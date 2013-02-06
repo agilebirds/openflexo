@@ -53,6 +53,9 @@ public class FlexoBuilderProjectReferenceLoader implements FlexoProjectReference
 		if (editor != null) {
 			return editor.getProject();
 		}
+		if (silentlyOnly) {
+			return null;
+		}
 		if (serverURL != null && login != null && password != null) {
 			Map<String, String> param = new HashMap<String, String>();
 			param.put("login", login);
