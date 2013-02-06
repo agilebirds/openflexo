@@ -211,19 +211,6 @@ public class FPSController extends FlexoController {
 		return _sharedProjectBrowser;
 	}
 
-	/**
-	 * Select the view representing supplied object, if this view exists. Try all to really display supplied object, even if required view
-	 * is not the current displayed view
-	 * 
-	 * @param object
-	 *            : the object to focus on
-	 */
-	@Override
-	public void selectAndFocusObject(FlexoObject object) {
-		// TODO: Implements this
-		setCurrentEditedObjectAsModuleView(object);
-	}
-
 	@Override
 	public boolean handleException(InspectableObject inspectable, String propertyName, Object value, Throwable exception) {
 		// TODO: Handles here exceptions that may be thrown through the inspector

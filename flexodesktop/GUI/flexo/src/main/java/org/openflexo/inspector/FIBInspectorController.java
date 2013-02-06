@@ -32,7 +32,10 @@ import javax.swing.JPopupMenu;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.resource.ResourceLoaded;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternInstanceBindingVariable;
@@ -102,4 +105,12 @@ public class FIBInspectorController extends FlexoFIBController {
 		}
 	}
 
+	@Override
+	public void update(FlexoObservable o, DataModification dataModification) {
+		// TODO Auto-generated method stub
+		super.update(o, dataModification);
+		if (dataModification instanceof ResourceLoaded) {
+			System.out.println("Je detecte une resource qui vient de se charger !");
+		}
+	}
 }

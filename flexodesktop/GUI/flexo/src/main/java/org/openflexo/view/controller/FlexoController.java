@@ -119,9 +119,11 @@ import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectReference;
+import org.openflexo.foundation.rm.FlexoViewResource;
 import org.openflexo.foundation.rm.ProjectClosedNotification;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.ViewPointResource;
+import org.openflexo.foundation.rm.VirtualModelInstanceResource;
 import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
@@ -1825,6 +1827,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			if (!((FlexoResource<?>) object).isLoaded()) {
 				FlexoProgress progress = getEditor().getFlexoProgressFactory().makeFlexoProgress("loading_resource", 3);
 				try {
+					System.out.println("je charge le truc");
 					resourceData = (FlexoObject) ((FlexoResource<?>) object).getResourceData(progress);
 				} catch (FileNotFoundException e) {
 					notify("Cannot load resource: " + e.getMessage());
@@ -1857,6 +1860,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 					e.printStackTrace();
 				}
 			}
+			System.out.println("ma rd=" + resourceData);
 			if (resourceData != null) {
 				selectAndFocusObject(resourceData);
 			}
@@ -1964,12 +1968,20 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		return rmWindow = new ResourceManagerWindow(project);
 	}
 
+	/**
+	 * Select the supplied object. Also try to select (create if not exists) a main view representing supplied object, if this view exists.<br>
+	 * Try all to really display supplied object, even if required view is not the current displayed view
+	 * 
+	 * @param object
+	 *            the object to focus on
+	 */
 	public void selectAndFocusObject(FlexoObject object) {
 		if (object instanceof FlexoProject) {
 			getControllerModel().setCurrentProject((FlexoProject) object);
 		} else {
 			setCurrentEditedObjectAsModuleView(object);
 		}
+		getSelectionManager().setSelectedObject(object);
 	}
 
 	public ValidationModel getDefaultValidationModel() {
@@ -2071,6 +2083,10 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return VPMIconLibrary.iconForObject((ExampleDiagramResource) object);
 		} else if (object instanceof DiagramPaletteResource) {
 			return VPMIconLibrary.iconForObject((DiagramPaletteResource) object);
+		} else if (object instanceof FlexoViewResource) {
+			return VEIconLibrary.iconForObject((FlexoViewResource) object);
+		} else if (object instanceof VirtualModelInstanceResource) {
+			return VEIconLibrary.iconForObject((VirtualModelInstanceResource) object);
 		} else if (object instanceof ViewLibrary) {
 			return VEIconLibrary.VIEW_LIBRARY_ICON;
 		} else if (object instanceof ViewObject) {

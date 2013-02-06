@@ -23,6 +23,8 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.foundation.rm.FlexoViewResource;
+import org.openflexo.foundation.rm.VirtualModelInstanceResource;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.View;
@@ -33,6 +35,7 @@ import org.openflexo.foundation.view.diagram.model.DiagramConnector;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramRootPane;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
+import org.openflexo.foundation.view.diagram.rm.DiagramResource;
 import org.openflexo.toolbox.ImageIconResource;
 
 /**
@@ -96,6 +99,17 @@ public class VEIconLibrary extends IconLibrary {
 		}
 		logger.warning("No icon for " + object.getClass());
 		return UNKNOWN_ICON;
+	}
+
+	public static ImageIcon iconForObject(FlexoViewResource object) {
+		return VIEW_ICON;
+	}
+
+	public static ImageIcon iconForObject(VirtualModelInstanceResource object) {
+		if (object instanceof DiagramResource) {
+			return DIAGRAM_ICON;
+		}
+		return VIRTUAL_MODEL_INSTANCE_ICON;
 	}
 
 }

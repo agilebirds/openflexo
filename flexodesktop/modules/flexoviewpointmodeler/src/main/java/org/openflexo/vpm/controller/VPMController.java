@@ -185,6 +185,7 @@ public class VPMController extends FlexoController {
 				}
 			}
 		}
+		getSelectionManager().setSelectedObject(object);
 	}
 
 	// ================================================

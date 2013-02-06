@@ -32,7 +32,7 @@ import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.view.View;
-import org.openflexo.foundation.view.diagram.action.CreateVirtualModelInstance;
+import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.VECst;
@@ -61,7 +61,7 @@ public class CreateVirtualModelInstanceInitializer extends ActionInitializer<Cre
 				if (action.skipChoosePopup) {
 					return true;
 				} else {
-					return instanciateAndShowDialog(action, VECst.CREATE_DIAGRAM_DIALOG_FIB);
+					return instanciateAndShowDialog(action, VECst.CREATE_VIRTUAL_MODEL_INSTANCE_DIALOG_FIB);
 				}
 
 			}
@@ -99,7 +99,7 @@ public class CreateVirtualModelInstanceInitializer extends ActionInitializer<Cre
 
 	@Override
 	protected Icon getEnabledIcon() {
-		return VEIconLibrary.DIAGRAM_ICON;
+		return VEIconLibrary.VIRTUAL_MODEL_INSTANCE_ICON;
 	}
 
 }

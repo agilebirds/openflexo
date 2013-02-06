@@ -210,34 +210,4 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 		return ARROW_BOTTOM;
 	}
 
-	/*public ImageIcon getOntologyIcon() {
-		return ONTOLOGY_ICON;
-	}
-
-	public ImageIcon getOntologyClassIcon() {
-		return ONTOLOGY_CLASS_ICON;
-	}
-
-	public ImageIcon getOntologyIndividualIcon() {
-		return ONTOLOGY_INDIVIDUAL_ICON;
-	}
-
-	public ImageIcon getOntologyDataPropertyIcon() {
-		return ONTOLOGY_DATA_PROPERTY_ICON;
-	}
-
-	public ImageIcon getOntologyObjectPropertyIcon() {
-		return ONTOLOGY_OBJECT_PROPERTY_ICON;
-	}
-
-	public ImageIcon getOntologyAnnotationPropertyIcon() {
-		return ONTOLOGY_ANNOTATION_PROPERTY_ICON;
-	}*/
-
-	/*public void createOntologyClass(IFlexoOntology ontology) {
-		System.out.println("Create class for " + ontology);
-		CreateOntologyClass action = CreateOntologyClass.actionType.makeNewAction(ontology, null, getEditor());
-		action.doAction();
-	}*/
-
 }

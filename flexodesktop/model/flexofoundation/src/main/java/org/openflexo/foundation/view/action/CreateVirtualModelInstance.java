@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.view.diagram.action;
+package org.openflexo.foundation.view.action;
 
 import java.security.InvalidParameterException;
 import java.util.Vector;
@@ -111,11 +111,18 @@ public class CreateVirtualModelInstance extends FlexoAction<CreateVirtualModelIn
 		// Creates the resource here
 	}
 
-	public String errorMessage;
+	private String errorMessage;
+
+	public String getErrorMessage() {
+		isValid();
+		// System.out.println("valid=" + isValid());
+		// System.out.println("errorMessage=" + errorMessage);
+		return errorMessage;
+	}
 
 	public boolean isValid() {
 		if (virtualModel == null) {
-			errorMessage = FlexoLocalization.localizedForKey("no_diagram_type_selected");
+			errorMessage = FlexoLocalization.localizedForKey("no_virtual_model_type_selected");
 			return false;
 		}
 		if (StringUtils.isEmpty(newVirtualModelInstanceTitle)) {

@@ -112,7 +112,8 @@ public class CreateView extends FlexoAction<CreateView, RepositoryFolder, Diagra
 		newView = View.newView(newViewName, newViewTitle, viewpointResource.getViewPoint(), getFolder(), getProject());
 
 		logger.info("Added view " + newView + " in folder " + getFolder() + " for project " + getProject());
-		// Creates the resource here
+
+		getViewLibrary().registerResource(newView.getResource(), getFocusedObject());
 	}
 
 	public ViewLibrary getViewLibrary() {
