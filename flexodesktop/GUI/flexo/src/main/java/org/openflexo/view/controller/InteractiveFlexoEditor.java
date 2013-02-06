@@ -190,8 +190,11 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 				try {
 					runAction(action);
 				} catch (FlexoException exception) {
-					runExceptionHandler(exception, action);
+					if (!runExceptionHandler(exception, action)) {
+						return null;
+					}
 				}
+				runFinalizer(action, event);
 				if (!progressIsShowing) {
 					ProgressWindow.hideProgressWindow();
 				}
