@@ -14,5 +14,5 @@
     <Localized key="Advanced" lang="English">Advanced</Localized>
     <Localized key="Advanced" lang="Dutch">Advanced</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="OR operator" />
+  <Parameter name="title" value="Exclusive gateway" />
 </Panel>

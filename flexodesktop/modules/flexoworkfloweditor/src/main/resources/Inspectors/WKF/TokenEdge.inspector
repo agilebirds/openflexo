@@ -18,5 +18,5 @@
     <Localized key="Basic" lang="English">Basic</Localized>
     <Localized key="Basic" lang="Dutch">Basic</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="Token edge" />
+  <Parameter name="title" value="Sequential Flow" />
 </Panel>
