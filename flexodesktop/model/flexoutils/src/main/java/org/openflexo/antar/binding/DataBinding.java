@@ -528,6 +528,14 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 
 		// System.out.println("Evaluating " + this + " in context " + context);
 
+		// boolean debug = false;
+
+		/*if (expression instanceof BindingValue && toString().equals("data.layout")
+				&& context.getValue(((BindingValue) expression).getBindingVariable()).getClass().getSimpleName().equals("FIBPanel")) {
+			System.out.println("Getting the point...");
+			debug = true;
+		}*/
+
 		// First we check that the binding is valid, otherwise we don't go further
 		if (isValid()) {
 
@@ -573,6 +581,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 				// We do not warn anymore since this situation happens very often
 				/*logger.warning("Cannot evaluate " + expression + " max reduction is " + evaluatedExpression + " resolvedExpression="
 						+ resolvedExpression);*/
+
 				return null;
 
 			} catch (NullReferenceException e1) {
