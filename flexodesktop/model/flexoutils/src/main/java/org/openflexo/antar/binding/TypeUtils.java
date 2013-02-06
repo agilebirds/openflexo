@@ -57,10 +57,10 @@ public class TypeUtils {
 				if (rawType instanceof Class) {
 					return (Class) rawType;
 				}
-				logger.warning("Not handled: " + aType.getClass().getName());
+				logger.warning("Not handled: " + aType + " of " + aType.getClass().getName());
 				return null;
 			} else {
-				logger.warning("Not handled: " + aType.getClass().getName());
+				logger.warning("Not handled: " + aType + " of " + aType.getClass().getName());
 				return null;
 			}
 		}
@@ -538,7 +538,9 @@ public class TypeUtils {
 	}
 
 	public static boolean isResolved(Type type) {
-		return type instanceof Class || type instanceof GenericArrayType || type instanceof ParameterizedType || type instanceof CustomType;
+		return type instanceof Class
+				|| (type instanceof GenericArrayType && isResolved(((GenericArrayType) type).getGenericComponentType()))
+				|| type instanceof ParameterizedType || type instanceof CustomType;
 	}
 
 	/**

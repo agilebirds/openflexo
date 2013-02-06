@@ -198,9 +198,9 @@ public class KeyValueProperty extends Observable {
 	 * </ul>
 	 * Returns corresponding method, null if no such method exist
 	 */
-	protected Method searchMatchingGetMethod(Class lastClass, String propertyName) {
+	protected Method searchMatchingGetMethod(Class aDeclaringClass, String propertyName) {
 
-		Method returnedMethod;
+		Method returnedMethod = null;
 		String propertyNameWithFirstCharToUpperCase = propertyName.substring(0, 1).toUpperCase()
 				+ propertyName.substring(1, propertyName.length());
 
@@ -214,7 +214,10 @@ public class KeyValueProperty extends Observable {
 
 		for (String trie : tries) {
 			try {
-				return lastClass.getMethod(trie, null);
+				returnedMethod = aDeclaringClass.getMethod(trie, null);
+				if (returnedMethod != null) {
+					return returnedMethod;
+				}
 			} catch (SecurityException err) {
 				// we continue
 			} catch (NoSuchMethodException err) {
@@ -222,6 +225,11 @@ public class KeyValueProperty extends Observable {
 			} catch (NoClassDefFoundError err) {
 				// we continue
 			}
+		}
+
+		// If declaring class is interface, also lookup in Object class
+		if (returnedMethod == null && aDeclaringClass.isInterface()) {
+			return searchMatchingGetMethod(Object.class, propertyName);
 		}
 
 		// Debugging.debug ("No method matching "
@@ -242,7 +250,7 @@ public class KeyValueProperty extends Observable {
 	 * </ul>
 	 * Returns corresponding method, null if no such method exist
 	 */
-	protected Method searchMatchingSetMethod(Class declaringClass, String propertyName, Type aType) {
+	protected Method searchMatchingSetMethod(Class aDeclaringClass, String propertyName, Type aType) {
 		String propertyNameWithFirstCharToUpperCase = propertyName.substring(0, 1).toUpperCase()
 				+ propertyName.substring(1, propertyName.length());
 		String[] tries;
@@ -258,7 +266,7 @@ public class KeyValueProperty extends Observable {
 		tries[1] = "_set" + propertyNameWithFirstCharToUpperCase;
 
 		if (aType instanceof Class) {
-			for (Method m : declaringClass.getMethods()) {
+			for (Method m : aDeclaringClass.getMethods()) {
 				for (int i = 0; i < tries.length; i++) {
 					if (m.getName().equals(tries[i]) && m.getParameterTypes().length == 1 && m.getParameterTypes()[0].equals(aType)) {
 						return m;
@@ -266,7 +274,7 @@ public class KeyValueProperty extends Observable {
 				}
 			}
 		} else {
-			for (Method m : declaringClass.getMethods()) {
+			for (Method m : aDeclaringClass.getMethods()) {
 				for (int i = 0; i < tries.length; i++) {
 					if (m.getName().equals(tries[i]) && m.getGenericParameterTypes().length == 1
 							&& m.getGenericParameterTypes()[0].equals(aType)) {
@@ -280,7 +288,7 @@ public class KeyValueProperty extends Observable {
 		Type superType = TypeUtils.getSuperType(aType);
 		if (superType != null) {
 			// Try with a super class
-			Method returned = searchMatchingSetMethod(declaringClass, propertyName, superType);
+			Method returned = searchMatchingSetMethod(aDeclaringClass, propertyName, superType);
 			if (returned != null) {
 				return returned;
 			}
@@ -289,7 +297,7 @@ public class KeyValueProperty extends Observable {
 		// Finally try without generics
 		if (TypeUtils.getBaseClass(aType) != null && TypeUtils.getBaseClass(aType).getSuperclass() != null
 				&& TypeUtils.getBaseClass(aType).getSuperclass() != superType) {
-			return searchMatchingSetMethod(declaringClass, propertyName, TypeUtils.getBaseClass(aType).getSuperclass());
+			return searchMatchingSetMethod(aDeclaringClass, propertyName, TypeUtils.getBaseClass(aType).getSuperclass());
 		}
 		/*
 		Class typeClass = TypeUtils.getBaseClass(aType);
@@ -418,6 +426,19 @@ public class KeyValueProperty extends Observable {
 
 	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) {
 		KeyValueCoder.setObjectForKey(target, value, getName());
+	}*/
+
+	/*public static void main(String[] args) {
+		KeyValueProperty kv1 = new KeyValueProperty(Object.class, "class", false);
+		System.out.println("kv1=" + kv1);
+		KeyValueProperty kv2 = new KeyValueProperty(KeyValueProperty.class, "class", false);
+		System.out.println("kv2=" + kv2);
+		KeyValueProperty kv3 = new KeyValueProperty(TestInterface.class, "class", false);
+		System.out.println("kv3=" + kv3);
+	}
+
+	public static interface TestInterface {
+
 	}*/
 
 }

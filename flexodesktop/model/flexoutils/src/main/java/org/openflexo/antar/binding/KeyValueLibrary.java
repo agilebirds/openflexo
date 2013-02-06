@@ -64,8 +64,9 @@ public class KeyValueLibrary {
 				returned = new KeyValueProperty(declaringType, propertyName, false);
 				cacheForType.put(propertyName, returned);
 			} catch (InvalidKeyValuePropertyException e) {
-				// logger.warning("While computing getKeyValueProperty("+propertyName+") for "+declaringType+" message:"+e.getMessage());
-				// e.printStackTrace();
+				logger.warning("While computing getKeyValueProperty(" + propertyName + ") for " + declaringType + " message:"
+						+ e.getMessage());
+				e.printStackTrace();
 				return null;
 			}
 		}
@@ -75,7 +76,9 @@ public class KeyValueLibrary {
 	public static Vector<KeyValueProperty> getDeclaredProperties(Type declaringType) {
 		Vector<KeyValueProperty> returned = declaredKeyValueProperties.get(declaringType);
 		if (returned == null) {
-			logger.fine("build declaredProperties() for " + declaringType);
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("build declaredProperties() for " + declaringType);
+			}
 			Vector<String> excludedSignatures = new Vector<String>();
 			returned = searchForProperties(declaringType, true, excludedSignatures);
 			declaredKeyValueProperties.put(declaringType, returned);
@@ -124,12 +127,19 @@ public class KeyValueLibrary {
 					returned.add(p);
 				}
 			}
-			System.err.println("");
 			for (Type t : TypeUtils.getSuperInterfaceTypes(current)) {
 				appendAccessibleProperties(t, returned);
 			}
-			// returned.addAll(getDeclaredProperties(current));
-			current = TypeUtils.getSuperType(current);
+
+			Type superType = TypeUtils.getSuperType(current);
+
+			// If this is a simple interface, at least inherits properties from Object class
+			if (superType == null && TypeUtils.getBaseClass(current) != null && TypeUtils.getBaseClass(current).isInterface()) {
+				current = Object.class;
+			} else {
+				current = superType;
+			}
+
 		}
 	}
 
