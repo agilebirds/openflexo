@@ -1,5 +1,7 @@
 package org.openflexo.antar.binding;
 
+import java.lang.reflect.InvocationTargetException;
+
 import junit.framework.TestCase;
 
 import org.openflexo.antar.expr.NullReferenceException;
@@ -18,6 +20,8 @@ public class TestBindingEvaluator extends TestCase {
 		} catch (TypeMismatchException e) {
 			fail();
 		} catch (NullReferenceException e) {
+			fail();
+		} catch (InvocationTargetException e) {
 			fail();
 		}
 		System.out.println("Evaluated as " + evaluatedResult);

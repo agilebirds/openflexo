@@ -21,6 +21,7 @@ package org.openflexo.fib.view.widget;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -92,6 +93,8 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
 				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 			}
 		}
 		updateDependancies(new Vector<FIBComponent>());
@@ -125,6 +128,9 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 				e.printStackTrace();
 				buttonWidget.setIcon(null);
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+				buttonWidget.setIcon(null);
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 				buttonWidget.setIcon(null);
 			}

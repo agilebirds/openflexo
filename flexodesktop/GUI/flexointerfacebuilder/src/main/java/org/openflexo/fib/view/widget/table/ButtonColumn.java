@@ -20,6 +20,7 @@
 package org.openflexo.fib.view.widget.table;
 
 import java.awt.event.ActionEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Logger;
 
 import javax.swing.AbstractAction;
@@ -56,6 +57,8 @@ public class ButtonColumn<T extends Object> extends AbstractColumn<T> implements
 					} catch (TypeMismatchException e1) {
 						e1.printStackTrace();
 					} catch (NullReferenceException e1) {
+						e1.printStackTrace();
+					} catch (InvocationTargetException e1) {
 						e1.printStackTrace();
 					}
 				}

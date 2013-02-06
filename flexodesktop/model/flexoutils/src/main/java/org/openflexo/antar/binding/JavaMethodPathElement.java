@@ -27,6 +27,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Function.FunctionArgument;
+import org.openflexo.antar.expr.InvocationTargetTransformException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 
@@ -113,7 +114,8 @@ public class JavaMethodPathElement extends FunctionPathElement {
 	}
 
 	@Override
-	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
+	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException,
+			InvocationTargetTransformException {
 
 		// System.out.println("evaluate " + getMethodDefinition().getSignature() + " for " + target);
 
@@ -121,8 +123,12 @@ public class JavaMethodPathElement extends FunctionPathElement {
 		int i = 0;
 
 		for (Function.FunctionArgument a : getFunction().getArguments()) {
-			args[i] = TypeUtils.castTo(getParameter(a).getBindingValue(context), getMethodDefinition().getMethod()
-					.getGenericParameterTypes()[i]);
+			try {
+				args[i] = TypeUtils.castTo(getParameter(a).getBindingValue(context), getMethodDefinition().getMethod()
+						.getGenericParameterTypes()[i]);
+			} catch (InvocationTargetException e) {
+				throw new InvocationTargetTransformException(e);
+			}
 			i++;
 		}
 		try {
@@ -140,13 +146,18 @@ public class JavaMethodPathElement extends FunctionPathElement {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			logger.info("InvocationTargetException while evaluating method " + getMethodDefinition().getMethod() + " with args: ");
+			StringBuffer sb = new StringBuffer();
+			sb.append("InvocationTargetException " + e.getTargetException().getClass().getSimpleName() + " : "
+					+ e.getTargetException().getMessage() + " while evaluating method " + getMethodDefinition().getMethod()
+					+ " with args: ");
 			for (int j = 0; j < args.length; j++) {
-				logger.info("arg " + j + " = " + args[j]);
+				sb.append("arg " + j + " = " + args[j] + " ");
 			}
-			e.printStackTrace();
+			logger.warning(sb.toString());
+			/*e.printStackTrace();
 			logger.info("Caused by:");
-			e.getTargetException().printStackTrace();
+			e.getTargetException().printStackTrace();*/
+			throw new InvocationTargetTransformException(e);
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 			Method m = getMethodDefinition().getMethod();

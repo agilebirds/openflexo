@@ -350,6 +350,8 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 					e.printStackTrace();
 				} catch (NullReferenceException e) {
 					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
 				}
 			}
 		}

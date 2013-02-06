@@ -20,6 +20,7 @@
 package org.openflexo.fib.view;
 
 import java.awt.Dimension;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -124,6 +125,9 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 			e.printStackTrace();
 			return null;
 		} catch (NullReferenceException e) {
+			e.printStackTrace();
+			return null;
+		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 			return null;
 		}

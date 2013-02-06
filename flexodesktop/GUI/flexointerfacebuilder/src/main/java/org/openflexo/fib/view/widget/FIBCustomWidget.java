@@ -160,6 +160,8 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 					e.printStackTrace();
 				} catch (NullReferenceException e) {
 					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
 				}
 			}
 			return true;
@@ -199,6 +201,8 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 					e.printStackTrace();
 				} catch (NullReferenceException e) {
 					// e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
 				}
 			}
 		}

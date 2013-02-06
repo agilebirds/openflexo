@@ -81,8 +81,7 @@
     <Localized key="create_ontologic_view_without_view_point" lang="English">Create view without viewpoint</Localized>
     <Localized key="new_view_title" lang="French">Titre de la vue</Localized>
     <Localized key="new_view_title" lang="English">View title</Localized>
-    <Localized key="no_view_title_defined" lang="English">Please enter a title</Localized>
-    <Localized key="no_view_title_defined" lang="English">Please choose a view point</Localized>
+    <Localized key="no_view_title_defined" lang="English">Please enter title for newly created view</Localized>
     <Localized key="no_folder_defined" lang="English">No folder defined</Localized>
     <Localized key="a_view_with_that_name_already_exists" lang="English">A view with that name already exist. Please choose another name</Localized>
     <Localized key="no_view_name_defined" lang="French">Aucun nom défini pour cette nouvelle vue</Localized>
@@ -102,5 +101,8 @@
     <Localized key="no_view_title_defined" lang="French">Veuillez entrer un titre</Localized>
     <Localized key="no_view_name_defined" lang="English">No name defined for this view</Localized>
     <Localized key="no_view_point_selected" lang="English">Please choose a view point</Localized>
+    <Localized key="virtual_model" lang="English">virtual_model</Localized>
+    <Localized key="virtual_model" lang="French">virtual_model</Localized>
+    <Localized key="virtual_model" lang="Dutch">virtual_model</Localized>
   </LocalizedDictionary>
 </Panel>

@@ -20,6 +20,7 @@
 package org.openflexo.fib.view.widget;
 
 import java.awt.Component;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -171,6 +172,8 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 			}
 		}
 		if (objectToSelect == null && getWidget().getAutoSelectFirstRow() && _list.getModel().getSize() > 0) {
@@ -268,6 +271,8 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 				} catch (TypeMismatchException e1) {
 					e1.printStackTrace();
 				} catch (NullReferenceException e1) {
+					e1.printStackTrace();
+				} catch (InvocationTargetException e1) {
 					e1.printStackTrace();
 				}
 			}

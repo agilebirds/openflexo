@@ -21,6 +21,7 @@ package org.openflexo.fib.view.widget.browser;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -289,6 +290,8 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 					} catch (TypeMismatchException e) {
 						continue;
 					} catch (NullReferenceException e) {
+						continue;
+					} catch (InvocationTargetException e) {
 						continue;
 					}
 

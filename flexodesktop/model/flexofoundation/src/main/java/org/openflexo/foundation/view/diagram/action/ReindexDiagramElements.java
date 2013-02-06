@@ -20,6 +20,7 @@
 package org.openflexo.foundation.view.diagram.action;
 
 import java.beans.PropertyChangeSupport;
+import java.lang.reflect.InvocationTargetException;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -208,6 +209,8 @@ public class ReindexDiagramElements extends FlexoAction<ReindexDiagramElements, 
 				} catch (TypeMismatchException e) {
 					e.printStackTrace();
 				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
 					e.printStackTrace();
 				}
 				if (StringUtils.isNotEmpty(returned)) {

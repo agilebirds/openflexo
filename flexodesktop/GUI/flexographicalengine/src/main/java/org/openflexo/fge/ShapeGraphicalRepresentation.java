@@ -26,6 +26,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -34,7 +35,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
@@ -1692,6 +1692,8 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
 				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 			}
 			setLocationConstraints(LocationConstraints.UNMOVABLE);
 		}
@@ -1702,6 +1704,8 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 			setLocationConstraints(LocationConstraints.UNMOVABLE);
@@ -1714,6 +1718,8 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
 				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 			}
 			setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
 		}
@@ -1724,6 +1730,8 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 			setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
@@ -1782,6 +1790,8 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
 			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -1795,6 +1805,8 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
 	}
@@ -1810,6 +1822,8 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
 			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -1823,6 +1837,8 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
 	}

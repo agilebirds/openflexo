@@ -19,6 +19,7 @@
  */
 package org.openflexo.antar.binding;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +34,7 @@ import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionTransformer;
 import org.openflexo.antar.expr.ExpressionVisitor;
+import org.openflexo.antar.expr.InvocationTargetTransformException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TransformException;
 import org.openflexo.antar.expr.TypeMismatchException;
@@ -519,8 +521,10 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	 * @return
 	 * @throws TypeMismatchException
 	 * @throws NullReferenceException
+	 * @throws InvocationTargetException
 	 */
-	public T getBindingValue(final BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
+	public T getBindingValue(final BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException,
+			InvocationTargetException {
 
 		// System.out.println("Evaluating " + this + " in context " + context);
 
@@ -575,6 +579,8 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 				throw e1;
 			} catch (TypeMismatchException e1) {
 				throw e1;
+			} catch (InvocationTargetTransformException e1) {
+				throw e1.getException();
 			} catch (TransformException e1) {
 				logger.warning("Unexpected TransformException while evaluating " + expression + " " + e1.getMessage());
 				e1.printStackTrace();
@@ -592,17 +598,24 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	 * @return
 	 * @throws TypeMismatchException
 	 * @throws NullReferenceException
+	 * @throws InvocationTargetException
 	 */
-	public void setBindingValue(Object value, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
+	public void setBindingValue(Object value, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException,
+			InvocationTargetException {
 		if (isSettable()) {
 			if (isBindingValue()) {
 				// At this time, only BindingValue is settable
-				((BindingValue) getExpression()).setBindingValue(value, context);
+				try {
+					((BindingValue) getExpression()).setBindingValue(value, context);
+				} catch (InvocationTargetTransformException e) {
+					throw e.getException();
+				}
 			}
 		}
 	}
 
-	public void execute(final BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
+	public void execute(final BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException,
+			InvocationTargetException {
 		getBindingValue(context);
 	}
 

@@ -19,6 +19,8 @@
  */
 package org.openflexo.foundation.view.diagram.viewpoint;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
@@ -61,6 +63,8 @@ public class NavigationScheme extends AbstractActionScheme {
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 		}

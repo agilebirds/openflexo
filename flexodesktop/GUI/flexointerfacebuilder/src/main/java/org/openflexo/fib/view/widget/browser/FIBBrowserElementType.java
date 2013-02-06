@@ -20,6 +20,7 @@
 package org.openflexo.fib.view.widget.browser;
 
 import java.awt.Font;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -67,6 +68,8 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 				} catch (TypeMismatchException e) {
 					e.printStackTrace();
 				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
 					e.printStackTrace();
 				}
 				return result;
@@ -174,6 +177,8 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
 				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 			}
 		}
 		return object.toString();
@@ -190,6 +195,8 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 		}
@@ -208,6 +215,8 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 			if (returned instanceof Icon) {
@@ -231,6 +240,8 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 			if (enabledValue != null) {
@@ -261,6 +272,9 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 				e.printStackTrace();
 				return true;
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+				return true;
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 				return true;
 			}
@@ -314,6 +328,9 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 				} catch (NullReferenceException e) {
 					e.printStackTrace();
 					visible = true;
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+					visible = true;
 				}
 				if (!visible) {
 					// Finally we dont want to see it
@@ -326,6 +343,8 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 			if (children.getCast().isSet()) {
@@ -350,6 +369,9 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 				} catch (NullReferenceException e) {
 					e.printStackTrace();
 					visible = true;
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+					visible = true;
 				}
 				if (!visible) {
 					// Finally we dont want to see it
@@ -362,6 +384,8 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 			List<?> list = ToolBox.getListFromIterable(bindingValue);
@@ -388,6 +412,8 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
 				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 			}
 		}
 		return object.toString();
@@ -401,6 +427,8 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 		}
@@ -431,6 +459,8 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 			return null;

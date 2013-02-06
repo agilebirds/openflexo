@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.logging.Logger;
@@ -33,7 +34,6 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 /**
  * Abstract class representing a primitive to be executed as an atomic action of an EditionScheme
@@ -138,6 +138,8 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 		}
@@ -271,8 +273,8 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 
 	private void insertActionAtCurrentIndex(EditionAction editionAction) {
 		if (getActionContainer() != null) {
-		getActionContainer().insertActionAtIndex(editionAction, getActionContainer().getIndex(this) + 1);
-	}
+			getActionContainer().insertActionAtIndex(editionAction, getActionContainer().getIndex(this) + 1);
+		}
 	}
 
 	/*public AddShape createAddShapeAction() {

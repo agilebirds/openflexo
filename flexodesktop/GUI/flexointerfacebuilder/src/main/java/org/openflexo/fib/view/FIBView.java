@@ -21,6 +21,7 @@ package org.openflexo.fib.view;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -221,6 +222,9 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
 				// NullReferenceException is allowed, in this case, default visibility is true
+				componentVisible = true;
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 				componentVisible = true;
 			}
 		}

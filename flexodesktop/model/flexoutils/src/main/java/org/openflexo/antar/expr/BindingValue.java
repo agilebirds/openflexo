@@ -600,7 +600,8 @@ public class BindingValue extends Expression {
 		return analysingSuccessfull;
 	}
 
-	public Object getBindingValue(BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
+	public Object getBindingValue(BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException,
+			InvocationTargetTransformException {
 
 		// System.out.println("  > evaluate BindingValue " + this + " in context " + context);
 		if (isValid()) {
@@ -620,7 +621,8 @@ public class BindingValue extends Expression {
 		return null;
 	}
 
-	public void setBindingValue(Object value, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
+	public void setBindingValue(Object value, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException,
+			InvocationTargetTransformException {
 
 		// logger.info("setBindingValue() for " + this + " with " + value + " context=" + context);
 		// logger.info("valid=" + isValid());
@@ -699,7 +701,11 @@ public class BindingValue extends Expression {
 				try {
 					current = element.getBindingValue(current, context);
 				} catch (TypeMismatchException e) {
+					// silently escape
 				} catch (NullReferenceException e) {
+					// silently escape
+				} catch (InvocationTargetTransformException e) {
+					// silently escape
 				}
 				if (current == null) {
 					return returned;
@@ -743,9 +749,14 @@ public class BindingValue extends Expression {
 				try {
 					current = element.getBindingValue(current, context);
 				} catch (TypeMismatchException e) {
-					e.printStackTrace();
+					// We silently escape...
+					// e.printStackTrace();
 				} catch (NullReferenceException e) {
-					e.printStackTrace();
+					// We silently escape...
+					// e.printStackTrace();
+				} catch (InvocationTargetTransformException e) {
+					// We silently escape...
+					// e.printStackTrace();
 				}
 				if (current == null) {
 					return returned;

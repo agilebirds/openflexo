@@ -1,6 +1,7 @@
 package org.openflexo.antar.binding;
 
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import java.lang.reflect.InvocationTargetException;
+
 import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.BindingValue.AbstractBindingPathElement;
 import org.openflexo.antar.expr.BindingValue.NormalBindingPathElement;
@@ -98,7 +99,8 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 	public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
 	}
 
-	private Object evaluate(String bindingPath) throws InvalidKeyValuePropertyException, TypeMismatchException, NullReferenceException {
+	private Object evaluate(String bindingPath) throws InvalidKeyValuePropertyException, TypeMismatchException, NullReferenceException,
+			InvocationTargetException {
 		String normalizedBindingPath = normalizeBindingPath(bindingPath);
 		System.out.println("Normalize " + bindingPath + " to " + normalizedBindingPath);
 		DataBinding binding = new DataBinding<Object>(normalizedBindingPath, this, Object.class, DataBinding.BindingDefinitionType.GET);
@@ -113,7 +115,7 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 	}
 
 	public static Object evaluateBinding(String bindingPath, Object object) throws InvalidKeyValuePropertyException, TypeMismatchException,
-			NullReferenceException {
+			NullReferenceException, InvocationTargetException {
 
 		BindingEvaluator evaluator = new BindingEvaluator(object);
 		return evaluator.evaluate(bindingPath);
@@ -132,6 +134,8 @@ public class BindingEvaluator implements Bindable, BindingEvaluationContext {
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
 	}

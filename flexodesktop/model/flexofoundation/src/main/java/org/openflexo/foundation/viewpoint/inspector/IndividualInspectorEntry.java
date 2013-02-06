@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
@@ -30,7 +31,6 @@ import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 /**
  * Represents an inspector entry for an ontology individual
@@ -125,6 +125,8 @@ public class IndividualInspectorEntry extends InspectorEntry {
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 		}

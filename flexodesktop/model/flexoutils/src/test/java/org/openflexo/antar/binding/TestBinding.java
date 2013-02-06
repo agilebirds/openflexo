@@ -1,12 +1,12 @@
 package org.openflexo.antar.binding;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 
@@ -199,7 +199,8 @@ public class TestBinding extends TestCase {
 
 		System.out.println("Evaluate " + bindingPath);
 
-		DataBinding<?> dataBinding = new DataBinding<Object>(bindingPath, BINDING_CONTEXT, expectedType, DataBinding.BindingDefinitionType.GET);
+		DataBinding<?> dataBinding = new DataBinding<Object>(bindingPath, BINDING_CONTEXT, expectedType,
+				DataBinding.BindingDefinitionType.GET);
 
 		/*	BINDING_FACTORY.setBindable(BINDING_CONTEXT);
 			AbstractBinding binding = BINDING_FACTORY.convertFromString(bindingPath);
@@ -219,6 +220,9 @@ public class TestBinding extends TestCase {
 			e.printStackTrace();
 			fail();
 		} catch (NullReferenceException e) {
+			e.printStackTrace();
+			fail();
+		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 			fail();
 		}

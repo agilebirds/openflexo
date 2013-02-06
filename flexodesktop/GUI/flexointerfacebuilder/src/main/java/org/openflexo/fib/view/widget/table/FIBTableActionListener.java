@@ -21,6 +21,7 @@ package org.openflexo.fib.view.widget.table;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Logger;
@@ -112,6 +113,8 @@ public class FIBTableActionListener implements ActionListener, BindingEvaluation
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
 				// e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 			}
 			if (returned == null) {
 				return false;
@@ -134,6 +137,8 @@ public class FIBTableActionListener implements ActionListener, BindingEvaluation
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 			tableWidget.updateWidgetFromModel();

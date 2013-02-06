@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.DataBinding;
@@ -29,7 +30,6 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public class DeleteAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends EditionAction<M, MM, FlexoModelObject> {
 
@@ -52,6 +52,8 @@ public class DeleteAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -107,6 +109,8 @@ public class DeleteAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel
 		} catch (TypeMismatchException e1) {
 			e1.printStackTrace();
 		} catch (NullReferenceException e1) {
+			e1.printStackTrace();
+		} catch (InvocationTargetException e1) {
 			e1.printStackTrace();
 		}
 		if (objectToDelete == null) {

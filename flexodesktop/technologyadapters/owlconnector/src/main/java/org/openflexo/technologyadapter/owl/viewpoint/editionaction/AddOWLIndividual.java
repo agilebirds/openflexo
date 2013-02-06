@@ -19,6 +19,7 @@
  */
 package org.openflexo.technologyadapter.owl.viewpoint.editionaction;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.expr.NullReferenceException;
@@ -70,6 +71,8 @@ public class AddOWLIndividual extends AddIndividual<OWLOntology, OWLOntology, OW
 			e1.printStackTrace();
 		} catch (NullReferenceException e1) {
 			e1.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
 		}
 		// System.out.println("individualName="+individualName);
 		OWLIndividual newIndividual = null;

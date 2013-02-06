@@ -28,6 +28,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -199,6 +200,9 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		} catch (NullReferenceException e) {
 			// logger.warning("Widget " + getWidget() + " NullReferenceException: " + e.getMessage());
 			return null;
+		} catch (InvocationTargetException e) {
+			logger.warning("Widget " + getWidget() + " InvocationTargetException: " + e.getMessage());
+			return null;
 		}
 
 	}
@@ -222,6 +226,9 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			} catch (NullReferenceException e) {
 				logger.warning("Unexpected NullReferenceException " + e.getMessage());
 				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				logger.warning("Unexpected InvocationTargetException " + e.getMessage());
+				e.printStackTrace();
 			}
 			if (!equals(old, aValue)) {
 				SwingUtilities.invokeLater(new Runnable() {
@@ -243,6 +250,9 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
 				logger.warning("Unexpected NullReferenceException " + e.getMessage());
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				logger.warning("Unexpected InvocationTargetException " + e.getMessage());
 				e.printStackTrace();
 			}
 			if (object == null) {
@@ -280,6 +290,8 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
 				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 			}
 
 		}
@@ -296,6 +308,8 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 		}
@@ -508,6 +522,9 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			} catch (NullReferenceException e) {
 				// NullReferenceException is allowed, in this case, default enability is true
 				componentEnabled = true;
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+				componentEnabled = true;
 			}
 		}
 		return componentEnabled;
@@ -521,6 +538,8 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 		}
@@ -538,6 +557,8 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 			if (getWidget().getLocalize() && returned != null) {
@@ -574,6 +595,8 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
 				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 			}
 		}
 		return null;
@@ -587,6 +610,8 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
 			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -598,6 +623,8 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
 			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -608,6 +635,8 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
 	}

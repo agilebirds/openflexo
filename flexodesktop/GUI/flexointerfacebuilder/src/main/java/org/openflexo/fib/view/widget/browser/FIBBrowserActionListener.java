@@ -21,6 +21,7 @@ package org.openflexo.fib.view.widget.browser;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Logger;
@@ -108,6 +109,8 @@ public class FIBBrowserActionListener implements ActionListener, BindingEvaluati
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 			if (returned == null) {

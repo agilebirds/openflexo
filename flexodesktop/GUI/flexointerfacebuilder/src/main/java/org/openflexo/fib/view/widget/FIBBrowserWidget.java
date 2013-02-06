@@ -25,6 +25,7 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.MouseListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
@@ -124,6 +125,8 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
 			// e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -193,6 +196,8 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
 
@@ -425,7 +430,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 						}
 					});
 				}
-		}
+			}
 
 			@Override
 			public void treeNodesChanged(TreeModelEvent e) {
@@ -576,7 +581,6 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 			getDynamicModel().selected = null;
 		}
 		getDynamicModel().selection = selection;
-		notifyDynamicModelChanged();
 
 		/*System.out.println("selectedObject=" + selectedObject);
 		System.out.println("getComponent().getSelected()=" + getComponent().getSelected() + " of "
@@ -584,17 +588,19 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		System.out.println("getComponent().getSelected().isValid()=" + getComponent().getSelected().isValid());*/
 
 		if (getComponent().getSelected().isValid()) {
-			logger.fine("Sets SELECTED binding with " + selectedObject);
+			logger.fine("Sets SELECTED binding with " + getDynamicModel().selected);
 			try {
-				getComponent().getSelected().setBindingValue(selectedObject, getController());
+				getComponent().getSelected().setBindingValue(getDynamicModel().selected, getController());
 			} catch (TypeMismatchException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (NullReferenceException e1) {
-				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (InvocationTargetException e1) {
 				e1.printStackTrace();
 			}
 		}
+
+		notifyDynamicModelChanged();
 
 		updateFont();
 

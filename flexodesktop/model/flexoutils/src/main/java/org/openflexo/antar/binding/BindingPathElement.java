@@ -21,6 +21,7 @@ package org.openflexo.antar.binding;
 
 import java.lang.reflect.Type;
 
+import org.openflexo.antar.expr.InvocationTargetTransformException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 
@@ -66,7 +67,8 @@ public interface BindingPathElement extends Typed {
 	 * @throws NullReferenceException
 	 * @throws TypeMismatchException
 	 */
-	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException;
+	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException,
+			InvocationTargetTransformException;
 
 	public BindingPathElement getParent();
 

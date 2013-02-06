@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.view;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
@@ -244,6 +245,8 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
 			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -259,6 +262,8 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 			return true;
@@ -403,6 +408,8 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 				} catch (TypeMismatchException e) {
 					e.printStackTrace();
 				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
 					e.printStackTrace();
 				}
 			}

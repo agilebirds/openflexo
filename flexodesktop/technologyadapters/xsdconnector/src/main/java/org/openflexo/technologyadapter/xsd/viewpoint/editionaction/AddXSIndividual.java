@@ -19,6 +19,7 @@
  */
 package org.openflexo.technologyadapter.xsd.viewpoint.editionaction;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.expr.NullReferenceException;
@@ -29,7 +30,6 @@ import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.xsd.model.XMLModel;
 import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntClass;
@@ -67,6 +67,8 @@ public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOnt
 		} catch (TypeMismatchException e1) {
 			e1.printStackTrace();
 		} catch (NullReferenceException e1) {
+			e1.printStackTrace();
+		} catch (InvocationTargetException e1) {
 			e1.printStackTrace();
 		}
 		// System.out.println("individualName="+individualName);

@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.view.diagram.viewpoint;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 import org.openflexo.antar.binding.BindingModel;
@@ -91,6 +92,8 @@ public class GraphicalElementAction extends EditionPatternObject {
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 		}

@@ -19,6 +19,7 @@
  */
 package org.openflexo.fib.model;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,7 +28,6 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 
@@ -51,7 +51,8 @@ public abstract class FIBBrowserAction extends FIBModelObject {
 	@Deprecated
 	public static BindingDefinition METHOD = new BindingDefinition("method", Object.class, DataBinding.BindingDefinitionType.EXECUTE, false);
 	@Deprecated
-	public static BindingDefinition IS_AVAILABLE = new BindingDefinition("isAvailable", Boolean.class, DataBinding.BindingDefinitionType.EXECUTE, false);
+	public static BindingDefinition IS_AVAILABLE = new BindingDefinition("isAvailable", Boolean.class,
+			DataBinding.BindingDefinitionType.EXECUTE, false);
 
 	public FIBBrowserElement getBrowserElement() {
 		return element;
@@ -164,6 +165,9 @@ public abstract class FIBBrowserAction extends FIBModelObject {
 				e.printStackTrace();
 				return null;
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+				return null;
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 				return null;
 			}

@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
@@ -108,6 +109,8 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
 			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
 		}
 		if (value instanceof IFlexoOntologyConcept) {
 			return (IFlexoOntologyConcept) value;
@@ -121,6 +124,8 @@ public class ObjectPropertyAssertion extends AbstractAssertion {
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
 		return null;

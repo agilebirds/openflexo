@@ -19,6 +19,7 @@
  */
 package org.openflexo.dg.docx;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Vector;
@@ -238,6 +239,8 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
 			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
 		}
 		logger.info("getIterableObjects = " + listValue);
 		if (listValue instanceof List) {
@@ -263,6 +266,8 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
 			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
 		}
 		return conditionValue;
 	}
@@ -277,6 +282,8 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
 		return conditionValue;
@@ -321,6 +328,8 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
 		return (T) objectValue;

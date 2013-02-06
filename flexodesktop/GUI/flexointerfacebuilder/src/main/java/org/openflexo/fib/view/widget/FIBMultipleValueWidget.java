@@ -21,6 +21,7 @@ package org.openflexo.fib.view.widget;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +74,8 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 					e.printStackTrace();
 				} catch (NullReferenceException e) {
 					// e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
 				}
 				if (accessedList instanceof List) {
 					list = (List) accessedList;
@@ -88,6 +91,8 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 				} catch (TypeMismatchException e1) {
 					e1.printStackTrace();
 				} catch (NullReferenceException e1) {
+					e1.printStackTrace();
+				} catch (InvocationTargetException e1) {
 					e1.printStackTrace();
 				}
 				// System.out.println("accessedArray="+accessedArray);
@@ -152,6 +157,8 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 					e.printStackTrace();
 				} catch (NullReferenceException e) {
 					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
 				}
 				return accessedList != null && !accessedList.equals(list);
 
@@ -164,6 +171,8 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 				} catch (TypeMismatchException e) {
 					e.printStackTrace();
 				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
 					e.printStackTrace();
 				}
 				// TODO: you can do better

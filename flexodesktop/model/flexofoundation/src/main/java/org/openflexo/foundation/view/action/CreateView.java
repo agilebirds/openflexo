@@ -133,9 +133,19 @@ public class CreateView extends FlexoAction<CreateView, RepositoryFolder, Diagra
 		return getFocusedObject();
 	}
 
-	public String errorMessage;
+	private String errorMessage;
+
+	public String getErrorMessage() {
+		isValid();
+		// System.out.println("valid=" + isValid());
+		// System.out.println("errorMessage=" + errorMessage);
+		return errorMessage;
+	}
 
 	public boolean isValid() {
+
+		// System.out.println("viewpointResource=" + viewpointResource);
+
 		if (getFolder() == null) {
 			errorMessage = FlexoLocalization.localizedForKey("no_folder_defined");
 			return false;

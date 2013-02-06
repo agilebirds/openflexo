@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.view.diagram.viewpoint.editionaction;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -98,6 +99,8 @@ public class AddConnector extends AddShemaElementAction<DiagramConnector> {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
 				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 			}
 			return null;
 		}
@@ -113,6 +116,8 @@ public class AddConnector extends AddShemaElementAction<DiagramConnector> {
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 			return null;

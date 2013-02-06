@@ -21,6 +21,7 @@ package org.openflexo.fib.view.widget.table;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
@@ -177,6 +178,9 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 			// logger.warning("Unexpected " + e.getMessage());
 			// e.printStackTrace();
 			return null;
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 
@@ -188,6 +192,8 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
 	}
@@ -249,6 +255,8 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
 				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 			}
 		}
 		return null;
@@ -263,6 +271,8 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
 				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 			}
 		}
 		return null;
@@ -276,6 +286,8 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 		}
@@ -313,6 +325,8 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
 				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 			}
 		}
 
@@ -341,6 +355,8 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			}
 		}

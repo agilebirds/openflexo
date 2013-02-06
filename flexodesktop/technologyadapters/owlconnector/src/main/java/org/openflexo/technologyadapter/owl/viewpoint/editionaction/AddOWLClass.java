@@ -19,6 +19,7 @@
  */
 package org.openflexo.technologyadapter.owl.viewpoint.editionaction;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.expr.NullReferenceException;
@@ -27,7 +28,6 @@ import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddClass;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 
@@ -61,6 +61,8 @@ public class AddOWLClass extends AddClass<OWLOntology, OWLOntology, OWLClass> {
 			e1.printStackTrace();
 		} catch (NullReferenceException e1) {
 			e1.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
 		}
 		OWLClass newClass = null;
 		try {

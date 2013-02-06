@@ -20,6 +20,7 @@
 package org.openflexo.fib.view.widget.table;
 
 import java.awt.Component;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -127,6 +128,8 @@ public class DropDownColumn<T extends Object> extends AbstractColumn<T> implemen
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
 				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
 			}
 
 			if (accessedList instanceof List) {
@@ -143,6 +146,8 @@ public class DropDownColumn<T extends Object> extends AbstractColumn<T> implemen
 			} catch (TypeMismatchException e1) {
 				e1.printStackTrace();
 			} catch (NullReferenceException e1) {
+				e1.printStackTrace();
+			} catch (InvocationTargetException e1) {
 				e1.printStackTrace();
 			}
 			try {
