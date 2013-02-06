@@ -217,6 +217,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 					componentVisible = isVisible;
 				}
 			} catch (TypeMismatchException e) {
+				logger.warning("Unable to evaluate " + getComponent().getVisible());
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
 				// NullReferenceException is allowed, in this case, default visibility is true
@@ -238,14 +239,14 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		if (isComponentVisible() != visible) {
 			visible = !visible;
 			getResultingJComponent().setVisible(visible);
-				if (getResultingJComponent().getParent() instanceof JComponent) {
-					((JComponent) getResultingJComponent().getParent()).revalidate();
-				} else if (getResultingJComponent().getParent() != null) {
-					getResultingJComponent().getParent().validate();
-				}
-				if (getResultingJComponent().getParent() != null) {
-					getResultingJComponent().getParent().repaint();
-				}
+			if (getResultingJComponent().getParent() instanceof JComponent) {
+				((JComponent) getResultingJComponent().getParent()).revalidate();
+			} else if (getResultingJComponent().getParent() != null) {
+				getResultingJComponent().getParent().validate();
+			}
+			if (getResultingJComponent().getParent() != null) {
+				getResultingJComponent().getParent().repaint();
+			}
 			if (visible) {
 				for (FIBView<?, ?> view : subViews) {
 					view.updateVisibility();
@@ -253,8 +254,8 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 			}
 			if (getDynamicModel() != null) {
 				getDynamicModel().setVisible(visible);
+			}
 		}
-	}
 	}
 
 	public FIBComponentDynamicModel<?> createDynamicModel() {

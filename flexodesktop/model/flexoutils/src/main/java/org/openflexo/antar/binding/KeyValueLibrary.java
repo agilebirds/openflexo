@@ -64,9 +64,9 @@ public class KeyValueLibrary {
 				returned = new KeyValueProperty(declaringType, propertyName, false);
 				cacheForType.put(propertyName, returned);
 			} catch (InvalidKeyValuePropertyException e) {
-				logger.warning("While computing getKeyValueProperty(" + propertyName + ") for " + declaringType + " message:"
-						+ e.getMessage());
-				e.printStackTrace();
+				// logger.warning("While computing getKeyValueProperty(" + propertyName + ") for " + declaringType + " message:" +
+				// e.getMessage());
+				// e.printStackTrace();
 				return null;
 			}
 		}
