@@ -42,7 +42,7 @@ public abstract class Constant<V> extends Expression {
 		} else if (value instanceof String) {
 			return new Constant.StringConstant((String) value);
 		} else if (value.getClass().isEnum()) {
-			return new Constant.EnumConstant(((Enum) value).name());
+			return new Constant.EnumConstant(((Enum) value));
 		} else if (value instanceof Float) {
 			return new Constant.FloatConstant(((Float) value).doubleValue());
 		} else if (value instanceof Double) {
@@ -182,30 +182,35 @@ public abstract class Constant<V> extends Expression {
 	}
 
 	public static class EnumConstant extends Constant<Enum> {
-		private String name;
+		private Enum value;
+		private String enumName;
 
 		@Override
 		public EvaluationType getEvaluationType() {
 			return EvaluationType.ENUM;
 		}
 
-		public EnumConstant(String aName) {
+		public EnumConstant(Enum value) {
 			super();
-			this.name = aName;
+			this.value = value;
+		}
+
+		@Deprecated
+		public EnumConstant(String enumName) {
+			super();
+			this.enumName = enumName;
 		}
 
 		public String getName() {
-			return name;
-		}
-
-		public void setName(String value) {
-			this.name = value;
+			if (value != null) {
+				return value.name();
+			}
+			return enumName;
 		}
 
 		@Override
 		public Enum getValue() {
-			// TODO !
-			return null;
+			return value;
 		}
 	}
 
