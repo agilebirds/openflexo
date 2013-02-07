@@ -127,6 +127,7 @@ import org.openflexo.foundation.ontology.ProjectOntologyLibrary;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.rm.FlexoResource.DependencyAlgorithmScheme;
+import org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.stats.ProjectStatistics;
@@ -853,6 +854,25 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * @see org.openflexo.foundation.rm.FlexoResourceData#save()
 	 */
 	public synchronized void saveModifiedResources(FlexoProgress progress, boolean clearModifiedStatus) throws SaveResourceException {
+		try {
+			_saveModifiedResources(progress, clearModifiedStatus);
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Exception occurred during saving " + getDisplayName() + ". Trying to repair and save again");
+			}
+			repairProject();
+			_saveModifiedResources(progress, clearModifiedStatus);
+		}
+	}
+
+	private void repairProject() {
+		ValidationModel validationModel = getProjectValidationModel();
+		validate(validationModel);
+	}
+
+	private void _saveModifiedResources(FlexoProgress progress, boolean clearModifiedStatus) throws SaveResourceException,
+			SaveXMLResourceException, SaveResourcePermissionDeniedException {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Saving modified resources of project...");
 		}
