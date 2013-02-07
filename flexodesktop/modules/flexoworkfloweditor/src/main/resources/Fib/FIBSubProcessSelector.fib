@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel layout="twocols" darkLevel="0" dataClassName="org.openflexo.wkf.controller.action.SubProcessSelectorDialog$SubProcessSelectorData">
-  <Label label="errorMessage" align="center" data="data.errorMessage" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="(data.errorMessage.length &gt; 0)" foregroundColor="255,0,0" localize="true" />
+  <Label label="errorMessage" align="center" data="data.errorMessage" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="((data.errorMessage.length &gt; 0) &amp; data.isShowErrorMessage)" foregroundColor="255,0,0" localize="true" />
   <Label label="select_a_choice" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
   <RadioButtonList columns="1" hGap="0" vGap="-2" data="data.choice" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="choice" localize="true" staticList="" iteratorClassName="org.openflexo.wkf.controller.action.SubProcessSelectorDialog$BoundProcessChoice" autoSelectFirstRow="false" />
   <Label label="new_process_name" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(choice.selected.name = &quot;BIND_NEW&quot;)" localize="true" />
@@ -20,7 +20,7 @@
   <TextField data="data.subProcessNodeName" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="subProcessNodeName" localize="true" columns="7" text="TextField" />
   <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
     <Panel layout="grid" hGap="5" vGap="5" cols="2" rows="1" borderTitle="" darkLevel="0" constraints="flow()">
-      <Button action="controller.validateAndDispose()" buttonType="Trigger" label="ok" default="true" constraints="grid(x=0;y=0)" localize="true" />
+      <Button action="controller.validateAndDispose()" buttonType="Trigger" label="ok" default="true" constraints="grid(x=0;y=0)" localize="true" enable="(data.errorMessage = null)" />
       <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" constraints="grid(x=1;y=0)" localize="true" />
     </Panel>
   </Panel>
