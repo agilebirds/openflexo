@@ -93,7 +93,7 @@ public class ToolsMenu extends FlexoMenu {
 	public ToolsMenu(FlexoController controller) {
 		super("tools", controller);
 		addSpecificItems();
-		if (!UserType.isCustomerRelease() && !UserType.isAnalystRelease()) {
+		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			add(loggingItem = new LoggingItem());
 			add(localizedEditorItem = new LocalizedEditorItem());
 			add(rmItem = new ResourceManagerItem());
@@ -104,7 +104,7 @@ public class ToolsMenu extends FlexoMenu {
 			addSeparator();
 			add(saveDocSubmissions = new SaveDocSubmissionItem());
 		}
-		if (!UserType.isCustomerRelease() && !UserType.isAnalystRelease()) {
+		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			addSeparator();
 			add(repairProject = new RepairProjectItem());
 		}
