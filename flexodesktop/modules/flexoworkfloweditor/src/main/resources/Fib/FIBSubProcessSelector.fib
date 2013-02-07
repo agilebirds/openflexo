@@ -11,13 +11,15 @@
     <Assignment variable="component.selectableCondition" value="&quot;data.isAcceptableExistingProcessNode(ExistingProcessSelector.customComponent.candidateValue)&quot;" />
     <Parameter name="selectableCondition" value="data.isAcceptableExistingProcessNode(ExistingProcessSelector.candidateValue)" />
   </Custom>
+  <Label label="sub_process_node_name" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+  <TextField data="data.subProcessNodeName" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="subProcessNodeName" localize="true" columns="7" text="TextField" />
+  <Label label="reusable_process" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(choice.selected.name = &quot;BIND_EXISTING&quot;)" localize="true" />
+  <CheckBox selected="true" data="data.noParentProcess" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(choice.selected.name = &quot;BIND_EXISTING&quot;)" name="NoParentCheckbox" localize="true" />
   <Label label="parent_process" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(choice.selected.name = &quot;BIND_NEW&quot;)" localize="true" />
-  <Custom componentClassName="org.openflexo.components.widget.FIBProcessNodeSelector" localize="true" manageDynamicModel="true" name="ParentProcessSelector" data="data.parentProcess" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(choice.selected.name = &quot;BIND_NEW&quot;)">
+  <Custom componentClassName="org.openflexo.components.widget.FIBProcessNodeSelector" localize="true" enable="(!(data.noParentProcess))" manageDynamicModel="true" name="ParentProcessSelector" data="data.parentProcess" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(choice.selected.name = &quot;BIND_NEW&quot;)">
     <Assignment variable="component.project" value="data.project" />
     <Assignment variable="component.selectableCondition" value="&quot;data.isAcceptableParentProcessNode(ParentProcessSelector.customComponent.candidateValue)&quot;" />
   </Custom>
-  <Label label="sub_process_node_name" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-  <TextField data="data.subProcessNodeName" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="subProcessNodeName" localize="true" columns="7" text="TextField" />
   <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
     <Panel layout="grid" hGap="5" vGap="5" cols="2" rows="1" borderTitle="" darkLevel="0" constraints="flow()">
       <Button action="controller.validateAndDispose()" buttonType="Trigger" label="ok" default="true" constraints="grid(x=0;y=0)" localize="true" enable="(data.errorMessage = null)" />
@@ -55,5 +57,26 @@
     <Localized key="cancel" lang="English">Cancel</Localized>
     <Localized key="cancel" lang="French">Annuler</Localized>
     <Localized key="cancel" lang="Dutch">Cancel</Localized>
+    <Localized key="Create a new process" lang="English">Create a new process</Localized>
+    <Localized key="Create a new process" lang="French">Create a new process</Localized>
+    <Localized key="Create a new process" lang="Dutch">Create a new process</Localized>
+    <Localized key="Choose an existing process" lang="English">Choose an existing process</Localized>
+    <Localized key="Choose an existing process" lang="French">Choose an existing process</Localized>
+    <Localized key="Choose an existing process" lang="Dutch">Choose an existing process</Localized>
+    <Localized key="Choose a process later" lang="English">Choose a process later</Localized>
+    <Localized key="Choose a process later" lang="French">Choose a process later</Localized>
+    <Localized key="Choose a process later" lang="Dutch">Choose a process later</Localized>
+    <Localized key="reusable_process" lang="English">Reusable process</Localized>
+    <Localized key="reusable_process" lang="French">Processus réutilisable</Localized>
+    <Localized key="reusable_process" lang="Dutch">Reusable process</Localized>
+    <Localized key="Créer un nouveau processus" lang="English">Créer un nouveau processus</Localized>
+    <Localized key="Créer un nouveau processus" lang="French">Créer un nouveau processus</Localized>
+    <Localized key="Créer un nouveau processus" lang="Dutch">Créer un nouveau processus</Localized>
+    <Localized key="Choisir un processus existant" lang="English">Choisir un processus existant</Localized>
+    <Localized key="Choisir un processus existant" lang="French">Choisir un processus existant</Localized>
+    <Localized key="Choisir un processus existant" lang="Dutch">Choisir un processus existant</Localized>
+    <Localized key="Choisir un processus plus tard" lang="English">Choisir un processus plus tard</Localized>
+    <Localized key="Choisir un processus plus tard" lang="French">Choisir un processus plus tard</Localized>
+    <Localized key="Choisir un processus plus tard" lang="Dutch">Choisir un processus plus tard</Localized>
   </LocalizedDictionary>
 </Panel>

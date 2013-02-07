@@ -42,6 +42,7 @@ public class SubProcessSelectorDialog extends FIBDialog<SubProcessSelectorDialog
 		private final SubProcessNode subProcessNode;
 		private String errorMessage;
 		private boolean showErrorMessage;
+		private boolean noParentProcess;
 
 		public SubProcessSelectorData(FlexoProject project, WKFControllerActionInitializer controllerActionInitializer,
 				SubProcessNode subProcessNode, FlexoProcessNode process) {
@@ -51,6 +52,7 @@ public class SubProcessSelectorDialog extends FIBDialog<SubProcessSelectorDialog
 			subProcessNodeName = subProcessNode.getName();
 			this.parentProcess = process;
 			this.propertyChangeSupport = new PropertyChangeSupport(this);
+			noParentProcess = true;
 			validate();
 		}
 
@@ -144,6 +146,14 @@ public class SubProcessSelectorDialog extends FIBDialog<SubProcessSelectorDialog
 		public void setParentProcess(FlexoProcessNode parentProcess) {
 			this.parentProcess = parentProcess;
 			propertyChangeSupport.firePropertyChange("parentProcess", null, parentProcess);
+		}
+
+		public boolean getNoParentProcess() {
+			return noParentProcess;
+		}
+
+		public void setNoParentProcess(boolean value) {
+			noParentProcess = value;
 		}
 
 		public String getSubProcessNodeName() {
@@ -249,7 +259,9 @@ public class SubProcessSelectorDialog extends FIBDialog<SubProcessSelectorDialog
 					AddSubProcess addSubProcess = AddSubProcess.actionType.makeNewAction(getData().subProcessNode.getProcess(), null,
 							getData().getControllerActionInitializer().getEditor());
 					addSubProcess.setNewProcessName(getData().getNewProcessName());
-					addSubProcess.setParentProcess(getData().parentProcess != null ? getData().parentProcess.getProcess() : null);
+					if (!getData().getNoParentProcess()) {
+						addSubProcess.setParentProcess(getData().parentProcess != null ? getData().parentProcess.getProcess() : null);
+					}
 					addSubProcess.setShowNewProcess(false);
 					addSubProcess.doAction();
 					if (addSubProcess.hasActionExecutionSucceeded()) {

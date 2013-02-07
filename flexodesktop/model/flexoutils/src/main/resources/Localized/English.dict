@@ -4332,6 +4332,7 @@ returned_instance=Returned ProcessInstance
 returned_type=Returned type
 returns=Returns
 reusable_component=Reusable component
+reusable_process=Reusable process
 reuse_component=Reuse component
 revert=Revert
 revert_all_repository_to_version=Revert all repository to version
