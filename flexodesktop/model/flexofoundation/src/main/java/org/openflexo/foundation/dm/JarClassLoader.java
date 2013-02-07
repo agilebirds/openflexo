@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
+import java.util.zip.ZipException;
 
 import org.apache.commons.io.FileUtils;
 
@@ -27,6 +28,8 @@ public class JarClassLoader extends ClassLoader {
 	private List<File> jarDirectories;
 
 	private Set<JarFile> jarFiles;
+
+	private Set<File> bannedZip;
 
 	public JarClassLoader(List<File> jarDirectories) {
 		super();
@@ -149,6 +152,9 @@ public class JarClassLoader extends ClassLoader {
 		for (File jarDir : jarDirectories) {
 			jarFiles.addAll(FileUtils.listFiles(jarDir, new String[] { "jar" }, false));
 		}
+		if (bannedZip != null) {
+			jarFiles.removeAll(bannedZip);
+		}
 		for (File file : jarFiles) {
 			try {
 				JarFile jarFile = new JarFile(file);
@@ -158,6 +164,12 @@ public class JarClassLoader extends ClassLoader {
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
+				if (e instanceof ZipException) {
+					if (bannedZip == null) {
+						bannedZip = new HashSet<File>();
+					}
+					bannedZip.add(file);
+				}
 			}
 		}
 		return null;
