@@ -130,9 +130,10 @@
   
   <!--  <entity name="org.openflexo.foundation.rm.FlexoViewLibraryResource" xmlTag="ShemaLibrary"/>-->
 
-  <entity name="org.openflexo.foundation.rm.FlexoViewResource" xmlTag="Shema">
+  <!--  <entity name="org.openflexo.foundation.rm.ViewResource" xmlTag="View">
 	 <property name="name" xmlTag="name" attribute="YES"/> 	
-  </entity>
+  </entity> -->
+
 
   <entity name="org.openflexo.foundation.rm.FlexoJarResource" xmlTag="JAR"/>
 

@@ -285,4 +285,9 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	 */
 	public void notifyContentsAdded(FlexoResource<?> resource);
 
+	/**
+	 * Delete this resource
+	 */
+	public void delete();
+
 }

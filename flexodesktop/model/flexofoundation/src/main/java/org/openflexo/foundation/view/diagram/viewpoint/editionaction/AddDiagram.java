@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.foundation.rm.FlexoViewResource;
+import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.model.Diagram;
@@ -114,7 +114,7 @@ public class AddDiagram extends DiagramAction<Diagram> {
 	@Override
 	public Diagram performAction(EditionSchemeAction action) {
 		Diagram initialDiagram = (Diagram) action.retrieveVirtualModelInstance();
-		FlexoViewResource viewResource = initialDiagram.getView().getResource();
+		ViewResource viewResource = initialDiagram.getView().getResource();
 		org.openflexo.foundation.view.diagram.action.CreateDiagram addDiagramAction = org.openflexo.foundation.view.diagram.action.CreateDiagram.actionType
 				.makeNewEmbeddedAction(initialDiagram.getView(), null, action);
 		addDiagramAction.newDiagramTitle = getDiagramName(action);

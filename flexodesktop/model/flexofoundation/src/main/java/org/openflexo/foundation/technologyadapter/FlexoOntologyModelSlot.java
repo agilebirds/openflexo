@@ -2,6 +2,8 @@ package org.openflexo.foundation.technologyadapter;
 
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
+import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel;
@@ -31,4 +33,8 @@ public abstract class FlexoOntologyModelSlot<M extends FlexoModel<M, MM>, MM ext
 		super(builder);
 	}
 
+	@Override
+	public ModelSlotInstanceConfiguration<FlexoOntologyModelSlot<M, MM>> createConfiguration(CreateVirtualModelInstance action) {
+		return new FlexoOntologyModelSlotInstanceConfiguration<FlexoOntologyModelSlot<M, MM>>(this, action);
+	}
 }

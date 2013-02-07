@@ -37,8 +37,12 @@ public class FlexoFileNotFoundException extends LoadResourceException {
 
 	@Override
 	public String getMessage() {
-		return "FileNotFoundException: resource: " + deprecatedFileResource.getResourceIdentifier() + " file: "
-				+ deprecatedFileResource.getFile().getAbsolutePath();
+		if (deprecatedFileResource != null) {
+			return "FileNotFoundException: resource: " + deprecatedFileResource.getResourceIdentifier() + " file: "
+					+ deprecatedFileResource.getFile().getAbsolutePath();
+		} else {
+			return "FileNotFoundException: resource: null";
+		}
 	}
 
 }

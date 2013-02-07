@@ -34,4 +34,6 @@ public interface FlexoFileResource<RD extends ResourceData<RD>> extends FlexoRes
 
 	public boolean renameFileTo(String name) throws InvalidFileNameException, IOException;
 
+	public void delete(boolean deleteFile);
+
 }

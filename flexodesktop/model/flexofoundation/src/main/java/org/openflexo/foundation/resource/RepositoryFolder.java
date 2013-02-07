@@ -3,6 +3,7 @@ package org.openflexo.foundation.resource;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoObject;
 
@@ -13,6 +14,8 @@ import org.openflexo.foundation.FlexoObject;
  * 
  */
 public class RepositoryFolder<R extends FlexoResource<?>> extends FlexoObject {
+
+	private static final Logger logger = Logger.getLogger(RepositoryFolder.class.getPackage().getName());
 
 	private final ResourceRepository<R> resourceRepository;
 	private String name;
@@ -79,6 +82,10 @@ public class RepositoryFolder<R extends FlexoResource<?>> extends FlexoObject {
 	}
 
 	public void addToResources(R resource) {
+		if (resources.contains(resource)) {
+			logger.warning("Resource already present in " + this + " : " + resource + ". Ignore it.");
+			return;
+		}
 		resources.add(resource);
 		setChanged();
 		notifyObservers(new ResourceRegistered(resource, this));

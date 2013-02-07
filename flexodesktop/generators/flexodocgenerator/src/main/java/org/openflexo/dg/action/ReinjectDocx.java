@@ -55,8 +55,8 @@ import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.action.AbstractGCAction;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoStorageResource;
-import org.openflexo.foundation.rm.FlexoViewResource;
 import org.openflexo.foundation.rm.StorageResourceData;
+import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
@@ -278,7 +278,7 @@ public class ReinjectDocx extends AbstractGCAction<ReinjectDocx, CGObject> {
 				}
 			}
 			boolean found = false;
-			for (FlexoViewResource vr : project.getViewLibrary().getAllResources()) {
+			for (ViewResource vr : project.getViewLibrary().getAllResources()) {
 				View view = vr.getView();
 				if (view == null) {
 					continue;

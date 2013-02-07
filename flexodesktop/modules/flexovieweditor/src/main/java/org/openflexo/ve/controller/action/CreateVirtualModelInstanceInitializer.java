@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -31,6 +32,7 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.icon.VEIconLibrary;
@@ -61,6 +63,29 @@ public class CreateVirtualModelInstanceInitializer extends ActionInitializer<Cre
 				if (action.skipChoosePopup) {
 					return true;
 				} else {
+					int step = 0;
+					boolean shouldContinue = true;
+					while (shouldContinue) {
+						Status result;
+						if (step == 0) {
+							result = instanciateShowDialogAndReturnStatus(action, VECst.CREATE_VIRTUAL_MODEL_INSTANCE_DIALOG_FIB);
+						} else {
+							ModelSlot<?, ?> configuredModelSlot = action.getVirtualModel().getModelSlots().get(step - 1);
+							result = instanciateShowDialogAndReturnStatus(action.getModelSlotInstanceConfiguration(configuredModelSlot),
+									VECst.CONFIGURE_MODEL_SLOT_INSTANCE_DIALOG_FIB);
+						}
+						System.out.println("result = " + result);
+						if (result == Status.CANCELED) {
+							return false;
+						} else if (result == Status.VALIDATED) {
+							return true;
+						} else if (result == Status.NEXT && step + 1 <= action.getVirtualModel().getModelSlots().size()) {
+							step = step + 1;
+						} else if (result == Status.BACK && step - 1 >= 0) {
+							step = step - 1;
+						}
+					}
+
 					return instanciateAndShowDialog(action, VECst.CREATE_VIRTUAL_MODEL_INSTANCE_DIALOG_FIB);
 				}
 

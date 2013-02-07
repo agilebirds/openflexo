@@ -106,6 +106,7 @@ public abstract class FlexoFileResourceImpl<RD extends ResourceData<RD>> extends
 		return getDiskLastModifiedDate();
 	}
 
+	@Override
 	public boolean renameFileTo(String name) throws InvalidFileNameException, IOException {
 		File newFile = new File(getFile().getParentFile(), name);
 		if (getFile().exists()) {
@@ -179,6 +180,30 @@ public abstract class FlexoFileResourceImpl<RD extends ResourceData<RD>> extends
 			}
 		}
 		return _lastWrittenOnDisk;
+	}
+
+	/**
+	 * Delete this resource by deleting the file
+	 */
+	@Override
+	public void delete() {
+		delete(true);
+	}
+
+	/**
+	 * Delete this resource. Delete file is flag deleteFile is true.
+	 */
+	@Override
+	public void delete(boolean deleteFile) {
+		super.delete();
+		if (getFile() != null && getFile().exists() && deleteFile) {
+			if (this instanceof FlexoProjectResource) {
+				((FlexoProjectResource) this).getProject().addToFilesToDelete(getFile());
+			}
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Will delete file " + getFile().getAbsolutePath() + " upon next save of RM");
+			}
+		}
 	}
 
 }

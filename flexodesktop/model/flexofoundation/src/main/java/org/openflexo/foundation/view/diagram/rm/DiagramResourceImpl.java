@@ -6,12 +6,14 @@ import java.io.FileNotFoundException;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
+import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.rm.VirtualModelInstanceResourceImpl;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
+import org.openflexo.toolbox.StringUtils;
 
 /**
  * Default implementation for {@link DiagramResource}
@@ -28,11 +30,38 @@ public abstract class DiagramResourceImpl extends VirtualModelInstanceResourceIm
 			DiagramResourceImpl returned = (DiagramResourceImpl) factory.newInstance(DiagramResource.class);
 			returned.setServiceManager(view.getProject().getServiceManager());
 			String baseName = name;
-			File xmlFile = new File(view.getFlexoResource().getFile().getParentFile(), baseName + ".diagram");
+			File xmlFile = new File(view.getResource().getFile().getParentFile(), baseName + DiagramResource.DIAGRAM_SUFFIX);
+			returned.setProject(view.getProject());
 			returned.setName(name);
-			returned.setURI(view.getProject().getURI() + "/" + baseName);
 			returned.setFile(xmlFile);
-			returned.setVirtualModel(diagramSpecification);
+			returned.setVirtualModelResource(diagramSpecification.getResource());
+			view.getResource().addToContents(returned);
+			return returned;
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static DiagramResource retrieveDiagramResource(File diagramFile, ViewResource viewResource) {
+		try {
+			ModelFactory factory = new ModelFactory(DiagramResource.class);
+			DiagramResourceImpl returned = (DiagramResourceImpl) factory.newInstance(DiagramResource.class);
+			returned.setServiceManager(viewResource.getProject().getServiceManager());
+			String baseName = diagramFile.getName().substring(0, diagramFile.getName().length() - DiagramResource.DIAGRAM_SUFFIX.length());
+			File xmlFile = new File(viewResource.getFile().getParentFile(), baseName + DiagramResource.DIAGRAM_SUFFIX);
+			returned.setProject(viewResource.getProject());
+			returned.setName(baseName);
+			returned.setFile(xmlFile);
+			VirtualModelInstanceInfo vmiInfo = findVirtualModelInstanceInfo(xmlFile, "Diagram");
+			if (vmiInfo == null) {
+				// Unable to retrieve infos, just abort
+				return null;
+			}
+			if (StringUtils.isNotEmpty(vmiInfo.virtualModelURI)) {
+				returned.setVirtualModelResource(viewResource.getViewPoint().getVirtualModelNamed(vmiInfo.virtualModelURI).getResource());
+			}
+			viewResource.addToContents(returned);
 			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();

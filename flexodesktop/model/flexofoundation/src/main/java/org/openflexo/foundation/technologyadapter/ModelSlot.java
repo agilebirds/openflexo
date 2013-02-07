@@ -13,6 +13,8 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
+import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 import org.openflexo.foundation.viewpoint.AddEditionPattern;
 import org.openflexo.foundation.viewpoint.ConditionalAction;
 import org.openflexo.foundation.viewpoint.DeleteAction;
@@ -362,5 +364,7 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 			return null;
 		}
 	}
+
+	public abstract ModelSlotInstanceConfiguration<? extends ModelSlot<M, MM>> createConfiguration(CreateVirtualModelInstance action);
 
 }

@@ -56,8 +56,8 @@ import javax.imageio.ImageIO;
 import javax.naming.InvalidNameException;
 import javax.swing.ImageIcon;
 
-import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.DocType;
@@ -1255,7 +1255,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		if (identifier != null) {
 			if (resourceForKey(identifier) == resource) {
-			removeResourceWithKey(identifier);
+				removeResourceWithKey(identifier);
 			}
 			for (FlexoResource<FlexoResourceData> res : new ArrayList<FlexoResource<FlexoResourceData>>(resource.getAlteredResources())) {
 				res.removeFromDependentResources(resource);
@@ -1400,10 +1400,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	public FlexoMonitoringScreenResource getFlexoMonitoringScreenResource(String componentName) {
 		return (FlexoMonitoringScreenResource) resourceForKey(ResourceType.MONITORING_SCREEN, componentName);
-	}
-
-	public FlexoViewResource getShemaResource(String shemaName) {
-		return (FlexoViewResource) resourceForKey(ResourceType.VIEW, shemaName);
 	}
 
 	public ImplementationModelResource getImplementationModelResource(String modelName) {
@@ -3888,7 +3884,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		if (!isDeserializing()) {
 			setChanged();
 			notifyObservers(new AttributeDataModification(PROJECT_URI, old, projectURI));
-	}
+		}
 	}
 
 	@Override
@@ -4583,7 +4579,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 */
 	public Set<FlexoModel<?, ?>> getAllReferencedModels() {
 		HashSet<FlexoModel<?, ?>> returned = new HashSet<FlexoModel<?, ?>>();
-		for (FlexoViewResource vr : getViewLibrary().getAllResources()) {
+		for (ViewResource vr : getViewLibrary().getAllResources()) {
 			if (vr.isLoaded()) {
 				View v = vr.getView();
 				for (ModelSlotInstance<?, ?> msi : v.getModelSlotInstances()) {
@@ -4618,7 +4614,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 */
 	public Set<FlexoMetaModel<?>> getAllReferencedMetaModels() {
 		HashSet<FlexoMetaModel<?>> returned = new HashSet<FlexoMetaModel<?>>();
-		for (FlexoViewResource vr : getViewLibrary().getAllResources()) {
+		for (ViewResource vr : getViewLibrary().getAllResources()) {
 			if (vr.isLoaded()) {
 				View v = vr.getView();
 				for (ModelSlotInstance<?, ?> msi : v.getModelSlotInstances()) {

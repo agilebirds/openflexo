@@ -18,5 +18,7 @@ import org.openflexo.model.annotations.XMLElement;
 @XMLElement
 public interface DiagramResource extends VirtualModelInstanceResource<Diagram> {
 
+	public static final String DIAGRAM_SUFFIX = ".diagram";
+
 	public Diagram getDiagram();
 }

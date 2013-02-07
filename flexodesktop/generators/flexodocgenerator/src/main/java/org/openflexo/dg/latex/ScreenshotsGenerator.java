@@ -34,8 +34,8 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.rm.FlexoCopiedResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectReference;
-import org.openflexo.foundation.rm.FlexoViewResource;
 import org.openflexo.foundation.rm.ResourceType;
+import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -77,9 +77,9 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 		if (getProject().getProjectData() != null && getProject().getProjectData().getImportedProjects().size() > 0) {
 			for (FlexoProjectReference ref : getProject().getProjectData().getImportedProjects()) {
 				if (ref.getReferredProject() != null) {
-				buildResourcesAndSetGeneratorsForProject(ref.getReferredProject(), resources, newGenerators);
+					buildResourcesAndSetGeneratorsForProject(ref.getReferredProject(), resources, newGenerators);
+				}
 			}
-		}
 		}
 		if (getProject().getFlexoComponentLibrary(false) != null) {
 			// Now the components
@@ -104,7 +104,7 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 
 		// Now the Views
 		if (getProject() != null) {
-			for (FlexoViewResource vr : getProject().getViewLibrary().getAllResources()) {
+			for (ViewResource vr : getProject().getViewLibrary().getAllResources()) {
 				FlexoCopiedResource cdCopy = getResourceForView(vr, true);
 				resources.add(cdCopy);
 				newGenerators.put(cdCopy, (CopiedResourceGenerator) cdCopy.getGenerator());
@@ -210,7 +210,7 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 		return getResourceForFlexoModelObject(cd, createIfNull);
 	}
 
-	private FlexoCopiedResource getResourceForView(FlexoViewResource viewResource, boolean createIfNull) {
+	private FlexoCopiedResource getResourceForView(ViewResource viewResource, boolean createIfNull) {
 		return getResourceForFlexoModelObject(viewResource.getView(), createIfNull);
 	}
 
@@ -266,7 +266,7 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 		} else if (o instanceof FlexoWorkflow) {
 			return getResourceForFlexoModelObject(o, false);
 		} else if (o instanceof View) {
-			return getResourceForView(((View) o).getFlexoResource(), false);
+			return getResourceForView(((View) o).getResource(), false);
 		}
 		return null;
 	}

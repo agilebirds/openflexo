@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel layout="twocols" darkLevel="0" data="" dataClassName="org.openflexo.foundation.view.ViewLibrary" controllerClassName="org.openflexo.view.controller.FlexoFIBController" visible="">
-  <Browser root="data" iteratorClassName="java.lang.Object" visibleRowCount="5" rowHeight="18" boundToSelectionManager="true" selectionMode="DiscontiguousTreeSelection" selected="" showFooter="true" rootVisible="true" showRootsHandle="true" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="controller.singleClick(ViewLibraryBrowser.selected)" doubleClickAction="controller.doubleClick(ViewLibraryBrowser.selected)" rightClickAction="controller.rightClick(ViewLibraryBrowser.selected,event)" enterPressedAction="" valueChangedAction="" name="ViewLibraryBrowser" index="0" data="" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="">
+  <Browser root="data" iteratorClassName="java.lang.Object" visibleRowCount="5" rowHeight="18" boundToSelectionManager="true" selectionMode="DiscontiguousTreeSelection" selected="" showFooter="true" rootVisible="true" showRootsHandle="true" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="controller.singleClick(ViewLibraryBrowser.selected)" doubleClickAction="controller.doubleClick(ViewLibraryBrowser.selected)" rightClickAction="controller.rightClick(ViewLibraryBrowser.selected,event)" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="ViewLibraryBrowser" index="0" data="" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="">
     <BrowserElement dataClassName="org.openflexo.foundation.view.ViewLibrary" label="&quot;View Library&quot;" icon="controller.iconForObject(viewLibrary)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="viewLibrary">
       <Children data="data.rootFolder" visible="" cast="" name="rootFolder" />
     </BrowserElement>
@@ -8,7 +8,10 @@
       <Children data="viewFolder.children" visible="" cast="" name="subFolders" />
       <Children data="viewFolder.resources" visible="" cast="" name="views" />
     </BrowserElement>
-    <BrowserElement dataClassName="org.openflexo.foundation.rm.FlexoViewResource" label="viewResource.name" icon="controller.iconForObject(viewResource)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="viewResource" />
+    <BrowserElement dataClassName="org.openflexo.foundation.rm.ViewResource" label="viewResource.name" icon="controller.iconForObject(viewResource)" tooltip="" enabled="viewResource.isLoaded" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="viewResource">
+      <Children data="viewResource.contents" visible="" cast="" name="children" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.rm.VirtualModelResource" label="virtualModelResource.name" icon="controller.iconForObject(virtualModelResource)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="virtualModelResource" />
   </Browser>
   <LocalizedDictionary />
 </Panel>

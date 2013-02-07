@@ -28,7 +28,6 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
-import org.openflexo.kvc.KeyValueCoding;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.xmlcode.KeyValueCoder;
 import org.openflexo.xmlcode.KeyValueDecoder;
@@ -42,8 +41,7 @@ import org.openflexo.xmlcode.KeyValueDecoder;
  * 
  * @author sguerin
  */
-public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> implements
-		KeyValueCoding {
+public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends FlexoObject, T2 extends FlexoObject> extends FlexoObject {
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoAction.class.getPackage().getName());
 
@@ -56,6 +54,7 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 	private FlexoEditor _editor;
 	private ExecutionContext _executionContext;
 
+	@Override
 	public void delete() {
 		if (_executionContext != null) {
 			_executionContext.delete();
@@ -222,10 +221,12 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 
 	protected abstract void doAction(Object context) throws FlexoException;
 
+	@Override
 	public Object getContext() {
 		return _context;
 	}
 
+	@Override
 	public void setContext(Object context) {
 		_context = context;
 	}
@@ -527,6 +528,11 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 	@Override
 	public boolean isHashtableProperty(String key) {
 		return KeyValueDecoder.isHashtableProperty(this, key);
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		return getClass().getName();
 	}
 
 }

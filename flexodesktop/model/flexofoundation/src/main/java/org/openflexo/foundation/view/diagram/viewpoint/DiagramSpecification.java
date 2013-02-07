@@ -35,6 +35,8 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.view.diagram.DiagramModelSlot;
 import org.openflexo.foundation.view.diagram.DiagramTechnologyAdapter;
+import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
+import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -111,6 +113,30 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 		}
 	}
 
+	/**
+	 * Load eventually unloaded VirtualModels<br>
+	 * After this call return, we can assert that all {@link VirtualModel} are loaded.
+	 */
+	private void loadDiagramPalettesWhenUnloaded() {
+		for (org.openflexo.foundation.resource.FlexoResource<?> r : getResource().getContents()) {
+			if (r instanceof DiagramPaletteResource) {
+				((DiagramPaletteResource) r).getDiagramPalette();
+			}
+		}
+	}
+
+	/**
+	 * Load eventually unloaded VirtualModels<br>
+	 * After this call return, we can assert that all {@link VirtualModel} are loaded.
+	 */
+	private void loadExampleDiagramsWhenUnloaded() {
+		for (org.openflexo.foundation.resource.FlexoResource<?> r : getResource().getContents()) {
+			if (r instanceof ExampleDiagramResource) {
+				((ExampleDiagramResource) r).getExampleDiagram();
+			}
+		}
+	}
+
 	@Override
 	public DiagramSpecificationResource getResource() {
 		return (DiagramSpecificationResource) super.getResource();
@@ -122,6 +148,7 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 	}
 
 	public List<DiagramPalette> getPalettes() {
+		loadDiagramPalettesWhenUnloaded();
 		return palettes;
 	}
 
@@ -129,6 +156,7 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 		if (paletteName == null) {
 			return null;
 		}
+		loadDiagramPalettesWhenUnloaded();
 		for (DiagramPalette p : getPalettes()) {
 			if (paletteName.equals(p.getName())) {
 				return p;
@@ -150,15 +178,17 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 	}
 
 	public List<ExampleDiagram> getExampleDiagrams() {
+		loadExampleDiagramsWhenUnloaded();
 		return exampleDiagrams;
 	}
 
-	public ExampleDiagram getExampleDiagram(String shemaName) {
-		if (shemaName == null) {
+	public ExampleDiagram getExampleDiagram(String diagramName) {
+		if (diagramName == null) {
 			return null;
 		}
+		loadExampleDiagramsWhenUnloaded();
 		for (ExampleDiagram s : getExampleDiagrams()) {
-			if (shemaName.equals(s.getName())) {
+			if (diagramName.equals(s.getName())) {
 				return s;
 			}
 		}

@@ -152,4 +152,13 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 		this.serviceManager = serviceManager;
 		getServiceManager().getResourceManager().registerResource(this);
 	}
+
+	/**
+	 * Delete this resource by deleting the file
+	 */
+	@Override
+	public void delete() {
+		super.delete();
+	}
+
 }

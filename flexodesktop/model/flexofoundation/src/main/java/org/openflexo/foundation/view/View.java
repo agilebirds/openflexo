@@ -26,14 +26,16 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FlexoXMLFileResource;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
-import org.openflexo.foundation.rm.FlexoViewResource;
-import org.openflexo.foundation.rm.FlexoXMLStorageResource;
+import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.SaveResourceException;
+import org.openflexo.foundation.rm.ViewResource;
+import org.openflexo.foundation.rm.ViewResourceImpl;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
@@ -56,27 +58,21 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 
 	private static final Logger logger = Logger.getLogger(View.class.getPackage().getName());
 
-	private FlexoViewResource _resource;
-	private ViewPoint _viewpoint;
+	private ViewResource resource;
 	private List<VirtualModelInstance<?, ?>> vmInstances;
 	private List<ModelSlotInstance<?, ?>> modelSlotInstances;
 	private String title;
 
-	private final FlexoProject project;
-
-	public static View newView(String viewName, String viewTitle, ViewPoint viewPoint, RepositoryFolder<FlexoViewResource> folder,
+	public static View newView(String viewName, String viewTitle, ViewPoint viewPoint, RepositoryFolder<ViewResource> folder,
 			FlexoProject project) throws InvalidFileNameException, SaveResourceException {
 
-		FlexoViewResource newViewResource = new FlexoViewResource(project, viewName, folder, viewPoint);
+		ViewResource newViewResource = ViewResourceImpl.makeViewResource(viewName, folder, viewPoint, project.getViewLibrary());
 
 		View newView = new View(project);
 		newViewResource.setResourceData(newView);
 		newView.setResource(newViewResource);
 
 		newView.setTitle(viewTitle);
-
-		// And register it to the library
-		project.getViewLibrary().registerResource(newViewResource, folder);
 
 		// Save it
 		newView.save();
@@ -101,7 +97,6 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 	 */
 	public View(FlexoProject project) {
 		super(project);
-		this.project = project;
 		logger.info("Created new view with project " + project);
 		vmInstances = new ArrayList<VirtualModelInstance<?, ?>>();
 		modelSlotInstances = new ArrayList<ModelSlotInstance<?, ?>>();
@@ -115,49 +110,46 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 
 	@Override
 	public FlexoProject getProject() {
-		if (getFlexoResource() != null) {
-			return super.getProject();
+		if (getResource() != null) {
+			return getResource().getProject();
 		}
-		return project;
+		return super.getProject();
 	}
 
 	@Override
-	public XMLStorageResourceData getXMLResourceData() {
+	public XMLStorageResourceData<?> getXMLResourceData() {
 		return this;
 	}
 
+	@Deprecated
 	@Override
-	public FlexoViewResource getFlexoResource() {
-		return _resource;
+	public FlexoStorageResource<View> getFlexoResource() {
+		return null;
 	}
 
-	@Override
-	public FlexoXMLStorageResource getFlexoXMLFileResource() {
-		return getFlexoResource();
-	}
-
+	@Deprecated
 	@Override
 	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
-		_resource = (FlexoViewResource) resource;
 	}
 
 	@Override
-	public FlexoViewResource getResource() {
-		return getFlexoResource();
+	public FlexoXMLFileResource<View> getFlexoXMLFileResource() {
+		return resource;
+	}
+
+	@Override
+	public ViewResource getResource() {
+		return resource;
 	}
 
 	@Override
 	public void setResource(org.openflexo.foundation.resource.FlexoResource<View> resource) {
-		try {
-			setFlexoResource((FlexoResource) resource);
-		} catch (DuplicateResourceException e) {
-			e.printStackTrace();
-		}
+		this.resource = (ViewResource) resource;
 	}
 
 	@Override
 	public void save() throws SaveResourceException {
-		getFlexoResource().saveResourceData();
+		getResource().save(null);
 	}
 
 	@Override
@@ -167,16 +159,16 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 
 	@Override
 	public String getName() {
-		if (getFlexoResource() != null) {
-			return getFlexoResource().getName();
+		if (getResource() != null) {
+			return getResource().getName();
 		}
 		return null;
 	}
 
 	@Override
 	public void setName(String name) {
-		if (getFlexoResource() != null) {
-			getFlexoResource().setName(name);
+		if (getResource() != null) {
+			getResource().setName(name);
 		}
 	}
 
@@ -204,8 +196,8 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 	}
 
 	public ViewPoint getViewPoint() {
-		if (getFlexoResource() != null) {
-			return getFlexoResource().getViewPoint();
+		if (getResource() != null) {
+			return getResource().getViewPoint();
 		}
 		return null;
 	}
@@ -330,9 +322,9 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 		return getModel(modelSlot, true);
 	}*/
 
-	public Set<FlexoMetaModel> getAllMetaModels() {
-		Set<FlexoMetaModel> allMetaModels = new HashSet<FlexoMetaModel>();
-		for (ModelSlotInstance instance : getModelSlotInstances()) {
+	public Set<FlexoMetaModel<?>> getAllMetaModels() {
+		Set<FlexoMetaModel<?>> allMetaModels = new HashSet<FlexoMetaModel<?>>();
+		for (ModelSlotInstance<?, ?> instance : getModelSlotInstances()) {
 			if (instance.getModelSlot() != null && instance.getModelSlot().getMetaModelResource() != null) {
 				allMetaModels.add(instance.getModelSlot().getMetaModelResource().getMetaModelData());
 			}
@@ -342,7 +334,7 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 
 	public Set<FlexoModel<?, ?>> getAllModels() {
 		Set<FlexoModel<?, ?>> allModels = new HashSet<FlexoModel<?, ?>>();
-		for (ModelSlotInstance instance : getModelSlotInstances()) {
+		for (ModelSlotInstance<?, ?> instance : getModelSlotInstances()) {
 			if (instance.getModel() != null) {
 				allModels.add(instance.getModel());
 			}
@@ -360,12 +352,12 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("delete: View " + getName());
 		}
-		if (getFlexoResource() != null) {
-			getFlexoResource().delete();
+		if (getResource() != null) {
+			getResource().delete();
 		}
 
-		if (getFlexoResource() != null) {
-			getFlexoResource().delete();
+		if (getResource() != null) {
+			getResource().delete();
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("View " + getName() + " has no ViewDefinition associated!");
@@ -383,9 +375,9 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 		return getProject().getViewLibrary();
 	}
 
-	public RepositoryFolder<FlexoViewResource> getFolder() {
-		if (getFlexoResource() != null) {
-			return getViewLibrary().getParentFolder(getFlexoResource());
+	public RepositoryFolder<ViewResource> getFolder() {
+		if (getResource() != null) {
+			return getViewLibrary().getParentFolder(getResource());
 		}
 		return null;
 	}

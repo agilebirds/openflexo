@@ -68,7 +68,7 @@ public class VirtualModelInstanceBuilder {
 
 	public VirtualModel getVirtualModel() {
 		if (virtualModelResource != null) {
-			return virtualModelResource.getVirtualModel();
+			return virtualModelResource.getVirtualModelResource().getVirtualModel();
 		}
 		return null;
 	}

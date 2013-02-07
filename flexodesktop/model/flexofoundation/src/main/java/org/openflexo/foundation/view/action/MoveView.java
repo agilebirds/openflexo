@@ -27,7 +27,7 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.resource.RepositoryFolder;
-import org.openflexo.foundation.rm.FlexoViewResource;
+import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.view.View;
 
 public class MoveView extends FlexoAction<MoveView, View, View> {
@@ -53,7 +53,7 @@ public class MoveView extends FlexoAction<MoveView, View, View> {
 
 	};
 
-	private RepositoryFolder<FlexoViewResource> folder;
+	private RepositoryFolder<ViewResource> folder;
 
 	protected MoveView(View focusedObject, Vector<View> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -70,16 +70,16 @@ public class MoveView extends FlexoAction<MoveView, View, View> {
 		}
 	}
 
-	private void moveToFolder(View v, RepositoryFolder<FlexoViewResource> folder) {
-		RepositoryFolder<FlexoViewResource> oldFolder = v.getFolder();
-		v.getViewLibrary().moveResource(v.getFlexoResource(), oldFolder, folder);
+	private void moveToFolder(View v, RepositoryFolder<ViewResource> folder) {
+		RepositoryFolder<ViewResource> oldFolder = v.getFolder();
+		v.getViewLibrary().moveResource(v.getResource(), oldFolder, folder);
 	}
 
-	public RepositoryFolder<FlexoViewResource> getFolder() {
+	public RepositoryFolder<ViewResource> getFolder() {
 		return folder;
 	};
 
-	public void setFolder(RepositoryFolder<FlexoViewResource> folder) {
+	public void setFolder(RepositoryFolder<ViewResource> folder) {
 		this.folder = folder;
 	}
 }

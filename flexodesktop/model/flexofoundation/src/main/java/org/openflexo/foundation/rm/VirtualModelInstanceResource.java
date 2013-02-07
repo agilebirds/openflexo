@@ -4,7 +4,6 @@ import org.openflexo.foundation.resource.FlexoProjectResource;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoXMLFileResource;
 import org.openflexo.foundation.view.VirtualModelInstance;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
@@ -23,13 +22,19 @@ import org.openflexo.model.annotations.XMLElement;
 public interface VirtualModelInstanceResource<VMI extends VirtualModelInstance<VMI, ?>> extends FlexoXMLFileResource<VMI>,
 		FlexoProjectResource<VMI> {
 
-	public static final String VIRTUAL_MODEL = "virtualModel";
+	public static final String VIRTUAL_MODEL_SUFFIX = ".vmxml";
 
-	@Getter(value = VIRTUAL_MODEL, ignoreType = true)
-	public VirtualModel getVirtualModel();
+	public static final String VIRTUAL_MODEL_RESOURCE = "virtualModelResource";
 
-	@Setter(VIRTUAL_MODEL)
-	public void setVirtualModel(VirtualModel virtualModel);
+	@Getter(value = VIRTUAL_MODEL_RESOURCE, ignoreType = true)
+	public VirtualModelResource<?> getVirtualModelResource();
 
-	public VirtualModelInstance getVirtualModelInstance();
+	@Setter(VIRTUAL_MODEL_RESOURCE)
+	public void setVirtualModelResource(VirtualModelResource<?> virtualModelResource);
+
+	public VMI getVirtualModelInstance();
+
+	@Override
+	public ViewResource getContainer();
+
 }

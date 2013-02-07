@@ -31,11 +31,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.FileResourceRepository;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoViewResource;
-import org.openflexo.foundation.rm.InvalidFileNameException;
+import org.openflexo.foundation.rm.ViewResource;
+import org.openflexo.foundation.rm.ViewResourceImpl;
 
 /**
  * The {@link ViewLibrary} contains all {@link FlexoViewResource} referenced in a {@link FlexoProject}
@@ -43,7 +44,7 @@ import org.openflexo.foundation.rm.InvalidFileNameException;
  * @author sylvain
  */
 
-public class ViewLibrary extends FileResourceRepository<FlexoViewResource> {
+public class ViewLibrary extends FileResourceRepository<ViewResource> {
 
 	private static final Logger logger = Logger.getLogger(ViewLibrary.class.getPackage().getName());
 
@@ -57,6 +58,13 @@ public class ViewLibrary extends FileResourceRepository<FlexoViewResource> {
 		this.project = project;
 		getRootFolder().setName(project.getName());
 		exploreDirectoryLookingForViews(getDirectory(), getRootFolder());
+	}
+
+	public FlexoServiceManager getServiceManager() {
+		if (getProject() != null) {
+			return getProject().getServiceManager();
+		}
+		return null;
 	}
 
 	public static File getExpectedViewLibraryDirectory(FlexoProject project) {
@@ -82,7 +90,7 @@ public class ViewLibrary extends FileResourceRepository<FlexoViewResource> {
 
 	public List<View> getViewsForViewPointWithURI(String vpURI) {
 		List<View> views = new ArrayList<View>();
-		for (FlexoViewResource vr : getAllResources()) {
+		for (ViewResource vr : getAllResources()) {
 			if (vr.getViewPoint() != null && vr.getViewPointResource().getURI().equals(vpURI)) {
 				views.add(vr.getView());
 			}
@@ -90,14 +98,14 @@ public class ViewLibrary extends FileResourceRepository<FlexoViewResource> {
 		return views;
 	}
 
-	public void delete(FlexoViewResource vr) {
+	public void delete(ViewResource vr) {
 		logger.info("Remove view " + vr);
 		unregisterResource(vr);
 		vr.delete();
 	}
 
 	public void delete(View v) {
-		delete(v.getFlexoResource());
+		delete(v.getResource());
 	}
 
 	public boolean isValidForANewViewName(String value) {
@@ -107,7 +115,7 @@ public class ViewLibrary extends FileResourceRepository<FlexoViewResource> {
 		return getRootFolder().isValidResourceName(value);
 	}
 
-	public FlexoViewResource getViewResourceNamed(String value) {
+	public ViewResource getViewResourceNamed(String value) {
 		if (value == null) {
 			return null;
 		}
@@ -121,26 +129,22 @@ public class ViewLibrary extends FileResourceRepository<FlexoViewResource> {
 	 * @param viewPointLibrary
 	 * @return a flag indicating if some View were found
 	 */
-	private boolean exploreDirectoryLookingForViews(File directory, RepositoryFolder<FlexoViewResource> folder) {
+	private boolean exploreDirectoryLookingForViews(File directory, RepositoryFolder<ViewResource> folder) {
 		boolean returned = false;
 		System.out.println("Exploring " + directory.getAbsolutePath());
 		logger.fine("Exploring " + directory);
 		if (directory.exists() && directory.isDirectory()) {
 			for (File f : directory.listFiles()) {
 				if (f.isDirectory() && f.getName().endsWith(".view")) {
-					FlexoViewResource vRes;
-					try {
-						vRes = new FlexoViewResource(getProject(), f);
-						logger.info("Found and register view " + vRes.getURI() + " file=" + vRes.getFile().getAbsolutePath() + " folder="
-								+ folder + " path=" + folder.getFile());
-						registerResource(vRes, folder);
-						returned = true;
-					} catch (InvalidFileNameException e) {
-						e.printStackTrace();
-					}
+					ViewResource vRes;
+					vRes = ViewResourceImpl.retrieveViewResource(f, folder, this);
+					logger.info("Found and register view " + vRes.getURI() + " file=" + vRes.getFile().getAbsolutePath() + " folder="
+							+ folder + " path=" + folder.getFile());
+					registerResource(vRes, folder);
+					returned = true;
 				}
 				if (f.isDirectory() && !f.getName().equals("CVS")) {
-					RepositoryFolder<FlexoViewResource> newFolder = new RepositoryFolder<FlexoViewResource>(f.getName(), folder, this);
+					RepositoryFolder<ViewResource> newFolder = new RepositoryFolder<ViewResource>(f.getName(), folder, this);
 					if (exploreDirectoryLookingForViews(f, newFolder)) {
 						returned = true;
 					} else {

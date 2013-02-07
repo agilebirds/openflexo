@@ -24,8 +24,8 @@ import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.action.AddRepositoryFolder;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoViewResource;
 import org.openflexo.foundation.rm.ViewPointResource;
+import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.view.action.CreateView;
 import org.openflexo.foundation.view.diagram.action.CreateDiagram;
 import org.openflexo.foundation.view.diagram.model.Diagram;
@@ -36,7 +36,7 @@ public class TestCreateView extends FlexoTestCase {
 	public static FlexoProject project;
 	private static FlexoEditor editor;
 	private static ViewPoint basicOntologyEditor;
-	private static RepositoryFolder<FlexoViewResource> viewFolder;
+	private static RepositoryFolder<ViewResource> viewFolder;
 	private static View view;
 
 	/**
@@ -116,7 +116,7 @@ public class TestCreateView extends FlexoTestCase {
 		assertEquals(1, project.getViewLibrary().getRootFolder().getChildren().size());
 		viewFolder = project.getViewLibrary().getRootFolder().getChildren().get(0);
 		assertEquals(1, viewFolder.getResources().size());
-		FlexoViewResource viewRes = viewFolder.getResources().get(0);
+		ViewResource viewRes = viewFolder.getResources().get(0);
 		assertEquals(viewRes, project.getViewLibrary().getResource(viewRes.getURI()));
 		assertNotNull(viewRes);
 		assertFalse(viewRes.isLoaded());
@@ -142,11 +142,16 @@ public class TestCreateView extends FlexoTestCase {
 	}*/
 
 	public void test6CreateDiagram() {
+		System.out.println("Create diagram, view=" + view + " editor=" + editor);
+		System.out.println("editor project = " + editor.getProject());
+		System.out.println("view project = " + view.getProject());
 		CreateDiagram createDiagram = CreateDiagram.actionType.makeNewAction(view, null, editor);
 		createDiagram.newDiagramName = "TestNewDiagram";
 		createDiagram.newDiagramTitle = "A nice title for a new diagram";
 		createDiagram.diagramSpecification = basicOntologyEditor.getDefaultDiagramSpecification();
 		createDiagram.doAction();
+		System.out.println("exception thrown=" + createDiagram.getThrownException());
+		// createDiagram.getThrownException().printStackTrace();
 		assertTrue(createDiagram.hasActionExecutionSucceeded());
 		Diagram newDiagram = createDiagram.getNewDiagram();
 		System.out.println("New diagram " + newDiagram + " created in " + newDiagram.getResource().getFile());

@@ -47,10 +47,13 @@ public class VECst {
 	// General
 	public static File ONTOLOGY_VIEW_FIB = new FileResource("Fib/OntologyView.fib");
 
-	// Shema edition
+	// View/VirtualModelInstance edition
 	public static File CREATE_VIEW_DIALOG_FIB = new FileResource("Fib/Dialog/CreateViewDialog.fib");
-	public static File CREATE_DIAGRAM_DIALOG_FIB = new FileResource("Fib/Dialog/CreateDiagramDialog.fib");
 	public static File CREATE_VIRTUAL_MODEL_INSTANCE_DIALOG_FIB = new FileResource("Fib/Dialog/CreateVirtualModelInstanceDialog.fib");
+	public static File CONFIGURE_MODEL_SLOT_INSTANCE_DIALOG_FIB = new FileResource("Fib/Dialog/ConfigureModelSlotInstanceDialog.fib");
+
+	// Diagram edition
+	public static File CREATE_DIAGRAM_DIALOG_FIB = new FileResource("Fib/Dialog/CreateDiagramDialog.fib");
 	public static File DELETE_DIAGRAM_ELEMENTS_DIALOG_FIB = new FileResource("Fib/Dialog/DeleteDiagramElementsDialog.fib");
 	public static File REINDEX_DIAGRAM_ELEMENTS_DIALOG_FIB = new FileResource("Fib/Dialog/ReindexDiagramElementsDialog.fib");
 

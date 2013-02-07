@@ -90,6 +90,8 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 		newVirtualModelInstance.setResource(newVirtualModelResource);
 		newVirtualModelInstance.setTitle(virtualModelTitle);
 
+		view.getResource().notifyContentsAdded(newVirtualModelResource);
+
 		newVirtualModelInstance.save();
 
 		return newVirtualModelResource;

@@ -20,6 +20,7 @@
 package org.openflexo.foundation.view.action;
 
 import java.security.InvalidParameterException;
+import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -30,6 +31,7 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.VirtualModelInstanceResource;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.viewpoint.VirtualModel;
@@ -72,28 +74,27 @@ public class CreateVirtualModelInstance extends FlexoAction<CreateVirtualModelIn
 
 	public String newVirtualModelInstanceName;
 	public String newVirtualModelInstanceTitle;
-	public VirtualModel<?> virtualModel;
+	private VirtualModel<?> virtualModel;
 
 	public boolean skipChoosePopup = false;
 
 	CreateVirtualModelInstance(View focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
+		modelSlotConfigurations = new Hashtable<ModelSlot<?, ?>, ModelSlotInstanceConfiguration<?>>();
 	}
 
 	@Override
 	protected void doAction(Object context) throws InvalidFileNameException, SaveResourceException {
 		logger.info("Add virtual model instance in view " + getFocusedObject());
 
-		if (StringUtils.isNotEmpty(newVirtualModelInstanceTitle) && StringUtils.isEmpty(newVirtualModelInstanceName)) {
-			newVirtualModelInstanceName = JavaUtils.getClassName(newVirtualModelInstanceTitle);
-		}
+		newVirtualModelInstanceName = JavaUtils.getClassName(newVirtualModelInstanceName);
 
 		if (StringUtils.isNotEmpty(newVirtualModelInstanceName) && StringUtils.isEmpty(newVirtualModelInstanceTitle)) {
 			newVirtualModelInstanceTitle = newVirtualModelInstanceName;
 		}
 
 		if (StringUtils.isEmpty(newVirtualModelInstanceName)) {
-			throw new InvalidParameterException("view name is undefined");
+			throw new InvalidParameterException("virtual model instance name is undefined");
 		}
 
 		int index = 1;
@@ -120,22 +121,36 @@ public class CreateVirtualModelInstance extends FlexoAction<CreateVirtualModelIn
 		return errorMessage;
 	}
 
+	public int getStepsNumber() {
+		if (virtualModel == null) {
+			return 1;
+		} else {
+			return virtualModel.getModelSlots().size() + 1;
+		}
+	}
+
+	@Override
 	public boolean isValid() {
 		if (virtualModel == null) {
 			errorMessage = FlexoLocalization.localizedForKey("no_virtual_model_type_selected");
 			return false;
 		}
+		if (StringUtils.isEmpty(newVirtualModelInstanceName)) {
+			errorMessage = FlexoLocalization.localizedForKey("no_virtual_model_name_defined");
+			return false;
+		}
+
+		if (!newVirtualModelInstanceName.equals(JavaUtils.getClassName(newVirtualModelInstanceName))
+				&& !newVirtualModelInstanceName.equals(JavaUtils.getVariableName(newVirtualModelInstanceName))) {
+			errorMessage = FlexoLocalization.localizedForKey("invalid_name_for_new_virtual_model");
+			return false;
+		}
+
 		if (StringUtils.isEmpty(newVirtualModelInstanceTitle)) {
 			errorMessage = FlexoLocalization.localizedForKey("no_virtual_model_title_defined");
 			return false;
 		}
-
-		String vmiName = newVirtualModelInstanceName;
-		if (StringUtils.isNotEmpty(newVirtualModelInstanceTitle) && StringUtils.isEmpty(newVirtualModelInstanceName)) {
-			vmiName = JavaUtils.getClassName(newVirtualModelInstanceTitle);
-		}
-
-		if (getFocusedObject().getVirtualModelInstance(vmiName) != null) {
+		if (getFocusedObject().getVirtualModelInstance(newVirtualModelInstanceName) != null) {
 			errorMessage = FlexoLocalization.localizedForKey("a_virtual_model_with_that_name_already_exists");
 			return false;
 		}
@@ -144,5 +159,45 @@ public class CreateVirtualModelInstance extends FlexoAction<CreateVirtualModelIn
 
 	public VirtualModelInstance getNewVirtualModelInstance() {
 		return newVirtualModelInstance;
+	}
+
+	private Hashtable<ModelSlot<?, ?>, ModelSlotInstanceConfiguration<?>> modelSlotConfigurations;
+
+	public VirtualModel<?> getVirtualModel() {
+		return virtualModel;
+	}
+
+	public void setVirtualModel(VirtualModel<?> virtualModel) {
+		if (virtualModel != this.virtualModel) {
+			this.virtualModel = virtualModel;
+			modelSlotConfigurations.clear();
+			if (this.virtualModel != null) {
+				for (ModelSlot<?, ?> ms : this.virtualModel.getModelSlots()) {
+					modelSlotConfigurations.put(ms, ms.createConfiguration(this));
+				}
+			}
+		}
+	}
+
+	public ModelSlotInstanceConfiguration<?> getModelSlotInstanceConfiguration(ModelSlot<?, ?> ms) {
+		return modelSlotConfigurations.get(ms);
+	}
+
+	/**
+	 * Return a boolean indicating if all options are enough to execute the action
+	 * 
+	 * @return
+	 */
+	public boolean isActionValidable() {
+		if (!isValid()) {
+			return false;
+		}
+		for (ModelSlot<?, ?> ms : virtualModel.getModelSlots()) {
+			ModelSlotInstanceConfiguration<?> configuration = getModelSlotInstanceConfiguration(ms);
+			if (!configuration.isValidConfiguration()) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

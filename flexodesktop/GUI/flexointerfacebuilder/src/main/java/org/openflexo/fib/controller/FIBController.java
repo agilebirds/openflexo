@@ -135,7 +135,7 @@ public class FIBController extends Observable implements BindingEvaluationContex
 	private FIBViewFactory viewFactory;
 
 	public enum Status {
-		RUNNING, VALIDATED, CANCELED, ABORTED, RESET, YES, NO, QUIT, OTHER
+		RUNNING, VALIDATED, CANCELED, ABORTED, NEXT, BACK, RESET, YES, NO, QUIT, OTHER
 	}
 
 	private Status status = Status.RUNNING;
@@ -483,6 +483,22 @@ public class FIBController extends Observable implements BindingEvaluationContex
 
 	public void validateAndDispose() {
 		status = Status.VALIDATED;
+		Window w = retrieveWindow();
+		if (w != null) {
+			w.dispose();
+		}
+	}
+
+	public void nextAndDispose() {
+		status = Status.NEXT;
+		Window w = retrieveWindow();
+		if (w != null) {
+			w.dispose();
+		}
+	}
+
+	public void backAndDispose() {
+		status = Status.BACK;
 		Window w = retrieveWindow();
 		if (w != null) {
 			w.dispose();

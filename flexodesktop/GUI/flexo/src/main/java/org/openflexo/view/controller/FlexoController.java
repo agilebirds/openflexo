@@ -119,10 +119,10 @@ import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectReference;
-import org.openflexo.foundation.rm.FlexoViewResource;
 import org.openflexo.foundation.rm.ProjectClosedNotification;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.ViewPointResource;
+import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.rm.VirtualModelInstanceResource;
 import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
@@ -1827,7 +1827,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			if (!((FlexoResource<?>) object).isLoaded()) {
 				FlexoProgress progress = getEditor().getFlexoProgressFactory().makeFlexoProgress("loading_resource", 3);
 				try {
-					System.out.println("je charge le truc");
 					resourceData = (FlexoObject) ((FlexoResource<?>) object).getResourceData(progress);
 				} catch (FileNotFoundException e) {
 					notify("Cannot load resource: " + e.getMessage());
@@ -1860,7 +1859,6 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 					e.printStackTrace();
 				}
 			}
-			System.out.println("ma rd=" + resourceData);
 			if (resourceData != null) {
 				selectAndFocusObject(resourceData);
 			}
@@ -2083,8 +2081,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return VPMIconLibrary.iconForObject((ExampleDiagramResource) object);
 		} else if (object instanceof DiagramPaletteResource) {
 			return VPMIconLibrary.iconForObject((DiagramPaletteResource) object);
-		} else if (object instanceof FlexoViewResource) {
-			return VEIconLibrary.iconForObject((FlexoViewResource) object);
+		} else if (object instanceof ViewResource) {
+			return VEIconLibrary.iconForObject((ViewResource) object);
 		} else if (object instanceof VirtualModelInstanceResource) {
 			return VEIconLibrary.iconForObject((VirtualModelInstanceResource) object);
 		} else if (object instanceof ViewLibrary) {

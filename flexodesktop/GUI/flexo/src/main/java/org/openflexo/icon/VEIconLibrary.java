@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.foundation.rm.FlexoViewResource;
+import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.rm.VirtualModelInstanceResource;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelSlotInstance;
@@ -101,7 +101,7 @@ public class VEIconLibrary extends IconLibrary {
 		return UNKNOWN_ICON;
 	}
 
-	public static ImageIcon iconForObject(FlexoViewResource object) {
+	public static ImageIcon iconForObject(ViewResource object) {
 		return VIEW_ICON;
 	}
 
