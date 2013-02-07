@@ -30,6 +30,7 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.fib.model.validation.ValidationReport;
 
 public abstract class FIBBrowserAction extends FIBModelObject {
 
@@ -173,6 +174,35 @@ public abstract class FIBBrowserAction extends FIBModelObject {
 			}
 		} else {
 			return null;
+		}
+	}
+
+	@Override
+	protected void applyValidation(ValidationReport report) {
+		super.applyValidation(report);
+		performValidation(MethodBindingMustBeValid.class, report);
+		performValidation(IsAvailableBindingMustBeValid.class, report);
+	}
+
+	public static class MethodBindingMustBeValid extends BindingMustBeValid<FIBBrowserAction> {
+		public MethodBindingMustBeValid() {
+			super("'method'_binding_is_not_valid", FIBBrowserAction.class);
+		}
+
+		@Override
+		public DataBinding<?> getBinding(FIBBrowserAction object) {
+			return object.getMethod();
+		}
+	}
+
+	public static class IsAvailableBindingMustBeValid extends BindingMustBeValid<FIBBrowserAction> {
+		public IsAvailableBindingMustBeValid() {
+			super("'is_available'_binding_is_not_valid", FIBBrowserAction.class);
+		}
+
+		@Override
+		public DataBinding<?> getBinding(FIBBrowserAction object) {
+			return object.getIsAvailable();
 		}
 	}
 

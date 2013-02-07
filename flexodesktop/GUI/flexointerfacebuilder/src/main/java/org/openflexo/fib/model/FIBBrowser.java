@@ -514,6 +514,11 @@ public class FIBBrowser extends FIBWidget {
 	}
 
 	@Override
+	public List<? extends FIBModelObject> getEmbeddedObjects() {
+		return getElements();
+	}
+
+	@Override
 	protected void applyValidation(ValidationReport report) {
 		super.applyValidation(report);
 		performValidation(RootBindingMustBeValid.class, report);
@@ -527,6 +532,18 @@ public class FIBBrowser extends FIBWidget {
 		@Override
 		public DataBinding<?> getBinding(FIBBrowser object) {
 			return object.getRoot();
+		}
+
+	}
+
+	public static class SelectedBindingMustBeValid extends BindingMustBeValid<FIBBrowser> {
+		public SelectedBindingMustBeValid() {
+			super("'selected'_binding_is_not_valid", FIBBrowser.class);
+		}
+
+		@Override
+		public DataBinding<?> getBinding(FIBBrowser object) {
+			return object.getSelected();
 		}
 
 	}

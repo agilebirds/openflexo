@@ -22,6 +22,7 @@ package org.openflexo.fib.model;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Observable;
@@ -369,7 +370,7 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 		return list;
 	}
 
-	public abstract List<? extends FIBModelObject> getEmbeddedObjects();
+	public abstract Collection<? extends FIBModelObject> getEmbeddedObjects();
 
 	public static class FIBModelObjectShouldHaveAUniqueName extends ValidationRule<FIBModelObjectShouldHaveAUniqueName, FIBModelObject> {
 		public FIBModelObjectShouldHaveAUniqueName() {

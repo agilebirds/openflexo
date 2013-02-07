@@ -30,7 +30,7 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.fib.model.validation.ValidationReport;
 
 public abstract class FIBTableColumn extends FIBModelObject {
 
@@ -383,6 +383,83 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	@Override
 	public List<? extends FIBModelObject> getEmbeddedObjects() {
 		return null;
+	}
+
+	@Override
+	protected void applyValidation(ValidationReport report) {
+		super.applyValidation(report);
+		performValidation(DataBindingMustBeValid.class, report);
+		performValidation(FormatBindingMustBeValid.class, report);
+		performValidation(TooltipBindingMustBeValid.class, report);
+		performValidation(ColorBindingMustBeValid.class, report);
+		performValidation(BgColorBindingMustBeValid.class, report);
+		performValidation(ValueChangedActionBindingMustBeValid.class, report);
+	}
+
+	public static class DataBindingMustBeValid extends BindingMustBeValid<FIBTableColumn> {
+		public DataBindingMustBeValid() {
+			super("'data'_binding_is_not_valid", FIBTableColumn.class);
+		}
+
+		@Override
+		public DataBinding<?> getBinding(FIBTableColumn object) {
+			return object.getData();
+		}
+	}
+
+	public static class FormatBindingMustBeValid extends BindingMustBeValid<FIBTableColumn> {
+		public FormatBindingMustBeValid() {
+			super("'format'_binding_is_not_valid", FIBTableColumn.class);
+		}
+
+		@Override
+		public DataBinding<?> getBinding(FIBTableColumn object) {
+			return object.getFormat();
+		}
+	}
+
+	public static class TooltipBindingMustBeValid extends BindingMustBeValid<FIBTableColumn> {
+		public TooltipBindingMustBeValid() {
+			super("'tooltip'_binding_is_not_valid", FIBTableColumn.class);
+		}
+
+		@Override
+		public DataBinding<?> getBinding(FIBTableColumn object) {
+			return object.getTooltip();
+		}
+	}
+
+	public static class ColorBindingMustBeValid extends BindingMustBeValid<FIBTableColumn> {
+		public ColorBindingMustBeValid() {
+			super("'color'_binding_is_not_valid", FIBTableColumn.class);
+		}
+
+		@Override
+		public DataBinding<?> getBinding(FIBTableColumn object) {
+			return object.getColor();
+		}
+	}
+
+	public static class BgColorBindingMustBeValid extends BindingMustBeValid<FIBTableColumn> {
+		public BgColorBindingMustBeValid() {
+			super("'bg_color'_binding_is_not_valid", FIBTableColumn.class);
+		}
+
+		@Override
+		public DataBinding<?> getBinding(FIBTableColumn object) {
+			return object.getBgColor();
+		}
+	}
+
+	public static class ValueChangedActionBindingMustBeValid extends BindingMustBeValid<FIBTableColumn> {
+		public ValueChangedActionBindingMustBeValid() {
+			super("'value_changed_action'_binding_is_not_valid", FIBTableColumn.class);
+		}
+
+		@Override
+		public DataBinding<?> getBinding(FIBTableColumn object) {
+			return object.getValueChangedAction();
+		}
 	}
 
 }

@@ -23,6 +23,7 @@ import java.awt.Font;
 import java.io.File;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
@@ -41,6 +42,8 @@ import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.model.FIBBrowserAction.FIBAddAction;
 import org.openflexo.fib.model.FIBBrowserAction.FIBCustomAction;
 import org.openflexo.fib.model.FIBBrowserAction.FIBRemoveAction;
+import org.openflexo.fib.model.validation.ValidationReport;
+import org.openflexo.toolbox.ChainedCollection;
 
 public class FIBBrowserElement extends FIBModelObject {
 
@@ -788,11 +791,141 @@ public class FIBBrowserElement extends FIBModelObject {
 			return null;
 		}
 
+		@Override
+		protected void applyValidation(ValidationReport report) {
+			super.applyValidation(report);
+			performValidation(DataBindingMustBeValid.class, report);
+			performValidation(VisibleBindingMustBeValid.class, report);
+			performValidation(CastBindingMustBeValid.class, report);
+		}
+
+		public static class DataBindingMustBeValid extends BindingMustBeValid<FIBBrowserElementChildren> {
+			public DataBindingMustBeValid() {
+				super("'data'_binding_is_not_valid", FIBBrowserElementChildren.class);
+			}
+
+			@Override
+			public DataBinding<?> getBinding(FIBBrowserElementChildren object) {
+				return object.getData();
+			}
+		}
+
+		public static class VisibleBindingMustBeValid extends BindingMustBeValid<FIBBrowserElementChildren> {
+			public VisibleBindingMustBeValid() {
+				super("'visible'_binding_is_not_valid", FIBBrowserElementChildren.class);
+			}
+
+			@Override
+			public DataBinding<?> getBinding(FIBBrowserElementChildren object) {
+				return object.getVisible();
+			}
+		}
+
+		public static class CastBindingMustBeValid extends BindingMustBeValid<FIBBrowserElementChildren> {
+			public CastBindingMustBeValid() {
+				super("'cast'_binding_is_not_valid", FIBBrowserElementChildren.class);
+			}
+
+			@Override
+			public DataBinding<?> getBinding(FIBBrowserElementChildren object) {
+				return object.getCast();
+			}
+		}
+
 	}
 
 	@Override
-	public List<? extends FIBModelObject> getEmbeddedObjects() {
-		return null;
+	public Collection<? extends FIBModelObject> getEmbeddedObjects() {
+		return new ChainedCollection(getActions(), getChildren());
+	}
+
+	@Override
+	protected void applyValidation(ValidationReport report) {
+		super.applyValidation(report);
+		performValidation(LabelBindingMustBeValid.class, report);
+		performValidation(IconBindingMustBeValid.class, report);
+		performValidation(TooltipBindingMustBeValid.class, report);
+		performValidation(EnabledBindingMustBeValid.class, report);
+		performValidation(VisibleBindingMustBeValid.class, report);
+		performValidation(EditableLabelBindingMustBeValid.class, report);
+		performValidation(DynamicFontBindingMustBeValid.class, report);
+	}
+
+	public static class LabelBindingMustBeValid extends BindingMustBeValid<FIBBrowserElement> {
+		public LabelBindingMustBeValid() {
+			super("'label'_binding_is_not_valid", FIBBrowserElement.class);
+		}
+
+		@Override
+		public DataBinding<?> getBinding(FIBBrowserElement object) {
+			return object.getLabel();
+		}
+	}
+
+	public static class IconBindingMustBeValid extends BindingMustBeValid<FIBBrowserElement> {
+		public IconBindingMustBeValid() {
+			super("'icon'_binding_is_not_valid", FIBBrowserElement.class);
+		}
+
+		@Override
+		public DataBinding<?> getBinding(FIBBrowserElement object) {
+			return object.getIcon();
+		}
+	}
+
+	public static class TooltipBindingMustBeValid extends BindingMustBeValid<FIBBrowserElement> {
+		public TooltipBindingMustBeValid() {
+			super("'tooltip'_binding_is_not_valid", FIBBrowserElement.class);
+		}
+
+		@Override
+		public DataBinding<?> getBinding(FIBBrowserElement object) {
+			return object.getTooltip();
+		}
+	}
+
+	public static class EnabledBindingMustBeValid extends BindingMustBeValid<FIBBrowserElement> {
+		public EnabledBindingMustBeValid() {
+			super("'enabled'_binding_is_not_valid", FIBBrowserElement.class);
+		}
+
+		@Override
+		public DataBinding<?> getBinding(FIBBrowserElement object) {
+			return object.getEnabled();
+		}
+	}
+
+	public static class VisibleBindingMustBeValid extends BindingMustBeValid<FIBBrowserElement> {
+		public VisibleBindingMustBeValid() {
+			super("'visible'_binding_is_not_valid", FIBBrowserElement.class);
+		}
+
+		@Override
+		public DataBinding<?> getBinding(FIBBrowserElement object) {
+			return object.getVisible();
+		}
+	}
+
+	public static class EditableLabelBindingMustBeValid extends BindingMustBeValid<FIBBrowserElement> {
+		public EditableLabelBindingMustBeValid() {
+			super("'editable_label'_binding_is_not_valid", FIBBrowserElement.class);
+		}
+
+		@Override
+		public DataBinding<?> getBinding(FIBBrowserElement object) {
+			return object.getEditableLabel();
+		}
+	}
+
+	public static class DynamicFontBindingMustBeValid extends BindingMustBeValid<FIBBrowserElement> {
+		public DynamicFontBindingMustBeValid() {
+			super("'dynamic_font'_binding_is_not_valid", FIBBrowserElement.class);
+		}
+
+		@Override
+		public DataBinding<?> getBinding(FIBBrowserElement object) {
+			return object.getDynamicFont();
+		}
 	}
 
 }

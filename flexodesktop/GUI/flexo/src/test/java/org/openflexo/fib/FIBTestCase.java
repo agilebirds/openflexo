@@ -15,6 +15,9 @@ public class FIBTestCase extends TestCase {
 
 	public void validateFIB(File fibFile) {
 		FIBComponent component = FIBLibrary.instance().retrieveFIBComponent(fibFile);
+		if (component == null) {
+			fail("Component not found: " + fibFile.getAbsolutePath());
+		}
 		ValidationReport validationReport = component.validate();
 		for (ValidationError error : validationReport.getErrors()) {
 			logger.severe("FIBComponent validation error: Object: " + error.getObject() + " message: " + error.getMessage());

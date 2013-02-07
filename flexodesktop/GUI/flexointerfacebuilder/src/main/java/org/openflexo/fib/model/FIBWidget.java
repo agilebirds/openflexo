@@ -21,6 +21,7 @@ package org.openflexo.fib.model;
 
 import java.awt.event.MouseEvent;
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -645,7 +646,7 @@ public abstract class FIBWidget extends FIBComponent {
 	}
 
 	@Override
-	public List<? extends FIBModelObject> getEmbeddedObjects() {
+	public Collection<? extends FIBModelObject> getEmbeddedObjects() {
 		return null;
 	}
 

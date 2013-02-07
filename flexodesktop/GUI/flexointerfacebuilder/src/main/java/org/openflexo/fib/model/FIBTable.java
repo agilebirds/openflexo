@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -32,7 +33,6 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.binding.WilcardTypeImpl;
@@ -40,6 +40,7 @@ import org.openflexo.fib.controller.FIBTableDynamicModel;
 import org.openflexo.fib.model.FIBTableAction.FIBAddAction;
 import org.openflexo.fib.model.FIBTableAction.FIBCustomAction;
 import org.openflexo.fib.model.FIBTableAction.FIBRemoveAction;
+import org.openflexo.toolbox.ChainedCollection;
 
 public class FIBTable extends FIBWidget implements FIBTableComponent /*implements DynamicAccess*/{
 
@@ -633,6 +634,11 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 			this.backgroundNonSelectionColor = backgroundNonSelectionColor;
 			hasChanged(notification);
 		}
+	}
+
+	@Override
+	public Collection<? extends FIBModelObject> getEmbeddedObjects() {
+		return new ChainedCollection(getColumns(), getActions());
 	}
 
 }

@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.fib.model.validation.ValidationReport;
 
 public abstract class FIBTableAction extends FIBModelObject {
 
@@ -47,7 +47,8 @@ public abstract class FIBTableAction extends FIBModelObject {
 	@Deprecated
 	public static BindingDefinition METHOD = new BindingDefinition("method", Object.class, DataBinding.BindingDefinitionType.EXECUTE, false);
 	@Deprecated
-	public static BindingDefinition IS_AVAILABLE = new BindingDefinition("isAvailable", Boolean.class, DataBinding.BindingDefinitionType.GET, false);
+	public static BindingDefinition IS_AVAILABLE = new BindingDefinition("isAvailable", Boolean.class,
+			DataBinding.BindingDefinitionType.GET, false);
 
 	public FIBTable getTable() {
 		return table;
@@ -144,6 +145,35 @@ public abstract class FIBTableAction extends FIBModelObject {
 		@Override
 		public ActionType getActionType() {
 			return ActionType.Custom;
+		}
+	}
+
+	@Override
+	protected void applyValidation(ValidationReport report) {
+		super.applyValidation(report);
+		performValidation(MethodBindingMustBeValid.class, report);
+		performValidation(IsAvailableBindingMustBeValid.class, report);
+	}
+
+	public static class MethodBindingMustBeValid extends BindingMustBeValid<FIBTableAction> {
+		public MethodBindingMustBeValid() {
+			super("'method'_binding_is_not_valid", FIBTableAction.class);
+		}
+
+		@Override
+		public DataBinding<?> getBinding(FIBTableAction object) {
+			return object.getMethod();
+		}
+	}
+
+	public static class IsAvailableBindingMustBeValid extends BindingMustBeValid<FIBTableAction> {
+		public IsAvailableBindingMustBeValid() {
+			super("'is_available'_binding_is_not_valid", FIBTableAction.class);
+		}
+
+		@Override
+		public DataBinding<?> getBinding(FIBTableAction object) {
+			return object.getIsAvailable();
 		}
 	}
 
