@@ -4,8 +4,8 @@
     <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
       <Label label="is_sequential" index="18" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IsSequentialLabel" localize="true" />
       <CheckBox selected="false" index="19" data="data.isSequential" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IsSequential" localize="true" />
-      <Label label="display_thumb" index="20" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="DisplaySubProcessImageLabel" localize="true" />
-      <CheckBox selected="false" index="21" data="data.displaySubProcessImage" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="DisplaySubProcessImage" localize="true" />
+      <Label label="display_thumb" index="20" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="false" name="DisplaySubProcessImageLabel" localize="true" />
+      <CheckBox selected="false" index="21" data="data.displaySubProcessImage" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="false" name="DisplaySubProcessImage" localize="true" />
     </Tab>
     <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab">
       <Parameter name="visibleFor" value="SEMANTICS,SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER " />
@@ -17,9 +17,9 @@
     <Localized key="is_sequential" lang="English">Is sequential</Localized>
     <Localized key="is_sequential" lang="French">Séquentiel ?</Localized>
     <Localized key="is_sequential" lang="Dutch">Is sequential</Localized>
-    <Localized key="display_thumb" lang="English">DIsplay embedded subprocess</Localized>
+    <Localized key="display_thumb" lang="English">DIsplay embedded</Localized>
     <Localized key="display_thumb" lang="French">Afficher le sous-processus</Localized>
-    <Localized key="display_thumb" lang="Dutch">DIsplay embedded subprocess</Localized>
+    <Localized key="display_thumb" lang="Dutch">DIsplay embedded</Localized>
     <Localized key="Basic" lang="English">Basic</Localized>
     <Localized key="Basic" lang="Dutch">Basic</Localized>
     <Localized key="Advanced" lang="English">Advanced</Localized>
