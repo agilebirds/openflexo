@@ -41,14 +41,17 @@ public class SubProcessSelectorDialog extends FIBDialog<SubProcessSelectorDialog
 
 		private final SubProcessNode subProcessNode;
 		private String errorMessage;
+		private boolean showErrorMessage;
 
 		public SubProcessSelectorData(FlexoProject project, WKFControllerActionInitializer controllerActionInitializer,
 				SubProcessNode subProcessNode, FlexoProcessNode process) {
 			this.project = project;
 			this.controllerActionInitializer = controllerActionInitializer;
 			this.subProcessNode = subProcessNode;
+			subProcessNodeName = subProcessNode.getName();
 			this.parentProcess = process;
 			this.propertyChangeSupport = new PropertyChangeSupport(this);
+			validate();
 		}
 
 		@Override
@@ -192,6 +195,14 @@ public class SubProcessSelectorDialog extends FIBDialog<SubProcessSelectorDialog
 			setErrorMessage(null);
 		}
 
+		public boolean isShowErrorMessage() {
+			return showErrorMessage;
+		}
+
+		public void setShowErrorMessage(boolean showErrorMessage) {
+			this.showErrorMessage = showErrorMessage;
+		}
+
 	}
 
 	public SubProcessSelectorDialog(FlexoProject project, WKFControllerActionInitializer controllerActionInitializer,
@@ -204,44 +215,53 @@ public class SubProcessSelectorDialog extends FIBDialog<SubProcessSelectorDialog
 	public boolean askAndSetSubProcess() {
 		setSize(560, 270);
 		setLocationRelativeTo(getOwner());
-		setVisible(true);
-		if (getStatus() == Status.VALIDATED) {
-			getData().getSubProcessNode().setName(getData().getSubProcessNodeName());
-			switch (getData().getChoice()) {
-			case BIND_EXISTING:
-				FlexoProcessNode existingProcess = getData().getExistingProcess();
-				if (existingProcess != null) {
-					FlexoProcess process;
-					if (existingProcess.getWorkflow().isCache()) {
-						process = existingProcess.getProcess(true);
-						if (process == null) {
-							return false;
+		while (true) {
+			setVisible(true);
+			if (getStatus() == Status.VALIDATED) {
+				getData().setShowErrorMessage(true);
+				getData().validate();
+				if (getData().getErrorMessage() != null) {
+					continue;
+				}
+				getData().getSubProcessNode().setName(getData().getSubProcessNodeName());
+				switch (getData().getChoice()) {
+				case BIND_EXISTING:
+					FlexoProcessNode existingProcess = getData().getExistingProcess();
+					if (existingProcess != null) {
+						FlexoProcess process;
+						if (existingProcess.getWorkflow().isCache()) {
+							process = existingProcess.getProcess(true);
+							if (process == null) {
+								return false;
+							}
+						} else {
+							process = existingProcess.getProcess();
 						}
-					} else {
-						process = existingProcess.getProcess();
+						if (process != null) {
+							getData().getSubProcessNode().setSubProcess(process);
+							return true;
+						}
 					}
-					if (process != null) {
-						getData().getSubProcessNode().setSubProcess(process);
+					break;
+				case BIND_LATER:
+					return true;
+				case BIND_NEW:
+					AddSubProcess addSubProcess = AddSubProcess.actionType.makeNewAction(getData().subProcessNode.getProcess(), null,
+							getData().getControllerActionInitializer().getEditor());
+					addSubProcess.setNewProcessName(getData().getNewProcessName());
+					addSubProcess.setParentProcess(getData().parentProcess != null ? getData().parentProcess.getProcess() : null);
+					addSubProcess.setShowNewProcess(false);
+					addSubProcess.doAction();
+					if (addSubProcess.hasActionExecutionSucceeded()) {
+						getData().getSubProcessNode().setSubProcess(addSubProcess.getNewProcess());
 						return true;
 					}
+					break;
 				}
-				break;
-			case BIND_LATER:
-				return true;
-			case BIND_NEW:
-				AddSubProcess addSubProcess = AddSubProcess.actionType.makeNewAction(getData().subProcessNode.getProcess(), null, getData()
-						.getControllerActionInitializer().getEditor());
-				addSubProcess.setNewProcessName(getData().getNewProcessName());
-				addSubProcess.setParentProcess(getData().parentProcess != null ? getData().parentProcess.getProcess() : null);
-				addSubProcess.setShowNewProcess(false);
-				addSubProcess.doAction();
-				if (addSubProcess.hasActionExecutionSucceeded()) {
-					getData().getSubProcessNode().setSubProcess(addSubProcess.getNewProcess());
-					return true;
-				}
-				break;
+			} else {
+				return false;
 			}
 		}
-		return false;
+
 	}
 }
