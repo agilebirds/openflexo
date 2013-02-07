@@ -46,6 +46,7 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 			returned.setFile(xmlFile);
 			returned.setVirtualModelResource(virtualModel.getResource());
 			view.getResource().addToContents(returned);
+			view.getResource().notifyContentsAdded(returned);
 			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
@@ -75,6 +76,7 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 				returned.setVirtualModelResource(viewResource.getViewPoint().getVirtualModelNamed(vmiInfo.virtualModelURI).getResource());
 			}
 			viewResource.addToContents(returned);
+			viewResource.notifyContentsAdded(returned);
 			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();

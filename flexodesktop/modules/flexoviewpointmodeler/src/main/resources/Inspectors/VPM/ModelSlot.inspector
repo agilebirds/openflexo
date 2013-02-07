@@ -6,7 +6,7 @@
       <TextField columns="10" passwd="false" readOnly="true" localize="true" data="data.technologyAdapter.name" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
       <Label label="metamodel" localize="true" name="TechnologyLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
       <Custom componentClassName="org.openflexo.components.widget.FIBMetaModelSelector" localize="true" manageDynamicModel="true" name="MetaModelSelector" data="data.metaModelResource" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)">
-        <Assignment variable="component.informationSpace" value="data.viewPoint.viewPointLibrary.flexoServiceManager.informationSpace" />
+        <Assignment variable="component.informationSpace" value="data.viewPoint.viewPointLibrary.serviceManager.informationSpace" />
         <Assignment variable="component.technologyAdapter" value="data.technologyAdapter" />
       </Custom>
       <Label label="required" localize="true" name="Required" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />

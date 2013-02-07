@@ -53,6 +53,9 @@ public class KeyValueLibrary {
 	}
 
 	public static KeyValueProperty getKeyValueProperty(Type declaringType, String propertyName) {
+		if (declaringType == null) {
+			return null;
+		}
 		Hashtable<String, KeyValueProperty> cacheForType = properties.get(declaringType);
 		if (cacheForType == null) {
 			cacheForType = new Hashtable<String, KeyValueProperty>();

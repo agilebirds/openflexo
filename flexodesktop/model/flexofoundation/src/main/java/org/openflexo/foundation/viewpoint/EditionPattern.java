@@ -155,6 +155,7 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 
 	public EditionPattern(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
+		virtualModel = builder.getVirtualModel();
 		patternRoles = new Vector<PatternRole>();
 		editionSchemes = new Vector<EditionScheme>();
 		editionPatternConstraints = new Vector<EditionPatternConstraint>();

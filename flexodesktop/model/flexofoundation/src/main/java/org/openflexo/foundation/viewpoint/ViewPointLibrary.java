@@ -110,12 +110,12 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 	 * @return
 	 */
 	public VirtualModel getVirtualModel(String virtualModelURI) {
-		String viewPointURI = virtualModelURI.substring(0, virtualModelURI.lastIndexOf("."));
+		String viewPointURI = virtualModelURI.substring(0, virtualModelURI.lastIndexOf("/"));
 		ViewPoint vp = getViewPoint(viewPointURI);
 		if (vp != null) {
-			return vp.getVirtualModelNamed(virtualModelURI.substring(virtualModelURI.lastIndexOf(".") + 1));
+			return vp.getVirtualModelNamed(virtualModelURI.substring(virtualModelURI.lastIndexOf("/") + 1));
 		}
-		logger.warning("Cannot find virtual model:" + virtualModelURI);
+		logger.warning("Cannot find virtual model:" + virtualModelURI + " (searched in viewpoint " + vp + ")");
 		return null;
 	}
 
