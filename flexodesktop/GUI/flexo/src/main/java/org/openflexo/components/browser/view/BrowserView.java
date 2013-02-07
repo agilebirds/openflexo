@@ -194,7 +194,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		add(northPanel, BorderLayout.NORTH);
 
 		treeView = createTreeView(browser);
-
+		treeView.setExpandsSelectedPaths(true);
 		ds = new TreeDragSource(treeView, DnDConstants.ACTION_COPY_OR_MOVE);
 		dt = createTreeDropTarget(treeView, _browser);
 		BrowserViewCellRenderer renderer = new BrowserViewCellRenderer();
