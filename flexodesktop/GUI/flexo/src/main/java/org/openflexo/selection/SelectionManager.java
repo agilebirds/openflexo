@@ -381,7 +381,6 @@ public abstract class SelectionManager extends Observable {
 	 *            : the object to add to selection
 	 */
 	protected void internallyAddToSelected(FlexoObject object, boolean isNewFocusedObject) {
-		logger.info("internallyAddToSelected() with " + object);
 		if (!isSelectable(object)) {
 			return;
 		}
@@ -556,7 +555,6 @@ public abstract class SelectionManager extends Observable {
 	 */
 
 	private void setCurrentInspectedObject(FlexoObject inspectable) {
-		logger.info("Inspect " + inspectable);
 		if (!isInspectable(inspectable)) {
 			return;
 		}

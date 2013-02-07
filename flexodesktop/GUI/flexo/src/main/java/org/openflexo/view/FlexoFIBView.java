@@ -216,7 +216,7 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		// TODO !
-		logger.info("propertyChange in FlexoFIBView: " + evt);
+		// logger.info("propertyChange in FlexoFIBView: " + evt);
 	}
 
 	public Object getDataObject() {
