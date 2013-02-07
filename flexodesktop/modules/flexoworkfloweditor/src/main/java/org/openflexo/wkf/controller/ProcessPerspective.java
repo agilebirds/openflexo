@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -150,15 +151,20 @@ public class ProcessPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
+	public void notifyModuleViewDisplayed(final ModuleView<?> moduleView) {
 		// currentProcessView = (ProcessView) moduleView;
 		if (moduleView instanceof ProcessView) {
-			FlexoProcess process = ((ProcessView) moduleView).getRepresentedObject();
-			_controller.getProcessBrowser().setRootObject(process);
-			_controller.getExternalProcessBrowser().setRootObject(process);
-			_controller.getWorkflowBrowser().focusOn(process);
-			_controller.getSelectionManager().setSelectedObject(process);
-			importedWorkflowView.setSelected(process.getProcessNode());
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					FlexoProcess process = ((ProcessView) moduleView).getRepresentedObject();
+					_controller.getProcessBrowser().setRootObject(process);
+					_controller.getExternalProcessBrowser().setRootObject(process);
+					_controller.getWorkflowBrowser().focusOn(process);
+					_controller.getSelectionManager().setSelectedObject(process);
+					importedWorkflowView.setSelected(process.getProcessNode());
+				}
+			});
 		}
 	}
 

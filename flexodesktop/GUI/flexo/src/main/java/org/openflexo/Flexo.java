@@ -49,6 +49,7 @@ import org.openflexo.application.FlexoApplication;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.SplashWindow;
 import org.openflexo.components.WelcomeDialog;
+import org.openflexo.foundation.FlexoMainLocalizer;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
@@ -198,6 +199,8 @@ public class Flexo {
 		final SplashWindow splashWindow2 = splashWindow;
 		FlexoProperties.load();
 		initializeLoggingManager();
+		// First init localization with default location
+		FlexoLocalization.initWith(new FlexoMainLocalizer());
 		final ApplicationContext applicationContext = new InteractiveApplicationContext();
 		FlexoApplication.installEventQueue();
 		// Before starting the UI, we need to initialize localization

@@ -3,7 +3,7 @@
   <Panel layout="border" borderTitle="" darkLevel="0" index="0" constraints="border(index=0;location=center)">
     <Panel layout="border" border="line" borderColor="204,204,204" darkLevel="0" index="0" constraints="border(index=0;location=center)" opaque="true" backgroundColor="255,255,255" width="320" height="320" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_NEVER" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED">
       <Panel layout="flow" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" borderBottom="0" borderRight="80" darkLevel="0" index="0" constraints="border(index=0;location=center)">
-        <CheckboxList columns="1" hGap="0" vGap="2" index="0" data="data.selected" constraints="flow(index=0;location=center)" name="CheckboxList" format="(((object.name + &quot; (&quot;) + object.projectDirectory) + &quot;)&quot;)" icon="controller.iconForObject(object)" localize="false" staticList="" list="data.projects" showIcon="true" iteratorClassName="org.openflexo.foundation.rm.FlexoProject" autoSelectFirstRow="true">
+        <CheckboxList columns="1" hGap="0" vGap="2" index="0" data="data.selected" constraints="flow(index=0;location=center)" name="CheckboxList" format="(((object.displayName + &quot; (&quot;) + object.projectDirectory) + &quot;)&quot;)" icon="controller.iconForObject(object)" localize="false" staticList="" list="data.projects" showIcon="true" iteratorClassName="org.openflexo.foundation.rm.FlexoProject" autoSelectFirstRow="true">
           <Dependancy componentName="SelectAll" />
           <Dependancy componentName="DeselectAll" />
         </CheckboxList>
