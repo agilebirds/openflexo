@@ -319,7 +319,8 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 		if (modelObject != null) {
 			return getSerializationRepresentationForObject(modelObject, serializeClassName);
 		} else {
-			return resourceIdentifier + SEPARATOR + userIdentifier + FlexoModelObject.ID_SEPARATOR + flexoID
+			return (enclosingProjectIdentifier != null ? enclosingProjectIdentifier + PROJECT_SEPARATOR : "") + resourceIdentifier
+					+ SEPARATOR + userIdentifier + FlexoModelObject.ID_SEPARATOR + flexoID
 					+ (serializeClassName ? SEPARATOR + className : "");
 		}
 	}
