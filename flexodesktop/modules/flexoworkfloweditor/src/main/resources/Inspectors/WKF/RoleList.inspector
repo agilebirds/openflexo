@@ -31,5 +31,5 @@
     <Localized key="Roles" lang="English">Roles</Localized>
     <Localized key="Roles" lang="Dutch">Roles</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="RoleList" />
+  <Parameter name="title" value="Role List" />
 </Panel>

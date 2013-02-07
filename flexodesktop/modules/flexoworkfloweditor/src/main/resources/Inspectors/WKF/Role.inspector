@@ -34,8 +34,12 @@
       <Number minValue="30" maxValue="1000" increment="1" numberType="IntegerType" columns="10" index="3" data="data.getIntegerParameter(&quot;swl_height&quot;,80)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IntegerParameterswlHeight80" localize="true" />
       <Label label="index" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IntegerParameterswlIndex80Label" localize="true" />
       <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="10" index="5" data="data.getIntegerParameter(&quot;swl_index&quot;,80)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IntegerParameterswlIndex80" localize="true" />
-      <Label label="text_color" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextColorswlLabel" localize="true" />
-      <Color allowsNull="false" index="13" data="data.getTextColor(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColorswl" localize="true" />
+      <Label label="text_color" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextColorswlLabel" localize="true">
+        <Parameter name="visibleFor" value="DEVELOPER,MAINTAINER" />
+      </Label>
+      <Color allowsNull="false" index="13" data="data.getTextColor(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColorswl" localize="true">
+        <Parameter name="visibleFor" value="DEVELOPER,MAINTAINER" />
+      </Color>
       <Label label="back_color" index="14" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ColorLabel" localize="true" />
       <Color allowsNull="false" index="15" data="data.color" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Color" localize="true" />
     </Tab>
@@ -52,8 +56,12 @@
       <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="11" data="data.getHeight(&quot;default&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Heightdefault" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
       </Number>
-      <Label label="text_color" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextColordefaultLabel" localize="true" />
-      <Color allowsNull="false" index="13" data="data.getTextColor(&quot;default&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColordefault" localize="true" />
+      <Label label="text_color" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextColordefaultLabel" localize="true">
+        <Parameter name="visibleFor" value="DEVELOPER,MAINTAINER" />
+      </Label>
+      <Color allowsNull="false" index="13" data="data.getTextColor(&quot;default&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColordefault" localize="true">
+        <Parameter name="visibleFor" value="DEVELOPER,MAINTAINER" />
+      </Color>
       <Label label="back_color" index="14" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ColorLabel" localize="true" />
       <Color allowsNull="false" index="15" data="data.color" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Color" localize="true" />
     </Tab>

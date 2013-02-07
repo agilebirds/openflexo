@@ -64,5 +64,5 @@
     <Localized key="body" lang="French">Corps</Localized>
     <Localized key="body" lang="Dutch">Body</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="Event Node" />
+  <Parameter name="title" value="Event" />
 </Panel>
