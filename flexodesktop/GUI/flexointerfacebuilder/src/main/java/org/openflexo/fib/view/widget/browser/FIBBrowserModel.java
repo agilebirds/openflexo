@@ -69,6 +69,8 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 	private FIBBrowser _fibBrowser;
 	private final Multimap<Object, BrowserCell> contents;
 
+	private FIBBrowserWidget widget;
+
 	/**
 	 * Stores controls: key is the JButton and value the PropertyListActionListener
 	 */
@@ -78,7 +80,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 		super(null);
 		contents = Multimaps.synchronizedMultimap(ArrayListMultimap.<Object, BrowserCell> create());
 		_fibBrowser = fibBrowser;
-		// _widget = widget;
+		this.widget = widget;
 		_elementTypes = new Hashtable<FIBBrowserElement, FIBBrowserElementType>();
 		for (FIBBrowserElement browserElement : fibBrowser.getElements()) {
 			addToElementTypes(browserElement, buildBrowserElementType(browserElement, controller));
@@ -331,6 +333,17 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 		}
 
 		public void update(boolean recursively) {
+
+			// Sylvain: Fix issue with inspector switching to "Multiple selection"
+			// If object being updated is the current selection, then the next valueChanged() in FIBBrowserWidget
+			// will add a new object in the selection without removing this represented object
+			// A possible fix is to force reset the selection when represented object of updated cell is in the selection
+			/*boolean wasSelected = false;
+			if (widget.getSelection().contains(representedObject)) {
+				wasSelected = true;
+				widget.removeFromSelection(representedObject);
+			}*/
+
 			// logger.info("**************** update() "+this);
 			if (browserElementType == null) {
 				logger.warning("Not element type registered for " + representedObject);
@@ -461,12 +474,12 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 			}
 
 			if (requireSorting) {
-				/*
-				Object wasSelected = getSelectedObject();
+
+				/*Object wasSelected = widget.getSelectedObject();
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Will reselect " + wasSelected);
-				}
-				*/
+				}*/
+
 				try {
 					nodeStructureChanged(this);
 				} catch (Exception e) {
@@ -477,13 +490,18 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 					logger.warning("Unexpected " + e.getClass().getSimpleName()
 							+ " when refreshing browser, no severity but please investigate");
 				}
-				/*
-				if (wasSelected != null) {
-					resetSelection();
-					addToSelection(wasSelected);
-				}
-				*/
+
+				/*if (wasSelected != null) {
+					widget.resetSelection();
+					widget.addToSelection(wasSelected);
+				}*/
+
 			}
+
+			/*if (wasSelected) {
+				widget.addToSelection(representedObject);
+			}*/
+
 			dependingObjects.refreshObserving(browserElementType);
 		}
 

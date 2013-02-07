@@ -527,6 +527,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 	@Override
 	public void removeFromSelection(Object o) {
+		selection.remove(o);
 		for (TreePath path : getBrowserModel().getPaths(o)) {
 			getTreeSelectionModel().removeSelectionPath(path);
 		}
@@ -534,6 +535,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 	@Override
 	public void resetSelection() {
+		selection.clear();
 		getTreeSelectionModel().clearSelection();
 	}
 
@@ -562,7 +564,9 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 			if (obj != null
 					&& (getBrowser().getIteratorClass() == null || getBrowser().getIteratorClass().isAssignableFrom(obj.getClass()))) {
 				if (e.isAddedPath(tp)) {
-					selection.add(obj);
+					if (!selection.contains(obj)) {
+						selection.add(obj);
+					}
 				} else {
 					selection.remove(obj);
 				}
