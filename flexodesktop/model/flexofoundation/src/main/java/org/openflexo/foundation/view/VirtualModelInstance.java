@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.view;
 
-import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,15 +30,12 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoXMLFileResource;
-import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.InvalidFileNameException;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.VirtualModelInstanceResource;
 import org.openflexo.foundation.rm.VirtualModelInstanceResourceImpl;
@@ -324,7 +320,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 		modelsMap.put(instance.getModelSlot(), instance.getModel());
 	}
 
-	public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> void setModel(ModelSlot<M, MM> modelSlot, M model) {
+	/*public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> void setModel(ModelSlot<M, MM> modelSlot, M model) {
 		modelsMap.put(modelSlot, model);
 		for (ModelSlotInstance instance : modelSlotInstances) {
 			if (instance.getModelSlot().equals(modelSlot)) {
@@ -365,6 +361,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> M getModel(ModelSlot<M, MM> modelSlot) {
 		return getModel(modelSlot, true);
 	}
+	*/
 
 	public Set<FlexoMetaModel> getAllMetaModels() {
 		Set<FlexoMetaModel> allMetaModels = new HashSet<FlexoMetaModel>();

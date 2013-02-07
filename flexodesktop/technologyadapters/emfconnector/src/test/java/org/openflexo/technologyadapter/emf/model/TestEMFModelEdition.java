@@ -30,6 +30,7 @@ package org.openflexo.technologyadapter.emf.model;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
@@ -86,8 +87,14 @@ public class TestEMFModelEdition {
 
 			EMFMetaModelRepository emfMetaModelRepository = (EMFMetaModelRepository) metaModelRepository;
 			EMFMetaModelResource emfMetaModelResource = emfMetaModelRepository.getResource("http://www.thalesgroup.com/parameters/1.0");
-			EMFModelResource emfModelResource = technologicalAdapter.createEmptyModel(null, emfMetaModelResource,
-					technologicalAdapter.getTechnologyContextManager());
+			EMFModelResource emfModelResource = null;
+			try {
+				emfModelResource = technologicalAdapter.createEmptyModel(File.createTempFile("coucou", ".emf"), "myURI",
+						emfMetaModelResource, technologicalAdapter.getTechnologyContextManager());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			EMFObjectIndividual intParameter = createIntParameter(emfModelResource, emfMetaModelResource, "BoolParameter Name",
 					Integer.valueOf(12));

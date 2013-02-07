@@ -10,7 +10,9 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
@@ -161,9 +163,21 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 		this.viewPoint = viewPoint;
 	}
 
-	public final FlexoResource<M> createEmptyModel(View view, FlexoResource<MM> metaModelResource) {
-		return getTechnologyAdapter().createEmptyModel(view.getProject(), metaModelResource,
+	public final FlexoResource<M> createProjectSpecificEmptyModel(View view, String filename, String modelUri,
+			FlexoResource<MM> metaModelResource) {
+		return getTechnologyAdapter().createEmptyModel(view.getProject(), filename, modelUri, metaModelResource,
 				technologyAdapter.getTechnologyContextManager());
+	};
+
+	public final FlexoResource<M> createSharedEmptyModel(FlexoResourceCenter resourceCenter, String relativePath, String filename,
+			String modelUri, FlexoResource<MM> metaModelResource) {
+		if (resourceCenter instanceof FileSystemBasedResourceCenter) {
+			return getTechnologyAdapter().createEmptyModel((FileSystemBasedResourceCenter) resourceCenter, relativePath, filename,
+					modelUri, metaModelResource, technologyAdapter.getTechnologyContextManager());
+		} else {
+			logger.warning("Cannot create shared model in a non file-system-based resource center");
+			return null;
+		}
 	};
 
 	/**

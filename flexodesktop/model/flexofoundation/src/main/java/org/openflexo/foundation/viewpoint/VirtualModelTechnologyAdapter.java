@@ -22,6 +22,7 @@ package org.openflexo.foundation.viewpoint;
 import java.io.File;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
@@ -106,7 +107,7 @@ public class VirtualModelTechnologyAdapter<VMI extends VirtualModelInstance<VMI,
 	 * @return
 	 */
 	@Override
-	public FlexoResource<VMI> createEmptyModel(FlexoProject project, FlexoResource<VM> metaModel,
+	public FlexoResource<VMI> createEmptyModel(FlexoProject project, String filename, String modelUri, FlexoResource<VM> metaModel,
 			TechnologyContextManager<VMI, VM> technologyContextManager) {
 		logger.info("Add view");
 		logger.warning("Not implemented yet");
@@ -141,6 +142,13 @@ public class VirtualModelTechnologyAdapter<VMI extends VirtualModelInstance<VMI,
 		logger.info("Added view " + _newShema + " for project " + _newShema.getProject());
 		// Creates the resource here
 		_newShema.getShemaResource();*/
+	}
+
+	@Override
+	public FlexoResource<VMI> createEmptyModel(FileSystemBasedResourceCenter resourceCenter, String relativePath, String filename,
+			String modelUri, FlexoResource<VM> metaModelResource, TechnologyContextManager<VMI, VM> technologyContextManager) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override

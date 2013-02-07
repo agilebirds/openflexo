@@ -22,6 +22,7 @@ package org.openflexo.technologyadapter.xsd;
 import java.io.File;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
@@ -195,7 +196,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	 * @return
 	 */
 	@Override
-	public XMLModelResource createEmptyModel(FlexoProject project, FlexoResource<XSDMetaModel> metaModel,
+	public XMLModelResource createEmptyModel(FlexoProject project, String filename, String modelUri, FlexoResource<XSDMetaModel> metaModel,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
 
 		// TODO: meta model not handled here !
@@ -246,6 +247,14 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 
 		return newProjectOntology;*/
 
+		return null;
+	}
+
+	@Override
+	public FlexoResource<XMLModel> createEmptyModel(FileSystemBasedResourceCenter resourceCenter, String relativePath, String filename,
+			String modelUri, FlexoResource<XSDMetaModel> metaModelResource,
+			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

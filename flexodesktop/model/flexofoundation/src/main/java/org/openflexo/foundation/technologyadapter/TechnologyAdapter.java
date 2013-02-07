@@ -22,6 +22,7 @@ package org.openflexo.foundation.technologyadapter;
 import java.io.File;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
@@ -134,14 +135,31 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 			TechnologyContextManager<M, MM> technologyContextManager);
 
 	/**
-	 * Creates new model conform to the supplied meta model
+	 * Creates new model conform to the supplied meta model in a FlexoResourceCenter.
 	 * 
-	 * @param project
-	 * @param metaModel
+	 * @param resourceCenter
+	 * @param relativePath
+	 * @param filename
+	 * @param modelUri
+	 * @param metaModelResource
+	 * @param technologyContextManager
 	 * @return
 	 */
-	public abstract FlexoResource<M> createEmptyModel(FlexoProject project, FlexoResource<MM> metaModelResource,
-			TechnologyContextManager<M, MM> technologyContextManager);
+	public abstract FlexoResource<M> createEmptyModel(FileSystemBasedResourceCenter resourceCenter, String relativePath, String filename,
+			String modelUri, FlexoResource<MM> metaModelResource, TechnologyContextManager<M, MM> technologyContextManager);
+
+	/**
+	 * Creates new model conform to the supplied meta model in a FlexoProject.
+	 * 
+	 * @param project
+	 * @param filename
+	 * @param modelUri
+	 * @param metaModelResource
+	 * @param technologyContextManager
+	 * @return
+	 */
+	public abstract FlexoResource<M> createEmptyModel(FlexoProject project, String filename, String modelUri,
+			FlexoResource<MM> metaModelResource, TechnologyContextManager<M, MM> technologyContextManager);
 
 	/**
 	 * Create a model repository for current {@link TechnologyAdapter} and supplied {@link FlexoResourceCenter}

@@ -22,6 +22,7 @@ package org.openflexo.foundation.view.diagram;
 import java.io.File;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
@@ -102,49 +103,19 @@ public class DiagramTechnologyAdapter extends VirtualModelTechnologyAdapter<Diag
 		return false;
 	}
 
-	/**
-	 * Creates new model conform to the supplied meta model
-	 * 
-	 * @param project
-	 * @param metaModel
-	 * @return
-	 */
 	@Override
-	public FlexoResource<Diagram> createEmptyModel(FlexoProject project, FlexoResource<DiagramSpecification> metaModel,
+	public FlexoResource<Diagram> createEmptyModel(FlexoProject project, String filename, String modelUri,
+			FlexoResource<DiagramSpecification> metaModel, TechnologyContextManager<Diagram, DiagramSpecification> technologyContextManager) {
+		// TODO Auto-generated method stub
+		return super.createEmptyModel(project, filename, modelUri, metaModel, technologyContextManager);
+	}
+
+	@Override
+	public FlexoResource<Diagram> createEmptyModel(FileSystemBasedResourceCenter resourceCenter, String relativePath, String filename,
+			String modelUri, FlexoResource<DiagramSpecification> metaModelResource,
 			TechnologyContextManager<Diagram, DiagramSpecification> technologyContextManager) {
-		logger.info("Add view");
-		logger.warning("Not implemented yet");
-		return null;
-		/*if (StringUtils.isNotEmpty(newViewTitle) && StringUtils.isEmpty(newViewName)) {
-			newViewName = JavaUtils.getClassName(newViewTitle);
-		}
-
-		if (StringUtils.isNotEmpty(newViewName) && StringUtils.isEmpty(newViewTitle)) {
-			newViewTitle = newViewName;
-		}
-
-		if (getFolder() == null) {
-			throw new InvalidParameterException("folder is undefined");
-		}
-		if (StringUtils.isEmpty(newViewName)) {
-			throw new InvalidParameterException("view name is undefined");
-		}
-
-		int index = 1;
-		String baseName = newViewName;
-		while (getProject().getShemaLibrary().getShemaNamed(newViewName) != null) {
-			newViewName = baseName + index;
-			index++;
-		}
-
-		_newShema = new ViewDefinition(newViewName, getFolder().getShemaLibrary(), getFolder(), getProject(), true);
-		_newShema.setTitle(newViewTitle);
-		if (useViewPoint) {
-			_newShema.setViewPoint(viewpoint);
-		}
-		logger.info("Added view " + _newShema + " for project " + _newShema.getProject());
-		// Creates the resource here
-		_newShema.getShemaResource();*/
+		// TODO Auto-generated method stub
+		return super.createEmptyModel(resourceCenter, relativePath, filename, modelUri, metaModelResource, technologyContextManager);
 	}
 
 	@Override

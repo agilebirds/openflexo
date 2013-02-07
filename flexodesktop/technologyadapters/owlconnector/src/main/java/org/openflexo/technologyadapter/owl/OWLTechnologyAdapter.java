@@ -23,6 +23,7 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
@@ -146,8 +147,8 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 	}
 
 	@Override
-	public OWLOntologyResource createEmptyModel(FlexoProject project, FlexoResource<OWLOntology> metaModel,
-			TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
+	public OWLOntologyResource createEmptyModel(FlexoProject project, String filename, String modelUri,
+			FlexoResource<OWLOntology> metaModel, TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("createNewOWLModel(), project=" + project);
 		}
@@ -200,6 +201,14 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 		}
 
 		return ontologyRes;
+	}
+
+	@Override
+	public FlexoResource<OWLOntology> createEmptyModel(FileSystemBasedResourceCenter resourceCenter, String relativePath, String filename,
+			String modelUri, FlexoResource<OWLOntology> metaModelResource,
+			TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
