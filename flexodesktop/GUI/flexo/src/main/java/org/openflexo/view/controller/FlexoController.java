@@ -1793,8 +1793,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	public void objectWasClicked(Object object) {
-		logger.info("Object was clicked: " + object);
-		logger.info("Current selection=" + getSelectionManager().getSelection());
+		// logger.info("Object was clicked: " + object);
+		// logger.info("Current selection=" + getSelectionManager().getSelection());
 		if (getCurrentPerspective() != null) {
 			if (object instanceof FlexoObject) {
 				getCurrentPerspective().objectWasClicked(getRelevantObject((FlexoObject) object));
@@ -1805,7 +1805,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	public void objectWasRightClicked(Object object, MouseEvent e) {
-		logger.info("Object was right-clicked: " + object + "event=" + e);
+		// logger.info("Object was right-clicked: " + object + "event=" + e);
 		if (object instanceof FlexoObject) {
 			FlexoObject relevantObject = getRelevantObject((FlexoObject) object);
 			getSelectionManager().getContextualMenuManager()
@@ -1821,7 +1821,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	}
 
 	public void objectWasDoubleClicked(Object object) {
-		logger.info("Object was double-clicked: " + object);
+		// logger.info("Object was double-clicked: " + object);
 		if (object instanceof FlexoResource<?>) {
 			FlexoObject resourceData = null;
 			if (!((FlexoResource<?>) object).isLoaded()) {

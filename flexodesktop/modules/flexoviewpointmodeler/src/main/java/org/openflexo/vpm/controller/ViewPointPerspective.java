@@ -220,7 +220,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 
 	@Override
 	public void objectWasClicked(Object object) {
-		logger.info("ViewPointPerspective: object was clicked: " + object);
+		// logger.info("ViewPointPerspective: object was clicked: " + object);
 		if (object == null) {
 			return;
 		}
@@ -286,12 +286,12 @@ public class ViewPointPerspective extends FlexoPerspective {
 
 	@Override
 	public void objectWasRightClicked(Object object) {
-		logger.info("ViewPointPerspective: object was right-clicked: " + object);
+		// logger.info("ViewPointPerspective: object was right-clicked: " + object);
 	}
 
 	@Override
 	public void objectWasDoubleClicked(Object object) {
-		logger.info("ViewPointPerspective: object was double-clicked: " + object);
+		// logger.info("ViewPointPerspective: object was double-clicked: " + object);
 	}
 
 }
