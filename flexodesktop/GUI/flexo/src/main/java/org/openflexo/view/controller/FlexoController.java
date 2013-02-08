@@ -1825,6 +1825,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 						}
 					}
 				}
+			} else if (evt.getPropertyName().equals(ControllerModel.CURRENT_OBJECT)) {
+				getSelectionManager().setSelectedObject(getControllerModel().getCurrentObject());
 			}
 		} else if (evt.getSource() instanceof FlexoProject && evt.getPropertyName().equals(ProjectClosedNotification.CLOSE)) {
 			FlexoProject project = (FlexoProject) evt.getSource();
