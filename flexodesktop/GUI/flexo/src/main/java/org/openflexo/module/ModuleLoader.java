@@ -123,7 +123,6 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 
 	@Override
 	public String getDeletedProperty() {
-		// TODO Auto-generated method stub
 
 		return null;
 	}
@@ -341,6 +340,9 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
+					if (isLoaded(module)) {
+						_modules.get(module).getFlexoFrame().toFront();
+					}
 					ModuleLoader.this.ignoreSwitch = false;
 				}
 			});
