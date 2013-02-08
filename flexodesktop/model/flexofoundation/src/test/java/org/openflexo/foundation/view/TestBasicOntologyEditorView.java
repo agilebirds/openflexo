@@ -148,9 +148,9 @@ public class TestBasicOntologyEditorView extends FlexoTestCase {
 		System.out.println("editor project = " + editor.getProject());
 		System.out.println("view project = " + view.getProject());
 		CreateDiagram createDiagram = CreateDiagram.actionType.makeNewAction(view, null, editor);
-		createDiagram.newDiagramName = "TestNewDiagram";
-		createDiagram.newDiagramTitle = "A nice title for a new diagram";
-		createDiagram.diagramSpecification = basicOntologyEditor.getDefaultDiagramSpecification();
+		createDiagram.setNewVirtualModelInstanceName("TestNewDiagram");
+		createDiagram.setNewVirtualModelInstanceTitle("A nice title for a new diagram");
+		createDiagram.setDiagramSpecification(basicOntologyEditor.getDefaultDiagramSpecification());
 		createDiagram.doAction();
 		System.out.println("exception thrown=" + createDiagram.getThrownException());
 		// createDiagram.getThrownException().printStackTrace();
@@ -158,9 +158,9 @@ public class TestBasicOntologyEditorView extends FlexoTestCase {
 		Diagram newDiagram = createDiagram.getNewDiagram();
 		System.out.println("New diagram " + newDiagram + " created in " + newDiagram.getResource().getFile());
 		assertNotNull(newDiagram);
-		assertEquals(createDiagram.newDiagramName, newDiagram.getName());
-		assertEquals(createDiagram.newDiagramTitle, newDiagram.getTitle());
-		assertEquals(createDiagram.diagramSpecification, basicOntologyEditor.getDefaultDiagramSpecification());
+		assertEquals(createDiagram.getNewVirtualModelInstanceName(), newDiagram.getName());
+		assertEquals(createDiagram.getNewVirtualModelInstanceTitle(), newDiagram.getTitle());
+		assertEquals(createDiagram.getDiagramSpecification(), basicOntologyEditor.getDefaultDiagramSpecification());
 		assertTrue(newDiagram.getResource().getFile().exists());
 		assertEquals(project, newDiagram.getResource().getProject());
 		assertEquals(project, newDiagram.getProject());

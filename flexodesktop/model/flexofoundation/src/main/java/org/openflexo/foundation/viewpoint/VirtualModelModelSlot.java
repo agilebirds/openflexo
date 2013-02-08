@@ -95,7 +95,7 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	}
 
 	@Override
-	public ModelSlotInstanceConfiguration<VirtualModelModelSlot<VMI, VM>> createConfiguration(CreateVirtualModelInstance action) {
+	public ModelSlotInstanceConfiguration<? extends VirtualModelModelSlot<VMI, VM>> createConfiguration(CreateVirtualModelInstance<?> action) {
 		return new VirtualModelModelSlotInstanceConfiguration<VirtualModelModelSlot<VMI, VM>>(this, action);
 	}
 }

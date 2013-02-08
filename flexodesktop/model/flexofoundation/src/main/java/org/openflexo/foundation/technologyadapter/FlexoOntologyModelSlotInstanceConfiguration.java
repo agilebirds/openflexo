@@ -50,7 +50,7 @@ public class FlexoOntologyModelSlotInstanceConfiguration<MS extends FlexoOntolog
 	private String relativePath;
 	private String filename;
 
-	protected FlexoOntologyModelSlotInstanceConfiguration(MS ms, CreateVirtualModelInstance action) {
+	protected FlexoOntologyModelSlotInstanceConfiguration(MS ms, CreateVirtualModelInstance<?> action) {
 		super(ms, action);
 		resourceCenter = action.getFocusedObject().getViewPoint().getViewPointLibrary().getServiceManager().getResourceCenterService()
 				.getUserResourceCenter();

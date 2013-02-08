@@ -8,6 +8,9 @@ import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
+import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
+import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
+import org.openflexo.foundation.view.diagram.action.CreateDiagram;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
@@ -126,4 +129,14 @@ public class DiagramModelSlot extends VirtualModelModelSlot<Diagram, DiagramSpec
 		}
 	}
 
+	@Override
+	public boolean getIsRequired() {
+		return true;
+	}
+
+	@Override
+	public ModelSlotInstanceConfiguration<? extends VirtualModelModelSlot<Diagram, DiagramSpecification>> createConfiguration(
+			CreateVirtualModelInstance<?> action) {
+		return new DiagramModelSlotInstanceConfiguration(this, (CreateDiagram) action);
+	}
 }

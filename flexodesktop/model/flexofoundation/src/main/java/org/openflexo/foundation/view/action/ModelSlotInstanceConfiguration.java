@@ -36,7 +36,7 @@ import org.openflexo.foundation.view.VirtualModelInstance;
  */
 public abstract class ModelSlotInstanceConfiguration<MS extends ModelSlot<?, ?>> extends FlexoObject {
 
-	private CreateVirtualModelInstance action;
+	private CreateVirtualModelInstance<?> action;
 	private MS modelSlot;
 	private ModelSlotInstanceConfigurationOption option;
 
@@ -74,12 +74,12 @@ public abstract class ModelSlotInstanceConfiguration<MS extends ModelSlot<?, ?>>
 		}
 	}
 
-	protected ModelSlotInstanceConfiguration(MS ms, CreateVirtualModelInstance action) {
+	protected ModelSlotInstanceConfiguration(MS ms, CreateVirtualModelInstance<?> action) {
 		this.action = action;
 		modelSlot = ms;
 	}
 
-	public CreateVirtualModelInstance getAction() {
+	public CreateVirtualModelInstance<?> getAction() {
 		return action;
 	}
 

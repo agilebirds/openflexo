@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.ve.shema;
+package org.openflexo.ve.diagram;
 
 import java.awt.Color;
 import java.awt.Component;

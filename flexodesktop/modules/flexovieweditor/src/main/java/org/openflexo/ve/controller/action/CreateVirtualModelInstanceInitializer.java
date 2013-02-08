@@ -35,6 +35,7 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
+import org.openflexo.foundation.view.action.CreateVirtualModelInstance.CreateConcreteVirtualModelInstance;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.VECst;
@@ -42,7 +43,7 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class CreateVirtualModelInstanceInitializer extends ActionInitializer<CreateVirtualModelInstance, View, FlexoModelObject> {
+public class CreateVirtualModelInstanceInitializer extends ActionInitializer<CreateConcreteVirtualModelInstance, View, FlexoModelObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -56,10 +57,10 @@ public class CreateVirtualModelInstanceInitializer extends ActionInitializer<Cre
 	}
 
 	@Override
-	protected FlexoActionInitializer<CreateVirtualModelInstance> getDefaultInitializer() {
-		return new FlexoActionInitializer<CreateVirtualModelInstance>() {
+	protected FlexoActionInitializer<CreateConcreteVirtualModelInstance> getDefaultInitializer() {
+		return new FlexoActionInitializer<CreateConcreteVirtualModelInstance>() {
 			@Override
-			public boolean run(EventObject e, CreateVirtualModelInstance action) {
+			public boolean run(EventObject e, CreateConcreteVirtualModelInstance action) {
 				if (action.skipChoosePopup) {
 					return true;
 				} else {
@@ -93,10 +94,10 @@ public class CreateVirtualModelInstanceInitializer extends ActionInitializer<Cre
 	}
 
 	@Override
-	protected FlexoActionFinalizer<CreateVirtualModelInstance> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<CreateVirtualModelInstance>() {
+	protected FlexoActionFinalizer<CreateConcreteVirtualModelInstance> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<CreateConcreteVirtualModelInstance>() {
 			@Override
-			public boolean run(EventObject e, CreateVirtualModelInstance action) {
+			public boolean run(EventObject e, CreateConcreteVirtualModelInstance action) {
 				// getController().setCurrentEditedObjectAsModuleView(action.getNewVirtualModelInstance());
 				getController().selectAndFocusObject(action.getNewVirtualModelInstance());
 				return true;
@@ -105,10 +106,10 @@ public class CreateVirtualModelInstanceInitializer extends ActionInitializer<Cre
 	}
 
 	@Override
-	protected FlexoExceptionHandler<CreateVirtualModelInstance> getDefaultExceptionHandler() {
-		return new FlexoExceptionHandler<CreateVirtualModelInstance>() {
+	protected FlexoExceptionHandler<CreateConcreteVirtualModelInstance> getDefaultExceptionHandler() {
+		return new FlexoExceptionHandler<CreateConcreteVirtualModelInstance>() {
 			@Override
-			public boolean handleException(FlexoException exception, CreateVirtualModelInstance action) {
+			public boolean handleException(FlexoException exception, CreateConcreteVirtualModelInstance action) {
 				if (exception instanceof NotImplementedException) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("not_implemented_yet"));
 					return true;

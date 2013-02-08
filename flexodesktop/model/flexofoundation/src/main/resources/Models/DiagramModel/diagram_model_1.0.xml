@@ -23,7 +23,7 @@
     <property name="editionPatternReferences" type="vector" primary="yes" xmlTag="EditionPatternReference"/>
   </entity>
   
-  	<entity name="org.openflexo.foundation.FlexoProperty" xmlTag="FlexoProperty">
+ 	<entity name="org.openflexo.foundation.FlexoProperty" xmlTag="FlexoProperty">
 		<property name="name" xmlTag="name" attribute="yes" />
 		<property name="value" xmlTag="value" attribute="yes" />
 	</entity>
@@ -31,12 +31,12 @@
 	<entity name="org.openflexo.foundation.view.VirtualModelInstance" xmlTag="VirtualModelInstance">
 		<description>VirtualModelInstance</description>
 		<property name="title" xmlTag="title" attribute="yes" />
+		<property name="virtualModelURI" xmlTag="virtualModelURI" attribute="YES" description="" />
 		<property name="modelSlotInstances" xmlTag="modelSlotInstances" type="vector" contains="org.openflexo.foundation.view.ModelSlotInstance" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.view.ModelSlotInstance" xmlTag="ModelSlotInstance">
 		<description>Binds a model slot to a model within a given virtual model instance</description>
-		<property name="view" xmlTag="view" attribute="YES" />
 		<property name="modelSlotName" xmlTag="modelSlotName" attribute="YES" />
 		<property name="modelURI" xmlTag="modelURI" attribute="YES" />
 	</entity>
@@ -139,7 +139,7 @@
 	</entity>
 
 	<entity name="org.openflexo.foundation.view.diagram.model.DiagramRootPane" xmlTag="DiagramRootPane">
-		<description>VEShema</description>
+		<description>Root pane</description>
 		<property name="graphicalRepresentation" xmlTag="DrawingGraphicalRepresentation" />
 	</entity>
 

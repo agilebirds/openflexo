@@ -39,12 +39,13 @@ public class DiagramRootPane extends DiagramElement<DrawingGraphicalRepresentati
 	}
 
 	/**
-	 * Default constructor for OEShema
+	 * Explicit constructor for root pane
 	 * 
 	 * @param shemaDefinition
 	 */
 	public DiagramRootPane(Diagram diagram) {
 		super(diagram);
+		setGraphicalRepresentation(new DrawingGraphicalRepresentation());
 	}
 
 	@Override

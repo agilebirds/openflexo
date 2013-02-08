@@ -19,25 +19,28 @@
  */
 package org.openflexo.foundation.view.diagram.action;
 
-import java.security.InvalidParameterException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.rm.DiagramResource;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.JavaUtils;
-import org.openflexo.toolbox.StringUtils;
 
-public class CreateDiagram extends FlexoAction<CreateDiagram, View, FlexoModelObject> {
+/**
+ * This action is called to create a new {@link Diagram} (a {@link VirtualModelInstance} in a {@link View}
+ * 
+ * @author sylvain
+ */
+public class CreateDiagram extends CreateVirtualModelInstance<CreateDiagram> {
 
 	private static final Logger logger = Logger.getLogger(CreateDiagram.class.getPackage().getName());
 
@@ -68,74 +71,50 @@ public class CreateDiagram extends FlexoAction<CreateDiagram, View, FlexoModelOb
 		FlexoModelObject.addActionForClass(CreateDiagram.actionType, View.class);
 	}
 
-	private Diagram newDiagram;
-
-	public String newDiagramName;
-	public String newDiagramTitle;
-	public DiagramSpecification diagramSpecification;
-
-	public boolean skipChoosePopup = false;
-
 	CreateDiagram(View focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
 	@Override
-	protected void doAction(Object context) throws InvalidFileNameException, SaveResourceException {
-		logger.info("Add diagram in view " + getFocusedObject());
-
-		if (StringUtils.isNotEmpty(newDiagramTitle) && StringUtils.isEmpty(newDiagramName)) {
-			newDiagramName = JavaUtils.getClassName(newDiagramTitle);
-		}
-
-		if (StringUtils.isNotEmpty(newDiagramName) && StringUtils.isEmpty(newDiagramTitle)) {
-			newDiagramTitle = newDiagramName;
-		}
-
-		if (StringUtils.isEmpty(newDiagramName)) {
-			throw new InvalidParameterException("view name is undefined");
-		}
-
-		int index = 1;
-		String baseName = newDiagramName;
-		while (!getFocusedObject().isValidVirtualModelName(newDiagramName)) {
-			newDiagramName = baseName + index;
-			index++;
-		}
-
-		DiagramResource newDiagramResource = Diagram.newDiagramResource(newDiagramName, newDiagramTitle, diagramSpecification,
+	public DiagramResource makeVirtualModelInstanceResource() throws InvalidFileNameException, SaveResourceException {
+		return Diagram.newDiagramResource(getNewVirtualModelInstanceName(), getNewVirtualModelInstanceTitle(), getDiagramSpecification(),
 				getFocusedObject());
-		newDiagram = newDiagramResource.getDiagram();
-
-		logger.info("Added diagram " + newDiagram + " in view " + getFocusedObject());
-		// Creates the resource here
 	}
 
-	public String errorMessage;
+	@Override
+	public String noVirtualModelSelectedMessage() {
+		return FlexoLocalization.localizedForKey("no_diagram_type_selected");
+	}
 
-	public boolean isValid() {
-		if (diagramSpecification == null) {
-			errorMessage = FlexoLocalization.localizedForKey("no_diagram_type_selected");
-			return false;
-		}
-		if (StringUtils.isEmpty(newDiagramTitle)) {
-			errorMessage = FlexoLocalization.localizedForKey("no_diagram_title_defined");
-			return false;
-		}
+	@Override
+	public String noTitleMessage() {
+		return FlexoLocalization.localizedForKey("no_diagram_title_defined");
+	}
 
-		String diagramName = newDiagramName;
-		if (StringUtils.isNotEmpty(newDiagramTitle) && StringUtils.isEmpty(newDiagramName)) {
-			diagramName = JavaUtils.getClassName(newDiagramTitle);
-		}
+	@Override
+	public String noNameMessage() {
+		return FlexoLocalization.localizedForKey("no_diagram_name_defined");
+	}
 
-		if (getFocusedObject().getVirtualModelInstance(diagramName) != null) {
-			errorMessage = FlexoLocalization.localizedForKey("a_diagram_with_that_name_already_exists");
-			return false;
-		}
-		return true;
+	@Override
+	public String invalidNameMessage() {
+		return FlexoLocalization.localizedForKey("invalid_name_for_new_diagram");
+	}
+
+	@Override
+	public String duplicatedNameMessage() {
+		return FlexoLocalization.localizedForKey("a_diagram_with_that_name_already_exists");
+	}
+
+	public DiagramSpecification getDiagramSpecification() {
+		return (DiagramSpecification) getVirtualModel();
+	}
+
+	public void setDiagramSpecification(DiagramSpecification diagramSpecification) {
+		setVirtualModel(diagramSpecification);
 	}
 
 	public Diagram getNewDiagram() {
-		return newDiagram;
+		return (Diagram) super.getNewVirtualModelInstance();
 	}
 }

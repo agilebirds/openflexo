@@ -253,6 +253,9 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 			}
 		}
 		logger.warning("Not found EditionPattern:" + editionPatternId);
+		for (EditionPattern editionPattern : editionPatterns) {
+			System.out.println("J'ai ca: " + editionPattern);
+		}
 		return null;
 	}
 

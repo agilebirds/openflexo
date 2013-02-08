@@ -39,7 +39,7 @@ public class VirtualModelModelSlotInstanceConfiguration<MS extends VirtualModelM
 
 	private List<ModelSlotInstanceConfigurationOption> options;
 
-	protected VirtualModelModelSlotInstanceConfiguration(MS ms, CreateVirtualModelInstance action) {
+	protected VirtualModelModelSlotInstanceConfiguration(MS ms, CreateVirtualModelInstance<?> action) {
 		super(ms, action);
 		options = new ArrayList<ModelSlotInstanceConfiguration.ModelSlotInstanceConfigurationOption>();
 		options.add(DefaultModelSlotInstanceConfigurationOption.Autoconfigure);

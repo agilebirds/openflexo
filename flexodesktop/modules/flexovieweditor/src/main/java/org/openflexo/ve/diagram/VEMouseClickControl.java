@@ -1,4 +1,4 @@
-package org.openflexo.ve.shema;
+package org.openflexo.ve.diagram;
 
 import java.awt.event.MouseEvent;
 

@@ -117,8 +117,8 @@ public class AddDiagram extends DiagramAction<Diagram> {
 		ViewResource viewResource = initialDiagram.getView().getResource();
 		org.openflexo.foundation.view.diagram.action.CreateDiagram addDiagramAction = org.openflexo.foundation.view.diagram.action.CreateDiagram.actionType
 				.makeNewEmbeddedAction(initialDiagram.getView(), null, action);
-		addDiagramAction.newDiagramTitle = getDiagramName(action);
-		addDiagramAction.diagramSpecification = getPatternRole().getDiagramSpecification();
+		addDiagramAction.setNewVirtualModelInstanceName(getDiagramName(action));
+		addDiagramAction.setDiagramSpecification(getPatternRole().getDiagramSpecification());
 		addDiagramAction.skipChoosePopup = true;
 		addDiagramAction.doAction();
 		if (addDiagramAction.hasActionExecutionSucceeded() && addDiagramAction.getNewDiagram() != null) {

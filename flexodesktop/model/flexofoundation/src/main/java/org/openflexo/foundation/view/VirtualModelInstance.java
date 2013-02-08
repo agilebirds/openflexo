@@ -323,7 +323,8 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	public void addToModelSlotInstances(ModelSlotInstance<?, ?> instance) {
 		Iterator<ModelSlotInstance<?, ?>> it = modelSlotInstances.iterator();
 		while (it.hasNext()) {
-			if (it.next().getModelSlot() != null && it.next().getModelSlot().equals(instance.getModelSlot())) {
+			ModelSlotInstance<?, ?> next = it.next();
+			if (next.getModelSlot() != null && next.getModelSlot().equals(instance.getModelSlot())) {
 				it.remove();
 			}
 		}

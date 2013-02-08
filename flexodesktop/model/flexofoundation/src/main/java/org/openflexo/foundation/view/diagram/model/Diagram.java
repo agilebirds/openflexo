@@ -87,6 +87,9 @@ public class Diagram extends VirtualModelInstance<Diagram, DiagramSpecification>
 	}
 
 	public DiagramRootPane getRootPane() {
+		if (rootPane == null) {
+			rootPane = new DiagramRootPane(this);
+		}
 		return rootPane;
 	}
 

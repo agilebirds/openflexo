@@ -33,8 +33,8 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.selection.PastingGraphicalContext;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.ve.shema.DiagramModuleView;
-import org.openflexo.ve.shema.DiagramView;
+import org.openflexo.ve.diagram.DiagramModuleView;
+import org.openflexo.ve.diagram.DiagramView;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**

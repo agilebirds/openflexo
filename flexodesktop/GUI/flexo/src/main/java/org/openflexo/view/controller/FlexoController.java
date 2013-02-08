@@ -1775,9 +1775,9 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 * @return
 	 */
 	private FlexoObject getRelevantObject(FlexoObject object) {
-		if (object instanceof FlexoResource<?>) {
+		/*if (object instanceof FlexoResource<?>) {
 			logger.info("Resource " + object + " loaded=" + ((FlexoResource<?>) object).isLoaded());
-		}
+		}*/
 		if (object instanceof FlexoResource<?> && ((FlexoResource<?>) object).isLoaded()) {
 			try {
 				return (FlexoObject) ((FlexoResource<?>) object).getResourceData(null);

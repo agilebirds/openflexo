@@ -138,8 +138,8 @@ public class TestCityMappingView extends FlexoTestCase {
 		System.out.println("Create virtual model instance, view=" + view + " editor=" + editor);
 
 		CreateVirtualModelInstance createVirtualModelInstance = CreateVirtualModelInstance.actionType.makeNewAction(view, null, editor);
-		createVirtualModelInstance.newVirtualModelInstanceName = "TestNewVirtualModel";
-		createVirtualModelInstance.newVirtualModelInstanceTitle = "A nice title for a new virtual model instance";
+		createVirtualModelInstance.setNewVirtualModelInstanceName("TestNewVirtualModel");
+		createVirtualModelInstance.setNewVirtualModelInstanceTitle("A nice title for a new virtual model instance");
 
 		VirtualModel<?> conceptualModel = cityMappingVP.getVirtualModelNamed("ConceptualModel");
 		assertNotNull(conceptualModel);
@@ -178,8 +178,8 @@ public class TestCityMappingView extends FlexoTestCase {
 		System.out.println("New VirtualModelInstance " + newVirtualModelInstance + " created in "
 				+ newVirtualModelInstance.getResource().getFile());
 		assertNotNull(newVirtualModelInstance);
-		assertEquals(createVirtualModelInstance.newVirtualModelInstanceName, newVirtualModelInstance.getName());
-		assertEquals(createVirtualModelInstance.newVirtualModelInstanceTitle, newVirtualModelInstance.getTitle());
+		assertEquals(createVirtualModelInstance.getNewVirtualModelInstanceName(), newVirtualModelInstance.getName());
+		assertEquals(createVirtualModelInstance.getNewVirtualModelInstanceTitle(), newVirtualModelInstance.getTitle());
 		assertEquals(createVirtualModelInstance.getVirtualModel(), cityMappingVP.getVirtualModelNamed("ConceptualModel"));
 		assertTrue(newVirtualModelInstance.getResource().getFile().exists());
 		assertEquals(project, newVirtualModelInstance.getResource().getProject());

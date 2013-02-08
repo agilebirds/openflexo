@@ -40,19 +40,40 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
-public class CreateVirtualModelInstance extends FlexoAction<CreateVirtualModelInstance, View, FlexoModelObject> {
+/**
+ * This action is called to create a new {@link VirtualModelInstance} in a {@link View}
+ * 
+ * @author sylvain
+ * 
+ * @param <A>
+ *            type of action, required to manage introspection for inheritance
+ */
+public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelInstance<A>> extends FlexoAction<A, View, FlexoModelObject> {
 
 	private static final Logger logger = Logger.getLogger(CreateVirtualModelInstance.class.getPackage().getName());
 
-	public static FlexoActionType<CreateVirtualModelInstance, View, FlexoModelObject> actionType = new FlexoActionType<CreateVirtualModelInstance, View, FlexoModelObject>(
+	public static class CreateConcreteVirtualModelInstance extends CreateVirtualModelInstance<CreateConcreteVirtualModelInstance> {
+		CreateConcreteVirtualModelInstance(View focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+			super(actionType, focusedObject, globalSelection, editor);
+		}
+
+		@Override
+		public VirtualModelInstanceResource makeVirtualModelInstanceResource() throws InvalidFileNameException, SaveResourceException {
+			return VirtualModelInstance.newVirtualModelInstance(getNewVirtualModelInstanceName(), getNewVirtualModelInstanceTitle(),
+					getVirtualModel(), getFocusedObject());
+		}
+	}
+
+	public static FlexoActionType<CreateConcreteVirtualModelInstance, View, FlexoModelObject> actionType = new FlexoActionType<CreateConcreteVirtualModelInstance, View, FlexoModelObject>(
 			"instantiate_virtual_model", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public CreateVirtualModelInstance makeNewAction(View focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
-			return new CreateVirtualModelInstance(focusedObject, globalSelection, editor);
+		public CreateConcreteVirtualModelInstance makeNewAction(View focusedObject, Vector<FlexoModelObject> globalSelection,
+				FlexoEditor editor) {
+			return new CreateConcreteVirtualModelInstance(focusedObject, globalSelection, editor);
 		}
 
 		@Override
@@ -73,16 +94,19 @@ public class CreateVirtualModelInstance extends FlexoAction<CreateVirtualModelIn
 
 	private VirtualModelInstance<?, ?> newVirtualModelInstance;
 
-	public String newVirtualModelInstanceName;
-	public String newVirtualModelInstanceTitle;
+	private String newVirtualModelInstanceName;
+	private String newVirtualModelInstanceTitle;
 	private VirtualModel<?> virtualModel;
 
 	public boolean skipChoosePopup = false;
 
-	CreateVirtualModelInstance(View focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
+	public CreateVirtualModelInstance(FlexoActionType<A, View, FlexoModelObject> actionType, View focusedObject,
+			Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		modelSlotConfigurations = new Hashtable<ModelSlot<?, ?>, ModelSlotInstanceConfiguration<?>>();
 	}
+
+	public abstract VirtualModelInstanceResource makeVirtualModelInstanceResource() throws InvalidFileNameException, SaveResourceException;
 
 	@Override
 	protected void doAction(Object context) throws InvalidFileNameException, SaveResourceException, InvalidArgumentException {
@@ -105,8 +129,8 @@ public class CreateVirtualModelInstance extends FlexoAction<CreateVirtualModelIn
 			index++;
 		}
 
-		VirtualModelInstanceResource newVirtualModelInstanceResource = VirtualModelInstance.newVirtualModelInstance(
-				newVirtualModelInstanceName, newVirtualModelInstanceTitle, virtualModel, getFocusedObject());
+		VirtualModelInstanceResource newVirtualModelInstanceResource = makeVirtualModelInstanceResource();
+
 		newVirtualModelInstance = newVirtualModelInstanceResource.getVirtualModelInstance();
 
 		logger.info("Added virtual model instance " + newVirtualModelInstance + " in view " + getFocusedObject());
@@ -147,29 +171,49 @@ public class CreateVirtualModelInstance extends FlexoAction<CreateVirtualModelIn
 	@Override
 	public boolean isValid() {
 		if (virtualModel == null) {
-			errorMessage = FlexoLocalization.localizedForKey("no_virtual_model_type_selected");
+			errorMessage = noVirtualModelSelectedMessage();
 			return false;
 		}
 		if (StringUtils.isEmpty(newVirtualModelInstanceName)) {
-			errorMessage = FlexoLocalization.localizedForKey("no_virtual_model_name_defined");
+			errorMessage = noNameMessage();
 			return false;
 		}
 
 		if (!newVirtualModelInstanceName.equals(JavaUtils.getClassName(newVirtualModelInstanceName))
 				&& !newVirtualModelInstanceName.equals(JavaUtils.getVariableName(newVirtualModelInstanceName))) {
-			errorMessage = FlexoLocalization.localizedForKey("invalid_name_for_new_virtual_model");
+			errorMessage = invalidNameMessage();
 			return false;
 		}
 
 		if (StringUtils.isEmpty(newVirtualModelInstanceTitle)) {
-			errorMessage = FlexoLocalization.localizedForKey("no_virtual_model_title_defined");
+			errorMessage = noTitleMessage();
 			return false;
 		}
 		if (getFocusedObject().getVirtualModelInstance(newVirtualModelInstanceName) != null) {
-			errorMessage = FlexoLocalization.localizedForKey("a_virtual_model_with_that_name_already_exists");
+			errorMessage = duplicatedNameMessage();
 			return false;
 		}
 		return true;
+	}
+
+	public String noVirtualModelSelectedMessage() {
+		return FlexoLocalization.localizedForKey("no_virtual_model_type_selected");
+	}
+
+	public String noTitleMessage() {
+		return FlexoLocalization.localizedForKey("no_virtual_model_title_defined");
+	}
+
+	public String noNameMessage() {
+		return FlexoLocalization.localizedForKey("no_virtual_model_name_defined");
+	}
+
+	public String invalidNameMessage() {
+		return FlexoLocalization.localizedForKey("invalid_name_for_new_virtual_model");
+	}
+
+	public String duplicatedNameMessage() {
+		return FlexoLocalization.localizedForKey("a_virtual_model_with_that_name_already_exists");
 	}
 
 	public VirtualModelInstance getNewVirtualModelInstance() {
@@ -214,5 +258,21 @@ public class CreateVirtualModelInstance extends FlexoAction<CreateVirtualModelIn
 			}
 		}
 		return true;
+	}
+
+	public String getNewVirtualModelInstanceName() {
+		return newVirtualModelInstanceName;
+	}
+
+	public void setNewVirtualModelInstanceName(String newVirtualModelInstanceName) {
+		this.newVirtualModelInstanceName = newVirtualModelInstanceName;
+	}
+
+	public String getNewVirtualModelInstanceTitle() {
+		return newVirtualModelInstanceTitle;
+	}
+
+	public void setNewVirtualModelInstanceTitle(String newVirtualModelInstanceTitle) {
+		this.newVirtualModelInstanceTitle = newVirtualModelInstanceTitle;
 	}
 }

@@ -17,6 +17,8 @@ import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewLibrary;
+import org.openflexo.foundation.view.diagram.rm.DiagramResource;
+import org.openflexo.foundation.view.diagram.rm.DiagramResourceImpl;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -107,6 +109,9 @@ public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> im
 						VirtualModelInstanceResource virtualModelInstanceResource = VirtualModelInstanceResourceImpl
 								.retrieveVirtualModelInstanceResource(virtualModelFile, returned);
 						returned.addToContents(virtualModelInstanceResource);
+					} else if (virtualModelFile.getName().endsWith(DiagramResource.DIAGRAM_SUFFIX)) {
+						DiagramResource diagramResource = DiagramResourceImpl.retrieveDiagramResource(virtualModelFile, returned);
+						returned.addToContents(diagramResource);
 					}
 				}
 			}

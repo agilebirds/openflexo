@@ -17,13 +17,13 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.ve.shema;
+package org.openflexo.ve.diagram;
 
 import java.awt.Graphics;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.view.DrawingView;
-import org.openflexo.ve.shema.DrawEdgeControl.DrawEdgeAction;
+import org.openflexo.ve.diagram.DrawEdgeControl.DrawEdgeAction;
 
 public class DiagramView extends DrawingView<DiagramRepresentation> {
 

@@ -26,6 +26,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
+import org.openflexo.foundation.view.action.CreateVirtualModelInstance.CreateConcreteVirtualModelInstance;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.ve.VECst;
 
@@ -36,7 +37,7 @@ public class ConfigureModelInstanceDialogEDITOR extends ProjectDialogEDITOR {
 		FlexoEditor editor = loadProject(new FileResource("TestProjects/1.6/Test1.6.prj"));
 		FlexoProject project = editor.getProject();
 		View v = project.getViewLibrary().getRootFolder().getResources().get(0).getView();
-		CreateVirtualModelInstance action = CreateVirtualModelInstance.actionType.makeNewAction(v, null, editor);
+		CreateConcreteVirtualModelInstance action = CreateVirtualModelInstance.actionType.makeNewAction(v, null, editor);
 		action.setVirtualModel(v.getViewPoint().getVirtualModels().get(0));
 		return makeArray(action.getModelSlotInstanceConfiguration(action.getVirtualModel().getModelSlots().get(0)));
 	}

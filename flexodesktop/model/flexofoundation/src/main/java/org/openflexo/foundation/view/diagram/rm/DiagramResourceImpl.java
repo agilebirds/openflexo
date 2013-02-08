@@ -11,6 +11,7 @@ import org.openflexo.foundation.rm.VirtualModelInstanceResourceImpl;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.StringUtils;
@@ -58,8 +59,11 @@ public abstract class DiagramResourceImpl extends VirtualModelInstanceResourceIm
 				// Unable to retrieve infos, just abort
 				return null;
 			}
-			if (StringUtils.isNotEmpty(vmiInfo.virtualModelURI)) {
-				returned.setVirtualModelResource(viewResource.getViewPoint().getVirtualModelNamed(vmiInfo.virtualModelURI).getResource());
+			if (viewResource.getViewPoint() != null && StringUtils.isNotEmpty(vmiInfo.virtualModelURI)) {
+				VirtualModel vm = viewResource.getViewPoint().getVirtualModelNamed(vmiInfo.virtualModelURI);
+				if (vm != null) {
+					returned.setVirtualModelResource(vm.getResource());
+				}
 			}
 			viewResource.addToContents(returned);
 			return returned;

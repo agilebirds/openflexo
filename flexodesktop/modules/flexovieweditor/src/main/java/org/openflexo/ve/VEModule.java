@@ -40,7 +40,7 @@ import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
 import org.openflexo.module.external.ExternalVEModule;
 import org.openflexo.ve.controller.VEController;
-import org.openflexo.ve.shema.DiagramController;
+import org.openflexo.ve.diagram.DiagramController;
 import org.openflexo.view.controller.FlexoController;
 
 /**

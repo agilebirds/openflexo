@@ -88,6 +88,8 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> exte
 	public DiagramElement(Diagram diagram) {
 		super(diagram.getProject());
 		this.diagram = diagram;
+		childs = new Vector<DiagramElement<?>>();
+		ancestors = new Vector<DiagramElement<?>>();
 	}
 
 	@Override

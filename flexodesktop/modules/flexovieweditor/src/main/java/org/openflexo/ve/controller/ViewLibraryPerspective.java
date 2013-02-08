@@ -39,8 +39,8 @@ import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.inspector.FIBInspectorPanel;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.ve.shema.DiagramController;
-import org.openflexo.ve.shema.DiagramModuleView;
+import org.openflexo.ve.diagram.DiagramController;
+import org.openflexo.ve.diagram.DiagramModuleView;
 import org.openflexo.ve.widget.FIBViewLibraryBrowser;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
@@ -143,7 +143,7 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoObject object) {
-		return object instanceof View;
+		return object instanceof Diagram;
 	}
 
 	@Override

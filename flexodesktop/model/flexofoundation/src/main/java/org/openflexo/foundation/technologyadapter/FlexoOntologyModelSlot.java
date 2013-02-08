@@ -34,7 +34,7 @@ public abstract class FlexoOntologyModelSlot<M extends FlexoModel<M, MM>, MM ext
 	}
 
 	@Override
-	public ModelSlotInstanceConfiguration<FlexoOntologyModelSlot<M, MM>> createConfiguration(CreateVirtualModelInstance action) {
+	public ModelSlotInstanceConfiguration<FlexoOntologyModelSlot<M, MM>> createConfiguration(CreateVirtualModelInstance<?> action) {
 		return new FlexoOntologyModelSlotInstanceConfiguration<FlexoOntologyModelSlot<M, MM>>(this, action);
 	}
 }

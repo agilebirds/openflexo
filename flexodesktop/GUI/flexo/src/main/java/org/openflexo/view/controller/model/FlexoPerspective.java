@@ -211,15 +211,15 @@ public abstract class FlexoPerspective extends ControllerModelObject {
 	}
 
 	public void objectWasClicked(Object object) {
-		logger.info("FlexoPerspective: object was clicked: " + object);
+		// logger.info("FlexoPerspective: object was clicked: " + object);
 	}
 
 	public void objectWasRightClicked(Object object) {
-		logger.info("FlexoPerspective: object was right-clicked: " + object);
+		// logger.info("FlexoPerspective: object was right-clicked: " + object);
 	}
 
 	public void objectWasDoubleClicked(Object object) {
-		logger.info("FlexoPerspective: object was double-clicked: " + object);
+		// logger.info("FlexoPerspective: object was double-clicked: " + object);
 	}
 
 }

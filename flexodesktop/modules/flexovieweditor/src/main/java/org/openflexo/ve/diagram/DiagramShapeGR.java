@@ -17,55 +17,76 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.ve.shema;
+package org.openflexo.ve.diagram;
 
+import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.connectors.Connector.ConnectorType;
+import org.openflexo.fge.cp.ControlArea;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.view.diagram.model.DiagramConnector;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
+import org.openflexo.foundation.view.diagram.model.dm.ConnectorInserted;
+import org.openflexo.foundation.view.diagram.model.dm.ConnectorRemoved;
 import org.openflexo.foundation.view.diagram.model.dm.ElementUpdated;
+import org.openflexo.foundation.view.diagram.model.dm.ShapeInserted;
+import org.openflexo.foundation.view.diagram.model.dm.ShapeRemoved;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
+import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.xml.ViewBuilder;
+import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.toolbox.ToolBox;
 
-public class DiagramConnectorGR extends ConnectorGraphicalRepresentation<DiagramConnector> implements GraphicalFlexoObserver,
-		DiagramConstants {
+public class DiagramShapeGR extends ShapeGraphicalRepresentation<DiagramShape> implements GraphicalFlexoObserver, DiagramConstants {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(DiagramConnectorGR.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(DiagramShapeGR.class.getPackage().getName());
 
 	/**
 	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public DiagramConnectorGR(ViewBuilder builder) {
-		this(null, null);
+	public DiagramShapeGR(ViewBuilder builder) {
+		super(ShapeType.RECTANGLE, null, null);
 	}
 
-	public DiagramConnectorGR(DiagramConnector aConnector, Drawing<?> aDrawing) {
-		super(ConnectorType.LINE, aDrawing != null ? (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(aConnector
-				.getStartShape()) : null, aDrawing != null ? (ShapeGraphicalRepresentation<?>) aDrawing
-				.getGraphicalRepresentation(aConnector.getEndShape()) : null, aConnector, aDrawing);
-		// setText(getRole().getName());
+	public DiagramShapeGR(DiagramShape aShape, Drawing<?> aDrawing) {
+		super(ShapeType.RECTANGLE, aShape, aDrawing);
 
+		registerShapeGR(aShape, aDrawing);
+	}
+
+	public boolean isGRRegistered = false;
+
+	public boolean isGRRegistered() {
+		return isGRRegistered;
+	}
+
+	public void registerShapeGR(DiagramShape aShape, Drawing<?> aDrawing) {
+		setDrawable(aShape);
+		setDrawing(aDrawing);
 		addToMouseClickControls(new DiagramController.ShowContextualMenuControl());
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
 			addToMouseClickControls(new DiagramController.ShowContextualMenuControl(true));
 		}
+		addToMouseDragControls(new DrawEdgeControl());
 
 		registerMouseClickControls();
 
-		if (aConnector != null) {
-			aConnector.addObserver(this);
+		if (aShape != null) {
+			aShape.addObserver(this);
 		}
 
+		if (aShape != null) {
+			aShape.update();
+		}
+		isGRRegistered = true;
 	}
 
 	private void registerMouseClickControls() {
@@ -92,26 +113,36 @@ public class DiagramConnectorGR extends ConnectorGraphicalRepresentation<Diagram
 		super.delete();
 	}
 
-	public DiagramConnector getDiagramConnector() {
+	@Override
+	public DiagramRepresentation getDrawing() {
+		return (DiagramRepresentation) super.getDrawing();
+	}
+
+	public DiagramShape getDiagramShape() {
 		return getDrawable();
 	}
 
 	@Override
 	public int getIndex() {
-		if (getDiagramConnector() != null) {
-			return getDiagramConnector().getIndex();
+		if (getDiagramShape() != null) {
+			return getDiagramShape().getIndex();
 		}
 		return super.getIndex();
 	}
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (observable == getDiagramConnector()) {
-			/*if (dataModification instanceof NameChanged) {
-				// logger.info("received NameChanged notification");
-				// notifyChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
-				// setText(getText());
-			} else*/if (dataModification instanceof ElementUpdated) {
+		if (observable == getDiagramShape()) {
+			// logger.info("Notified "+dataModification);
+			if (dataModification instanceof ShapeInserted) {
+				getDrawing().updateGraphicalObjectsHierarchy();
+			} else if (dataModification instanceof ShapeRemoved) {
+				getDrawing().updateGraphicalObjectsHierarchy();
+			} else if (dataModification instanceof ConnectorInserted) {
+				getDrawing().updateGraphicalObjectsHierarchy();
+			} else if (dataModification instanceof ConnectorRemoved) {
+				getDrawing().updateGraphicalObjectsHierarchy();
+			} else if (dataModification instanceof ElementUpdated) {
 				update();
 			}
 		}
@@ -163,19 +194,73 @@ public class DiagramConnectorGR extends ConnectorGraphicalRepresentation<Diagram
 	}
 
 	/*@Override
+	public boolean getAllowToLeaveBounds() {
+		return false;
+	}*/
+
+	/*@Override
 	public String getText() {
-		if (getOEConnector() != null) {
-			return getOEConnector().getName();
+		if (getOEShape() != null) {
+			return getOEShape().getName();
 		}
 		return null;
 	}
 
 	@Override
 	public void setTextNoNotification(String text) {
-		if (getOEConnector() != null) {
-			getOEConnector().setName(text);
+		if (getOEShape() != null) {
+			getOEShape().setName(text);
 		}
 	}*/
+
+	private ConcatenedList<ControlArea<?>> controlAreas;
+
+	@Override
+	public List<? extends ControlArea<?>> getControlAreas() {
+		if (controlAreas == null) {
+			controlAreas = new ConcatenedList<ControlArea<?>>();
+			controlAreas.addElementList(super.getControlAreas());
+			if (getDiagramShape().providesSupportAsPrimaryRole() && getDiagramShape().getAvailableLinkSchemeFromThisShape() != null
+					&& getDiagramShape().getAvailableLinkSchemeFromThisShape().size() > 0) {
+				boolean northDirectionSupported = false;
+				boolean eastDirectionSupported = false;
+				boolean southDirectionSupported = false;
+				boolean westDirectionSupported = false;
+				for (LinkScheme ls : getDiagramShape().getAvailableLinkSchemeFromThisShape()) {
+					if (ls.getNorthDirectionSupported()) {
+						northDirectionSupported = true;
+					}
+					if (ls.getEastDirectionSupported()) {
+						eastDirectionSupported = true;
+					}
+					if (ls.getSouthDirectionSupported()) {
+						southDirectionSupported = true;
+					}
+					if (ls.getWestDirectionSupported()) {
+						westDirectionSupported = true;
+					}
+				}
+
+				if (northDirectionSupported) {
+					controlAreas.addElement(new FloatingPalette(this, getDrawable().getDiagram().getRootPane(),
+							SimplifiedCardinalDirection.NORTH));
+				}
+				if (eastDirectionSupported) {
+					controlAreas.addElement(new FloatingPalette(this, getDrawable().getDiagram().getRootPane(),
+							SimplifiedCardinalDirection.EAST));
+				}
+				if (southDirectionSupported) {
+					controlAreas.addElement(new FloatingPalette(this, getDrawable().getDiagram().getRootPane(),
+							SimplifiedCardinalDirection.SOUTH));
+				}
+				if (westDirectionSupported) {
+					controlAreas.addElement(new FloatingPalette(this, getDrawable().getDiagram().getRootPane(),
+							SimplifiedCardinalDirection.WEST));
+				}
+			}
+		}
+		return controlAreas;
+	}
 
 	/**
 	 * We dont want URI to be renamed all the time: we decide here to disable continuous text editing

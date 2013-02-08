@@ -190,7 +190,7 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 		// newDMModel.initializeDefaultRepositories(dmRes);
 		try {
 			// dmRes.saveResourceData();
-			project.registerResource(ontologyRes);
+			// project.registerResource(ontologyRes);
 		} catch (Exception e1) {
 			// Warns about the exception
 			if (logger.isLoggable(Level.WARNING)) {
