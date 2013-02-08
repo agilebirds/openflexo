@@ -804,6 +804,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	}
 
 	public void setControllerClass(Class<? extends FIBController> controllerClass) {
+
 		FIBAttributeNotification<Class> notification = requireChange(Parameters.controllerClass, (Class) controllerClass);
 		if (notification != null) {
 			this.controllerClass = controllerClass;

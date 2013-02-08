@@ -374,8 +374,20 @@ public abstract class FIBWidget extends FIBComponent {
 		return getDataType();
 	}
 
+	@Override
+	public void notifiedBindingModelRecreated() {
+		super.notifiedBindingModelRecreated();
+		if (getFormatter() != null) {
+			getFormatter().notifiedBindingModelRecreated();
+		}
+	}
+
 	private class FIBFormatter extends FIBModelObject implements Bindable {
 		private BindingModel formatterBindingModel = null;
+
+		public void notifiedBindingModelRecreated() {
+			createFormatterBindingModel();
+		}
 
 		@Override
 		public BindingModel getBindingModel() {

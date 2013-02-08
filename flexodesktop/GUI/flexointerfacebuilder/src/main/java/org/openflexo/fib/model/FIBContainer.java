@@ -400,11 +400,11 @@ public abstract class FIBContainer extends FIBComponent {
 		}
 		int index = subComponents.indexOf(c);
 		if (index > 0) {
-		subComponents.remove(c);
+			subComponents.remove(c);
 			updateComponentIndexForInsertionIndex(c, index - 1);
-		subComponents.insertElementAt(c, index - 1);
-		notifyComponentIndexChanged(c);
-	}
+			subComponents.insertElementAt(c, index - 1);
+			notifyComponentIndexChanged(c);
+		}
 	}
 
 	public void componentDown(FIBComponent c) {
@@ -413,7 +413,7 @@ public abstract class FIBContainer extends FIBComponent {
 		}
 		int index = subComponents.indexOf(c);
 		if (index < subComponents.size() - 1) {
-		subComponents.remove(c);
+			subComponents.remove(c);
 		}
 		updateComponentIndexForInsertionIndex(c, index + 1);
 		subComponents.insertElementAt(c, index + 1);
@@ -441,6 +441,14 @@ public abstract class FIBContainer extends FIBComponent {
 	private void notifySubcomponentsIndexChanged() {
 		setChanged();
 		notifyObservers(new FIBAttributeNotification<Vector<FIBComponent>>(Parameters.subComponents, subComponents));
+	}
+
+	@Override
+	public void notifiedBindingModelRecreated() {
+		super.notifiedBindingModelRecreated();
+		for (FIBComponent c : getSubComponents()) {
+			c.notifiedBindingModelRecreated();
+		}
 	}
 
 	@Override
