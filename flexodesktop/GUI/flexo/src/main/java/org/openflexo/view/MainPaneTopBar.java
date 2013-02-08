@@ -59,7 +59,6 @@ public class MainPaneTopBar extends JMenuBar {
 	public MainPaneTopBar(@Nonnull FlexoController controller) {
 		this.controller = controller;
 		this.model = controller.getControllerModel();
-		setBackground(UIManager.getDefaults().getColor("ToolBar.floatingForeground"));
 		registrationManager = new PropertyChangeListenerRegistrationManager();
 		setLayout(new BorderLayout());
 		this.forcePreferredSize = true/*ToolBox.getPLATFORM() != ToolBox.MACOS*/;
@@ -344,4 +343,9 @@ public class MainPaneTopBar extends JMenuBar {
 		rightViewToggle.setEnabled(visible);
 	}
 
+	@Override
+	public void updateUI() {
+		super.updateUI();
+		setBackground(UIManager.getDefaults().getColor("ToolBar.floatingForeground"));
+	}
 }
