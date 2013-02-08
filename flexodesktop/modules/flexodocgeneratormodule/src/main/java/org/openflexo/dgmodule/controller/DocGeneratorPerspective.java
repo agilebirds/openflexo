@@ -64,7 +64,14 @@ public class DocGeneratorPerspective extends FlexoPerspective {
 		/*if (proposedObject instanceof TOCEntry) {
 			return ((TOCEntry) proposedObject).getRepository();
 		} else {*/
-		return this.dgController.getProject().getGeneratedDoc();
+		if (proposedObject != null) {
+			if (proposedObject.getProject().getGeneratedDoc().getGeneratedRepositories().size() > 0) {
+				return proposedObject.getProject().getGeneratedDoc().getGeneratedRepositories().get(0);
+			} else {
+				return proposedObject.getProject().getGeneratedDoc();
+			}
+		}
+		return null;
 		// }
 	}
 
