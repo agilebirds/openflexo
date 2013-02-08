@@ -75,7 +75,7 @@ public class ScreenshotsGenerator extends AbstractCompoundGenerator<FlexoProject
 		// First Workflow
 		buildResourcesAndSetGeneratorsForProject(getProject(), resources, newGenerators);
 		if (getProject().getProjectData() != null && getProject().getProjectData().getImportedProjects().size() > 0) {
-			for (FlexoProjectReference ref : getProject().getProjectData().getImportedProjects()) {
+			for (FlexoProjectReference ref : getProject().getResolvedProjectReferences()) {
 				if (ref.getReferredProject() != null) {
 					buildResourcesAndSetGeneratorsForProject(ref.getReferredProject(), resources, newGenerators);
 				}
