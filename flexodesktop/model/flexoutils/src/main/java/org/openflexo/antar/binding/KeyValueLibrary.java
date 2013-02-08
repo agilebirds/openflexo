@@ -23,6 +23,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
@@ -103,6 +105,13 @@ public class KeyValueLibrary {
 		if (returned == null) {
 			returned = new Vector<KeyValueProperty>();
 			appendAccessibleProperties(declaringType, returned);
+			Collections.sort(returned, new Comparator<KeyValueProperty>() {
+
+				@Override
+				public int compare(KeyValueProperty o1, KeyValueProperty o2) {
+					return o1.getName().compareTo(o2.getName());
+				}
+			});
 			accessibleKeyValueProperties.put(declaringType, returned);
 		}
 		return returned;
@@ -124,7 +133,6 @@ public class KeyValueLibrary {
 					returned.add(p);
 				}
 			}
-			System.err.println("");
 			for (Type t : TypeUtils.getSuperInterfaceTypes(current)) {
 				appendAccessibleProperties(t, returned);
 			}
@@ -143,6 +151,13 @@ public class KeyValueLibrary {
 				current = TypeUtils.getSuperType(current);
 				// current = current.getSuperclass();
 			}
+			Collections.sort(returned, new Comparator<MethodDefinition>() {
+
+				@Override
+				public int compare(MethodDefinition o1, MethodDefinition o2) {
+					return o1.getSignature().compareTo(o2.getSignature());
+				}
+			});
 			accessibleMethods.put(declaringType, returned);
 		}
 		return returned;
@@ -185,7 +200,13 @@ public class KeyValueLibrary {
 			}
 			e.printStackTrace();
 		}
+		Collections.sort(returned, new Comparator<MethodDefinition>() {
 
+			@Override
+			public int compare(MethodDefinition o1, MethodDefinition o2) {
+				return o1.getSignature().compareTo(o2.getSignature());
+			}
+		});
 		return returned;
 	}
 
@@ -235,6 +256,13 @@ public class KeyValueLibrary {
 			}
 			e.printStackTrace();
 		}
+		Collections.sort(returned, new Comparator<KeyValueProperty>() {
+
+			@Override
+			public int compare(KeyValueProperty o1, KeyValueProperty o2) {
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
 		return returned;
 	}
 
