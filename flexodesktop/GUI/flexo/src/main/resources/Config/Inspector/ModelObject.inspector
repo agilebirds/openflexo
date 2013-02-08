@@ -1,4 +1,4 @@
-<inspector title="ModelObject" inspectedClassName="org.openflexo.foundation.FlexoModelObject">
+<inspector title="ModelObject" inspectedClassName="org.openflexo.foundation.FlexoObject">
 	<tab name="Doc" index="1" layout="DEFAULT">
 		<property name="specificDescriptions" label="specific_description" widget="CUSTOM" depends="project,hasSpecificDescriptions" constraint="10">
 			<param name="className" value="org.openflexo.components.widget.DescriptionInspectorWidget"/>
