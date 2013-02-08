@@ -52,6 +52,7 @@ import org.openflexo.dgmodule.view.DGFileVersionPopup;
 import org.openflexo.dgmodule.view.DGMainPane;
 import org.openflexo.doceditor.controller.DEController;
 import org.openflexo.doceditor.controller.DESelectionManager;
+import org.openflexo.doceditor.controller.TOCPerspective;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
@@ -135,12 +136,12 @@ public class DGController extends DEController implements FlexoObserver, Project
 
 	@Override
 	protected void initializePerspectives() {
-		super.initializePerspectives();
 		_CGGeneratedResourceModifiedHook = new DGGeneratedResourceModifiedHook();
 		browser = new DGBrowser(this);
 		dgBrowserView = new DGBrowserView(this, browser);
 		createFooter();
 		addToPerspectives(DOCUMENTATION_GENERATOR_PERSPECTIVE = new DocGeneratorPerspective(this));
+		addToPerspectives(TOC_PERSPECTIVE = new TOCPerspective(this));
 		addToPerspectives(TEMPLATES_PERSPECTIVE = new TemplatesPerspective(this));
 		addToPerspectives(VERSIONNING_PERSPECTIVE = new VersionningPerspective(this));
 	}
