@@ -51,6 +51,7 @@ import javax.swing.plaf.basic.BasicTextPaneUI;
 import javax.swing.plaf.basic.BasicViewportUI;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
@@ -548,7 +549,8 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		StyleConstants.setForeground(set, color);
 		textComponent.setForeground(color);
 		textComponent.setDisabledTextColor(color);
-		textComponent.setParagraphAttributes(set, true);
+		StyledDocument document = textComponent.getStyledDocument();
+		document.setCharacterAttributes(0, document.getLength(), set, true);
 		textComponent.validate();
 		updateBounds();
 	}
