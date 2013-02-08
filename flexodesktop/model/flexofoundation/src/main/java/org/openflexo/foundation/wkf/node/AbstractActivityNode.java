@@ -204,6 +204,9 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	// Used when deserializing
 	public void setRoleReference(FlexoModelObjectReference<Role> aRoleReference) {
 		this.role = aRoleReference;
+		if (this.role != null) {
+			this.role.setOwner(this);
+		}
 	}
 
 	public String getDocumentationUrl() {
@@ -249,7 +252,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 	public Role getRole() {
 		if (role != null) {
-			Role object = getWorkflow().getCachedRole(role);
+			final Role object = getWorkflow().getCachedRole(role);
 			if (object != null && object.isCache() && manager == null) {
 				String projectURI = role.getEnclosingProjectIdentifier();
 				if (projectURI != null) {
@@ -265,8 +268,13 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 									manager.delete();
 									manager = null;
 									if (role != null && role.getObject(true) != null) {
-										role.getObject(true).addObserver(AbstractActivityNode.this);
 										observedRole = role.getObject(true);
+										observedRole.addObserver(AbstractActivityNode.this);
+										if (!object.getColor().equals(observedRole.getColor())) {
+											AbstractActivityNode.this.setChanged();
+											AbstractActivityNode.this.notifyObservers(new RoleColorChange());
+										}
+
 									}
 								}
 							}, projectRef);
@@ -350,6 +358,9 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 	// Used when deserializing
 	public void setRoleAReference(FlexoModelObjectReference<Role> aRoleReference) {
 		this.roleA = aRoleReference;
+		if (this.roleA != null) {
+			this.roleA.setOwner(this);
+		}
 	}
 
 	public List<Role> getInformedRoles() {
@@ -490,12 +501,18 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 	public void addToConsultedRoleReferences(FlexoModelObjectReference<Role> role) {
 		consultedRoles.add(role);
+		if (role != null) {
+			role.setOwner(this);
+		}
 		setChanged();
 		notifyAttributeModification("consultedRoles", null, consultedRoles);
 	}
 
 	public void removeFromConsultedRoleReferences(FlexoModelObjectReference<Role> role) {
 		consultedRoles.remove(role);
+		if (role != null) {
+			role.setOwner(null);
+		}
 		setChanged();
 		notifyAttributeModification("consultedRoles", null, consultedRoles);
 	}
@@ -519,12 +536,18 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 	public void addToInformedRoleReferences(FlexoModelObjectReference<Role> role) {
 		informedRoles.add(role);
+		if (role != null) {
+			role.setOwner(this);
+		}
 		setChanged();
 		notifyAttributeModification("informedRoles", null, informedRoles);
 	}
 
 	public void removeFromInformedRoleReferences(FlexoModelObjectReference<Role> role) {
 		informedRoles.remove(role);
+		if (role != null) {
+			role.setOwner(null);
+		}
 		setChanged();
 		notifyAttributeModification("informedRoles", null, informedRoles);
 	}
@@ -896,7 +919,6 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 	@Override
 	public void objectCantBeFound(FlexoModelObjectReference<?> reference) {
-		// TODO Auto-generated method stub
 
 	}
 
