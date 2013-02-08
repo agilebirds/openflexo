@@ -30,7 +30,6 @@ import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.InvalidFileNameException;
-import org.openflexo.foundation.rm.ProjectRestructuration;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
@@ -153,16 +152,26 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 			logger.fine("createNewOWLModel(), project=" + project);
 		}
 		logger.info("-------------> Create ontology for " + project.getProjectName());
-		File owlFile = ProjectRestructuration.getExpectedProjectOntologyFile(project, project.getProjectName());
+
+		File owlFile = new File(FlexoProject.getProjectSpecificModelsDirectory(project), filename);
+
+		System.out.println("OWL file: " + owlFile.getAbsolutePath());
+
 		FlexoProjectFile ontologyFile = new FlexoProjectFile(owlFile, project);
 
 		OWLOntologyLibrary ontologyLibrary = (OWLOntologyLibrary) technologyContextManager;
 
-		OWLOntology newOntology = OWLOntology.createOWLEmptyOntology(project.getURI(), owlFile, ontologyLibrary, this);
+		OWLOntology newOntology = OWLOntology.createOWLEmptyOntology(modelUri, owlFile, ontologyLibrary, this);
+
+		System.out.println("project-relative file: " + ontologyFile);
 
 		OWLOntologyResource ontologyRes;
 		try {
 			ontologyRes = new OWLOntologyResource(project, newOntology, ontologyFile);
+
+			System.out.println("file: " + ontologyRes.getResourceFile());
+			System.out.println("file: " + ontologyRes.getFile());
+
 			ontologyLibrary.registerModel(ontologyRes);
 		} catch (InvalidFileNameException e) {
 			e.printStackTrace();

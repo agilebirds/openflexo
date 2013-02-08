@@ -16,6 +16,7 @@ import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.StringUtils;
@@ -103,6 +104,16 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 	@Override
 	public Class<VMI> getResourceDataClass() {
 		return (Class<VMI>) VirtualModelInstance.class;
+	}
+
+	@Override
+	public boolean hasBuilder() {
+		return true;
+	}
+
+	@Override
+	public final VirtualModelInstanceBuilder instanciateNewBuilder() {
+		return new VirtualModelInstanceBuilder(getContainer(), this);
 	}
 
 	@Override

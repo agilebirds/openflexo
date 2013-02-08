@@ -56,6 +56,14 @@ public abstract class NamedViewPointObject extends ViewPointObject {
 		super(builder);
 	}
 
+	/**
+	 * Return the URI of the {@link NamedViewPointObject}<br>
+	 * The convention for URI are following: <viewpoint_uri>/<virtual_model_name>#<edition_pattern_name>.<edition_scheme_name> <br>
+	 * eg<br>
+	 * http://www.mydomain.org/MyViewPoint/MyVirtualModel#MyEditionPattern.MyEditionScheme
+	 * 
+	 * @return String representing unique URI of this object
+	 */
 	public abstract String getURI();
 
 	public String getName() {

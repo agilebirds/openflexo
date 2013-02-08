@@ -98,6 +98,14 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		return (getEditionPattern() != null ? getEditionPattern().getFullyQualifiedName() : "null") + "." + getName();
 	}
 
+	/**
+	 * Return the URI of the {@link NamedViewPointObject}<br>
+	 * The convention for URI are following: <viewpoint_uri>/<virtual_model_name>#<edition_pattern_name>.<edition_scheme_name> <br>
+	 * eg<br>
+	 * http://www.mydomain.org/MyViewPoint/MyVirtualModel#MyEditionPattern.MyEditionScheme
+	 * 
+	 * @return String representing unique URI of this object
+	 */
 	@Override
 	public String getURI() {
 		return getEditionPattern().getURI() + "." + getName();

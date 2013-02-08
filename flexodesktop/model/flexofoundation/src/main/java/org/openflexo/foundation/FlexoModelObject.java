@@ -28,6 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionnable;
+import org.openflexo.foundation.resource.FlexoProjectResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ScreenshotResource;
 import org.openflexo.foundation.utils.FlexoDocFormat;
@@ -168,6 +169,9 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	public FlexoProject getProject() {
 		if (getXMLResourceData() != null && getXMLResourceData().getFlexoResource() != null) {
 			return getXMLResourceData().getFlexoResource().getProject();
+		}
+		if (getXMLResourceData() != null && getXMLResourceData().getResource() instanceof FlexoProjectResource) {
+			return ((FlexoProjectResource) getXMLResourceData().getResource()).getProject();
 		}
 		return null;
 	}

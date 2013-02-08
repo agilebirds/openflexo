@@ -68,8 +68,7 @@ public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 
 	@Override
 	public XMLStorageResourceData getXMLResourceData() {
-		// Not defined in this context
-		return null;
+		return getVirtualModelInstance();
 	}
 
 	public void setView(View view) {

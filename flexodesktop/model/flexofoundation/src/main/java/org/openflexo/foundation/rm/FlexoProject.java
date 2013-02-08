@@ -4625,4 +4625,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return returned;
 	}
 
+	public static File getProjectSpecificModelsDirectory(FlexoProject project) {
+		File returned = new File(project.getProjectDirectory(), "Models");
+		returned.mkdirs();
+		return returned;
+	}
+
 }

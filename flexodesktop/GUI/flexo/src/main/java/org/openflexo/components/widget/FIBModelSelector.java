@@ -30,8 +30,9 @@ import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.DefaultFlexoServiceManager;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
+import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -42,18 +43,22 @@ import org.openflexo.view.controller.FlexoFIBController;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 /**
- * Widget allowing to select a MetaModel while browsing in Information Space
+ * Widget allowing to select a Model while browsing in Information Space
  * 
  * @author sguerin
  * 
  */
-public class FIBMetaModelSelector extends FIBModelObjectSelector<FlexoMetaModelResource> {
+public class FIBModelSelector extends FIBModelObjectSelector<FlexoModelResource> {
 	@SuppressWarnings("hiding")
-	static final Logger logger = Logger.getLogger(FIBMetaModelSelector.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(FIBModelSelector.class.getPackage().getName());
 
-	public static FileResource FIB_FILE = new FileResource("Fib/MetaModelSelector.fib");
+	public static FileResource FIB_FILE = new FileResource("Fib/ModelSelector.fib");
 
-	public FIBMetaModelSelector(FlexoMetaModelResource editedObject) {
+	private InformationSpace informationSpace;
+	private TechnologyAdapter<?, ?> technologyAdapter;
+	private FlexoResourceCenter resourceCenter;
+
+	public FIBModelSelector(FlexoModelResource editedObject) {
 		super(editedObject);
 	}
 
@@ -63,19 +68,17 @@ public class FIBMetaModelSelector extends FIBModelObjectSelector<FlexoMetaModelR
 	}
 
 	@Override
-	public Class<FlexoMetaModelResource> getRepresentedType() {
-		return FlexoMetaModelResource.class;
+	public Class<FlexoModelResource> getRepresentedType() {
+		return FlexoModelResource.class;
 	}
 
 	@Override
-	public String renderedString(FlexoMetaModelResource editedObject) {
+	public String renderedString(FlexoModelResource editedObject) {
 		if (editedObject != null) {
 			return editedObject.getURI();
 		}
 		return "";
 	}
-
-	private InformationSpace informationSpace;
 
 	public InformationSpace getInformationSpace() {
 		return informationSpace;
@@ -86,8 +89,6 @@ public class FIBMetaModelSelector extends FIBModelObjectSelector<FlexoMetaModelR
 		this.informationSpace = informationSpace;
 		updateCustomPanel(getEditedObject());
 	}
-
-	private TechnologyAdapter<?, ?> technologyAdapter;
 
 	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
 		return technologyAdapter;
@@ -105,6 +106,14 @@ public class FIBMetaModelSelector extends FIBModelObjectSelector<FlexoMetaModelR
 		} else {
 			return getInformationSpace();
 		}
+	}
+
+	public FlexoResourceCenter getResourceCenter() {
+		return resourceCenter;
+	}
+
+	public void setResourceCenter(FlexoResourceCenter resourceCenter) {
+		this.resourceCenter = resourceCenter;
 	}
 
 	// Please uncomment this for a live test
@@ -142,14 +151,14 @@ public class FIBMetaModelSelector extends FIBModelObjectSelector<FlexoMetaModelR
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				FIBMetaModelSelector selector = new FIBMetaModelSelector(null);
+				FIBModelSelector selector = new FIBModelSelector(null);
 				selector.setInformationSpace(informationSpace);
-				try {
+				/*try {
 					selector.setTechnologyAdapter(serviceManager.getTechnologyAdapterService().getTechnologyAdapter(
 							(Class<TechnologyAdapter<?, ?>>) Class.forName("org.openflexo.technologyadapter.emf.EMFTechnologyAdapter")));
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
-				}
+				}*/
 				return makeArray(selector);
 			}
 

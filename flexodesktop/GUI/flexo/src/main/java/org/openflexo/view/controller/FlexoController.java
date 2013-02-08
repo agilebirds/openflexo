@@ -114,8 +114,10 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.resource.UserResourceCenter;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectReference;
@@ -2060,7 +2062,12 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		} else if (object instanceof FlexoFacet) {
 			return IconLibrary.FOLDER_ICON;
 		} else if (object instanceof FlexoResourceCenter) {
+			if (object instanceof UserResourceCenter) {
+				return IconLibrary.HOME_ICON;
+			}
 			return IconLibrary.RESOURCE_CENTER_ICON;
+		} else if (object instanceof FlexoResourceCenterService) {
+			return IconLibrary.INFORMATION_SPACE_ICON;
 		} else if (object instanceof WorkflowModelObject) {
 			return WKFIconLibrary.iconForObject((WorkflowModelObject) object);
 		} else if (object instanceof WKFObject) {

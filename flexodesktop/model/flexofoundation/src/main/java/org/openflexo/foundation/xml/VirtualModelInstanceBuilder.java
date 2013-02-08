@@ -36,7 +36,7 @@ public class VirtualModelInstanceBuilder {
 
 	public VirtualModelInstance<?, ?> vmInstance;
 	private ViewResource viewResource;
-	private VirtualModelInstanceResource virtualModelResource;
+	private VirtualModelInstanceResource virtualModelInstanceResource;
 
 	/**
 	 * Use this constructor to build an Operation Component
@@ -46,15 +46,15 @@ public class VirtualModelInstanceBuilder {
 	public VirtualModelInstanceBuilder(ViewResource viewResource, VirtualModelInstanceResource virtualModelResource) {
 		super();
 		this.viewResource = viewResource;
-		this.virtualModelResource = virtualModelResource;
+		this.virtualModelInstanceResource = virtualModelResource;
 		if (virtualModelResource.isLoaded()) {
 			vmInstance = virtualModelResource.getVirtualModelInstance();
 		}
 	}
 
 	public FlexoProject getProject() {
-		if (virtualModelResource != null) {
-			return virtualModelResource.getProject();
+		if (virtualModelInstanceResource != null) {
+			return virtualModelInstanceResource.getProject();
 		}
 		return null;
 	}
@@ -67,8 +67,8 @@ public class VirtualModelInstanceBuilder {
 	}
 
 	public VirtualModel getVirtualModel() {
-		if (virtualModelResource != null) {
-			return virtualModelResource.getVirtualModelResource().getVirtualModel();
+		if (virtualModelInstanceResource != null && virtualModelInstanceResource.getVirtualModelResource() != null) {
+			return virtualModelInstanceResource.getVirtualModelResource().getVirtualModel();
 		}
 		return null;
 	}

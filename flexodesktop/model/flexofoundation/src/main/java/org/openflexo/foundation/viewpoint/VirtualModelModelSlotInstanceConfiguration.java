@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 
@@ -49,6 +51,13 @@ public class VirtualModelModelSlotInstanceConfiguration<MS extends VirtualModelM
 	@Override
 	public List<ModelSlotInstanceConfigurationOption> getAvailableOptions() {
 		return options;
+	}
+
+	@Override
+	public ModelSlotInstance<?, ?> createModelSlotInstance(VirtualModelInstance<?, ?> vmInstance) {
+		ModelSlotInstance<?, ?> returned = new ModelSlotInstance(vmInstance, getModelSlot());
+		returned.setModelURI("TODO");
+		return returned;
 	}
 
 }

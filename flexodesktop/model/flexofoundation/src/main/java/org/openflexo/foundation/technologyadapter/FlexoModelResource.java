@@ -27,4 +27,5 @@ public interface FlexoModelResource<M extends FlexoModel<M, MM>, MM extends Flex
 
 	public M getModelData();
 
+	public M getModel();
 }

@@ -225,6 +225,10 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 
 	protected abstract ResizablePanel createCustomPanel(T editedObject);
 
+	protected int getRequiredWidth() {
+		return getWidth();
+	}
+
 	private void makePopup() {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("makePopup()");
@@ -241,7 +245,16 @@ public abstract class CustomPopup<T> extends JPanel implements ActionListener, M
 		// dim.height = dim.height - 50;
 		posX = p.x;/* +getWidth()-getCustomPanel().getWidth(); */
 		posY = p.y + getHeight() - 1;
-		int newWidth = getCustomPanel().getDefaultSize().width;
+		int newWidth;
+		if (getRequiredWidth() < 0) {
+			newWidth = getCustomPanel().getDefaultSize().width;
+		} else {
+			if (getRequiredWidth() > getCustomPanel().getDefaultSize().width) {
+				newWidth = getRequiredWidth();
+			} else {
+				newWidth = getCustomPanel().getDefaultSize().width;
+			}
+		}
 		int newHeight = getCustomPanel().getDefaultSize().height;
 		/*
 		 * if (posX + getCustomPanel().getDefaultSize().width > dim.width) { posX = dim.width - getCustomPanel().getDefaultSize().width -

@@ -30,10 +30,9 @@ import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.DefaultFlexoServiceManager;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
-import org.openflexo.foundation.technologyadapter.InformationSpace;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
@@ -42,18 +41,20 @@ import org.openflexo.view.controller.FlexoFIBController;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 /**
- * Widget allowing to select a MetaModel while browsing in Information Space
+ * Widget allowing to select a FlexoResourceCenter while browsing in FlexoResourceCenterService
  * 
  * @author sguerin
  * 
  */
-public class FIBMetaModelSelector extends FIBModelObjectSelector<FlexoMetaModelResource> {
+public class FIBResourceCenterSelector extends FIBModelObjectSelector<FlexoResourceCenter> {
 	@SuppressWarnings("hiding")
-	static final Logger logger = Logger.getLogger(FIBMetaModelSelector.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(FIBResourceCenterSelector.class.getPackage().getName());
 
-	public static FileResource FIB_FILE = new FileResource("Fib/MetaModelSelector.fib");
+	public static FileResource FIB_FILE = new FileResource("Fib/ResourceCenterSelector.fib");
 
-	public FIBMetaModelSelector(FlexoMetaModelResource editedObject) {
+	private FlexoResourceCenterService rcService;
+
+	public FIBResourceCenterSelector(FlexoResourceCenter editedObject) {
 		super(editedObject);
 	}
 
@@ -63,48 +64,30 @@ public class FIBMetaModelSelector extends FIBModelObjectSelector<FlexoMetaModelR
 	}
 
 	@Override
-	public Class<FlexoMetaModelResource> getRepresentedType() {
-		return FlexoMetaModelResource.class;
+	public Class<FlexoResourceCenter> getRepresentedType() {
+		return FlexoResourceCenter.class;
 	}
 
 	@Override
-	public String renderedString(FlexoMetaModelResource editedObject) {
+	public String renderedString(FlexoResourceCenter editedObject) {
 		if (editedObject != null) {
-			return editedObject.getURI();
+			return editedObject.getName();
 		}
 		return "";
 	}
 
-	private InformationSpace informationSpace;
-
-	public InformationSpace getInformationSpace() {
-		return informationSpace;
+	public FlexoResourceCenterService getResourceCenterService() {
+		return rcService;
 	}
 
-	@CustomComponentParameter(name = "informationSpace", type = CustomComponentParameter.Type.MANDATORY)
-	public void setInformationSpace(InformationSpace informationSpace) {
-		this.informationSpace = informationSpace;
-		updateCustomPanel(getEditedObject());
-	}
-
-	private TechnologyAdapter<?, ?> technologyAdapter;
-
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
-		return technologyAdapter;
-	}
-
-	@CustomComponentParameter(name = "technologyAdapter", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setTechnologyAdapter(TechnologyAdapter<?, ?> technologyAdapter) {
-		this.technologyAdapter = technologyAdapter;
+	@CustomComponentParameter(name = "resourceCenterService", type = CustomComponentParameter.Type.MANDATORY)
+	public void setResourceCenterService(FlexoResourceCenterService rcService) {
+		this.rcService = rcService;
 		updateCustomPanel(getEditedObject());
 	}
 
 	public Object getRootObject() {
-		if (getTechnologyAdapter() != null) {
-			return getTechnologyAdapter();
-		} else {
-			return getInformationSpace();
-		}
+		return getResourceCenterService();
 	}
 
 	// Please uncomment this for a live test
@@ -137,19 +120,18 @@ public class FIBMetaModelSelector extends FIBModelObjectSelector<FlexoMetaModelR
 		};
 		TechnologyAdapterControllerService tacService = DefaultTechnologyAdapterControllerService.getNewInstance();
 		serviceManager.registerService(tacService);
-		final InformationSpace informationSpace = serviceManager.getInformationSpace();
 
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				FIBMetaModelSelector selector = new FIBMetaModelSelector(null);
-				selector.setInformationSpace(informationSpace);
-				try {
+				FIBResourceCenterSelector selector = new FIBResourceCenterSelector(null);
+				selector.setResourceCenterService(serviceManager.getResourceCenterService());
+				/*try {
 					selector.setTechnologyAdapter(serviceManager.getTechnologyAdapterService().getTechnologyAdapter(
 							(Class<TechnologyAdapter<?, ?>>) Class.forName("org.openflexo.technologyadapter.emf.EMFTechnologyAdapter")));
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
-				}
+				}*/
 				return makeArray(selector);
 			}
 

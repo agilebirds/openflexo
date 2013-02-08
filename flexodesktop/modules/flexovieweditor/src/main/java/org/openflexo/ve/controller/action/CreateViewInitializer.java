@@ -73,7 +73,8 @@ public class CreateViewInitializer extends ActionInitializer<CreateView, Reposit
 		return new FlexoActionFinalizer<CreateView>() {
 			@Override
 			public boolean run(EventObject e, CreateView action) {
-				getController().setCurrentEditedObjectAsModuleView(action.getNewView());
+				// getController().setCurrentEditedObjectAsModuleView(action.getNewView());
+				getController().selectAndFocusObject(action.getNewView());
 				return true;
 			}
 		};

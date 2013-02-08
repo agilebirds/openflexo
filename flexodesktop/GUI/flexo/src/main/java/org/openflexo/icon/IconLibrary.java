@@ -57,6 +57,7 @@ public class IconLibrary {
 	public static final ImageIcon OPENFLEXO_TEXT_SMALL_ICON = new ImageIconResource("Icons/Flexo/OpenflexoText_150x40.png");
 
 	// Common icons
+	public static final ImageIcon HOME_ICON = new ImageIconResource("Icons/Common/Home.png");
 	public static final ImageIcon FOLDER_ICON = new ImageIconResource("Icons/Common/Folder.gif");
 	public static final ImageIcon SMALL_EXCEL_ICON = new ImageIconResource("Icons/Common/SmallExcel.gif");
 	public static final ImageIcon BIG_EXCEL_ICON = new ImageIconResource("Icons/Common/BigExcel.png");

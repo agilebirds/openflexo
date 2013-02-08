@@ -203,6 +203,14 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 		return (getVirtualModel() != null ? getVirtualModel().getFullyQualifiedName() : "null") + "#" + getName();
 	}
 
+	/**
+	 * Return the URI of the {@link EditionPattern}<br>
+	 * The convention for URI are following: <viewpoint_uri>/<virtual_model_name>#<edition_pattern_name>.<edition_scheme_name> <br>
+	 * eg<br>
+	 * http://www.mydomain.org/MyViewPoint/MyVirtualModel#MyEditionPattern.MyEditionScheme
+	 * 
+	 * @return String representing unique URI of this object
+	 */
 	@Override
 	public String getURI() {
 		return getVirtualModel().getURI() + "#" + getName();

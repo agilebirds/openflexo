@@ -104,9 +104,9 @@ public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> im
 			if (viewDirectory.exists() && viewDirectory.isDirectory()) {
 				for (File virtualModelFile : viewDirectory.listFiles()) {
 					if (virtualModelFile.getName().endsWith(VirtualModelInstanceResource.VIRTUAL_MODEL_SUFFIX)) {
-						VirtualModelInstanceResource virtualModelResource = VirtualModelInstanceResourceImpl
+						VirtualModelInstanceResource virtualModelInstanceResource = VirtualModelInstanceResourceImpl
 								.retrieveVirtualModelInstanceResource(virtualModelFile, returned);
-						returned.addToContents(virtualModelResource);
+						returned.addToContents(virtualModelInstanceResource);
 					}
 				}
 			}
@@ -118,6 +118,11 @@ public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> im
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public boolean hasBuilder() {
+		return true;
 	}
 
 	@Override
@@ -181,11 +186,6 @@ public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> im
 	@Override
 	public FlexoResourceTree update() {
 		return null;
-	}
-
-	@Override
-	public boolean hasBuilder() {
-		return true;
 	}
 
 	@Override

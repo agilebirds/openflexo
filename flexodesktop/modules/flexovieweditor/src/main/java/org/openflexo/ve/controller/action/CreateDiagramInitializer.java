@@ -73,7 +73,8 @@ public class CreateDiagramInitializer extends ActionInitializer<CreateDiagram, V
 		return new FlexoActionFinalizer<CreateDiagram>() {
 			@Override
 			public boolean run(EventObject e, CreateDiagram action) {
-				getController().setCurrentEditedObjectAsModuleView(action.getNewDiagram());
+				// getController().setCurrentEditedObjectAsModuleView(action.getNewDiagram());
+				getController().selectAndFocusObject(action.getNewDiagram());
 				return true;
 			}
 		};

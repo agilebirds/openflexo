@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.InvalidArgumentException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.InvalidFileNameException;
@@ -84,7 +85,7 @@ public class CreateVirtualModelInstance extends FlexoAction<CreateVirtualModelIn
 	}
 
 	@Override
-	protected void doAction(Object context) throws InvalidFileNameException, SaveResourceException {
+	protected void doAction(Object context) throws InvalidFileNameException, SaveResourceException, InvalidArgumentException {
 		logger.info("Add virtual model instance in view " + getFocusedObject());
 
 		newVirtualModelInstanceName = JavaUtils.getClassName(newVirtualModelInstanceName);
@@ -109,7 +110,21 @@ public class CreateVirtualModelInstance extends FlexoAction<CreateVirtualModelIn
 		newVirtualModelInstance = newVirtualModelInstanceResource.getVirtualModelInstance();
 
 		logger.info("Added virtual model instance " + newVirtualModelInstance + " in view " + getFocusedObject());
-		// Creates the resource here
+
+		System.out.println("OK, we have created the file " + newVirtualModelInstanceResource.getFile().getAbsolutePath());
+
+		for (ModelSlot<?, ?> ms : virtualModel.getModelSlots()) {
+			ModelSlotInstanceConfiguration<?> configuration = getModelSlotInstanceConfiguration(ms);
+			if (configuration.isValidConfiguration()) {
+				newVirtualModelInstance.addToModelSlotInstances(configuration.createModelSlotInstance(newVirtualModelInstance));
+			} else {
+				throw new InvalidArgumentException("Wrong configuration for model slot " + configuration.getModelSlot() + " configuration="
+						+ configuration);
+			}
+		}
+
+		System.out.println("Saving file again...");
+		newVirtualModelInstance.save();
 	}
 
 	private String errorMessage;

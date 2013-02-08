@@ -74,7 +74,6 @@ public class CreateVirtualModelInstanceInitializer extends ActionInitializer<Cre
 							result = instanciateShowDialogAndReturnStatus(action.getModelSlotInstanceConfiguration(configuredModelSlot),
 									VECst.CONFIGURE_MODEL_SLOT_INSTANCE_DIALOG_FIB);
 						}
-						System.out.println("result = " + result);
 						if (result == Status.CANCELED) {
 							return false;
 						} else if (result == Status.VALIDATED) {
@@ -98,7 +97,8 @@ public class CreateVirtualModelInstanceInitializer extends ActionInitializer<Cre
 		return new FlexoActionFinalizer<CreateVirtualModelInstance>() {
 			@Override
 			public boolean run(EventObject e, CreateVirtualModelInstance action) {
-				getController().setCurrentEditedObjectAsModuleView(action.getNewVirtualModelInstance());
+				// getController().setCurrentEditedObjectAsModuleView(action.getNewVirtualModelInstance());
+				getController().selectAndFocusObject(action.getNewVirtualModelInstance());
 				return true;
 			}
 		};

@@ -48,7 +48,7 @@
       <Dependancy componentName="VirtualModelTitleTextField" />
     </Button>
     <Button action="controller.backAndDispose()" buttonIcon="" buttonType="Trigger" label="back" format="" icon="" tooltip="" localize="true" enable="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" data="" constraints="flow()" visible="" font="Lucida Grande,0,13" />
-    <Button action="controller.nextAndDispose()" buttonIcon="" buttonType="Trigger" label="next" format="" icon="" tooltip="" localize="true" enable="data.isValid" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="0" data="" constraints="flow(index=0)" visible="" font="Lucida Grande,0,13">
+    <Button action="controller.nextAndDispose()" buttonIcon="" buttonType="Trigger" label="next" format="" icon="" tooltip="" localize="true" enable="(data.isValid &amp; (data.virtualModel.modelSlots.size &gt; 0))" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="0" data="" constraints="flow(index=0)" visible="" font="Lucida Grande,0,13">
       <Dependancy componentName="VirtualModelBrowser" />
       <Dependancy componentName="VirtualModelNameTextField" />
       <Dependancy componentName="VirtualModelTitleTextField" />

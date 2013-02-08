@@ -170,7 +170,7 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 			return false;
 		} else {
 			try {
-				return !getFile().exists() || getResourceData().isModified();
+				return getFile() != null && (!getFile().exists() || getResourceData().isModified());
 			} catch (Exception e) {
 				e.printStackTrace();
 				return false;

@@ -88,6 +88,15 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 		this.technologyAdapter = ontologyLibrary.getTechnologyAdapter();
 	}
 
+	public OWLOntologyResource(FlexoProject aProject, OWLOntology anOntology, FlexoProjectFile ontologyFile)
+			throws InvalidFileNameException, DuplicateResourceException {
+		this(aProject, anOntology.getTechnologyAdapter());
+		_resourceData = anOntology;
+		absoluteFile = ontologyFile.getFile();
+		anOntology.setFlexoResource(this);
+		setResourceFile(ontologyFile);
+	}
+
 	@Override
 	public String getURI() {
 		return ontologyURI;
@@ -105,24 +114,6 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 	public void setOntologyLibrary(OWLOntologyLibrary ontologyLibrary) {
 		this.ontologyLibrary = ontologyLibrary;
 		ontologyLibrary.registerOntology(this);
-	}
-
-	/*public OWLOntologyResource(FlexoProject aProject, FlexoDMResource dmResource, FlexoProjectFile eoModelFile)
-	        throws InvalidFileNameException
-	{
-	    this(aProject);
-	    setResourceFile(eoModelFile);
-	    addToSynchronizedResources(dmResource);
-	    if (logger.isLoggable(Level.INFO))
-	        logger.info("Build new FlexoEOModelResource");
-	}*/
-
-	public OWLOntologyResource(FlexoProject aProject, OWLOntology anOntology, FlexoProjectFile ontologyFile)
-			throws InvalidFileNameException, DuplicateResourceException {
-		this(aProject, anOntology.getTechnologyAdapter());
-		_resourceData = anOntology;
-		anOntology.setFlexoResource(this);
-		setResourceFile(ontologyFile);
 	}
 
 	@Override
@@ -257,4 +248,10 @@ public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> imple
 			return null;
 		}
 	}
+
+	@Override
+	public OWLOntology getModel() {
+		return getModelData();
+	}
+
 }

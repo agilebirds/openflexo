@@ -175,4 +175,10 @@ public class XMLModelResource extends FlexoStorageResource<XMLModel> implements 
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public XMLModel getModel() {
+		return getModelData();
+	}
+
 }

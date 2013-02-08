@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.view;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -73,7 +74,6 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	private List<ModelSlotInstance<?, ?>> modelSlotInstances;
 	private Map<ModelSlot<?, ?>, FlexoModel<?, ?>> modelsMap = new HashMap<ModelSlot<?, ?>, FlexoModel<?, ?>>(); // Do not serialize this.
 	private String title;
-	private View view;
 
 	public static VirtualModelInstanceResource<?> newVirtualModelInstance(String virtualModelName, String virtualModelTitle,
 			VirtualModel virtualModel, View view) throws InvalidFileNameException, SaveResourceException {
@@ -110,12 +110,15 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	public VirtualModelInstance(View view, VirtualModel virtualModel) {
 		super(virtualModel, view.getProject());
 		logger.info("Created new VirtualModelInstance for virtual model " + virtualModel);
-		this.view = view;
+		modelSlotInstances = new ArrayList<ModelSlotInstance<?, ?>>();
 	}
 
 	@Override
 	public View getView() {
-		return view;
+		if (getResource() != null && getResource().getContainer() != null) {
+			return getResource().getContainer().getView();
+		}
+		return null;
 	}
 
 	@Override
@@ -132,6 +135,14 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 
 	public VM getVirtualModel() {
 		return getEditionPattern();
+	}
+
+	public String getVirtualModelURI() {
+		return super.getEditionPatternURI();
+	}
+
+	public void setVirtualModelURI(String virtualModelURI) {
+		super.setEditionPatternURI(virtualModelURI);
 	}
 
 	@Override
@@ -312,7 +323,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	public void addToModelSlotInstances(ModelSlotInstance<?, ?> instance) {
 		Iterator<ModelSlotInstance<?, ?>> it = modelSlotInstances.iterator();
 		while (it.hasNext()) {
-			if (it.next().getModelSlot().equals(instance.getModelSlot())) {
+			if (it.next().getModelSlot() != null && it.next().getModelSlot().equals(instance.getModelSlot())) {
 				it.remove();
 			}
 		}

@@ -24,6 +24,8 @@ import java.util.List;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.foundation.view.VirtualModelInstance;
 
 /**
  * This class is used to stored the configuration of a {@link ModelSlot} which has to be instantiated
@@ -104,4 +106,6 @@ public abstract class ModelSlotInstanceConfiguration<MS extends ModelSlot<?, ?>>
 	public boolean isValidConfiguration() {
 		return option != null;
 	}
+
+	public abstract ModelSlotInstance<?, ?> createModelSlotInstance(VirtualModelInstance<?, ?> msInstance);
 }
