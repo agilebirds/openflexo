@@ -20,26 +20,12 @@
 package org.openflexo.components.widget;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.foundation.DefaultFlexoServiceManager;
-import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoServiceManager;
-import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
-import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.view.controller.DefaultTechnologyAdapterControllerService;
-import org.openflexo.view.controller.FlexoFIBController;
-import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 /**
  * Widget allowing to select a MetaModel while browsing in Information Space
@@ -110,7 +96,7 @@ public class FIBMetaModelSelector extends FIBModelObjectSelector<FlexoMetaModelR
 	// Please uncomment this for a live test
 	// Never commit this uncommented since it will not compile on continuous build
 	// To have icon, you need to choose "Test interface" in the editor (otherwise, flexo controller is not instantiated in EDIT mode)
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 
 		try {
 			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
@@ -164,5 +150,5 @@ public class FIBMetaModelSelector extends FIBModelObjectSelector<FlexoMetaModelR
 			}
 		};
 		editor.launch();
-	}
+	}*/
 }

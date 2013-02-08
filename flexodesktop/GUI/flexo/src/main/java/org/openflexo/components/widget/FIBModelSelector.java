@@ -20,27 +20,13 @@
 package org.openflexo.components.widget;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.fib.controller.FIBController;
-import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.foundation.DefaultFlexoServiceManager;
-import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
-import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.view.controller.DefaultTechnologyAdapterControllerService;
-import org.openflexo.view.controller.FlexoFIBController;
-import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 /**
  * Widget allowing to select a Model while browsing in Information Space
@@ -119,7 +105,7 @@ public class FIBModelSelector extends FIBModelObjectSelector<FlexoModelResource>
 	// Please uncomment this for a live test
 	// Never commit this uncommented since it will not compile on continuous build
 	// To have icon, you need to choose "Test interface" in the editor (otherwise, flexo controller is not instantiated in EDIT mode)
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 
 		try {
 			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
@@ -153,12 +139,12 @@ public class FIBModelSelector extends FIBModelObjectSelector<FlexoModelResource>
 			public Object[] getData() {
 				FIBModelSelector selector = new FIBModelSelector(null);
 				selector.setInformationSpace(informationSpace);
-				/*try {
-					selector.setTechnologyAdapter(serviceManager.getTechnologyAdapterService().getTechnologyAdapter(
-							(Class<TechnologyAdapter<?, ?>>) Class.forName("org.openflexo.technologyadapter.emf.EMFTechnologyAdapter")));
-				} catch (ClassNotFoundException e) {
-					e.printStackTrace();
-				}*/
+				//try {
+				//	selector.setTechnologyAdapter(serviceManager.getTechnologyAdapterService().getTechnologyAdapter(
+				//			(Class<TechnologyAdapter<?, ?>>) Class.forName("org.openflexo.technologyadapter.emf.EMFTechnologyAdapter")));
+				//} catch (ClassNotFoundException e) {
+				//	e.printStackTrace();
+				//}
 				return makeArray(selector);
 			}
 
@@ -173,5 +159,5 @@ public class FIBModelSelector extends FIBModelObjectSelector<FlexoModelResource>
 			}
 		};
 		editor.launch();
-	}
+	}*/
 }
