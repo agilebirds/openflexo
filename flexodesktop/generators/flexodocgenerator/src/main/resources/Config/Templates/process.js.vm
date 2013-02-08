@@ -209,7 +209,7 @@
             
             divDescriptionElement.appendChild(pMailElement);
         #end
-        #if($generator.isInstance($node,"org.openflexo.foundation.wkf.MetricsValue.MetricsValueOwner") && !${node.getMetricsValues().isEmpty()})
+        #if($generator.isInstance($node,"org.openflexo.foundation.wkf.MetricsValue$MetricsValueOwner") && !${node.getMetricsValues().isEmpty()})
             var divMetricsElement = document.createElement('div');
             divMetricsElement.className = 'htmlDocMetrics';
             
@@ -419,11 +419,11 @@
 			#set($screenshotName = "")
 			#if(${generator.isInstance($node,"org.openflexo.foundation.wkf.WKFArtefact")})
 				#set($screenShot = ${generator.screenshot($node.getParentPetriGraph().getContainer(), $projectGenerator)})
-				#set($trimInfo = ${project.getScreenshotResource($node.getParentPetriGraph().getContainer(), true).getTrimInfo()})
+				#set($trimInfo = ${node.getParentPetriGraph().getContainer().getProject().getScreenshotResource($node.getParentPetriGraph().getContainer(), true).getTrimInfo()})
 				#set($screenshotName = ${generator.screenshotName($node.getParentPetriGraph().getContainer(), $projectGenerator)})
 			#else
 				#set($screenShot = ${generator.screenshot($node, $projectGenerator)})
-				#set($trimInfo = ${project.getScreenshotResource($node, true).getTrimInfo()})
+				#set($trimInfo = ${node.getProject().getScreenshotResource($node, true).getTrimInfo()})
 				#set($screenshotName = ${generator.screenshotName($node, $projectGenerator)})
 			#end
             var imgElement = document.createElement('img');
