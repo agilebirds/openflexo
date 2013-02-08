@@ -245,6 +245,14 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 		return resource;
 	}
 
+	public String getResourceIdentifier() {
+		if (resource != null) {
+			return resource.getResourceIdentifier();
+		} else {
+			return resourceIdentifier;
+		}
+	}
+
 	@Override
 	public Converter getConverter() {
 		if (getReferringProject() != null) {
@@ -383,6 +391,15 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getSource() == resource && "name".equals(evt.getPropertyName())) {
 			resourceIdentifier = resource.getResourceIdentifier();
+			if (getOwner() != null) {
+				getOwner().objectSerializationIdChanged(this);
+			}
+		}
+	}
+
+	public void _setEnclosingProjectIdentifier(String uri) {
+		if (enclosingProjectIdentifier == null) {
+			enclosingProjectIdentifier = uri;
 			if (getOwner() != null) {
 				getOwner().objectSerializationIdChanged(this);
 			}

@@ -69,6 +69,7 @@ import org.openflexo.foundation.rm.ImportedRoleLibraryCreated;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.ProjectData;
 import org.openflexo.foundation.rm.ProjectRestructuration;
+import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoFont;
@@ -2061,13 +2062,25 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 		if (reference.getObject() != null) {
 			return reference.getObject();
 		} else {
-			String projectURI = reference.getEnclosingProjectIdentifier();
-			if (projectURI != null) {
-				ProjectData data = getProject().getProjectData();
-				if (data != null) {
+			ProjectData data = getProject().getProjectData();
+			if (data != null) {
+				String projectURI = reference.getEnclosingProjectIdentifier();
+				if (projectURI != null) {
 					FlexoProjectReference projectRef = data.getProjectReferenceWithURI(projectURI, true);
 					if (projectRef != null) {
 						return projectRef.getWorkflow().getRoleList().getRoleWithFlexoID(reference.getFlexoID());
+					}
+				} else {
+					if (reference.getResourceIdentifier() != null) {
+						String projectName = reference.getResourceIdentifier().substring(ResourceType.WORKFLOW.getName().length() + 1);
+						List<FlexoProjectReference> refs = data.getProjectReferenceWithName(projectName, true);
+						for (FlexoProjectReference ref : refs) {
+							Role r = ref.getWorkflow().getRoleList().getRoleWithFlexoID(reference.getFlexoID());
+							if (r != null) {
+								reference._setEnclosingProjectIdentifier(ref.getURI());
+								return r;
+							}
+						}
 					}
 				}
 			}
