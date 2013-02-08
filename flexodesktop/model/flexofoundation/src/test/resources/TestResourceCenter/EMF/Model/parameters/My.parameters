@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com.thalesgroup.parameters.model:ParameterSet xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:com.thalesgroup.parameters.model="http://www.thalesgroup.com/parameters/1.0" name="MyParameterSet">
+  <ownedParameters xsi:type="com.thalesgroup.parameters.model:BoolParameterValue" name="BoolParameterValue1"/>
+  <ownedParameters xsi:type="com.thalesgroup.parameters.model:DoubleParameterValue" name="DoubleParameterValue1"/>
+  <ownedParameters xsi:type="com.thalesgroup.parameters.model:StringParameterValue" name="StringParameterValue1" value="String1"/>
+  <ownedParameters xsi:type="com.thalesgroup.parameters.model:IntParameterValue" name="IntParameterValue1" value="100"/>
+  <ownedParameters xsi:type="com.thalesgroup.parameters.model:BoolParameterValue" name="BoolParameterValue2" value="true"/>
+  <ownedParameters xsi:type="com.thalesgroup.parameters.model:StringParameterValue" name="StringParameterValue2" value="String2"/>
+  <ownedParameters xsi:type="com.thalesgroup.parameters.model:DoubleParameterValue" name="DoubleParameterValue2" value="50.2524"/>
+  <ownedParameters xsi:type="com.thalesgroup.parameters.model:IntParameterValue" name="IntParameterValue2" value="202"/>
+</com.thalesgroup.parameters.model:ParameterSet>
