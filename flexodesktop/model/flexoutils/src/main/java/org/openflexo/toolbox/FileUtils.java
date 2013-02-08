@@ -479,7 +479,7 @@ public class FileUtils {
 	}
 
 	public static boolean isStringValidForFileName(String s) {
-		return s != null && !UNACCEPTABLE_CHARS_PATTERN.matcher(s).find() && s.matches(VALID_FILE_NAME_REGEXP);
+		return s != null && !UNACCEPTABLE_CHARS_PATTERN.matcher(s).find() && s.matches(VALID_FILE_NAME_REGEXP) && s.length() < 256;
 	}
 
 	public static String removeNonASCIIAndPonctuationAndBadFileNameChars(String s) {
@@ -507,6 +507,7 @@ public class FileUtils {
 	 * @return
 	 */
 	public static String getValidFileName(String fileName) {
+		fileName = fileName.replace('\\', '/');
 		StringBuffer sb = new StringBuffer();
 		Matcher m = UNACCEPTABLE_SLASH_PATTERN.matcher(fileName);
 		while (m.find()) {
@@ -519,6 +520,37 @@ public class FileUtils {
 			m.appendReplacement(sb, "_");
 		}
 		m.appendTail(sb);
+		fileName = sb.toString();
+		String extension = null;
+		if (fileName.length() > 4) {
+			if (fileName.charAt(fileName.length() - 4) == '.') {
+				extension = fileName.substring(fileName.length() - 4);
+				fileName = fileName.substring(0, fileName.length() - 4);
+			} else if (fileName.charAt(fileName.length() - 5) == '.') {
+				extension = fileName.substring(fileName.length() - 5);
+				fileName = fileName.substring(0, fileName.length() - 5);
+			}
+		}
+		sb.setLength(0);
+		int previous = 0;
+		int index;
+		while ((index = fileName.indexOf('/', previous)) > -1) {
+			if (index - previous > 240) {
+				sb.append(fileName.substring(previous, previous + 240)).append('/');
+			} else {
+				sb.append(fileName.substring(previous, index + 1));
+			}
+			previous = index + 1;
+		}
+		index = fileName.length();
+		if (index - previous > 240) {
+			sb.append(fileName.substring(previous, previous + 240));
+		} else {
+			sb.append(fileName.substring(previous, index));
+		}
+		if (extension != null) {
+			sb.append(extension);
+		}
 		return sb.toString();
 	}
 
