@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VirtualModel id="1" modelVersion="1.0" name="ConceptualModel">
+  <EditionPattern id="2" name="House">
+    <Inspector id="3" inspectorTitle="House" />
+  </EditionPattern>
+  <EditionPattern id="4" name="Mansion" parentEditionPattern="http://www.openflexo.org/ViewPoints/Tests/CityMapping/ConceptualModel#House">
+    <Inspector id="5" inspectorTitle="Mansion" />
+  </EditionPattern>
+  <EditionPattern id="6" name="City">
+    <Inspector id="7" inspectorTitle="City" />
+  </EditionPattern>
+  <EditionPattern id="8" name="Resident">
+    <Inspector id="9" inspectorTitle="Resident" />
+  </EditionPattern>
+  <EditionPattern id="10" name="Appartment" parentEditionPattern="http://www.openflexo.org/ViewPoints/Tests/CityMapping/ConceptualModel#House">
+    <Inspector id="11" inspectorTitle="Appartment" />
+  </EditionPattern>
+  <LocalizedDictionary id="12" />
+  <EMFModelSlot id="13" isRequired="true" isReadOnly="false" metaModelURI="http://www.thalesgroup.com/openflexo/emf/model/exemple1" name="emfModel" />
+  <OWLModelSlot id="14" isRequired="true" isReadOnly="false" metaModelURI="http://www.thalesgroup.com/Ontologies/CityOntology.owl" name="ontology" />
+  <description>This is the conceptual layer when concepts are federated with EditionPatterns</description>
+  <Inspector id="15" inspectorTitle="ConceptualModel" />
+</VirtualModel>
