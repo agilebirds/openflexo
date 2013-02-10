@@ -84,6 +84,7 @@ public class AdvancedPrefs extends ContextPreferences {
 	private static final String PROXY_LOGIN = "ProxyLogin";
 	private static final String PROXY_PASSWORD = "ProxyPassword";
 	public static final String SHOW_ALL_TABS = "show_all_tabs";
+	public static final String PREFERENCE_OVERRIDE_FROM_FLEXO_PROPERTIES_DONE = "preference_override_from_flexo_properties_done";
 
 	@Override
 	public String getName() {
@@ -607,6 +608,18 @@ public class AdvancedPrefs extends ContextPreferences {
 
 	public static void setShowAllTabs(boolean showAllTabs) {
 		getPreferences().setBooleanProperty(SHOW_ALL_TABS, showAllTabs);
+	}
+
+	public static boolean getPreferenceOverrideFromFlexoPropertiesDone() {
+		Boolean answer = getPreferences().getBooleanProperty(PREFERENCE_OVERRIDE_FROM_FLEXO_PROPERTIES_DONE);
+		if (answer == null) {
+			return false;
+		}
+		return answer;
+	}
+
+	public static void setPreferenceOverrideFromFlexoPropertiesDone(boolean preferenceOverrideFromFlexoPropertiesDone) {
+		getPreferences().setBooleanProperty(PREFERENCE_OVERRIDE_FROM_FLEXO_PROPERTIES_DONE, preferenceOverrideFromFlexoPropertiesDone);
 	}
 
 }
