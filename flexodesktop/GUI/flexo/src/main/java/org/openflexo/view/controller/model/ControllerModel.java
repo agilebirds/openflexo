@@ -328,7 +328,6 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	}
 
 	private void notifyLocationChange(Location old, Location newLocation) {
-		getPropertyChangeSupport().firePropertyChange(CURRENT_LOCATION, old, currentLocation);
 		if (old == null || old.getEditor() != currentLocation.getEditor()) {
 			getPropertyChangeSupport()
 					.firePropertyChange(CURRENT_EDITOR, old != null ? old.getEditor() : null, currentLocation.getEditor());
@@ -341,7 +340,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 			getPropertyChangeSupport()
 					.firePropertyChange(CURRENT_OBJECT, old != null ? old.getObject() : null, currentLocation.getObject());
 		}
-
+		getPropertyChangeSupport().firePropertyChange(CURRENT_LOCATION, old, currentLocation);
 	}
 
 	public Stack<Location> getNextHistory() {
