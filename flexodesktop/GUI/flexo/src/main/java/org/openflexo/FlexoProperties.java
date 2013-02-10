@@ -191,7 +191,7 @@ public class FlexoProperties {
 					overrideDone = true;
 				}
 				if (_instance.getBugReportPassword() != null) {
-					AdvancedPrefs.setBugReportPassword(_instance.getBugReportPassword());
+					AdvancedPrefs.getPreferences().setProperty(AdvancedPrefs.BUG_REPORT_PASWORD, _instance.getBugReportPassword());
 					overrideDone = true;
 				}
 				if (overrideDone) {
