@@ -72,13 +72,18 @@ public class TOCPerspective extends FlexoPerspective {
 	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof TOCEntry) {
 			return ((TOCEntry) proposedObject).getRepository();
-		} else if (this.deController.getProject() != null && this.deController.getProject().getTOCData().getRepositories().size() > 0) {
-			return this.deController.getProject().getTOCData().getRepositories().firstElement();
-		} else if (this.deController.getProject() != null) {
-			return this.deController.getProject().getTOCData();
-		} else {
-			return null;
 		}
+		if (proposedObject != null) {
+			FlexoProject project = proposedObject.getProject();
+			if (project != null) {
+				if (project.getTOCData().getRepositories().size() > 0) {
+					return project.getTOCData().getRepositories().firstElement();
+				} else {
+					return project.getTOCData();
+				}
+			}
+		}
+		return null;
 	}
 
 	@Override
