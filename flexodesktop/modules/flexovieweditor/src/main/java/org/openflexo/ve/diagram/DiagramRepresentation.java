@@ -32,9 +32,10 @@ import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.model.DiagramConnector;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramRootPane;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
 
-public class DiagramRepresentation extends DefaultDrawing<Diagram> implements GraphicalFlexoObserver, DiagramConstants {
+public class DiagramRepresentation extends DefaultDrawing<DiagramRootPane> implements GraphicalFlexoObserver, DiagramConstants {
 
 	private static final Logger logger = Logger.getLogger(DiagramRepresentation.class.getPackage().getName());
 
@@ -45,8 +46,8 @@ public class DiagramRepresentation extends DefaultDrawing<Diagram> implements Gr
 
 	private boolean screenshotOnly;
 
-	public DiagramRepresentation(Diagram aDiagram, boolean screenshotOnly) {
-		super(aDiagram);
+	public DiagramRepresentation(DiagramRootPane aDiagramRootPane, boolean screenshotOnly) {
+		super(aDiagramRootPane);
 		// graphicalRepresentation = new DrawingGraphicalRepresentation<OEShema>(this);
 		// graphicalRepresentation.addToMouseClickControls(new OEShemaController.ShowContextualMenuControl());
 
@@ -55,7 +56,7 @@ public class DiagramRepresentation extends DefaultDrawing<Diagram> implements Gr
 		shapesGR = new Hashtable<DiagramShape, DiagramShapeGR>();
 		connectorsGR = new Hashtable<DiagramConnector, DiagramConnectorGR>();
 
-		aDiagram.addObserver(this);
+		aDiagramRootPane.addObserver(this);
 
 		updateGraphicalObjectsHierarchy();
 
@@ -66,15 +67,15 @@ public class DiagramRepresentation extends DefaultDrawing<Diagram> implements Gr
 		if (graphicalRepresentation != null) {
 			graphicalRepresentation.delete();
 		}
-		if (getDiagram() != null) {
-			getDiagram().deleteObserver(this);
+		if (getDiagramRootPane() != null) {
+			getDiagramRootPane().deleteObserver(this);
 		}
 		super.delete();
 	}
 
 	@Override
 	protected void buildGraphicalObjectsHierarchy() {
-		buildGraphicalObjectsHierarchyFor(getDiagram().getRootPane());
+		buildGraphicalObjectsHierarchyFor(getDiagramRootPane());
 	}
 
 	private void buildGraphicalObjectsHierarchyFor(DiagramElement<?> parent) {
@@ -92,8 +93,12 @@ public class DiagramRepresentation extends DefaultDrawing<Diagram> implements Gr
 		}
 	}
 
-	public Diagram getDiagram() {
+	public DiagramRootPane getDiagramRootPane() {
 		return getModel();
+	}
+
+	public Diagram getDiagram() {
+		return getDiagramRootPane().getDiagram();
 	}
 
 	@Override

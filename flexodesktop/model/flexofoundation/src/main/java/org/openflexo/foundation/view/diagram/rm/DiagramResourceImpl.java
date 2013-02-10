@@ -60,6 +60,9 @@ public abstract class DiagramResourceImpl extends VirtualModelInstanceResourceIm
 				return null;
 			}
 			if (viewResource.getViewPoint() != null && StringUtils.isNotEmpty(vmiInfo.virtualModelURI)) {
+
+				System.out.println("Found virtualModelURI=" + vmiInfo.virtualModelURI);
+				System.out.println("Qui correspond a " + viewResource.getViewPoint().getVirtualModelNamed(vmiInfo.virtualModelURI));
 				VirtualModel vm = viewResource.getViewPoint().getVirtualModelNamed(vmiInfo.virtualModelURI);
 				if (vm != null) {
 					returned.setVirtualModelResource(vm.getResource());

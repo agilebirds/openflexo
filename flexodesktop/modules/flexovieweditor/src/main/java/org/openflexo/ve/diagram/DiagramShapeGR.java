@@ -40,7 +40,7 @@ import org.openflexo.foundation.view.diagram.model.dm.ShapeRemoved;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
-import org.openflexo.foundation.xml.ViewBuilder;
+import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.toolbox.ToolBox;
 
@@ -52,7 +52,7 @@ public class DiagramShapeGR extends ShapeGraphicalRepresentation<DiagramShape> i
 	/**
 	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public DiagramShapeGR(ViewBuilder builder) {
+	public DiagramShapeGR(VirtualModelInstanceBuilder builder) {
 		super(ShapeType.RECTANGLE, null, null);
 	}
 

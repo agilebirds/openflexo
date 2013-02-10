@@ -205,8 +205,6 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 	}
 
 	public void setProject(FlexoProject project) {
-		System.out.println("On bascule sur le projet " + project);
-		System.out.println("ViewLibrary: " + project.getViewLibrary());
 		viewLibraryBrowser.setRootObject(project.getViewLibrary());
 	}
 }

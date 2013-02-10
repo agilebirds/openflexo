@@ -33,7 +33,7 @@ import org.openflexo.foundation.view.diagram.model.DiagramConnector;
 import org.openflexo.foundation.view.diagram.model.dm.ElementUpdated;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementAction;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
-import org.openflexo.foundation.xml.ViewBuilder;
+import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.toolbox.ToolBox;
 
 public class DiagramConnectorGR extends ConnectorGraphicalRepresentation<DiagramConnector> implements GraphicalFlexoObserver,
@@ -45,7 +45,7 @@ public class DiagramConnectorGR extends ConnectorGraphicalRepresentation<Diagram
 	/**
 	 * Constructor invoked during deserialization DO NOT use it
 	 */
-	public DiagramConnectorGR(ViewBuilder builder) {
+	public DiagramConnectorGR(VirtualModelInstanceBuilder builder) {
 		this(null, null);
 	}
 

@@ -22,6 +22,7 @@ package org.openflexo.ve.diagram;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -37,6 +38,7 @@ import org.openflexo.foundation.view.action.AddShape;
 import org.openflexo.foundation.view.diagram.action.ReindexDiagramElements;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramRootPane;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
@@ -44,13 +46,15 @@ import org.openflexo.ve.controller.VEController;
 
 public class DiagramController extends SelectionManagingDrawingController<DiagramRepresentation> {
 
+	private static final Logger logger = Logger.getLogger(DiagramController.class.getPackage().getName());
+
 	private VEController _controller;
 	private CommonPalette _commonPalette;
 	private DiagramModuleView _moduleView;
 	private Hashtable<DiagramPalette, ContextualPalette> _contextualPalettes;
 
 	public DiagramController(VEController controller, Diagram diagram, boolean screenshotOnly) {
-		super(new DiagramRepresentation(diagram, screenshotOnly), controller.getSelectionManager());
+		super(new DiagramRepresentation(diagram.getRootPane(), screenshotOnly), controller.getSelectionManager());
 
 		_controller = controller;
 
@@ -72,10 +76,9 @@ public class DiagramController extends SelectionManagingDrawingController<Diagra
 			@Override
 			public void performedDrawNewShape(ShapeGraphicalRepresentation graphicalRepresentation,
 					GraphicalRepresentation parentGraphicalRepresentation) {
-				System.out.println("OK, perform draw new shape with " + graphicalRepresentation + " et parent: "
-						+ parentGraphicalRepresentation);
+				logger.info("OK, perform draw new shape with " + graphicalRepresentation + " and parent: " + parentGraphicalRepresentation);
 
-				AddShape action = AddShape.actionType.makeNewAction(getDiagram().getRootPane(), null, getVEController().getEditor());
+				AddShape action = AddShape.actionType.makeNewAction(getDiagramRootPane(), null, getVEController().getEditor());
 				action.setGraphicalRepresentation(graphicalRepresentation);
 				action.setNameSetToNull(true);
 
@@ -97,8 +100,8 @@ public class DiagramController extends SelectionManagingDrawingController<Diagra
 		super.delete();
 		// Fixed huge bug with graphical representation (which are in the model) deleted when the diagram view was closed
 		// getDrawing().delete();
-		if (getDrawing().getDiagram() != null) {
-			getDrawing().getDiagram().deleteObserver(getDrawing());
+		if (getDrawing().getDiagramRootPane() != null) {
+			getDrawing().getDiagramRootPane().deleteObserver(getDrawing());
 		}
 	}
 
@@ -161,8 +164,8 @@ public class DiagramController extends SelectionManagingDrawingController<Diagra
 		return paletteView;
 	}
 
-	public Diagram getDiagram() {
-		return getDrawing().getDiagram();
+	public DiagramRootPane getDiagramRootPane() {
+		return getDrawing().getDiagramRootPane();
 	}
 
 	public FlexoEditor getEditor() {

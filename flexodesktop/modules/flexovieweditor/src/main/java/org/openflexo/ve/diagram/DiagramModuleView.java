@@ -82,7 +82,7 @@ public class DiagramModuleView extends JPanel implements ModuleView<Diagram>, Pr
 
 	@Override
 	public Diagram getRepresentedObject() {
-		return _controller.getDiagram();
+		return _controller.getDiagramRootPane().getDiagram();
 	}
 
 	@Override

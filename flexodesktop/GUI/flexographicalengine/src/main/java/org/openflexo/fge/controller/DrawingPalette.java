@@ -441,6 +441,7 @@ public class DrawingPalette {
 							e.rejectDrop();
 							return;
 						}
+
 						// OK, let's got for the drop
 						if (element.acceptDragging(focused)) {
 							Component targetComponent = e.getDropTargetContext().getComponent();

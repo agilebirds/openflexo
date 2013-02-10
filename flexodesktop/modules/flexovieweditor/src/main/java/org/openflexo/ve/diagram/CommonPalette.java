@@ -37,6 +37,7 @@ import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.view.action.AddShape;
+import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 
 public class CommonPalette extends DrawingPalette {
@@ -174,10 +175,16 @@ public class CommonPalette extends DrawingPalette {
 
 			@Override
 			public boolean elementDragged(GraphicalRepresentation containerGR, FGEPoint dropLocation) {
-				if (containerGR.getDrawable() instanceof DiagramElement<?>) {
 
-					DiagramElement<?> container = (DiagramElement<?>) containerGR.getDrawable();
+				DiagramElement<?> container = null;
 
+				if (containerGR.getDrawable() instanceof Diagram) {
+					container = ((Diagram) containerGR.getDrawable()).getRootPane();
+				} else if (containerGR.getDrawable() instanceof DiagramElement<?>) {
+					container = (DiagramElement<?>) containerGR.getDrawable();
+				}
+
+				if (container != null) {
 					ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
 					shapeGR.setIsSelectable(true);
 					shapeGR.setIsFocusable(true);
@@ -205,6 +212,11 @@ public class CommonPalette extends DrawingPalette {
 					// action.setNewShapeName(FlexoLocalization.localizedForKey("unnamed"));
 
 					action.doAction();
+
+					if (!action.hasActionExecutionSucceeded()) {
+						logger.warning("Action " + action + " has failed");
+					}
+
 					return action.hasActionExecutionSucceeded();
 				}
 

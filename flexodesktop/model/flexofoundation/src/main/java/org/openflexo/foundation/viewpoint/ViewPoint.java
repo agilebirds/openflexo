@@ -304,7 +304,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	}
 
 	/**
-	 * Return {@link VirtualModel} with supplied name
+	 * Return {@link VirtualModel} with supplied name or URI
 	 * 
 	 * @return
 	 */
@@ -312,6 +312,9 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		loadVirtualModelsWhenUnloaded();
 		for (VirtualModel vm : getVirtualModels()) {
 			if (vm.getName().equals(virtualModelName)) {
+				return vm;
+			}
+			if (vm.getURI().equals(virtualModelName)) {
 				return vm;
 			}
 		}
