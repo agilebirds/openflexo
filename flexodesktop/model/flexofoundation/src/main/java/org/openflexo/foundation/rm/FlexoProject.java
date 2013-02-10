@@ -128,6 +128,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.resource.FlexoProjectResource;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.rm.FlexoResource.DependencyAlgorithmScheme;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
@@ -573,6 +574,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Saving project... DONE");
 		}
+
 		FlexoProcessImageNotificationCenter.getInstance().notifyNewImage();
 	}
 
@@ -900,6 +902,19 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 				data.saveResourceData(clearModifiedStatus);
 				resourceSaved = true;
 			}
+			for (org.openflexo.foundation.resource.FlexoResource<?> r : getServiceManager().getResourceManager().getUnsavedResources()) {
+				try {
+					// Temporary hack: we iterate on all resources known in the ResourceManager
+					if (r instanceof FlexoProjectResource && ((FlexoProjectResource) r).getProject() == this
+							&& r.getResourceData(null).isModified()) {
+						if (progress != null) {
+							progress.setSecondaryProgress(FlexoLocalization.localizedForKey("saving_resource_") + r);
+						}
+						r.save(null);
+					}
+				} catch (Exception e) {
+				}
+			}
 		} finally {
 			if (resourceSaved) {
 				// Revision is incremented only if a FlexoStorageResource has been changed. This is allows essentially to track if the
@@ -941,6 +956,17 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 				return true;
 			}
 		}
+		for (org.openflexo.foundation.resource.FlexoResource<?> r : getServiceManager().getResourceManager().getUnsavedResources()) {
+			try {
+				// Temporary hack: we iterate on all resources known in the ResourceManager
+				if (r instanceof FlexoProjectResource && ((FlexoProjectResource) r).getProject() == this
+						&& r.getResourceData(null).isModified()) {
+					return true;
+				}
+			} catch (Exception e) {
+			}
+		}
+
 		return false;
 	}
 
