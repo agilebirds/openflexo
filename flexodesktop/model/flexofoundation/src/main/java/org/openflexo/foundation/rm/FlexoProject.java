@@ -4034,7 +4034,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	@Override
 	public String toString() {
-		return "PROJECT-" + getName() + " ID=" + getID();
+		return "PROJECT-" + getDisplayName() + " ID=" + getID();
 	}
 
 	public static void cleanUpActionizer() {
