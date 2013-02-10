@@ -4788,6 +4788,7 @@ swimming_lane_height=Swim lane height
 swimming_lane_number=Number of swin lanes
 switch_to_cg_perspective=Switch to code generation perspective
 switch_to_module=Switch to module
+switch_to_role_perspective=Switch to role perspective
 symbolic_directory=Symbolic directory
 synchronize=Synchronize...
 synchronize_and_write=Synchronize and write

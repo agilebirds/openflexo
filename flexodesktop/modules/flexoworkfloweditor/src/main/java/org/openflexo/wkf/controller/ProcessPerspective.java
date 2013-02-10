@@ -29,6 +29,7 @@ import javax.swing.SwingUtilities;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.module.UserType;
@@ -39,6 +40,7 @@ import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.wkf.processeditor.ProcessEditorController;
 import org.openflexo.wkf.processeditor.ProcessView;
 import org.openflexo.wkf.view.ImportedWorkflowView;
+import org.openflexo.wkf.view.WKFProjectModuleView;
 
 public class ProcessPerspective extends FlexoPerspective {
 	static final Logger logger = Logger.getLogger(ProcessPerspective.class.getPackage().getName());
@@ -103,11 +105,15 @@ public class ProcessPerspective extends FlexoPerspective {
 	}
 
 	@Override
-	public FlexoProcess getDefaultObject(FlexoModelObject proposedObject) {
+	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof WKFObject) {
 			return ((WKFObject) proposedObject).getProcess();
-		} else if (proposedObject != null) {
-			return proposedObject.getProject().getRootFlexoProcess();
+		} else if (proposedObject != null && proposedObject.getProject() != null) {
+			if (proposedObject.getProject().getRootFlexoProcess() != null) {
+				return proposedObject.getProject().getRootFlexoProcess();
+			} else {
+				return proposedObject.getProject().getWorkflow();
+			}
 		} else {
 			return null;
 		}
@@ -115,7 +121,8 @@ public class ProcessPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return object instanceof FlexoProcess && !((FlexoProcess) object).isImported();
+		return object instanceof FlexoProcess && !((FlexoProcess) object).isImported() || object instanceof FlexoWorkflow
+				&& !((FlexoWorkflow) object).isCache();
 	}
 
 	@Override
@@ -124,6 +131,8 @@ public class ProcessPerspective extends FlexoPerspective {
 			ProcessView drawingView = new ProcessEditorController(_controller, (FlexoProcess) object).getDrawingView();
 			drawingView.getDrawing().setEditable(editable);
 			return drawingView;
+		} else if (object instanceof FlexoWorkflow) {
+			return new WKFProjectModuleView((FlexoWorkflow) object, _controller, this);
 		} else {
 			return null;
 		}

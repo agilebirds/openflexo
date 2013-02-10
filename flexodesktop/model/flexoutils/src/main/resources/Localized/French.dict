@@ -4786,6 +4786,7 @@ swimming_lane_height=Hauteur d'un couloir
 swimming_lane_number=Nombre de couloirs
 switch_to_cg_perspective=Basculer sur la perspective de g\u00E9n\u00E9ration de code
 switch_to_module=S\u00E9lectionne le module
+switch_to_role_perspective=Passer \u00E0 la perspective des r\u00F4les
 symbolic_directory=R\u00E9pertoire symbolique
 synchronize=Synchroniser...
 synchronize_and_write=Synchroniser et \u00E9crire
