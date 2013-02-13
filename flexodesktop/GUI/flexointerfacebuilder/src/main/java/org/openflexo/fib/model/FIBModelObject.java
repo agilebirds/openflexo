@@ -68,6 +68,8 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 	private String name;
 	private String description;
 
+	private BindingFactory bindingFactory;
+
 	private Vector<FIBParameter> parameters = new Vector<FIBParameter>();
 
 	public FIBModelObject() {
@@ -165,7 +167,20 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 
 	@Override
 	public BindingFactory getBindingFactory() {
+		if (getRootComponent() != null && getRootComponent() != this) {
+			return getRootComponent().getBindingFactory();
+		}
+		if (bindingFactory != null) {
+			return bindingFactory;
+		}
 		return FIBLibrary.instance().getBindingFactory();
+	}
+
+	public void setBindingFactory(BindingFactory bindingFactory) {
+		if (getRootComponent() != null && getRootComponent() != this) {
+			logger.warning("Called setBindingFactory() on the non-root component: this is weird and generally indicates that something strange happened");
+		}
+		this.bindingFactory = bindingFactory;
 	}
 
 	/**

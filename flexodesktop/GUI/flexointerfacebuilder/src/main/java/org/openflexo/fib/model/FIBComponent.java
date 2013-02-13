@@ -497,8 +497,15 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	}
 
 	protected void createBindingModel() {
-		_bindingModel = new BindingModel();
+		createBindingModel(null);
+	}
 
+	protected void createBindingModel(BindingModel baseBindingModel) {
+		if (baseBindingModel == null) {
+			_bindingModel = new BindingModel();
+		} else {
+			_bindingModel = new BindingModel(baseBindingModel);
+		}
 		/*Class dataClass = null;
 		try {
 			if (dataClassName != null) {

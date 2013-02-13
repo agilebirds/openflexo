@@ -289,6 +289,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
+				logger.warning("Unexpected " + e + " message=" + e.getMessage());
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
 				e.printStackTrace();

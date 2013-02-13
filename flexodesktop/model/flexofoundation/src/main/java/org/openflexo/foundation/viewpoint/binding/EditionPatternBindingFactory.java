@@ -65,6 +65,7 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 		}
 
 		if (parent instanceof EditionSchemeParametersBindingVariable) {
+			System.out.println("Je tombe sur u EditionSchemeParametersBindingVariable");
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
 			EditionScheme es = ((EditionSchemeParametersBindingVariable) parent).getEditionScheme();
 			for (EditionSchemeParameter p : es.getParameters()) {
@@ -92,10 +93,20 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 	@Override
 	public SimplePathElement makeSimplePathElement(BindingPathElement parent, String propertyName) {
 		// We want to avoid code duplication, so iterate on all accessible simple path element and choose the right one
+		if (parent instanceof EditionSchemeParametersBindingVariable) {
+			System.out.println("Je tombe sur u EditionSchemeParametersBindingVariable pour " + propertyName + " accessibles="
+					+ getAccessibleSimplePathElements(parent));
+		}
 		for (SimplePathElement e : getAccessibleSimplePathElements(parent)) {
+			if (parent instanceof EditionSchemeParametersBindingVariable) {
+				System.out.println("> " + e.getLabel());
+			}
 			if (e.getLabel().equals(propertyName)) {
 				return e;
 			}
+		}
+		if (parent instanceof EditionSchemeParametersBindingVariable) {
+			System.out.println("lapi trouve");
 		}
 		return super.makeSimplePathElement(parent, propertyName);
 	}

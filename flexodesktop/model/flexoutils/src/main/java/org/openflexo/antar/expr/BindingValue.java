@@ -639,6 +639,8 @@ public class BindingValue extends Expression {
 		// System.out.println("Sets value: "+value);
 		// System.out.println("Binding: "+getStringRepresentation());
 
+		BindingPathElement lastEvaluatedPathElement = getBindingVariable();
+		Object lastEvaluated = null;
 		Object returned = context.getValue(getBindingVariable());
 
 		// System.out.println("For variable "+_bindingVariable+" object is "+returned);
@@ -647,15 +649,18 @@ public class BindingValue extends Expression {
 			for (BindingPathElement element : getBindingPath()) {
 				if (element != getLastBindingPathElement()) {
 					// System.out.println("Apply "+element);
+					lastEvaluatedPathElement = element;
 					returned = element.getBindingValue(returned, context);
 					if (returned == null) {
-						throw new NullReferenceException();
+						throw new NullReferenceException("null occured when evaluating " + lastEvaluatedPathElement + " from "
+								+ lastEvaluated);
 					}
+					lastEvaluated = returned;
 					// System.out.println("Obtain "+returned);
 				}
 			}
 			if (returned == null) {
-				throw new NullReferenceException();
+				throw new NullReferenceException("null occured when evaluating " + lastEvaluatedPathElement + " from " + lastEvaluated);
 			}
 
 			// logger.info("returned="+returned);
