@@ -1302,10 +1302,10 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 				}
 			}
 			logger.info("I cannot find " + element + " of " + (element != null ? element.getClass() : null));
-			for (int i = 0; i < getSize(); i++) {
+			/*for (int i = 0; i < getSize(); i++) {
 				logger.info("Looking with " + getElementAt(i).getElement() + " of "
 						+ (getElementAt(i).getElement() != null ? getElementAt(i).getElement().getClass() : null));
-			}
+			}*/
 
 			return null;
 		}
