@@ -45,7 +45,7 @@ public class BindingVariable implements BindingPathElement, SettableBindingPathE
 
 	@Override
 	public String toString() {
-		return getVariableName() + "/" + (getType() instanceof Class ? ((Class) getType()).getSimpleName() : getType());
+		return getVariableName() + "/" + TypeUtils.simpleRepresentation(getType());
 	}
 
 	@Override

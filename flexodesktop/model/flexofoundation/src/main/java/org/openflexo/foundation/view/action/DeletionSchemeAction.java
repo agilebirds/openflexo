@@ -33,9 +33,8 @@ import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.viewpoint.DeletionScheme;
-import org.openflexo.foundation.viewpoint.EditionScheme;
 
-public class DeletionSchemeAction extends EditionSchemeAction<DeletionSchemeAction> {
+public class DeletionSchemeAction extends EditionSchemeAction<DeletionSchemeAction, DeletionScheme> {
 
 	private static final Logger logger = Logger.getLogger(DeletionSchemeAction.class.getPackage().getName());
 
@@ -110,7 +109,7 @@ public class DeletionSchemeAction extends EditionSchemeAction<DeletionSchemeActi
 	}
 
 	@Override
-	public EditionScheme getEditionScheme() {
+	public DeletionScheme getEditionScheme() {
 		return getDeletionScheme();
 	}
 

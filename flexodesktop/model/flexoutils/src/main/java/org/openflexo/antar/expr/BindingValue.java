@@ -553,7 +553,8 @@ public class BindingValue extends Expression {
 						} else {
 							analysingSuccessfull = false;
 							invalidBindingReason = "cannot find property " + ((NormalBindingPathElement) pathElement).property
-									+ " for type " + TypeUtils.simpleRepresentation(current.getType());
+									+ " for element " + current + " and type " + TypeUtils.simpleRepresentation(current.getType())
+									+ " owner=" + dataBinding.getOwner() + " factory=" + dataBinding.getOwner().getBindingFactory();
 							return false;
 						}
 					} else if (pathElement instanceof MethodCallBindingPathElement) {

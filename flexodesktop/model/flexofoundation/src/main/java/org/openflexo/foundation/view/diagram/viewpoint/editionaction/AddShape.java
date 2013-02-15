@@ -41,9 +41,9 @@ import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 
@@ -256,7 +256,7 @@ public class AddShape extends AddShemaElementAction<DiagramShape> {
 			@Override
 			protected void fixAction() {
 				AddShape action = getObject();
-				action.setContainer(new DataBinding<DiagramElement<?>>(EditionScheme.TOP_LEVEL));
+				action.setContainer(new DataBinding<DiagramElement<?>>(DiagramEditionScheme.TOP_LEVEL));
 			}
 
 		}
@@ -303,7 +303,8 @@ public class AddShape extends AddShemaElementAction<DiagramShape> {
 			@Override
 			protected void fixAction() {
 				AddShape action = getObject();
-				action.setContainer(new DataBinding<DiagramElement<?>>(EditionScheme.TARGET + "." + patternRole.getPatternRoleName()));
+				action.setContainer(new DataBinding<DiagramElement<?>>(DiagramEditionScheme.TARGET + "."
+						+ patternRole.getPatternRoleName()));
 			}
 		}
 

@@ -322,6 +322,7 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 	public String toString() {
 		boolean isFirst = true;
 		StringBuffer returned = new StringBuffer();
+		returned.append("FlexoAction: " + getClass().getName() + "[");
 		if (getExecutionContext() != null) {
 			for (String key : getExecutionContext().getObjectsCreatedWhileExecutingAction().keySet()) {
 				FlexoObject o = getExecutionContext().getObjectsCreatedWhileExecutingAction().get(key);

@@ -221,7 +221,7 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject {
 		this.defaultValue = defaultValue;
 	}
 
-	public Object getDefaultValue(EditionSchemeAction<?> action) {
+	public Object getDefaultValue(EditionSchemeAction<?, ?> action) {
 		DiagramPaletteElement paletteElement = action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement() : null;
 
 		// System.out.println("Default value for "+element.getName()+" ???");

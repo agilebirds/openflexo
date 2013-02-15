@@ -42,10 +42,10 @@ import org.openflexo.foundation.view.diagram.model.DiagramConnector;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 
@@ -350,7 +350,8 @@ public class AddConnector extends AddShemaElementAction<DiagramConnector> {
 			@Override
 			protected void fixAction() {
 				AddConnector action = getObject();
-				action.setFromShape(new DataBinding<DiagramShape>(EditionScheme.FROM_TARGET + "." + patternRole.getPatternRoleName()));
+				action.setFromShape(new DataBinding<DiagramShape>(DiagramEditionScheme.FROM_TARGET + "."
+						+ patternRole.getPatternRoleName()));
 			}
 		}
 
@@ -427,7 +428,7 @@ public class AddConnector extends AddShemaElementAction<DiagramConnector> {
 			@Override
 			protected void fixAction() {
 				AddConnector action = getObject();
-				action.setToShape(new DataBinding<DiagramShape>(EditionScheme.TO_TARGET + "." + patternRole.getPatternRoleName()));
+				action.setToShape(new DataBinding<DiagramShape>(DiagramEditionScheme.TO_TARGET + "." + patternRole.getPatternRoleName()));
 			}
 		}
 

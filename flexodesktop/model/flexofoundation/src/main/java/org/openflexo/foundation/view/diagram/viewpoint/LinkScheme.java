@@ -30,12 +30,10 @@ import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddConnecto
 import org.openflexo.foundation.viewpoint.AbstractCreationScheme;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.toolbox.StringUtils;
 
-public class LinkScheme extends AbstractCreationScheme {
+public class LinkScheme extends AbstractCreationScheme implements DiagramEditionScheme {
 
 	private String fromTarget;
 	private String toTarget;
@@ -107,12 +105,12 @@ public class LinkScheme extends AbstractCreationScheme {
 		super.appendContextualBindingVariables(bindingModel);
 		bindingModelNeedToBeRecomputed = false;
 		if (getFromTargetEditionPattern() != null) {
-			bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.FROM_TARGET, getFromTargetEditionPattern()));
+			bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.FROM_TARGET, getFromTargetEditionPattern()));
 		} else if (_getFromTarget() != null && !StringUtils.isEmpty(_getFromTarget())) {
 			bindingModelNeedToBeRecomputed = true;
 		}
 		if (getToTargetEditionPattern() != null) {
-			bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.TO_TARGET, getToTargetEditionPattern()));
+			bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.TO_TARGET, getToTargetEditionPattern()));
 		} else if (_getToTarget() != null && !StringUtils.isEmpty(_getToTarget())) {
 			bindingModelNeedToBeRecomputed = true;
 		}

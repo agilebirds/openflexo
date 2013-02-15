@@ -28,11 +28,27 @@ public class JavaPropertyPathElement extends SimplePathElement {
 		} else {
 			logger.warning("cannot find property " + propertyName + " for " + parent + " which type is " + parent.getType());
 		}
+		if (propertyName.equals("parameters")) {
+			System.out.println("parameters, parent = " + parent.getType().toString());
+		}
+		if (propertyName.equals("parameters")
+				&& parent.getType().toString().equals("class org.openflexo.foundation.view.diagram.viewpoint.DropScheme")) {
+			System.out.println("ok je l'ai");
+			Thread.dumpStack();
+		}
 	}
 
 	public JavaPropertyPathElement(BindingPathElement parent, KeyValueProperty property) {
 		super(parent, property.getName(), property.getType());
 		keyValueProperty = property;
+		if (getPropertyName().equals("parameters")) {
+			System.out.println("parameters, parent = " + parent.getType().toString());
+		}
+		if (getPropertyName().equals("parameters")
+				&& parent.getType().toString().equals("class org.openflexo.foundation.view.diagram.viewpoint.DropScheme")) {
+			System.out.println("ok je l'ai");
+			Thread.dumpStack();
+		}
 	}
 
 	@Override

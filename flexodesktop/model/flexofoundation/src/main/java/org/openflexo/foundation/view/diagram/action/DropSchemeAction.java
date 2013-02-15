@@ -36,18 +36,17 @@ import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
-import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramRootPane;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
 import org.openflexo.foundation.viewpoint.EditionAction;
-import org.openflexo.foundation.viewpoint.EditionScheme;
 
-public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
+public class DropSchemeAction extends DiagramEditionSchemeAction<DropSchemeAction, DropScheme> {
 
 	private static final Logger logger = Logger.getLogger(DropSchemeAction.class.getPackage().getName());
 
@@ -129,7 +128,7 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 	}
 
 	@Override
-	public EditionScheme getEditionScheme() {
+	public DropScheme getEditionScheme() {
 		return getDropScheme();
 	}
 
@@ -176,7 +175,8 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 					gr.setLocation(dropLocation);
 
 					// Temporary comment this portion of code if child shapes are declared inside this shape
-					if (!action.getPatternRole().containsShapes() && action.getContainer().toString().equals(EditionScheme.TOP_LEVEL)) {
+					if (!action.getPatternRole().containsShapes()
+							&& action.getContainer().toString().equals(DiagramEditionScheme.TOP_LEVEL)) {
 						ShapeBorder border = gr.getBorder();
 						ShapeBorder newBorder = new ShapeBorder(border);
 						boolean requireNewBorder = false;
@@ -232,7 +232,7 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 
 	@Override
 	public Object getValue(BindingVariable variable) {
-		if (variable.getVariableName().equals(EditionScheme.TARGET) && _dropScheme.getTargetEditionPattern() != null) {
+		if (variable.getVariableName().equals(DiagramEditionScheme.TARGET) && _dropScheme.getTargetEditionPattern() != null) {
 			if (getParent() instanceof DiagramShape) {
 				return ((DiagramShape) getParent()).getEditionPatternInstance();
 			}

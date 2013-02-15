@@ -30,13 +30,11 @@ import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
 import org.openflexo.foundation.viewpoint.AbstractCreationScheme;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.toolbox.StringUtils;
 
-public class DropScheme extends AbstractCreationScheme {
+public class DropScheme extends AbstractCreationScheme implements DiagramEditionScheme {
 
 	private String target;
 	private ShapePatternRole targetPatternRole;
@@ -120,7 +118,7 @@ public class DropScheme extends AbstractCreationScheme {
 		super.appendContextualBindingVariables(bindingModel);
 		bindingModelNeedToBeRecomputed = false;
 		if (getTargetEditionPattern() != null) {
-			bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.TARGET, getTargetEditionPattern()));
+			bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.TARGET, getTargetEditionPattern()));
 		} else if (_getTarget() != null && !_getTarget().equals("top")) {
 			// logger.warning("Cannot find edition pattern " + _getTarget() + " !!!!!!!!!!!!!!");
 			bindingModelNeedToBeRecomputed = true;
@@ -156,7 +154,7 @@ public class DropScheme extends AbstractCreationScheme {
 		A newAction = super.createAction(actionClass, modelSlot);
 		if (newAction instanceof AddShape) {
 			if (isTopTarget()) {
-				((AddShape) newAction).setContainer(new DataBinding<DiagramElement<?>>(EditionScheme.TOP_LEVEL));
+				((AddShape) newAction).setContainer(new DataBinding<DiagramElement<?>>(DiagramEditionScheme.TOP_LEVEL));
 			}
 		}
 		return newAction;

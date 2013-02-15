@@ -107,7 +107,11 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 
 	public <T> T getPatternActor(PatternRole<T> patternRole) {
 		// logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" getPatternActor() actors="+actors);
-		return ((ActorReference<T>) actors.get(patternRole)).retrieveObject();
+		ActorReference<T> actorReference = (ActorReference<T>) actors.get(patternRole);
+		if (actorReference != null) {
+			return actorReference.retrieveObject();
+		}
+		return null;
 	}
 
 	public <T> void setPatternActor(T object, PatternRole<T> patternRole) {

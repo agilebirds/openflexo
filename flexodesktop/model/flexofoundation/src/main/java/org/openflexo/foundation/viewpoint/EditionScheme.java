@@ -28,7 +28,8 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.diagram.model.DiagramRootPane;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.viewpoint.binding.EditionSchemeParametersBindingVariable;
 import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
 import org.openflexo.logging.FlexoLogger;
@@ -48,11 +49,8 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	//
 	protected static final Logger logger = FlexoLogger.getLogger(EditionScheme.class.getPackage().getName());
 
-	public static final String TOP_LEVEL = "topLevel";
-	public static final String TARGET = "target";
-	public static final String FROM_TARGET = "fromTarget";
-	public static final String TO_TARGET = "toTarget";
 	public static final String THIS = "this";
+	public static final String VIRTUAL_MODEL = "virtualModel";
 
 	private String name;
 	private String label;
@@ -627,8 +625,13 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	protected void appendContextualBindingVariables(BindingModel bindingModel) {
-		bindingModel.addToBindingVariables(new BindingVariable(TOP_LEVEL, View.class));
-		// bindingModel.addToBindingVariables(new GraphicalElementPathElement.ViewPathElement(TOP_LEVEL, null));
+		bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.THIS, getEditionPattern()));
+		if (getEditionPattern() != null) {
+			bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.VIRTUAL_MODEL, getEditionPattern().getVirtualModel()));
+		}
+		if (this instanceof DiagramEditionScheme) {
+			bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.TOP_LEVEL, DiagramRootPane.class));
+		}
 	}
 
 	/**

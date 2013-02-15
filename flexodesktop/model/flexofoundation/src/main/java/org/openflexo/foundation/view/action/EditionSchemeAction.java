@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.view.action;
 
+import java.lang.reflect.Type;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
@@ -26,6 +27,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.CustomType;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
@@ -48,15 +50,18 @@ import org.openflexo.toolbox.StringUtils;
 /**
  * This abstract class is the root class for all actions which can be performed at conceptual or design level, generally on a view tool
  * (such as a diagram).<br>
- * An {@link EditionSchemeAction} represents the execution of an {@link EditionScheme}.<br>
- * To be used and executed on Openflexo platform, it is wrapped in a {@link FlexoAction}.
+ * An {@link EditionSchemeAction} represents the execution (in the "instances" world) of an {@link EditionScheme}.<br>
+ * To be used and executed on Openflexo platform, it is wrapped in a {@link FlexoAction}.<br>
+ * An {@link EditionSchemeAction} can be considered as an instance of {@link EditionScheme}, and thus, typed (this is why this class
+ * implements CustomType interface)
+ * 
  * 
  * @author sylvain
  * 
  * @param <A>
  */
-public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> extends FlexoAction<A, FlexoModelObject, FlexoModelObject>
-		implements BindingEvaluationContext {
+public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, ES extends EditionScheme> extends
+		FlexoAction<A, FlexoModelObject, FlexoModelObject> implements BindingEvaluationContext, CustomType {
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeAction.class.getPackage().getName());
 
@@ -178,7 +183,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		return parameterListValues.get(parameter);
 	}
 
-	public abstract EditionScheme getEditionScheme();
+	public abstract ES getEditionScheme();
 
 	public abstract EditionPatternInstance getEditionPatternInstance();
 
@@ -244,9 +249,6 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		if (variable.getVariableName().equals(EditionScheme.THIS)) {
 			return getEditionPatternInstance();
 		}
-		if (variable.getVariableName().equals(EditionScheme.TOP_LEVEL)) {
-			return retrieveVirtualModelInstance();
-		}
 		if (variables.get(variable.getVariableName()) != null) {
 			return variables.get(variable.getVariableName());
 		}
@@ -279,6 +281,34 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A>> exte
 		// return overridenGraphicalRepresentations.get(patternRole);
 		// TODO temporary desactivate overriden GR
 		return null;
+	}
+
+	@Override
+	public Class getBaseClass() {
+		return EditionSchemeAction.class;
+	}
+
+	@Override
+	public boolean isTypeAssignableFrom(Type aType, boolean permissive) {
+		// System.out.println("isTypeAssignableFrom " + aType + " (i am a " + this + ")");
+		if (aType instanceof EditionSchemeAction) {
+			return getEditionScheme() == (((EditionSchemeAction) aType).getEditionScheme());
+		}
+		return false;
+	}
+
+	@Override
+	public String simpleRepresentation() {
+		return "EditionSchemeAction" + ":" + getEditionScheme();
+	}
+
+	@Override
+	public String fullQualifiedRepresentation() {
+		return "EditionSchemeAction" + ":" + getEditionScheme();
+	}
+
+	public Hashtable<EditionSchemeParameter, Object> getParameters() {
+		return parameterValues;
 	}
 
 }

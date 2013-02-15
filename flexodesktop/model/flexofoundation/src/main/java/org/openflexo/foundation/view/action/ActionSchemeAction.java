@@ -29,9 +29,8 @@ import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.viewpoint.AbstractActionScheme;
-import org.openflexo.foundation.viewpoint.EditionScheme;
 
-public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction> {
+public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction, AbstractActionScheme> {
 
 	private static final Logger logger = Logger.getLogger(ActionSchemeAction.class.getPackage().getName());
 
@@ -59,7 +58,7 @@ public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction> 
 	}
 
 	@Override
-	public EditionScheme getEditionScheme() {
+	public AbstractActionScheme getEditionScheme() {
 		return getActionScheme();
 	}
 

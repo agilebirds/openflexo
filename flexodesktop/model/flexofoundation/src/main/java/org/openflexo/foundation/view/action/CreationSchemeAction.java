@@ -37,7 +37,7 @@ import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.ListParameter;
 
-public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeAction> {
+public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeAction, CreationScheme> {
 
 	private static final Logger logger = Logger.getLogger(CreationSchemeAction.class.getPackage().getName());
 
@@ -142,7 +142,7 @@ public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeActi
 	}
 
 	@Override
-	public EditionScheme getEditionScheme() {
+	public CreationScheme getEditionScheme() {
 		return getCreationScheme();
 	}
 

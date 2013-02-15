@@ -32,16 +32,15 @@ import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
-import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.model.DiagramConnector;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddConnector;
 import org.openflexo.foundation.viewpoint.EditionAction;
-import org.openflexo.foundation.viewpoint.EditionScheme;
 
-public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction> {
+public class LinkSchemeAction extends DiagramEditionSchemeAction<LinkSchemeAction, LinkScheme> {
 
 	private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
 
@@ -107,7 +106,7 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction> {
 	}
 
 	@Override
-	public EditionScheme getEditionScheme() {
+	public LinkScheme getEditionScheme() {
 		return getLinkScheme();
 	}
 
@@ -162,10 +161,10 @@ public class LinkSchemeAction extends EditionSchemeAction<LinkSchemeAction> {
 
 	@Override
 	public Object getValue(BindingVariable variable) {
-		if (variable.getVariableName().equals(EditionScheme.FROM_TARGET) && getLinkScheme().getFromTargetEditionPattern() != null) {
+		if (variable.getVariableName().equals(DiagramEditionScheme.FROM_TARGET) && getLinkScheme().getFromTargetEditionPattern() != null) {
 			return getFromShape().getEditionPatternInstance();
 		}
-		if (variable.getVariableName().equals(EditionScheme.TO_TARGET) && getLinkScheme().getToTargetEditionPattern() != null) {
+		if (variable.getVariableName().equals(DiagramEditionScheme.TO_TARGET) && getLinkScheme().getToTargetEditionPattern() != null) {
 			return getToShape().getEditionPatternInstance();
 		}
 		return super.getValue(variable);

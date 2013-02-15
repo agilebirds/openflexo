@@ -1,6 +1,7 @@
 package org.openflexo.foundation.viewpoint.binding;
 
 import java.lang.reflect.Type;
+import java.util.Hashtable;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
@@ -33,6 +34,10 @@ public class EditionSchemeParameterPathElement extends SimplePathElement {
 
 	@Override
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
+		if (target instanceof Hashtable) {
+			Hashtable<EditionSchemeParameter, Object> allParameters = (Hashtable<EditionSchemeParameter, Object>) target;
+			return allParameters.get(parameter);
+		}
 		logger.warning("Please implement me, target=" + target + " context=" + context);
 		return null;
 	}
@@ -40,6 +45,11 @@ public class EditionSchemeParameterPathElement extends SimplePathElement {
 	@Override
 	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) throws TypeMismatchException,
 			NullReferenceException {
+		if (target instanceof Hashtable) {
+			Hashtable<EditionSchemeParameter, Object> allParameters = (Hashtable<EditionSchemeParameter, Object>) target;
+			allParameters.put(parameter, value);
+			return;
+		}
 		logger.warning("Please implement me, target=" + target + " context=" + context);
 	}
 

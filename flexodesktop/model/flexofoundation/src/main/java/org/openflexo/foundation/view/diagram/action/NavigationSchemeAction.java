@@ -26,13 +26,11 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
-import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.action.NavigationSchemeActionType;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.NavigationScheme;
-import org.openflexo.foundation.viewpoint.EditionScheme;
 
-public class NavigationSchemeAction extends EditionSchemeAction<NavigationSchemeAction> {
+public class NavigationSchemeAction extends DiagramEditionSchemeAction<NavigationSchemeAction, NavigationScheme> {
 
 	private static final Logger logger = Logger.getLogger(NavigationSchemeAction.class.getPackage().getName());
 
@@ -60,7 +58,7 @@ public class NavigationSchemeAction extends EditionSchemeAction<NavigationScheme
 	}
 
 	@Override
-	public EditionScheme getEditionScheme() {
+	public NavigationScheme getEditionScheme() {
 		return getNavigationScheme();
 	}
 

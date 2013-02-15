@@ -30,7 +30,7 @@ import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.AbstractActionScheme;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 
-public class NavigationScheme extends AbstractActionScheme {
+public class NavigationScheme extends AbstractActionScheme implements DiagramEditionScheme {
 
 	private DataBinding<Object> targetObject;
 

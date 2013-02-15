@@ -13,6 +13,7 @@ import org.openflexo.antar.binding.JavaBindingFactory;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
@@ -65,9 +66,15 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 		}
 
 		if (parent instanceof EditionSchemeParametersBindingVariable) {
-			System.out.println("Je tombe sur u EditionSchemeParametersBindingVariable");
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
 			EditionScheme es = ((EditionSchemeParametersBindingVariable) parent).getEditionScheme();
+			for (EditionSchemeParameter p : es.getParameters()) {
+				returned.add(getSimplePathElement(p, parent));
+			}
+			return returned;
+		} else if (parent instanceof EditionSchemeParametersPathElement) {
+			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
+			EditionScheme es = ((EditionSchemeParametersPathElement) parent).getEditionScheme();
 			for (EditionSchemeParameter p : es.getParameters()) {
 				returned.add(getSimplePathElement(p, parent));
 			}
@@ -76,6 +83,14 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
 			EditionPattern ep = (EditionPattern) parent.getType();
 			for (PatternRole<?> pr : ep.getPatternRoles()) {
+				returned.add(getSimplePathElement(pr, parent));
+			}
+			return returned;
+		} else if (parent.getType() instanceof EditionSchemeAction) {
+			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
+			EditionScheme editionScheme = ((EditionSchemeAction) parent.getType()).getEditionScheme();
+			returned.add(new EditionSchemeParametersPathElement(parent, editionScheme));
+			for (PatternRole<?> pr : editionScheme.getEditionPattern().getPatternRoles()) {
 				returned.add(getSimplePathElement(pr, parent));
 			}
 			return returned;
@@ -93,27 +108,17 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 	@Override
 	public SimplePathElement makeSimplePathElement(BindingPathElement parent, String propertyName) {
 		// We want to avoid code duplication, so iterate on all accessible simple path element and choose the right one
-		if (parent instanceof EditionSchemeParametersBindingVariable) {
-			System.out.println("Je tombe sur u EditionSchemeParametersBindingVariable pour " + propertyName + " accessibles="
-					+ getAccessibleSimplePathElements(parent));
-		}
 		for (SimplePathElement e : getAccessibleSimplePathElements(parent)) {
-			if (parent instanceof EditionSchemeParametersBindingVariable) {
-				System.out.println("> " + e.getLabel());
-			}
 			if (e.getLabel().equals(propertyName)) {
 				return e;
 			}
-		}
-		if (parent instanceof EditionSchemeParametersBindingVariable) {
-			System.out.println("lapi trouve");
 		}
 		return super.makeSimplePathElement(parent, propertyName);
 	}
 
 	@Override
 	public FunctionPathElement makeFunctionPathElement(BindingPathElement parent, String functionName, List<DataBinding<?>> args) {
-		return null;
+		return super.makeFunctionPathElement(parent, functionName, args);
 	}
 
 }

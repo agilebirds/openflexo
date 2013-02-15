@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.components.widget.FIBIndividualSelector;
 import org.openflexo.components.widget.FIBPropertySelector;
@@ -90,11 +91,11 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 
 	private static final Logger logger = Logger.getLogger(ParametersRetriever.class.getPackage().getName());
 
-	private EditionSchemeAction<?> action;
+	private EditionSchemeAction<?, ?> action;
 
 	protected DiagramPaletteElement paletteElement;
 
-	public static boolean retrieveParameters(final EditionSchemeAction<?> action, boolean skipDialogWhenPossible) {
+	public static boolean retrieveParameters(final EditionSchemeAction<?, ?> action, boolean skipDialogWhenPossible) {
 		boolean successfullyRetrievedDefaultParameters = action.retrieveDefaultParameters();
 
 		if (successfullyRetrievedDefaultParameters && action.getEditionScheme().getSkipConfirmationPanel() && skipDialogWhenPossible) {
@@ -106,7 +107,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 		return retriever._retrieveParameters2(action);
 	}
 
-	private ParametersRetriever(EditionSchemeAction<?> action) {
+	private ParametersRetriever(EditionSchemeAction<?, ?> action) {
 		this.action = action;
 	}
 
@@ -386,24 +387,28 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 		return unknown;
 	}
 
-	private FIBComponent makeFIB(final EditionSchemeAction<?> action) {
+	private FIBComponent makeFIB(final EditionSchemeAction<?, ?> action) {
 
 		paletteElement = action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement() : null;
 		final EditionScheme editionScheme = action.getEditionScheme();
 
-		FIBPanel returned = new FIBPanel();/* {
-											@Override
-											protected void createBindingModel() {
-											super.createBindingModel(action.getEditionScheme().getBindingModel());
-											/*_bindingModel.addToBindingVariables(new BindingVariable("parameters", new ParameterizedTypeImpl(List.class,
-											new WilcardTypeImpl(EditionSchemeParameter.class))));*/
-		// _bindingModel.addToBindingVariables(new ResolvedEditionSchemeParameterListPathElement(action));
-		// }
-		// };*/
+		FIBPanel returned = new FIBPanel() {
+			@Override
+			protected void createDataBindingVariable() {
+				_bindingModel.addToBindingVariables(new BindingVariable("data", action));
+			}
+			/*@Override
+			protected void createBindingModel() {
+				super.createBindingModel(action.getEditionScheme().getBindingModel());
+				//_bindingModel.addToBindingVariables(new BindingVariable("parameters", new ParameterizedTypeImpl(List.class,
+				//new WilcardTypeImpl(EditionSchemeParameter.class))));
+				//_bindingModel.addToBindingVariables(new ResolvedEditionSchemeParameterListPathElement(action));
+			}*/
+		};
 		returned.setBindingFactory(action.getEditionScheme().getBindingFactory());
 
 		returned.setLayout(Layout.twocols);
-		returned.setDataClass(action.getEditionScheme().getClass());
+		returned.setDataClass(action.getBaseClass());
 		returned.setBorder(Border.empty);
 		returned.setBorderTop(10);
 		returned.setBorderBottom(5);
@@ -502,7 +507,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 		return returned;
 	}
 
-	private boolean _retrieveParameters2(final EditionSchemeAction<?> action) {
+	private boolean _retrieveParameters2(final EditionSchemeAction<?, ?> action) {
 
 		FIBComponent component = makeFIB(action);
 		FIBDialog dialog = FIBDialog.instanciateDialog(component, action, null, true, FlexoLocalization.getMainLocalizer());

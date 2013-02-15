@@ -95,7 +95,7 @@ public class ListParameter extends EditionSchemeParameter {
 		this.list = list;
 	}
 
-	public Object getList(EditionSchemeAction<?> action) {
+	public Object getList(EditionSchemeAction<?, ?> action) {
 		if (getList().isValid()) {
 			try {
 				return getList().getBindingValue(action);

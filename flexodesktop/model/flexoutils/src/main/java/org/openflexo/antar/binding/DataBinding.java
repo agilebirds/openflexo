@@ -466,8 +466,13 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 		needsParsing = false;
 
 		if (!isValid()) {
-			logger.warning("Invalid binding " + getUnparsedBinding() + " reason: " + invalidBindingReason() + " "
-					+ getOwner().getBindingModel() + " " + getOwner().getBindingFactory());
+			logger.warning("Invalid binding "
+					+ getUnparsedBinding()
+					+ " reason: "
+					+ invalidBindingReason()
+					+ " "
+					+ (getOwner() != null ? "BindingModel=" + getOwner().getBindingModel() + " BindingFactory="
+							+ getOwner().getBindingFactory() : ""));
 		}
 
 		return expression;
