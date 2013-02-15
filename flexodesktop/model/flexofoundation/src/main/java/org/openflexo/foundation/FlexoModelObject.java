@@ -456,10 +456,12 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			}
 		}
 
-		for (FlexoModelObjectReference ref : new ArrayList<FlexoModelObjectReference>(referencers)) {
-			ref.notifyObjectDeletion();
+		if (referencers != null) {
+			for (FlexoModelObjectReference ref : new ArrayList<FlexoModelObjectReference>(referencers)) {
+				ref.notifyObjectDeletion();
+			}
+			referencers.clear();
 		}
-		referencers.clear();
 		referencers = null;
 
 		super.delete();
