@@ -689,6 +689,9 @@ public class TypeUtils {
 					actualTypeArguments[i] = makeInstantiatedType(tv2, type);
 				}
 				return new ParameterizedTypeImpl(((Class<?>) ((ParameterizedType) type).getRawType()).getSuperclass(), actualTypeArguments);
+			} else {
+				// System.out.println("super type of " + simpleRepresentation(type) + " is " + simpleRepresentation(superType));
+				return superType;
 			}
 		} else if (type instanceof Class) {
 			return ((Class) type).getGenericSuperclass();
