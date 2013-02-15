@@ -50,6 +50,7 @@ import javax.swing.table.TableColumn;
 
 import org.jdesktop.swingx.JXTable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
@@ -535,6 +536,8 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 			} catch (NullReferenceException e1) {
 				e1.printStackTrace();
 			} catch (InvocationTargetException e1) {
+				e1.printStackTrace();
+			} catch (NotSettableContextException e1) {
 				e1.printStackTrace();
 			}
 		}

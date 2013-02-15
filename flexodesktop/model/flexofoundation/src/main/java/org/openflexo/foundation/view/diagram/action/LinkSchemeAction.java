@@ -99,7 +99,7 @@ public class LinkSchemeAction extends DiagramEditionSchemeAction<LinkSchemeActio
 
 		// getEditionPattern().getViewPoint().getViewpointOntology().loadWhenUnloaded();
 
-		editionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
+		editionPatternInstance = getVirtualModelInstance().makeNewEditionPatternInstance(getEditionPattern());
 
 		applyEditionActions();
 

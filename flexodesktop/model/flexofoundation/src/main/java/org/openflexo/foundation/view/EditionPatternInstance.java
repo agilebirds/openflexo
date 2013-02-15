@@ -32,6 +32,7 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.FlexoModelObject;
@@ -64,7 +65,6 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	protected static final String DELETED_PROPERTY = "deleted";
 
 	private EditionPattern editionPattern;
-	private long instanceId;
 	private Hashtable<PatternRole<?>, ActorReference<?>> actors;
 	private VirtualModelInstance<?, ?> vmInstance;
 
@@ -97,10 +97,10 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		initializeDeserialization(builder);
 	}
 
-	public EditionPatternInstance(EditionPattern aPattern, FlexoProject project) {
-		super(project);
+	public EditionPatternInstance(EditionPattern aPattern, VirtualModelInstance vmInstance, FlexoProject project) {
+		super(vmInstance != null ? vmInstance.getProject() : project);
 		// logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" <init2> actors="+actors);
-		instanceId = project.getNewFlexoID();
+		this.vmInstance = vmInstance;
 		this.editionPattern = aPattern;
 		actors = new Hashtable<PatternRole<?>, ActorReference<?>>();
 	}
@@ -142,7 +142,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 
 			// Un-register last reference
 			if (object instanceof FlexoProjectObject) {
-				((FlexoProjectObject) oldObject).registerEditionPatternReference(this);
+				((FlexoProjectObject) object).registerEditionPatternReference(this);
 			}
 
 			ActorReference<T> actorReference = patternRole.makeActorReference(object, this);
@@ -162,7 +162,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	public String debug() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("EditionPattern: " + editionPattern.getName() + "\n");
-		sb.append("Instance: " + instanceId + " hash=" + Integer.toHexString(hashCode()) + "\n");
+		sb.append("Instance: " + getFlexoID() + " hash=" + Integer.toHexString(hashCode()) + "\n");
 		for (PatternRole<?> patternRole : actors.keySet()) {
 			FlexoModelObject object = actors.get(patternRole);
 			sb.append("Role: " + patternRole + " : " + object + "\n");
@@ -202,14 +202,6 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	// Serialization/deserialization only, do not use
 	public void setEditionPatternURI(String editionPatternURI) {
 		this.editionPatternURI = editionPatternURI;
-	}
-
-	public long getInstanceId() {
-		return instanceId;
-	}
-
-	public void setInstanceId(long instanceId) {
-		this.instanceId = instanceId;
 	}
 
 	public Hashtable<PatternRole<?>, ActorReference<?>> getActors() {
@@ -268,6 +260,8 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 			} catch (NullReferenceException e) {
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			} catch (NotSettableContextException e) {
 				e.printStackTrace();
 			}
 			return true;
@@ -431,7 +425,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 
 	@Override
 	public String getFullyQualifiedName() {
-		return getVirtualModelInstance().getFullyQualifiedName() + "." + getEditionPattern().getURI() + "." + getInstanceId();
+		return getVirtualModelInstance().getFullyQualifiedName() + "." + getEditionPattern().getURI() + "." + getFlexoID();
 	}
 
 	@Override

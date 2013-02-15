@@ -47,6 +47,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBBrowserDynamicModel;
@@ -600,6 +601,8 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 			} catch (NullReferenceException e1) {
 				e1.printStackTrace();
 			} catch (InvocationTargetException e1) {
+				e1.printStackTrace();
+			} catch (NotSettableContextException e1) {
 				e1.printStackTrace();
 			}
 		}

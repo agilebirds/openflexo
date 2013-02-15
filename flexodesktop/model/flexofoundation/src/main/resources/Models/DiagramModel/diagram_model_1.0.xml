@@ -43,7 +43,6 @@
 
 	<entity name="org.openflexo.foundation.view.EditionPatternInstance" xmlTag="EditionPatternInstance">
 		<property name="editionPatternURI" xmlTag="editionPatternURI" attribute="YES" description="" />
-		<property name="instanceId" xmlTag="instanceId" attribute="YES" description="" />
 		<property name="actors" contains="org.openflexo.foundation.view.ActorReference" primary="yes" type="hashtable" key="patternRole"/>
 	</entity>
 

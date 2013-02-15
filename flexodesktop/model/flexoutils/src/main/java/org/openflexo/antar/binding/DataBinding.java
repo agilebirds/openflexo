@@ -35,6 +35,7 @@ import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionTransformer;
 import org.openflexo.antar.expr.ExpressionVisitor;
 import org.openflexo.antar.expr.InvocationTargetTransformException;
+import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TransformException;
 import org.openflexo.antar.expr.TypeMismatchException;
@@ -614,9 +615,10 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	 * @throws TypeMismatchException
 	 * @throws NullReferenceException
 	 * @throws InvocationTargetException
+	 * @throws NotSettableContextException
 	 */
 	public void setBindingValue(Object value, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException,
-			InvocationTargetException {
+			InvocationTargetException, NotSettableContextException {
 		if (isSettable()) {
 			if (isBindingValue()) {
 				// At this time, only BindingValue is settable

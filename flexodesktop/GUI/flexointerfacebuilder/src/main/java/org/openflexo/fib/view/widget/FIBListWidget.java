@@ -32,6 +32,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
@@ -273,6 +274,8 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 				} catch (NullReferenceException e1) {
 					e1.printStackTrace();
 				} catch (InvocationTargetException e1) {
+					e1.printStackTrace();
+				} catch (NotSettableContextException e1) {
 					e1.printStackTrace();
 				}
 			}

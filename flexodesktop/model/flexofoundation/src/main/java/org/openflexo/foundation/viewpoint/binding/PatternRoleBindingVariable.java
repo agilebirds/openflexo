@@ -21,7 +21,7 @@ public class PatternRoleBindingVariable extends BindingVariable {
 		return getPatternRole().getType();
 	}
 
-	public PatternRole<?> getPatternRole() {
+	public PatternRole getPatternRole() {
 		return patternRole;
 	}
 }

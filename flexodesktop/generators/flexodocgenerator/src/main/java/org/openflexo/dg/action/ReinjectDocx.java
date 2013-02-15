@@ -265,7 +265,7 @@ public class ReinjectDocx extends AbstractGCAction<ReinjectDocx, CGObject> {
 				for (FlexoModelObjectReference<EditionPatternInstance> ref : object.getEditionPatternReferences()) {
 					EditionPatternInstance epi2 = ref.getObject();
 					if (epi2.getEditionPattern() != null && epi2.getEditionPattern().getURI().equals(epi.getEditionPatternURI())
-							&& epi2.getInstanceId() == instanceID) {
+							&& epi2.getFlexoID() == instanceID) {
 						if (epi2 != null) {
 							epis.put(epi2, epi);
 							found = true;
@@ -293,7 +293,7 @@ public class ReinjectDocx extends AbstractGCAction<ReinjectDocx, CGObject> {
 					}
 					if (pattern != null) {
 						for (EditionPatternInstance inst : vmi.getEPInstances(pattern)) {
-							if (inst.getInstanceId() == instanceID) {
+							if (inst.getFlexoID() == instanceID) {
 								epis.put(inst, epi);
 								found = true;
 								break;

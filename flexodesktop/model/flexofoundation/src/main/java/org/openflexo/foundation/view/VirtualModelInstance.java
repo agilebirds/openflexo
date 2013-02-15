@@ -22,8 +22,11 @@ package org.openflexo.foundation.view;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -73,6 +76,8 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	// this.
 	private String title;
 
+	private HashMap<EditionPattern, Map<Long, EditionPatternInstance>> editionPatternInstances;
+
 	public static VirtualModelInstanceResource<?> newVirtualModelInstance(String virtualModelName, String virtualModelTitle,
 			VirtualModel virtualModel, View view) throws InvalidFileNameException, SaveResourceException {
 
@@ -106,9 +111,10 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	 * @param shemaDefinition
 	 */
 	public VirtualModelInstance(View view, VirtualModel virtualModel) {
-		super(virtualModel, view.getProject());
+		super(virtualModel, null, view.getProject());
 		logger.info("Created new VirtualModelInstance for virtual model " + virtualModel);
 		modelSlotInstances = new ArrayList<ModelSlotInstance<?, ?>>();
+		editionPatternInstances = new HashMap<EditionPattern, Map<Long, EditionPatternInstance>>();
 	}
 
 	@Override
@@ -167,6 +173,17 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 		return null;
 	}
 
+	public EditionPatternInstance makeNewEditionPatternInstance(EditionPattern pattern) {
+		EditionPatternInstance returned = new EditionPatternInstance(pattern, this, getProject());
+		Map<Long, EditionPatternInstance> hash = editionPatternInstances.get(pattern);
+		if (hash == null) {
+			hash = new Hashtable<Long, EditionPatternInstance>();
+			editionPatternInstances.put(pattern, hash);
+		}
+		hash.put(returned.getFlexoID(), returned);
+		return returned;
+	}
+
 	public Collection<EditionPatternInstance> getEPInstances(String epName) {
 		if (getViewPoint() == null) {
 			return Collections.emptyList();
@@ -176,31 +193,12 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	}
 
 	public Collection<EditionPatternInstance> getEPInstances(EditionPattern ep) {
-		/*Collection<DiagramShape> shapes = getChildrenOfType(DiagramShape.class);
-		Collection<DiagramConnector> connectors = getChildrenOfType(DiagramConnector.class);
-		Collection<EditionPatternInstance> epis = new LinkedHashSet<EditionPatternInstance>();
-		for (DiagramShape shape : shapes) {
-			EditionPatternReference epr = shape.getEditionPatternReference();
-			if (epr == null) {
-				continue;
-			}
-			if (epr.getEditionPattern() == ep) {
-				epis.add(epr.getEditionPatternInstance());
-			}
-		}
-		for (DiagramConnector conn : connectors) {
-			EditionPatternReference epr = conn.getEditionPatternReference();
-			if (epr == null) {
-				continue;
-			}
-			if (epr.getEditionPattern() == ep) {
-				epis.add(epr.getEditionPatternInstance());
-			}
-		}
-		return epis;*/
-		return null;
+		Map<Long, EditionPatternInstance> hash = editionPatternInstances.get(ep);
+		return hash.values();
 	}
 
+	// TODO: refactor this
+	@Deprecated
 	public List<EditionPatternInstance> getEPInstancesWithPropertyEqualsTo(String epName, String epProperty, Object value) {
 		/*List<EditionPatternInstance> returned = new ArrayList<EditionPatternInstance>();
 		Collection<EditionPatternInstance> epis = getEPInstances(epName);
@@ -296,8 +294,15 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	 */
 	public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> ModelSlotInstance<M, MM> getModelSlotInstance(
 			ModelSlot<M, MM> modelSlot) {
-		// TODO
-		logger.warning("Please implement me");
+		for (ModelSlotInstance<?, ?> msInstance : getModelSlotInstances()) {
+			if (msInstance.getModelSlot() == modelSlot) {
+				return (ModelSlotInstance<M, MM>) msInstance;
+			}
+		}
+		logger.warning("Cannot find ModelSlotInstance for ModelSlot " + modelSlot);
+		if (getVirtualModel() != null && !getVirtualModel().getModelSlots().contains(modelSlot)) {
+			logger.warning("Worse than that, supplied ModelSlot is not part of virtual model " + getVirtualModel());
+		}
 		return null;
 	}
 
@@ -382,7 +387,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> M getModel(ModelSlot<M, MM> modelSlot) {
 		return getModel(modelSlot, true);
 	}
-	*/
+	 */
 
 	public Set<FlexoMetaModel> getAllMetaModels() {
 		Set<FlexoMetaModel> allMetaModels = new HashSet<FlexoMetaModel>();
