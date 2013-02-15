@@ -32,6 +32,7 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.Function.FunctionArgument;
 import org.openflexo.antar.binding.FunctionPathElement;
+import org.openflexo.antar.binding.SettableBindingEvaluationContext;
 import org.openflexo.antar.binding.SettableBindingPathElement;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.binding.TargetObject;
@@ -623,7 +624,7 @@ public class BindingValue extends Expression {
 	}
 
 	public void setBindingValue(Object value, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException,
-			InvocationTargetTransformException {
+			InvocationTargetTransformException, NotSettableContextException {
 
 		// logger.info("setBindingValue() for " + this + " with " + value + " context=" + context);
 		// logger.info("valid=" + isValid());
@@ -635,6 +636,16 @@ public class BindingValue extends Expression {
 
 		if (!isSettable()) {
 			return;
+		}
+
+		if (getBindingPath().size() == 0 && getBindingVariable() != null) {
+			// This is a simple assignation
+			if (context instanceof SettableBindingEvaluationContext) {
+				((SettableBindingEvaluationContext) context).setValue(value, getBindingVariable());
+				return;
+			} else {
+				throw new NotSettableContextException(getBindingVariable(), context);
+			}
 		}
 
 		// System.out.println("Sets value: "+value);

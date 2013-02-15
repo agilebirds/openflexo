@@ -32,6 +32,7 @@ import javax.swing.table.TableCellRenderer;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
@@ -194,6 +195,8 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		} catch (NullReferenceException e) {
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (NotSettableContextException e) {
 			e.printStackTrace();
 		}
 	}

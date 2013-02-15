@@ -39,6 +39,7 @@ import javax.swing.table.TableCellRenderer;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
@@ -351,6 +352,8 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 				} catch (NullReferenceException e) {
 					e.printStackTrace();
 				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				} catch (NotSettableContextException e) {
 					e.printStackTrace();
 				}
 			}

@@ -156,11 +156,9 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewLibrary;
-import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
@@ -4162,22 +4160,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	public boolean getIsLocalized() {
 		return getDKVModel(false) != null && getDKVModel().getLanguages().size() > 1;
-	}
-
-	private Map<String, Map<Long, EditionPatternInstance>> _editionPatternInstances;
-
-	public EditionPatternInstance makeNewEditionPatternInstance(EditionPattern pattern) {
-		EditionPatternInstance returned = new EditionPatternInstance(pattern, this);
-		if (_editionPatternInstances == null) {
-			_editionPatternInstances = new Hashtable<String, Map<Long, EditionPatternInstance>>();
-		}
-		Map<Long, EditionPatternInstance> hash = _editionPatternInstances.get(pattern.getName());
-		if (hash == null) {
-			hash = new Hashtable<Long, EditionPatternInstance>();
-			_editionPatternInstances.put(pattern.getName(), hash);
-		}
-		hash.put(returned.getInstanceId(), returned);
-		return returned;
 	}
 
 	/*public EditionPatternInstance getEditionPatternInstance(EditionPatternReference reference) {

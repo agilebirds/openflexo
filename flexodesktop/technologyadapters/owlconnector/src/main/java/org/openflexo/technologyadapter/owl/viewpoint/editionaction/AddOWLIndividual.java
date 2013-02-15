@@ -77,50 +77,52 @@ public class AddOWLIndividual extends AddIndividual<OWLOntology, OWLOntology, OW
 		// System.out.println("individualName="+individualName);
 		OWLIndividual newIndividual = null;
 		try {
-			System.out.println("getModelSlotInstance(action)=" + getModelSlotInstance(action));
 			if (getModelSlotInstance(action) != null) {
-				System.out.println("getModelSlotInstance(action).getModel()=" + getModelSlotInstance(action).getModel());
-				newIndividual = getModelSlotInstance(action).getModel().createOntologyIndividual(individualName, father);
-				logger.info("********* Added individual " + newIndividual.getName() + " as " + father);
+				if (getModelSlotInstance(action).getModel() != null) {
+					newIndividual = getModelSlotInstance(action).getModel().createOntologyIndividual(individualName, father);
+					logger.info("********* Added individual " + newIndividual.getName() + " as " + father);
 
-				for (DataPropertyAssertion dataPropertyAssertion : getDataAssertions()) {
-					if (dataPropertyAssertion.evaluateCondition(action)) {
-						logger.info("DataPropertyAssertion=" + dataPropertyAssertion);
-						OWLProperty property = (OWLProperty) dataPropertyAssertion.getOntologyProperty();
-						logger.info("Property=" + property);
-						Object value = dataPropertyAssertion.getValue(action);
-						newIndividual.addPropertyStatement(property, value);
+					for (DataPropertyAssertion dataPropertyAssertion : getDataAssertions()) {
+						if (dataPropertyAssertion.evaluateCondition(action)) {
+							logger.info("DataPropertyAssertion=" + dataPropertyAssertion);
+							OWLProperty property = (OWLProperty) dataPropertyAssertion.getOntologyProperty();
+							logger.info("Property=" + property);
+							Object value = dataPropertyAssertion.getValue(action);
+							newIndividual.addPropertyStatement(property, value);
+						}
 					}
-				}
-				for (ObjectPropertyAssertion objectPropertyAssertion : getObjectAssertions()) {
-					if (objectPropertyAssertion.evaluateCondition(action)) {
-						// logger.info("ObjectPropertyAssertion="+objectPropertyAssertion);
-						OWLProperty property = (OWLProperty) objectPropertyAssertion.getOntologyProperty();
-						// logger.info("Property="+property);
-						if (property instanceof OWLObjectProperty) {
-							if (((OWLObjectProperty) property).isLiteralRange()) {
-								Object value = objectPropertyAssertion.getValue(action);
-								newIndividual.addPropertyStatement(property, value);
-							} else {
-								OWLConcept<?> assertionObject = (OWLConcept<?>) objectPropertyAssertion.getAssertionObject(action);
-								if (assertionObject != null) {
-									newIndividual.getOntResource().addProperty(((OWLObjectProperty) property).getOntProperty(),
-											assertionObject.getOntResource());
+					for (ObjectPropertyAssertion objectPropertyAssertion : getObjectAssertions()) {
+						if (objectPropertyAssertion.evaluateCondition(action)) {
+							// logger.info("ObjectPropertyAssertion="+objectPropertyAssertion);
+							OWLProperty property = (OWLProperty) objectPropertyAssertion.getOntologyProperty();
+							// logger.info("Property="+property);
+							if (property instanceof OWLObjectProperty) {
+								if (((OWLObjectProperty) property).isLiteralRange()) {
+									Object value = objectPropertyAssertion.getValue(action);
+									newIndividual.addPropertyStatement(property, value);
+								} else {
+									OWLConcept<?> assertionObject = (OWLConcept<?>) objectPropertyAssertion.getAssertionObject(action);
+									if (assertionObject != null) {
+										newIndividual.getOntResource().addProperty(((OWLObjectProperty) property).getOntProperty(),
+												assertionObject.getOntResource());
+									}
 								}
 							}
-						}
-						IFlexoOntologyConcept assertionObject = objectPropertyAssertion.getAssertionObject(action);
-						// logger.info("assertionObject="+assertionObject);
-						if (assertionObject != null && newIndividual instanceof OWLIndividual && property instanceof OWLProperty
-								&& assertionObject instanceof OWLConcept) {
-							newIndividual.getOntResource().addProperty(property.getOntProperty(),
-									((OWLConcept) assertionObject).getOntResource());
-						} else {
-							// logger.info("assertion object is null");
+							IFlexoOntologyConcept assertionObject = objectPropertyAssertion.getAssertionObject(action);
+							// logger.info("assertionObject="+assertionObject);
+							if (assertionObject != null && newIndividual instanceof OWLIndividual && property instanceof OWLProperty
+									&& assertionObject instanceof OWLConcept) {
+								newIndividual.getOntResource().addProperty(property.getOntProperty(),
+										((OWLConcept) assertionObject).getOntResource());
+							} else {
+								// logger.info("assertion object is null");
+							}
 						}
 					}
+					newIndividual.updateOntologyStatements();
+				} else {
+					logger.warning("No model defined for ModelSlotInstance " + getModelSlotInstance(action));
 				}
-				newIndividual.updateOntologyStatements();
 			} else {
 				logger.warning("No model slot instance defined for " + getModelSlot());
 			}

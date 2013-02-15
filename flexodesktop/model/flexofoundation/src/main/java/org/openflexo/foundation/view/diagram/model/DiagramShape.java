@@ -235,7 +235,8 @@ public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> {
 
 		for (EditionPattern ep : getDiagramSpecification().getEditionPatterns()) {
 			for (LinkScheme ls : ep.getLinkSchemes()) {
-				if (ls.getFromTargetEditionPattern().isAssignableFrom(getEditionPattern()) && ls.getIsAvailableWithFloatingPalette()) {
+				if (ls.getFromTargetEditionPattern() != null && ls.getFromTargetEditionPattern().isAssignableFrom(getEditionPattern())
+						&& ls.getIsAvailableWithFloatingPalette()) {
 					// This candidate is acceptable
 					availableLinkSchemeFromThisShape.add(ls);
 				}

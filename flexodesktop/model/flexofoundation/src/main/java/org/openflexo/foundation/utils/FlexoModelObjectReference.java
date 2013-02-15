@@ -109,7 +109,18 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 		 * ArrayIndexOutOfBounds, etc...
 		 */
 		if (modelObject.getXMLResourceData() != null) {
-			this.resourceIdentifier = modelObject.getXMLResourceData().getFlexoResource().getResourceIdentifier();
+			// BEGIN @Deprecated
+			if (modelObject.getXMLResourceData().getFlexoResource() != null) {
+				this.resourceIdentifier = modelObject.getXMLResourceData().getFlexoResource().getResourceIdentifier();
+			} else // END @Deprecated
+			if (modelObject.getXMLResourceData().getResource() != null) {
+				this.resourceIdentifier = modelObject.getXMLResourceData().getResource().getURI();
+			} else {
+				logger.warning("object " + modelObject + " has a XML resource data (" + modelObject.getXMLResourceData()
+						+ ") with null resource ");
+			}
+		} else {
+			logger.warning("object " + modelObject + " has no XML resource data !");
 		}
 		this.userIdentifier = modelObject.getUserIdentifier();
 		this.flexoID = modelObject.getFlexoID();

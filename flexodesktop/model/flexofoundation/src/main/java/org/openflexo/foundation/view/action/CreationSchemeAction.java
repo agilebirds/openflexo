@@ -89,7 +89,7 @@ public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeActi
 
 		// getEditionPattern().getViewPoint().getViewpointOntology().loadWhenUnloaded();
 
-		editionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
+		editionPatternInstance = getVirtualModelInstance().makeNewEditionPatternInstance(getEditionPattern());
 
 		applyEditionActions();
 

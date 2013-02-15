@@ -173,7 +173,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		if (getXMLResourceData() != null && getXMLResourceData().getResource() instanceof FlexoProjectResource) {
 			return ((FlexoProjectResource) getXMLResourceData().getResource()).getProject();
 		}
-		return null;
+		return super.getProject();
 	}
 
 	@Override
@@ -393,7 +393,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			}
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("No project for object of type " + getClassNameKey());
+				logger.warning("No project for object of type " + getClassNameKey() + " (".getClass().getName() + ")");
 			}
 		}
 		return flexoID;

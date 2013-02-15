@@ -199,7 +199,7 @@ public class DGDocxXMLGenerator<T extends FlexoModelObject> extends Generator<T,
 		} else if (object instanceof IEPageComponent) {
 			s = "PAGE-" + ((IEPageComponent) object).getName();
 		} else if (object instanceof EditionPatternInstance) {
-			s = ((EditionPatternInstance) object).getPattern().getName() + "-" + ((EditionPatternInstance) object).getInstanceId();
+			s = ((EditionPatternInstance) object).getPattern().getName() + "-" + ((EditionPatternInstance) object).getFlexoID();
 		} else if (object instanceof FlexoModelObject) {
 			s = ((FlexoModelObject) object).getFullyQualifiedName();
 		} else if (object instanceof View) {

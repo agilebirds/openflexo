@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.CustomType;
+import org.openflexo.antar.binding.SettableBindingEvaluationContext;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
@@ -45,6 +46,8 @@ import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.ListParameter;
 import org.openflexo.foundation.viewpoint.URIParameter;
+import org.openflexo.foundation.viewpoint.binding.EditionSchemeParametersBindingVariable;
+import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -61,7 +64,7 @@ import org.openflexo.toolbox.StringUtils;
  * @param <A>
  */
 public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, ES extends EditionScheme> extends
-		FlexoAction<A, FlexoModelObject, FlexoModelObject> implements BindingEvaluationContext, CustomType {
+		FlexoAction<A, FlexoModelObject, FlexoModelObject> implements SettableBindingEvaluationContext, CustomType {
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeAction.class.getPackage().getName());
 
@@ -199,6 +202,11 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 	 * Recursively invoke {@link #performAction(EditionAction, Hashtable)}
 	 */
 	protected void applyEditionActions() {
+
+		for (EditionSchemeParameter param : parameterValues.keySet()) {
+			logger.info("Parameter " + param.getName() + " value=" + parameterValues.get(param));
+		}
+
 		Hashtable<EditionAction, Object> performedActions = new Hashtable<EditionAction, Object>();
 
 		// Perform actions
@@ -233,7 +241,9 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 				try {
 					assignableAction.getAssignation().setBindingValue(assignedObject, this);
 				} catch (Exception e) {
-					logger.warning("Unexpected assignation issue, " + assignableAction.getAssignation() + " object=" + assignedObject);
+					logger.warning("Unexpected assignation issue, " + assignableAction.getAssignation() + " object=" + assignedObject
+							+ " exception: " + e);
+					e.printStackTrace();
 				}
 			}
 			if (assignableAction.getPatternRole() != null && assignedObject instanceof FlexoModelObject) {
@@ -246,35 +256,28 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 
 	@Override
 	public Object getValue(BindingVariable variable) {
-		if (variable.getVariableName().equals(EditionScheme.THIS)) {
+		if (variable instanceof EditionSchemeParametersBindingVariable) {
+			return getParameters();
+		} else if (variable instanceof PatternRoleBindingVariable) {
+			return getEditionPatternInstance().getPatternActor(((PatternRoleBindingVariable) variable).getPatternRole());
+		} else if (variable.getVariableName().equals(EditionScheme.THIS)) {
 			return getEditionPatternInstance();
 		}
 		if (variables.get(variable.getVariableName()) != null) {
 			return variables.get(variable.getVariableName());
 		}
 
-		/*if (variable instanceof EditionSchemeParameterListPathElement) {
-			return this;
-		} else if (variable instanceof EditionSchemeParameterPathElement) {
-			return getParameterValue(((EditionSchemeParameterPathElement) variable).getParameter());
-		} else if (variable instanceof ViewPathElement) {
-			if (variable.getVariableName().equals(EditionScheme.TOP_LEVEL)) {
-				return retrieveOEShema();
-			}
-		} else if (variable instanceof PatternRolePathElement) {
-			return getEditionPatternInstance().getPatternActor(((PatternRolePathElement) variable).getPatternRole());
-		} else if (variable instanceof EditionPatternPathElement) {
-			if (variable.getVariableName().equals(EditionScheme.THIS)) {
-				return getEditionPatternInstance();
-			}
-		}
-
-		if (variables.get(variable.getVariableName()) != null) {
-			return variables.get(variable.getVariableName());
-		}*/
-
-		logger.warning("Unexpected variable requested in EditionSchemeAction " + variable);
+		logger.warning("Unexpected variable requested in EditionSchemeAction: " + variable + " of " + variable.getClass());
 		return null;
+	}
+
+	@Override
+	public void setValue(Object value, BindingVariable variable) {
+		if (variable instanceof PatternRoleBindingVariable) {
+			getEditionPatternInstance().setPatternActor(value, ((PatternRoleBindingVariable) variable).getPatternRole());
+		}
+		logger.warning("Unexpected variable requested in settable context in EditionSchemeAction: " + variable + " of "
+				+ variable.getClass());
 	}
 
 	public GraphicalRepresentation<? extends DiagramElement> getOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {

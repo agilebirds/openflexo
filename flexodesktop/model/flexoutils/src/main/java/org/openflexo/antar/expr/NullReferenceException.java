@@ -61,7 +61,7 @@ public class NullReferenceException extends TransformException {
 			return FlexoLocalization.localizedForKeyWithParams("NullReferenceException_on_operator_($0)",
 					concernedOperator.getLocalizedName());
 		} else {
-			return FlexoLocalization.localizedForKey("NullReferenceException");
+			return getMessage();
 		}
 	}
 

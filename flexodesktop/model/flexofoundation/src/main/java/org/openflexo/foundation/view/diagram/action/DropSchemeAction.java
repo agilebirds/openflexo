@@ -96,9 +96,14 @@ public class DropSchemeAction extends DiagramEditionSchemeAction<DropSchemeActio
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParametersException {
 		logger.info("Drop palette element");
 
+		logger.info("project=" + getProject());
 		// getEditionPattern().getViewPoint().getViewpointOntology().loadWhenUnloaded();
 
-		editionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
+		editionPatternInstance = getVirtualModelInstance().makeNewEditionPatternInstance(getEditionPattern());
+
+		logger.info("editionPatternInstance=" + editionPatternInstance);
+		logger.info("epi project=" + editionPatternInstance.getProject());
+		logger.info("epi resource data =" + editionPatternInstance.getXMLResourceData());
 
 		applyEditionActions();
 

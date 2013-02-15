@@ -49,6 +49,7 @@ import org.openflexo.antar.binding.DependingObjects;
 import org.openflexo.antar.binding.DependingObjects.HasDependencyBinding;
 import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
@@ -292,6 +293,8 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				logger.warning("Unexpected " + e + " message=" + e.getMessage());
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			} catch (NotSettableContextException e) {
 				e.printStackTrace();
 			}
 
