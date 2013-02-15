@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram id="FLX_44" editionPatternURI="http://www.agilebirds.com/openflexo/ViewPoints/UML/UseCaseDiagram.owl/DiagramSpecification" instanceId="43" userID="FLX" flexoID="44" dontGenerate="false" useSpecificDescriptions="false" title="utyytuuty" virtualModelURI="http://www.agilebirds.com/openflexo/ViewPoints/UML/UseCaseDiagram.owl/DiagramSpecification">
+  <DiagramRootPane id="FLX_45" index="-1" indexRelativeToEPType="-1" userID="FLX" flexoID="45" dontGenerate="false" useSpecificDescriptions="false">
+    <DrawingGraphicalRepresentation id="1" width="1000.0" height="1000.0" drawWorkingArea="false" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255" identifier="root" layer="0" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <TextStyle id="2" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </DrawingGraphicalRepresentation>
+  </DiagramRootPane>
+  <ModelSlotInstance id="FLX_46" modelSlotName="owl" modelURI="ytu" userID="FLX" flexoID="46" dontGenerate="false" useSpecificDescriptions="false" />
+  <ModelSlotInstance id="FLX_47" modelSlotName="diagram" modelURI="TODO" userID="FLX" flexoID="47" dontGenerate="false" useSpecificDescriptions="false" />
+</Diagram>
