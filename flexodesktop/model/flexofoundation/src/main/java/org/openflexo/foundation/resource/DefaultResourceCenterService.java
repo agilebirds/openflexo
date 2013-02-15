@@ -67,8 +67,11 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 			}
 		}
 		openFlexoResourceCenter = new LocalResourceCenterImplementation(file);
-		userResourceCenter = new UserResourceCenter(new File(FileUtils.getDocumentDirectory(),
-				"FlexoUserResourceCenter/ResourceCenterData.xml"));
+		File userResourceCenterStorageFile = new File(FileUtils.getDocumentDirectory(), "FlexoUserResourceCenter/ResourceCenterData.xml");
+		if (!userResourceCenterStorageFile.getParentFile().canWrite()) {
+			userResourceCenterStorageFile = new File(System.getProperty("user.home"), "FlexoUserResourceCenter/ResourceCenterData.xml");
+		}
+		userResourceCenter = new UserResourceCenter(userResourceCenterStorageFile);
 
 	}
 

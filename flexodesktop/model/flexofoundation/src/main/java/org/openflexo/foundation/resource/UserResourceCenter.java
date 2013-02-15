@@ -49,7 +49,7 @@ public class UserResourceCenter extends FileSystemBasedResourceCenter implements
 			// Hum this sucks...
 			e1.printStackTrace();
 		}
-		if (userResourceCenterStorageFile.exists() && userResourceCenterStorageFile.isFile()) {
+		if (userResourceCenterStorageFile.exists() && userResourceCenterStorageFile.isFile() && userResourceCenterStorageFile.canWrite()) {
 			try {
 				update();
 			} catch (IOException e) {
@@ -176,9 +176,9 @@ public class UserResourceCenter extends FileSystemBasedResourceCenter implements
 			try {
 				try {
 					storage = (Storage) modelFactory.deserialize(fis, DeserializationPolicy.EXTENSIVE);
-				if (logger.isLoggable(Level.INFO)) {
-					logger.info("Loaded " + storage.getResources().size() + " resources from user resource cente file");
-				}
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("Loaded " + storage.getResources().size() + " resources from user resource cente file");
+					}
 				} catch (JDOMException e) {
 					e.printStackTrace();
 					throw new IOException("Parsing XML data failed: " + e.getMessage(), e);

@@ -96,7 +96,7 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 			ViewPointLibrary viewPointLibrary) {
 		boolean returned = false;
 		logger.fine("Exploring " + directory);
-		if (directory.exists() && directory.isDirectory()) {
+		if (directory.exists() && directory.isDirectory() && directory.canRead()) {
 			for (File f : directory.listFiles()) {
 				if (f.isDirectory() && f.getName().endsWith(".viewpoint")) {
 					ViewPointResource vpRes = ViewPointResourceImpl.retrieveViewPointResource(f, viewPointLibrary);
@@ -165,7 +165,7 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 			MetaModelRepository<MMR, M, MM, TA> mmRepository) {
 		logger.fine("Exploring " + directory);
 		boolean returned = false;
-		if (directory.exists() && directory.isDirectory()) {
+		if (directory.exists() && directory.isDirectory() && directory.canRead()) {
 			for (File f : directory.listFiles()) {
 				if (technologyAdapter.isValidMetaModelFile(f, technologyContextManager)) {
 					MMR mmRes = (MMR) technologyAdapter.retrieveMetaModelResource(f, technologyContextManager);
@@ -213,7 +213,7 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 			ModelRepository<MR, ?, ?, ?> modelRepository) {
 		logger.fine("Exploring " + directory);
 		boolean returned = false;
-		if (directory.exists() && directory.isDirectory()) {
+		if (directory.exists() && directory.isDirectory() && directory.canRead()) {
 			for (File f : directory.listFiles()) {
 				for (MMR metaModelResource : mmRepository.getAllResources()) {
 					if (technologyAdapter.isValidModelFile(f, metaModelResource, technologyContextManager)) {
