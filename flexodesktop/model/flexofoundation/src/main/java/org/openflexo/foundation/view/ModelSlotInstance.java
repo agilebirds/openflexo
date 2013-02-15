@@ -85,6 +85,10 @@ public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 		return vmInstance;
 	}
 
+	public void setVirtualModelInstance(VirtualModelInstance<?, ?> vmInstance) {
+		this.vmInstance = vmInstance;
+	}
+
 	public void setModelSlot(ModelSlot<M, MM> modelSlot) {
 		this.modelSlot = modelSlot;
 	}

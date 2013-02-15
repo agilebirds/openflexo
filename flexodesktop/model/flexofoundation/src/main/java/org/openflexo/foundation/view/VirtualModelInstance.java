@@ -22,11 +22,8 @@ package org.openflexo.foundation.view;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,7 +69,8 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 
 	private VirtualModelInstanceResource<VMI> resource;
 	private List<ModelSlotInstance<?, ?>> modelSlotInstances;
-	private Map<ModelSlot<?, ?>, FlexoModel<?, ?>> modelsMap = new HashMap<ModelSlot<?, ?>, FlexoModel<?, ?>>(); // Do not serialize this.
+	// private Map<ModelSlot<?, ?>, FlexoModel<?, ?>> modelsMap = new HashMap<ModelSlot<?, ?>, FlexoModel<?, ?>>(); // Do not serialize
+	// this.
 	private String title;
 
 	public static VirtualModelInstanceResource<?> newVirtualModelInstance(String virtualModelName, String virtualModelTitle,
@@ -305,10 +303,10 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 
 	public void setModelSlotInstances(List<ModelSlotInstance<?, ?>> instances) {
 		this.modelSlotInstances = instances;
-		modelsMap.clear();
+		/*modelsMap.clear();
 		for (ModelSlotInstance<?, ?> model : instances) {
 			modelsMap.put(model.getModelSlot(), model.getModel());
-		}
+		}*/
 	}
 
 	public List<ModelSlotInstance<?, ?>> getModelSlotInstances() {
@@ -316,12 +314,23 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	}
 
 	public void removeFromModelSlotInstance(ModelSlotInstance<?, ?> instance) {
-		modelSlotInstances.remove(instance);
-		modelsMap.remove(instance.getModelSlot());
+		if (modelSlotInstances.contains(instance)) {
+			instance.setVirtualModelInstance(null);
+			modelSlotInstances.remove(instance);
+			setChanged();
+			notifyObservers(new VEDataModification("modelSlotInstances", instance, null));
+		}
+		// modelsMap.remove(instance.getModelSlot());
 	}
 
 	public void addToModelSlotInstances(ModelSlotInstance<?, ?> instance) {
-		Iterator<ModelSlotInstance<?, ?>> it = modelSlotInstances.iterator();
+		if (!modelSlotInstances.contains(instance)) {
+			instance.setVirtualModelInstance(this);
+			modelSlotInstances.add(instance);
+			setChanged();
+			notifyObservers(new VEDataModification("modelSlotInstances", null, instance));
+		}
+		/*Iterator<ModelSlotInstance<?, ?>> it = modelSlotInstances.iterator();
 		while (it.hasNext()) {
 			ModelSlotInstance<?, ?> next = it.next();
 			if (next.getModelSlot() != null && next.getModelSlot().equals(instance.getModelSlot())) {
@@ -329,7 +338,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 			}
 		}
 		modelSlotInstances.add(instance);
-		modelsMap.put(instance.getModelSlot(), instance.getModel());
+		modelsMap.put(instance.getModelSlot(), instance.getModel());*/
 	}
 
 	/*public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> void setModel(ModelSlot<M, MM> modelSlot, M model) {
