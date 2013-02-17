@@ -225,6 +225,12 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 			metaModelResource = (FlexoMetaModelResource<M, MM>) getInformationSpace().getMetaModel(metaModelURI);
 			logger.info("Looked-up " + metaModelResource);
 		}
+		// Temporary hack to lookup parent slot (to be refactored)
+		if (metaModelResource == null && getVirtualModel() != null && getViewPoint() != null) {
+			if (getViewPoint().getModelSlot(getName()) != null) {
+				return (FlexoMetaModelResource<M, MM>) getViewPoint().getModelSlot(getName()).getMetaModelResource();
+			}
+		}
 		return metaModelResource;
 	}
 

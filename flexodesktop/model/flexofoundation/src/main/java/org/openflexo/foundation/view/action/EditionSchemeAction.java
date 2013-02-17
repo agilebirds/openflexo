@@ -92,20 +92,24 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 	public boolean retrieveDefaultParameters() {
 		boolean returned = true;
 		EditionScheme editionScheme = getEditionScheme();
+		logger.info("BEGIN retrieveDefaultParameters() for " + editionScheme);
 		for (final EditionSchemeParameter parameter : editionScheme.getParameters()) {
 			Object defaultValue = parameter.getDefaultValue(this);
-			if (defaultValue != null && !(parameter instanceof URIParameter)) {
+			logger.info("Parameter " + parameter.getName() + " default value = " + defaultValue);
+			if (defaultValue != null) {
 				parameterValues.put(parameter, defaultValue);
 			}
 			if (parameter instanceof ListParameter) {
 				List list = (List) ((ListParameter) parameter).getList(this);
 				parameterListValues.put((ListParameter) parameter, list);
 			}
+			logger.info("Parameter " + parameter.getName() + " valid=" + parameter.isValid(this, defaultValue));
 			if (!parameter.isValid(this, defaultValue)) {
 				logger.info("Parameter " + parameter + " is not valid for value " + defaultValue);
 				returned = false;
 			}
 		}
+		logger.info("END retrieveDefaultParameters() for " + editionScheme);
 		return returned;
 	}
 

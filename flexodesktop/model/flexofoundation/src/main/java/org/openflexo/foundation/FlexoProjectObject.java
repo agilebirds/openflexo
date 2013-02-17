@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
@@ -39,7 +40,7 @@ import org.openflexo.xmlcode.XMLSerializable;
  * @author sguerin
  * 
  */
-public abstract class FlexoProjectObject extends FlexoObject implements XMLSerializable {
+public abstract class FlexoProjectObject extends FlexoObject implements XMLSerializable, ReferenceOwner {
 
 	private static final Logger logger = Logger.getLogger(FlexoProjectObject.class.getPackage().getName());
 
@@ -77,6 +78,7 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 
 	}
 
+	@Override
 	public FlexoProject getProject() {
 		return project;
 	}
@@ -178,7 +180,7 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 		FlexoModelObjectReference<EditionPatternInstance> existingReference = getEditionPatternReference(editionPatternInstance);
 
 		if (existingReference == null) {
-			addToEditionPatternReferences(new FlexoModelObjectReference<EditionPatternInstance>(editionPatternInstance));
+			addToEditionPatternReferences(new FlexoModelObjectReference<EditionPatternInstance>(editionPatternInstance, this));
 		}
 	}
 
@@ -213,6 +215,26 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public void notifyObjectLoaded(FlexoModelObjectReference<?> reference) {
+		logger.warning("TODO: implement this");
+	}
+
+	@Override
+	public void objectCantBeFound(FlexoModelObjectReference<?> reference) {
+		logger.warning("TODO: implement this");
+	}
+
+	@Override
+	public void objectSerializationIdChanged(FlexoModelObjectReference<?> reference) {
+		setChanged();
+	}
+
+	@Override
+	public void objectDeleted(FlexoModelObjectReference<?> reference) {
+		logger.warning("TODO: implement this");
 	}
 
 }

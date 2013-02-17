@@ -39,6 +39,7 @@ import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.ModelEntity;
 import org.openflexo.xmlcode.ModelProperty;
 import org.openflexo.xmlcode.SerializationHandler;
+import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLCoder;
 import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
@@ -733,6 +734,22 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 			setModelVersion(version);
 			resourceData.clearIsModified(false);
 		}
+	}
+
+	private StringEncoder STRING_ENCODER = null;
+
+	@Override
+	public StringEncoder getStringEncoder() {
+		if (STRING_ENCODER == null) {
+			if (this instanceof FlexoProjectResource) {
+				System.out.println("OK, j'ai rajoute le convertisseur FlexoModelObjectReferenceConverter");
+				STRING_ENCODER = new StringEncoder(super.getStringEncoder(), ((FlexoProjectResource) this).getProject()
+						.getObjectReferenceConverter());
+			} else {
+				STRING_ENCODER = super.getStringEncoder();
+			}
+		}
+		return STRING_ENCODER;
 	}
 
 	public FlexoVersion latestVersion() {

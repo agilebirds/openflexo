@@ -65,9 +65,18 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 	 * @return
 	 */
 	public static String getSerializationRepresentationForObject(FlexoModelObject modelObject, boolean serializeClassName) {
-		return modelObject.getProject().getURI() + PROJECT_SEPARATOR
-				+ modelObject.getXMLResourceData().getFlexoResource().getResourceIdentifier() + SEPARATOR
-				+ modelObject.getSerializationIdentifier() + (serializeClassName ? SEPARATOR + modelObject.getClass().getName() : "");
+		// HACK: We temporary maintain access to old resource scheme and new one
+		if (modelObject.getXMLResourceData().getFlexoResource() != null) {
+			return modelObject.getProject().getURI() + PROJECT_SEPARATOR
+					+ modelObject.getXMLResourceData().getFlexoResource().getResourceIdentifier() + SEPARATOR
+					+ modelObject.getSerializationIdentifier() + (serializeClassName ? SEPARATOR + modelObject.getClass().getName() : "");
+		} else if (modelObject.getXMLResourceData().getResource() != null) {
+			return modelObject.getProject().getURI() + PROJECT_SEPARATOR + modelObject.getXMLResourceData().getResource().getURI()
+					+ SEPARATOR + modelObject.getSerializationIdentifier()
+					+ (serializeClassName ? SEPARATOR + modelObject.getClass().getName() : "");
+		} else {
+			return null;
+		}
 	}
 
 	private String resourceIdentifier;

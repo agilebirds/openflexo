@@ -33,7 +33,6 @@ import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
@@ -75,6 +74,7 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 
 	@Override
 	public IFlexoOntologyClass getOntologyClass() {
+		// System.out.println("AddIndividual: ontologyClassURI=" + ontologyClassURI);
 		if (StringUtils.isNotEmpty(ontologyClassURI)) {
 			return getVirtualModel().getOntologyClass(ontologyClassURI);
 		} else {
