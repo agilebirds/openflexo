@@ -420,24 +420,28 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> exte
 				EditionPatternInstance returned = null;
 				for (FlexoModelObjectReference<EditionPatternInstance> ref : getEditionPatternReferences()) {
 					EditionPatternInstance epi = ref.getObject();
-					PatternRole<?> pr = epi.getRoleForActor(this);
-					if (pr instanceof GraphicalElementPatternRole) {
-						GraphicalElementPatternRole grPatternRole = (GraphicalElementPatternRole) pr;
-						if (grPatternRole.getIsPrimaryRepresentationRole()) {
-							if (returned != null) {
-								if (logger.isLoggable(Level.WARNING)) {
-									logger.warning("More than one edition pattern reference where element plays a primary role 1 !!!!");
+					if (epi != null) {
+						PatternRole<?> pr = epi.getRoleForActor(this);
+						if (pr instanceof GraphicalElementPatternRole) {
+							GraphicalElementPatternRole grPatternRole = (GraphicalElementPatternRole) pr;
+							if (grPatternRole.getIsPrimaryRepresentationRole()) {
+								if (returned != null) {
+									if (logger.isLoggable(Level.WARNING)) {
+										logger.warning("More than one edition pattern reference where element plays a primary role 1 !!!!");
+									}
 								}
-							}
-							returned = epi;
-						} else if (grPatternRole.isIncludedInPrimaryRepresentationRole()) {
-							if (returned != null) {
-								if (logger.isLoggable(Level.WARNING)) {
-									logger.warning("More than one edition pattern reference where element plays a primary role 2 !!!!");
+								returned = epi;
+							} else if (grPatternRole.isIncludedInPrimaryRepresentationRole()) {
+								if (returned != null) {
+									if (logger.isLoggable(Level.WARNING)) {
+										logger.warning("More than one edition pattern reference where element plays a primary role 2 !!!!");
+									}
 								}
+								returned = epi;
 							}
-							returned = epi;
 						}
+					} else {
+						logger.warning("Cannot find EditionPatternInstance for " + ref);
 					}
 				}
 				if (returned != null) {

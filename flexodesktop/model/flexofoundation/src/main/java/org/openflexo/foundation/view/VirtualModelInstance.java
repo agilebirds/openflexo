@@ -22,7 +22,6 @@ package org.openflexo.foundation.view;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
@@ -76,7 +75,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	// this.
 	private String title;
 
-	private HashMap<EditionPattern, Map<Long, EditionPatternInstance>> editionPatternInstances;
+	private Hashtable<EditionPattern, Map<Long, EditionPatternInstance>> editionPatternInstances;
 
 	public static VirtualModelInstanceResource<?> newVirtualModelInstance(String virtualModelName, String virtualModelTitle,
 			VirtualModel virtualModel, View view) throws InvalidFileNameException, SaveResourceException {
@@ -114,7 +113,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 		super(virtualModel, null, view.getProject());
 		logger.info("Created new VirtualModelInstance for virtual model " + virtualModel);
 		modelSlotInstances = new ArrayList<ModelSlotInstance<?, ?>>();
-		editionPatternInstances = new HashMap<EditionPattern, Map<Long, EditionPatternInstance>>();
+		editionPatternInstances = new Hashtable<EditionPattern, Map<Long, EditionPatternInstance>>();
 	}
 
 	@Override
@@ -173,15 +172,80 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 		return null;
 	}
 
+	/**
+	 * Instanciate and register a new {@link EditionPatternInstance}
+	 * 
+	 * @param pattern
+	 * @return
+	 */
 	public EditionPatternInstance makeNewEditionPatternInstance(EditionPattern pattern) {
 		EditionPatternInstance returned = new EditionPatternInstance(pattern, this, getProject());
-		Map<Long, EditionPatternInstance> hash = editionPatternInstances.get(pattern);
+		return registerEditionPatternInstance(returned);
+	}
+
+	/**
+	 * Register an existing {@link EditionPatternInstance} (used in deserialization)
+	 * 
+	 * @param epi
+	 * @return
+	 */
+	protected EditionPatternInstance registerEditionPatternInstance(EditionPatternInstance epi) {
+		Map<Long, EditionPatternInstance> hash = editionPatternInstances.get(epi.getEditionPattern());
 		if (hash == null) {
 			hash = new Hashtable<Long, EditionPatternInstance>();
-			editionPatternInstances.put(pattern, hash);
+			editionPatternInstances.put(epi.getEditionPattern(), hash);
 		}
-		hash.put(returned.getFlexoID(), returned);
+		hash.put(epi.getFlexoID(), epi);
+		return epi;
+	}
+
+	/**
+	 * Un-register an existing {@link EditionPatternInstance}
+	 * 
+	 * @param epi
+	 * @return
+	 */
+	protected EditionPatternInstance unregisterEditionPatternInstance(EditionPatternInstance epi) {
+		Map<Long, EditionPatternInstance> hash = editionPatternInstances.get(epi.getEditionPattern());
+		if (hash == null) {
+			hash = new Hashtable<Long, EditionPatternInstance>();
+			editionPatternInstances.put(epi.getEditionPattern(), hash);
+		}
+		hash.remove(epi.getFlexoID());
+		return epi;
+	}
+
+	// Do not use this since not efficient, used in deserialization only
+	public List<EditionPatternInstance> getEditionPatternInstancesList() {
+		List<EditionPatternInstance> returned = new ArrayList<EditionPatternInstance>();
+		for (Map<Long, EditionPatternInstance> epMap : editionPatternInstances.values()) {
+			for (EditionPatternInstance epi : epMap.values()) {
+				returned.add(epi);
+			}
+		}
 		return returned;
+	}
+
+	public void setEditionPatternInstancesList(List<EditionPatternInstance> epiList) {
+		for (EditionPatternInstance epi : epiList) {
+			addToEditionPatternInstancesList(epi);
+		}
+	}
+
+	public void addToEditionPatternInstancesList(EditionPatternInstance epi) {
+		registerEditionPatternInstance(epi);
+	}
+
+	public void removeFromEditionPatternInstancesList(EditionPatternInstance epi) {
+		unregisterEditionPatternInstance(epi);
+	}
+
+	public Hashtable<EditionPattern, Map<Long, EditionPatternInstance>> getEditionPatternInstances() {
+		return editionPatternInstances;
+	}
+
+	public void setEditionPatternInstances(Hashtable<EditionPattern, Map<Long, EditionPatternInstance>> editionPatternInstances) {
+		this.editionPatternInstances = editionPatternInstances;
 	}
 
 	public Collection<EditionPatternInstance> getEPInstances(String epName) {

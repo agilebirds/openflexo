@@ -32,7 +32,8 @@
 		<description>VirtualModelInstance</description>
 		<property name="title" xmlTag="title" attribute="yes" />
 		<property name="virtualModelURI" xmlTag="virtualModelURI" attribute="YES" description="" />
-		<property name="modelSlotInstances" xmlTag="modelSlotInstances" type="vector" contains="org.openflexo.foundation.view.ModelSlotInstance" />
+		<property name="modelSlotInstances" type="vector" contains="org.openflexo.foundation.view.ModelSlotInstance" />
+		<property name="editionPatternInstancesList" type="vector" contains="org.openflexo.foundation.view.EditionPatternInstance" primary="yes"/>
 	</entity>
 
 	<entity name="org.openflexo.foundation.view.ModelSlotInstance" xmlTag="ModelSlotInstance">
@@ -49,7 +50,7 @@
 	<entity
 		name="org.openflexo.foundation.view.ActorReference"
 		abstract="yes">
-		<property name="patternRole" xmlTag="patternRole" attribute="YES"
+		<property name="patternRoleName" xmlTag="patternRoleName" attribute="YES"
 			description="" />
 	</entity>
 
