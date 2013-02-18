@@ -1210,4 +1210,18 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 		return isConverting;
 	}
 
+	@Override
+	public long getNewFlexoID() {
+		if (getProject() != null) {
+			return getProject().getNewFlexoID();
+		}
+		return -2;
+	}
+
+	@Override
+	public void setLastID(long lastUniqueID) {
+		if (getProject() != null) {
+			getProject().setLastID(lastUniqueID);
+		}
+	}
 }

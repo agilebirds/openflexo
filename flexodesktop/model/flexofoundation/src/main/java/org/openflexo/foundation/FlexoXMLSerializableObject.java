@@ -35,6 +35,7 @@ import org.openflexo.foundation.rm.RMNotification;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.xml.FlexoBuilder;
 import org.openflexo.foundation.xml.FlexoXMLSerializable;
+import org.openflexo.foundation.xml.XMLResourceDataBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.xmlcode.Cloner;
 import org.openflexo.xmlcode.StringEncoder;
@@ -251,6 +252,15 @@ public abstract class FlexoXMLSerializableObject extends FlexoProjectObject impl
 				isCreatedByCloning = true;
 			}
 		}
+
+		// In case of the builder is a XMLResourceDataBuilder, we needs to set the resource now
+		// (flexoID support)
+		if (builder instanceof XMLResourceDataBuilder) {
+			if (getXMLResourceData() != null) {
+				getXMLResourceData().setResource(((XMLResourceDataBuilder) builder).getResource());
+			}
+		}
+
 		// Modified by DVA on June 2006: getBindingModel() cannot be called now. too soon !!
 		try {
 			if (this instanceof Bindable && ((Bindable) this).getBindingModel() != null) {

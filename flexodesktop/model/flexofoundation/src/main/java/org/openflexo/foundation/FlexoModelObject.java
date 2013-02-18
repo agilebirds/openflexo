@@ -29,6 +29,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionnable;
 import org.openflexo.foundation.resource.FlexoProjectResource;
+import org.openflexo.foundation.resource.FlexoXMLFileResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ScreenshotResource;
 import org.openflexo.foundation.utils.FlexoDocFormat;
@@ -382,6 +383,10 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		if (isBeingCloned()) {
 			return -1;
 		}
+		if (flexoID < 0 && !isDeserializing() && getXMLResourceData() != null
+				&& getXMLResourceData().getResource() instanceof FlexoXMLFileResource) {
+			flexoID = ((FlexoXMLFileResource) getXMLResourceData().getResource()).getNewFlexoID();
+		}
 		if (getProject() != null) {
 			if (getProject().getLastUniqueIDHasBeenSet() && flexoID < 0 && !isDeserializing()) {
 				flexoID = getProject().getNewFlexoID();
@@ -416,6 +421,14 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Tried to set a negative ID on object of class " + getClass().getName());
 			}
+		}
+	}
+
+	@Override
+	public void finalizeDeserialization(Object builder) {
+		super.finalizeDeserialization(builder);
+		if (getXMLResourceData() != null && getXMLResourceData().getResource() instanceof FlexoXMLFileResource) {
+			((FlexoXMLFileResource) getXMLResourceData().getResource()).setLastID(getFlexoID());
 		}
 	}
 

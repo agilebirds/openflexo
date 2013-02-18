@@ -19,37 +19,24 @@
  */
 package org.openflexo.foundation.xml;
 
+import org.openflexo.foundation.resource.FlexoXMLFileResource;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.ViewResource;
-import org.openflexo.foundation.view.View;
 
 /**
- * Builder for {@link View}
- * 
- * @author sguerin
+ * @author sylvain
  * 
  */
-public class ViewBuilder extends XMLResourceDataBuilder<ViewResource> {
+public abstract class XMLResourceDataBuilder<R extends FlexoXMLFileResource<?>> {
+	private FlexoProject project;
 
-	public View view = null;
+	private R resource;
 
-	/**
-	 * Use this constructor to build an Operation Component
-	 * 
-	 * @param componentDefinition
-	 */
-	public ViewBuilder(ViewResource resource) {
-		super(resource);
-		if (resource.isLoaded()) {
-			view = resource.getView();
-		}
+	public XMLResourceDataBuilder(R resource) {
+		this.resource = resource;
 	}
 
-	public FlexoProject getProject() {
-		if (getResource() != null) {
-			return getResource().getProject();
-		}
-		return null;
+	public R getResource() {
+		return resource;
 	}
 
 }

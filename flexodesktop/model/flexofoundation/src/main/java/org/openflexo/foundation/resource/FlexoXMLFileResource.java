@@ -40,4 +40,8 @@ public interface FlexoXMLFileResource<RD extends ResourceData<RD>> extends Flexo
 	public Object instanciateNewBuilder();
 
 	public boolean isConverting();
+
+	public long getNewFlexoID();
+
+	public void setLastID(long lastUniqueID);
 }

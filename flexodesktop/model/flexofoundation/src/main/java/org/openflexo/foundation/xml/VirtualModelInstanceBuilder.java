@@ -32,11 +32,10 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
  * @author sguerin
  * 
  */
-public class VirtualModelInstanceBuilder {
+public class VirtualModelInstanceBuilder extends XMLResourceDataBuilder<VirtualModelInstanceResource> {
 
 	public VirtualModelInstance<?, ?> vmInstance;
 	private ViewResource viewResource;
-	private VirtualModelInstanceResource virtualModelInstanceResource;
 
 	/**
 	 * Use this constructor to build an Operation Component
@@ -44,19 +43,11 @@ public class VirtualModelInstanceBuilder {
 	 * @param componentDefinition
 	 */
 	public VirtualModelInstanceBuilder(ViewResource viewResource, VirtualModelInstanceResource virtualModelResource) {
-		super();
+		super(virtualModelResource);
 		this.viewResource = viewResource;
-		this.virtualModelInstanceResource = virtualModelResource;
 		if (virtualModelResource.isLoaded()) {
 			vmInstance = virtualModelResource.getVirtualModelInstance();
 		}
-	}
-
-	public FlexoProject getProject() {
-		if (virtualModelInstanceResource != null) {
-			return virtualModelInstanceResource.getProject();
-		}
-		return null;
 	}
 
 	public View getView() {
@@ -67,8 +58,15 @@ public class VirtualModelInstanceBuilder {
 	}
 
 	public VirtualModel getVirtualModel() {
-		if (virtualModelInstanceResource != null && virtualModelInstanceResource.getVirtualModelResource() != null) {
-			return virtualModelInstanceResource.getVirtualModelResource().getVirtualModel();
+		if (getResource() != null && getResource().getVirtualModelResource() != null) {
+			return getResource().getVirtualModelResource().getVirtualModel();
+		}
+		return null;
+	}
+
+	public FlexoProject getProject() {
+		if (getResource() != null) {
+			return getResource().getProject();
 		}
 		return null;
 	}

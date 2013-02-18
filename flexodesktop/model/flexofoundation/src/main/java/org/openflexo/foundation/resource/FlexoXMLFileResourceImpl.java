@@ -841,6 +841,44 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 		}
 	}
 
+	private boolean lastUniqueIDHasBeenSet = false;
+	private long lastID;
+
+	public boolean lastUniqueIDHasBeenSet() {
+		return lastUniqueIDHasBeenSet;
+	}
+
+	@Override
+	public long getNewFlexoID() {
+		if (lastID < 0) {
+			return -1;
+		}
+		return ++lastID;
+	}
+
+	/**
+	 * @return Returns the lastUniqueID.
+	 */
+	public long getLastID() {
+		if (lastUniqueIDHasBeenSet && lastID < 0) {
+			lastID = 0;
+		}
+		return lastID;
+	}
+
+	/**
+	 * @param lastUniqueID
+	 *            The lastUniqueID to set.
+	 */
+	@Override
+	public void setLastID(long lastUniqueID) {
+		if (lastUniqueID > lastID) {
+			lastID = lastUniqueID;
+			lastUniqueIDHasBeenSet = true;
+			System.out.println("Resource " + this + " lastID is now " + lastID);
+		}
+	}
+
 	public static Document readXMLFile(File f) throws JDOMException, IOException {
 		FileInputStream fio = new FileInputStream(f);
 		SAXBuilder parser = new SAXBuilder();

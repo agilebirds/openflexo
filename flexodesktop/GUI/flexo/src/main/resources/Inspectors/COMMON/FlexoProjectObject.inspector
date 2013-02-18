@@ -4,12 +4,6 @@
     <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" data="" visible="" font="SansSerif,0,11" name="BasicTab" />
     <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" data="" visible="" font="SansSerif,0,11" name="DocTab" />
     <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" data="" visible="" font="SansSerif,0,11" name="AdvancedTab">
-      <Label label="flexo_id" index="0" data="" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" name="FlexoIDLabel" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="">
-        <Parameter name="visibleFor" value="SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER" />
-      </Label>
-      <TextField index="1" data="data.flexoID.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" name="FlexoID" readOnly="true" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" editable="">
-        <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPPER" />
-      </TextField>
       <Label label="EP refs" index="2" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="">
         <LocalizedDictionary />
         <Parameter name="visibleFor" value="SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER" />
@@ -94,5 +88,5 @@
     <Localized key="Advanced" lang="English">Advanced</Localized>
     <Localized key="Advanced" lang="Dutch">Advanced</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="ModelObject" />
+  <Parameter name="title" value="FlexoProjectObject" />
 </Panel>

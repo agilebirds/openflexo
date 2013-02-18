@@ -2675,8 +2675,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 *            The lastUniqueID to set.
 	 */
 	public void setLastID(long lastUniqueID) {
-		lastID = lastUniqueID;
-		lastUniqueIDHasBeenSet = true;
+		if (lastUniqueID > lastID) {
+			lastID = lastUniqueID;
+			lastUniqueIDHasBeenSet = true;
+		}
 	}
 
 	public boolean getLastUniqueIDHasBeenSet() {
