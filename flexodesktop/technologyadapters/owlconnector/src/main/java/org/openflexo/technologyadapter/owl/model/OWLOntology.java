@@ -1471,6 +1471,7 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 	}
 
 	public void saveToFile(File aFile) {
+		System.out.println("Saving OWL ontology to " + aFile.getAbsolutePath());
 		FileOutputStream out = null;
 		try {
 			out = new FileOutputStream(aFile);

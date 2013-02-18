@@ -166,6 +166,7 @@ public abstract class FlexoResource<RD extends FlexoResourceData> extends FlexoO
 
 	public void setServiceManager(FlexoServiceManager serviceManager) {
 		this.serviceManager = serviceManager;
+		// getServiceManager().getResourceManager().registerResource(this);
 	}
 
 	public ProjectLoadingHandler getLoadingHandler() {

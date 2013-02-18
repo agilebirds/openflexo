@@ -328,6 +328,7 @@ public class FileMenu extends FlexoMenu {
 					getController().getFlexoFrame().setCursor(c);
 				}
 			}
+			getController().reviewModifiedResources();
 		}
 
 		@Override

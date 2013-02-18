@@ -187,17 +187,7 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 			return null;
 		}
 
-		// newDMModel.initializeDefaultRepositories(dmRes);
-		try {
-			// dmRes.saveResourceData();
-			// project.registerResource(ontologyRes);
-		} catch (Exception e1) {
-			// Warns about the exception
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
-			}
-			e1.printStackTrace();
-		}
+		ontologyRes.setServiceManager(project.getServiceManager());
 
 		try {
 			ontologyRes.saveResourceData();

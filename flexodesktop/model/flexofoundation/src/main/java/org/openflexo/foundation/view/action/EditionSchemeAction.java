@@ -35,7 +35,9 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
@@ -224,6 +226,19 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 		// Finalize actions
 		for (EditionAction action : performedActions.keySet()) {
 			action.finalizePerformAction(this, performedActions.get(action));
+		}
+
+		// Hack to be removed (implements model resources as FlexoResource interface !!!)
+		System.out.println("HACK !!!!!!! saving the models...");
+		for (ModelSlotInstance<?, ?> instance : getEditionPatternInstance().getVirtualModelInstance().getModelSlotInstances()) {
+			System.out.println("Slot " + instance + " model " + instance.getModel());
+			if (instance.getModel() != null) {
+				try {
+					instance.getModel().save();
+				} catch (SaveResourceException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 	}
