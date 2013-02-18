@@ -84,6 +84,7 @@ public class AddConnector extends FlexoAction<AddConnector, DiagramShape, Diagra
 				logger.info("Parent=" + parent);
 			}
 			if (parent == null) {
+				logger.warning("No common ancestors for " + getFromShape() + " and " + getToShape());
 				throw new IllegalArgumentException("No common ancestor");
 			}
 			_newConnector = new DiagramConnector(getFromShape().getDiagram(), getFromShape(), getToShape());

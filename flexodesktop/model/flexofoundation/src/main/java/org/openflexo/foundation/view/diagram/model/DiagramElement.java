@@ -136,11 +136,13 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> exte
 	}
 
 	public void setChilds(Vector<DiagramElement<?>> someChilds) {
+		ancestors = null;
 		childs.addAll(someChilds);
 	}
 
 	public void addToChilds(DiagramElement<?> aChild) {
 		// logger.info("****** addToChild() put "+aChild+" under "+this);
+		ancestors = null;
 		childs.add(aChild);
 		aChild.setParent(this);
 		setChanged();
@@ -153,6 +155,7 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> exte
 	}
 
 	public void removeFromChilds(DiagramElement<?> aChild) {
+		ancestors = null;
 		childs.remove(aChild);
 		setChanged();
 		if (aChild instanceof DiagramShape) {
@@ -326,6 +329,7 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> exte
 	}
 
 	protected void setParent(DiagramElement<?> parent) {
+		ancestors = null;
 		this.parent = parent;
 	}
 
