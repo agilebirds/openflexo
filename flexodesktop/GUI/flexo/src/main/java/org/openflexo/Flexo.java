@@ -186,12 +186,13 @@ public class Flexo {
 				}
 			}
 		}
-		remapStandardOuputs(isDev);
-		UserType userTypeNamed = UserType.getUserTypeNamed(userTypeName);
-		UserType.setCurrentUserType(userTypeNamed);
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS || !isDev) {
 			getResourcePath();
 		}
+		ResourceLocator.printDirectoriesSearchOrder(System.err);
+		remapStandardOuputs(isDev);
+		UserType userTypeNamed = UserType.getUserTypeNamed(userTypeName);
+		UserType.setCurrentUserType(userTypeNamed);
 		SplashWindow splashWindow = null;
 		if (!noSplash) {
 			splashWindow = new SplashWindow(FlexoFrame.getActiveFrame(), UserType.getCurrentUserType());
@@ -211,7 +212,6 @@ public class Flexo {
 				initFlexo(applicationContext, splashWindow2);
 			}
 		});
-		ResourceLocator.printDirectoriesSearchOrder(System.err);
 		Modules.getInstance();
 		try {
 			DenaliSecurityProvider.insertSecurityProvider();
