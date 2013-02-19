@@ -294,6 +294,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 	public void setValue(Object value, BindingVariable variable) {
 		if (variable instanceof PatternRoleBindingVariable) {
 			getEditionPatternInstance().setPatternActor(value, ((PatternRoleBindingVariable) variable).getPatternRole());
+			return;
 		}
 		logger.warning("Unexpected variable requested in settable context in EditionSchemeAction: " + variable + " of "
 				+ variable.getClass());
