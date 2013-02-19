@@ -218,6 +218,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 			}
 		}
 		getWorkflowBrowser().setRootObject(getProject());
+		getProcessBrowser().setRootObject(getProject());
 		_roleListBrowser.setRootObject(getProject() != null ? getProject().getWorkflow() : null);
 		PROCESS_EDITOR_PERSPECTIVE.setProject(getProject());
 		SWIMMING_LANE_PERSPECTIVE.setProject(getProject());

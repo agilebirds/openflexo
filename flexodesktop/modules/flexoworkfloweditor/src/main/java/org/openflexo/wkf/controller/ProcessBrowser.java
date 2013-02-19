@@ -36,7 +36,7 @@ public class ProcessBrowser extends ProjectBrowser {
 	private static final Logger logger = Logger.getLogger(ProcessBrowser.class.getPackage().getName());
 
 	public ProcessBrowser(WKFController controller) {
-		super(controller.getEditor(), controller.getSelectionManager());
+		super(controller);
 	}
 
 	@Override
