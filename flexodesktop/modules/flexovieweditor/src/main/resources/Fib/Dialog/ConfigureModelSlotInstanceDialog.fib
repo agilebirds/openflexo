@@ -70,18 +70,6 @@
     <Panel layout="twocols" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="Lucida Grande,0,11" darkLevel="0" index="4" data="" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(OptionRadioButtonList.selected.name = &quot;Autoconfigure&quot;)" name="AutoconfigurePanel" />
   </Panel>
   <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="Lucida Grande,0,11" darkLevel="0" index="6" data="" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=10;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="">
-    <Button action="controller.validateAndDispose()" buttonIcon="" buttonType="Trigger" label="finish" format="" icon="" tooltip="" localize="true" enable="data.action.isActionValidable" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" data="" constraints="flow()" visible="" font="Lucida Grande,0,13">
-      <Dependancy componentName="ResourceCenterSelector" />
-      <Dependancy componentName="ModelSelector" />
-      <Dependancy componentName="ModelURITF1" />
-      <Dependancy componentName="RelativePathTF1" />
-      <Dependancy componentName="FileNameTF1" />
-      <Dependancy componentName="ModelURITF2" />
-      <Dependancy componentName="RelaivePathTF2" />
-      <Dependancy componentName="FileNameTF2" />
-      <Dependancy componentName="ResourceCenterSelector3" />
-      <Dependancy componentName="OptionRadioButtonList" />
-    </Button>
     <Button action="controller.backAndDispose()" buttonIcon="" buttonType="Trigger" label="back" format="" icon="" tooltip="" localize="true" enable="data.action.isActionValidable" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" data="" constraints="flow()" visible="" font="Lucida Grande,0,13" />
     <Button action="controller.nextAndDispose()" buttonIcon="" buttonType="Trigger" label="next" format="" icon="" tooltip="" localize="true" enable="((data.isValidConfiguration &amp; ((data.action.virtualModel.modelSlots.indexOf(data.modelSlot) + 2) &lt; data.action.stepsNumber)) &amp; data.isValidConfiguration)" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="0" data="" constraints="flow(index=0)" visible="" font="Lucida Grande,0,13">
       <Dependancy componentName="ResourceCenterSelector" />
@@ -98,6 +86,18 @@
     </Button>
     <Button action="controller.cancelAndDispose()" buttonIcon="" buttonType="Trigger" label="Cancel" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="1" data="" constraints="flow(index=1)" visible="" font="Lucida Grande,0,13">
       <LocalizedDictionary />
+    </Button>
+    <Button action="controller.validateAndDispose()" buttonIcon="" buttonType="Trigger" label="finish" format="" icon="" tooltip="" localize="true" enable="data.action.isActionValidable" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="1" data="" constraints="flow()" visible="" font="Lucida Grande,0,13">
+      <Dependancy componentName="ResourceCenterSelector" />
+      <Dependancy componentName="ModelSelector" />
+      <Dependancy componentName="ModelURITF1" />
+      <Dependancy componentName="RelativePathTF1" />
+      <Dependancy componentName="FileNameTF1" />
+      <Dependancy componentName="ModelURITF2" />
+      <Dependancy componentName="RelaivePathTF2" />
+      <Dependancy componentName="FileNameTF2" />
+      <Dependancy componentName="ResourceCenterSelector3" />
+      <Dependancy componentName="OptionRadioButtonList" />
     </Button>
   </Panel>
   <LocalizedDictionary>
