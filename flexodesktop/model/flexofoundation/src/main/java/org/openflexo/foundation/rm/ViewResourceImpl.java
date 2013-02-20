@@ -36,6 +36,15 @@ import org.openflexo.xmlcode.StringEncoder;
  * @author Sylvain
  * 
  */
+@FlexoResourceDefinition( /* This is the resource specification*/
+resourceDataClass = View.class, /* ResourceData class which is handled by this resource */
+builderClass = ViewBuilder.class, /* Builder to be used to deserialize */
+hasBuilder = true, /* Indicates if builder is to be used*/
+contains = { /* Defines the resources which may be embeddded in this resource */
+@SomeResources(resourceType = DiagramResource.class, pattern = "*.diagram"),
+		@SomeResources(resourceType = VirtualModelInstanceResource.class, pattern = "*.vmxml") }, /* */
+require = { /* Defines the resources which are required for this resource */
+@RequiredResource(resourceType = ViewPointResource.class, value = ViewResource.VIEWPOINT_RESOURCE) })
 public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> implements ViewResource {
 
 	static final Logger logger = Logger.getLogger(ViewResourceImpl.class.getPackage().getName());
