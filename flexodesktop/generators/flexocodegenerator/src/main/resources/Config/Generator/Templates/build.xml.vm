@@ -1,21 +1,82 @@
-<project name="$project.getPrefix()Application" default="build" basedir=".">
+<project name="$project.getPrefix()Application" default="all" basedir=".">
     <!-- Lot of settings for this task are defined in the "build.properties" file -->
     <property file="build.properties"/>
-    <!-- NEW CVS TASKS -->
-    <!-- compile classes -->
-    <target name="java">
-        <path id="classpath">
-            <pathelement path="../${dollar}{project.dir}/${build.output.java.dir}"/>
-        </path>
-        <ant dir="." antfile="../${dollar}{project.dir}/${dollar}{project.buildscripts.dir}/woapp-project.xml" target="java">
-            <property name="param.woapp.dir" value="."/>
-            <property name="param.output.java.dir" value="${classes.dir}"/>
-            <property name="param.src.java.dir" value="${src.dir}"/>
-            <property name="param.api.dir" value="../${dollar}{project.dir}/${build.output.dist.api.dir}"/> 
-            <property name="param.build.output.dir" value="../${dollar}{project.dir}/${build.output.build.dir}"/>
-            <reference refid="classpath" torefid="classpath"/>
-        </ant>
+    <property file="${user.home}${file.separator}Library${file.separator}wobuild.properties"/>
+    
+    <path id="classpath.woproject">
+        <pathelement location="${woproject.lib}"/>
+    </path>
+    
+    <target name="properties">
+    	<property name="classes.dir" value="${target.dir}/classes" />
+    	<property name="dist.dir" value="${target.dir}/dist" />
+    	<property name="framework.dir" value="${dist.dir}/framework" />
+    	<property name="lib.dir" value="${dist.dir}/lib" />
+    	<property name="webresources.dir" value="${dist.dir}/webserverresources" />
+    	<property name="woapp.dir" value="${dist.dir}/woapp" />
+    	<mkdir dir="${classes.dir}"/>
+    	<mkdir dir="${woapp.dir}"/>
+    	<mkdir dir="${webresources.dir}"/>
     </target>
+    
+    <target name="all" depends="properties">
+    	<antcall target="unzip-api" />
+    	<antcall target="unzip-framework" />
+    	<antcall target="copy-framework"/>
+    	<antcall target="compile"/>
+    	<antcall target="build"/>
+    	<antcall target="dist"/>
+    </target>
+    
+    <target name="unzip-api" depends="properties">
+        <unzip src="${zipped.api.file}" dest="${lib.dir}"/>
+    </target>
+    
+    <target name="unzip-framework" depends="properties">
+        <unzip src="${zipped.framework.file}" dest="${framework.dir}/Library/Frameworks/"/>
+    </target>
+    
+    <target name="copy-framework" depends="properties" if="${flexo.framework.dir}">
+    	<copy todir="${framework.dir}/Library/Frameworks/" verbose="true">
+            <fileset dir="${flexo.framework.dir}">
+                <include name="**/*"/>
+                <include name="*"/>
+            </fileset>
+        </copy>
+    </target>
+    
+    <target name="compile" depends="properties">
+        <path id="classpath">
+            <pathelement path="${classes.dir}"/>
+            <fileset dir="${wo.wolocalroot}">
+                <patternset>
+                  <includesfile name="woproject/ant.classpaths.wo.wolocalroot.manual"/>
+                </patternset>
+             </fileset>
+             <fileset dir="${lib.dir}">
+                <include name="**/*.jar"/>
+             </fileset>
+        </path>
+        
+        <taskdef name="wocompile" classname="org.objectstyle.woproject.ant.WOCompile">
+            <classpath refid="classpath.woproject"/>
+        </taskdef>
+        
+        <wocompile srcdir="${src.dir}" destdir="${classes.dir}"
+            deprecation="off" debug="on" optimize="off" 
+            encoding="utf-8" compiler="javac1.4"
+            source="1.5" target="1.5" fork="true">
+            <frameworks dir="${wo.wosystemroot}">       
+                    <includesfile name="woproject/ant.frameworks.wo.wosystemroot.manual"/>
+            </frameworks>
+            <frameworks dir="${framework.dir}">
+                    <includesfile name="woproject/ant.frameworks.user.home.manual"/>
+            </frameworks>
+            <classpath refid="classpath"/>
+        </wocompile>
+    </target>
+    
+    
     <!-- Build WebObject Application -->
     <!-- For more settings please edit the "build.properties" file     -->
     <!-- Here are properties that could be modified via the file       -->
@@ -24,79 +85,100 @@
     <!--       webxml.customcontent : Part added at the end of web.xml    -->
     <!--        webxml.appmode : WebObjects Applicaiton mode             -->
     <!--                        (Development or Deployment)            -->
-    <target name="build">
-        <ant dir="."
-        antfile="../${dollar}{project.dir}/${dollar}{project.buildscripts.dir}/woapp-project.xml"
-        target="build">
-            <property name="param.woapp.dir" value="."/>
-            <property name="param.output.java.dir" value="${classes.dir}"/>
-            <property name="param.build.output.dir" value="../${dollar}{project.dir}/${build.output.build.dir}"/>
-            <property name="param.output.woapp.dir" value="../${dollar}{project.dir}/${build.output.woapp.dir}"/>
-            <property name="param.api.dir" value="../${dollar}{project.dir}/${build.output.dist.api.dir}"/>   
-            <property name="param.output.ws.dir" value="../${dollar}{project.dir}/${build.output.ws.dir}"/>
-            <property name="param.resources.dir" value="${resources.dir}"/>
-            <property name="param.components.dir" value="${components.dir}"/>
-            <property name="param.ws.dir" value="${ws.dir}"/>
-        </ant>
+    <target name="build" depends="properties">
+        <taskdef name="woapplication" classname="org.objectstyle.woproject.ant.WOApplication">
+            <classpath refid="classpath.woproject"/>
+        </taskdef>
+        
+        <woapplication name="${application.name}" 
+            destdir="${woapp.dir}" 
+            wsdestdir="${webresources.dir}"
+            webxml="true"
+            webxml_customcontent="${webxml.customcontent}"
+            webxml_woroot="${webxml.woroot}"
+            webxml_woappmode="${webxml.mode}">   
+            <classes dir="${classes.dir}">
+                <patternset>
+                    <includesfile name="woproject/classes.include.patternset"/> 
+                    <excludesfile name="woproject/classes.exclude.patternset"/> 
+                </patternset>
+            </classes>
+            <wsresources dir="${ws.dir}">
+                <patternset>
+                    <includesfile name="woproject/wsresources.include.patternset"/> 
+                    <excludesfile name="woproject/wsresources.exclude.patternset"/> 
+                </patternset>
+            </wsresources>
+            <resources dir="${resources.dir}">
+                <patternset>
+                    <includesfile name="woproject/resources.include.patternset"/> 
+                    <excludesfile name="woproject/resources.exclude.patternset"/> 
+                </patternset>
+            </resources>
+            <resources dir="${components.dir}">
+                <patternset>
+                    <includesfile name="woproject/resources.include.patternset"/> 
+                    <excludesfile name="woproject/resources.exclude.patternset"/> 
+                </patternset>
+            </resources>
+            <frameworks dir="${wo.wosystemroot}"  embed="true">
+                <includesfile name="woproject/ant.frameworks.wo.wosystemroot.manual"/>
+            </frameworks>
+            <frameworks dir="${framework.dir}" embed="true">
+                <includesfile name="woproject/ant.frameworks.user.home.manual"/>
+            </frameworks>
+            <lib dir=".">
+                <patternset>
+                    <includesfile name="woproject/ant.classpaths.wo.wolocalroot.manual"/>
+                </patternset>
+            </lib>
+            <lib dir="${lib.dir}">
+                <patternset>
+                    <include name="**.jar"/>
+                </patternset>
+            </lib>
+        </woapplication>
+    	<copy tofile="${woapp.dir}/${application.name}.woa/Contents/Resources/Application.conf" file="${application.conf}" overwrite="true"/>
     </target>
 
-    <!-- ========================================== -->
-    <!-- ========================================== -->
-    <!-- Build all.                                 -->
-    <!-- ========================================== -->
-    <target name="all" depends="version,java,build,post-configure">
-    </target>
-    <!-- ============================================= -->
-    <!-- Run tests.                                    -->
-    <!-- ============================================= -->
-    <target name="test">
-    </target>
-    <!-- ========================================== -->
-    <!-- Build dist.                                 -->
-    <!-- ========================================== -->
     <target name="dist">
-        <ant dir="."
-        antfile="../${dollar}{project.dir}/${dollar}{project.buildscripts.dir}/woapp-project.xml"
-        target="dist">
-            <property name="param.dist.dir" value="../${dollar}{project.dir}/${build.output.dist.war.dir}"/>
-            <property name="param.lib.dir" value="../${dollar}{project.dir}/${dollar}{project.libraries.dir}"/>
-            <property name="param.output.woapp.dir" value="../${dollar}{project.dir}/${build.output.woapp.dir}"/>
-        <property name="param.build.output.dir" value="../${dollar}{project.dir}/${build.output.build.dir}"/>
-            <property name="param.output.ws.dir" value="../${dollar}{project.dir}/${build.output.ws.dir}"/>
-        </ant>
+         <move todir="${webresources.dir}" preservelastmodified="true">
+            <fileset dir="${webresources.dir}/WebObjects/">
+                <include name="**/*"/>
+            </fileset>
+        </move>
+        <delete dir="${webresources.dir}/WebObjects"/>
+        <mkdir dir="${webresources.dir}/Frameworks"/>
+    	<copy todir="${webresources.dir}/Frameworks">
+            <fileset dir="${wo.wosystemroot}/Library/">
+                <patternset>
+                    <include name="**.framework/WebServerResources/**"/>
+                </patternset>
+            </fileset>
+        </copy>
+        <copy todir="${webresources.dir}/Frameworks">
+            <fileset dir="${framework.dir}/Library/Frameworks/">
+                <patternset>
+                    <include name="**.framework/WebServerResources/**"/>
+                </patternset>
+            </fileset>
+        </copy>
+    	<war warfile="${war.file}" 
+            webxml="${woapp.dir}/${application.name}.woa/Contents/web.xml">
+            <webinf dir="${woapp.dir}">
+                <include name="${application.name}.woa/**"/>
+            </webinf>
+            <zipfileset dir="${webresources.dir}" prefix="webserverresources"/>
+            <lib dir="${wo.wosystemroot}/Library/Frameworks/JavaWOJSPServlet.framework/WebServerResources/Java/">
+                <include name="JavaWOJSPServlet_client.jar"/>
+            </lib>
+            <lib dir="${lib.dir}">
+                <include name="*.jar"/>
+            </lib>
+            <webinf dir="${wo.wosystemroot}/Library/Frameworks/JavaWOJSPServlet.framework/Resources/" prefix="WEB-INF/tlds">
+                <include name="WOtaglib_1_0.tld"/>
+            </webinf>
+        </war>
     </target>
-    
-    <target name="configure" depends="version">
-        <ant antfile="../${dollar}{project.dir}/${dollar}{project.buildscripts.dir}/woapp-project.xml"
-                target="set.database">
-             <property name="param.output.frameworks.dir" value="../${dollar}{project.dir}/${build.output.frameworks.dir}"/>
-               <property name="param.dist.dir" value="../${dollar}{project.dir}/${build.output.dist.dir}"/>
-        </ant>
-    </target>
-    
-    <target name="post-configure">
-        <ant antfile="../${dollar}{project.dir}/${dollar}{project.buildscripts.dir}/woapp-project.xml"
-                target="post-configure">
-               <property name="param.output.woapp.dir" value="../${dollar}{project.dir}/${build.output.woapp.dir}"/>
-        </ant>
-    </target>
-    
-    <!-- ========================================== -->
-    <!-- Version dist.                                 -->
-    <!-- ========================================== -->
-    <target name="version">
-        <ant dir="."
-        antfile="../${dollar}{project.dir}/${dollar}{project.buildscripts.dir}/woapp-project.xml"
-        target="version">
-                <property name="version.framework" value="DenaliCore"/>
-                <property name="version.path" value="${src.dir}/be/denali/core/version"/>
-                <property name="version.package" value="be.denali.core.version"/>
-        </ant>
-    </target>
-    
-    <target name="clean">
-        <ant dir="."
-        antfile="../${dollar}{project.dir}/${dollar}{project.buildscripts.dir}/woapp-project.xml"
-        target="clean"/>
-    </target>
+   
 </project>

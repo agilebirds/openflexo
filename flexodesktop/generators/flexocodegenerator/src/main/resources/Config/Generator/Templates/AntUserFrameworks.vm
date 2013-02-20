@@ -1,15 +1,16 @@
-Library/Frameworks/DenaliComponents.framework
-Library/Frameworks/DenaliCore.framework
-Library/Frameworks/DenaliCountry.framework
-Library/Frameworks/DenaliEmail.framework
-Library/Frameworks/DenaliExceptionHandling.framework
-Library/Frameworks/DenaliFileGenerator.framework
-Library/Frameworks/DenaliFlexoProcessor.framework
-Library/Frameworks/DenaliKeyValueInMemory.framework
-Library/Frameworks/DenaliLogging.framework
-Library/Frameworks/DenaliWebResources.framework
-Library/Frameworks/ScenarioRecorder.framework
-Library/Frameworks/ERChangeNotificationJMS.framework
+#set($prefix = "Library/Frameworks/")
+${prefix}DenaliComponents.framework
+${prefix}DenaliCore.framework
+${prefix}DenaliCountry.framework
+${prefix}DenaliEmail.framework
+${prefix}DenaliExceptionHandling.framework
+${prefix}DenaliFileGenerator.framework
+${prefix}DenaliFlexoProcessor.framework
+${prefix}DenaliKeyValueInMemory.framework
+${prefix}DenaliLogging.framework
+${prefix}DenaliWebResources.framework
+${prefix}ScenarioRecorder.framework
+${prefix}ERChangeNotificationJMS.framework
 #foreach($file in $project.listFrameworksToEmbed())
-Library/Frameworks/$file.getName()
+${prefix}$file.getName()
 #end

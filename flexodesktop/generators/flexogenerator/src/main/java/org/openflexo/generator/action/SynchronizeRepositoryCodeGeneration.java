@@ -35,7 +35,6 @@ import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.generator.AbstractProjectGenerator;
 import org.openflexo.generator.exception.GenerationException;
-import org.openflexo.generator.exception.ModelValidationException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.PlaySound;
 
@@ -85,9 +84,9 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
-	private ValidateProject validateProjectAction;
-
 	private boolean hasFailed = false;
+
+	private ValidateProject validateProjectAction;
 
 	@Override
 	public boolean isLongRunningAction() {
@@ -121,16 +120,13 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 			// Validate project
 			validateProjectAction = ValidateProject.actionType.makeNewEmbeddedAction(getRepository(), null, this);
 			validateProjectAction.setContext(this);
-			try {
-				validateProjectAction.doAction(null);
-			} catch (ModelValidationException e) {
+			validateProjectAction.doAction();
+			if (!validateProjectAction.isProjectValid()) {
 				_continueAfterValidation = false;
 				hasFailed = true;
 				if (logger.isLoggable(Level.INFO)) {
-					logger.info("Synchronization has failed because of validation:\n" + e.getDetails());
+					logger.info("Synchronization has failed because of validation:\n" + validateProjectAction.readableValidationErrors());
 				}
-			} catch (FlexoException e) {
-				throw e;
 			}
 
 			// Don't continue if validation failed and continue requested anymay
