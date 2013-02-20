@@ -1579,7 +1579,11 @@ public class XMLDecoder {
 			} else {
 				key = KeyValueDecoder.objectForKey(object, modelProperty.getKeyToUse());
 			}
-			returnedHashtable.put(key, object);
+			if (key == null) {
+				System.err.println("Cannot find key for " + object + " key=" + modelProperty.getKeyToUse());
+			} else {
+				returnedHashtable.put(key, object);
+			}
 		}
 
 		return returnedHashtable;
