@@ -21,21 +21,36 @@ package org.openflexo.foundation.utils;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.KVCFlexoObject;
+import org.openflexo.foundation.resource.FlexoXMLFileResource;
+import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.FlexoStorageResource.ResourceLoadingListener;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.foundation.rm.ProjectData;
+import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder.Converter;
 
+/**
+ * 
+ * TODO: actually support both FlexoResource implementation.<br>
+ * Please review code when only new scheme will be implemented
+ * 
+ * 
+ * @author sylvain
+ * 
+ * @param <O>
+ */
 public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFlexoObject implements
 		StringConvertable<FlexoModelObjectReference<O>>, ResourceLoadingListener, PropertyChangeListener {
 
@@ -100,7 +115,7 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 
 	private ReferenceStatus status = ReferenceStatus.UNRESOLVED;
 
-	private FlexoXMLStorageResource resource;
+	private FlexoXMLFileResource resource;
 
 	public FlexoModelObjectReference(O object, ReferenceOwner owner) {
 		this(object);
@@ -173,9 +188,10 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 		if (getReferringProject() != null) {
 			getReferringProject().removeObjectReferences(this);
 		}
-		if (getResource(false) != null) {
-			getResource(false).removeResourceLoadingListener(this);
-			getResource(false).getPropertyChangeSupport().removePropertyChangeListener("name", this);
+		// TODO: OLD FlexoResource scheme
+		if (getResource(false) instanceof FlexoXMLStorageResource) {
+			((FlexoXMLStorageResource) getResource(false)).removeResourceLoadingListener(this);
+			((FlexoXMLStorageResource) getResource(false)).getPropertyChangeSupport().removePropertyChangeListener("name", this);
 		}
 		if (modelObject != null) {
 			modelObject.removeFromReferencers(this);
@@ -219,7 +235,11 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 				if (modelObject != null) {
 					status = ReferenceStatus.RESOLVED;
 					owner.notifyObjectLoaded(this);
-				} else if (getResource(force) == null || getResource(force).isLoaded() && !getResource(force).getIsLoading()) {
+				} else if (getResource(force) == null
+						|| getResource(force).isLoaded()
+						// TODO: OLD FlexoResource scheme
+						&& (!(getResource(force) instanceof FlexoXMLStorageResource) || !((FlexoXMLStorageResource) getResource(force))
+								.getIsLoading())) {
 					if (getResource(force) == null) {
 						status = ReferenceStatus.RESOURCE_NOT_FOUND;
 					} else {
@@ -234,21 +254,44 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 
 	private O findObject(boolean force) {
 		if (getEnclosingProject(force) != null) {
-			FlexoXMLStorageResource res = getResource(force);
+			FlexoXMLFileResource res = getResource(force);
 			if (res == null) {
 				return null;
 			}
-			if (force && !res.isLoaded()) {
-				res.getResourceData();
-			}
-			if (res.isLoaded() && !res.getIsLoading()) {
-				return (O) getEnclosingProject(force).findObject(userIdentifier, flexoID);
+			// TODO: OLD FlexoResource scheme
+			if (res instanceof FlexoXMLStorageResource) {
+				if (force && !res.isLoaded()) {
+					((FlexoXMLStorageResource) res).getXMLResourceData();
+				}
+				if (res.isLoaded() && !((FlexoXMLStorageResource) res).getIsLoading()) {
+					return (O) getEnclosingProject(force).findObject(userIdentifier, flexoID);
+				}
+			} else {
+				// TODO: New FlexoResource scheme
+				try {
+					res.getResourceData(null);
+					if (res.isLoaded()) {
+						return (O) getEnclosingProject(force).findObject(userIdentifier, flexoID);
+					}
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ResourceLoadingCancelledException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ResourceDependencyLoopException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (FlexoException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		return null;
 	}
 
-	public FlexoXMLStorageResource getResource(boolean force) {
+	public FlexoXMLFileResource getResource(boolean force) {
 		if (resourceIdentifier == null || getEnclosingProject(force) == null) {
 			return null;
 		}
@@ -256,9 +299,15 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 			FlexoProject enclosingProject = getEnclosingProject(force);
 			if (enclosingProject != null) {
 				resource = (FlexoXMLStorageResource) enclosingProject.resourceForKey(resourceIdentifier);
+				// TODO: OLD FlexoResource scheme
 				if (resource != null) {
-					resource.addResourceLoadingListener(this);
-					resource.getPropertyChangeSupport().addPropertyChangeListener("name", this);
+					((FlexoXMLStorageResource) resource).addResourceLoadingListener(this);
+					((FlexoXMLStorageResource) resource).getPropertyChangeSupport().addPropertyChangeListener("name", this);
+				} else {
+					// TODO: New FlexoResource scheme
+					// Otherwise, search using uri
+					resource = (FlexoXMLFileResource) enclosingProject.getServiceManager().getResourceManager()
+							.getResource(resourceIdentifier);
 				}
 			}
 		}
@@ -397,7 +446,13 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if (evt.getSource() == resource && "name".equals(evt.getPropertyName())) {
-			resourceIdentifier = resource.getResourceIdentifier();
+			// TODO: OLD FlexoResource scheme
+			if (resource instanceof FlexoXMLStorageResource) {
+				resourceIdentifier = ((FlexoXMLStorageResource) resource).getResourceIdentifier();
+			} else {
+				// TODO: New FlexoResource scheme
+				resourceIdentifier = resource.getURI();
+			}
 			if (getOwner() != null) {
 				getOwner().objectSerializationIdChanged(this);
 			}

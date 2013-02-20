@@ -95,6 +95,8 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	public EditionPatternInstance(VirtualModelInstanceBuilder builder) {
 		super(builder.getProject());
 		vmInstance = builder.vmInstance;
+		actors = new Hashtable<PatternRole<?>, ActorReference<?>>();
+		actorList = new Vector<ActorReference<?>>();
 		initializeDeserialization(builder);
 	}
 
@@ -104,6 +106,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		this.vmInstance = vmInstance;
 		this.editionPattern = aPattern;
 		actors = new Hashtable<PatternRole<?>, ActorReference<?>>();
+		actorList = new Vector<ActorReference<?>>();
 	}
 
 	public <T> T getPatternActor(PatternRole<T> patternRole) {
@@ -254,21 +257,19 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	}
 
 	@Override
-	public void initializeDeserialization(Object builder) {
-		super.initializeDeserialization(builder);
-		actorList = new Vector<ActorReference<?>>();
-	}
-
-	@Override
 	public void finalizeDeserialization(Object builder) {
 		super.finalizeDeserialization(builder);
 		System.out.println("OK, j'ai fini de decoder mon EPI, EP=" + getEditionPattern());
+		finalizeActorsDeserialization();
 	}
 
 	private void finalizeActorsDeserialization() {
 		if (getEditionPattern() != null) {
 			for (ActorReference actorRef : actorList) {
-				actors.put(actorRef.getPatternRole(), actorRef);
+				System.out.println("Actor: " + actorRef.getPatternRoleName() + " pattern role = " + actorRef.getPatternRole());
+				if (actorRef.getPatternRole() != null) {
+					actors.put(actorRef.getPatternRole(), actorRef);
+				}
 			}
 		}
 	}

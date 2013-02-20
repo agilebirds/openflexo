@@ -54,7 +54,10 @@ public abstract class ActorReference<T> extends VirtualModelInstanceObject {
 	}
 
 	public String getPatternRoleName() {
-		return patternRole.getPatternRoleName();
+		if (patternRole != null) {
+			return patternRole.getPatternRoleName();
+		}
+		return patternRoleName;
 	}
 
 	public void setPatternRoleName(String patternRoleName) {

@@ -110,12 +110,14 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 	}
 
 	public void addToEditionPatternReferences(FlexoModelObjectReference<EditionPatternInstance> ref) {
+		ref.setOwner(this);
 		editionPatternReferences.add(ref);
 		setChanged();
 		notifyObservers(new DataModification("editionPatternReferences", null, ref));
 	}
 
 	public void removeFromEditionPatternReferences(FlexoModelObjectReference<EditionPatternInstance> ref) {
+		ref.setOwner(null);
 		editionPatternReferences.remove(ref);
 		setChanged();
 		notifyObservers(new DataModification("editionPatternReferences", ref, null));
