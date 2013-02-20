@@ -20,9 +20,14 @@
 package org.openflexo.technologyadapter.emf.rm;
 
 import java.io.FileNotFoundException;
+import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.logging.Logger;
 
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.dm.JarClassLoader;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.FlexoResourceTree;
@@ -70,9 +75,38 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 	 */
 	@Override
 	public EMFMetaModel loadResourceData(IProgress progress) throws ResourceLoadingCancelledException {
-		EMFMetaModelConverter converter = new EMFMetaModelConverter((EMFTechnologyAdapter) getTechnologyAdapter());
-		EMFMetaModel result = converter.convertMetaModel(getPackage());
-		// FIXME result.setResource(this);
+		EMFMetaModel result = null;
+		// Load class and instanciate.
+		JarClassLoader jarClassLoader = new JarClassLoader(Collections.singletonList(getFile()));
+		Class<?> ePackageClass = jarClassLoader.findClass(getPackageClassName());
+		try {
+			if (ePackageClass != null) {
+				Field ePackageField = ePackageClass.getField("eINSTANCE");
+				if (ePackageField != null) {
+					setPackage((EPackage) ePackageField.get(null));
+					Class<?> resourceFactoryClass = jarClassLoader.findClass(getResourceFactoryClassName());
+					if (resourceFactoryClass != null) {
+						setResourceFactory((Resource.Factory) resourceFactoryClass.newInstance());
+						if (getPackage() != null && getPackage().getNsURI().equalsIgnoreCase(getURI()) && getResourceFactory() != null) {
+
+							EMFMetaModelConverter converter = new EMFMetaModelConverter((EMFTechnologyAdapter) getTechnologyAdapter());
+							result = converter.convertMetaModel(getPackage());
+							// FIXME result.setResource(this);
+						}
+					}
+				}
+			}
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		}
 		return result;
 	}
 

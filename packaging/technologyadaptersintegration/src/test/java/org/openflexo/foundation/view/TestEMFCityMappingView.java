@@ -38,7 +38,7 @@ import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration.Defau
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 
-public class TestCityMappingView extends FlexoTestCase {
+public class TestEMFCityMappingView extends FlexoTestCase {
 
 	public static FlexoProject project;
 	private static FlexoEditor editor;
@@ -150,8 +150,9 @@ public class TestCityMappingView extends FlexoTestCase {
 		FlexoOntologyModelSlotInstanceConfiguration emfModelSlotConfiguration = (FlexoOntologyModelSlotInstanceConfiguration) createVirtualModelInstance
 				.getModelSlotInstanceConfiguration(emfModelSlot);
 		emfModelSlotConfiguration.setOption(DefaultModelSlotInstanceConfigurationOption.SelectExistingModel);
+		// File modelFile = new FileResource("src/test/resources/TestResourceCenter/EMF/Model/example1/my.example1");
 		File modelFile = new File(((FileSystemBasedResourceCenter) resourceCenter).getRootDirectory(),
-				"TestResourceCenter/EMF/Model/city1/my.city1");
+				"TestResourceCenter/EMF/Model/example1/my.example1");
 		System.out.println("Searching " + modelFile.getAbsolutePath());
 		assertTrue(modelFile.exists());
 		System.out.println("Searching " + modelFile.toURI().toString());
@@ -171,6 +172,7 @@ public class TestCityMappingView extends FlexoTestCase {
 
 		createVirtualModelInstance.doAction();
 		System.out.println("exception thrown=" + createVirtualModelInstance.getThrownException());
+		// createDiagram.getThrownException().printStackTrace();
 		assertTrue(createVirtualModelInstance.hasActionExecutionSucceeded());
 		VirtualModelInstance newVirtualModelInstance = createVirtualModelInstance.getNewVirtualModelInstance();
 		System.out.println("New VirtualModelInstance " + newVirtualModelInstance + " created in "

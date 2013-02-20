@@ -37,7 +37,9 @@ import org.openflexo.technologyadapter.emf.model.EMFModel;
 public interface EMFMetaModelResource extends FlexoFileResource<EMFMetaModel>, FlexoMetaModelResource<EMFModel, EMFMetaModel> {
 
 	public static final String EXTENSION = "extension";
+	public static final String PACKAGE_CLASSNAME = "package.classname";
 	public static final String PACKAGE = "package";
+	public static final String RESOURCE_FACTORY_CLASSNAME = "resourcefactory.classname";
 	public static final String RESOURCE_FACTORY = "resourcefactory";
 
 	/**
@@ -61,6 +63,22 @@ public interface EMFMetaModelResource extends FlexoFileResource<EMFMetaModel>, F
 	 * 
 	 * @param ePackage
 	 */
+	@Setter(value = PACKAGE_CLASSNAME)
+	void setPackageClassName(String ePackage);
+
+	/**
+	 * Getter of Package MetaModel.
+	 * 
+	 * @return
+	 */
+	@Getter(value = PACKAGE_CLASSNAME, ignoreType = true)
+	String getPackageClassName();
+
+	/**
+	 * Setter of Package MetaModel.
+	 * 
+	 * @param ePackage
+	 */
 	@Setter(value = PACKAGE)
 	void setPackage(EPackage ePackage);
 
@@ -71,6 +89,22 @@ public interface EMFMetaModelResource extends FlexoFileResource<EMFMetaModel>, F
 	 */
 	@Getter(value = PACKAGE, ignoreType = true)
 	EPackage getPackage();
+
+	/**
+	 * Setter of ResourceFactory of Model for MetaModel.
+	 * 
+	 * @param resourceFactory
+	 */
+	@Setter(RESOURCE_FACTORY_CLASSNAME)
+	void setResourceFactoryClassName(String resourceFactory);
+
+	/**
+	 * Getter of ResourceFactory of Model for MetaModel.
+	 * 
+	 * @return
+	 */
+	@Getter(value = RESOURCE_FACTORY_CLASSNAME, ignoreType = true)
+	String getResourceFactoryClassName();
 
 	/**
 	 * Setter of ResourceFactory of Model for MetaModel.
