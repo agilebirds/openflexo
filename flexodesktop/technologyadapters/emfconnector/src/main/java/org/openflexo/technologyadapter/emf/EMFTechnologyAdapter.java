@@ -24,15 +24,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.Collections;
 import java.util.Properties;
 import java.util.logging.Logger;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.openflexo.foundation.dm.JarClassLoader;
 import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
@@ -100,6 +95,36 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	}
 
 	/**
+	 * Return EMF Property file of MetaModel Directory.
+	 * 
+	 * @param aMetaModelFile
+	 * @return
+	 */
+	public Properties getEmfProperties(final File aMetaModelFile) {
+		Properties emfProperties = null;
+		if (aMetaModelFile.isDirectory()) {
+			// Read emf.properties file.
+			File[] emfPropertiesFiles = aMetaModelFile.listFiles(new FilenameFilter() {
+				@Override
+				public boolean accept(File dir, String name) {
+					return dir == aMetaModelFile && name.equalsIgnoreCase("emf.properties");
+				}
+			});
+			if (emfPropertiesFiles.length == 1) {
+				try {
+					emfProperties = new Properties();
+					emfProperties.load(new FileReader(emfPropertiesFiles[0]));
+				} catch (FileNotFoundException e) {
+					emfProperties = null;
+				} catch (IOException e) {
+					emfProperties = null;
+				}
+			}
+		}
+		return emfProperties;
+	}
+
+	/**
 	 * 
 	 * Follow the link.
 	 * 
@@ -108,7 +133,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 */
 	@Override
 	public boolean isValidMetaModelFile(File aMetaModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
-		return retrieveMetaModelResource(aMetaModelFile, technologyContextManager) != null;
+		return getEmfProperties(aMetaModelFile) != null;
 	}
 
 	/**
@@ -120,7 +145,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 */
 	@Override
 	public String retrieveMetaModelURI(File aMetaModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
-		return retrieveMetaModelResource(aMetaModelFile, technologyContextManager).getPackage().getNsURI();
+		return getEmfProperties(aMetaModelFile).getProperty("URI");
 	}
 
 	/**
@@ -134,73 +159,38 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	public EMFMetaModelResource retrieveMetaModelResource(final File aMetaModelFile,
 			TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
 		EMFMetaModelResource metaModelResource = null;
-		if (aMetaModelFile.isDirectory()) {
-			// Read emf.properties file.
-			File[] emfPropertiesFiles = aMetaModelFile.listFiles(new FilenameFilter() {
-				@Override
-				public boolean accept(File dir, String name) {
-					return dir == aMetaModelFile && name.equalsIgnoreCase("emf.properties");
-				}
-			});
-			if (emfPropertiesFiles.length == 1) {
-				try {
-					Properties emfProperties = new Properties();
-					emfProperties.load(new FileReader(emfPropertiesFiles[0]));
-					String extension = emfProperties.getProperty("EXTENSION");
-					String ePackageClassName = emfProperties.getProperty("PACKAGE");
-					String resourceFactoryClassName = emfProperties.getProperty("RESOURCE_FACTORY");
-					if (extension != null && ePackageClassName != null && resourceFactoryClassName != null) {
-						// Load class and instanciate.
-						EPackage ePackage = null;
-						Resource.Factory resourceFactory = null;
-						JarClassLoader jarClassLoader = new JarClassLoader(Collections.singletonList(aMetaModelFile));
-						Class<?> ePackageClass = jarClassLoader.findClass(ePackageClassName);
-						if (ePackageClass != null) {
-							Field ePackageField = ePackageClass.getField("eINSTANCE");
-							if (ePackageField != null) {
-								ePackage = (EPackage) ePackageField.get(null);
-								Class<?> resourceFactoryClass = jarClassLoader.findClass(resourceFactoryClassName);
-								if (resourceFactoryClass != null) {
-									resourceFactory = (Resource.Factory) resourceFactoryClass.newInstance();
-									if (extension != null && ePackage != null && resourceFactory != null) {
-										ModelFactory factory = new ModelFactory(EMFMetaModelResource.class);
-										metaModelResource = factory.newInstance(EMFMetaModelResource.class);
-										metaModelResource.setServiceManager(getTechnologyAdapterService().getServiceManager());
-										metaModelResource.setTechnologyAdapter(this);
-										metaModelResource.setURI(ePackage.getNsURI());
-										metaModelResource.setName(ePackage.getName());
-										metaModelResource.setFile(aMetaModelFile);
-										metaModelResource.setModelFileExtension(extension);
-										metaModelResource.setPackage(ePackage);
-										metaModelResource.setResourceFactory(resourceFactory);
-									}
-								}
-							}
-						}
-					}
 
-					EMFTechnologyContextManager emfContextManager = (EMFTechnologyContextManager) technologyContextManager;
+		EMFTechnologyContextManager emfContextManager = (EMFTechnologyContextManager) technologyContextManager;
+
+		Properties emfProperties = getEmfProperties(aMetaModelFile);
+		if (emfProperties != null) {
+			try {
+				String uri = emfProperties.getProperty("URI");
+				String extension = emfProperties.getProperty("EXTENSION");
+				String ePackageClassName = emfProperties.getProperty("PACKAGE");
+				String resourceFactoryClassName = emfProperties.getProperty("RESOURCE_FACTORY");
+				if (uri != null && extension != null && ePackageClassName != null && resourceFactoryClassName != null) {
+					ModelFactory factory = new ModelFactory(EMFMetaModelResource.class);
+					metaModelResource = factory.newInstance(EMFMetaModelResource.class);
+					metaModelResource.setServiceManager(getTechnologyAdapterService().getServiceManager());
+					metaModelResource.setTechnologyAdapter(this);
+					metaModelResource.setURI(uri);
+					metaModelResource.setName(aMetaModelFile.getName());
+					metaModelResource.setFile(aMetaModelFile);
+					metaModelResource.setModelFileExtension(extension);
+					metaModelResource.setPackageClassName(ePackageClassName);
+					metaModelResource.setResourceFactoryClassName(resourceFactoryClassName);
+
 					emfContextManager.registerMetaModel(metaModelResource);
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (NoSuchFieldException e) {
-					e.printStackTrace();
-				} catch (SecurityException e) {
-					e.printStackTrace();
-				} catch (InstantiationException e) {
-					e.printStackTrace();
-				} catch (ModelDefinitionException e) {
-					e.printStackTrace();
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			} catch (ModelDefinitionException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
-
 		return metaModelResource;
 	}
 
@@ -224,14 +214,16 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	@Override
 	public boolean isValidModelFile(File aModelFile, FlexoResource<EMFMetaModel> metaModelResource,
 			TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
-		boolean isValid = false;
+		boolean valid = false;
 		if (aModelFile.exists()) {
 			EMFMetaModelResource emfMetaModelResource = (EMFMetaModelResource) metaModelResource;
 			if (aModelFile.getName().endsWith("." + emfMetaModelResource.getModelFileExtension())) {
-				isValid = true;
+				if (aModelFile.isFile()) {
+					valid = true;
+				}
 			}
 		}
-		return isValid;
+		return valid;
 	}
 
 	/**
@@ -256,17 +248,18 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	public EMFModelResource retrieveModelResource(File aModelFile, FlexoResource<EMFMetaModel> metaModelResource,
 			TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
 		EMFModelResource emfModelResource = null;
-		if (aModelFile.isFile()) {
+
+		EMFTechnologyContextManager emfContextManager = (EMFTechnologyContextManager) technologyContextManager;
+		emfModelResource = emfContextManager.getModel(aModelFile);
+
+		if (emfModelResource == null) {
 			try {
 				EMFMetaModelResource emfMetaModelResource = (EMFMetaModelResource) metaModelResource;
-				Resource emfResource = emfMetaModelResource.getResourceFactory().createResource(
-						URI.createFileURI(aModelFile.getAbsolutePath()));
 				emfModelResource = new EMFModelResource(aModelFile, emfMetaModelResource, this, URI.createFileURI(
 						aModelFile.getAbsolutePath()).toString());
 				emfModelResource.setServiceManager(getTechnologyAdapterService().getServiceManager());
-				emfModelResource.setEMFResource(emfResource);
-				EMFTechnologyContextManager emfContextManager = (EMFTechnologyContextManager) technologyContextManager;
-				emfContextManager.registerModel(emfModelResource);
+
+				emfContextManager.registerModel(aModelFile, emfModelResource);
 			} catch (InvalidFileNameException e) {
 				e.printStackTrace();
 			} catch (DuplicateResourceException e) {

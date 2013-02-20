@@ -19,23 +19,34 @@
  */
 package org.openflexo.technologyadapter.emf;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
+import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 
 public class EMFTechnologyContextManager extends TechnologyContextManager<EMFModel, EMFMetaModel> {
-
-	@Override
-	public void registerModel(FlexoResource<EMFModel> newModelResource) {
-		// TODO Auto-generated method stub
-
-	}
+	/** Models. */
+	protected Map<File, FlexoResource<EMFModel>> models = new HashMap<File, FlexoResource<EMFModel>>();
 
 	@Override
 	public void registerMetaModel(FlexoResource<EMFMetaModel> newMetaModelResource) {
-		// TODO Auto-generated method stub
-
 	}
 
+	public EMFModelResource getModel(File modelFile) {
+		return (EMFModelResource) models.get(modelFile);
+	}
+
+	public void registerModel(File modelFile, FlexoResource<EMFModel> newModelResource) {
+		models.put(modelFile, newModelResource);
+		registerModel(newModelResource);
+	}
+
+	@Override
+	public void registerModel(FlexoResource<EMFModel> newModelResource) {
+	}
 }
