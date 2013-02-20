@@ -67,6 +67,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	private EditionPattern editionPattern;
 	private Hashtable<PatternRole<?>, ActorReference<?>> actors;
 	private VirtualModelInstance<?, ?> vmInstance;
+	private Vector<ActorReference<?>> actorList;
 
 	/**
 	 * 
@@ -202,10 +203,28 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 
 	public void setActorForKey(ActorReference<?> o, PatternRole<?> key) {
 		actors.put(key, o);
+		ActorReference removeThis = null;
+		for (ActorReference ref : actorList) {
+			if (ref.getPatternRole() == o.getPatternRole()) {
+				removeThis = ref;
+			}
+		}
+		if (removeThis != null) {
+			actorList.remove(removeThis);
+		}
 	}
 
 	public void removeActorWithKey(PatternRole<?> key) {
 		actors.remove(key);
+		ActorReference removeThis = null;
+		for (ActorReference ref : actorList) {
+			if (ref.getPatternRole() == key) {
+				removeThis = ref;
+			}
+		}
+		if (removeThis != null) {
+			actorList.remove(removeThis);
+		}
 	}
 
 	/*public String getStringValue(String inspectorEntryKey)
@@ -217,6 +236,42 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	{
 		System.out.println("SET string value for "+inspectorEntryKey+" value: "+value);
 	}*/
+
+	public Vector<ActorReference<?>> getActorList() {
+		return actorList;
+	}
+
+	public void setActorList(Vector<ActorReference<?>> deserializedActors) {
+		this.actorList = deserializedActors;
+	}
+
+	public void addToActorList(ActorReference actorReference) {
+		actorList.add(actorReference);
+	}
+
+	public void removeFromActorList(ActorReference actorReference) {
+		actorList.remove(actorReference);
+	}
+
+	@Override
+	public void initializeDeserialization(Object builder) {
+		super.initializeDeserialization(builder);
+		actorList = new Vector<ActorReference<?>>();
+	}
+
+	@Override
+	public void finalizeDeserialization(Object builder) {
+		super.finalizeDeserialization(builder);
+		System.out.println("OK, j'ai fini de decoder mon EPI, EP=" + getEditionPattern());
+	}
+
+	private void finalizeActorsDeserialization() {
+		if (getEditionPattern() != null) {
+			for (ActorReference actorRef : actorList) {
+				actors.put(actorRef.getPatternRole(), actorRef);
+			}
+		}
+	}
 
 	public Object evaluate(String expression) {
 		DataBinding<Object> vpdb = new DataBinding<Object>(expression);
