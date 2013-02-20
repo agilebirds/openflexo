@@ -188,7 +188,7 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 		FlexoModelObjectReference<EditionPatternInstance> referenceToRemove = getEditionPatternReference(editionPatternInstance);
 		if (referenceToRemove == null) {
 			logger.warning("Called for unregister EditionPatternReference for unexisting reference to edition pattern instance EP="
-					+ editionPatternInstance.getPattern().getName() + " id=" + editionPatternInstance.getFlexoID());
+					+ editionPatternInstance.getEditionPattern().getName() + " id=" + editionPatternInstance.getFlexoID());
 		} else {
 			removeFromEditionPatternReferences(referenceToRemove);
 		}

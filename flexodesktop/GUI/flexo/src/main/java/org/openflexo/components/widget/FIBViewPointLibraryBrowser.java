@@ -17,29 +17,29 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.widget;
+package org.openflexo.components.widget;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.FIBBrowserView;
 import org.openflexo.view.controller.FlexoController;
 
 /**
- * Browser allowing to browse through a {@link VirtualModel}<br>
+ * Browser allowing to browse through viewpoint library<br>
  * 
  * @author sguerin
  * 
  */
 @SuppressWarnings("serial")
-public class FIBVirtualModelBrowser extends FIBBrowserView<VirtualModel> {
-	static final Logger logger = Logger.getLogger(FIBVirtualModelBrowser.class.getPackage().getName());
+public class FIBViewPointLibraryBrowser extends FIBBrowserView<ViewPointLibrary> {
+	static final Logger logger = Logger.getLogger(FIBViewPointLibraryBrowser.class.getPackage().getName());
 
-	public static final FileResource FIB_FILE = new FileResource("Fib/Widget/FIBVirtualModelBrowser.fib");
+	public static final FileResource FIB_FILE = new FileResource("Fib/Widget/FIBViewPointLibraryBrowser.fib");
 
-	public FIBVirtualModelBrowser(VirtualModel virtualModel, FlexoController controller) {
-		super(virtualModel, controller, FIB_FILE);
+	public FIBViewPointLibraryBrowser(ViewPointLibrary viewPointLibrary, FlexoController controller) {
+		super(viewPointLibrary, controller, FIB_FILE);
 	}
 
 	// Please uncomment this for a live test
@@ -57,18 +57,26 @@ public class FIBVirtualModelBrowser extends FIBBrowserView<VirtualModel> {
 			e.printStackTrace();
 		}
 
-		TestApplicationContext testApplicationContext = new TestApplicationContext(
-				new FileResource("src/test/resources/TestResourceCenter"));
-		final ViewPointLibrary viewPointLibrary = testApplicationContext.getViewPointLibrary();
+		final FlexoServiceManager serviceManager = new DefaultFlexoServiceManager() {
+			@Override
+			protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
+				return null;
+			}
 
-		ViewPointResource vpRes = viewPointLibrary
-				.getViewPointResource("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
-		final DiagramSpecification basicOntologyEditorDS = vpRes.getViewPoint().getDefaultDiagramSpecification();
+			@Override
+			protected FlexoEditor createApplicationEditor() {
+				return null;
+			}
+		};
+		final ViewPointLibrary viewPointLibrary = serviceManager.getViewPointLibrary();
+
+		// System.out.println("Resource centers=" + viewPointLibrary.getResourceCenterService().getResourceCenters());
+		// System.exit(-1);
 
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				return makeArray(basicOntologyEditorDS);
+				return makeArray(viewPointLibrary);
 			}
 
 			@Override

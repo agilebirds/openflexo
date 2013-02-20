@@ -170,18 +170,6 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		return sb.toString();
 	}
 
-	public EditionPattern getPattern() {
-		return getEditionPattern();
-	}
-
-	public void setPattern(EditionPattern pattern) {
-		setEditionPattern(pattern);
-	}
-
-	public void setEditionPattern(EditionPattern editionPattern) {
-		this.editionPattern = editionPattern;
-	}
-
 	private String editionPatternURI;
 
 	public EditionPattern getEditionPattern() {
@@ -232,7 +220,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 
 	public Object evaluate(String expression) {
 		DataBinding<Object> vpdb = new DataBinding<Object>(expression);
-		vpdb.setOwner(getPattern());
+		vpdb.setOwner(getEditionPattern());
 		vpdb.setDeclaredType(Object.class);
 		vpdb.setBindingDefinitionType(BindingDefinitionType.GET);
 		try {
@@ -249,7 +237,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 
 	public boolean setBindingValue(String expression, Object value) {
 		DataBinding<Object> vpdb = new DataBinding<Object>(expression);
-		vpdb.setOwner(getPattern());
+		vpdb.setOwner(getEditionPattern());
 		vpdb.setDeclaredType(Object.class);
 		vpdb.setBindingDefinitionType(BindingDefinitionType.SET);
 		if (vpdb.isValid()) {
@@ -272,12 +260,12 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 
 	@Override
 	public BindingFactory getBindingFactory() {
-		return getPattern().getInspector().getBindingFactory();
+		return getEditionPattern().getInspector().getBindingFactory();
 	}
 
 	@Override
 	public BindingModel getBindingModel() {
-		return getPattern().getInspector().getBindingModel();
+		return getEditionPattern().getInspector().getBindingModel();
 	}
 
 	@Override
@@ -399,7 +387,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 
 	@Override
 	public String getDisplayableName() {
-		for (GraphicalElementPatternRole pr : getPattern().getGraphicalElementPatternRoles()) {
+		for (GraphicalElementPatternRole pr : getEditionPattern().getGraphicalElementPatternRoles()) {
 			if (pr != null && pr.getLabel().isSet() && pr.getLabel().isValid()) {
 				try {
 					return (String) pr.getLabel().getBindingValue(this);
@@ -412,7 +400,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 				}
 			}
 		}
-		return getPattern().getName();
+		return getEditionPattern().getName();
 	}
 
 	@Override

@@ -1,13 +1,13 @@
 package org.openflexo.vpm.fib;
 
 import org.openflexo.FlexoCst;
+import org.openflexo.components.widget.FIBDiagramPaletteBrowser;
+import org.openflexo.components.widget.FIBExampleDiagramBrowser;
+import org.openflexo.components.widget.FIBViewPointBrowser;
+import org.openflexo.components.widget.FIBViewPointLibraryBrowser;
+import org.openflexo.components.widget.FIBVirtualModelBrowser;
 import org.openflexo.fib.FIBTestCase;
 import org.openflexo.vpm.VPMCst;
-import org.openflexo.vpm.widget.FIBDiagramPaletteBrowser;
-import org.openflexo.vpm.widget.FIBExampleDiagramBrowser;
-import org.openflexo.vpm.widget.FIBViewPointBrowser;
-import org.openflexo.vpm.widget.FIBViewPointLibraryBrowser;
-import org.openflexo.vpm.widget.FIBVirtualModelBrowser;
 
 public class TestVPMFIB extends FIBTestCase {
 

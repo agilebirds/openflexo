@@ -27,6 +27,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.openflexo.FlexoCst;
+import org.openflexo.components.widget.FIBDiagramPaletteBrowser;
+import org.openflexo.components.widget.FIBExampleDiagramBrowser;
+import org.openflexo.components.widget.FIBViewPointBrowser;
+import org.openflexo.components.widget.FIBViewPointLibraryBrowser;
+import org.openflexo.components.widget.FIBVirtualModelBrowser;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteObject;
@@ -49,11 +54,6 @@ import org.openflexo.vpm.examplediagram.ExampleDiagramModuleView;
 import org.openflexo.vpm.view.EditionPatternView;
 import org.openflexo.vpm.view.ViewPointLibraryView;
 import org.openflexo.vpm.view.ViewPointView;
-import org.openflexo.vpm.widget.FIBDiagramPaletteBrowser;
-import org.openflexo.vpm.widget.FIBExampleDiagramBrowser;
-import org.openflexo.vpm.widget.FIBViewPointBrowser;
-import org.openflexo.vpm.widget.FIBViewPointLibraryBrowser;
-import org.openflexo.vpm.widget.FIBVirtualModelBrowser;
 
 public class ViewPointPerspective extends FlexoPerspective {
 
