@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DiagramSpecification id="1" name="CityMappingDiagramSpecification" modelVersion="1.0">
+  <EditionPattern id="2" name="City">
+    <DropScheme id="3" target="top" name="drop_new" label="drop_new" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <TextFieldParameter id="4" name="name" label="name" defaultValue="" usePaletteLabelAsDefaultValue="false" conditional="" isRequired="false" />
+    </DropScheme>
+    <DropScheme id="5" name="drop_existing" label="drop_existing" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <IndividualParameter id="6" conceptValue="" name="city1" label="city1" defaultValue="" usePaletteLabelAsDefaultValue="false" conditional="" isRequired="false" />
+      <IndividualParameter id="7" conceptValue="" name="city2" label="city2" defaultValue="" usePaletteLabelAsDefaultValue="false" conditional="" isRequired="false" />
+    </DropScheme>
+    <ContainedEMFObjectIndividualPatternRole id="8" patternRole="city1" name="city1" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city1/City">
+      <AddressedEMFModelSlot id="9" isRequired="true" isReadOnly="false" metaModelURI="http://www.thalesgroup.com/openflexo/emf/model/city1" name="city1" />
+    </ContainedEMFObjectIndividualPatternRole>
+    <ContainedEMFObjectIndividualPatternRole id="10" patternRole="city2" name="city2" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city2/City">
+      <AddressedEMFModelSlot id="11" isRequired="true" isReadOnly="false" metaModelURI="http://www.thalesgroup.com/openflexo/emf/model/city2" name="city2" />
+    </ContainedEMFObjectIndividualPatternRole>
+    <ContainedShapePatternRole id="12" patternRole="cityShape" name="cityShape" exampleLabel="city">
+      <ShapeGraphicalRepresentation id="13" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="91.04222831921749" y="61.04676174888937" width="559.7852797327926" height="397.7951835398644" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" xConstraints="" yConstraints="" widthConstraints="" heightConstraints="" identifier="object_0" layer="1" hasText="true" text="city" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="14" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="15" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="16" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="17" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="18" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="19" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="20" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape id="21" isRounded="false" arcSize="30.0" />
+        <ShadowStyle id="22" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="23" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <AddressedDiagramModelSlot id="24" isRequired="true" isReadOnly="false" name="diagram" />
+      <GRSpec id="25" featureName="label" value="city1.name" readOnly="false" />
+    </ContainedShapePatternRole>
+    <PrimaryConceptEMFObjectIndividualPatternRole idref="8" />
+    <PrimaryRepresentationShapePatternRole idref="12" />
+    <Inspector id="26" inspectorTitle="City" />
+  </EditionPattern>
+  <EditionPattern id="27" name="Mayor" parentEditionPattern="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMappingDiagramSpecification#Resident">
+    <ContainedEMFObjectIndividualPatternRole id="28" patternRole="mayor2" name="mayor2">
+      <AddressedEMFModelSlot idref="11" />
+    </ContainedEMFObjectIndividualPatternRole>
+    <ContainedShapePatternRole id="29" patternRole="mayorShape" name="mayorShape" exampleLabel="mayor">
+      <ShapeGraphicalRepresentation id="30" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="160.0" y="40.0" width="80.0" height="50.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" xConstraints="" yConstraints="" widthConstraints="" heightConstraints="" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="31" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="32" color="192,192,192" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="33" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="34" color="192,192,192" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="35" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="36" color="192,192,192" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="37" top="20" bottom="20" left="20" right="20" />
+        <RectangleShape idref="21" />
+        <ShadowStyle id="38" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="39" font="SansSerif,1,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <AddressedDiagramModelSlot idref="24" />
+      <GRSpec id="40" featureName="label" value="mayor2.name" readOnly="false" />
+    </ContainedShapePatternRole>
+    <ContainedEMFObjectIndividualPatternRole id="41" patternRole="resident1" name="resident1">
+      <AddressedEMFModelSlot idref="9" />
+    </ContainedEMFObjectIndividualPatternRole>
+    <PrimaryConceptEMFObjectIndividualPatternRole idref="28" />
+    <PrimaryRepresentationShapePatternRole idref="29" />
+    <Inspector id="42" inspectorTitle="Mayor" />
+  </EditionPattern>
+  <EditionPattern id="43" name="Resident">
+    <ContainedEMFObjectIndividualPatternRole id="44" patternRole="resident1" name="resident1" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city1/Resident">
+      <AddressedEMFModelSlot idref="9" />
+    </ContainedEMFObjectIndividualPatternRole>
+    <ContainedEMFObjectIndividualPatternRole id="45" patternRole="house2" name="house2" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city2/House">
+      <AddressedEMFModelSlot idref="11" />
+    </ContainedEMFObjectIndividualPatternRole>
+    <ContainedShapePatternRole id="46" patternRole="residentShape" name="residentShape" exampleLabel="resident">
+      <AddressedDiagramModelSlot idref="24" />
+      <GRSpec id="47" featureName="label" value="resident1.name" readOnly="false" />
+    </ContainedShapePatternRole>
+    <PrimaryConceptEMFObjectIndividualPatternRole idref="44" />
+    <PrimaryRepresentationShapePatternRole idref="46" />
+    <Inspector id="48" inspectorTitle="Resident" />
+  </EditionPattern>
+  <EditionPattern id="49" name="Appartment" parentEditionPattern="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMappingDiagramSpecification#House">
+    <ContainedEMFObjectIndividualPatternRole id="50" patternRole="house1" name="house1" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city1/House">
+      <AddressedEMFModelSlot idref="9" />
+    </ContainedEMFObjectIndividualPatternRole>
+    <ContainedEMFObjectIndividualPatternRole id="51" patternRole="appartment2" name="appartment2" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city2/Appartment">
+      <AddressedEMFModelSlot idref="11" />
+    </ContainedEMFObjectIndividualPatternRole>
+    <ContainedShapePatternRole id="52" patternRole="appartmentShape" name="appartmentShape" exampleLabel="appartment">
+      <AddressedDiagramModelSlot idref="24" />
+      <GRSpec id="53" featureName="label" value="house1.info" readOnly="false" />
+    </ContainedShapePatternRole>
+    <PrimaryConceptEMFObjectIndividualPatternRole idref="50" />
+    <PrimaryRepresentationShapePatternRole idref="52" />
+    <Inspector id="54" inspectorTitle="Appartment" />
+  </EditionPattern>
+  <EditionPattern id="55" name="Mansion" parentEditionPattern="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMappingDiagramSpecification#House">
+    <ContainedEMFObjectIndividualPatternRole id="56" patternRole="house1" name="house1" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city1/House">
+      <AddressedEMFModelSlot idref="9" />
+    </ContainedEMFObjectIndividualPatternRole>
+    <ContainedEMFObjectIndividualPatternRole id="57" patternRole="mansion2" name="mansion2" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city2/Mansion">
+      <AddressedEMFModelSlot idref="11" />
+    </ContainedEMFObjectIndividualPatternRole>
+    <ContainedShapePatternRole id="58" patternRole="mansionShape" name="mansionShape" exampleLabel="mansion">
+      <AddressedDiagramModelSlot idref="24" />
+      <GRSpec id="59" featureName="label" value="house1.info" readOnly="false" />
+    </ContainedShapePatternRole>
+    <PrimaryConceptEMFObjectIndividualPatternRole idref="56" />
+    <PrimaryRepresentationShapePatternRole idref="58" />
+    <Inspector id="60" inspectorTitle="Mansion" />
+  </EditionPattern>
+  <EditionPattern id="61" name="House">
+    <Inspector id="62" inspectorTitle="House" />
+  </EditionPattern>
+  <LocalizedDictionary id="63" />
+  <DiagramModelSlot idref="24" />
+  <EMFModelSlot idref="9" />
+  <EMFModelSlot idref="11" />
+  <Inspector id="64" inspectorTitle="CityMappingDiagramSpecification" />
+</DiagramSpecification>
