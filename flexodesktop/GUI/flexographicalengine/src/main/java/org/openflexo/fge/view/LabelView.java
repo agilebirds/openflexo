@@ -550,7 +550,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		textComponent.setForeground(color);
 		textComponent.setDisabledTextColor(color);
 		StyledDocument document = textComponent.getStyledDocument();
-		document.setCharacterAttributes(0, document.getLength(), set, true);
+		document.setParagraphAttributes(0, document.getLength(), set, true);
 		textComponent.validate();
 		updateBounds();
 	}
