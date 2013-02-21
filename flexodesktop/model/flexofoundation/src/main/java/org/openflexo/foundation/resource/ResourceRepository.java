@@ -55,6 +55,9 @@ public class ResourceRepository<R extends FlexoResource<?>> extends FlexoObject 
 
 	private RepositoryFolder<R> rootFolder;
 
+	/** Stores the object which is the "owner" of this repository */
+	private Object owner;
+
 	public RepositoryFolder<R> getRootFolder() {
 		return rootFolder;
 	}
@@ -62,9 +65,17 @@ public class ResourceRepository<R extends FlexoResource<?>> extends FlexoObject 
 	/**
 	 * Creates a new {@link ResourceRepository}
 	 */
-	public ResourceRepository() {
+	public ResourceRepository(Object owner) {
+		this.owner = owner;
 		resources = new HashMap<String, R>();
 		rootFolder = new RepositoryFolder<R>("root", null, this);
+	}
+
+	/**
+	 * Stores the object which is the "owner" of this repository. The owner has the responsability of this repository.
+	 */
+	public Object getOwner() {
+		return owner;
 	}
 
 	/**

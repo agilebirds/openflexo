@@ -64,7 +64,7 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 
 	@Override
 	public String toString() {
-		return super.toString() + " directory=" + getRootDirectory().getAbsolutePath();
+		return super.toString() + " directory=" + (getRootDirectory() != null ? getRootDirectory().getAbsolutePath() : null);
 	}
 
 	@Override
@@ -311,7 +311,10 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 
 	@Override
 	public String getName() {
-		return getRootDirectory().getAbsolutePath();
+		if (getRootDirectory() != null) {
+			return getRootDirectory().getAbsolutePath();
+		}
+		return "unset";
 	}
 
 }

@@ -23,9 +23,9 @@ import java.io.File;
 
 import org.openflexo.toolbox.FileResource;
 
-public class AskLocalResourceCenterDirectory {
+public class AskResourceCenterDirectory {
 
-	public static final FileResource FIB_FILE = new FileResource("Fib/AskLocalResourceCenterDirectory.fib");
+	public static final FileResource FIB_FILE = new FileResource("Fib/AskResourceCenterDirectory.fib");
 
 	private File localResourceDirectory;
 

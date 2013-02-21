@@ -77,6 +77,11 @@ public class UserResourceCenter /*extends FileSystemBasedResourceCenter*/impleme
 		return userResourceCenterStorageFile;
 	}
 
+	@Override
+	public String getName() {
+		return userResourceCenterStorageFile.getParentFile().getAbsolutePath();
+	}
+
 	@ModelEntity
 	@XMLElement(xmlTag = "UserResourceCenter")
 	@Imports({ @Import(FlexoFileResource.class) })
@@ -266,12 +271,6 @@ public class UserResourceCenter /*extends FileSystemBasedResourceCenter*/impleme
 	@Override
 	public <R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> MetaModelRepository<R, M, MM, TA> getMetaModelRepository(
 			TA technologyAdapter) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getName() {
 		// TODO Auto-generated method stub
 		return null;
 	}
