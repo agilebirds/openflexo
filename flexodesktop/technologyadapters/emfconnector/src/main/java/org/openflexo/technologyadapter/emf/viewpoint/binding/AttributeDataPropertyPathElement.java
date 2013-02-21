@@ -9,6 +9,7 @@ import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
+import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 
 public class AttributeDataPropertyPathElement extends SimplePathElement {
 
@@ -45,13 +46,12 @@ public class AttributeDataPropertyPathElement extends SimplePathElement {
 
 	@Override
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
-		logger.warning("Please implement me, target=" + target + " context=" + context);
-		return null;
+		return ((EMFObjectIndividual) target).getObject().eGet(dataProperty.getObject());
 	}
 
 	@Override
 	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) throws TypeMismatchException,
 			NullReferenceException {
-		logger.warning("Please implement me, target=" + target + " context=" + context);
+		((EMFObjectIndividual) target).getObject().eSet(dataProperty.getObject(), value);
 	}
 }

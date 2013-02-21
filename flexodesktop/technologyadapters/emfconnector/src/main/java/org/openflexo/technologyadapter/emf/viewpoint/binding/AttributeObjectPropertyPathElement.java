@@ -48,13 +48,12 @@ public class AttributeObjectPropertyPathElement extends SimplePathElement {
 
 	@Override
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
-		logger.warning("Please implement me, target=" + target + " context=" + context);
-		return null;
+		return ((EMFObjectIndividual) target).getObject().eGet(objectProperty.getObject());
 	}
 
 	@Override
 	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) throws TypeMismatchException,
 			NullReferenceException {
-		logger.warning("Please implement me, target=" + target + " context=" + context);
+		((EMFObjectIndividual) target).getObject().eSet(objectProperty.getObject(), value);
 	}
 }
