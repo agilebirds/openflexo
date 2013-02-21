@@ -346,17 +346,16 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		getTableModel().addTableModelListener(this);
 
 		_table = new JXTable(getTableModel()) {
+
 			@Override
-			public Dimension getPreferredScrollableViewportSize() {
-				if (getTable().getVisibleRowCount() != null) {
-					return super.getPreferredScrollableViewportSize();
-				}
-				return super.getPreferredSize();
+			public Dimension getPreferredSize() {
+				return getPreferredScrollableViewportSize();
 			}
 
 			@Override
 			protected void resetDefaultTableCellRendererColors(Component renderer, int row, int column) {
 			}
+
 		};
 		_table.setSortOrderCycle(SortOrder.ASCENDING, SortOrder.DESCENDING, SortOrder.UNSORTED);
 		_table.setAutoCreateRowSorter(true);
