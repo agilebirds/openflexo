@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.widget;
+package org.openflexo.components.widget;
 
 import java.util.logging.Logger;
 

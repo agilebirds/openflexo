@@ -17,29 +17,29 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.widget;
+package org.openflexo.components.widget;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.FIBBrowserView;
 import org.openflexo.view.controller.FlexoController;
 
 /**
- * Browser allowing to browse through viewpoint<br>
+ * Browser allowing to browse through a {@link VirtualModel}<br>
  * 
  * @author sguerin
  * 
  */
 @SuppressWarnings("serial")
-public class FIBViewPointBrowser extends FIBBrowserView<ViewPoint> {
-	static final Logger logger = Logger.getLogger(FIBViewPointBrowser.class.getPackage().getName());
+public class FIBVirtualModelBrowser extends FIBBrowserView<VirtualModel> {
+	static final Logger logger = Logger.getLogger(FIBVirtualModelBrowser.class.getPackage().getName());
 
-	public static final FileResource FIB_FILE = new FileResource("Fib/Widget/FIBViewPointBrowser.fib");
+	public static final FileResource FIB_FILE = new FileResource("Fib/Widget/FIBVirtualModelBrowser.fib");
 
-	public FIBViewPointBrowser(ViewPoint viewPoint, FlexoController controller) {
-		super(viewPoint, controller, FIB_FILE);
+	public FIBVirtualModelBrowser(VirtualModel virtualModel, FlexoController controller) {
+		super(virtualModel, controller, FIB_FILE);
 	}
 
 	// Please uncomment this for a live test
@@ -63,15 +63,12 @@ public class FIBViewPointBrowser extends FIBBrowserView<ViewPoint> {
 
 		ViewPointResource vpRes = viewPointLibrary
 				.getViewPointResource("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
-		final ViewPoint basicOntologyEditor = vpRes.getViewPoint();
-
-		// System.out.println("basicOntologyEditor=" + basicOntologyEditor);
-		// System.exit(-1);
+		final DiagramSpecification basicOntologyEditorDS = vpRes.getViewPoint().getDefaultDiagramSpecification();
 
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				return makeArray(basicOntologyEditor);
+				return makeArray(basicOntologyEditorDS);
 			}
 
 			@Override

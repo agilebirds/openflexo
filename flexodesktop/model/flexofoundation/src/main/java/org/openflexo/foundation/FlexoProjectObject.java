@@ -110,12 +110,14 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 	}
 
 	public void addToEditionPatternReferences(FlexoModelObjectReference<EditionPatternInstance> ref) {
+		ref.setOwner(this);
 		editionPatternReferences.add(ref);
 		setChanged();
 		notifyObservers(new DataModification("editionPatternReferences", null, ref));
 	}
 
 	public void removeFromEditionPatternReferences(FlexoModelObjectReference<EditionPatternInstance> ref) {
+		ref.setOwner(null);
 		editionPatternReferences.remove(ref);
 		setChanged();
 		notifyObservers(new DataModification("editionPatternReferences", ref, null));
@@ -188,7 +190,7 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 		FlexoModelObjectReference<EditionPatternInstance> referenceToRemove = getEditionPatternReference(editionPatternInstance);
 		if (referenceToRemove == null) {
 			logger.warning("Called for unregister EditionPatternReference for unexisting reference to edition pattern instance EP="
-					+ editionPatternInstance.getPattern().getName() + " id=" + editionPatternInstance.getFlexoID());
+					+ editionPatternInstance.getEditionPattern().getName() + " id=" + editionPatternInstance.getFlexoID());
 		} else {
 			removeFromEditionPatternReferences(referenceToRemove);
 		}

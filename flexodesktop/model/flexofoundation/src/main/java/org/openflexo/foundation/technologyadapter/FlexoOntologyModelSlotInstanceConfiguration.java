@@ -64,6 +64,24 @@ public class FlexoOntologyModelSlotInstanceConfiguration<MS extends FlexoOntolog
 	}
 
 	@Override
+	public void setOption(org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration.ModelSlotInstanceConfigurationOption option) {
+		super.setOption(option);
+		if (option == DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel) {
+			modelUri = getAction().getFocusedObject().getProject().getURI() + "/Models/myModel";
+			relativePath = "/";
+			filename = "myModel.owl";
+		} else if (option == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
+			modelUri = "ResourceCenter/Models/";
+			relativePath = "/";
+			filename = "myModel.owl";
+		} else if (option == DefaultModelSlotInstanceConfigurationOption.SelectExistingModel) {
+			modelUri = null;
+			relativePath = null;
+			filename = null;
+		}
+	}
+
+	@Override
 	public List<ModelSlotInstanceConfigurationOption> getAvailableOptions() {
 		return options;
 	}

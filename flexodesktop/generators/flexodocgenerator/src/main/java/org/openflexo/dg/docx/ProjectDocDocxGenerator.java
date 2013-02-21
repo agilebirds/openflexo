@@ -351,7 +351,7 @@ public class ProjectDocDocxGenerator extends ProjectDocGenerator {
 				break;
 			}
 		}
-		return FlexoEPITag.buildFlexoEPITag(String.valueOf(object.getFlexoID()), object.getPattern().getURI(), bindingPath,
+		return FlexoEPITag.buildFlexoEPITag(String.valueOf(object.getFlexoID()), object.getEditionPattern().getURI(), bindingPath,
 				modelObjectReference);
 	}
 

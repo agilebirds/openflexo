@@ -19,15 +19,13 @@
  */
 package org.openflexo.foundation.resource;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoException;
+import org.apache.commons.lang3.StringUtils;
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceImpl;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 
 /**
  * This is the very first implementation of the new ResourceManager
@@ -93,6 +91,18 @@ public class ResourceManager extends FlexoServiceImpl implements FlexoService {
 			}
 		}
 		return returned;
+	}
+
+	public FlexoResource<?> getResource(String resourceURI) {
+		if (StringUtils.isEmpty(resourceURI)) {
+			return null;
+		}
+		for (FlexoResource r : resources) {
+			if (resourceURI.equals(r.getURI())) {
+				return r;
+			}
+		}
+		return null;
 	}
 
 }

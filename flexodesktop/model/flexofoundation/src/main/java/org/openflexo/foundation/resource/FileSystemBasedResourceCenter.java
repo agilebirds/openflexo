@@ -20,7 +20,6 @@
 package org.openflexo.foundation.resource;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
@@ -35,9 +34,6 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointRepository;
-import org.openflexo.toolbox.FileResource;
-import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.FileUtils.CopyStrategy;
 
 /**
  * An abstract implementation of a {@link FlexoResourceCenter} based on a file system.
@@ -50,8 +46,6 @@ import org.openflexo.toolbox.FileUtils.CopyStrategy;
 public abstract class FileSystemBasedResourceCenter implements FlexoResourceCenter {
 
 	protected static final Logger logger = Logger.getLogger(FileSystemBasedResourceCenter.class.getPackage().getName());
-
-	private static final File VIEWPOINT_LIBRARY_DIR = new FileResource("ViewPoints");
 
 	private File rootDirectory;
 
@@ -82,6 +76,7 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 	public void initialize(ViewPointLibrary viewPointLibrary) {
 		logger.info("Initializing ViewPointLibrary");
 		viewPointRepository = new ViewPointRepository(this, viewPointLibrary);
+		System.out.println("Exploring " + rootDirectory + " for ResourceCenter " + this + " for ViewPoints");
 		exploreDirectoryLookingForViewPoints(rootDirectory, viewPointRepository.getRootFolder(), viewPointLibrary);
 	}
 
@@ -272,11 +267,6 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 		return (MetaModelRepository<R, M, MM, TA>) metaModelRepositories.get(technologyAdapter);
 	}
 
-	@Override
-	public void update() throws IOException {
-		copyViewPoints(VIEWPOINT_LIBRARY_DIR, getRootDirectory(), CopyStrategy.REPLACE_OLD_ONLY);
-	}
-
 	/*@Override
 	public ViewPointLibrary getViewPointLibrary() {
 		if (viewPointLibrary == null) {
@@ -318,19 +308,6 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 		}
 	}
 	*/
-
-	@Deprecated
-	private static void copyViewPoints(File initialDirectory, File resourceCenterDirectory, CopyStrategy copyStrategy) {
-		if (initialDirectory.getParentFile().equals(resourceCenterDirectory)) {
-			return;
-		}
-
-		try {
-			FileUtils.copyDirToDir(VIEWPOINT_LIBRARY_DIR, resourceCenterDirectory, copyStrategy);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
 	@Override
 	public String getName() {

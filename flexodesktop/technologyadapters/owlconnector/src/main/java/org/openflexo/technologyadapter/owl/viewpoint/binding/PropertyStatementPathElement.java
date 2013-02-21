@@ -76,6 +76,11 @@ public abstract class PropertyStatementPathElement extends SimplePathElement {
 
 		@Override
 		public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
+			if (target instanceof OWLIndividual) {
+				System.out.println("Property " + getPropertyName() + " for individual " + target + " return "
+						+ ((OWLIndividual) target).getPropertyValue(getProperty()));
+				return ((OWLIndividual) target).getPropertyValue(getProperty());
+			}
 			logger.warning("Please implement me, target=" + target + " context=" + context);
 			return null;
 		}
@@ -83,6 +88,11 @@ public abstract class PropertyStatementPathElement extends SimplePathElement {
 		@Override
 		public void setBindingValue(Object value, Object target, BindingEvaluationContext context) throws TypeMismatchException,
 				NullReferenceException {
+			if (target instanceof OWLIndividual) {
+				System.out.println("Property " + getPropertyName() + " for individual " + target + " sets value " + value);
+				((OWLIndividual) target).setPropertyValue(getProperty(), value);
+				return;
+			}
 			logger.warning("Please implement me, target=" + target + " context=" + context);
 		}
 	}

@@ -21,8 +21,6 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
-
 public class EditionPatternParameter extends InnerModelSlotParameter {
 
 	private EditionPattern editionPatternType;
@@ -57,8 +55,8 @@ public class EditionPatternParameter extends InnerModelSlotParameter {
 	}
 
 	public EditionPattern getEditionPatternType() {
-		if (editionPatternType == null && editionPatternTypeURI != null && getViewPointLibrary() != null) {
-			editionPatternType = getViewPointLibrary().getEditionPattern(editionPatternTypeURI);
+		if (editionPatternType == null && editionPatternTypeURI != null && getVirtualModel() != null) {
+			editionPatternType = getVirtualModel().getEditionPattern(editionPatternTypeURI);
 			for (EditionScheme s : getEditionPattern().getEditionSchemes()) {
 				s.updateBindingModels();
 			}

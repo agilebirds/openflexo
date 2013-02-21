@@ -25,13 +25,16 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import org.eclipse.emf.ecore.resource.Resource;
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.LoadResourceException;
+import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
@@ -116,17 +119,22 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 	 * @return the modelResource value
 	 */
 	public Resource getEMFResource() {
+		if (modelResource == null) {
+			try {
+				metaModelResource.getResourceData(null); // Insure MetaModel loaded
+				modelResource = metaModelResource.getResourceFactory().createResource(
+						org.eclipse.emf.common.util.URI.createFileURI(modelFile.getAbsolutePath()));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (ResourceLoadingCancelledException e) {
+				e.printStackTrace();
+			} catch (ResourceDependencyLoopException e) {
+				e.printStackTrace();
+			} catch (FlexoException e) {
+				e.printStackTrace();
+			}
+		}
 		return modelResource;
-	}
-
-	/**
-	 * Setter of EMF Model Resource.
-	 * 
-	 * @param modelResource
-	 *            the modelResource to set
-	 */
-	public void setEMFResource(Resource modelResource) {
-		this.modelResource = modelResource;
 	}
 
 	/**
@@ -163,7 +171,7 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 	 */
 	private void writeToFile() throws SaveResourceException {
 		try {
-			modelResource.save(null);
+			getEMFResource().save(null);
 			logger.info("Wrote " + getFile());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -211,13 +219,9 @@ public class EMFModelResource extends FlexoStorageResource<EMFModel> implements 
 	protected EMFModel performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadResourceException,
 			FileNotFoundException, ProjectLoadingCancelledException {
 		try {
-			if (modelResource == null) {
-				modelResource = metaModelResource.getResourceFactory().createResource(
-						org.eclipse.emf.common.util.URI.createFileURI(modelFile.getAbsolutePath()));
-			}
-			modelResource.load(null);
+			getEMFResource().load(null);
 			EMFModelConverter converter = new EMFModelConverter();
-			_resourceData = converter.convertModel(getMetaModel(), modelResource);
+			_resourceData = converter.convertModel(getMetaModel(), getEMFResource());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

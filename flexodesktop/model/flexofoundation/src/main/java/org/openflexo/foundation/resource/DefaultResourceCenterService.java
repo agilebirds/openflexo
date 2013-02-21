@@ -119,6 +119,10 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 
 	@Override
 	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
+		if (notification instanceof ProjectLoaded) {
+			ProjectResourceCenter pRC = ProjectResourceCenter.instanciateProjectResourceCenter(((ProjectLoaded) notification).getProject());
+			addToResourceCenters(pRC);
+		}
 		if (caller instanceof TechnologyAdapterService) {
 			if (notification instanceof ServiceRegistered) {
 				for (FlexoResourceCenter rc : getResourceCenters()) {
@@ -127,5 +131,4 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 			}
 		}
 	}
-
 }

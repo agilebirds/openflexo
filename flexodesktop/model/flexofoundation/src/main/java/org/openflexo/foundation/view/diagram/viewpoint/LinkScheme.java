@@ -69,8 +69,8 @@ public class LinkScheme extends AbstractCreationScheme implements DiagramEdition
 		if (StringUtils.isEmpty(_getFromTarget())) {
 			return null;
 		}
-		if (getViewPointLibrary() != null) {
-			return getViewPointLibrary().getEditionPattern(_getFromTarget());
+		if (getVirtualModel() != null) {
+			return getVirtualModel().getEditionPattern(_getFromTarget());
 		}
 		return null;
 	}
@@ -83,6 +83,9 @@ public class LinkScheme extends AbstractCreationScheme implements DiagramEdition
 	public EditionPattern getToTargetEditionPattern() {
 		if (StringUtils.isEmpty(_getToTarget())) {
 			return null;
+		}
+		if (getVirtualModel() != null) {
+			return getVirtualModel().getEditionPattern(_getToTarget());
 		}
 		if (getViewPointLibrary() != null) {
 			return getViewPointLibrary().getEditionPattern(_getToTarget());

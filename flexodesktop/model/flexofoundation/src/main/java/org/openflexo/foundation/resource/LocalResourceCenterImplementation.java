@@ -37,6 +37,7 @@ public class LocalResourceCenterImplementation extends FileSystemBasedResourceCe
 	protected static final Logger logger = Logger.getLogger(LocalResourceCenterImplementation.class.getPackage().getName());
 
 	private static final File ONTOLOGIES_DIR = new FileResource("Ontologies");
+	private static final File VIEWPOINT_LIBRARY_DIR = new FileResource("ViewPoints");
 
 	// private File newViewPointSandboxDirectory;
 
@@ -89,10 +90,24 @@ public class LocalResourceCenterImplementation extends FileSystemBasedResourceCe
 
 	@Override
 	public void update() throws IOException {
-		super.update();
+		copyViewPoints(VIEWPOINT_LIBRARY_DIR, getRootDirectory(), CopyStrategy.REPLACE_OLD_ONLY);
 		copyOntologies(ONTOLOGIES_DIR, getRootDirectory(), CopyStrategy.REPLACE_OLD_ONLY);
 	}
 
+	@Deprecated
+	private static void copyViewPoints(File initialDirectory, File resourceCenterDirectory, CopyStrategy copyStrategy) {
+		if (initialDirectory.getParentFile().equals(resourceCenterDirectory)) {
+			return;
+		}
+
+		try {
+			FileUtils.copyDirToDir(VIEWPOINT_LIBRARY_DIR, resourceCenterDirectory, copyStrategy);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Deprecated
 	private static void copyOntologies(File initialDirectory, File resourceCenterDirectory, CopyStrategy copyStrategy) {
 		if (initialDirectory.getParentFile().equals(resourceCenterDirectory)) {
 			return;

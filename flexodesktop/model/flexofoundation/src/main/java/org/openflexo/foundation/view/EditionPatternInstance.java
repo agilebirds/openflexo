@@ -67,6 +67,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	private EditionPattern editionPattern;
 	private Hashtable<PatternRole<?>, ActorReference<?>> actors;
 	private VirtualModelInstance<?, ?> vmInstance;
+	private Vector<ActorReference<?>> actorList;
 
 	/**
 	 * 
@@ -94,6 +95,8 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	public EditionPatternInstance(VirtualModelInstanceBuilder builder) {
 		super(builder.getProject());
 		vmInstance = builder.vmInstance;
+		actors = new Hashtable<PatternRole<?>, ActorReference<?>>();
+		actorList = new Vector<ActorReference<?>>();
 		initializeDeserialization(builder);
 	}
 
@@ -103,6 +106,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		this.vmInstance = vmInstance;
 		this.editionPattern = aPattern;
 		actors = new Hashtable<PatternRole<?>, ActorReference<?>>();
+		actorList = new Vector<ActorReference<?>>();
 	}
 
 	public <T> T getPatternActor(PatternRole<T> patternRole) {
@@ -170,18 +174,6 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		return sb.toString();
 	}
 
-	public EditionPattern getPattern() {
-		return getEditionPattern();
-	}
-
-	public void setPattern(EditionPattern pattern) {
-		setEditionPattern(pattern);
-	}
-
-	public void setEditionPattern(EditionPattern editionPattern) {
-		this.editionPattern = editionPattern;
-	}
-
 	private String editionPatternURI;
 
 	public EditionPattern getEditionPattern() {
@@ -214,10 +206,28 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 
 	public void setActorForKey(ActorReference<?> o, PatternRole<?> key) {
 		actors.put(key, o);
+		ActorReference removeThis = null;
+		for (ActorReference ref : actorList) {
+			if (ref.getPatternRole() == o.getPatternRole()) {
+				removeThis = ref;
+			}
+		}
+		if (removeThis != null) {
+			actorList.remove(removeThis);
+		}
 	}
 
 	public void removeActorWithKey(PatternRole<?> key) {
 		actors.remove(key);
+		ActorReference removeThis = null;
+		for (ActorReference ref : actorList) {
+			if (ref.getPatternRole() == key) {
+				removeThis = ref;
+			}
+		}
+		if (removeThis != null) {
+			actorList.remove(removeThis);
+		}
 	}
 
 	/*public String getStringValue(String inspectorEntryKey)
@@ -230,9 +240,43 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		System.out.println("SET string value for "+inspectorEntryKey+" value: "+value);
 	}*/
 
+	public Vector<ActorReference<?>> getActorList() {
+		return actorList;
+	}
+
+	public void setActorList(Vector<ActorReference<?>> deserializedActors) {
+		this.actorList = deserializedActors;
+	}
+
+	public void addToActorList(ActorReference actorReference) {
+		actorList.add(actorReference);
+	}
+
+	public void removeFromActorList(ActorReference actorReference) {
+		actorList.remove(actorReference);
+	}
+
+	@Override
+	public void finalizeDeserialization(Object builder) {
+		super.finalizeDeserialization(builder);
+		System.out.println("OK, j'ai fini de decoder mon EPI, EP=" + getEditionPattern());
+		finalizeActorsDeserialization();
+	}
+
+	private void finalizeActorsDeserialization() {
+		if (getEditionPattern() != null) {
+			for (ActorReference actorRef : actorList) {
+				System.out.println("Actor: " + actorRef.getPatternRoleName() + " pattern role = " + actorRef.getPatternRole());
+				if (actorRef.getPatternRole() != null) {
+					actors.put(actorRef.getPatternRole(), actorRef);
+				}
+			}
+		}
+	}
+
 	public Object evaluate(String expression) {
 		DataBinding<Object> vpdb = new DataBinding<Object>(expression);
-		vpdb.setOwner(getPattern());
+		vpdb.setOwner(getEditionPattern());
 		vpdb.setDeclaredType(Object.class);
 		vpdb.setBindingDefinitionType(BindingDefinitionType.GET);
 		try {
@@ -249,7 +293,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 
 	public boolean setBindingValue(String expression, Object value) {
 		DataBinding<Object> vpdb = new DataBinding<Object>(expression);
-		vpdb.setOwner(getPattern());
+		vpdb.setOwner(getEditionPattern());
 		vpdb.setDeclaredType(Object.class);
 		vpdb.setBindingDefinitionType(BindingDefinitionType.SET);
 		if (vpdb.isValid()) {
@@ -272,12 +316,12 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 
 	@Override
 	public BindingFactory getBindingFactory() {
-		return getPattern().getInspector().getBindingFactory();
+		return getEditionPattern().getInspector().getBindingFactory();
 	}
 
 	@Override
 	public BindingModel getBindingModel() {
-		return getPattern().getInspector().getBindingModel();
+		return getEditionPattern().getInspector().getBindingModel();
 	}
 
 	@Override
@@ -399,7 +443,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 
 	@Override
 	public String getDisplayableName() {
-		for (GraphicalElementPatternRole pr : getPattern().getGraphicalElementPatternRoles()) {
+		for (GraphicalElementPatternRole pr : getEditionPattern().getGraphicalElementPatternRoles()) {
 			if (pr != null && pr.getLabel().isSet() && pr.getLabel().isValid()) {
 				try {
 					return (String) pr.getLabel().getBindingValue(this);
@@ -412,7 +456,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 				}
 			}
 		}
-		return getPattern().getName();
+		return getEditionPattern().getName();
 	}
 
 	@Override

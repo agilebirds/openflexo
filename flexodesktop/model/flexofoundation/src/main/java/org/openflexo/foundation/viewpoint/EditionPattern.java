@@ -815,8 +815,8 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 
 	public EditionPattern getParentEditionPattern() {
 		if (parentEditionPattern == null && StringUtils.isNotEmpty(parentEditionPatternURI)) {
-			if (getViewPointLibrary() != null) {
-				setParentEditionPattern(getViewPointLibrary().getEditionPattern(parentEditionPatternURI));
+			if (getVirtualModel() != null) {
+				setParentEditionPattern(getVirtualModel().getEditionPattern(parentEditionPatternURI));
 			}
 		}
 		return parentEditionPattern;

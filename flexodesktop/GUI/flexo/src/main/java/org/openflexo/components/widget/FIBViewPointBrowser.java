@@ -17,29 +17,29 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.widget;
+package org.openflexo.components.widget;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.FIBBrowserView;
 import org.openflexo.view.controller.FlexoController;
 
 /**
- * Browser allowing to browse through example diagram<br>
+ * Browser allowing to browse through viewpoint<br>
  * 
  * @author sguerin
  * 
  */
 @SuppressWarnings("serial")
-public class FIBDiagramPaletteBrowser extends FIBBrowserView<DiagramPalette> {
-	static final Logger logger = Logger.getLogger(FIBDiagramPaletteBrowser.class.getPackage().getName());
+public class FIBViewPointBrowser extends FIBBrowserView<ViewPoint> {
+	static final Logger logger = Logger.getLogger(FIBViewPointBrowser.class.getPackage().getName());
 
-	public static final FileResource FIB_FILE = new FileResource("Fib/Widget/FIBDiagramPaletteBrowser.fib");
+	public static final FileResource FIB_FILE = new FileResource("Fib/Widget/FIBViewPointBrowser.fib");
 
-	public FIBDiagramPaletteBrowser(DiagramPalette diagramPalette, FlexoController controller) {
-		super(diagramPalette, controller, FIB_FILE);
+	public FIBViewPointBrowser(ViewPoint viewPoint, FlexoController controller) {
+		super(viewPoint, controller, FIB_FILE);
 	}
 
 	// Please uncomment this for a live test
@@ -63,14 +63,15 @@ public class FIBDiagramPaletteBrowser extends FIBBrowserView<DiagramPalette> {
 
 		ViewPointResource vpRes = viewPointLibrary
 				.getViewPointResource("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
+		final ViewPoint basicOntologyEditor = vpRes.getViewPoint();
 
-		DiagramPaletteResource dpRes = vpRes.getContents(DiagramPaletteResource.class).get(0);
-		final DiagramPalette diagramPalette = dpRes.getDiagramPalette();
+		// System.out.println("basicOntologyEditor=" + basicOntologyEditor);
+		// System.exit(-1);
 
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				return makeArray(diagramPalette);
+				return makeArray(basicOntologyEditor);
 			}
 
 			@Override
