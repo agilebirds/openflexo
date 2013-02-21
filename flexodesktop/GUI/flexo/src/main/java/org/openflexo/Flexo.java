@@ -19,6 +19,8 @@
  */
 package org.openflexo;
 
+import java.awt.Frame;
+import java.awt.Window;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -243,7 +245,7 @@ public class Flexo {
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 			System.setProperty("apple.laf.useScreenMenuBar", "true");
 		}
-		initUILAF();
+		initUILAF(AdvancedPrefs.getLookAndFeelString());
 		if (isDev) {
 			FlexoLoggingFormatter.logDate = false;
 		}
@@ -294,16 +296,28 @@ public class Flexo {
 		welcomeDialog.toFront();
 	}
 
-	private static void initUILAF() {
+	static void initUILAF(String value) {
+		if (UIManager.getLookAndFeel().getClass().getName().equals(value)) {
+			return;
+		}
 		try {
-			UIManager.setLookAndFeel(AdvancedPrefs.getLookAndFeelString());
+			UIManager.setLookAndFeel(value);
+			for (Frame frame : Frame.getFrames()) {
+				for (Window window : frame.getOwnedWindows()) {
+					SwingUtilities.updateComponentTreeUI(window);
+				}
+				SwingUtilities.updateComponentTreeUI(frame);
+			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

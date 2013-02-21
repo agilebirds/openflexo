@@ -19,8 +19,6 @@
  */
 package org.openflexo.module;
 
-import java.awt.Frame;
-import java.awt.Window;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -36,8 +34,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.GeneralPreferences;
@@ -454,35 +450,6 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 	@Override
 	public ExternalOEModule getVEModuleInstance() throws ModuleLoadingException {
 		return getOEModule();
-	}
-
-	/**
-	 * @param value
-	 *            the look and feel identifier
-	 * @throws ClassNotFoundException
-	 *             - if the LookAndFeel class could not be found
-	 * @throws UnsupportedLookAndFeelException
-	 *             - if lnf.isSupportedLookAndFeel() is false
-	 * @throws IllegalAccessException
-	 *             - if the class or initializer isn't accessible
-	 * @throws InstantiationException
-	 *             - if a new instance of the class couldn't be created
-	 * @throws ClassCastException
-	 *             - if className does not identify a class that extends LookAndFeel
-	 */
-	// todo move this method somewhere else
-	public static void setLookAndFeel(String value) throws ClassNotFoundException, InstantiationException, IllegalAccessException,
-			UnsupportedLookAndFeelException {
-		if (UIManager.getLookAndFeel().getClass().getName().equals(value)) {
-			return;
-		}
-		UIManager.setLookAndFeel(value);
-		for (Frame frame : Frame.getFrames()) {
-			for (Window window : frame.getOwnedWindows()) {
-				SwingUtilities.updateComponentTreeUI(window);
-			}
-			SwingUtilities.updateComponentTreeUI(frame);
-		}
 	}
 
 	@Override

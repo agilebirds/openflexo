@@ -26,10 +26,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import org.openflexo.foundation.utils.FlexoFont;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.prefs.ContextPreferences;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.swing.CustomPopup;
@@ -259,17 +257,7 @@ public class AdvancedPrefs extends ContextPreferences {
 			value = LookAndFeel.getDefaultLookAndFeel();
 		}
 		getPreferences().setProperty(ToolBox.getPLATFORM() + LOOK_AND_FEEL, LookAndFeel.lookAndFeelConverter.convertToString(value));
-		try {
-			ModuleLoader.setLookAndFeel(LookAndFeel.lookAndFeelConverter.convertToString(value));
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
+		Flexo.initUILAF(LookAndFeel.lookAndFeelConverter.convertToString(value));
 	}
 
 	public static void save() {
