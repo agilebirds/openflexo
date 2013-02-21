@@ -199,4 +199,7 @@ public class TestEMFCityMappingView extends FlexoTestCase {
 		assertEquals(project, newVirtualModelInstance.getResource().getProject());
 		assertEquals(project, newVirtualModelInstance.getProject());
 	}
+
+	// DropSchemeAction
+	// TestBasicOntologyEditorView
 }
