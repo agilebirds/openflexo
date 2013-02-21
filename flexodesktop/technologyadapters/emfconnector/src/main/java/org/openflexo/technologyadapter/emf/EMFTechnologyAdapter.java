@@ -38,7 +38,6 @@ import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
-import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -279,7 +278,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	@Override
 	public EMFModelResource createEmptyModel(FlexoProject project, String filename, String modelUri,
 			FlexoResource<EMFMetaModel> metaModelResource, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
-		File modelFile = ViewLibrary.getExpectedViewLibraryDirectory(project);
+		File modelFile = new File(FlexoProject.getProjectSpecificModelsDirectory(project), filename);
 		return createEmptyModel(modelFile, modelUri, metaModelResource, technologyContextManager);
 	}
 
@@ -315,6 +314,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 		try {
 			result = retrieveModelResource(modelFile, metaModelResource, technologyContextManager);
 			result.getEMFResource().save(null);
+			System.out.println("Create empty model " + modelFile.getAbsolutePath() + " as " + metaModelResource.getURI());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
