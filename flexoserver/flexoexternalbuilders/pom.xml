@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>flexoserver</artifactId>
-		<version>1.5-SNAPSHOT</version>
+		<version>1.5.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexoexternalbuilders</artifactId>
 	<name>Flexo External Builders</name>
