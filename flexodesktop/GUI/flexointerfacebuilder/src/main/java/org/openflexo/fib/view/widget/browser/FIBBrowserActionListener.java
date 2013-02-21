@@ -33,9 +33,8 @@ import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBAttributeNotification;
 import org.openflexo.fib.model.FIBBrowserAction;
-import org.openflexo.fib.model.FIBBrowserAction.FIBAddAction;
+import org.openflexo.fib.model.FIBBrowserAction.ActionType;
 import org.openflexo.fib.model.FIBBrowserAction.FIBCustomAction;
-import org.openflexo.fib.model.FIBBrowserAction.FIBRemoveAction;
 import org.openflexo.fib.model.FIBTableAction;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
 
@@ -79,15 +78,15 @@ public class FIBBrowserActionListener implements ActionListener, BindingEvaluati
 	}
 
 	public boolean isAddAction() {
-		return browserAction instanceof FIBAddAction;
+		return browserAction.getActionType() == ActionType.Add;
 	}
 
 	public boolean isRemoveAction() {
-		return browserAction instanceof FIBRemoveAction;
+		return browserAction.getActionType() == ActionType.Delete;
 	}
 
 	public boolean isCustomAction() {
-		return browserAction instanceof FIBCustomAction;
+		return browserAction.getActionType() == ActionType.Custom;
 	}
 
 	public boolean isStatic() {
@@ -116,7 +115,7 @@ public class FIBBrowserActionListener implements ActionListener, BindingEvaluati
 			logger.fine("Perform action " + browserAction.getName() + " method " + browserAction.getMethod());
 			logger.fine("controller=" + getController() + " of " + getController().getClass().getSimpleName());
 			this.selectedObject = selectedObject;
-			final Object newObject = browserAction.performAction(this, selectedObject);
+			final Object newObject = getBrowserAction().getMethod().getBindingValue(this);
 			// browserModel.fireTableDataChanged();
 			// browserModel.getBrowserWidget().updateWidgetFromModel();
 			SwingUtilities.invokeLater(new Runnable() {
@@ -126,6 +125,10 @@ public class FIBBrowserActionListener implements ActionListener, BindingEvaluati
 				}
 			});
 		}
+	}
+
+	public FIBBrowserAction getBrowserAction() {
+		return browserAction;
 	}
 
 	@Override
@@ -155,9 +158,10 @@ public class FIBBrowserActionListener implements ActionListener, BindingEvaluati
 	public Object getValue(BindingVariable variable) {
 		if (variable.getVariableName().equals("selected")) {
 			return selectedObject;
+		} else if (variable.getVariableName().equals("action")) {
+			return browserAction;
 		} else {
 			return getController().getValue(variable);
 		}
 	}
-
 }

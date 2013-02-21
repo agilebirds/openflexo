@@ -29,9 +29,9 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBBrowserAction;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.listener.FIBMouseClickListener;
@@ -77,14 +77,24 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 		public FIBBrowserActionAdapter(FlexoActionType<?, ?, ?> actionType) {
 			super();
 			this.actionType = actionType;
-			// setIsAvailable(new DataBinding(unparsed))
+			setMethod(new DataBinding("action.performAction(selected)"));
+			setIsAvailable(new DataBinding("action.isAvailable(selected)"));
 		}
 
-		@Override
-		public Object performAction(BindingEvaluationContext context, Object selectedObject) {
-			FlexoAction action = actionType.makeNewAction((FlexoModelObject) selectedObject, null, controller.getEditor());
-			action.doAction();
+		public Object performAction(Object selected) {
+			if (selected instanceof FlexoModelObject) {
+				FlexoAction action = actionType.makeNewAction((FlexoModelObject) selected, null, controller.getEditor());
+				action.doAction();
+			}
 			return null;
+		}
+
+		public boolean isAvailable(Object selected) {
+			if (selected instanceof FlexoModelObject) {
+				return controller.getEditor().isActionVisible(actionType, (FlexoModelObject) selected, null)
+						&& controller.getEditor().isActionEnabled(actionType, (FlexoModelObject) selected, null);
+			}
+			return false;
 		}
 
 		@Override
