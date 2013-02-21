@@ -40,7 +40,7 @@ import org.openflexo.foundation.ie.widget.IEBlocWidget;
 import org.openflexo.foundation.ie.widget.IEHTMLTableWidget;
 import org.openflexo.foundation.ie.widget.TopComponentReusableWidget;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.resource.LocalResourceCenterImplementation;
+import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.rm.FlexoResourceManager.BackwardSynchronizationHook;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
@@ -576,8 +576,8 @@ public class TestRM extends FlexoTestCase {
 		// The last test must call this to stop the RM checking
 		_project.close();
 		FileUtils.deleteDir(_project.getProjectDirectory());
-		if (resourceCenter != null && resourceCenter.getOpenFlexoResourceCenter() instanceof LocalResourceCenterImplementation) {
-			FileUtils.deleteDir(((LocalResourceCenterImplementation) resourceCenter.getOpenFlexoResourceCenter()).getRootDirectory());
+		if (resourceCenter != null && resourceCenter.getOpenFlexoResourceCenter() instanceof DirectoryResourceCenter) {
+			FileUtils.deleteDir(((DirectoryResourceCenter) resourceCenter.getOpenFlexoResourceCenter()).getRootDirectory());
 		}
 		resetVariables();
 		_bsHook = null;

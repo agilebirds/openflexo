@@ -13,7 +13,7 @@ import org.openflexo.toolbox.FileUtils;
 
 public abstract class DefaultResourceCenterService extends FlexoServiceImpl implements FlexoResourceCenterService {
 
-	private LocalResourceCenterImplementation openFlexoResourceCenter;
+	private DirectoryResourceCenter openFlexoResourceCenter;
 	private UserResourceCenter userResourceCenter;
 
 	public static FlexoResourceCenterService getNewInstance() {
@@ -32,8 +32,8 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 
 	public static FlexoResourceCenterService getNewInstance(File localResourceCenterDir) {
 		DefaultResourceCenterService service = (DefaultResourceCenterService) getNewInstance();
-		service.openFlexoResourceCenter = LocalResourceCenterImplementation
-				.instanciateNewLocalResourceCenterImplementation(localResourceCenterDir);
+		service.openFlexoResourceCenter = DirectoryResourceCenter
+				.instanciateNewDirectoryResourceCenter(localResourceCenterDir);
 		return service;
 	}
 
@@ -66,7 +66,7 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 				e.printStackTrace();
 			}
 		}
-		openFlexoResourceCenter = new LocalResourceCenterImplementation(file);
+		openFlexoResourceCenter = new DirectoryResourceCenter(file);
 		File userResourceCenterStorageFile = new File(FileUtils.getDocumentDirectory(), "FlexoUserResourceCenter/ResourceCenterData.xml");
 		if (!userResourceCenterStorageFile.getParentFile().canWrite()) {
 			userResourceCenterStorageFile = new File(System.getProperty("user.home"), "FlexoUserResourceCenter/ResourceCenterData.xml");
@@ -82,7 +82,7 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 		}*/
 
 	@Override
-	public LocalResourceCenterImplementation getOpenFlexoResourceCenter() {
+	public DirectoryResourceCenter getOpenFlexoResourceCenter() {
 		return openFlexoResourceCenter;
 	}
 

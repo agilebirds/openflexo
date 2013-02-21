@@ -7,7 +7,7 @@ import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.action.ImportProject;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.resource.LocalResourceCenterImplementation;
+import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.rm.FlexoProjectReference;
@@ -67,8 +67,8 @@ public class TestProjectReuse extends FlexoTestCase {
 
 	@Override
 	protected void tearDown() throws Exception {
-		if (resourceCenter != null && resourceCenter.getOpenFlexoResourceCenter() instanceof LocalResourceCenterImplementation) {
-			FileUtils.deleteDir(((LocalResourceCenterImplementation) resourceCenter.getOpenFlexoResourceCenter()).getRootDirectory());
+		if (resourceCenter != null && resourceCenter.getOpenFlexoResourceCenter() instanceof DirectoryResourceCenter) {
+			FileUtils.deleteDir(((DirectoryResourceCenter) resourceCenter.getOpenFlexoResourceCenter()).getRootDirectory());
 		}
 		if (rootProject != null) {
 			rootProject.close();

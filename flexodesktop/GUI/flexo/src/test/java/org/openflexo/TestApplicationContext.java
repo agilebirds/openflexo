@@ -6,7 +6,7 @@ import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.resource.UserResourceCenter;
+import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
@@ -38,7 +38,8 @@ public class TestApplicationContext extends ApplicationContext {
 	public TestApplicationContext(File resourceCenterDirectory) {
 		super();
 		this.resourceCenterDirectory = resourceCenterDirectory;
-		getResourceCenterService().addToResourceCenters(new UserResourceCenter(resourceCenterDirectory));
+		// getResourceCenterService().addToResourceCenters(new UserResourceCenter(resourceCenterDirectory));
+		getResourceCenterService().addToResourceCenters(new DirectoryResourceCenter(resourceCenterDirectory));
 	}
 
 	@Override

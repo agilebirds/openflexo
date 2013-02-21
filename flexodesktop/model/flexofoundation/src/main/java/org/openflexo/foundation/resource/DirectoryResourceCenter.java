@@ -32,23 +32,29 @@ import org.openflexo.toolbox.FileUtils.CopyStrategy;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
 
-public class LocalResourceCenterImplementation extends FileSystemBasedResourceCenter implements FlexoResourceCenter {
+/**
+ * Default implementation for a {@link FlexoResourceCenter} bound to a directory on the file system
+ * 
+ * @author sylvain
+ * 
+ */
+public class DirectoryResourceCenter extends FileSystemBasedResourceCenter implements FlexoResourceCenter {
 
-	protected static final Logger logger = Logger.getLogger(LocalResourceCenterImplementation.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(DirectoryResourceCenter.class.getPackage().getName());
 
 	private static final File ONTOLOGIES_DIR = new FileResource("Ontologies");
 	private static final File VIEWPOINT_LIBRARY_DIR = new FileResource("ViewPoints");
 
 	// private File newViewPointSandboxDirectory;
 
-	public LocalResourceCenterImplementation(File resourceCenterDirectory) {
+	public DirectoryResourceCenter(File resourceCenterDirectory) {
 		super(resourceCenterDirectory);
 		// newViewPointSandboxDirectory = new File(resourceCenterDirectory, "ViewPoints");
 	}
 
-	public static LocalResourceCenterImplementation instanciateNewLocalResourceCenterImplementation(File resourceCenterDirectory) {
+	public static DirectoryResourceCenter instanciateNewDirectoryResourceCenter(File resourceCenterDirectory) {
 		logger.info("Instanciate ResourceCenter from " + resourceCenterDirectory.getAbsolutePath());
-		LocalResourceCenterImplementation localResourceCenterImplementation = new LocalResourceCenterImplementation(resourceCenterDirectory);
+		DirectoryResourceCenter localResourceCenterImplementation = new DirectoryResourceCenter(resourceCenterDirectory);
 		try {
 			localResourceCenterImplementation.update();
 		} catch (IOException e) {
@@ -57,9 +63,9 @@ public class LocalResourceCenterImplementation extends FileSystemBasedResourceCe
 		return localResourceCenterImplementation;
 	}
 
-	public static LocalResourceCenterImplementation instanciateTestLocalResourceCenterImplementation(File resourceCenterDirectory) {
+	public static DirectoryResourceCenter instanciateTestDirectoryResourceCenter(File resourceCenterDirectory) {
 		logger.info("Instanciate TEST ResourceCenter from " + resourceCenterDirectory.getAbsolutePath());
-		LocalResourceCenterImplementation localResourceCenterImplementation = new LocalResourceCenterImplementation(resourceCenterDirectory);
+		DirectoryResourceCenter localResourceCenterImplementation = new DirectoryResourceCenter(resourceCenterDirectory);
 		return localResourceCenterImplementation;
 	}
 

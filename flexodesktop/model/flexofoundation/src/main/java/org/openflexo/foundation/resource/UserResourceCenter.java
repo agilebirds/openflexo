@@ -11,6 +11,14 @@ import java.util.logging.Level;
 
 import org.apache.commons.io.IOUtils;
 import org.jdom2.JDOMException;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.MetaModelRepository;
+import org.openflexo.foundation.technologyadapter.ModelRepository;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
+import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.ViewPointRepository;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.model.StringConverterLibrary.Converter;
 import org.openflexo.model.annotations.Adder;
@@ -31,7 +39,7 @@ import org.openflexo.model.factory.SerializationPolicy;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
 
-public class UserResourceCenter extends FileSystemBasedResourceCenter implements FlexoResourceCenter {
+public class UserResourceCenter /*extends FileSystemBasedResourceCenter*/implements FlexoResourceCenter {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(UserResourceCenter.class
 			.getPackage().getName());
@@ -41,7 +49,8 @@ public class UserResourceCenter extends FileSystemBasedResourceCenter implements
 	private File userResourceCenterStorageFile;
 
 	public UserResourceCenter(File userResourceCenterStorageFile) {
-		super(userResourceCenterStorageFile.getParentFile());
+		// super(userResourceCenterStorageFile.getParentFile());
+		super();
 		this.userResourceCenterStorageFile = userResourceCenterStorageFile;
 		try {
 			this.modelFactory = new ModelFactory(Storage.class);
@@ -171,8 +180,8 @@ public class UserResourceCenter extends FileSystemBasedResourceCenter implements
 
 	@Override
 	public void update() throws IOException {
-		if (getRootDirectory().exists()) {
-			FileInputStream fis = new FileInputStream(getRootDirectory());
+		if (userResourceCenterStorageFile.exists()) {
+			FileInputStream fis = new FileInputStream(userResourceCenterStorageFile);
 			try {
 				try {
 					storage = (Storage) modelFactory.deserialize(fis, DeserializationPolicy.EXTENSIVE);
@@ -227,6 +236,44 @@ public class UserResourceCenter extends FileSystemBasedResourceCenter implements
 			return value.toString();
 		}
 
+	}
+
+	@Override
+	public void initialize(ViewPointLibrary viewPointLibrary) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void initialize(TechnologyAdapterService technologyAdapterService) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public ViewPointRepository getViewPointRepository() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <R extends FlexoResource<? extends M>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> ModelRepository<R, M, MM, TA> getModelRepository(
+			TA technologyAdapter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> MetaModelRepository<R, M, MM, TA> getMetaModelRepository(
+			TA technologyAdapter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
