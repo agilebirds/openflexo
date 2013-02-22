@@ -306,8 +306,8 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		return new FlexoJTree(browser);
 	}
 
-	protected TreeDropTarget createTreeDropTarget(FlexoJTree treeView2, ProjectBrowser _browser2) {
-		return new TreeDropTarget(treeView, _browser);
+	protected TreeDropTarget createTreeDropTarget(FlexoJTree treeView, ProjectBrowser browser) {
+		return new TreeDropTarget(treeView, browser);
 	}
 
 	public ProjectBrowser getBrowser() {

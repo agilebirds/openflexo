@@ -1303,6 +1303,10 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		return _editor;
 	}
 
+	public FlexoController getController() {
+		return controller;
+	}
+
 	public int getRowHeight() {
 		return rowHeight;
 	}
