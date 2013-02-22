@@ -1099,6 +1099,9 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		if (notification != null) {
 			this.multilineAllowed = multilineAllowed;
 			hasChanged(notification);
+			if (!multilineAllowed && getText() != null) {
+				setText(getText().replaceAll("\r?\n", " "));
+			}
 		}
 	}
 
