@@ -28,13 +28,9 @@
  */
 package org.openflexo.technologyadapter.emf.viewpoint.editionaction;
 
-import java.util.List;
 import java.util.logging.Logger;
 
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
@@ -66,22 +62,22 @@ public class RemoveEMFObjectIndividual extends DeleteAction<EMFModel, EMFMetaMod
 	 */
 	@Override
 	public FlexoModelObject performAction(EditionSchemeAction action) {
-		ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
-		EObject object = objectIndividual.getObject();
-		EObject container = object.eContainer();
-		EStructuralFeature containmentFeature = object.eContainmentFeature();
-		if (container != null) {
-			// Model Object not root
-			if (containmentFeature.getUpperBound() != 1) {
-				List<EObject> values = (List<EObject>) container.eGet(containmentFeature);
-				values.remove(object);
-			} else {
-				objectIndividual.getObject().eUnset(containmentFeature);
-			}
-		} else {
-			// Root Model Object
-			modelSlotInstance.getModel().getEMFResource().getContents().remove(object);
-		}
+		// ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
+		// EObject object = objectIndividual.getObject();
+		// EObject container = object.eContainer();
+		// EStructuralFeature containmentFeature = object.eContainmentFeature();
+		// if (container != null) {
+		// // Model Object not root
+		// if (containmentFeature.getUpperBound() != 1) {
+		// List<EObject> values = (List<EObject>) container.eGet(containmentFeature);
+		// values.remove(object);
+		// } else {
+		// objectIndividual.getObject().eUnset(containmentFeature);
+		// }
+		// } else {
+		// // Root Model Object
+		// modelSlotInstance.getModel().getEMFResource().getContents().remove(object);
+		// }
 		return null;
 	}
 

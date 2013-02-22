@@ -30,7 +30,6 @@ package org.openflexo.technologyadapter.emf.viewpoint.editionaction;
 
 import java.lang.reflect.Type;
 
-import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
@@ -73,9 +72,9 @@ public class AddEMFObjectIndividualAttributeDataPropertyValue<T> extends
 	 */
 	@Override
 	public Type getAssignableType() {
-		if (value != null) {
-			return value.getClass();
-		}
+		// if (value != null) {
+		// return value.getClass();
+		// }
 		return Object.class;
 	}
 
@@ -87,13 +86,13 @@ public class AddEMFObjectIndividualAttributeDataPropertyValue<T> extends
 	@Override
 	public EMFObjectIndividualAttributeDataPropertyValue performAction(EditionSchemeAction action) {
 		EMFObjectIndividualAttributeDataPropertyValue result = null;
-		ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
-		EMFModel model = modelSlotInstance.getModel();
-		// Add Attribute in EMF
-		objectIndividual.getObject().eSet(attributeDataProperty.getObject(), value);
-		// Instanciate Wrapper
-		result = model.getConverter().convertObjectIndividualAttributeDataPropertyValue(model, objectIndividual.getObject(),
-				attributeDataProperty.getObject());
+		// ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
+		// EMFModel model = modelSlotInstance.getModel();
+		// // Add Attribute in EMF
+		// objectIndividual.getObject().eSet(attributeDataProperty.getObject(), value);
+		// // Instanciate Wrapper
+		// result = model.getConverter().convertObjectIndividualAttributeDataPropertyValue(model, objectIndividual.getObject(),
+		// attributeDataProperty.getObject());
 		return result;
 	}
 

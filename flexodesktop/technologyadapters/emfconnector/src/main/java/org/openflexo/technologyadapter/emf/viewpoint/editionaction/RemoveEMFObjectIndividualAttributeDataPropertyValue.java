@@ -29,9 +29,7 @@
 package org.openflexo.technologyadapter.emf.viewpoint.editionaction;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
-import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
@@ -74,9 +72,9 @@ public class RemoveEMFObjectIndividualAttributeDataPropertyValue<T> extends
 	 */
 	@Override
 	public Type getAssignableType() {
-		if (value != null) {
-			return value.getClass();
-		}
+		// if (value != null) {
+		// return value.getClass();
+		// }
 		return Object.class;
 	}
 
@@ -88,18 +86,18 @@ public class RemoveEMFObjectIndividualAttributeDataPropertyValue<T> extends
 	@Override
 	public EMFObjectIndividualAttributeDataPropertyValue performAction(EditionSchemeAction action) {
 		EMFObjectIndividualAttributeDataPropertyValue result = null;
-		ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
-		EMFModel model = modelSlotInstance.getModel();
-		// Remove Attribute in EMF
-		if (attributeDataProperty.getObject().getUpperBound() != 1) {
-			List<T> values = (List<T>) objectIndividual.getObject().eGet(attributeDataProperty.getObject());
-			values.remove(value);
-		} else {
-			objectIndividual.getObject().eUnset(attributeDataProperty.getObject());
-		}
-		// Instanciate Wrapper
-		result = model.getConverter().convertObjectIndividualAttributeDataPropertyValue(model, objectIndividual.getObject(),
-				attributeDataProperty.getObject());
+		// ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
+		// EMFModel model = modelSlotInstance.getModel();
+		// // Remove Attribute in EMF
+		// if (attributeDataProperty.getObject().getUpperBound() != 1) {
+		// List<T> values = (List<T>) objectIndividual.getObject().eGet(attributeDataProperty.getObject());
+		// values.remove(value);
+		// } else {
+		// objectIndividual.getObject().eUnset(attributeDataProperty.getObject());
+		// }
+		// // Instanciate Wrapper
+		// result = model.getConverter().convertObjectIndividualAttributeDataPropertyValue(model, objectIndividual.getObject(),
+		// attributeDataProperty.getObject());
 		return result;
 	}
 
