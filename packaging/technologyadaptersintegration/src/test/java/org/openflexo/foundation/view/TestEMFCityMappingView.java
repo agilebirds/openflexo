@@ -28,6 +28,8 @@
  */
 package org.openflexo.foundation.view;
 
+import java.util.Vector;
+
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.action.AddRepositoryFolder;
@@ -35,10 +37,17 @@ import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.rm.ViewResource;
+import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlotInstanceConfiguration;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.CreateView;
+import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration.DefaultModelSlotInstanceConfigurationOption;
+import org.openflexo.foundation.view.diagram.DiagramModelSlotInstanceConfiguration;
 import org.openflexo.foundation.view.diagram.action.CreateDiagram;
 import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
 import org.openflexo.foundation.view.diagram.model.Diagram;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
+import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
+import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 
 /**
@@ -59,6 +68,9 @@ public class TestEMFCityMappingView extends FlexoTestCase {
 		instanciateTestServiceManager();
 	}
 
+	/**
+	 * Test creating Diagram and model from scratch.
+	 */
 	public void testEMFCityMapping() {
 		// CreateProject
 		FlexoEditor editor = createProject("TestCreateView");
@@ -66,9 +78,9 @@ public class TestEMFCityMappingView extends FlexoTestCase {
 		assertNotNull(project.getViewLibrary());
 
 		// Load CityMapping ViewPoint
-		ViewPoint cityMappingVP = loadViewPoint("http://www.thalesgroup.com/openflexo/emf/CityMapping");
-		assertNotNull(cityMappingVP);
-		System.out.println("Found view point in " + cityMappingVP.getResource().getFile());
+		ViewPoint cityMappingViewPoint = loadViewPoint("http://www.thalesgroup.com/openflexo/emf/CityMapping");
+		assertNotNull(cityMappingViewPoint);
+		System.out.println("Found view point in " + cityMappingViewPoint.getResource().getFile());
 
 		// Create View Folder
 		AddRepositoryFolder addRepositoryFolder = AddRepositoryFolder.actionType.makeNewAction(project.getViewLibrary().getRootFolder(),
@@ -83,7 +95,7 @@ public class TestEMFCityMappingView extends FlexoTestCase {
 		CreateView addView = CreateView.actionType.makeNewAction(viewFolder, null, editor);
 		addView.newViewName = "TestNewView";
 		addView.newViewTitle = "A nice title for a new view";
-		addView.viewpointResource = cityMappingVP.getResource();
+		addView.viewpointResource = cityMappingViewPoint.getResource();
 		addView.doAction();
 		assertTrue(addView.hasActionExecutionSucceeded());
 		View newView = addView.getNewView();
@@ -91,7 +103,7 @@ public class TestEMFCityMappingView extends FlexoTestCase {
 		assertNotNull(newView);
 		assertEquals(addView.newViewName, newView.getName());
 		assertEquals(addView.newViewTitle, newView.getTitle());
-		assertEquals(addView.viewpointResource.getViewPoint(), cityMappingVP);
+		assertEquals(addView.viewpointResource.getViewPoint(), cityMappingViewPoint);
 		assertTrue(newView.getResource().getFile().exists());
 
 		// Reload Project
@@ -118,7 +130,37 @@ public class TestEMFCityMappingView extends FlexoTestCase {
 		CreateDiagram createDiagram = CreateDiagram.actionType.makeNewAction(view, null, editor);
 		createDiagram.setNewVirtualModelInstanceName("TestNewDiagram");
 		createDiagram.setNewVirtualModelInstanceTitle("A nice title for a new diagram");
-		createDiagram.setDiagramSpecification(cityMappingVP.getDefaultDiagramSpecification());
+		createDiagram.setDiagramSpecification(cityMappingViewPoint.getDefaultDiagramSpecification());
+		// Populate modelSlots
+		assertEquals(3, cityMappingViewPoint.getDefaultDiagramSpecification().getModelSlots().size());
+		// Model Slot Diagram
+		ModelSlot<?, ?> diagramModelSlot = cityMappingViewPoint.getDefaultDiagramSpecification().getModelSlot("diagram");
+		assertNotNull(diagramModelSlot);
+		DiagramModelSlotInstanceConfiguration diagramModelSlotConfiguration = (DiagramModelSlotInstanceConfiguration) createDiagram
+				.getModelSlotInstanceConfiguration(diagramModelSlot);
+		diagramModelSlotConfiguration.setOption(DefaultModelSlotInstanceConfigurationOption.Autoconfigure);
+		assertTrue(diagramModelSlotConfiguration.isValidConfiguration());
+		// Model Slot city1
+		ModelSlot<?, ?> city1ModelSlot = cityMappingViewPoint.getDefaultDiagramSpecification().getModelSlot("city1");
+		assertNotNull(city1ModelSlot);
+		FlexoOntologyModelSlotInstanceConfiguration city1ModelSlotConfiguration = (FlexoOntologyModelSlotInstanceConfiguration) createDiagram
+				.getModelSlotInstanceConfiguration(city1ModelSlot);
+		city1ModelSlotConfiguration.setOption(DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel);
+		city1ModelSlotConfiguration.setModelUri("http://www.thalesgroup.com/openflexo/emf/CityMapping/city1");
+		city1ModelSlotConfiguration.setRelativePath("/");
+		city1ModelSlotConfiguration.setFilename("city.city1");
+		assertTrue(city1ModelSlotConfiguration.isValidConfiguration());
+		// Model Slot city2
+		ModelSlot<?, ?> city2ModelSlot = cityMappingViewPoint.getDefaultDiagramSpecification().getModelSlot("city2");
+		assertNotNull(city2ModelSlot);
+		FlexoOntologyModelSlotInstanceConfiguration city2ModelSlotConfiguration = (FlexoOntologyModelSlotInstanceConfiguration) createDiagram
+				.getModelSlotInstanceConfiguration(city2ModelSlot);
+		city2ModelSlotConfiguration.setOption(DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel);
+		city2ModelSlotConfiguration.setModelUri("http://www.thalesgroup.com/openflexo/emf/CityMapping/city1");
+		city2ModelSlotConfiguration.setRelativePath("/");
+		city2ModelSlotConfiguration.setFilename("city.city2");
+		assertTrue(city2ModelSlotConfiguration.isValidConfiguration());
+		// Do Action CreateDiagram.
 		createDiagram.doAction();
 		System.out.println("exception thrown=" + createDiagram.getThrownException());
 		assertTrue(createDiagram.hasActionExecutionSucceeded());
@@ -127,13 +169,20 @@ public class TestEMFCityMappingView extends FlexoTestCase {
 		assertNotNull(newDiagram);
 		assertEquals(createDiagram.getNewVirtualModelInstanceName(), newDiagram.getName());
 		assertEquals(createDiagram.getNewVirtualModelInstanceTitle(), newDiagram.getTitle());
-		assertEquals(createDiagram.getDiagramSpecification(), cityMappingVP.getDefaultDiagramSpecification());
+		assertEquals(createDiagram.getDiagramSpecification(), cityMappingViewPoint.getDefaultDiagramSpecification());
 		assertTrue(newDiagram.getResource().getFile().exists());
 		assertEquals(project, newDiagram.getResource().getProject());
 		assertEquals(project, newDiagram.getProject());
 
 		// Populate Diagram
+		DiagramSpecification diagramSpecification = cityMappingViewPoint.getDefaultDiagramSpecification();
+		assertEquals(6, diagramSpecification.getEditionPatterns().size());
+		EditionPattern cityEditionPattern = diagramSpecification.getEditionPattern("City");
+		Vector<DropScheme> cityDropSchemes = cityEditionPattern.getDropSchemes();
+		assertEquals(1, cityDropSchemes.size());
+
 		DropSchemeAction dropSchemeAction = DropSchemeAction.actionType.makeNewAction(view, null, editor);
+		dropSchemeAction.setDropScheme(cityDropSchemes.get(0));
 		dropSchemeAction.doAction();
 	}
 
