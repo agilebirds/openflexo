@@ -48,6 +48,7 @@ import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 
 /**
@@ -181,9 +182,23 @@ public class TestEMFCityMappingView extends FlexoTestCase {
 		Vector<DropScheme> cityDropSchemes = cityEditionPattern.getDropSchemes();
 		assertEquals(1, cityDropSchemes.size());
 
-		DropSchemeAction dropSchemeAction = DropSchemeAction.actionType.makeNewAction(view, null, editor);
-		dropSchemeAction.setDropScheme(cityDropSchemes.get(0));
-		dropSchemeAction.doAction();
+		DropSchemeAction cityDropSchemeAction = DropSchemeAction.actionType.makeNewAction(createDiagram.getNewDiagram().getRootPane(),
+				null, editor);
+		DropScheme cityDropScheme = cityDropSchemes.get(0);
+		cityDropSchemeAction.setDropScheme(cityDropScheme);
+		EditionSchemeParameter cityNameParameter = cityDropScheme.getParameter("name");
+		assertNotNull(cityNameParameter);
+		cityDropSchemeAction.setParameterValue(cityNameParameter, "Brest");
+		EditionSchemeParameter cityCity1UriParameter = cityDropScheme.getParameter("city1Uri");
+		assertNotNull(cityCity1UriParameter);
+		cityDropSchemeAction.setParameterValue(cityCity1UriParameter, "city1");
+		EditionSchemeParameter cityCity2UriParameter = cityDropScheme.getParameter("city2Uri");
+		assertNotNull(cityCity2UriParameter);
+		cityDropSchemeAction.setParameterValue(cityCity2UriParameter, "city2");
+		assertEquals("Brest", (String) cityDropSchemeAction.getParameterValue(cityNameParameter));
+		assertEquals("city1", (String) cityDropSchemeAction.getParameterValue(cityCity1UriParameter));
+		assertEquals("city2", (String) cityDropSchemeAction.getParameterValue(cityCity2UriParameter));
+		cityDropSchemeAction.doAction();
 	}
 
 	private ViewPoint loadViewPoint(String viewPointURI) {

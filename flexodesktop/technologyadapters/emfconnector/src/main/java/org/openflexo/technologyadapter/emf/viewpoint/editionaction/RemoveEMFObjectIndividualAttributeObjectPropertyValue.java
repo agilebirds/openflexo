@@ -31,14 +31,12 @@ package org.openflexo.technologyadapter.emf.viewpoint.editionaction;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
-import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeObjectProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
-import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualAttributeObjectPropertyValue;
 
 /**
@@ -89,15 +87,20 @@ public class RemoveEMFObjectIndividualAttributeObjectPropertyValue<T> extends
 	 */
 	@Override
 	public EMFObjectIndividualAttributeObjectPropertyValue performAction(EditionSchemeAction action) {
-		EMFModel model = (EMFModel) objectIndividual.getOntology();
+		EMFObjectIndividualAttributeObjectPropertyValue result = null;
+		ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
+		EMFModel model = modelSlotInstance.getModel();
+		// Remove Attribute in EMF
 		if (attributeObjectProperty.getObject().getUpperBound() != 1) {
 			List<T> values = (List<T>) objectIndividual.getObject().eGet(attributeObjectProperty.getObject());
 			values.remove(value);
 		} else {
 			objectIndividual.getObject().eUnset(attributeObjectProperty.getObject());
 		}
-		return model.getConverter().convertObjectIndividualAttributeObjectPropertyValue(model, objectIndividual.getObject(),
+		// Instanciate Wrapper
+		result = model.getConverter().convertObjectIndividualAttributeObjectPropertyValue(model, objectIndividual.getObject(),
 				attributeObjectProperty.getObject());
+		return result;
 	}
 
 	/**
@@ -108,41 +111,5 @@ public class RemoveEMFObjectIndividualAttributeObjectPropertyValue<T> extends
 	 */
 	@Override
 	public void finalizePerformAction(EditionSchemeAction action, EMFObjectIndividualAttributeObjectPropertyValue initialContext) {
-	}
-
-	protected EMFObjectIndividual objectIndividual;
-
-	/**
-	 * Setter of objectIndividual.
-	 * 
-	 * @param objectIndividual
-	 *            the objectIndividual to set
-	 */
-	public void setObjectIndividual(EMFObjectIndividual objectIndividual) {
-		this.objectIndividual = objectIndividual;
-	}
-
-	protected EMFAttributeObjectProperty attributeObjectProperty;
-
-	/**
-	 * Setter of attributeObjectProperty.
-	 * 
-	 * @param attributeObjectProperty
-	 *            the attributeObjectProperty to set
-	 */
-	public void setAttributeObjectProperty(EMFAttributeObjectProperty attributeObjectProperty) {
-		this.attributeObjectProperty = attributeObjectProperty;
-	}
-
-	protected T value;
-
-	/**
-	 * Setter of value.
-	 * 
-	 * @param value
-	 *            the value to set
-	 */
-	public void setValue(T value) {
-		this.value = value;
 	}
 }

@@ -31,14 +31,12 @@ package org.openflexo.technologyadapter.emf.viewpoint.editionaction;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
-import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
-import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualReferenceObjectPropertyValue;
 
 /**
@@ -89,15 +87,20 @@ public class AddEMFObjectIndividualReferenceObjectPropertyValue<T> extends
 	 */
 	@Override
 	public EMFObjectIndividualReferenceObjectPropertyValue performAction(EditionSchemeAction action) {
-		EMFModel model = (EMFModel) objectIndividual.getOntology();
+		EMFObjectIndividualReferenceObjectPropertyValue result = null;
+		ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
+		EMFModel model = modelSlotInstance.getModel();
+		// Add Attribute in EMF
 		if (referenceObjectProperty.getObject().getUpperBound() != 1) {
 			List<T> values = (List<T>) objectIndividual.getObject().eGet(referenceObjectProperty.getObject());
 			values.add(value);
 		} else {
 			objectIndividual.getObject().eSet(referenceObjectProperty.getObject(), value);
 		}
-		return model.getConverter().convertObjectIndividualReferenceObjectPropertyValue(model, objectIndividual.getObject(),
+		// Instanciate Wrapper
+		result = model.getConverter().convertObjectIndividualReferenceObjectPropertyValue(model, objectIndividual.getObject(),
 				referenceObjectProperty.getObject());
+		return result;
 	}
 
 	/**
@@ -108,41 +111,5 @@ public class AddEMFObjectIndividualReferenceObjectPropertyValue<T> extends
 	 */
 	@Override
 	public void finalizePerformAction(EditionSchemeAction action, EMFObjectIndividualReferenceObjectPropertyValue initialContext) {
-	}
-
-	protected EMFObjectIndividual objectIndividual;
-
-	/**
-	 * Setter of objectIndividual.
-	 * 
-	 * @param objectIndividual
-	 *            the objectIndividual to set
-	 */
-	public void setObjectIndividual(EMFObjectIndividual objectIndividual) {
-		this.objectIndividual = objectIndividual;
-	}
-
-	protected EMFReferenceObjectProperty referenceObjectProperty;
-
-	/**
-	 * Setter of referenceObjectProperty.
-	 * 
-	 * @param referenceObjectProperty
-	 *            the referenceObjectProperty to set
-	 */
-	public void setReferenceObjectProperty(EMFReferenceObjectProperty referenceObjectProperty) {
-		this.referenceObjectProperty = referenceObjectProperty;
-	}
-
-	protected T value;
-
-	/**
-	 * Setter of value.
-	 * 
-	 * @param value
-	 *            the value to set
-	 */
-	public void setValue(T value) {
-		this.value = value;
 	}
 }
