@@ -147,4 +147,10 @@ public class RepositoryFolder<R extends FlexoResource<?>> extends FlexoObject {
 		}
 		super.delete();
 	}
+
+	@Override
+	public String toString() {
+		return "RepositoryFolder " + getName() + (!isRootFolder() ? " in " + getParentFolder().getName() : " root") + " of "
+				+ getResourceRepository();
+	}
 }

@@ -96,6 +96,13 @@ public class VirtualModelTechnologyAdapter<VMI extends VirtualModelInstance<VMI,
 	@Override
 	public boolean isValidModelFile(File aModelFile, FlexoResource<VM> metaModelResource,
 			TechnologyContextManager<VMI, VM> technologyContextManager) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isValidModelFile(File aModelFile, TechnologyContextManager<VMI, VM> technologyContextManager) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -173,6 +180,12 @@ public class VirtualModelTechnologyAdapter<VMI extends VirtualModelInstance<VMI,
 	@Override
 	public FlexoResource<VMI> retrieveModelResource(File aModelFile, FlexoResource<VM> metaModelResource,
 			TechnologyContextManager<VMI, VM> technologyContextManager) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public FlexoResource<VMI> retrieveModelResource(File aModelFile, TechnologyContextManager<VMI, VM> technologyContextManager) {
 		// TODO Auto-generated method stub
 		return null;
 	}

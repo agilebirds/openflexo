@@ -215,6 +215,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 			TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
 		boolean valid = false;
 		if (aModelFile.exists()) {
+			// TODO syntaxic check and conformity to XMI
 			EMFMetaModelResource emfMetaModelResource = (EMFMetaModelResource) metaModelResource;
 			if (aModelFile.getName().endsWith("." + emfMetaModelResource.getModelFileExtension())) {
 				if (aModelFile.isFile()) {
@@ -223,6 +224,12 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 			}
 		}
 		return valid;
+	}
+
+	@Override
+	public boolean isValidModelFile(File aModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
+		// TODO syntaxic check and conformity to XMI
+		return aModelFile.isFile() && aModelFile.exists();
 	}
 
 	/**
@@ -267,6 +274,13 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 		}
 
 		return emfModelResource;
+	}
+
+	@Override
+	public FlexoResource<EMFModel> retrieveModelResource(File aModelFile,
+			TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/**

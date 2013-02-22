@@ -148,9 +148,14 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	@Override
 	public boolean isValidModelFile(File aModelFile, FlexoResource<XSDMetaModel> metaModelResource,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
-		// TODO: also check that file is valid and maps a valid XML model conform to supplied meta-model
-		// return aModelFile.getName().endsWith(".xml");
-		return false;
+		// TODO: also check that file is valid and maps the valid XSD represented by the metamodel
+		return aModelFile.getName().endsWith(".xml");
+	}
+
+	@Override
+	public boolean isValidModelFile(File aModelFile, TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
+		// TODO: also check that file is valid and maps a valid XSD
+		return aModelFile.getName().endsWith(".xml");
 	}
 
 	/**
@@ -186,6 +191,13 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 		XSDTechnologyContextManager xsdContextManager = (XSDTechnologyContextManager) technologyContextManager;
 		xsdContextManager.registerModel(xmlModelResource);
 		return xmlModelResource;
+	}
+
+	@Override
+	public FlexoResource<XMLModel> retrieveModelResource(File aModelFile,
+			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
+		logger.warning("Not implemented yet");
+		return null;
 	}
 
 	/**

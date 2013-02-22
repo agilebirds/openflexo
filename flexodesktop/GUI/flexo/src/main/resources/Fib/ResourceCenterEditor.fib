@@ -25,7 +25,7 @@
               <Children data="folder.children" visible="" cast="" name="subFolders" />
               <Children data="folder.resources" visible="" cast="" name="resources" />
             </BrowserElement>
-            <BrowserElement dataClassName="org.openflexo.foundation.resource.FlexoResource" label="resource.name" icon="controller.iconForObject(resource)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="resource" />
+            <BrowserElement dataClassName="org.openflexo.foundation.resource.FlexoResource" label="resource.uRI" icon="controller.iconForObject(resource)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="resource" />
             <BrowserElement dataClassName="org.openflexo.foundation.resource.FlexoResourceCenter" label="resourceCenter.name" icon="controller.iconForObject(resourceCenter)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="resourceCenter" />
           </Browser>
           <Panel layout="border" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" darkLevel="0" data="" constraints="border(location=north)" visible="">

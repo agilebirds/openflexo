@@ -284,14 +284,14 @@ public class ResourceRepository<R extends FlexoResource<?>> extends FlexoObject 
 
 	public RepositoryFolder<R> getRepositoryFolder(File aFile, boolean createWhenNonExistent) throws IOException {
 		if (FileUtils.directoryContainsFile(getRootFolder().getFile(), aFile)) {
-			System.out.println("Searching folder for file " + aFile + "root folder = " + getRootFolder().getFile());
+			// System.out.println("Searching folder for file " + aFile + "root folder = " + getRootFolder().getFile());
 			List<String> pathTo = new ArrayList<String>();
 			File f = aFile.getParentFile().getCanonicalFile();
 			while (f != null && !f.equals(getRootFolder().getFile().getCanonicalFile())) {
 				pathTo.add(0, f.getName());
 				f = f.getParentFile();
 			}
-			System.out.println("Paths = " + pathTo);
+			// System.out.println("Paths = " + pathTo);
 			RepositoryFolder<R> returned = getRootFolder();
 			for (String pathElement : pathTo) {
 				RepositoryFolder<R> currentFolder = returned.getFolderNamed(pathElement);
@@ -300,13 +300,13 @@ public class ResourceRepository<R extends FlexoResource<?>> extends FlexoObject 
 						RepositoryFolder<R> newFolder = new RepositoryFolder<R>(pathElement, returned, this);
 						currentFolder = newFolder;
 					} else {
-						System.out.println("Folder for " + aFile + " is not existant");
+						// System.out.println("Folder for " + aFile + " is not existant");
 						return null;
 					}
 				}
 				returned = currentFolder;
 			}
-			System.out.println("Folder for " + aFile + " is " + returned.getFile());
+			// System.out.println("Folder for " + aFile + " is " + returned.getFile());
 			return returned;
 		}
 		return null;

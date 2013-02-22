@@ -2,9 +2,11 @@ package org.openflexo.foundation.technologyadapter;
 
 import java.util.List;
 
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterAdded;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
@@ -16,7 +18,7 @@ import org.openflexo.foundation.resource.FlexoResourceCenterService;
  * For each {@link FlexoResourceCenter} and for each {@link TechnologyAdapter}, a repository of {@link FlexoModel} and
  * {@link FlexoMetaModel} are managed.
  * 
- * @author sguerin
+ * @author sylvain
  * 
  */
 public class InformationSpace extends FlexoServiceImpl {
@@ -33,6 +35,15 @@ public class InformationSpace extends FlexoServiceImpl {
 			return getServiceManager().getTechnologyAdapterService().getTechnologyAdapters();
 		}
 		return null;
+	}
+
+	@Override
+	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
+		if (notification instanceof ResourceCenterAdded) {
+			setChanged();
+			notifyObservers(new DataModification(null, ((ResourceCenterAdded) notification).getAddedResourceCenter()));
+		}
+		super.receiveNotification(caller, notification);
 	}
 
 	/**

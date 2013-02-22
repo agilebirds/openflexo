@@ -81,7 +81,7 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 	 */
 	@Override
 	public boolean isValidMetaModelFile(File aMetaModelFile, TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
-		// TODO: also check that file is valid and maps a valid XSD schema
+		// TODO: also check that file is valid
 		return aMetaModelFile.isFile() && aMetaModelFile.getName().endsWith(".owl");
 	}
 
@@ -109,6 +109,11 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 		// TODO: also check that file is valid and maps a valid XML model conform to supplied meta-model
 		// return aModelFile.getName().endsWith(".owl");
 		return false;
+	}
+
+	@Override
+	public boolean isValidModelFile(File aModelFile, TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
+		return aModelFile.isFile() && aModelFile.getName().endsWith(".owl");
 	}
 
 	@Override
@@ -142,6 +147,13 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 		ontologyResource.setServiceManager(getTechnologyAdapterService().getFlexoServiceManager());
 		logger.info("Found OWL ontology " + ontologyResource.getURI() + " file:" + aModelFile.getAbsolutePath());
 		return ontologyResource;*/
+		return null;
+	}
+
+	@Override
+	public FlexoResource<OWLOntology> retrieveModelResource(File aModelFile,
+			TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
