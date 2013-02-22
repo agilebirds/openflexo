@@ -358,7 +358,7 @@ public class FIBBrowser extends FIBWidget {
 		} else {
 			Class<?> superclass = aClass.getSuperclass();
 			if (superclass != null) {
-				returned = elementsForClasses.get(aClass);
+				returned = elementsForClasses.get(superclass);
 				if (returned != null) {
 					return returned;
 				} else {

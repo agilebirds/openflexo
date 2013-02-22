@@ -20,7 +20,10 @@
 package org.openflexo.foundation.resource;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Timer;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.rm.ViewPointResource;
@@ -43,7 +46,7 @@ import org.openflexo.foundation.viewpoint.ViewPointRepository;
  * @author sylvain
  * 
  */
-public abstract class FileSystemBasedResourceCenter implements FlexoResourceCenter {
+public abstract class FileSystemBasedResourceCenter extends FileResourceRepository<FlexoResource<?>> implements FlexoResourceCenter {
 
 	protected static final Logger logger = Logger.getLogger(FileSystemBasedResourceCenter.class.getPackage().getName());
 
@@ -54,8 +57,10 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 	private HashMap<TechnologyAdapter<?, ?>, MetaModelRepository<?, ?, ?, ?>> metaModelRepositories = new HashMap<TechnologyAdapter<?, ?>, MetaModelRepository<?, ?, ?, ?>>();
 
 	public FileSystemBasedResourceCenter(File rootDirectory) {
-		super();
+		super(null, rootDirectory);
+		setOwner(this);
 		this.rootDirectory = rootDirectory;
+		startDirectoryWatching();
 	}
 
 	public File getRootDirectory() {
@@ -74,10 +79,25 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 
 	@Override
 	public void initialize(ViewPointLibrary viewPointLibrary) {
-		logger.info("Initializing ViewPointLibrary");
+		logger.info("Initializing ViewPointLibrary for " + this);
 		viewPointRepository = new ViewPointRepository(this, viewPointLibrary);
-		System.out.println("Exploring " + rootDirectory + " for ResourceCenter " + this + " for ViewPoints");
-		exploreDirectoryLookingForViewPoints(rootDirectory, viewPointRepository.getRootFolder(), viewPointLibrary);
+		exploreDirectoryLookingForViewPoints(rootDirectory, viewPointLibrary);
+	}
+
+	/**
+	 * Retrieve (creates it when not existant) folder containing supplied file
+	 * 
+	 * @param repository
+	 * @param aFile
+	 * @return
+	 */
+	protected <R extends FlexoResource<?>> RepositoryFolder<R> retrieveRepositoryFolder(ResourceRepository<R> repository, File aFile) {
+		try {
+			return repository.getRepositoryFolder(aFile, true);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return repository.getRootFolder();
+		}
 	}
 
 	/**
@@ -87,37 +107,53 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 	 * @param viewPointLibrary
 	 * @return a flag indicating if some ViewPoints were found
 	 */
-	private boolean exploreDirectoryLookingForViewPoints(File directory, RepositoryFolder<ViewPointResource> folder,
-			ViewPointLibrary viewPointLibrary) {
+	private boolean exploreDirectoryLookingForViewPoints(File directory, ViewPointLibrary viewPointLibrary) {
 		boolean returned = false;
 		logger.fine("Exploring " + directory);
 		if (directory.exists() && directory.isDirectory() && directory.canRead()) {
 			for (File f : directory.listFiles()) {
-				if (f.isDirectory() && f.getName().endsWith(".viewpoint")) {
-					ViewPointResource vpRes = ViewPointResourceImpl.retrieveViewPointResource(f, viewPointLibrary);
-					if (vpRes != null) {
-						logger.info("Found and register viewpoint "
-								+ vpRes.getURI()
-								+ (vpRes instanceof FlexoFileResource ? " file=" + ((FlexoFileResource) vpRes).getFile().getAbsolutePath()
-										: ""));
-						viewPointRepository.registerResource(vpRes, folder);
-						returned = true;
-					} else {
-						logger.warning("While exploring resource center looking for viewpoints : cannot retrieve resource for file "
-								+ f.getAbsolutePath());
-					}
-				}
+				ViewPointResource vpRes = analyseAsViewPoint(f);
 				if (f.isDirectory() && !f.getName().equals("CVS")) {
-					RepositoryFolder newFolder = new RepositoryFolder(f.getName(), folder, viewPointRepository);
-					if (exploreDirectoryLookingForViewPoints(f, newFolder, viewPointLibrary)) {
+					if (exploreDirectoryLookingForViewPoints(f, viewPointLibrary)) {
 						returned = true;
-					} else {
-						folder.removeFromChildren(newFolder);
 					}
 				}
 			}
 		}
 		return returned;
+	}
+
+	/**
+	 * 
+	 * @param directory
+	 * @param folder
+	 * @param viewPointLibrary
+	 * @return a flag indicating if some ViewPoints were found
+	 */
+	private ViewPointResource analyseAsViewPoint(File candidateFile) {
+		if (candidateFile.exists() && candidateFile.isDirectory() && candidateFile.canRead()
+				&& candidateFile.getName().endsWith(".viewpoint")) {
+			RepositoryFolder<ViewPointResource> folder = retrieveRepositoryFolder(viewPointRepository, candidateFile);
+			ViewPointResource vpRes = ViewPointResourceImpl.retrieveViewPointResource(candidateFile,
+					viewPointRepository.getViewPointLibrary());
+			if (vpRes != null) {
+				logger.info("Found and register viewpoint " + vpRes.getURI()
+						+ (vpRes instanceof FlexoFileResource ? " file=" + ((FlexoFileResource) vpRes).getFile().getAbsolutePath() : ""));
+				viewPointRepository.registerResource(vpRes, folder);
+				// Also register the resource in the ResourceCenter seen as a ResourceRepository
+				try {
+					registerResource(vpRes, getRepositoryFolder(candidateFile, true));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return vpRes;
+			} else {
+				logger.warning("While exploring resource center looking for viewpoints : cannot retrieve resource for file "
+						+ candidateFile.getAbsolutePath());
+			}
+		}
+
+		return null;
 	}
 
 	@Override
@@ -315,6 +351,49 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 			return getRootDirectory().getAbsolutePath();
 		}
 		return "unset";
+	}
+
+	private DirectoryWatcher directoryWatcher;
+	private Timer timer;
+
+	public void startDirectoryWatching() {
+		directoryWatcher = new DirectoryWatcher(getRootDirectory()) {
+			@Override
+			protected void fileModified(File file) {
+				FileSystemBasedResourceCenter.this.fileModified(file);
+			}
+
+			@Override
+			protected void fileAdded(File file) {
+				FileSystemBasedResourceCenter.this.fileAdded(file);
+			}
+
+			@Override
+			protected void fileDeleted(File file) {
+				FileSystemBasedResourceCenter.this.fileDeleted(file);
+			}
+		};
+
+		timer = new Timer();
+		timer.schedule(directoryWatcher, new Date(), 1000);
+
+	}
+
+	public void stopDirectoryWatching() {
+		timer.cancel();
+	}
+
+	protected void fileModified(File file) {
+		System.out.println("File MODIFIED " + file.getName() + " in " + file.getParentFile().getAbsolutePath());
+	}
+
+	protected void fileAdded(File file) {
+		System.out.println("File ADDED " + file.getName() + " in " + file.getParentFile().getAbsolutePath());
+		analyseAsViewPoint(file);
+	}
+
+	protected void fileDeleted(File file) {
+		System.out.println("File DELETED " + file.getName() + " in " + file.getParentFile().getAbsolutePath());
 	}
 
 }

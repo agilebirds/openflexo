@@ -3,8 +3,8 @@ package org.openflexo.builders.utils;
 import java.io.File;
 
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
-import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.UserResourceCenter;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
@@ -32,7 +32,6 @@ public abstract class FlexoBuilderResourceCenterService extends DefaultResourceC
 		return null;
 	}
 
-	@Override
 	public DirectoryResourceCenter getOpenFlexoResourceCenter() {
 		return openFlexoResourceCenter;
 	}

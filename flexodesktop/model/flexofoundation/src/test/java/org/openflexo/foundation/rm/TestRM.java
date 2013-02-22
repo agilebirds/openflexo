@@ -39,8 +39,9 @@ import org.openflexo.foundation.ie.util.WidgetType;
 import org.openflexo.foundation.ie.widget.IEBlocWidget;
 import org.openflexo.foundation.ie.widget.IEHTMLTableWidget;
 import org.openflexo.foundation.ie.widget.TopComponentReusableWidget;
-import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoResourceManager.BackwardSynchronizationHook;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
@@ -97,7 +98,7 @@ public class TestRM extends FlexoTestCase {
 	private static IEBlocWidget _bloc2;
 	private static FlexoReusableComponentResource _partialComponentResource;
 
-	private static FlexoResourceCenterService resourceCenter;
+	private static FlexoResourceCenterService resourceCenterService;
 
 	/**
 	 * Overrides setUp
@@ -576,15 +577,19 @@ public class TestRM extends FlexoTestCase {
 		// The last test must call this to stop the RM checking
 		_project.close();
 		FileUtils.deleteDir(_project.getProjectDirectory());
-		if (resourceCenter != null && resourceCenter.getOpenFlexoResourceCenter() instanceof DirectoryResourceCenter) {
-			FileUtils.deleteDir(((DirectoryResourceCenter) resourceCenter.getOpenFlexoResourceCenter()).getRootDirectory());
+		if (resourceCenterService != null) {
+			for (FlexoResourceCenter rc : resourceCenterService.getResourceCenters()) {
+				if (rc instanceof DirectoryResourceCenter) {
+					FileUtils.deleteDir(((DirectoryResourceCenter) rc).getRootDirectory());
+				}
+			}
 		}
 		resetVariables();
 		_bsHook = null;
 		_editor = null;
 		_projectDirectory = null;
 		_projectIdentifier = null;
-		resourceCenter = null;
+		resourceCenterService = null;
 	}
 
 	private void resetVariables() {

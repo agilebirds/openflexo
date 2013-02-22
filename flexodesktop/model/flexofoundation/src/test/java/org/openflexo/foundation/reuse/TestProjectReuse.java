@@ -6,8 +6,9 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.action.ImportProject;
-import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.rm.FlexoProjectReference;
@@ -25,7 +26,7 @@ public class TestProjectReuse extends FlexoTestCase {
 
 	private static final String SUB_PROCESS_NAME = "My Sub Process";
 	private static final String SUB_PROCESS_NODE_NAME = "A Sub Process Node";
-	private FlexoResourceCenterService resourceCenter;
+	private FlexoResourceCenterService resourceCenterService;
 	private File rootProjectDirectory;
 	private File importedProjectDirectory;
 	private FlexoEditor rootEditor;
@@ -56,7 +57,7 @@ public class TestProjectReuse extends FlexoTestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		resourceCenter = getNewResourceCenter("TestImport");
+		resourceCenterService = getNewResourceCenter("TestImport");
 		rootEditor = createProject("RootTestImport", serviceManager);
 		rootProject = rootEditor.getProject();
 		importedProjectEditor = createProject("ImportedProject", serviceManager);
@@ -67,8 +68,12 @@ public class TestProjectReuse extends FlexoTestCase {
 
 	@Override
 	protected void tearDown() throws Exception {
-		if (resourceCenter != null && resourceCenter.getOpenFlexoResourceCenter() instanceof DirectoryResourceCenter) {
-			FileUtils.deleteDir(((DirectoryResourceCenter) resourceCenter.getOpenFlexoResourceCenter()).getRootDirectory());
+		if (resourceCenterService != null) {
+			for (FlexoResourceCenter rc : resourceCenterService.getResourceCenters()) {
+				if (rc instanceof DirectoryResourceCenter) {
+					FileUtils.deleteDir(((DirectoryResourceCenter) rc).getRootDirectory());
+				}
+			}
 		}
 		if (rootProject != null) {
 			rootProject.close();

@@ -29,64 +29,119 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * 
+ * Implements a timer task which recursively watch a directory looking for changes on file system
  * 
  * @author sylvain
  * 
  */
 public abstract class DirectoryWatcher extends TimerTask {
-	private String path;
-	private File filesArray[];
-	private HashMap<File, Long> dir = new HashMap<File, Long>();
 
-	public DirectoryWatcher(String path) {
-		super();
-		this.path = path;
-		filesArray = new File(path).listFiles();
-		for (int i = 0; i < filesArray.length; i++) {
-			dir.put(filesArray[i], new Long(filesArray[i].lastModified()));
+	private NodeDirectoryWatcher rootDirectoryWatcher;
+
+	private static class NodeDirectoryWatcher {
+
+		private DirectoryWatcher watcher;
+		private File directory;
+		private HashMap<File, Long> lastModified = new HashMap<File, Long>();
+		private HashMap<File, NodeDirectoryWatcher> subNodes = new HashMap<File, NodeDirectoryWatcher>();
+
+		private NodeDirectoryWatcher(File directory, DirectoryWatcher watcher, boolean notifyAdding) {
+			// System.out.println("Init NodeDirectoryWatcher on " + directory);
+			this.directory = directory;
+			this.watcher = watcher;
+			for (File f : directory.listFiles()) {
+				lastModified.put(f, new Long(f.lastModified()));
+				if (f.isDirectory()) {
+					subNodes.put(f, new NodeDirectoryWatcher(f, watcher, notifyAdding));
+				}
+				if (notifyAdding) {
+					watcher.fileAdded(f);
+				}
+			}
 		}
+
+		private void watch() {
+			HashSet<File> checkedFiles = new HashSet<File>();
+
+			// scan the files and check for modification/addition
+			for (File f : directory.listFiles()) {
+				Long current = lastModified.get(f);
+				checkedFiles.add(f);
+				if (current == null) {
+					// new file
+					lastModified.put(f, new Long(f.lastModified()));
+					watcher.fileAdded(f);
+					if (f.isDirectory()) {
+						subNodes.put(f, new NodeDirectoryWatcher(f, watcher, true));
+					}
+				} else if (current.longValue() != f.lastModified()) {
+					// modified file
+					lastModified.put(f, new Long(f.lastModified()));
+					watcher.fileModified(f);
+				}
+			}
+
+			// now check for deleted files
+			Set<File> ref = ((HashMap<File, Long>) lastModified.clone()).keySet();
+			ref.removeAll(checkedFiles);
+			Iterator<File> it = ref.iterator();
+			while (it.hasNext()) {
+				File deletedFile = it.next();
+				lastModified.remove(deletedFile);
+				if (subNodes.get(deletedFile) != null) {
+					subNodes.get(deletedFile).delete();
+				}
+				subNodes.remove(deletedFile);
+				watcher.fileDeleted(deletedFile);
+			}
+
+			for (NodeDirectoryWatcher w : subNodes.values()) {
+				w.watch();
+			}
+		}
+
+		private void delete() {
+			for (File f : lastModified.keySet()) {
+				watcher.fileDeleted(f);
+			}
+			for (NodeDirectoryWatcher w : subNodes.values()) {
+				w.delete();
+			}
+		}
+	}
+
+	public DirectoryWatcher(File directory) {
+		super();
+		rootDirectoryWatcher = new NodeDirectoryWatcher(directory, this, false);
+		System.out.println("Started DirectoryWatcher on " + directory);
 	}
 
 	@Override
 	public final void run() {
-		HashSet<File> checkedFiles = new HashSet<File>();
-		filesArray = new File(path).listFiles();
-
-		// scan the files and check for modification/addition
-		for (int i = 0; i < filesArray.length; i++) {
-			Long current = dir.get(filesArray[i]);
-			checkedFiles.add(filesArray[i]);
-			if (current == null) {
-				// new file
-				dir.put(filesArray[i], new Long(filesArray[i].lastModified()));
-				onChange(filesArray[i], "add");
-			} else if (current.longValue() != filesArray[i].lastModified()) {
-				// modified file
-				dir.put(filesArray[i], new Long(filesArray[i].lastModified()));
-				onChange(filesArray[i], "modify");
-			}
-		}
-
-		// now check for deleted files
-		Set<File> ref = ((HashMap<File, Long>) dir.clone()).keySet();
-		ref.removeAll(checkedFiles);
-		Iterator<File> it = ref.iterator();
-		while (it.hasNext()) {
-			File deletedFile = it.next();
-			dir.remove(deletedFile);
-			onChange(deletedFile, "delete");
-		}
+		rootDirectoryWatcher.watch();
 	}
 
-	protected abstract void onChange(File file, String action);
+	protected abstract void fileModified(File file);
+
+	protected abstract void fileAdded(File file);
+
+	protected abstract void fileDeleted(File file);
 
 	public static void main(String[] args) {
-		TimerTask task = new DirectoryWatcher("/Users/sylvain/Temp") {
+		TimerTask task = new DirectoryWatcher(new File("/Users/sylvain/Temp")) {
 			@Override
-			protected void onChange(File file, String action) {
-				// here we code the action on a change
-				System.out.println("File " + file.getName() + " action: " + action);
+			protected void fileModified(File file) {
+				System.out.println("File MODIFIED " + file.getName() + " in " + file.getParentFile().getAbsolutePath());
+			}
+
+			@Override
+			protected void fileAdded(File file) {
+				System.out.println("File ADDED " + file.getName() + " in " + file.getParentFile().getAbsolutePath());
+			}
+
+			@Override
+			protected void fileDeleted(File file) {
+				System.out.println("File DELETED " + file.getName() + " in " + file.getParentFile().getAbsolutePath());
 			}
 		};
 
