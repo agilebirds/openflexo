@@ -188,6 +188,7 @@ public class Flexo {
 				}
 			}
 		}
+		// 1. Very important to initiate first the ResourceLocator. Nothing else. See also issue 463.
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS || !isDev) {
 			getResourcePath();
 		}
