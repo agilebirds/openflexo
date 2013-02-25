@@ -66,11 +66,13 @@ public class VPMModule extends FlexoModule implements ExternalCEDModule {
 		CEDPreferences.init();
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
 
+	}
+
+	@Override
+	public void initModule() {
+		super.initModule();
 		// Put here a code to display default view
 		getCEDController().setCurrentEditedObjectAsModuleView(getCEDController().getCalcLibrary());
-
-		// Retain here all necessary resources
-		// retain(<the_required_resource_data>);
 	}
 
 	@Override

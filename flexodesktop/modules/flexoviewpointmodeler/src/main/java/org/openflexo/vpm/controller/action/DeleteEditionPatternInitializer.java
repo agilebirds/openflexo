@@ -23,6 +23,7 @@ import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
+import javax.swing.JOptionPane;
 
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.viewpoint.EditionPattern;
@@ -52,7 +53,26 @@ public class DeleteEditionPatternInitializer extends ActionInitializer<DeleteEdi
 		return new FlexoActionInitializer<DeleteEditionPattern>() {
 			@Override
 			public boolean run(EventObject e, DeleteEditionPattern action) {
-				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_really_like_to_delete_this_edition_pattern"));
+				if (FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_really_like_to_delete_this_edition_pattern"))) {
+					if (action.getFocusedObject().getChildEditionPatterns().size() > 0) {
+						int choice = FlexoController.confirmYesNoCancel(FlexoLocalization
+								.localizedForKey("would_you_like_to_delete_its_children_too"));
+						switch (choice) {
+						case JOptionPane.YES_OPTION:
+							action.setDeleteChildren(true);
+							break;
+						case JOptionPane.NO_OPTION:
+							action.setDeleteChildren(false);
+							break;
+						default:
+							return false;
+						}
+						return true;
+					} else {
+						return true;
+					}
+				}
+				return false;
 			}
 		};
 	}

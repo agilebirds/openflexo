@@ -267,7 +267,7 @@ public class Flexo {
 						module = Modules.getInstance().getAvailableModules().get(0);
 					}
 				}
-				applicationContext.getModuleLoader().getModuleInstance(module).activateModule();
+				applicationContext.getModuleLoader().switchToModule(module);
 				applicationContext.getProjectLoader().loadProject(projectDirectory);
 			} catch (ProjectLoadingCancelledException e) {
 				// project need a conversion, but user cancelled the conversion.

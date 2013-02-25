@@ -79,6 +79,8 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 
 	private FlexoModule activeModule = null;
 
+	private Module activatingModule;
+
 	private WeakReference<FlexoEditor> lastActiveEditor;
 
 	private class ActiveEditorListener implements PropertyChangeListener {
@@ -189,8 +191,12 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 			ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("loading_module") + " " + module.getLocalizedName(), 8);
 		}
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("loading_module") + " " + module.getLocalizedName());
-		FlexoModule flexoModule = doInternalLoadModule(module);
+		FlexoModule flexoModule = module.getConstructor().newInstance(new Object[] { applicationContext });
 		_modules.put(module, flexoModule);
+		if (activatingModule == module) {
+			activeModule = flexoModule;
+		}
+		doInternalLoadModule(flexoModule);
 		if (createProgress) {
 			ProgressWindow.hideProgressWindow();
 		}
@@ -200,9 +206,9 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 
 	private class ModuleLoaderCallable implements Callable<FlexoModule> {
 
-		private final Module module;
+		private final FlexoModule module;
 
-		public ModuleLoaderCallable(Module module) {
+		public ModuleLoaderCallable(FlexoModule module) {
 			this.module = module;
 		}
 
@@ -211,14 +217,14 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Loading module " + module.getName());
 			}
-			FlexoModule flexoModule = module.getConstructor().newInstance(new Object[] { applicationContext });
-			FCH.ensureHelpEntryForModuleHaveBeenCreated(flexoModule);
-			return flexoModule;
+			module.initModule();
+			FCH.ensureHelpEntryForModuleHaveBeenCreated(module);
+			return module;
 		}
 
 	}
 
-	private FlexoModule doInternalLoadModule(Module module) throws Exception {
+	private FlexoModule doInternalLoadModule(FlexoModule module) throws Exception {
 		ModuleLoaderCallable loader = new ModuleLoaderCallable(module);
 		return FlexoSwingUtils.syncRunInEDT(loader);
 	}
@@ -310,6 +316,7 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 			return activeModule;
 		}
 		ignoreSwitch = true;
+		activatingModule = module;
 		try {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Switch to module " + module.getName());
@@ -333,6 +340,7 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 			}
 			throw new ModuleLoadingException(module);
 		} finally {
+			activatingModule = null;
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {

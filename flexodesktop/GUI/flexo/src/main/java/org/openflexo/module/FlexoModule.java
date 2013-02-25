@@ -55,6 +55,9 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 	public FlexoModule(ApplicationContext applicationContext) {
 		super();
 		this.applicationContext = applicationContext;
+	}
+
+	public void initModule() {
 		controller = createControllerForModule();
 	}
 
@@ -102,14 +105,6 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 
 	public boolean isActive() {
 		return isActive;
-	}
-
-	public void activateModule() {
-		try {
-			getModuleLoader().switchToModule(getModule());
-		} catch (ModuleLoadingException e) {
-			e.printStackTrace();
-		}
 	}
 
 	void setAsInactive() {

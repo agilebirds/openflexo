@@ -90,8 +90,19 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 
 	@Override
 	public void delete() {
+		delete(false);
+	}
+
+	public void delete(boolean deleteChildren) {
 		if (getViewPoint() != null) {
 			getViewPoint().removeFromEditionPatterns(this);
+		}
+		for (EditionPattern child : new ArrayList<EditionPattern>(getChildEditionPatterns())) {
+			if (deleteChildren) {
+				child.delete(deleteChildren);
+			} else {
+				child.setParentEditionPattern(null);
+			}
 		}
 		super.delete();
 		deleteObservers();

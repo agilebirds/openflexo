@@ -48,11 +48,15 @@ public class SGModule extends FlexoModule implements ExternalSGModule {
 
 	public SGModule(ApplicationContext applicationContext) throws Exception {
 		super(applicationContext);
+		SGPreferences.init();
+	}
 
+	@Override
+	public void initModule() {
+		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
+		super.initModule();
 		// Load all available technology modules.
 		TechnologyModuleDefinition.getAllTechnologyModuleDefinitions();
-		SGPreferences.init();
-		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
 	}
 
 	@Override

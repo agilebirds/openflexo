@@ -5276,6 +5276,7 @@ would_you_like_to_convert_entire_project_to_new_version_of_flexo_(recommanded)=W
 would_you_like_to_create_it=Would you like to create it
 would_you_like_to_create_it_and_continue?=Would you like to create it and continue?
 would_you_like_to_cut_those_objects=Would you like to cut those objects ?
+would_you_like_to_delete_its_children_too=Would you like to delete its children too?
 would_you_like_to_delete_service_interface_used_in_ws_and_remove_it_from_ws=This interface is used in a web service. Would you really like to delete it? (The interface will be removed from the service))
 would_you_like_to_delete_the_process=Would you like to delete the process 
 would_you_like_to_delete_the_service_interface=Would you really like to delete this service interface?
