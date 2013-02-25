@@ -115,7 +115,7 @@ public class ProjectOWLOntology extends OWLOntology implements ProjectOntology {
 		returned.ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, ontologyLibrary, base);
 		returned.ontModel.createOntology(anURI);
 		returned.ontModel.setDynamicImports(true);
-		returned.isLoaded = true;
+		returned.load();
 		return returned;
 	}
 
