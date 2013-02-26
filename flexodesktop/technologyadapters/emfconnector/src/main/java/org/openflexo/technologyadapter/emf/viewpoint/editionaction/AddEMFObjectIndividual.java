@@ -61,17 +61,22 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModel, EMFMetaModel
 	public EMFObjectIndividual performAction(EditionSchemeAction action) {
 		EMFObjectIndividual result = null;
 		ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
-		IFlexoOntologyClass aClass = getOntologyClass();
-		if (aClass instanceof EMFClassClass) {
-			EMFClassClass emfClassClass = (EMFClassClass) aClass;
-			// Create EMF Object
-			EObject eObject = EcoreUtil.create(emfClassClass.getObject());
-			modelSlotInstance.getModel().getEMFResource().getContents().add(eObject);
-			// Instanciate Wrapper.
-			result = modelSlotInstance.getModel().getConverter().convertObjectIndividual(modelSlotInstance.getModel(), eObject);
-			logger.info("********* Added individual " + result.getName() + " as " + aClass.getName());
+		if (modelSlotInstance.getModel() != null) {
+			IFlexoOntologyClass aClass = getOntologyClass();
+			if (aClass instanceof EMFClassClass) {
+				EMFClassClass emfClassClass = (EMFClassClass) aClass;
+				// Create EMF Object
+				EObject eObject = EcoreUtil.create(emfClassClass.getObject());
+				modelSlotInstance.getModel().getEMFResource().getContents().add(eObject);
+				// Instanciate Wrapper.
+				result = modelSlotInstance.getModel().getConverter().convertObjectIndividual(modelSlotInstance.getModel(), eObject);
+				logger.info("********* Added individual " + result.getName() + " as " + aClass.getName());
+			} else {
+				logger.warning("Not allowed to create new Enum values.");
+				return null;
+			}
 		} else {
-			logger.warning("Not allowed to create new Enum values.");
+			logger.warning("Model slot not correctly initialised : model is null");
 			return null;
 		}
 
