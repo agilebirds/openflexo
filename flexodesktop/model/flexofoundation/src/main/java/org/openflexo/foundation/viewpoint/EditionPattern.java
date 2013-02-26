@@ -910,15 +910,15 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	@Override
 	public String getLanguageRepresentation() {
 		// Voir du cote de GeneratorFormatter pour formatter tout ca
-		StringBuffer sb = new StringBuffer();
-		sb.append("EditionPattern " + getName());
-		sb.append(" {" + StringUtils.LINE_SEPARATOR);
+		StringBuilder sb = new StringBuilder();
+		sb.append("EditionPattern ").append(getName());
+		sb.append(" {").append(StringUtils.LINE_SEPARATOR);
 		sb.append(StringUtils.LINE_SEPARATOR);
 		for (PatternRole pr : getPatternRoles()) {
 			sb.append(pr.getLanguageRepresentation());
 			sb.append(StringUtils.LINE_SEPARATOR);
 		}
-		sb.append("}" + StringUtils.LINE_SEPARATOR);
+		sb.append("}").append(StringUtils.LINE_SEPARATOR);
 		return sb.toString();
 	}
 
