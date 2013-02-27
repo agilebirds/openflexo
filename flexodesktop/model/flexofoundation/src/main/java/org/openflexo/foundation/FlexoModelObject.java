@@ -423,13 +423,13 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			return -1;
 		}
 		if (getProject() != null) {
-			if (getProject().getLastUniqueIDHasBeenSet() && flexoID < 0 && !isDeserializing()) {
+			if (flexoID < 0 && getProject().getLastUniqueIDHasBeenSet() && !isDeserializing()) {
 				flexoID = getProject().getNewFlexoID();
 				// setChanged();
-			}
-			if (!isRegistered) {
-				registerObject(getProject());
-				isRegistered = true;
+				if (!isRegistered) {
+					registerObject(getProject());
+					isRegistered = true;
+				}
 			}
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
