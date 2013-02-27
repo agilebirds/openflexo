@@ -268,7 +268,7 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 					if (logger.isLoggable(Level.SEVERE)) {
 						logger.severe("Unknown doc format");
 					}
-					setExitCodeCleanUpAndExit(UNEXPECTED_EXCEPTION);
+					setExitCodeCleanUpAndExit(UNKNOWN_EXIT);
 					break;
 				}
 			} else {
