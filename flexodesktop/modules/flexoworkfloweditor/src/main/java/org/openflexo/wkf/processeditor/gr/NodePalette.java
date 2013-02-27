@@ -21,8 +21,10 @@ package org.openflexo.wkf.processeditor.gr;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -35,20 +37,22 @@ import javax.swing.SwingUtilities;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGERectangle;
+import org.openflexo.fge.geom.FGERegularPolygon;
 import org.openflexo.fge.geom.FGERoundRectangle;
 import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.FGEGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
+import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEPaintManager;
@@ -58,8 +62,13 @@ import org.openflexo.foundation.wkf.FlexoPetriGraph;
 import org.openflexo.foundation.wkf.action.CreateAssociation;
 import org.openflexo.foundation.wkf.action.CreateEdge;
 import org.openflexo.foundation.wkf.action.DropWKFElement;
+import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.AbstractNode;
+import org.openflexo.foundation.wkf.node.ActionNode;
+import org.openflexo.foundation.wkf.node.FlexoNode;
+import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.WKFNode;
+import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.wkf.processeditor.AbstractWKFPalette.WKFPaletteElement;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.processeditor.ProcessEditorController;
@@ -70,7 +79,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 	protected static final Color OK = new Color(0, 191, 0);
 
 	private enum Mode {
-		NODE, EDGE, DATA_OBJECT, DATA_SOURCE;
+		NODE, EDGE, EXCLUSIVE_GATEWAY, ANNOTATION;
 	}
 
 	private WKFNodeGR<?> nodeGR;
@@ -78,15 +87,15 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 
 	private FGERoundRectangle nodeRect;
 	private FGERectangle edgeRect;
-	private FGERectangle dataObjectRect;
-	private FGERectangle dataSourceRect;
+	private FGERectangle exclusiveGatewayRect;
+	private FGERectangle annotationRect;
 
 	/** The vertical space between two elements of the palette */
-	private static final int SPACING = 5;
+	private static final int SPACING = 3;
 	/** The height of an element of the palette */
-	private static final int ELEMENTS_HEIGHT = 8;
+	private static final int ELEMENTS_HEIGHT = 10;
 	/** The width of an element of the palette */
-	private static final int ELEMENTS_WIDTH = 12;
+	private static final int ELEMENTS_WIDTH = 16;
 
 	private static final int PALETTE_WIDTH = 16;
 	private static final int PALETTE_HEIGHT = 4 * ELEMENTS_HEIGHT + 5 * SPACING;
@@ -95,10 +104,9 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 	private static final BackgroundStyle DEFAULT = BackgroundStyle.makeColoredBackground(Color.WHITE);
 	private static final ForegroundStyle NODE_FOREGROUND = ForegroundStyle.makeStyle(FGEUtils.NICE_DARK_GREEN, 1.0f);
 	private static final ForegroundStyle EDGE_FOREGROUND = ForegroundStyle.makeStyle(FGEUtils.NICE_BROWN, 1.0f);
-	private static final ForegroundStyle DATA_OBJECT_FOREGROUND = ForegroundStyle.makeStyle(FGEUtils.NICE_BLUE, 1.0f);
-	// private static final ForegroundStyle AND_FOREGROUND = ForegroundStyle.makeStyle(FGEUtils.NICE_BORDEAU, 1.0f);
 	private static final BackgroundStyle NODE_BACKGROUND = BackgroundStyle.makeColorGradientBackground(FGEUtils.NICE_DARK_GREEN,
 			Color.WHITE, ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
+	private static final ForegroundStyle OR_FOREGROUND = ForegroundStyle.makeStyle(FGEUtils.NICE_DARK_GREEN, 1.0f);
 
 	static {
 		DEFAULT.setUseTransparency(true);
@@ -139,6 +147,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 
 	private Rectangle previousRectangle;
 	private Mode mode;
+	private TextStyle annotationTextStyle;
 
 	public void paint(Graphics g, ProcessEditorController controller) {
 		if (drawEdge && currentDraggingLocationInDrawingView != null) {
@@ -194,10 +203,10 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 			mode = Mode.NODE;
 		} else if (edgeRect.contains(startPoint)) {
 			mode = Mode.EDGE;
-		} else if (dataObjectRect.contains(startPoint)) {
-			mode = Mode.DATA_OBJECT;
-		} else if (dataSourceRect.contains(startPoint)) {
-			mode = Mode.DATA_SOURCE;
+		} else if (exclusiveGatewayRect.contains(startPoint)) {
+			mode = Mode.EXCLUSIVE_GATEWAY;
+		} else if (annotationRect.contains(startPoint)) {
+			mode = Mode.ANNOTATION;
 		}
 		if (mode != null) {
 			drawEdge = true;
@@ -304,36 +313,49 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 				WKFPaletteElement element = null;
 				switch (mode) {
 				case NODE:
-					if (target.getLevel() == FlexoLevel.ACTIVITY) {
-						element = ((ProcessEditorController) controller).getActivityPalette().getNormalActivityElement();
-					} else if (target.getLevel() == FlexoLevel.OPERATION) {
-						element = ((ProcessEditorController) controller).getOperationPalette().getNormalOperationElement();
-					} else if (target.getLevel() == FlexoLevel.ACTION) {
-						element = ((ProcessEditorController) controller).getActionPalette().getFlexoActionElement();
+					if ((nodeGR.getDrawable() instanceof AbstractActivityNode || nodeGR.getDrawable() instanceof OperationNode || nodeGR
+							.getDrawable() instanceof ActionNode) && !((FlexoNode) nodeGR.getDrawable()).isBeginOrEndNode()) {
+						DropWKFElement drop = DropWKFElement.actionType.makeNewAction(target, null,
+								((ProcessEditorController) controller).getEditor());
+						drop.setObject(to = clone((FlexoNode) nodeGR.getDrawable()));
+						drop.setResetNodeName(false);
+						drop.setLocation(dropLocation.x, dropLocation.y);
+						drop.setGraphicalContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+						drop.doAction();
+						to = createElement(drop, dropLocation, target, direction);
 					} else {
-						return;
+						if (target.getLevel() == FlexoLevel.ACTIVITY) {
+							element = ((ProcessEditorController) controller).getActivityPalette().getNormalActivityElement();
+						} else if (target.getLevel() == FlexoLevel.OPERATION) {
+							element = ((ProcessEditorController) controller).getOperationPalette().getNormalOperationElement();
+						} else if (target.getLevel() == FlexoLevel.ACTION) {
+							element = ((ProcessEditorController) controller).getActionPalette().getFlexoActionElement();
+						} else {
+							return;
+						}
+						DropWKFElement drop = element.createAndExecuteDropElementAction(dropLocation, target, null, false);
+						to = createElement(drop, dropLocation, target, direction);
 					}
-					to = createElement(element, dropLocation, target, direction);
 					break;
 				case EDGE:
 					if (this.to != null) {
 						to = this.to.getDrawable();
 					}
 					break;
-				case DATA_SOURCE:
+				case EXCLUSIVE_GATEWAY:
 					if (target.getLevel() == FlexoLevel.ACTIVITY) {
-						element = ((ProcessEditorController) controller).getActivityPalette().getAndOperatorElement();
+						element = ((ProcessEditorController) controller).getActivityPalette().getOrOperatorElement();
 					} else if (target.getLevel() == FlexoLevel.OPERATION) {
-						element = ((ProcessEditorController) controller).getOperationPalette().getANDOperatorElement();
+						element = ((ProcessEditorController) controller).getOperationPalette().getOROperatorElement();
 					} else if (target.getLevel() == FlexoLevel.ACTION) {
-						element = ((ProcessEditorController) controller).getActionPalette().getANDOperatorElement();
+						element = ((ProcessEditorController) controller).getActionPalette().getOROperatorElement();
 					} else {
 						return;
 					}
-					to = createElement(((ProcessEditorController) controller).getArtefactPalette().getDataSource(), dropLocation, target,
-							direction);
+					DropWKFElement drop = element.createAndExecuteDropElementAction(dropLocation, target, null, false);
+					to = createElement(drop, dropLocation, target, direction);
 					break;
-				case DATA_OBJECT:
+				case ANNOTATION:
 					/*if (target.getLevel()==FlexoLevel.ACTIVITY)
 						element = ((ProcessEditorController)controller).getActivityPalette().getOrOperatorElement();
 					else if (target.getLevel()==FlexoLevel.OPERATION)
@@ -342,8 +364,9 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 						element = ((ProcessEditorController)controller).getActionPalette().getOROperatorElement();
 					else
 						return ;*/
-					to = createElement(((ProcessEditorController) controller).getArtefactPalette().getDataFile(), dropLocation, target,
-							direction);
+					drop = ((ProcessEditorController) controller).getArtefactPalette().getAnnotation()
+							.createAndExecuteDropElementAction(dropLocation, target, null, false);
+					to = createElement(drop, dropLocation, target, direction);
 					break;
 
 				default:
@@ -367,8 +390,8 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 				}
 				switch (mode) {
 				case NODE:
-				case DATA_SOURCE:
-				case DATA_OBJECT:
+				case EXCLUSIVE_GATEWAY:
+				case ANNOTATION:
 					controller.setSelectedObject(controller.getGraphicalRepresentation(to));
 					break;
 
@@ -389,6 +412,10 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 		super.stopDragging(controller, focusedGR);
 	}
 
+	private WKFNode clone(FlexoNode flexoNode) {
+		return (WKFNode) flexoNode.cloneUsingXMLMapping(true);
+	}
+
 	private void resetVariables() {
 		drawEdge = false;
 		isDnd = false;
@@ -396,14 +423,13 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 		currentDraggingLocationInDrawingView = null;
 	}
 
-	private WKFNode createElement(WKFPaletteElement element, FGEPoint dropLocation, FlexoPetriGraph container,
+	private WKFNode createElement(DropWKFElement drop, FGEPoint dropLocation, FlexoPetriGraph container,
 			SimplifiedCardinalDirection direction) {
 		FGEPoint locationInDrawing = null;
 		if (controller.getGraphicalRepresentation(container) != null) {
 			locationInDrawing = dropLocation.transform(GraphicalRepresentation.convertCoordinatesAT(
 					controller.getGraphicalRepresentation(container), controller.getDrawingGraphicalRepresentation(), 1.0));// gr.getLocationInDrawing();
 		}
-		DropWKFElement drop = element.createAndExecuteDropElementAction(dropLocation, container, null, false);
 		if (drop.getObject() != null && drop.hasActionExecutionSucceeded()) {
 			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) controller.getGraphicalRepresentation(drop.getObject());
 			if (locationInDrawing == null) {
@@ -470,24 +496,9 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 		FGERoundRectangle paletteRect = (FGERoundRectangle) getArea().transform(at);
 		FGERoundRectangle nodeRect = (FGERoundRectangle) this.nodeRect.transform(at);
 		FGERectangle edgeRect = (FGERectangle) this.edgeRect.transform(at);
-		FGERectangle orRect = (FGERectangle) this.dataObjectRect.transform(at);
-		double arrowSize = 4/** drawingGraphics.getScale() */
-		;
-		/*FGERegularPolygon orPoly = new FGERegularPolygon(orRect.x+(PALETTE_WIDTH-ELEMENTS_HEIGHT)/2,orRect.y,ELEMENTS_HEIGHT,ELEMENTS_HEIGHT,Filling.FILLED,4,90);
-		FGEPoint northEast = orPoly.getSegments().get(0).getMiddle();
-		FGEPoint southEast = orPoly.getSegments().get(1).getMiddle();
-		FGEPoint southWest = orPoly.getSegments().get(2).getMiddle();
-		FGEPoint northWest = orPoly.getSegments().get(3).getMiddle();*/
-		FGERectangle andRect = (FGERectangle) this.dataSourceRect.transform(at);
-		AffineTransform translateAndResize = AffineTransform.getTranslateInstance(orRect.x + (PALETTE_WIDTH - ELEMENTS_HEIGHT) / 2,
-				orRect.y);
-		translateAndResize.concatenate(AffineTransform.getScaleInstance(ELEMENTS_HEIGHT, ELEMENTS_HEIGHT));
-		FGEPolygon dataObjectPoly = DataObjectGR.fileShape.transform(translateAndResize);
-		/*FGERegularPolygon andPoly = new FGERegularPolygon(andRect.x+(PALETTE_WIDTH-ELEMENTS_HEIGHT)/2,andRect.y,ELEMENTS_HEIGHT,ELEMENTS_HEIGHT,Filling.FILLED,4,90);
-		FGEPoint north = andPoly.getPointAt(0);
-		FGEPoint east = andPoly.getPointAt(1);
-		FGEPoint south = andPoly.getPointAt(2);
-		FGEPoint west = andPoly.getPointAt(3);*/
+		FGERectangle orRect = (FGERectangle) this.exclusiveGatewayRect.transform(at);
+		FGERectangle annotationRect = (FGERectangle) this.annotationRect.transform(at);
+		double arrowSize = 4;
 
 		paletteRect.paint(drawingGraphics);
 
@@ -508,42 +519,44 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 		drawingGraphics.drawLine(eastPt.x - arrowSize, edgeRect.y, eastPt.x, eastPt.y);
 		drawingGraphics.drawLine(eastPt.x - arrowSize, edgeRect.y + ELEMENTS_HEIGHT, eastPt.x, eastPt.y);
 
-		// 3. DataObject
-		drawingGraphics.setDefaultForeground(DATA_OBJECT_FOREGROUND);
+		// 3. Exclusive gateway
+		FGERegularPolygon orPoly = new FGERegularPolygon(orRect.x + (PALETTE_WIDTH - ELEMENTS_HEIGHT) / 2, orRect.y, ELEMENTS_HEIGHT,
+				ELEMENTS_HEIGHT, Filling.FILLED, 4, 90);
+		FGEPoint northEast = orPoly.getSegments().get(0).getMiddle();
+		FGEPoint southEast = orPoly.getSegments().get(1).getMiddle();
+		FGEPoint southWest = orPoly.getSegments().get(2).getMiddle();
+		FGEPoint northWest = orPoly.getSegments().get(3).getMiddle();
+
+		drawingGraphics.setDefaultForeground(OR_FOREGROUND);
 		// drawingGraphics.setDefaultBackground(OR_BACKGROUND);
 		drawingGraphics.useDefaultForegroundStyle();
 		// drawingGraphics.useDefaultBackgroundStyle();
-		drawingGraphics.drawPolygon(dataObjectPoly);
-		/*drawingGraphics.drawPolygon(orPoly);
-		double orOffset = 1;
-		drawingGraphics.drawLine(northWest.x+orOffset, northWest.y+orOffset, southEast.x-orOffset, southEast.y-orOffset);
-		drawingGraphics.drawLine(northEast.x-orOffset, northEast.y+orOffset, southWest.x+orOffset, southWest.y-orOffset);*/
+		drawingGraphics.drawPolygon(orPoly);
+		double orOffset = 1/*drawingGraphics.getScale()*/;
+		drawingGraphics.drawLine(northWest.x + orOffset, northWest.y + orOffset, southEast.x - orOffset, southEast.y - orOffset);
+		drawingGraphics.drawLine(northEast.x - orOffset, northEast.y + orOffset, southWest.x + orOffset, southWest.y - orOffset);
 
-		// 4. DataSource
-		/*drawingGraphics.setDefaultForeground(AND_FOREGROUND);
-		//drawingGraphics.setDefaultBackground(AND_BACKGROUND);
+		// 4. Annotation
+		drawingGraphics.setDefaultForeground(ForegroundStyle.makeStyle(annotationTextStyle.getColor()));
 		drawingGraphics.useDefaultForegroundStyle();
-		//drawingGraphics.useDefaultBackgroundStyle();
-		drawingGraphics.drawPolygon(andPoly);
-		double andOffset = 2;
-		drawingGraphics.drawLine(north.x, north.y+andOffset,south.x, south.y-andOffset);
-		drawingGraphics.drawLine(west.x+andOffset, west.y,east.x-andOffset, east.y);*/
-		int NUMBER_OF_CYLINDER = 4;
-		double height = (double) 2 * ELEMENTS_HEIGHT / (NUMBER_OF_CYLINDER + 1);
-		double halfHeight = height / 2;
-		double x = andRect.x + (PALETTE_WIDTH - ELEMENTS_HEIGHT) / 2;
-		for (int i = NUMBER_OF_CYLINDER; i > 0; i--) {
-			drawingGraphics.setDefaultForeground(DataSourceGR.NO_FOREGROUND);
-			drawingGraphics.setDefaultBackground(i % 2 == 0 ? DataSourceGR.EVEN_BACKGROUND : DataSourceGR.ODD_BACKROUND);
-			drawingGraphics.useDefaultBackgroundStyle();
-			double y = andRect.y + (i - 1) * halfHeight;
-			drawingGraphics.fillCircle(x, y, ELEMENTS_HEIGHT, height);
-			if (i > 1) {
-				drawingGraphics.fillRect(x, y, ELEMENTS_HEIGHT, halfHeight);
-			}
-		}
+		drawingGraphics.drawLine(annotationRect.getNorthWestPt(), new FGEPoint(annotationRect.x + annotationRect.width / 5,
+				annotationRect.y));
+		drawingGraphics.drawLine(annotationRect.getNorthWestPt(), annotationRect.getSouthWestPt());
+		drawingGraphics.drawLine(new FGEPoint(annotationRect.x + annotationRect.width / 5, annotationRect.y + annotationRect.height),
+				annotationRect.getSouthWestPt());
+		drawingGraphics.setDefaultTextStyle(annotationTextStyle);
+		drawingGraphics.useDefaultTextStyle();
+		FGEPoint pt = annotationRect.getNorthWestPt();
+		pt.y += annotationTextStyle.getFont().getSize() / 2 - 1;
+		pt.x += 1;
+		drawingGraphics.drawString("Abc", pt, HorizontalTextAlignment.LEFT);
 
 		drawingGraphics.releaseClonedGraphics(oldGraphics);
+
+		/*drawingGraphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.RED));
+		drawingGraphics.drawRect(orRect.x, orRect.y, orRect.width, orRect.height);
+		drawingGraphics.drawRect(annotationRect.x, annotationRect.y, annotationRect.width, annotationRect.height);*/
+
 		return drawingGraphics.getGraphicalRepresentation().convertNormalizedRectangleToViewCoordinates(paletteRect.getBoundingBox(),
 				drawingGraphics.getScale());
 
@@ -582,12 +595,17 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 		edgeRect = (FGERectangle) new FGERectangle(nodeGR.getWidth() + SPACING + (PALETTE_WIDTH - ELEMENTS_WIDTH) / 2,
 				(nodeGR.getHeight() - PALETTE_HEIGHT) / 2 + SPACING + (SPACING + ELEMENTS_HEIGHT), ELEMENTS_WIDTH, ELEMENTS_HEIGHT,
 				Filling.FILLED).transform(at);
-		dataObjectRect = (FGERectangle) new FGERectangle(nodeGR.getWidth() + SPACING + (PALETTE_WIDTH - ELEMENTS_WIDTH) / 2,
+		exclusiveGatewayRect = (FGERectangle) new FGERectangle(nodeGR.getWidth() + SPACING + (PALETTE_WIDTH - ELEMENTS_WIDTH) / 2,
 				(nodeGR.getHeight() - PALETTE_HEIGHT) / 2 + SPACING + 2 * (SPACING + ELEMENTS_HEIGHT), ELEMENTS_WIDTH, ELEMENTS_HEIGHT,
 				Filling.FILLED).transform(at);
-		dataSourceRect = (FGERectangle) new FGERectangle(nodeGR.getWidth() + SPACING + (PALETTE_WIDTH - ELEMENTS_WIDTH) / 2,
+		annotationRect = (FGERectangle) new FGERectangle(nodeGR.getWidth() + SPACING + (PALETTE_WIDTH - ELEMENTS_WIDTH) / 2,
 				(nodeGR.getHeight() - PALETTE_HEIGHT) / 2 + SPACING + 3 * (SPACING + ELEMENTS_HEIGHT), ELEMENTS_WIDTH, ELEMENTS_HEIGHT,
 				Filling.FILLED).transform(at);
+		annotationTextStyle = TextStyle.makeTextStyle(Color.BLACK, new Font("Dialog", Font.PLAIN, 10));
+	}
 
+	protected Image getScaledOperatorImage(double scale) {
+		return WKFIconLibrary.OR_OPERATOR_ICON.getImage().getScaledInstance((int) (ELEMENTS_WIDTH * scale), (int) (ELEMENTS_WIDTH * scale),
+				Image.SCALE_SMOOTH);
 	}
 }
