@@ -167,7 +167,7 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 	public FlexoWorkflow(FlexoWorkflowBuilder builder) {
 		this(builder.getProject());
 		builder.workflow = this;
-		_resource = builder.resource;
+		setFlexoResource(builder.resource);
 		initializeDeserialization(builder);
 	}
 
@@ -282,6 +282,7 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 	@Override
 	public void setFlexoResource(FlexoResource resource) {
 		_resource = (FlexoWorkflowResource) resource;
+		registerOnProject();
 	}
 
 	@Override
@@ -2090,7 +2091,7 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 
 	@Override
 	public boolean isCache() {
-		return getFlexoResource().isCache();
+		return getFlexoResource() != null && getFlexoResource().isCache();
 	}
 
 	@Override
