@@ -1058,19 +1058,23 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				rebuildCompleteHierarchy();
-				synchronized (SunDragSourceContextPeer.class) {
-					try {
-						SunDragSourceContextPeer.checkDragDropInProgress();
-					} catch (InvalidDnDOperationException e1) {
-						if (logger.isLoggable(Level.WARNING)) {
-							logger.warning("For some reason there was still a Dnd in progress. Will set it back to false. God knows why this happens");
+				try {
+					rebuildCompleteHierarchy();
+					synchronized (SunDragSourceContextPeer.class) {
+						try {
+							SunDragSourceContextPeer.checkDragDropInProgress();
+						} catch (InvalidDnDOperationException e1) {
+							if (logger.isLoggable(Level.WARNING)) {
+								logger.warning("For some reason there was still a Dnd in progress. Will set it back to false. God knows why this happens");
+							}
+							if (logger.isLoggable(Level.FINE)) {
+								logger.log(Level.FINE, "Stacktrace for DnD still in progress", e1);
+							}
+							SunDragSourceContextPeer.setDragDropInProgress(false);
 						}
-						if (logger.isLoggable(Level.FINE)) {
-							logger.log(Level.FINE, "Stacktrace for DnD still in progress", e1);
-						}
-						SunDragSourceContextPeer.setDragDropInProgress(false);
 					}
+				} finally {
+					rebuildRequested = false;
 				}
 			}
 		});
@@ -1181,7 +1185,6 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 		invalidateGraphicalObjectsHierarchy();
 		updateGraphicalObjectsHierarchy();
 		updateLocations();
-		rebuildRequested = false;
 	}
 
 }
