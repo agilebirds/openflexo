@@ -470,6 +470,9 @@ public class DrawingView<D extends Drawing<?>> extends FGELayeredView<D> impleme
 			if (gr.shouldBeDisplayed()
 					&& (!temporaryObjectsOnly || getPaintManager().isTemporaryObject(gr) || getPaintManager().containsTemporaryObject(gr))) {
 				FGEView<?> view = viewForObject(gr);
+				if (view == null) {
+					continue;
+				}
 				Component viewAsComponent = (Component) view;
 				Graphics childGraphics = g.create(viewAsComponent.getX(), viewAsComponent.getY(), viewAsComponent.getWidth(),
 						viewAsComponent.getHeight());
