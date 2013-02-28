@@ -63,8 +63,8 @@ import org.openflexo.foundation.ontology.dm.OntologyIndividualRemoved;
 import org.openflexo.foundation.ontology.dm.OntologyObjectPropertyInserted;
 import org.openflexo.foundation.ontology.dm.OntologyObjectPropertyRemoved;
 import org.openflexo.foundation.ontology.dm.OntologyObjectRenamed;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -2017,7 +2017,7 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 		String uri = findOntologyURI(f);
 		System.out.println("uri: " + uri);
 		System.out.println("uri: " + findOntologyName(f));
-		FlexoResourceCenter resourceCenter = DirectoryResourceCenter.instanciateTestDirectoryResourceCenter(new File(
+		FlexoResourceCenter resourceCenter = DirectoryResourceCenter.instanciateNewDirectoryResourceCenter(new File(
 				"/Users/sylvain/Library/OpenFlexo/FlexoResourceCenter"));
 		// resourceCenter.retrieveBaseOntologyLibrary();
 		// ImportedOntology o = ImportedOntology.createNewImportedOntology(uri, f, resourceCenter.retrieveBaseOntologyLibrary());

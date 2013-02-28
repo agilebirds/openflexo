@@ -77,6 +77,7 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModel, EMFMetaModel
 			}
 		} else {
 			logger.warning("Model slot not correctly initialised : model is null");
+			Thread.dumpStack();
 			return null;
 		}
 

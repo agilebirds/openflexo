@@ -113,7 +113,7 @@ public abstract class DirectoryWatcher extends TimerTask {
 	public DirectoryWatcher(File directory) {
 		super();
 		rootDirectoryWatcher = new NodeDirectoryWatcher(directory, this, false);
-		System.out.println("Started DirectoryWatcher on " + directory);
+		System.out.println("Started DirectoryWatcher on " + directory + " ...");
 	}
 
 	@Override

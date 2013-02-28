@@ -106,6 +106,9 @@ public class FlexoOntologyModelSlotInstanceConfiguration<MS extends FlexoOntolog
 			modelResource = createProjectSpecificEmptyModel(msInstance, (ModelSlot<?, ?>) getModelSlot());
 			if (modelResource != null) {
 				msInstance.setModel((M) getModelResource().getModel());
+				System.out.println("***** Created model resource " + getModelResource());
+				System.out.println("***** Created model " + getModelResource().getModel());
+				System.out.println("***** Created model with uri=" + getModelResource().getModel().getURI());
 			} else {
 				logger.warning("Could not create ProjectSpecificEmtpyModel for model slot " + getModelSlot());
 			}

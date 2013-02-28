@@ -9,7 +9,8 @@ import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.toolbox.StringUtils;
 
 /**
- * Concretize the binding of a {@link ModelSlot} to a concrete {@link FlexoModel}
+ * Concretize the binding of a {@link ModelSlot} to a concrete {@link FlexoModel}<br>
+ * This is the binding point between a {@link ModelSlot} and its concretization in a {@link VirtualModelInstance}
  * 
  * The {@link ModelSlotInstance} are instantiated inside a {@link View}
  * 
@@ -142,4 +143,10 @@ public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 		return "model_slot_instance";
 	}
 
+	@Override
+	public String toString() {
+		return "ModelSlotInstance:"
+				+ (getModelSlot() != null ? getModelSlot().getName() + ":" + getModelSlot().getClass().getSimpleName() + "_"
+						+ (getName() != null ? getName() : getFlexoID()) : "null");
+	}
 }

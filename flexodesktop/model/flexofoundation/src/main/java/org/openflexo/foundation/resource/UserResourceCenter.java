@@ -58,6 +58,7 @@ public class UserResourceCenter /*extends FileSystemBasedResourceCenter*/impleme
 			// Hum this sucks...
 			e1.printStackTrace();
 		}
+		modelFactory.getStringEncoder().addConverter(FLEXO_VERSION_CONVERTER);
 		if (userResourceCenterStorageFile.exists() && userResourceCenterStorageFile.isFile() && userResourceCenterStorageFile.canWrite()) {
 			try {
 				update();
@@ -70,7 +71,6 @@ public class UserResourceCenter /*extends FileSystemBasedResourceCenter*/impleme
 		if (storage == null) {
 			storage = modelFactory.newInstance(Storage.class);
 		}
-		modelFactory.getStringEncoder().addConverter(FLEXO_VERSION_CONVERTER);
 	}
 
 	public File getUserResourceCenterStorageFile() {

@@ -44,13 +44,14 @@ public class ResourceManager extends FlexoServiceImpl implements FlexoService {
 	}
 
 	private ResourceManager() {
-		initialize();
+		// Not now: will be performed by the ServiceManager
+		// initialize();
+		resources = new ArrayList<FlexoResource<?>>();
 	}
 
 	@Override
 	public void initialize() {
-		resources = new ArrayList<FlexoResource<?>>();
-		System.out.println("Initialized ResourceManager...");
+		logger.info("Initialized ResourceManager...");
 	}
 
 	public void registerResource(FlexoResource<?> resource) {

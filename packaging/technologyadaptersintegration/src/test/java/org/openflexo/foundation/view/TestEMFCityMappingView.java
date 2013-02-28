@@ -175,6 +175,22 @@ public class TestEMFCityMappingView extends FlexoTestCase {
 		assertEquals(project, newDiagram.getResource().getProject());
 		assertEquals(project, newDiagram.getProject());
 
+		// Test ModelSlotInstance well created and initialized
+		assertEquals(3, newDiagram.getModelSlotInstances().size());
+		ModelSlotInstance<?, ?> diagramModelSlotInstance = newDiagram.getModelSlotInstance("diagram");
+		assertNotNull(diagramModelSlotInstance);
+		ModelSlotInstance<?, ?> city1ModelSlotInstance = newDiagram.getModelSlotInstance("city1");
+		assertNotNull(city1ModelSlotInstance);
+		ModelSlotInstance<?, ?> city2ModelSlotInstance = newDiagram.getModelSlotInstance("city2");
+		assertNotNull(city2ModelSlotInstance);
+		System.out.println("DiagramModel=" + diagramModelSlotInstance.getModelURI());
+		System.out.println("City1Model=" + city1ModelSlotInstance.getModelURI());
+		System.out.println("City2Model=" + city2ModelSlotInstance.getModelURI());
+		assertNotNull(city1ModelSlotInstance.getModelURI());
+		assertNotNull(city2ModelSlotInstance.getModelURI());
+		assertNotNull(city1ModelSlotInstance.getModel());
+		assertNotNull(city2ModelSlotInstance.getModel());
+
 		// Populate Diagram
 		DiagramSpecification diagramSpecification = cityMappingViewPoint.getDefaultDiagramSpecification();
 		assertEquals(6, diagramSpecification.getEditionPatterns().size());

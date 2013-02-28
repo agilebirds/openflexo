@@ -222,7 +222,10 @@ public abstract class FlexoTestCase extends TestCase {
 	}
 
 	protected FlexoEditor createProject(String projectName) {
-		return createProject(projectName, instanciateTestServiceManager());
+		if (serviceManager == null) {
+			serviceManager = instanciateTestServiceManager();
+		}
+		return createProject(projectName, serviceManager);
 	}
 
 	protected static FlexoResourceCenterService getNewResourceCenter(String name) {

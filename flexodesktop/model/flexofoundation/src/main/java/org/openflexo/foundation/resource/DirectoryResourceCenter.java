@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FileUtils.CopyStrategy;
@@ -54,24 +53,13 @@ public class DirectoryResourceCenter extends FileSystemBasedResourceCenter imple
 
 	public static DirectoryResourceCenter instanciateNewDirectoryResourceCenter(File resourceCenterDirectory) {
 		logger.info("Instanciate ResourceCenter from " + resourceCenterDirectory.getAbsolutePath());
-		DirectoryResourceCenter localResourceCenterImplementation = new DirectoryResourceCenter(resourceCenterDirectory);
+		DirectoryResourceCenter directoryResourceCenter = new DirectoryResourceCenter(resourceCenterDirectory);
 		try {
-			localResourceCenterImplementation.update();
+			directoryResourceCenter.update();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return localResourceCenterImplementation;
-	}
-
-	public static DirectoryResourceCenter instanciateTestDirectoryResourceCenter(File resourceCenterDirectory) {
-		logger.info("Instanciate TEST ResourceCenter from " + resourceCenterDirectory.getAbsolutePath());
-		DirectoryResourceCenter localResourceCenterImplementation = new DirectoryResourceCenter(resourceCenterDirectory);
-		return localResourceCenterImplementation;
-	}
-
-	@Override
-	public final void initialize(TechnologyAdapterService technologyAdapterService) {
-		super.initialize(technologyAdapterService);
+		return directoryResourceCenter;
 	}
 
 	@Override
@@ -102,6 +90,7 @@ public class DirectoryResourceCenter extends FileSystemBasedResourceCenter imple
 
 	@Deprecated
 	private static void copyViewPoints(File initialDirectory, File resourceCenterDirectory, CopyStrategy copyStrategy) {
+
 		if (initialDirectory.getParentFile().equals(resourceCenterDirectory)) {
 			return;
 		}
@@ -115,6 +104,7 @@ public class DirectoryResourceCenter extends FileSystemBasedResourceCenter imple
 
 	@Deprecated
 	private static void copyOntologies(File initialDirectory, File resourceCenterDirectory, CopyStrategy copyStrategy) {
+
 		if (initialDirectory.getParentFile().equals(resourceCenterDirectory)) {
 			return;
 		}

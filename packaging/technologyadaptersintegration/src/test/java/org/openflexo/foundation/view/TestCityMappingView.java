@@ -150,8 +150,7 @@ public class TestCityMappingView extends FlexoTestCase {
 		FlexoOntologyModelSlotInstanceConfiguration emfModelSlotConfiguration = (FlexoOntologyModelSlotInstanceConfiguration) createVirtualModelInstance
 				.getModelSlotInstanceConfiguration(emfModelSlot);
 		emfModelSlotConfiguration.setOption(DefaultModelSlotInstanceConfigurationOption.SelectExistingModel);
-		File modelFile = new File(((FileSystemBasedResourceCenter) resourceCenter).getRootDirectory(),
-				"TestResourceCenter/EMF/Model/city1/my.city1");
+		File modelFile = new File(((FileSystemBasedResourceCenter) resourceCenter).getRootDirectory(), "EMF/Model/city1/my.city1");
 		System.out.println("Searching " + modelFile.getAbsolutePath());
 		assertTrue(modelFile.exists());
 		System.out.println("Searching " + modelFile.toURI().toString());

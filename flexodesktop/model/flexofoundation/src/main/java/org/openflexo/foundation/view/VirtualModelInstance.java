@@ -350,8 +350,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	// ==========================================================================
 
 	/**
-	 * This is the binding point between a {@link ModelSlot} and its concretization in a {@link VirtualModelInstance} through notion of
-	 * {@link ModelSlotInstance}
+	 * Return {@link ModelSlotInstance} concretizing supplied modelSlot
 	 * 
 	 * @param modelSlot
 	 * @return
@@ -370,12 +369,24 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 		return null;
 	}
 
+	/**
+	 * Return {@link ModelSlotInstance} concretizing modelSlot identified by supplied name
+	 * 
+	 * @param modelSlot
+	 * @return
+	 */
+	public ModelSlotInstance<?, ?> getModelSlotInstance(String modelSlotName) {
+		for (ModelSlotInstance<?, ?> msInstance : getModelSlotInstances()) {
+			if (msInstance.getModelSlot().getName().equals(modelSlotName)) {
+				return msInstance;
+			}
+		}
+		logger.warning("Cannot find ModelSlotInstance named " + modelSlotName);
+		return null;
+	}
+
 	public void setModelSlotInstances(List<ModelSlotInstance<?, ?>> instances) {
 		this.modelSlotInstances = instances;
-		/*modelsMap.clear();
-		for (ModelSlotInstance<?, ?> model : instances) {
-			modelsMap.put(model.getModelSlot(), model.getModel());
-		}*/
 	}
 
 	public List<ModelSlotInstance<?, ?>> getModelSlotInstances() {
@@ -389,7 +400,6 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 			setChanged();
 			notifyObservers(new VEDataModification("modelSlotInstances", instance, null));
 		}
-		// modelsMap.remove(instance.getModelSlot());
 	}
 
 	public void addToModelSlotInstances(ModelSlotInstance<?, ?> instance) {
@@ -399,60 +409,13 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 			setChanged();
 			notifyObservers(new VEDataModification("modelSlotInstances", null, instance));
 		}
-		/*Iterator<ModelSlotInstance<?, ?>> it = modelSlotInstances.iterator();
-		while (it.hasNext()) {
-			ModelSlotInstance<?, ?> next = it.next();
-			if (next.getModelSlot() != null && next.getModelSlot().equals(instance.getModelSlot())) {
-				it.remove();
-			}
-		}
-		modelSlotInstances.add(instance);
-		modelsMap.put(instance.getModelSlot(), instance.getModel());*/
 	}
 
-	/*public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> void setModel(ModelSlot<M, MM> modelSlot, M model) {
-		modelsMap.put(modelSlot, model);
-		for (ModelSlotInstance instance : modelSlotInstances) {
-			if (instance.getModelSlot().equals(modelSlot)) {
-				instance.setModel(model);
-				return;
-			}
-		}
-		ModelSlotInstance<M, MM> instance = new ModelSlotInstance<M, MM>(this, modelSlot);
-		instance.setModel(model);
-		modelSlotInstances.add(instance);
-	}
-
-	public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> M getModel(ModelSlot<M, MM> modelSlot, boolean createIfDoesNotExist) {
-		M model = (M) modelsMap.get(modelSlot);
-		if (createIfDoesNotExist && model == null) {
-			try {
-				org.openflexo.foundation.resource.FlexoResource<M> modelResource = modelSlot.createEmptyModel(getView(),
-						modelSlot.getMetaModelResource());
-				model = modelResource.getResourceData(null);
-				setModel(modelSlot, model);
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ResourceLoadingCancelledException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ResourceDependencyLoopException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (FlexoException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return model;
-	}
-
-	public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> M getModel(ModelSlot<M, MM> modelSlot) {
-		return getModel(modelSlot, true);
-	}
+	/**
+	 * Return a set of all meta models (load them when unloaded) used in this {@link VirtualModelInstance}
+	 * 
+	 * @return
 	 */
-
 	public Set<FlexoMetaModel> getAllMetaModels() {
 		Set<FlexoMetaModel> allMetaModels = new HashSet<FlexoMetaModel>();
 		for (ModelSlotInstance instance : getModelSlotInstances()) {
@@ -463,6 +426,11 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 		return allMetaModels;
 	}
 
+	/**
+	 * Return a set of all models (load them when unloaded) used in this {@link VirtualModelInstance}
+	 * 
+	 * @return
+	 */
 	public Set<FlexoModel<?, ?>> getAllModels() {
 		Set<FlexoModel<?, ?>> allModels = new HashSet<FlexoModel<?, ?>>();
 		for (ModelSlotInstance instance : getModelSlotInstances()) {
