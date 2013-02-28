@@ -255,32 +255,45 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 			TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
 		EMFModelResource emfModelResource = null;
 
-		EMFTechnologyContextManager emfContextManager = (EMFTechnologyContextManager) technologyContextManager;
-		emfModelResource = emfContextManager.getModel(aModelFile);
+		EMFTechnologyContextManager emfTechnologyContextManager = (EMFTechnologyContextManager) technologyContextManager;
+		emfModelResource = emfTechnologyContextManager.getModel(aModelFile);
 
 		if (emfModelResource == null) {
-			try {
-				EMFMetaModelResource emfMetaModelResource = (EMFMetaModelResource) metaModelResource;
-				emfModelResource = new EMFModelResource(aModelFile, emfMetaModelResource, this, URI.createFileURI(
-						aModelFile.getAbsolutePath()).toString());
-				emfModelResource.setServiceManager(getTechnologyAdapterService().getServiceManager());
-
-				emfContextManager.registerModel(aModelFile, emfModelResource);
-			} catch (InvalidFileNameException e) {
-				e.printStackTrace();
-			} catch (DuplicateResourceException e) {
-				e.printStackTrace();
-			}
+			emfModelResource = createModelResource(aModelFile, (EMFMetaModelResource) metaModelResource, emfTechnologyContextManager);
 		}
 
 		return emfModelResource;
 	}
 
 	@Override
-	public FlexoResource<EMFModel> retrieveModelResource(File aModelFile,
-			TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
+	public EMFModelResource retrieveModelResource(File aModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/**
+	 * Create Model Resource from file.
+	 * 
+	 * @param aModelFile
+	 * @param emfMetaModelResource
+	 * @param emfTechnologyContextManager
+	 * @return
+	 */
+	protected EMFModelResource createModelResource(File aModelFile, EMFMetaModelResource emfMetaModelResource,
+			EMFTechnologyContextManager emfTechnologyContextManager) {
+		EMFModelResource emfModelResource = null;
+		try {
+			emfModelResource = new EMFModelResource(aModelFile, emfMetaModelResource, this, URI.createFileURI(aModelFile.getAbsolutePath())
+					.toString());
+			emfModelResource.setServiceManager(getTechnologyAdapterService().getServiceManager());
+
+			emfTechnologyContextManager.registerModel(aModelFile, emfModelResource);
+		} catch (InvalidFileNameException e) {
+			e.printStackTrace();
+		} catch (DuplicateResourceException e) {
+			e.printStackTrace();
+		}
+		return emfModelResource;
 	}
 
 	/**
@@ -326,8 +339,10 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 			TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
 		EMFModelResource result = null;
 		try {
-			result = retrieveModelResource(modelFile, metaModelResource, technologyContextManager);
+			result = createModelResource(modelFile, (EMFMetaModelResource) metaModelResource,
+					(EMFTechnologyContextManager) technologyContextManager);
 			result.getEMFResource().save(null);
+			result.getResourceData();
 			System.out.println("Create empty model " + modelFile.getAbsolutePath() + " as " + metaModelResource.getURI());
 		} catch (IOException e) {
 			e.printStackTrace();
