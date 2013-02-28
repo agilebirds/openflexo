@@ -34,6 +34,8 @@ import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
+import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import org.openflexo.toolbox.StringUtils;
@@ -377,12 +379,15 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 	}
 
 	@Override
-	public void registerModel(FlexoResource<OWLOntology> ontologyResource) {
+	public void registerMetaModel(FlexoMetaModelResource<OWLOntology, OWLOntology> ontologyResource) {
+		super.registerMetaModel(ontologyResource);
 		registerOntology(ontologyResource);
 	}
 
 	@Override
-	public void registerMetaModel(FlexoResource<OWLOntology> ontologyResource) {
+	public void registerModel(FlexoModelResource<OWLOntology, OWLOntology> ontologyResource) {
+		super.registerModel(ontologyResource);
 		registerOntology(ontologyResource);
 	}
+
 }

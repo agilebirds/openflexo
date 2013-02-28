@@ -35,6 +35,7 @@ import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.InvalidFileNameException;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
@@ -265,9 +266,19 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 		return emfModelResource;
 	}
 
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#retrieveModelResource(java.io.File,
+	 *      org.openflexo.foundation.technologyadapter.TechnologyContextManager)
+	 */
 	@Override
 	public EMFModelResource retrieveModelResource(File aModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
-		// TODO Auto-generated method stub
+		for (FlexoMetaModelResource<EMFModel, EMFMetaModel> mmRes : technologyContextManager.getAllMetaModels()) {
+			if (isValidModelFile(aModelFile, mmRes, technologyContextManager)) {
+				return retrieveModelResource(aModelFile, mmRes, technologyContextManager);
+			}
+		}
 		return null;
 	}
 
@@ -287,7 +298,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 					.toString());
 			emfModelResource.setServiceManager(getTechnologyAdapterService().getServiceManager());
 
-			emfTechnologyContextManager.registerModel(aModelFile, emfModelResource);
+			emfTechnologyContextManager.registerModel(emfModelResource);
 		} catch (InvalidFileNameException e) {
 			e.printStackTrace();
 		} catch (DuplicateResourceException e) {

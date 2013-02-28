@@ -107,7 +107,7 @@ public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 
 	public M getModel() {
 		if (getVirtualModelInstance() != null && model == null && StringUtils.isNotEmpty(modelURI)) {
-			model = (M) getVirtualModelInstance().getInformationSpace().getModel(modelURI);
+			model = (M) getVirtualModelInstance().getInformationSpace().getModelWithURI(modelURI);
 		}
 		return model;
 	}

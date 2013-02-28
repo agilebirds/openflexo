@@ -7,7 +7,6 @@ import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterAdded;
-import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 
@@ -74,9 +73,9 @@ public class InformationSpace extends FlexoServiceImpl {
 		return null;
 	}
 
-	public FlexoMetaModelResource<?, ?> getMetaModel(String uri) {
+	public FlexoMetaModelResource<?, ?> getMetaModelWithURI(String uri) {
 		for (TechnologyAdapter ta : getServiceManager().getTechnologyAdapterService().getTechnologyAdapters()) {
-			FlexoMetaModelResource<?, ?> returned = getMetaModel(uri, ta);
+			FlexoMetaModelResource<?, ?> returned = getMetaModelWithURI(uri, ta);
 			if (returned != null) {
 				return returned;
 			}
@@ -84,19 +83,20 @@ public class InformationSpace extends FlexoServiceImpl {
 		return null;
 	}
 
-	public FlexoMetaModelResource<?, ?> getMetaModel(String uri, TechnologyAdapter<?, ?> technologyAdapter) {
-		for (MetaModelRepository<?, ?, ?, ?> mmRep : getAllMetaModelRepositories(technologyAdapter)) {
+	public FlexoMetaModelResource<?, ?> getMetaModelWithURI(String uri, TechnologyAdapter<?, ?> technologyAdapter) {
+		return technologyAdapter.getTechnologyContextManager().getMetaModelWithURI(uri);
+		/*for (MetaModelRepository<?, ?, ?, ?> mmRep : getAllMetaModelRepositories(technologyAdapter)) {
 			FlexoResource<?> resource = mmRep.getResource(uri);
 			if (resource != null) {
 				return (FlexoMetaModelResource<?, ?>) resource;
 			}
 		}
-		return null;
+		return null;*/
 	}
 
-	public FlexoModelResource<?, ?> getModel(String uri) {
+	public FlexoModelResource<?, ?> getModelWithURI(String uri) {
 		for (TechnologyAdapter ta : getServiceManager().getTechnologyAdapterService().getTechnologyAdapters()) {
-			FlexoModelResource<?, ?> returned = getModel(uri, ta);
+			FlexoModelResource<?, ?> returned = getModelWithURI(uri, ta);
 			if (returned != null) {
 				return returned;
 			}
@@ -104,13 +104,14 @@ public class InformationSpace extends FlexoServiceImpl {
 		return null;
 	}
 
-	public FlexoModelResource<?, ?> getModel(String uri, TechnologyAdapter<?, ?> technologyAdapter) {
-		for (ModelRepository<?, ?, ?, ?> mRep : getAllModelRepositories(technologyAdapter)) {
+	public FlexoModelResource<?, ?> getModelWithURI(String uri, TechnologyAdapter<?, ?> technologyAdapter) {
+		return technologyAdapter.getTechnologyContextManager().getModelWithURI(uri);
+		/*for (ModelRepository<?, ?, ?, ?> mRep : getAllModelRepositories(technologyAdapter)) {
 			FlexoResource<?> resource = mRep.getResource(uri);
 			if (resource != null) {
 				return (FlexoModelResource<?, ?>) resource;
 			}
 		}
-		return null;
+		return null;*/
 	}
 }

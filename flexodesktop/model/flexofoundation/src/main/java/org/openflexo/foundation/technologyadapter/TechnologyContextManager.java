@@ -19,7 +19,10 @@
  */
 package org.openflexo.foundation.technologyadapter;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoObject;
@@ -28,7 +31,6 @@ import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.ontology.SubPropertyOfProperty;
-import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 
@@ -50,6 +52,11 @@ public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM e
 	protected Hashtable<IFlexoOntologyClass, IndividualOfClass> individualsOfClass;
 	protected Hashtable<IFlexoOntologyClass, SubClassOfClass> subclassesOfClass;
 	protected Hashtable<IFlexoOntologyStructuralProperty, SubPropertyOfProperty> subpropertiesOfProperty;
+
+	/** Stores all known metamodels where key is the URI of metamodel */
+	protected Map<String, FlexoMetaModelResource<M, MM>> metamodels = new HashMap<String, FlexoMetaModelResource<M, MM>>();
+	/** Stores all known models where key is the URI of model */
+	protected Map<String, FlexoModelResource<M, MM>> models = new HashMap<String, FlexoModelResource<M, MM>>();
 
 	public IndividualOfClass getIndividualOfClass(IFlexoOntologyClass anOntologyClass) {
 		if (individualsOfClass.get(anOntologyClass) != null) {
@@ -87,22 +94,50 @@ public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM e
 		subpropertiesOfProperty = new Hashtable<IFlexoOntologyStructuralProperty, SubPropertyOfProperty>();
 	}
 
-	/**
-	 * Called when a new model was registered, notify the {@link TechnologyContextManager}
-	 * 
-	 * @param newModel
-	 */
-	public abstract void registerModel(FlexoResource<M> newModelResource);
+	@Override
+	public String getFullyQualifiedName() {
+		return getClass().getName();
+	}
 
 	/**
 	 * Called when a new meta model was registered, notify the {@link TechnologyContextManager}
 	 * 
 	 * @param newModel
 	 */
-	public abstract void registerMetaModel(FlexoResource<MM> newMetaModelResource);
+	public void registerMetaModel(FlexoMetaModelResource<M, MM> newMetaModelResource) {
+		metamodels.put(newMetaModelResource.getURI(), newMetaModelResource);
+	}
 
-	@Override
-	public String getFullyQualifiedName() {
-		return getClass().getName();
+	/**
+	 * Called when a new model was registered, notify the {@link TechnologyContextManager}
+	 * 
+	 * @param newModel
+	 */
+	public void registerModel(FlexoModelResource<M, MM> newModelResource) {
+		models.put(newModelResource.getURI(), newModelResource);
+	}
+
+	/**
+	 * Return resource storing metamodel identified by supplied uri, asserting this metamodel has been registered in this technology
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public FlexoMetaModelResource<M, MM> getMetaModelWithURI(String uri) {
+		return metamodels.get(uri);
+	}
+
+	/**
+	 * Return resource storing model identified by supplied uri, asserting this model has been registered in this technology
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public FlexoModelResource<M, MM> getModelWithURI(String uri) {
+		return models.get(uri);
+	}
+
+	public Collection<FlexoMetaModelResource<M, MM>> getAllMetaModels() {
+		return metamodels.values();
 	}
 }

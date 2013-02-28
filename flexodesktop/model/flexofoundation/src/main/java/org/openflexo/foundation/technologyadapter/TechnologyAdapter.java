@@ -135,22 +135,18 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 			TechnologyContextManager<M, MM> technologyContextManager);
 
 	/**
-	 * Instantiate new model resource stored in supplied model file
-	 * 
-	 * @param rc
-	 *            TODO
-	 * @param aMetaModelFile
+	 * Instantiate new model resource stored in supplied model file<br>
+	 * The metamodel is not yet known, so we have to iterate on all known metamodels of this technology to find one (or many) which is
+	 * relevant
 	 * 
 	 * @return
 	 */
 	public abstract FlexoResource<M> retrieveModelResource(File aModelFile, TechnologyContextManager<M, MM> technologyContextManager);
 
 	/**
-	 * Instantiate new model resource stored in supplied model file, given the conformant metamodel
-	 * 
-	 * @param rc
-	 *            TODO
-	 * @param aMetaModelFile
+	 * Instantiate new model resource stored in supplied model file, given the conformant metamodel<br>
+	 * We assert here that model resource is conform to supplied metamodel, ie we will not try to lookup the metamodel but take the one
+	 * which was supplied
 	 * 
 	 * @return
 	 */
