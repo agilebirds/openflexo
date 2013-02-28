@@ -21,7 +21,6 @@ package org.openflexo.fib.view.widget;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -346,11 +345,6 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		getTableModel().addTableModelListener(this);
 
 		_table = new JXTable(getTableModel()) {
-
-			@Override
-			public Dimension getPreferredSize() {
-				return getPreferredScrollableViewportSize();
-			}
 
 			@Override
 			protected void resetDefaultTableCellRendererColors(Component renderer, int row, int column) {
