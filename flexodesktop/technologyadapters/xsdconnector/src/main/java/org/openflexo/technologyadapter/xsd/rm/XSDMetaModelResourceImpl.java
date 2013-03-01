@@ -60,4 +60,9 @@ public abstract class XSDMetaModelResourceImpl extends FlexoFileResourceImpl<XSD
 		return null;
 	}
 
+	@Override
+	public Class<XSDMetaModel> getResourceDataClass() {
+		return XSDMetaModel.class;
+	}
+
 }

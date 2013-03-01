@@ -147,7 +147,7 @@ public class TestEMFCityMappingView extends FlexoTestCase {
 		FlexoOntologyModelSlotInstanceConfiguration city1ModelSlotConfiguration = (FlexoOntologyModelSlotInstanceConfiguration) createDiagram
 				.getModelSlotInstanceConfiguration(city1ModelSlot);
 		city1ModelSlotConfiguration.setOption(DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel);
-		city1ModelSlotConfiguration.setModelUri("http://www.thalesgroup.com/openflexo/emf/CityMapping/city1");
+		city1ModelSlotConfiguration.setModelUri("http://www.thalesgroup.com/openflexo/emf/CityMapping/myCity1");
 		city1ModelSlotConfiguration.setRelativePath("/");
 		city1ModelSlotConfiguration.setFilename("city.city1");
 		assertTrue(city1ModelSlotConfiguration.isValidConfiguration());
@@ -157,7 +157,7 @@ public class TestEMFCityMappingView extends FlexoTestCase {
 		FlexoOntologyModelSlotInstanceConfiguration city2ModelSlotConfiguration = (FlexoOntologyModelSlotInstanceConfiguration) createDiagram
 				.getModelSlotInstanceConfiguration(city2ModelSlot);
 		city2ModelSlotConfiguration.setOption(DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel);
-		city2ModelSlotConfiguration.setModelUri("http://www.thalesgroup.com/openflexo/emf/CityMapping/city1");
+		city2ModelSlotConfiguration.setModelUri("http://www.thalesgroup.com/openflexo/emf/CityMapping/myCity2");
 		city2ModelSlotConfiguration.setRelativePath("/");
 		city2ModelSlotConfiguration.setFilename("city.city2");
 		assertTrue(city2ModelSlotConfiguration.isValidConfiguration());

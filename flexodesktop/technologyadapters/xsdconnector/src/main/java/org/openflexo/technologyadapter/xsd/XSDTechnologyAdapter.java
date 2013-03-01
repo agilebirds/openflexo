@@ -27,7 +27,6 @@ import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProjectBuilder;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
@@ -53,6 +52,7 @@ import org.openflexo.technologyadapter.xsd.model.XSDMetaModelRepository;
 import org.openflexo.technologyadapter.xsd.model.XSDTechnologyContextManager;
 import org.openflexo.technologyadapter.xsd.model.XSOntology;
 import org.openflexo.technologyadapter.xsd.rm.XMLModelResource;
+import org.openflexo.technologyadapter.xsd.rm.XMLModelResourceImpl;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSDBindingFactory;
 
@@ -185,9 +185,8 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	public FlexoResource<XMLModel> retrieveModelResource(File aModelFile, FlexoResource<XSDMetaModel> metaModelResource,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
 		logger.warning("Not implemented yet");
-		XMLModelResource xmlModelResource = new XMLModelResource((FlexoProjectBuilder) null);
-		xmlModelResource.setServiceManager(getTechnologyAdapterService().getServiceManager());
-
+		XMLModelResource xmlModelResource = XMLModelResourceImpl.retrieveXMLModelResource(aModelFile,
+				(XSDMetaModelResource) metaModelResource, getTechnologyContextManager());
 		XSDTechnologyContextManager xsdContextManager = (XSDTechnologyContextManager) technologyContextManager;
 		xsdContextManager.registerModel(xmlModelResource);
 		return xmlModelResource;
@@ -272,7 +271,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 
 	@Override
 	public TechnologyContextManager<XMLModel, XSDMetaModel> createTechnologyContextManager(FlexoResourceCenterService service) {
-		return new XSDTechnologyContextManager();
+		return new XSDTechnologyContextManager(this, service);
 	}
 
 	@Override

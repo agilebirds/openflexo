@@ -104,6 +104,7 @@ public class FlexoOntologyModelSlotInstanceConfiguration<MS extends FlexoOntolog
 			}
 		} else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel) {
 			modelResource = createProjectSpecificEmptyModel(msInstance, (ModelSlot<?, ?>) getModelSlot());
+			System.out.println("***** modelResource = " + modelResource);
 			if (modelResource != null) {
 				msInstance.setModel((M) getModelResource().getModel());
 				System.out.println("***** Created model resource " + getModelResource());

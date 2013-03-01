@@ -105,6 +105,13 @@ public class InformationSpace extends FlexoServiceImpl {
 	}
 
 	public FlexoModelResource<?, ?> getModelWithURI(String uri, TechnologyAdapter<?, ?> technologyAdapter) {
+		if (technologyAdapter == null) {
+			logger.warning("Unexpected null " + technologyAdapter);
+			return null;
+		} else if (technologyAdapter.getTechnologyContextManager() == null) {
+			// logger.warning("Unexpected null technologyContextManager for " + technologyAdapter);
+			return null;
+		}
 		return technologyAdapter.getTechnologyContextManager().getModelWithURI(uri);
 		/*for (ModelRepository<?, ?, ?, ?> mRep : getAllModelRepositories(technologyAdapter)) {
 			FlexoResource<?> resource = mRep.getResource(uri);

@@ -107,7 +107,7 @@ public class TestEMFModelEdition {
 			EMFObjectIndividual parameterSet = createParameterSet(emfModelResource, emfMetaModelResource, "ParameterSet Name",
 					Arrays.asList(intParameter, doubleParameter, boolParameter, stringParameter));
 
-			emfModelResource.saveResourceData();
+			emfModelResource.save(null);
 		} catch (SaveResourceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

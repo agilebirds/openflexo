@@ -72,9 +72,6 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 	public static final String TECHNICAL_DESCRIPTION_URI = FLEXO_CONCEPT_ONTOLOGY_URI + "#technicalDescription";
 	public static final String USER_MANUAL_DESCRIPTION_URI = FLEXO_CONCEPT_ONTOLOGY_URI + "#userManualDescription";
 
-	private OWLTechnologyAdapter adapter;
-	private FlexoResourceCenterService resourceCenterService;
-
 	private SimpleGraphMaker graphMaker;
 
 	private Map<String, FlexoResource<OWLOntology>> ontologies;
@@ -95,9 +92,7 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 	}
 
 	public OWLOntologyLibrary(OWLTechnologyAdapter adapter, FlexoResourceCenterService resourceCenterService) {
-		super();
-		this.adapter = adapter;
-		this.resourceCenterService = resourceCenterService;
+		super(adapter, resourceCenterService);
 
 		ontologyObjectConverter = new OntologyObjectConverter(null/*this*/);
 		graphMaker = new SimpleGraphMaker();
@@ -140,8 +135,9 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 		}
 	}
 
+	@Override
 	public OWLTechnologyAdapter getTechnologyAdapter() {
-		return adapter;
+		return (OWLTechnologyAdapter) super.getTechnologyAdapter();
 	}
 
 	public OWLDataType getDataType(String dataTypeURI) {
@@ -211,6 +207,7 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 				e.printStackTrace();
 			}
 		}
+		logger.warning("Not found ontology: " + ontologyURI);
 		return null;
 	}
 
@@ -324,8 +321,10 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 	public boolean hasModel(String name) {
 		logger.info("hasModel " + name + " ? ");
 		if (getOntology(name) != null) {
+			logger.info("YES");
 			return true;
 		}
+		logger.info("NO");
 		return getGraphMaker().hasGraph(name);
 	}
 

@@ -78,7 +78,7 @@ public class TestLoadEMFMetaModel extends FlexoTestCase {
 					.getModelRepository(technologicalAdapter);
 			Collection<FlexoResource<EMFModel>> modelResources = modelRepository.getAllResources();
 			for (FlexoResource<EMFModel> modelResource : modelResources) {
-				EMFModel model = ((EMFModelResource) modelResource).getResourceData();
+				EMFModel model = ((EMFModelResource) modelResource).getModel();
 				assertNotNull(model);
 			}
 		}

@@ -100,6 +100,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	 */
 	public VirtualModelInstance(VirtualModelInstanceBuilder builder) {
 		this(builder.getView(), builder.getVirtualModel());
+		setResource(builder.getResource());
 		builder.vmInstance = this;
 		initializeDeserialization(builder);
 	}

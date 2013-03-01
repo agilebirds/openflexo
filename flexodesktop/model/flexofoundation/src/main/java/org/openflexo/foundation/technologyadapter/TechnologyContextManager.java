@@ -49,14 +49,17 @@ public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM e
 
 	private static final Logger logger = Logger.getLogger(TechnologyContextManager.class.getPackage().getName());
 
-	protected Hashtable<IFlexoOntologyClass, IndividualOfClass> individualsOfClass;
-	protected Hashtable<IFlexoOntologyClass, SubClassOfClass> subclassesOfClass;
-	protected Hashtable<IFlexoOntologyStructuralProperty, SubPropertyOfProperty> subpropertiesOfProperty;
+	private TechnologyAdapter<M, MM> adapter;
+	private FlexoResourceCenterService resourceCenterService;
 
 	/** Stores all known metamodels where key is the URI of metamodel */
 	protected Map<String, FlexoMetaModelResource<M, MM>> metamodels = new HashMap<String, FlexoMetaModelResource<M, MM>>();
 	/** Stores all known models where key is the URI of model */
 	protected Map<String, FlexoModelResource<M, MM>> models = new HashMap<String, FlexoModelResource<M, MM>>();
+
+	protected Hashtable<IFlexoOntologyClass, IndividualOfClass> individualsOfClass;
+	protected Hashtable<IFlexoOntologyClass, SubClassOfClass> subclassesOfClass;
+	protected Hashtable<IFlexoOntologyStructuralProperty, SubPropertyOfProperty> subpropertiesOfProperty;
 
 	public IndividualOfClass getIndividualOfClass(IFlexoOntologyClass anOntologyClass) {
 		if (individualsOfClass.get(anOntologyClass) != null) {
@@ -88,10 +91,20 @@ public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM e
 		}
 	}
 
-	public TechnologyContextManager() {
+	public TechnologyContextManager(TechnologyAdapter<M, MM> adapter, FlexoResourceCenterService resourceCenterService) {
+		this.adapter = adapter;
+		this.resourceCenterService = resourceCenterService;
 		individualsOfClass = new Hashtable<IFlexoOntologyClass, IndividualOfClass>();
 		subclassesOfClass = new Hashtable<IFlexoOntologyClass, SubClassOfClass>();
 		subpropertiesOfProperty = new Hashtable<IFlexoOntologyStructuralProperty, SubPropertyOfProperty>();
+	}
+
+	public TechnologyAdapter<M, MM> getTechnologyAdapter() {
+		return adapter;
+	}
+
+	public FlexoResourceCenterService getResourceCenterService() {
+		return resourceCenterService;
 	}
 
 	@Override

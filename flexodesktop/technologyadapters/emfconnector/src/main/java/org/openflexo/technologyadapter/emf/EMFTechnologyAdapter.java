@@ -27,14 +27,12 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import org.eclipse.emf.common.util.URI;
 import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.InvalidFileNameException;
+import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
@@ -49,6 +47,7 @@ import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFModelRepository;
 import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
+import org.openflexo.technologyadapter.emf.rm.EMFModelResourceImpl;
 import org.openflexo.technologyadapter.emf.viewpoint.binding.EMFBindingFactory;
 
 /**
@@ -260,7 +259,8 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 		emfModelResource = emfTechnologyContextManager.getModel(aModelFile);
 
 		if (emfModelResource == null) {
-			emfModelResource = createModelResource(aModelFile, (EMFMetaModelResource) metaModelResource, emfTechnologyContextManager);
+			emfModelResource = EMFModelResourceImpl.retrieveEMFModelResource(aModelFile, (EMFMetaModelResource) metaModelResource,
+					(EMFTechnologyContextManager) technologyContextManager);
 		}
 
 		return emfModelResource;
@@ -290,7 +290,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 * @param emfTechnologyContextManager
 	 * @return
 	 */
-	protected EMFModelResource createModelResource(File aModelFile, EMFMetaModelResource emfMetaModelResource,
+	/*protected EMFModelResource createModelResource(File aModelFile, EMFMetaModelResource emfMetaModelResource,
 			EMFTechnologyContextManager emfTechnologyContextManager) {
 		EMFModelResource emfModelResource = null;
 		try {
@@ -305,7 +305,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 			e.printStackTrace();
 		}
 		return emfModelResource;
-	}
+	}*/
 
 	/**
 	 * Follow the link.
@@ -348,17 +348,18 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 */
 	public EMFModelResource createEmptyModel(File modelFile, String modelUri, FlexoResource<EMFMetaModel> metaModelResource,
 			TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
-		EMFModelResource result = null;
+		EMFMetaModelResource emfMetaModelResource = (EMFMetaModelResource) metaModelResource;
+		EMFModelResource emfModelResource = EMFModelResourceImpl.makeEMFModelResource(modelUri, modelFile, emfMetaModelResource,
+				(EMFTechnologyContextManager) technologyContextManager);
+		technologyContextManager.registerModel(emfModelResource);
 		try {
-			result = createModelResource(modelFile, (EMFMetaModelResource) metaModelResource,
-					(EMFTechnologyContextManager) technologyContextManager);
-			result.getEMFResource().save(null);
-			result.getResourceData();
-			System.out.println("Create empty model " + modelFile.getAbsolutePath() + " as " + metaModelResource.getURI());
-		} catch (IOException e) {
+			emfModelResource.save(null);
+		} catch (SaveResourceException e) {
 			e.printStackTrace();
 		}
-		return result;
+		System.out.println("Created empty model " + modelFile.getAbsolutePath() + " as " + modelUri + " conform to "
+				+ metaModelResource.getURI());
+		return emfModelResource;
 	}
 
 	/**
@@ -369,7 +370,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	 */
 	@Override
 	public TechnologyContextManager<EMFModel, EMFMetaModel> createTechnologyContextManager(FlexoResourceCenterService service) {
-		return new EMFTechnologyContextManager();
+		return new EMFTechnologyContextManager(this, service);
 	}
 
 	/**

@@ -1,7 +1,6 @@
 package org.openflexo.foundation.technologyadapter;
 
 import org.openflexo.foundation.resource.ResourceData;
-import org.openflexo.foundation.rm.StorageResourceData;
 
 /**
  * This interface is implemented by all objects considered in Flexo Modelling Language as a model<br>
@@ -19,7 +18,7 @@ import org.openflexo.foundation.rm.StorageResourceData;
  * 
  * @param <MM>
  */
-public interface FlexoModel<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends StorageResourceData<M>, ResourceData<M> {
+public interface FlexoModel<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends /*StorageResourceData<M>,*/ResourceData<M> {
 	/**
 	 * Meta Model.
 	 * 
