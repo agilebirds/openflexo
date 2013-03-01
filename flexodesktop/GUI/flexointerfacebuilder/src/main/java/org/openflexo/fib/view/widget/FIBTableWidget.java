@@ -351,6 +351,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 			}
 
 		};
+		_table.setVisibleRowCount(0);
 		_table.setSortOrderCycle(SortOrder.ASCENDING, SortOrder.DESCENDING, SortOrder.UNSORTED);
 		_table.setAutoCreateRowSorter(true);
 		_table.setFillsViewportHeight(true);
