@@ -64,8 +64,8 @@ import org.openflexo.foundation.ie.widget.IEHTMLTableWidget;
 import org.openflexo.foundation.ie.widget.IEReusableWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
+import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.resource.UserResourceCenter;
 import org.openflexo.foundation.rm.FlexoOperationComponentResource;
 import org.openflexo.foundation.rm.FlexoProcessResource;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -119,7 +119,7 @@ public abstract class FlexoTestCase extends TestCase {
 	protected static File _projectDirectory;
 	protected static String _projectIdentifier;
 	protected static FlexoServiceManager serviceManager;
-	protected static UserResourceCenter resourceCenter;
+	protected static DirectoryResourceCenter resourceCenter;
 	static {
 		try {
 			FlexoLoggingManager.initialize(-1, true, null, Level.WARNING, null);
@@ -208,7 +208,7 @@ public abstract class FlexoTestCase extends TestCase {
 					testResourceCenterDirectory.mkdirs();
 					FileUtils.copyContentDirToDir(new FileResource("src/test/resources/TestResourceCenter"), testResourceCenterDirectory);
 					FlexoResourceCenterService rcService = DefaultResourceCenterService.getNewInstance();
-					rcService.addToResourceCenters(resourceCenter = new UserResourceCenter(testResourceCenterDirectory));
+					rcService.addToResourceCenters(resourceCenter = new DirectoryResourceCenter(testResourceCenterDirectory));
 					return rcService;
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -222,7 +222,10 @@ public abstract class FlexoTestCase extends TestCase {
 	}
 
 	protected FlexoEditor createProject(String projectName) {
-		return createProject(projectName, instanciateTestServiceManager());
+		if (serviceManager == null) {
+			serviceManager = instanciateTestServiceManager();
+		}
+		return createProject(projectName, serviceManager);
 	}
 
 	protected static FlexoResourceCenterService getNewResourceCenter(String name) {

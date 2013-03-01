@@ -104,8 +104,12 @@ public class FlexoOntologyModelSlotInstanceConfiguration<MS extends FlexoOntolog
 			}
 		} else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel) {
 			modelResource = createProjectSpecificEmptyModel(msInstance, (ModelSlot<?, ?>) getModelSlot());
+			System.out.println("***** modelResource = " + modelResource);
 			if (modelResource != null) {
 				msInstance.setModel((M) getModelResource().getModel());
+				System.out.println("***** Created model resource " + getModelResource());
+				System.out.println("***** Created model " + getModelResource().getModel());
+				System.out.println("***** Created model with uri=" + getModelResource().getModel().getURI());
 			} else {
 				logger.warning("Could not create ProjectSpecificEmtpyModel for model slot " + getModelSlot());
 			}

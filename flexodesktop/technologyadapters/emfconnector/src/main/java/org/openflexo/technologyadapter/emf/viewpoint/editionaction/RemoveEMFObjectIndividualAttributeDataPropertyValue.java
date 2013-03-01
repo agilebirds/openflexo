@@ -29,16 +29,12 @@
 package org.openflexo.technologyadapter.emf.viewpoint.editionaction;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
-import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
-import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualAttributeDataPropertyValue;
 
 /**
@@ -76,9 +72,9 @@ public class RemoveEMFObjectIndividualAttributeDataPropertyValue<T> extends
 	 */
 	@Override
 	public Type getAssignableType() {
-		if (value != null) {
-			return value.getClass();
-		}
+		// if (value != null) {
+		// return value.getClass();
+		// }
 		return Object.class;
 	}
 
@@ -89,15 +85,20 @@ public class RemoveEMFObjectIndividualAttributeDataPropertyValue<T> extends
 	 */
 	@Override
 	public EMFObjectIndividualAttributeDataPropertyValue performAction(EditionSchemeAction action) {
-		EMFModel model = (EMFModel) objectIndividual.getOntology();
-		if (attributeDataProperty.getObject().getUpperBound() != 1) {
-			List<T> values = (List<T>) objectIndividual.getObject().eGet(attributeDataProperty.getObject());
-			values.remove(value);
-		} else {
-			objectIndividual.getObject().eUnset(attributeDataProperty.getObject());
-		}
-		return model.getConverter().convertObjectIndividualAttributeDataPropertyValue(model, objectIndividual.getObject(),
-				attributeDataProperty.getObject());
+		EMFObjectIndividualAttributeDataPropertyValue result = null;
+		// ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
+		// EMFModel model = modelSlotInstance.getModel();
+		// // Remove Attribute in EMF
+		// if (attributeDataProperty.getObject().getUpperBound() != 1) {
+		// List<T> values = (List<T>) objectIndividual.getObject().eGet(attributeDataProperty.getObject());
+		// values.remove(value);
+		// } else {
+		// objectIndividual.getObject().eUnset(attributeDataProperty.getObject());
+		// }
+		// // Instanciate Wrapper
+		// result = model.getConverter().convertObjectIndividualAttributeDataPropertyValue(model, objectIndividual.getObject(),
+		// attributeDataProperty.getObject());
+		return result;
 	}
 
 	/**
@@ -108,41 +109,5 @@ public class RemoveEMFObjectIndividualAttributeDataPropertyValue<T> extends
 	 */
 	@Override
 	public void finalizePerformAction(EditionSchemeAction action, EMFObjectIndividualAttributeDataPropertyValue initialContext) {
-	}
-
-	protected EMFObjectIndividual objectIndividual;
-
-	/**
-	 * Setter of objectIndividual.
-	 * 
-	 * @param objectIndividual
-	 *            the objectIndividual to set
-	 */
-	public void setObjectIndividual(EMFObjectIndividual objectIndividual) {
-		this.objectIndividual = objectIndividual;
-	}
-
-	protected EMFAttributeDataProperty attributeDataProperty;
-
-	/**
-	 * Setter of attributeDataProperty.
-	 * 
-	 * @param attributeDataProperty
-	 *            the attributeDataProperty to set
-	 */
-	public void setAttributeDataProperty(EMFAttributeDataProperty attributeDataProperty) {
-		this.attributeDataProperty = attributeDataProperty;
-	}
-
-	protected T value;
-
-	/**
-	 * Setter of value.
-	 * 
-	 * @param value
-	 *            the value to set
-	 */
-	public void setValue(T value) {
-		this.value = value;
 	}
 }

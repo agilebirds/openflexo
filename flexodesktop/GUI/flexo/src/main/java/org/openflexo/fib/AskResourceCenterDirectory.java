@@ -21,23 +21,20 @@ package org.openflexo.fib;
 
 import java.io.File;
 
-import org.openflexo.fib.editor.FIBAbstractEditor;
+import org.openflexo.toolbox.FileResource;
 
-public class AskLocalResourceCenterDirectoryEDITOR extends FIBAbstractEditor {
+public class AskResourceCenterDirectory {
 
-	@Override
-	public Object[] getData() {
-		AskResourceCenterDirectory o = new AskResourceCenterDirectory();
-		o.setLocalResourceDirectory(null); // new File(System.getProperty("user.dir"));
-		return FIBAbstractEditor.makeArray(o);
+	public static final FileResource FIB_FILE = new FileResource("Fib/AskResourceCenterDirectory.fib");
+
+	private File localResourceDirectory;
+
+	public File getLocalResourceDirectory() {
+		return localResourceDirectory;
 	}
 
-	@Override
-	public File getFIBFile() {
-		return AskResourceCenterDirectory.FIB_FILE;
+	public void setLocalResourceDirectory(File localResourceDirectory) {
+		this.localResourceDirectory = localResourceDirectory;
 	}
 
-	public static void main(String[] args) {
-		main(AskLocalResourceCenterDirectoryEDITOR.class);
-	}
 }

@@ -19,166 +19,26 @@
  */
 package org.openflexo.technologyadapter.xsd.rm;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.util.logging.Level;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.apache.commons.io.IOUtils;
-import org.openflexo.foundation.FlexoServiceManager;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProjectBuilder;
-import org.openflexo.foundation.rm.FlexoStorageResource;
-import org.openflexo.foundation.rm.InvalidFileNameException;
-import org.openflexo.foundation.rm.LoadResourceException;
-import org.openflexo.foundation.rm.ResourceType;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
+import org.openflexo.foundation.resource.FlexoFileResource;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
-import org.openflexo.foundation.utils.FlexoProgress;
-import org.openflexo.foundation.utils.FlexoProjectFile;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
-import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
 import org.openflexo.technologyadapter.xsd.model.XMLModel;
 import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
+import org.openflexo.technologyadapter.xsd.model.XSDTechnologyContextManager;
 
-@SuppressWarnings("serial")
-public class XMLModelResource extends FlexoStorageResource<XMLModel> implements FlexoModelResource<XMLModel, XSDMetaModel> {
+@ModelEntity
+@ImplementationClass(XMLModelResourceImpl.class)
+public interface XMLModelResource extends FlexoFileResource<XMLModel>, FlexoModelResource<XMLModel, XSDMetaModel> {
 
-	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XMLModelResource.class.getPackage()
-			.getName());
+	public static final String TECHNOLOGY_CONTEXT_MANAGER = "technologyContextManager";
 
-	public XMLModelResource(FlexoProjectBuilder builder) {
-		this(builder.project, builder.serviceManager);
-		builder.notifyResourceLoading(this);
-	}
+	@Getter(value = TECHNOLOGY_CONTEXT_MANAGER, ignoreType = true)
+	public XSDTechnologyContextManager getTechnologyContextManager();
 
-	public XMLModelResource(FlexoProject aProject, FlexoServiceManager serviceManager) {
-		super(aProject, serviceManager);
-	}
-
-	public XMLModelResource(FlexoProject project, FlexoServiceManager serviceManager, XMLModel newProjectOntology,
-			FlexoProjectFile ontologyFile) throws InvalidFileNameException, DuplicateResourceException {
-		super(project, serviceManager);
-		_resourceData = newProjectOntology;
-		newProjectOntology.setFlexoResource(this);
-		this.setResourceFile(ontologyFile);
-	}
-
-	@Override
-	protected void saveResourceData(boolean clearIsModified) throws SaveResourceException {
-		if (!hasWritePermission()) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Permission denied : " + getFile().getAbsolutePath());
-			}
-			throw new SaveResourcePermissionDeniedException(this);
-		}
-		if (_resourceData != null) {
-			FileWritingLock lock = willWriteOnDisk();
-			writeToFile();
-			hasWrittenOnDisk(lock);
-			notifyResourceStatusChanged();
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Succeeding to save Resource " + getResourceIdentifier() + " : " + getFile().getName());
-			}
-		}
-		if (clearIsModified) {
-			getResourceData().clearIsModified(false);
-		}
-	}
-
-	private void writeToFile() throws SaveResourceException {
-		FileOutputStream out = null;
-		try {
-			out = new FileOutputStream(getFile());
-			StreamResult result = new StreamResult(out);
-			TransformerFactory factory = TransformerFactory.newInstance(
-					"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
-			Transformer transformer = factory.newTransformer();
-			DOMSource source = new DOMSource(this.getResourceData().getOntology().toXML());
-			transformer.transform(source, result);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			throw new SaveResourceException(this);
-		} catch (TransformerConfigurationException e) {
-			e.printStackTrace();
-			throw new SaveResourceException(this);
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-			throw new SaveResourceException(this);
-		} catch (TransformerException e) {
-			e.printStackTrace();
-			throw new SaveResourceException(this);
-		} finally {
-			IOUtils.closeQuietly(out);
-		}
-
-		logger.info("Wrote " + getFile());
-	}
-
-	@Override
-	public ResourceType getResourceType() {
-		return ResourceType.OWL_ONTOLOGY;
-	}
-
-	@Override
-	public String getName() {
-		return getProject().getProjectName();
-	}
-
-	@Override
-	protected XMLModel performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadResourceException,
-			FileNotFoundException, ProjectLoadingCancelledException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Class<XMLModel> getResourceDataClass() {
-		return XMLModel.class;
-	}
-
-	@Override
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setTechnologyAdapter(TechnologyAdapter<?, ?> technologyAdapter) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public XSDMetaModel getMetaModel() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setMetaModel(XSDMetaModel aMetaModel) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public XMLModel getModelData() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public XMLModel getModel() {
-		return getModelData();
-	}
+	@Setter(TECHNOLOGY_CONTEXT_MANAGER)
+	public void setTechnologyContextManager(XSDTechnologyContextManager technologyContextManager);
 
 }

@@ -19,7 +19,10 @@
  */
 package org.openflexo.foundation.technologyadapter;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoObject;
@@ -28,7 +31,6 @@ import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.ontology.SubPropertyOfProperty;
-import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 
@@ -46,6 +48,14 @@ import org.openflexo.foundation.resource.FlexoResourceCenterService;
 public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends FlexoObject {
 
 	private static final Logger logger = Logger.getLogger(TechnologyContextManager.class.getPackage().getName());
+
+	private TechnologyAdapter<M, MM> adapter;
+	private FlexoResourceCenterService resourceCenterService;
+
+	/** Stores all known metamodels where key is the URI of metamodel */
+	protected Map<String, FlexoMetaModelResource<M, MM>> metamodels = new HashMap<String, FlexoMetaModelResource<M, MM>>();
+	/** Stores all known models where key is the URI of model */
+	protected Map<String, FlexoModelResource<M, MM>> models = new HashMap<String, FlexoModelResource<M, MM>>();
 
 	protected Hashtable<IFlexoOntologyClass, IndividualOfClass> individualsOfClass;
 	protected Hashtable<IFlexoOntologyClass, SubClassOfClass> subclassesOfClass;
@@ -81,10 +91,34 @@ public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM e
 		}
 	}
 
-	public TechnologyContextManager() {
+	public TechnologyContextManager(TechnologyAdapter<M, MM> adapter, FlexoResourceCenterService resourceCenterService) {
+		this.adapter = adapter;
+		this.resourceCenterService = resourceCenterService;
 		individualsOfClass = new Hashtable<IFlexoOntologyClass, IndividualOfClass>();
 		subclassesOfClass = new Hashtable<IFlexoOntologyClass, SubClassOfClass>();
 		subpropertiesOfProperty = new Hashtable<IFlexoOntologyStructuralProperty, SubPropertyOfProperty>();
+	}
+
+	public TechnologyAdapter<M, MM> getTechnologyAdapter() {
+		return adapter;
+	}
+
+	public FlexoResourceCenterService getResourceCenterService() {
+		return resourceCenterService;
+	}
+
+	@Override
+	public String getFullyQualifiedName() {
+		return getClass().getName();
+	}
+
+	/**
+	 * Called when a new meta model was registered, notify the {@link TechnologyContextManager}
+	 * 
+	 * @param newModel
+	 */
+	public void registerMetaModel(FlexoMetaModelResource<M, MM> newMetaModelResource) {
+		metamodels.put(newMetaModelResource.getURI(), newMetaModelResource);
 	}
 
 	/**
@@ -92,17 +126,31 @@ public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM e
 	 * 
 	 * @param newModel
 	 */
-	public abstract void registerModel(FlexoResource<M> newModelResource);
+	public void registerModel(FlexoModelResource<M, MM> newModelResource) {
+		models.put(newModelResource.getURI(), newModelResource);
+	}
 
 	/**
-	 * Called when a new meta model was registered, notify the {@link TechnologyContextManager}
+	 * Return resource storing metamodel identified by supplied uri, asserting this metamodel has been registered in this technology
 	 * 
-	 * @param newModel
+	 * @param uri
+	 * @return
 	 */
-	public abstract void registerMetaModel(FlexoResource<MM> newMetaModelResource);
+	public FlexoMetaModelResource<M, MM> getMetaModelWithURI(String uri) {
+		return metamodels.get(uri);
+	}
 
-	@Override
-	public String getFullyQualifiedName() {
-		return getClass().getName();
+	/**
+	 * Return resource storing model identified by supplied uri, asserting this model has been registered in this technology
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public FlexoModelResource<M, MM> getModelWithURI(String uri) {
+		return models.get(uri);
+	}
+
+	public Collection<FlexoMetaModelResource<M, MM>> getAllMetaModels() {
+		return metamodels.values();
 	}
 }

@@ -54,7 +54,7 @@ public class ViewLibrary extends FileResourceRepository<ViewResource> {
 	 * Create a new FlexoComponentLibrary.
 	 */
 	public ViewLibrary(FlexoProject project) {
-		super(getExpectedViewLibraryDirectory(project));
+		super(project, getExpectedViewLibraryDirectory(project));
 		this.project = project;
 		getRootFolder().setName(project.getName());
 		exploreDirectoryLookingForViews(getDirectory(), getRootFolder());

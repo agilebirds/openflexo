@@ -28,20 +28,14 @@
  */
 package org.openflexo.technologyadapter.emf.viewpoint.editionaction;
 
-import java.util.List;
 import java.util.logging.Logger;
 
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
-import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
-import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 
 /**
  * Remove an EMF Object Individual from model.
@@ -68,21 +62,22 @@ public class RemoveEMFObjectIndividual extends DeleteAction<EMFModel, EMFMetaMod
 	 */
 	@Override
 	public FlexoModelObject performAction(EditionSchemeAction action) {
-		EObject object = objectIndividual.getObject();
-		EObject container = object.eContainer();
-		EStructuralFeature containmentFeature = object.eContainmentFeature();
-		if (container != null) {
-			// Model Object not root
-			if (containmentFeature.getUpperBound() != 1) {
-				List<EObject> values = (List<EObject>) container.eGet(containmentFeature);
-				values.remove(object);
-			} else {
-				objectIndividual.getObject().eUnset(containmentFeature);
-			}
-		} else {
-			// Root Model Object
-			emfModelResource.getEMFResource().getContents().remove(object);
-		}
+		// ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
+		// EObject object = objectIndividual.getObject();
+		// EObject container = object.eContainer();
+		// EStructuralFeature containmentFeature = object.eContainmentFeature();
+		// if (container != null) {
+		// // Model Object not root
+		// if (containmentFeature.getUpperBound() != 1) {
+		// List<EObject> values = (List<EObject>) container.eGet(containmentFeature);
+		// values.remove(object);
+		// } else {
+		// objectIndividual.getObject().eUnset(containmentFeature);
+		// }
+		// } else {
+		// // Root Model Object
+		// modelSlotInstance.getModel().getEMFResource().getContents().remove(object);
+		// }
 		return null;
 	}
 
@@ -94,29 +89,5 @@ public class RemoveEMFObjectIndividual extends DeleteAction<EMFModel, EMFMetaMod
 	 */
 	@Override
 	public void finalizePerformAction(EditionSchemeAction action, FlexoModelObject initialContext) {
-	}
-
-	protected EMFModelResource emfModelResource;
-
-	/**
-	 * Setter of emfModelResource.
-	 * 
-	 * @param emfModelResource
-	 *            the emfModelResource to set
-	 */
-	public void setEMFModelResource(EMFModelResource emfModelResource) {
-		this.emfModelResource = emfModelResource;
-	}
-
-	protected EMFObjectIndividual objectIndividual;
-
-	/**
-	 * Setter of objectIndividual.
-	 * 
-	 * @param objectIndividual
-	 *            the objectIndividual to set
-	 */
-	public void setObjectIndividual(EMFObjectIndividual objectIndividual) {
-		this.objectIndividual = objectIndividual;
 	}
 }

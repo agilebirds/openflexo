@@ -1183,18 +1183,20 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 						+ selectedValue.getElement().getClass());
 				System.out.println("currentElement=" + currentElement + " of " + currentElement != null ? currentElement.getClass() : null);*/
 
-				if (!(currentElement instanceof FunctionPathElement)
-						|| (!((FunctionPathElement) currentElement).getFunction().equals(
-								((FunctionPathElement) selectedValue.getElement()).getFunction()))) {
-					disconnect();
-					Function function = ((FunctionPathElement) selectedValue.getElement()).getFunction();
-					// TODO: we need to handle here generic FunctionPathElement and not only JavaMethodPathElement
-					JavaMethodPathElement newMethodCall = new JavaMethodPathElement(bindingValue.getLastBindingPathElement(),
-							(MethodDefinition) ((FunctionPathElement) selectedValue.getElement()).getFunction(),
-							new ArrayList<DataBinding<?>>());
-					bindingValue.setBindingPathElementAtIndex(newMethodCall, index - 1);
-					getEditedObject().setExpression(bindingValue);
-					fireEditedObjectChanged();
+				if (currentElement != null) {
+					if (!(currentElement instanceof FunctionPathElement)
+							|| (!((FunctionPathElement) currentElement).getFunction().equals(
+									((FunctionPathElement) selectedValue.getElement()).getFunction()))) {
+						disconnect();
+						Function function = ((FunctionPathElement) selectedValue.getElement()).getFunction();
+						// TODO: we need to handle here generic FunctionPathElement and not only JavaMethodPathElement
+						JavaMethodPathElement newMethodCall = new JavaMethodPathElement(bindingValue.getLastBindingPathElement(),
+								(MethodDefinition) ((FunctionPathElement) selectedValue.getElement()).getFunction(),
+								new ArrayList<DataBinding<?>>());
+						bindingValue.setBindingPathElementAtIndex(newMethodCall, index - 1);
+						getEditedObject().setExpression(bindingValue);
+						fireEditedObjectChanged();
+					}
 				}
 			}
 		}

@@ -19,32 +19,13 @@
  */
 package org.openflexo.technologyadapter.owl.rm;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.openflexo.foundation.ontology.dm.OntologyImported;
-import org.openflexo.foundation.resource.FlexoResource;
-import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProjectBuilder;
-import org.openflexo.foundation.rm.FlexoStorageResource;
-import org.openflexo.foundation.rm.InvalidFileNameException;
-import org.openflexo.foundation.rm.LoadResourceException;
-import org.openflexo.foundation.rm.ResourceType;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
+import org.openflexo.foundation.resource.FlexoFileResource;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
-import org.openflexo.foundation.utils.FlexoProgress;
-import org.openflexo.foundation.utils.FlexoProjectFile;
-import org.openflexo.foundation.utils.ProjectLoadingHandler;
-import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
 
@@ -54,204 +35,17 @@ import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
  * @author sguerin
  * 
  */
-public class OWLOntologyResource extends FlexoStorageResource<OWLOntology> implements FlexoResource<OWLOntology>,
-		FlexoModelResource<OWLOntology, OWLOntology>, FlexoMetaModelResource<OWLOntology, OWLOntology> {
+@ModelEntity
+@ImplementationClass(OWLOntologyResourceImpl.class)
+public interface OWLOntologyResource extends FlexoFileResource<OWLOntology>, FlexoModelResource<OWLOntology, OWLOntology>,
+		FlexoMetaModelResource<OWLOntology, OWLOntology> {
 
-	private static final Logger logger = Logger.getLogger(OWLOntologyResource.class.getPackage().getName());
+	public static final String ONTOLOGY_LIBRARY = "ontologyLibrary";
 
-	private OWLTechnologyAdapter technologyAdapter;
-	private OWLOntologyLibrary ontologyLibrary = null;
-	private String ontologyURI;
-	private File absoluteFile;
-	private OWLOntology metaModel;
+	@Getter(value = ONTOLOGY_LIBRARY, ignoreType = true)
+	public OWLOntologyLibrary getOntologyLibrary();
 
-	/**
-	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
-	 * 
-	 * @param builder
-	 */
-	public OWLOntologyResource(FlexoProjectBuilder builder) {
-		super(builder.project, builder.serviceManager);
-		builder.notifyResourceLoading(this);
-	}
-
-	public OWLOntologyResource(FlexoProject aProject, OWLTechnologyAdapter technologyAdapter) {
-		super(aProject, technologyAdapter.getTechnologyAdapterService().getServiceManager());
-		this.technologyAdapter = technologyAdapter;
-	}
-
-	public OWLOntologyResource(File owlFile, OWLOntologyLibrary ontologyLibrary) {
-		super((FlexoProject) null, ontologyLibrary.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
-		this.ontologyURI = OWLOntology.findOntologyURI(owlFile);
-		absoluteFile = owlFile;
-		setOntologyLibrary(ontologyLibrary);
-		this.technologyAdapter = ontologyLibrary.getTechnologyAdapter();
-	}
-
-	public OWLOntologyResource(FlexoProject aProject, OWLOntology anOntology, FlexoProjectFile ontologyFile)
-			throws InvalidFileNameException, DuplicateResourceException {
-		this(aProject, anOntology.getTechnologyAdapter());
-		_resourceData = anOntology;
-		absoluteFile = ontologyFile.getFile();
-		anOntology.setFlexoResource(this);
-		setResourceFile(ontologyFile);
-	}
-
-	@Override
-	public String getURI() {
-		return ontologyURI;
-	}
-
-	@Override
-	public File getFile() {
-		return absoluteFile;
-	}
-
-	public OWLOntologyLibrary getOntologyLibrary() {
-		return ontologyLibrary;
-	}
-
-	public void setOntologyLibrary(OWLOntologyLibrary ontologyLibrary) {
-		this.ontologyLibrary = ontologyLibrary;
-		ontologyLibrary.registerOntology(this);
-	}
-
-	@Override
-	public ResourceType getResourceType() {
-		return ResourceType.OWL_ONTOLOGY;
-	}
-
-	@Override
-	public String getName() {
-		if (getProject() != null) {
-			return getProject().getProjectName();
-		}
-		return getURI();
-	}
-
-	@Override
-	public Class getResourceDataClass() {
-		return OWLOntology.class;
-	}
-
-	@Override
-	public void setName(String aName) {
-		// Not allowed
-	}
-
-	@Override
-	public OWLTechnologyAdapter getTechnologyAdapter() {
-		return technologyAdapter;
-	}
-
-	@Override
-	public void setTechnologyAdapter(TechnologyAdapter<?, ?> technologyAdapter) {
-		this.technologyAdapter = (OWLTechnologyAdapter) technologyAdapter;
-	}
-
-	@Override
-	public OWLOntology performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadResourceException {
-
-		OWLOntology ontology = new OWLOntology(getURI(), getFile(), getOntologyLibrary(), getTechnologyAdapter());
-		setChanged();
-		notifyObservers(new OntologyImported(ontology));
-
-		_resourceData = ontology;
-
-		try {
-			_resourceData.setFlexoResource(this);
-		} catch (DuplicateResourceException e) {
-			e.printStackTrace();
-			logger.warning("Should not happen");
-		}
-		notifyResourceStatusChanged();
-		return _resourceData;
-	}
-
-	/**
-	 * Implements
-	 * 
-	 * @see org.openflexo.foundation.rm.FlexoResource#saveResourceData()
-	 * @see org.openflexo.foundation.rm.FlexoResource#saveResourceData()
-	 */
-	@Override
-	protected void saveResourceData(boolean clearIsModified) throws SaveResourceException {
-		if (!hasWritePermission()) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Permission denied : " + getFile().getAbsolutePath());
-			}
-			throw new SaveResourcePermissionDeniedException(this);
-		}
-		if (_resourceData != null) {
-			FileWritingLock lock = willWriteOnDisk();
-			_writeToFile();
-			hasWrittenOnDisk(lock);
-			notifyResourceStatusChanged();
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Succeeding to save Resource " + getResourceIdentifier() + " : " + getFile().getName());
-			}
-		}
-		if (clearIsModified) {
-			getResourceData().clearIsModified(false);
-		}
-	}
-
-	public void _writeToFile() throws SaveResourceException {
-		FileOutputStream out = null;
-		try {
-			out = new FileOutputStream(getFile());
-			_resourceData.getOntModel().write(out, null, _resourceData.getOntologyURI());
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			throw new SaveResourceException(this);
-		} finally {
-			try {
-				if (out != null) {
-					out.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-				throw new SaveResourceException(this);
-			}
-		}
-
-		logger.info("Wrote " + getFile());
-
-	}
-
-	@Override
-	public OWLOntology getMetaModel() {
-		return metaModel;
-	}
-
-	@Override
-	public void setMetaModel(OWLOntology aMetaModel) {
-		metaModel = aMetaModel;
-	}
-
-	@Override
-	public OWLOntology getModelData() {
-		try {
-			return getResourceData(null);
-		} catch (ResourceLoadingCancelledException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	@Override
-	public OWLOntology getMetaModelData() {
-		try {
-			return getResourceData(null);
-		} catch (ResourceLoadingCancelledException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	@Override
-	public OWLOntology getModel() {
-		return getModelData();
-	}
+	@Setter(ONTOLOGY_LIBRARY)
+	public void setOntologyLibrary(OWLOntologyLibrary ontologyLibrary);
 
 }

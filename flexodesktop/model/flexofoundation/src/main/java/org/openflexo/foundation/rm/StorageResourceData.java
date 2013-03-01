@@ -24,6 +24,7 @@ import java.util.Date;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.ResourceData;
 
+@Deprecated
 public interface StorageResourceData<RD extends StorageResourceData<RD>> extends FlexoResourceData, ResourceData<RD> {
 
 	/**
@@ -51,6 +52,7 @@ public interface StorageResourceData<RD extends StorageResourceData<RD>> extends
 	/**
 	 * Sets the resource to be not modified anymore. Also resets last memory update if required (default the passed value should be false)
 	 */
+	@Override
 	public void clearIsModified(boolean clearLastMemoryUpdate);
 
 	/**
@@ -58,6 +60,7 @@ public interface StorageResourceData<RD extends StorageResourceData<RD>> extends
 	 * 
 	 * @return
 	 */
+	@Override
 	public boolean isModified();
 
 	/**

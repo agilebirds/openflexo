@@ -20,6 +20,7 @@
 package org.openflexo.foundation.rm;
 
 import org.openflexo.foundation.resource.FlexoXMLFileResource;
+import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.XMLSerializable;
 
@@ -29,7 +30,8 @@ import org.openflexo.xmlcode.XMLSerializable;
  * @author sguerin
  * 
  */
-public interface XMLStorageResourceData<RD extends XMLStorageResourceData<RD>> extends StorageResourceData<RD>, XMLSerializable {
+public interface XMLStorageResourceData<RD extends XMLStorageResourceData<RD>> extends StorageResourceData<RD>, ResourceData<RD>,
+		XMLSerializable {
 
 	// TODO: replace with getResource()
 	public FlexoXMLFileResource<RD> getFlexoXMLFileResource();

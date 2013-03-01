@@ -33,11 +33,8 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
-import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
-import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualAttributeDataPropertyValue;
 
 /**
@@ -75,9 +72,9 @@ public class AddEMFObjectIndividualAttributeDataPropertyValue<T> extends
 	 */
 	@Override
 	public Type getAssignableType() {
-		if (value != null) {
-			return value.getClass();
-		}
+		// if (value != null) {
+		// return value.getClass();
+		// }
 		return Object.class;
 	}
 
@@ -88,10 +85,15 @@ public class AddEMFObjectIndividualAttributeDataPropertyValue<T> extends
 	 */
 	@Override
 	public EMFObjectIndividualAttributeDataPropertyValue performAction(EditionSchemeAction action) {
-		EMFModel model = (EMFModel) objectIndividual.getOntology();
-		objectIndividual.getObject().eSet(attributeDataProperty.getObject(), value);
-		return model.getConverter().convertObjectIndividualAttributeDataPropertyValue(model, objectIndividual.getObject(),
-				attributeDataProperty.getObject());
+		EMFObjectIndividualAttributeDataPropertyValue result = null;
+		// ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
+		// EMFModel model = modelSlotInstance.getModel();
+		// // Add Attribute in EMF
+		// objectIndividual.getObject().eSet(attributeDataProperty.getObject(), value);
+		// // Instanciate Wrapper
+		// result = model.getConverter().convertObjectIndividualAttributeDataPropertyValue(model, objectIndividual.getObject(),
+		// attributeDataProperty.getObject());
+		return result;
 	}
 
 	/**
@@ -102,41 +104,5 @@ public class AddEMFObjectIndividualAttributeDataPropertyValue<T> extends
 	 */
 	@Override
 	public void finalizePerformAction(EditionSchemeAction action, EMFObjectIndividualAttributeDataPropertyValue initialContext) {
-	}
-
-	protected EMFObjectIndividual objectIndividual;
-
-	/**
-	 * Setter of objectIndividual.
-	 * 
-	 * @param objectIndividual
-	 *            the objectIndividual to set
-	 */
-	public void setObjectIndividual(EMFObjectIndividual objectIndividual) {
-		this.objectIndividual = objectIndividual;
-	}
-
-	protected EMFAttributeDataProperty attributeDataProperty;
-
-	/**
-	 * Setter of attributeDataProperty.
-	 * 
-	 * @param attributeDataProperty
-	 *            the attributeDataProperty to set
-	 */
-	public void setAttributeDataProperty(EMFAttributeDataProperty attributeDataProperty) {
-		this.attributeDataProperty = attributeDataProperty;
-	}
-
-	protected T value;
-
-	/**
-	 * Setter of value.
-	 * 
-	 * @param value
-	 *            the value to set
-	 */
-	public void setValue(T value) {
-		this.value = value;
 	}
 }

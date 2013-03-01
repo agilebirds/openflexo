@@ -28,24 +28,28 @@
  */
 package org.openflexo.foundation.view;
 
-import java.io.File;
+import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.action.AddRepositoryFolder;
-import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.rm.ViewResource;
-import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlotInstanceConfiguration;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.CreateView;
-import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration.DefaultModelSlotInstanceConfigurationOption;
+import org.openflexo.foundation.view.diagram.DiagramModelSlotInstanceConfiguration;
+import org.openflexo.foundation.view.diagram.action.CreateDiagram;
+import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
+import org.openflexo.foundation.view.diagram.model.Diagram;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
+import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.VirtualModel;
 
 /**
  * Test instanciation of City Mapping View with 2 EMF
@@ -54,71 +58,45 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
  */
 public class TestEMFCityMappingView extends FlexoTestCase {
 
-	public static FlexoProject project;
-	private static FlexoEditor editor;
-	private static ViewPoint cityMappingVP;
-	private static RepositoryFolder<ViewResource> viewFolder;
-	private static View view;
-
 	/**
-	 * Instantiate test resource center
+	 * Follow the link.
+	 * 
+	 * @see junit.framework.TestCase#setUp()
 	 */
-	public void test0InstantiateResourceCenter() {
-
-		log("test0InstantiateResourceCenter()");
-
-		// TODO: create a project where all those tests don't need a manual import of projects
-		// TODO: copy all test VP in tmp dir and work with those VP instead of polling GIT workspace
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
 		instanciateTestServiceManager();
 	}
 
-	public void test1CreateProject() {
-		editor = createProject("TestCreateView");
-		project = editor.getProject();
-
+	/**
+	 * Test creating Diagram and model from scratch.
+	 */
+	public void testEMFCityMapping() {
+		// CreateProject
+		FlexoEditor editor = createProject("TestCreateView");
+		FlexoProject project = editor.getProject();
 		assertNotNull(project.getViewLibrary());
-	}
 
-	private ViewPoint loadViewPoint(String viewPointURI) {
+		// Load CityMapping ViewPoint
+		ViewPoint cityMappingViewPoint = loadViewPoint("http://www.thalesgroup.com/openflexo/emf/CityMapping");
+		assertNotNull(cityMappingViewPoint);
+		System.out.println("Found view point in " + cityMappingViewPoint.getResource().getFile());
 
-		log("Testing ViewPoint loading: " + viewPointURI);
-
-		System.out.println("resourceCenter=" + resourceCenter);
-		System.out.println("resourceCenter.getViewPointRepository()=" + resourceCenter.getViewPointRepository());
-
-		ViewPointResource vpRes = resourceCenter.getViewPointRepository().getResource(viewPointURI);
-
-		assertNotNull(vpRes);
-		assertFalse(vpRes.isLoaded());
-
-		ViewPoint vp = vpRes.getViewPoint();
-		assertTrue(vpRes.isLoaded());
-
-		return vp;
-
-	}
-
-	public void test2LoadCityMappingViewPoint() {
-		cityMappingVP = loadViewPoint("http://www.openflexo.org/ViewPoints/Tests/CityMapping");
-		assertNotNull(cityMappingVP);
-		System.out.println("Found view point in " + cityMappingVP.getResource().getFile());
-	}
-
-	public void test3CreateViewFolder() {
+		// Create View Folder
 		AddRepositoryFolder addRepositoryFolder = AddRepositoryFolder.actionType.makeNewAction(project.getViewLibrary().getRootFolder(),
 				null, editor);
 		addRepositoryFolder.setNewFolderName("NewViewFolder");
 		addRepositoryFolder.doAction();
 		assertTrue(addRepositoryFolder.hasActionExecutionSucceeded());
-		viewFolder = addRepositoryFolder.getNewFolder();
+		RepositoryFolder<ViewResource> viewFolder = addRepositoryFolder.getNewFolder();
 		assertTrue(viewFolder.getFile().exists());
-	}
 
-	public void test4CreateView() {
+		// Create View
 		CreateView addView = CreateView.actionType.makeNewAction(viewFolder, null, editor);
 		addView.newViewName = "TestNewView";
 		addView.newViewTitle = "A nice title for a new view";
-		addView.viewpointResource = cityMappingVP.getResource();
+		addView.viewpointResource = cityMappingViewPoint.getResource();
 		addView.doAction();
 		assertTrue(addView.hasActionExecutionSucceeded());
 		View newView = addView.getNewView();
@@ -126,11 +104,10 @@ public class TestEMFCityMappingView extends FlexoTestCase {
 		assertNotNull(newView);
 		assertEquals(addView.newViewName, newView.getName());
 		assertEquals(addView.newViewTitle, newView.getTitle());
-		assertEquals(addView.viewpointResource.getViewPoint(), cityMappingVP);
+		assertEquals(addView.viewpointResource.getViewPoint(), cityMappingViewPoint);
 		assertTrue(newView.getResource().getFile().exists());
-	}
 
-	public void test5ReloadProject() {
+		// Reload Project
 		editor = reloadProject(project.getProjectDirectory());
 		project = editor.getProject();
 		assertNotNull(project.getViewLibrary());
@@ -141,62 +118,114 @@ public class TestEMFCityMappingView extends FlexoTestCase {
 		assertEquals(viewRes, project.getViewLibrary().getResource(viewRes.getURI()));
 		assertNotNull(viewRes);
 		assertFalse(viewRes.isLoaded());
-		view = viewRes.getView();
+		View view = viewRes.getView();
 		assertTrue(viewRes.isLoaded());
 		assertNotNull(view);
 		assertEquals(project, view.getResource().getProject());
 		assertEquals(project, view.getProject());
+
+		// CreateDiagram
+		System.out.println("Create diagram, view=" + view + " editor=" + editor);
+		System.out.println("editor project = " + editor.getProject());
+		System.out.println("view project = " + view.getProject());
+		CreateDiagram createDiagram = CreateDiagram.actionType.makeNewAction(view, null, editor);
+		createDiagram.setNewVirtualModelInstanceName("TestNewDiagram");
+		createDiagram.setNewVirtualModelInstanceTitle("A nice title for a new diagram");
+		createDiagram.setDiagramSpecification(cityMappingViewPoint.getDefaultDiagramSpecification());
+		// Populate modelSlots
+		assertEquals(3, cityMappingViewPoint.getDefaultDiagramSpecification().getModelSlots().size());
+		// Model Slot Diagram
+		ModelSlot<?, ?> diagramModelSlot = cityMappingViewPoint.getDefaultDiagramSpecification().getModelSlot("diagram");
+		assertNotNull(diagramModelSlot);
+		DiagramModelSlotInstanceConfiguration diagramModelSlotConfiguration = (DiagramModelSlotInstanceConfiguration) createDiagram
+				.getModelSlotInstanceConfiguration(diagramModelSlot);
+		diagramModelSlotConfiguration.setOption(DefaultModelSlotInstanceConfigurationOption.Autoconfigure);
+		assertTrue(diagramModelSlotConfiguration.isValidConfiguration());
+		// Model Slot city1
+		ModelSlot<?, ?> city1ModelSlot = cityMappingViewPoint.getDefaultDiagramSpecification().getModelSlot("city1");
+		assertNotNull(city1ModelSlot);
+		FlexoOntologyModelSlotInstanceConfiguration city1ModelSlotConfiguration = (FlexoOntologyModelSlotInstanceConfiguration) createDiagram
+				.getModelSlotInstanceConfiguration(city1ModelSlot);
+		city1ModelSlotConfiguration.setOption(DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel);
+		city1ModelSlotConfiguration.setModelUri("http://www.thalesgroup.com/openflexo/emf/CityMapping/myCity1");
+		city1ModelSlotConfiguration.setRelativePath("/");
+		city1ModelSlotConfiguration.setFilename("city.city1");
+		assertTrue(city1ModelSlotConfiguration.isValidConfiguration());
+		// Model Slot city2
+		ModelSlot<?, ?> city2ModelSlot = cityMappingViewPoint.getDefaultDiagramSpecification().getModelSlot("city2");
+		assertNotNull(city2ModelSlot);
+		FlexoOntologyModelSlotInstanceConfiguration city2ModelSlotConfiguration = (FlexoOntologyModelSlotInstanceConfiguration) createDiagram
+				.getModelSlotInstanceConfiguration(city2ModelSlot);
+		city2ModelSlotConfiguration.setOption(DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel);
+		city2ModelSlotConfiguration.setModelUri("http://www.thalesgroup.com/openflexo/emf/CityMapping/myCity2");
+		city2ModelSlotConfiguration.setRelativePath("/");
+		city2ModelSlotConfiguration.setFilename("city.city2");
+		assertTrue(city2ModelSlotConfiguration.isValidConfiguration());
+		// Do Action CreateDiagram.
+		createDiagram.doAction();
+		System.out.println("exception thrown=" + createDiagram.getThrownException());
+		assertTrue(createDiagram.hasActionExecutionSucceeded());
+		Diagram newDiagram = createDiagram.getNewDiagram();
+		System.out.println("New diagram " + newDiagram + " created in " + newDiagram.getResource().getFile());
+		assertNotNull(newDiagram);
+		assertEquals(createDiagram.getNewVirtualModelInstanceName(), newDiagram.getName());
+		assertEquals(createDiagram.getNewVirtualModelInstanceTitle(), newDiagram.getTitle());
+		assertEquals(createDiagram.getDiagramSpecification(), cityMappingViewPoint.getDefaultDiagramSpecification());
+		assertTrue(newDiagram.getResource().getFile().exists());
+		assertEquals(project, newDiagram.getResource().getProject());
+		assertEquals(project, newDiagram.getProject());
+
+		// Test ModelSlotInstance well created and initialized
+		assertEquals(3, newDiagram.getModelSlotInstances().size());
+		ModelSlotInstance<?, ?> diagramModelSlotInstance = newDiagram.getModelSlotInstance("diagram");
+		assertNotNull(diagramModelSlotInstance);
+		ModelSlotInstance<?, ?> city1ModelSlotInstance = newDiagram.getModelSlotInstance("city1");
+		assertNotNull(city1ModelSlotInstance);
+		ModelSlotInstance<?, ?> city2ModelSlotInstance = newDiagram.getModelSlotInstance("city2");
+		assertNotNull(city2ModelSlotInstance);
+		System.out.println("DiagramModel=" + diagramModelSlotInstance.getModelURI());
+		System.out.println("City1Model=" + city1ModelSlotInstance.getModelURI());
+		System.out.println("City2Model=" + city2ModelSlotInstance.getModelURI());
+		assertNotNull(city1ModelSlotInstance.getModelURI());
+		assertNotNull(city2ModelSlotInstance.getModelURI());
+		assertNotNull(city1ModelSlotInstance.getModel());
+		assertNotNull(city2ModelSlotInstance.getModel());
+
+		// Populate Diagram
+		DiagramSpecification diagramSpecification = cityMappingViewPoint.getDefaultDiagramSpecification();
+		assertEquals(6, diagramSpecification.getEditionPatterns().size());
+		EditionPattern cityEditionPattern = diagramSpecification.getEditionPattern("City");
+		Vector<DropScheme> cityDropSchemes = cityEditionPattern.getDropSchemes();
+		assertEquals(1, cityDropSchemes.size());
+
+		DropSchemeAction cityDropSchemeAction = DropSchemeAction.actionType.makeNewAction(createDiagram.getNewDiagram().getRootPane(),
+				null, editor);
+		DropScheme cityDropScheme = cityDropSchemes.get(0);
+		cityDropSchemeAction.setDropScheme(cityDropScheme);
+		EditionSchemeParameter cityNameParameter = cityDropScheme.getParameter("name");
+		assertNotNull(cityNameParameter);
+		cityDropSchemeAction.setParameterValue(cityNameParameter, "Brest");
+		EditionSchemeParameter cityCity1UriParameter = cityDropScheme.getParameter("city1Uri");
+		assertNotNull(cityCity1UriParameter);
+		cityDropSchemeAction.setParameterValue(cityCity1UriParameter, "city1");
+		EditionSchemeParameter cityCity2UriParameter = cityDropScheme.getParameter("city2Uri");
+		assertNotNull(cityCity2UriParameter);
+		cityDropSchemeAction.setParameterValue(cityCity2UriParameter, "city2");
+		assertEquals("Brest", (String) cityDropSchemeAction.getParameterValue(cityNameParameter));
+		assertEquals("city1", (String) cityDropSchemeAction.getParameterValue(cityCity1UriParameter));
+		assertEquals("city2", (String) cityDropSchemeAction.getParameterValue(cityCity2UriParameter));
+		cityDropSchemeAction.doAction();
 	}
 
-	public void test6CreateVirtualModelInstance() {
-		System.out.println("Create virtual model instance, view=" + view + " editor=" + editor);
-
-		CreateVirtualModelInstance createVirtualModelInstance = CreateVirtualModelInstance.actionType.makeNewAction(view, null, editor);
-		createVirtualModelInstance.setNewVirtualModelInstanceName("TestNewVirtualModel");
-		createVirtualModelInstance.setNewVirtualModelInstanceTitle("A nice title for a new virtual model instance");
-
-		VirtualModel<?> conceptualModel = cityMappingVP.getVirtualModelNamed("ConceptualModel");
-		assertNotNull(conceptualModel);
-
-		createVirtualModelInstance.setVirtualModel(conceptualModel);
-
-		ModelSlot<?, ?> emfModelSlot = conceptualModel.getModelSlots().get(0);
-		FlexoOntologyModelSlotInstanceConfiguration emfModelSlotConfiguration = (FlexoOntologyModelSlotInstanceConfiguration) createVirtualModelInstance
-				.getModelSlotInstanceConfiguration(emfModelSlot);
-		emfModelSlotConfiguration.setOption(DefaultModelSlotInstanceConfigurationOption.SelectExistingModel);
-		// File modelFile = new FileResource("src/test/resources/TestResourceCenter/EMF/Model/example1/my.example1");
-		File modelFile = new File(((FileSystemBasedResourceCenter) resourceCenter).getRootDirectory(),
-				"TestResourceCenter/EMF/Model/example1/my.example1");
-		System.out.println("Searching " + modelFile.getAbsolutePath());
-		assertTrue(modelFile.exists());
-		System.out.println("Searching " + modelFile.toURI().toString());
-		FlexoModelResource<?, ?> modelResource = project.getServiceManager().getInformationSpace().getModel(modelFile.toURI().toString());
-		assertNotNull(modelResource);
-		emfModelSlotConfiguration.setModelResource(modelResource);
-		assertTrue(emfModelSlotConfiguration.isValidConfiguration());
-
-		ModelSlot<?, ?> ontologySlot = conceptualModel.getModelSlots().get(1);
-		FlexoOntologyModelSlotInstanceConfiguration ontologyModelSlotConfiguration = (FlexoOntologyModelSlotInstanceConfiguration) createVirtualModelInstance
-				.getModelSlotInstanceConfiguration(ontologySlot);
-		ontologyModelSlotConfiguration.setOption(DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel);
-		ontologyModelSlotConfiguration.setModelUri("http://MyCityOntology");
-		ontologyModelSlotConfiguration.setRelativePath("");
-		ontologyModelSlotConfiguration.setFilename("MyCityOntology.owl");
-		assertTrue(ontologyModelSlotConfiguration.isValidConfiguration());
-
-		createVirtualModelInstance.doAction();
-		System.out.println("exception thrown=" + createVirtualModelInstance.getThrownException());
-		// createDiagram.getThrownException().printStackTrace();
-		assertTrue(createVirtualModelInstance.hasActionExecutionSucceeded());
-		VirtualModelInstance newVirtualModelInstance = createVirtualModelInstance.getNewVirtualModelInstance();
-		System.out.println("New VirtualModelInstance " + newVirtualModelInstance + " created in "
-				+ newVirtualModelInstance.getResource().getFile());
-		assertNotNull(newVirtualModelInstance);
-		assertEquals(createVirtualModelInstance.getNewVirtualModelInstanceName(), newVirtualModelInstance.getName());
-		assertEquals(createVirtualModelInstance.getNewVirtualModelInstanceTitle(), newVirtualModelInstance.getTitle());
-		assertEquals(createVirtualModelInstance.getVirtualModel(), cityMappingVP.getVirtualModelNamed("ConceptualModel"));
-		assertTrue(newVirtualModelInstance.getResource().getFile().exists());
-		assertEquals(project, newVirtualModelInstance.getResource().getProject());
-		assertEquals(project, newVirtualModelInstance.getProject());
+	private ViewPoint loadViewPoint(String viewPointURI) {
+		log("Testing ViewPoint loading: " + viewPointURI);
+		System.out.println("resourceCenter=" + resourceCenter);
+		System.out.println("resourceCenter.getViewPointRepository()=" + resourceCenter.getViewPointRepository());
+		ViewPointResource viewPointResource = resourceCenter.getViewPointRepository().getResource(viewPointURI);
+		assertNotNull(viewPointResource);
+		assertFalse(viewPointResource.isLoaded());
+		ViewPoint viewPoint = viewPointResource.getViewPoint();
+		assertTrue(viewPointResource.isLoaded());
+		return viewPoint;
 	}
 }

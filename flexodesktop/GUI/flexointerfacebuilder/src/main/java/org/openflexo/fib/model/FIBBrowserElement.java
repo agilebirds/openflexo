@@ -835,6 +835,11 @@ public class FIBBrowserElement extends FIBModelObject {
 	}
 
 	@Override
+	public String toString() {
+		return "FIBBrowserElement(name" + getName() + ",type=" + getDataClass() + ")";
+	}
+
+	@Override
 	public Collection<? extends FIBModelObject> getEmbeddedObjects() {
 		return new ChainedCollection(getActions(), getChildren());
 	}

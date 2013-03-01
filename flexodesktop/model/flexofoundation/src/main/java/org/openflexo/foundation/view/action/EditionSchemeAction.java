@@ -34,6 +34,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.resource.FlexoFileResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.view.EditionPatternInstance;
@@ -232,9 +233,9 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 		System.out.println("HACK !!!!!!! saving the models...");
 		for (ModelSlotInstance<?, ?> instance : getEditionPatternInstance().getVirtualModelInstance().getModelSlotInstances()) {
 			System.out.println("Slot " + instance + " model " + instance.getModel());
-			if (instance.getModel() != null) {
+			if (instance.getModel() instanceof FlexoFileResource) {
 				try {
-					instance.getModel().save();
+					((FlexoFileResource) instance.getModel()).save(null);
 				} catch (SaveResourceException e) {
 					e.printStackTrace();
 				}

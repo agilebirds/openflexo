@@ -53,8 +53,8 @@ public abstract class MetaModelRepository<R extends FlexoResource<? extends MM>,
 	 * @param resourceCenter
 	 */
 	public MetaModelRepository(TA technologyAdapter, FlexoResourceCenter resourceCenter) {
-		super(resourceCenter instanceof FileSystemBasedResourceCenter ? ((FileSystemBasedResourceCenter) resourceCenter).getRootDirectory()
-				: null);
+		super(resourceCenter, resourceCenter instanceof FileSystemBasedResourceCenter ? ((FileSystemBasedResourceCenter) resourceCenter)
+				.getRootDirectory() : null);
 		this.technologyAdapter = technologyAdapter;
 		this.resourceCenter = resourceCenter;
 		getRootFolder().setName(resourceCenter.getName());

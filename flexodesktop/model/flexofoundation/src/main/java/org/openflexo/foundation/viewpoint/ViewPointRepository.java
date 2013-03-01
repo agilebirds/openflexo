@@ -41,8 +41,8 @@ public class ViewPointRepository extends FileResourceRepository<ViewPointResourc
 	private ViewPointLibrary viewPointLibrary;
 
 	public ViewPointRepository(FlexoResourceCenter resourceCenter, ViewPointLibrary vpLibrary) {
-		super(resourceCenter instanceof FileSystemBasedResourceCenter ? ((FileSystemBasedResourceCenter) resourceCenter).getRootDirectory()
-				: null);
+		super(resourceCenter, resourceCenter instanceof FileSystemBasedResourceCenter ? ((FileSystemBasedResourceCenter) resourceCenter)
+				.getRootDirectory() : null);
 		this.resourceCenter = resourceCenter;
 		this.viewPointLibrary = vpLibrary;
 		getRootFolder().setName(resourceCenter.getName());

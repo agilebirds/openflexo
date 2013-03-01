@@ -21,6 +21,7 @@ package org.openflexo.foundation.resource;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -55,6 +56,9 @@ public class ResourceRepository<R extends FlexoResource<?>> extends FlexoObject 
 
 	private RepositoryFolder<R> rootFolder;
 
+	/** Stores the object which is the "owner" of this repository */
+	private Object owner;
+
 	public RepositoryFolder<R> getRootFolder() {
 		return rootFolder;
 	}
@@ -62,9 +66,26 @@ public class ResourceRepository<R extends FlexoResource<?>> extends FlexoObject 
 	/**
 	 * Creates a new {@link ResourceRepository}
 	 */
-	public ResourceRepository() {
+	public ResourceRepository(Object owner) {
+		this.owner = owner;
 		resources = new HashMap<String, R>();
 		rootFolder = new RepositoryFolder<R>("root", null, this);
+	}
+
+	/**
+	 * Stores the object which is the "owner" of this repository. The owner has the responsability of this repository.
+	 */
+	public Object getOwner() {
+		return owner;
+	}
+
+	/**
+	 * Sets the "owner" of this repository
+	 * 
+	 * @param owner
+	 */
+	public void setOwner(Object owner) {
+		this.owner = owner;
 	}
 
 	/**
@@ -257,6 +278,36 @@ public class ResourceRepository<R extends FlexoResource<?>> extends FlexoObject 
 				return folder;
 			}
 
+		}
+		return null;
+	}
+
+	public RepositoryFolder<R> getRepositoryFolder(File aFile, boolean createWhenNonExistent) throws IOException {
+		if (FileUtils.directoryContainsFile(getRootFolder().getFile(), aFile)) {
+			// System.out.println("Searching folder for file " + aFile + "root folder = " + getRootFolder().getFile());
+			List<String> pathTo = new ArrayList<String>();
+			File f = aFile.getParentFile().getCanonicalFile();
+			while (f != null && !f.equals(getRootFolder().getFile().getCanonicalFile())) {
+				pathTo.add(0, f.getName());
+				f = f.getParentFile();
+			}
+			// System.out.println("Paths = " + pathTo);
+			RepositoryFolder<R> returned = getRootFolder();
+			for (String pathElement : pathTo) {
+				RepositoryFolder<R> currentFolder = returned.getFolderNamed(pathElement);
+				if (currentFolder == null) {
+					if (createWhenNonExistent) {
+						RepositoryFolder<R> newFolder = new RepositoryFolder<R>(pathElement, returned, this);
+						currentFolder = newFolder;
+					} else {
+						// System.out.println("Folder for " + aFile + " is not existant");
+						return null;
+					}
+				}
+				returned = currentFolder;
+			}
+			// System.out.println("Folder for " + aFile + " is " + returned.getFile());
+			return returned;
 		}
 		return null;
 	}

@@ -742,7 +742,6 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 	public StringEncoder getStringEncoder() {
 		if (STRING_ENCODER == null) {
 			if (this instanceof FlexoProjectResource) {
-				System.out.println("OK, j'ai rajoute le convertisseur FlexoModelObjectReferenceConverter");
 				STRING_ENCODER = new StringEncoder(super.getStringEncoder(), ((FlexoProjectResource) this).getProject()
 						.getObjectReferenceConverter());
 			} else {

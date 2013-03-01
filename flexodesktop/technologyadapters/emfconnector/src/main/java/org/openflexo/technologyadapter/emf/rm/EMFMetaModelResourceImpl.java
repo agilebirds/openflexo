@@ -91,7 +91,7 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 
 							EMFMetaModelConverter converter = new EMFMetaModelConverter((EMFTechnologyAdapter) getTechnologyAdapter());
 							result = converter.convertMetaModel(getPackage());
-							// FIXME result.setResource(this);
+							result.setResource(this);
 						}
 					}
 				}
@@ -130,4 +130,10 @@ public abstract class EMFMetaModelResourceImpl extends FlexoFileResourceImpl<EMF
 		logger.info("MetaModel is not supposed to be updated.");
 		return null;
 	}
+
+	@Override
+	public Class<EMFMetaModel> getResourceDataClass() {
+		return EMFMetaModel.class;
+	}
+
 }

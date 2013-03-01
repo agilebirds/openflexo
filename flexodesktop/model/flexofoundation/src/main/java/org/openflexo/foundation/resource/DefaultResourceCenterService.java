@@ -11,9 +11,15 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.FileUtils;
 
+/**
+ * Default implementation for the {@link FlexoResourceCenterService} Manage the {@link UserResourceCenter} and the default
+ * {@link DirectoryResourceCenter}
+ * 
+ * @author sylvain
+ * 
+ */
 public abstract class DefaultResourceCenterService extends FlexoServiceImpl implements FlexoResourceCenterService {
 
-	private LocalResourceCenterImplementation openFlexoResourceCenter;
 	private UserResourceCenter userResourceCenter;
 
 	public static FlexoResourceCenterService getNewInstance() {
@@ -21,8 +27,7 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 			ModelFactory factory = new ModelFactory(FlexoResourceCenterService.class);
 			factory.setImplementingClassForInterface(DefaultResourceCenterService.class, FlexoResourceCenterService.class);
 			DefaultResourceCenterService returned = (DefaultResourceCenterService) factory.newInstance(FlexoResourceCenterService.class);
-			returned.addToResourceCenters(returned.openFlexoResourceCenter);
-			returned.addToResourceCenters(returned.userResourceCenter);
+			returned.addUserResourceCenter();
 			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
@@ -30,14 +35,20 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 		return null;
 	}
 
-	public static FlexoResourceCenterService getNewInstance(File localResourceCenterDir) {
-		DefaultResourceCenterService service = (DefaultResourceCenterService) getNewInstance();
-		service.openFlexoResourceCenter = LocalResourceCenterImplementation
-				.instanciateNewLocalResourceCenterImplementation(localResourceCenterDir);
-		return service;
+	public static FlexoResourceCenterService getNewInstance(File resourceCenterDirectory) {
+		DefaultResourceCenterService returned = (DefaultResourceCenterService) getNewInstance();
+		if (resourceCenterDirectory != null && resourceCenterDirectory.isDirectory() && resourceCenterDirectory.exists()) {
+			returned.addToDirectoryResourceCenter(resourceCenterDirectory);
+		} else {
+			File defaultRCFile = tryToFindDefaultResourceCenterDirectory();
+			if (defaultRCFile != null && defaultRCFile.isDirectory() && defaultRCFile.exists()) {
+				returned.addToDirectoryResourceCenter(defaultRCFile);
+			}
+		}
+		return returned;
 	}
 
-	public DefaultResourceCenterService() {
+	private static File tryToFindDefaultResourceCenterDirectory() {
 		File root = FileUtils.getApplicationDataDirectory();
 		File file = null;
 		boolean ok = false;
@@ -66,28 +77,30 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 				e.printStackTrace();
 			}
 		}
-		openFlexoResourceCenter = new LocalResourceCenterImplementation(file);
+		return file;
+	}
+
+	public DefaultResourceCenterService() {
+	}
+
+	public UserResourceCenter addUserResourceCenter() {
 		File userResourceCenterStorageFile = new File(FileUtils.getDocumentDirectory(), "FlexoUserResourceCenter/ResourceCenterData.xml");
 		if (!userResourceCenterStorageFile.getParentFile().canWrite()) {
 			userResourceCenterStorageFile = new File(System.getProperty("user.home"), "FlexoUserResourceCenter/ResourceCenterData.xml");
 		}
 		userResourceCenter = new UserResourceCenter(userResourceCenterStorageFile);
-
+		addToResourceCenters(userResourceCenter);
+		return userResourceCenter;
 	}
 
-	/*	@Override
-		public void registerTechnologyAdapterService(TechnologyAdapterService technologyAdapterService) {
-			openFlexoResourceCenter.initialize(technologyAdapterService);
-			userResourceCenter.initialize(technologyAdapterService);
-		}*/
-
-	@Override
-	public LocalResourceCenterImplementation getOpenFlexoResourceCenter() {
-		return openFlexoResourceCenter;
+	public DirectoryResourceCenter addToDirectoryResourceCenter(File aDirectory) {
+		DirectoryResourceCenter returned = DirectoryResourceCenter.instanciateNewDirectoryResourceCenter(aDirectory);
+		addToResourceCenters(returned);
+		return returned;
 	}
 
 	@Override
-	public FlexoResourceCenter getUserResourceCenter() {
+	public UserResourceCenter getUserResourceCenter() {
 		return userResourceCenter;
 	}
 

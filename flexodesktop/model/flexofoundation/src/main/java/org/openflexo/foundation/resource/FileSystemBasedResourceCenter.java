@@ -20,7 +20,10 @@
 package org.openflexo.foundation.resource;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Timer;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.rm.ViewPointResource;
@@ -43,7 +46,7 @@ import org.openflexo.foundation.viewpoint.ViewPointRepository;
  * @author sylvain
  * 
  */
-public abstract class FileSystemBasedResourceCenter implements FlexoResourceCenter {
+public abstract class FileSystemBasedResourceCenter extends FileResourceRepository<FlexoResource<?>> implements FlexoResourceCenter {
 
 	protected static final Logger logger = Logger.getLogger(FileSystemBasedResourceCenter.class.getPackage().getName());
 
@@ -53,9 +56,13 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 	private HashMap<TechnologyAdapter<?, ?>, ModelRepository<?, ?, ?, ?>> modelRepositories = new HashMap<TechnologyAdapter<?, ?>, ModelRepository<?, ?, ?, ?>>();
 	private HashMap<TechnologyAdapter<?, ?>, MetaModelRepository<?, ?, ?, ?>> metaModelRepositories = new HashMap<TechnologyAdapter<?, ?>, MetaModelRepository<?, ?, ?, ?>>();
 
+	private TechnologyAdapterService technologyAdapterService;
+
 	public FileSystemBasedResourceCenter(File rootDirectory) {
-		super();
+		super(null, rootDirectory);
+		setOwner(this);
 		this.rootDirectory = rootDirectory;
+		startDirectoryWatching();
 	}
 
 	public File getRootDirectory() {
@@ -64,7 +71,7 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 
 	@Override
 	public String toString() {
-		return super.toString() + " directory=" + getRootDirectory().getAbsolutePath();
+		return super.toString() + " directory=" + (getRootDirectory() != null ? getRootDirectory().getAbsolutePath() : null);
 	}
 
 	@Override
@@ -74,10 +81,25 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 
 	@Override
 	public void initialize(ViewPointLibrary viewPointLibrary) {
-		logger.info("Initializing ViewPointLibrary");
+		logger.info("Initializing ViewPointLibrary for " + this);
 		viewPointRepository = new ViewPointRepository(this, viewPointLibrary);
-		System.out.println("Exploring " + rootDirectory + " for ResourceCenter " + this + " for ViewPoints");
-		exploreDirectoryLookingForViewPoints(rootDirectory, viewPointRepository.getRootFolder(), viewPointLibrary);
+		exploreDirectoryLookingForViewPoints(rootDirectory, viewPointLibrary);
+	}
+
+	/**
+	 * Retrieve (creates it when not existant) folder containing supplied file
+	 * 
+	 * @param repository
+	 * @param aFile
+	 * @return
+	 */
+	protected <R extends FlexoResource<?>> RepositoryFolder<R> retrieveRepositoryFolder(ResourceRepository<R> repository, File aFile) {
+		try {
+			return repository.getRepositoryFolder(aFile, true);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return repository.getRootFolder();
+		}
 	}
 
 	/**
@@ -87,32 +109,15 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 	 * @param viewPointLibrary
 	 * @return a flag indicating if some ViewPoints were found
 	 */
-	private boolean exploreDirectoryLookingForViewPoints(File directory, RepositoryFolder<ViewPointResource> folder,
-			ViewPointLibrary viewPointLibrary) {
+	private boolean exploreDirectoryLookingForViewPoints(File directory, ViewPointLibrary viewPointLibrary) {
 		boolean returned = false;
 		logger.fine("Exploring " + directory);
 		if (directory.exists() && directory.isDirectory() && directory.canRead()) {
 			for (File f : directory.listFiles()) {
-				if (f.isDirectory() && f.getName().endsWith(".viewpoint")) {
-					ViewPointResource vpRes = ViewPointResourceImpl.retrieveViewPointResource(f, viewPointLibrary);
-					if (vpRes != null) {
-						logger.info("Found and register viewpoint "
-								+ vpRes.getURI()
-								+ (vpRes instanceof FlexoFileResource ? " file=" + ((FlexoFileResource) vpRes).getFile().getAbsolutePath()
-										: ""));
-						viewPointRepository.registerResource(vpRes, folder);
-						returned = true;
-					} else {
-						logger.warning("While exploring resource center looking for viewpoints : cannot retrieve resource for file "
-								+ f.getAbsolutePath());
-					}
-				}
+				ViewPointResource vpRes = analyseAsViewPoint(f);
 				if (f.isDirectory() && !f.getName().equals("CVS")) {
-					RepositoryFolder newFolder = new RepositoryFolder(f.getName(), folder, viewPointRepository);
-					if (exploreDirectoryLookingForViewPoints(f, newFolder, viewPointLibrary)) {
+					if (exploreDirectoryLookingForViewPoints(f, viewPointLibrary)) {
 						returned = true;
-					} else {
-						folder.removeFromChildren(newFolder);
 					}
 				}
 			}
@@ -120,9 +125,43 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 		return returned;
 	}
 
+	/**
+	 * 
+	 * @param directory
+	 * @param folder
+	 * @param viewPointLibrary
+	 * @return a flag indicating if some ViewPoints were found
+	 */
+	private ViewPointResource analyseAsViewPoint(File candidateFile) {
+		if (candidateFile.exists() && candidateFile.isDirectory() && candidateFile.canRead()
+				&& candidateFile.getName().endsWith(".viewpoint")) {
+			ViewPointResource vpRes = ViewPointResourceImpl.retrieveViewPointResource(candidateFile,
+					viewPointRepository.getViewPointLibrary());
+			if (vpRes != null) {
+				logger.info("Found and register viewpoint " + vpRes.getURI()
+						+ (vpRes instanceof FlexoFileResource ? " file=" + ((FlexoFileResource) vpRes).getFile().getAbsolutePath() : ""));
+				RepositoryFolder<ViewPointResource> folder = retrieveRepositoryFolder(viewPointRepository, candidateFile);
+				viewPointRepository.registerResource(vpRes, folder);
+				// Also register the resource in the ResourceCenter seen as a ResourceRepository
+				try {
+					registerResource(vpRes, getRepositoryFolder(candidateFile, true));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				return vpRes;
+			} else {
+				logger.warning("While exploring resource center looking for viewpoints : cannot retrieve resource for file "
+						+ candidateFile.getAbsolutePath());
+			}
+		}
+
+		return null;
+	}
+
 	@Override
 	public void initialize(TechnologyAdapterService technologyAdapterService) {
 		logger.info("Initializing " + technologyAdapterService);
+		this.technologyAdapterService = technologyAdapterService;
 		for (TechnologyAdapter<?, ?> adapter : technologyAdapterService.getTechnologyAdapters()) {
 			logger.info("Initializing resource center " + this + " with adapter " + adapter.getName());
 			TechnologyContextManager<?, ?> technologyContextManager = technologyAdapterService.getTechnologyContextManager(adapter);
@@ -138,10 +177,8 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 			metaModelRepositories.put(technologyAdapter, mmRepository);
 			ModelRepository<MR, M, MM, TA> modelRepository = (ModelRepository<MR, M, MM, TA>) technologyAdapter.createModelRepository(this);
 			modelRepositories.put(technologyAdapter, modelRepository);
-			exploreDirectoryLookingForMetaModels(rootDirectory, mmRepository.getRootFolder(), technologyAdapter, technologyContextManager,
-					mmRepository);
-			exploreDirectoryLookingForModels(rootDirectory, modelRepository.getRootFolder(), technologyAdapter, technologyContextManager,
-					mmRepository, modelRepository);
+			exploreDirectoryLookingForMetaModels(rootDirectory, technologyAdapter, technologyContextManager, mmRepository);
+			exploreDirectoryLookingForModels(rootDirectory, technologyAdapter, technologyContextManager, mmRepository, modelRepository);
 		}
 	}
 
@@ -156,39 +193,51 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 	 * @return a flag indicating if some metamodels were found
 	 */
 	private <MR extends FlexoResource<M>, M extends FlexoModel<M, MM>, MMR extends FlexoResource<MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> boolean exploreDirectoryLookingForMetaModels(
-			File directory, RepositoryFolder folder, TA technologyAdapter, TechnologyContextManager technologyContextManager,
+			File directory, TA technologyAdapter, TechnologyContextManager technologyContextManager,
 			MetaModelRepository<MMR, M, MM, TA> mmRepository) {
 		logger.fine("Exploring " + directory);
 		boolean returned = false;
 		if (directory.exists() && directory.isDirectory() && directory.canRead()) {
 			for (File f : directory.listFiles()) {
-				if (technologyAdapter.isValidMetaModelFile(f, technologyContextManager)) {
-					MMR mmRes = (MMR) technologyAdapter.retrieveMetaModelResource(f, technologyContextManager);
-					if (mmRes != null) {
-						logger.fine("TechnologyAdapter "
-								+ technologyAdapter.getName()
-								+ ": found and register metamodel "
-								+ mmRes.getURI()
-								+ (mmRes instanceof FlexoFileResource ? " file=" + ((FlexoFileResource) mmRes).getFile().getAbsolutePath()
-										: ""));
-						mmRepository.registerResource(mmRes, folder);
-						returned = true;
-					} else {
-						logger.warning("TechnologyAdapter " + technologyAdapter.getName() + ": Cannot retrieve resource for metamodel "
-								+ f.getAbsolutePath());
-					}
+				MMR mmRes = tryToRetrieveMetaModel(f, technologyAdapter, technologyContextManager);
+				if (mmRes != null) {
+					registerAsMetaModel(f, mmRes, technologyAdapter, technologyContextManager);
 				}
 				if (f.isDirectory() && !f.getName().equals("CVS")) {
-					RepositoryFolder newFolder = new RepositoryFolder(f.getName(), folder, mmRepository);
-					if (exploreDirectoryLookingForMetaModels(f, newFolder, technologyAdapter, technologyContextManager, mmRepository)) {
+					if (exploreDirectoryLookingForMetaModels(f, technologyAdapter, technologyContextManager, mmRepository)) {
 						returned = true;
-					} else {
-						folder.removeFromChildren(newFolder);
 					}
 				}
 			}
 		}
 		return returned;
+	}
+
+	private <MR extends FlexoResource<M>, M extends FlexoModel<M, MM>, MMR extends FlexoResource<MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> MMR registerAsMetaModel(
+			File candidateFile, MMR mmRes, TA technologyAdapter, TechnologyContextManager technologyContextManager) {
+		logger.fine("TechnologyAdapter " + technologyAdapter.getName() + ": found and register metamodel " + mmRes.getURI()
+				+ (mmRes instanceof FlexoFileResource ? " file=" + ((FlexoFileResource) mmRes).getFile().getAbsolutePath() : ""));
+
+		MetaModelRepository<MMR, M, MM, TA> mmRepository = getMetaModelRepository(technologyAdapter);
+
+		RepositoryFolder<MMR> folder = retrieveRepositoryFolder(mmRepository, candidateFile);
+		mmRepository.registerResource(mmRes, folder);
+
+		// Also register the resource in the ResourceCenter seen as a ResourceRepository
+		try {
+			registerResource(mmRes, getRepositoryFolder(candidateFile, true));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return mmRes;
+	}
+
+	private <MR extends FlexoResource<M>, M extends FlexoModel<M, MM>, MMR extends FlexoResource<MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> MMR tryToRetrieveMetaModel(
+			File candidateFile, TA technologyAdapter, TechnologyContextManager technologyContextManager) {
+		if (technologyAdapter.isValidMetaModelFile(candidateFile, technologyContextManager)) {
+			return (MMR) technologyAdapter.retrieveMetaModelResource(candidateFile, technologyContextManager);
+		}
+		return null;
 	}
 
 	/**
@@ -203,44 +252,54 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 	 * @return a flag indicating if some metamodels were found
 	 */
 	private <MR extends FlexoResource<M>, M extends FlexoModel<M, MM>, MMR extends FlexoResource<MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> boolean exploreDirectoryLookingForModels(
-			File directory, RepositoryFolder folder, TechnologyAdapter<?, MM> technologyAdapter,
-			TechnologyContextManager technologyContextManager, MetaModelRepository<MMR, ?, ?, ?> mmRepository,
-			ModelRepository<MR, ?, ?, ?> modelRepository) {
+			File directory, TA technologyAdapter, TechnologyContextManager technologyContextManager,
+			MetaModelRepository<MMR, ?, ?, ?> mmRepository, ModelRepository<MR, ?, ?, ?> modelRepository) {
 		logger.fine("Exploring " + directory);
 		boolean returned = false;
 		if (directory.exists() && directory.isDirectory() && directory.canRead()) {
 			for (File f : directory.listFiles()) {
-				for (MMR metaModelResource : mmRepository.getAllResources()) {
-					if (technologyAdapter.isValidModelFile(f, metaModelResource, technologyContextManager)) {
-						MR modelRes = (MR) technologyAdapter.retrieveModelResource(f, metaModelResource, technologyContextManager);
-						if (modelRes != null) {
-							logger.fine("TechnologyAdapter "
-									+ technologyAdapter.getName()
-									+ ": found and register model "
-									+ modelRes.getURI()
-									+ (modelRes instanceof FlexoFileResource ? " file="
-											+ ((FlexoFileResource) modelRes).getFile().getAbsolutePath() : ""));
-							modelRepository.registerResource(modelRes, folder);
-							returned = true;
-						} else {
-							logger.warning("TechnologyAdapter " + technologyAdapter.getName() + ": Cannot retrieve resource for model "
-									+ f.getAbsolutePath());
-						}
-					}
+				MR modelRes = tryToRetrieveModel(f, technologyAdapter, technologyContextManager);
+				if (modelRes != null) {
+					registerAsModel(f, modelRes, technologyAdapter, technologyContextManager);
 				}
 				if (f.isDirectory() && !f.getName().equals("CVS")) {
-					RepositoryFolder newFolder = new RepositoryFolder(f.getName(), folder, mmRepository);
-					if (exploreDirectoryLookingForModels(f, newFolder, technologyAdapter, technologyContextManager, mmRepository,
-							modelRepository)) {
+					if (exploreDirectoryLookingForModels(f, technologyAdapter, technologyContextManager, mmRepository, modelRepository)) {
 						returned = true;
-					} else {
-						folder.removeFromChildren(newFolder);
 					}
-
 				}
 			}
 		}
 		return returned;
+	}
+
+	private <MR extends FlexoResource<M>, M extends FlexoModel<M, MM>, MMR extends FlexoResource<MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> MR registerAsModel(
+			File candidateFile, MR modelRes, TA technologyAdapter, TechnologyContextManager technologyContextManager) {
+
+		MetaModelRepository<MMR, M, MM, TA> mmRepository = getMetaModelRepository(technologyAdapter);
+		ModelRepository<MR, M, MM, TA> modelRepository = getModelRepository(technologyAdapter);
+
+		for (MMR metaModelResource : mmRepository.getAllResources()) {
+			if (technologyAdapter.isValidModelFile(candidateFile, metaModelResource, technologyContextManager)) {
+				logger.fine("TechnologyAdapter "
+						+ technologyAdapter.getName()
+						+ ": found and register model "
+						+ modelRes.getURI()
+						+ (modelRes instanceof FlexoFileResource ? " file=" + ((FlexoFileResource) modelRes).getFile().getAbsolutePath()
+								: ""));
+				RepositoryFolder<MR> folder = retrieveRepositoryFolder(modelRepository, candidateFile);
+				modelRepository.registerResource(modelRes, folder);
+				return modelRes;
+			}
+		}
+		return null;
+	}
+
+	private <MR extends FlexoResource<M>, M extends FlexoModel<M, MM>, MMR extends FlexoResource<MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> MR tryToRetrieveModel(
+			File candidateFile, TechnologyAdapter<?, MM> technologyAdapter, TechnologyContextManager technologyContextManager) {
+		if (technologyAdapter.isValidModelFile(candidateFile, technologyContextManager)) {
+			return (MR) technologyAdapter.retrieveModelResource(candidateFile, technologyContextManager);
+		}
+		return null;
 	}
 
 	/**
@@ -252,7 +311,14 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 	@Override
 	public final <R extends FlexoResource<? extends M>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> ModelRepository<R, M, MM, TA> getModelRepository(
 			TA technologyAdapter) {
-		return (ModelRepository<R, M, MM, TA>) modelRepositories.get(technologyAdapter);
+		ModelRepository<R, M, MM, TA> modelRepository = (ModelRepository<R, M, MM, TA>) modelRepositories.get(technologyAdapter);
+		if (modelRepository == null) {
+			modelRepository = (ModelRepository<R, M, MM, TA>) technologyAdapter.createModelRepository(this);
+			if (modelRepository != null) {
+				modelRepositories.put(technologyAdapter, modelRepository);
+			}
+		}
+		return modelRepository;
 	}
 
 	/**
@@ -264,7 +330,14 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 	@Override
 	public final <R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> MetaModelRepository<R, M, MM, TA> getMetaModelRepository(
 			TA technologyAdapter) {
-		return (MetaModelRepository<R, M, MM, TA>) metaModelRepositories.get(technologyAdapter);
+		MetaModelRepository<R, M, MM, TA> mmRepository = (MetaModelRepository<R, M, MM, TA>) metaModelRepositories.get(technologyAdapter);
+		if (mmRepository == null) {
+			mmRepository = (MetaModelRepository<R, M, MM, TA>) technologyAdapter.createMetaModelRepository(this);
+			if (mmRepository != null) {
+				metaModelRepositories.put(technologyAdapter, mmRepository);
+			}
+		}
+		return mmRepository;
 	}
 
 	/*@Override
@@ -311,7 +384,67 @@ public abstract class FileSystemBasedResourceCenter implements FlexoResourceCent
 
 	@Override
 	public String getName() {
-		return getRootDirectory().getAbsolutePath();
+		if (getRootDirectory() != null) {
+			return getRootDirectory().getAbsolutePath();
+		}
+		return "unset";
+	}
+
+	private DirectoryWatcher directoryWatcher;
+	private Timer timer;
+
+	public void startDirectoryWatching() {
+		directoryWatcher = new DirectoryWatcher(getRootDirectory()) {
+			@Override
+			protected void fileModified(File file) {
+				FileSystemBasedResourceCenter.this.fileModified(file);
+			}
+
+			@Override
+			protected void fileAdded(File file) {
+				FileSystemBasedResourceCenter.this.fileAdded(file);
+			}
+
+			@Override
+			protected void fileDeleted(File file) {
+				FileSystemBasedResourceCenter.this.fileDeleted(file);
+			}
+		};
+
+		timer = new Timer();
+		timer.schedule(directoryWatcher, new Date(), 1000);
+
+	}
+
+	public void stopDirectoryWatching() {
+		timer.cancel();
+	}
+
+	protected void fileModified(File file) {
+		System.out.println("File MODIFIED " + file.getName() + " in " + file.getParentFile().getAbsolutePath());
+	}
+
+	protected void fileAdded(File file) {
+		System.out.println("File ADDED " + file.getName() + " in " + file.getParentFile().getAbsolutePath());
+		analyseAsViewPoint(file);
+		if (technologyAdapterService != null) {
+			for (TechnologyAdapter adapter : technologyAdapterService.getTechnologyAdapters()) {
+				logger.info("Initializing resource center " + this + " with adapter " + adapter.getName());
+				TechnologyContextManager technologyContextManager = technologyAdapterService.getTechnologyContextManager(adapter);
+				FlexoResource<? extends FlexoMetaModel> mmRes = tryToRetrieveMetaModel(file, adapter, technologyContextManager);
+				if (mmRes != null) {
+					registerAsMetaModel(file, mmRes, adapter, technologyContextManager);
+				}
+				FlexoResource<? extends FlexoModel> modelRes = tryToRetrieveModel(file, adapter, technologyContextManager);
+				if (modelRes != null) {
+					registerAsModel(file, modelRes, adapter, technologyContextManager);
+				}
+			}
+		}
+	}
+
+	protected void fileDeleted(File file) {
+		System.out.println("File DELETED " + file.getName() + " in " + file.getParentFile().getAbsolutePath());
 	}
 
 }

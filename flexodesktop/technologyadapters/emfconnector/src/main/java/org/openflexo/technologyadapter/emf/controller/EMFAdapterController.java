@@ -37,11 +37,23 @@ import org.openflexo.view.controller.TechnologyAdapterController;
 
 public class EMFAdapterController extends TechnologyAdapterController<EMFTechnologyAdapter> {
 
+	/**
+	 * 
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.view.controller.TechnologyAdapterController#getTechnologyAdapterClass()
+	 */
 	@Override
 	public Class<EMFTechnologyAdapter> getTechnologyAdapterClass() {
 		return EMFTechnologyAdapter.class;
 	}
 
+	/**
+	 * 
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.view.controller.TechnologyAdapterController#initializeActions(org.openflexo.view.controller.ControllerActionInitializer)
+	 */
 	@Override
 	public void initializeActions(ControllerActionInitializer actionInitializer) {
 

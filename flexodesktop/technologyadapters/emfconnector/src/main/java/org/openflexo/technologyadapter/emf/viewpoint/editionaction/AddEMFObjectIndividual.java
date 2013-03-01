@@ -24,15 +24,14 @@ import java.util.logging.Logger;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.emf.metamodel.EMFClassClass;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
-import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 
 /**
  * Create EMF Object.
@@ -61,15 +60,24 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModel, EMFMetaModel
 	@Override
 	public EMFObjectIndividual performAction(EditionSchemeAction action) {
 		EMFObjectIndividual result = null;
-		IFlexoOntologyClass aClass = emfModelResource.getResourceData().getMetaModel().getClass(emfClassURI);
-		if (aClass instanceof EMFClassClass) {
-			EMFClassClass emfClassClass = (EMFClassClass) aClass;
-			EObject eObject = EcoreUtil.create(emfClassClass.getObject());
-			emfModelResource.getResourceData().getEMFResource().getContents().add(eObject);
-			result = emfModelResource.getResourceData().getConverter().convertObjectIndividual(emfModelResource.getResourceData(), eObject);
-			logger.info("********* Added individual " + result.getName() + " as " + aClass.getName());
+		ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
+		if (modelSlotInstance.getModel() != null) {
+			IFlexoOntologyClass aClass = getOntologyClass();
+			if (aClass instanceof EMFClassClass) {
+				EMFClassClass emfClassClass = (EMFClassClass) aClass;
+				// Create EMF Object
+				EObject eObject = EcoreUtil.create(emfClassClass.getObject());
+				modelSlotInstance.getModel().getEMFResource().getContents().add(eObject);
+				// Instanciate Wrapper.
+				result = modelSlotInstance.getModel().getConverter().convertObjectIndividual(modelSlotInstance.getModel(), eObject);
+				logger.info("********* Added individual " + result.getName() + " as " + aClass.getName());
+			} else {
+				logger.warning("Not allowed to create new Enum values.");
+				return null;
+			}
 		} else {
-			logger.warning("Not allowed to create new Enum values.");
+			logger.warning("Model slot not correctly initialised : model is null");
+			Thread.dumpStack();
 			return null;
 		}
 
@@ -78,17 +86,5 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModel, EMFMetaModel
 
 	@Override
 	public void finalizePerformAction(EditionSchemeAction action, EMFObjectIndividual initialContext) {
-	}
-
-	protected EMFModelResource emfModelResource;
-
-	public void setEMFModelResource(EMFModelResource emfModelResource) {
-		this.emfModelResource = emfModelResource;
-	}
-
-	protected String emfClassURI;
-
-	public void setEMFClassURI(String emfClassURI) {
-		this.emfClassURI = emfClassURI;
 	}
 }

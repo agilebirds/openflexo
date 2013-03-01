@@ -27,13 +27,10 @@ import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
-import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.owl.model.OWLMetaModelRepository;
@@ -41,6 +38,7 @@ import org.openflexo.technologyadapter.owl.model.OWLModelRepository;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
 import org.openflexo.technologyadapter.owl.rm.OWLOntologyResource;
+import org.openflexo.technologyadapter.owl.rm.OWLOntologyResourceImpl;
 import org.openflexo.technologyadapter.owl.viewpoint.binding.OWLBindingFactory;
 
 /**
@@ -81,7 +79,7 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 	 */
 	@Override
 	public boolean isValidMetaModelFile(File aMetaModelFile, TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
-		// TODO: also check that file is valid and maps a valid XSD schema
+		// TODO: also check that file is valid
 		return aMetaModelFile.isFile() && aMetaModelFile.getName().endsWith(".owl");
 	}
 
@@ -112,14 +110,18 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 	}
 
 	@Override
+	public boolean isValidModelFile(File aModelFile, TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
+		return aModelFile.isFile() && aModelFile.getName().endsWith(".owl");
+	}
+
+	@Override
 	public FlexoResource<OWLOntology> retrieveMetaModelResource(File aMetaModelFile,
 			TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
 
 		// logger.info("Retrieving OWL MetaModelResource for " + aMetaModelFile.getAbsolutePath());
 
 		OWLOntologyLibrary ontologyLibrary = (OWLOntologyLibrary) technologyContextManager;
-		OWLOntologyResource ontologyResource = new OWLOntologyResource(aMetaModelFile, ontologyLibrary);
-		ontologyResource.setServiceManager(getTechnologyAdapterService().getServiceManager());
+		OWLOntologyResource ontologyResource = OWLOntologyResourceImpl.retrieveOWLOntologyResource(aMetaModelFile, ontologyLibrary);
 		logger.info("Found OWL ontology " + ontologyResource.getURI() + " file:" + aMetaModelFile.getAbsolutePath());
 		return ontologyResource;
 
@@ -146,6 +148,13 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 	}
 
 	@Override
+	public FlexoResource<OWLOntology> retrieveModelResource(File aModelFile,
+			TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public OWLOntologyResource createEmptyModel(FlexoProject project, String filename, String modelUri,
 			FlexoResource<OWLOntology> metaModel, TechnologyContextManager<OWLOntology, OWLOntology> technologyContextManager) {
 		if (logger.isLoggable(Level.FINE)) {
@@ -154,43 +163,10 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 		logger.info("-------------> Create ontology for " + project.getProjectName());
 
 		File owlFile = new File(FlexoProject.getProjectSpecificModelsDirectory(project), filename);
-
-		System.out.println("OWL file: " + owlFile.getAbsolutePath());
-
-		FlexoProjectFile ontologyFile = new FlexoProjectFile(owlFile, project);
-
 		OWLOntologyLibrary ontologyLibrary = (OWLOntologyLibrary) technologyContextManager;
-
-		OWLOntology newOntology = OWLOntology.createOWLEmptyOntology(modelUri, owlFile, ontologyLibrary, this);
-
-		System.out.println("project-relative file: " + ontologyFile);
-
-		OWLOntologyResource ontologyRes;
+		OWLOntologyResource returned = OWLOntologyResourceImpl.makeOWLOntologyResource(modelUri, owlFile, ontologyLibrary);
 		try {
-			ontologyRes = new OWLOntologyResource(project, newOntology, ontologyFile);
-
-			System.out.println("file: " + ontologyRes.getResourceFile());
-			System.out.println("file: " + ontologyRes.getFile());
-
-			ontologyLibrary.registerModel(ontologyRes);
-		} catch (InvalidFileNameException e) {
-			e.printStackTrace();
-			if (logger.isLoggable(Level.SEVERE)) {
-				logger.severe("This should not happen: invalid file " + ontologyFile);
-			}
-			return null;
-		} catch (DuplicateResourceException e) {
-			e.printStackTrace();
-			if (logger.isLoggable(Level.SEVERE)) {
-				logger.severe("This should not happen: DuplicateResourceException for " + ontologyFile);
-			}
-			return null;
-		}
-
-		ontologyRes.setServiceManager(project.getServiceManager());
-
-		try {
-			ontologyRes.saveResourceData();
+			returned.save(null);
 		} catch (Exception e1) {
 			// Warns about the exception
 			if (logger.isLoggable(Level.WARNING)) {
@@ -199,7 +175,7 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 			e1.printStackTrace();
 		}
 
-		return ontologyRes;
+		return returned;
 	}
 
 	@Override
