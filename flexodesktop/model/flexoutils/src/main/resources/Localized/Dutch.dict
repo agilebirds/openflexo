@@ -1,4 +1,3 @@
-#Thu Feb 28 15:12:42 CET 2013
 =
 \ =\ 
 \ into\ =\ into 
@@ -1325,8 +1324,8 @@ choose_component_entity=Kies de entiteit als basis component
 choose_cvs_repository_location=Kies CVS repository locatie
 choose_existing_and_already_bound_begin_node=Kies bestaande en gelinkte BEGIN node
 choose_existing_and_unbound_begin_node=Kies bestaande en niet gelinkte BEGIN node
-choose_existing_end_node=Choose existing END node
-choose_existing_repository=Choose existing repository
+choose_existing_end_node=Kies bestaande END node
+choose_existing_repository=
 choose_helpset_to_reload=Choose helpset to reload
 choose_how_to_repair=Choose how to repair
 choose_language=Chose the language
@@ -3260,6 +3259,7 @@ loading_required_resources=Loading required resources
 loading_resources...=Loading resources...
 loading_resources_manager=Loading Resources Manager
 loading_time_stamps=Loading time stamps...
+loading_ui=loading_ui
 loading_workflow=Loading workflow
 local_directory=Local directory
 local_name=Local name
