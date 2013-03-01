@@ -399,8 +399,8 @@ public class ToolsMenu extends FlexoMenu {
 	public class TimeTravelAction extends AbstractAction {
 		public TimeTravelAction() {
 			super();
+			setEnabled(false);
 			if (getController().getProject() == null) {
-				setEnabled(false);
 			}
 		}
 
