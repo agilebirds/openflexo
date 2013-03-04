@@ -8,7 +8,7 @@
 	</tab>
 
 	<tab name="Advanced" index="2" layout="DEFAULT">
-		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 	</tab>
 	
 	<tab name="Graphics" index="20" layout="DEFAULT">

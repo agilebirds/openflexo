@@ -22,7 +22,7 @@
 
 	<tab name="Data" index="3" layout="DEFAULT">
 		<property_list name="additionalBindings" label="additional_widget_bindings" constraint="10">
-		  <param name="visibleFor" value="DEVELOPPER,MAINTAINER"/>
+		  <param name="visibleFor" value="DEVELOPER,MAINTAINER"/>
 		  <param name="visible_row_count" value="5"/>
 		  <param name="row_height" value="20"/>
 		  <property_list_column name="variableName" label="name" widget="TEXT_FIELD">

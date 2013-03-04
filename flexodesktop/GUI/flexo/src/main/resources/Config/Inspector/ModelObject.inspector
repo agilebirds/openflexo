@@ -13,7 +13,7 @@
 	</tab>
 	<tab name="Advanced" index="2" layout="DEFAULT">
 		<property name="flexoID" label="flexo_id" widget="READ_ONLY_TEXT_FIELD" constraint="100">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property_list name="customProperties" label="custom_properties" constraint="101">
           <param name="displayLabel" value="true"/>

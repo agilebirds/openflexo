@@ -5,7 +5,7 @@
 		</layout>
 		<!-- Operators are immutable now -->
 		<!--<property name="operatorType" label="operator_type" widget="DROPDOWN" constraint="1">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 			<param name="format" value="name"/>
 		</property>-->
 	</tab>
