@@ -36,7 +36,7 @@ import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddSubClassSt
  * <p>
  * Implementation of the ModelSlot class for the OWL technology adapter
  * 
- * @author Luka Le Roux
+ * @author sylvain, luka
  * 
  */
 @DeclarePatternRoles({ @DeclarePatternRole(OWLIndividualPatternRole.class), // Instances
@@ -62,22 +62,18 @@ public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntolog
 
 	public OWLModelSlot(ViewPoint viewPoint, OWLTechnologyAdapter adapter) {
 		super(viewPoint, adapter);
-		logger.info(">>>>>>>>>>>>>>>>> created OWLMOdelSlot - 1");
 	}
 
 	public OWLModelSlot(VirtualModel<?> virtualModel, OWLTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
-		logger.info(">>>>>>>>>>>>>>>>> created OWLMOdelSlot - 2");
 	}
 
 	public OWLModelSlot(VirtualModelBuilder builder) {
 		super(builder);
-		logger.info(">>>>>>>>>>>>>>>>> created OWLMOdelSlot - 3");
 	}
 
 	public OWLModelSlot(ViewPointBuilder builder) {
 		super(builder);
-		logger.info(">>>>>>>>>>>>>>>>> created OWLMOdelSlot - 4");
 	}
 
 	@Override
