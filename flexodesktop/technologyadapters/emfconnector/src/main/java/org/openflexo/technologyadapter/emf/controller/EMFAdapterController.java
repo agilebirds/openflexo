@@ -19,8 +19,12 @@
  */
 package org.openflexo.technologyadapter.emf.controller;
 
+import java.util.logging.Logger;
+
 import javax.swing.ImageIcon;
 
+import org.openflexo.components.widget.OntologyBrowserModel;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
@@ -28,6 +32,10 @@ import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.gui.EMFIconLibrary;
+import org.openflexo.technologyadapter.emf.gui.EMFMetaModelBrowserModel;
+import org.openflexo.technologyadapter.emf.gui.EMFModelBrowserModel;
+import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
+import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 import org.openflexo.technologyadapter.emf.viewpoint.EMFObjectIndividualPatternRole;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividual;
@@ -36,6 +44,8 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.TechnologyAdapterController;
 
 public class EMFAdapterController extends TechnologyAdapterController<EMFTechnologyAdapter> {
+
+	static final Logger logger = Logger.getLogger(EMFAdapterController.class.getPackage().getName());
 
 	/**
 	 * 
@@ -140,6 +150,18 @@ public class EMFAdapterController extends TechnologyAdapterController<EMFTechnol
 			return IconFactory.getImageIcon(getIconForOntologyObject(EMFClassClass.class), IconLibrary.DUPLICATE);
 			}*/
 		return null;
+	}
+
+	@Override
+	public OntologyBrowserModel makeOntologyBrowserModel(IFlexoOntology context) {
+		if (context instanceof EMFMetaModel) {
+			return new EMFMetaModelBrowserModel((EMFMetaModel) context);
+		} else if (context instanceof EMFModel) {
+			return new EMFModelBrowserModel((EMFModel) context);
+		} else {
+			logger.warning("Unexpected " + context);
+			return null;
+		}
 	}
 
 }

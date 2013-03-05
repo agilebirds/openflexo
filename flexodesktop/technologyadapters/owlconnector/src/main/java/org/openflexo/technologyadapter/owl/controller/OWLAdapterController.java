@@ -4,6 +4,8 @@ import java.io.File;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.components.widget.OntologyBrowserModel;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
@@ -11,12 +13,14 @@ import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import org.openflexo.technologyadapter.owl.gui.OWLIconLibrary;
+import org.openflexo.technologyadapter.owl.gui.OWLOntologyBrowserModel;
 import org.openflexo.technologyadapter.owl.model.DataPropertyStatement;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
 import org.openflexo.technologyadapter.owl.model.OWLDataProperty;
 import org.openflexo.technologyadapter.owl.model.OWLIndividual;
 import org.openflexo.technologyadapter.owl.model.OWLObject;
 import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
+import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLProperty;
 import org.openflexo.technologyadapter.owl.model.ObjectPropertyStatement;
 import org.openflexo.technologyadapter.owl.model.PropertyStatement;
@@ -162,5 +166,10 @@ public class OWLAdapterController extends TechnologyAdapterController<OWLTechnol
 			return IconFactory.getImageIcon(getIconForOntologyObject(OWLClass.class), IconLibrary.DUPLICATE);
 		}
 		return null;
+	}
+
+	@Override
+	public OntologyBrowserModel makeOntologyBrowserModel(IFlexoOntology model) {
+		return new OWLOntologyBrowserModel((OWLOntology) model);
 	}
 }
