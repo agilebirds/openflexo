@@ -606,4 +606,9 @@ public class EMFMetaModel extends FlexoOntologyObjectImpl implements FlexoMetaMo
 	public boolean isOntologyDataProperty() {
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		return "EMFMetaModel:" + getURI();
+	}
 }

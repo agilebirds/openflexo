@@ -67,9 +67,19 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 		this.propertyURI = propertyURI;
 	}
 
+	@Override
+	public IFlexoOntologyStructuralProperty getProperty() {
+		return getObjectProperty();
+	}
+
+	@Override
+	public void setProperty(IFlexoOntologyStructuralProperty aProperty) {
+		setObjectProperty(aProperty);
+	}
+
 	public OWLProperty getObjectProperty() {
 		if (getVirtualModel() != null) {
-			return (OWLProperty) getVirtualModel().getOntologyObjectProperty(_getPropertyURI());
+			return (OWLProperty) getVirtualModel().getOntologyProperty(_getPropertyURI());
 		}
 		return null;
 	}

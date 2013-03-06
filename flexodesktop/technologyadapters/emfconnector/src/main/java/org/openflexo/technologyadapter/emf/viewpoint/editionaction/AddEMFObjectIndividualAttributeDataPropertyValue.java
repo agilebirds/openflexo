@@ -28,14 +28,26 @@
  */
 package org.openflexo.technologyadapter.emf.viewpoint.editionaction;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.ontology.IndividualOfClass;
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.AssignableAction;
+import org.openflexo.foundation.viewpoint.SetDataPropertyValueAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualAttributeDataPropertyValue;
+import org.openflexo.toolbox.StringUtils;
 
 /**
  * Assign a simple DataType value to the attribute of an object.
@@ -43,8 +55,11 @@ import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualAttributeDat
  * @author gbesancon
  * 
  */
-public class AddEMFObjectIndividualAttributeDataPropertyValue<T> extends
-		AssignableAction<EMFModel, EMFMetaModel, EMFObjectIndividualAttributeDataPropertyValue> {
+public class AddEMFObjectIndividualAttributeDataPropertyValue extends SetEMFPropertyValue<EMFObjectIndividualAttributeDataPropertyValue>
+		implements SetDataPropertyValueAction {
+
+	private String dataPropertyURI = null;
+	private DataBinding<Object> value;
 
 	/**
 	 * Constructor.
@@ -65,16 +80,102 @@ public class AddEMFObjectIndividualAttributeDataPropertyValue<T> extends
 		return EditionActionType.AddDataPropertyStatement;
 	}
 
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.viewpoint.AssignableAction#getAssignableType()
-	 */
+	@Override
+	public Type getSubjectType() {
+		if (getDataProperty() != null && getDataProperty().getDomain() instanceof IFlexoOntologyClass) {
+			return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) getDataProperty().getDomain());
+		}
+		return super.getSubjectType();
+	}
+
+	@Override
+	public IFlexoOntologyStructuralProperty getProperty() {
+		return getDataProperty();
+	}
+
+	@Override
+	public void setProperty(IFlexoOntologyStructuralProperty aProperty) {
+		setDataProperty((EMFAttributeDataProperty) aProperty);
+	}
+
+	@Override
+	public IFlexoOntologyDataProperty getDataProperty() {
+		if (getVirtualModel() != null && StringUtils.isNotEmpty(dataPropertyURI)) {
+			return getVirtualModel().getOntologyDataProperty(dataPropertyURI);
+		}
+		return null;
+	}
+
+	@Override
+	public void setDataProperty(IFlexoOntologyDataProperty ontologyProperty) {
+		if (ontologyProperty != null) {
+			dataPropertyURI = ontologyProperty.getURI();
+		} else {
+			dataPropertyURI = null;
+		}
+	}
+
+	public String _getDataPropertyURI() {
+		if (getDataProperty() != null) {
+			return getDataProperty().getURI();
+		}
+		return dataPropertyURI;
+	}
+
+	public void _setDataPropertyURI(String dataPropertyURI) {
+		this.dataPropertyURI = dataPropertyURI;
+	}
+
+	public Object getValue(EditionSchemeAction action) {
+		try {
+			return getValue().getBindingValue(action);
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public Type getType() {
+		if (getDataProperty() != null) {
+			return getDataProperty().getRange().getAccessedType();
+		}
+		return Object.class;
+	};
+
+	@Override
+	public DataBinding<Object> getValue() {
+		if (value == null) {
+			value = new DataBinding<Object>(this, getType(), BindingDefinitionType.GET) {
+				@Override
+				public Type getDeclaredType() {
+					return getType();
+				}
+			};
+			value.setBindingName("value");
+		}
+		return value;
+	}
+
+	@Override
+	public void setValue(DataBinding<Object> value) {
+		if (value != null) {
+			value = new DataBinding<Object>(value.toString(), this, getType(), BindingDefinitionType.GET) {
+				@Override
+				public Type getDeclaredType() {
+					return getType();
+				}
+			};
+			value.setBindingName("value");
+		}
+		this.value = value;
+	}
+
 	@Override
 	public Type getAssignableType() {
-		// if (value != null) {
-		// return value.getClass();
-		// }
 		return Object.class;
 	}
 
@@ -86,10 +187,10 @@ public class AddEMFObjectIndividualAttributeDataPropertyValue<T> extends
 	@Override
 	public EMFObjectIndividualAttributeDataPropertyValue performAction(EditionSchemeAction action) {
 		EMFObjectIndividualAttributeDataPropertyValue result = null;
-		// ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
-		// EMFModel model = modelSlotInstance.getModel();
+		ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
+		EMFModel model = modelSlotInstance.getModel();
 		// // Add Attribute in EMF
-		// objectIndividual.getObject().eSet(attributeDataProperty.getObject(), value);
+		getSubject(action).getObject().eSet(((EMFAttributeDataProperty) getDataProperty()).getObject(), getValue(action));
 		// // Instanciate Wrapper
 		// result = model.getConverter().convertObjectIndividualAttributeDataPropertyValue(model, objectIndividual.getObject(),
 		// attributeDataProperty.getObject());

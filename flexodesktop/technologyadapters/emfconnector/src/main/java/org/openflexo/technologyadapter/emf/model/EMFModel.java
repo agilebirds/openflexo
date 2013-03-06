@@ -573,4 +573,9 @@ public class EMFModel extends FlexoOntologyObjectImpl implements FlexoModel<EMFM
 		return false;
 	}
 
+	@Override
+	public String toString() {
+		return "EMFModel:" + getURI();
+	}
+
 }

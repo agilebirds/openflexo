@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.technologyadapter.owl.viewpoint.editionaction;
+package org.openflexo.technologyadapter.emf.viewpoint.editionaction;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
@@ -27,27 +27,38 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.SetPropertyValueAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.technologyadapter.owl.model.OWLConcept;
-import org.openflexo.technologyadapter.owl.model.OWLOntology;
-import org.openflexo.technologyadapter.owl.model.OWLStatement;
+import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
+import org.openflexo.technologyadapter.emf.model.EMFModel;
+import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 
-public abstract class AddStatement<S extends OWLStatement> extends AssignableAction<OWLOntology, OWLOntology, S> implements
-		SetPropertyValueAction {
+public abstract class SetEMFPropertyValue<T> extends AssignableAction<EMFModel, EMFMetaModel, T> implements SetPropertyValueAction {
 
-	private static final Logger logger = Logger.getLogger(AddStatement.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(SetEMFPropertyValue.class.getPackage().getName());
 
-	public AddStatement(VirtualModel.VirtualModelBuilder builder) {
+	public SetEMFPropertyValue(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 
-	public OWLConcept<?> getPropertySubject(EditionSchemeAction action) {
+	private DataBinding<Object> subject;
+
+	@Override
+	public Type getSubjectType() {
+		if (getProperty() != null && getProperty().getDomain() instanceof IFlexoOntologyClass) {
+			return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) getProperty().getDomain());
+		}
+		return IFlexoOntologyConcept.class;
+	}
+
+	public EMFObjectIndividual getSubject(EditionSchemeAction action) {
 		try {
-			return (OWLConcept<?>) getSubject().getBindingValue(action);
+			return (EMFObjectIndividual) getSubject().getBindingValue(action);
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
@@ -56,31 +67,6 @@ public abstract class AddStatement<S extends OWLStatement> extends AssignableAct
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	/*@Override
-	public R getPatternRole() {
-		try {
-			return super.getPatternRole();
-		} catch (ClassCastException e) {
-			logger.warning("Unexpected pattern role type");
-			setPatternRole(null);
-			return null;
-		}
-	}*/
-
-	// FIXME: if we remove this useless code, some FIB won't work (see EditionPatternView.fib, inspect an AddIndividual)
-	// Need to be fixed in KeyValueProperty.java
-	/*@Override
-	public void setPatternRole(R patternRole) {
-		super.setPatternRole(patternRole);
-	}*/
-
-	private DataBinding<Object> subject;
-
-	@Override
-	public Type getSubjectType() {
-		return IFlexoOntologyConcept.class;
 	}
 
 	@Override
@@ -111,13 +97,13 @@ public abstract class AddStatement<S extends OWLStatement> extends AssignableAct
 		this.subject = subject;
 	}
 
-	public static class SubjectIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AddStatement> {
+	public static class SubjectIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<SetEMFPropertyValue> {
 		public SubjectIsRequiredAndMustBeValid() {
-			super("'subject'_binding_is_required_and_must_be_valid", AddStatement.class);
+			super("'subject'_binding_is_required_and_must_be_valid", SetEMFPropertyValue.class);
 		}
 
 		@Override
-		public DataBinding<IFlexoOntologyConcept> getBinding(AddStatement object) {
+		public DataBinding<IFlexoOntologyConcept> getBinding(SetEMFPropertyValue object) {
 			return object.getSubject();
 		}
 

@@ -256,10 +256,15 @@ public class VPMIconLibrary extends IconLibrary {
 				TechnologyAdapterController<?> tac = getTechnologyAdapterController(((EditionAction) object).getModelSlot()
 						.getTechnologyAdapter());
 				if (tac != null) {
-					return tac.getIconForEditionAction((Class<? extends EditionAction>) object.getClass());
+					ImageIcon returned = tac.getIconForEditionAction((Class<? extends EditionAction>) object.getClass());
+					if (returned != null) {
+						return returned;
+					} else {
+						return tac.getTechnologyIcon();
+					}
 				}
 			}
-			return EDITION_PATTERN_ACTION_ICON;
+			return UNKNOWN_ICON;
 		} else if (object instanceof EditionPattern) {
 			return EDITION_PATTERN_ICON;
 		} else if (object instanceof EditionSchemeParameter) {

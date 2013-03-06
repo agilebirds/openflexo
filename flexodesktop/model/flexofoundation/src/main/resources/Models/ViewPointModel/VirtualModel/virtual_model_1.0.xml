@@ -399,6 +399,7 @@
 	<entity name="org.openflexo.foundation.viewpoint.EditionAction" abstract="yes">
 		<property name="description" xmlTag="description" />
 		<property name="conditional" xmlTag="conditional" attribute="YES" />
+		<property name="modelSlot" contains="org.openflexo.foundation.technologyadapter.ModelSlot" context="Addressed" primary="NO" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.AssignableAction" abstract="yes">
@@ -527,6 +528,30 @@
 			attribute="YES" />
 		<property name="cardinality" xmlTag="cardinality" attribute="YES" />
 	</entity>
+
+	<entity name="org.openflexo.technologyadapter.emf.viewpoint.editionaction.SetEMFPropertyValue"
+		abstract="yes">
+		<property name="subject" xmlTag="subject" attribute="YES" />
+	</entity>
+
+	<entity name="org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividualAttributeObjectPropertyValue"
+		xmlTag="AddEMFObjectIndividualAttributeObjectPropertyValue">
+		<property name="object" xmlTag="object" attribute="YES" />
+		<property name="objectPropertyURI" xmlTag="objectPropertyURI" attribute="YES" />
+	</entity>
+
+	<entity name="org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividualReferenceObjectPropertyValue"
+		xmlTag="AddEMFObjectIndividualReferenceObjectPropertyValue">
+		<property name="object" xmlTag="object" attribute="YES" />
+		<property name="objectPropertyURI" xmlTag="objectPropertyURI" attribute="YES" />
+	</entity>
+
+	<entity name="org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividualAttributeDataPropertyValue"
+		xmlTag="AddEMFObjectIndividualAttributeDataPropertyValue">
+		<property name="value" xmlTag="value" attribute="YES" />
+		<property name="dataPropertyURI" xmlTag="dataPropertyURI" attribute="YES" />
+	</entity>
+
 
 	<entity name="org.openflexo.foundation.viewpoint.AbstractAssertion"
 		abstract="yes">

@@ -39,6 +39,7 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.SetObjectPropertyValueAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
@@ -47,11 +48,12 @@ import org.openflexo.technologyadapter.owl.model.StatementWithProperty;
 import org.openflexo.technologyadapter.owl.viewpoint.ObjectPropertyStatementPatternRole;
 import org.openflexo.toolbox.StringUtils;
 
-public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyStatement> {
+public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyStatement> implements SetObjectPropertyValueAction {
 
 	private static final Logger logger = Logger.getLogger(AddObjectPropertyStatement.class.getPackage().getName());
 
 	private String objectPropertyURI = null;
+	private DataBinding<Object> object;
 
 	public AddObjectPropertyStatement(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
@@ -87,18 +89,30 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 		return getEditionPattern().getPatternRoles(ObjectPropertyStatementPatternRole.class);
 	}*/
 
-	public IFlexoOntologyStructuralProperty getObjectProperty() {
-		if (StringUtils.isNotEmpty(objectPropertyURI)) {
+	@Override
+	public IFlexoOntologyStructuralProperty getProperty() {
+		return getObjectProperty();
+	}
+
+	@Override
+	public void setProperty(IFlexoOntologyStructuralProperty aProperty) {
+		setObjectProperty((OWLObjectProperty) aProperty);
+	}
+
+	@Override
+	public IFlexoOntologyObjectProperty getObjectProperty() {
+		if (getVirtualModel() != null && StringUtils.isNotEmpty(objectPropertyURI)) {
 			return getVirtualModel().getOntologyObjectProperty(objectPropertyURI);
 		} else {
 			if (getPatternRole() != null) {
-				return getPatternRole().getObjectProperty();
+				return (OWLObjectProperty) getPatternRole().getObjectProperty();
 			}
 		}
 		return null;
 	}
 
-	public void setObjectProperty(IFlexoOntologyStructuralProperty ontologyProperty) {
+	@Override
+	public void setObjectProperty(IFlexoOntologyObjectProperty ontologyProperty) {
 		if (ontologyProperty != null) {
 			if (getPatternRole() != null) {
 				if (getPatternRole().getObjectProperty().isSuperConceptOf(ontologyProperty)) {
@@ -142,31 +156,37 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 		return null;
 	}
 
-	private DataBinding<Object> object;
-
 	public Type getObjectType() {
-		if (getObjectProperty() instanceof IFlexoOntologyObjectProperty
-				&& ((IFlexoOntologyObjectProperty) getObjectProperty()).getRange() instanceof IFlexoOntologyClass) {
-			return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) ((IFlexoOntologyObjectProperty) getObjectProperty())
-					.getRange());
+		if (getObjectProperty() instanceof IFlexoOntologyObjectProperty && getObjectProperty().getRange() instanceof IFlexoOntologyClass) {
+			return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) getObjectProperty().getRange());
 		}
 		return IFlexoOntologyConcept.class;
 	}
 
+	@Override
 	public DataBinding<Object> getObject() {
 		if (object == null) {
-			object = new DataBinding<Object>(this, getObjectType(), BindingDefinitionType.GET);
+			object = new DataBinding<Object>(this, getObjectType(), BindingDefinitionType.GET) {
+				@Override
+				public Type getDeclaredType() {
+					return getObjectType();
+				}
+			};
 			object.setBindingName("object");
 		}
 		return object;
 	}
 
+	@Override
 	public void setObject(DataBinding<Object> object) {
 		if (object != null) {
-			object.setOwner(this);
+			object = new DataBinding<Object>(object.toString(), this, getObjectType(), BindingDefinitionType.GET) {
+				@Override
+				public Type getDeclaredType() {
+					return getObjectType();
+				}
+			};
 			object.setBindingName("object");
-			object.setDeclaredType(getObjectType());
-			object.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.object = object;
 	}
