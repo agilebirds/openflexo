@@ -1908,9 +1908,11 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 			return returned;
 		}
 		for (OWLOntology o : getAllImportedOntologies()) {
-			returned = o.getDeclaredIndividual(individualURI);
-			if (returned != null) {
-				return returned;
+			if (o != null) {
+				returned = o.getDeclaredIndividual(individualURI);
+				if (returned != null) {
+					return returned;
+				}
 			}
 		}
 		return null;
@@ -1934,9 +1936,11 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 			return returned;
 		}
 		for (OWLOntology o : getAllImportedOntologies()) {
-			returned = o.getDeclaredObjectProperty(propertyURI);
-			if (returned != null) {
-				return returned;
+			if (o != null) {
+				returned = o.getDeclaredObjectProperty(propertyURI);
+				if (returned != null) {
+					return returned;
+				}
 			}
 		}
 		return null;
@@ -1968,9 +1972,11 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 			return returned;
 		}
 		for (OWLOntology o : getAllImportedOntologies()) {
-			returned = o.getDeclaredDataProperty(propertyURI);
-			if (returned != null) {
-				return returned;
+			if (o != null) {
+				returned = o.getDeclaredDataProperty(propertyURI);
+				if (returned != null) {
+					return returned;
+				}
 			}
 		}
 		return null;
