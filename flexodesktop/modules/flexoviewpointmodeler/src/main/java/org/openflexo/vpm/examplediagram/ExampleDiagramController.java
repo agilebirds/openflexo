@@ -199,25 +199,25 @@ public class ExampleDiagramController extends SelectionManagingDrawingController
 	}
 
 	protected void updatePalette(DiagramPalette palette, DrawingView<?> oldPaletteView) {
-		if (paletteView != null) {
+		if (getPaletteView() != null) {
 			// System.out.println("update palette with " + oldPaletteView);
 			int index = -1;
-			for (int i = 0; i < paletteView.getComponentCount(); i++) {
+			for (int i = 0; i < getPaletteView().getComponentCount(); i++) {
 				// System.out.println("> " + paletteView.getComponentAt(i));
-				Component c = paletteView.getComponentAt(i);
+				Component c = getPaletteView().getComponentAt(i);
 				if (SwingUtilities.isDescendingFrom(oldPaletteView, c)) {
 					index = i;
 					System.out.println("Found index " + index);
 				}
 			}
 			if (index > -1) {
-				paletteView.remove(paletteView.getComponentAt(index));
+				getPaletteView().remove(getPaletteView().getComponentAt(index));
 				ContextualPalette cp = _contextualPalettes.get(palette);
 				cp.updatePalette();
-				paletteView.insertTab(palette.getName(), null, cp.getPaletteViewInScrollPane(), null, index);
+				getPaletteView().insertTab(palette.getName(), null, cp.getPaletteViewInScrollPane(), null, index);
 			}
-			paletteView.revalidate();
-			paletteView.repaint();
+			getPaletteView().revalidate();
+			getPaletteView().repaint();
 		} else {
 			logger.warning("updatePalette() called with null value for paletteView");
 		}

@@ -19,6 +19,7 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager impl
 	private FlexoEditor applicationEditor;
 
 	public ApplicationContext() {
+		super();
 		applicationEditor = createApplicationEditor();
 		try {
 			ProjectLoader projectLoader = new ProjectLoader(this);
@@ -41,6 +42,7 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager impl
 		return getService(ProjectLoader.class);
 	}
 
+	@Override
 	public final FlexoProjectReferenceLoader getProjectReferenceLoader() {
 		return getService(FlexoProjectReferenceLoader.class);
 	}
