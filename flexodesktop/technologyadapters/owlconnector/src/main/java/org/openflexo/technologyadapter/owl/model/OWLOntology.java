@@ -1857,9 +1857,11 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 		}
 
 		for (OWLOntology o : getAllImportedOntologies()) {
-			returned = o.getDeclaredClass(classURI);
-			if (returned != null) {
-				return returned;
+			if (o != null) {
+				returned = o.getDeclaredClass(classURI);
+				if (returned != null) {
+					return returned;
+				}
 			}
 		}
 		return null;
