@@ -23,6 +23,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
@@ -33,15 +35,19 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.components.widget.OntologyBrowserModel.OntologyBrowserModelRecomputed;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.OntologyUtils;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.StringUtils;
+import org.openflexo.view.controller.TechnologyAdapterController;
+import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 /**
  * Widget allowing to select an IFlexoOntologyIndividual<br>
@@ -73,6 +79,7 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<IFlexoOntology
 	private boolean strictMode = false;
 
 	protected OntologyBrowserModel model = null;
+	private TechnologyAdapter technologyAdapter;
 
 	private BindingModel bindingModel;
 
@@ -306,20 +313,38 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<IFlexoOntology
 		update();
 	}
 
+	public TechnologyAdapter getTechnologyAdapter() {
+		return technologyAdapter;
+	}
+
+	public void setTechnologyAdapter(TechnologyAdapter technologyAdapter) {
+		this.technologyAdapter = technologyAdapter;
+	}
+
 	public OntologyBrowserModel getModel() {
 		if (model == null) {
-			model = new OntologyBrowserModel(getContext()) {
+			if (getTechnologyAdapter() != null) {
+				// Use technology specific browser model
+				TechnologyAdapterController technologyAdapterController = getTechnologyAdapter().getTechnologyAdapterService()
+						.getServiceManager().getService(TechnologyAdapterControllerService.class)
+						.getTechnologyAdapterController(technologyAdapter);
+				model = technologyAdapterController.makeOntologyBrowserModel(getContext());
+			} else { // Use default
+				model = new OntologyBrowserModel(getContext());
+			}
+			model.addObserver(new Observer() {
 				@Override
-				public void recomputeStructure() {
-					super.recomputeStructure();
-					SwingUtilities.invokeLater(new Runnable() {
-						@Override
-						public void run() {
-							getPropertyChangeSupport().firePropertyChange("model", null, getModel());
-						}
-					});
+				public void update(Observable o, Object arg) {
+					if (arg instanceof OntologyBrowserModelRecomputed) {
+						SwingUtilities.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								getPropertyChangeSupport().firePropertyChange("model", null, getModel());
+							}
+						});
+					}
 				}
-			};
+			});
 			model.setStrictMode(getStrictMode());
 			model.setHierarchicalMode(getHierarchicalMode());
 			model.setDisplayPropertiesInClasses(false);

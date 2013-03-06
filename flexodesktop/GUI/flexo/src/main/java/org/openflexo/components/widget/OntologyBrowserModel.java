@@ -103,6 +103,12 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 			computeNonHierarchicalStructure();
 		}
 		isRecomputingStructure = false;
+		setChanged();
+		notifyObservers(new OntologyBrowserModelRecomputed());
+	}
+
+	public static class OntologyBrowserModelRecomputed {
+
 	}
 
 	public void delete() {
