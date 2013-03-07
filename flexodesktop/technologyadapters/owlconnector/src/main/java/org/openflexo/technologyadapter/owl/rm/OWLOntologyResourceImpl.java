@@ -96,12 +96,12 @@ public abstract class OWLOntologyResourceImpl extends FlexoFileResourceImpl<OWLO
 		try {
 			ModelFactory factory = new ModelFactory(OWLOntologyResource.class);
 			OWLOntologyResourceImpl returned = (OWLOntologyResourceImpl) factory.newInstance(OWLOntologyResource.class);
-			returned.setServiceManager(ontologyLibrary.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
 			returned.setTechnologyAdapter(ontologyLibrary.getTechnologyAdapter());
 			returned.setOntologyLibrary(ontologyLibrary);
 			returned.setName(OWLOntology.findOntologyName(owlFile));
 			returned.setFile(owlFile);
 			returned.setURI(OWLOntology.findOntologyURI(owlFile));
+			returned.setServiceManager(ontologyLibrary.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
 			// Register the ontology as model and metamodel as it can be both
 			ontologyLibrary.registerModel(returned);
 			ontologyLibrary.registerMetaModel(returned);

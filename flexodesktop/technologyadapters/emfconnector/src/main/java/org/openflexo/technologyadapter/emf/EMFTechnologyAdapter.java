@@ -171,7 +171,6 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 				if (uri != null && extension != null && ePackageClassName != null && resourceFactoryClassName != null) {
 					ModelFactory factory = new ModelFactory(EMFMetaModelResource.class);
 					metaModelResource = factory.newInstance(EMFMetaModelResource.class);
-					metaModelResource.setServiceManager(getTechnologyAdapterService().getServiceManager());
 					metaModelResource.setTechnologyAdapter(this);
 					metaModelResource.setURI(uri);
 					metaModelResource.setName(aMetaModelFile.getName());
@@ -179,7 +178,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 					metaModelResource.setModelFileExtension(extension);
 					metaModelResource.setPackageClassName(ePackageClassName);
 					metaModelResource.setResourceFactoryClassName(resourceFactoryClassName);
-
+					metaModelResource.setServiceManager(getTechnologyAdapterService().getServiceManager());
 					emfContextManager.registerMetaModel(metaModelResource);
 				}
 			} catch (SecurityException e) {

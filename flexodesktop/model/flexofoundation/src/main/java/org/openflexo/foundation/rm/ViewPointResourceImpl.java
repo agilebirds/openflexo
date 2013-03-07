@@ -52,7 +52,6 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 		try {
 			ModelFactory factory = new ModelFactory(ViewPointResource.class);
 			ViewPointResourceImpl returned = (ViewPointResourceImpl) factory.newInstance(ViewPointResource.class);
-			returned.setServiceManager(viewPointLibrary.getServiceManager());
 			String baseName = viewPointDirectory.getName().substring(0, viewPointDirectory.getName().length() - 10);
 			File xmlFile = new File(viewPointDirectory, baseName + ".xml");
 			returned.setName(name);
@@ -63,6 +62,8 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 			returned.setViewPointLibrary(viewPointLibrary);
 			viewPointLibrary.registerViewPoint(returned);
 			returned.relativePathFileConverter = new RelativePathFileConverter(viewPointDirectory);
+
+			returned.setServiceManager(viewPointLibrary.getServiceManager());
 
 			return returned;
 		} catch (ModelDefinitionException e) {
@@ -75,7 +76,6 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 		try {
 			ModelFactory factory = new ModelFactory(ViewPointResource.class);
 			ViewPointResourceImpl returned = (ViewPointResourceImpl) factory.newInstance(ViewPointResource.class);
-			returned.setServiceManager(viewPointLibrary.getServiceManager());
 			String baseName = viewPointDirectory.getName().substring(0, viewPointDirectory.getName().length() - 10);
 			File xmlFile = new File(viewPointDirectory, baseName + ".xml");
 			ViewPointInfo vpi = findViewPointInfo(viewPointDirectory);
@@ -99,6 +99,8 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 			returned.setViewPointLibrary(viewPointLibrary);
 			viewPointLibrary.registerViewPoint(returned);
 
+			returned.setServiceManager(viewPointLibrary.getServiceManager());
+
 			logger.fine("ViewPointResource " + xmlFile.getAbsolutePath() + " version " + returned.getModelVersion());
 
 			// Now look for virtual models
@@ -112,11 +114,11 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 								Document d = FlexoXMLFileResourceImpl.readXMLFile(virtualModelFile);
 								if (d.getRootElement().getName().equals("VirtualModel")) {
 									VirtualModelResource virtualModelResource = VirtualModelResourceImpl.retrieveVirtualModelResource(f,
-											virtualModelFile, viewPointLibrary);
+											virtualModelFile, returned, viewPointLibrary);
 									returned.addToContents(virtualModelResource);
 								} else if (d.getRootElement().getName().equals("DiagramSpecification")) {
 									DiagramSpecificationResource diagramSpecificationResource = DiagramSpecificationResourceImpl
-											.retrieveDiagramSpecificationResource(f, virtualModelFile, viewPointLibrary);
+											.retrieveDiagramSpecificationResource(f, virtualModelFile, returned, viewPointLibrary);
 									returned.addToContents(diagramSpecificationResource);
 								}
 							} catch (JDOMException e) {
@@ -185,7 +187,10 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 			for (EditionPattern ep : vm.getEditionPatterns()) {
 				ep.finalizeParentEditionPatternDeserialization();
 			}
+			vm.clearIsModified();
 		}
+
+		returned.clearIsModified();
 
 		return returned;
 	}

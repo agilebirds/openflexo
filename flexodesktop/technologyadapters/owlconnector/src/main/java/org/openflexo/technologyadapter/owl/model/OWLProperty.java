@@ -353,4 +353,8 @@ public abstract class OWLProperty extends OWLConcept<OntProperty> implements IFl
 		return null;
 	}
 
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + ":" + getURI();
+	}
 }

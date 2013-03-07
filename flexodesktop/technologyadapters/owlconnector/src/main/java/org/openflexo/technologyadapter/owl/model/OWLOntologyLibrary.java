@@ -127,9 +127,14 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 			getRDFSOntology().loadWhenUnloaded();
 			getRDFOntology().loadWhenUnloaded();
 			getOWLOntology().loadWhenUnloaded();
+			// Because some ontologies have cross reference, we update again concept and properties to setup cross references
 			getRDFSOntology().updateConceptsAndProperties();
 			getRDFOntology().updateConceptsAndProperties();
 			getOWLOntology().updateConceptsAndProperties();
+			// Because we have updated again, we have to clear the modification stamp
+			getRDFSOntology().clearIsModified();
+			getRDFOntology().clearIsModified();
+			getOWLOntology().clearIsModified();
 			getFlexoConceptOntology().loadWhenUnloaded();
 			defaultOntologiesLoaded = true;
 		}

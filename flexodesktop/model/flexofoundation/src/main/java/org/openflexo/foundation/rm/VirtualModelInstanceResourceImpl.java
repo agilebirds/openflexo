@@ -38,7 +38,6 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 			ModelFactory factory = new ModelFactory(VirtualModelInstanceResource.class);
 			VirtualModelInstanceResourceImpl<?> returned = (VirtualModelInstanceResourceImpl<?>) factory
 					.newInstance(VirtualModelInstanceResource.class);
-			returned.setServiceManager(view.getProject().getServiceManager());
 			String baseName = name;
 			File xmlFile = new File(view.getResource().getFile().getParentFile(), baseName
 					+ VirtualModelInstanceResource.VIRTUAL_MODEL_SUFFIX);
@@ -46,8 +45,12 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 			returned.setName(name);
 			returned.setFile(xmlFile);
 			returned.setVirtualModelResource(virtualModel.getResource());
+
+			returned.setServiceManager(view.getProject().getServiceManager());
+
 			view.getResource().addToContents(returned);
 			view.getResource().notifyContentsAdded(returned);
+
 			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
@@ -117,14 +120,6 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 	@Override
 	public final VirtualModelInstanceBuilder instanciateNewBuilder() {
 		return new VirtualModelInstanceBuilder(getContainer(), this);
-	}
-
-	@Override
-	public String getURI() {
-		if (getContainer() != null) {
-			return getContainer().getURI() + "/" + getName();
-		}
-		return null;
 	}
 
 	protected static class VirtualModelInstanceInfo {

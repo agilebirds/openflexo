@@ -102,13 +102,13 @@ public abstract class EMFModelResourceImpl extends FlexoFileResourceImpl<EMFMode
 		try {
 			ModelFactory factory = new ModelFactory(EMFModelResource.class);
 			EMFModelResourceImpl returned = (EMFModelResourceImpl) factory.newInstance(EMFModelResource.class);
-			returned.setServiceManager(technologyContextManager.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
 			returned.setTechnologyAdapter(technologyContextManager.getTechnologyAdapter());
 			returned.setTechnologyContextManager(technologyContextManager);
 			returned.setName(modelFile.getName());
 			returned.setFile(modelFile);
 			returned.setURI(modelFile.toURI().toString());
 			returned.setMetaModel(emfMetaModelResource.getMetaModelData());
+			returned.setServiceManager(technologyContextManager.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
 			technologyContextManager.registerModel(returned);
 			return returned;
 		} catch (ModelDefinitionException e) {

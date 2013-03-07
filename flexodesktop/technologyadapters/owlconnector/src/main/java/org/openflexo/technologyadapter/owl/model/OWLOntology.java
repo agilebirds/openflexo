@@ -211,12 +211,28 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 	}
 
+	public static void main(String[] args) {
+		System.out.println("Hop: "
+				+ findOntologyURIWithRDFBaseMethod(new File("/Users/sylvain/Library/OpenFlexo/FlexoResourceCenter/owl-xml_cpmf.owl")));
+	}
+
 	private static String findOntologyURIWithRDFBaseMethod(File aFile) {
 		Document document;
 		try {
 			logger.fine("Try to find URI for " + aFile);
 			document = readXMLFile(aFile);
 			Element root = getElement(document, "RDF");
+			if (root != null) {
+				Iterator it = root.getAttributes().iterator();
+				while (it.hasNext()) {
+					Attribute at = (Attribute) it.next();
+					if (at.getName().equals("base")) {
+						logger.fine("Returned " + at.getValue());
+						return at.getValue();
+					}
+				}
+			}
+			root = getElement(document, "Ontology");
 			if (root != null) {
 				Iterator it = root.getAttributes().iterator();
 				while (it.hasNext()) {
@@ -298,7 +314,7 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return aFile.getName();
 	}
 
 	private static Document readXMLFile(File f) throws JDOMException, IOException {
@@ -371,7 +387,8 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 	 * @return
 	 */
 	public Set<OWLOntology> getAllImportedOntologies() {
-		return OntologyUtils.getAllImportedOntologies(this);
+		Set<OWLOntology> returned = OntologyUtils.getAllImportedOntologies(this);
+		return returned;
 	}
 
 	/**
@@ -1413,8 +1430,6 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 			e.printStackTrace();
 		}
 
-		isLoaded = true;
-
 		for (Object o : ontModel.listImportedOntologyURIs()) {
 			OWLOntology importedOnt = _library.getOntology((String) o);
 			logger.info("importedOnt= " + importedOnt);
@@ -1434,8 +1449,11 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 		createConceptsAndProperties();
 
+		isLoaded = true;
+
 		logger.info("Finished loading ontology " + ontologyURI);
 
+		clearIsModified();
 	}
 
 	public void describe() {
@@ -1803,6 +1821,8 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 	@Override
 	public OWLConcept<?> getOntologyObject(String objectURI) {
 
+		loadWhenUnloaded();
+
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("retrieve IFlexoOntologyConcept " + objectURI);
 		}
@@ -1848,6 +1868,9 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 	@Override
 	public OWLClass getClass(String classURI) {
+
+		loadWhenUnloaded();
+
 		if (classURI == null) {
 			return null;
 		}
@@ -1892,6 +1915,8 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 	@Override
 	public OWLClass getDeclaredClass(String classURI) {
+		loadWhenUnloaded();
+
 		if (classURI == null) {
 			return null;
 		}
@@ -1920,6 +1945,8 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 	@Override
 	public OWLIndividual getDeclaredIndividual(String individualURI) {
+		loadWhenUnloaded();
+
 		if (individualURI == null) {
 			return null;
 		}
@@ -1948,6 +1975,8 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 	@Override
 	public OWLObjectProperty getDeclaredObjectProperty(String propertyURI) {
+		loadWhenUnloaded();
+
 		if (propertyURI == null) {
 			return null;
 		}
@@ -1984,6 +2013,8 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 	@Override
 	public OWLDataProperty getDeclaredDataProperty(String propertyURI) {
+		loadWhenUnloaded();
+
 		if (propertyURI == null) {
 			return null;
 		}
@@ -2016,7 +2047,7 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 		return null;
 	}
 
-	public static void main(String[] args) {
+	public static void main3(String[] args) {
 		File f = new File("/Users/sylvain/Library/OpenFlexo/FlexoResourceCenter/Ontologies/www.bolton.ac.uk/Archimate_from_Ecore.owl");
 		String uri = findOntologyURI(f);
 		System.out.println("uri: " + uri);
@@ -2153,5 +2184,21 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 	public void setResource(org.openflexo.foundation.resource.FlexoResource<OWLOntology> resource) {
 		ontologyResource = (OWLOntologyResource) resource;
 	}
+
+	/*@Override
+	protected synchronized void setChanged() {
+		super.setChanged();
+		if (isLoaded) {
+			logger.info("***************** setChanged() in OWLOntology");
+		}
+	}
+
+	@Override
+	public synchronized void setIsModified() {
+		super.setIsModified();
+		if (isLoaded) {
+			logger.info("***************** setIsModified() in OWLOntology");
+		}
+	}*/
 
 }

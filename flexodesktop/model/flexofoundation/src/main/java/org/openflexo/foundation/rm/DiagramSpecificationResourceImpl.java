@@ -37,6 +37,7 @@ public abstract class DiagramSpecificationResourceImpl extends VirtualModelResou
 			returned.setDirectory(diagramSpecificationDirectory);
 			returned.setFile(diagramSpecificationXMLFile);
 			returned.setViewPointLibrary(viewPointLibrary);
+			returned.setURI(viewPointResource.getURI() + "/" + diagramSpecificationDirectory.getName());
 			returned.setServiceManager(viewPointLibrary.getServiceManager());
 			returned.relativePathFileConverter = new RelativePathFileConverter(diagramSpecificationDirectory);
 			viewPointResource.addToContents(returned);
@@ -49,12 +50,11 @@ public abstract class DiagramSpecificationResourceImpl extends VirtualModelResou
 	}
 
 	public static DiagramSpecificationResource retrieveDiagramSpecificationResource(File diagramSpecificationDirectory,
-			File diagramSpecificationXMLFile, ViewPointLibrary viewPointLibrary) {
+			File diagramSpecificationXMLFile, ViewPointResource viewPointResource, ViewPointLibrary viewPointLibrary) {
 		try {
 			ModelFactory factory = new ModelFactory(DiagramSpecificationResource.class);
 			DiagramSpecificationResourceImpl returned = (DiagramSpecificationResourceImpl) factory
 					.newInstance(DiagramSpecificationResource.class);
-			returned.setServiceManager(viewPointLibrary.getServiceManager());
 			String baseName = diagramSpecificationDirectory.getName();
 			File xmlFile = new File(diagramSpecificationDirectory, baseName + ".xml");
 			DiagramSpecificationInfo vpi = findDiagramSpecificationInfo(diagramSpecificationDirectory);
@@ -62,6 +62,7 @@ public abstract class DiagramSpecificationResourceImpl extends VirtualModelResou
 				// Unable to retrieve infos, just abort
 				return null;
 			}
+			returned.setURI(viewPointResource.getURI() + "/" + diagramSpecificationDirectory.getName());
 			returned.setFile(xmlFile);
 			returned.setDirectory(diagramSpecificationDirectory);
 			returned.setName(vpi.name);
@@ -70,6 +71,8 @@ public abstract class DiagramSpecificationResourceImpl extends VirtualModelResou
 			}
 			returned.setModelVersion(new FlexoVersion(StringUtils.isNotEmpty(vpi.modelVersion) ? vpi.modelVersion : "0.1"));
 			returned.setViewPointLibrary(viewPointLibrary);
+
+			returned.setServiceManager(viewPointLibrary.getServiceManager());
 
 			logger.fine("DiagramSpecificationResource " + xmlFile.getAbsolutePath() + " version " + returned.getModelVersion());
 

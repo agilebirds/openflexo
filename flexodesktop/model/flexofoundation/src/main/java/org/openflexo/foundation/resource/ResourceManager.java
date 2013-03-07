@@ -57,6 +57,10 @@ public class ResourceManager extends FlexoServiceImpl implements FlexoService {
 	public void registerResource(FlexoResource<?> resource) {
 		resources.add(resource);
 		getServiceManager().notify(this, new ResourceRegistered(resource, null));
+		if (resource.getURI() == null) {
+			logger.info("Une resource avec une URI null: " + resource);
+			Thread.dumpStack();
+		}
 	}
 
 	public void unregisterResource(FlexoResource<?> resource) {

@@ -347,4 +347,10 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 		}
 	}
 
+	@Override
+	public synchronized void setIsModified() {
+		super.setIsModified();
+		logger.info("***************** setIsModified() in DiagramSpecification");
+	}
+
 }

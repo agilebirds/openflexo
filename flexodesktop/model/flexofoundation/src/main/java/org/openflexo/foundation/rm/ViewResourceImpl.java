@@ -67,18 +67,20 @@ public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> im
 			File viewDirectory = new File(folder.getFile(), name + ViewResource.VIEW_SUFFIX);
 			ModelFactory factory = new ModelFactory(ViewResource.class);
 			ViewResourceImpl returned = (ViewResourceImpl) factory.newInstance(ViewResource.class);
-			returned.setServiceManager(viewLibrary.getServiceManager());
 			String baseName = name;
 			File xmlFile = new File(viewDirectory, baseName + ".xml");
 			returned.setName(name);
 			returned.setProject(viewLibrary.getProject());
 			returned.setVersion(new FlexoVersion("1.0"));
+			returned.setURI(viewLibrary.getProject().getURI() + "/" + name);
 			returned.setFile(xmlFile);
 			returned.setDirectory(viewDirectory);
 			returned.setViewLibrary(viewLibrary);
 			returned.setViewPointResource(viewPoint.getResource());
 			returned.relativePathFileConverter = new RelativePathFileConverter(viewDirectory);
 			viewLibrary.registerResource(returned, folder);
+
+			returned.setServiceManager(viewLibrary.getServiceManager());
 
 			return returned;
 		} catch (ModelDefinitionException e) {
@@ -91,7 +93,6 @@ public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> im
 		try {
 			ModelFactory factory = new ModelFactory(ViewResource.class);
 			ViewResourceImpl returned = (ViewResourceImpl) factory.newInstance(ViewResource.class);
-			returned.setServiceManager(viewLibrary.getServiceManager());
 			String baseName = viewDirectory.getName().substring(0, viewDirectory.getName().length() - ViewResource.VIEW_SUFFIX.length());
 			File xmlFile = new File(viewDirectory, baseName + ".xml");
 			returned.setProject(viewLibrary.getProject());
@@ -103,11 +104,14 @@ public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> im
 			returned.setFile(xmlFile);
 			returned.setDirectory(viewDirectory);
 			returned.setName(vpi.name);
+			returned.setURI(viewLibrary.getProject().getURI() + "/" + vpi.name);
 			if (StringUtils.isNotEmpty(vpi.viewPointURI)) {
 				returned.setViewPointResource(viewLibrary.getServiceManager().getViewPointLibrary().getViewPointResource(vpi.viewPointURI));
 			}
 			returned.setViewLibrary(viewLibrary);
 			viewLibrary.registerResource(returned, folder);
+
+			returned.setServiceManager(viewLibrary.getServiceManager());
 
 			logger.fine("ViewResource " + xmlFile.getAbsolutePath() + " version " + returned.getModelVersion());
 

@@ -249,6 +249,26 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 					} else if (predicateProperty instanceof IFlexoOntologyDataProperty) {
 						newStatement = new DataPropertyStatement(this, s, getTechnologyAdapter());
 					} else {
+						/*OWLOntologyLibrary owlOntologyLibrary = getOntologyLibrary();
+						OWLOntology rdfsOntology = owlOntologyLibrary.getRDFSOntology();
+						System.out.println("Unknown predicate: " + predicate);
+						System.out.println("Known predicates:");
+						for (OWLDataProperty p : getOntology().getAccessibleDataProperties()) {
+							System.out.println(" > " + p);
+						}
+						for (OWLObjectProperty p : getOntology().getAccessibleObjectProperties()) {
+							System.out.println(" > " + p);
+						}
+						System.out.println("rdfsOntology=" + rdfsOntology);
+						System.out.println("hop=" + getOntology().getOntologyObject(predicate.getURI()));
+						System.out.println("hop2=" + rdfsOntology.getOntologyObject(predicate.getURI()));
+						System.out.println("ontology = " + getOntology());
+						System.out.println("importedOntologies=" + getOntology().getImportedOntologies());
+						System.out.println("allImportedOntologies=" + getOntology().getAllImportedOntologies());
+						System.out.println("OWLOntology = " + getOntology().getImportedOntologies().get(0));
+						System.out.println("OWLOntology importedOntologies="
+								+ getOntology().getImportedOntologies().get(0).getImportedOntologies());
+						System.out.println("OWLOntology importedOntologies=" + owlOntologyLibrary.getOWLOntology().getImportedOntologies());*/
 						logger.warning("Inconsistant data: unkwown property " + predicate);
 					}
 				}

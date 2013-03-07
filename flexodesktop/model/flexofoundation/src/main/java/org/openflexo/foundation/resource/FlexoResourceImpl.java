@@ -147,6 +147,10 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 		return serviceManager;
 	}
 
+	/**
+	 * Sets and register the service manager<br>
+	 * Also (VERY IMPORTANT) register the resource in the ResourceManager !!!
+	 */
 	@Override
 	public void setServiceManager(FlexoServiceManager serviceManager) {
 		this.serviceManager = serviceManager;
