@@ -207,12 +207,12 @@
     		    <Panel layout="gridbag" borderTitle="Panel" constraints="twocols(location=right;index=0;expandHorizontally=true;expandVertically=false)">
     		      <Label label="define_specific_font" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" />
     		      <Font data="data.font" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=2;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" />
-    		      <Label label="background_color" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=5;gridWidth=1;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
+    		      <Label label="define_background_color" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=5;gridWidth=1;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
     		      <Color data="data.backgroundColor" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=6;gridWidth=0;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true"/>
-    		      <Label label="foreground_color" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=9;gridWidth=1;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
+    		      <Label label="define_foreground_color" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=9;gridWidth=1;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
      		      <Color data="data.foregroundColor" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=10;gridWidth=0;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true"/>
     		      <Label label="opaque" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=12;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" />
-    		      <CheckBox data="data.opaque" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=11;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
+    		      <CheckBox data="data.opaque" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=11;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
     		    </Panel>
   		    </Panel>
   			    
@@ -353,12 +353,12 @@
     <Localized key="font_and_colors" lang="French">Police et couleurs</Localized>
     <Localized key="component_size_management" lang="English">Component size management</Localized>
     <Localized key="component_size_management" lang="French">Gestion de la taille du composant</Localized>
-    <Localized key="background_color" lang="English">Background color</Localized>
-    <Localized key="foreground_color" lang="English">Foreground color</Localized>
-    <Localized key="background_color" lang="French">Couleur de l'arrière-plan</Localized>
-    <Localized key="foreground_color" lang="French">Couleur d'avant-plan</Localized>
-    <Localized key="background_color" lang="Dutch">Background color</Localized>
-    <Localized key="foreground_color" lang="Dutch">Foreground color</Localized>
+    <Localized key="define_background_color" lang="English">Define background color</Localized>
+    <Localized key="define_foreground_color" lang="English">Define foreground color</Localized>
+    <Localized key="define_background_color" lang="French">Définir une couleur d'arrière-plan</Localized>
+    <Localized key="define_foreground_color" lang="French">Définir une couleur d'avant-plan</Localized>
+    <Localized key="define_background_color" lang="Dutch">Define background color</Localized>
+    <Localized key="define_foreground_color" lang="Dutch">Define foreground color</Localized>
     <Localized key="border_layout_constraints" lang="French">Contraintes de positionnement mode "BORDER"</Localized>
     <Localized key="box_layout_constraints" lang="French">Contraintes de positionnement mode "BOX"</Localized>
     <Localized key="grid_bag_layout_constraints" lang="French">Contraintes de positionnement mode "GRID BAG"</Localized>

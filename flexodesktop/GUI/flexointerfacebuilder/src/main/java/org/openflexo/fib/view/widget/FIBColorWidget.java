@@ -59,25 +59,27 @@ public class FIBColorWidget extends FIBWidgetView<FIBColor, ColorSelector, Color
 			_selector.addApplyCancelListener(this);
 		}
 		_selector.addFocusListener(this);
+		_selector.setEnabled(false);
 		checkBox = new JCheckBox();
 		checkBox.setToolTipText(FlexoLocalization.localizedForKey("undefined_value", checkBox));
 		checkBox.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				_selector.setEnabled(!checkBox.isSelected());
+				_selector.setEnabled(checkBox.isSelected());
 				updateModelFromWidget();
 			}
 		});
 		container = new JPanel(new GridBagLayout());
+		container.setOpaque(false);
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.weightx = 1.0;
-		container.add(_selector, gbc);
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.weightx = 0;
 		gbc.anchor = GridBagConstraints.LINE_START;
 		container.add(checkBox, gbc);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 1.0;
+		container.add(_selector, gbc);
 		updateCheckboxVisibility();
 		updateFont();
 	}
@@ -99,7 +101,7 @@ public class FIBColorWidget extends FIBWidgetView<FIBColor, ColorSelector, Color
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
 		Color editedObject = _selector.getEditedObject();
-		if (checkBox.isSelected()) {
+		if (!checkBox.isSelected()) {
 			editedObject = null;
 		}
 		if (notEquals(getValue(), editedObject)) {
@@ -122,7 +124,7 @@ public class FIBColorWidget extends FIBWidgetView<FIBColor, ColorSelector, Color
 	@Override
 	public synchronized boolean updateModelFromWidget() {
 		Color editedObject = null;
-		if (!checkBox.isSelected()) {
+		if (checkBox.isSelected()) {
 			editedObject = _selector.getEditedObject();
 		}
 		if (notEquals(getValue(), editedObject)) {

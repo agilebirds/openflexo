@@ -394,6 +394,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	}
 
 	protected void updateBackgroundColor() {
+		getJComponent().setOpaque(getComponent().getOpaque());
 		getJComponent().setBackground(getComponent().getBackgroundColor());
 	}
 
