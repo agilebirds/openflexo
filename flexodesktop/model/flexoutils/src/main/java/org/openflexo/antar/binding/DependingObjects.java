@@ -45,6 +45,10 @@ public class DependingObjects {
 			logger.info("refreshObserving() for " + observerObject);
 		}*/
 
+		if (observerObject == null) {
+			return;
+		}
+
 		List<TargetObject> updatedDependingObjects = new ArrayList<TargetObject>();
 		for (DataBinding<?> binding : observerObject.getDependencyBindings()) {
 			List<TargetObject> targetObjects = binding.getTargetObjects(context);
