@@ -1,24 +1,30 @@
 package org.openflexo.technologyadapter.emf.viewpoint.binding;
 
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
+import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeAssociation;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 
-public class AttributeDataPropertyPathElement extends SimplePathElement {
+public class AttributeDataPropertyFeatureAssociationPathElement extends SimplePathElement {
 
 	private EMFAttributeDataProperty dataProperty;
+	private EMFAttributeAssociation association;
 
-	private static final Logger logger = Logger.getLogger(AttributeDataPropertyPathElement.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AttributeDataPropertyFeatureAssociationPathElement.class.getPackage().getName());
 
-	public AttributeDataPropertyPathElement(BindingPathElement parent, EMFAttributeDataProperty property) {
+	public AttributeDataPropertyFeatureAssociationPathElement(BindingPathElement parent, EMFAttributeAssociation association,
+			EMFAttributeDataProperty property) {
 		super(parent, property.getName(), property.getRange().getAccessedType());
+		this.association = association;
 		dataProperty = property;
 	}
 
@@ -28,10 +34,18 @@ public class AttributeDataPropertyPathElement extends SimplePathElement {
 
 	@Override
 	public Type getType() {
-		if (getDataProperty() != null && getDataProperty().getRange() != null) {
-			return getDataProperty().getRange().getAccessedType();
+		if (association.getUpperBound() == null || (association.getUpperBound() >= 0 && association.getUpperBound() <= 1)) {
+			// Single cardinality
+			if (getDataProperty() != null && getDataProperty().getRange() != null) {
+				return getDataProperty().getRange().getAccessedType();
+			}
+			return Object.class;
+		} else {
+			if (getDataProperty() != null && getDataProperty().getRange() != null) {
+				return new ParameterizedTypeImpl(List.class, getDataProperty().getRange().getAccessedType());
+			}
+			return new ParameterizedTypeImpl(List.class, Object.class);
 		}
-		return Object.class;
 	}
 
 	@Override

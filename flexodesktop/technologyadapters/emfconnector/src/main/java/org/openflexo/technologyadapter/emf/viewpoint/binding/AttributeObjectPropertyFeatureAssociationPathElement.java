@@ -1,27 +1,34 @@
 package org.openflexo.technologyadapter.emf.viewpoint.binding;
 
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
+import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IndividualOfClass;
+import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeAssociation;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeObjectProperty;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 
-public class AttributeObjectPropertyPathElement extends SimplePathElement {
+public class AttributeObjectPropertyFeatureAssociationPathElement extends SimplePathElement {
 
 	private EMFAttributeObjectProperty objectProperty;
+	private EMFAttributeAssociation association;
 
-	private static final Logger logger = Logger.getLogger(AttributeObjectPropertyPathElement.class.getPackage().getName());
+	private static final Logger logger = Logger
+			.getLogger(AttributeObjectPropertyFeatureAssociationPathElement.class.getPackage().getName());
 
-	public AttributeObjectPropertyPathElement(BindingPathElement parent, EMFAttributeObjectProperty property) {
+	public AttributeObjectPropertyFeatureAssociationPathElement(BindingPathElement parent, EMFAttributeAssociation association,
+			EMFAttributeObjectProperty property) {
 		super(parent, property.getName(), EMFObjectIndividual.class);
 		objectProperty = property;
+		this.association = association;
 	}
 
 	public EMFAttributeObjectProperty getObjectProperty() {
@@ -30,10 +37,19 @@ public class AttributeObjectPropertyPathElement extends SimplePathElement {
 
 	@Override
 	public Type getType() {
-		if (getObjectProperty().getRange() instanceof IFlexoOntologyClass) {
-			return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) getObjectProperty().getRange());
+		if (association.getUpperBound() == null || (association.getUpperBound() >= 0 && association.getUpperBound() <= 1)) {
+			// Single cardinality
+			if (getObjectProperty().getRange() instanceof IFlexoOntologyClass) {
+				return IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) getObjectProperty().getRange());
+			}
+			return Object.class;
+		} else {
+			if (getObjectProperty().getRange() instanceof IFlexoOntologyClass) {
+				return new ParameterizedTypeImpl(List.class,
+						IndividualOfClass.getIndividualOfClass((IFlexoOntologyClass) getObjectProperty().getRange()));
+			}
+			return new ParameterizedTypeImpl(List.class, Object.class);
 		}
-		return EMFObjectIndividual.class;
 	}
 
 	@Override

@@ -15,9 +15,11 @@ import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.ontology.SubPropertyOfProperty;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterBindingFactory;
 import org.openflexo.foundation.viewpoint.TechnologySpecificCustomType;
+import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeAssociation;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeObjectProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFClassClass;
+import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceAssociation;
 import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
 
 /**
@@ -35,12 +37,18 @@ public final class EMFBindingFactory extends TechnologyAdapterBindingFactory {
 
 	@Override
 	protected SimplePathElement makeSimplePathElement(Object object, BindingPathElement parent) {
-		if (object instanceof EMFAttributeDataProperty) {
-			return new AttributeDataPropertyPathElement(parent, (EMFAttributeDataProperty) object);
-		} else if (object instanceof EMFAttributeObjectProperty) {
-			return new AttributeObjectPropertyPathElement(parent, (EMFAttributeObjectProperty) object);
-		} else if (object instanceof EMFReferenceObjectProperty) {
-			return new ReferenceObjectPropertyPathElement(parent, (EMFReferenceObjectProperty) object);
+		if (object instanceof EMFAttributeAssociation) {
+			if (((EMFAttributeAssociation) object).getFeature() instanceof EMFAttributeDataProperty) {
+				return new AttributeDataPropertyFeatureAssociationPathElement(parent, (EMFAttributeAssociation) object,
+						(EMFAttributeDataProperty) ((EMFAttributeAssociation) object).getFeature());
+			} else if (((EMFAttributeAssociation) object).getFeature() instanceof EMFAttributeObjectProperty) {
+				return new AttributeObjectPropertyFeatureAssociationPathElement(parent, (EMFAttributeAssociation) object,
+						(EMFAttributeObjectProperty) ((EMFAttributeAssociation) object).getFeature());
+			}
+		} else if (object instanceof EMFReferenceAssociation
+				&& ((EMFReferenceAssociation) object).getFeature() instanceof EMFReferenceObjectProperty) {
+			return new ObjectReferenceFeatureAssociationPathElement(parent, (EMFReferenceAssociation) object,
+					(EMFReferenceObjectProperty) ((EMFReferenceAssociation) object).getFeature());
 		}
 		logger.warning("Unexpected " + object);
 		return null;
@@ -70,7 +78,7 @@ public final class EMFBindingFactory extends TechnologyAdapterBindingFactory {
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
 			if (parentType.getOntologyClass() instanceof EMFClassClass) {
 				for (IFlexoOntologyFeatureAssociation fa : ((EMFClassClass) parentType.getOntologyClass()).getFeatureAssociations()) {
-					returned.add(getSimplePathElement(fa.getFeature(), parent));
+					returned.add(getSimplePathElement(fa, parent));
 				}
 			}
 			return returned;
