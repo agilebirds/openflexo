@@ -309,4 +309,14 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 		return BINDING_FACTORY;
 	}
 
+	@Override
+	public String getExpectedMetaModelExtension() {
+		return ".xsd";
+	}
+
+	@Override
+	public String getExpectedModelExtension(FlexoResource<XSDMetaModel> metaModel) {
+		return ".xml";
+	}
+
 }

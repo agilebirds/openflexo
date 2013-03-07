@@ -251,4 +251,14 @@ public class OWLTechnologyAdapter extends TechnologyAdapter<OWLOntology, OWLOnto
 		return BINDING_FACTORY;
 	}
 
+	@Override
+	public String getExpectedMetaModelExtension() {
+		return ".owl";
+	}
+
+	@Override
+	public String getExpectedModelExtension(FlexoResource<OWLOntology> metaModel) {
+		return ".owl";
+	}
+
 }

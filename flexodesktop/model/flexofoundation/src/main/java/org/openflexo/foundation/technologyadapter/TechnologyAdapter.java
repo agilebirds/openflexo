@@ -291,4 +291,8 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 		}
 		return null;
 	}
+
+	public abstract String getExpectedMetaModelExtension();
+
+	public abstract String getExpectedModelExtension(FlexoResource<MM> metaModel);
 }

@@ -3,6 +3,7 @@ package org.openflexo.foundation.view;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
@@ -107,7 +108,11 @@ public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 
 	public M getModel() {
 		if (getVirtualModelInstance() != null && model == null && StringUtils.isNotEmpty(modelURI)) {
-			model = (M) getVirtualModelInstance().getInformationSpace().getModelWithURI(modelURI);
+			FlexoModelResource<M, MM> modelResource = (FlexoModelResource<M, MM>) getVirtualModelInstance().getInformationSpace()
+					.getModelWithURI(modelURI);
+			if (modelResource != null) {
+				model = modelResource.getModel();
+			}
 		}
 		return model;
 	}

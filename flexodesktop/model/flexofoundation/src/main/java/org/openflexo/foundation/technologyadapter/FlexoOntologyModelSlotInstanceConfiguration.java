@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
@@ -69,11 +70,15 @@ public class FlexoOntologyModelSlotInstanceConfiguration<MS extends FlexoOntolog
 		if (option == DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel) {
 			modelUri = getAction().getFocusedObject().getProject().getURI() + "/Models/myModel";
 			relativePath = "/";
-			filename = "myModel.owl";
+			filename = "myModel"
+					+ getModelSlot().getTechnologyAdapter()
+							.getExpectedModelExtension((FlexoResource) getModelSlot().getMetaModelResource());
 		} else if (option == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
 			modelUri = "ResourceCenter/Models/";
 			relativePath = "/";
-			filename = "myModel.owl";
+			filename = "myModel"
+					+ getModelSlot().getTechnologyAdapter()
+							.getExpectedModelExtension((FlexoResource) getModelSlot().getMetaModelResource());
 		} else if (option == DefaultModelSlotInstanceConfigurationOption.SelectExistingModel) {
 			modelUri = null;
 			relativePath = null;

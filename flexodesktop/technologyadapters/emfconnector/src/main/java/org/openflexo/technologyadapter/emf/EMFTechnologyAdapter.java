@@ -412,4 +412,15 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 		return BINDING_FACTORY;
 	}
 
+	@Override
+	public String getExpectedMetaModelExtension() {
+		// Not applicable: this is a directory
+		return null;
+	}
+
+	@Override
+	public String getExpectedModelExtension(FlexoResource<EMFMetaModel> metaModel) {
+		return "." + ((EMFMetaModelResource) metaModel).getModelFileExtension();
+	}
+
 }

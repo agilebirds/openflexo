@@ -209,4 +209,16 @@ public class VirtualModelTechnologyAdapter<VMI extends VirtualModelInstance<VMI,
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public String getExpectedMetaModelExtension() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getExpectedModelExtension(FlexoResource<VM> metaModel) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -31,8 +31,8 @@ import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 
-public abstract class DiagramEditionSchemeAction<A extends EditionSchemeAction<A, ES>, ES extends EditionScheme & DiagramEditionScheme> extends
-		EditionSchemeAction<A, ES> {
+public abstract class DiagramEditionSchemeAction<A extends EditionSchemeAction<A, ES>, ES extends EditionScheme & DiagramEditionScheme>
+		extends EditionSchemeAction<A, ES> {
 
 	private static final Logger logger = Logger.getLogger(DiagramEditionSchemeAction.class.getPackage().getName());
 
@@ -53,6 +53,7 @@ public abstract class DiagramEditionSchemeAction<A extends EditionSchemeAction<A
 	@Override
 	public Object getValue(BindingVariable variable) {
 		if (variable.getVariableName().equals(DiagramEditionScheme.TOP_LEVEL)) {
+			System.out.println("Returning " + getDiagram().getRootPane());
 			return getDiagram().getRootPane();
 		}
 		return super.getValue(variable);
