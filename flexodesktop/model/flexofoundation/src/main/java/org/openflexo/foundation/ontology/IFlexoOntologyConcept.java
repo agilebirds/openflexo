@@ -29,7 +29,6 @@
 package org.openflexo.foundation.ontology;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Common interface for concepts of Ontology.
@@ -108,7 +107,7 @@ public interface IFlexoOntologyConcept extends IFlexoOntologyObject {
 	 * @return
 	 */
 	@Deprecated
-	public Set<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange();
+	public List<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange();
 
 	/**
 	 * Return all properties accessible in the scope of this ontology object, where declared domain is this object
@@ -116,7 +115,7 @@ public interface IFlexoOntologyConcept extends IFlexoOntologyObject {
 	 * @return
 	 */
 	@Deprecated
-	public Set<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain();
+	public List<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain();
 
 	// NB: implemented in FlexoModelObject
 	// @Deprecated

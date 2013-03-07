@@ -19,9 +19,8 @@
  */
 package org.openflexo.technologyadapter.xsd.model;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
@@ -32,14 +31,14 @@ public abstract class AbstractXSOntConcept extends AbstractXSOntObject implement
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(AbstractXSOntConcept.class
 			.getPackage().getName());
 
-	private final Set<XSOntProperty> propertiesTakingMySelfAsRange;
-	private final Set<XSOntProperty> propertiesTakingMySelfAsDomain;
+	private final List<XSOntProperty> propertiesTakingMySelfAsRange;
+	private final List<XSOntProperty> propertiesTakingMySelfAsDomain;
 
 	protected AbstractXSOntConcept(XSOntology ontology, String name, String uri, XSDTechnologyAdapter adapter) {
 		super(ontology, name, uri, adapter);
 
-		propertiesTakingMySelfAsRange = new HashSet<XSOntProperty>();
-		propertiesTakingMySelfAsDomain = new HashSet<XSOntProperty>();
+		propertiesTakingMySelfAsRange = new ArrayList<XSOntProperty>();
+		propertiesTakingMySelfAsDomain = new ArrayList<XSOntProperty>();
 	}
 
 	protected AbstractXSOntConcept(XSDTechnologyAdapter adapter) {
@@ -78,12 +77,12 @@ public abstract class AbstractXSOntConcept extends AbstractXSOntObject implement
 	}
 
 	@Override
-	public Set<? extends XSOntProperty> getPropertiesTakingMySelfAsRange() {
+	public List<? extends XSOntProperty> getPropertiesTakingMySelfAsRange() {
 		return propertiesTakingMySelfAsRange;
 	}
 
 	@Override
-	public Set<? extends XSOntProperty> getPropertiesTakingMySelfAsDomain() {
+	public List<? extends XSOntProperty> getPropertiesTakingMySelfAsDomain() {
 		// TODO Auto-generated method stub
 		return propertiesTakingMySelfAsDomain;
 	}

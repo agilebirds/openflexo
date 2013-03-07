@@ -19,6 +19,7 @@
  */
 package org.openflexo.technologyadapter.owl.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -65,8 +66,8 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 	private boolean domainsAndRangesAreRecursivelyUpToDate = false;
 	private Set<OWLProperty> declaredPropertiesTakingMySelfAsRange;
 	private Set<OWLProperty> declaredPropertiesTakingMySelfAsDomain;
-	protected Set<OWLProperty> propertiesTakingMySelfAsRange;
-	protected Set<OWLProperty> propertiesTakingMySelfAsDomain;
+	protected List<OWLProperty> propertiesTakingMySelfAsRange;
+	protected List<OWLProperty> propertiesTakingMySelfAsDomain;
 
 	private String uri;
 	private String name;
@@ -91,8 +92,8 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 		_semanticStatements = new Vector<OWLStatement>();
 		_annotationStatements = new Vector<PropertyStatement>();
 		_annotationObjectsStatements = new Vector<ObjectPropertyStatement>();
-		propertiesTakingMySelfAsRange = new HashSet<OWLProperty>();
-		propertiesTakingMySelfAsDomain = new HashSet<OWLProperty>();
+		propertiesTakingMySelfAsRange = new ArrayList<OWLProperty>();
+		propertiesTakingMySelfAsDomain = new ArrayList<OWLProperty>();
 		declaredPropertiesTakingMySelfAsRange = new HashSet<OWLProperty>();
 		declaredPropertiesTakingMySelfAsDomain = new HashSet<OWLProperty>();
 	}
@@ -862,7 +863,7 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 	}
 
 	@Override
-	public Set<OWLProperty> getPropertiesTakingMySelfAsRange() {
+	public List<OWLProperty> getPropertiesTakingMySelfAsRange() {
 		getDeclaredPropertiesTakingMySelfAsRange(); // Required in some cases: TODO: investigate this
 		if (!domainsAndRangesAreRecursivelyUpToDate) {
 			recursivelySearchRangeAndDomains();
@@ -871,7 +872,7 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 	}
 
 	@Override
-	public Set<OWLProperty> getPropertiesTakingMySelfAsDomain() {
+	public List<OWLProperty> getPropertiesTakingMySelfAsDomain() {
 		getDeclaredPropertiesTakingMySelfAsDomain(); // Required in some cases: TODO: investigate this
 		if (!domainsAndRangesAreRecursivelyUpToDate) {
 			recursivelySearchRangeAndDomains();
