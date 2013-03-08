@@ -1185,8 +1185,8 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 
 				if (currentElement != null) {
 					if (!(currentElement instanceof FunctionPathElement)
-							|| (!((FunctionPathElement) currentElement).getFunction().equals(
-									((FunctionPathElement) selectedValue.getElement()).getFunction()))) {
+							|| (((FunctionPathElement) currentElement).getFunction() == null || !((FunctionPathElement) currentElement)
+									.getFunction().equals(((FunctionPathElement) selectedValue.getElement()).getFunction()))) {
 						disconnect();
 						Function function = ((FunctionPathElement) selectedValue.getElement()).getFunction();
 						// TODO: we need to handle here generic FunctionPathElement and not only JavaMethodPathElement
