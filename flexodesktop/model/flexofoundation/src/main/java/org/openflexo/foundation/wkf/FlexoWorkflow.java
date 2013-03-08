@@ -1317,25 +1317,17 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 						}
 					}, getProject());
 				}
-				appendRoles(getImportedRoleList(), allAssignableRoles);
-				allAssignableRoles = Collections.unmodifiableList(allAssignableRoles);
 			}
+			allAssignableRoles = Collections.unmodifiableList(allAssignableRoles);
 		}
 		return allAssignableRoles;
 	}
 
-	public void appendRoles(RoleList roleList, List<Role> reply) {
+	private void appendRoles(RoleList roleList, List<Role> reply) {
 		if (roleList != null) {
 			for (Role r : roleList.getRoles()) {
 				if (r.getIsAssignable()) {
 					reply.add(r);
-				}
-			}
-			if (getImportedRoleList() != null) {
-				for (Role r : getImportedRoleList().getRoles()) {
-					if (r.getIsAssignable()) {
-						reply.add(r);
-					}
 				}
 			}
 		}
