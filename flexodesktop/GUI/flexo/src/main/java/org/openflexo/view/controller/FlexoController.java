@@ -101,6 +101,7 @@ import org.openflexo.foundation.cg.GeneratedCode;
 import org.openflexo.foundation.cg.GeneratedDoc;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.templates.CGTemplateObject;
+import org.openflexo.foundation.dkv.DKVObject;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DuplicateClassNameException;
 import org.openflexo.foundation.ie.IEObject;
@@ -1901,6 +1902,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return WKFIconLibrary.iconForObject((WKFObject) object);
 		} else if (object instanceof IEObject) {
 			return SEIconLibrary.iconForObject((IEObject) object);
+		} else if (object instanceof DKVObject) {
+			return SEIconLibrary.iconForObject((DKVObject) object);
 		} else if (object instanceof DMObject) {
 			return DMEIconLibrary.iconForObject((DMObject) object);
 		} else if (object instanceof ViewPointLibraryObject) {
