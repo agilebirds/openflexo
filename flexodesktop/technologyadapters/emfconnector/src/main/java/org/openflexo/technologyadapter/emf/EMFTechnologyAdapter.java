@@ -275,7 +275,9 @@ public class EMFTechnologyAdapter extends TechnologyAdapter<EMFModel, EMFMetaMod
 	public EMFModelResource retrieveModelResource(File aModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager) {
 		for (FlexoMetaModelResource<EMFModel, EMFMetaModel> mmRes : technologyContextManager.getAllMetaModels()) {
 			if (isValidModelFile(aModelFile, mmRes, technologyContextManager)) {
-				return retrieveModelResource(aModelFile, mmRes, technologyContextManager);
+				EMFModelResource returned = retrieveModelResource(aModelFile, mmRes, technologyContextManager);
+				returned.setMetaModelResource(mmRes);
+				return returned;
 			}
 		}
 		return null;

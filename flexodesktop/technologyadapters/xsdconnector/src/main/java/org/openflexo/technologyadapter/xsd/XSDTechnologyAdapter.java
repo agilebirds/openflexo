@@ -169,6 +169,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
 		XSDMetaModelResource xsdMetaModelResource = makeXSDMetaModelResource(aMetaModelFile,
 				retrieveMetaModelURI(aMetaModelFile, technologyContextManager));
+		xsdMetaModelResource.setName(aMetaModelFile.getName());
 		xsdMetaModelResource.setServiceManager(getTechnologyAdapterService().getServiceManager());
 		XSDTechnologyContextManager xsdContextManager = (XSDTechnologyContextManager) technologyContextManager;
 		xsdContextManager.registerMetaModel(xsdMetaModelResource);

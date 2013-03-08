@@ -74,11 +74,11 @@ public abstract class EMFModelResourceImpl extends FlexoFileResourceImpl<EMFMode
 			returned.setName(modelFile.getName());
 			returned.setFile(modelFile);
 			returned.setURI(modelURI);
-			returned.setMetaModel(emfMetaModelResource.getMetaModelData());
+			returned.setMetaModelResource(emfMetaModelResource);
 			technologyContextManager.registerModel(returned);
 			// Creates the EMF model from scratch
 			EMFModelConverter converter = new EMFModelConverter();
-			EMFModel resourceData = converter.convertModel(returned.getMetaModel(), returned.getEMFResource());
+			EMFModel resourceData = converter.convertModel(returned.getMetaModelResource().getMetaModelData(), returned.getEMFResource());
 			returned.setResourceData(resourceData);
 			System.out.println("ResourceData=" + returned.getModel());
 			return returned;
@@ -107,7 +107,7 @@ public abstract class EMFModelResourceImpl extends FlexoFileResourceImpl<EMFMode
 			returned.setName(modelFile.getName());
 			returned.setFile(modelFile);
 			returned.setURI(modelFile.toURI().toString());
-			returned.setMetaModel(emfMetaModelResource.getMetaModelData());
+			returned.setMetaModelResource(emfMetaModelResource);
 			returned.setServiceManager(technologyContextManager.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
 			technologyContextManager.registerModel(returned);
 			return returned;
@@ -134,7 +134,7 @@ public abstract class EMFModelResourceImpl extends FlexoFileResourceImpl<EMFMode
 		try {
 			getEMFResource().load(null);
 			EMFModelConverter converter = new EMFModelConverter();
-			EMFModel resourceData = converter.convertModel(getMetaModel(), getEMFResource());
+			EMFModel resourceData = converter.convertModel(getMetaModelResource().getMetaModelData(), getEMFResource());
 			setResourceData(resourceData);
 			return resourceData;
 		} catch (IOException e) {
@@ -230,15 +230,11 @@ public abstract class EMFModelResourceImpl extends FlexoFileResourceImpl<EMFMode
 	 */
 	public Resource getEMFResource() {
 		if (modelResource == null) {
-			if (getMetaModel() == null) {
+			if (getMetaModelResource() == null) {
 				logger.warning("EMFModel has no meta-model !!!");
 				return null;
 			}
-			if (getMetaModel().getResource() == null) {
-				logger.warning("EMFModel has a meta-model with null resource !!!");
-				return null;
-			}
-			modelResource = getMetaModel().getResource().getResourceFactory()
+			modelResource = getMetaModelResource().getMetaModelData().getResource().getResourceFactory()
 					.createResource(org.eclipse.emf.common.util.URI.createFileURI(getFile().getAbsolutePath()));
 		}
 		return modelResource;

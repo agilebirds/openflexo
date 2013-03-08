@@ -78,7 +78,7 @@ public abstract class XMLModelResourceImpl extends FlexoFileResourceImpl<XMLMode
 			returned.setName(modelFile.getName());
 			returned.setFile(modelFile);
 			returned.setURI(modelURI);
-			returned.setMetaModel(xsdMetaModelResource.getMetaModelData());
+			returned.setMetaModelResource(xsdMetaModelResource);
 			technologyContextManager.registerModel(returned);
 			// Creates the XML model from scratch
 			returned.setResourceData(new XMLModel(modelURI, xsdMetaModelResource.getFile(), technologyContextManager.getTechnologyAdapter()));
@@ -109,7 +109,7 @@ public abstract class XMLModelResourceImpl extends FlexoFileResourceImpl<XMLMode
 			returned.setName(modelFile.getName());
 			returned.setFile(modelFile);
 			returned.setURI(modelFile.toURI().toString());
-			returned.setMetaModel(xsdMetaModelResource.getMetaModelData());
+			returned.setMetaModelResource(xsdMetaModelResource);
 			technologyContextManager.registerModel(returned);
 			return returned;
 		} catch (ModelDefinitionException e) {

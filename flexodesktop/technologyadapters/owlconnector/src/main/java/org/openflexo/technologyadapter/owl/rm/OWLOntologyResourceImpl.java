@@ -33,6 +33,7 @@ import org.openflexo.foundation.rm.FlexoFileResource.FileWritingLock;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
@@ -64,7 +65,6 @@ public abstract class OWLOntologyResourceImpl extends FlexoFileResourceImpl<OWLO
 		try {
 			ModelFactory factory = new ModelFactory(OWLOntologyResource.class);
 			OWLOntologyResourceImpl returned = (OWLOntologyResourceImpl) factory.newInstance(OWLOntologyResource.class);
-			returned.setServiceManager(ontologyLibrary.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
 			returned.setTechnologyAdapter(ontologyLibrary.getTechnologyAdapter());
 			returned.setOntologyLibrary(ontologyLibrary);
 			returned.setName(owlFile.getName());
@@ -73,6 +73,9 @@ public abstract class OWLOntologyResourceImpl extends FlexoFileResourceImpl<OWLO
 			// Register the ontology as model and metamodel as it can be both
 			ontologyLibrary.registerModel(returned);
 			ontologyLibrary.registerMetaModel(returned);
+
+			returned.setServiceManager(ontologyLibrary.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
+
 			// Creates the ontology
 			returned.setResourceData(OWLOntology.createOWLEmptyOntology(ontologyURI, owlFile, ontologyLibrary,
 					ontologyLibrary.getTechnologyAdapter()));
@@ -203,14 +206,14 @@ public abstract class OWLOntologyResourceImpl extends FlexoFileResourceImpl<OWLO
 	}
 
 	@Override
-	public OWLOntology getMetaModel() {
-		logger.warning("getMetaModel() not implemented in OWLOntologyResource");
+	public FlexoMetaModelResource<OWLOntology, OWLOntology> getMetaModelResource() {
+		logger.warning("FlexoMetaModelResource() not implemented in OWLOntologyResource");
 		// TODO: implement this and extends cardinality
 		return null;
 	}
 
 	@Override
-	public void setMetaModel(OWLOntology aMetaModel) {
+	public void setMetaModelResource(FlexoMetaModelResource<OWLOntology, OWLOntology> aMetaModelResource) {
 		// TODO: implement this and extends cardinality
 	}
 
