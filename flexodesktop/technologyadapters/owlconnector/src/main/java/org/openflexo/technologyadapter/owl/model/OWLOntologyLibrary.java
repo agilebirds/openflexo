@@ -114,10 +114,10 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 
 		logger.info("ontologies=" + ontologies);
 
-		logger.info("getRDFSOntology()=" + getRDFSOntology());
-		logger.info("getRDFOntology()=" + getRDFOntology());
-		logger.info("getOWLOntology()=" + getOWLOntology());
-		logger.info("getFlexoConceptOntology()=" + getFlexoConceptOntology());
+		// logger.info("getRDFSOntology()=" + getRDFSOntology());
+		// logger.info("getRDFOntology()=" + getRDFOntology());
+		// logger.info("getOWLOntology()=" + getOWLOntology());
+		// logger.info("getFlexoConceptOntology()=" + getFlexoConceptOntology());
 
 		FlexoResource<OWLOntology> rdfsOntologyResource = ontologies.get(RDFSURIDefinitions.RDFS_ONTOLOGY_URI);
 		logger.info("rdfsOntologyResource=" + rdfsOntologyResource);
