@@ -324,12 +324,9 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 
 	@Override
 	public boolean hasModel(String name) {
-		logger.info("hasModel " + name + " ? ");
 		if (getOntology(name) != null) {
-			logger.info("YES");
 			return true;
 		}
-		logger.info("NO");
 		return getGraphMaker().hasGraph(name);
 	}
 

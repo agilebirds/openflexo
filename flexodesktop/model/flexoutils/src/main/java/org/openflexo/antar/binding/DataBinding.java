@@ -458,7 +458,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 			} catch (ParseException e1) {
 				// parse error
 				expression = null;
-				logger.warning(e1.getMessage());
+				// logger.warning(e1.getMessage());
 				return null;
 			}
 			needsParsing = false;
