@@ -12,7 +12,6 @@
         <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPPER" />
       </Label>
       <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="ActivationPrimitive" index="1" data="data.activationPrimitive" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-        <Assignment variable="component.bindingDefinition" value="data.activationPrimitiveBindingDefinition" />
         <Assignment variable="component.allowsCompoundBindings" value="true" />
         <Assignment variable="component.bindable" value="data" />
         <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPPER" />
@@ -22,12 +21,10 @@
       </Label>
       <Table iteratorClassName="org.openflexo.foundation.bindings.BindingAssignment" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="ActivationAssignments" index="3" data="data.activationAssignments" constraints="twocols(expandHorizontally=true;expandVertically=true;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
         <CustomColumn componentClassName="org.openflexo.components.widget.binding.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.receiver" format="object.stringRepresentation" title="receiver" columnWidth="150" resizable="true" displayTitle="true">
-          <ColumnAssignment variable="component.bindingDefinition" value="iterator.receiverBindingDefinition" />
-          <ColumnAssignment variable="component.bindable" value="iterator" />
+           <ColumnAssignment variable="component.bindable" value="iterator" />
         </CustomColumn>
         <LabelColumn data="iterator.assignLabel" title=" " columnWidth="25" resizable="false" displayTitle="false" />
         <CustomColumn componentClassName="org.openflexo.components.widget.binding.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.value" format="object.stringRepresentation" title="value" columnWidth="250" resizable="true" displayTitle="true">
-          <ColumnAssignment variable="component.bindingDefinition" value="iterator.valueBindingDefinition" />
           <ColumnAssignment variable="component.bindable" value="iterator" />
         </CustomColumn>
         <AddAction method="data.createActivationAssignement" name="new" />
@@ -38,7 +35,6 @@
         <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPPER" />
       </Label>
       <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="DesactivationPrimitive" index="5" data="data.desactivationPrimitive" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-        <Assignment variable="component.bindingDefinition" value="data.desactivationPrimitiveBindingDefinition" />
         <Assignment variable="component.allowsCompoundBindings" value="true" />
         <Assignment variable="component.bindable" value="data" />
         <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPPER" />
@@ -48,12 +44,10 @@
       </Label>
       <Table iteratorClassName="org.openflexo.foundation.bindings.BindingAssignment" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="DesactivationAssignments" index="7" data="data.desactivationAssignments" constraints="twocols(expandHorizontally=true;expandVertically=true;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
         <CustomColumn componentClassName="org.openflexo.components.widget.binding.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.receiver" format="object.stringRepresentation" title="receiver" columnWidth="150" resizable="true" displayTitle="true">
-          <ColumnAssignment variable="component.bindingDefinition" value="iterator.receiverBindingDefinition" />
           <ColumnAssignment variable="component.bindable" value="iterator" />
         </CustomColumn>
         <LabelColumn data="iterator.assignLabel" title=" " columnWidth="25" resizable="false" displayTitle="false" />
         <CustomColumn componentClassName="org.openflexo.components.widget.binding.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.value" format="object.stringRepresentation" title="value" columnWidth="250" resizable="true" displayTitle="true">
-          <ColumnAssignment variable="component.bindingDefinition" value="iterator.valueBindingDefinition" />
           <ColumnAssignment variable="component.bindable" value="iterator" />
         </CustomColumn>
         <AddAction method="data.createDesactivationAssignement" name="new" />
