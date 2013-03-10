@@ -16,7 +16,7 @@
 		<property name="inputMessageDefinition.name" label="input_message" widget="TEXT_FIELD" constraint="0">
 			<param name="columns" value="10"/>
 			<param name="validateOnReturn" value="true"/>
-		  <param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		  <param name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST"/>
 		</property>
 		<property_list name="inputMessageDefinition.entries" label="input_message" constraint="1">
 		  <param name="displayLabel" value="false"/>
@@ -39,7 +39,7 @@
 		  </property_list_column>
 		  <property_list_action name="new" type="ADD" method="inputMessageDefinition.createNewMessageEntry"/>
 		  <property_list_action name="delete" type="DELETE" method="inputMessageDefinition.deleteMessageEntry" isAvailable="inputMessageDefinition.isMessageEntryDeletable"/>
-		  <param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		  <param name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST"/>
 		</property_list>
 	</tab>
 </inspector>

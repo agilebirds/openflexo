@@ -25,7 +25,7 @@
 			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
 			<param name="binding_definition" value="bindingNameDefinition"/>			
 			<param name="creates_entry" value="createsBindingVariable"/>			
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 	</tab>
 

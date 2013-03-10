@@ -278,7 +278,10 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository> imp
 		defaultProperties.put("war.file", warFile.getAbsolutePath());
 		defaultProperties.put("zipped.api.file", ZIPPED_API_FILE.getAbsolutePath());
 		defaultProperties.put("zipped.framework.file", ZIPPED_FRAMEWORK_FILE.getAbsolutePath());
-		defaultProperties.put("flexo.framework.dir", getProject().getFrameworksToEmbedDirectory().getAbsolutePath());
+		File[] listFiles = getProject().getFrameworksToEmbedDirectory().listFiles();
+		if (listFiles != null && listFiles.length > 0) {
+			defaultProperties.put("flexo.framework.dir", getProject().getFrameworksToEmbedDirectory().getAbsolutePath());
+		}
 		defaultProperties.put("woproject.lib", WOPROJECT_JAR.getAbsolutePath());
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Copying repository (" + getRepository().getDirectory().getAbsolutePath() + ") to temp dir: "

@@ -3,7 +3,7 @@
 	<tab name="Basic" index="0" layout="DEFAULT">
 		<property name="TRCssType" label="css_type" widget="DROPDOWN" constraint="0">
 			<param name="format" value="name"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 	</tab>
 

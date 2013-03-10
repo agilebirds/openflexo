@@ -13,7 +13,7 @@
           <ColumnAssignment variable="component.bindingDefinition" value="iterator.bindingDefinition" />
           <ColumnAssignment variable="component.bindable" value="iterator" />
         </CustomColumn>
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Table>
     </Tab>
     <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">

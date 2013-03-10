@@ -22,7 +22,7 @@
 
 	<tab name="Doc" index="2" layout="DEFAULT">
 		<property name="funcName" label="function_name" widget="TEXT_FIELD" constraint="2">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 <!--		<property name="behavior" label="behavior" widget="TEXT_AREA" constraint="4">
 			<param name="height" value="64"/>

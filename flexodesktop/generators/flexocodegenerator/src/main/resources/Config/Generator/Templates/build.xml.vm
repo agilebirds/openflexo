@@ -36,7 +36,8 @@
         <unzip src="${zipped.framework.file}" dest="${framework.dir}/Library/Frameworks/"/>
     </target>
     
-    <target name="copy-framework" depends="properties" if="${flexo.framework.dir}">
+    <target name="copy-framework" depends="properties" if="flexo.framework.dir">
+    	<echo message="Copying embedded framewrks from ${flexo.framework.dir}"/>
     	<copy todir="${framework.dir}/Library/Frameworks/" verbose="true">
             <fileset dir="${flexo.framework.dir}">
                 <include name="**/*"/>

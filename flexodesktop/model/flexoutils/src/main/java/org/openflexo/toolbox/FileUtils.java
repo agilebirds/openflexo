@@ -172,7 +172,7 @@ public class FileUtils {
 					case IGNORE_EXISTING:
 						continue;
 					case REPLACE_OLD_ONLY:
-						if (!getDiskLastModifiedDate(src).after(getDiskLastModifiedDate(destFile))) {
+						if (!getDiskLastModifiedDate(curFile).after(getDiskLastModifiedDate(destFile))) {
 							continue;
 						}
 					default:

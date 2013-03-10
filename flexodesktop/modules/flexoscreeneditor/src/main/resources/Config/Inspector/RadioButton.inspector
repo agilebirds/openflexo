@@ -5,11 +5,11 @@
 		<property name="buttonLabel" label="label" widget="TEXT_FIELD" constraint="1"/>
 		<property name="displayLabel" label="displayLabel" widget="CHECKBOX" constraint="2"/>		
 		<property name="labelAlign" label="alignement" widget="CHECKBOX" constraint="3">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="value" label="default_value" widget="CHECKBOX" constraint="4"/>
     	<property name="useOneNameForAllRadios" label="use_one_name_for_all_radios" widget="CHECKBOX" constraint="5">
-    		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+    		<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
     	</property>
 		<property name="disabled" label="disabled" widget="CHECKBOX" constraint="6"/>
 	</tab>

@@ -35,12 +35,12 @@
     </Tab>
     <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="DataTab">
       <Label label="condition" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.isConditional = true)" name="ConditionPrimitiveLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Label>
       <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="ConditionPrimitive" index="5" data="data.conditionPrimitive" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.isConditional = true)">
         <Assignment variable="component.bindingDefinition" value="data.conditionPrimitiveBindingDefinition" />
         <Assignment variable="component.bindable" value="data" />
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Custom>
       <Parameter name="visibleFor" value="ANALYST,DEVELOPER,MAINTAINER " />
     </Tab>

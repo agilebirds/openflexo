@@ -8,7 +8,7 @@
 		<property name="projectDirectory" label="location" widget="READ_ONLY_TEXT_FIELD" constraint="1"/>
 		<property name="projectDescription" label="description" widget="TEXT_AREA" constraint="2">
 			<param name="height" value="200"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="flexoWorkflow.rootProcess" label="root_process" widget="DROPDOWN" depend="flexoWorkflow" constraint="3">
 			<param name="dynamiclist" value="flexoWorkflow.topLevelFlexoProcesses"/>
@@ -18,7 +18,7 @@
 		<property name="targetType" label="target" widget="DROPDOWN" constraint="5">
 			<param name="format" value="name"/>
 			<param name="showReset" value="false"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="cssSheet" label="css_sheet" widget="DROPDOWN" constraint="6">
 			<param name="format" value="name"/>
@@ -29,7 +29,7 @@
 		</property>
 		<property name="creationDateAsString" label="creation_date" widget="READ_ONLY_TEXT_FIELD" constraint="8"/>
 		<property name="creationUserId" label="creation_user_id" widget="READ_ONLY_TEXT_FIELD" constraint="9">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 	</tab>
 	
