@@ -230,7 +230,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 		}
 
 		// Hack to be removed (implements model resources as FlexoResource interface !!!)
-		System.out.println("HACK !!!!!!! saving the models...");
+		/*System.out.println("HACK !!!!!!! saving the models...");
 		for (ModelSlotInstance<?, ?> instance : getEditionPatternInstance().getVirtualModelInstance().getModelSlotInstances()) {
 			System.out.println("Slot " + instance + " model " + instance.getModel());
 			if (instance.getModel() instanceof FlexoFileResource) {
@@ -240,7 +240,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 					e.printStackTrace();
 				}
 			}
-		}
+		}*/
 
 	}
 
