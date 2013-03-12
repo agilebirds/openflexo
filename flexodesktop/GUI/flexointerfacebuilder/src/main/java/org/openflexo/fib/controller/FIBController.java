@@ -362,7 +362,7 @@ public class FIBController extends Observable implements BindingEvaluationContex
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				isPopupTrigger = true;
+				isPopupTrigger = e.isPopupTrigger();
 			}
 		});
 		returned.getDynamicJComponent().addKeyListener(new KeyAdapter() {
