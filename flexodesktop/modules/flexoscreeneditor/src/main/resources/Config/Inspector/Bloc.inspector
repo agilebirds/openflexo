@@ -9,7 +9,7 @@
 
 	<tab name="Advanced" index="1" layout="DEFAULT">
 		<property name="hideTable" label="hide_table" widget="CHECKBOX" constraint="2">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 	</tab>
 

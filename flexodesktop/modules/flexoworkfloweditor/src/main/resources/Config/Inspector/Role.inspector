@@ -86,7 +86,7 @@
 		</property>
 		<property name="height('default')" label="height" widget="DOUBLE" constraint="5">
 			<param name="columns" value="10"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="textColor('default')" label="text_color" widget="COLOR" constraint="6">
 			<param name="columns" value="10"/>

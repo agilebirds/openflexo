@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-import org.openflexo.builders.FlexoExternalMain;
 import org.openflexo.builders.FlexoExternalMainWithProject;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.dg.ProjectDocGenerator;
@@ -123,7 +122,7 @@ public class FlexoBuilderEditor extends DefaultFlexoEditor implements ProjectGen
 						doNextTodo(action);
 					}
 					if (FlexoBuilderEditor.this.exception != null) {
-						externalMainWithProject.setExitCodeCleanUpAndExit(FlexoExternalMain.UNEXPECTED_EXCEPTION);
+						externalMainWithProject.setExitCodePrintStackTraceCleanUpAndExit(FlexoBuilderEditor.this.exception);
 					}
 				}
 			};
@@ -132,9 +131,8 @@ public class FlexoBuilderEditor extends DefaultFlexoEditor implements ProjectGen
 			try {
 				action.doActionInContext();
 			} catch (Throwable e) {
-				e.printStackTrace();
 				FlexoBuilderEditor.this.exception = e;
-				externalMainWithProject.setExitCodeCleanUpAndExit(FlexoExternalMain.UNEXPECTED_EXCEPTION);
+				externalMainWithProject.setExitCodePrintStackTraceCleanUpAndExit(e);
 			}
 			if (!action.isEmbedded()) {
 				doNextTodo(action);
@@ -170,10 +168,9 @@ public class FlexoBuilderEditor extends DefaultFlexoEditor implements ProjectGen
 					public void run() {
 						try {
 							toRun.run();
-						} catch (Throwable e) {
-							e.printStackTrace();
-							FlexoBuilderEditor.this.exception = e;
-							externalMainWithProject.setExitCodeCleanUpAndExit(FlexoExternalMain.UNEXPECTED_EXCEPTION);
+						} catch (Throwable t) {
+							FlexoBuilderEditor.this.exception = t;
+							externalMainWithProject.setExitCodePrintStackTraceCleanUpAndExit(t);
 						}
 					}
 

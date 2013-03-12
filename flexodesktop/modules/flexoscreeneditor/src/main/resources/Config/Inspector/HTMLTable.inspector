@@ -6,10 +6,10 @@
 		<property name="rowCount" label="rows" widget="INTEGER" constraint="3">
 		</property>
 		<property name="grid" label="grid_on" widget="CHECKBOX" constraint="4" help="grid around Cells">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="noCSS" label="no_css_for_row" widget="CHECKBOX" constraint="5" help="no alternate color for rows.">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="isShowingBorder" label="show_table_border" widget="CHECKBOX" constraint="6" help="no alternate color for rows."/>
 	</tab>

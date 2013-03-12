@@ -24,7 +24,51 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import org.openflexo.foundation.dkv.DKVModel;
+import org.openflexo.foundation.dkv.DKVModel.DomainList;
+import org.openflexo.foundation.dkv.DKVModel.LanguageList;
+import org.openflexo.foundation.dkv.DKVObject;
+import org.openflexo.foundation.dkv.Domain;
+import org.openflexo.foundation.dkv.Domain.KeyList;
+import org.openflexo.foundation.dkv.Domain.ValueList;
+import org.openflexo.foundation.dkv.Key;
+import org.openflexo.foundation.dkv.Language;
+import org.openflexo.foundation.dkv.Value;
+import org.openflexo.foundation.ie.ComponentInstance;
 import org.openflexo.foundation.ie.IEObject;
+import org.openflexo.foundation.ie.IEWOComponent;
+import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
+import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
+import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
+import org.openflexo.foundation.ie.cl.PopupComponentDefinition;
+import org.openflexo.foundation.ie.cl.ReusableComponentDefinition;
+import org.openflexo.foundation.ie.cl.TabComponentDefinition;
+import org.openflexo.foundation.ie.menu.FlexoItemMenu;
+import org.openflexo.foundation.ie.operator.ConditionalOperator;
+import org.openflexo.foundation.ie.operator.RepetitionOperator;
+import org.openflexo.foundation.ie.widget.IEBIRTWidget;
+import org.openflexo.foundation.ie.widget.IEBlocWidget;
+import org.openflexo.foundation.ie.widget.IEBrowserWidget;
+import org.openflexo.foundation.ie.widget.IEButtonWidget;
+import org.openflexo.foundation.ie.widget.IECheckBoxWidget;
+import org.openflexo.foundation.ie.widget.IEDropDownWidget;
+import org.openflexo.foundation.ie.widget.IEDynamicImage;
+import org.openflexo.foundation.ie.widget.IEFileUploadWidget;
+import org.openflexo.foundation.ie.widget.IEHTMLTableWidget;
+import org.openflexo.foundation.ie.widget.IEHeaderWidget;
+import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
+import org.openflexo.foundation.ie.widget.IELabelWidget;
+import org.openflexo.foundation.ie.widget.IEMultimediaWidget;
+import org.openflexo.foundation.ie.widget.IERadioButtonWidget;
+import org.openflexo.foundation.ie.widget.IESequence;
+import org.openflexo.foundation.ie.widget.IESequenceTab;
+import org.openflexo.foundation.ie.widget.IEStringWidget;
+import org.openflexo.foundation.ie.widget.IETDWidget;
+import org.openflexo.foundation.ie.widget.IETRWidget;
+import org.openflexo.foundation.ie.widget.IETabWidget;
+import org.openflexo.foundation.ie.widget.IETextAreaWidget;
+import org.openflexo.foundation.ie.widget.IETextFieldWidget;
+import org.openflexo.foundation.ie.widget.IEWysiwygWidget;
 import org.openflexo.toolbox.ImageIconResource;
 
 /**
@@ -116,9 +160,106 @@ public class SEIconLibrary extends IconLibrary {
 	public static final ImageIcon SMALL_MULTIMEDIA = new ImageIconResource("Icons/Model/SE/Small_MULTIMEDIA.gif");
 	public static final ImageIcon REUSABLEWIDGET_ICON = new ImageIconResource("Icons/Model/SE/ReusableComponent.gif");
 
-	public static ImageIcon iconForObject(IEObject object) {
-		logger.warning("iconForObject(IEObject) not implemented yet");
+	public static ImageIcon iconForObject(DKVObject object) {
+		if (object instanceof DKVModel) {
+			return DOMAIN_ICON;
+		} else if (object instanceof Domain) {
+			return DOMAIN_ICON;
+		} else if (object instanceof DomainList) {
+			return LIST_ICON;
+		} else if (object instanceof LanguageList) {
+			return LIST_ICON;
+		} else if (object instanceof Language) {
+			return LANGUAGE_ICON;
+		} else if (object instanceof Key) {
+			return DKV_KEY_ICON;
+		} else if (object instanceof Value) {
+			return VALUE_ICON;
+		} else if (object instanceof KeyList) {
+			return LIST_ICON;
+		} else if (object instanceof ValueList) {
+			return LIST_ICON;
+		}
+
 		return null;
 	}
 
+	public static ImageIcon iconForObject(IEObject object) {
+		if (object instanceof ComponentInstance) {
+			object = ((ComponentInstance) object).getComponentDefinition();
+		}
+		if (object instanceof IEWOComponent) {
+			object = ((IEWOComponent) object).getComponentDefinition();
+		}
+
+		if (object instanceof OperationComponentDefinition) {
+			return OPERATION_COMPONENT_ICON;
+		} else if (object instanceof PopupComponentDefinition) {
+			return POPUP_COMPONENT_ICON;
+		} else if (object instanceof TabComponentDefinition) {
+			return TAB_COMPONENT_ICON;
+		} else if (object instanceof ReusableComponentDefinition) {
+			return REUSABLE_COMPONENT_ICON;
+		} else if (object instanceof FlexoComponentFolder) {
+			return IE_FOLDER_ICON;
+		} else if (object instanceof FlexoComponentLibrary) {
+			return COMPONENT_LIBRARY_ICON;
+		} else if (object instanceof FlexoItemMenu) {
+			return MENUITEM_ICON;
+		} else if (object instanceof IEBlocWidget) {
+			return BLOC_ICON;
+		} else if (object instanceof IEHTMLTableWidget) {
+			return HTMLTABLE_ICON;
+		} else if (object instanceof IETRWidget) {
+			return TR_ICON;
+		} else if (object instanceof IETDWidget) {
+			return TD_ICON;
+		} else if (object instanceof IESequenceTab && ((IESequenceTab) object).isRoot()) {
+			return THUMBNAILCONTAINER_ICON;
+		} else if (object instanceof IEStringWidget) {
+			return STRING_ICON;
+		} else if (object instanceof IELabelWidget) {
+			return LABEL_ICON;
+		} else if (object instanceof IEWysiwygWidget) {
+			return WYSIWYG_ICON;
+		} else if (object instanceof IEDropDownWidget) {
+			return DROPDOWN_ICON;
+		} else if (object instanceof IEDynamicImage) {
+			return IMAGE_FILE;
+		} else if (object instanceof IEMultimediaWidget) {
+			return MULTIMEDIA_ICON;
+		} else if (object instanceof IEButtonWidget) {
+			return BUTTON_ICON;
+		} else if (object instanceof IEBIRTWidget) {
+			return BIRT_ICON;
+		} else if (object instanceof IETextFieldWidget) {
+			return TEXTFIELD_ICON;
+		} else if (object instanceof IETextAreaWidget) {
+			return TEXTAREA_ICON;
+		} else if (object instanceof IEHeaderWidget) {
+			return HEADER_ICON;
+		} else if (object instanceof IEHyperlinkWidget) {
+			return HYPERLINK_ICON;
+		} else if (object instanceof IECheckBoxWidget) {
+			return CHECKBOX_ICON;
+		} else if (object instanceof IEFileUploadWidget) {
+			return FILEUPLOAD_ICON;
+		} else if (object instanceof IETabWidget) {
+			return TAB_COMPONENT_ICON;
+		} else if (object instanceof TabComponentDefinition) {
+			return TAB_COMPONENT_ICON;
+		} else if (object instanceof IERadioButtonWidget) {
+			return RADIOBUTTON_ICON;
+		} else if (object instanceof IEBrowserWidget) {
+			return BROWSER_ICON;
+		} else if (object instanceof IESequence) {
+			return CONDITIONAL_ICON;
+		} else if (object instanceof RepetitionOperator) {
+			return REPETITION_ICON;
+		} else if (object instanceof ConditionalOperator) {
+			return CONDITIONAL_ICON;
+		}
+
+		return null;
+	}
 }

@@ -167,7 +167,7 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 	public FlexoWorkflow(FlexoWorkflowBuilder builder) {
 		this(builder.getProject());
 		builder.workflow = this;
-		_resource = builder.resource;
+		setFlexoResource(builder.resource);
 		initializeDeserialization(builder);
 	}
 
@@ -282,6 +282,7 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 	@Override
 	public void setFlexoResource(FlexoResource resource) {
 		_resource = (FlexoWorkflowResource) resource;
+		registerOnProject();
 	}
 
 	@Override
@@ -1316,25 +1317,17 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 						}
 					}, getProject());
 				}
-				appendRoles(getImportedRoleList(), allAssignableRoles);
-				allAssignableRoles = Collections.unmodifiableList(allAssignableRoles);
 			}
+			allAssignableRoles = Collections.unmodifiableList(allAssignableRoles);
 		}
 		return allAssignableRoles;
 	}
 
-	public void appendRoles(RoleList roleList, List<Role> reply) {
+	private void appendRoles(RoleList roleList, List<Role> reply) {
 		if (roleList != null) {
 			for (Role r : roleList.getRoles()) {
 				if (r.getIsAssignable()) {
 					reply.add(r);
-				}
-			}
-			if (getImportedRoleList() != null) {
-				for (Role r : getImportedRoleList().getRoles()) {
-					if (r.getIsAssignable()) {
-						reply.add(r);
-					}
 				}
 			}
 		}
@@ -2090,7 +2083,7 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 
 	@Override
 	public boolean isCache() {
-		return getFlexoResource().isCache();
+		return getFlexoResource() != null && getFlexoResource().isCache();
 	}
 
 	@Override

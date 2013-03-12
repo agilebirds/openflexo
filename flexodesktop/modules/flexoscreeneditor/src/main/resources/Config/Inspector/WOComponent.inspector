@@ -46,7 +46,7 @@
 		  <property_list_column name="isSettable" label="settable" widget="CHECKBOX">
 			<param name="column_width" value="25"/>
 			<param name="resizable" value="true"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		  </property_list_column>
 		  <property_list_action name="new" type="ADD" method="componentDefinition.createNewBinding"/>
 		  <property_list_action name="delete" type="DELETE" method="componentDefinition.deleteBinding" isAvailable="componentDefinition.isBindingDefinitionDeletable"/>

@@ -188,6 +188,7 @@ public class Flexo {
 				}
 			}
 		}
+		// 1. Very important to initiate first the ResourceLocator. Nothing else. See also issue 463.
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS || !isDev) {
 			getResourcePath();
 		}
@@ -266,7 +267,7 @@ public class Flexo {
 						module = Modules.getInstance().getAvailableModules().get(0);
 					}
 				}
-				applicationContext.getModuleLoader().getModuleInstance(module).activateModule();
+				applicationContext.getModuleLoader().switchToModule(module);
 				applicationContext.getProjectLoader().loadProject(projectDirectory);
 			} catch (ProjectLoadingCancelledException e) {
 				// project need a conversion, but user cancelled the conversion.

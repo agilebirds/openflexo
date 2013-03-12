@@ -12,13 +12,13 @@
 		<property name="inputMessage.name" label="input_message" widget="READ_ONLY_TEXT_FIELD" constraint="0" depends="hasInputMessage" conditional="hasInputMessage=true">
 			<param name="columns" value="10"/>
 			<param name="validateOnReturn" value="true"/>
-		  <param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		  <param name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST"/>
 		</property>
 		<property_list name="inputMessage.bindings" label="input_message" constraint="1" depends="hasInputMessage" conditional="hasInputMessage=true">
 		  <param name="displayLabel" value="false"/>
 		  <param name="visible_row_count" value="4"/>
 		  <param name="row_height" value="20"/>
-		  <param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		  <param name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST"/>
 		  <property_list_column name="bindingDefinition.variableName" label="name" widget="TEXT_FIELD">
 			<param name="column_width" value="80"/>
 			<param name="resizable" value="true"/>
@@ -46,13 +46,13 @@
 		<property name="outputMessage.name" label="output_message" widget="READ_ONLY_TEXT_FIELD" constraint="2" depends="hasOutputMessage" conditional="hasOutputMessage=true">
 			<param name="columns" value="10"/>
 			<param name="validateOnReturn" value="true"/>
-		  <param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		  <param name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST"/>
 		</property>
 		<property_list name="outputMessage.bindings" label="output_message" constraint="3" depends="hasOutputMessage" conditional="hasOutputMessage=true">
 		  <param name="displayLabel" value="false"/>
 		  <param name="visible_row_count" value="4"/>
 		  <param name="row_height" value="20"/>
-		  <param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		  <param name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST"/>
 		  <property_list_column name="bindingDefinition.variableName" label="name" widget="TEXT_FIELD">
 			<param name="column_width" value="80"/>
 			<param name="resizable" value="true"/>

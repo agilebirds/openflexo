@@ -29,6 +29,7 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -906,18 +907,22 @@ public class XMLMapping {
 			if (followPrimaryAndCopiableOnly && (!property.isPrimary() || !property.isCopyable())) {
 				continue;
 			}
-			Object o = property.getKeyValueProperty().getObjectValue(object);
+			KeyValueProperty keyValueProperty = property.getKeyValueProperty();
+			if (keyValueProperty instanceof SingleKeyValueProperty && keyValueProperty.getType().isPrimitive()) {
+				continue;
+			}
+			Object o = keyValueProperty.getObjectValue(object);
 			if (o != null) {
 				if (recursive) {
-					if (o instanceof Hashtable) {
-						Hashtable<Object, Object> hash = (Hashtable<Object, Object>) o;
+					if (o instanceof Map) {
+						Map<?, ?> hash = (Map<?, ?>) o;
 						for (Object oInHash : hash.values()) {
 							if (!visited.contains(oInHash)) {
 								v.addAll(getEmbeddedObjectsForObject(oInHash, v, klass, recursive, followPrimaryAndCopiableOnly, visited));
 							}
 						}
-					} else if (o instanceof Vector) {
-						Vector<Object> vector = (Vector<Object>) o;
+					} else if (o instanceof List) {
+						List<?> vector = (List<?>) o;
 						for (Object oInVector : vector) {
 							if (!visited.contains(oInVector)) {
 								v.addAll(getEmbeddedObjectsForObject(oInVector, v, klass, recursive, followPrimaryAndCopiableOnly, visited));

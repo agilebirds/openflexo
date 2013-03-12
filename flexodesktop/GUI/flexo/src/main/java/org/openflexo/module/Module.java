@@ -391,8 +391,8 @@ public abstract class Module implements IModule {
 			}
 		} catch (ClassNotFoundException e) {
 			if (!notFoundNotified) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Could not find MODULE " + fullQualifiedModuleName);
+				if (logger.isLoggable(Level.INFO)) {
+					logger.info("Could not find MODULE " + fullQualifiedModuleName);
 				}
 				notFoundNotified = true;
 			}

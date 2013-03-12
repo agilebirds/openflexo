@@ -187,8 +187,10 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		((AbstractDocument) textComponent.getDocument()).setDocumentFilter(new DocumentFilter() {
 			@Override
 			public void insertString(FilterBypass fb, int offset, String text, AttributeSet attr) throws BadLocationException {
-				if (text.equals("\n") || text.equals("\r\n")) {
-					return;
+				if (!getGraphicalRepresentation().getIsMultilineAllowed()) {
+					if (text.equals("\n") || text.equals("\r\n")) {
+						return;
+					}
 				}
 				text = filteredText(text);
 				super.insertString(fb, offset, text, attr);
@@ -196,9 +198,11 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 
 			@Override
 			public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-				if (length == 0) {
-					if (text.equals("\n") || text.equals("\r\n")) {
-						return;
+				if (!getGraphicalRepresentation().getIsMultilineAllowed()) {
+					if (length == 0) {
+						if (text.equals("\n") || text.equals("\r\n")) {
+							return;
+						}
 					}
 				}
 				text = filteredText(text);

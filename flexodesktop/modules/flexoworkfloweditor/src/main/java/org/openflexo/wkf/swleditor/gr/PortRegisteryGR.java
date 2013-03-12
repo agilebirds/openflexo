@@ -348,25 +348,7 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 	}
 
 	@Override
-	public FGEArea getLocationConstrainedAreaForChild(AbstractNodeGR node) {
-		Vector<FGESegment> lines = new Vector<FGESegment>();
-		for (int i = 0; i < getSwimmingLaneNb(); i++) {
-			double x1 = SWIMMING_LANE_BORDER - node.getBorder().left;
-			double x2 = getWidth() - SWIMMING_LANE_BORDER - node.getWidth() - node.getBorder().left;
-			double y = i * getHeight() / getSwimmingLaneNb() + getHeight() / getSwimmingLaneNb() / 2 - node.getHeight() / 2
-					- node.getBorder().top;
-			lines.add(new FGESegment(x1, y, x2, y));
-		}
-		return FGEUnionArea.makeUnion(lines);
-	}
-
-	@Override
 	public void notifyObjectHasResized() {
-		for (GraphicalRepresentation gr : getContainedGraphicalRepresentations()) {
-			if (gr instanceof AbstractNodeGR) {
-				((AbstractNodeGR) gr).resetLocationConstrainedArea();
-			}
-		}
 		super.notifyObjectHasResized();
 		updateControlArea();
 	}

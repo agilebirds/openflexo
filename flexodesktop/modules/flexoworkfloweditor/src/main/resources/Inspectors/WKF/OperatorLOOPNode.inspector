@@ -6,60 +6,60 @@
       <Label label="loop_type" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="LoopTypeLabel" localize="true" />
       <DropDown index="5" data="data.loopType" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="LoopType" localize="true" iteratorClassName="org.openflexo.foundation.wkf.node.LoopType" autoSelectFirstRow="false" />
       <Label label="condition" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((data.loopType = &quot;WHILE&quot;) | (data.loopType = &quot;UNTIL&quot;))" name="ConditionLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Label>
       <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="Condition" index="7" data="data.condition" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((data.loopType = &quot;WHILE&quot;) | (data.loopType = &quot;UNTIL&quot;))">
         <Assignment variable="component.bindingDefinition" value="data.CONDITION_BINDING_DEFINITION" />
         <Assignment variable="component.bindable" value="data" />
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Custom>
       <Label label="iterator" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.loopType = &quot;FOR_INCREMENT&quot;)" name="IteratorLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Label>
       <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="Iterator" index="9" data="data.iterator" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.loopType = &quot;FOR_INCREMENT&quot;)">
         <Assignment variable="component.bindingDefinition" value="data.ITERATOR_BINDING_DEFINITION" />
         <Assignment variable="component.bindable" value="data" />
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Custom>
       <Label label="start_value" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.loopType = &quot;FOR_INCREMENT&quot;)" name="BeginValueLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Label>
       <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="BeginValue" index="11" data="data.beginValue" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.loopType = &quot;FOR_INCREMENT&quot;)">
         <Assignment variable="component.bindingDefinition" value="data.BEGIN_VALUE_BINDING_DEFINITION" />
         <Assignment variable="component.bindable" value="data" />
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Custom>
       <Label label="end_value" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.loopType = &quot;FOR_INCREMENT&quot;)" name="EndValueLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Label>
       <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="EndValue" index="13" data="data.endValue" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.loopType = &quot;FOR_INCREMENT&quot;)">
         <Assignment variable="component.bindingDefinition" value="data.END_VALUE_BINDING_DEFINITION" />
         <Assignment variable="component.bindable" value="data" />
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Custom>
       <Label label="increment_value" index="14" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.loopType = &quot;FOR_INCREMENT&quot;)" name="IncrementValueLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Label>
       <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="IncrementValue" index="15" data="data.incrementValue" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.loopType = &quot;FOR_INCREMENT&quot;)">
         <Assignment variable="component.bindingDefinition" value="data.INCREMENT_VALUE_BINDING_DEFINITION" />
         <Assignment variable="component.bindable" value="data" />
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Custom>
       <Label label="collection" index="16" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.loopType = &quot;FOR_COLLECTION&quot;)" name="IterationCollectionLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Label>
       <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="IterationCollection" index="17" data="data.iterationCollection" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.loopType = &quot;FOR_COLLECTION&quot;)">
         <Assignment variable="component.bindingDefinition" value="data.ITERATION_COLLECTION_BINDING_DEFINITION" />
         <Assignment variable="component.bindable" value="data" />
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Custom>
       <Label label="iterator" index="18" constraints="twocols(expandHorizontally=false;expandVertically=false;index=14;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.loopType = &quot;FOR_COLLECTION&quot;)" name="CollectionItemLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Label>
       <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="CollectionItem" index="19" data="data.collectionItem" constraints="twocols(expandHorizontally=true;expandVertically=false;index=15;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.loopType = &quot;FOR_COLLECTION&quot;)">
         <Assignment variable="component.bindingDefinition" value="data.COLLECTION_ITEM_BINDING_DEFINITION" />
         <Assignment variable="component.bindable" value="data" />
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Custom>
       <Parameter name="visibleFor" value="ANALYST,DEVELOPER,MAINTAINE" />
     </Tab>

@@ -295,13 +295,14 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 				return;
 			}
 		}
-		if (observedRole != aRole) {
+		if (observedRole != aRole || aRole == null) {
 			if (manager != null) {
 				manager.delete();
 				manager = null;
 			}
 			if (observedRole != null) {
 				observedRole.deleteObserver(this);
+				observedRole = null;
 			}
 			if (role != null) {
 				role.delete();

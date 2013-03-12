@@ -436,9 +436,11 @@ public class ViewPoint extends ViewPointObject {
 			palettes = new Vector<ViewPointPalette>();
 		}
 		for (File f : dir.listFiles()) {
-			if (!f.isDirectory() && f.getName().endsWith(".palette")) {
+			if (!f.isDirectory() && f.getName().endsWith(".palette") && f.length() > 0) {
 				ViewPointPalette palette = ViewPointPalette.instanciateCalcPalette(this, f);
-				addToCalcPalettes(palette);
+				if (palette != null) {
+					addToCalcPalettes(palette);
+				}
 			} else if (f.isDirectory() && !f.getName().equals("CVS")) {
 				findPalettes(f);
 			}

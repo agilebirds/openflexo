@@ -318,11 +318,23 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		if (getConnector() instanceof RectPolylinConnector) {
 			if (getStartObject() instanceof AnnotationGR) {
 				startOrientationFixed = true;
-				newStartOrientation = SimplifiedCardinalDirection.WEST;
+				double d = getStartObject().getLocationInDrawing().x + getStartObject().getWidth() / 2;
+				double e = getEndObject().getLocationInDrawing().x + getEndObject().getWidth() / 2;
+				if (d > e) {
+					newStartOrientation = SimplifiedCardinalDirection.WEST;
+				} else {
+					newStartOrientation = SimplifiedCardinalDirection.EAST;
+				}
 			}
 			if (getEndObject() instanceof AnnotationGR) {
 				endOrientationFixed = true;
-				newEndOrientation = SimplifiedCardinalDirection.WEST;
+				double d = getStartObject().getLocationInDrawing().x + getStartObject().getWidth() / 2;
+				double e = getEndObject().getLocationInDrawing().x + getEndObject().getWidth() / 2;
+				if (d < e) {
+					newEndOrientation = SimplifiedCardinalDirection.WEST;
+				} else {
+					newEndOrientation = SimplifiedCardinalDirection.EAST;
+				}
 			}
 		}
 

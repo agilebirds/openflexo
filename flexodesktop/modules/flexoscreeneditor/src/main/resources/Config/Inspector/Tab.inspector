@@ -12,7 +12,7 @@
 	<tab name="Advanced" index="1" layout="DEFAULT">
 		<property name="key" label="key" widget="TEXT_FIELD" constraint="3">
 			<param name="columns" value="10"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 	</tab>
 

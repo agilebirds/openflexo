@@ -5273,6 +5273,7 @@ would_you_like_to_convert_entire_project_to_new_version_of_flexo_(recommanded)=S
 would_you_like_to_create_it=Voulez-vous le cr\u00E9er
 would_you_like_to_create_it_and_continue?=Voulez-vous le cr\u00E9er et continuer?
 would_you_like_to_cut_those_objects=Confirmez vous la suppression de ces objets ?
+would_you_like_to_delete_its_children_too=Voulez-vous suppimer ses enfants \u00E9galement?
 would_you_like_to_delete_service_interface_used_in_ws_and_remove_it_from_ws=Cette service interface est utilis\u00E9e par un service web. Confirmez vous la suppression? (L'interface sera aussi supprim\u00E9e du service)e)
 would_you_like_to_delete_the_process=Confirmez-vous la suppression du processus 
 would_you_like_to_delete_the_service_interface=Confirmez-vous la suppression de cette service interface?
