@@ -38,6 +38,7 @@ import org.openflexo.toolbox.StringUtils;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comparable<OntologyClass> {
 
@@ -230,14 +231,17 @@ public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comp
 		if (individual == null) {
 			return false;
 		}
-		Iterator it = individual.listOntClasses(false);
+		Iterator<Resource> it = individual.listRDFTypes(false);
 		while (it.hasNext()) {
-			OntClass p = (OntClass) it.next();
-			if (p.equals(parentClass)) {
-				return true;
-			}
-			if (isSuperClassOf(parentClass, p)) {
-				return true;
+			Resource r = it.next();
+			if (r.canAs(OntClass.class)) {
+				OntClass c = r.as(OntClass.class);
+				if (c.equals(parentClass)) {
+					return true;
+				}
+				if (isSuperClassOf(parentClass, c)) {
+					return true;
+				}
 			}
 		}
 		return false;
