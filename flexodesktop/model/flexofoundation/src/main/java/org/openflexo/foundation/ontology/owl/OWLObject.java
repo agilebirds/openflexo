@@ -554,7 +554,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 
 	@Override
 	public boolean isSubConceptOf(OntologyObject concept) {
-		return concept.isSuperConceptOf(concept);
+		return concept.isSuperConceptOf(this);
 	}
 
 	public PropertyStatement createNewCommentAnnotation() {
