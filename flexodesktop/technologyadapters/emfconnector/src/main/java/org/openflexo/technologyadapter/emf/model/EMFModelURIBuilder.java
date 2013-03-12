@@ -99,6 +99,8 @@ public class EMFModelURIBuilder {
 			builder.append(getUri(eObject.eContainer()));
 		}
 		builder.append("/");
+		builder.append(eObject.eClass().getName());
+		builder.append("/");
 		builder.append(getName(eObject));
 		return builder.toString();
 	}
