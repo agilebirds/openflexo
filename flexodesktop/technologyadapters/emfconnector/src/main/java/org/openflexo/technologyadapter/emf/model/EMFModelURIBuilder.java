@@ -91,10 +91,8 @@ public class EMFModelURIBuilder {
 	 */
 	public static String getUri(EObject eObject) {
 		StringBuilder builder = new StringBuilder();
-
 		if (eObject.eContainer() == null) {
-			if (eObject.eResource() == null) {
-			} else {
+			if (eObject.eResource() != null) {
 				builder.append(eObject.eResource().getURI().toString());
 			}
 		} else {
@@ -102,7 +100,6 @@ public class EMFModelURIBuilder {
 		}
 		builder.append("/");
 		builder.append(getName(eObject));
-
 		return builder.toString();
 	}
 
