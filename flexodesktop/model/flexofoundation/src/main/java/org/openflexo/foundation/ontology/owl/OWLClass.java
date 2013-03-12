@@ -211,9 +211,9 @@ public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comp
 		if (parentClass.equals(subClass)) {
 			return true;
 		}
-		Iterator it = subClass.listSuperClasses();
+		Iterator<OntClass> it = subClass.listSuperClasses();
 		while (it.hasNext()) {
-			OntClass p = (OntClass) it.next();
+			OntClass p = it.next();
 			if (p.equals(parentClass)) {
 				return true;
 			}
@@ -231,6 +231,7 @@ public class OWLClass extends OWLObject<OntClass> implements OntologyClass, Comp
 		if (individual == null) {
 			return false;
 		}
+
 		Iterator<Resource> it = individual.listRDFTypes(false);
 		while (it.hasNext()) {
 			Resource r = it.next();

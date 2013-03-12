@@ -234,9 +234,7 @@ public class ViewShape extends ViewElement {
 				if (ds.getTargetEditionPattern() == targetEditionPattern || ds.getTopTarget() && targetEditionPattern == null) {
 					for (EditionPattern ep2 : calc.getEditionPatterns()) {
 						for (LinkScheme ls : ep2.getLinkSchemes()) {
-							if (ls.getFromTargetEditionPattern().isAssignableFrom(getEditionPattern())
-									&& ls.getToTargetEditionPattern().isAssignableFrom(ds.getEditionPattern())
-									&& ls.getIsAvailableWithFloatingPalette()) {
+							if (ls.isValidTarget(getEditionPattern(), ds.getEditionPattern()) && ls.getIsAvailableWithFloatingPalette()) {
 								// This candidate is acceptable
 								availableLinkSchemeFromThisShape.add(new DropAndLinkScheme(ds, ls));
 							}
