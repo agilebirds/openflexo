@@ -25,7 +25,7 @@ import java.util.Comparator;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 
 /**
- * This interface is implemented by all classes modelizing an element of a formal binding path, whichever type it is.
+ * This interface is implemented by all classes modeling an element of a formal binding path, whichever type it is.
  * 
  * @author sylvain
  * 
