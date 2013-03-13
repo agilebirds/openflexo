@@ -321,10 +321,10 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 			if (r == null) {
 				r = OWL.getMetaModelResource("http://www.agilebirds.com" + importedOntology);
 			}
-			if (r != null) {
+			/*if (r != null) {
 				logger.info("************************ For ViewPoint " + getURI() + " declaring OWL model slot targetting meta-model "
 						+ r.getURI());
-			}
+			}*/
 
 			ModelSlot<?, ?> ms = OWL.createNewModelSlot(this);
 			ms.setName("owl");
@@ -345,12 +345,6 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public synchronized void setIsModified() {
-		super.setIsModified();
-		logger.info("***************** setIsModified() in DiagramSpecification");
 	}
 
 }

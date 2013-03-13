@@ -29,7 +29,6 @@
         </CustomColumn>
         <CheckBoxColumn data="iterator.bindingDefinition.isMandatory" title="mandatory" columnWidth="60" resizable="false" displayTitle="true" />
         <CustomColumn componentClassName="org.openflexo.components.widget.binding.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.bindingValue" format="object.stringRepresentation" title="value" columnWidth="150" resizable="true" displayTitle="true">
-          <ColumnAssignment variable="component.bindingDefinition" value="iterator.bindingDefinition" />
           <ColumnAssignment variable="component.bindable" value="iterator" />
         </CustomColumn>
         <AddAction method="data.componentInstance.createNewBinding" name="new" />

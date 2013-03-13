@@ -573,7 +573,7 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 
 	@Override
 	public boolean isSubConceptOf(IFlexoOntologyConcept concept) {
-		return concept.isSuperConceptOf(concept);
+		return concept.isSuperConceptOf(this);
 	}
 
 	public PropertyStatement createNewCommentAnnotation() {

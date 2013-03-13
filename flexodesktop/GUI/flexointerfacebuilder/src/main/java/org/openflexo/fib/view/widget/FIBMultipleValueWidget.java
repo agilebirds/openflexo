@@ -65,7 +65,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 
 			logger.fine("Build FIBListModel");
 
-			if (getWidget().getList() != null && getWidget().getList().isSet() && getDataObject() != null) {
+			if (getWidget().getList() != null && getWidget().getList().isValid() && getDataObject() != null) {
 
 				Object accessedList = null;
 				try {
@@ -83,7 +83,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 
 			}
 
-			else if (getWidget().getArray() != null && getWidget().getArray().isSet() && getDataObject() != null) {
+			else if (getWidget().getArray() != null && getWidget().getArray().isValid() && getDataObject() != null) {
 
 				Object accessedArray = null;
 				try {

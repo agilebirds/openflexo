@@ -25,6 +25,8 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
+import org.openflexo.foundation.technologyadapter.DeclareFetchRequest;
+import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
@@ -44,6 +46,7 @@ import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectI
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.RemoveEMFObjectIndividualAttributeDataPropertyValue;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.RemoveEMFObjectIndividualAttributeObjectPropertyValue;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.RemoveEMFObjectIndividualReferenceObjectPropertyValue;
+import org.openflexo.technologyadapter.emf.viewpoint.editionaction.SelectEMFObjectIndividual;
 
 /**
  * Implementation of the ModelSlot class for the EMF technology adapter
@@ -60,6 +63,8 @@ import org.openflexo.technologyadapter.emf.viewpoint.editionaction.RemoveEMFObje
 		@DeclareEditionAction(RemoveEMFObjectIndividualAttributeDataPropertyValue.class), // Remove Attribute Data Value
 		@DeclareEditionAction(RemoveEMFObjectIndividualAttributeObjectPropertyValue.class), // Remove Attribute Object Value
 		@DeclareEditionAction(RemoveEMFObjectIndividualReferenceObjectPropertyValue.class) // Remove Reference Object Value
+})
+@DeclareFetchRequests({ @DeclareFetchRequest(SelectEMFObjectIndividual.class) // Allows to select some EMFObjectIndividual
 })
 public class EMFModelSlot extends FlexoOntologyModelSlot<EMFModel, EMFMetaModel> {
 

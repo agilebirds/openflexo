@@ -67,7 +67,8 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	private EditionPattern editionPattern;
 	private Hashtable<PatternRole<?>, ActorReference<?>> actors;
 	private VirtualModelInstance<?, ?> vmInstance;
-	private Vector<ActorReference<?>> actorList;
+
+	private Vector<ActorReference<?>> deserializedActorList;
 
 	/**
 	 * 
@@ -96,7 +97,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		super(builder.getProject());
 		vmInstance = builder.vmInstance;
 		actors = new Hashtable<PatternRole<?>, ActorReference<?>>();
-		actorList = new Vector<ActorReference<?>>();
+		// actorList = new Vector<ActorReference<?>>();
 		initializeDeserialization(builder);
 	}
 
@@ -106,7 +107,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		this.vmInstance = vmInstance;
 		this.editionPattern = aPattern;
 		actors = new Hashtable<PatternRole<?>, ActorReference<?>>();
-		actorList = new Vector<ActorReference<?>>();
+		// actorList = new Vector<ActorReference<?>>();
 	}
 
 	public <T> T getPatternActor(PatternRole<T> patternRole) {
@@ -200,7 +201,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		return actors;
 	}
 
-	public void setActors(Hashtable<PatternRole<?>, ActorReference<?>> actors) {
+	/*public void setActors(Hashtable<PatternRole<?>, ActorReference<?>> actors) {
 		this.actors = actors;
 	}
 
@@ -228,7 +229,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		if (removeThis != null) {
 			actorList.remove(removeThis);
 		}
-	}
+	}*/
 
 	/*public String getStringValue(String inspectorEntryKey)
 	{
@@ -240,33 +241,50 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		System.out.println("SET string value for "+inspectorEntryKey+" value: "+value);
 	}*/
 
+	// WARNING: do no use outside context of serialization/deserialization (performance issues)
 	public Vector<ActorReference<?>> getActorList() {
-		return actorList;
+		return new Vector<ActorReference<?>>(actors.values());
 	}
 
+	// WARNING: do no use outside context of serialization/deserialization
 	public void setActorList(Vector<ActorReference<?>> deserializedActors) {
-		this.actorList = deserializedActors;
+		for (ActorReference<?> ar : deserializedActors) {
+			addToActorList(ar);
+		}
 	}
 
+	// WARNING: do no use outside context of serialization/deserialization
 	public void addToActorList(ActorReference actorReference) {
-		actorList.add(actorReference);
+		actorReference.setEditionPatternInstance(this);
+		if (actorReference.getPatternRole() != null) {
+			actors.put(actorReference.getPatternRole(), actorReference);
+		} else {
+			if (deserializedActorList == null) {
+				deserializedActorList = new Vector<ActorReference<?>>();
+			}
+			deserializedActorList.add(actorReference);
+		}
 	}
 
+	// WARNING: do no use outside context of serialization/deserialization
 	public void removeFromActorList(ActorReference actorReference) {
-		actorList.remove(actorReference);
+		actorReference.setEditionPatternInstance(null);
+		if (actorReference.getPatternRole() != null) {
+			actors.remove(actorReference.getPatternRole());
+		}
 	}
 
 	@Override
 	public void finalizeDeserialization(Object builder) {
 		super.finalizeDeserialization(builder);
-		System.out.println("OK, j'ai fini de decoder mon EPI, EP=" + getEditionPattern());
 		finalizeActorsDeserialization();
 	}
 
 	private void finalizeActorsDeserialization() {
-		if (getEditionPattern() != null) {
-			for (ActorReference actorRef : actorList) {
-				System.out.println("Actor: " + actorRef.getPatternRoleName() + " pattern role = " + actorRef.getPatternRole());
+		if (getEditionPattern() != null && deserializedActorList != null) {
+			for (ActorReference actorRef : deserializedActorList) {
+				// System.out.println("Actor: " + actorRef.getPatternRoleName() + " pattern role = " + actorRef.getPatternRole() + " name="
+				// + actorRef.getPatternRoleName() + " ep=" + getEditionPattern());
 				if (actorRef.getPatternRole() != null) {
 					actors.put(actorRef.getPatternRole(), actorRef);
 				}

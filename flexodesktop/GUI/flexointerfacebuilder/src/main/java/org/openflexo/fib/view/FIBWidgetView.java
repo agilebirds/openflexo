@@ -222,13 +222,13 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			try {
 				aValue = (T) getWidget().getValueTransform().getBindingValue(getValueBindingContext(aValue));
 			} catch (TypeMismatchException e) {
-				logger.warning("Unexpected TypeMismatchException " + e.getMessage());
+				logger.warning("Unexpected TypeMismatchException while evaluating " + getWidget().getValueTransform() + e.getMessage());
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
-				logger.warning("Unexpected NullReferenceException " + e.getMessage());
+				logger.warning("Unexpected NullReferenceException while evaluating " + getWidget().getValueTransform() + e.getMessage());
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
-				logger.warning("Unexpected InvocationTargetException " + e.getMessage());
+				logger.warning("Unexpected InvocationTargetException while evaluating " + getWidget().getValueTransform() + e.getMessage());
 				e.printStackTrace();
 			}
 			if (!equals(old, aValue)) {
@@ -247,13 +247,13 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			try {
 				object = getWidget().getValueValidator().getBindingValue(getValueBindingContext(aValue));
 			} catch (TypeMismatchException e) {
-				logger.warning("Unexpected TypeMismatchException " + e.getMessage());
+				logger.warning("Unexpected TypeMismatchException while evaluating " + getWidget().getValueValidator() + e.getMessage());
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
-				logger.warning("Unexpected NullReferenceException " + e.getMessage());
+				logger.warning("Unexpected NullReferenceException while evaluating " + getWidget().getValueValidator() + e.getMessage());
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
-				logger.warning("Unexpected InvocationTargetException " + e.getMessage());
+				logger.warning("Unexpected InvocationTargetException while evaluating " + getWidget().getValueValidator() + e.getMessage());
 				e.printStackTrace();
 			}
 			if (object == null) {
@@ -290,8 +290,9 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
-				logger.warning("Unexpected " + e + " message=" + e.getMessage());
-				e.printStackTrace();
+				logger.warning("Unexpected " + e + " cannot setValue() with " + getWidget().getData() + " and value " + aValue
+						+ " message=" + e.getMessage());
+				// e.printStackTrace();
 			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			} catch (NotSettableContextException e) {

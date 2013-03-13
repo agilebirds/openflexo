@@ -66,7 +66,6 @@ public abstract class PatternRole<T> extends EditionPatternObject {
 	}
 
 	public void setModelSlot(ModelSlot<?, ?> modelSlot) {
-		logger.info("setModelSlot with " + modelSlot);
 		this.modelSlot = modelSlot;
 	}
 

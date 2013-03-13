@@ -40,8 +40,11 @@ public class RangeStatement extends OWLStatement {
 	public RangeStatement(OWLConcept<?> subject, Statement s, OWLTechnologyAdapter adapter) {
 		super(subject, s, adapter);
 		if (s.getObject() instanceof Resource) {
+			// System.out.println("RangeStatement, subject=" + subject + " prodicate=" + s.getPredicate());
 			range = getOntology().retrieveOntologyObject((Resource) s.getObject());
-			if (((Resource) s.getObject()).getURI() != null) {
+			// System.out.println("RangeStatement, range=" + range);
+			// If range cannot be found, try to lookup a datatype
+			if (range == null && ((Resource) s.getObject()).getURI() != null) {
 				dataType = getTechnologyAdapter().getOntologyLibrary().getDataType(((Resource) s.getObject()).getURI());
 			}
 		} else {

@@ -29,6 +29,8 @@ import javax.swing.SwingUtilities;
 import org.openflexo.components.widget.OntologyBrowserModel.OntologyBrowserModelRecomputed;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.technologyadapter.FlexoModelResource;
+import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.TechnologyAdapterController;
@@ -55,6 +57,7 @@ public class FIBClassSelector extends FIBModelObjectSelector<IFlexoOntologyClass
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/FIBClassSelector.fib");
 
+	private InformationSpace informationSpace;
 	private IFlexoOntology context;
 	private IFlexoOntologyClass rootClass;
 	private boolean hierarchicalMode = true;
@@ -83,6 +86,20 @@ public class FIBClassSelector extends FIBModelObjectSelector<IFlexoOntologyClass
 		return IFlexoOntologyClass.class;
 	}
 
+	public InformationSpace getInformationSpace() {
+		// Still use legacy: if InformationSpace is not specified by project, retrieve IS from Project
+		if (informationSpace == null && getProject() != null) {
+			informationSpace = getProject().getInformationSpace();
+		}
+		return informationSpace;
+	}
+
+	@CustomComponentParameter(name = "informationSpace", type = CustomComponentParameter.Type.OPTIONAL)
+	public void setInformationSpace(InformationSpace informationSpace) {
+		// System.out.println("Sets InformationSpace with " + informationSpace);
+		this.informationSpace = informationSpace;
+	}
+
 	@Override
 	public String renderedString(IFlexoOntologyClass editedObject) {
 		if (editedObject != null) {
@@ -101,10 +118,10 @@ public class FIBClassSelector extends FIBModelObjectSelector<IFlexoOntologyClass
 	@CustomComponentParameter(name = "contextOntologyURI", type = CustomComponentParameter.Type.MANDATORY)
 	public void setContextOntologyURI(String ontologyURI) {
 		// logger.info("Sets ontology with " + ontologyURI);
-		if (getProject() != null) {
-			IFlexoOntology context = getProject().getFlexoOntology(ontologyURI);
-			if (context != null) {
-				setContext(context);
+		if (getInformationSpace() != null) {
+			FlexoModelResource<?, ?> modelResource = getInformationSpace().getModelWithURI(ontologyURI);
+			if (modelResource != null && modelResource.getModel() instanceof IFlexoOntology) {
+				setContext((IFlexoOntology) modelResource.getModel());
 			}
 		}
 	}

@@ -31,7 +31,7 @@ public class FIBDescriptionWidgetEDITOR extends ProjectDialogEDITOR {
 
 	@Override
 	public Object[] getData() {
-		FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
+		FlexoEditor editor = loadProject(new FileResource("TestProjects/1.6/Test1.6.prj"));
 		FlexoProject project = editor.getProject();
 		return FIBAbstractEditor.makeArray(project, project.getFlexoWorkflow().getRootProcess());
 	}

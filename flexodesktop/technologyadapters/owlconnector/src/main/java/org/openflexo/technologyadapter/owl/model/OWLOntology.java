@@ -1400,8 +1400,8 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 	}
 
 	protected void load() {
-		logger.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% " + ontologyURI);
-		logger.info("Try to load ontology " + ontologyURI);
+		// logger.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% " + ontologyURI);
+		// logger.info("Try to load ontology " + ontologyURI);
 
 		ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, _library, null);
 
@@ -1421,9 +1421,9 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 		// read the source document
 		try {
-			logger.info("BEGIN Read " + ontologyURI);
+			logger.fine("BEGIN Read " + ontologyURI);
 			ontModel.read(ontologyURI);
-			logger.info("END read " + ontologyURI);
+			logger.fine("END read " + ontologyURI);
 		} catch (Exception e) {
 			logger.warning("Unexpected exception while reading ontology " + ontologyURI);
 			logger.warning("Exception " + e.getMessage() + ". See logs for details");
@@ -1432,16 +1432,14 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 		for (Object o : ontModel.listImportedOntologyURIs()) {
 			OWLOntology importedOnt = _library.getOntology((String) o);
-			logger.info("importedOnt= " + importedOnt);
 			if (importedOnt != null) {
 				importedOnt.loadWhenUnloaded();
 				importedOntologies.add(importedOnt);
 			}
 		}
 
-		logger.info("For " + ontologyURI + " Imported ontologies = " + getImportedOntologies());
-
-		logger.info("Loaded ontology " + ontologyURI + " search for concepts and properties");
+		// logger.info("Loaded ontology " + ontologyURI + " imported ontologies = " + getImportedOntologies());
+		// logger.info("Loaded ontology " + ontologyURI + " search for concepts and properties");
 
 		for (IFlexoOntology o : getImportedOntologies()) {
 			logger.info("Imported ontology: " + o);

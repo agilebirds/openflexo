@@ -38,7 +38,6 @@
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
       </Label>
       <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="ConditionPrimitive" index="5" data="data.conditionPrimitive" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.isConditional = true)">
-        <Assignment variable="component.bindingDefinition" value="data.conditionPrimitiveBindingDefinition" />
         <Assignment variable="component.bindable" value="data" />
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
       </Custom>

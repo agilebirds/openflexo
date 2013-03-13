@@ -164,6 +164,9 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 
 				DropScheme dropScheme = viewPointPaletteElement.getDropScheme();
 
+				logger.info("Drop scheme being applied: " + dropScheme);
+				System.out.println("Drop scheme being applied: " + dropScheme);
+
 				Hashtable<GraphicalElementPatternRole, ExampleDiagramObject> grHierarchy = new Hashtable<GraphicalElementPatternRole, ExampleDiagramObject>();
 
 				for (EditionAction action : dropScheme.getActions()) {

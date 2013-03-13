@@ -177,6 +177,7 @@ public abstract class EMFModelResourceImpl extends FlexoFileResourceImpl<EMFMode
 			writeToFile();
 			hasWrittenOnDisk(lock);
 			notifyResourceStatusChanged();
+			resourceData.clearIsModified(false);
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Succeeding to save Resource " + getURI() + " : " + getFile().getName());
 			}
