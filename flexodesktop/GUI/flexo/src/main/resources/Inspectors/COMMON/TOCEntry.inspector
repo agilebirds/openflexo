@@ -74,13 +74,13 @@
     <Localized key="startOnANewPage" lang="French">Commencer sur une nouvelle page</Localized>
     <Localized key="startOnANewPage" lang="Dutch">Start on a new page</Localized>
     <Localized key="include_subprocesses" lang="English">including subprocesses</Localized>
-    <Localized key="include_subprocesses" lang="French">inclure les sous-processus</Localized>
+    <Localized key="include_subprocesses" lang="French">Inclure les sous-processus</Localized>
     <Localized key="include_subprocesses" lang="Dutch">including subprocesses</Localized>
     <Localized key="is_read_only" lang="English">Is read only</Localized>
     <Localized key="is_read_only" lang="French">Lecture seule</Localized>
     <Localized key="is_read_only" lang="Dutch">Is read only</Localized>
     <Localized key="include_statuslist" lang="English">Include Status List</Localized>
-    <Localized key="include_statuslist" lang="French">inclure la liste des statuts</Localized>
+    <Localized key="include_statuslist" lang="French">Inclure la liste des statuts</Localized>
     <Localized key="include_statuslist" lang="Dutch">Include Status List</Localized>
     <Localized key="diagram" lang="English">Diagram</Localized>
     <Localized key="diagram" lang="French">Diagramme</Localized>
@@ -91,6 +91,13 @@
     <Localized key="type" lang="English">Type</Localized>
     <Localized key="type" lang="French">Type</Localized>
     <Localized key="type" lang="Dutch">Type</Localized>
+    <Localized key="renderSectionTitle" lang="English">Render Section Title</Localized>
+    <Localized key="renderSectionTitle" lang="French">Rendre le titre de la section</Localized>
+    <Localized key="renderSectionTitle" lang="Dutch">renderSectionTitle</Localized>
+    <Localized key="Basic" lang="English">Basic</Localized>
+    <Localized key="Basic" lang="Dutch">Basis</Localized>
+    <Localized key="Advanced" lang="English">Advanced</Localized>
+    <Localized key="Advanced" lang="Dutch">Geavanceerd</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="TOCEntry" />
 </Panel>
