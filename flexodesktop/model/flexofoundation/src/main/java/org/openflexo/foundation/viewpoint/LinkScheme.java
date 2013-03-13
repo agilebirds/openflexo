@@ -23,10 +23,7 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyObject;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
-import org.openflexo.foundation.ontology.owl.AllValuesFromRestrictionClass;
 import org.openflexo.foundation.ontology.owl.OWLClass;
-import org.openflexo.foundation.ontology.owl.OWLIntersectionClass;
-import org.openflexo.foundation.ontology.owl.OWLUnionClass;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
@@ -120,12 +117,12 @@ public class LinkScheme extends AbstractCreationScheme {
 					boolean ok = true;
 					OntologyObject range = objectProperty.getRange();
 					if (range instanceof OWLClass) {
-						if (!conformsTo(toOntologicType, (OWLClass) range)) {
+						if (((OWLClass) range).containsOntologyObject(toOntologicType, true)) {
 							return false;
 						}
 					}
 					for (OWLClass restriction : fromOntologicType.getRestrictions(objectProperty)) {
-						if (!conformsTo(toOntologicType, restriction)) {
+						if (!restriction.containsOntologyObject(toOntologicType, true)) {
 							ok = false;
 							break;
 						}
@@ -138,31 +135,6 @@ public class LinkScheme extends AbstractCreationScheme {
 		}
 		return getFromTargetEditionPattern().isAssignableFrom(actualFromTarget)
 				&& getToTargetEditionPattern().isAssignableFrom(actualToTarget);
-	}
-
-	private boolean conformsTo(OWLClass klass, OWLClass owlClass) {
-		if (klass == owlClass || klass.isSubConceptOf(owlClass)) {
-			return true;
-		}
-		if (owlClass instanceof AllValuesFromRestrictionClass) {
-			return conformsTo(klass, ((AllValuesFromRestrictionClass) owlClass).getObject());
-		}
-		if (owlClass instanceof OWLUnionClass) {
-			for (OWLClass c : ((OWLUnionClass) owlClass).getOperands()) {
-				if (conformsTo(klass, c)) {
-					return true;
-				}
-			}
-			return false;
-		} else if (owlClass instanceof OWLIntersectionClass) {
-			for (OWLClass c : ((OWLUnionClass) owlClass).getOperands()) {
-				if (!conformsTo(klass, c)) {
-					return false;
-				}
-			}
-			return true;
-		}
-		return false;
 	}
 
 	@Override
