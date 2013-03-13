@@ -31,6 +31,7 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.foundation.DataModification;
@@ -193,7 +194,16 @@ public class SGFooter extends JPanel implements GraphicalFlexoObserver, FocusLis
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
+	public void update(final FlexoObservable observable, final DataModification dataModification) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					update(observable, dataModification);
+				}
+			});
+			return;
+		}
 		refresh();
 	}
 
