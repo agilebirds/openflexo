@@ -117,7 +117,7 @@ public class LinkScheme extends AbstractCreationScheme {
 					boolean ok = true;
 					OntologyObject range = objectProperty.getRange();
 					if (range instanceof OWLClass) {
-						if (((OWLClass) range).containsOntologyObject(toOntologicType, true)) {
+						if (!((OWLClass) range).containsOntologyObject(toOntologicType, true)) {
 							return false;
 						}
 					}
