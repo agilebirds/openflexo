@@ -409,7 +409,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	}
 
 	public boolean isLastFocusedSelectable() {
-		return getController().getLastFocusedSelectable() == this;
+		return getController() != null && getController().getLastFocusedSelectable() == this;
 	}
 
 	@Override
