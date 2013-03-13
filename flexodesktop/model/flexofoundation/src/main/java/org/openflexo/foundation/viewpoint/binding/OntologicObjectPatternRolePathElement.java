@@ -1,6 +1,7 @@
 package org.openflexo.foundation.viewpoint.binding;
 
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -174,6 +175,7 @@ public abstract class OntologicObjectPatternRolePathElement<T extends OntologyOb
 					allProperties.add(propertyPathElement);
 				}
 			}
+			Collections.sort(allProperties, BindingPathElement.COMPARATOR);
 			propertiesFound = true;
 		}
 	}

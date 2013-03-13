@@ -20,6 +20,7 @@
 package org.openflexo.antar.binding;
 
 import java.lang.reflect.Type;
+import java.util.Comparator;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 
@@ -30,6 +31,24 @@ import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
  * 
  */
 public interface BindingPathElement<T> extends Typed {
+
+	public static final Comparator<BindingPathElement> COMPARATOR = new Comparator<BindingPathElement>() {
+
+		@Override
+		public int compare(BindingPathElement o1, BindingPathElement o2) {
+			if (o1.getLabel() == null) {
+				if (o2.getLabel() == null) {
+					return 0;
+				} else {
+					return -1;
+				}
+			} else if (o2.getLabel() == null) {
+				return 1;
+			}
+			return o1.getLabel().compareTo(o2.getLabel());
+		}
+	};
+
 	public Class<?> getDeclaringClass();
 
 	@Override

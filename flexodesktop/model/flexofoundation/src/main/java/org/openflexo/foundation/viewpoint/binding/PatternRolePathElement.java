@@ -2,6 +2,7 @@ package org.openflexo.foundation.viewpoint.binding;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -160,7 +161,7 @@ public class PatternRolePathElement<T extends Object> implements SimplePathEleme
 	}
 
 	public List<BindingPathElement> getAllProperties() {
-		return EMPTY_LIST;
+		return Collections.emptyList();
 	}
 
 	public PatternRole getPatternRole() {
