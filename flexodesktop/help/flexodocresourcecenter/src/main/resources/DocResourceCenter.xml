@@ -13065,6 +13065,7 @@ forward to the next nodes.</description>
                     <description>No description</description>
                     <EmbeddingChildDocItem id="GeneratedDocModuleView-add_repository" identifier="GeneratedDocModuleView-add_repository" embedded="false" hidden="false" />
                     <EmbeddingChildDocItem id="GeneratedDocModuleView-add_toc" identifier="GeneratedDocModuleView-add_toc" embedded="false" hidden="false" />
+                    <EmbeddingChildDocItem id="GeneratedDocModuleView-import_documentation_templates" identifier="GeneratedDocModuleView-import_documentation_templates" embedded="false" hidden="true" />
                     <RelatedToDocItem idref="code_generation" />
                     <RelatedToDocItem idref="code_generation" />
                   </RelatedToDocItem>
@@ -13119,6 +13120,7 @@ forward to the next nodes.</description>
               <DocItem idref="GeneratedDocModuleView" />
               <DocItem idref="GeneratedDocModuleView-add_repository" />
               <DocItem idref="GeneratedDocModuleView-add_toc" />
+              <DocItem idref="GeneratedDocModuleView-import_documentation_templates" />
             </DocItemFolder>
             <DocItem idref="code_generation" />
           </DocItemFolder>
@@ -13547,9 +13549,7 @@ forward to the next nodes.</description>
               <EmbeddingChildDocItem id="DMModelView-add_repository..." identifier="DMModelView-add_repository..." embedded="false" hidden="false" />
               <EmbeddingChildDocItem id="DMModelView-update_repository" identifier="DMModelView-update_repository" embedded="false" hidden="false" />
               <EmbeddingChildDocItem id="DMModelView-delete" identifier="DMModelView-delete" embedded="false" hidden="false" />
-              <EmbeddingChildDocItem id="DMModelView-add_repository" identifier="DMModelView-add_repository" embedded="false" hidden="true">
-                <description />
-              </EmbeddingChildDocItem>
+              <EmbeddingChildDocItem id="DMModelView-add_repository" identifier="DMModelView-add_repository" embedded="false" hidden="true" />
             </DocItem>
             <DocItem idref="DMModelView-add_repository" />
             <DocItem idref="DMModelView-add_repository..." />
@@ -14178,6 +14178,10 @@ forward to the next nodes.</description>
                       <RelatedToDocItem idref="process_edition" />
                     </RelatedToDocItem>
                     <RelatedToDocItem idref="FlexoProcessView" />
+                    <RelatedToDocItem id="WKFProjectModuleView" identifier="WKFProjectModuleView" embedded="false" hidden="true">
+                      <description>No description</description>
+                      <RelatedToDocItem idref="process_edition" />
+                    </RelatedToDocItem>
                     <title key="ENGLISH">Perspective Process Edition</title>
                   </RelatedToDocItem>
                   <title key="ENGLISH">Perspective Process Edition</title>
@@ -14253,6 +14257,7 @@ forward to the next nodes.</description>
                     <RelatedToDocItem idref="SwimmingLaneView" />
                   </RelatedToDocItem>
                 </InheritanceChildDocItem>
+                <InheritanceChildDocItem idref="WKFProjectModuleView" />
                 <EmbeddingChildDocItem idref="process_edition" />
                 <EmbeddingChildDocItem idref="documentation" />
                 <EmbeddingChildDocItem idref="role_editor" />
@@ -15453,6 +15458,10 @@ forward to the next nodes.</description>
               <description>Documentation on that view</description>
               <DocItem idref="WKFDocumentationView2" />
             </DocItemFolder>
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-main-paneprocess_editionWKFProjectModuleView" primaryDocItemId="WKFProjectModuleView" identifier="WKFProjectModuleView">
+              <description>Documentation on that view</description>
+              <DocItem idref="WKFProjectModuleView" />
+            </DocItemFolder>
             <DocItem idref="process_edition" />
           </DocItemFolder>
           <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-main-panerole_editor" primaryDocItemId="role_editor" identifier="role_editor">
@@ -15715,16 +15724,9 @@ forward to the next nodes.</description>
         </EmbeddingChildDocItem>
         <EmbeddingChildDocItem id="ie-palette" identifier="ie-palette" embedded="false" hidden="true" />
         <EmbeddingChildDocItem id="dm-browser" identifier="dm-browser" embedded="false" hidden="true">
-          <description />
-          <EmbeddingChildDocItem id="dm-browser-plus" identifier="dm-browser-plus" embedded="false" hidden="true">
-            <description />
-          </EmbeddingChildDocItem>
-          <EmbeddingChildDocItem id="dm-browser-minus" identifier="dm-browser-minus" embedded="false" hidden="true">
-            <description />
-          </EmbeddingChildDocItem>
-          <EmbeddingChildDocItem id="dm-browser-options" identifier="dm-browser-options" embedded="false" hidden="true">
-            <description />
-          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="dm-browser-plus" identifier="dm-browser-plus" embedded="false" hidden="true" />
+          <EmbeddingChildDocItem id="dm-browser-minus" identifier="dm-browser-minus" embedded="false" hidden="true" />
+          <EmbeddingChildDocItem id="dm-browser-options" identifier="dm-browser-options" embedded="false" hidden="true" />
         </EmbeddingChildDocItem>
         <title key="ENGLISH">Flexo Tool Set</title>
         <DocItemVersion id="FlexoToolSet_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
