@@ -71,6 +71,10 @@ public class EMFModelURIBuilder {
 				}
 			}
 		}
+		// If no name use URI Fragment
+		if (builder.length() == 0) {
+			builder.append(eObject.eResource().getURIFragment(eObject));
+		}
 		return builder.toString();
 	}
 
