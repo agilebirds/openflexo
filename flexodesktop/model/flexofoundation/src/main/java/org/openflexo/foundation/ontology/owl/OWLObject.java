@@ -1105,6 +1105,6 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 
 	@Override
 	public boolean containsOntologyObject(OntologyObject o, boolean inherited) {
-		return o == this || inherited && isSubConceptOf(o);
+		return o == this || inherited && isSuperConceptOf(o);
 	}
 }
