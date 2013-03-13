@@ -1207,7 +1207,8 @@ name of the template corresponding to the specific toc_entry.
                     <w:showingPlcHdr/>
                 #end
             #end
-            <w:tag w:val="#escape(${projectGenerator.getFlexoDescriptionTag($_object, $usedTarget)})" />
+            #set($toEscape = ${projectGenerator.getFlexoDescriptionTag($_object, $usedTarget)})
+            <w:tag w:val="#escape($toEscape)" />
             <w:lock w:val="sdtLocked" />
         </w:sdtPr>
         <w:sdtEndPr />
