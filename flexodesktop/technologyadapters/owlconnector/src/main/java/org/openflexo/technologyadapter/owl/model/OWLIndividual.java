@@ -37,6 +37,7 @@ import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import com.hp.hpl.jena.ontology.ConversionException;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
+import com.hp.hpl.jena.rdf.model.Resource;
 
 public class OWLIndividual extends OWLConcept<Individual> implements IFlexoOntologyIndividual, Comparable<IFlexoOntologyIndividual> {
 
@@ -121,14 +122,16 @@ public class OWLIndividual extends OWLConcept<Individual> implements IFlexoOntol
 
 	private void updateSuperClasses(Individual anIndividual) {
 		// superClasses.clear();
-		Iterator<OntClass> it = anIndividual.listOntClasses(true);
+		Iterator<Resource> it = anIndividual.listRDFTypes(true);
 		while (it.hasNext()) {
 			try {
-				OntClass father = it.next();
-				OWLClass fatherClass = getOntology().retrieveOntologyClass(father);// getOntologyLibrary().getClass(father.getURI());
-				if (fatherClass != null) {
-					if (!types.contains(fatherClass)) {
-						types.add(fatherClass);
+				Resource father = it.next();
+				if (father.canAs(OntClass.class)) {
+					OWLClass fatherClass = getOntology().retrieveOntologyClass(father.as(OntClass.class));// getOntologyLibrary().getClass(father.getURI());
+					if (fatherClass != null) {
+						if (!types.contains(fatherClass)) {
+							types.add(fatherClass);
+						}
 					}
 				}
 			} catch (ConversionException e) {
@@ -137,6 +140,7 @@ public class OWLIndividual extends OWLConcept<Individual> implements IFlexoOntol
 				// OntClass: it does not have rdf:type owl:Class or equivalent
 				// Please investigate this
 				logger.warning("Exception thrown while processing updateSuperClasses() for " + getURI());
+				// e.printStackTrace();
 			} catch (Exception e) {
 				logger.warning("Exception thrown while processing updateSuperClasses() for " + getURI());
 				e.printStackTrace();

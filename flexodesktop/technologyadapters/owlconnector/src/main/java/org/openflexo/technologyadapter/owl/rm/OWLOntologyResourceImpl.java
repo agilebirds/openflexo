@@ -129,7 +129,9 @@ public abstract class OWLOntologyResourceImpl extends FlexoFileResourceImpl<OWLO
 	@Override
 	public OWLOntology loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
 			FileNotFoundException, FlexoException {
-		return new OWLOntology(getURI(), getFile(), getOntologyLibrary(), (OWLTechnologyAdapter) getTechnologyAdapter());
+		OWLOntology returned = new OWLOntology(getURI(), getFile(), getOntologyLibrary(), (OWLTechnologyAdapter) getTechnologyAdapter());
+		returned.setResource(this);
+		return returned;
 	}
 
 	/**
@@ -167,6 +169,7 @@ public abstract class OWLOntologyResourceImpl extends FlexoFileResourceImpl<OWLO
 			_writeToFile();
 			hasWrittenOnDisk(lock);
 			notifyResourceStatusChanged();
+			resourceData.clearIsModified(false);
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Succeeding to save Resource " + getURI() + " : " + getFile().getName());
 			}

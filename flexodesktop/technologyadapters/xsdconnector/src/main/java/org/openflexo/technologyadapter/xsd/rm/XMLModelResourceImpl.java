@@ -171,6 +171,7 @@ public abstract class XMLModelResourceImpl extends FlexoFileResourceImpl<XMLMode
 			writeToFile();
 			hasWrittenOnDisk(lock);
 			notifyResourceStatusChanged();
+			resourceData.clearIsModified(false);
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Succeeding to save Resource " + getURI() + " : " + getFile().getName());
 			}
