@@ -1166,7 +1166,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 			getSelectionManager().setSelectedObjects(objects);
 		} else {
 			resetSelection();
-			addToSelected(objects);
+			if (objects != null) {
+				addToSelected(objects);
+			}
 		}
 	}
 
