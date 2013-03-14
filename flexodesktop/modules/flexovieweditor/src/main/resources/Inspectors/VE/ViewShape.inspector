@@ -367,9 +367,9 @@
     <Localized key="height_constraints" lang="English">Height constraints</Localized>
     <Localized key="height_constraints" lang="French">Contrainte en hauteur</Localized>
     <Localized key="height_constraints" lang="Dutch">Height constraints</Localized>
-    <Localized key="border" lang="English">border</Localized>
-    <Localized key="border" lang="French">bord</Localized>
-    <Localized key="border" lang="Dutch">border</Localized>
+    <Localized key="border" lang="English">Border</Localized>
+    <Localized key="border" lang="French">Bord</Localized>
+    <Localized key="border" lang="Dutch">Border</Localized>
     <Localized key="top" lang="English">Top</Localized>
     <Localized key="top" lang="French">Haut</Localized>
     <Localized key="top" lang="Dutch">Top</Localized>
