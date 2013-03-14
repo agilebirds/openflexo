@@ -24,7 +24,7 @@ import java.io.File;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.toolbox.FileResource;
 
-public class TestEditor extends FIBAbstractEditor {
+public class TestReuse extends FIBAbstractEditor {
 
 	@Override
 	public Object[] getData() {
@@ -35,11 +35,11 @@ public class TestEditor extends FIBAbstractEditor {
 
 	@Override
 	public File getFIBFile() {
-		return new FileResource("TestFIB/TestTable.fib");
+		return new FileResource("TestFIB/TestReuse.fib");
 	}
 
 	public static void main(String[] args) {
-		main(TestEditor.class);
+		main(TestReuse.class);
 	}
 
 }

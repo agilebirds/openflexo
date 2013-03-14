@@ -120,7 +120,7 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 			return null;
 		}
 		try {
-			return getComponent().getData().getBindingValue(getController());
+			return getComponent().getData().getBindingValue(getBindingEvaluationContext());
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 			return null;

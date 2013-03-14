@@ -142,7 +142,7 @@ public class DropDownColumn<T extends Object> extends AbstractColumn<T> implemen
 			iteratorObject = object;
 			Object accessedArray = null;
 			try {
-				accessedArray = getColumnModel().getArray().getBindingValue(getController());
+				accessedArray = getColumnModel().getArray().getBindingValue(this);
 			} catch (TypeMismatchException e1) {
 				e1.printStackTrace();
 			} catch (NullReferenceException e1) {

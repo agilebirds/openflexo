@@ -32,6 +32,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
@@ -39,6 +40,7 @@ import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBSelectable;
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.fib.view.widget.FIBReferencedComponentWidget;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.localization.LocalizationListener;
@@ -63,6 +65,8 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	private boolean isDeleted = false;
 
 	private JScrollPane scrolledComponent;
+
+	private FIBReferencedComponentWidget embeddingComponent;
 
 	public FIBView(M model, FIBController controller) {
 		super();
@@ -139,6 +143,16 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		return controller;
 	}
 
+	public BindingEvaluationContext getBindingEvaluationContext() {
+		if (getParentView() != null) {
+			return getParentView().getBindingEvaluationContext();
+		}
+		if (getEmbeddingComponent() != null) {
+			return getEmbeddingComponent().getBindingEvaluationContext();
+		}
+		return getController();
+	}
+
 	public final Object getDataObject() {
 		return getController().getDataObject();
 	}
@@ -213,7 +227,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		boolean componentVisible = true;
 		if (getComponent().getVisible() != null && getComponent().getVisible().isSet()) {
 			try {
-				Boolean isVisible = getComponent().getVisible().getBindingValue(getController());
+				Boolean isVisible = getComponent().getVisible().getBindingValue(getBindingEvaluationContext());
 				if (isVisible != null) {
 					componentVisible = isVisible;
 				}
@@ -415,5 +429,13 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 
 	public static boolean notEquals(Object o1, Object o2) {
 		return !equals(o1, o2);
+	}
+
+	public FIBReferencedComponentWidget getEmbeddingComponent() {
+		return embeddingComponent;
+	}
+
+	public void setEmbeddingComponent(FIBReferencedComponentWidget embeddingComponent) {
+		this.embeddingComponent = embeddingComponent;
 	}
 }

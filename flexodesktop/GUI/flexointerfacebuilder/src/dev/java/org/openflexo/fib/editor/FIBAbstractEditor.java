@@ -58,6 +58,7 @@ import org.openflexo.localization.Language;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.xmlcode.AccessorInvocationException;
 import org.openflexo.xmlcode.DuplicateSerializationIdentifierException;
@@ -334,8 +335,9 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					logger.info("Getting this "
-							+ XMLCoder.encodeObjectWithMapping(fibComponent, FIBLibrary.getFIBMapping(), StringEncoder.getDefaultInstance()));
+					RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(fibFile.getParentFile());
+					StringEncoder stringEncoder = new StringEncoder(StringEncoder.getDefaultInstance(), relativePathFileConverter);
+					logger.info("Getting this " + XMLCoder.encodeObjectWithMapping(fibComponent, FIBLibrary.getFIBMapping(), stringEncoder));
 				} catch (InvalidObjectSpecificationException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

@@ -169,7 +169,7 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 		Object objectToSelect = null;
 		if (getComponent().getSelected().isValid()) {
 			try {
-				objectToSelect = getComponent().getSelected().getBindingValue(getController());
+				objectToSelect = getComponent().getSelected().getBindingValue(getBindingEvaluationContext());
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
@@ -268,7 +268,7 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 			if (getComponent().getSelected().isValid()) {
 				logger.fine("Sets SELECTED binding with " + selectedObject);
 				try {
-					getComponent().getSelected().setBindingValue(selectedObject, getController());
+					getComponent().getSelected().setBindingValue(selectedObject, getBindingEvaluationContext());
 				} catch (TypeMismatchException e1) {
 					e1.printStackTrace();
 				} catch (NullReferenceException e1) {

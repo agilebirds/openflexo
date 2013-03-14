@@ -186,7 +186,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		Object value = null;
 
 		try {
-			value = getWidget().getData().getBindingValue(getController());
+			value = getWidget().getData().getBindingValue(getBindingEvaluationContext());
 			T returned = (T) value;
 			if (getDynamicModel() != null) {
 				getDynamicModel().setData(returned);
@@ -284,7 +284,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				return;
 			}
 			try {
-				getWidget().getData().setBindingValue(aValue, getController());
+				getWidget().getData().setBindingValue(aValue, getBindingEvaluationContext());
 			} catch (AccessorInvocationException e) {
 				getController().handleException(e.getCause());
 			} catch (TypeMismatchException e) {
@@ -309,7 +309,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 		if (getWidget().getValueChangedAction().isValid()) {
 			try {
-				getWidget().getValueChangedAction().execute(getController());
+				getWidget().getValueChangedAction().execute(getBindingEvaluationContext());
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
@@ -325,7 +325,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		if (dependingObjects == null) {
 			dependingObjects = new DependingObjects(this);
 		}
-		dependingObjects.refreshObserving(getController());
+		dependingObjects.refreshObserving(getBindingEvaluationContext());
 	}
 
 	@Override
@@ -516,7 +516,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		}
 		if (getComponent().getEnable() != null && getComponent().getEnable().isValid()) {
 			try {
-				Boolean isEnabled = getComponent().getEnable().getBindingValue(getController());
+				Boolean isEnabled = getComponent().getEnable().getBindingValue(getBindingEvaluationContext());
 				if (isEnabled != null) {
 					componentEnabled = isEnabled;
 				}
@@ -538,7 +538,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	private void updateDynamicTooltip() {
 		if (getComponent().getTooltip() != null && getComponent().getTooltip().isValid()) {
 			try {
-				String tooltipText = getComponent().getTooltip().getBindingValue(getController());
+				String tooltipText = getComponent().getTooltip().getBindingValue(getBindingEvaluationContext());
 				getDynamicJComponent().setToolTipText(tooltipText);
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();

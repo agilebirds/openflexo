@@ -66,6 +66,7 @@ import javax.swing.event.ListSelectionListener;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
@@ -356,6 +357,11 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 				model.instanciateParameters(bindingSelector.getBindable());
 			}
 			super.setModel(model);
+		}
+
+		@Override
+		public BindingEvaluationContext getBindingEvaluationContext() {
+			return null;
 		}
 	}
 

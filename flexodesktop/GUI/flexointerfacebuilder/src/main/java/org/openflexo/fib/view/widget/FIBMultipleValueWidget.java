@@ -69,7 +69,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 
 				Object accessedList = null;
 				try {
-					accessedList = getWidget().getList().getBindingValue(getController());
+					accessedList = getWidget().getList().getBindingValue(getBindingEvaluationContext());
 				} catch (TypeMismatchException e) {
 					e.printStackTrace();
 				} catch (NullReferenceException e) {
@@ -87,7 +87,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 
 				Object accessedArray = null;
 				try {
-					accessedArray = getWidget().getArray().getBindingValue(getController());
+					accessedArray = getWidget().getArray().getBindingValue(getBindingEvaluationContext());
 				} catch (TypeMismatchException e1) {
 					e1.printStackTrace();
 				} catch (NullReferenceException e1) {
@@ -152,7 +152,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 
 				Object accessedList = null;
 				try {
-					accessedList = getWidget().getList().getBindingValue(getController());
+					accessedList = getWidget().getList().getBindingValue(getBindingEvaluationContext());
 				} catch (TypeMismatchException e) {
 					e.printStackTrace();
 				} catch (NullReferenceException e) {
@@ -167,7 +167,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 			else if (getWidget().getArray() != null && getWidget().getArray().isSet() && getDataObject() != null) {
 
 				try {
-					Object accessedArray = getWidget().getArray().getBindingValue(getController());
+					Object accessedArray = getWidget().getArray().getBindingValue(getBindingEvaluationContext());
 				} catch (TypeMismatchException e) {
 					e.printStackTrace();
 				} catch (NullReferenceException e) {

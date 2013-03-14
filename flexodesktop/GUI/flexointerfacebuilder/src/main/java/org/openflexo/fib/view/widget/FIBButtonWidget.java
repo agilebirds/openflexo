@@ -88,7 +88,7 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 		Object data = getController().getDataObject();
 		if (getWidget().getAction().isValid()) {
 			try {
-				getWidget().getAction().execute(getController());
+				getWidget().getAction().execute(getBindingEvaluationContext());
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
@@ -122,7 +122,7 @@ public class FIBButtonWidget extends FIBWidgetView<FIBButton, JButton, String> {
 		if (getWidget().getButtonIcon() != null && getWidget().getButtonIcon().isSet() && getWidget().getButtonIcon().isValid()) {
 			Icon icon;
 			try {
-				icon = getWidget().getButtonIcon().getBindingValue(getController());
+				icon = getWidget().getButtonIcon().getBindingValue(getBindingEvaluationContext());
 				buttonWidget.setIcon(icon);
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
