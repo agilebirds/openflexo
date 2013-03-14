@@ -1,6 +1,7 @@
 package org.openflexo.foundation.viewpoint.binding;
 
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -161,6 +162,7 @@ public abstract class ObjectPropertyStatementPathElement<T> extends StatementPat
 				if (propertyPathElement != null) {
 					allProperties.add(propertyPathElement);
 				}
+				Collections.sort(allProperties, BindingPathElement.COMPARATOR);
 			}
 			propertiesFound = true;
 		}
