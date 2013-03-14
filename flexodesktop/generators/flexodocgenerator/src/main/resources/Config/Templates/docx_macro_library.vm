@@ -1,6 +1,6 @@
 #macro(mkbookMark $id $name)
 #set($key=${generator.getNewHolder()})
-#getCurrentUniqueId($key)#incrementCurrentUniqueId
+#getCurrentUniqueId($key)#incrementCurrentUniqueId()
 #set($key = ${key.get()})
 #set($xkey = (${key}*1000000+${id}))
 <w:bookmarkStart w:id="${xkey}" w:name="${name}"/>
@@ -972,7 +972,6 @@ name of the template corresponding to the specific toc_entry.
 #end
 
 #macro(renderBullets $bulletWRList $bulletSectionID)
-<!--Entering macro renderBullets -->
     #addNumberingId($bulletSectionID)
     
     #foreach($bulletItem in $bulletWRList)
@@ -988,29 +987,23 @@ name of the template corresponding to the specific toc_entry.
         </w:p>
     #end
     
-<!-- Exiting macro renderBullets -->
 #end
 
 #macro(addNumberingId $numberingId)
-<!--Entering macro addNumberingId -->
     #set($numberingIds = $generator.getNewHolder())
     #getNumberingIds($numberingIds)
     #set($numberingIds = ${numberingIds.get()})
     #void($numberingIds.add($numberingId))
-<!-- Exiting macro addNumberingId -->
 #end
 
 #macro(addOrderedNumberingId $numberingId)
-<!--Entering macro addOrderedNumberingId -->
     #set($orderedNumberingIds = $generator.getNewHolder())
     #getOrderedNumberingIds($orderedNumberingIds)
     #set($orderedNumberingIds = ${orderedNumberingIds.get()})
     #void($orderedNumberingIds.add($numberingId))
-<!-- Exiting macro addOrderedNumberingId -->
 #end
 
 #macro(convertHTML2DocxVelocityXml $html)
-<!--Entering macro convertHTML2DocxVelocityXml -->
     #set($currentUniqueId = $generator.getNewHolder())
     #getCurrentUniqueId($currentUniqueId)
     #set($currentUniqueId = ${currentUniqueId.get()})
@@ -1026,7 +1019,6 @@ name of the template corresponding to the specific toc_entry.
     #foreach($bulletId in ${docxVelocityXmlFromHtml.getOrderedBulletsIds()})
         #addOrderedNumberingId($bulletId)
     #end
-<!-- Exiting macro convertHTML2DocxVelocityXml -->
 #end
 
 #*
