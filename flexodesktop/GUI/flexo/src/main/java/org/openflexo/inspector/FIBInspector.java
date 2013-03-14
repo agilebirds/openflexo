@@ -517,8 +517,7 @@ public class FIBInspector extends FIBPanel {
 				processFolderSelector.setComponentClass(org.openflexo.components.widget.FIBProcessFolderSelector.class);
 				processFolderSelector.addToAssignments(new FIBCustomAssignment(processFolderSelector, new DataBinding("component.project"),
 						new DataBinding("data.project"), true));
-				newTab.addToSubComponents(processFolderSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false)
-						);
+				newTab.addToSubComponents(processFolderSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
 				return processFolderSelector;
 			case Role:
 				FIBCustom roleSelector = new FIBCustom();
@@ -571,7 +570,7 @@ public class FIBInspector extends FIBPanel {
 	}
 
 	protected void appendInspectorEntries(EditionPattern ep, String epIdentifier, FIBTab newTab) {
-		if (ep.getParentEditionPattern()!=null) {
+		if (ep.getParentEditionPattern() != null) {
 			appendInspectorEntries(ep.getParentEditionPattern(), epIdentifier, newTab);
 		}
 		LocalizedDictionary localizedDictionary = ep.getViewPoint().getLocalizedDictionary();
