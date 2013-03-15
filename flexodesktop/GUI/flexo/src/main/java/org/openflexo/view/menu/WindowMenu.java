@@ -86,11 +86,6 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 
 	protected PaletteItem paletteItem;
 
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
 	public WindowMenu(FlexoController controller, Module module) {
 		super("window", controller);
 		if (logger.isLoggable(Level.FINE)) {
@@ -208,11 +203,6 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 		}
 	}
 
-	// ==========================================================================
-	// ============================= InspectorWindow
-	// ============================
-	// ==========================================================================
-
 	public class InspectorWindowItem extends JCheckBoxMenuItem {
 
 		public InspectorWindowItem() {
@@ -239,11 +229,6 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 
 	}
 
-	// ==========================================================================
-	// ============================= PreferencesWindow
-	// ============================
-	// ==========================================================================
-
 	public class PreferencesWindowItem extends JCheckBoxMenuItem {
 
 		public PreferencesWindowItem() {
@@ -265,11 +250,6 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 		}
 
 	}
-
-	// ==========================================================================
-	// ========================= CheckConsistencyWindow
-	// =========================
-	// ==========================================================================
 
 	public class CheckConsistencyWindowItem extends JCheckBoxMenuItem {
 
@@ -295,12 +275,6 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 		}
 
 	}
-
-	// ==========================================================================
-	// ==========================================================================
-	// =============================== RelativeWindow
-	// ===============================
-	// ==========================================================================
 
 	public class RelativeWindowItem extends JCheckBoxMenuItem {
 		protected RelativeWindowAction action;
@@ -393,10 +367,6 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 		}
 	}
 
-	// =============================================================
-	// ================ Hide/Show Control Panel ====================
-	// =============================================================
-
 	public class ControlPanelItem extends FlexoMenuItem {
 		public ControlPanelItem() {
 			super(new ControlPanelAction(), "hide_control_panel", null, getController(), true);
@@ -432,10 +402,6 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 		}
 
 	}
-
-	// =============================================================
-	// =================== Hide/Show Palette =======================
-	// =============================================================
 
 	public String getHidePaletteString() {
 		return "hide_palette";
@@ -475,11 +441,6 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 		}
 
 	}
-
-	// ==========================================================================
-	// ==================== Hide/Show Process Browser
-	// ===========================
-	// ==========================================================================
 
 	public class BrowserItem extends FlexoMenuItem {
 		public BrowserItem() {
