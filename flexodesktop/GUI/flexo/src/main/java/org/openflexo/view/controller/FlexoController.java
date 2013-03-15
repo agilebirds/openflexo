@@ -601,8 +601,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		}
 	}
 
-	public PreferencesWindow getPreferencesWindow() {
-		return PreferencesController.instance().getPreferencesWindow();
+	public PreferencesWindow getPreferencesWindow(boolean create) {
+		return PreferencesController.instance().getPreferencesWindow(create);
 	}
 
 	public void showPreferences() {
