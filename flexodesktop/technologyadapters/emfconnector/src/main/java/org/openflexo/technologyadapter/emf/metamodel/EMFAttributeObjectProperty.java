@@ -31,7 +31,6 @@ package org.openflexo.technologyadapter.emf.metamodel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
@@ -272,8 +271,8 @@ public class EMFAttributeObjectProperty extends AEMFMetaModelObjectImpl<EAttribu
 	 */
 	@Override
 	@Deprecated
-	public Set<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange() {
-		return Collections.emptySet();
+	public List<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange() {
+		return Collections.emptyList();
 	}
 
 	/**
@@ -283,8 +282,8 @@ public class EMFAttributeObjectProperty extends AEMFMetaModelObjectImpl<EAttribu
 	 */
 	@Override
 	@Deprecated
-	public Set<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain() {
-		return Collections.emptySet();
+	public List<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain() {
+		return Collections.emptyList();
 	}
 
 	/**

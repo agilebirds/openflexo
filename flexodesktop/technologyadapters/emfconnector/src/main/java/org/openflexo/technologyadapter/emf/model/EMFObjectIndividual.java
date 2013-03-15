@@ -31,7 +31,6 @@ package org.openflexo.technologyadapter.emf.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -226,8 +225,8 @@ public class EMFObjectIndividual extends AEMFModelObjectImpl<EObject> implements
 	 */
 	@Override
 	@Deprecated
-	public Set<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange() {
-		return Collections.emptySet();
+	public List<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange() {
+		return Collections.emptyList();
 	}
 
 	/**
@@ -237,8 +236,8 @@ public class EMFObjectIndividual extends AEMFModelObjectImpl<EObject> implements
 	 */
 	@Override
 	@Deprecated
-	public Set<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain() {
-		return Collections.emptySet();
+	public List<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain() {
+		return Collections.emptyList();
 	}
 
 	/**
@@ -316,4 +315,8 @@ public class EMFObjectIndividual extends AEMFModelObjectImpl<EObject> implements
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "EMFObjectIndividual/" + getTypes().get(0) + ":" + getName() + "uri=" + getURI();
+	}
 }

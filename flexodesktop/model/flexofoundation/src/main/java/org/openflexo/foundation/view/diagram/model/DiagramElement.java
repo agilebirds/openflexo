@@ -389,7 +389,7 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> exte
 
 	public EditionPattern getEditionPattern() {
 		if (getEditionPatternInstance() != null) {
-			return getEditionPatternInstance().getPattern();
+			return getEditionPatternInstance().getEditionPattern();
 		}
 		return null;
 	}

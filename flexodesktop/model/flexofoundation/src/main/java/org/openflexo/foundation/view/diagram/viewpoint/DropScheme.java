@@ -58,8 +58,8 @@ public class DropScheme extends AbstractCreationScheme implements DiagramEdition
 		if (isTopTarget()) {
 			return null;
 		}
-		if (getViewPointLibrary() != null) {
-			return getViewPointLibrary().getEditionPattern(_getTarget());
+		if (getVirtualModel() != null) {
+			return getVirtualModel().getEditionPattern(_getTarget());
 		}
 		return null;
 	}

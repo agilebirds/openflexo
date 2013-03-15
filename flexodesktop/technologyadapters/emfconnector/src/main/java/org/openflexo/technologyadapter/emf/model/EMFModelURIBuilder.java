@@ -33,6 +33,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 /**
  * EMF Uri Builder from Object.
@@ -70,6 +71,10 @@ public class EMFModelURIBuilder {
 				}
 			}
 		}
+		// If no name use URI Fragment
+		if (builder.length() == 0) {
+			builder.append(eObject.eResource().getURIFragment(eObject));
+		}
 		return builder.toString();
 	}
 
@@ -91,19 +96,7 @@ public class EMFModelURIBuilder {
 	 */
 	public static String getUri(EObject eObject) {
 		StringBuilder builder = new StringBuilder();
-
-		if (eObject.eContainer() == null) {
-			if (eObject.eResource() == null) {
-			} else {
-				builder.append(eObject.eResource().getURI().toString());
-			}
-		} else {
-			builder.append(getUri(eObject.eContainer()));
-		}
-		builder.append("/");
-		builder.append(getName(eObject));
-
+		builder.append(EcoreUtil.getURI(eObject));
 		return builder.toString();
 	}
-
 }

@@ -10,7 +10,6 @@
           <ColumnAssignment variable="component.owner" value="iterator" />
         </CustomColumn>
         <CustomColumn componentClassName="org.openflexo.components.widget.binding.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.bindingValue" format="object.stringRepresentation" title="operation_entry" columnWidth="150" resizable="true" displayTitle="true">
-          <ColumnAssignment variable="component.bindingDefinition" value="iterator.bindingDefinition" />
           <ColumnAssignment variable="component.bindable" value="iterator" />
         </CustomColumn>
       </Table>

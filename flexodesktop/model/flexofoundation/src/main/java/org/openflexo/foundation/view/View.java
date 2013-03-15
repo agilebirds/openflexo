@@ -86,6 +86,7 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 	 */
 	public View(ViewBuilder builder) {
 		this(builder.getProject());
+		setResource(builder.getResource());
 		builder.view = this;
 		initializeDeserialization(builder);
 	}

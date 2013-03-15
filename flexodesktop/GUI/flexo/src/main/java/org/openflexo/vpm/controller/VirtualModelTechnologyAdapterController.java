@@ -2,6 +2,8 @@ package org.openflexo.vpm.controller;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.components.widget.OntologyBrowserModel;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.viewpoint.AddEditionPattern;
 import org.openflexo.foundation.viewpoint.DeleteAction;
@@ -97,4 +99,9 @@ public class VirtualModelTechnologyAdapterController extends TechnologyAdapterCo
 		return null;
 	}
 
+	@Override
+	public OntologyBrowserModel makeOntologyBrowserModel(IFlexoOntology context) {
+		// TODO not applicable yet
+		return null;
+	}
 }

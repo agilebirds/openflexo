@@ -34,6 +34,8 @@ import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
+import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import org.openflexo.toolbox.StringUtils;
@@ -70,9 +72,6 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 	public static final String TECHNICAL_DESCRIPTION_URI = FLEXO_CONCEPT_ONTOLOGY_URI + "#technicalDescription";
 	public static final String USER_MANUAL_DESCRIPTION_URI = FLEXO_CONCEPT_ONTOLOGY_URI + "#userManualDescription";
 
-	private OWLTechnologyAdapter adapter;
-	private FlexoResourceCenterService resourceCenterService;
-
 	private SimpleGraphMaker graphMaker;
 
 	private Map<String, FlexoResource<OWLOntology>> ontologies;
@@ -93,9 +92,7 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 	}
 
 	public OWLOntologyLibrary(OWLTechnologyAdapter adapter, FlexoResourceCenterService resourceCenterService) {
-		super();
-		this.adapter = adapter;
-		this.resourceCenterService = resourceCenterService;
+		super(adapter, resourceCenterService);
 
 		ontologyObjectConverter = new OntologyObjectConverter(null/*this*/);
 		graphMaker = new SimpleGraphMaker();
@@ -117,10 +114,10 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 
 		logger.info("ontologies=" + ontologies);
 
-		logger.info("getRDFSOntology()=" + getRDFSOntology());
-		logger.info("getRDFOntology()=" + getRDFOntology());
-		logger.info("getOWLOntology()=" + getOWLOntology());
-		logger.info("getFlexoConceptOntology()=" + getFlexoConceptOntology());
+		// logger.info("getRDFSOntology()=" + getRDFSOntology());
+		// logger.info("getRDFOntology()=" + getRDFOntology());
+		// logger.info("getOWLOntology()=" + getOWLOntology());
+		// logger.info("getFlexoConceptOntology()=" + getFlexoConceptOntology());
 
 		FlexoResource<OWLOntology> rdfsOntologyResource = ontologies.get(RDFSURIDefinitions.RDFS_ONTOLOGY_URI);
 		logger.info("rdfsOntologyResource=" + rdfsOntologyResource);
@@ -130,16 +127,22 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 			getRDFSOntology().loadWhenUnloaded();
 			getRDFOntology().loadWhenUnloaded();
 			getOWLOntology().loadWhenUnloaded();
+			// Because some ontologies have cross reference, we update again concept and properties to setup cross references
 			getRDFSOntology().updateConceptsAndProperties();
 			getRDFOntology().updateConceptsAndProperties();
 			getOWLOntology().updateConceptsAndProperties();
+			// Because we have updated again, we have to clear the modification stamp
+			getRDFSOntology().clearIsModified();
+			getRDFOntology().clearIsModified();
+			getOWLOntology().clearIsModified();
 			getFlexoConceptOntology().loadWhenUnloaded();
 			defaultOntologiesLoaded = true;
 		}
 	}
 
+	@Override
 	public OWLTechnologyAdapter getTechnologyAdapter() {
-		return adapter;
+		return (OWLTechnologyAdapter) super.getTechnologyAdapter();
 	}
 
 	public OWLDataType getDataType(String dataTypeURI) {
@@ -209,6 +212,7 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 				e.printStackTrace();
 			}
 		}
+		logger.warning("Not found ontology: " + ontologyURI);
 		return null;
 	}
 
@@ -320,7 +324,6 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 
 	@Override
 	public boolean hasModel(String name) {
-		logger.info("hasModel " + name + " ? ");
 		if (getOntology(name) != null) {
 			return true;
 		}
@@ -377,12 +380,15 @@ public class OWLOntologyLibrary extends TechnologyContextManager<OWLOntology, OW
 	}
 
 	@Override
-	public void registerModel(FlexoResource<OWLOntology> ontologyResource) {
+	public void registerMetaModel(FlexoMetaModelResource<OWLOntology, OWLOntology> ontologyResource) {
+		super.registerMetaModel(ontologyResource);
 		registerOntology(ontologyResource);
 	}
 
 	@Override
-	public void registerMetaModel(FlexoResource<OWLOntology> ontologyResource) {
+	public void registerModel(FlexoModelResource<OWLOntology, OWLOntology> ontologyResource) {
+		super.registerModel(ontologyResource);
 		registerOntology(ontologyResource);
 	}
+
 }

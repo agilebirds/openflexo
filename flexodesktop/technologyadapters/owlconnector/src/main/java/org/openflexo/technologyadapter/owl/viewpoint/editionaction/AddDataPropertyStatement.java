@@ -38,6 +38,7 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.SetDataPropertyValueAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.owl.model.DataPropertyStatement;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
@@ -46,7 +47,7 @@ import org.openflexo.technologyadapter.owl.model.StatementWithProperty;
 import org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementPatternRole;
 import org.openflexo.toolbox.StringUtils;
 
-public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement> {
+public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement> implements SetDataPropertyValueAction {
 
 	private static final Logger logger = Logger.getLogger(AddDataPropertyStatement.class.getPackage().getName());
 
@@ -87,8 +88,19 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 		return null;
 	}
 
-	public IFlexoOntologyStructuralProperty getDataProperty() {
-		if (StringUtils.isNotEmpty(dataPropertyURI)) {
+	@Override
+	public IFlexoOntologyStructuralProperty getProperty() {
+		return getDataProperty();
+	}
+
+	@Override
+	public void setProperty(IFlexoOntologyStructuralProperty aProperty) {
+		setDataProperty((OWLDataProperty) aProperty);
+	}
+
+	@Override
+	public IFlexoOntologyDataProperty getDataProperty() {
+		if (getVirtualModel() != null && StringUtils.isNotEmpty(dataPropertyURI)) {
 			return getVirtualModel().getOntologyDataProperty(dataPropertyURI);
 		} else {
 			if (getPatternRole() != null) {
@@ -98,7 +110,8 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 		return null;
 	}
 
-	public void setDataProperty(IFlexoOntologyStructuralProperty ontologyProperty) {
+	@Override
+	public void setDataProperty(IFlexoOntologyDataProperty ontologyProperty) {
 		if (ontologyProperty != null) {
 			if (getPatternRole() != null) {
 				if (getPatternRole().getDataProperty().isSuperConceptOf(ontologyProperty)) {
@@ -144,25 +157,35 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 
 	public Type getType() {
 		if (getDataProperty() != null) {
-			return ((IFlexoOntologyDataProperty) getDataProperty()).getRange().getAccessedType();
+			return getDataProperty().getRange().getAccessedType();
 		}
 		return Object.class;
 	};
 
+	@Override
 	public DataBinding<Object> getValue() {
 		if (value == null) {
-			value = new DataBinding<Object>(this, getType(), BindingDefinitionType.GET);
+			value = new DataBinding<Object>(this, getType(), BindingDefinitionType.GET) {
+				@Override
+				public Type getDeclaredType() {
+					return getType();
+				}
+			};
 			value.setBindingName("value");
 		}
 		return value;
 	}
 
+	@Override
 	public void setValue(DataBinding<Object> value) {
 		if (value != null) {
-			value.setOwner(this);
+			value = new DataBinding<Object>(value.toString(), this, getType(), BindingDefinitionType.GET) {
+				@Override
+				public Type getDeclaredType() {
+					return getType();
+				}
+			};
 			value.setBindingName("value");
-			value.setDeclaredType(getType());
-			value.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.value = value;
 	}

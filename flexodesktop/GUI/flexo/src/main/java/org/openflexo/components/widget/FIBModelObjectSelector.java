@@ -365,10 +365,14 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 		return matchingValues;
 	}
 
+	// FIBModelObjectSelector is applicable to something else than objects in a project
+	@Deprecated
 	public FlexoProject getProject() {
 		return project;
 	}
 
+	// FIBModelObjectSelector is applicable to something else than objects in a project
+	@Deprecated
 	@CustomComponentParameter(name = "project", type = CustomComponentParameter.Type.MANDATORY)
 	public void setProject(FlexoProject project) {
 		if (project == null) {

@@ -23,6 +23,8 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.components.widget.OntologyBrowserModel;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
@@ -137,4 +139,5 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<?
 	 */
 	public abstract ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass);
 
+	public abstract OntologyBrowserModel makeOntologyBrowserModel(IFlexoOntology context);
 }

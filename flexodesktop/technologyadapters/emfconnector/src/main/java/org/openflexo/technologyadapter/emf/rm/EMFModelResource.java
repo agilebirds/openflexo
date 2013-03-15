@@ -19,255 +19,31 @@
  */
 package org.openflexo.technologyadapter.emf.rm;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.logging.Level;
-
-import org.eclipse.emf.ecore.resource.Resource;
-import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoServiceManager;
-import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProjectBuilder;
-import org.openflexo.foundation.rm.FlexoStorageResource;
-import org.openflexo.foundation.rm.InvalidFileNameException;
-import org.openflexo.foundation.rm.LoadResourceException;
-import org.openflexo.foundation.rm.ResourceDependencyLoopException;
-import org.openflexo.foundation.rm.ResourceType;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
+import org.openflexo.foundation.resource.FlexoFileResource;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
-import org.openflexo.foundation.utils.FlexoProgress;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
-import org.openflexo.foundation.utils.ProjectLoadingHandler;
-import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.technologyadapter.emf.EMFTechnologyContextManager;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
-import org.openflexo.technologyadapter.emf.model.io.EMFModelConverter;
 
 /**
  * EMF Model Resource.
  * 
  * @author gbesancon
  */
-public class EMFModelResource extends FlexoStorageResource<EMFModel> implements FlexoModelResource<EMFModel, EMFMetaModel> {
+@ModelEntity
+@ImplementationClass(EMFModelResourceImpl.class)
+public interface EMFModelResource extends FlexoFileResource<EMFModel>, FlexoModelResource<EMFModel, EMFMetaModel> {
 
-	/** Logger. */
-	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(EMFModelResource.class.getPackage()
-			.getName());
+	public static final String TECHNOLOGY_CONTEXT_MANAGER = "technologyContextManager";
 
-	/** Technological Adapter. */
-	protected EMFTechnologyAdapter adapter;
+	@Getter(value = TECHNOLOGY_CONTEXT_MANAGER, ignoreType = true)
+	public EMFTechnologyContextManager getTechnologyContextManager();
 
-	/** MetaModel Resource. */
-	protected final EMFMetaModelResource metaModelResource;
-
-	/** Model File. */
-	protected final File modelFile;
-
-	/** Model Resource. */
-	protected Resource modelResource;
-
-	/**
-	 * Constructor.
-	 * 
-	 * @param builder
-	 */
-	public EMFModelResource(FlexoProjectBuilder builder) {
-		this(builder != null ? builder.project : null, builder != null ? builder.serviceManager : null);
-		if (builder != null) {
-			builder.notifyResourceLoading(this);
-		}
-	}
-
-	/**
-	 * Constructor.
-	 * 
-	 * @param aProject
-	 */
-	public EMFModelResource(FlexoProject aProject, FlexoServiceManager serviceManager) {
-		super(aProject, serviceManager);
-		metaModelResource = null;
-		adapter = null;
-		modelFile = null;
-	}
-
-	/**
-	 * Constructor.
-	 * 
-	 * @param project
-	 * @param newEMFModel
-	 * @param file
-	 * @throws InvalidFileNameException
-	 * @throws DuplicateResourceException
-	 */
-	public EMFModelResource(File file, EMFMetaModelResource metaModelResource, EMFTechnologyAdapter adapter, String uri)
-			throws InvalidFileNameException, DuplicateResourceException {
-		super((FlexoProject) null, adapter.getTechnologyAdapterService().getServiceManager());
-		this.modelFile = file;
-		this.metaModelResource = metaModelResource;
-		this.adapter = adapter;
-		setURI(uri);
-	}
-
-	/**
-	 * Getter of EMF Model Resource.
-	 * 
-	 * @return the modelResource value
-	 */
-	public Resource getEMFResource() {
-		if (modelResource == null) {
-			try {
-				metaModelResource.getResourceData(null); // Insure MetaModel loaded
-				modelResource = metaModelResource.getResourceFactory().createResource(
-						org.eclipse.emf.common.util.URI.createFileURI(modelFile.getAbsolutePath()));
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (ResourceLoadingCancelledException e) {
-				e.printStackTrace();
-			} catch (ResourceDependencyLoopException e) {
-				e.printStackTrace();
-			} catch (FlexoException e) {
-				e.printStackTrace();
-			}
-		}
-		return modelResource;
-	}
-
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.rm.FlexoStorageResource#saveResourceData(boolean)
-	 */
-	@Override
-	protected void saveResourceData(boolean clearIsModified) throws SaveResourceException {
-		if (!hasWritePermission()) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Permission denied : " + getFile().getAbsolutePath());
-			}
-			throw new SaveResourcePermissionDeniedException(this);
-		}
-		if (_resourceData != null) {
-			FileWritingLock lock = willWriteOnDisk();
-			writeToFile();
-			hasWrittenOnDisk(lock);
-			notifyResourceStatusChanged();
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Succeeding to save Resource " + getResourceIdentifier() + " : " + getFile().getName());
-			}
-		}
-		if (clearIsModified) {
-			getResourceData().clearIsModified(false);
-		}
-	}
-
-	/**
-	 * Write file.
-	 * 
-	 * @throws SaveResourceException
-	 */
-	private void writeToFile() throws SaveResourceException {
-		try {
-			getEMFResource().save(null);
-			logger.info("Wrote " + getFile());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.rm.FlexoResource#getResourceType()
-	 */
-	@Override
-	public ResourceType getResourceType() {
-		return ResourceType.EMF;
-	}
-
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.rm.FlexoResource#getName()
-	 */
-	@Override
-	public String getName() {
-		return modelFile.getAbsolutePath();
-	}
-
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.rm.FlexoFileResource#getFile()
-	 */
-	@Override
-	public File getFile() {
-		return modelFile;
-	}
-
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.rm.FlexoStorageResource#performLoadResourceData(org.openflexo.foundation.utils.FlexoProgress,
-	 *      org.openflexo.foundation.utils.ProjectLoadingHandler)
-	 */
-	@Override
-	protected EMFModel performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler) throws LoadResourceException,
-			FileNotFoundException, ProjectLoadingCancelledException {
-		try {
-			getEMFResource().load(null);
-			EMFModelConverter converter = new EMFModelConverter();
-			_resourceData = converter.convertModel(getMetaModel(), getEMFResource());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return _resourceData;
-	}
-
-	/**
-	 * 
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.resource.FlexoResource#getResourceDataClass()
-	 */
-	@Override
-	public Class<EMFModel> getResourceDataClass() {
-		return EMFModel.class;
-	}
-
-	@Override
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
-		return adapter;
-	}
-
-	@Override
-	public void setTechnologyAdapter(TechnologyAdapter<?, ?> technologyAdapter) {
-		if (technologyAdapter instanceof EMFTechnologyAdapter) {
-			adapter = (EMFTechnologyAdapter) technologyAdapter;
-		}
-	}
-
-	@Override
-	public EMFMetaModel getMetaModel() {
-		return metaModelResource.getMetaModelData();
-	}
-
-	@Override
-	public void setMetaModel(EMFMetaModel aMetaModel) {
-	}
-
-	@Override
-	public EMFModel getModelData() {
-		return _resourceData;
-	}
-
-	@Override
-	public EMFModel getModel() {
-		return getModelData();
-	}
+	@Setter(TECHNOLOGY_CONTEXT_MANAGER)
+	public void setTechnologyContextManager(EMFTechnologyContextManager technologyContextManager);
 
 }

@@ -91,16 +91,29 @@ public class OntologyUtils {
 	 */
 	public static <O extends IFlexoOntology> Set<O> getAllImportedOntologies(O ontology) {
 		Set<O> returned = new HashSet<O>();
+		appendImportedOntologies(ontology, returned);
+		/*
 		returned.add(ontology);
+		// System.out.println("Add " + ontology + " still to import " + ontology.getImportedOntologies());
 		if (ontology.getImportedOntologies() != null) {
 			for (IFlexoOntology i : ontology.getImportedOntologies()) {
-				returned.add((O) i);
-				if (i != ontology && !returned.contains(i)) {
+				if (i != ontology && !returned.contains(i)) { // Previous test to prevent loops in imports
 					returned.addAll((Set<O>) getAllImportedOntologies(i));
 				}
+				// System.out.println("Add " + i);
+				returned.add((O) i);
+			}
+		}*/
+		return returned;
+	}
+
+	private static <O extends IFlexoOntology> void appendImportedOntologies(O ontology, Set<O> s) {
+		if (!s.contains(ontology)) {
+			s.add(ontology);
+			for (IFlexoOntology imported : ontology.getImportedOntologies()) {
+				appendImportedOntologies(imported, (Set) s);
 			}
 		}
-		return returned;
 	}
 
 }

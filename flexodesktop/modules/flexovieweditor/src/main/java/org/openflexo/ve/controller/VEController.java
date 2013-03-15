@@ -53,7 +53,7 @@ public class VEController extends FlexoController {
 
 	public ViewLibraryPerspective VIEW_LIBRARY_PERSPECTIVE;
 
-	// public OntologyPerspective ONTOLOGY_PERSPECTIVE;
+	public InformationSpacePerspective INFORMATION_SPACE_PERSPECTIVE;
 
 	@Override
 	public boolean useNewInspectorScheme() {
@@ -75,7 +75,7 @@ public class VEController extends FlexoController {
 	@Override
 	protected void initializePerspectives() {
 		addToPerspectives(VIEW_LIBRARY_PERSPECTIVE = new ViewLibraryPerspective(this));
-		// addToPerspectives(ONTOLOGY_PERSPECTIVE = new OntologyPerspective(this));
+		addToPerspectives(INFORMATION_SPACE_PERSPECTIVE = new InformationSpacePerspective(this));
 	}
 
 	@Override

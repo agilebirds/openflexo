@@ -41,6 +41,7 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 			returned.setName(diagramPaletteFile.getName());
 			returned.setFile(diagramPaletteFile);
 			returned.setViewPointLibrary(viewPointLibrary);
+			returned.setURI(dsResource.getURI() + "/" + diagramPaletteFile.getName());
 			returned.setServiceManager(viewPointLibrary.getServiceManager());
 			returned.relativePathFileConverter = new RelativePathFileConverter(diagramPaletteFile.getParentFile());
 			dsResource.addToContents(returned);
@@ -59,6 +60,7 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 			returned.setName(diagramPaletteFile.getName());
 			returned.setFile(diagramPaletteFile);
 			returned.setViewPointLibrary(viewPointLibrary);
+			returned.setURI(dsResource.getURI() + "/" + diagramPaletteFile.getName());
 			returned.setServiceManager(viewPointLibrary.getServiceManager());
 			returned.relativePathFileConverter = new RelativePathFileConverter(diagramPaletteFile.getParentFile());
 			dsResource.addToContents(returned);
@@ -119,6 +121,7 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 		returned.init(getContainer().getDiagramSpecification(), getFile().getName().substring(0, getFile().getName().length() - 8));
 		System.out.println("DiagramPalette = " + returned);
 		getContainer().getDiagramSpecification().addToPalettes(returned);
+		returned.clearIsModified();
 		return returned;
 	}
 

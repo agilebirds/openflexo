@@ -34,14 +34,16 @@ import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBFont;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.CustomPopup.ApplyCancelListener;
 import org.openflexo.swing.FontSelector;
 
-public class FIBFontWidget extends FIBWidgetView<FIBFont, FontSelector, Font> {
+public class FIBFontWidget extends FIBWidgetView<FIBFont, FontSelector, Font> implements ApplyCancelListener {
 
 	private static final Logger logger = Logger.getLogger(FIBFontWidget.class.getPackage().getName());
 
 	protected FontSelector _selector;
 	private JCheckBox checkBox;
+	private Font revertValue;
 
 	private JPanel container;
 
@@ -50,6 +52,8 @@ public class FIBFontWidget extends FIBWidgetView<FIBFont, FontSelector, Font> {
 		_selector = new FontSelector();
 		if (isReadOnly()) {
 			_selector.getDownButton().setEnabled(false);
+		} else {
+			_selector.addApplyCancelListener(this);
 		}
 		_selector.addFocusListener(this);
 		checkBox = new JCheckBox();
@@ -63,14 +67,15 @@ public class FIBFontWidget extends FIBWidgetView<FIBFont, FontSelector, Font> {
 			}
 		});
 		container = new JPanel(new GridBagLayout());
+		container.setOpaque(false);
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.weightx = 1.0;
-		container.add(_selector, gbc);
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.weightx = 0;
 		gbc.anchor = GridBagConstraints.LINE_START;
 		container.add(checkBox, gbc);
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 1.0;
+		container.add(_selector, gbc);
 		updateCheckboxVisibility();
 		updateFont();
 	}
@@ -83,9 +88,10 @@ public class FIBFontWidget extends FIBWidgetView<FIBFont, FontSelector, Font> {
 	public synchronized boolean updateWidgetFromModel() {
 		// if (notEquals(getValue(),getSelectedFont())) {
 		widgetUpdating = true;
-		checkBox.setSelected(getValue() == null);
+		checkBox.setSelected(getValue() != null);
 		_selector.setEnabled((getValue() != null || !getWidget().getAllowsNull()) && isEnabled());
 		setFont(getValue());
+		revertValue = getValue();
 		widgetUpdating = false;
 		return true;
 		// }
@@ -103,7 +109,7 @@ public class FIBFontWidget extends FIBWidgetView<FIBFont, FontSelector, Font> {
 		}
 
 		Font editedObject = null;
-		if (!checkBox.isSelected()) {
+		if (checkBox.isSelected()) {
 			editedObject = _selector.getEditedObject();
 		}
 		setValue(editedObject);
@@ -124,6 +130,16 @@ public class FIBFontWidget extends FIBWidgetView<FIBFont, FontSelector, Font> {
 
 	protected void setFont(Font aFont) {
 		_selector.setEditedObject(aFont);
+	}
+
+	@Override
+	public void fireApplyPerformed() {
+		updateModelFromWidget();
+	}
+
+	@Override
+	public void fireCancelPerformed() {
+		setValue(revertValue);
 	}
 
 }

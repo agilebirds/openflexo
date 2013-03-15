@@ -19,6 +19,7 @@
  */
 package org.openflexo.technologyadapter.owl.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -65,8 +66,8 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 	private boolean domainsAndRangesAreRecursivelyUpToDate = false;
 	private Set<OWLProperty> declaredPropertiesTakingMySelfAsRange;
 	private Set<OWLProperty> declaredPropertiesTakingMySelfAsDomain;
-	protected Set<OWLProperty> propertiesTakingMySelfAsRange;
-	protected Set<OWLProperty> propertiesTakingMySelfAsDomain;
+	protected List<OWLProperty> propertiesTakingMySelfAsRange;
+	protected List<OWLProperty> propertiesTakingMySelfAsDomain;
 
 	private String uri;
 	private String name;
@@ -91,8 +92,8 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 		_semanticStatements = new Vector<OWLStatement>();
 		_annotationStatements = new Vector<PropertyStatement>();
 		_annotationObjectsStatements = new Vector<ObjectPropertyStatement>();
-		propertiesTakingMySelfAsRange = new HashSet<OWLProperty>();
-		propertiesTakingMySelfAsDomain = new HashSet<OWLProperty>();
+		propertiesTakingMySelfAsRange = new ArrayList<OWLProperty>();
+		propertiesTakingMySelfAsDomain = new ArrayList<OWLProperty>();
 		declaredPropertiesTakingMySelfAsRange = new HashSet<OWLProperty>();
 		declaredPropertiesTakingMySelfAsDomain = new HashSet<OWLProperty>();
 	}
@@ -248,6 +249,26 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 					} else if (predicateProperty instanceof IFlexoOntologyDataProperty) {
 						newStatement = new DataPropertyStatement(this, s, getTechnologyAdapter());
 					} else {
+						/*OWLOntologyLibrary owlOntologyLibrary = getOntologyLibrary();
+						OWLOntology rdfsOntology = owlOntologyLibrary.getRDFSOntology();
+						System.out.println("Unknown predicate: " + predicate);
+						System.out.println("Known predicates:");
+						for (OWLDataProperty p : getOntology().getAccessibleDataProperties()) {
+							System.out.println(" > " + p);
+						}
+						for (OWLObjectProperty p : getOntology().getAccessibleObjectProperties()) {
+							System.out.println(" > " + p);
+						}
+						System.out.println("rdfsOntology=" + rdfsOntology);
+						System.out.println("hop=" + getOntology().getOntologyObject(predicate.getURI()));
+						System.out.println("hop2=" + rdfsOntology.getOntologyObject(predicate.getURI()));
+						System.out.println("ontology = " + getOntology());
+						System.out.println("importedOntologies=" + getOntology().getImportedOntologies());
+						System.out.println("allImportedOntologies=" + getOntology().getAllImportedOntologies());
+						System.out.println("OWLOntology = " + getOntology().getImportedOntologies().get(0));
+						System.out.println("OWLOntology importedOntologies="
+								+ getOntology().getImportedOntologies().get(0).getImportedOntologies());
+						System.out.println("OWLOntology importedOntologies=" + owlOntologyLibrary.getOWLOntology().getImportedOntologies());*/
 						logger.warning("Inconsistant data: unkwown property " + predicate);
 					}
 				}
@@ -552,7 +573,7 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 
 	@Override
 	public boolean isSubConceptOf(IFlexoOntologyConcept concept) {
-		return concept.isSuperConceptOf(concept);
+		return concept.isSuperConceptOf(this);
 	}
 
 	public PropertyStatement createNewCommentAnnotation() {
@@ -742,7 +763,7 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 
 		getOntResource().addProperty(((OWLProperty) property).getOntProperty(), object.getResource());
 		updateOntologyStatements();
-		getOntology().setChanged();
+		setChanged();
 		return getPropertyStatement(property, object);
 	}
 
@@ -758,12 +779,12 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 			if (value instanceof String) {
 				getOntResource().addProperty(property.getOntProperty(), (String) value);
 				updateOntologyStatements();
-				getOntology().setChanged();
+				setChanged();
 				return getPropertyStatement(property, (String) value);
 			} else {
 				getOntResource().addLiteral(property.getOntProperty(), value);
 				updateOntologyStatements();
-				getOntology().setChanged();
+				setChanged();
 				return getPropertyStatement(property, value);
 			}
 		}
@@ -782,7 +803,7 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 		// System.out.println("****** Add statement for property "+property.getName()+" value="+value+" language="+language);
 		getOntResource().addProperty(property.getOntProperty(), value, language.getTag());
 		updateOntologyStatements();
-		getOntology().setChanged();
+		setChanged();
 		return getPropertyStatement(property, value, language);
 	}
 
@@ -796,14 +817,14 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 	public DataPropertyStatement addDataPropertyStatement(OWLDataProperty property, Object value) {
 		getOntResource().addLiteral(((OWLProperty) property).getOntProperty(), value);
 		updateOntologyStatements();
-		getOntology().setChanged();
+		setChanged();
 		return getDataPropertyStatement(property, value);
 	}
 
 	public void removePropertyStatement(PropertyStatement statement) {
 		getFlexoOntology().getOntModel().remove(statement.getStatement());
 		updateOntologyStatements();
-		getOntology().setChanged();
+		setChanged();
 	}
 
 	public PropertyStatement addLiteral(OWLProperty property, Object value) {
@@ -832,7 +853,7 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 			} else {
 				// If value is null, just ignore
 			}
-			getOntology().setChanged();
+			setChanged();
 			return getPropertyStatement(property);
 		}
 		return null;
@@ -862,7 +883,7 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 	}
 
 	@Override
-	public Set<OWLProperty> getPropertiesTakingMySelfAsRange() {
+	public List<OWLProperty> getPropertiesTakingMySelfAsRange() {
 		getDeclaredPropertiesTakingMySelfAsRange(); // Required in some cases: TODO: investigate this
 		if (!domainsAndRangesAreRecursivelyUpToDate) {
 			recursivelySearchRangeAndDomains();
@@ -871,7 +892,7 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 	}
 
 	@Override
-	public Set<OWLProperty> getPropertiesTakingMySelfAsDomain() {
+	public List<OWLProperty> getPropertiesTakingMySelfAsDomain() {
 		getDeclaredPropertiesTakingMySelfAsDomain(); // Required in some cases: TODO: investigate this
 		if (!domainsAndRangesAreRecursivelyUpToDate) {
 			recursivelySearchRangeAndDomains();
@@ -1074,6 +1095,27 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 	public <T> T accept(IFlexoOntologyConceptVisitor<T> visitor) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public final void setChanged() {
+		/*
+		 * The final keyword is added here mainly because this part of the code
+		 * is highly sensitive. A synchronized modifier could cause many
+		 * problems (essentially with the auto-saving thread)
+		 */
+
+		synchronized (this) {
+			super.setChanged();
+			setIsModified();
+			if (getFlexoOntology() != null) {
+				getFlexoOntology().setIsModified();
+			}
+		}
+	}
+
+	public OWLOntology getResourceData() {
+		return getFlexoOntology();
 	}
 
 }

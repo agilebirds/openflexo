@@ -155,7 +155,9 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 
 	public EditionPattern(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
-		virtualModel = builder.getVirtualModel();
+		if (builder != null) {
+			virtualModel = builder.getVirtualModel();
+		}
 		patternRoles = new Vector<PatternRole>();
 		editionSchemes = new Vector<EditionScheme>();
 		editionPatternConstraints = new Vector<EditionPatternConstraint>();
@@ -813,8 +815,8 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 
 	public EditionPattern getParentEditionPattern() {
 		if (parentEditionPattern == null && StringUtils.isNotEmpty(parentEditionPatternURI)) {
-			if (getViewPointLibrary() != null) {
-				setParentEditionPattern(getViewPointLibrary().getEditionPattern(parentEditionPatternURI));
+			if (getVirtualModel() != null) {
+				setParentEditionPattern(getVirtualModel().getEditionPattern(parentEditionPatternURI));
 			}
 		}
 		return parentEditionPattern;

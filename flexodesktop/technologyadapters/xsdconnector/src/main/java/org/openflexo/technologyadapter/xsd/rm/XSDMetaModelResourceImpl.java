@@ -1,6 +1,7 @@
 package org.openflexo.technologyadapter.xsd.rm;
 
 import java.io.FileNotFoundException;
+import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
@@ -12,6 +13,8 @@ import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 import org.openflexo.toolbox.IProgress;
 
 public abstract class XSDMetaModelResourceImpl extends FlexoFileResourceImpl<XSDMetaModel> implements XSDMetaModelResource {
+
+	private static final Logger logger = Logger.getLogger(XSDMetaModelResourceImpl.class.getPackage().getName());
 
 	@Override
 	public XSDMetaModel getMetaModelData() {
@@ -49,7 +52,7 @@ public abstract class XSDMetaModelResourceImpl extends FlexoFileResourceImpl<XSD
 	 */
 	@Override
 	public void save(IProgress progress) {
-
+		logger.info("Not implemented yet");
 	}
 
 	/**
@@ -58,6 +61,11 @@ public abstract class XSDMetaModelResourceImpl extends FlexoFileResourceImpl<XSD
 	@Override
 	public FlexoResourceTree update() {
 		return null;
+	}
+
+	@Override
+	public Class<XSDMetaModel> getResourceDataClass() {
+		return XSDMetaModel.class;
 	}
 
 }

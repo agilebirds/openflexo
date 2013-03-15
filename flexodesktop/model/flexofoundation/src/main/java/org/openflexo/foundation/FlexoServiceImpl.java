@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  * @author sylvain
  * 
  */
-public abstract class FlexoServiceImpl implements FlexoService {
+public abstract class FlexoServiceImpl extends FlexoObservable implements FlexoService {
 
 	protected static final Logger logger = Logger.getLogger(FlexoServiceImpl.class.getPackage().getName());
 
@@ -46,6 +46,12 @@ public abstract class FlexoServiceImpl implements FlexoService {
 	@Override
 	public FlexoServiceManager getServiceManager() {
 		return serviceManager;
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

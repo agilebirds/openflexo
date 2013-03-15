@@ -96,6 +96,13 @@ public class VirtualModelTechnologyAdapter<VMI extends VirtualModelInstance<VMI,
 	@Override
 	public boolean isValidModelFile(File aModelFile, FlexoResource<VM> metaModelResource,
 			TechnologyContextManager<VMI, VM> technologyContextManager) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isValidModelFile(File aModelFile, TechnologyContextManager<VMI, VM> technologyContextManager) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -178,6 +185,12 @@ public class VirtualModelTechnologyAdapter<VMI extends VirtualModelInstance<VMI,
 	}
 
 	@Override
+	public FlexoResource<VMI> retrieveModelResource(File aModelFile, TechnologyContextManager<VMI, VM> technologyContextManager) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public <R extends FlexoResource<? extends VM>> MetaModelRepository<R, VMI, VM, ? extends TechnologyAdapter<VMI, VM>> createMetaModelRepository(
 			FlexoResourceCenter resourceCenter) {
 		// TODO Auto-generated method stub
@@ -193,6 +206,18 @@ public class VirtualModelTechnologyAdapter<VMI extends VirtualModelInstance<VMI,
 
 	@Override
 	public TechnologyContextManager<VMI, VM> createTechnologyContextManager(FlexoResourceCenterService service) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getExpectedMetaModelExtension() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getExpectedModelExtension(FlexoResource<VM> metaModel) {
 		// TODO Auto-generated method stub
 		return null;
 	}

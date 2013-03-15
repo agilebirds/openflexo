@@ -20,16 +20,24 @@
 package org.openflexo.components.widget;
 
 import java.io.File;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.components.widget.OntologyBrowserModel.OntologyBrowserModelRecomputed;
 import org.openflexo.foundation.ontology.BuiltInDataType;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.technologyadapter.FlexoModelResource;
+import org.openflexo.foundation.technologyadapter.InformationSpace;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.view.controller.TechnologyAdapterController;
+import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
 /**
  * Widget allowing to select an IFlexoOntologyStructuralProperty.<br>
@@ -60,6 +68,7 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/FIBPropertySelector.fib");
 
+	private InformationSpace informationSpace;
 	private IFlexoOntology context;
 	private IFlexoOntologyClass rootClass;
 	private IFlexoOntologyClass domain;
@@ -97,6 +106,20 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 		return IFlexoOntologyStructuralProperty.class;
 	}
 
+	public InformationSpace getInformationSpace() {
+		// Still use legacy: if InformationSpace is not specified by project, retrieve IS from Project
+		if (informationSpace == null && getProject() != null) {
+			informationSpace = getProject().getInformationSpace();
+		}
+		return informationSpace;
+	}
+
+	@CustomComponentParameter(name = "informationSpace", type = CustomComponentParameter.Type.OPTIONAL)
+	public void setInformationSpace(InformationSpace informationSpace) {
+		// System.out.println("Sets InformationSpace with " + informationSpace);
+		this.informationSpace = informationSpace;
+	}
+
 	@Override
 	public String renderedString(IFlexoOntologyStructuralProperty editedObject) {
 		if (editedObject != null) {
@@ -112,6 +135,7 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 	@CustomComponentParameter(name = "context", type = CustomComponentParameter.Type.MANDATORY)
 	public void setContext(IFlexoOntology context) {
 		this.context = context;
+		update();
 	}
 
 	public String getContextOntologyURI() {
@@ -124,10 +148,10 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 	@CustomComponentParameter(name = "contextOntologyURI", type = CustomComponentParameter.Type.MANDATORY)
 	public void setContextOntologyURI(String ontologyURI) {
 		// logger.info("Sets ontology with " + ontologyURI);
-		if (getProject() != null) {
-			IFlexoOntology context = getProject().getFlexoOntology(ontologyURI);
-			if (context != null) {
-				setContext(context);
+		if (getInformationSpace() != null) {
+			FlexoModelResource<?, ?> modelResource = getInformationSpace().getModelWithURI(ontologyURI);
+			if (modelResource != null && modelResource.getModel() instanceof IFlexoOntology) {
+				setContext((IFlexoOntology) modelResource.getModel());
 			}
 		}
 	}
@@ -165,6 +189,7 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 
 	@CustomComponentParameter(name = "domain", type = CustomComponentParameter.Type.OPTIONAL)
 	public void setDomain(IFlexoOntologyClass domain) {
+		System.out.println("INGORED !!!!! PropertySelector, setDomain() with " + domain);
 		this.domain = domain;
 	}
 
@@ -277,20 +302,40 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 		update();
 	}
 
+	private TechnologyAdapter technologyAdapter;
+
+	public TechnologyAdapter getTechnologyAdapter() {
+		return technologyAdapter;
+	}
+
+	public void setTechnologyAdapter(TechnologyAdapter technologyAdapter) {
+		this.technologyAdapter = technologyAdapter;
+	}
+
 	public OntologyBrowserModel getModel() {
 		if (model == null) {
-			model = new OntologyBrowserModel(getContext()) {
+			if (getTechnologyAdapter() != null) {
+				// Use technology specific browser model
+				TechnologyAdapterController technologyAdapterController = getTechnologyAdapter().getTechnologyAdapterService()
+						.getServiceManager().getService(TechnologyAdapterControllerService.class)
+						.getTechnologyAdapterController(technologyAdapter);
+				model = technologyAdapterController.makeOntologyBrowserModel(getContext());
+			} else { // Use default
+				model = new OntologyBrowserModel(getContext());
+			}
+			model.addObserver(new Observer() {
 				@Override
-				public void recomputeStructure() {
-					super.recomputeStructure();
-					SwingUtilities.invokeLater(new Runnable() {
-						@Override
-						public void run() {
-							getPropertyChangeSupport().firePropertyChange("model", null, getModel());
-						}
-					});
+				public void update(Observable o, Object arg) {
+					if (arg instanceof OntologyBrowserModelRecomputed) {
+						SwingUtilities.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								getPropertyChangeSupport().firePropertyChange("model", null, getModel());
+							}
+						});
+					}
 				}
-			};
+			});
 			model.setStrictMode(getStrictMode());
 			model.setHierarchicalMode(getHierarchicalMode());
 			model.setDisplayPropertiesInClasses(getDisplayPropertiesInClasses());

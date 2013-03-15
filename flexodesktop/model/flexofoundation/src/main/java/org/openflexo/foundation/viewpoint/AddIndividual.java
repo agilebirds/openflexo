@@ -72,6 +72,14 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 		return null;
 	}
 
+	public IFlexoOntologyClass getType() {
+		return getOntologyClass();
+	}
+
+	public void setType(IFlexoOntologyClass type) {
+		setOntologyClass(type);
+	}
+
 	@Override
 	public IFlexoOntologyClass getOntologyClass() {
 		// System.out.println("AddIndividual: ontologyClassURI=" + ontologyClassURI);

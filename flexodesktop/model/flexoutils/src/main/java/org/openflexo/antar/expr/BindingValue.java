@@ -466,6 +466,11 @@ public class BindingValue extends Expression {
 					for (FunctionArgument arg : functionPathElement.getFunction().getArguments()) {
 						DataBinding<?> argValue = functionPathElement.getParameter(arg);
 						// System.out.println("Checking " + argValue + " valid=" + argValue.isValid());
+						if (argValue == null) {
+							invalidBindingReason = "Parameter value for function: " + functionPathElement.getFunction() + " : "
+									+ "invalid null argument " + arg.getArgumentName();
+							return false;
+						}
 						if (!argValue.isValid()) {
 							invalidBindingReason = "Parameter value for function: " + functionPathElement.getFunction() + " : "
 									+ "invalid argument " + arg.getArgumentName() + " reason=" + argValue.invalidBindingReason();

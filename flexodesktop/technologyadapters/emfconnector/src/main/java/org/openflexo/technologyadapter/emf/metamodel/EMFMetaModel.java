@@ -47,8 +47,6 @@ import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IFlexoOntologyMetaModel;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.metamodel.io.EMFMetaModelConverter;
@@ -161,40 +159,14 @@ public class EMFMetaModel extends FlexoOntologyObjectImpl implements FlexoMetaMo
 		return converter;
 	}
 
-	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
-	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
-	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
-	public EMFMetaModelResource getFlexoResource() {
+	@Override
+	public EMFMetaModelResource getResource() {
 		return metaModelResource;
 	}
 
-	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
-	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
-	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
-	public void setFlexoResource(@SuppressWarnings("rawtypes") FlexoResource resource) throws DuplicateResourceException {
-		if (resource instanceof EMFMetaModelResource) {
-			this.metaModelResource = (EMFMetaModelResource) resource;
-		}
-	}
-
-	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
-	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
-	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
-	@Override
-	public org.openflexo.foundation.resource.FlexoResource<EMFMetaModel> getResource() {
-		return getFlexoResource();
-	}
-
-	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
-	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
-	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
 	@Override
 	public void setResource(org.openflexo.foundation.resource.FlexoResource<EMFMetaModel> resource) {
-		try {
-			setFlexoResource((FlexoResource<?>) resource);
-		} catch (DuplicateResourceException e) {
-			e.printStackTrace();
-		}
+		metaModelResource = (EMFMetaModelResource) resource;
 	}
 
 	/**
@@ -633,5 +605,10 @@ public class EMFMetaModel extends FlexoOntologyObjectImpl implements FlexoMetaMo
 	@Override
 	public boolean isOntologyDataProperty() {
 		return false;
+	}
+
+	@Override
+	public String toString() {
+		return "EMFMetaModel:" + getURI();
 	}
 }

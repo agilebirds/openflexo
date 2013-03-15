@@ -29,12 +29,13 @@ public abstract class DiagramResourceImpl extends VirtualModelInstanceResourceIm
 		try {
 			ModelFactory factory = new ModelFactory(DiagramResource.class);
 			DiagramResourceImpl returned = (DiagramResourceImpl) factory.newInstance(DiagramResource.class);
-			returned.setServiceManager(view.getProject().getServiceManager());
 			String baseName = name;
 			File xmlFile = new File(view.getResource().getFile().getParentFile(), baseName + DiagramResource.DIAGRAM_SUFFIX);
 			returned.setProject(view.getProject());
 			returned.setName(name);
 			returned.setFile(xmlFile);
+			returned.setURI(view.getProject().getURI() + "/" + baseName);
+			returned.setServiceManager(view.getProject().getServiceManager());
 			returned.setVirtualModelResource(diagramSpecification.getResource());
 			view.getResource().addToContents(returned);
 			return returned;
@@ -48,12 +49,13 @@ public abstract class DiagramResourceImpl extends VirtualModelInstanceResourceIm
 		try {
 			ModelFactory factory = new ModelFactory(DiagramResource.class);
 			DiagramResourceImpl returned = (DiagramResourceImpl) factory.newInstance(DiagramResource.class);
-			returned.setServiceManager(viewResource.getProject().getServiceManager());
 			String baseName = diagramFile.getName().substring(0, diagramFile.getName().length() - DiagramResource.DIAGRAM_SUFFIX.length());
 			File xmlFile = new File(viewResource.getFile().getParentFile(), baseName + DiagramResource.DIAGRAM_SUFFIX);
 			returned.setProject(viewResource.getProject());
 			returned.setName(baseName);
 			returned.setFile(xmlFile);
+			returned.setURI(viewResource.getProject().getURI() + "/" + baseName);
+			returned.setServiceManager(viewResource.getProject().getServiceManager());
 			VirtualModelInstanceInfo vmiInfo = findVirtualModelInstanceInfo(xmlFile, "Diagram");
 			if (vmiInfo == null) {
 				// Unable to retrieve infos, just abort

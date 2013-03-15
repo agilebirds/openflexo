@@ -31,7 +31,6 @@ package org.openflexo.technologyadapter.emf.metamodel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EReference;
@@ -273,8 +272,8 @@ public class EMFReferenceObjectProperty extends AEMFMetaModelObjectImpl<EReferen
 	 */
 	@Override
 	@Deprecated
-	public Set<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange() {
-		return Collections.emptySet();
+	public List<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange() {
+		return Collections.emptyList();
 	}
 
 	/**
@@ -284,8 +283,8 @@ public class EMFReferenceObjectProperty extends AEMFMetaModelObjectImpl<EReferen
 	 */
 	@Override
 	@Deprecated
-	public Set<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain() {
-		return Collections.emptySet();
+	public List<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain() {
+		return Collections.emptyList();
 	}
 
 	/**
@@ -306,5 +305,11 @@ public class EMFReferenceObjectProperty extends AEMFMetaModelObjectImpl<EReferen
 	@Override
 	public boolean isOntologyObjectProperty() {
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "EMFClassReference: " + getName() + " range=" + getRange() + " domain=" + getDomain();
 	}
 }

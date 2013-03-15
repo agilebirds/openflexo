@@ -65,6 +65,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
@@ -275,8 +276,8 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			individualSelector.setComponentClass(FIBIndividualSelector.class);
 			// Quick and dirty hack to configure ClassSelector: refactor this when new binding model will be in use
 			// component.context = xxx
-			individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding<Object>("component.project"),
-					new DataBinding<Object>("data.project"), true));
+			/*individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding<Object>("component.project"),
+					new DataBinding<Object>("data.project"), true));*/
 			/*individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector,
 					new DataBinding("component.contextOntologyURI"), new DataBinding('"' + parameter.getViewPoint().getViewpointOntology()
 							.getURI() + '"') {
@@ -285,6 +286,21 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 							return parameter.getBindingFactory();
 						}
 					}, true));*/
+
+			individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding<Object>(
+					"component.informationSpace"), new DataBinding<Object>("data.project.informationSpace"), true));
+			if (action.getVirtualModelInstance() != null) {
+				ModelSlotInstance msInstance = action.getVirtualModelInstance().getModelSlotInstance(
+						((IndividualParameter) parameter).getModelSlot());
+				if (msInstance != null && msInstance.getModel() != null) {
+					individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding(
+							"component.contextOntologyURI"), new DataBinding<Object>('"' + msInstance.getModel().getURI() + '"'), true));
+				} else {
+					logger.warning("No model defined for model slot " + ((IndividualParameter) parameter).getModelSlot());
+				}
+			} else {
+				logger.warning("Inconsistent data: no VirtualModelInstance for action " + action);
+			}
 			// Quick and dirty hack to configure IndividualSelector: refactor this when new binding model will be in use
 			individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding<Object>("component.typeURI"),
 					new DataBinding<Object>('"' + ((IndividualParameter) parameter)._getConceptURI() + '"'), true));
@@ -301,8 +317,8 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			classSelector.setComponentClass(org.openflexo.components.widget.FIBClassSelector.class);
 			// Quick and dirty hack to configure ClassSelector: refactor this when new binding model will be in use
 			// component.context = xxx
-			classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding<Object>("component.project"),
-					new DataBinding<Object>("data.project"), true));
+			/*classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding<Object>("component.project"),
+					new DataBinding<Object>("data.project"), true));*/
 			/*classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.contextOntologyURI"),
 					new DataBinding('"' + classParameter.getViewPoint().getViewpointOntology().getURI() + '"') {
 						@Override
@@ -310,6 +326,20 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 							return parameter.getBindingFactory();
 						}
 					}, true));*/
+			classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding<Object>("component.informationSpace"),
+					new DataBinding<Object>("data.project.informationSpace"), true));
+			if (action.getVirtualModelInstance() != null) {
+				ModelSlotInstance msInstance = action.getVirtualModelInstance().getModelSlotInstance(
+						((IndividualParameter) parameter).getModelSlot());
+				if (msInstance != null && msInstance.getModel() != null) {
+					classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding("component.contextOntologyURI"),
+							new DataBinding<Object>('"' + msInstance.getModel().getURI() + '"'), true));
+				} else {
+					logger.warning("No model defined for model slot " + ((IndividualParameter) parameter).getModelSlot());
+				}
+			} else {
+				logger.warning("Inconsistent data: no VirtualModelInstance for action " + action);
+			}
 			// Quick and dirty hack to configure ClassSelector: refactor this when new binding model will be in use
 			IFlexoOntologyClass conceptClass = null;
 			if (classParameter.getIsDynamicConceptValue()) {
@@ -330,8 +360,8 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			propertySelector.setComponentClass(FIBPropertySelector.class);
 			// Quick and dirty hack to configure FIBPropertySelector: refactor this when new binding model will be in use
 			// component.context = xxx
-			propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding<Object>("component.project"),
-					new DataBinding<Object>("data.project"), true));
+			/*propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding<Object>("component.project"),
+					new DataBinding<Object>("data.project"), true));*/
 			/*propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding("component.contextOntologyURI"),
 					new DataBinding('"' + propertyParameter.getViewPoint().getViewpointOntology().getURI() + '"') {
 						@Override
@@ -339,6 +369,20 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 							return parameter.getBindingFactory();
 						}
 					}, true));*/
+			propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding<Object>(
+					"component.informationSpace"), new DataBinding<Object>("data.project.informationSpace"), true));
+			if (action.getVirtualModelInstance() != null) {
+				ModelSlotInstance msInstance = action.getVirtualModelInstance().getModelSlotInstance(
+						((IndividualParameter) parameter).getModelSlot());
+				if (msInstance != null && msInstance.getModel() != null) {
+					propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding(
+							"component.contextOntologyURI"), new DataBinding<Object>('"' + msInstance.getModel().getURI() + '"'), true));
+				} else {
+					logger.warning("No model defined for model slot " + ((IndividualParameter) parameter).getModelSlot());
+				}
+			} else {
+				logger.warning("Inconsistent data: no VirtualModelInstance for action " + action);
+			}
 
 			// Quick and dirty hack to configure PropertySelector: refactor this when new binding model will be in use
 			IFlexoOntologyClass domainClass = null;

@@ -19,12 +19,14 @@
  */
 package org.openflexo.vpm.examplediagram;
 
+import java.awt.Component;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -53,6 +55,9 @@ public class ExampleDiagramController extends SelectionManagingDrawingController
 	private CommonPalette _commonPalette;
 	private ExampleDiagramModuleView _moduleView;
 	private Hashtable<DiagramPalette, ContextualPalette> _contextualPalettes;
+
+	private JTabbedPane paletteView;
+	private Vector<DiagramPalette> orderedPalettes;
 
 	public ExampleDiagramController(VPMController controller, ExampleDiagram shema, boolean readOnly) {
 		super(new ExampleDiagramRepresentation(shema, readOnly), controller.getSelectionManager());
@@ -84,8 +89,8 @@ public class ExampleDiagramController extends SelectionManagingDrawingController
 				/*System.out.println("OK, perform draw new shape with " + graphicalRepresentation + " et parent: "
 						+ parentGraphicalRepresentation);*/
 
-				AddExampleDiagramShape action = AddExampleDiagramShape.actionType.makeNewAction(getExampleDiagram(), null, getCEDController()
-						.getEditor());
+				AddExampleDiagramShape action = AddExampleDiagramShape.actionType.makeNewAction(getExampleDiagram(), null,
+						getCEDController().getEditor());
 				action.graphicalRepresentation = graphicalRepresentation;
 				action.newShapeName = graphicalRepresentation.getText();
 				if (action.newShapeName == null) {
@@ -137,10 +142,6 @@ public class ExampleDiagramController extends SelectionManagingDrawingController
 	public CommonPalette getCommonPalette() {
 		return _commonPalette;
 	}
-
-	private JTabbedPane paletteView;
-
-	private Vector<DiagramPalette> orderedPalettes;
 
 	public JTabbedPane getPaletteView() {
 		if (paletteView == null) {
@@ -198,12 +199,28 @@ public class ExampleDiagramController extends SelectionManagingDrawingController
 	}
 
 	protected void updatePalette(DiagramPalette palette, DrawingView<?> oldPaletteView) {
-		int index = paletteView.indexOfComponent(oldPaletteView);
-		paletteView.remove(oldPaletteView);
-		ContextualPalette cp = _contextualPalettes.get(palette);
-		paletteView.insertTab(palette.getName(), null, cp.getPaletteView(), null, index);
-		paletteView.revalidate();
-		paletteView.repaint();
+		if (getPaletteView() != null) {
+			// System.out.println("update palette with " + oldPaletteView);
+			int index = -1;
+			for (int i = 0; i < getPaletteView().getComponentCount(); i++) {
+				// System.out.println("> " + paletteView.getComponentAt(i));
+				Component c = getPaletteView().getComponentAt(i);
+				if (SwingUtilities.isDescendingFrom(oldPaletteView, c)) {
+					index = i;
+					System.out.println("Found index " + index);
+				}
+			}
+			if (index > -1) {
+				getPaletteView().remove(getPaletteView().getComponentAt(index));
+				ContextualPalette cp = _contextualPalettes.get(palette);
+				cp.updatePalette();
+				getPaletteView().insertTab(palette.getName(), null, cp.getPaletteViewInScrollPane(), null, index);
+			}
+			getPaletteView().revalidate();
+			getPaletteView().repaint();
+		} else {
+			logger.warning("updatePalette() called with null value for paletteView");
+		}
 	}
 
 	public ExampleDiagram getExampleDiagram() {

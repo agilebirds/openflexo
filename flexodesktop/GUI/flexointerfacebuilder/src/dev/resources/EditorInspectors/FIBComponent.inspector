@@ -37,20 +37,20 @@
 
 			<Tab name="LayoutTab" title="Layout" index="3" layout="twocols" font="SansSerif,0,11" useScrollBar="true" >
 			
-				<Panel name="NoneConstraints" border="titled" borderTitle="free_location_constraints" data="($org.openflexo.fib.model.NoneLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.NoneLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='none'"> 
+				<Panel name="NoneConstraints" border="titled" borderTitle="free_location_constraints" data="($org.openflexo.fib.model.NoneLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.NoneLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null) &amp;&amp; (data.parent.layout='none')"> 
 				</Panel>
 
-				<Panel name="FlowConstraints" border="titled" borderTitle="flow_layout_constraints" data="($org.openflexo.fib.model.FlowLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.FlowLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='flow'"> 
+				<Panel name="FlowConstraints" border="titled" borderTitle="flow_layout_constraints" data="($org.openflexo.fib.model.FlowLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.FlowLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='flow')"> 
 					<Label label="index" constraints="twocols(location=left)"/>
 					<Number name="flowConstraintsIndex" data="data.index" constraints="twocols(location=right)"/>
 				</Panel>
 
-				<Panel name="BorderConstraints" border="titled" borderTitle="border_layout_constraints" data="($org.openflexo.fib.model.BorderLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.BorderLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='border'"> 
+				<Panel name="BorderConstraints" border="titled" borderTitle="border_layout_constraints" data="($org.openflexo.fib.model.BorderLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.BorderLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='border')"> 
 					<Label label="location" constraints="twocols(location=left)"/>
 					<DropDown data="BorderConstraints.data.location" constraints="twocols(location=right)" showReset="false"/>
 				</Panel>
 
-				<Panel name="GridConstraints" border="titled" borderTitle="grid_layout_constraints" data="($org.openflexo.fib.model.GridLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.GridLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='grid'"> 
+				<Panel name="GridConstraints" border="titled" borderTitle="grid_layout_constraints" data="($org.openflexo.fib.model.GridLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.GridLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='grid')"> 
 					<Panel layout="flow" hGap="5" vGap="0">
 				        <Label label="column"/>
 				        <Number name="gridConstraintsX" numberType="IntegerType" data="GridConstraints.data.x" columns="3"/>
@@ -59,7 +59,7 @@
 					</Panel>
 				</Panel>
 
-				<Panel name="BoxConstraints" border="titled" borderTitle="box_layout_constraints" data="($org.openflexo.fib.model.BoxLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.BoxLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='box'"> 
+				<Panel name="BoxConstraints" border="titled" borderTitle="box_layout_constraints" data="($org.openflexo.fib.model.BoxLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.BoxLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='box')"> 
 					<Label label="index" constraints="twocols(location=left)"/>
 					<Number name="boxConstraintsIndex" data="BoxConstraints.data.index" constraints="twocols(location=right)"/>
 					<Panel layout="flow" hGap="5" vGap="0">
@@ -70,7 +70,7 @@
 					</Panel>
 				</Panel>
 
-				<Panel name="TwoColsConstraints" border="titled" borderTitle="two_cols_layout_constraints" data="($org.openflexo.fib.model.TwoColsLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.TwoColsLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true;index=100)" visible="data.parent.layout='twocols'"> 
+				<Panel name="TwoColsConstraints" border="titled" borderTitle="two_cols_layout_constraints" data="($org.openflexo.fib.model.TwoColsLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.TwoColsLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true;index=100)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='twocols')"> 
 					<Label label="index" constraints="twocols(location=left)"/>
 					<Number name="twoColsConstraintsIndex" data="TwoColsConstraints.data.index" constraints="twocols(location=right)"/>
 					<Label label="location" constraints="twocols(location=left)"/>
@@ -92,7 +92,7 @@
 					</Panel>
 				</Panel>
 
-				<Panel name="GridBagConstraints" border="titled" borderTitle="grid_bag_layout_constraints" data="($org.openflexo.fib.model.GridBagLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.GridBagLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='gridbag'"> 
+				<Panel name="GridBagConstraints" border="titled" borderTitle="grid_bag_layout_constraints" data="($org.openflexo.fib.model.GridBagLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.GridBagLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='gridbag')"> 
 					<Label label="index" constraints="twocols(location=left)"/>
 					<Number name="gridBagConstraintsIndex" data="GridBagConstraints.data.index" constraints="twocols(location=right)"/>
 				    <Label label="gridX" constraints="twocols(location=left)"/>
@@ -181,7 +181,7 @@
   			     </Panel>
  		       </Panel>
 
-				<Panel name="SplitLayoutConstraints" border="titled" borderTitle="split_layout_constraints" data="($org.openflexo.fib.model.SplitLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.SplitLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="data.parent.layout='split'"> 
+				<Panel name="SplitLayoutConstraints" border="titled" borderTitle="split_layout_constraints" data="($org.openflexo.fib.model.SplitLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.SplitLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='split')"> 
                    <Label label="identifier" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
                    <DropDown index="1" data="SplitLayoutConstraints.data.splitLeaf" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" format="object.name" localize="true" list="SplitLayoutConstraints.data.availableLeaves" iteratorClassName="org.openflexo.swing.layout.MultiSplitLayout$Leaf" autoSelectFirstRow="true" />
                    <Label label="weight" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
@@ -207,12 +207,12 @@
     		    <Panel layout="gridbag" borderTitle="Panel" constraints="twocols(location=right;index=0;expandHorizontally=true;expandVertically=false)">
     		      <Label label="define_specific_font" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=1;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" />
     		      <Font data="data.font" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=2;gridWidth=0;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true" />
-    		      <Label label="background_color" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=5;gridWidth=1;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
+    		      <Label label="define_background_color" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=5;gridWidth=1;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
     		      <Color data="data.backgroundColor" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=6;gridWidth=0;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true"/>
-    		      <Label label="foreground_color" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=9;gridWidth=1;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
+    		      <Label label="define_foreground_color" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=9;gridWidth=1;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
      		      <Color data="data.foregroundColor" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=10;gridWidth=0;insetsTop=5;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" localize="true"/>
     		      <Label label="opaque" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=12;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=horizontal)" />
-    		      <CheckBox data="data.opaque" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=center;gridY=-1;gridX=-1;index=11;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
+    		      <CheckBox data="data.opaque" constraints="gridbag(insetsLeft=0;insetsRight=0;gridHeight=1;padY=0;padX=0;anchor=west;gridY=-1;gridX=-1;index=11;gridWidth=1;insetsTop=0;insetsBottom=0;weightY=0.0;weightX=0.0;fill=none)" />
     		    </Panel>
   		    </Panel>
   			    
@@ -353,12 +353,12 @@
     <Localized key="font_and_colors" lang="French">Police et couleurs</Localized>
     <Localized key="component_size_management" lang="English">Component size management</Localized>
     <Localized key="component_size_management" lang="French">Gestion de la taille du composant</Localized>
-    <Localized key="background_color" lang="English">Background color</Localized>
-    <Localized key="foreground_color" lang="English">Foreground color</Localized>
-    <Localized key="background_color" lang="French">Couleur de l'arrière-plan</Localized>
-    <Localized key="foreground_color" lang="French">Couleur d'avant-plan</Localized>
-    <Localized key="background_color" lang="Dutch">Background color</Localized>
-    <Localized key="foreground_color" lang="Dutch">Foreground color</Localized>
+    <Localized key="define_background_color" lang="English">Define background color</Localized>
+    <Localized key="define_foreground_color" lang="English">Define foreground color</Localized>
+    <Localized key="define_background_color" lang="French">Définir une couleur d'arrière-plan</Localized>
+    <Localized key="define_foreground_color" lang="French">Définir une couleur d'avant-plan</Localized>
+    <Localized key="define_background_color" lang="Dutch">Define background color</Localized>
+    <Localized key="define_foreground_color" lang="Dutch">Define foreground color</Localized>
     <Localized key="border_layout_constraints" lang="French">Contraintes de positionnement mode "BORDER"</Localized>
     <Localized key="box_layout_constraints" lang="French">Contraintes de positionnement mode "BOX"</Localized>
     <Localized key="grid_bag_layout_constraints" lang="French">Contraintes de positionnement mode "GRID BAG"</Localized>

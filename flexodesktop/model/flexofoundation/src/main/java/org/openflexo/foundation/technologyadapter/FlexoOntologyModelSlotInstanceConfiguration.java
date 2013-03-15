@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
@@ -64,6 +65,28 @@ public class FlexoOntologyModelSlotInstanceConfiguration<MS extends FlexoOntolog
 	}
 
 	@Override
+	public void setOption(org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration.ModelSlotInstanceConfigurationOption option) {
+		super.setOption(option);
+		if (option == DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel) {
+			modelUri = getAction().getFocusedObject().getProject().getURI() + "/Models/myModel";
+			relativePath = "/";
+			filename = "myModel"
+					+ getModelSlot().getTechnologyAdapter()
+							.getExpectedModelExtension((FlexoResource) getModelSlot().getMetaModelResource());
+		} else if (option == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
+			modelUri = "ResourceCenter/Models/";
+			relativePath = "/";
+			filename = "myModel"
+					+ getModelSlot().getTechnologyAdapter()
+							.getExpectedModelExtension((FlexoResource) getModelSlot().getMetaModelResource());
+		} else if (option == DefaultModelSlotInstanceConfigurationOption.SelectExistingModel) {
+			modelUri = null;
+			relativePath = null;
+			filename = null;
+		}
+	}
+
+	@Override
 	public List<ModelSlotInstanceConfigurationOption> getAvailableOptions() {
 		return options;
 	}
@@ -86,8 +109,12 @@ public class FlexoOntologyModelSlotInstanceConfiguration<MS extends FlexoOntolog
 			}
 		} else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel) {
 			modelResource = createProjectSpecificEmptyModel(msInstance, (ModelSlot<?, ?>) getModelSlot());
+			System.out.println("***** modelResource = " + modelResource);
 			if (modelResource != null) {
 				msInstance.setModel((M) getModelResource().getModel());
+				System.out.println("***** Created model resource " + getModelResource());
+				System.out.println("***** Created model " + getModelResource().getModel());
+				System.out.println("***** Created model with uri=" + getModelResource().getModel().getURI());
 			} else {
 				logger.warning("Could not create ProjectSpecificEmtpyModel for model slot " + getModelSlot());
 			}

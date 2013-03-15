@@ -28,6 +28,7 @@ import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.owl.model.IsAStatement;
@@ -36,6 +37,7 @@ import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLIndividual;
 import org.openflexo.technologyadapter.owl.model.SubClassStatement;
 
+@Deprecated
 public class AddSubClassStatement extends AddStatement<SubClassStatement> {
 
 	private static final Logger logger = Logger.getLogger(AddSubClassStatement.class.getPackage().getName());
@@ -47,6 +49,17 @@ public class AddSubClassStatement extends AddStatement<SubClassStatement> {
 	@Override
 	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddIsAStatement;
+	}
+
+	@Override
+	public IFlexoOntologyStructuralProperty getProperty() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setProperty(IFlexoOntologyStructuralProperty aProperty) {
+		// TODO Auto-generated method stub
 	}
 
 	public OWLConcept<?> getPropertyFather(EditionSchemeAction action) {

@@ -25,6 +25,7 @@ package org.openflexo.foundation.rm;
  * @author sguerin
  * 
  */
+@Deprecated
 public interface FlexoResourceData {
 
 	/**

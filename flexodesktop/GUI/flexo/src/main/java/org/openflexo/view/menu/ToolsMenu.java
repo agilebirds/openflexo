@@ -60,6 +60,7 @@ import org.openflexo.module.Module;
 import org.openflexo.module.UserType;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.ResourceCenterEditor;
 import org.openflexo.view.controller.model.ControllerModel;
 
 /**
@@ -75,6 +76,8 @@ public class ToolsMenu extends FlexoMenu {
 	// ============================= Instance Variables
 	// =========================
 	// ==========================================================================
+
+	public JMenuItem manageResourceCenterItem;
 
 	public JMenuItem loggingItem;
 
@@ -94,6 +97,7 @@ public class ToolsMenu extends FlexoMenu {
 		super("tools", controller);
 		addSpecificItems();
 		if (!UserType.isCustomerRelease() && !UserType.isAnalystRelease()) {
+			add(manageResourceCenterItem = new ManageResourceCenterItem());
 			add(loggingItem = new LoggingItem());
 			add(localizedEditorItem = new LocalizedEditorItem());
 			add(rmItem = new ResourceManagerItem());
@@ -115,10 +119,34 @@ public class ToolsMenu extends FlexoMenu {
 		// No specific item here, please override this method when required
 	}
 
-	// ==========================================================================
-	// ========================== Logging
-	// =======================================
-	// ==========================================================================
+	// ===============================================================
+	// ===================== Resource Centers ========================
+	// ===============================================================
+
+	public class ManageResourceCenterItem extends FlexoMenuItem {
+
+		public ManageResourceCenterItem() {
+			super(new ManageResourceCenterAction(), "manage_resource_centers", KeyStroke.getKeyStroke(KeyEvent.VK_G, FlexoCst.META_MASK),
+					getController(), true);
+		}
+
+	}
+
+	public class ManageResourceCenterAction extends AbstractAction {
+		public ManageResourceCenterAction() {
+			super();
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			ResourceCenterEditor.showResourceCenterEditor(getController().getApplicationContext().getResourceCenterService(),
+					getController().getFlexoFrame());
+		}
+	}
+
+	// ===============================================================
+	// ========================== Logging ============================
+	// ===============================================================
 
 	public class LoggingItem extends FlexoMenuItem {
 

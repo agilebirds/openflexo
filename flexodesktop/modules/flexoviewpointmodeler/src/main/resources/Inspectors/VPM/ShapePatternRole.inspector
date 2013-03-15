@@ -118,19 +118,19 @@
           <Label label="dimensions_constraints" localize="true" name="DimensionConstraintsLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
           <DropDown format="object.name.toLowerCase" localize="true" name="DimensionConstraints" data="GRTab.data.dimensionConstraints" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" width="150" iteratorClassName="org.openflexo.fge.ShapeGraphicalRepresentation$DimensionConstraints" />
           <Label label="x_constraints" localize="true" constraints="twocols(location=left;index=10;expandVertically=false)" />
-          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="GRTab.data.xConstraints" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.xConstraints)">
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="GRTab.data.xConstraints" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.notifiedBindingChanged(GRTab.data.xConstraints)">
             <Assignment variable="component.bindable" value="data" />
           </Custom>
           <Label label="y_constraints" localize="true" constraints="twocols(location=left;index=12;expandVertically=false)" />
-          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="GRTab.data.yConstraints" constraints="twocols(location=right;index=13;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.yConstraints)">
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="GRTab.data.yConstraints" constraints="twocols(location=right;index=13;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.notifiedBindingChanged(GRTab.data.yConstraints)">
             <Assignment variable="component.bindable" value="data" />
           </Custom>
           <Label label="width_constraints" localize="true" constraints="twocols(location=left;index=14;expandVertically=false)" />
-          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="GRTab.data.widthConstraints" constraints="twocols(location=right;index=15;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.widthConstraints)">
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="GRTab.data.widthConstraints" constraints="twocols(location=right;index=15;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.notifiedBindingChanged(GRTab.data.widthConstraints)">
             <Assignment variable="component.bindable" value="data" />
           </Custom>
           <Label label="height_constraints" localize="true" constraints="twocols(location=left;index=16;expandVertically=false)" />
-          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="GRTab.data.heightConstraints" constraints="twocols(location=right;index=17;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.constraintChanged(GRTab.data.heightConstraints)">
+          <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" data="GRTab.data.heightConstraints" constraints="twocols(location=right;index=17;expandHorizontally=true;expandVertically=false)" localize="true" manageDynamicModel="true" valueChangedAction="GRTab.data.notifiedBindingChanged(GRTab.data.heightConstraints)">
             <Assignment variable="component.bindable" value="data" />
           </Custom>
           <Label label="border" localize="true" name="BorderLabel" constraints="twocols(location=left;index=18;expandHorizontally=false;expandVertically=false)" />

@@ -10,7 +10,6 @@
       <Table iteratorClassName="org.openflexo.foundation.dm.DMTranstyper$DMTranstyperValue" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="Values" index="5" data="data.values" constraints="twocols(expandHorizontally=true;expandVertically=true;index=4;location=right)" visible="((data.allowsMappingDefinition = true) &amp; (data.isMappingDefined = true))">
         <LabelColumn data="iterator.name" title="name" columnWidth="80" resizable="true" displayTitle="true" />
         <CustomColumn componentClassName="org.openflexo.components.widget.binding.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.propertyValue" format="object.stringRepresentation" title="value" columnWidth="200" resizable="true" displayTitle="true">
-          <ColumnAssignment variable="component.bindingDefinition" value="iterator.bindingDefinition" />
           <ColumnAssignment variable="component.bindable" value="iterator" />
         </CustomColumn>
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />

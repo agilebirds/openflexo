@@ -134,6 +134,7 @@ public class URIParameter extends EditionSchemeParameter {
 				}
 				proposal = baseProposal + i;
 			}
+			System.out.println("Generate URI " + proposal);
 			return proposal;
 		}
 		return null;

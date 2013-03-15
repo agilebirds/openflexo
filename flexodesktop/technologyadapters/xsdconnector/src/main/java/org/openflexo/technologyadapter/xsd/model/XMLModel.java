@@ -22,9 +22,6 @@ package org.openflexo.technologyadapter.xsd.model;
 import java.io.File;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
@@ -46,54 +43,21 @@ public class XMLModel extends XSOntology implements FlexoModel<XMLModel, XSDMeta
 		return null;
 	}
 
+	/**
+	 * Return the resource, as a {@link EMFModelResource}
+	 */
 	@Override
-	@Deprecated
-	public FlexoProject getProject() {
-		// TODO should be removed from FlexoResourceData implementation
-		return null;
-	}
-
-	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
-	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
-	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
-	@Override
-	public XMLModelResource getFlexoResource() {
+	public XMLModelResource getResource() {
 		return modelResource;
 	}
 
-	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
-	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
-	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
-	@Override
-	public void setFlexoResource(@SuppressWarnings("rawtypes") FlexoResource resource) throws DuplicateResourceException {
-		if (resource instanceof XMLModelResource) {
-			this.modelResource = (XMLModelResource) resource;
-		}
-	}
-
-	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
-	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
-	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
-	@Override
-	public org.openflexo.foundation.resource.FlexoResource<XMLModel> getResource() {
-		return getFlexoResource();
-	}
-
-	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
-	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
-	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
 	@Override
 	public void setResource(org.openflexo.foundation.resource.FlexoResource<XMLModel> resource) {
-		try {
-			setFlexoResource((FlexoResource) resource);
-		} catch (DuplicateResourceException e) {
-			e.printStackTrace();
-		}
+		modelResource = (XMLModelResource) resource;
 	}
 
-	@Override
 	public void save() throws SaveResourceException {
-		getFlexoResource().saveResourceData();
+		getResource().save(null);
 	}
 
 }

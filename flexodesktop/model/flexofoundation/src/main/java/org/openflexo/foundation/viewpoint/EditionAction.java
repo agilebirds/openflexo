@@ -66,7 +66,8 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 		GraphicalAction,
 		GoToObject,
 		Iteration,
-		Conditional
+		Conditional,
+		FetchRequest
 	}
 
 	private ModelSlot<M, MM> modelSlot;

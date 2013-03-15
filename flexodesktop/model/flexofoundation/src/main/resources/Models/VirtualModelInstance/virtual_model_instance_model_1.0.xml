@@ -43,13 +43,13 @@
 
 	<entity name="org.openflexo.foundation.view.EditionPatternInstance" xmlTag="EditionPatternInstance">
 		<property name="editionPatternURI" xmlTag="editionPatternURI" attribute="YES" description="" />
-		<property name="actors" contains="org.openflexo.foundation.view.ActorReference" primary="yes" type="hashtable" key="patternRole"/>
+		<property name="actorList" contains="org.openflexo.foundation.view.ActorReference" primary="yes" type="vector"/>
 	</entity>
 
 	<entity
 		name="org.openflexo.foundation.view.ActorReference"
 		abstract="yes">
-		<property name="patternRole" xmlTag="patternRole" attribute="YES"
+		<property name="patternRoleName" xmlTag="patternRoleName" attribute="YES"
 			description="" />
 	</entity>
 

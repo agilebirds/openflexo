@@ -47,6 +47,7 @@ import org.openflexo.foundation.param.DirectoryParameter;
 import org.openflexo.foundation.param.DynamicDropDownParameter;
 import org.openflexo.foundation.param.FileParameter;
 import org.openflexo.foundation.param.ParametersModel;
+import org.openflexo.foundation.resource.ProjectLoaded;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.FlexoResourceManager;
@@ -201,6 +202,10 @@ public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChange
 			ProgressWindow.hideProgressWindow();
 		}
 		ProgressWindow.hideProgressWindow();
+
+		System.out.println("Je notifie que le project vient d'etre charge");
+		getServiceManager().notify(this, new ProjectLoaded(editor.getProject()));
+
 		return editor;
 	}
 

@@ -42,6 +42,7 @@ public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> exte
 			returned.setDirectory(virtualModelDirectory);
 			returned.setFile(virtualModelXMLFile);
 			returned.setViewPointLibrary(viewPointLibrary);
+			returned.setURI(viewPointResource.getURI() + "/" + virtualModelDirectory.getName());
 			returned.setServiceManager(viewPointLibrary.getServiceManager());
 			returned.relativePathFileConverter = new RelativePathFileConverter(virtualModelDirectory);
 			viewPointResource.addToContents(returned);
@@ -54,7 +55,7 @@ public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> exte
 	}
 
 	public static VirtualModelResource retrieveVirtualModelResource(File virtualModelDirectory, File virtualModelXMLFile,
-			ViewPointLibrary viewPointLibrary) {
+			ViewPointResource viewPointResource, ViewPointLibrary viewPointLibrary) {
 		try {
 			ModelFactory factory = new ModelFactory(VirtualModelResource.class);
 			VirtualModelResourceImpl returned = (VirtualModelResourceImpl) factory.newInstance(VirtualModelResource.class);
@@ -69,6 +70,7 @@ public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> exte
 			returned.setFile(xmlFile);
 			returned.setDirectory(virtualModelDirectory);
 			returned.setName(vpi.name);
+			returned.setURI(viewPointResource.getURI() + "/" + virtualModelDirectory.getName());
 			if (StringUtils.isNotEmpty(vpi.version)) {
 				returned.setVersion(new FlexoVersion(vpi.version));
 			}
@@ -141,6 +143,7 @@ public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> exte
 
 		VM returned = super.loadResourceData(progress);
 		getContainer().getViewPoint().addToVirtualModels(returned);
+		returned.clearIsModified();
 		return returned;
 	}
 

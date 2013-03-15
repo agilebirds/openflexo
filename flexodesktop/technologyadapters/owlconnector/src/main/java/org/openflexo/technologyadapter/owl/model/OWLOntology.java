@@ -63,12 +63,9 @@ import org.openflexo.foundation.ontology.dm.OntologyIndividualRemoved;
 import org.openflexo.foundation.ontology.dm.OntologyObjectPropertyInserted;
 import org.openflexo.foundation.ontology.dm.OntologyObjectPropertyRemoved;
 import org.openflexo.foundation.ontology.dm.OntologyObjectRenamed;
+import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.resource.LocalResourceCenterImplementation;
 import org.openflexo.foundation.resource.ResourceData;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
@@ -214,12 +211,28 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 	}
 
+	public static void main(String[] args) {
+		System.out.println("Hop: "
+				+ findOntologyURIWithRDFBaseMethod(new File("/Users/sylvain/Library/OpenFlexo/FlexoResourceCenter/owl-xml_cpmf.owl")));
+	}
+
 	private static String findOntologyURIWithRDFBaseMethod(File aFile) {
 		Document document;
 		try {
 			logger.fine("Try to find URI for " + aFile);
 			document = readXMLFile(aFile);
 			Element root = getElement(document, "RDF");
+			if (root != null) {
+				Iterator it = root.getAttributes().iterator();
+				while (it.hasNext()) {
+					Attribute at = (Attribute) it.next();
+					if (at.getName().equals("base")) {
+						logger.fine("Returned " + at.getValue());
+						return at.getValue();
+					}
+				}
+			}
+			root = getElement(document, "Ontology");
 			if (root != null) {
 				Iterator it = root.getAttributes().iterator();
 				while (it.hasNext()) {
@@ -301,7 +314,7 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return aFile.getName();
 	}
 
 	private static Document readXMLFile(File f) throws JDOMException, IOException {
@@ -374,7 +387,8 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 	 * @return
 	 */
 	public Set<OWLOntology> getAllImportedOntologies() {
-		return OntologyUtils.getAllImportedOntologies(this);
+		Set<OWLOntology> returned = OntologyUtils.getAllImportedOntologies(this);
+		return returned;
 	}
 
 	/**
@@ -1386,8 +1400,8 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 	}
 
 	protected void load() {
-		logger.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% " + ontologyURI);
-		logger.info("Try to load ontology " + ontologyURI);
+		// logger.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% " + ontologyURI);
+		// logger.info("Try to load ontology " + ontologyURI);
 
 		ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM, _library, null);
 
@@ -1407,29 +1421,25 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 		// read the source document
 		try {
-			logger.info("BEGIN Read " + ontologyURI);
+			logger.fine("BEGIN Read " + ontologyURI);
 			ontModel.read(ontologyURI);
-			logger.info("END read " + ontologyURI);
+			logger.fine("END read " + ontologyURI);
 		} catch (Exception e) {
 			logger.warning("Unexpected exception while reading ontology " + ontologyURI);
 			logger.warning("Exception " + e.getMessage() + ". See logs for details");
 			e.printStackTrace();
 		}
 
-		isLoaded = true;
-
 		for (Object o : ontModel.listImportedOntologyURIs()) {
 			OWLOntology importedOnt = _library.getOntology((String) o);
-			logger.info("importedOnt= " + importedOnt);
 			if (importedOnt != null) {
 				importedOnt.loadWhenUnloaded();
 				importedOntologies.add(importedOnt);
 			}
 		}
 
-		logger.info("For " + ontologyURI + " Imported ontologies = " + getImportedOntologies());
-
-		logger.info("Loaded ontology " + ontologyURI + " search for concepts and properties");
+		// logger.info("Loaded ontology " + ontologyURI + " imported ontologies = " + getImportedOntologies());
+		// logger.info("Loaded ontology " + ontologyURI + " search for concepts and properties");
 
 		for (IFlexoOntology o : getImportedOntologies()) {
 			logger.info("Imported ontology: " + o);
@@ -1437,8 +1447,11 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 		createConceptsAndProperties();
 
+		isLoaded = true;
+
 		logger.info("Finished loading ontology " + ontologyURI);
 
+		clearIsModified();
 	}
 
 	public void describe() {
@@ -1497,7 +1510,6 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 		}
 	}
 
-	@Override
 	public void save() throws SaveResourceException {
 		saveToFile(getAlternativeLocalFile());
 	}
@@ -1807,6 +1819,8 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 	@Override
 	public OWLConcept<?> getOntologyObject(String objectURI) {
 
+		loadWhenUnloaded();
+
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("retrieve IFlexoOntologyConcept " + objectURI);
 		}
@@ -1852,6 +1866,9 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 	@Override
 	public OWLClass getClass(String classURI) {
+
+		loadWhenUnloaded();
+
 		if (classURI == null) {
 			return null;
 		}
@@ -1861,9 +1878,11 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 		}
 
 		for (OWLOntology o : getAllImportedOntologies()) {
-			returned = o.getDeclaredClass(classURI);
-			if (returned != null) {
-				return returned;
+			if (o != null) {
+				returned = o.getDeclaredClass(classURI);
+				if (returned != null) {
+					return returned;
+				}
 			}
 		}
 		return null;
@@ -1894,6 +1913,8 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 	@Override
 	public OWLClass getDeclaredClass(String classURI) {
+		loadWhenUnloaded();
+
 		if (classURI == null) {
 			return null;
 		}
@@ -1910,9 +1931,11 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 			return returned;
 		}
 		for (OWLOntology o : getAllImportedOntologies()) {
-			returned = o.getDeclaredIndividual(individualURI);
-			if (returned != null) {
-				return returned;
+			if (o != null) {
+				returned = o.getDeclaredIndividual(individualURI);
+				if (returned != null) {
+					return returned;
+				}
 			}
 		}
 		return null;
@@ -1920,6 +1943,8 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 	@Override
 	public OWLIndividual getDeclaredIndividual(String individualURI) {
+		loadWhenUnloaded();
+
 		if (individualURI == null) {
 			return null;
 		}
@@ -1936,9 +1961,11 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 			return returned;
 		}
 		for (OWLOntology o : getAllImportedOntologies()) {
-			returned = o.getDeclaredObjectProperty(propertyURI);
-			if (returned != null) {
-				return returned;
+			if (o != null) {
+				returned = o.getDeclaredObjectProperty(propertyURI);
+				if (returned != null) {
+					return returned;
+				}
 			}
 		}
 		return null;
@@ -1946,6 +1973,8 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 	@Override
 	public OWLObjectProperty getDeclaredObjectProperty(String propertyURI) {
+		loadWhenUnloaded();
+
 		if (propertyURI == null) {
 			return null;
 		}
@@ -1970,9 +1999,11 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 			return returned;
 		}
 		for (OWLOntology o : getAllImportedOntologies()) {
-			returned = o.getDeclaredDataProperty(propertyURI);
-			if (returned != null) {
-				return returned;
+			if (o != null) {
+				returned = o.getDeclaredDataProperty(propertyURI);
+				if (returned != null) {
+					return returned;
+				}
 			}
 		}
 		return null;
@@ -1980,6 +2011,8 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 
 	@Override
 	public OWLDataProperty getDeclaredDataProperty(String propertyURI) {
+		loadWhenUnloaded();
+
 		if (propertyURI == null) {
 			return null;
 		}
@@ -2012,12 +2045,12 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 		return null;
 	}
 
-	public static void main(String[] args) {
+	public static void main3(String[] args) {
 		File f = new File("/Users/sylvain/Library/OpenFlexo/FlexoResourceCenter/Ontologies/www.bolton.ac.uk/Archimate_from_Ecore.owl");
 		String uri = findOntologyURI(f);
 		System.out.println("uri: " + uri);
 		System.out.println("uri: " + findOntologyName(f));
-		FlexoResourceCenter resourceCenter = LocalResourceCenterImplementation.instanciateTestLocalResourceCenterImplementation(new File(
+		FlexoResourceCenter resourceCenter = DirectoryResourceCenter.instanciateNewDirectoryResourceCenter(new File(
 				"/Users/sylvain/Library/OpenFlexo/FlexoResourceCenter"));
 		// resourceCenter.retrieveBaseOntologyLibrary();
 		// ImportedOntology o = ImportedOntology.createNewImportedOntology(uri, f, resourceCenter.retrieveBaseOntologyLibrary());
@@ -2137,55 +2170,33 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 		return null;
 	}
 
+	/**
+	 * Return the resource, as a {@link OWLOntologyResource}
+	 */
 	@Override
-	public synchronized void setChanged() {
-		super.setChanged();
-		getFlexoResource().setChanged();
-	}
-
-	@Override
-	@Deprecated
-	public FlexoProject getProject() {
-		// TODO should be removed from FlexoResourceData implementation
-		return null;
-	}
-
-	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
-	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
-	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
-	@Override
-	public OWLOntologyResource getFlexoResource() {
+	public OWLOntologyResource getResource() {
 		return ontologyResource;
 	}
 
-	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
-	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
-	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
-	@Override
-	public void setFlexoResource(@SuppressWarnings("rawtypes") FlexoResource resource) throws DuplicateResourceException {
-		if (resource instanceof OWLOntologyResource) {
-			this.ontologyResource = (OWLOntologyResource) resource;
-		}
-	}
-
-	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
-	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
-	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
-	@Override
-	public org.openflexo.foundation.resource.FlexoResource<OWLOntology> getResource() {
-		return getFlexoResource();
-	}
-
-	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
-	// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
-	// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
 	@Override
 	public void setResource(org.openflexo.foundation.resource.FlexoResource<OWLOntology> resource) {
-		try {
-			setFlexoResource((FlexoResource) resource);
-		} catch (DuplicateResourceException e) {
-			e.printStackTrace();
+		ontologyResource = (OWLOntologyResource) resource;
+	}
+
+	/*@Override
+	protected synchronized void setChanged() {
+		super.setChanged();
+		if (isLoaded) {
+			logger.info("***************** setChanged() in OWLOntology");
 		}
 	}
+
+	@Override
+	public synchronized void setIsModified() {
+		super.setIsModified();
+		if (isLoaded) {
+			logger.info("***************** setIsModified() in OWLOntology");
+		}
+	}*/
 
 }

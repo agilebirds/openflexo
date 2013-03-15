@@ -30,12 +30,14 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
+import org.openflexo.foundation.viewpoint.SetPropertyValueAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLStatement;
 
-public abstract class AddStatement<S extends OWLStatement> extends AssignableAction<OWLOntology, OWLOntology, S> {
+public abstract class AddStatement<S extends OWLStatement> extends AssignableAction<OWLOntology, OWLOntology, S> implements
+		SetPropertyValueAction {
 
 	private static final Logger logger = Logger.getLogger(AddStatement.class.getPackage().getName());
 
@@ -76,24 +78,35 @@ public abstract class AddStatement<S extends OWLStatement> extends AssignableAct
 
 	private DataBinding<Object> subject;
 
+	@Override
 	public Type getSubjectType() {
 		return IFlexoOntologyConcept.class;
 	}
 
+	@Override
 	public DataBinding<Object> getSubject() {
 		if (subject == null) {
-			subject = new DataBinding<Object>(this, getSubjectType(), BindingDefinitionType.GET);
+			subject = new DataBinding<Object>(this, getSubjectType(), BindingDefinitionType.GET) {
+				@Override
+				public Type getDeclaredType() {
+					return getSubjectType();
+				}
+			};
 			subject.setBindingName("subject");
 		}
 		return subject;
 	}
 
+	@Override
 	public void setSubject(DataBinding<Object> subject) {
 		if (subject != null) {
-			subject.setOwner(this);
+			subject = new DataBinding<Object>(subject.toString(), this, getSubjectType(), BindingDefinitionType.GET) {
+				@Override
+				public Type getDeclaredType() {
+					return getSubjectType();
+				}
+			};
 			subject.setBindingName("subject");
-			subject.setDeclaredType(getSubjectType());
-			subject.setBindingDefinitionType(BindingDefinitionType.GET);
 		}
 		this.subject = subject;
 	}

@@ -299,48 +299,14 @@
       <FlexoWebServerFileResource idref="SYL_WEBSERVER.objective-process.jpg" />
       <FlexoWebServerFileResource idref="SYL_WEBSERVER.organisationStructure.jpg" />
       <FlexoWebServerFileResource idref="SYL_WEBSERVER.process-mapping.jpg" />
-      <ShemaLibrary idref="SYL_SHEMA_LIBRARY.TestVE" />
       <FlexoWSLibrary idref="SYL_WS_LIBRARY.TestVE" />
       <ProjectOntology idref="SYL_PROJECT_ONTOLOGY.TestVE" />
       <TOCResource idref="SYL_TOC_RESOURCE.TestVE" />
-      <Shema idref="SYL_SHEMA.BasicOrganization" />
-      <Shema idref="SYL_SHEMA.TestOrganizationMap" />
-      <Shema idref="SYL_SHEMA.R&amp;DDefinition" />
       <EOModel idref="SYL_EOMODEL.sdffdsfsd.eomodeld" />
       <Process idref="SYL_PROCESS.NewProcess" />
       <FlexoCSSResource idref="SYL_CSS_FILE.FlexoDocumentationMasterStyle.css" />
     </SynchronizedResources>
   </RMResource>
-  <Shema id="SYL_SHEMA.BasicOrganization" name="BasicOrganization" userID="SYL" version="1.0" file="Ontology/BasicOrganization.shema">
-    <DependantResources id="SYL_SHEMA.BasicOrganization_DR" />
-    <SynchronizedResources id="SYL_SHEMA.BasicOrganization_SR">
-      <ShemaLibrary idref="SYL_SHEMA_LIBRARY.TestVE" />
-      <RMResource idref="SYL_RM.TestVE" />
-    </SynchronizedResources>
-  </Shema>
-  <Shema id="SYL_SHEMA.R&amp;DDefinition" name="R&amp;DDefinition" userID="SYL" version="1.0" file="Ontology/R&amp;DDefinition.shema">
-    <DependantResources id="SYL_SHEMA.R&amp;DDefinition_DR" />
-    <SynchronizedResources id="SYL_SHEMA.R&amp;DDefinition_SR">
-      <ShemaLibrary idref="SYL_SHEMA_LIBRARY.TestVE" />
-      <RMResource idref="SYL_RM.TestVE" />
-    </SynchronizedResources>
-  </Shema>
-  <Shema id="SYL_SHEMA.TestOrganizationMap" name="TestOrganizationMap" userID="SYL" version="1.0" file="Ontology/TestOrganizationMap.shema">
-    <DependantResources id="SYL_SHEMA.TestOrganizationMap_DR" />
-    <SynchronizedResources id="SYL_SHEMA.TestOrganizationMap_SR">
-      <ShemaLibrary idref="SYL_SHEMA_LIBRARY.TestVE" />
-      <RMResource idref="SYL_RM.TestVE" />
-    </SynchronizedResources>
-  </Shema>
-  <ShemaLibrary id="SYL_SHEMA_LIBRARY.TestVE" userID="SYL" version="1.0" file="Ontology/TestVE.oelib">
-    <DependantResources id="SYL_SHEMA_LIBRARY.TestVE_DR" />
-    <SynchronizedResources id="SYL_SHEMA_LIBRARY.TestVE_SR">
-      <RMResource idref="SYL_RM.TestVE" />
-      <Shema idref="SYL_SHEMA.BasicOrganization" />
-      <Shema idref="SYL_SHEMA.TestOrganizationMap" />
-      <Shema idref="SYL_SHEMA.R&amp;DDefinition" />
-    </SynchronizedResources>
-  </ShemaLibrary>
   <TOCResource id="SYL_TOC_RESOURCE.TestVE" userID="SYL" file="Documentation/TestVE.toc" version="0.1">
     <DependantResources id="SYL_TOC_RESOURCE.TestVE_DR" />
     <SynchronizedResources id="SYL_TOC_RESOURCE.TestVE_SR">

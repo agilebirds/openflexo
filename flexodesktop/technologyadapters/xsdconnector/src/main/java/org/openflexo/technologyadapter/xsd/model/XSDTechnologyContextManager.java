@@ -1,20 +1,18 @@
 package org.openflexo.technologyadapter.xsd.model;
 
-import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
+import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 
 public class XSDTechnologyContextManager extends TechnologyContextManager<XMLModel, XSDMetaModel> {
 
-	@Override
-	public void registerModel(FlexoResource<XMLModel> newModelResource) {
-		// TODO Auto-generated method stub
-
+	public XSDTechnologyContextManager(XSDTechnologyAdapter adapter, FlexoResourceCenterService resourceCenterService) {
+		super(adapter, resourceCenterService);
 	}
 
 	@Override
-	public void registerMetaModel(FlexoResource<XSDMetaModel> newMetaModelResource) {
-		// TODO Auto-generated method stub
-
+	public XSDTechnologyAdapter getTechnologyAdapter() {
+		return (XSDTechnologyAdapter) super.getTechnologyAdapter();
 	}
 
 }

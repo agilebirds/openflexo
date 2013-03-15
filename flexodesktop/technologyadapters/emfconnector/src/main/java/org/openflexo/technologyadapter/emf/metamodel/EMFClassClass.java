@@ -30,10 +30,8 @@ package org.openflexo.technologyadapter.emf.metamodel;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
@@ -235,16 +233,24 @@ public class EMFClassClass extends AEMFMetaModelObjectImpl<EClass> implements IF
 	 */
 	@Override
 	@Deprecated
-	public Set<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange() {
-		Set<IFlexoOntologyStructuralProperty> result = new HashSet<IFlexoOntologyStructuralProperty>();
+	public List<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange() {
+		List<IFlexoOntologyStructuralProperty> result = new ArrayList<IFlexoOntologyStructuralProperty>();
 		for (EObject crossReference : object.eCrossReferences()) {
 			if (crossReference instanceof EAttribute) {
-				result.add(ontology.getConverter().convertAttributeProperty(ontology, (EAttribute) crossReference));
+				IFlexoOntologyStructuralProperty property = ontology.getConverter().convertAttributeProperty(ontology,
+						(EAttribute) crossReference);
+				if (!result.contains(property)) {
+					result.add(property);
+				}
 			} else if (crossReference instanceof EReference) {
-				result.add(ontology.getConverter().convertReferenceObjectProperty(ontology, (EReference) crossReference));
+				IFlexoOntologyStructuralProperty property = ontology.getConverter().convertReferenceObjectProperty(ontology,
+						(EReference) crossReference);
+				if (!result.contains(property)) {
+					result.add(property);
+				}
 			}
 		}
-		return Collections.unmodifiableSet(result);
+		return result;
 	}
 
 	/**
@@ -254,17 +260,23 @@ public class EMFClassClass extends AEMFMetaModelObjectImpl<EClass> implements IF
 	 */
 	@Override
 	@Deprecated
-	public Set<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain() {
-		Set<IFlexoOntologyFeature> result = new HashSet<IFlexoOntologyFeature>();
+	public List<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain() {
+		List<IFlexoOntologyFeature> result = new ArrayList<IFlexoOntologyFeature>();
 		for (EAttribute attribute : object.getEAttributes()) {
-			result.add(ontology.getConverter().convertAttributeProperty(ontology, attribute));
+			IFlexoOntologyFeature attr = ontology.getConverter().convertAttributeProperty(ontology, attribute);
+			if (!result.contains(attr)) {
+				result.add(attr);
+			}
 		}
 		for (EReference reference : object.getEReferences()) {
-			result.add(ontology.getConverter().convertReferenceObjectProperty(ontology, reference));
+			IFlexoOntologyFeature ref = ontology.getConverter().convertReferenceObjectProperty(ontology, reference);
+			if (!result.contains(ref)) {
+				result.add(ref);
+			}
 		}
 		for (EOperation operation : object.getEOperations()) {
 		}
-		return Collections.unmodifiableSet(result);
+		return result;
 	}
 
 	/**

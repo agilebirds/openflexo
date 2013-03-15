@@ -115,6 +115,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.resource.ProjectResourceCenter;
 import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.resource.UserResourceCenter;
@@ -2065,6 +2066,9 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			if (object instanceof UserResourceCenter) {
 				return IconLibrary.HOME_ICON;
 			}
+			if (object instanceof ProjectResourceCenter) {
+				return IconLibrary.OPENFLEXO_NOTEXT_16;
+			}
 			return IconLibrary.RESOURCE_CENTER_ICON;
 		} else if (object instanceof FlexoResourceCenterService) {
 			return IconLibrary.INFORMATION_SPACE_ICON;
@@ -2098,7 +2102,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return VEIconLibrary.iconForObject((ViewObject) object);
 		} else if (object instanceof RepositoryFolder) {
 			if (((RepositoryFolder) object).isRootFolder()) {
-				return IconLibrary.RESOURCE_CENTER_ICON;
+				return statelessIconForObject(((RepositoryFolder) object).getResourceRepository().getOwner());
 			}
 			return IconLibrary.FOLDER_ICON;
 		} else if (object instanceof TechnologyAdapter<?, ?>) {

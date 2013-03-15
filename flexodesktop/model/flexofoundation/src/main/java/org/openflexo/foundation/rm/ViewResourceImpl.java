@@ -36,6 +36,15 @@ import org.openflexo.xmlcode.StringEncoder;
  * @author Sylvain
  * 
  */
+@FlexoResourceDefinition( /* This is the resource specification*/
+resourceDataClass = View.class, /* ResourceData class which is handled by this resource */
+builderClass = ViewBuilder.class, /* Builder to be used to deserialize */
+hasBuilder = true, /* Indicates if builder is to be used*/
+contains = { /* Defines the resources which may be embeddded in this resource */
+@SomeResources(resourceType = DiagramResource.class, pattern = "*.diagram"),
+		@SomeResources(resourceType = VirtualModelInstanceResource.class, pattern = "*.vmxml") }, /* */
+require = { /* Defines the resources which are required for this resource */
+@RequiredResource(resourceType = ViewPointResource.class, value = ViewResource.VIEWPOINT_RESOURCE) })
 public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> implements ViewResource {
 
 	static final Logger logger = Logger.getLogger(ViewResourceImpl.class.getPackage().getName());
@@ -58,18 +67,20 @@ public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> im
 			File viewDirectory = new File(folder.getFile(), name + ViewResource.VIEW_SUFFIX);
 			ModelFactory factory = new ModelFactory(ViewResource.class);
 			ViewResourceImpl returned = (ViewResourceImpl) factory.newInstance(ViewResource.class);
-			returned.setServiceManager(viewLibrary.getServiceManager());
 			String baseName = name;
 			File xmlFile = new File(viewDirectory, baseName + ".xml");
 			returned.setName(name);
 			returned.setProject(viewLibrary.getProject());
 			returned.setVersion(new FlexoVersion("1.0"));
+			returned.setURI(viewLibrary.getProject().getURI() + "/" + name);
 			returned.setFile(xmlFile);
 			returned.setDirectory(viewDirectory);
 			returned.setViewLibrary(viewLibrary);
 			returned.setViewPointResource(viewPoint.getResource());
 			returned.relativePathFileConverter = new RelativePathFileConverter(viewDirectory);
 			viewLibrary.registerResource(returned, folder);
+
+			returned.setServiceManager(viewLibrary.getServiceManager());
 
 			return returned;
 		} catch (ModelDefinitionException e) {
@@ -82,7 +93,6 @@ public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> im
 		try {
 			ModelFactory factory = new ModelFactory(ViewResource.class);
 			ViewResourceImpl returned = (ViewResourceImpl) factory.newInstance(ViewResource.class);
-			returned.setServiceManager(viewLibrary.getServiceManager());
 			String baseName = viewDirectory.getName().substring(0, viewDirectory.getName().length() - ViewResource.VIEW_SUFFIX.length());
 			File xmlFile = new File(viewDirectory, baseName + ".xml");
 			returned.setProject(viewLibrary.getProject());
@@ -94,11 +104,14 @@ public abstract class ViewResourceImpl extends FlexoXMLFileResourceImpl<View> im
 			returned.setFile(xmlFile);
 			returned.setDirectory(viewDirectory);
 			returned.setName(vpi.name);
+			returned.setURI(viewLibrary.getProject().getURI() + "/" + vpi.name);
 			if (StringUtils.isNotEmpty(vpi.viewPointURI)) {
 				returned.setViewPointResource(viewLibrary.getServiceManager().getViewPointLibrary().getViewPointResource(vpi.viewPointURI));
 			}
 			returned.setViewLibrary(viewLibrary);
 			viewLibrary.registerResource(returned, folder);
+
+			returned.setServiceManager(viewLibrary.getServiceManager());
 
 			logger.fine("ViewResource " + xmlFile.getAbsolutePath() + " version " + returned.getModelVersion());
 

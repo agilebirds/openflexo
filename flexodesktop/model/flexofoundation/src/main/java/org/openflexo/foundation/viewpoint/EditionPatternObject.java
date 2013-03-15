@@ -59,4 +59,12 @@ public abstract class EditionPatternObject extends NamedViewPointObject {
 		return "<not_implemented:" + getFullyQualifiedName() + ">";
 	}
 
+	@Override
+	public void setChanged() {
+		super.setChanged();
+		if (getVirtualModel() != null) {
+			getVirtualModel().setIsModified();
+		}
+	}
+
 }

@@ -2,6 +2,8 @@ package org.openflexo.diagram.controller;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.components.widget.OntologyBrowserModel;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.view.diagram.DiagramTechnologyAdapter;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
@@ -109,6 +111,12 @@ public class DiagramTechnologyAdapterController extends TechnologyAdapterControl
 		} else if (DeleteAction.class.isAssignableFrom(editionActionClass)) {
 			return VEIconLibrary.DELETE_ICON;
 		}
+		return null;
+	}
+
+	@Override
+	public OntologyBrowserModel makeOntologyBrowserModel(IFlexoOntology model) {
+		// TODO not applicable
 		return null;
 	}
 

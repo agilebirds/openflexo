@@ -17,13 +17,13 @@ import org.openflexo.model.annotations.XMLElement;
 @XMLElement
 public interface FlexoModelResource<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends TechnologyAdapterResource<M> {
 
-	public static final String META_MODEL = "metaModel";
+	public static final String META_MODEL_RESOURCE = "metaModelResource";
 
-	@Getter(value = META_MODEL, ignoreType = true)
-	public MM getMetaModel();
+	@Getter(value = META_MODEL_RESOURCE, ignoreType = true)
+	public FlexoMetaModelResource<M, MM> getMetaModelResource();
 
-	@Setter(META_MODEL)
-	public void setMetaModel(MM aMetaModel);
+	@Setter(META_MODEL_RESOURCE)
+	public void setMetaModelResource(FlexoMetaModelResource<M, MM> aMetaModelResource);
 
 	public M getModelData();
 

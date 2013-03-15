@@ -102,7 +102,7 @@ public class FlexoVelocityIntrospector extends SecureUberspector {
 		if (obj instanceof EditionPatternInstance) {
 			EditionPatternInstance epi = (EditionPatternInstance) obj;
 			DataBinding<?> dataBinding = DataBindingEvaluator.buildBindingForMethodAndParams(methodName, args);
-			dataBinding.setOwner(epi.getPattern());
+			dataBinding.setOwner(epi.getEditionPattern());
 			dataBinding.setDeclaredType(Object.class);
 			dataBinding.setBindingDefinitionType(BindingDefinitionType.GET);
 			dataBinding.setBindingName(methodName);
@@ -125,7 +125,7 @@ public class FlexoVelocityIntrospector extends SecureUberspector {
 			if (obj instanceof EditionPatternInstance) {
 				EditionPatternInstance epi = (EditionPatternInstance) obj;
 				DataBinding<?> dataBinding = new DataBinding<Object>(identifier);
-				dataBinding.setOwner(epi.getPattern());
+				dataBinding.setOwner(epi.getEditionPattern());
 				dataBinding.setDeclaredType(Object.class);
 				dataBinding.setBindingDefinitionType(BindingDefinitionType.GET);
 				dataBinding.setBindingName(identifier);

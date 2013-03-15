@@ -890,14 +890,16 @@ public class FIBController extends Observable implements BindingEvaluationContex
 				return;
 			}
 		}
+		Class embeddedEditor = null;
+		Constructor c = null;
 		try {
+			embeddedEditor = Class.forName("org.openflexo.fib.editor.FIBEmbeddedEditor");
+			c = embeddedEditor.getConstructors()[0];
 			File fibFile = new File(component.getDefinitionFile());
 			if (!fibFile.exists()) {
 				logger.warning("Cannot find FIB file definition for component, aborting FIB edition");
 				return;
 			}
-			Class embeddedEditor = Class.forName("org.openflexo.fib.editor.FIBEmbeddedEditor");
-			Constructor c = embeddedEditor.getConstructors()[0];
 			Object[] args = new Object[2];
 			args[0] = fibFile;
 			args[1] = getDataObject();
@@ -912,8 +914,8 @@ public class FIBController extends Observable implements BindingEvaluationContex
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.warning("Cannot instanciate " + embeddedEditor + " with constructor " + c + " because of unexpected exception ");
+			e.getTargetException().printStackTrace();
 		}
 	}
 

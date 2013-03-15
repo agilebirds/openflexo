@@ -112,6 +112,18 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 			TechnologyContextManager<M, MM> technologyContextManager);
 
 	/**
+	 * Return flag indicating if supplied file represents a valid model<br>
+	 * Note that the meta-model is not yet known
+	 * 
+	 * @param aModelFile
+	 * @param metaModelResource
+	 * @param rc
+	 *            TODO
+	 * @return
+	 */
+	public abstract boolean isValidModelFile(File aModelFile, TechnologyContextManager<M, MM> technologyContextManager);
+
+	/**
 	 * Retrieve and return URI for supplied model file
 	 * 
 	 * @param aModelFile
@@ -123,11 +135,18 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 			TechnologyContextManager<M, MM> technologyContextManager);
 
 	/**
-	 * Instantiate new model resource stored in supplied model file
+	 * Instantiate new model resource stored in supplied model file<br>
+	 * The metamodel is not yet known, so we have to iterate on all known metamodels of this technology to find one (or many) which is
+	 * relevant
 	 * 
-	 * @param rc
-	 *            TODO
-	 * @param aMetaModelFile
+	 * @return
+	 */
+	public abstract FlexoResource<M> retrieveModelResource(File aModelFile, TechnologyContextManager<M, MM> technologyContextManager);
+
+	/**
+	 * Instantiate new model resource stored in supplied model file, given the conformant metamodel<br>
+	 * We assert here that model resource is conform to supplied metamodel, ie we will not try to lookup the metamodel but take the one
+	 * which was supplied
 	 * 
 	 * @return
 	 */
@@ -272,4 +291,8 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 		}
 		return null;
 	}
+
+	public abstract String getExpectedMetaModelExtension();
+
+	public abstract String getExpectedModelExtension(FlexoResource<MM> metaModel);
 }

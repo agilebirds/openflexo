@@ -39,8 +39,8 @@ public class FileResourceRepository<R extends FlexoResource<?>> extends Resource
 	/**
 	 * Creates a new {@link FileResourceRepository}
 	 */
-	public FileResourceRepository(File directory) {
-		super();
+	public FileResourceRepository(Object owner, File directory) {
+		super(owner);
 		this.directory = directory;
 	}
 

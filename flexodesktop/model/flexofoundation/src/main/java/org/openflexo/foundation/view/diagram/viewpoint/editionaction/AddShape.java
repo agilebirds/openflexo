@@ -40,8 +40,8 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
-import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
+import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
@@ -160,7 +160,8 @@ public class AddShape extends AddShemaElementAction<DiagramShape> {
 		DiagramElement<?> container = getContainer(action);
 
 		if (container == null) {
-			logger.warning("When adding shape, cannot find container for action " + getPatternRole() + " container=" + getContainer(action));
+			logger.warning("When adding shape, cannot find container for action " + getPatternRole() + " container=" + getContainer(action)
+					+ " container=" + getContainer());
 			return null;
 		}
 
@@ -303,8 +304,7 @@ public class AddShape extends AddShemaElementAction<DiagramShape> {
 			@Override
 			protected void fixAction() {
 				AddShape action = getObject();
-				action.setContainer(new DataBinding<DiagramElement<?>>(DiagramEditionScheme.TARGET + "."
-						+ patternRole.getPatternRoleName()));
+				action.setContainer(new DataBinding<DiagramElement<?>>(DiagramEditionScheme.TARGET + "." + patternRole.getPatternRoleName()));
 			}
 		}
 

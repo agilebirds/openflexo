@@ -30,9 +30,7 @@ package org.openflexo.technologyadapter.emf.metamodel;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
@@ -242,16 +240,24 @@ public class EMFEnumClass extends AEMFMetaModelObjectImpl<EEnum> implements IFle
 	 */
 	@Override
 	@Deprecated
-	public Set<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange() {
-		Set<IFlexoOntologyStructuralProperty> result = new HashSet<IFlexoOntologyStructuralProperty>();
+	public List<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange() {
+		List<IFlexoOntologyStructuralProperty> result = new ArrayList<IFlexoOntologyStructuralProperty>();
 		for (EObject crossReference : object.eCrossReferences()) {
 			if (crossReference instanceof EAttribute) {
-				result.add(ontology.getConverter().convertAttributeProperty(ontology, (EAttribute) crossReference));
+				IFlexoOntologyStructuralProperty property = ontology.getConverter().convertAttributeProperty(ontology,
+						(EAttribute) crossReference);
+				if (!result.contains(property)) {
+					result.add(property);
+				}
 			} else if (crossReference instanceof EReference) {
-				result.add(ontology.getConverter().convertReferenceObjectProperty(ontology, (EReference) crossReference));
+				IFlexoOntologyStructuralProperty property = ontology.getConverter().convertReferenceObjectProperty(ontology,
+						(EReference) crossReference);
+				if (!result.contains(property)) {
+					result.add(property);
+				}
 			}
 		}
-		return Collections.unmodifiableSet(result);
+		return result;
 	}
 
 	/**
@@ -261,8 +267,8 @@ public class EMFEnumClass extends AEMFMetaModelObjectImpl<EEnum> implements IFle
 	 */
 	@Override
 	@Deprecated
-	public Set<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain() {
-		return Collections.emptySet();
+	public List<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain() {
+		return Collections.emptyList();
 	}
 
 	/**

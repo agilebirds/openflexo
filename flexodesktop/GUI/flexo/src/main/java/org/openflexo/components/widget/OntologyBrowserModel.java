@@ -103,6 +103,12 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 			computeNonHierarchicalStructure();
 		}
 		isRecomputingStructure = false;
+		setChanged();
+		notifyObservers(new OntologyBrowserModelRecomputed());
+	}
+
+	public static class OntologyBrowserModelRecomputed {
+
 	}
 
 	public void delete() {
@@ -281,9 +287,10 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 		if (object instanceof IFlexoOntologyStructuralProperty && getDomain() != null) {
 			IFlexoOntologyStructuralProperty p = (IFlexoOntologyStructuralProperty) object;
 			if (p.getDomain() instanceof IFlexoOntologyClass) {
-				if (!((IFlexoOntologyClass) p.getDomain()).isSuperClassOf(getDomain())) {
-					/*System.out.println("Dismiss " + object + " becasuse " + p.getDomain().getName() + " is not superclass of "
-							+ getDomain().getName());*/
+				if (!((IFlexoOntologyClass) p.getDomain()).equals(getDomain())
+						&& !((IFlexoOntologyClass) p.getDomain()).isSuperClassOf(getDomain())) {
+					// System.out.println("Dismiss " + object + " becasuse " + p.getDomain().getName() + " is not superclass of "
+					// + getDomain().getName());
 					return false;
 				}
 				/*if (!getDomain().isSuperClassOf(((IFlexoOntologyClass) p.getDomain()))) {

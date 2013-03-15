@@ -222,7 +222,7 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 
 	public FlexoMetaModelResource<M, MM> getMetaModelResource() {
 		if (metaModelResource == null && StringUtils.isNotEmpty(metaModelURI) && getInformationSpace() != null) {
-			metaModelResource = (FlexoMetaModelResource<M, MM>) getInformationSpace().getMetaModel(metaModelURI);
+			metaModelResource = (FlexoMetaModelResource<M, MM>) getInformationSpace().getMetaModelWithURI(metaModelURI);
 			logger.info("Looked-up " + metaModelResource);
 		}
 		// Temporary hack to lookup parent slot (to be refactored)

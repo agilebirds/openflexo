@@ -34,6 +34,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.resource.FlexoFileResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.view.EditionPatternInstance;
@@ -229,17 +230,17 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 		}
 
 		// Hack to be removed (implements model resources as FlexoResource interface !!!)
-		System.out.println("HACK !!!!!!! saving the models...");
+		/*System.out.println("HACK !!!!!!! saving the models...");
 		for (ModelSlotInstance<?, ?> instance : getEditionPatternInstance().getVirtualModelInstance().getModelSlotInstances()) {
 			System.out.println("Slot " + instance + " model " + instance.getModel());
-			if (instance.getModel() != null) {
+			if (instance.getModel() instanceof FlexoFileResource) {
 				try {
-					instance.getModel().save();
+					((FlexoFileResource) instance.getModel()).save(null);
 				} catch (SaveResourceException e) {
 					e.printStackTrace();
 				}
 			}
-		}
+		}*/
 
 	}
 
@@ -294,6 +295,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 	public void setValue(Object value, BindingVariable variable) {
 		if (variable instanceof PatternRoleBindingVariable) {
 			getEditionPatternInstance().setPatternActor(value, ((PatternRoleBindingVariable) variable).getPatternRole());
+			return;
 		}
 		logger.warning("Unexpected variable requested in settable context in EditionSchemeAction: " + variable + " of "
 				+ variable.getClass());

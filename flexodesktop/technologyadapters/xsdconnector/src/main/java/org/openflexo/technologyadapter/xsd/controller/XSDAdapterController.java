@@ -1,15 +1,23 @@
 package org.openflexo.technologyadapter.xsd.controller;
 
+import java.util.logging.Logger;
+
 import javax.swing.ImageIcon;
 
+import org.openflexo.components.widget.OntologyBrowserModel;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
+import org.openflexo.technologyadapter.xsd.gui.XMLModelBrowserModel;
 import org.openflexo.technologyadapter.xsd.gui.XSDIconLibrary;
+import org.openflexo.technologyadapter.xsd.gui.XSDMetaModelBrowserModel;
 import org.openflexo.technologyadapter.xsd.model.AbstractXSOntObject;
+import org.openflexo.technologyadapter.xsd.model.XMLModel;
+import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntClass;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSClassPatternRole;
@@ -21,6 +29,8 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.TechnologyAdapterController;
 
 public class XSDAdapterController extends TechnologyAdapterController<XSDTechnologyAdapter> {
+
+	static final Logger logger = Logger.getLogger(XSDAdapterController.class.getPackage().getName());
 
 	@Override
 	public Class<XSDTechnologyAdapter> getTechnologyAdapterClass() {
@@ -117,6 +127,18 @@ public class XSDAdapterController extends TechnologyAdapterController<XSDTechnol
 			return IconFactory.getImageIcon(getIconForOntologyObject(XSOntClass.class), IconLibrary.DUPLICATE);
 		}
 		return null;
+	}
+
+	@Override
+	public OntologyBrowserModel makeOntologyBrowserModel(IFlexoOntology context) {
+		if (context instanceof XSDMetaModel) {
+			return new XSDMetaModelBrowserModel((XSDMetaModel) context);
+		} else if (context instanceof XMLModel) {
+			return new XMLModelBrowserModel((XMLModel) context);
+		} else {
+			logger.warning("Unexpected " + context);
+			return null;
+		}
 	}
 
 }
