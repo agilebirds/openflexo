@@ -1021,6 +1021,46 @@
 				<version>2.3.0-v200706262000</version>
 			</dependency>
 			<dependency>
+				<groupId> org.eclipse.core</groupId>
+				<artifactId>runtime</artifactId>
+				<version>3.3.100-v20070530</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse</groupId>
+				<artifactId>osgi</artifactId>
+				<version>3.3.0-v20070530</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.equinox</groupId>
+				<artifactId>common</artifactId>
+				<version>3.3.0-v20070426</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.core</groupId>
+				<artifactId>jobs</artifactId>
+				<version>3.3.0-v20070423</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.equinox</groupId>
+				<artifactId>registry</artifactId>
+				<version>3.3.0-v20070522</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.equinox</groupId>
+				<artifactId>preferences</artifactId>
+				<version>3.2.100-v20070522</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.core</groupId>
+				<artifactId>contenttype</artifactId>
+				<version>3.2.100-v20070319</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.equinox</groupId>
+				<artifactId>app</artifactId>
+				<version>1.0.0-v20070606</version>
+			</dependency>
+			<dependency>
 				<groupId>org.eclipse.emf</groupId>
 				<artifactId>ecore</artifactId>
 				<version>2.3.0-v200706262000</version>
