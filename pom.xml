@@ -108,7 +108,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-dependency-plugin</artifactId>
-					<version>2.1</version>
+					<version>2.7</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -755,6 +755,56 @@
 				<artifactId>flexosemanticsplus</artifactId>
 				<version>${project.version}</version>
 				<type>pom</type>
+			</dependency>
+
+			<dependency>
+				<groupId>org.openflexo.packaging</groupId>
+				<artifactId>flexolite</artifactId>
+				<version>${project.version}</version>
+				<classifier>packaging</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo.packaging</groupId>
+				<artifactId>flexobusiness</artifactId>
+				<version>${project.version}</version>
+				<classifier>packaging</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo.packaging</groupId>
+				<artifactId>flexobusinessplus</artifactId>
+				<version>${project.version}</version>
+				<classifier>packaging</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo.packaging</groupId>
+				<artifactId>flexoenterprise</artifactId>
+				<version>${project.version}</version>
+				<classifier>packaging</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo.packaging</groupId>
+				<artifactId>flexomaintainer</artifactId>
+				<version>${project.version}</version>
+				<classifier>packaging</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo.packaging</groupId>
+				<artifactId>flexosemantics</artifactId>
+				<version>${project.version}</version>
+				<classifier>packaging</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo.packaging</groupId>
+				<artifactId>flexosemanticsplus</artifactId>
+				<version>${project.version}</version>
+				<classifier>packaging</classifier>
+				<type>zip</type>
 			</dependency>
 
 			<!-- tests -->
