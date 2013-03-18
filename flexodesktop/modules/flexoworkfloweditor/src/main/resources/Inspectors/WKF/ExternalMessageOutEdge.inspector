@@ -25,5 +25,5 @@
     <Localized key="Data" lang="English">Data</Localized>
     <Localized key="Data" lang="Dutch">Data</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="External Message OUT edge" />
+  <Parameter name="title" value="Sequential flow" />
 </Panel>

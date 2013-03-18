@@ -66,5 +66,5 @@
     <Localized key="output_message" lang="Dutch">Output message</Localized>
     <Localized key="Basic" lang="French">Basique</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="Message edge" />
+  <Parameter name="title" value="Message flow" />
 </Panel>

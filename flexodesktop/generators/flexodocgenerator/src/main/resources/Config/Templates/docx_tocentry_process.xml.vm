@@ -22,7 +22,7 @@
 			#elseif($node.isLoop())
 				Activity (loop sub-process): 
         	#elseif($node.isSingle())
-				Activity bloc: 
+				Activity: 
 			#elseif($a.isWSCall()) 
 				Activity  (WS call sub-process): 
 			#else
