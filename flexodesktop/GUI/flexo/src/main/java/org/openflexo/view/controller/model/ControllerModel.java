@@ -209,7 +209,12 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 				if (location != null && location != NO_LOCATION) {
 					setCurrentLocation(location);
 				} else {
-					setCurrentLocation(currentEditor, null, getCurrentPerspective());
+					FlexoModelObject object = null;
+					if (getCurrentEditor() == null && currentEditor != null && currentEditor.getProject() != null
+							&& getCurrentPerspective() != null) {
+						object = getCurrentPerspective().getDefaultObject(currentEditor.getProject());
+					}
+					setCurrentLocation(currentEditor, object, getCurrentPerspective());
 				}
 			}
 		}
