@@ -11,3 +11,4 @@ target
 .DS_Store
 *.hprof.index
 .vmweb-config.xml
+*~

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram id="FLX_43" editionPatternURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMappingDiagramSpecification" userID="FLX" flexoID="43" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" title="Brest" virtualModelURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMappingDiagramSpecification">
+  <DiagramRootPane id="FLX_1" index="-1" indexRelativeToEPType="-1" userID="FLX" flexoID="1" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+    <DrawingGraphicalRepresentation id="1" className="org.openflexo.ve.diagram.DiagramGR" width="1000.0" height="1000.0" drawWorkingArea="false" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255" identifier="root" layer="0" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+      <TextStyle id="2" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </DrawingGraphicalRepresentation>
+    <ContainedDiagramShape id="FLX_7" index="0" indexRelativeToEPType="0" userID="FLX" flexoID="7" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+      <ShapeGraphicalRepresentation id="3" className="org.openflexo.ve.diagram.DiagramShapeGR" x="126.0" y="156.0" width="559.7852797327926" height="397.7951835398644" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" xConstraints="" yConstraints="" widthConstraints="" heightConstraints="" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="false" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="4" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorBackgroundStyle id="5" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="6" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="7" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="8" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="9" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="10" top="25" bottom="25" left="25" right="25" />
+        <RectangleShape id="11" isRounded="false" arcSize="30.0" />
+        <ShadowStyle id="12" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="13" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <EditionPatternReference>http://www.agilebirds.com/projects/2013/3/CityMapping_1362736592640|http://www.agilebirds.com/projects/2013/3/CityMapping_1362736592640/Brest#FLX_6</EditionPatternReference>
+    </ContainedDiagramShape>
+  </DiagramRootPane>
+  <ModelSlotInstance id="FLX_2" modelSlotName="diagram" modelURI="TODO" userID="FLX" flexoID="2" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+  <ModelSlotInstance id="FLX_3" modelSlotName="city1" modelURI="file:/D:/Documents%20and%20Settings/gbesancon/Mes%20documents/FlexoUserResourceCenter/CityMapping.prj/Models/brest.city1" userID="FLX" flexoID="3" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+  <ModelSlotInstance id="FLX_4" modelSlotName="city2" modelURI="file:/D:/Documents%20and%20Settings/gbesancon/Mes%20documents/FlexoUserResourceCenter/CityMapping.prj/Models/brest.city2" userID="FLX" flexoID="4" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+  <EditionPatternInstance id="FLX_9" editionPatternURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMappingDiagramSpecification#Mansion" userID="FLX" flexoID="9" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+  <EditionPatternInstance id="FLX_8" editionPatternURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMappingDiagramSpecification#Resident" userID="FLX" flexoID="8" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+  <EditionPatternInstance id="FLX_6" editionPatternURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMappingDiagramSpecification#City" userID="FLX" flexoID="6" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+  <EditionPatternInstance id="FLX_5" editionPatternURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMappingDiagramSpecification#City" userID="FLX" flexoID="5" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+</Diagram>

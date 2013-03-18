@@ -246,8 +246,7 @@ public class EMFModel extends FlexoOntologyObjectImpl implements FlexoModel<EMFM
 	 */
 	@Override
 	public Object getObject(String objectURI) {
-		// TODO Auto-generated method stub
-		return null;
+		return getOntologyObject(objectURI);
 	}
 
 	/**
