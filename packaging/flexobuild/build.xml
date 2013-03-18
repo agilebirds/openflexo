@@ -27,7 +27,10 @@
 		<tstamp>
 			<format property="build.id" pattern="yyyy-MM-dd.HHmm" />
 		</tstamp>
-	    <property name="build.properties" value="${flexobuild.work.dir}/build.properties" />
+		<property name="build.properties" value="${flexobuild.work.dir}/build.properties" />
+		<property name="maven.group.id" value="org.openflexo.packaging" />
+		<property name="maven.type" value="zip" />
+		<property name="maven.classifier" value="packaging" />
 	</target>
 
 	<target name="deploy" depends="defineProperties">
@@ -57,7 +60,7 @@
 		<loadproperties srcfile="lite.properties" />
 		<antcall target="createPackage" />
 	</target>
-	
+
 	<target name="packageSemantics">
 		<loadproperties srcfile="semantics.properties" />
 		<antcall target="createPackage" />
@@ -108,11 +111,7 @@
 	</target>
 
 	<target name="checkoutArtifact">
-		<property name="maven.group.id" value="org.openflexo.packaging" />
-		<property name="maven.type" value="zip" />
-		<property name="maven.classifier" value="packaging" />
-		<property name="maven.artifact.name" value="${maven.artifact.id}-${project.version}-${maven.classifier}.${maven.type}" />
-		<artifact:dependencies filesetId="maven.artifact" addArtifactFileSetRefs="true">
+		<!--<artifact:dependencies filesetId="maven.artifact" addArtifactFileSetRefs="true">
 			<localrepository id="local" path="${settings.localRepository}"/>
 			<dependency groupId="${maven.group.id}" artifactId="${maven.artifact.id}" version="${project.version}" type="${maven.type}" classifier="${maven.classifier}" />
 		</artifact:dependencies>
@@ -120,7 +119,17 @@
 			<fileset refid="${maven.group.id}:${maven.artifact.id}:${maven.type}:${maven.classifier}" />
 			<mapper type="flatten" />
 		</copy>
-		<unzip src="${artifact.dir}/${maven.artifact.name}" dest="${dist.dir}" />
+		<unzip src="${artifact.dir}/${maven.artifact.name}" dest="${dist.dir}" />-->
+		<copy file="pom.xml.tpl" tofile="${flexobuild.work.dir}/pom.xml" filtering="true" overwrite="true">
+			<filterset>
+				<filtersfile file="${build.properties}" />
+			</filterset>
+		</copy>
+		<artifact:mvn mavenhome="${maven.home}" pom="${flexobuild.work.dir}/pom.xml">
+			<localrepository id="local" path="${settings.localRepository}"/>
+			<arg value="-B"/>
+			<arg value="dependency:unpack"/>
+		</artifact:mvn>
 		<antcall target="generateApplicationVersion" />
 	</target>
 
