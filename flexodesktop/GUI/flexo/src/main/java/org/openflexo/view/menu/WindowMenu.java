@@ -142,8 +142,8 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 			}
 
 		});
-		getModuleLoader().getPropertyChangeSupport().addPropertyChangeListener(ModuleLoader.MODULE_LOADED, this);
-		getModuleLoader().getPropertyChangeSupport().addPropertyChangeListener(ModuleLoader.MODULE_UNLOADED, this);
+		manager.addListener(ModuleLoader.MODULE_LOADED, this, getModuleLoader());
+		manager.addListener(ModuleLoader.MODULE_UNLOADED, this, getModuleLoader());
 	}
 
 	@Override
@@ -330,7 +330,7 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 
 	private void notifyModuleHasBeenLoaded(Module module) {
 		JMenuItem item = moduleMenuItems.get(module);
-		insert(item, getController().getModuleLoader().getLoadedModuleCount() - 1);
+		insert(item, getController().getModuleLoader().getLoadedModules().indexOf(module));
 	}
 
 	private void notifyModuleHasBeenUnloaded(Module module) {

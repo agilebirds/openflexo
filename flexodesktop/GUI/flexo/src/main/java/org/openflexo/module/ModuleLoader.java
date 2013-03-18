@@ -241,6 +241,16 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 		return Modules.getInstance().getAvailableModules();
 	}
 
+	public List<Module> getLoadedModules() {
+		List<Module> list = new ArrayList<Module>();
+		for (Module module : getAvailableModules()) {
+			if (isLoaded(module)) {
+				list.add(module);
+			}
+		}
+		return list;
+	}
+
 	public List<Module> getUnloadedModules() {
 		List<Module> list = new ArrayList<Module>();
 		for (Module module : getAvailableModules()) {
