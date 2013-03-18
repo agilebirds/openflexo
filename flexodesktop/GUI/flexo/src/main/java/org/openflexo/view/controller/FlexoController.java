@@ -1874,7 +1874,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		ImageIcon iconForObject = statelessIconForObject(object);
 		if (iconForObject != null) {
 			if (getModule().getModule().requireProject() && object instanceof FlexoModelObject && getProject() != null
-					&& ((FlexoModelObject) object).getProject() != getProject()
+					&& ((FlexoModelObject) object).getProject() != getProject() && ((FlexoModelObject) object).getProject() != null
 					&& (!(object instanceof FlexoProject) || !getProjectLoader().getRootProjects().contains(object))) {
 				iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
 			} else if (object instanceof FlexoProjectReference) {
