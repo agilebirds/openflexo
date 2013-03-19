@@ -43,40 +43,6 @@
 			<groupId>org.eclipse.emf</groupId>
 			<artifactId>ecore-xmi</artifactId>
 		</dependency>
-		<!-- Transitive dependencies which needs to be specified so that issues with version ranges will be solved -->
-		<dependency>
-			<groupId> org.eclipse.core</groupId>
-			<artifactId>runtime</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse</groupId>
-			<artifactId>osgi</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.equinox</groupId>
-			<artifactId>common</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.core</groupId>
-			<artifactId>jobs</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.equinox</groupId>
-			<artifactId>registry</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.equinox</groupId>
-			<artifactId>preferences</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.core</groupId>
-			<artifactId>contenttype</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.equinox</groupId>
-			<artifactId>app</artifactId>
-		</dependency>
-		<!-- End of transitive dependencies for EMF support -->
 	</dependencies>
 </project>
 
