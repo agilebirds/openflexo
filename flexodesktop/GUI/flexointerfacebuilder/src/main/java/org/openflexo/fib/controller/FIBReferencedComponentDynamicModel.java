@@ -17,29 +17,14 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fib.editor.test;
+package org.openflexo.fib.controller;
 
-import java.io.File;
+import org.openflexo.fib.model.FIBComponent;
 
-import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.toolbox.FileResource;
+public class FIBReferencedComponentDynamicModel<T> extends FIBComponentDynamicModel<T> {
+	public FIBComponent referencedComponent;
 
-public class TestEditor extends FIBAbstractEditor {
-
-	@Override
-	public Object[] getData() {
-		Object[] returned = new Object[1];
-		returned[0] = new Family();
-		return returned;
+	public FIBReferencedComponentDynamicModel(T data) {
+		super(data);
 	}
-
-	@Override
-	public File getFIBFile() {
-		return new FileResource("TestFIB/TestTable.fib");
-	}
-
-	public static void main(String[] args) {
-		main(TestEditor.class);
-	}
-
 }

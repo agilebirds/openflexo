@@ -19,6 +19,8 @@
  */
 package org.openflexo.fib.view.widget.table;
 
+import org.openflexo.antar.binding.BindingEvaluationContext;
+
 /**
  * Please comment this class
  * 
@@ -29,5 +31,5 @@ public interface EditableColumn<T> {
 
 	public boolean isCellEditableFor(Object object);
 
-	public void setValueFor(Object object, T value);
+	public void setValueFor(Object object, T value, BindingEvaluationContext evaluationContext);
 }

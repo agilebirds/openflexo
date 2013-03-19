@@ -224,6 +224,7 @@ public class FIBLibrary {
 	}
 
 	public static void saveComponentToStream(FIBComponent component, File file, OutputStream stream) {
+		System.out.println("Relative path: " + file.getParentFile());
 		RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(file.getParentFile());
 		XMLCoder coder = new XMLCoder(getFIBMapping(), new StringEncoder(StringEncoder.getDefaultInstance(), relativePathFileConverter));
 		try {

@@ -289,11 +289,8 @@ public class FIBCustom extends FIBWidget {
 		}
 
 		@Override
-		public FIBComponent getRootComponent() {
-			if (getCustom() != null) {
-				return getCustom().getRootComponent();
-			}
-			return null;
+		public FIBComponent getComponent() {
+			return getCustom();
 		}
 
 		public DataBinding<?> getVariable() {

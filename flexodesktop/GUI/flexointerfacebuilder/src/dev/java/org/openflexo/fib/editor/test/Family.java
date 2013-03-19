@@ -49,7 +49,7 @@ public class Family {
 		parents[0] = father;
 		parents[1] = mother;
 
-		biggestChild = null;
+		biggestParent = father;
 
 		Person jacky1, jacky2, jacky3;
 
@@ -57,13 +57,15 @@ public class Family {
 		children.add(new Person("John", "Smith", 9, Gender.Male));
 		children.add(new Person("Suzy", "Smith", 3, Gender.Female));
 		children.add(jacky1 = new Person("Jacky1", "Smith", 2, Gender.Male));
-		children.add(jacky2 = new Person("Jacky2", "Smith", 2, Gender.Male));
-		children.add(jacky3 = new Person("Jacky3", "Smith", 2, Gender.Male));
+		children.add(jacky2 = new Person("Jacky2", "Smith", 3, Gender.Male));
+		children.add(jacky3 = new Person("Jacky3", "Smith", 4, Gender.Male));
 
 		jackies = new Vector<Person>();
 		jackies.add(jacky1);
 		jackies.add(jacky2);
 		jackies.add(jacky3);
+
+		biggestChild = jacky3;
 
 	}
 

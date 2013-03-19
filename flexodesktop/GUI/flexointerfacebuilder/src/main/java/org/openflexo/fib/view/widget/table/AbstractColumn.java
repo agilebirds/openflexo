@@ -160,8 +160,9 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 
 	public abstract Class<T> getValueClass();
 
-	public synchronized T getValueFor(final Object object) {
+	public synchronized T getValueFor(final Object object, BindingEvaluationContext evaluationContext) {
 		iteratorObject = object;
+		bindingEvaluationContext = evaluationContext;
 		/*
 		 * System.out.println("column: "+columnModel);
 		 * System.out.println("binding: "
@@ -185,11 +186,12 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		}
 	}
 
-	public synchronized void setValueFor(final Object object, T value) {
+	public synchronized void setValueFor(final Object object, T value, BindingEvaluationContext evaluationContext) {
 		iteratorObject = object;
+		bindingEvaluationContext = evaluationContext;
 		try {
 			columnModel.getData().setBindingValue(value, this);
-			notifyValueChangedFor(object, value);
+			notifyValueChangedFor(object, value, bindingEvaluationContext);
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
@@ -208,8 +210,17 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		if (variable.getVariableName().equals("iterator")) {
 			return iteratorObject;
 		} else {
-			return getController().getValue(variable);
+			return getBindingEvaluationContext().getValue(variable);
 		}
+	}
+
+	private BindingEvaluationContext bindingEvaluationContext;
+
+	public BindingEvaluationContext getBindingEvaluationContext() {
+		if (bindingEvaluationContext != null) {
+			return bindingEvaluationContext;
+		}
+		return getController();
 	}
 
 	/**
@@ -310,10 +321,11 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 		return getTableModel().getPropertyListColumnWithTitle(title);
 	}
 
-	public void notifyValueChangedFor(Object object, T value) {
+	public void notifyValueChangedFor(Object object, T value, BindingEvaluationContext evaluationContext) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("notifyValueChangedFor " + object);
 		}
+		bindingEvaluationContext = evaluationContext;
 		// Following will force the whole row where object was modified to be
 		// updated
 		// (In case of some computed cells are to be updated according to ths
@@ -323,7 +335,7 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 
 		if (getColumnModel().getValueChangedAction().isValid()) {
 			try {
-				getColumnModel().getValueChangedAction().execute(getController());
+				getColumnModel().getValueChangedAction().execute(this);
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {

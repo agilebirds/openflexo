@@ -121,7 +121,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 	public Object getRootValue() {
 		try {
-			return getWidget().getRoot().getBindingValue(getController());
+			return getWidget().getRoot().getBindingValue(getBindingEvaluationContext());
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 		} catch (NullReferenceException e) {
@@ -188,8 +188,9 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		// System.out.println("value="+getComponent().getSelected().getBindingValue(getController()));
 
 		try {
-			if (getComponent().getSelected().isValid() && getComponent().getSelected().getBindingValue(getController()) != null) {
-				Object newSelectedObject = getComponent().getSelected().getBindingValue(getController());
+			if (getComponent().getSelected().isValid()
+					&& getComponent().getSelected().getBindingValue(getBindingEvaluationContext()) != null) {
+				Object newSelectedObject = getComponent().getSelected().getBindingValue(getBindingEvaluationContext());
 				if (returned = notEquals(newSelectedObject, getSelectedObject())) {
 					setSelectedObject(newSelectedObject);
 				}
@@ -595,7 +596,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		if (getComponent().getSelected().isValid()) {
 			logger.fine("Sets SELECTED binding with " + getDynamicModel().selected);
 			try {
-				getComponent().getSelected().setBindingValue(getDynamicModel().selected, getController());
+				getComponent().getSelected().setBindingValue(getDynamicModel().selected, getBindingEvaluationContext());
 			} catch (TypeMismatchException e1) {
 				e1.printStackTrace();
 			} catch (NullReferenceException e1) {

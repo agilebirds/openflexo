@@ -512,6 +512,10 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 		public SelectorFIBController getController() {
 			return controller;
 		}
+
+		public FIBView getFIBView() {
+			return fibView;
+		}
 	}
 
 	public static class SelectorFIBController extends FlexoFIBController {
@@ -730,7 +734,7 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 		setCandidateValue(candidateValue);
 		boolean returned = true;
 		try {
-			returned = getSelectableConditionDataBinding().getBindingValue(controller);
+			returned = getSelectableConditionDataBinding().getBindingValue(getSelectorPanel().getFIBView().getBindingEvaluationContext());
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
 		} catch (NullReferenceException e) {

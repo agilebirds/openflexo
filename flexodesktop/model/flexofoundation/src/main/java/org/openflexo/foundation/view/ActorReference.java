@@ -71,4 +71,12 @@ public abstract class ActorReference<T> extends VirtualModelInstanceObject {
 		}
 		return null;
 	}
+
+	public ModelSlotInstance<?, ?> getModelSlotInstance() {
+		if (getVirtualModelInstance() != null) {
+			return getVirtualModelInstance().getModelSlotInstance(getPatternRole().getModelSlot());
+		}
+		return null;
+	}
+
 }

@@ -8,35 +8,37 @@ import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternInstanceType;
 
-public class EditionPatternPatternRolePathElement<PR extends PatternRole<?>> extends SimplePathElement {
+public class EditionPatternInstancePathElement extends SimplePathElement {
 
-	private static final Logger logger = Logger.getLogger(EditionPatternPatternRolePathElement.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(EditionPatternInstancePathElement.class.getPackage().getName());
 
-	private PR patternRole;
+	private EditionPattern editionPattern;
 
-	public EditionPatternPatternRolePathElement(BindingPathElement parent, PR patternRole) {
-		super(parent, patternRole.getPatternRoleName(), patternRole.getType());
-		this.patternRole = patternRole;
+	public EditionPatternInstancePathElement(BindingPathElement parent, String pathElementName, EditionPattern editionPattern) {
+		super(parent, pathElementName, EditionPatternInstanceType.getEditionPatternInstanceType(editionPattern));
+		this.editionPattern = editionPattern;
+	}
+
+	@Override
+	public Type getType() {
+		return EditionPatternInstanceType.getEditionPatternInstanceType(editionPattern);
 	}
 
 	@Override
 	public String getLabel() {
-		return patternRole.getPatternRoleName();
+		return getPropertyName();
 	}
 
 	@Override
 	public String getTooltipText(Type resultingType) {
-		return patternRole.getDescription();
+		return editionPattern.getDescription();
 	}
 
 	@Override
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
-		if (target instanceof EditionPatternInstance) {
-			return ((EditionPatternInstance) target).getPatternActor((PatternRole) patternRole);
-		}
 		logger.warning("Please implement me, target=" + target + " context=" + context);
 		return null;
 	}
@@ -44,10 +46,6 @@ public class EditionPatternPatternRolePathElement<PR extends PatternRole<?>> ext
 	@Override
 	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) throws TypeMismatchException,
 			NullReferenceException {
-		if (target instanceof EditionPatternInstance) {
-			((EditionPatternInstance) target).setPatternActor(value, (PatternRole) patternRole);
-			return;
-		}
 		logger.warning("Please implement me, target=" + target + " context=" + context);
 	}
 

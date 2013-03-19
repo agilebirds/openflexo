@@ -75,10 +75,20 @@ public class JavaMethodPathElement extends FunctionPathElement {
 
 	@Override
 	public Type getType() {
+		if (customType != null) {
+			return customType;
+		}
 		if (getMethodDefinition() != null) {
 			return TypeUtils.makeInstantiatedType(getMethodDefinition().getMethod().getGenericReturnType(), getParent().getType());
 		}
 		return super.getType();
+	}
+
+	private Type customType = null;
+
+	@Override
+	public void setType(Type type) {
+		customType = type;
 	}
 
 	protected static MethodDefinition retrieveMethod(Type parentType, String methodName, List<DataBinding<?>> args) {

@@ -136,7 +136,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		if (_fibTable.getEnable().isSet() && _fibTable.getEnable().isValid()) {
 			Boolean enabledValue = true;
 			try {
-				enabledValue = _fibTable.getEnable().getBindingValue(getController());
+				enabledValue = _fibTable.getEnable().getBindingValue(getBindingEvaluationContext());
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
@@ -191,8 +191,9 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 			setSelectedObject(wasSelected);
 		} else {
 			try {
-				if (getComponent().getSelected().isValid() && getComponent().getSelected().getBindingValue(getController()) != null) {
-					Object newSelectedObject = getComponent().getSelected().getBindingValue(getController());
+				if (getComponent().getSelected().isValid()
+						&& getComponent().getSelected().getBindingValue(getBindingEvaluationContext()) != null) {
+					Object newSelectedObject = getComponent().getSelected().getBindingValue(getBindingEvaluationContext());
 					if (returned = notEquals(newSelectedObject, getSelectedObject())) {
 						setSelectedObject(newSelectedObject);
 					}
@@ -530,7 +531,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		if (getComponent().getSelected().isValid()) {
 			logger.fine("Sets SELECTED binding with " + selectedObject);
 			try {
-				getComponent().getSelected().setBindingValue(selectedObject, getController());
+				getComponent().getSelected().setBindingValue(selectedObject, getBindingEvaluationContext());
 			} catch (TypeMismatchException e1) {
 				e1.printStackTrace();
 			} catch (NullReferenceException e1) {

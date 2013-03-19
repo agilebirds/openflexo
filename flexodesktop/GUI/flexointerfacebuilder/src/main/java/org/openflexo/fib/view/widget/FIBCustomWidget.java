@@ -156,7 +156,7 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 			setValue(customComponent.getEditedObject());
 			if (getWidget().getValueChangedAction().isValid()) {
 				try {
-					getWidget().getValueChangedAction().execute(getController());
+					getWidget().getValueChangedAction().execute(getBindingEvaluationContext());
 				} catch (TypeMismatchException e) {
 					e.printStackTrace();
 				} catch (NullReferenceException e) {
@@ -193,7 +193,7 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 			if (valueDB != null && valueDB.isValid()) {
 				Object value = null;
 				try {
-					value = valueDB.getBindingValue(getController());
+					value = valueDB.getBindingValue(getBindingEvaluationContext());
 					if (variableDB.isValid()) {
 						// System.out.println("Assignment " + assign + " set value with " + value);
 						variableDB.setBindingValue(value, this);

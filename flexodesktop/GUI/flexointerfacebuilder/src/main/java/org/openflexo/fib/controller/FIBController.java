@@ -70,6 +70,7 @@ import org.openflexo.fib.model.FIBLocalizedDictionary;
 import org.openflexo.fib.model.FIBNumber;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBRadioButtonList;
+import org.openflexo.fib.model.FIBReferencedComponent;
 import org.openflexo.fib.model.FIBSplitPanel;
 import org.openflexo.fib.model.FIBTab;
 import org.openflexo.fib.model.FIBTabPanel;
@@ -102,6 +103,7 @@ import org.openflexo.fib.view.widget.FIBLabelWidget;
 import org.openflexo.fib.view.widget.FIBListWidget;
 import org.openflexo.fib.view.widget.FIBNumberWidget;
 import org.openflexo.fib.view.widget.FIBRadioButtonListWidget;
+import org.openflexo.fib.view.widget.FIBReferencedComponentWidget;
 import org.openflexo.fib.view.widget.FIBTableWidget;
 import org.openflexo.fib.view.widget.FIBTextAreaWidget;
 import org.openflexo.fib.view.widget.FIBTextFieldWidget;
@@ -431,7 +433,7 @@ public class FIBController extends Observable implements BindingEvaluationContex
 				if (fibWidget.hasEnterPressedAction() && e.getKeyCode() == KeyEvent.VK_ENTER) {
 					// Detected double-click associated with action
 					try {
-						fibWidget.getEnterPressedAction().execute(FIBController.this);
+						fibWidget.getEnterPressedAction().execute(returned.getBindingEvaluationContext());
 					} catch (TypeMismatchException e1) {
 						e1.printStackTrace();
 					} catch (NullReferenceException e1) {
@@ -853,6 +855,9 @@ public class FIBController extends Observable implements BindingEvaluationContex
 			}
 			if (fibWidget instanceof FIBCustom) {
 				return new FIBCustomWidget((FIBCustom) fibWidget, FIBController.this);
+			}
+			if (fibWidget instanceof FIBReferencedComponent) {
+				return new FIBReferencedComponentWidget((FIBReferencedComponent) fibWidget, FIBController.this, this);
 			}
 			return null;
 		}
