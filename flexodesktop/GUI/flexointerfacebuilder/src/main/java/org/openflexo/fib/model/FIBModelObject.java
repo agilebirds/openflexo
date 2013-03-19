@@ -34,6 +34,7 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.validation.FixProposal;
 import org.openflexo.fib.model.validation.ProblemIssue;
 import org.openflexo.fib.model.validation.ValidationError;
@@ -168,7 +169,10 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 
 	@Override
 	public BindingFactory getBindingFactory() {
-		return getComponent().getBindingFactory();
+		if (getComponent() != null) {
+			return getComponent().getBindingFactory();
+		}
+		return FIBLibrary.instance().getBindingFactory();
 	}
 
 	/**
