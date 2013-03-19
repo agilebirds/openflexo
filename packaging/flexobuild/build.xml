@@ -151,12 +151,22 @@
 	</target>
 
 	<target name="generateHelp">
-		<artifact:dependencies pathId="flexoant">
+		<copy file="pom.xml.tpl" tofile="${artifact.dir}/pom.xml" filtering="true" overwrite="true">
+			<filterset>
+				<filtersfile file="${build.properties}" />
+				<filter token="dist.dir" value="${artifact.dir}"/>
+			</filterset>
+		</copy>
+		<artifact:mvn mavenhome="${maven.home}" pom="${artifact.dir}/pom.xml">
 			<localrepository id="local" path="${settings.localRepository}"/>
-			<dependency groupId="org.openflexo" artifactId="flexoant" version="${project.version}" type="jar" />
-		</artifact:dependencies>
+			<arg value="-B"/>
+			<arg value="dependency:copy"/>
+		</artifact:mvn>
 		<taskdef name="generatehelp" classname="org.openflexo.ant.GenerateHelpSetTask">
 			<classpath>
+				<fileset dir="${artifact.dir}">
+					<include name="**/*.jar" />
+				</fileset>
 				<fileset dir="${dist.dir}/lib">
 					<include name="**/*.jar" />
 				</fileset>
