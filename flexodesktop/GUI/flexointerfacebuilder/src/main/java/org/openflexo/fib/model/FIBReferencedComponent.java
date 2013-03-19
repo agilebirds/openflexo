@@ -72,6 +72,7 @@ public class FIBReferencedComponent extends FIBWidget {
 		}
 	}
 
+	@Override
 	public FIBComponent getComponent() {
 		if (component == null && getComponentFile() != null && getComponentFile().exists()) {
 			component = FIBLibrary.instance().retrieveFIBComponent(getComponentFile());
@@ -193,11 +194,8 @@ public class FIBReferencedComponent extends FIBWidget {
 		}
 
 		@Override
-		public FIBComponent getRootComponent() {
-			if (getReferencedComponent() != null) {
-				return getReferencedComponent().getRootComponent();
-			}
-			return null;
+		public FIBComponent getComponent() {
+			return getReferencedComponent();
 		}
 
 		public DataBinding<?> getVariable() {

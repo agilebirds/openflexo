@@ -34,7 +34,6 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.validation.FixProposal;
 import org.openflexo.fib.model.validation.ProblemIssue;
 import org.openflexo.fib.model.validation.ValidationError;
@@ -67,8 +66,6 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 
 	private String name;
 	private String description;
-
-	private BindingFactory bindingFactory;
 
 	private Vector<FIBParameter> parameters = new Vector<FIBParameter>();
 
@@ -155,32 +152,23 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 		return true;
 	}
 
-	public abstract FIBComponent getRootComponent();
+	// public abstract FIBComponent getRootComponent();
+
+	/**
+	 * Return the FIBComponent this component refer to
+	 * 
+	 * @return
+	 */
+	public abstract FIBComponent getComponent();
 
 	@Override
 	public BindingModel getBindingModel() {
-		if (getRootComponent() != null && getRootComponent() != this) {
-			return getRootComponent().getBindingModel();
-		}
-		return null;
+		return getComponent().getBindingModel();
 	}
 
 	@Override
 	public BindingFactory getBindingFactory() {
-		if (getRootComponent() != null && getRootComponent() != this) {
-			return getRootComponent().getBindingFactory();
-		}
-		if (bindingFactory != null) {
-			return bindingFactory;
-		}
-		return FIBLibrary.instance().getBindingFactory();
-	}
-
-	public void setBindingFactory(BindingFactory bindingFactory) {
-		if (getRootComponent() != null && getRootComponent() != this) {
-			logger.warning("Called setBindingFactory() on the non-root component: this is weird and generally indicates that something strange happened");
-		}
-		this.bindingFactory = bindingFactory;
+		return getComponent().getBindingFactory();
 	}
 
 	/**
@@ -352,7 +340,7 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 	}
 
 	public boolean isNameUsedInHierarchy(String aName) {
-		return isNameUsedInHierarchy(aName, getRootComponent());
+		return isNameUsedInHierarchy(aName, getComponent().getRootComponent());
 	}
 
 	private static boolean isNameUsedInHierarchy(String aName, FIBModelObject object) {
@@ -370,7 +358,7 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 	}
 
 	public List<FIBModelObject> getObjectsWithName(String aName) {
-		return retrieveObjectsWithName(aName, getRootComponent(), new ArrayList<FIBModelObject>());
+		return retrieveObjectsWithName(aName, getComponent().getRootComponent(), new ArrayList<FIBModelObject>());
 	}
 
 	private static List<FIBModelObject> retrieveObjectsWithName(String aName, FIBModelObject object, List<FIBModelObject> list) {

@@ -37,8 +37,8 @@ public class FIBDependancy extends FIBModelObject {
 	}
 
 	@Override
-	public FIBComponent getRootComponent() {
-		return owner.getRootComponent();
+	public FIBComponent getComponent() {
+		return owner;
 	}
 
 	public FIBComponent getOwner() {
@@ -94,7 +94,7 @@ public class FIBDependancy extends FIBModelObject {
 	@Override
 	public void finalizeDeserialization() {
 		super.finalizeDeserialization();
-		setMasterComponent(getRootComponent().getComponentNamed(masterComponentName));
+		setMasterComponent(getComponent().getRootComponent().getComponentNamed(masterComponentName));
 	}
 
 	@Override
