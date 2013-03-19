@@ -188,7 +188,7 @@ public class FIBInspector extends FIBPanel {
 		Set<EditionPattern> editionPatternsToDisplay = new HashSet<EditionPattern>();
 
 		for (EditionPattern ep : tabsForEP.keySet()) {
-			if (object.getEditionPatternReference(ep) == null) {
+			if (object.getEditionPatternInstance(ep) == null) {
 				tabsForEP.get(ep).setVisible(DataBinding.makeFalseBinding());
 			}
 		}
@@ -464,7 +464,8 @@ public class FIBInspector extends FIBPanel {
 		// newTab.setDataClass(EditionPatternInstance.class);
 		// newTab.setData(new DataBinding("data.editionPatternReferences.get["+refIndex+"].editionPatternInstance"));
 		// newTab.setData(new DataBinding("data.editionPatternReferences.firstElement.editionPatternInstance"));
-		String epIdentifier = ep.getVirtualModel().getName() + "_" + ep.getName() + "_" + refIndex;
+		// String epIdentifier = ep.getVirtualModel().getName() + "_" + ep.getName() + "_" + refIndex;
+		String epIdentifier = "data.getEditionPatternInstance(\"" + ep.getURI() + "\")";
 		newTab.setName(epIdentifier + "Panel");
 		int index = 0;
 		LocalizedDictionary localizedDictionary = ep.getViewPoint().getLocalizedDictionary();
@@ -477,6 +478,7 @@ public class FIBInspector extends FIBPanel {
 			label.setLabel(entryLabel);
 			newTab.addToSubComponents(label, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false), index++);
 			FIBWidget widget = makeWidget(entry, newTab, index++);
+			widget.setBindingFactory(entry.getBindingFactory());
 			widget.setData(new DataBinding<Object>(epIdentifier + "." + entry.getData().toString()));
 			widget.setReadOnly(entry.getIsReadOnly());
 

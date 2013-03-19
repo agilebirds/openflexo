@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.CastExpression;
 import org.openflexo.antar.expr.Constant;
+import org.openflexo.antar.expr.Constant.StringConstant;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionTransformer;
 import org.openflexo.antar.expr.ExpressionVisitor;
@@ -410,6 +411,10 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 
 	public boolean isConstant() {
 		return getExpression() != null && getExpression() instanceof Constant;
+	}
+
+	public boolean isStringConstant() {
+		return getExpression() != null && getExpression() instanceof StringConstant;
 	}
 
 	public boolean isCompoundBinding() {
