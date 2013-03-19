@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>generators</artifactId>
@@ -17,14 +16,14 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
 			</plugin>
-            <plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>**/*/TestCG2.java</exclude>
-                    </excludes>
-                </configuration>
+				<configuration>
+					<excludes>
+						<exclude>**/*/TestCG2.java</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -51,16 +50,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexowarbuilder</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexowarbuilder</artifactId>
-			<classifier>resources</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
 			<artifactId>flexodocgenerator</artifactId>
 		</dependency>
 		<dependency>
@@ -77,6 +66,10 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.ant</groupId>
+			<artifactId>ant</artifactId>
 		</dependency>
 	</dependencies>
 </project>
