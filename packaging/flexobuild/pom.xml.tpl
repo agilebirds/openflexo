@@ -1,0 +1,30 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>dummy</groupId>
+  <artifactId>dummy-@maven.artifact.id@</artifactId>
+  <version>@project.version@</version>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.7</version>
+        <configuration>
+        <artifactItems>
+            <artifactItem>
+              <groupId>@maven.group.id@</groupId>
+              <artifactId>@maven.artifact.id@</artifactId>
+              <version>@project.version@</version>
+              <classifier>@maven.classifier@</classifier>
+              <type>@maven.type@</type>
+              <overWrite>true</overWrite>
+            </artifactItem>
+          </artifactItems>
+          <outputDirectory>@dist.dir@</outputDirectory>
+          <overWriteReleases>true</overWriteReleases>
+          <overWriteSnapshots>true</overWriteSnapshots>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

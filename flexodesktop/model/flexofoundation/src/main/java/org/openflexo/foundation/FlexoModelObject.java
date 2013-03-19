@@ -120,12 +120,12 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	 * href="http://www.jguru.com/faq/view.jsp?EID=251942">http://www.jguru.com/faq/view.jsp?EID=251942</A></blockquote>
 	 */
 	public FlexoModelObject() {
-		super();
-		referencers = new Vector<FlexoModelObjectReference<?>>();
+		this(null);
 	}
 
 	public FlexoModelObject(FlexoProject project) {
 		super(project);
+		referencers = new Vector<FlexoModelObjectReference<?>>();
 		registerObject(project);
 	}
 

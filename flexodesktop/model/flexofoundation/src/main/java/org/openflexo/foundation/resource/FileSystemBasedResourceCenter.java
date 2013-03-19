@@ -21,9 +21,11 @@ package org.openflexo.foundation.resource;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Timer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.rm.ViewPointResource;
@@ -394,7 +396,8 @@ public abstract class FileSystemBasedResourceCenter extends FileResourceReposito
 	}
 
 	private DirectoryWatcher directoryWatcher;
-	private Timer timer;
+
+	private ScheduledFuture<?> scheduleWithFixedDelay;
 
 	public void startDirectoryWatching() {
 		directoryWatcher = new DirectoryWatcher(getRootDirectory()) {
@@ -414,13 +417,12 @@ public abstract class FileSystemBasedResourceCenter extends FileResourceReposito
 			}
 		};
 
-		timer = new Timer();
-		timer.schedule(directoryWatcher, new Date(), 1000);
-
+		ScheduledExecutorService newScheduledThreadPool = Executors.newScheduledThreadPool(1);
+		scheduleWithFixedDelay = newScheduledThreadPool.scheduleWithFixedDelay(directoryWatcher, 0, 1, TimeUnit.SECONDS);
 	}
 
 	public void stopDirectoryWatching() {
-		timer.cancel();
+		scheduleWithFixedDelay.cancel(true);
 	}
 
 	protected void fileModified(File file) {

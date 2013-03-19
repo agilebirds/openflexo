@@ -1,15 +1,8 @@
 <project name="project" default="package" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
-	<path id="classpath">
-		<fileset dir="lib">
-			<include name="*.jar" />
-		</fileset>
-	</path>
 
-	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
-		<classpath refid="classpath" />
-	</taskdef>
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
 
-	<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" classpathref="classpath" reverseLoader="true" />
+	<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" />
 
 	<target name="defineProperties">
 		<!-- Remove '-SNAPSHOT' if any -->
@@ -27,7 +20,10 @@
 		<tstamp>
 			<format property="build.id" pattern="yyyy-MM-dd.HHmm" />
 		</tstamp>
-	    <property name="build.properties" value="${flexobuild.work.dir}/build.properties" />
+		<property name="build.properties" value="${flexobuild.work.dir}/build.properties" />
+		<property name="maven.group.id" value="org.openflexo.packaging" />
+		<property name="maven.type" value="zip" />
+		<property name="maven.classifier" value="packaging" />
 	</target>
 
 	<target name="deploy" depends="defineProperties">
@@ -57,7 +53,7 @@
 		<loadproperties srcfile="lite.properties" />
 		<antcall target="createPackage" />
 	</target>
-	
+
 	<target name="packageSemantics">
 		<loadproperties srcfile="semantics.properties" />
 		<antcall target="createPackage" />
@@ -108,11 +104,7 @@
 	</target>
 
 	<target name="checkoutArtifact">
-		<property name="maven.group.id" value="org.openflexo.packaging" />
-		<property name="maven.type" value="zip" />
-		<property name="maven.classifier" value="packaging" />
-		<property name="maven.artifact.name" value="${maven.artifact.id}-${project.version}-${maven.classifier}.${maven.type}" />
-		<artifact:dependencies filesetId="maven.artifact" addArtifactFileSetRefs="true">
+		<!--<artifact:dependencies filesetId="maven.artifact" addArtifactFileSetRefs="true">
 			<localrepository id="local" path="${settings.localRepository}"/>
 			<dependency groupId="${maven.group.id}" artifactId="${maven.artifact.id}" version="${project.version}" type="${maven.type}" classifier="${maven.classifier}" />
 		</artifact:dependencies>
@@ -120,7 +112,17 @@
 			<fileset refid="${maven.group.id}:${maven.artifact.id}:${maven.type}:${maven.classifier}" />
 			<mapper type="flatten" />
 		</copy>
-		<unzip src="${artifact.dir}/${maven.artifact.name}" dest="${dist.dir}" />
+		<unzip src="${artifact.dir}/${maven.artifact.name}" dest="${dist.dir}" />-->
+		<copy file="pom.xml.tpl" tofile="${flexobuild.work.dir}/pom.xml" filtering="true" overwrite="true">
+			<filterset>
+				<filtersfile file="${build.properties}" />
+			</filterset>
+		</copy>
+		<artifact:mvn mavenhome="${maven.home}" pom="${flexobuild.work.dir}/pom.xml">
+			<localrepository id="local" path="${settings.localRepository}"/>
+			<arg value="-B"/>
+			<arg value="dependency:unpack"/>
+		</artifact:mvn>
 		<antcall target="generateApplicationVersion" />
 	</target>
 
@@ -155,7 +157,6 @@
 		</artifact:dependencies>
 		<taskdef name="generatehelp" classname="org.openflexo.ant.GenerateHelpSetTask">
 			<classpath>
-				<path refid="flexoant" />
 				<fileset dir="${dist.dir}/lib">
 					<include name="**/*.jar" />
 				</fileset>
@@ -287,7 +288,7 @@
 	<target name="copyOnServerWindowsRelease" unless="isNightly">
 		<property name="folder" value="${deployment.root.folder}/${flexo_version}/${daily_folder}/Windows" />
 		<antcall target="createRemoteFolder"/>
-		<scp todir="${deployment.server.name}:${folder}" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}">
+		<scp todir="${deployment.server.name}:${folder}" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}" failonerror="false">
 			<fileset dir="${project.build.directory}">
 				<include name="*.exe" />
 			</fileset>
@@ -297,7 +298,7 @@
 	<target name="copyOnServerMacRelease" unless="isNightly">
 		<property name="folder" value="${deployment.root.folder}/${flexo_version}/${daily_folder}/Mac" />
 		<antcall target="createRemoteFolder"/>
-		<scp todir="${deployment.server.name}:${folder}" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}">
+		<scp todir="${deployment.server.name}:${folder}" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}" failonerror="false">
 			<fileset dir="${project.build.directory}">
 				<include name="*.dmg" />
 			</fileset>
@@ -307,7 +308,7 @@
 	<target name="copyOnServerLinuxRelease" unless="isNightly">
 		<property name="folder" value="${deployment.root.folder}/${flexo_version}/${daily_folder}/Linux" />
 		<antcall target="createRemoteFolder"/>
-		<scp todir="${deployment.server.name}:${folder}" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}">
+		<scp todir="${deployment.server.name}:${folder}" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}" failonerror="false">
 			<fileset dir="${project.build.directory}">
 				<include name="*.tar.gz" />
 			</fileset>
@@ -317,7 +318,7 @@
 	<target name="copyOnServerWindowsNightly" if="isNightly">
 		<property name="folder" value="${deployment.root.folder}/${flexo_version}/nightly/Windows" />
 		<antcall target="createRemoteFolder"/>
-		<scp todir="${deployment.server.name}:${folder}" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}">
+		<scp todir="${deployment.server.name}:${folder}" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}" failonerror="false">
 			<fileset dir="${project.build.directory}">
 				<include name="*.exe" />
 			</fileset>
@@ -345,12 +346,7 @@
 	</target>
 
 	<target name="createRemoteFolder">
-		<exec executable="ssh" failonerror="false">
-			<arg value="-o StrictHostKeyChecking=no" />
-			<arg value="${deployment.server.name}" />
-			<arg value="mkdir -p" />
-			<arg value="${folder}" />
-		</exec>
+		<sshexec command="mkdir -p ${folder}" host="${deployment.server.name}" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}" failonerror="false"/>
 	</target>
 
 </project>

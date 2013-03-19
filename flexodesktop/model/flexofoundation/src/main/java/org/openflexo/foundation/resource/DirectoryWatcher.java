@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -42,15 +43,15 @@ public abstract class DirectoryWatcher extends TimerTask {
 
 		private DirectoryWatcher watcher;
 		private File directory;
-		private HashMap<File, Long> lastModified = new HashMap<File, Long>();
-		private HashMap<File, NodeDirectoryWatcher> subNodes = new HashMap<File, NodeDirectoryWatcher>();
+		private Map<File, Long> lastModified = new HashMap<File, Long>();
+		private Map<File, NodeDirectoryWatcher> subNodes = new HashMap<File, NodeDirectoryWatcher>();
 
 		private NodeDirectoryWatcher(File directory, DirectoryWatcher watcher, boolean notifyAdding) {
 			// System.out.println("Init NodeDirectoryWatcher on " + directory);
 			this.directory = directory;
 			this.watcher = watcher;
 			for (File f : directory.listFiles()) {
-				lastModified.put(f, new Long(f.lastModified()));
+				lastModified.put(f, f.lastModified());
 				if (f.isDirectory()) {
 					subNodes.put(f, new NodeDirectoryWatcher(f, watcher, notifyAdding));
 				}
@@ -61,7 +62,7 @@ public abstract class DirectoryWatcher extends TimerTask {
 		}
 
 		private void watch() {
-			HashSet<File> checkedFiles = new HashSet<File>();
+			Set<File> checkedFiles = new HashSet<File>();
 
 			// scan the files and check for modification/addition
 			for (File f : directory.listFiles()) {
@@ -69,20 +70,20 @@ public abstract class DirectoryWatcher extends TimerTask {
 				checkedFiles.add(f);
 				if (current == null) {
 					// new file
-					lastModified.put(f, new Long(f.lastModified()));
+					lastModified.put(f, f.lastModified());
 					watcher.fileAdded(f);
 					if (f.isDirectory()) {
 						subNodes.put(f, new NodeDirectoryWatcher(f, watcher, true));
 					}
 				} else if (current.longValue() != f.lastModified()) {
 					// modified file
-					lastModified.put(f, new Long(f.lastModified()));
+					lastModified.put(f, f.lastModified());
 					watcher.fileModified(f);
 				}
 			}
 
 			// now check for deleted files
-			Set<File> ref = ((HashMap<File, Long>) lastModified.clone()).keySet();
+			Set<File> ref = new HashMap<File, Long>(lastModified).keySet();
 			ref.removeAll(checkedFiles);
 			Iterator<File> it = ref.iterator();
 			while (it.hasNext()) {
