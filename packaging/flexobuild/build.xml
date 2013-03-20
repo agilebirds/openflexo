@@ -154,9 +154,11 @@
 	<target name="generateHelp">
 		<copy file="pom.xml.tpl" tofile="${artifact.dir}/pom.xml" filtering="true" overwrite="true">
 			<filterset>
+				<filter token="dist.dir" value="${artifact.dir}"/>
 				<filter token="maven.group.id" value="org.openflexo"/>
 				<filter token="maven.artifact.id" value="flexoant"/>
 				<filter token="maven.classifier" value=""/>
+				<filter token="maven.type" value="jar"/>
 			</filterset>
 			<filterset>
 				<filtersfile file="${build.properties}" />
