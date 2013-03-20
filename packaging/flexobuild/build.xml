@@ -357,7 +357,7 @@
 	</target>
 
 	<target name="createRemoteFolder">
-		<sshexec command="mkdir -p ${folder}" host="${deployment.server.name}" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}" failonerror="false"/>
+		<sshexec command="mkdir -p ${folder}" host="${deployment.server.name}" username="${user.name}" trust="true" keyfile="${ssh.private.keyfile}" passphrase="${ssh.passphrase}" failonerror="false"/>
 	</target>
 
 </project>
