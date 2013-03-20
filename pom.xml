@@ -327,13 +327,6 @@
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
-				<artifactId>flexohelp</artifactId>
-				<version>${project.version}</version>
-				<classifier>resources</classifier>
-				<type>zip</type>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
 				<artifactId>flexodocresourcecenter</artifactId>
 				<version>${project.version}</version>
 			</dependency>
