@@ -27,6 +27,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.drm.DocItemFolder;
+import org.openflexo.drm.DocResourceCenter;
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
 import org.openflexo.drm.helpset.DRMHelpSet;
@@ -66,6 +67,7 @@ public class GenerateHelpSet extends FlexoAction<GenerateHelpSet, FlexoModelObje
 	};
 
 	static {
+		FlexoModelObject.addActionForClass(actionType, DocResourceCenter.class);
 		FlexoModelObject.addActionForClass(actionType, DocItemFolder.class);
 	}
 
