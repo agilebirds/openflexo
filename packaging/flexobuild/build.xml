@@ -119,7 +119,7 @@
 				<filtersfile file="${build.properties}" />
 			</filterset>
 		</copy>
-		<artifact:mvn mavenhome="${maven.home}" pom="${flexobuild.work.dir}/pom.xml">
+		<artifact:mvn mavenhome="${maven.home}" pom="${flexobuild.work.dir}/pom.xml" fork="true">
 			<localrepository id="local" path="${settings.localRepository}"/>
 			<arg value="-B"/>
 			<arg value="dependency:unpack"/>
@@ -154,11 +154,15 @@
 	<target name="generateHelp">
 		<copy file="pom.xml.tpl" tofile="${artifact.dir}/pom.xml" filtering="true" overwrite="true">
 			<filterset>
+				<filter token="maven.group.id" value="org.openflexo"/>
+				<filter token="maven.artifact.id" value="flexoant"/>
+				<filter token="maven.classifier" value=""/>
+			</filterset>
+			<filterset>
 				<filtersfile file="${build.properties}" />
-				<filter token="dist.dir" value="${artifact.dir}"/>
 			</filterset>
 		</copy>
-		<artifact:mvn mavenhome="${maven.home}" pom="${artifact.dir}/pom.xml">
+		<artifact:mvn mavenhome="${maven.home}" pom="${artifact.dir}/pom.xml" fork="true">
 			<localrepository id="local" path="${settings.localRepository}"/>
 			<arg value="-B"/>
 			<arg value="dependency:copy"/>
