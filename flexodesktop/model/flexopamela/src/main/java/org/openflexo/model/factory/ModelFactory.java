@@ -38,7 +38,7 @@ public class ModelFactory {
 	private Class<? extends Map> mapImplementationClass = Hashtable.class;
 
 	private Map<Class, PAMELAProxyFactory> proxyFactories;
-	private StringEncoder stringEncoder;
+	private final StringEncoder stringEncoder;
 	private ModelContext modelContext;
 
 	private ModelContext extendedContext;
