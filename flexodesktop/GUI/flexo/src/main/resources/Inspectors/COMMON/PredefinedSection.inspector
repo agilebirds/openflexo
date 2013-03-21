@@ -3,7 +3,7 @@
   <TabPanel name="Tab" constraints="border(location=center)" useScrollBar="false">
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="BasicTab">
       <Label label="contents" localize="true" name="DocumentedDiagramLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
-      <DropDown format="object.name" localize="true" data="data.type" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      <DropDown format="object.name" localize="true" iteratorClassName="org.openflexo.foundation.toc.PredefinedSection$PredefinedSectionType" data="data.type" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
     </Tab>
   </TabPanel>
   <Parameter name="title" value="Pre-defined section" />
