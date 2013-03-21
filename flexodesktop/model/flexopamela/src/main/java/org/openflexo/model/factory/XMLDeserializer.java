@@ -162,7 +162,8 @@ class XMLDeserializer {
 					throw new RestrictiveDeserializationException("No attribute found for the attribute named: " + attribute.getName());
 				case EXTENSIVE:
 					// TODO: handle extra values
-					break;
+					// break;
+					continue; // As long as we don't handlethem, we continue to avoid NPE.
 				}
 			}
 			Object value = getStringEncoder().fromString(property.getType(), attribute.getValue());
