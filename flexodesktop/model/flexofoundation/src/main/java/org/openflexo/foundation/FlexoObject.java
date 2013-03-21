@@ -773,18 +773,46 @@ public abstract class FlexoObject extends FlexoObservable {
 		}
 	}
 
-	// This deprecated method was kept to preserve backward compatibility with Openflexo 1.5
-	// All of this will be refactored and this method will be removed from next versions
-	/*@Deprecated
-	public void registerEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole<?> patternRole) {
-		logger.warning("registerEditionPatternReference(): not implemented yet: should be refactored");
-	}*/
+	public List<DocType> getDocTypes() {
+		return null;
+	}
 
-	// This deprecated method was kept to preserve backward compatibility with Openflexo 1.5
-	// All of this will be refactored and this method will be removed from next versions
-	/*@Deprecated
-	public void unregisterEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole<?> patternRole) {
-		logger.warning("unregisterEditionPatternReference(): not implemented yet: should be refactored");
-	}*/
+	private static HelpRetriever _helpRetriever = null;
+
+	public static interface HelpRetriever {
+		public String shortHelpForObject(FlexoObject object);
+
+		public String longHelpForObject(FlexoObject object);
+	}
+
+	/**
+	 * Return help text for supplied object, as defined in DocResourceManager as long version Note: return an HTML version, with embedding
+	 * <html>...</html> tags.
+	 */
+	public String getHelpText() {
+		if (_helpRetriever != null) {
+			return _helpRetriever.longHelpForObject(this);
+		}
+		return null;
+	}
+
+	/**
+	 * Return help text for supplied object, as defined in DocResourceManager as short version Note: return an HTML version, with embedding
+	 * <html>...</html> tags.
+	 */
+	public String getShortHelpText() {
+		if (_helpRetriever != null) {
+			return _helpRetriever.shortHelpForObject(this);
+		}
+		return null;
+	}
+
+	public static HelpRetriever getHelpRetriever() {
+		return _helpRetriever;
+	}
+
+	public static void setHelpRetriever(HelpRetriever retriever) {
+		_helpRetriever = retriever;
+	}
 
 }

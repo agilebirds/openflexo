@@ -479,6 +479,10 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 					+ " "
 					+ (getOwner() != null ? "BindingModel=" + getOwner().getBindingModel() + " BindingFactory="
 							+ getOwner().getBindingFactory() : ""));
+			/*Bindable owner = getOwner();
+			BindingModel bm = getOwner().getBindingModel();
+			BindingFactory bf = getOwner().getBindingFactory();
+			logger.info("Breakpoint");*/
 		}
 
 		return expression;

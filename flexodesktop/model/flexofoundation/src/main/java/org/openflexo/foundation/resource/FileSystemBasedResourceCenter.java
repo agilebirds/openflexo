@@ -427,6 +427,8 @@ public abstract class FileSystemBasedResourceCenter extends FileResourceReposito
 
 	protected void fileModified(File file) {
 		System.out.println("File MODIFIED " + file.getName() + " in " + file.getParentFile().getAbsolutePath());
+		// System.out.println("Aborting in FileSystemBasedResourceCenter");
+		// System.exit(-1);
 	}
 
 	protected void fileAdded(File file) {

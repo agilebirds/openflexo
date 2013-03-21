@@ -87,6 +87,14 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 		this.project = project;
 	}
 
+	@Override
+	public List<DocType> getDocTypes() {
+		if (getProject() != null) {
+			return getProject().getDocTypes();
+		}
+		return super.getDocTypes();
+	}
+
 	public FlexoServiceManager getServiceManager() {
 		if (getProject() != null) {
 			return getProject().getServiceManager();

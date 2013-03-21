@@ -196,7 +196,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	@Override
 	public FlexoResource<XMLModel> retrieveModelResource(File aModelFile,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
-		logger.warning("Not implemented yet");
+		// logger.warning("Not implemented yet");
 		return null;
 	}
 
