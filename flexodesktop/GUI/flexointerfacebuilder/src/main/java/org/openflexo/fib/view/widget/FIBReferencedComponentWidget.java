@@ -142,10 +142,12 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 
 		if (getReferencedComponentView() != null) {
 
-			getReferencedComponentView().getDynamicModel().setData(getValue());
+			// getReferencedComponentView().getDynamicModel().setData(getValue());
 
 			performAssignments();
-			logger.info("Update FIBReferenceComponentWidget with " + getValue());
+			// logger.info("********* Update FIBReferenceComponentWidget " + getWidget().getComponentFile() + " with " + getValue());
+			// logger.info("getData()=" + getWidget().getData());
+			// logger.info("valid=" + getWidget().getData().isValid());
 			referencedComponentView.getDynamicModel().setData(getValue());
 			referencedComponentView.updateDataObject(getValue());
 		}
@@ -177,8 +179,7 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 		getParentView().updateDataObject(getValue());
 	}
 
-	@Override
-	public BindingEvaluationContext getBindingEvaluationContext() {
+	public BindingEvaluationContext getEmbeddedBindingEvaluationContext() {
 		return this;
 	}
 

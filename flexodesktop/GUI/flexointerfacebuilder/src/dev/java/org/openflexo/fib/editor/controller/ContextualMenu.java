@@ -223,11 +223,15 @@ public class ContextualMenu {
 						}
 					}
 				}
+				DataBinding<Boolean> visible = reusableComponent.getVisible();
+				reusableComponent.setData(null);
+				reusableComponent.setVisible(null);
 				logger.info("Save to file " + params.reusableComponentFile.getAbsolutePath());
 				FIBLibrary.save(reusableComponent, params.reusableComponentFile);
 				FIBReferencedComponent widget = new FIBReferencedComponent();
 				widget.setComponentFile(params.reusableComponentFile);
 				widget.setData(params.data);
+				widget.setVisible(visible);
 				parent.addToSubComponents(widget, reusableComponent.getConstraints());
 				return widget;
 			}

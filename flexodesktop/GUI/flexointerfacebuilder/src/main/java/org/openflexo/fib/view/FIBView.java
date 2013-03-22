@@ -148,7 +148,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 			return getParentView().getBindingEvaluationContext();
 		}
 		if (getEmbeddingComponent() != null) {
-			return getEmbeddingComponent().getBindingEvaluationContext();
+			return getEmbeddingComponent().getEmbeddedBindingEvaluationContext();
 		}
 		return getController();
 	}
