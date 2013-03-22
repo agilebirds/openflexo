@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
@@ -11,19 +12,41 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
+import org.openflexo.antar.binding.Bindable;
+import org.openflexo.antar.binding.BindingFactory;
+import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.fib.FIBLibrary;
+import org.openflexo.fib.controller.FIBController.Status;
+import org.openflexo.fib.controller.FIBDialog;
+import org.openflexo.fib.editor.FIBEditor.FIBPreferences;
 import org.openflexo.fib.editor.controller.EditorAction.ActionAvailability;
 import org.openflexo.fib.editor.controller.EditorAction.ActionPerformer;
 import org.openflexo.fib.model.BorderLayoutConstraints;
 import org.openflexo.fib.model.BorderLayoutConstraints.BorderLayoutLocation;
+import org.openflexo.fib.model.FIBButton;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBContainer;
+import org.openflexo.fib.model.FIBCustom;
+import org.openflexo.fib.model.FIBFile;
+import org.openflexo.fib.model.FIBFile.FileMode;
+import org.openflexo.fib.model.FIBLabel;
+import org.openflexo.fib.model.FIBLabel.Align;
 import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBPanel.Border;
+import org.openflexo.fib.model.FIBPanel.FlowLayoutAlignment;
 import org.openflexo.fib.model.FIBPanel.Layout;
+import org.openflexo.fib.model.FIBReferencedComponent;
 import org.openflexo.fib.model.FIBSplitPanel;
 import org.openflexo.fib.model.SplitLayoutConstraints;
+import org.openflexo.fib.model.TwoColsLayoutConstraints;
+import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
+import org.openflexo.fib.utils.BindingSelector;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.toolbox.StringUtils;
 
 public class ContextualMenu {
 	private static final Logger logger = FlexoLogger.getLogger(ContextualMenu.class.getPackage().getName());
@@ -109,6 +132,129 @@ public class ContextualMenu {
 				return object instanceof FIBComponent && ((FIBComponent) object).getParent() != null;
 			}
 		}));
+
+		addToActions(new EditorAction("Make reusable component", null, new ActionPerformer() {
+			@Override
+			public FIBModelObject performAction(FIBModelObject object) {
+				FIBContainer component = (FIBContainer) object;
+				FIBContainer parent = component.getParent();
+				return makeReusableComponent(component, parent);
+			}
+		}, new ActionAvailability() {
+			@Override
+			public boolean isAvailableFor(FIBModelObject object) {
+				return object instanceof FIBContainer && ((FIBContainer) object).getParent() != null;
+			}
+		}));
+	}
+
+	public FIBModelObject makeReusableComponent(FIBContainer component, FIBContainer parent) {
+		MakeReusableComponentParameters params = new MakeReusableComponentParameters(parent);
+		params.reusableComponentFile = new File(FIBPreferences.getLastDirectory(), "ReusableComponent.fib");
+		FIBPanel panel = new FIBPanel();
+		panel.setDataClass(params.getClass());
+		panel.setLayout(Layout.twocols);
+		FIBLabel title = new FIBLabel("Make reusable component");
+		title.setAlign(Align.center);
+		panel.addToSubComponents(title, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false));
+		panel.addToSubComponents(new FIBLabel("file"), new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
+		FIBFile fileWidget = new FIBFile();
+		fileWidget.setMode(FileMode.SaveMode);
+		fileWidget.setData(new DataBinding("data.reusableComponentFile"));
+		panel.addToSubComponents(fileWidget, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
+		panel.addToSubComponents(new FIBLabel("data"), new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false));
+		FIBCustom dataWidget = new FIBCustom();
+		dataWidget.setComponentClass(BindingSelector.class);
+		dataWidget.setData(new DataBinding("data.data"));
+		dataWidget.addToAssignments(new FIBCustom.FIBCustomAssignment(dataWidget, new DataBinding<Object>("component.bindable"),
+				new DataBinding<Object>("data"), true));
+		panel.addToSubComponents(dataWidget, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
+		FIBPanel controlPanel = new FIBPanel();
+		controlPanel.setLayout(Layout.flow);
+		controlPanel.setFlowAlignment(FlowLayoutAlignment.CENTER);
+		FIBButton validateButton = new FIBButton();
+		validateButton.setLabel("validate");
+		validateButton.setAction(new DataBinding<Object>("controller.validateAndDispose()"));
+		controlPanel.addToSubComponents(validateButton);
+		FIBButton cancelButton = new FIBButton();
+		cancelButton.setLabel("cancel");
+		cancelButton.setAction(new DataBinding<Object>("controller.cancelAndDispose()"));
+		controlPanel.addToSubComponents(cancelButton);
+		panel.addToSubComponents(controlPanel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false));
+
+		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(panel, params, editorController.getEditor().getFrame(), true);
+		System.out.println("dialog status = " + dialog.getStatus());
+
+		if (dialog.getStatus() == Status.VALIDATED) {
+			if (params.reusableComponentFile != null) {
+				System.out.println("Saving new component to " + params.reusableComponentFile);
+				FIBContainer reusableComponent = component;
+				parent.removeFromSubComponents(reusableComponent);
+				reusableComponent.setData(params.data);
+				reusableComponent.setDataClass(TypeUtils.getBaseClass(params.data.getAnalyzedType()));
+				for (FIBComponent child : reusableComponent.getAllSubComponents()) {
+					for (DataBinding binding : child.getDependencyBindings()) {
+						if (binding.isSet()) {
+							System.out.println("What about " + binding);
+							if (binding.toString().startsWith(params.data.toString())) {
+								binding.setUnparsedBinding(binding.toString().replace(params.data.toString(), "data"));
+								System.out.println("Replaced by " + binding);
+							}
+							if (StringUtils.isNotEmpty(reusableComponent.getName())) {
+								if (binding.toString().startsWith(reusableComponent.getName() + ".")) {
+									binding.setUnparsedBinding(binding.toString().substring(reusableComponent.getName().length() + 1));
+									System.out.println("Replaced by " + binding);
+								}
+							}
+						}
+					}
+				}
+				logger.info("Save to file " + params.reusableComponentFile.getAbsolutePath());
+				FIBLibrary.save(reusableComponent, params.reusableComponentFile);
+				FIBReferencedComponent widget = new FIBReferencedComponent();
+				widget.setComponentFile(params.reusableComponentFile);
+				widget.setData(params.data);
+				parent.addToSubComponents(widget, reusableComponent.getConstraints());
+				return widget;
+			}
+		}
+
+		return null;
+	}
+
+	public static class MakeReusableComponentParameters implements Bindable {
+		public File reusableComponentFile;
+		public Class reusableComponentClass;
+		public DataBinding<Object> data;
+
+		private FIBComponent contextComponent;
+
+		public MakeReusableComponentParameters(FIBComponent contextComponent) {
+			this.contextComponent = contextComponent;
+			data = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET);
+		}
+
+		@Override
+		public BindingModel getBindingModel() {
+			return contextComponent.getBindingModel();
+		}
+
+		@Override
+		public BindingFactory getBindingFactory() {
+			return contextComponent.getBindingFactory();
+		}
+
+		@Override
+		public void notifiedBindingChanged(DataBinding<?> dataBinding) {
+			reusableComponentClass = TypeUtils.getBaseClass(data.getAnalyzedType());
+			System.out.println("reusableComponentClass=" + reusableComponentClass);
+		}
+
+		@Override
+		public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
+			reusableComponentClass = TypeUtils.getBaseClass(data.getAnalyzedType());
+			System.out.println("reusableComponentClass=" + reusableComponentClass);
+		}
 	}
 
 	public void addToActions(EditorAction action) {

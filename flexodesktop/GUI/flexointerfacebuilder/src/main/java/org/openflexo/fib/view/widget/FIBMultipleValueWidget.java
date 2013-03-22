@@ -37,7 +37,6 @@ import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListDataListener;
 
-import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
@@ -446,14 +445,6 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 				getLocalized(s);
 			}
 		}
-	}
-
-	@Override
-	public List<DataBinding<?>> getDependencyBindings() {
-		List<DataBinding<?>> returned = super.getDependencyBindings();
-		returned.add(getWidget().getList());
-		returned.add(getWidget().getArray());
-		return returned;
 	}
 
 }

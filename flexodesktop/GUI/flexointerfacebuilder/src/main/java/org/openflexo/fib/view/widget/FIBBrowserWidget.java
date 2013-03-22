@@ -27,7 +27,6 @@ import java.awt.Rectangle;
 import java.awt.event.MouseListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
-import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,7 +45,6 @@ import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
@@ -250,14 +248,6 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 	public void clearSelection() {
 		getTreeSelectionModel().clearSelection();
-	}
-
-	@Override
-	public List<DataBinding<?>> getDependencyBindings() {
-		List<DataBinding<?>> returned = super.getDependencyBindings();
-		returned.add(getWidget().getSelected());
-		returned.add(getWidget().getRoot());
-		return returned;
 	}
 
 	@Override

@@ -29,7 +29,6 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
@@ -118,6 +117,16 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	 * @return boolean indicating if changes were required or not
 	 */
 	public abstract boolean updateModelFromWidget();
+
+	@Override
+	public List<TargetObject> getChainedBindings(DataBinding<?> binding, TargetObject object) {
+		return getWidget().getChainedBindings(binding, object);
+	}
+
+	@Override
+	public List<DataBinding<?>> getDependencyBindings() {
+		return getWidget().getDependencyBindings();
+	}
 
 	@Override
 	public void focusGained(FocusEvent event) {
@@ -374,20 +383,6 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			}
 		}
 		return true;
-	}
-
-	@Override
-	public List<DataBinding<?>> getDependencyBindings() {
-		List<DataBinding<?>> returned = new ArrayList<DataBinding<?>>();
-		returned.add(getWidget().getData());
-		returned.add(getWidget().getVisible());
-		returned.add(getWidget().getEnable());
-		return returned;
-	}
-
-	@Override
-	public List<TargetObject> getChainedBindings(DataBinding<?> binding, TargetObject object) {
-		return null;
 	}
 
 	/**

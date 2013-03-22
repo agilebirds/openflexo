@@ -22,11 +22,13 @@ package org.openflexo.fib.model;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.beans.PropertyChangeEvent;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -38,7 +40,9 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DependingObjects.HasDependencyBinding;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
+import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.fib.FIBLibrary;
@@ -53,7 +57,7 @@ import org.openflexo.fib.view.FIBView;
 import org.openflexo.localization.LocalizedDelegate;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class FIBComponent extends FIBModelObject implements TreeNode {
+public abstract class FIBComponent extends FIBModelObject implements TreeNode, HasDependencyBinding {
 
 	private static final Logger logger = Logger.getLogger(FIBComponent.class.getPackage().getName());
 
@@ -1267,6 +1271,31 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		performValidation(DataBindingMustBeValid.class, report);
 		performValidation(VisibleBindingMustBeValid.class, report);
 		performValidation(NonRootComponentShouldNotHaveLocalizedDictionary.class, report);
+	}
+
+	@Override
+	public List<DataBinding<?>> getDependencyBindings() {
+		List<DataBinding<?>> returned = new ArrayList<DataBinding<?>>();
+		returned.add(getData());
+		returned.add(getVisible());
+		return returned;
+	}
+
+	@Override
+	public List<TargetObject> getChainedBindings(DataBinding<?> binding, TargetObject object) {
+		return null;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		// TODO Auto-generated method stub
+
 	}
 
 	public Date getLastModified() {

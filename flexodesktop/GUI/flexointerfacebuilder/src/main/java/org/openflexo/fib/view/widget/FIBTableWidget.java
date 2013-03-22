@@ -49,7 +49,6 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
 
 import org.jdesktop.swingx.JXTable;
-import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
@@ -246,13 +245,6 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 
 	public void clearSelection() {
 		getListSelectionModel().clearSelection();
-	}
-
-	@Override
-	public List<DataBinding<?>> getDependencyBindings() {
-		List<DataBinding<?>> returned = super.getDependencyBindings();
-		returned.add(getWidget().getSelected());
-		return returned;
 	}
 
 	@Override

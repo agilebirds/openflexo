@@ -19,6 +19,7 @@
  */
 package org.openflexo.fib.model;
 
+
 public class FIBEditor extends FIBTextWidget {
 
 	public static enum Parameters implements FIBModelAttribute {
