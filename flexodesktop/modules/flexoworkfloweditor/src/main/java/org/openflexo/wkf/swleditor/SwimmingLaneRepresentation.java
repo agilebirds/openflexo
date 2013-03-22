@@ -236,6 +236,7 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 			AbstractNode concernedNode = null;
 			if (targetObject instanceof FlexoPreCondition) {
 				concernedNode = ((FlexoPreCondition) targetObject).getAttachedNode();
+				targetObject = concernedNode;
 			} else if (targetObject instanceof AbstractNode) {
 				concernedNode = (AbstractNode) targetObject;
 			} else if (targetObject instanceof WKFArtefact) {
@@ -581,12 +582,12 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 	private void addNode(AbstractNode node, FlexoModelObject container) {
 		addDrawable(node, container);
 		if (node instanceof FlexoNode) {
-			for (FlexoPreCondition pre : ((FlexoNode) node).getPreConditions()) {
+			/*for (FlexoPreCondition pre : ((FlexoNode) node).getPreConditions()) {
 				addDrawable(pre, node);
 				if (pre.getAttachedBeginNode() != null && isVisible(pre.getAttachedBeginNode())) {
 					addDrawable(preAndBeginNodeAssociationForPrecondition(pre), getProcess());
 				}
-			}
+			}*/
 		}
 		/*if (node instanceof EdgeStarting) {
 			for (FlexoPostCondition post : ((EdgeStarting)node).getOutgoingPostConditions()) {

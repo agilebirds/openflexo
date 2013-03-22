@@ -28,7 +28,9 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.geom.area.DefaultAreaProvider;
 import org.openflexo.fge.geom.area.FGEArea;
+import org.openflexo.fge.geom.area.FGEAreaProvider;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.BackgroundStyle;
@@ -198,14 +200,14 @@ public class FGERectPolylin extends FGEPolylin {
 	 * Return and build a FGERectPolylin, given some parameters. All orientation solutions are examined, and best solution is returned: -
 	 * 1st: try to minimize number of points - 2nd: try to minimize total length of path
 	 * 
-	 * @param startArea
-	 * @param endArea
+	 * @param startAreaProvider
+	 * @param endAreaProvider
 	 * @param straightWhenPossible
 	 * @param overlap
 	 */
-	public static FGERectPolylin makeShortestRectPolylin(FGEArea startArea, FGEArea endArea, boolean straightWhenPossible, double overlapX,
-			double overlapY) {
-		return makeShortestRectPolylin(startArea, endArea, straightWhenPossible, overlapX, overlapY,
+	public static FGERectPolylin makeShortestRectPolylin(FGEAreaProvider<SimplifiedCardinalDirection> startAreaProvider,
+			FGEAreaProvider<SimplifiedCardinalDirection> endAreaProvider, boolean straightWhenPossible, double overlapX, double overlapY) {
+		return makeShortestRectPolylin(startAreaProvider, endAreaProvider, straightWhenPossible, overlapX, overlapY,
 				(Vector<SimplifiedCardinalDirection>) null, (Vector<SimplifiedCardinalDirection>) null);
 	}
 
@@ -218,9 +220,10 @@ public class FGERectPolylin extends FGEPolylin {
 	 * @param straightWhenPossible
 	 * @param overlap
 	 */
-	public static FGERectPolylin makeShortestRectPolylin(FGEArea startArea, FGEArea endArea, boolean straightWhenPossible, double overlapX,
-			double overlapY, SimplifiedCardinalDirection startOrientation, SimplifiedCardinalDirection endOrientation) {
-		return makeShortestRectPolylin(startArea, endArea, straightWhenPossible, overlapX, overlapY,
+	public static FGERectPolylin makeShortestRectPolylin(FGEAreaProvider<SimplifiedCardinalDirection> startAreaProvider,
+			FGEAreaProvider<SimplifiedCardinalDirection> endAreaProvider, boolean straightWhenPossible, double overlapX, double overlapY,
+			SimplifiedCardinalDirection startOrientation, SimplifiedCardinalDirection endOrientation) {
+		return makeShortestRectPolylin(startAreaProvider, endAreaProvider, straightWhenPossible, overlapX, overlapY,
 				SimplifiedCardinalDirection.allDirectionsExcept(startOrientation),
 				SimplifiedCardinalDirection.allDirectionsExcept(endOrientation));
 	}
@@ -234,17 +237,25 @@ public class FGERectPolylin extends FGEPolylin {
 	 * @param straightWhenPossible
 	 * @param overlap
 	 */
-	public static FGERectPolylin makeShortestRectPolylin(FGEArea startArea, FGEArea endArea, boolean straightWhenPossible, double overlapX,
-			double overlapY, Vector<SimplifiedCardinalDirection> excludedStartOrientations,
-			Vector<SimplifiedCardinalDirection> excludedEndOrientations) {
+	public static FGERectPolylin makeShortestRectPolylin(FGEAreaProvider<SimplifiedCardinalDirection> startAreaProvider,
+			FGEAreaProvider<SimplifiedCardinalDirection> endAreaProvider, boolean straightWhenPossible, double overlapX, double overlapY,
+			Vector<SimplifiedCardinalDirection> excludedStartOrientations, Vector<SimplifiedCardinalDirection> excludedEndOrientations) {
 		FGERectPolylin returned = null;
 		int bestNbOfPoints = Integer.MAX_VALUE;
 		double bestLength = Double.POSITIVE_INFINITY;
 
 		for (SimplifiedCardinalDirection startOrientation : SimplifiedCardinalDirection.values()) {
 			if (excludedStartOrientations == null || !excludedStartOrientations.contains(startOrientation)) {
+				FGEArea startArea = startAreaProvider.getArea(startOrientation);
+				if (startArea instanceof FGEEmptyArea) {
+					continue;
+				}
 				for (SimplifiedCardinalDirection endOrientation : SimplifiedCardinalDirection.values()) {
 					if (excludedEndOrientations == null || !excludedEndOrientations.contains(endOrientation)) {
+						FGEArea endArea = endAreaProvider.getArea(endOrientation);
+						if (endArea instanceof FGEEmptyArea) {
+							continue;
+						}
 						FGERectPolylin tried = new FGERectPolylin(startArea, startOrientation, endArea, endOrientation,
 								straightWhenPossible, overlapX, overlapY);
 						if (tried.doesRespectAllConstraints() && tried.getPointsNb() < bestNbOfPoints) {
@@ -274,16 +285,19 @@ public class FGERectPolylin extends FGEPolylin {
 	 * @param straightWhenPossible
 	 * @param overlap
 	 */
-	public static FGERectPolylin makeShortestRectPolylin(FGEArea startArea, FGEArea endArea, boolean straightWhenPossible, double overlapX,
-			double overlapY, FGEPoint minimizeDistanceToThisPoint, Vector<SimplifiedCardinalDirection> excludedStartOrientations,
+	public static FGERectPolylin makeShortestRectPolylin(FGEAreaProvider<SimplifiedCardinalDirection> startAreaProvider,
+			FGEAreaProvider<SimplifiedCardinalDirection> endAreaProvider, boolean straightWhenPossible, double overlapX, double overlapY,
+			FGEPoint minimizeDistanceToThisPoint, Vector<SimplifiedCardinalDirection> excludedStartOrientations,
 			Vector<SimplifiedCardinalDirection> excludedEndOrientations) {
 		FGERectPolylin returned = null;
 		double bestDistance = Double.POSITIVE_INFINITY;
 
 		for (SimplifiedCardinalDirection startOrientation : SimplifiedCardinalDirection.values()) {
 			if (excludedStartOrientations == null || !excludedStartOrientations.contains(startOrientation)) {
+				FGEArea startArea = startAreaProvider.getArea(startOrientation);
 				for (SimplifiedCardinalDirection endOrientation : SimplifiedCardinalDirection.values()) {
 					if (excludedEndOrientations == null || !excludedEndOrientations.contains(endOrientation)) {
+						FGEArea endArea = endAreaProvider.getArea(endOrientation);
 						FGERectPolylin tried = new FGERectPolylin(startArea, startOrientation, endArea, endOrientation,
 								straightWhenPossible, overlapX, overlapY);
 						double distance = FGEPoint
@@ -308,9 +322,11 @@ public class FGERectPolylin extends FGEPolylin {
 	 * @param straightWhenPossible
 	 * @param overlap
 	 */
-	public static FGERectPolylin makeRectPolylinCrossingPoint(FGEArea startArea, FGEArea endArea, FGEPoint crossedPoint,
-			boolean straightWhenPossible, double overlapX, double overlapY) {
-		return makeRectPolylinCrossingPoint(startArea, endArea, crossedPoint, straightWhenPossible, overlapX, overlapY, null, null);
+	public static FGERectPolylin makeRectPolylinCrossingPoint(FGEAreaProvider<SimplifiedCardinalDirection> startAreaProvider,
+			FGEAreaProvider<SimplifiedCardinalDirection> endAreaProvider, FGEPoint crossedPoint, boolean straightWhenPossible,
+			double overlapX, double overlapY) {
+		return makeRectPolylinCrossingPoint(startAreaProvider, endAreaProvider, crossedPoint, straightWhenPossible, overlapX, overlapY,
+				null, null);
 	}
 
 	/**
@@ -322,10 +338,11 @@ public class FGERectPolylin extends FGEPolylin {
 	 * @param straightWhenPossible
 	 * @param overlap
 	 */
-	public static FGERectPolylin makeRectPolylinCrossingPoint(FGEArea startArea, FGEArea endArea, FGEPoint crossedPoint,
+	public static FGERectPolylin makeRectPolylinCrossingPoint(FGEAreaProvider<SimplifiedCardinalDirection> startAreaProvider,
+			FGEAreaProvider<SimplifiedCardinalDirection> endAreaProvider, FGEPoint crossedPoint,
 			SimplifiedCardinalDirection startOrientation, SimplifiedCardinalDirection endOrientation, boolean straightWhenPossible,
 			double overlapX, double overlapY) {
-		return makeRectPolylinCrossingPoint(startArea, endArea, crossedPoint, straightWhenPossible, overlapX, overlapY,
+		return makeRectPolylinCrossingPoint(startAreaProvider, endAreaProvider, crossedPoint, straightWhenPossible, overlapX, overlapY,
 				SimplifiedCardinalDirection.allDirectionsExcept(startOrientation),
 				SimplifiedCardinalDirection.allDirectionsExcept(endOrientation));
 	}
@@ -397,8 +414,9 @@ public class FGERectPolylin extends FGEPolylin {
 	 * @param straightWhenPossible
 	 * @param overlap
 	 */
-	public static FGERectPolylin makeRectPolylinCrossingPoint(FGEArea startArea, FGEArea endArea, FGEPoint crossedPoint,
-			boolean straightWhenPossible, double overlapX, double overlapY, Vector<SimplifiedCardinalDirection> excludedStartOrientations,
+	public static FGERectPolylin makeRectPolylinCrossingPoint(FGEAreaProvider<SimplifiedCardinalDirection> startAreaProvider,
+			FGEAreaProvider<SimplifiedCardinalDirection> endAreaProvider, FGEPoint crossedPoint, boolean straightWhenPossible,
+			double overlapX, double overlapY, Vector<SimplifiedCardinalDirection> excludedStartOrientations,
 			Vector<SimplifiedCardinalDirection> excludedEndOrientations) {
 		FGERectPolylin returned = null;
 		int bestNbOfPoints = Integer.MAX_VALUE;
@@ -415,16 +433,18 @@ public class FGERectPolylin extends FGEPolylin {
 		// Following regards performances optimization
 		// Replace further commented code
 
+		DefaultAreaProvider<SimplifiedCardinalDirection> crossedPointAreaProvider = new DefaultAreaProvider<SimplifiedCardinalDirection>(
+				crossedPoint);
 		for (SimplifiedCardinalDirection orientation1 : SimplifiedCardinalDirection.values()) {
-			FGERectPolylin polylin = makeShortestRectPolylin(startArea, crossedPoint, true, overlapX, overlapY, excludedStartOrientations,
-					SimplifiedCardinalDirection.allDirectionsExcept(orientation1));
+			FGERectPolylin polylin = makeShortestRectPolylin(startAreaProvider, crossedPointAreaProvider, true, overlapX, overlapY,
+					excludedStartOrientations, SimplifiedCardinalDirection.allDirectionsExcept(orientation1));
 			if (polylin != null) {
 				polylins1.put(orientation1, polylin);
 			}
 		}
 
 		for (SimplifiedCardinalDirection orientation2 : SimplifiedCardinalDirection.values()) {
-			FGERectPolylin polylin = makeShortestRectPolylin(crossedPoint, endArea, true, overlapX, overlapY,
+			FGERectPolylin polylin = makeShortestRectPolylin(crossedPointAreaProvider, endAreaProvider, true, overlapX, overlapY,
 					SimplifiedCardinalDirection.allDirectionsExcept(orientation2), excludedEndOrientations);
 			if (polylin != null) {
 				polylins2.put(orientation2, polylin);
@@ -2243,7 +2263,8 @@ public class FGERectPolylin extends FGEPolylin {
 			// System.out.println("overlap="+overlap);
 			if (currentEndIndex - currentStartIndex == 1) {
 				/*FGERectPolylin*/
-				missingPath = makeShortestRectPolylin(currentPointStartingSide, currentPointEndingSide, true, overlapX, overlapY,
+				missingPath = makeShortestRectPolylin(new DefaultAreaProvider<SimplifiedCardinalDirection>(currentPointStartingSide),
+						new DefaultAreaProvider<SimplifiedCardinalDirection>(currentPointEndingSide), true, overlapX, overlapY,
 						excludedStartOrientations, excludedEndOrientations);
 				for (int i = 1; i < missingPath.getPointsNb() - 1; i++) {
 					updatedPolylin.insertPointAtIndex(missingPath.getPointAt(i), currentStartIndex + i);
@@ -2251,7 +2272,8 @@ public class FGERectPolylin extends FGEPolylin {
 			} else if (currentEndIndex - currentStartIndex == 2) {
 				/*FGERectPolylin*/// missingPath = makeShortestRectPolylin(currentPointStartingSide, currentPointEndingSide, true, overlap,
 				// updatedPolylin.getPointAt(currentStartIndex+1), excludedStartOrientations, excludedEndOrientations);
-				missingPath = makeRectPolylinCrossingPoint(currentPointStartingSide, currentPointEndingSide,
+				missingPath = makeRectPolylinCrossingPoint(new DefaultAreaProvider<SimplifiedCardinalDirection>(currentPointStartingSide),
+						new DefaultAreaProvider<SimplifiedCardinalDirection>(currentPointEndingSide),
 						updatedPolylin.getPointAt(currentStartIndex + 1), true, overlapX, overlapY, excludedStartOrientations,
 						excludedEndOrientations);
 				updatedPolylin.removePointAtIndex(currentStartIndex + 1);

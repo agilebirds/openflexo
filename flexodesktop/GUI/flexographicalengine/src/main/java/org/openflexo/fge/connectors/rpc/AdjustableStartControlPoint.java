@@ -31,43 +31,19 @@ import org.openflexo.fge.geom.area.FGEArea;
 public class AdjustableStartControlPoint extends RectPolylinAdjustableControlPoint {
 	static final Logger logger = Logger.getLogger(AdjustableStartControlPoint.class.getPackage().getName());
 
-	private FGEArea draggingAuthorizedArea;
-
 	public AdjustableStartControlPoint(FGEPoint point, RectPolylinConnector connector) {
 		super(point, connector);
 	}
 
-	private FGEArea retrieveDraggingAuthorizedArea() {
-		return getConnector().retrieveAllowedStartArea(false);
-
-		/*FGEShape<?> shape = getConnector().getStartObject().getShape().getOutline();
-		FGEShape<?> startArea = (FGEShape<?>) shape.transform(GraphicalRepresentation.convertNormalizedCoordinatesAT(getConnector().getStartObject(), getGraphicalRepresentation()));
-		
-		
-		if (getConnector().getPrimitiveAllowedStartOrientations().size() > 0 
-				&& getConnector().getPrimitiveAllowedStartOrientations().size() < 4) {
-			// Some directions may not be available
-			Vector<FGEArea> allowedAreas = new Vector<FGEArea>();
-			for (SimplifiedCardinalDirection o : getConnector().getPrimitiveAllowedStartOrientations()) {
-				allowedAreas.add(startArea.getAnchorAreaFrom(o));
-			}
-			
-			return FGEUnionArea.makeUnion(allowedAreas);			
-		}
-		
-		return startArea;*/
-	}
-
 	@Override
 	public FGEArea getDraggingAuthorizedArea() {
-		return draggingAuthorizedArea;
+		return getConnector().retrieveAllowedStartArea(false);
 	}
 
 	@Override
 	public void startDragging(DrawingController controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
-		draggingAuthorizedArea = retrieveDraggingAuthorizedArea();
-		logger.info("draggingAuthorizedArea=" + draggingAuthorizedArea);
+		getConnector().setIsStartingLocationFixed(true);
 	}
 
 	@Override

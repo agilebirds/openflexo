@@ -494,6 +494,14 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		getEdge()._setGraphicalPropertyForKey(relativeMiddleSymbolLocation, getRelativeMiddleSymbolLocationKey());
 	}
 
+	public boolean startLocationManuallyAdjusted() {
+		return getConnector() instanceof RectPolylinConnector && ((RectPolylinConnector) getConnector()).getIsStartingLocationFixed();
+	}
+
+	public boolean endLocationManuallyAdjusted() {
+		return getConnector() instanceof RectPolylinConnector && ((RectPolylinConnector) getConnector()).getIsEndingLocationFixed();
+	}
+
 	private boolean isPolylinConverterRegistered = false;
 
 	private void ensurePolylinConverterIsRegistered() {

@@ -63,6 +63,21 @@ public interface FGEGeometricObject<O extends FGEGeometricObject> extends Clonea
 			}
 		}
 
+		public FGEPoint getNormalizedRepresentativePoint() {
+			switch (this) {
+			case NORTH:
+				return new FGEPoint(0.5, 0.0);
+			case SOUTH:
+				return new FGEPoint(0.5, 1.0);
+			case EAST:
+				return new FGEPoint(1.0, 0.5);
+			case WEST:
+				return new FGEPoint(0.0, 0.5);
+			default:
+				return new FGEPoint();
+			}
+		}
+
 		public SimplifiedCardinalDirection getOpposite() {
 			if (this == EAST) {
 				return WEST;
@@ -75,6 +90,20 @@ public interface FGEGeometricObject<O extends FGEGeometricObject> extends Clonea
 			}
 			if (this == NORTH) {
 				return SOUTH;
+			}
+			return null;
+		}
+
+		public CardinalDirection getCardinalDirectionEquivalent() {
+			switch (this) {
+			case EAST:
+				return CardinalDirection.EAST;
+			case NORTH:
+				return CardinalDirection.NORTH;
+			case SOUTH:
+				return CardinalDirection.SOUTH;
+			case WEST:
+				return CardinalDirection.WEST;
 			}
 			return null;
 		}
