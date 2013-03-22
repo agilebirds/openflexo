@@ -20,8 +20,8 @@
   <Panel layout="border" borderTitle="Panel" darkLevel="0" index="0" constraints="border(index=0;location=south)">
     <Panel layout="flow" hGap="5" vGap="10" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" constraints="border(location=south)" backgroundColor="245,255,246">
       <Panel layout="grid" hGap="5" vGap="5" cols="4" rows="1" flowAlignment="LEADING" darkLevel="0" constraints="flow()">
-        <Button action="controller.openProject(RecentProjectTable.selected,ModuleList.selected)" buttonType="Trigger" label="open_project" constraints="grid(location=north;x=0;y=0)" name="OpenProjectButton" localize="true" enable="((ModuleList.selected != null) &amp; ModuleList.selected.requireProject)" />
-        <Button action="controller.newProject(ModuleList.selected)" buttonType="Trigger" label="new_project" constraints="grid(x=1;y=0)" name="NewProjectButton" localize="true" enable="((ModuleList.selected != null) &amp; ModuleList.selected.requireProject)" />
+        <Button action="controller.newProject(ModuleList.selected)" buttonType="Trigger" label="new_project" constraints="grid(x=0;y=0)" name="NewProjectButton" localize="true" enable="((ModuleList.selected != null) &amp; ModuleList.selected.requireProject)" />
+        <Button action="controller.openProject(RecentProjectTable.selected,ModuleList.selected)" buttonType="Trigger" label="open_project" constraints="grid(x=1;y=0)" name="OpenProjectButton" localize="true" enable="((ModuleList.selected != null) &amp; ModuleList.selected.requireProject)" />
         <Button action="controller.openModule(ModuleList.selected)" buttonType="Trigger" label="open_module" constraints="grid(x=2;y=0)" name="OpenModuleButton" localize="true" enable="((ModuleList.selected != null) &amp; (!(ModuleList.selected.requireProject)))" />
         <Button action="controller.exit()" buttonType="Trigger" label="Exit" constraints="grid(x=3;y=0)" name="ExitButton" localize="true" />
       </Panel>
