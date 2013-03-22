@@ -137,6 +137,11 @@ public class ResourceLocator {
 					if (flexoDesktopDirectory != null) {
 						findAllFlexoProjects(flexoDesktopDirectory, directoriesSearchOrder);
 					}
+					File technologyadaptersintegrationDirectory = new File(flexoDesktopDirectory.getParentFile(),
+							"packaging/technologyadaptersintegration");
+					if (technologyadaptersintegrationDirectory != null) {
+						findAllFlexoProjects(technologyadaptersintegrationDirectory, directoriesSearchOrder);
+					}
 					directoriesSearchOrder.add(workingDirectory);
 				}
 			}
@@ -160,7 +165,7 @@ public class ResourceLocator {
 		if (new File(dir, "pom.xml").exists()) {
 			files.add(dir);
 			for (File f : dir.listFiles()) {
-				if (f.getName().startsWith("flexo")) {
+				if (f.getName().startsWith("flexo") || f.getName().equals("technologyadaptersintegration")) {
 					addProjectResourceDirs(files, f);
 				} else if (f.isDirectory()) {
 					findAllFlexoProjects(f, files);
