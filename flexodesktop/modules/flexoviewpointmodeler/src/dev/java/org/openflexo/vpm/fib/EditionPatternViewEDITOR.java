@@ -44,6 +44,9 @@ public class EditionPatternViewEDITOR extends FIBAbstractEditor {
 		returned[0] = viewPoint1.getEditionPattern("Employee");
 		returned[1] = viewPoint1.getEditionPattern("BOTDepartment");*/
 
+		System.out.println("viewPointLibrary=" + viewPointLibrary);
+		System.out.println("vps=" + viewPointLibrary.getViewPoints());
+
 		ViewPoint viewPoint2 = viewPointLibrary
 				.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalUnitDefinition.owl");
 		returned[0] = viewPoint2.getDefaultDiagramSpecification().getEditionPattern("OrganizationalUnit");

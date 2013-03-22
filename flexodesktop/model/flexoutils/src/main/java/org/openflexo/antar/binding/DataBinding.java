@@ -595,8 +595,8 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 				}
 
 				// We do not warn anymore since this situation happens very often
-				/*logger.warning("Cannot evaluate " + expression + " max reduction is " + evaluatedExpression + " resolvedExpression="
-						+ resolvedExpression);*/
+				// logger.warning("Cannot evaluate " + expression + " max reduction is " + evaluatedExpression + " resolvedExpression="
+				// + resolvedExpression);
 
 				return null;
 

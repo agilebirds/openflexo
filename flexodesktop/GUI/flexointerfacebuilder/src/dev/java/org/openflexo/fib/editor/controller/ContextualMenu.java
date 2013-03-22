@@ -22,6 +22,7 @@ import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController.Status;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.fib.editor.FIBEditor.FIBPreferences;
+import org.openflexo.fib.editor.FIBEmbeddedEditor;
 import org.openflexo.fib.editor.controller.EditorAction.ActionAvailability;
 import org.openflexo.fib.editor.controller.EditorAction.ActionPerformer;
 import org.openflexo.fib.model.BorderLayoutConstraints;
@@ -45,6 +46,7 @@ import org.openflexo.fib.model.SplitLayoutConstraints;
 import org.openflexo.fib.model.TwoColsLayoutConstraints;
 import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
 import org.openflexo.fib.utils.BindingSelector;
+import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
@@ -146,6 +148,22 @@ public class ContextualMenu {
 				return object instanceof FIBContainer && ((FIBContainer) object).getParent() != null;
 			}
 		}));
+
+		addToActions(new EditorAction("Open component", null, new ActionPerformer() {
+			@Override
+			public FIBModelObject performAction(FIBModelObject object) {
+				FIBReferencedComponent referencedComponent = (FIBReferencedComponent) object;
+				Object dataObject = ((FIBWidgetView) editorController.getController().viewForComponent(referencedComponent)).getValue();
+				System.out.println("dataObject=" + dataObject);
+				new FIBEmbeddedEditor(referencedComponent.getComponentFile(), dataObject);
+				return referencedComponent;
+			}
+		}, new ActionAvailability() {
+			@Override
+			public boolean isAvailableFor(FIBModelObject object) {
+				return object instanceof FIBReferencedComponent;
+			}
+		}));
 	}
 
 	public FIBModelObject makeReusableComponent(FIBContainer component, FIBContainer parent) {
@@ -183,27 +201,23 @@ public class ContextualMenu {
 		panel.addToSubComponents(controlPanel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false));
 
 		FIBDialog dialog = FIBDialog.instanciateAndShowDialog(panel, params, editorController.getEditor().getFrame(), true);
-		System.out.println("dialog status = " + dialog.getStatus());
 
 		if (dialog.getStatus() == Status.VALIDATED) {
 			if (params.reusableComponentFile != null) {
-				System.out.println("Saving new component to " + params.reusableComponentFile);
+				logger.info("Saving new component to " + params.reusableComponentFile);
 				FIBContainer reusableComponent = component;
 				parent.removeFromSubComponents(reusableComponent);
-				reusableComponent.setData(params.data);
+				reusableComponent.setControllerClass(parent.getRootComponent().getControllerClass());
 				reusableComponent.setDataClass(TypeUtils.getBaseClass(params.data.getAnalyzedType()));
 				for (FIBComponent child : reusableComponent.getAllSubComponents()) {
 					for (DataBinding binding : child.getDependencyBindings()) {
 						if (binding.isSet()) {
-							System.out.println("What about " + binding);
 							if (binding.toString().startsWith(params.data.toString())) {
 								binding.setUnparsedBinding(binding.toString().replace(params.data.toString(), "data"));
-								System.out.println("Replaced by " + binding);
 							}
 							if (StringUtils.isNotEmpty(reusableComponent.getName())) {
 								if (binding.toString().startsWith(reusableComponent.getName() + ".")) {
 									binding.setUnparsedBinding(binding.toString().substring(reusableComponent.getName().length() + 1));
-									System.out.println("Replaced by " + binding);
 								}
 							}
 						}

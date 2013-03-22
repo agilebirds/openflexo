@@ -220,6 +220,30 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	protected abstract boolean checkValidDataPath();
 
 	public final boolean isComponentVisible() {
+		/*if (getComponent().getName() != null && getComponent().getName().equals("DropSchemePanel")) {
+			System.out.println("Bon, je me demande si c'est visible");
+			System.out.println("getComponent().getVisible()=" + getComponent().getVisible());
+			System.out.println("valid=" + getComponent().getVisible().isValid());
+			System.out.println("getBindingEvaluationContext=" + getBindingEvaluationContext());
+			try {
+				System.out.println("result=" + getComponent().getVisible().getBindingValue(getBindingEvaluationContext()));
+				DataBinding<Object> binding1 = new DataBinding<Object>("data", getComponent(), Object.class, BindingDefinitionType.GET);
+				System.out.println("data=" + binding1.getBindingValue(getBindingEvaluationContext()));
+				DataBinding<Object> binding2 = new DataBinding<Object>("EditionActionBrowser.selected", getComponent(), Object.class,
+						BindingDefinitionType.GET);
+				System.out.println("EditionActionBrowser.selected=" + binding2.getBindingValue(getBindingEvaluationContext()));
+			} catch (TypeMismatchException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}*/
+
 		if (getParentView() != null && !getParentView().isComponentVisible()) {
 			return false;
 		}

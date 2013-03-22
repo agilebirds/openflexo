@@ -24,6 +24,7 @@ import org.openflexo.antar.expr.Constant.BooleanConstant;
 import org.openflexo.antar.expr.Constant.DateConstant;
 import org.openflexo.antar.expr.Constant.DurationConstant;
 import org.openflexo.antar.expr.Constant.EnumConstant;
+import org.openflexo.antar.expr.Constant.ObjectConstant;
 import org.openflexo.antar.expr.Constant.ObjectSymbolicConstant;
 import org.openflexo.antar.expr.Constant.StringConstant;
 
@@ -123,6 +124,10 @@ public abstract class BooleanBinaryOperator extends BinaryOperator {
 		public Constant evaluate(Constant leftArg, Constant rightArg) throws TypeMismatchException {
 			// System.out.println("leftArg="+leftArg+" of "+leftArg.getEvaluationType());
 			// System.out.println("rightArg="+rightArg+" of "+rightArg.getEvaluationType());
+			if (leftArg instanceof ObjectConstant && rightArg instanceof ObjectConstant) {
+				return ((ObjectConstant) leftArg).getValue().equals(((ObjectConstant) rightArg).getValue()) ? Constant.BooleanConstant.TRUE
+						: Constant.BooleanConstant.FALSE;
+			}
 			if (leftArg instanceof BooleanConstant && rightArg instanceof BooleanConstant) {
 				return ((BooleanConstant) leftArg).getValue() == ((BooleanConstant) rightArg).getValue() ? Constant.BooleanConstant.TRUE
 						: Constant.BooleanConstant.FALSE;

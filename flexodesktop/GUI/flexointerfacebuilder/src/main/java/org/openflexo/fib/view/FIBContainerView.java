@@ -152,7 +152,7 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 			for (FIBView v : new ArrayList<FIBView>(subViews)) {
 				v.updateDataObject(dataObject);
 			}
-			if (getDynamicModel() != null) {
+			if (getDynamicModel() != null && getComponent().getData().isSet()) {
 				logger.fine("Container: " + getComponent() + " value data for " + getDynamicModel() + " is " + getValue());
 				getDynamicModel().setData(getValue());
 				notifyDynamicModelChanged();
