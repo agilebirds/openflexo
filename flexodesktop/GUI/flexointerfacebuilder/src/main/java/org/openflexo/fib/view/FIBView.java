@@ -22,9 +22,9 @@ package org.openflexo.fib.view;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,7 +58,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	private FIBController controller;
 	private final FIBComponentDynamicModel dynamicModel;
 
-	protected Vector<FIBView> subViews;
+	protected Hashtable<FIBComponent, FIBView> subViews;
 
 	private boolean visible = true;
 
@@ -73,7 +73,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		this.controller = controller;
 		component = model;
 
-		subViews = new Vector<FIBView>();
+		subViews = new Hashtable<FIBComponent, FIBView>();
 
 		dynamicModel = createDynamicModel();
 
@@ -90,7 +90,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		}
 		logger.fine("Delete view for component " + getComponent());
 		if (subViews != null) {
-			for (FIBView v : subViews) {
+			for (FIBView v : subViews.values()) {
 				v.delete();
 			}
 			subViews.clear();
@@ -111,7 +111,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		if (getComponent() == component) {
 			return getJComponent();
 		} else {
-			for (FIBView v : getSubViews()) {
+			for (FIBView v : getSubViews().values()) {
 				JComponent j = v.getJComponentForObject(component);
 				if (j != null) {
 					return j;
@@ -125,7 +125,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		if (getComponent() == component) {
 			return getDynamicJComponent();
 		} else {
-			for (FIBView v : getSubViews()) {
+			for (FIBView v : getSubViews().values()) {
 				JComponent j = v.geDynamicJComponentForObject(component);
 				if (j != null) {
 					return j;
@@ -298,7 +298,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 				getResultingJComponent().getParent().repaint();
 			}
 			if (visible) {
-				for (FIBView<?, ?> view : subViews) {
+				for (FIBView<?, ?> view : subViews.values()) {
 					view.updateVisibility();
 				}
 			}
@@ -356,7 +356,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		return null;
 	}
 
-	public Vector<FIBView> getSubViews() {
+	public Hashtable<FIBComponent, FIBView> getSubViews() {
 		return subViews;
 	}
 

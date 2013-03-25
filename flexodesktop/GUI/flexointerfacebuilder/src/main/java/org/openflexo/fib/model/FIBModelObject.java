@@ -67,6 +67,7 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 
 	private String name;
 	private String description;
+	private boolean isDeleted = false;
 
 	private Vector<FIBParameter> parameters = new Vector<FIBParameter>();
 
@@ -75,6 +76,11 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 	}
 
 	public void delete() {
+		isDeleted = true;
+	}
+
+	public boolean isDeleted() {
+		return isDeleted;
 	}
 
 	public String getName() {

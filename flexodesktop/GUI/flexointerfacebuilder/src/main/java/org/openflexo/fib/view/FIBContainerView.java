@@ -149,7 +149,7 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 		}
 		update(new Vector<FIBComponent>());
 		if (isComponentVisible()) {
-			for (FIBView v : new ArrayList<FIBView>(subViews)) {
+			for (FIBView v : new ArrayList<FIBView>(subViews.values())) {
 				v.updateDataObject(dataObject);
 			}
 			if (getDynamicModel() != null && getComponent().getData().isSet()) {
@@ -178,7 +178,7 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 
 	@Override
 	public void updateLanguage() {
-		for (FIBView v : subViews) {
+		for (FIBView v : subViews.values()) {
 			// if (!"True".equals(v.getComponent().getParameter(FIBContainer.INHERITED)))
 			v.updateLanguage();
 		}
@@ -199,7 +199,7 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 	}
 
 	protected void registerViewForComponent(FIBView view, FIBComponent component) {
-		subViews.add(view);
+		subViews.put(component, view);
 	}
 
 	protected void registerComponentWithConstraints(JComponent component, Object constraint) {
@@ -251,7 +251,7 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 		if (getFont() != null) {
 			getJComponent().setFont(getFont());
 		}
-		for (FIBView v : subViews) {
+		for (FIBView v : subViews.values()) {
 			v.updateFont();
 		}
 		getJComponent().revalidate();

@@ -79,7 +79,7 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 	public FIBView<FIBComponent, JComponent> getReferencedComponentView() {
 		if (referencedComponentView == null && !isComponentLoading) {
 			isComponentLoading = true;
-			System.out.println(">>>>>>> Making new FIBView for " + getWidget() + " for " + getWidget().getComponent());
+			//System.out.println(">>>>>>> Making new FIBView for " + getWidget() + " for " + getWidget().getComponent());
 			if (getWidget().getComponent() instanceof FIBWidget) {
 				referencedComponentView = factory.makeWidget((FIBWidget) getWidget().getComponent());
 				referencedComponentView.setEmbeddingComponent(this);

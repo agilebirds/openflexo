@@ -55,7 +55,7 @@ public class FIBTabView<C extends FIBTab> extends FIBPanelView<C> {
 			FIBTabPanelView parent = (FIBTabPanelView) getParentView();
 			if (isVisible() && getResultingJComponent().getParent() == null) {
 				int newIndex = 0;
-				for (FIBView<?, ?> v : getParentView().getSubViews()) {
+				for (FIBView<?, ?> v : getParentView().getSubViews().values()) {
 					if (v instanceof FIBTabView && v.isComponentVisible()) {
 						FIBTab tab = ((FIBTabView<?>) v).getComponent();
 						if (getComponent().getParent().getIndex(getComponent()) > tab.getParent().getIndex(tab)) {
