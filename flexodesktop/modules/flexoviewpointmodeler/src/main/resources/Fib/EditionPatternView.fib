@@ -3,9 +3,9 @@
   <SplitPanel index="0" data="" constraints="border(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="">
     <ColSplit name="ColSplit" weight="1.0">
       <RowSplit name="RowSplit" weight="0.0">
-        <Leaf name="title" weight="0.0" />
+        <Leaf name="patternRoles" weight="0.5" />
         <Divider />
-        <Leaf name="preview" weight="0.0" />
+        <Leaf name="preview" weight="0.5" />
       </RowSplit>
       <Divider />
       <Leaf name="details" weight="1.0" />
@@ -15,11 +15,11 @@
         <Assignment variable="component.selectionManager" value="controller.selectionManager" />
       </Custom>
     </Panel>
-    <Table iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" selected="" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="PatternRoleTable" index="0" data="data.patternRoles" constraints="split(index=0;location=north;splitIdentifier=title)" visible="">
+    <Table iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" selected="" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="PatternRoleTable" index="0" data="data.patternRoles" constraints="split(index=0;location=north;splitIdentifier=patternRoles)" visible="">
       <IconColumn data="controller.iconForObject(iterator)" format="" title="icon" columnWidth="25" resizable="false" displayTitle="false" color="" bgColor="" tooltip="" valueChangedAction="" name="icon" />
-      <TextFieldColumn isEditable="" data="iterator.patternRoleName" format="" title="pattern_role" columnWidth="100" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" />
-      <LabelColumn data="iterator.modelSlot.name" format="" title="model_slot" columnWidth="80" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="label" />
-      <LabelColumn data="iterator.preciseType" format="" title="type" columnWidth="110" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="label" />
+      <TextFieldColumn isEditable="" data="iterator.patternRoleName" format="" title="pattern_role" columnWidth="70" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" />
+      <LabelColumn data="iterator.modelSlot.name" format="" title="model_slot" columnWidth="50" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="label" />
+      <LabelColumn data="iterator.preciseType" format="" title="type" columnWidth="70" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="label" />
       <CheckBoxColumn data="iterator.isPrimaryRole" format="" title="" columnWidth="20" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="checkbox" />
       <RemoveAction method="data.deletePatternRole(selected)" isAvailable="" name="delete" />
       <AddAction method="controller.createPatternRole(data)" isAvailable="" name="createPatternRole" />
@@ -43,7 +43,7 @@
                 <IconColumn data="controller.iconForObject(iterator)" format="" title="icon" columnWidth="20" resizable="false" displayTitle="false" color="" bgColor="" tooltip="" valueChangedAction="" name="icon" />
                 <TextFieldColumn isEditable="" data="iterator.name" format="" title="edition_scheme" columnWidth="200" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" />
                 <LabelColumn data="iterator.editionSchemeType.name" format="" title="type" columnWidth="100" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="label" />
-                <AddAction method="data.createDropScheme" isAvailable="" name="new_drop_scheme" />
+                <AddAction method="data.createDropScheme" isAvailable="(selected.virtualModel.class.simpleName = &quot;DiagramSpecification&quot;)" name="new_drop_scheme" />
                 <RemoveAction method="data.deleteEditionScheme(selected)" isAvailable="" name="delete_scheme" />
                 <AddAction method="data.createLinkScheme" isAvailable="" name="new_link_scheme" />
                 <AddAction method="data.createActionScheme" isAvailable="" name="new_action_scheme" />
