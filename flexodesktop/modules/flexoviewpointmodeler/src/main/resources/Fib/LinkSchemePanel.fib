@@ -36,4 +36,36 @@
   </Panel>
   <Label label="description" index="10" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
   <TextArea columns="6" rows="2" index="11" data="data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" editable="" />
+  <LocalizedDictionary>
+    <Localized key="from" lang="English">From</Localized>
+    <Localized key="from" lang="French">De</Localized>
+    <Localized key="from" lang="Dutch">From</Localized>
+    <Localized key="to" lang="English">To</Localized>
+    <Localized key="to" lang="French">À</Localized>
+    <Localized key="to" lang="Dutch">To</Localized>
+    <Localized key="description" lang="English">Description</Localized>
+    <Localized key="description" lang="French">Description</Localized>
+    <Localized key="description" lang="Dutch">Description</Localized>
+    <Localized key="label" lang="English">Label</Localized>
+    <Localized key="label" lang="French">Label</Localized>
+    <Localized key="label" lang="Dutch">Label</Localized>
+    <Localized key="link_scheme" lang="English">Link scheme</Localized>
+    <Localized key="link_scheme" lang="French">Link Scheme</Localized>
+    <Localized key="link_scheme" lang="Dutch">Link scheme</Localized>
+    <Localized key="available with floating palette" lang="English">available with floating palette</Localized>
+    <Localized key="available with floating palette" lang="French">available with floating palette</Localized>
+    <Localized key="available with floating palette" lang="Dutch">available with floating palette</Localized>
+    <Localized key="north" lang="English">North</Localized>
+    <Localized key="north" lang="French">Nord</Localized>
+    <Localized key="north" lang="Dutch">North</Localized>
+    <Localized key="east" lang="English">East</Localized>
+    <Localized key="east" lang="French">Est</Localized>
+    <Localized key="east" lang="Dutch">East</Localized>
+    <Localized key="south" lang="English">South</Localized>
+    <Localized key="south" lang="French">Sud</Localized>
+    <Localized key="south" lang="Dutch">South</Localized>
+    <Localized key="west" lang="English">West</Localized>
+    <Localized key="west" lang="French">Ouest</Localized>
+    <Localized key="west" lang="Dutch">West</Localized>
+  </LocalizedDictionary>
 </Panel>

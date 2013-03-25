@@ -8,4 +8,15 @@
   </Custom>
   <Label label="description" align="right" index="4" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
   <TextArea columns="6" rows="2" text="TextArea" index="5" data="data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" editable="" />
+  <LocalizedDictionary>
+    <Localized key="delete" lang="English">Delete</Localized>
+    <Localized key="delete" lang="French">Supprimer</Localized>
+    <Localized key="delete" lang="Dutch">Delete</Localized>
+    <Localized key="action_type" lang="English">Action type</Localized>
+    <Localized key="action_type" lang="French">Type d'Action</Localized>
+    <Localized key="action_type" lang="Dutch">Action type</Localized>
+    <Localized key="description" lang="English">Description</Localized>
+    <Localized key="description" lang="French">Description</Localized>
+    <Localized key="description" lang="Dutch">Description</Localized>
+  </LocalizedDictionary>
 </Panel>

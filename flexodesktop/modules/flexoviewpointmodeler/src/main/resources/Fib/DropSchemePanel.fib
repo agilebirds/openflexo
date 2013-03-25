@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="twocols" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="DropScheme" borderLeft="5" titleFont="SansSerif,0,11" darkLevel="0" index="20" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.DropScheme" controllerClassName="org.openflexo.vpm.controller.VPMFIBController" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="" name="DropSchemePanel">
+<Panel layout="twocols" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="DropScheme" borderLeft="5" titleFont="SansSerif,0,11" darkLevel="0" index="20" data="" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.DropScheme" controllerClassName="org.openflexo.vpm.controller.VPMFIBController" constraints="gridbag(anchor=center;fill=both;gridHeight=0;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="" name="DropSchemePanel">
   <Label label="drop_scheme" align="right" index="0" data="" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
   <TextField index="1" data="data.name" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" name="DropSchemeTF" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" columns="6" text="TextField" editable="" />
   <Label label="label" index="2" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=0;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
@@ -13,19 +13,42 @@
       <Assignment variable="component.viewPointLibrary" value="data.viewPointLibrary" />
       <Assignment variable="component.project" value="" />
       <Assignment variable="component.selectableCondition" value="" />
+      <Dependancy componentName="TopLevelCheckbox" />
     </Custom>
-    <CheckBox selected="true" index="1" data="data.topTarget" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" name="checkbox" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
+    <CheckBox selected="true" index="1" data="data.topTarget" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" name="TopLevelCheckbox" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
     <Label label="top_level" index="2" data="" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.01;weightY=0.0)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
   </Panel>
   <Label label="target_role" index="6" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="data.targetHasMultipleRoles" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="">
     <Dependancy componentName="TargetEditionPatternDropDown" />
     <LocalizedDictionary />
   </Label>
-  <DropDown index="7" data="data.targetPatternRole" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="data.targetHasMultipleRoles" name="dropdown" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" staticList="" list="data.targetEditionPattern.shapePatternRoles" array="" iteratorClassName="java.lang.Object" autoSelectFirstRow="true">
+  <DropDown index="7" data="data.targetPatternRole" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="data.targetHasMultipleRoles" name="dropdown" format="" icon="" tooltip="" localize="false" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" staticList="" list="data.targetEditionPattern.shapePatternRoles" array="" iteratorClassName="java.lang.Object" autoSelectFirstRow="true">
     <Dependancy componentName="TargetEditionPatternDropDown" />
     <LocalizedDictionary />
   </DropDown>
   <Label label="description" align="right" index="8" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
   <TextArea columns="6" rows="2" text="TextArea" index="9" data="data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" editable="" />
-  <LocalizedDictionary />
+  <LocalizedDictionary>
+    <Localized key="drop_scheme" lang="English">Drop Scheme</Localized>
+    <Localized key="drop_scheme" lang="French">Drop Scheme</Localized>
+    <Localized key="drop_scheme" lang="Dutch">Drop the Scheme</Localized>
+    <Localized key="label" lang="English">Label</Localized>
+    <Localized key="label" lang="French">Label</Localized>
+    <Localized key="label" lang="Dutch">Label</Localized>
+    <Localized key="description" lang="English">Description</Localized>
+    <Localized key="description" lang="French">Description</Localized>
+    <Localized key="description" lang="Dutch">Description</Localized>
+    <Localized key="target" lang="English">Target</Localized>
+    <Localized key="target" lang="French">Cible</Localized>
+    <Localized key="target" lang="Dutch">Target</Localized>
+    <Localized key="top_level" lang="English">Top level</Localized>
+    <Localized key="top_level" lang="French">A la racine</Localized>
+    <Localized key="top_level" lang="Dutch">top level</Localized>
+    <Localized key="shape" lang="English">Shape</Localized>
+    <Localized key="shape" lang="French">Forme</Localized>
+    <Localized key="shape" lang="Dutch">Shape</Localized>
+    <Localized key="target_role" lang="English">Target role</Localized>
+    <Localized key="target_role" lang="French">Rôle cible</Localized>
+    <Localized key="target_role" lang="Dutch">target_role</Localized>
+  </LocalizedDictionary>
 </Panel>

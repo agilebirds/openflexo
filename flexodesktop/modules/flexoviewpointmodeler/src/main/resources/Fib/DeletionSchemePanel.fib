@@ -12,4 +12,18 @@
   </Custom>
   <Label label="description" index="6" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
   <TextArea columns="6" rows="2" index="7" data="data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" editable="" />
+  <LocalizedDictionary>
+    <Localized key="conditional" lang="English">conditional</Localized>
+    <Localized key="conditional" lang="French">conditionnel</Localized>
+    <Localized key="conditional" lang="Dutch">conditional</Localized>
+    <Localized key="label" lang="English">Label</Localized>
+    <Localized key="label" lang="French">Label</Localized>
+    <Localized key="label" lang="Dutch">Label</Localized>
+    <Localized key="deletion_scheme" lang="English">deletion_scheme</Localized>
+    <Localized key="deletion_scheme" lang="French">deletion_scheme</Localized>
+    <Localized key="deletion_scheme" lang="Dutch">deletion_scheme</Localized>
+    <Localized key="description" lang="English">Description</Localized>
+    <Localized key="description" lang="French">Description</Localized>
+    <Localized key="description" lang="Dutch">Description</Localized>
+  </LocalizedDictionary>
 </Panel>

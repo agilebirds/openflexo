@@ -35,6 +35,7 @@ import org.openflexo.components.widget.FIBVirtualModelBrowser;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteObject;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
@@ -51,9 +52,12 @@ import org.openflexo.vpm.diagrampalette.DiagramPaletteController;
 import org.openflexo.vpm.diagrampalette.DiagramPaletteModuleView;
 import org.openflexo.vpm.examplediagram.ExampleDiagramController;
 import org.openflexo.vpm.examplediagram.ExampleDiagramModuleView;
-import org.openflexo.vpm.view.EditionPatternView;
+import org.openflexo.vpm.view.DiagramEditionPatternView;
+import org.openflexo.vpm.view.DiagramSpecificationView;
+import org.openflexo.vpm.view.StandardEditionPatternView;
 import org.openflexo.vpm.view.ViewPointLibraryView;
 import org.openflexo.vpm.view.ViewPointView;
+import org.openflexo.vpm.view.VirtualModelView;
 
 public class ViewPointPerspective extends FlexoPerspective {
 
@@ -170,9 +174,21 @@ public class ViewPointPerspective extends FlexoPerspective {
 			return new ViewPointView((ViewPoint) object, (VPMController) controller);
 		}
 		if (object instanceof EditionPattern) {
-			if (((EditionPattern) object).getViewPoint() != null) {
+			EditionPattern ep = (EditionPattern) object;
+			if (ep instanceof VirtualModel) {
+				if (ep instanceof DiagramSpecification) {
+					return new DiagramSpecificationView(ep, (VPMController) controller);
+				} else {
+					return new VirtualModelView(ep, (VPMController) controller);
+				}
+			} else {
+				if (ep.getVirtualModel() instanceof DiagramSpecification) {
+					return new DiagramEditionPatternView(ep, (VPMController) controller);
+				} else {
+					return new StandardEditionPatternView(ep, (VPMController) controller);
+				}
 			}
-			return new EditionPatternView((EditionPattern) object, (VPMController) controller);
+
 		}
 		if (object instanceof DiagramPalette) {
 			return new DiagramPaletteController(_controller, (DiagramPalette) object, false).getModuleView();

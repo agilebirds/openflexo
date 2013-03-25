@@ -30,4 +30,30 @@
   </Custom>
   <Label label="description" align="right" index="16" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
   <TextArea columns="6" rows="2" text="TextArea" index="17" data="data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" editable="" />
+  <LocalizedDictionary>
+    <Localized key="model_slot" lang="English">model_slot</Localized>
+    <Localized key="model_slot" lang="French">model_slot</Localized>
+    <Localized key="model_slot" lang="Dutch">model_slot</Localized>
+    <Localized key="description" lang="English">Description</Localized>
+    <Localized key="description" lang="French">Description</Localized>
+    <Localized key="description" lang="Dutch">Description</Localized>
+    <Localized key="action_type" lang="English">Action type</Localized>
+    <Localized key="action_type" lang="French">Type d'Action</Localized>
+    <Localized key="action_type" lang="Dutch">Action type</Localized>
+    <Localized key="subject" lang="English">Subject</Localized>
+    <Localized key="subject" lang="French">Sujet</Localized>
+    <Localized key="subject" lang="Dutch">Subject</Localized>
+    <Localized key="Assign" lang="English">Assign</Localized>
+    <Localized key="Assign" lang="French">Assign</Localized>
+    <Localized key="Assign" lang="Dutch">Assign</Localized>
+    <Localized key="conditional" lang="English">conditional</Localized>
+    <Localized key="conditional" lang="French">conditionnel</Localized>
+    <Localized key="conditional" lang="Dutch">conditional</Localized>
+    <Localized key="value" lang="English">Value</Localized>
+    <Localized key="value" lang="French">Valeur</Localized>
+    <Localized key="value" lang="Dutch">Value</Localized>
+    <Localized key="property" lang="English">Property</Localized>
+    <Localized key="property" lang="French">Propriété</Localized>
+    <Localized key="property" lang="Dutch">Property</Localized>
+  </LocalizedDictionary>
 </Panel>

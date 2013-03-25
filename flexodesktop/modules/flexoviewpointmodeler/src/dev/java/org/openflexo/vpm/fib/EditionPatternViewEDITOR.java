@@ -81,7 +81,7 @@ public class EditionPatternViewEDITOR extends FIBAbstractEditor {
 
 	@Override
 	public File getFIBFile() {
-		return VPMCst.EDITION_PATTERN_VIEW_FIB;
+		return VPMCst.DIAGRAM_EDITION_PATTERN_VIEW_FIB;
 	}
 
 	public static void main(String[] args) {

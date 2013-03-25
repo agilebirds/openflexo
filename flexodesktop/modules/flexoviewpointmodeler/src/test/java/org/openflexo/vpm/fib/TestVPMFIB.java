@@ -11,8 +11,20 @@ import org.openflexo.vpm.VPMCst;
 
 public class TestVPMFIB extends FIBTestCase {
 
-	public void testEditionPatternView() {
-		validateFIB(VPMCst.EDITION_PATTERN_VIEW_FIB);
+	public void testStandardEditionPatternView() {
+		validateFIB(VPMCst.STANDARD_EDITION_PATTERN_VIEW_FIB);
+	}
+
+	public void testDiagramEditionPatternView() {
+		validateFIB(VPMCst.DIAGRAM_EDITION_PATTERN_VIEW_FIB);
+	}
+
+	public void testVirtualModelView() {
+		validateFIB(VPMCst.VIRTUAL_MODEL_VIEW_FIB);
+	}
+
+	public void testDiagramSpecificationView() {
+		validateFIB(VPMCst.DIAGRAM_SPECIFICATION_VIEW_FIB);
 	}
 
 	public void testViewPointLibraryView() {

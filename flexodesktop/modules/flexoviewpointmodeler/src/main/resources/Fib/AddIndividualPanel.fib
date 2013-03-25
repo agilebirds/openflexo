@@ -61,4 +61,54 @@
   </Table>
   <Label label="description" index="14" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=14;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
   <TextArea columns="6" rows="2" text="TextArea" index="15" data="data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=15;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" editable="" />
+  <LocalizedDictionary>
+    <Localized key="object_assertions" lang="English">object_assertions</Localized>
+    <Localized key="object_assertions" lang="French">object_assertions</Localized>
+    <Localized key="object_assertions" lang="Dutch">object_assertions</Localized>
+    <Localized key="individual_name_(uri)" lang="English">Individual name (URI)</Localized>
+    <Localized key="individual_name_(uri)" lang="French">Nom de l'individu (URI)</Localized>
+    <Localized key="individual_name_(uri)" lang="Dutch">Individual name (URI)</Localized>
+    <Localized key="description" lang="English">Description</Localized>
+    <Localized key="description" lang="French">Description</Localized>
+    <Localized key="description" lang="Dutch">Description</Localized>
+    <Localized key="action_type" lang="English">Action type</Localized>
+    <Localized key="action_type" lang="French">Type d'Action</Localized>
+    <Localized key="action_type" lang="Dutch">Action type</Localized>
+    <Localized key="data_assertions" lang="English">data_assertions</Localized>
+    <Localized key="data_assertions" lang="French">data_assertions</Localized>
+    <Localized key="data_assertions" lang="Dutch">data_assertions</Localized>
+    <Localized key="Assign" lang="English">Assign</Localized>
+    <Localized key="Assign" lang="French">Assign</Localized>
+    <Localized key="Assign" lang="Dutch">Assign</Localized>
+    <Localized key="property" lang="English">Property</Localized>
+    <Localized key="property" lang="French">Propriété</Localized>
+    <Localized key="property" lang="Dutch">Property</Localized>
+    <Localized key="object" lang="English">Object</Localized>
+    <Localized key="object" lang="French">Objet</Localized>
+    <Localized key="object" lang="Dutch">Object</Localized>
+    <Localized key="conditional" lang="English">conditional</Localized>
+    <Localized key="conditional" lang="French">conditionnel</Localized>
+    <Localized key="conditional" lang="Dutch">conditional</Localized>
+    <Localized key="add_object_assertion" lang="English">Add object assertion</Localized>
+    <Localized key="add_object_assertion" lang="French">Ajouter une assertion de type 'objet'</Localized>
+    <Localized key="add_object_assertion" lang="Dutch">Add object assertion</Localized>
+    <Localized key="delete_object_assertion" lang="English">Delete the object assertion</Localized>
+    <Localized key="delete_object_assertion" lang="French">Effacer l' object assertion</Localized>
+    <Localized key="delete_object_assertion" lang="Dutch">Delete the object assertion</Localized>
+    <Localized key="value" lang="English">Value</Localized>
+    <Localized key="value" lang="French">Valeur</Localized>
+    <Localized key="value" lang="Dutch">Value</Localized>
+    <Localized key="add_data_assertion" lang="English">Add data assertion</Localized>
+    <Localized key="add_data_assertion" lang="French">Ajouter l'assertion de données</Localized>
+    <Localized key="add_data_assertion" lang="Dutch">Add data assertion</Localized>
+    <Localized key="delete_data_assertion" lang="English">Delete data assertion</Localized>
+    <Localized key="delete_data_assertion" lang="French">Supprimer l'assertion</Localized>
+    <Localized key="delete_data_assertion" lang="Dutch">Delete data assertion</Localized>
+    <Localized key="model_slot" lang="English">model_slot</Localized>
+    <Localized key="model_slot" lang="French">model_slot</Localized>
+    <Localized key="model_slot" lang="Dutch">model_slot</Localized>
+    <Localized key="ontology_class" lang="English">Ontology class</Localized>
+    <Localized key="ontology_class" lang="French">Classe ontologique</Localized>
+    <Localized key="ontology_class" lang="Dutch">Ontology class</Localized>
+  </LocalizedDictionary>
 </Panel>
