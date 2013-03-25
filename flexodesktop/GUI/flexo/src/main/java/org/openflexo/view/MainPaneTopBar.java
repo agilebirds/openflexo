@@ -19,6 +19,7 @@ import javax.swing.UIManager;
 import org.openflexo.components.widget.FIBProjectSelector;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.IconLibrary;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
@@ -87,6 +88,7 @@ public class MainPaneTopBar extends JMenuBar {
 	private void initModules() {
 		for (final Module module : model.getModuleLoader().getAvailableModules()) {
 			final JButton button = new BarButton(module.getMediumIcon());
+			button.setToolTipText(FlexoLocalization.localizedForKey(module.getName(), button));
 			button.setEnabled(true);
 			button.setFocusable(false);
 			if (forcePreferredSize) {
