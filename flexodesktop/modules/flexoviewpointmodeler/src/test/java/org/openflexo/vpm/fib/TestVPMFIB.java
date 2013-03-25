@@ -27,10 +27,6 @@ public class TestVPMFIB extends FIBTestCase {
 		validateFIB(VPMCst.DIAGRAM_SPECIFICATION_VIEW_FIB);
 	}
 
-	public void testViewPointLibraryView() {
-		validateFIB(VPMCst.VIEWPOINT_LIBRARY_VIEW_FIB);
-	}
-
 	public void testViewPointView() {
 		validateFIB(VPMCst.VIEWPOINT_VIEW_FIB);
 	}

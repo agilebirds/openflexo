@@ -20,7 +20,7 @@
       <AddAction method="controller.createPatternRole(data)" isAvailable="" name="createPatternRole" />
     </Table>
     <TabPanel name="MainTabPanel" index="1" data="" constraints="split(index=1;location=center;splitIdentifier=details)" visible="">
-      <Tab title="edition_schemes" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="0" data="" constraints="border(index=1;location=center)" visible="" name="EditionSchemeTab">
+      <Tab title="behaviour" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="0" data="" constraints="border(index=1;location=center)" visible="" name="EditionSchemeTab">
         <SplitPanel index="0" data="" constraints="border(index=0;location=center)" visible="">
           <ColSplit name="ColSplit" weight="0.0">
             <Leaf name="top" weight="0.5" />

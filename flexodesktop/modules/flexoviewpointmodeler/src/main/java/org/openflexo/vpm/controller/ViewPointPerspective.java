@@ -39,6 +39,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
@@ -55,7 +56,6 @@ import org.openflexo.vpm.examplediagram.ExampleDiagramModuleView;
 import org.openflexo.vpm.view.DiagramEditionPatternView;
 import org.openflexo.vpm.view.DiagramSpecificationView;
 import org.openflexo.vpm.view.StandardEditionPatternView;
-import org.openflexo.vpm.view.ViewPointLibraryView;
 import org.openflexo.vpm.view.ViewPointView;
 import org.openflexo.vpm.view.VirtualModelView;
 
@@ -153,22 +153,25 @@ public class ViewPointPerspective extends FlexoPerspective {
 		if (hasModuleViewForObject(proposedObject)) {
 			return proposedObject;
 		}
-		return _controller.getViewPointLibrary();
+		if (proposedObject instanceof EditionPatternObject) {
+			return ((EditionPatternObject) proposedObject).getEditionPattern();
+		}
+		if (proposedObject instanceof ViewPointObject) {
+			return ((ViewPointObject) proposedObject).getViewPoint();
+		}
+		return null;
 	}
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoObject object) {
-		return object instanceof ViewPointLibrary || object instanceof DiagramPalette || object instanceof ExampleDiagram
-				|| object instanceof ViewPoint || object instanceof EditionPattern;
+		return object instanceof DiagramPalette || object instanceof ExampleDiagram || object instanceof ViewPoint
+				|| object instanceof EditionPattern;
 	}
 
 	@Override
 	public ModuleView<? extends FlexoObject> createModuleViewForObject(FlexoObject object, FlexoController controller) {
 		if (object.isDeleted()) {
 			return null;
-		}
-		if (object instanceof ViewPointLibrary) {
-			return new ViewPointLibraryView((ViewPointLibrary) object, (VPMController) controller);
 		}
 		if (object instanceof ViewPoint) {
 			return new ViewPointView((ViewPoint) object, (VPMController) controller);
