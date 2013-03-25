@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.fib.editor.controller.FIBInspector" layout="border" darkLevel="0" data="" dataClassName="org.openflexo.fib.model.FIBTable" visible="" name="Inspector">
   <TabPanel name="Tab" data="" constraints="border(location=center)" visible="">
-    <Tab title="Basic" layout="twocols" darkLevel="0" index="0" data="" visible="" name="BasicTab">
+    <Tab title="Basic" layout="twocols" darkLevel="0" index="0" data="" visible="" font="SansSerif,0,11" name="BasicTab">
       <Label label="iterator_class" data="" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
       <Custom componentClassName="org.openflexo.fib.utils.ClassSelector" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" data="data.iteratorClass" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" />
       <Label label="visible_row_count" data="" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
@@ -15,7 +15,7 @@
       <CheckBox selected="false" data="data.showFooter" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
       <Label label="show_footer" data="" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
     </Tab>
-    <Tab title="Table" layout="twocols" darkLevel="0" index="1" data="" visible="" name="AdvancedTab">
+    <Tab title="Table" layout="twocols" darkLevel="0" index="1" data="" visible="" font="SansSerif,0,11" name="AdvancedTab">
       <TabPanel data="" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="">
         <Tab title="Columns" layout="gridbag" darkLevel="0" index="0" data="" visible="">
           <Table iteratorClassName="org.openflexo.fib.model.FIBTableColumn" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" selected="" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="ColumnsTable" index="0" data="data.columns" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="">
@@ -101,7 +101,7 @@
         </Tab>
       </TabPanel>
     </Tab>
-    <Tab title="Controls" layout="twocols" darkLevel="0" index="2" data="" visible="" name="ControlsTab">
+    <Tab title="Controls" layout="twocols" darkLevel="0" index="2" data="" visible="" font="SansSerif,0,11" name="ControlsTab">
       <Label label="selected" data="" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
       <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" data="data.selected" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="">
         <Assignment variable="component.bindable" value="data" />
@@ -111,7 +111,7 @@
       <Label label="selectionMode" data="" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
       <DropDown data="data.selectionMode" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" list="" array="" iteratorClassName="java.lang.Object" autoSelectFirstRow="false" />
     </Tab>
-    <Tab title="Graphics" layout="twocols" darkLevel="0" index="4" data="" visible="" name="GraphicsTab">
+    <Tab title="Graphics" layout="twocols" darkLevel="0" index="4" data="" visible="" font="SansSerif,0,11" name="GraphicsTab">
       <Panel layout="border" border="titled" borderTitle="table_colors" darkLevel="0" index="0" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="">
         <Panel layout="gridbag" hGap="5" vGap="5" cols="2" rows="3" borderTitle="Panel" darkLevel="0" data="" constraints="border(location=center)" visible="">
           <Label label="bg_selection_color" align="right" index="0" data="" constraints="gridbag(anchor=east;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
