@@ -565,6 +565,14 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 		return newActionScheme;
 	}
 
+	public SynchronizationScheme createSynchronizationScheme() {
+		SynchronizationScheme newSynchronizationScheme = new SynchronizationScheme(null);
+		newSynchronizationScheme.setEditionPattern(this);
+		newSynchronizationScheme.setName("synchronization");
+		addToEditionSchemes(newSynchronizationScheme);
+		return newSynchronizationScheme;
+	}
+
 	public NavigationScheme createNavigationScheme() {
 		NavigationScheme newNavigationScheme = new NavigationScheme(null);
 		newNavigationScheme.setEditionPattern(this);

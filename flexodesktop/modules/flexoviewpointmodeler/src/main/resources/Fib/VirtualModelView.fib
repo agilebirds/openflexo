@@ -37,6 +37,7 @@
                 <TextFieldColumn isEditable="" data="iterator.name" format="" title="edition_scheme" columnWidth="200" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" />
                 <LabelColumn data="iterator.editionSchemeType.name" format="" title="type" columnWidth="100" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="label" />
                 <RemoveAction method="data.deleteEditionScheme(selected)" isAvailable="" name="delete_scheme" />
+                <AddAction method="data.createSynchronizationScheme" isAvailable="" name="new_synchronization_scheme" />
                 <AddAction method="data.createActionScheme" isAvailable="" name="new_action_scheme" />
                 <AddAction method="data.createCreationScheme" isAvailable="" name="new_creation_scheme" />
                 <AddAction method="data.createDeletionScheme" isAvailable="" name="new_deletion_scheme" />
