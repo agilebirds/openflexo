@@ -76,6 +76,9 @@ public class JavaMethodPathElement extends FunctionPathElement {
 	@Override
 	public Type getType() {
 		if (customType != null) {
+			if (TypeUtils.isGeneric(customType)) {
+				return TypeUtils.makeInstantiatedType(customType, getParent().getType());
+			}
 			return customType;
 		}
 		if (getMethodDefinition() != null) {
