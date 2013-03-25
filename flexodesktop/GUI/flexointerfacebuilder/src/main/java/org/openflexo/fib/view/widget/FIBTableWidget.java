@@ -569,8 +569,12 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		int index = getValue().indexOf(o);
 		if (index > -1) {
 			ignoreNotifications = true;
-			index = _table.convertRowIndexToView(index);
-			getListSelectionModel().addSelectionInterval(index, index);
+			try {
+				index = _table.convertRowIndexToView(index);
+				getListSelectionModel().addSelectionInterval(index, index);
+			} catch (IndexOutOfBoundsException e) {
+				logger.warning("Unexpected " + e);
+			}
 			ignoreNotifications = false;
 		}
 	}
