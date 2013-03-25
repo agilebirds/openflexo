@@ -598,7 +598,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 
 	public boolean areStaticValuesAllowed() {
 		if (getEditedObject() != null
-				&& (getEditedObject().isSettable() || getEditedObject().getBindingDefinitionType() == DataBinding.BindingDefinitionType.EXECUTE)) {
+				&& (getEditedObject().isSettable() /*|| getEditedObject().getBindingDefinitionType() == DataBinding.BindingDefinitionType.EXECUTE*/)) {
 			return false;
 		}
 		return _allowsStaticValues;
@@ -1393,6 +1393,7 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 
 		BindingFactory factory = new JavaBindingFactory();
 		DataBinding binding = new DataBinding<String>("aString.toString", testBindable, String.class, DataBinding.BindingDefinitionType.GET);
+		// DataBinding binding = new DataBinding<String>(testBindable, Object.class, DataBinding.BindingDefinitionType.EXECUTE);
 
 		BindingSelector _selector = new BindingSelector(null) {
 			@Override
