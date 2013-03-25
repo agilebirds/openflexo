@@ -79,6 +79,7 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 	public FIBView<FIBComponent, JComponent> getReferencedComponentView() {
 		if (referencedComponentView == null && !isComponentLoading) {
 			isComponentLoading = true;
+			System.out.println(">>>>>>> Making new FIBView for " + getWidget() + " for " + getWidget().getComponent());
 			if (getWidget().getComponent() instanceof FIBWidget) {
 				referencedComponentView = factory.makeWidget((FIBWidget) getWidget().getComponent());
 				referencedComponentView.setEmbeddingComponent(this);
@@ -158,6 +159,12 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 	@Override
 	public Object getValue(BindingVariable variable) {
 		if (variable.getVariableName().equals("data")) {
+			/*if (getWidget().getName() != null && getWidget().getName().equals("DropSchemePanel")) {
+				System.out.println("Returns data for DropSchemePanel as " + referencedComponentView.getDynamicModel().getData());
+			}
+			if (getWidget() != null && getWidget().getName() != null && getWidget().getName().equals("DropSchemeWidget")) {
+				System.out.println("Returns data for DropSchemeWidget as " + referencedComponentView.getDynamicModel().getData());
+			}*/
 			return referencedComponentView.getDynamicModel().getData();
 		}
 		if (variable.getVariableName().equals("component")) {

@@ -167,8 +167,7 @@ public class ContextualMenu {
 	}
 
 	public FIBModelObject makeReusableComponent(FIBContainer component, FIBContainer parent) {
-		MakeReusableComponentParameters params = new MakeReusableComponentParameters(parent);
-		params.reusableComponentFile = new File(FIBPreferences.getLastDirectory(), "ReusableComponent.fib");
+		MakeReusableComponentParameters params = new MakeReusableComponentParameters(component, parent);
 		FIBPanel panel = new FIBPanel();
 		panel.setDataClass(params.getClass());
 		panel.setLayout(Layout.twocols);
@@ -241,15 +240,26 @@ public class ContextualMenu {
 	}
 
 	public static class MakeReusableComponentParameters implements Bindable {
+		public String componentName;
 		public File reusableComponentFile;
 		public Class reusableComponentClass;
 		public DataBinding<Object> data;
 
 		private FIBComponent contextComponent;
 
-		public MakeReusableComponentParameters(FIBComponent contextComponent) {
-			this.contextComponent = contextComponent;
-			data = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET);
+		public MakeReusableComponentParameters(FIBContainer component, FIBContainer parent) {
+			this.contextComponent = parent;
+			if (StringUtils.isNotEmpty(component.getName())) {
+				componentName = component.getName();
+				reusableComponentFile = new File(FIBPreferences.getLastDirectory(), componentName + ".fib");
+			} else {
+				reusableComponentFile = new File(FIBPreferences.getLastDirectory(), "ReusableComponent.fib");
+			}
+			if (component.getData().isSet()) {
+				data = new DataBinding<Object>(component.getData().toString(), this, Object.class, BindingDefinitionType.GET);
+			} else {
+				data = new DataBinding<Object>(this, Object.class, BindingDefinitionType.GET);
+			}
 		}
 
 		@Override

@@ -195,6 +195,13 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		Object value = null;
 
 		try {
+			/*if (getWidget().getData().toString().equals("data.targetPatternRole")) {
+				System.out.println("hop");
+				System.out.println("hop2");
+				Object o = getBindingEvaluationContext().getValue(new BindingVariable("data", null));
+				System.out.println("hop3");
+
+			}*/
 			value = getWidget().getData().getBindingValue(getBindingEvaluationContext());
 			T returned = (T) value;
 			if (getDynamicModel() != null) {

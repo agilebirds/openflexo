@@ -144,7 +144,6 @@ public class FIBSplitPanelView extends FIBContainerView<FIBSplitPanel, JXMultiSp
 		getJComponent().revalidate();
 		getJComponent().repaint();
 	}
-
 	/*@Override
 	public void updateLanguage() {
 		super.updateLanguage();

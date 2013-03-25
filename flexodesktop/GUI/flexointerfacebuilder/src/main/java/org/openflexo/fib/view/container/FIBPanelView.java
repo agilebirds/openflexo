@@ -196,6 +196,8 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 
 	@Override
 	public synchronized void updateLayout() {
+		logger.info("relayout panel " + getComponent());
+
 		if (getSubViews() != null) {
 			for (FIBView v : getSubViews()) {
 				v.delete();
