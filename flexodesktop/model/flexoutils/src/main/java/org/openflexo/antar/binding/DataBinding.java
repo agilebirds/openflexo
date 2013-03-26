@@ -479,6 +479,10 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 					+ " "
 					+ (getOwner() != null ? "BindingModel=" + getOwner().getBindingModel() + " BindingFactory="
 							+ getOwner().getBindingFactory() : ""));
+			/*Bindable owner = getOwner();
+			BindingModel bm = getOwner().getBindingModel();
+			BindingFactory bf = getOwner().getBindingFactory();
+			logger.info("Breakpoint");*/
 		}
 
 		return expression;
@@ -591,8 +595,8 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 				}
 
 				// We do not warn anymore since this situation happens very often
-				/*logger.warning("Cannot evaluate " + expression + " max reduction is " + evaluatedExpression + " resolvedExpression="
-						+ resolvedExpression);*/
+				// logger.warning("Cannot evaluate " + expression + " max reduction is " + evaluatedExpression + " resolvedExpression="
+				// + resolvedExpression);
 
 				return null;
 

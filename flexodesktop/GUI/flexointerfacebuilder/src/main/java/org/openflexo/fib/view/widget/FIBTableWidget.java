@@ -49,7 +49,6 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
 
 import org.jdesktop.swingx.JXTable;
-import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
@@ -246,13 +245,6 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 
 	public void clearSelection() {
 		getListSelectionModel().clearSelection();
-	}
-
-	@Override
-	public List<DataBinding<?>> getDependencyBindings() {
-		List<DataBinding<?>> returned = super.getDependencyBindings();
-		returned.add(getWidget().getSelected());
-		return returned;
 	}
 
 	@Override
@@ -577,8 +569,12 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		int index = getValue().indexOf(o);
 		if (index > -1) {
 			ignoreNotifications = true;
-			index = _table.convertRowIndexToView(index);
-			getListSelectionModel().addSelectionInterval(index, index);
+			try {
+				index = _table.convertRowIndexToView(index);
+				getListSelectionModel().addSelectionInterval(index, index);
+			} catch (IndexOutOfBoundsException e) {
+				logger.warning("Unexpected " + e);
+			}
 			ignoreNotifications = false;
 		}
 	}
@@ -588,7 +584,11 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		int index = getValue().indexOf(o);
 		if (index > -1) {
 			ignoreNotifications = true;
-			index = _table.convertRowIndexToView(index);
+			try {
+				index = _table.convertRowIndexToView(index);
+			} catch (IndexOutOfBoundsException e) {
+				logger.warning("Unexpected " + e);
+			}
 			getListSelectionModel().removeSelectionInterval(index, index);
 			ignoreNotifications = false;
 		}

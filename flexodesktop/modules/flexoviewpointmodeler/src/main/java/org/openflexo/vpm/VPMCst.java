@@ -51,10 +51,11 @@ public class VPMCst {
 	public static final int PALETTE_DOC_SPLIT_LOCATION = 300;
 
 	// General components
-	// public static File ONTOLOGY_VIEW_FIB = new FileResource("Fib/OntologyView.fib");
-	public static File VIEWPOINT_LIBRARY_VIEW_FIB = new FileResource("Fib/ViewPointLibraryView.fib");
 	public static File VIEWPOINT_VIEW_FIB = new FileResource("Fib/ViewPointView.fib");
-	public static File EDITION_PATTERN_VIEW_FIB = new FileResource("Fib/EditionPatternView.fib");
+	public static File STANDARD_EDITION_PATTERN_VIEW_FIB = new FileResource("Fib/StandardEditionPatternView.fib");
+	public static File DIAGRAM_EDITION_PATTERN_VIEW_FIB = new FileResource("Fib/DiagramEditionPatternView.fib");
+	public static File VIRTUAL_MODEL_VIEW_FIB = new FileResource("Fib/VirtualModelView.fib");
+	public static File DIAGRAM_SPECIFICATION_VIEW_FIB = new FileResource("Fib/DiagramSpecificationView.fib");
 
 	// ViewPoint edition
 	public static File CREATE_MODEL_SLOT_DIALOG_FIB = new FileResource("Fib/Dialog/CreateModelSlotDialog.fib");

@@ -663,6 +663,13 @@ public abstract class FIBWidget extends FIBComponent {
 	}
 
 	@Override
+	public List<DataBinding<?>> getDependencyBindings() {
+		List<DataBinding<?>> returned = super.getDependencyBindings();
+		returned.add(getEnable());
+		return returned;
+	}
+
+	@Override
 	protected void applyValidation(ValidationReport report) {
 		super.applyValidation(report);
 		performValidation(FIBWidgetDeclaredAsDynamicShouldHaveAName.class, report);

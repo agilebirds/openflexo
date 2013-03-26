@@ -37,7 +37,6 @@ import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListDataListener;
 
-import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
@@ -47,6 +46,7 @@ import org.openflexo.fib.model.FIBMultipleValues;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
+import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 
 public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C extends JComponent, T> extends FIBWidgetView<W, C, T> {
 
@@ -75,6 +75,9 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 				} catch (NullReferenceException e) {
 					// e.printStackTrace();
 				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				} catch (InvalidObjectSpecificationException e) {
+					logger.warning("Unexpected InvalidObjectSpecificationException " + e);
 					e.printStackTrace();
 				}
 				if (accessedList instanceof List) {
@@ -446,14 +449,6 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 				getLocalized(s);
 			}
 		}
-	}
-
-	@Override
-	public List<DataBinding<?>> getDependencyBindings() {
-		List<DataBinding<?>> returned = super.getDependencyBindings();
-		returned.add(getWidget().getList());
-		returned.add(getWidget().getArray());
-		return returned;
 	}
 
 }

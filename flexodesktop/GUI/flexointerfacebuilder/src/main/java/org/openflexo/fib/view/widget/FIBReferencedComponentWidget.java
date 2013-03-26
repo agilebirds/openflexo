@@ -79,6 +79,7 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 	public FIBView<FIBComponent, JComponent> getReferencedComponentView() {
 		if (referencedComponentView == null && !isComponentLoading) {
 			isComponentLoading = true;
+			//System.out.println(">>>>>>> Making new FIBView for " + getWidget() + " for " + getWidget().getComponent());
 			if (getWidget().getComponent() instanceof FIBWidget) {
 				referencedComponentView = factory.makeWidget((FIBWidget) getWidget().getComponent());
 				referencedComponentView.setEmbeddingComponent(this);
@@ -142,11 +143,14 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 
 		if (getReferencedComponentView() != null) {
 
+			// getReferencedComponentView().getDynamicModel().setData(getValue());
+
 			performAssignments();
-			logger.info("Update FIBReferenceComponentWidget with " + getValue());
+			// logger.info("********* Update FIBReferenceComponentWidget " + getWidget().getComponentFile() + " with " + getValue());
+			// logger.info("getData()=" + getWidget().getData());
+			// logger.info("valid=" + getWidget().getData().isValid());
 			referencedComponentView.getDynamicModel().setData(getValue());
 			referencedComponentView.updateDataObject(getValue());
-
 		}
 		return true;
 
@@ -155,6 +159,12 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 	@Override
 	public Object getValue(BindingVariable variable) {
 		if (variable.getVariableName().equals("data")) {
+			/*if (getWidget().getName() != null && getWidget().getName().equals("DropSchemePanel")) {
+				System.out.println("Returns data for DropSchemePanel as " + referencedComponentView.getDynamicModel().getData());
+			}
+			if (getWidget() != null && getWidget().getName() != null && getWidget().getName().equals("DropSchemeWidget")) {
+				System.out.println("Returns data for DropSchemeWidget as " + referencedComponentView.getDynamicModel().getData());
+			}*/
 			return referencedComponentView.getDynamicModel().getData();
 		}
 		if (variable.getVariableName().equals("component")) {
@@ -176,8 +186,13 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 		getParentView().updateDataObject(getValue());
 	}
 
-	@Override
-	public BindingEvaluationContext getBindingEvaluationContext() {
+	public BindingEvaluationContext getEmbeddedBindingEvaluationContext() {
 		return this;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + " referencedComponentView=" + referencedComponentView + " dynamicModel="
+				+ referencedComponentView.getDynamicModel() + " data=" + referencedComponentView.getDynamicModel().getData();
 	}
 }

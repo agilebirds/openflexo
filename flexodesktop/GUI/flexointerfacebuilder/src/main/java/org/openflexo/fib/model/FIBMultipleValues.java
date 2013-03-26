@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.GenericArrayTypeImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.TypeUtils;
@@ -345,6 +344,14 @@ public abstract class FIBMultipleValues extends FIBWidget {
 		performValidation(FIBMultipleValuesMustDefineValueRange.class, report);
 		performValidation(ListBindingMustBeValid.class, report);
 		performValidation(ArrayBindingMustBeValid.class, report);
+	}
+
+	@Override
+	public List<DataBinding<?>> getDependencyBindings() {
+		List<DataBinding<?>> returned = super.getDependencyBindings();
+		returned.add(getList());
+		returned.add(getArray());
+		return returned;
 	}
 
 	public static class FIBMultipleValuesMustDefineValueRange extends

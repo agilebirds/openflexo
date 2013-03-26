@@ -73,6 +73,7 @@ import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
+import org.openflexo.foundation.viewpoint.SynchronizationScheme;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
@@ -121,6 +122,8 @@ public class VPMIconLibrary extends IconLibrary {
 	public static final ImageIconResource DIAGRAM_PALETTE_ICON = new ImageIconResource("Icons/Model/VPM/DiagramPalette.png");
 	public static final ImageIconResource EDITION_PATTERN_ICON = new ImageIconResource("Icons/Model/VPM/EditionPattern.png");
 	public static final ImageIconResource ACTION_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/ActionSchemeIcon.png");
+	public static final ImageIconResource SYNCHRONIZATION_SCHEME_ICON = new ImageIconResource(
+			"Icons/Model/VPM/SynchronizationSchemeIcon.png");
 	public static final ImageIconResource DROP_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/DropSchemeIcon.png");
 	public static final ImageIconResource LINK_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/LinkSchemeIcon.png");
 	public static final ImageIconResource CLONING_SCHEME_ICON = new ImageIconResource("Icons/Model/VPM/CloningSchemeIcon.png");
@@ -271,6 +274,8 @@ public class VPMIconLibrary extends IconLibrary {
 			return EDITION_PATTERN_PARAMETER_ICON;
 		} else if (object instanceof ActionScheme) {
 			return ACTION_SCHEME_ICON;
+		} else if (object instanceof SynchronizationScheme) {
+			return SYNCHRONIZATION_SCHEME_ICON;
 		} else if (object instanceof DropScheme) {
 			return DROP_SCHEME_ICON;
 		} else if (object instanceof LinkScheme) {

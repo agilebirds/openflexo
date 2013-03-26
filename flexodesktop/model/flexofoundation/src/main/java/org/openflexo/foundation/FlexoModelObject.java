@@ -660,44 +660,6 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	// ============== Access to help ==============
 	// ============================================
 
-	private static HelpRetriever _helpRetriever = null;
-
-	public static interface HelpRetriever {
-		public String shortHelpForObject(FlexoModelObject object);
-
-		public String longHelpForObject(FlexoModelObject object);
-	}
-
-	/**
-	 * Return help text for supplied object, as defined in DocResourceManager as long version Note: return an HTML version, with embedding
-	 * <html>...</html> tags.
-	 */
-	public String getHelpText() {
-		if (_helpRetriever != null) {
-			return _helpRetriever.longHelpForObject(this);
-		}
-		return null;
-	}
-
-	/**
-	 * Return help text for supplied object, as defined in DocResourceManager as short version Note: return an HTML version, with embedding
-	 * <html>...</html> tags.
-	 */
-	public String getShortHelpText() {
-		if (_helpRetriever != null) {
-			return _helpRetriever.shortHelpForObject(this);
-		}
-		return null;
-	}
-
-	public static HelpRetriever getHelpRetriever() {
-		return _helpRetriever;
-	}
-
-	public static void setHelpRetriever(HelpRetriever retriever) {
-		_helpRetriever = retriever;
-	}
-
 	// ================================================
 	// ============== Dynamic properties ==============
 	// ================================================

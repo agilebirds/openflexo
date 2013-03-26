@@ -133,7 +133,7 @@ public class ModuleInspectorController extends Observable implements Observer {
 		}
 
 		for (FIBInspector inspector : inspectors.values()) {
-			logger.fine("Merging inspector: " + inspector);
+			// logger.info("Merging inspector: " + inspector);
 			inspector.appendSuperInspectors(this);
 		}
 

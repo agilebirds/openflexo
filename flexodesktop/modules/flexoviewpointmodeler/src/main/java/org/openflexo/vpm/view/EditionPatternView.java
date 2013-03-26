@@ -19,6 +19,8 @@
  */
 package org.openflexo.vpm.view;
 
+import java.io.File;
+
 import org.openflexo.fib.view.container.FIBTabPanelView;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
 import org.openflexo.fib.view.widget.FIBTableWidget;
@@ -31,20 +33,20 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 import org.openflexo.view.FIBModuleView;
-import org.openflexo.vpm.VPMCst;
 import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.controller.ViewPointPerspective;
 
 /**
- * Please comment this class
+ * This is the module view representing an EditionPattern<br>
+ * Because an EditionPattern can be of multiple forms, this class is abstract and must be subclassed with a specific FIB
  * 
  * @author sguerin
  * 
  */
-public class EditionPatternView extends FIBModuleView<EditionPattern> {
+public abstract class EditionPatternView<EP extends EditionPattern> extends FIBModuleView<EP> {
 
-	public EditionPatternView(EditionPattern editionPattern, VPMController controller) {
-		super(editionPattern, controller, VPMCst.EDITION_PATTERN_VIEW_FIB);
+	public EditionPatternView(EP editionPattern, VPMController controller, File fibFile) {
+		super(editionPattern, controller, fibFile);
 	}
 
 	@Override

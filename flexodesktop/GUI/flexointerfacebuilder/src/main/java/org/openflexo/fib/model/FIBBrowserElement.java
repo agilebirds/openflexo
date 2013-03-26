@@ -361,7 +361,7 @@ public class FIBBrowserElement extends FIBModelObject {
 
 	public DataBinding<Font> getDynamicFont() {
 		if (dynamicFont == null) {
-			dynamicFont = new DataBinding<Font>(this, Font.class, DataBinding.BindingDefinitionType.GET);
+			dynamicFont = new DataBinding<Font>(iterator, Font.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return dynamicFont;
 	}

@@ -1,15 +1,16 @@
 package org.openflexo.fib.model;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 
 public abstract class FIBTextWidget extends FIBWidget {
 
 	@Deprecated
-	public static BindingDefinition EDITABLE = new BindingDefinition("editable", Boolean.class, DataBinding.BindingDefinitionType.GET, false);
+	public static BindingDefinition EDITABLE = new BindingDefinition("editable", Boolean.class, DataBinding.BindingDefinitionType.GET,
+			false);
 
 	public static enum Parameters implements FIBModelAttribute {
 		editable;
@@ -84,6 +85,13 @@ public abstract class FIBTextWidget extends FIBWidget {
 	 */
 	public void setValidateOnReturn(boolean validateOnReturn) {
 		this.validateOnReturn = validateOnReturn;
+	}
+
+	@Override
+	public List<DataBinding<?>> getDependencyBindings() {
+		List<DataBinding<?>> returned = super.getDependencyBindings();
+		returned.add(getEditable());
+		return returned;
 	}
 
 }

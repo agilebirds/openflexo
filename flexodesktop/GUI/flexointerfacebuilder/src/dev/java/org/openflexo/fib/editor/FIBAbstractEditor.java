@@ -46,6 +46,7 @@ import javax.swing.WindowConstants;
 
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.editor.FIBEditor.FIBPreferences;
 import org.openflexo.fib.editor.controller.FIBEditorController;
 import org.openflexo.fib.editor.controller.FIBEditorPalette;
 import org.openflexo.fib.editor.controller.FIBInspectorController;
@@ -422,6 +423,8 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		getPalette().setEditorController(editorController);
 		frame.getContentPane().add(editorController.getEditorPanel());
 		frame.pack();
+
+		FIBPreferences.setLastFile(fibFile);
 	}
 
 	public void switchToData(Object data) {

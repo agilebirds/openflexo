@@ -24,7 +24,6 @@ import java.awt.Color;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,7 +37,6 @@ import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBTextArea;
 import org.openflexo.fib.view.FIBWidgetView;
@@ -142,13 +140,6 @@ public class FIBTextAreaWidget extends FIBWidgetView<FIBTextArea, JTextArea, Str
 		 */
 
 		updateFont();
-	}
-
-	@Override
-	public List<DataBinding<?>> getDependencyBindings() {
-		List<DataBinding<?>> returned = super.getDependencyBindings();
-		returned.add(getWidget().getEditable());
-		return returned;
 	}
 
 	@Override

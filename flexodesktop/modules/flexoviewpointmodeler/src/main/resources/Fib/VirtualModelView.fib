@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="border" borderTitle="Panel" borderTop="10" titleFont="SansSerif,0,11" darkLevel="0" data="" dataClassName="org.openflexo.foundation.viewpoint.VirtualModel" controllerClassName="org.openflexo.vpm.controller.VPMFIBController" visible="" font="SansSerif,0,12" name="main">
+  <SplitPanel index="0" data="" constraints="border(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="">
+    <ColSplit name="ColSplit" weight="0.0">
+      <Leaf name="top" weight="0.0" />
+      <Divider />
+      <Leaf name="bottom" weight="1.0" />
+    </ColSplit>
+    <Table iteratorClassName="org.openflexo.foundation.technologyadapter.ModelSlot" visibleRowCount="5" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" selected="" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="ModelSlotTable" index="0" data="data.modelSlots" constraints="split(index=0;location=north;splitIdentifier=top)" visible="">
+      <IconColumn data="controller.iconForObject(iterator)" format="" title="icon" columnWidth="25" resizable="false" displayTitle="false" color="" bgColor="" tooltip="" valueChangedAction="" name="icon" />
+      <TextFieldColumn isEditable="" data="iterator.name" format="" title="model_slot" columnWidth="80" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" />
+      <LabelColumn data="iterator.technologyAdapter.name" format="" title="technology" columnWidth="200" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="label" />
+      <LabelColumn data="iterator.metaModelURI" format="" title="meta_model" columnWidth="500" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="label" />
+      <RemoveAction method="data.deleteModelSlot(selected)" isAvailable="" name="delete" />
+      <AddAction method="controller.createModelSlot(data)" isAvailable="" name="createModelSlot" />
+    </Table>
+    <TabPanel name="MainTabPanel" index="1" data="" constraints="split(index=1;location=center;splitIdentifier=bottom)" visible="">
+      <Tab title="structural" layout="border" titleFont="SansSerif,0,12" darkLevel="0" index="0" data="" visible="" name="StructuralTab">
+        <FIBReferencedComponent componentFile="VirtualModelStructuralPanel.fib" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" data="data" constraints="border(location=center)" visible="" />
+      </Tab>
+      <Tab title="behavioural" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="1" data="" constraints="border(index=1;location=center)" visible="" name="BehaviouralTab">
+        <SplitPanel index="0" data="" constraints="border(index=0;location=center)" visible="">
+          <ColSplit name="ColSplit" weight="0.0">
+            <Leaf name="top" weight="0.5" />
+            <Divider />
+            <Leaf name="bottom" weight="0.5" />
+          </ColSplit>
+          <Panel layout="border" borderTitle="Panel" borderTop="9" borderBottom="15" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="0" data="" constraints="split(index=0;location=north;splitIdentifier=top)" visible="" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED">
+            <SplitPanel index="0" data="" constraints="border(index=0;location=center)" visible="">
+              <RowSplit name="RowSplit" weight="0.0">
+                <Leaf name="left" weight="0.5" />
+                <Divider />
+                <Leaf name="right" weight="0.5" />
+              </RowSplit>
+              <Table iteratorClassName="org.openflexo.foundation.viewpoint.EditionScheme" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" selected="" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="EditionSchemeTable" index="0" data="data.editionSchemes" constraints="split(index=0;location=west;splitIdentifier=left)" visible="">
+                <IconColumn data="controller.iconForObject(iterator)" format="" title="icon" columnWidth="20" resizable="false" displayTitle="false" color="" bgColor="" tooltip="" valueChangedAction="" name="icon" />
+                <TextFieldColumn isEditable="" data="iterator.name" format="" title="edition_scheme" columnWidth="200" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" />
+                <LabelColumn data="iterator.editionSchemeType.name" format="" title="type" columnWidth="100" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="label" />
+                <RemoveAction method="data.deleteEditionScheme(selected)" isAvailable="" name="delete_scheme" />
+                <AddAction method="data.createSynchronizationScheme" isAvailable="" name="new_synchronization_scheme" />
+                <AddAction method="data.createActionScheme" isAvailable="" name="new_action_scheme" />
+                <AddAction method="data.createCreationScheme" isAvailable="" name="new_creation_scheme" />
+                <AddAction method="data.createDeletionScheme" isAvailable="" name="new_deletion_scheme" />
+                <CustomAction method="selected.duplicate((selected.name + &quot;Copy&quot;))" isAvailable="" name="duplicate" />
+                <AddAction method="data.createCloningScheme" isAvailable="" name="new_cloning_scheme" />
+              </Table>
+              <Panel layout="border" border="rounded3d" borderTitle="Parameters for EditionScheme" borderTop="2" borderBottom="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="1" index="0" data="" constraints="split(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=0;gridY=1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=west;padX=0;padY=0;splitIdentifier=right;weightX=0.5;weightY=1.0;x=0;y=0)" visible="">
+                <Table iteratorClassName="org.openflexo.foundation.viewpoint.EditionSchemeParameter" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" selected="" format="" icon="" tooltip="" localize="true" enable="(EditionSchemeTable.selected != null)" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="ParametersTable" index="0" data="EditionSchemeTable.selected.parameters" constraints="border(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=0;gridY=1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.5;weightY=1.0;x=0;y=0)" visible="" font="SansSerif.plain,0,12">
+                  <IconColumn data="controller.iconForObject(iterator)" format="" title="icon" columnWidth="20" resizable="false" displayTitle="false" color="" bgColor="" tooltip="" valueChangedAction="" name="icon" />
+                  <TextFieldColumn isEditable="" data="iterator.name" format="" title="name" columnWidth="100" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" />
+                  <TextFieldColumn isEditable="" data="iterator.label" format="" title="label" columnWidth="100" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" />
+                  <DropDownColumn list="" array="" data="iterator.widget" format="" title="widget" columnWidth="80" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="dropdown" />
+                  <AddAction method="EditionSchemeTable.selected.createTextFieldParameter" isAvailable="" name="add_textfield_parameter" />
+                  <AddAction method="EditionSchemeTable.selected.createLocalizedTextFieldParameter" isAvailable="" name="add_localized_textfield_parameter" />
+                  <AddAction method="EditionSchemeTable.selected.createTextAreaParameter" isAvailable="" name="add_textarea_parameter" />
+                  <AddAction method="EditionSchemeTable.selected.createIntegerParameter" isAvailable="" name="add_integer_parameter" />
+                  <AddAction method="EditionSchemeTable.selected.createCheckBoxParameter" isAvailable="" name="add_checkbox_parameter" />
+                  <AddAction method="EditionSchemeTable.selected.createDropDownParameter" isAvailable="" name="add_dropdown_parameter" />
+                  <AddAction method="EditionSchemeTable.selected.createIndividualParameter" isAvailable="" name="add_individual_parameter" />
+                  <AddAction method="EditionSchemeTable.selected.createClassParameter" isAvailable="" name="add_class_parameter" />
+                  <RemoveAction method="EditionSchemeTable.selected.deleteParameter(selected)" isAvailable="" name="delete" />
+                  <AddAction method="EditionSchemeTable.selected.createFlexoObjectParameter" isAvailable="" name="add_flexo_model_parameter" />
+                  <AddAction method="EditionSchemeTable.selected.createURIParameter" isAvailable="" name="add_uri_parameter" />
+                  <AddAction method="EditionSchemeTable.selected.createObjectPropertyParameter" isAvailable="" name="add_object_property_parameter" />
+                  <AddAction method="EditionSchemeTable.selected.createDataPropertyParameter" isAvailable="" name="add_data_property_parameter" />
+                  <AddAction method="EditionSchemeTable.selected.createListParameter" isAvailable="" name="add_list_parameter" />
+                  <AddAction method="EditionSchemeTable.selected.createEditionPatternParameter" isAvailable="" name="add_edition_pattern_parameter" />
+                  <AddAction method="EditionSchemeTable.selected.createPropertyParameter" isAvailable="" name="add_property_parameter" />
+                </Table>
+                <Panel layout="box" boxLayoutAxis="Y_AXIS" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" data="" constraints="border(location=east)" visible="" name="ParametersOrderingPanel">
+                  <Button action="EditionSchemePanel.data.parameterFirst(ParametersTable.selected)" buttonIcon="controller.arrowTop" buttonType="Trigger" label="" format="" icon="" tooltip="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &gt; 0))" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="0" data="" constraints="box(alignmentX=0.5;alignmentY=0.5;index=0;location=west)" visible="">
+                    <LocalizedDictionary />
+                  </Button>
+                  <Button action="EditionSchemePanel.data.parameterUp(ParametersTable.selected)" buttonIcon="controller.arrowUp" buttonType="Trigger" label="" format="" icon="" tooltip="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &gt; 0))" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="1" data="" constraints="box(alignmentX=0.5;alignmentY=0.5;index=1;location=north)" visible="">
+                    <LocalizedDictionary />
+                  </Button>
+                  <Button action="EditionSchemePanel.data.parameterDown(ParametersTable.selected)" buttonIcon="controller.arrowDown" buttonType="Trigger" label="" format="" icon="" tooltip="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &lt; (EditionSchemePanel.data.parameters.size - 1)))" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="2" data="" constraints="box(alignmentX=0.5;alignmentY=0.5;index=2;location=center)" visible="">
+                    <LocalizedDictionary />
+                  </Button>
+                  <Button action="EditionSchemePanel.data.parameterLast(ParametersTable.selected)" buttonIcon="controller.arrowBottom" buttonType="Trigger" label="" format="" icon="" tooltip="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &lt; (EditionSchemePanel.data.parameters.size - 1)))" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="3" data="" constraints="box(alignmentX=0.5;alignmentY=0.5;index=3;location=east)" visible="">
+                    <LocalizedDictionary />
+                  </Button>
+                  <LocalizedDictionary />
+                </Panel>
+              </Panel>
+            </SplitPanel>
+          </Panel>
+          <FIBReferencedComponent componentFile="EditionSchemePanel.fib" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="EditionSchemeWidget" index="0" data="EditionSchemeTable.selected" constraints="split(index=0;location=center;splitIdentifier=bottom)" visible="" />
+        </SplitPanel>
+      </Tab>
+      <Tab title="inspector" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" index="1" data="data.inspector" dataClassName="org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector" constraints="border(index=1;location=center)" visible="" width="80" height="60" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="InspectorTab">
+        <FIBReferencedComponent componentFile="EditionPatternInspectorPanel.fib" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="EditionPatternInspectorWidget" data="data.inspector" constraints="border(location=center)" visible="" />
+      </Tab>
+      <Tab title="localization" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" index="2" data="" constraints="border(index=1;location=center)" visible="" name="LocalizationTab">
+        <FIBReferencedComponent componentFile="LocalizedDictionaryPanel.fib" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="LocalizedDictionaryWidget" data="data.viewPoint.localizedDictionary" constraints="border(location=center)" visible="" />
+      </Tab>
+    </TabPanel>
+  </SplitPanel>
+  <LocalizedDictionary>
+    <Localized key="edition_scheme" lang="English">Edition Scheme</Localized>
+    <Localized key="edition_scheme" lang="French">Edition Scheme</Localized>
+    <Localized key="edition_scheme" lang="Dutch">Edition Scheme</Localized>
+    <Localized key="type" lang="English">Type</Localized>
+    <Localized key="type" lang="French">Type</Localized>
+    <Localized key="type" lang="Dutch">Type</Localized>
+    <Localized key="new_drop_scheme" lang="English">New Drop Scheme</Localized>
+    <Localized key="new_drop_scheme" lang="French">Nouveau Drop Scheme</Localized>
+    <Localized key="new_drop_scheme" lang="Dutch">New Drop Scheme</Localized>
+    <Localized key="delete_scheme" lang="English">Delete scheme</Localized>
+    <Localized key="delete_scheme" lang="French">Supprimer le mécanisme</Localized>
+    <Localized key="delete_scheme" lang="Dutch">Delete scheme</Localized>
+    <Localized key="new_link_scheme" lang="English">New Link Scheme</Localized>
+    <Localized key="new_link_scheme" lang="French">Nouveau Link Scheme</Localized>
+    <Localized key="new_link_scheme" lang="Dutch">New Link Scheme</Localized>
+    <Localized key="new_action_scheme" lang="English">new_action_scheme</Localized>
+    <Localized key="new_action_scheme" lang="French">new_action_scheme</Localized>
+    <Localized key="new_action_scheme" lang="Dutch">new_action_scheme</Localized>
+    <Localized key="new_creation_scheme" lang="English">new_creation_scheme</Localized>
+    <Localized key="new_creation_scheme" lang="French">new_creation_scheme</Localized>
+    <Localized key="new_creation_scheme" lang="Dutch">new_creation_scheme</Localized>
+    <Localized key="new_navigation_scheme" lang="English">new_navigation_scheme</Localized>
+    <Localized key="new_navigation_scheme" lang="French">new_navigation_scheme</Localized>
+    <Localized key="new_navigation_scheme" lang="Dutch">new_navigation_scheme</Localized>
+    <Localized key="new_deletion_scheme" lang="English">new_deletion_scheme</Localized>
+    <Localized key="new_deletion_scheme" lang="French">new_deletion_scheme</Localized>
+    <Localized key="new_deletion_scheme" lang="Dutch">new_deletion_scheme</Localized>
+    <Localized key="duplicate" lang="English">duplicate</Localized>
+    <Localized key="duplicate" lang="French">duplicate</Localized>
+    <Localized key="duplicate" lang="Dutch">duplicate</Localized>
+    <Localized key="new_cloning_scheme" lang="English">new_cloning_scheme</Localized>
+    <Localized key="new_cloning_scheme" lang="French">new_cloning_scheme</Localized>
+    <Localized key="new_cloning_scheme" lang="Dutch">new_cloning_scheme</Localized>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="label" lang="English">Label</Localized>
+    <Localized key="label" lang="French">Label</Localized>
+    <Localized key="label" lang="Dutch">Label</Localized>
+    <Localized key="widget" lang="English">widget</Localized>
+    <Localized key="widget" lang="French">élément graphique</Localized>
+    <Localized key="widget" lang="Dutch">widget</Localized>
+    <Localized key="add_textfield_parameter" lang="English">Add a Textfield parameter</Localized>
+    <Localized key="add_textfield_parameter" lang="French">Ajouter un paramètre TextField</Localized>
+    <Localized key="add_textfield_parameter" lang="Dutch">Add ta Textfield parameter</Localized>
+    <Localized key="add_localized_textfield_parameter" lang="English">Add a localized textfield parameter</Localized>
+    <Localized key="add_localized_textfield_parameter" lang="French">Ajouter un paramètre textfield localisé</Localized>
+    <Localized key="add_localized_textfield_parameter" lang="Dutch">Add a localized textfield parameter</Localized>
+    <Localized key="add_textarea_parameter" lang="English">Add a TextArea parameter</Localized>
+    <Localized key="add_textarea_parameter" lang="French">Ajouter un paramètre TextArea</Localized>
+    <Localized key="add_textarea_parameter" lang="Dutch">Add a TextArea parameter</Localized>
+    <Localized key="add_integer_parameter" lang="English">Add an Integer parameter</Localized>
+    <Localized key="add_integer_parameter" lang="French">Ajouter un paramètre Integer</Localized>
+    <Localized key="add_integer_parameter" lang="Dutch">Add an Integer parameter</Localized>
+    <Localized key="add_checkbox_parameter" lang="English">Add checkbox parameter</Localized>
+    <Localized key="add_checkbox_parameter" lang="French">Ajouter un paramètre checkbox</Localized>
+    <Localized key="add_checkbox_parameter" lang="Dutch">Add checkbox parameter</Localized>
+    <Localized key="add_dropdown_parameter" lang="English">Add dropdown parameter</Localized>
+    <Localized key="add_dropdown_parameter" lang="French">Ajouter une paramètre dropdown</Localized>
+    <Localized key="add_dropdown_parameter" lang="Dutch">Add dropdown parameter</Localized>
+    <Localized key="add_individual_parameter" lang="English">add_individual_parameter</Localized>
+    <Localized key="add_individual_parameter" lang="French">add_individual_parameter</Localized>
+    <Localized key="add_individual_parameter" lang="Dutch">add_individual_parameter</Localized>
+    <Localized key="add_class_parameter" lang="English">add_class_parameter</Localized>
+    <Localized key="add_class_parameter" lang="French">add_class_parameter</Localized>
+    <Localized key="add_class_parameter" lang="Dutch">add_class_parameter</Localized>
+    <Localized key="delete" lang="English">Delete</Localized>
+    <Localized key="delete" lang="French">Supprimer</Localized>
+    <Localized key="delete" lang="Dutch">Delete</Localized>
+    <Localized key="add_flexo_model_parameter" lang="English">add_flexo_model_parameter</Localized>
+    <Localized key="add_flexo_model_parameter" lang="French">add_flexo_model_parameter</Localized>
+    <Localized key="add_flexo_model_parameter" lang="Dutch">add_flexo_model_parameter</Localized>
+    <Localized key="add_uri_parameter" lang="English">add_uri_parameter</Localized>
+    <Localized key="add_uri_parameter" lang="French">add_uri_parameter</Localized>
+    <Localized key="add_uri_parameter" lang="Dutch">add_uri_parameter</Localized>
+    <Localized key="add_object_property_parameter" lang="English">add_object_property_parameter</Localized>
+    <Localized key="add_object_property_parameter" lang="French">add_object_property_parameter</Localized>
+    <Localized key="add_object_property_parameter" lang="Dutch">add_object_property_parameter</Localized>
+    <Localized key="add_data_property_parameter" lang="English">add_data_property_parameter</Localized>
+    <Localized key="add_data_property_parameter" lang="French">add_data_property_parameter</Localized>
+    <Localized key="add_data_property_parameter" lang="Dutch">add_data_property_parameter</Localized>
+    <Localized key="add_list_parameter" lang="English">add_list_parameter</Localized>
+    <Localized key="add_list_parameter" lang="French">add_list_parameter</Localized>
+    <Localized key="add_list_parameter" lang="Dutch">add_list_parameter</Localized>
+    <Localized key="add_edition_pattern_parameter" lang="English">add_edition_pattern_parameter</Localized>
+    <Localized key="add_edition_pattern_parameter" lang="French">add_edition_pattern_parameter</Localized>
+    <Localized key="add_edition_pattern_parameter" lang="Dutch">add_edition_pattern_parameter</Localized>
+    <Localized key="add_property_parameter" lang="English">add_property_parameter</Localized>
+    <Localized key="add_property_parameter" lang="French">add_property_parameter</Localized>
+    <Localized key="add_property_parameter" lang="Dutch">add_property_parameter</Localized>
+    <Localized key="Parameters for EditionScheme" lang="English">Parameters for EditionScheme</Localized>
+    <Localized key="Parameters for EditionScheme" lang="French">Parameters for EditionScheme</Localized>
+    <Localized key="Parameters for EditionScheme" lang="Dutch">Parameters for EditionScheme</Localized>
+    <Localized key="localization" lang="English">Localization</Localized>
+    <Localized key="localization" lang="French">Locales</Localized>
+    <Localized key="localization" lang="Dutch">localization</Localized>
+    <Localized key="inspector" lang="English">Inspector</Localized>
+    <Localized key="inspector" lang="French">Inspecteur</Localized>
+    <Localized key="inspector" lang="Dutch">Inspector</Localized>
+    <Localized key="structural" lang="English">Structural</Localized>
+    <Localized key="structural" lang="French">Structure</Localized>
+    <Localized key="structural" lang="Dutch">structural</Localized>
+    <Localized key="behavioural" lang="English">Behavioural</Localized>
+    <Localized key="behavioural" lang="French">Comportement</Localized>
+    <Localized key="behavioural" lang="Dutch">behavioural</Localized>
+    <Localized key="model_slot" lang="English">Model Slot</Localized>
+    <Localized key="model_slot" lang="French">Model Slot</Localized>
+    <Localized key="model_slot" lang="Dutch">model_slot</Localized>
+    <Localized key="technology" lang="English">Technology</Localized>
+    <Localized key="technology" lang="French">Technologie</Localized>
+    <Localized key="technology" lang="Dutch">technology</Localized>
+    <Localized key="meta_model" lang="English">Metamodel</Localized>
+    <Localized key="meta_model" lang="French">Metamodèle</Localized>
+    <Localized key="meta_model" lang="Dutch">meta_model</Localized>
+    <Localized key="createModelSlot" lang="English">createModelSlot</Localized>
+    <Localized key="createModelSlot" lang="French">createModelSlot</Localized>
+    <Localized key="createModelSlot" lang="Dutch">createModelSlot</Localized>
+  </LocalizedDictionary>
+</Panel>

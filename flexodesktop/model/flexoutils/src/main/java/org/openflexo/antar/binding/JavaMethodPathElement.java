@@ -76,6 +76,9 @@ public class JavaMethodPathElement extends FunctionPathElement {
 	@Override
 	public Type getType() {
 		if (customType != null) {
+			if (TypeUtils.isGeneric(customType)) {
+				return TypeUtils.makeInstantiatedType(customType, getParent().getType());
+			}
 			return customType;
 		}
 		if (getMethodDefinition() != null) {
@@ -102,6 +105,9 @@ public class JavaMethodPathElement extends FunctionPathElement {
 		}
 		if (possiblyMatchingMethods.size() > 1) {
 			logger.warning("Please implement disambiguity here");
+			for (DataBinding<?> arg : args) {
+				System.out.println("arg of " + arg.getDeclaredType() + " / " + arg.getAnalyzedType());
+			}
 			// Return the first one
 			// TODO: try to find the best one
 			return MethodDefinition.getMethodDefinition(parentType, possiblyMatchingMethods.get(0));

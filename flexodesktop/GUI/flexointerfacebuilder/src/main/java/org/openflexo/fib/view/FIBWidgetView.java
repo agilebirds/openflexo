@@ -29,7 +29,6 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
@@ -120,6 +119,16 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	public abstract boolean updateModelFromWidget();
 
 	@Override
+	public List<TargetObject> getChainedBindings(DataBinding<?> binding, TargetObject object) {
+		return getWidget().getChainedBindings(binding, object);
+	}
+
+	@Override
+	public List<DataBinding<?>> getDependencyBindings() {
+		return getWidget().getDependencyBindings();
+	}
+
+	@Override
 	public void focusGained(FocusEvent event) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("focusGained()");
@@ -186,6 +195,13 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		Object value = null;
 
 		try {
+			/*if (getWidget().getData().toString().equals("data.targetPatternRole")) {
+				System.out.println("hop");
+				System.out.println("hop2");
+				Object o = getBindingEvaluationContext().getValue(new BindingVariable("data", null));
+				System.out.println("hop3");
+
+			}*/
 			value = getWidget().getData().getBindingValue(getBindingEvaluationContext());
 			T returned = (T) value;
 			if (getDynamicModel() != null) {
@@ -374,20 +390,6 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			}
 		}
 		return true;
-	}
-
-	@Override
-	public List<DataBinding<?>> getDependencyBindings() {
-		List<DataBinding<?>> returned = new ArrayList<DataBinding<?>>();
-		returned.add(getWidget().getData());
-		returned.add(getWidget().getVisible());
-		returned.add(getWidget().getEnable());
-		return returned;
-	}
-
-	@Override
-	public List<TargetObject> getChainedBindings(DataBinding<?> binding, TargetObject object) {
-		return null;
 	}
 
 	/**

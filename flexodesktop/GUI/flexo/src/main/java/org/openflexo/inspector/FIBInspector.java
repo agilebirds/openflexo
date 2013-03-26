@@ -43,7 +43,7 @@ import org.openflexo.fib.model.FIBTextField;
 import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.model.TwoColsLayoutConstraints;
 import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
@@ -113,7 +113,7 @@ public class FIBInspector extends FIBPanel {
 
 	protected void appendSuperInspector(FIBInspector superInspector) {
 		if (!superInspectorWereAppened) {
-			// System.out.println("Append "+superInspector+" to "+this);
+			// logger.info("> Append " + superInspector + " to " + this);
 			/*try {
 				System.out.println("Clone container:\n"+XMLCoder.encodeObjectWithMapping(superInspector, FIBLibrary.getFIBMapping(),StringEncoder.getDefaultInstance()));
 				System.out.println("Found this:\n"+XMLCoder.encodeObjectWithMapping((XMLSerializable)Cloner.cloneObjectWithMapping(superInspector, FIBLibrary.getFIBMapping()), FIBLibrary.getFIBMapping(),StringEncoder.getDefaultInstance()));
@@ -132,6 +132,7 @@ public class FIBInspector extends FIBPanel {
 			}*/
 			append((FIBPanel) Cloner.cloneObjectWithMapping(superInspector, FIBLibrary.getFIBMapping()));
 			superInspectorWereAppened = true;
+			// logger.info("< Appened " + superInspector + " to " + this);
 		}
 	}
 
@@ -179,7 +180,7 @@ public class FIBInspector extends FIBPanel {
 	 * @param object
 	 * @return a boolean indicating if a new tab was created
 	 */
-	protected boolean updateEditionPatternReferences(FlexoModelObject object) {
+	protected boolean updateEditionPatternReferences(FlexoProjectObject object) {
 
 		boolean returned = false;
 

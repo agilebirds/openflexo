@@ -21,6 +21,7 @@ package org.openflexo.technologyadapter.xsd.model;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -89,7 +90,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 
 	@Override
 	public List<XSOntology> getImportedOntologies() {
-		return null;
+		return Collections.emptyList();
 	}
 
 	public Set<XSOntology> getAllImportedOntologies() {

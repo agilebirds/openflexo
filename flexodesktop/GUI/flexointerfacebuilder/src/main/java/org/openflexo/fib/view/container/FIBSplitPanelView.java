@@ -21,6 +21,8 @@ package org.openflexo.fib.view.container;
 
 import java.util.logging.Logger;
 
+import javax.swing.SwingUtilities;
+
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBSplitPanel;
@@ -62,7 +64,7 @@ public class FIBSplitPanelView extends FIBContainerView<FIBSplitPanel, JXMultiSp
 	protected JXMultiSplitPane createJComponent() {
 		layout = new MultiSplitLayout();
 		layout.setLayoutByWeight(false);
-		layout.setFloatingDividers(false);
+		layout.setFloatingDividers(true);
 
 		splitPane = new JXMultiSplitPane(layout)/* {
 
@@ -99,6 +101,9 @@ public class FIBSplitPanelView extends FIBContainerView<FIBSplitPanel, JXMultiSp
 
 		updateLayout();
 
+		// layout.setLayoutByWeight(false);
+		// layout.setFloatingDividers(false);
+
 		return splitPane;
 	}
 
@@ -114,13 +119,17 @@ public class FIBSplitPanelView extends FIBContainerView<FIBSplitPanel, JXMultiSp
 	@Override
 	protected void retrieveContainedJComponentsAndConstraints() {
 
-		for (FIBComponent c : getComponent().getSubComponents()) {
-			FIBView subView = getController().buildView(c);
-			if (subView != null) {
-				registerViewForComponent(subView, c);
-				registerComponentWithConstraints(subView.getResultingJComponent(),
-						((SplitLayoutConstraints) c.getConstraints()).getSplitIdentifier());
+		for (FIBComponent subComponent : getComponent().getSubComponents()) {
+			FIBView subView = getController().viewForComponent(subComponent);
+			if (subView == null) {
+				subView = getController().buildView(subComponent);
 			}
+			// FIBView subView = getController().buildView(subComponent);
+			// if (subView != null) {
+			registerViewForComponent(subView, subComponent);
+			registerComponentWithConstraints(subView.getResultingJComponent(),
+					((SplitLayoutConstraints) subComponent.getConstraints()).getSplitIdentifier());
+			// }
 		}
 	}
 
@@ -131,11 +140,13 @@ public class FIBSplitPanelView extends FIBContainerView<FIBSplitPanel, JXMultiSp
 
 		layout.setModel(getComponent().getSplit());
 
-		if (getSubViews() != null) {
-			for (FIBView v : getSubViews()) {
-				v.delete();
+		/*if (getSubViews() != null) {
+			for (FIBView v : getSubViews().values()) {
+				if (v.getComponent().isDeleted()) {
+					v.delete();
+				}
 			}
-		}
+		}*/
 		getJComponent().removeAll();
 
 		buildSubComponents();
@@ -143,8 +154,14 @@ public class FIBSplitPanelView extends FIBContainerView<FIBSplitPanel, JXMultiSp
 
 		getJComponent().revalidate();
 		getJComponent().repaint();
-	}
 
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				layout.setFloatingDividers(false);
+			}
+		});
+	}
 	/*@Override
 	public void updateLanguage() {
 		super.updateLanguage();

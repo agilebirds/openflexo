@@ -1,6 +1,7 @@
 package org.openflexo.foundation.view.diagram.viewpoint;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
@@ -8,7 +9,6 @@ import org.openflexo.foundation.view.diagram.model.DiagramConnector;
 import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationChanged;
 import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationModified;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
 public class ConnectorPatternRole extends GraphicalElementPatternRole<DiagramConnector> {
@@ -181,4 +181,7 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole<DiagramCon
 
 	public static GraphicalFeature<?, ?>[] AVAILABLE_FEATURES = {};
 
+	public List<ShapePatternRole> getShapePatternRoles() {
+		return getEditionPattern().getShapePatternRoles();
+	}
 }

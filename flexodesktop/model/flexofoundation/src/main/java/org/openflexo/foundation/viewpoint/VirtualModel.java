@@ -257,8 +257,13 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 			if (editionPattern.getURI().equals(editionPatternId)) {
 				return editionPattern;
 			}
+			// Special case to handle conversion from old VP version
+			// TODO: to be removed when all VP are up-to-date
+			if ((getViewPoint().getURI() + "#" + editionPattern.getName()).equals(editionPatternId)) {
+				return editionPattern;
+			}
 		}
-		logger.warning("Not found EditionPattern:" + editionPatternId);
+		// logger.warning("Not found EditionPattern:" + editionPatternId);
 		return null;
 	}
 

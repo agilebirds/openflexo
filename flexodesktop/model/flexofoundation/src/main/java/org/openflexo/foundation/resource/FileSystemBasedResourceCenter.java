@@ -400,33 +400,39 @@ public abstract class FileSystemBasedResourceCenter extends FileResourceReposito
 	private ScheduledFuture<?> scheduleWithFixedDelay;
 
 	public void startDirectoryWatching() {
-		directoryWatcher = new DirectoryWatcher(getRootDirectory()) {
-			@Override
-			protected void fileModified(File file) {
-				FileSystemBasedResourceCenter.this.fileModified(file);
-			}
+		if (getRootDirectory() != null && getRootDirectory().exists()) {
+			directoryWatcher = new DirectoryWatcher(getRootDirectory()) {
+				@Override
+				protected void fileModified(File file) {
+					FileSystemBasedResourceCenter.this.fileModified(file);
+				}
 
-			@Override
-			protected void fileAdded(File file) {
-				FileSystemBasedResourceCenter.this.fileAdded(file);
-			}
+				@Override
+				protected void fileAdded(File file) {
+					FileSystemBasedResourceCenter.this.fileAdded(file);
+				}
 
-			@Override
-			protected void fileDeleted(File file) {
-				FileSystemBasedResourceCenter.this.fileDeleted(file);
-			}
-		};
+				@Override
+				protected void fileDeleted(File file) {
+					FileSystemBasedResourceCenter.this.fileDeleted(file);
+				}
+			};
 
-		ScheduledExecutorService newScheduledThreadPool = Executors.newScheduledThreadPool(1);
-		scheduleWithFixedDelay = newScheduledThreadPool.scheduleWithFixedDelay(directoryWatcher, 0, 1, TimeUnit.SECONDS);
+			ScheduledExecutorService newScheduledThreadPool = Executors.newScheduledThreadPool(1);
+			scheduleWithFixedDelay = newScheduledThreadPool.scheduleWithFixedDelay(directoryWatcher, 0, 1, TimeUnit.SECONDS);
+		}
 	}
 
 	public void stopDirectoryWatching() {
-		scheduleWithFixedDelay.cancel(true);
+		if (getRootDirectory() != null && getRootDirectory().exists()) {
+			scheduleWithFixedDelay.cancel(true);
+		}
 	}
 
 	protected void fileModified(File file) {
 		System.out.println("File MODIFIED " + file.getName() + " in " + file.getParentFile().getAbsolutePath());
+		// System.out.println("Aborting in FileSystemBasedResourceCenter");
+		// System.exit(-1);
 	}
 
 	protected void fileAdded(File file) {

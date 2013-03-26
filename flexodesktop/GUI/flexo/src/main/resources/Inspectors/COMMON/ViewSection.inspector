@@ -3,7 +3,7 @@
   <TabPanel name="Tab" constraints="border(location=center)" useScrollBar="false">
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="BasicTab">
     <Label label="view" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)"  />
-    <Custom componentClassName="org.openflexo.components.widget.FIBViewSelector" data="data.viewDefinition" constraints="twocols(expandHorizontally=true;expandVertically=false;index=21;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="viewSelector" localize="true" manageDynamicModel="true">
+    <Custom componentClassName="org.openflexo.components.widget.FIBViewSelector" data="data.viewResource" constraints="twocols(expandHorizontally=true;expandVertically=false;index=21;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="viewSelector" localize="true" manageDynamicModel="true">
       <Assignment variable="component.project" value="data.project" />
     </Custom>
     <Label label="value" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)"  />

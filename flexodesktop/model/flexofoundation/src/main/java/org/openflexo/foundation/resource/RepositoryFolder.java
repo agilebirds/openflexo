@@ -153,4 +153,11 @@ public class RepositoryFolder<R extends FlexoResource<?>> extends FlexoObject {
 		return "RepositoryFolder " + getName() + (!isRootFolder() ? " in " + getParentFolder().getName() : " root") + " of "
 				+ getResourceRepository();
 	}
+
+	public int getIndex() {
+		if (getParentFolder() != null) {
+			return getParentFolder().getChildren().indexOf(this);
+		}
+		return -1;
+	}
 }

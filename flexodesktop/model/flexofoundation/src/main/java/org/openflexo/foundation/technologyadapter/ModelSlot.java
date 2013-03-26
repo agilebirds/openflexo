@@ -62,6 +62,7 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 
 	private List<Class<? extends PatternRole>> availablePatternRoleTypes;
 	private List<Class<? extends EditionAction>> availableEditionActionTypes;
+	private List<Class<? extends EditionAction>> availableFetchRequestActionTypes;
 
 	protected ModelSlot(ViewPoint viewPoint, TechnologyAdapter<M, MM> technologyAdapter) {
 		super((VirtualModel.VirtualModelBuilder) null);
@@ -352,12 +353,26 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 				availableEditionActionTypes.add(patternRoleDeclaration.value());
 			}
 		}
-		availableEditionActionTypes.add(org.openflexo.foundation.viewpoint.DeclarePatternRole.class);
-		availableEditionActionTypes.add(org.openflexo.foundation.viewpoint.AddEditionPattern.class);
-		availableEditionActionTypes.add(DeleteAction.class);
-		availableEditionActionTypes.add(ConditionalAction.class);
-		availableEditionActionTypes.add(IterationAction.class);
 		return availableEditionActionTypes;
+	}
+
+	public List<Class<? extends EditionAction>> getAvailableFetchRequestActionTypes() {
+		if (availableFetchRequestActionTypes == null) {
+			availableFetchRequestActionTypes = computeAvailableFetchRequestActionTypes();
+		}
+		return availableFetchRequestActionTypes;
+	}
+
+	private List<Class<? extends EditionAction>> computeAvailableFetchRequestActionTypes() {
+		availableFetchRequestActionTypes = new ArrayList<Class<? extends EditionAction>>();
+		Class<?> cl = getClass();
+		if (cl.isAnnotationPresent(DeclareFetchRequests.class)) {
+			DeclareFetchRequests allFetchRequestActions = cl.getAnnotation(DeclareFetchRequests.class);
+			for (DeclareFetchRequest fetchRequestDeclaration : allFetchRequestActions.value()) {
+				availableFetchRequestActionTypes.add(fetchRequestDeclaration.value());
+			}
+		}
+		return availableFetchRequestActionTypes;
 	}
 
 	/**
