@@ -326,7 +326,7 @@ public class TabbedPane<J> {
 			extraTabsButton.addActionListener(this);
 			extraTabsPopup = new JPopupMenu();
 			extraTabsPopup.setInvoker(extraTabsButton);
-			extraTabsButton.setComponentPopupMenu(extraTabsPopup);
+			// extraTabsButton.setComponentPopupMenu(extraTabsPopup);
 			setBorder(new AbstractBorder() {
 				@Override
 				public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {

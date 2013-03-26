@@ -19,6 +19,8 @@
  */
 package org.openflexo;
 
+import java.awt.Frame;
+import java.awt.Window;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -49,6 +51,7 @@ import org.openflexo.application.FlexoApplication;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.components.SplashWindow;
 import org.openflexo.components.WelcomeDialog;
+import org.openflexo.foundation.FlexoMainLocalizer;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.foundation.utils.ProjectInitializerException;
@@ -185,12 +188,14 @@ public class Flexo {
 				}
 			}
 		}
-		remapStandardOuputs(isDev);
-		UserType userTypeNamed = UserType.getUserTypeNamed(userTypeName);
-		UserType.setCurrentUserType(userTypeNamed);
+		// 1. Very important to initiate first the ResourceLocator. Nothing else. See also issue 463.
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS || !isDev) {
 			getResourcePath();
 		}
+		ResourceLocator.printDirectoriesSearchOrder(System.err);
+		remapStandardOuputs(isDev);
+		UserType userTypeNamed = UserType.getUserTypeNamed(userTypeName);
+		UserType.setCurrentUserType(userTypeNamed);
 		SplashWindow splashWindow = null;
 		if (!noSplash) {
 			splashWindow = new SplashWindow(FlexoFrame.getActiveFrame(), UserType.getCurrentUserType());
@@ -198,6 +203,8 @@ public class Flexo {
 		final SplashWindow splashWindow2 = splashWindow;
 		FlexoProperties.load();
 		initializeLoggingManager();
+		// First init localization with default location
+		FlexoLocalization.initWith(new FlexoMainLocalizer());
 		final ApplicationContext applicationContext = new InteractiveApplicationContext();
 		/*final ApplicationContext applicationContext = new ApplicationContext() {
 
@@ -247,7 +254,6 @@ public class Flexo {
 				initFlexo(applicationContext, splashWindow2);
 			}
 		});
-		ResourceLocator.printDirectoriesSearchOrder(System.err);
 		Modules.getInstance();
 		try {
 			DenaliSecurityProvider.insertSecurityProvider();
@@ -279,7 +285,7 @@ public class Flexo {
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 			System.setProperty("apple.laf.useScreenMenuBar", "true");
 		}
-		initUILAF();
+		initUILAF(AdvancedPrefs.getLookAndFeelString());
 		if (isDev) {
 			FlexoLoggingFormatter.logDate = false;
 		}
@@ -300,7 +306,7 @@ public class Flexo {
 						module = Modules.getInstance().getAvailableModules().get(0);
 					}
 				}
-				applicationContext.getModuleLoader().getModuleInstance(module).activateModule();
+				applicationContext.getModuleLoader().switchToModule(module);
 				applicationContext.getProjectLoader().loadProject(projectDirectory);
 			} catch (ProjectLoadingCancelledException e) {
 				// project need a conversion, but user cancelled the conversion.
@@ -330,16 +336,28 @@ public class Flexo {
 		welcomeDialog.toFront();
 	}
 
-	private static void initUILAF() {
+	static void initUILAF(String value) {
+		if (UIManager.getLookAndFeel().getClass().getName().equals(value)) {
+			return;
+		}
 		try {
-			UIManager.setLookAndFeel(AdvancedPrefs.getLookAndFeelString());
+			UIManager.setLookAndFeel(value);
+			for (Frame frame : Frame.getFrames()) {
+				for (Window window : frame.getOwnedWindows()) {
+					SwingUtilities.updateComponentTreeUI(window);
+				}
+				SwingUtilities.updateComponentTreeUI(frame);
+			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

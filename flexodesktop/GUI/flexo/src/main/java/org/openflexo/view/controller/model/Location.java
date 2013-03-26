@@ -86,7 +86,8 @@ public class Location extends ControllerModelObject {
 
 	public boolean isEditable() {
 		if (getObject() instanceof FlexoProjectObject) {
-			return ((FlexoProjectObject) getObject()).getProject() == getEditor().getProject();
+			return ((FlexoProjectObject) getObject()).getProject() == getEditor().getProject()
+					|| ((FlexoProjectObject) getObject()).getProject() == null;
 		}
 		return true;
 	}

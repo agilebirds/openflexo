@@ -14,26 +14,26 @@
 
 	<property name="browserFont" label="browser_font" widget="FONT" constraint="4"/>
 	<property name="synchronizedBrowser" label="synchronized_browser" widget="CHECKBOX" constraint="5">
-		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 	</property>
 	<property name="hideFilteredObjects" label="hide_non_bindable" widget="CHECKBOX" constraint="6">
-		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 	</property>
 	<property name="lastVisitedDirectory" label="last_visited_directory" widget="DIRECTORY" constraint="7"/>
 	<property name="eclipseWorkspaceDirectory" label="workspace_directory" widget="DIRECTORY" constraint="8">
-		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 	</property>
 	<property name="closeOnMouseOut" label="close_popups_when_mouse_leaves_popup" widget="CHECKBOX" constraint="10">
-		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 	</property>
 	<property name="hightlightUncommentedItem" label="hightlight_uncommented_item" widget="CHECKBOX" constraint="11">
-		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 	</property>
 	<property name="enableUndoManager" label="enable_undo_manager" widget="CHECKBOX" constraint="12">
-		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 	</property>
 	<property name="undoLevels" label="undo_levels" widget="INTEGER" constraint="13">
-		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 	</property>
 	<property name="lookAndFeel" label="look_and_feel" widget="DROPDOWN" constraint="14">
 		<param name="format" value="name"/>

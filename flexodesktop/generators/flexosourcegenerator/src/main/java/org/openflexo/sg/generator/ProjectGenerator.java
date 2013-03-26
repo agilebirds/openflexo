@@ -35,7 +35,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.tools.ant.BuildListener;
 import org.openflexo.foundation.TargetType;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.generator.IFlexoResourceGenerator;
@@ -67,8 +66,6 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 
 	private boolean hasBeenInitialized = false;
 
-	private Vector<BuildListener> buildListeners;
-
 	private Map<TechnologyModuleDefinition, ModuleGenerator> generators = new HashMap<TechnologyModuleDefinition, ModuleGenerator>();
 
 	// =============================================================
@@ -98,7 +95,6 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 			}
 		}
 
-		buildListeners = new Vector<BuildListener>();
 	}
 
 	public SourceRepository getSourceRepository() {
@@ -282,14 +278,6 @@ public class ProjectGenerator extends AbstractProjectGenerator<SourceRepository>
 
 	public File getResourceOutputDirectory() {
 		return getRootOutputDirectory();
-	}
-
-	public void addBuildListener(BuildListener listener) {
-		buildListeners.add(listener);
-	}
-
-	public void removeBuildListener(BuildListener listener) {
-		buildListeners.remove(listener);
 	}
 
 	/**

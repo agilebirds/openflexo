@@ -50,6 +50,7 @@ import org.openflexo.foundation.RepresentableFlexoModelObject;
 import org.openflexo.foundation.action.SetPropertyAction;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.dm.ObjectLocationChanged;
+import org.openflexo.foundation.wkf.dm.ObjectSizeChanged;
 import org.openflexo.foundation.wkf.dm.RoleColorChange;
 import org.openflexo.foundation.wkf.dm.RoleNameChange;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
@@ -69,8 +70,6 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 
 	public RoleGR(Role aRole, Drawing<?> aDrawing) {
 		super(ShapeType.RECTANGLE, aRole, aDrawing);
-		setWidth(100);
-		setHeight(40);
 		// setText(getRole().getName());
 		setIsFloatingLabel(false);
 		getShape().setIsRounded(true);
@@ -89,6 +88,26 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 
 		aRole.addObserver(this);
 
+	}
+
+	@Override
+	public double getWidth() {
+		return getRole().getWidth(RepresentableFlexoModelObject.DEFAULT, 100);
+	}
+
+	@Override
+	public void setWidthNoNotification(double width) {
+		getRole().setWidth(width, RepresentableFlexoModelObject.DEFAULT);
+	}
+
+	@Override
+	public double getHeight() {
+		return getRole().getHeight(RepresentableFlexoModelObject.DEFAULT, 40);
+	}
+
+	@Override
+	public void setHeightNoNotification(double height) {
+		getRole().setHeight(height, RepresentableFlexoModelObject.DEFAULT);
 	}
 
 	@Override
@@ -357,6 +376,10 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 					notifyShapeNeedsToBeRedrawn();
 				} else {
 					notifyShapeNeedsToBeRedrawn();
+				}
+			} else if (dataModification instanceof ObjectSizeChanged) {
+				if (!isResizing()) {
+					notifyObjectResized();
 				}
 			} else if (dataModification instanceof ObjectLocationChanged) {
 				if (!isUpdatingPosition) {

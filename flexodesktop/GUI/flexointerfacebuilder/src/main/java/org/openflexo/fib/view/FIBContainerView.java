@@ -19,7 +19,6 @@
  */
 package org.openflexo.fib.view;
 
-import java.awt.Dimension;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -79,9 +78,7 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 			addJComponent(j);
 		}
 
-		if (getComponent().getWidth() != null && getComponent().getHeight() != null) {
-			getJComponent().setPreferredSize(new Dimension(getComponent().getWidth(), getComponent().getHeight()));
-		}
+		updatePreferredSize();
 
 		updateFont();
 

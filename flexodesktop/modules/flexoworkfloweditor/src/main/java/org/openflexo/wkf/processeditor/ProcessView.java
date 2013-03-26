@@ -54,8 +54,13 @@ public class ProcessView extends DrawingView<ProcessRepresentation> implements M
 	}
 
 	@Override
-	public void deleteModuleView() {
+	public void delete() {
 		getRepresentedObject().getPropertyChangeSupport().removePropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
+		super.delete();
+	}
+
+	@Override
+	public void deleteModuleView() {
 		logger.info("deleteModuleView for process");
 		getController().delete();
 	}

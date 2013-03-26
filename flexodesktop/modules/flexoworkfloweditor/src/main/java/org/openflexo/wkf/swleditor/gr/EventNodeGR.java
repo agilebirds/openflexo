@@ -185,7 +185,6 @@ public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 
 		if (dataModification instanceof DataModification) {
 			if (dataModification instanceof RoleChanged) {
-				resetLocationConstrainedArea();
 				getDrawing().requestRebuildCompleteHierarchy();
 			} else if ("eventType".equals(dataModification.propertyName()) || "isCatching".equals(dataModification.propertyName())) {
 				updateBackgroundForeground();

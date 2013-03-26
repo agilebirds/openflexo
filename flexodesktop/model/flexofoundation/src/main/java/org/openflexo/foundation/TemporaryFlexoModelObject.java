@@ -30,6 +30,11 @@ public class TemporaryFlexoModelObject extends FlexoModelObject {
 	}
 
 	@Override
+	protected final void registerObject(FlexoProject project) {
+
+	}
+
+	@Override
 	public boolean isDocEditable() {
 		return false;
 	}

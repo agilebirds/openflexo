@@ -204,9 +204,8 @@ public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> {
 				if (ds.getTargetEditionPattern() == targetEditionPattern || ds.getTopTarget() && targetEditionPattern == null) {
 					for (EditionPattern ep2 : getDiagramSpecification().getEditionPatterns()) {
 						for (LinkScheme ls : ep2.getLinkSchemes()) {
-							if (ls.getFromTargetEditionPattern().isAssignableFrom(getEditionPattern())
-									&& ls.getToTargetEditionPattern().isAssignableFrom(ds.getEditionPattern())
-									&& ls.getIsAvailableWithFloatingPalette()) {
+							// Let's directly reuse the code that exists in the LinkScheme instead of re-writing it here.
+							if (ls.isValidTarget(ep2, ds.getEditionPattern()) && ls.getIsAvailableWithFloatingPalette()) {
 								// This candidate is acceptable
 								availableLinkSchemeFromThisShape.add(new DropAndLinkScheme(ds, ls));
 							}

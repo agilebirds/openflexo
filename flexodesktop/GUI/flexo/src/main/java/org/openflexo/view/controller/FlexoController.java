@@ -106,6 +106,7 @@ import org.openflexo.foundation.cg.GeneratedCode;
 import org.openflexo.foundation.cg.GeneratedDoc;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.templates.CGTemplateObject;
+import org.openflexo.foundation.dkv.DKVObject;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DuplicateClassNameException;
 import org.openflexo.foundation.ie.IEObject;
@@ -625,8 +626,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		}
 	}
 
-	public PreferencesWindow getPreferencesWindow() {
-		return PreferencesController.instance().getPreferencesWindow();
+	public PreferencesWindow getPreferencesWindow(boolean create) {
+		return PreferencesController.instance().getPreferencesWindow(create);
 	}
 
 	public void showPreferences() {
@@ -1945,6 +1946,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 						}
 					}
 				}
+			} else if (evt.getPropertyName().equals(ControllerModel.CURRENT_OBJECT)) {
+				getSelectionManager().setSelectedObject(getControllerModel().getCurrentObject());
 			}
 		} else if (evt.getSource() instanceof FlexoProject && evt.getPropertyName().equals(ProjectClosedNotification.CLOSE)) {
 			FlexoProject project = (FlexoProject) evt.getSource();
@@ -2024,7 +2027,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		ImageIcon iconForObject = statelessIconForObject(object);
 		if (iconForObject != null) {
 			if (getModule().getModule().requireProject() && object instanceof FlexoModelObject && getProject() != null
-					&& ((FlexoModelObject) object).getProject() != getProject()
+					&& ((FlexoModelObject) object).getProject() != getProject() && ((FlexoModelObject) object).getProject() != null
 					&& (!(object instanceof FlexoProject) || !getProjectLoader().getRootProjects().contains(object))) {
 				iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
 			} else if (object instanceof FlexoProjectReference) {
@@ -2078,6 +2081,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return WKFIconLibrary.iconForObject((WKFObject) object);
 		} else if (object instanceof IEObject) {
 			return SEIconLibrary.iconForObject((IEObject) object);
+		} else if (object instanceof DKVObject) {
+			return SEIconLibrary.iconForObject((DKVObject) object);
 		} else if (object instanceof DMObject) {
 			return DMEIconLibrary.iconForObject((DMObject) object);
 		} else if (object instanceof ViewPointLibrary) {

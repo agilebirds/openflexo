@@ -30,7 +30,7 @@
         <property name="conditionPrimitive" label="condition" widget="CUSTOM" depends="isConditional" conditional="isConditional=true" constraint="2">
             <param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
             <param name="binding_definition" value="conditionPrimitiveBindingDefinition"/>          
-            <param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+            <param name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST"/>
         </property>
     </tab>
 

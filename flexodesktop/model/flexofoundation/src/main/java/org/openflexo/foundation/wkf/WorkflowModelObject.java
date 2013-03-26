@@ -53,16 +53,17 @@ public abstract class WorkflowModelObject extends RepresentableFlexoModelObject 
 	public WorkflowModelObject(FlexoProject project, FlexoWorkflow workflow) {
 		super(project);
 		this.workflow = workflow;
+		if (workflow != null) {
+			registerOnProject();
+		}
 	}
 
 	@Override
 	protected void registerObject(FlexoProject project) {
 	}
 
-	@Override
-	public void finalizeDeserialization(Object builder) {
-		super.finalizeDeserialization(builder);
-		if (getProject().getFlexoWorkflowResource(false) == getWorkflow().getFlexoResource()) {
+	protected void registerOnProject() {
+		if (getWorkflow().getFlexoResource() != null && !getWorkflow().isCache()) {
 			super.registerObject(getProject());
 		}
 	}

@@ -172,7 +172,7 @@ public class DEController extends FlexoController implements FlexoObserver {
 	 */
 	@Override
 	public void selectAndFocusObject(FlexoObject object) {
-		if (object instanceof TOCEntry) {
+		if (object instanceof TOCEntry || object instanceof TOCData) {
 			setCurrentEditedObjectAsModuleView(object);
 		}
 		getSelectionManager().setSelectedObject(object);

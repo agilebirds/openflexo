@@ -219,6 +219,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 			}
 		}
 		getWorkflowBrowser().setRootObject(getProject());
+		getProcessBrowser().setRootObject(getProject());
 		_roleListBrowser.setRootObject(getProject() != null ? getProject().getWorkflow() : null);
 		PROCESS_EDITOR_PERSPECTIVE.setProject(getProject());
 		SWIMMING_LANE_PERSPECTIVE.setProject(getProject());
@@ -601,6 +602,8 @@ public class WKFController extends FlexoController implements PrintManagingContr
 			return ((FlexoProcess) object).getName();
 		} else if (object instanceof RoleList) {
 			return FlexoLocalization.localizedForKeyWithParams("roles");
+		} else if (object instanceof FlexoWorkflow) {
+			return ((FlexoWorkflow) object).getProject().getDisplayableName();
 		}
 		return null;
 	}
@@ -653,7 +656,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	}
 
 	public void notifyUseSimpleEventPaletteHasChanged() {
-		JOptionPane.showMessageDialog(getPreferencesWindow(),
+		JOptionPane.showMessageDialog(getPreferencesWindow(false),
 				FlexoLocalization.localizedForKey("You must restart OpenFlexo to enable this change."),
 				FlexoLocalization.localizedForKey("Restart required"), JOptionPane.INFORMATION_MESSAGE);
 	}

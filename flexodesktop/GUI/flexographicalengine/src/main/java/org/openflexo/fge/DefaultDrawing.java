@@ -222,12 +222,34 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 				if (o2.parentNode == o1.parentNode) {
 					return o2.parentNode.childNodes.indexOf(o1) - o2.parentNode.childNodes.indexOf(o2);
 				}
-				return res;
-				/*if (o1 == o2) return 0;
-				if (o1.isAncestorOf(o2)) return -1;
-				if (o2.isAncestorOf(o1)) return 1;
-				logger.warning("Could not compare "+o1+" and "+o2);
-				return 0;*/
+				// 1. We first find a common ancestor
+				DrawingTreeNode<?> ancestor = o1.getCommonAncestor(o2);
+				if (ancestor != null) {
+					DrawingTreeNode<?> p1 = null, p2 = null;
+					// 2. We look for a direct child of the common ancestor which is an ancestor of the compared nodes
+					DrawingTreeNode<?> c1 = o1;
+					while (c1.parentNode != ancestor) {
+						c1 = c1.parentNode;
+					}
+					p1 = c1;
+					DrawingTreeNode<?> c2 = o2;
+					while (c2.parentNode != ancestor) {
+						c2 = c2.parentNode;
+					}
+					p2 = c2;
+					// 3. We now return the difference of index between those 2.
+					if (p1 != null && p2 != null) {
+						return ancestor.childNodes.indexOf(p1) - ancestor.childNodes.indexOf(p2);
+					}
+				}
+				if (o1.isAncestorOf(o2)) {
+					return -1;
+				}
+				if (o2.isAncestorOf(o1)) {
+					return 1;
+				}
+				logger.warning("Could not compare " + o1 + " and " + o2);
+				return 0;
 			}
 		});
 		/*Vector<GraphicalRepresentation> returned = new Vector<GraphicalRepresentation>();
@@ -447,6 +469,25 @@ public abstract class DefaultDrawing<M> extends Observable implements Drawing<M>
 			for (DrawingTreeNode<?> dtn : childNodes) {
 				dtn.invalidate();
 			}
+		}
+
+		private List<DrawingTreeNode<?>> getAncestors() {
+			List<DrawingTreeNode<?>> ancestors = new ArrayList<DefaultDrawing<M>.DrawingTreeNode<?>>();
+			ancestors.add(this);
+			if (parentNode != null) {
+				ancestors.addAll(parentNode.getAncestors());
+			}
+			return ancestors;
+		}
+
+		public DrawingTreeNode<?> getCommonAncestor(DrawingTreeNode<?> o) {
+			List<DrawingTreeNode<?>> ancestors = o.getAncestors();
+			for (DrawingTreeNode<?> ancestor : getAncestors()) {
+				if (ancestors.contains(ancestor)) {
+					return ancestor;
+				}
+			}
+			return null;
 		}
 
 		private boolean isAncestorOf(DrawingTreeNode<?> o2) {

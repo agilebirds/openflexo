@@ -236,6 +236,7 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 			AbstractNode concernedNode = null;
 			if (targetObject instanceof FlexoPreCondition) {
 				concernedNode = ((FlexoPreCondition) targetObject).getAttachedNode();
+				targetObject = concernedNode;
 			} else if (targetObject instanceof AbstractNode) {
 				concernedNode = (AbstractNode) targetObject;
 			} else if (targetObject instanceof WKFArtefact) {
@@ -581,12 +582,12 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 	private void addNode(AbstractNode node, FlexoModelObject container) {
 		addDrawable(node, container);
 		if (node instanceof FlexoNode) {
-			for (FlexoPreCondition pre : ((FlexoNode) node).getPreConditions()) {
+			/*for (FlexoPreCondition pre : ((FlexoNode) node).getPreConditions()) {
 				addDrawable(pre, node);
 				if (pre.getAttachedBeginNode() != null && isVisible(pre.getAttachedBeginNode())) {
 					addDrawable(preAndBeginNodeAssociationForPrecondition(pre), getProcess());
 				}
-			}
+			}*/
 		}
 		/*if (node instanceof EdgeStarting) {
 			for (FlexoPostCondition post : ((EdgeStarting)node).getOutgoingPostConditions()) {
@@ -1058,19 +1059,23 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				rebuildCompleteHierarchy();
-				synchronized (SunDragSourceContextPeer.class) {
-					try {
-						SunDragSourceContextPeer.checkDragDropInProgress();
-					} catch (InvalidDnDOperationException e1) {
-						if (logger.isLoggable(Level.WARNING)) {
-							logger.warning("For some reason there was still a Dnd in progress. Will set it back to false. God knows why this happens");
+				try {
+					rebuildCompleteHierarchy();
+					synchronized (SunDragSourceContextPeer.class) {
+						try {
+							SunDragSourceContextPeer.checkDragDropInProgress();
+						} catch (InvalidDnDOperationException e1) {
+							if (logger.isLoggable(Level.WARNING)) {
+								logger.warning("For some reason there was still a Dnd in progress. Will set it back to false. God knows why this happens");
+							}
+							if (logger.isLoggable(Level.FINE)) {
+								logger.log(Level.FINE, "Stacktrace for DnD still in progress", e1);
+							}
+							SunDragSourceContextPeer.setDragDropInProgress(false);
 						}
-						if (logger.isLoggable(Level.FINE)) {
-							logger.log(Level.FINE, "Stacktrace for DnD still in progress", e1);
-						}
-						SunDragSourceContextPeer.setDragDropInProgress(false);
 					}
+				} finally {
+					rebuildRequested = false;
 				}
 			}
 		});
@@ -1181,7 +1186,6 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 		invalidateGraphicalObjectsHierarchy();
 		updateGraphicalObjectsHierarchy();
 		updateLocations();
-		rebuildRequested = false;
 	}
 
 }

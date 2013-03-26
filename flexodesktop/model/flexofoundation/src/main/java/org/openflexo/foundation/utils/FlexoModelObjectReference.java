@@ -314,6 +314,14 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 		return resource;
 	}
 
+	public String getResourceIdentifier() {
+		if (resource != null) {
+			return ((FlexoXMLStorageResource) resource).getResourceIdentifier();
+		} else {
+			return resourceIdentifier;
+		}
+	}
+
 	@Override
 	public Converter getConverter() {
 		if (getReferringProject() != null) {
@@ -334,7 +342,11 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 					ProjectData data = getReferringProject().getProjectData();
 					if (data != null) {
 						FlexoProjectReference projectReference = data.getProjectReferenceWithURI(enclosingProjectIdentifier);
-						return projectReference.getReferredProject(force);
+						if (projectReference != null) {
+							return projectReference.getReferredProject(force);
+						} else {
+							return getReferringProject();
+						}
 					}
 				}
 			} else {
@@ -384,7 +396,8 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 		if (modelObject != null) {
 			return getSerializationRepresentationForObject(modelObject, serializeClassName);
 		} else {
-			return resourceIdentifier + SEPARATOR + userIdentifier + FlexoModelObject.ID_SEPARATOR + flexoID
+			return (enclosingProjectIdentifier != null ? enclosingProjectIdentifier + PROJECT_SEPARATOR : "") + resourceIdentifier
+					+ SEPARATOR + userIdentifier + FlexoModelObject.ID_SEPARATOR + flexoID
 					+ (serializeClassName ? SEPARATOR + className : "");
 		}
 	}
@@ -453,6 +466,15 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 				// TODO: New FlexoResource scheme
 				resourceIdentifier = resource.getURI();
 			}
+			if (getOwner() != null) {
+				getOwner().objectSerializationIdChanged(this);
+			}
+		}
+	}
+
+	public void _setEnclosingProjectIdentifier(String uri) {
+		if (enclosingProjectIdentifier == null) {
+			enclosingProjectIdentifier = uri;
 			if (getOwner() != null) {
 				getOwner().objectSerializationIdChanged(this);
 			}

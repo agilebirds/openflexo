@@ -1,6 +1,7 @@
 package org.openflexo.doceditor.controller;
 
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.foundation.toc.action.AddTOCRepository;
 import org.openflexo.view.controller.FlexoFIBController;
 
 /**
@@ -25,7 +26,7 @@ public class DEFIBController extends FlexoFIBController {
 		return (DEController) super.getFlexoController();
 	}
 
-	public void coucou() {
-		System.out.println("Coucou");
+	public void addTableOfContent() {
+		getEditor().performActionType(AddTOCRepository.actionType, getEditor().getProject().getTOCData(), null, null);
 	}
 }

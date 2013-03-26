@@ -20,6 +20,8 @@
 package org.openflexo.fge.geom.area;
 
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -39,15 +41,11 @@ public class FGEIntersectionArea extends FGEOperationArea {
 	private Vector<FGEArea> _objects;
 
 	public static FGEArea makeIntersection(FGEArea... objects) {
-		Vector<FGEArea> v = new Vector<FGEArea>();
-		for (FGEArea o : objects) {
-			v.add(o.clone());
-		}
-		return makeIntersection(v);
+		return makeIntersection(Arrays.asList(objects));
 	}
 
 	public static FGEArea makeIntersection(List<? extends FGEArea> objects) {
-		Vector<FGEArea> nonEmbeddedObjects = new Vector<FGEArea>();
+		List<FGEArea> nonEmbeddedObjects = new ArrayList<FGEArea>();
 		for (int i = 0; i < objects.size(); i++) {
 			FGEArea a1 = objects.get(i);
 			if (a1 instanceof FGEEmptyArea) {
@@ -103,7 +101,7 @@ public class FGEIntersectionArea extends FGEOperationArea {
 		if (nonEmbeddedObjects.size() == 0) {
 			return new FGEEmptyArea();
 		} else if (nonEmbeddedObjects.size() == 1) {
-			return nonEmbeddedObjects.firstElement().clone();
+			return nonEmbeddedObjects.get(0).clone();
 		} else {
 			FGEIntersectionArea returned = new FGEIntersectionArea(nonEmbeddedObjects);
 

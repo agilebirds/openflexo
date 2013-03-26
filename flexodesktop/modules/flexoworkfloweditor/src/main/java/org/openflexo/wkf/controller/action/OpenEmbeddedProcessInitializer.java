@@ -27,7 +27,14 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.action.OpenEmbeddedProcess;
+import org.openflexo.foundation.wkf.action.ShowHidePortmap;
+import org.openflexo.foundation.wkf.action.ShowHidePortmapRegistery;
+import org.openflexo.foundation.wkf.node.LoopSubProcessNode;
+import org.openflexo.foundation.wkf.node.MultipleInstanceSubProcessNode;
+import org.openflexo.foundation.wkf.node.SingleInstanceSubProcessNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
+import org.openflexo.foundation.wkf.node.WSCallSubProcessNode;
+import org.openflexo.foundation.wkf.ws.FlexoPortMap;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -76,6 +83,34 @@ public class OpenEmbeddedProcessInitializer extends ActionInitializer<OpenEmbedd
 		return new FlexoActionFinalizer<OpenEmbeddedProcess>() {
 			@Override
 			public boolean run(EventObject e, OpenEmbeddedProcess action) {
+				if (action.getFocusedObject() instanceof SubProcessNode) {
+					// We just dropped a SubProcessNode
+					// Default status of DELETE ports is hidden
+					SubProcessNode spNode = action.getFocusedObject();
+					if (spNode.getPortMapRegistery() != null) {
+						if (spNode instanceof SingleInstanceSubProcessNode || spNode instanceof LoopSubProcessNode
+								|| spNode instanceof WSCallSubProcessNode) {
+							for (FlexoPortMap pm : spNode.getPortMapRegistery().getAllDeletePortmaps()) {
+								ShowHidePortmap.actionType.makeNewAction(pm, null, action.getEditor()).doAction();
+							}
+						}
+						if (spNode instanceof WSCallSubProcessNode) {
+							for (FlexoPortMap pm : spNode.getPortMapRegistery().getAllOutPortmaps()) {
+								ShowHidePortmap.actionType.makeNewAction(pm, null, action.getEditor()).doAction();
+							}
+						}
+						if (spNode instanceof MultipleInstanceSubProcessNode) {
+							for (FlexoPortMap pm : spNode.getPortMapRegistery().getAllOutPortmaps()) {
+								ShowHidePortmap.actionType.makeNewAction(pm, null, action.getEditor()).doAction();
+							}
+						}
+						if (spNode instanceof SingleInstanceSubProcessNode || spNode instanceof LoopSubProcessNode
+								|| spNode instanceof MultipleInstanceSubProcessNode) {
+							ShowHidePortmapRegistery.actionType.makeNewAction(spNode.getPortMapRegistery(), null, action.getEditor())
+									.doAction();
+						}
+					}
+				}
 				if (action.getFocusedObject() instanceof SubProcessNode && action.getFocusedObject().hasSubProcessReference()) {
 					FlexoProcess subProcess = action.getFocusedObject().getSubProcess(true);
 					if (subProcess != null) {

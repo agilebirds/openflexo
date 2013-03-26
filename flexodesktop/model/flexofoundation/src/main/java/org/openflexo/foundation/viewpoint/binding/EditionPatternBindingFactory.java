@@ -1,8 +1,10 @@
 package org.openflexo.foundation.viewpoint.binding;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingPathElement;
@@ -26,16 +28,16 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
 public final class EditionPatternBindingFactory extends JavaBindingFactory {
 	static final Logger logger = Logger.getLogger(EditionPatternBindingFactory.class.getPackage().getName());
 
-	private HashMap<BindingPathElement, HashMap<Object, SimplePathElement>> storedBindingPathElements;
+	private Map<BindingPathElement, Map<Object, SimplePathElement>> storedBindingPathElements;
 	private ViewPoint viewPoint;
 
 	public EditionPatternBindingFactory(ViewPoint viewPoint) {
-		storedBindingPathElements = new HashMap<BindingPathElement, HashMap<Object, SimplePathElement>>();
+		storedBindingPathElements = new HashMap<BindingPathElement, Map<Object, SimplePathElement>>();
 		this.viewPoint = viewPoint;
 	}
 
 	protected SimplePathElement getSimplePathElement(Object object, BindingPathElement parent) {
-		HashMap<Object, SimplePathElement> storedValues = storedBindingPathElements.get(parent);
+		Map<Object, SimplePathElement> storedValues = storedBindingPathElements.get(parent);
 		if (storedValues == null) {
 			storedValues = new HashMap<Object, SimplePathElement>();
 			storedBindingPathElements.put(parent, storedValues);
@@ -63,10 +65,13 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 	public List<? extends SimplePathElement> getAccessibleSimplePathElements(BindingPathElement parent) {
 
 		if (parent.getType() instanceof TechnologySpecificCustomType) {
-			TechnologySpecificCustomType parentType = ((TechnologySpecificCustomType) parent.getType());
+			TechnologySpecificCustomType parentType = (TechnologySpecificCustomType) parent.getType();
 			TechnologyAdapter<?, ?> ta = parentType.getTechnologyAdapter();
 			if (ta != null && ta.getTechnologyAdapterBindingFactory().handleType(parentType)) {
-				return ta.getTechnologyAdapterBindingFactory().getAccessibleSimplePathElements(parent);
+				List<? extends SimplePathElement> returned = ta.getTechnologyAdapterBindingFactory()
+						.getAccessibleSimplePathElements(parent);
+				Collections.sort(returned, BindingPathElement.COMPARATOR);
+				return returned;
 			}
 		}
 
@@ -76,6 +81,7 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 			for (EditionSchemeParameter p : es.getParameters()) {
 				returned.add(getSimplePathElement(p, parent));
 			}
+			Collections.sort(returned, BindingPathElement.COMPARATOR);
 			return returned;
 		} else if (parent instanceof EditionSchemeParametersPathElement) {
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
@@ -83,6 +89,7 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 			for (EditionSchemeParameter p : es.getParameters()) {
 				returned.add(getSimplePathElement(p, parent));
 			}
+			Collections.sort(returned, BindingPathElement.COMPARATOR);
 			return returned;
 		} else if (TypeUtils.isTypeAssignableFrom(EditionPattern.class, parent.getType())) {
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
@@ -133,7 +140,7 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 		FunctionPathElement returned = super.makeFunctionPathElement(parent, functionName, args);
 		// Hook to specialize type returned by getEditionPatternInstance(String)
 		if (functionName.equals("getEditionPatternInstance")) {
-			if (TypeUtils.isTypeAssignableFrom(ViewObject.class, parent.getType()) && args.size() == 1 && (args.get(0).isStringConstant())) {
+			if (TypeUtils.isTypeAssignableFrom(ViewObject.class, parent.getType()) && args.size() == 1 && args.get(0).isStringConstant()) {
 				String editionPatternId = ((StringConstant) args.get(0).getExpression()).getValue();
 				EditionPattern ep = viewPoint.getEditionPattern(editionPatternId);
 				returned.setType(EditionPatternInstanceType.getEditionPatternInstanceType(ep));

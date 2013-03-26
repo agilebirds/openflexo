@@ -303,7 +303,6 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 					MouseClickControlActionType.MULTIPLE_SELECTION));
 		}
 		addToMouseDragControls(MouseDragControl.makeMouseDragControl("Move", MouseButton.LEFT, MouseDragControlActionType.MOVE));
-		addToMouseDragControls(MouseDragControl.makeMouseDragControl("Zoom", MouseButton.RIGHT, MouseDragControlActionType.ZOOM));
 		addToMouseDragControls(MouseDragControl.makeMouseShiftDragControl("Rectangle selection", MouseButton.LEFT,
 				MouseDragControlActionType.RECTANGLE_SELECTING));
 	}
@@ -1401,7 +1400,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 
 			isCheckingDimensionConstraints = true;
 
-			FGERectangle requiredBounds = getRequiredBoundsForContents();
+			// FGERectangle requiredBounds = getRequiredBoundsForContents();
 
 			boolean changed = false;
 			FGEDimension newDimension = getSize();
@@ -2738,4 +2737,25 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		}
 	}
 
+	/**
+	 * Returns the area on which the given connector can start. The area is expressed in this normalized coordinates
+	 * 
+	 * @param connectorGR
+	 *            the connector asking where to start
+	 * @return the area on which the given connector can start
+	 */
+	public FGEArea getAllowedStartAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR) {
+		return getShape().getOutline();
+	}
+
+	/**
+	 * Returns the area on which the given connector can end. The area is expressed in this normalized coordinates
+	 * 
+	 * @param connectorGR
+	 *            the connector asking where to end
+	 * @return the area on which the given connector can end
+	 */
+	public FGEArea getAllowedEndAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR) {
+		return getShape().getOutline();
+	}
 }

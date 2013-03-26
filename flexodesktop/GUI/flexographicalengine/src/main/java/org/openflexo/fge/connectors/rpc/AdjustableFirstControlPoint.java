@@ -28,6 +28,7 @@ import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
 import org.openflexo.fge.geom.FGESegment;
+import org.openflexo.fge.geom.area.DefaultAreaProvider;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEPlane;
 import org.openflexo.fge.geom.area.FGESubstractionArea;
@@ -205,11 +206,13 @@ public class AdjustableFirstControlPoint extends RectPolylinAdjustableControlPoi
 						SimplifiedCardinalDirection.allDirectionsExcept(initialNextOrientation.getOpposite()));*/
 				if (initialPolylin.getSegmentNb() > 3) {
 					FGESegment oppositeSegment = initialPolylin.getSegmentAt(2);
-					appendingPath = FGERectPolylin.makeRectPolylinCrossingPoint(newStartPosition, oppositeSegment.getP2(),
+					appendingPath = FGERectPolylin.makeRectPolylinCrossingPoint(new DefaultAreaProvider<SimplifiedCardinalDirection>(
+							newStartPosition), new DefaultAreaProvider<SimplifiedCardinalDirection>(oppositeSegment.getP2()),
 							newFirstCPLocation, orientation, initialNextOrientation.getOpposite(), true, getConnector()
 									.getOverlapXResultingFromPixelOverlap(), getConnector().getOverlapYResultingFromPixelOverlap());
 				} else {
-					appendingPath = FGERectPolylin.makeRectPolylinCrossingPoint(newStartPosition, nextCPLocation, newFirstCPLocation,
+					appendingPath = FGERectPolylin.makeRectPolylinCrossingPoint(new DefaultAreaProvider<SimplifiedCardinalDirection>(
+							newStartPosition), new DefaultAreaProvider<SimplifiedCardinalDirection>(nextCPLocation), newFirstCPLocation,
 							orientation, initialNextOrientation.getOpposite(), true, getConnector().getOverlapXResultingFromPixelOverlap(),
 							getConnector().getOverlapYResultingFromPixelOverlap());
 				}
@@ -252,11 +255,13 @@ public class AdjustableFirstControlPoint extends RectPolylinAdjustableControlPoi
 
 				if (initialPolylin.getSegmentNb() > 3) {
 					FGESegment oppositeSegment = initialPolylin.getSegmentAt(2);
-					appendingPath = FGERectPolylin.makeRectPolylinCrossingPoint(newStartPosition, oppositeSegment.getP2(),
+					appendingPath = FGERectPolylin.makeRectPolylinCrossingPoint(new DefaultAreaProvider<SimplifiedCardinalDirection>(
+							newStartPosition), new DefaultAreaProvider<SimplifiedCardinalDirection>(oppositeSegment.getP2()),
 							newFirstCPLocation, orientation, initialNextOrientation.getOpposite(), true, getConnector()
 									.getOverlapXResultingFromPixelOverlap(), getConnector().getOverlapYResultingFromPixelOverlap());
 				} else {
-					appendingPath = FGERectPolylin.makeRectPolylinCrossingPoint(newStartPosition, nextCPLocation, newFirstCPLocation,
+					appendingPath = FGERectPolylin.makeRectPolylinCrossingPoint(new DefaultAreaProvider<SimplifiedCardinalDirection>(
+							newStartPosition), new DefaultAreaProvider<SimplifiedCardinalDirection>(nextCPLocation), newFirstCPLocation,
 							orientation, initialNextOrientation.getOpposite(), true, getConnector().getOverlapXResultingFromPixelOverlap(),
 							getConnector().getOverlapYResultingFromPixelOverlap());
 				}
@@ -275,7 +280,6 @@ public class AdjustableFirstControlPoint extends RectPolylinAdjustableControlPoi
 			}
 		}
 	}
-
 	/**
 	 * This method is internally called when first control point has been detected to be moved.
 	 * 

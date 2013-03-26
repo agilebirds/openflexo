@@ -113,7 +113,6 @@ public abstract class OperatorGR<O extends OperatorNode> extends PetriGraphNodeG
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (dataModification instanceof RoleChanged) {
-			resetLocationConstrainedArea();
 			getDrawing().requestRebuildCompleteHierarchy();
 		}
 		super.update(observable, dataModification);

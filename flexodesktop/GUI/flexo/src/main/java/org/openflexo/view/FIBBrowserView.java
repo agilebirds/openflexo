@@ -26,8 +26,11 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.model.FIBBrowser;
+import org.openflexo.fib.model.FIBBrowserElement;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.listener.FIBSelectionListener;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.view.controller.FlexoController;
 
@@ -108,18 +111,17 @@ public abstract class FIBBrowserView<O> extends SelectionSynchronizedFIBView imp
 		if (!browser.getRightClickAction().isSet() || !browser.getRightClickAction().isValid()) {
 			browser.setRightClickAction(new DataBinding<Object>("controller.rightClick(" + browser.getName() + ".selected,event)"));
 		}
-		/*
+
 		for (FIBBrowserElement el : browser.getElements()) {
 			if (el.getDataClass() != null) {
 				if (FlexoObject.class.isAssignableFrom(el.getDataClass())) {
-					Vector<FlexoActionType> actionList = FlexoObject.getActionList(el.getDataClass());
-					for (FlexoActionType actionType : actionList) {
+					List<FlexoActionType<?, ?, ?>> actionList = FlexoObject.getActionList(el.getDataClass());
+					for (FlexoActionType<?, ?, ?> actionType : actionList) {
 						el.addToActions(new FIBBrowserActionAdapter(actionType));
 					}
 				}
 			}
 		}
-		*/
 	}
 
 	public FIBBrowser getFIBBrowser(FIBComponent component) {

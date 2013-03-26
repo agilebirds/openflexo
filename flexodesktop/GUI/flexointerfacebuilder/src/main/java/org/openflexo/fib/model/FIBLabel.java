@@ -56,16 +56,17 @@ public class FIBLabel extends FIBWidget {
 
 	public FIBLabel() {
 		super();
+		setOpaque(false);
+	}
+
+	public FIBLabel(String label) {
+		this();
+		this.label = label;
 	}
 
 	@Override
 	protected String getBaseName() {
 		return "Label";
-	}
-
-	public FIBLabel(String label) {
-		super();
-		this.label = label;
 	}
 
 	@Override

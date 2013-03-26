@@ -41,6 +41,8 @@ public class FIBImageWidget extends FIBWidgetView<FIBImage, JLabel, Image> imple
 	public FIBImageWidget(FIBImage model, FIBController controller) {
 		super(model, controller);
 		labelWidget = new JLabel();
+		labelWidget.setFocusable(false); // There is not much point in giving focus to a label since there is no KeyBindings nor KeyListener
+											// on it.
 		if (model.getData().isValid()) {
 			labelWidget.setText(" ");
 		}

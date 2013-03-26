@@ -214,6 +214,7 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 			AbstractNode concernedNode = null;
 			if (targetObject instanceof FlexoPreCondition) {
 				concernedNode = ((FlexoPreCondition) targetObject).getAttachedNode();
+				targetObject = concernedNode;
 			} else if (targetObject instanceof AbstractNode) {
 				concernedNode = (AbstractNode) targetObject;
 			} else if (targetObject instanceof WKFArtefact) {
@@ -429,13 +430,13 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 	private void addNode(AbstractNode node, WKFObject container) {
 		addDrawable(node, container);
 		if (node instanceof FlexoNode) {
-			for (FlexoPreCondition pre : ((FlexoNode) node).getPreConditions()) {
+			/*for (FlexoPreCondition pre : ((FlexoNode) node).getPreConditions()) {
 				addDrawable(pre, node);
 				if (pre.getAttachedBeginNode() != null && pre.getAttachedBeginNode().getParentPetriGraph() != null
 						&& isVisible(pre.getAttachedBeginNode().getParentPetriGraph())) {
 					addDrawable(preAndBeginNodeAssociationForPrecondition(pre), getProcess());
 				}
-			}
+			}*/
 		}
 
 		if (node instanceof AbstractActivityNode) {

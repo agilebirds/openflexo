@@ -3,13 +3,12 @@ package org.openflexo.foundation.resource;
 import java.io.File;
 import java.io.IOException;
 
-import javax.xml.bind.annotation.XmlAttribute;
-
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 
 /**
@@ -26,7 +25,7 @@ public interface FlexoFileResource<RD extends ResourceData<RD>> extends FlexoRes
 	public static final String FILE = "file";
 
 	@Getter(FILE)
-	@XmlAttribute
+	@XMLAttribute
 	public File getFile();
 
 	@Setter(FILE)

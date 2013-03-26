@@ -76,7 +76,6 @@ public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extend
 	@Override
 	public void setWidthNoNotification(double width) {
 		getNode().setWidth(width, SWIMMING_LANE_EDITOR);
-		resetLocationConstrainedArea();
 	}
 
 	public double getDefaultWidth() {
@@ -94,7 +93,6 @@ public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extend
 	@Override
 	public void setHeightNoNotification(double height) {
 		getNode().setHeight(height, SWIMMING_LANE_EDITOR);
-		resetLocationConstrainedArea();
 	}
 
 	public double getDefaultHeight() {

@@ -30,10 +30,10 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
+import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.ParametersModel;
 import org.openflexo.foundation.param.ProcessParameter;
-import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.InvalidFileNameException;
@@ -78,23 +78,22 @@ public class AddSubProcessInitializer extends ActionInitializer {
 				}
 				ParameterDefinition[] parameters = new ParameterDefinition[3];
 				String baseName = FlexoLocalization.localizedForKey("new_process_name");
-				parameters[0] = new TextFieldParameter("newProcessName", "name_of_process", getProject().getFlexoWorkflow()
-						.findNextDefaultProcessName(baseName));
-				String UNDER_PROCESS = FlexoLocalization.localizedForKey("under_process");
-				String NO_CONTEXT = FlexoLocalization.localizedForKey("without_context");
-				String[] contexts = { UNDER_PROCESS, NO_CONTEXT };
-				parameters[1] = new RadioButtonListParameter<String>("context", "process_context", process == null ? NO_CONTEXT
-						: UNDER_PROCESS, contexts);
+				TextFieldParameter textFieldParameter = new TextFieldParameter("newProcessName", "name_of_process", getProject()
+						.getFlexoWorkflow().findNextDefaultProcessName(baseName));
+				textFieldParameter.setRequestFocus(true);
+				parameters[0] = textFieldParameter;
+
+				parameters[1] = new CheckboxParameter("no_parent", "reusable_process", true);
 				parameters[2] = new ProcessParameter("parentProcess", "parent_process", process);
-				parameters[2].setDepends("context");
-				parameters[2].setConditional("context=" + '"' + UNDER_PROCESS + '"');
+				parameters[2].setDepends("no_parent");
+				parameters[2].setConditional("no_parent=false");
 				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
 						FlexoLocalization.localizedForKey("create_new_sub_process"),
 						FlexoLocalization.localizedForKey("enter_parameters_for_the_new_sub_process"), new ValidationCondition() {
 							@Override
 							public boolean isValid(ParametersModel model) {
 								errorMessage = FlexoLocalization.localizedForKey("you_must_choose_a_context");
-								return model.parameterForKey("context").getValue() != null;
+								return model.parameterForKey("no_parent").getValue() != null;
 							}
 
 							@Override
@@ -105,7 +104,7 @@ public class AddSubProcessInitializer extends ActionInitializer {
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 					String newProcessName = (String) dialog.parameterValueWithName("newProcessName");
 					FlexoProcess parentProcess;
-					if (dialog.parameterValueWithName("context").equals(UNDER_PROCESS)) {
+					if (dialog.parameterValueWithName("no_parent").equals(Boolean.FALSE)) {
 						parentProcess = (FlexoProcess) dialog.parameterValueWithName("parentProcess");
 					} else {
 						parentProcess = null;

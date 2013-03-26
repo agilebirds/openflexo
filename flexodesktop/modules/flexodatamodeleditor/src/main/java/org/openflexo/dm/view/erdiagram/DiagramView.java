@@ -46,8 +46,13 @@ public class DiagramView extends DrawingView<ERDiagramRepresentation> implements
 	}
 
 	@Override
-	public void deleteModuleView() {
+	public void delete() {
 		getRepresentedObject().getPropertyChangeSupport().removePropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
+		super.delete();
+	}
+
+	@Override
+	public void deleteModuleView() {
 		getController().delete();
 	}
 

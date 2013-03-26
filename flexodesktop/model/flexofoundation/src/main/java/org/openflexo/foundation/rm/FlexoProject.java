@@ -131,6 +131,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.resource.FlexoProjectResource;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.rm.FlexoResource.DependencyAlgorithmScheme;
+import org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.stats.ProjectStatistics;
@@ -877,6 +878,25 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * @see org.openflexo.foundation.rm.FlexoResourceData#save()
 	 */
 	public synchronized void saveModifiedResources(FlexoProgress progress, boolean clearModifiedStatus) throws SaveResourceException {
+		try {
+			_saveModifiedResources(progress, clearModifiedStatus);
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Exception occurred during saving " + getDisplayName() + ". Trying to repair and save again");
+			}
+			repairProject();
+			_saveModifiedResources(progress, clearModifiedStatus);
+		}
+	}
+
+	private void repairProject() {
+		ValidationModel validationModel = getProjectValidationModel();
+		validate(validationModel);
+	}
+
+	private void _saveModifiedResources(FlexoProgress progress, boolean clearModifiedStatus) throws SaveResourceException,
+			SaveXMLResourceException, SaveResourcePermissionDeniedException {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Saving modified resources of project...");
 		}
@@ -1574,8 +1594,18 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	}
 
 	public ScreenshotResource getScreenshotResource(FlexoModelObject object, boolean createIfNotExist) {
-		ScreenshotResource resource = (ScreenshotResource) resourceForKey(ResourceType.SCREENSHOT,
-				ScreenshotGenerator.getScreenshotName(object));
+		FlexoProject project = this;
+		if (object.getProject() != this) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Attempt to retrieve a screenshot for an object which does not belong to this project");
+				logger.warning("Object is " + object + " and comes from project " + object.getProject().getDisplayableName()
+						+ " but I am project " + getDisplayableName());
+
+			}
+			project = object.getProject();
+		}
+		String screenshotName = ScreenshotGenerator.getScreenshotName(object);
+		ScreenshotResource resource = (ScreenshotResource) project.resourceForKey(ResourceType.SCREENSHOT, screenshotName);
 		if (resource != null && resource.getModelObject() == null) {
 			resource = null;
 		}
@@ -3761,6 +3791,97 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	}
 
+	public static class ModelObjectReferenceMustDefineAnEnclosingProjectID extends
+			ValidationRule<ModelObjectReferenceMustDefineAnEnclosingProjectID, FlexoProject> {
+
+		public ModelObjectReferenceMustDefineAnEnclosingProjectID() {
+			super(FlexoProject.class, "model_object_reference_must_define_an_enclosing_project_identifier");
+		}
+
+		@Override
+		public ValidationIssue<ModelObjectReferenceMustDefineAnEnclosingProjectID, FlexoProject> applyValidation(FlexoProject project) {
+			List<FlexoModelObjectReference<?>> problematicReferences = new ArrayList<FlexoModelObjectReference<?>>();
+			if (project.getFlexoWorkflow(false) != null) {
+				for (FlexoProcess process : project.getWorkflow().getAllLocalFlexoProcesses()) {
+					for (AbstractActivityNode activity : process.getAllAbstractActivityNodes()) {
+						if (activity.getRoleReference() != null && activity.getRoleReference().getEnclosingProjectIdentifier() == null) {
+							problematicReferences.add(activity.getRoleReference());
+						}
+						if (activity.getRoleAReference() != null && activity.getRoleAReference().getEnclosingProjectIdentifier() == null) {
+							problematicReferences.add(activity.getRoleAReference());
+						}
+						if (activity.getConsultedRoleReferences() != null) {
+							for (FlexoModelObjectReference<Role> role : activity.getConsultedRoleReferences()) {
+								if (role != null && role.getEnclosingProjectIdentifier() == null) {
+									problematicReferences.add(role);
+								}
+							}
+						}
+						if (activity.getInformedRoleReferences() != null) {
+							for (FlexoModelObjectReference<Role> role : activity.getInformedRoleReferences()) {
+								if (role != null && role.getEnclosingProjectIdentifier() == null) {
+									problematicReferences.add(role);
+								}
+							}
+						}
+
+					}
+				}
+			}
+			Iterator<FlexoModelObjectReference<?>> i = problematicReferences.iterator();
+			while (i.hasNext()) {
+				if (i.next().getObject() != null) {
+					i.remove();
+				}
+			}
+			if (problematicReferences.size() > 0) {
+				return new ValidationError<FlexoProject.ModelObjectReferenceMustDefineAnEnclosingProjectID, FlexoProject>(this, project,
+						FlexoLocalization.localizedForKey("some_external_references_are_incorrect"), new FixModelObjectReferences(
+								problematicReferences));
+			} else {
+				return null;
+			}
+		}
+	}
+
+	public static class FixModelObjectReferences extends
+			FixProposal<FlexoProject.ModelObjectReferenceMustDefineAnEnclosingProjectID, FlexoProject> {
+
+		private final List<FlexoModelObjectReference<?>> problematicReferences;
+
+		public FixModelObjectReferences(List<FlexoModelObjectReference<?>> problematicReferences) {
+			super("repair_references");
+			this.problematicReferences = problematicReferences;
+		}
+
+		@Override
+		protected void fixAction() {
+			if (getObject().getProjectData() != null) {
+				for (FlexoModelObjectReference<?> modelObjectReference : problematicReferences) {
+					String resourceIdentifier = modelObjectReference.getResourceIdentifier();
+					if (resourceIdentifier != null) {
+						ResourceType type = null;
+						for (ResourceType rt : ResourceType.availableValues()) {
+							if (resourceIdentifier.startsWith(rt.getName())) {
+								type = rt;
+								break;
+							}
+						}
+						if (type != null) {
+							String name = resourceIdentifier.substring(type.getName().length() + 1);
+							List<FlexoProjectReference> refs = getObject().getProjectData().getProjectReferenceWithName(name, true);
+							if (refs.size() > 0) {
+								FlexoProjectReference ref = refs.get(0);
+								modelObjectReference._setEnclosingProjectIdentifier(ref.getURI());
+							}
+						}
+					}
+				}
+
+			}
+		}
+	}
+
 	public static class ComponentInstancesMustDefineAComponent extends ValidationRule<ComponentInstancesMustDefineAComponent, FlexoProject> {
 
 		public class FixComponentInstances extends FixProposal<ComponentInstancesMustDefineAComponent, FlexoProject> {
@@ -3781,7 +3902,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 		public ComponentInstancesMustDefineAComponent() {
 			super(FlexoProject.class, "component_instance_must_define_a_component");
-
 		}
 
 		@Override
@@ -3926,7 +4046,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	@Override
 	public String toString() {
-		return "PROJECT-" + getName() + " ID=" + getID();
+		return "PROJECT-" + getDisplayName() + " ID=" + getID();
 	}
 
 	public static void cleanUpActionizer() {
@@ -4331,6 +4451,34 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 
 	public boolean hasImportedProjects() {
 		return getProjectData() != null && getProjectData().getImportedProjects().size() > 0;
+	}
+
+	public List<FlexoProjectReference> getResolvedProjectReferences() {
+		List<FlexoProjectReference> refs = new ArrayList<FlexoProjectReference>();
+		appendResolvedReferences(this, refs);
+		return refs;
+	}
+
+	private void appendResolvedReferences(FlexoProject project, List<FlexoProjectReference> refs) {
+		if (project.getProjectData() != null) {
+			for (FlexoProjectReference ref : project.getProjectData().getImportedProjects()) {
+				boolean alreadyAdded = false;
+				for (FlexoProjectReference addedRef : refs) {
+					if (addedRef.getURI().equals(ref.getURI())) {
+						alreadyAdded = true;
+						break;
+					}
+				}
+				if (!alreadyAdded) {
+					refs.add(ref);
+				}
+			}
+			for (FlexoProjectReference ref : project.getProjectData().getImportedProjects()) {
+				if (ref.getReferredProject() != null) {
+					appendResolvedReferences(ref.getReferredProject(), refs);
+				}
+			}
+		}
 	}
 
 	public List<FlexoModelObjectReference> getObjectReferences() {

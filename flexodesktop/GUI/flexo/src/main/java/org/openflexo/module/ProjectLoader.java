@@ -242,16 +242,13 @@ public class ProjectLoader extends FlexoServiceImpl implements HasPropertyChange
 			autoSaveServices.put(editor.getProject(), new AutoSaveService(this, editor.getProject()));
 		}
 		getPropertyChangeSupport().firePropertyChange(EDITOR_ADDED, null, editor);
-		if (applicationContext.getResourceCenterService().getUserResourceCenter()
-				.retrieveResource(editor.getProject().getURI(), editor.getProject().getVersion(), FlexoProject.class, null) == null) {
-			try {
-				FlexoProjectReference ref = modelFactory.newInstance(FlexoProjectReference.class);
-				ref.init(editor.getProject());
-				applicationContext.getResourceCenterService().getUserResourceCenter()
-						.publishResource(ref, editor.getProject().getVersion(), null);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		try {
+			FlexoProjectReference ref = modelFactory.newInstance(FlexoProjectReference.class);
+			ref.init(editor.getProject());
+			applicationContext.getResourceCenterService().getUserResourceCenter()
+					.publishResource(ref, editor.getProject().getVersion(), null);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		for (FlexoProject project : new ArrayList<FlexoProject>(editors.keySet())) {
 			if (project.getProjectData() != null) {

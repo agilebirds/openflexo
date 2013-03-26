@@ -13,6 +13,7 @@ public class InactiveFlexoActionException extends FlexoException {
 
 	public InactiveFlexoActionException(FlexoActionType<?, ?, ?> actionType, FlexoObject focusedObject,
 			Vector<? extends FlexoObject> globalSelection) {
+		super("Action " + actionType + " is not active for " + focusedObject + " and " + globalSelection);
 		this.actionType = actionType;
 		this.focusedObject = focusedObject;
 		this.globalSelection = globalSelection;

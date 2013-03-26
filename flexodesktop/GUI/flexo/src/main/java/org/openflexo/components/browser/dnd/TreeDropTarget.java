@@ -129,17 +129,16 @@ public class TreeDropTarget implements DropTargetListener {
 		}
 		if (node == null || !targetAcceptsSource(node, source)) {
 			dtde.rejectDrag();
-			if (ToolBox.getPLATFORM() == ToolBox.MACOS && _browser != null && _browser.getSelectionManager() != null
-					&& _browser.getSelectionManager().getController() != null
-					&& _browser.getSelectionManager().getController().getFlexoFrame() != null) {
-				_browser.getSelectionManager().getController().getFlexoFrame().setCursor(INVALID_CURSOR);
+			if (ToolBox.getPLATFORM() == ToolBox.MACOS && _browser != null && _browser.getController() != null
+					&& _browser.getController().getFlexoFrame() != null) {
+				_browser.getController().getFlexoFrame().setCursor(INVALID_CURSOR);
 			}
 		} else {
 			targetTree.setSelectionPath(path);
 			// start by supporting move operations
 			dtde.acceptDrag(DnDConstants.ACTION_MOVE);
-			if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
-				_browser.getSelectionManager().getController().getFlexoFrame().setCursor(VALID_CURSOR);
+			if (ToolBox.isMacOS() && _browser.getController() != null) {
+				_browser.getController().getFlexoFrame().setCursor(VALID_CURSOR);
 			}
 		}
 	}

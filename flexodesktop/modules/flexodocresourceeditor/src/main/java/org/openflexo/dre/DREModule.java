@@ -42,6 +42,11 @@ public class DREModule extends FlexoModule implements ExternalDREModule {
 	public DREModule(ApplicationContext applicationContext) {
 		super(applicationContext);
 		DREPreferences.init();
+	}
+
+	@Override
+	public void initModule() {
+		super.initModule();
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
 		// Put here a code to display default view
 		getDREController().setCurrentEditedObjectAsModuleView(DocResourceManager.instance().getDocResourceCenter().getRootFolder());

@@ -109,6 +109,7 @@ public abstract class FIBWidget extends FIBComponent {
 
 	public FIBWidget() {
 		super();
+		setOpaque(true); // Most widgets are opaque except: label, filechooser and tabbedpane
 		formatter = new FIBFormatter();
 		valueBindable = new FIBValueBindable();
 		eventListener = new FIBEventListener();

@@ -51,7 +51,7 @@
 		  <param name="displayLabel" value="false"/>
 		  <param name="visible_row_count" value="4"/>
 		  <param name="row_height" value="20"/>
-		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		  <property_list_column name="name" label="name" widget="READ_ONLY_TEXT_FIELD">
 			<param name="column_width" value="80"/>
 			<param name="resizable" value="true"/>
@@ -71,7 +71,7 @@
 			<param name="className" value="org.openflexo.components.widget.JavaSourceCodeInspectorWidget"/>
 			<param name="rows" value="5"/>
 			<param name="columns" value="20"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		
 	</tab>

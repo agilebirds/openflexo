@@ -20,7 +20,6 @@
 package org.openflexo.fib.view.widget.browser;
 
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -221,7 +220,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 		return contents.get(representedObject);
 	}
 
-	public class BrowserCell implements TreeNode, Observer, PropertyChangeListener, HasDependencyBinding {
+	public class BrowserCell implements TreeNode, Observer, HasDependencyBinding {
 		private Object representedObject;
 		private FIBBrowserElementType browserElementType;
 		private BrowserCell father;

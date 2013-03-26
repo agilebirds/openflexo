@@ -39,6 +39,7 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
@@ -698,6 +699,12 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	}
 
 	private void enableComponent(Component component) {
+		if (component instanceof JScrollPane) {
+			component = ((JScrollPane) component).getViewport().getView();
+			if (component == null) {
+				return;
+			}
+		}
 		component.setEnabled(true);
 		if (component instanceof Container) {
 			for (Component c : ((Container) component).getComponents()) {
@@ -707,6 +714,12 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	}
 
 	private void disableComponent(Component component) {
+		if (component instanceof JScrollPane) {
+			component = ((JScrollPane) component).getViewport().getView();
+			if (component == null) {
+				return;
+			}
+		}
 		component.setEnabled(false);
 		if (component instanceof Container) {
 			for (Component c : ((Container) component).getComponents()) {

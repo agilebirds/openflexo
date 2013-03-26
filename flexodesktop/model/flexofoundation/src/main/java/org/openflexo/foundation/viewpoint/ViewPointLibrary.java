@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,7 +60,7 @@ public class ViewPointLibrary extends FlexoObject implements FlexoService, Valid
 
 	public static final ViewPointValidationModel VALIDATION_MODEL = new ViewPointValidationModel();
 
-	private final Hashtable<String, ViewPointResource> map;
+	private final Map<String, ViewPointResource> map;
 
 	private FlexoServiceManager serviceManager;
 

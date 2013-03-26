@@ -46,13 +46,15 @@ public class FPSModule extends FlexoModule implements ExternalFPSModule {
 	public FPSModule(ApplicationContext applicationContext) throws Exception {
 		super(applicationContext);
 		FPSPreferences.init();
+	}
+
+	@Override
+	public void initModule() {
+		super.initModule();
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
 
 		// Put here a code to display default view
 		getFPSController().setCurrentEditedObjectAsModuleView(getFPSController().getRepositories());
-
-		// Retain here all necessary resources
-		// retain(<the_required_resource_data>);
 	}
 
 	@Override

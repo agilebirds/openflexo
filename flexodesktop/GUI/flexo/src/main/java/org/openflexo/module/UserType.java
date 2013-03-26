@@ -74,7 +74,9 @@ public abstract class UserType extends KVCFlexoObject {
 	 */
 	public static final UserType getCurrentUserType() {
 		if (currentUserType == null) {
-			throw new IllegalStateException("currentUserType is null. Did you call setCurrentUserType.");
+			currentUserType = UserType.MAINTAINER;
+
+			// throw new IllegalStateException("currentUserType is null. Did you call setCurrentUserType.");
 		}
 		return currentUserType;
 	}

@@ -43,16 +43,6 @@ public class GeneratorModule extends FlexoModule implements ExternalGeneratorMod
 	public GeneratorModule(ApplicationContext applicationContext) throws Exception {
 		super(applicationContext);
 		GeneratorPreferences.init();
-		/*
-		if (getProject().getGeneratedCode().getGeneratedRepositories().size() == 0) {
-			getGeneratorController().setCurrentEditedObjectAsModuleView(getProject().getGeneratedCode());
-			getGeneratorController().selectAndFocusObject(getProject().getGeneratedCode());
-		} else {
-			getGeneratorController().setCurrentEditedObjectAsModuleView(
-					getProject().getGeneratedCode().getGeneratedRepositories().firstElement());
-			getGeneratorController().selectAndFocusObject(getProject().getGeneratedCode().getGeneratedRepositories().firstElement());
-		}
-		*/
 	}
 
 	@Override

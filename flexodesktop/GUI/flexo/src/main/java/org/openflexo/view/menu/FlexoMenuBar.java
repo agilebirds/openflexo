@@ -52,8 +52,8 @@ public abstract class FlexoMenuBar extends JMenuBar {
 		_controller = controller;
 		add(getFileMenu(controller));
 		add(getEditMenu(controller));
-		add(getWindowMenu(controller, module));
 		add(getToolsMenu(controller));
+		add(getWindowMenu(controller, module));
 		if (FlexoHelp.isAvailable()) {
 			add(getHelpMenu(controller));
 		}

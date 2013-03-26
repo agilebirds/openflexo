@@ -20,6 +20,7 @@
 package org.openflexo.inspector.widget;
 
 import java.awt.Dimension;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -27,8 +28,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -57,8 +60,9 @@ public class TextFieldWidget extends DenaliWidget<String> {
 	public static final String PASSWORD_PARAM = "password";
 
 	public static final String VALIDATE_ON_RETURN = "validateOnReturn";
+	public static final String REQUEST_FOCUS = "requestFocus";
 
-	public TextFieldWidget(PropertyModel model, AbstractController controller) {
+	public TextFieldWidget(final PropertyModel model, AbstractController controller) {
 		super(model, controller);
 		if (model.hasValueForParameter(PASSWORD_PARAM) && model.getBooleanValueForParameter(PASSWORD_PARAM)) {
 			_textField = new JPasswordField() {
@@ -71,6 +75,19 @@ public class TextFieldWidget extends DenaliWidget<String> {
 				public Dimension getMinimumSize() {
 					return MINIMUM_SIZE;
 				}
+
+				@Override
+				public void addNotify() {
+					super.addNotify();
+					if (model.hasValueForParameter(REQUEST_FOCUS)) {
+						SwingUtilities.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								_textField.requestFocusInWindow();
+							}
+						});
+					}
+				}
 			};
 		} else {
 			_textField = new JTextField() {
@@ -82,6 +99,19 @@ public class TextFieldWidget extends DenaliWidget<String> {
 				@Override
 				public Dimension getMinimumSize() {
 					return MINIMUM_SIZE;
+				}
+
+				@Override
+				public void addNotify() {
+					super.addNotify();
+					if (model.hasValueForParameter(REQUEST_FOCUS)) {
+						SwingUtilities.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								_textField.requestFocusInWindow();
+							}
+						});
+					}
 				}
 			};
 		}
@@ -155,6 +185,20 @@ public class TextFieldWidget extends DenaliWidget<String> {
 				// if (logger.isLoggable(Level.FINE)) logger.fine
 				// ("actionPerformed()");
 				updateModelFromWidget();
+				final Window w = SwingUtilities.windowForComponent(_textField);
+				if (w instanceof JDialog) {
+					if (((JDialog) w).getRootPane().getDefaultButton() != null) {
+						SwingUtilities.invokeLater(new Runnable() {
+
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+
+								((JDialog) w).getRootPane().getDefaultButton().doClick();
+							}
+						});
+					}
+				}
 			}
 		});
 		getDynamicComponent().addFocusListener(new WidgetFocusListener(this) {

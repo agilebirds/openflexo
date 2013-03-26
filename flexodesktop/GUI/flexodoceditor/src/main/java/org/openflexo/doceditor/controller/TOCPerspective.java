@@ -17,6 +17,7 @@ import org.openflexo.doceditor.view.DETOCEntryModuleView;
 import org.openflexo.doceditor.view.TOCDataView;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCEntry;
@@ -73,13 +74,18 @@ public class TOCPerspective extends FlexoPerspective {
 	public FlexoModelObject getDefaultObject(FlexoObject proposedObject) {
 		if (proposedObject instanceof TOCEntry) {
 			return ((TOCEntry) proposedObject).getRepository();
-		} else if (this.deController.getProject() != null && this.deController.getProject().getTOCData().getRepositories().size() > 0) {
-			return this.deController.getProject().getTOCData().getRepositories().firstElement();
-		} else if (this.deController.getProject() != null) {
-			return this.deController.getProject().getTOCData();
-		} else {
-			return null;
 		}
+		if (proposedObject instanceof FlexoProjectObject) {
+			FlexoProject project = ((FlexoProjectObject) proposedObject).getProject();
+			if (project != null) {
+				if (project.getTOCData().getRepositories().size() > 0) {
+					return project.getTOCData().getRepositories().firstElement();
+				} else {
+					return project.getTOCData();
+				}
+			}
+		}
+		return null;
 	}
 
 	@Override

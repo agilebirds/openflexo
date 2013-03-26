@@ -151,8 +151,8 @@ public class OperationNodeGR extends AbstractOperationNodeGR {
 			setRelativeTextY(0.5); // Label is located on middle
 		}*/
 		setIsMultilineAllowed(true);
-		setAdjustMinimalWidthToLabelWidth(true);
-		setAdjustMinimalHeightToLabelHeight(true);
+		setAdjustMinimalWidthToLabelWidth(false);
+		setAdjustMinimalHeightToLabelHeight(false);
 	}
 
 	@Override

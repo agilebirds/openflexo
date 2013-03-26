@@ -41,13 +41,13 @@ public class FIBLabelWidget extends FIBWidgetView<FIBLabel, JLabel, String> {
 		} else {
 			labelWidget = new JLabel();
 		}
+		labelWidget.setFocusable(false); // There is not much point in giving focus to a label since there is no KeyBindings nor KeyListener
+											// on it.
 		labelWidget.setBorder(BorderFactory.createEmptyBorder(TOP_COMPENSATING_BORDER, TOP_COMPENSATING_BORDER, BOTTOM_COMPENSATING_BORDER,
 				RIGHT_COMPENSATING_BORDER));
 		updateFont();
 		updateAlign();
 		updateLabel();
-		// updatePreferredSize();
-
 	}
 
 	@Override

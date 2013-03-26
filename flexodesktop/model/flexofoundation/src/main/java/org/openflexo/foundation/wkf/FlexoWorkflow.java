@@ -70,6 +70,7 @@ import org.openflexo.foundation.rm.ImportedRoleLibraryCreated;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.ProjectData;
 import org.openflexo.foundation.rm.ProjectRestructuration;
+import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoFont;
@@ -115,19 +116,10 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 	public static final String ALL_ASSIGNABLE_ROLES = "allAssignableRoles";
 
 	public enum GraphicalProperties {
-		CONNECTOR_REPRESENTATION("connectorRepresentation"),
-		COMPONENT_FONT("componentFont"),
-		ROLE_FONT("roleFont"),
-		EVENT_FONT("eventFont"),
-		ACTION_FONT("actionFont"),
-		OPERATION_FONT("operationFont"),
-		ACTIVITY_FONT("activityFont"),
-		ARTEFACT_FONT("artefactFont"),
-		EDGE_FONT("edgeFont"),
-		SHOW_MESSAGES("showMessages"),
-		SHOW_WO_NAME("showWOName"),
-		SHOW_SHADOWS("showShadows"),
-		USE_TRANSPARENCY("useTransparency");
+		CONNECTOR_REPRESENTATION("connectorRepresentation"), COMPONENT_FONT("componentFont"), ROLE_FONT("roleFont"), EVENT_FONT("eventFont"), ACTION_FONT(
+				"actionFont"), OPERATION_FONT("operationFont"), ACTIVITY_FONT("activityFont"), ARTEFACT_FONT("artefactFont"), EDGE_FONT(
+				"edgeFont"), SHOW_MESSAGES("showMessages"), SHOW_WO_NAME("showWOName"), SHOW_SHADOWS("showShadows"), USE_TRANSPARENCY(
+				"useTransparency");
 		private String serializationName;
 
 		GraphicalProperties(String s) {
@@ -167,7 +159,7 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 	public FlexoWorkflow(FlexoWorkflowBuilder builder) {
 		this(builder.getProject());
 		builder.workflow = this;
-		_resource = builder.resource;
+		setFlexoResource(builder.resource);
 		initializeDeserialization(builder);
 	}
 
@@ -292,6 +284,7 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 	@Override
 	public void setFlexoResource(FlexoResource resource) {
 		_resource = (FlexoWorkflowResource) resource;
+		registerOnProject();
 	}
 
 	@Override
@@ -1290,7 +1283,7 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 			RoleList roleList = getRoleList();
 			appendRoles(roleList, allAssignableRoles);
 			if (!isCache()) {
-			if (getProject().getProjectData() != null) {
+				if (getProject().getProjectData() != null) {
 					manager.addListener(ProjectData.IMPORTED_PROJECTS, new PropertyChangeListener() {
 
 						@Override
@@ -1298,7 +1291,7 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 							clearAssignableRolesCache();
 						}
 					}, getProject().getProjectData());
-				for (FlexoProjectReference ref : getProject().getProjectData().getImportedProjects()) {
+					for (FlexoProjectReference ref : getProject().getProjectData().getImportedProjects()) {
 						manager.addListener(FlexoProjectReference.WORKFLOW, new PropertyChangeListener() {
 
 							@Override
@@ -1323,28 +1316,20 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 						@Override
 						public void propertyChange(PropertyChangeEvent evt) {
 							clearAssignableRolesCache();
-				}
+						}
 					}, getProject());
+				}
 			}
-			appendRoles(getImportedRoleList(), allAssignableRoles);
 			allAssignableRoles = Collections.unmodifiableList(allAssignableRoles);
-		}
 		}
 		return allAssignableRoles;
 	}
 
-	public void appendRoles(RoleList roleList, List<Role> reply) {
+	private void appendRoles(RoleList roleList, List<Role> reply) {
 		if (roleList != null) {
 			for (Role r : roleList.getRoles()) {
 				if (r.getIsAssignable()) {
 					reply.add(r);
-				}
-			}
-			if (getImportedRoleList() != null) {
-				for (Role r : getImportedRoleList().getRoles()) {
-					if (r.getIsAssignable()) {
-						reply.add(r);
-					}
 				}
 			}
 		}
@@ -2077,13 +2062,25 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 		if (reference.getObject() != null) {
 			return reference.getObject();
 		} else {
-			String projectURI = reference.getEnclosingProjectIdentifier();
-			if (projectURI != null) {
-				ProjectData data = getProject().getProjectData();
-				if (data != null) {
+			ProjectData data = getProject().getProjectData();
+			if (data != null) {
+				String projectURI = reference.getEnclosingProjectIdentifier();
+				if (projectURI != null) {
 					FlexoProjectReference projectRef = data.getProjectReferenceWithURI(projectURI, true);
 					if (projectRef != null) {
 						return projectRef.getWorkflow().getRoleList().getRoleWithFlexoID(reference.getFlexoID());
+					}
+				} else {
+					if (reference.getResourceIdentifier() != null) {
+						String projectName = reference.getResourceIdentifier().substring(ResourceType.WORKFLOW.getName().length() + 1);
+						List<FlexoProjectReference> refs = data.getProjectReferenceWithName(projectName, true);
+						for (FlexoProjectReference ref : refs) {
+							Role r = ref.getWorkflow().getRoleList().getRoleWithFlexoID(reference.getFlexoID());
+							if (r != null) {
+								reference._setEnclosingProjectIdentifier(ref.getURI());
+								return r;
+							}
+						}
 					}
 				}
 			}
@@ -2093,9 +2090,8 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 
 	@Override
 	public boolean isCache() {
-		return getFlexoResource().isCache();
+		return getFlexoResource() != null && getFlexoResource().isCache();
 	}
-
 
 	@Override
 	public FlexoModelObject getUncachedObject() {
@@ -2106,6 +2102,5 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 	public FlexoProcessNode getProcessNode() {
 		return null;
 	}
-
 
 }

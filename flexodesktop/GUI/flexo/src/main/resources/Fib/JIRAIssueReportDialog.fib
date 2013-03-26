@@ -1,63 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="border"  darkLevel="0" data="data.issue.issuetype" dataClassName="org.openflexo.br.view.JIRAIssueReportDialog" width="480" height="630">
-  <Panel layout="twocols" borderTop="5" borderBottom="5" borderLeft="5" borderRight="5"  darkLevel="0" constraints="border(index=0;location=center)">
-    <Label label="Title" localize="true" name="summary" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
-      <LocalizedDictionary />
-    </Label>
-    <TextField columns="7" passwd="false" text="TextField" data="data.issue.summary" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
-    <Label label="Description" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
-      <LocalizedDictionary />
-    </Label>
-    <TextArea validateOnReturn="true" columns="8" rows="10" text="TextArea" data="data.issue.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
-    <Label label="Type" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
-      <LocalizedDictionary />
-    </Label>
-    <DropDown format="object.name" localize="true" name="type" data="data.issue.issuetype" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" staticList="" list="data.project.issuetypes" iteratorClassName="org.openflexo.ws.jira.model.JIRAIssue$IssueType" autoSelectFirstRow="true">
-      <LocalizedDictionary />
-    </DropDown>
-    <Label label="Priority" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.issue.issuetype.priorityField != null)">
-      <LocalizedDictionary />
-    </Label>
-    <DropDown format="object.name" localize="true" name="priority" data="data.issue.priority" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.issue.issuetype.priorityField != null)" staticList="" list="data.issue.issuetype.priorityField.allowedValues" iteratorClassName="org.openflexo.ws.jira.model.JIRAPriority" autoSelectFirstRow="true">
-      <LocalizedDictionary />
-    </DropDown>
-    <Label label="Module" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.issue.issuetype.componentField != null)">
-      <LocalizedDictionary />
-    </Label>
-    <DropDown format="object.name" localize="true" name="module" data="data.issue.component" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.issue.issuetype.componentField != null)" staticList="" list="data.availableModules" iteratorClassName="org.openflexo.ws.jira.model.JIRAComponent" autoSelectFirstRow="true">
+<Panel layout="border" darkLevel="0" data="data.issue.issuetype" dataClassName="org.openflexo.br.view.JIRAIssueReportDialog" width="480" height="630">
+  <Panel layout="twocols" borderTop="5" borderBottom="5" borderLeft="5" borderRight="5" darkLevel="0" index="0" constraints="border(index=0;location=center)">
+    <Label label="Title" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="summary" localize="true" />
+    <TextField index="1" data="data.issue.summary" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" columns="7" text="TextField" />
+    <Label label="Description" index="2" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+    <TextArea validateOnReturn="true" columns="8" rows="10" text="TextArea" index="3" data="data.issue.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
+    <Label label="Type" index="4" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+    <DropDown index="5" data="data.issue.issuetype" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="type" format="object.name" localize="true" staticList="" list="data.project.issuetypes" iteratorClassName="org.openflexo.ws.jira.model.JIRAIssue$IssueType" autoSelectFirstRow="true" />
+    <Label label="Priority" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.issue.issuetype.priorityField != null)" localize="true" />
+    <DropDown index="7" data="data.issue.priority" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.issue.issuetype.priorityField != null)" name="priority" format="object.name" localize="true" staticList="" list="data.issue.issuetype.priorityField.allowedValues" iteratorClassName="org.openflexo.ws.jira.model.JIRAPriority" autoSelectFirstRow="true" />
+    <Label label="Module" index="8" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.issue.issuetype.componentField != null)" localize="true" />
+    <DropDown index="9" data="data.issue.component" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.issue.issuetype.componentField != null)" name="module" format="object.name" localize="true" staticList="" list="data.availableModules" iteratorClassName="org.openflexo.ws.jira.model.JIRAComponent" autoSelectFirstRow="true">
       <Dependancy componentName="type" />
-      <LocalizedDictionary />
     </DropDown>
-    <Label label="Send logs" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
-      <LocalizedDictionary />
-    </Label>
-    <CheckBox selected="false" localize="true" name="sendLogs" data="data.isSendLogs" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
-    <Label label="Send system properties" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
-      <LocalizedDictionary />
-    </Label>
-    <CheckBox selected="false" localize="true" name="sendSystemProperties" data="data.isSendSystemProperties" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
-    <Label label="Send screenshots" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=14;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
-      <LocalizedDictionary />
-    </Label>
-    <CheckBox selected="false" localize="true" name="sendScreenshot" data="data.isSendScreenshots" constraints="twocols(expandHorizontally=true;expandVertically=false;index=15;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
-    <Label label="Send current project" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=16;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
-      <LocalizedDictionary />
-    </Label>
-    <CheckBox selected="false" localize="true" name="sendCurrentProject" data="data.isSendProject" constraints="twocols(expandHorizontally=true;expandVertically=false;index=17;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
-    <Label label="Attach file" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)">
-      <LocalizedDictionary />
-    </Label>
-    <File mode="OpenMode" isDirectory="false" data="data.attachFile" constraints="twocols(expandHorizontally=true;expandVertically=false;index=19;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="attachFile" localize="true" />
-    <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2"  darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" width="80" height="60">
-      <Button action="controller.validateAndDispose()" buttonType="Trigger" label="Send" constraints="flow(index=0)" name="Send" localize="true" enable="(((!(data.issue.summary.trim.isEmpty)) &amp; (!(data.issue.description.trim.isEmpty))) &amp; (data.issue.issuetype != null))">
-        <LocalizedDictionary />
-      </Button>
-      <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="Cancel" constraints="flow(index=1)" localize="true">
-        <LocalizedDictionary />
-      </Button>
+    <Label label="Send logs" index="10" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+    <CheckBox selected="false" index="11" data="data.isSendLogs" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="sendLogs" localize="true" />
+    <Label label="Send system properties" index="12" constraints="twocols(expandHorizontally=true;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+    <CheckBox selected="false" index="13" data="data.isSendSystemProperties" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="sendSystemProperties" localize="true" />
+    <Label label="Send screenshots" index="14" constraints="twocols(expandHorizontally=true;expandVertically=false;index=14;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+    <CheckBox selected="false" index="15" data="data.isSendScreenshots" constraints="twocols(expandHorizontally=true;expandVertically=false;index=15;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="sendScreenshot" localize="true" />
+    <Label label="Send current project" index="16" constraints="twocols(expandHorizontally=true;expandVertically=false;index=16;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+    <CheckBox selected="false" index="17" data="data.isSendProject" constraints="twocols(expandHorizontally=true;expandVertically=false;index=17;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="sendCurrentProject" localize="true" />
+    <Label label="Attach file" index="18" constraints="twocols(expandHorizontally=true;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+    <File mode="OpenMode" isDirectory="false" index="19" data="data.attachFile" constraints="twocols(expandHorizontally=true;expandVertically=false;index=19;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="attachFile" localize="true" />
+    <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="20" constraints="twocols(expandHorizontally=true;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
+      <Panel layout="grid" hGap="5" vGap="5" cols="2" rows="2" flowAlignment="CENTER" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" darkLevel="0" index="20" constraints="flow(expandHorizontally=true;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
+        <Button action="controller.validateAndDispose()" buttonType="Trigger" label="Send" localize="true" enable="((((data.issue.issuetype != null) &amp; (data.issue.summary != null)) &amp; (data.issue.description != null)) &amp; ((!(data.issue.summary.trim.isEmpty)) &amp; (!(data.issue.description.trim.isEmpty))))" index="0" constraints="grid(index=0;x=0;y=0)" name="Send" />
+        <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="Cancel" localize="true" index="0" constraints="grid(index=1;x=1;y=0)" />
+      </Panel>
     </Panel>
-    <LocalizedDictionary />
   </Panel>
   <LocalizedDictionary />
 </Panel>
-

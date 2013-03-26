@@ -39,7 +39,7 @@
 
 	<tab name="Doc" index="1" layout="DEFAULT">
 		<property name="funcName" label="function_name" widget="TEXT_FIELD" constraint="2">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 	</tab>
 
@@ -48,7 +48,7 @@
 		<hidden name="bindingKeypath"/>
 		<property name="openInNewWindow" label="open_in_new_window" widget="CHECKBOX" constraint="5" help="true if the link will open a new window." depends="hyperlinkType" conditional="hyperlinkType=URL"/>
 		<property name ="isHTML" label="isHTML" widget="CHECKBOX" constraint="6" depends="fieldType" conditional="fieldType=Text||fieldType=null">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="submitForm" label="submit_form" widget="CHECKBOX" constraint="8" help="true if the link will open a new window." depends="hyperlinkType" conditional="hyperlinkType=DisplayAction OR hyperlinkType=FlexoAction"/>
 		<property name="isValidatingForm" label="validate_form" widget="CHECKBOX" constraint="9" depends="hyperlinkType,submitForm" conditional="hyperlinkType=null OR hyperlinkType=Confirm  OR ((hyperlinkType=FlexoAction OR hyperlinkType=DisplayAction) AND submitForm=true)"/>
@@ -59,7 +59,7 @@
 			<param name="activate_compound_bindings" value="true"/>			
 		</property>
 		<property name="isSubmittingOpener" label="isSubmittingOpener" widget="CHECKBOX" constraint="13" depends="hyperlinkType,popupComponentDefinition" conditional="popupComponentDefinition!=null AND popupComponentDefinition.isHelper=false AND (hyperlinkType!=FlexoAction AND hyperlinkType!=displayAction)">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="includePopupInPage" label="include_popup_in_page" widget="CHECKBOX" constraint="12" depends="popupComponentDefinition,isInPopup,hyperlinkType" conditional="popupComponentDefinition!=null AND popupComponentDefinition.isHelper=false AND (isInPopup=false AND (hyperlinkType=Submit OR hyperlinkType=Save OR hyperlinkType=New OR hyperlinkType=null OR hyperlinkType=FlexoAction OR hyperlinkType=DisplayAction)"/>
 	</tab>
@@ -72,7 +72,7 @@
 		</property>
 		<property name="bindingValueWhenEmpty" label="binding_valueWhenEmpty" widget="TEXT_FIELD" constraint="0">
 			<param name="columns" value="10"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="bindingUrl" label="binding_url" widget="CUSTOM" constraint="1" depends="hyperlinkType" conditional="hyperlinkType=URL">
 			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>

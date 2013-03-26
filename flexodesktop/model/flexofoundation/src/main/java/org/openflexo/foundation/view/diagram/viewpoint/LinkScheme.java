@@ -99,6 +99,8 @@ public class LinkScheme extends AbstractCreationScheme implements DiagramEdition
 	}
 
 	public boolean isValidTarget(EditionPattern actualFromTarget, EditionPattern actualToTarget) {
+		// TODO: improved this so that we can take into account adressed models restrictions. See also
+		// LinkScheme.isValidTarget on branch 1.5.1
 		return getFromTargetEditionPattern().isAssignableFrom(actualFromTarget)
 				&& getToTargetEditionPattern().isAssignableFrom(actualToTarget);
 	}
