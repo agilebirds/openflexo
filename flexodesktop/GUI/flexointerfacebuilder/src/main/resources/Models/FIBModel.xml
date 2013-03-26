@@ -211,6 +211,8 @@
     <property name="rows" xmlTag="rows" attribute="YES"/> 
     <property name="text" xmlTag="text" attribute="YES"/> 
     <property name="tokenMarkerStyle" xmlTag="tokenMarkerStyle" attribute="YES"/> 
+  </entity>
+
   <entity name="org.openflexo.fib.model.FIBEditorPane" xmlTag="EditorPane"> 
     <property name="contentType" xmlTag="contentType" attribute="YES"/> 
   </entity>
