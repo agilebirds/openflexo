@@ -613,6 +613,10 @@ public class BindingValue extends Expression {
 		// System.out.println("  > evaluate BindingValue " + this + " in context " + context);
 		if (isValid()) {
 			Object current = context.getValue(getBindingVariable());
+			if (current == null) {
+				// If the binding variable is null, just return null
+				return null;
+			}
 			BindingPathElement previous = getBindingVariable();
 			for (BindingPathElement e : getBindingPath()) {
 				if (current == null) {

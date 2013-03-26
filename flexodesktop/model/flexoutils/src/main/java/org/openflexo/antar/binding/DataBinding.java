@@ -375,6 +375,11 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 			return true;
 		}
 
+		if (isNull()) {
+			// A null expression is valid (otherwise return Object.class as analyzed type, and type checking will fail in next test
+			return true;
+		}
+
 		invalidBindingReason = "Invalid binding " + this + " because types are not matching searched " + getDeclaredType() + " having "
 				+ getAnalyzedType();
 		if (logger.isLoggable(Level.FINE)) {
@@ -411,6 +416,10 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 
 	public boolean isConstant() {
 		return getExpression() != null && getExpression() instanceof Constant;
+	}
+
+	public boolean isNull() {
+		return getExpression() != null && getExpression() == Constant.ObjectSymbolicConstant.NULL;
 	}
 
 	public boolean isStringConstant() {
@@ -571,8 +580,10 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 							((BindingValue) e).setDataBinding(DataBinding.this);
 							try {
 								Object o = ((BindingValue) e).getBindingValue(context);
+								// System.out.println("For " + e + " getting " + o);
 								return Constant.makeConstant(o);
 							} catch (NullReferenceException nre) {
+								// System.out.println("NullReferenceException for " + e);
 								return new UnresolvedExpression();
 							}
 						}

@@ -133,7 +133,7 @@ public class JavaMethodPathElement extends FunctionPathElement {
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException,
 			InvocationTargetTransformException {
 
-		// System.out.println("evaluate " + getMethodDefinition().getSignature() + " for " + target);
+		//System.out.println("evaluate " + getMethodDefinition().getSignature() + " for " + target);
 
 		Object[] args = new Object[getFunction().getArguments().size()];
 		int i = 0;
