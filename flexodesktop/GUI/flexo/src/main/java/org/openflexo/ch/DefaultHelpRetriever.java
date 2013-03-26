@@ -25,8 +25,8 @@ import org.openflexo.GeneralPreferences;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoModelObject.HelpRetriever;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoObject.HelpRetriever;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.inspector.widget.DenaliWidget;
 
@@ -45,7 +45,7 @@ public class DefaultHelpRetriever implements HelpRetriever {
 	 * <html>...</html> tags.
 	 */
 	@Override
-	public String shortHelpForObject(FlexoModelObject object) {
+	public String shortHelpForObject(FlexoObject object) {
 		if (!(object instanceof InspectableObject)) {
 			return null;
 		}
@@ -66,7 +66,7 @@ public class DefaultHelpRetriever implements HelpRetriever {
 	 * <html>...</html> tags.
 	 */
 	@Override
-	public String longHelpForObject(FlexoModelObject object) {
+	public String longHelpForObject(FlexoObject object) {
 		if (!(object instanceof InspectableObject)) {
 			return null;
 		}

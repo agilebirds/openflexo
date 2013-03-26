@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.technologyadapter.owl.model.OWLConcept" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="uri" localize="true" name="UriLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Uri" data="data.URI" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
+      <Label label="semantic_statements" align="center" localize="true" name="SemanticStatementsLabel" constraints="twocols(location=left;index=200;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.technologyadapter.owl.model.OWLStatement" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.semanticStatements" constraints="twocols(location=right;index=201;expandHorizontally=true;expandVertically=true)" name="SemanticStatements" localize="true" manageDynamicModel="true">
+        <IconColumn data="controller.iconForObject(iterator)" title="" columnWidth="30" resizable="false" displayTitle="true" />
+        <LabelColumn data="iterator.toString" title="statement" columnWidth="200" resizable="true" displayTitle="true" />
+      </Table>
+    </Tab>
+    <Tab index="1" title="Annotations" layout="twocols" font="SansSerif,0,11" name="AnnotationsTab">
+      <Table iteratorClassName="org.openflexo.technologyadapter.owl.model.PropertyStatement" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.annotationStatements" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=true)" name="AnnotationStatements" localize="true" manageDynamicModel="true">
+        <IconColumn data="controller.iconForObject(iterator)" title="" columnWidth="30" resizable="false" displayTitle="true" />
+        <LabelColumn data="iterator.property.name" title="property" columnWidth="100" resizable="true" displayTitle="true" />
+        <TextFieldColumn data="iterator.stringValue" title="value" columnWidth="350" resizable="true" displayTitle="true" />
+        <DropDownColumn list="iterator.language.availableValues" data="iterator.language" format="object.name" title="lang" columnWidth="80" resizable="false" displayTitle="true" />
+        <AddAction method="data.createNewCommentAnnotation()" isAvailable="data.isAnnotationAddable()" name="make_new_comment_annotation" />
+        <AddAction method="data.createNewLabelAnnotation()" isAvailable="data.isAnnotationAddable()" name="make_new_label_annotation" />
+        <RemoveAction method="data.deleteAnnotation(selected)" isAvailable="data.isAnnotationDeletable(selected)" name="delete_annotation" />
+      </Table>
+      <Table iteratorClassName="org.openflexo.technologyadapter.owl.model.ObjectPropertyStatement" visibleRowCount="2" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.annotationObjectStatements" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=true)" name="AnnotationObjectStatements" localize="true" manageDynamicModel="true">
+        <IconColumn data="controller.iconForObject(iterator)" title="" columnWidth="30" resizable="false" displayTitle="true" />
+        <LabelColumn data="iterator.property.name" title="property" columnWidth="100" resizable="true" displayTitle="true" />
+        <AddAction method="data.createNewSeeAlsoAnnotation()" isAvailable="data.isAnnotationAddable()" name="make_new_see_also_annotation" />
+        <AddAction method="data.createNewIsDefinedByAnnotation()" isAvailable="data.isAnnotationAddable()" name="make_new_is_defined_by_annotation" />
+        <RemoveAction method="data.deleteAnnotation(selected)" isAvailable="data.isAnnotationDeletable(selected)" name="delete_annotation" />
+      </Table>
+    </Tab>
+    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="all_ontologic_statements" align="center" localize="true" name="StatementsLabel" constraints="twocols(location=left;index=10;expandHorizontally=true;expandVertically=false)" />
+      <Table iteratorClassName="org.openflexo.technologyadapter.owl.model.OWLStatement" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.statements" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=true)" name="Statements" localize="true" manageDynamicModel="true">
+        <IconColumn data="controller.iconForObject(iterator)" title="" columnWidth="30" resizable="false" displayTitle="true" />
+        <LabelColumn data="iterator.toString" title="statement" columnWidth="200" resizable="true" displayTitle="true" />
+      </Table>
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="all_ontologic_statements" lang="English">All ontologic statements</Localized>
+    <Localized key="all_ontologic_statements" lang="French">All ontologic statements</Localized>
+    <Localized key="all_ontologic_statements" lang="Dutch">All ontologic statements</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="uri" lang="English">URI</Localized>
+    <Localized key="uri" lang="French">URI</Localized>
+    <Localized key="uri" lang="Dutch">URI</Localized>
+    <Localized key="is_read_only" lang="English">Is read only</Localized>
+    <Localized key="is_read_only" lang="French">Lecture seule</Localized>
+    <Localized key="is_read_only" lang="Dutch">Is read only</Localized>
+    <Localized key="semantic_statements" lang="English">Semantic statements</Localized>
+    <Localized key="semantic_statements" lang="French">Faits ontologiques</Localized>
+    <Localized key="semantic_statements" lang="Dutch">Semantic statements</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Ontologic object" />
+</Panel>
+

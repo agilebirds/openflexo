@@ -20,6 +20,7 @@
 package org.openflexo.foundation.viewpoint.action;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -32,9 +33,13 @@ import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.viewpoint.ActionContainer;
+import org.openflexo.foundation.viewpoint.ConditionalAction;
+import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeObject;
+import org.openflexo.foundation.viewpoint.FetchRequestIterationAction;
+import org.openflexo.foundation.viewpoint.IterationAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.localization.FlexoLocalization;
 
@@ -71,22 +76,65 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 		FlexoModelObject.addActionForClass(CreateEditionAction.actionType, EditionAction.class);
 	}
 
+	public static enum CreateEditionActionChoice {
+		BuiltInAction, ModelSlotSpecificAction, RequestAction, ControlAction
+	}
+
 	public String description;
+	private CreateEditionActionChoice actionChoice = CreateEditionActionChoice.BuiltInAction;
 	public ModelSlot<?, ?> modelSlot;
 	public Class<? extends EditionAction> editionActionClass;
 
 	private EditionAction newEditionAction;
 
+	private List<Class<? extends EditionAction>> builtInActions;
+	private List<Class<? extends EditionAction>> controlActions;
+
 	CreateEditionAction(EditionSchemeObject focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
+
+		builtInActions = new ArrayList<Class<? extends EditionAction>>();
+		builtInActions.add(org.openflexo.foundation.viewpoint.DeclarePatternRole.class);
+		builtInActions.add(org.openflexo.foundation.viewpoint.AddEditionPattern.class);
+		builtInActions.add(DeleteAction.class);
+
+		controlActions = new ArrayList<Class<? extends EditionAction>>();
+		controlActions.add(ConditionalAction.class);
+		controlActions.add(IterationAction.class);
+		controlActions.add(FetchRequestIterationAction.class);
 
 	}
 
 	public List<Class<? extends EditionAction>> getAvailableEditionActionTypes() {
-		if (modelSlot != null) {
-			return modelSlot.getAvailableEditionActionTypes();
+		switch (actionChoice) {
+		case BuiltInAction:
+			return builtInActions;
+		case ControlAction:
+			return controlActions;
+		case ModelSlotSpecificAction:
+			if (modelSlot != null) {
+				return modelSlot.getAvailableEditionActionTypes();
+			}
+			return null;
+		case RequestAction:
+			if (modelSlot != null) {
+				return modelSlot.getAvailableFetchRequestActionTypes();
+			}
+			return null;
+		default:
+			return null;
 		}
-		return null;
+	}
+
+	public CreateEditionActionChoice getActionChoice() {
+		return actionChoice;
+	}
+
+	public void setActionChoice(CreateEditionActionChoice actionChoice) {
+		if (this.actionChoice != actionChoice) {
+			this.actionChoice = actionChoice;
+			editionActionClass = null;
+		}
 	}
 
 	@Override
@@ -111,16 +159,22 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 		return newEditionAction;
 	}
 
-	private String validityMessage = NO_MODEL_SLOT;
+	private String validityMessage = NO_ACTION_TYPE_SELECTED;
 
 	private static final String NO_MODEL_SLOT = FlexoLocalization.localizedForKey("please_choose_a_model_slot");
+	private static final String NO_ACTION_TYPE_SELECTED = FlexoLocalization.localizedForKey("please_select_an_action_type");
 
 	public String getValidityMessage() {
 		return validityMessage;
 	}
 
+	@Override
 	public boolean isValid() {
-		if (modelSlot == null) {
+		if (editionActionClass == null) {
+			validityMessage = NO_ACTION_TYPE_SELECTED;
+			return false;
+		}
+		if (actionChoice == CreateEditionActionChoice.ModelSlotSpecificAction && modelSlot == null) {
 			validityMessage = NO_MODEL_SLOT;
 			return false;
 		} else {

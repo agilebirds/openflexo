@@ -37,8 +37,6 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-import org.openflexo.antar.expr.NullReferenceException;
-import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBButtonColumn;
 import org.openflexo.fib.model.FIBCheckBoxColumn;
@@ -357,7 +355,7 @@ public class FIBTableModel extends AbstractTableModel {
 		AbstractColumn column = columnAt(col);
 		if (column != null) {
 			Object object = elementAt(row);
-			return column.getValueFor(object);
+			return column.getValueFor(object, _widget.getBindingEvaluationContext());
 		}
 		return null;
 
@@ -368,7 +366,7 @@ public class FIBTableModel extends AbstractTableModel {
 		AbstractColumn column = columnAt(col);
 		if (column != null && column instanceof EditableColumn) {
 			Object object = elementAt(row);
-			((EditableColumn) column).setValueFor(object, value);
+			((EditableColumn) column).setValueFor(object, value, _widget.getBindingEvaluationContext());
 			fireCellUpdated(object, row, col);
 		}
 	}
@@ -444,18 +442,18 @@ public class FIBTableModel extends AbstractTableModel {
 		return _controls.elements();
 	}*/
 
-		/*  if (controlPanel == null) {
-		    controlPanel = new JPanel() {
-		         @Override
-		        public void remove(int index)
-		        {
-		            super.remove(index);
-		        }
-		    };
-		    controlPanel.setLayout(new FlowLayout());
-		    controlPanel.setOpaque(false);
-		}
-		return controlPanel;*/
+	/*  if (controlPanel == null) {
+	    controlPanel = new JPanel() {
+	         @Override
+	        public void remove(int index)
+	        {
+	            super.remove(index);
+	        }
+	    };
+	    controlPanel.setLayout(new FlowLayout());
+	    controlPanel.setOpaque(false);
+	}
+	return controlPanel;*/
 
 	public FIBTableColumn getPropertyListColumnWithTitle(String title) {
 		return _fibTable.getColumnWithTitle(title);

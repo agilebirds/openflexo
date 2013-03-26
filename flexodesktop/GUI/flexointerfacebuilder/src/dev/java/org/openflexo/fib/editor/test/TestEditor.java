@@ -24,22 +24,22 @@ import java.io.File;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.toolbox.FileResource;
 
-public class TestEditor {
+public class TestEditor extends FIBAbstractEditor {
+
+	@Override
+	public Object[] getData() {
+		Object[] returned = new Object[1];
+		returned[0] = new Family();
+		return returned;
+	}
+
+	@Override
+	public File getFIBFile() {
+		return new FileResource("TestFIB/TestTable.fib");
+	}
 
 	public static void main(String[] args) {
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			@Override
-			public Object[] getData() {
-				Object[] returned = new Object[1];
-				returned[0] = new Family();
-				return returned;
-			}
-
-			@Override
-			public File getFIBFile() {
-				return new FileResource("TestFIB/TestTable.fib");
-			}
-		};
-		editor.launch();
+		main(TestEditor.class);
 	}
+
 }

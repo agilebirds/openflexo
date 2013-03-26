@@ -47,6 +47,7 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 		_values = new Hashtable<Language, Hashtable<String, String>>();
 	}
 
+	@Override
 	public FIBComponent getComponent() {
 		return _component;
 	}
@@ -162,11 +163,6 @@ public class FIBLocalizedDictionary extends FIBModelObject implements LocalizedD
 		// logger.warning(">>>>>>>>>>>>>>>>>>>>> Cannot find key "+key+" for language "+language);
 		return isSearchingNewEntries;
 		// return false;
-	}
-
-	@Override
-	public FIBComponent getRootComponent() {
-		return getComponent().getRootComponent();
 	}
 
 	public class DynamicEntry {

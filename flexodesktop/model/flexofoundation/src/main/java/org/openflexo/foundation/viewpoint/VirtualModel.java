@@ -243,6 +243,12 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 		notifyObservers(new EditionPatternDeleted(pattern));
 	}
 
+	/**
+	 * Return EditionPattern matching supplied id represented as a string, which could be either the name of EditionPattern, or its URI
+	 * 
+	 * @param editionPatternId
+	 * @return
+	 */
 	public EditionPattern getEditionPattern(String editionPatternId) {
 		for (EditionPattern editionPattern : editionPatterns) {
 			if (editionPattern.getName().equals(editionPatternId)) {
@@ -251,11 +257,13 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 			if (editionPattern.getURI().equals(editionPatternId)) {
 				return editionPattern;
 			}
+			// Special case to handle conversion from old VP version
+			// TODO: to be removed when all VP are up-to-date
+			if ((getViewPoint().getURI() + "#" + editionPattern.getName()).equals(editionPatternId)) {
+				return editionPattern;
+			}
 		}
-		logger.warning("Not found EditionPattern:" + editionPatternId);
-		for (EditionPattern editionPattern : editionPatterns) {
-			System.out.println("J'ai ca: " + editionPattern);
-		}
+		// logger.warning("Not found EditionPattern:" + editionPatternId);
 		return null;
 	}
 

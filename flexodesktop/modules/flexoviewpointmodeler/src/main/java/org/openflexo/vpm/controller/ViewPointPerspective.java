@@ -35,9 +35,11 @@ import org.openflexo.components.widget.FIBVirtualModelBrowser;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteObject;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
@@ -51,9 +53,11 @@ import org.openflexo.vpm.diagrampalette.DiagramPaletteController;
 import org.openflexo.vpm.diagrampalette.DiagramPaletteModuleView;
 import org.openflexo.vpm.examplediagram.ExampleDiagramController;
 import org.openflexo.vpm.examplediagram.ExampleDiagramModuleView;
-import org.openflexo.vpm.view.EditionPatternView;
-import org.openflexo.vpm.view.ViewPointLibraryView;
+import org.openflexo.vpm.view.DiagramEditionPatternView;
+import org.openflexo.vpm.view.DiagramSpecificationView;
+import org.openflexo.vpm.view.StandardEditionPatternView;
 import org.openflexo.vpm.view.ViewPointView;
+import org.openflexo.vpm.view.VirtualModelView;
 
 public class ViewPointPerspective extends FlexoPerspective {
 
@@ -149,13 +153,19 @@ public class ViewPointPerspective extends FlexoPerspective {
 		if (hasModuleViewForObject(proposedObject)) {
 			return proposedObject;
 		}
-		return _controller.getViewPointLibrary();
+		if (proposedObject instanceof EditionPatternObject) {
+			return ((EditionPatternObject) proposedObject).getEditionPattern();
+		}
+		if (proposedObject instanceof ViewPointObject) {
+			return ((ViewPointObject) proposedObject).getViewPoint();
+		}
+		return null;
 	}
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoObject object) {
-		return object instanceof ViewPointLibrary || object instanceof DiagramPalette || object instanceof ExampleDiagram
-				|| object instanceof ViewPoint || object instanceof EditionPattern;
+		return object instanceof DiagramPalette || object instanceof ExampleDiagram || object instanceof ViewPoint
+				|| object instanceof EditionPattern;
 	}
 
 	@Override
@@ -163,16 +173,25 @@ public class ViewPointPerspective extends FlexoPerspective {
 		if (object.isDeleted()) {
 			return null;
 		}
-		if (object instanceof ViewPointLibrary) {
-			return new ViewPointLibraryView((ViewPointLibrary) object, (VPMController) controller);
-		}
 		if (object instanceof ViewPoint) {
 			return new ViewPointView((ViewPoint) object, (VPMController) controller);
 		}
 		if (object instanceof EditionPattern) {
-			if (((EditionPattern) object).getViewPoint() != null) {
+			EditionPattern ep = (EditionPattern) object;
+			if (ep instanceof VirtualModel) {
+				if (ep instanceof DiagramSpecification) {
+					return new DiagramSpecificationView(ep, (VPMController) controller);
+				} else {
+					return new VirtualModelView(ep, (VPMController) controller);
+				}
+			} else {
+				if (ep.getVirtualModel() instanceof DiagramSpecification) {
+					return new DiagramEditionPatternView(ep, (VPMController) controller);
+				} else {
+					return new StandardEditionPatternView(ep, (VPMController) controller);
+				}
 			}
-			return new EditionPatternView((EditionPattern) object, (VPMController) controller);
+
 		}
 		if (object instanceof DiagramPalette) {
 			return new DiagramPaletteController(_controller, (DiagramPalette) object, false).getModuleView();

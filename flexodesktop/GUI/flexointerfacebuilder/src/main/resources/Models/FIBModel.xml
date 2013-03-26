@@ -255,6 +255,16 @@
     <property name="isDefault" xmlTag="default" attribute="YES" ignoreDefaultValue="false"/> 
   </entity>
   
+  <entity name="org.openflexo.fib.model.FIBReferencedComponent" xmlTag="FIBReferencedComponent"> 
+    <property name="componentFile" xmlTag="componentFile" attribute="YES"/> 
+    <property name="assignments" xmlTag="ReferenceAssignment" type="vector"/> 
+  </entity>
+   
+  <entity name="org.openflexo.fib.model.FIBReferencedComponent$FIBReferenceAssignment" xmlTag="ReferenceAssignment"> 
+    <property name="variable" xmlTag="variable" attribute="YES"/> 
+    <property name="value" xmlTag="value" attribute="YES"/> 
+  </entity>
+
   <entity name="org.openflexo.fib.model.FIBCustom" xmlTag="Custom"> 
     <property name="componentClass" xmlTag="componentClassName" attribute="YES"/> 
     <property name="assignments" xmlTag="Assignment" type="vector"/> 

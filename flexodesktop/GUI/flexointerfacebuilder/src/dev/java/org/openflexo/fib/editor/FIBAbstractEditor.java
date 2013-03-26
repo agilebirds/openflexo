@@ -46,6 +46,7 @@ import javax.swing.WindowConstants;
 
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.editor.FIBEditor.FIBPreferences;
 import org.openflexo.fib.editor.controller.FIBEditorController;
 import org.openflexo.fib.editor.controller.FIBEditorPalette;
 import org.openflexo.fib.editor.controller.FIBInspectorController;
@@ -58,6 +59,7 @@ import org.openflexo.localization.Language;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.toolbox.RelativePathFileConverter;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.xmlcode.AccessorInvocationException;
 import org.openflexo.xmlcode.DuplicateSerializationIdentifierException;
@@ -334,8 +336,9 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					logger.info("Getting this "
-							+ XMLCoder.encodeObjectWithMapping(fibComponent, FIBLibrary.getFIBMapping(), StringEncoder.getDefaultInstance()));
+					RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(fibFile.getParentFile());
+					StringEncoder stringEncoder = new StringEncoder(StringEncoder.getDefaultInstance(), relativePathFileConverter);
+					logger.info("Getting this " + XMLCoder.encodeObjectWithMapping(fibComponent, FIBLibrary.getFIBMapping(), stringEncoder));
 				} catch (InvalidObjectSpecificationException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -420,6 +423,8 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		getPalette().setEditorController(editorController);
 		frame.getContentPane().add(editorController.getEditorPanel());
 		frame.pack();
+
+		FIBPreferences.setLastFile(fibFile);
 	}
 
 	public void switchToData(Object data) {

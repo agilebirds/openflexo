@@ -228,7 +228,7 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 
 	protected FIBCustomComponent<T, ?> getViewCustomWidget(Object rowObject) {
 		if (_viewCustomWidget != null) {
-			T value = getValueFor(rowObject);
+			T value = getValueFor(rowObject, getBindingEvaluationContext());
 			_viewCustomWidget.setEditedObject(value);
 			_viewCustomWidget.setRevertValue(value);
 			logger.fine("Return _viewCustomWidget for model rowObject=" + rowObject + " value=" + value);
@@ -238,7 +238,7 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 
 	protected FIBCustomComponent<T, ?> getEditCustomWidget(Object rowObject) {
 		if (_editCustomWidget != null) {
-			T value = getValueFor(rowObject);
+			T value = getValueFor(rowObject, getBindingEvaluationContext());
 			_editCustomWidget.setEditedObject(value);
 			_editCustomWidget.setRevertValue(value);
 			logger.fine("Return _editCustomWidget for model rowObject=" + rowObject + " value=" + value);
@@ -303,7 +303,7 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 				table.putClientProperty("terminateEditOnFocusLost", Boolean.FALSE);
 			}
 			setEditedRowObject(elementAt(row));
-			_customWidget.setEditedObject(getValueFor(elementAt(row)));
+			_customWidget.setEditedObject(getValueFor(elementAt(row), getBindingEvaluationContext()));
 			if (disableTerminateEditOnFocusLost) {
 				_customWidget.addApplyCancelListener(new ApplyCancelListener() {
 
@@ -373,8 +373,8 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 	@Override
 	public void fireApplyPerformed() {
 		logger.fine("fireApplyPerformed() for " + _editedRowObject);
-		setValueFor(_editedRowObject, _editCustomWidget.getEditedObject());
-		notifyValueChangedFor(_editedRowObject, _editCustomWidget.getEditedObject());
+		setValueFor(_editedRowObject, _editCustomWidget.getEditedObject(), getBindingEvaluationContext());
+		notifyValueChangedFor(_editedRowObject, _editCustomWidget.getEditedObject(), getBindingEvaluationContext());
 	}
 
 	@Override

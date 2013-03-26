@@ -86,8 +86,8 @@ public class FIBLocalizedEntry extends FIBModelObject {
 	}
 
 	@Override
-	public FIBComponent getRootComponent() {
-		return getLocalizedDictionary().getRootComponent();
+	public FIBComponent getComponent() {
+		return getLocalizedDictionary().getComponent();
 	}
 
 	@Override

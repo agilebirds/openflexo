@@ -49,7 +49,6 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
 
 import org.jdesktop.swingx.JXTable;
-import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NotSettableContextException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
@@ -136,7 +135,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		if (_fibTable.getEnable().isSet() && _fibTable.getEnable().isValid()) {
 			Boolean enabledValue = true;
 			try {
-				enabledValue = _fibTable.getEnable().getBindingValue(getController());
+				enabledValue = _fibTable.getEnable().getBindingValue(getBindingEvaluationContext());
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
@@ -191,8 +190,9 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 			setSelectedObject(wasSelected);
 		} else {
 			try {
-				if (getComponent().getSelected().isValid() && getComponent().getSelected().getBindingValue(getController()) != null) {
-					Object newSelectedObject = getComponent().getSelected().getBindingValue(getController());
+				if (getComponent().getSelected().isValid()
+						&& getComponent().getSelected().getBindingValue(getBindingEvaluationContext()) != null) {
+					Object newSelectedObject = getComponent().getSelected().getBindingValue(getBindingEvaluationContext());
 					if (returned = notEquals(newSelectedObject, getSelectedObject())) {
 						setSelectedObject(newSelectedObject);
 					}
@@ -245,13 +245,6 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 
 	public void clearSelection() {
 		getListSelectionModel().clearSelection();
-	}
-
-	@Override
-	public List<DataBinding<?>> getDependencyBindings() {
-		List<DataBinding<?>> returned = super.getDependencyBindings();
-		returned.add(getWidget().getSelected());
-		return returned;
 	}
 
 	@Override
@@ -530,7 +523,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		if (getComponent().getSelected().isValid()) {
 			logger.fine("Sets SELECTED binding with " + selectedObject);
 			try {
-				getComponent().getSelected().setBindingValue(selectedObject, getController());
+				getComponent().getSelected().setBindingValue(selectedObject, getBindingEvaluationContext());
 			} catch (TypeMismatchException e1) {
 				e1.printStackTrace();
 			} catch (NullReferenceException e1) {
@@ -576,8 +569,12 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		int index = getValue().indexOf(o);
 		if (index > -1) {
 			ignoreNotifications = true;
-			index = _table.convertRowIndexToView(index);
-			getListSelectionModel().addSelectionInterval(index, index);
+			try {
+				index = _table.convertRowIndexToView(index);
+				getListSelectionModel().addSelectionInterval(index, index);
+			} catch (IndexOutOfBoundsException e) {
+				logger.warning("Unexpected " + e);
+			}
 			ignoreNotifications = false;
 		}
 	}
@@ -587,7 +584,11 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		int index = getValue().indexOf(o);
 		if (index > -1) {
 			ignoreNotifications = true;
-			index = _table.convertRowIndexToView(index);
+			try {
+				index = _table.convertRowIndexToView(index);
+			} catch (IndexOutOfBoundsException e) {
+				logger.warning("Unexpected " + e);
+			}
 			getListSelectionModel().removeSelectionInterval(index, index);
 			ignoreNotifications = false;
 		}

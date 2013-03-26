@@ -524,6 +524,14 @@ public class FIBBrowser extends FIBWidget {
 		performValidation(RootBindingMustBeValid.class, report);
 	}
 
+	@Override
+	public List<DataBinding<?>> getDependencyBindings() {
+		List<DataBinding<?>> returned = super.getDependencyBindings();
+		returned.add(getSelected());
+		returned.add(getRoot());
+		return returned;
+	}
+
 	public static class RootBindingMustBeValid extends BindingMustBeValid<FIBBrowser> {
 		public RootBindingMustBeValid() {
 			super("'root'_binding_is_not_valid", FIBBrowser.class);

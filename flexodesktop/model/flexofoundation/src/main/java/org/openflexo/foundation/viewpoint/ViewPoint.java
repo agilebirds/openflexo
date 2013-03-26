@@ -35,7 +35,6 @@ import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
-import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
@@ -109,6 +108,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	private List<VirtualModel<?>> virtualModels;
 	private ViewPointResource resource;
 	private BindingModel bindingModel;
+	private EditionPatternBindingFactory bindingFactory = new EditionPatternBindingFactory(this);
 
 	/**
 	 * Stores a chained collections of objects which are involved in validation
@@ -321,6 +321,23 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		return null;
 	}
 
+	/**
+	 * Return EditionPattern matching supplied id represented as a string, which could be either the name of EditionPattern, or its URI
+	 * 
+	 * @param editionPatternId
+	 * @return
+	 */
+	public EditionPattern getEditionPattern(String editionPatternId) {
+		for (VirtualModel vm : getVirtualModels()) {
+			EditionPattern returned = vm.getEditionPattern(editionPatternId);
+			if (returned != null) {
+				return returned;
+			}
+		}
+		logger.warning("Not found EditionPattern:" + editionPatternId);
+		return null;
+	}
+
 	// Return a default diagram specification (temporary hack to ensure compatibility with old versions)
 	@Deprecated
 	public DiagramSpecification getDefaultDiagramSpecification() {
@@ -470,16 +487,14 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	}
 
 	@Override
-	public BindingFactory getBindingFactory() {
-		return EDITION_PATTERN_BINDING_FACTORY;
+	public EditionPatternBindingFactory getBindingFactory() {
+		return bindingFactory;
 	}
 
 	@Override
 	public ValidationModel getDefaultValidationModel() {
 		return ViewPointLibrary.VALIDATION_MODEL;
 	}
-
-	private static EditionPatternBindingFactory EDITION_PATTERN_BINDING_FACTORY = new EditionPatternBindingFactory();
 
 	// ==========================================================================
 	// ============================== Model Slots ===============================

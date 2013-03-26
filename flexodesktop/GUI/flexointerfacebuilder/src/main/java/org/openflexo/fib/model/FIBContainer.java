@@ -54,6 +54,26 @@ public abstract class FIBContainer extends FIBComponent {
 		return super.getDataClass();
 	}*/
 
+	/**
+	 * Return a recursive list of all components beeing embedded in this container
+	 * 
+	 * @return
+	 */
+	public List<FIBComponent> getAllSubComponents() {
+		List<FIBComponent> returned = new ArrayList<FIBComponent>();
+		appendAllSubComponents(this, returned);
+		return returned;
+	}
+
+	private void appendAllSubComponents(FIBContainer container, List<FIBComponent> returned) {
+		for (FIBComponent child : container.getSubComponents()) {
+			returned.add(child);
+			if (child instanceof FIBContainer) {
+				appendAllSubComponents((FIBContainer) child, returned);
+			}
+		}
+	}
+
 	public Vector<FIBComponent> getSubComponents() {
 		return subComponents;
 	}

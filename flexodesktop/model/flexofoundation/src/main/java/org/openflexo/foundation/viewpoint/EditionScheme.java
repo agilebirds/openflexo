@@ -292,8 +292,11 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 
 	@Override
 	public VirtualModel<?> getVirtualModel() {
-		if (getEditionPattern() != null) {
+		if (getEditionPattern() != null && getEditionPattern().getVirtualModel() != null) {
 			return getEditionPattern().getVirtualModel();
+		}
+		if (getEditionPattern() instanceof VirtualModel) {
+			return (VirtualModel<?>) getEditionPattern();
 		}
 		return null;
 	}

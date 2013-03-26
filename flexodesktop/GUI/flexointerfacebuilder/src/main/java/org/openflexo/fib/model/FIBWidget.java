@@ -408,8 +408,8 @@ public abstract class FIBWidget extends FIBComponent {
 		}
 
 		@Override
-		public FIBComponent getRootComponent() {
-			return FIBWidget.this.getRootComponent();
+		public FIBComponent getComponent() {
+			return FIBWidget.this;
 		}
 
 		@Override
@@ -459,8 +459,8 @@ public abstract class FIBWidget extends FIBComponent {
 		}
 
 		@Override
-		public FIBComponent getRootComponent() {
-			return FIBWidget.this.getRootComponent();
+		public FIBComponent getComponent() {
+			return FIBWidget.this;
 		}
 
 		@Override
@@ -517,8 +517,8 @@ public abstract class FIBWidget extends FIBComponent {
 		}
 
 		@Override
-		public FIBComponent getRootComponent() {
-			return FIBWidget.this.getRootComponent();
+		public FIBComponent getComponent() {
+			return FIBWidget.this;
 		}
 
 		@Override
@@ -660,6 +660,13 @@ public abstract class FIBWidget extends FIBComponent {
 	@Override
 	public Collection<? extends FIBModelObject> getEmbeddedObjects() {
 		return null;
+	}
+
+	@Override
+	public List<DataBinding<?>> getDependencyBindings() {
+		List<DataBinding<?>> returned = super.getDependencyBindings();
+		returned.add(getEnable());
+		return returned;
 	}
 
 	@Override

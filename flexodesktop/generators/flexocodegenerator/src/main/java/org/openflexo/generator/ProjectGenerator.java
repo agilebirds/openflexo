@@ -20,8 +20,6 @@
 package org.openflexo.generator;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -48,19 +46,14 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.generator.bpel.BPELGenerator;
 import org.openflexo.generator.dm.DataModelGenerator;
 import org.openflexo.generator.exception.GenerationException;
-import org.openflexo.generator.exception.IOExceptionOccuredException;
 import org.openflexo.generator.exception.PermissionDeniedException;
 import org.openflexo.generator.exception.TemplateNotFoundException;
 import org.openflexo.generator.ie.ComponentsGenerator;
-import org.openflexo.generator.utils.BuildAnaGenerator;
 import org.openflexo.generator.utils.FlexoReaderGenerator;
 import org.openflexo.generator.utils.PrototypeProcessBusinessDataSamplesCreator;
 import org.openflexo.generator.utils.ResourceGenerator;
 import org.openflexo.generator.wkf.ControlGraphsGenerator;
 import org.openflexo.generator.wkf.WorkflowContextGenerator;
-import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.FileUtils.CopyStrategy;
-import org.openflexo.warbuilder.FlexoWarBuilder;
 
 /**
  * Controller for Generator module
@@ -239,6 +232,7 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository> {
 	}
 
 	public File generateWar(boolean cleanImmediately) throws GenerationException {
+		/*
 		final File distDirectory = getRepository().getWarDirectory();
 		if (distDirectory == null) {
 			throw new GenerationException("You MUST define a target directory. Sorry.");
@@ -303,6 +297,8 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository> {
 			throw e;
 		}
 		return new File(distDirectory, getRepository().getWarName() + ".war");
+		*/
+		return null;
 	}
 
 	/**

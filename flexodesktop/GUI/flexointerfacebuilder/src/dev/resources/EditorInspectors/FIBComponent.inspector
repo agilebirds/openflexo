@@ -230,7 +230,7 @@
 				<Panel border="titled" borderTitle="Explicit dependencies" layout="border" constraints="twocols(location=center;expandHorizontally=true;expandVertically=true)"> 
 					<Table name="DependenciesTable" iteratorClassName="org.openflexo.fib.model.FIBDependancy" data="data.explicitDependancies" constraints="border(location=center)" visibleRowCount="5" rowHeight="20">
 						<LabelColumn data="iterator.owner.toString" title="owner" columnWidth="200" resizable="true"/>
-						<DropDownColumn data="iterator.masterComponent" list="iterator.rootComponent.namedComponents" title="dependency" columnWidth="200" resizable="true" />
+						<DropDownColumn data="iterator.masterComponent" list="iterator.component.rootComponent.namedComponents" title="dependency" columnWidth="200" resizable="true" />
 						<AddAction name="make_new_dependency" method="data.createNewExplicitDependancy()" />
 	    				<RemoveAction name="delete_dependency" method="data.deleteExplicitDependancy(selected)"/>
 					</Table>

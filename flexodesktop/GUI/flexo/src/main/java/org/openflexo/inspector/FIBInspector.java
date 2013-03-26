@@ -43,7 +43,7 @@ import org.openflexo.fib.model.FIBTextField;
 import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.model.TwoColsLayoutConstraints;
 import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
@@ -113,7 +113,7 @@ public class FIBInspector extends FIBPanel {
 
 	protected void appendSuperInspector(FIBInspector superInspector) {
 		if (!superInspectorWereAppened) {
-			// System.out.println("Append "+superInspector+" to "+this);
+			// logger.info("> Append " + superInspector + " to " + this);
 			/*try {
 				System.out.println("Clone container:\n"+XMLCoder.encodeObjectWithMapping(superInspector, FIBLibrary.getFIBMapping(),StringEncoder.getDefaultInstance()));
 				System.out.println("Found this:\n"+XMLCoder.encodeObjectWithMapping((XMLSerializable)Cloner.cloneObjectWithMapping(superInspector, FIBLibrary.getFIBMapping()), FIBLibrary.getFIBMapping(),StringEncoder.getDefaultInstance()));
@@ -132,6 +132,7 @@ public class FIBInspector extends FIBPanel {
 			}*/
 			append((FIBPanel) Cloner.cloneObjectWithMapping(superInspector, FIBLibrary.getFIBMapping()));
 			superInspectorWereAppened = true;
+			// logger.info("< Appened " + superInspector + " to " + this);
 		}
 	}
 
@@ -179,7 +180,7 @@ public class FIBInspector extends FIBPanel {
 	 * @param object
 	 * @return a boolean indicating if a new tab was created
 	 */
-	protected boolean updateEditionPatternReferences(FlexoModelObject object) {
+	protected boolean updateEditionPatternReferences(FlexoProjectObject object) {
 
 		boolean returned = false;
 
@@ -188,7 +189,7 @@ public class FIBInspector extends FIBPanel {
 		Set<EditionPattern> editionPatternsToDisplay = new HashSet<EditionPattern>();
 
 		for (EditionPattern ep : tabsForEP.keySet()) {
-			if (object.getEditionPatternReference(ep) == null) {
+			if (object.getEditionPatternInstance(ep) == null) {
 				tabsForEP.get(ep).setVisible(DataBinding.makeFalseBinding());
 			}
 		}
@@ -464,7 +465,8 @@ public class FIBInspector extends FIBPanel {
 		// newTab.setDataClass(EditionPatternInstance.class);
 		// newTab.setData(new DataBinding("data.editionPatternReferences.get["+refIndex+"].editionPatternInstance"));
 		// newTab.setData(new DataBinding("data.editionPatternReferences.firstElement.editionPatternInstance"));
-		String epIdentifier = ep.getVirtualModel().getName() + "_" + ep.getName() + "_" + refIndex;
+		// String epIdentifier = ep.getVirtualModel().getName() + "_" + ep.getName() + "_" + refIndex;
+		String epIdentifier = "data.getEditionPatternInstance(\"" + ep.getURI() + "\")";
 		newTab.setName(epIdentifier + "Panel");
 		int index = 0;
 		LocalizedDictionary localizedDictionary = ep.getViewPoint().getLocalizedDictionary();
@@ -477,6 +479,7 @@ public class FIBInspector extends FIBPanel {
 			label.setLabel(entryLabel);
 			newTab.addToSubComponents(label, new TwoColsLayoutConstraints(TwoColsLayoutLocation.left, false, false), index++);
 			FIBWidget widget = makeWidget(entry, newTab, index++);
+			widget.setBindingFactory(entry.getBindingFactory());
 			widget.setData(new DataBinding<Object>(epIdentifier + "." + entry.getData().toString()));
 			widget.setReadOnly(entry.getIsReadOnly());
 

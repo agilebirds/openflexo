@@ -9,11 +9,6 @@
         <IconColumn data="controller.iconForObject(iterator)" title="" columnWidth="30" resizable="false" displayTitle="true" />
         <LabelColumn data="iterator.name" title="URI" columnWidth="200" resizable="true" displayTitle="true" />
       </Table>
-      <Label label="ontology_sub_properties" align="center" localize="true" name="SubPropertiesLabel" constraints="twocols(location=left;index=8;expandHorizontally=true;expandVertically=false)" />
-      <Table iteratorClassName="org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.subProperties" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=true)" name="SubProperties" localize="true" manageDynamicModel="true">
-        <IconColumn data="controller.iconForObject(iterator)" title="" columnWidth="30" resizable="false" displayTitle="true" />
-        <LabelColumn data="iterator.name" title="URI" columnWidth="200" resizable="true" displayTitle="true" />
-      </Table>
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
@@ -24,9 +19,6 @@
     <Localized key="ontology_super_properties" lang="English">Super properties</Localized>
     <Localized key="ontology_super_properties" lang="French">Super properties</Localized>
     <Localized key="ontology_super_properties" lang="Dutch">Super properties</Localized>
-    <Localized key="ontology_sub_properties" lang="English">Sub properties</Localized>
-    <Localized key="ontology_sub_properties" lang="French">Sub properties</Localized>
-    <Localized key="ontology_sub_properties" lang="Dutch">Sub properties</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="Ontologic data property" />
 </Panel>

@@ -1,6 +1,7 @@
 package org.openflexo.foundation.toc;
 
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
 
@@ -28,6 +29,17 @@ public class ViewSection extends ModelObjectSection<View> {
 
 	public void setView(View view) {
 		setModelObject(view);
+	}
+
+	public ViewResource getViewResource() {
+		if (getView() != null) {
+			return getView().getResource();
+		}
+		return null;
+	}
+
+	public void setViewResource(ViewResource viewResource) {
+
 	}
 
 	@Override

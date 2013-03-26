@@ -26,6 +26,7 @@ import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.widget.DefaultFIBCustomComponent;
 import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.LocalizedDelegate;
 import org.openflexo.toolbox.FileResource;
@@ -36,7 +37,7 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
-public class FIBDescriptionWidget extends DefaultFIBCustomComponent<FlexoModelObject> {
+public class FIBDescriptionWidget extends DefaultFIBCustomComponent<FlexoObject> {
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBDescriptionWidget.class.getPackage().getName());
 
@@ -47,8 +48,8 @@ public class FIBDescriptionWidget extends DefaultFIBCustomComponent<FlexoModelOb
 	}
 
 	@Override
-	public Class<FlexoModelObject> getRepresentedType() {
-		return FlexoModelObject.class;
+	public Class<FlexoObject> getRepresentedType() {
+		return FlexoObject.class;
 	}
 
 	@Override

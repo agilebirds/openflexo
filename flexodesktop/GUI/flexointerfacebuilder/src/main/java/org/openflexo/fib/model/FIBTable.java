@@ -641,4 +641,11 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 		return new ChainedCollection(getColumns(), getActions());
 	}
 
+	@Override
+	public List<DataBinding<?>> getDependencyBindings() {
+		List<DataBinding<?>> returned = super.getDependencyBindings();
+		returned.add(getSelected());
+		return returned;
+	}
+
 }

@@ -88,7 +88,7 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<IFlexoOntology
 
 	private String defaultRenderer = null;
 
-	private static EditionPatternBindingFactory EDITION_PATTERN_BINDING_FACTORY = new EditionPatternBindingFactory();
+	private static EditionPatternBindingFactory EDITION_PATTERN_BINDING_FACTORY = new EditionPatternBindingFactory(null);
 
 	private HashMap<IFlexoOntologyClass, DataBinding<String>> renderers;
 

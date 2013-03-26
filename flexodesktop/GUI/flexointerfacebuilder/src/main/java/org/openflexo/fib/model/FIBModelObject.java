@@ -67,8 +67,7 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 
 	private String name;
 	private String description;
-
-	private BindingFactory bindingFactory;
+	private boolean isDeleted = false;
 
 	private Vector<FIBParameter> parameters = new Vector<FIBParameter>();
 
@@ -77,6 +76,11 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 	}
 
 	public void delete() {
+		isDeleted = true;
+	}
+
+	public boolean isDeleted() {
+		return isDeleted;
 	}
 
 	public String getName() {
@@ -155,32 +159,26 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 		return true;
 	}
 
-	public abstract FIBComponent getRootComponent();
+	// public abstract FIBComponent getRootComponent();
+
+	/**
+	 * Return the FIBComponent this component refer to
+	 * 
+	 * @return
+	 */
+	public abstract FIBComponent getComponent();
 
 	@Override
 	public BindingModel getBindingModel() {
-		if (getRootComponent() != null && getRootComponent() != this) {
-			return getRootComponent().getBindingModel();
-		}
-		return null;
+		return getComponent().getBindingModel();
 	}
 
 	@Override
 	public BindingFactory getBindingFactory() {
-		if (getRootComponent() != null && getRootComponent() != this) {
-			return getRootComponent().getBindingFactory();
-		}
-		if (bindingFactory != null) {
-			return bindingFactory;
+		if (getComponent() != null) {
+			return getComponent().getBindingFactory();
 		}
 		return FIBLibrary.instance().getBindingFactory();
-	}
-
-	public void setBindingFactory(BindingFactory bindingFactory) {
-		if (getRootComponent() != null && getRootComponent() != this) {
-			logger.warning("Called setBindingFactory() on the non-root component: this is weird and generally indicates that something strange happened");
-		}
-		this.bindingFactory = bindingFactory;
 	}
 
 	/**
@@ -352,7 +350,7 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 	}
 
 	public boolean isNameUsedInHierarchy(String aName) {
-		return isNameUsedInHierarchy(aName, getRootComponent());
+		return isNameUsedInHierarchy(aName, getComponent().getRootComponent());
 	}
 
 	private static boolean isNameUsedInHierarchy(String aName, FIBModelObject object) {
@@ -370,7 +368,7 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 	}
 
 	public List<FIBModelObject> getObjectsWithName(String aName) {
-		return retrieveObjectsWithName(aName, getRootComponent(), new ArrayList<FIBModelObject>());
+		return retrieveObjectsWithName(aName, getComponent().getRootComponent(), new ArrayList<FIBModelObject>());
 	}
 
 	private static List<FIBModelObject> retrieveObjectsWithName(String aName, FIBModelObject object, List<FIBModelObject> list) {

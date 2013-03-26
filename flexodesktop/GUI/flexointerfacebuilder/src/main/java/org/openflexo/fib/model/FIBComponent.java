@@ -22,11 +22,13 @@ package org.openflexo.fib.model;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.beans.PropertyChangeEvent;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -34,12 +36,16 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.tree.TreeNode;
 
 import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DependingObjects.HasDependencyBinding;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
+import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.BindingValue;
+import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.validation.FixProposal;
@@ -51,10 +57,11 @@ import org.openflexo.fib.view.FIBView;
 import org.openflexo.localization.LocalizedDelegate;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class FIBComponent extends FIBModelObject implements TreeNode {
+public abstract class FIBComponent extends FIBModelObject implements TreeNode, HasDependencyBinding {
 
 	private static final Logger logger = Logger.getLogger(FIBComponent.class.getPackage().getName());
 
+	private BindingFactory bindingFactory;
 	public static Color DISABLED_COLOR = Color.GRAY;
 
 	@Deprecated
@@ -457,7 +464,11 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		return getParent() == null;
 	}
 
-	@Override
+	/**
+	 * Return the root component for this component. Iterate over the top of the component hierarchy.
+	 * 
+	 * @return
+	 */
 	public FIBComponent getRootComponent() {
 		FIBComponent current = this;
 		while (current != null && !current.isRootComponent()) {
@@ -476,7 +487,10 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			}
 			return _bindingModel;
 		} else {
-			return super.getBindingModel();
+			if (getRootComponent() != null && getRootComponent() != this) {
+				return getRootComponent().getBindingModel();
+			}
+			return null;
 		}
 	}
 
@@ -772,6 +786,16 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	}
 
 	public abstract String getIdentifier();
+
+	/**
+	 * Return the FIBComponent this component refer to
+	 * 
+	 * @return
+	 */
+	@Override
+	public FIBComponent getComponent() {
+		return this;
+	}
 
 	public Type getDataType() {
 		if (dataClass == null) {
@@ -1249,6 +1273,31 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		performValidation(NonRootComponentShouldNotHaveLocalizedDictionary.class, report);
 	}
 
+	@Override
+	public List<DataBinding<?>> getDependencyBindings() {
+		List<DataBinding<?>> returned = new ArrayList<DataBinding<?>>();
+		returned.add(getData());
+		returned.add(getVisible());
+		return returned;
+	}
+
+	@Override
+	public List<TargetObject> getChainedBindings(DataBinding<?> binding, TargetObject object) {
+		return null;
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		// TODO Auto-generated method stub
+
+	}
+
 	public Date getLastModified() {
 		return lastModified;
 	}
@@ -1371,6 +1420,21 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			}
 		}
 
+	}
+
+	@Override
+	public BindingFactory getBindingFactory() {
+		if (bindingFactory != null) {
+			return bindingFactory;
+		}
+		if (getParent() != null) {
+			return getParent().getBindingFactory();
+		}
+		return FIBLibrary.instance().getBindingFactory();
+	}
+
+	public void setBindingFactory(BindingFactory bindingFactory) {
+		this.bindingFactory = bindingFactory;
 	}
 
 }

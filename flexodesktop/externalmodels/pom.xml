@@ -18,7 +18,6 @@
 		<module>flexojavacvs</module>
 		<module>flexojavaparser</module>
 		<module>flexoprjsharing</module>
-		<module>flexowarbuilder</module>
 		<module>flexowsdl</module>
 		<module>flexoxmldiff</module>
 	</modules>

@@ -59,11 +59,8 @@ public abstract class FIBTableAction extends FIBModelObject {
 	}
 
 	@Override
-	public FIBComponent getRootComponent() {
-		if (getTable() != null) {
-			return getTable().getRootComponent();
-		}
-		return null;
+	public FIBComponent getComponent() {
+		return getTable();
 	}
 
 	public DataBinding<Object> getMethod() {

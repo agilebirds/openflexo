@@ -42,7 +42,8 @@ public class ConceptActorReference<T extends IFlexoOntologyObject> extends Actor
 	@Override
 	public T retrieveObject() {
 		if (object == null) {
-			object = (T) getProject().getObject(objectURI);
+			// object = (T) getProject().getObject(objectURI);
+			object = (T) getModelSlotInstance().getModel().getObject(objectURI);
 		}
 		if (object == null) {
 			logger.warning("Could not retrieve object " + objectURI);

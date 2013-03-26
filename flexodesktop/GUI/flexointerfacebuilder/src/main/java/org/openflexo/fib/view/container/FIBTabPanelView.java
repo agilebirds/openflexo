@@ -92,7 +92,7 @@ public class FIBTabPanelView extends FIBContainerView<FIBTabPanel, JTabbedPane> 
 	@Override
 	public synchronized void updateLayout() {
 		int index = tabbedPane.getSelectedIndex();
-		for (FIBView v : getSubViews()) {
+		for (FIBView v : getSubViews().values()) {
 			v.delete();
 		}
 		getResultingJComponent().removeAll();
@@ -108,7 +108,7 @@ public class FIBTabPanelView extends FIBContainerView<FIBTabPanel, JTabbedPane> 
 	public void updateLanguage() {
 		super.updateLanguage();
 		int index = 0;
-		for (FIBView v : subViews) {
+		for (FIBView v : getSubViews().values()) {
 			if (v.getComponent() instanceof FIBTab) {
 				if (v.getJComponent().getParent() != null) {
 					tabbedPane.setTitleAt(index, getLocalized(((FIBTab) v.getComponent()).getTitle()));

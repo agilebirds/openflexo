@@ -514,6 +514,7 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 	 * @return
 	 */
 	protected void saveResourceData(boolean clearIsModified) throws SaveXMLResourceException, SaveResourcePermissionDeniedException {
+		System.out.println("Saving " + getFile());
 		if (!hasWritePermission()) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Permission denied : " + getFile().getAbsolutePath());

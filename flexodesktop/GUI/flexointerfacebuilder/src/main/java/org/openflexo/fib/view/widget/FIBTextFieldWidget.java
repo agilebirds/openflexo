@@ -25,7 +25,6 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,7 +37,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBTextField;
 import org.openflexo.fib.view.FIBWidgetView;
@@ -169,13 +167,6 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 
 	public Class getDefaultType() {
 		return String.class;
-	}
-
-	@Override
-	public List<DataBinding<?>> getDependencyBindings() {
-		List<DataBinding<?>> returned = super.getDependencyBindings();
-		returned.add(getWidget().getEditable());
-		return returned;
 	}
 
 	@Override

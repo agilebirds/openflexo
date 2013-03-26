@@ -29,7 +29,6 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 
 public class FIBCustomColumn extends FIBTableColumn {
@@ -143,7 +142,8 @@ public class FIBCustomColumn extends FIBTableColumn {
 
 	public static class FIBCustomAssignment extends FIBModelObject {
 		@Deprecated
-		public static BindingDefinition VARIABLE = new BindingDefinition("variable", Object.class, DataBinding.BindingDefinitionType.GET_SET, true);
+		public static BindingDefinition VARIABLE = new BindingDefinition("variable", Object.class,
+				DataBinding.BindingDefinitionType.GET_SET, true);
 		@Deprecated
 		public BindingDefinition VALUE = new BindingDefinition("value", Object.class, DataBinding.BindingDefinitionType.GET, true);
 
@@ -185,9 +185,9 @@ public class FIBCustomColumn extends FIBTableColumn {
 		}
 
 		@Override
-		public FIBComponent getRootComponent() {
+		public FIBComponent getComponent() {
 			if (getCustomColumn() != null) {
-				return getCustomColumn().getRootComponent();
+				return getCustomColumn().getComponent();
 			}
 			return null;
 		}

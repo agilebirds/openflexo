@@ -22,9 +22,9 @@ package org.openflexo.fib.view;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,6 +32,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
@@ -39,6 +40,7 @@ import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBSelectable;
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.fib.view.widget.FIBReferencedComponentWidget;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.localization.LocalizationListener;
@@ -56,7 +58,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	private FIBController controller;
 	private final FIBComponentDynamicModel dynamicModel;
 
-	protected Vector<FIBView> subViews;
+	protected Hashtable<FIBComponent, FIBView> subViews;
 
 	private boolean visible = true;
 
@@ -64,12 +66,14 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 
 	private JScrollPane scrolledComponent;
 
+	private FIBReferencedComponentWidget embeddingComponent;
+
 	public FIBView(M model, FIBController controller) {
 		super();
 		this.controller = controller;
 		component = model;
 
-		subViews = new Vector<FIBView>();
+		subViews = new Hashtable<FIBComponent, FIBView>();
 
 		dynamicModel = createDynamicModel();
 
@@ -86,7 +90,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		}
 		logger.fine("Delete view for component " + getComponent());
 		if (subViews != null) {
-			for (FIBView v : subViews) {
+			for (FIBView v : subViews.values()) {
 				v.delete();
 			}
 			subViews.clear();
@@ -107,7 +111,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		if (getComponent() == component) {
 			return getJComponent();
 		} else {
-			for (FIBView v : getSubViews()) {
+			for (FIBView v : getSubViews().values()) {
 				JComponent j = v.getJComponentForObject(component);
 				if (j != null) {
 					return j;
@@ -121,7 +125,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		if (getComponent() == component) {
 			return getDynamicJComponent();
 		} else {
-			for (FIBView v : getSubViews()) {
+			for (FIBView v : getSubViews().values()) {
 				JComponent j = v.geDynamicJComponentForObject(component);
 				if (j != null) {
 					return j;
@@ -137,6 +141,24 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 
 	public FIBController getController() {
 		return controller;
+	}
+
+	public BindingEvaluationContext getBindingEvaluationContext() {
+		if (getParentView() != null) {
+			return getParentView().getBindingEvaluationContext();
+		}
+		if (getComponent() != null && getComponent().getName() != null && getComponent().getName().equals("DropSchemePanel")) {
+			if (getEmbeddingComponent() == null) {
+				System.out.println("for DropSchemePanel embedding component is " + getEmbeddingComponent());
+			}
+		}
+		/*if (getComponent() != null && getComponent().getName() != null && getComponent().getName().equals("DropSchemeWidget")) {
+			System.out.println("for DropSchemeWidget embedding component is " + getEmbeddingComponent());
+		}*/
+		if (getEmbeddingComponent() != null) {
+			return getEmbeddingComponent().getEmbeddedBindingEvaluationContext();
+		}
+		return getController();
 	}
 
 	public final Object getDataObject() {
@@ -206,6 +228,30 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	protected abstract boolean checkValidDataPath();
 
 	public final boolean isComponentVisible() {
+		/*if (getComponent().getName() != null && getComponent().getName().equals("DropSchemePanel")) {
+			System.out.println("Bon, je me demande si c'est visible");
+			System.out.println("getComponent().getVisible()=" + getComponent().getVisible());
+			System.out.println("valid=" + getComponent().getVisible().isValid());
+			System.out.println("getBindingEvaluationContext=" + getBindingEvaluationContext());
+			try {
+				System.out.println("result=" + getComponent().getVisible().getBindingValue(getBindingEvaluationContext()));
+				DataBinding<Object> binding1 = new DataBinding<Object>("data", getComponent(), Object.class, BindingDefinitionType.GET);
+				System.out.println("data=" + binding1.getBindingValue(getBindingEvaluationContext()));
+				DataBinding<Object> binding2 = new DataBinding<Object>("EditionActionBrowser.selected", getComponent(), Object.class,
+						BindingDefinitionType.GET);
+				System.out.println("EditionActionBrowser.selected=" + binding2.getBindingValue(getBindingEvaluationContext()));
+			} catch (TypeMismatchException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}*/
+
 		if (getParentView() != null && !getParentView().isComponentVisible()) {
 			return false;
 		}
@@ -213,7 +259,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		boolean componentVisible = true;
 		if (getComponent().getVisible() != null && getComponent().getVisible().isSet()) {
 			try {
-				Boolean isVisible = getComponent().getVisible().getBindingValue(getController());
+				Boolean isVisible = getComponent().getVisible().getBindingValue(getBindingEvaluationContext());
 				if (isVisible != null) {
 					componentVisible = isVisible;
 				}
@@ -252,7 +298,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 				getResultingJComponent().getParent().repaint();
 			}
 			if (visible) {
-				for (FIBView<?, ?> view : subViews) {
+				for (FIBView<?, ?> view : subViews.values()) {
 					view.updateVisibility();
 				}
 			}
@@ -310,7 +356,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		return null;
 	}
 
-	public Vector<FIBView> getSubViews() {
+	public Hashtable<FIBComponent, FIBView> getSubViews() {
 		return subViews;
 	}
 
@@ -415,5 +461,16 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 
 	public static boolean notEquals(Object o1, Object o2) {
 		return !equals(o1, o2);
+	}
+
+	public FIBReferencedComponentWidget getEmbeddingComponent() {
+		return embeddingComponent;
+	}
+
+	public void setEmbeddingComponent(FIBReferencedComponentWidget embeddingComponent) {
+		if (getComponent() != null && getComponent().getName() != null && getComponent().getName().equals("DropSchemePanel")) {
+			System.out.println("Set emmbedding component for DropSchemePanel with " + embeddingComponent);
+		}
+		this.embeddingComponent = embeddingComponent;
 	}
 }

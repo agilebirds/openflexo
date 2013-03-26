@@ -90,12 +90,15 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 			if (StringUtils.isNotEmpty(vpi.version)) {
 				returned.setVersion(new FlexoVersion(vpi.version));
 			}
+			boolean hasBeenConverted = false;
 			if (StringUtils.isEmpty(vpi.modelVersion)) {
 				// This is the old model, convert to new model
 				restructureViewPointFrom0_1(viewPointDirectory, xmlFile);
+				hasBeenConverted = true;
 			}
 
-			returned.setModelVersion(new FlexoVersion(StringUtils.isNotEmpty(vpi.modelVersion) ? vpi.modelVersion : "0.1"));
+			returned.setModelVersion(StringUtils.isNotEmpty(vpi.modelVersion) ? new FlexoVersion(vpi.modelVersion) : returned
+					.latestVersion());
 			returned.setViewPointLibrary(viewPointLibrary);
 			viewPointLibrary.registerViewPoint(returned);
 

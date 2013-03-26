@@ -108,9 +108,9 @@ public class FIBHtmlEditorOption extends FIBModelObject {
 	}
 
 	@Override
-	public FIBComponent getRootComponent() {
+	public FIBComponent getComponent() {
 		if (getFIBHtmlEditor() != null) {
-			return getFIBHtmlEditor().getRootComponent();
+			return getFIBHtmlEditor().getComponent();
 		}
 		return null;
 	}

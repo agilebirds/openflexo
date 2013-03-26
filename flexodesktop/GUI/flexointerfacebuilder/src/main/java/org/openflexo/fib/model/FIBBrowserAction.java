@@ -64,9 +64,9 @@ public abstract class FIBBrowserAction extends FIBModelObject {
 	}
 
 	@Override
-	public FIBComponent getRootComponent() {
+	public FIBComponent getComponent() {
 		if (getBrowserElement() != null) {
-			return getBrowserElement().getRootComponent();
+			return getBrowserElement().getComponent();
 		}
 		return null;
 	}

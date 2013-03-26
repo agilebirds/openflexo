@@ -75,10 +75,23 @@ public class JavaMethodPathElement extends FunctionPathElement {
 
 	@Override
 	public Type getType() {
+		if (customType != null) {
+			if (TypeUtils.isGeneric(customType)) {
+				return TypeUtils.makeInstantiatedType(customType, getParent().getType());
+			}
+			return customType;
+		}
 		if (getMethodDefinition() != null) {
 			return TypeUtils.makeInstantiatedType(getMethodDefinition().getMethod().getGenericReturnType(), getParent().getType());
 		}
 		return super.getType();
+	}
+
+	private Type customType = null;
+
+	@Override
+	public void setType(Type type) {
+		customType = type;
 	}
 
 	protected static MethodDefinition retrieveMethod(Type parentType, String methodName, List<DataBinding<?>> args) {
@@ -92,6 +105,9 @@ public class JavaMethodPathElement extends FunctionPathElement {
 		}
 		if (possiblyMatchingMethods.size() > 1) {
 			logger.warning("Please implement disambiguity here");
+			for (DataBinding<?> arg : args) {
+				System.out.println("arg of " + arg.getDeclaredType() + " / " + arg.getAnalyzedType());
+			}
 			// Return the first one
 			// TODO: try to find the best one
 			return MethodDefinition.getMethodDefinition(parentType, possiblyMatchingMethods.get(0));

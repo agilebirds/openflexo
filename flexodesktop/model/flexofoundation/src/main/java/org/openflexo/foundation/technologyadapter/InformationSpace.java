@@ -84,7 +84,10 @@ public class InformationSpace extends FlexoServiceImpl {
 	}
 
 	public FlexoMetaModelResource<?, ?> getMetaModelWithURI(String uri, TechnologyAdapter<?, ?> technologyAdapter) {
-		return technologyAdapter.getTechnologyContextManager().getMetaModelWithURI(uri);
+		if (technologyAdapter != null && technologyAdapter.getTechnologyContextManager() != null) {
+			return technologyAdapter.getTechnologyContextManager().getMetaModelWithURI(uri);
+		}
+		return null;
 		/*for (MetaModelRepository<?, ?, ?, ?> mmRep : getAllMetaModelRepositories(technologyAdapter)) {
 			FlexoResource<?> resource = mmRep.getResource(uri);
 			if (resource != null) {

@@ -113,9 +113,9 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	}
 
 	@Override
-	public FIBComponent getRootComponent() {
-		if (getTable() != null) {
-			return getTable().getRootComponent();
+	public FIBComponent getComponent() {
+		if (getTable() instanceof FIBTable) {
+			return ((FIBTable) getTable());
 		}
 		return null;
 	}
@@ -286,8 +286,8 @@ public abstract class FIBTableColumn extends FIBModelObject {
 		}
 
 		@Override
-		public FIBComponent getRootComponent() {
-			return FIBTableColumn.this.getRootComponent();
+		public FIBComponent getComponent() {
+			return FIBTableColumn.this.getComponent();
 		}
 
 		@Override

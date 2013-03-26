@@ -127,11 +127,8 @@ public class FIBBrowserElement extends FIBModelObject {
 	}
 
 	@Override
-	public FIBComponent getRootComponent() {
-		if (getBrowser() != null) {
-			return getBrowser().getRootComponent();
-		}
-		return null;
+	public FIBComponent getComponent() {
+		return getBrowser();
 	}
 
 	public DataBinding<String> getLabel() {
@@ -364,7 +361,7 @@ public class FIBBrowserElement extends FIBModelObject {
 
 	public DataBinding<Font> getDynamicFont() {
 		if (dynamicFont == null) {
-			dynamicFont = new DataBinding<Font>(this, Font.class, DataBinding.BindingDefinitionType.GET);
+			dynamicFont = new DataBinding<Font>(iterator, Font.class, DataBinding.BindingDefinitionType.GET);
 		}
 		return dynamicFont;
 	}
@@ -426,8 +423,8 @@ public class FIBBrowserElement extends FIBModelObject {
 		}
 
 		@Override
-		public FIBComponent getRootComponent() {
-			return FIBBrowserElement.this.getRootComponent();
+		public FIBComponent getComponent() {
+			return FIBBrowserElement.this.getComponent();
 		}
 
 		@Override
@@ -635,8 +632,8 @@ public class FIBBrowserElement extends FIBModelObject {
 			}
 
 			@Override
-			public FIBComponent getRootComponent() {
-				return browserElement.getRootComponent();
+			public FIBComponent getComponent() {
+				return browserElement.getComponent();
 			}
 
 			@Override
@@ -719,9 +716,9 @@ public class FIBBrowserElement extends FIBModelObject {
 		}
 
 		@Override
-		public FIBComponent getRootComponent() {
+		public FIBComponent getComponent() {
 			if (getBrowserElement() != null) {
-				return getBrowserElement().getRootComponent();
+				return getBrowserElement().getComponent();
 			}
 			return null;
 		}

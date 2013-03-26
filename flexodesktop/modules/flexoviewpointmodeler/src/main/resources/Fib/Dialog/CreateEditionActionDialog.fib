@@ -1,112 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="gridbag" darkLevel="0" data="" dataClassName="org.openflexo.foundation.viewpoint.action.CreateEditionAction" controllerClassName="org.openflexo.view.controller.FlexoFIBController" visible="">
-  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="0" data="" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" name="title">
+<Panel layout="twocols" darkLevel="0" data="" dataClassName="org.openflexo.foundation.viewpoint.action.CreateEditionAction" controllerClassName="org.openflexo.view.controller.FlexoFIBController" visible="">
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="0" data="" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" name="title">
     <Label label="creates_edition_action" align="center" index="0" data="" constraints="flow(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" font="Lucida Grande,1,15" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
   </Panel>
-  <Label label="model_slot" index="3" data="" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=20;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
-  <DropDown index="4" data="data.modelSlot" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" name="ModelSlotDD" format="object.name" icon="controller.getTechnologyAdapterController(object.technologyAdapter).technologyIcon" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" list="data.focusedObject.virtualModel.modelSlots" array="" showIcon="true" iteratorClassName="org.openflexo.foundation.technologyadapter.ModelSlot" autoSelectFirstRow="true" />
-  <Label label="action_type" index="5" data="" constraints="gridbag(anchor=north_east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=20;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
-  <DropDown index="5" data="data.editionActionClass" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" name="ActionTypeDD" format="object.simpleName" icon="controller.getTechnologyAdapterController(data.modelSlot.technologyAdapter).getIconForEditionAction(object)" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" list="data.availableEditionActionTypes" array="" showIcon="true" iteratorClassName="java.lang.Class" autoSelectFirstRow="true">
+  <Label label="please_select_a_kind_of_action" index="1" data="(RadioButtonList.selectedIndex = 1)" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=20;insetsRight=2;insetsTop=0;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
+  <RadioButtonList columns="1" hGap="0" vGap="-2" index="2" data="data.actionChoice" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" name="RadioButtonList" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" staticList="" list="" array="" iteratorClassName="org.openflexo.foundation.viewpoint.action.CreateEditionAction$CreateEditionActionChoice" autoSelectFirstRow="true" />
+  <Label label="model_slot" index="3" data="" constraints="twocols(anchor=east;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=20;insetsRight=0;insetsTop=0;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(RadioButtonList.selectedIndex = 1)" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
+  <DropDown index="4" data="data.modelSlot" constraints="twocols(anchor=west;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;location=right;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(RadioButtonList.selectedIndex = 1)" name="ModelSlotDD" format="object.name" icon="controller.getTechnologyAdapterController(object.technologyAdapter).technologyIcon" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" list="data.focusedObject.virtualModel.modelSlots" array="" showIcon="true" iteratorClassName="org.openflexo.foundation.technologyadapter.ModelSlot" autoSelectFirstRow="true" />
+  <Label label="action_type" index="5" data="" constraints="twocols(anchor=north_east;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=20;insetsRight=0;insetsTop=0;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
+  <DropDown index="5" data="data.editionActionClass" constraints="twocols(anchor=west;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" name="ActionTypeDD" format="object.simpleName" icon="controller.getTechnologyAdapterController(data.modelSlot.technologyAdapter).getIconForEditionAction(object)" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" list="data.availableEditionActionTypes" array="" showIcon="true" iteratorClassName="java.lang.Class" autoSelectFirstRow="true">
     <Dependancy componentName="ModelSlotDD" />
+    <Dependancy componentName="RadioButtonList" />
   </DropDown>
-  <Label label="description" align="right" index="11" data="" constraints="gridbag(anchor=north_east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=20;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
-  <TextArea columns="6" rows="2" text="TextArea" index="12" data="data.description" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" editable="" />
-  <Panel layout="border" borderTitle="Panel" titleFont="Lucida Grande,2,11" darkLevel="0" index="13" data="" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" font="Lucida Grande,2,11" />
-  <Label label="label" index="14" data="data.validityMessage" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=4;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" font="Lucida Grande,2,11" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="">
+  <Label label="description" align="right" index="11" data="" constraints="twocols(anchor=north_east;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=20;insetsRight=0;insetsTop=0;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
+  <TextArea columns="6" rows="2" text="TextArea" index="12" data="data.description" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=true;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" editable="" />
+  <Panel layout="border" borderTitle="Panel" titleFont="Lucida Grande,2,11" darkLevel="0" index="13" data="" constraints="twocols(anchor=center;expandHorizontally=false;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" font="Lucida Grande,2,11" />
+  <Label label="label" index="14" data="data.validityMessage" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=4;insetsRight=0;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" font="Lucida Grande,2,11" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="">
     <Dependancy componentName="ModelSlotName" />
     <Dependancy componentName="ModelSlotDD" />
     <Dependancy componentName="MetaModelSelector" />
     <LocalizedDictionary />
   </Label>
-  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="15" data="" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=9;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="">
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="15" data="" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=9;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="">
     <Button action="controller.validateAndDispose()" buttonIcon="" buttonType="Trigger" label="validate" format="" icon="" tooltip="" localize="true" enable="data.isValid" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="0" data="" constraints="flow(index=0)" visible="">
-      <Dependancy componentName="ModelSlotName" />
+      <Dependancy componentName="RadioButtonList" />
       <Dependancy componentName="ModelSlotDD" />
-      <Dependancy componentName="EditionActionTypeDD" />
+      <Dependancy componentName="ActionTypeDD" />
     </Button>
     <Button action="controller.cancelAndDispose()" buttonIcon="" buttonType="Trigger" label="cancel" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="1" data="" constraints="flow(index=1)" visible="" />
   </Panel>
   <LocalizedDictionary>
+    <Localized key="BuiltInAction" lang="English">BuiltInAction</Localized>
+    <Localized key="BuiltInAction" lang="French">BuiltInAction</Localized>
+    <Localized key="BuiltInAction" lang="Dutch">BuiltInAction</Localized>
+    <Localized key="ModelSlotSpecificAction" lang="English">ModelSlotSpecificAction</Localized>
+    <Localized key="ModelSlotSpecificAction" lang="French">ModelSlotSpecificAction</Localized>
+    <Localized key="ModelSlotSpecificAction" lang="Dutch">ModelSlotSpecificAction</Localized>
+    <Localized key="RequestAction" lang="English">RequestAction</Localized>
+    <Localized key="RequestAction" lang="French">RequestAction</Localized>
+    <Localized key="RequestAction" lang="Dutch">RequestAction</Localized>
+    <Localized key="ControlAction" lang="English">ControlAction</Localized>
+    <Localized key="ControlAction" lang="French">ControlAction</Localized>
+    <Localized key="ControlAction" lang="Dutch">ControlAction</Localized>
     <Localized key="description" lang="English">Description</Localized>
-    <Localized key="validate" lang="English">Validate</Localized>
-    <Localized key="cancel" lang="English">Cancel</Localized>
     <Localized key="description" lang="French">Description</Localized>
-    <Localized key="validate" lang="French">Valider</Localized>
-    <Localized key="cancel" lang="French">Annuler</Localized>
     <Localized key="description" lang="Dutch">Description</Localized>
-    <Localized key="validate" lang="Dutch">Validate</Localized>
+    <Localized key="cancel" lang="English">Cancel</Localized>
+    <Localized key="cancel" lang="French">Annuler</Localized>
     <Localized key="cancel" lang="Dutch">Cancel</Localized>
-    <Localized key="shema_name" lang="English">Shema name</Localized>
-    <Localized key="shema_name" lang="French">Nom du schéma</Localized>
-    <Localized key="creates_model_slot" lang="English">Creates Model Slot</Localized>
-    <Localized key="creates_model_slot" lang="French">Créer un ModelSlot</Localized>
-    <Localized key="creates_model_slot" lang="Dutch">creates_model_slot</Localized>
-    <Localized key="name" lang="English">Name</Localized>
-    <Localized key="name" lang="French">Nom</Localized>
-    <Localized key="name" lang="Dutch">Name</Localized>
-    <Localized key="technology_adapter" lang="English">Technology adapter</Localized>
-    <Localized key="technology_adapter" lang="French">Connecteur technologique</Localized>
-    <Localized key="technology_adapter" lang="Dutch">technology_adapter</Localized>
-    <Localized key="Openflexo built-in diagram technology adapter" lang="English">Openflexo built-in diagram technology adapter</Localized>
-    <Localized key="Openflexo built-in diagram technology adapter" lang="French">Openflexo built-in diagram technology adapter</Localized>
-    <Localized key="Openflexo built-in diagram technology adapter" lang="Dutch">Openflexo built-in diagram technology adapter</Localized>
-    <Localized key="EMF technology adapter" lang="English">EMF technology adapter</Localized>
-    <Localized key="EMF technology adapter" lang="French">EMF technology adapter</Localized>
-    <Localized key="EMF technology adapter" lang="Dutch">EMF technology adapter</Localized>
-    <Localized key="OWL technology adapter" lang="English">OWL technology adapter</Localized>
-    <Localized key="OWL technology adapter" lang="French">OWL technology adapter</Localized>
-    <Localized key="OWL technology adapter" lang="Dutch">OWL technology adapter</Localized>
-    <Localized key="XSD/XML technology adapter" lang="English">XSD/XML technology adapter</Localized>
-    <Localized key="XSD/XML technology adapter" lang="French">XSD/XML technology adapter</Localized>
-    <Localized key="XSD/XML technology adapter" lang="Dutch">XSD/XML technology adapter</Localized>
-    <Localized key="metamodel" lang="English">Metamodel</Localized>
-    <Localized key="metamodel" lang="French">Métamodèle</Localized>
-    <Localized key="metamodel" lang="Dutch">metamodel</Localized>
-    <Localized key="label" lang="English">Label</Localized>
-    <Localized key="label" lang="French">Label</Localized>
-    <Localized key="label" lang="Dutch">Label</Localized>
-    <Localized key="required" lang="English">required</Localized>
-    <Localized key="required" lang="French">required</Localized>
-    <Localized key="required" lang="Dutch">required</Localized>
-    <Localized key="read_only" lang="English">Read only</Localized>
-    <Localized key="read_only" lang="French">Lecture seule</Localized>
-    <Localized key="read_only" lang="Dutch">Read only</Localized>
-    <Localized key="this_name_is_already_used_please_choose_an_other_one" lang="English">This name is already used. Please choose an other one</Localized>
-    <Localized key="this_name_is_already_used_please_choose_an_other_one" lang="French">Ce nom est déjà utilisé</Localized>
-    <Localized key="this_name_is_already_used_please_choose_an_other_one" lang="Dutch">this_name_is_already_used_please_choose_an_other_one</Localized>
-    <Localized key="model_slot_must_have_an_non_empty_and_unique_name" lang="English">ModelSlots must have a non-empty and unique name</Localized>
-    <Localized key="model_slot_must_have_an_non_empty_and_unique_name" lang="French">Le ModelSlot doit avoir un nom unique et non nul</Localized>
-    <Localized key="model_slot_must_have_an_non_empty_and_unique_name" lang="Dutch">model_slot_must_have_an_non_empty_and_unique_name</Localized>
-    <Localized key="please_choose_a_technology_adapter" lang="English">Please choose a technology adapter</Localized>
-    <Localized key="please_choose_a_technology_adapter" lang="French">Veuillez choisir un connecteur technologique</Localized>
-    <Localized key="please_choose_a_technology_adapter" lang="Dutch">please_choose_a_technology_adapter</Localized>
-    <Localized key="please_choose_a_valid_metamodel" lang="English">Please choose a valid metamodel</Localized>
-    <Localized key="please_choose_a_valid_metamodel" lang="French">Veuillez choisir un métamodèle valide</Localized>
-    <Localized key="please_choose_a_valid_metamodel" lang="Dutch">please_choose_a_valid_metamodel</Localized>
-    <Localized key="creates_edition_action" lang="English">Creates edition action</Localized>
-    <Localized key="creates_edition_action" lang="French">Créer une primitive d'édition</Localized>
-    <Localized key="creates_edition_action" lang="Dutch">creates_edition_action</Localized>
-    <Localized key="model_slot" lang="English">Model Slot</Localized>
-    <Localized key="model_slot" lang="French">Model Slot</Localized>
-    <Localized key="model_slot" lang="Dutch">model_slot</Localized>
-    <Localized key="owl" lang="English">owl</Localized>
-    <Localized key="owl" lang="French">owl</Localized>
-    <Localized key="owl" lang="Dutch">owl</Localized>
-    <Localized key="diagram" lang="English">Diagram</Localized>
-    <Localized key="diagram" lang="French">Diagramme</Localized>
-    <Localized key="diagram" lang="Dutch">Diagram</Localized>
-    <Localized key="Diagram" lang="English">Diagram</Localized>
-    <Localized key="Diagram" lang="French">Diagram</Localized>
-    <Localized key="Diagram" lang="Dutch">Diagram</Localized>
+    <Localized key="validate" lang="English">Validate</Localized>
+    <Localized key="validate" lang="French">Valider</Localized>
+    <Localized key="validate" lang="Dutch">Validate</Localized>
     <Localized key="action_type" lang="English">Action type</Localized>
     <Localized key="action_type" lang="French">Type d'Action</Localized>
     <Localized key="action_type" lang="Dutch">Action type</Localized>
-    <Localized key="AddOWLIndividual" lang="English">AddOWLIndividual</Localized>
-    <Localized key="AddOWLIndividual" lang="French">AddOWLIndividual</Localized>
-    <Localized key="AddOWLIndividual" lang="Dutch">AddOWLIndividual</Localized>
-    <Localized key="AddOWLClass" lang="English">AddOWLClass</Localized>
-    <Localized key="AddOWLClass" lang="French">AddOWLClass</Localized>
-    <Localized key="AddOWLClass" lang="Dutch">AddOWLClass</Localized>
+    <Localized key="please_select_a_kind_of_action" lang="English">Please select a kind of action</Localized>
+    <Localized key="please_select_a_kind_of_action" lang="French">Veuillez choisir un type d'action</Localized>
+    <Localized key="please_select_a_kind_of_action" lang="Dutch">please_select_a_kind_of_action</Localized>
     <Localized key="DeclarePatternRole" lang="English">DeclarePatternRole</Localized>
     <Localized key="DeclarePatternRole" lang="French">DeclarePatternRole</Localized>
     <Localized key="DeclarePatternRole" lang="Dutch">DeclarePatternRole</Localized>
@@ -116,14 +66,11 @@
     <Localized key="DeleteAction" lang="English">DeleteAction</Localized>
     <Localized key="DeleteAction" lang="French">DeleteAction</Localized>
     <Localized key="DeleteAction" lang="Dutch">DeleteAction</Localized>
-    <Localized key="ConditionalAction" lang="English">ConditionalAction</Localized>
-    <Localized key="ConditionalAction" lang="French">ConditionalAction</Localized>
-    <Localized key="ConditionalAction" lang="Dutch">ConditionalAction</Localized>
-    <Localized key="IterationAction" lang="English">IterationAction</Localized>
-    <Localized key="IterationAction" lang="French">IterationAction</Localized>
-    <Localized key="IterationAction" lang="Dutch">IterationAction</Localized>
-    <Localized key="Diagramme" lang="English">Diagramme</Localized>
-    <Localized key="Diagramme" lang="French">Diagramme</Localized>
-    <Localized key="Diagramme" lang="Dutch">Diagramme</Localized>
+    <Localized key="model_slot" lang="English">model_slot</Localized>
+    <Localized key="model_slot" lang="French">model_slot</Localized>
+    <Localized key="model_slot" lang="Dutch">model_slot</Localized>
+    <Localized key="creates_edition_action" lang="English">creates_edition_action</Localized>
+    <Localized key="creates_edition_action" lang="French">creates_edition_action</Localized>
+    <Localized key="creates_edition_action" lang="Dutch">creates_edition_action</Localized>
   </LocalizedDictionary>
 </Panel>

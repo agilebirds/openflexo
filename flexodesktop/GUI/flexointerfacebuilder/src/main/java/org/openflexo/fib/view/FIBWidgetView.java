@@ -29,7 +29,6 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
@@ -120,6 +119,16 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	public abstract boolean updateModelFromWidget();
 
 	@Override
+	public List<TargetObject> getChainedBindings(DataBinding<?> binding, TargetObject object) {
+		return getWidget().getChainedBindings(binding, object);
+	}
+
+	@Override
+	public List<DataBinding<?>> getDependencyBindings() {
+		return getWidget().getDependencyBindings();
+	}
+
+	@Override
 	public void focusGained(FocusEvent event) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("focusGained()");
@@ -186,7 +195,14 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		Object value = null;
 
 		try {
-			value = getWidget().getData().getBindingValue(getController());
+			/*if (getWidget().getData().toString().equals("data.targetPatternRole")) {
+				System.out.println("hop");
+				System.out.println("hop2");
+				Object o = getBindingEvaluationContext().getValue(new BindingVariable("data", null));
+				System.out.println("hop3");
+
+			}*/
+			value = getWidget().getData().getBindingValue(getBindingEvaluationContext());
 			T returned = (T) value;
 			if (getDynamicModel() != null) {
 				getDynamicModel().setData(returned);
@@ -284,7 +300,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				return;
 			}
 			try {
-				getWidget().getData().setBindingValue(aValue, getController());
+				getWidget().getData().setBindingValue(aValue, getBindingEvaluationContext());
 			} catch (AccessorInvocationException e) {
 				getController().handleException(e.getCause());
 			} catch (TypeMismatchException e) {
@@ -309,7 +325,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 		if (getWidget().getValueChangedAction().isValid()) {
 			try {
-				getWidget().getValueChangedAction().execute(getController());
+				getWidget().getValueChangedAction().execute(getBindingEvaluationContext());
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
@@ -325,7 +341,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		if (dependingObjects == null) {
 			dependingObjects = new DependingObjects(this);
 		}
-		dependingObjects.refreshObserving(getController());
+		dependingObjects.refreshObserving(getBindingEvaluationContext());
 	}
 
 	@Override
@@ -374,20 +390,6 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			}
 		}
 		return true;
-	}
-
-	@Override
-	public List<DataBinding<?>> getDependencyBindings() {
-		List<DataBinding<?>> returned = new ArrayList<DataBinding<?>>();
-		returned.add(getWidget().getData());
-		returned.add(getWidget().getVisible());
-		returned.add(getWidget().getEnable());
-		return returned;
-	}
-
-	@Override
-	public List<TargetObject> getChainedBindings(DataBinding<?> binding, TargetObject object) {
-		return null;
 	}
 
 	/**
@@ -516,7 +518,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		}
 		if (getComponent().getEnable() != null && getComponent().getEnable().isValid()) {
 			try {
-				Boolean isEnabled = getComponent().getEnable().getBindingValue(getController());
+				Boolean isEnabled = getComponent().getEnable().getBindingValue(getBindingEvaluationContext());
 				if (isEnabled != null) {
 					componentEnabled = isEnabled;
 				}
@@ -538,7 +540,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	private void updateDynamicTooltip() {
 		if (getComponent().getTooltip() != null && getComponent().getTooltip().isValid()) {
 			try {
-				String tooltipText = getComponent().getTooltip().getBindingValue(getController());
+				String tooltipText = getComponent().getTooltip().getBindingValue(getBindingEvaluationContext());
 				getDynamicJComponent().setToolTipText(tooltipText);
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();

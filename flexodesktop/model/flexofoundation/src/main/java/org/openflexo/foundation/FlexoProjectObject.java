@@ -87,6 +87,14 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 		this.project = project;
 	}
 
+	@Override
+	public List<DocType> getDocTypes() {
+		if (getProject() != null) {
+			return getProject().getDocTypes();
+		}
+		return super.getDocTypes();
+	}
+
 	public FlexoServiceManager getServiceManager() {
 		if (getProject() != null) {
 			return getProject().getServiceManager();
@@ -139,8 +147,15 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 		return null;
 	}
 
-	// Return first one if many
-	public EditionPatternInstance getEditionPatternReference(String editionPatternId) {
+	/**
+	 * Return EditionPatternInstance matching supplied id represented as a string, which could be either the name of EditionPattern, or its
+	 * URI<br>
+	 * If many EditionPatternInstance are declared in this FlexoProjectObject, return first one
+	 * 
+	 * @param editionPatternId
+	 * @return
+	 */
+	public EditionPatternInstance getEditionPatternInstance(String editionPatternId) {
 		if (editionPatternId == null) {
 			return null;
 		}
@@ -149,12 +164,21 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 			if (epi.getEditionPattern().getName().equals(editionPatternId)) {
 				return epi;
 			}
+			if (epi.getEditionPattern().getURI().equals(editionPatternId)) {
+				return epi;
+			}
 		}
 		return null;
 	}
 
-	// Return first one if many
-	public EditionPatternInstance getEditionPatternReference(EditionPattern editionPattern) {
+	/**
+	 * Return EditionPatternInstance matching supplied EditionPattern<br>
+	 * If many EditionPatternInstance are declared in this FlexoProjectObject, return first one
+	 * 
+	 * @param editionPatternId
+	 * @return
+	 */
+	public EditionPatternInstance getEditionPatternInstance(EditionPattern editionPattern) {
 		if (editionPattern == null) {
 			return null;
 		}

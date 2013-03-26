@@ -34,6 +34,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.fib.view.widget.table.EditableColumn;
 
 /**
@@ -362,7 +363,7 @@ public abstract class AbstractModel<M extends Observable, D extends Observable> 
 		AbstractColumn column = columnAt(col);
 		if (column != null && column instanceof EditableColumn) {
 			D object = elementAt(row);
-			((EditableColumn) column).setValueFor(object, value);
+			((EditableColumn) column).setValueFor(object, value, getBindingEvaluationContext());
 			fireCellUpdated(object, row, col);
 		}
 	}
@@ -395,4 +396,5 @@ public abstract class AbstractModel<M extends Observable, D extends Observable> 
 		}
 	}
 
+	public abstract BindingEvaluationContext getBindingEvaluationContext();
 }

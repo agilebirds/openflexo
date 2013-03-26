@@ -41,6 +41,10 @@ public class FIBDialog<T> extends JDialog {
 
 	private FIBView view;
 
+	public static <T> FIBDialog<T> instanciateDialog(File componentFile, T data, Window frame, boolean modal) {
+		return instanciateDialog(componentFile, data, frame, modal, null);
+	}
+
 	public static <T> FIBDialog<T> instanciateDialog(File componentFile, T data, Window frame, boolean modal, LocalizedDelegate localizer) {
 		FIBComponent fibComponent = FIBLibrary.instance().retrieveFIBComponent(componentFile);
 		if (fibComponent == null) {
@@ -58,6 +62,10 @@ public class FIBDialog<T> extends JDialog {
 	public static <T> FIBDialog<T> instanciateDialog(FIBComponent fibComponent, T data, Window frame, boolean modal,
 			FIBController controller) {
 		return new FIBDialog<T>(fibComponent, data, frame, modal, controller);
+	}
+
+	public static <T> FIBDialog<T> instanciateAndShowDialog(FIBComponent fibComponent, T data, Window frame, boolean modal) {
+		return instanciateAndShowDialog(fibComponent, data, frame, modal, (LocalizedDelegate) null);
 	}
 
 	public static <T> FIBDialog<T> instanciateAndShowDialog(FIBComponent fibComponent, T data, Window frame, boolean modal,

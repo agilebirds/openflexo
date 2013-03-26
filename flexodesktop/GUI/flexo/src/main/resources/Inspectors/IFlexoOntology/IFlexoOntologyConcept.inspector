@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.ontology.IFlexoOntologyConcept" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label label="uri" localize="true" name="UriLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
+      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Uri" data="data.URI" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
+    </Tab>
+   </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="uri" lang="English">URI</Localized>
+    <Localized key="uri" lang="French">URI</Localized>
+    <Localized key="uri" lang="Dutch">URI</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Ontologic concept" />
+</Panel>
+

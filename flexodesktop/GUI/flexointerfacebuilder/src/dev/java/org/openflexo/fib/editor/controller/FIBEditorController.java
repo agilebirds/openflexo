@@ -67,6 +67,7 @@ import org.openflexo.fib.editor.view.widget.FIBEditableLabelWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableListWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableNumberWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableRadioButtonListWidget;
+import org.openflexo.fib.editor.view.widget.FIBEditableReferencedComponentWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableTableWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableTextAreaWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableTextFieldWidget;
@@ -89,6 +90,7 @@ import org.openflexo.fib.model.FIBList;
 import org.openflexo.fib.model.FIBNumber;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBRadioButtonList;
+import org.openflexo.fib.model.FIBReferencedComponent;
 import org.openflexo.fib.model.FIBSplitPanel;
 import org.openflexo.fib.model.FIBTab;
 import org.openflexo.fib.model.FIBTabPanel;
@@ -439,6 +441,9 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 			}
 			if (fibWidget instanceof FIBCustom) {
 				return new FIBEditableCustomWidget((FIBCustom) fibWidget, FIBEditorController.this);
+			}
+			if (fibWidget instanceof FIBReferencedComponent) {
+				return new FIBEditableReferencedComponentWidget((FIBReferencedComponent) fibWidget, FIBEditorController.this, this);
 			}
 			return null;
 		}

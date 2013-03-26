@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.CastExpression;
 import org.openflexo.antar.expr.Constant;
+import org.openflexo.antar.expr.Constant.StringConstant;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionTransformer;
 import org.openflexo.antar.expr.ExpressionVisitor;
@@ -412,6 +413,10 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 		return getExpression() != null && getExpression() instanceof Constant;
 	}
 
+	public boolean isStringConstant() {
+		return getExpression() != null && getExpression() instanceof StringConstant;
+	}
+
 	public boolean isCompoundBinding() {
 		return isBindingValue() && ((BindingValue) getExpression()).isCompoundBinding();
 	}
@@ -474,6 +479,10 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 					+ " "
 					+ (getOwner() != null ? "BindingModel=" + getOwner().getBindingModel() + " BindingFactory="
 							+ getOwner().getBindingFactory() : ""));
+			/*Bindable owner = getOwner();
+			BindingModel bm = getOwner().getBindingModel();
+			BindingFactory bf = getOwner().getBindingFactory();
+			logger.info("Breakpoint");*/
 		}
 
 		return expression;
@@ -586,8 +595,8 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 				}
 
 				// We do not warn anymore since this situation happens very often
-				/*logger.warning("Cannot evaluate " + expression + " max reduction is " + evaluatedExpression + " resolvedExpression="
-						+ resolvedExpression);*/
+				// logger.warning("Cannot evaluate " + expression + " max reduction is " + evaluatedExpression + " resolvedExpression="
+				// + resolvedExpression);
 
 				return null;
 

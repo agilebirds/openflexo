@@ -785,6 +785,7 @@ public class BindingValue extends Expression {
 				}
 			}
 		} catch (InvalidObjectSpecificationException e) {
+			logger.info("While computing getTargetObjects() for " + this + " with evaluation context=" + context);
 			logger.warning(e.getMessage());
 			return returned;
 		}

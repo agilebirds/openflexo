@@ -196,11 +196,15 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 
 	@Override
 	public synchronized void updateLayout() {
-		if (getSubViews() != null) {
-			for (FIBView v : getSubViews()) {
-				v.delete();
+		logger.info("relayout panel " + getComponent());
+
+		/*if (getSubViews() != null) {
+			for (FIBView v : getSubViews().values()) {
+				if (v.getComponent().isDeleted()) {
+					v.delete();
+				}
 			}
-		}
+		}*/
 		getJComponent().removeAll();
 
 		_setPanelLayoutParameters();
@@ -236,7 +240,11 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 		if (getComponent().getLayout() == Layout.grid) {
 
 			for (FIBComponent subComponent : getComponent().getSubComponents()) {
-				FIBView subView = getController().buildView(subComponent);
+				FIBView subView = getController().viewForComponent(subComponent);
+				if (subView == null) {
+					subView = getController().buildView(subComponent);
+				}
+				// FIBView subView = getController().buildView(c);
 				registerViewForComponent(subView, subComponent);
 			}
 
@@ -249,7 +257,11 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 
 		else {
 			for (FIBComponent subComponent : allSubComponents) {
-				FIBView subView = getController().buildView(subComponent);
+				FIBView subView = getController().viewForComponent(subComponent);
+				if (subView == null) {
+					subView = getController().buildView(subComponent);
+				}
+				// FIBView subView = getController().buildView(c);
 				registerViewForComponent(subView, subComponent);
 				registerComponentWithConstraints(subView.getResultingJComponent(), subComponent.getConstraints());
 			}
