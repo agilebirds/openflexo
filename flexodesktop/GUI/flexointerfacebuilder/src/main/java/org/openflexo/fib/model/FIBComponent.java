@@ -891,11 +891,11 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 	}
 
-	public Boolean getOpaque() {
+	public boolean getOpaque() {
 		return opaque;
 	}
 
-	public void setOpaque(Boolean opaque) {
+	public void setOpaque(boolean opaque) {
 		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.opaque, opaque);
 		if (notification != null) {
 			this.opaque = opaque;
