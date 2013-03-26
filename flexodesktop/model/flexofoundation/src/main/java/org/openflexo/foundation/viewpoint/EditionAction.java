@@ -66,6 +66,7 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 		GraphicalAction,
 		GoToObject,
 		Iteration,
+		FetchRequestIteration,
 		Conditional,
 		FetchRequest
 	}
