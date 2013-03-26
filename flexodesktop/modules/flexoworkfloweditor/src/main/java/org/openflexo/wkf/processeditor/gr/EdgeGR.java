@@ -80,7 +80,6 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		edge.addObserver(this);
 		isInduced = aDrawing.getFirstVisibleObject(edge.getStartNode()) != edge.getStartNode()
 				|| aDrawing.getFirstVisibleObject(edge.getEndNode()) != edge.getEndNode();
-
 		setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.6f));
 
 		setMiddleSymbol(MiddleSymbolType.FILLED_ARROW);
@@ -355,11 +354,23 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		if (getConnector() instanceof RectPolylinConnector) {
 			if (getStartObject() instanceof AnnotationGR) {
 				startOrientationFixed = ((AnnotationGR) getStartObject()).getModel().isAnnotation();
-				newStartOrientation = SimplifiedCardinalDirection.WEST;
+				double d = getStartObject().getLocationInDrawing().x + getStartObject().getWidth() / 2;
+				double e = getEndObject().getLocationInDrawing().x + getEndObject().getWidth() / 2;
+				if (d > e) {
+					newStartOrientation = SimplifiedCardinalDirection.WEST;
+				} else {
+					newStartOrientation = SimplifiedCardinalDirection.EAST;
+				}
 			}
 			if (getEndObject() instanceof AnnotationGR) {
 				endOrientationFixed = ((AnnotationGR) getEndObject()).getModel().isAnnotation();
-				newEndOrientation = SimplifiedCardinalDirection.WEST;
+				double d = getStartObject().getLocationInDrawing().x + getStartObject().getWidth() / 2;
+				double e = getEndObject().getLocationInDrawing().x + getEndObject().getWidth() / 2;
+				if (d < e) {
+					newEndOrientation = SimplifiedCardinalDirection.WEST;
+				} else {
+					newEndOrientation = SimplifiedCardinalDirection.EAST;
+				}
 			}
 		}
 
@@ -513,6 +524,14 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 
 	private String getOldRelativeMiddleSymbolLocationKey() {
 		return "middle_symbol_location_" + getOldContext();
+	}
+
+	public boolean startLocationManuallyAdjusted() {
+		return getConnector() instanceof RectPolylinConnector && ((RectPolylinConnector) getConnector()).getIsStartingLocationFixed();
+	}
+
+	public boolean endLocationManuallyAdjusted() {
+		return getConnector() instanceof RectPolylinConnector && ((RectPolylinConnector) getConnector()).getIsEndingLocationFixed();
 	}
 
 	private void storeNewLayout() {

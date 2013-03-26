@@ -13,10 +13,10 @@
       <Label label="include_subprocesses" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.isDocSubType = true)" name="RecursionEnabledLabel" localize="true" />
       <CheckBox selected="false" index="9" data="data.recursionEnabled" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.isDocSubType = true)" name="RecursionEnabled" localize="true" />
       <Label label="is_read_only" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IsReadOnlyLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
       <CheckBox selected="false" index="11" data="data.isReadOnly" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IsReadOnly" readOnly="true" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </CheckBox>
       <Label label="include_statuslist" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((data.isDocSubType = true) | (data.isProcessesSection = true))" name="IncludeStatusListLabel" localize="true" />
       <CheckBox selected="false" index="13" data="data.includeStatusList" constraints="twocols(expandHorizontally=false;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((data.isDocSubType = true) | (data.isProcessesSection = true))" name="IncludeStatusList" localize="true" />
@@ -29,22 +29,22 @@
     </Tab>
     <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab">
       <Label label="level" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="LevelLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
       <TextField index="11" data="data.level.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Level" readOnly="true" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </TextField>
       <Label label="depth" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="DepthLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
       <TextField index="13" data="data.depth.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Depth" readOnly="true" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </TextField>
       <Label label="section" index="14" constraints="twocols(expandHorizontally=false;expandVertically=false;index=14;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IdentifierLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
       <TextField index="15" data="data.identifier.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=15;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Identifier" readOnly="true" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </TextField>
       <Parameter name="visibleFor" value="SEMANTICS,SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER" />
     </Tab>
@@ -74,13 +74,13 @@
     <Localized key="startOnANewPage" lang="French">Commencer sur une nouvelle page</Localized>
     <Localized key="startOnANewPage" lang="Dutch">Start on a new page</Localized>
     <Localized key="include_subprocesses" lang="English">including subprocesses</Localized>
-    <Localized key="include_subprocesses" lang="French">inclure les sous-processus</Localized>
+    <Localized key="include_subprocesses" lang="French">Inclure les sous-processus</Localized>
     <Localized key="include_subprocesses" lang="Dutch">including subprocesses</Localized>
     <Localized key="is_read_only" lang="English">Is read only</Localized>
     <Localized key="is_read_only" lang="French">Lecture seule</Localized>
     <Localized key="is_read_only" lang="Dutch">Is read only</Localized>
     <Localized key="include_statuslist" lang="English">Include Status List</Localized>
-    <Localized key="include_statuslist" lang="French">inclure la liste des statuts</Localized>
+    <Localized key="include_statuslist" lang="French">Inclure la liste des statuts</Localized>
     <Localized key="include_statuslist" lang="Dutch">Include Status List</Localized>
     <Localized key="diagram" lang="English">Diagram</Localized>
     <Localized key="diagram" lang="French">Diagramme</Localized>
@@ -91,6 +91,13 @@
     <Localized key="type" lang="English">Type</Localized>
     <Localized key="type" lang="French">Type</Localized>
     <Localized key="type" lang="Dutch">Type</Localized>
+    <Localized key="renderSectionTitle" lang="English">Render Section Title</Localized>
+    <Localized key="renderSectionTitle" lang="French">Rendre le titre de la section</Localized>
+    <Localized key="renderSectionTitle" lang="Dutch">renderSectionTitle</Localized>
+    <Localized key="Basic" lang="English">Basic</Localized>
+    <Localized key="Basic" lang="Dutch">Basis</Localized>
+    <Localized key="Advanced" lang="English">Advanced</Localized>
+    <Localized key="Advanced" lang="Dutch">Geavanceerd</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="TOCEntry" />
 </Panel>

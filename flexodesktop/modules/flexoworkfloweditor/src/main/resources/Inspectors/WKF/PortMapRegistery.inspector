@@ -16,9 +16,17 @@
     <Localized key="hide_port_map_registery" lang="English">Hide port map registery</Localized>
     <Localized key="hide_port_map_registery" lang="French">Masquer le registre de ports</Localized>
     <Localized key="hide_port_map_registery" lang="Dutch">Hide port map registery</Localized>
-    <Localized key="port_maps" lang="English">port maps</Localized>
-    <Localized key="port_maps" lang="French">port maps</Localized>
-    <Localized key="port_maps" lang="Dutch">port maps</Localized>
+    <Localized key="port_maps" lang="English">Port maps</Localized>
+    <Localized key="port_maps" lang="French">Port maps</Localized>
+    <Localized key="port_maps" lang="Dutch">Port maps</Localized>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="hidden" lang="English">Hidden</Localized>
+    <Localized key="hidden" lang="French">masqué</Localized>
+    <Localized key="hidden" lang="Dutch">Hidden</Localized>
+    <Localized key="Basic" lang="English">Basic</Localized>
+    <Localized key="Basic" lang="Dutch">Basic</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="PortMap Registery" />
 </Panel>

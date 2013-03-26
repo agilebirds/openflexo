@@ -93,9 +93,14 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 
 	public WKFModule(ApplicationContext applicationContext) throws Exception {
 		super(applicationContext);
-		getWKFController().loadRelativeWindows();
 		WKFPreferences.init();
+	}
+
+	@Override
+	public void initModule() {
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
+		super.initModule();
+		getWKFController().loadRelativeWindows();
 	}
 
 	@Override

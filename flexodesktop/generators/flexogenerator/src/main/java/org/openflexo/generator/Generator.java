@@ -25,6 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -682,6 +683,36 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 
 	public void sortVectorOfModelObject(List<FlexoModelObject> vectorToSort) {
 		Collections.sort(vectorToSort, new FlexoModelObject.FlexoDefaultComparator<FlexoModelObject>());
+	}
+
+	public void sortEPIs(List<EditionPatternInstance> vectorToSort, final String binding) {
+		Collections.sort(vectorToSort, new Comparator<EditionPatternInstance>() {
+
+			@Override
+			public int compare(EditionPatternInstance o1, EditionPatternInstance o2) {
+				Object e1 = o1.evaluate(binding);
+				Object e2 = o2.evaluate(binding);
+				if (e1 == null) {
+					if (e2 == null) {
+						return 0;
+					} else {
+						return -1;
+					}
+				} else if (e2 == null) {
+					return 1;
+				}
+				if (e1 instanceof Comparable && e2 instanceof Comparable) {
+					try {
+						((Comparable) e1).compareTo(e2);
+					} catch (ClassCastException e) {
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("Could not compare " + e1 + " with " + e2 + " Using string compare");
+						}
+					}
+				}
+				return e1.toString().compareTo(e2.toString());
+			}
+		});
 	}
 
 	public static String escapeStringForHTML(String s) {

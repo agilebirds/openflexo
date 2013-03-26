@@ -11,13 +11,13 @@
 		<property name="outputMessageDefinition.name" label="output_message" widget="TEXT_FIELD" constraint="0">
 			<param name="columns" value="10"/>
 			<param name="validateOnReturn" value="true"/>
-		  <param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+		  <param name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST"/>
 		</property>
 	    <property_list name="outputMessageDefinition.entries" label="output_message" constraint="3">
 		  <param name="displayLabel" value="false"/>
 		  <param name="visible_row_count" value="4"/>
 		  <param name="row_height" value="20"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST"/>
 		  <property_list_column name="variableName" label="name" widget="TEXT_FIELD">
 			<param name="column_width" value="100"/>
 			<param name="resizable" value="true"/>

@@ -11,28 +11,28 @@
       <Label label="has_output_message" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" visible="false" name="HasOutputMessageLabel" localize="true" />
       <CheckBox selected="false" index="7" data="data.hasOutputMessage" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" visible="false" name="HasOutputMessage" localize="true" />
       <Label label="input_message" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" visible="(data.hasInputMessage = true)" name="InputMessageDefinitionnameLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
       <TextField index="9" data="data.inputMessageDefinition.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;location=right)" visible="(data.hasInputMessage = true)" name="InputMessageDefinitionname" readOnly="true" localize="true" validateOnReturn="true" columns="10">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </TextField>
       <Table iteratorClassName="org.openflexo.foundation.wkf.ws.MessageEntry" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="InputMessageDefinitionentries" index="11" data="data.inputMessageDefinition.entries" constraints="twocols(expandHorizontally=true;expandVertically=true;index=10;location=right)" visible="(data.hasInputMessage = true)">
         <LabelColumn data="iterator.variableName" title="name" columnWidth="80" resizable="true" displayTitle="true" />
         <LabelColumn data="iterator.type" format="object.name" title="type" columnWidth="80" resizable="true" displayTitle="true" />
         <CheckBoxColumn data="iterator.isMandatory" title="mandatory" columnWidth="30" resizable="true" displayTitle="true" />
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Table>
       <Label label="output_message" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;insetsTop=5;location=left)" visible="(data.hasOutputMessage = true)" name="OutputMessageDefinitionnameLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
       <TextField index="13" data="data.outputMessageDefinition.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=12;location=right)" visible="(data.hasOutputMessage = true)" name="OutputMessageDefinitionname" readOnly="true" localize="true" validateOnReturn="true" columns="10">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </TextField>
       <Table iteratorClassName="org.openflexo.foundation.wkf.ws.MessageEntry" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="OutputMessageDefinitionentries" index="15" data="data.outputMessageDefinition.entries" constraints="twocols(expandHorizontally=true;expandVertically=true;index=13;location=right)" visible="(data.hasOutputMessage = true)">
         <LabelColumn data="iterator.variableName" title="name" columnWidth="80" resizable="true" displayTitle="true" />
         <LabelColumn data="iterator.type" format="object.name" title="type" columnWidth="80" resizable="true" displayTitle="true" />
         <CheckBoxColumn data="iterator.isMandatory" title="mandatory" columnWidth="30" resizable="true" displayTitle="true" />
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Table>
     </Tab>
     <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="DocTab">

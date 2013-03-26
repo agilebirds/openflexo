@@ -4,7 +4,7 @@
     <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab" />
     <Tab title="Messages" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="MessagesTab">
       <Label label="output_message" align="center" index="4" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;location=center)" name="OutputMessageDefinitionentriesLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
       <Table iteratorClassName="org.openflexo.foundation.wkf.ws.MessageEntry" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="OutputMessageDefinitionentries" index="5" data="data.outputMessageDefinition.entries" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;location=right)">
         <TextFieldColumn data="iterator.variableName" title="name" columnWidth="100" resizable="true" displayTitle="true" />
@@ -15,13 +15,13 @@
         <CheckBoxColumn data="iterator.isMandatory" title="mandatory" columnWidth="50" resizable="true" displayTitle="true" />
         <AddAction method="data.outputMessageDefinition.createNewMessageEntry" name="new" />
         <RemoveAction method="data.outputMessageDefinition.deleteMessageEntry(selected)" isAvailable="data.inputMessageDefinition.isMessageEntryDeletable(selected)" name="delete" />
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Table>
     </Tab>
     <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="DataTab">
       <Label label="InfoLabel" index="1" data="data.tabOutputBindingDescription" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=right)" name="TabOutputBindingDescription" localize="true" />
       <Label label="output_message_bindings" align="center" index="4" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=center)" name="OutputMessageBindingsbindingsLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
       <Table iteratorClassName="org.openflexo.foundation.wkf.ws.ServiceMessageEntryBinding" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="OutputMessageBindingsbindings" index="5" data="data.outputMessageBindings.bindings" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;location=right)">
         <LabelColumn data="iterator.bindingDefinition.variableName" title="operation_entry" columnWidth="80" resizable="true" displayTitle="true" />
@@ -31,7 +31,7 @@
         <CustomColumn componentClassName="org.openflexo.components.widget.binding.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.bindingValue" format="object.stringRepresentation" title="port_entry" columnWidth="150" resizable="true" displayTitle="true">
           <ColumnAssignment variable="component.bindable" value="iterator" />
         </CustomColumn>
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Table>
     </Tab>
   </TabPanel>

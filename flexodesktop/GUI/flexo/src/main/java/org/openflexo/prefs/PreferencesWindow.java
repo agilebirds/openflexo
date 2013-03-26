@@ -46,7 +46,7 @@ public class PreferencesWindow extends JFrame {
 		super();
 		getContentPane().setLayout(new BorderLayout());
 		setSize(PREFERENCES_WINDOW_WIDTH, PREFERENCES_WINDOW_HEIGHT);
-		setLocation(752, 405);
+		setLocationRelativeTo(null);
 		reset();
 		setFocusable(true);
 	}

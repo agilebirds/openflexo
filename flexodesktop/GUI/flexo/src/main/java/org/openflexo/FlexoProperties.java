@@ -42,6 +42,9 @@ public class FlexoProperties {
 	public static final String KEEPLOGTRACE = "keepLogTrace";
 	public static final String DEFAULT_LOG_LEVEL = "default.logging.level";
 	public static final String CUSTOM_LOG_CONFIG_FILE = "logging.file.name";
+	public static final String FLEXO_SERVER_INSTANCE_URL = "flexoserver_instance_url";
+	public static final String BUG_REPORT_USER = "bug_report_user";
+	public static final String BUG_REPORT_PASWORD = "bug_report_password";
 
 	private static FlexoProperties _instance;
 	private Properties applicationProperties = null;
@@ -154,6 +157,18 @@ public class FlexoProperties {
 		applicationProperties.setProperty(ALLOWSDOCSUBMISSION, String.valueOf(b));
 	}
 
+	public String getBugReportPassword() {
+		return applicationProperties.getProperty(BUG_REPORT_PASWORD);
+	}
+
+	public String getBugReportUser() {
+		return applicationProperties.getProperty(BUG_REPORT_USER);
+	}
+
+	public String getFlexoServerInstanceURL() {
+		return applicationProperties.getProperty(FLEXO_SERVER_INSTANCE_URL);
+	}
+
 	public static FlexoProperties load() {
 		return instance();
 	}
@@ -161,6 +176,29 @@ public class FlexoProperties {
 	public static FlexoProperties instance() {
 		if (_instance == null) {
 			_instance = new FlexoProperties(new FileResource("Config/Flexo.properties"));
+			if (!AdvancedPrefs.getPreferenceOverrideFromFlexoPropertiesDone()) {
+				boolean overrideDone = false;
+				if (_instance.getFlexoServerInstanceURL() != null) {
+					AdvancedPrefs.setFlexoServerInstanceURL(_instance.getFlexoServerInstanceURL());
+					overrideDone = true;
+					String webServiceUrl = _instance.applicationProperties.getProperty("webServiceUrl");
+					if (webServiceUrl != null) {
+						AdvancedPrefs.setWebServiceUrl(webServiceUrl);
+					}
+				}
+				if (_instance.getBugReportUser() != null) {
+					AdvancedPrefs.setBugReportUser(_instance.getBugReportUser());
+					overrideDone = true;
+				}
+				if (_instance.getBugReportPassword() != null) {
+					AdvancedPrefs.getPreferences().setProperty(AdvancedPrefs.BUG_REPORT_PASWORD, _instance.getBugReportPassword());
+					overrideDone = true;
+				}
+				if (overrideDone) {
+					AdvancedPrefs.setPreferenceOverrideFromFlexoPropertiesDone(true);
+					AdvancedPrefs.save();
+				}
+			}
 		}
 		return _instance;
 	}

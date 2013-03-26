@@ -37,6 +37,7 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.components.AskParametersDialog;
@@ -52,6 +53,7 @@ import org.openflexo.dgmodule.view.DGFileVersionPopup;
 import org.openflexo.dgmodule.view.DGMainPane;
 import org.openflexo.doceditor.controller.DEController;
 import org.openflexo.doceditor.controller.DESelectionManager;
+import org.openflexo.doceditor.controller.TOCPerspective;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
@@ -136,12 +138,12 @@ public class DGController extends DEController implements FlexoObserver, Project
 
 	@Override
 	protected void initializePerspectives() {
-		super.initializePerspectives();
 		_CGGeneratedResourceModifiedHook = new DGGeneratedResourceModifiedHook();
 		browser = new DGBrowser(this);
 		dgBrowserView = new DGBrowserView(this, browser);
 		createFooter();
 		addToPerspectives(DOCUMENTATION_GENERATOR_PERSPECTIVE = new DocGeneratorPerspective(this));
+		addToPerspectives(TOC_PERSPECTIVE = new TOCPerspective(this));
 		addToPerspectives(TEMPLATES_PERSPECTIVE = new TemplatesPerspective(this));
 		addToPerspectives(VERSIONNING_PERSPECTIVE = new VersionningPerspective(this));
 	}
@@ -464,7 +466,16 @@ public class DGController extends DEController implements FlexoObserver, Project
 		}
 
 		@Override
-		public void update(FlexoObservable observable, DataModification dataModification) {
+		public void update(final FlexoObservable observable, final DataModification dataModification) {
+			if (!SwingUtilities.isEventDispatchThread()) {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						update(observable, dataModification);
+					}
+				});
+				return;
+			}
 			refresh();
 		}
 

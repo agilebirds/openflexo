@@ -19,8 +19,6 @@
  */
 package org.openflexo.doceditormodule;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.logging.Logger;
 
 import org.openflexo.ApplicationContext;
@@ -42,18 +40,9 @@ public class DEModule extends FlexoModule {
 	private static final Logger logger = Logger.getLogger(DEModule.class.getPackage().getName());
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.DE };
 
-	public DEModule(ApplicationContext applicationContext) throws Exception {
+	public DEModule(ApplicationContext applicationContext) {
 		super(applicationContext);
 		DEPreferences.init();
-		/*
-		if (getProject().getTOCData().getRepositories().size() == 0) {
-			getDEController().setCurrentEditedObjectAsModuleView(getProject().getTOCData());
-			getDEController().selectAndFocusObject(getProject().getTOCData());
-		} else {
-			getDEController().setCurrentEditedObjectAsModuleView(getProject().getTOCData().getRepositories().firstElement());
-			getDEController().selectAndFocusObject(getProject().getTOCData().getRepositories().firstElement());
-		}
-		*/
 	}
 
 	@Override
@@ -72,18 +61,6 @@ public class DEModule extends FlexoModule {
 	}
 
 	public DEController getDEController() {
-		new ActionListener() {
-			private final String s;
-			{
-				s = "";
-			}
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		};
 		return (DEController) getFlexoController();
 	}
 

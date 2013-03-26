@@ -22,23 +22,26 @@ package org.openflexo.fib.view.widget.browser;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.util.Hashtable;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -62,16 +65,99 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 
 	protected FIBBrowserWidget _widget;
 
-	protected JButton plusButton;
-	protected JButton minusButton;
-	protected JButton optionsButton;
-	protected JButton filtersButton;
-
 	// protected JPopupMenu popupMenu = null;
 
 	private Map<FIBBrowserElement, Map<FIBBrowserAction, FIBBrowserActionListener>> _addActions;
 	private Map<FIBBrowserElement, Map<FIBBrowserAction, FIBBrowserActionListener>> _removeActions;
 	private Map<FIBBrowserElement, Map<FIBBrowserAction, FIBBrowserActionListener>> _otherActions;
+
+	private class BrowserButton implements ActionListener {
+		private Map<FIBBrowserElement, Map<FIBBrowserAction, FIBBrowserActionListener>> actions;
+		private JButton button;
+
+		public BrowserButton(Map<FIBBrowserElement, Map<FIBBrowserAction, FIBBrowserActionListener>> actions, Icon icon, Icon disabledIcon,
+				Icon pressedIcon) {
+			super();
+			this.actions = actions;
+			button = new ImageButton(icon);
+			button.setDisabledIcon(disabledIcon);
+			button.setPressedIcon(pressedIcon);
+			button.addActionListener(this);
+		}
+
+		public JButton getButton() {
+			return button;
+		}
+
+		public void handleSelectionChanged(Object selection) {
+			boolean active = true;
+			if (selection != null) {
+				FIBBrowserElement element = elementForObject(selection);
+				if (element != null) {
+					Map<FIBBrowserAction, FIBBrowserActionListener> browserActions = actions.get(element);
+					int activeActionCount = 0;
+					if (browserActions != null && browserActions.size() > 0) {
+						for (Entry<FIBBrowserAction, FIBBrowserActionListener> e : browserActions.entrySet()) {
+							if (e.getValue().isActive(selection)) {
+								activeActionCount++;
+							}
+						}
+					}
+					active = activeActionCount > 0;
+				} else {
+					active = false;
+				}
+			} else {
+				active = false;
+			}
+			button.setEnabled(active);
+		}
+
+		private FIBBrowserElement elementForObject(Object object) {
+			if (object == null) {
+				return null;
+			} else {
+				return _widget.getComponent().elementForClass(object.getClass());
+			}
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			FIBBrowserElement element = elementForObject(_widget.getSelectedObject());
+			if (element != null) {
+				List<FIBBrowserActionListener> listeners = new ArrayList<FIBBrowserActionListener>();
+				Map<FIBBrowserAction, FIBBrowserActionListener> browserActions = actions.get(element);
+				if (browserActions != null && browserActions.size() > 0) {
+					for (Entry<FIBBrowserAction, FIBBrowserActionListener> entry : browserActions.entrySet()) {
+						if (entry.getValue().isActive(_widget.getSelectedObject())) {
+							listeners.add(entry.getValue());
+						}
+					}
+				}
+				if (listeners.size() == 1) {
+					listeners.get(0).actionPerformed(e);
+				} else if (listeners.size() > 1) {
+					JPopupMenu popupMenu = new JPopupMenu();
+					for (FIBBrowserActionListener actionListener : listeners) {
+						actionListener.setSelectedObject(_widget.getSelectedObject());
+						JMenuItem menuItem = new JMenuItem(getLocalized(actionListener.getBrowserAction().getName()));
+						menuItem.addActionListener(actionListener);
+						popupMenu.add(menuItem);
+					}
+					popupMenu.setInvoker(button);
+					Point location = button.getLocationOnScreen();
+					location.y -= popupMenu.getPreferredSize().getHeight();
+					popupMenu.setLocation(location);
+					popupMenu.setVisible(true);
+				}
+			}
+		}
+	}
+
+	private BrowserButton plusButton;
+	private BrowserButton minusButton;
+	private BrowserButton optionsButton;
+	private JButton filtersButton;
 
 	/**
 	 * Stores controls: key is the JButton and value the FIBTableActionListener
@@ -86,325 +172,55 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 
 		setBorder(BorderFactory.createEmptyBorder());
 		setLayout(new BorderLayout());
-		// setPreferredSize(new
-		// Dimension(FlexoCst.MINIMUM_BROWSER_VIEW_WIDTH,FlexoCst.MINIMUM_BROWSER_CONTROL_PANEL_HEIGHT));
-		setPreferredSize(new Dimension(MINIMUM_BROWSER_VIEW_WIDTH, 20));
 
-		JPanel plusMinusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		plusMinusPanel.setBorder(BorderFactory.createEmptyBorder());
-
-		plusButton = new ImageButton(FIBIconLibrary.BROWSER_PLUS_ICON);
-		plusButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (!hasMultiplePlusActions(currentElement)) {
-					plusPressed(currentElement);
-					plusButton.setIcon(FIBIconLibrary.BROWSER_PLUS_ICON);
-				}
-			}
-
-		});
-		plusButton.setDisabledIcon(FIBIconLibrary.BROWSER_PLUS_DISABLED_ICON);
-		// plusButton.setSelectedIcon(FlexoCst.BROWSER_PLUS_SELECTED_ICON);
-		plusButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent mouseEvent) {
-				if (plusButton.isEnabled()) {
-					plusButton.setIcon(FIBIconLibrary.BROWSER_PLUS_SELECTED_ICON);
-				}
-				if (hasMultiplePlusActions(currentElement)) {
-					getPlusActionMenu(currentElement).show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-					plusButton.setIcon(FIBIconLibrary.BROWSER_PLUS_ICON);
-				}
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent mouseEvent) {
-				if (plusButton.isEnabled()) {
-					plusButton.setIcon(FIBIconLibrary.BROWSER_PLUS_ICON);
-				}
-				if (hasMultiplePlusActions(currentElement)) {
-					getPlusActionMenu(currentElement).show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-				}
-			}
-		});
-
-		minusButton = new ImageButton(FIBIconLibrary.BROWSER_MINUS_ICON);
-		minusButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (!hasMultipleMinusActions(currentElement)) {
-					minusPressed(currentElement);
-					minusButton.setIcon(FIBIconLibrary.BROWSER_MINUS_ICON);
-				}
-			}
-
-		});
-		minusButton.setDisabledIcon(FIBIconLibrary.BROWSER_MINUS_DISABLED_ICON);
-		// minusButton.setSelectedIcon(FlexoCst.BROWSER_MINUS_SELECTED_ICON);
-		minusButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent mouseEvent) {
-				if (minusButton.isEnabled()) {
-					minusButton.setIcon(FIBIconLibrary.BROWSER_MINUS_SELECTED_ICON);
-				}
-				if (hasMultipleMinusActions(currentElement)) {
-					getMinusActionMenu(currentElement).show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-					minusButton.setIcon(FIBIconLibrary.BROWSER_MINUS_ICON);
-				}
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent mouseEvent) {
-				if (minusButton.isEnabled()) {
-					minusButton.setIcon(FIBIconLibrary.BROWSER_MINUS_ICON);
-				}
-				if (hasMultipleMinusActions(currentElement)) {
-					getMinusActionMenu(currentElement).show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-				}
-			}
-		});
-
-		plusMinusPanel.add(plusButton);
-		plusMinusPanel.add(minusButton);
-
-		add(plusMinusPanel, BorderLayout.WEST);
-
-		optionsButton = new ImageButton(FIBIconLibrary.BROWSER_OPTIONS_ICON);
-		optionsButton.setDisabledIcon(FIBIconLibrary.BROWSER_OPTIONS_DISABLED_ICON);
-
-		optionsButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent mouseEvent) {
-				if (optionsButton.isEnabled()) {
-					optionsButton.setIcon(FIBIconLibrary.BROWSER_OPTIONS_SELECTED_ICON);
-					getOptionActionMenu(currentElement).show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-				}
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent mouseEvent) {
-				if (optionsButton.isEnabled()) {
-					optionsButton.setIcon(FIBIconLibrary.BROWSER_OPTIONS_ICON);
-					getOptionActionMenu(currentElement).show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-				}
-			}
-
-		});
+		plusButton = new BrowserButton(_addActions, FIBIconLibrary.BROWSER_PLUS_ICON, FIBIconLibrary.BROWSER_PLUS_DISABLED_ICON,
+				FIBIconLibrary.BROWSER_PLUS_SELECTED_ICON);
+		minusButton = new BrowserButton(_removeActions, FIBIconLibrary.BROWSER_MINUS_ICON, FIBIconLibrary.BROWSER_MINUS_DISABLED_ICON,
+				FIBIconLibrary.BROWSER_MINUS_SELECTED_ICON);
+		optionsButton = new BrowserButton(_otherActions, FIBIconLibrary.BROWSER_OPTIONS_ICON, FIBIconLibrary.BROWSER_OPTIONS_DISABLED_ICON,
+				FIBIconLibrary.BROWSER_OPTIONS_SELECTED_ICON);
 
 		filtersButton = new ImageButton(FIBIconLibrary.BROWSER_FILTERS_ICON);
 		filtersButton.setDisabledIcon(FIBIconLibrary.BROWSER_FILTERS_DISABLED_ICON);
-
-		filtersButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent mouseEvent) {
-				if (hasFilters()) {
-					filtersButton.setIcon(FIBIconLibrary.BROWSER_FILTERS_SELECTED_ICON);
-					getFiltersPopupMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-				}
-			}
+		filtersButton.setPressedIcon(FIBIconLibrary.BROWSER_FILTERS_SELECTED_ICON);
+		filtersButton.addActionListener(new ActionListener() {
 
 			@Override
-			public void mouseReleased(MouseEvent mouseEvent) {
-				if (hasFilters() && (filtersPopupMenu == null || !filtersPopupMenu.isVisible())) {
-					getFiltersPopupMenu().show(mouseEvent.getComponent(), mouseEvent.getX(), mouseEvent.getY());
-					getFiltersPopupMenu().grabFocus();
-				}
+			public void actionPerformed(ActionEvent e) {
+				Point point = filtersButton.getLocationOnScreen();
+				JPopupMenu popupMenu = getFiltersPopupMenu();
+				popupMenu.pack();
+				point.y -= popupMenu.getHeight();
+				popupMenu.setInvoker(filtersButton);
+				popupMenu.setLocation(point);
+				popupMenu.setVisible(true);
 			}
-
 		});
+		JPanel plusMinusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+		plusMinusPanel.add(plusButton.getButton());
+		plusMinusPanel.add(minusButton.getButton());
+		JPanel optionsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+		optionsPanel.add(optionsButton.getButton());
+		if (hasFilters()) {
+			optionsPanel.add(filtersButton);
+		}
 
-		filtersButton.setEnabled(hasFilters());
-
-		JPanel optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		optionsPanel.setBorder(BorderFactory.createEmptyBorder());
-		optionsPanel.add(optionsButton);
-		optionsPanel.add(filtersButton);
-
+		add(plusMinusPanel, BorderLayout.WEST);
 		add(optionsPanel, BorderLayout.EAST);
-
-		handleSelectionCleared();
 
 		revalidate();
 	}
 
-	private FIBBrowserElement currentElement;
-
-	protected void switchToElement(FIBBrowserElement element) {
-		currentElement = element;
-	}
-
-	protected void handleSelectionChanged(FIBBrowserElement element) {
-		// System.out.println("handleSelectionChanged");
-
-		switchToElement(element);
-
-		plusActionMenuNeedsRecomputed = true;
-		minusActionMenuNeedsRecomputed = true;
-		optionsActionMenuNeedsRecomputed = true;
-
-		if (element == null) {
-			plusButton.setEnabled(false);
-			minusButton.setEnabled(false);
-			optionsButton.setEnabled(false);
-		} else {
-			if (hasMultiplePlusActions(element)) {
-				plusButton.setEnabled(true && _widget.isEnabled());
-			} else {
-				boolean isActive = false;
-				Map<FIBBrowserAction, FIBBrowserActionListener> hashtable = _addActions.get(element);
-				for (Map.Entry<FIBBrowserAction, FIBBrowserActionListener> e : hashtable.entrySet()) {
-					FIBBrowserActionListener actionListener = e.getValue();
-					if (actionListener.isActive(_widget.getSelectedObject())) {
-						isActive = true;
-					}
-				}
-				plusButton.setEnabled(isActive && _widget.isEnabled());
-			}
-
-			boolean isMinusActive = false;
-			Map<FIBBrowserAction, FIBBrowserActionListener> hashtable = _removeActions.get(element);
-			for (Map.Entry<FIBBrowserAction, FIBBrowserActionListener> e : hashtable.entrySet()) {
-				FIBBrowserActionListener actionListener = e.getValue();
-				if (actionListener.isActive(_widget.getSelectedObject())) {
-					isMinusActive = true;
-				}
-			}
-			minusButton.setEnabled(isMinusActive && _widget.isEnabled());
-			optionsButton.setEnabled(_otherActions.size() > 0 && _widget.isEnabled());
-		}
-	}
-
-	protected void handleSelectionCleared() {
-		handleSelectionChanged(null);
-
-	}
-
-	void plusPressed(FIBBrowserElement element) {
-		Map<FIBBrowserAction, FIBBrowserActionListener> hashtable = _addActions.get(element);
-		for (Map.Entry<FIBBrowserAction, FIBBrowserActionListener> e : hashtable.entrySet()) {
-			FIBBrowserActionListener actionListener = e.getValue();
-			if (actionListener.isActive(_widget.getSelectedObject())) {
-				actionListener.performAction(_widget.getSelectedObject());
-			}
-		}
-	}
-
-	void minusPressed(FIBBrowserElement element) {
-		Map<FIBBrowserAction, FIBBrowserActionListener> hashtable = _removeActions.get(element);
-		for (Map.Entry<FIBBrowserAction, FIBBrowserActionListener> e : hashtable.entrySet()) {
-			FIBBrowserActionListener actionListener = e.getValue();
-			if (actionListener.isActive(_widget.getSelectedObject())) {
-				// actionListener.performAction(_tableModel.getSelectedObject(), _tableModel.getSelectedObjects());
-				actionListener.performAction(_widget.getSelectedObject());
-			}
-		}
-	}
-
-	boolean hasMultiplePlusActions(FIBBrowserElement element) {
-		if (element == null) {
-			return false;
-		}
-		if (_addActions.get(element) != null) {
-			return _addActions.get(element).size() > 1;
-		}
-		return false;
-	}
-
-	boolean hasMultipleMinusActions(FIBBrowserElement element) {
-		if (element == null) {
-			return false;
-		}
-		if (_removeActions.get(element) != null) {
-			return _removeActions.get(element).size() > 1;
-		}
-		return false;
-	}
-
-	private JPopupMenu plusActionMenu = null;
-	private JPopupMenu minusActionMenu = null;
-	private JPopupMenu optionsActionMenu = null;
-
-	private boolean plusActionMenuNeedsRecomputed = true;
-	private boolean minusActionMenuNeedsRecomputed = true;
-	private boolean optionsActionMenuNeedsRecomputed = true;
-
-	private JPopupMenu getPlusActionMenu(FIBBrowserElement element) {
-		if (plusActionMenuNeedsRecomputed) {
-			plusActionMenu = new JPopupMenu();
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Build plus menu");
-			}
-
-			Map<FIBBrowserAction, FIBBrowserActionListener> hashtable = _addActions.get(element);
-			for (Map.Entry<FIBBrowserAction, FIBBrowserActionListener> e : hashtable.entrySet()) {
-				FIBBrowserActionListener actionListener = e.getValue();
-				actionListener.setSelectedObject(_widget.getSelectedObject());
-				// actionListener.setSelectedObjects(_tableModel.getSelectedObjects());
-				JMenuItem menuItem = new JMenuItem(getLocalized(e.getKey().getName()));
-				menuItem.addActionListener(actionListener);
-				plusActionMenu.add(menuItem);
-				menuItem.setEnabled(actionListener.isActive(_widget.getSelectedObject()));
-			}
-
-			plusActionMenuNeedsRecomputed = false;
-		}
-		return plusActionMenu;
-	}
-
-	private JPopupMenu getMinusActionMenu(FIBBrowserElement element) {
-		if (minusActionMenuNeedsRecomputed) {
-			minusActionMenu = new JPopupMenu();
-
-			Map<FIBBrowserAction, FIBBrowserActionListener> hashtable = _removeActions.get(element);
-			for (Map.Entry<FIBBrowserAction, FIBBrowserActionListener> e : hashtable.entrySet()) {
-				FIBBrowserActionListener actionListener = e.getValue();
-				actionListener.setSelectedObject(_widget.getSelectedObject());
-				// actionListener.setSelectedObjects(_tableModel.getSelectedObjects());
-				JMenuItem menuItem = new JMenuItem(getLocalized(e.getKey().getName()));
-				menuItem.addActionListener(actionListener);
-				minusActionMenu.add(menuItem);
-				menuItem.setEnabled(actionListener.isActive(_widget.getSelectedObject()));
-			}
-
-			minusActionMenuNeedsRecomputed = false;
-		}
-		return minusActionMenu;
-	}
-
-	private JPopupMenu getOptionActionMenu(FIBBrowserElement element) {
-		if (optionsActionMenuNeedsRecomputed) {
-			optionsActionMenu = new JPopupMenu();
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Build options menu");
-			}
-
-			Map<FIBBrowserAction, FIBBrowserActionListener> hashtable = _otherActions.get(element);
-			for (Map.Entry<FIBBrowserAction, FIBBrowserActionListener> e : hashtable.entrySet()) {
-				FIBBrowserActionListener actionListener = e.getValue();
-				actionListener.setSelectedObject(_widget.getSelectedObject());
-				// actionListener.setSelectedObjects(_tableModel.getSelectedObjects());
-				JMenuItem menuItem = new JMenuItem(getLocalized(e.getKey().getName()));
-				menuItem.addActionListener(actionListener);
-				optionsActionMenu.add(menuItem);
-				menuItem.setEnabled(actionListener.isActive(_widget.getSelectedObject()));
-			}
-
-			optionsActionMenuNeedsRecomputed = false;
-		}
-		return optionsActionMenu;
-	}
-
 	private void initializeActions(FIBBrowserWidget widget) {
-		_addActions = new Hashtable<FIBBrowserElement, Map<FIBBrowserAction, FIBBrowserActionListener>>();
-		_removeActions = new Hashtable<FIBBrowserElement, Map<FIBBrowserAction, FIBBrowserActionListener>>();
-		_otherActions = new Hashtable<FIBBrowserElement, Map<FIBBrowserAction, FIBBrowserActionListener>>();
+		_addActions = new LinkedHashMap<FIBBrowserElement, Map<FIBBrowserAction, FIBBrowserActionListener>>();
+		_removeActions = new LinkedHashMap<FIBBrowserElement, Map<FIBBrowserAction, FIBBrowserActionListener>>();
+		_otherActions = new LinkedHashMap<FIBBrowserElement, Map<FIBBrowserAction, FIBBrowserActionListener>>();
 
 		for (FIBBrowserElement element : widget.getComponent().getElements()) {
 
-			Map<FIBBrowserAction, FIBBrowserActionListener> addActions = new Hashtable<FIBBrowserAction, FIBBrowserActionListener>();
-			Map<FIBBrowserAction, FIBBrowserActionListener> removeActions = new Hashtable<FIBBrowserAction, FIBBrowserActionListener>();
-			Map<FIBBrowserAction, FIBBrowserActionListener> otherActions = new Hashtable<FIBBrowserAction, FIBBrowserActionListener>();
+			Map<FIBBrowserAction, FIBBrowserActionListener> addActions = new LinkedHashMap<FIBBrowserAction, FIBBrowserActionListener>();
+			Map<FIBBrowserAction, FIBBrowserActionListener> removeActions = new LinkedHashMap<FIBBrowserAction, FIBBrowserActionListener>();
+			Map<FIBBrowserAction, FIBBrowserActionListener> otherActions = new LinkedHashMap<FIBBrowserAction, FIBBrowserActionListener>();
 
 			for (FIBBrowserAction plAction : element.getActions()) {
 				FIBBrowserActionListener plActionListener = new FIBBrowserActionListener(_widget, plAction);
@@ -451,51 +267,9 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 	}
 
 	public void setFocusedObject(Object object) {
-		logger.fine("Footer: set focused object with " + object);
-
-		if (object == null) {
-			handleSelectionCleared();
-			return;
-		}
-
-		FIBBrowserElement element = _widget.getComponent().elementForClass(object.getClass());
-
-		// logger.info("Set model with "+model);
-		if (element != null) {
-			if (_addActions != null) {
-				Map<FIBBrowserAction, FIBBrowserActionListener> hashtable = _addActions.get(element);
-				if (hashtable != null) {
-					for (Map.Entry<FIBBrowserAction, FIBBrowserActionListener> e : hashtable.entrySet()) {
-						FIBBrowserActionListener actionListener = hashtable.get(e.getKey());
-						actionListener.setModel(object);
-					}
-				}
-			}
-			if (_removeActions != null) {
-				Map<FIBBrowserAction, FIBBrowserActionListener> hashtable = _removeActions.get(element);
-				if (hashtable != null) {
-					for (Map.Entry<FIBBrowserAction, FIBBrowserActionListener> e : hashtable.entrySet()) {
-						FIBBrowserActionListener actionListener = hashtable.get(e.getKey());
-						actionListener.setModel(object);
-					}
-				}
-			}
-			if (_otherActions != null) {
-				Map<FIBBrowserAction, FIBBrowserActionListener> hashtable = _otherActions.get(element);
-				if (hashtable != null) {
-					for (Map.Entry<FIBBrowserAction, FIBBrowserActionListener> e : hashtable.entrySet()) {
-						FIBBrowserActionListener actionListener = hashtable.get(e.getKey());
-						actionListener.setModel(object);
-					}
-				}
-			}
-
-			handleSelectionChanged(element);
-			/*
-			 * for (Enumeration en = _controls.elements(); en.hasMoreElements();) { FIBTableActionListener actionListener =
-			 * (FIBTableActionListener) en.nextElement(); actionListener.setModel(model); } updateControls(null);
-			 */
-		}
+		plusButton.handleSelectionChanged(object);
+		minusButton.handleSelectionChanged(object);
+		optionsButton.handleSelectionChanged(object);
 	}
 
 	public FIBController getController() {

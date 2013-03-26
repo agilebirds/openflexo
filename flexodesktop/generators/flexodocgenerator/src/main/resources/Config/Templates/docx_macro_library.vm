@@ -1,6 +1,6 @@
 #macro(mkbookMark $id $name)
 #set($key=${generator.getNewHolder()})
-#getCurrentUniqueId($key)#incrementCurrentUniqueId
+#getCurrentUniqueId($key)#incrementCurrentUniqueId()
 #set($key = ${key.get()})
 #set($xkey = (${key}*1000000+${id}))
 <w:bookmarkStart w:id="${xkey}" w:name="${name}"/>
@@ -972,7 +972,6 @@ name of the template corresponding to the specific toc_entry.
 #end
 
 #macro(renderBullets $bulletWRList $bulletSectionID)
-<!--Entering macro renderBullets -->
     #addNumberingId($bulletSectionID)
     
     #foreach($bulletItem in $bulletWRList)
@@ -988,29 +987,23 @@ name of the template corresponding to the specific toc_entry.
         </w:p>
     #end
     
-<!-- Exiting macro renderBullets -->
 #end
 
 #macro(addNumberingId $numberingId)
-<!--Entering macro addNumberingId -->
     #set($numberingIds = $generator.getNewHolder())
     #getNumberingIds($numberingIds)
     #set($numberingIds = ${numberingIds.get()})
     #void($numberingIds.add($numberingId))
-<!-- Exiting macro addNumberingId -->
 #end
 
 #macro(addOrderedNumberingId $numberingId)
-<!--Entering macro addOrderedNumberingId -->
     #set($orderedNumberingIds = $generator.getNewHolder())
     #getOrderedNumberingIds($orderedNumberingIds)
     #set($orderedNumberingIds = ${orderedNumberingIds.get()})
     #void($orderedNumberingIds.add($numberingId))
-<!-- Exiting macro addOrderedNumberingId -->
 #end
 
 #macro(convertHTML2DocxVelocityXml $html)
-<!--Entering macro convertHTML2DocxVelocityXml -->
     #set($currentUniqueId = $generator.getNewHolder())
     #getCurrentUniqueId($currentUniqueId)
     #set($currentUniqueId = ${currentUniqueId.get()})
@@ -1026,7 +1019,6 @@ name of the template corresponding to the specific toc_entry.
     #foreach($bulletId in ${docxVelocityXmlFromHtml.getOrderedBulletsIds()})
         #addOrderedNumberingId($bulletId)
     #end
-<!-- Exiting macro convertHTML2DocxVelocityXml -->
 #end
 
 #*
@@ -1207,7 +1199,8 @@ name of the template corresponding to the specific toc_entry.
                     <w:showingPlcHdr/>
                 #end
             #end
-            <w:tag w:val="#escape(${projectGenerator.getFlexoDescriptionTag($_object, $usedTarget)})" />
+            #set($toEscape = ${projectGenerator.getFlexoDescriptionTag($_object, $usedTarget)})
+            <w:tag w:val="#escape($toEscape)" />
             <w:lock w:val="sdtLocked" />
         </w:sdtPr>
         <w:sdtEndPr />
@@ -1591,7 +1584,6 @@ name of the template corresponding to the specific toc_entry.
 *
 *#
 #macro(RoleForWorkFlow $_workflow)
-<!--Entering macro RoleForWorkFlow -->
 
     #if(${_workflow.getRoleList().getRoles().size()}>0 || ${_workflow.getImportedRoleList().getRoles().size()}>0)
         <w:p>
@@ -1625,7 +1617,6 @@ name of the template corresponding to the specific toc_entry.
 
         #renderDocxTable(["Role", "Description"] $rolesTablesContents)
     #end
-<!-- Exiting macro RoleForWorkFlow -->
 #end
 
 #*
@@ -1633,7 +1624,6 @@ name of the template corresponding to the specific toc_entry.
 *
 *#
 #macro(printUsedProcessRef $_node)
-<!--Entering macro printUsedProcessRef -->
     #if($_node.isSubProcessNode())
         #if($node.getSubProcess())
           #if(!$_node.getSubProcess().getDontGenerate())
@@ -1653,11 +1643,9 @@ name of the template corresponding to the specific toc_entry.
                     #getXmlParagraphWithContent("This node does not define which process it uses." $null)
        #end
     #end
-<!-- Exiting macro printUsedProcessRef -->
 #end
 
 #macro(renderScreenshotForObject $_object)
-<!--Entering macro renderScreenshotForObject -->
     #set($image = ${projectGenerator.getScreenshotImageIcon($_object)})
     #set($rid = ${projectGenerator.getRIdForResource(${projectGenerator.getScreenshot($_object)})})
     #set($imageWidth = $image.getIconWidth())
@@ -1718,8 +1706,71 @@ name of the template corresponding to the specific toc_entry.
             </w:drawing>
         </w:r>
     </w:p>
-<!-- Exiting macro renderScreenshotForObject -->
 #end
+
+#macro(renderLandscapeScreenshotForObject $_object)
+    #set($image = ${projectGenerator.getScreenshotImageIcon($_object)})
+    #set($rid = ${projectGenerator.getRIdForResource(${projectGenerator.getScreenshot($_object)})})
+    #set($imageWidth = $image.getIconWidth())
+    #set($imageHeight = $image.getIconHeight())
+    #if($imageWidth > 920)
+        #set($imageWidth = 920)
+        #set($imageHeight = $imageHeight * $imageWidth / $image.getIconWidth())
+    #end
+    #if($imageHeight > 645)
+        #set($imageHeight = 645)
+        #set($imageWidth = $image.getIconWidth() * $imageHeight / $image.getIconHeight())
+    #end
+        
+    #set($imageWidth = $imageWidth * 9525) ##Don't ask me why
+    #set($imageHeight = $imageHeight * 9525) ##Don't ask me why
+    
+    <w:p>
+        <w:pPr>
+            <w:jc w:val="center"/>
+        </w:pPr>
+        <w:r>
+            <w:rPr>
+                <w:noProof/>
+            </w:rPr>
+            <w:drawing>
+                <wp:inline distT="0" distB="0" distL="0" distR="0">
+                    <wp:extent cx="$imageWidth" cy="$imageHeight"/>
+                    <wp:docPr id="#getUniqueId()" name="Picture"/>
+                    <wp:cNvGraphicFramePr>
+                        <a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1"/>
+                    </wp:cNvGraphicFramePr>
+                    <a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
+                        <a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
+                            <pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
+                                <pic:nvPicPr>
+                                    <pic:cNvPr id="0" name=""/>
+                                    <pic:cNvPicPr/>
+                                </pic:nvPicPr>
+                                <pic:blipFill>
+                                    <a:blip r:embed="$rid"/>
+                                    <a:stretch>
+                                        <a:fillRect/>
+                                    </a:stretch>
+                                </pic:blipFill>
+                                <pic:spPr>
+                                    <a:xfrm>
+                                        <a:off x="0" y="0"/>
+                                        <a:ext cx="$imageWidth" cy="$imageHeight"/>
+                                    </a:xfrm>
+                                    <a:prstGeom prst="rect">
+                                        <a:avLst/>
+                                    </a:prstGeom>
+                                </pic:spPr>
+                            </pic:pic>
+                        </a:graphicData>
+                    </a:graphic>
+                </wp:inline>
+            </w:drawing>
+        </w:r>
+    </w:p>
+#end
+
 #macro(renderImportedImageFile $importedImagePath)
     #renderImportedImageFileWithMaxSize($importedImagePath 514 734)
 #end

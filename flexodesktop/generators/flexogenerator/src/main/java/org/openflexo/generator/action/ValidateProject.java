@@ -95,9 +95,9 @@ public class ValidateProject extends GCAction<ValidateProject, GenerationReposit
 					dkvValidationObserver);
 		} catch (ModelValidationException e) {
 			throw e;
+		} finally {
+			hideFlexoProgress();
 		}
-
-		hideFlexoProgress();
 	}
 
 	private ValidationReport ieValidationReport = null;

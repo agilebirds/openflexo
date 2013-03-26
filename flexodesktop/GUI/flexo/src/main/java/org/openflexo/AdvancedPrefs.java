@@ -26,10 +26,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import org.openflexo.foundation.utils.FlexoFont;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.prefs.ContextPreferences;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.swing.CustomPopup;
@@ -84,6 +82,7 @@ public class AdvancedPrefs extends ContextPreferences {
 	private static final String PROXY_LOGIN = "ProxyLogin";
 	private static final String PROXY_PASSWORD = "ProxyPassword";
 	public static final String SHOW_ALL_TABS = "show_all_tabs";
+	public static final String PREFERENCE_OVERRIDE_FROM_FLEXO_PROPERTIES_DONE = "preference_override_from_flexo_properties_done";
 
 	@Override
 	public String getName() {
@@ -258,17 +257,7 @@ public class AdvancedPrefs extends ContextPreferences {
 			value = LookAndFeel.getDefaultLookAndFeel();
 		}
 		getPreferences().setProperty(ToolBox.getPLATFORM() + LOOK_AND_FEEL, LookAndFeel.lookAndFeelConverter.convertToString(value));
-		try {
-			ModuleLoader.setLookAndFeel(LookAndFeel.lookAndFeelConverter.convertToString(value));
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
+		Flexo.initUILAF(LookAndFeel.lookAndFeelConverter.convertToString(value));
 	}
 
 	public static void save() {
@@ -607,6 +596,18 @@ public class AdvancedPrefs extends ContextPreferences {
 
 	public static void setShowAllTabs(boolean showAllTabs) {
 		getPreferences().setBooleanProperty(SHOW_ALL_TABS, showAllTabs);
+	}
+
+	public static boolean getPreferenceOverrideFromFlexoPropertiesDone() {
+		Boolean answer = getPreferences().getBooleanProperty(PREFERENCE_OVERRIDE_FROM_FLEXO_PROPERTIES_DONE);
+		if (answer == null) {
+			return false;
+		}
+		return answer;
+	}
+
+	public static void setPreferenceOverrideFromFlexoPropertiesDone(boolean preferenceOverrideFromFlexoPropertiesDone) {
+		getPreferences().setBooleanProperty(PREFERENCE_OVERRIDE_FROM_FLEXO_PROPERTIES_DONE, preferenceOverrideFromFlexoPropertiesDone);
 	}
 
 }

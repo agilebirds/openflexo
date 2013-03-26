@@ -72,7 +72,7 @@ public class JConsole extends JEditTextArea {
 		} catch (BadLocationException e) {
 			logger.warning("BadLocationException");
 		}
-		if (!log.endsWith("\n")) {
+		if (!log.isEmpty() && !log.endsWith("\n")) {
 			try {
 				document.insertString(document.getLength(), "\n", null);
 			} catch (BadLocationException e) {

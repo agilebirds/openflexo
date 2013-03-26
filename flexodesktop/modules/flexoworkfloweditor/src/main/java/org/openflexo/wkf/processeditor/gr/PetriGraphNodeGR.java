@@ -24,7 +24,11 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.cp.ControlArea;
+import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.geom.area.FGEArea;
+import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
@@ -37,6 +41,9 @@ import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
 public abstract class PetriGraphNodeGR<O extends PetriGraphNode> extends AbstractNodeGR<O> {
 
+	protected static final FGEArea CONNECTOR_LOCATION_AREA = FGEUnionArea.makeUnion(new FGEPoint(0, 0.5), new FGEPoint(0.5, 0),
+			new FGEPoint(1, 0.5), new FGEPoint(0.5, 1));
+
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(PetriGraphNodeGR.class.getPackage().getName());
 
@@ -46,6 +53,22 @@ public abstract class PetriGraphNodeGR<O extends PetriGraphNode> extends Abstrac
 	public PetriGraphNodeGR(O node, ShapeType shapeType, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(node, shapeType, aDrawing);
 		this.isInPalette = isInPalet;
+	}
+
+	@Override
+	public FGEArea getAllowedStartAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR) {
+		if (connectorGR instanceof EdgeGR && !((EdgeGR<?>) connectorGR).startLocationManuallyAdjusted()) {
+			return CONNECTOR_LOCATION_AREA;
+		}
+		return super.getAllowedStartAreaForConnector(connectorGR);
+	}
+
+	@Override
+	public FGEArea getAllowedEndAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR) {
+		if (connectorGR instanceof EdgeGR && !((EdgeGR<?>) connectorGR).endLocationManuallyAdjusted()) {
+			return CONNECTOR_LOCATION_AREA;
+		}
+		return super.getAllowedEndAreaForConnector(connectorGR);
 	}
 
 	@Override

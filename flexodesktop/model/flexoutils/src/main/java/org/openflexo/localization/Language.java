@@ -19,7 +19,6 @@
  */
 package org.openflexo.localization;
 
-import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -193,8 +192,7 @@ public abstract class Language extends KVCObject implements StringConvertable, C
 		if (languageAsString == null) {
 			return ENGLISH;
 		}
-		for (Enumeration<Language> e = getAvailableLanguages().elements(); e.hasMoreElements();) {
-			Language next = e.nextElement();
+		for (Language next : getAvailableLanguages()) {
 			if (next.getName().equalsIgnoreCase(languageAsString)) {
 				return next;
 			}
@@ -205,15 +203,14 @@ public abstract class Language extends KVCObject implements StringConvertable, C
 		if (getAvailableLanguages().size() > 0) {
 			return getAvailableLanguages().firstElement();
 		}
-		return null;
+		return ENGLISH;
 	}
 
 	public static Language retrieveLanguage(String languageAsString) {
 		if (languageAsString == null) {
 			return ENGLISH;
 		}
-		for (Enumeration e = getAvailableLanguages().elements(); e.hasMoreElements();) {
-			Language next = (Language) e.nextElement();
+		for (Language next : getAvailableLanguages()) {
 			if (next.getName().equalsIgnoreCase(languageAsString)) {
 				return next;
 			}
@@ -221,7 +218,7 @@ public abstract class Language extends KVCObject implements StringConvertable, C
 				return next;
 			}
 		}
-		return null;
+		return ENGLISH;
 	}
 
 	public abstract String getName();

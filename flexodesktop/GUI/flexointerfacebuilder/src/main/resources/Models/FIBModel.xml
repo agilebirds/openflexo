@@ -82,6 +82,7 @@
   </entity>
    
   <entity name="org.openflexo.fib.model.FIBTabPanel" xmlTag="TabPanel"> 
+    <property name="opaque" xmlTag="opaque" attribute="YES" ignoreDefaultValue="false"/>
   </entity>
    
   <entity name="org.openflexo.fib.model.FIBSplitPanel" xmlTag="SplitPanel"> 
@@ -120,6 +121,7 @@
     <property name="localize" xmlTag="localize" attribute="YES"/> 
     <property name="enable" xmlTag="enable" attribute="YES"/> 
     <property name="manageDynamicModel" xmlTag="manageDynamicModel" attribute="YES" ignoreDefaultValue="false"/> 
+    <property name="opaque" xmlTag="opaque" attribute="YES" ignoreDefaultValue="true"/>
     <property name="clickAction" xmlTag="clickAction" attribute="YES"/> 
     <property name="doubleClickAction" xmlTag="doubleClickAction" attribute="YES"/> 
     <property name="rightClickAction" xmlTag="rightClickAction" attribute="YES"/> 
@@ -131,7 +133,8 @@
   
   <entity name="org.openflexo.fib.model.FIBLabel" xmlTag="Label"> 
     <property name="label" xmlTag="label" attribute="YES"/> 
-    <property name="align" xmlTag="align" attribute="YES" ignoreDefaultValue="left"/> 
+    <property name="align" xmlTag="align" attribute="YES" ignoreDefaultValue="left"/>
+    <property name="opaque" xmlTag="opaque" attribute="YES" ignoreDefaultValue="false"/>
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBImage" xmlTag="Image"> 
@@ -140,6 +143,7 @@
     <property name="align" xmlTag="align" attribute="YES"/>
     <property name="imageWidth" xmlTag="imageWidth" attribute="YES"/>
     <property name="imageHeight" xmlTag="imageHeight" attribute="YES"/>
+    <property name="opaque" xmlTag="opaque" attribute="YES" ignoreDefaultValue="false"/>
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBCheckBox" xmlTag="CheckBox"> 
@@ -207,6 +211,11 @@
     <property name="rows" xmlTag="rows" attribute="YES"/> 
     <property name="text" xmlTag="text" attribute="YES"/> 
     <property name="tokenMarkerStyle" xmlTag="tokenMarkerStyle" attribute="YES"/> 
+  <entity name="org.openflexo.fib.model.FIBEditorPane" xmlTag="EditorPane"> 
+    <property name="contentType" xmlTag="contentType" attribute="YES"/> 
+  </entity>
+  
+  <entity name="org.openflexo.fib.model.FIBTextPane" xmlTag="TextPane"> 
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBHtmlEditor" xmlTag="HTMLEditor"> 
@@ -245,6 +254,7 @@
     <property name="directory" xmlTag="isDirectory" attribute="YES"/> 
     <property name="defaultDirectory" xmlTag="defaultDirectory" attribute="YES"/> 
     <property name="columns" xmlTag="columns" attribute="YES"/> 
+    <property name="opaque" xmlTag="opaque" attribute="YES" ignoreDefaultValue="false"/>
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBButton" xmlTag="Button"> 

@@ -15,7 +15,7 @@
 
 	<tab name="Advanced" index="1" layout="DEFAULT">
 		<property name ="isHTML" label="isHTML" widget="CHECKBOX" constraint="7" depends="fieldType" conditional="fieldType=Text||fieldType=null">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 	</tab>
 
@@ -28,7 +28,7 @@
 		</property>-->
 		<property name="bindingValueWhenEmpty" label="binding_valueWhenEmpty" widget="TEXT_FIELD" constraint="0">
 			<param name="columns" value="10"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 	</tab>
 

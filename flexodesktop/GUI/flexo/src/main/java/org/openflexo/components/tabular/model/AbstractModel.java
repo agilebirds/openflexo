@@ -20,6 +20,7 @@
 package org.openflexo.components.tabular.model;
 
 import java.awt.Component;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -196,7 +197,7 @@ public abstract class AbstractModel<M extends FlexoObject, D extends FlexoObject
 	}
 
 	private void updateObservedObjects() {
-		for (FlexoObject observed : _observedObjects) {
+		for (FlexoObject observed : new ArrayList<FlexoObject>(_observedObjects)) {
 			observed.deleteObserver(this);
 		}
 		_observedObjects.clear();

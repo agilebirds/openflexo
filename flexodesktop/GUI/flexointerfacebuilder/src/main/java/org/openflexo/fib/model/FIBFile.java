@@ -50,6 +50,7 @@ public class FIBFile extends FIBWidget {
 	private Integer columns;
 
 	public FIBFile() {
+		setOpaque(false);
 	}
 
 	@Override

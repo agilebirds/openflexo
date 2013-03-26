@@ -20,6 +20,7 @@
 package org.openflexo.fib.model;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,7 +28,9 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.model.validation.ValidationReport;
@@ -49,11 +52,12 @@ public abstract class FIBBrowserAction extends FIBModelObject {
 	private DataBinding<Object> method;
 	private DataBinding<Boolean> isAvailable;
 
+	private BindingModel actionBindingModel;
+
 	@Deprecated
-	public static BindingDefinition METHOD = new BindingDefinition("method", Object.class, DataBinding.BindingDefinitionType.EXECUTE, false);
+	public static BindingDefinition METHOD = new BindingDefinition("method", Object.class, BindingDefinitionType.EXECUTE, false);
 	@Deprecated
-	public static BindingDefinition IS_AVAILABLE = new BindingDefinition("isAvailable", Boolean.class,
-			DataBinding.BindingDefinitionType.EXECUTE, false);
+	public static BindingDefinition IS_AVAILABLE = new BindingDefinition("isAvailable", Boolean.class, BindingDefinitionType.EXECUTE, false);
 
 	public FIBBrowserElement getBrowserElement() {
 		return element;
@@ -106,7 +110,16 @@ public abstract class FIBBrowserAction extends FIBModelObject {
 	@Override
 	public BindingModel getBindingModel() {
 		if (getBrowserElement() != null) {
-			return getBrowserElement().getActionBindingModel();
+			if (actionBindingModel == null) {
+				actionBindingModel = new BindingModel(getBrowserElement().getActionBindingModel());
+				actionBindingModel.addToBindingVariables(new BindingVariable("action", Object.class) {
+					@Override
+					public Type getType() {
+						return FIBBrowserAction.this.getClass();
+					}
+				});
+			}
+			return actionBindingModel;
 		}
 		return null;
 	}

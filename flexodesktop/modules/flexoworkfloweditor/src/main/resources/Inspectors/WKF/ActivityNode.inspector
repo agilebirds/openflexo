@@ -67,5 +67,5 @@
     <Localized key="Stats" lang="French">Stats</Localized>
     <Localized key="Stats" lang="Dutch">Stats</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="Activity Node" />
+  <Parameter name="title" value="Activity" />
 </Panel>

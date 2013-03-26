@@ -19,7 +19,6 @@
  */
 package org.openflexo.fib.model;
 
-
 public class FIBTextArea extends FIBTextWidget {
 
 	public Integer rows = null;
@@ -45,6 +44,7 @@ public class FIBTextArea extends FIBTextWidget {
 	 */
 	public void setRows(Integer rows) {
 		this.rows = rows;
+
 	}
 
 }

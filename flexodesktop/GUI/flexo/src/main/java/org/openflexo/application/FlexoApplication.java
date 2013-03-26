@@ -31,26 +31,24 @@ import java.lang.reflect.Method;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.prefs.Preferences;
 
 import org.openflexo.AdvancedPrefs;
 import org.openflexo.Flexo;
-import org.openflexo.FlexoCst;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.br.view.JIRAIssueReportDialog;
 import org.openflexo.ch.DefaultHelpRetriever;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.drm.DocResourceManager;
-import org.openflexo.foundation.FlexoMainLocalizer;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
+import org.openflexo.help.FlexoHelp;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.jedit.JEditTextArea;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.localization.Language;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.UserType;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.utils.CancelException;
 import org.openflexo.utils.TooManyFailedAttemptException;
@@ -97,9 +95,6 @@ public class FlexoApplication {
 		}
 		isInitialized = true;
 
-		// First init localization with default location
-		FlexoLocalization.initWith(new FlexoMainLocalizer());
-
 		JEditTextArea.DIALOG_FACTORY = FlexoDialog.DIALOG_FACTORY;
 		try {
 			if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
@@ -119,27 +114,12 @@ public class FlexoApplication {
 				addApplicationListener.invoke(application, new Object[] { applicationAdapter });
 
 				// ((com.apple.eawt.Application)application).addApplicationListener(applicationAdapter);
-			} else if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
-				Preferences prefs = Preferences.userNodeForPackage(FlexoApplication.class);
-				if (prefs.nodeExists(FlexoCst.BUSINESS_APPLICATION_VERSION.toString())) {
-					prefs = prefs.node(FlexoCst.BUSINESS_APPLICATION_VERSION.toString());
-				} else if (prefs.nodeExists(FlexoCst.BUSINESS_APPLICATION_VERSION.toString(true))) {
-					prefs = prefs.node(FlexoCst.BUSINESS_APPLICATION_VERSION.toString(true));
-				}
-				String lg = prefs.get("language", "unknown");
-				lg = lg.toLowerCase();
-				if (lg.startsWith("fr")) {
-					GeneralPreferences.setLanguage(Language.FRENCH);
-				} else if (lg.startsWith("en")) {
-					GeneralPreferences.setLanguage(Language.ENGLISH);
-				} else if (lg.startsWith("nl")) {
-					GeneralPreferences.setLanguage(Language.DUTCH);
-				}
-				prefs.remove("language");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		FlexoHelp.configure(GeneralPreferences.getLanguage().getIdentifier(), UserType.getCurrentUserType().getIdentifier());
+		FlexoHelp.reloadHelpSet();
 		FlexoModelObject.setCurrentUserIdentifier(GeneralPreferences.getUserIdentifier());// Loads the preferences
 		AdvancedPrefs.getEnableUndoManager(); // just load advanced prefs
 		FlexoModelObject.setHelpRetriever(new DefaultHelpRetriever(DocResourceManager.instance()));

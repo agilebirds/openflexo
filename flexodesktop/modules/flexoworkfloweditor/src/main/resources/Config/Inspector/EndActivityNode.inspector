@@ -19,7 +19,7 @@
 	<tab name="Doc" index="2">
 		<property name="index" label="index" widget="INTEGER" constraint="0"/>
 		<property name="acronym" label="acronym" widget="TEXT_FIELD" constraint="1">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 	</tab>
 	

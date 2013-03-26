@@ -28,27 +28,27 @@
 		
 	<tab name="Advanced" index="1">
 		<property name="isStaticallyDefinedInTemplate" label="statically_defined_in_template" widget="READ_ONLY_CHECKBOX" constraint="0" help="Set to true if this property was statically defined in template during last model reinjection">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 	</tab>
 	<tab name="Code" index="3">
 		<property name="visibilityModifier.localizedName" label="access_modifier" widget="LABEL" constraint="1">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
  		<property name="isAbstract" label="abstract_modifier" widget="READ_ONLY_CHECKBOX" constraint="2">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="isStatic" label="static_modifier" widget="READ_ONLY_CHECKBOX" constraint="3">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="isSynchronized" label="synchronized_modifier" widget="READ_ONLY_CHECKBOX" constraint="4">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="code" label="code" widget="JAVA_CODE" constraint="6">
 			<param name="readOnly" value="true"/>
 			<param name="rows" value="5"/>
 			<param name="columns" value="20"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 	</tab>
 </inspector>

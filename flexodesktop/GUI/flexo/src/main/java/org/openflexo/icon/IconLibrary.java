@@ -97,14 +97,8 @@ public class IconLibrary {
 
 	// GUI icons
 
-	public static final Icon NAVIGATION_SPACER = new ImageIconResource("Icons/GUI/PerspectiveSpacer.gif");
-	public static final Icon NAVIGATION_CLOSE_LEFT = new ImageIconResource("Icons/GUI/PerspectiveLeft.gif");
-	public static final Icon NAVIGATION_CLOSE_RIGHT = new ImageIconResource("Icons/GUI/PerspectiveRight.gif");
-
 	public static final ImageIcon DEFAULT_PERSPECTIVE_ACTIVE_ICON = new ImageIconResource("Icons/GUI/DefaultPerspective_A.png");
-	public static final ImageIcon DEFAULT_PERSPECTIVE_SELECTED_ICON = new ImageIconResource("Icons/GUI/DefaultPerspective_S.gif");
 	public static final ImageIcon LIST_PERSPECTIVE_ACTIVE_ICON = new ImageIconResource("Icons/GUI/ListPerspective_A.png");
-	public static final ImageIcon LIST_PERSPECTIVE_SELECTED_ICON = new ImageIconResource("Icons/GUI/ListPerspective_S.gif");
 
 	public static final ImageIcon BROWSER_PLUS_ICON = new ImageIconResource("Icons/GUI/Browser/BrowserPlus.gif");
 	public static final ImageIcon BROWSER_PLUS_DISABLED_ICON = new ImageIconResource("Icons/GUI/Browser/BrowserPlusDisabled.gif");
@@ -130,7 +124,6 @@ public class IconLibrary {
 	public static final Icon NAVIGATION_UP_ICON = new ImageIconResource("Icons/GUI/Navigation/MenuNAV_Fleche_02.png");
 
 	public static final Icon COLLAPSE_ALL_ICON = new ImageIconResource("Icons/GUI/Actions/CollapseAll.png");
-	public static final Icon AUTO_LAYOUT_ICON = new ImageIconResource("Icons/GUI/Actions/AutoLayout.png");
 
 	// Markers
 	public static final IconMarker POSITIVE_MARKER = new IconMarker(new ImageIconResource("Icons/Utils/Markers/Plus.png"), 0, 0);

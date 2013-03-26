@@ -615,7 +615,7 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 		// First we look if property has a defined domain
 		if (p.getDomain() instanceof IFlexoOntologyClass) {
 			// Return the most specialized definition
-			IFlexoOntology ontology = (searchedOntology != null ? searchedOntology : getContext());
+			IFlexoOntology ontology = searchedOntology != null ? searchedOntology : getContext();
 			IFlexoOntologyClass c = ontology.getClass(((IFlexoOntologyClass) p.getDomain()).getURI());
 			if (c == null) {
 				c = (IFlexoOntologyClass) p.getDomain();
@@ -698,11 +698,10 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 			return false;
 		} else {
 			for (IFlexoOntologyClass c2 : someClasses) {
-				if (c2.isSuperConceptOf(c) /*&& c2 != c*/&& (!c2.getURI().equals(c.getURI()))) {
+				if (c2.isSuperConceptOf(c) /*&& c2 != c*/&& !c2.getURI().equals(c.getURI())) {
 					return true;
 				}
 			}
-
 			return false;
 		}
 	}

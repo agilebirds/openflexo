@@ -9,57 +9,87 @@
 *#
 
 #set($view = $object)
-
+#if(${view.getView()})
+    #set($view = ${view.getView()})
+#end
+#set($subLevel = ${level} + 1)
 #if($view)
 
-${generator.log("Rendering view")}
-${generator.logO($view)}
-
-<w:p>   
-    <w:pPr>
-        <w:pStyle w:val="Heading$level"/>
-    </w:pPr>
-    #mkbookMark(${view.getFlexoID()} ${generator.getReference($view)})
-    <w:r>
-        <w:t xml:space="preserve">View: </w:t>
-    </w:r>
-    #renderName($view)
-</w:p>
-
-<w:p>
-	<w:r>
-		<w:rPr>
-			<w:pStyle w:val="Heading$level"/>
-			<w:b/>
-			<w:u w:val="single"/>
-		</w:rPr>
-		<w:t xml:space="preserve">Description:</w:t>
-	</w:r>
-</w:p>
-	
-#description($view)
-
-
-	#renderScreenshotForObject($view)
-
-## Some dummy headers
-
-#set($headers = ["Name", "Description", "ID"])
-
-## Some dummy content
-###set($tableContents = ${generator.getNewVector()})
-
-##foreach($concept in $view.getConcepts()) ## each concept matches a row
-##    #set($row = ${generator.getNewVector()})
-##    #void(${row.add(${concept.getName()})})
-##    #void(${row.add(${concept.getDescription()})})
-##    #void(${row.add(${concept.getFlexoID()})})
-###end
-
+    ${generator.log("Rendering view")}
+    ${generator.logO($view)}
+    #set($heading = "")
+    #foreach($s in ${stringUtils.splitByCharacterTypeCamelCase(${view.getViewPoint().getName()})})
+        #set($heading = "$heading $s")
+    #end
+    #set($heading = $heading.trim())
+    <w:p>
+        <w:pPr>
+            <w:keepNext/>
+            <w:pStyle w:val="Heading${level}"/>
+        </w:pPr>
+        <w:r>
+            <w:t xml:space="preserve">#escape("$heading: ${view.getName()}")</w:t>
+        </w:r>
+    </w:p>
+    #description($view)
+    #renderScreenshotForObject($view)
+    #foreach($pattern in ${view.getViewPoint().getEditionPatterns()})
+        #set($heading ="")
+        #set($labelPath = ${pattern.getPrimaryRepresentationRole().getLabel().toString()})
+        #set($headers = $generator.getNewList())
+        #if($labelPath)
+            #void($headers.add(""))
+        #end
+        #set($rows = $generator.getNewList())
+        #foreach($s in ${stringUtils.splitByCharacterTypeCamelCase(${pattern.getName()})})
+            #set($heading = "$heading $s")
+        #end
+        #set($heading = $heading.trim())
+        #set($entries = $generator.getNewList())
+        #foreach($entry in ${pattern.getInspector().getEntries()})
+            #if(!${entry.getName().toLowerCase().contains("uri")} && !${entry.getLabel().toLowerCase().contains("uri")} && (${entry.getWidgetName()}=="TextField" || ${entry.getWidgetName()}=="TextArea"))
+                 #void(${entries.add($entry)})
+                 #set($label = ${pattern.getViewPoint().getLocalizedDictionary().getLocalizedForKeyAndLanguage($entry.getLabel(), ${Language.ENGLISH})})
+                 #if(!$label)
+                    #set($label = $entry.getLabel())
+                 #end
+                 #void($headers.add("#escape($label)"))
+            #end
+        #end
+        
+        #set($tag = "w:p")
+        #set($epis = $view.getEPInstances($pattern))
+        #if($epis.size()>0)
+                #foreach($epi in $epis)
+                  #set($row = $generator.getNewList())
+                  #if($labelPath)
+                      #set($label = "#renderEPIWithTag($epi $labelPath $tag)")
+                      #void($row.add($label))
+                  #end
+                  #foreach($entry in $entries)
+                      #set($path = ${entry.getData().toString()})
+                      #void($row.add("#renderEPIWithTag($epi $path $tag)"))
+                  #end
+                  #void($rows.add($row))
+                #end
+                <w:p>
+                    <w:pPr>
+                        <w:keepNext/>
+                        <w:pStyle w:val="Heading${subLevel}"/>
+                    </w:pPr>
+                    <w:r>
+                        <w:t>#escape($heading)</w:t>
+                    </w:r>
+                </w:p>
+            #if($headers.size()>0)
+                #renderDocxTable2($headers $rows $falseValue)
+            #else
+                <w:p>
+                    <w:r>
+                        <w:t>#escape("No relevant information to display.")</w:t>
+                    </w:r>
+                </w:p>
+            #end
+        #end
+    #end
 #end
-
-${generator.log("End rendering view")}
-
-
-## macro is defined in docx_macro_library.vm: #macro(renderDocxTable $headersArray $contents)
-#renderDocxTable($headers $tableContents)

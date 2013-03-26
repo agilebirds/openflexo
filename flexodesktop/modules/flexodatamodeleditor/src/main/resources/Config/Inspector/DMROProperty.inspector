@@ -23,7 +23,7 @@
 
 	<tab name="Code" index="3">
 		<property name="isCodeGenerationApplicable" label="" widget="READ_ONLY_CHECKBOX" constraint="0" depends="isCodeGenerationApplicable" conditional="true=false" >
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property> <!-- never displayed, just for conditionals -->
 		<property name="codeGenerationNotApplicableLabel" widget="LABEL" constraint="0" depends="isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=false">
 			<param name="displayLabel" value="false"/>
@@ -32,45 +32,45 @@
 			<param name="widgetLayout" value="1COL"/>
 			<param name="align" value="center"/>
 			<param name="height" value="200"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		
 		<property name="implementationType.localizedName" label="implementation_type" widget="READ_ONLY_TEXT_FIELD" constraint="1" depends="isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="fieldName" label="field_name" widget="READ_ONLY_TEXT_FIELD" constraint="2" depends="implementationType,isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true AND (implementationType=PUBLIC_ACCESSORS_PRIVATE_FIELD OR implementationType=PUBLIC_ACCESSORS_PROTECTED_FIELD)">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="isUnderscoredAccessors" label="prepend_underscore" widget="READ_ONLY_CHECKBOX" constraint="4" depends="implementationType,isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true AND (implementationType=PUBLIC_ACCESSORS_PRIVATE_FIELD OR implementationType=PUBLIC_ACCESSORS_PROTECTED_FIELD OR implementationType=PUBLIC_ACCESSORS_ONLY)">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		
 		<property name="getterCode" label="getter_code" widget="JAVA_CODE" constraint="7" depends="implementationType,isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true AND (implementationType=PUBLIC_ACCESSORS_PRIVATE_FIELD OR implementationType=PUBLIC_ACCESSORS_PROTECTED_FIELD OR implementationType=PUBLIC_ACCESSORS_ONLY)">
 			<param name="readOnly" value="true"/>
 			<param name="rows" value="5"/>
 			<param name="columns" value="20"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 
 		<property name="setterCode" label="setter_code" widget="JAVA_CODE" constraint="10" depends="isSettable,implementationType,isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true AND isSettable=true AND (implementationType=PUBLIC_ACCESSORS_PRIVATE_FIELD OR implementationType=PUBLIC_ACCESSORS_PROTECTED_FIELD OR implementationType=PUBLIC_ACCESSORS_ONLY)">
 			<param name="readOnly" value="true"/>
 			<param name="rows" value="5"/>
 			<param name="columns" value="20"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 
 		<property name="additionCode" label="addition_code" widget="JAVA_CODE" constraint="13" depends="isSettable,implementationType,cardinality,isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true AND (cardinality=HASHTABLE OR cardinality=VECTOR) AND isSettable=true AND (implementationType=PUBLIC_ACCESSORS_PRIVATE_FIELD OR implementationType=PUBLIC_ACCESSORS_PROTECTED_FIELD OR implementationType=PUBLIC_ACCESSORS_ONLY)">
 			<param name="readOnly" value="true"/>
 			<param name="rows" value="5"/>
 			<param name="columns" value="20"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 
 		<property name="removalCode" label="removal_code" widget="JAVA_CODE" constraint="16" depends="isSettable,implementationType,cardinality,isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true AND (cardinality=HASHTABLE OR cardinality=VECTOR) AND isSettable=true AND (implementationType=PUBLIC_ACCESSORS_PRIVATE_FIELD OR implementationType=PUBLIC_ACCESSORS_PROTECTED_FIELD OR implementationType=PUBLIC_ACCESSORS_ONLY)">
 			<param name="readOnly" value="true"/>
 			<param name="rows" value="5"/>
 			<param name="columns" value="20"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 
 

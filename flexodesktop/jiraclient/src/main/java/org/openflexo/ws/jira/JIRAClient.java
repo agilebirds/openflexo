@@ -89,10 +89,12 @@ public class JIRAClient {
 		}
 		switch (connection.getResponseCode()) {
 		case 401:
+		case 403:
 			throw new UnauthorizedJIRAAccessException();
 		}
 		InputStream is;
-		if (connection.getResponseCode() > 399) {
+		boolean isErrorStatus = connection.getResponseCode() > 399;
+		if (isErrorStatus) {
 			is = new BufferedInputStream(connection.getErrorStream());
 		} else {
 			is = new BufferedInputStream(connection.getInputStream());
@@ -105,6 +107,9 @@ public class JIRAClient {
 				baos.write(b, 0, read);
 			}
 			String json2 = new String(baos.toByteArray(), "UTF-8");
+			if (isErrorStatus) {
+				throw new IOException(json2 + "\n(Status: " + connection.getResponseCode() + ")");
+			}
 			return JIRAGson.getInstance().fromJson(json2, submit.getResultClass());
 		} finally {
 			is.close();

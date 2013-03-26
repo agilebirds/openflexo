@@ -249,18 +249,12 @@ public class PortmapGR extends AbstractNodeGR<FlexoPortMap> {
 		};
 	}
 
-	private boolean portmapIsBeeingDragged = false;
-
-	@Override
-	public void notifyObjectWillMove() {
-		portmapIsBeeingDragged = true;
-		super.notifyObjectWillMove();
-	}
-
 	@Override
 	public void notifyObjectHasMoved() {
+		if (isLayingout) {
+			return;
+		}
 		super.notifyObjectHasMoved();
-		portmapIsBeeingDragged = false;
 		FlexoPortMap afterPortmap = null;
 		if (observedContainer != null) {
 			for (GraphicalRepresentation<?> gr : observedContainer.getContainedGraphicalRepresentations()) {

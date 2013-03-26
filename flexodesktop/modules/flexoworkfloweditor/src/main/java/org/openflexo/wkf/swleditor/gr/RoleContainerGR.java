@@ -34,13 +34,11 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
-import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
-import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
@@ -101,7 +99,7 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 
 		// setDimensionConstraints(DimensionConstraints.CONTAINER);
 
-		// setBorder(new ShapeGraphicalRepresentation.ShapeBorder(0, CONTAINER_LABEL_HEIGHT, 0, 0));
+		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(0, CONTAINER_LABEL_HEIGHT, 0, 0));
 
 		/*mainColor = role.getColor();
 		backColor = new Color ((255*3+mainColor.getRed())/4,(255*3+mainColor.getGreen())/4,(255*3+mainColor.getBlue())/4);
@@ -121,31 +119,6 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 				g.fillRoundRect(0, 0, g.getWidth() - 1, g.getHeight() - 1 + CONTAINER_LABEL_HEIGHT, arcSize, arcSize);
 				g.useForegroundStyle(decorationForeground);
 				g.drawRoundRect(0, 0, g.getWidth() - 1, g.getHeight() - 1 + CONTAINER_LABEL_HEIGHT, arcSize, arcSize);
-				g.fillArc(0, g.getHeight() + CONTAINER_LABEL_HEIGHT - arcSize, arcSize, arcSize, 180, 90);
-				g.fillArc(g.getWidth() - arcSize, g.getHeight() + CONTAINER_LABEL_HEIGHT - arcSize, arcSize, arcSize, 270, 90);
-				g.fillRect(arcSize / 2, g.getHeight() - arcSize / 2 + CONTAINER_LABEL_HEIGHT, g.getWidth() - arcSize + 1, arcSize / 2);
-				g.fillRect(0, g.getHeight() - arcSize / 2 - 2 + CONTAINER_LABEL_HEIGHT, g.getWidth(), 3);
-
-				Rectangle labelBoundsRect = getNormalizedLabelBounds();
-				labelBoundsRect.x = labelBoundsRect.x - (int) getX();
-				labelBoundsRect.y = labelBoundsRect.y - (int) getY();
-
-				g.useBackgroundStyle(BackgroundStyle.makeColoredBackground(Color.WHITE));
-				g.fillRoundRect(labelBoundsRect.x, labelBoundsRect.y, labelBoundsRect.width, labelBoundsRect.height, 10, 10);
-				g.useForegroundStyle(decorationForeground);
-				g.drawRoundRect(labelBoundsRect.x, labelBoundsRect.y, labelBoundsRect.width, labelBoundsRect.height, 10, 10);
-
-				Color bestColor = FGEUtils.chooseBestColor(mainColor, Color.WHITE, mainColor, FGEUtils.emphasizedColor(mainColor),
-						emphasizedMainColor);
-				g.useTextStyle(TextStyle.makeTextStyle(bestColor, FGEConstants.DEFAULT_TEXT_FONT));
-				g.drawString(getRole().getName(), g.getWidth() / 2, g.getHeight() - 9 + CONTAINER_LABEL_HEIGHT,
-						HorizontalTextAlignment.CENTER);
-
-				g.useBackgroundStyle(decorationBackground);
-				g.fillCircle(new FGEPoint(15, 5), new FGEDimension(22, 22));
-				g.useForegroundStyle(decorationForeground);
-				g.drawCircle(new FGEPoint(15, 5), new FGEDimension(22, 22));
-
 			};
 
 			@Override
@@ -153,7 +126,6 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 				return false;
 			}
 		});
-
 		setForeground(ForegroundStyle.makeNone());
 		setBackground(BackgroundStyle.makeEmptyBackground());
 
@@ -220,8 +192,11 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 		setTextStyle(TextStyle.makeTextStyle(emphasizedMainColor, new Font("SansSerif", Font.BOLD, 12)));
 
 		// Those are the styles used by border painter (not the one used for shape itself, which are empty)
-
-		background = BackgroundStyle.makeColorGradientBackground(backColor, Color.WHITE, ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
+		if (backColor == null) {
+			backColor = Color.BLACK;
+		}
+		background = BackgroundStyle.makeColorGradientBackground(backColor, new Color(backColor.getRed() / 2 + 128,
+				backColor.getGreen() / 2 + 128, backColor.getBlue() / 2 + 128), ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 
 		decorationForeground = ForegroundStyle.makeStyle(mainColor);
 		decorationForeground.setLineWidth(0.2);
@@ -367,19 +342,6 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 	}
 
 	@Override
-	public FGEArea getLocationConstrainedAreaForChild(AbstractNodeGR node) {
-		Vector<FGESegment> lines = new Vector<FGESegment>();
-		for (int i = 0; i < getSwimmingLaneNb(); i++) {
-			double x1 = SWIMMING_LANE_BORDER - node.getBorder().left;
-			double x2 = getWidth() - SWIMMING_LANE_BORDER - node.getWidth() - node.getBorder().left;
-			double y = i * getHeight() / getSwimmingLaneNb() + getHeight() / getSwimmingLaneNb() / 2 - node.getHeight() / 2
-					- node.getBorder().top;
-			lines.add(new FGESegment(x1, y, x2, y));
-		}
-		return FGEUnionArea.makeUnion(lines);
-	}
-
-	@Override
 	public int getSwimmingLaneNb() {
 		return getDrawing().getSwimmingLaneNb(getRole());
 	}
@@ -425,11 +387,6 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 
 	@Override
 	public void notifyObjectHasResized() {
-		for (GraphicalRepresentation gr : getContainedGraphicalRepresentations()) {
-			if (gr instanceof AbstractNodeGR) {
-				((AbstractNodeGR) gr).resetLocationConstrainedArea();
-			}
-		}
 		super.notifyObjectHasResized();
 		updateControlArea();
 	}

@@ -131,13 +131,16 @@ public class DropWKFElement extends FlexoUndoableAction<DropWKFElement, FlexoPet
 			}
 			if (getObject() instanceof PetriGraphNode) {
 				PetriGraphNode node = (PetriGraphNode) getObject();
-				if (getRoleToAssociate() != null && getRoleToAssociate() != getProject().getWorkflow().getDefaultRole()) {
+				if (getRoleToAssociate() != null) {
+					if (roleToAssociate == getProject().getWorkflow().getDefaultRole()) {
+						roleToAssociate = null;
+					}
 					if (node instanceof AbstractActivityNode) {
-						((AbstractActivityNode) node).setRole(getRoleToAssociate());
+						((AbstractActivityNode) node).setRole(roleToAssociate);
 					} else if (node instanceof OperatorNode) {
-						((OperatorNode) node).setRole(getRoleToAssociate());
+						((OperatorNode) node).setRole(roleToAssociate);
 					} else if (node instanceof EventNode) {
-						((EventNode) node).setRole(getRoleToAssociate());
+						((EventNode) node).setRole(roleToAssociate);
 					}
 				}
 				if (node instanceof OperatorNode || node instanceof EventNode || node.getLevel() == getPetriGraph().getLevel()) {

@@ -8,7 +8,7 @@
 			<param name="columns" value="10"/>
 		</property>
 		<property name="initTokenNbr" label="init_token_number" widget="INTEGER" constraint="3">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="triggerLevel" label="trigger_level" widget="INTEGER" constraint="4"/>
 		<property name="attachedBeginNode" label="attached_begin_node" widget="DROPDOWN" constraint="5">

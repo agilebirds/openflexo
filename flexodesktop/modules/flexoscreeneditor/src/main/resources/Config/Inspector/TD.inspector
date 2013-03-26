@@ -3,7 +3,7 @@
 	<tab name="Basic" index="0" layout="DEFAULT">
 		<!--<property name="TDCssType" label="css_type" widget="DROPDOWN" constraint="0">
 			<param name="format" value="name"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>-->
 		<property name="alignement" label="alignement" widget="CUSTOM" constraint="1">
 			<param name="className" value="org.openflexo.components.widget.IECellPositionWidget"/>
@@ -21,16 +21,16 @@
 	<tab name="Advanced" index="1" layout="DEFAULT">
 
 		<property name="weightx" label="weight_x" widget="READ_ONLY_TEXT_FIELD" constraint="7">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="weighty" label="weight_y" widget="READ_ONLY_TEXT_FIELD" constraint="8">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="gridx" label="grid_x" widget="READ_ONLY_TEXT_FIELD" constraint="9">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="gridy" label="grid_y" widget="READ_ONLY_TEXT_FIELD" constraint="10">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 	</tab>
 

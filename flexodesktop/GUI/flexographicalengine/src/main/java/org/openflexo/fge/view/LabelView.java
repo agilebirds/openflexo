@@ -49,8 +49,13 @@ import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicScrollPaneUI;
 import javax.swing.plaf.basic.BasicTextPaneUI;
 import javax.swing.plaf.basic.BasicViewportUI;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
@@ -179,6 +184,38 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		this.textComponent = new TextComponent();
 		this.textComponentListener = new LabelDocumentListener();
 		textComponent.addMouseListener(new InOutMouseListener());
+		((AbstractDocument) textComponent.getDocument()).setDocumentFilter(new DocumentFilter() {
+			@Override
+			public void insertString(FilterBypass fb, int offset, String text, AttributeSet attr) throws BadLocationException {
+				if (!getGraphicalRepresentation().getIsMultilineAllowed()) {
+					if (text.equals("\n") || text.equals("\r\n")) {
+						return;
+					}
+				}
+				text = filteredText(text);
+				super.insertString(fb, offset, text, attr);
+			}
+
+			@Override
+			public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+				if (!getGraphicalRepresentation().getIsMultilineAllowed()) {
+					if (length == 0) {
+						if (text.equals("\n") || text.equals("\r\n")) {
+							return;
+						}
+					}
+				}
+				text = filteredText(text);
+				super.replace(fb, offset, length, text, attrs);
+			}
+
+			private String filteredText(String text) {
+				if (!getGraphicalRepresentation().getIsMultilineAllowed()) {
+					return text.replaceAll("\r?\n", " ");
+				}
+				return text;
+			}
+		});
 		getViewport().setBorder(null);
 		getViewport().setOpaque(false);
 		setViewportView(textComponent);
@@ -548,7 +585,8 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		StyleConstants.setForeground(set, color);
 		textComponent.setForeground(color);
 		textComponent.setDisabledTextColor(color);
-		textComponent.setParagraphAttributes(set, true);
+		StyledDocument document = textComponent.getStyledDocument();
+		document.setParagraphAttributes(0, document.getLength(), set, true);
 		textComponent.validate();
 		updateBounds();
 	}

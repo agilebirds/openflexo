@@ -3,31 +3,31 @@
   <TabPanel name="Tab" constraints="border(location=center)">
     <Tab title="Code" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="CodeTab">
       <Label label="" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" visible="false" name="IsCodeGenerationApplicableLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
       <Label align="center" index="1" data="data.codeGenerationNotApplicableLabel" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;location=right)" visible="(data.isCodeGenerationApplicable = false)" height="200" name="CodeGenerationNotApplicableLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
       <Label label="implementation_type" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" visible="(data.isCodeGenerationApplicable = true)" name="ImplementationTypeLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
       <DropDown showReset="true" index="3" data="data.implementationType" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" visible="(data.isCodeGenerationApplicable = true)" name="ImplementationType" format="object.localizedName" localize="true" list="data.implementationType.availableValues" iteratorClassName="org.openflexo.foundation.dm.DMPropertyImplementationType" autoSelectFirstRow="false">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </DropDown>
       <Label label="field_name" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" visible="((data.isCodeGenerationApplicable = true) &amp; (((((data.implementationType = &quot;PUBLIC_ACCESSORS_PRIVATE_FIELD&quot;) | (data.implementationType = &quot;PUBLIC_ACCESSORS_PROTECTED_FIELD&quot;)) | (data.implementationType = &quot;PUBLIC_FIELD&quot;)) | (data.implementationType = &quot;PROTECTED_FIELD&quot;)) | (data.implementationType = &quot;PUBLIC_STATIC_FINAL_FIELD&quot;)))" name="FieldNameLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
       <TextField index="5" data="data.fieldName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" visible="((data.isCodeGenerationApplicable = true) &amp; (((((data.implementationType = &quot;PUBLIC_ACCESSORS_PRIVATE_FIELD&quot;) | (data.implementationType = &quot;PUBLIC_ACCESSORS_PROTECTED_FIELD&quot;)) | (data.implementationType = &quot;PUBLIC_FIELD&quot;)) | (data.implementationType = &quot;PROTECTED_FIELD&quot;)) | (data.implementationType = &quot;PUBLIC_STATIC_FINAL_FIELD&quot;)))" name="FieldName" localize="true" validateOnReturn="true" columns="10">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </TextField>
       <CheckBox selected="false" index="1" data="data.isCodeGenerationApplicable" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;location=right)" visible="false" name="IsCodeGenerationApplicable" readOnly="true" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </CheckBox>
       <Label label="prepend_underscore" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsTop=5;location=left)" visible="((data.isCodeGenerationApplicable = true) &amp; (((data.implementationType = &quot;PUBLIC_ACCESSORS_PRIVATE_FIELD&quot;) | (data.implementationType = &quot;PUBLIC_ACCESSORS_PROTECTED_FIELD&quot;)) | (data.implementationType = &quot;PUBLIC_ACCESSORS_ONLY&quot;)))" name="IsUnderscoredAccessorsLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
       <CheckBox selected="false" index="9" data="data.isUnderscoredAccessors" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;location=right)" visible="((data.isCodeGenerationApplicable = true) &amp; (((data.implementationType = &quot;PUBLIC_ACCESSORS_PRIVATE_FIELD&quot;) | (data.implementationType = &quot;PUBLIC_ACCESSORS_PROTECTED_FIELD&quot;)) | (data.implementationType = &quot;PUBLIC_ACCESSORS_ONLY&quot;)))" name="IsUnderscoredAccessors" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </CheckBox>
     </Tab>
     <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="AdvancedTab">

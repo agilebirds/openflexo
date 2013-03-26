@@ -670,8 +670,8 @@ public class ModelEntity {
 
 		else {
 			// _availableContexts = null;
-			for (Enumeration e = parentModelEntity.getModelProperties(); e.hasMoreElements();) {
-				ModelProperty parentModelProperty = (ModelProperty) e.nextElement();
+			for (Enumeration<ModelProperty> e = parentModelEntity.getModelProperties(); e.hasMoreElements();) {
+				ModelProperty parentModelProperty = e.nextElement();
 				if (getModelPropertyWithName(parentModelProperty.getName()) != null) {
 					// This entity already has this property defined,
 					// which overrides the parent one > do nothing

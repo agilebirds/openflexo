@@ -111,7 +111,6 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 					MouseClickControlActionType.SELECTION));
 			addToMouseDragControls(MouseDragControl.makeMouseDragControl("Rectangle selection", MouseButton.LEFT,
 					MouseDragControlActionType.RECTANGLE_SELECTING));
-			addToMouseDragControls(MouseDragControl.makeMouseDragControl("Zoom", MouseButton.RIGHT, MouseDragControlActionType.ZOOM));
 		}
 		width = 1000;
 		height = 1000;

@@ -16,6 +16,7 @@ import org.openflexo.dgmodule.view.GeneratedDocModuleView;
 import org.openflexo.doceditor.controller.DEController;
 import org.openflexo.doceditor.view.DETOCEntryModuleView;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.DGRepository;
@@ -60,12 +61,14 @@ public class DocGeneratorPerspective extends FlexoPerspective {
 
 	@Override
 	public FlexoObject getDefaultObject(FlexoObject proposedObject) {
-		// System.out.println("Proposed object in DOCGeneratorPerspective: " + proposedObject);
-		/*if (proposedObject instanceof TOCEntry) {
-			return ((TOCEntry) proposedObject).getRepository();
-		} else {*/
-		return this.dgController.getProject().getGeneratedDoc();
-		// }
+		if (proposedObject instanceof FlexoProjectObject) {
+			if (((FlexoProjectObject) proposedObject).getProject().getGeneratedDoc().getGeneratedRepositories().size() > 0) {
+				return ((FlexoProjectObject) proposedObject).getProject().getGeneratedDoc().getGeneratedRepositories().get(0);
+			} else {
+				return ((FlexoProjectObject) proposedObject).getProject().getGeneratedDoc();
+			}
+		}
+		return null;
 	}
 
 	@Override

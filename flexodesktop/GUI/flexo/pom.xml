@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>GUI</artifactId>
-		<version>1.6-SNAPSHOT</version>
+        <version>1.6-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexo</artifactId>
 	<name>GUI :: Flexo</name>
@@ -95,6 +95,10 @@
 			<artifactId>flexofoundation</artifactId>
 			<classifier>tests</classifier>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>

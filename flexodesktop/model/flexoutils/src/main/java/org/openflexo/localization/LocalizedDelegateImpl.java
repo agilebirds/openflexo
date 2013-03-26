@@ -480,7 +480,7 @@ public class LocalizedDelegateImpl extends Observable implements LocalizedDelega
 			loadLocalizedDictionaries();
 		}
 		matchingEntries = new Vector<Entry>();
-		for (Entry e : entries) {
+		for (Entry e : getEntries()) {
 			switch (searchMode) {
 			case Contains:
 				if (e.contains(text)) {

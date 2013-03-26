@@ -10,7 +10,7 @@
 		<property name="accessedProcessInstance" label="accessed_instance" widget="CUSTOM" constraint="4">
 			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
 			<param name="binding_definition" value="accessedProcessInstanceBindingDefinition"/>			
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 	</tab>
 

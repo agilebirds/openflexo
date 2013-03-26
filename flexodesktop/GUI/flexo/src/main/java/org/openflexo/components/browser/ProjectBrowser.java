@@ -46,6 +46,7 @@ import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.selection.SelectionSynchronizedComponent;
+import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -97,6 +98,8 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	int rowHeight = DEFAULT_ROW_HEIGHT;
 
 	private FlexoController controller;
+
+	protected PropertyChangeListenerRegistrationManager manager = new PropertyChangeListenerRegistrationManager();
 
 	@Deprecated
 	public ProjectBrowser(FlexoProject project) {
@@ -495,12 +498,12 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Setting root object to be " + aRootObject);
 		}
-		if (this._rootObject != null) {
-			this._rootObject.getPropertyChangeSupport().removePropertyChangeListener(this._rootObject.getDeletedProperty(), this);
+		if (this._rootObject != null && this._rootObject.getDeletedProperty() != null) {
+			manager.removeListener(this._rootObject.getDeletedProperty(), this, this._rootObject);
 		}
 		_rootObject = aRootObject;
-		if (this._rootObject != null) {
-			this._rootObject.getPropertyChangeSupport().addPropertyChangeListener(this._rootObject.getDeletedProperty(), this);
+		if (this._rootObject != null && this._rootObject.getDeletedProperty() != null) {
+			manager.addListener(this._rootObject.getDeletedProperty(), this, this._rootObject);
 		}
 		update();
 		if (_rootObject != null && !isRootCollapsable()) {
@@ -541,6 +544,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 			logger.fine("Delete browser " + getClass().getName());
 		}
 		deleted = true;
+		manager.delete();
 		clearTree();
 		_project = null;
 		_rootElement = null;
@@ -549,6 +553,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		_filters.clear();
 		_browserListeners.clear();
 		_selectionManager = null;
+		controller = null;
 	}
 
 	private void clearTree() {
@@ -1166,7 +1171,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 			getSelectionManager().setSelectedObjects(objects);
 		} else {
 			resetSelection();
-			addToSelected(objects);
+			if (objects != null) {
+				addToSelected(objects);
+			}
 		}
 	}
 
@@ -1301,6 +1308,10 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 			return controller.getEditor();
 		}
 		return _editor;
+	}
+
+	public FlexoController getController() {
+		return controller;
 	}
 
 	public int getRowHeight() {

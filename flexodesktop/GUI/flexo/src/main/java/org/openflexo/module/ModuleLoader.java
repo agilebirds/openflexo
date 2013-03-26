@@ -19,8 +19,6 @@
  */
 package org.openflexo.module;
 
-import java.awt.Frame;
-import java.awt.Window;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -36,8 +34,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.GeneralPreferences;
@@ -52,10 +48,10 @@ import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.rm.SaveResourceExceptionList;
 import org.openflexo.foundation.utils.OperationCancelledException;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.external.ExternalVPMModule;
 import org.openflexo.module.external.ExternalDMModule;
 import org.openflexo.module.external.ExternalIEModule;
 import org.openflexo.module.external.ExternalVEModule;
+import org.openflexo.module.external.ExternalVPMModule;
 import org.openflexo.module.external.ExternalWKFModule;
 import org.openflexo.module.external.IModuleLoader;
 import org.openflexo.prefs.FlexoPreferences;
@@ -84,6 +80,8 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 	private boolean allowsDocSubmission;
 
 	private FlexoModule activeModule = null;
+
+	private Module activatingModule;
 
 	private WeakReference<FlexoEditor> lastActiveEditor;
 
@@ -125,7 +123,6 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 
 	@Override
 	public String getDeletedProperty() {
-		// TODO Auto-generated method stub
 
 		return null;
 	}
@@ -158,6 +155,10 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 	 */
 	public Enumeration<FlexoModule> loadedModules() {
 		return new Vector<FlexoModule>(_modules.values()).elements();
+	}
+
+	public int getLoadedModuleCount() {
+		return _modules.size();
 	}
 
 	/**
@@ -196,8 +197,12 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 			ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("loading_module") + " " + module.getLocalizedName(), 8);
 		}
 		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("loading_module") + " " + module.getLocalizedName());
-		FlexoModule flexoModule = doInternalLoadModule(module);
+		FlexoModule flexoModule = module.getConstructor().newInstance(new Object[] { applicationContext });
 		_modules.put(module, flexoModule);
+		if (activatingModule == module) {
+			activeModule = flexoModule;
+		}
+		doInternalLoadModule(flexoModule);
 		if (createProgress) {
 			ProgressWindow.hideProgressWindow();
 		}
@@ -244,9 +249,9 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 
 	private class ModuleLoaderCallable implements Callable<FlexoModule> {
 
-		private final Module module;
+		private final FlexoModule module;
 
-		public ModuleLoaderCallable(Module module) {
+		public ModuleLoaderCallable(FlexoModule module) {
 			this.module = module;
 		}
 
@@ -255,14 +260,13 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Loading module " + module.getName());
 			}
-			FlexoModule flexoModule = null;
-			flexoModule = module.getConstructor().newInstance(new Object[] { applicationContext });
-			FCH.ensureHelpEntryForModuleHaveBeenCreated(flexoModule);
-			return flexoModule;
+			module.initModule();
+			FCH.ensureHelpEntryForModuleHaveBeenCreated(module);
+			return module;
 		}
 	}
 
-	private FlexoModule doInternalLoadModule(Module module) throws Exception {
+	private FlexoModule doInternalLoadModule(FlexoModule module) throws Exception {
 		ModuleLoaderCallable loader = new ModuleLoaderCallable(module);
 		return FlexoSwingUtils.syncRunInEDT(loader);
 	}
@@ -273,6 +277,26 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 
 	public List<Module> getAvailableModules() {
 		return Modules.getInstance().getAvailableModules();
+	}
+
+	public List<Module> getLoadedModules() {
+		List<Module> list = new ArrayList<Module>();
+		for (Module module : getAvailableModules()) {
+			if (isLoaded(module)) {
+				list.add(module);
+			}
+		}
+		return list;
+	}
+
+	public List<Module> getUnloadedModules() {
+		List<Module> list = new ArrayList<Module>();
+		for (Module module : getAvailableModules()) {
+			if (!isLoaded(module)) {
+				list.add(module);
+			}
+		}
+		return list;
 	}
 
 	public boolean isLoaded(Module module) {
@@ -354,35 +378,40 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 			return activeModule;
 		}
 		ignoreSwitch = true;
+		activatingModule = module;
 		try {
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Switch to module " + module.getName());
-		}
-		FlexoModule moduleInstance = getModuleInstance(module);
-		if (moduleInstance != null) {
-			FlexoModule old = activeModule;
-			if (activeModule != null) {
-				activeModule.getController().getControllerModel().getPropertyChangeSupport()
-						.removePropertyChangeListener(ControllerModel.CURRENT_EDITOR, activeEditorListener);
-				activeModule.setAsInactive();
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Switch to module " + module.getName());
 			}
-			activeModule = moduleInstance;
-			moduleInstance.setAsActiveModule();
-			if (activeModule.getModule().requireProject()) {
-				activeModule.getController().getControllerModel().getPropertyChangeSupport()
-						.addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, activeEditorListener);
+			FlexoModule moduleInstance = getModuleInstance(module);
+			if (moduleInstance != null) {
+				FlexoModule old = activeModule;
+				if (activeModule != null) {
+					activeModule.getController().getControllerModel().getPropertyChangeSupport()
+							.removePropertyChangeListener(ControllerModel.CURRENT_EDITOR, activeEditorListener);
+					activeModule.setAsInactive();
+				}
+				activeModule = moduleInstance;
+				moduleInstance.setAsActiveModule();
+				if (activeModule.getModule().requireProject()) {
+					activeModule.getController().getControllerModel().getPropertyChangeSupport()
+							.addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, activeEditorListener);
+				}
+				getPropertyChangeSupport().firePropertyChange(ACTIVE_MODULE, old, activeModule);
+				getServiceManager().notify(this, new ModuleActivated(activeModule));
+				return moduleInstance;
 			}
-			getPropertyChangeSupport().firePropertyChange(ACTIVE_MODULE, old, activeModule);
-			getServiceManager().notify(this, new ModuleActivated(activeModule));
-			return moduleInstance;
-		}
-		throw new ModuleLoadingException(module);
+			throw new ModuleLoadingException(module);
 		} finally {
+			activatingModule = null;
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
+					if (isLoaded(module)) {
+						_modules.get(module).getFlexoFrame().toFront();
+					}
 					ModuleLoader.this.ignoreSwitch = false;
-	}
+				}
 			});
 		}
 	}
@@ -492,35 +521,6 @@ public class ModuleLoader extends FlexoServiceImpl implements FlexoService, IMod
 	@Override
 	public ExternalVEModule getVEModuleInstance() throws ModuleLoadingException {
 		return getOEModule();
-	}
-
-	/**
-	 * @param value
-	 *            the look and feel identifier
-	 * @throws ClassNotFoundException
-	 *             - if the LookAndFeel class could not be found
-	 * @throws UnsupportedLookAndFeelException
-	 *             - if lnf.isSupportedLookAndFeel() is false
-	 * @throws IllegalAccessException
-	 *             - if the class or initializer isn't accessible
-	 * @throws InstantiationException
-	 *             - if a new instance of the class couldn't be created
-	 * @throws ClassCastException
-	 *             - if className does not identify a class that extends LookAndFeel
-	 */
-	// todo move this method somewhere else
-	public static void setLookAndFeel(String value) throws ClassNotFoundException, InstantiationException, IllegalAccessException,
-			UnsupportedLookAndFeelException {
-		if (UIManager.getLookAndFeel().getClass().getName().equals(value)) {
-			return;
-		}
-		UIManager.setLookAndFeel(value);
-		for (Frame frame : Frame.getFrames()) {
-			for (Window window : frame.getOwnedWindows()) {
-				SwingUtilities.updateComponentTreeUI(window);
-			}
-			SwingUtilities.updateComponentTreeUI(frame);
-		}
 	}
 
 	@Override

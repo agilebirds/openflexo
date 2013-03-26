@@ -3,7 +3,7 @@ package org.openflexo.antar.binding;
 import java.lang.reflect.Type;
 
 /**
- * Modelize a simple path element in a binding path, represented by a simple get/set access through a property
+ * Model a simple path element in a binding path, represented by a simple get/set access through a property
  * 
  * @author sylvain
  * 

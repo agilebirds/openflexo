@@ -210,7 +210,12 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 				if (location != null && location != NO_LOCATION) {
 					setCurrentLocation(location);
 				} else {
-					setCurrentLocation(currentEditor, null, getCurrentPerspective());
+					FlexoObject object = null;
+					if (getCurrentEditor() == null && currentEditor != null && currentEditor.getProject() != null
+							&& getCurrentPerspective() != null) {
+						object = getCurrentPerspective().getDefaultObject(currentEditor.getProject());
+					}
+					setCurrentLocation(currentEditor, object, getCurrentPerspective());
 				}
 			}
 		}
@@ -329,7 +334,6 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 	}
 
 	private void notifyLocationChange(Location old, Location newLocation) {
-		getPropertyChangeSupport().firePropertyChange(CURRENT_LOCATION, old, currentLocation);
 		if (old == null || old.getEditor() != currentLocation.getEditor()) {
 			getPropertyChangeSupport()
 					.firePropertyChange(CURRENT_EDITOR, old != null ? old.getEditor() : null, currentLocation.getEditor());
@@ -342,7 +346,7 @@ public class ControllerModel extends ControllerModelObject implements PropertyCh
 			getPropertyChangeSupport()
 					.firePropertyChange(CURRENT_OBJECT, old != null ? old.getObject() : null, currentLocation.getObject());
 		}
-
+		getPropertyChangeSupport().firePropertyChange(CURRENT_LOCATION, old, currentLocation);
 	}
 
 	public Stack<Location> getNextHistory() {

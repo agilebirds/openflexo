@@ -27,6 +27,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.regex.Pattern;
 import java.util.zip.Deflater;
@@ -94,6 +95,16 @@ public class ZipUtils {
 				continue;
 			}
 			File outputFile = new File(outputDir, entry.getName().replace('\\', '/'));
+			if (outputFile.getName().startsWith("._")) {
+				// This block is made to drop MacOS crap added to zip files
+				if (zipFile.getEntry(entry.getName().substring(0, entry.getName().length() - outputFile.getName().length())
+						+ outputFile.getName().substring(2)) != null) {
+					continue;
+				}
+				if (new File(outputFile.getParentFile(), outputFile.getName().substring(2)).exists()) {
+					continue;
+				}
+			}
 			FileUtils.createNewFile(outputFile);
 			InputStream zipStream = null;
 			FileOutputStream fos = null;
@@ -111,6 +122,15 @@ public class ZipUtils {
 			} finally {
 				IOUtils.closeQuietly(zipStream);
 				IOUtils.closeQuietly(fos);
+			}
+		}
+		Collection<File> listFiles = org.apache.commons.io.FileUtils.listFiles(outputDir, null, true);
+		for (File file : listFiles) {
+			if (file.isFile() && file.getName().startsWith("._")) {
+				File f = new File(file.getParentFile(), file.getName().substring(2));
+				if (f.exists()) {
+					file.delete();
+				}
 			}
 		}
 		zipFile.close();
@@ -297,10 +317,10 @@ public class ZipUtils {
 
 	public static void main(String[] args) {
 		try {
-			File zip = new File("C:\\Users\\Guillaume\\Desktop\\SEPELDocumentationTemplates2.zip");
-			File tmp = FileUtils.createTempDirectory("Hello", "Something");
+			File zip = new File("d:/Work/SNA_1LS_REPAIR_VOICE_1_0_RO.zip");
+			File tmp = new File("D:/tmp/TestUnzip");
+			tmp.mkdirs();
 			unzip(zip, tmp);
-			FileUtils.deleteDir(tmp);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

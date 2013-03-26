@@ -391,7 +391,7 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 				logger.info("Loading project... DONE.");
 			}
 			if (progress != null) {
-				progress.setProgress("Check ProcessInstance consistency");
+				progress.setProgress(FlexoLocalization.localizedForKey("loading_ui"));
 			}
 			_loadProjectProgress = null;
 			return project;

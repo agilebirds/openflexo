@@ -28,6 +28,7 @@ import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
 import org.openflexo.fge.geom.FGESegment;
+import org.openflexo.fge.geom.area.DefaultAreaProvider;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEPlane;
 import org.openflexo.fge.geom.area.FGESubstractionArea;
@@ -197,11 +198,13 @@ public class AdjustableLastControlPoint extends RectPolylinAdjustableControlPoin
 
 				if (initialPolylin.getSegmentNb() > 3) {
 					FGESegment oppositeSegment = initialPolylin.getSegmentAt(initialPolylin.getSegmentNb() - 3);
-					appendingPath = FGERectPolylin.makeRectPolylinCrossingPoint(oppositeSegment.getP1(), newEndPosition, newLastCPLocation,
-							initialPreviousOrientation.getOpposite(), orientation, true, getConnector()
+					appendingPath = FGERectPolylin.makeRectPolylinCrossingPoint(new DefaultAreaProvider<SimplifiedCardinalDirection>(
+							oppositeSegment.getP1()), new DefaultAreaProvider<SimplifiedCardinalDirection>(newEndPosition),
+							newLastCPLocation, initialPreviousOrientation.getOpposite(), orientation, true, getConnector()
 									.getOverlapXResultingFromPixelOverlap(), getConnector().getOverlapYResultingFromPixelOverlap());
 				} else {
-					appendingPath = FGERectPolylin.makeRectPolylinCrossingPoint(previousCPLocation, newEndPosition, newLastCPLocation,
+					appendingPath = FGERectPolylin.makeRectPolylinCrossingPoint(new DefaultAreaProvider<SimplifiedCardinalDirection>(
+							previousCPLocation), new DefaultAreaProvider<SimplifiedCardinalDirection>(newEndPosition), newLastCPLocation,
 							initialPreviousOrientation.getOpposite(), orientation, true, getConnector()
 									.getOverlapXResultingFromPixelOverlap(), getConnector().getOverlapYResultingFromPixelOverlap());
 
@@ -240,11 +243,13 @@ public class AdjustableLastControlPoint extends RectPolylinAdjustableControlPoin
 
 				if (initialPolylin.getSegmentNb() > 3) {
 					FGESegment oppositeSegment = initialPolylin.getSegmentAt(initialPolylin.getSegmentNb() - 3);
-					appendingPath = FGERectPolylin.makeRectPolylinCrossingPoint(oppositeSegment.getP1(), newEndPosition, newLastCPLocation,
-							initialPreviousOrientation.getOpposite(), orientation, true, getConnector()
+					appendingPath = FGERectPolylin.makeRectPolylinCrossingPoint(new DefaultAreaProvider<SimplifiedCardinalDirection>(
+							oppositeSegment.getP1()), new DefaultAreaProvider<SimplifiedCardinalDirection>(newEndPosition),
+							newLastCPLocation, initialPreviousOrientation.getOpposite(), orientation, true, getConnector()
 									.getOverlapXResultingFromPixelOverlap(), getConnector().getOverlapYResultingFromPixelOverlap());
 				} else {
-					appendingPath = FGERectPolylin.makeRectPolylinCrossingPoint(previousCPLocation, newEndPosition, newLastCPLocation,
+					appendingPath = FGERectPolylin.makeRectPolylinCrossingPoint(new DefaultAreaProvider<SimplifiedCardinalDirection>(
+							previousCPLocation), new DefaultAreaProvider<SimplifiedCardinalDirection>(newEndPosition), newLastCPLocation,
 							initialPreviousOrientation.getOpposite(), orientation, true, getConnector()
 									.getOverlapXResultingFromPixelOverlap(), getConnector().getOverlapYResultingFromPixelOverlap());
 

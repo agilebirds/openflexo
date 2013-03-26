@@ -50,6 +50,7 @@ import org.openflexo.foundation.wkf.ws.InPort;
 import org.openflexo.foundation.wkf.ws.NewPort;
 import org.openflexo.foundation.wkf.ws.OutPort;
 import org.openflexo.foundation.wkf.ws.PortRegistery;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.wkf.processeditor.gr.ActivityNodeGR;
 import org.openflexo.wkf.processeditor.gr.BeginActivityNodeGR;
 import org.openflexo.wkf.processeditor.gr.EndActivityNodeGR;
@@ -253,7 +254,7 @@ public class ActivityPalette extends AbstractWKFPalette {
 
 	private WKFPaletteElement makeSingleInstanceSubProcessNodeElement(int x, int y, int width, int height) {
 		final SingleInstanceSubProcessNode node = new SingleInstanceSubProcessNode((FlexoProcess) null);
-		node.setName("Single S/P");
+		node.setName(FlexoLocalization.localizedForKey("sub_process_call_activity"));
 		node.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 		node.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 		node.setWidth(width, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
@@ -278,7 +279,7 @@ public class ActivityPalette extends AbstractWKFPalette {
 	private WKFPaletteElement makeMultipleInstanceSubProcessNodeElement(int x, int y, int width, int height) {
 		final MultipleInstanceSubProcessNode node = new MultipleInstanceSubProcessNode((FlexoProcess) null);
 		node.setIsSequential(false);
-		node.setName("Multiple S/P");
+		node.setName(FlexoLocalization.localizedForKey("parallel_sub_process"));
 		node.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 		node.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 		node.setWidth(width, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
@@ -294,7 +295,7 @@ public class ActivityPalette extends AbstractWKFPalette {
 
 	private WKFPaletteElement makeLoopSubProcessNodeElement(int x, int y, int width, int height) {
 		final LoopSubProcessNode node = new LoopSubProcessNode((FlexoProcess) null);
-		node.setName("Loop S/P");
+		node.setName(FlexoLocalization.localizedForKey("sequential_sub_process"));
 		node.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 		node.setY(y, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 		node.setWidth(width, ProcessEditorConstants.BASIC_PROCESS_EDITOR);

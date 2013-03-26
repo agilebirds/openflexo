@@ -20,16 +20,25 @@
 package org.openflexo.generator;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.tools.ant.BuildEvent;
+import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.BuildListener;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.ProjectHelper;
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.bpel.BPELWriter;
 import org.openflexo.foundation.cg.CGRepository;
@@ -49,20 +58,29 @@ import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.exception.PermissionDeniedException;
 import org.openflexo.generator.exception.TemplateNotFoundException;
 import org.openflexo.generator.ie.ComponentsGenerator;
+import org.openflexo.generator.utils.BuildXmlGenerator;
 import org.openflexo.generator.utils.FlexoReaderGenerator;
 import org.openflexo.generator.utils.PrototypeProcessBusinessDataSamplesCreator;
 import org.openflexo.generator.utils.ResourceGenerator;
 import org.openflexo.generator.wkf.ControlGraphsGenerator;
 import org.openflexo.generator.wkf.WorkflowContextGenerator;
+import org.openflexo.toolbox.FileResource;
+import org.openflexo.toolbox.FileUtils;
+import org.openflexo.toolbox.FileUtils.CopyStrategy;
 
 /**
  * Controller for Generator module
  * 
  * @author sguerin
  */
-public class ProjectGenerator extends AbstractProjectGenerator<CGRepository> {
+public class ProjectGenerator extends AbstractProjectGenerator<CGRepository> implements BuildListener {
+
+	private static final FileResource WOPROJECT_JAR = new FileResource("Config/Generator/Libraries/woproject.jar");
 
 	protected static final Logger logger = Logger.getLogger(ProjectGenerator.class.getPackage().getName());
+
+	private static final FileResource ZIPPED_API_FILE = new FileResource("Config/Generator/Libraries/api-proto.zip");
+	private static final FileResource ZIPPED_FRAMEWORK_FILE = new FileResource("Config/Generator/Libraries/framework-proto.zip");
 
 	private static final String CG_MACRO_LIBRARY_NAME = "VM_global_library.vm";
 
@@ -232,7 +250,6 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository> {
 	}
 
 	public File generateWar(boolean cleanImmediately) throws GenerationException {
-		/*
 		final File distDirectory = getRepository().getWarDirectory();
 		if (distDirectory == null) {
 			throw new GenerationException("You MUST define a target directory. Sorry.");
@@ -256,12 +273,16 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository> {
 		if (!genTempOutputDir.exists()) {
 			genTempOutputDir.mkdir();
 		}
-		BuildAnaGenerator buildanaGenerator = new BuildAnaGenerator(ProjectGenerator.this);
-		buildanaGenerator.generate(true);
-		FlexoWarBuilder warBuilder = new FlexoWarBuilder(getProject(), buildanaGenerator.getFile(), distDirectory,
-				getTarget() == CodeType.PROTOTYPE);
-		warBuilder.addBuildListeners(buildListeners);
-
+		Map<String, String> defaultProperties = new HashMap<String, String>();
+		File warFile = new File(distDirectory, getRepository().getWarName() + ".war");
+		defaultProperties.put("war.file", warFile.getAbsolutePath());
+		defaultProperties.put("zipped.api.file", ZIPPED_API_FILE.getAbsolutePath());
+		defaultProperties.put("zipped.framework.file", ZIPPED_FRAMEWORK_FILE.getAbsolutePath());
+		File[] listFiles = getProject().getFrameworksToEmbedDirectory().listFiles();
+		if (listFiles != null && listFiles.length > 0) {
+			defaultProperties.put("flexo.framework.dir", getProject().getFrameworksToEmbedDirectory().getAbsolutePath());
+		}
+		defaultProperties.put("woproject.lib", WOPROJECT_JAR.getAbsolutePath());
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Copying repository (" + getRepository().getDirectory().getAbsolutePath() + ") to temp dir: "
 					+ genTempOutputDir.getAbsolutePath());
@@ -278,27 +299,66 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository> {
 			e1.printStackTrace();
 			throw new RuntimeException();
 		}
+		Project project = new Project();
+		project.init();
+		File buildFile = new File(genTempOutputDir, BuildXmlGenerator.FILE_NAME);
+		try {
+			ProjectHelper.getProjectHelper().parse(project, buildFile);
+		} catch (BuildException e) {
+			e.printStackTrace();
+			setGenerationException(new WARBuildingException(new Exception("Configuration file " + buildFile
+					+ " is invalid, or cannot be read.", e)));
+		}
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Launching war creation. Working directory is " + tmpOutputDir.getAbsolutePath());
 		}
+		for (Entry<String, String> e : defaultProperties.entrySet()) {
+			project.setUserProperty(e.getKey(), e.getValue());
+		}
+		project.addBuildListener(this);
 		try {
-			warBuilder.makeWar(tmpOutputDir, genTempOutputDir, cleanImmediately);
-		} catch (IOException e) {
-			e.printStackTrace();
-			setGenerationException(new IOExceptionOccuredException(e, ProjectGenerator.this));
-		} catch (Exception e) {
+			project.executeTarget(project.getDefaultTarget());
+		} catch (BuildException e) {
 			e.printStackTrace();
 			setGenerationException(new WARBuildingException(e));
 		}
-
+		project.removeBuildListener(this);
+		clean(genTempOutputDir, cleanImmediately);
 		if (getGenerationException() != null) {
 			GenerationException e = getGenerationException();
 			resetGenerationException();
 			throw e;
 		}
-		return new File(distDirectory, getRepository().getWarName() + ".war");
-		*/
-		return null;
+		return warFile;
+	}
+
+	private void clean(final File genTempOutputDir, boolean cleanImmediately) {
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("Deleting " + genTempOutputDir.getAbsolutePath());
+					}
+					FileUtils.recursiveDeleteFile(genTempOutputDir);
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("Done deleting " + genTempOutputDir.getAbsolutePath());
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				} finally {
+				}
+			}
+		});
+		t.setPriority(Thread.MIN_PRIORITY);
+		t.start();
+		if (cleanImmediately) {
+			try {
+				t.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -360,11 +420,11 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository> {
 
 	public Properties collectComponentHelp() {
 		Properties p = new Properties();
-		Enumeration en = getProject().getFlexoComponentLibrary().getAllComponentList().elements();
+		Enumeration<ComponentDefinition> en = getProject().getFlexoComponentLibrary().getAllComponentList().elements();
 		ComponentDefinition cd = null;
 		IEWOComponent comp = null;
 		while (en.hasMoreElements()) {
-			cd = (ComponentDefinition) en.nextElement();
+			cd = en.nextElement();
 			comp = cd.getWOComponent();
 			if (comp != null) {
 				if (comp.hasHelpText()) {
@@ -496,4 +556,54 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository> {
 		}
 		return sb.toString();
 	}
+
+	@Override
+	public void buildStarted(BuildEvent event) {
+		for (BuildListener l : buildListeners) {
+			l.buildStarted(event);
+		}
+	}
+
+	@Override
+	public void buildFinished(BuildEvent event) {
+		for (BuildListener l : buildListeners) {
+			l.buildFinished(event);
+		}
+	}
+
+	@Override
+	public void targetStarted(BuildEvent event) {
+		for (BuildListener l : buildListeners) {
+			l.targetStarted(event);
+		}
+	}
+
+	@Override
+	public void targetFinished(BuildEvent event) {
+		for (BuildListener l : buildListeners) {
+			l.targetFinished(event);
+		}
+	}
+
+	@Override
+	public void taskStarted(BuildEvent event) {
+		for (BuildListener l : buildListeners) {
+			l.taskStarted(event);
+		}
+	}
+
+	@Override
+	public void taskFinished(BuildEvent event) {
+		for (BuildListener l : buildListeners) {
+			l.taskFinished(event);
+		}
+	}
+
+	@Override
+	public void messageLogged(BuildEvent event) {
+		for (BuildListener l : buildListeners) {
+			l.messageLogged(event);
+		}
+	}
+
 }

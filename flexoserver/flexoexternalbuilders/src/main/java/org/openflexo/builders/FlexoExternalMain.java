@@ -144,8 +144,7 @@ public abstract class FlexoExternalMain implements Runnable {
 		} catch (Throwable t) {
 			mem = null;
 			System.gc();
-			t.printStackTrace();
-			setExitCodeCleanUpAndExit(UNEXPECTED_EXCEPTION);
+			setExitCodePrintStackTraceCleanUpAndExit(t);
 		}
 	}
 
@@ -456,6 +455,11 @@ public abstract class FlexoExternalMain implements Runnable {
 
 	public boolean isDone() {
 		return done;
+	}
+
+	public synchronized void setExitCodePrintStackTraceCleanUpAndExit(Throwable t) {
+		t.printStackTrace();
+		setExitCodeCleanUpAndExit(UNEXPECTED_EXCEPTION);
 	}
 
 	public synchronized void setExitCodeCleanUpAndExit(int exitCode) {

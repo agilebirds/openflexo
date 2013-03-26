@@ -35,7 +35,7 @@ import org.openflexo.view.FIBModuleView;
  */
 public class TOCDataView extends FIBModuleView<TOCData> {
 
-	public static File FIB_FILE = new FileResource("Fib/TOCDataView.fib");
+	public static final File FIB_FILE = new FileResource("Fib/TOCDataView.fib");
 
 	public TOCDataView(TOCData tocEntry, DEController controller) {
 		super(tocEntry, controller, FIB_FILE);

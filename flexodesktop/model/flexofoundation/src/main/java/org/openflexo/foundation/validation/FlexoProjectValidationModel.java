@@ -44,7 +44,7 @@ public class FlexoProjectValidationModel extends ValidationModel {
 		registerRule(new FlexoProject.RebuildDependancies());
 		registerRule(new FlexoProject.ComponentInstancesMustDefineAComponent());
 		registerRule(new FlexoProject.GeneratedResourcesMustHaveCGFile());
-
+		registerRule(new FlexoProject.ModelObjectReferenceMustDefineAnEnclosingProjectID());
 		registerRule(new AbstractActivityNode.ActivityCouldNotDefineOperationPetriGraphWhenNotAllowed());
 
 		// Notify that the validation model is complete and that inheritance

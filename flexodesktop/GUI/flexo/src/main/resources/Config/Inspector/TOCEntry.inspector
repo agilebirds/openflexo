@@ -6,7 +6,7 @@
 		<property name="recursionEnabled" label="include_subprocesses" widget="CHECKBOX" depends="isDocSubType" conditional="isDocSubType=true" constraint="4"/>
 		<property name="includeStatusList" label="include_statuslist" widget="CHECKBOX" depends="isDocSubType,isProcessesSection" conditional="isDocSubType=true OR isProcessesSection=true" constraint="5"/>
 		<property name="isReadOnly" label="is_read_only" widget="READ_ONLY_CHECKBOX" constraint="5">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="documentedDMEOEntity" label="table" widget="CUSTOM" constraint="6" depends="isIndividualEntity" conditional="isIndividualEntity=true">
 			<param name="className" value="org.openflexo.components.widget.DMEOEntityInspectorWidget"/>
@@ -32,16 +32,16 @@
 	
 	<tab name="Advanced" index="1" layout="DEFAULT">
 		<property name="level" label="level" widget="READ_ONLY_TEXT_FIELD" constraint="1">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="depth" label="depth" widget="READ_ONLY_TEXT_FIELD" constraint="2">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="identifier" label="section" widget="READ_ONLY_TEXT_FIELD" constraint="3">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="subType" label="subType" widget="READ_ONLY_TEXT_FIELD" constraint="4">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 	</tab>
 </inspector>

@@ -33,7 +33,7 @@ public class DocTypeRemoved extends CGDataModification {
 	 * @param newValue
 	 */
 	public DocTypeRemoved(Object oldValue) {
-		super(oldValue, null);
+		super("docTypes", oldValue, null);
 	}
 
 }

@@ -4,7 +4,7 @@
   <Panel layout="border" border="rounded3d" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=5;insetsLeft=5;insetsRight=5;insetsTop=5;padX=0;padY=0;weightX=1.0;weightY=1.0)" width="80" height="60">
     <Label label="doc_editor_introduction_text" align="center" localize="true" constraints="border(location=center)" />
   </Panel>
-  <Button action="controller.coucou()" buttonType="Trigger" label="add_table_of_contents" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=10;insetsLeft=0;insetsRight=0;insetsTop=10;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" />
+  <Button action="controller.addTableOfContent()" buttonType="Trigger" label="add_table_of_contents" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=10;insetsLeft=0;insetsRight=0;insetsTop=10;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" />
   <LocalizedDictionary>
     <Localized key="normal_section" lang="English">Normal section</Localized>
     <Localized key="normal_section" lang="French">Section normale</Localized>

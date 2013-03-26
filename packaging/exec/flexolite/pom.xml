@@ -9,7 +9,7 @@
         <groupId>org.openflexo.packaging</groupId>
         <artifactId>exec</artifactId>
         <version>1.6-SNAPSHOT</version>
-    </parent>
+   </parent>
     <artifactId>flexolite</artifactId>
     <properties>
         <userType>lite</userType>

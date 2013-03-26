@@ -27,6 +27,11 @@ public interface ProjectData extends AccessibleProxyObject, PAMELAStorageResourc
 
 	public FlexoProjectReference getProjectReferenceWithURI(String projectURI, boolean searchRecursively);
 
+	@Finder(collection = IMPORTED_PROJECTS, attribute = FlexoProjectReference.NAME, isMultiValued = true)
+	public List<FlexoProjectReference> getProjectReferenceWithName(String name);
+
+	public List<FlexoProjectReference> getProjectReferenceWithName(String name, boolean searchRecursively);
+
 	@Getter(value = IMPORTED_PROJECTS, cardinality = Cardinality.LIST, inverse = FlexoProjectReference.PROJECT_DATA)
 	@XMLElement(xmlTag = "ImportedProjects")
 	public List<FlexoProjectReference> getImportedProjects();
@@ -70,6 +75,29 @@ public interface ProjectData extends AccessibleProxyObject, PAMELAStorageResourc
 				}
 			}
 			return null;
+		}
+
+		@Override
+		public List<FlexoProjectReference> getProjectReferenceWithName(String name, boolean searchRecursively) {
+			List<FlexoProjectReference> refs = getProjectReferenceWithName(name);
+			if (searchRecursively) {
+				for (FlexoProjectReference ref2 : getImportedProjects()) {
+					if (ref2.getReferredProject() != null) {
+						ProjectData projectData = ref2.getReferredProject().getProjectData();
+						if (projectData != null) {
+							List<FlexoProjectReference> projectReferenceWithName = projectData.getProjectReferenceWithName(name,
+									searchRecursively);
+							for (FlexoProjectReference ref : projectReferenceWithName) {
+								if (!refs.contains(ref)) {
+									refs.add(ref);
+								}
+							}
+						}
+					}
+
+				}
+			}
+			return refs;
 		}
 
 		@Override

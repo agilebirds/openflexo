@@ -51,7 +51,7 @@ import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.InvalidArgumentException;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGObject;
-import org.openflexo.foundation.cg.GenerationRepository;
+import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.action.AbstractGCAction;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoStorageResource;
@@ -107,7 +107,7 @@ public class ReinjectDocx extends AbstractGCAction<ReinjectDocx, CGObject> {
 	}
 
 	static {
-		FlexoModelObject.addActionForClass(ReinjectDocx.actionType, GenerationRepository.class);
+		FlexoModelObject.addActionForClass(ReinjectDocx.actionType, DGRepository.class);
 	}
 
 	@Override

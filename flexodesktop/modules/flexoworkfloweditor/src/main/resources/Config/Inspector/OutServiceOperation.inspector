@@ -11,7 +11,7 @@
 	<property_list name="outputMessageDefinition.entries" label="output_message" constraint="2">
 		  <param name="visible_row_count" value="4"/>
 		  <param name="row_height" value="20"/>
-		  <param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		  <param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		  <property_list_column name="variableName" label="name" widget="TEXT_FIELD">
 			<param name="column_width" value="100"/>
 			<param name="resizable" value="true"/>
@@ -35,7 +35,7 @@
 	<tab name="Data" index="3">
 		<property name="tabOutputBindingDescription" label="description" widget="INFOLABEL"/>
 		<property_list name="outputMessageBindings.bindings" label="output_message_bindings" constraint="2">
-		  <param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		  <param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		  <param name="visible_row_count" value="4"/>
 		  <param name="row_height" value="20"/>
 		  <property_list_column name="bindingDefinition.variableName" label="operation_entry" widget="READ_ONLY_TEXT_FIELD">

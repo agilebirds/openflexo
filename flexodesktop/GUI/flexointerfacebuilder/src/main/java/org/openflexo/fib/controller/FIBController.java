@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
@@ -60,6 +61,7 @@ import org.openflexo.fib.model.FIBContainer;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBDropDown;
 import org.openflexo.fib.model.FIBEditor;
+import org.openflexo.fib.model.FIBEditorPane;
 import org.openflexo.fib.model.FIBFile;
 import org.openflexo.fib.model.FIBFont;
 import org.openflexo.fib.model.FIBHtmlEditor;
@@ -77,6 +79,7 @@ import org.openflexo.fib.model.FIBTabPanel;
 import org.openflexo.fib.model.FIBTable;
 import org.openflexo.fib.model.FIBTextArea;
 import org.openflexo.fib.model.FIBTextField;
+import org.openflexo.fib.model.FIBTextPane;
 import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.model.listener.FIBMouseClickListener;
 import org.openflexo.fib.model.listener.FIBSelectionListener;
@@ -94,6 +97,7 @@ import org.openflexo.fib.view.widget.FIBCheckboxListWidget;
 import org.openflexo.fib.view.widget.FIBColorWidget;
 import org.openflexo.fib.view.widget.FIBCustomWidget;
 import org.openflexo.fib.view.widget.FIBDropDownWidget;
+import org.openflexo.fib.view.widget.FIBEditorPaneWidget;
 import org.openflexo.fib.view.widget.FIBEditorWidget;
 import org.openflexo.fib.view.widget.FIBFileWidget;
 import org.openflexo.fib.view.widget.FIBFontWidget;
@@ -118,7 +122,6 @@ import org.openflexo.toolbox.ToolBox;
  * 
  * @author sylvain
  * 
- * @param <T>
  */
 public class FIBController extends Observable implements BindingEvaluationContext, Observer {
 
@@ -786,11 +789,20 @@ public class FIBController extends Observable implements BindingEvaluationContex
 			if (fibWidget instanceof FIBTextField) {
 				return new FIBTextFieldWidget((FIBTextField) fibWidget, FIBController.this);
 			}
-			if (fibWidget instanceof FIBTextArea) {
-				return new FIBTextAreaWidget((FIBTextArea) fibWidget, FIBController.this);
-			}
 			if (fibWidget instanceof FIBEditor) {
 				return new FIBEditorWidget((FIBEditor) fibWidget, FIBController.this);
+			}
+			if (fibWidget instanceof FIBTextPane) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Can't handle TextPane yet");
+				}
+				return new FIBEditorPaneWidget((FIBEditorPane) fibWidget, FIBController.this);
+			}
+			if (fibWidget instanceof FIBEditorPane) {
+				return new FIBEditorPaneWidget((FIBEditorPane) fibWidget, FIBController.this);
+			}
+			if (fibWidget instanceof FIBTextArea) {
+				return new FIBTextAreaWidget((FIBTextArea) fibWidget, FIBController.this);
 			}
 			if (fibWidget instanceof FIBHtmlEditor) {
 				return new FIBHtmlEditorWidget((FIBHtmlEditor) fibWidget, FIBController.this);

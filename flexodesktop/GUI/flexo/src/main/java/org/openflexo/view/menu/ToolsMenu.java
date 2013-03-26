@@ -98,6 +98,8 @@ public class ToolsMenu extends FlexoMenu {
 		addSpecificItems();
 		if (!UserType.isCustomerRelease() && !UserType.isAnalystRelease()) {
 			add(manageResourceCenterItem = new ManageResourceCenterItem());
+		}
+		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			add(loggingItem = new LoggingItem());
 			add(localizedEditorItem = new LocalizedEditorItem());
 			add(rmItem = new ResourceManagerItem());
@@ -108,7 +110,7 @@ public class ToolsMenu extends FlexoMenu {
 			addSeparator();
 			add(saveDocSubmissions = new SaveDocSubmissionItem());
 		}
-		if (!UserType.isCustomerRelease() && !UserType.isAnalystRelease()) {
+		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			addSeparator();
 			add(repairProject = new RepairProjectItem());
 		}
@@ -427,8 +429,8 @@ public class ToolsMenu extends FlexoMenu {
 	public class TimeTravelAction extends AbstractAction {
 		public TimeTravelAction() {
 			super();
+			setEnabled(false);
 			if (getController().getProject() == null) {
-				setEnabled(false);
 			}
 		}
 

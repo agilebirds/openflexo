@@ -194,7 +194,7 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		add(northPanel, BorderLayout.NORTH);
 
 		treeView = createTreeView(browser);
-
+		treeView.setExpandsSelectedPaths(true);
 		ds = new TreeDragSource(treeView, DnDConstants.ACTION_COPY_OR_MOVE);
 		dt = createTreeDropTarget(treeView, _browser);
 		BrowserViewCellRenderer renderer = new BrowserViewCellRenderer();
@@ -306,8 +306,8 @@ public abstract class BrowserView extends JPanel implements FlexoActionSource, P
 		return new FlexoJTree(browser);
 	}
 
-	protected TreeDropTarget createTreeDropTarget(FlexoJTree treeView2, ProjectBrowser _browser2) {
-		return new TreeDropTarget(treeView, _browser);
+	protected TreeDropTarget createTreeDropTarget(FlexoJTree treeView, ProjectBrowser browser) {
+		return new TreeDropTarget(treeView, browser);
 	}
 
 	public ProjectBrowser getBrowser() {

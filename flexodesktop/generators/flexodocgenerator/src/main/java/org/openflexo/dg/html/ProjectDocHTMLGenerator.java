@@ -46,6 +46,7 @@ import org.openflexo.foundation.cg.templates.CGTemplates;
 import org.openflexo.foundation.cg.templates.TemplateFileNotification;
 import org.openflexo.foundation.rm.FlexoCopiedResource;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -135,15 +136,19 @@ public class ProjectDocHTMLGenerator extends ProjectDocGenerator {
 				propertiesGenerator);
 		resources.add(propertiesRes);
 
-		// A JS file per process
 		buildResourcesForProject(repository, resources, getProject());
-
+		for (FlexoProjectReference ref : getProject().getResolvedProjectReferences()) {
+			buildResourcesForProject(repository, resources, ref.getReferredProject());
+		}
 		buildResourcesAndSetGeneratorsForCopyOfPackagedResources(resources);
 		buildResourcesAndSetGeneratorsForCopiedResources(resources);
 		screenshotsGenerator.buildResourcesAndSetGenerators(repository, resources);
 	}
 
-	public void buildResourcesForProject(DGRepository repository, Vector<CGRepositoryFileResource> resources, FlexoProject project) {
+	private void buildResourcesForProject(DGRepository repository, Vector<CGRepositoryFileResource> resources, FlexoProject project) {
+		if (project == null) {
+			return;
+		}
 		Vector<FlexoProcess> processes = project.getAllLocalFlexoProcesses();
 		resetSecondaryProgressWindow(processes.size());
 		Set<ProcessFolder> allFolders = new HashSet<ProcessFolder>();
