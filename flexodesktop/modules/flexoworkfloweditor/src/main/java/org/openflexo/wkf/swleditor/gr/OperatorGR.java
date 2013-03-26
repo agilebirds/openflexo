@@ -23,6 +23,7 @@ import java.awt.Color;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.fge.graphics.BackgroundImageBackgroundStyle;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.TextStyle;
@@ -58,10 +59,10 @@ public abstract class OperatorGR<O extends OperatorNode> extends PetriGraphNodeG
 
 		if (getImageIcon() != null) {
 			background = BackgroundStyle.makeImageBackground(getImageIcon());
-			((BackgroundStyle.BackgroundImage) background).setScaleX(1);
-			((BackgroundStyle.BackgroundImage) background).setScaleY(1);
-			((BackgroundStyle.BackgroundImage) background).setDeltaX(-2);
-			((BackgroundStyle.BackgroundImage) background).setDeltaY(-3);
+			((BackgroundImageBackgroundStyle) background).setScaleX(1);
+			((BackgroundImageBackgroundStyle) background).setScaleY(1);
+			((BackgroundImageBackgroundStyle) background).setDeltaX(-2);
+			((BackgroundImageBackgroundStyle) background).setDeltaY(-3);
 		} else {
 			background = BackgroundStyle.makeEmptyBackground();
 		}

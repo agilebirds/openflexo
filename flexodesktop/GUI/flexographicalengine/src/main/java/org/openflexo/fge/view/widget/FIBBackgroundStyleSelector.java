@@ -39,12 +39,16 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.graphics.BackgroundImageBackgroundStyle;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.BackgroundStyle.BackgroundStyleType;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
-import org.openflexo.fge.graphics.BackgroundStyle.Texture.TextureType;
+import org.openflexo.fge.graphics.ColorBackgroundStyle;
+import org.openflexo.fge.graphics.ColorGradientBackgroundStyle;
+import org.openflexo.fge.graphics.ColorGradientBackgroundStyle.ColorGradientDirection;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShadowStyle;
+import org.openflexo.fge.graphics.TextureBackgroundStyle;
+import org.openflexo.fge.graphics.TextureBackgroundStyle.TextureType;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
@@ -202,20 +206,20 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 			case NONE:
 				break;
 			case COLOR:
-				color1 = ((BackgroundStyle.Color) backgroundStyle).getColor();
+				color1 = ((ColorBackgroundStyle) backgroundStyle).getColor();
 				break;
 			case COLOR_GRADIENT:
-				color1 = ((BackgroundStyle.ColorGradient) backgroundStyle).getColor1();
-				color2 = ((BackgroundStyle.ColorGradient) backgroundStyle).getColor2();
-				gradientDirection = ((BackgroundStyle.ColorGradient) backgroundStyle).getDirection();
+				color1 = ((ColorGradientBackgroundStyle) backgroundStyle).getColor1();
+				color2 = ((ColorGradientBackgroundStyle) backgroundStyle).getColor2();
+				gradientDirection = ((ColorGradientBackgroundStyle) backgroundStyle).getDirection();
 				break;
 			case TEXTURE:
-				color1 = ((BackgroundStyle.Texture) backgroundStyle).getColor1();
-				color2 = ((BackgroundStyle.Texture) backgroundStyle).getColor2();
-				textureType = ((BackgroundStyle.Texture) backgroundStyle).getTextureType();
+				color1 = ((TextureBackgroundStyle) backgroundStyle).getColor1();
+				color2 = ((TextureBackgroundStyle) backgroundStyle).getColor2();
+				textureType = ((TextureBackgroundStyle) backgroundStyle).getTextureType();
 				break;
 			case IMAGE:
-				imageFile = ((BackgroundStyle.BackgroundImage) backgroundStyle).getImageFile();
+				imageFile = ((BackgroundImageBackgroundStyle) backgroundStyle).getImageFile();
 				break;
 			default:
 				break;

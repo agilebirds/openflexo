@@ -26,9 +26,9 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.GeometricObject;
 import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.Texture.TextureType;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
+import org.openflexo.fge.graphics.TextureBackgroundStyle.TextureType;
 
 public abstract class Edition {
 	public int currentStep;

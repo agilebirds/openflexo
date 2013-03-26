@@ -43,7 +43,7 @@
                 <IconColumn data="controller.iconForObject(iterator)" format="" title="icon" columnWidth="20" resizable="false" displayTitle="false" color="" bgColor="" tooltip="" valueChangedAction="" name="icon" />
                 <TextFieldColumn isEditable="" data="iterator.name" format="" title="edition_scheme" columnWidth="200" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" />
                 <LabelColumn data="iterator.editionSchemeType.name" format="" title="type" columnWidth="100" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="label" />
-                <AddAction method="data.createDropScheme" isAvailable="(selected.virtualModel.class.simpleName = &quot;DiagramSpecification&quot;)" name="new_drop_scheme" />
+                <AddAction method="data.createDropScheme" isAvailable="" name="new_drop_scheme" />
                 <RemoveAction method="data.deleteEditionScheme(selected)" isAvailable="" name="delete_scheme" />
                 <AddAction method="data.createLinkScheme" isAvailable="" name="new_link_scheme" />
                 <AddAction method="data.createActionScheme" isAvailable="" name="new_action_scheme" />
@@ -105,6 +105,5 @@
       </Tab>
     </TabPanel>
   </SplitPanel>
-  <LocalizedDictionary>
-  </LocalizedDictionary>
+  <LocalizedDictionary />
 </Panel>

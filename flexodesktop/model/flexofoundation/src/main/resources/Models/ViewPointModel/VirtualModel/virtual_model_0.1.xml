@@ -812,18 +812,18 @@
 	</entity>
 
 
-	<entity name="org.openflexo.fge.graphics.BackgroundStyle$None"
+	<entity name="org.openflexo.fge.graphics.NoneBackgroundStyle"
 		xmlTag="NoneBackgroundStyle">
 		<description>Empty background style</description>
 	</entity>
 
-	<entity name="org.openflexo.fge.graphics.BackgroundStyle$Color"
+	<entity name="org.openflexo.fge.graphics.ColorBackgroundStyle"
 		xmlTag="ColorBackgroundStyle">
 		<description>Colored background style</description>
 		<property name="color" xmlTag="color" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.fge.graphics.BackgroundStyle$ColorGradient"
+	<entity name="org.openflexo.fge.graphics.ColorGradientBackgroundStyle"
 		xmlTag="ColorGradientBackgroundStyle">
 		<description>Colored gradient background style</description>
 		<property name="color1" xmlTag="color1" attribute="YES" />
@@ -831,7 +831,7 @@
 		<property name="direction" xmlTag="direction" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.fge.graphics.BackgroundStyle$Texture"
+	<entity name="org.openflexo.fge.graphics.TextureBackgroundStyle"
 		xmlTag="TexturedBackgroundStyle">
 		<description>Textured background style</description>
 		<property name="color1" xmlTag="color1" attribute="YES" />
@@ -839,7 +839,7 @@
 		<property name="textureType" xmlTag="textureType" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.fge.graphics.BackgroundStyle$BackgroundImage"
+	<entity name="org.openflexo.fge.graphics.BackgroundImageBackgroundStyle"
 		xmlTag="ImageBackgroundStyle">
 		<description>Textured background style</description>
 		<property name="imageFile" xmlTag="imageFile" attribute="YES" />

@@ -22,6 +22,7 @@ package org.openflexo.wkf.swleditor.gr;
 import java.awt.Color;
 
 import org.openflexo.fge.geom.area.FGEArea;
+import org.openflexo.fge.graphics.BackgroundImageBackgroundStyle;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.TextStyle;
@@ -33,7 +34,7 @@ import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
 public class PortGR extends AbstractNodeGR<FlexoPort> {
 
-	private final BackgroundStyle.BackgroundImage background;
+	private final BackgroundImageBackgroundStyle background;
 	private FGEArea locationConstrainedArea;
 
 	public PortGR(FlexoPort port, SwimmingLaneRepresentation aDrawing) {

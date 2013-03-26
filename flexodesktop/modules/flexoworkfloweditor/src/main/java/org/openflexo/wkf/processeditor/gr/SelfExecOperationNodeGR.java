@@ -26,8 +26,8 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
+import org.openflexo.fge.graphics.BackgroundImageBackgroundStyle;
 import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.shapes.Circle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
@@ -42,7 +42,7 @@ public class SelfExecOperationNodeGR extends AbstractOperationNodeGR {
 	private static final Logger logger = Logger.getLogger(SelfExecOperationNodeGR.class.getPackage().getName());
 
 	private final ForegroundStyle foreground;
-	private final BackgroundImage background;
+	private final BackgroundImageBackgroundStyle background;
 
 	public SelfExecOperationNodeGR(SelfExecutableOperationNode operationNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(operationNode, ShapeType.CIRCLE, aDrawing, isInPalet);

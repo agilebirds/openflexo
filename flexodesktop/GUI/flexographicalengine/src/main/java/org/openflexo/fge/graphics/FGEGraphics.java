@@ -54,7 +54,6 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGEQuadCurve;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage.ImageBackgroundType;
 
 public abstract class FGEGraphics {
 
@@ -202,15 +201,15 @@ public abstract class FGEGraphics {
 			return; // Strange...
 		}
 
-		if (currentBackground instanceof BackgroundStyle.None) {
+		if (currentBackground instanceof NoneBackgroundStyle) {
 			// Nothing to do
-		} else if (currentBackground instanceof BackgroundStyle.Color) {
-			g2d.setColor(((BackgroundStyle.Color) currentBackground).getColor());
-		} else if (currentBackground instanceof BackgroundStyle.ColorGradient) {
+		} else if (currentBackground instanceof ColorBackgroundStyle) {
+			g2d.setColor(((ColorBackgroundStyle) currentBackground).getColor());
+		} else if (currentBackground instanceof ColorGradientBackgroundStyle) {
 			g2d.setPaint(currentBackground.getPaint(getGraphicalRepresentation(), _controller.getScale()));
-		} else if (currentBackground instanceof BackgroundStyle.Texture) {
+		} else if (currentBackground instanceof TextureBackgroundStyle) {
 			g2d.setPaint(currentBackground.getPaint(getGraphicalRepresentation(), _controller.getScale()));
-		} else if (currentBackground instanceof BackgroundStyle.BackgroundImage) {
+		} else if (currentBackground instanceof BackgroundImageBackgroundStyle) {
 			g2d.setPaint(currentBackground.getPaint(getGraphicalRepresentation(), _controller.getScale()));
 		}
 
@@ -378,13 +377,13 @@ public abstract class FGEGraphics {
 	}
 
 	public void fillRect(double x, double y, double width, double height) {
-		if (currentBackground instanceof BackgroundStyle.None) {
+		if (currentBackground instanceof NoneBackgroundStyle) {
 			return;
 		}
 
 		Rectangle r = convertNormalizedRectangleToViewCoordinates(x, y, width, height);
 
-		if (currentBackground instanceof BackgroundStyle.BackgroundImage) {
+		if (currentBackground instanceof BackgroundImageBackgroundStyle) {
 			fillInShapeWithImage(r);
 		} else {
 			g2d.fillRect(r.x, r.y, r.width, r.height);
@@ -416,17 +415,17 @@ public abstract class FGEGraphics {
 			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) getGraphicalRepresentation();
 			at.concatenate(AffineTransform.getTranslateInstance(gr.getBorder().left, gr.getBorder().top));
 		}
-		if (currentBackground instanceof BackgroundStyle.BackgroundImage) {
-			at.concatenate(AffineTransform.getTranslateInstance(((BackgroundStyle.BackgroundImage) currentBackground).getDeltaX(),
-					((BackgroundStyle.BackgroundImage) currentBackground).getDeltaY()));
-			if (((BackgroundStyle.BackgroundImage) currentBackground).getImageBackgroundType() == ImageBackgroundType.OPAQUE) {
-				g2d.setColor(((BackgroundStyle.BackgroundImage) currentBackground).getImageBackgroundColor());
+		if (currentBackground instanceof BackgroundImageBackgroundStyle) {
+			at.concatenate(AffineTransform.getTranslateInstance(((BackgroundImageBackgroundStyle) currentBackground).getDeltaX(),
+					((BackgroundImageBackgroundStyle) currentBackground).getDeltaY()));
+			if (((BackgroundImageBackgroundStyle) currentBackground).getImageBackgroundType() == BackgroundImageBackgroundStyle.ImageBackgroundType.OPAQUE) {
+				g2d.setColor(((BackgroundImageBackgroundStyle) currentBackground).getImageBackgroundColor());
 				g2d.fill(aShape);
 			}
 		}
-		if (currentBackground instanceof BackgroundStyle.BackgroundImage) {
-			at.concatenate(AffineTransform.getScaleInstance(((BackgroundStyle.BackgroundImage) currentBackground).getScaleX(),
-					((BackgroundStyle.BackgroundImage) currentBackground).getScaleY()));
+		if (currentBackground instanceof BackgroundImageBackgroundStyle) {
+			at.concatenate(AffineTransform.getScaleInstance(((BackgroundImageBackgroundStyle) currentBackground).getScaleX(),
+					((BackgroundImageBackgroundStyle) currentBackground).getScaleY()));
 
 		}
 
@@ -435,7 +434,7 @@ public abstract class FGEGraphics {
 		} else {
 			g2d.setComposite(AlphaComposite.getInstance(TRANSPARENT_COMPOSITE_RULE));
 		}
-		g2d.drawImage(((BackgroundStyle.BackgroundImage) currentBackground).getImage(), at, null);
+		g2d.drawImage(((BackgroundImageBackgroundStyle) currentBackground).getImage(), at, null);
 
 		releaseClonedGraphics(oldGraphics);
 	}
@@ -496,13 +495,13 @@ public abstract class FGEGraphics {
 	}
 
 	public void fillRoundRect(double x, double y, double width, double height, double arcwidth, double archeight) {
-		if (currentBackground instanceof BackgroundStyle.None) {
+		if (currentBackground instanceof NoneBackgroundStyle) {
 			return;
 		}
 
 		Rectangle r = convertNormalizedRectangleToViewCoordinates(x, y, width, height);
 		Rectangle arcRect = convertNormalizedRectangleToViewCoordinates(0, 0, arcwidth, archeight);
-		if (currentBackground instanceof BackgroundStyle.BackgroundImage) {
+		if (currentBackground instanceof BackgroundImageBackgroundStyle) {
 			RoundRectangle2D.Double rr = new RoundRectangle2D.Double(r.x, r.y, r.width, r.height, arcRect.width, arcRect.height);
 			fillInShapeWithImage(rr);
 		} else {
@@ -546,7 +545,7 @@ public abstract class FGEGraphics {
 	}
 
 	public void fillPolygon(FGEPoint[] points) {
-		if (currentBackground instanceof BackgroundStyle.None) {
+		if (currentBackground instanceof NoneBackgroundStyle) {
 			return;
 		}
 		if (points == null || points.length == 0) {
@@ -560,7 +559,7 @@ public abstract class FGEGraphics {
 			xpoints[i] = p.x;
 			ypoints[i] = p.y;
 		}
-		if (currentBackground instanceof BackgroundStyle.BackgroundImage) {
+		if (currentBackground instanceof BackgroundImageBackgroundStyle) {
 			Polygon p = new Polygon(xpoints, ypoints, points.length);
 			fillInShapeWithImage(p);
 		} else {
@@ -602,7 +601,7 @@ public abstract class FGEGraphics {
 
 	public void fillCircle(double x, double y, double width, double height) {
 		Rectangle r = convertNormalizedRectangleToViewCoordinates(x, y, width, height);
-		if (currentBackground instanceof BackgroundStyle.BackgroundImage) {
+		if (currentBackground instanceof BackgroundImageBackgroundStyle) {
 			Arc2D.Double a = new Arc2D.Double(r.x, r.y, r.width, r.height, 0, 360, Arc2D.CHORD);
 			fillInShapeWithImage(a);
 		} else {
@@ -636,7 +635,7 @@ public abstract class FGEGraphics {
 
 	public void fillArc(double x, double y, double width, double height, double angleStart, double arcAngle) {
 		Rectangle r = convertNormalizedRectangleToViewCoordinates(x, y, width, height);
-		if (currentBackground instanceof BackgroundStyle.BackgroundImage) {
+		if (currentBackground instanceof BackgroundImageBackgroundStyle) {
 			Arc2D.Double a = new Arc2D.Double(r.x, r.y, r.width, r.height, (int) angleStart, (int) arcAngle, Arc2D.PIE);
 			fillInShapeWithImage(a);
 		} else {
@@ -734,7 +733,7 @@ public abstract class FGEGraphics {
 
 	public void fillGeneralShape(FGEGeneralShape shape) {
 		GeneralPath p = shape.getGeneralPath();
-		if (currentBackground instanceof BackgroundStyle.BackgroundImage) {
+		if (currentBackground instanceof BackgroundImageBackgroundStyle) {
 			fillInShapeWithImage(p);
 		} else {
 			g2d.fill(p);

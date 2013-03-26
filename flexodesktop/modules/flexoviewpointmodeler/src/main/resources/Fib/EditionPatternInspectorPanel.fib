@@ -18,11 +18,11 @@
         <TextFieldColumn isEditable="" data="iterator.name" format="" title="name" columnWidth="100" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="textfield" />
         <TextFieldColumn isEditable="" data="iterator.label" format="" title="label" columnWidth="100" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="textfield" />
         <LabelColumn data="iterator.widgetName" format="" title="widget" columnWidth="100" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="label" />
-        <AddAction method="data.inspector.createNewTextField" isAvailable="" name="add_textfield" />
-        <AddAction method="data.inspector.createNewTableProperty" isAvailable="" name="add_table" />
-        <RemoveAction method="data.inspector.deleteEntry(selected)" isAvailable="" name="delete" />
-        <AddAction method="data.inspector.createNewTextArea" isAvailable="" name="add_textarea" />
-        <AddAction method="data.inspector.createNewInteger" isAvailable="" name="add_integer" />
+        <AddAction method="data.createNewDataProperty" isAvailable="" name="add_textfield" />
+        <AddAction method="data.createNewDataProperty" isAvailable="" name="add_table" />
+        <RemoveAction method="data.deleteEntry(selected)" isAvailable="" name="delete" />
+        <AddAction method="data.createNewTextArea" isAvailable="" name="add_textarea" />
+        <AddAction method="data.createNewInteger" isAvailable="" name="add_integer" />
         <AddAction method="data.inspector.createNewCheckbox" isAvailable="" name="add_checkbox" />
         <AddAction method="data.inspector.createNewIndividual" isAvailable="" name="add_individual" />
         <AddAction method="data.inspector.createNewClass" isAvailable="" name="add_class" />

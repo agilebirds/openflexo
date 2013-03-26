@@ -722,7 +722,7 @@
   	 <property name="textureType" xmlTag="textureType" attribute="YES"/>
   </entity>
 	
-  <entity name="org.openflexo.fge.graphics.BackgroundStyle$BackgroundImage" xmlTag="ImageBackgroundStyle">
+  <entity name="org.openflexo.fge.graphics.BackgroundImageBackgroundStyle" xmlTag="ImageBackgroundStyle">
      <description>Textured background style</description>
   	 <property name="imageFile" xmlTag="imageFile" attribute="YES"/>
   	 <property name="scaleX" xmlTag="scaleX" attribute="YES"/>

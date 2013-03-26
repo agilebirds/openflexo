@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.graphics.ColorGradientBackgroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShapePainter;
@@ -40,9 +41,9 @@ public class DataSourceGR extends ArtefactGR<WKFDataSource> {
 	private static final Color ODD_COLOR = new Color(233, 235, 53);
 	private static final Color EVEN_COLOR = new Color(211, 101, 38);
 	public static final BackgroundStyle EVEN_BACKGROUND = BackgroundStyle.makeColorGradientBackground(EVEN_COLOR,
-			FGEUtils.mergeColors(EVEN_COLOR, ODD_COLOR), BackgroundStyle.ColorGradient.ColorGradientDirection.NORTH_SOUTH);
+			FGEUtils.mergeColors(EVEN_COLOR, ODD_COLOR), ColorGradientBackgroundStyle.ColorGradientDirection.NORTH_SOUTH);
 	public static final BackgroundStyle ODD_BACKROUND = BackgroundStyle.makeColorGradientBackground(ODD_COLOR,
-			FGEUtils.mergeColors(EVEN_COLOR, ODD_COLOR), BackgroundStyle.ColorGradient.ColorGradientDirection.NORTH_SOUTH);
+			FGEUtils.mergeColors(EVEN_COLOR, ODD_COLOR), ColorGradientBackgroundStyle.ColorGradientDirection.NORTH_SOUTH);
 	public static final ForegroundStyle NO_FOREGROUND = ForegroundStyle.makeNone();
 
 	// private static final ForegroundStyle ODD_FOREGROUND = ForegroundStyle.makeStyle(ODD_COLOR);

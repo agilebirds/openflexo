@@ -28,7 +28,7 @@ import org.openflexo.fge.geomedit.GeometricObject;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
 import org.openflexo.fge.geomedit.ShowContextualMenuControl;
 import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.Texture.TextureType;
+import org.openflexo.fge.graphics.TextureBackgroundStyle.TextureType;
 import org.openflexo.xmlcode.XMLSerializable;
 
 public class GeometricObjectGraphicalRepresentation<A extends FGEArea, G extends GeometricObject<A>> extends

@@ -42,6 +42,7 @@ import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.graphics.ColorBackgroundStyle;
 import org.openflexo.fge.graphics.DrawingDecorationPainter;
 import org.openflexo.fge.graphics.FGEDrawingDecorationGraphics;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
@@ -339,7 +340,7 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 
 		super.paint(g, controller);
 
-		if (!(bgStyle instanceof BackgroundStyle.Color) || !((BackgroundStyle.Color) bgStyle).getColor().equals(getBackgroundColor())) {
+		if (!(bgStyle instanceof ColorBackgroundStyle) || !((ColorBackgroundStyle) bgStyle).getColor().equals(getBackgroundColor())) {
 			bgStyle = BackgroundStyle.makeColoredBackground(getBackgroundColor());
 		}
 

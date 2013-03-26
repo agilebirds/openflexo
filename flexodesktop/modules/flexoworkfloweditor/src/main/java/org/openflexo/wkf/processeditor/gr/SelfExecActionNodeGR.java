@@ -26,8 +26,8 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
+import org.openflexo.fge.graphics.BackgroundImageBackgroundStyle;
 import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.foundation.wkf.action.OpenExecutionPetriGraph;
 import org.openflexo.foundation.wkf.node.SelfExecutableActionNode;
@@ -40,7 +40,7 @@ public class SelfExecActionNodeGR extends AbstractActionNodeGR {
 	private static final Logger logger = Logger.getLogger(SelfExecActionNodeGR.class.getPackage().getName());
 
 	private final ForegroundStyle foreground;
-	private final BackgroundImage background;
+	private final BackgroundImageBackgroundStyle background;
 
 	public SelfExecActionNodeGR(SelfExecutableActionNode actionNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(actionNode, aDrawing, isInPalet);

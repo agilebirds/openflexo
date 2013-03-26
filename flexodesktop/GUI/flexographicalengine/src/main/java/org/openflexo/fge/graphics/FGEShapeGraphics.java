@@ -22,7 +22,6 @@ package org.openflexo.fge.graphics;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage;
 
 public class FGEShapeGraphics extends FGEGraphics {
 
@@ -41,8 +40,8 @@ public class FGEShapeGraphics extends FGEGraphics {
 	protected void applyCurrentBackgroundStyle() {
 		super.applyCurrentBackgroundStyle();
 
-		if (currentBackground instanceof BackgroundStyle.BackgroundImage && ((BackgroundImage) currentBackground).getFitToShape()) {
-			BackgroundImage bgImage = (BackgroundImage) currentBackground;
+		if (currentBackground instanceof BackgroundImageBackgroundStyle && ((BackgroundImageBackgroundStyle) currentBackground).getFitToShape()) {
+			BackgroundImageBackgroundStyle bgImage = (BackgroundImageBackgroundStyle) currentBackground;
 			bgImage.setDeltaX(0);
 			bgImage.setDeltaY(0);
 			if (bgImage.getImage() != null) {

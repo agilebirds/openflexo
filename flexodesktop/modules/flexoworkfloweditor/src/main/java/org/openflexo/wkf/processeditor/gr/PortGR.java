@@ -22,6 +22,7 @@ package org.openflexo.wkf.processeditor.gr;
 import java.awt.Color;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.graphics.BackgroundImageBackgroundStyle;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.TextStyle;
@@ -35,7 +36,7 @@ public class PortGR extends AbstractNodeGR<FlexoPort> {
 
 	private static final Logger logger = Logger.getLogger(PortGR.class.getPackage().getName());
 
-	private final BackgroundStyle.BackgroundImage background;
+	private final BackgroundImageBackgroundStyle background;
 
 	public PortGR(FlexoPort port, ProcessRepresentation aDrawing) {
 		super(port, ShapeType.SQUARE, aDrawing);

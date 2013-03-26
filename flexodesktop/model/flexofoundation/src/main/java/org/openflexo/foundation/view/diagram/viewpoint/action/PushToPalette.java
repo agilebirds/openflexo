@@ -29,7 +29,7 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
-import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.graphics.BackgroundImageBackgroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.graphics.TextStyle;
@@ -119,7 +119,7 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDiagramShap
 				ShapeGraphicalRepresentation gr = new ShapeGraphicalRepresentation();
 				gr.setShapeType(ShapeType.RECTANGLE);
 				gr.setForeground(ForegroundStyle.makeNone());
-				gr.setBackground(new BackgroundStyle.BackgroundImage(screenshotFile));
+				gr.setBackground(new BackgroundImageBackgroundStyle(screenshotFile));
 				gr.setShadowStyle(ShadowStyle.makeNone());
 				gr.setTextStyle(TextStyle.makeDefault());
 				gr.setText("");

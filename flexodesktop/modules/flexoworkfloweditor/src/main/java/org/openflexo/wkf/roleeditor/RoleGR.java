@@ -33,10 +33,10 @@ import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.graphics.BackgroundImageBackgroundStyle;
+import org.openflexo.fge.graphics.BackgroundImageBackgroundStyle.ImageBackgroundType;
 import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage.ImageBackgroundType;
-import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
+import org.openflexo.fge.graphics.ColorGradientBackgroundStyle.ColorGradientDirection;
 import org.openflexo.fge.graphics.DecorationPainter;
 import org.openflexo.fge.graphics.FGEShapeDecorationGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
@@ -130,7 +130,7 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 	public class RoleDecorationPainter implements DecorationPainter, Cloneable {
 		private Role role;
 		protected ForegroundStyle decorationForeground;
-		protected BackgroundImage decorationBackground;
+		protected BackgroundImageBackgroundStyle decorationBackground;
 		private boolean isSystemRole;
 
 		@Override
