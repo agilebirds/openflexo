@@ -61,7 +61,7 @@ public class GenerateHelpSet extends FlexoAction<GenerateHelpSet, FlexoModelObje
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return object != null && object instanceof DocItemFolder && ((DocItemFolder) object).isRootFolder();
+			return object != null && (!(object instanceof DocItemFolder) || ((DocItemFolder) object).isRootFolder());
 		}
 
 	};
@@ -132,7 +132,7 @@ public class GenerateHelpSet extends FlexoAction<GenerateHelpSet, FlexoModelObje
 
 	private File _helpSetDirectory;
 
-	private File getHelpsetDirectory() {
+	public File getHelpsetDirectory() {
 		if (_helpSetDirectory == null) {
 			_helpSetDirectory = new FileResource("Help");
 		}

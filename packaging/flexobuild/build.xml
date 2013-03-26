@@ -152,6 +152,7 @@
 	</target>
 
 	<target name="generateHelp">
+		<!--
 		<copy file="pom.xml.tpl" tofile="${artifact.dir}/pom.xml" filtering="true" overwrite="true">
 			<filterset>
 				<filter token="dist.dir" value="${artifact.dir}"/>
@@ -169,11 +170,9 @@
 			<arg value="-B"/>
 			<arg value="dependency:copy"/>
 		</artifact:mvn>
+		-->
 		<taskdef name="generatehelp" classname="org.openflexo.ant.GenerateHelpSetTask">
 			<classpath>
-				<fileset dir="${artifact.dir}">
-					<include name="**/*.jar" />
-				</fileset>
 				<fileset dir="${dist.dir}/lib">
 					<include name="**/*.jar" />
 				</fileset>
