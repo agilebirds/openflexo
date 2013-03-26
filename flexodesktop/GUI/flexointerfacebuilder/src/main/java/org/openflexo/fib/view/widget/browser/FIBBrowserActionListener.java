@@ -127,6 +127,10 @@ public class FIBBrowserActionListener implements ActionListener, BindingEvaluati
 			logger.fine("Perform action " + browserAction.getName() + " method " + browserAction.getMethod());
 			logger.fine("controller=" + getController() + " of " + getController().getClass().getSimpleName());
 			this.selectedObject = selectedObject;
+			/*logger.info("selectedObject=" + selectedObject);
+			logger.info("getMethod=" + getBrowserAction().getMethod());
+			logger.info("valid=" + getBrowserAction().getMethod().isValid() + " reason:"
+					+ getBrowserAction().getMethod().invalidBindingReason());*/
 			try {
 				final Object newObject = getBrowserAction().getMethod().getBindingValue(this);
 				// browserModel.fireTableDataChanged();
