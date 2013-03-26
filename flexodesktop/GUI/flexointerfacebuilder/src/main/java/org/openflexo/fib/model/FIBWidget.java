@@ -42,6 +42,7 @@ import org.openflexo.fib.model.validation.ValidationReport;
 import org.openflexo.fib.model.validation.ValidationRule;
 import org.openflexo.fib.model.validation.ValidationWarning;
 import org.openflexo.toolbox.StringUtils;
+import org.openflexo.toolbox.ToolBox;
 
 public abstract class FIBWidget extends FIBComponent {
 
@@ -109,7 +110,10 @@ public abstract class FIBWidget extends FIBComponent {
 
 	public FIBWidget() {
 		super();
-		setOpaque(true); // Most widgets are opaque except: label, filechooser and tabbedpane
+		// Temporary hack to keep opaque to false on MacOSX (display issues)
+		if (!ToolBox.isMacOS()) {
+			setOpaque(true); // Most widgets are opaque except: label, filechooser and tabbedpane
+		}
 		formatter = new FIBFormatter();
 		valueBindable = new FIBValueBindable();
 		eventListener = new FIBEventListener();
