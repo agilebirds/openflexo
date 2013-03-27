@@ -70,6 +70,7 @@ import org.openflexo.foundation.viewpoint.FetchRequestIterationAction;
 import org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole;
 import org.openflexo.foundation.viewpoint.IterationAction;
 import org.openflexo.foundation.viewpoint.LocalizedDictionary;
+import org.openflexo.foundation.viewpoint.MatchEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
@@ -202,6 +203,8 @@ public class VPMIconLibrary extends IconLibrary {
 			return INSPECT_ICON;
 		} else if (object instanceof EditionPatternConstraint) {
 			return CONSTRAINT_ICON;
+		} else if (object instanceof MatchEditionPatternInstance.MatchingCriteria) {
+			return CONSTRAINT_ICON;
 		} else if (object instanceof DiagramPalette) {
 			return DIAGRAM_PALETTE_ICON;
 		} else if (object instanceof DiagramPaletteElement) {
@@ -231,6 +234,8 @@ public class VPMIconLibrary extends IconLibrary {
 				return EXAMPLE_DIAGRAM_ICON;
 			} else if (object instanceof AddEditionPatternInstance) {
 				return IconFactory.getImageIcon(EDITION_PATTERN_ICON, IconLibrary.DUPLICATE);
+			} else if (object instanceof MatchEditionPatternInstance) {
+				return IconFactory.getImageIcon(EDITION_PATTERN_ICON, IconLibrary.SYNC);
 			} else if (object instanceof CloneShape) {
 				return IconFactory.getImageIcon(SHAPE_ICON, DUPLICATE);
 			} else if (object instanceof AddShape) {
@@ -276,7 +281,7 @@ public class VPMIconLibrary extends IconLibrary {
 		} else if (object instanceof ActionScheme) {
 			return ACTION_SCHEME_ICON;
 		} else if (object instanceof SynchronizationScheme) {
-			return SYNCHRONIZATION_SCHEME_ICON;
+			return IconFactory.getImageIcon(VIRTUAL_MODEL_ICON, IconLibrary.SYNC);
 		} else if (object instanceof DropScheme) {
 			return DROP_SCHEME_ICON;
 		} else if (object instanceof LinkScheme) {

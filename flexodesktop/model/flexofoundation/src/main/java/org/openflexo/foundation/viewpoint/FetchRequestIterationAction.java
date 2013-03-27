@@ -63,6 +63,11 @@ public class FetchRequestIterationAction<M extends FlexoModel<M, MM>, MM extends
 
 	public void setFetchRequest(FetchRequest<?, ?, ?> fetchRequest) {
 		this.fetchRequest = fetchRequest;
+		// Big hack to prevent XMLCoDe to also append FetchRequest to the list of embedded actions
+		// Should be removed either by the fixing of XMLCoDe or by the switch to PAMELA
+		if (getActions().contains(fetchRequest)) {
+			removeFromActions(fetchRequest);
+		}
 	}
 
 	public Type getItemType() {
@@ -99,7 +104,9 @@ public class FetchRequestIterationAction<M extends FlexoModel<M, MM>, MM extends
 
 	@Override
 	public Object performAction(EditionSchemeAction action) {
+		System.out.println("Perform FetchRequestIterationAction for " + getFetchRequest());
 		List<?> items = fetchItems(action);
+		System.out.println("Items=" + items);
 		if (items != null) {
 			for (Object item : items) {
 				action.declareVariable(getIteratorName(), item);
@@ -108,6 +115,15 @@ public class FetchRequestIterationAction<M extends FlexoModel<M, MM>, MM extends
 		}
 		action.dereferenceVariable(getIteratorName());
 		return null;
+	}
+
+	@Override
+	public void addToActions(EditionAction<?, ?, ?> action) {
+		// Big hack to prevent XMLCoDe to also append FetchRequest to the list of embedded actions
+		// Should be removed either by the fixing of XMLCoDe or by the switch to PAMELA
+		if (getFetchRequest() != action) {
+			super.addToActions(action);
+		}
 	}
 
 	@Override

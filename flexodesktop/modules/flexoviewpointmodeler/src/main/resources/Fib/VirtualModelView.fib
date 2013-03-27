@@ -33,7 +33,7 @@
                 <Leaf name="right" weight="0.5" />
               </RowSplit>
               <Table iteratorClassName="org.openflexo.foundation.viewpoint.EditionScheme" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" selected="" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="EditionSchemeTable" index="0" data="data.editionSchemes" constraints="split(index=0;location=west;splitIdentifier=left)" visible="">
-                <IconColumn data="controller.iconForObject(iterator)" format="" title="icon" columnWidth="20" resizable="false" displayTitle="false" color="" bgColor="" tooltip="" valueChangedAction="" name="icon" />
+                <IconColumn data="controller.iconForObject(iterator)" format="" title="icon" columnWidth="25" resizable="false" displayTitle="false" color="" bgColor="" tooltip="" valueChangedAction="" name="icon" />
                 <TextFieldColumn isEditable="" data="iterator.name" format="" title="edition_scheme" columnWidth="200" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" />
                 <LabelColumn data="iterator.editionSchemeType.name" format="" title="type" columnWidth="100" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="label" />
                 <RemoveAction method="data.deleteEditionScheme(selected)" isAvailable="" name="delete_scheme" />

@@ -20,15 +20,22 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.Bindable;
+import org.openflexo.antar.binding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingFactory;
+import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.validation.Validable;
 
 /**
  * Abstract class representing a fetch request, which is a primitive allowing to browse in the model while configuring requests
@@ -42,14 +49,21 @@ public abstract class FetchRequest<M extends FlexoModel<M, MM>, MM extends Flexo
 
 	private Vector<DataBinding<Boolean>> conditions;
 
+	private ConditionOwner conditionOwner;
+
 	public FetchRequest(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 		conditions = new Vector<DataBinding<Boolean>>();
+		conditionOwner = new ConditionOwner(this);
 	}
 
 	@Override
 	public EditionActionType getEditionActionType() {
 		return EditionActionType.FetchRequest;
+	}
+
+	public ConditionOwner getConditionOwner() {
+		return conditionOwner;
 	}
 
 	public abstract Type getFetchedType();
@@ -68,7 +82,7 @@ public abstract class FetchRequest<M extends FlexoModel<M, MM>, MM extends Flexo
 	}
 
 	public void addToConditions(DataBinding<Boolean> condition) {
-		conditions.add(condition);
+		conditions.add(new DataBinding<Boolean>(condition.toString(), conditionOwner, Boolean.class, BindingDefinitionType.GET));
 	}
 
 	public void removeFromConditions(DataBinding<Boolean> condition) {
@@ -76,13 +90,72 @@ public abstract class FetchRequest<M extends FlexoModel<M, MM>, MM extends Flexo
 	}
 
 	public DataBinding<Boolean> createCondition() {
-		DataBinding<Boolean> newCondition = new DataBinding<Boolean>(this, Boolean.class, BindingDefinitionType.GET);
+		DataBinding<Boolean> newCondition = new DataBinding<Boolean>(conditionOwner, Boolean.class, BindingDefinitionType.GET);
 		addToConditions(newCondition);
 		return newCondition;
 	}
 
 	public void deleteCondition(DataBinding<Boolean> aCondition) {
 		removeFromConditions(aCondition);
+	}
+
+	@Override
+	protected BindingModel buildInferedBindingModel() {
+		BindingModel returned = super.buildInferedBindingModel();
+		returned.addToBindingVariables(new BindingVariable("selected", getFetchedType()) {
+			@Override
+			public Object getBindingValue(Object target, BindingEvaluationContext context) {
+				logger.info("What should i return for " + "selected" + " ? target " + target + " context=" + context);
+				return super.getBindingValue(target, context);
+			}
+
+			@Override
+			public Type getType() {
+				return getFetchedType();
+			}
+		});
+		return returned;
+	}
+
+	public static class ConditionOwner extends EditionSchemeObject implements Bindable {
+
+		private FetchRequest<?, ?, ?> fetchRequest;
+
+		public ConditionOwner(FetchRequest<?, ?, ?> fetchRequest) {
+			super(null);
+			this.fetchRequest = fetchRequest;
+		}
+
+		@Override
+		public Collection<? extends Validable> getEmbeddedValidableObjects() {
+			return null;
+		}
+
+		@Override
+		public BindingModel getBindingModel() {
+			return fetchRequest.getInferedBindingModel();
+		}
+
+		@Override
+		public EditionScheme getEditionScheme() {
+			return fetchRequest.getEditionScheme();
+		}
+
+		@Override
+		public EditionPattern getEditionPattern() {
+			return fetchRequest.getEditionPattern();
+		}
+
+		@Override
+		public String getURI() {
+			return null;
+		}
+
+		@Override
+		public BindingFactory getBindingFactory() {
+			return fetchRequest.getBindingFactory();
+		}
+
 	}
 
 }

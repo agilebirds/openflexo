@@ -64,9 +64,21 @@ public class ConditionalAction<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 
 	@Override
 	public boolean evaluateCondition(EditionSchemeAction action) {
-		if (getCondition().isValid()) {
+		if (getCondition().isSet() && getCondition().isValid()) {
 			try {
-				return getCondition().getBindingValue(action);
+				DataBinding condition = getCondition();
+				Boolean returned = getCondition().getBindingValue(action);
+				if (returned == null) {
+					/*System.out.println("Evaluation of " + getCondition() + " returns null");
+					DataBinding db1 = new DataBinding<Object>("city1.name", getCondition().getOwner(), Object.class,
+							BindingDefinitionType.GET);
+					DataBinding db2 = new DataBinding<Object>("city2.mayor.name", getCondition().getOwner(), Object.class,
+							BindingDefinitionType.GET);
+					System.out.println("city1.name=" + db1.getBindingValue(action));
+					System.out.println("city2.mayor.name=" + db2.getBindingValue(action));*/
+					return false;
+				}
+				return returned;
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {

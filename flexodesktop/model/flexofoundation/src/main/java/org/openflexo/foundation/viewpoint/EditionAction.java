@@ -58,6 +58,7 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 		AddShape,
 		AddDiagram,
 		AddEditionPatternInstance,
+		MatchEditionPatternInstance,
 		CloneShape,
 		CloneConnector,
 		CloneIndividual,

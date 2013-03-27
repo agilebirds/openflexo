@@ -60,8 +60,10 @@ import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.action.ActionSchemeActionType;
 import org.openflexo.foundation.view.action.NavigationSchemeActionType;
+import org.openflexo.foundation.view.action.SynchronizationSchemeActionType;
 import org.openflexo.foundation.view.diagram.viewpoint.NavigationScheme;
 import org.openflexo.foundation.viewpoint.ActionScheme;
+import org.openflexo.foundation.viewpoint.SynchronizationScheme;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.action.EditionAction;
@@ -305,6 +307,14 @@ public abstract class ContextualMenuManager {
 								contextualMenu.putAction(new NavigationSchemeActionType(ns, epi));
 							}
 						}
+					}
+				}
+			}
+			if (focusedObject instanceof EditionPatternInstance) {
+				EditionPatternInstance epi = (EditionPatternInstance) focusedObject;
+				if (epi != null && epi.getEditionPattern() != null && epi.getEditionPattern().hasSynchronizationScheme()) {
+					for (SynchronizationScheme ss : epi.getEditionPattern().getSynchronizationSchemes()) {
+						contextualMenu.putAction(new SynchronizationSchemeActionType(ss, epi));
 					}
 				}
 			}

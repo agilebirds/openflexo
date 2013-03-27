@@ -449,6 +449,16 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 		return returned;
 	}
 
+	public Vector<SynchronizationScheme> getSynchronizationSchemes() {
+		Vector<SynchronizationScheme> returned = new Vector<SynchronizationScheme>();
+		for (EditionScheme es : getEditionSchemes()) {
+			if (es instanceof SynchronizationScheme) {
+				returned.add((SynchronizationScheme) es);
+			}
+		}
+		return returned;
+	}
+
 	public Vector<DeletionScheme> getDeletionSchemes() {
 		Vector<DeletionScheme> returned = new Vector<DeletionScheme>();
 		for (EditionScheme es : getEditionSchemes()) {
@@ -510,6 +520,15 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 	public boolean hasActionScheme() {
 		for (EditionScheme es : getEditionSchemes()) {
 			if (es instanceof ActionScheme) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean hasSynchronizationScheme() {
+		for (EditionScheme es : getEditionSchemes()) {
+			if (es instanceof SynchronizationScheme) {
 				return true;
 			}
 		}
