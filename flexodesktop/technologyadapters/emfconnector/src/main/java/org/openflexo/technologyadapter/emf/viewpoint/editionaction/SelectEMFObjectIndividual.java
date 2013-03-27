@@ -36,7 +36,6 @@ import org.openflexo.technologyadapter.emf.metamodel.EMFEnumClass;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
-import org.openflexo.technologyadapter.emf.utility.EcoreUtility;
 
 /**
  * EMF technology - specific {@link FetchRequest} allowing to retrieve a selection of some {@link EMFObjectIndividual} matching some
@@ -54,6 +53,7 @@ public class SelectEMFObjectIndividual extends SelectIndividual<EMFModel, EMFMet
 
 	@Override
 	public List<EMFObjectIndividual> performAction(EditionSchemeAction action) {
+		// System.out.println("Selecting EMFObjectIndividuals in " + getModelSlotInstance(action).getModel() + " with type=" + getType());
 		List<EMFObjectIndividual> selectedIndividuals = new ArrayList<EMFObjectIndividual>(0);
 		EMFModel emfModel = getModelSlotInstance(action).getModel();
 		Resource resource = emfModel.getEMFResource();
@@ -63,21 +63,29 @@ public class SelectEMFObjectIndividual extends SelectIndividual<EMFModel, EMFMet
 			TreeIterator<EObject> iterator = resource.getAllContents();
 			while (iterator.hasNext()) {
 				EObject eObject = iterator.next();
-				selectedEMFIndividuals.addAll(EcoreUtility.getAllContents(eObject, ((EMFClassClass) flexoOntologyClass).getObject()
-						.getClass()));
+				// FIXME: following commented code was written by gilles
+				// Seems to not working
+				// Replaced by following
+				// Gilles, could you check and explain ?
+				/*selectedEMFIndividuals.addAll(EcoreUtility.getAllContents(eObject, ((EMFClassClass) flexoOntologyClass).getObject()
+						.getClass()));*/
+				if (eObject.eClass().equals(((EMFClassClass) flexoOntologyClass).getObject())) {
+					selectedEMFIndividuals.add(eObject);
+				}
 			}
 		} else if (flexoOntologyClass instanceof EMFEnumClass) {
 			System.err.println("We shouldn't browse enum individuals of type " + ((EMFEnumClass) flexoOntologyClass).getObject().getName()
 					+ ".");
 		}
 
+		// System.out.println("selectedEMFIndividuals=" + selectedEMFIndividuals);
+
 		for (EObject eObject : selectedEMFIndividuals) {
 			EMFObjectIndividual emfObjectIndividual = emfModel.getConverter().getIndividuals().get(eObject);
 			if (emfObjectIndividual != null) {
 				selectedIndividuals.add(emfObjectIndividual);
 			} else {
-				System.err.println("It's weird there shoud be an existing OpenFlexo wrapper existing for EMF Object : "
-						+ eObject.toString());
+				logger.warning("It's weird there shoud be an existing OpenFlexo wrapper existing for EMF Object : " + eObject.toString());
 				selectedIndividuals.add(emfModel.getConverter().convertObjectIndividual(emfModel, eObject));
 			}
 		}
