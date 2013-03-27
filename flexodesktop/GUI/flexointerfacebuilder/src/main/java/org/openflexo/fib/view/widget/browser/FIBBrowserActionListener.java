@@ -185,7 +185,7 @@ public class FIBBrowserActionListener implements ActionListener, BindingEvaluati
 		} else if (variable.getVariableName().equals("action")) {
 			return browserAction;
 		} else {
-			return getController().getValue(variable);
+			return widget.getBindingEvaluationContext().getValue(variable);
 		}
 	}
 }

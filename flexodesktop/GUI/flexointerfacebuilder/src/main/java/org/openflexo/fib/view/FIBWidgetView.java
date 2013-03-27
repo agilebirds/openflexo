@@ -740,7 +740,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			if (variable.getVariableName().equals("value")) {
 				return value;
 			} else {
-				return getController().getValue(variable);
+				return getBindingEvaluationContext().getValue(variable);
 			}
 		}
 	}
@@ -757,7 +757,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			if (variable.getVariableName().equals("object")) {
 				return value;
 			} else {
-				return getController().getValue(variable);
+				return getBindingEvaluationContext().getValue(variable);
 			}
 		}
 	}
@@ -774,7 +774,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			if (variable.getVariableName().equals("event")) {
 				return mouseEvent;
 			} else {
-				return getController().getValue(variable);
+				return getBindingEvaluationContext().getValue(variable);
 			}
 		}
 	}
