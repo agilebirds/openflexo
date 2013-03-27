@@ -50,7 +50,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	protected static final Logger logger = FlexoLogger.getLogger(EditionScheme.class.getPackage().getName());
 
 	public static final String THIS = "this";
-	public static final String VIRTUAL_MODEL = "virtualModel";
+	public static final String VIRTUAL_MODEL_INSTANCE = "virtualModelInstance";
 
 	private String name;
 	private String label;
@@ -630,7 +630,8 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	protected void appendContextualBindingVariables(BindingModel bindingModel) {
 		bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.THIS, getEditionPattern()));
 		if (getEditionPattern() != null) {
-			bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.VIRTUAL_MODEL, getEditionPattern().getVirtualModel()));
+			bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.VIRTUAL_MODEL_INSTANCE, getEditionPattern()
+					.getVirtualModel()));
 		}
 		if (this instanceof DiagramEditionScheme) {
 			bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.TOP_LEVEL, DiagramRootPane.class));

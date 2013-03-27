@@ -23,7 +23,7 @@ import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
  */
 @DeclarePatternRoles({ @DeclarePatternRole(EditionPatternPatternRole.class) // EditionPattern
 })
-@DeclareEditionActions({ @DeclareEditionAction(AddEditionPattern.class) // Add EditionPattern
+@DeclareEditionActions({ @DeclareEditionAction(AddEditionPatternInstance.class) // Add EditionPattern
 })
 public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM extends VirtualModel<VM>> extends ModelSlot<VMI, VM> {
 
@@ -87,8 +87,8 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 
 	@Override
 	public <EA extends EditionAction<?, ?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
-		if (AddEditionPattern.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddEditionPattern(null);
+		if (AddEditionPatternInstance.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new AddEditionPatternInstance(null);
 		}
 		return null;
 	}

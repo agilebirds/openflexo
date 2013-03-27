@@ -86,9 +86,9 @@ public class ViewPointValidationModel extends ValidationModel {
 		registerRule(new GraphicalAction.GraphicalActionMustHaveASubject());
 		registerRule(new GraphicalAction.GraphicalActionMustDefineAValue());
 
-		registerRule(new AddEditionPattern.ViewBindingIsRequiredAndMustBeValid());
-		registerRule(new AddEditionPattern.AddEditionPatternMustAddressACreationScheme());
-		registerRule(new AddEditionPattern.AddEditionPatternParametersMustBeValid());
+		registerRule(new AddEditionPatternInstance.VirtualModelInstanceBindingIsRequiredAndMustBeValid());
+		registerRule(new AddEditionPatternInstance.AddEditionPatternMustAddressACreationScheme());
+		registerRule(new AddEditionPatternInstance.AddEditionPatternParametersMustBeValid());
 
 		registerRule(new ConditionalAction.ConditionBindingIsRequiredAndMustBeValid());
 		registerRule(new IterationAction.IterationBindingIsRequiredAndMustBeValid());

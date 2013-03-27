@@ -53,7 +53,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.editionaction.CloneConnec
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.CloneShape;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.GraphicalAction;
 import org.openflexo.foundation.viewpoint.ActionScheme;
-import org.openflexo.foundation.viewpoint.AddEditionPattern;
+import org.openflexo.foundation.viewpoint.AddEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.CloningScheme;
 import org.openflexo.foundation.viewpoint.ConditionalAction;
 import org.openflexo.foundation.viewpoint.CreationScheme;
@@ -229,7 +229,7 @@ public class VPMIconLibrary extends IconLibrary {
 		} else if (object instanceof EditionAction) {
 			if (object instanceof AddDiagram) {
 				return EXAMPLE_DIAGRAM_ICON;
-			} else if (object instanceof AddEditionPattern) {
+			} else if (object instanceof AddEditionPatternInstance) {
 				return EDITION_PATTERN_ICON;
 			} else if (object instanceof CloneShape) {
 				return IconFactory.getImageIcon(SHAPE_ICON, DUPLICATE);

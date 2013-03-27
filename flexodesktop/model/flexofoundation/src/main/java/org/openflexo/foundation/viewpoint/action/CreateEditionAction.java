@@ -33,7 +33,7 @@ import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.viewpoint.ActionContainer;
-import org.openflexo.foundation.viewpoint.AddEditionPattern;
+import org.openflexo.foundation.viewpoint.AddEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.ConditionalAction;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -100,7 +100,7 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 
 		builtInActions = new ArrayList<Class<? extends EditionAction>>();
 		builtInActions.add(org.openflexo.foundation.viewpoint.DeclarePatternRole.class);
-		builtInActions.add(org.openflexo.foundation.viewpoint.AddEditionPattern.class);
+		builtInActions.add(org.openflexo.foundation.viewpoint.AddEditionPatternInstance.class);
 		builtInActions.add(DeleteAction.class);
 
 		controlActions = new ArrayList<Class<? extends EditionAction>>();
@@ -215,8 +215,8 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 			}
 			if (org.openflexo.foundation.viewpoint.DeclarePatternRole.class.isAssignableFrom(builtInActionClass)) {
 				return new org.openflexo.foundation.viewpoint.DeclarePatternRole(null);
-			} else if (AddEditionPattern.class.isAssignableFrom(builtInActionClass)) {
-				return new AddEditionPattern(null);
+			} else if (AddEditionPatternInstance.class.isAssignableFrom(builtInActionClass)) {
+				return new AddEditionPatternInstance(null);
 			} else if (DeleteAction.class.isAssignableFrom(builtInActionClass)) {
 				return new DeleteAction(null);
 			} else {
