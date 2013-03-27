@@ -2,7 +2,7 @@
 
 <versions> 
 	
-  <class name="org.openflexo.foundation.rm.FlexoProject" latestVersion="5.0"> 
+  <class name="org.openflexo.foundation.rm.FlexoProject" latestVersion="6.0"> 
     <version id="1.0" modelFile="RMModel/RMModel_1.0.xml"/> 
 	<version id="1.1" modelFile="RMModel/RMModel_1.1.xml"/> 
 	<version id="1.2" modelFile="RMModel/RMModel_1.2.xml" needsManualConversion="true" toVersion="2.0"/> 
@@ -15,7 +15,8 @@
 	<version id="3.5" modelFile="RMModel/RMModel_3.5.xml" needsManualConversion="true" toVersion="4.0"/> <!-- 1.1, 1.2 -->
 	<version id="4.0" modelFile="RMModel/RMModel_4.0.xml" needsManualConversion="true" toVersion="5.0"/> <!-- 1.1, 1.2 -->
 	<version id="4.1" modelFile="RMModel/RMModel_4.1.xml" needsManualConversion="true" toVersion="5.0"/> <!-- 1.3 -->
-	<version id="5.0" modelFile="RMModel/RMModel_5.0.xml"/> <!-- 1.4.4 -->
+	<version id="5.0" modelFile="RMModel/RMModel_5.0.xml" needsManualConversion="true" toVersion="6.0"/> <!-- 1.4.4 -->
+	<version id="6.0" modelFile="RMModel/RMModel_6.0.xml"/> <!-- 1.6 -->
   </class>
    
   <class name="org.openflexo.foundation.wkf.FlexoWorkflow" latestVersion="2.4"> 
@@ -310,7 +311,7 @@
 	  <release_class name="org.openflexo.foundation.viewpoint.ViewPoint" version="1.0"/>
   </release>
   <release identifier="1.6">
-	  <release_class name="org.openflexo.foundation.rm.FlexoProject" version="5.0"/> 
+	  <release_class name="org.openflexo.foundation.rm.FlexoProject" version="6.0"/> 
 	  <release_class name="org.openflexo.foundation.wkf.FlexoWorkflow" version="2.4"/> 
 	  <release_class name="org.openflexo.foundation.wkf.FlexoProcess" version="6.0"/> 
 	  <release_class name="org.openflexo.foundation.ie.IEWOComponent" version="3.1"/> 

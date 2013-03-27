@@ -21,6 +21,7 @@ package org.openflexo.foundation.rm;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -32,9 +33,15 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.IOUtils;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.JDOMException;
 import org.jdom2.filter.ElementFilter;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
+import org.jdom2.util.IteratorIterable;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.FlexoXMLSerializableObject;
@@ -494,6 +501,8 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 			return convertFrom35to40();
 		} else if (v2.equals(new FlexoVersion("5.0"))) {
 			return convertProjectToNewPackages();
+		} else if (v1.equals(new FlexoVersion("5.0")) && v2.equals(new FlexoVersion("6.0"))) {
+			return convertFrom50To60();
 		} else {
 			return super.convertResourceFileFromVersionToVersion(v1, v2);
 		}
@@ -568,6 +577,60 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * @return
+	 */
+	private boolean convertFrom50To60() {
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Starting conversion from version 5.0 to 6.0 of RMXML.");
+		}
+		convertFrom50To60(getFile());
+		convertFrom50To60(getTSFile());
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Finished successfully conversion from version 5.0 to 6.0 of RMXML.");
+		}
+		return true;
+	}
+
+	private boolean convertFrom50To60(File file) {
+		SAXBuilder parser = new SAXBuilder();
+		FileInputStream in = null;
+		FileOutputStream out = null;
+		try {
+			in = new FileInputStream(file);
+			Document document = parser.build(in);
+			in.close();
+			removeElementsWithName(document, "ProjectOntology");
+			removeElementsWithName(document, "ShemaLibrary");
+			removeElementsWithName(document, "View");
+			XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+			out = new FileOutputStream(file);
+			outputter.output(document, out);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		} catch (JDOMException e) {
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			IOUtils.closeQuietly(in);
+			IOUtils.closeQuietly(out);
+		}
+		return true;
+	}
+
+	private void removeElementsWithName(Document document, String name) {
+		IteratorIterable<Element> children = document.getDescendants(new ElementFilter(name));
+		while (children.hasNext()) {
+			children.next();
+			children.remove();
+		}
+
 	}
 
 	/**
