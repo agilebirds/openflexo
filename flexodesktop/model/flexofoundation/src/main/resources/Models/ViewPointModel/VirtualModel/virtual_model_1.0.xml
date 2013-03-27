@@ -600,6 +600,24 @@
 	</entity>
 
 	<entity
+		name="org.openflexo.foundation.viewpoint.FetchRequestIterationAction"
+		xmlTag="FetchRequestIterationAction">
+		<property name="iteratorName" xmlTag="iteratorName" attribute="YES" />
+		<property name="fetchRequest" contains="org.openflexo.foundation.viewpoint.FetchRequest" context="Addressed" />
+	</entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.FetchRequest" abstract="yes" contexts="Addressed">
+		<property name="conditions" xmlTag="Condition" type="vector" />
+	</entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.SelectIndividual" abstract="yes">
+		<property name="ontologyClassURI" xmlTag="ontologyClassURI" attribute="YES" />
+	</entity>
+
+	<entity name="org.openflexo.technologyadapter.emf.viewpoint.editionaction.SelectEMFObjectIndividual" xmlTag="SelectEMFObjectIndividual">
+	</entity>
+	
+	<entity
 		name="org.openflexo.foundation.viewpoint.DeleteAction"
 		xmlTag="DeleteAction">
 		<property name="object" xmlTag="object" attribute="YES" />

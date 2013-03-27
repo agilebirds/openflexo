@@ -126,7 +126,7 @@ public class XSDAdapterController extends TechnologyAdapterController<XSDTechnol
 		} else if (AddXSClass.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(getIconForOntologyObject(XSOntClass.class), IconLibrary.DUPLICATE);
 		}
-		return null;
+		return super.getIconForEditionAction(editionActionClass);
 	}
 
 	@Override

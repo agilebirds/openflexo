@@ -17,13 +17,10 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
-import org.openflexo.foundation.viewpoint.AddEditionPattern;
-import org.openflexo.foundation.viewpoint.ConditionalAction;
-import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPatternPatternRole;
+import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole;
-import org.openflexo.foundation.viewpoint.IterationAction;
 import org.openflexo.foundation.viewpoint.NamedViewPointObject;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
@@ -383,22 +380,17 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	 * @param editionActionClass
 	 * @return
 	 */
-	public <EA extends EditionAction<?, ?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
-		if (org.openflexo.foundation.viewpoint.DeclarePatternRole.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new org.openflexo.foundation.viewpoint.DeclarePatternRole(null);
-		} else if (AddEditionPattern.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddEditionPattern(null);
-		} else if (DeleteAction.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new DeleteAction(null);
-		} else if (ConditionalAction.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new ConditionalAction(null);
-		} else if (IterationAction.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new IterationAction(null);
-		} else {
-			logger.warning("Unexpected " + editionActionClass);
-			return null;
-		}
-	}
+	public abstract <EA extends EditionAction<?, ?, ?>> EA makeEditionAction(Class<EA> editionActionClass);
+
+	/**
+	 * Creates and return a new {@link FetchRequest} of supplied class.<br>
+	 * This responsability is delegated to the technology-specific {@link ModelSlot} which manages with introspection its own
+	 * {@link FetchRequest} types
+	 * 
+	 * @param fetchRequestClass
+	 * @return
+	 */
+	public abstract <FR extends FetchRequest<?, ?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass);
 
 	public abstract ModelSlotInstanceConfiguration<? extends ModelSlot<M, MM>> createConfiguration(CreateVirtualModelInstance<?> action);
 

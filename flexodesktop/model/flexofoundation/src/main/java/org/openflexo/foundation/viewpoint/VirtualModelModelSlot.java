@@ -89,9 +89,13 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	public <EA extends EditionAction<?, ?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddEditionPattern.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddEditionPattern(null);
-		} else {
-			return super.makeEditionAction(editionActionClass);
 		}
+		return null;
+	}
+
+	@Override
+	public <FR extends FetchRequest<?, ?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
+		return null;
 	}
 
 	@Override

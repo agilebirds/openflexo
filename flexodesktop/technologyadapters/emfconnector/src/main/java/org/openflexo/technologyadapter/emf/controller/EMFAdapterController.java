@@ -149,7 +149,7 @@ public class EMFAdapterController extends TechnologyAdapterController<EMFTechnol
 		} /*else if (AddEMFClassClass.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(getIconForOntologyObject(EMFClassClass.class), IconLibrary.DUPLICATE);
 			}*/
-		return null;
+		return super.getIconForEditionAction(editionActionClass);
 	}
 
 	@Override

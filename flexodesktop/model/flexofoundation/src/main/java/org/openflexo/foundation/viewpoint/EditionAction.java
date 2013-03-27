@@ -68,7 +68,8 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 		Iteration,
 		FetchRequestIteration,
 		Conditional,
-		FetchRequest
+		FetchRequest,
+		SelectIndividual
 	}
 
 	private ModelSlot<M, MM> modelSlot;

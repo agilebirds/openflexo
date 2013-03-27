@@ -53,11 +53,6 @@ public class SelectEMFObjectIndividual extends SelectIndividual<EMFModel, EMFMet
 	}
 
 	@Override
-	public Class<EMFObjectIndividual> getFetchedType() {
-		return EMFObjectIndividual.class;
-	}
-
-	@Override
 	public List<EMFObjectIndividual> performAction(EditionSchemeAction action) {
 		List<EMFObjectIndividual> selectedIndividuals = new ArrayList<EMFObjectIndividual>(0);
 		EMFModel emfModel = getModelSlotInstance(action).getModel();

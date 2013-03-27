@@ -10,6 +10,7 @@ import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
 import org.openflexo.foundation.viewpoint.EditionAction;
+import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -177,9 +178,13 @@ public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntolog
 			return (EA) new AddRestrictionStatement(null);
 		} else if (AddSubClassStatement.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddSubClassStatement(null);
-		} else {
-			return super.makeEditionAction(editionActionClass);
 		}
+		return null;
+	}
+
+	@Override
+	public <FR extends FetchRequest<?, ?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
+		return null;
 	}
 
 }

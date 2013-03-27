@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
+import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.logging.FlexoLogger;
@@ -50,11 +51,19 @@ public abstract class SelectIndividual<M extends FlexoModel<M, MM>, MM extends F
 	}
 
 	@Override
-	public abstract Class<T> getFetchedType();
+	public EditionActionType getEditionActionType() {
+		return EditionActionType.SelectIndividual;
+	}
+
+	@Override
+	public IndividualOfClass getFetchedType() {
+		return IndividualOfClass.getIndividualOfClass(getType());
+	}
 
 	public IFlexoOntologyClass getType() {
-		if (StringUtils.isNotEmpty(typeURI)) {
-			return getVirtualModel().getOntologyClass(typeURI);
+		if (StringUtils.isNotEmpty(typeURI) && getModelSlot() != null && getModelSlot().getMetaModelResource() != null
+				&& getModelSlot().getMetaModelResource().getMetaModelData() != null) {
+			return (IFlexoOntologyClass) getModelSlot().getMetaModelResource().getMetaModelData().getObject(typeURI);
 		}
 		return null;
 	}
@@ -78,4 +87,9 @@ public abstract class SelectIndividual<M extends FlexoModel<M, MM>, MM extends F
 		this.typeURI = ontologyClassURI;
 	}
 
+	@Override
+	public String getStringRepresentation() {
+		return getClass().getSimpleName() + (getType() != null ? " : " + getType().getName() : "")
+				+ (StringUtils.isNotEmpty(getAssignation().toString()) ? " (" + getAssignation().toString() + ")" : "");
+	}
 }

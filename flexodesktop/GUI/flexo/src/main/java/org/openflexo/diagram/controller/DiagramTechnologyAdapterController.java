@@ -111,7 +111,7 @@ public class DiagramTechnologyAdapterController extends TechnologyAdapterControl
 		} else if (DeleteAction.class.isAssignableFrom(editionActionClass)) {
 			return VEIconLibrary.DELETE_ICON;
 		}
-		return null;
+		return super.getIconForEditionAction(editionActionClass);
 	}
 
 	@Override

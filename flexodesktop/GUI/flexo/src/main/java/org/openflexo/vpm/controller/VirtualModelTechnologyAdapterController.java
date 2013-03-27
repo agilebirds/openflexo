@@ -96,7 +96,7 @@ public class VirtualModelTechnologyAdapterController extends TechnologyAdapterCo
 		} else if (DeleteAction.class.isAssignableFrom(editionActionClass)) {
 			return VEIconLibrary.DELETE_ICON;
 		}
-		return null;
+		return super.getIconForEditionAction(editionActionClass);
 	}
 
 	@Override

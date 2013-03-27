@@ -25,6 +25,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
@@ -51,7 +52,7 @@ public abstract class FetchRequest<M extends FlexoModel<M, MM>, MM extends Flexo
 		return EditionActionType.FetchRequest;
 	}
 
-	public abstract Class<T> getFetchedType();
+	public abstract Type getFetchedType();
 
 	@Override
 	public Type getAssignableType() {
@@ -73,4 +74,15 @@ public abstract class FetchRequest<M extends FlexoModel<M, MM>, MM extends Flexo
 	public void removeFromConditions(DataBinding<Boolean> condition) {
 		conditions.remove(condition);
 	}
+
+	public DataBinding<Boolean> createCondition() {
+		DataBinding<Boolean> newCondition = new DataBinding<Boolean>(this, Boolean.class, BindingDefinitionType.GET);
+		addToConditions(newCondition);
+		return newCondition;
+	}
+
+	public void deleteCondition(DataBinding<Boolean> aCondition) {
+		removeFromConditions(aCondition);
+	}
+
 }
