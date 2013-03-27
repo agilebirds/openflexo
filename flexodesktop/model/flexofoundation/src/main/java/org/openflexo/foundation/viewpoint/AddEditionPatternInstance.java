@@ -44,6 +44,15 @@ import org.openflexo.foundation.view.action.CreationSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
 
+/**
+ * This action is used to explicitely instanciate a new {@link EditionPatternInstance} in a given {@link VirtualModelInstance} with some
+ * parameters
+ * 
+ * @author sylvain
+ * 
+ * @param <M>
+ * @param <MM>
+ */
 public class AddEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends
 		AssignableAction<M, MM, EditionPatternInstance> {
 
@@ -141,29 +150,29 @@ public class AddEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends F
 		}
 	}
 
-	private Vector<AddEditionPatternParameter> parameters = new Vector<AddEditionPatternInstance.AddEditionPatternParameter>();
+	private Vector<AddEditionPatternInstanceParameter> parameters = new Vector<AddEditionPatternInstance.AddEditionPatternInstanceParameter>();
 
-	public Vector<AddEditionPatternParameter> getParameters() {
+	public Vector<AddEditionPatternInstanceParameter> getParameters() {
 		updateParameters();
 		return parameters;
 	}
 
-	public void setParameters(Vector<AddEditionPatternParameter> parameters) {
+	public void setParameters(Vector<AddEditionPatternInstanceParameter> parameters) {
 		this.parameters = parameters;
 	}
 
-	public void addToParameters(AddEditionPatternParameter parameter) {
+	public void addToParameters(AddEditionPatternInstanceParameter parameter) {
 		parameter.setAction(this);
 		parameters.add(parameter);
 	}
 
-	public void removeFromParameters(AddEditionPatternParameter parameter) {
+	public void removeFromParameters(AddEditionPatternInstanceParameter parameter) {
 		parameter.setAction(null);
 		parameters.remove(parameter);
 	}
 
-	public AddEditionPatternParameter getParameter(EditionSchemeParameter p) {
-		for (AddEditionPatternParameter addEPParam : parameters) {
+	public AddEditionPatternInstanceParameter getParameter(EditionSchemeParameter p) {
+		for (AddEditionPatternInstanceParameter addEPParam : parameters) {
 			if (addEPParam.getParam() == p) {
 				return addEPParam;
 			}
@@ -172,18 +181,18 @@ public class AddEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends F
 	}
 
 	private void updateParameters() {
-		Vector<AddEditionPatternParameter> parametersToRemove = new Vector<AddEditionPatternInstance.AddEditionPatternParameter>(parameters);
+		Vector<AddEditionPatternInstanceParameter> parametersToRemove = new Vector<AddEditionPatternInstance.AddEditionPatternInstanceParameter>(parameters);
 		if (getCreationScheme() != null) {
 			for (EditionSchemeParameter p : getCreationScheme().getParameters()) {
-				AddEditionPatternParameter existingParam = getParameter(p);
+				AddEditionPatternInstanceParameter existingParam = getParameter(p);
 				if (existingParam != null) {
 					parametersToRemove.remove(existingParam);
 				} else {
-					addToParameters(new AddEditionPatternParameter(p));
+					addToParameters(new AddEditionPatternInstanceParameter(p));
 				}
 			}
 		}
-		for (AddEditionPatternParameter removeThis : parametersToRemove) {
+		for (AddEditionPatternInstanceParameter removeThis : parametersToRemove) {
 			removeFromParameters(removeThis);
 		}
 	}
@@ -196,7 +205,7 @@ public class AddEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends F
 		CreationSchemeAction creationSchemeAction = CreationSchemeAction.actionType.makeNewEmbeddedAction(vmInstance, null, action);
 		creationSchemeAction.setVirtualModelInstance(vmInstance);
 		creationSchemeAction.setCreationScheme(getCreationScheme());
-		for (AddEditionPatternParameter p : getParameters()) {
+		for (AddEditionPatternInstanceParameter p : getParameters()) {
 			EditionSchemeParameter param = p.getParam();
 			Object value = p.evaluateParameterValue(action);
 			logger.info("For parameter " + param + " value is " + value);
@@ -218,7 +227,7 @@ public class AddEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends F
 
 	}
 
-	public static class AddEditionPatternParameter extends EditionSchemeObject implements Bindable {
+	public static class AddEditionPatternInstanceParameter extends EditionSchemeObject implements Bindable {
 
 		@SuppressWarnings("unused")
 		private static final Logger logger = Logger.getLogger(GraphicalElementSpecification.class.getPackage().getName());
@@ -230,11 +239,11 @@ public class AddEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends F
 		private DataBinding<Object> value;
 
 		// Use it only for deserialization
-		public AddEditionPatternParameter(VirtualModel.VirtualModelBuilder builder) {
+		public AddEditionPatternInstanceParameter(VirtualModel.VirtualModelBuilder builder) {
 			super(builder);
 		}
 
-		public AddEditionPatternParameter(EditionSchemeParameter param) {
+		public AddEditionPatternInstanceParameter(EditionSchemeParameter param) {
 			super(null);
 			this.param = param;
 		}
@@ -367,21 +376,21 @@ public class AddEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends F
 		return getEditionPatternType();
 	}
 
-	public static class AddEditionPatternMustAddressACreationScheme extends
-			ValidationRule<AddEditionPatternMustAddressACreationScheme, AddEditionPatternInstance> {
-		public AddEditionPatternMustAddressACreationScheme() {
+	public static class AddEditionPatternInstanceMustAddressACreationScheme extends
+			ValidationRule<AddEditionPatternInstanceMustAddressACreationScheme, AddEditionPatternInstance> {
+		public AddEditionPatternInstanceMustAddressACreationScheme() {
 			super(AddEditionPatternInstance.class, "add_edition_pattern_action_must_address_a_valid_creation_scheme");
 		}
 
 		@Override
-		public ValidationIssue<AddEditionPatternMustAddressACreationScheme, AddEditionPatternInstance> applyValidation(
+		public ValidationIssue<AddEditionPatternInstanceMustAddressACreationScheme, AddEditionPatternInstance> applyValidation(
 				AddEditionPatternInstance action) {
 			if (action.getCreationScheme() == null) {
 				if (action.getEditionPatternType() == null) {
-					return new ValidationError<AddEditionPatternMustAddressACreationScheme, AddEditionPatternInstance>(this, action,
+					return new ValidationError<AddEditionPatternInstanceMustAddressACreationScheme, AddEditionPatternInstance>(this, action,
 							"add_edition_pattern_action_doesn't_define_any_edition_pattern");
 				} else {
-					return new ValidationError<AddEditionPatternMustAddressACreationScheme, AddEditionPatternInstance>(this, action,
+					return new ValidationError<AddEditionPatternInstanceMustAddressACreationScheme, AddEditionPatternInstance>(this, action,
 							"add_edition_pattern_action_doesn't_define_any_creation_scheme");
 				}
 			}
@@ -389,18 +398,18 @@ public class AddEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends F
 		}
 	}
 
-	public static class AddEditionPatternParametersMustBeValid extends
-			ValidationRule<AddEditionPatternParametersMustBeValid, AddEditionPatternInstance<?, ?>> {
-		public AddEditionPatternParametersMustBeValid() {
+	public static class AddEditionPatternInstanceParametersMustBeValid extends
+			ValidationRule<AddEditionPatternInstanceParametersMustBeValid, AddEditionPatternInstance<?, ?>> {
+		public AddEditionPatternInstanceParametersMustBeValid() {
 			super(AddEditionPatternInstance.class, "add_edition_pattern_parameters_must_be_valid");
 		}
 
 		@Override
-		public ValidationIssue<AddEditionPatternParametersMustBeValid, AddEditionPatternInstance<?, ?>> applyValidation(
+		public ValidationIssue<AddEditionPatternInstanceParametersMustBeValid, AddEditionPatternInstance<?, ?>> applyValidation(
 				AddEditionPatternInstance<?, ?> action) {
 			if (action.getCreationScheme() != null) {
-				Vector<ValidationIssue<AddEditionPatternParametersMustBeValid, AddEditionPatternInstance<?, ?>>> issues = new Vector<ValidationIssue<AddEditionPatternParametersMustBeValid, AddEditionPatternInstance<?, ?>>>();
-				for (AddEditionPatternParameter p : action.getParameters()) {
+				Vector<ValidationIssue<AddEditionPatternInstanceParametersMustBeValid, AddEditionPatternInstance<?, ?>>> issues = new Vector<ValidationIssue<AddEditionPatternInstanceParametersMustBeValid, AddEditionPatternInstance<?, ?>>>();
+				for (AddEditionPatternInstanceParameter p : action.getParameters()) {
 					if (p.getParam().getIsRequired()) {
 						if (p.getValue() == null || !p.getValue().isSet()) {
 							if (p.getParam() instanceof URIParameter && ((URIParameter) p.getParam()).getBaseURI().isSet()
@@ -421,7 +430,7 @@ public class AddEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends F
 				} else if (issues.size() == 1) {
 					return issues.firstElement();
 				} else {
-					return new CompoundIssue<AddEditionPatternInstance.AddEditionPatternParametersMustBeValid, AddEditionPatternInstance<?, ?>>(
+					return new CompoundIssue<AddEditionPatternInstance.AddEditionPatternInstanceParametersMustBeValid, AddEditionPatternInstance<?, ?>>(
 							action, issues);
 				}
 			}

@@ -230,18 +230,16 @@ public class VPMIconLibrary extends IconLibrary {
 			if (object instanceof AddDiagram) {
 				return EXAMPLE_DIAGRAM_ICON;
 			} else if (object instanceof AddEditionPatternInstance) {
-				return EDITION_PATTERN_ICON;
+				return IconFactory.getImageIcon(EDITION_PATTERN_ICON, IconLibrary.DUPLICATE);
 			} else if (object instanceof CloneShape) {
 				return IconFactory.getImageIcon(SHAPE_ICON, DUPLICATE);
 			} else if (object instanceof AddShape) {
-				return SHAPE_ICON;
+				return IconFactory.getImageIcon(SHAPE_ICON, IconLibrary.DUPLICATE);
 			} else if (object instanceof CloneConnector) {
 				return IconFactory.getImageIcon(CONNECTOR_ICON, DUPLICATE);
 			} else if (object instanceof AddConnector) {
-				return CONNECTOR_ICON;
-			} /*else if (object instanceof AddStatement) {
-				return OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON;
-				}*/else if (object instanceof DeclarePatternRole) {
+				return IconFactory.getImageIcon(CONNECTOR_ICON, IconLibrary.DUPLICATE);
+			} else if (object instanceof DeclarePatternRole) {
 				return DECLARE_PATTERN_ROLE_ICON;
 			} else if (object instanceof ConditionalAction) {
 				return CONDITIONAL_ACTION_ICON;

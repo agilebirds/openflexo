@@ -450,10 +450,10 @@
 		xmlTag="AddEditionPattern">
 		<property name="virtualModelInstance" xmlTag="virtualModelInstance" attribute="YES" />
 		<property name="creationSchemeURI" xmlTag="creationSchemeURI" attribute="YES" />
-		<property name="parameters" type="vector" contains="org.openflexo.foundation.viewpoint.AddEditionPatternInstance$AddEditionPatternParameter" />
+		<property name="parameters" type="vector" contains="org.openflexo.foundation.viewpoint.AddEditionPatternInstance$AddEditionPatternInstanceParameter" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.AddEditionPatternInstance$AddEditionPatternParameter" xmlTag="AddEditionPatternParameter">
+	<entity name="org.openflexo.foundation.viewpoint.AddEditionPatternInstance$AddEditionPatternInstanceParameter" xmlTag="AddEditionPatternParameter">
 		<property name="paramName" xmlTag="paramName" attribute="YES" />
 		<property name="value" xmlTag="value" attribute="YES" />
 	</entity>

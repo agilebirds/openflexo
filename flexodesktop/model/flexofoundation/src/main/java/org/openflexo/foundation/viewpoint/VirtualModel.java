@@ -51,6 +51,7 @@ import org.openflexo.foundation.viewpoint.dm.EditionPatternCreated;
 import org.openflexo.foundation.viewpoint.dm.EditionPatternDeleted;
 import org.openflexo.foundation.viewpoint.dm.ModelSlotAdded;
 import org.openflexo.foundation.viewpoint.dm.ModelSlotRemoved;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ChainedCollection;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.StringUtils;
@@ -288,6 +289,11 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 			// bindingModel.addToBindingVariables(new EditionPatternPathElement<ViewPoint>(ep, this));
 			bindingModel.addToBindingVariables(new BindingVariable(ep.getName(), ep));
 		}
+	}
+
+	@Override
+	public String simpleRepresentation() {
+		return "VirtualModel:" + FlexoLocalization.localizedForKey(getLocalizedDictionary(), getName());
 	}
 
 	// ==========================================================================
