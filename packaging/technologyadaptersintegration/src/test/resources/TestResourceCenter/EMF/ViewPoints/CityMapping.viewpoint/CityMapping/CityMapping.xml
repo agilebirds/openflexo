@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VirtualModel id="1" modelVersion="1.0" name="CityMapping">
+  <EditionPattern id="2" name="City">
+    <CreationScheme id="3" name="creation" label="creation" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <IndividualParameter id="4" conceptURI="http://www.thalesgroup.com/openflexo/emf/model/city1/City" conceptValue="" name="cityInModel1" label="cityInModel1" defaultValue="" usePaletteLabelAsDefaultValue="false" conditional="" isRequired="false">
+        <AddressedEMFModelSlot id="5" isRequired="true" isReadOnly="false" metaModelURI="http://www.thalesgroup.com/openflexo/emf/model/city1" name="model1" />
+      </IndividualParameter>
+      <IndividualParameter id="6" conceptURI="http://www.thalesgroup.com/openflexo/emf/model/city2/City" conceptValue="" name="cityInModel2" label="cityInModel2" defaultValue="" usePaletteLabelAsDefaultValue="false" conditional="" isRequired="false">
+        <AddressedEMFModelSlot id="7" isRequired="true" isReadOnly="false" metaModelURI="http://www.thalesgroup.com/openflexo/emf/model/city2" name="model2" />
+      </IndividualParameter>
+      <DeclarePatternRole id="8" object="parameters.cityInModel1" conditional="" assignation="cityInModel1" />
+      <DeclarePatternRole id="9" object="parameters.cityInModel2" conditional="" assignation="cityInModel2" />
+    </CreationScheme>
+    <ContainedEMFObjectIndividualPatternRole id="10" patternRole="cityInModel1" name="cityInModel1" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city1/City">
+      <AddressedEMFModelSlot idref="5" />
+    </ContainedEMFObjectIndividualPatternRole>
+    <ContainedEMFObjectIndividualPatternRole id="11" patternRole="cityInModel2" name="cityInModel2" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city2/City">
+      <AddressedEMFModelSlot idref="7" />
+    </ContainedEMFObjectIndividualPatternRole>
+    <PrimaryConceptEMFObjectIndividualPatternRole idref="10" />
+    <Inspector id="12" inspectorTitle="City" />
+    <Constraint id="13" constraint="(cityInModel1.name.toUpperCase = cityInModel2.name.toUpperCase)" />
+  </EditionPattern>
+  <EditionPattern id="14" name="House">
+    <Inspector id="15" inspectorTitle="House" />
+  </EditionPattern>
+  <EditionPattern id="16" name="Appartment" parentEditionPattern="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#House">
+    <ContainedEMFObjectIndividualPatternRole id="17" patternRole="houseInModel1" name="houseInModel1" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city1/House">
+      <AddressedEMFModelSlot idref="5" />
+    </ContainedEMFObjectIndividualPatternRole>
+    <ContainedEMFObjectIndividualPatternRole id="18" patternRole="appartmentInModel2" name="appartmentInModel2" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city2/Appartment">
+      <AddressedEMFModelSlot idref="7" />
+    </ContainedEMFObjectIndividualPatternRole>
+    <PrimaryConceptEMFObjectIndividualPatternRole idref="17" />
+    <Inspector id="19" inspectorTitle="Appartment" />
+    <Constraint id="20" constraint="(houseInModel1.type.name = &quot;Appartment&quot;)" />
+    <Constraint id="21" constraint="(houseInModel1.info = appartmentInModel2.label)" />
+  </EditionPattern>
+  <EditionPattern id="22" name="Mansion" parentEditionPattern="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#House">
+    <ContainedEMFObjectIndividualPatternRole id="23" patternRole="houseInModel1" name="houseInModel1" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city1/House">
+      <AddressedEMFModelSlot idref="5" />
+    </ContainedEMFObjectIndividualPatternRole>
+    <ContainedEMFObjectIndividualPatternRole id="24" patternRole="mansionInModel2" name="mansionInModel2" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city2/Mansion">
+      <AddressedEMFModelSlot idref="7" />
+    </ContainedEMFObjectIndividualPatternRole>
+    <PrimaryConceptEMFObjectIndividualPatternRole idref="23" />
+    <Inspector id="25" inspectorTitle="Mansion" />
+    <Constraint id="26" constraint="(houseInModel1.type.name = &quot;Mansion&quot;)" />
+    <Constraint id="27" constraint="(houseInModel1.info = mansionInModel2.number.toString)" />
+  </EditionPattern>
+  <EditionPattern id="28" name="Resident">
+    <ContainedEMFObjectIndividualPatternRole id="29" patternRole="residentInModel1" name="residentInModel1" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city1/Resident">
+      <AddressedEMFModelSlot idref="5" />
+    </ContainedEMFObjectIndividualPatternRole>
+    <ContainedEMFObjectIndividualPatternRole id="30" patternRole="houseInModel2" name="houseInModel2" ontologicType="http://www.thalesgroup.com/openflexo/emf/model/city2/House">
+      <AddressedEMFModelSlot idref="7" />
+    </ContainedEMFObjectIndividualPatternRole>
+    <PrimaryConceptEMFObjectIndividualPatternRole idref="29" />
+    <Inspector id="31" inspectorTitle="Resident" />
+    <Constraint id="32" constraint="(residentInModel1.name = houseInModel2.owner)" />
+  </EditionPattern>
+  <EditionPattern id="33" name="Mayor" parentEditionPattern="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#Resident">
+    <Inspector id="34" inspectorTitle="Mayor" />
+  </EditionPattern>
+  <LocalizedDictionary id="35" />
+  <EMFModelSlot idref="5" />
+  <EMFModelSlot idref="7" />
+  <SynchronizationScheme id="36" conditional="" name="synchronization" label="synchronization" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+    <FetchRequestIterationAction id="37" iteratorName="city1" conditional="">
+      <AddressedSelectEMFObjectIndividual id="38" ontologyClassURI="http://www.thalesgroup.com/openflexo/emf/model/city1/City" conditional="" assignation="">
+        <AddressedEMFModelSlot idref="5" />
+      </AddressedSelectEMFObjectIndividual>
+      <AddressedEMFModelSlot idref="5" />
+      <FetchRequestIterationAction id="39" iteratorName="city2" conditional="">
+        <AddressedSelectEMFObjectIndividual id="40" ontologyClassURI="http://www.thalesgroup.com/openflexo/emf/model/city2/City" conditional="" name="" assignation="">
+          <Condition>(selected.mayor.name = city1.name)</Condition>
+          <AddressedEMFModelSlot idref="7" />
+        </AddressedSelectEMFObjectIndividual>
+        <AddressedEMFModelSlot idref="7" />
+        <MatchEditionPatternInstance id="41" virtualModelInstance="this" creationSchemeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#City.creation" conditional="" assignation="">
+          <MatchingCriteria id="42" patternRoleName="cityInModel1" value="city1" />
+          <MatchingCriteria id="43" patternRoleName="cityInModel2" value="city2" />
+          <CreateEditionPatternInstanceParameter id="44" paramName="cityInModel1" value="city1" />
+          <CreateEditionPatternInstanceParameter id="45" paramName="cityInModel2" value="city2" />
+        </MatchEditionPatternInstance>
+      </FetchRequestIterationAction>
+    </FetchRequestIterationAction>
+  </SynchronizationScheme>
+  <Inspector id="46" inspectorTitle="CityMapping" />
+</VirtualModel>
