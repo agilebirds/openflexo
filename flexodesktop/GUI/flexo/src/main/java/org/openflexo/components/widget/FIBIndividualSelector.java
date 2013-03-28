@@ -157,6 +157,7 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<IFlexoOntology
 
 	public String renderObject(FlexoOntologyObjectImpl object) {
 		if (object instanceof IFlexoOntologyIndividual) {
+			System.out.println("For " + object + " render " + renderedString((IFlexoOntologyIndividual) object));
 			return renderedString((IFlexoOntologyIndividual) object);
 		}
 		return object.getName();
@@ -230,17 +231,20 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<IFlexoOntology
 	@Override
 	public String renderedString(final IFlexoOntologyIndividual editedObject) {
 
-		DataBinding<String> binding = getRenderer(editedObject);
-
-		// System.out.println("Trying to render " + editedObject + " renderer=" + getRenderer(editedObject));
-
-		if (binding == null) {
+		if (editedObject == null) {
 			return null;
+		}
+
+		System.out.println("Trying to render " + editedObject + " renderer=" + getRenderer(editedObject));
+		DataBinding<String> renderer = getRenderer(editedObject);
+
+		if (renderer == null) {
+			return editedObject.getName();
 		}
 
 		if (editedObject != null) {
 			try {
-				String returned = binding.getBindingValue(new BindingEvaluationContext() {
+				String returned = renderer.getBindingValue(new BindingEvaluationContext() {
 					@Override
 					public Object getValue(BindingVariable variable) {
 						return editedObject;
@@ -251,7 +255,7 @@ public class FIBIndividualSelector extends FIBModelObjectSelector<IFlexoOntology
 				return editedObject.getName();
 			}
 		}
-		return "";
+		return editedObject.getName();
 	}
 
 	public String getContextOntologyURI() {

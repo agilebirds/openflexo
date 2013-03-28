@@ -153,11 +153,11 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 
 	@Override
 	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller) {
-		if (object instanceof VirtualModelInstance) {
-			return new VirtualModelInstanceView((VirtualModelInstance) object, (VEController) controller);
-		}
 		if (object instanceof Diagram) {
 			return getControllerForDiagram((Diagram) object).getModuleView();
+		}
+		if (object instanceof VirtualModelInstance) {
+			return new VirtualModelInstanceView((VirtualModelInstance) object, (VEController) controller);
 		}
 		return null;
 	}
