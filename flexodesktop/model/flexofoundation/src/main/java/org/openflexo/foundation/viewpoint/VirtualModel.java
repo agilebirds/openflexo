@@ -51,7 +51,6 @@ import org.openflexo.foundation.viewpoint.dm.EditionPatternCreated;
 import org.openflexo.foundation.viewpoint.dm.EditionPatternDeleted;
 import org.openflexo.foundation.viewpoint.dm.ModelSlotAdded;
 import org.openflexo.foundation.viewpoint.dm.ModelSlotRemoved;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ChainedCollection;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.StringUtils;
@@ -268,6 +267,14 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 		return null;
 	}
 
+	public SynchronizationScheme createSynchronizationScheme() {
+		SynchronizationScheme newSynchronizationScheme = new SynchronizationScheme(null);
+		newSynchronizationScheme.setVirtualModel(this);
+		newSynchronizationScheme.setName("synchronization");
+		addToEditionSchemes(newSynchronizationScheme);
+		return newSynchronizationScheme;
+	}
+
 	@Override
 	public BindingModel getBindingModel() {
 		if (bindingModel == null) {
@@ -287,14 +294,15 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 		bindingModel = new BindingModel();
 		for (EditionPattern ep : getEditionPatterns()) {
 			// bindingModel.addToBindingVariables(new EditionPatternPathElement<ViewPoint>(ep, this));
-			bindingModel.addToBindingVariables(new BindingVariable(ep.getName(), ep));
+			bindingModel.addToBindingVariables(new BindingVariable(ep.getName(), EditionPatternInstanceType
+					.getEditionPatternInstanceType(ep)));
 		}
 	}
 
-	@Override
+	/*@Override
 	public String simpleRepresentation() {
 		return "VirtualModel:" + FlexoLocalization.localizedForKey(getLocalizedDictionary(), getName());
-	}
+	}*/
 
 	// ==========================================================================
 	// ============================== Model Slots ===============================

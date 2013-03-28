@@ -297,7 +297,7 @@ public abstract class FlexoObject extends FlexoObservable {
 	// Action management
 	// ***************************************************
 
-	public List<FlexoActionType<?, ?, ?>> getActionList() {
+	public final List<FlexoActionType<?, ?, ?>> getActionList() {
 		return getActionList(getClass());
 	}
 

@@ -181,7 +181,8 @@ public class AddEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends F
 	}
 
 	private void updateParameters() {
-		Vector<AddEditionPatternInstanceParameter> parametersToRemove = new Vector<AddEditionPatternInstance.AddEditionPatternInstanceParameter>(parameters);
+		Vector<AddEditionPatternInstanceParameter> parametersToRemove = new Vector<AddEditionPatternInstance.AddEditionPatternInstanceParameter>(
+				parameters);
 		if (getCreationScheme() != null) {
 			for (EditionSchemeParameter p : getCreationScheme().getParameters()) {
 				AddEditionPatternInstanceParameter existingParam = getParameter(p);
@@ -373,7 +374,7 @@ public class AddEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends F
 
 	@Override
 	public Type getAssignableType() {
-		return getEditionPatternType();
+		return EditionPatternInstanceType.getEditionPatternInstanceType(getEditionPatternType());
 	}
 
 	public static class AddEditionPatternInstanceMustAddressACreationScheme extends
@@ -387,11 +388,11 @@ public class AddEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends F
 				AddEditionPatternInstance action) {
 			if (action.getCreationScheme() == null) {
 				if (action.getEditionPatternType() == null) {
-					return new ValidationError<AddEditionPatternInstanceMustAddressACreationScheme, AddEditionPatternInstance>(this, action,
-							"add_edition_pattern_action_doesn't_define_any_edition_pattern");
+					return new ValidationError<AddEditionPatternInstanceMustAddressACreationScheme, AddEditionPatternInstance>(this,
+							action, "add_edition_pattern_action_doesn't_define_any_edition_pattern");
 				} else {
-					return new ValidationError<AddEditionPatternInstanceMustAddressACreationScheme, AddEditionPatternInstance>(this, action,
-							"add_edition_pattern_action_doesn't_define_any_creation_scheme");
+					return new ValidationError<AddEditionPatternInstanceMustAddressACreationScheme, AddEditionPatternInstance>(this,
+							action, "add_edition_pattern_action_doesn't_define_any_creation_scheme");
 				}
 			}
 			return null;

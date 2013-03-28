@@ -19,12 +19,29 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.VirtualModelInstance;
 
+/**
+ * A {@link SynchronizationScheme} is applied to a {@link VirtualModelInstance} to automatically manage contained
+ * {@link EditionPatternInstance}
+ * 
+ * @author sylvain
+ * 
+ */
 public class SynchronizationScheme extends AbstractActionScheme {
 
 	public SynchronizationScheme(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
+	}
+
+	@Override
+	public VirtualModel<?> getVirtualModel() {
+		return (VirtualModel<?>) super.getEditionPattern();
+	}
+
+	public void setVirtualModel(VirtualModel<?> virtualModel) {
+		setEditionPattern(virtualModel);
 	}
 
 }

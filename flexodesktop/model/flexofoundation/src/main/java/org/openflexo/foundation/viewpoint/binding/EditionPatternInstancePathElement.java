@@ -9,7 +9,7 @@ import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternInstanceType;
+import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
 
 public class EditionPatternInstancePathElement extends SimplePathElement {
 

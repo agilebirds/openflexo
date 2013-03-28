@@ -27,13 +27,12 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 
-public class DeclarePatternRole<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends
-		AssignableAction<M, MM, FlexoModelObject> {
+public class DeclarePatternRole<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends AssignableAction<M, MM, FlexoObject> {
 
 	private static final Logger logger = Logger.getLogger(DeclarePatternRole.class.getPackage().getName());
 
@@ -114,12 +113,12 @@ public class DeclarePatternRole<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	}
 
 	@Override
-	public FlexoModelObject performAction(EditionSchemeAction action) {
-		return (FlexoModelObject) getDeclaredObject(action);
+	public FlexoObject performAction(EditionSchemeAction action) {
+		return (FlexoObject) getDeclaredObject(action);
 	}
 
 	@Override
-	public void finalizePerformAction(EditionSchemeAction action, FlexoModelObject initialContext) {
+	public void finalizePerformAction(EditionSchemeAction action, FlexoObject initialContext) {
 		// TODO Auto-generated method stub
 
 	}

@@ -22,6 +22,7 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -42,6 +43,7 @@ import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.CreationSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.view.action.SynchronizationSchemeAction;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
 
 /**
@@ -95,6 +97,7 @@ public class MatchEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends
 			virtualModelInstance = new DataBinding<VirtualModelInstance>(this, VirtualModelInstance.class,
 					DataBinding.BindingDefinitionType.GET);
 			virtualModelInstance.setBindingName("virtualModelInstance");
+			virtualModelInstance.setMandatory(true);
 		}
 		return virtualModelInstance;
 	}
@@ -105,6 +108,7 @@ public class MatchEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends
 			aVirtualModelInstance.setBindingName("virtualModelInstance");
 			aVirtualModelInstance.setDeclaredType(VirtualModelInstance.class);
 			aVirtualModelInstance.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+			aVirtualModelInstance.setMandatory(true);
 		}
 		this.virtualModelInstance = aVirtualModelInstance;
 	}
@@ -249,23 +253,43 @@ public class MatchEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends
 		logger.info("Perform perform MatchEditionPatternInstance " + action);
 		VirtualModelInstance vmInstance = getVirtualModelInstance(action);
 		logger.info("VirtualModelInstance: " + vmInstance);
-		CreationSchemeAction creationSchemeAction = CreationSchemeAction.actionType.makeNewEmbeddedAction(vmInstance, null, action);
-		creationSchemeAction.setVirtualModelInstance(vmInstance);
-		creationSchemeAction.setCreationScheme(getCreationScheme());
-		for (CreateEditionPatternInstanceParameter p : getParameters()) {
-			EditionSchemeParameter param = p.getParam();
-			Object value = p.evaluateParameterValue(action);
-			logger.info("For parameter " + param + " value is " + value);
-			if (value != null) {
-				creationSchemeAction.setParameterValue(p.getParam(), p.evaluateParameterValue(action));
+		Hashtable<PatternRole, Object> criterias = new Hashtable<PatternRole, Object>();
+		for (MatchingCriteria mc : getMatchingCriterias()) {
+			Object value = mc.evaluateCriteriaValue(action);
+			criterias.put(mc.getPatternRole(), value);
+			System.out.println("Pour " + mc.getPatternRole().getPatternRoleName() + " value is " + value);
+		}
+		logger.info("On s'arrete pour regarder ");
+		EditionPatternInstance matchingEditionPatternInstance = ((SynchronizationSchemeAction) action).matchEditionPatternInstance(
+				getEditionPatternType(), criterias);
+
+		if (matchingEditionPatternInstance != null) {
+			// A matching EditionPatternInstance was found
+			((SynchronizationSchemeAction) action).foundMatchingEditionPatternInstance(matchingEditionPatternInstance);
+		} else {
+
+			CreationSchemeAction creationSchemeAction = CreationSchemeAction.actionType.makeNewEmbeddedAction(vmInstance, null, action);
+			creationSchemeAction.setVirtualModelInstance(vmInstance);
+			creationSchemeAction.setCreationScheme(getCreationScheme());
+			for (CreateEditionPatternInstanceParameter p : getParameters()) {
+				EditionSchemeParameter param = p.getParam();
+				Object value = p.evaluateParameterValue(action);
+				logger.info("For parameter " + param + " value is " + value);
+				if (value != null) {
+					creationSchemeAction.setParameterValue(p.getParam(), p.evaluateParameterValue(action));
+				}
+			}
+			logger.info(">> Creating a new EPI in " + vmInstance);
+			creationSchemeAction.doAction();
+			if (creationSchemeAction.hasActionExecutionSucceeded()) {
+				logger.info("Successfully performed performAddEditionPattern " + action);
+				matchingEditionPatternInstance = creationSchemeAction.getEditionPatternInstance();
+				((SynchronizationSchemeAction) action).newEditionPatternInstance(matchingEditionPatternInstance);
+			} else {
+				logger.warning("Could not create EditionPatternInstance for " + action);
 			}
 		}
-		creationSchemeAction.doAction();
-		if (creationSchemeAction.hasActionExecutionSucceeded()) {
-			logger.info("Successfully performed performAddEditionPattern " + action);
-			return creationSchemeAction.getEditionPatternInstance();
-		}
-		return null;
+		return matchingEditionPatternInstance;
 	}
 
 	@Override
@@ -561,7 +585,7 @@ public class MatchEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends
 
 	@Override
 	public Type getAssignableType() {
-		return getEditionPatternType();
+		return EditionPatternInstanceType.getEditionPatternInstanceType(getEditionPatternType());
 	}
 
 	public static class MatchEditionPatternInstanceMustAddressACreationScheme extends

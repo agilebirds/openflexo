@@ -117,6 +117,7 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 	@Override
 	public JComponent getBottomRightView() {
 		if (getCurrentDiagramModuleView() != null) {
+			// if (_controller != null && _controller.getCurrentModuleView() != null) {
 			return inspectorPanelScrollPane;
 		} else {
 			return bottomRightDummy;

@@ -19,14 +19,18 @@
  */
 package org.openflexo.foundation.view.action;
 
+import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.SynchronizationScheme;
 
 public class SynchronizationSchemeAction extends EditionSchemeAction<SynchronizationSchemeAction, SynchronizationScheme> {
@@ -73,6 +77,13 @@ public class SynchronizationSchemeAction extends EditionSchemeAction<Synchroniza
 	}
 
 	@Override
+	protected void applyEditionActions() {
+		beginSynchronization();
+		super.applyEditionActions();
+		endSynchronization();
+	}
+
+	@Override
 	public VirtualModelInstance retrieveVirtualModelInstance() {
 		if (getEditionPatternInstance() instanceof VirtualModelInstance) {
 			return (VirtualModelInstance) getEditionPatternInstance();
@@ -84,6 +95,39 @@ public class SynchronizationSchemeAction extends EditionSchemeAction<Synchroniza
 			return ((DiagramElement<?>) getFocusedObject()).getDiagram();
 		}*/
 		return null;
+	}
+
+	public void beginSynchronization() {
+		System.out.println("BEGIN synchronization on " + getVirtualModelInstance());
+	}
+
+	public void endSynchronization() {
+		System.out.println("END synchronization on " + getVirtualModelInstance());
+	}
+
+	public EditionPatternInstance matchEditionPatternInstance(EditionPattern editionPatternType, Hashtable<PatternRole, Object> criterias) {
+		System.out.println("MATCH epi on " + getVirtualModelInstance() + " for editionPatternType with " + criterias);
+		for (EditionPatternInstance epi : getVirtualModelInstance().getEPInstances(editionPatternType)) {
+			boolean allCriteriasMatching = true;
+			for (PatternRole pr : criterias.keySet()) {
+				if (!FlexoObject.areSameValue(epi.getPatternActor(pr), criterias.get(pr))) {
+					allCriteriasMatching = false;
+				}
+			}
+			if (allCriteriasMatching) {
+				return epi;
+			}
+		}
+		return null;
+	}
+
+	public void foundMatchingEditionPatternInstance(EditionPatternInstance matchingEditionPatternInstance) {
+		System.out.println("FOUND matching : " + matchingEditionPatternInstance);
+	}
+
+	public void newEditionPatternInstance(EditionPatternInstance newEditionPatternInstance) {
+		System.out.println("NEW EPI : " + newEditionPatternInstance);
+
 	}
 
 }

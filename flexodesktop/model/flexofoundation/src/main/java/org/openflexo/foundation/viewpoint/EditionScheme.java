@@ -628,10 +628,11 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	protected void appendContextualBindingVariables(BindingModel bindingModel) {
-		bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.THIS, getEditionPattern()));
+		bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.THIS, EditionPatternInstanceType
+				.getEditionPatternInstanceType(getEditionPattern())));
 		if (getEditionPattern() != null) {
-			bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.VIRTUAL_MODEL_INSTANCE, getEditionPattern()
-					.getVirtualModel()));
+			bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.VIRTUAL_MODEL_INSTANCE, EditionPatternInstanceType
+					.getEditionPatternInstanceType(getEditionPattern().getVirtualModel())));
 		}
 		if (this instanceof DiagramEditionScheme) {
 			bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.TOP_LEVEL, DiagramRootPane.class));

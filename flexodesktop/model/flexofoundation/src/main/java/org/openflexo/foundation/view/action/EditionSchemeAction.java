@@ -34,11 +34,8 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.resource.FlexoFileResource;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
@@ -197,11 +194,11 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 
 	public abstract EditionPatternInstance getEditionPatternInstance();
 
-	public VirtualModelInstance getVirtualModelInstance() {
+	public VirtualModelInstance<?, ?> getVirtualModelInstance() {
 		return retrieveVirtualModelInstance();
 	}
 
-	public abstract VirtualModelInstance retrieveVirtualModelInstance();
+	public abstract VirtualModelInstance<?, ?> retrieveVirtualModelInstance();
 
 	/**
 	 * This is the internal code performing execution of the control graph of {@link EditionAction} defined to be the execution control

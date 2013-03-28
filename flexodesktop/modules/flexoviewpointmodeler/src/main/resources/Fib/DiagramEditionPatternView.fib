@@ -20,7 +20,6 @@
       <TextFieldColumn isEditable="" data="iterator.patternRoleName" format="" title="pattern_role" columnWidth="70" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" />
       <LabelColumn data="iterator.modelSlot.name" format="" title="model_slot" columnWidth="50" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="label" />
       <LabelColumn data="iterator.preciseType" format="" title="type" columnWidth="70" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="label" />
-      <CheckBoxColumn data="iterator.isPrimaryRole" format="" title="" columnWidth="20" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="checkbox" />
       <RemoveAction method="data.deletePatternRole(selected)" isAvailable="" name="delete" />
       <AddAction method="controller.createPatternRole(data)" isAvailable="" name="createPatternRole" />
     </Table>

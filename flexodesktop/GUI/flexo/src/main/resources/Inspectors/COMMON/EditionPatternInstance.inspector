@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" data="" dataClassName="org.openflexo.foundation.view.EditionPatternInstance" controllerClassName="org.openflexo.inspector.FIBInspectorController" visible="" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" data="" constraints="border(location=center)" visible="">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" data="" visible="" font="SansSerif,0,11" name="BasicTab">
+      <Label label="actors" index="2" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="">
+        <LocalizedDictionary />
+        <Parameter name="visibleFor" value="SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER" />
+      </Label>
+      <Table index="3" iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" selected="" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator=""  data="data.editionPattern.patternRoles" constraints="twocols(anchor=center;expandHorizontally=true;expandVertically=true;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="">
+        <IconColumn data="controller.iconForObject(iterator)" format="" title="icon" columnWidth="20" resizable="false" displayTitle="false" color="" bgColor="" tooltip="" valueChangedAction="" name="icon" />
+        <LabelColumn data="iterator.patternRoleName" format="" title="pattern_role" columnWidth="100" resizable="true" displayTitle="true" font="Lucida Grande,0,13" color="" bgColor="" tooltip="" valueChangedAction="" name="label" />
+        <LabelColumn data="data.getPatternActor(iterator)" format="" title="actor" columnWidth="300" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="label" />
+        <LocalizedDictionary />
+      </Table>
+      <Parameter name="visibleFor" value="SEMANTIC,SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="flexo_id" lang="English">OpenFlexo ID</Localized>
+    <Localized key="flexo_id" lang="French">OpenFlexo ID</Localized>
+    <Localized key="flexo_id" lang="Dutch">OpenFlexo ID</Localized>
+    <Localized key="custom_properties" lang="English">Custom properties</Localized>
+    <Localized key="custom_properties" lang="French">Propriétés supplémentaires</Localized>
+    <Localized key="custom_properties" lang="Dutch">Custom properties</Localized>
+    <Localized key="dont_generate" lang="English">Don't generate doc</Localized>
+    <Localized key="dont_generate" lang="French">Ne pas générer</Localized>
+    <Localized key="dont_generate" lang="Dutch">Don't generate doc</Localized>
+    <Localized key="EP refs" lang="English">EP refs</Localized>
+    <Localized key="EP refs" lang="French">EP refs</Localized>
+    <Localized key="EP refs" lang="Dutch">EP refs</Localized>
+    <Localized key="Id" lang="English">Id</Localized>
+    <Localized key="Id" lang="French">Id</Localized>
+    <Localized key="Id" lang="Dutch">Id</Localized>
+    <Localized key="EditionPattern" lang="English">EditionPattern</Localized>
+    <Localized key="EditionPattern" lang="French">EditionPattern</Localized>
+    <Localized key="EditionPattern" lang="Dutch">EditionPattern</Localized>
+    <Localized key="PatternRole" lang="English">PatternRole</Localized>
+    <Localized key="PatternRole" lang="French">PatternRole</Localized>
+    <Localized key="PatternRole" lang="Dutch">PatternRole</Localized>
+    <Localized key="pattern_role" lang="English">Pattern Role</Localized>
+    <Localized key="pattern_role" lang="French">Pattern Role</Localized>
+    <Localized key="pattern_role" lang="Dutch">Pattern Role</Localized>
+    <Localized key="actor" lang="English">Actor</Localized>
+    <Localized key="actor" lang="French">Acteur</Localized>
+    <Localized key="actor" lang="Dutch">actor</Localized>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="value" lang="English">Value</Localized>
+    <Localized key="value" lang="French">Valeur</Localized>
+    <Localized key="value" lang="Dutch">Value</Localized>
+    <Localized key="new" lang="English">New</Localized>
+    <Localized key="new" lang="French">Nouveau</Localized>
+    <Localized key="new" lang="Dutch">New</Localized>
+    <Localized key="delete" lang="English">Delete</Localized>
+    <Localized key="delete" lang="French">Supprimer</Localized>
+    <Localized key="delete" lang="Dutch">Delete</Localized>
+    <Localized key="sort" lang="English">Sort</Localized>
+    <Localized key="sort" lang="French">Trier</Localized>
+    <Localized key="sort" lang="Dutch">Sort</Localized>
+    <Localized key="Doc" lang="English">Doc</Localized>
+    <Localized key="Doc" lang="French">Doc</Localized>
+    <Localized key="Doc" lang="Dutch">Doc</Localized>
+    <Localized key="Advanced" lang="English">Advanced</Localized>
+    <Localized key="Advanced" lang="Dutch">Advanced</Localized>
+    <Localized key="actors" lang="English">Actors</Localized>
+    <Localized key="actors" lang="French">Acteurs</Localized>
+    <Localized key="actors" lang="Dutch">actors</Localized>
+    <Localized key="Basic" lang="English">Basic</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="Basic" lang="Dutch">Basis</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="EditionPatternInstance" />
+</Panel>

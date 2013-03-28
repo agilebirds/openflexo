@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
@@ -66,7 +67,8 @@ public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeActi
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, DiagramElement.class);
+		FlexoObject.addActionForClass(actionType, DiagramElement.class);
+		FlexoObject.addActionForClass(actionType, VirtualModelInstance.class);
 	}
 
 	private VirtualModelInstance vmInstance;

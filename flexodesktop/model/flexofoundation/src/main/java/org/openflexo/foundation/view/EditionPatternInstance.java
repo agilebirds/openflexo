@@ -508,4 +508,15 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	public void setVirtualModelInstance(VirtualModelInstance<?, ?> vmInstance) {
 		this.vmInstance = vmInstance;
 	}
+
+	public String getStringRepresentation() {
+		StringBuffer sb = new StringBuffer();
+		sb.append(getEditionPattern().getName() + ": ");
+		boolean isFirst = true;
+		for (ActorReference ref : actors.values()) {
+			sb.append((isFirst ? "" : ", ") + ref.getPatternRoleName() + "=" + ref.retrieveObject().toString());
+			isFirst = false;
+		}
+		return sb.toString();
+	}
 }

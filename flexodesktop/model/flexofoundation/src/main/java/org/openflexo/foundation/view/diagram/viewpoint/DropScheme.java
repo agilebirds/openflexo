@@ -30,6 +30,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
 import org.openflexo.foundation.viewpoint.AbstractCreationScheme;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.toolbox.StringUtils;
@@ -118,7 +119,8 @@ public class DropScheme extends AbstractCreationScheme implements DiagramEdition
 		super.appendContextualBindingVariables(bindingModel);
 		bindingModelNeedToBeRecomputed = false;
 		if (getTargetEditionPattern() != null) {
-			bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.TARGET, getTargetEditionPattern()));
+			bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.TARGET, EditionPatternInstanceType
+					.getEditionPatternInstanceType(getTargetEditionPattern())));
 		} else if (_getTarget() != null && !_getTarget().equals("top")) {
 			// logger.warning("Cannot find edition pattern " + _getTarget() + " !!!!!!!!!!!!!!");
 			bindingModelNeedToBeRecomputed = true;
