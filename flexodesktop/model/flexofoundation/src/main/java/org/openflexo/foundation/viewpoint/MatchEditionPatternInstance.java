@@ -246,7 +246,7 @@ public class MatchEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends
 
 	@Override
 	public EditionPatternInstance performAction(EditionSchemeAction action) {
-		logger.info("Perform performAddEditionPattern " + action);
+		logger.info("Perform perform MatchEditionPatternInstance " + action);
 		VirtualModelInstance vmInstance = getVirtualModelInstance(action);
 		logger.info("VirtualModelInstance: " + vmInstance);
 		CreationSchemeAction creationSchemeAction = CreationSchemeAction.actionType.makeNewEmbeddedAction(vmInstance, null, action);

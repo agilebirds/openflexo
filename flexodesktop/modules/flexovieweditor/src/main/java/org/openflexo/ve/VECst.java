@@ -46,6 +46,7 @@ public class VECst {
 
 	// General
 	public static File ONTOLOGY_VIEW_FIB = new FileResource("Fib/OntologyView.fib");
+	public static File VIRTUAL_MODEL_INSTANCE_VIEW_FIB = new FileResource("Fib/VirtualModelInstanceView.fib");
 
 	// View/VirtualModelInstance edition
 	public static File CREATE_VIEW_DIALOG_FIB = new FileResource("Fib/Dialog/CreateViewDialog.fib");

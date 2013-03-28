@@ -257,9 +257,10 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 		return getEPInstances(ep);
 	}
 
-	public Collection<EditionPatternInstance> getEPInstances(EditionPattern ep) {
+	public List<EditionPatternInstance> getEPInstances(EditionPattern ep) {
 		Map<Long, EditionPatternInstance> hash = editionPatternInstances.get(ep);
-		return hash.values();
+		// TODO: performance issue here
+		return new ArrayList(hash.values());
 	}
 
 	// TODO: refactor this

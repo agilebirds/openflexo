@@ -13,8 +13,8 @@ import org.openflexo.foundation.viewpoint.action.CreatePatternRole;
 import org.openflexo.view.controller.FlexoFIBController;
 
 /**
- * Represents the controller of a FIBComponent in the context of DocumentationEditor module<br>
- * Extends FlexoFIBController by supporting features relative to DE module
+ * Represents the controller used in VPM (ViewPointModeller)<br>
+ * Extends FlexoFIBController by supporting features relative to VPM module
  * 
  * 
  * @author sylvain
