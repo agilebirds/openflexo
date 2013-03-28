@@ -120,6 +120,9 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 			newPatternRole.setPatternRoleName(getPatternRoleName());
 			newPatternRole.setModelSlot(modelSlot);
 			newPatternRole.setDescription(description);
+			if (isIndividual()) {
+				((IndividualPatternRole) newPatternRole).setOntologicType(individualType);
+			}
 			getEditionPattern().addToPatternRoles(newPatternRole);
 		}
 
