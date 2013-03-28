@@ -69,6 +69,7 @@ import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import org.openflexo.technologyadapter.owl.model.action.CreateDataProperty;
 import org.openflexo.technologyadapter.owl.model.action.CreateObjectProperty;
@@ -96,7 +97,6 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.RDFWriter;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.ResourceFactory;
 import com.hp.hpl.jena.rdf.model.Statement;
@@ -212,8 +212,13 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 	}
 
 	public static void main(String[] args) {
-		System.out.println("Hop: "
-				+ findOntologyURIWithRDFBaseMethod(new File("/Users/sylvain/Library/OpenFlexo/FlexoResourceCenter/owl-xml_cpmf.owl")));
+		System.out
+				.println("Hop1: "
+						+ findOntologyURI(new File(
+								"/Users/sylvain/GIT/openflexo/flexodesktop/model/flexofoundation/src/test/resources/TestProjects/1.6/Test1.6.prj/Models/myModel.owl")));
+		System.out.println("Hop2: " + findOntologyURI(new File("/Users/sylvain/Library/OpenFlexo/FlexoResourceCenter/owl-xml_cpmf.owl")));
+		System.out.println("Hop3: "
+				+ findOntologyURI(new File("/Users/sylvain/Library/OpenFlexo/FlexoResourceCenter/Ontologies/www.omg.org/UML2.owl")));
 	}
 
 	private static String findOntologyURIWithRDFBaseMethod(File aFile) {
@@ -1483,10 +1488,11 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 		// TODO
 	}
 
-	public void saveToFile(File aFile) {
+	/*public void saveToFile(File aFile) {
 		System.out.println("Saving OWL ontology to " + aFile.getAbsolutePath());
 		FileOutputStream out = null;
 		try {
+			getOntModel().setNsPrefix("base", getOntologyURI());
 			out = new FileOutputStream(aFile);
 			RDFWriter writer = ontModel.getWriter("RDF/XML-ABBREV");
 			writer.setProperty("xmlbase", getOntologyURI());
@@ -1508,10 +1514,15 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 				logger.warning("IOException: " + e.getMessage());
 			}
 		}
+	}*/
+
+	public void save(FlexoProgress progress) throws SaveResourceException {
+		// saveToFile(getAlternativeLocalFile());
+		getResource().save(progress);
 	}
 
 	public void save() throws SaveResourceException {
-		saveToFile(getAlternativeLocalFile());
+		save(null);
 	}
 
 	/**

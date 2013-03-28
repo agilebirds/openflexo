@@ -9,6 +9,7 @@ import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.technologyadapter.owl.model.OWLConcept;
 
 public class URINamePathElement extends SimplePathElement {
 
@@ -30,6 +31,9 @@ public class URINamePathElement extends SimplePathElement {
 
 	@Override
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
+		if (target instanceof OWLConcept) {
+			return ((OWLConcept) target).getName();
+		}
 		logger.warning("Please implement me, target=" + target + " context=" + context);
 		return null;
 	}
@@ -37,6 +41,10 @@ public class URINamePathElement extends SimplePathElement {
 	@Override
 	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) throws TypeMismatchException,
 			NullReferenceException {
+		if (target instanceof OWLConcept) {
+			((OWLConcept) target).setName((String) value);
+			return;
+		}
 		logger.warning("Please implement me, target=" + target + " context=" + context);
 	}
 
