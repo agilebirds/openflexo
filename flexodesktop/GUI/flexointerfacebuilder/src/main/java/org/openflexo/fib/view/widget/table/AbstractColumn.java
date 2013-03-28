@@ -96,7 +96,9 @@ public abstract class AbstractColumn<T> implements BindingEvaluationContext, Obs
 					|| dataModification.getAttribute() == FIBTableColumn.Parameters.font
 					|| dataModification.getAttribute() == FIBTableColumn.Parameters.resizable
 					|| dataModification.getAttribute() == FIBTableColumn.Parameters.title) {
-				((FIBTableWidget) controller.viewForComponent((FIBComponent) columnModel.getTable())).updateTable();
+				if (controller.viewForComponent((FIBComponent) columnModel.getTable()) != null) {
+					((FIBTableWidget) controller.viewForComponent((FIBComponent) columnModel.getTable())).updateTable();
+				}
 			}
 		}
 	}
