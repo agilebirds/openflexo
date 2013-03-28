@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<city2:City xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:city2="http://www.thalesgroup.com/openflexo/emf/model/city2" name="Lampaul-Plouarzel">
+  <houses xsi:type="city2:Mansion" owner="Sylvain Le Lapin" number="2"/>
+  <houses xsi:type="city2:Appartment" owner="Elisa La Lamproie" label="OuaLou"/>
+  <mayor name="Hector Le Castor"/>
+</city2:City>
