@@ -50,7 +50,8 @@ public class JavaMethodPathElement extends FunctionPathElement {
 			}
 		}
 		if (getMethodDefinition() == null) {
-			logger.warning("Cannot retrieve method " + methodName + " with " + args.size() + " parameters from " + parent.getType());
+			logger.warning("Cannot retrieve method " + methodName + " with " + args.size() + " parameters from " + parent.getType()
+					+ " args=" + args);
 		} else {
 			setType(getMethodDefinition().getMethod().getGenericReturnType());
 		}
@@ -97,16 +98,38 @@ public class JavaMethodPathElement extends FunctionPathElement {
 	protected static MethodDefinition retrieveMethod(Type parentType, String methodName, List<DataBinding<?>> args) {
 		Vector<Method> possiblyMatchingMethods = new Vector<Method>();
 		Class<?> typeClass = TypeUtils.getBaseClass(parentType);
+		if (typeClass == null) {
+			System.out.println("Cannot find typeClass for " + parentType);
+		}
 		Method[] allMethods = typeClass.getMethods();
+		// First attempt: we perform type checking on parameters
 		for (Method method : allMethods) {
 			if (method.getName().equals(methodName) && method.getGenericParameterTypes().length == args.size()) {
-				possiblyMatchingMethods.add(method);
+				boolean lookupFails = false;
+				for (int i = 0; i < args.size(); i++) {
+					DataBinding<?> suppliedArg = args.get(i);
+					Type argType = method.getGenericParameterTypes()[i];
+					if (!TypeUtils.isTypeAssignableFrom(argType, suppliedArg.getDeclaredType())) {
+						lookupFails = true;
+					}
+				}
+				if (!lookupFails) {
+					possiblyMatchingMethods.add(method);
+				}
+			}
+		}
+		// Second attempt: we don't check the types of parameters
+		if (possiblyMatchingMethods.size() == 0) {
+			for (Method method : allMethods) {
+				if (method.getName().equals(methodName) && method.getGenericParameterTypes().length == args.size()) {
+					possiblyMatchingMethods.add(method);
+				}
 			}
 		}
 		if (possiblyMatchingMethods.size() > 1) {
 			logger.warning("Please implement disambiguity here");
 			for (DataBinding<?> arg : args) {
-				System.out.println("arg of " + arg.getDeclaredType() + " / " + arg.getAnalyzedType());
+				System.out.println("arg " + arg + " of " + arg.getDeclaredType() + " / " + arg.getAnalyzedType());
 			}
 			// Return the first one
 			// TODO: try to find the best one
@@ -133,7 +156,7 @@ public class JavaMethodPathElement extends FunctionPathElement {
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException,
 			InvocationTargetTransformException {
 
-		//System.out.println("evaluate " + getMethodDefinition().getSignature() + " for " + target);
+		// System.out.println("evaluate " + getMethodDefinition().getSignature() + " for " + target);
 
 		Object[] args = new Object[getFunction().getArguments().size()];
 		int i = 0;
