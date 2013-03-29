@@ -49,7 +49,6 @@ import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.LocalizedDictionary;
-import org.openflexo.foundation.viewpoint.binding.EditionPatternInstanceBindingVariable;
 import org.openflexo.foundation.viewpoint.inspector.CheckboxInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.ClassInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.DataPropertyInspectorEntry;
@@ -180,7 +179,7 @@ public class FIBInspector extends FIBPanel {
 	 * @param object
 	 * @return a boolean indicating if a new tab was created
 	 */
-	protected boolean updateEditionPatternReferences(FlexoProjectObject object) {
+	protected boolean updateFlexoProjectObjectInspector(FlexoProjectObject object) {
 
 		boolean returned = false;
 
@@ -205,7 +204,7 @@ public class FIBInspector extends FIBPanel {
 				tab.setVisible(DataBinding.makeTrueBinding());
 				currentEditionPatterns.add(epi.getEditionPattern());
 			}
-			updateBindingModel();
+			// updateBindingModel();
 		}
 
 		/*for (FIBComponent c : getTabPanel().getSubComponents()) {
@@ -239,14 +238,48 @@ public class FIBInspector extends FIBPanel {
 		return returned;
 	}
 
-	@Override
+	/**
+	 * This method looks after object's EditionPattern references to know if we need to structurally change inspector by adding or removing
+	 * tabs, which all correspond to one and only one EditionPattern
+	 * 
+	 * Note: only object providing support as primary role are handled here
+	 * 
+	 * @param object
+	 * @return a boolean indicating if a new tab was created
+	 */
+	protected boolean updateEditionPatternInstanceInspector(EditionPatternInstance object) {
+
+		boolean returned = false;
+
+		currentEditionPatterns.clear();
+
+		EditionPattern editionPatternsToDisplay;
+
+		for (EditionPattern ep : tabsForEP.keySet()) {
+			if (object.getEditionPattern() == ep) {
+				tabsForEP.get(ep).setVisible(DataBinding.makeFalseBinding());
+			}
+		}
+
+		editionPatternsToDisplay = object.getEditionPattern();
+		if (ensureCreationOfTabForEP(object.getEditionPattern())) {
+			returned = true;
+		}
+		FIBTab tab = tabsForEP.get(object.getEditionPattern());
+		tab.setVisible(DataBinding.makeTrueBinding());
+		currentEditionPatterns.add(object.getEditionPattern());
+
+		return returned;
+	}
+
+	/*@Override
 	protected void createBindingModel() {
 		super.createBindingModel();
 		for (int i = 0; i < currentEditionPatterns.size(); i++) {
 			EditionPattern ep = currentEditionPatterns.get(i);
 			_bindingModel.addToBindingVariables(new EditionPatternInstanceBindingVariable(ep, i));
 		}
-	}
+	}*/
 
 	private FIBWidget makeWidget(final InspectorEntry entry, FIBTab newTab) {
 		if (entry instanceof TextFieldInspectorEntry) {

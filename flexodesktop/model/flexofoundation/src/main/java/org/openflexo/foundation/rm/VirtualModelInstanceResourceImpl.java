@@ -78,7 +78,8 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 				return null;
 			}
 			if (StringUtils.isNotEmpty(vmiInfo.virtualModelURI)) {
-				if (viewResource != null && viewResource.getViewPoint() != null) {
+				if (viewResource != null && viewResource.getViewPoint() != null
+						&& viewResource.getViewPoint().getVirtualModelNamed(vmiInfo.virtualModelURI) != null) {
 					returned.setVirtualModelResource(viewResource.getViewPoint().getVirtualModelNamed(vmiInfo.virtualModelURI)
 							.getResource());
 				}
