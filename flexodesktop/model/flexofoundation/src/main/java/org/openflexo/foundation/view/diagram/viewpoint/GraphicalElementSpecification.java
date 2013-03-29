@@ -103,6 +103,8 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 
 	public void setReadOnly(boolean readOnly) {
 		this.readOnly = readOnly;
+		getValue().setBindingDefinitionType(getReadOnly() ? BindingDefinitionType.GET : BindingDefinitionType.GET_SET);
+		notifiedBindingChanged(getValue());
 	}
 
 	public boolean getMandatory() {
