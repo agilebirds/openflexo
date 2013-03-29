@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.logging.Logger;
@@ -28,6 +29,9 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.logging.FlexoLogger;
 
 /**
@@ -39,6 +43,8 @@ import org.openflexo.logging.FlexoLogger;
 public class FetchRequestCondition extends EditionPatternObject {
 
 	protected static final Logger logger = FlexoLogger.getLogger(FetchRequestCondition.class.getPackage().getName());
+
+	public static final String SELECTED = "selected";
 
 	private FetchRequest fetchRequest;
 	private DataBinding<Boolean> condition;
@@ -78,10 +84,10 @@ public class FetchRequestCondition extends EditionPatternObject {
 		} else {
 			returned = new BindingModel();
 		}
-		returned.addToBindingVariables(new BindingVariable("selected", getFetchRequest().getFetchedType()) {
+		returned.addToBindingVariables(new BindingVariable(SELECTED, getFetchRequest().getFetchedType()) {
 			@Override
 			public Object getBindingValue(Object target, BindingEvaluationContext context) {
-				logger.info("What should i return for " + "selected" + " ? target " + target + " context=" + context);
+				logger.info("What should i return for " + SELECTED + " ? target " + target + " context=" + context);
 				return super.getBindingValue(target, context);
 			}
 
@@ -125,4 +131,28 @@ public class FetchRequestCondition extends EditionPatternObject {
 		this.condition = condition;
 	}
 
+	public boolean evaluateCondition(final Object proposedFetchResult, final EditionSchemeAction action) {
+		Boolean returned = null;
+		try {
+			returned = condition.getBindingValue(new BindingEvaluationContext() {
+				@Override
+				public Object getValue(BindingVariable variable) {
+					if (variable.getVariableName().equals(SELECTED)) {
+						return proposedFetchResult;
+					}
+					return action.getValue(variable);
+				}
+			});
+		} catch (TypeMismatchException e) {
+			e.printStackTrace();
+		} catch (NullReferenceException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		if (returned == null) {
+			return false;
+		}
+		return returned;
+	}
 }

@@ -73,18 +73,18 @@
       <AddressedEMFModelSlot idref="5" />
       <FetchRequestIterationAction id="39" iteratorName="city2" conditional="">
         <AddressedSelectEMFObjectIndividual id="40" ontologyClassURI="http://www.thalesgroup.com/openflexo/emf/model/city2/City" conditional="" name="" assignation="">
-          <Condition>(selected.mayor.name = city1.name)</Condition>
+          <Condition id="41" condition="(selected.name = city1.name)" />
           <AddressedEMFModelSlot idref="7" />
         </AddressedSelectEMFObjectIndividual>
         <AddressedEMFModelSlot idref="7" />
-        <MatchEditionPatternInstance id="41" virtualModelInstance="this" creationSchemeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#City.creation" conditional="" assignation="">
-          <MatchingCriteria id="42" patternRoleName="cityInModel1" value="city1" />
-          <MatchingCriteria id="43" patternRoleName="cityInModel2" value="city2" />
-          <CreateEditionPatternInstanceParameter id="44" paramName="cityInModel1" value="city1" />
-          <CreateEditionPatternInstanceParameter id="45" paramName="cityInModel2" value="city2" />
+        <MatchEditionPatternInstance id="42" virtualModelInstance="this" creationSchemeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#City.creation" conditional="" assignation="">
+          <MatchingCriteria id="43" patternRoleName="cityInModel1" value="city1" />
+          <MatchingCriteria id="44" patternRoleName="cityInModel2" value="city2" />
+          <CreateEditionPatternInstanceParameter id="45" paramName="cityInModel1" value="city1" />
+          <CreateEditionPatternInstanceParameter id="46" paramName="cityInModel2" value="city2" />
         </MatchEditionPatternInstance>
       </FetchRequestIterationAction>
     </FetchRequestIterationAction>
   </SynchronizationScheme>
-  <Inspector id="46" inspectorTitle="CityMapping" />
+  <Inspector id="47" inspectorTitle="CityMapping" />
 </VirtualModel>

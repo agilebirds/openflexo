@@ -23,25 +23,25 @@
         <RemoveAction method="data.deleteEntry(selected)" isAvailable="" name="delete" />
         <AddAction method="data.createNewTextArea" isAvailable="" name="add_textarea" />
         <AddAction method="data.createNewInteger" isAvailable="" name="add_integer" />
-        <AddAction method="data.inspector.createNewCheckbox" isAvailable="" name="add_checkbox" />
-        <AddAction method="data.inspector.createNewIndividual" isAvailable="" name="add_individual" />
-        <AddAction method="data.inspector.createNewClass" isAvailable="" name="add_class" />
-        <AddAction method="data.inspector.createNewFlexoObject" isAvailable="" name="add_flexo_object" />
-        <AddAction method="data.inspector.createNewObjectProperty" isAvailable="" name="add_object_property" />
-        <AddAction method="data.inspector.createNewDataProperty" isAvailable="" name="add_data_property" />
-        <AddAction method="data.inspector.createNewProperty" isAvailable="" name="add_property" />
+        <AddAction method="data.createNewCheckbox" isAvailable="" name="add_checkbox" />
+        <AddAction method="data.createNewIndividual" isAvailable="" name="add_individual" />
+        <AddAction method="data.createNewClass" isAvailable="" name="add_class" />
+        <AddAction method="data.createNewFlexoObject" isAvailable="" name="add_flexo_object" />
+        <AddAction method="data.createNewObjectProperty" isAvailable="" name="add_object_property" />
+        <AddAction method="data.createNewDataProperty" isAvailable="" name="add_data_property" />
+        <AddAction method="data.createNewProperty" isAvailable="" name="add_property" />
       </Table>
       <Panel layout="box" boxLayoutAxis="Y_AXIS" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="2" data="" constraints="border(anchor=north;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=east;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" name="InspectorOrderingPanel">
-        <Button action="InspectorTab.data.entryFirst(InspectorPropertyTable.selected)" buttonIcon="controller.arrowTop" buttonType="Trigger" label="" format="" icon="" tooltip="" localize="true" enable="((InspectorPropertyTable.selected != null) &amp; (InspectorPropertyTable.selected.index &gt; 0))" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="InspectorEntryFirst" index="0" data="" constraints="box(alignmentX=0.5;alignmentY=0.5;index=0;location=west)" visible="">
+        <Button action="data.entryFirst(InspectorPropertyTable.selected)" buttonIcon="controller.arrowTop" buttonType="Trigger" label="" format="" icon="" tooltip="" localize="true" enable="((InspectorPropertyTable.selected != null) &amp; (InspectorPropertyTable.selected.index &gt; 0))" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="InspectorEntryFirst" index="0" data="" constraints="box(alignmentX=0.5;alignmentY=0.5;index=0;location=west)" visible="">
           <LocalizedDictionary />
         </Button>
-        <Button action="InspectorTab.data.entryUp(InspectorPropertyTable.selected)" buttonIcon="controller.arrowUp" buttonType="Trigger" label="" format="" icon="" tooltip="" localize="true" enable="((InspectorPropertyTable.selected != null) &amp; (InspectorPropertyTable.selected.index &gt; 0))" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="InspectorEntryUp" index="1" data="" constraints="box(alignmentX=0.5;alignmentY=0.5;index=1;location=north)" visible="">
+        <Button action="data.entryUp(InspectorPropertyTable.selected)" buttonIcon="controller.arrowUp" buttonType="Trigger" label="" format="" icon="" tooltip="" localize="true" enable="((InspectorPropertyTable.selected != null) &amp; (InspectorPropertyTable.selected.index &gt; 0))" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="InspectorEntryUp" index="1" data="" constraints="box(alignmentX=0.5;alignmentY=0.5;index=1;location=north)" visible="">
           <LocalizedDictionary />
         </Button>
-        <Button action="InspectorTab.data.entryDown(InspectorPropertyTable.selected)" buttonIcon="controller.arrowDown" buttonType="Trigger" label="" format="" icon="" tooltip="" localize="true" enable="((InspectorPropertyTable.selected != null) &amp; (InspectorPropertyTable.selected.index &lt; (InspectorTab.data.entries.size - 1)))" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="InspectorEntryDown" index="2" data="" constraints="box(alignmentX=0.5;alignmentY=0.5;index=2;location=center)" visible="">
+        <Button action="data.entryDown(InspectorPropertyTable.selected)" buttonIcon="controller.arrowDown" buttonType="Trigger" label="" format="" icon="" tooltip="" localize="true" enable="((InspectorPropertyTable.selected != null) &amp; (InspectorPropertyTable.selected.index &lt; (data.entries.size - 1)))" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="InspectorEntryDown" index="2" data="" constraints="box(alignmentX=0.5;alignmentY=0.5;index=2;location=center)" visible="">
           <LocalizedDictionary />
         </Button>
-        <Button action="InspectorTab.data.entryLast(InspectorPropertyTable.selected)" buttonIcon="controller.arrowBottom" buttonType="Trigger" label="" format="" icon="" tooltip="" localize="true" enable="((InspectorPropertyTable.selected != null) &amp; (InspectorPropertyTable.selected.index &lt; (InspectorTab.data.entries.size - 1)))" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="InspectorEntryLast" index="3" data="" constraints="box(alignmentX=0.5;alignmentY=0.5;index=3;location=east)" visible="">
+        <Button action="data.entryLast(InspectorPropertyTable.selected)" buttonIcon="controller.arrowBottom" buttonType="Trigger" label="" format="" icon="" tooltip="" localize="true" enable="((InspectorPropertyTable.selected != null) &amp; (InspectorPropertyTable.selected.index &lt; (data.entries.size - 1)))" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="InspectorEntryLast" index="3" data="" constraints="box(alignmentX=0.5;alignmentY=0.5;index=3;location=east)" visible="">
           <LocalizedDictionary />
         </Button>
         <LocalizedDictionary />

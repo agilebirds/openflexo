@@ -95,7 +95,7 @@ public class SelectEMFObjectIndividual extends SelectIndividual<EMFModel, EMFMet
 			}
 		}
 
-		return selectedIndividuals;
+		return filterWithConditions(selectedIndividuals, action);
 	}
 
 	@Override

@@ -30,7 +30,7 @@
       <Dependancy componentName="EditionPatternBrowser" />
       <Dependancy componentName="SynchronizeButton" />
     </Table>
-    <Panel layout="border" border="titled" borderTitle="Panel" darkLevel="0" index="1" data="EditionPatternInstancesTable.selected" dataClassName="org.openflexo.foundation.view.EditionPatternInstance" constraints="split(anchor=center;expandHorizontally=true;expandVertically=true;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;splitIdentifier=bottom;weightX=1.0;weightY=1.0)" visible="" name="EditionPatternInstanceDetails">
+    <Panel layout="border" borderTitle="Panel" darkLevel="0" index="1" data="EditionPatternInstancesTable.selected" dataClassName="org.openflexo.foundation.view.EditionPatternInstance" constraints="split(anchor=center;expandHorizontally=true;expandVertically=true;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;splitIdentifier=bottom;weightX=1.0;weightY=1.0)" visible="" name="EditionPatternInstanceDetails">
       <Table iteratorClassName="org.openflexo.foundation.viewpoint.PatternRole" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" selected="" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" opaque="false" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="1" data="EditionPatternInstanceDetails.data.editionPattern.patternRoles" constraints="border(anchor=center;expandHorizontally=true;expandVertically=true;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;splitIdentifier=bottom;weightX=1.0;weightY=1.0)" visible="">
         <IconColumn data="controller.iconForObject(iterator)" format="" title="icon" columnWidth="20" resizable="false" displayTitle="false" color="" bgColor="" tooltip="" valueChangedAction="" name="icon" />
         <LabelColumn data="iterator.patternRoleName" format="" title="pattern_role" columnWidth="100" resizable="true" displayTitle="true" font="Lucida Grande,0,13" color="" bgColor="" tooltip="" valueChangedAction="" name="label" />
@@ -49,5 +49,17 @@
     <Localized key="virtual_model" lang="English">Virtual Model</Localized>
     <Localized key="virtual_model" lang="French">Virtual Model</Localized>
     <Localized key="virtual_model" lang="Dutch">virtual_model</Localized>
+    <Localized key="synchronize" lang="English">Synchronize...</Localized>
+    <Localized key="synchronize" lang="French">Synchroniser...</Localized>
+    <Localized key="synchronize" lang="Dutch">Synchronize...</Localized>
+    <Localized key="id" lang="English">Id</Localized>
+    <Localized key="id" lang="French">Id</Localized>
+    <Localized key="id" lang="Dutch">Id</Localized>
+    <Localized key="pattern_role" lang="English">Pattern Role</Localized>
+    <Localized key="pattern_role" lang="French">Pattern Role</Localized>
+    <Localized key="pattern_role" lang="Dutch">Pattern Role</Localized>
+    <Localized key="actor" lang="English">Actpr</Localized>
+    <Localized key="actor" lang="French">Acteur</Localized>
+    <Localized key="actor" lang="Dutch">actor</Localized>
   </LocalizedDictionary>
 </Panel>

@@ -20,6 +20,7 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -28,6 +29,7 @@ import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.view.action.EditionSchemeAction;
 
 /**
  * Abstract class representing a fetch request, which is a primitive allowing to browse in the model while configuring requests
@@ -90,6 +92,30 @@ public abstract class FetchRequest<M extends FlexoModel<M, MM>, MM extends Flexo
 		removeFromConditions(aCondition);
 	}
 
+	public List<T> filterWithConditions(List<T> fetchResult, EditionSchemeAction action) {
+		if (getConditions().size() == 0) {
+			return fetchResult;
+		} else {
+			System.out.println("Filtering with " + getConditions() + " fetchResult=" + fetchResult);
+			List<T> returned = new ArrayList<T>();
+			for (T proposedFetchResult : fetchResult) {
+				boolean takeIt = true;
+				for (FetchRequestCondition condition : getConditions()) {
+					if (!condition.evaluateCondition(proposedFetchResult, action)) {
+						takeIt = false;
+						break;
+					}
+				}
+				if (takeIt) {
+					returned.add(proposedFetchResult);
+					System.out.println("I take " + proposedFetchResult);
+				} else {
+					System.out.println("I dismiss " + proposedFetchResult);
+				}
+			}
+			return returned;
+		}
+	}
 	/*@Override
 	public BindingFactory getBindingFactory() {
 		System.out.println("On me demande la binding factory et je reponds " + super.getBindingFactory());
