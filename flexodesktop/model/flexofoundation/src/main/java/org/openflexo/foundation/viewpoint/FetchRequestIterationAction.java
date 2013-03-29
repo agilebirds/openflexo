@@ -62,6 +62,7 @@ public class FetchRequestIterationAction<M extends FlexoModel<M, MM>, MM extends
 	}
 
 	public void setFetchRequest(FetchRequest<?, ?, ?> fetchRequest) {
+		fetchRequest.setActionContainer(this);
 		this.fetchRequest = fetchRequest;
 		// Big hack to prevent XMLCoDe to also append FetchRequest to the list of embedded actions
 		// Should be removed either by the fixing of XMLCoDe or by the switch to PAMELA

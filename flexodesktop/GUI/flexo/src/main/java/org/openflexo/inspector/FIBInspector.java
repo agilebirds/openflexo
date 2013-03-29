@@ -85,7 +85,8 @@ public class FIBInspector extends FIBPanel {
 	private FIBInspector superInspector;
 
 	private Vector<EditionPattern> currentEditionPatterns = new Vector<EditionPattern>();
-	private Hashtable<EditionPattern, FIBTab> tabsForEP = new Hashtable<EditionPattern, FIBTab>();
+	private Hashtable<EditionPattern, FIBTab> tabsForEPIReference = new Hashtable<EditionPattern, FIBTab>();
+	private Hashtable<EditionPattern, FIBTab> tabsForEPI = new Hashtable<EditionPattern, FIBTab>();
 
 	public FIBInspector getSuperInspector() {
 		return superInspector;
@@ -158,12 +159,26 @@ public class FIBInspector extends FIBPanel {
 		return "Error ???";
 	}
 
-	private boolean ensureCreationOfTabForEP(EditionPattern ep) {
-		FIBTab returned = tabsForEP.get(ep);
+	private boolean ensureCreationOfTabForEPIReference(EditionPattern ep) {
+		FIBTab returned = tabsForEPIReference.get(ep);
 		if (returned == null) {
 			// System.out.println("Creating FIBTab for " + ep);
-			returned = makeFIBTab(ep);
-			tabsForEP.put(ep, returned);
+			String epIdentifier = getEditionPatternIdentifierForEPIReference(ep);
+			returned = makeFIBTab(ep, epIdentifier);
+			tabsForEPIReference.put(ep, returned);
+			getTabPanel().addToSubComponents(returned, null, 0);
+			return true;
+		}
+		return false;
+	}
+
+	private boolean ensureCreationOfTabForEPI(EditionPattern ep) {
+		FIBTab returned = tabsForEPI.get(ep);
+		if (returned == null) {
+			// System.out.println("Creating FIBTab for " + ep);
+			String epIdentifier = getEditionPatternIdentifierForEPI(ep);
+			returned = makeFIBTab(ep, epIdentifier);
+			tabsForEPI.put(ep, returned);
 			getTabPanel().addToSubComponents(returned, null, 0);
 			return true;
 		}
@@ -187,9 +202,9 @@ public class FIBInspector extends FIBPanel {
 
 		Set<EditionPattern> editionPatternsToDisplay = new HashSet<EditionPattern>();
 
-		for (EditionPattern ep : tabsForEP.keySet()) {
+		for (EditionPattern ep : tabsForEPIReference.keySet()) {
 			if (object.getEditionPatternInstance(ep) == null) {
-				tabsForEP.get(ep).setVisible(DataBinding.makeFalseBinding());
+				tabsForEPIReference.get(ep).setVisible(DataBinding.makeFalseBinding());
 			}
 		}
 
@@ -197,10 +212,10 @@ public class FIBInspector extends FIBPanel {
 			for (FlexoModelObjectReference<EditionPatternInstance> ref : object.getEditionPatternReferences()) {
 				EditionPatternInstance epi = ref.getObject();
 				editionPatternsToDisplay.add(epi.getEditionPattern());
-				if (ensureCreationOfTabForEP(epi.getEditionPattern())) {
+				if (ensureCreationOfTabForEPIReference(epi.getEditionPattern())) {
 					returned = true;
 				}
-				FIBTab tab = tabsForEP.get(epi.getEditionPattern());
+				FIBTab tab = tabsForEPIReference.get(epi.getEditionPattern());
 				tab.setVisible(DataBinding.makeTrueBinding());
 				currentEditionPatterns.add(epi.getEditionPattern());
 			}
@@ -255,17 +270,17 @@ public class FIBInspector extends FIBPanel {
 
 		EditionPattern editionPatternsToDisplay;
 
-		for (EditionPattern ep : tabsForEP.keySet()) {
+		for (EditionPattern ep : tabsForEPI.keySet()) {
 			if (object.getEditionPattern() == ep) {
-				tabsForEP.get(ep).setVisible(DataBinding.makeFalseBinding());
+				tabsForEPI.get(ep).setVisible(DataBinding.makeFalseBinding());
 			}
 		}
 
 		editionPatternsToDisplay = object.getEditionPattern();
-		if (ensureCreationOfTabForEP(object.getEditionPattern())) {
+		if (ensureCreationOfTabForEPI(object.getEditionPattern())) {
 			returned = true;
 		}
-		FIBTab tab = tabsForEP.get(object.getEditionPattern());
+		FIBTab tab = tabsForEPI.get(object.getEditionPattern());
 		tab.setVisible(DataBinding.makeTrueBinding());
 		currentEditionPatterns.add(object.getEditionPattern());
 
@@ -489,9 +504,8 @@ public class FIBInspector extends FIBPanel {
 
 	}
 
-	private FIBTab makeFIBTab(EditionPattern ep) {
+	private FIBTab makeFIBTab(EditionPattern ep, String epIdentifier) {
 		// logger.info("makeFIBTab " + refIndex + " for " + ep);
-		String epIdentifier = getEditionPatternIdentifier(ep);
 		FIBTab newTab = createFIBTabForEditionPattern(ep);
 		appendInspectorEntries(ep, epIdentifier, newTab);
 		newTab.finalizeDeserialization();
@@ -519,7 +533,7 @@ public class FIBInspector extends FIBPanel {
 	}
 
 	protected FIBTab createFIBTabForEditionPattern(EditionPattern ep) {
-		String epIdentifier = getEditionPatternIdentifier(ep);
+		String epIdentifier = getEditionPatternIdentifierForEPIReference(ep);
 		FIBTab newTab = new FIBTab();
 		newTab.setTitle(ep.getInspector().getInspectorTitle());
 		newTab.setLayout(Layout.twocols);
@@ -530,9 +544,13 @@ public class FIBInspector extends FIBPanel {
 		return newTab;
 	}
 
-	protected String getEditionPatternIdentifier(EditionPattern ep) {
+	protected String getEditionPatternIdentifierForEPIReference(EditionPattern ep) {
 		return "data.getEditionPatternInstance(\"" + ep.getName() + "\")";
 		// return ep.getViewPoint().getName() + "_" + ep.getName() + "_" + refIndex;
+	}
+
+	protected String getEditionPatternIdentifierForEPI(EditionPattern ep) {
+		return "data";
 	}
 
 }

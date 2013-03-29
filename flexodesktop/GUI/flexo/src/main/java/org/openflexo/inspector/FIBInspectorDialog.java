@@ -31,6 +31,7 @@ import javax.swing.WindowConstants;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.diagram.model.DiagramConnector;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.inspector.ModuleInspectorController.InspectedObjectChanged;
@@ -100,7 +101,10 @@ public class FIBInspectorDialog extends JDialog implements Observer {
 			setTitle(INSPECTOR_TITLE);
 		} else*/if (notification instanceof InspectedObjectChanged) {
 			Object object = ((InspectedObjectChanged) notification).getInspectedObject();
-			if (object instanceof FlexoModelObject && (object instanceof DiagramShape || object instanceof DiagramConnector)
+			if (object instanceof EditionPatternInstance) {
+				String newTitle = ((EditionPatternInstance) object).getEditionPattern().getInspector().getInspectorTitle();
+				setTitle(newTitle);
+			} else if (object instanceof FlexoModelObject && (object instanceof DiagramShape || object instanceof DiagramConnector)
 					&& ((FlexoModelObject) object).getEditionPatternReferences().size() > 0) {
 				String newTitle = ((FlexoModelObject) object).getEditionPatternReferences().get(0).getObject().getEditionPattern()
 						.getInspector().getInspectorTitle();

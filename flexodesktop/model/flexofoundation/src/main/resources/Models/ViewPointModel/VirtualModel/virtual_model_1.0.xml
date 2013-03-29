@@ -623,7 +623,11 @@
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.FetchRequest" abstract="yes" contexts="Addressed">
-		<property name="conditions" xmlTag="Condition" type="vector" />
+		<property name="conditions" type="vector" contains="org.openflexo.foundation.viewpoint.FetchRequestCondition"/>
+	</entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.FetchRequestCondition" xmlTag="Condition">
+		<property name="condition" xmlTag="condition" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.SelectIndividual" abstract="yes">

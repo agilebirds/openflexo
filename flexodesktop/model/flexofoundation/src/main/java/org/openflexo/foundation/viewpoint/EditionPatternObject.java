@@ -38,6 +38,9 @@ public abstract class EditionPatternObject extends NamedViewPointObject {
 		if (getVirtualModel() != null) {
 			return getVirtualModel().getViewPoint();
 		}
+		if (getEditionPattern() != null && getEditionPattern() != this) {
+			return getEditionPattern().getViewPoint();
+		}
 		return null;
 	}
 

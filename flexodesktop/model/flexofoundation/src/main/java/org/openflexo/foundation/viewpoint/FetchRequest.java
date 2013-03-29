@@ -20,22 +20,14 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
-import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingEvaluationContext;
-import org.openflexo.antar.binding.BindingFactory;
-import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.BindingVariable;
-import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
-import org.openflexo.foundation.validation.Validable;
 
 /**
  * Abstract class representing a fetch request, which is a primitive allowing to browse in the model while configuring requests
@@ -47,23 +39,16 @@ public abstract class FetchRequest<M extends FlexoModel<M, MM>, MM extends Flexo
 
 	private static final Logger logger = Logger.getLogger(FetchRequest.class.getPackage().getName());
 
-	private Vector<DataBinding<Boolean>> conditions;
-
-	private ConditionOwner conditionOwner;
+	private Vector<FetchRequestCondition> conditions;
 
 	public FetchRequest(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
-		conditions = new Vector<DataBinding<Boolean>>();
-		conditionOwner = new ConditionOwner(this);
+		conditions = new Vector<FetchRequestCondition>();
 	}
 
 	@Override
 	public EditionActionType getEditionActionType() {
 		return EditionActionType.FetchRequest;
-	}
-
-	public ConditionOwner getConditionOwner() {
-		return conditionOwner;
 	}
 
 	public abstract Type getFetchedType();
@@ -73,89 +58,45 @@ public abstract class FetchRequest<M extends FlexoModel<M, MM>, MM extends Flexo
 		return new ParameterizedTypeImpl(List.class, getFetchedType());
 	}
 
-	public Vector<DataBinding<Boolean>> getConditions() {
+	public Vector<FetchRequestCondition> getConditions() {
 		return conditions;
 	}
 
-	public void setConditions(Vector<DataBinding<Boolean>> conditions) {
+	public void setConditions(Vector<FetchRequestCondition> conditions) {
 		this.conditions = conditions;
 	}
 
-	public void addToConditions(DataBinding<Boolean> condition) {
-		conditions.add(new DataBinding<Boolean>(condition.toString(), conditionOwner, Boolean.class, BindingDefinitionType.GET));
+	public void addToConditions(FetchRequestCondition condition) {
+		condition.setFetchRequest(this);
+		conditions.add(condition);
+		setChanged();
+		notifyObservers(new DataModification("conditions", null, condition));
 	}
 
-	public void removeFromConditions(DataBinding<Boolean> condition) {
+	public void removeFromConditions(FetchRequestCondition condition) {
+		condition.setFetchRequest(null);
 		conditions.remove(condition);
+		setChanged();
+		notifyObservers(new DataModification("conditions", condition, null));
 	}
 
-	public DataBinding<Boolean> createCondition() {
-		DataBinding<Boolean> newCondition = new DataBinding<Boolean>(conditionOwner, Boolean.class, BindingDefinitionType.GET);
+	public FetchRequestCondition createCondition() {
+		FetchRequestCondition newCondition = new FetchRequestCondition(null);
 		addToConditions(newCondition);
 		return newCondition;
 	}
 
-	public void deleteCondition(DataBinding<Boolean> aCondition) {
+	public void deleteCondition(FetchRequestCondition aCondition) {
 		removeFromConditions(aCondition);
 	}
 
-	@Override
-	protected BindingModel buildInferedBindingModel() {
-		BindingModel returned = super.buildInferedBindingModel();
-		returned.addToBindingVariables(new BindingVariable("selected", getFetchedType()) {
-			@Override
-			public Object getBindingValue(Object target, BindingEvaluationContext context) {
-				logger.info("What should i return for " + "selected" + " ? target " + target + " context=" + context);
-				return super.getBindingValue(target, context);
-			}
-
-			@Override
-			public Type getType() {
-				return getFetchedType();
-			}
-		});
-		return returned;
-	}
-
-	public static class ConditionOwner extends EditionSchemeObject implements Bindable {
-
-		private FetchRequest<?, ?, ?> fetchRequest;
-
-		public ConditionOwner(FetchRequest<?, ?, ?> fetchRequest) {
-			super(null);
-			this.fetchRequest = fetchRequest;
-		}
-
-		@Override
-		public Collection<? extends Validable> getEmbeddedValidableObjects() {
-			return null;
-		}
-
-		@Override
-		public BindingModel getBindingModel() {
-			return fetchRequest.getInferedBindingModel();
-		}
-
-		@Override
-		public EditionScheme getEditionScheme() {
-			return fetchRequest.getEditionScheme();
-		}
-
-		@Override
-		public EditionPattern getEditionPattern() {
-			return fetchRequest.getEditionPattern();
-		}
-
-		@Override
-		public String getURI() {
-			return null;
-		}
-
-		@Override
-		public BindingFactory getBindingFactory() {
-			return fetchRequest.getBindingFactory();
-		}
-
-	}
+	/*@Override
+	public BindingFactory getBindingFactory() {
+		System.out.println("On me demande la binding factory et je reponds " + super.getBindingFactory());
+		System.out.println("VP= " + getViewPoint());
+		System.out.println("VM= " + getVirtualModel());
+		System.out.println("EP= " + getEditionPattern());
+		return super.getBindingFactory();
+	}*/
 
 }

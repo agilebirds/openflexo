@@ -53,6 +53,11 @@ public class SelectEMFObjectIndividual extends SelectIndividual<EMFModel, EMFMet
 
 	@Override
 	public List<EMFObjectIndividual> performAction(EditionSchemeAction action) {
+		if (getModelSlotInstance(action) == null) {
+			logger.warning("Could not access model slot instance. Abort.");
+			return null;
+		}
+
 		// System.out.println("Selecting EMFObjectIndividuals in " + getModelSlotInstance(action).getModel() + " with type=" + getType());
 		List<EMFObjectIndividual> selectedIndividuals = new ArrayList<EMFObjectIndividual>(0);
 		EMFModel emfModel = getModelSlotInstance(action).getModel();
