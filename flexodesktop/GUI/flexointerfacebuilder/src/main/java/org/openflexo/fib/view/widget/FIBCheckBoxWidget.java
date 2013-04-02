@@ -85,9 +85,9 @@ public class FIBCheckBoxWidget extends FIBWidgetView<FIBCheckBox, JCheckBox, Boo
 
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
-		if (notEquals(isNegate ? !getValue() : getValue(), checkbox.isSelected())) {
+		Boolean value = getValue();
+		if (notEquals(isNegate ? value == null || !value : value != null && value, checkbox.isSelected())) {
 			widgetUpdating = true;
-			Boolean value = getValue();
 			if (value != null) {
 				if (isNegate) {
 					value = !value;
@@ -109,8 +109,9 @@ public class FIBCheckBoxWidget extends FIBWidgetView<FIBCheckBox, JCheckBox, Boo
 			return false;
 		}
 
-		if (notEquals(isNegate ? !getValue() : getValue(), checkbox.isSelected())) {
-			setValue(new Boolean(isNegate ? !checkbox.isSelected() : checkbox.isSelected()));
+		Boolean value = getValue();
+		if (notEquals(isNegate ? value == null || !value : value != null && value, checkbox.isSelected())) {
+			setValue(isNegate ? !checkbox.isSelected() : checkbox.isSelected());
 			return true;
 		}
 		return false;

@@ -141,7 +141,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	private DataBinding visible;
 
 	private Font font;
-	private boolean opaque = false;
+	private Boolean opaque;
 	private Color backgroundColor;
 	private Color foregroundColor;
 
@@ -891,11 +891,11 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		}
 	}
 
-	public boolean getOpaque() {
+	public Boolean getOpaque() {
 		return opaque;
 	}
 
-	public void setOpaque(boolean opaque) {
+	public void setOpaque(Boolean opaque) {
 		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.opaque, opaque);
 		if (notification != null) {
 			this.opaque = opaque;

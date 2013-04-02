@@ -341,7 +341,9 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	}
 
 	protected void updateOpacity() {
-		getDynamicJComponent().setOpaque(getComponent().getOpaque());
+		if (getComponent().getOpaque() != null) {
+			getDynamicJComponent().setOpaque(getComponent().getOpaque());
+		}
 	}
 
 	protected void updatePreferredSize() {

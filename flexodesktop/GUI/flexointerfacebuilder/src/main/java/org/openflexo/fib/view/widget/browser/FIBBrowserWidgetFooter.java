@@ -135,6 +135,7 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 					}
 				}
 				if (listeners.size() == 1) {
+					listeners.get(0).setSelectedObject(_widget.getSelectedObject());
 					listeners.get(0).actionPerformed(e);
 				} else if (listeners.size() > 1) {
 					JPopupMenu popupMenu = new JPopupMenu();
