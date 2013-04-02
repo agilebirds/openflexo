@@ -413,9 +413,13 @@
 		<property name="assignation" xmlTag="assignation" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.DeclarePatternRole"
-		xmlTag="DeclarePatternRole">
+	<entity name="org.openflexo.foundation.viewpoint.DeclarePatternRole" xmlTag="DeclarePatternRole">
 		<property name="object" xmlTag="object" attribute="YES" />
+	</entity>
+
+	<entity name="org.openflexo.foundation.viewpoint.DeclareVariable" xmlTag="DeclareVariable">
+		<property name="variableName" xmlTag="variableName" attribute="YES" />
+		<property name="value" xmlTag="value" attribute="YES" />
 	</entity>
 
 	<entity

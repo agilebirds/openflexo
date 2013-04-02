@@ -100,6 +100,7 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 		super(actionType, focusedObject, globalSelection, editor);
 
 		builtInActions = new ArrayList<Class<? extends EditionAction>>();
+		builtInActions.add(org.openflexo.foundation.viewpoint.DeclareVariable.class);
 		builtInActions.add(org.openflexo.foundation.viewpoint.DeclarePatternRole.class);
 		builtInActions.add(org.openflexo.foundation.viewpoint.AddEditionPatternInstance.class);
 		builtInActions.add(org.openflexo.foundation.viewpoint.MatchEditionPatternInstance.class);
@@ -215,7 +216,9 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 				logger.warning("Unexpected " + builtInActionClass);
 				return null;
 			}
-			if (org.openflexo.foundation.viewpoint.DeclarePatternRole.class.isAssignableFrom(builtInActionClass)) {
+			if (org.openflexo.foundation.viewpoint.DeclareVariable.class.isAssignableFrom(builtInActionClass)) {
+				return new org.openflexo.foundation.viewpoint.DeclareVariable(null);
+			} else if (org.openflexo.foundation.viewpoint.DeclarePatternRole.class.isAssignableFrom(builtInActionClass)) {
 				return new org.openflexo.foundation.viewpoint.DeclarePatternRole(null);
 			} else if (AddEditionPatternInstance.class.isAssignableFrom(builtInActionClass)) {
 				return new AddEditionPatternInstance(null);
