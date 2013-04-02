@@ -410,6 +410,7 @@
 
 	<entity name="org.openflexo.foundation.viewpoint.AssignableAction" abstract="yes">
 		<!--  <property name="patternRoleName" xmlTag="patternRole" attribute="YES" /> -->
+		<property name="variableName" xmlTag="variableName" attribute="YES" />
 		<property name="assignation" xmlTag="assignation" attribute="YES" />
 	</entity>
 
@@ -417,8 +418,7 @@
 		<property name="object" xmlTag="object" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.DeclareVariable" xmlTag="DeclareVariable">
-		<property name="variableName" xmlTag="variableName" attribute="YES" />
+	<entity name="org.openflexo.foundation.viewpoint.AssignationAction" xmlTag="AssignationAction">
 		<property name="value" xmlTag="value" attribute="YES" />
 	</entity>
 

@@ -78,6 +78,15 @@ public class ActionSchemeAction extends EditionSchemeAction<ActionSchemeAction, 
 		if (getFocusedObject() instanceof DiagramElement<?>) {
 			return ((DiagramElement<?>) getFocusedObject()).getDiagram();
 		}
+		if (getEditionPatternInstance() instanceof VirtualModelInstance) {
+			return (VirtualModelInstance) getEditionPatternInstance();
+		}
+		if (getEditionPatternInstance() != null) {
+			return getEditionPatternInstance().getVirtualModelInstance();
+		}
+		/*if (getFocusedObject() instanceof DiagramElement<?>) {
+			return ((DiagramElement<?>) getFocusedObject()).getDiagram();
+		}*/
 		return null;
 	}
 

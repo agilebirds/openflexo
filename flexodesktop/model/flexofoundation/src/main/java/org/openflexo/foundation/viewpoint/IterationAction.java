@@ -141,6 +141,7 @@ public class IterationAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 		List<?> items = evaluateIteration(action);
 		if (items != null) {
 			for (Object item : items) {
+				System.out.println("> working with " + getIteratorName() + "=" + item);
 				action.declareVariable(getIteratorName(), item);
 				performBatchOfActions(getActions(), action);
 			}

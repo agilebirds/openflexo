@@ -149,7 +149,7 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<?
 	public ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass) {
 		if (org.openflexo.foundation.viewpoint.DeclarePatternRole.class.isAssignableFrom(editionActionClass)) {
 			return VPMIconLibrary.DECLARE_PATTERN_ROLE_ICON;
-		} else if (org.openflexo.foundation.viewpoint.DeclareVariable.class.isAssignableFrom(editionActionClass)) {
+		} else if (org.openflexo.foundation.viewpoint.AssignationAction.class.isAssignableFrom(editionActionClass)) {
 			return VPMIconLibrary.DECLARE_PATTERN_ROLE_ICON;
 		} else if (AddEditionPatternInstance.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(VEIconLibrary.EDITION_PATTERN_INSTANCE_ICON, IconLibrary.DUPLICATE);

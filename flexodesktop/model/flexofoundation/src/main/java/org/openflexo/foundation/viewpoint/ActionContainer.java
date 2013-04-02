@@ -89,4 +89,5 @@ public interface ActionContainer {
 
 	public EditionAction<?, ?, ?> deleteAction(EditionAction<?, ?, ?> anAction);
 
+	public void variableAdded(AssignableAction action);
 }

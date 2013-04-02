@@ -63,7 +63,7 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 		CloneConnector,
 		CloneIndividual,
 		DeclarePatternRole,
-		DeclareVariable,
+		Assignation,
 		DeleteAction,
 		GraphicalAction,
 		GoToObject,
@@ -133,7 +133,12 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 	}
 
 	public ModelSlotInstance<M, MM> getModelSlotInstance(EditionSchemeAction action) {
-		return action.getVirtualModelInstance().getModelSlotInstance(getModelSlot());
+		if (action.getVirtualModelInstance() != null) {
+			return action.getVirtualModelInstance().getModelSlotInstance(getModelSlot());
+		} else {
+			logger.severe("Could not access virtual model instance for action " + action);
+			return null;
+		}
 	}
 
 	public boolean evaluateCondition(EditionSchemeAction action) {

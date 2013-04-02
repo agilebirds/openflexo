@@ -156,8 +156,4 @@ public class AddDiagram extends DiagramAction<Diagram> {
 		return null;
 	}
 
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, Diagram initialContext) {
-	}
-
 }

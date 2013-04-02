@@ -117,10 +117,4 @@ public class DeclarePatternRole<M extends FlexoModel<M, MM>, MM extends FlexoMet
 		return (FlexoObject) getDeclaredObject(action);
 	}
 
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, FlexoObject initialContext) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

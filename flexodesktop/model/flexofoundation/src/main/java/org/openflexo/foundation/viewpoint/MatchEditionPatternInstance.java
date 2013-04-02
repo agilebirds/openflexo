@@ -292,12 +292,6 @@ public class MatchEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends
 		return matchingEditionPatternInstance;
 	}
 
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, EditionPatternInstance initialContext) {
-		// TODO Auto-generated method stub
-
-	}
-
 	public static class MatchingCriteria extends EditionSchemeObject implements Bindable {
 
 		@SuppressWarnings("unused")

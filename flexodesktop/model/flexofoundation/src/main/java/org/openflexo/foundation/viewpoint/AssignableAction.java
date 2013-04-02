@@ -23,9 +23,10 @@ import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -39,6 +40,8 @@ public abstract class AssignableAction<M extends FlexoModel<M, MM>, MM extends F
 	private static final Logger logger = Logger.getLogger(AssignableAction.class.getPackage().getName());
 
 	private DataBinding<Object> assignation;
+
+	private String variableName = null;
 
 	public AssignableAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
@@ -55,10 +58,14 @@ public abstract class AssignableAction<M extends FlexoModel<M, MM>, MM extends F
 
 	public DataBinding<Object> getAssignation() {
 		if (assignation == null) {
-			assignation = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.GET_SET);
-			assignation.setDeclaredType(getAssignableType());
-			assignation.setBindingName("assignation");
-			assignation.setMandatory(isAssignationRequired());
+			if (StringUtils.isNotEmpty(variableName)) {
+				updateVariableAssignation();
+			} else {
+				assignation = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.GET_SET);
+				assignation.setDeclaredType(getAssignableType());
+				assignation.setBindingName("assignation");
+				assignation.setMandatory(isAssignationRequired());
+			}
 		}
 		assignation.setDeclaredType(getAssignableType());
 		return assignation;
@@ -92,15 +99,50 @@ public abstract class AssignableAction<M extends FlexoModel<M, MM>, MM extends F
 				+ (StringUtils.isNotEmpty(getAssignation().toString()) ? " (" + getAssignation().toString() + ")" : "");
 	}
 
-	/*@Deprecated
-	public String _getPatternRoleName() {
-		return getAssignation().toString();
+	public String getVariableName() {
+		return variableName;
 	}
 
-	@Deprecated
-	public void _setPatternRoleName(String patternRole) {
-		getAssignation().setUnparsedBinding(patternRole);
-	}*/
+	public void setVariableName(String variableName) {
+		if (!FlexoObject.areSameValue(variableName, this.variableName)) {
+			this.variableName = variableName;
+			if (StringUtils.isNotEmpty(variableName)) {
+				updateVariableAssignation();
+			}
+			if (getActionContainer() != null) {
+				getActionContainer().variableAdded(this);
+			}
+		}
+	}
+
+	public boolean getIsVariableDeclaration() {
+		return StringUtils.isNotEmpty(getVariableName());
+	}
+
+	public void setIsVariableDeclaration(boolean flag) {
+		if (flag) {
+			if (StringUtils.isEmpty(getVariableName())) {
+				setVariableName("newVariable");
+			}
+		} else {
+			if (StringUtils.isNotEmpty(getVariableName())) {
+				setVariableName(null);
+				getAssignation().reset();
+			}
+		}
+	}
+
+	protected void updateVariableAssignation() {
+		assignation = new DataBinding<Object>(getVariableName(), this, getAssignableType(), BindingDefinitionType.GET_SET);
+	}
+
+	@Override
+	public void finalizePerformAction(org.openflexo.foundation.view.action.EditionSchemeAction action, T initialContext) {
+		/*if (getIsVariableDeclaration()) {
+			System.out.println("Setting variable " + getVariableName() + " with " + initialContext);
+			action.declareVariable(getVariableName(), initialContext);
+		}*/
+	}
 
 	public static class AssignationBindingMustBeValid extends BindingMustBeValid<AssignableAction> {
 		public AssignationBindingMustBeValid() {

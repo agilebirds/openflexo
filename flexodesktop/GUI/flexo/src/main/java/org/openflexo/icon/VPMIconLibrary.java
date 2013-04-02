@@ -59,7 +59,7 @@ import org.openflexo.foundation.viewpoint.ConditionalAction;
 import org.openflexo.foundation.viewpoint.CreationScheme;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.DeclarePatternRole;
-import org.openflexo.foundation.viewpoint.DeclareVariable;
+import org.openflexo.foundation.viewpoint.AssignationAction;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.DeletionScheme;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -250,7 +250,7 @@ public class VPMIconLibrary extends IconLibrary {
 				return IconFactory.getImageIcon(CONNECTOR_ICON, IconLibrary.DUPLICATE);
 			} else if (object instanceof DeclarePatternRole) {
 				return DECLARE_PATTERN_ROLE_ICON;
-			} else if (object instanceof DeclareVariable) {
+			} else if (object instanceof AssignationAction) {
 				return DECLARE_PATTERN_ROLE_ICON;
 			} else if (object instanceof ConditionalAction) {
 				return CONDITIONAL_ACTION_ICON;

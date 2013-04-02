@@ -98,7 +98,4 @@ public class SelectEMFObjectIndividual extends SelectIndividual<EMFModel, EMFMet
 		return filterWithConditions(selectedIndividuals, action);
 	}
 
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, List<EMFObjectIndividual> initialContext) {
-	}
 }

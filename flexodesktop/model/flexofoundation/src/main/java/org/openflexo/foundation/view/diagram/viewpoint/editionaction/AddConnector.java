@@ -234,6 +234,7 @@ public class AddConnector extends AddShemaElementAction<DiagramConnector> {
 
 	@Override
 	public void finalizePerformAction(EditionSchemeAction action, DiagramConnector newConnector) {
+		super.finalizePerformAction(action, newConnector);
 		// Be sure that the newly created shape is updated
 		newConnector.update();
 	}
@@ -350,8 +351,7 @@ public class AddConnector extends AddShemaElementAction<DiagramConnector> {
 			@Override
 			protected void fixAction() {
 				AddConnector action = getObject();
-				action.setFromShape(new DataBinding<DiagramShape>(DiagramEditionScheme.FROM_TARGET + "."
-						+ patternRole.getPatternRoleName()));
+				action.setFromShape(new DataBinding<DiagramShape>(DiagramEditionScheme.FROM_TARGET + "." + patternRole.getPatternRoleName()));
 			}
 		}
 

@@ -254,6 +254,10 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 
 		if (assignedObject != null && action instanceof AssignableAction) {
 			AssignableAction assignableAction = (AssignableAction) action;
+			if (assignableAction.getIsVariableDeclaration()) {
+				System.out.println("Setting variable " + assignableAction.getVariableName() + " with " + assignedObject);
+				declareVariable(assignableAction.getVariableName(), assignedObject);
+			}
 			if (assignableAction.getAssignation().isSet() && assignableAction.getAssignation().isValid()) {
 				try {
 					assignableAction.getAssignation().setBindingValue(assignedObject, this);
@@ -292,6 +296,10 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 	public void setValue(Object value, BindingVariable variable) {
 		if (variable instanceof PatternRoleBindingVariable) {
 			getEditionPatternInstance().setPatternActor(value, ((PatternRoleBindingVariable) variable).getPatternRole());
+			return;
+		}
+		if (variables.get(variable.getVariableName()) != null) {
+			variables.put(variable.getVariableName(), value);
 			return;
 		}
 		logger.warning("Unexpected variable requested in settable context in EditionSchemeAction: " + variable + " of "

@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -624,25 +625,17 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 				_bindingModel.addToBindingVariables(new PatternRoleBindingVariable(role));
 			}
 		}
-		/*for (final EditionAction a : getActions()) {
-			if (a instanceof DeclareVariable) {
-				System.out.println("Je dois rajouter la variable " + ((DeclareVariable) a).getVariableName());
-				_bindingModel.addToBindingVariables(new BindingVariable(((DeclareVariable) a).getVariableName(), ((DeclareVariable) a)
-						.getAssignableType()) {
-					@Override
-					public Object getBindingValue(Object target, BindingEvaluationContext context) {
-						logger.info("What should i return for " + ((DeclareVariable) a).getVariableName() + " ? target " + target
-								+ " context=" + context);
-						return super.getBindingValue(target, context);
-					}
-
+		for (final EditionAction a : getActions()) {
+			if (a instanceof AssignableAction && ((AssignableAction) a).getIsVariableDeclaration()) {
+				_bindingModel.addToBindingVariables(new BindingVariable(((AssignableAction) a).getVariableName(), ((AssignableAction) a)
+						.getAssignableType(), true) {
 					@Override
 					public Type getType() {
-						return ((DeclareVariable) a).getAssignableType();
+						return ((AssignableAction) a).getAssignableType();
 					}
 				});
 			}
-		}*/
+		}
 		notifyBindingModelChanged();
 	}
 
@@ -658,6 +651,11 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		if (this instanceof DiagramEditionScheme) {
 			bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.TOP_LEVEL, DiagramRootPane.class));
 		}
+	}
+
+	@Override
+	public void variableAdded(AssignableAction action) {
+		updateBindingModels();
 	}
 
 	/**

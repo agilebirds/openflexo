@@ -35,21 +35,19 @@ import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 
-public class DeclareVariable<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends AssignableAction<M, MM, FlexoObject> {
+public class AssignationAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends AssignableAction<M, MM, FlexoObject> {
 
-	private static final Logger logger = Logger.getLogger(DeclareVariable.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AssignationAction.class.getPackage().getName());
 
 	private DataBinding<Object> value;
 
-	private String variableName = "variable";
-
-	public DeclareVariable(VirtualModel.VirtualModelBuilder builder) {
+	public AssignationAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 
 	@Override
 	public EditionActionType getEditionActionType() {
-		return EditionActionType.DeclareVariable;
+		return EditionActionType.Assignation;
 	}
 
 	@Override
@@ -102,38 +100,9 @@ public class DeclareVariable<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 	}
 
 	@Override
-	public void finalizePerformAction(EditionSchemeAction action, FlexoObject initialContext) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public String getVariableName() {
-		return variableName;
-	}
-
-	public void setVariableName(String variableName) {
-		this.variableName = variableName;
-		updateAssignation();
-	}
-
-	private DataBinding<Object> assignation;
-
-	@Override
-	public DataBinding<Object> getAssignation() {
-		if (assignation == null) {
-			updateAssignation();
-		}
-		return assignation;
-	}
-
-	private void updateAssignation() {
-		assignation = new DataBinding<Object>(getVariableName(), this, getAssignableType(), BindingDefinitionType.GET_SET);
-	}
-
-	@Override
 	public void notifiedBindingChanged(DataBinding<?> dataBinding) {
 		if (dataBinding == getValue()) {
-			updateAssignation();
+			updateVariableAssignation();
 		}
 		super.notifiedBindingChanged(dataBinding);
 	}
@@ -164,13 +133,13 @@ public class DeclareVariable<M extends FlexoModel<M, MM>, MM extends FlexoMetaMo
 		}*/
 	}
 
-	public static class ObjectBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<DeclareVariable> {
+	public static class ObjectBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AssignationAction> {
 		public ObjectBindingIsRequiredAndMustBeValid() {
-			super("'value'_binding_is_not_valid", DeclareVariable.class);
+			super("'value'_binding_is_not_valid", AssignationAction.class);
 		}
 
 		@Override
-		public DataBinding<Object> getBinding(DeclareVariable object) {
+		public DataBinding<Object> getBinding(AssignationAction object) {
 			return object.getValue();
 		}
 

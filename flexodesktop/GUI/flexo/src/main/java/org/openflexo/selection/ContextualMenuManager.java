@@ -314,6 +314,16 @@ public abstract class ContextualMenuManager {
 				if (epi != null && epi.getEditionPattern() != null && epi.getEditionPattern().hasSynchronizationScheme()) {
 					contextualMenu.putAction(new SynchronizationSchemeActionType(epi.getEditionPattern().getSynchronizationScheme(), epi));
 				}
+				if (epi != null && epi.getEditionPattern() != null && epi.getEditionPattern().hasActionScheme()) {
+					for (ActionScheme as : epi.getEditionPattern().getActionSchemes()) {
+						contextualMenu.putAction(new ActionSchemeActionType(as, epi));
+					}
+				}
+				if (epi != null && epi.getEditionPattern() != null && epi.getEditionPattern().hasNavigationScheme()) {
+					for (NavigationScheme ns : epi.getEditionPattern().getNavigationSchemes()) {
+						contextualMenu.putAction(new NavigationSchemeActionType(ns, epi));
+					}
+				}
 			}
 			_popupMenu = contextualMenu.makePopupMenu(focusedObject);
 		} else {

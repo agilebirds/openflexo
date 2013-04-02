@@ -224,10 +224,6 @@ public class AddObjectPropertyStatement extends AddStatement<ObjectPropertyState
 		return subject.addPropertyStatement(property, object);
 	}
 
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, ObjectPropertyStatement initialContext) {
-	}
-
 	public static class AddObjectPropertyStatementActionMustDefineAnObjectProperty extends
 			ValidationRule<AddObjectPropertyStatementActionMustDefineAnObjectProperty, AddObjectPropertyStatement> {
 		public AddObjectPropertyStatementActionMustDefineAnObjectProperty() {

@@ -222,12 +222,6 @@ public class AddEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends F
 		return null;
 	}
 
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, EditionPatternInstance initialContext) {
-		// TODO Auto-generated method stub
-
-	}
-
 	public static class AddEditionPatternInstanceParameter extends EditionSchemeObject implements Bindable {
 
 		@SuppressWarnings("unused")
