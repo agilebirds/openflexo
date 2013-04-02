@@ -35,6 +35,7 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequestIterationAction;
 import org.openflexo.foundation.viewpoint.IterationAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.SelectEditionPatternInstance;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.VEIconLibrary;
@@ -153,6 +154,8 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<?
 			return VPMIconLibrary.DECLARE_PATTERN_ROLE_ICON;
 		} else if (AddEditionPatternInstance.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(VEIconLibrary.EDITION_PATTERN_INSTANCE_ICON, IconLibrary.DUPLICATE);
+		} else if (SelectEditionPatternInstance.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(VEIconLibrary.EDITION_PATTERN_INSTANCE_ICON, IconLibrary.IMPORT);
 		} else if (DeleteAction.class.isAssignableFrom(editionActionClass)) {
 			return VPMIconLibrary.DELETE_ICON;
 		} else if (ConditionalAction.class.isAssignableFrom(editionActionClass)) {

@@ -54,12 +54,12 @@ import org.openflexo.foundation.view.diagram.viewpoint.editionaction.CloneShape;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.GraphicalAction;
 import org.openflexo.foundation.viewpoint.ActionScheme;
 import org.openflexo.foundation.viewpoint.AddEditionPatternInstance;
+import org.openflexo.foundation.viewpoint.AssignationAction;
 import org.openflexo.foundation.viewpoint.CloningScheme;
 import org.openflexo.foundation.viewpoint.ConditionalAction;
 import org.openflexo.foundation.viewpoint.CreationScheme;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.DeclarePatternRole;
-import org.openflexo.foundation.viewpoint.AssignationAction;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.DeletionScheme;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -77,6 +77,7 @@ import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
+import org.openflexo.foundation.viewpoint.SelectEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.SynchronizationScheme;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
@@ -238,6 +239,8 @@ public class VPMIconLibrary extends IconLibrary {
 				return EXAMPLE_DIAGRAM_ICON;
 			} else if (object instanceof AddEditionPatternInstance) {
 				return IconFactory.getImageIcon(EDITION_PATTERN_ICON, IconLibrary.DUPLICATE);
+			} else if (object instanceof SelectEditionPatternInstance) {
+				return IconFactory.getImageIcon(EDITION_PATTERN_ICON, IconLibrary.IMPORT);
 			} else if (object instanceof MatchEditionPatternInstance) {
 				return IconFactory.getImageIcon(EDITION_PATTERN_ICON, IconLibrary.SYNC);
 			} else if (object instanceof CloneShape) {

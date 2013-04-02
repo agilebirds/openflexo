@@ -450,6 +450,11 @@
 		<property name="diagramName" xmlTag="diagramName" attribute="YES" />
 	</entity>
 
+	<entity name="org.openflexo.foundation.viewpoint.SelectEditionPatternInstance" xmlTag="SelectEditionPatternInstance">
+		<property name="editionPatternTypeURI" xmlTag="editionPatternTypeURI" attribute="YES" />
+	</entity>
+
+
 	<entity name="org.openflexo.foundation.viewpoint.AddEditionPatternInstance" xmlTag="AddEditionPatternInstance">
 		<property name="virtualModelInstance" xmlTag="virtualModelInstance" attribute="YES" />
 		<property name="creationSchemeURI" xmlTag="creationSchemeURI" attribute="YES" />

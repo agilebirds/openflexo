@@ -21,9 +21,9 @@
       <Tab title="behavioural" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="1" data="" constraints="border(index=1;location=center)" visible="" name="BehaviouralTab">
         <SplitPanel index="0" data="" constraints="border(index=0;location=center)" visible="">
           <ColSplit name="ColSplit" weight="0.0">
-            <Leaf name="top" weight="0.5" />
+            <Leaf name="top" weight="0.20000000298023224" />
             <Divider />
-            <Leaf name="bottom" weight="0.5" />
+            <Leaf name="bottom" weight="0.800000011920929" />
           </ColSplit>
           <Panel layout="border" borderTitle="Panel" borderTop="9" borderBottom="15" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="0" data="" constraints="split(index=0;location=north;splitIdentifier=top)" visible="" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED">
             <SplitPanel index="0" data="" constraints="border(index=0;location=center)" visible="">

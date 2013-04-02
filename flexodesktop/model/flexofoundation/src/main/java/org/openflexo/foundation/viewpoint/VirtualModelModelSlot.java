@@ -6,6 +6,8 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
+import org.openflexo.foundation.technologyadapter.DeclareFetchRequest;
+import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
@@ -23,7 +25,9 @@ import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
  */
 @DeclarePatternRoles({ @DeclarePatternRole(EditionPatternPatternRole.class) // EditionPattern
 })
-@DeclareEditionActions({ @DeclareEditionAction(AddEditionPatternInstance.class) // Add EditionPattern
+@DeclareEditionActions({ @DeclareEditionAction(AddEditionPatternInstance.class) // Add EditionPatternInstance
+})
+@DeclareFetchRequests({ @DeclareFetchRequest(SelectEditionPatternInstance.class) // Select EditionPatternInstance
 })
 public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM extends VirtualModel<VM>> extends ModelSlot<VMI, VM> {
 

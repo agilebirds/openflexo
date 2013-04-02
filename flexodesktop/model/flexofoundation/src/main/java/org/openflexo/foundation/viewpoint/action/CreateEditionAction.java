@@ -43,6 +43,7 @@ import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.FetchRequestIterationAction;
 import org.openflexo.foundation.viewpoint.IterationAction;
 import org.openflexo.foundation.viewpoint.MatchEditionPatternInstance;
+import org.openflexo.foundation.viewpoint.SelectEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.localization.FlexoLocalization;
 
@@ -104,6 +105,7 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 		builtInActions.add(org.openflexo.foundation.viewpoint.DeclarePatternRole.class);
 		builtInActions.add(org.openflexo.foundation.viewpoint.AddEditionPatternInstance.class);
 		builtInActions.add(org.openflexo.foundation.viewpoint.MatchEditionPatternInstance.class);
+		builtInActions.add(org.openflexo.foundation.viewpoint.SelectEditionPatternInstance.class);
 		builtInActions.add(DeleteAction.class);
 
 		controlActions = new ArrayList<Class<? extends EditionAction>>();
@@ -224,6 +226,8 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 				return new AddEditionPatternInstance(null);
 			} else if (MatchEditionPatternInstance.class.isAssignableFrom(builtInActionClass)) {
 				return new MatchEditionPatternInstance(null);
+			} else if (SelectEditionPatternInstance.class.isAssignableFrom(builtInActionClass)) {
+				return new SelectEditionPatternInstance(null);
 			} else if (DeleteAction.class.isAssignableFrom(builtInActionClass)) {
 				return new DeleteAction(null);
 			} else {
