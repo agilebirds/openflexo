@@ -79,8 +79,13 @@ public class FetchRequestCondition extends EditionPatternObject {
 	protected BindingModel buildBindingModel() {
 		BindingModel returned;
 		if (getFetchRequest() != null) {
-			returned = new BindingModel(getFetchRequest().getActionContainer() != null ? getFetchRequest().getActionContainer()
-					.getBindingModel() : getFetchRequest().getBindingModel());
+			/*returned = new BindingModel(getFetchRequest().getActionContainer() != null ? getFetchRequest().getActionContainer()
+					.getBindingModel() : getFetchRequest().getBindingModel());*/
+			if (getFetchRequest().getEmbeddingIteration() != null) {
+				returned = new BindingModel(getFetchRequest().getEmbeddingIteration().getBindingModel());
+			} else {
+				returned = new BindingModel(getFetchRequest().getBindingModel());
+			}
 		} else {
 			returned = new BindingModel();
 		}

@@ -43,6 +43,9 @@ public abstract class FetchRequest<M extends FlexoModel<M, MM>, MM extends Flexo
 
 	private Vector<FetchRequestCondition> conditions;
 
+	// null in fetch request is not embedded in an iteration
+	private FetchRequestIterationAction embeddingIteration;
+
 	public FetchRequest(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 		conditions = new Vector<FetchRequestCondition>();
@@ -116,6 +119,7 @@ public abstract class FetchRequest<M extends FlexoModel<M, MM>, MM extends Flexo
 			return returned;
 		}
 	}
+
 	/*@Override
 	public BindingFactory getBindingFactory() {
 		System.out.println("On me demande la binding factory et je reponds " + super.getBindingFactory());
@@ -124,5 +128,13 @@ public abstract class FetchRequest<M extends FlexoModel<M, MM>, MM extends Flexo
 		System.out.println("EP= " + getEditionPattern());
 		return super.getBindingFactory();
 	}*/
+
+	public FetchRequestIterationAction getEmbeddingIteration() {
+		return embeddingIteration;
+	}
+
+	public void setEmbeddingIteration(FetchRequestIterationAction embeddingIteration) {
+		this.embeddingIteration = embeddingIteration;
+	}
 
 }

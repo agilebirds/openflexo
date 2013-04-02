@@ -256,7 +256,9 @@ public class MatchEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends
 		Hashtable<PatternRole, Object> criterias = new Hashtable<PatternRole, Object>();
 		for (MatchingCriteria mc : getMatchingCriterias()) {
 			Object value = mc.evaluateCriteriaValue(action);
-			criterias.put(mc.getPatternRole(), value);
+			if (value != null) {
+				criterias.put(mc.getPatternRole(), value);
+			}
 			System.out.println("Pour " + mc.getPatternRole().getPatternRoleName() + " value is " + value);
 		}
 		logger.info("On s'arrete pour regarder ");

@@ -28,6 +28,7 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
@@ -170,9 +171,30 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 
 		for (EditionAction editionAction : actions) {
 			if (editionAction.evaluateCondition(contextAction)) {
-				Object returned = editionAction.performAction(contextAction);
-				if (returned != null) {
-					performedActions.put(editionAction, returned);
+				Object assignedObject = editionAction.performAction(contextAction);
+				if (assignedObject != null) {
+					performedActions.put(editionAction, assignedObject);
+				}
+
+				if (assignedObject != null && editionAction instanceof AssignableAction) {
+					AssignableAction assignableAction = (AssignableAction) editionAction;
+					if (assignableAction.getIsVariableDeclaration()) {
+						System.out.println("Setting variable " + assignableAction.getVariableName() + " with " + assignedObject);
+						contextAction.declareVariable(assignableAction.getVariableName(), assignedObject);
+					}
+					if (assignableAction.getAssignation().isSet() && assignableAction.getAssignation().isValid()) {
+						try {
+							assignableAction.getAssignation().setBindingValue(assignedObject, contextAction);
+						} catch (Exception e) {
+							logger.warning("Unexpected assignation issue, " + assignableAction.getAssignation() + " object="
+									+ assignedObject + " exception: " + e);
+							e.printStackTrace();
+						}
+					}
+					if (assignableAction.getPatternRole() != null && assignedObject instanceof FlexoModelObject) {
+						contextAction.getEditionPatternInstance().setObjectForPatternRole((FlexoModelObject) assignedObject,
+								assignableAction.getPatternRole());
+					}
 				}
 			}
 		}
