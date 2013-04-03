@@ -29,6 +29,8 @@ import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
+import org.openflexo.antar.binding.Function;
+import org.openflexo.antar.binding.Function.FunctionArgument;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.validation.Validable;
@@ -37,7 +39,7 @@ import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class EditionSchemeParameter extends EditionSchemeObject {
+public abstract class EditionSchemeParameter extends EditionSchemeObject implements FunctionArgument {
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeParameter.class.getPackage().getName());
 
@@ -254,6 +256,21 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject {
 
 	public boolean isValid(EditionSchemeAction action, Object value) {
 		return !getIsRequired() || value != null;
+	}
+
+	@Override
+	public Function getFunction() {
+		return getEditionScheme();
+	}
+
+	@Override
+	public String getArgumentName() {
+		return getName();
+	}
+
+	@Override
+	public Type getArgumentType() {
+		return getType();
 	}
 
 }

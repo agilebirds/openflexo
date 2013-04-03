@@ -23,9 +23,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingEvaluationContext;
-import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
@@ -76,7 +73,7 @@ public class AssignationAction<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 		return value;
 	}
 
-	public void setValue(DataBinding<Object> object) {
+	public void setValue(DataBinding<Object> value) {
 		if (value != null) {
 			value.setOwner(this);
 			value.setBindingName("value");
@@ -107,34 +104,8 @@ public class AssignationAction<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 		super.notifiedBindingChanged(dataBinding);
 	}
 
-	@Override
-	protected BindingModel buildInferedBindingModel() {
-		BindingModel returned = super.buildInferedBindingModel();
-		returned.addToBindingVariables(new BindingVariable(getVariableName(), getAssignableType()) {
-			@Override
-			public Object getBindingValue(Object target, BindingEvaluationContext context) {
-				logger.info("What should i return for " + getVariableName() + " ? target " + target + " context=" + context);
-				return super.getBindingValue(target, context);
-			}
-
-			@Override
-			public Type getType() {
-				return getAssignableType();
-			}
-		});
-		return returned;
-	}
-
-	@Override
-	protected void rebuildInferedBindingModel() {
-		super.rebuildInferedBindingModel();
-		/*for (EditionAction<?, ?, ?> action : getActionContainer().getActions()) {
-			action.rebuildInferedBindingModel();
-		}*/
-	}
-
-	public static class ObjectBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AssignationAction> {
-		public ObjectBindingIsRequiredAndMustBeValid() {
+	public static class ValueBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<AssignationAction> {
+		public ValueBindingIsRequiredAndMustBeValid() {
 			super("'value'_binding_is_not_valid", AssignationAction.class);
 		}
 

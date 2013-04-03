@@ -108,6 +108,7 @@ public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM ext
 		actions.remove(action);
 		setChanged();
 		notifyObservers();
+		notifyChange("actions", null, actions);
 	}
 
 	@Override

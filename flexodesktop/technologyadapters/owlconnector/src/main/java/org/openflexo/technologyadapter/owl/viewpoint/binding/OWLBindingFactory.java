@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.Function;
 import org.openflexo.antar.binding.FunctionPathElement;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.foundation.ontology.IndividualOfClass;
@@ -92,8 +93,8 @@ public final class OWLBindingFactory extends TechnologyAdapterBindingFactory {
 	}
 
 	@Override
-	public FunctionPathElement makeFunctionPathElement(BindingPathElement parent, String functionName, List<DataBinding<?>> args) {
-		return null;
+	public FunctionPathElement makeFunctionPathElement(BindingPathElement father, Function function, List<DataBinding<?>> args) {
+		return super.makeFunctionPathElement(father, function, args);
 	}
 
 	private List<OWLProperty> searchProperties(OWLClass owlClass) {

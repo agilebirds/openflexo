@@ -65,6 +65,7 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 		CloneIndividual,
 		DeclarePatternRole,
 		Assignation,
+		Execution,
 		DeleteAction,
 		GraphicalAction,
 		GoToObject,

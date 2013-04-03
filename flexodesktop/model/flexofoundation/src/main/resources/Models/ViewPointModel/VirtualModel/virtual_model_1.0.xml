@@ -422,6 +422,10 @@
 		<property name="value" xmlTag="value" attribute="YES" />
 	</entity>
 
+	<entity name="org.openflexo.foundation.viewpoint.ExecutionAction" xmlTag="ExecutionAction">
+		<property name="execution" xmlTag="execution" attribute="YES" />
+	</entity>
+
 	<entity
 		name="org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShemaElementAction"
 		abstract="yes">

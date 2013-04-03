@@ -97,7 +97,7 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 
 	@Override
 	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
-		// System.out.println("!!!!!!!! Je sette la classe avec " + ontologyClass);
+		System.out.println("!!!!!!!! Je sette la classe avec " + ontologyClass);
 		if (ontologyClass != null) {
 			if (getPatternRole() instanceof IndividualPatternRole) {
 				if (getPatternRole().getOntologicType().isSuperConceptOf(ontologyClass)) {
@@ -111,6 +111,7 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 		} else {
 			ontologyClassURI = null;
 		}
+		System.out.println("ontologyClassURI=" + ontologyClassURI);
 	}
 
 	public String _getOntologyClassURI() {

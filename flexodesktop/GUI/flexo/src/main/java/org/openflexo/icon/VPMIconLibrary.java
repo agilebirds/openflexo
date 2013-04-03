@@ -67,6 +67,7 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternConstraint;
 import org.openflexo.foundation.viewpoint.EditionPatternPatternRole;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
+import org.openflexo.foundation.viewpoint.ExecutionAction;
 import org.openflexo.foundation.viewpoint.FetchRequestCondition;
 import org.openflexo.foundation.viewpoint.FetchRequestIterationAction;
 import org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole;
@@ -255,6 +256,8 @@ public class VPMIconLibrary extends IconLibrary {
 				return DECLARE_PATTERN_ROLE_ICON;
 			} else if (object instanceof AssignationAction) {
 				return DECLARE_PATTERN_ROLE_ICON;
+			} else if (object instanceof ExecutionAction) {
+				return ACTION_SCHEME_ICON;
 			} else if (object instanceof ConditionalAction) {
 				return CONDITIONAL_ACTION_ICON;
 			} else if (object instanceof IterationAction) {

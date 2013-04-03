@@ -21,11 +21,14 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 import java.util.Collection;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.Function;
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
@@ -43,7 +46,7 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain
  * 
  */
-public abstract class EditionScheme extends EditionSchemeObject implements ActionContainer {
+public abstract class EditionScheme extends EditionSchemeObject implements ActionContainer, Function {
 
 	protected BindingModel _bindingModel;
 
@@ -694,6 +697,42 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 
 	public void setHeight(int height) {
 		this.height = height;
+	}
+
+	@Override
+	public Type getReturnType() {
+		return Void.TYPE;
+	}
+
+	@Override
+	public List<EditionSchemeParameter> getArguments() {
+		return getParameters();
+	}
+
+	private String editionSchemeSignature = null;
+
+	public String getSignature() {
+		if (editionSchemeSignature == null) {
+			StringBuffer signature = new StringBuffer();
+			signature.append(getName());
+			signature.append("(");
+			signature.append(getParameterListAsString(false));
+			signature.append(")");
+			editionSchemeSignature = signature.toString();
+		}
+		return editionSchemeSignature;
+	}
+
+	private String getParameterListAsString(boolean fullyQualified) {
+		StringBuffer returned = new StringBuffer();
+		boolean isFirst = true;
+		for (EditionSchemeParameter param : getParameters()) {
+			returned.append((isFirst ? "" : ",")
+					+ (fullyQualified ? TypeUtils.fullQualifiedRepresentation(param.getType()) : TypeUtils.simpleRepresentation(param
+							.getType())));
+			isFirst = false;
+		}
+		return returned.toString();
 	}
 
 }

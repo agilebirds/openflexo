@@ -22,6 +22,9 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.FlexoObject;
@@ -142,6 +145,26 @@ public abstract class AssignableAction<M extends FlexoModel<M, MM>, MM extends F
 			System.out.println("Setting variable " + getVariableName() + " with " + initialContext);
 			action.declareVariable(getVariableName(), initialContext);
 		}*/
+	}
+
+	@Override
+	protected final BindingModel buildInferedBindingModel() {
+		BindingModel returned = super.buildInferedBindingModel();
+		if (getIsVariableDeclaration()) {
+			returned.addToBindingVariables(new BindingVariable(getVariableName(), getAssignableType()) {
+				@Override
+				public Object getBindingValue(Object target, BindingEvaluationContext context) {
+					logger.info("What should i return for " + getVariableName() + " ? target " + target + " context=" + context);
+					return super.getBindingValue(target, context);
+				}
+
+				@Override
+				public Type getType() {
+					return getAssignableType();
+				}
+			});
+		}
+		return returned;
 	}
 
 	public static class AssignationBindingMustBeValid extends BindingMustBeValid<AssignableAction> {

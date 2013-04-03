@@ -1,5 +1,6 @@
 package org.openflexo.foundation.viewpoint.binding;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.Function;
 import org.openflexo.antar.binding.FunctionPathElement;
 import org.openflexo.antar.binding.JavaBindingFactory;
 import org.openflexo.antar.binding.SimplePathElement;
@@ -17,6 +19,7 @@ import org.openflexo.antar.expr.Constant.StringConstant;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.AbstractActionScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
 import org.openflexo.foundation.viewpoint.EditionScheme;
@@ -31,8 +34,11 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 	private Map<BindingPathElement, Map<Object, SimplePathElement>> storedBindingPathElements;
 	private ViewPoint viewPoint;
 
+	private Map<BindingPathElement, Map<EditionPattern, List<EditionSchemePathElement>>> editionSchemePathElements;
+
 	public EditionPatternBindingFactory(ViewPoint viewPoint) {
 		storedBindingPathElements = new HashMap<BindingPathElement, Map<Object, SimplePathElement>>();
+		editionSchemePathElements = new HashMap<BindingPathElement, Map<EditionPattern, List<EditionSchemePathElement>>>();
 		this.viewPoint = viewPoint;
 	}
 
@@ -121,7 +127,27 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 
 	@Override
 	public List<? extends FunctionPathElement> getAccessibleFunctionPathElements(BindingPathElement parent) {
+		if (parent.getType() instanceof EditionPatternInstanceType) {
+			return getEditionSchemePathElements(parent, ((EditionPatternInstanceType) parent.getType()).getEditionPattern());
+		}
 		return super.getAccessibleFunctionPathElements(parent);
+	}
+
+	public List<EditionSchemePathElement> getEditionSchemePathElements(BindingPathElement parent, EditionPattern ep) {
+		Map<EditionPattern, List<EditionSchemePathElement>> map = editionSchemePathElements.get(parent);
+		if (map == null) {
+			map = new HashMap<EditionPattern, List<EditionSchemePathElement>>();
+			editionSchemePathElements.put(parent, map);
+		}
+		List<EditionSchemePathElement> returned = map.get(ep);
+		if (returned == null) {
+			returned = new ArrayList<EditionSchemePathElement>();
+			for (AbstractActionScheme as : ep.getAbstractActionSchemes()) {
+				returned.add(new EditionSchemePathElement(parent, as, null));
+			}
+			map.put(ep, returned);
+		}
+		return returned;
 	}
 
 	@Override
@@ -136,10 +162,18 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 	}
 
 	@Override
-	public FunctionPathElement makeFunctionPathElement(BindingPathElement parent, String functionName, List<DataBinding<?>> args) {
-		FunctionPathElement returned = super.makeFunctionPathElement(parent, functionName, args);
+	public FunctionPathElement makeFunctionPathElement(BindingPathElement parent, Function function, List<DataBinding<?>> args) {
+		System.out.println("makeFunctionPathElement with " + parent + " function=" + function + " args=" + args);
+		if (parent.getType() == null) {
+			return null;
+		}
+		if (parent.getType() instanceof EditionPatternInstanceType && function instanceof EditionScheme) {
+			return new EditionSchemePathElement(parent, (EditionScheme) function, null);
+		}
+		FunctionPathElement returned = super.makeFunctionPathElement(parent, function, args);
 		// Hook to specialize type returned by getEditionPatternInstance(String)
-		if (functionName.equals("getEditionPatternInstance")) {
+		// This method is used while executing DiagramElement inspectors
+		if (function.getName().equals("getEditionPatternInstance")) {
 			if (TypeUtils.isTypeAssignableFrom(ViewObject.class, parent.getType()) && args.size() == 1 && args.get(0).isStringConstant()) {
 				String editionPatternId = ((StringConstant) args.get(0).getExpression()).getValue();
 				EditionPattern ep = viewPoint.getEditionPattern(editionPatternId);
@@ -147,5 +181,13 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 			}
 		}
 		return returned;
+	}
+
+	@Override
+	public Function retrieveFunction(Type parentType, String functionName, List<DataBinding<?>> args) {
+		if (parentType instanceof EditionPatternInstanceType) {
+			return ((EditionPatternInstanceType) parentType).getEditionPattern().getEditionScheme(functionName);
+		}
+		return super.retrieveFunction(parentType, functionName, args);
 	}
 }

@@ -57,6 +57,10 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModel, EMFMetaModel
 		return (EMFClassClass) super.getOntologyClass();
 	}
 
+	public void setOntologyClass(EMFClassClass ontologyClass) {
+		super.setOntologyClass(ontologyClass);
+	}
+
 	@Override
 	public Class<EMFObjectIndividual> getOntologyIndividualClass() {
 		return EMFObjectIndividual.class;
@@ -117,7 +121,7 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModel, EMFMetaModel
 				modelSlotInstance.getModel().setIsModified();
 				logger.info("********* Added individual " + result.getName() + " as " + aClass.getName());
 			} else {
-				logger.warning("Not allowed to create new Enum values.");
+				logger.warning("Not allowed to create new Enum values. getOntologyClass()=" + getOntologyClass());
 				return null;
 			}
 		} else {
