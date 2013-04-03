@@ -108,26 +108,21 @@ public class FIBEditorPaneWidget extends FIBWidgetView<FIBEditorPane, JEditorPan
 				}
 			}
 		});
-		if (getComponent().getContentType() != null) {
-			editorPane.setContentType(getComponent().getContentType().getContentType());
-		} else {
-			editorPane.setContentType("text/html");
-		}
+		updateContentType();
 		editorPane.addFocusListener(this);
 
 		editorPane.setAutoscrolls(true);
 		editorPane.setEnabled(true);
 
-		/*
-		 * pane = new JScrollPane(_textArea);
-		 * 
-		 * pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		 * pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		 * 
-		 * pane.setMinimumSize(MINIMUM_SIZE);
-		 */
-
 		updateFont();
+	}
+
+	protected void updateContentType() {
+		if (getComponent().getContentType() != null) {
+			editorPane.setContentType(getComponent().getContentType().getContentType());
+		} else {
+			editorPane.setContentType("text/html");
+		}
 	}
 
 	@Override
@@ -166,7 +161,6 @@ public class FIBEditorPaneWidget extends FIBWidgetView<FIBEditorPane, JEditorPan
 			widgetUpdating = true;
 			try {
 				editorPane.setText(getValue());
-				System.err.println(getValue());
 				updateFont();
 			} finally {
 				widgetUpdating = false;

@@ -24,7 +24,6 @@ import java.util.Vector;
 public class FIBTabPanel extends FIBContainer {
 
 	public FIBTabPanel() {
-		setOpaque(false);
 	}
 
 	@Override

@@ -25,6 +25,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,7 +59,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	private FIBController controller;
 	private final FIBComponentDynamicModel dynamicModel;
 
-	protected Hashtable<FIBComponent, FIBView> subViews;
+	protected Map<FIBComponent, FIBView> subViews;
 
 	private boolean visible = true;
 
@@ -356,7 +357,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		return null;
 	}
 
-	public Hashtable<FIBComponent, FIBView> getSubViews() {
+	public Map<FIBComponent, FIBView> getSubViews() {
 		return subViews;
 	}
 
@@ -402,7 +403,9 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	}
 
 	protected void updateOpacity() {
-		getDynamicJComponent().setOpaque(getComponent().getOpaque());
+		if (getComponent().getOpaque() != null) {
+			getDynamicJComponent().setOpaque(getComponent().getOpaque());
+		}
 	}
 
 	protected void updatePreferredSize() {
@@ -445,7 +448,6 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	}
 
 	protected void updateBackgroundColor() {
-		getJComponent().setOpaque(getComponent().getOpaque());
 		getJComponent().setBackground(getComponent().getBackgroundColor());
 	}
 

@@ -44,7 +44,7 @@
 			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
+		<dependency>  
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexojavaparser</artifactId>
 		</dependency>

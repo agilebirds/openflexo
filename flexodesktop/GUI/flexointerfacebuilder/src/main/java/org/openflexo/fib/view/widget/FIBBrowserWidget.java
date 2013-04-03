@@ -316,7 +316,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 					if (getSelectionRows() != null && getSelectionRows().length > 0) {
 						for (int selected : getSelectionRows()) {
 							Rectangle rowBounds = getRowBounds(selected);
-							if (getVisibleRect().contains(rowBounds)) {
+							if (getVisibleRect().intersects(rowBounds)) {
 								Object value = getPathForRow(selected).getLastPathComponent();
 								Component treeCellRendererComponent = getCellRenderer().getTreeCellRendererComponent(this, value, true,
 										isExpanded(selected), getModel().isLeaf(value), selected, getLeadSelectionRow() == selected);
@@ -327,11 +327,11 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 								if (bgColor != null) {
 									g.setColor(bgColor);
 									g.fillRect(0, rowBounds.y, getWidth(), rowBounds.height);
+									Graphics g2 = g.create(rowBounds.x, rowBounds.y, rowBounds.width, rowBounds.height);
+									treeCellRendererComponent.setBounds(rowBounds);
+									treeCellRendererComponent.paint(g2);
+									g2.dispose();
 								}
-								Graphics g2 = g.create(rowBounds.x, rowBounds.y, rowBounds.width, rowBounds.height);
-								treeCellRendererComponent.setBounds(rowBounds);
-								treeCellRendererComponent.paint(g2);
-								g2.dispose();
 							}
 						}
 					}
