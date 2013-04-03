@@ -19,6 +19,7 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
+import org.openflexo.toolbox.IProgress;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -77,7 +78,8 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 				return null;
 			}
 			if (StringUtils.isNotEmpty(vmiInfo.virtualModelURI)) {
-				if (viewResource != null && viewResource.getViewPoint() != null) {
+				if (viewResource != null && viewResource.getViewPoint() != null
+						&& viewResource.getViewPoint().getVirtualModelNamed(vmiInfo.virtualModelURI) != null) {
 					returned.setVirtualModelResource(viewResource.getViewPoint().getVirtualModelNamed(vmiInfo.virtualModelURI)
 							.getResource());
 				}
@@ -163,4 +165,13 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 		return null;
 	}
 
+	@Override
+	public VMI loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
+			FileNotFoundException, FlexoException {
+		VMI returned = super.loadResourceData(progress);
+		if (returned.isSynchronizable()) {
+			returned.synchronize(null);
+		}
+		return returned;
+	}
 }

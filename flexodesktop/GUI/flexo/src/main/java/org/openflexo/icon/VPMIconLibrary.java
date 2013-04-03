@@ -53,7 +53,8 @@ import org.openflexo.foundation.view.diagram.viewpoint.editionaction.CloneConnec
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.CloneShape;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.GraphicalAction;
 import org.openflexo.foundation.viewpoint.ActionScheme;
-import org.openflexo.foundation.viewpoint.AddEditionPattern;
+import org.openflexo.foundation.viewpoint.AddEditionPatternInstance;
+import org.openflexo.foundation.viewpoint.AssignationAction;
 import org.openflexo.foundation.viewpoint.CloningScheme;
 import org.openflexo.foundation.viewpoint.ConditionalAction;
 import org.openflexo.foundation.viewpoint.CreationScheme;
@@ -66,13 +67,17 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternConstraint;
 import org.openflexo.foundation.viewpoint.EditionPatternPatternRole;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
+import org.openflexo.foundation.viewpoint.FetchRequestCondition;
+import org.openflexo.foundation.viewpoint.FetchRequestIterationAction;
 import org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole;
 import org.openflexo.foundation.viewpoint.IterationAction;
 import org.openflexo.foundation.viewpoint.LocalizedDictionary;
+import org.openflexo.foundation.viewpoint.MatchEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
+import org.openflexo.foundation.viewpoint.SelectEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.SynchronizationScheme;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
@@ -201,6 +206,10 @@ public class VPMIconLibrary extends IconLibrary {
 			return INSPECT_ICON;
 		} else if (object instanceof EditionPatternConstraint) {
 			return CONSTRAINT_ICON;
+		} else if (object instanceof FetchRequestCondition) {
+			return CONSTRAINT_ICON;
+		} else if (object instanceof MatchEditionPatternInstance.MatchingCriteria) {
+			return CONSTRAINT_ICON;
 		} else if (object instanceof DiagramPalette) {
 			return DIAGRAM_PALETTE_ICON;
 		} else if (object instanceof DiagramPaletteElement) {
@@ -228,23 +237,29 @@ public class VPMIconLibrary extends IconLibrary {
 		} else if (object instanceof EditionAction) {
 			if (object instanceof AddDiagram) {
 				return EXAMPLE_DIAGRAM_ICON;
-			} else if (object instanceof AddEditionPattern) {
-				return EDITION_PATTERN_ICON;
+			} else if (object instanceof AddEditionPatternInstance) {
+				return IconFactory.getImageIcon(EDITION_PATTERN_ICON, IconLibrary.DUPLICATE);
+			} else if (object instanceof SelectEditionPatternInstance) {
+				return IconFactory.getImageIcon(EDITION_PATTERN_ICON, IconLibrary.IMPORT);
+			} else if (object instanceof MatchEditionPatternInstance) {
+				return IconFactory.getImageIcon(EDITION_PATTERN_ICON, IconLibrary.SYNC);
 			} else if (object instanceof CloneShape) {
 				return IconFactory.getImageIcon(SHAPE_ICON, DUPLICATE);
 			} else if (object instanceof AddShape) {
-				return SHAPE_ICON;
+				return IconFactory.getImageIcon(SHAPE_ICON, IconLibrary.DUPLICATE);
 			} else if (object instanceof CloneConnector) {
 				return IconFactory.getImageIcon(CONNECTOR_ICON, DUPLICATE);
 			} else if (object instanceof AddConnector) {
-				return CONNECTOR_ICON;
-			} /*else if (object instanceof AddStatement) {
-				return OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON;
-				}*/else if (object instanceof DeclarePatternRole) {
+				return IconFactory.getImageIcon(CONNECTOR_ICON, IconLibrary.DUPLICATE);
+			} else if (object instanceof DeclarePatternRole) {
+				return DECLARE_PATTERN_ROLE_ICON;
+			} else if (object instanceof AssignationAction) {
 				return DECLARE_PATTERN_ROLE_ICON;
 			} else if (object instanceof ConditionalAction) {
 				return CONDITIONAL_ACTION_ICON;
 			} else if (object instanceof IterationAction) {
+				return ITERATION_ACTION_ICON;
+			} else if (object instanceof FetchRequestIterationAction) {
 				return ITERATION_ACTION_ICON;
 			} else if (object instanceof DeleteAction) {
 				PatternRole pr = ((DeleteAction) object).getPatternRole();
@@ -275,7 +290,7 @@ public class VPMIconLibrary extends IconLibrary {
 		} else if (object instanceof ActionScheme) {
 			return ACTION_SCHEME_ICON;
 		} else if (object instanceof SynchronizationScheme) {
-			return SYNCHRONIZATION_SCHEME_ICON;
+			return IconFactory.getImageIcon(VIRTUAL_MODEL_ICON, IconLibrary.SYNC);
 		} else if (object instanceof DropScheme) {
 			return DROP_SCHEME_ICON;
 		} else if (object instanceof LinkScheme) {

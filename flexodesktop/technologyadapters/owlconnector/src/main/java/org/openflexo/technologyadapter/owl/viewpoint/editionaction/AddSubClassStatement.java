@@ -114,8 +114,4 @@ public class AddSubClassStatement extends AddStatement<SubClassStatement> {
 		return null;
 	}
 
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, SubClassStatement initialContext) {
-	}
-
 }

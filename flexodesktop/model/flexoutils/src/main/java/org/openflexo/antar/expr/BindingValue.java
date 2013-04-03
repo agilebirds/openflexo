@@ -572,7 +572,14 @@ public class BindingValue extends Expression {
 									DataBinding.BindingDefinitionType.GET);
 							argDataBinding.setBindingName("arg" + argIndex);
 							argDataBinding.setExpression(arg);
-							argDataBinding.setDeclaredType(Object.class/*argDataBinding.getAnalyzedType()*/);
+							// argDataBinding.setDeclaredType(Object.class);
+							// IMPORTANT/HACK: following statement (call to isValid()) is required to get access to analyzed type and
+							// declares it
+							// TODO: find a better solution
+							argDataBinding.isValid();
+							if (argDataBinding.getAnalyzedType() != null) {
+								argDataBinding.setDeclaredType(argDataBinding.getAnalyzedType());
+							}
 							args.add(argDataBinding);
 							argIndex++;
 						}

@@ -76,8 +76,4 @@ public class AddXSClass extends AddClass<XMLModel, XSDMetaModel, XSOntClass> {
 		return newClass;
 	}
 
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, XSOntClass initialContext) {
-	}
-
 }

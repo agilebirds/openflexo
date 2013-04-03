@@ -20,14 +20,16 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.view.action.EditionSchemeAction;
 
 /**
  * Abstract class representing a fetch request, which is a primitive allowing to browse in the model while configuring requests
@@ -39,11 +41,14 @@ public abstract class FetchRequest<M extends FlexoModel<M, MM>, MM extends Flexo
 
 	private static final Logger logger = Logger.getLogger(FetchRequest.class.getPackage().getName());
 
-	private Vector<DataBinding<Boolean>> conditions;
+	private Vector<FetchRequestCondition> conditions;
+
+	// null in fetch request is not embedded in an iteration
+	private FetchRequestIterationAction embeddingIteration;
 
 	public FetchRequest(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
-		conditions = new Vector<DataBinding<Boolean>>();
+		conditions = new Vector<FetchRequestCondition>();
 	}
 
 	@Override
@@ -51,26 +56,85 @@ public abstract class FetchRequest<M extends FlexoModel<M, MM>, MM extends Flexo
 		return EditionActionType.FetchRequest;
 	}
 
-	public abstract Class<T> getFetchedType();
+	public abstract Type getFetchedType();
 
 	@Override
 	public Type getAssignableType() {
 		return new ParameterizedTypeImpl(List.class, getFetchedType());
 	}
 
-	public Vector<DataBinding<Boolean>> getConditions() {
+	public Vector<FetchRequestCondition> getConditions() {
 		return conditions;
 	}
 
-	public void setConditions(Vector<DataBinding<Boolean>> conditions) {
+	public void setConditions(Vector<FetchRequestCondition> conditions) {
 		this.conditions = conditions;
 	}
 
-	public void addToConditions(DataBinding<Boolean> condition) {
+	public void addToConditions(FetchRequestCondition condition) {
+		condition.setFetchRequest(this);
 		conditions.add(condition);
+		setChanged();
+		notifyObservers(new DataModification("conditions", null, condition));
 	}
 
-	public void removeFromConditions(DataBinding<Boolean> condition) {
+	public void removeFromConditions(FetchRequestCondition condition) {
+		condition.setFetchRequest(null);
 		conditions.remove(condition);
+		setChanged();
+		notifyObservers(new DataModification("conditions", condition, null));
 	}
+
+	public FetchRequestCondition createCondition() {
+		FetchRequestCondition newCondition = new FetchRequestCondition(null);
+		addToConditions(newCondition);
+		return newCondition;
+	}
+
+	public void deleteCondition(FetchRequestCondition aCondition) {
+		removeFromConditions(aCondition);
+	}
+
+	public List<T> filterWithConditions(List<T> fetchResult, EditionSchemeAction action) {
+		if (getConditions().size() == 0) {
+			return fetchResult;
+		} else {
+			System.out.println("Filtering with " + getConditions() + " fetchResult=" + fetchResult);
+			List<T> returned = new ArrayList<T>();
+			for (T proposedFetchResult : fetchResult) {
+				boolean takeIt = true;
+				for (FetchRequestCondition condition : getConditions()) {
+					if (!condition.evaluateCondition(proposedFetchResult, action)) {
+						takeIt = false;
+						break;
+					}
+				}
+				if (takeIt) {
+					returned.add(proposedFetchResult);
+					System.out.println("I take " + proposedFetchResult);
+				} else {
+					System.out.println("I dismiss " + proposedFetchResult);
+				}
+			}
+			return returned;
+		}
+	}
+
+	/*@Override
+	public BindingFactory getBindingFactory() {
+		System.out.println("On me demande la binding factory et je reponds " + super.getBindingFactory());
+		System.out.println("VP= " + getViewPoint());
+		System.out.println("VM= " + getVirtualModel());
+		System.out.println("EP= " + getEditionPattern());
+		return super.getBindingFactory();
+	}*/
+
+	public FetchRequestIterationAction getEmbeddingIteration() {
+		return embeddingIteration;
+	}
+
+	public void setEmbeddingIteration(FetchRequestIterationAction embeddingIteration) {
+		this.embeddingIteration = embeddingIteration;
+	}
+
 }

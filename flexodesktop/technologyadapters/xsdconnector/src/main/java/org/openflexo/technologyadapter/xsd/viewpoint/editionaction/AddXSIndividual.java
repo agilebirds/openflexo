@@ -95,10 +95,4 @@ public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOnt
 		}
 	}
 
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, XSOntIndividual initialContext) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

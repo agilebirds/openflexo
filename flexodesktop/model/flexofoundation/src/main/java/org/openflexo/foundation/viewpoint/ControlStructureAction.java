@@ -19,15 +19,17 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends
 		EditionAction<M, MM, Object> implements ActionContainer {
@@ -52,6 +54,29 @@ public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM ext
 		for (EditionAction<?, ?, ?> action : getActions()) {
 			action.rebuildInferedBindingModel();
 		}
+
+	}
+
+	@Override
+	protected BindingModel buildInferedBindingModel() {
+		BindingModel returned = super.buildInferedBindingModel();
+		for (final EditionAction a : getActions()) {
+			if (a instanceof AssignableAction && ((AssignableAction) a).getIsVariableDeclaration()) {
+				returned.addToBindingVariables(new BindingVariable(((AssignableAction) a).getVariableName(), ((AssignableAction) a)
+						.getAssignableType(), true) {
+					@Override
+					public Type getType() {
+						return ((AssignableAction) a).getAssignableType();
+					}
+				});
+			}
+		}
+		return returned;
+	}
+
+	@Override
+	public void variableAdded(AssignableAction action) {
+		rebuildInferedBindingModel();
 	}
 
 	@Override

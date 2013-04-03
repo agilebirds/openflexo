@@ -29,11 +29,13 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.EditionPatternStructuralFacet;
+import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -118,6 +120,9 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 			newPatternRole.setPatternRoleName(getPatternRoleName());
 			newPatternRole.setModelSlot(modelSlot);
 			newPatternRole.setDescription(description);
+			if (isIndividual()) {
+				((IndividualPatternRole) newPatternRole).setOntologicType(individualType);
+			}
 			getEditionPattern().addToPatternRoles(newPatternRole);
 		}
 
@@ -137,6 +142,7 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 		return validityMessage;
 	}
 
+	@Override
 	public boolean isValid() {
 		if (StringUtils.isEmpty(getPatternRoleName())) {
 			validityMessage = EMPTY_NAME;
@@ -152,5 +158,11 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 			return true;
 		}
 	}
+
+	public boolean isIndividual() {
+		return IndividualPatternRole.class.isAssignableFrom(patternRoleClass);
+	}
+
+	public IFlexoOntologyClass individualType;
 
 }

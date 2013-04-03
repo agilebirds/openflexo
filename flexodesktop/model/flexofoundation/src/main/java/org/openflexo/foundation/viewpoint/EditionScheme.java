@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -50,7 +51,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	protected static final Logger logger = FlexoLogger.getLogger(EditionScheme.class.getPackage().getName());
 
 	public static final String THIS = "this";
-	public static final String VIRTUAL_MODEL = "virtualModel";
+	public static final String VIRTUAL_MODEL_INSTANCE = "virtualModelInstance";
 
 	private String name;
 	private String label;
@@ -624,17 +625,37 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 				_bindingModel.addToBindingVariables(new PatternRoleBindingVariable(role));
 			}
 		}
+		for (final EditionAction a : getActions()) {
+			if (a instanceof AssignableAction && ((AssignableAction) a).getIsVariableDeclaration()) {
+				_bindingModel.addToBindingVariables(new BindingVariable(((AssignableAction) a).getVariableName(), ((AssignableAction) a)
+						.getAssignableType(), true) {
+					@Override
+					public Type getType() {
+						return ((AssignableAction) a).getAssignableType();
+					}
+				});
+			}
+		}
 		notifyBindingModelChanged();
 	}
 
 	protected void appendContextualBindingVariables(BindingModel bindingModel) {
-		bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.THIS, getEditionPattern()));
 		if (getEditionPattern() != null) {
-			bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.VIRTUAL_MODEL, getEditionPattern().getVirtualModel()));
+			bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.THIS, EditionPatternInstanceType
+					.getEditionPatternInstanceType(getEditionPattern())));
+			if (getEditionPattern().getVirtualModel() != null) {
+				bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.VIRTUAL_MODEL_INSTANCE, EditionPatternInstanceType
+						.getEditionPatternInstanceType(getEditionPattern().getVirtualModel())));
+			}
 		}
 		if (this instanceof DiagramEditionScheme) {
 			bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.TOP_LEVEL, DiagramRootPane.class));
 		}
+	}
+
+	@Override
+	public void variableAdded(AssignableAction action) {
+		updateBindingModels();
 	}
 
 	/**

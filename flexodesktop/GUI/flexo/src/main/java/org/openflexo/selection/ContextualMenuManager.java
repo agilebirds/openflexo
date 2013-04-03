@@ -60,6 +60,7 @@ import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.action.ActionSchemeActionType;
 import org.openflexo.foundation.view.action.NavigationSchemeActionType;
+import org.openflexo.foundation.view.action.SynchronizationSchemeActionType;
 import org.openflexo.foundation.view.diagram.viewpoint.NavigationScheme;
 import org.openflexo.foundation.viewpoint.ActionScheme;
 import org.openflexo.toolbox.ToolBox;
@@ -305,6 +306,22 @@ public abstract class ContextualMenuManager {
 								contextualMenu.putAction(new NavigationSchemeActionType(ns, epi));
 							}
 						}
+					}
+				}
+			}
+			if (focusedObject instanceof EditionPatternInstance) {
+				EditionPatternInstance epi = (EditionPatternInstance) focusedObject;
+				if (epi != null && epi.getEditionPattern() != null && epi.getEditionPattern().hasSynchronizationScheme()) {
+					contextualMenu.putAction(new SynchronizationSchemeActionType(epi.getEditionPattern().getSynchronizationScheme(), epi));
+				}
+				if (epi != null && epi.getEditionPattern() != null && epi.getEditionPattern().hasActionScheme()) {
+					for (ActionScheme as : epi.getEditionPattern().getActionSchemes()) {
+						contextualMenu.putAction(new ActionSchemeActionType(as, epi));
+					}
+				}
+				if (epi != null && epi.getEditionPattern() != null && epi.getEditionPattern().hasNavigationScheme()) {
+					for (NavigationScheme ns : epi.getEditionPattern().getNavigationSchemes()) {
+						contextualMenu.putAction(new NavigationSchemeActionType(ns, epi));
 					}
 				}
 			}

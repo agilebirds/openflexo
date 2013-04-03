@@ -31,6 +31,7 @@ import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
 import org.openflexo.foundation.viewpoint.EditionAction;
+import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -164,9 +165,16 @@ public class EMFModelSlot extends FlexoOntologyModelSlot<EMFModel, EMFMetaModel>
 			return (EA) new RemoveEMFObjectIndividualAttributeObjectPropertyValue(null);
 		} else if (RemoveEMFObjectIndividualReferenceObjectPropertyValue.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new RemoveEMFObjectIndividualReferenceObjectPropertyValue(null);
-		} else {
-			return super.makeEditionAction(editionActionClass);
 		}
+		return null;
+	}
+
+	@Override
+	public <FR extends FetchRequest<?, ?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
+		if (SelectEMFObjectIndividual.class.isAssignableFrom(fetchRequestClass)) {
+			return (FR) new SelectEMFObjectIndividual(null);
+		}
+		return null;
 	}
 
 }

@@ -21,6 +21,8 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
+import org.openflexo.foundation.view.EditionPatternInstance;
+
 public class EditionPatternParameter extends InnerModelSlotParameter {
 
 	private EditionPattern editionPatternType;
@@ -33,9 +35,9 @@ public class EditionPatternParameter extends InnerModelSlotParameter {
 	@Override
 	public Type getType() {
 		if (getEditionPatternType() != null) {
-			return getEditionPatternType();
+			return EditionPatternInstanceType.getEditionPatternInstanceType(getEditionPatternType());
 		}
-		return EditionPattern.class;
+		return EditionPatternInstance.class;
 	};
 
 	@Override

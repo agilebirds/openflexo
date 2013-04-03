@@ -101,13 +101,4 @@ public class RemoveEMFObjectIndividualAttributeObjectPropertyValue<T> extends
 		return result;
 	}
 
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.viewpoint.EditionAction#finalizePerformAction(org.openflexo.foundation.view.action.EditionSchemeAction,
-	 *      java.lang.Object)
-	 */
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, EMFObjectIndividualAttributeObjectPropertyValue initialContext) {
-	}
 }

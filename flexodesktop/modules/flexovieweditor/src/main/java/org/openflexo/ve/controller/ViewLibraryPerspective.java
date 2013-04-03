@@ -35,12 +35,14 @@ import org.openflexo.foundation.FlexoProjectObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.ViewLibrary;
+import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.inspector.FIBInspectorPanel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.diagram.DiagramController;
 import org.openflexo.ve.diagram.DiagramModuleView;
+import org.openflexo.ve.view.VirtualModelInstanceView;
 import org.openflexo.ve.widget.FIBViewLibraryBrowser;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
@@ -105,18 +107,21 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 
 	@Override
 	public JComponent getTopRightView() {
-		if (getCurrentShemaModuleView() == null) {
+		if (getCurrentDiagramModuleView() != null) {
+			return getCurrentDiagramModuleView().getController().getPaletteView();
+		} else {
 			return EMPTY_RIGHT_VIEW;
 		}
-		return getCurrentShemaModuleView().getController().getPaletteView();
 	}
 
 	@Override
 	public JComponent getBottomRightView() {
-		if (getCurrentShemaModuleView() == null) {
+		if (getCurrentDiagramModuleView() != null) {
+			// if (_controller != null && _controller.getCurrentModuleView() != null) {
+			return inspectorPanelScrollPane;
+		} else {
 			return bottomRightDummy;
 		}
-		return inspectorPanelScrollPane;
 	}
 
 	/**
@@ -143,7 +148,7 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoObject object) {
-		return object instanceof Diagram;
+		return object instanceof Diagram || object instanceof VirtualModelInstance;
 	}
 
 	@Override
@@ -151,13 +156,16 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 		if (object instanceof Diagram) {
 			return getControllerForDiagram((Diagram) object).getModuleView();
 		}
+		if (object instanceof VirtualModelInstance) {
+			return new VirtualModelInstanceView((VirtualModelInstance) object, (VEController) controller);
+		}
 		return null;
 	}
 
 	@Override
 	public JComponent getHeader() {
-		if (getCurrentShemaModuleView() != null) {
-			return getCurrentShemaModuleView().getController().getScalePanel();
+		if (getCurrentDiagramModuleView() != null) {
+			return getCurrentDiagramModuleView().getController().getScalePanel();
 		}
 		return null;
 	}
@@ -167,9 +175,16 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 		return infoLabel;
 	}
 
-	public DiagramModuleView getCurrentShemaModuleView() {
+	public DiagramModuleView getCurrentDiagramModuleView() {
 		if (_controller != null && _controller.getCurrentModuleView() instanceof DiagramModuleView) {
 			return (DiagramModuleView) _controller.getCurrentModuleView();
+		}
+		return null;
+	}
+
+	public VirtualModelInstanceView getCurrentVirtualModelInstanceView() {
+		if (_controller != null && _controller.getCurrentModuleView() instanceof VirtualModelInstanceView) {
+			return (VirtualModelInstanceView) _controller.getCurrentModuleView();
 		}
 		return null;
 	}

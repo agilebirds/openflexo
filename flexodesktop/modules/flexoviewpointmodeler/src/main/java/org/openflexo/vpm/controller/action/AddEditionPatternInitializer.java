@@ -64,7 +64,9 @@ public class AddEditionPatternInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<AddEditionPattern>() {
 			@Override
 			public boolean run(EventObject e, AddEditionPattern action) {
-				((VPMController) getController()).setCurrentEditedObjectAsModuleView(action.getNewEditionPattern());
+				if (action.switchNewlyCreatedEditionPattern) {
+					((VPMController) getController()).setCurrentEditedObjectAsModuleView(action.getNewEditionPattern());
+				}
 				return true;
 			}
 		};

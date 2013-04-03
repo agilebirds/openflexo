@@ -197,13 +197,4 @@ public class AddEMFObjectIndividualAttributeDataPropertyValue extends SetEMFProp
 		return result;
 	}
 
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.viewpoint.EditionAction#finalizePerformAction(org.openflexo.foundation.view.action.EditionSchemeAction,
-	 *      java.lang.Object)
-	 */
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, EMFObjectIndividualAttributeDataPropertyValue initialContext) {
-	}
 }

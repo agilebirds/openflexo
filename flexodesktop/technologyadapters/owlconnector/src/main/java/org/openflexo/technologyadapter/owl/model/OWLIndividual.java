@@ -354,4 +354,9 @@ public class OWLIndividual extends OWLConcept<Individual> implements IFlexoOntol
 		logger.warning("Not implemented yet");
 		return null;
 	}
+
+	@Override
+	public String toString() {
+		return "OWLIndividual:" + getURI();
+	}
 }

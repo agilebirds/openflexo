@@ -77,6 +77,7 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 		new DropSchemeActionInitializer(this);
 		new LinkSchemeActionInitializer(this);
 		new ActionSchemeActionInitializer(this);
+		new SynchronizationSchemeActionInitializer(this);
 		new NavigationSchemeActionInitializer(this);
 		new ResetGraphicalRepresentationInitializer(this);
 

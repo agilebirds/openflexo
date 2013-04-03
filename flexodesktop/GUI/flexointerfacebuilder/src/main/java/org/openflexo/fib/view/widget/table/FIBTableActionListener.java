@@ -181,7 +181,7 @@ public class FIBTableActionListener implements ActionListener, BindingEvaluation
 		if (variable.getVariableName().equals("selected")) {
 			return selectedObject;
 		} else {
-			return getController().getValue(variable);
+			return tableWidget.getBindingEvaluationContext().getValue(variable);
 		}
 	}
 

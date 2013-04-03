@@ -602,6 +602,10 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 				}
 
 				if (evaluatedExpression instanceof Constant) {
+					Class baseClassForType = TypeUtils.getBaseClass(getDeclaredType());
+					if (baseClassForType != null && Number.class.isAssignableFrom(baseClassForType)) {
+						return (T) TypeUtils.castTo(((Constant) evaluatedExpression).getValue(), getDeclaredType());
+					}
 					return (T) ((Constant) evaluatedExpression).getValue();
 				}
 

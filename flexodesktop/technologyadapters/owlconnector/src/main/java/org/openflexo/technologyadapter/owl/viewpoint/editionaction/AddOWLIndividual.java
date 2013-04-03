@@ -135,10 +135,4 @@ public class AddOWLIndividual extends AddIndividual<OWLOntology, OWLOntology, OW
 		}
 	}
 
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, OWLIndividual initialContext) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

@@ -33,13 +33,17 @@ import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.viewpoint.ActionContainer;
+import org.openflexo.foundation.viewpoint.AddEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.ConditionalAction;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeObject;
+import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.FetchRequestIterationAction;
 import org.openflexo.foundation.viewpoint.IterationAction;
+import org.openflexo.foundation.viewpoint.MatchEditionPatternInstance;
+import org.openflexo.foundation.viewpoint.SelectEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.localization.FlexoLocalization;
 
@@ -81,9 +85,12 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 	}
 
 	public String description;
-	private CreateEditionActionChoice actionChoice = CreateEditionActionChoice.BuiltInAction;
+	public CreateEditionActionChoice actionChoice = CreateEditionActionChoice.BuiltInAction;
 	public ModelSlot<?, ?> modelSlot;
-	public Class<? extends EditionAction> editionActionClass;
+	public Class<? extends EditionAction> builtInActionClass;
+	public Class<? extends EditionAction> controlActionClass;
+	public Class<? extends EditionAction> modelSlotSpecificActionClass;
+	public Class<? extends FetchRequest> requestActionClass;
 
 	private EditionAction newEditionAction;
 
@@ -94,8 +101,11 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 		super(actionType, focusedObject, globalSelection, editor);
 
 		builtInActions = new ArrayList<Class<? extends EditionAction>>();
+		builtInActions.add(org.openflexo.foundation.viewpoint.AssignationAction.class);
 		builtInActions.add(org.openflexo.foundation.viewpoint.DeclarePatternRole.class);
-		builtInActions.add(org.openflexo.foundation.viewpoint.AddEditionPattern.class);
+		builtInActions.add(org.openflexo.foundation.viewpoint.AddEditionPatternInstance.class);
+		builtInActions.add(org.openflexo.foundation.viewpoint.MatchEditionPatternInstance.class);
+		builtInActions.add(org.openflexo.foundation.viewpoint.SelectEditionPatternInstance.class);
 		builtInActions.add(DeleteAction.class);
 
 		controlActions = new ArrayList<Class<? extends EditionAction>>();
@@ -105,45 +115,35 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 
 	}
 
-	public List<Class<? extends EditionAction>> getAvailableEditionActionTypes() {
-		switch (actionChoice) {
-		case BuiltInAction:
-			return builtInActions;
-		case ControlAction:
-			return controlActions;
-		case ModelSlotSpecificAction:
-			if (modelSlot != null) {
-				return modelSlot.getAvailableEditionActionTypes();
-			}
-			return null;
-		case RequestAction:
-			if (modelSlot != null) {
-				return modelSlot.getAvailableFetchRequestActionTypes();
-			}
-			return null;
-		default:
-			return null;
-		}
+	public List<Class<? extends EditionAction>> getBuiltInActions() {
+		return builtInActions;
 	}
 
-	public CreateEditionActionChoice getActionChoice() {
-		return actionChoice;
+	public List<Class<? extends EditionAction>> getControlActions() {
+		return controlActions;
 	}
 
-	public void setActionChoice(CreateEditionActionChoice actionChoice) {
-		if (this.actionChoice != actionChoice) {
-			this.actionChoice = actionChoice;
-			editionActionClass = null;
+	public List<Class<? extends EditionAction>> getModelSlotSpecificActions() {
+		if (modelSlot != null) {
+			return modelSlot.getAvailableEditionActionTypes();
 		}
+		return null;
+	}
+
+	public List<Class<? extends EditionAction>> getRequestActions() {
+		if (modelSlot != null) {
+			return modelSlot.getAvailableFetchRequestActionTypes();
+		}
+		return null;
 	}
 
 	@Override
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
-		logger.info("Add edition action, modelSlot=" + modelSlot + " editionActionClass=" + editionActionClass);
+		logger.info("Add edition action, modelSlot=" + modelSlot + " actionChoice=" + actionChoice);
 
-		if (modelSlot != null && editionActionClass != null) {
-			newEditionAction = modelSlot.makeEditionAction(editionActionClass);
-			newEditionAction.setModelSlot(modelSlot);
+		newEditionAction = makeEditionAction();
+
+		if (newEditionAction != null) {
 			if (getFocusedObject() instanceof ActionContainer) {
 				((ActionContainer) getFocusedObject()).addToActions(newEditionAction);
 			} else if (getFocusedObject() instanceof EditionAction) {
@@ -170,17 +170,112 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 
 	@Override
 	public boolean isValid() {
-		if (editionActionClass == null) {
-			validityMessage = NO_ACTION_TYPE_SELECTED;
-			return false;
-		}
-		if (actionChoice == CreateEditionActionChoice.ModelSlotSpecificAction && modelSlot == null) {
-			validityMessage = NO_MODEL_SLOT;
-			return false;
-		} else {
-			validityMessage = "";
+		switch (actionChoice) {
+		case BuiltInAction:
+			if (builtInActionClass == null) {
+				validityMessage = NO_ACTION_TYPE_SELECTED;
+				return false;
+			}
 			return true;
+		case ControlAction:
+			if (controlActionClass == null) {
+				validityMessage = NO_ACTION_TYPE_SELECTED;
+				return false;
+			}
+			return true;
+		case ModelSlotSpecificAction:
+			if (modelSlot == null) {
+				validityMessage = NO_MODEL_SLOT;
+				return false;
+			}
+			if (modelSlotSpecificActionClass == null) {
+				validityMessage = NO_ACTION_TYPE_SELECTED;
+				return false;
+			}
+			return true;
+		case RequestAction:
+			if (modelSlot == null) {
+				validityMessage = NO_MODEL_SLOT;
+				return false;
+			}
+			if (requestActionClass == null) {
+				validityMessage = NO_ACTION_TYPE_SELECTED;
+				return false;
+			}
+			return true;
+
+		default:
+			return false;
 		}
+
+	}
+
+	private EditionAction makeEditionAction() {
+		EditionAction returned;
+		switch (actionChoice) {
+		case BuiltInAction:
+			if (builtInActionClass == null) {
+				logger.warning("Unexpected " + builtInActionClass);
+				return null;
+			}
+			if (org.openflexo.foundation.viewpoint.AssignationAction.class.isAssignableFrom(builtInActionClass)) {
+				return new org.openflexo.foundation.viewpoint.AssignationAction(null);
+			} else if (org.openflexo.foundation.viewpoint.DeclarePatternRole.class.isAssignableFrom(builtInActionClass)) {
+				return new org.openflexo.foundation.viewpoint.DeclarePatternRole(null);
+			} else if (AddEditionPatternInstance.class.isAssignableFrom(builtInActionClass)) {
+				return new AddEditionPatternInstance(null);
+			} else if (MatchEditionPatternInstance.class.isAssignableFrom(builtInActionClass)) {
+				return new MatchEditionPatternInstance(null);
+			} else if (SelectEditionPatternInstance.class.isAssignableFrom(builtInActionClass)) {
+				return new SelectEditionPatternInstance(null);
+			} else if (DeleteAction.class.isAssignableFrom(builtInActionClass)) {
+				return new DeleteAction(null);
+			} else {
+				logger.warning("Unexpected " + builtInActionClass);
+				return null;
+			}
+		case ControlAction:
+			if (controlActionClass == null) {
+				logger.warning("Unexpected " + controlActionClass);
+				return null;
+			}
+			if (ConditionalAction.class.isAssignableFrom(controlActionClass)) {
+				return new ConditionalAction(null);
+			} else if (IterationAction.class.isAssignableFrom(controlActionClass)) {
+				return new IterationAction(null);
+			} else if (FetchRequestIterationAction.class.isAssignableFrom(controlActionClass) && requestActionClass != null
+					&& modelSlot != null) {
+				returned = new FetchRequestIterationAction(null);
+				FetchRequest request = modelSlot.makeFetchRequest(requestActionClass);
+				request.setModelSlot(modelSlot);
+				((FetchRequestIterationAction) returned).setFetchRequest(request);
+				returned.setModelSlot(modelSlot);
+				return returned;
+			} else {
+				logger.warning("Unexpected " + controlActionClass);
+				return null;
+			}
+		case ModelSlotSpecificAction:
+			if (modelSlotSpecificActionClass != null && modelSlot != null) {
+				returned = modelSlot.makeEditionAction(modelSlotSpecificActionClass);
+				returned.setModelSlot(modelSlot);
+				return returned;
+			}
+			break;
+		case RequestAction:
+			if (requestActionClass != null && modelSlot != null) {
+				returned = modelSlot.makeFetchRequest(requestActionClass);
+				returned.setModelSlot(modelSlot);
+				return returned;
+			}
+
+		default:
+			break;
+		}
+
+		logger.warning("Cannot build EditionAction");
+		return null;
+
 	}
 
 }

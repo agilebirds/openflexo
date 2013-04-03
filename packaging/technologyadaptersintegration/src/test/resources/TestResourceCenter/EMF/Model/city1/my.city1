@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<city1:City xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:city1="http://www.thalesgroup.com/openflexo/emf/model/city1">
-  <houses owner="//@residents.0" info="12"/>
-  <houses owner="//@residents.1" type="Appartment" info="42B"/>
-  <residents name="resident1"/>
-  <residents name="resident2"/>
-  <residents name="resident3"/>
-</city1:City>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:city1="http://www.thalesgroup.com/openflexo/emf/model/city1">
+  <city1:City name="Lampaul-Plouarzel">
+    <houses owner="/0/@residents.0" type="Mansion" info="12"/>
+    <houses owner="/0/@residents.1" type="Appartment" info="42B"/>
+    <houses owner="/0/@residents.2" type="Appartment" info="12A"/>
+    <residents name="Christophe Guychard"/>
+    <residents name="Sylvain Guerin"/>
+    <residents name="Patrick Martin"/>
+  </city1:City>
+  <city1:City name="Paris"/>
+  <city1:City name="Bordeaux"/>
+  <city1:City name="Brest">
+  </city1:City>
+</xmi:XMI>

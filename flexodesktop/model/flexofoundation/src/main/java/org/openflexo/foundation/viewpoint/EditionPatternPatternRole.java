@@ -17,7 +17,7 @@ public class EditionPatternPatternRole extends PatternRole<EditionPatternInstanc
 
 	@Override
 	public Type getType() {
-		return getEditionPatternType();
+		return EditionPatternInstanceType.getEditionPatternInstanceType(getEditionPatternType());
 	}
 
 	@Override

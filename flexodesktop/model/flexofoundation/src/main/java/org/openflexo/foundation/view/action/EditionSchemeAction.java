@@ -34,11 +34,8 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.resource.FlexoFileResource;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
@@ -197,11 +194,11 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 
 	public abstract EditionPatternInstance getEditionPatternInstance();
 
-	public VirtualModelInstance getVirtualModelInstance() {
+	public VirtualModelInstance<?, ?> getVirtualModelInstance() {
 		return retrieveVirtualModelInstance();
 	}
 
-	public abstract VirtualModelInstance retrieveVirtualModelInstance();
+	public abstract VirtualModelInstance<?, ?> retrieveVirtualModelInstance();
 
 	/**
 	 * This is the internal code performing execution of the control graph of {@link EditionAction} defined to be the execution control
@@ -257,6 +254,10 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 
 		if (assignedObject != null && action instanceof AssignableAction) {
 			AssignableAction assignableAction = (AssignableAction) action;
+			if (assignableAction.getIsVariableDeclaration()) {
+				System.out.println("Setting variable " + assignableAction.getVariableName() + " with " + assignedObject);
+				declareVariable(assignableAction.getVariableName(), assignedObject);
+			}
 			if (assignableAction.getAssignation().isSet() && assignableAction.getAssignation().isValid()) {
 				try {
 					assignableAction.getAssignation().setBindingValue(assignedObject, this);
@@ -295,6 +296,10 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 	public void setValue(Object value, BindingVariable variable) {
 		if (variable instanceof PatternRoleBindingVariable) {
 			getEditionPatternInstance().setPatternActor(value, ((PatternRoleBindingVariable) variable).getPatternRole());
+			return;
+		}
+		if (variables.get(variable.getVariableName()) != null) {
+			variables.put(variable.getVariableName(), value);
 			return;
 		}
 		logger.warning("Unexpected variable requested in settable context in EditionSchemeAction: " + variable + " of "

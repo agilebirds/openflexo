@@ -29,12 +29,13 @@ import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagram;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.view.FIBModuleView;
+import org.openflexo.view.ModuleView;
 import org.openflexo.vpm.VPMCst;
 import org.openflexo.vpm.controller.VPMController;
 import org.openflexo.vpm.controller.ViewPointPerspective;
 
 /**
- * Please comment this class
+ * This is the {@link ModuleView} representing a {@link ViewPoint}
  * 
  * @author sguerin
  * 

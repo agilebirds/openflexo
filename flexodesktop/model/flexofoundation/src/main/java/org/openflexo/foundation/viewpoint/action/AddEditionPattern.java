@@ -67,6 +67,8 @@ public class AddEditionPattern extends FlexoAction<AddEditionPattern, VirtualMod
 	private String _newEditionPatternName;
 	private EditionPattern _newEditionPattern;
 
+	public boolean switchNewlyCreatedEditionPattern = true;
+
 	AddEditionPattern(VirtualModel focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}

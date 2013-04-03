@@ -54,9 +54,10 @@ public abstract class AbstractActionScheme extends EditionScheme {
 	}
 
 	public boolean evaluateCondition(EditionPatternInstance editionPatternInstance) {
-		if (getConditional().isValid()) {
+		if (getConditional().isSet() && getConditional().isValid()) {
 			try {
-				return getConditional().getBindingValue(editionPatternInstance);
+				Boolean returned = getConditional().getBindingValue(editionPatternInstance);
+				return returned;
 			} catch (TypeMismatchException e) {
 				e.printStackTrace();
 			} catch (NullReferenceException e) {

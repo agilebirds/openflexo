@@ -28,8 +28,18 @@ import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
+import org.openflexo.foundation.viewpoint.AddEditionPatternInstance;
+import org.openflexo.foundation.viewpoint.ConditionalAction;
+import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
+import org.openflexo.foundation.viewpoint.FetchRequestIterationAction;
+import org.openflexo.foundation.viewpoint.IterationAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.SelectEditionPatternInstance;
+import org.openflexo.icon.IconFactory;
+import org.openflexo.icon.IconLibrary;
+import org.openflexo.icon.VEIconLibrary;
+import org.openflexo.icon.VPMIconLibrary;
 
 /**
  * This class represents a technology-specific controller provided by a {@link TechnologyAdapter}<br>
@@ -137,7 +147,27 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<?
 	 * @param object
 	 * @return
 	 */
-	public abstract ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass);
+	public ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass) {
+		if (org.openflexo.foundation.viewpoint.DeclarePatternRole.class.isAssignableFrom(editionActionClass)) {
+			return VPMIconLibrary.DECLARE_PATTERN_ROLE_ICON;
+		} else if (org.openflexo.foundation.viewpoint.AssignationAction.class.isAssignableFrom(editionActionClass)) {
+			return VPMIconLibrary.DECLARE_PATTERN_ROLE_ICON;
+		} else if (AddEditionPatternInstance.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(VEIconLibrary.EDITION_PATTERN_INSTANCE_ICON, IconLibrary.DUPLICATE);
+		} else if (SelectEditionPatternInstance.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(VEIconLibrary.EDITION_PATTERN_INSTANCE_ICON, IconLibrary.IMPORT);
+		} else if (DeleteAction.class.isAssignableFrom(editionActionClass)) {
+			return VPMIconLibrary.DELETE_ICON;
+		} else if (ConditionalAction.class.isAssignableFrom(editionActionClass)) {
+			return VPMIconLibrary.CONDITIONAL_ACTION_ICON;
+		} else if (IterationAction.class.isAssignableFrom(editionActionClass)) {
+			return VPMIconLibrary.ITERATION_ACTION_ICON;
+		} else if (FetchRequestIterationAction.class.isAssignableFrom(editionActionClass)) {
+			return VPMIconLibrary.ITERATION_ACTION_ICON;
+		}
+		return null;
+
+	}
 
 	public abstract OntologyBrowserModel makeOntologyBrowserModel(IFlexoOntology context);
 }

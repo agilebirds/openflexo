@@ -267,6 +267,14 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 		return null;
 	}
 
+	public SynchronizationScheme createSynchronizationScheme() {
+		SynchronizationScheme newSynchronizationScheme = new SynchronizationScheme(null);
+		newSynchronizationScheme.setVirtualModel(this);
+		newSynchronizationScheme.setName("synchronization");
+		addToEditionSchemes(newSynchronizationScheme);
+		return newSynchronizationScheme;
+	}
+
 	@Override
 	public BindingModel getBindingModel() {
 		if (bindingModel == null) {
@@ -286,9 +294,15 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 		bindingModel = new BindingModel();
 		for (EditionPattern ep : getEditionPatterns()) {
 			// bindingModel.addToBindingVariables(new EditionPatternPathElement<ViewPoint>(ep, this));
-			bindingModel.addToBindingVariables(new BindingVariable(ep.getName(), ep));
+			bindingModel.addToBindingVariables(new BindingVariable(ep.getName(), EditionPatternInstanceType
+					.getEditionPatternInstanceType(ep)));
 		}
 	}
+
+	/*@Override
+	public String simpleRepresentation() {
+		return "VirtualModel:" + FlexoLocalization.localizedForKey(getLocalizedDictionary(), getName());
+	}*/
 
 	// ==========================================================================
 	// ============================== Model Slots ===============================

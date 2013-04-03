@@ -223,10 +223,6 @@ public class AddDataPropertyStatement extends AddStatement<DataPropertyStatement
 		return subject.addDataPropertyStatement(property, value);
 	}
 
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, DataPropertyStatement initialContext) {
-	}
-
 	public static class AddDataPropertyStatementActionMustDefineADataProperty extends
 			ValidationRule<AddDataPropertyStatementActionMustDefineADataProperty, AddDataPropertyStatement> {
 		public AddDataPropertyStatementActionMustDefineADataProperty() {

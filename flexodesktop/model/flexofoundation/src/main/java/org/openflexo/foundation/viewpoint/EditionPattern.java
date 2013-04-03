@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -29,7 +28,6 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.CustomType;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.validation.FixProposal;
@@ -52,7 +50,6 @@ import org.openflexo.foundation.viewpoint.dm.EditionSchemeRemoved;
 import org.openflexo.foundation.viewpoint.dm.PatternRoleInserted;
 import org.openflexo.foundation.viewpoint.dm.PatternRoleRemoved;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.ChainedCollection;
 import org.openflexo.toolbox.StringUtils;
@@ -71,7 +68,7 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain
  * 
  */
-public class EditionPattern extends EditionPatternObject implements CustomType {
+public class EditionPattern extends EditionPatternObject {
 
 	protected static final Logger logger = FlexoLogger.getLogger(EditionPattern.class.getPackage().getName());
 
@@ -98,61 +95,6 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 	 */
 	private ChainedCollection<ViewPointObject> validableObjects = null;
 
-	/**
-	 * Represent the type of a EditionPatternInstance of a given EditionPattern
-	 * 
-	 * @author sylvain
-	 * 
-	 */
-	public static class EditionPatternInstanceType implements CustomType {
-
-		public static EditionPatternInstanceType getEditionPatternInstanceType(EditionPattern anEditionPattern) {
-			if (anEditionPattern == null) {
-				return null;
-			}
-			return anEditionPattern.getInstanceType();
-		}
-
-		private EditionPattern editionPattern;
-
-		public EditionPatternInstanceType(EditionPattern anEditionPattern) {
-			this.editionPattern = anEditionPattern;
-		}
-
-		public EditionPattern getEditionPattern() {
-			return editionPattern;
-		}
-
-		@Override
-		public Class getBaseClass() {
-			return EditionPatternInstance.class;
-		}
-
-		@Override
-		public boolean isTypeAssignableFrom(Type aType, boolean permissive) {
-			// System.out.println("isTypeAssignableFrom " + aType + " (i am a " + this + ")");
-			if (aType instanceof EditionPatternInstanceType) {
-				return editionPattern.isAssignableFrom(((EditionPatternInstanceType) aType).getEditionPattern());
-			}
-			return false;
-		}
-
-		@Override
-		public String simpleRepresentation() {
-			return "EditionPatternInstanceType" + ":" + editionPattern;
-		}
-
-		@Override
-		public String fullQualifiedRepresentation() {
-			return "EditionPatternInstanceType" + ":" + editionPattern;
-		}
-
-		@Override
-		public String toString() {
-			return simpleRepresentation();
-		}
-	}
-
 	public EditionPattern(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 		if (builder != null) {
@@ -174,7 +116,7 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 		return validableObjects;
 	}
 
-	private EditionPatternInstanceType getInstanceType() {
+	EditionPatternInstanceType getInstanceType() {
 		return instanceType;
 	}
 
@@ -449,6 +391,20 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 		return returned;
 	}
 
+	/**
+	 * Only one synchronization scheme is allowed
+	 * 
+	 * @return
+	 */
+	public SynchronizationScheme getSynchronizationScheme() {
+		for (EditionScheme es : getEditionSchemes()) {
+			if (es instanceof SynchronizationScheme) {
+				return (SynchronizationScheme) es;
+			}
+		}
+		return null;
+	}
+
 	public Vector<DeletionScheme> getDeletionSchemes() {
 		Vector<DeletionScheme> returned = new Vector<DeletionScheme>();
 		for (EditionScheme es : getEditionSchemes()) {
@@ -516,6 +472,15 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 		return false;
 	}
 
+	public boolean hasSynchronizationScheme() {
+		for (EditionScheme es : getEditionSchemes()) {
+			if (es instanceof SynchronizationScheme) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public boolean hasNavigationScheme() {
 		for (EditionScheme es : getEditionSchemes()) {
 			if (es instanceof NavigationScheme) {
@@ -563,14 +528,6 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 		newActionScheme.setName("action");
 		addToEditionSchemes(newActionScheme);
 		return newActionScheme;
-	}
-
-	public SynchronizationScheme createSynchronizationScheme() {
-		SynchronizationScheme newSynchronizationScheme = new SynchronizationScheme(null);
-		newSynchronizationScheme.setEditionPattern(this);
-		newSynchronizationScheme.setName("synchronization");
-		addToEditionSchemes(newSynchronizationScheme);
-		return newSynchronizationScheme;
 	}
 
 	public NavigationScheme createNavigationScheme() {
@@ -767,7 +724,7 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 		this.primaryRepresentationRole = primaryRepresentationRole;
 	}
 
-	@Override
+	/*@Override
 	public String simpleRepresentation() {
 		return "EditionPattern:" + FlexoLocalization.localizedForKey(getLocalizedDictionary(), getName());
 	}
@@ -788,7 +745,7 @@ public class EditionPattern extends EditionPatternObject implements CustomType {
 			return isAssignableFrom((EditionPattern) aType);
 		}
 		return aType == this;
-	}
+	}*/
 
 	/**
 	 * Duplicates this EditionPattern, given a new name<br>

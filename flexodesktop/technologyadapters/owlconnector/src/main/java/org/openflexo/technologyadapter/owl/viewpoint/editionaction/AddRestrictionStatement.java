@@ -236,10 +236,4 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 		return null;
 	}
 
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, OWLStatement initialContext) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

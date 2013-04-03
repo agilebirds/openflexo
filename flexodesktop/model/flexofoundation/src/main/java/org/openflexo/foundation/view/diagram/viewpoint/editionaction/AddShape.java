@@ -175,6 +175,7 @@ public class AddShape extends AddShemaElementAction<DiagramShape> {
 
 	@Override
 	public void finalizePerformAction(EditionSchemeAction action, DiagramShape newShape) {
+		super.finalizePerformAction(action, newShape);
 		// Be sure that the newly created shape is updated
 		newShape.update();
 	}

@@ -5,11 +5,12 @@ import javax.swing.ImageIcon;
 import org.openflexo.components.widget.OntologyBrowserModel;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
-import org.openflexo.foundation.viewpoint.AddEditionPattern;
+import org.openflexo.foundation.viewpoint.AddEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPatternPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.SelectEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.VirtualModelTechnologyAdapter;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
@@ -91,12 +92,14 @@ public class VirtualModelTechnologyAdapterController extends TechnologyAdapterCo
 
 	@Override
 	public ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass) {
-		if (AddEditionPattern.class.isAssignableFrom(editionActionClass)) {
+		if (AddEditionPatternInstance.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(VEIconLibrary.EDITION_PATTERN_INSTANCE_ICON, IconLibrary.DUPLICATE);
+		} else if (SelectEditionPatternInstance.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory.getImageIcon(VEIconLibrary.EDITION_PATTERN_INSTANCE_ICON, IconLibrary.IMPORT);
 		} else if (DeleteAction.class.isAssignableFrom(editionActionClass)) {
-			return VEIconLibrary.DELETE_ICON;
+			return IconFactory.getImageIcon(VEIconLibrary.EDITION_PATTERN_INSTANCE_ICON, IconLibrary.DELETE);
 		}
-		return null;
+		return super.getIconForEditionAction(editionActionClass);
 	}
 
 	@Override

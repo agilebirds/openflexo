@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<city2:City xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:city2="http://www.thalesgroup.com/openflexo/emf/model/city2" name="Lyon">
+  <houses xsi:type="city2:Mansion" owner="Ga Ga"/>
+  <houses xsi:type="city2:Appartment" owner="Bu Zo" label="BuZo"/>
+  <mayor name="GaBu ZoMe"/>
+</city2:City>

@@ -41,6 +41,9 @@ import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
 import org.openflexo.toolbox.IProgress;
 
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.RDFWriter;
+
 /**
  * Represents the resource associated to a {@link OWLOntology}
  * 
@@ -177,13 +180,20 @@ public abstract class OWLOntologyResourceImpl extends FlexoFileResourceImpl<OWLO
 	}
 
 	private void _writeToFile() throws SaveResourceException {
+		System.out.println("Saving OWL ontology to " + getFile().getAbsolutePath());
 		FileOutputStream out = null;
 		try {
+			OWLOntology ontology = getResourceData(null);
+			OntModel ontModel = ontology.getOntModel();
+			ontModel.setNsPrefix("base", ontology.getURI());
 			out = new FileOutputStream(getFile());
-			getResourceData(null).getOntModel().write(out, null, getResourceData(null).getOntologyURI());
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			throw new SaveResourceException(this);
+			RDFWriter writer = ontModel.getWriter("RDF/XML-ABBREV");
+			writer.setProperty("xmlbase", ontology.getURI());
+			writer.write(ontModel.getBaseModel(), out, ontology.getURI());
+			// getOntModel().setNsPrefix("base", getOntologyURI());
+			// getOntModel().write(out, "RDF/XML-ABBREV", getOntologyURI()); // "RDF/XML-ABBREV"
+			clearIsModified(true);
+			logger.info("Wrote " + getFile());
 		} catch (ResourceLoadingCancelledException e) {
 			e.printStackTrace();
 			throw new SaveResourceException(this);
@@ -193,6 +203,10 @@ public abstract class OWLOntologyResourceImpl extends FlexoFileResourceImpl<OWLO
 		} catch (FlexoException e) {
 			e.printStackTrace();
 			throw new SaveResourceException(this);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			logger.warning("FileNotFoundException: " + e.getMessage());
+			throw new SaveResourceException(this);
 		} finally {
 			try {
 				if (out != null) {
@@ -200,11 +214,10 @@ public abstract class OWLOntologyResourceImpl extends FlexoFileResourceImpl<OWLO
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
+				logger.warning("IOException: " + e.getMessage());
 				throw new SaveResourceException(this);
 			}
 		}
-
-		logger.info("Wrote " + getFile());
 
 	}
 

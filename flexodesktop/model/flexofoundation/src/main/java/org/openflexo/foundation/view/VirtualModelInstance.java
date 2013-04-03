@@ -30,6 +30,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.resource.FlexoXMLFileResource;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -44,7 +45,10 @@ import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.view.action.SynchronizationSchemeAction;
+import org.openflexo.foundation.view.action.SynchronizationSchemeActionType;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.SynchronizationScheme;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
@@ -197,6 +201,8 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 			editionPatternInstances.put(epi.getEditionPattern(), hash);
 		}
 		hash.put(epi.getFlexoID(), epi);
+		System.out.println("Registered EPI " + epi + " in " + epi.getEditionPattern());
+		System.out.println("hop: " + getEPInstances(epi.getEditionPattern()));
 		return epi;
 	}
 
@@ -257,9 +263,14 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 		return getEPInstances(ep);
 	}
 
-	public Collection<EditionPatternInstance> getEPInstances(EditionPattern ep) {
+	public List<EditionPatternInstance> getEPInstances(EditionPattern ep) {
 		Map<Long, EditionPatternInstance> hash = editionPatternInstances.get(ep);
-		return hash.values();
+		if (hash == null) {
+			hash = new Hashtable<Long, EditionPatternInstance>();
+			editionPatternInstances.put(ep, hash);
+		}
+		// TODO: performance issue here
+		return new ArrayList(hash.values());
 	}
 
 	// TODO: refactor this
@@ -469,6 +480,26 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 		setChanged();
 		notifyObservers(new VirtualModelInstanceDeleted(this));
 		deleteObservers();
+	}
+
+	// ==========================================================================
+	// =============================== Synchronize ==============================
+	// ==========================================================================
+
+	public void synchronize(FlexoEditor editor) {
+		if (isSynchronizable()) {
+			VirtualModel vm = getVirtualModel();
+			SynchronizationScheme ss = vm.getSynchronizationScheme();
+			SynchronizationSchemeActionType actionType = new SynchronizationSchemeActionType(ss, this);
+			SynchronizationSchemeAction action = actionType.makeNewAction(this, null, editor);
+			action.doAction();
+		} else {
+			logger.warning("No synchronization scheme defined for " + getVirtualModel());
+		}
+	}
+
+	public boolean isSynchronizable() {
+		return getVirtualModel() != null && getVirtualModel().hasSynchronizationScheme();
 	}
 
 }

@@ -133,6 +133,10 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 
 		newVirtualModelInstance = newVirtualModelInstanceResource.getVirtualModelInstance();
 
+		if (newVirtualModelInstance.isSynchronizable()) {
+			newVirtualModelInstance.synchronize(null);
+		}
+
 		logger.info("Added virtual model instance " + newVirtualModelInstance + " in view " + getFocusedObject());
 
 		System.out.println("OK, we have created the file " + newVirtualModelInstanceResource.getFile().getAbsolutePath());

@@ -75,10 +75,4 @@ public class AddOWLClass extends AddClass<OWLOntology, OWLOntology, OWLClass> {
 		return newClass;
 	}
 
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, OWLClass initialContext) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

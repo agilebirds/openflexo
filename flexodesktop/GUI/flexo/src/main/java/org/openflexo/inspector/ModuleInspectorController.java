@@ -40,6 +40,7 @@ import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBContainer;
 import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.module.UserType;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.FlexoController;
@@ -291,8 +292,10 @@ public class ModuleInspectorController extends Observable implements Observer {
 			switchToEmptyContent();
 		} else {
 			boolean updateEPTabs = false;
-			if (object instanceof FlexoModelObject) {
-				updateEPTabs = newInspector.updateEditionPatternReferences((FlexoModelObject) object);
+			if (object instanceof EditionPatternInstance) {
+				updateEPTabs = newInspector.updateEditionPatternInstanceInspector((EditionPatternInstance) object);
+			} else if (object instanceof FlexoModelObject) {
+				updateEPTabs = newInspector.updateFlexoProjectObjectInspector((FlexoModelObject) object);
 			}
 			if (newInspector != currentInspector || updateEPTabs) {
 				switchToInspector(newInspector, updateEPTabs);

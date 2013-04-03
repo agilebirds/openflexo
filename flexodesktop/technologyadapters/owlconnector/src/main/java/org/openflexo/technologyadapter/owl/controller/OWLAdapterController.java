@@ -165,7 +165,7 @@ public class OWLAdapterController extends TechnologyAdapterController<OWLTechnol
 		} else if (AddOWLClass.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(getIconForOntologyObject(OWLClass.class), IconLibrary.DUPLICATE);
 		}
-		return null;
+		return super.getIconForEditionAction(editionActionClass);
 	}
 
 	@Override

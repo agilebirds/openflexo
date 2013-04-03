@@ -317,6 +317,7 @@ public class EMFObjectIndividual extends AEMFModelObjectImpl<EObject> implements
 
 	@Override
 	public String toString() {
-		return "EMFObjectIndividual/" + getTypes().get(0) + ":" + getName() + "uri=" + getURI();
+		// return "EMFObjectIndividual/" + getTypes().get(0) + ":" + getName() + "uri=" + getURI();
+		return getTypes().get(0).getName() + ":" + getName();
 	}
 }

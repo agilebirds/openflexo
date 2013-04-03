@@ -128,7 +128,4 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModel, EMFMetaModel
 		return result;
 	}
 
-	@Override
-	public void finalizePerformAction(EditionSchemeAction action, EMFObjectIndividual initialContext) {
-	}
 }
