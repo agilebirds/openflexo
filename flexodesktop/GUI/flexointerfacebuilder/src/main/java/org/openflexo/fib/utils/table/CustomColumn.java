@@ -22,7 +22,6 @@ package org.openflexo.fib.utils.table;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Observable;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.JLabel;
@@ -43,7 +42,7 @@ import org.openflexo.toolbox.ToolBox;
  * @author sguerin
  * 
  */
-public abstract class CustomColumn<D extends Observable, T> extends AbstractColumn<D, T> implements EditableColumn<D, T> {
+public abstract class CustomColumn<D, T> extends AbstractColumn<D, T> implements EditableColumn<D, T> {
 
 	public CustomColumn(String title, int defaultWidth) {
 		super(title, defaultWidth, true);

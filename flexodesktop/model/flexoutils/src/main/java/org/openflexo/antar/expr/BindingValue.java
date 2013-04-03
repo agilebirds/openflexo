@@ -30,6 +30,7 @@ import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.Function;
 import org.openflexo.antar.binding.Function.FunctionArgument;
 import org.openflexo.antar.binding.FunctionPathElement;
 import org.openflexo.antar.binding.SettableBindingEvaluationContext;
@@ -395,6 +396,15 @@ public class BindingValue extends Expression {
 		return isValid(getDataBinding());
 	}
 
+	private boolean needsToBeReanalized = false;
+
+	public void markedAsToBeReanalized() {
+		needsToBeReanalized = true;
+		if (isValid()) {
+			analysingSuccessfull = true;
+		}
+	}
+
 	public boolean isValid(DataBinding<?> dataBinding) {
 
 		setDataBinding(dataBinding);
@@ -407,9 +417,11 @@ public class BindingValue extends Expression {
 			buildBindingPathFromParsedBindingPath(dataBinding);
 		}
 
-		if (!analysingSuccessfull) {
+		if (!analysingSuccessfull && !needsToBeReanalized) {
 			return false;
 		}
+
+		needsToBeReanalized = false;
 
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Is BindingValue " + this + " valid ?");
@@ -463,6 +475,7 @@ public class BindingValue extends Expression {
 					invalidBindingReason = "invalid function";
 					return false;
 				} else {
+					// System.out.println("Checking for functionPathElement= " + functionPathElement);
 					for (FunctionArgument arg : functionPathElement.getFunction().getArguments()) {
 						DataBinding<?> argValue = functionPathElement.getParameter(arg);
 						// System.out.println("Checking " + argValue + " valid=" + argValue.isValid());
@@ -583,12 +596,21 @@ public class BindingValue extends Expression {
 							args.add(argDataBinding);
 							argIndex++;
 						}
-						FunctionPathElement newPathElement = dataBinding.getOwner().getBindingFactory()
-								.makeFunctionPathElement(current, ((MethodCallBindingPathElement) pathElement).method, args);
-						if (newPathElement != null) {
-							bindingPath.add(newPathElement);
-							current = newPathElement;
-							// System.out.println("> FUNCTION " + pathElement);
+						Function function = dataBinding.getOwner().getBindingFactory()
+								.retrieveFunction(current.getType(), ((MethodCallBindingPathElement) pathElement).method, args);
+						if (function != null) {
+							FunctionPathElement newPathElement = dataBinding.getOwner().getBindingFactory()
+									.makeFunctionPathElement(current, function, args);
+							if (newPathElement != null) {
+								bindingPath.add(newPathElement);
+								current = newPathElement;
+								// System.out.println("> FUNCTION " + pathElement);
+							} else {
+								invalidBindingReason = "cannot find method " + ((MethodCallBindingPathElement) pathElement).method
+										+ " for type " + TypeUtils.simpleRepresentation(current.getType());
+								analysingSuccessfull = false;
+								return false;
+							}
 						} else {
 							invalidBindingReason = "cannot find method " + ((MethodCallBindingPathElement) pathElement).method
 									+ " for type " + TypeUtils.simpleRepresentation(current.getType());

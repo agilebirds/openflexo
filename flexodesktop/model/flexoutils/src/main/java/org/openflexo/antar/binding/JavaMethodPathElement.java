@@ -20,10 +20,8 @@
 package org.openflexo.antar.binding;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Function.FunctionArgument;
@@ -41,24 +39,17 @@ public class JavaMethodPathElement extends FunctionPathElement {
 
 	static final Logger logger = Logger.getLogger(JavaMethodPathElement.class.getPackage().getName());
 
-	public JavaMethodPathElement(BindingPathElement parent, String methodName, List<DataBinding<?>> args) {
-		super(parent, retrieveMethod(parent.getType(), methodName, args), args);
-		if (getFunction() != null) {
-			for (FunctionArgument arg : getFunction().getArguments()) {
-				DataBinding<?> argValue = getParameter(arg);
-				argValue.setDeclaredType(arg.getArgumentType());
-			}
-		}
-		if (getMethodDefinition() == null) {
-			logger.warning("Cannot retrieve method " + methodName + " with " + args.size() + " parameters from " + parent.getType()
-					+ " args=" + args);
-		} else {
-			setType(getMethodDefinition().getMethod().getGenericReturnType());
-		}
-	}
-
 	public JavaMethodPathElement(BindingPathElement parent, MethodDefinition method, List<DataBinding<?>> args) {
 		super(parent, method, args);
+		if (getMethodDefinition() != null) {
+			for (FunctionArgument arg : getMethodDefinition().getArguments()) {
+				DataBinding<?> argValue = getParameter(arg);
+				if (argValue != null) {
+					argValue.setDeclaredType(arg.getArgumentType());
+				}
+			}
+		}
+		setType(getMethodDefinition().getMethod().getGenericReturnType());
 	}
 
 	public MethodDefinition getMethodDefinition() {
@@ -93,53 +84,6 @@ public class JavaMethodPathElement extends FunctionPathElement {
 	@Override
 	public void setType(Type type) {
 		customType = type;
-	}
-
-	protected static MethodDefinition retrieveMethod(Type parentType, String methodName, List<DataBinding<?>> args) {
-		Vector<Method> possiblyMatchingMethods = new Vector<Method>();
-		Class<?> typeClass = TypeUtils.getBaseClass(parentType);
-		if (typeClass == null) {
-			System.out.println("Cannot find typeClass for " + parentType);
-		}
-		Method[] allMethods = typeClass.getMethods();
-		// First attempt: we perform type checking on parameters
-		for (Method method : allMethods) {
-			if (method.getName().equals(methodName) && method.getGenericParameterTypes().length == args.size()) {
-				boolean lookupFails = false;
-				for (int i = 0; i < args.size(); i++) {
-					DataBinding<?> suppliedArg = args.get(i);
-					Type argType = method.getGenericParameterTypes()[i];
-					if (!TypeUtils.isTypeAssignableFrom(argType, suppliedArg.getDeclaredType())) {
-						lookupFails = true;
-					}
-				}
-				if (!lookupFails) {
-					possiblyMatchingMethods.add(method);
-				}
-			}
-		}
-		// Second attempt: we don't check the types of parameters
-		if (possiblyMatchingMethods.size() == 0) {
-			for (Method method : allMethods) {
-				if (method.getName().equals(methodName) && method.getGenericParameterTypes().length == args.size()) {
-					possiblyMatchingMethods.add(method);
-				}
-			}
-		}
-		if (possiblyMatchingMethods.size() > 1) {
-			logger.warning("Please implement disambiguity here");
-			for (DataBinding<?> arg : args) {
-				System.out.println("arg " + arg + " of " + arg.getDeclaredType() + " / " + arg.getAnalyzedType());
-			}
-			// Return the first one
-			// TODO: try to find the best one
-			return MethodDefinition.getMethodDefinition(parentType, possiblyMatchingMethods.get(0));
-		} else if (possiblyMatchingMethods.size() == 1) {
-			return MethodDefinition.getMethodDefinition(parentType, possiblyMatchingMethods.get(0));
-		} else {
-			logger.warning("Cannot find method named " + methodName + " with args=" + args + " for type " + parentType);
-			return null;
-		}
 	}
 
 	@Override
@@ -197,14 +141,6 @@ public class JavaMethodPathElement extends FunctionPathElement {
 			logger.info("Caused by:");
 			e.getTargetException().printStackTrace();*/
 			throw new InvocationTargetTransformException(e);
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-			Method m = getMethodDefinition().getMethod();
-			System.out.println("j'ai mon pb");
-			System.out.println("getMethodDefinition()=" + getMethodDefinition());
-			System.out.println("getMethodDefinition().getMethod()=" + getMethodDefinition().getMethod());
-
-			// System.exit(-1);
 		}
 		return null;
 

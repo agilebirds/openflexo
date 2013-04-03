@@ -22,7 +22,6 @@ package org.openflexo.fib.utils.table;
 import java.awt.Component;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Observable;
 import java.util.Vector;
 
 import javax.swing.DefaultCellEditor;
@@ -41,7 +40,7 @@ import javax.swing.table.TableCellRenderer;
  * @author sguerin
  * 
  */
-public abstract class DropDownColumn<D extends Observable, T> extends AbstractColumn<D, T> implements EditableColumn<D, T> {
+public abstract class DropDownColumn<D, T> extends AbstractColumn<D, T> implements EditableColumn<D, T> {
 
 	private DropDownCellRenderer _cellRenderer;
 

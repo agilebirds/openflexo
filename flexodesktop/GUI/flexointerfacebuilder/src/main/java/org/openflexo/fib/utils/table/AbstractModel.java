@@ -43,7 +43,7 @@ import org.openflexo.fib.view.widget.table.EditableColumn;
  * @author sguerin
  * 
  */
-public abstract class AbstractModel<M extends Observable, D extends Observable> extends DefaultTableModel implements Observer {
+public abstract class AbstractModel<M extends Observable, D> extends DefaultTableModel implements Observer {
 
 	private static final Logger logger = Logger.getLogger(AbstractModel.class.getPackage().getName());
 
@@ -194,14 +194,18 @@ public abstract class AbstractModel<M extends Observable, D extends Observable> 
 
 	private void updateObservedObjects() {
 		for (Enumeration<D> en = _observedObjects.elements(); en.hasMoreElements();) {
-			Observable observed = en.nextElement();
-			observed.deleteObserver(this);
+			Object observed = en.nextElement();
+			if (observed instanceof Observable) {
+				((Observable) observed).deleteObserver(this);
+			}
 		}
 		_observedObjects.clear();
 		for (int i = 0; i < getRowCount(); i++) {
 			D observed = elementAt(i);
 			_observedObjects.add(observed);
-			observed.addObserver(this);
+			if (observed instanceof Observable) {
+				((Observable) observed).addObserver(this);
+			}
 		}
 	}
 

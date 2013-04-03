@@ -21,7 +21,6 @@ package org.openflexo.fib.utils.table;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.util.Observable;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
@@ -36,7 +35,7 @@ import javax.swing.table.TableCellEditor;
  * @author sguerin
  * 
  */
-public abstract class EditableStringColumn<D extends Observable> extends StringColumn<D> implements EditableColumn<D, String> {
+public abstract class EditableStringColumn<D> extends StringColumn<D> implements EditableColumn<D, String> {
 
 	DefaultCellEditor editor;
 

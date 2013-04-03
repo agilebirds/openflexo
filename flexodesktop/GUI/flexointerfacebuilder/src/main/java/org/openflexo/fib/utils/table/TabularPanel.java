@@ -60,7 +60,7 @@ public class TabularPanel extends JPanel implements TableModelListener, ListSele
 
 	private JScrollPane scrollPane;
 
-	protected Vector<Observable> _selectedObjects;
+	protected Vector<Object> _selectedObjects;
 	protected boolean _selectedObjectsNeedsRecomputing;
 
 	public TabularPanel(AbstractModel model, int visibleRowCount) {
@@ -81,7 +81,7 @@ public class TabularPanel extends JPanel implements TableModelListener, ListSele
 		_table = new FlexoJTable(model);
 		// _table.setPreferredSize(new Dimension(model.getTotalPreferredWidth(),100));
 
-		_selectedObjects = new Vector<Observable>();
+		_selectedObjects = new Vector<Object>();
 		_selectedObjectsNeedsRecomputing = false;
 
 		// _table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -223,7 +223,7 @@ public class TabularPanel extends JPanel implements TableModelListener, ListSele
 
 	}
 
-	public Vector<Observable> getSelectedObjects() {
+	public Vector<Object> getSelectedObjects() {
 		if (_selectedObjectsNeedsRecomputing) {
 			_selectedObjects.clear();
 			for (int i = 0; i < _model.getRowCount(); i++) {
@@ -240,7 +240,7 @@ public class TabularPanel extends JPanel implements TableModelListener, ListSele
 		return getSelectedObjects().containsAll(objectList);
 	}
 
-	public boolean isSelected(Observable object) {
+	public boolean isSelected(Object object) {
 		return getSelectedObjects().contains(object);
 	}
 
@@ -302,7 +302,7 @@ public class TabularPanel extends JPanel implements TableModelListener, ListSele
 
 	}
 
-	public void selectObject(Observable object) {
+	public void selectObject(Object object) {
 		resetSelection();
 
 		if (isSelected(object) == false) {

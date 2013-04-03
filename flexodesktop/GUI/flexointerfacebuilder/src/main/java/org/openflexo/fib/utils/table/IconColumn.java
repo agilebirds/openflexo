@@ -20,7 +20,6 @@
 package org.openflexo.fib.utils.table;
 
 import java.awt.Component;
-import java.util.Observable;
 
 import javax.swing.Icon;
 import javax.swing.JLabel;
@@ -33,7 +32,7 @@ import javax.swing.table.TableCellRenderer;
  * @author sguerin
  * 
  */
-public abstract class IconColumn<D extends Observable> extends AbstractColumn<D, Icon> {
+public abstract class IconColumn<D> extends AbstractColumn<D, Icon> {
 
 	public IconColumn(String title, int defaultWidth) {
 		super(title, defaultWidth, false);

@@ -19,7 +19,6 @@
  */
 package org.openflexo.fib.utils.table;
 
-import java.util.Observable;
 
 /**
  * Please comment this class
@@ -27,7 +26,7 @@ import java.util.Observable;
  * @author sguerin
  * 
  */
-public abstract class CheckColumn<D extends Observable> extends AbstractColumn<D, Boolean> implements EditableColumn<D, Boolean> {
+public abstract class CheckColumn<D> extends AbstractColumn<D, Boolean> implements EditableColumn<D, Boolean> {
 
 	public CheckColumn(String title, int defaultWidth) {
 		super(title, defaultWidth, false);

@@ -19,7 +19,6 @@
  */
 package org.openflexo.fib.utils.table;
 
-import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,7 +33,7 @@ import org.openflexo.fib.utils.BindingSelector;
  * @author sguerin
  * 
  */
-public abstract class BindingValueColumn<D extends Observable> extends CustomColumn<D, DataBinding> {
+public abstract class BindingValueColumn<D> extends CustomColumn<D, DataBinding> {
 
 	protected static final Logger logger = Logger.getLogger(BindingValueColumn.class.getPackage().getName());
 

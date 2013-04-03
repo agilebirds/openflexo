@@ -60,8 +60,6 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.Function;
 import org.openflexo.antar.binding.FunctionPathElement;
 import org.openflexo.antar.binding.JavaBindingFactory;
-import org.openflexo.antar.binding.JavaMethodPathElement;
-import org.openflexo.antar.binding.MethodDefinition;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.BindingValue;
@@ -787,12 +785,20 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 					getLabel().setVisible(true);
 					getLabel().setIcon(UtilsIconLibrary.OK_ICON);
 				} else {
-					logger.info("Binding not valid: " + editedObject + " reason=" + editedObject.invalidBindingReason());
+					logger.info("Hop: Binding not valid: " + editedObject + " reason=" + editedObject.invalidBindingReason());
 					/*if (editedObject.isBindingValue()) {
 						BindingValue bv = (BindingValue) (editedObject.getExpression());
 						System.out.println("BV=" + bv);
 						System.out.println("valid=" + bv.isValid());
 						System.out.println("reason=" + bv.invalidBindingReason());
+						for (BindingPathElement bpe : bv.getBindingPath()) {
+							System.out.println("> " + bpe);
+							if (bpe.getSerializationRepresentation().equals("substring(2)")) {
+								System.out.println("Valid=" + editedObject.isValid());
+								System.out.println("On s'arrete");
+								editedObject.isValid();
+							}
+						}
 					}*/
 					getLabel().setVisible(true);
 					getLabel().setIcon(UtilsIconLibrary.ERROR_ICON);
@@ -1183,21 +1189,31 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 						+ selectedValue.getElement().getClass());
 				System.out.println("currentElement=" + currentElement + " of " + currentElement != null ? currentElement.getClass() : null);*/
 
-				if (currentElement != null) {
-					if (!(currentElement instanceof FunctionPathElement)
-							|| (((FunctionPathElement) currentElement).getFunction() == null || !((FunctionPathElement) currentElement)
-									.getFunction().equals(((FunctionPathElement) selectedValue.getElement()).getFunction()))) {
-						disconnect();
-						Function function = ((FunctionPathElement) selectedValue.getElement()).getFunction();
+				logger.info("Selecting currentElement " + currentElement + " selectedValue=" + selectedValue);
+				// if (currentElement != null) {
+				if (currentElement == null
+						|| !(currentElement instanceof FunctionPathElement)
+						|| (((FunctionPathElement) currentElement).getFunction() == null || !((FunctionPathElement) currentElement)
+								.getFunction().equals(((FunctionPathElement) selectedValue.getElement()).getFunction()))) {
+					disconnect();
+					Function function = ((FunctionPathElement) selectedValue.getElement()).getFunction();
+					logger.info("Selecting function " + function);
+					FunctionPathElement newFunctionPathElement = getBindable().getBindingFactory().makeFunctionPathElement(
+							bindingValue.getLastBindingPathElement(), function, new ArrayList<DataBinding<?>>());
+					if (newFunctionPathElement != null) {
 						// TODO: we need to handle here generic FunctionPathElement and not only JavaMethodPathElement
-						JavaMethodPathElement newMethodCall = new JavaMethodPathElement(bindingValue.getLastBindingPathElement(),
+						/*JavaMethodPathElement newMethodCall = new JavaMethodPathElement(bindingValue.getLastBindingPathElement(),
 								(MethodDefinition) ((FunctionPathElement) selectedValue.getElement()).getFunction(),
-								new ArrayList<DataBinding<?>>());
-						bindingValue.setBindingPathElementAtIndex(newMethodCall, index - 1);
+								new ArrayList<DataBinding<?>>());*/
+						bindingValue.setBindingPathElementAtIndex(newFunctionPathElement, index - 1);
 						getEditedObject().setExpression(bindingValue);
 						fireEditedObjectChanged();
+					} else {
+						logger.warning("Cannot retrieve new FunctionPathElement for " + bindingValue.getLastBindingPathElement()
+								+ " function=" + function);
 					}
 				}
+				// }
 			}
 		}
 	}

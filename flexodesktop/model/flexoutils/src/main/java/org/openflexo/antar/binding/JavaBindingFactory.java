@@ -3,9 +3,11 @@
  */
 package org.openflexo.antar.binding;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 public class JavaBindingFactory implements BindingFactory {
@@ -63,8 +65,61 @@ public class JavaBindingFactory implements BindingFactory {
 	}
 
 	@Override
-	public FunctionPathElement makeFunctionPathElement(BindingPathElement father, String functionName, List<DataBinding<?>> args) {
-		return new JavaMethodPathElement(father, functionName, args);
+	public FunctionPathElement makeFunctionPathElement(BindingPathElement father, Function function, List<DataBinding<?>> args) {
+		if (function instanceof MethodDefinition) {
+			return new JavaMethodPathElement(father, (MethodDefinition) function, args);
+		}
+		return null;
+	}
+
+	@Override
+	public Function retrieveFunction(Type parentType, String functionName, List<DataBinding<?>> args) {
+		Vector<Method> possiblyMatchingMethods = new Vector<Method>();
+		Class<?> typeClass = TypeUtils.getBaseClass(parentType);
+		if (typeClass == null) {
+			System.out.println("Cannot find typeClass for " + parentType);
+		}
+		Method[] allMethods = typeClass.getMethods();
+		// First attempt: we perform type checking on parameters
+		for (Method method : allMethods) {
+			if (method.getName().equals(functionName) && method.getGenericParameterTypes().length == args.size()) {
+				boolean lookupFails = false;
+				for (int i = 0; i < args.size(); i++) {
+					DataBinding<?> suppliedArg = args.get(i);
+					Type argType = method.getGenericParameterTypes()[i];
+					if (!TypeUtils.isTypeAssignableFrom(argType, suppliedArg.getDeclaredType())) {
+						lookupFails = true;
+					}
+				}
+				if (!lookupFails) {
+					possiblyMatchingMethods.add(method);
+				}
+			}
+		}
+		// Second attempt: we don't check the types of parameters
+		if (possiblyMatchingMethods.size() == 0) {
+			for (Method method : allMethods) {
+				if (method.getName().equals(functionName) && method.getGenericParameterTypes().length == args.size()) {
+					possiblyMatchingMethods.add(method);
+				}
+			}
+		}
+		if (possiblyMatchingMethods.size() > 1) {
+			logger.warning("Please implement disambiguity here");
+			for (DataBinding<?> arg : args) {
+				System.out.println("arg " + arg + " of " + arg.getDeclaredType() + " / " + arg.getAnalyzedType());
+			}
+			// Return the first one
+			// TODO: try to find the best one
+			return MethodDefinition.getMethodDefinition(parentType, possiblyMatchingMethods.get(0));
+		} else if (possiblyMatchingMethods.size() == 1) {
+			return MethodDefinition.getMethodDefinition(parentType, possiblyMatchingMethods.get(0));
+		} else {
+			logger.warning("Cannot find method named " + functionName + " with args=" + args + "(" + args.size() + ") for type "
+					+ parentType);
+			Thread.dumpStack();
+			return null;
+		}
 	}
 
 }

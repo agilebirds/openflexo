@@ -110,6 +110,8 @@ public abstract class FunctionPathElement extends Observable implements BindingP
 	}
 
 	public void setParameter(Function.FunctionArgument argument, DataBinding<?> value) {
+		serializationRepresentation = null;
+		// System.out.println("setParameter " + argument + " for " + this + " with " + value);
 		parameters.put(argument, value);
 	}
 
@@ -124,6 +126,11 @@ public abstract class FunctionPathElement extends Observable implements BindingP
 	@Override
 	public int hashCode() {
 		return getSerializationRepresentation().hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "@" + Integer.toHexString(hashCode()) + "/" + getSerializationRepresentation();
 	}
 
 }

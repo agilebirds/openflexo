@@ -19,7 +19,6 @@
  */
 package org.openflexo.fib.utils.table;
 
-import java.util.Observable;
 
 /**
  * Please comment this class
@@ -27,7 +26,7 @@ import java.util.Observable;
  * @author sguerin
  * 
  */
-public interface EditableColumn<D extends Observable, T> {
+public interface EditableColumn<D, T> {
 
 	public boolean isCellEditableFor(D object);
 

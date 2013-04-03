@@ -19,8 +19,6 @@
  */
 package org.openflexo.fib.utils.table;
 
-import java.util.Observable;
-
 import javax.swing.JComponent;
 import javax.swing.table.TableCellRenderer;
 
@@ -30,7 +28,7 @@ import javax.swing.table.TableCellRenderer;
  * @author sguerin
  * 
  */
-public abstract class StringColumn<D extends Observable> extends AbstractColumn<D, String> {
+public abstract class StringColumn<D> extends AbstractColumn<D, String> {
 
 	public StringColumn(String title, int defaultWidth) {
 		this(title, defaultWidth, true);

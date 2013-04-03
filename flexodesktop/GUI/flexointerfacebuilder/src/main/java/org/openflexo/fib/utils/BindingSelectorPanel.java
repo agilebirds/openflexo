@@ -276,12 +276,16 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 
 				@Override
 				public void setValue(Function.FunctionArgument arg, DataBinding aValue) {
-					logger.info("setValue in BindingValueColumn with " + aValue);
+					// logger.info("setValue in BindingValueColumn with " + aValue);
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Sets value " + arg + " to be " + aValue);
 					}
 					if (arg != null) {
 						getFunctionPathElement().setParameter(arg, aValue);
+						if (bindingSelector.getEditedObject().isBindingValue()) {
+							BindingValue bv = (BindingValue) bindingSelector.getEditedObject().getExpression();
+							bv.markedAsToBeReanalized();
+						}
 					}
 
 					bindingSelector.fireEditedObjectChanged();
@@ -808,6 +812,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 					if (selectedValue.getElement() instanceof FunctionPathElement) {
 						BindingPathElement currentElement = bindingValue.getBindingPathElementAtIndex(_selectedPathElementIndex - 1);
 						if (currentElement instanceof FunctionPathElement
+								&& (((FunctionPathElement) currentElement).getFunction() != null)
 								&& ((FunctionPathElement) currentElement).getFunction().equals(
 										((FunctionPathElement) selectedValue.getElement()).getFunction())) {
 							// logger.info("On y arrive");
@@ -989,7 +994,7 @@ public class BindingSelectorPanel extends AbstractBindingSelectorPanel implement
 			// Remove and clean unused lists
 			cleanLists(lastUpdatedList);
 
-			if (bindingSelector.editionMode == EditionMode.COMPOUND_BINDING) {
+			if (bindingSelector.editionMode == EditionMode.COMPOUND_BINDING && bindingValueRepresentation != null) {
 				bindingValueRepresentation.setText(bindingSelector.renderedString(binding));
 				bindingValueRepresentation.setForeground(bindingValue.isValid() ? Color.BLACK : Color.RED);
 				updateMethodCallPanel();

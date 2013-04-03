@@ -22,7 +22,6 @@ package org.openflexo.fib.utils.table;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.util.Observable;
 
 import javax.swing.JComponent;
 import javax.swing.JTable;
@@ -40,7 +39,7 @@ import org.openflexo.toolbox.ToolBox;
  * @author sguerin
  * 
  */
-public abstract class AbstractColumn<D extends Observable, T> {
+public abstract class AbstractColumn<D, T> {
 	public static final Font NORMAL_FONT = new Font("SansSerif", Font.PLAIN, 11);
 	public static final Font MEDIUM_FONT = new Font("SansSerif", Font.PLAIN, 10);
 	public static final Font SMALL_FONT = new Font("SansSerif", Font.PLAIN, 9);

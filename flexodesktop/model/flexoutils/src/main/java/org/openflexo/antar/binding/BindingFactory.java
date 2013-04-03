@@ -3,6 +3,7 @@
  */
 package org.openflexo.antar.binding;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 public interface BindingFactory {
@@ -13,6 +14,8 @@ public interface BindingFactory {
 
 	public SimplePathElement makeSimplePathElement(BindingPathElement father, String propertyName);
 
-	public FunctionPathElement makeFunctionPathElement(BindingPathElement father, String functionName, List<DataBinding<?>> args);
+	public Function retrieveFunction(Type parentType, String functionName, List<DataBinding<?>> args);
+
+	public FunctionPathElement makeFunctionPathElement(BindingPathElement father, Function function, List<DataBinding<?>> args);
 
 }

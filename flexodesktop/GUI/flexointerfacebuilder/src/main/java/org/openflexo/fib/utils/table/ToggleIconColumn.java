@@ -19,7 +19,6 @@
  */
 package org.openflexo.fib.utils.table;
 
-import java.util.Observable;
 
 /**
  * Please comment this class
@@ -27,7 +26,7 @@ import java.util.Observable;
  * @author sguerin
  * 
  */
-public abstract class ToggleIconColumn<D extends Observable> extends IconColumn<D> {
+public abstract class ToggleIconColumn<D> extends IconColumn<D> {
 
 	public ToggleIconColumn(String title, int defaultWidth) {
 		super(title, defaultWidth);

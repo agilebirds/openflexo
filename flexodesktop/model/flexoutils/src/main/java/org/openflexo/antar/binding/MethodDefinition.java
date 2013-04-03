@@ -51,12 +51,12 @@ public class MethodDefinition extends Observable implements Function {
 		super();
 		this.method = method;
 		this.declaringType = aDeclaringType;
-		arguments = new ArrayList<Function.FunctionArgument>();
+		arguments = new ArrayList<FunctionArgument>();
 		int i = 0;
 		for (Type t : method.getGenericParameterTypes()) {
 			String argName = "arg" + i;
 			Type argType = TypeUtils.makeInstantiatedType(t, aDeclaringType);
-			arguments.add(new Function.FunctionArgument(this, argName, argType));
+			arguments.add(new DefaultFunctionArgument(this, argName, argType));
 			i++;
 		}
 	}
