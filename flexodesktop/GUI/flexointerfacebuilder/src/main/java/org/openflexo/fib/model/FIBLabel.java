@@ -56,7 +56,6 @@ public class FIBLabel extends FIBWidget {
 
 	public FIBLabel() {
 		super();
-		setOpaque(false);
 	}
 
 	public FIBLabel(String label) {

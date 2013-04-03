@@ -28,6 +28,7 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
@@ -58,6 +59,7 @@ import org.openflexo.fib.editor.view.widget.FIBEditableCheckboxWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableColorWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableCustomWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableDropDownWidget;
+import org.openflexo.fib.editor.view.widget.FIBEditableEditorPaneWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableEditorWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableFileWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableFontWidget;
@@ -81,6 +83,7 @@ import org.openflexo.fib.model.FIBContainer;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBDropDown;
 import org.openflexo.fib.model.FIBEditor;
+import org.openflexo.fib.model.FIBEditorPane;
 import org.openflexo.fib.model.FIBFile;
 import org.openflexo.fib.model.FIBFont;
 import org.openflexo.fib.model.FIBHtmlEditor;
@@ -97,6 +100,7 @@ import org.openflexo.fib.model.FIBTabPanel;
 import org.openflexo.fib.model.FIBTable;
 import org.openflexo.fib.model.FIBTextArea;
 import org.openflexo.fib.model.FIBTextField;
+import org.openflexo.fib.model.FIBTextPane;
 import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.FIBWidgetView;
@@ -444,6 +448,14 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 			}
 			if (fibWidget instanceof FIBReferencedComponent) {
 				return new FIBEditableReferencedComponentWidget((FIBReferencedComponent) fibWidget, FIBEditorController.this, this);
+			}
+			if (fibWidget instanceof FIBTextPane) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Can't handle editable FIBTextPane!");
+				}
+			}
+			if (fibWidget instanceof FIBEditorPane) {
+				return new FIBEditableEditorPaneWidget((FIBEditorPane) fibWidget, FIBEditorController.this);
 			}
 			return null;
 		}

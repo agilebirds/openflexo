@@ -82,26 +82,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 	}
 
 	public static enum Parameters implements FIBModelAttribute {
-		index,
-		data,
-		visible,
-		dataClass,
-		controllerClass,
-		font,
-		opaque,
-		backgroundColor,
-		foregroundColor,
-		width,
-		height,
-		minWidth,
-		minHeight,
-		maxWidth,
-		maxHeight,
-		useScrollBar,
-		horizontalScrollbarPolicy,
-		verticalScrollbarPolicy,
-		constraints,
-		explicitDependancies
+		index, data, visible, dataClass, controllerClass, font, opaque, backgroundColor, foregroundColor, width, height, minWidth, minHeight, maxWidth, maxHeight, useScrollBar, horizontalScrollbarPolicy, verticalScrollbarPolicy, constraints, explicitDependancies
 	}
 
 	public static enum VerticalScrollBarPolicy {
@@ -153,7 +134,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 	private DataBinding<Boolean> visible;
 
 	private Font font;
-	private boolean opaque = false;
+	private Boolean opaque;
 	private Color backgroundColor;
 	private Color foregroundColor;
 
@@ -911,11 +892,11 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 		}
 	}
 
-	public final boolean getOpaque() {
+	public Boolean getOpaque() {
 		return opaque;
 	}
 
-	public final void setOpaque(boolean opaque) {
+	public void setOpaque(Boolean opaque) {
 		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.opaque, opaque);
 		if (notification != null) {
 			this.opaque = opaque;
