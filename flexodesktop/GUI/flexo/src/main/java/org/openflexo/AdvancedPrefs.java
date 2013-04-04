@@ -21,6 +21,7 @@ package org.openflexo;
 
 import java.awt.Font;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -75,6 +76,7 @@ public class AdvancedPrefs extends ContextPreferences {
 
 	private static final String USE_DEFAULT_PROXY_SETTINGS = "UseDefaultProxySettings";
 	private static final String NO_PROXY = "NoProxy";
+	private static final String NO_PROXY_HOSTS = "NoProxyHosts";
 	private static final String HTTP_PROXY_HOST = "HTTPProxyHost";
 	private static final String HTTP_PROXY_PORT = "HTTPProxyPort";
 	private static final String HTTPS_PROXY_HOST = "HTTPSProxyHost";
@@ -349,11 +351,26 @@ public class AdvancedPrefs extends ContextPreferences {
 					if (sProxyPort != null) {
 						System.setProperty("https.proxyPort", String.valueOf(sProxyPort));
 					}
+					List<String> noProxyHosts = getNoProxyHosts();
+
+					if (noProxyHosts != null && noProxyHosts.size() > 0) {
+						StringBuilder sb = new StringBuilder();
+						for (String noProxyHost : noProxyHosts) {
+							if (sb.length() > 0) {
+								sb.append('|');
+							}
+							sb.append(noProxyHost);
+						}
+						System.setProperty("http.nonProxyHosts", sb.toString());
+					} else {
+						System.clearProperty("http.nonProxyHosts");
+					}
 				} else {
 					System.clearProperty("http.proxyHost");
 					System.clearProperty("http.proxyPort");
 					System.clearProperty("https.proxyHost");
 					System.clearProperty("https.proxyPort");
+					System.clearProperty("http.nonProxyHosts");
 				}
 			} finally {
 				isApplying = false;
@@ -532,6 +549,28 @@ public class AdvancedPrefs extends ContextPreferences {
 	public static void setSProxyPort(Integer proxyPort) {
 		getPreferences().setIntegerProperty(HTTPS_PROXY_PORT, proxyPort, "sProxyPort");
 		applyProxySettings();
+	}
+
+	public static String getNoProxyHostsString() {
+		return getPreferences().getProperty(NO_PROXY_HOSTS);
+	}
+
+	public static void setNoProxyHostsString(String string) {
+		getPreferences().setProperty(NO_PROXY_HOSTS, string);
+		applyProxySettings();
+	}
+
+	public static List<String> getNoProxyHosts() {
+		String string = getNoProxyHostsString();
+		if (string != null && string.trim().length() > 0) {
+			List<String> list = new ArrayList<String>();
+			String[] s = string.split(",");
+			for (String string2 : s) {
+				list.add(string2.trim());
+			}
+			return list;
+		}
+		return null;
 	}
 
 	public static void redetectProxySettings() {

@@ -386,7 +386,12 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 		try {
 			KeyValueCoding target = getTargetObject(inspectable);
 			if (target != null) {
-				target.objectForKey(getLastAccessor());
+				String lastAccessor = getLastAccessor();
+				if (lastAccessor != null) {
+					target.objectForKey(lastAccessor);
+				} else {
+					return false;
+				}
 				return true;
 			} else {
 				return false;

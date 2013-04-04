@@ -39,37 +39,47 @@
 		<param name="format" value="name"/>
 		<param name="showReset" value="false"/>
 	</property>
-	<property name="useDefaultProxySettings" label="use_default_proxy" widget="CHECKBOX" constraint="15"/>
-	<property name="noProxy" label="no_proxy" widget="CHECKBOX" depends="useDefaultProxySettings" conditional="useDefaultProxySettings=false" constraint="16"/>
-	<property name="proxyHost" label="http_proxy_host" widget="TEXT_FIELD" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" constraint="17">
+    <property name="webServiceUrl" label="web_service_url" widget="TEXT_FIELD" constraint="15">
+       <param name="validateOnReturn" value="true"/>
+    </property>
+    <property name="rememberAndDontAskWebServiceParamsAnymore" label="web_service_remember_and_dont_ask_params_anymore" widget="CHECKBOX" constraint="16"/>
+    <property name="flexoServerInstanceURL" label="flexo_server_instance_url" widget="TEXT_FIELD" constraint="17">
+       <param name="validateOnReturn" value="true"/>
+    </property>
+    
+	<property name="" label="proxy_settings" widget="LABEL" constraint="18">
+       <param name="widgetLayout" value="1COL"/>
+	</property>
+	<property name="useDefaultProxySettings" label="use_default_proxy" widget="CHECKBOX" constraint="20"/>
+	<property name="noProxy" label="no_proxy" widget="CHECKBOX" depends="useDefaultProxySettings" conditional="useDefaultProxySettings=false" constraint="21"/>
+	<property name="proxyHost" label="http_proxy_host" widget="TEXT_FIELD" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" constraint="22">
 	   <param name="validateOnReturn" value="true"/>
 	</property>
-	<property name="proxyPort" label="http_proxy_port" widget="INTEGER" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" constraint="18">
+	<property name="proxyPort" label="http_proxy_port" widget="INTEGER" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" constraint="23">
 	   <param name="validateOnReturn" value="true"/>
 	</property>
-	<property name="sProxyHost" label="https_proxy_host" widget="TEXT_FIELD" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" constraint="19">
+	<property name="sProxyHost" label="https_proxy_host" widget="TEXT_FIELD" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" constraint="24">
 	   <param name="validateOnReturn" value="true"/>
 	</property>
-	<property name="sProxyPort" label="https_proxy_port" widget="INTEGER" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" constraint="20">
+	<property name="sProxyPort" label="https_proxy_port" widget="INTEGER" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" constraint="25">
 	   <param name="validateOnReturn" value="true"/>
 	</property>
-	<group name="button" constraint="20">
+	<property name="sProxyPort" label="https_proxy_port" widget="INTEGER" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" constraint="25">
+	   <param name="validateOnReturn" value="true"/>
+	</property>
+	<property name="noProxyHostsString" label="no_proxy_hosts" widget="TEXT_AREA" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" constraint="26">
+	   <param name="validateOnReturn" value="true"/>
+	</property>
+	<group name="button" constraint="27">
 		<param name = "layout" value="right"/>
 		<property name="redetectProxySettings" label="redetect_proxy_settings" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" widget="BUTTON" constraint="1">
 		</property>
 	</group>
-	<property name="proxyLogin" label="proxy_login" widget="TEXT_FIELD" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" constraint="21">
+	<property name="proxyLogin" label="proxy_login" widget="TEXT_FIELD" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" constraint="28">
 	   <param name="validateOnReturn" value="true"/>
 	</property>
-	<property name="proxyPassword" label="proxy_password" widget="TEXT_FIELD" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" constraint="22">
+	<property name="proxyPassword" label="proxy_password" widget="TEXT_FIELD" depends="useDefaultProxySettings,noProxy" conditional="useDefaultProxySettings=false and noProxy=false" constraint="29">
 	   <param name="validateOnReturn" value="true"/>
 	   <param name="password" value="true"/>
-	</property>
-	<property name="webServiceUrl" label="web_service_url" widget="TEXT_FIELD" constraint="23">
-	   <param name="validateOnReturn" value="true"/>
-	</property>
-	<property name="rememberAndDontAskWebServiceParamsAnymore" label="web_service_remember_and_dont_ask_params_anymore" widget="CHECKBOX" constraint="24"/>
-	<property name="flexoServerInstanceURL" label="flexo_server_instance_url" widget="TEXT_FIELD" constraint="25">
-	   <param name="validateOnReturn" value="true"/>
 	</property>
 </tab>
