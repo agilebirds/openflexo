@@ -58,7 +58,7 @@ public class SelectEMFObjectIndividual extends SelectIndividual<EMFModel, EMFMet
 			return null;
 		}
 
-		// System.out.println("Selecting EMFObjectIndividuals in " + getModelSlotInstance(action).getModel() + " with type=" + getType());
+		System.out.println("Selecting EMFObjectIndividuals in " + getModelSlotInstance(action).getModel() + " with type=" + getType());
 		List<EMFObjectIndividual> selectedIndividuals = new ArrayList<EMFObjectIndividual>(0);
 		EMFModel emfModel = getModelSlotInstance(action).getModel();
 		Resource resource = emfModel.getEMFResource();
@@ -74,16 +74,21 @@ public class SelectEMFObjectIndividual extends SelectIndividual<EMFModel, EMFMet
 				// Gilles, could you check and explain ?
 				/*selectedEMFIndividuals.addAll(EcoreUtility.getAllContents(eObject, ((EMFClassClass) flexoOntologyClass).getObject()
 						.getClass()));*/
-				if (eObject.eClass().equals(((EMFClassClass) flexoOntologyClass).getObject())) {
+				EMFClassClass emfObjectIndividualType = emfModel.getMetaModel().getConverter().getClasses().get(eObject.eClass());
+				if (emfObjectIndividualType.equals(flexoOntologyClass)
+						|| ((EMFClassClass) flexoOntologyClass).isSuperClassOf(emfObjectIndividualType)) {
 					selectedEMFIndividuals.add(eObject);
 				}
+				/*if (eObject.eClass().equals(((EMFClassClass) flexoOntologyClass).getObject())) {
+					selectedEMFIndividuals.add(eObject);
+				}*/
 			}
 		} else if (flexoOntologyClass instanceof EMFEnumClass) {
 			System.err.println("We shouldn't browse enum individuals of type " + ((EMFEnumClass) flexoOntologyClass).getObject().getName()
 					+ ".");
 		}
 
-		// System.out.println("selectedEMFIndividuals=" + selectedEMFIndividuals);
+		System.out.println("selectedEMFIndividuals=" + selectedEMFIndividuals);
 
 		for (EObject eObject : selectedEMFIndividuals) {
 			EMFObjectIndividual emfObjectIndividual = emfModel.getConverter().getIndividuals().get(eObject);
@@ -95,7 +100,11 @@ public class SelectEMFObjectIndividual extends SelectIndividual<EMFModel, EMFMet
 			}
 		}
 
-		return filterWithConditions(selectedIndividuals, action);
+		List<EMFObjectIndividual> returned = filterWithConditions(selectedIndividuals, action);
+
+		System.out.println("after filtering, selectedEMFIndividuals=" + returned);
+
+		return returned;
 	}
 
 }
