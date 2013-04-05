@@ -1469,6 +1469,7 @@ connect_repository=Connexion du r\u00E9pertoire
 connect_repository_to_local_file_system=Connexion du r\u00E9pertoire au syst\u00E8me de fichiers local
 connect_to_local_directory=Connecter \u00E0 un r\u00E9pertoire local
 connected=connect\u00E9
+connecting_to_server=Connexion au serveur
 connection_error=Erreur \u00E0 la connexion
 connection_timeout=D\u00E9lai d'attente de connexion d\u00E9pass\u00E9
 connection_type=Type de connexion

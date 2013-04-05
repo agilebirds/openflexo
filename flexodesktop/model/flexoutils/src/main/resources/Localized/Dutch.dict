@@ -1471,6 +1471,7 @@ connect_repository=Connect repository
 connect_repository_to_local_file_system=Connect repository to local file system
 connect_to_local_directory=Connect to local directory
 connected=connected
+connecting_to_server=Connecting to server
 connection_error=Connection error
 connection_timeout=Connection timeout
 connection_type=Connection type

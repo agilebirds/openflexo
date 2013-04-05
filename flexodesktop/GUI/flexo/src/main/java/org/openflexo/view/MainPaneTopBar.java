@@ -88,7 +88,7 @@ public class MainPaneTopBar extends JMenuBar {
 	private void initModules() {
 		for (final Module module : model.getModuleLoader().getAvailableModules()) {
 			final JButton button = new BarButton(module.getMediumIcon());
-			button.setToolTipText(FlexoLocalization.localizedForKey(module.getName(), button));
+			button.setToolTipText(FlexoLocalization.localizedTooltipForKey(module.getName(), button));
 			button.setEnabled(true);
 			button.setFocusable(false);
 			if (forcePreferredSize) {
