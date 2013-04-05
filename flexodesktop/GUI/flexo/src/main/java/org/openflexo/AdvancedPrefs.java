@@ -562,7 +562,7 @@ public class AdvancedPrefs extends ContextPreferences {
 	}
 
 	public static void setNoProxyHostsString(String string) {
-		getPreferences().setProperty(NO_PROXY_HOSTS, string);
+		getPreferences().setProperty(NO_PROXY_HOSTS, string, "noProxyHostsString");
 		applyProxySettings();
 	}
 
