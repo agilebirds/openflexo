@@ -137,11 +137,7 @@ public class AdvancedPrefs extends ContextPreferences {
 	}
 
 	public static String getBugReportPassword() {
-		String answer = getPreferences().getPasswordProperty(BUG_REPORT_PASWORD);
-		if (answer == null) {
-			setBugReportUrl(answer = "https://bugs.openflexo.com");
-		}
-		return answer;
+		return getPreferences().getPasswordProperty(BUG_REPORT_PASWORD);
 	}
 
 	public static void setBugReportPassword(String password) {
@@ -282,7 +278,7 @@ public class AdvancedPrefs extends ContextPreferences {
 	public static String getWebServiceUrl() {
 		String answer = getPreferences().getProperty(WEB_SERVICE_URL_KEY);
 		if (answer == null) {
-			setWebServiceUrl("https://www.flexobpmserver.com/Flexo/WebObjects/FlexoServer.woa/ws/PPMWebService");
+			setWebServiceUrl("https://server.openflexo.com/Flexo/WebObjects/FlexoServer.woa/ws/PPMWebService");
 			return getWebServiceUrl();
 		}
 		return answer;
@@ -552,7 +548,17 @@ public class AdvancedPrefs extends ContextPreferences {
 	}
 
 	public static String getNoProxyHostsString() {
-		return getPreferences().getProperty(NO_PROXY_HOSTS);
+		String answer = getPreferences().getProperty(NO_PROXY_HOSTS);
+		if (answer == null) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("localhost,127.0.0.1");
+			String localDomain = ProxyUtils.getLocalDomain();
+			if (localDomain != null) {
+				sb.append(",*.").append(localDomain);
+			}
+			setNoProxyHostsString(sb.toString());
+		}
+		return answer;
 	}
 
 	public static void setNoProxyHostsString(String string) {
@@ -578,6 +584,7 @@ public class AdvancedPrefs extends ContextPreferences {
 		setProxyPort(null);
 		setSProxyHost(null);
 		setSProxyPort(null);
+		setNoProxyHostsString(null);
 	}
 
 	public static String getProxyLogin() {
