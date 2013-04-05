@@ -295,6 +295,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		});
 		mainPane = createMainPane();
 		getFlexoFrame().getContentPane().add(mainPane, BorderLayout.CENTER);
+		((JComponent) getFlexoFrame().getContentPane()).revalidate();
 		initInspectors();
 		initializePerspectives();
 		if (getModule().getModule().requireProject()) {

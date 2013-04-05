@@ -165,6 +165,7 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 	}
 
 	public void showPreferences() {
+		getPreferencesWindow(true);
 		update();
 		getPreferencesWindow().setVisible(true);
 	}

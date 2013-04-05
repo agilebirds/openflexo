@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 import javax.swing.AbstractButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 import javax.swing.border.TitledBorder;
@@ -67,6 +68,8 @@ public class FlexoLocalization {
 	private static List<WeakReference<LocalizationListener>> localizationListeners = new Vector<WeakReference<LocalizationListener>>();
 
 	private static final WeakHashMap<Component, String> _storedLocalizedForComponents = new WeakHashMap<Component, String>();
+
+	private static final WeakHashMap<JComponent, String> _storedLocalizedForComponentTooltips = new WeakHashMap<JComponent, String>();
 
 	private static final WeakHashMap<TitledBorder, String> _storedLocalizedForBorders = new WeakHashMap<TitledBorder, String>();
 
@@ -270,6 +273,18 @@ public class FlexoLocalization {
 		return localizedForKey(delegate, key);
 	}
 
+	public static String localizedTooltipForKey(String key, JComponent component) {
+		return localizedTooltipForKey(mainLocalizer, key, component);
+	}
+
+	public static String localizedTooltipForKey(LocalizedDelegate delegate, String key, JComponent component) {
+		if (logger.isLoggable(Level.FINE)) {
+			logger.finest("localizedForKey called with " + key + " for " + component.getClass().getName());
+		}
+		_storedLocalizedForComponentTooltips.put(component, key);
+		return localizedForKey(delegate, key);
+	}
+
 	public static String localizedForKey(String key, Component component) {
 		return localizedForKey(mainLocalizer, key, component);
 	}
@@ -330,6 +345,12 @@ public class FlexoLocalization {
 							((JTabbedPane) component.getParent().getParent()).indexOfComponent(component), text);
 				}
 			}
+		}
+		for (Map.Entry<JComponent, String> e : _storedLocalizedForComponentTooltips.entrySet()) {
+			JComponent component = e.getKey();
+			String string = e.getValue();
+			String text = localizedForKey(string);
+			component.setToolTipText(text);
 		}
 		for (Map.Entry<TitledBorder, String> e : _storedLocalizedForBorders.entrySet()) {
 			String string = e.getValue();

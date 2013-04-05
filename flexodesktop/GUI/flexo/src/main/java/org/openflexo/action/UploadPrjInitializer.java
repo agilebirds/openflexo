@@ -75,19 +75,24 @@ public class UploadPrjInitializer extends ActionInitializer {
 				CLProjectDescriptor[] targetProjects = null;
 				boolean proceed = true;
 				while (proceed) {
-					while (targetProjects == null) {
-						client = getController().getWSClient(!isFirst);
-						isFirst = false;
-						if (client == null) {
-							return false;// Cancelled
+					ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("connecting_to_server"), -1);
+					try {
+						while (targetProjects == null) {
+							client = getController().getWSClient(!isFirst);
+							isFirst = false;
+							if (client == null) {
+								return false;// Cancelled
+							}
+							try {
+								targetProjects = client.getAvailableProjects();
+							} catch (PPMWebServiceAuthentificationException e1) {
+								getController().handleWSException(e1);
+							} catch (RemoteException e1) {
+								getController().handleWSException(e1);
+							}
 						}
-						try {
-							targetProjects = client.getAvailableProjects();
-						} catch (PPMWebServiceAuthentificationException e1) {
-							getController().handleWSException(e1);
-						} catch (RemoteException e1) {
-							getController().handleWSException(e1);
-						}
+					} finally {
+						ProgressWindow.hideProgressWindow();
 					}
 					CLProjectDescriptor target = null;
 					try {
@@ -101,6 +106,7 @@ public class UploadPrjInitializer extends ActionInitializer {
 					if (target != null) {
 						action.setTargetProject(target);
 
+						ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 5);
 						File zipFile = null;
 						try {
 							zipFile = File.createTempFile("tmp_" + System.currentTimeMillis(), "tmp_" + System.currentTimeMillis());
@@ -111,7 +117,6 @@ public class UploadPrjInitializer extends ActionInitializer {
 							return false;
 						}
 
-						ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 5);
 						try {
 							getProject().saveAsZipFile(zipFile, ProgressWindow.instance(), true, true);
 						} catch (SaveResourceException e1) {

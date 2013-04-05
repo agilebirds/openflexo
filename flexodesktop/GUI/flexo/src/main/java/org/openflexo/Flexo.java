@@ -374,7 +374,7 @@ public class Flexo {
 
 			@Override
 			public List<Proxy> select(URI uri) {
-				ArrayList<Proxy> proxies = new ArrayList<Proxy>(defaultSelector.select(uri));
+				List<Proxy> proxies = new ArrayList<Proxy>(defaultSelector.select(uri));
 				if (!proxies.contains(Proxy.NO_PROXY)) {
 					proxies.add(Proxy.NO_PROXY);
 				}
