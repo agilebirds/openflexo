@@ -53,6 +53,8 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 	 */
 	private FlexoProperties _preferences;
 
+	private FlexoAbstractPreferences delegate;
+
 	private FlexoAbstractPreferences(FlexoProperties properties) {
 		this._preferences = properties;
 		this.propertyChangeSupport = new PropertyChangeSupport(this);
@@ -64,6 +66,7 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 
 	protected FlexoAbstractPreferences(FlexoAbstractPreferences delegate) {
 		this(delegate._preferences);
+		this.delegate = delegate;
 	}
 
 	protected FlexoAbstractPreferences(File preferencesFile) {
@@ -115,14 +118,18 @@ public abstract class FlexoAbstractPreferences extends FlexoObservable implement
 	}
 
 	public void setProperty(String key, String value, String notificationKey) {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.finer("setProperty " + key + " with " + value);
-		}
 		String oldValue = getProperty(key);
-		if (value != null) {
-			_preferences.setProperty(key, value);
+		if (delegate != null) {
+			delegate.setProperty(key, value, notificationKey);
 		} else {
-			_preferences.remove(key);
+			if (logger.isLoggable(Level.FINE)) {
+				logger.finer("setProperty " + key + " with " + value);
+			}
+			if (value != null) {
+				_preferences.setProperty(key, value);
+			} else {
+				_preferences.remove(key);
+			}
 		}
 		PreferencesHaveChanged modif = new PreferencesHaveChanged(key, oldValue, value);
 		if (logger.isLoggable(Level.FINE)) {

@@ -83,6 +83,11 @@ public class UploadPrjAction extends FlexoAction<UploadPrjAction, FlexoProject, 
 	}
 
 	@Override
+	public boolean isLongRunningAction() {
+		return true;
+	}
+
+	@Override
 	protected void doAction(Object context) throws FlexoException {
 		final long length = zippedPrj.length();
 		final FlexoProgress flexoProgress = makeFlexoProgress(FlexoLocalization.localizedForKey("sending_project"), NUMBER_OF_STATES);
