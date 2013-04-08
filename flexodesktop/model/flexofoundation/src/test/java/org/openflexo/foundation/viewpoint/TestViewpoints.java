@@ -65,8 +65,7 @@ public class TestViewpoints extends FlexoTestCase {
 	 */
 	public void test0LoadTestResourceCenter() {
 		log("test0LoadTestResourceCenter()");
-		testResourceCenter = LocalResourceCenterImplementation.instanciateTestLocalResourceCenterImplementation(new FileResource(
-				"TestResourceCenter"));
+		testResourceCenter = new LocalResourceCenterImplementation(new FileResource("TestResourceCenter"), false);
 
 		System.out.println(testResourceCenter.retrieveViewPointLibrary().getViewPoints());
 	}

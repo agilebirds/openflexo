@@ -86,8 +86,15 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 	private ViewPointLibrary viewPointLibrary;
 	private File newViewPointSandboxDirectory;
 
+	private boolean filterVP;
+
 	public LocalResourceCenterImplementation(File resourceCenterDirectory) {
+		this(resourceCenterDirectory, true);
+	}
+
+	public LocalResourceCenterImplementation(File resourceCenterDirectory, boolean filterVP) {
 		super();
+		this.filterVP = filterVP;
 		localDirectory = resourceCenterDirectory;
 		newViewPointSandboxDirectory = new File(resourceCenterDirectory, "ViewPoints");
 	}
@@ -229,7 +236,7 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 	}
 
 	private boolean isImportable(File f) {
-		return ImportableViewPoints.isImportable(f);
+		return true || !filterVP || ImportableViewPoints.isImportable(f);
 	}
 
 	public File getLocalDirectory() {
