@@ -19,17 +19,13 @@
  */
 package org.openflexo.foundation.ontology;
 
-import java.io.File;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
 import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.ontology.owl.OWLOntology.OntologyNotFoundException;
-import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.LocalResourceCenterImplementation;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.toolbox.FileUtils;
 
@@ -43,12 +39,6 @@ public class TestProjectOntologyManipulations extends FlexoTestCase {
 
 	protected static final Logger logger = Logger.getLogger(TestPopulateDKV.class.getPackage().getName());
 
-	private static FlexoEditor _editor;
-	private static FlexoProject _project;
-
-	private static File _resourceCenterDirectory;
-	private static FlexoResourceCenterService _resourceCenter;
-
 	public TestProjectOntologyManipulations(String name) {
 		super(name);
 	}
@@ -58,7 +48,7 @@ public class TestProjectOntologyManipulations extends FlexoTestCase {
 	 */
 	public void test0InstanciateNewResourceCenter() {
 		log("test0InstanciateNewResourceCenter()");
-		_resourceCenter = getNewResourceCenter(TestProjectOntologyManipulations.class.getSimpleName());
+		resourceCenterService = getNewResourceCenter(TestProjectOntologyManipulations.class.getSimpleName());
 	}
 
 	/**
@@ -67,7 +57,7 @@ public class TestProjectOntologyManipulations extends FlexoTestCase {
 	public void test1CreateProject() {
 		log("test1CreateProject()");
 
-		_editor = createProject("TestOntology", _resourceCenter);
+		_editor = createProject("TestOntology", resourceCenterService);
 		_project = _editor.getProject();
 	}
 
@@ -83,10 +73,10 @@ public class TestProjectOntologyManipulations extends FlexoTestCase {
 
 		logger.info("Reload project");
 
-		_editor = reloadProject(_project.getProjectDirectory(), _resourceCenter, null);
 		if (_project != null) {
 			_project.close();
 		}
+		_editor = reloadProject(_project.getProjectDirectory(), resourceCenterService, null);
 		_project = _editor.getProject();
 
 		logger.info("Hop" + _project.getProjectOntology());
@@ -198,21 +188,26 @@ public class TestProjectOntologyManipulations extends FlexoTestCase {
 
 		logger.info("Reload project");
 
-		_editor = reloadProject(_project.getProjectDirectory());
 		if (_project != null) {
 			_project.close();
 		}
+		_editor = reloadProject(_project.getProjectDirectory(), resourceCenterService, null);
 		_project = _editor.getProject();
 
 		_project.getProjectOntology().describe();
+		if (_project != null) {
+			_project.close();
+		}
+
 		FileUtils.deleteDir(_project.getProjectDirectory());
-		if (_resourceCenter != null && _resourceCenter.getOpenFlexoResourceCenter() instanceof LocalResourceCenterImplementation) {
-			FileUtils.deleteDir(((LocalResourceCenterImplementation) _resourceCenter.getOpenFlexoResourceCenter()).getLocalDirectory());
+		if (resourceCenterService != null
+				&& resourceCenterService.getOpenFlexoResourceCenter() instanceof LocalResourceCenterImplementation) {
+			FileUtils.deleteDir(((LocalResourceCenterImplementation) resourceCenterService.getOpenFlexoResourceCenter())
+					.getLocalDirectory());
 		}
 		_project = null;
 		_editor = null;
-		_resourceCenter = null;
-		_resourceCenterDirectory = null;
+		resourceCenterService = null;
 	}
 
 }

@@ -236,7 +236,7 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 	}
 
 	private boolean isImportable(File f) {
-		return true || !filterVP || ImportableViewPoints.isImportable(f);
+		return !filterVP || ImportableViewPoints.isImportable(f);
 	}
 
 	public File getLocalDirectory() {
