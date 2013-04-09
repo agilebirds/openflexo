@@ -44,6 +44,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Text;
 import org.jdom2.output.Format;
+import org.jdom2.output.LineSeparator;
 import org.jdom2.output.XMLOutputter;
 import org.openflexo.xmlcode.XMLMapId.NoMapIdEntryException;
 import org.xml.sax.SAXException;
@@ -1009,7 +1010,9 @@ public class XMLCoder {
 			InvalidModelException, AccessorInvocationException, DuplicateSerializationIdentifierException {
 
 		Document builtDocument = buildDocument(anObject);
-		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		Format prettyFormat = Format.getPrettyFormat();
+		prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+		XMLOutputter outputter = new XMLOutputter(prettyFormat);
 		try {
 			outputter.output(builtDocument, aWriter);
 		} catch (IOException e) {
@@ -1042,7 +1045,9 @@ public class XMLCoder {
 	protected void buildDocumentAndSendToOutputStream(Object anObject, OutputStream out, DocType docType)
 			throws InvalidObjectSpecificationException, InvalidModelException, AccessorInvocationException,
 			DuplicateSerializationIdentifierException {
-		buildDocumentAndSendToOutputStream(anObject, out, docType, Format.getPrettyFormat());
+		Format prettyFormat = Format.getPrettyFormat();
+		prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+		buildDocumentAndSendToOutputStream(anObject, out, docType, prettyFormat);
 	}
 
 	protected void buildDocumentAndSendToOutputStream(Object anObject, OutputStream out, DocType docType, Format format)

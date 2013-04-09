@@ -38,6 +38,7 @@ import org.jdom2.Element;
 import org.jdom2.Parent;
 import org.jdom2.Text;
 import org.jdom2.output.Format;
+import org.jdom2.output.LineSeparator;
 import org.jdom2.output.XMLOutputter;
 import org.openflexo.diff.DiffSource;
 import org.openflexo.diff.merge.IMerge;
@@ -674,7 +675,9 @@ public class XMLDiff3 extends Observable implements IMerge {
 
 	private String getXMLText(Document doc) {
 		StringWriter writer = new StringWriter();
-		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		Format prettyFormat = Format.getPrettyFormat();
+		prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+		XMLOutputter outputter = new XMLOutputter(prettyFormat);
 		try {
 			outputter.output(doc, writer);
 		} catch (IOException e) {
@@ -685,7 +688,9 @@ public class XMLDiff3 extends Observable implements IMerge {
 
 	public static String getXMLText(Element el) {
 		StringWriter writer = new StringWriter();
-		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		Format prettyFormat = Format.getPrettyFormat();
+		prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+		XMLOutputter outputter = new XMLOutputter(prettyFormat);
 		try {
 			outputter.output(el, writer);
 		} catch (IOException e) {
