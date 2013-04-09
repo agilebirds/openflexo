@@ -1006,6 +1006,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return returned;
 	}
 
+	private boolean closed = false;
+
 	/**
 	 * Close this project Don't save anything
 	 * 
@@ -1013,6 +1015,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * 
 	 */
 	public void close() {
+		if (closed) {
+			return;
+		}
+		closed = true;
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Closing project...");
 		}
