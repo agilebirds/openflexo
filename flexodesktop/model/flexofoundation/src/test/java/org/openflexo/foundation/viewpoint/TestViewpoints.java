@@ -133,7 +133,7 @@ public class TestViewpoints extends FlexoTestCase {
 
 		assertViewPointIsValid(testResourceCenter.retrieveViewPointLibrary().getViewPoint(
 				"http://www.agilebirds.com/openflexo/ViewPoints/SKOS/SKOSThesaurusEditor.owl"));
-
+		testResourceCenter = null;
 	}
 
 }
