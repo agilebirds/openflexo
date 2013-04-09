@@ -29,15 +29,6 @@ public class UserTypeTest extends AbstractGuiTest {
 		Assert.assertEquals("UserType must be analyst.", UserType.ANALYST, currentUserType);
 	}
 
-	public void testSetUserTypeNullThrowIllegalArgumentException() {
-		try {
-			UserType.setCurrentUserType(null);
-			Assert.fail("Should have fail with an IllegalArgumentException.");
-		} catch (IllegalArgumentException e) {
-			// that's expected
-		}
-	}
-
 	public void testSetSameUserTypeTwoTimesDontFail() {
 		UserType.setCurrentUserType(UserType.ANALYST);
 		UserType firstCurrentUserType = UserType.getCurrentUserType();
