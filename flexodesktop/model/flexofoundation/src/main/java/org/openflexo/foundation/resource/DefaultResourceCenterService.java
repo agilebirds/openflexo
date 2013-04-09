@@ -30,6 +30,12 @@ public abstract class DefaultResourceCenterService implements FlexoResourceCente
 		return service;
 	}
 
+	public static FlexoResourceCenterService getNewInstance(File localResourceCenterDir, boolean filterVP) {
+		DefaultResourceCenterService service = (DefaultResourceCenterService) getNewInstance();
+		service.openFlexoResourceCenter = new LocalResourceCenterImplementation(localResourceCenterDir, filterVP);
+		return service;
+	}
+
 	public DefaultResourceCenterService() {
 		File root = FileUtils.getApplicationDataDirectory();
 		File file = null;

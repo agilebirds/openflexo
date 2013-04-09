@@ -1,0 +1,321 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns="http://ontologies.socialdataweb.org/vcso/omg/bmm/bmm.owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xml:base="http://ontologies.socialdataweb.org/vcso/omg/bmm/bmm.owl">
+  <owl:Ontology rdf:about="">
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >1.0</owl:versionInfo>
+  </owl:Ontology>
+  <owl:Class rdf:ID="Directive">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Regulation">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Liability">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Opportunity">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="AssessmentCategory"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Influencer"/>
+  <owl:Class rdf:ID="End">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:ID="CourseOfAction">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Means"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="DesiredResult">
+    <rdfs:subClassOf rdf:resource="#End"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Asset">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:ID="BusinessProcess">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Means">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Goal">
+    <rdfs:subClassOf rdf:resource="#DesiredResult"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Objective">
+    <rdfs:subClassOf rdf:resource="#DesiredResult"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Resource">
+    <rdfs:subClassOf rdf:resource="#Asset"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Strategy">
+    <rdfs:subClassOf rdf:resource="#CourseOfAction"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Tactic">
+    <rdfs:subClassOf rdf:resource="#CourseOfAction"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Risk">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="PotentialImpact"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="InfluencingOrganization">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Assessment"/>
+  <owl:Class rdf:ID="BusinessPolicy">
+    <rdfs:subClassOf rdf:resource="#Directive"/>
+  </owl:Class>
+  <owl:Class rdf:ID="OrganizationalUnit"/>
+  <owl:Class rdf:ID="Actuator">
+    <rdfs:subClassOf rdf:resource="#Influencer"/>
+  </owl:Class>
+  <owl:Class rdf:about="#PotentialImpact">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Weakness">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#AssessmentCategory"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="PotentialReward">
+    <rdfs:subClassOf rdf:resource="#PotentialImpact"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Mission">
+    <rdfs:subClassOf rdf:resource="#CourseOfAction"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Vision">
+    <rdfs:subClassOf rdf:resource="#DesiredResult"/>
+  </owl:Class>
+  <owl:Class rdf:ID="BusinessRule">
+    <rdfs:subClassOf rdf:resource="#Directive"/>
+  </owl:Class>
+  <owl:Class rdf:about="#AssessmentCategory">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Threat">
+    <rdfs:subClassOf rdf:resource="#AssessmentCategory"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Offering">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="FixedAsset"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#FixedAsset">
+    <rdfs:subClassOf rdf:resource="#Asset"/>
+  </owl:Class>
+  <owl:Class rdf:ID="OrganizationCategory">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:ID="InfluencerCategory">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Strength">
+    <rdfs:subClassOf rdf:resource="#AssessmentCategory"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="recognizes">
+    <rdfs:domain rdf:resource="#OrganizationalUnit"/>
+    <rdfs:range rdf:resource="#Influencer"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="governsUseOf">
+    <rdfs:domain rdf:resource="#Directive"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="enablingCourseOfActionEnablesEnabledCourseOfAction">
+    <rdfs:domain rdf:resource="#CourseOfAction"/>
+    <rdfs:range rdf:resource="#CourseOfAction"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="focusesEffortOn">
+    <rdfs:domain rdf:resource="#Strategy"/>
+    <rdfs:range rdf:resource="#Goal"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="deploys">
+    <rdfs:domain rdf:resource="#Tactic"/>
+    <rdfs:range rdf:resource="#Offering"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="evokes">
+    <rdfs:domain rdf:resource="#CourseOfAction"/>
+    <rdfs:range rdf:resource="#Influencer"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="broaderCourseOfActionIncludesMoreSpecificCourseOfAction">
+    <rdfs:domain rdf:resource="#CourseOfAction"/>
+    <rdfs:range rdf:resource="#CourseOfAction"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="isALongTerm">
+    <rdfs:range rdf:resource="#CourseOfAction"/>
+    <rdfs:domain rdf:resource="#Strategy"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="realizes">
+    <rdfs:domain rdf:resource="#BusinessProcess"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="includes">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >includes</rdfs:label>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="establishes">
+    <rdfs:range rdf:resource="#CourseOfAction"/>
+    <rdfs:domain rdf:resource="#OrganizationalUnit"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasCategory">
+    <rdfs:domain rdf:resource="#Influencer"/>
+    <rdfs:range rdf:resource="#InfluencerCategory"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="broaderDesiredResultIncludesMoreSpecificDesiredResult">
+    <rdfs:domain rdf:resource="#DesiredResult"/>
+    <rdfs:range rdf:resource="#DesiredResult"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="isResponsibleFor">
+    <rdfs:domain rdf:resource="#OrganizationalUnit"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="affects">
+    <rdfs:range rdf:resource="#CourseOfAction"/>
+    <rdfs:domain rdf:resource="#Assessment"/>
+    <rdfs:range rdf:resource="#DesiredResult"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="actsAs">
+    <rdfs:domain rdf:resource="#Directive"/>
+    <rdfs:range rdf:resource="#Regulation"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="quantifies">
+    <rdfs:range rdf:resource="#Goal"/>
+    <rdfs:domain rdf:resource="#Objective"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="isSourceOf">
+    <rdfs:domain rdf:resource="#Directive"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="fixesEffortTo">
+    <rdfs:range rdf:resource="#Objective"/>
+    <rdfs:domain rdf:resource="#Tactic"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="isJudgementOf">
+    <rdfs:domain rdf:resource="#Assessment"/>
+    <rdfs:range rdf:resource="#Influencer"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="channelsEffortToward">
+    <rdfs:range rdf:resource="#DesiredResult"/>
+    <rdfs:domain rdf:resource="#CourseOfAction"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="defines">
+    <rdfs:range rdf:resource="#DesiredResult"/>
+    <rdfs:domain rdf:resource="#OrganizationalUnit"/>
+    <rdfs:range rdf:resource="#End"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="governs">
+    <rdfs:domain rdf:resource="#BusinessPolicy"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="categorizes">
+    <rdfs:domain rdf:resource="#OrganizationCategory"/>
+    <rdfs:range rdf:resource="#InfluencingOrganization"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="implements">
+    <rdfs:domain rdf:resource="#Tactic"/>
+    <rdfs:range rdf:resource="#Strategy"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="determines">
+    <rdfs:domain rdf:resource="#Strategy"/>
+    <rdfs:range rdf:resource="#OrganizationalUnit"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="isBasisFor">
+    <rdfs:domain rdf:resource="#BusinessPolicy"/>
+    <rdfs:range rdf:resource="#BusinessRule"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="manages">
+    <rdfs:domain rdf:resource="#BusinessProcess"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="makes">
+    <rdfs:domain rdf:resource="#OrganizationalUnit"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="affectsAchievementOf">
+    <rdfs:domain rdf:resource="#Assessment"/>
+    <rdfs:range rdf:resource="#End"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="provides">
+    <rdfs:domain rdf:resource="#FixedAsset"/>
+    <rdfs:range rdf:resource="#Resource"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="delivers">
+    <rdfs:domain rdf:resource="#BusinessProcess"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="affectsEmploymentOf">
+    <rdfs:domain rdf:resource="#Assessment"/>
+    <rdfs:range rdf:resource="#Means"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="requires">
+    <rdfs:domain rdf:resource="#Offering"/>
+    <rdfs:range rdf:resource="#Resource"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="supportsAchievementOf">
+    <rdfs:domain rdf:resource="#Directive"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="identifies">
+    <rdfs:domain rdf:resource="#Assessment"/>
+    <rdfs:range rdf:resource="#PotentialImpact"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="makesOperative">
+    <rdfs:domain rdf:resource="#Mission"/>
+    <rdfs:range rdf:resource="#Vision"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="uses">
+    <rdfs:domain rdf:resource="#Offering"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="effectsEnforcementLevelOf">
+    <rdfs:domain rdf:resource="#Tactic"/>
+    <rdfs:range rdf:resource="#BusinessRule"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="amplifies">
+    <rdfs:domain rdf:resource="#Goal"/>
+    <rdfs:range rdf:resource="#Vision"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="discharges">
+    <rdfs:domain rdf:resource="#CourseOfAction"/>
+    <rdfs:range rdf:resource="#Liability"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="appraises">
+    <rdfs:range rdf:resource="#Assessment"/>
+    <rdfs:domain rdf:resource="#OrganizationalUnit"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="isActsAs">
+    <rdfs:domain rdf:resource="#OrganizationalUnit"/>
+    <rdfs:range rdf:resource="#InfluencingOrganization"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="guides">
+    <rdfs:domain rdf:resource="#BusinessRule"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="isCategoryFor">
+    <rdfs:domain rdf:resource="#AssessmentCategory"/>
+    <rdfs:range rdf:resource="#Assessment"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="claims">
+    <rdfs:domain rdf:resource="#Liability"/>
+    <rdfs:range rdf:resource="#Resource"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="definesOffering">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >defines Offering</rdfs:label>
+    <rdfs:domain rdf:resource="#Strategy"/>
+    <rdfs:range rdf:resource="#Offering"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="isAComponentOfThePlanFor">
+    <rdfs:domain rdf:resource="#Strategy"/>
+    <rdfs:range rdf:resource="#Mission"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="isAShortTerm">
+    <rdfs:range rdf:resource="#CourseOfAction"/>
+    <rdfs:domain rdf:resource="#Tactic"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="isDefinedBy">
+    <rdfs:domain rdf:resource="#OrganizationalUnit"/>
+    <rdfs:range rdf:resource="#Strategy"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasGoverningDirective">
+    <rdfs:domain rdf:resource="#CourseOfAction"/>
+    <rdfs:range rdf:resource="#Directive"/>
+  </owl:ObjectProperty>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->
