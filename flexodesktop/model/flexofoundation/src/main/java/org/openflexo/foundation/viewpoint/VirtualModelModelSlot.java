@@ -25,7 +25,7 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain
  * 
  */
-@DeclarePatternRoles({ @DeclarePatternRole(EditionPatternPatternRole.class) // EditionPattern
+@DeclarePatternRoles({ @DeclarePatternRole(EditionPatternInstancePatternRole.class) // EditionPattern
 })
 @DeclareEditionActions({ @DeclareEditionAction(AddEditionPatternInstance.class) // Add EditionPatternInstance
 })
@@ -75,8 +75,8 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 
 	@Override
 	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
-		if (EditionPatternPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new EditionPatternPatternRole(null);
+		if (EditionPatternInstancePatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return (PR) new EditionPatternInstancePatternRole(null);
 		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
 		return null;
@@ -84,7 +84,7 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 
 	@Override
 	public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
-		if (EditionPatternPatternRole.class.isAssignableFrom(patternRoleClass)) {
+		if (EditionPatternInstancePatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return "editionPatternInstance";
 		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());

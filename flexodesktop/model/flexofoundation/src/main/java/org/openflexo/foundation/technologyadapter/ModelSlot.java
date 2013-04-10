@@ -18,7 +18,7 @@ import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 import org.openflexo.foundation.viewpoint.EditionAction;
-import org.openflexo.foundation.viewpoint.EditionPatternPatternRole;
+import org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole;
 import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.FlexoModelObjectPatternRole;
 import org.openflexo.foundation.viewpoint.NamedViewPointObject;
@@ -125,7 +125,7 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	 * @return
 	 */
 	public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
-		if (EditionPatternPatternRole.class.isAssignableFrom(patternRoleClass)) {
+		if (EditionPatternInstancePatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return "editionPattern";
 		} else if (FlexoModelObjectPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return "modelObject";

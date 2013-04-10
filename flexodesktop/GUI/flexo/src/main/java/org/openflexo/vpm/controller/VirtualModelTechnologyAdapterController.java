@@ -8,7 +8,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.viewpoint.AddEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
-import org.openflexo.foundation.viewpoint.EditionPatternPatternRole;
+import org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.SelectEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.VirtualModelTechnologyAdapter;
@@ -84,7 +84,7 @@ public class VirtualModelTechnologyAdapterController extends TechnologyAdapterCo
 	 */
 	@Override
 	public ImageIcon getIconForPatternRole(Class<? extends PatternRole> patternRoleClass) {
-		if (EditionPatternPatternRole.class.isAssignableFrom(patternRoleClass)) {
+		if (EditionPatternInstancePatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return VEIconLibrary.EDITION_PATTERN_INSTANCE_ICON;
 		}
 		return null;

@@ -5,13 +5,13 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelObjectActorReference;
 
-public class EditionPatternPatternRole extends PatternRole<EditionPatternInstance> {
+public class EditionPatternInstancePatternRole extends PatternRole<EditionPatternInstance> {
 
 	private EditionPattern editionPatternType;
 	private CreationScheme creationScheme;
 	private String _creationSchemeURI;
 
-	public EditionPatternPatternRole(VirtualModel.VirtualModelBuilder builder) {
+	public EditionPatternInstancePatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

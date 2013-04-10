@@ -142,8 +142,8 @@ public class MatchEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends
 	}
 
 	public CreationScheme getCreationScheme() {
-		if (getPatternRole() instanceof EditionPatternPatternRole) {
-			return ((EditionPatternPatternRole) getPatternRole()).getCreationScheme();
+		if (getPatternRole() instanceof EditionPatternInstancePatternRole) {
+			return ((EditionPatternInstancePatternRole) getPatternRole()).getCreationScheme();
 		}
 		if (creationScheme == null && _creationSchemeURI != null && getViewPointLibrary() != null) {
 			creationScheme = (CreationScheme) getViewPointLibrary().getEditionScheme(_creationSchemeURI);

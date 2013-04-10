@@ -172,7 +172,7 @@
 		<!--  <property name="viewpointURI" xmlTag="viewpointURI" attribute="YES" /> -->
 	</entity>
 
-	<entity name="org.openflexo.foundation.viewpoint.EditionPatternPatternRole" xmlTag="EditionPatternPatternRole">
+	<entity name="org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole" xmlTag="EditionPatternPatternRole">
 		<property name="creationSchemeURI" xmlTag="creationSchemeURI" attribute="YES" />
 	</entity>
 
