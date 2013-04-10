@@ -23,24 +23,24 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.rm.ViewPointResource;
+import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.toolbox.FileResource;
 
 /**
- * Widget allowing to select a ViewPoint
+ * Widget allowing to select a VirtualModel
  * 
  * @author sguerin
  * 
  */
-public class FIBEditionPatternSelector extends FIBModelObjectSelector<EditionPattern> {
+public class FIBVirtualModelSelector extends FIBModelObjectSelector<VirtualModelResource> {
 	@SuppressWarnings("hiding")
-	static final Logger logger = Logger.getLogger(FIBEditionPatternSelector.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(FIBVirtualModelSelector.class.getPackage().getName());
 
-	public static FileResource FIB_FILE = new FileResource("Fib/EditionPatternSelector.fib");
+	public static FileResource FIB_FILE = new FileResource("Fib/VirtualModelSelector.fib");
 
-	public FIBEditionPatternSelector(EditionPattern editedObject) {
+	public FIBVirtualModelSelector(VirtualModelResource editedObject) {
 		super(editedObject);
 	}
 
@@ -56,12 +56,12 @@ public class FIBEditionPatternSelector extends FIBModelObjectSelector<EditionPat
 	}
 
 	@Override
-	public Class<EditionPattern> getRepresentedType() {
-		return EditionPattern.class;
+	public Class<VirtualModelResource> getRepresentedType() {
+		return VirtualModelResource.class;
 	}
 
 	@Override
-	public String renderedString(EditionPattern editedObject) {
+	public String renderedString(VirtualModelResource editedObject) {
 		if (editedObject != null) {
 			return editedObject.getName();
 		}
@@ -79,20 +79,21 @@ public class FIBEditionPatternSelector extends FIBModelObjectSelector<EditionPat
 		this.viewPointLibrary = viewPointLibrary;
 	}
 
-	private ViewPoint viewPoint;
+	private ViewPointResource viewPoint;
 
-	public ViewPoint getViewPoint() {
+	public ViewPointResource getViewPoint() {
 		return viewPoint;
 	}
 
 	@CustomComponentParameter(name = "viewPoint", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setViewPoint(ViewPoint viewPoint) {
+	public void setViewPoint(ViewPointResource viewPoint) {
+		System.out.println("Setting viewpoint with " + viewPoint);
 		this.viewPoint = viewPoint;
 	}
 
 	public FlexoObject getRootObject() {
 		if (getViewPoint() != null) {
-			return getViewPoint();
+			return (FlexoObject) getViewPoint();
 		} else {
 			return getViewPointLibrary();
 		}
@@ -107,7 +108,7 @@ public class FIBEditionPatternSelector extends FIBModelObjectSelector<EditionPat
 			public Object[] getData() {
 				TestApplicationContext testApplicationContext = new TestApplicationContext(new FileResource(
 						"src/test/resources/TestResourceCenter"));
-				FIBEditionPatternSelector selector = new FIBEditionPatternSelector(null);
+				FIBVirtualModelSelector selector = new FIBVirtualModelSelector(null);
 				selector.setViewPointLibrary(testApplicationContext.getViewPointLibrary());
 				return makeArray(selector);
 			}

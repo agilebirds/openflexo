@@ -29,12 +29,15 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
+import org.openflexo.foundation.viewpoint.VirtualModelTechnologyAdapter;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
@@ -74,6 +77,7 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, ViewPointObjec
 	public String description;
 	public TechnologyAdapter<?, ?> technologyAdapter;
 	public FlexoMetaModelResource<?, ?> mmRes;
+	public VirtualModelResource vmRes;
 	public boolean required = true;
 	public boolean readOnly = false;
 
@@ -94,7 +98,11 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, ViewPointObjec
 				newModelSlot = technologyAdapter.createNewModelSlot((ViewPoint) getFocusedObject());
 			}
 			newModelSlot.setName(modelSlotName);
-			newModelSlot.setMetaModelResource(mmRes);
+			if (technologyAdapter instanceof VirtualModelTechnologyAdapter) {
+				((VirtualModelModelSlot) newModelSlot).setVirtualModelResource(vmRes);
+			} else {
+				newModelSlot.setMetaModelResource(mmRes);
+			}
 			newModelSlot.setIsRequired(required);
 			newModelSlot.setIsReadOnly(readOnly);
 			newModelSlot.setDescription(description);
@@ -122,6 +130,7 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, ViewPointObjec
 		return validityMessage;
 	}
 
+	@Override
 	public boolean isValid() {
 		if (StringUtils.isEmpty(modelSlotName)) {
 			validityMessage = EMPTY_NAME;

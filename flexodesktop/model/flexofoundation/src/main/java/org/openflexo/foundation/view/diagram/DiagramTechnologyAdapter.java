@@ -54,7 +54,7 @@ public class DiagramTechnologyAdapter extends VirtualModelTechnologyAdapter<Diag
 
 	@Override
 	public String getName() {
-		return "Openflexo built-in diagram technology adapter";
+		return "Openflexo diagram";
 	}
 
 	@Override

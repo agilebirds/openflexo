@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclareFetchRequest;
@@ -16,6 +17,7 @@ import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.toolbox.StringUtils;
 
 /**
  * Implementation of the ModelSlot class for the Openflexo built-in diagram technology adapter
@@ -106,4 +108,33 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	public ModelSlotInstanceConfiguration<? extends VirtualModelModelSlot<VMI, VM>> createConfiguration(CreateVirtualModelInstance<?> action) {
 		return new VirtualModelModelSlotInstanceConfiguration<VirtualModelModelSlot<VMI, VM>>(this, action);
 	}
+
+	private VirtualModelResource<?> virtualModelResource;
+	private String virtualModelURI;
+
+	public VirtualModelResource<?> getVirtualModelResource() {
+		if (virtualModelResource == null && StringUtils.isNotEmpty(virtualModelURI)) {
+			virtualModelResource = getViewPoint().getVirtualModelNamed(virtualModelURI).getResource();
+			logger.info("Looked-up " + virtualModelResource);
+		}
+		return virtualModelResource;
+	}
+
+	public void setVirtualModelResource(VirtualModelResource<?> virtualModelResource) {
+		this.virtualModelResource = virtualModelResource;
+	}
+
+	@Override
+	public String getMetaModelURI() {
+		if (virtualModelResource != null) {
+			return virtualModelResource.getURI();
+		}
+		return virtualModelURI;
+	}
+
+	@Override
+	public void setMetaModelURI(String metaModelURI) {
+		this.virtualModelURI = metaModelURI;
+	}
+
 }

@@ -4,15 +4,15 @@
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
       <Label label="technology" localize="true" name="TechnologyLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
       <TextField columns="10" passwd="false" readOnly="true" localize="true" data="data.technologyAdapter.name" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
-      <Label label="metamodel" localize="true" name="TechnologyLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-      <Custom componentClassName="org.openflexo.components.widget.FIBMetaModelSelector" localize="true" manageDynamicModel="true" name="MetaModelSelector" data="data.metaModelResource" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)">
+      <Label index="6" label="metamodel" localize="true" name="MetaModelLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
+      <Custom componentClassName="org.openflexo.components.widget.FIBMetaModelSelector" localize="true" manageDynamicModel="true" name="MetaModelSelector" data="data.metaModelResource" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)">
         <Assignment variable="component.informationSpace" value="data.viewPoint.viewPointLibrary.serviceManager.informationSpace" />
         <Assignment variable="component.technologyAdapter" value="data.technologyAdapter" />
       </Custom>
-      <Label label="required" localize="true" name="Required" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
-      <CheckBox selected="false" localize="true" name="RequiredCB" data="data.isRequired" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" />
-      <Label label="read_only" localize="true" name="ReadOnly" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
-      <CheckBox selected="false" localize="true" name="ReadOnlyCB" data="data.isReadOnly" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" />
+      <Label label="required" localize="true" name="Required" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" name="RequiredCB" data="data.isRequired" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" />
+      <Label label="read_only" localize="true" name="ReadOnly" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
+      <CheckBox selected="false" localize="true" name="ReadOnlyCB" data="data.isReadOnly" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" />
     </Tab>
     <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
   </TabPanel>
