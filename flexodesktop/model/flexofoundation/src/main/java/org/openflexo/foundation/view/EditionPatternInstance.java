@@ -519,4 +519,10 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		}
 		return sb.toString();
 	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + ":" + getEditionPattern().getName() + "_" + (getName() != null ? getName() : getFlexoID());
+	}
+
 }

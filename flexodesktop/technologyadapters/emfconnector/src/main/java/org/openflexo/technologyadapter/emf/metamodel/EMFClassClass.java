@@ -156,12 +156,12 @@ public class EMFClassClass extends AEMFMetaModelObjectImpl<EClass> implements IF
 	}
 
 	/**
-	 * Follow the link.
+	 * Return declared association with features for this concept.<br>
+	 * Note that parent classes are not taken under account
 	 * 
 	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getFeatureAssociations()
 	 */
-	@Override
-	public List<IFlexoOntologyFeatureAssociation> getFeatureAssociations() {
+	public List<IFlexoOntologyFeatureAssociation> getDeclaredFeatureAssociations() {
 		List<IFlexoOntologyFeatureAssociation> featureAssociations = new ArrayList<IFlexoOntologyFeatureAssociation>(0);
 		for (EAttribute attribute : object.getEAttributes()) {
 			featureAssociations.add(ontology.getConverter().convertAttributeAssociation(ontology, attribute));
@@ -170,6 +170,28 @@ public class EMFClassClass extends AEMFMetaModelObjectImpl<EClass> implements IF
 			featureAssociations.add(ontology.getConverter().convertReferenceAssociation(ontology, reference));
 		}
 		return Collections.unmodifiableList(featureAssociations);
+	}
+
+	/**
+	 * Return association with features for this concept.<br>
+	 * Note that this method consider inheritance
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getFeatureAssociations()
+	 */
+	@Override
+	public List<IFlexoOntologyFeatureAssociation> getFeatureAssociations() {
+		List<IFlexoOntologyFeatureAssociation> featureAssociations = new ArrayList<IFlexoOntologyFeatureAssociation>();
+		appendFeatureAssociation(this, featureAssociations);
+		return Collections.unmodifiableList(featureAssociations);
+	}
+
+	private void appendFeatureAssociation(EMFClassClass aClass, List<IFlexoOntologyFeatureAssociation> answer) {
+		answer.addAll(aClass.getDeclaredFeatureAssociations());
+		for (IFlexoOntologyClass superClass : aClass.getSuperClasses()) {
+			if (superClass instanceof EMFClassClass) {
+				appendFeatureAssociation((EMFClassClass) superClass, answer);
+			}
+		}
 	}
 
 	/**

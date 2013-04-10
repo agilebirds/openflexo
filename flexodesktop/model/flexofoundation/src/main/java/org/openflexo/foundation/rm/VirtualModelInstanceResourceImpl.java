@@ -172,6 +172,9 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 		if (returned.isSynchronizable()) {
 			returned.synchronize(null);
 		}
+		getContainer().getView().addToVirtualModelInstances(returned);
+		returned.clearIsModified();
 		return returned;
 	}
+
 }

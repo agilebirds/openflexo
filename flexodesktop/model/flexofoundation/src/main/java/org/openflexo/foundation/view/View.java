@@ -36,6 +36,7 @@ import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.rm.ViewResourceImpl;
+import org.openflexo.foundation.rm.VirtualModelInstanceResource;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
@@ -219,6 +220,7 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 	// ==========================================================================
 
 	public List<VirtualModelInstance<?, ?>> getVirtualModelInstances() {
+		loadVirtualModelInstancesWhenUnloaded();
 		return vmInstances;
 	}
 
@@ -232,6 +234,18 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 
 	public void removeFromVirtualModelInstances(VirtualModelInstance<?, ?> vmInstance) {
 		vmInstances.remove(vmInstance);
+	}
+
+	/**
+	 * Load eventually unloaded VirtualModelInstances<br>
+	 * After this call return, we can assert that all {@link VirtualModelInstance} are loaded.
+	 */
+	private void loadVirtualModelInstancesWhenUnloaded() {
+		for (org.openflexo.foundation.resource.FlexoResource<?> r : getResource().getContents()) {
+			if (r instanceof VirtualModelInstanceResource) {
+				((VirtualModelInstanceResource) r).getVirtualModelInstance();
+			}
+		}
 	}
 
 	public VirtualModelInstance<?, ?> getVirtualModelInstance(String name) {

@@ -30,7 +30,7 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.toolbox.FileResource;
 
 /**
- * Widget allowing to select a ViewPoint
+ * Widget allowing to select an EditionPattern
  * 
  * @author sguerin
  * 
