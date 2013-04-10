@@ -10,6 +10,7 @@ public class EditionPatternInstancePatternRole extends PatternRole<EditionPatter
 	private EditionPattern editionPatternType;
 	private CreationScheme creationScheme;
 	private String _creationSchemeURI;
+	private String _editionPatternTypeURI;
 
 	public EditionPatternInstancePatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
@@ -42,6 +43,9 @@ public class EditionPatternInstancePatternRole extends PatternRole<EditionPatter
 		if (getCreationScheme() != null) {
 			return getCreationScheme().getEditionPattern();
 		}
+		if (editionPatternType == null && _editionPatternTypeURI != null && getViewPoint() != null) {
+			editionPatternType = getViewPoint().getEditionPattern(_editionPatternTypeURI);
+		}
 		return editionPatternType;
 	}
 
@@ -51,9 +55,19 @@ public class EditionPatternInstancePatternRole extends PatternRole<EditionPatter
 			if (getCreationScheme() != null && getCreationScheme().getEditionPattern() != editionPatternType) {
 				setCreationScheme(null);
 			}
-			for (EditionScheme s : getEditionPattern().getEditionSchemes()) {
-				s.updateBindingModels();
+			if (getEditionPattern() != null) {
+				for (EditionScheme s : getEditionPattern().getEditionSchemes()) {
+					s.updateBindingModels();
+				}
 			}
+		}
+	}
+
+	@Override
+	public void finalizePatternRoleDeserialization() {
+		super.finalizePatternRoleDeserialization();
+		if (editionPatternType == null && _editionPatternTypeURI != null && getViewPoint() != null) {
+			editionPatternType = getViewPoint().getEditionPattern(_editionPatternTypeURI);
 		}
 	}
 
@@ -72,6 +86,20 @@ public class EditionPatternInstancePatternRole extends PatternRole<EditionPatter
 			}
 		}
 		_creationSchemeURI = uri;
+	}
+
+	public String _getEditionPatternTypeURI() {
+		if (getEditionPatternType() != null) {
+			return getEditionPatternType().getURI();
+		}
+		return _editionPatternTypeURI;
+	}
+
+	public void _setEditionPatternTypeURI(String uri) {
+		if (getViewPoint() != null) {
+			editionPatternType = getViewPoint().getEditionPattern(uri);
+		}
+		_editionPatternTypeURI = uri;
 	}
 
 	public CreationScheme getCreationScheme() {
@@ -96,6 +124,25 @@ public class EditionPatternInstancePatternRole extends PatternRole<EditionPatter
 	@Override
 	public ModelObjectActorReference<EditionPatternInstance> makeActorReference(EditionPatternInstance object, EditionPatternInstance epi) {
 		return new ModelObjectActorReference<EditionPatternInstance>(object, this, epi);
+	}
+
+	@Override
+	public VirtualModelModelSlot<?, ?> getModelSlot() {
+		VirtualModelModelSlot<?, ?> returned = (VirtualModelModelSlot<?, ?>) super.getModelSlot();
+		if (returned == null) {
+			if (getVirtualModel() != null && getVirtualModel().getModelSlots(VirtualModelModelSlot.class).size() > 0) {
+				return getVirtualModel().getModelSlots(VirtualModelModelSlot.class).get(0);
+			}
+		}
+		return returned;
+	}
+
+	public VirtualModelModelSlot<?, ?> getVirtualModelModelSlot() {
+		return getModelSlot();
+	}
+
+	public void setVirtualModelModelSlot(VirtualModelModelSlot<?, ?> modelSlot) {
+		setModelSlot(modelSlot);
 	}
 
 }

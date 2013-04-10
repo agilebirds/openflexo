@@ -143,14 +143,17 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDiagramShap
 			_newPaletteElement.setDropScheme(dropScheme);
 			_newPaletteElement.setBoundLabelToElementName(!takeScreenshotForTopLevelElement);
 
-			for (ExampleDrawingObjectEntry entry : drawingObjectEntries) {
-				if (entry.getSelectThis()) {
-					if (entry.graphicalObject instanceof ExampleDiagramShape) {
-						_newPaletteElement.addToOverridingGraphicalRepresentations(new ShapeOverridingGraphicalRepresentation(
-								entry.patternRole, (ShapeGraphicalRepresentation) entry.graphicalObject.getGraphicalRepresentation()));
-					} else if (entry.graphicalObject instanceof ExampleDiagramConnector) {
-						_newPaletteElement.addToOverridingGraphicalRepresentations(new ConnectorOverridingGraphicalRepresentation(
-								entry.patternRole, (ConnectorGraphicalRepresentation) entry.graphicalObject.getGraphicalRepresentation()));
+			if (overrideDefaultGraphicalRepresentations) {
+				for (ExampleDrawingObjectEntry entry : drawingObjectEntries) {
+					if (entry.getSelectThis()) {
+						if (entry.graphicalObject instanceof ExampleDiagramShape) {
+							_newPaletteElement.addToOverridingGraphicalRepresentations(new ShapeOverridingGraphicalRepresentation(
+									entry.patternRole, (ShapeGraphicalRepresentation) entry.graphicalObject.getGraphicalRepresentation()));
+						} else if (entry.graphicalObject instanceof ExampleDiagramConnector) {
+							_newPaletteElement.addToOverridingGraphicalRepresentations(new ConnectorOverridingGraphicalRepresentation(
+									entry.patternRole, (ConnectorGraphicalRepresentation) entry.graphicalObject
+											.getGraphicalRepresentation()));
+						}
 					}
 				}
 			}
@@ -164,6 +167,7 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDiagramShap
 		return _newPaletteElement;
 	}
 
+	@Override
 	public boolean isValid() {
 		return StringUtils.isNotEmpty(newElementName) && palette != null && editionPattern != null && dropScheme != null;
 	}

@@ -21,14 +21,16 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 
+import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.EditionPatternInstance;
 
-public class EditionPatternParameter extends InnerModelSlotParameter {
+public class EditionPatternInstanceParameter extends InnerModelSlotParameter {
 
 	private EditionPattern editionPatternType;
 	private String editionPatternTypeURI;
 
-	public EditionPatternParameter(VirtualModel.VirtualModelBuilder builder) {
+	public EditionPatternInstanceParameter(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 
@@ -57,8 +59,8 @@ public class EditionPatternParameter extends InnerModelSlotParameter {
 	}
 
 	public EditionPattern getEditionPatternType() {
-		if (editionPatternType == null && editionPatternTypeURI != null && getVirtualModel() != null) {
-			editionPatternType = getVirtualModel().getEditionPattern(editionPatternTypeURI);
+		if (editionPatternType == null && editionPatternTypeURI != null && getModelSlotVirtualModel() != null) {
+			editionPatternType = getModelSlotVirtualModel().getEditionPattern(editionPatternTypeURI);
 			for (EditionScheme s : getEditionPattern().getEditionSchemes()) {
 				s.updateBindingModels();
 			}
@@ -73,6 +75,20 @@ public class EditionPatternParameter extends InnerModelSlotParameter {
 				s.updateBindingModels();
 			}
 		}
+	}
+
+	@Override
+	public void setModelSlot(ModelSlot<?, ?> modelSlot) {
+		super.setModelSlot(modelSlot);
+		setChanged();
+		notifyObservers(new DataModification("modelSlotVirtualModel", null, modelSlot));
+	}
+
+	public VirtualModel<?> getModelSlotVirtualModel() {
+		if (getModelSlot() instanceof VirtualModelModelSlot) {
+			return ((VirtualModelModelSlot) getModelSlot()).getVirtualModelResource().getVirtualModel();
+		}
+		return null;
 	}
 
 }

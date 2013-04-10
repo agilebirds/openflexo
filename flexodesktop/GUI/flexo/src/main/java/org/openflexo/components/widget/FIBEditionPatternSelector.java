@@ -26,6 +26,7 @@ import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.toolbox.FileResource;
 
 /**
@@ -90,8 +91,21 @@ public class FIBEditionPatternSelector extends FIBModelObjectSelector<EditionPat
 		this.viewPoint = viewPoint;
 	}
 
+	private VirtualModel<?> virtualModel;
+
+	public VirtualModel<?> getVirtualModel() {
+		return virtualModel;
+	}
+
+	@CustomComponentParameter(name = "virtualModel", type = CustomComponentParameter.Type.OPTIONAL)
+	public void setVirtualModel(VirtualModel<?> virtualModel) {
+		this.virtualModel = virtualModel;
+	}
+
 	public FlexoObject getRootObject() {
-		if (getViewPoint() != null) {
+		if (getVirtualModel() != null) {
+			return getVirtualModel();
+		} else if (getViewPoint() != null) {
 			return getViewPoint();
 		} else {
 			return getViewPointLibrary();

@@ -566,9 +566,9 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		return newParameter;
 	}
 
-	public EditionSchemeParameter createEditionPatternParameter() {
-		EditionSchemeParameter newParameter = new EditionPatternParameter(null);
-		newParameter.setName("editionPattern");
+	public EditionSchemeParameter createEditionPatternInstanceParameter() {
+		EditionSchemeParameter newParameter = new EditionPatternInstanceParameter(null);
+		newParameter.setName("editionPatternInstance");
 		// newParameter.setLabel("label");
 		addToParameters(newParameter);
 		return newParameter;

@@ -361,7 +361,7 @@
 	</entity>
 
 	<entity
-		name="org.openflexo.foundation.viewpoint.EditionPatternParameter" xmlTag="EditionPatternParameter">
+		name="org.openflexo.foundation.viewpoint.EditionPatternInstanceParameter" xmlTag="EditionPatternParameter">
 		<property name="editionPatternTypeURI" xmlTag="editionPatternTypeURI" attribute="YES" />
 	</entity>
 

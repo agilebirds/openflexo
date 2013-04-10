@@ -260,16 +260,23 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		return this;
 	}
 
+	private boolean isLoading = false;
+
 	/**
 	 * Load eventually unloaded VirtualModels<br>
 	 * After this call return, we can assert that all {@link VirtualModel} are loaded.
 	 */
-	private void loadVirtualModelsWhenUnloaded() {
+	private synchronized void loadVirtualModelsWhenUnloaded() {
+		if (isLoading) {
+			return;
+		}
+		isLoading = true;
 		for (org.openflexo.foundation.resource.FlexoResource<?> r : getResource().getContents()) {
 			if (r instanceof VirtualModelResource) {
 				((VirtualModelResource<?>) r).getVirtualModel();
 			}
 		}
+		isLoading = false;
 	}
 
 	/**
