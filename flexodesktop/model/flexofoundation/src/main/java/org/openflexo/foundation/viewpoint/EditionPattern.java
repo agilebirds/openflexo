@@ -116,7 +116,7 @@ public class EditionPattern extends EditionPatternObject {
 		return validableObjects;
 	}
 
-	EditionPatternInstanceType getInstanceType() {
+	public EditionPatternInstanceType getInstanceType() {
 		return instanceType;
 	}
 

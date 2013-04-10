@@ -38,7 +38,7 @@ public abstract class SimplePathElement implements BindingPathElement, SettableB
 		return type;
 	}
 
-	public void setType(Type type) {
+	public final void setType(Type type) {
 		this.type = type;
 	}
 

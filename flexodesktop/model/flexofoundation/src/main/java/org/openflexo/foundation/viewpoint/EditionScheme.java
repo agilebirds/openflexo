@@ -34,7 +34,6 @@ import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.diagram.model.DiagramRootPane;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
-import org.openflexo.foundation.viewpoint.binding.EditionSchemeParametersBindingVariable;
 import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.ChainedCollection;
@@ -71,6 +70,11 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	private int width = 800;
 	private int height = 600;
 
+	private EditionSchemeType editionSchemeType = new EditionSchemeType(this);
+	private EditionSchemeActionType editionSchemeActionType = new EditionSchemeActionType(this);
+	private EditionSchemeParametersType editionSchemeParametersType = new EditionSchemeParametersType(this);
+	private EditionSchemeParametersValuesType editionSchemeParametersValuesType = new EditionSchemeParametersValuesType(this);
+
 	/**
 	 * Stores a chained collections of objects which are involved in validation
 	 */
@@ -81,6 +85,22 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		actions = new Vector<EditionAction<?, ?, ?>>();
 		parameters = new Vector<EditionSchemeParameter>();
 		editionSchemeParameters = new EditionSchemeParameters(this);
+	}
+
+	public EditionSchemeType getEditionSchemeType() {
+		return editionSchemeType;
+	}
+
+	public EditionSchemeActionType getEditionSchemeActionType() {
+		return editionSchemeActionType;
+	}
+
+	public EditionSchemeParametersType getEditionSchemeParametersType() {
+		return editionSchemeParametersType;
+	}
+
+	public EditionSchemeParametersValuesType getEditionSchemeParametersValuesType() {
+		return editionSchemeParametersValuesType;
 	}
 
 	public EditionSchemeParameters getEditionSchemeParameters() {
@@ -620,7 +640,9 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 
 	private final void createBindingModel() {
 		_bindingModel = new BindingModel();
-		_bindingModel.addToBindingVariables(new EditionSchemeParametersBindingVariable(this));
+		_bindingModel.addToBindingVariables(new BindingVariable("parameters", getEditionSchemeParametersValuesType()));
+		_bindingModel.addToBindingVariables(new BindingVariable("parametersDefinitions", getEditionSchemeParametersType()));
+		// _bindingModel.addToBindingVariables(new EditionSchemeParametersBindingVariable(this));
 		// _bindingModel.addToBindingVariables(new EditionSchemeParameterListPathElement(this, null));
 		appendContextualBindingVariables(_bindingModel);
 		if (getEditionPattern() != null) {

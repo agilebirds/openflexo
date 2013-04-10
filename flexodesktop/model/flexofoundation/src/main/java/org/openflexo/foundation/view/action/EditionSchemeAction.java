@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.view.action;
 
-import java.lang.reflect.Type;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
@@ -27,7 +26,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
-import org.openflexo.antar.binding.CustomType;
 import org.openflexo.antar.binding.SettableBindingEvaluationContext;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
@@ -46,7 +44,6 @@ import org.openflexo.foundation.viewpoint.EditionScheme;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.ListParameter;
 import org.openflexo.foundation.viewpoint.URIParameter;
-import org.openflexo.foundation.viewpoint.binding.EditionSchemeParametersBindingVariable;
 import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
 import org.openflexo.toolbox.StringUtils;
 
@@ -64,7 +61,7 @@ import org.openflexo.toolbox.StringUtils;
  * @param <A>
  */
 public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, ES extends EditionScheme> extends
-		FlexoAction<A, FlexoModelObject, FlexoModelObject> implements SettableBindingEvaluationContext, CustomType {
+		FlexoAction<A, FlexoModelObject, FlexoModelObject> implements SettableBindingEvaluationContext {
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeAction.class.getPackage().getName());
 
@@ -277,8 +274,10 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 
 	@Override
 	public Object getValue(BindingVariable variable) {
-		if (variable instanceof EditionSchemeParametersBindingVariable) {
+		if (variable.getVariableName().equals("parameters")) {
 			return getParameters();
+		} else if (variable.getVariableName().equals("parametersDefinitions")) {
+			return getEditionScheme().getParameters();
 		} else if (variable instanceof PatternRoleBindingVariable) {
 			return getEditionPatternInstance().getPatternActor(((PatternRoleBindingVariable) variable).getPatternRole());
 		} else if (variable.getVariableName().equals(EditionScheme.THIS)) {
@@ -310,30 +309,6 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 		// return overridenGraphicalRepresentations.get(patternRole);
 		// TODO temporary desactivate overriden GR
 		return null;
-	}
-
-	@Override
-	public Class getBaseClass() {
-		return EditionSchemeAction.class;
-	}
-
-	@Override
-	public boolean isTypeAssignableFrom(Type aType, boolean permissive) {
-		// System.out.println("isTypeAssignableFrom " + aType + " (i am a " + this + ")");
-		if (aType instanceof EditionSchemeAction) {
-			return getEditionScheme() == (((EditionSchemeAction) aType).getEditionScheme());
-		}
-		return false;
-	}
-
-	@Override
-	public String simpleRepresentation() {
-		return "EditionSchemeAction" + ":" + getEditionScheme();
-	}
-
-	@Override
-	public String fullQualifiedRepresentation() {
-		return "EditionSchemeAction" + ":" + getEditionScheme();
 	}
 
 	public Hashtable<EditionSchemeParameter, Object> getParameters() {

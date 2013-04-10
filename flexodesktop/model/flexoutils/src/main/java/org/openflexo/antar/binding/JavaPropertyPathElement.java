@@ -37,7 +37,10 @@ public class JavaPropertyPathElement extends SimplePathElement {
 
 	@Override
 	public Type getType() {
-		if (keyValueProperty != null) {
+		// IMPORTANT:
+		// If declared type is a CustomType, don't try to instanciate the one from the keyValueProperty
+		// which can also shadow a more specialized type encoded by a CustomType
+		if (!(super.getType() instanceof CustomType) && keyValueProperty != null) {
 			return TypeUtils.makeInstantiatedType(keyValueProperty.getType(), getParent().getType());
 		}
 		return super.getType();

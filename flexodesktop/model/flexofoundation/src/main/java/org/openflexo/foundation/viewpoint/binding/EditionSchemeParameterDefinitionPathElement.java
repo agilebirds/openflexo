@@ -1,7 +1,7 @@
 package org.openflexo.foundation.viewpoint.binding;
 
 import java.lang.reflect.Type;
-import java.util.Hashtable;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
@@ -11,14 +11,14 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 
-public class EditionSchemeParameterPathElement extends SimplePathElement {
+public class EditionSchemeParameterDefinitionPathElement extends SimplePathElement {
 
-	private static final Logger logger = Logger.getLogger(EditionSchemeParameterPathElement.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(EditionSchemeParameterDefinitionPathElement.class.getPackage().getName());
 
 	private EditionSchemeParameter parameter;
 
-	public EditionSchemeParameterPathElement(BindingPathElement parent, EditionSchemeParameter parameter) {
-		super(parent, parameter.getName(), parameter.getType());
+	public EditionSchemeParameterDefinitionPathElement(BindingPathElement parent, EditionSchemeParameter parameter) {
+		super(parent, parameter.getName(), parameter.getClass());
 		this.parameter = parameter;
 	}
 
@@ -34,9 +34,8 @@ public class EditionSchemeParameterPathElement extends SimplePathElement {
 
 	@Override
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
-		if (target instanceof Hashtable) {
-			Hashtable<EditionSchemeParameter, Object> allParameters = (Hashtable<EditionSchemeParameter, Object>) target;
-			return allParameters.get(parameter);
+		if (target instanceof List) {
+			return parameter;
 		}
 		logger.warning("Please implement me, target=" + target + " context=" + context);
 		return null;
@@ -45,11 +44,6 @@ public class EditionSchemeParameterPathElement extends SimplePathElement {
 	@Override
 	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) throws TypeMismatchException,
 			NullReferenceException {
-		if (target instanceof Hashtable) {
-			Hashtable<EditionSchemeParameter, Object> allParameters = (Hashtable<EditionSchemeParameter, Object>) target;
-			allParameters.put(parameter, value);
-			return;
-		}
 		logger.warning("Please implement me, target=" + target + " context=" + context);
 	}
 

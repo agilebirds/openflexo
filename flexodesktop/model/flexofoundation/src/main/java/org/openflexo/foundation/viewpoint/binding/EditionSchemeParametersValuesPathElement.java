@@ -1,27 +1,24 @@
 package org.openflexo.foundation.viewpoint.binding;
 
 import java.lang.reflect.Type;
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingPathElement;
-import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.SimplePathElement;
-import org.openflexo.antar.binding.WilcardTypeImpl;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionScheme;
-import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
+import org.openflexo.foundation.viewpoint.EditionSchemeParametersValuesType;
 
-public class EditionSchemeParametersPathElement extends SimplePathElement {
-	static final Logger logger = Logger.getLogger(EditionSchemeParametersPathElement.class.getPackage().getName());
+public class EditionSchemeParametersValuesPathElement extends SimplePathElement {
+	static final Logger logger = Logger.getLogger(EditionSchemeParametersValuesPathElement.class.getPackage().getName());
 
 	private EditionScheme editionScheme;
 
-	public EditionSchemeParametersPathElement(BindingPathElement parent, EditionScheme anEditionScheme) {
-		super(parent, "parameters", new ParameterizedTypeImpl(List.class, new WilcardTypeImpl(EditionSchemeParameter.class)));
+	public EditionSchemeParametersValuesPathElement(BindingPathElement parent, EditionScheme anEditionScheme) {
+		super(parent, "parameters", EditionSchemeParametersValuesType.getEditionSchemeParametersValuesType(anEditionScheme));
 		this.editionScheme = anEditionScheme;
 	}
 

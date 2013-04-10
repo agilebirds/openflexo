@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingPathElement;
-import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.Function;
 import org.openflexo.antar.binding.FunctionPathElement;
@@ -19,12 +18,15 @@ import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.Constant.StringConstant;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.view.ViewObject;
-import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AbstractActionScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
 import org.openflexo.foundation.viewpoint.EditionScheme;
+import org.openflexo.foundation.viewpoint.EditionSchemeActionType;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
+import org.openflexo.foundation.viewpoint.EditionSchemeParametersType;
+import org.openflexo.foundation.viewpoint.EditionSchemeParametersValuesType;
+import org.openflexo.foundation.viewpoint.EditionSchemeType;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.TechnologySpecificCustomType;
 import org.openflexo.foundation.viewpoint.ViewPoint;
@@ -62,9 +64,13 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 			return new EditionPatternPatternRolePathElement<PatternRole<?>>(parent, (PatternRole<?>) object);
 		}
 		if (object instanceof EditionSchemeParameter) {
-			return new EditionSchemeParameterPathElement(parent, (EditionSchemeParameter) object);
+			if (parent.getType() instanceof EditionSchemeParametersType) {
+				return new EditionSchemeParameterDefinitionPathElement(parent, (EditionSchemeParameter) object);
+			} else if (parent.getType() instanceof EditionSchemeParametersValuesType) {
+				return new EditionSchemeParameterValuePathElement(parent, (EditionSchemeParameter) object);
+			}
 		}
-		logger.warning("Unexpected " + object);
+		logger.warning("Unexpected " + object + " for parent=" + parent);
 		return null;
 	}
 
@@ -82,7 +88,24 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 			}
 		}
 
-		if (parent instanceof EditionSchemeParametersBindingVariable) {
+		if (parent.getType() instanceof EditionSchemeParametersType) {
+			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
+			EditionScheme es = ((EditionSchemeParametersType) parent.getType()).getEditionScheme();
+			for (EditionSchemeParameter p : es.getParameters()) {
+				returned.add(getSimplePathElement(p, parent));
+			}
+			Collections.sort(returned, BindingPathElement.COMPARATOR);
+			return returned;
+		} else if (parent.getType() instanceof EditionSchemeParametersValuesType) {
+			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
+			EditionScheme es = ((EditionSchemeParametersValuesType) parent.getType()).getEditionScheme();
+			for (EditionSchemeParameter p : es.getParameters()) {
+				returned.add(getSimplePathElement(p, parent));
+			}
+			Collections.sort(returned, BindingPathElement.COMPARATOR);
+			return returned;
+		}
+		/*if (parent instanceof EditionSchemeParametersBindingVariable) {
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
 			EditionScheme es = ((EditionSchemeParametersBindingVariable) parent).getEditionScheme();
 			for (EditionSchemeParameter p : es.getParameters()) {
@@ -98,7 +121,15 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 			}
 			Collections.sort(returned, BindingPathElement.COMPARATOR);
 			return returned;
-		} /*else if (TypeUtils.isTypeAssignableFrom(EditionPattern.class, parent.getType())) {
+		} else if (parent instanceof EditionSchemeParametersValuesPathElement) {
+			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
+			EditionScheme es = ((EditionSchemeParametersValuesPathElement) parent).getEditionScheme();
+			for (EditionSchemeParameter p : es.getParameters()) {
+				returned.add(getSimplePathElement(p, parent));
+			}
+			Collections.sort(returned, BindingPathElement.COMPARATOR);
+			return returned;
+		}*//*else if (TypeUtils.isTypeAssignableFrom(EditionPattern.class, parent.getType())) {
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
 				EditionPattern ep = (EditionPattern) parent.getType();
 				for (PatternRole<?> pr : ep.getPatternRoles()) {
@@ -112,10 +143,20 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 				returned.add(getSimplePathElement(pr, parent));
 			}
 			return returned;
-		} else if (parent.getType() instanceof EditionSchemeAction) {
+		} else if (parent.getType() instanceof EditionSchemeType) {
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
-			EditionScheme editionScheme = ((EditionSchemeAction) parent.getType()).getEditionScheme();
-			returned.add(new EditionSchemeParametersPathElement(parent, editionScheme));
+			EditionScheme editionScheme = ((EditionSchemeType) parent.getType()).getEditionScheme();
+			returned.add(new EditionSchemeParametersValuesPathElement(parent, editionScheme));
+			returned.add(new EditionSchemeParametersDefinitionsPathElement(parent, editionScheme));
+			for (PatternRole<?> pr : editionScheme.getEditionPattern().getPatternRoles()) {
+				returned.add(getSimplePathElement(pr, parent));
+			}
+			return returned;
+		} else if (parent.getType() instanceof EditionSchemeActionType) {
+			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
+			EditionScheme editionScheme = ((EditionSchemeActionType) parent.getType()).getEditionScheme();
+			returned.add(new EditionSchemeParametersValuesPathElement(parent, editionScheme));
+			returned.add(new EditionSchemeParametersDefinitionsPathElement(parent, editionScheme));
 			for (PatternRole<?> pr : editionScheme.getEditionPattern().getPatternRoles()) {
 				returned.add(getSimplePathElement(pr, parent));
 			}
@@ -160,18 +201,21 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 				returned = e;
 			}
 		}
-		if (returned != null) {
-			if (propertyName.equals("parameters") && !(parent instanceof BindingVariable)) {
-				System.out.println("Tiens tiens...");
-			}
-			return returned;
+		// We cannot find a simple path element at this level, retrieve from java
+		if (returned == null) {
+			returned = super.makeSimplePathElement(parent, propertyName);
 		}
-		return super.makeSimplePathElement(parent, propertyName);
+		// Hook to specialize type returned by EditionSchemeAction.getEditionScheme()
+		// This method is used while executing DiagramElement inspectors
+		if (propertyName.equals("editionScheme") && (parent.getType() instanceof EditionSchemeActionType)) {
+			returned.setType(EditionSchemeType.getEditionSchemeType(((EditionSchemeActionType) parent.getType()).getEditionScheme()));
+		}
+		return returned;
 	}
 
 	@Override
 	public FunctionPathElement makeFunctionPathElement(BindingPathElement parent, Function function, List<DataBinding<?>> args) {
-		System.out.println("makeFunctionPathElement with " + parent + " function=" + function + " args=" + args);
+		// System.out.println("makeFunctionPathElement with " + parent + " function=" + function + " args=" + args);
 		if (parent.getType() == null) {
 			return null;
 		}

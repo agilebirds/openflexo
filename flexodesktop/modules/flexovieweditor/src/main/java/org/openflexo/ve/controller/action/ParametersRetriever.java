@@ -75,6 +75,7 @@ import org.openflexo.foundation.viewpoint.ClassParameter;
 import org.openflexo.foundation.viewpoint.DataPropertyParameter;
 import org.openflexo.foundation.viewpoint.EditionPatternInstanceParameter;
 import org.openflexo.foundation.viewpoint.EditionScheme;
+import org.openflexo.foundation.viewpoint.EditionSchemeActionType;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.FlexoObjectParameter;
 import org.openflexo.foundation.viewpoint.IndividualParameter;
@@ -275,36 +276,15 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			}
 		} else if (parameter instanceof EditionPatternInstanceParameter) {
 			FIBCustom epiSelector = new FIBCustom();
+			epiSelector.setBindingFactory(parameter.getBindingFactory());
 			epiSelector.setComponentClass(FIBEditionPatternInstanceSelector.class);
 			epiSelector.addToAssignments(new FIBCustomAssignment(epiSelector, new DataBinding<Object>("component.project"),
 					new DataBinding<Object>("data.project"), true));
 			epiSelector.addToAssignments(new FIBCustomAssignment(epiSelector, new DataBinding<Object>("component.view"),
 					new DataBinding<Object>("data.view"), true));
-			/*epiSelector.addToAssignments(new FIBCustomAssignment(epiSelector, new DataBinding<Object>("component.virtualModelInstance"),
-					new DataBinding<Object>("data.virtualModelInstance"), true));*/
-			epiSelector.addToAssignments(new FIBCustomAssignment(epiSelector, new DataBinding<Object>("component.viewPoint"),
-					new DataBinding<Object>("data.editionPattern.viewPoint"), true));
 			epiSelector.addToAssignments(new FIBCustomAssignment(epiSelector, new DataBinding<Object>("component.editionPattern"),
-					new DataBinding<Object>("data.editionScheme.parameters." + parameter.getName() + ".editionPattern"), true));
-			/*if (action.getVirtualModelInstance() != null) {
-				ModelSlotInstance msInstance = action.getVirtualModelInstance().getModelSlotInstance(
-						((IndividualParameter) parameter).getModelSlot());
-				if (msInstance != null && msInstance.getModel() != null) {
-					individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding(
-							"component.contextOntologyURI"), new DataBinding<Object>('"' + msInstance.getModel().getURI() + '"'), true));
-				} else {
-					logger.warning("No model defined for model slot " + ((IndividualParameter) parameter).getModelSlot());
-				}
-			} else {
-				logger.warning("Inconsistent data: no VirtualModelInstance for action " + action);
-			}*/
-			// Quick and dirty hack to configure IndividualSelector: refactor this when new binding model will be in use
-			/*individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding<Object>("component.typeURI"),
-					new DataBinding<Object>('"' + ((IndividualParameter) parameter)._getConceptURI() + '"'), true));
-			if (StringUtils.isNotEmpty(((IndividualParameter) parameter).getRenderer())) {
-				individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding<Object>(
-						"component.renderer"), new DataBinding<Object>('"' + ((IndividualParameter) parameter).getRenderer() + '"'), true));
-			}*/
+					new DataBinding<Object>("data.editionScheme.parametersDefinitions." + parameter.getName() + ".editionPatternType"),
+					true));
 			epiSelector.setData(new DataBinding<Object>("data.parameters." + parameter.getName()));
 			panel.addToSubComponents(epiSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
 			return epiSelector;
@@ -476,7 +456,8 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 		FIBPanel returned = new FIBPanel() {
 			@Override
 			protected void createDataBindingVariable() {
-				_bindingModel.addToBindingVariables(new BindingVariable("data", action));
+				_bindingModel.addToBindingVariables(new BindingVariable("data", EditionSchemeActionType.getEditionSchemeActionType(action
+						.getEditionScheme())));
 			}
 			/*@Override
 			protected void createBindingModel() {
@@ -489,7 +470,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 		returned.setBindingFactory(action.getEditionScheme().getBindingFactory());
 
 		returned.setLayout(Layout.twocols);
-		returned.setDataClass(action.getBaseClass());
+		returned.setDataClass(action.getClass());
 		returned.setBorder(Border.empty);
 		returned.setBorderTop(10);
 		returned.setBorderBottom(5);
