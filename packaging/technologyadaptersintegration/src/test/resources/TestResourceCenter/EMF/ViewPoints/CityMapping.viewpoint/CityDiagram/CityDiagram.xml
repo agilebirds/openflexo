@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DiagramSpecification id="1" name="CityDiagram" modelVersion="1.0">
+  <LocalizedDictionary id="2" />
+  <DiagramModelSlot id="3" isRequired="true" isReadOnly="false" name="diagram" />
+  <VirtualModelModelSlot id="4" isRequired="true" isReadOnly="false" metaModelURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping" name="cityMapping" />
+  <Inspector id="5" inspectorTitle="CityDiagram" />
+</DiagramSpecification>
