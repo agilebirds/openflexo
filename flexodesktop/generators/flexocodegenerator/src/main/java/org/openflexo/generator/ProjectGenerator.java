@@ -304,6 +304,7 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository> imp
 		File buildFile = new File(genTempOutputDir, BuildXmlGenerator.FILE_NAME);
 		try {
 			ProjectHelper.getProjectHelper().parse(project, buildFile);
+			project.setBaseDir(genTempOutputDir);
 		} catch (BuildException e) {
 			e.printStackTrace();
 			setGenerationException(new WARBuildingException(new Exception("Configuration file " + buildFile
@@ -316,6 +317,9 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository> imp
 			project.setUserProperty(e.getKey(), e.getValue());
 		}
 		project.addBuildListener(this);
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Ant file is " + project.getProperty("ant.file"));
+		}
 		try {
 			project.executeTarget(project.getDefaultTarget());
 		} catch (BuildException e) {
