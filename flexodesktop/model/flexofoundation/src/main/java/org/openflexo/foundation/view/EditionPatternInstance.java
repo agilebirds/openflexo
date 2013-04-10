@@ -510,6 +510,31 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	}
 
 	public String getStringRepresentation() {
+		if (getEditionPattern().getInspector().getRenderer().isSet() && getEditionPattern().getInspector().getRenderer().isValid()) {
+			try {
+				// System.out.println("Evaluating " + getEditionPattern().getInspector().getRenderer() + " for " + this);
+				return getEditionPattern().getInspector().getRenderer().getBindingValue(new BindingEvaluationContext() {
+					@Override
+					public Object getValue(BindingVariable variable) {
+						if (variable.getVariableName().equals("instance")) {
+							return EditionPatternInstance.this;
+						}
+						logger.warning("Unexpected variable " + variable);
+						return null;
+					}
+				});
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+		return extendedStringRepresentation();
+	}
+
+	public String extendedStringRepresentation() {
 		StringBuffer sb = new StringBuffer();
 		sb.append(getEditionPattern().getName() + ": ");
 		boolean isFirst = true;

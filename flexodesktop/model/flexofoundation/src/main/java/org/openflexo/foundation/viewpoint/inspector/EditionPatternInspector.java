@@ -19,17 +19,22 @@
  */
 package org.openflexo.foundation.viewpoint.inspector;
 
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
+import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.viewpoint.dm.InspectorEntryInserted;
 import org.openflexo.foundation.viewpoint.dm.InspectorEntryRemoved;
 import org.openflexo.logging.FlexoLogger;
@@ -47,6 +52,9 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	private String inspectorTitle;
 	private EditionPattern _editionPattern;
 	private Vector<InspectorEntry> entries;
+	private DataBinding<String> renderer;
+
+	private EditionPatternFormatter formatter;
 
 	public static EditionPatternInspector makeEditionPatternInspector(EditionPattern ep) {
 		EditionPatternInspector returned = new EditionPatternInspector(null);
@@ -58,11 +66,16 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 	public EditionPatternInspector(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 		entries = new Vector<InspectorEntry>();
+		formatter = new EditionPatternFormatter();
 	}
 
 	@Override
 	public String getURI() {
 		return null;
+	}
+
+	public EditionPatternFormatter getFormatter() {
+		return formatter;
 	}
 
 	@Override
@@ -77,6 +90,7 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 
 	public void setEditionPattern(EditionPattern editionPattern) {
 		_editionPattern = editionPattern;
+		formatter.notifiedBindingModelRecreated();
 	}
 
 	@Override
@@ -275,6 +289,72 @@ public class EditionPatternInspector extends EditionPatternObject implements Bin
 		setChanged();
 		notifyObservers();
 		notifyChange("entries", null, entries);
+	}
+
+	public DataBinding<String> getRenderer() {
+		if (renderer == null) {
+			renderer = new DataBinding<String>(formatter, String.class, BindingDefinitionType.GET);
+			renderer.setBindingName("renderer");
+		}
+		return renderer;
+	}
+
+	public void setRenderer(DataBinding<String> renderer) {
+		if (renderer != null) {
+			renderer.setOwner(formatter);
+			renderer.setDeclaredType(String.class);
+			renderer.setBindingDefinitionType(BindingDefinitionType.GET);
+			renderer.setBindingName("renderer");
+		}
+		this.renderer = renderer;
+		notifiedBindingChanged(this.renderer);
+	}
+
+	private class EditionPatternFormatter implements Bindable {
+		private BindingModel formatterBindingModel = null;
+
+		public void notifiedBindingModelRecreated() {
+			createFormatterBindingModel();
+		}
+
+		@Override
+		public BindingFactory getBindingFactory() {
+			return EditionPatternInspector.this.getBindingFactory();
+		}
+
+		@Override
+		public BindingModel getBindingModel() {
+			if (formatterBindingModel == null) {
+				createFormatterBindingModel();
+			}
+			return formatterBindingModel;
+		}
+
+		private void createFormatterBindingModel() {
+			formatterBindingModel = new BindingModel();
+			formatterBindingModel.addToBindingVariables(new BindingVariable("instance", EditionPatternInstanceType
+					.getEditionPatternInstanceType(getEditionPattern())) {
+				@Override
+				public Type getType() {
+					return EditionPatternInstanceType.getEditionPatternInstanceType(getEditionPattern());
+				}
+			});
+		}
+
+		@Override
+		public void notifiedBindingChanged(DataBinding<?> dataBinding) {
+			if (dataBinding == getRenderer()) {
+				EditionPatternInspector.this.notifiedBindingChanged(dataBinding);
+			}
+		}
+
+		@Override
+		public void notifiedBindingDecoded(DataBinding<?> dataBinding) {
+			if (dataBinding == getRenderer()) {
+				EditionPatternInspector.this.notifiedBindingDecoded(dataBinding);
+			}
+		}
+
 	}
 
 }

@@ -79,6 +79,7 @@
 	<entity name="org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector"
 		xmlTag="Inspector">
 		<property name="inspectorTitle" xmlTag="inspectorTitle" attribute="YES" />
+		<property name="renderer" xmlTag="renderer" attribute="YES" />
 		<property name="entries" type="vector" contains="org.openflexo.foundation.viewpoint.inspector.InspectorEntry" />
 	</entity>
 

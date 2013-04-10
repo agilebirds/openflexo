@@ -14,7 +14,7 @@
     <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.VirtualModel" label="virtualModel.name" icon="controller.iconForObject(virtualModel)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="virtualModel">
       <Children data="virtualModel.allRootEditionPatterns" visible="" cast="" name="children" />
     </BrowserElement>
-    <BrowserElement dataClassName="org.openflexo.foundation.view.EditionPatternInstance" label="editionPatternInstance.toString" icon="controller.iconForObject(editionPatternInstance)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="editionPatternInstance" />
+    <BrowserElement dataClassName="org.openflexo.foundation.view.EditionPatternInstance" label="editionPatternInstance.stringRepresentation" icon="controller.iconForObject(editionPatternInstance)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="editionPatternInstance" />
   </Browser>
   <Panel layout="flow" hGap="5" vGap="0" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="3" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="">
     <Button action="controller.apply()" buttonIcon="" buttonType="Trigger" label="apply" format="" icon="" tooltip="" localize="true" enable="(data.selectedValue != null)" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="0" data="" constraints="flow(index=0)" visible="" />
