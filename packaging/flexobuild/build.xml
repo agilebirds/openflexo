@@ -1,7 +1,6 @@
 <project name="project" default="package" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
-
 	<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" />
 
 	<target name="defineProperties">
@@ -105,15 +104,6 @@
 	</target>
 
 	<target name="checkoutArtifact">
-		<!--<artifact:dependencies filesetId="maven.artifact" addArtifactFileSetRefs="true">
-			<localrepository id="local" path="${settings.localRepository}"/>
-			<dependency groupId="${maven.group.id}" artifactId="${maven.artifact.id}" version="${project.version}" type="${maven.type}" classifier="${maven.classifier}" />
-		</artifact:dependencies>
-		<copy todir="${artifact.dir}">
-			<fileset refid="${maven.group.id}:${maven.artifact.id}:${maven.type}:${maven.classifier}" />
-			<mapper type="flatten" />
-		</copy>
-		<unzip src="${artifact.dir}/${maven.artifact.name}" dest="${dist.dir}" />-->
 		<copy file="pom.xml.tpl" tofile="${flexobuild.work.dir}/pom.xml" filtering="true" overwrite="true">
 			<filterset>
 				<filtersfile file="${build.properties}" />
@@ -152,33 +142,13 @@
 	</target>
 
 	<target name="generateHelp">
-		<!--
-		<copy file="pom.xml.tpl" tofile="${artifact.dir}/pom.xml" filtering="true" overwrite="true">
-			<filterset>
-				<filter token="dist.dir" value="${artifact.dir}"/>
-				<filter token="maven.group.id" value="org.openflexo"/>
-				<filter token="maven.artifact.id" value="flexoant"/>
-				<filter token="maven.classifier" value=""/>
-				<filter token="maven.type" value="jar"/>
-			</filterset>
-			<filterset>
-				<filtersfile file="${build.properties}" />
-			</filterset>
-		</copy>
-		<artifact:mvn mavenhome="${maven.home}" pom="${artifact.dir}/pom.xml" fork="true">
-			<localrepository id="local" path="${settings.localRepository}"/>
-			<arg value="-B"/>
-			<arg value="dependency:copy"/>
-		</artifact:mvn>
-		-->
 		<taskdef name="generatehelp" classname="org.openflexo.ant.GenerateHelpSetTask">
 			<classpath>
 				<fileset dir="${dist.dir}/lib">
 					<include name="**/*.jar" />
 				</fileset>
 			</classpath>
-		</taskdef>
-		<generatehelp resourceDir="${dist.dir}">
+		</taskdef>		<generatehelp resourceDir="${dist.dir}">
 			<language isocode="ENGLISH" title="FlexoToolSet Help">
 				<distribution name="${userType}" />
 			</language>

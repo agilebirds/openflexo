@@ -13,6 +13,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.output.Format;
+import org.jdom2.output.LineSeparator;
 import org.jdom2.output.XMLOutputter;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
@@ -317,7 +318,9 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 			Element diagramSpecification = FlexoXMLFileResourceImpl.getElement(diagramSpecificationDocument, "ViewPoint");
 			diagramSpecification.setName("DiagramSpecification");
 			FileOutputStream fos = new FileOutputStream(new File(diagramSpecificationDir, "DiagramSpecification.xml"));
-			XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+			Format prettyFormat = Format.getPrettyFormat();
+			prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+			XMLOutputter outputter = new XMLOutputter(prettyFormat);
 			try {
 				outputter.output(diagramSpecificationDocument, fos);
 			} catch (IOException e) {

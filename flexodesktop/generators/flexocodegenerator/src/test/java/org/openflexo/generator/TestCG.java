@@ -127,7 +127,7 @@ public class TestCG extends CGTestCase {
 	}
 
 	/**
-	 * Check that resources ans dependancies were correctely built
+	 * Check that resources and dependencies were correctly built
 	 */
 	public void test1CheckResources() {
 		log("test1CheckResources");

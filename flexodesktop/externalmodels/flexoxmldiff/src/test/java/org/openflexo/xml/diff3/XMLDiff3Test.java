@@ -34,6 +34,7 @@ import junit.framework.TestCase;
 
 import org.jdom2.Document;
 import org.jdom2.output.Format;
+import org.jdom2.output.LineSeparator;
 import org.jdom2.output.XMLOutputter;
 import org.openflexo.foundation.xml.XMLSerializationService;
 import org.openflexo.toolbox.FileResource;
@@ -128,7 +129,9 @@ public class XMLDiff3Test extends TestCase {
 
 	protected String getStringRepresentation(Document doc) {
 		StringWriter writer = new StringWriter();
-		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		Format prettyFormat = Format.getPrettyFormat();
+		prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+		XMLOutputter outputter = new XMLOutputter(prettyFormat);
 		try {
 			outputter.output(doc, writer);
 		} catch (IOException e) {
@@ -154,8 +157,9 @@ public class XMLDiff3Test extends TestCase {
 	}
 
 	protected void print(Document doc, OutputStream aWriter) throws InvalidObjectSpecificationException, InvalidModelException {
-
-		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		Format prettyFormat = Format.getPrettyFormat();
+		prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+		XMLOutputter outputter = new XMLOutputter(prettyFormat);
 		try {
 			outputter.output(doc, aWriter);
 		} catch (IOException e) {
