@@ -17,6 +17,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMConstants;
 import org.jdom2.output.Format;
+import org.jdom2.output.LineSeparator;
 import org.jdom2.output.XMLOutputter;
 import org.openflexo.model.ModelContextLibrary;
 import org.openflexo.model.ModelEntity;
@@ -78,7 +79,9 @@ class XMLSerializer {
 			Element rootElement = serializeElement(object, null);
 			postProcess(rootElement);
 			builtDocument.setRootElement(rootElement);
-			XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+			Format prettyFormat = Format.getPrettyFormat();
+			prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+			XMLOutputter outputter = new XMLOutputter(prettyFormat);
 			try {
 				outputter.output(builtDocument, out);
 			} catch (IOException e) {
@@ -103,7 +106,9 @@ class XMLSerializer {
 
 	public String buildXMLOutput(Document doc) {
 		StringWriter writer = new StringWriter();
-		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		Format prettyFormat = Format.getPrettyFormat();
+		prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+		XMLOutputter outputter = new XMLOutputter(prettyFormat);
 		try {
 			outputter.output(doc, writer);
 		} catch (IOException e) {

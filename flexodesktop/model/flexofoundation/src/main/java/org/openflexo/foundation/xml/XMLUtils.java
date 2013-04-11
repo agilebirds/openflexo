@@ -42,6 +42,7 @@ import java.util.logging.Logger;
 import org.apache.xerces.parsers.DOMParser;
 import org.jdom2.input.DOMBuilder;
 import org.jdom2.output.Format;
+import org.jdom2.output.LineSeparator;
 import org.jdom2.output.XMLOutputter;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.node.AbstractNode;
@@ -94,7 +95,9 @@ public class XMLUtils {
 
 	public static boolean saveXMLFile(org.jdom2.Document document, OutputStream os) {
 		try {
-			XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+			Format prettyFormat = Format.getPrettyFormat();
+			prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+			XMLOutputter outputter = new XMLOutputter(prettyFormat);
 			outputter.output(document, os);
 			return true;
 		} catch (Exception e) {
