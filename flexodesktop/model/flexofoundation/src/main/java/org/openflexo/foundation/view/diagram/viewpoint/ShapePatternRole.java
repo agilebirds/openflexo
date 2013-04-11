@@ -8,7 +8,6 @@ import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationChanged;
 import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationModified;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
 public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape> {
@@ -87,6 +86,7 @@ public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape> 
 	}
 
 	public void setParentShapePatternRole(ShapePatternRole parentShapePatternRole) {
+		// System.out.println(">>>> setParentShapePatternRole() with " + parentShapePatternRole);
 		this.parentShapePatternRole = parentShapePatternRole;
 		setChanged();
 		notifyObservers();
@@ -97,10 +97,11 @@ public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape> 
 	}
 
 	public void setParentShapeAsDefinedInAction(boolean flag) {
+		// System.out.println(">>>> setParentShapeAsDefinedInAction() with " + flag);
 		if (!flag && getEditionPattern().getShapePatternRoles().size() > 0) {
 			setParentShapePatternRole(getEditionPattern().getShapePatternRoles().get(0));
 		} else {
-			System.out.println("setParentShapePatternRole with null");
+			// System.out.println("setParentShapePatternRole with null");
 			setParentShapePatternRole(null);
 		}
 	}
@@ -118,7 +119,7 @@ public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape> 
 
 	@Override
 	public boolean isIncludedInPrimaryRepresentationRole() {
-		if (getParentShapePatternRole() != null) {
+		if (getParentShapePatternRole() != null && getParentShapePatternRole() != this) {
 			return getParentShapePatternRole().isIncludedInPrimaryRepresentationRole();
 		}
 		return super.isIncludedInPrimaryRepresentationRole();

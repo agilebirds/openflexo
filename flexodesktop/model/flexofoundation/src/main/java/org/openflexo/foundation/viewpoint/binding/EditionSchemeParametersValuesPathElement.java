@@ -39,7 +39,7 @@ public class EditionSchemeParametersValuesPathElement extends SimplePathElement 
 	@Override
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
 		if (target instanceof EditionSchemeAction) {
-			return ((EditionSchemeAction) target).getParameters();
+			return ((EditionSchemeAction) target).getParametersValues();
 		}
 		logger.warning("Please implement me, target=" + target + " of " + target.getClass() + " context=" + context);
 		return null;

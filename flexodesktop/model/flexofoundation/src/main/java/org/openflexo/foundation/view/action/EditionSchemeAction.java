@@ -52,8 +52,6 @@ import org.openflexo.toolbox.StringUtils;
  * (such as a diagram).<br>
  * An {@link EditionSchemeAction} represents the execution (in the "instances" world) of an {@link EditionScheme}.<br>
  * To be used and executed on Openflexo platform, it is wrapped in a {@link FlexoAction}.<br>
- * An {@link EditionSchemeAction} can be considered as an instance of {@link EditionScheme}, and thus, typed (this is why this class
- * implements CustomType interface)
  * 
  * 
  * @author sylvain
@@ -275,7 +273,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 	@Override
 	public Object getValue(BindingVariable variable) {
 		if (variable.getVariableName().equals("parameters")) {
-			return getParameters();
+			return getParametersValues();
 		} else if (variable.getVariableName().equals("parametersDefinitions")) {
 			return getEditionScheme().getParameters();
 		} else if (variable instanceof PatternRoleBindingVariable) {
@@ -311,7 +309,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 		return null;
 	}
 
-	public Hashtable<EditionSchemeParameter, Object> getParameters() {
+	public Hashtable<EditionSchemeParameter, Object> getParametersValues() {
 		return parameterValues;
 	}
 
