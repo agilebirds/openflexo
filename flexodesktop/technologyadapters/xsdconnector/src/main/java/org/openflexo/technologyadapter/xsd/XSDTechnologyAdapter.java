@@ -20,27 +20,22 @@
 package org.openflexo.technologyadapter.xsd;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.logging.Logger;
 
+import org.apache.xml.resolver.Catalog;
+import org.apache.xml.resolver.CatalogManager;
+import org.apache.xml.resolver.tools.CatalogResolver;
 import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
-import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
-import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
-import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
-import org.openflexo.foundation.viewpoint.AddClass;
-import org.openflexo.foundation.viewpoint.AddIndividual;
-import org.openflexo.foundation.viewpoint.ClassPatternRole;
-import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
-import org.openflexo.foundation.viewpoint.DeleteAction;
-import org.openflexo.foundation.viewpoint.IndividualPatternRole;
-import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -59,32 +54,24 @@ import org.openflexo.technologyadapter.xsd.viewpoint.XSDBindingFactory;
 /**
  * This class defines and implements the XSD/XML technology adapter
  * 
- * @author sylvain, luka
+ * @author sylvain, luka, Christophe
  * 
  */
-@DeclarePatternRoles({
-/** Instances */
-@DeclarePatternRole(IndividualPatternRole.class),
-/** Classes */
-@DeclarePatternRole(ClassPatternRole.class),
-/** Data properties */
-@DeclarePatternRole(DataPropertyPatternRole.class),
-/** Object properties */
-@DeclarePatternRole(ObjectPropertyPatternRole.class) })
-@DeclareEditionActions({
-/** Add instance */
-@DeclareEditionAction(AddIndividual.class),
-/** Add class */
-@DeclareEditionAction(AddClass.class),
-/** Add class */
-@DeclareEditionAction(DeleteAction.class) })
+
 public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaModel> {
 
+	private static final String CatalogFileNames = "catalog-v0.ofcat";
+	
 	protected static final Logger logger = Logger.getLogger(XSDTechnologyAdapter.class.getPackage().getName());
 
 	private static final XSDBindingFactory BINDING_FACTORY = new XSDBindingFactory();
 
+	private static final CatalogResolver resolver = new org.apache.xml.resolver.tools.CatalogResolver();
+	
 	public XSDTechnologyAdapter() throws TechnologyAdapterInitializationException {
+		CatalogManager cm = resolver.getCatalog().getCatalogManager();
+		cm.setCatalogFiles(CatalogFileNames);
+		cm.setVerbosity(5);
 	}
 
 	@Override
@@ -122,7 +109,9 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	 */
 	@Override
 	public String retrieveMetaModelURI(File aMetaModelFile, TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
-		return XSOntology.findOntologyURI(aMetaModelFile);
+		String s =  XSOntology.findOntologyURI(aMetaModelFile);
+		
+		return s;
 	}
 
 	/**
@@ -135,6 +124,19 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	public String retrieveModelURI(File aModelFile, FlexoResource<XSDMetaModel> metaModelResource,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
 		// TODO Auto-generated method stub
+		try {
+			String u = getCatalog().resolveSystem(aModelFile.toURI().toString());
+			
+			if (u == null ) {
+				logger.warning ("NO CATALOG??");
+			}
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
 	}
 
@@ -185,21 +187,52 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	@Override
 	public FlexoResource<XMLModel> retrieveModelResource(File aModelFile, FlexoResource<XSDMetaModel> metaModelResource,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
-		logger.warning("Not implemented yet");
+		
 		XMLModelResource xmlModelResource = XMLModelResourceImpl.retrieveXMLModelResource(aModelFile,
 				(XSDMetaModelResource) metaModelResource, getTechnologyContextManager());
+		
 		XSDTechnologyContextManager xsdContextManager = (XSDTechnologyContextManager) technologyContextManager;
+		
 		xsdContextManager.registerModel(xmlModelResource);
+		
 		return xmlModelResource;
 	}
 
 	@Override
 	public FlexoResource<XMLModel> retrieveModelResource(File aModelFile,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
-		// logger.warning("Not implemented yet");
+		
+		for (FlexoMetaModelResource<XMLModel, XSDMetaModel> mmRes : technologyContextManager.getAllMetaModels()) {
+			if (isValidModelFile(aModelFile, mmRes, technologyContextManager)) {
+				
+				XMLModelResource xmlModelResource = (XMLModelResource) retrieveModelResource(aModelFile, mmRes, technologyContextManager);
+				xmlModelResource.setMetaModelResource(mmRes);
+				technologyContextManager.registerModel(xmlModelResource);
+				
+				return (FlexoResource<XMLModel>) xmlModelResource;
+			}
+		}
 		return null;
 	}
 
+	/**
+	 * Create empty model.
+	 * 
+	 * @param modelFile
+	 * @param modelUri
+	 * @param metaModelResource
+	 * @param technologyContextManager
+	 * @return
+	 */
+	public  XMLModelResource createEmptyModel(File modelFile, String modelUri, FlexoResource<XSDMetaModel> metaModelResource,
+			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
+		
+		XMLModelResource ModelResource = XMLModelResourceImpl.makeXMLModelResource(modelUri, modelFile, (XSDMetaModelResource) metaModelResource, (XSDTechnologyContextManager) technologyContextManager);
+		technologyContextManager.registerModel(ModelResource);
+		return ModelResource;
+
+	}
+		
 	/**
 	 * Creates new model conform to the supplied meta model
 	 * 
@@ -210,64 +243,21 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	@Override
 	public XMLModelResource createEmptyModel(FlexoProject project, String filename, String modelUri, FlexoResource<XSDMetaModel> metaModel,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
+		
+		File modelFile = new File(FlexoProject.getProjectSpecificModelsDirectory(project), filename);
 
-		// TODO: meta model not handled here !
-
-		/*if (logger.isLoggable(Level.FINE)) {
-			logger.fine("createNewXMLModel(), project=" + project);
-		}
-		logger.info("-------------> Create XMLModel for " + project.getProjectName());
-		File owlFile = ProjectRestructuration.getExpectedProjectOntologyFile(project, project.getProjectName());
-		FlexoProjectFile ontologyFile = new FlexoProjectFile(owlFile, project);
-
-		XMLModel newProjectOntology = createProjectOntology(project.getURI(), owlFile, project.getProjectOntologyLibrary());
-		project.getProjectOntologyLibrary().registerOntology(newProjectOntology);
-
-		FlexoXMLModelResource ontologyRes;
-		try {
-			ontologyRes = new FlexoXMLModelResource(project, newProjectOntology, ontologyFile);
-		} catch (InvalidFileNameException e) {
-			e.printStackTrace();
-			if (logger.isLoggable(Level.SEVERE)) {
-				logger.severe("This should not happen: invalid file " + ontologyFile);
-			}
-			return null;
-		} catch (DuplicateResourceException e) {
-			e.printStackTrace();
-			if (logger.isLoggable(Level.SEVERE)) {
-				logger.severe("This should not happen: DuplicateResourceException for " + ontologyFile);
-			}
-			return null;
-		}
-		try {
-			project.registerResource(ontologyRes);
-		} catch (Exception e1) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
-			}
-			e1.printStackTrace();
-		}
-
-		try {
-			ontologyRes.saveResourceData();
-		} catch (Exception e1) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
-			}
-			e1.printStackTrace();
-		}
-
-		return newProjectOntology;*/
-
-		return null;
+		return createEmptyModel(modelFile, modelUri, metaModel, technologyContextManager);
+		
 	}
+
 
 	@Override
 	public FlexoResource<XMLModel> createEmptyModel(FileSystemBasedResourceCenter resourceCenter, String relativePath, String filename,
 			String modelUri, FlexoResource<XSDMetaModel> metaModelResource,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
-		// TODO Auto-generated method stub
-		return null;
+		File modelDirectory = new File(resourceCenter.getRootDirectory(), relativePath);
+		File modelFile = new File(modelDirectory, filename);
+		return createEmptyModel(modelFile, modelUri, metaModelResource, technologyContextManager);
 	}
 
 	@Override
@@ -318,6 +308,10 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	@Override
 	public String getExpectedModelExtension(FlexoResource<XSDMetaModel> metaModel) {
 		return ".xml";
+	}
+
+	public Catalog getCatalog(){
+		return resolver.getCatalog();
 	}
 
 }

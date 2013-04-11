@@ -22,6 +22,7 @@ package org.openflexo.technologyadapter.xsd.rm;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,7 +44,9 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
+import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.technologyadapter.xsd.model.XMLModel;
+import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.model.XSDTechnologyContextManager;
 import org.openflexo.toolbox.IProgress;
 
@@ -72,12 +75,12 @@ public abstract class XMLModelResourceImpl extends FlexoFileResourceImpl<XMLMode
 		try {
 			ModelFactory factory = new ModelFactory(XMLModelResource.class);
 			XMLModelResourceImpl returned = (XMLModelResourceImpl) factory.newInstance(XMLModelResource.class);
-			returned.setServiceManager(technologyContextManager.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
-			returned.setTechnologyAdapter(technologyContextManager.getTechnologyAdapter());
-			returned.setTechnologyContextManager(technologyContextManager);
 			returned.setName(modelFile.getName());
 			returned.setFile(modelFile);
 			returned.setURI(modelURI);
+			returned.setServiceManager(technologyContextManager.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
+			returned.setTechnologyAdapter(technologyContextManager.getTechnologyAdapter());
+			returned.setTechnologyContextManager(technologyContextManager);
 			returned.setMetaModelResource(xsdMetaModelResource);
 			technologyContextManager.registerModel(returned);
 			// Creates the XML model from scratch
@@ -103,12 +106,12 @@ public abstract class XMLModelResourceImpl extends FlexoFileResourceImpl<XMLMode
 		try {
 			ModelFactory factory = new ModelFactory(XMLModelResource.class);
 			XMLModelResourceImpl returned = (XMLModelResourceImpl) factory.newInstance(XMLModelResource.class);
-			returned.setServiceManager(technologyContextManager.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
-			returned.setTechnologyAdapter(technologyContextManager.getTechnologyAdapter());
-			returned.setTechnologyContextManager(technologyContextManager);
 			returned.setName(modelFile.getName());
 			returned.setFile(modelFile);
 			returned.setURI(modelFile.toURI().toString());
+			returned.setServiceManager(technologyContextManager.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
+			returned.setTechnologyAdapter(technologyContextManager.getTechnologyAdapter());
+			returned.setTechnologyContextManager(technologyContextManager);
 			returned.setMetaModelResource(xsdMetaModelResource);
 			technologyContextManager.registerModel(returned);
 			return returned;
@@ -132,8 +135,11 @@ public abstract class XMLModelResourceImpl extends FlexoFileResourceImpl<XMLMode
 	@Override
 	public XMLModel loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
 			FileNotFoundException, FlexoException {
-		logger.warning("Not implemented: loadResourceData() in XMLModelResourceImpl");
-		return null;
+	/*	logger.warning("Not implemented: loadResourceData() in XMLModelResourceImpl"); 	 */
+
+		XMLModel returned = new XMLModel(getURI(), getFile(), (XSDTechnologyAdapter) getTechnologyAdapter());
+		returned.loadWhenUnloaded();
+		return returned;
 	}
 
 	/**

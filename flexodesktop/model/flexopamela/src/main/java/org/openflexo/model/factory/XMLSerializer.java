@@ -32,7 +32,7 @@ class XMLSerializer {
 
 	// This code is an attempt to force JDom to use system line separator (issues with CR / CRLF and git/egit)
 	static {
-		System.setProperty(JDOMConstants.JDOM2_PROPERTY_LINE_SEPARATOR, "SYSTEM");
+		System.setProperty(JDOMConstants.JDOM2_PROPERTY_LINE_SEPARATOR, org.jdom2.output.LineSeparator.SYSTEM.toString() );
 	}
 
 	public static final String ID = "id";
