@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="border" borderTop="5" borderBottom="5" borderLeft="5" borderRight="5" darkLevel="0" data="data" dataClassName="org.openflexo.components.SaveProjectsDialog$ProjectList" controllerClassName="org.openflexo.view.controller.FlexoFIBController">
-  <Panel layout="border" borderTitle="" darkLevel="0" index="0" constraints="border(index=0;location=center)">
-    <Panel layout="border" border="line" borderColor="204,204,204" darkLevel="0" index="0" constraints="border(index=0;location=center)" opaque="true" backgroundColor="255,255,255" width="320" height="320" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_NEVER" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED">
-      <Panel layout="flow" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" borderBottom="0" borderRight="80" darkLevel="0" index="0" constraints="border(index=0;location=center)">
-        <CheckboxList columns="1" hGap="0" vGap="2" index="0" data="data.selected" constraints="flow(index=0;location=center)" name="CheckboxList" format="(((object.displayName + &quot; (&quot;) + object.projectDirectory) + &quot;)&quot;)" icon="controller.iconForObject(object)" localize="false" staticList="" list="data.projects" showIcon="true" iteratorClassName="org.openflexo.foundation.rm.FlexoProject" autoSelectFirstRow="true">
+<Panel layout="border" borderTop="5" borderBottom="5" borderLeft="5" borderRight="5" darkLevel="0" data="data" dataClassName="org.openflexo.components.SaveProjectsDialog$ProjectList" controllerClassName="org.openflexo.view.controller.FlexoFIBController" visible="">
+  <Panel layout="border" borderTitle="" darkLevel="0" index="0" data="" constraints="border(index=0;location=center)" visible="">
+    <Panel layout="border" border="line" borderColor="204,204,204" darkLevel="0" index="0" data="" constraints="border(index=0;location=center)" visible="" opaque="true" backgroundColor="255,255,255" width="320" height="320" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_NEVER" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED">
+      <Panel layout="flow" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" borderBottom="0" borderRight="80" darkLevel="0" index="0" data="" constraints="border(index=0;location=center)" visible="">
+        <CheckboxList columns="1" hGap="0" vGap="2" index="0" data="data.selected" constraints="flow(index=0;location=center)" visible="" name="CheckboxList" format="(((object.displayName + &quot; (&quot;) + object.projectDirectory.toString) + &quot;)&quot;)" icon="controller.iconForObject(object)" tooltip="" localize="false" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" staticList="" list="data.projects" array="" showIcon="true" iteratorClassName="org.openflexo.foundation.rm.FlexoProject" autoSelectFirstRow="true">
           <Dependancy componentName="SelectAll" />
           <Dependancy componentName="DeselectAll" />
         </CheckboxList>
       </Panel>
     </Panel>
-    <Panel layout="flow" hGap="5" vGap="5" flowAlignment="RIGHT" borderTitle="Panel" darkLevel="0" index="0" constraints="border(index=0;location=south)">
-      <Panel layout="grid" hGap="5" vGap="5" cols="2" rows="2" darkLevel="0" index="0" constraints="flow(index=0;location=center)">
-        <Button action="data.selectAll()" buttonType="Trigger" label="select_all" constraints="grid(x=0;y=0)" name="SelectAll" localize="true" manageDynamicModel="true" />
-        <Button action="data.deselectAll()" buttonType="Trigger" label="deselect_all" constraints="grid(x=1;y=0)" name="DeselectAll" localize="true" manageDynamicModel="true" />
-        <Button action="controller.chooseYesAndDispose()" buttonType="Trigger" label="Save" default="true" constraints="grid(x=0;y=1)" localize="true" />
-        <Button action="controller.chooseNoAndDispose()" buttonType="Trigger" label="Cancel" constraints="grid(x=1;y=1)" localize="true" />
+    <Panel layout="flow" hGap="5" vGap="5" flowAlignment="RIGHT" borderTitle="Panel" darkLevel="0" index="0" data="" constraints="border(index=0;location=south)" visible="">
+      <Panel layout="grid" hGap="5" vGap="5" cols="2" rows="2" darkLevel="0" index="0" data="" constraints="flow(index=0;location=center)" visible="">
+        <Button action="data.selectAll()" buttonIcon="" buttonType="Trigger" label="select_all" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="SelectAll" data="" constraints="grid(x=0;y=0)" visible="" />
+        <Button action="data.deselectAll()" buttonIcon="" buttonType="Trigger" label="deselect_all" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="DeselectAll" data="" constraints="grid(x=1;y=0)" visible="" />
+        <Button action="controller.chooseYesAndDispose()" buttonIcon="" buttonType="Trigger" label="Save" default="true" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" data="" constraints="grid(x=0;y=1)" visible="" />
+        <Button action="controller.chooseNoAndDispose()" buttonIcon="" buttonType="Trigger" label="Cancel" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" data="" constraints="grid(x=1;y=1)" visible="" />
       </Panel>
     </Panel>
   </Panel>
