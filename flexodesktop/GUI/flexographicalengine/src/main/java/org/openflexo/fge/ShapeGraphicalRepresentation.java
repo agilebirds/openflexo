@@ -1844,7 +1844,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 
 	@Override
 	public void notifiedBindingChanged(DataBinding<?> dataBinding) {
-		System.out.println("Binding changed to " + dataBinding);
+		//logger.info("Binding changed to " + dataBinding);
 
 		super.notifiedBindingChanged(dataBinding);
 		if (dataBinding == getXConstraints() && dataBinding.isValid()) {

@@ -51,7 +51,7 @@ public class VirtualModelTechnologyAdapter<VMI extends VirtualModelInstance<VMI,
 
 	@Override
 	public String getName() {
-		return "Openflexo built-in virtual model technology adapter";
+		return "Openflexo virtual model";
 	}
 
 	@Override

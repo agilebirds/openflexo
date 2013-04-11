@@ -33,11 +33,14 @@ import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.EditionPatternStructuralFacet;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
@@ -78,6 +81,8 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 	public String description;
 	public ModelSlot<?, ?> modelSlot;
 	public Class<? extends PatternRole> patternRoleClass;
+	public IFlexoOntologyClass individualType;
+	public EditionPattern editionPatternInstanceType;
 
 	private PatternRole newPatternRole;
 
@@ -123,6 +128,9 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 			if (isIndividual()) {
 				((IndividualPatternRole) newPatternRole).setOntologicType(individualType);
 			}
+			if (isEditionPatternInstance()) {
+				((EditionPatternInstancePatternRole) newPatternRole).setEditionPatternType(editionPatternInstanceType);
+			}
 			getEditionPattern().addToPatternRoles(newPatternRole);
 		}
 
@@ -160,9 +168,23 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 	}
 
 	public boolean isIndividual() {
+		if (patternRoleClass == null) {
+			return false;
+		}
 		return IndividualPatternRole.class.isAssignableFrom(patternRoleClass);
 	}
 
-	public IFlexoOntologyClass individualType;
+	public boolean isEditionPatternInstance() {
+		if (patternRoleClass == null) {
+			return false;
+		}
+		return EditionPatternInstancePatternRole.class.isAssignableFrom(patternRoleClass);
+	}
 
+	public VirtualModel<?> getModelSlotVirtualModel() {
+		if (modelSlot instanceof VirtualModelModelSlot) {
+			return ((VirtualModelModelSlot) modelSlot).getVirtualModelResource().getVirtualModel();
+		}
+		return null;
+	}
 }

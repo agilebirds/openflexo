@@ -65,7 +65,7 @@ import org.openflexo.foundation.viewpoint.DeletionScheme;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternConstraint;
-import org.openflexo.foundation.viewpoint.EditionPatternPatternRole;
+import org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole;
 import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
 import org.openflexo.foundation.viewpoint.ExecutionAction;
 import org.openflexo.foundation.viewpoint.FetchRequestCondition;
@@ -337,7 +337,7 @@ public class VPMIconLibrary extends IconLibrary {
 			return SHAPE_ICON;
 		} else if (object instanceof DiagramPatternRole) {
 			return EXAMPLE_DIAGRAM_ICON;
-		} else if (object instanceof EditionPatternPatternRole) {
+		} else if (object instanceof EditionPatternInstancePatternRole) {
 			return EDITION_PATTERN_ICON;
 		} else if (object instanceof PrimitivePatternRole) {
 			return UNKNOWN_ICON;

@@ -14,6 +14,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
+import org.openflexo.toolbox.IProgress;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -97,6 +98,18 @@ public abstract class DiagramResourceImpl extends VirtualModelInstanceResourceIm
 	@Override
 	public Class<Diagram> getResourceDataClass() {
 		return Diagram.class;
+	}
+
+	@Override
+	public Diagram loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
+			FileNotFoundException, FlexoException {
+		Diagram returned = super.loadResourceData(progress);
+		if (returned.isSynchronizable()) {
+			returned.synchronize(null);
+		}
+		getContainer().getView().addToVirtualModelInstances(returned);
+		returned.clearIsModified();
+		return returned;
 	}
 
 }

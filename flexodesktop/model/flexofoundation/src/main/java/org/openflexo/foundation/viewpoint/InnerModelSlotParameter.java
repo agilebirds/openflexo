@@ -19,8 +19,8 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
 public abstract class InnerModelSlotParameter extends EditionSchemeParameter {
 
@@ -36,6 +36,8 @@ public abstract class InnerModelSlotParameter extends EditionSchemeParameter {
 
 	public void setModelSlot(ModelSlot<?, ?> modelSlot) {
 		this.modelSlot = modelSlot;
+		setChanged();
+		notifyObservers(new DataModification("modelSlot", null, modelSlot));
 	}
 
 }

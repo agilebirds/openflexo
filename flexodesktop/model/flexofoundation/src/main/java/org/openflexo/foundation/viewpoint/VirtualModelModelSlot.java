@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclareFetchRequest;
@@ -16,6 +17,7 @@ import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.toolbox.StringUtils;
 
 /**
  * Implementation of the ModelSlot class for the Openflexo built-in diagram technology adapter
@@ -23,7 +25,7 @@ import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
  * @author sylvain
  * 
  */
-@DeclarePatternRoles({ @DeclarePatternRole(EditionPatternPatternRole.class) // EditionPattern
+@DeclarePatternRoles({ @DeclarePatternRole(EditionPatternInstancePatternRole.class) // EditionPattern
 })
 @DeclareEditionActions({ @DeclareEditionAction(AddEditionPatternInstance.class) // Add EditionPatternInstance
 })
@@ -73,8 +75,8 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 
 	@Override
 	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
-		if (EditionPatternPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return (PR) new EditionPatternPatternRole(null);
+		if (EditionPatternInstancePatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return (PR) new EditionPatternInstancePatternRole(null);
 		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
 		return null;
@@ -82,7 +84,7 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 
 	@Override
 	public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
-		if (EditionPatternPatternRole.class.isAssignableFrom(patternRoleClass)) {
+		if (EditionPatternInstancePatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return "editionPatternInstance";
 		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
@@ -106,4 +108,33 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	public ModelSlotInstanceConfiguration<? extends VirtualModelModelSlot<VMI, VM>> createConfiguration(CreateVirtualModelInstance<?> action) {
 		return new VirtualModelModelSlotInstanceConfiguration<VirtualModelModelSlot<VMI, VM>>(this, action);
 	}
+
+	private VirtualModelResource<?> virtualModelResource;
+	private String virtualModelURI;
+
+	public VirtualModelResource<?> getVirtualModelResource() {
+		if (virtualModelResource == null && StringUtils.isNotEmpty(virtualModelURI)) {
+			virtualModelResource = getViewPoint().getVirtualModelNamed(virtualModelURI).getResource();
+			logger.info("Looked-up " + virtualModelResource);
+		}
+		return virtualModelResource;
+	}
+
+	public void setVirtualModelResource(VirtualModelResource<?> virtualModelResource) {
+		this.virtualModelResource = virtualModelResource;
+	}
+
+	@Override
+	public String getMetaModelURI() {
+		if (virtualModelResource != null) {
+			return virtualModelResource.getURI();
+		}
+		return virtualModelURI;
+	}
+
+	@Override
+	public void setMetaModelURI(String metaModelURI) {
+		this.virtualModelURI = metaModelURI;
+	}
+
 }

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingPathElement;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.Function;
 import org.openflexo.antar.binding.FunctionPathElement;
@@ -97,14 +98,14 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 			}
 			Collections.sort(returned, BindingPathElement.COMPARATOR);
 			return returned;
-		} else if (TypeUtils.isTypeAssignableFrom(EditionPattern.class, parent.getType())) {
+		} /*else if (TypeUtils.isTypeAssignableFrom(EditionPattern.class, parent.getType())) {
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
-			EditionPattern ep = (EditionPattern) parent.getType();
-			for (PatternRole<?> pr : ep.getPatternRoles()) {
-				returned.add(getSimplePathElement(pr, parent));
-			}
+				EditionPattern ep = (EditionPattern) parent.getType();
+				for (PatternRole<?> pr : ep.getPatternRoles()) {
+					returned.add(getSimplePathElement(pr, parent));
+				}
 			return returned;
-		} else if (parent.getType() instanceof EditionPatternInstanceType) {
+			} */else if (parent.getType() instanceof EditionPatternInstanceType) {
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
 			EditionPattern ep = ((EditionPatternInstanceType) parent.getType()).getEditionPattern();
 			for (PatternRole<?> pr : ep.getPatternRoles()) {
@@ -153,10 +154,17 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 	@Override
 	public SimplePathElement makeSimplePathElement(BindingPathElement parent, String propertyName) {
 		// We want to avoid code duplication, so iterate on all accessible simple path element and choose the right one
+		SimplePathElement returned = null;
 		for (SimplePathElement e : getAccessibleSimplePathElements(parent)) {
 			if (e.getLabel().equals(propertyName)) {
-				return e;
+				returned = e;
 			}
+		}
+		if (returned != null) {
+			if (propertyName.equals("parameters") && !(parent instanceof BindingVariable)) {
+				System.out.println("Tiens tiens...");
+			}
+			return returned;
 		}
 		return super.makeSimplePathElement(parent, propertyName);
 	}

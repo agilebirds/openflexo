@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationError;
@@ -67,6 +68,8 @@ public abstract class PatternRole<T> extends EditionPatternObject {
 
 	public void setModelSlot(ModelSlot<?, ?> modelSlot) {
 		this.modelSlot = modelSlot;
+		setChanged();
+		notifyObservers(new DataModification("modelSlot", null, modelSlot));
 	}
 
 	public void setEditionPattern(EditionPattern pattern) {
