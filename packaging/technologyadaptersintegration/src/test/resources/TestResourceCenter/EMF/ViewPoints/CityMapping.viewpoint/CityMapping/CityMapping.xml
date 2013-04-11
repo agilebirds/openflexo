@@ -30,11 +30,11 @@
       <AddressedEMFModelSlot idref="7" />
     </ContainedEMFObjectIndividualPatternRole>
     <PrimaryConceptEMFObjectIndividualPatternRole idref="16" />
-    <Inspector id="18" inspectorTitle="City" />
+    <Inspector id="18" inspectorTitle="City" renderer="((instance.cityInModel1 != null) ? ((instance.cityInModel2 != null) ? (instance.cityInModel1.name + &quot; [sync]&quot;) : (instance.cityInModel1.name + &quot; [model1]&quot;)) : (instance.cityInModel2.name + &quot; [model2]&quot;))" />
     <Constraint id="19" constraint="(cityInModel1.name.toUpperCase = cityInModel2.name.toUpperCase)" />
   </EditionPattern>
   <EditionPattern id="20" name="House">
-    <Inspector id="21" inspectorTitle="House" />
+    <Inspector id="21" inspectorTitle="House" renderer="" />
   </EditionPattern>
   <EditionPattern id="22" name="Appartment" parentEditionPattern="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#House">
     <CreationScheme id="23" name="creation" label="creation" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
@@ -54,7 +54,7 @@
       <AddressedEMFModelSlot idref="7" />
     </ContainedEMFObjectIndividualPatternRole>
     <PrimaryConceptEMFObjectIndividualPatternRole idref="28" />
-    <Inspector id="30" inspectorTitle="Appartment" />
+    <Inspector id="30" inspectorTitle="Appartment" renderer="(&quot;Appartment &quot; + ((instance.houseInModel1 != null) ? ((instance.appartmentInModel2 != null) ? (instance.houseInModel1.info + &quot; [sync]&quot;) : (instance.houseInModel1.info + &quot; [model1]&quot;)) : (instance.appartmentInModel2.label + &quot; [model2]&quot;)))" />
     <Constraint id="31" constraint="(houseInModel1.type.name = &quot;Appartment&quot;)" />
     <Constraint id="32" constraint="(houseInModel1.info = appartmentInModel2.label)" />
   </EditionPattern>
@@ -76,7 +76,7 @@
       <AddressedEMFModelSlot idref="7" />
     </ContainedEMFObjectIndividualPatternRole>
     <PrimaryConceptEMFObjectIndividualPatternRole idref="39" />
-    <Inspector id="41" inspectorTitle="Mansion" />
+    <Inspector id="41" inspectorTitle="Mansion" renderer="(&quot;Mansion &quot; + ((instance.houseInModel1 != null) ? ((instance.mansionInModel2 != null) ? (instance.houseInModel1.info + &quot; [sync]&quot;) : (instance.houseInModel1.info + &quot; [model1]&quot;)) : (instance.mansionInModel2.number.toString + &quot; [model2]&quot;)))" />
     <Constraint id="42" constraint="(houseInModel1.type.name = &quot;Mansion&quot;)" />
     <Constraint id="43" constraint="(houseInModel1.info = mansionInModel2.number.toString)" />
   </EditionPattern>
@@ -98,11 +98,11 @@
       <AddressedEMFModelSlot idref="7" />
     </ContainedEMFObjectIndividualPatternRole>
     <PrimaryConceptEMFObjectIndividualPatternRole idref="50" />
-    <Inspector id="52" inspectorTitle="Resident" />
+    <Inspector id="52" inspectorTitle="Resident" renderer="((instance.residentInModel1 != null) ? ((instance.houseInModel2 != null) ? (instance.residentInModel1.name + &quot; [sync]&quot;) : (instance.residentInModel1.name + &quot; [model1]&quot;)) : (instance.houseInModel2.owner + &quot; [model2]&quot;))" />
     <Constraint id="53" constraint="(residentInModel1.name = houseInModel2.owner)" />
   </EditionPattern>
   <EditionPattern id="54" name="Mayor" parentEditionPattern="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#Resident">
-    <Inspector id="55" inspectorTitle="Mayor" />
+    <Inspector id="55" inspectorTitle="Mayor" renderer="" />
   </EditionPattern>
   <LocalizedDictionary id="56" />
   <EMFModelSlot idref="5" />
@@ -245,5 +245,5 @@
       <ExecutionAction id="141" execution="nonExistingCity.generateModel1FromModel2()" conditional="" assignation="" />
     </IterationAction>
   </ActionScheme>
-  <Inspector id="142" inspectorTitle="CityMapping" />
+  <Inspector id="142" inspectorTitle="CityMapping" renderer="" />
 </VirtualModel>
