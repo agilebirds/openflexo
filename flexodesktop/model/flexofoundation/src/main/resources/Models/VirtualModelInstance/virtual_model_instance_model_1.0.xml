@@ -33,6 +33,7 @@
 		<property name="title" xmlTag="title" attribute="yes" />
 		<property name="virtualModelURI" xmlTag="virtualModelURI" attribute="YES" description="" />
 		<property name="modelSlotInstances" xmlTag="modelSlotInstances" type="vector" contains="org.openflexo.foundation.view.ModelSlotInstance" />
+		<property name="editionPatternInstancesList" type="vector" contains="org.openflexo.foundation.view.EditionPatternInstance" primary="yes"/>
 	</entity>
 
 	<entity name="org.openflexo.foundation.view.ModelSlotInstance" xmlTag="ModelSlotInstance">
