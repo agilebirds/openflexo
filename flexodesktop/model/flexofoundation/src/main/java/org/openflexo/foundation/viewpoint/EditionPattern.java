@@ -792,9 +792,11 @@ public class EditionPattern extends EditionPatternObject {
 			if (aParentEP == null) {
 				this.parentEditionPattern.childEditionPatterns.remove(this);
 				this.parentEditionPattern = aParentEP;
-				this.parentEditionPattern.setChanged();
-				this.parentEditionPattern.notifyObservers(new EditionPatternHierarchyChanged(this));
-				this.parentEditionPattern.notifyChange("childEditionPatterns", null, getChildEditionPatterns());
+				if (this.parentEditionPattern != null) {
+					this.parentEditionPattern.setChanged();
+					this.parentEditionPattern.notifyObservers(new EditionPatternHierarchyChanged(this));
+					this.parentEditionPattern.notifyChange("childEditionPatterns", null, getChildEditionPatterns());
+				}
 			} else {
 				aParentEP.childEditionPatterns.add(this);
 				this.parentEditionPattern = aParentEP;
