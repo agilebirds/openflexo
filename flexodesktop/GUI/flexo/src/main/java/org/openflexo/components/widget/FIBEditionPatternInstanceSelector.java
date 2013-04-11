@@ -85,7 +85,7 @@ public class FIBEditionPatternInstanceSelector extends FIBModelObjectSelector<Ed
 	@Override
 	public String renderedString(EditionPatternInstance editedObject) {
 		if (editedObject != null) {
-			return editedObject.toString();
+			return editedObject.getStringRepresentation();
 		}
 		return "";
 	}
