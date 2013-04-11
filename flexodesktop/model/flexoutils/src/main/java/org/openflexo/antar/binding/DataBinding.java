@@ -91,7 +91,10 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 
 		@Override
 		public String convertToString(DataBinding value) {
-			return value.toString();
+			if (value.isSet()) {
+				return value.toString();
+			}
+			return null;
 		};
 	}
 
