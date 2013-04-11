@@ -42,7 +42,6 @@ import org.jdom2.Attribute;
 import org.jdom2.DocType;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.JDOMConstants;
 import org.jdom2.Text;
 import org.jdom2.output.Format;
 import org.jdom2.output.LineSeparator;
@@ -99,11 +98,6 @@ import org.xml.sax.SAXException;
  * @see XMLMapping
  */
 public class XMLCoder {
-
-	// This code is an attempt to force JDom to use system line separator (issues with CR / CRLF and git/egit)
-	static {
-		System.setProperty(JDOMConstants.JDOM2_PROPERTY_LINE_SEPARATOR, "SYSTEM");
-	}
 
 	/** Stores mapping that will be used for decoding */
 	protected XMLMapping xmlMapping;
