@@ -45,7 +45,7 @@ public interface AbstractNode extends WKFObject {
 	@Getter(value = OUTGOING_EDGES, cardinality = Cardinality.LIST, inverse = Edge.START_NODE)
 	@XMLElement(context = "Outgoing", primary = true)
 	@CloningStrategy(StrategyType.CLONE)
-	@Embedded(closureConditions = { Edge.END_NODE })
+	@Embedded(closureConditions = { Edge.END_NODE }, deletionConditions = { Edge.END_NODE })
 	public List<Edge> getOutgoingEdges();
 
 	@Setter(OUTGOING_EDGES)
@@ -59,7 +59,7 @@ public interface AbstractNode extends WKFObject {
 
 	@Getter(value = INCOMING_EDGES, cardinality = Cardinality.LIST, inverse = Edge.END_NODE)
 	@XMLElement(context = "Incoming")
-	@Embedded(closureConditions = { Edge.START_NODE })
+	@Embedded(closureConditions = { Edge.START_NODE }, deletionConditions = { Edge.START_NODE })
 	@CloningStrategy(StrategyType.CLONE)
 	public List<Edge> getIncomingEdges();
 

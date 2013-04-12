@@ -656,6 +656,27 @@ public class BasicTests extends AbstractPAMELATest {
 		assertTrue(activityNode.isModified()); // And that activity node is no longer synched with its previous container process.
 	}
 
+	public void testDeletion() {
+		FlexoProcess process = factory.newInstance(FlexoProcess.class);
+		process.init("234XX");
+		process.setName("NewProcess");
+		process.setFoo(8);
+
+		ActivityNode activityNode = factory.newInstance(ActivityNode.class, "MyActivity");
+		process.addToNodes(activityNode);
+		StartNode startNode = factory.newInstance(StartNode.class, "Start");
+		process.addToNodes(startNode);
+		EndNode endNode = factory.newInstance(EndNode.class, "End");
+		process.addToNodes(endNode);
+		TokenEdge edge1 = factory.newInstance(TokenEdge.class, "edge1", startNode, activityNode);
+		startNode.delete();
+		assertTrue(startNode.isDeleted());
+		assertFalse(edge1.isDeleted());
+		activityNode.delete();
+		assertTrue(edge1.isDeleted());
+		assertTrue(activityNode.isDeleted());
+	}
+
 	private void serializeObject(AccessibleProxyObject object) {
 		try {
 			factory.serialize(object, new ByteArrayOutputStream());
