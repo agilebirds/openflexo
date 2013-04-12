@@ -27,6 +27,7 @@ import java.util.logging.Level;
 
 import org.openflexo.action.ImportProjectInitializer;
 import org.openflexo.action.ProjectExcelExportInitializer;
+import org.openflexo.action.RemoveImportedProjectInitializer;
 import org.openflexo.action.UploadPrjInitializer;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.FlexoEditor;
@@ -118,6 +119,7 @@ public class ControllerActionInitializer implements EditorProvider {
 	public void initializeActions() {
 		new InspectActionizer(this);
 		new ImportProjectInitializer(this);
+		new RemoveImportedProjectInitializer(this);
 		new HelpActionizer(this);
 		new SubmitDocumentationActionizer(this);
 		new RefreshImportedRolesActionInitializer(this);
