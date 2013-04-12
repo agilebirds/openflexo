@@ -32,6 +32,7 @@ import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
@@ -141,19 +142,19 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 	}
 
 	public void singleClick(Object object) {
-		if (getFlexoController() != null) {
+		if (getFlexoController() != null && object instanceof FlexoModelObject) {
 			getFlexoController().objectWasClicked(object);
 		}
 	}
 
 	public void doubleClick(Object object) {
-		if (getFlexoController() != null) {
+		if (getFlexoController() != null && object instanceof FlexoModelObject) {
 			getFlexoController().objectWasDoubleClicked(object);
 		}
 	}
 
 	public void rightClick(Object object, MouseEvent e) {
-		if (getFlexoController() != null) {
+		if (getFlexoController() != null && object instanceof FlexoModelObject) {
 			getFlexoController().objectWasRightClicked(object, e);
 		}
 	}

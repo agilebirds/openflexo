@@ -301,7 +301,7 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 	public Type getDefaultDataClass() {
 		Type[] args = new Type[1];
 		args[0] = new WilcardTypeImpl(getIteratorClass());
-		return new ParameterizedTypeImpl(List.class, args);
+		return new ParameterizedTypeImpl(Collection.class, args);
 	}
 
 	@Override

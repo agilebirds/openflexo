@@ -254,8 +254,7 @@ public class XMLCoder {
 		alreadySerialized.clear();
 		serializationIdentifierForObject.clear();
 		orderedElementReferenceList.delete();
-		for (Enumeration en = objectReferences.elements(); en.hasMoreElements();) {
-			ObjectReference next = (ObjectReference) en.nextElement();
+		for (ObjectReference next : objectReferences.values()) {
 			next.delete();
 		}
 		objectReferences.clear();
