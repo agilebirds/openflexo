@@ -236,7 +236,7 @@ public class XMLDecoder {
 	public XMLDecoder(XMLMapping anXmlMapping, Object aBuilder, StringEncoder encoder) {
 		super();
 		xmlMapping = anXmlMapping;
-		alreadyDeserialized = new Hashtable();
+		alreadyDeserialized = new Hashtable<Object, Object>();
 		nextReference = 0;
 		builder = aBuilder;
 		stringEncoder = encoder;
@@ -1105,6 +1105,28 @@ public class XMLDecoder {
 			// "+currentDeserializedReference+" object
 			// "+returnedObject.getClass().getName());
 			alreadyDeserialized.put(currentDeserializedReference, returnedObject);
+		}
+
+		if (modelEntity != null) {
+			try {
+				Object[] params = { builder };
+				boolean initializationHasBeenPerformed = false;
+				if (xmlMapping.hasBuilderClass()) {
+					if (modelEntity.hasInitializerWithParameter()) {
+						modelEntity.getInitializerWithParameter().invoke(returnedObject, params);
+						initializationHasBeenPerformed = true;
+					}
+				}
+				if (modelEntity.hasInitializerWithoutParameter() && !initializationHasBeenPerformed) {
+					modelEntity.getInitializerWithoutParameter().invoke(returnedObject, null);
+					initializationHasBeenPerformed = true;
+				}
+			} catch (IllegalAccessException e1) {
+				e1.printStackTrace();
+			} catch (InvocationTargetException e2) {
+				e2.getTargetException().printStackTrace();
+				throw new AccessorInvocationException("Exception " + e2.getClass().getName() + " caught during finalization.", e2);
+			}
 		}
 
 		for (Enumeration<ModelProperty> e = modelEntity.getModelProperties(); e.hasMoreElements();) {

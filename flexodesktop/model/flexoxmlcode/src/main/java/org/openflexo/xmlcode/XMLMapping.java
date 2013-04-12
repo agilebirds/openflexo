@@ -257,6 +257,9 @@ public class XMLMapping {
 	/** Defines 'finalizer' label */
 	public static final String finalizerLabel = "finalizer";
 
+	/** Defines 'initializer' label */
+	public static final String initializerLabel = "initializer";
+
 	/** Defines 'contexts' label */
 	public static final String contextsLabel = "contexts";
 
