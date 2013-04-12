@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -365,7 +366,7 @@ public class ModelFactory {
 	 */
 	public List<Object> getEmbeddedObjects(Object root, EmbeddingType embeddingType, Object... context) {
 		if (!isProxyObject(root)) {
-			return null;
+			return Collections.emptyList();
 		}
 
 		List<Object> derivedObjectsFromContext = new ArrayList<Object>();
@@ -445,8 +446,8 @@ public class ModelFactory {
 		if (append) {
 			// There is no condition, just append it
 			if (!list.contains(child)) {
-				list.add(child);
 				// System.out.println("Embedded in "+father+" because of "+p+" : "+child);
+				list.add(child);
 				appendEmbeddedObjects(child, list, embeddingType);
 			}
 		} else {
@@ -477,6 +478,12 @@ public class ModelFactory {
 				if (requiredPresence.size() > 0) {
 					ConditionalPresence conditionalPresence = new ConditionalPresence(child, requiredPresence);
 					list.add(conditionalPresence);
+				} else {
+					if (!list.contains(child)) {
+						// System.out.println("Embedded in "+father+" because of "+p+" : "+child);
+						list.add(child);
+						appendEmbeddedObjects(child, list, embeddingType);
+					}
 				}
 			}
 			// System.out.println("Embedded in "+father+" : "+child+" conditioned to required presence of "+requiredPresence);
