@@ -45,21 +45,21 @@ public class XSOMUtils {
 			@Override
 			public void error(SAXParseException exception) throws SAXException {
 				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning(exception.getMessage());
+					logger.warning("XSOM-Error: " + exception.getMessage());
 				}
 			}
 
 			@Override
 			public void fatalError(SAXParseException exception) throws SAXException {
 				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning(exception.getMessage());
+					logger.warning("XSOM-Fatal: " + exception.getMessage());
 				}
 			}
 
 			@Override
 			public void warning(SAXParseException exception) throws SAXException {
 				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning(exception.getMessage());
+					logger.warning("XSOM-Warning: " + exception.getMessage());
 				}
 			}
 

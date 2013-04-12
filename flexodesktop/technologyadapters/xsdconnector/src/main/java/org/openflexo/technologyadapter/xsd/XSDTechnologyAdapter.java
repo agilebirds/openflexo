@@ -24,10 +24,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.logging.Logger;
 
-import org.apache.xml.resolver.Catalog;
-import org.apache.xml.resolver.CatalogManager;
-import org.apache.xml.resolver.tools.CatalogResolver;
 import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
+import org.openflexo.foundation.resource.FlexoFileResource;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
@@ -66,12 +64,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 
 	private static final XSDBindingFactory BINDING_FACTORY = new XSDBindingFactory();
 
-	private static final CatalogResolver resolver = new org.apache.xml.resolver.tools.CatalogResolver();
-	
 	public XSDTechnologyAdapter() throws TechnologyAdapterInitializationException {
-		CatalogManager cm = resolver.getCatalog().getCatalogManager();
-		cm.setCatalogFiles(CatalogFileNames);
-		cm.setVerbosity(5);
 	}
 
 	@Override
@@ -123,21 +116,12 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	@Override
 	public String retrieveModelURI(File aModelFile, FlexoResource<XSDMetaModel> metaModelResource,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
-		// TODO Auto-generated method stub
-		try {
-			String u = getCatalog().resolveSystem(aModelFile.toURI().toString());
-			
-			if (u == null ) {
-				logger.warning ("NO CATALOG??");
-			}
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		
+		// TODO Manage URIs properly
+		
+		logger.warning("xsdconnector: Have to deal properly with URIs");
+		
+		return aModelFile.toURI().toString();
 	}
 
 	/**
@@ -185,7 +169,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	 *      org.openflexo.foundation.resource.FlexoResource, org.openflexo.foundation.technologyadapter.TechnologyContextManager)
 	 */
 	@Override
-	public FlexoResource<XMLModel> retrieveModelResource(File aModelFile, FlexoResource<XSDMetaModel> metaModelResource,
+	public XMLModelResource retrieveModelResource(File aModelFile, FlexoResource<XSDMetaModel> metaModelResource,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
 		
 		XMLModelResource xmlModelResource = XMLModelResourceImpl.retrieveXMLModelResource(aModelFile,
@@ -199,7 +183,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	}
 
 	@Override
-	public FlexoResource<XMLModel> retrieveModelResource(File aModelFile,
+	public XMLModelResource retrieveModelResource(File aModelFile,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
 		
 		for (FlexoMetaModelResource<XMLModel, XSDMetaModel> mmRes : technologyContextManager.getAllMetaModels()) {
@@ -209,7 +193,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 				xmlModelResource.setMetaModelResource(mmRes);
 				technologyContextManager.registerModel(xmlModelResource);
 				
-				return (FlexoResource<XMLModel>) xmlModelResource;
+				return  xmlModelResource;
 			}
 		}
 		return null;
@@ -226,7 +210,11 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	 */
 	public  XMLModelResource createEmptyModel(File modelFile, String modelUri, FlexoResource<XSDMetaModel> metaModelResource,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
+
+		logger.warning("xsdconnector: URI not supported ");
 		
+		modelUri = modelFile.toURI().toString();
+
 		XMLModelResource ModelResource = XMLModelResourceImpl.makeXMLModelResource(modelUri, modelFile, (XSDMetaModelResource) metaModelResource, (XSDTechnologyContextManager) technologyContextManager);
 		technologyContextManager.registerModel(ModelResource);
 		return ModelResource;
@@ -244,8 +232,9 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	public XMLModelResource createEmptyModel(FlexoProject project, String filename, String modelUri, FlexoResource<XSDMetaModel> metaModel,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
 		
+		
 		File modelFile = new File(FlexoProject.getProjectSpecificModelsDirectory(project), filename);
-
+		
 		return createEmptyModel(modelFile, modelUri, metaModel, technologyContextManager);
 		
 	}
@@ -308,10 +297,6 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	@Override
 	public String getExpectedModelExtension(FlexoResource<XSDMetaModel> metaModel) {
 		return ".xml";
-	}
-
-	public Catalog getCatalog(){
-		return resolver.getCatalog();
 	}
 
 }

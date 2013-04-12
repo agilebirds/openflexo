@@ -55,15 +55,12 @@ import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSIndividu
  */
 @DeclarePatternRoles({ 
 	    @DeclarePatternRole(XSIndividualPatternRole.class), // Instances
-		@DeclarePatternRole(XSClassPatternRole.class), // Classes
-		@DeclarePatternRole(DataPropertyPatternRole.class), // Data properties
-		@DeclarePatternRole(ObjectPropertyPatternRole.class), // Object properties 
+		@DeclarePatternRole(XSClassPatternRole.class) // Classes
 		})
 		
 @DeclareEditionActions({ 
 		@DeclareEditionAction(AddXSIndividual.class), // Add instance
-		@DeclareEditionAction(AddXSClass.class), // Add class
-		@DeclareEditionAction(DeleteAction.class) // Delete class
+		@DeclareEditionAction(AddXSClass.class) // Add class
 })
 public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel> {
 

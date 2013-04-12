@@ -135,7 +135,6 @@ public abstract class XMLModelResourceImpl extends FlexoFileResourceImpl<XMLMode
 	@Override
 	public XMLModel loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
 			FileNotFoundException, FlexoException {
-	/*	logger.warning("Not implemented: loadResourceData() in XMLModelResourceImpl"); 	 */
 
 		XMLModel returned = new XMLModel(getURI(), getFile(), (XSDTechnologyAdapter) getTechnologyAdapter());
 		returned.loadWhenUnloaded();
