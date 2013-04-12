@@ -518,6 +518,15 @@
 	<entity name="org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividual"
 		xmlTag="AddEMFObjectIndividual">
 	</entity>
+	
+	<entity name="org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSIndividual"
+		xmlTag="AddXSIndividual">
+	</entity>
+	
+	<entity name="org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSClass"
+		xmlTag="AddXSClass">
+	</entity>
+	
 
 
 	<entity name="org.openflexo.foundation.viewpoint.CloneIndividual" abstract="yes">

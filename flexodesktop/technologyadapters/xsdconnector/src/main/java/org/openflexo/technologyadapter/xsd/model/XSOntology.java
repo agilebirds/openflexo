@@ -135,9 +135,14 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 
 	private static boolean mapsToClass(XSElementDecl element) {
 		if (element.getType().isComplexType()) {
+			logger.info("CG DEBUG XML : this element maps to a class : " + element.getName());
 			return true;
 		}
-		return false;
+		else {
+
+			logger.info("CG DEBUG XML : this element does no map to a class : " + element.getName());
+			return false;	
+		}
 		// TODO check if there's a need to check for attribute if SimpleType.
 	}
 
@@ -154,20 +159,23 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		classes.clear();
 		thingClass = new XSOntClass(this, "Thing", XS_THING_URI, getTechnologyAdapter());
 		addClass(thingClass);
+/*
+ * Ne semble pas nécessaire étant donné qu'on ne peut pas créer des choses de ce type
 		for (XSComplexType complexType : fetcher.getComplexTypes()) {
 			XSOntClass xsClass = loadClass(complexType);
 			xsClass.addToSuperClasses(getRootConcept());
 		}
+	*/	
+		
 		for (XSElementDecl element : fetcher.getElementDecls()) {
 			if (mapsToClass(element)) {
 				XSOntClass xsClass = loadClass(element);
 				try {
-					XSOntClass superClass = classes.get(fetcher.getUri(element.getType()));
-					xsClass.addToSuperClasses(superClass);
+					/* XSOntClass superClass = classes.get(fetcher.getUri(element.getType())); */
+					xsClass.addToSuperClasses(getRootConcept());
 				} catch (Exception e) {
 
 				}
-
 			}
 		}
 		for (XSAttGroupDecl attGroup : fetcher.getAttGroupDecls()) {
@@ -216,6 +224,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 			xsDataProperty.setDataType(computeDataType(simpleType));
 		}
 		for (XSElementDecl element : fetcher.getElementDecls()) {
+			logger.info("CG XML DEBUG load Data Properties for : " + element.getName());
 			if (mapsToClass(element) == false) {
 				XSOntDataProperty xsDataProperty = loadDataProperty(element);
 				xsDataProperty.setDataType(computeDataType(element.getType().asSimpleType()));
@@ -258,12 +267,14 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 
 		for (XSComplexType complexType : fetcher.getComplexTypes()) {
 			XSOntClass c = getClass(fetcher.getUri(complexType));
-			XSOntObjectProperty cHasChild = loadPrefixedProperty(complexType, hasChild);
-			cHasChild.newRangeFound(c);
-			addDomainIfPossible(cHasChild, c.getURI());
-			XSOntObjectProperty cHasParent = loadPrefixedProperty(complexType, hasParent);
-			cHasParent.newRangeFound(c);
-			addDomainIfPossible(cHasParent, c.getURI());
+			if (c != null){
+				XSOntObjectProperty cHasChild = loadPrefixedProperty(complexType, hasChild);
+				cHasChild.newRangeFound(c);
+				addDomainIfPossible(cHasChild, c.getURI());
+				XSOntObjectProperty cHasParent = loadPrefixedProperty(complexType, hasParent);
+				cHasParent.newRangeFound(c);
+				addDomainIfPossible(cHasParent, c.getURI());
+			}
 		}
 
 		for (XSElementDecl element : fetcher.getElementDecls()) {
@@ -319,8 +330,6 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	}
 
 	public boolean load() {
-		// TODO Should I create a w3 ontology? possibly .owl?
-		// TODO Seems I should.
 		if (isLoading() == true) {
 			return false;
 		}
@@ -330,7 +339,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		if (schemaSet != null) {
 			fetcher = new XSDeclarationsFetcher();
 			fetcher.fetch(schemaSet);
-			clearAllRangeAndDomain();
+			clearAllRangeAndDomain(); // TODO CG, pas sur que ce soit utile cette merde!
 			loadClasses();
 			loadDataProperties();
 			loadObjectProperties();
