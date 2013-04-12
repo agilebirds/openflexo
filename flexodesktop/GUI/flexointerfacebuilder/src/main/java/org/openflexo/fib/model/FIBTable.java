@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -295,7 +296,7 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 	public Type getDefaultDataClass() {
 		Type[] args = new Type[1];
 		args[0] = new WilcardTypeImpl(getIteratorClass());
-		return new ParameterizedTypeImpl(List.class, args);
+		return new ParameterizedTypeImpl(Collection.class, args);
 	}
 
 	@Override
