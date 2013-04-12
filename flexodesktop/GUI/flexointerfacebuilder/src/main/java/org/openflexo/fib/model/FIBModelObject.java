@@ -167,6 +167,10 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 		return FIBLibrary.instance().getBindingFactory();
 	}
 
+	public void initializeDeserialization() {
+
+	}
+
 	public void finalizeDeserialization() {
 	}
 
@@ -415,7 +419,8 @@ public abstract class FIBModelObject extends Observable implements Bindable, XML
 			if (getBinding(object) != null && getBinding(object).isSet()) {
 				if (!getBinding(object).isValid()) {
 					DeleteBinding<C> deleteBinding = new DeleteBinding<C>(this);
-					return new ValidationError<BindingMustBeValid<C>, C>(this, object, BindingMustBeValid.this.getNameKey(), deleteBinding);
+					return new ValidationError<BindingMustBeValid<C>, C>(this, object, BindingMustBeValid.this.getNameKey() + " '"
+							+ getBinding(object) + "'", deleteBinding);
 				}
 			}
 			return null;

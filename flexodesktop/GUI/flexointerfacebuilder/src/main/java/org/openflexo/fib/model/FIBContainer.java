@@ -54,6 +54,16 @@ public abstract class FIBContainer extends FIBComponent {
 		return super.getDataClass();
 	}*/
 
+	@Override
+	public void updateBindingModel() {
+		super.updateBindingModel();
+		if (deserializationPerformed) {
+			for (FIBComponent child : getSubComponents()) {
+				child.updateBindingModel();
+			}
+		}
+	}
+
 	public Vector<FIBComponent> getSubComponents() {
 		return subComponents;
 	}
