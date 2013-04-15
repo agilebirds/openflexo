@@ -333,6 +333,11 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 		notifyObservers(new ModelSlotRemoved(modelSlot, this));
 	}
 
+	public void deleteModelSlot(ModelSlot<?, ?> modelSlot) {
+		removeFromModelSlots(modelSlot);
+		modelSlot.delete();
+	}
+
 	public <MS extends ModelSlot<?, ?>> List<MS> getModelSlots(Class<MS> msType) {
 		List<MS> returned = new ArrayList<MS>();
 		for (ModelSlot<?, ?> ms : getModelSlots()) {
