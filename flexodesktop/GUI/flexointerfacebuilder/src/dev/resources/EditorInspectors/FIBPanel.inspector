@@ -1,284 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.fib.editor.controller.FIBInspector" layout="border" darkLevel="0" dataClassName="org.openflexo.fib.model.FIBPanel" name="Inspector">
-  <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
-      <Label label="name" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-      <TextField data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" columns="15" />
-      <Label label="data" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="dataLabel" localize="true" />
-      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="data.notifyBindingChanged(data.data)" name="dataValue" data="data.data.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-        <Assignment variable="component.bindable" value="data" />
-        <Assignment variable="component.bindingDefinition" value="data.dataBindingDefinition" />
-      </Custom>
-      <Label label="data_class" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-      <Custom componentClassName="org.openflexo.fib.utils.ClassSelector" localize="true" manageDynamicModel="true" data="data.dataClass" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
-      <Label label="controller_class" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="data.isRootComponent" localize="true" />
-      <Custom componentClassName="org.openflexo.fib.utils.ClassSelector" localize="true" manageDynamicModel="true" data="data.controllerClass" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="data.isRootComponent" />
-      <Label label="visible" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="visibleLabel" localize="true" />
-      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" name="visibleValue" data="data.visible.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-        <Assignment variable="component.bindable" value="data" />
-        <Assignment variable="component.bindingDefinition" value="data.VISIBLE" />
-      </Custom>
-      <Panel layout="twocols" border="titled" borderTitle="Layout" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="LayoutPanel">
-        <Label label="layout" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <DropDown data="data.layout" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" iteratorClassName="org.openflexo.fib.model.FIBPanel$Layout" autoSelectFirstRow="false" />
-        <Label label="alignment" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.layout = &quot;flow&quot;)" localize="true" />
-        <DropDown data="data.flowAlignment" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.layout = &quot;flow&quot;)" localize="true" iteratorClassName="org.openflexo.fib.model.FIBPanel$FlowLayoutAlignment" autoSelectFirstRow="false" />
-        <Label label="axis" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.layout = &quot;box&quot;)" localize="true" />
-        <DropDown data="data.boxLayoutAxis" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.layout = &quot;box&quot;)" localize="true" iteratorClassName="org.openflexo.fib.model.FIBPanel$BoxLayoutAxis" autoSelectFirstRow="false" />
-        <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="((data.layout = &quot;flow&quot;) | (data.layout = &quot;grid&quot;))">
-          <Label label="hGap" constraints="flow()" localize="true" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="data.hGap" constraints="flow()" localize="true" />
-          <Label label="vGap" constraints="flow()" localize="true" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="data.vGap" constraints="flow()" localize="true" />
-        </Panel>
-        <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="(data.layout = &quot;grid&quot;)">
-          <Label label="columns" constraints="flow()" localize="true" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="data.cols" constraints="flow()" localize="true" />
-          <Label label="rows" constraints="flow()" localize="true" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="data.rows" constraints="flow()" localize="true" />
-        </Panel>
-      </Panel>
-    </Tab>
-    <Tab title="Components" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="AdvancedTab">
-      <Label label="index" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-      <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" data="data.index" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="index" localize="true" />
-      <Panel layout="border" borderTitle="Components" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="ComponentsPanel">
-        <Table iteratorClassName="org.openflexo.fib.model.FIBComponent" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="ComponentsTable" data="data.subComponents" constraints="border(location=center)" font="SansSerif,0,11">
-          <NumberColumn numberType="IntegerType" data="iterator.index" title="index" columnWidth="40" resizable="false" displayTitle="true" />
-          <LabelColumn data="iterator.toString" title="Component" columnWidth="200" resizable="true" displayTitle="true" />
-          <LabelColumn data="iterator.constraints.stringRepresentation" title="Constraints" columnWidth="300" resizable="true" displayTitle="true" />
-          <CustomAction method="data.reorderComponents()" name="reorder_components" />
-        </Table>
-        <Panel layout="box" hGap="5" vGap="5" boxLayoutAxis="Y_AXIS" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(location=east)">
-          <Button action="data.componentFirst(ComponentsTable.selected)" buttonType="Trigger" label="First" index="0" constraints="box(alignmentX=0.5;alignmentY=0.5;index=0)" name="firstButton" localize="true" enable="((ComponentsTable.selected != null) &amp; (ComponentsTable.selected.parent.getIndex(ComponentsTable.selected) &gt; 0))" />
-          <Button action="data.componentUp(ComponentsTable.selected)" buttonType="Trigger" label="Up" index="0" constraints="box(alignmentX=0.5;alignmentY=0.5;index=0)" name="upButton" localize="true" enable="((ComponentsTable.selected != null) &amp; (ComponentsTable.selected.parent.getIndex(ComponentsTable.selected) &gt; 0))" />
-          <Button action="data.componentDown(ComponentsTable.selected)" buttonType="Trigger" label="Down" index="0" constraints="box(alignmentX=0.5;alignmentY=0.5;index=0)" name="downButton" localize="true" enable="((ComponentsTable.selected != null) &amp; (ComponentsTable.selected.parent.getIndex(ComponentsTable.selected) &lt; (data.subComponents.size - 1)))" />
-          <Button action="data.componentLast(ComponentsTable.selected)" buttonType="Trigger" label="Last" index="0" constraints="box(alignmentX=0.5;alignmentY=0.5;index=0)" name="lastButton" localize="true" enable="((ComponentsTable.selected != null) &amp; (ComponentsTable.selected.parent.getIndex(ComponentsTable.selected) &lt; (data.subComponents.size - 1)))" />
-        </Panel>
-      </Panel>
-      <CheckBox selected="false" data="data.protectContent" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-      <Label label="protect_content_against_modifications" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
-      <CheckBox selected="false" data="data.trackViewPortWidth" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-      <Label label="track_view_port_width" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
-      <CheckBox selected="false" data="data.trackViewPortHeight" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-      <Label label="track_view_port_height" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
-    </Tab>
-    <Tab title="Controls" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="ControlsTab" />
-    <Tab title="Layout" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="LayoutTab">
-      <Panel layout="twocols" border="titled" borderTitle="free_location_constraints" titleFont="SansSerif,0,11" darkLevel="0" data="data.constraints" dataClassName="org.openflexo.fib.model.NoneLayoutConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="(data.parent.layout = &quot;none&quot;)" name="NoneConstraints" />
-      <Panel layout="twocols" border="titled" borderTitle="flow_layout_constraints" titleFont="SansSerif,0,11" darkLevel="0" data="data.constraints" dataClassName="org.openflexo.fib.model.FlowLayoutConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="(data.parent.layout = &quot;flow&quot;)" name="FlowConstraints">
-        <Label label="index" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" data="data.index" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="flowConstraintsIndex" localize="true" />
-      </Panel>
-      <Panel layout="twocols" border="titled" borderTitle="border_layout_constraints" titleFont="SansSerif,0,11" darkLevel="0" data="data.constraints" dataClassName="org.openflexo.fib.model.BorderLayoutConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="(data.parent.layout = &quot;border&quot;)" name="BorderConstraints">
-        <Label label="location" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <DropDown data="BorderConstraints.data.location" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" iteratorClassName="org.openflexo.fib.model.BorderLayoutConstraints$BorderLayoutLocation" autoSelectFirstRow="false" />
-      </Panel>
-      <Panel layout="twocols" border="titled" borderTitle="grid_layout_constraints" titleFont="SansSerif,0,11" darkLevel="0" data="data.constraints" dataClassName="org.openflexo.fib.model.GridLayoutConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="(data.parent.layout = &quot;grid&quot;)" name="GridConstraints">
-        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
-          <Label label="column" constraints="flow()" localize="true" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="GridConstraints.data.x" constraints="flow()" name="gridConstraintsX" localize="true" />
-          <Label label="row" constraints="flow()" localize="true" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="GridConstraints.data.y" constraints="flow()" name="gridConstraintsY" localize="true" />
-        </Panel>
-      </Panel>
-      <Panel layout="twocols" border="titled" borderTitle="box_layout_constraints" titleFont="SansSerif,0,11" darkLevel="0" data="data.constraints" dataClassName="org.openflexo.fib.model.BoxLayoutConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="(data.parent.layout = &quot;box&quot;)" name="BoxConstraints">
-        <Label label="index" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" data="BoxConstraints.data.index" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="boxConstraintsIndex" localize="true" />
-        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
-          <Label label="alignmentX" constraints="flow()" localize="true" />
-          <Number minValue="0.0" maxValue="1.0" increment="0.05" numberType="FloatType" columns="5" data="BoxConstraints.data.alignmentX" constraints="flow()" name="boxConstraintsAlignX" localize="true" />
-          <Label label="alignmentY" constraints="flow()" localize="true" />
-          <Number minValue="0.0" maxValue="1.0" increment="0.05" numberType="FloatType" columns="5" data="BoxConstraints.data.alignmentY" constraints="flow()" name="boxConstraintsAlignY" localize="true" />
-        </Panel>
-      </Panel>
-      <Panel layout="twocols" border="titled" borderTitle="two_cols_layout_constraints" titleFont="SansSerif,0,11" darkLevel="0" index="100" data="data.constraints" dataClassName="org.openflexo.fib.model.TwoColsLayoutConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;index=100;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="(data.parent.layout = &quot;twocols&quot;)" name="TwoColsConstraints">
-        <Label label="index" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" data="TwoColsConstraints.data.index" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="twoColsConstraintsIndex" localize="true" />
-        <Label label="location" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <DropDown data="TwoColsConstraints.data.location" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" iteratorClassName="org.openflexo.fib.model.TwoColsLayoutConstraints$TwoColsLayoutLocation" autoSelectFirstRow="false" />
-        <CheckBox selected="false" data="TwoColsConstraints.data.expandHorizontally" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <Label label="expand_horizontally" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
-        <CheckBox selected="false" data="TwoColsConstraints.data.expandVertically" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <Label label="expand_vertically" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
-        <Label label="Insets" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-          <Label label="top" constraints="flow()" localize="true" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="1" data="TwoColsConstraints.data.insetsTop" constraints="flow()" name="twoColsConstraintsInsetsTop" localize="true" />
-          <Label label="left" constraints="flow()" localize="true" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="1" data="TwoColsConstraints.data.insetsLeft" constraints="flow()" name="twoColsConstraintsInsetsLeft" localize="true" />
-          <Label label="bottom" constraints="flow()" localize="true" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="1" data="TwoColsConstraints.data.insetsBottom" constraints="flow()" name="twoColsConstraintsInsetsBottom" localize="true" />
-          <Label label="right" constraints="flow()" localize="true" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="1" data="TwoColsConstraints.data.insetsRight" constraints="flow()" name="twoColsConstraintsInsetsRight" localize="true" />
-        </Panel>
-      </Panel>
-      <Panel layout="twocols" border="titled" borderTitle="grid_bag_layout_constraints" titleFont="SansSerif,0,11" darkLevel="0" data="data.constraints" dataClassName="org.openflexo.fib.model.GridBagLayoutConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="(data.parent.layout = &quot;gridbag&quot;)" name="GridBagConstraints">
-        <Label label="index" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" data="GridBagConstraints.data.index" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="gridBagConstraintsIndex" localize="true" />
-        <Label label="gridX" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="GridBagConstraints.data.gridX" constraints="flow()" visible="(GridBagConstraints.data.gridX &gt;= 0)" name="gridBagConstraintsGridX" localize="true" />
-          <CheckBox selected="false" data="GridBagConstraints.data.gridXRelative" constraints="flow()" localize="true" />
-          <Label label="relative" constraints="flow()" localize="true" />
-        </Panel>
-        <Label label="gridY" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="GridBagConstraints.data.gridY" constraints="flow()" visible="(GridBagConstraints.data.gridY &gt;= 0)" name="gridBagConstraintsGridY" localize="true" />
-          <CheckBox selected="false" data="GridBagConstraints.data.gridYRelative" constraints="flow()" localize="true" />
-          <Label label="relative" constraints="flow()" localize="true" />
-        </Panel>
-        <Label label="gridWidth" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="GridBagConstraints.data.gridWidth" constraints="flow()" visible="(GridBagConstraints.data.gridWidth &gt; 0)" name="gridBagConstraintsGridWidth" localize="true" />
-          <CheckBox selected="false" data="GridBagConstraints.data.gridWidthRelative" constraints="flow()" localize="true" />
-          <Label label="relative" constraints="flow()" localize="true" />
-          <CheckBox selected="false" data="GridBagConstraints.data.gridWidthRemainder" constraints="flow()" localize="true" />
-          <Label label="remainder" constraints="flow()" localize="true" />
-        </Panel>
-        <Label label="gridHeight" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="GridBagConstraints.data.gridHeight" constraints="flow()" visible="(GridBagConstraints.data.gridHeight &gt; 0)" name="gridBagConstraintsGridHeight" localize="true" />
-          <CheckBox selected="false" data="GridBagConstraints.data.gridHeightRelative" constraints="flow()" localize="true" />
-          <Label label="relative" constraints="flow()" localize="true" />
-          <CheckBox selected="false" data="GridBagConstraints.data.gridHeightRemainder" constraints="flow()" localize="true" />
-          <Label label="remainder" constraints="flow()" localize="true" />
-        </Panel>
-        <Label label="weights" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-          <Label label="weightX" constraints="flow()" localize="true" />
-          <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" columns="3" data="GridBagConstraints.data.weightX" constraints="flow()" name="gridBagConstraintsWeightX" localize="true" />
-          <Label label="weightY" constraints="flow()" localize="true" />
-          <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" columns="3" data="GridBagConstraints.data.weightY" constraints="flow()" name="gridBagConstraintsWeightY" localize="true" />
-        </Panel>
-        <Label label="anchor" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <DropDown data="GridBagConstraints.data.anchor" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" iteratorClassName="org.openflexo.fib.model.GridBagLayoutConstraints$AnchorType" autoSelectFirstRow="false" />
-        <Label label="fill" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <DropDown data="GridBagConstraints.data.fill" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" iteratorClassName="org.openflexo.fib.model.GridBagLayoutConstraints$FillType" autoSelectFirstRow="false" />
-        <Label label="pads" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-          <Label label="padX" constraints="flow()" localize="true" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="GridBagConstraints.data.padX" constraints="flow()" name="gridBagConstraintsPadX" localize="true" />
-          <Label label="padY" constraints="flow()" localize="true" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="GridBagConstraints.data.padY" constraints="flow()" name="gridBagConstraintsPadY" localize="true" />
-        </Panel>
-        <Label label="Insets" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-          <Label label="top" constraints="flow()" localize="true" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="1" data="GridBagConstraints.data.insetsTop" constraints="flow()" name="gridBagConstraintsInsetsTop" localize="true" />
-          <Label label="left" constraints="flow()" localize="true" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="1" data="GridBagConstraints.data.insetsLeft" constraints="flow()" name="gridBagConstraintsInsetsLeft" localize="true" />
-          <Label label="bottom" constraints="flow()" localize="true" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="1" data="GridBagConstraints.data.insetsBottom" constraints="flow()" name="gridBagConstraintsInsetsBottom" localize="true" />
-          <Label label="right" constraints="flow()" localize="true" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="1" data="GridBagConstraints.data.insetsRight" constraints="flow()" name="gridBagConstraintsInsetsRight" localize="true" />
-        </Panel>
-      </Panel>
-      <Panel layout="twocols" border="titled" borderTitle="component_size_management" titleFont="SansSerif,0,11" darkLevel="0" index="1" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
-        <CheckBox selected="false" index="0" data="data.definePreferredDimensions" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="DefinePreferredSize" localize="true" />
-        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" index="1" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
-          <Label label="define_preferred_dimensions" index="0" constraints="flow(index=0)" localize="true" />
-          <Number minValue="0" maxValue="65535" increment="5" numberType="IntegerType" columns="3" index="1" data="data.width" constraints="flow(index=1)" name="preferredWidth" localize="true" enable="data.definePreferredDimensions" />
-          <Label label="X" index="2" constraints="flow(index=2)" localize="true" enable="data.definePreferredDimensions" />
-          <Number minValue="0" maxValue="65535" increment="5" numberType="IntegerType" columns="3" index="3" data="data.height" constraints="flow(index=3)" name="preferredHeight" localize="true" enable="data.definePreferredDimensions" />
-          <Label label="pixels" index="4" constraints="flow(index=4)" localize="true" />
-        </Panel>
-        <CheckBox selected="false" index="2" data="data.defineMinDimensions" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="DefineMinSize" localize="true" />
-        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" index="3" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
-          <Label label="define_minimum_dimensions" index="0" constraints="flow(index=0)" localize="true" />
-          <Number minValue="0" maxValue="65535" increment="5" numberType="IntegerType" columns="3" index="1" data="data.minWidth" constraints="flow(index=1)" name="minWidth" localize="true" enable="data.defineMinDimensions" />
-          <Label label="X" index="2" constraints="flow(index=2)" localize="true" enable="data.defineMinDimensions" />
-          <Number minValue="0" maxValue="65535" increment="5" numberType="IntegerType" columns="3" index="3" data="data.minHeight" constraints="flow(index=3)" name="minHeight" localize="true" enable="data.defineMinDimensions" />
-          <Label label="pixels" index="4" constraints="flow(index=4)" localize="true" />
-        </Panel>
-        <CheckBox selected="false" index="4" data="data.defineMaxDimensions" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="DefineMaxSize" localize="true" />
-        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" index="5" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
-          <Label label="define_maximum_dimensions" index="0" constraints="flow(index=0)" localize="true" />
-          <Number minValue="0" maxValue="65535" increment="5" numberType="IntegerType" columns="3" index="1" data="data.maxWidth" constraints="flow(index=1)" name="maxWidth" localize="true" enable="data.defineMaxDimensions" />
-          <Label label="X" index="2" constraints="flow(index=2)" localize="true" enable="data.defineMaxDimensions" />
-          <Number minValue="0" maxValue="65535" increment="5" numberType="IntegerType" columns="3" index="3" data="data.maxHeight" constraints="flow(index=3)" name="maxHeight" localize="true" enable="data.defineMaxDimensions" />
-          <Label label="pixels" index="4" constraints="flow(index=4)" localize="true" />
-        </Panel>
-      </Panel>
-      <Panel layout="twocols" border="titled" borderTitle="split_layout_constraints" titleFont="SansSerif,0,11" darkLevel="0" data="data.constraints" dataClassName="org.openflexo.fib.model.SplitLayoutConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="(data.parent.layout = &quot;split&quot;)" name="SplitLayoutConstraints">
-        <Label label="identifier" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <DropDown index="1" data="SplitLayoutConstraints.data.splitLeaf" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" format="object.name" localize="true" list="SplitLayoutConstraints.data.availableLeaves" iteratorClassName="org.openflexo.swing.layout.MultiSplitLayout$Leaf" autoSelectFirstRow="true" />
-        <Label label="weight" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <Number minValue="0" maxValue="1" increment="0.05" numberType="FloatType" columns="3" index="3" data="SplitLayoutConstraints.data.weight" constraints="twocols(expandHorizontally=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Weight" localize="true" />
-      </Panel>
-      <Panel layout="twocols" border="titled" borderTitle="scroll_bar_policy" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="ScrollBarPolicy">
-        <CheckBox selected="false" data="data.useScrollBar" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <Label label="use_scrollbar" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
-        <Label label="horizontal_policy" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="data.useScrollBar" localize="true" />
-        <DropDown data="data.horizontalScrollbarPolicy" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="data.useScrollBar" localize="true" iteratorClassName="org.openflexo.fib.model.FIBComponent$HorizontalScrollBarPolicy" autoSelectFirstRow="false" />
-        <Label label="vertical_policy" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="data.useScrollBar" localize="true" />
-        <DropDown data="data.verticalScrollbarPolicy" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="data.useScrollBar" localize="true" iteratorClassName="org.openflexo.fib.model.FIBComponent$VerticalScrollBarPolicy" autoSelectFirstRow="false" />
-      </Panel>
-    </Tab>
-    <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="GraphicsTab">
-      <Panel layout="twocols" border="rounded3d" borderTitle="Border" borderTop="2" borderBottom="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="1" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="BorderPanel">
-        <Label label="border" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
-        <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-          <DropDown data="data.border" constraints="flow()" localize="true" iteratorClassName="org.openflexo.fib.model.FIBPanel$Border" autoSelectFirstRow="false" />
-          <Color data="data.borderColor" constraints="flow()" visible="(data.border = &quot;line&quot;)" localize="true" />
-          <TextField data="data.borderTitle" constraints="flow()" visible="((data.border = &quot;titled&quot;) | (data.border = &quot;rounded3d&quot;))" localize="true" />
-        </Panel>
-        <Label label="title_font" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((data.border = &quot;titled&quot;) | (data.border = &quot;rounded3d&quot;))" localize="true" />
-        <Font sampleText="Sample for this font" data="data.titleFont" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((data.border = &quot;titled&quot;) | (data.border = &quot;rounded3d&quot;))" localize="true" />
-        <Label label="dark_level" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.border = &quot;rounded3d&quot;)" localize="true" />
-        <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="data.darkLevel" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.border = &quot;rounded3d&quot;)" localize="true" />
-        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="((data.border = &quot;empty&quot;) | (data.border = &quot;rounded3d&quot;))">
-          <Label label="top" constraints="flow()" localize="true" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="2" data="data.borderTop" constraints="flow()" localize="true" />
-          <Label label="left" constraints="flow()" localize="true" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="2" data="data.borderLeft" constraints="flow()" localize="true" />
-          <Label label="bottom" constraints="flow()" localize="true" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="2" data="data.borderBottom" constraints="flow()" localize="true" />
-          <Label label="right" constraints="flow()" localize="true" />
-          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="2" data="data.borderRight" constraints="flow()" localize="true" />
-        </Panel>
-      </Panel>
-      <Panel layout="twocols" border="titled" borderTitle="font_and_colors" titleFont="SansSerif,0,11" darkLevel="0" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
-        <Panel layout="gridbag" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
-          <Label label="define_specific_font" index="1" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=5;insetsRight=5;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-          <Font sampleText="Sample for this font" index="2" data="data.font" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-          <Label label="background_color" index="5" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=5;insetsRight=5;insetsTop=5;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-          <Color index="6" data="data.backgroundColor" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-          <Label label="foreground_color" index="9" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=9;insetsBottom=0;insetsLeft=5;insetsRight=5;insetsTop=5;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-          <Color index="10" data="data.foregroundColor" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=10;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-          <Label label="opaque" index="12" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=12;insetsBottom=0;insetsLeft=5;insetsRight=5;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-          <CheckBox selected="false" index="11" data="data.opaque" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=11;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
-        </Panel>
-      </Panel>
-    </Tab>
-    <Tab title="Depends" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="5" font="SansSerif,0,11" name="DependenciesTab">
-      <Panel layout="border" border="titled" borderTitle="Dynamic dependencies" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
-        <Table iteratorClassName="org.openflexo.fib.model.FIBComponent" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="DependenciesTable" data="data.mayDepends" constraints="border(location=center)">
-          <LabelColumn data="data.toString" title="owner" columnWidth="200" resizable="true" displayTitle="true" />
-          <LabelColumn data="iterator.toString" title="dependency" columnWidth="200" resizable="true" displayTitle="true" />
-        </Table>
-      </Panel>
-      <Panel layout="border" border="titled" borderTitle="Explicit dependencies" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
-        <Table iteratorClassName="org.openflexo.fib.model.FIBDependancy" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="DependenciesTable" data="data.explicitDependancies" constraints="border(location=center)">
-          <LabelColumn data="iterator.owner.toString" title="owner" columnWidth="200" resizable="true" displayTitle="true" />
-          <DropDownColumn list="iterator.rootComponent.namedComponents" data="iterator.masterComponent" title="dependency" columnWidth="200" resizable="true" displayTitle="true" />
-          <AddAction method="data.createNewExplicitDependancy()" name="make_new_dependency" />
-          <RemoveAction method="data.deleteExplicitDependancy(selected)" name="delete_dependency" />
-        </Table>
-      </Panel>
-    </Tab>
-    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="6" font="SansSerif,0,11" name="DocumentationTab">
-      <TextArea data="data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" localize="true" />
-    </Tab>
-    <Tab title="Params" layout="border" titleFont="SansSerif,0,11" darkLevel="0" index="7" font="SansSerif,0,11" name="ParametersTab">
-      <Table iteratorClassName="org.openflexo.fib.model.FIBParameter" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="ParametersTable" data="data.parameters" constraints="border(location=center)">
-        <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" name="name" />
-        <TextFieldColumn data="iterator.value" title="value" columnWidth="200" resizable="true" displayTitle="true" name="description" />
-        <AddAction method="data.createNewParameter()" isAvailable="data.isParameterAddable()" name="make_new_parameter" />
-        <RemoveAction method="data.deleteParameter(selected)" isAvailable="data.isParameterDeletable(selected)" name="delete_parameter" />
-      </Table>
-    </Tab>
-  </TabPanel>
+		<TabPanel name="Tab" constraints="border(location=center)">
+
+			<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
+			
+				<Panel name="LayoutPanel" border="titled" borderTitle="Layout" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)">
+				    <Label label="layout" constraints="twocols(location=left)"/>
+				    <DropDown data="data.layout" constraints="twocols(location=right)" showReset="false"/>
+				    <Label label="alignment" constraints="twocols(location=left)" visible="data.layout='flow'"/>
+				    <DropDown data="data.flowAlignment" constraints="twocols(location=right)" showReset="false" visible="data.layout='flow'"/>
+				    <Label label="axis" constraints="twocols(location=left)" visible="data.layout='box'"/>
+				    <DropDown data="data.boxLayoutAxis" constraints="twocols(location=right)" showReset="false" visible="data.layout='box'"/>
+					<Panel layout="flow" hGap="0" vGap="0" visible="(data.layout='flow') | (data.layout='grid')" constraints="twocols(location=center;expandHorizontally=true)">
+				        <Label label="hGap"/>
+				        <Number numberType="IntegerType" data="data.hGap" columns="3"/>
+				        <Label label="vGap"/>
+				        <Number numberType="IntegerType" data="data.vGap" columns="3"/>
+					</Panel>
+					<Panel layout="flow" hGap="0" vGap="0" visible="data.layout='grid'" constraints="twocols(location=center;expandHorizontally=true)">
+				        <Label label="columns"/>
+				        <Number numberType="IntegerType" data="data.cols" columns="3"/>
+				        <Label label="rows"/>
+				        <Number numberType="IntegerType" data="data.rows" columns="3"/>
+					</Panel>
+				</Panel>
+
+			</Tab>
+			
+			<Tab name="AdvancedTab" title="Components" index="1" layout="twocols" font="SansSerif,0,11" >
+			
+					<CheckBox data="data.protectContent" constraints="twocols(location=left)"/>
+					<Label label="protect_content_against_modifications" constraints="twocols(location=right)"/>
+					<CheckBox data="data.trackViewPortWidth" constraints="twocols(location=left)"/>
+					<Label label="track_view_port_width" constraints="twocols(location=right)"/>
+					<CheckBox data="data.trackViewPortHeight" constraints="twocols(location=left)"/>
+					<Label label="track_view_port_height" constraints="twocols(location=right)"/>
+			</Tab>
+			
+			<Tab name="GraphicsTab" title="Graphics" index="4" layout="twocols" font="SansSerif,0,11" >
+			
+ 				<Panel name="BorderPanel" border="rounded3d" darkLevel="1" borderTitle="Border" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)">
+					<Label label="border" constraints="twocols(location=left)"/>
+					<Panel layout="flow" hGap="0" vGap="0" constraints="twocols(location=right)">
+					  <DropDown data="data.border" showReset="false"/>
+					  <Color data="data.borderColor" showReset="false" visible="data.border='line'"/>
+					  <TextField data="data.borderTitle" visible="(data.border='titled') | (data.border='rounded3d')"/>
+					</Panel>
+				    <Label label="title_font" constraints="twocols(location=left)" visible="(data.border='titled') | (data.border='rounded3d')"/>
+   		      		<Font data="data.titleFont" constraints="twocols(location=right)" visible="(data.border='titled') | (data.border='rounded3d')"/>
+				    <Label label="dark_level" constraints="twocols(location=left)" visible="data.border='rounded3d'"/>
+				    <Number numberType="IntegerType" data="data.darkLevel" columns="3" constraints="twocols(location=right)" visible="data.border='rounded3d'"/>
+					<Panel layout="flow" hGap="5" vGap="0" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.border='empty') | (data.border='rounded3d')">
+				        <Label label="top"/>
+				        <Number numberType="IntegerType" data="data.borderTop" columns="2"/>
+				        <Label label="left"/>
+				        <Number numberType="IntegerType" data="data.borderLeft" columns="2"/>
+				        <Label label="bottom"/>
+				        <Number numberType="IntegerType" data="data.borderBottom" columns="2"/>
+				        <Label label="right"/>
+				        <Number numberType="IntegerType" data="data.borderRight" columns="2"/>
+					</Panel>
+				</Panel>
+  			    
+ 			</Tab>
+			
+		</TabPanel>
   <LocalizedDictionary>
     <Localized key="name" lang="English">Name</Localized>
     <Localized key="index" lang="English">Index</Localized>
