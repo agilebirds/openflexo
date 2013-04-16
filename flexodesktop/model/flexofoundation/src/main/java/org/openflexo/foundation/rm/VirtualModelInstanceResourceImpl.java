@@ -45,7 +45,7 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 			returned.setProject(view.getProject());
 			returned.setName(name);
 			returned.setFile(xmlFile);
-			returned.setURI(view.getProject().getURI() + "/" + baseName);
+			returned.setURI(view.getURI() + "/" + baseName);
 			returned.setVirtualModelResource(virtualModel.getResource());
 
 			returned.setServiceManager(view.getProject().getServiceManager());
@@ -72,7 +72,7 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 			File xmlFile = new File(viewResource.getFile().getParentFile(), baseName + VirtualModelInstanceResource.VIRTUAL_MODEL_SUFFIX);
 			returned.setProject(viewResource.getProject());
 			returned.setName(baseName);
-			returned.setURI(viewResource.getProject().getURI() + "/" + baseName);
+			returned.setURI(viewResource.getURI() + "/" + baseName);
 			returned.setFile(xmlFile);
 			VirtualModelInstanceInfo vmiInfo = findVirtualModelInstanceInfo(xmlFile, "VirtualModelInstance");
 			if (vmiInfo == null) {

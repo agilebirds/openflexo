@@ -19,12 +19,17 @@
  */
 package org.openflexo.foundation.view.diagram;
 
-import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 import org.openflexo.foundation.view.diagram.action.CreateDiagram;
 import org.openflexo.foundation.viewpoint.VirtualModelModelSlotInstanceConfiguration;
 
 /**
- * This class is used to stored the configuration of a {@link FlexoOntologyModelSlot} which has to be instantiated
+ * This class is used to stored the configuration of a {@link DiagramModelSlot} which has to be instantiated
  * 
  * 
  * @author sylvain
@@ -32,8 +37,32 @@ import org.openflexo.foundation.viewpoint.VirtualModelModelSlotInstanceConfigura
  */
 public class DiagramModelSlotInstanceConfiguration extends VirtualModelModelSlotInstanceConfiguration<DiagramModelSlot> {
 
+	private List<ModelSlotInstanceConfigurationOption> options;
+
 	protected DiagramModelSlotInstanceConfiguration(DiagramModelSlot ms, CreateDiagram action) {
 		super(ms, action);
+		options = new ArrayList<ModelSlotInstanceConfiguration.ModelSlotInstanceConfigurationOption>();
+		options.add(DefaultModelSlotInstanceConfigurationOption.Autoconfigure);
+		if (!ms.getIsRequired()) {
+			options.add(DefaultModelSlotInstanceConfigurationOption.LeaveEmpty);
+		}
+	}
+
+	@Override
+	public List<ModelSlotInstanceConfigurationOption> getAvailableOptions() {
+		return options;
+	}
+
+	@Override
+	public boolean isValidConfiguration() {
+		return (getOption() == DefaultModelSlotInstanceConfigurationOption.Autoconfigure);
+	}
+
+	@Override
+	public ModelSlotInstance<?, ?> createModelSlotInstance(VirtualModelInstance<?, ?> vmInstance) {
+		ModelSlotInstance<?, ?> returned = new ModelSlotInstance(vmInstance, getModelSlot());
+		// No need to store a model, this is a built-in scheme
+		return returned;
 	}
 
 }

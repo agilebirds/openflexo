@@ -102,7 +102,7 @@ public class AddShape extends AddShemaElementAction<DiagramShape> {
 
 	public DataBinding<DiagramElement<?>> getContainer() {
 		if (container == null) {
-			container = new DataBinding<DiagramElement<?>>(this, DiagramShape.class, BindingDefinitionType.GET);
+			container = new DataBinding<DiagramElement<?>>(this, DiagramElement.class, BindingDefinitionType.GET);
 			container.setBindingName("container");
 		}
 		return container;

@@ -21,15 +21,16 @@ package org.openflexo.foundation.viewpoint;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
-import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import org.openflexo.foundation.rm.VirtualModelInstanceResource;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 
 /**
- * This class is used to stored the configuration of a {@link FlexoOntologyModelSlot} which has to be instantiated
+ * This class is used to stored the configuration of a {@link VirtualModelModelSlot} which has to be instantiated
  * 
  * 
  * @author sylvain
@@ -37,12 +38,17 @@ import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
  */
 public class VirtualModelModelSlotInstanceConfiguration<MS extends VirtualModelModelSlot<?, ?>> extends ModelSlotInstanceConfiguration<MS> {
 
+	private static final Logger logger = Logger.getLogger(VirtualModelModelSlotInstanceConfiguration.class.getPackage().getName());
+
 	private List<ModelSlotInstanceConfigurationOption> options;
+	private VirtualModelInstanceResource addressedVirtualModelInstanceResource;
 
 	protected VirtualModelModelSlotInstanceConfiguration(MS ms, CreateVirtualModelInstance<?> action) {
 		super(ms, action);
+		// logger.info("On se recree ???????????????????????????????????????????? ");
 		options = new ArrayList<ModelSlotInstanceConfiguration.ModelSlotInstanceConfigurationOption>();
-		options.add(DefaultModelSlotInstanceConfigurationOption.Autoconfigure);
+		options.add(DefaultModelSlotInstanceConfigurationOption.SelectExistingVirtualModel);
+		options.add(DefaultModelSlotInstanceConfigurationOption.CreateNewVirtualModel);
 		if (!ms.getIsRequired()) {
 			options.add(DefaultModelSlotInstanceConfigurationOption.LeaveEmpty);
 		}
@@ -56,8 +62,36 @@ public class VirtualModelModelSlotInstanceConfiguration<MS extends VirtualModelM
 	@Override
 	public ModelSlotInstance<?, ?> createModelSlotInstance(VirtualModelInstance<?, ?> vmInstance) {
 		ModelSlotInstance<?, ?> returned = new ModelSlotInstance(vmInstance, getModelSlot());
-		returned.setModelURI("TODO");
+		logger.info("Et la, j'ai maintenant " + getAddressedVirtualModelInstanceResource());
+		returned.setModelURI(getAddressedVirtualModelInstanceResource().getURI());
 		return returned;
+	}
+
+	public VirtualModelInstanceResource getAddressedVirtualModelInstanceResource() {
+		logger.info(toString() + " >>>>>>>>>>>>> getAddressedVirtualModelInstanceResource returned "
+				+ addressedVirtualModelInstanceResource);
+		return addressedVirtualModelInstanceResource;
+	}
+
+	public void setAddressedVirtualModelInstanceResource(VirtualModelInstanceResource addressedVirtualModelInstanceResource) {
+		logger.info(toString() + " >>>>>>>>>>>>> setAddressedVirtualModelInstanceResource with " + addressedVirtualModelInstanceResource);
+		this.addressedVirtualModelInstanceResource = addressedVirtualModelInstanceResource;
+	}
+
+	@Override
+	public boolean isValidConfiguration() {
+		if (!super.isValidConfiguration()) {
+			return false;
+		}
+		if (getOption() == DefaultModelSlotInstanceConfigurationOption.SelectExistingVirtualModel) {
+			logger.info(toString() + " isValidConfiguration() having " + getAddressedVirtualModelInstanceResource());
+			return getAddressedVirtualModelInstanceResource() != null;
+		} else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreateNewVirtualModel) {
+			// Not implemented yet
+			return false;
+
+		}
+		return false;
 	}
 
 }

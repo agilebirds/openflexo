@@ -22,6 +22,7 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
@@ -133,6 +134,19 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 
 	public void setModelSlot(ModelSlot<M, MM> modelSlot) {
 		this.modelSlot = modelSlot;
+	}
+
+	public <MS extends ModelSlot<?, ?>> List<MS> getAvailableModelSlots(Class<MS> msType) {
+		if (getEditionPattern() != null && getEditionPattern().getVirtualModel() != null) {
+			return getEditionPattern().getVirtualModel().getModelSlots(msType);
+		} else if (getEditionPattern() instanceof VirtualModel) {
+			return ((VirtualModel) getEditionPattern()).getModelSlots(msType);
+		}
+		return null;
+	}
+
+	public List<VirtualModelModelSlot> getAvailableVirtualModelModelSlots() {
+		return getAvailableModelSlots(VirtualModelModelSlot.class);
 	}
 
 	public ModelSlotInstance<M, MM> getModelSlotInstance(EditionSchemeAction action) {

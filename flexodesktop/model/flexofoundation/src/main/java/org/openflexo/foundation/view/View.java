@@ -106,6 +106,15 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 	}
 
 	@Override
+	public String getURI() {
+		if (getResource() == null) {
+			return super.getURI();
+		} else {
+			return getResource().getURI();
+		}
+	}
+
+	@Override
 	public View getView() {
 		return this;
 	}

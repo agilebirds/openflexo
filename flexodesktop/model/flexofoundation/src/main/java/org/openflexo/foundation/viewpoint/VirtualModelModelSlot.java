@@ -101,6 +101,9 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 
 	@Override
 	public <FR extends FetchRequest<?, ?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
+		if (SelectEditionPatternInstance.class.isAssignableFrom(fetchRequestClass)) {
+			return (FR) new SelectEditionPatternInstance(null);
+		}
 		return null;
 	}
 
@@ -137,4 +140,15 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 		this.virtualModelURI = metaModelURI;
 	}
 
+	/**
+	 * Return adressed virtual model (the virtual model this model slot specifically adresses, not the one in which it is defined)
+	 * 
+	 * @return
+	 */
+	public VirtualModel getAddressedVirtualModel() {
+		if (getViewPoint() != null && StringUtils.isNotEmpty(virtualModelURI)) {
+			return getViewPoint().getVirtualModelNamed(virtualModelURI);
+		}
+		return null;
+	}
 }

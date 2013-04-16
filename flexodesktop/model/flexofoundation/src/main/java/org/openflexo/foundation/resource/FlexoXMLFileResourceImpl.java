@@ -417,25 +417,25 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 			setModelVersion(version);
 			return returned;
 		} catch (AccessorInvocationException e) {
-			if (logger.isLoggable(Level.FINE)) {
-				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("FAILED loading " + getResourceDataClass().getName() + " with model version " + version + " Exception: "
+			if (logger.isLoggable(Level.INFO)) {
+				if (logger.isLoggable(Level.INFO)) {
+					logger.info("FAILED loading " + getResourceDataClass().getName() + " with model version " + version + " Exception: "
 							+ e.getTargetException().getMessage());
 				}
 			}
-			if (logger.isLoggable(Level.FINER)) {
+			if (logger.isLoggable(Level.INFO)) {
 				e.getTargetException().printStackTrace();
 			}
-			e.printStackTrace();
+			// e.printStackTrace();
 			throw new XMLOperationException(e, version);
 		} catch (Exception e) {
-			if (logger.isLoggable(Level.FINE)) {
-				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("FAILED loading " + getResourceDataClass().getName() + " with model version " + version + " Exception: "
+			if (logger.isLoggable(Level.INFO)) {
+				if (logger.isLoggable(Level.INFO)) {
+					logger.info("FAILED loading " + getResourceDataClass().getName() + " with model version " + version + " Exception: "
 							+ e.getMessage());
 				}
 			}
-			if (logger.isLoggable(Level.FINEST)) {
+			if (logger.isLoggable(Level.INFO)) {
 				e.printStackTrace();
 			}
 			// e.printStackTrace();

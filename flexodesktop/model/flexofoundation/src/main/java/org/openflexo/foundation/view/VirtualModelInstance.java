@@ -264,6 +264,10 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	}
 
 	public List<EditionPatternInstance> getEPInstances(EditionPattern ep) {
+		if (ep == null) {
+			logger.warning("Unexpected null EditionPattern");
+			return Collections.emptyList();
+		}
 		Map<Long, EditionPatternInstance> hash = editionPatternInstances.get(ep);
 		if (hash == null) {
 			hash = new Hashtable<Long, EditionPatternInstance>();

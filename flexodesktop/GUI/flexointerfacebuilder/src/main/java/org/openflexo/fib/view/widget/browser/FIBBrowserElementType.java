@@ -175,6 +175,7 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 			try {
 				return browserElementDefinition.getLabel().getBindingValue(this);
 			} catch (TypeMismatchException e) {
+				//System.out.println("While evaluating " + browserElementDefinition.getLabel());
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
 				e.printStackTrace();

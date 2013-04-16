@@ -56,9 +56,17 @@ public abstract class ModelSlotInstanceConfiguration<MS extends ModelSlot<?, ?>>
 		 */
 		CreatePrivateNewModel,
 		/**
-		 * Created a model in a ResourceCenter (the model might be shared and concurrently accessed)
+		 * Create a model in a ResourceCenter (the model might be shared and concurrently accessed)
 		 */
 		CreateSharedNewModel,
+		/**
+		 * Retrieve an existing virtual model instance
+		 */
+		SelectExistingVirtualModel,
+		/**
+		 * Creates a new virtual model
+		 */
+		CreateNewVirtualModel,
 		/**
 		 * Leave empty and decide later
 		 */

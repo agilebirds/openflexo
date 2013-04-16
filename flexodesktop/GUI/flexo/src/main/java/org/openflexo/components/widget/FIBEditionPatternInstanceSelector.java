@@ -70,6 +70,11 @@ public class FIBEditionPatternInstanceSelector extends FIBModelObjectSelector<Ed
 	public void delete() {
 		super.delete();
 		viewPointLibrary = null;
+		viewPoint = null;
+		virtualModel = null;
+		editionPattern = null;
+		view = null;
+		virtualModelInstance = null;
 	}
 
 	@Override

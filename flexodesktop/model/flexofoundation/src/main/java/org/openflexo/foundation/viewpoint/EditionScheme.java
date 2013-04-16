@@ -34,6 +34,7 @@ import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.diagram.model.DiagramRootPane;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.ChainedCollection;
@@ -673,7 +674,8 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 						.getEditionPatternInstanceType(getEditionPattern().getVirtualModel())));
 			}
 		}
-		if (this instanceof DiagramEditionScheme) {
+		// if (this instanceof DiagramEditionScheme) {
+		if (getEditionPattern() != null && getEditionPattern().getVirtualModel() instanceof DiagramSpecification) {
 			bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.TOP_LEVEL, DiagramRootPane.class));
 		}
 	}

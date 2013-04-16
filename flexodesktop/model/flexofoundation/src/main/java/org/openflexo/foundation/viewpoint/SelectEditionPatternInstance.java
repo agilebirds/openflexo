@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.logging.FlexoLogger;
@@ -71,13 +72,36 @@ public class SelectEditionPatternInstance<VMI extends VirtualModelInstance<VMI, 
 		this.editionPatternTypeURI = editionPatternURI;
 	}
 
+	// private boolean isUpdatingBindingModels = false;
+
 	public EditionPattern getEditionPatternType() {
+		// System.out.println("getEditionPatternType() for " + editionPatternTypeURI);
+		// System.out.println("vm=" + getVirtualModel());
+		// System.out.println("ep=" + getEditionPattern());
+		// System.out.println("ms=" + getModelSlot());
+		// if (getModelSlot() instanceof VirtualModelModelSlot) {
+		// System.out.println("ms.vm=" + ((VirtualModelModelSlot) getModelSlot()).getAddressedVirtualModel());
+		// }
 		if (editionPatternType == null && editionPatternTypeURI != null && getVirtualModel() != null) {
 			editionPatternType = getVirtualModel().getEditionPattern(editionPatternTypeURI);
-			for (EditionScheme s : getEditionPattern().getEditionSchemes()) {
-				s.updateBindingModels();
+			/*if (!isUpdatingBindingModels) {
+				isUpdatingBindingModels = true;
+				for (EditionScheme s : getEditionPattern().getEditionSchemes()) {
+					s.updateBindingModels();
+				}
+				isUpdatingBindingModels = false;
+			}*/
+		}
+		if (editionPatternType == null && editionPatternTypeURI != null && getEditionPattern() instanceof VirtualModel) {
+			editionPatternType = ((VirtualModel) getEditionPattern()).getEditionPattern(editionPatternTypeURI);
+		}
+		if (editionPatternType == null && editionPatternTypeURI != null && getModelSlot() instanceof VirtualModelModelSlot) {
+			if (((VirtualModelModelSlot) getModelSlot()).getAddressedVirtualModel() != null) {
+				editionPatternType = ((VirtualModelModelSlot) getModelSlot()).getAddressedVirtualModel().getEditionPattern(
+						editionPatternTypeURI);
 			}
 		}
+		// System.out.println("return " + editionPatternType);
 		return editionPatternType;
 	}
 
@@ -98,6 +122,11 @@ public class SelectEditionPatternInstance<VMI extends VirtualModelInstance<VMI, 
 
 	@Override
 	public List<EditionPatternInstance> performAction(EditionSchemeAction action) {
+		if (getModelSlot() instanceof VirtualModelModelSlot) {
+			ModelSlotInstance modelSlotInstance = action.getVirtualModelInstance().getModelSlotInstance(getModelSlot());
+			System.out.println("modelSlotInstance=" + modelSlotInstance + " model=" + modelSlotInstance.getModel());
+			// System.out.println("hop");
+		}
 		VirtualModelInstance<VMI, VM> vmi = action.getVirtualModelInstance();
 		System.out.println("Returning " + vmi.getEPInstances(getEditionPatternType()));
 		return filterWithConditions(vmi.getEPInstances(getEditionPatternType()), action);

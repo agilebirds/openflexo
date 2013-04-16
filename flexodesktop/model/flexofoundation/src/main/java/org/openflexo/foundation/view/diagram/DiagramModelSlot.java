@@ -6,6 +6,8 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
+import org.openflexo.foundation.technologyadapter.DeclareFetchRequest;
+import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
@@ -23,6 +25,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.editionaction.GraphicalAc
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.SelectEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
@@ -43,6 +46,8 @@ import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
 		@DeclareEditionAction(AddConnector.class), // Add connector
 		@DeclareEditionAction(GraphicalAction.class), // Graphical action
 		@DeclareEditionAction(DeleteAction.class) // Delete action
+})
+@DeclareFetchRequests({ @DeclareFetchRequest(SelectEditionPatternInstance.class) // Allows to select some EditionPatternInstance
 })
 public class DiagramModelSlot extends VirtualModelModelSlot<Diagram, DiagramSpecification> {
 
@@ -137,6 +142,11 @@ public class DiagramModelSlot extends VirtualModelModelSlot<Diagram, DiagramSpec
 	@Override
 	public ModelSlotInstanceConfiguration<? extends VirtualModelModelSlot<Diagram, DiagramSpecification>> createConfiguration(
 			CreateVirtualModelInstance<?> action) {
-		return new DiagramModelSlotInstanceConfiguration(this, (CreateDiagram) action);
+		if (action instanceof CreateDiagram) {
+			return new DiagramModelSlotInstanceConfiguration(this, (CreateDiagram) action);
+		} else {
+			logger.warning("Unexpected " + action);
+			return null;
+		}
 	}
 }
