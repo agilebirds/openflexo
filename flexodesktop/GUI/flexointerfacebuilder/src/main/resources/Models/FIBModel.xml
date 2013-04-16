@@ -2,7 +2,7 @@
 
 <model>
 
-  <entity name="org.openflexo.fib.model.FIBModelObject" abstract="yes" finalizer="finalizeDeserialization"> 
+  <entity name="org.openflexo.fib.model.FIBModelObject" abstract="yes" finalizer="finalizeDeserialization" initializer="initializeDeserialization"> 
     <property name="name" xmlTag="name" attribute="YES"/> 
     <property name="description" xmlTag="description"/> 
     <property name="parameters" xmlTag="Parameter" type="vector"/> 

@@ -74,6 +74,9 @@ public class ModelEntity {
 	protected Class<?> relatedClass;
 
 	/** Stores string indicating decoding finalizer to run, if required */
+	protected String initializer = null;
+
+	/** Stores string indicating decoding finalizer to run, if required */
 	protected String finalizer = null;
 
 	/** Stores string indicating decoding finalizer to run, if required */
@@ -106,6 +109,10 @@ public class ModelEntity {
 
 	/** Description of this entity */
 	protected String description;
+
+	private Method initializerWithoutParameter;
+
+	private Method initializerWithParameter;
 
 	/**
 	 * Creates a new <code>ModelEntity</code> instance<br>
@@ -169,6 +176,8 @@ public class ModelEntity {
 				isAbstract = tempAttribute.getNodeValue().equalsIgnoreCase("yes") || tempAttribute.getNodeValue().equalsIgnoreCase("true");
 			} else if (tempAttribute.getNodeName().equals(XMLMapping.finalizerLabel)) {
 				finalizer = tempAttribute.getNodeValue();
+			} else if (tempAttribute.getNodeName().equals(XMLMapping.initializerLabel)) {
+				initializer = tempAttribute.getNodeValue();
 			} else if (tempAttribute.getNodeName().equals(XMLMapping.contextsLabel)) {
 				contextsAsString = tempAttribute.getNodeValue();
 			} else if (tempAttribute.getNodeName().equals(XMLMapping.genericTypingStoredIn)) {
@@ -274,6 +283,36 @@ public class ModelEntity {
 										+ model.builderClass().getName()
 										+ " and this class is not abstract. If this class should never be instanciated directly, declares it as abstract (see abtract xml tag).");
 					}
+				}
+			}
+
+			// Looking for decoding initializing methods
+			if (initializer != null) {
+				try {
+					initializerWithoutParameter = relatedClass.getMethod(initializer, (Class<?>[]) null);
+				} catch (NoSuchMethodException e) {
+					// Ignore for now
+				}
+
+				if (model.hasBuilderClass()) {
+					boolean initializerHasBeenFound = false;
+					Class currentClass = model.builderClass();
+					Class[] params = new Class[1];
+					while (!initializerHasBeenFound && currentClass != null) {
+						try {
+							params[0] = currentClass;
+							initializerWithParameter = relatedClass.getMethod(finalizer, params);
+							initializerHasBeenFound = true;
+						} catch (NoSuchMethodException e) {
+							currentClass = currentClass.getSuperclass();
+						}
+					}
+
+				}
+
+				if (!hasInitializerWithoutParameter() && !hasFinalizerWithParameter()) {
+					throw new InvalidModelException("Class " + getName() + " does not implement specified decoding initializing method : "
+							+ initializer);
 				}
 			}
 
@@ -776,6 +815,55 @@ public class ModelEntity {
 			return finalizerWithParameter != null || getParentEntity().hasFinalizerWithParameter();
 		}
 		return finalizerWithParameter != null;
+	}
+
+	/**
+	 * Returns decoding finalizing method without parameter, if any
+	 */
+	public Method getInitializerWithoutParameter() {
+		if (initializerWithoutParameter == null) {
+			if (getParentEntity() != null) {
+				return getParentEntity().getInitializerWithoutParameter();
+			} else {
+				return null;
+			}
+		}
+		return initializerWithoutParameter;
+	}
+
+	/**
+	 * Returns decoding finalizing method with parameter (builder class defined in XMLMapping), if any
+	 */
+	public Method getInitializerWithParameter() {
+		if (initializerWithParameter == null) {
+			if (getParentEntity() != null) {
+				return getParentEntity().getInitializerWithParameter();
+			} else {
+				return null;
+			}
+		}
+		return initializerWithParameter;
+	}
+
+	/**
+	 * Returns boolean indicating if this entity has a decoding finalizing method without parameter, if any
+	 */
+	public boolean hasInitializerWithoutParameter() {
+		if (getParentEntity() != null) {
+			return initializerWithoutParameter != null || getParentEntity().hasInitializerWithoutParameter();
+		}
+		return initializerWithoutParameter != null;
+	}
+
+	/**
+	 * Returns boolean indicating if this entity has a decoding finalizing method with parameter (builder class defined in XMLMapping), if
+	 * any
+	 */
+	public boolean hasInitializerWithParameter() {
+		if (getParentEntity() != null) {
+			return initializer != null || getParentEntity().hasInitializerWithParameter();
+		}
+		return initializerWithParameter != null;
 	}
 
 	/**

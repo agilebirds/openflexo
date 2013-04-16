@@ -42,9 +42,9 @@ import org.jdom2.Attribute;
 import org.jdom2.DocType;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.JDOMConstants;
 import org.jdom2.Text;
 import org.jdom2.output.Format;
+import org.jdom2.output.LineSeparator;
 import org.jdom2.output.XMLOutputter;
 import org.openflexo.xmlcode.XMLMapId.NoMapIdEntryException;
 import org.xml.sax.SAXException;
@@ -98,11 +98,6 @@ import org.xml.sax.SAXException;
  * @see XMLMapping
  */
 public class XMLCoder {
-
-	// This code is an attempt to force JDom to use system line separator (issues with CR / CRLF and git/egit)
-	static {
-		System.setProperty(JDOMConstants.JDOM2_PROPERTY_LINE_SEPARATOR, "SYSTEM");
-	}
 
 	/** Stores mapping that will be used for decoding */
 	protected XMLMapping xmlMapping;
@@ -259,8 +254,7 @@ public class XMLCoder {
 		alreadySerialized.clear();
 		serializationIdentifierForObject.clear();
 		orderedElementReferenceList.delete();
-		for (Enumeration en = objectReferences.elements(); en.hasMoreElements();) {
-			ObjectReference next = (ObjectReference) en.nextElement();
+		for (ObjectReference next : objectReferences.values()) {
 			next.delete();
 		}
 		objectReferences.clear();
@@ -1015,7 +1009,9 @@ public class XMLCoder {
 			InvalidModelException, AccessorInvocationException, DuplicateSerializationIdentifierException {
 
 		Document builtDocument = buildDocument(anObject);
-		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		Format prettyFormat = Format.getPrettyFormat();
+		prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+		XMLOutputter outputter = new XMLOutputter(prettyFormat);
 		try {
 			outputter.output(builtDocument, aWriter);
 		} catch (IOException e) {
@@ -1048,7 +1044,9 @@ public class XMLCoder {
 	protected void buildDocumentAndSendToOutputStream(Object anObject, OutputStream out, DocType docType)
 			throws InvalidObjectSpecificationException, InvalidModelException, AccessorInvocationException,
 			DuplicateSerializationIdentifierException {
-		buildDocumentAndSendToOutputStream(anObject, out, docType, Format.getPrettyFormat());
+		Format prettyFormat = Format.getPrettyFormat();
+		prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+		buildDocumentAndSendToOutputStream(anObject, out, docType, prettyFormat);
 	}
 
 	protected void buildDocumentAndSendToOutputStream(Object anObject, OutputStream out, DocType docType, Format format)

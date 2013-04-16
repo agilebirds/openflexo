@@ -40,6 +40,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.filter.ElementFilter;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
+import org.jdom2.output.LineSeparator;
 import org.jdom2.output.XMLOutputter;
 import org.jdom2.util.IteratorIterable;
 import org.openflexo.foundation.FlexoException;
@@ -605,7 +606,9 @@ public class FlexoRMResource extends FlexoXMLStorageResource<FlexoProject> {
 			removeElementsWithName(document, "ProjectOntology");
 			removeElementsWithName(document, "ShemaLibrary");
 			removeElementsWithName(document, "View");
-			XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+			Format prettyFormat = Format.getPrettyFormat();
+			prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+			XMLOutputter outputter = new XMLOutputter(prettyFormat);
 			out = new FileOutputStream(file);
 			outputter.output(document, out);
 		} catch (FileNotFoundException e) {

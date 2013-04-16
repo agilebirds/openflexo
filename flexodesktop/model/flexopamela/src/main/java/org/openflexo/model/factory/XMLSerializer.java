@@ -15,8 +15,8 @@ import javassist.util.proxy.ProxyObject;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.JDOMConstants;
 import org.jdom2.output.Format;
+import org.jdom2.output.LineSeparator;
 import org.jdom2.output.XMLOutputter;
 import org.openflexo.model.ModelContextLibrary;
 import org.openflexo.model.ModelEntity;
@@ -29,11 +29,6 @@ import org.openflexo.model.exceptions.ModelExecutionException;
 import org.openflexo.model.exceptions.RestrictiveSerializationException;
 
 class XMLSerializer {
-
-	// This code is an attempt to force JDom to use system line separator (issues with CR / CRLF and git/egit)
-	static {
-		System.setProperty(JDOMConstants.JDOM2_PROPERTY_LINE_SEPARATOR, "SYSTEM");
-	}
 
 	public static final String ID = "id";
 	public static final String ID_REF = "idref";
@@ -78,7 +73,9 @@ class XMLSerializer {
 			Element rootElement = serializeElement(object, null);
 			postProcess(rootElement);
 			builtDocument.setRootElement(rootElement);
-			XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+			Format prettyFormat = Format.getPrettyFormat();
+			prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+			XMLOutputter outputter = new XMLOutputter(prettyFormat);
 			try {
 				outputter.output(builtDocument, out);
 			} catch (IOException e) {
@@ -103,7 +100,9 @@ class XMLSerializer {
 
 	public String buildXMLOutput(Document doc) {
 		StringWriter writer = new StringWriter();
-		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		Format prettyFormat = Format.getPrettyFormat();
+		prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+		XMLOutputter outputter = new XMLOutputter(prettyFormat);
 		try {
 			outputter.output(doc, writer);
 		} catch (IOException e) {

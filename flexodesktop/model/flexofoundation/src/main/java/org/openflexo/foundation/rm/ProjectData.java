@@ -5,6 +5,7 @@ import java.util.List;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.Embedded;
 import org.openflexo.model.annotations.Finder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
@@ -34,6 +35,7 @@ public interface ProjectData extends AccessibleProxyObject, PAMELAStorageResourc
 
 	@Getter(value = IMPORTED_PROJECTS, cardinality = Cardinality.LIST, inverse = FlexoProjectReference.PROJECT_DATA)
 	@XMLElement(xmlTag = "ImportedProjects")
+	@Embedded
 	public List<FlexoProjectReference> getImportedProjects();
 
 	@Setter(value = IMPORTED_PROJECTS)
@@ -120,7 +122,8 @@ public interface ProjectData extends AccessibleProxyObject, PAMELAStorageResourc
 
 		@Override
 		public void removeFromImportedProjects(FlexoProjectReference projectReference) {
-			getProject().getFlexoRMResource().removeFromDependentResources(projectReference.getReferredProject().getFlexoRMResource());
+			// TODO: remove dependency toward external resource.
+			// getProject().getFlexoRMResource().removeFromDependentResources(projectReference.getReferredProject().getFlexoRMResource());
 			performSuperRemover(IMPORTED_PROJECTS, projectReference);
 		}
 

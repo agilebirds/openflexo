@@ -23,6 +23,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
@@ -131,12 +132,12 @@ public class FIBTableModel extends AbstractTableModel {
 		return _values;
 	}
 
-	public void setValues(List<?> values) {
+	public void setValues(Collection<?> values) {
 		// logger.info("setValues with "+values);
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setValues() with " + values);
 		}
-		List<?> newValues = values;
+		Collection<?> newValues = values;
 		if (values == null) {
 			newValues = Collections.emptyList();
 		}
@@ -185,7 +186,7 @@ public class FIBTableModel extends AbstractTableModel {
 
 		}
 
-		fireModelObjectHasChanged(oldValues, newValues);
+		fireModelObjectHasChanged(oldValues, _values);
 		fireTableDataChanged();
 	}
 
@@ -237,7 +238,7 @@ public class FIBTableModel extends AbstractTableModel {
 	 * @see EventListenerList
 	 * @see javax.swing.JTable#tableChanged(TableModelEvent)
 	 */
-	public void fireModelObjectHasChanged(List oldValues, List newValues) {
+	public void fireModelObjectHasChanged(List<Object> oldValues, List<Object> newValues) {
 		// logger.info("fireModelObjectHasChanged in " + getTable().getName() + " from " + oldValues + " to " + newValues);
 		fireTableChanged(new ModelObjectHasChanged(this, oldValues, newValues));
 	}

@@ -6,6 +6,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.action.ImportProject;
+import org.openflexo.foundation.action.RemoveImportedProject;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
@@ -154,5 +155,11 @@ public class TestProjectReuse extends FlexoTestCase {
 		assertEquals(subProcessNode.getSubProcess().getProject(), subProcess.getProject());
 		assertEquals(importedProject, subProcessNode.getSubProcess().getProject());
 		assertDepends(rootProject.getRootProcess().getFlexoResource(), subProcess.getFlexoResource());
+		RemoveImportedProject remove = RemoveImportedProject.actionType.makeNewAction(importedProject, null, rootEditor);
+		remove.setImportingProject(rootProject);
+		remove.doAction();
+		assertTrue(remove.hasActionExecutionSucceeded());
+		assertNull(subProcessNode.getSubProcess());
+		assertNull(subProcessNode.getSubProcessReference());
 	}
 }

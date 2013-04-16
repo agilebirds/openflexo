@@ -231,6 +231,13 @@ public class XSDeclarationsFetcher implements XSVisitor {
 			attributeUse(attributeUse);
 		}
 	}
+	
+	private void attContainer(XSElementDecl attContainer) {
+		XSComplexType xst = (XSComplexType) attContainer.getType();
+		for (XSAttributeUse attributeUse : xst.getDeclaredAttributeUses()) {
+			attributeUse(attributeUse);
+		}
+	}
 
 	@Override
 	public void attributeUse(XSAttributeUse attributeUse) {
@@ -301,8 +308,12 @@ public class XSDeclarationsFetcher implements XSVisitor {
 		path.push(elementDecl);
 
 		if (elementDecl.getType().isLocal()) {
+			logger.info("XML DEBUG CG: there is a local type here? " + elementDecl.getName());
 			// TODO If it's global it has already been visited, make sure.
 			elementDecl.getType().visit(this);
+		}
+		else if (elementDecl.getType().isComplexType()){
+			attContainer(elementDecl);
 		}
 
 		path.pop();

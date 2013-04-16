@@ -26,7 +26,7 @@
 		<organization.url>http://www.agilebirds.com/</organization.url>
 		<organization.logo>http://www.agilebirds.com/_Ressources/img/header_Logo.gif</organization.logo>
 		<swingx.version>1.6.3</swingx.version>
-		<ant.version>1.8.2</ant.version>
+		<ant.version>1.9.0</ant.version>
 		<javahelp.version>2.0.05</javahelp.version>
 	</properties>
 	<scm>
@@ -825,8 +825,8 @@
 			</dependency>
 			<dependency>
 				<groupId>org.jdom</groupId>
-				<artifactId>jdom</artifactId>
-				<version>2.0.2</version>
+				<artifactId>jdom2</artifactId>
+				<version>2.0.4</version>
 			</dependency>
 			<dependency>
 				<groupId>com.sferyx.htmleditor</groupId>

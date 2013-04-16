@@ -28,8 +28,13 @@ import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import org.openflexo.foundation.viewpoint.AddClass;
+import org.openflexo.foundation.viewpoint.AddIndividual;
+import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
+import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
+import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
@@ -45,13 +50,16 @@ import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSIndividu
 /**
  * Implementation of the ModelSlot class for the XSD/XML technology adapter
  * 
- * @author Luka Le Roux, Sylvain Guerin
+ * @author Luka Le Roux, Sylvain Guerin, Christophe Guychard
  * 
  */
-@DeclarePatternRoles({ @DeclarePatternRole(XSIndividualPatternRole.class), // Instances
+@DeclarePatternRoles({ 
+	    @DeclarePatternRole(XSIndividualPatternRole.class), // Instances
 		@DeclarePatternRole(XSClassPatternRole.class) // Classes
-})
-@DeclareEditionActions({ @DeclareEditionAction(AddXSIndividual.class), // Add instance
+		})
+		
+@DeclareEditionActions({ 
+		@DeclareEditionAction(AddXSIndividual.class), // Add instance
 		@DeclareEditionAction(AddXSClass.class) // Add class
 })
 public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel> {
@@ -118,13 +126,13 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 	 */
 	@Override
 	public <EA extends EditionAction<?, ?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
-		/*if (AddXMLIndividual.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddXMLIndividual(null);
-		} else if (AddXSDClass.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddXSDClass(null);
-		} else {*/
+		if (AddXSIndividual.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new AddXSIndividual(null);
+		} else if (AddXSClass.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new AddXSClass(null);
+		} else {
 		return null;
-		// }
+		 }
 	}
 
 	@Override

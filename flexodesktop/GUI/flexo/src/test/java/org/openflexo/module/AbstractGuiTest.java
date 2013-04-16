@@ -43,15 +43,6 @@ public abstract class AbstractGuiTest extends TestCase {
 		setUserTypeFieldByReflection(userTypeBackUp);
 	}
 
-	public void testUserTypeIsNullThrowIllegalStateException() {
-		try {
-			UserType.getCurrentUserType();
-			Assert.fail("Should have fail with an IllegalStateException.");
-		} catch (IllegalStateException e) {
-			// that's expected.
-		}
-	}
-
 	private UserType setUserTypeFieldByReflection(UserType valueToSet) {
 		Field currentUserTypeField = null;
 		try {
