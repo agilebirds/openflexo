@@ -191,24 +191,11 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 	}
 
 	@Override
-	public void notifyObjectLoaded(FlexoModelObjectReference<?> reference) {
-
-	}
-
-	@Override
-	public void objectCantBeFound(FlexoModelObjectReference<?> reference) {
-
-	}
-
-	@Override
-	public void objectSerializationIdChanged(FlexoModelObjectReference<?> reference) {
-		setChanged();
-	}
-
-	@Override
 	public void objectDeleted(FlexoModelObjectReference<?> reference) {
 		if (reference == _subProcess) {
 			setSubProcess(null);
+		} else {
+			super.objectDeleted(reference);
 		}
 	}
 
