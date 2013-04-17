@@ -106,9 +106,9 @@ public class JavaBindingFactory implements BindingFactory {
 		}
 		if (possiblyMatchingMethods.size() > 1) {
 			logger.warning("Please implement disambiguity here");
-			for (DataBinding<?> arg : args) {
+			/*for (DataBinding<?> arg : args) {
 				System.out.println("arg " + arg + " of " + arg.getDeclaredType() + " / " + arg.getAnalyzedType());
-			}
+			}*/
 			// Return the first one
 			// TODO: try to find the best one
 			return MethodDefinition.getMethodDefinition(parentType, possiblyMatchingMethods.get(0));
