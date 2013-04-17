@@ -64,7 +64,8 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 	@Override
 	public void delete() {
 
-		for (FlexoModelObjectReference<EditionPatternInstance> ref : editionPatternReferences) {
+		for (FlexoModelObjectReference<EditionPatternInstance> ref : new ArrayList<FlexoModelObjectReference<EditionPatternInstance>>(
+				editionPatternReferences)) {
 			EditionPatternInstance epi = ref.getObject();
 			if (epi != null) {
 				epi.nullifyPatternActor(epi.getRoleForActor(this));
@@ -117,7 +118,18 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 		this.editionPatternReferences = editionPatternReferences;
 	}
 
-	public void addToEditionPatternReferences(FlexoModelObjectReference<EditionPatternInstance> ref) {
+	public void addToEditionPatternReferences(final FlexoModelObjectReference<EditionPatternInstance> ref) {
+		/*SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					ref.getObject();
+				} catch (ClassCastException e) {
+					System.out.println("Je tiens le coupable !!!");
+				}
+			}
+		});*/
+		//logger.info("****************** addToEditionPatternReferences() with " + ref);
 		ref.setOwner(this);
 		editionPatternReferences.add(ref);
 		setChanged();
@@ -184,7 +196,7 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 		}
 		for (FlexoModelObjectReference<EditionPatternInstance> ref : editionPatternReferences) {
 			EditionPatternInstance epi = ref.getObject();
-			if (epi.getEditionPattern() == editionPattern) {
+			if (epi != null && epi.getEditionPattern() == editionPattern) {
 				return epi;
 			}
 		}
@@ -193,9 +205,15 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 
 	protected FlexoModelObjectReference<EditionPatternInstance> getEditionPatternReference(EditionPatternInstance editionPatternInstance) {
 		for (FlexoModelObjectReference<EditionPatternInstance> ref : editionPatternReferences) {
-			EditionPatternInstance epi = ref.getObject();
-			if (epi == editionPatternInstance) {
-				return ref;
+			String was = ref.toString() + " serialized as " + ref.getStringRepresentation();
+			try {
+				EditionPatternInstance epi = ref.getObject();
+				if (epi == editionPatternInstance) {
+					return ref;
+				}
+			} catch (ClassCastException e) {
+				e.printStackTrace();
+				System.out.println("OK, j'ai le soucis, was=" + was);
 			}
 		}
 		return null;

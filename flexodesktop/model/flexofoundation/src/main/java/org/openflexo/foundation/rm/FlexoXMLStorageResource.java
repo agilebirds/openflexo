@@ -1224,4 +1224,14 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 			getProject().setLastID(lastUniqueID);
 		}
 	}
+
+	@Override
+	public XMLSerializationService getXMLSerializationService() {
+		if (getServiceManager() != null) {
+			return getServiceManager().getXMLSerializationService();
+		}
+		logger.warning("Sorry, XMLSerializationService not registered, cannot proceed");
+		return null;
+	}
+
 }

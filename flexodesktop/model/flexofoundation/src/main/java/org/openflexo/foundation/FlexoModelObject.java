@@ -390,6 +390,8 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		if (getProject() != null) {
 			if (flexoID < 0 && getProject().getLastUniqueIDHasBeenSet() && !isDeserializing()) {
 				flexoID = getProject().getNewFlexoID();
+				logger.info(">>>>>>>>>>>>>>> Registering new FlexoID " + flexoID + " for " + this);
+				System.out.println(">>>>>>>>>>>>>>> Registering new FlexoID " + flexoID + " for " + this);
 				// setChanged();
 				if (!isRegistered) {
 					registerObject(getProject());

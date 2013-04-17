@@ -46,9 +46,7 @@ import org.openflexo.xmlcode.XMLMapping;
 import org.openflexo.xmlcode.XMLSerializable;
 
 /**
- * Default implementation for {@link FlexoFileResource}
- * 
- * Very first draft for implementation, only implements get/load scheme
+ * Default implementation for {@link FlexoXMLFileResource} (a {@link FlexoFileResource} stored in a XML {@link File})
  * 
  * @param <RD>
  *            the type of the resource data reference by this resource
@@ -759,7 +757,8 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 		return null;
 	}
 
-	protected XMLSerializationService getXMLSerializationService() {
+	@Override
+	public XMLSerializationService getXMLSerializationService() {
 		if (getServiceManager() != null) {
 			return getServiceManager().getXMLSerializationService();
 		}
@@ -872,6 +871,7 @@ public abstract class FlexoXMLFileResourceImpl<RD extends ResourceData<RD>> exte
 	 */
 	@Override
 	public void setLastID(long lastUniqueID) {
+		System.out.println(">>>>>>>>>> setLastID with " + lastUniqueID);
 		if (lastUniqueID > lastID) {
 			lastID = lastUniqueID;
 			lastUniqueIDHasBeenSet = true;

@@ -2546,6 +2546,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return loadingHandler;
 	}
 
+	@Override
 	public List<DocType> getDocTypes() {
 		if (docTypes.size() == 0) {
 			try {
@@ -2741,7 +2742,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 	}
 
-	public FlexoModelObject findObject(String objectUID, long objectFlexoID) {
+	/*public FlexoModelObject findObject(String objectUID, long objectFlexoID) {
 		if (allRegisteredObjects == null) {
 			return null;
 		}
@@ -2753,7 +2754,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		// logger.info("Try to find "+objectUID+"_"+objectFlexoID+" : FAILED");
 		return null;
-	}
+	}*/
 
 	public void clearRecentlyCreatedObjects() {
 		_recentlyCreatedObjects.clear();

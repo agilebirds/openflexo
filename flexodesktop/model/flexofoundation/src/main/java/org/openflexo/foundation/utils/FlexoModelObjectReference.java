@@ -22,6 +22,7 @@ package org.openflexo.foundation.utils;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.FileNotFoundException;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,6 +30,7 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.KVCFlexoObject;
 import org.openflexo.foundation.resource.FlexoXMLFileResource;
+import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectReference;
@@ -40,6 +42,7 @@ import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder.Converter;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * 
@@ -252,14 +255,71 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 		return modelObject;
 	}
 
+	private O findObjectInResource(FlexoXMLFileResource resource) {
+		try {
+			// Ensure the resource is loaded
+			ResourceData resourceData;
+			resourceData = resource.getResourceData(null);
+			XMLMapping mapping = resource.getXMLSerializationService().getMappingForClassAndVersion(resource.getResourceDataClass(),
+					resource.getModelVersion());
+			Collection<FlexoModelObject> containedObjects = mapping.getEmbeddedObjectsForObject(resourceData, FlexoModelObject.class,
+					false, true);
+			for (FlexoModelObject temp : containedObjects) {
+				if (temp.getFlexoID() == flexoID && temp.getUserIdentifier().equals(userIdentifier)) {
+					logger.info("Found object " + userIdentifier + "_" + flexoID + " : SUCCEEDED (is " + temp + ")");
+					return (O) temp;
+				}
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ResourceLoadingCancelledException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ResourceDependencyLoopException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FlexoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		logger.warning("Cannot find object " + userIdentifier + "_" + flexoID + " in resource " + resource);
+		ResourceData resourceData = null;
+		try {
+			resourceData = resource.getResourceData(null);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ResourceLoadingCancelledException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ResourceDependencyLoopException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FlexoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		XMLMapping mapping = resource.getXMLSerializationService().getMappingForClassAndVersion(resource.getResourceDataClass(),
+				resource.getModelVersion());
+		Collection<FlexoModelObject> containedObjects = mapping.getEmbeddedObjectsForObject(resourceData, FlexoModelObject.class);
+		Collection<FlexoModelObject> containedObjects2 = mapping.getEmbeddedObjectsForObject(resourceData, FlexoModelObject.class, false,
+				false);
+		Collection<FlexoModelObject> containedObjects3 = mapping.getEmbeddedObjectsForObject(resourceData, FlexoModelObject.class, false,
+				true);
+		return null;
+	}
+
 	private O findObject(boolean force) {
 		if (getEnclosingProject(force) != null) {
 			FlexoXMLFileResource res = getResource(force);
 			if (res == null) {
 				return null;
+			} else {
+				return findObjectInResource(res);
 			}
 			// TODO: OLD FlexoResource scheme
-			if (res instanceof FlexoXMLStorageResource) {
+			/*if (res instanceof FlexoXMLStorageResource) {
 				if (force && !res.isLoaded()) {
 					((FlexoXMLStorageResource) res).getXMLResourceData();
 				}
@@ -286,7 +346,7 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}
+			}*/
 		}
 		return null;
 	}

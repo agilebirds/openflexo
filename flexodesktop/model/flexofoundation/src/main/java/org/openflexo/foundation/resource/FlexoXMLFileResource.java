@@ -4,6 +4,7 @@ import java.io.File;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
+import org.openflexo.foundation.xml.XMLSerializationService;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
@@ -44,4 +45,7 @@ public interface FlexoXMLFileResource<RD extends ResourceData<RD>> extends Flexo
 	public long getNewFlexoID();
 
 	public void setLastID(long lastUniqueID);
+
+	public XMLSerializationService getXMLSerializationService();
+
 }
