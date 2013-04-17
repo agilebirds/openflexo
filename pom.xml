@@ -6,7 +6,7 @@
 	<groupId>org.openflexo</groupId>
 	<artifactId>openflexo</artifactId>
 	<packaging>pom</packaging>
-	<version>1.5.1-SNAPSHOT</version>
+	<version>1.5.2-SNAPSHOT</version>
 	<name>OpenFlexo</name>
 	<organization>
 		<name>${organization.name}</name>
