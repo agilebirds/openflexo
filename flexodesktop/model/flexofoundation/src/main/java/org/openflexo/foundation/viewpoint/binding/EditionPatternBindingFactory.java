@@ -142,6 +142,10 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 			for (PatternRole<?> pr : ep.getPatternRoles()) {
 				returned.add(getSimplePathElement(pr, parent));
 			}
+			// TODO: performance issue
+			if (ep.getInspector().getRenderer().isSet() && ep.getInspector().getRenderer().isValid()) {
+				returned.add(new EPIRendererPathElement(parent));
+			}
 			return returned;
 		} else if (parent.getType() instanceof EditionSchemeType) {
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
