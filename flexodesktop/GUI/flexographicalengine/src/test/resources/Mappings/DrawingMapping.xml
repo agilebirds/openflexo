@@ -278,40 +278,48 @@
 	 <property name="shadowBlur" xmlTag="shadowBlur" attribute="YES"/>
  </entity>
 
-  <entity name="org.openflexo.fge.graphics.BackgroundStyle$None" xmlTag="NoneBackgroundStyle">
-     <description>Empty background style</description>
-  </entity>
-	
-  <entity name="org.openflexo.fge.graphics.BackgroundStyle$Color" xmlTag="ColorBackgroundStyle">
-     <description>Colored background style</description>
-  	 <property name="color" xmlTag="color" attribute="YES"/>
-  </entity>
-	
-  <entity name="org.openflexo.fge.graphics.BackgroundStyle$ColorGradient" xmlTag="ColorGradientBackgroundStyle">
-     <description>Colored gradient background style</description>
-  	 <property name="color1" xmlTag="color1" attribute="YES"/>
-  	 <property name="color2" xmlTag="color2" attribute="YES"/>
-  	 <property name="direction" xmlTag="direction" attribute="YES"/>
-  </entity>
-	
-  <entity name="org.openflexo.fge.graphics.BackgroundStyle$Texture" xmlTag="TexturedBackgroundStyle">
-     <description>Textured background style</description>
-  	 <property name="color1" xmlTag="color1" attribute="YES"/>
-  	 <property name="color2" xmlTag="color2" attribute="YES"/>
-  	 <property name="textureType" xmlTag="textureType" attribute="YES"/>
-  </entity>
-	
-  <entity name="org.openflexo.fge.graphics.BackgroundImageBackgroundStyle" xmlTag="ImageBackgroundStyle">
-     <description>Textured background style</description>
-  	 <property name="imageFile" xmlTag="imageFile" attribute="YES"/>
-  	 <property name="scaleX" xmlTag="scaleX" attribute="YES"/>
-  	 <property name="scaleY" xmlTag="scaleY" attribute="YES"/>
-  	 <property name="deltaX" xmlTag="deltaX" attribute="YES"/>
-  	 <property name="deltaY" xmlTag="deltaY" attribute="YES"/>
-  	 <property name="imageBackgroundType" xmlTag="imageBackgroundType" attribute="YES"/>
- 	 <property name="imageBackgroundColor" xmlTag="imageBackgroundColor" attribute="YES"/>
-  </entity>
-	
+	<entity name="org.openflexo.fge.graphics.NoneBackgroundStyle"
+		xmlTag="NoneBackgroundStyle">
+		<description>Empty background style</description>
+	</entity>
+
+	<entity name="org.openflexo.fge.graphics.ColorBackgroundStyle"
+		xmlTag="ColorBackgroundStyle">
+		<description>Colored background style</description>
+		<property name="color" xmlTag="color" attribute="YES" />
+	</entity>
+
+	<entity name="org.openflexo.fge.graphics.ColorGradientBackgroundStyle"
+		xmlTag="ColorGradientBackgroundStyle">
+		<description>Colored gradient background style</description>
+		<property name="color1" xmlTag="color1" attribute="YES" />
+		<property name="color2" xmlTag="color2" attribute="YES" />
+		<property name="direction" xmlTag="direction" attribute="YES" />
+	</entity>
+
+	<entity name="org.openflexo.fge.graphics.TextureBackgroundStyle"
+		xmlTag="TexturedBackgroundStyle">
+		<description>Textured background style</description>
+		<property name="color1" xmlTag="color1" attribute="YES" />
+		<property name="color2" xmlTag="color2" attribute="YES" />
+		<property name="textureType" xmlTag="textureType" attribute="YES" />
+	</entity>
+
+	<entity name="org.openflexo.fge.graphics.BackgroundImageBackgroundStyle"
+		xmlTag="ImageBackgroundStyle">
+		<description>Textured background style</description>
+		<property name="imageFile" xmlTag="imageFile" attribute="YES" />
+		<property name="scaleX" xmlTag="scaleX" attribute="YES" />
+		<property name="scaleY" xmlTag="scaleY" attribute="YES" />
+		<property name="deltaX" xmlTag="deltaX" attribute="YES" />
+		<property name="deltaY" xmlTag="deltaY" attribute="YES" />
+		<property name="imageBackgroundType" xmlTag="imageBackgroundType"
+			attribute="YES" />
+		<property name="imageBackgroundColor" xmlTag="imageBackgroundColor"
+			attribute="YES" />
+		<property name="fitToShape" xmlTag="fitToShape" attribute="YES" />
+	</entity>
+
   <entity name="org.openflexo.fge.geom.FGERectPolylin" xmlTag="FGERectPolylin">
      <description>Represent a 2D polylin</description>
   	 <property name="points" xmlTag="FGEPoint" type="vector" primary="yes"/>
