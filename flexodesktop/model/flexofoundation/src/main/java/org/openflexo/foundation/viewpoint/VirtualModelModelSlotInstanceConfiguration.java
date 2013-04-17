@@ -45,7 +45,6 @@ public class VirtualModelModelSlotInstanceConfiguration<MS extends VirtualModelM
 
 	protected VirtualModelModelSlotInstanceConfiguration(MS ms, CreateVirtualModelInstance<?> action) {
 		super(ms, action);
-		// logger.info("On se recree ???????????????????????????????????????????? ");
 		options = new ArrayList<ModelSlotInstanceConfiguration.ModelSlotInstanceConfigurationOption>();
 		options.add(DefaultModelSlotInstanceConfigurationOption.SelectExistingVirtualModel);
 		options.add(DefaultModelSlotInstanceConfigurationOption.CreateNewVirtualModel);
@@ -62,19 +61,15 @@ public class VirtualModelModelSlotInstanceConfiguration<MS extends VirtualModelM
 	@Override
 	public ModelSlotInstance<?, ?> createModelSlotInstance(VirtualModelInstance<?, ?> vmInstance) {
 		ModelSlotInstance<?, ?> returned = new ModelSlotInstance(vmInstance, getModelSlot());
-		logger.info("Et la, j'ai maintenant " + getAddressedVirtualModelInstanceResource());
 		returned.setModelURI(getAddressedVirtualModelInstanceResource().getURI());
 		return returned;
 	}
 
 	public VirtualModelInstanceResource getAddressedVirtualModelInstanceResource() {
-		logger.info(toString() + " >>>>>>>>>>>>> getAddressedVirtualModelInstanceResource returned "
-				+ addressedVirtualModelInstanceResource);
 		return addressedVirtualModelInstanceResource;
 	}
 
 	public void setAddressedVirtualModelInstanceResource(VirtualModelInstanceResource addressedVirtualModelInstanceResource) {
-		logger.info(toString() + " >>>>>>>>>>>>> setAddressedVirtualModelInstanceResource with " + addressedVirtualModelInstanceResource);
 		this.addressedVirtualModelInstanceResource = addressedVirtualModelInstanceResource;
 	}
 
@@ -84,7 +79,6 @@ public class VirtualModelModelSlotInstanceConfiguration<MS extends VirtualModelM
 			return false;
 		}
 		if (getOption() == DefaultModelSlotInstanceConfigurationOption.SelectExistingVirtualModel) {
-			logger.info(toString() + " isValidConfiguration() having " + getAddressedVirtualModelInstanceResource());
 			return getAddressedVirtualModelInstanceResource() != null;
 		} else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreateNewVirtualModel) {
 			// Not implemented yet

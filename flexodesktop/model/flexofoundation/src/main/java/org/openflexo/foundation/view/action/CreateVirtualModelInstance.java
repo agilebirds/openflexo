@@ -147,7 +147,10 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 			}
 		}
 
+		System.out.println("Now, we try to synchronize the new virtual model instance");
+
 		if (newVirtualModelInstance.isSynchronizable()) {
+			System.out.println("Go for it");
 			newVirtualModelInstance.synchronize(null);
 		}
 

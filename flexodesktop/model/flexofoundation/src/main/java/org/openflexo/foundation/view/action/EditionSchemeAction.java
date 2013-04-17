@@ -281,6 +281,11 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 		} else if (variable.getVariableName().equals(EditionScheme.THIS)) {
 			return getEditionPatternInstance();
 		}
+
+		if (getEditionScheme().getVirtualModel().handleVariable(variable)) {
+			return getVirtualModelInstance().getValueForVariable(variable);
+		}
+
 		if (variables.get(variable.getVariableName()) != null) {
 			return variables.get(variable.getVariableName());
 		}

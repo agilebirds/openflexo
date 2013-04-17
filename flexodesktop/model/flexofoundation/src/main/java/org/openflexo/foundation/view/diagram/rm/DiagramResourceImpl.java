@@ -35,7 +35,7 @@ public abstract class DiagramResourceImpl extends VirtualModelInstanceResourceIm
 			returned.setProject(view.getProject());
 			returned.setName(name);
 			returned.setFile(xmlFile);
-			returned.setURI(view.getProject().getURI() + "/" + baseName);
+			returned.setURI(view.getURI() + "/" + baseName);
 			returned.setServiceManager(view.getProject().getServiceManager());
 			returned.setVirtualModelResource(diagramSpecification.getResource());
 			view.getResource().addToContents(returned);
@@ -55,7 +55,7 @@ public abstract class DiagramResourceImpl extends VirtualModelInstanceResourceIm
 			returned.setProject(viewResource.getProject());
 			returned.setName(baseName);
 			returned.setFile(xmlFile);
-			returned.setURI(viewResource.getProject().getURI() + "/" + baseName);
+			returned.setURI(viewResource.getURI() + "/" + baseName);
 			returned.setServiceManager(viewResource.getProject().getServiceManager());
 			VirtualModelInstanceInfo vmiInfo = findVirtualModelInstanceInfo(xmlFile, "Diagram");
 			if (vmiInfo == null) {

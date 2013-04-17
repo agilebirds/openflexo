@@ -30,6 +30,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.resource.FlexoXMLFileResource;
 import org.openflexo.foundation.rm.DuplicateResourceException;
@@ -122,6 +123,15 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	}
 
 	@Override
+	public String getURI() {
+		if (getResource() == null) {
+			return super.getURI();
+		} else {
+			return getResource().getURI();
+		}
+	}
+
+	@Override
 	public View getView() {
 		if (getResource() != null && getResource().getContainer() != null) {
 			return getResource().getContainer().getView();
@@ -201,8 +211,8 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 			editionPatternInstances.put(epi.getEditionPattern(), hash);
 		}
 		hash.put(epi.getFlexoID(), epi);
-		System.out.println("Registered EPI " + epi + " in " + epi.getEditionPattern());
-		System.out.println("hop: " + getEPInstances(epi.getEditionPattern()));
+		// System.out.println("Registered EPI " + epi + " in " + epi.getEditionPattern());
+		// System.out.println("Registered: " + getEPInstances(epi.getEditionPattern()));
 		return epi;
 	}
 
@@ -255,8 +265,13 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 		this.editionPatternInstances = editionPatternInstances;
 	}
 
+	// TODO: performance isssues
+	public Collection<EditionPatternInstance> getAllEPInstances() {
+		return getEditionPatternInstancesList();
+	}
+
 	public Collection<EditionPatternInstance> getEPInstances(String epName) {
-		if (getViewPoint() == null) {
+		if (getVirtualModel() == null) {
 			return Collections.emptyList();
 		}
 		EditionPattern ep = getVirtualModel().getEditionPattern(epName);
@@ -265,7 +280,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 
 	public List<EditionPatternInstance> getEPInstances(EditionPattern ep) {
 		if (ep == null) {
-			logger.warning("Unexpected null EditionPattern");
+			// logger.warning("Unexpected null EditionPattern");
 			return Collections.emptyList();
 		}
 		Map<Long, EditionPatternInstance> hash = editionPatternInstances.get(ep);
@@ -274,7 +289,11 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 			editionPatternInstances.put(ep, hash);
 		}
 		// TODO: performance issue here
-		return new ArrayList(hash.values());
+		List<EditionPatternInstance> returned = new ArrayList(hash.values());
+		for (EditionPattern childEP : ep.getChildEditionPatterns()) {
+			returned.addAll(getEPInstances(childEP));
+		}
+		return returned;
 	}
 
 	// TODO: refactor this
@@ -348,6 +367,11 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	@Override
 	public String getFullyQualifiedName() {
 		return getProject().getFullyQualifiedName() + "." + getName();
+	}
+
+	@Override
+	public XMLStorageResourceData getXMLResourceData() {
+		return this;
 	}
 
 	@Override
@@ -504,6 +528,16 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 
 	public boolean isSynchronizable() {
 		return getVirtualModel() != null && getVirtualModel().hasSynchronizationScheme();
+	}
+
+	/**
+	 * Return run-time value for {@link BindingVariable} variable
+	 * 
+	 * @param variable
+	 * @return
+	 */
+	public Object getValueForVariable(BindingVariable variable) {
+		return null;
 	}
 
 }

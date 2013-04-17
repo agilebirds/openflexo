@@ -1,10 +1,14 @@
 package org.openflexo.foundation.view;
 
+import java.util.logging.Logger;
+
+import org.openflexo.foundation.rm.VirtualModelInstanceResource;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
 import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.toolbox.StringUtils;
@@ -22,6 +26,8 @@ import org.openflexo.toolbox.StringUtils;
  * 
  */
 public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends VirtualModelInstanceObject {
+
+	private static final Logger logger = Logger.getLogger(ModelSlotInstance.class.getPackage().getName());
 
 	private View view;
 	private VirtualModelInstance<?, ?> vmInstance;
@@ -108,11 +114,21 @@ public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 
 	public M getModel() {
 		if (getVirtualModelInstance() != null && model == null && StringUtils.isNotEmpty(modelURI)) {
-			FlexoModelResource<M, MM> modelResource = (FlexoModelResource<M, MM>) getVirtualModelInstance().getInformationSpace()
-					.getModelWithURI(modelURI);
-			if (modelResource != null) {
-				model = modelResource.getModel();
+			if (getModelSlot() instanceof VirtualModelModelSlot) {
+				VirtualModelInstanceResource vmiResource = getProject().getViewLibrary().getVirtualModelInstance(modelURI);
+				if (vmiResource != null) {
+					model = (M) vmiResource.getVirtualModelInstance();
+				}
+			} else {
+				FlexoModelResource<M, MM> modelResource = (FlexoModelResource<M, MM>) getVirtualModelInstance().getInformationSpace()
+						.getModelWithURI(modelURI);
+				if (modelResource != null) {
+					model = modelResource.getModel();
+				}
 			}
+		}
+		if (model == null) {
+			logger.warning("cannot find model " + modelURI);
 		}
 		return model;
 	}

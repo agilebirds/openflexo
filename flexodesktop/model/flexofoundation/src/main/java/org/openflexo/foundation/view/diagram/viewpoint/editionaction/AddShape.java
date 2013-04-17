@@ -170,6 +170,8 @@ public class AddShape extends AddShemaElementAction<DiagramShape> {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Added shape " + newShape + " under " + container);
 		}
+
+		System.out.println("Added shape " + newShape);
 		return newShape;
 	}
 

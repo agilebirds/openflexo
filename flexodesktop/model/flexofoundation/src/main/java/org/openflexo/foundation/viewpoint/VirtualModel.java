@@ -46,6 +46,7 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.viewpoint.ViewPointObject.LanguageRepresentationContext.LanguageRepresentationOutput;
 import org.openflexo.foundation.viewpoint.dm.EditionPatternCreated;
 import org.openflexo.foundation.viewpoint.dm.EditionPatternDeleted;
@@ -684,6 +685,17 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 		}
 		out.append("}" + StringUtils.LINE_SEPARATOR);
 		return out.toString();
+	}
+
+	/**
+	 * Return flag indicating if supplied BindingVariable is set at runtime
+	 * 
+	 * @param variable
+	 * @return
+	 * @see VirtualModelInstance#getValueForVariable(BindingVariable)
+	 */
+	public boolean handleVariable(BindingVariable variable) {
+		return false;
 	}
 
 }

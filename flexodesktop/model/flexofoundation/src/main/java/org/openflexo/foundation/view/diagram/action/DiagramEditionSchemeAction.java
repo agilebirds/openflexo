@@ -22,7 +22,6 @@ package org.openflexo.foundation.view.diagram.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -48,15 +47,6 @@ public abstract class DiagramEditionSchemeAction<A extends EditionSchemeAction<A
 
 	public Diagram getDiagram() {
 		return getVirtualModelInstance();
-	}
-
-	@Override
-	public Object getValue(BindingVariable variable) {
-		if (variable.getVariableName().equals(DiagramEditionScheme.TOP_LEVEL)) {
-			System.out.println("Returning " + getDiagram().getRootPane());
-			return getDiagram().getRootPane();
-		}
-		return super.getValue(variable);
 	}
 
 }

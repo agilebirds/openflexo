@@ -21,6 +21,7 @@ package org.openflexo.foundation.view.diagram.model;
 
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
@@ -30,6 +31,7 @@ import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.diagram.DiagramTechnologyAdapter;
 import org.openflexo.foundation.view.diagram.rm.DiagramResource;
 import org.openflexo.foundation.view.diagram.rm.DiagramResourceImpl;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 
@@ -124,4 +126,23 @@ public class Diagram extends VirtualModelInstance<Diagram, DiagramSpecification>
 		return "DIAGRAM";
 	}
 
+	/**
+	 * Return run-time value for {@link BindingVariable} variable
+	 * 
+	 * @param variable
+	 * @return
+	 */
+	@Override
+	public Object getValueForVariable(BindingVariable variable) {
+		if (variable.getVariableName().equals(DiagramEditionScheme.TOP_LEVEL)) {
+			return getRootPane();
+		}
+		return super.getValue(variable);
+	}
+
+	@Override
+	public void finalizeDeserialization(Object builder) {
+		// TODO Auto-generated method stub
+		super.finalizeDeserialization(builder);
+	}
 }

@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.rm.DiagramSpecificationResource;
 import org.openflexo.foundation.rm.DiagramSpecificationResourceImpl;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
@@ -274,6 +275,14 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 			}
 		}
 		return returned;
+	}
+
+	@Override
+	public boolean handleVariable(BindingVariable variable) {
+		if (variable.getVariableName().equals(DiagramEditionScheme.TOP_LEVEL)) {
+			return true;
+		}
+		return super.handleVariable(variable);
 	}
 
 	@Override

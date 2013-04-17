@@ -19,7 +19,9 @@
  */
 package org.openflexo.foundation.view.action;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -97,12 +99,20 @@ public class SynchronizationSchemeAction extends EditionSchemeAction<Synchroniza
 		return null;
 	}
 
+	private List<EditionPatternInstance> episToBeRemoved;
+
 	public void beginSynchronization() {
 		System.out.println("BEGIN synchronization on " + getVirtualModelInstance());
+		episToBeRemoved = new ArrayList<EditionPatternInstance>();
+		episToBeRemoved.addAll(getVirtualModelInstance().getAllEPInstances());
 	}
 
 	public void endSynchronization() {
 		System.out.println("END synchronization on " + getVirtualModelInstance());
+		for (EditionPatternInstance epi : episToBeRemoved) {
+			System.out.println("Deleting " + epi);
+			epi.delete();
+		}
 	}
 
 	public EditionPatternInstance matchEditionPatternInstance(EditionPattern editionPatternType, Hashtable<PatternRole, Object> criterias) {
@@ -123,6 +133,7 @@ public class SynchronizationSchemeAction extends EditionSchemeAction<Synchroniza
 
 	public void foundMatchingEditionPatternInstance(EditionPatternInstance matchingEditionPatternInstance) {
 		System.out.println("FOUND matching : " + matchingEditionPatternInstance);
+		episToBeRemoved.remove(matchingEditionPatternInstance);
 	}
 
 	public void newEditionPatternInstance(EditionPatternInstance newEditionPatternInstance) {

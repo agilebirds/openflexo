@@ -111,6 +111,10 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 	}
 
 	public <T> T getPatternActor(PatternRole<T> patternRole) {
+		if (patternRole == null) {
+			logger.warning("Unexpected null patternRole");
+			return null;
+		}
 		// logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" getPatternActor() actors="+actors);
 		ActorReference<T> actorReference = (ActorReference<T>) actors.get(patternRole);
 		if (actorReference != null) {
@@ -150,9 +154,8 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 				((FlexoProjectObject) object).registerEditionPatternReference(this);
 			}
 
-			ActorReference<T> actorReference = patternRole.makeActorReference(object, this);
-
 			if (object != null) {
+				ActorReference<T> actorReference = patternRole.makeActorReference(object, this);
 				actors.put(patternRole, actorReference);
 			} else {
 				actors.remove(patternRole);
@@ -375,28 +378,36 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 			// Generate on-the-fly default deletion scheme
 			delete(getEditionPattern().generateDefaultDeletionScheme());
 		}
-
 	}
 
 	/**
 	 * Delete this EditionPattern instance using supplied DeletionScheme
 	 */
 	public void delete(DeletionScheme deletionScheme) {
-		logger.warning("NEW EditionPatternInstance deletion !");
+		if (isDeleted()) {
+			return;
+		}
+		VirtualModelInstance container = getVirtualModelInstance();
+		if (container != null) {
+			container.removeFromEditionPatternInstancesList(this);
+		}
+		// logger.warning("EditionPatternInstance deletion !");
 		deleted = true;
-		Object primaryPatternActor = getPatternActor(getEditionPattern().getPrimaryRepresentationRole());
-		if (primaryPatternActor instanceof FlexoModelObject) {
-			DeletionSchemeAction deletionSchemeAction = DeletionSchemeAction.actionType.makeNewAction(
-					(FlexoModelObject) primaryPatternActor, null, null);
-			deletionSchemeAction.setDeletionScheme(deletionScheme);
-			deletionSchemeAction.setEditionPatternInstanceToDelete(this);
-			deletionSchemeAction.doAction();
-			if (deletionSchemeAction.hasActionExecutionSucceeded()) {
-				logger.info("Successfully performed delete EditionPattern instance " + getEditionPattern());
+		if (getEditionPattern().getPrimaryRepresentationRole() != null) {
+			Object primaryPatternActor = getPatternActor(getEditionPattern().getPrimaryRepresentationRole());
+			if (primaryPatternActor instanceof FlexoModelObject) {
+				DeletionSchemeAction deletionSchemeAction = DeletionSchemeAction.actionType.makeNewAction(
+						(FlexoModelObject) primaryPatternActor, null, null);
+				deletionSchemeAction.setDeletionScheme(deletionScheme);
+				deletionSchemeAction.setEditionPatternInstanceToDelete(this);
+				deletionSchemeAction.doAction();
+				if (deletionSchemeAction.hasActionExecutionSucceeded()) {
+					logger.info("Successfully performed delete EditionPattern instance " + getEditionPattern());
+				}
+			} else {
+				logger.warning("Actor for role " + getEditionPattern().getPrimaryRepresentationRole() + " is not a FlexoModelObject: is "
+						+ primaryPatternActor);
 			}
-		} else {
-			logger.warning("Actor for role " + getEditionPattern().getPrimaryRepresentationRole() + " is not a FlexoModelObject: is "
-					+ primaryPatternActor);
 		}
 	}
 

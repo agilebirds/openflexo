@@ -37,6 +37,7 @@ import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ViewResource;
 import org.openflexo.foundation.rm.ViewResourceImpl;
+import org.openflexo.foundation.rm.VirtualModelInstanceResource;
 
 /**
  * The {@link ViewLibrary} contains all {@link FlexoViewResource} referenced in a {@link FlexoProject}
@@ -122,6 +123,35 @@ public class ViewLibrary extends FileResourceRepository<ViewResource> {
 		return getRootFolder().getResourceWithName(value);
 	}
 
+	public ViewResource getView(String viewURI) {
+		if (viewURI == null) {
+			return null;
+		}
+		return getResource(viewURI);
+	}
+
+	public VirtualModelInstanceResource getVirtualModelInstance(String virtualModelInstanceURI) {
+		if (virtualModelInstanceURI == null) {
+			return null;
+		}
+		// System.out.println("lookup mvi " + virtualModelInstanceURI);
+		String viewURI = virtualModelInstanceURI.substring(0, virtualModelInstanceURI.lastIndexOf("/"));
+		// System.out.println("lookup view " + viewURI);
+		ViewResource vr = getView(viewURI);
+		if (vr != null) {
+			for (VirtualModelInstanceResource vmir : vr.getContents(VirtualModelInstanceResource.class)) {
+				if (vmir.getURI().equals(virtualModelInstanceURI)) {
+					// System.out.println("Found " + vmir);
+					return vmir;
+				}
+			}
+		} else {
+			logger.warning("Cannot find View " + viewURI);
+		}
+		logger.warning("Cannot find VirtualModelInstance " + virtualModelInstanceURI);
+		return null;
+	}
+
 	/**
 	 * 
 	 * @param directory
@@ -138,10 +168,12 @@ public class ViewLibrary extends FileResourceRepository<ViewResource> {
 				if (f.isDirectory() && f.getName().endsWith(".view")) {
 					ViewResource vRes;
 					vRes = ViewResourceImpl.retrieveViewResource(f, folder, this);
-					logger.info("Found and register view " + vRes.getURI() + " file=" + vRes.getFile().getAbsolutePath() + " folder="
-							+ folder + " path=" + folder.getFile());
-					registerResource(vRes, folder);
-					returned = true;
+					if (vRes != null) {
+						logger.info("Found and register view " + vRes.getURI() + " file=" + vRes.getFile().getAbsolutePath() + " folder="
+								+ folder + " path=" + folder.getFile());
+						registerResource(vRes, folder);
+						returned = true;
+					}
 				}
 				if (f.isDirectory() && !f.getName().equals("CVS")) {
 					RepositoryFolder<ViewResource> newFolder = new RepositoryFolder<ViewResource>(f.getName(), folder, this);

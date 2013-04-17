@@ -122,13 +122,24 @@ public class SelectEditionPatternInstance<VMI extends VirtualModelInstance<VMI, 
 
 	@Override
 	public List<EditionPatternInstance> performAction(EditionSchemeAction action) {
+		VirtualModelInstance<VMI, VM> vmi = null;
 		if (getModelSlot() instanceof VirtualModelModelSlot) {
 			ModelSlotInstance modelSlotInstance = action.getVirtualModelInstance().getModelSlotInstance(getModelSlot());
-			System.out.println("modelSlotInstance=" + modelSlotInstance + " model=" + modelSlotInstance.getModel());
-			// System.out.println("hop");
+			if (modelSlotInstance != null) {
+				System.out.println("modelSlotInstance=" + modelSlotInstance + " model=" + modelSlotInstance.getModel());
+				vmi = (VirtualModelInstance<VMI, VM>) modelSlotInstance.getModel();
+			} else {
+				logger.warning("Cannot find ModelSlotInstance for " + getModelSlot());
+			}
+		} else {
+			vmi = action.getVirtualModelInstance();
 		}
-		VirtualModelInstance<VMI, VM> vmi = action.getVirtualModelInstance();
-		System.out.println("Returning " + vmi.getEPInstances(getEditionPatternType()));
-		return filterWithConditions(vmi.getEPInstances(getEditionPatternType()), action);
+		if (vmi != null) {
+			System.out.println("Returning " + vmi.getEPInstances(getEditionPatternType()));
+			return filterWithConditions(vmi.getEPInstances(getEditionPatternType()), action);
+		} else {
+			logger.warning("Cannot find virtual model instance on which to apply SelectEditionPatternInstance");
+			return null;
+		}
 	}
 }
