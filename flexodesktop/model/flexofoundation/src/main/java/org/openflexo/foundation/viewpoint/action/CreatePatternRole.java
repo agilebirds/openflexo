@@ -187,4 +187,12 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 		}
 		return null;
 	}
+
+	public List<ModelSlot> getAvailableModelSlots() {
+		if (getFocusedObject() instanceof VirtualModel) {
+			return ((VirtualModel) getFocusedObject()).getModelSlots();
+		} else {
+			return getFocusedObject().getVirtualModel().getModelSlots();
+		}
+	}
 }

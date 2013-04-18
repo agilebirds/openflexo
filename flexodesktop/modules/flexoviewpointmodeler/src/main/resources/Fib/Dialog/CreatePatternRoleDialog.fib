@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="gridbag" darkLevel="0" data="" dataClassName="org.openflexo.foundation.viewpoint.action.CreatePatternRole" controllerClassName="org.openflexo.view.controller.FlexoFIBController" visible="" width="415" height="310">
-  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="0" data="" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" name="title">
-    <Label label="creates_pattern_role" align="center" index="0" data="" constraints="flow(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" font="Lucida Grande,1,15" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
+<Panel layout="gridbag" darkLevel="0" dataClassName="org.openflexo.foundation.viewpoint.action.CreatePatternRole" controllerClassName="org.openflexo.view.controller.FlexoFIBController" width="415" height="310">
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="0" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="title">
+    <Label label="creates_pattern_role" align="center" index="0" constraints="flow(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,1,15" localize="true" />
   </Panel>
-  <Label label="name" align="right" index="1" data="" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
-  <TextField index="2" data="data.patternRoleName" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" name="ModelSlotName" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" columns="20" text="TextField" editable="">
+  <Label label="name" align="right" index="1" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <TextField index="2" data="data.patternRoleName" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="ModelSlotName" localize="true" columns="20" text="TextField">
     <Dependancy componentName="PatternRoleTypeDD" />
   </TextField>
-  <Label label="model_slot" align="right" index="3" data="" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
-  <DropDown index="4" data="data.modelSlot" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" name="ModelSlotDD" format="object.name" icon="controller.getTechnologyAdapterController(object.technologyAdapter).technologyIcon" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" list="data.focusedObject.virtualModel.modelSlots" array="" showIcon="true" iteratorClassName="org.openflexo.foundation.technologyadapter.ModelSlot" autoSelectFirstRow="true">
+  <Label label="model_slot" align="right" index="3" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <DropDown index="4" data="data.modelSlot" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="ModelSlotDD" format="object.name" icon="controller.getTechnologyAdapterController(object.technologyAdapter).technologyIcon" localize="true" list="data.availableModelSlots" showIcon="true" iteratorClassName="org.openflexo.foundation.technologyadapter.ModelSlot" autoSelectFirstRow="true">
     <Dependancy />
   </DropDown>
-  <Label label="pattern_role_type" align="right" index="5" data="" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
-  <DropDown index="6" data="data.patternRoleClass" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" name="PatternRoleTypeDD" format="object.simpleName" icon="controller.getTechnologyAdapterController(data.modelSlot.technologyAdapter).getIconForPatternRole(object)" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" list="data.availablePatternRoleTypes" array="" showIcon="true" iteratorClassName="java.lang.Class" autoSelectFirstRow="true">
+  <Label label="pattern_role_type" align="right" index="5" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <DropDown index="6" data="data.patternRoleClass" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="PatternRoleTypeDD" format="object.simpleName" icon="controller.getTechnologyAdapterController(data.modelSlot.technologyAdapter).getIconForPatternRole(object)" localize="true" list="data.availablePatternRoleTypes" showIcon="true" iteratorClassName="java.lang.Class" autoSelectFirstRow="true">
     <Dependancy componentName="ModelSlotDD" />
   </DropDown>
-  <Label label="type" index="6" data="" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.isIndividual" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="">
+  <Label label="type" index="6" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.isIndividual" localize="true">
     <Dependancy componentName="ModelSlotDD" />
     <Dependancy componentName="PatternRoleTypeDD" />
   </Label>
-  <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="11" data="data.individualType" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.isIndividual" opaque="false">
+  <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" localize="true" manageDynamicModel="true" index="11" data="data.individualType" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.isIndividual" opaque="false">
     <Assignment variable="component.context" value="data.modelSlot.metaModelResource.metaModelData" />
-    <Assignment variable="component.rootClass" value="" />
-    <Assignment variable="component.hierarchicalMode" value="" />
-    <Assignment variable="component.strictMode" value="" />
-    <Assignment variable="component.informationSpace" value="" />
-    <Assignment variable="component.contextOntologyURI" value="" />
-    <Assignment variable="component.rootClassURI" value="" />
-    <Assignment variable="component.project" value="" />
-    <Assignment variable="component.selectableCondition" value="" />
+    <Assignment variable="component.rootClass" />
+    <Assignment variable="component.hierarchicalMode" />
+    <Assignment variable="component.strictMode" />
+    <Assignment variable="component.informationSpace" />
+    <Assignment variable="component.contextOntologyURI" />
+    <Assignment variable="component.rootClassURI" />
+    <Assignment variable="component.project" />
+    <Assignment variable="component.selectableCondition" />
     <Dependancy componentName="ModelSlotDD" />
     <Dependancy componentName="PatternRoleTypeDD" />
   </Custom>
-  <Label label="edition_pattern" index="11" data="" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.isEditionPatternInstance" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="">
+  <Label label="edition_pattern" index="11" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.isEditionPatternInstance" localize="true">
     <Dependancy componentName="ModelSlotDD" />
     <Dependancy componentName="PatternRoleTypeDD" />
   </Label>
-  <Custom componentClassName="org.openflexo.components.widget.FIBEditionPatternSelector" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="11" data="data.editionPatternInstanceType" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.isEditionPatternInstance">
+  <Custom componentClassName="org.openflexo.components.widget.FIBEditionPatternSelector" localize="true" manageDynamicModel="true" index="11" data="data.editionPatternInstanceType" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.isEditionPatternInstance">
     <Assignment variable="component.virtualModel" value="data.modelSlotVirtualModel" />
     <Dependancy componentName="PatternRoleTypeDD" />
     <Dependancy componentName="ModelSlotDD" />
   </Custom>
-  <Label label="description" align="right" index="11" data="" constraints="gridbag(anchor=north_east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
-  <TextArea columns="6" rows="2" text="TextArea" index="12" data="data.description" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" editable="" />
-  <Panel layout="border" borderTitle="Panel" titleFont="Lucida Grande,2,11" darkLevel="0" index="13" data="" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=9;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" font="Lucida Grande,2,11" />
-  <Label label="label" index="14" data="data.validityMessage" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=10;insetsBottom=0;insetsLeft=4;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" font="Lucida Grande,2,11" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="">
+  <Label label="description" align="right" index="11" constraints="gridbag(anchor=north_east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <TextArea columns="6" rows="2" text="TextArea" index="12" data="data.description" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" localize="true" />
+  <Panel layout="border" borderTitle="Panel" titleFont="Lucida Grande,2,11" darkLevel="0" index="13" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=9;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" font="Lucida Grande,2,11" />
+  <Label label="label" index="14" data="data.validityMessage" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=10;insetsBottom=0;insetsLeft=4;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,2,11" localize="true">
     <Dependancy componentName="ModelSlotName" />
     <Dependancy componentName="ModelSlotDD" />
     <Dependancy componentName="MetaModelSelector" />
     <LocalizedDictionary />
   </Label>
-  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="15" data="" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=11;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="">
-    <Button action="controller.validateAndDispose()" buttonIcon="" buttonType="Trigger" label="validate" format="" icon="" tooltip="" localize="true" enable="data.isValid" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="0" data="" constraints="flow(index=0)" visible="" opaque="false">
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="15" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=11;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)">
+    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="validate" localize="true" enable="data.isValid" index="0" constraints="flow(index=0)" opaque="false">
       <Dependancy componentName="ModelSlotName" />
       <Dependancy componentName="ModelSlotDD" />
       <Dependancy componentName="PatternRoleTypeDD" />
     </Button>
-    <Button action="controller.cancelAndDispose()" buttonIcon="" buttonType="Trigger" label="cancel" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="1" data="" constraints="flow(index=1)" visible="" opaque="false" />
+    <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" localize="true" index="1" constraints="flow(index=1)" opaque="false" />
   </Panel>
   <LocalizedDictionary>
     <Localized key="description" lang="English">Description</Localized>
