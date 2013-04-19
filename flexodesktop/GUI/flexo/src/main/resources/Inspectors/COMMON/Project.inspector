@@ -44,12 +44,12 @@
     <Tab title="ImportedProjects" layout="twocols" titleFont="SansSerif,0,12" darkLevel="0" name="ImportedProjectsTab">
       <Table iteratorClassName="org.openflexo.foundation.rm.FlexoProjectReference" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="ImportedProject" data="data.projectData.importedProjects" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
         <IconColumn data="controller.flexoController.iconForObject(iterator)" title="" columnWidth="20" resizable="false" displayTitle="true" name="icon" />
-        <LabelColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" name="label" />
+        <LabelColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" tooltip="iterator.name" name="label" />
         <LabelColumn data="iterator.file.absolutePath" title="location" columnWidth="100" resizable="true" displayTitle="true" tooltip="iterator.file.absolutePath" name="label" />
         <LabelColumn data="iterator.version" title="version" columnWidth="50" resizable="true" displayTitle="true" name="label" />
         <LabelColumn data="iterator.revision" title="revision" columnWidth="40" resizable="true" displayTitle="true" name="label" />
-        <LabelColumn data="iterator.uRI" title="URI" columnWidth="100" resizable="true" displayTitle="true" name="label" />
-        <CheckBoxColumn data="(iterator.referredProject != null)" title="checkbox" columnWidth="100" resizable="true" displayTitle="true" name="checkbox" />
+        <LabelColumn data="iterator.uRI" title="URI" columnWidth="100" resizable="true" displayTitle="true" tooltip="iterator.uRI" name="label" />
+        <CheckBoxColumn data="(iterator.referredProject != null)" title="loaded" columnWidth="100" resizable="true" displayTitle="true" name="loaded" />
         <AddAction method="controller.importProject(data)" name="import_project" />
         <RemoveAction method="controller.unimportProject(data,ImportedProject.selection)" isAvailable="(ImportedProject.selection.size &gt; 0)" name="remove_imported_project" />
       </Table>
