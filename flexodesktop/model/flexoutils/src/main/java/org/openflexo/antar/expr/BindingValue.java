@@ -537,7 +537,7 @@ public class BindingValue extends Expression {
 		}
 
 		if (dataBinding.getOwner().getBindingModel() == null) {
-			logger.warning("DataBinding owner has no binding model, binding=" + dataBinding + " owner=" + dataBinding.getOwner());
+			logger.warning("DataBinding owner has no binding model, owner=" + dataBinding.getOwner());
 			invalidBindingReason = "DataBinding owner has no binding model, binding=" + dataBinding + " owner=" + dataBinding.getOwner();
 			return false;
 		}
