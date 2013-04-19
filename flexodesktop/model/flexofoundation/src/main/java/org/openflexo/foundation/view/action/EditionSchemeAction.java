@@ -266,7 +266,8 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 		if (assignedObject != null && action instanceof AssignableAction) {
 			AssignableAction assignableAction = (AssignableAction) action;
 			if (assignableAction.getIsVariableDeclaration()) {
-				System.out.println("Setting variable " + assignableAction.getVariableName() + " with " + assignedObject);
+				System.out.println("Setting variable " + assignableAction.getVariableName() + " with value " + assignedObject + " of "
+						+ (assignedObject != null ? assignedObject.getClass() : "null"));
 				declareVariable(assignableAction.getVariableName(), assignedObject);
 			}
 			if (assignableAction.getAssignation().isSet() && assignableAction.getAssignation().isValid()) {

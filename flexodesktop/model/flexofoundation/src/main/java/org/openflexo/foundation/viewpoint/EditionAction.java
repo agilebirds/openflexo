@@ -195,7 +195,8 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 				if (assignedObject != null && editionAction instanceof AssignableAction) {
 					AssignableAction assignableAction = (AssignableAction) editionAction;
 					if (assignableAction.getIsVariableDeclaration()) {
-						System.out.println("Setting variable " + assignableAction.getVariableName() + " with " + assignedObject);
+						System.out.println("Setting variable " + assignableAction.getVariableName() + " with value " + assignedObject
+								+ " of " + (assignedObject != null ? assignedObject.getClass() : "null"));
 						contextAction.declareVariable(assignableAction.getVariableName(), assignedObject);
 					}
 					if (assignableAction.getAssignation().isSet() && assignableAction.getAssignation().isValid()) {

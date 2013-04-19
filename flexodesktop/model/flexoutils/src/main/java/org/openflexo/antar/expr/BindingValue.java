@@ -563,6 +563,12 @@ public class BindingValue extends Expression {
 			return false;
 		}
 
+		if (dataBinding.getOwner().getBindingFactory() == null) {
+			logger.warning("DataBinding owner has no binding factory, owner=" + dataBinding.getOwner());
+			invalidBindingReason = "DataBinding owner has no binding factory, binding=" + dataBinding + " owner=" + dataBinding.getOwner();
+			return false;
+		}
+
 		needsAnalysing = false;
 		analyzedWithBindingModel = dataBinding.getOwner().getBindingModel();
 		setDataBinding(dataBinding);

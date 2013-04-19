@@ -27,12 +27,11 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 
-public class AssignationAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends AssignableAction<M, MM, FlexoObject> {
+public class AssignationAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends AssignableAction<M, MM, Object> {
 
 	private static final Logger logger = Logger.getLogger(AssignationAction.class.getPackage().getName());
 
@@ -92,8 +91,8 @@ public class AssignationAction<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 	}
 
 	@Override
-	public FlexoObject performAction(EditionSchemeAction action) {
-		return (FlexoObject) getDeclaredObject(action);
+	public Object performAction(EditionSchemeAction action) {
+		return getDeclaredObject(action);
 	}
 
 	@Override
