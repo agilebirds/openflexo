@@ -151,4 +151,13 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 		}
 		return null;
 	}
+
+	/**
+	 * Return flag indicating if this model slot is the reflexive model slot for virtual model container
+	 * 
+	 * @return
+	 */
+	public boolean isReflexiveModelSlot() {
+		return getName().equals(VirtualModel.REFLEXIVE_MODEL_SLOT_NAME) && getVirtualModelResource() == getVirtualModel().getResource();
+	}
 }

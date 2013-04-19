@@ -84,8 +84,13 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 		BuiltInAction, ModelSlotSpecificAction, RequestAction, ControlAction
 	}
 
+	public static enum LayoutChoice {
+		InsertAfter, InsertBefore, InsertInside;
+	}
+
 	public String description;
 	public CreateEditionActionChoice actionChoice = CreateEditionActionChoice.BuiltInAction;
+	private LayoutChoice layoutChoice;
 	public ModelSlot<?, ?> modelSlot;
 	public Class<? extends EditionAction> builtInActionClass;
 	public Class<? extends EditionAction> controlActionClass;
@@ -145,12 +150,16 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 		newEditionAction = makeEditionAction();
 
 		if (newEditionAction != null) {
-			if (getFocusedObject() instanceof ActionContainer) {
+			if ((getFocusedObject() instanceof ActionContainer) && (getLayoutChoice() == LayoutChoice.InsertInside)) {
 				((ActionContainer) getFocusedObject()).addToActions(newEditionAction);
 			} else if (getFocusedObject() instanceof EditionAction) {
 				ActionContainer container = ((EditionAction) getFocusedObject()).getActionContainer();
 				int index = container.getIndex((EditionAction) getFocusedObject());
-				container.insertActionAtIndex(newEditionAction, index + 1);
+				if (getLayoutChoice() == LayoutChoice.InsertAfter) {
+					container.insertActionAtIndex(newEditionAction, index + 1);
+				} else {
+					container.insertActionAtIndex(newEditionAction, index);
+				}
 			}
 		}
 
@@ -279,6 +288,20 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 		logger.warning("Cannot build EditionAction");
 		return null;
 
+	}
+
+	public LayoutChoice getLayoutChoice() {
+		if (layoutChoice == null) {
+			if (getFocusedObject() instanceof ActionContainer) {
+				return LayoutChoice.InsertInside;
+			}
+			return LayoutChoice.InsertAfter;
+		}
+		return layoutChoice;
+	}
+
+	public void setLayoutChoice(LayoutChoice layoutChoice) {
+		this.layoutChoice = layoutChoice;
 	}
 
 }

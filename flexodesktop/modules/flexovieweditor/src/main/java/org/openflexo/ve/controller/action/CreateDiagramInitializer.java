@@ -93,7 +93,7 @@ public class CreateDiagramInitializer extends ActionInitializer<CreateDiagram, V
 							return false;
 						} else if (result == Status.VALIDATED) {
 							return true;
-						} else if (result == Status.NEXT && step + 1 <= action.getStepsNumber()) {
+						} else if (result == Status.NEXT && step + 1 < action.getStepsNumber()) {
 							step = step + 1;
 						} else if (result == Status.BACK && step - 1 >= 0) {
 							step = step - 1;

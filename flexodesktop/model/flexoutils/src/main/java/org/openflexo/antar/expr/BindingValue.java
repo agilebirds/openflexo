@@ -27,6 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
@@ -397,6 +398,7 @@ public class BindingValue extends Expression {
 	}
 
 	private boolean needsToBeReanalized = false;
+	private BindingModel analyzedWithBindingModel = null;
 
 	public void markedAsToBeReanalized() {
 		needsToBeReanalized = true;
@@ -411,6 +413,25 @@ public class BindingValue extends Expression {
 		if (dataBinding == null) {
 			invalidBindingReason = "binding value has no referenced data binding";
 			return false;
+		}
+
+		if (dataBinding.getOwner() == null) {
+			invalidBindingReason = "binding value referenced data binding has no owner";
+			return false;
+		}
+
+		if (dataBinding.getOwner().getBindingModel() == null) {
+			invalidBindingReason = "binding value referenced data binding owner has no binding model";
+			return false;
+		}
+
+		if (dataBinding.getOwner().getBindingFactory() == null) {
+			invalidBindingReason = "binding value referenced data binding owner has no binding factory";
+			return false;
+		}
+
+		if (!dataBinding.getOwner().getBindingModel().equals(analyzedWithBindingModel)) {
+			needsAnalysing = true;
 		}
 
 		if (needsAnalysing) {
@@ -531,8 +552,8 @@ public class BindingValue extends Expression {
 	public boolean buildBindingPathFromParsedBindingPath(DataBinding<?> dataBinding) {
 
 		if (dataBinding.getOwner() == null) {
-			logger.warning("DataBinding " + dataBinding + " has no owner");
-			invalidBindingReason = "DataBinding " + dataBinding + " has no owner";
+			logger.warning("DataBinding has no owner");
+			invalidBindingReason = "DataBinding has no owner";
 			return false;
 		}
 
@@ -543,6 +564,7 @@ public class BindingValue extends Expression {
 		}
 
 		needsAnalysing = false;
+		analyzedWithBindingModel = dataBinding.getOwner().getBindingModel();
 		setDataBinding(dataBinding);
 		bindingVariable = null;
 		bindingPath = new ArrayList<BindingPathElement>();

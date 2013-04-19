@@ -127,7 +127,7 @@ public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 				}
 			}
 		}
-		if (model == null) {
+		if (model == null && StringUtils.isNotEmpty(modelURI)) {
 			logger.warning("cannot find model " + modelURI);
 		}
 		return model;

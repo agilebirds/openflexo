@@ -99,7 +99,7 @@ public abstract class FetchRequest<M extends FlexoModel<M, MM>, MM extends Flexo
 		if (getConditions().size() == 0) {
 			return fetchResult;
 		} else {
-			System.out.println("Filtering with " + getConditions() + " fetchResult=" + fetchResult);
+			// System.out.println("Filtering with " + getConditions() + " fetchResult=" + fetchResult);
 			List<T> returned = new ArrayList<T>();
 			for (T proposedFetchResult : fetchResult) {
 				boolean takeIt = true;
@@ -111,9 +111,9 @@ public abstract class FetchRequest<M extends FlexoModel<M, MM>, MM extends Flexo
 				}
 				if (takeIt) {
 					returned.add(proposedFetchResult);
-					System.out.println("I take " + proposedFetchResult);
+					// System.out.println("I take " + proposedFetchResult);
 				} else {
-					System.out.println("I dismiss " + proposedFetchResult);
+					// System.out.println("I dismiss " + proposedFetchResult);
 				}
 			}
 			return returned;

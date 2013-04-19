@@ -464,6 +464,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 				// We should investigate further, but since no real consequences are raised here, we just ignore exception
 				e.printStackTrace();
 				logger.warning("Unexpected ArrayIndexOutOfBoundsException when refreshing browser, no severity but please investigate");
+				nodeStructureChanged(this);
 			} catch (NullPointerException e) {
 				// Might happen when a structural modification will call parent's nodeChanged()
 				// An NullPointerException might be raised here

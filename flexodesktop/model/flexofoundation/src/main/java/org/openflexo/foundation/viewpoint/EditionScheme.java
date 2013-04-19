@@ -627,10 +627,26 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	public void updateBindingModels() {
+		/*if (getName().equals("synchronization")) {
+			System.out.println("******* updateBindingModels() for " + this + " " + getName() + " and ep=" + getEditionPattern());
+		}*/
 		logger.fine("updateBindingModels()");
 		_bindingModel = null;
 		createBindingModel();
 		rebuildActionsBindingModel();
+		recursivelyUpdateInferedBindingModels(this);
+	}
+
+	private void recursivelyUpdateInferedBindingModels(ActionContainer container) {
+		/*if (getName().equals("synchronization")) {
+			System.out.println("    > recursivelyUpdateInferedBindingModels for " + container + " bindingModel=" + getBindingModel());
+		}*/
+		for (EditionAction action : container.getActions()) {
+			action.rebuildInferedBindingModel();
+			if (action instanceof ActionContainer) {
+				recursivelyUpdateInferedBindingModels((ActionContainer) action);
+			}
+		}
 	}
 
 	protected void rebuildActionsBindingModel() {

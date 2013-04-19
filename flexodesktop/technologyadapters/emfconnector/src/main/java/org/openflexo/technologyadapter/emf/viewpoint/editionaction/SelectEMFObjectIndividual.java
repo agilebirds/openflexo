@@ -88,7 +88,7 @@ public class SelectEMFObjectIndividual extends SelectIndividual<EMFModel, EMFMet
 					+ ".");
 		}
 
-		System.out.println("selectedEMFIndividuals=" + selectedEMFIndividuals);
+		// System.out.println("selectedEMFIndividuals=" + selectedEMFIndividuals);
 
 		for (EObject eObject : selectedEMFIndividuals) {
 			EMFObjectIndividual emfObjectIndividual = emfModel.getConverter().getIndividuals().get(eObject);
@@ -102,7 +102,7 @@ public class SelectEMFObjectIndividual extends SelectIndividual<EMFModel, EMFMet
 
 		List<EMFObjectIndividual> returned = filterWithConditions(selectedIndividuals, action);
 
-		System.out.println("after filtering, selectedEMFIndividuals=" + returned);
+		System.out.println("SelectEMFObjectIndividual, without filtering =" + selectedIndividuals + " after filtering=" + returned);
 
 		return returned;
 	}

@@ -44,6 +44,7 @@ import org.openflexo.foundation.rm.VirtualModelResourceImpl;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
@@ -132,10 +133,48 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 
 	@Override
 	public void finalizeDeserialization(Object builder) {
+		finalizeEditionPatternDeserialization();
 		for (EditionPattern ep : getEditionPatterns()) {
 			ep.finalizeEditionPatternDeserialization();
 		}
 		super.finalizeDeserialization(builder);
+		// Ensure access to reflexive model slot
+		getReflexiveModelSlot();
+	}
+
+	private ModelSlot<? extends VirtualModelInstance<?, VM>, VM> reflexiveModelSlot;
+
+	public static final String REFLEXIVE_MODEL_SLOT_NAME = "this";
+
+	/**
+	 * Return reflexive model slot<br>
+	 * The reflexive model slot is an abstraction which allow to consider the virtual model as a model which can be accessed from itself
+	 * 
+	 * @return
+	 */
+	public <VMI extends VirtualModelInstance<VMI, VM>> ModelSlot<VMI, VM> getReflexiveModelSlot() {
+		if (reflexiveModelSlot == null) {
+			reflexiveModelSlot = (ModelSlot<VMI, VM>) getModelSlot(REFLEXIVE_MODEL_SLOT_NAME);
+			if (reflexiveModelSlot == null) {
+				reflexiveModelSlot = makeReflexiveModelSlot();
+			}
+		}
+		return (ModelSlot<VMI, VM>) reflexiveModelSlot;
+	}
+
+	protected <VMI extends VirtualModelInstance<VMI, VM>> VirtualModelModelSlot<VMI, VM> makeReflexiveModelSlot() {
+		if (getViewPoint().getViewPointLibrary().getServiceManager() != null
+				&& getViewPoint().getViewPointLibrary().getServiceManager().getService(TechnologyAdapterService.class) != null) {
+			VirtualModelTechnologyAdapter<VMI, VM> builtInTA = getViewPoint().getViewPointLibrary().getServiceManager()
+					.getService(TechnologyAdapterService.class).getTechnologyAdapter(VirtualModelTechnologyAdapter.class);
+			VirtualModelModelSlot<VMI, VM> returned = builtInTA.createNewModelSlot(this);
+			returned.setVirtualModelResource(getResource());
+			returned.setName(REFLEXIVE_MODEL_SLOT_NAME);
+			addToModelSlots(returned);
+			return returned;
+		}
+		logger.warning("Could not instanciate reflexive model slot");
+		return null;
 	}
 
 	/**

@@ -46,10 +46,14 @@ public class VirtualModelModelSlotInstanceConfiguration<MS extends VirtualModelM
 	protected VirtualModelModelSlotInstanceConfiguration(MS ms, CreateVirtualModelInstance<?> action) {
 		super(ms, action);
 		options = new ArrayList<ModelSlotInstanceConfiguration.ModelSlotInstanceConfigurationOption>();
-		options.add(DefaultModelSlotInstanceConfigurationOption.SelectExistingVirtualModel);
-		options.add(DefaultModelSlotInstanceConfigurationOption.CreateNewVirtualModel);
-		if (!ms.getIsRequired()) {
-			options.add(DefaultModelSlotInstanceConfigurationOption.LeaveEmpty);
+		if (ms.isReflexiveModelSlot()) {
+			options.add(DefaultModelSlotInstanceConfigurationOption.Autoconfigure);
+		} else {
+			options.add(DefaultModelSlotInstanceConfigurationOption.SelectExistingVirtualModel);
+			options.add(DefaultModelSlotInstanceConfigurationOption.CreateNewVirtualModel);
+			if (!ms.getIsRequired()) {
+				options.add(DefaultModelSlotInstanceConfigurationOption.LeaveEmpty);
+			}
 		}
 	}
 
@@ -75,6 +79,9 @@ public class VirtualModelModelSlotInstanceConfiguration<MS extends VirtualModelM
 
 	@Override
 	public boolean isValidConfiguration() {
+		if (getModelSlot().isReflexiveModelSlot()) {
+			return true;
+		}
 		if (!super.isValidConfiguration()) {
 			return false;
 		}

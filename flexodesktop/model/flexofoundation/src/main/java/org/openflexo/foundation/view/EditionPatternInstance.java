@@ -520,8 +520,14 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		this.vmInstance = vmInstance;
 	}
 
+	protected boolean hasValidRenderer() {
+		return getEditionPattern() != null && getEditionPattern().getInspector() != null
+				&& getEditionPattern().getInspector().getRenderer() != null && getEditionPattern().getInspector().getRenderer().isSet()
+				&& getEditionPattern().getInspector().getRenderer().isValid();
+	}
+
 	public String getStringRepresentation() {
-		if (getEditionPattern().getInspector().getRenderer().isSet() && getEditionPattern().getInspector().getRenderer().isValid()) {
+		if (hasValidRenderer()) {
 			try {
 				// System.out.println("Evaluating " + getEditionPattern().getInspector().getRenderer() + " for " + this);
 				return getEditionPattern().getInspector().getRenderer().getBindingValue(new BindingEvaluationContext() {
@@ -558,7 +564,8 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + ":" + getEditionPattern().getName() + "_" + (getName() != null ? getName() : getFlexoID());
+		return getClass().getSimpleName() + ":" + getEditionPattern().getName() + "_" + (getName() != null ? getName() : getFlexoID())
+				+ (hasValidRenderer() ? " [" + getStringRepresentation() + "]" : "");
 	}
 
 }

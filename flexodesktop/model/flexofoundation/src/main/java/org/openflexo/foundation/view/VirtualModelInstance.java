@@ -52,6 +52,7 @@ import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.SynchronizationScheme;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.xmlcode.XMLMapping;
 
@@ -401,6 +402,12 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 			if (msInstance.getModelSlot() == modelSlot) {
 				return (ModelSlotInstance<M, MM>) msInstance;
 			}
+		}
+		if (modelSlot instanceof VirtualModelModelSlot && ((VirtualModelModelSlot) modelSlot).isReflexiveModelSlot()) {
+			ModelSlotInstance reflexiveModelSlotInstance = new ModelSlotInstance(getView(), modelSlot);
+			reflexiveModelSlotInstance.setModel(this);
+			addToModelSlotInstances(reflexiveModelSlotInstance);
+			return reflexiveModelSlotInstance;
 		}
 		logger.warning("Cannot find ModelSlotInstance for ModelSlot " + modelSlot);
 		if (getVirtualModel() != null && !getVirtualModel().getModelSlots().contains(modelSlot)) {

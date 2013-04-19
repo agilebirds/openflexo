@@ -42,9 +42,13 @@ public class DiagramModelSlotInstanceConfiguration extends VirtualModelModelSlot
 	protected DiagramModelSlotInstanceConfiguration(DiagramModelSlot ms, CreateDiagram action) {
 		super(ms, action);
 		options = new ArrayList<ModelSlotInstanceConfiguration.ModelSlotInstanceConfigurationOption>();
-		options.add(DefaultModelSlotInstanceConfigurationOption.Autoconfigure);
-		if (!ms.getIsRequired()) {
-			options.add(DefaultModelSlotInstanceConfigurationOption.LeaveEmpty);
+		if (ms.isReflexiveModelSlot()) {
+			options.add(DefaultModelSlotInstanceConfigurationOption.Autoconfigure);
+		} else {
+			options.add(DefaultModelSlotInstanceConfigurationOption.Autoconfigure);
+			if (!ms.getIsRequired()) {
+				options.add(DefaultModelSlotInstanceConfigurationOption.LeaveEmpty);
+			}
 		}
 	}
 
@@ -55,7 +59,8 @@ public class DiagramModelSlotInstanceConfiguration extends VirtualModelModelSlot
 
 	@Override
 	public boolean isValidConfiguration() {
-		return (getOption() == DefaultModelSlotInstanceConfigurationOption.Autoconfigure);
+		return true;
+		// return (getOption() == DefaultModelSlotInstanceConfigurationOption.Autoconfigure);
 	}
 
 	@Override

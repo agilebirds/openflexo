@@ -104,14 +104,30 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 	 */
 	public DiagramSpecification(ViewPoint viewPoint) {
 		this((VirtualModel.VirtualModelBuilder) null);
-		if (viewPoint.getViewPointLibrary().getServiceManager() != null
+		/*if (viewPoint.getViewPointLibrary().getServiceManager() != null
 				&& viewPoint.getViewPointLibrary().getServiceManager().getService(TechnologyAdapterService.class) != null) {
 			DiagramTechnologyAdapter diagramTA = viewPoint.getViewPointLibrary().getServiceManager()
 					.getService(TechnologyAdapterService.class).getTechnologyAdapter(DiagramTechnologyAdapter.class);
 			DiagramModelSlot diagramMS = diagramTA.createNewModelSlot(this);
 			diagramMS.setName("diagram");
 			addToModelSlots(diagramMS);
+		}*/
+	}
+
+	@Override
+	protected DiagramModelSlot makeReflexiveModelSlot() {
+		if (getViewPoint().getViewPointLibrary().getServiceManager() != null
+				&& getViewPoint().getViewPointLibrary().getServiceManager().getService(TechnologyAdapterService.class) != null) {
+			DiagramTechnologyAdapter diagramTA = getViewPoint().getViewPointLibrary().getServiceManager()
+					.getService(TechnologyAdapterService.class).getTechnologyAdapter(DiagramTechnologyAdapter.class);
+			DiagramModelSlot returned = diagramTA.createNewModelSlot(this);
+			returned.setVirtualModelResource(getResource());
+			returned.setName(REFLEXIVE_MODEL_SLOT_NAME);
+			addToModelSlots(returned);
+			return returned;
 		}
+		logger.warning("Could not instanciate reflexive model slot");
+		return null;
 	}
 
 	/**
@@ -302,6 +318,7 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 			convertTo_1_0(((VirtualModel.VirtualModelBuilder) builder).getViewPointLibrary());
 		}
 		super.finalizeDeserialization(builder);
+		updateBindingModel();
 	}
 
 	@Deprecated

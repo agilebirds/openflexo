@@ -31,6 +31,7 @@ import org.openflexo.foundation.action.InvalidParametersException;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.viewpoint.CreationScheme;
@@ -69,6 +70,7 @@ public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeActi
 	static {
 		FlexoObject.addActionForClass(actionType, DiagramElement.class);
 		FlexoObject.addActionForClass(actionType, VirtualModelInstance.class);
+		FlexoObject.addActionForClass(actionType, View.class);
 	}
 
 	private VirtualModelInstance vmInstance;
@@ -91,10 +93,30 @@ public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeActi
 
 		// getEditionPattern().getViewPoint().getViewpointOntology().loadWhenUnloaded();
 
-		editionPatternInstance = getVirtualModelInstance().makeNewEditionPatternInstance(getEditionPattern());
+		// In case of this action is embedded in a CreateVirtualModelInstance action, the editionPatternInstance (which will be here a
+		// VirtualModelInstance) will be already initialized and should subsequently not been recreated)
+		if (editionPatternInstance == null) {
+			if (getVirtualModelInstance() != null) {
+				editionPatternInstance = getVirtualModelInstance().makeNewEditionPatternInstance(getEditionPattern());
+			} else {
+				logger.warning("Could not create new EditionPatternInstance because container VirtualModelInstance is null");
+				throw new InvalidParametersException("VirtualModelInstance");
+			}
+		}
 
 		applyEditionActions();
 
+	}
+
+	/**
+	 * Used when creation of EditionPatternInstance initialization is beeing delegated to an other component.<br>
+	 * This happens for example in the case of VirtualModelInstance creation, where the creation of EditionPatternInstance is performed in
+	 * the {@link CreateVirtualModelInstance} action
+	 * 
+	 * @param editionPatternInstance
+	 */
+	public void initWithEditionPatternInstance(EditionPatternInstance editionPatternInstance) {
+		this.editionPatternInstance = editionPatternInstance;
 	}
 
 	public boolean retrieveMissingDefaultParameters() {

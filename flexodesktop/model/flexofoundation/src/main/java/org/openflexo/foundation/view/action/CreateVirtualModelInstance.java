@@ -153,6 +153,11 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 			}
 		}
 
+		if (creationSchemeAction != null) {
+			creationSchemeAction.initWithEditionPatternInstance(newVirtualModelInstance);
+			creationSchemeAction.doAction();
+		}
+
 		System.out.println("Now, we try to synchronize the new virtual model instance");
 
 		if (newVirtualModelInstance.isSynchronizable()) {
@@ -312,7 +317,7 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 	public void setCreationScheme(CreationScheme creationScheme) {
 		this.creationScheme = creationScheme;
 		if (creationScheme != null) {
-			creationSchemeAction = CreationSchemeAction.actionType.makeNewAction(getFocusedObject(), null, getEditor());
+			creationSchemeAction = CreationSchemeAction.actionType.makeNewEmbeddedAction(getFocusedObject(), null, this);
 			creationSchemeAction.setCreationScheme(creationScheme);
 			creationSchemeAction.addObserver(this);
 		} else {

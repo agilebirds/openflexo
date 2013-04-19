@@ -341,7 +341,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 				return returned;
 			}
 		}
-		logger.warning("Not found EditionPattern:" + editionPatternId);
+		// logger.warning("Not found EditionPattern:" + editionPatternId);
 		return null;
 	}
 
