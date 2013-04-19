@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
+import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
 import org.openflexo.fge.connectors.CurveConnector;
@@ -79,8 +80,8 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 
 		setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.6f));
 
-		setMiddleSymbol(MiddleSymbolType.FILLED_ARROW);
-
+		setMiddleSymbol(MiddleSymbolType.NONE);
+		setEndSymbol(EndSymbolType.FILLED_ARROW);
 		addToMouseClickControls(new ResetLayout(), true);
 
 		addToMouseClickControls(new SwimmingLaneEditorController.ShowContextualMenuControl(false));
