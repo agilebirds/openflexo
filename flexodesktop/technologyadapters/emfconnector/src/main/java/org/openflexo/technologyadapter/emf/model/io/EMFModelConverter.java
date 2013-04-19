@@ -28,8 +28,10 @@
  */
 package org.openflexo.technologyadapter.emf.model.io;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
@@ -38,6 +40,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EObjectEList;
 import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
@@ -52,6 +55,8 @@ import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualReferenceObj
  * @author gbesancon
  */
 public class EMFModelConverter {
+
+	private static final Logger logger = Logger.getLogger(EMFModelConverter.class.getPackage().getName());
 
 	/** Builder. */
 	protected EMFModelBuilder builder = new EMFModelBuilder();
@@ -107,6 +112,30 @@ public class EMFModelConverter {
 			individual = individuals.get(eObject);
 		}
 		return individual;
+	}
+
+	/**
+	 * Convert single EMF Object or EObjectList of EMF Object to EMF Object Individual or List of EMF Object Individual
+	 * 
+	 * @param model
+	 * @param eObject
+	 * @return
+	 */
+	public Object convertIndividualReference(EMFModel model, Object reference) {
+		if (reference instanceof EObjectEList) {
+			ArrayList<EMFObjectIndividual> returned = new ArrayList<EMFObjectIndividual>();
+			for (Object item : (EObjectEList) reference) {
+				returned.add(convertObjectIndividual(model, (EObject) item));
+			}
+			return returned;
+		} else if (reference instanceof EObject) {
+			return convertObjectIndividual(model, (EObject) reference);
+		} else if (reference instanceof Enum) {
+			return reference;
+		} else {
+			logger.warning("Unexpected " + reference + " of " + (reference != null ? reference.getClass() : null));
+			return reference;
+		}
 	}
 
 	/**

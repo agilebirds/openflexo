@@ -14,6 +14,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeAssociation;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeObjectProperty;
+import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 
 public class AttributeObjectPropertyFeatureAssociationPathElement extends SimplePathElement {
@@ -59,12 +60,17 @@ public class AttributeObjectPropertyFeatureAssociationPathElement extends Simple
 
 	@Override
 	public String getTooltipText(Type resultingType) {
-		return objectProperty.getDisplayableDescription();
+		return "ObjectAttribute " + objectProperty.getDisplayableDescription();
 	}
 
 	@Override
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
-		return ((EMFObjectIndividual) target).getObject().eGet(objectProperty.getObject());
+		EMFModel model = ((EMFObjectIndividual) target).getFlexoOntology();
+		Object emfAnswer = ((EMFObjectIndividual) target).getObject().eGet(objectProperty.getObject());
+		Object returned = model.getConverter().convertIndividualReference(model, emfAnswer);
+		// System.out.println("AttributeObjectPropertyFeatureAssociationPathElement, Je retourne " + returned + " of " + (returned != null ?
+		// returned.getClass() : null));
+		return returned;
 	}
 
 	@Override

@@ -12,6 +12,7 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeAssociation;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
+import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 
 public class AttributeDataPropertyFeatureAssociationPathElement extends SimplePathElement {
@@ -55,12 +56,16 @@ public class AttributeDataPropertyFeatureAssociationPathElement extends SimplePa
 
 	@Override
 	public String getTooltipText(Type resultingType) {
-		return dataProperty.getDisplayableDescription();
+		return "DataAttribute " + dataProperty.getDisplayableDescription();
 	}
 
 	@Override
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
-		return ((EMFObjectIndividual) target).getObject().eGet(dataProperty.getObject());
+		EMFModel model = ((EMFObjectIndividual) target).getFlexoOntology();
+		Object emfAnswer = ((EMFObjectIndividual) target).getObject().eGet(dataProperty.getObject());
+		// System.out.println("AttributeDataPropertyFeatureAssociationPathElement, returning " + emfAnswer + " of " + (emfAnswer != null ?
+		// emfAnswer.getClass() : null));
+		return emfAnswer;
 	}
 
 	@Override
