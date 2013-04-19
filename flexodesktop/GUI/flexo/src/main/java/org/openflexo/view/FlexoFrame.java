@@ -260,14 +260,20 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 	}
 
 	public FlexoModule getModule() {
-		return getController().getModule();
+		if (getController() != null) {
+			return getController().getModule();
+		} else {
+			return null;
+		}
 	}
 
 	protected void switchToModule() {
-		try {
-			getModuleLoader().switchToModule(getModule().getModule());
-		} catch (ModuleLoadingException e1) {
-			e1.printStackTrace();
+		if (getModule() != null) {
+			try {
+				getModuleLoader().switchToModule(getModule().getModule());
+			} catch (ModuleLoadingException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 

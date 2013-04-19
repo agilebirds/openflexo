@@ -21,7 +21,7 @@ package org.openflexo.wkf.processeditor.gr;
 
 import java.awt.Color;
 
-import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
+import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.rpc.RectPolylinConnector;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
@@ -108,10 +108,10 @@ public class MessageEdgeGR extends EdgeGR<MessageEdge<?, ?>> {
 		if (getStartObject() instanceof PortmapGR || getEndObject() instanceof PortmapGR || getStartObject() instanceof PortGR
 				|| getEndObject() instanceof PortGR) {
 			setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.6f, DashStyle.MEDIUM_DASHES));
-			setMiddleSymbol(MiddleSymbolType.PLAIN_ARROW);
+			setEndSymbol(EndSymbolType.PLAIN_ARROW);
 		} else {
 			setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.6f));
-			setMiddleSymbol(MiddleSymbolType.FILLED_ARROW);
+			setEndSymbol(EndSymbolType.FILLED_ARROW);
 		}
 	}
 }
