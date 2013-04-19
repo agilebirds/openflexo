@@ -19,14 +19,10 @@
  */
 package org.openflexo.wkf.processeditor.gr;
 
-import java.awt.Color;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.connectors.rpc.RectPolylinConnector;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.foundation.wkf.WKFGroup;
 import org.openflexo.foundation.wkf.edge.TokenEdge;
-import org.openflexo.foundation.wkf.node.FlexoNode;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
 public class TokenEdgeGR extends EdgeGR<TokenEdge> {
@@ -37,11 +33,12 @@ public class TokenEdgeGR extends EdgeGR<TokenEdge> {
 	public TokenEdgeGR(TokenEdge edge, ProcessRepresentation aDrawing) {
 		super(edge, aDrawing.getFirstVisibleObject(edge.getStartNode()), aDrawing.getFirstVisibleObject(edge.getEndNode()), aDrawing);
 
-		if (isInduced() && !(aDrawing.getFirstVisibleObject(edge.getStartNode()) instanceof WKFGroup)
+		/* As discussed with Dom & Fred, all edges are black now.
+		   if (isInduced() && !(aDrawing.getFirstVisibleObject(edge.getStartNode()) instanceof WKFGroup)
 				&& !(aDrawing.getFirstVisibleObject(edge.getEndNode()) instanceof WKFGroup)
-				&& !(edge.getStartNode() instanceof FlexoNode && ((FlexoNode) edge.getStartNode()).isEndNode())/* terminal induced edges are not represented in light gray anymore */) {
+				&& !(edge.getStartNode() instanceof FlexoNode && ((FlexoNode) edge.getStartNode()).isEndNode())) {
 			setForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY, 1.6f));
-		}
+		}*/
 	}
 
 	public TokenEdge getTokenEdge() {
