@@ -56,6 +56,10 @@ public class CreateVirtualModelInstanceInitializer extends ActionInitializer<Cre
 		return (VEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
+	private Status chooseVirtualModel(CreateConcreteVirtualModelInstance action) {
+		return instanciateShowDialogAndReturnStatus(action, VECst.CREATE_VIRTUAL_MODEL_INSTANCE_DIALOG_FIB);
+	}
+
 	@Override
 	protected FlexoActionInitializer<CreateConcreteVirtualModelInstance> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateConcreteVirtualModelInstance>() {

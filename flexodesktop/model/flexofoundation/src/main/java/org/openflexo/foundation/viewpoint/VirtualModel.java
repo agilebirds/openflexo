@@ -289,6 +289,7 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 		logger.fine("updateBindingModel()");
 		bindingModel = null;
 		createBindingModel();
+		super.updateBindingModel();
 	}
 
 	private void createBindingModel() {

@@ -47,20 +47,22 @@ public abstract class DefaultFIBCustomComponent<T> extends JPanel implements FIB
 
 	private T editedObject;
 
-	private FIBComponent fibComponent;
-	private FIBView<?, ?> fibView;
-	private FIBController controller;
+	protected FIBComponent fibComponent;
+	protected FIBView<?, ?> fibView;
+	protected FIBController controller;
+	protected LocalizedDelegate localizer;
 
 	private PropertyChangeSupport pcSupport;
 
-	public DefaultFIBCustomComponent(FileResource fibFile, T editedObject, LocalizedDelegate parentLocalizer) {
+	public DefaultFIBCustomComponent(FIBComponent component, T editedObject, LocalizedDelegate parentLocalizer) {
 		super();
 
+		localizer = parentLocalizer;
 		pcSupport = new PropertyChangeSupport(this);
 
 		this.editedObject = editedObject;
 
-		fibComponent = FIBLibrary.instance().retrieveFIBComponent(fibFile);
+		fibComponent = component;
 		controller = makeFIBController(fibComponent, parentLocalizer);
 		fibView = controller.buildView(fibComponent);
 
@@ -70,6 +72,10 @@ public abstract class DefaultFIBCustomComponent<T> extends JPanel implements FIB
 		add(fibView.getResultingJComponent(), BorderLayout.CENTER);
 
 		applyCancelListener = new Vector<ApplyCancelListener>();
+	}
+
+	public DefaultFIBCustomComponent(FileResource fibFile, T editedObject, LocalizedDelegate parentLocalizer) {
+		this(FIBLibrary.instance().retrieveFIBComponent(fibFile), editedObject, parentLocalizer);
 	}
 
 	@Override

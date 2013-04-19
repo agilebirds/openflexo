@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.ve.controller.action;
+package org.openflexo.ve.widget;
 
 import java.awt.Dimension;
 import java.awt.Font;
@@ -57,6 +57,7 @@ import org.openflexo.fib.model.FIBPanel.FlowLayoutAlignment;
 import org.openflexo.fib.model.FIBPanel.Layout;
 import org.openflexo.fib.model.FIBTextArea;
 import org.openflexo.fib.model.FIBTextField;
+import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.model.GridBagLayoutConstraints;
 import org.openflexo.fib.model.GridBagLayoutConstraints.AnchorType;
 import org.openflexo.fib.model.GridBagLayoutConstraints.FillType;
@@ -111,7 +112,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 		return retriever._retrieveParameters(action);
 	}
 
-	private ParametersRetriever(EditionSchemeAction<?, ?> action) {
+	protected ParametersRetriever(EditionSchemeAction<?, ?> action) {
 		this.action = action;
 	}
 
@@ -155,41 +156,31 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 		if (parameter instanceof TextFieldParameter) {
 			FIBTextField tf = new FIBTextField();
 			tf.setName(parameter.getName() + "TextField");
-			tf.setData(new DataBinding<Object>("data.parameters." + parameter.getName()));
-			panel.addToSubComponents(tf, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
-			return tf;
+			return registerWidget(tf, parameter, panel, index);
 		} else if (parameter instanceof URIParameter) {
 			URIPanel uriPanel = new URIPanel(parameter);
-			panel.addToSubComponents(uriPanel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
-			return uriPanel;
+			return registerWidget(uriPanel, parameter, panel, index);
 		} else if (parameter instanceof TextAreaParameter) {
 			FIBTextArea ta = new FIBTextArea();
 			ta.setName(parameter.getName() + "TextArea");
-			ta.setData(new DataBinding<Object>("data.parameters." + parameter.getName()));
 			ta.setValidateOnReturn(true); // Avoid too many ontologies manipulations
 			ta.setUseScrollBar(true);
 			ta.setHorizontalScrollbarPolicy(HorizontalScrollBarPolicy.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			ta.setVerticalScrollbarPolicy(VerticalScrollBarPolicy.VERTICAL_SCROLLBAR_AS_NEEDED);
-			panel.addToSubComponents(ta, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, true), index);
-			return ta;
+			return registerWidget(ta, parameter, panel, index, true, true);
 		} else if (parameter instanceof CheckboxParameter) {
 			FIBCheckBox cb = new FIBCheckBox();
 			cb.setName(parameter.getName() + "CheckBox");
-			cb.setData(new DataBinding<Object>("data.parameters." + parameter.getName()));
-			panel.addToSubComponents(cb, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
-			return cb;
+			return registerWidget(cb, parameter, panel, index);
 		} else if (parameter instanceof IntegerParameter) {
 			FIBNumber number = new FIBNumber();
 			number.setName(parameter.getName() + "Number");
-			number.setData(new DataBinding<Object>("data.parameters." + parameter.getName()));
 			number.setNumberType(NumberType.IntegerType);
-			panel.addToSubComponents(number, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
-			return number;
+			return registerWidget(number, parameter, panel, index);
 		} else if (parameter instanceof ListParameter) {
 			ListParameter listParameter = (ListParameter) parameter;
 			FIBCheckboxList cbList = new FIBCheckboxList();
 			cbList.setName(parameter.getName() + "CheckboxList");
-			cbList.setData(new DataBinding<Object>("data.parameters." + parameter.getName()));
 			// TODO: repair this !!!
 			logger.warning("This feature is no more implemented, please repair this !!!");
 			cbList.setList(new DataBinding<List<?>>("data.parameters." + parameter.getName() + "TODO"));
@@ -216,8 +207,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			cbList.setHorizontalScrollbarPolicy(HorizontalScrollBarPolicy.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			cbList.setVerticalScrollbarPolicy(VerticalScrollBarPolicy.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-			panel.addToSubComponents(cbList, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, true), index);
-			return cbList;
+			return registerWidget(cbList, parameter, panel, index, true, true);
 		} else if (parameter instanceof FlexoObjectParameter) {
 			FlexoObjectParameter foParameter = (FlexoObjectParameter) parameter;
 			switch (foParameter.getFlexoObjectType()) {
@@ -226,50 +216,37 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 				processSelector.setComponentClass(org.openflexo.components.widget.FIBProcessSelector.class);
 				processSelector.addToAssignments(new FIBCustomAssignment(processSelector, new DataBinding<Object>("component.project"),
 						new DataBinding<Object>("data.project"), true));
-				processSelector.setData(new DataBinding<Object>("data.parameters." + parameter.getName()));
-				panel.addToSubComponents(processSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
-				return processSelector;
+				return registerWidget(processSelector, parameter, panel, index);
 			case ProcessFolder:
 				FIBCustom processFolderSelector = new FIBCustom();
 				processFolderSelector.setComponentClass(org.openflexo.components.widget.FIBProcessFolderSelector.class);
 				processFolderSelector.addToAssignments(new FIBCustomAssignment(processFolderSelector, new DataBinding<Object>(
 						"component.project"), new DataBinding<Object>("data.project"), true));
-				processFolderSelector.setData(new DataBinding<Object>("data.parameters." + parameter.getName()));
-				panel.addToSubComponents(processFolderSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false),
-						index);
-				return processFolderSelector;
+				return registerWidget(processFolderSelector, parameter, panel, index);
 			case Role:
 				FIBCustom roleSelector = new FIBCustom();
 				roleSelector.setComponentClass(org.openflexo.components.widget.FIBRoleSelector.class);
 				roleSelector.addToAssignments(new FIBCustomAssignment(roleSelector, new DataBinding<Object>("component.project"),
 						new DataBinding<Object>("data.project"), true));
-				roleSelector.setData(new DataBinding<Object>("data.parameters." + parameter.getName()));
-				panel.addToSubComponents(roleSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
-				return roleSelector;
+				return registerWidget(roleSelector, parameter, panel, index);
 			case Activity:
 				FIBCustom activitySelector = new FIBCustom();
 				activitySelector.setComponentClass(org.openflexo.components.widget.ActivitySelector.class);
 				activitySelector.addToAssignments(new FIBCustomAssignment(activitySelector, new DataBinding<Object>("component.project"),
 						new DataBinding<Object>("data.project"), true));
-				activitySelector.setData(new DataBinding<Object>("data.parameters." + parameter.getName()));
-				panel.addToSubComponents(activitySelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
-				return activitySelector;
+				return registerWidget(activitySelector, parameter, panel, index);
 			case Operation:
 				FIBCustom operationSelector = new FIBCustom();
 				operationSelector.setComponentClass(org.openflexo.components.widget.OperationSelector.class);
 				operationSelector.addToAssignments(new FIBCustomAssignment(operationSelector, new DataBinding<Object>("component.project"),
 						new DataBinding<Object>("data.project"), true));
-				operationSelector.setData(new DataBinding<Object>("data.parameters." + parameter.getName()));
-				panel.addToSubComponents(operationSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
-				return operationSelector;
+				return registerWidget(operationSelector, parameter, panel, index);
 			case Action:
 				FIBCustom actionSelector = new FIBCustom();
 				actionSelector.setComponentClass(org.openflexo.components.widget.ActionSelector.class);
 				actionSelector.addToAssignments(new FIBCustomAssignment(actionSelector, new DataBinding<Object>("component.project"),
 						new DataBinding<Object>("data.project"), true));
-				actionSelector.setData(new DataBinding<Object>("data.parameters." + parameter.getName()));
-				panel.addToSubComponents(actionSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
-				return actionSelector;
+				return registerWidget(actionSelector, parameter, panel, index);
 
 			default:
 				break;
@@ -285,9 +262,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			epiSelector.addToAssignments(new FIBCustomAssignment(epiSelector, new DataBinding<Object>("component.editionPattern"),
 					new DataBinding<Object>("data.editionScheme.parametersDefinitions." + parameter.getName() + ".editionPatternType"),
 					true));
-			epiSelector.setData(new DataBinding<Object>("data.parameters." + parameter.getName()));
-			panel.addToSubComponents(epiSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
-			return epiSelector;
+			return registerWidget(epiSelector, parameter, panel, index);
 		} else if (parameter instanceof IndividualParameter) {
 			FIBCustom individualSelector = new FIBCustom();
 			individualSelector.setComponentClass(FIBIndividualSelector.class);
@@ -325,9 +300,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 				individualSelector.addToAssignments(new FIBCustomAssignment(individualSelector, new DataBinding<Object>(
 						"component.renderer"), new DataBinding<Object>('"' + ((IndividualParameter) parameter).getRenderer() + '"'), true));
 			}
-			individualSelector.setData(new DataBinding<Object>("data.parameters." + parameter.getName()));
-			panel.addToSubComponents(individualSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
-			return individualSelector;
+			return registerWidget(individualSelector, parameter, panel, index);
 		} else if (parameter instanceof ClassParameter) {
 			ClassParameter classParameter = (ClassParameter) parameter;
 			FIBCustom classSelector = new FIBCustom();
@@ -368,9 +341,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 				classSelector.addToAssignments(new FIBCustomAssignment(classSelector, new DataBinding<Object>("component.rootClassURI"),
 						new DataBinding<Object>('"' + conceptClass.getURI() + '"'), true));
 			}
-			classSelector.setData(new DataBinding<Object>("data.parameters." + parameter.getName()));
-			panel.addToSubComponents(classSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
-			return classSelector;
+			return registerWidget(classSelector, parameter, panel, index);
 		} else if (parameter instanceof PropertyParameter) {
 			PropertyParameter propertyParameter = (PropertyParameter) parameter;
 			FIBCustom propertySelector = new FIBCustom();
@@ -435,20 +406,36 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 				propertySelector.addToAssignments(new FIBCustomAssignment(propertySelector, new DataBinding<Object>(
 						"component.selectObjectProperties"), DataBinding.makeFalseBinding(), true));
 			}
-
-			propertySelector.setData(new DataBinding<Object>("data.parameters." + parameter.getName()));
-			panel.addToSubComponents(propertySelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
-			return propertySelector;
+			return registerWidget(propertySelector, parameter, panel, index);
 		}
 
 		// Default
 		FIBLabel unknown = new FIBLabel();
 		unknown.setLabel("???");
-		panel.addToSubComponents(unknown, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false), index);
+		registerWidget(unknown, parameter, panel, index);
 		return unknown;
 	}
 
-	private FIBComponent makeFIB(final EditionSchemeAction<?, ?> action) {
+	private FIBComponent registerWidget(FIBComponent widget, EditionSchemeParameter parameter, FIBPanel panel, int index) {
+		return registerWidget(widget, parameter, panel, index, true, false);
+	}
+
+	private FIBComponent registerWidget(FIBComponent widget, EditionSchemeParameter parameter, FIBPanel panel, int index,
+			boolean expandHorizontally, boolean expandVertically) {
+		widget.setData(new DataBinding<Object>("data.parameters." + parameter.getName()));
+		if (widget instanceof FIBWidget) {
+			((FIBWidget) widget).setValueChangedAction(new DataBinding<Object>("controller.parameterValueChanged(data)"));
+		}
+		panel.addToSubComponents(widget, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, expandHorizontally, expandVertically),
+				index);
+		return widget;
+	}
+
+	protected FIBComponent makeFIB(final EditionSchemeAction<?, ?> action, boolean addTitle, boolean addControls) {
+
+		if (action == null) {
+			return new FIBPanel();
+		}
 
 		paletteElement = action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement() : null;
 		final EditionScheme editionScheme = action.getEditionScheme();
@@ -476,37 +463,41 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 		returned.setBorderBottom(5);
 		returned.setBorderRight(10);
 		returned.setBorderLeft(10);
-		returned.setControllerClass(FlexoFIBController.class);
+		returned.setControllerClass(ParametersRetrieverController.class);
 
 		if (editionScheme.getDefinePopupDefaultSize()) {
 			returned.setMinWidth(editionScheme.getWidth());
 			returned.setMinHeight(editionScheme.getHeight());
 		}
 
-		FIBLabel titleLabel = new FIBLabel();
-		titleLabel.setAlign(Align.center);
-		titleLabel.setLabel(FlexoLocalization.localizedForKey(editionScheme.getVirtualModel().getLocalizedDictionary(),
-				editionScheme.getLabel() != null ? editionScheme.getLabel() : editionScheme.getName()));
-		returned.addToSubComponents(titleLabel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false), 0);
+		int index = 0;
+		if (addTitle) {
+			FIBLabel titleLabel = new FIBLabel();
+			titleLabel.setAlign(Align.center);
+			titleLabel.setLabel(FlexoLocalization.localizedForKey(editionScheme.getVirtualModel().getLocalizedDictionary(),
+					editionScheme.getLabel() != null ? editionScheme.getLabel() : editionScheme.getName()));
+			returned.addToSubComponents(titleLabel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false), 0);
+			index++;
 
-		if (StringUtils.isNotEmpty(editionScheme.getDescription())) {
-			FIBPanel descriptionPanel = new FIBPanel();
-			descriptionPanel.setLayout(Layout.twocols);
-			descriptionPanel.setBorder(Border.rounded3d);
-			descriptionPanel.setLayout(Layout.border);
-			descriptionPanel.setBorderTop(10);
-			descriptionPanel.setBorderBottom(10);
+			if (StringUtils.isNotEmpty(editionScheme.getDescription())) {
+				FIBPanel descriptionPanel = new FIBPanel();
+				descriptionPanel.setLayout(Layout.twocols);
+				descriptionPanel.setBorder(Border.rounded3d);
+				descriptionPanel.setLayout(Layout.border);
+				descriptionPanel.setBorderTop(10);
+				descriptionPanel.setBorderBottom(10);
 
-			FIBLabel descriptionLabel = new FIBLabel();
-			descriptionLabel.setAlign(Align.center);
-			descriptionLabel.setLabel("<html><i>" + editionScheme.getDescription() + "</i></html>");
-			descriptionPanel.addToSubComponents(descriptionLabel, new BorderLayoutConstraints(BorderLayoutLocation.center));
-			returned.addToSubComponents(descriptionPanel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false), 1);
-		} else {
-			((TwoColsLayoutConstraints) titleLabel.getConstraints()).setInsetsBottom(10);
+				FIBLabel descriptionLabel = new FIBLabel();
+				descriptionLabel.setAlign(Align.center);
+				descriptionLabel.setLabel("<html><i>" + editionScheme.getDescription() + "</i></html>");
+				descriptionPanel.addToSubComponents(descriptionLabel, new BorderLayoutConstraints(BorderLayoutLocation.center));
+				returned.addToSubComponents(descriptionPanel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false), 1);
+				index++;
+			} else {
+				((TwoColsLayoutConstraints) titleLabel.getConstraints()).setInsetsBottom(10);
+			}
 		}
 
-		int index = 1;
 		Hashtable<EditionSchemeParameter, FIBComponent> widgets = new Hashtable<EditionSchemeParameter, FIBComponent>();
 		for (final EditionSchemeParameter parameter : editionScheme.getParameters()) {
 			FIBLabel label = new FIBLabel();
@@ -528,27 +519,32 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 			}
 		}
 
-		FIBPanel buttonsPanel = new FIBPanel();
+		if (addControls) {
+			FIBPanel buttonsPanel = new FIBPanel();
 
-		buttonsPanel.setLayout(Layout.flow);
-		buttonsPanel.setFlowAlignment(FlowLayoutAlignment.CENTER);
-		buttonsPanel.setHGap(0);
-		buttonsPanel.setVGap(5);
-		buttonsPanel.setBorderTop(5);
-		buttonsPanel.setBorder(Border.empty);
-		FIBButton validateButton = new FIBButton();
-		validateButton.setLabel("validate");
-		validateButton.setLocalize(true);
-		validateButton.setAction(new DataBinding("controller.validateAndDispose()"));
-		buttonsPanel.addToSubComponents(validateButton);
-		FIBButton cancelButton = new FIBButton();
-		cancelButton.setLabel("cancel");
-		cancelButton.setLocalize(true);
-		cancelButton.setAction(new DataBinding("controller.cancelAndDispose()"));
-		buttonsPanel.addToSubComponents(cancelButton);
+			buttonsPanel.setLayout(Layout.flow);
+			buttonsPanel.setFlowAlignment(FlowLayoutAlignment.CENTER);
+			buttonsPanel.setHGap(0);
+			buttonsPanel.setVGap(5);
+			buttonsPanel.setBorderTop(5);
+			buttonsPanel.setBorder(Border.empty);
+			FIBButton validateButton = new FIBButton();
+			validateButton.setLabel("validate");
+			validateButton.setLocalize(true);
+			validateButton.setAction(new DataBinding("controller.validateAndDispose()"));
+			validateButton.setEnable(new DataBinding<Boolean>("controller.isValidable(data)"));
+			for (FIBComponent widget : widgets.values()) {
+				validateButton.addToExplicitDependancies(new FIBDependancy(widget));
+			}
+			buttonsPanel.addToSubComponents(validateButton);
+			FIBButton cancelButton = new FIBButton();
+			cancelButton.setLabel("cancel");
+			cancelButton.setLocalize(true);
+			cancelButton.setAction(new DataBinding("controller.cancelAndDispose()"));
+			buttonsPanel.addToSubComponents(cancelButton);
 
-		returned.addToSubComponents(buttonsPanel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false), index++);
-
+			returned.addToSubComponents(buttonsPanel, new TwoColsLayoutConstraints(TwoColsLayoutLocation.center, true, false), index++);
+		}
 		/*	try {
 				logger.info("Getting this "
 						+ XMLCoder.encodeObjectWithMapping(returned, FIBLibrary.getFIBMapping(), StringEncoder.getDefaultInstance()));
@@ -571,7 +567,7 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 
 	private boolean _retrieveParameters(final EditionSchemeAction<?, ?> action) {
 
-		FIBComponent component = makeFIB(action);
+		FIBComponent component = makeFIB(action, true, true);
 		FIBDialog dialog = FIBDialog.instanciateDialog(component, action, null, true, FlexoLocalization.getMainLocalizer());
 		if (!action.getEditionScheme().getDefinePopupDefaultSize()) {
 			dialog.setMinimumSize(new Dimension(500, 50));
@@ -580,4 +576,19 @@ public class ParametersRetriever /*implements BindingEvaluationContext*/{
 		return dialog.getStatus() == Status.VALIDATED;
 	}
 
+	public static class ParametersRetrieverController extends FlexoFIBController {
+
+		public ParametersRetrieverController(FIBComponent component) {
+			super(component);
+		}
+
+		public boolean isValidable(EditionSchemeAction<?, ?> action) {
+			return action.areRequiredParametersSetAndValid();
+		}
+
+		public boolean parameterValueChanged(EditionSchemeAction<?, ?> action) {
+			action.parameterValueChanged();
+			return true;
+		}
+	}
 }

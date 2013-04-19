@@ -24,8 +24,11 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.InvalidArgumentException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -35,6 +38,7 @@ import org.openflexo.foundation.rm.VirtualModelInstanceResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.viewpoint.CreationScheme;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.JavaUtils;
@@ -48,7 +52,8 @@ import org.openflexo.toolbox.StringUtils;
  * @param <A>
  *            type of action, required to manage introspection for inheritance
  */
-public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelInstance<A>> extends FlexoAction<A, View, FlexoModelObject> {
+public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelInstance<A>> extends FlexoAction<A, View, FlexoModelObject>
+		implements FlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(CreateVirtualModelInstance.class.getPackage().getName());
 
@@ -97,6 +102,7 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 	private String newVirtualModelInstanceName;
 	private String newVirtualModelInstanceTitle;
 	private VirtualModel<?> virtualModel;
+	private CreationScheme creationScheme;
 
 	public boolean skipChoosePopup = false;
 
@@ -110,7 +116,7 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 
 	@Override
 	protected void doAction(Object context) throws InvalidFileNameException, SaveResourceException, InvalidArgumentException {
-		logger.info("Add virtual model instance in view " + getFocusedObject());
+		logger.info("Add virtual model instance in view " + getFocusedObject() + " creationSchemeAction=" + creationSchemeAction);
 
 		newVirtualModelInstanceName = JavaUtils.getClassName(newVirtualModelInstanceName);
 
@@ -170,8 +176,10 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 	public int getStepsNumber() {
 		if (virtualModel == null) {
 			return 1;
-		} else {
+		} else if (!getVirtualModel().hasCreationScheme()) {
 			return virtualModel.getModelSlots().size() + 1;
+		} else {
+			return virtualModel.getModelSlots().size() + 2;
 		}
 	}
 
@@ -258,9 +266,23 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 		if (!isValid()) {
 			return false;
 		}
+		if (getVirtualModel() == null) {
+			return false;
+		}
 		for (ModelSlot<?, ?> ms : virtualModel.getModelSlots()) {
 			ModelSlotInstanceConfiguration<?> configuration = getModelSlotInstanceConfiguration(ms);
 			if (!configuration.isValidConfiguration()) {
+				return false;
+			}
+		}
+		if (getVirtualModel().hasCreationScheme()) {
+			if (getCreationScheme() == null) {
+				return false;
+			}
+			if (getCreationSchemeAction() == null) {
+				return false;
+			}
+			if (!getCreationSchemeAction().areRequiredParametersSetAndValid()) {
 				return false;
 			}
 		}
@@ -281,5 +303,34 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 
 	public void setNewVirtualModelInstanceTitle(String newVirtualModelInstanceTitle) {
 		this.newVirtualModelInstanceTitle = newVirtualModelInstanceTitle;
+	}
+
+	public CreationScheme getCreationScheme() {
+		return creationScheme;
+	}
+
+	public void setCreationScheme(CreationScheme creationScheme) {
+		this.creationScheme = creationScheme;
+		if (creationScheme != null) {
+			creationSchemeAction = CreationSchemeAction.actionType.makeNewAction(getFocusedObject(), null, getEditor());
+			creationSchemeAction.setCreationScheme(creationScheme);
+			creationSchemeAction.addObserver(this);
+		} else {
+			creationSchemeAction = null;
+		}
+	}
+
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification.propertyName().equals(EditionSchemeAction.PARAMETER_VALUE_CHANGED)) {
+			setChanged();
+			notifyObservers(new DataModification("isActionValidable", false, true));
+		}
+	}
+
+	private CreationSchemeAction creationSchemeAction;
+
+	public CreationSchemeAction getCreationSchemeAction() {
+		return creationSchemeAction;
 	}
 }

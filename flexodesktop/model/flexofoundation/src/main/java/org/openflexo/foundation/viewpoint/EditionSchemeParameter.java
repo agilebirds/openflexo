@@ -247,10 +247,10 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 	private boolean isRequired = false;
 
 	public boolean getIsRequired() {
-		return false;
+		return isRequired;
 	}
 
-	public void setIsRequired(boolean flag) {
+	public final void setIsRequired(boolean flag) {
 		isRequired = flag;
 	}
 

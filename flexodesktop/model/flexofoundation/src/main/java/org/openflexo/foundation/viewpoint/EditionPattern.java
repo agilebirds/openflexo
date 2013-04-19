@@ -472,6 +472,15 @@ public class EditionPattern extends EditionPatternObject {
 		return false;
 	}
 
+	public boolean hasCreationScheme() {
+		for (EditionScheme es : getEditionSchemes()) {
+			if (es instanceof CreationScheme) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public boolean hasSynchronizationScheme() {
 		for (EditionScheme es : getEditionSchemes()) {
 			if (es instanceof SynchronizationScheme) {
@@ -632,6 +641,7 @@ public class EditionPattern extends EditionPatternObject {
 		for (PatternRole pr : getPatternRoles()) {
 			pr.finalizePatternRoleDeserialization();
 		}
+		updateBindingModel();
 	}
 
 	public void finalizeParentEditionPatternDeserialization() {

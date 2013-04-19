@@ -47,7 +47,12 @@ public class EditionSchemeParameterValuePathElement extends SimplePathElement {
 			NullReferenceException {
 		if (target instanceof Hashtable) {
 			Hashtable<EditionSchemeParameter, Object> allParameters = (Hashtable<EditionSchemeParameter, Object>) target;
-			allParameters.put(parameter, value);
+			System.out.println("Setting value " + value + " for " + parameter);
+			if (value != null) {
+				allParameters.put(parameter, value);
+			} else {
+				allParameters.remove(parameter);
+			}
 			return;
 		}
 		logger.warning("Please implement me, target=" + target + " context=" + context);

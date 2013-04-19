@@ -28,6 +28,7 @@ import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.SettableBindingEvaluationContext;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -108,6 +109,21 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 		return returned;
 	}
 
+	/**
+	 * Return a flag indicating if all parameters declared as "mandatory" have been set
+	 * 
+	 * @return
+	 */
+	public boolean areRequiredParametersSetAndValid() {
+		EditionScheme editionScheme = getEditionScheme();
+		for (final EditionSchemeParameter parameter : editionScheme.getParameters()) {
+			if (!parameter.isValid(this, parameterValues.get(parameter))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public FlexoProject getProject() {
 		if (getFocusedObject() != null) {
 			return getFocusedObject().getProject();
@@ -170,7 +186,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 	}
 
 	public void setParameterValue(EditionSchemeParameter parameter, Object value) {
-		// System.out.println("setParameterValue " + value + " for parameter " + parameter.getName());
+		System.out.println("setParameterValue " + value + " for parameter " + parameter.getName());
 		parameterValues.put(parameter, value);
 		/*for (EditionSchemeParameter p : getEditionScheme().getParameters()) {
 			if (p instanceof URIParameter) {
@@ -318,4 +334,11 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 		return parameterValues;
 	}
 
+	public boolean parameterValueChanged() {
+		setChanged();
+		notifyObservers(new DataModification(PARAMETER_VALUE_CHANGED, null, getParametersValues()));
+		return true;
+	}
+
+	public static final String PARAMETER_VALUE_CHANGED = "parameterValueChanged";
 }

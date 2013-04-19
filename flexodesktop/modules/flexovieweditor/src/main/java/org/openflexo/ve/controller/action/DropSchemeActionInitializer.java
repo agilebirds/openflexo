@@ -33,6 +33,7 @@ import org.openflexo.foundation.view.diagram.action.DropSchemeAction;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.controller.VEController;
+import org.openflexo.ve.widget.ParametersRetriever;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;

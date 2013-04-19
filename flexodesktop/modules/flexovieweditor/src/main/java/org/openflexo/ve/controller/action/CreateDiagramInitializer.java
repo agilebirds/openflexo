@@ -55,6 +55,19 @@ public class CreateDiagramInitializer extends ActionInitializer<CreateDiagram, V
 		return (VEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
+	private Status chooseVirtualModel(CreateDiagram action) {
+		return instanciateShowDialogAndReturnStatus(action, VECst.CREATE_DIAGRAM_DIALOG_FIB);
+	}
+
+	private Status chooseAndConfigureCreationScheme(CreateDiagram action) {
+		return instanciateShowDialogAndReturnStatus(action, VECst.CHOOSE_AND_CONFIGURE_CREATION_SCHEME_DIALOG_FIB);
+	}
+
+	private Status configureModelSlot(CreateDiagram action, ModelSlot<?, ?> configuredModelSlot) {
+		return instanciateShowDialogAndReturnStatus(action.getModelSlotInstanceConfiguration(configuredModelSlot),
+				VECst.CONFIGURE_MODEL_SLOT_INSTANCE_DIALOG_FIB);
+	}
+
 	@Override
 	protected FlexoActionInitializer<CreateDiagram> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateDiagram>() {
@@ -68,17 +81,19 @@ public class CreateDiagramInitializer extends ActionInitializer<CreateDiagram, V
 					while (shouldContinue) {
 						Status result;
 						if (step == 0) {
-							result = instanciateShowDialogAndReturnStatus(action, VECst.CREATE_DIAGRAM_DIALOG_FIB);
+							result = chooseVirtualModel(action);
+						} else if (step == action.getStepsNumber() - 1 && action.getDiagramSpecification() != null
+								&& action.getDiagramSpecification().hasCreationScheme()) {
+							result = chooseAndConfigureCreationScheme(action);
 						} else {
 							ModelSlot<?, ?> configuredModelSlot = action.getVirtualModel().getModelSlots().get(step - 1);
-							result = instanciateShowDialogAndReturnStatus(action.getModelSlotInstanceConfiguration(configuredModelSlot),
-									VECst.CONFIGURE_MODEL_SLOT_INSTANCE_DIALOG_FIB);
+							result = configureModelSlot(action, configuredModelSlot);
 						}
 						if (result == Status.CANCELED) {
 							return false;
 						} else if (result == Status.VALIDATED) {
 							return true;
-						} else if (result == Status.NEXT && step + 1 <= action.getVirtualModel().getModelSlots().size()) {
+						} else if (result == Status.NEXT && step + 1 <= action.getStepsNumber()) {
 							step = step + 1;
 						} else if (result == Status.BACK && step - 1 >= 0) {
 							step = step - 1;

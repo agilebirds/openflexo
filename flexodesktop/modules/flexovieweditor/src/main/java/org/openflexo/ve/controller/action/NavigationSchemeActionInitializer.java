@@ -33,6 +33,7 @@ import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.view.diagram.action.NavigationSchemeAction;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.ve.widget.ParametersRetriever;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
