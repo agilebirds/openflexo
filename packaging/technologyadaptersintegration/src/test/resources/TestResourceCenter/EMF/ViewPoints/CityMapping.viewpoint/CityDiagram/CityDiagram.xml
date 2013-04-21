@@ -96,54 +96,78 @@
         <AddressedDiagramModelSlot idref="7" />
       </AddShape>
     </DropScheme>
-    <ContainedShapePatternRole id="63" patternRole="shape" name="shape" exampleLabel="Mansion">
-      <ShapeGraphicalRepresentation id="64" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="61.0" y="23.164835164835154" width="69.9009900990099" height="64.83516483516485" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="false" identifier="object_0" layer="2" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="54.0" absoluteTextY="11.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="65" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ImageBackgroundStyle id="66" imageFile="Mansion.png" scaleX="1.4562706270627064" scaleY="1.350732600732601" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="67" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="68" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="69" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="70" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="71" top="20" bottom="20" left="20" right="20" />
+    <CreationScheme id="63" name="createMansionGR" label="createMansionGR" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <EditionPatternInstanceParameter id="64" editionPatternTypeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#Mansion" name="mansionParam" label="mansionParam" usePaletteLabelAsDefaultValue="false" isRequired="false">
+        <AddressedVirtualModelModelSlot idref="5" />
+      </EditionPatternInstanceParameter>
+      <DeclarePatternRole id="65" object="parameters.mansionParam" assignation="mansion" />
+      <AddShape id="66" container="virtualModelInstance.cityGR.container" extendParentBoundsToHostThisShape="false" name="" assignation="shape">
+        <AddressedDiagramModelSlot idref="67" />
+      </AddShape>
+    </CreationScheme>
+    <ContainedShapePatternRole id="68" patternRole="shape" name="shape" exampleLabel="Mansion">
+      <ShapeGraphicalRepresentation id="69" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="61.0" y="23.164835164835154" width="69.9009900990099" height="64.83516483516485" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="false" identifier="object_0" layer="2" hasText="true" text="Mansion" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="54.0" absoluteTextY="11.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="70" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="71" imageFile="Mansion.png" scaleX="1.4562706270627064" scaleY="1.350732600732601" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="72" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="73" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="74" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="75" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="76" top="20" bottom="20" left="20" right="20" />
         <RectangleShape idref="54" />
-        <ShadowStyle id="72" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="73" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        <ShadowStyle id="77" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="78" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
       <AddressedDiagramModelSlot idref="7" />
-      <GRSpec id="74" featureName="label" value="&quot;Shape&quot;" readOnly="true" />
+      <GRSpec id="79" featureName="label" value="mansion.render" readOnly="true" />
     </ContainedShapePatternRole>
-    <PrimaryRepresentationShapePatternRole idref="63" />
-    <Inspector id="75" inspectorTitle="MansionGR" />
+    <ContainedEditionPatternInstancePatternRole id="80" editionPatternTypeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#Mansion" patternRole="mansion" name="mansion">
+      <AddressedVirtualModelModelSlot idref="5" />
+    </ContainedEditionPatternInstancePatternRole>
+    <PrimaryRepresentationShapePatternRole idref="68" />
+    <Inspector id="81" inspectorTitle="MansionGR" />
   </EditionPattern>
-  <EditionPattern id="76" name="AppartmentGR">
-    <DropScheme id="77" target="top" name="dropAppartmentGRAtTopLevel" label="dropAppartmentGRAtTopLevel" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
-      <AddShape id="78" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shape">
+  <EditionPattern id="82" name="AppartmentGR">
+    <DropScheme id="83" target="top" name="dropAppartmentGRAtTopLevel" label="dropAppartmentGRAtTopLevel" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <AddShape id="84" container="topLevel" extendParentBoundsToHostThisShape="false" assignation="shape">
         <AddressedDiagramModelSlot idref="7" />
       </AddShape>
     </DropScheme>
-    <ContainedShapePatternRole id="79" patternRole="shape" name="shape" exampleLabel="Appartment">
-      <ShapeGraphicalRepresentation id="80" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="54.0" y="19.219780219780205" width="70.8910891089109" height="69.7802197802198" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="false" identifier="object_0" layer="2" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="53.0" absoluteTextY="16.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
-        <ForegroundStyle id="81" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <ImageBackgroundStyle id="82" imageFile="Apartment.png" scaleX="1.0906321401370909" scaleY="1.0735418427726122" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedForegroundStyle id="83" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <SelectedColorBackgroundStyle id="84" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedForegroundStyle id="85" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <FocusedColorBackgroundStyle id="86" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
-        <Border id="87" top="20" bottom="20" left="20" right="20" />
+    <CreationScheme id="85" name="createAppartmentGR" label="createAppartmentGR" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+      <EditionPatternInstanceParameter id="86" editionPatternTypeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#Appartment" name="appartmentParam" label="appartmentParam" usePaletteLabelAsDefaultValue="false" isRequired="false">
+        <AddressedVirtualModelModelSlot idref="5" />
+      </EditionPatternInstanceParameter>
+      <DeclarePatternRole id="87" object="parameters.appartmentParam" assignation="appartment" />
+      <AddShape id="88" container="virtualModelInstance.cityGR.container" extendParentBoundsToHostThisShape="false" assignation="shape">
+        <AddressedDiagramModelSlot idref="67" />
+      </AddShape>
+    </CreationScheme>
+    <ContainedShapePatternRole id="89" patternRole="shape" name="shape" exampleLabel="Appartment">
+      <ShapeGraphicalRepresentation id="90" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="54.0" y="19.219780219780205" width="70.8910891089109" height="69.7802197802198" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="false" identifier="object_0" layer="2" hasText="true" text="Appartment" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="53.0" absoluteTextY="16.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
+        <ForegroundStyle id="91" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="92" imageFile="Apartment.png" scaleX="1.0906321401370909" scaleY="1.0735418427726122" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="true" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedForegroundStyle id="93" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <SelectedColorBackgroundStyle id="94" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedForegroundStyle id="95" noStroke="false" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <FocusedColorBackgroundStyle id="96" color="254,247,217" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="97" top="20" bottom="20" left="20" right="20" />
         <RectangleShape idref="54" />
-        <ShadowStyle id="88" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
-        <TextStyle id="89" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        <ShadowStyle id="98" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <TextStyle id="99" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ShapeGraphicalRepresentation>
       <AddressedDiagramModelSlot idref="7" />
-      <GRSpec id="90" featureName="label" value="&quot;Shape&quot;" readOnly="true" />
+      <GRSpec id="100" featureName="label" value="appartment.render" readOnly="true" />
     </ContainedShapePatternRole>
-    <PrimaryRepresentationShapePatternRole idref="79" />
-    <Inspector id="91" inspectorTitle="AppartmentGR" />
+    <ContainedEditionPatternInstancePatternRole id="101" editionPatternTypeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#Appartment" patternRole="appartment" name="appartment">
+      <AddressedVirtualModelModelSlot idref="5" />
+    </ContainedEditionPatternInstancePatternRole>
+    <PrimaryRepresentationShapePatternRole idref="89" />
+    <Inspector id="102" inspectorTitle="AppartmentGR" />
   </EditionPattern>
-  <LocalizedDictionary id="92" />
+  <LocalizedDictionary id="103" />
   <VirtualModelModelSlot idref="5" />
-  <DiagramModelSlot id="93" isRequired="true" isReadOnly="false" metaModelURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityDiagram" name="this" />
-  <CreationScheme id="94" name="createNewDiagramWithSuppliedCity" label="creates_new_diagram_focusing_on_a_city" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+  <DiagramModelSlot id="67" isRequired="true" isReadOnly="false" metaModelURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityDiagram" name="this" />
+  <CreationScheme id="104" name="createNewDiagramWithSuppliedCity" label="creates_new_diagram_focusing_on_a_city" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
     <description>&lt;html&gt;
   &lt;head&gt;
     
@@ -155,12 +179,12 @@
     &lt;/p&gt;
   &lt;/body&gt;
 &lt;/html&gt;</description>
-    <EditionPatternInstanceParameter id="95" editionPatternTypeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#City" name="cityParameter" label="city" usePaletteLabelAsDefaultValue="false" isRequired="true">
+    <EditionPatternInstanceParameter id="105" editionPatternTypeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#City" name="cityParameter" label="city" usePaletteLabelAsDefaultValue="false" isRequired="true">
       <AddressedVirtualModelModelSlot idref="5" />
     </EditionPatternInstanceParameter>
-    <DeclarePatternRole id="96" object="parameters.cityParameter" name="" assignation="city" />
+    <DeclarePatternRole id="106" object="parameters.cityParameter" name="" assignation="city" />
   </CreationScheme>
-  <CreationScheme id="97" name="createNewDiagramRepresentingNewCity" label="anOtherWayToCreateADiagram" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+  <CreationScheme id="107" name="createNewDiagramRepresentingNewCity" label="anOtherWayToCreateADiagram" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
     <description>&lt;html&gt;
   &lt;head&gt;
     
@@ -174,20 +198,47 @@
     &lt;/p&gt;
   &lt;/body&gt;
 &lt;/html&gt;</description>
-    <TextFieldParameter id="98" name="newCityName" label="new_city_name" defaultValue="&quot;valeur2&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
-    <TextAreaParameter id="99" name="description" label="description" defaultValue="&quot;coucou&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+    <TextFieldParameter id="108" name="newCityName" label="new_city_name" defaultValue="&quot;valeur2&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+    <TextAreaParameter id="109" name="description" label="description" defaultValue="&quot;coucou&quot;" usePaletteLabelAsDefaultValue="false" isRequired="false" />
   </CreationScheme>
-  <SynchronizationScheme id="100" name="synchronization" label="synchronization" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
-    <MatchEditionPatternInstance id="101" virtualModelInstance="this" creationSchemeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityDiagram#CityGR.createCityGR">
-      <MatchingCriteria id="102" patternRoleName="container" />
-      <MatchingCriteria id="103" patternRoleName="icon" />
-      <MatchingCriteria id="104" patternRoleName="label" />
-      <MatchingCriteria id="105" patternRoleName="city" value="city" />
-      <CreateEditionPatternInstanceParameter id="106" paramName="cityParameter" value="city" />
+  <SynchronizationScheme id="110" name="synchronization" label="synchronization" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+    <MatchEditionPatternInstance id="111" virtualModelInstance="this" creationSchemeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityDiagram#CityGR.createCityGR" assignation="cityGR">
+      <MatchingCriteria id="112" patternRoleName="container" />
+      <MatchingCriteria id="113" patternRoleName="icon" />
+      <MatchingCriteria id="114" patternRoleName="label" />
+      <MatchingCriteria id="115" patternRoleName="city" value="city" />
+      <CreateEditionPatternInstanceParameter id="116" paramName="cityParameter" value="city" />
     </MatchEditionPatternInstance>
+    <FetchRequestIterationAction id="117" iteratorName="appartment">
+      <AddressedSelectEditionPatternInstance id="118" editionPatternTypeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#Appartment">
+        <AddressedVirtualModelModelSlot idref="5" />
+        <Condition id="119" condition="(selected.city = city)" />
+      </AddressedSelectEditionPatternInstance>
+      <AddressedVirtualModelModelSlot idref="5" />
+      <MatchEditionPatternInstance id="120" virtualModelInstance="this" creationSchemeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityDiagram#AppartmentGR.createAppartmentGR">
+        <MatchingCriteria id="121" patternRoleName="shape" />
+        <MatchingCriteria id="122" patternRoleName="appartment" value="appartment" />
+        <CreateEditionPatternInstanceParameter id="123" paramName="appartmentParam" value="appartment" />
+      </MatchEditionPatternInstance>
+    </FetchRequestIterationAction>
+    <FetchRequestIterationAction id="124" iteratorName="mansion">
+      <AddressedSelectEditionPatternInstance id="125" editionPatternTypeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#Mansion">
+        <AddressedVirtualModelModelSlot idref="5" />
+        <Condition id="126" condition="(selected.city = city)" />
+      </AddressedSelectEditionPatternInstance>
+      <AddressedVirtualModelModelSlot idref="5" />
+      <MatchEditionPatternInstance id="127" virtualModelInstance="this" creationSchemeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityDiagram#MansionGR.createMansionGR">
+        <MatchingCriteria id="128" patternRoleName="shape" />
+        <MatchingCriteria id="129" patternRoleName="mansion" value="mansion" />
+        <CreateEditionPatternInstanceParameter id="130" paramName="mansionParam" value="mansion" />
+      </MatchEditionPatternInstance>
+    </FetchRequestIterationAction>
   </SynchronizationScheme>
-  <ContainedEditionPatternInstancePatternRole id="107" editionPatternTypeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#City" patternRole="city" name="city">
+  <ContainedEditionPatternInstancePatternRole id="131" editionPatternTypeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityMapping#City" patternRole="city" name="city">
     <AddressedVirtualModelModelSlot idref="5" />
   </ContainedEditionPatternInstancePatternRole>
-  <Inspector id="108" inspectorTitle="CityDiagram" />
+  <ContainedEditionPatternInstancePatternRole id="132" editionPatternTypeURI="http://www.thalesgroup.com/openflexo/emf/CityMapping/CityDiagram#CityGR" patternRole="cityGR" name="cityGR">
+    <AddressedDiagramModelSlot idref="67" />
+  </ContainedEditionPatternInstancePatternRole>
+  <Inspector id="133" inspectorTitle="CityDiagram" />
 </DiagramSpecification>
