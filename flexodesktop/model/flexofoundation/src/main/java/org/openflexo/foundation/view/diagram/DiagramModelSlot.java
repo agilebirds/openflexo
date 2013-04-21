@@ -22,8 +22,10 @@ import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddConnecto
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddDiagram;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.GraphicalAction;
+import org.openflexo.foundation.viewpoint.AddEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
+import org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.SelectEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.ViewPoint;
@@ -39,13 +41,15 @@ import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
  */
 @DeclarePatternRoles({ @DeclarePatternRole(DiagramPatternRole.class), // Diagrams
 		@DeclarePatternRole(ShapePatternRole.class), // Shapes
-		@DeclarePatternRole(ConnectorPatternRole.class) // Connectors
+		@DeclarePatternRole(ConnectorPatternRole.class), // Connectors
+		@DeclarePatternRole(EditionPatternInstancePatternRole.class) // EditionPatternInstance
 })
 @DeclareEditionActions({ @DeclareEditionAction(AddDiagram.class), // Add diagram
 		@DeclareEditionAction(AddShape.class), // Add shape
 		@DeclareEditionAction(AddConnector.class), // Add connector
 		@DeclareEditionAction(GraphicalAction.class), // Graphical action
-		@DeclareEditionAction(DeleteAction.class) // Delete action
+		@DeclareEditionAction(DeleteAction.class), // Delete action
+		@DeclareEditionAction(AddEditionPatternInstance.class) // Add EditionPatternInstance
 })
 @DeclareFetchRequests({ @DeclareFetchRequest(SelectEditionPatternInstance.class) // Allows to select some EditionPatternInstance
 })
@@ -99,6 +103,10 @@ public class DiagramModelSlot extends VirtualModelModelSlot<Diagram, DiagramSpec
 			return (PR) new ShapePatternRole(null);
 		} else if (ConnectorPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return (PR) new ConnectorPatternRole(null);
+		}
+		PR returned = super.makePatternRole(patternRoleClass);
+		if (returned != null) {
+			return returned;
 		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
 		return null;

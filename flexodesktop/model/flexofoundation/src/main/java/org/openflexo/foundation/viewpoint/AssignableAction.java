@@ -64,7 +64,12 @@ public abstract class AssignableAction<M extends FlexoModel<M, MM>, MM extends F
 			if (StringUtils.isNotEmpty(variableName)) {
 				updateVariableAssignation();
 			} else {
-				assignation = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.GET_SET);
+				assignation = new DataBinding<Object>(this, Object.class, DataBinding.BindingDefinitionType.GET_SET) {
+					@Override
+					public Type getDeclaredType() {
+						return getAssignableType();
+					}
+				};
 				assignation.setDeclaredType(getAssignableType());
 				assignation.setBindingName("assignation");
 				assignation.setMandatory(isAssignationRequired());
@@ -76,13 +81,20 @@ public abstract class AssignableAction<M extends FlexoModel<M, MM>, MM extends F
 
 	public void setAssignation(DataBinding<Object> assignation) {
 		if (assignation != null) {
-			assignation.setOwner(this);
+			this.assignation = new DataBinding<Object>(assignation.toString(), this, Object.class,
+					DataBinding.BindingDefinitionType.GET_SET) {
+				@Override
+				public Type getDeclaredType() {
+					return getAssignableType();
+				}
+			};
+			/*assignation.setOwner(this);
 			assignation.setBindingName("assignation");
 			assignation.setDeclaredType(getAssignableType());
 			assignation.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET_SET);
-			assignation.setMandatory(isAssignationRequired());
+			assignation.setMandatory(isAssignationRequired());*/
 		}
-		this.assignation = assignation;
+		// this.assignation = assignation;
 		notifiedBindingChanged(this.assignation);
 	}
 

@@ -19,13 +19,20 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
@@ -95,25 +102,71 @@ public abstract class FetchRequest<M extends FlexoModel<M, MM>, MM extends Flexo
 		removeFromConditions(aCondition);
 	}
 
-	public List<T> filterWithConditions(List<T> fetchResult, EditionSchemeAction action) {
+	public List<T> filterWithConditions(List<T> fetchResult, final EditionSchemeAction action) {
 		if (getConditions().size() == 0) {
 			return fetchResult;
 		} else {
-			// System.out.println("Filtering with " + getConditions() + " fetchResult=" + fetchResult);
+			System.out.println("Filtering with " + getConditions() + " fetchResult=" + fetchResult);
 			List<T> returned = new ArrayList<T>();
-			for (T proposedFetchResult : fetchResult) {
+			for (final T proposedFetchResult : fetchResult) {
 				boolean takeIt = true;
 				for (FetchRequestCondition condition : getConditions()) {
 					if (!condition.evaluateCondition(proposedFetchResult, action)) {
 						takeIt = false;
+						System.out.println("I dismiss " + proposedFetchResult + " because of " + condition.getCondition() + " valid="
+								+ condition.getCondition().isValid());
+						DataBinding<Object> db = new DataBinding<Object>("selected", condition.getCondition().getOwner(), Object.class,
+								BindingDefinitionType.GET);
+						DataBinding<Object> db2 = new DataBinding<Object>("selected.city", condition.getCondition().getOwner(),
+								Object.class, BindingDefinitionType.GET);
+						DataBinding<Object> db3 = new DataBinding<Object>("city", condition.getCondition().getOwner(), Object.class,
+								BindingDefinitionType.GET);
+						try {
+							System.out.println("selected=" + db.getBindingValue(new BindingEvaluationContext() {
+								@Override
+								public Object getValue(BindingVariable variable) {
+									if (variable.getVariableName().equals(FetchRequestCondition.SELECTED)) {
+										return proposedFetchResult;
+									}
+									return action.getValue(variable);
+								}
+							}));
+							System.out.println("selected.city=" + db2.getBindingValue(new BindingEvaluationContext() {
+								@Override
+								public Object getValue(BindingVariable variable) {
+									if (variable.getVariableName().equals(FetchRequestCondition.SELECTED)) {
+										return proposedFetchResult;
+									}
+									return action.getValue(variable);
+								}
+							}));
+							System.out.println("city=" + db3.getBindingValue(new BindingEvaluationContext() {
+								@Override
+								public Object getValue(BindingVariable variable) {
+									if (variable.getVariableName().equals(FetchRequestCondition.SELECTED)) {
+										return proposedFetchResult;
+									}
+									return action.getValue(variable);
+								}
+							}));
+						} catch (TypeMismatchException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (NullReferenceException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (InvocationTargetException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						System.out.println("On attend");
 						break;
 					}
 				}
 				if (takeIt) {
 					returned.add(proposedFetchResult);
-					// System.out.println("I take " + proposedFetchResult);
+					System.out.println("I take " + proposedFetchResult);
 				} else {
-					// System.out.println("I dismiss " + proposedFetchResult);
 				}
 			}
 			return returned;

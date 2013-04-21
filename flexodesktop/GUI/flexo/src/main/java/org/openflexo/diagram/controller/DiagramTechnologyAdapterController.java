@@ -15,6 +15,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.GraphicalAction;
 import org.openflexo.foundation.viewpoint.DeleteAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
+import org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
@@ -94,6 +95,8 @@ public class DiagramTechnologyAdapterController extends TechnologyAdapterControl
 			return VEIconLibrary.SHAPE_ICON;
 		} else if (ConnectorPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return VEIconLibrary.CONNECTOR_ICON;
+		} else if (EditionPatternInstancePatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return VEIconLibrary.EDITION_PATTERN_INSTANCE_ICON;
 		}
 		return null;
 	}

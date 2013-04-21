@@ -116,7 +116,7 @@ public class SynchronizationSchemeAction extends EditionSchemeAction<Synchroniza
 	}
 
 	public EditionPatternInstance matchEditionPatternInstance(EditionPattern editionPatternType, Hashtable<PatternRole, Object> criterias) {
-		System.out.println("MATCH epi on " + getVirtualModelInstance() + " for editionPatternType with " + criterias);
+		System.out.println("MATCH epi on " + getVirtualModelInstance() + " for " + editionPatternType + " with " + criterias);
 		for (EditionPatternInstance epi : getVirtualModelInstance().getEPInstances(editionPatternType)) {
 			boolean allCriteriasMatching = true;
 			for (PatternRole pr : criterias.keySet()) {

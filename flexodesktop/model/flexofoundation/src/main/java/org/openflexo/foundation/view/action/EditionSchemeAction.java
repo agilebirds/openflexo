@@ -297,6 +297,8 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 			return getEditionPatternInstance().getPatternActor(((PatternRoleBindingVariable) variable).getPatternRole());
 		} else if (variable.getVariableName().equals(EditionScheme.THIS)) {
 			return getEditionPatternInstance();
+		} else if (variable.getVariableName().equals(EditionScheme.VIRTUAL_MODEL_INSTANCE)) {
+			return getVirtualModelInstance();
 		}
 
 		if (getEditionScheme().getVirtualModel().handleVariable(variable)) {

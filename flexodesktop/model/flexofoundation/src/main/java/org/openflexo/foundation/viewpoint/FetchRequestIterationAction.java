@@ -99,6 +99,7 @@ public class FetchRequestIterationAction<M extends FlexoModel<M, MM>, MM extends
 
 	private List<?> fetchItems(EditionSchemeAction action) {
 		if (getFetchRequest() != null) {
+			System.out.println("Pour choper mes items, je lance " + getFetchRequest());
 			return getFetchRequest().performAction(action);
 		}
 		return Collections.emptyList();
