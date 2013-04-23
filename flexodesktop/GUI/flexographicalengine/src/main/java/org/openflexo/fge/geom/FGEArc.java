@@ -24,6 +24,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEUtils;
@@ -33,6 +34,7 @@ import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEExclusiveOrArea;
 import org.openflexo.fge.geom.area.FGEHalfBand;
 import org.openflexo.fge.geom.area.FGEHalfLine;
+import org.openflexo.fge.geom.area.FGEHalfPlane;
 import org.openflexo.fge.geom.area.FGEIntersectionArea;
 import org.openflexo.fge.geom.area.FGESubstractionArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
@@ -772,7 +774,7 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 		if (area instanceof FGEArc && ((FGEArc) area).overlap(this)) {
 			return computeArcIntersection((FGEArc) area);
 		}
-		if (area instanceof FGEBand || area instanceof FGEHalfBand) {
+		if (area instanceof FGEBand || area instanceof FGEHalfBand || area instanceof FGEHalfPlane) {
 			// TODO please really implement this
 			FGERectangle boundingBox = getBoundingBox();
 			boundingBox.setIsFilled(true);
@@ -783,6 +785,9 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 			FGEArea returned = intersect(boundsIntersect);
 			if (returned instanceof FGEIntersectionArea) {
 				// Cannot do better, sorry
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Unable to compute intersection between " + this + " and " + area);
+				}
 			}
 			return returned;
 		}
