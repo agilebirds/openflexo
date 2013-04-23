@@ -36,6 +36,7 @@ import org.openflexo.foundation.wkf.node.PetriGraphNode;
 import org.openflexo.foundation.wkf.node.WKFNode;
 import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
+import org.openflexo.wkf.processeditor.gr.EdgeGR;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
 public abstract class PetriGraphNodeGR<O extends PetriGraphNode> extends AbstractNodeGR<O> {
@@ -58,7 +59,8 @@ public abstract class PetriGraphNodeGR<O extends PetriGraphNode> extends Abstrac
 
 	@Override
 	public FGEArea getAllowedStartAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR) {
-		if (connectorGR instanceof EdgeGR && !((EdgeGR<?>) connectorGR).startLocationManuallyAdjusted()) {
+		if (connectorGR instanceof EdgeGR && !((EdgeGR<?>) connectorGR).startLocationManuallyAdjusted()
+				&& ((EdgeGR<?>) connectorGR).getEdge().hasLocationConstraintFlag()) {
 			return CONNECTOR_LOCATION_AREA;
 		}
 		return super.getAllowedStartAreaForConnector(connectorGR);
@@ -66,7 +68,8 @@ public abstract class PetriGraphNodeGR<O extends PetriGraphNode> extends Abstrac
 
 	@Override
 	public FGEArea getAllowedEndAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR) {
-		if (connectorGR instanceof EdgeGR && !((EdgeGR<?>) connectorGR).endLocationManuallyAdjusted()) {
+		if (connectorGR instanceof EdgeGR && !((EdgeGR<?>) connectorGR).endLocationManuallyAdjusted()
+				&& ((EdgeGR<?>) connectorGR).getEdge().hasLocationConstraintFlag()) {
 			return CONNECTOR_LOCATION_AREA;
 		}
 		return super.getAllowedEndAreaForConnector(connectorGR);

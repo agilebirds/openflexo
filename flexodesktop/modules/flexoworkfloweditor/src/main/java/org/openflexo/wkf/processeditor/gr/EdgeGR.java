@@ -83,7 +83,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 				|| aDrawing.getFirstVisibleObject(edge.getEndNode()) != edge.getEndNode();
 		setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.6f));
 
-		setMiddleSymbol(MiddleSymbolType.NONE);
+		setMiddleSymbol(MiddleSymbolType.FILLED_ARROW);
 		setEndSymbol(EndSymbolType.FILLED_ARROW);
 
 		addToMouseClickControls(new ResetLayout(), true);
@@ -319,6 +319,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 
 	public void resetLayout() {
 		if (getConnector() instanceof RectPolylinConnector) {
+			getEdge().setLocationConstraintFlag(true);
 			((RectPolylinConnector) getConnector()).setIsStartingLocationFixed(false);
 			((RectPolylinConnector) getConnector()).setIsEndingLocationFixed(false);
 			if (WKFPreferences.getConnectorAdjustability() == RectPolylinAdjustability.FULLY_ADJUSTABLE) {

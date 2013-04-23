@@ -57,7 +57,8 @@ public abstract class PetriGraphNodeGR<O extends PetriGraphNode> extends Abstrac
 
 	@Override
 	public FGEArea getAllowedStartAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR) {
-		if (connectorGR instanceof EdgeGR && !((EdgeGR<?>) connectorGR).startLocationManuallyAdjusted()) {
+		if (connectorGR instanceof EdgeGR && !((EdgeGR<?>) connectorGR).startLocationManuallyAdjusted()
+				&& ((EdgeGR<?>) connectorGR).getEdge().hasLocationConstraintFlag()) {
 			return CONNECTOR_LOCATION_AREA;
 		}
 		return super.getAllowedStartAreaForConnector(connectorGR);
@@ -65,7 +66,8 @@ public abstract class PetriGraphNodeGR<O extends PetriGraphNode> extends Abstrac
 
 	@Override
 	public FGEArea getAllowedEndAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR) {
-		if (connectorGR instanceof EdgeGR && !((EdgeGR<?>) connectorGR).endLocationManuallyAdjusted()) {
+		if (connectorGR instanceof EdgeGR && !((EdgeGR<?>) connectorGR).endLocationManuallyAdjusted()
+				&& ((EdgeGR<?>) connectorGR).getEdge().hasLocationConstraintFlag()) {
 			return CONNECTOR_LOCATION_AREA;
 		}
 		return super.getAllowedEndAreaForConnector(connectorGR);

@@ -277,6 +277,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 
 	public void resetLayout() {
 		if (getConnector() instanceof RectPolylinConnector) {
+			getEdge().setLocationConstraintFlag(true);
 			((RectPolylinConnector) getConnector()).setIsStartingLocationFixed(false);
 			((RectPolylinConnector) getConnector()).setIsEndingLocationFixed(false);
 			if (WKFPreferences.getConnectorAdjustability() == RectPolylinAdjustability.FULLY_ADJUSTABLE) {
