@@ -91,7 +91,7 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 
 	public RoleContainerGR(Role role, SwimmingLaneRepresentation aDrawing) {
 		super(role, ShapeType.RECTANGLE, aDrawing);
-
+		((org.openflexo.fge.shapes.Rectangle) getShape()).setIsRounded(false);
 		setLayer(SWLEditorConstants.ROLE_LAYER);
 
 		setMinimalWidth(180);

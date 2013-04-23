@@ -426,7 +426,7 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 		for (RepresentableFlexoModelObject o : orderedMainObjects()) {
 			int swlNb = getSwimmingLaneNb(o);
 			int swlHeight = getSwimmingLaneHeight(o);
-			returned += swlNb * swlHeight + 2 * SWIMMING_LANE_BORDER;
+			returned += swlNb * swlHeight /*+ 2 * SWIMMING_LANE_BORDER*/;
 		}
 		return returned;
 	}
@@ -439,7 +439,7 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 			}
 			int swlNb = getSwimmingLaneNb(o);
 			int swlHeight = getSwimmingLaneHeight(o);
-			returned += swlNb * swlHeight + 2 * SWIMMING_LANE_BORDER;
+			returned += swlNb * swlHeight /*+ 2 * SWIMMING_LANE_BORDER*/;
 		}
 		logger.warning("Unexpected situation here");
 		return returned;
