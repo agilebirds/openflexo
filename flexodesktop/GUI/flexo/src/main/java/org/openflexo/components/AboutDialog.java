@@ -32,6 +32,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
+import org.openflexo.ApplicationVersion;
 import org.openflexo.FlexoCst;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.module.UserType;
@@ -67,8 +68,8 @@ public class AboutDialog extends JDialog {
 		getContentPane().add(businessLabel);
 		businessLabel.setBounds(260, 195, 280, 15);
 
-		JLabel versionLabel = new JLabel("Version " + FlexoCst.BUSINESS_APPLICATION_VERSION + " (build " + FlexoCst.BUILD_ID + ")",
-				SwingConstants.RIGHT);
+		JLabel versionLabel = new JLabel("Version " + FlexoCst.BUSINESS_APPLICATION_VERSION + " (build " + ApplicationVersion.BUILD_ID
+				+ ")", SwingConstants.RIGHT);
 		versionLabel.setForeground(Color.DARK_GRAY);
 		versionLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		getContentPane().add(versionLabel);
