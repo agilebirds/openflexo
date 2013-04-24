@@ -93,7 +93,7 @@
     <Localized key="Doc" lang="French">Doc</Localized>
     <Localized key="Doc" lang="Dutch">Doc</Localized>
     <Localized key="Advanced" lang="English">Advanced</Localized>
-    <Localized key="Advanced" lang="Dutch">Advanced</Localized>
+    <Localized key="Advanced" lang="Dutch">Geavanceerd</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="ModelObject" />
 </Panel>

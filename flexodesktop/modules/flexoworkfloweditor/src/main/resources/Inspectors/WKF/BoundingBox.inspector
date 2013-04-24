@@ -11,16 +11,16 @@
     <Tab title="Graphics_BPE" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="12" visible="controller.displayInspectorTabForContext(&quot;BPE&quot;)" font="SansSerif,0,11" name="GraphicsBPETab">
       <Label label="text_color" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextColorbpeLabel" localize="true" />
       <Color allowsNull="false" index="9" data="data.textColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColorbpe" localize="true" />
+      <Label label="text_font" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextFontbpeLabel" localize="true" />
+      <Font sampleText="Sample for this font" allowsNull="false" index="10" data="data.textFont.font" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextFont" tooltipText="Text Font" localize="true" />
       <Label label="solid_background" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=14;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IsSolidBackgroundbpeLabel" localize="true" />
       <CheckBox selected="false" index="11" data="data.isSolidBackground" constraints="twocols(expandHorizontally=false;expandVertically=false;index=15;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IsSolidBackground" localize="true" />
-      <Label label="back_color" index="12" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BgColorbpeLabel" localize="true" />
-      <Color allowsNull="false" index="13" data="data.backgroundColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="BgColorbpe" localize="true" />
-      <Label label="text_font" index="14" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextFontbpeLabel" localize="true" />
-      <Font sampleText="Sample for this font" index="15" data="data.textFont.font" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextFont" tooltipText="Text Font" localize="true" />
       <Label label="text_alignment" index="16" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextAlignmentbpeLabel" localize="true" />
       <DropDown index="17" data="data.textAlignment" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" width="150" name="TextAlignmentbpe" format="object.name" localize="true" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$ParagraphAlignment" autoSelectFirstRow="false" />
       <Label label="dash_style" index="18" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="DashStylebpeLabel" localize="true" />
       <DropDown index="19" data="data.dashStyle" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" width="150" name="DashStylebpe" format="object.name" localize="true" showIcon="true" iteratorClassName="org.openflexo.fge.graphics.ForegroundStyle$DashStyle" autoSelectFirstRow="false" />
+      <Label label="back_color" index="19" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BgColorbpeLabel" localize="true" />
+      <Color allowsNull="false" index="19" data="data.backgroundColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="BgColorbpe" localize="true" />
       <Label label="border_color" index="20" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BorderColorbpeLabel" localize="true" />
       <Color allowsNull="false" index="21" data="data.borderColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="BorderColor" localize="true" />
       <Label label="rounded_corners" index="22" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IsRoundedbpeLabel" localize="true" />
@@ -29,16 +29,16 @@
     <Tab title="Graphics_SWL" layout="twocols" titleFont="SansSerif,0,12" darkLevel="0" index="21" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" name="GraphicsSWLTab">
       <Label label="text_color" index="8" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextColorswlLabel" localize="true" />
       <Color allowsNull="false" index="9" data="data.textColor" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TextColorswl" localize="true" />
+      <Label label="text_font" index="10" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextFontswlLabel" localize="true" />
+      <Font sampleText="Sample for this font" allowsNull="false" index="10" data="data.textFont.font" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
       <Label label="solid_background" index="10" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IsSolidBackgroundswlLabel" localize="true" />
-      <CheckBox selected="true" index="11" data="data.isSolidBackground" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IsSolidBackgroundswl" localize="true" />
-      <Label label="back_color" index="12" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BgColorswlLabel" localize="true" />
+      <CheckBox selected="true" index="10" data="data.isSolidBackground" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IsSolidBackgroundswl" localize="true" />
+      <Label label="text_alignment" index="10" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextAlignmentswlLabel" localize="true" />
+      <DropDown index="10" data="data.textAlignment" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="TextAlignmentswl" localize="true" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$ParagraphAlignment" autoSelectFirstRow="true" />
+      <Label label="dash_style" index="10" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="DashStyleswlLabel" localize="true" />
+      <DropDown index="10" data="data.dashStyle" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="DashStyleswl" localize="true" iteratorClassName="org.openflexo.fge.graphics.ForegroundStyle$DashStyle" autoSelectFirstRow="true" />
+      <Label label="back_color" index="10" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BgColorswlLabel" localize="true" />
       <Color allowsNull="false" index="13" data="data.backgroundColor" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="BgColorswl" localize="true" />
-      <Label label="text_font" index="14" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextFontswlLabel" localize="true" />
-      <Font sampleText="Sample for this font" index="15" data="data.textFont.font" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
-      <Label label="text_alignment" index="16" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextAlignmentswlLabel" localize="true" />
-      <DropDown index="17" data="data.textAlignment" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="TextAlignmentswl" localize="true" iteratorClassName="org.openflexo.fge.GraphicalRepresentation$ParagraphAlignment" autoSelectFirstRow="true" />
-      <Label label="dash_style" index="18" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="DashStyleswlLabel" localize="true" />
-      <DropDown index="19" data="data.dashStyle" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="DashStyleswl" localize="true" iteratorClassName="org.openflexo.fge.graphics.ForegroundStyle$DashStyle" autoSelectFirstRow="true" />
       <Label label="border_color" index="20" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BorderColorswlLabel" localize="true" />
       <Color allowsNull="false" index="21" data="data.borderColor" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="BorderColorswl" localize="true" />
       <Label label="rounded_corners" index="22" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IsRoundedswlLabel" localize="true" />
@@ -122,6 +122,27 @@
     <Localized key="Graphics_SWL" lang="English">Graphics</Localized>
     <Localized key="Graphics_SWL" lang="French">Graphisme</Localized>
     <Localized key="Graphics_SWL" lang="Dutch">Graphics</Localized>
+    <Localized key="PLAIN STROKE" lang="English">PLAIN STROKE</Localized>
+    <Localized key="PLAIN STROKE" lang="French">PLAIN STROKE</Localized>
+    <Localized key="PLAIN STROKE" lang="Dutch">PLAIN STROKE</Localized>
+    <Localized key="SMALL DASHES" lang="English">SMALL DASHES</Localized>
+    <Localized key="SMALL DASHES" lang="French">SMALL DASHES</Localized>
+    <Localized key="SMALL DASHES" lang="Dutch">SMALL DASHES</Localized>
+    <Localized key="MEDIUM DASHES" lang="English">MEDIUM DASHES</Localized>
+    <Localized key="MEDIUM DASHES" lang="French">MEDIUM DASHES</Localized>
+    <Localized key="MEDIUM DASHES" lang="Dutch">MEDIUM DASHES</Localized>
+    <Localized key="MEDIUM SPACED DASHES" lang="English">MEDIUM SPACED DASHES</Localized>
+    <Localized key="MEDIUM SPACED DASHES" lang="French">MEDIUM SPACED DASHES</Localized>
+    <Localized key="MEDIUM SPACED DASHES" lang="Dutch">MEDIUM SPACED DASHES</Localized>
+    <Localized key="BIG DASHES" lang="English">BIG DASHES</Localized>
+    <Localized key="BIG DASHES" lang="French">BIG DASHES</Localized>
+    <Localized key="BIG DASHES" lang="Dutch">BIG DASHES</Localized>
+    <Localized key="DOTS DASHES" lang="English">DOTS DASHES</Localized>
+    <Localized key="DOTS DASHES" lang="French">DOTS DASHES</Localized>
+    <Localized key="DOTS DASHES" lang="Dutch">DOTS DASHES</Localized>
+    <Localized key="DOT LINES DASHES" lang="English">DOT LINES DASHES</Localized>
+    <Localized key="DOT LINES DASHES" lang="French">DOT LINES DASHES</Localized>
+    <Localized key="DOT LINES DASHES" lang="Dutch">DOT LINES DASHES</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="Group" />
 </Panel>
