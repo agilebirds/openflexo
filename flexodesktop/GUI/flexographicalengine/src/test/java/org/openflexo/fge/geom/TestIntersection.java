@@ -44,6 +44,8 @@ public class TestIntersection extends Assert {
 	private static final FGELine VERTICAL_LINE = new FGELine(1, 0, 0);
 	private static final FGELine OFFSETED_VERTICAL_LINE = new FGELine(1, 0, -1);
 
+	private static final FGERoundRectangle ROUND_RECTANGLE = new FGERoundRectangle(0, 0, 1, 1, 0.01, 0.01);
+
 	@Test
 	public void testParallelism() {
 		assertFalse(VERTICAL_LINE.isParallelTo(rectangle.getNorth()));
@@ -139,5 +141,6 @@ public class TestIntersection extends Assert {
 		assertEquals(TOP_LEFT, FGEIntersectionArea.makeIntersection(line1, TOP_LEFT));
 		assertEquals(TOP_LEFT, FGEIntersectionArea.makeIntersection(TOP_LEFT, line1));
 		assertEquals(TOP_LEFT, FGEIntersectionArea.makeIntersection(TOP_LEFT, line2));
+		assertEquals(ROUND_RECTANGLE.getArcExcludedWest(), ROUND_RECTANGLE.intersect(hp));
 	}
 }

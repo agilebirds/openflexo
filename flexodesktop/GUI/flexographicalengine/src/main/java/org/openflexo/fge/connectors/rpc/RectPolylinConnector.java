@@ -1627,24 +1627,26 @@ public class RectPolylinConnector extends Connector {
 		}
 
 		else {
-			for (int i = 0; i < potentialStartOrientations.size(); i++) {
-				for (int j = 0; j < potentialEndOrientations.size(); j++) {
-					if (allowedStartOrientations.contains(potentialStartOrientations.get(i))
-							&& allowedEndOrientations.contains(potentialEndOrientations.get(j))) {
-						FGERectPolylin newPolylin = new FGERectPolylin(startArea, potentialStartOrientations.get(i), endArea,
-								potentialEndOrientations.get(j), getStraightLineWhenPossible(), getOverlapXResultingFromPixelOverlap(),
-								getOverlapYResultingFromPixelOverlap());
-						potentialPolylin.add(newPolylin);
-						if (newPolylin.doesRespectAllConstraints() && newPolylin.getLength() < minimalLength + FGEGeometricObject.EPSILON /*
-																																			* Hysteresis
-																																			* to
-																																			* avoid
-																																			* blinking
-																																			*/) {
-							polylin = newPolylin;
-							minimalLength = newPolylin.getLength();
-							choosenStartOrientation = potentialStartOrientations.get(i);
-							choosenEndOrientation = potentialEndOrientations.get(j);
+			for (SimplifiedCardinalDirection startOrientation : potentialStartOrientations) {
+				if (allowedStartOrientations.contains(startOrientation)) {
+					for (SimplifiedCardinalDirection endOrientation : potentialEndOrientations) {
+						if (allowedEndOrientations.contains(endOrientation)) {
+							FGERectPolylin newPolylin = new FGERectPolylin(startArea, startOrientation, endArea, endOrientation,
+									getStraightLineWhenPossible(), getOverlapXResultingFromPixelOverlap(),
+									getOverlapYResultingFromPixelOverlap());
+							potentialPolylin.add(newPolylin);
+							if (newPolylin.doesRespectAllConstraints()
+									&& newPolylin.getLength() < minimalLength + FGEGeometricObject.EPSILON /*
+																											* Hysteresis
+																											* to
+																											* avoid
+																											* blinking
+																											*/) {
+								polylin = newPolylin;
+								minimalLength = newPolylin.getLength();
+								choosenStartOrientation = startOrientation;
+								choosenEndOrientation = endOrientation;
+							}
 						}
 					}
 				}
