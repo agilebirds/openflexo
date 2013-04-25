@@ -774,7 +774,7 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 		if (area instanceof FGEArc && ((FGEArc) area).overlap(this)) {
 			return computeArcIntersection((FGEArc) area);
 		}
-		if (area instanceof FGEBand || area instanceof FGEHalfBand || area instanceof FGEHalfPlane) {
+		if (area instanceof FGEBand || area instanceof FGEHalfBand) {
 			// TODO please really implement this
 			FGERectangle boundingBox = getBoundingBox();
 			boundingBox.setIsFilled(true);
@@ -790,6 +790,36 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 				}
 			}
 			return returned;
+		}
+		if (area instanceof FGEHalfPlane) {
+			FGEHalfPlane hp = (FGEHalfPlane) area;
+			FGELine line = hp.line;
+			FGEArea intersect = intersect(line);
+			FGEPoint p1 = null;
+			FGEPoint p2 = null;
+			if (intersect instanceof FGEUnionArea && ((FGEUnionArea) intersect).isUnionOfPoints()
+					&& ((FGEUnionArea) intersect).getObjects().size() > 1) {
+				p1 = (FGEPoint) ((FGEUnionArea) intersect).getObjects().get(0);
+				p2 = (FGEPoint) ((FGEUnionArea) intersect).getObjects().get(1);
+			} else if (intersect instanceof FGESegment) {
+				p1 = ((FGESegment) intersect).getP1();
+				p2 = ((FGESegment) intersect).getP2();
+			}
+			if (p1 != null && p2 != null) {
+				ArcType type = getFGEArcType();
+				if (type == ArcType.PIE) {
+					type = line.contains(getCenter()) ? ArcType.PIE : ArcType.CHORD;
+				}
+				double startAngle = Math.toDegrees(angleForPoint(p1));
+				double endAngle = Math.toDegrees(angleForPoint(p2));
+				FGEArc arc1 = new FGEArc(x, y, width, height, startAngle, endAngle - startAngle + (endAngle >= startAngle ? 0 : 360), type);
+				FGEArc arc2 = new FGEArc(x, y, width, height, endAngle, startAngle - endAngle + (startAngle >= endAngle ? 0 : 360), type);
+				if (hp.containsPoint(arc1.getMiddle())) {
+					return arc1;
+				} else {
+					return arc2;
+				}
+			}
 		}
 
 		FGEIntersectionArea returned = new FGEIntersectionArea(this, area);
@@ -917,7 +947,7 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 	public void paint(FGEGraphics g) {
 		if (getFGEArcType() == ArcType.CHORD || getFGEArcType() == ArcType.PIE) {
 			g.useDefaultBackgroundStyle();
-			g.fillArc(getX(), getY(), getWidth(), getHeight(), getAngleStart(), getAngleExtent());
+			g.fillArc(getX(), getY(), getWidth(), getHeight(), getAngleStart(), getAngleExtent(), getFGEArcType() == ArcType.CHORD);
 		}
 		g.useDefaultForegroundStyle();
 		Stroke defaultForegroundStroke = null;
