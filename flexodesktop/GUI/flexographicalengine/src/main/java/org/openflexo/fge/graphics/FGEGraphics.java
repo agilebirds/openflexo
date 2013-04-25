@@ -635,11 +635,20 @@ public abstract class FGEGraphics {
 	}
 
 	public void fillArc(double x, double y, double width, double height, double angleStart, double arcAngle) {
+		fillArc(x, y, width, height, angleStart, arcAngle, false);
+	}
+
+	public void fillArc(double x, double y, double width, double height, double angleStart, double arcAngle, boolean chord) {
 		Rectangle r = convertNormalizedRectangleToViewCoordinates(x, y, width, height);
 		if (currentBackground instanceof BackgroundStyle.BackgroundImage) {
-			Arc2D.Double a = new Arc2D.Double(r.x, r.y, r.width, r.height, (int) angleStart, (int) arcAngle, Arc2D.PIE);
+			Arc2D.Double a = new Arc2D.Double(r.x, r.y, r.width, r.height, (int) angleStart, (int) arcAngle, chord ? Arc2D.CHORD
+					: Arc2D.PIE);
 			fillInShapeWithImage(a);
 		} else {
+			if (chord) {
+				Arc2D.Double a = new Arc2D.Double(r.x, r.y, r.width, r.height, (int) angleStart, (int) arcAngle, Arc2D.CHORD);
+				g2d.setClip(a);
+			}
 			g2d.fillArc(r.x, r.y, r.width, r.height, (int) angleStart, (int) arcAngle);
 		}
 		if (logger.isLoggable(Level.FINER)) {
