@@ -843,17 +843,36 @@ public class FGERoundRectangle extends RoundRectangle2D.Double implements FGEGeo
 	@Override
 	public FGEArea getAnchorAreaFrom(SimplifiedCardinalDirection orientation) {
 		if (orientation == SimplifiedCardinalDirection.NORTH) {
-			// return getNorth();
-			return new FGEUnionArea(getArcExcludedNorth(), getNorthWestRound(), getNorthEastRound());
+			FGEArc northWestRound = getNorthWestRound();
+			northWestRound.extent = 45;
+			FGEArc northEastRound = getNorthEastRound();
+			northEastRound.extent = 45;
+			northEastRound.start += 45;
+			return new FGEUnionArea(getArcExcludedNorth(), northWestRound, northEastRound);
 		} else if (orientation == SimplifiedCardinalDirection.SOUTH) {
 			// return getSouth();
-			return new FGEUnionArea(getArcExcludedSouth(), getSouthWestRound(), getSouthEastRound());
+			FGEArc southWestRound = getSouthWestRound();
+			southWestRound.start += 45;
+			southWestRound.extent = 45;
+			FGEArc southEastRound = getSouthEastRound();
+			southEastRound.extent = 45;
+			return new FGEUnionArea(getArcExcludedSouth(), southWestRound, southEastRound);
 		} else if (orientation == SimplifiedCardinalDirection.EAST) {
 			// return getEast();
-			return new FGEUnionArea(getArcExcludedEast(), getNorthEastRound(), getSouthEastRound());
+			FGEArc northEastRound = getNorthEastRound();
+			northEastRound.extent = 45;
+			FGEArc southEastRound = getSouthEastRound();
+			southEastRound.extent = 45;
+			southEastRound.start += 45;
+			return new FGEUnionArea(getArcExcludedEast(), northEastRound, southEastRound);
 		} else if (orientation == SimplifiedCardinalDirection.WEST) {
 			// return getWest();
-			return new FGEUnionArea(getArcExcludedWest(), getNorthWestRound(), getSouthWestRound());
+			FGEArc northWestRound = getNorthWestRound();
+			northWestRound.extent = 45;
+			northWestRound.start += 45;
+			FGEArc southWestRound = getSouthWestRound();
+			southWestRound.extent = 45;
+			return new FGEUnionArea(getArcExcludedWest(), northWestRound, southWestRound);
 		}
 		logger.warning("Unexpected: " + orientation);
 		return null;
