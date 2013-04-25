@@ -147,5 +147,12 @@ public class TestIntersection extends Assert {
 		assertEquals(TOP_LEFT, FGEIntersectionArea.makeIntersection(TOP_LEFT, line2));
 		assertEquals(ROUND_RECTANGLE.getArcExcludedWest(), ROUND_RECTANGLE.intersect(hp));
 		assertEquals(HALF_ELLIPS, ELLIPS.intersect(hp));
+
+		FGEEllips ellips = new FGEEllips(0.07092198581560283, 0.16666666666666666, 0.21985815602836878, 0.4696969696969698,
+				Filling.NOT_FILLED);
+		FGELine line = new FGELine(0.18085106382978722, 0.16666666666666669, 0.400709219858156, 0.16666666666666669);
+		FGEPoint point = new FGEPoint(0.18085106382978722, -0.30303030303030304);
+		FGEHalfPlane halfPlane = new FGEHalfPlane(line, point);
+		assertEquals(ellips.getPointAtAngle(90), FGEIntersectionArea.makeIntersection(ellips, halfPlane));
 	}
 }

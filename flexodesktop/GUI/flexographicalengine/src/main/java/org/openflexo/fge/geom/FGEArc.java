@@ -804,6 +804,8 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 			} else if (intersect instanceof FGESegment) {
 				p1 = ((FGESegment) intersect).getP1();
 				p2 = ((FGESegment) intersect).getP2();
+			} else if (intersect instanceof FGEPoint) {
+				return intersect;
 			}
 			if (p1 != null && p2 != null) {
 				ArcType type = getFGEArcType();
