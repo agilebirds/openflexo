@@ -12,6 +12,7 @@ import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
@@ -160,4 +161,26 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	public boolean isReflexiveModelSlot() {
 		return getName().equals(VirtualModel.REFLEXIVE_MODEL_SLOT_NAME) && getVirtualModelResource() == getVirtualModel().getResource();
 	}
+
+	/** 
+	 * 
+	 * @param msInstance
+	 * @param o
+	 * @return URI as String
+	 */
+	public String getURIForObject(ModelSlotInstance msInstance, Object o)
+	  {
+	    logger.warning("This  Je ne devrais jamais passé là normalement....");
+	    return null;
+	  }
+
+	/**
+	 * @param msInstance
+	 * @param objectURI
+	 * @return the Object
+	 */
+	  public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI)
+	  {
+	    logger.warning("Whouata, Tu es sûr de toi là? Je ne devrais jamais passé là normalement....");
+	    return null;
 }

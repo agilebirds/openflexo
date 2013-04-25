@@ -29,6 +29,7 @@
 package org.openflexo.foundation.ontology;
 
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.view.ModelSlotInstance;
 
 /**
  * Flexo Ontology Object.
@@ -57,7 +58,7 @@ public interface IFlexoOntologyObject {
 	 * 
 	 * @return
 	 */
-	public String getURI();
+	public String getURI(ModelSlotInstance msInstance);
 
 	/**
 	 * Description of Object.

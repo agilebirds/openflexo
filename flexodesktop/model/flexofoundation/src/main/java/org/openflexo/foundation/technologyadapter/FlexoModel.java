@@ -1,6 +1,7 @@
 package org.openflexo.foundation.technologyadapter;
 
 import org.openflexo.foundation.resource.ResourceData;
+import org.openflexo.foundation.view.ModelSlotInstance;
 
 /**
  * This interface is implemented by all objects considered in Flexo Modelling Language as a model<br>
@@ -33,7 +34,7 @@ public interface FlexoModel<M extends FlexoModel<M, MM>, MM extends FlexoMetaMod
 	 */
 	public String getURI();
 
-	public Object getObject(String objectURI);
+	public Object getObject(ModelSlotInstance msInstance, String objectURI);
 
 	/**
 	 * Return the {@link TechnologyAdapter} of technical space where related FlexoOntology exists
