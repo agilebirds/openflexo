@@ -181,7 +181,11 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 
 	public abstract ConnectorType getConnectorType();
 
-	public void refreshConnector() {
+	public final void refreshConnector() {
+		refreshConnector(false);
+	}
+
+	public void refreshConnector(boolean forceRefresh) {
 		/*
 		 * if (FGEConstants.DEBUG || getGraphicalRepresentation().getDebugCoveringArea()) { computeCoveringAreas(); }
 		 */

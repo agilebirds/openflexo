@@ -33,7 +33,7 @@ public abstract class WKFEdge<S extends WKFNode, E extends WKFNode> extends WKFO
 
 	private static final Logger logger = Logger.getLogger(WKFEdge.class.getPackage().getName());
 
-	private static final String LOCATION_CONSTRAINT_FLAG = "locationConstraintFlag";
+	public static final String LOCATION_CONSTRAINT_FLAG = "locationConstraintFlag";
 
 	private S startNode;
 
@@ -184,6 +184,8 @@ public abstract class WKFEdge<S extends WKFNode, E extends WKFNode> extends WKFO
 
 	public void setLocationConstraintFlag(boolean flag) {
 		_setGraphicalPropertyForKey(flag, LOCATION_CONSTRAINT_FLAG);
+		setChanged();
+		notifyAttributeModification(LOCATION_CONSTRAINT_FLAG, !flag, flag);
 	}
 
 	/*@Override

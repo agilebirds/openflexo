@@ -305,8 +305,8 @@ public class RectPolylinConnector extends Connector {
 	}
 
 	@Override
-	public void refreshConnector() {
-		if (!needsRefresh()) {
+	public void refreshConnector(boolean force) {
+		if (!force && !needsRefresh()) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Skipping refreshConnector() for " + getGraphicalRepresentation().getDrawable());
 			}
@@ -323,7 +323,7 @@ public class RectPolylinConnector extends Connector {
 			updateMiddleSymbolLocationControlPoint();
 		}
 
-		super.refreshConnector();
+		super.refreshConnector(force);
 
 		firstUpdated = true;
 
@@ -1697,7 +1697,7 @@ public class RectPolylinConnector extends Connector {
 				startArea) : new FGEAreaProvider<SimplifiedCardinalDirection>() {
 			@Override
 			public FGEArea getArea(SimplifiedCardinalDirection input) {
-				return getStartObject().getAllowedEndAreaForConnectorForDirection(getGraphicalRepresentation(), startArea, input);
+				return getStartObject().getAllowedStartAreaForConnectorForDirection(getGraphicalRepresentation(), startArea, input);
 			}
 		};
 		FGEAreaProvider<SimplifiedCardinalDirection> endAreaProvider = getIsEndingLocationFixed() ? new DefaultAreaProvider<SimplifiedCardinalDirection>(

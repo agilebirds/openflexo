@@ -551,12 +551,15 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 			if (dataModification instanceof PostInserted || dataModification instanceof PostRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 			} else if (dataModification instanceof WKFAttributeDataModification) {
-				if (((WKFAttributeDataModification) dataModification).getAttributeName().equals(FlexoPostCondition.EDGE_REPRESENTATION)) {
+				String propertyName = ((WKFAttributeDataModification) dataModification).propertyName();
+				if (FlexoPostCondition.EDGE_REPRESENTATION.equals(propertyName)) {
 					updatePropertiesFromWKFPreferences();
 					refreshConnector();
-				} else if ("isConditional".equals(((WKFAttributeDataModification) dataModification).propertyName())) {
+				} else if ("isConditional".equals(propertyName)) {
 					refreshConnector(true);
 				} else if ("isDefaultFlow".equals(((WKFAttributeDataModification) dataModification).propertyName())) {
+					refreshConnector(true);
+				} else if (WKFEdge.LOCATION_CONSTRAINT_FLAG.equals(propertyName) && (Boolean) dataModification.newValue()) {
 					refreshConnector(true);
 				}
 			} else if (dataModification instanceof NameChanged) {
