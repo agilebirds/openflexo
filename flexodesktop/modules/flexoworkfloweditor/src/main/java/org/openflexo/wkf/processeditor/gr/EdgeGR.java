@@ -20,7 +20,6 @@
 package org.openflexo.wkf.processeditor.gr;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -206,7 +205,12 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 	}
 
 	protected void convertOldLayout(RectPolylinConnector connector) {
-		setRelativeMiddleSymbolLocation(1.0);
+		if (getEdge().hasGraphicalPropertyForKey(getPreConditionLayoutTransformFlagKey())) {
+			return;
+		}
+		double relativeLocation = (Double) getEdge()._graphicalPropertyForKey(
+				getRelativeMiddleSymbolLocationKey(getContext(startObject, getEdge().getEndNode(), false)));
+		setRelativeMiddleSymbolLocation(relativeLocation);
 		Rectangle normalizedBounds = getNormalizedBounds(1.0);
 		String oldContext = getContext(startObject, getEdge().getEndNode(), false);
 		AffineTransform startToDrawingAT = convertFromDrawableToDrawingAT(getStartObject(), 1.0);
@@ -216,20 +220,18 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		FGEPoint startLocationInDrawing = new FGEPoint();
 		FGEPoint endLocationInDrawing = new FGEPoint();
 		startToDrawingAT.transform(startLocationInDrawing, startLocationInDrawing);
-		startLocationInDrawing.x += getStartObject().getBorder().left;
-		startLocationInDrawing.y += getStartObject().getBorder().top;
+		ShapeBorder startBorder = getStartObject().getBorder();
+		startLocationInDrawing.x -= startBorder.left;
+		startLocationInDrawing.y -= startBorder.top;
 		// Start object bounds in drawing coordinates
 		FGEDimension startSize = getStartObject().getSize();
-		startSize.width += getStartObject().getBorder().right;
-		startSize.height += getStartObject().getBorder().bottom;
+		startSize.width += startBorder.right + startBorder.left;
+		startSize.height += startBorder.bottom + startBorder.top;
 		FGERectangle startObjectRect = new FGERectangle(startLocationInDrawing, startSize, Filling.FILLED);
 		// Compute the precondition location into the drawing coordinates
 		endToDrawingAT.transform(new FGEPoint(posx, posy), endLocationInDrawing);
 		/*endLocationInDrawing.x += getEndObject().getBorder().left;
 		endLocationInDrawing.y += getEndObject().getBorder().top;*/
-		FGEPoint convertLocalViewCoordinatesToRemoteNormalizedPoint = getDrawingGraphicalRepresentation()
-				.convertLocalViewCoordinatesToRemoteNormalizedPoint(new Point((int) endLocationInDrawing.x, (int) endLocationInDrawing.y),
-						getEndObject(), 1.0);
 		// Pre condition bounds in drawing coordinates
 		FGERectangle preConditionRect = new FGERectangle(endLocationInDrawing, new FGEDimension(PreConditionGR.PRECONDITION_SIZE,
 				PreConditionGR.PRECONDITION_SIZE), Filling.FILLED);
@@ -257,10 +259,9 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 			getEdge()._removeGraphicalPropertyWithKey(getFixedStartLocationKey(oldContext));
 		}
 		ShapeBorder border = getEndObject().getBorder();
-		FGEPoint endLocation = new FGEPoint((posx + PreConditionGR.PRECONDITION_SIZE / 2 + border.left)
-				/ (getEndObject().getWidth() + border.right + border.left), (posy + PreConditionGR.PRECONDITION_SIZE / 2 + border.top)
-				/ (getEndObject().getHeight() + border.bottom + border.top));
-		connector.setFixedEndLocation(convertLocalViewCoordinatesToRemoteNormalizedPoint);
+		FGEPoint endLocation = new FGEPoint(posx / (getEndObject().getWidth() + border.left), posy
+				/ (getEndObject().getHeight() + border.top));
+		connector.setFixedEndLocation(endLocation);
 		getEdge()._removeGraphicalPropertyWithKey(getFixedEndLocationKey(oldContext));
 		getEdge()._removeGraphicalPropertyWithKey(
 				getRelativeMiddleSymbolLocationKey(getContext(startObject, getEdge().getEndNode(), false)));

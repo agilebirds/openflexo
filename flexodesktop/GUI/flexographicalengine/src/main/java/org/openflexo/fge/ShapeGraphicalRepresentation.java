@@ -47,6 +47,7 @@ import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGESegment;
@@ -2683,5 +2684,30 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	 */
 	public FGEArea getAllowedEndAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR) {
 		return getShape().getOutline();
+	}
+
+	/**
+	 * Returns the area on which the given connector can start. The area is expressed in this normalized coordinates
+	 * 
+	 * @param connectorGR
+	 *            the connector asking where to start
+	 * 
+	 * @return the area on which the given connector can start
+	 */
+	public FGEArea getAllowedStartAreaForConnectorForDirection(ConnectorGraphicalRepresentation<?> connectorGR, FGEArea area,
+			SimplifiedCardinalDirection direction) {
+		return area;
+	}
+
+	/**
+	 * Returns the area on which the given connector can end. The area is expressed in this normalized coordinates
+	 * 
+	 * @param connectorGR
+	 *            the connector asking where to end
+	 * @return the area on which the given connector can end
+	 */
+	public FGEArea getAllowedEndAreaForConnectorForDirection(ConnectorGraphicalRepresentation<?> connectorGR, FGEArea area,
+			SimplifiedCardinalDirection direction) {
+		return area;
 	}
 }

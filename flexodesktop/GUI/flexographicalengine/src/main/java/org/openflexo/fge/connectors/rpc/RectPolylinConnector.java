@@ -55,9 +55,6 @@ import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.geom.area.DefaultAreaProvider;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEAreaProvider;
-import org.openflexo.fge.geom.area.FGEEmptyArea;
-import org.openflexo.fge.geom.area.FGEHalfPlane;
-import org.openflexo.fge.geom.area.FGEIntersectionArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
@@ -1700,34 +1697,14 @@ public class RectPolylinConnector extends Connector {
 				startArea) : new FGEAreaProvider<SimplifiedCardinalDirection>() {
 			@Override
 			public FGEArea getArea(SimplifiedCardinalDirection input) {
-				AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(getStartObject(), getGraphicalRepresentation());
-				FGEHalfPlane makeFGEHalfPlane = FGEHalfPlane.makeFGEHalfPlane(input.getNormalizedRepresentativePoint(),
-						input.getCardinalDirectionEquivalent()).transform(at);
-				FGEArea makeIntersection = FGEIntersectionArea.makeIntersection(startArea, makeFGEHalfPlane);
-				if (makeIntersection instanceof FGEEmptyArea) {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Intersection of " + startArea + " and " + makeFGEHalfPlane + " return empty area");
-					}
-					return startArea;
-				}
-				return makeIntersection;
+				return getStartObject().getAllowedEndAreaForConnectorForDirection(getGraphicalRepresentation(), startArea, input);
 			}
 		};
 		FGEAreaProvider<SimplifiedCardinalDirection> endAreaProvider = getIsEndingLocationFixed() ? new DefaultAreaProvider<SimplifiedCardinalDirection>(
 				endArea) : new FGEAreaProvider<SimplifiedCardinalDirection>() {
 			@Override
 			public FGEArea getArea(SimplifiedCardinalDirection input) {
-				AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(getEndObject(), getGraphicalRepresentation());
-				FGEHalfPlane makeFGEHalfPlane = FGEHalfPlane.makeFGEHalfPlane(input.getNormalizedRepresentativePoint(),
-						input.getCardinalDirectionEquivalent()).transform(at);
-				FGEArea makeIntersection = FGEIntersectionArea.makeIntersection(endArea, makeFGEHalfPlane);
-				if (makeIntersection instanceof FGEEmptyArea) {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Intersection of " + endArea + " and " + makeFGEHalfPlane + " return empty area");
-					}
-					return endArea;
-				}
-				return makeIntersection;
+				return getEndObject().getAllowedEndAreaForConnectorForDirection(getGraphicalRepresentation(), endArea, input);
 			}
 		};
 		if (_crossedPoint != null) {

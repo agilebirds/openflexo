@@ -103,14 +103,14 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 		return graphicalRepresentation.getDrawable();
 	}
 
-	public ShapeGraphicalRepresentation getStartObject() {
+	public ShapeGraphicalRepresentation<?> getStartObject() {
 		if (graphicalRepresentation == null) {
 			return null;
 		}
 		return graphicalRepresentation.getStartObject();
 	}
 
-	public ShapeGraphicalRepresentation getEndObject() {
+	public ShapeGraphicalRepresentation<?> getEndObject() {
 		if (graphicalRepresentation == null) {
 			return null;
 		}
