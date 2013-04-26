@@ -252,6 +252,7 @@ public abstract class IEWidgetView<T extends IEWidget> extends IEInnerDSWidgetVi
 		if (logger.isLoggable(Level.FINEST)) {
 			logger.finest("setIsSelected=" + b + " dans " + getClass().getName());
 		}
+		grabFocus();
 		repaint();
 	}
 
