@@ -80,7 +80,7 @@ public class EditMenu extends FlexoMenu {
 		public UndoItem() {
 			super(new UndoAction(), "undo", KeyStroke.getKeyStroke(KeyEvent.VK_Z, FlexoCst.META_MASK), IconLibrary.UNDO_ICON,
 					getController());
-			_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, this);
+			manager.addListener(ControllerModel.CURRENT_EDITOR, this, _controller.getControllerModel());
 		}
 
 		@Override
@@ -89,15 +89,15 @@ public class EditMenu extends FlexoMenu {
 				if (evt.getOldValue() != null) {
 					FlexoEditor old = (FlexoEditor) evt.getOldValue();
 					if (old.getUndoManager() != null) {
-						old.getUndoManager().getPropertyChangeSupport().removePropertyChangeListener(UndoManager.ACTION_HISTORY, this);
-						old.getUndoManager().getPropertyChangeSupport().removePropertyChangeListener(UndoManager.ENABLED, this);
+						manager.removeListener(UndoManager.ACTION_HISTORY, this, old.getUndoManager());
+						manager.removeListener(UndoManager.ENABLED, this, old.getUndoManager());
 					}
 				}
 				if (evt.getNewValue() != null) {
 					FlexoEditor editor = (FlexoEditor) evt.getNewValue();
 					if (editor.getUndoManager() != null) {
-						editor.getUndoManager().getPropertyChangeSupport().addPropertyChangeListener(UndoManager.ACTION_HISTORY, this);
-						editor.getUndoManager().getPropertyChangeSupport().addPropertyChangeListener(UndoManager.ENABLED, this);
+						manager.addListener(UndoManager.ACTION_HISTORY, this, editor.getUndoManager());
+						manager.addListener(UndoManager.ENABLED, this, editor.getUndoManager());
 					}
 					updateWithUndoManagerState();
 				}
@@ -150,7 +150,7 @@ public class EditMenu extends FlexoMenu {
 		public RedoItem() {
 			super(new RedoAction(), "redo", KeyStroke.getKeyStroke(KeyEvent.VK_Y, FlexoCst.META_MASK), IconLibrary.REDO_ICON,
 					getController());
-			_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, this);
+			manager.addListener(ControllerModel.CURRENT_EDITOR, this, _controller.getControllerModel());
 		}
 
 		@Override
@@ -159,15 +159,15 @@ public class EditMenu extends FlexoMenu {
 				if (evt.getOldValue() != null) {
 					FlexoEditor old = (FlexoEditor) evt.getOldValue();
 					if (old.getUndoManager() != null) {
-						old.getUndoManager().getPropertyChangeSupport().removePropertyChangeListener(UndoManager.ACTION_HISTORY, this);
-						old.getUndoManager().getPropertyChangeSupport().removePropertyChangeListener(UndoManager.ENABLED, this);
+						manager.removeListener(UndoManager.ACTION_HISTORY, this, old.getUndoManager());
+						manager.removeListener(UndoManager.ENABLED, this, old.getUndoManager());
 					}
 				}
 				if (evt.getNewValue() != null) {
 					FlexoEditor editor = (FlexoEditor) evt.getNewValue();
 					if (editor.getUndoManager() != null) {
-						editor.getUndoManager().getPropertyChangeSupport().addPropertyChangeListener(UndoManager.ACTION_HISTORY, this);
-						editor.getUndoManager().getPropertyChangeSupport().addPropertyChangeListener(UndoManager.ENABLED, this);
+						manager.addListener(UndoManager.ACTION_HISTORY, this, editor.getUndoManager());
+						manager.addListener(UndoManager.ENABLED, this, editor.getUndoManager());
 					}
 					updateWithUndoManagerState();
 				}
