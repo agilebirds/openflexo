@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.toc.ViewFolderSection" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" useScrollBar="false" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)" useScrollBar="false">
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="BasicTab">
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="BasicTab" opaque="false">
     <Label label="view_folder" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)"  />
     <Custom componentClassName="org.openflexo.components.widget.FIBViewFolderSelector" data="data.viewFolder" constraints="twocols(expandHorizontally=true;expandVertically=false;index=21;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="viewFolderSelector" localize="true" manageDynamicModel="true">
       <Assignment variable="component.project" value="data.project" />

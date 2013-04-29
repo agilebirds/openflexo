@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="twocols" darkLevel="0" dataClassName="org.openflexo.components.widget.FIBProjectSelector" controllerClassName="org.openflexo.components.widget.FIBModelObjectSelector$SelectorFIBController" width="270" height="300">
-  <Panel layout="gridbag" borderTitle="Panel" darkLevel="0" index="1" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="Matches">
+<Panel layout="twocols" darkLevel="0" dataClassName="org.openflexo.components.widget.FIBProjectSelector" controllerClassName="org.openflexo.components.widget.FIBModelObjectSelector$SelectorFIBController" width="270" height="300" opaque="false">
+  <Panel layout="gridbag" borderTitle="Panel" darkLevel="0" index="1" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="Matches" opaque="false">
     <Label align="right" index="0" data="((&quot;Found &quot; + data.matchingValues.size) + &quot; matches&quot;)" constraints="gridbag(anchor=east;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=5;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="((data.matchingValues.size != 1) &amp; data.isFiltered)" name="MatchesLabel" localize="true" />
   </Panel>
   <Browser root="data.projectLoader" iteratorClassName="java.lang.Object" visibleRowCount="10" rowHeight="20" boundToSelectionManager="false" selectionMode="SingleTreeSelection" selected="data.selectedObject" showFooter="false" rootVisible="false" showRootsHandle="true" localize="true" manageDynamicModel="true" doubleClickAction="data.apply()" enterPressedAction="data.apply()" name="projectBrowser" index="2" dataClassName="org.openflexo.components.widget.FIBProjectSelector" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
@@ -14,7 +14,7 @@
       <Children data="projectReference.referredProject.projectData.importedProjects" name="children" />
     </BrowserElement>
   </Browser>
-  <Panel layout="flow" hGap="5" vGap="0" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="3" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
+  <Panel layout="flow" hGap="5" vGap="0" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="3" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" opaque="false">
     <Button action="controller.apply()" buttonType="Trigger" label="apply" index="0" constraints="flow(index=0)" localize="true" enable="(data.selectedValue != null)" />
     <Button action="controller.cancel()" buttonType="Trigger" label="cancel" index="1" constraints="flow(index=1)" localize="true" />
     <Button action="controller.reset()" buttonType="Trigger" label="reset" index="2" constraints="flow(index=2)" visible="data.showReset" localize="true" />

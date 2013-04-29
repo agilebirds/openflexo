@@ -55,7 +55,7 @@ public abstract class DefaultFIBCustomComponent<T> extends JPanel implements FIB
 
 	public DefaultFIBCustomComponent(FileResource fibFile, T editedObject, LocalizedDelegate parentLocalizer) {
 		super();
-
+		setOpaque(false);
 		pcSupport = new PropertyChangeSupport(this);
 
 		this.editedObject = editedObject;
