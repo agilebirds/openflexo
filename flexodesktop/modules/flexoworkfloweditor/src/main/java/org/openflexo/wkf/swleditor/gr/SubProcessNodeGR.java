@@ -93,22 +93,22 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	@Override
 	int getTopBorder() {
-		return isInPalette ? 5 : PORTMAP_REGISTERY_WIDTH;
+		return isInPalette ? super.getTopBorder() : PORTMAP_REGISTERY_WIDTH;
 	}
 
 	@Override
 	int getBottomBorder() {
-		return isInPalette ? 5 : PORTMAP_REGISTERY_WIDTH;
+		return isInPalette ? super.getBottomBorder() : PORTMAP_REGISTERY_WIDTH;
 	}
 
 	@Override
 	int getLeftBorder() {
-		return isInPalette ? 5 : PORTMAP_REGISTERY_WIDTH;
+		return isInPalette ? super.getLeftBorder() : PORTMAP_REGISTERY_WIDTH;
 	}
 
 	@Override
 	int getRightBorder() {
-		return isInPalette ? 5 : PORTMAP_REGISTERY_WIDTH;
+		return isInPalette ? super.getRightBorder() : PORTMAP_REGISTERY_WIDTH;
 	}
 
 	protected FlexoFont getRoleFont() {

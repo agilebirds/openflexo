@@ -22,57 +22,69 @@ package org.openflexo.wkf.processeditor.gr;
 import java.awt.Color;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
+import org.openflexo.fge.graphics.ForegroundStyle.CapStyle;
+import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
+import org.openflexo.fge.graphics.ForegroundStyle.JoinStyle;
 import org.openflexo.fge.graphics.ShapePainter;
+import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.wkf.WKFDataSource;
+import org.openflexo.foundation.wkf.WKFMessageArtifact;
+import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-public class DataSourceGR extends ArtefactGR<WKFDataSource> {
+public class MessageGR extends ArtefactGR<WKFMessageArtifact> {
 
-	private static final Logger logger = Logger.getLogger(DataSourceGR.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(MessageGR.class.getPackage().getName());
+	private static final FGEPoint TOP_RIGHT = new FGEPoint(1, 0);
 
-	public static final ForegroundStyle NO_FOREGROUND = ForegroundStyle.makeNone();
+	private static final FGEPoint CENTER = new FGEPoint(0.5, 0.5);
 
-	// private static final ForegroundStyle ODD_FOREGROUND = ForegroundStyle.makeStyle(ODD_COLOR);
+	private static final FGEPoint ORIGIN = new FGEPoint(0, 0);
 
-	// private boolean isUpdatingPosition = false;
+	private static final BackgroundStyle INITIATING_BACKGROUND = BackgroundStyle.makeColoredBackground(Color.WHITE);
+	private static final BackgroundStyle EXITING_BACKGROUND = BackgroundStyle.makeColoredBackground(Color.GRAY);
 
-	public DataSourceGR(WKFDataSource dataSource, ProcessRepresentation aDrawing) {
+	private static final ForegroundStyle FOREGROUND = ForegroundStyle.makeStyle(new Color(0, 34, 73), 1.6f, JoinStyle.JOIN_ROUND,
+			CapStyle.CAP_ROUND, DashStyle.PLAIN_STROKE);
+
+	public MessageGR(WKFMessageArtifact dataSource, ProcessRepresentation aDrawing) {
 		super(dataSource, ShapeType.RECTANGLE, aDrawing);
+		((Rectangle) getShape()).setIsRounded(false);
 		setIsFloatingLabel(true);
-		setForeground(ForegroundStyle.makeNone());
-		setBackground(BackgroundStyle.makeColoredBackground(Color.WHITE));
+		setForeground(FOREGROUND);
+		if (dataSource.isInitiating()) {
+			setBackground(INITIATING_BACKGROUND);
+		} else {
+			setBackground(EXITING_BACKGROUND);
+		}
 		setMinimalWidth(10);
 		setMinimalHeight(10);
 		setShapePainter(new ShapePainter() {
 			@Override
 			public void paintShape(FGEShapeGraphics g) {
-				g.useForegroundStyle(ForegroundStyle.makeStyle(Color.BLACK));
-				double height = 0.375;
-				g.drawCircle(0, 0, 1, height);
-				g.drawArc(0, 0.075, 1, height, 180, 180);
-				g.drawArc(0, 0.15, 1, height, 180, 180);
-				g.drawArc(0, 1 - height, 1, height, 180, 180);
-				g.drawLine(0, height / 2, 0, 1 - height / 2);
-				g.drawLine(1, height / 2, 1, 1 - height / 2);
+				g.setDefaultForeground(FOREGROUND);
+				g.useDefaultForegroundStyle();
+				g.drawLine(ORIGIN, CENTER);
+				g.drawLine(CENTER, TOP_RIGHT);
 			}
 		});
 	}
 
 	@Override
 	public double getDefaultWidth() {
-		return 55;
+		return 50;
 	}
 
 	@Override
 	public double getDefaultHeight() {
-		return 40;
+		return 35;
 	}
 
 	@Override
@@ -101,6 +113,16 @@ public class DataSourceGR extends ArtefactGR<WKFDataSource> {
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		super.update(observable, dataModification);
+		if (dataModification instanceof WKFAttributeDataModification) {
+			String propertyName = ((WKFAttributeDataModification) dataModification).propertyName();
+			if (WKFMessageArtifact.INITIATING.equals(propertyName)) {
+				if (getDrawable().isInitiating()) {
+					setBackground(INITIATING_BACKGROUND);
+				} else {
+					setBackground(EXITING_BACKGROUND);
+				}
+			}
+		}
 	}
 
 }

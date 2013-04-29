@@ -54,6 +54,7 @@ import org.openflexo.foundation.wkf.WKFArtefact;
 import org.openflexo.foundation.wkf.WKFDataObject;
 import org.openflexo.foundation.wkf.WKFDataSource;
 import org.openflexo.foundation.wkf.WKFGroup;
+import org.openflexo.foundation.wkf.WKFMessageArtifact;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.WKFStockObject;
 import org.openflexo.foundation.wkf.dm.ArtefactInserted;
@@ -127,6 +128,7 @@ import org.openflexo.wkf.swleditor.gr.EventNodeGR;
 import org.openflexo.wkf.swleditor.gr.ExpanderGR;
 import org.openflexo.wkf.swleditor.gr.ExpanderGR.Expander;
 import org.openflexo.wkf.swleditor.gr.MessageEdgeGR;
+import org.openflexo.wkf.swleditor.gr.MessageGR;
 import org.openflexo.wkf.swleditor.gr.NormalAbstractActivityNodeGR;
 import org.openflexo.wkf.swleditor.gr.OperationNodeGR;
 import org.openflexo.wkf.swleditor.gr.OperationPetriGraphGR;
@@ -919,6 +921,9 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 		}
 		if (aDrawable instanceof WKFStockObject) {
 			return new StockObjectGR((WKFStockObject) aDrawable, this);
+		}
+		if (aDrawable instanceof WKFMessageArtifact) {
+			return new MessageGR((WKFMessageArtifact) aDrawable, this);
 		}
 		logger.warning("Cannot build GraphicalRepresentation for " + aDrawable);
 		return null;

@@ -134,22 +134,22 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	@Override
 	public int getTopBorder() {
-		return isInPalette ? 5 : PORTMAP_REGISTERY_WIDTH;
+		return isInPalette ? super.getTopBorder() : PORTMAP_REGISTERY_WIDTH;
 	}
 
 	@Override
 	public int getBottomBorder() {
-		return isInPalette ? 5 : PORTMAP_REGISTERY_WIDTH;
+		return isInPalette ? super.getBottomBorder() : PORTMAP_REGISTERY_WIDTH;
 	}
 
 	@Override
 	public int getLeftBorder() {
-		return isInPalette ? 5 : PORTMAP_REGISTERY_WIDTH;
+		return isInPalette ? super.getLeftBorder() : PORTMAP_REGISTERY_WIDTH;
 	}
 
 	@Override
 	public int getRightBorder() {
-		return isInPalette ? 5 : PORTMAP_REGISTERY_WIDTH;
+		return isInPalette ? super.getRightBorder() : PORTMAP_REGISTERY_WIDTH;
 	}
 
 	protected double getVerticalGap() {
@@ -245,7 +245,7 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 				}
 			}, false, false, false, false);
 		}
-		
+
 		@Override
 		public boolean isApplicable(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent e) {
 			return super.isApplicable(graphicalRepresentation, controller, e) && isInsideClosingBox(graphicalRepresentation, controller, e);

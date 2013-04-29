@@ -325,7 +325,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 						to = createElement(drop, dropLocation, target, direction);
 					} else {
 						if (target.getLevel() == FlexoLevel.ACTIVITY) {
-							element = ((ProcessEditorController) controller).getActivityPalette().getNormalActivityElement();
+							element = ((ProcessEditorController) controller).getBasicPalette().getNormalActivityElement();
 						} else if (target.getLevel() == FlexoLevel.OPERATION) {
 							element = ((ProcessEditorController) controller).getOperationPalette().getNormalOperationElement();
 						} else if (target.getLevel() == FlexoLevel.ACTION) {
@@ -344,7 +344,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 					break;
 				case EXCLUSIVE_GATEWAY:
 					if (target.getLevel() == FlexoLevel.ACTIVITY) {
-						element = ((ProcessEditorController) controller).getActivityPalette().getOrOperatorElement();
+						element = ((ProcessEditorController) controller).getBasicPalette().getOrOperatorElement();
 					} else if (target.getLevel() == FlexoLevel.OPERATION) {
 						element = ((ProcessEditorController) controller).getOperationPalette().getOROperatorElement();
 					} else if (target.getLevel() == FlexoLevel.ACTION) {
@@ -364,7 +364,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 						element = ((ProcessEditorController)controller).getActionPalette().getOROperatorElement();
 					else
 						return ;*/
-					drop = ((ProcessEditorController) controller).getArtefactPalette().getAnnotation()
+					drop = ((ProcessEditorController) controller).getBasicPalette().getAnnotation()
 							.createAndExecuteDropElementAction(dropLocation, target, null, false);
 					to = createElement(drop, dropLocation, target, direction);
 					break;

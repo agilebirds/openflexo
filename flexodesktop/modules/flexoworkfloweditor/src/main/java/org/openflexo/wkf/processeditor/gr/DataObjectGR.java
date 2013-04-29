@@ -43,8 +43,10 @@ import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.WKFDataObject;
+import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
+import org.openflexo.wkf.utils.DataObjectShapePainter;
 
 public class DataObjectGR extends ArtefactGR<WKFDataObject> {
 
@@ -73,6 +75,8 @@ public class DataObjectGR extends ArtefactGR<WKFDataObject> {
 
 	private ConcatenedList<ControlArea<?>> controlAreas;
 
+	private DataObjectShapePainter dataObjectShapePainter;
+
 	public DataObjectGR(WKFDataObject dataSource, ProcessRepresentation aDrawing) {
 		super(dataSource, ShapeType.POLYGON, aDrawing);
 		((RegularPolygon) getShape()).setPoints(fileShape.getPoints());
@@ -81,6 +85,7 @@ public class DataObjectGR extends ArtefactGR<WKFDataObject> {
 		setBackground(BACKGROUND);
 		setMinimalWidth(10);
 		setMinimalHeight(10);
+		dataObjectShapePainter = new DataObjectShapePainter(this);
 		setShapePainter(new ShapePainter() {
 			@Override
 			public void paintShape(FGEShapeGraphics g) {
@@ -88,9 +93,20 @@ public class DataObjectGR extends ArtefactGR<WKFDataObject> {
 				g.useDefaultForegroundStyle();
 				g.drawLine(topFoldingPoint, foldingPoint); // Vertical bar
 				g.drawLine(foldingPoint, rightFoldingPoint); // Horizontal bar
+				dataObjectShapePainter.paintShape(g);
 			}
 		});
 		updateControlAreas();
+	}
+
+	@Override
+	public double getDefaultWidth() {
+		return 50;
+	}
+
+	@Override
+	public double getDefaultHeight() {
+		return 50;
 	}
 
 	@Override
@@ -137,6 +153,14 @@ public class DataObjectGR extends ArtefactGR<WKFDataObject> {
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		super.update(observable, dataModification);
+		if (dataModification instanceof WKFAttributeDataModification) {
+			String propertyName = ((WKFAttributeDataModification) dataModification).propertyName();
+			if (WKFDataObject.IS_COLLECTION.equals(propertyName)) {
+				notifyShapeNeedsToBeRedrawn();
+			} else if (WKFDataObject.TYPE.equals(propertyName)) {
+				notifyShapeNeedsToBeRedrawn();
+			}
+		}
 	}
 
 }

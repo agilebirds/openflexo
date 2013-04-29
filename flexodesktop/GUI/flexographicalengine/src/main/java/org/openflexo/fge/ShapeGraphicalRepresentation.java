@@ -261,10 +261,10 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 
 	}
 
-	protected FGEShapeGraphics graphics;
-	protected FGEShapeDecorationGraphics decorationGraphics;
-	protected DecorationPainter decorationPainter;
-	protected ShapePainter shapePainter;
+	private FGEShapeGraphics graphics;
+	private FGEShapeDecorationGraphics decorationGraphics;
+	private DecorationPainter decorationPainter;
+	private ShapePainter shapePainter;
 
 	// *******************************************************************************
 	// * Constructor *

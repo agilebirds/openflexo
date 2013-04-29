@@ -34,7 +34,6 @@ import org.openflexo.foundation.wkf.dm.LabelLocationChanged;
 import org.openflexo.foundation.wkf.dm.ObjectLocationChanged;
 import org.openflexo.foundation.wkf.dm.ObjectSizeChanged;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.processeditor.ProcessEditorController;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
@@ -109,13 +108,13 @@ public abstract class WKFObjectGR<O extends WKFObject> extends ShapeGraphicalRep
 	}
 
 	public void updatePropertiesFromWKFPreferences() {
-		if (supportShadow()
+		/*if (supportShadow()
 				&& (getWorkflow() != null && getWorkflow().getShowShadows(WKFPreferences.getShowShadows()) || getWorkflow() == null
 						&& WKFPreferences.getShowShadows())) {
 			setShadowStyle(ShadowStyle.makeDefault());
-		} else {
-			setShadowStyle(ShadowStyle.makeNone());
-		}
+		} else {*/
+		setShadowStyle(ShadowStyle.makeNone());
+		// }
 	}
 
 	protected abstract boolean supportShadow();

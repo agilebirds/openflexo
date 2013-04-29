@@ -20,25 +20,18 @@
 package org.openflexo.foundation.wkf;
 
 import org.openflexo.foundation.DeletableObject;
-import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.inspector.InspectableObject;
 
-public class WKFDataObject extends WKFArtefact implements InspectableObject, DeletableObject, LevelledObject {
+public class WKFMessageArtifact extends WKFArtefact implements InspectableObject, DeletableObject, LevelledObject {
 
-	public static final String IS_COLLECTION = "isCollection";
-	public static final String TYPE = "type";
-	private boolean isCollection = false;
-	private DataObjectType type;
-
-	public enum DataObjectType {
-		INPUT, OUTPUT;
-	}
+	public static final String INITIATING = "initiating";
+	private boolean initiating = true;
 
 	/**
 	 * Constructor used during deserialization
 	 */
-	public WKFDataObject(FlexoProcessBuilder builder) {
+	public WKFMessageArtifact(FlexoProcessBuilder builder) {
 		this(builder.process);
 		initializeDeserialization(builder);
 	}
@@ -46,43 +39,32 @@ public class WKFDataObject extends WKFArtefact implements InspectableObject, Del
 	/**
 	 * Default constructor
 	 */
-	public WKFDataObject(FlexoProcess process) {
+	public WKFMessageArtifact(FlexoProcess process) {
 		super(process);
-	}
-
-	public boolean isCollection() {
-		return isCollection;
-	}
-
-	public void setIsCollection(boolean collection) {
-		this.isCollection = collection;
-		setChanged();
-		notifyAttributeModification(IS_COLLECTION, !collection, collection);
-	}
-
-	public DataObjectType getType() {
-		return type;
-	}
-
-	public void setType(DataObjectType type) {
-		this.type = type;
-		setChanged();
-		notifyAttributeModification(TYPE, null, type);
 	}
 
 	@Override
 	public String getInspectorName() {
-		return Inspectors.WKF.DATA_OBJECT_INSPECTOR;
+		return null;
 	}
 
 	@Override
 	public String getClassNameKey() {
-		return "data_object";
+		return "message_artifact";
 	}
 
 	@Override
 	public String getFullyQualifiedName() {
-		return "DATA_OBJECT." + getText();
+		return "MESSAGE." + getText();
 	}
 
+	public boolean isInitiating() {
+		return initiating;
+	}
+
+	public void setInitiating(boolean initiating) {
+		this.initiating = initiating;
+		setChanged();
+		notifyAttributeModification(INITIATING, !initiating, initiating);
+	}
 }
