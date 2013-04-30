@@ -1107,11 +1107,13 @@ public class MetaphaseEditorPanel extends JPanel {
 			}
 		});*/
 		mainScrollPane = new JScrollPane();
+		mainScrollPane.setOpaque(false);
 		mainScrollPane.setViewportView(htmlTextPane);
 
 		setLayout(new BorderLayout());
 
 		toolbarPanel = new JPanel(new GridBagLayout());
+		toolbarPanel.setOpaque(false);
 		// toolbarPanel.setLayout(new BoxLayout(toolbarPanel, BoxLayout.Y_AXIS));
 
 		add(toolbarPanel, BorderLayout.NORTH);
@@ -1206,6 +1208,7 @@ public class MetaphaseEditorPanel extends JPanel {
 
 	private JPanel makeGroup(String groupName, final MetaphaseEditorConfiguration configuration, JButton... buttons) {
 		JPanel returned = new JPanel();
+		returned.setOpaque(false);
 		returned.setName(groupName);
 		// returned.setBorder(BorderFactory.createEtchedBorder());
 		returned.setBorder(BorderFactory.createEmptyBorder());
@@ -1300,6 +1303,7 @@ public class MetaphaseEditorPanel extends JPanel {
 		});
 
 		JPanel returned = new JPanel();
+		returned.setOpaque(false);
 		returned.setVisible(components.size() > 0);
 		returned.setLayout(new WrapLayout(FlowLayout.LEADING, 10, 0));
 		for (JComponent c : components) {

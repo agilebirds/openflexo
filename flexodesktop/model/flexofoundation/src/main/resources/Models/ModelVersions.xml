@@ -30,7 +30,7 @@
     <version id="2.4" modelFile="FlexoWorkflowModel/workflow_model_2.4.xml"/>
   </class>
    
-  <class name="org.openflexo.foundation.wkf.FlexoProcess" latestVersion="6.0"> 
+  <class name="org.openflexo.foundation.wkf.FlexoProcess" latestVersion="6.1"> 
     <!-- deprecated --> <!-- <version id="0.1" modelFile="FlexoProcessModel/process_model_0.1.xml" needsManualConversion="true" toVersion="1.0"/> -->
     <!-- deprecated --> <!-- <version id="1.0" modelFile="FlexoProcessModel/process_model_1.0.xml"/> -->
     <!-- deprecated --> <!-- <version id="1.1" modelFile="FlexoProcessModel/process_model_1.1.xml"/> -->
@@ -45,6 +45,7 @@
     <version id="4.0" modelFile="FlexoProcessModel/process_model_4.0.xml" needsManualConversion="true" toVersion="5.0"/> <!-- 1.3 -->
     <version id="5.0" modelFile="FlexoProcessModel/process_model_5.0.xml" needsManualConversion="true" toVersion="6.0"/> <!-- 1.3.4 -->
     <version id="6.0" modelFile="FlexoProcessModel/process_model_6.0.xml"/> <!-- 1.3.6 -->
+    <version id="6.1" modelFile="FlexoProcessModel/process_model_6.1.xml"/> 
  </class>
    
   <class name="org.openflexo.foundation.ie.IEWOComponent" latestVersion="3.1"> 
@@ -247,6 +248,26 @@
 	  <release_class name="org.openflexo.foundation.rm.FlexoProject" version="5.0"/> 
 	  <release_class name="org.openflexo.foundation.wkf.FlexoWorkflow" version="2.4"/> 
 	  <release_class name="org.openflexo.foundation.wkf.FlexoProcess" version="6.0"/> 
+	  <release_class name="org.openflexo.foundation.ie.IEWOComponent" version="3.1"/> 
+	  <release_class name="org.openflexo.foundation.ie.menu.FlexoNavigationMenu" version="2.2"/> 
+	  <release_class name="org.openflexo.foundation.ie.cl.FlexoComponentLibrary" version="2.4"/> 
+	  <release_class name="org.openflexo.foundation.dm.DMModel" version="2.9"/> 
+	  <release_class name="org.openflexo.foundation.dkv.DKVModel" version="0.2"/>
+	  <release_class name="org.openflexo.foundation.ws.FlexoWSLibrary" version="0.2"/>
+	  <release_class name="org.openflexo.foundation.cg.GeneratedCode" version="0.1"/>
+	  <release_class name="org.openflexo.foundation.sg.GeneratedSources" version="0.1"/>
+ 	  <release_class name="org.openflexo.foundation.sg.implmodel.ImplementationModel" version="0.1"/>
+	  <release_class name="org.openflexo.foundation.ontology.shema.OEShemaLibrary" version="0.1"/>
+	  <release_class name="org.openflexo.foundation.ontology.shema.OEShema" version="0.1"/>
+	  <release_class name="org.openflexo.foundation.cg.GeneratedDoc" version="0.1"/>
+	  <release_class name="org.openflexo.foundation.toc.TOCData" version="0.1"/>
+	  <release_class name="org.openflexo.foundation.view.ViewLibrary" version="1.0"/>
+  </release>
+  
+  <release identifier="1.5.1">
+	  <release_class name="org.openflexo.foundation.rm.FlexoProject" version="5.0"/> 
+	  <release_class name="org.openflexo.foundation.wkf.FlexoWorkflow" version="2.4"/> 
+	  <release_class name="org.openflexo.foundation.wkf.FlexoProcess" version="6.1"/> 
 	  <release_class name="org.openflexo.foundation.ie.IEWOComponent" version="3.1"/> 
 	  <release_class name="org.openflexo.foundation.ie.menu.FlexoNavigationMenu" version="2.2"/> 
 	  <release_class name="org.openflexo.foundation.ie.cl.FlexoComponentLibrary" version="2.4"/> 

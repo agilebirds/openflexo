@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.ws.PortRegistery" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab" opaque="false">
       <Label label="is_visible" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IsVisibleLabel" localize="true" />
       <CheckBox selected="false" index="1" data="data.isVisible" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IsVisible" localize="true" />
     </Tab>
-    <Tab title="Graphics_SWL" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="21" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" font="SansSerif,0,11" name="GraphicsSWLTab">
+    <Tab title="Graphics_SWL" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="21" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" font="SansSerif,0,11" name="GraphicsSWLTab" opaque="false">
       <Label label="swimming_lane_number" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IntegerParameterswlNb1Label" localize="true" />
       <Number minValue="1" maxValue="255" increment="1" numberType="IntegerType" columns="10" index="1" data="data.getIntegerParameter(&quot;swl_nb&quot;,1)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IntegerParameterswlNb1" localize="true" />
       <Label label="swimming_lane_height" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IntegerParameterswlHeight80Label" localize="true" />

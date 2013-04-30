@@ -22,17 +22,18 @@ package org.openflexo.wkf.processeditor.gr;
 import javax.swing.ImageIcon;
 
 import org.openflexo.foundation.wkf.node.OROperator;
-import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
 public class OperatorORGR extends OperatorGR<OROperator> {
 
 	public OperatorORGR(OROperator operatorNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(operatorNode, aDrawing, isInPalet);
+		setDimensionConstraints(DimensionConstraints.FREELY_RESIZABLE);
+		setIsFloatingLabel(false);
 	}
 
 	@Override
 	public ImageIcon getImageIcon() {
-		return WKFIconLibrary.OR_OPERATOR_ICON;
+		return /*WKFIconLibrary.OR_OPERATOR_ICON*/null;
 	}
 }

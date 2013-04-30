@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.node.IFOperator" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab" opaque="false">
       <Label label="status_for_positive_evaluation" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="NewStatusForPositiveEvaluationLabel" localize="true" />
       <DropDown showReset="true" index="1" data="data.newStatusForPositiveEvaluation" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="NewStatusForPositiveEvaluation" format="object.nameAndProcess" localize="true" list="data.process.statusList.allAvailableStatus" iteratorClassName="org.openflexo.foundation.wkf.Status" autoSelectFirstRow="false" />
       <Label label="status_for_negative_evaluation" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="NewStatusForNegativeEvaluationLabel" localize="true" />
       <DropDown showReset="true" index="3" data="data.newStatusForNegativeEvaluation" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="NewStatusForNegativeEvaluation" format="object.nameAndProcess" localize="true" list="data.process.statusList.allAvailableStatus" iteratorClassName="org.openflexo.foundation.wkf.Status" autoSelectFirstRow="false" />
     </Tab>
-    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="DataTab">
+    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="DataTab" opaque="false">
       <Label label="condition" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ConditionPrimitiveLabel" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Label>
@@ -18,7 +18,7 @@
       </Custom>
       <Parameter name="visibleFor" value="ANALYST,DEVELOPER,MAINTAINER" />
     </Tab>
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab">
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab" opaque="false">
       <Parameter name="visibleFor" value="SEMANTICS,SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER" />
     </Tab>
   </TabPanel>

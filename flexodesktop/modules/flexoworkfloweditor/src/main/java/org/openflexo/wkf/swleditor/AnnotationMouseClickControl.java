@@ -38,7 +38,7 @@ public class AnnotationMouseClickControl extends MouseClickControl {
 
 		@Override
 		public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
-			WKFPaletteElement annotation = ((SwimmingLaneEditorController) controller).getArtefactPalette().getAnnotationElement();
+			WKFPaletteElement annotation = ((SwimmingLaneEditorController) controller).getBasicPalette().getAnnotation();
 			if (annotation.acceptDragging(graphicalRepresentation)) {
 				// Point p =
 				// getDrawingGraphicalRepresentation().convertNormalizedPointToViewCoordinates(getDrawingGraphicalRepresentation().convertRemoteViewCoordinatesToLocalNormalizedPoint(event.getPoint(),

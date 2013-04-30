@@ -58,7 +58,6 @@ import org.openflexo.foundation.wkf.dm.NodeRemoved;
 import org.openflexo.foundation.wkf.dm.PetriGraphHasBeenOpened;
 import org.openflexo.foundation.wkf.dm.PostRemoved;
 import org.openflexo.wkf.WKFPreferences;
-import org.openflexo.wkf.processeditor.AnnotationMouseClickControl;
 import org.openflexo.wkf.processeditor.ProcessGraphicalRepresentation;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
@@ -130,9 +129,9 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 		setForeground(ForegroundStyle.makeNone());
 		setBackground(BackgroundStyle.makeEmptyBackground());
 
-		addToMouseDragControls(new ContainerCloser(), true);
+		// addToMouseDragControls(new ContainerCloser(), true);
 		if (object instanceof FlexoPetriGraph && ((FlexoPetriGraph) object).getContainer() != null) {
-			addToMouseClickControls(new AnnotationMouseClickControl());
+			// addToMouseClickControls(new AnnotationMouseClickControl());
 			((FlexoPetriGraph) object).getContainer().addObserver(this);
 		}
 	}

@@ -415,8 +415,7 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 		public PaletteItem() {
 			super(new PaletteAction(), getHidePaletteString(), null, getController(), true);
 			updateText();
-			getController().getControllerModel().getPropertyChangeSupport()
-					.addPropertyChangeListener(ControllerModel.RIGHT_VIEW_VISIBLE, this);
+			manager.addListener(ControllerModel.RIGHT_VIEW_VISIBLE, this, getController().getControllerModel());
 		}
 
 		public void updateText() {
@@ -446,8 +445,7 @@ public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 		public BrowserItem() {
 			super(new BrowserAction(), "hide_browser", null, getController(), true);
 			updateText();
-			getController().getControllerModel().getPropertyChangeSupport()
-					.addPropertyChangeListener(ControllerModel.LEFT_VIEW_VISIBLE, this);
+			manager.addListener(ControllerModel.LEFT_VIEW_VISIBLE, this, getController().getControllerModel());
 		}
 
 		@Override

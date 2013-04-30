@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.cp.ControlArea;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
@@ -58,21 +59,47 @@ public abstract class PetriGraphNodeGR<O extends PetriGraphNode> extends Abstrac
 	}
 
 	@Override
+	public FGEArea getAllowedStartAreaForConnectorForDirection(ConnectorGraphicalRepresentation<?> connectorGR, FGEArea area,
+			SimplifiedCardinalDirection direction) {
+		if (isStartAreaConstrained(connectorGR)) {
+			return convertNormalizedPoint(this, direction.getNormalizedRepresentativePoint(), connectorGR);
+		}
+		return super.getAllowedStartAreaForConnectorForDirection(connectorGR, area, direction);
+	}
+
+	@Override
 	public FGEArea getAllowedStartAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR) {
-		if (connectorGR instanceof EdgeGR && !((EdgeGR<?>) connectorGR).startLocationManuallyAdjusted()
-				&& ((EdgeGR<?>) connectorGR).getEdge().hasLocationConstraintFlag()) {
+		if (isStartAreaConstrained(connectorGR)) {
 			return CONNECTOR_LOCATION_AREA;
 		}
 		return super.getAllowedStartAreaForConnector(connectorGR);
 	}
 
+	protected boolean isStartAreaConstrained(ConnectorGraphicalRepresentation<?> connectorGR) {
+		return connectorGR instanceof EdgeGR && !((EdgeGR<?>) connectorGR).startLocationManuallyAdjusted()
+				&& ((EdgeGR<?>) connectorGR).getEdge().hasLocationConstraintFlag();
+	}
+
+	@Override
+	public FGEArea getAllowedEndAreaForConnectorForDirection(ConnectorGraphicalRepresentation<?> connectorGR, FGEArea area,
+			SimplifiedCardinalDirection direction) {
+		if (isEndAreaConstrained(connectorGR)) {
+			return convertNormalizedPoint(this, direction.getNormalizedRepresentativePoint(), connectorGR);
+		}
+		return super.getAllowedEndAreaForConnectorForDirection(connectorGR, area, direction);
+	}
+
 	@Override
 	public FGEArea getAllowedEndAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR) {
-		if (connectorGR instanceof EdgeGR && !((EdgeGR<?>) connectorGR).endLocationManuallyAdjusted()
-				&& ((EdgeGR<?>) connectorGR).getEdge().hasLocationConstraintFlag()) {
+		if (isEndAreaConstrained(connectorGR)) {
 			return CONNECTOR_LOCATION_AREA;
 		}
 		return super.getAllowedEndAreaForConnector(connectorGR);
+	}
+
+	protected boolean isEndAreaConstrained(ConnectorGraphicalRepresentation<?> connectorGR) {
+		return connectorGR instanceof EdgeGR && !((EdgeGR<?>) connectorGR).endLocationManuallyAdjusted()
+				&& ((EdgeGR<?>) connectorGR).getEdge().hasLocationConstraintFlag();
 	}
 
 	@Override

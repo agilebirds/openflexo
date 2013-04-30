@@ -92,13 +92,12 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 	@CustomComponentParameter(name = "ontology", type = CustomComponentParameter.Type.MANDATORY)
 	public void setOntology(FlexoOntology context) {
 		if (this.ontology instanceof HasPropertyChangeSupport && ((HasPropertyChangeSupport) ontology).getDeletedProperty() != null) {
-			((HasPropertyChangeSupport) this.ontology).getPropertyChangeSupport().removePropertyChangeListener(
-					((HasPropertyChangeSupport) ontology).getDeletedProperty(), this);
+			manager.removeListener(((HasPropertyChangeSupport) ontology).getDeletedProperty(), this,
+					(HasPropertyChangeSupport) this.ontology);
 		}
 		this.ontology = context;
 		if (this.ontology instanceof HasPropertyChangeSupport && ((HasPropertyChangeSupport) ontology).getDeletedProperty() != null) {
-			((HasPropertyChangeSupport) this.ontology).getPropertyChangeSupport().addPropertyChangeListener(
-					((HasPropertyChangeSupport) ontology).getDeletedProperty(), this);
+			manager.addListener(((HasPropertyChangeSupport) ontology).getDeletedProperty(), this, (HasPropertyChangeSupport) this.ontology);
 		}
 		ontology.loadWhenUnloaded();
 		update();
