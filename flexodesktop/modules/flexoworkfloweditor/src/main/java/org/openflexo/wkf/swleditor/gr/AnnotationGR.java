@@ -200,7 +200,8 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 			setForeground(ForegroundStyle.makeNone());
 			setIsFloatingLabel(false);
 			setAdjustMinimalWidthToLabelWidth(true);
-			setAdjustMinimalHeightToLabelHeight(true);
+			setAdjustMinimalHeightToLabelHeight(false);
+			setMinimalHeight(20);
 			setAdjustMaximalWidthToLabelWidth(true);
 			setAdjustMaximalHeightToLabelHeight(true);
 			setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
