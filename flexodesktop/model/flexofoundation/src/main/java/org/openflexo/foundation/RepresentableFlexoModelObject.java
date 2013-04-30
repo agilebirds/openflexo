@@ -375,7 +375,11 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public double getWidth(String context) {
-		return getWidth(context, 100);
+		return getWidth(context, getDefaultWidth());
+	}
+
+	protected int getDefaultWidth() {
+		return 100;
 	}
 
 	public double getWidth(String context, double defaultValue) {
@@ -392,7 +396,11 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public double getHeight(String context) {
-		return getHeight(context, 50);
+		return getHeight(context, getDefaultHeight());
+	}
+
+	protected int getDefaultHeight() {
+		return 50;
 	}
 
 	public double getHeight(String context, double defaultValue) {

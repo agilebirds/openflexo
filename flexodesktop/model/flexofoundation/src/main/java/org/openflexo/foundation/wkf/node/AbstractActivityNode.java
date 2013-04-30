@@ -1006,4 +1006,14 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 		consultedRoles.clear();
 		super.delete();
 	}
+
+	@Override
+	protected int getDefaultWidth() {
+		return 150;
+	}
+
+	@Override
+	protected int getDefaultHeight() {
+		return 90;
+	}
 }
