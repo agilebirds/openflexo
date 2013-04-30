@@ -124,7 +124,6 @@ public class ExtendedPalette extends AbstractWKFPalette {
 
 	private WKFPaletteElement makeDataFile(int x, int y, DataObjectType type, boolean collection) {
 		WKFDataObject annotation = new WKFDataObject((FlexoProcess) null);
-		annotation.setText(FlexoLocalization.localizedForKey("document"));
 		annotation.setType(type);
 		annotation.setIsCollection(collection);
 		annotation.setX(x, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
