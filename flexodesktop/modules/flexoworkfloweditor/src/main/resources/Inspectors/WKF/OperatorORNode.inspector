@@ -10,12 +10,17 @@
       <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="5" data="data.getWidth(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Widthbpe" localize="true" />
       <Label label="height" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="HeightbpeLabel" localize="true" />
       <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="7" data="data.getHeight(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Heightbpe" localize="true" />
+      <Label label="resizable" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ResizablebpeLabel" localize="true" />
+      <CheckBox data="data.isResizable(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Resizablebpe" localize="true" />
+      
     </Tab>
     <Tab title="Graphics_SWL" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="21" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" font="SansSerif,0,11" name="GraphicsSWLTab" opaque="false">
       <Label label="width" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="Widthswl80Label" localize="true" />
       <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="5" data="data.getWidth(&quot;swl&quot;,80)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Widthswl80" localize="true" />
       <Label label="height" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="Heightswl40Label" localize="true" />
       <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="7" data="data.getHeight(&quot;swl&quot;,40)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Heightswl40" localize="true" />
+      <Label label="resizable" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ResizableswlLabel" localize="true" />
+      <CheckBox data="data.isResizable(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Resizableswl" localize="true" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>

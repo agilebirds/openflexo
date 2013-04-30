@@ -53,6 +53,7 @@ import org.openflexo.foundation.wkf.ws.NewPort;
 import org.openflexo.foundation.wkf.ws.OutPort;
 import org.openflexo.foundation.wkf.ws.PortRegistery;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.swleditor.gr.ActivityNodeGR;
 import org.openflexo.wkf.swleditor.gr.AnnotationGR;
 import org.openflexo.wkf.swleditor.gr.DataObjectGR;
@@ -126,7 +127,7 @@ public class BasicPalette extends AbstractWKFPalette {
 	private WKFPaletteElement messageOut;
 
 	public BasicPalette() {
-		super(365, 335, "basic");
+		super(365, 390, "basic");
 		int hgap = 5;
 		int vgap = 5;
 		int x = hgap, y = vgap;
@@ -134,22 +135,27 @@ public class BasicPalette extends AbstractWKFPalette {
 		x += normalActivityElement.getGraphicalRepresentation().getViewWidth(1.0) + hgap;
 		singleInstanceSubProcessNodeElement = makeSingleInstanceSubProcessNodeElement(x, y, 150, 90);
 		y += singleInstanceSubProcessNodeElement.getGraphicalRepresentation().getViewHeight(1.0) + vgap;
-		x = hgap;
-		defaultStartEventElement = makeDefaultStartEventElement(x, y);
-		x += defaultStartEventElement.getGraphicalRepresentation().getViewWidth(1.0) + hgap;
-		defaultIntermediateEventElement = makeDefaultIntermediateEventElement(x, y);
-		x += defaultIntermediateEventElement.getGraphicalRepresentation().getViewWidth(1.0) + hgap;
-		defaultEndEventElement = makeDefaultEndEventElement(x, y);
-		x = hgap;
-		y += defaultEndEventElement.getGraphicalRepresentation().getViewHeight(1.0) + vgap;
-		andOperatorElement = makeANDOperatorElement(x, y);
-		x += andOperatorElement.getGraphicalRepresentation().getViewWidth(1.0) + hgap;
-		orOperatorElement = makeOROperatorElement(x, y);
 
 		x = hgap;
+		orOperatorElement = makeOROperatorElement(x, y);
+		x = hgap;
 		y += orOperatorElement.getGraphicalRepresentation().getViewHeight(1.0) + vgap;
+
+		defaultStartEventElement = makeDefaultStartEventElement(x, y);
+		x += defaultStartEventElement.getGraphicalRepresentation().getViewWidth(1.0) + hgap;
+
+		defaultIntermediateEventElement = makeDefaultIntermediateEventElement(x, y);
+		x += defaultIntermediateEventElement.getGraphicalRepresentation().getViewWidth(1.0) + hgap;
+
+		defaultEndEventElement = makeDefaultEndEventElement(x, y);
+		x += defaultEndEventElement.getGraphicalRepresentation().getViewWidth(1.0) + hgap;
+		andOperatorElement = makeANDOperatorElement(x, y);
+		x = hgap;
+		y += defaultEndEventElement.getGraphicalRepresentation().getViewHeight(1.0) + vgap;
+
 		annotation = makeAnnotationElement(x, y + 15);
 		x += hgap + annotation.getGraphicalRepresentation().getViewWidth(1.0);
+
 		dataFile = makeDataFile(x, y);
 		x += dataFile.getGraphicalRepresentation().getViewWidth(1.0);
 
@@ -222,6 +228,8 @@ public class BasicPalette extends AbstractWKFPalette {
 
 	private WKFPaletteElement makeOROperatorElement(int x, int y) {
 		final OROperator operator = new OROperator((FlexoProcess) null);
+		operator.setIsResizable(true, ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		operator.setIsResizable(true, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		operator.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		operator.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		return makePaletteElement(operator, new OperatorORGR(operator, null, true), DROP_ON_ROLE_OR_ACTIVITY_PG_OR_ACTIVITY_GROUP);

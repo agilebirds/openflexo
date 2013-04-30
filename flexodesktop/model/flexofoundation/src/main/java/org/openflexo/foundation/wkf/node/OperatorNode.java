@@ -36,6 +36,7 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.dm.RoleChanged;
+import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ProgrammingLanguage;
@@ -46,6 +47,8 @@ import org.openflexo.toolbox.ProgrammingLanguage;
  * @author sguerin
  */
 public abstract class OperatorNode extends PetriGraphNode implements Bindable, ExecutableWorkflowElement, ReferenceOwner {
+
+	private static final String RESIZABLE = "resizable";
 
 	static final Logger logger = Logger.getLogger(OperatorNode.class.getPackage().getName());
 
@@ -133,9 +136,21 @@ public abstract class OperatorNode extends PetriGraphNode implements Bindable, E
 		return true;
 	}
 
-	// ==========================================================================
-	// ================================= Delete ===============================
-	// ==========================================================================
+	public String getResizableKeyForContext(String context) {
+		return RESIZABLE + '_' + context;
+	}
+
+	public boolean isResizable(String context) {
+		return _booleanGraphicalPropertyForKey(getResizableKeyForContext(context), false);
+	}
+
+	public void setIsResizable(boolean resizable, String context) {
+		if (requireChange(isResizable(context), resizable)) {
+			_setGraphicalPropertyForKey(resizable, getResizableKeyForContext(context));
+			setChanged();
+			notifyObservers(new WKFAttributeDataModification(getResizableKeyForContext(context), !resizable, resizable));
+		}
+	}
 
 	@Override
 	public final void delete() {
