@@ -36,7 +36,7 @@ public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 
 	public ActivityNodeGR(ActivityNode activityNode, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
 		super(activityNode, ShapeType.RECTANGLE, aDrawing, isInPalet);
-
+		setVerticalTextAlignment(VerticalTextAlignment.TOP);
 		setShapePainter(new ShapePainter() {
 			@Override
 			public void paintShape(FGEShapeGraphics g) {
@@ -48,6 +48,15 @@ public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 
 		updatePropertiesFromWKFPreferences();
 
+	}
+
+	@Override
+	public double getRelativeTextY() {
+		if (getImageIcon() != null) {
+			return (getImageIcon().getIconHeight() + 1) / getHeight();
+		} else {
+			return 10 / getHeight();
+		}
 	}
 
 	@Override
@@ -113,6 +122,7 @@ public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 		if (dataModification instanceof WKFAttributeDataModification
 				&& "taskType".equals(((WKFAttributeDataModification) dataModification).getAttributeName())) {
 			checkAndUpdateDimensionIfRequired();
+			notifyShapeNeedsToBeRedrawn();
 		}
 		super.update(observable, dataModification);
 	}

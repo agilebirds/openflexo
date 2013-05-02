@@ -21,7 +21,6 @@ package org.openflexo.wkf.swleditor.gr;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
@@ -65,6 +64,7 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	public SubProcessNodeGR(SubProcessNode subProcessNode, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
 		super(subProcessNode, ShapeType.RECTANGLE, aDrawing, isInPalet);
+		setVerticalTextAlignment(VerticalTextAlignment.TOP);
 		addToMouseClickControls(new ProcessOpener(), true);
 		/*setBorder(new ShapeGraphicalRepresentation.ShapeBorder(
 				PortmapRegisteryGR.PORTMAP_REGISTERY_WIDTH,
@@ -118,17 +118,9 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 		return WKFPreferences.getRoleFont();
 	}
 
-	protected double getVerticalGap() {
-		Dimension labelSize = getNormalizedLabelSize();
-		return (getHeight() - labelSize.height - getRoleFont().getSize() - ICONS_HEIGHT - getExtraSpaceAbove() - getExtraSpaceBelow()) / 4;
-	}
-
 	@Override
 	public double getRelativeTextY() {
-		Dimension labelSize = getNormalizedLabelSize();
-		double vGap = getVerticalGap();
-		double absoluteCenterY = vGap + labelSize.height / 2 + getExtraSpaceAbove();
-		return absoluteCenterY / getHeight();
+		return getExtraSpaceAbove() / getHeight();
 	}
 
 	@Override
@@ -145,9 +137,7 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 	}
 
 	public FGERectangle getExpandingRect() {
-		Dimension labelSize = getNormalizedLabelSize();
-		double vGap = getVerticalGap();
-		double absoluteIconY = vGap * 3 + labelSize.height + getRoleFont().getSize() + getExtraSpaceAbove();
+		double absoluteIconY = getHeight() - getExtraSpaceBelow() - MIN_SPACE - WKFIconLibrary.EXPANDABLE_ICON.getIconHeight();
 		double absoluteIconX;
 		ImageIcon typeIcon = getImageIcon(getSubProcessNode());
 		if (typeIcon == null) {
@@ -160,14 +150,12 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	}
 
-	protected FGERectangle getAdditionalSymbolRect() {
+	public FGERectangle getAdditionalSymbolRect() {
 		ImageIcon typeIcon = getImageIcon(getSubProcessNode());
 		if (typeIcon == null) {
 			return null;
 		}
-		Dimension labelSize = getNormalizedLabelSize();
-		double vGap = getVerticalGap();
-		double absoluteIconY = vGap * 3 + labelSize.height + getRoleFont().getSize() + getExtraSpaceAbove();
+		double absoluteIconY = getHeight() - getExtraSpaceBelow() - MIN_SPACE - WKFIconLibrary.EXPANDABLE_ICON.getIconHeight();
 		double absoluteIconX = (getWidth() - WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() - typeIcon.getIconWidth() - MIN_SPACE) / 2
 				+ WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() + MIN_SPACE;
 		return new FGERectangle(absoluteIconX / getWidth(), absoluteIconY / getHeight(), WKFIconLibrary.EXPANDABLE_ICON.getIconWidth()

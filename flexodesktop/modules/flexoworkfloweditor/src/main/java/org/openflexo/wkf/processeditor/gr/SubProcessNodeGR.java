@@ -21,7 +21,6 @@ package org.openflexo.wkf.processeditor.gr;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -63,11 +62,12 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	private static final Logger logger = Logger.getLogger(SubProcessNodeGR.class.getPackage().getName());
 
-	private static final int MIN_SPACE = 5;
+	private static final int MIN_SPACE = 4;
 	private static final int ICONS_HEIGHT = 20;
 
 	public SubProcessNodeGR(SubProcessNode subProcessNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(subProcessNode, ShapeType.RECTANGLE, aDrawing, isInPalet);
+		setVerticalTextAlignment(VerticalTextAlignment.TOP);
 		addToMouseClickControls(new ProcessOpener(), true);
 		setShapePainter(new ShapePainter() {
 			@Override
@@ -105,10 +105,9 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 			public void paintDefaultDecoration(FGEShapeGraphics g) {
 				g.useTextStyle(roleLabelTextStyle);
-				Dimension labelSize = getNormalizedLabelSize();
-				double vGap = getVerticalGap();
-				double absoluteRoleLabelCenterY = vGap * 2 + labelSize.height + getRoleFont().getSize() / 2 - 3 + getExtraSpaceAbove();
-				g.drawString(getSubLabel(), new FGEPoint(0.5, absoluteRoleLabelCenterY / getHeight()), HorizontalTextAlignment.CENTER);
+				g.drawString(getSubLabel(), new FGEPoint(0.5,
+						(roleLabelTextStyle.getFont().getSize() / 2 + MIN_SPACE + getExtraSpaceAbove()) / getHeight()),
+						HorizontalTextAlignment.CENTER);
 
 				FGERectangle expandingRect = getExpandingRect();
 				g.drawImage(WKFIconLibrary.EXPANDABLE_ICON.getImage(), new FGEPoint(expandingRect.x, expandingRect.y));
@@ -152,17 +151,9 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 		return isInPalette ? super.getRightBorder() : PORTMAP_REGISTERY_WIDTH;
 	}
 
-	protected double getVerticalGap() {
-		Dimension labelSize = getNormalizedLabelSize();
-		return (getHeight() - labelSize.height - getRoleFont().getSize() - ICONS_HEIGHT - getExtraSpaceAbove() - getExtraSpaceBelow()) / 4;
-	}
-
 	@Override
 	public double getRelativeTextY() {
-		Dimension labelSize = getNormalizedLabelSize();
-		double vGap = getVerticalGap();
-		double absoluteCenterY = vGap + labelSize.height / 2 + getExtraSpaceAbove();
-		return absoluteCenterY / getHeight();
+		return (roleLabelTextStyle.getFont().getSize() + MIN_SPACE + getExtraSpaceAbove()) / getHeight();
 	}
 
 	@Override
@@ -179,9 +170,7 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 	}
 
 	public FGERectangle getExpandingRect() {
-		Dimension labelSize = getNormalizedLabelSize();
-		double vGap = getVerticalGap();
-		double absoluteIconY = vGap * 3 + labelSize.height + getRoleFont().getSize() + getExtraSpaceAbove();
+		double absoluteIconY = getHeight() - getExtraSpaceBelow() - MIN_SPACE - WKFIconLibrary.EXPANDABLE_ICON.getIconHeight();
 		double absoluteIconX;
 		ImageIcon typeIcon = getImageIcon(getSubProcessNode());
 		if (typeIcon == null) {
@@ -199,9 +188,7 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 		if (typeIcon == null) {
 			return null;
 		}
-		Dimension labelSize = getNormalizedLabelSize();
-		double vGap = getVerticalGap();
-		double absoluteIconY = vGap * 3 + labelSize.height + getRoleFont().getSize() + getExtraSpaceAbove();
+		double absoluteIconY = getHeight() - getExtraSpaceBelow() - MIN_SPACE - WKFIconLibrary.EXPANDABLE_ICON.getIconHeight();
 		double absoluteIconX = (getWidth() - WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() - typeIcon.getIconWidth() - MIN_SPACE) / 2
 				+ WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() + MIN_SPACE;
 		return new FGERectangle(absoluteIconX / getWidth(), absoluteIconY / getHeight(), WKFIconLibrary.EXPANDABLE_ICON.getIconWidth()
@@ -214,9 +201,6 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 		if (typeIcon == null) {
 			return null;
 		}
-		Dimension labelSize = getNormalizedLabelSize();
-		double vGap = getVerticalGap();
-		// double absoluteIconY = vGap*3+labelSize.height+getRoleFont().getSize()+getExtraSpaceAbove();
 		double absoluteIconY = getHeight() - 10 - WKFIconLibrary.EXPANDABLE_ICON.getIconHeight();
 		double absoluteIconX = (getWidth() - WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() - typeIcon.getIconWidth() - MIN_SPACE) / 2
 				+ WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() + MIN_SPACE;
