@@ -60,6 +60,8 @@ public class FIBColorWidget extends FIBWidgetView<FIBColor, ColorSelector, Color
 		}
 		_selector.addFocusListener(this);
 		checkBox = new JCheckBox();
+		checkBox.setText(FlexoLocalization.localizedForKey("transparent", checkBox));
+		checkBox.setHorizontalTextPosition(JCheckBox.LEADING);
 		checkBox.setToolTipText(FlexoLocalization.localizedForKey("undefined_value", checkBox));
 		checkBox.addActionListener(new ActionListener() {
 
@@ -70,6 +72,7 @@ public class FIBColorWidget extends FIBWidgetView<FIBColor, ColorSelector, Color
 			}
 		});
 		container = new JPanel(new GridBagLayout());
+		container.setOpaque(false);
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weightx = 1.0;

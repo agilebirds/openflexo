@@ -66,6 +66,7 @@ public class FIBFontWidget extends FIBWidgetView<FIBFont, FontSelector, Font> im
 			}
 		});
 		container = new JPanel(new GridBagLayout());
+		container.setOpaque(false);
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.weightx = 1.0;
