@@ -2,8 +2,8 @@
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.view.ViewShape" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
     <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
-      <Label label="index" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IndexLabel" localize="true" />
-      <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="10" index="1" data="data.indexRelativeToEPType" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Index" localize="true" />
+      <Label label="index" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="10" index="1" data="data.indexRelativeToEPType" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Layer_index" localize="true" />
       <TabPanel name="GRTab" index="2" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.ShapeGraphicalRepresentation" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
         <Tab title="Shape" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="ShapeTab">
           <Custom componentClassName="org.openflexo.fge.view.widget.ShapePreviewPanel" localize="true" manageDynamicModel="true" index="0" data="GRTab.data.shape" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)">
@@ -100,7 +100,7 @@
           <CheckBox selected="false" index="21" data="GRTab.data.isVisible" constraints="twocols(expandHorizontally=false;expandVertically=false;index=21;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IsVisible" localize="true" />
           <Label label="allows_to_leave_bounds" index="22" constraints="twocols(expandHorizontally=true;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
           <CheckBox selected="true" index="23" data="GRTab.data.allowToLeaveBounds" constraints="twocols(expandHorizontally=true;expandVertically=false;index=23;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="checkbox" localize="true" />
-          <Label label="index" index="24" constraints="twocols(expandHorizontally=true;expandVertically=false;index=24;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+          <Label label="layer_index" index="24" constraints="twocols(expandHorizontally=true;expandVertically=false;index=24;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
           <Number minValue="0" maxValue="65535" increment="1" numberType="IntegerType" columns="3" index="25" data="GRTab.data.index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=25;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Integer" localize="true" />
         </Tab>
         <Tab title="Edition" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EditionTab">
@@ -442,18 +442,21 @@
     <Localized key="Contraint par le pas" lang="English">Contraint par le pas</Localized>
     <Localized key="Contraint par le pas" lang="French">Contraint par le pas</Localized>
     <Localized key="Contraint par le pas" lang="Dutch">Contraint par le pas</Localized>
-    <Localized key="Largeur fixe" lang="English">Largeur fixe</Localized>
+    <Localized key="Largeur fixe" lang="English">Fixed width</Localized>
     <Localized key="Largeur fixe" lang="French">Largeur fixe</Localized>
-    <Localized key="Largeur fixe" lang="Dutch">Largeur fixe</Localized>
-    <Localized key="Hauteur fixe" lang="English">Hauteur fixe</Localized>
+    <Localized key="Largeur fixe" lang="Dutch">Fixed width</Localized>
+    <Localized key="Hauteur fixe" lang="English">Fixed height</Localized>
     <Localized key="Hauteur fixe" lang="French">Hauteur fixe</Localized>
-    <Localized key="Hauteur fixe" lang="Dutch">Hauteur fixe</Localized>
+    <Localized key="Hauteur fixe" lang="Dutch">Fixed height</Localized>
     <Localized key="Conteneur" lang="English">Conteneur</Localized>
     <Localized key="Conteneur" lang="French">Conteneur</Localized>
     <Localized key="Conteneur" lang="Dutch">Conteneur</Localized>
     <Localized key="X" lang="English">X</Localized>
     <Localized key="X" lang="French">X</Localized>
     <Localized key="X" lang="Dutch">X</Localized>
+    <Localized key="layer_index" lang="English">Layer index</Localized>
+    <Localized key="layer_index" lang="French">Index de couche</Localized>
+    <Localized key="layer_index" lang="Dutch">Layer index</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="Shape" />
 </Panel>
