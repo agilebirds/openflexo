@@ -400,13 +400,13 @@
     <Localized key="horizontal_text_alignment" lang="French">Alignement horizontal du texte</Localized>
     <Localized key="horizontal_text_alignment" lang="Dutch">Horizontal text alignment</Localized>
     <Localized key="Left" lang="English">Left</Localized>
-    <Localized key="Left" lang="French">Left</Localized>
+    <Localized key="Left" lang="French">Gauche</Localized>
     <Localized key="Left" lang="Dutch">Left</Localized>
     <Localized key="Center" lang="English">Center</Localized>
-    <Localized key="Center" lang="French">Center</Localized>
+    <Localized key="Center" lang="French">Centre</Localized>
     <Localized key="Center" lang="Dutch">Center</Localized>
     <Localized key="Right" lang="English">Right</Localized>
-    <Localized key="Right" lang="French">Right</Localized>
+    <Localized key="Right" lang="French">Droit</Localized>
     <Localized key="Right" lang="Dutch">Right</Localized>
     <Localized key="vertical_text_alignment" lang="English">Vertical text alignment</Localized>
     <Localized key="vertical_text_alignment" lang="French">Alignement vertical du texte</Localized>
@@ -415,7 +415,7 @@
     <Localized key="top" lang="French">Haut</Localized>
     <Localized key="top" lang="Dutch">Top</Localized>
     <Localized key="middle" lang="English">Middle</Localized>
-    <Localized key="middle" lang="French">Middle</Localized>
+    <Localized key="middle" lang="French">Milieu</Localized>
     <Localized key="middle" lang="Dutch">Middle</Localized>
     <Localized key="bottom" lang="English">Bottom</Localized>
     <Localized key="bottom" lang="French">Bas</Localized>
@@ -424,10 +424,10 @@
     <Localized key="Top" lang="French">Top</Localized>
     <Localized key="Top" lang="Dutch">Top</Localized>
     <Localized key="Bottom" lang="English">Bottom</Localized>
-    <Localized key="Bottom" lang="French">Bottom</Localized>
+    <Localized key="Bottom" lang="French">Bas</Localized>
     <Localized key="Bottom" lang="Dutch">Bottom</Localized>
     <Localized key="justify" lang="English">Justify</Localized>
-    <Localized key="justify" lang="French">Justify</Localized>
+    <Localized key="justify" lang="French">Justifier</Localized>
     <Localized key="justify" lang="Dutch">Justify</Localized>
     <Localized key="line_wrap" lang="English">Line wrap</Localized>
     <Localized key="line_wrap" lang="French">Line wrap</Localized>
@@ -469,10 +469,10 @@
     <Localized key="Unresizable" lang="French">Non redimensionnable</Localized>
     <Localized key="Unresizable" lang="Dutch">Unresizable</Localized>
     <Localized key="Constrained dimensions" lang="English">Constrained dimensions</Localized>
-    <Localized key="Constrained dimensions" lang="French">Constrained dimensions</Localized>
+    <Localized key="Constrained dimensions" lang="French">Dimensions contraintes</Localized>
     <Localized key="Constrained dimensions" lang="Dutch">Constrained dimensions</Localized>
     <Localized key="Step constrained" lang="English">Step constrained</Localized>
-    <Localized key="Step constrained" lang="French">Step constrained</Localized>
+    <Localized key="Step constrained" lang="French">Contraint par le pas</Localized>
     <Localized key="Step constrained" lang="Dutch">Step constrained</Localized>
     <Localized key="Fixed width" lang="English">Fixed width</Localized>
     <Localized key="Fixed width" lang="French">Largeur fixe</Localized>
@@ -559,10 +559,10 @@
     <Localized key="EnablingChanges" lang="French">EnablingChanges</Localized>
     <Localized key="EnablingChanges" lang="Dutch">EnablingChanges</Localized>
     <Localized key="BusinessChanges" lang="English">BusinessChanges</Localized>
-    <Localized key="BusinessChanges" lang="French">BusinessChanges</Localized>
+    <Localized key="BusinessChanges" lang="French">Changement Business</Localized>
     <Localized key="BusinessChanges" lang="Dutch">BusinessChanges</Localized>
     <Localized key="Benefits" lang="English">Benefits</Localized>
-    <Localized key="Benefits" lang="French">Benefits</Localized>
+    <Localized key="Benefits" lang="French">Bénéfices</Localized>
     <Localized key="Benefits" lang="Dutch">Benefits</Localized>
     <Localized key="InvestmentObjectives" lang="English">InvestmentObjectives</Localized>
     <Localized key="InvestmentObjectives" lang="French">InvestmentObjectives</Localized>
@@ -657,6 +657,36 @@
     <Localized key="Conteneur" lang="English">Container</Localized>
     <Localized key="Conteneur" lang="French">Conteneur</Localized>
     <Localized key="Conteneur" lang="Dutch">Container</Localized>
+    <Localized key="Middle" lang="English">Middle</Localized>
+    <Localized key="Middle" lang="French">Milieu</Localized>
+    <Localized key="Middle" lang="Dutch">Middle</Localized>
+    <Localized key="Justify" lang="English">Justify</Localized>
+    <Localized key="Justify" lang="French">Justifier</Localized>
+    <Localized key="Justify" lang="Dutch">Justify</Localized>
+    <Localized key="Objective" lang="English">Objective</Localized>
+    <Localized key="Objective" lang="French">Objective</Localized>
+    <Localized key="Objective" lang="Dutch">Objective</Localized>
+    <Localized key="Benefit" lang="English">Benefit</Localized>
+    <Localized key="Benefit" lang="French">Bénéfices</Localized>
+    <Localized key="Benefit" lang="Dutch">Benefit</Localized>
+    <Localized key="BusinesssChange" lang="English">BusinesssChange</Localized>
+    <Localized key="BusinesssChange" lang="French">Changement Business</Localized>
+    <Localized key="BusinesssChange" lang="Dutch">BusinesssChange</Localized>
+    <Localized key="EnablingChange" lang="English">EnablingChange</Localized>
+    <Localized key="EnablingChange" lang="French">EnablingChange</Localized>
+    <Localized key="EnablingChange" lang="Dutch">EnablingChange</Localized>
+    <Localized key="Enabler" lang="English">Enabler</Localized>
+    <Localized key="Enabler" lang="French">Enabler</Localized>
+    <Localized key="Enabler" lang="Dutch">Enabler</Localized>
+    <Localized key="Driver" lang="English">Driver</Localized>
+    <Localized key="Driver" lang="French">Driver</Localized>
+    <Localized key="Driver" lang="Dutch">Driver</Localized>
+    <Localized key="ProjectHeading" lang="English">ProjectHeading</Localized>
+    <Localized key="ProjectHeading" lang="French">ProjectHeading</Localized>
+    <Localized key="ProjectHeading" lang="Dutch">ProjectHeading</Localized>
+    <Localized key="dropEnablerAtTopLevel" lang="English">dropEnablerAtTopLevel</Localized>
+    <Localized key="dropEnablerAtTopLevel" lang="French">dropEnablerAtTopLevel</Localized>
+    <Localized key="dropEnablerAtTopLevel" lang="Dutch">dropEnablerAtTopLevel</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="Palette element" />
 </Panel>
