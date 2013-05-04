@@ -1513,6 +1513,40 @@ public class XMLCoder {
 							}
 							returnedElement.addContent(propertiesElement);
 						}
+					} else if (modelProperty.isSafeProperties()) {
+						Map<?, ?> values = KeyValueDecoder.hashtableForKey(anObject, (PropertiesKeyValueProperty) keyValueProperty);
+						if (values != null && values.size() > 0) {
+							Element propertiesElement = new Element(modelProperty.getDefaultXmlTag());
+							for (Entry<?, ?> e : values.entrySet()) {
+								Object keyAsObject = e.getKey();
+								if (!(keyAsObject instanceof String)) {
+									throw new InvalidDataException("Properties keys must be instance of String");
+								}
+								String key = (String) keyAsObject;
+								Object value = e.getValue();
+
+								Element valueElement = new Element(XMLMapping.entryLabel);
+								valueElement.setAttribute(XMLMapping.keyLabel, key);
+								String valueAsText = null;
+								String classNameLabel = null;
+								if (value instanceof PropertiesKeyValueProperty.UndecodableProperty) {
+									// In this case, class matching property is not loaded, and thus
+									// Object is not instanciated. But, we must keep serialized version
+									valueAsText = ((PropertiesKeyValueProperty.UndecodableProperty) value).value;
+									classNameLabel = ((PropertiesKeyValueProperty.UndecodableProperty) value).className;
+								} else if (value != null) {
+									valueAsText = stringEncoder._encodeObject(value);
+									classNameLabel = value.getClass().getName();
+								}
+								if (valueAsText != null) {
+									valueElement.setAttribute(XMLMapping.classNameLabel, classNameLabel);
+									valueElement.setAttribute(XMLMapping.valueLabel, valueAsText);
+								}
+
+								propertiesElement.addContent(valueElement);
+							}
+							returnedElement.addContent(propertiesElement);
+						}
 					} else if (modelProperty.isUnmappedAttributes()) {
 
 						Map<?, ?> values = KeyValueDecoder.hashtableForKey(anObject, (HashtableKeyValueProperty) keyValueProperty);
