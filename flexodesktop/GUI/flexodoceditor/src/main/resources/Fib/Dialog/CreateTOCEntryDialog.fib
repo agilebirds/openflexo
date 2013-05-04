@@ -195,7 +195,7 @@
     <Localized key="operation_component" lang="Dutch">Operation screen</Localized>
     <Localized key="er_diagram" lang="Dutch">ER Diagram</Localized>
     <Localized key="value" lang="Dutch">Value</Localized>
-    <Localized key="contents" lang="English">contents</Localized>
+    <Localized key="contents" lang="English">Contents</Localized>
     <Localized key="kind_of_model_object" lang="English">Object to render</Localized>
     <Localized key="kind_of_predefined_section" lang="English">Type of predefined section</Localized>
     <Localized key="object_to_document" lang="English">Object to document</Localized>
@@ -365,8 +365,8 @@
     <Localized key="iteration" lang="English">iteration</Localized>
     <Localized key="iteration" lang="French">iteration</Localized>
     <Localized key="iteration" lang="Dutch">iteration</Localized>
-    <Localized key="contents" lang="French">contents</Localized>
-    <Localized key="contents" lang="Dutch">contents</Localized>
+    <Localized key="contents" lang="French">Contenu</Localized>
+    <Localized key="contents" lang="Dutch">Contents</Localized>
     <Localized key="kind_of_predefined_section" lang="French">Type de section prédéfinies</Localized>
     <Localized key="kind_of_predefined_section" lang="Dutch">Type of predefined section</Localized>
     <Localized key="kind_of_model_object" lang="French">Objet dont il faut produire le rendu</Localized>
@@ -441,5 +441,71 @@
     <Localized key="ER DIAGRAM" lang="English">ER DIAGRAM</Localized>
     <Localized key="ER DIAGRAM" lang="French">DIAGRAMME ER</Localized>
     <Localized key="ER DIAGRAM" lang="Dutch">ER DIAGRAM</Localized>
+    <Localized key="NOTES &amp; QUESTIONS" lang="English">NOTES &amp; QUESTIONS</Localized>
+    <Localized key="NOTES &amp; QUESTIONS" lang="French">NOTES &amp; QUESTIONS</Localized>
+    <Localized key="NOTES &amp; QUESTIONS" lang="Dutch">NOTES &amp; QUESTIONS</Localized>
+    <Localized key="Raci Matrix" lang="English">Raci Matrix</Localized>
+    <Localized key="Raci Matrix" lang="French">Raci Matrix</Localized>
+    <Localized key="Raci Matrix" lang="Dutch">Raci Matrix</Localized>
+    <Localized key="Section &quot;Normale&quot;" lang="English">Section "Normale"</Localized>
+    <Localized key="Section &quot;Normale&quot;" lang="French">Section "Normale"</Localized>
+    <Localized key="Section &quot;Normale&quot;" lang="Dutch">Section "Normale"</Localized>
+    <Localized key="Section prédéfinie" lang="English">Section prédéfinie</Localized>
+    <Localized key="Section prédéfinie" lang="French">Section prédéfinie</Localized>
+    <Localized key="Section prédéfinie" lang="Dutch">Section prédéfinie</Localized>
+    <Localized key="Section &quot;Objet du modèle&quot;" lang="English">Section "Objet du modèle"</Localized>
+    <Localized key="Section &quot;Objet du modèle&quot;" lang="French">Section "Objet du modèle"</Localized>
+    <Localized key="Section &quot;Objet du modèle&quot;" lang="Dutch">Section "Objet du modèle"</Localized>
+    <Localized key="Section conditionelle" lang="English">Section conditionelle</Localized>
+    <Localized key="Section conditionelle" lang="French">Section conditionelle</Localized>
+    <Localized key="Section conditionelle" lang="Dutch">Section conditionelle</Localized>
+    <Localized key="Section &quot;Itération&quot;" lang="English">Section "Itération"</Localized>
+    <Localized key="Section &quot;Itération&quot;" lang="French">Section "Itération"</Localized>
+    <Localized key="Section &quot;Itération&quot;" lang="Dutch">Section "Itération"</Localized>
+    <Localized key="PROCESSUS" lang="English">PROCESSUS</Localized>
+    <Localized key="PROCESSUS" lang="French">PROCESSUS</Localized>
+    <Localized key="PROCESSUS" lang="Dutch">PROCESSUS</Localized>
+    <Localized key="VUES" lang="English">VUES</Localized>
+    <Localized key="VUES" lang="French">VUES</Localized>
+    <Localized key="VUES" lang="Dutch">VUES</Localized>
+    <Localized key="BUT" lang="English">BUT</Localized>
+    <Localized key="BUT" lang="French">BUT</Localized>
+    <Localized key="BUT" lang="Dutch">BUT</Localized>
+    <Localized key="OBJECTIFS" lang="English">OBJECTIFS</Localized>
+    <Localized key="OBJECTIFS" lang="French">OBJECTIFS</Localized>
+    <Localized key="OBJECTIFS" lang="Dutch">OBJECTIFS</Localized>
+    <Localized key="Parties prenantes" lang="English">Parties prenantes</Localized>
+    <Localized key="Parties prenantes" lang="French">Parties prenantes</Localized>
+    <Localized key="Parties prenantes" lang="Dutch">Parties prenantes</Localized>
+    <Localized key="ECRANS" lang="English">ECRANS</Localized>
+    <Localized key="ECRANS" lang="French">ECRANS</Localized>
+    <Localized key="ECRANS" lang="Dutch">ECRANS</Localized>
+    <Localized key="MODELE DE DONNEES" lang="English">MODELE DE DONNEES</Localized>
+    <Localized key="MODELE DE DONNEES" lang="French">MODELE DE DONNEES</Localized>
+    <Localized key="MODELE DE DONNEES" lang="Dutch">MODELE DE DONNEES</Localized>
+    <Localized key="GUIDE DE L'UTILISATEUR" lang="English">GUIDE DE L'UTILISATEUR</Localized>
+    <Localized key="GUIDE DE L'UTILISATEUR" lang="French">GUIDE DE L'UTILISATEUR</Localized>
+    <Localized key="GUIDE DE L'UTILISATEUR" lang="Dutch">GUIDE DE L'UTILISATEUR</Localized>
+    <Localized key="CONTEXTE DU PROJET" lang="English">CONTEXTE DU PROJET</Localized>
+    <Localized key="CONTEXTE DU PROJET" lang="French">CONTEXTE DU PROJET</Localized>
+    <Localized key="CONTEXTE DU PROJET" lang="Dutch">CONTEXTE DU PROJET</Localized>
+    <Localized key="SIPOC Niveau 2" lang="English">SIPOC Niveau 2</Localized>
+    <Localized key="SIPOC Niveau 2" lang="French">SIPOC Niveau 2</Localized>
+    <Localized key="SIPOC Niveau 2" lang="Dutch">SIPOC Niveau 2</Localized>
+    <Localized key="SIPOC Niveau 3" lang="English">SIPOC Niveau 3</Localized>
+    <Localized key="SIPOC Niveau 3" lang="French">SIPOC Niveau 3</Localized>
+    <Localized key="SIPOC Niveau 3" lang="Dutch">SIPOC Niveau 3</Localized>
+    <Localized key="DIAGRAMME ER" lang="English">DIAGRAMME ER</Localized>
+    <Localized key="DIAGRAMME ER" lang="French">DIAGRAMME ER</Localized>
+    <Localized key="DIAGRAMME ER" lang="Dutch">DIAGRAMME ER</Localized>
+    <Localized key="Vue" lang="English">Vue</Localized>
+    <Localized key="Vue" lang="French">Vue</Localized>
+    <Localized key="Vue" lang="Dutch">Vue</Localized>
+    <Localized key="Ecran de l'opération" lang="English">Ecran de l'opération</Localized>
+    <Localized key="Ecran de l'opération" lang="French">Ecran de l'opération</Localized>
+    <Localized key="Ecran de l'opération" lang="Dutch">Ecran de l'opération</Localized>
+    <Localized key="Matrice RACI" lang="English">Matrice RACI</Localized>
+    <Localized key="Matrice RACI" lang="French">Matrice RACI</Localized>
+    <Localized key="Matrice RACI" lang="Dutch">Matrice RACI</Localized>
   </LocalizedDictionary>
 </Panel>
