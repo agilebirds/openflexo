@@ -40,7 +40,6 @@ import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ShapeView;
-import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.utils.FlexoFont;
@@ -165,7 +164,11 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	public static ImageIcon getImageIcon(SubProcessNode spNode) {
 		if (spNode instanceof MultipleInstanceSubProcessNode) {
-			return WKFIconLibrary.MULTIPLE_INSTANCE_SUBPROCESS_ICON;
+			if (((MultipleInstanceSubProcessNode) spNode).getIsSequential()) {
+				return WKFIconLibrary.SEQUENTIAL_MULTIPLE_INSTANCE_SUBPROCESS_ICON;
+			} else {
+				return WKFIconLibrary.MULTIPLE_INSTANCE_SUBPROCESS_ICON;
+			}
 		} else if (spNode instanceof SingleInstanceSubProcessNode) {
 			return null;
 		} else if (spNode instanceof LoopSubProcessNode) {
@@ -198,9 +201,10 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (dataModification instanceof AttributeDataModification
-				&& "subProcess".equals(((AttributeDataModification) dataModification).propertyName())) {
+		if ("subProcess".equals(dataModification.propertyName())) {
 			getDrawing().updateGraphicalObjectsHierarchy();
+		} else if (MultipleInstanceSubProcessNode.IS_SEQUENTIAL.equals(dataModification.propertyName())) {
+			notifyShapeNeedsToBeRedrawn();
 		}
 		super.update(observable, dataModification);
 	}
