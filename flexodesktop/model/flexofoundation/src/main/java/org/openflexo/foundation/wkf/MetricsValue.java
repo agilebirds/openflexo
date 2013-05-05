@@ -183,7 +183,7 @@ public class MetricsValue extends WKFObject implements InspectableObject, FlexoM
 
 	public void setMetricsDefinition(MetricsDefinition object) {
 		if (metricsDefinitionReference != null) {
-			metricsDefinitionReference.delete();
+			metricsDefinitionReference.delete(false);
 			metricsDefinitionReference = null;
 		}
 		if (object != null) {
@@ -244,7 +244,7 @@ public class MetricsValue extends WKFObject implements InspectableObject, FlexoM
 			if (owner != null) {
 				owner.removeFromMetricsValues(this);
 			}
-			reference.delete();
+			reference.delete(false);
 		}
 	}
 
