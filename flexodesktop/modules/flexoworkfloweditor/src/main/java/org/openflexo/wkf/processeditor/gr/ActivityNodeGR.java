@@ -126,6 +126,7 @@ public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 		if (dataModification instanceof WKFAttributeDataModification
 				&& "taskType".equals(((WKFAttributeDataModification) dataModification).getAttributeName())) {
 			checkAndUpdateDimensionIfRequired();
+			notifyShapeNeedsToBeRedrawn();
 		}
 		super.update(observable, dataModification);
 	}
