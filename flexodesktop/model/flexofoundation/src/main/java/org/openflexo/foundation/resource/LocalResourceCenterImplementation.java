@@ -69,6 +69,9 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 					return ivp.validViewPointNames.contains(viewPointName);
 				}
 			}
+			if (ViewPoint.getViewPointBaseName(viewPointFile).equals("BenefitDependancyNetwork")) {
+				return false;
+			}
 			return true;
 
 		}
