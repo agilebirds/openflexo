@@ -94,6 +94,7 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 	private FlexoXMLStorageResource resource;
 
 	private boolean deleted = false;
+	private String modelObjectIdentifier;
 
 	public FlexoModelObjectReference(O object, ReferenceOwner owner) {
 		this(object);
@@ -126,6 +127,7 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 
 	public FlexoModelObjectReference(FlexoProject project, String modelObjectIdentifier) {
 		this.referringProject = project;
+		this.modelObjectIdentifier = modelObjectIdentifier;
 		if (referringProject != null) {
 			referringProject.addToObjectReferences(this);
 		}
@@ -152,6 +154,10 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 	}
 
 	public void delete() {
+		delete(true);
+	}
+
+	public void delete(boolean notify) {
 		if (!deleted) {
 			deleted = true;
 			if (getReferringProject() != null) {
@@ -213,7 +219,9 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 					} else {
 						status = ReferenceStatus.NOT_FOUND;
 					}
-					owner.objectCantBeFound(this);
+					if (force) {
+						owner.objectCantBeFound(this);
+					}
 				}
 			}
 		}
@@ -224,6 +232,7 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 		if (getEnclosingProject(force) != null) {
 			FlexoXMLStorageResource res = getResource(force);
 			if (res == null) {
+
 				return null;
 			}
 			if (force && !res.isLoaded()) {
@@ -244,6 +253,9 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 			FlexoProject enclosingProject = getEnclosingProject(force);
 			if (enclosingProject != null) {
 				resource = (FlexoXMLStorageResource) enclosingProject.resourceForKey(resourceIdentifier);
+				if (resource == null && enclosingProjectIdentifier == null) {
+
+				}
 				if (resource != null) {
 					resource.addResourceLoadingListener(this);
 					resource.getPropertyChangeSupport().addPropertyChangeListener("name", this);

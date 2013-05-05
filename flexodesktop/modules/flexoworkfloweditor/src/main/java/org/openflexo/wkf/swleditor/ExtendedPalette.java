@@ -54,10 +54,11 @@ public class ExtendedPalette extends AbstractWKFPalette {
 
 	private static final Logger logger = Logger.getLogger(ExtendedPalette.class.getPackage().getName());
 
-	private ContainerValidity DROP_ON_PETRI_GRAPH = new ContainerValidity() {
+	private ContainerValidity DROP_ON_ROLE_OR_PETRI_GRAPH = new ContainerValidity() {
 		@Override
 		public boolean isContainerValid(FlexoModelObject container) {
-			return container instanceof FlexoPetriGraph || container instanceof FlexoProcess || container instanceof WKFArtefact;
+			return container instanceof FlexoPetriGraph || container instanceof FlexoProcess || container instanceof WKFArtefact
+					|| container instanceof Role;
 		}
 	};
 
@@ -132,7 +133,7 @@ public class ExtendedPalette extends AbstractWKFPalette {
 		annotation.setLabelX(40, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		annotation.setLabelY(80, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		annotation.setTextFont(new FlexoFont("Lucida Sans", Font.PLAIN, 10));
-		return makePaletteElement(annotation, new DataObjectGR(annotation, null), DROP_ON_PETRI_GRAPH);
+		return makePaletteElement(annotation, new DataObjectGR(annotation, null), DROP_ON_ROLE_OR_PETRI_GRAPH);
 	}
 
 	private WKFPaletteElement makeBoundingBoxElement(int x, int y, int width, int height) {
@@ -150,7 +151,7 @@ public class ExtendedPalette extends AbstractWKFPalette {
 		annotation.setLabelX(60, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		annotation.setLabelY(10, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		// annotation.setTextFont(new FlexoFont("SansSerif",Font.PLAIN, 9), ActivityNodeGR.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(annotation, new AnnotationGR(annotation, null), DROP_ON_PETRI_GRAPH);
+		return makePaletteElement(annotation, new AnnotationGR(annotation, null), DROP_ON_ROLE_OR_PETRI_GRAPH);
 	}
 
 	public WKFPaletteElement makeDataSourceElement(int x, int y) {
@@ -161,7 +162,7 @@ public class ExtendedPalette extends AbstractWKFPalette {
 		annotation.setLabelX(40, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		annotation.setLabelY(65, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		annotation.setTextFont(new FlexoFont("Lucida Sans", Font.PLAIN, 10));
-		return makePaletteElement(annotation, new DataSourceGR(annotation, null), DROP_ON_PETRI_GRAPH);
+		return makePaletteElement(annotation, new DataSourceGR(annotation, null), DROP_ON_ROLE_OR_PETRI_GRAPH);
 
 	}
 
@@ -173,7 +174,7 @@ public class ExtendedPalette extends AbstractWKFPalette {
 		annotation.setTextFont(new FlexoFont("Lucida Sans", Font.PLAIN, 10));
 		annotation.setLabelX(25, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		annotation.setLabelY(45, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(annotation, new StockObjectGR(annotation, null), DROP_ON_PETRI_GRAPH);
+		return makePaletteElement(annotation, new StockObjectGR(annotation, null), DROP_ON_ROLE_OR_PETRI_GRAPH);
 	}
 
 	private WKFPaletteElement makeINCLUSIVEOperatorElement(int x, int y) {

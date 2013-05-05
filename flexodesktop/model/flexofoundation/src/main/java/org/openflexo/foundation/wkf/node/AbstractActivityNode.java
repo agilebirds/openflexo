@@ -227,7 +227,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 	public void setLinkedProcess(FlexoProcess linkedProcess) {
 		if (this.linkedProcess != null) {
-			this.linkedProcess.delete();
+			this.linkedProcess.delete(false);
 			this.linkedProcess = null;
 		}
 		if (linkedProcess != null) {
@@ -305,7 +305,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 				observedRole = null;
 			}
 			if (role != null) {
-				role.delete();
+				role.delete(false);
 				role = null;
 			}
 			if (aRole != null) {
@@ -920,7 +920,7 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 	@Override
 	public void objectCantBeFound(FlexoModelObjectReference<?> reference) {
-
+		objectDeleted(reference);
 	}
 
 	@Override
@@ -930,14 +930,18 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 
 	@Override
 	public void objectDeleted(FlexoModelObjectReference<?> reference) {
-		if (role == reference) {
-			setRole(null);
-		} else if (roleA == reference) {
-			setRoleA(null);
-		} else if (informedRoles.contains(reference)) {
-			removeFromInformedRoleReferences((FlexoModelObjectReference<Role>) reference);
-		} else if (consultedRoles.contains(reference)) {
-			removeFromConsultedRoleReferences((FlexoModelObjectReference<Role>) reference);
+		if (!getProcess().getFlexoResource().isConverting()) {
+			if (role == reference) {
+				setRole(null);
+			} else if (roleA == reference) {
+				setRoleA(null);
+			} else if (informedRoles.contains(reference)) {
+				removeFromInformedRoleReferences((FlexoModelObjectReference<Role>) reference);
+			} else if (consultedRoles.contains(reference)) {
+				removeFromConsultedRoleReferences((FlexoModelObjectReference<Role>) reference);
+			} else if (reference == getLinkedProcessReference()) {
+				setLinkedProcess(null);
+			}
 		}
 	}
 
@@ -988,20 +992,20 @@ public abstract class AbstractActivityNode extends FatherNode implements Metrics
 			boundaryEvent.delete();
 		}
 		if (role != null) {
-			role.delete();
+			role.delete(false);
 			role = null;
 		}
 		if (roleA != null) {
-			roleA.delete();
+			roleA.delete(false);
 			roleA = null;
 		}
 
 		for (FlexoModelObjectReference<Role> ref : informedRoles) {
-			ref.delete();
+			ref.delete(false);
 		}
 		informedRoles.clear();
 		for (FlexoModelObjectReference<Role> ref : consultedRoles) {
-			ref.delete();
+			ref.delete(false);
 		}
 		consultedRoles.clear();
 		super.delete();

@@ -54,6 +54,7 @@ import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.NameChanged;
+import org.openflexo.foundation.RepresentableFlexoModelObject;
 import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.dm.PostInserted;
@@ -371,7 +372,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 	public double getAbsoluteTextX() {
 		if (getEdge().hasLabelLocationForContext(getOldContext())) {
 			getEdge().setLabelX(getEdge().getLabelX(getOldContext(), getDefaultLabelX()), getContext());
-			getEdge()._removeGraphicalPropertyWithKey(getEdge().getLabelXContextForContext(getOldContext()));
+			getEdge()._removeGraphicalPropertyWithKey(getEdge().getLabelXKeyForContext(getOldContext()));
 		}
 		if (!getEdge().hasLabelLocationForContext(getContext())) {
 			getEdge().getLabelX(getContext(), getDefaultLabelX());
@@ -388,7 +389,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 	public double getAbsoluteTextY() {
 		if (getEdge().hasLabelLocationForContext(getOldContext())) {
 			getEdge().setLabelY(getEdge().getLabelY(getOldContext(), getDefaultLabelY()), getContext());
-			getEdge()._removeGraphicalPropertyWithKey(getEdge().getLabelYContextForContext(getOldContext()));
+			getEdge()._removeGraphicalPropertyWithKey(getEdge().getLabelYKeyForContext(getOldContext()));
 		}
 		if (!getEdge().hasLabelLocationForContext(getContext())) {
 			getEdge().getLabelY(getContext(), getDefaultLabelY());
@@ -815,6 +816,10 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
 			} else if ("hideWhenInduced".equals(dataModification.propertyName())) {
 				getDrawing().updateGraphicalObjectsHierarchy();
+			} else if (RepresentableFlexoModelObject.getBgColorKeyForContext(BASIC_PROCESS_EDITOR).equals(dataModification.propertyName())
+					|| RepresentableFlexoModelObject.getTextColorKeyForContext(BASIC_PROCESS_EDITOR)
+							.equals(dataModification.propertyName())) {
+				updatePropertiesFromWKFPreferences();
 			}
 		}
 	}
@@ -833,24 +838,14 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 
 	@Override
 	public void updatePropertiesFromWKFPreferences() {
-		/*
-		 * if (getPostCondition().getEdgeRepresentation() == null) { AbstractNode startingNode = getPostCondition().getStartingNode(); if
-		 * (startingNode instanceof FlexoNode && ((FlexoNode)startingNode).isEndNode() && startingNode.getParentPetriGraph().getContainer()
-		 * instanceof AbstractNode) startingNode = (AbstractNode) startingNode.getParentPetriGraph().getContainer(); FlexoPetriGraph
-		 * parentPG = ((PetriGraphNode)startingNode).getParentPetriGraph(); if (parentPG !=null) { if
-		 * (parentPG.getLevel()==FlexoLevel.ACTION) getPostCondition().setEdgeRepresentation(WKFPreferences.getActionConnector()); else if
-		 * (parentPG.getLevel()==FlexoLevel.OPERATION) getPostCondition().setEdgeRepresentation(WKFPreferences.getOperationConnector());
-		 * else getPostCondition().setEdgeRepresentation(WKFPreferences.getActivityConnector()); } else {
-		 * getPostCondition().setEdgeRepresentation(WKFPreferences.getActivityConnector()); } }
-		 */
 		EdgeRepresentation type = (EdgeRepresentation) getEdge().getWorkflow().getConnectorRepresentation(
 				WKFPreferences.getConnectorRepresentation());
 		if (isInsideSameActionPetriGraph()) {
 			type = EdgeRepresentation.CURVE;
 		}
 		context = null;
-		TextStyle ts = TextStyle.makeTextStyle(Color.BLACK, getEdgeFont().getFont());
-		ts.setBackgroundColor(Color.WHITE);
+		TextStyle ts = TextStyle.makeTextStyle(getDrawable().getTextColor(BASIC_PROCESS_EDITOR, Color.BLACK), getEdgeFont().getFont());
+		ts.setBackgroundColor(getDrawable().getBgColor(BASIC_PROCESS_EDITOR, Color.WHITE));
 		ts.setIsBackgroundColored(true);
 		setTextStyle(ts);
 		setConnector(makeConnector(type.getConnectorType()));

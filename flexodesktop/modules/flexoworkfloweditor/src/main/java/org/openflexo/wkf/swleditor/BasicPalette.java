@@ -39,18 +39,9 @@ import org.openflexo.foundation.wkf.node.ActivityNode;
 import org.openflexo.foundation.wkf.node.EventNode;
 import org.openflexo.foundation.wkf.node.EventNode.EVENT_TYPE;
 import org.openflexo.foundation.wkf.node.EventNode.TriggerType;
-import org.openflexo.foundation.wkf.node.IFOperator;
-import org.openflexo.foundation.wkf.node.LOOPOperator;
-import org.openflexo.foundation.wkf.node.LoopSubProcessNode;
 import org.openflexo.foundation.wkf.node.OROperator;
 import org.openflexo.foundation.wkf.node.SelfExecutableNode;
 import org.openflexo.foundation.wkf.node.SingleInstanceSubProcessNode;
-import org.openflexo.foundation.wkf.node.WSCallSubProcessNode;
-import org.openflexo.foundation.wkf.ws.DeletePort;
-import org.openflexo.foundation.wkf.ws.InOutPort;
-import org.openflexo.foundation.wkf.ws.InPort;
-import org.openflexo.foundation.wkf.ws.NewPort;
-import org.openflexo.foundation.wkf.ws.OutPort;
 import org.openflexo.foundation.wkf.ws.PortRegistery;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
@@ -60,10 +51,7 @@ import org.openflexo.wkf.swleditor.gr.DataObjectGR;
 import org.openflexo.wkf.swleditor.gr.EventNodeGR;
 import org.openflexo.wkf.swleditor.gr.MessageGR;
 import org.openflexo.wkf.swleditor.gr.OperatorANDGR;
-import org.openflexo.wkf.swleditor.gr.OperatorIFGR;
-import org.openflexo.wkf.swleditor.gr.OperatorLOOPGR;
 import org.openflexo.wkf.swleditor.gr.OperatorORGR;
-import org.openflexo.wkf.swleditor.gr.PortGR;
 import org.openflexo.wkf.swleditor.gr.SubProcessNodeGR;
 
 public class BasicPalette extends AbstractWKFPalette {
@@ -101,10 +89,11 @@ public class BasicPalette extends AbstractWKFPalette {
 		}
 	};
 
-	private ContainerValidity DROP_ON_PETRI_GRAPH = new ContainerValidity() {
+	private ContainerValidity DROP_ON_ROLE_OR_PETRI_GRAPH = new ContainerValidity() {
 		@Override
 		public boolean isContainerValid(FlexoModelObject container) {
-			return container instanceof FlexoPetriGraph || container instanceof FlexoProcess || container instanceof WKFArtefact;
+			return container instanceof FlexoPetriGraph || container instanceof FlexoProcess || container instanceof WKFArtefact
+					|| container instanceof Role;
 		}
 	};
 
@@ -172,7 +161,7 @@ public class BasicPalette extends AbstractWKFPalette {
 		message.setInitiating(b);
 		message.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		message.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(message, new MessageGR(message, null), DROP_ON_PETRI_GRAPH);
+		return makePaletteElement(message, new MessageGR(message, null), DROP_ON_ROLE_OR_PETRI_GRAPH);
 	}
 
 	private WKFPaletteElement makeDataFile(int x, int y) {
@@ -182,7 +171,7 @@ public class BasicPalette extends AbstractWKFPalette {
 		annotation.setLabelX(40, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		annotation.setLabelY(80, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		annotation.setTextFont(new FlexoFont("Lucida Sans", Font.PLAIN, 10));
-		return makePaletteElement(annotation, new DataObjectGR(annotation, null), DROP_ON_PETRI_GRAPH);
+		return makePaletteElement(annotation, new DataObjectGR(annotation, null), DROP_ON_ROLE_OR_PETRI_GRAPH);
 	}
 
 	private WKFPaletteElement makeAnnotationElement(int x, int y) {
@@ -193,7 +182,7 @@ public class BasicPalette extends AbstractWKFPalette {
 		annotation.setIsAnnotation();
 		annotation.setTextFont(new FlexoFont("Lucida Sans", Font.ITALIC, 10));
 		annotation.setIsRounded(false);
-		return makePaletteElement(annotation, new AnnotationGR(annotation, null), DROP_ON_PETRI_GRAPH);
+		return makePaletteElement(annotation, new AnnotationGR(annotation, null), DROP_ON_ROLE_OR_PETRI_GRAPH);
 	}
 
 	private WKFPaletteElement makeNormalActivityElement(int x, int y, int width, int height) {
@@ -222,8 +211,7 @@ public class BasicPalette extends AbstractWKFPalette {
 		operator.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		operator.setLabelX(28, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		operator.setLabelY(55, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(operator, new OperatorANDGR(operator, null, true),
-				DROP_ON_ROLE_OR_ACTIVITY_PG_OR_ACTIVITY_GROUP_FOR_INTERACTIVE_NODE);
+		return makePaletteElement(operator, new OperatorANDGR(operator, null, true), DROP_ON_ROLE_OR_ACTIVITY_PG_OR_ACTIVITY_GROUP);
 	}
 
 	private WKFPaletteElement makeOROperatorElement(int x, int y) {
@@ -235,61 +223,9 @@ public class BasicPalette extends AbstractWKFPalette {
 		return makePaletteElement(operator, new OperatorORGR(operator, null, true), DROP_ON_ROLE_OR_ACTIVITY_PG_OR_ACTIVITY_GROUP);
 	}
 
-	private WKFPaletteElement makeIFOperatorElement(int x, int y) {
-		final IFOperator operator = new IFOperator((FlexoProcess) null);
-		operator.setName(operator.getDefaultName());
-		operator.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setLabelX(28, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setLabelY(55, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(operator, new OperatorIFGR(operator, null, true), DROP_ON_ROLE_OR_ACTIVITY_PG_OR_ACTIVITY_GROUP);
-	}
-
-	private WKFPaletteElement makeLOOPOperatorElement(int x, int y) {
-		final LOOPOperator operator = new LOOPOperator((FlexoProcess) null);
-		operator.setName(operator.getDefaultName());
-		operator.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setLabelX(28, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		operator.setLabelY(55, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(operator, new OperatorLOOPGR(operator, null, true), DROP_ON_ROLE_OR_ACTIVITY_PG_OR_ACTIVITY_GROUP);
-	}
-
 	private WKFPaletteElement makeSingleInstanceSubProcessNodeElement(int x, int y, int width, int height) {
 		final SingleInstanceSubProcessNode node = new SingleInstanceSubProcessNode((FlexoProcess) null);
 		node.setName(FlexoLocalization.localizedForKey("sub_process_call_activity"));
-		node.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		node.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		node.setWidth(width, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		node.setHeight(height, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		SubProcessNodeGR gr = new SubProcessNodeGR(node, null, true) {
-			@Override
-			public String getRoleLabel() {
-				return "<role>";
-			}
-		};
-		return makePaletteElement(node, gr, DROP_ON_ROLE_OR_ACTIVITY_PG_OR_ACTIVITY_GROUP_FOR_INTERACTIVE_NODE);
-	}
-
-	private WKFPaletteElement makeLoopSubProcessNodeElement(int x, int y, int width, int height) {
-		final LoopSubProcessNode node = new LoopSubProcessNode((FlexoProcess) null);
-		node.setName(FlexoLocalization.localizedForKey("sequential_sub_process"));
-		node.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		node.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		node.setWidth(width, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		node.setHeight(height, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		SubProcessNodeGR gr = new SubProcessNodeGR(node, null, true) {
-			@Override
-			public String getRoleLabel() {
-				return "<role>";
-			}
-		};
-		return makePaletteElement(node, gr, DROP_ON_ROLE_OR_ACTIVITY_PG_OR_ACTIVITY_GROUP_FOR_INTERACTIVE_NODE);
-	}
-
-	private WKFPaletteElement makeWSCallSubProcessNodeElement(int x, int y, int width, int height) {
-		final WSCallSubProcessNode node = new WSCallSubProcessNode((FlexoProcess) null);
-		node.setName("Web Service");
 		node.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		node.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		node.setWidth(width, SWLEditorConstants.SWIMMING_LANE_EDITOR);
@@ -337,56 +273,6 @@ public class BasicPalette extends AbstractWKFPalette {
 		node.setLabelX(25, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		node.setLabelY(50, SWLEditorConstants.SWIMMING_LANE_EDITOR);
 		return makePaletteElement(node, new EventNodeGR(node, null), DROP_ON_ROLE_OR_ACTIVITY_PG_OR_ACTIVITY_GROUP);
-	}
-
-	private WKFPaletteElement makeNewPortElement(int x, int y, String portName) {
-		final NewPort port = new NewPort((FlexoProcess) null);
-		port.setName(portName);
-		port.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		port.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		port.setLabelX(25, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		port.setLabelY(65, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(port, new PortGR(port, null), DROP_ON_PORT_REGISTERY);
-	}
-
-	private WKFPaletteElement makeInPortElement(int x, int y, String portName) {
-		final InPort port = new InPort((FlexoProcess) null);
-		port.setName(portName);
-		port.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		port.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		port.setLabelX(25, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		port.setLabelY(65, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(port, new PortGR(port, null), DROP_ON_PORT_REGISTERY);
-	}
-
-	private WKFPaletteElement makeOutPortElement(int x, int y, String portName) {
-		final OutPort port = new OutPort((FlexoProcess) null);
-		port.setName(portName);
-		port.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		port.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		port.setLabelX(25, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		port.setLabelY(65, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(port, new PortGR(port, null), DROP_ON_PORT_REGISTERY);
-	}
-
-	private WKFPaletteElement makeInOutPortElement(int x, int y, String portName) {
-		final InOutPort port = new InOutPort((FlexoProcess) null);
-		port.setName(portName);
-		port.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		port.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		port.setLabelX(25, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		port.setLabelY(65, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(port, new PortGR(port, null), DROP_ON_PORT_REGISTERY);
-	}
-
-	private WKFPaletteElement makeDeletePortElement(int x, int y, String portName) {
-		final DeletePort port = new DeletePort((FlexoProcess) null);
-		port.setName(portName);
-		port.setX(x, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		port.setY(y, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		port.setLabelX(25, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		port.setLabelY(65, SWLEditorConstants.SWIMMING_LANE_EDITOR);
-		return makePaletteElement(port, new PortGR(port, null), DROP_ON_PORT_REGISTERY);
 	}
 
 	public WKFPaletteElement getNormalActivityElement() {

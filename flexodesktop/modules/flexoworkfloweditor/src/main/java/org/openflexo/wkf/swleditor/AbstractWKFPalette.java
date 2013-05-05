@@ -142,7 +142,13 @@ public abstract class AbstractWKFPalette extends DrawingPalette {
 
 			else {
 				Role roleWhereToDrop = null;
-				SwimmingLaneRepresentation swlRepresentation = ((SWLObjectGR) gr).getDrawing();
+				SwimmingLaneRepresentation swlRepresentation = null;
+				if (gr instanceof SwimmingLaneGraphicalRepresentation) {
+					swlRepresentation = ((SwimmingLaneGraphicalRepresentation) gr).getSwimmingLaneRepresentation();
+					container = swlRepresentation.getProcess().getActivityPetriGraph();
+				} else {
+					swlRepresentation = ((SWLObjectGR) gr).getDrawing();
+				}
 				if (gr.getDrawable() instanceof FlexoPetriGraph) {
 					container = (FlexoPetriGraph) gr.getDrawable();
 				}

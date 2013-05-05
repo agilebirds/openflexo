@@ -78,7 +78,7 @@
   
    <entity name="org.openflexo.foundation.RepresentableFlexoModelObject" abstract="YES">
     <description>Contains data used for graphical representations</description>
-    <property name="graphicalProperties" xmlTag="GraphicalProperties" type="properties" description="Dynamic properties storing data used for graphical representation"/> 
+    <property name="graphicalProperties" xmlTag="GraphicalProperties" type="safeproperties" description="Dynamic properties storing data used for graphical representation"/> 
   </entity>
 
 	 <entity name="org.openflexo.foundation.wkf.WKFObject" abstract="YES" finalizer="finalizeDeserialization">

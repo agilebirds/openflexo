@@ -43,6 +43,7 @@ import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.NameChanged;
+import org.openflexo.foundation.RepresentableFlexoModelObject;
 import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.dm.PostInserted;
@@ -566,6 +567,9 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
 			} else if ("hideWhenInduced".equals(dataModification.propertyName())) {
 				getDrawing().updateGraphicalObjectsHierarchy();
+			} else if (RepresentableFlexoModelObject.getBgColorKeyForContext(SWIMMING_LANE_EDITOR).equals(dataModification.propertyName())
+					|| RepresentableFlexoModelObject.getFgColorKeyForContext(SWIMMING_LANE_EDITOR).equals(dataModification.propertyName())) {
+				updatePropertiesFromWKFPreferences();
 			}
 		}
 	}
@@ -590,8 +594,8 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		if (isInsideSameActionPetriGraph()) {
 			type = EdgeRepresentation.CURVE;
 		}
-		TextStyle ts = TextStyle.makeTextStyle(Color.BLACK, getEdgeFont().getFont());
-		ts.setBackgroundColor(Color.WHITE);
+		TextStyle ts = TextStyle.makeTextStyle(getDrawable().getFgColor(SWIMMING_LANE_EDITOR, Color.BLACK), getEdgeFont().getFont());
+		ts.setBackgroundColor(getDrawable().getBgColor(SWIMMING_LANE_EDITOR, Color.WHITE));
 		ts.setIsBackgroundColored(true);
 		setTextStyle(ts);
 		setConnector(makeConnector(type.getConnectorType()));

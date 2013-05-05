@@ -136,7 +136,7 @@ public abstract class OperatorNode extends PetriGraphNode implements Bindable, E
 		return true;
 	}
 
-	public String getResizableKeyForContext(String context) {
+	public static String getResizableKeyForContext(String context) {
 		return RESIZABLE + '_' + context;
 	}
 
@@ -202,7 +202,7 @@ public abstract class OperatorNode extends PetriGraphNode implements Bindable, E
 		Role oldRole = getRole();
 		if (oldRole != aRole) {
 			if (roleReference != null) {
-				roleReference.delete();
+				roleReference.delete(false);
 				roleReference = null;
 			}
 			if (aRole != null) {
@@ -222,8 +222,7 @@ public abstract class OperatorNode extends PetriGraphNode implements Bindable, E
 
 	@Override
 	public void objectCantBeFound(FlexoModelObjectReference<?> reference) {
-		// TODO Auto-generated method stub
-
+		setRole(null);
 	}
 
 	@Override

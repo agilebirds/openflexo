@@ -34,7 +34,7 @@ import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
 public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 
-	private static final int MIN_SPACE = 1;
+	private static final int MIN_SPACE = 4;
 
 	public ActivityNodeGR(ActivityNode activityNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(activityNode, ShapeType.RECTANGLE, aDrawing, isInPalet);
@@ -103,16 +103,18 @@ public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 
 	@Override
 	public double getRelativeTextY() {
+		int vOffset;
 		if (getImageIcon() != null) {
-			return (getImageIcon().getIconHeight() + 1) / getHeight();
+			vOffset = Math.max(getImageIcon().getIconHeight(), roleLabelTextStyle.getFont().getSize());
 		} else {
-			return 10 / getHeight();
+			vOffset = roleLabelTextStyle.getFont().getSize();
 		}
+		return (vOffset + MIN_SPACE) / getHeight();
 	}
 
 	@Override
 	public double getRequiredHeight(double labelHeight) {
-		return labelHeight + getRoleFont().getSize() + 3 * MIN_SPACE;
+		return labelHeight + getRoleFont().getSize() + MIN_SPACE;
 	}
 
 	public ActivityNode getActivityNode() {

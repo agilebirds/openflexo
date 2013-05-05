@@ -34,6 +34,8 @@ import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
 public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 
+	private static final int MIN_SPACE = 4;
+
 	public ActivityNodeGR(ActivityNode activityNode, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
 		super(activityNode, ShapeType.RECTANGLE, aDrawing, isInPalet);
 		setVerticalTextAlignment(VerticalTextAlignment.TOP);
@@ -52,11 +54,8 @@ public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 
 	@Override
 	public double getRelativeTextY() {
-		if (getImageIcon() != null) {
-			return (getImageIcon().getIconHeight() + 1) / getHeight();
-		} else {
-			return 10 / getHeight();
-		}
+		int vOffset = getImageIcon() != null ? getImageIcon().getIconHeight() : 10;
+		return (vOffset + MIN_SPACE) / getHeight();
 	}
 
 	@Override
