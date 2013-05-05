@@ -7,6 +7,8 @@
         <Assignment variable="component.selectableCondition" value="&quot;data.isAcceptableAsSubProcess(SubProcess.customComponent.candidateValue)&quot;" />
         <Assignment variable="component.project" value="data.project" />
       </Custom>
+      <Label label="reusable" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="reusableLabel" localize="true" />
+      <CheckBox data="data.subProcess.isTopLevelProcess" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="reusableCB" localize="true" readOnly="true"/>
     </Tab>
     <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab" opaque="false">
       <Parameter name="visibleFor" value="SEMANTICS,SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER " />

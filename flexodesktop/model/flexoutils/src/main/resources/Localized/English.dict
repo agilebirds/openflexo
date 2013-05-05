@@ -4340,6 +4340,7 @@ return_type=Return type
 returned_instance=Returned ProcessInstance
 returned_type=Returned type
 returns=Returns
+reusable=Reusable
 reusable_component=Reusable component
 reusable_process=Reusable process
 reuse_component=Reuse component

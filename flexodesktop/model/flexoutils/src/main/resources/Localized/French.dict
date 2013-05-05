@@ -4338,6 +4338,7 @@ return_type=Type retourn\u00E9
 returned_instance=ProcessInstance retourn\u00E9
 returned_type=Type retourn\u00E9
 returns=Retourne
+reusable=R\u00E9utilisable
 reusable_component=Composant r\u00E9utilisable
 reusable_process=Processus r\u00E9utilisable
 reuse_component=R\u00E9utiliser l'\u00E9cran
