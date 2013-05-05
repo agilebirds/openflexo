@@ -70,7 +70,7 @@ public class FIBTableWidgetFooter extends JPanel {
 		_widget = widget;
 
 		initializeActions(widget);
-
+		setOpaque(false);
 		setBorder(BorderFactory.createEmptyBorder());
 		setLayout(new BorderLayout());
 
