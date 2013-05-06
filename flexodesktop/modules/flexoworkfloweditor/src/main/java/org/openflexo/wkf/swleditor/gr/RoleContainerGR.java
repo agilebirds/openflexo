@@ -69,6 +69,8 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 
 	static final Logger logger = Logger.getLogger(OperationNodeGR.class.getPackage().getName());
 
+	private static final TextStyle ROLE_LABEL_TEXT_STYLE = TextStyle.makeTextStyle(Color.BLACK, new Font("Arial", Font.PLAIN, 12));
+
 	protected BackgroundStyle background;
 	protected ForegroundStyle decorationForeground;
 	protected BackgroundImage decorationBackground;
@@ -108,10 +110,10 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 				g.useForegroundStyle(decorationForeground);
 				g.drawRect(0, 0, g.getWidth() - 1, g.getHeight() - 1);
 				g.drawLine(20, 0, 20, getHeight());
-
-				double x = 10 + g.getCurrentTextStyle().getFont().getSize() * 2;
+				g.useTextStyle(ROLE_LABEL_TEXT_STYLE);
+				double x = 10 + ROLE_LABEL_TEXT_STYLE.getFont().getSize() * 2;
 				double y = getHeight() / 2;
-				System.err.println(g.drawString(getDrawable().getName(), x, y, -90, HorizontalTextAlignment.CENTER));
+				g.drawString(getDrawable().getName(), x, y, -90, HorizontalTextAlignment.CENTER);
 			};
 
 			@Override
