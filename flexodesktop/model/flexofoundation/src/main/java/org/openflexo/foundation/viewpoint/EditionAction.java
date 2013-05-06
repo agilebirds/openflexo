@@ -276,7 +276,7 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 
 	protected BindingModel buildInferedBindingModel() {
 		BindingModel returned;
-		if (getActionContainer() == null || isDeserializing()) {
+		if (getActionContainer() == null || isDeserializing() /* Prevent StackOverflow !!! */) {
 			returned = new BindingModel();
 		} else {
 			returned = new BindingModel(getActionContainer().getInferedBindingModel());
