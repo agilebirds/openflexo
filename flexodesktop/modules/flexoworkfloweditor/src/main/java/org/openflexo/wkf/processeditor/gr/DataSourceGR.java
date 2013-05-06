@@ -47,18 +47,22 @@ public class DataSourceGR extends ArtefactGR<WKFDataSource> {
 		super(dataSource, ShapeType.RECTANGLE, aDrawing);
 		setIsFloatingLabel(true);
 		setForeground(ForegroundStyle.makeNone());
-		setBackground(BackgroundStyle.makeColoredBackground(Color.WHITE));
+		setBackground(BackgroundStyle.makeEmptyBackground());
 		setMinimalWidth(10);
 		setMinimalHeight(10);
 		setShapePainter(new ShapePainter() {
 			@Override
 			public void paintShape(FGEShapeGraphics g) {
-				g.useForegroundStyle(ForegroundStyle.makeStyle(Color.BLACK));
+				g.useBackgroundStyle(BackgroundStyle.makeColoredBackground(Color.WHITE));
 				double height = 0.375;
+				g.fillRect(0, height / 2, 1, 1 - height);
+				g.fillCircle(0, 0, 1, height);
+				g.fillArc(0, 1 - height, 1, height, 180, 180);
+				g.useForegroundStyle(ForegroundStyle.makeStyle(Color.BLACK));
 				g.drawCircle(0, 0, 1, height);
+				g.drawArc(0, 1 - height, 1, height, 180, 180);
 				g.drawArc(0, 0.075, 1, height, 180, 180);
 				g.drawArc(0, 0.15, 1, height, 180, 180);
-				g.drawArc(0, 1 - height, 1, height, 180, 180);
 				g.drawLine(0, height / 2, 0, 1 - height / 2);
 				g.drawLine(1, height / 2, 1, 1 - height / 2);
 			}
