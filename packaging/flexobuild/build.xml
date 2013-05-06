@@ -156,7 +156,8 @@
 					<include name="**/*.jar" />
 				</fileset>
 			</classpath>
-		</taskdef>		<generatehelp resourceDir="${dist.dir}">
+		</taskdef>
+		<generatehelp resourceDir="${dist.dir}">
 			<language isocode="ENGLISH" title="FlexoToolSet Help">
 				<distribution name="${userType}" />
 			</language>
