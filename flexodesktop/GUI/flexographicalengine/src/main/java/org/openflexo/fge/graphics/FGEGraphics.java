@@ -180,6 +180,10 @@ public abstract class FGEGraphics {
 				+ stroke.getLineJoin() + ")-(cap=" + stroke.getEndCap() + ")-(dash=" + stroke.getDashPhase() + ")";
 	}
 
+	public TextStyle getCurrentTextStyle() {
+		return currentTextStyle;
+	}
+
 	public BackgroundStyle getDefaultBackground() {
 		return defaultBackground;
 	}
