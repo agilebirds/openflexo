@@ -27,19 +27,23 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 
 import org.openflexo.components.AskParametersDialog;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.InvalidArgumentException;
 import org.openflexo.foundation.action.ExecutionContext;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoActionRedoInitializer;
+import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoActionUndoFinalizer;
+import org.openflexo.foundation.action.FlexoActionVisibleCondition;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.param.NodeParameter;
 import org.openflexo.foundation.param.NodeParameter.NodeSelectingConditional;
 import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
+import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.action.CreateExecutionPetriGraph;
 import org.openflexo.foundation.wkf.action.CreateNode;
 import org.openflexo.foundation.wkf.action.CreatePetriGraph;
@@ -54,11 +58,12 @@ import org.openflexo.foundation.wkf.node.SelfExecutableNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableOperationNode;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.module.UserType;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class CreatePreconditionInitializer extends ActionInitializer {
+public class CreatePreconditionInitializer extends ActionInitializer<CreatePreCondition, FlexoNode, WKFObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -330,6 +335,18 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 					executionContext.createBeginNodeAction.redoAction();
 				}
 				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionVisibleCondition<CreatePreCondition, FlexoNode, WKFObject> getVisibleCondition() {
+		return new FlexoActionVisibleCondition<CreatePreCondition, FlexoNode, WKFObject>() {
+
+			@Override
+			public boolean isVisible(FlexoActionType<CreatePreCondition, FlexoNode, WKFObject> actionType, FlexoNode object,
+					Vector<WKFObject> globalSelection, FlexoEditor editor) {
+				return UserType.isDevelopperRelease() || UserType.isMaintainerRelease();
 			}
 		};
 	}
