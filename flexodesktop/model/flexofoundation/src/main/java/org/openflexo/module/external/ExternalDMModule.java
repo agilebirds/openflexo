@@ -34,4 +34,6 @@ public interface ExternalDMModule extends ExternalModule {
 
 	public JComponent createScreenshotForObject(ERDiagram target);
 
+	public void finalizeScreenshot();
+
 }
