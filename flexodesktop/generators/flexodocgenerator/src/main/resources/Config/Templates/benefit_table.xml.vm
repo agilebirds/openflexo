@@ -11,6 +11,7 @@
 </w:p>
 <w:p>
     <w:pPr>
+        <w:keepNext/>
         <w:pStyle w:val="Heading${level}"/>
     </w:pPr>
     <w:r>
