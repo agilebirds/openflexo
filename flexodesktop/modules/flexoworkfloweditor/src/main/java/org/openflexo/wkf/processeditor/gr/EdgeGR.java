@@ -206,7 +206,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 	}
 
 	protected void convertOldLayout(RectPolylinConnector connector) {
-		if (getEdge().hasGraphicalPropertyForKey(getPreConditionLayoutTransformFlagKey())) {
+		if (getEdge().hasGraphicalPropertyForKey(getPreConditionLayoutTransformFlagKey()) || isDeleted()) {
 			return;
 		}
 		double relativeLocation = (Double) getEdge()._graphicalPropertyForKey(
