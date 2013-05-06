@@ -109,8 +109,9 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 				g.drawRect(0, 0, g.getWidth() - 1, g.getHeight() - 1);
 				g.drawLine(20, 0, 20, getHeight());
 
-				g.getGraphics().rotate(-Math.PI / 2, 10, getHeight() / 2);
-				g.drawString(getDrawable().getName(), new FGEPoint(10, getHeight() / 2), HorizontalTextAlignment.CENTER);
+				double x = 10 + g.getCurrentTextStyle().getFont().getSize() * 2;
+				double y = getHeight() / 2;
+				System.err.println(g.drawString(getDrawable().getName(), x, y, -90, HorizontalTextAlignment.CENTER));
 			};
 
 			@Override
