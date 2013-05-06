@@ -25,6 +25,7 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -109,11 +110,15 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 				g.fillRect(0, 0, g.getWidth() - 1, g.getHeight() - 1);
 				g.useForegroundStyle(decorationForeground);
 				g.drawRect(0, 0, g.getWidth() - 1, g.getHeight() - 1);
-				g.drawLine(20, 0, 20, getHeight());
+				double x = 10 + ROLE_LABEL_TEXT_STYLE.getFont().getSize();
+				g.drawLine(x, 0, x, getHeight());
 				g.useTextStyle(ROLE_LABEL_TEXT_STYLE);
-				double x = 10 + ROLE_LABEL_TEXT_STYLE.getFont().getSize() * 2;
 				double y = getHeight() / 2;
-				g.drawString(getDrawable().getName(), x, y, -90, HorizontalTextAlignment.CENTER);
+				AffineTransform at = AffineTransform.getScaleInstance(g.getScale(), g.getScale());
+				int orientation = -90;
+				at.concatenate(AffineTransform.getRotateInstance(Math.toRadians(orientation)));
+
+				g.drawString(getDrawable().getName(), x, y, orientation, HorizontalTextAlignment.CENTER);
 			};
 
 			@Override
