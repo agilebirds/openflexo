@@ -28,6 +28,7 @@ import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.viewpoint.AddClass;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyPatternRole;
@@ -143,6 +144,19 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 	@Override
 	@Deprecated
 	public BindingVariable makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
+		return null;
+	}
+
+	@Override
+	public String getURIForObject(ModelSlotInstance msInstance, Object o) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object retrieveObjectWithURI(ModelSlotInstance msInstance,
+			String objectURI) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

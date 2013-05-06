@@ -1,5 +1,6 @@
 /*
- * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2010-2012 AgileBirds
+ * (c) Copyright 2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -17,6 +18,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 package org.openflexo.technologyadapter.emf;
 
 import java.util.logging.Logger;
@@ -30,6 +32,7 @@ import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
@@ -174,6 +177,19 @@ public class EMFModelSlot extends FlexoOntologyModelSlot<EMFModel, EMFMetaModel>
 		if (SelectEMFObjectIndividual.class.isAssignableFrom(fetchRequestClass)) {
 			return (FR) new SelectEMFObjectIndividual(null);
 		}
+		return null;
+	}
+
+	@Override
+	public String getURIForObject(ModelSlotInstance msInstance, Object o) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object retrieveObjectWithURI(ModelSlotInstance msInstance,
+			String objectURI) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

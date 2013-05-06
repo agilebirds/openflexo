@@ -32,6 +32,7 @@ import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.toolbox.StringUtils;
 
@@ -101,7 +102,7 @@ public abstract class AddClass<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 		}
 	}
 
-	public String _getOntologyClassURI() {
+	public String _getOntologyClassURI(EditionSchemeAction action) {
 		if (getOntologyClass() != null) {
 			if (getPatternRole() instanceof ClassPatternRole && getPatternRole().getOntologicType() == getOntologyClass()) {
 				// No need to store an overriding type, just use default provided by pattern role

@@ -22,7 +22,7 @@ public class ConceptActorReference<T extends IFlexoOntologyObject> extends Actor
 
 		ModelSlotInstance msInstance = getModelSlotInstance();
 		/** Model Slot is responsible for URI mapping */
-		objectURI = msInstance.retrieveObjectWithURI(o);
+	    objectURI = msInstance.getModelSlot().getURIForObject(msInstance, o);
 	}
 
 	// Constructor used during deserialization
@@ -49,8 +49,7 @@ public class ConceptActorReference<T extends IFlexoOntologyObject> extends Actor
 			if (msInstance.getModel() != null) {
 				// object = (T) getProject().getObject(objectURI); 
 				/** Model Slot is responsible for URI mapping */
-				ModelS
-				object = (T) msInstance.getModel().getObject(msInstance,objectURI);
+				 object = (T) msInstance.getModelSlot().retrieveObjectWithURI(msInstance, objectURI);
 			} else {
 				logger.warning("Could not access to model in model slot " + getModelSlotInstance());
 				logger.warning("Searched " + getModelSlotInstance().getModelURI());

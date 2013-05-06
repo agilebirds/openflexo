@@ -34,7 +34,7 @@ public interface FlexoModel<M extends FlexoModel<M, MM>, MM extends FlexoMetaMod
 	 */
 	public String getURI();
 
-	public Object getObject(ModelSlotInstance msInstance, String objectURI);
+	public Object getObject(String objectURI);
 
 	/**
 	 * Return the {@link TechnologyAdapter} of technical space where related FlexoOntology exists
