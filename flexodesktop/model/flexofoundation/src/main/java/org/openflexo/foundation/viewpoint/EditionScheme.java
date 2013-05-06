@@ -615,6 +615,9 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 
 	@Override
 	public BindingModel getBindingModel() {
+		if (isRebuildingBindingModel) {
+			return _bindingModel;
+		}
 		if (_bindingModel == null) {
 			createBindingModel();
 		}
@@ -627,6 +630,9 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	public void updateBindingModels() {
+		if (isDeserializing()) {
+			return;
+		}
 		/*if (getName().equals("synchronization")) {
 			System.out.println("******* updateBindingModels() for " + this + " " + getName() + " and ep=" + getEditionPattern());
 		}*/
@@ -655,8 +661,11 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		}
 	}
 
+	private boolean isRebuildingBindingModel = false;
+
 	private final void createBindingModel() {
 		_bindingModel = new BindingModel();
+		isRebuildingBindingModel = true;
 		_bindingModel.addToBindingVariables(new BindingVariable("parameters", getEditionSchemeParametersValuesType()));
 		_bindingModel.addToBindingVariables(new BindingVariable("parametersDefinitions", getEditionSchemeParametersType()));
 		// _bindingModel.addToBindingVariables(new EditionSchemeParametersBindingVariable(this));
@@ -679,6 +688,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 			}
 		}
 		notifyBindingModelChanged();
+		isRebuildingBindingModel = false;
 	}
 
 	protected void appendContextualBindingVariables(BindingModel bindingModel) {
