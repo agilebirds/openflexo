@@ -102,7 +102,7 @@ public abstract class AddClass<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 		}
 	}
 
-	public String _getOntologyClassURI(EditionSchemeAction action) {
+	public String _getOntologyClassURI() {
 		if (getOntologyClass() != null) {
 			if (getPatternRole() instanceof ClassPatternRole && getPatternRole().getOntologicType() == getOntologyClass()) {
 				// No need to store an overriding type, just use default provided by pattern role

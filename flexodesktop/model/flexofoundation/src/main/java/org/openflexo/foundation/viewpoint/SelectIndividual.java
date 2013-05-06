@@ -79,7 +79,7 @@ public abstract class SelectIndividual<M extends FlexoModel<M, MM>, MM extends F
 		}
 	}
 
-	public String _getOntologyClassURI(EditionSchemeAction action) {
+	public String _getOntologyClassURI() {
 		if (getType() != null) {
 			return getType().getURI();
 		}
