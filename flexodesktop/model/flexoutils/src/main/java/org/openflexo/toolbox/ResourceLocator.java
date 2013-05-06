@@ -149,11 +149,11 @@ public class ResourceLocator {
 					File flexoDesktopDirectory = findProjectDirectoryWithName(workingDirectory, "flexodesktop");
 					if (flexoDesktopDirectory != null) {
 						findAllFlexoProjects(flexoDesktopDirectory, directoriesSearchOrder);
-					}
-					File technologyadaptersintegrationDirectory = new File(flexoDesktopDirectory.getParentFile(),
-							"packaging/technologyadaptersintegration");
-					if (technologyadaptersintegrationDirectory != null) {
-						findAllFlexoProjects(technologyadaptersintegrationDirectory, directoriesSearchOrder);
+						File technologyadaptersintegrationDirectory = new File(flexoDesktopDirectory.getParentFile(),
+								"packaging/technologyadaptersintegration");
+						if (technologyadaptersintegrationDirectory != null) {
+							findAllFlexoProjects(technologyadaptersintegrationDirectory, directoriesSearchOrder);
+						}
 					}
 					directoriesSearchOrder.add(workingDirectory);
 				}
