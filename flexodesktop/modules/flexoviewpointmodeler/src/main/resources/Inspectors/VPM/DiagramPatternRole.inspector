@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
-  <TabPanel name="Tab" constraints="border(location=center;index=0)">
-    <Tab index="1" title="Graphics" layout="twocols" font="SansSerif,0,11" name="Graphics">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
+      <Label index="4" label="diagram_type" localize="true" name="DSLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
+      <Custom componentClassName="org.openflexo.components.widget.FIBVirtualModelSelector" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="DSSelector" index="5" data="data.diagramSpecificationResource" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)">
+        <Assignment variable="component.viewPoint" value="data.viewPoint.resource" />
+      </Custom>
     </Tab>
   </TabPanel>
   <LocalizedDictionary>

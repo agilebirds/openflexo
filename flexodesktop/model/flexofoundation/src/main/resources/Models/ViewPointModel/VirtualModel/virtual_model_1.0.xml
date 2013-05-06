@@ -170,7 +170,7 @@
 	</entity>
 
 	<entity name="org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole" xmlTag="DiagramPatternRole">
-		<!--  <property name="viewpointURI" xmlTag="viewpointURI" attribute="YES" /> -->
+		<property name="diagramSpecificationURI" xmlTag="diagramSpecificationURI" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole" xmlTag="EditionPatternInstancePatternRole">

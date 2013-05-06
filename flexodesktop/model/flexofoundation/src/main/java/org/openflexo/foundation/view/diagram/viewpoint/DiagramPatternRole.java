@@ -1,17 +1,23 @@
 package org.openflexo.foundation.view.diagram.viewpoint;
 
 import java.lang.reflect.Type;
+import java.util.logging.Logger;
 
+import org.openflexo.foundation.rm.DiagramSpecificationResource;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelObjectActorReference;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.StringUtils;
 
 public class DiagramPatternRole extends PatternRole<View> {
 
-	private DiagramSpecification diagramSpecification;
+	private static final Logger logger = Logger.getLogger(DiagramPatternRole.class.getPackage().getName());
+
+	private DiagramSpecificationResource diagramSpecificationResource;
+	private String diagramSpecificationURI;
 
 	public DiagramPatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
@@ -40,12 +46,38 @@ public class DiagramPatternRole extends PatternRole<View> {
 		// Not relevant
 	}
 
+	public DiagramSpecificationResource getDiagramSpecificationResource() {
+		if (diagramSpecificationResource == null && StringUtils.isNotEmpty(diagramSpecificationURI)) {
+			diagramSpecificationResource = getViewPoint().getDiagramSpecificationNamed(diagramSpecificationURI).getResource();
+			logger.info("Looked-up " + diagramSpecificationResource);
+		}
+		return diagramSpecificationResource;
+	}
+
+	public void setDiagramSpecificationResource(DiagramSpecificationResource diagramSpecificationResource) {
+		this.diagramSpecificationResource = diagramSpecificationResource;
+	}
+
+	public String getDiagramSpecificationURI() {
+		if (diagramSpecificationResource != null) {
+			return diagramSpecificationResource.getURI();
+		}
+		return diagramSpecificationURI;
+	}
+
+	public void setDiagramSpecificationURI(String diagramSpecificationURI) {
+		this.diagramSpecificationURI = diagramSpecificationURI;
+	}
+
 	public DiagramSpecification getDiagramSpecification() {
-		return diagramSpecification;
+		if (getDiagramSpecificationResource() != null) {
+			return getDiagramSpecificationResource().getDiagramSpecification();
+		}
+		return null;
 	}
 
 	public void setDiagramSpecification(DiagramSpecification diagramSpecification) {
-		this.diagramSpecification = diagramSpecification;
+		diagramSpecificationResource = diagramSpecification.getResource();
 	}
 
 	@Override

@@ -329,6 +329,26 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	}
 
 	/**
+	 * Return {@link DiagramSpecification} with supplied name or URI
+	 * 
+	 * @return
+	 */
+	public DiagramSpecification getDiagramSpecificationNamed(String diagramSpecificationName) {
+		loadVirtualModelsWhenUnloaded();
+		for (VirtualModel vm : getVirtualModels()) {
+			if (vm instanceof DiagramSpecification) {
+				if (vm.getName().equals(diagramSpecificationName)) {
+					return (DiagramSpecification) vm;
+				}
+				if (vm.getURI().equals(diagramSpecificationName)) {
+					return (DiagramSpecification) vm;
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Return EditionPattern matching supplied id represented as a string, which could be either the name of EditionPattern, or its URI
 	 * 
 	 * @param editionPatternId
