@@ -226,8 +226,8 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		mainPane.setPreferredSize(new Dimension(600, 300));
 		getContentPane().add(mainPane);
 		setSize(600, 300);
-		center();
 		pack();
+		center();
 		setVisible(true);
 		paintImmediately();
 		if (logger.isLoggable(Level.FINE)) {

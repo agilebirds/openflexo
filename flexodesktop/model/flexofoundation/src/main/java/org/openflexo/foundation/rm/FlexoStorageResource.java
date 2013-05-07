@@ -457,7 +457,9 @@ public abstract class FlexoStorageResource<SRD extends StorageResourceData<SRD>>
 			LoadResourceException, FileNotFoundException, ProjectLoadingCancelledException {
 		if (!isLoaded()) {
 			_resourceData = performLoadResourceData(null, getLoadingHandler());
-			_resourceData.setFlexoResource(this);
+			if (_resourceData != null) {
+				_resourceData.setFlexoResource(this);
+			}
 		}
 		if (updatedResources != null) {
 			backwardSynchronizeWith(updatedResources);

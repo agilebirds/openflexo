@@ -10,10 +10,10 @@
       <Children data="tocData.project.generatedDoc" name="docTypes" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.foundation.toc.TOCRepository" label="tocRepository.name" icon="controller.iconForObject(tocRepository)" isEditable="false" filtered="false" defaultVisible="true" name="tocRepository">
-      <Children data="tocRepository.tocEntries" name="tocEntries" />
+      <Children data="tocRepository.sortedTocEntries" name="tocEntries" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.foundation.toc.TOCEntry" label="tocEntry.name" icon="controller.iconForObject(tocEntry)" isEditable="false" filtered="false" defaultVisible="true" name="tocEntry">
-      <Children data="tocEntry.tocEntries" name="children" />
+      <Children data="tocEntry.sortedTocEntries" name="children" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.foundation.DocType" label="docType.name" icon="controller.iconForObject(docType)" isEditable="false" filtered="false" defaultVisible="true" name="docType" />
     <BrowserElement dataClassName="org.openflexo.foundation.cg.GeneratedDoc" label="&quot;Documentation types&quot;" imageIconFile="../../../../../../GUI/flexo/src/main/resources/Icons/Common/Folder.gif" isEditable="false" filtered="false" defaultVisible="true" name="docTypes">
