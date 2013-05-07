@@ -222,4 +222,14 @@ public class ViewLibraryPerspective extends FlexoPerspective {
 	public void setProject(FlexoProject project) {
 		viewLibraryBrowser.setRootObject(project.getViewLibrary());
 	}
+
+	@Override
+	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
+		super.notifyModuleViewDisplayed(moduleView);
+		if (moduleView instanceof DiagramModuleView) {
+			_controller.getControllerModel().setRightViewVisible(true);
+		} else {
+			_controller.getControllerModel().setRightViewVisible(false);
+		}
+	}
 }

@@ -128,12 +128,15 @@ public class DropScheme extends AbstractCreationScheme implements DiagramEdition
 	}
 
 	private boolean bindingModelNeedToBeRecomputed = false;
+	private boolean isUpdatingBindingModel = false;
 
 	@Override
 	public BindingModel getBindingModel() {
-		if (bindingModelNeedToBeRecomputed) {
+		if (bindingModelNeedToBeRecomputed && !isUpdatingBindingModel) {
+			isUpdatingBindingModel = true;
 			bindingModelNeedToBeRecomputed = false;
 			updateBindingModels();
+			isUpdatingBindingModel = false;
 		}
 		return super.getBindingModel();
 	}
