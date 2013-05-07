@@ -120,6 +120,9 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 
 	private FlexoXMLFileResource resource;
 
+	private boolean deleted = false;
+	private String modelObjectIdentifier;
+
 	public FlexoModelObjectReference(O object, ReferenceOwner owner) {
 		this(object);
 		setOwner(owner);
@@ -162,6 +165,7 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 
 	public FlexoModelObjectReference(FlexoProject project, String modelObjectIdentifier) {
 		this.referringProject = project;
+		this.modelObjectIdentifier = modelObjectIdentifier;
 		if (referringProject != null) {
 			referringProject.addToObjectReferences(this);
 		}
@@ -188,6 +192,12 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 	}
 
 	public void delete() {
+		delete(true);
+	}
+
+	public void delete(boolean notify) {
+		if (!deleted) {
+			deleted = true;
 		if (getReferringProject() != null) {
 			getReferringProject().removeObjectReferences(this);
 		}
@@ -199,8 +209,12 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 		if (modelObject != null) {
 			modelObject.removeFromReferencers(this);
 		}
+			if (owner != null) {
+				owner.objectDeleted(this);
+			}
 		owner = null;
 		modelObject = null;
+	}
 	}
 
 	public O getObject() {
@@ -248,9 +262,11 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 					} else {
 						status = ReferenceStatus.NOT_FOUND;
 					}
+					if (force) {
 					owner.objectCantBeFound(this);
 				}
 			}
+		}
 		}
 		return modelObject;
 	}
@@ -448,6 +464,12 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends KVCFl
 			this.owner = owner;
 			if (this.owner != null && this.owner.getProject() != null) {
 				this.owner.getProject().addToObjectReferences(this);
+			} else {
+				if (owner != null) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("No project found for " + owner + " " + getStringRepresentation());
+					}
+				}
 			}
 		}
 	}

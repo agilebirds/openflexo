@@ -74,6 +74,8 @@ public class WKFIconLibrary extends IconLibrary {
 	public static final IconMarker WS_MARKER = new IconMarker(new ImageIconResource("Icons/WKF/MarkerWS.gif"), 12, 9);
 
 	public static final ImageIcon MULTIPLE_INSTANCE_SUBPROCESS_ICON = new ImageIconResource("Icons/WKF/MultipleInstanceProcess.gif");
+	public static final ImageIcon SEQUENTIAL_MULTIPLE_INSTANCE_SUBPROCESS_ICON = new ImageIconResource(
+			"Icons/WKF/SequentialMultipleInstanceProcess.gif");
 	public static final ImageIcon LOOP_SUBPROCESS_ICON = new ImageIconResource("Icons/WKF/LoopProcess.gif");
 	public static final ImageIcon WS_CALL_SUBPROCESS_ICON = new ImageIconResource("Icons/WKF/WSCallProcess.gif");
 

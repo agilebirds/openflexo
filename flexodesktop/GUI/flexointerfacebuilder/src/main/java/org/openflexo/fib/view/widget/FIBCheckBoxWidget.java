@@ -76,11 +76,8 @@ public class FIBCheckBoxWidget extends FIBWidgetView<FIBCheckBox, JCheckBox, Boo
 
 	@Override
 	public Boolean getValue() {
-		if (super.getValue() instanceof Boolean) {
-			Boolean returned = super.getValue();
-			return returned;
-		}
-		return false;
+		Boolean value = super.getValue();
+		return value != null && value;
 	}
 
 	@Override

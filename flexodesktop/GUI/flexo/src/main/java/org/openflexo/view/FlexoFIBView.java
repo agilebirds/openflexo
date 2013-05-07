@@ -57,6 +57,7 @@ import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
+import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoFIBController;
 
@@ -125,6 +126,8 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 
 	private PropertyChangeSupport pcSupport;
 
+	protected PropertyChangeListenerRegistrationManager manager = new PropertyChangeListenerRegistrationManager();
+
 	public FlexoFIBView(Object representedObject, FlexoController controller, File fibFile, FlexoProgress progress) {
 		this(representedObject, controller, fibFile, false, progress);
 	}
@@ -150,7 +153,7 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 		this.fibComponent = fibComponent;
 
 		if (dataObject instanceof HasPropertyChangeSupport) {
-			((HasPropertyChangeSupport) dataObject).getPropertyChangeSupport().addPropertyChangeListener(this);
+			manager.addListener(this, (HasPropertyChangeSupport) dataObject);
 		} else if (dataObject instanceof FlexoObservable) {
 			((FlexoObservable) dataObject).addObserver(this);
 		}
@@ -236,13 +239,13 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 	public void setDataObject(Object object) {
 		// logger.info(">>>>>>> setDataObject with " + object);
 		if (this.dataObject instanceof HasPropertyChangeSupport) {
-			((HasPropertyChangeSupport) this.dataObject).getPropertyChangeSupport().removePropertyChangeListener(this);
+			manager.removeListener(this, (HasPropertyChangeSupport) this.dataObject);
 		} else if (this.dataObject instanceof FlexoObservable) {
 			((FlexoObservable) this.dataObject).deleteObserver(this);
 		}
 		dataObject = object;
 		if (dataObject instanceof HasPropertyChangeSupport) {
-			((HasPropertyChangeSupport) dataObject).getPropertyChangeSupport().addPropertyChangeListener(this);
+			manager.addListener(this, (HasPropertyChangeSupport) this.dataObject);
 		} else if (dataObject instanceof FlexoObservable) {
 			((FlexoObservable) dataObject).addObserver(this);
 		}
@@ -270,11 +273,10 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 			fibView.getController().removeMouseClickListener((FIBMouseClickListener) this);
 		}
 		fibView.delete();
-		if (dataObject instanceof HasPropertyChangeSupport) {
-			((HasPropertyChangeSupport) dataObject).getPropertyChangeSupport().removePropertyChangeListener(this);
-		} else if (dataObject instanceof FlexoObservable) {
+		if (dataObject instanceof FlexoObservable) {
 			((FlexoObservable) dataObject).deleteObserver(this);
 		}
+		manager.delete();
 		getPropertyChangeSupport().firePropertyChange(DELETED, false, true);
 	}
 

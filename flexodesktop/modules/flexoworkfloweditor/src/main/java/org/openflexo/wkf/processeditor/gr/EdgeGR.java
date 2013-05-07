@@ -20,14 +20,20 @@
 package org.openflexo.wkf.processeditor.gr;
 
 import java.awt.Color;
+import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
+import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
 import org.openflexo.fge.connectors.CurveConnector;
@@ -37,14 +43,18 @@ import org.openflexo.fge.connectors.rpc.RectPolylinConnector.RectPolylinConstrai
 import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
+import org.openflexo.fge.geom.FGEDimension;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
+import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.NameChanged;
+import org.openflexo.foundation.RepresentableFlexoModelObject;
 import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.dm.PostInserted;
@@ -82,7 +92,8 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 				|| aDrawing.getFirstVisibleObject(edge.getEndNode()) != edge.getEndNode();
 		setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.6f));
 
-		setMiddleSymbol(MiddleSymbolType.FILLED_ARROW);
+		setMiddleSymbol(MiddleSymbolType.NONE);
+		setEndSymbol(EndSymbolType.FILLED_ARROW);
 
 		addToMouseClickControls(new ResetLayout(), true);
 
@@ -134,31 +145,43 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 				polylinIWillBeAdustedTo = (FGERectPolylin) getEdge()._graphicalPropertyForKey(getStoredPolylinKey());
 				connector.setWasManuallyAdjusted(true);
 			}
-			if (getEdge().hasGraphicalPropertyForKey(getOldCrossedCPKey())) {
-				getEdge()._setGraphicalPropertyForKey(getEdge()._graphicalPropertyForKey(getOldCrossedCPKey()), getCrossedCPKey());
-				getEdge()._removeGraphicalPropertyWithKey(getOldCrossedCPKey());
-			}
+			if (getEdge().getEndNode() instanceof FlexoPreCondition
+					&& !getEdge().hasGraphicalPropertyForKey(getPreConditionLayoutTransformFlagKey())
+					&& getEdge().hasGraphicalPropertyForKey(
+							getRelativeMiddleSymbolLocationKey(getContext(startObject, getEdge().getEndNode(), false)))) {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						convertOldLayout((RectPolylinConnector) getConnector());
+					}
+				});
+			} else {
+				if (getEdge().hasGraphicalPropertyForKey(getOldCrossedCPKey())) {
+					getEdge()._setGraphicalPropertyForKey(getEdge()._graphicalPropertyForKey(getOldCrossedCPKey()), getCrossedCPKey());
+					getEdge()._removeGraphicalPropertyWithKey(getOldCrossedCPKey());
+				}
 
-			if (getEdge().hasGraphicalPropertyForKey(getCrossedCPKey())) {
-				connector.setCrossedControlPoint((FGEPoint) getEdge()._graphicalPropertyForKey(getCrossedCPKey()));
-			}
+				if (getEdge().hasGraphicalPropertyForKey(getCrossedCPKey())) {
+					connector.setCrossedControlPoint((FGEPoint) getEdge()._graphicalPropertyForKey(getCrossedCPKey()));
+				}
 
-			if (getEdge().hasGraphicalPropertyForKey(getOldFixedStartLocationKey())) {
-				getEdge()._setGraphicalPropertyForKey(getEdge()._graphicalPropertyForKey(getOldFixedStartLocationKey()),
-						getFixedStartLocationKey());
-				getEdge()._removeGraphicalPropertyWithKey(getOldFixedStartLocationKey());
-			}
-			if (getEdge().hasGraphicalPropertyForKey(getFixedStartLocationKey())) {
-				connector.setFixedStartLocation((FGEPoint) getEdge()._graphicalPropertyForKey(getFixedStartLocationKey()));
-			}
+				if (getEdge().hasGraphicalPropertyForKey(getOldFixedStartLocationKey())) {
+					getEdge()._setGraphicalPropertyForKey(getEdge()._graphicalPropertyForKey(getOldFixedStartLocationKey()),
+							getFixedStartLocationKey());
+					getEdge()._removeGraphicalPropertyWithKey(getOldFixedStartLocationKey());
+				}
+				if (getEdge().hasGraphicalPropertyForKey(getFixedStartLocationKey())) {
+					connector.setFixedStartLocation((FGEPoint) getEdge()._graphicalPropertyForKey(getFixedStartLocationKey()));
+				}
 
-			if (getEdge().hasGraphicalPropertyForKey(getOldFixedEndLocationKey())) {
-				getEdge()._setGraphicalPropertyForKey(getEdge()._graphicalPropertyForKey(getOldFixedEndLocationKey()),
-						getFixedEndLocationKey());
-				getEdge()._removeGraphicalPropertyWithKey(getOldFixedEndLocationKey());
-			}
-			if (getEdge().hasGraphicalPropertyForKey(getFixedEndLocationKey())) {
-				connector.setFixedEndLocation((FGEPoint) getEdge()._graphicalPropertyForKey(getFixedEndLocationKey()));
+				if (getEdge().hasGraphicalPropertyForKey(getOldFixedEndLocationKey())) {
+					getEdge()._setGraphicalPropertyForKey(getEdge()._graphicalPropertyForKey(getOldFixedEndLocationKey()),
+							getFixedEndLocationKey());
+					getEdge()._removeGraphicalPropertyWithKey(getOldFixedEndLocationKey());
+				}
+				if (getEdge().hasGraphicalPropertyForKey(getFixedEndLocationKey())) {
+					connector.setFixedEndLocation((FGEPoint) getEdge()._graphicalPropertyForKey(getFixedEndLocationKey()));
+				}
 			}
 
 			connector.setStraightLineWhenPossible(true);
@@ -180,6 +203,70 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		}
 
 		return returned;
+	}
+
+	protected void convertOldLayout(RectPolylinConnector connector) {
+		if (getEdge().hasGraphicalPropertyForKey(getPreConditionLayoutTransformFlagKey())) {
+			return;
+		}
+		double relativeLocation = (Double) getEdge()._graphicalPropertyForKey(
+				getRelativeMiddleSymbolLocationKey(getContext(startObject, getEdge().getEndNode(), false)));
+		setRelativeMiddleSymbolLocation(relativeLocation);
+		Rectangle normalizedBounds = getNormalizedBounds(1.0);
+		String oldContext = getContext(startObject, getEdge().getEndNode(), false);
+		AffineTransform startToDrawingAT = convertFromDrawableToDrawingAT(getStartObject(), 1.0);
+		AffineTransform endToDrawingAT = convertFromDrawableToDrawingAT(getEndObject(), 1.0);
+		double posx = ((FlexoPreCondition) getEdge().getEndNode()).getX(ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		double posy = ((FlexoPreCondition) getEdge().getEndNode()).getY(ProcessEditorConstants.BASIC_PROCESS_EDITOR);
+		FGEPoint startLocationInDrawing = new FGEPoint();
+		FGEPoint endLocationInDrawing = new FGEPoint();
+		startToDrawingAT.transform(startLocationInDrawing, startLocationInDrawing);
+		ShapeBorder startBorder = getStartObject().getBorder();
+		startLocationInDrawing.x -= startBorder.left;
+		startLocationInDrawing.y -= startBorder.top;
+		// Start object bounds in drawing coordinates
+		FGEDimension startSize = getStartObject().getSize();
+		startSize.width += startBorder.right + startBorder.left;
+		startSize.height += startBorder.bottom + startBorder.top;
+		FGERectangle startObjectRect = new FGERectangle(startLocationInDrawing, startSize, Filling.FILLED);
+		// Compute the precondition location into the drawing coordinates
+		endToDrawingAT.transform(new FGEPoint(posx, posy), endLocationInDrawing);
+		/*endLocationInDrawing.x += getEndObject().getBorder().left;
+		endLocationInDrawing.y += getEndObject().getBorder().top;*/
+		// Pre condition bounds in drawing coordinates
+		FGERectangle preConditionRect = new FGERectangle(endLocationInDrawing, new FGEDimension(PreConditionGR.PRECONDITION_SIZE,
+				PreConditionGR.PRECONDITION_SIZE), Filling.FILLED);
+		// Compute previous connector bounds (since before, end object was the precondition)
+		FGERectangle connectorRectWithPreConditionInDrawing = preConditionRect.rectangleUnion(startObjectRect);
+		FGEPoint oldCrossedPoint = (FGEPoint) getEdge()._graphicalPropertyForKey(getCrossedCPKey(oldContext));
+		if (oldCrossedPoint != null) {
+			getEdge()._removeGraphicalPropertyWithKey(getCrossedCPKey(oldContext));
+			FGEPoint crossedPointInDrawing = new FGEPoint(connectorRectWithPreConditionInDrawing.x
+					+ connectorRectWithPreConditionInDrawing.width * oldCrossedPoint.x, connectorRectWithPreConditionInDrawing.y
+					+ connectorRectWithPreConditionInDrawing.height * oldCrossedPoint.y);
+			FGEPoint crossedPointInConnector = new FGEPoint();
+			convertFromDrawingToDrawableAT(this, 1.0).transform(crossedPointInDrawing, crossedPointInConnector);
+			crossedPointInConnector.x /= normalizedBounds.width;
+			crossedPointInConnector.y /= normalizedBounds.height;
+			connector.setCrossedControlPoint(crossedPointInConnector);
+		}
+		Point2D labelLocation = getEdge().getLabelLocation(oldContext);
+		if (labelLocation != null) {
+			setAbsoluteTextX(labelLocation.getX());
+			setAbsoluteTextY(labelLocation.getY());
+		}
+		if (getEdge().hasGraphicalPropertyForKey(getFixedStartLocationKey(oldContext))) {
+			connector.setFixedStartLocation((FGEPoint) getEdge()._graphicalPropertyForKey(getFixedStartLocationKey(oldContext)));
+			getEdge()._removeGraphicalPropertyWithKey(getFixedStartLocationKey(oldContext));
+		}
+		ShapeBorder border = getEndObject().getBorder();
+		FGEPoint endLocation = new FGEPoint(posx / (getEndObject().getWidth() + border.left), posy
+				/ (getEndObject().getHeight() + border.top));
+		connector.setFixedEndLocation(endLocation);
+		getEdge()._removeGraphicalPropertyWithKey(getFixedEndLocationKey(oldContext));
+		getEdge()._removeGraphicalPropertyWithKey(
+				getRelativeMiddleSymbolLocationKey(getContext(startObject, getEdge().getEndNode(), false)));
+		getEdge()._setGraphicalPropertyForKey(Boolean.TRUE, getPreConditionLayoutTransformFlagKey());
 	}
 
 	private FGERectPolylin polylinIWillBeAdustedTo;
@@ -285,7 +372,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 	public double getAbsoluteTextX() {
 		if (getEdge().hasLabelLocationForContext(getOldContext())) {
 			getEdge().setLabelX(getEdge().getLabelX(getOldContext(), getDefaultLabelX()), getContext());
-			getEdge()._removeGraphicalPropertyWithKey(getEdge().getLabelXContextForContext(getOldContext()));
+			getEdge()._removeGraphicalPropertyWithKey(getEdge().getLabelXKeyForContext(getOldContext()));
 		}
 		if (!getEdge().hasLabelLocationForContext(getContext())) {
 			getEdge().getLabelX(getContext(), getDefaultLabelX());
@@ -302,7 +389,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 	public double getAbsoluteTextY() {
 		if (getEdge().hasLabelLocationForContext(getOldContext())) {
 			getEdge().setLabelY(getEdge().getLabelY(getOldContext(), getDefaultLabelY()), getContext());
-			getEdge()._removeGraphicalPropertyWithKey(getEdge().getLabelYContextForContext(getOldContext()));
+			getEdge()._removeGraphicalPropertyWithKey(getEdge().getLabelYKeyForContext(getOldContext()));
 		}
 		if (!getEdge().hasLabelLocationForContext(getContext())) {
 			getEdge().getLabelY(getContext(), getDefaultLabelY());
@@ -317,6 +404,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 
 	public void resetLayout() {
 		if (getConnector() instanceof RectPolylinConnector) {
+			getEdge().setLocationConstraintFlag(true);
 			((RectPolylinConnector) getConnector()).setIsStartingLocationFixed(false);
 			((RectPolylinConnector) getConnector()).setIsEndingLocationFixed(false);
 			if (WKFPreferences.getConnectorAdjustability() == RectPolylinAdjustability.FULLY_ADJUSTABLE) {
@@ -441,60 +529,91 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 
 	private String getContext() {
 		if (context == null) {
-			boolean storeContext = true;
-			StringBuilder sb = new StringBuilder(BASIC_PROCESS_EDITOR);
-			if (startObject instanceof PetriGraphNode) {
-				sb.append(((PetriGraphNode) startObject).getDepth());
-			} else {
-				if (startObject != null) {
-					sb.append(startObject.getClass().getSimpleName());
-				} else {
-					sb.append("???");
-					storeContext = false;
-				}
-			}
-			sb.append('_');
-			if (endObject instanceof PetriGraphNode) {
-				sb.append(((PetriGraphNode) endObject).getDepth());
-			} else {
-				if (endObject != null) {
-					sb.append(endObject.getClass().getSimpleName());
-				} else {
-					sb.append("???");
-					storeContext = false;
-				}
-			}
-			if (storeContext) {
-				context = sb.toString();
-			} else {
-				return sb.toString();
-			}
+			return getContext(startObject, endObject, true);
 		}
 		return context;
 	}
 
+	private String getContext(WKFObject start, WKFObject end, boolean storeContext) {
+		StringBuilder sb = new StringBuilder(BASIC_PROCESS_EDITOR);
+		if (start instanceof PetriGraphNode) {
+			sb.append(((PetriGraphNode) start).getDepth());
+		} else {
+			if (start != null) {
+				sb.append(start.getClass().getSimpleName());
+			} else {
+				sb.append("???");
+				storeContext = false;
+			}
+		}
+		sb.append('_');
+		if (end instanceof PetriGraphNode) {
+			sb.append(((PetriGraphNode) end).getDepth());
+		} else {
+			if (end != null) {
+				sb.append(end.getClass().getSimpleName());
+			} else {
+				sb.append("???");
+				storeContext = false;
+			}
+		}
+		if (storeContext) {
+			return context = sb.toString();
+		} else {
+			return sb.toString();
+		}
+	}
+
+	private String getPreConditionLayoutTransformFlagKey() {
+		return "pcl_transform_" + getContext();
+	}
+
 	private String getStoredPolylinKey() {
-		return "polylin_" + getContext();
+		return getStoredPolylinKey(getContext());
 	}
 
 	private String getStoredCurveCPKey() {
-		return "curve_cp_" + getContext();
+		return getStoredCurveCPKey(getContext());
 	}
 
 	private String getCrossedCPKey() {
-		return "crossed_cp_" + getContext();
+		return getCrossedCPKey(getContext());
 	}
 
 	private String getFixedStartLocationKey() {
-		return "fixed_start_location_" + getContext();
+		return getFixedStartLocationKey(getContext());
 	}
 
 	private String getFixedEndLocationKey() {
-		return "fixed_end_location_" + getContext();
+		return getFixedEndLocationKey(getContext());
 	}
 
 	private String getRelativeMiddleSymbolLocationKey() {
-		return "middle_symbol_location_" + getContext();
+		return getRelativeMiddleSymbolLocationKey(getContext());
+	}
+
+	private String getStoredPolylinKey(String context) {
+		return "polylin_" + context;
+	}
+
+	private String getStoredCurveCPKey(String context) {
+		return "curve_cp_" + context;
+	}
+
+	private String getCrossedCPKey(String context) {
+		return "crossed_cp_" + context;
+	}
+
+	private String getFixedStartLocationKey(String context) {
+		return "fixed_start_location_" + context;
+	}
+
+	private String getFixedEndLocationKey(String context) {
+		return "fixed_end_location_" + context;
+	}
+
+	private String getRelativeMiddleSymbolLocationKey(String context) {
+		return "middle_symbol_location_" + context;
 	}
 
 	private String getOldContext() {
@@ -682,18 +801,25 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 			if (dataModification instanceof PostInserted || dataModification instanceof PostRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 			} else if (dataModification instanceof WKFAttributeDataModification) {
-				if (((WKFAttributeDataModification) dataModification).getAttributeName().equals(FlexoPostCondition.EDGE_REPRESENTATION)) {
+				String propertyName = ((WKFAttributeDataModification) dataModification).propertyName();
+				if (FlexoPostCondition.EDGE_REPRESENTATION.equals(propertyName)) {
 					updatePropertiesFromWKFPreferences();
 					refreshConnector();
-				} else if ("isConditional".equals(((WKFAttributeDataModification) dataModification).propertyName())) {
+				} else if ("isConditional".equals(propertyName)) {
 					refreshConnector(true);
 				} else if ("isDefaultFlow".equals(((WKFAttributeDataModification) dataModification).propertyName())) {
+					refreshConnector(true);
+				} else if (WKFEdge.LOCATION_CONSTRAINT_FLAG.equals(propertyName) && (Boolean) dataModification.newValue()) {
 					refreshConnector(true);
 				}
 			} else if (dataModification instanceof NameChanged) {
 				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
 			} else if ("hideWhenInduced".equals(dataModification.propertyName())) {
 				getDrawing().updateGraphicalObjectsHierarchy();
+			} else if (RepresentableFlexoModelObject.getBgColorKeyForContext(BASIC_PROCESS_EDITOR).equals(dataModification.propertyName())
+					|| RepresentableFlexoModelObject.getTextColorKeyForContext(BASIC_PROCESS_EDITOR)
+							.equals(dataModification.propertyName())) {
+				updatePropertiesFromWKFPreferences();
 			}
 		}
 	}
@@ -712,24 +838,14 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 
 	@Override
 	public void updatePropertiesFromWKFPreferences() {
-		/*
-		 * if (getPostCondition().getEdgeRepresentation() == null) { AbstractNode startingNode = getPostCondition().getStartingNode(); if
-		 * (startingNode instanceof FlexoNode && ((FlexoNode)startingNode).isEndNode() && startingNode.getParentPetriGraph().getContainer()
-		 * instanceof AbstractNode) startingNode = (AbstractNode) startingNode.getParentPetriGraph().getContainer(); FlexoPetriGraph
-		 * parentPG = ((PetriGraphNode)startingNode).getParentPetriGraph(); if (parentPG !=null) { if
-		 * (parentPG.getLevel()==FlexoLevel.ACTION) getPostCondition().setEdgeRepresentation(WKFPreferences.getActionConnector()); else if
-		 * (parentPG.getLevel()==FlexoLevel.OPERATION) getPostCondition().setEdgeRepresentation(WKFPreferences.getOperationConnector());
-		 * else getPostCondition().setEdgeRepresentation(WKFPreferences.getActivityConnector()); } else {
-		 * getPostCondition().setEdgeRepresentation(WKFPreferences.getActivityConnector()); } }
-		 */
 		EdgeRepresentation type = (EdgeRepresentation) getEdge().getWorkflow().getConnectorRepresentation(
 				WKFPreferences.getConnectorRepresentation());
 		if (isInsideSameActionPetriGraph()) {
 			type = EdgeRepresentation.CURVE;
 		}
 		context = null;
-		TextStyle ts = TextStyle.makeTextStyle(Color.BLACK, getEdgeFont().getFont());
-		ts.setBackgroundColor(Color.WHITE);
+		TextStyle ts = TextStyle.makeTextStyle(getDrawable().getTextColor(BASIC_PROCESS_EDITOR, Color.BLACK), getEdgeFont().getFont());
+		ts.setBackgroundColor(getDrawable().getBgColor(BASIC_PROCESS_EDITOR, Color.WHITE));
 		ts.setIsBackgroundColored(true);
 		setTextStyle(ts);
 		setConnector(makeConnector(type.getConnectorType()));

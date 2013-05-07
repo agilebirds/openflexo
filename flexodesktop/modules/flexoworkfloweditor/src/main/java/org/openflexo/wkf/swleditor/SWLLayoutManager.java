@@ -156,13 +156,12 @@ public class SWLLayoutManager extends WKFLayoutManager {
 				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("role") + " " + r.getName());
 			}
 			SwimmingPool pool = generalLayout.get(r);
-			_representation.setSwimmingLaneNb(pool.lanes.size(), r);
 			for (SwimmingLane lane : pool.lanes.values()) {
 				for (AutoLayoutNode node : lane.nodes) {
 					node.proposedLocation.y = lane.index * pool.maxLaneHeight;
 				}
 			}
-			_representation.setSwimmingLaneHeight((int) pool.maxLaneHeight, r);
+			_representation.setHeight(r, pool.maxLaneHeight * pool.lanes.size());
 		}
 		for (AutoLayoutNode n : nodeMap.values()) {
 			if (progress != null) {

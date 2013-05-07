@@ -4,6 +4,7 @@
 	<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" />
 
 	<target name="defineProperties">
+		<property environment="env"/>
 		<!-- Remove '-SNAPSHOT' if any -->
 		<propertyregex property="flexo_version" input="${project.version}" regexp="-SNAPSHOT" replace="" />
 		<!-- Set a 3 digit version in normalized_version -->
@@ -19,6 +20,7 @@
 		<tstamp>
 			<format property="build.id" pattern="yyyy-MM-dd.HHmm" />
 		</tstamp>
+		<property name="commit.id" value="${env.GIT_COMMIT}"/>
 		<property name="build.properties" value="${flexobuild.work.dir}/build.properties" />
 		<property name="maven.group.id" value="org.openflexo.packaging" />
 		<property name="maven.type" value="zip" />
@@ -148,7 +150,8 @@
 					<include name="**/*.jar" />
 				</fileset>
 			</classpath>
-		</taskdef>		<generatehelp resourceDir="${dist.dir}">
+		</taskdef>
+		<generatehelp resourceDir="${dist.dir}">
 			<language isocode="ENGLISH" title="FlexoToolSet Help">
 				<distribution name="${userType}" />
 			</language>

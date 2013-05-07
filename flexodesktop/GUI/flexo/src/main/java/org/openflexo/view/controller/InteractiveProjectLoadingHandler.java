@@ -30,6 +30,7 @@ import javax.swing.Icon;
 import javax.swing.JOptionPane;
 
 import org.openflexo.foundation.TemporaryFlexoModelObject;
+import org.openflexo.foundation.rm.FlexoProcessResource;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoRMResource;
 import org.openflexo.foundation.rm.FlexoResource;
@@ -73,7 +74,13 @@ public abstract class InteractiveProjectLoadingHandler implements ProjectLoading
 	protected void performConversion(FlexoProject project, Vector<ResourceToConvert> resourcesToConvert, FlexoProgress progress) {
 		List<FlexoXMLStorageResource<? extends XMLStorageResourceData>> resources = new ArrayList<FlexoXMLStorageResource<? extends XMLStorageResourceData>>();
 		for (ResourceToConvert resourceToConvert : resourcesToConvert) {
-			resources.add(resourceToConvert.getResource());
+			if (resourceToConvert.getResource() instanceof FlexoProcessResource) {
+				if (!resources.contains(project.getFlexoWorkflowResource())) {
+					resources.add(project.getFlexoWorkflowResource());
+				}
+			} else {
+				resources.add(resourceToConvert.getResource());
+			}
 		}
 		progress.setProgress(FlexoLocalization.localizedForKey("converting_project"));
 		progress.resetSecondaryProgress(resourcesToConvert.size());

@@ -23,18 +23,12 @@ import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
 public interface SWLContainerGR {
 
-	public int getSwimmingLaneNb();
-
-	public void setSwimmingLaneNb(int swlNb);
-
-	public int getSwimmingLaneHeight();
-
-	public void setSwimmingLaneHeight(int height);
-
 	public double getWidth();
 
 	public double getHeight();
 
 	public SwimmingLaneRepresentation getDrawing();
+
+	public void anchorLocation();
 
 }

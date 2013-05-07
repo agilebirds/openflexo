@@ -214,8 +214,7 @@ public class ToolsMenu extends FlexoMenu {
 		public ResourceManagerAction() {
 			super();
 			if (getController() != null) {
-				getController().getControllerModel().getPropertyChangeSupport()
-						.addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, this);
+				manager.addListener(ControllerModel.CURRENT_EDITOR, this, getController().getControllerModel());
 			}
 			updateEnability();
 		}
@@ -335,8 +334,7 @@ public class ToolsMenu extends FlexoMenu {
 		public RepairProjectAction() {
 			super();
 			if (getController() != null) {
-				getController().getControllerModel().getPropertyChangeSupport()
-						.addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, this);
+				manager.addListener(ControllerModel.CURRENT_EDITOR, this, getController().getControllerModel());
 			}
 			updateEnability();
 		}

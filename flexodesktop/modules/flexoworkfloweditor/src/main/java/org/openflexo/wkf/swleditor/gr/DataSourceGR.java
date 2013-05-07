@@ -60,20 +60,30 @@ public class DataSourceGR extends ArtefactGR<WKFDataSource> {
 		setShapePainter(new ShapePainter() {
 			@Override
 			public void paintShape(FGEShapeGraphics g) {
-				double height = 2.0 / (NUMBER_OF_CYLINDER + 1);
-				double halfHeight = height / 2;
-				for (int i = NUMBER_OF_CYLINDER; i > 0; i--) {
-					g.setDefaultForeground(NO_FOREGROUND);
-					g.setDefaultBackground(i % 2 == 0 ? EVEN_BACKGROUND : ODD_BACKROUND);
-					g.useDefaultBackgroundStyle();
-					// g.useDefaultForegroundStyle();
-					g.fillCircle(0, (i - 1) * halfHeight, 1, height);
-					if (i > 1) {
-						g.fillRect(0, (i - 1) * halfHeight, 1, halfHeight);
-					}
-				}
+				g.useBackgroundStyle(BackgroundStyle.makeColoredBackground(Color.WHITE));
+				double height = 0.375;
+				g.fillRect(0, height / 2, 1, 1 - height);
+				g.fillCircle(0, 0, 1, height);
+				g.fillArc(0, 1 - height, 1, height, 180, 180);
+				g.useForegroundStyle(ForegroundStyle.makeStyle(Color.BLACK));
+				g.drawCircle(0, 0, 1, height);
+				g.drawArc(0, 1 - height, 1, height, 180, 180);
+				g.drawArc(0, 0.075, 1, height, 180, 180);
+				g.drawArc(0, 0.15, 1, height, 180, 180);
+				g.drawLine(0, height / 2, 0, 1 - height / 2);
+				g.drawLine(1, height / 2, 1, 1 - height / 2);
 			}
 		});
+	}
+
+	@Override
+	public double getDefaultWidth() {
+		return 55;
+	}
+
+	@Override
+	public double getDefaultHeight() {
+		return 40;
 	}
 
 	@Override

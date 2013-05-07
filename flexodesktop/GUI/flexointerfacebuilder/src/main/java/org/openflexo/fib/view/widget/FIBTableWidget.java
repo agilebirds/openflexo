@@ -415,7 +415,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, Collection<?
 		// _listSelectionModel.addListSelectionListener(this);
 
 		scrollPane = new JScrollPane(_table);
-
+		scrollPane.setOpaque(false);
 		if (_fibTable.getCreateNewRowOnClick()) {
 			_table.addMouseListener(new MouseAdapter() {
 				@Override

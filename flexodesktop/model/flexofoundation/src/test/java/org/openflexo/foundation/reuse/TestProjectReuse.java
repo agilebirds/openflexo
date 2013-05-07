@@ -7,9 +7,6 @@ import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.action.ImportProject;
 import org.openflexo.foundation.action.RemoveImportedProject;
-import org.openflexo.foundation.resource.DirectoryResourceCenter;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.rm.FlexoProjectReference;
@@ -18,6 +15,7 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
+import org.openflexo.foundation.wkf.action.AddRole;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
@@ -27,7 +25,7 @@ public class TestProjectReuse extends FlexoTestCase {
 
 	private static final String SUB_PROCESS_NAME = "My Sub Process";
 	private static final String SUB_PROCESS_NODE_NAME = "A Sub Process Node";
-	private FlexoResourceCenterService resourceCenterService;
+	private static final String ROLE_NAME = "My role";
 	private File rootProjectDirectory;
 	private File importedProjectDirectory;
 	private FlexoEditor rootEditor;
@@ -58,7 +56,6 @@ public class TestProjectReuse extends FlexoTestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		resourceCenterService = getNewResourceCenter("TestImport");
 		rootEditor = createProject("RootTestImport", serviceManager);
 		rootProject = rootEditor.getProject();
 		importedProjectEditor = createProject("ImportedProject", serviceManager);
@@ -69,13 +66,6 @@ public class TestProjectReuse extends FlexoTestCase {
 
 	@Override
 	protected void tearDown() throws Exception {
-		if (resourceCenterService != null) {
-			for (FlexoResourceCenter rc : resourceCenterService.getResourceCenters()) {
-				if (rc instanceof DirectoryResourceCenter) {
-					FileUtils.deleteDir(((DirectoryResourceCenter) rc).getRootDirectory());
-				}
-			}
-		}
 		if (rootProject != null) {
 			rootProject.close();
 			FileUtils.deleteDir(rootProject.getProjectDirectory());
@@ -130,6 +120,12 @@ public class TestProjectReuse extends FlexoTestCase {
 	}
 
 	public void testReuseProcess() throws SaveResourceException {
+		AddRole addRole = AddRole.actionType.makeNewAction(importedProject.getFlexoWorkflow(true), null, importedProjectEditor);
+		addRole.setNewRoleName(ROLE_NAME);
+		addRole.doAction();
+		assertTrue(addRole.hasActionExecutionSucceeded());
+		assertNotNull(addRole.getNewRole());
+		assertEquals(addRole.getNewRole(), importedProject.getWorkflow().getRoleList().roleWithName(ROLE_NAME));
 		ImportProject importProject = ImportProject.actionType.makeNewAction(rootProject, null, rootEditor);
 		importProject.setProjectToImport(importedProject);
 		importProject.doAction();
@@ -137,13 +133,15 @@ public class TestProjectReuse extends FlexoTestCase {
 		FlexoProcess subProcess = createSubProcess(SUB_PROCESS_NAME, null, importedProjectEditor);
 		SubProcessNode subProcessNode = instanciateLoopSubProcess(subProcess, rootProject.getRootProcess(), 400, 200, rootEditor);
 		subProcessNode.setName(SUB_PROCESS_NODE_NAME);
+		subProcessNode.setRole(importedProject.getWorkflow().getRoleList().roleWithName(ROLE_NAME));
 		assertDepends(rootProject.getRootProcess().getFlexoResource(), subProcess.getFlexoResource());
 		importedProject.save();
 		rootProject.save();
 		rootProject.close();
 		importedProject.close();
 		importedProject = null;
-		rootProject = reloadProject(rootProjectDirectory, new ProjectReferenceLoader()).getProject();
+		rootEditor = reloadProject(rootProjectDirectory, new ProjectReferenceLoader());
+		rootProject = rootEditor.getProject();
 		rootProject.getProjectData().getImportedProjects().get(0).getReferredProject(true);
 		assertNotNull(importedProject); // Imported project should be automatically re-assigned a new value with the project reference
 										// loader
@@ -151,14 +149,17 @@ public class TestProjectReuse extends FlexoTestCase {
 		subProcessNode = rootProject.getRootProcess().getActivityPetriGraph().getSubProcessNodeNamed(SUB_PROCESS_NODE_NAME);
 		assertNotNull(subProcessNode);
 		assertNotNull(subProcessNode.getSubProcess());
+		assertNotNull(subProcessNode.getRole());
+		assertEquals(importedProject.getWorkflow().getRoleList().roleWithName(ROLE_NAME), subProcessNode.getRole());
 		assertEquals(subProcessNode.getSubProcess(), subProcess);
 		assertEquals(subProcessNode.getSubProcess().getProject(), subProcess.getProject());
 		assertEquals(importedProject, subProcessNode.getSubProcess().getProject());
 		assertDepends(rootProject.getRootProcess().getFlexoResource(), subProcess.getFlexoResource());
-		RemoveImportedProject remove = RemoveImportedProject.actionType.makeNewAction(importedProject, null, rootEditor);
-		remove.setImportingProject(rootProject);
+		RemoveImportedProject remove = RemoveImportedProject.actionType.makeNewAction(rootProject, null, rootEditor);
+		remove.setProjectToRemoveURI(importedProject.getURI());
 		remove.doAction();
 		assertTrue(remove.hasActionExecutionSucceeded());
+		assertNull(subProcessNode.getRole());
 		assertNull(subProcessNode.getSubProcess());
 		assertNull(subProcessNode.getSubProcessReference());
 	}

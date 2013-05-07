@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
+import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
 import org.openflexo.fge.connectors.CurveConnector;
@@ -42,6 +43,7 @@ import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.NameChanged;
+import org.openflexo.foundation.RepresentableFlexoModelObject;
 import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.dm.PostInserted;
@@ -79,8 +81,8 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 
 		setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.6f));
 
-		setMiddleSymbol(MiddleSymbolType.FILLED_ARROW);
-
+		setMiddleSymbol(MiddleSymbolType.NONE);
+		setEndSymbol(EndSymbolType.FILLED_ARROW);
 		addToMouseClickControls(new ResetLayout(), true);
 
 		addToMouseClickControls(new SwimmingLaneEditorController.ShowContextualMenuControl(false));
@@ -276,6 +278,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 
 	public void resetLayout() {
 		if (getConnector() instanceof RectPolylinConnector) {
+			getEdge().setLocationConstraintFlag(true);
 			((RectPolylinConnector) getConnector()).setIsStartingLocationFixed(false);
 			((RectPolylinConnector) getConnector()).setIsEndingLocationFixed(false);
 			if (WKFPreferences.getConnectorAdjustability() == RectPolylinAdjustability.FULLY_ADJUSTABLE) {
@@ -549,18 +552,24 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 			if (dataModification instanceof PostInserted || dataModification instanceof PostRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 			} else if (dataModification instanceof WKFAttributeDataModification) {
-				if (((WKFAttributeDataModification) dataModification).getAttributeName().equals(FlexoPostCondition.EDGE_REPRESENTATION)) {
+				String propertyName = ((WKFAttributeDataModification) dataModification).propertyName();
+				if (FlexoPostCondition.EDGE_REPRESENTATION.equals(propertyName)) {
 					updatePropertiesFromWKFPreferences();
 					refreshConnector();
-				} else if ("isConditional".equals(((WKFAttributeDataModification) dataModification).propertyName())) {
+				} else if ("isConditional".equals(propertyName)) {
 					refreshConnector(true);
 				} else if ("isDefaultFlow".equals(((WKFAttributeDataModification) dataModification).propertyName())) {
+					refreshConnector(true);
+				} else if (WKFEdge.LOCATION_CONSTRAINT_FLAG.equals(propertyName) && (Boolean) dataModification.newValue()) {
 					refreshConnector(true);
 				}
 			} else if (dataModification instanceof NameChanged) {
 				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
 			} else if ("hideWhenInduced".equals(dataModification.propertyName())) {
 				getDrawing().updateGraphicalObjectsHierarchy();
+			} else if (RepresentableFlexoModelObject.getBgColorKeyForContext(SWIMMING_LANE_EDITOR).equals(dataModification.propertyName())
+					|| RepresentableFlexoModelObject.getFgColorKeyForContext(SWIMMING_LANE_EDITOR).equals(dataModification.propertyName())) {
+				updatePropertiesFromWKFPreferences();
 			}
 		}
 	}
@@ -585,8 +594,8 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		if (isInsideSameActionPetriGraph()) {
 			type = EdgeRepresentation.CURVE;
 		}
-		TextStyle ts = TextStyle.makeTextStyle(Color.BLACK, getEdgeFont().getFont());
-		ts.setBackgroundColor(Color.WHITE);
+		TextStyle ts = TextStyle.makeTextStyle(getDrawable().getFgColor(SWIMMING_LANE_EDITOR, Color.BLACK), getEdgeFont().getFont());
+		ts.setBackgroundColor(getDrawable().getBgColor(SWIMMING_LANE_EDITOR, Color.WHITE));
 		ts.setIsBackgroundColored(true);
 		setTextStyle(ts);
 		setConnector(makeConnector(type.getConnectorType()));

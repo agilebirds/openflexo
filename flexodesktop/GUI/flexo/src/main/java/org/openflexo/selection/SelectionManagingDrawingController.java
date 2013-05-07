@@ -104,7 +104,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 		}
 		super.addToSelectedObjects(anObject);
 		if (_selectionManager != null) {
-			if (anObject.getDrawable() instanceof FlexoObject) {
+			if (anObject != null && anObject.getDrawable() instanceof FlexoObject) {
 				// logger.info("Je rajoute "+anObject.getDrawable()+" dans le SM");
 				_selectionManager.addToSelected((FlexoObject) anObject.getDrawable());
 			}

@@ -330,7 +330,7 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 		Role oldRole = getRole();
 		if (oldRole != aRole) {
 			if (roleReference != null) {
-				roleReference.delete();
+				roleReference.delete(false);
 				roleReference = null;
 			}
 			if (aRole != null) {
@@ -350,8 +350,7 @@ public class EventNode extends PetriGraphNode implements ExecutableWorkflowEleme
 
 	@Override
 	public void objectCantBeFound(FlexoModelObjectReference<?> reference) {
-		// TODO Auto-generated method stub
-
+		setRole(null);
 	}
 
 	@Override

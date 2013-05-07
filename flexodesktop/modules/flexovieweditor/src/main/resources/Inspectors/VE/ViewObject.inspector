@@ -67,4 +67,133 @@
       </TabPanel>
     </Tab>
   </TabPanel>
+
+  <LocalizedDictionary>
+    <Localized key="text" lang="English">Text</Localized>
+    <Localized key="text" lang="French">Texte</Localized>
+    <Localized key="text" lang="Dutch">Text</Localized>
+    <Localized key="text_style" lang="English">Text style</Localized>
+    <Localized key="text_style" lang="French">Style de texte</Localized>
+    <Localized key="text_style" lang="Dutch">Text style</Localized>
+    <Localized key="multiple_lines" lang="English">Multiple lines</Localized>
+    <Localized key="multiple_lines" lang="French">Lignes multiples</Localized>
+    <Localized key="multiple_lines" lang="Dutch">Multiple lines</Localized>
+    <Localized key="horizontal_text_alignment" lang="English">Horizontal text alignment</Localized>
+    <Localized key="horizontal_text_alignment" lang="French">Alignement horizontal du texte</Localized>
+    <Localized key="horizontal_text_alignment" lang="Dutch">Horizontal text alignment</Localized>
+    <Localized key="left" lang="English">Left</Localized>
+    <Localized key="left" lang="French">Gauche</Localized>
+    <Localized key="left" lang="Dutch">Left</Localized>
+    <Localized key="center" lang="English">Center</Localized>
+    <Localized key="center" lang="French">Centré</Localized>
+    <Localized key="center" lang="Dutch">Center</Localized>
+    <Localized key="right" lang="English">Right</Localized>
+    <Localized key="right" lang="French">Droit</Localized>
+    <Localized key="right" lang="Dutch">Right</Localized>
+    <Localized key="Left" lang="English">Left</Localized>
+    <Localized key="Left" lang="French">Gauche</Localized>
+    <Localized key="Left" lang="Dutch">Left</Localized>
+    <Localized key="Center" lang="English">Center</Localized>
+    <Localized key="Center" lang="French">Centre</Localized>
+    <Localized key="Center" lang="Dutch">Center</Localized>
+    <Localized key="Right" lang="English">Right</Localized>
+    <Localized key="Right" lang="French">Right</Localized>
+    <Localized key="Right" lang="Dutch">Right</Localized>
+    <Localized key="vertical_text_alignment" lang="English">Vertical text alignment</Localized>
+    <Localized key="vertical_text_alignment" lang="French">Alignement vertical du texte</Localized>
+    <Localized key="vertical_text_alignment" lang="Dutch">Vertical text alignment</Localized>
+    <Localized key="top" lang="English">Top</Localized>
+    <Localized key="top" lang="French">Haut</Localized>
+    <Localized key="top" lang="Dutch">Top</Localized>
+    <Localized key="middle" lang="English">Middle</Localized>
+    <Localized key="middle" lang="French">Milieu</Localized>
+    <Localized key="middle" lang="Dutch">Middle</Localized>
+    <Localized key="bottom" lang="English">Bottom</Localized>
+    <Localized key="bottom" lang="French">Bas</Localized>
+    <Localized key="bottom" lang="Dutch">Bottom</Localized>
+    <Localized key="Top" lang="English">Top</Localized>
+    <Localized key="Top" lang="French">Haut</Localized>
+    <Localized key="Top" lang="Dutch">Top</Localized>
+    <Localized key="Bottom" lang="English">Bottom</Localized>
+    <Localized key="Bottom" lang="French">Bas</Localized>
+    <Localized key="Bottom" lang="Dutch">Bottom</Localized>
+    <Localized key="text_alignment" lang="English">Text alignment</Localized>
+    <Localized key="text_alignment" lang="French">Alignement du texte</Localized>
+    <Localized key="text_alignment" lang="Dutch">Text alignment</Localized>
+    <Localized key="justify" lang="English">Justify</Localized>
+    <Localized key="justify" lang="French">Justifier</Localized>
+    <Localized key="justify" lang="Dutch">Justify</Localized>
+    <Localized key="read_only" lang="English">Read only</Localized>
+    <Localized key="read_only" lang="French">Lecture seule</Localized>
+    <Localized key="read_only" lang="Dutch">Read only</Localized>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="button" lang="English">Button</Localized>
+    <Localized key="button" lang="French">Bouton</Localized>
+    <Localized key="button" lang="Dutch">Button</Localized>
+    <Localized key="clics" lang="English">Clics</Localized>
+    <Localized key="clics" lang="French">Clics</Localized>
+    <Localized key="clics" lang="Dutch">Clics</Localized>
+    <Localized key="shift" lang="English">Shift</Localized>
+    <Localized key="shift" lang="French">Shift</Localized>
+    <Localized key="shift" lang="Dutch">Shift</Localized>
+    <Localized key="ctrl" lang="English">Ctrl</Localized>
+    <Localized key="ctrl" lang="French">Ctrl</Localized>
+    <Localized key="ctrl" lang="Dutch">Ctrl</Localized>
+    <Localized key="meta" lang="English">Meta</Localized>
+    <Localized key="meta" lang="French">Meta</Localized>
+    <Localized key="meta" lang="Dutch">Meta</Localized>
+    <Localized key="alt" lang="English">Alt</Localized>
+    <Localized key="alt" lang="French">Alt</Localized>
+    <Localized key="alt" lang="Dutch">Alt</Localized>
+    <Localized key="action" lang="English">Action</Localized>
+    <Localized key="action" lang="French">Action</Localized>
+    <Localized key="action" lang="Dutch">Action</Localized>
+    <Localized key="new" lang="English">New</Localized>
+    <Localized key="new" lang="French">Nouveau</Localized>
+    <Localized key="new" lang="Dutch">New</Localized>
+    <Localized key="delete" lang="English">Delete</Localized>
+    <Localized key="delete" lang="French">Supprimer</Localized>
+    <Localized key="delete" lang="Dutch">Delete</Localized>
+    <Localized key="mouse_click_controls" lang="English">Mouse click controls</Localized>
+    <Localized key="mouse_click_controls" lang="French">Contrôle des clics de souris</Localized>
+    <Localized key="mouse_click_controls" lang="Dutch">Mouse click controls</Localized>
+    <Localized key="mouse_drag_controls" lang="English">Mouse drag controls</Localized>
+    <Localized key="mouse_drag_controls" lang="French">Contrôle des 'drag' de souris</Localized>
+    <Localized key="mouse_drag_controls" lang="Dutch">Mouse drag controls</Localized>
+    <Localized key="Text" lang="English">Text</Localized>
+    <Localized key="Text" lang="French">Texte</Localized>
+    <Localized key="Text" lang="Dutch">Text</Localized>
+    <Localized key="Edition" lang="English">Edition</Localized>
+    <Localized key="Edition" lang="French">Edition</Localized>
+    <Localized key="Edition" lang="Dutch">Edition</Localized>
+    <Localized key="Basic" lang="English">Basic</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="Basic" lang="Dutch">Basic</Localized>
+    <Localized key="Gauche" lang="English">Gauche</Localized>
+    <Localized key="Gauche" lang="French">Gauche</Localized>
+    <Localized key="Gauche" lang="Dutch">Gauche</Localized>
+    <Localized key="Centré" lang="English">Centré</Localized>
+    <Localized key="Centré" lang="French">Centré</Localized>
+    <Localized key="Centré" lang="Dutch">Centré</Localized>
+    <Localized key="Droit" lang="English">Droit</Localized>
+    <Localized key="Droit" lang="French">Droit</Localized>
+    <Localized key="Droit" lang="Dutch">Droit</Localized>
+    <Localized key="Haut" lang="English">Haut</Localized>
+    <Localized key="Haut" lang="French">Haut</Localized>
+    <Localized key="Haut" lang="Dutch">Haut</Localized>
+    <Localized key="Bas" lang="English">Bas</Localized>
+    <Localized key="Bas" lang="French">Bas</Localized>
+    <Localized key="Bas" lang="Dutch">Bas</Localized>
+    <Localized key="Middle" lang="English">Middle</Localized>
+    <Localized key="Middle" lang="French">Milieu</Localized>
+    <Localized key="Middle" lang="Dutch">Middle</Localized>
+    <Localized key="Justify" lang="English">Justify</Localized>
+    <Localized key="Justify" lang="French">Justifier</Localized>
+    <Localized key="Justify" lang="Dutch">Justify</Localized>
+    <Localized key="Justifier" lang="English">Justifier</Localized>
+    <Localized key="Justifier" lang="French">Justifier</Localized>
+    <Localized key="Justifier" lang="Dutch">Justifier</Localized>
+  </LocalizedDictionary>
 </Panel>

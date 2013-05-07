@@ -86,7 +86,11 @@ public abstract class FlexoModule implements DataFlexoObserver, IModule {
 	}
 
 	public FlexoFrame getFlexoFrame() {
-		return controller.getFlexoFrame();
+		if (controller != null) {
+			return controller.getFlexoFrame();
+		} else {
+			return null;
+		}
 	}
 
 	public abstract InspectorGroup[] getInspectorGroups();

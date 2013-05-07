@@ -43,6 +43,7 @@ import org.openflexo.foundation.wkf.WKFArtefact;
 import org.openflexo.foundation.wkf.WKFDataObject;
 import org.openflexo.foundation.wkf.WKFDataSource;
 import org.openflexo.foundation.wkf.WKFGroup;
+import org.openflexo.foundation.wkf.WKFMessageArtifact;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.WKFStockObject;
 import org.openflexo.foundation.wkf.dm.ArtefactInserted;
@@ -116,6 +117,7 @@ import org.openflexo.wkf.processeditor.gr.ExpandedActivityGroupGR;
 import org.openflexo.wkf.processeditor.gr.ExpanderGR;
 import org.openflexo.wkf.processeditor.gr.ExpanderGR.Expander;
 import org.openflexo.wkf.processeditor.gr.MessageEdgeGR;
+import org.openflexo.wkf.processeditor.gr.MessageGR;
 import org.openflexo.wkf.processeditor.gr.NormalAbstractActivityNodeGR;
 import org.openflexo.wkf.processeditor.gr.OperationNodeGR;
 import org.openflexo.wkf.processeditor.gr.OperationPetriGraphGR;
@@ -765,6 +767,9 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 		}
 		if (aDrawable instanceof WKFStockObject) {
 			return new StockObjectGR((WKFStockObject) aDrawable, this);
+		}
+		if (aDrawable instanceof WKFMessageArtifact) {
+			return new MessageGR((WKFMessageArtifact) aDrawable, this);
 		}
 		logger.warning("Cannot build GraphicalRepresentation for " + aDrawable);
 		return null;

@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.node.OROperator" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab" />
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" opaque="false" name="BasicTab" />
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" opaque="false" name="AdvancedTab">
       <Parameter name="visibleFor" value="SEMANTICS,SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER" />
+    </Tab>
+    <Tab title="Graphics_BPE" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="20" visible="controller.displayInspectorTabForContext(&quot;BPE&quot;)" font="SansSerif,0,11" opaque="false" name="GraphicsBPETab">
+      <Label label="width" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="WidthbpeLabel" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="5" data="data.getWidth(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Widthbpe" localize="true" />
+      <Label label="height" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="HeightbpeLabel" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="7" data="data.getHeight(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Heightbpe" localize="true" />
+      <Label label="resizable" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ResizablebpeLabel" localize="true" />
+      <CheckBox selected="false" data="data.isResizable(&quot;bpe&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Resizablebpe" localize="true" />
+    </Tab>
+    <Tab title="Graphics_SWL" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="21" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" font="SansSerif,0,11" opaque="false" name="GraphicsSWLTab">
+      <Label label="width" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="Widthswl80Label" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="5" data="data.getWidth(&quot;swl&quot;,80)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Widthswl80" localize="true" />
+      <Label label="height" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="Heightswl40Label" localize="true" />
+      <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="7" data="data.getHeight(&quot;swl&quot;,40)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Heightswl40" localize="true" />
+      <Label label="resizable" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ResizableswlLabel" localize="true" />
+      <CheckBox selected="false" data="data.isResizable(&quot;swl&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Resizableswl" localize="true" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
@@ -13,6 +29,21 @@
     <Localized key="Basic" lang="Dutch">Basic</Localized>
     <Localized key="Advanced" lang="English">Advanced</Localized>
     <Localized key="Advanced" lang="Dutch">Advanced</Localized>
+    <Localized key="width" lang="English">Width</Localized>
+    <Localized key="width" lang="French">Largeur</Localized>
+    <Localized key="width" lang="Dutch">Width</Localized>
+    <Localized key="height" lang="English">Height</Localized>
+    <Localized key="height" lang="French">Hauteur</Localized>
+    <Localized key="height" lang="Dutch">Height</Localized>
+    <Localized key="resizable" lang="English">Resizable</Localized>
+    <Localized key="resizable" lang="French">Taille modifiable</Localized>
+    <Localized key="resizable" lang="Dutch">Resizable</Localized>
+    <Localized key="Graphics_BPE" lang="English">Graphics</Localized>
+    <Localized key="Graphics_BPE" lang="French">Graphisme</Localized>
+    <Localized key="Graphics_BPE" lang="Dutch">Graphics</Localized>
+    <Localized key="Graphics_SWL" lang="English">Graphics</Localized>
+    <Localized key="Graphics_SWL" lang="French">Graphisme</Localized>
+    <Localized key="Graphics_SWL" lang="Dutch">Graphics</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="Exclusive gateway" />
 </Panel>

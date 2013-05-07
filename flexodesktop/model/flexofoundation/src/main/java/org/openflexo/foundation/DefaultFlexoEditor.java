@@ -21,6 +21,7 @@ package org.openflexo.foundation;
 
 import java.util.EventObject;
 import java.util.Vector;
+import java.util.logging.Level;
 
 import javax.swing.Icon;
 import javax.swing.KeyStroke;
@@ -35,6 +36,10 @@ import org.openflexo.foundation.rm.ResourceUpdateHandler;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
 
 public class DefaultFlexoEditor implements FlexoEditor {
+
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(DefaultFlexoEditor.class
+			.getPackage().getName());
+
 	private final FlexoProject _project;
 	private DefaultFlexoResourceUpdateHandler resourceUpdateHandler;
 
@@ -123,6 +128,10 @@ public class DefaultFlexoEditor implements FlexoEditor {
 		}
 		if (action.getFocusedObject() instanceof FlexoProjectObject
 				&& ((FlexoProjectObject) action.getFocusedObject()).getProject() != getProject()) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Focused object project is not the same as my project. Refusing to edit and execute action "
+						+ action.getLocalizedName());
+			}
 			return null;
 		}
 		try {

@@ -26,9 +26,14 @@ import org.openflexo.inspector.InspectableObject;
 
 public class WKFDataObject extends WKFArtefact implements InspectableObject, DeletableObject, LevelledObject {
 
-	// ==========================================================
-	// ======================= Constructor ======================
-	// ==========================================================
+	public static final String IS_COLLECTION = "isCollection";
+	public static final String TYPE = "type";
+	private boolean isCollection = false;
+	private DataObjectType type;
+
+	public enum DataObjectType {
+		INPUT, OUTPUT;
+	}
 
 	/**
 	 * Constructor used during deserialization
@@ -43,6 +48,26 @@ public class WKFDataObject extends WKFArtefact implements InspectableObject, Del
 	 */
 	public WKFDataObject(FlexoProcess process) {
 		super(process);
+	}
+
+	public boolean isCollection() {
+		return isCollection;
+	}
+
+	public void setIsCollection(boolean collection) {
+		this.isCollection = collection;
+		setChanged();
+		notifyAttributeModification(IS_COLLECTION, !collection, collection);
+	}
+
+	public DataObjectType getType() {
+		return type;
+	}
+
+	public void setType(DataObjectType type) {
+		this.type = type;
+		setChanged();
+		notifyAttributeModification(TYPE, null, type);
 	}
 
 	@Override

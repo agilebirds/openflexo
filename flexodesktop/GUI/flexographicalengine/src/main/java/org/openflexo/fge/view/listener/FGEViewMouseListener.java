@@ -81,6 +81,9 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 		case SelectionTool:
 
 			GraphicalRepresentation<?> focusedObject = getFocusRetriever().getFocusedObject(e);
+			if (focusedObject == null) {
+				focusedObject = graphicalRepresentation.getDrawing().getDrawingGraphicalRepresentation();
+			}
 			editable &= focusedObject != null && !focusedObject.getIsReadOnly();
 			if (editable) {
 				if (getController().hasEditedLabel()) {
@@ -129,10 +132,6 @@ public class FGEViewMouseListener implements MouseListener, MouseMotionListener 
 						}
 					}
 				}
-			}
-
-			if (focusedObject == null) {
-				focusedObject = graphicalRepresentation.getDrawing().getDrawingGraphicalRepresentation();
 			}
 
 			if (view.isDeleted()) {

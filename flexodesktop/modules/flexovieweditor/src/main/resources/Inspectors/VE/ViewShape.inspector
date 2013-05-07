@@ -2,8 +2,8 @@
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.view.diagram.model.DiagramShape" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
     <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
-      <Label label="index" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IndexLabel" localize="true" />
-      <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="10" index="1" data="data.indexRelativeToEPType" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Index" localize="true" />
+      <Label label="index" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="10" index="1" data="data.indexRelativeToEPType" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Layer_index" localize="true" />
       <TabPanel name="GRTab" index="2" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.ShapeGraphicalRepresentation" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
         <Tab title="Shape" layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="ShapeTab">
           <Custom componentClassName="org.openflexo.fge.view.widget.ShapePreviewPanel" localize="true" manageDynamicModel="true" index="0" data="GRTab.data.shape" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)">
@@ -60,7 +60,7 @@
           <Label label="dimensions" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="DimensionLabel" localize="true" />
           <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" index="7" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
             <Number minValue="0.0" maxValue="10000.0" increment="1.0" numberType="DoubleType" columns="5" index="0" data="GRTab.data.width" constraints="flow(index=0)" name="Width" localize="true" />
-            <Label label="x" index="1" constraints="flow(index=1)" name="X" localize="true" />
+            <Label label="X" index="1" constraints="flow(index=1)" name="X" localize="true" />
             <Number minValue="0.0" maxValue="10000.0" increment="1.0" numberType="DoubleType" columns="5" index="2" data="GRTab.data.height" constraints="flow(index=2)" name="Height" localize="true" />
           </Panel>
           <Label label="dimensions_constraints" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="DimensionConstraintsLabel" localize="true" />
@@ -96,7 +96,7 @@
           <CheckBox selected="false" index="21" data="GRTab.data.isVisible" constraints="twocols(expandHorizontally=false;expandVertically=false;index=21;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IsVisible" localize="true" />
           <Label label="allows_to_leave_bounds" index="22" constraints="twocols(expandHorizontally=true;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
           <CheckBox selected="true" index="23" data="GRTab.data.allowToLeaveBounds" constraints="twocols(expandHorizontally=true;expandVertically=false;index=23;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="checkbox" localize="true" />
-          <Label label="index" index="24" constraints="twocols(expandHorizontally=true;expandVertically=false;index=24;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+          <Label label="layer_index" index="24" constraints="twocols(expandHorizontally=true;expandVertically=false;index=24;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
           <Number minValue="0" maxValue="65535" increment="1" numberType="IntegerType" columns="3" index="25" data="GRTab.data.index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=25;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Integer" localize="true" />
         </Tab>
         <Tab title="Edition" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="EditionTab">
@@ -183,9 +183,9 @@
     <Localized key="height_fixed" lang="French">Hauteur fixe</Localized>
     <Localized key="height_fixed" lang="Dutch">Fixed height</Localized>
     <Localized key="container" lang="French">Conteneur</Localized>
-    <Localized key="dimensions_constraints" lang="English">Dimensions contraints</Localized>
+    <Localized key="dimensions_constraints" lang="English">Dimension constraints</Localized>
     <Localized key="dimensions_constraints" lang="French">Contraintes de dimensionnement</Localized>
-    <Localized key="dimensions_constraints" lang="Dutch">Dimensions contraints</Localized>
+    <Localized key="dimensions_constraints" lang="Dutch">Dimension constraints</Localized>
     <Localized key="top_border" lang="English">Top border</Localized>
     <Localized key="top_border" lang="French">Bord haut</Localized>
     <Localized key="top_border" lang="Dutch">Top border</Localized>
@@ -307,49 +307,49 @@
     <Localized key=";" lang="French">;</Localized>
     <Localized key=";" lang="Dutch">;</Localized>
     <Localized key="Freely movable" lang="English">Freely movable</Localized>
-    <Localized key="Freely movable" lang="French">Freely movable</Localized>
+    <Localized key="Freely movable" lang="French">Peut être bougé</Localized>
     <Localized key="Freely movable" lang="Dutch">Freely movable</Localized>
     <Localized key="Contained in shape" lang="English">Contained in shape</Localized>
-    <Localized key="Contained in shape" lang="French">Contained in shape</Localized>
+    <Localized key="Contained in shape" lang="French">Contenu dans la forme</Localized>
     <Localized key="Contained in shape" lang="Dutch">Contained in shape</Localized>
     <Localized key="Unmovable" lang="English">Unmovable</Localized>
-    <Localized key="Unmovable" lang="French">Unmovable</Localized>
+    <Localized key="Unmovable" lang="French">Non déplaçable</Localized>
     <Localized key="Unmovable" lang="Dutch">Unmovable</Localized>
     <Localized key="Relative to parent" lang="English">Relative to parent</Localized>
     <Localized key="Relative to parent" lang="French">Relative to parent</Localized>
     <Localized key="Relative to parent" lang="Dutch">Relative to parent</Localized>
     <Localized key="x fixed" lang="English">x fixed</Localized>
-    <Localized key="x fixed" lang="French">x fixed</Localized>
+    <Localized key="x fixed" lang="French">x fixe</Localized>
     <Localized key="x fixed" lang="Dutch">x fixed</Localized>
     <Localized key="y fixed" lang="English">y fixed</Localized>
-    <Localized key="y fixed" lang="French">y fixed</Localized>
+    <Localized key="y fixed" lang="French">y fixe</Localized>
     <Localized key="y fixed" lang="Dutch">y fixed</Localized>
     <Localized key="Area constrained" lang="English">Area constrained</Localized>
-    <Localized key="Area constrained" lang="French">Area constrained</Localized>
+    <Localized key="Area constrained" lang="French">Espace contraint</Localized>
     <Localized key="Area constrained" lang="Dutch">Area constrained</Localized>
     <Localized key="dimensions" lang="English">Dimensions</Localized>
     <Localized key="dimensions" lang="French">Dimensions</Localized>
     <Localized key="dimensions" lang="Dutch">Dimensions</Localized>
     <Localized key="Freely resizable" lang="English">Freely resizable</Localized>
-    <Localized key="Freely resizable" lang="French">Freely resizable</Localized>
+    <Localized key="Freely resizable" lang="French">Peut être redimensionné</Localized>
     <Localized key="Freely resizable" lang="Dutch">Freely resizable</Localized>
     <Localized key="Unresizable" lang="English">Unresizable</Localized>
-    <Localized key="Unresizable" lang="French">Unresizable</Localized>
+    <Localized key="Unresizable" lang="French">Non redimensionnable</Localized>
     <Localized key="Unresizable" lang="Dutch">Unresizable</Localized>
     <Localized key="Constrained dimensions" lang="English">Constrained dimensions</Localized>
-    <Localized key="Constrained dimensions" lang="French">Constrained dimensions</Localized>
+    <Localized key="Constrained dimensions" lang="French">Dimensions contraintes</Localized>
     <Localized key="Constrained dimensions" lang="Dutch">Constrained dimensions</Localized>
     <Localized key="Step constrained" lang="English">Step constrained</Localized>
-    <Localized key="Step constrained" lang="French">Step constrained</Localized>
+    <Localized key="Step constrained" lang="French">Contraint par le pas</Localized>
     <Localized key="Step constrained" lang="Dutch">Step constrained</Localized>
     <Localized key="Fixed width" lang="English">Fixed width</Localized>
-    <Localized key="Fixed width" lang="French">Fixed width</Localized>
+    <Localized key="Fixed width" lang="French">Largeur fixe</Localized>
     <Localized key="Fixed width" lang="Dutch">Fixed width</Localized>
     <Localized key="Fixed height" lang="English">Fixed height</Localized>
-    <Localized key="Fixed height" lang="French">Fixed height</Localized>
+    <Localized key="Fixed height" lang="French">Hauteur fixe</Localized>
     <Localized key="Fixed height" lang="Dutch">Fixed height</Localized>
     <Localized key="Container" lang="English">Container</Localized>
-    <Localized key="Container" lang="French">Container</Localized>
+    <Localized key="Container" lang="French">Conteneur</Localized>
     <Localized key="Container" lang="Dutch">Container</Localized>
     <Localized key="x_constraints" lang="English">x constraints</Localized>
     <Localized key="x_constraints" lang="French">Contraintes en abscisse</Localized>
@@ -417,12 +417,12 @@
     <Localized key="Relatif au parent" lang="English">Relatif au parent</Localized>
     <Localized key="Relatif au parent" lang="French">Relatif au parent</Localized>
     <Localized key="Relatif au parent" lang="Dutch">Relatif au parent</Localized>
-    <Localized key="x fixe" lang="English">x fixe</Localized>
+    <Localized key="x fixe" lang="English">x fixed</Localized>
     <Localized key="x fixe" lang="French">x fixe</Localized>
-    <Localized key="x fixe" lang="Dutch">x fixe</Localized>
-    <Localized key="y fixe" lang="English">y fixe</Localized>
+    <Localized key="x fixe" lang="Dutch">x fixed</Localized>
+    <Localized key="y fixe" lang="English">y fixed</Localized>
     <Localized key="y fixe" lang="French">y fixe</Localized>
-    <Localized key="y fixe" lang="Dutch">y fixe</Localized>
+    <Localized key="y fixe" lang="Dutch">y fixed</Localized>
     <Localized key="Espace contraint" lang="English">Espace contraint</Localized>
     <Localized key="Espace contraint" lang="French">Espace contraint</Localized>
     <Localized key="Espace contraint" lang="Dutch">Espace contraint</Localized>
@@ -432,21 +432,27 @@
     <Localized key="Non redimensionnable" lang="English">Non redimensionnable</Localized>
     <Localized key="Non redimensionnable" lang="French">Non redimensionnable</Localized>
     <Localized key="Non redimensionnable" lang="Dutch">Non redimensionnable</Localized>
-    <Localized key="Dimensions contraintes" lang="English">Dimensions contraintes</Localized>
+    <Localized key="Dimensions contraintes" lang="English">Constrained dimensions</Localized>
     <Localized key="Dimensions contraintes" lang="French">Dimensions contraintes</Localized>
-    <Localized key="Dimensions contraintes" lang="Dutch">Dimensions contraintes</Localized>
+    <Localized key="Dimensions contraintes" lang="Dutch">Constrained dimensions</Localized>
     <Localized key="Contraint par le pas" lang="English">Contraint par le pas</Localized>
     <Localized key="Contraint par le pas" lang="French">Contraint par le pas</Localized>
     <Localized key="Contraint par le pas" lang="Dutch">Contraint par le pas</Localized>
-    <Localized key="Largeur fixe" lang="English">Largeur fixe</Localized>
+    <Localized key="Largeur fixe" lang="English">Fixed width</Localized>
     <Localized key="Largeur fixe" lang="French">Largeur fixe</Localized>
-    <Localized key="Largeur fixe" lang="Dutch">Largeur fixe</Localized>
-    <Localized key="Hauteur fixe" lang="English">Hauteur fixe</Localized>
+    <Localized key="Largeur fixe" lang="Dutch">Fixed width</Localized>
+    <Localized key="Hauteur fixe" lang="English">Fixed height</Localized>
     <Localized key="Hauteur fixe" lang="French">Hauteur fixe</Localized>
-    <Localized key="Hauteur fixe" lang="Dutch">Hauteur fixe</Localized>
+    <Localized key="Hauteur fixe" lang="Dutch">Fixed height</Localized>
     <Localized key="Conteneur" lang="English">Conteneur</Localized>
     <Localized key="Conteneur" lang="French">Conteneur</Localized>
     <Localized key="Conteneur" lang="Dutch">Conteneur</Localized>
+    <Localized key="X" lang="English">X</Localized>
+    <Localized key="X" lang="French">X</Localized>
+    <Localized key="X" lang="Dutch">X</Localized>
+    <Localized key="layer_index" lang="English">Layer index</Localized>
+    <Localized key="layer_index" lang="French">Index de couche</Localized>
+    <Localized key="layer_index" lang="Dutch">Layer index</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="Shape" />
 </Panel>

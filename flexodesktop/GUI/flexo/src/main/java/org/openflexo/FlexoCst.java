@@ -51,8 +51,6 @@ import org.openflexo.toolbox.ToolBox;
 public class FlexoCst extends ColorCst {
 	public static final String DLPM_WORKPACKAGE_ID = "1000023";
 
-	public static final String BUILD_ID = new String(ApplicationVersion.BUILD_ID);
-
 	public static final FlexoVersion BUSINESS_APPLICATION_VERSION = new FlexoVersion(ApplicationVersion.BUSINESS_APPLICATION_VERSION);
 
 	public static final String BUSINESS_APPLICATION_VERSION_NAME = "OpenFlexo " + BUSINESS_APPLICATION_VERSION;

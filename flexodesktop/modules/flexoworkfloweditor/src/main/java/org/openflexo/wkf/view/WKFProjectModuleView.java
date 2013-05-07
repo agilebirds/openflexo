@@ -22,11 +22,8 @@ package org.openflexo.wkf.view;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Vector;
 
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -38,9 +35,8 @@ import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
+import org.openflexo.foundation.wkf.action.AddRole;
 import org.openflexo.foundation.wkf.action.AddSubProcess;
-import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.listener.FlexoActionButton;
@@ -64,18 +60,8 @@ public class WKFProjectModuleView extends JPanel implements ModuleView<FlexoWork
 		workflow.addObserver(this);
 		panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 50));
 		JPanel buttonPanel = new JPanel(new GridLayout(1, 0));
-		JButton button = new JButton(WKFIconLibrary.WKF_RP_ACTIVE_ICON);
-		button.setText(FlexoLocalization.localizedForKey("switch_to_role_perspective"));
-		button.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				WKFProjectModuleView.this.controller.getControllerModel().setCurrentPerspective(
-						WKFProjectModuleView.this.controller.ROLE_EDITOR_PERSPECTIVE);
-			}
-		});
 		buttonPanel.add(new FlexoActionButton(AddSubProcess.actionType, this, controller));
-		buttonPanel.add(button);
+		buttonPanel.add(new FlexoActionButton(AddRole.actionType, this, controller));
 		panel.add(buttonPanel);
 		add(panel);
 		revalidate();

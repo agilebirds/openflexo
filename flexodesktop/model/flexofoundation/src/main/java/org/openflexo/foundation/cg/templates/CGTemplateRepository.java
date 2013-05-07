@@ -29,6 +29,7 @@ import java.util.Vector;
 import org.openflexo.foundation.TargetType;
 import org.openflexo.foundation.cg.dm.CGDataModification;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.toolbox.EmptyVector;
 
 import com.google.common.collect.ArrayListMultimap;
 
@@ -38,12 +39,15 @@ public abstract class CGTemplateRepository extends CGTemplateObject {
 	private File _directory;
 	private CGDirectoryTemplateSet commonTemplates;
 	private Hashtable<TargetType, TargetSpecificCGTemplateSet> targetSpecificTemplates;
-	private Vector<TargetType> availableTargets;
+	private final Vector<TargetType> availableTargets;
 
 	public CGTemplateRepository(File directory, CGTemplates templates, Vector<TargetType> availableTargets) {
 		super();
 		_templates = templates;
 		_directory = directory;
+		if (availableTargets == null) {
+			availableTargets = EmptyVector.EMPTY_VECTOR();
+		}
 		this.availableTargets = availableTargets;
 		commonTemplates = makeCommonTemplateSet();
 		targetSpecificTemplates = new Hashtable<TargetType, TargetSpecificCGTemplateSet>();
@@ -62,14 +66,12 @@ public abstract class CGTemplateRepository extends CGTemplateObject {
 	@Override
 	public void update() {
 		commonTemplates.update();
-		if (availableTargets != null) {
 			for (TargetType target : availableTargets) {
 				TargetSpecificCGTemplateSet specificTargetSet = getTemplateSetForTarget(target);
 				if (specificTargetSet != null) {
 					specificTargetSet.update();
 				}
 			}
-		}
 		ArrayListMultimap<String, CGTemplate> templates = ArrayListMultimap.create();
 		for (CGTemplate t : commonTemplates.findAllTemplates()) {
 			templates.put(t.getName(), t);

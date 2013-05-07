@@ -46,8 +46,6 @@ public abstract class OperatorGR<O extends OperatorNode> extends PetriGraphNodeG
 		super(operatorNode, ShapeType.LOSANGE, aDrawing, isInPalet);
 		// setX(getOperatorNode().getPosX());
 		// setY(getOperatorNode().getPosY());
-		setWidth(35);
-		setHeight(35);
 
 		// setText(getOperatorNode().getName());
 		// setAbsoluteTextX(getOperatorNode().getNodeLabelPosX());
@@ -56,19 +54,8 @@ public abstract class OperatorGR<O extends OperatorNode> extends PetriGraphNodeG
 
 		foreground = ForegroundStyle.makeStyle(Color.BLACK);
 		foreground.setLineWidth(0.6);
-
-		if (getImageIcon() != null) {
-			background = BackgroundStyle.makeImageBackground(getImageIcon());
-			((BackgroundImageBackgroundStyle) background).setScaleX(1);
-			((BackgroundImageBackgroundStyle) background).setScaleY(1);
-			((BackgroundImageBackgroundStyle) background).setDeltaX(-2);
-			((BackgroundImageBackgroundStyle) background).setDeltaY(-3);
-		} else {
-			background = BackgroundStyle.makeEmptyBackground();
-		}
-
 		setForeground(foreground);
-		setBackground(background);
+		updateResizable();
 
 		setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
 
@@ -86,6 +73,69 @@ public abstract class OperatorGR<O extends OperatorNode> extends PetriGraphNodeG
 
 		updatePropertiesFromWKFPreferences();
 
+	}
+
+	@Override
+	public double getWidth() {
+		if (isResizable()) {
+			if (!getNode().hasDimensionForContext(SWIMMING_LANE_EDITOR)) {
+				getNode().getWidth(SWIMMING_LANE_EDITOR, DEFAULT_ACTIVITY_WIDTH);
+			}
+			return getNode().getWidth(SWIMMING_LANE_EDITOR);
+		} else {
+			return 35;
+		}
+	}
+
+	@Override
+	public void setWidthNoNotification(double width) {
+		getNode().setWidth(width, SWIMMING_LANE_EDITOR);
+	}
+
+	@Override
+	public double getHeight() {
+		if (isResizable()) {
+			if (!getNode().hasDimensionForContext(SWIMMING_LANE_EDITOR)) {
+				getNode().getHeight(SWIMMING_LANE_EDITOR, DEFAULT_ACTIVITY_HEIGHT);
+			}
+			return getNode().getHeight(SWIMMING_LANE_EDITOR);
+		} else {
+			return 35;
+		}
+	}
+
+	@Override
+	public void setHeightNoNotification(double height) {
+		getNode().setHeight(height, SWIMMING_LANE_EDITOR);
+	}
+
+	private void updateResizable() {
+		if (isResizable()) {
+			setDimensionConstraints(DimensionConstraints.FREELY_RESIZABLE);
+			setAdjustMinimalWidthToLabelWidth(false);
+			setAdjustMinimalHeightToLabelHeight(false);
+			setIsFloatingLabel(false);
+			setBackground(BackgroundStyle.makeEmptyBackground());
+		} else {
+			setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
+			setIsFloatingLabel(true);
+		}
+		if (getImageIcon() != null) {
+			background = BackgroundStyle.makeImageBackground(getImageIcon());
+			((BackgroundImageBackgroundStyle) background).setScaleX(1);
+			((BackgroundImageBackgroundStyle) background).setScaleY(1);
+			((BackgroundImageBackgroundStyle) background).setDeltaX(-2);
+			((BackgroundImageBackgroundStyle) background).setDeltaY(-3);
+		} else {
+			background = BackgroundStyle.makeColoredBackground(Color.WHITE);
+		}
+		setBackground(background);
+		notifyObjectResized();
+		notifyShapeNeedsToBeRedrawn();
+	}
+
+	protected boolean isResizable() {
+		return getOperatorNode().isResizable(SWIMMING_LANE_EDITOR);
 	}
 
 	@Override
@@ -114,6 +164,9 @@ public abstract class OperatorGR<O extends OperatorNode> extends PetriGraphNodeG
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (dataModification instanceof RoleChanged) {
 			getDrawing().requestRebuildCompleteHierarchy();
+		}
+		if (getDrawable().getResizableKeyForContext(SWIMMING_LANE_EDITOR).equals(dataModification.propertyName())) {
+			updateResizable();
 		}
 		super.update(observable, dataModification);
 	}

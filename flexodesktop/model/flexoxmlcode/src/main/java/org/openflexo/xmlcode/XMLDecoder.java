@@ -1449,6 +1449,9 @@ public class XMLDecoder {
 			if (modelProperty.isProperties()) {
 				KeyValueCoder.setHashtableForKey(object, propertiesHashtableOfObjectsMatchingHandledXMLTags(node, modelProperty),
 						(HashtableKeyValueProperty) keyValueProperty);
+			} else if (modelProperty.isSafeProperties()) {
+				KeyValueCoder.setHashtableForKey(object, safePropertiesHashtableOfObjectsMatchingHandledXMLTags(node, modelProperty),
+						(HashtableKeyValueProperty) keyValueProperty);
 			} else if (modelProperty.isUnmappedAttributes()) {
 				Vector unmappedAttributes = unmappedAttributes(node, modelProperty, modelEntity);
 				if (unmappedAttributes.size() > 0) {
@@ -1663,6 +1666,67 @@ public class XMLDecoder {
 						System.err.println("Value for " + value + " is null !");
 					} else {
 						returnedHashtable.put(element.getName(), decodedValue);
+					}
+				}
+			}
+		}
+
+		return returnedHashtable;
+	}
+
+	/**
+	 * Return a properties hashtable decoded from elements matching declared handled XML tag of specified <code>modelProperty</code>
+	 */
+	protected Hashtable safePropertiesHashtableOfObjectsMatchingHandledXMLTags(Element node, ModelProperty modelProperty) {
+
+		Hashtable returnedHashtable = new Hashtable();
+
+		List propertiesNodeList = node.getChildren();
+		Element propertiesNode;
+		if (propertiesNodeList.size() == 0) {
+			// throw new InvalidXMLDataException ("Properties tag
+			// '"+modelProperty.getName()+"' not found");
+			return new Hashtable(); // Returns an empty hashtable
+		} else {
+			int i = 0;
+			do {
+				propertiesNode = (Element) propertiesNodeList.get(i);
+				i++;
+			} while (!propertiesNode.getName().equals(modelProperty.getDefaultXmlTag()) && i < propertiesNodeList.size());
+		}
+		if (!propertiesNode.getName().equals(modelProperty.getDefaultXmlTag())) {
+			// throw new InvalidXMLDataException ("Properties tag
+			// '"+modelProperty.getDefaultXmlTag()+"' not found");
+			return new Hashtable(); // Returns an empty hashtable
+		}
+
+		List childElements = propertiesNode.getChildren();
+		for (int j = 0; j < childElements.size(); j++) {
+			Element element = (Element) childElements.get(j);
+			Attribute keyAttr = element.getAttribute(XMLMapping.keyLabel);
+			Attribute classNameAttr = element.getAttribute(XMLMapping.classNameLabel);
+			Class objectType = null;
+			if (classNameAttr != null) {
+				try {
+					objectType = Class.forName(classNameAttr.getValue());
+				} catch (ClassNotFoundException e) {
+					System.err.println("Class not found " + classNameAttr.getValue() + " for " + keyAttr.getValue());
+					// throw new InvalidXMLDataException("Class named '" + classNameAttr.getValue() + "' not found");
+				}
+				String value = element.getAttributeValue(XMLMapping.valueLabel);
+				if (objectType == null || stringEncoder._converterForClass(objectType) == null) {
+					// No converter, just keep reference of that object for persistance
+					// (without instanciating it)
+					// In this case, class matching property is not loaded, and thus
+					// Object is not instanciated. But, we must keep serialized version
+					returnedHashtable.put(keyAttr.getValue(), new PropertiesKeyValueProperty.UndecodableProperty(classNameAttr.getValue(),
+							value));
+				} else {
+					Object decodedValue = stringEncoder._decodeObject(value, objectType);
+					if (decodedValue == null) {
+						System.err.println("Value for " + value + " is null !");
+					} else {
+						returnedHashtable.put(keyAttr.getValue(), decodedValue);
 					}
 				}
 			}
