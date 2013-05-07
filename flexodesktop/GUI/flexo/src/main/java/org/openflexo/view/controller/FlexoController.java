@@ -757,6 +757,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 							isOK = true;
 						} catch (DuplicateResourceException e) {
 						} catch (InvalidNameException e) {
+						} catch (Exception e) {
+							e.printStackTrace();
 						}
 					} else {
 						return true;
