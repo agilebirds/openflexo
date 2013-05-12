@@ -37,8 +37,9 @@
 
 	<entity name="org.openflexo.technologyadapter.owl.OWLModelSlot" xmlTag="OWLModelSlot">
 	</entity>
-
-	<entity name="org.openflexo.technologyadapter.xsd.XSDModelSlot" xmlTag="XSDModelSlot">
+	
+ 
+	<entity name="org.openflexo.technologyadapter.xsd.XSDModelSlot" xmlTag="XSDModelSlot" >
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.LocalizedDictionary"

@@ -65,7 +65,10 @@ public class VirtualModelModelSlotInstanceConfiguration<MS extends VirtualModelM
 	@Override
 	public ModelSlotInstance<?, ?> createModelSlotInstance(VirtualModelInstance<?, ?> vmInstance) {
 		ModelSlotInstance<?, ?> returned = new ModelSlotInstance(vmInstance, getModelSlot());
-		returned.setModelURI(getAddressedVirtualModelInstanceResource().getURI());
+		if (getAddressedVirtualModelInstanceResource() != null) {
+			returned.setModelURI(getAddressedVirtualModelInstanceResource().getURI());
+		}
+		else {logger.warning ("VMInstance is NULL"); }
 		return returned;
 	}
 

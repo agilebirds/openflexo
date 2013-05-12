@@ -42,6 +42,7 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
+import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 import org.openflexo.technologyadapter.emf.viewpoint.EMFObjectIndividualPatternRole;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividual;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividualAttributeDataPropertyValue;
@@ -180,17 +181,16 @@ public class EMFModelSlot extends FlexoOntologyModelSlot<EMFModel, EMFMetaModel>
 		return null;
 	}
 
+
 	@Override
 	public String getURIForObject(ModelSlotInstance msInstance, Object o) {
-		// TODO Auto-generated method stub
-		return null;
+		return ((EMFObjectIndividual) o).getURI();
 	}
 
 	@Override
 	public Object retrieveObjectWithURI(ModelSlotInstance msInstance,
 			String objectURI) {
-		// TODO Auto-generated method stub
-		return null;
+		return msInstance.getModel().getObject(objectURI);
 	}
 
 }

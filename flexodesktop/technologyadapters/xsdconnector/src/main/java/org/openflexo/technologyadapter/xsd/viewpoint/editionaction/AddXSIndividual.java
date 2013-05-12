@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.DuplicateURIException;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
@@ -36,6 +37,15 @@ import org.openflexo.technologyadapter.xsd.model.XSOntClass;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 
 public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOntIndividual> {
+
+	@Override
+	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
+		// TODO Auto-generated method stub
+		super.setOntologyClass(ontologyClass);
+		if ( ontologyClassURI == null) {
+			logger.info ("Ya comme un beugue");
+		}
+	}
 
 	private static final Logger logger = Logger.getLogger(AddXSIndividual.class.getPackage().getName());
 

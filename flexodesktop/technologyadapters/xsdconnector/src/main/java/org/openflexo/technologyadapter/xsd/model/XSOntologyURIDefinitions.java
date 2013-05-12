@@ -21,7 +21,7 @@ package org.openflexo.technologyadapter.xsd.model;
 
 public interface XSOntologyURIDefinitions {
 
-	public static final String XS_ONTOLOGY_URI = "http://www.openflexo.org/xsd.owl";
+	public static final String XS_ONTOLOGY_URI = "http://www.openflexo.org/xsd.xml";
 
 	public static final String XS_DATAPROPERTY_NAMEPREFIX = "hasValue";
 

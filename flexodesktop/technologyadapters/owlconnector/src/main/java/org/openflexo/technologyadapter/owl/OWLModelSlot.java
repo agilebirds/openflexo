@@ -17,6 +17,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.technologyadapter.owl.model.OWLObject;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementPatternRole;
 import org.openflexo.technologyadapter.owl.viewpoint.OWLClassPatternRole;
@@ -187,18 +188,17 @@ public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntolog
 	public <FR extends FetchRequest<?, ?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
 		return null;
 	}
+	
 
 	@Override
 	public String getURIForObject(ModelSlotInstance msInstance, Object o) {
-		// TODO Auto-generated method stub
-		return null;
+		return ((OWLObject) o).getURI();
 	}
 
 	@Override
 	public Object retrieveObjectWithURI(ModelSlotInstance msInstance,
 			String objectURI) {
-		// TODO Auto-generated method stub
-		return null;
+		return msInstance.getModel().getObject(objectURI);
 	}
 
 }
