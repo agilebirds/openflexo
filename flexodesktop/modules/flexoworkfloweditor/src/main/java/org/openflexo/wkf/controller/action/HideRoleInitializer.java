@@ -60,13 +60,11 @@ public class HideRoleInitializer extends ActionInitializer {
 			@Override
 			public boolean run(EventObject event, HideRole action) {
 				if (action.getRole() != null) {
-					action.getRole().setIsVisible(false,
-							SwimmingLaneRepresentation.getRoleVisibilityContextForProcess(getController().getCurrentFlexoProcess()));
+					getController().getCurrentFlexoProcess().setRoleVisible(action.getRole(), false);
 					if (action.getGlobalSelection() != null) {
 						for (Role role : action.getGlobalSelection()) {
 							if (!SwimmingLaneRepresentation.roleMustBeShown(role, getController().getCurrentFlexoProcess())) {
-								role.setIsVisible(false, SwimmingLaneRepresentation.getRoleVisibilityContextForProcess(getController()
-										.getCurrentFlexoProcess()));
+								getController().getCurrentFlexoProcess().setRoleVisible(role, false);
 							}
 						}
 					}

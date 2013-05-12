@@ -29,9 +29,6 @@ import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
 import org.openflexo.fge.geom.area.FGEArea;
-import org.openflexo.fge.geom.area.FGEAreaProvider;
-import org.openflexo.fge.geom.area.FGEHalfPlane;
-import org.openflexo.fge.geom.area.FGEIntersectionArea;
 import org.openflexo.fge.geom.area.FGEPlane;
 
 public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPoint {
@@ -67,29 +64,25 @@ public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPo
 	}
 
 	private void movedMiddleCP() {
+		FGEArea startArea = getConnector().retrieveAllowedStartArea(false);
 
 		Vector<SimplifiedCardinalDirection> allowedStartOrientations = getConnector().getPrimitiveAllowedStartOrientations();
 		Vector<SimplifiedCardinalDirection> allowedEndOrientations = getConnector().getPrimitiveAllowedEndOrientations();
 
-		final FGEArea startArea;
 		if (getConnector().getIsStartingLocationFixed() && !getConnector().getIsStartingLocationDraggable()) {
 			// If starting location is fixed and not draggable,
 			// Then retrieve start area itself (which is here a single point)
 			startArea = getConnector().retrieveStartArea();
 			allowedStartOrientations = getConnector().getAllowedStartOrientations();
-		} else {
-			startArea = getConnector().retrieveAllowedStartArea(false);
 		}
 
-		final FGEArea endArea;
+		FGEArea endArea = getConnector().retrieveAllowedEndArea(false);
 
 		if (getConnector().getIsEndingLocationFixed() && !getConnector().getIsEndingLocationDraggable()) {
 			// If starting location is fixed and not draggable,
 			// Then retrieve start area itself (which is here a single point)
 			endArea = getConnector().retrieveEndArea();
 			allowedEndOrientations = getConnector().getAllowedEndOrientations();
-		} else {
-			endArea = getConnector().retrieveAllowedEndArea(false);
 		}
 
 		/*System.out.println("startArea="+startArea);
@@ -100,21 +93,8 @@ public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPo
 		FGERectPolylin newPolylin;
 
 		FGEPoint middleCPLocation = getPoint();
-		FGEAreaProvider<SimplifiedCardinalDirection> startAreaProvider = new FGEAreaProvider<FGEGeometricObject.SimplifiedCardinalDirection>() {
-			@Override
-			public FGEArea getArea(SimplifiedCardinalDirection input) {
-				return FGEIntersectionArea.makeIntersection(startArea,
-						FGEHalfPlane.makeFGEHalfPlane(input.getNormalizedRepresentativePoint(), input.getCardinalDirectionEquivalent()));
-			}
-		};
-		FGEAreaProvider<SimplifiedCardinalDirection> endAreaProvider = new FGEAreaProvider<FGEGeometricObject.SimplifiedCardinalDirection>() {
-			@Override
-			public FGEArea getArea(SimplifiedCardinalDirection input) {
-				return FGEIntersectionArea.makeIntersection(endArea,
-						FGEHalfPlane.makeFGEHalfPlane(input.getNormalizedRepresentativePoint(), input.getCardinalDirectionEquivalent()));
-			}
-		};
-		newPolylin = FGERectPolylin.makeRectPolylinCrossingPoint(startAreaProvider, endAreaProvider, middleCPLocation, true, getConnector()
+
+		newPolylin = FGERectPolylin.makeRectPolylinCrossingPoint(startArea, endArea, middleCPLocation, true, getConnector()
 				.getOverlapXResultingFromPixelOverlap(), getConnector().getOverlapYResultingFromPixelOverlap(), SimplifiedCardinalDirection
 				.allDirectionsExcept(allowedStartOrientations), SimplifiedCardinalDirection.allDirectionsExcept(allowedEndOrientations));
 
@@ -142,6 +122,7 @@ public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPo
 		}
 
 	}
+
 	/**
 	 * This method is internally called when first control point has been detected to be moved.
 	 * 

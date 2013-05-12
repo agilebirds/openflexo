@@ -344,7 +344,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 						to = createElement(drop, dropLocation, target, direction);
 					} else {
 						if (target.getLevel() == FlexoLevel.ACTIVITY) {
-							element = ((SwimmingLaneEditorController) controller).getActivityPalette().getNormalActivityElement();
+							element = ((SwimmingLaneEditorController) controller).getBasicPalette().getNormalActivityElement();
 						} else if (target.getLevel() == FlexoLevel.OPERATION) {
 							element = ((SwimmingLaneEditorController) controller).getOperationPalette().getNormalOperationElement();
 						} else if (target.getLevel() == FlexoLevel.ACTION) {
@@ -363,7 +363,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 					break;
 				case EXCLUSIVE_GATEWAY:
 					if (target.getLevel() == FlexoLevel.ACTIVITY) {
-						element = ((SwimmingLaneEditorController) controller).getActivityPalette().getOROperatorElement();
+						element = ((SwimmingLaneEditorController) controller).getBasicPalette().getOrOperatorElement();
 					} else if (target.getLevel() == FlexoLevel.OPERATION) {
 						element = ((SwimmingLaneEditorController) controller).getOperationPalette().getOrOperatorElement();
 					} else if (target.getLevel() == FlexoLevel.ACTION) {
@@ -383,7 +383,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 						element = ((SwimmingLaneEditorController)controller).getActionPalette().getOROperatorElement();
 					else
 						return ;*/
-					drop = ((SwimmingLaneEditorController) controller).getArtefactPalette().getAnnotationElement()
+					drop = ((SwimmingLaneEditorController) controller).getBasicPalette().getAnnotation()
 							.createAndExecuteDropElementAction(dropLocation, target, role, false);
 					to = createElement(drop, dropLocation, target, direction);
 					break;

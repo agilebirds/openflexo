@@ -1,74 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" darkLevel="0" dataClassName="org.openflexo.foundation.rm.FlexoProject" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.rm.FlexoProject" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Basic" layout="twocols" darkLevel="0" name="BasicTab">
-      <Label label="name" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" name="ProjectNameLabel" localize="true" />
-      <TextField data="data.projectName" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" name="ProjectName" readOnly="true" localize="true" />
-      <Label label="location" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" name="ProjectDirectoryLabel" localize="true" />
-      <TextField data="data.projectDirectory.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" name="ProjectDirectory" readOnly="true" localize="true" />
-      <Label label="description" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" name="ProjectDescriptionLabel" localize="true">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,12" darkLevel="0" name="BasicTab" opaque="false">
+      <Label label="name" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="ProjectNameLabel" localize="true" />
+      <TextField data="data.displayName" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="ProjectName" readOnly="true" localize="true" />
+      <Label label="location" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="ProjectDirectoryLabel" localize="true" />
+      <TextField data="data.projectDirectory.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="ProjectDirectory" readOnly="true" localize="true" />
+      <Label label="description" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="ProjectDescriptionLabel" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
-      <TextArea data="data.projectDescription" constraints="twocols(expandHorizontally=true;expandVertically=true;location=right)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="ProjectDescription" localize="true">
+      <TextArea data="data.projectDescription" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="ProjectDescription" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </TextArea>
-      <Label label="root_process" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" name="FlexoWorkflowrootProcessLabel" localize="true" />
-      <DropDown data="data.flexoWorkflow.rootProcess" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)" name="FlexoWorkflowrootProcess" format="object.name" localize="true" list="data.flexoWorkflow.topLevelFlexoProcesses" iteratorClassName="org.openflexo.foundation.wkf.FlexoProcess" autoSelectFirstRow="false" />
-      <Label label="target" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" name="TargetTypeLabel" localize="true">
+      <Label label="root_process" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="FlexoWorkflowrootProcessLabel" localize="true" />
+      <DropDown data="data.flexoWorkflow.rootProcess" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="FlexoWorkflowrootProcess" format="object.name" localize="true" list="data.flexoWorkflow.topLevelFlexoProcesses" iteratorClassName="org.openflexo.foundation.wkf.FlexoProcess" autoSelectFirstRow="false" />
+      <Label label="target" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="TargetTypeLabel" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
-      <DropDown data="data.targetType" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)" name="TargetType" format="object.name" localize="true" list="data.targetType.availableValues" iteratorClassName="org.openflexo.foundation.CodeType" autoSelectFirstRow="false">
+      <DropDown data="data.targetType" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="TargetType" format="object.name" localize="true" list="data.targetType.availableValues" iteratorClassName="org.openflexo.foundation.CodeType" autoSelectFirstRow="false">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </DropDown>
-      <Label label="css_sheet" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" name="CssSheetLabel" localize="true" />
-      <DropDown data="data.cssSheet" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)" name="CssSheet" format="object.name" localize="true" list="data.cssSheet.availableValues" iteratorClassName="org.openflexo.foundation.utils.FlexoCSS" autoSelectFirstRow="false" />
-      <Label label="date_format" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" name="ProjectDateFormatLabel" localize="true" />
-      <DropDown showReset="true" data="data.projectDateFormat" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)" name="ProjectDateFormat" format="object.displayString" localize="true" list="data.projectDateFormat.availableValues" iteratorClassName="org.openflexo.foundation.ie.util.DateFormatType" autoSelectFirstRow="false" />
-      <Label label="creation_date" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" name="CreationDateAsStringLabel" localize="true" />
-      <TextField data="data.creationDateAsString" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" name="CreationDateAsString" readOnly="true" localize="true" />
-      <Label label="creation_user_id" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" name="CreationUserIdLabel" localize="true">
+      <Label label="css_sheet" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="CssSheetLabel" localize="true" />
+      <DropDown data="data.cssSheet" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="CssSheet" format="object.name" localize="true" list="data.cssSheet.availableValues" iteratorClassName="org.openflexo.foundation.utils.FlexoCSS" autoSelectFirstRow="false" />
+      <Label label="date_format" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="ProjectDateFormatLabel" localize="true" />
+      <DropDown showReset="true" data="data.projectDateFormat" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="ProjectDateFormat" format="object.displayString" localize="true" list="data.projectDateFormat.availableValues" iteratorClassName="org.openflexo.foundation.ie.util.DateFormatType" autoSelectFirstRow="false" />
+      <Label label="creation_date" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="CreationDateAsStringLabel" localize="true" />
+      <TextField data="data.creationDateAsString" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="CreationDateAsString" readOnly="true" localize="true" />
+      <Label label="creation_user_id" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="CreationUserIdLabel" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
-      <TextField data="data.creationUserId" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" name="CreationUserId" readOnly="true" localize="true">
+      <TextField data="data.creationUserId" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="CreationUserId" readOnly="true" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </TextField>
     </Tab>
-    <Tab title="Advanced" layout="twocols" darkLevel="0" name="AdvancedTab">
-      <Label label="uri" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" name="URILabel" localize="true" />
-      <TextField data="data.uRI" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" name="URI" readOnly="true" localize="true" />
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,12" darkLevel="0" name="AdvancedTab" opaque="false">
+      <Label label="uri" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="URILabel" localize="true" />
+      <TextField data="data.uRI" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="URI" readOnly="true" localize="true" />
+      <Label label="version" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <TextField data="data.version" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" readOnly="true" localize="true" columns="7" />
+      <Label label="revision" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <TextField data="data.revision" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" columns="7" />
     </Tab>
-    <Tab title="Stats" layout="twocols" darkLevel="0" name="StatsTab">
-      <Label align="center" data="data.statistics.infoLabel" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" width="200" height="60" name="StatisticsinfoLabel" localize="true" />
-      <Label label="include_begin_end" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" name="StatisticsincludeBeginEndNodeLabel" localize="true" />
-      <CheckBox selected="false" data="data.statistics.includeBeginEndNode" constraints="twocols(expandHorizontally=false;expandVertically=false;location=right)" name="StatisticsincludeBeginEndNode" localize="true" />
-      <Label label="# processes" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" name="StatisticsprocessCountLabel" localize="true" />
-      <TextField data="data.statistics.processCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" name="StatisticsprocessCount" readOnly="true" localize="true" />
-      <Label label="# activities" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsactivityCountLabel" localize="true" />
-      <TextField data="data.statistics.activityCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsactivityCount" readOnly="true" localize="true" />
-      <Label label="# activities" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealActivityCountLabel" localize="true" />
-      <TextField data="data.statistics.realActivityCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealActivityCount" readOnly="true" localize="true" />
-      <Label label="# operations" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsoperationCountLabel" localize="true" />
-      <Label label="# operations" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealOperationCountLabel" localize="true" />
-      <TextField data="data.statistics.operationCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsoperationCount" readOnly="true" localize="true" />
-      <TextField data="data.statistics.realOperationCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealOperationCount" readOnly="true" localize="true" />
-      <Label label="# actions" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsactionCountLabel" localize="true" />
-      <TextField data="data.statistics.actionCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsactionCount" readOnly="true" localize="true" />
-      <Label label="# actions" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealActionCountLabel" localize="true" />
-      <TextField data="data.statistics.realActionCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealActionCount" readOnly="true" localize="true" />
-      <Label label="# screens" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" name="StatisticspageCountLabel" localize="true" />
-      <TextField data="data.statistics.pageCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" name="StatisticspageCount" readOnly="true" localize="true" />
-      <Label label="# popups" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" name="StatisticspopupCountLabel" localize="true" />
-      <TextField data="data.statistics.popupCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" name="StatisticspopupCount" readOnly="true" localize="true" />
-      <Label label="# tabs" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" name="StatisticstabCountLabel" localize="true" />
-      <TextField data="data.statistics.tabCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" name="StatisticstabCount" readOnly="true" localize="true" />
-      <Label label="# entities" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" name="StatisticseoEntityCountLabel" localize="true" />
-      <TextField data="data.statistics.eoEntityCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" name="StatisticseoEntityCount" readOnly="true" localize="true" />
-      <Label label="# attributes" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" name="StatisticseoAttributeCountLabel" localize="true" />
-      <TextField data="data.statistics.eoAttributeCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" name="StatisticseoAttributeCount" readOnly="true" localize="true" />
-      <Label label="# relationships" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsTop=5;location=left)" name="StatisticseoRelationshipCountLabel" localize="true" />
-      <TextField data="data.statistics.eoRelationshipCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;location=right)" name="StatisticseoRelationshipCount" readOnly="true" localize="true" />
-      <Panel layout="flow" hGap="5" vGap="0" flowAlignment="CENTER"  constraints="twocols(expandHorizontally=true;expandVertically=false;location=center)">
-          <Button action="data.statistics.refresh()" buttonType="Trigger" label="refresh" localize="true" />
+    <Tab title="ImportedProjects" layout="twocols" titleFont="SansSerif,0,12" darkLevel="0" name="ImportedProjectsTab" opaque="false">
+      <Table iteratorClassName="org.openflexo.foundation.rm.FlexoProjectReference" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="ImportedProject" data="data.projectData.importedProjects" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
+        <IconColumn data="controller.flexoController.iconForObject(iterator)" title="" columnWidth="20" resizable="false" displayTitle="true" name="icon" />
+        <LabelColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" tooltip="iterator.name" name="label" />
+        <LabelColumn data="iterator.file.absolutePath" title="location" columnWidth="100" resizable="true" displayTitle="true" tooltip="iterator.file.absolutePath" name="label" />
+        <LabelColumn data="iterator.version" title="version" columnWidth="50" resizable="true" displayTitle="true" name="label" />
+        <LabelColumn data="iterator.revision" title="revision" columnWidth="40" resizable="true" displayTitle="true" name="label" />
+        <LabelColumn data="iterator.uRI" title="URI" columnWidth="100" resizable="true" displayTitle="true" tooltip="iterator.uRI" name="label" />
+        <CheckBoxColumn data="(iterator.referredProject != null)" title="loaded" columnWidth="100" resizable="true" displayTitle="true" name="loaded" />
+        <AddAction method="controller.importProject(data)" name="import_project" />
+        <RemoveAction method="controller.unimportProject(data,ImportedProject.selection)" isAvailable="(ImportedProject.selection.size &gt; 0)" name="remove_imported_project" />
+      </Table>
+    </Tab>
+    <Tab title="Stats" layout="twocols" titleFont="SansSerif,0,12" darkLevel="0" name="StatsTab" opaque="false">
+      <Label align="center" data="data.statistics.infoLabel" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" width="200" height="60" name="StatisticsinfoLabel" localize="true" />
+      <Label label="include_begin_end" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="StatisticsincludeBeginEndNodeLabel" localize="true" />
+      <CheckBox selected="false" data="data.statistics.includeBeginEndNode" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="StatisticsincludeBeginEndNode" localize="true" />
+      <Label label="# processes" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="StatisticsprocessCountLabel" localize="true" />
+      <TextField data="data.statistics.processCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="StatisticsprocessCount" readOnly="true" localize="true" />
+      <Label label="# activities" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsactivityCountLabel" localize="true" />
+      <TextField data="data.statistics.activityCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsactivityCount" readOnly="true" localize="true" />
+      <Label label="# activities" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealActivityCountLabel" localize="true" />
+      <TextField data="data.statistics.realActivityCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealActivityCount" readOnly="true" localize="true" />
+      <Label label="# operations" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsoperationCountLabel" localize="true" />
+      <Label label="# operations" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealOperationCountLabel" localize="true" />
+      <TextField data="data.statistics.operationCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsoperationCount" readOnly="true" localize="true" />
+      <TextField data="data.statistics.realOperationCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealOperationCount" readOnly="true" localize="true" />
+      <Label label="# actions" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsactionCountLabel" localize="true" />
+      <TextField data="data.statistics.actionCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsactionCount" readOnly="true" localize="true" />
+      <Label label="# actions" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealActionCountLabel" localize="true" />
+      <TextField data="data.statistics.realActionCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealActionCount" readOnly="true" localize="true" />
+      <Label label="# screens" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="StatisticspageCountLabel" localize="true" />
+      <TextField data="data.statistics.pageCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="StatisticspageCount" readOnly="true" localize="true" />
+      <Label label="# popups" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="StatisticspopupCountLabel" localize="true" />
+      <TextField data="data.statistics.popupCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="StatisticspopupCount" readOnly="true" localize="true" />
+      <Label label="# tabs" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="StatisticstabCountLabel" localize="true" />
+      <TextField data="data.statistics.tabCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="StatisticstabCount" readOnly="true" localize="true" />
+      <Label label="# entities" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="StatisticseoEntityCountLabel" localize="true" />
+      <TextField data="data.statistics.eoEntityCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="StatisticseoEntityCount" readOnly="true" localize="true" />
+      <Label label="# attributes" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="StatisticseoAttributeCountLabel" localize="true" />
+      <TextField data="data.statistics.eoAttributeCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="StatisticseoAttributeCount" readOnly="true" localize="true" />
+      <Label label="# relationships" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;location=left)" name="StatisticseoRelationshipCountLabel" localize="true" />
+      <TextField data="data.statistics.eoRelationshipCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="StatisticseoRelationshipCount" readOnly="true" localize="true" />
+      <Panel layout="flow" hGap="5" vGap="0" flowAlignment="CENTER" titleFont="SansSerif,0,12" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)">
+        <Button action="data.statistics.refresh()" buttonType="Trigger" label="refresh" localize="true" constraints="flow()" />
       </Panel>
     </Tab>
   </TabPanel>

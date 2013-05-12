@@ -20,10 +20,8 @@
 package org.openflexo.fge.view.listener;
 
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Window;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.MouseEvent;
@@ -63,10 +61,12 @@ public class FocusRetriever {
 
 	private boolean cursorChanged = false;
 
+	private Component cursoredComponent;
+
 	private void resetCursorIfRequired() {
 		if (cursorChanged) {
-			Component frame = SwingUtilities.getAncestorOfClass(Window.class, drawingView);
-			frame.setCursor(Cursor.getDefaultCursor());
+			cursoredComponent.setCursor(null);
+			cursoredComponent = null;
 			cursorChanged = false;
 			getController()._setFocusedControlArea(null);
 		}
@@ -83,8 +83,11 @@ public class FocusRetriever {
 			drawingView.getController().setFocusedFloatingLabel(focusOnFloatingLabel(newFocusedObject, event) ? newFocusedObject : null);
 			ControlArea<?> cp = getFocusedControlAreaForDrawable(newFocusedObject, event);
 			if (cp != null) {
-				Component frame = SwingUtilities.getAncestorOfClass(Window.class, drawingView);
-				frame.setCursor(cp.getDraggingCursor());
+				if (cursoredComponent != null) {
+					cursoredComponent.setCursor(null);
+				}
+				cursoredComponent = event.getComponent();
+				cursoredComponent.setCursor(cp.getDraggingCursor());
 				cursorChanged = true;
 				getController()._setFocusedControlArea(cp);
 			} else {
@@ -116,7 +119,8 @@ public class FocusRetriever {
 		}
 
 		FGEView<?> view = drawingView.viewForObject(graphicalRepresentation);
-		FGEView<?> containerView = drawingView.viewForObject(graphicalRepresentation.getContainerGraphicalRepresentation());
+		FGEView<?> containerView = graphicalRepresentation == drawingView.getGraphicalRepresentation() ? drawingView : drawingView
+				.viewForObject(graphicalRepresentation.getContainerGraphicalRepresentation());
 		Point p = SwingUtilities.convertPoint(eventSource, eventLocation, (Component) containerView);
 		if (graphicalRepresentation.getHasText()) {
 			LabelView<?> labelView = view.getLabelView();

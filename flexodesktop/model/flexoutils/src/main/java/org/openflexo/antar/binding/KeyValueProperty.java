@@ -23,6 +23,8 @@ package org.openflexo.antar.binding;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.TreeSet;
 import java.util.logging.Logger;
@@ -253,31 +255,33 @@ public class KeyValueProperty extends Observable {
 	protected Method searchMatchingSetMethod(Class aDeclaringClass, String propertyName, Type aType) {
 		String propertyNameWithFirstCharToUpperCase = propertyName.substring(0, 1).toUpperCase()
 				+ propertyName.substring(1, propertyName.length());
-		String[] tries;
-		if (TypeUtils.isBoolean(aType) && propertyName.startsWith("is")) {
-			tries = new String[4];
-			String propertyNameWithFirstCharToUpperCase2 = propertyName.substring(2);
-			tries[2] = "set" + propertyNameWithFirstCharToUpperCase2;
-			tries[3] = "_set" + propertyNameWithFirstCharToUpperCase2;
-		} else {
-			tries = new String[2];
+		List<String> tries = new ArrayList<String>();
+		tries.add("set" + propertyNameWithFirstCharToUpperCase);
+		tries.add("_set" + propertyNameWithFirstCharToUpperCase);
+		if (TypeUtils.isBoolean(aType)) {
+			if (propertyName.startsWith("is")) {
+				String propertyNameWithFirstCharToUpperCase2 = propertyName.substring(2);
+				tries.add("set" + propertyNameWithFirstCharToUpperCase2);
+				tries.add("_set" + propertyNameWithFirstCharToUpperCase2);
+			} else if (propertyName.startsWith("_is")) {
+				String propertyNameWithFirstCharToUpperCase2 = propertyName.substring(3);
+				tries.add("set" + propertyNameWithFirstCharToUpperCase2);
+				tries.add("_set" + propertyNameWithFirstCharToUpperCase2);
+			}
 		}
-		tries[0] = "set" + propertyNameWithFirstCharToUpperCase;
-		tries[1] = "_set" + propertyNameWithFirstCharToUpperCase;
 
 		if (aType instanceof Class) {
 			for (Method m : aDeclaringClass.getMethods()) {
-				for (int i = 0; i < tries.length; i++) {
-					if (m.getName().equals(tries[i]) && m.getParameterTypes().length == 1 && m.getParameterTypes()[0].equals(aType)) {
+				for (String t : tries) {
+					if (m.getName().equals(t) && m.getParameterTypes().length == 1 && m.getParameterTypes()[0].equals(aType)) {
 						return m;
 					}
 				}
 			}
 		} else {
 			for (Method m : aDeclaringClass.getMethods()) {
-				for (int i = 0; i < tries.length; i++) {
-					if (m.getName().equals(tries[i]) && m.getGenericParameterTypes().length == 1
-							&& m.getGenericParameterTypes()[0].equals(aType)) {
+				for (String t : tries) {
+					if (m.getName().equals(t) && m.getGenericParameterTypes().length == 1 && m.getGenericParameterTypes()[0].equals(aType)) {
 						return m;
 					}
 				}

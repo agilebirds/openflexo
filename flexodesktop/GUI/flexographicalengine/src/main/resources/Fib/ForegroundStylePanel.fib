@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="gridbag" borderTop="0" titleFont="SansSerif,0,11" darkLevel="0" dataClassName="org.openflexo.fge.graphics.ForegroundStyle" controllerClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector$ForegroundStyleDetailsPanel$CustomFIBController" font="SansSerif,0,11" width="280" height="310" name="ForegroundStylePanel">
-  <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" borderTitle="Panel" borderTop="8" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="0" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="EnableStrokePanel">
+<Panel layout="gridbag" borderTop="0" titleFont="SansSerif,0,11" darkLevel="0" dataClassName="org.openflexo.fge.graphics.ForegroundStyle" controllerClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector$ForegroundStyleDetailsPanel$CustomFIBController" font="SansSerif,0,11" width="280" height="310" name="ForegroundStylePanel" opaque="false">
+  <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" borderTitle="Panel" borderTop="8" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="0" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="EnableStrokePanel" opaque="false">
     <CheckBox selected="false" index="1" data="data.noStroke" constraints="flow(anchor=center;expandHorizontally=true;expandVertically=false;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="checkbox" localize="true" />
     <Label label="no_stroke" index="0" constraints="flow(index=0;location=west)" localize="true">
       <LocalizedDictionary />
     </Label>
   </Panel>
-  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="1" constraints="gridbag(anchor=center;expandHorizontally=false;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=1.0)" name="MainPanel">
+  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="1" constraints="gridbag(anchor=center;expandHorizontally=false;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=1.0)" name="MainPanel" opaque="false">
     <Label label="line_width" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" enable="(!(data.noStroke))">
       <LocalizedDictionary />
     </Label>
@@ -34,7 +34,7 @@
       <LocalizedDictionary />
     </DropDown>
   </Panel>
-  <Panel layout="twocols" border="rounded3d" borderTitle="Transparency" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="2" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="TransparencyPanel">
+  <Panel layout="twocols" border="rounded3d" borderTitle="Transparency" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="2" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="TransparencyPanel" opaque="false">
     <Label label="use_transparency" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" enable="(!(data.noStroke))">
       <LocalizedDictionary />
     </Label>
@@ -42,7 +42,7 @@
     <Label label="transparency_level" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" enable="((!(data.noStroke)) &amp; data.useTransparency)" />
     <Number allowsNull="false" minValue="0" maxValue="1" increment="0.05" numberType="DoubleType" columns="3" index="3" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=7;insetsRight=2;insetsTop=0;location=center)" name="TransparencyLevel" localize="true" enable="((!(data.noStroke)) &amp; data.useTransparency)" valueChangedAction="controller.parameterChanged()" />
   </Panel>
-  <Panel layout="flow" hGap="0" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="3" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="controlPanel">
+  <Panel layout="flow" hGap="0" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="3" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="controlPanel" opaque="false">
     <Button action="controller.apply()" buttonType="Trigger" label="apply" index="0" constraints="flow(index=0)" localize="true">
       <LocalizedDictionary />
     </Button>

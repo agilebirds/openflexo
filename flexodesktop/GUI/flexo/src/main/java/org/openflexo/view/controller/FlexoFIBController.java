@@ -20,6 +20,7 @@
 package org.openflexo.view.controller;
 
 import java.awt.event.MouseEvent;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
@@ -34,6 +35,10 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
+import org.openflexo.foundation.action.ImportProject;
+import org.openflexo.foundation.action.RemoveImportedProject;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
@@ -208,6 +213,19 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 
 	public ImageIcon getArrowBottom() {
 		return ARROW_BOTTOM;
+	}
+
+	public void importProject(FlexoProject project) {
+		ImportProject importProject = ImportProject.actionType.makeNewAction(project, null, getEditor());
+		importProject.doAction();
+	}
+
+	public void unimportProject(FlexoProject project, List<FlexoProjectReference> references) {
+		for (FlexoProjectReference ref : references) {
+			RemoveImportedProject removeProject = RemoveImportedProject.actionType.makeNewAction(project, null, getEditor());
+			removeProject.setProjectToRemoveURI(ref.getURI());
+			removeProject.doAction();
+		}
 	}
 
 }

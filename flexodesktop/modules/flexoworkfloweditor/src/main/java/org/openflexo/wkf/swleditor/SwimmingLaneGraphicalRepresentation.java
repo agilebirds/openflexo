@@ -33,9 +33,18 @@ public class SwimmingLaneGraphicalRepresentation extends DrawingGraphicalReprese
 		swimmingLaneRepresentation = aDrawing;
 	}
 
+	public SwimmingLaneRepresentation getSwimmingLaneRepresentation() {
+		return swimmingLaneRepresentation;
+	}
+
 	@Override
 	public double getWidth() {
 		return swimmingLaneRepresentation.getSWLWidth();
+	}
+
+	@Override
+	public void setWidth(double aValue) {
+		swimmingLaneRepresentation.setSWLWidth(aValue);
 	}
 
 	@Override

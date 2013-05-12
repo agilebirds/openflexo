@@ -25,7 +25,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.HeadlessException;
-import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -758,6 +757,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 							isOK = true;
 						} catch (DuplicateResourceException e) {
 						} catch (InvalidNameException e) {
+						} catch (Exception e) {
+							e.printStackTrace();
 						}
 					} else {
 						return true;
@@ -979,22 +980,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 					dialog.getHeight(), Toolkit.getDefaultToolkit().getScreenSize().height));
 		}
 		dialog.setSize(maxDim);
-		if (window != null && window.isVisible()) {
-			Point locationOnScreen = window.getLocationOnScreen();
-			if (locationOnScreen.x < 0) {
-				locationOnScreen.x = 0;
-			}
-			if (locationOnScreen.y < 0) {
-				locationOnScreen.y = 0;
-			}
-			Dimension dim = new Dimension(locationOnScreen.x + window.getWidth() / 2, locationOnScreen.y + window.getHeight() / 2);
-			dialog.setLocation(Math.max(dim.width - dialog.getSize().width / 2, 0), Math.max(dim.height - dialog.getSize().height / 2, 0));
-		} else {
-			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-			dialog.setLocation(Math.max((dim.width - dialog.getSize().width) / 2, 0),
-					Math.max((dim.height - dialog.getSize().height) / 2, 0));
-		}
-		pane.selectInitialValue();
+		dialog.setLocationRelativeTo(window);
 		dialog.setVisible(true);
 		// pane.selectInitialValue();
 		dialog.dispose();

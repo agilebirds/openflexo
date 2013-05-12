@@ -38,6 +38,24 @@
     <Localized key="background_color" lang="English">Background color</Localized>
     <Localized key="background_color" lang="French">Couleur de l'arrière-plan</Localized>
     <Localized key="background_color" lang="Dutch">Background color</Localized>
+    <Localized key="title" lang="English">Title</Localized>
+    <Localized key="title" lang="French">Titre</Localized>
+    <Localized key="title" lang="Dutch">Title</Localized>
+    <Localized key="version" lang="English">Version</Localized>
+    <Localized key="version" lang="French">Version</Localized>
+    <Localized key="version" lang="Dutch">Version</Localized>
+    <Localized key="index" lang="English">Index</Localized>
+    <Localized key="index" lang="French">Index</Localized>
+    <Localized key="index" lang="Dutch">Index</Localized>
+    <Localized key="Drawing" lang="English">Drawing</Localized>
+    <Localized key="Drawing" lang="French">Dessin</Localized>
+    <Localized key="Drawing" lang="Dutch">Drawing</Localized>
+    <Localized key="Basic" lang="English">Basic</Localized>
+    <Localized key="Basic" lang="Dutch">Basis</Localized>
+    <Localized key="Advanced" lang="English">Advanced</Localized>
+    <Localized key="Advanced" lang="Dutch">Geavanceerd</Localized>
+    <Localized key="Graphics" lang="English">Graphics</Localized>
+    <Localized key="Graphics" lang="Dutch">Graphics</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="View" />
 </Panel>

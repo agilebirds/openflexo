@@ -3,7 +3,6 @@ package org.openflexo.foundation.action;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-import java.util.logging.Level;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
@@ -11,8 +10,6 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
-import org.openflexo.foundation.wkf.FlexoWorkflow;
-import org.openflexo.foundation.wkf.RoleList;
 
 public class RemoveImportedProject extends FlexoAction<RemoveImportedProject, FlexoModelObject, FlexoModelObject> {
 
@@ -30,22 +27,21 @@ public class RemoveImportedProject extends FlexoAction<RemoveImportedProject, Fl
 
 		@Override
 		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return object != null && object.getProject() != null;
+			return isEnabled(object, globalSelection);
 		}
 
 		@Override
 		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return object != null && object.getProject() != null;
+			return object != null && object.getProject() != null && object.getProject().getProjectData() != null
+					&& object.getProject().getProjectData().getImportedProjects().size() > 0;
 		}
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(actionType, RoleList.class);
-		FlexoModelObject.addActionForClass(actionType, FlexoWorkflow.class);
 		FlexoModelObject.addActionForClass(actionType, FlexoProject.class);
 	}
 
-	private FlexoProject importingProject;
+	private String projectToRemoveURI;
 
 	public RemoveImportedProject(FlexoModelObject focusedObject, Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -53,13 +49,12 @@ public class RemoveImportedProject extends FlexoAction<RemoveImportedProject, Fl
 
 	@Override
 	protected void doAction(Object context) throws FlexoException {
-		if (getImportingProject().getProjectData() != null) {
+		if (getProject().getProjectData() != null) {
 			String projectToRemoveURI = getProjectToRemoveURI();
-			FlexoProjectReference projectReferenceWithURI = getImportingProject().getProjectData().getProjectReferenceWithURI(
-					projectToRemoveURI);
+			FlexoProjectReference projectReferenceWithURI = getProject().getProjectData().getProjectReferenceWithURI(projectToRemoveURI);
 			if (projectReferenceWithURI != null) {
 				List<FlexoModelObjectReference<?>> toDelete = new ArrayList<FlexoModelObjectReference<?>>();
-				for (FlexoModelObjectReference<?> ref : getImportingProject().getObjectReferences()) {
+				for (FlexoModelObjectReference<?> ref : getProject().getObjectReferences()) {
 					if (projectToRemoveURI.equals(ref.getEnclosingProjectIdentifier())) {
 						toDelete.add(ref);
 					}
@@ -72,27 +67,16 @@ public class RemoveImportedProject extends FlexoAction<RemoveImportedProject, Fl
 		}
 	}
 
+	public FlexoProject getProject() {
+		return getFocusedObject().getProject();
+	}
+
 	public String getProjectToRemoveURI() {
-		if (getFocusedObject() instanceof FlexoWorkflow) {
-			return ((FlexoWorkflow) getFocusedObject()).getProjectURI();
-		} else if (getFocusedObject() instanceof RoleList) {
-			return ((RoleList) getFocusedObject()).getWorkflow().getProjectURI();
-		} else if (getFocusedObject() instanceof FlexoProject) {
-			return ((FlexoProject) getFocusedObject()).getProjectURI();
-		} else {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Don't know how to retrieve project URI from " + getFocusedObject());
-			}
-			return null;
-		}
+		return projectToRemoveURI;
 	}
 
-	public FlexoProject getImportingProject() {
-		return importingProject;
-	}
-
-	public void setImportingProject(FlexoProject importingProject) {
-		this.importingProject = importingProject;
+	public void setProjectToRemoveURI(String projectToRemoveURI) {
+		this.projectToRemoveURI = projectToRemoveURI;
 	}
 
 }

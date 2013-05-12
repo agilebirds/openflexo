@@ -407,14 +407,14 @@ public class CurveConnector extends Connector {
 	}
 
 	@Override
-	public void refreshConnector() {
-		if (!needsRefresh()) {
+	public void refreshConnector(boolean force) {
+		if (!force && !needsRefresh()) {
 			return;
 		}
 
 		updateControlPoints();
 
-		super.refreshConnector();
+		super.refreshConnector(force);
 
 		firstUpdated = true;
 

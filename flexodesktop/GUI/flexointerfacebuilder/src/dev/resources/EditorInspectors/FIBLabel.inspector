@@ -1,21 +1,715 @@
-<Panel className="org.openflexo.fib.editor.controller.FIBInspector" 
-	   name="Inspector" 
-	   layout="border" 
-	   dataClassName="org.openflexo.fib.model.FIBLabel">
-	<Parameter name="title" value="Label"/>
-
-		<TabPanel name="Tab" constraints="border(location=center)">
-
-			<Tab name="BasicTab" title="Basic" index="0" layout="twocols" font="SansSerif,0,11" >
-			
-				<Label label="label" constraints="twocols(location=left)"/>
-				<TextField data="data.label" constraints="twocols(location=right;expandHorizontally=true)" columns="15"/>
-	
-				<Label label="align" constraints="twocols(location=left)"/>
-				<DropDown data="data.align" constraints="twocols(location=right)" showReset="false"/>
-			
-			</Tab>
-						
-		</TabPanel>
-
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.fib.editor.controller.FIBInspector" layout="border" darkLevel="0" dataClassName="org.openflexo.fib.model.FIBLabel" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="name" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <TextField data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" columns="15" />
+      <Label label="data" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="dataLabel" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" valueChangedAction="data.notifyBindingChanged(data.data)" name="dataValue" data="data.data.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+        <Assignment variable="component.bindable" value="data" />
+        <Assignment variable="component.bindingDefinition" value="data.dataBindingDefinition" />
+      </Custom>
+      <Label label="data_class" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.ClassSelector" localize="true" manageDynamicModel="true" data="data.dataClass" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" />
+      <Label label="controller_class" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" visible="data.isRootComponent" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.ClassSelector" localize="true" manageDynamicModel="true" data="data.controllerClass" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="data.isRootComponent" />
+      <Label label="visible" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="visibleLabel" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" name="visibleValue" data="data.visible.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+        <Assignment variable="component.bindable" value="data" />
+        <Assignment variable="component.bindingDefinition" value="data.VISIBLE" />
+      </Custom>
+      <Label label="enable" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.enable.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+        <Assignment variable="component.bindable" value="data" />
+        <Assignment variable="component.bindingDefinition" value="data.ENABLE" />
+      </Custom>
+      <Label label="format" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.format.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+        <Assignment variable="component.bindable" value="data.formatter" />
+        <Assignment variable="component.bindingDefinition" value="data.FORMAT" />
+      </Custom>
+      <CheckBox selected="false" data="data.localize" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <Label label="localize_component" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" />
+      <CheckBox selected="false" data="data.readOnly" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <Label label="read_only_component" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" />
+      <Label label="label" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <TextField data="data.label" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" columns="15" />
+      <Label label="align" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <DropDown data="data.align" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" iteratorClassName="org.openflexo.fib.model.FIBLabel$Align" autoSelectFirstRow="false" />
+    </Tab>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="index" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" data="data.index" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="index" localize="true" />
+      <Label label="value_transform" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.valueTransform.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+        <Assignment variable="component.bindable" value="data.valueBindable" />
+        <Assignment variable="component.bindingDefinition" value="data.valueTransformBindingDefinition" />
+      </Custom>
+      <Label label="value_validator" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.valueValidator.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+        <Assignment variable="component.bindable" value="data.valueBindable" />
+        <Assignment variable="component.bindingDefinition" value="data.valueValidatorDefinition" />
+      </Custom>
+    </Tab>
+    <Tab title="Controls" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="ControlsTab">
+      <Label label="click_action" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.clickAction.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+        <Assignment variable="component.bindable" value="data.eventListener" />
+        <Assignment variable="component.bindingDefinition" value="data.CLICK_ACTION" />
+      </Custom>
+      <Label label="double_click_action" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.doubleClickAction.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+        <Assignment variable="component.bindable" value="data.eventListener" />
+        <Assignment variable="component.bindingDefinition" value="data.DOUBLE_CLICK_ACTION" />
+      </Custom>
+      <Label label="right_click_action" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.rightClickAction.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+        <Assignment variable="component.bindable" value="data.eventListener" />
+        <Assignment variable="component.bindingDefinition" value="data.RIGHT_CLICK_ACTION" />
+      </Custom>
+      <Label label="enter_pressed_action" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.enterPressedAction.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+        <Assignment variable="component.bindable" value="data" />
+        <Assignment variable="component.bindingDefinition" value="data.ENTER_PRESSED_ACTION" />
+      </Custom>
+      <Label label="value_changed" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.valueChangedAction.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+        <Assignment variable="component.bindable" value="data" />
+        <Assignment variable="component.bindingDefinition" value="data.VALUE_CHANGED_ACTION" />
+      </Custom>
+      <CheckBox selected="false" data="data.manageDynamicModel" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <Label label="dynamic_model" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" />
+    </Tab>
+    <Tab title="Layout" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="LayoutTab">
+      <Panel layout="twocols" border="titled" borderTitle="free_location_constraints" titleFont="SansSerif,0,11" darkLevel="0" data="data.constraints" dataClassName="org.openflexo.fib.model.NoneLayoutConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" visible="(data.parent.layout = &quot;none&quot;)" name="NoneConstraints" />
+      <Panel layout="twocols" border="titled" borderTitle="flow_layout_constraints" titleFont="SansSerif,0,11" darkLevel="0" data="data.constraints" dataClassName="org.openflexo.fib.model.FlowLayoutConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" visible="(data.parent.layout = &quot;flow&quot;)" name="FlowConstraints">
+        <Label label="index" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+        <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" data="data.index" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="flowConstraintsIndex" localize="true" />
+      </Panel>
+      <Panel layout="twocols" border="titled" borderTitle="border_layout_constraints" titleFont="SansSerif,0,11" darkLevel="0" data="data.constraints" dataClassName="org.openflexo.fib.model.BorderLayoutConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" visible="(data.parent.layout = &quot;border&quot;)" name="BorderConstraints">
+        <Label label="location" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+        <DropDown data="BorderConstraints.data.location" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" iteratorClassName="org.openflexo.fib.model.BorderLayoutConstraints$BorderLayoutLocation" autoSelectFirstRow="false" />
+      </Panel>
+      <Panel layout="twocols" border="titled" borderTitle="grid_layout_constraints" titleFont="SansSerif,0,11" darkLevel="0" data="data.constraints" dataClassName="org.openflexo.fib.model.GridLayoutConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" visible="(data.parent.layout = &quot;grid&quot;)" name="GridConstraints">
+        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)">
+          <Label label="column" constraints="flow()" localize="true" />
+          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="GridConstraints.data.x" constraints="flow()" name="gridConstraintsX" localize="true" />
+          <Label label="row" constraints="flow()" localize="true" />
+          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="GridConstraints.data.y" constraints="flow()" name="gridConstraintsY" localize="true" />
+        </Panel>
+      </Panel>
+      <Panel layout="twocols" border="titled" borderTitle="box_layout_constraints" titleFont="SansSerif,0,11" darkLevel="0" data="data.constraints" dataClassName="org.openflexo.fib.model.BoxLayoutConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" visible="(data.parent.layout = &quot;box&quot;)" name="BoxConstraints">
+        <Label label="index" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+        <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" data="BoxConstraints.data.index" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="boxConstraintsIndex" localize="true" />
+        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)">
+          <Label label="alignmentX" constraints="flow()" localize="true" />
+          <Number minValue="0.0" maxValue="1.0" increment="0.05" numberType="FloatType" columns="5" data="BoxConstraints.data.alignmentX" constraints="flow()" name="boxConstraintsAlignX" localize="true" />
+          <Label label="alignmentY" constraints="flow()" localize="true" />
+          <Number minValue="0.0" maxValue="1.0" increment="0.05" numberType="FloatType" columns="5" data="BoxConstraints.data.alignmentY" constraints="flow()" name="boxConstraintsAlignY" localize="true" />
+        </Panel>
+      </Panel>
+      <Panel layout="twocols" border="titled" borderTitle="two_cols_layout_constraints" titleFont="SansSerif,0,11" darkLevel="0" index="100" data="data.constraints" dataClassName="org.openflexo.fib.model.TwoColsLayoutConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;index=100;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" visible="(data.parent.layout = &quot;twocols&quot;)" name="TwoColsConstraints">
+        <Label label="index" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+        <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" data="TwoColsConstraints.data.index" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="twoColsConstraintsIndex" localize="true" />
+        <Label label="location" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+        <DropDown data="TwoColsConstraints.data.location" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" iteratorClassName="org.openflexo.fib.model.TwoColsLayoutConstraints$TwoColsLayoutLocation" autoSelectFirstRow="false" />
+        <CheckBox selected="false" data="TwoColsConstraints.data.expandHorizontally" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+        <Label label="expand_horizontally" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" />
+        <CheckBox selected="false" data="TwoColsConstraints.data.expandVertically" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+        <Label label="expand_vertically" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" />
+        <Label label="Insets" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+          <Label label="top" constraints="flow()" localize="true" />
+          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="1" data="TwoColsConstraints.data.insetsTop" constraints="flow()" name="twoColsConstraintsInsetsTop" localize="true" />
+          <Label label="left" constraints="flow()" localize="true" />
+          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="1" data="TwoColsConstraints.data.insetsLeft" constraints="flow()" name="twoColsConstraintsInsetsLeft" localize="true" />
+          <Label label="bottom" constraints="flow()" localize="true" />
+          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="1" data="TwoColsConstraints.data.insetsBottom" constraints="flow()" name="twoColsConstraintsInsetsBottom" localize="true" />
+          <Label label="right" constraints="flow()" localize="true" />
+          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="1" data="TwoColsConstraints.data.insetsRight" constraints="flow()" name="twoColsConstraintsInsetsRight" localize="true" />
+        </Panel>
+      </Panel>
+      <Panel layout="twocols" border="titled" borderTitle="grid_bag_layout_constraints" titleFont="SansSerif,0,11" darkLevel="0" index="100" data="data.constraints" dataClassName="org.openflexo.fib.model.GridBagLayoutConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" visible="(data.parent.layout = &quot;gridbag&quot;)" name="GridBagConstraints">
+        <Label label="index" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+        <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" data="GridBagConstraints.data.index" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="gridBagConstraintsIndex" localize="true" />
+        <Label label="gridX" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="GridBagConstraints.data.gridX" constraints="flow()" visible="(GridBagConstraints.data.gridX &gt;= 0)" name="gridBagConstraintsGridX" localize="true" />
+          <CheckBox selected="false" data="GridBagConstraints.data.gridXRelative" constraints="flow()" localize="true" />
+          <Label label="relative" constraints="flow()" localize="true" />
+        </Panel>
+        <Label label="gridY" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="GridBagConstraints.data.gridY" constraints="flow()" visible="(GridBagConstraints.data.gridY &gt;= 0)" name="gridBagConstraintsGridY" localize="true" />
+          <CheckBox selected="false" data="GridBagConstraints.data.gridYRelative" constraints="flow()" localize="true" />
+          <Label label="relative" constraints="flow()" localize="true" />
+        </Panel>
+        <Label label="gridWidth" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="GridBagConstraints.data.gridWidth" constraints="flow()" visible="(GridBagConstraints.data.gridWidth &gt; 0)" name="gridBagConstraintsGridWidth" localize="true" />
+          <CheckBox selected="false" data="GridBagConstraints.data.gridWidthRelative" constraints="flow()" localize="true" />
+          <Label label="relative" constraints="flow()" localize="true" />
+          <CheckBox selected="false" data="GridBagConstraints.data.gridWidthRemainder" constraints="flow()" localize="true" />
+          <Label label="remainder" constraints="flow()" localize="true" />
+        </Panel>
+        <Label label="gridHeight" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="GridBagConstraints.data.gridHeight" constraints="flow()" visible="(GridBagConstraints.data.gridHeight &gt; 0)" name="gridBagConstraintsGridHeight" localize="true" />
+          <CheckBox selected="false" data="GridBagConstraints.data.gridHeightRelative" constraints="flow()" localize="true" />
+          <Label label="relative" constraints="flow()" localize="true" />
+          <CheckBox selected="false" data="GridBagConstraints.data.gridHeightRemainder" constraints="flow()" localize="true" />
+          <Label label="remainder" constraints="flow()" localize="true" />
+        </Panel>
+        <Label label="weights" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+          <Label label="weightX" constraints="flow()" localize="true" />
+          <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" columns="3" data="GridBagConstraints.data.weightX" constraints="flow()" name="gridBagConstraintsWeightX" localize="true" />
+          <Label label="weightY" constraints="flow()" localize="true" />
+          <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" columns="3" data="GridBagConstraints.data.weightY" constraints="flow()" name="gridBagConstraintsWeightY" localize="true" />
+        </Panel>
+        <Label label="anchor" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+        <DropDown data="GridBagConstraints.data.anchor" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" iteratorClassName="org.openflexo.fib.model.GridBagLayoutConstraints$AnchorType" autoSelectFirstRow="false" />
+        <Label label="fill" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+        <DropDown data="GridBagConstraints.data.fill" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" iteratorClassName="org.openflexo.fib.model.GridBagLayoutConstraints$FillType" autoSelectFirstRow="false" />
+        <Label label="pads" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+          <Label label="padX" constraints="flow()" localize="true" />
+          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="GridBagConstraints.data.padX" constraints="flow()" name="gridBagConstraintsPadX" localize="true" />
+          <Label label="padY" constraints="flow()" localize="true" />
+          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" data="GridBagConstraints.data.padY" constraints="flow()" name="gridBagConstraintsPadY" localize="true" />
+        </Panel>
+        <Label label="Insets" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+          <Label label="top" constraints="flow()" localize="true" />
+          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="1" data="GridBagConstraints.data.insetsTop" constraints="flow()" name="gridBagConstraintsInsetsTop" localize="true" />
+          <Label label="left" constraints="flow()" localize="true" />
+          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="1" data="GridBagConstraints.data.insetsLeft" constraints="flow()" name="gridBagConstraintsInsetsLeft" localize="true" />
+          <Label label="bottom" constraints="flow()" localize="true" />
+          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="1" data="GridBagConstraints.data.insetsBottom" constraints="flow()" name="gridBagConstraintsInsetsBottom" localize="true" />
+          <Label label="right" constraints="flow()" localize="true" />
+          <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="1" data="GridBagConstraints.data.insetsRight" constraints="flow()" name="gridBagConstraintsInsetsRight" localize="true" />
+        </Panel>
+      </Panel>
+      <Panel layout="twocols" border="titled" borderTitle="component_size_management" titleFont="SansSerif,0,11" darkLevel="0" index="100" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)">
+        <CheckBox selected="false" index="0" data="data.definePreferredDimensions" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="DefinePreferredSize" localize="true" />
+        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" index="1" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)">
+          <Label label="define_preferred_dimensions" index="0" constraints="flow(index=0)" localize="true" />
+          <Number minValue="0" maxValue="65535" increment="5" numberType="IntegerType" columns="3" index="1" data="data.width" constraints="flow(index=1)" name="preferredWidth" localize="true" enable="data.definePreferredDimensions" />
+          <Label label="X" index="2" constraints="flow(index=2)" localize="true" enable="data.definePreferredDimensions" />
+          <Number minValue="0" maxValue="65535" increment="5" numberType="IntegerType" columns="3" index="3" data="data.height" constraints="flow(index=3)" name="preferredHeight" localize="true" enable="data.definePreferredDimensions" />
+          <Label label="pixels" index="4" constraints="flow(index=4)" localize="true" />
+        </Panel>
+        <CheckBox selected="false" index="2" data="data.defineMinDimensions" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="DefineMinSize" localize="true" />
+        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" index="3" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)">
+          <Label label="define_minimum_dimensions" index="0" constraints="flow(index=0)" localize="true" />
+          <Number minValue="0" maxValue="65535" increment="5" numberType="IntegerType" columns="3" index="1" data="data.minWidth" constraints="flow(index=1)" name="minWidth" localize="true" enable="data.defineMinDimensions" />
+          <Label label="X" index="2" constraints="flow(index=2)" localize="true" enable="data.defineMinDimensions" />
+          <Number minValue="0" maxValue="65535" increment="5" numberType="IntegerType" columns="3" index="3" data="data.minHeight" constraints="flow(index=3)" name="minHeight" localize="true" enable="data.defineMinDimensions" />
+          <Label label="pixels" index="4" constraints="flow(index=4)" localize="true" />
+        </Panel>
+        <CheckBox selected="false" index="4" data="data.defineMaxDimensions" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="DefineMaxSize" localize="true" />
+        <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" titleFont="SansSerif,0,11" darkLevel="0" index="5" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)">
+          <Label label="define_maximum_dimensions" index="0" constraints="flow(index=0)" localize="true" />
+          <Number minValue="0" maxValue="65535" increment="5" numberType="IntegerType" columns="3" index="1" data="data.maxWidth" constraints="flow(index=1)" name="maxWidth" localize="true" enable="data.defineMaxDimensions" />
+          <Label label="X" index="2" constraints="flow(index=2)" localize="true" enable="data.defineMaxDimensions" />
+          <Number minValue="0" maxValue="65535" increment="5" numberType="IntegerType" columns="3" index="3" data="data.maxHeight" constraints="flow(index=3)" name="maxHeight" localize="true" enable="data.defineMaxDimensions" />
+          <Label label="pixels" index="4" constraints="flow(index=4)" localize="true" />
+        </Panel>
+      </Panel>
+      <Panel layout="twocols" border="titled" borderTitle="split_layout_constraints" titleFont="SansSerif,0,11" darkLevel="0" index="100" data="data.constraints" dataClassName="org.openflexo.fib.model.SplitLayoutConstraints" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" visible="(data.parent.layout = &quot;split&quot;)" name="SplitLayoutConstraints">
+        <Label label="identifier" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+        <DropDown index="1" data="SplitLayoutConstraints.data.splitLeaf" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" format="object.name" localize="true" list="SplitLayoutConstraints.data.availableLeaves" iteratorClassName="org.openflexo.swing.layout.MultiSplitLayout$Leaf" autoSelectFirstRow="true" />
+        <Label label="weight" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+        <Number minValue="0" maxValue="1" increment="0.05" numberType="FloatType" columns="3" index="3" data="SplitLayoutConstraints.data.weight" constraints="twocols(expandHorizontally=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Weight" localize="true" />
+      </Panel>
+      <Panel layout="twocols" border="titled" borderTitle="scroll_bar_policy" titleFont="SansSerif,0,11" darkLevel="0" index="100" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" name="ScrollBarPolicy">
+        <CheckBox selected="false" data="data.useScrollBar" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+        <Label label="use_scrollbar" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" />
+        <Label label="horizontal_policy" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" visible="data.useScrollBar" localize="true" />
+        <DropDown data="data.horizontalScrollbarPolicy" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="data.useScrollBar" localize="true" iteratorClassName="org.openflexo.fib.model.FIBComponent$HorizontalScrollBarPolicy" autoSelectFirstRow="false" />
+        <Label label="vertical_policy" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" visible="data.useScrollBar" localize="true" />
+        <DropDown data="data.verticalScrollbarPolicy" constraints="twocols(expandHorizontally=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="data.useScrollBar" localize="true" iteratorClassName="org.openflexo.fib.model.FIBComponent$VerticalScrollBarPolicy" autoSelectFirstRow="false" />
+      </Panel>
+    </Tab>
+    <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="GraphicsTab">
+      <Panel layout="twocols" border="titled" borderTitle="font_and_colors" titleFont="SansSerif,0,11" darkLevel="0" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)">
+        <Panel layout="gridbag" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+          <Label label="define_specific_font" index="1" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=5;insetsRight=5;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+          <Font sampleText="Sample for this font" index="2" data="data.font" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+          <Label label="background_color" index="5" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=5;insetsRight=5;insetsTop=5;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+          <Color index="6" data="data.backgroundColor" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+          <Label label="foreground_color" index="9" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=9;insetsBottom=0;insetsLeft=5;insetsRight=5;insetsTop=5;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+          <Color index="10" data="data.foregroundColor" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=10;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=5;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+          <Label label="opaque" index="12" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=12;insetsBottom=0;insetsLeft=5;insetsRight=5;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+          <CheckBox selected="false" index="12" data="data.opaque" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=11;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+        </Panel>
+      </Panel>
+    </Tab>
+    <Tab title="Depends" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="5" font="SansSerif,0,11" name="DependenciesTab">
+      <Panel layout="border" border="titled" borderTitle="Dynamic dependencies" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)">
+        <Table iteratorClassName="org.openflexo.fib.model.FIBComponent" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="DependenciesTable" data="data.mayDepends" constraints="border(location=center)">
+          <LabelColumn data="data.toString" title="owner" columnWidth="200" resizable="true" displayTitle="true" />
+          <LabelColumn data="iterator.toString" title="dependency" columnWidth="200" resizable="true" displayTitle="true" />
+        </Table>
+      </Panel>
+      <Panel layout="border" border="titled" borderTitle="Explicit dependencies" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)">
+        <Table iteratorClassName="org.openflexo.fib.model.FIBDependancy" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="DependenciesTable" data="data.explicitDependancies" constraints="border(location=center)">
+          <LabelColumn data="iterator.owner.toString" title="owner" columnWidth="200" resizable="true" displayTitle="true" />
+          <DropDownColumn list="iterator.rootComponent.namedComponents" data="iterator.masterComponent" title="dependency" columnWidth="200" resizable="true" displayTitle="true" />
+          <AddAction method="data.createNewExplicitDependancy()" name="make_new_dependency" />
+          <RemoveAction method="data.deleteExplicitDependancy(selected)" name="delete_dependency" />
+        </Table>
+      </Panel>
+    </Tab>
+    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="6" font="SansSerif,0,11" name="DocumentationTab">
+      <TextArea data="data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" localize="true" />
+      <Label label="tooltip" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.fib.utils.BindingSelector" localize="true" manageDynamicModel="true" data="data.tooltip.binding" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+        <Assignment variable="component.bindable" value="data" />
+        <Assignment variable="component.bindingDefinition" value="data.TOOLTIP" />
+      </Custom>
+      <Label label="tooltip_text" constraints="twocols(expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+      <TextField data="data.tooltipText" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" columns="15" />
+    </Tab>
+    <Tab title="Params" layout="border" titleFont="SansSerif,0,11" darkLevel="0" index="7" font="SansSerif,0,11" name="ParametersTab">
+      <Table iteratorClassName="org.openflexo.fib.model.FIBParameter" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="ParametersTable" data="data.parameters" constraints="border(location=center)">
+        <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" name="name" />
+        <TextFieldColumn data="iterator.value" title="value" columnWidth="200" resizable="true" displayTitle="true" name="description" />
+        <AddAction method="data.createNewParameter()" isAvailable="data.isParameterAddable()" name="make_new_parameter" />
+        <RemoveAction method="data.deleteParameter(selected)" isAvailable="data.isParameterDeletable(selected)" name="delete_parameter" />
+      </Table>
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="enable" lang="English">Enable</Localized>
+    <Localized key="format" lang="English">Format</Localized>
+    <Localized key="enable" lang="French">Activer</Localized>
+    <Localized key="format" lang="French">Format</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="enable" lang="Dutch">Enable</Localized>
+    <Localized key="format" lang="Dutch">Format</Localized>
+    <Localized key="dynamic_model" lang="French">Modèle dynamique</Localized>
+    <Localized key="localize_component" lang="French">Localiser le composant</Localized>
+    <Localized key="read_only_component" lang="French">Composant en lecture seule</Localized>
+    <Localized key="value_changed" lang="French">Valeur changée</Localized>
+    <Localized key="value_changed" lang="English">Value changed</Localized>
+    <Localized key="dynamic_model" lang="English">Dynamic model</Localized>
+    <Localized key="localize_component" lang="English">Localize component</Localized>
+    <Localized key="read_only_component" lang="English">Read-only component</Localized>
+    <Localized key="value_changed" lang="Dutch">Value changed</Localized>
+    <Localized key="read_only_component" lang="Dutch">Read-only component</Localized>
+    <Localized key="localize_component" lang="Dutch">Localize component</Localized>
+    <Localized key="dynamic_model" lang="Dutch">Dynamic model</Localized>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="index" lang="English">Index</Localized>
+    <Localized key="location" lang="English">Location</Localized>
+    <Localized key="column" lang="English">Column</Localized>
+    <Localized key="top" lang="English">Top</Localized>
+    <Localized key="left" lang="English">Left</Localized>
+    <Localized key="right" lang="English">Right</Localized>
+    <Localized key="define_specific_font" lang="English">Define specific font</Localized>
+    <Localized key="define_preferred_dimensions" lang="English">Define preferred dimensions</Localized>
+    <Localized key="width" lang="English">Width</Localized>
+    <Localized key="height" lang="English">Height</Localized>
+    <Localized key="value" lang="English">Value</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="index" lang="French">Index</Localized>
+    <Localized key="location" lang="French">Positionement</Localized>
+    <Localized key="column" lang="French">Colonne</Localized>
+    <Localized key="top" lang="French">Haut</Localized>
+    <Localized key="left" lang="French">Gauche</Localized>
+    <Localized key="right" lang="French">Droit</Localized>
+    <Localized key="define_specific_font" lang="French">Définir la police spécifique</Localized>
+    <Localized key="define_preferred_dimensions" lang="French">Définir les dimensions préférées</Localized>
+    <Localized key="width" lang="French">Largeur</Localized>
+    <Localized key="height" lang="French">Hauteur</Localized>
+    <Localized key="value" lang="French">Valeur</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Graphics" lang="French">Graphisme</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="index" lang="Dutch">Index</Localized>
+    <Localized key="location" lang="Dutch">Location</Localized>
+    <Localized key="column" lang="Dutch">Column</Localized>
+    <Localized key="top" lang="Dutch">Top</Localized>
+    <Localized key="left" lang="Dutch">Left</Localized>
+    <Localized key="right" lang="Dutch">Right</Localized>
+    <Localized key="define_specific_font" lang="Dutch">Define specific font</Localized>
+    <Localized key="define_preferred_dimensions" lang="Dutch">Define preferred dimensions</Localized>
+    <Localized key="width" lang="Dutch">Width</Localized>
+    <Localized key="height" lang="Dutch">Height</Localized>
+    <Localized key="value" lang="Dutch">Value</Localized>
+    <Localized key="alignmentX" lang="French">Alignement X</Localized>
+    <Localized key="alignmentY" lang="French">Alignement Y</Localized>
+    <Localized key="anchor" lang="French">Ancrage</Localized>
+    <Localized key="bottom" lang="French">Bas</Localized>
+    <Localized key="data" lang="French">Donnée</Localized>
+    <Localized key="data_class" lang="French">Classe de donnée</Localized>
+    <Localized key="delete_dependency" lang="French">Supprimer la dépendance</Localized>
+    <Localized key="delete_parameter" lang="French">Supprimer le paramètre</Localized>
+    <Localized key="dependency" lang="French">Dépendance</Localized>
+    <Localized key="expand_horizontally" lang="French">Etendre horizontalement</Localized>
+    <Localized key="expand_vertically" lang="French">Etendre verticalement</Localized>
+    <Localized key="fill" lang="French">Remplir</Localized>
+    <Localized key="gridHeight" lang="French">Grid height</Localized>
+    <Localized key="gridWidth" lang="French">Grid width</Localized>
+    <Localized key="gridX" lang="French">Grid X</Localized>
+    <Localized key="gridY" lang="French">Grid Y</Localized>
+    <Localized key="Insets" lang="French">Insets</Localized>
+    <Localized key="make_new_dependency" lang="French">Créer une nouvelle dépendance</Localized>
+    <Localized key="make_new_parameter" lang="French">Créer un nouveau paramètre</Localized>
+    <Localized key="owner" lang="French">Propriétaire</Localized>
+    <Localized key="pads" lang="French">Pads</Localized>
+    <Localized key="padX" lang="French">Pad X</Localized>
+    <Localized key="padY" lang="French">Pad Y</Localized>
+    <Localized key="Params" lang="French">Params</Localized>
+    <Localized key="owner" lang="English">Owner</Localized>
+    <Localized key="pads" lang="English">Pads</Localized>
+    <Localized key="pads" lang="Dutch">Pads</Localized>
+    <Localized key="padX" lang="English">Pad X</Localized>
+    <Localized key="padX" lang="Dutch">Pad X</Localized>
+    <Localized key="padY" lang="English">Pad Y</Localized>
+    <Localized key="padY" lang="Dutch">Pad Y</Localized>
+    <Localized key="owner" lang="Dutch">Owner</Localized>
+    <Localized key="make_new_parameter" lang="English">Make new parameter</Localized>
+    <Localized key="make_new_parameter" lang="Dutch">Make new parameter</Localized>
+    <Localized key="make_new_dependency" lang="English">Make new dependency</Localized>
+    <Localized key="make_new_dependency" lang="Dutch">Make new dependency</Localized>
+    <Localized key="gridY" lang="English">Grid Y</Localized>
+    <Localized key="gridY" lang="Dutch">Grid Y</Localized>
+    <Localized key="gridX" lang="English">Grid X</Localized>
+    <Localized key="gridX" lang="Dutch">Grid X</Localized>
+    <Localized key="gridWidth" lang="English">Grid width</Localized>
+    <Localized key="gridWidth" lang="Dutch">Grid width</Localized>
+    <Localized key="gridHeight" lang="English">Grid height</Localized>
+    <Localized key="gridHeight" lang="Dutch">Grid height</Localized>
+    <Localized key="fill" lang="English">Fill</Localized>
+    <Localized key="fill" lang="Dutch">Fill</Localized>
+    <Localized key="expand_vertically" lang="English">Expand vertically</Localized>
+    <Localized key="expand_vertically" lang="Dutch">Expand vertically</Localized>
+    <Localized key="expand_horizontally" lang="English">Expand horizontally</Localized>
+    <Localized key="expand_horizontally" lang="Dutch">Expand horizontally</Localized>
+    <Localized key="dependency" lang="English">Dependency</Localized>
+    <Localized key="dependency" lang="Dutch">Dependency</Localized>
+    <Localized key="delete_parameter" lang="English">Delete parameter</Localized>
+    <Localized key="delete_parameter" lang="Dutch">Delete parameter</Localized>
+    <Localized key="delete_dependency" lang="English">Delete dependency</Localized>
+    <Localized key="delete_dependency" lang="Dutch">Delete dependency</Localized>
+    <Localized key="data_class" lang="English">Data class</Localized>
+    <Localized key="data_class" lang="Dutch">Data class</Localized>
+    <Localized key="data" lang="English">Data</Localized>
+    <Localized key="data" lang="Dutch">Data</Localized>
+    <Localized key="bottom" lang="English">Bottom</Localized>
+    <Localized key="bottom" lang="Dutch">Bottom</Localized>
+    <Localized key="anchor" lang="English">Anchor</Localized>
+    <Localized key="anchor" lang="Dutch">Anchor</Localized>
+    <Localized key="alignmentX" lang="English">Alignment X</Localized>
+    <Localized key="alignmentX" lang="Dutch">Alignment X</Localized>
+    <Localized key="alignmentY" lang="English">Alignment Y</Localized>
+    <Localized key="alignmentY" lang="Dutch">Alignment Y</Localized>
+    <Localized key="font_and_colors" lang="English">Font and colors</Localized>
+    <Localized key="font_and_colors" lang="French">Polices et couleurs</Localized>
+    <Localized key="component_size_management" lang="English">Component size management</Localized>
+    <Localized key="component_size_management" lang="French">Gestion de la taille des composants</Localized>
+    <Localized key="background_color" lang="English">Background color</Localized>
+    <Localized key="foreground_color" lang="English">Foreground color</Localized>
+    <Localized key="background_color" lang="French">Couleur de l'arrière-plan</Localized>
+    <Localized key="foreground_color" lang="French">Couleur d'avant-plan</Localized>
+    <Localized key="background_color" lang="Dutch">Background color</Localized>
+    <Localized key="foreground_color" lang="Dutch">Foreground color</Localized>
+    <Localized key="border_layout_constraints" lang="French">Contraintes de mise en page des bords</Localized>
+    <Localized key="box_layout_constraints" lang="French">Contraintes des mise en page des boîtes</Localized>
+    <Localized key="grid_bag_layout_constraints" lang="French">Contraintes des mise en page de grid bag</Localized>
+    <Localized key="grid_layout_constraints" lang="French">Contraintes de mise en page de grille</Localized>
+    <Localized key="free_location_constraints" lang="French">Contraintes des free locations</Localized>
+    <Localized key="flow_layout_constraints" lang="French">Contraintes de mise en page des flux</Localized>
+    <Localized key="border_layout_constraints" lang="English">Border layout constraints</Localized>
+    <Localized key="box_layout_constraints" lang="English">Box layout constraints</Localized>
+    <Localized key="define_maximum_dimensions" lang="English">Define maximum dimensions</Localized>
+    <Localized key="define_minimum_dimensions" lang="English">Define minimum dimensions</Localized>
+    <Localized key="flow_layout_constraints" lang="English">Flow layout constraints</Localized>
+    <Localized key="free_location_constraints" lang="English">Free location constraints</Localized>
+    <Localized key="grid_bag_layout_constraints" lang="English">Grid bag layout constraints</Localized>
+    <Localized key="grid_layout_constraints" lang="English">Grid layout constraints</Localized>
+    <Localized key="horizontal_policy" lang="French">horizontal_policy</Localized>
+    <Localized key="horizontal_policy" lang="English">horizontal_policy</Localized>
+    <Localized key="vertical_policy" lang="French">Politique verticale</Localized>
+    <Localized key="vertical_policy" lang="English">Vertical policy</Localized>
+    <Localized key="define_maximum_dimensions" lang="French">Definir les dimensions maximum</Localized>
+    <Localized key="define_minimum_dimensions" lang="French">Definir les dimensions minimum</Localized>
+    <Localized key="scroll_bar_policy" lang="French">Politique de scrool bar</Localized>
+    <Localized key="scroll_bar_policy" lang="English">Scroll bar policy</Localized>
+    <Localized key="two_cols_layout_constraints" lang="French">Contraintes de mise en page en deux colonnes</Localized>
+    <Localized key="two_cols_layout_constraints" lang="English">Two cols layout constraints</Localized>
+    <Localized key="use_scrollbar" lang="French">use_scrollbar</Localized>
+    <Localized key="use_scrollbar" lang="English">use_scrollbar</Localized>
+    <Localized key="visible" lang="French">Visible</Localized>
+    <Localized key="visible" lang="English">Visible</Localized>
+    <Localized key="weights" lang="French">weights</Localized>
+    <Localized key="weights" lang="English">weights</Localized>
+    <Localized key="weightX" lang="French">weightX</Localized>
+    <Localized key="weightY" lang="French">weightY</Localized>
+    <Localized key="weightX" lang="English">weightX</Localized>
+    <Localized key="weightY" lang="English">weightY</Localized>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="value" lang="English">Value</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="value" lang="French">Valeur</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="Graphics" lang="French">Graphisme</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="value" lang="Dutch">Value</Localized>
+    <Localized key="delete_parameter" lang="French">Supprimer le paramètre</Localized>
+    <Localized key="Depends" lang="French">Depends</Localized>
+    <Localized key="Doc" lang="French">Doc</Localized>
+    <Localized key="make_new_parameter" lang="French">Créer un nouveau paramètre</Localized>
+    <Localized key="Params" lang="French">Paramètres</Localized>
+    <Localized key="Params" lang="English">Params</Localized>
+    <Localized key="make_new_parameter" lang="English">Make new parameter</Localized>
+    <Localized key="delete_parameter" lang="English">Delete parameter</Localized>
+    <Localized key="controller_class" lang="English">controller_class</Localized>
+    <Localized key="controller_class" lang="French">controller_class</Localized>
+    <Localized key="controller_class" lang="Dutch">controller_class</Localized>
+    <Localized key="label" lang="English">Label</Localized>
+    <Localized key="label" lang="French">Label</Localized>
+    <Localized key="label" lang="Dutch">Label</Localized>
+    <Localized key="align" lang="English">Align</Localized>
+    <Localized key="align" lang="French">Aligner</Localized>
+    <Localized key="align" lang="Dutch">Align</Localized>
+    <Localized key="Left" lang="English">Left</Localized>
+    <Localized key="Left" lang="French">Left</Localized>
+    <Localized key="Left" lang="Dutch">Left</Localized>
+    <Localized key="Right" lang="English">Right</Localized>
+    <Localized key="Right" lang="French">Right</Localized>
+    <Localized key="Right" lang="Dutch">Right</Localized>
+    <Localized key="center" lang="English">Center</Localized>
+    <Localized key="center" lang="French">Centré</Localized>
+    <Localized key="center" lang="Dutch">Center</Localized>
+    <Localized key="Center" lang="English">Center</Localized>
+    <Localized key="Center" lang="French">Center</Localized>
+    <Localized key="Center" lang="Dutch">Center</Localized>
+    <Localized key="value_transform" lang="English">Value transform</Localized>
+    <Localized key="value_transform" lang="French">Valeur transformation</Localized>
+    <Localized key="value_transform" lang="Dutch">Value transform</Localized>
+    <Localized key="value_validator" lang="English">Value validator</Localized>
+    <Localized key="value_validator" lang="French">Valeur validation</Localized>
+    <Localized key="value_validator" lang="Dutch">Value validator</Localized>
+    <Localized key="click_action" lang="English">click_action</Localized>
+    <Localized key="click_action" lang="French">click_action</Localized>
+    <Localized key="click_action" lang="Dutch">click_action</Localized>
+    <Localized key="double_click_action" lang="English">Double click action</Localized>
+    <Localized key="double_click_action" lang="French">Action "double clic"</Localized>
+    <Localized key="double_click_action" lang="Dutch">Double click action</Localized>
+    <Localized key="right_click_action" lang="English">Right click action</Localized>
+    <Localized key="right_click_action" lang="French">Action "clic droit"</Localized>
+    <Localized key="right_click_action" lang="Dutch">Right click action</Localized>
+    <Localized key="enter_pressed_action" lang="English">Enter pressed action</Localized>
+    <Localized key="enter_pressed_action" lang="French">Action "enter pressed"</Localized>
+    <Localized key="enter_pressed_action" lang="Dutch">Enter pressed action</Localized>
+    <Localized key="north" lang="English">North</Localized>
+    <Localized key="north" lang="French">Nord</Localized>
+    <Localized key="north" lang="Dutch">North</Localized>
+    <Localized key="North" lang="English">North</Localized>
+    <Localized key="North" lang="French">Nord</Localized>
+    <Localized key="North" lang="Dutch">North</Localized>
+    <Localized key="south" lang="English">South</Localized>
+    <Localized key="south" lang="French">Sud</Localized>
+    <Localized key="south" lang="Dutch">South</Localized>
+    <Localized key="South" lang="English">South</Localized>
+    <Localized key="South" lang="French">Sud</Localized>
+    <Localized key="South" lang="Dutch">South</Localized>
+    <Localized key="east" lang="English">East</Localized>
+    <Localized key="east" lang="French">Est</Localized>
+    <Localized key="east" lang="Dutch">East</Localized>
+    <Localized key="East" lang="English">East</Localized>
+    <Localized key="East" lang="French">East</Localized>
+    <Localized key="East" lang="Dutch">East</Localized>
+    <Localized key="west" lang="English">West</Localized>
+    <Localized key="west" lang="French">Ouest</Localized>
+    <Localized key="west" lang="Dutch">West</Localized>
+    <Localized key="West" lang="English">West</Localized>
+    <Localized key="West" lang="French">Ouest</Localized>
+    <Localized key="West" lang="Dutch">West</Localized>
+    <Localized key="beforeFirstLine" lang="English">beforeFirstLine</Localized>
+    <Localized key="beforeFirstLine" lang="French">beforeFirstLine</Localized>
+    <Localized key="beforeFirstLine" lang="Dutch">beforeFirstLine</Localized>
+    <Localized key="afterLastLine" lang="English">afterLastLine</Localized>
+    <Localized key="afterLastLine" lang="French">afterLastLine</Localized>
+    <Localized key="afterLastLine" lang="Dutch">afterLastLine</Localized>
+    <Localized key="beforeLineBegins" lang="English">beforeLineBegins</Localized>
+    <Localized key="beforeLineBegins" lang="French">beforeLineBegins</Localized>
+    <Localized key="beforeLineBegins" lang="Dutch">beforeLineBegins</Localized>
+    <Localized key="afterLineEnds" lang="English">afterLineEnds</Localized>
+    <Localized key="afterLineEnds" lang="French">afterLineEnds</Localized>
+    <Localized key="afterLineEnds" lang="Dutch">afterLineEnds</Localized>
+    <Localized key="pageStart" lang="English">pageStart</Localized>
+    <Localized key="pageStart" lang="French">pageStart</Localized>
+    <Localized key="pageStart" lang="Dutch">pageStart</Localized>
+    <Localized key="pageEnd" lang="English">pageEnd</Localized>
+    <Localized key="pageEnd" lang="French">pageEnd</Localized>
+    <Localized key="pageEnd" lang="Dutch">pageEnd</Localized>
+    <Localized key="lineStart" lang="English">lineStart</Localized>
+    <Localized key="lineStart" lang="French">lineStart</Localized>
+    <Localized key="lineStart" lang="Dutch">lineStart</Localized>
+    <Localized key="lineEnd" lang="English">lineEnd</Localized>
+    <Localized key="lineEnd" lang="French">lineEnd</Localized>
+    <Localized key="lineEnd" lang="Dutch">lineEnd</Localized>
+    <Localized key="row" lang="English">Row</Localized>
+    <Localized key="row" lang="French">Rangée</Localized>
+    <Localized key="row" lang="Dutch">Row</Localized>
+    <Localized key="Insets" lang="English">Insets</Localized>
+    <Localized key="Insets" lang="Dutch">Insets</Localized>
+    <Localized key="relative" lang="English">relative</Localized>
+    <Localized key="relative" lang="French">relatif</Localized>
+    <Localized key="relative" lang="Dutch">relative</Localized>
+    <Localized key="remainder" lang="English">remainder</Localized>
+    <Localized key="remainder" lang="French">Restant</Localized>
+    <Localized key="remainder" lang="Dutch">remainder</Localized>
+    <Localized key="north_east" lang="English">North east</Localized>
+    <Localized key="north_east" lang="French">Nord est</Localized>
+    <Localized key="north_east" lang="Dutch">North east</Localized>
+    <Localized key="north_west" lang="English">Nprth west</Localized>
+    <Localized key="north_west" lang="French">Nord ouest</Localized>
+    <Localized key="north_west" lang="Dutch">Nprth west</Localized>
+    <Localized key="south_east" lang="English">South east</Localized>
+    <Localized key="south_east" lang="French">Sud est</Localized>
+    <Localized key="south_east" lang="Dutch">South east</Localized>
+    <Localized key="south_west" lang="English">South west</Localized>
+    <Localized key="south_west" lang="French">Sud ouest</Localized>
+    <Localized key="south_west" lang="Dutch">South west</Localized>
+    <Localized key="none" lang="English">None</Localized>
+    <Localized key="none" lang="French">Aucun</Localized>
+    <Localized key="none" lang="Dutch">None</Localized>
+    <Localized key="None" lang="English">None</Localized>
+    <Localized key="None" lang="French">None</Localized>
+    <Localized key="None" lang="Dutch">None</Localized>
+    <Localized key="horizontal" lang="English">horizontal</Localized>
+    <Localized key="horizontal" lang="French">horizontal</Localized>
+    <Localized key="horizontal" lang="Dutch">horizontal</Localized>
+    <Localized key="vertical" lang="English">Vertical</Localized>
+    <Localized key="vertical" lang="French">Vertical</Localized>
+    <Localized key="vertical" lang="Dutch">Vertical</Localized>
+    <Localized key="both" lang="English">Both</Localized>
+    <Localized key="both" lang="French">Bi-directionnelle</Localized>
+    <Localized key="both" lang="Dutch">Beide</Localized>
+    <Localized key="Both" lang="English">Both</Localized>
+    <Localized key="Both" lang="French">Both</Localized>
+    <Localized key="Both" lang="Dutch">Both</Localized>
+    <Localized key="X" lang="English">X</Localized>
+    <Localized key="X" lang="French">X</Localized>
+    <Localized key="X" lang="Dutch">X</Localized>
+    <Localized key="pixels" lang="English">pixels</Localized>
+    <Localized key="pixels" lang="French">pixels</Localized>
+    <Localized key="pixels" lang="Dutch">pixels</Localized>
+    <Localized key="identifier" lang="English">Identifier</Localized>
+    <Localized key="identifier" lang="French">Identifiant</Localized>
+    <Localized key="identifier" lang="Dutch">Identifier</Localized>
+    <Localized key="weight" lang="English">weight</Localized>
+    <Localized key="weight" lang="French">weight</Localized>
+    <Localized key="weight" lang="Dutch">weight</Localized>
+    <Localized key="split_layout_constraints" lang="English">Split layout constraints</Localized>
+    <Localized key="split_layout_constraints" lang="French">Contrainte des mise en page split</Localized>
+    <Localized key="split_layout_constraints" lang="Dutch">Split layout constraints</Localized>
+    <Localized key="HORIZONTAL_SCROLLBAR_AS_NEEDED" lang="English">HORIZONTAL SCROLLBAR AS NEEDED</Localized>
+    <Localized key="HORIZONTAL_SCROLLBAR_AS_NEEDED" lang="French">HORIZONTAL SCROLLBAR AS NEEDED</Localized>
+    <Localized key="HORIZONTAL_SCROLLBAR_AS_NEEDED" lang="Dutch">HORIZONTAL SCROLLBAR AS NEEDED</Localized>
+    <Localized key="HORIZONTAL_SCROLLBAR_NEVER" lang="English">HORIZONTAL SCROLLBAR NEVER</Localized>
+    <Localized key="HORIZONTAL_SCROLLBAR_NEVER" lang="French">HORIZONTAL SCROLLBAR NEVER</Localized>
+    <Localized key="HORIZONTAL_SCROLLBAR_NEVER" lang="Dutch">HORIZONTAL SCROLLBAR NEVER</Localized>
+    <Localized key="HORIZONTAL_SCROLLBAR_ALWAYS" lang="English">HORIZONTAL SCROLLBAR ALWAYS</Localized>
+    <Localized key="HORIZONTAL_SCROLLBAR_ALWAYS" lang="French">HORIZONTAL SCROLLBAR ALWAYS</Localized>
+    <Localized key="HORIZONTAL_SCROLLBAR_ALWAYS" lang="Dutch">HORIZONTAL SCROLLBAR ALWAYS</Localized>
+    <Localized key="VERTICAL_SCROLLBAR_AS_NEEDED" lang="English">VERTICAL SCROLLBAR AS NEEDED</Localized>
+    <Localized key="VERTICAL_SCROLLBAR_AS_NEEDED" lang="French">VERTICAL SCROLLBAR AS NEEDED</Localized>
+    <Localized key="VERTICAL_SCROLLBAR_AS_NEEDED" lang="Dutch">VERTICAL SCROLLBAR AS NEEDED</Localized>
+    <Localized key="VERTICAL_SCROLLBAR_NEVER" lang="English">VERTICAL SCROLLBAR NEVER</Localized>
+    <Localized key="VERTICAL_SCROLLBAR_NEVER" lang="French">VERTICAL SCROLLBAR NEVER</Localized>
+    <Localized key="VERTICAL_SCROLLBAR_NEVER" lang="Dutch">VERTICAL SCROLLBAR NEVER</Localized>
+    <Localized key="VERTICAL_SCROLLBAR_ALWAYS" lang="English">VERTICAL SCROLLBAR ALWAYS</Localized>
+    <Localized key="VERTICAL_SCROLLBAR_ALWAYS" lang="French">VERTICAL SCROLLBAR ALWAYS</Localized>
+    <Localized key="VERTICAL_SCROLLBAR_ALWAYS" lang="Dutch">VERTICAL SCROLLBAR ALWAYS</Localized>
+    <Localized key="opaque" lang="English">Opaque</Localized>
+    <Localized key="opaque" lang="French">Opaque</Localized>
+    <Localized key="opaque" lang="Dutch">Opaque</Localized>
+    <Localized key="Dynamic dependencies" lang="English">Dynamic dependencies</Localized>
+    <Localized key="Dynamic dependencies" lang="French">Dynamic dependencies</Localized>
+    <Localized key="Dynamic dependencies" lang="Dutch">Dynamic dependencies</Localized>
+    <Localized key="Explicit dependencies" lang="English">Explicit dependencies</Localized>
+    <Localized key="Explicit dependencies" lang="French">Explicit dependencies</Localized>
+    <Localized key="Explicit dependencies" lang="Dutch">Explicit dependencies</Localized>
+    <Localized key="tooltip" lang="English">Tooltip (ALT)</Localized>
+    <Localized key="tooltip" lang="French">Aide (ALT)</Localized>
+    <Localized key="tooltip" lang="Dutch">Tooltip (ALT)</Localized>
+    <Localized key="tooltip_text" lang="English">tooltip_text</Localized>
+    <Localized key="tooltip_text" lang="French">tooltip_text</Localized>
+    <Localized key="tooltip_text" lang="Dutch">tooltip_text</Localized>
+    <Localized key="Basic" lang="English">Basic</Localized>
+    <Localized key="Basic" lang="Dutch">Basis</Localized>
+    <Localized key="Advanced" lang="English">Advanced</Localized>
+    <Localized key="Advanced" lang="Dutch">Geavanceerd</Localized>
+    <Localized key="Controls" lang="English">Controls</Localized>
+    <Localized key="Controls" lang="French">Controls</Localized>
+    <Localized key="Controls" lang="Dutch">Controls</Localized>
+    <Localized key="Layout" lang="English">Layout</Localized>
+    <Localized key="Layout" lang="French">Layout</Localized>
+    <Localized key="Layout" lang="Dutch">Layout</Localized>
+    <Localized key="Graphics" lang="English">Graphics</Localized>
+    <Localized key="Graphics" lang="Dutch">Graphics</Localized>
+    <Localized key="Depends" lang="English">Depends</Localized>
+    <Localized key="Depends" lang="Dutch">Depends</Localized>
+    <Localized key="Doc" lang="English">Doc</Localized>
+    <Localized key="Doc" lang="Dutch">Doc</Localized>
+    <Localized key="Gauche" lang="English">Gauche</Localized>
+    <Localized key="Gauche" lang="French">Gauche</Localized>
+    <Localized key="Gauche" lang="Dutch">Gauche</Localized>
+    <Localized key="Droit" lang="English">Droit</Localized>
+    <Localized key="Droit" lang="French">Droit</Localized>
+    <Localized key="Droit" lang="Dutch">Droit</Localized>
+    <Localized key="Centré" lang="English">Centré</Localized>
+    <Localized key="Centré" lang="French">Centré</Localized>
+    <Localized key="Centré" lang="Dutch">Centré</Localized>
+    <Localized key="Nord" lang="English">Nord</Localized>
+    <Localized key="Nord" lang="French">Nord</Localized>
+    <Localized key="Nord" lang="Dutch">Nord</Localized>
+    <Localized key="Sud" lang="English">Sud</Localized>
+    <Localized key="Sud" lang="French">Sud</Localized>
+    <Localized key="Sud" lang="Dutch">Sud</Localized>
+    <Localized key="Est" lang="English">Est</Localized>
+    <Localized key="Est" lang="French">Est</Localized>
+    <Localized key="Est" lang="Dutch">Est</Localized>
+    <Localized key="Ouest" lang="English">Ouest</Localized>
+    <Localized key="Ouest" lang="French">Ouest</Localized>
+    <Localized key="Ouest" lang="Dutch">Ouest</Localized>
+    <Localized key="Aucun" lang="English">Aucun</Localized>
+    <Localized key="Aucun" lang="French">Aucun</Localized>
+    <Localized key="Aucun" lang="Dutch">Aucun</Localized>
+    <Localized key="Bi-directionnelle" lang="English">Bi-directionnelle</Localized>
+    <Localized key="Bi-directionnelle" lang="French">Bi-directionnelle</Localized>
+    <Localized key="Bi-directionnelle" lang="Dutch">Bi-directionnelle</Localized>
+    <Localized key="visible" lang="Dutch">Visible</Localized>
+    <Localized key="free_location_constraints" lang="Dutch">Free location constraints</Localized>
+    <Localized key="flow_layout_constraints" lang="Dutch">Flow layout constraints</Localized>
+    <Localized key="border_layout_constraints" lang="Dutch">Border layout constraints</Localized>
+    <Localized key="grid_layout_constraints" lang="Dutch">Grid layout constraints</Localized>
+    <Localized key="box_layout_constraints" lang="Dutch">Box layout constraints</Localized>
+    <Localized key="two_cols_layout_constraints" lang="Dutch">Two cols layout constraints</Localized>
+    <Localized key="weights" lang="Dutch">weights</Localized>
+    <Localized key="weightX" lang="Dutch">weightX</Localized>
+    <Localized key="weightY" lang="Dutch">weightY</Localized>
+    <Localized key="Beide" lang="English">Beide</Localized>
+    <Localized key="Beide" lang="French">Beide</Localized>
+    <Localized key="Beide" lang="Dutch">Beide</Localized>
+    <Localized key="grid_bag_layout_constraints" lang="Dutch">Grid bag layout constraints</Localized>
+    <Localized key="define_minimum_dimensions" lang="Dutch">Define minimum dimensions</Localized>
+    <Localized key="define_maximum_dimensions" lang="Dutch">Define maximum dimensions</Localized>
+    <Localized key="component_size_management" lang="Dutch">Component size management</Localized>
+    <Localized key="use_scrollbar" lang="Dutch">use_scrollbar</Localized>
+    <Localized key="horizontal_policy" lang="Dutch">horizontal_policy</Localized>
+    <Localized key="vertical_policy" lang="Dutch">Vertical policy</Localized>
+    <Localized key="scroll_bar_policy" lang="Dutch">scroll_bar_policy</Localized>
+    <Localized key="font_and_colors" lang="Dutch">Font and colors</Localized>
+    <Localized key="Params" lang="Dutch">Params</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Label" />
 </Panel>

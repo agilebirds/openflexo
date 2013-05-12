@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="gridbag" darkLevel="0" data="" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.action.DeclareShapeInEditionPattern" controllerClassName="org.openflexo.view.controller.FlexoFIBController" visible="" width="600" height="650">
+<Panel layout="gridbag" darkLevel="0" data="" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.action.DeclareShapeInEditionPattern" controllerClassName="org.openflexo.view.controller.FlexoFIBController" visible="" width="600" height="650" opaque="false">
   <Label label="declare_shape_in_edition_pattern" align="center" index="0" data="" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" font="Lucida Grande,1,15" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
   <RadioButtonList columns="1" hGap="0" vGap="-2" index="1" data="data.primaryChoice" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=15;insetsLeft=50;insetsRight=50;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" font="LucidaGrande,0,13" name="PaletteRadioButtonList" format="object.name" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" staticList="" list="" array="" iteratorClassName="java.lang.Object" autoSelectFirstRow="true">
     <LocalizedDictionary />
   </RadioButtonList>
-  <Panel layout="twocols" border="rounded3d" borderColor="0,0,0" borderTitle="" borderTop="2" borderBottom="2" borderLeft="20" borderRight="20" darkLevel="0" index="2" data="" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=1.0)" visible="(PaletteRadioButtonList.selectedIndex = 1)" width="170" height="150">
+  <Panel layout="twocols" border="rounded3d" borderColor="0,0,0" borderTitle="" borderTop="2" borderBottom="2" borderLeft="20" borderRight="20" darkLevel="0" index="2" data="" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=1.0)" visible="(PaletteRadioButtonList.selectedIndex = 1)" width="170" height="150" opaque="false">
     <Label label="DECLARE_IN_EXISTING_EDITION_PATTERN_description" align="center" index="0" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=20;insetsLeft=2;insetsRight=2;insetsTop=20;location=center)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="">
       <LocalizedDictionary />
     </Label>
@@ -22,7 +22,7 @@
     </DropDown>
     <LocalizedDictionary />
   </Panel>
-  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="20" borderRight="20" darkLevel="0" index="3" data="" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=1.0)" visible="(PaletteRadioButtonList.selectedIndex = 0)">
+  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="20" borderRight="20" darkLevel="0" index="3" data="" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=1.0)" visible="(PaletteRadioButtonList.selectedIndex = 0)" opaque="false">
     <Label label="label" align="center" index="0" data="(data.patternChoice.name + &quot;_description&quot;)" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=10;location=center)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="">
       <LocalizedDictionary />
     </Label>
@@ -84,7 +84,7 @@
     <Label label="target" index="13" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="">
       <LocalizedDictionary />
     </Label>
-    <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" darkLevel="0" index="14" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=14;insetsBottom=0;insetsLeft=0;insetsRight=2;insetsTop=0;location=right)" visible="">
+    <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" darkLevel="0" index="14" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=14;insetsBottom=0;insetsLeft=0;insetsRight=2;insetsTop=0;location=right)" visible="" opaque="false">
       <DropDown index="0" data="data.containerEditionPattern" constraints="flow(index=0)" visible="(!(isTopLevelWidget.data))" name="targetEditionPatternDropdown" format="object.name" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" staticList="" list="data.focusedObject.calc.editionPatterns" array="" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="true">
         <LocalizedDictionary />
       </DropDown>
@@ -103,7 +103,7 @@
     </TextField>
     <LocalizedDictionary />
   </Panel>
-  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" borderTop="10" titleFont="LucidaGrande,0,13" darkLevel="0" index="4" data="" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" font="LucidaGrande,0,13">
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" borderTop="10" titleFont="LucidaGrande,0,13" darkLevel="0" index="4" data="" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" font="LucidaGrande,0,13" opaque="false">
     <Button action="controller.validateAndDispose()" buttonIcon="" buttonType="Trigger" label="validate" format="" icon="" tooltip="" localize="true" enable="data.isValid" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="0" data="" constraints="flow(index=0)" visible="">
       <Dependancy componentName="editionPatternDropdown" />
       <Dependancy componentName="patternRoleDropDown" />

@@ -36,6 +36,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -112,6 +113,8 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.stats.ProcessStatistics;
 import org.openflexo.foundation.utils.FlexoCSS;
 import org.openflexo.foundation.utils.FlexoIndexManager;
+import org.openflexo.foundation.utils.FlexoModelObjectReference;
+import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ParameteredFixProposal;
@@ -188,7 +191,10 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author benoit, sylvain
  */
 public final class FlexoProcess extends WKFObject implements FlexoImportableObject, ApplicationHelpEntryPoint,
-		XMLStorageResourceData<FlexoProcess>, InspectableObject, Bindable, ExecutableWorkflowElement, MetricsValueOwner, LevelledObject {
+		XMLStorageResourceData<FlexoProcess>, InspectableObject, Bindable, ExecutableWorkflowElement, MetricsValueOwner, LevelledObject,
+		ReferenceOwner {
+
+	public static final String VISIBLE_ROLES = "visibleRoles";
 
 	static final Logger logger = Logger.getLogger(FlexoProcess.class.getPackage().getName());
 
@@ -224,6 +230,7 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 	private Vector<SubProcessNode> _subProcessNodes;
 
 	private Vector<AbstractNode> allAbstractNodes = null;
+
 	private Vector<WKFNode> allNodes = null;
 
 	private Date lastUpdate;
@@ -240,6 +247,7 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 	public static FlexoActionizer<WKFDelete, WKFObject, WKFObject> deleteActionizer;
 
 	private Vector<MetricsValue> metricsValues;
+	private Vector<FlexoModelObjectReference<Role>> visibleRoles;
 
 	public static FlexoActionizer<AddProcessMetricsValue, FlexoProcess, WKFObject> addMetricsActionizer;
 	public static FlexoActionizer<DeleteMetricsValue, MetricsValue, MetricsValue> deleteMetricsActionizer;
@@ -263,6 +271,7 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 		_subProcessNodes = new Vector<SubProcessNode>();
 		_serviceInterfaces = new Vector<ServiceInterface>();
 		metricsValues = new Vector<MetricsValue>();
+		visibleRoles = new Vector<FlexoModelObjectReference<Role>>();
 	}
 
 	/**
@@ -978,6 +987,54 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 		if (deleteMetricsActionizer != null) {
 			deleteMetricsActionizer.run(value, null);
 		}
+	}
+
+	public Vector<FlexoModelObjectReference<Role>> getVisibleRoles() {
+		return visibleRoles;
+	}
+
+	public void setVisibleRoles(Vector<FlexoModelObjectReference<Role>> visibleRoles) {
+		this.visibleRoles = visibleRoles;
+		setChanged();
+	}
+
+	public void addToVisibleRoles(FlexoModelObjectReference<Role> value) {
+		if (value != null) {
+			visibleRoles.add(value);
+			value.setOwner(this);
+			setChanged();
+			notifyAttributeModification(VISIBLE_ROLES, null, value);
+		}
+	}
+
+	public void removeFromVisibleRoles(FlexoModelObjectReference<Role> value) {
+		visibleRoles.remove(value);
+		value.setOwner(null);
+		value.delete();
+		setChanged();
+		notifyAttributeModification(VISIBLE_ROLES, value, null);
+	}
+
+	@Override
+	public void objectDeleted(FlexoModelObjectReference<?> reference) {
+		if (visibleRoles.contains(reference)) {
+			removeFromVisibleRoles((FlexoModelObjectReference<Role>) reference);
+		}
+	}
+
+	@Override
+	public void notifyObjectLoaded(FlexoModelObjectReference<?> reference) {
+
+	}
+
+	@Override
+	public void objectCantBeFound(FlexoModelObjectReference<?> reference) {
+		objectDeleted(reference);
+	}
+
+	@Override
+	public void objectSerializationIdChanged(FlexoModelObjectReference<?> reference) {
+		setChanged();
 	}
 
 	@Override
@@ -3326,6 +3383,41 @@ public final class FlexoProcess extends WKFObject implements FlexoImportableObje
 		case TEXT:
 		default:
 			return String.class;
+		}
+	}
+
+	public boolean isRoleVisible(Role role) {
+		for (FlexoModelObjectReference<Role> r : getVisibleRoles()) {
+			if (r.getObject() == role) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void setRoleVisible(Role role, boolean visible) {
+		if (role.isCache()) {
+			role = role.getRole(true);
+			if (role == null) {
+				return;
+			}
+		}
+		if (visible && !isRoleVisible(role)) {
+			addToVisibleRoles(new FlexoModelObjectReference<Role>(role));
+		} else if (!visible) {
+			boolean changed = false;
+			Iterator<FlexoModelObjectReference<Role>> i = getVisibleRoles().iterator();
+			while (i.hasNext()) {
+				FlexoModelObjectReference<org.openflexo.foundation.wkf.Role> ref = i.next();
+				if (ref.getObject() == role) {
+					i.remove();
+					changed = true;
+				}
+			}
+			if (changed) {
+				setChanged();
+				notifyAttributeModification(VISIBLE_ROLES, role, null);
+			}
 		}
 	}
 }

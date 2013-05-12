@@ -1,11 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.toc.PredefinedSection" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" useScrollBar="false" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.toc.PredefinedSection" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" useScrollBar="false" name="Inspector" opaque="false">
   <TabPanel name="Tab" constraints="border(location=center)" useScrollBar="false">
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="BasicTab">
+    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" useScrollBar="false" name="BasicTab" opaque="false">
       <Label label="contents" localize="true" name="DocumentedDiagramLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
       <DropDown format="object.name" localize="true" iteratorClassName="org.openflexo.foundation.toc.PredefinedSection$PredefinedSectionType" data="data.type" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
     </Tab>
   </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="contents" lang="English">Contents</Localized>
+    <Localized key="contents" lang="French">Contenu</Localized>
+    <Localized key="contents" lang="Dutch">Contents</Localized>
+    <Localized key="PROCESSES" lang="English">PROCESSES</Localized>
+    <Localized key="PROCESSES" lang="French">PROCESSUS</Localized>
+    <Localized key="PROCESSES" lang="Dutch">PROCESSES</Localized>
+    <Localized key="VIEWS" lang="English">VIEWS</Localized>
+    <Localized key="VIEWS" lang="French">VIEWS</Localized>
+    <Localized key="VIEWS" lang="Dutch">VIEWS</Localized>
+    <Localized key="ROLES" lang="English">ROLES</Localized>
+    <Localized key="ROLES" lang="French">ROLES</Localized>
+    <Localized key="ROLES" lang="Dutch">ROLES</Localized>
+    <Localized key="PURPOSE" lang="English">PURPOSE</Localized>
+    <Localized key="PURPOSE" lang="French">BUT</Localized>
+    <Localized key="PURPOSE" lang="Dutch">PURPOSE</Localized>
+    <Localized key="OBJECTIVES" lang="English">OBJECTIVES</Localized>
+    <Localized key="OBJECTIVES" lang="French">OBJECTIFS</Localized>
+    <Localized key="OBJECTIVES" lang="Dutch">OBJECTIVES</Localized>
+    <Localized key="SCOPE" lang="English">SCOPE</Localized>
+    <Localized key="SCOPE" lang="French">SCOPE</Localized>
+    <Localized key="SCOPE" lang="Dutch">SCOPE</Localized>
+    <Localized key="STAKEHOLDERS" lang="English">STAKEHOLDERS</Localized>
+    <Localized key="STAKEHOLDERS" lang="French">STAKEHOLDERS</Localized>
+    <Localized key="STAKEHOLDERS" lang="Dutch">STAKEHOLDERS</Localized>
+    <Localized key="SCREENS" lang="English">SCREENS</Localized>
+    <Localized key="SCREENS" lang="French">SCREENS</Localized>
+    <Localized key="SCREENS" lang="Dutch">SCREENS</Localized>
+    <Localized key="DATA_MODEL" lang="English">DATA MODEL</Localized>
+    <Localized key="DATA_MODEL" lang="French">MODELE DE DONNEES</Localized>
+    <Localized key="DATA_MODEL" lang="Dutch">DATA MODEL</Localized>
+    <Localized key="DEFINITIONS" lang="English">DEFINITIONS</Localized>
+    <Localized key="DEFINITIONS" lang="French">DEFINITION</Localized>
+    <Localized key="DEFINITIONS" lang="Dutch">DEFINITIONS</Localized>
+    <Localized key="READERS_GUIDE" lang="English">READERS GUIDE</Localized>
+    <Localized key="READERS_GUIDE" lang="French">GUIDE DE LECTURE</Localized>
+    <Localized key="READERS_GUIDE" lang="Dutch">READERS GUIDE</Localized>
+    <Localized key="NOTES_QUESTIONS" lang="English">NOTES QUESTIONS</Localized>
+    <Localized key="NOTES_QUESTIONS" lang="French">NOTES QUESTIONS</Localized>
+    <Localized key="NOTES_QUESTIONS" lang="Dutch">NOTES QUESTIONS</Localized>
+    <Localized key="PROJECT_CONTEXT" lang="English">PROJECT CONTEXT</Localized>
+    <Localized key="PROJECT_CONTEXT" lang="French">CONTEXT PROJET</Localized>
+    <Localized key="PROJECT_CONTEXT" lang="Dutch">PROJECT CONTEXT</Localized>
+    <Localized key="SIPOC_LEVEL2" lang="English">SIPOC LEVEL2</Localized>
+    <Localized key="SIPOC_LEVEL2" lang="French">SIPOC NIVEAU 2</Localized>
+    <Localized key="SIPOC_LEVEL2" lang="Dutch">SIPOC LEVEL2</Localized>
+    <Localized key="SIPOC_LEVEL3" lang="English">SIPOC LEVEL3</Localized>
+    <Localized key="SIPOC_LEVEL3" lang="French">SIPOC NIVEAU 3</Localized>
+    <Localized key="SIPOC_LEVEL3" lang="Dutch">SIPOC LEVEL3</Localized>
+    <Localized key="ER_DIAGRAM" lang="English">ER DIAGRAM</Localized>
+    <Localized key="ER_DIAGRAM" lang="French">DIAGRAMME ER</Localized>
+    <Localized key="ER_DIAGRAM" lang="Dutch">ER DIAGRAM</Localized>
+    <Localized key="RACI" lang="English">RACI</Localized>
+    <Localized key="RACI" lang="French">RACI</Localized>
+    <Localized key="RACI" lang="Dutch">RACI</Localized>
+    <Localized key="Basic" lang="English">Basic</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="Basic" lang="Dutch">Basis</Localized>
+  </LocalizedDictionary>
   <Parameter name="title" value="Pre-defined section" />
 </Panel>
 

@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" data="" dataClassName="org.openflexo.fge.view.widget.FIBShapeSelector$ShapeFactory" controllerClassName="org.openflexo.fge.view.widget.FIBShapeSelector$ShapeDetailsPanel$CustomFIBController" visible="" font="SansSerif,0,11" width="250" height="310" name="ShapePanel">
+<Panel layout="gridbag" titleFont="SansSerif,0,11" darkLevel="0" data="" dataClassName="org.openflexo.fge.view.widget.FIBShapeSelector$ShapeFactory" controllerClassName="org.openflexo.fge.view.widget.FIBShapeSelector$ShapeDetailsPanel$CustomFIBController" visible="" font="SansSerif,0,11" width="250" height="310" name="ShapePanel" opaque="false">
   <Custom componentClassName="org.openflexo.fge.view.widget.ShapePreviewPanel" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="PreviewPanel" index="0" data="data.shape" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="">
     <Dependancy componentName="shapeTypeDropdown" />
   </Custom>
-  <Panel layout="twocols" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="1" data="" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" width="80" height="60" name="ShapeTypePanel">
+  <Panel layout="twocols" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="1" data="" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="" width="80" height="60" name="ShapeTypePanel" opaque="false">
     <Label label="shape_type" index="0" data="" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
     <DropDown index="1" data="data.shapeType" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" name="shapeTypeDropdown" format="object.name.toLowerCase" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="controller.shapeChanged()" valueTransform="" valueValidator="" staticList="" list="" array="" iteratorClassName="org.openflexo.fge.shapes.Shape$ShapeType" autoSelectFirstRow="true" />
     <Dependancy componentName="shapeTypeDropdown" />
   </Panel>
-  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="2" data="($org.openflexo.fge.shapes.Rectangle)data.shape" dataClassName="org.openflexo.fge.shapes.Rectangle" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(data.shapeType = &quot;RECTANGLE&quot;)" name="RectanglePanel">
+  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="2" data="($org.openflexo.fge.shapes.Rectangle)data.shape" dataClassName="org.openflexo.fge.shapes.Rectangle" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(data.shapeType = &quot;RECTANGLE&quot;)" name="RectanglePanel" opaque="false">
     <Label label="rounded" index="0" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
     <CheckBox selected="true" index="1" data="RectanglePanel.data.isRounded" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" name="roundedCheckbox" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="controller.shapeChanged()" valueTransform="" valueValidator="" />
     <Label label="arc_size" index="2" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
     <Number allowsNull="false" minValue="0" maxValue="255" increment="1" numberType="DoubleType" columns="3" index="3" data="RectanglePanel.data.arcSize" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" name="arcSizeInteger" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="controller.shapeChanged()" valueTransform="" valueValidator="" />
     <Dependancy componentName="shapeTypeDropdown" />
   </Panel>
-  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="3" data="($org.openflexo.fge.shapes.Square)data.shape" dataClassName="org.openflexo.fge.shapes.Square" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(data.shapeType = &quot;SQUARE&quot;)" name="SquarePanel">
+  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="3" data="($org.openflexo.fge.shapes.Square)data.shape" dataClassName="org.openflexo.fge.shapes.Square" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(data.shapeType = &quot;SQUARE&quot;)" name="SquarePanel" opaque="false">
     <Label label="rounded" index="0" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
     <CheckBox selected="true" index="1" data="SquarePanel.data.isRounded" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" name="roundedCheckbox" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="controller.shapeChanged()" valueTransform="" valueValidator="" />
     <Label label="arc_size" index="2" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
     <Number allowsNull="false" minValue="0" maxValue="255" increment="1" numberType="DoubleType" columns="3" index="3" data="SquarePanel.data.arcSize" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" name="arcSizeInteger" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="controller.shapeChanged()" valueTransform="" valueValidator="" />
     <Dependancy componentName="shapeTypeDropdown" />
   </Panel>
-  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="4" data="($org.openflexo.fge.shapes.RegularPolygon)data.shape" dataClassName="org.openflexo.fge.shapes.RegularPolygon" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(data.shapeType = &quot;POLYGON&quot;)" name="PolygonPanel">
+  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="4" data="($org.openflexo.fge.shapes.RegularPolygon)data.shape" dataClassName="org.openflexo.fge.shapes.RegularPolygon" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(data.shapeType = &quot;POLYGON&quot;)" name="PolygonPanel" opaque="false">
     <Label label="points_number" index="0" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
     <Number allowsNull="false" minValue="3" maxValue="255" increment="1" numberType="IntegerType" columns="3" index="2" data="PolygonPanel.data.nPoints" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" name="PolygonPointsNumber" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="controller.shapeChanged()" valueTransform="" valueValidator="" />
     <Label label="start_angle" index="2" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
     <Number allowsNull="false" minValue="-360" maxValue="360" increment="5" numberType="DoubleType" columns="3" index="3" data="PolygonPanel.data.startAngle" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" name="PolygonStartAngle" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="controller.shapeChanged()" valueTransform="" valueValidator="" />
     <Dependancy componentName="shapeTypeDropdown" />
   </Panel>
-  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="5" data="($org.openflexo.fge.shapes.Triangle)data.shape" dataClassName="org.openflexo.fge.shapes.Triangle" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(data.shapeType = &quot;TRIANGLE&quot;)" name="TrianglePanel">
+  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="5" data="($org.openflexo.fge.shapes.Triangle)data.shape" dataClassName="org.openflexo.fge.shapes.Triangle" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(data.shapeType = &quot;TRIANGLE&quot;)" name="TrianglePanel" opaque="false">
     <Label label="start_angle" index="0" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
     <Number allowsNull="false" minValue="-360" maxValue="360" increment="5" numberType="DoubleType" columns="3" index="1" data="TrianglePanel.data.startAngle" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" name="TriangleStartAngle" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="controller.shapeChanged()" valueTransform="" valueValidator="" />
     <Dependancy componentName="shapeTypeDropdown" />
   </Panel>
-  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="6" data="($org.openflexo.fge.shapes.Losange)data.shape" dataClassName="org.openflexo.fge.shapes.Losange" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(data.shapeType = &quot;LOSANGE&quot;)" name="LosangePanel">
+  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="6" data="($org.openflexo.fge.shapes.Losange)data.shape" dataClassName="org.openflexo.fge.shapes.Losange" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(data.shapeType = &quot;LOSANGE&quot;)" name="LosangePanel" opaque="false">
     <Dependancy componentName="shapeTypeDropdown" />
   </Panel>
-  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="7" data="($org.openflexo.fge.shapes.Oval)data.shape" dataClassName="org.openflexo.fge.shapes.Oval" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(data.shapeType = &quot;OVAL&quot;)" name="OvalPanel">
+  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="7" data="($org.openflexo.fge.shapes.Oval)data.shape" dataClassName="org.openflexo.fge.shapes.Oval" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(data.shapeType = &quot;OVAL&quot;)" name="OvalPanel" opaque="false">
     <Dependancy componentName="shapeTypeDropdown" />
   </Panel>
-  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="8" data="($org.openflexo.fge.shapes.Circle)data.shape" dataClassName="org.openflexo.fge.shapes.Circle" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(data.shapeType = &quot;CIRCLE&quot;)" name="CirclePanel">
+  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="8" data="($org.openflexo.fge.shapes.Circle)data.shape" dataClassName="org.openflexo.fge.shapes.Circle" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(data.shapeType = &quot;CIRCLE&quot;)" name="CirclePanel" opaque="false">
     <Dependancy componentName="shapeTypeDropdown" />
   </Panel>
-  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="9" data="($org.openflexo.fge.shapes.Star)data.shape" dataClassName="org.openflexo.fge.shapes.Star" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=9;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(data.shapeType = &quot;STAR&quot;)" name="StarPanel">
+  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="9" data="($org.openflexo.fge.shapes.Star)data.shape" dataClassName="org.openflexo.fge.shapes.Star" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=9;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(data.shapeType = &quot;STAR&quot;)" name="StarPanel" opaque="false">
     <Label label="points_number" index="0" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
     <Number allowsNull="false" minValue="3" maxValue="255" increment="1" numberType="IntegerType" columns="3" index="2" data="StarPanel.data.nPoints" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" name="StarPointsNumber" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="controller.shapeChanged()" valueTransform="" valueValidator="" />
     <Label label="start_angle" index="2" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
@@ -52,7 +52,7 @@
     <Number allowsNull="false" minValue="0.0" maxValue="1.0" increment="0.05" numberType="FloatType" columns="3" index="5" data="StarPanel.data.ratio" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" name="StarRatio" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="controller.shapeChanged()" valueTransform="" valueValidator="" />
     <Dependancy componentName="shapeTypeDropdown" />
   </Panel>
-  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="10" data="($org.openflexo.fge.shapes.Arc)data.shape" dataClassName="org.openflexo.fge.shapes.Arc" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=10;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(data.shapeType = &quot;ARC&quot;)" name="ArcPanel">
+  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="10" data="($org.openflexo.fge.shapes.Arc)data.shape" dataClassName="org.openflexo.fge.shapes.Arc" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=10;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(data.shapeType = &quot;ARC&quot;)" name="ArcPanel" opaque="false">
     <Label label="start_angle" index="0" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
     <Number allowsNull="false" minValue="-360" maxValue="360" increment="5" numberType="DoubleType" columns="3" index="2" data="ArcPanel.data.angleStart" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="" name="ArcStartAngle" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="controller.shapeChanged()" valueTransform="" valueValidator="" />
     <Label label="angle_extent" index="2" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
@@ -63,7 +63,7 @@
     </DropDown>
     <Dependancy componentName="shapeTypeDropdown" />
   </Panel>
-  <Panel layout="border" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="11" data="($org.openflexo.fge.shapes.Polygon)data.shape" dataClassName="org.openflexo.fge.shapes.Polygon" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=11;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(data.shapeType = &quot;CUSTOM_POLYGON&quot;)" name="CustomPolygonPanel">
+  <Panel layout="border" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="10" borderRight="10" titleFont="SansSerif,0,11" darkLevel="0" index="11" data="($org.openflexo.fge.shapes.Polygon)data.shape" dataClassName="org.openflexo.fge.shapes.Polygon" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=11;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(data.shapeType = &quot;CUSTOM_POLYGON&quot;)" name="CustomPolygonPanel" opaque="false">
     <Table iteratorClassName="org.openflexo.fge.geom.FGEPoint" visibleRowCount="3" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" selected="" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" format="" icon="" tooltip="" localize="true" enable="" manageDynamicModel="true" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" name="CustomPolygonPointTable" index="0" data="CustomPolygonPanel.data.points" constraints="border(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="">
       <LabelColumn data="CustomPolygonPanel.data.points.indexOf(iterator)" format="" title="id" columnWidth="15" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="" name="label" />
       <NumberColumn numberType="DoubleType" data="iterator.x" format="" title="x" columnWidth="50" resizable="true" displayTitle="true" color="" bgColor="" tooltip="" valueChangedAction="controller.shapeChanged()" name="number" />
@@ -72,9 +72,148 @@
     </Table>
     <Dependancy componentName="shapeTypeDropdown" />
   </Panel>
-  <Panel layout="flow" hGap="0" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="12" data="" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" name="ControlPanel">
+  <Panel layout="flow" hGap="0" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="12" data="" constraints="gridbag(anchor=center;expandHorizontally=true;expandVertically=false;fill=horizontal;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="" name="ControlPanel" opaque="false">
     <Button action="controller.apply()" buttonIcon="" buttonType="Trigger" label="apply" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="0" data="" constraints="flow(index=0)" visible="" />
     <Button action="controller.cancel()" buttonIcon="" buttonType="Trigger" label="cancel" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" index="1" data="" constraints="flow(index=1)" visible="" />
   </Panel>
-  <LocalizedDictionary />
+  <LocalizedDictionary>
+    <Localized key="shape_type" lang="English">Shape</Localized>
+    <Localized key="shape_type" lang="French">Forme</Localized>
+    <Localized key="shape_type" lang="Dutch">Shape</Localized>
+    <Localized key="rectangle" lang="English">Rectangle</Localized>
+    <Localized key="rectangle" lang="French">Rectangle</Localized>
+    <Localized key="rectangle" lang="Dutch">Rectangle</Localized>
+    <Localized key="square" lang="English">Square</Localized>
+    <Localized key="square" lang="French">Carré</Localized>
+    <Localized key="square" lang="Dutch">Square</Localized>
+    <Localized key="rectangularoctogon" lang="English">Rectangular octogon</Localized>
+    <Localized key="rectangularoctogon" lang="French">Octogone rectangulaire</Localized>
+    <Localized key="rectangularoctogon" lang="Dutch">Rectangular octogon</Localized>
+    <Localized key="polygon" lang="English">Regular polygon</Localized>
+    <Localized key="polygon" lang="French">Polygone régulier</Localized>
+    <Localized key="polygon" lang="Dutch">Regular polygon</Localized>
+    <Localized key="triangle" lang="English">Triangle</Localized>
+    <Localized key="triangle" lang="French">Triangle</Localized>
+    <Localized key="triangle" lang="Dutch">Triangle</Localized>
+    <Localized key="losange" lang="English">Losange</Localized>
+    <Localized key="losange" lang="French">Losange</Localized>
+    <Localized key="losange" lang="Dutch">Losange</Localized>
+    <Localized key="oval" lang="English">Oval</Localized>
+    <Localized key="oval" lang="French">Ovale</Localized>
+    <Localized key="oval" lang="Dutch">Oval</Localized>
+    <Localized key="circle" lang="English">Circle</Localized>
+    <Localized key="circle" lang="French">Cercle</Localized>
+    <Localized key="circle" lang="Dutch">Circle</Localized>
+    <Localized key="star" lang="English">Star</Localized>
+    <Localized key="star" lang="French">Étoile</Localized>
+    <Localized key="star" lang="Dutch">Star</Localized>
+    <Localized key="arc" lang="English">Arc</Localized>
+    <Localized key="arc" lang="French">Arc</Localized>
+    <Localized key="arc" lang="Dutch">Boog (arc)</Localized>
+    <Localized key="custom_polygon" lang="English">Custom polygon</Localized>
+    <Localized key="custom_polygon" lang="French">Polygone personnalisé</Localized>
+    <Localized key="custom_polygon" lang="Dutch">Custom polygon</Localized>
+    <Localized key="Rectangle" lang="English">Rectangle</Localized>
+    <Localized key="Rectangle" lang="French">Rectangle</Localized>
+    <Localized key="Rectangle" lang="Dutch">Rectangle</Localized>
+    <Localized key="Square" lang="English">Square</Localized>
+    <Localized key="Square" lang="French">Carré</Localized>
+    <Localized key="Square" lang="Dutch">Square</Localized>
+    <Localized key="Regular polygon" lang="English">Regular polygon</Localized>
+    <Localized key="Regular polygon" lang="French">Polygone régulier</Localized>
+    <Localized key="Regular polygon" lang="Dutch">Regular polygon</Localized>
+    <Localized key="Triangle" lang="English">Triangle</Localized>
+    <Localized key="Triangle" lang="French">Triangle</Localized>
+    <Localized key="Triangle" lang="Dutch">Triangle</Localized>
+    <Localized key="Losange" lang="English">Losange</Localized>
+    <Localized key="Losange" lang="French">Losange</Localized>
+    <Localized key="Losange" lang="Dutch">Losange</Localized>
+    <Localized key="Oval" lang="English">Oval</Localized>
+    <Localized key="Oval" lang="French">Ovale</Localized>
+    <Localized key="Oval" lang="Dutch">Oval</Localized>
+    <Localized key="Circle" lang="English">Circle</Localized>
+    <Localized key="Circle" lang="French">Cercle</Localized>
+    <Localized key="Circle" lang="Dutch">Circle</Localized>
+    <Localized key="Star" lang="English">Star</Localized>
+    <Localized key="Star" lang="French">Etoile</Localized>
+    <Localized key="Star" lang="Dutch">Star</Localized>
+    <Localized key="rounded" lang="English">Rounded</Localized>
+    <Localized key="rounded" lang="French">Arrondi</Localized>
+    <Localized key="rounded" lang="Dutch">Rounded</Localized>
+    <Localized key="arc_size" lang="English">Arc size</Localized>
+    <Localized key="arc_size" lang="French">Taille de l'arc</Localized>
+    <Localized key="arc_size" lang="Dutch">Grootte boog</Localized>
+    <Localized key="points_number" lang="English">Point number</Localized>
+    <Localized key="points_number" lang="French">Nimbre de points</Localized>
+    <Localized key="points_number" lang="Dutch">Point number</Localized>
+    <Localized key="start_angle" lang="English">Start angle</Localized>
+    <Localized key="start_angle" lang="French">Angle de départ</Localized>
+    <Localized key="start_angle" lang="Dutch">Start angle</Localized>
+    <Localized key="ratio" lang="English">Ratio</Localized>
+    <Localized key="ratio" lang="French">Rapport</Localized>
+    <Localized key="ratio" lang="Dutch">Ratio</Localized>
+    <Localized key="angle_extent" lang="English">Angle extent</Localized>
+    <Localized key="angle_extent" lang="French">Extension d'angle</Localized>
+    <Localized key="angle_extent" lang="Dutch">Vergroting van de hoek</Localized>
+    <Localized key="arc_type" lang="English">Arc type</Localized>
+    <Localized key="arc_type" lang="French">Type d'arc</Localized>
+    <Localized key="arc_type" lang="Dutch">Type boog</Localized>
+    <Localized key="open" lang="English">Open</Localized>
+    <Localized key="open" lang="French">Ouvrir</Localized>
+    <Localized key="open" lang="Dutch">Open</Localized>
+    <Localized key="Open" lang="English">Open</Localized>
+    <Localized key="Open" lang="French">Ouvert</Localized>
+    <Localized key="Open" lang="Dutch">Open</Localized>
+    <Localized key="chord" lang="English">Chord</Localized>
+    <Localized key="chord" lang="French">Son</Localized>
+    <Localized key="chord" lang="Dutch">Chord</Localized>
+    <Localized key="Chord" lang="English">Chord</Localized>
+    <Localized key="Chord" lang="French">Chord</Localized>
+    <Localized key="Chord" lang="Dutch">Chord</Localized>
+    <Localized key="pie" lang="English">Pie</Localized>
+    <Localized key="pie" lang="French">Camembert</Localized>
+    <Localized key="pie" lang="Dutch">Pie</Localized>
+    <Localized key="id" lang="English">Id</Localized>
+    <Localized key="id" lang="French">Id</Localized>
+    <Localized key="id" lang="Dutch">Id</Localized>
+    <Localized key="x" lang="English">Position x</Localized>
+    <Localized key="x" lang="French">Abscisse</Localized>
+    <Localized key="x" lang="Dutch">Position x</Localized>
+    <Localized key="y" lang="English">Position y</Localized>
+    <Localized key="y" lang="French">Ordonnée</Localized>
+    <Localized key="y" lang="Dutch">Position y</Localized>
+    <Localized key="apply" lang="English">Apply</Localized>
+    <Localized key="apply" lang="French">Appliquer</Localized>
+    <Localized key="apply" lang="Dutch">Pas toe</Localized>
+    <Localized key="cancel" lang="English">Cancel</Localized>
+    <Localized key="cancel" lang="French">Annuler</Localized>
+    <Localized key="cancel" lang="Dutch">Cancel</Localized>
+    <Localized key="Carré" lang="English">Carré</Localized>
+    <Localized key="Carré" lang="French">Carré</Localized>
+    <Localized key="Carré" lang="Dutch">Carré</Localized>
+    <Localized key="Polygone régulier" lang="English">Polygone régulier</Localized>
+    <Localized key="Polygone régulier" lang="French">Polygone régulier</Localized>
+    <Localized key="Polygone régulier" lang="Dutch">Polygone régulier</Localized>
+    <Localized key="Ovale" lang="English">Ovale</Localized>
+    <Localized key="Ovale" lang="French">Ovale</Localized>
+    <Localized key="Ovale" lang="Dutch">Ovale</Localized>
+    <Localized key="Cercle" lang="English">Cercle</Localized>
+    <Localized key="Cercle" lang="French">Cercle</Localized>
+    <Localized key="Cercle" lang="Dutch">Cercle</Localized>
+    <Localized key="Étoile" lang="English">Étoile</Localized>
+    <Localized key="Étoile" lang="French">Étoile</Localized>
+    <Localized key="Étoile" lang="Dutch">Étoile</Localized>
+    <Localized key="Ouvrir" lang="English">Ouvrir</Localized>
+    <Localized key="Ouvrir" lang="French">Ouvrir</Localized>
+    <Localized key="Ouvrir" lang="Dutch">Ouvrir</Localized>
+    <Localized key="Son" lang="English">Son</Localized>
+    <Localized key="Son" lang="French">Son</Localized>
+    <Localized key="Son" lang="Dutch">Son</Localized>
+    <Localized key="camember" lang="English">Pie</Localized>
+    <Localized key="camember" lang="French">Camembert</Localized>
+    <Localized key="camember" lang="Dutch">Pie</Localized>
+    <Localized key="boog (arc)" lang="English">boog (arc)</Localized>
+    <Localized key="boog (arc)" lang="French">boog (arc)</Localized>
+    <Localized key="boog (arc)" lang="Dutch">boog (arc)</Localized>
+  </LocalizedDictionary>
 </Panel>

@@ -52,7 +52,7 @@ public class FlexoActionButton extends JButton {
 		this.controller = controller;
 		action = new ButtonAction(actionType, unlocalizedActionName);
 		setText(action.getLocalizedName(this));
-		setToolTipText(action.getLocalizedName(this));
+		setToolTipText(FlexoLocalization.localizedTooltipForKey(action._unlocalizedName, this));
 		if (getEditor() != null) {
 			if (getEditor().getEnabledIconFor(actionType) != null) {
 				setIcon(getEditor().getEnabledIconFor(actionType));

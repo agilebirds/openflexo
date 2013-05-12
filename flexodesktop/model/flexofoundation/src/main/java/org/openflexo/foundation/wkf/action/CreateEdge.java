@@ -195,6 +195,7 @@ public class CreateEdge extends FlexoUndoableAction<CreateEdge, AbstractNode, Ab
 			if (getNewEdgeName() != null) {
 				newPostCondition.setName(getNewEdgeName());
 			}
+			newPostCondition.setLocationConstraintFlag(true);
 			newPostCondition.setIsGenericOutput(getIsGenericOutput());
 			newPostCondition.updateMetricsValues();
 			if (getStartingNode() instanceof ContextualEdgeStarting && getOutputContext() != null) {

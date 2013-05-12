@@ -86,12 +86,10 @@ public abstract class FIBModuleView<O extends FlexoObject> extends SelectionSync
 	protected FIBModuleView(O representedObject, FlexoController controller, FIBComponent fibComponent, boolean addScrollBar,
 			FlexoProgress progress) {
 		super(representedObject, controller, fibComponent, addScrollBar, progress);
-
 	}
 
 	@Override
 	public void deleteModuleView() {
-		getRepresentedObject().getPropertyChangeSupport().removePropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 		deleteView();
 		getFlexoController().removeModuleView(this);
 	}

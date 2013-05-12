@@ -121,4 +121,11 @@ public class DMModule extends FlexoModule implements ExternalDMModule {
 		return screenshot;
 	}
 
+	@Override
+	public void finalizeScreenshot() {
+		screenshotController.delete();
+		screenshot = null;
+		screenshotController = null;
+	}
+
 }

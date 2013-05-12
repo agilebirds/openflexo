@@ -297,8 +297,7 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public boolean hasLabelLocationForContext(String context) {
-		return hasGraphicalPropertyForKey(getLabelXContextForContext(context))
-				&& hasGraphicalPropertyForKey(getLabelYContextForContext(context));
+		return hasGraphicalPropertyForKey(getLabelXKeyForContext(context)) && hasGraphicalPropertyForKey(getLabelYKeyForContext(context));
 	}
 
 	public void resetLocation() {
@@ -316,8 +315,8 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 
 	public void resetLabelLocation(String context) {
 		// Point2D oldLocation = getLabelLocation(context);
-		_removeGraphicalPropertyWithKey(getLabelXContextForContext(context));
-		_removeGraphicalPropertyWithKey(getLabelYContextForContext(context));
+		_removeGraphicalPropertyWithKey(getLabelXKeyForContext(context));
+		_removeGraphicalPropertyWithKey(getLabelYKeyForContext(context));
 		setChanged();
 		notifyObservers(new LabelLocationChanged(/*oldLocation, null, context*/));
 	}
@@ -375,7 +374,11 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public double getWidth(String context) {
-		return getWidth(context, 100);
+		return getWidth(context, getDefaultWidth());
+	}
+
+	protected int getDefaultWidth() {
+		return 100;
 	}
 
 	public double getWidth(String context, double defaultValue) {
@@ -392,7 +395,11 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public double getHeight(String context) {
-		return getHeight(context, 50);
+		return getHeight(context, getDefaultHeight());
+	}
+
+	protected int getDefaultHeight() {
+		return 50;
 	}
 
 	public double getHeight(String context, double defaultValue) {
@@ -417,12 +424,12 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public double getLabelX(String context, double defaultValue) {
-		return _doubleGraphicalPropertyForKey(getLabelXContextForContext(context), defaultValue);
+		return _doubleGraphicalPropertyForKey(getLabelXKeyForContext(context), defaultValue);
 	}
 
 	public void setLabelX(double x, String context) {
 		if (x != getLabelX(context)) {
-			_setGraphicalPropertyForKey(x, getLabelXContextForContext(context));
+			_setGraphicalPropertyForKey(x, getLabelXKeyForContext(context));
 			setChanged();
 			notifyObservers(new LabelLocationChanged());
 		}
@@ -433,71 +440,99 @@ public abstract class RepresentableFlexoModelObject extends FlexoModelObject {
 	}
 
 	public double getLabelY(String context, double defaultValue) {
-		return _doubleGraphicalPropertyForKey(getLabelYContextForContext(context), defaultValue);
+		return _doubleGraphicalPropertyForKey(getLabelYKeyForContext(context), defaultValue);
 	}
 
 	public void setLabelY(double y, String context) {
 		if (y != getLabelY(context)) {
-			_setGraphicalPropertyForKey(y, getLabelYContextForContext(context));
+			_setGraphicalPropertyForKey(y, getLabelYKeyForContext(context));
 			setChanged();
 			notifyObservers(new LabelLocationChanged());
 		}
 	}
 
-	public String getLabelXContextForContext(String context) {
+	public static String getLabelXKeyForContext(String context) {
 		return LABEL_POSX + "_" + context;
 	}
 
-	public String getLabelYContextForContext(String context) {
+	public static String getLabelYKeyForContext(String context) {
 		return LABEL_POSY + "_" + context;
 	}
 
 	public Color getBgColor(String context) {
-		return _colorGraphicalPropertyForKey(BG_COLOR + "_" + context, FlexoColor.WHITE_COLOR);
+		return _colorGraphicalPropertyForKey(getBgColorKeyForContext(context), FlexoColor.WHITE_COLOR);
 	}
 
 	public Color getBgColor(String context, Color defaultValue) {
-		return _colorGraphicalPropertyForKey(BG_COLOR + "_" + context, defaultValue);
+		return _colorGraphicalPropertyForKey(getBgColorKeyForContext(context), defaultValue);
 	}
 
 	public void setBgColor(Color bgColor, String context) {
-		_setGraphicalPropertyForKey(bgColor, BG_COLOR + "_" + context);
+		String key = getBgColorKeyForContext(context);
+		_setGraphicalPropertyForKey(bgColor, key);
+		setChanged();
+		notifyObservers(new DataModification(key, null, bgColor));
+	}
+
+	public static String getBgColorKeyForContext(String context) {
+		return BG_COLOR + "_" + context;
 	}
 
 	public Color getFgColor(String context) {
-		return _colorGraphicalPropertyForKey(FG_COLOR + "_" + context, FlexoColor.BLACK_COLOR);
+		return _colorGraphicalPropertyForKey(getFgColorKeyForContext(context), FlexoColor.BLACK_COLOR);
 	}
 
 	public Color getFgColor(String context, Color defaultValue) {
-		return _colorGraphicalPropertyForKey(FG_COLOR + "_" + context, defaultValue);
+		return _colorGraphicalPropertyForKey(getFgColorKeyForContext(context), defaultValue);
 	}
 
 	public void setFgColor(Color fgColor, String context) {
-		_setGraphicalPropertyForKey(fgColor, FG_COLOR + "_" + context);
+		String key = getFgColorKeyForContext(context);
+		_setGraphicalPropertyForKey(fgColor, key);
+		setChanged();
+		notifyObservers(new DataModification(key, null, fgColor));
+	}
+
+	public static String getFgColorKeyForContext(String context) {
+		return FG_COLOR + "_" + context;
 	}
 
 	public Color getTextColor(String context) {
-		return _colorGraphicalPropertyForKey(TEXT_COLOR + "_" + context, FlexoColor.BLACK_COLOR);
+		return _colorGraphicalPropertyForKey(getTextColorKeyForContext(context), FlexoColor.BLACK_COLOR);
 	}
 
 	public Color getTextColor(String context, Color defaultValue) {
-		return _colorGraphicalPropertyForKey(TEXT_COLOR + "_" + context, defaultValue);
+		return _colorGraphicalPropertyForKey(getTextColorKeyForContext(context), defaultValue);
 	}
 
 	public void setTextColor(Color textColor, String context) {
-		_setGraphicalPropertyForKey(textColor, TEXT_COLOR + "_" + context);
+		String key = getTextColorKeyForContext(context);
+		_setGraphicalPropertyForKey(textColor, key);
+		setChanged();
+		notifyObservers(new DataModification(key, null, textColor));
+	}
+
+	public static String getTextColorKeyForContext(String context) {
+		return TEXT_COLOR + "_" + context;
 	}
 
 	public FlexoFont getTextFont(String context) {
-		return _fontGraphicalPropertyForKey(TEXT_FONT + "_" + context, FlexoFont.SANS_SERIF);
+		return _fontGraphicalPropertyForKey(getTextFontKeyForContext(context), FlexoFont.SANS_SERIF);
 	}
 
 	public FlexoFont getTextFont(String context, FlexoFont defaultValue) {
-		return _fontGraphicalPropertyForKey(TEXT_FONT + "_" + context, defaultValue);
+		return _fontGraphicalPropertyForKey(getTextFontKeyForContext(context), defaultValue);
 	}
 
 	public void setTextFont(FlexoFont textFont, String context) {
-		_setGraphicalPropertyForKey(textFont, TEXT_FONT + "_" + context);
+		String key = getTextFontKeyForContext(context);
+		_setGraphicalPropertyForKey(textFont, key);
+		setChanged();
+		notifyObservers(new DataModification(key, null, textFont));
+	}
+
+	public static String getTextFontKeyForContext(String context) {
+		return TEXT_FONT + "_" + context;
 	}
 
 	public int getIntegerParameter(String key) {

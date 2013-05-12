@@ -72,16 +72,7 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 	}
 
 	public enum ExecutionStatus {
-		NEVER_EXECUTED,
-		EXECUTING_CORE,
-		HAS_SUCCESSFULLY_EXECUTED,
-		FAILED_EXECUTION,
-		EXECUTING_UNDO_CORE,
-		HAS_SUCCESSFULLY_UNDONE,
-		FAILED_UNDO_EXECUTION,
-		EXECUTING_REDO_CORE,
-		HAS_SUCCESSFULLY_REDONE,
-		FAILED_REDO_EXECUTION;
+		NEVER_EXECUTED, EXECUTING_CORE, HAS_SUCCESSFULLY_EXECUTED, FAILED_EXECUTION, EXECUTING_UNDO_CORE, HAS_SUCCESSFULLY_UNDONE, FAILED_UNDO_EXECUTION, EXECUTING_REDO_CORE, HAS_SUCCESSFULLY_REDONE, FAILED_REDO_EXECUTION;
 
 		public boolean hasActionExecutionSucceeded() {
 			return this == ExecutionStatus.HAS_SUCCESSFULLY_EXECUTED;
@@ -321,17 +312,17 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 	@Override
 	public String toString() {
 		boolean isFirst = true;
-		StringBuffer returned = new StringBuffer();
-		returned.append("FlexoAction: " + getClass().getName() + "[");
+		StringBuilder returned = new StringBuilder();
+		returned.append("FlexoAction: ").append(getClass().getName()).append("[");
 		if (getExecutionContext() != null) {
 			for (String key : getExecutionContext().getObjectsCreatedWhileExecutingAction().keySet()) {
 				FlexoObject o = getExecutionContext().getObjectsCreatedWhileExecutingAction().get(key);
-				returned.append((isFirst ? "" : " ") + "CREATED:" + key + "/" + o);
+				returned.append(isFirst ? "" : " ").append("CREATED:").append(key).append("/").append(o);
 				isFirst = false;
 			}
 			for (String key : getExecutionContext().getObjectsDeletedWhileExecutingAction().keySet()) {
 				FlexoObject o = getExecutionContext().getObjectsDeletedWhileExecutingAction().get(key);
-				returned.append((isFirst ? "" : " ") + "DELETED:" + key + "/" + o);
+				returned.append(isFirst ? "" : " ").append("DELETED:").append(key).append("/").append(o);
 				isFirst = false;
 			}
 		}

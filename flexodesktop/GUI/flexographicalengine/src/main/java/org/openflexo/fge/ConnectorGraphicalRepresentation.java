@@ -731,7 +731,7 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 		}
 		try {
 			if (forceRefresh || connector.needsRefresh()) {
-				connector.refreshConnector();
+				connector.refreshConnector(forceRefresh);
 				checkViewBounds();
 				setChanged();
 				notifyObservers(new ConnectorModified());

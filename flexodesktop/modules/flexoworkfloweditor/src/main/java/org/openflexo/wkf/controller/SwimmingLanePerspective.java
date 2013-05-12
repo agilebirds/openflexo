@@ -38,6 +38,7 @@ import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.wkf.swleditor.SwimmingLaneEditorController;
+import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 import org.openflexo.wkf.swleditor.SwimmingLaneView;
 import org.openflexo.wkf.view.ImportedWorkflowView;
 
@@ -139,6 +140,9 @@ public class SwimmingLanePerspective extends FlexoPerspective {
 	@Override
 	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller, boolean editable) {
 		if (object instanceof FlexoProcess) {
+			if (!SwimmingLaneRepresentation.loadAllReferencedRole((FlexoProcess) object)) {
+				return null;
+			}
 			SwimmingLaneView drawingView = getControllerForProcess((FlexoProcess) object).getDrawingView();
 			drawingView.getDrawing().setEditable(editable);
 			return drawingView;

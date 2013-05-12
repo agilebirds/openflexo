@@ -27,7 +27,9 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
+import org.openflexo.foundation.wkf.WKFAnnotation;
 import org.openflexo.foundation.wkf.edge.WKFAssociation;
+import org.openflexo.foundation.wkf.edge.WKFAssociation.Arrow;
 import org.openflexo.foundation.wkf.node.WKFNode;
 
 public class CreateAssociation extends FlexoUndoableAction<CreateAssociation, WKFNode, WKFNode> {
@@ -87,6 +89,9 @@ public class CreateAssociation extends FlexoUndoableAction<CreateAssociation, WK
 		}
 
 		newAssociation = new WKFAssociation(startNode, endNode);
+		if (!(startNode instanceof WKFAnnotation) && !(endNode instanceof WKFAnnotation)) {
+			newAssociation.setArrow(Arrow.START_TO_END);
+		}
 		objectCreated("NEW_ASSOCIATION", newAssociation);
 	}
 

@@ -22,7 +22,6 @@ package org.openflexo.foundation.wkf.node;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
-import org.openflexo.localization.FlexoLocalization;
 
 public class OROperator extends CommonOutputOperatorNode {
 
@@ -48,7 +47,7 @@ public class OROperator extends CommonOutputOperatorNode {
 
 	@Override
 	public String getDefaultName() {
-		return FlexoLocalization.localizedForKey("OR");
+		return "";
 	}
 
 }
