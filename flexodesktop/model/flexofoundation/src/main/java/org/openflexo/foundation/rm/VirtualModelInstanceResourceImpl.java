@@ -66,7 +66,6 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 			ModelFactory factory = new ModelFactory(VirtualModelInstanceResource.class);
 			VirtualModelInstanceResourceImpl<?> returned = (VirtualModelInstanceResourceImpl<?>) factory
 					.newInstance(VirtualModelInstanceResource.class);
-			returned.setServiceManager(viewResource.getProject().getServiceManager());
 			String baseName = virtualModelInstanceFile.getName().substring(0,
 					virtualModelInstanceFile.getName().length() - VirtualModelInstanceResource.VIRTUAL_MODEL_SUFFIX.length());
 			File xmlFile = new File(viewResource.getFile().getParentFile(), baseName + VirtualModelInstanceResource.VIRTUAL_MODEL_SUFFIX);
@@ -79,6 +78,7 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 				// Unable to retrieve infos, just abort
 				return null;
 			}
+			returned.setServiceManager(viewResource.getProject().getServiceManager());
 			if (StringUtils.isNotEmpty(vmiInfo.virtualModelURI)) {
 				if (viewResource != null && viewResource.getViewPoint() != null
 						&& viewResource.getViewPoint().getVirtualModelNamed(vmiInfo.virtualModelURI) != null) {

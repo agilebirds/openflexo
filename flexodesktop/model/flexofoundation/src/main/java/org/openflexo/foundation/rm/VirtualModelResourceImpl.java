@@ -59,7 +59,6 @@ public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> exte
 		try {
 			ModelFactory factory = new ModelFactory(VirtualModelResource.class);
 			VirtualModelResourceImpl returned = (VirtualModelResourceImpl) factory.newInstance(VirtualModelResource.class);
-			returned.setServiceManager(viewPointLibrary.getServiceManager());
 			String baseName = virtualModelDirectory.getName();
 			File xmlFile = new File(virtualModelDirectory, baseName + ".xml");
 			VirtualModelInfo vpi = findVirtualModelInfo(virtualModelDirectory);
@@ -76,6 +75,7 @@ public abstract class VirtualModelResourceImpl<VM extends VirtualModel<VM>> exte
 			}
 			returned.setModelVersion(new FlexoVersion(StringUtils.isNotEmpty(vpi.modelVersion) ? vpi.modelVersion : "0.1"));
 			returned.setViewPointLibrary(viewPointLibrary);
+			returned.setServiceManager(viewPointLibrary.getServiceManager());
 
 			logger.fine("VirtualModelResource " + xmlFile.getAbsolutePath() + " version " + returned.getModelVersion());
 
