@@ -67,8 +67,9 @@ public class VirtualModelModelSlotInstanceConfiguration<MS extends VirtualModelM
 		ModelSlotInstance<?, ?> returned = new ModelSlotInstance(vmInstance, getModelSlot());
 		if (getAddressedVirtualModelInstanceResource() != null) {
 			returned.setModelURI(getAddressedVirtualModelInstanceResource().getURI());
+		} else {
+			logger.warning("Addressed virtual model instance is null");
 		}
-		else {logger.warning ("VMInstance is NULL"); }
 		return returned;
 	}
 
