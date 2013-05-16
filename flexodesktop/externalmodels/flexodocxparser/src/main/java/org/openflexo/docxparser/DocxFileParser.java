@@ -160,6 +160,12 @@ public class DocxFileParser {
 				} else if (tagValue.startsWith(FlexoEPITag.EPI_TAG)) {
 					FlexoEPITag epiTag = new FlexoEPITag(tagValue);
 
+					// TODO: Here extract the text under 3 forms:
+					// * one line string
+					// * multi-line string
+					// * styled text
+					// Reinjection shall then choose the appropriate extract according the info
+					// available in VP.
 					String text = extractTextContent(sdtContentElement);
 
 					if (text.length() > 0) {
