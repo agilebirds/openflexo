@@ -138,7 +138,12 @@ public class SelectEditionPatternInstance<VMI extends VirtualModelInstance<VMI, 
 			System.out.println("Returning " + vmi.getEPInstances(getEditionPatternType()));
 			return filterWithConditions(vmi.getEPInstances(getEditionPatternType()), action);
 		} else {
-			logger.warning("Cannot find virtual model instance on which to apply SelectEditionPatternInstance");
+			logger.warning(getStringRepresentation()
+					+ " : Cannot find virtual model instance on which to apply SelectEditionPatternInstance");
+			// logger.warning("Additional info: getModelSlot()=" + getModelSlot());
+			// logger.warning("Additional info: action.getVirtualModelInstance()=" + action.getVirtualModelInstance());
+			// logger.warning("Additional info: action.getVirtualModelInstance().getModelSlotInstance(getModelSlot())="
+			// + action.getVirtualModelInstance().getModelSlotInstance(getModelSlot()));
 			return null;
 		}
 	}

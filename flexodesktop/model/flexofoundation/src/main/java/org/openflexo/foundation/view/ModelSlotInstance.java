@@ -148,6 +148,11 @@ public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 				}
 			}
 		}
+		// Special case to handle reflexive model slots
+		if (model == null && getVirtualModelInstance() != null
+				&& getModelSlot().equals(getVirtualModelInstance().getVirtualModel().getReflexiveModelSlot())) {
+			model = (M) getVirtualModelInstance();
+		}
 		if (model == null && StringUtils.isNotEmpty(modelURI)) {
 			logger.warning("cannot find model " + modelURI);
 		}

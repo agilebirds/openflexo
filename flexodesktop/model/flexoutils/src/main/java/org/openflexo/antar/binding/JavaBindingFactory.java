@@ -117,7 +117,7 @@ public class JavaBindingFactory implements BindingFactory {
 		} else {
 			logger.warning("Cannot find method named " + functionName + " with args=" + args + "(" + args.size() + ") for type "
 					+ parentType);
-			Thread.dumpStack();
+			// Thread.dumpStack();
 			return null;
 		}
 	}
