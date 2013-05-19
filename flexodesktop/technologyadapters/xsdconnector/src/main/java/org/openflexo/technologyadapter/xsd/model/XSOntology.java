@@ -508,9 +508,13 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 			}
 			return null;
 		}
-		XSOntIndividual individual = new XSOntIndividual(this, name, uri, getTechnologyAdapter());
+		// uri is not necesary for XML individuals for creation, it is calculated by URIProcessors by the ModelSlot
+		//XSOntIndividual individual = new XSOntIndividual(this, name, uri, getTechnologyAdapter());
+		
+		XSOntIndividual individual = new XSOntIndividual(this, name, getTechnologyAdapter());
+		
 		individual.setType(type);
-		individuals.put(individual.getURI(), individual);
+		individuals.put(individual.getGuid(), individual);
 		return individual;
 	}
 

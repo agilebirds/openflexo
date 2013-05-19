@@ -310,8 +310,7 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 	@Override
 	public Object retrieveObjectWithURI(ModelSlotInstance msInstance,
 			String objectURI) {
-		// TODO Auto-generated method stub
-		return null;
+		return msInstance.getModel().getObject(objectURI);
 	}
 
 	// ==========================================================================

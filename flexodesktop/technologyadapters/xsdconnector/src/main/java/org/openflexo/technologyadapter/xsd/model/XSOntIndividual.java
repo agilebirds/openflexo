@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
@@ -43,9 +44,11 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 	private Map<XSOntProperty, XSPropertyValue> values = new HashMap<XSOntProperty, XSPropertyValue>();
 	private Set<XSOntIndividual> children = new HashSet<XSOntIndividual>();
 	private XSOntIndividual parent;
-
-	protected XSOntIndividual(XSOntology ontology, String name, String uri, XSDTechnologyAdapter adapter) {
-		super(ontology, name, uri, adapter);
+	private String guid;
+	
+	protected XSOntIndividual(XSOntology ontology, String name, XSDTechnologyAdapter adapter) {
+		super(ontology, name, null, adapter);
+		setGuid(UUID.randomUUID().toString());
 	}
 
 	public XSOntClass getType() {
@@ -249,4 +252,11 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 		return null;
 	}
 
+	public String getGuid() {
+		return guid;
+	}
+
+	public void setGuid(String guid) {
+		this.guid = guid;
+	}
 }

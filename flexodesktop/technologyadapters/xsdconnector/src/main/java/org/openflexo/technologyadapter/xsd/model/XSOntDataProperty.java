@@ -78,6 +78,7 @@ public class XSOntDataProperty extends XSOntProperty implements IFlexoOntologyDa
 		return buffer.toString();
 	}
 
+
 	@Override
 	public boolean isOntologyDataProperty() {
 		return true;

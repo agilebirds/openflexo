@@ -26,6 +26,7 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
@@ -34,6 +35,7 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.xsd.model.XMLModel;
 import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntClass;
+import org.openflexo.technologyadapter.xsd.model.XSOntDataProperty;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 
 public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOntIndividual> {
@@ -43,13 +45,11 @@ public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOnt
 		// TODO Auto-generated method stub
 		super.setOntologyClass(ontologyClass);
 		if ( ontologyClassURI == null) {
-			logger.info ("Ya comme un beugue");
+			logger.warning("OntologyURI is null for XSIndividual");
 		}
 	}
 
 	private static final Logger logger = Logger.getLogger(AddXSIndividual.class.getPackage().getName());
-
-	private String dataPropertyURI = null;
 
 	public AddXSIndividual(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
@@ -84,12 +84,21 @@ public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOnt
 		// System.out.println("individualName="+individualName);
 		XSOntIndividual newIndividual = null;
 		try {
+
+			ModelSlotInstance<XMLModel, XSDMetaModel> modelSlotInstance = getModelSlotInstance(action);
+			
 			newIndividual = getModelSlotInstance(action).getModel().createOntologyIndividual(individualName, father);
+			
 			logger.info("********* Added individual " + newIndividual.getName() + " as " + father);
 
 			for (DataPropertyAssertion dataPropertyAssertion : getDataAssertions()) {
 				if (dataPropertyAssertion.evaluateCondition(action)) {
-					// ... TODO
+					logger.info("DataPropertyAssertion=" + dataPropertyAssertion);
+					XSOntDataProperty property = (XSOntDataProperty) dataPropertyAssertion.getOntologyProperty();
+					logger.info("Property=" + property);
+					Object value = dataPropertyAssertion.getValue(action);
+					logger.info("Value=" + value);
+					newIndividual.addToPropertyValue(property, value);
 				}
 			}
 			for (ObjectPropertyAssertion objectPropertyAssertion : getObjectAssertions()) {
@@ -97,6 +106,7 @@ public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOnt
 					// ... TODO
 				}
 			}
+			modelSlotInstance.getModel().setIsModified();
 
 			return newIndividual;
 		} catch (DuplicateURIException e) {
