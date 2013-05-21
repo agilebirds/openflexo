@@ -302,7 +302,7 @@ public class FlexoComponentFolder extends IECLObject implements InspectableObjec
 	}
 
 	@SuppressWarnings("unchecked")
-	private <CD extends ComponentDefinition> List<CD> getComponentsOfType(Class<CD> type) {
+	public <CD extends ComponentDefinition> List<CD> getComponentsOfType(Class<CD> type) {
 		List<CD> answer = new ArrayList<CD>();
 		for (ComponentDefinition cur : getComponents()) {
 			if (type.isAssignableFrom(cur.getClass())) {
@@ -313,6 +313,10 @@ public class FlexoComponentFolder extends IECLObject implements InspectableObjec
 			answer.addAll(folder.getComponentsOfType(type));
 		}
 		return answer;
+	}
+
+	public List<? extends ComponentDefinition> getComponents(Class<? extends ComponentDefinition> kl) {
+		return getComponentsOfType(kl);
 	}
 
 	public List<OperationComponentDefinition> getOperationsComponentList() {
