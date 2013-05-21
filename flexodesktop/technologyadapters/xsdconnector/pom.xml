@@ -9,6 +9,14 @@
 	</parent>
 	<artifactId>xsdconnector</artifactId>
 	<name>XSD technology connector</name>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 	<dependencies>
 		<dependency>
 			<groupId>org.openflexo</groupId>
