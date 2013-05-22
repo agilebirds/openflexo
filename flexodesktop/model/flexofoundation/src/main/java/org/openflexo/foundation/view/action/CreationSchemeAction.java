@@ -86,8 +86,9 @@ public class CreationSchemeAction extends EditionSchemeAction<CreationSchemeActi
 		logger.info("getEditionPattern()=" + getEditionPattern());
 
 		retrieveMissingDefaultParameters();
-
-		getEditionPattern().getViewPoint().getViewpointOntology().loadWhenUnloaded();
+		if (getEditionPattern().getViewPoint().getViewpointOntology() != null) {
+			getEditionPattern().getViewPoint().getViewpointOntology().loadWhenUnloaded();
+		}
 
 		editionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
 
