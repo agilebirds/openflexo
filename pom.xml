@@ -686,13 +686,34 @@
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
+				<artifactId>owlconnector</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
 				<artifactId>emfconnector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>emfconnector</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>xsdconnector</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
 				<artifactId>xsdconnector</artifactId>
 				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
 			</dependency>
 
 
