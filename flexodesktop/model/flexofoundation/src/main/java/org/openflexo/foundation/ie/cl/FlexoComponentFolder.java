@@ -301,22 +301,32 @@ public class FlexoComponentFolder extends IECLObject implements InspectableObjec
 		return getComponentLibrary();
 	}
 
-	@SuppressWarnings("unchecked")
+	public List<? extends ComponentDefinition> getComponents(Class<? extends ComponentDefinition> kl) {
+		return getComponentsOfType(kl);
+	}
+
+	public List<? extends ComponentDefinition> getComponents(Class<? extends ComponentDefinition> kl, boolean recursive) {
+		return getComponentsOfType(kl, recursive);
+	}
+
 	public <CD extends ComponentDefinition> List<CD> getComponentsOfType(Class<CD> type) {
+		return getComponentsOfType(type, true);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <CD extends ComponentDefinition> List<CD> getComponentsOfType(Class<CD> type, boolean recursive) {
 		List<CD> answer = new ArrayList<CD>();
 		for (ComponentDefinition cur : getComponents()) {
 			if (type.isAssignableFrom(cur.getClass())) {
 				answer.add((CD) cur);
 			}
 		}
-		for (FlexoComponentFolder folder : getSubFolders()) {
-			answer.addAll(folder.getComponentsOfType(type));
+		if (recursive) {
+			for (FlexoComponentFolder folder : getSubFolders()) {
+				answer.addAll(folder.getComponentsOfType(type));
+			}
 		}
 		return answer;
-	}
-
-	public List<? extends ComponentDefinition> getComponents(Class<? extends ComponentDefinition> kl) {
-		return getComponentsOfType(kl);
 	}
 
 	public List<OperationComponentDefinition> getOperationsComponentList() {

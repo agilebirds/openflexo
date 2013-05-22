@@ -45,7 +45,7 @@ public class FIBComponentSelector extends FIBModelObjectSelector<ComponentDefini
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBComponentSelector.class.getPackage().getName());
 
-	public static FileResource FIB_FILE = new FileResource("Fib/ComponentSelector.fib");
+	public static final FileResource FIB_FILE = new FileResource("Fib/ComponentSelector.fib");
 
 	private Class<? extends ComponentDefinition> type = ComponentDefinition.class;
 
@@ -64,7 +64,8 @@ public class FIBComponentSelector extends FIBModelObjectSelector<ComponentDefini
 	@Override
 	protected Collection<ComponentDefinition> getAllSelectableValues() {
 		if (getProject() != null) {
-			return new ArrayList<ComponentDefinition>(getProject().getFlexoComponentLibrary().getRootFolder().getComponentsOfType(type));
+			return new ArrayList<ComponentDefinition>(getProject().getFlexoComponentLibrary().getRootFolder()
+					.getComponentsOfType(type, true));
 		}
 		return null;
 	}
@@ -72,6 +73,11 @@ public class FIBComponentSelector extends FIBModelObjectSelector<ComponentDefini
 	@Override
 	public File getFIBFile() {
 		return FIB_FILE;
+	}
+
+	@Override
+	protected boolean isAcceptableValue(Object o) {
+		return super.isAcceptableValue(o) && getType().isAssignableFrom(o.getClass());
 	}
 
 	@Override
@@ -91,6 +97,7 @@ public class FIBComponentSelector extends FIBModelObjectSelector<ComponentDefini
 		return type;
 	}
 
+	@CustomComponentParameter(name = "type", type = CustomComponentParameter.Type.OPTIONAL)
 	public void setType(Class<? extends ComponentDefinition> type) {
 		this.type = type;
 	}
