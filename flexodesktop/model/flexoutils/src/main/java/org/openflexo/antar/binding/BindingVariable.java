@@ -1,24 +1,31 @@
 package org.openflexo.antar.binding;
 
+import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.ToolBox;
 
-public class BindingVariable implements BindingPathElement, SettableBindingPathElement {
+public class BindingVariable implements BindingPathElement, SettableBindingPathElement, HasPropertyChangeSupport {
 
 	private static final Logger logger = Logger.getLogger(BindingVariable.class.getPackage().getName());
 
 	private String variableName;
 	private Type type;
 	private boolean settable = false;
+	private PropertyChangeSupport pcSupport;
+
+	public static final String VARIABLE_NAME = "variableName";
+	public static final String TYPE = "type";
 
 	public BindingVariable(String variableName, Type type) {
 		super();
 		this.variableName = variableName;
 		this.type = type;
+		pcSupport = new PropertyChangeSupport(this);
 	}
 
 	public BindingVariable(String variableName, Type type, boolean settable) {
@@ -32,7 +39,11 @@ public class BindingVariable implements BindingPathElement, SettableBindingPathE
 	}
 
 	public void setType(Type type) {
-		this.type = type;
+		if (type != null && !type.equals(this.type)) {
+			Type oldType = this.type;
+			this.type = type;
+			pcSupport.firePropertyChange(TYPE, oldType, type);
+		}
 	}
 
 	public String getVariableName() {
@@ -40,7 +51,11 @@ public class BindingVariable implements BindingPathElement, SettableBindingPathE
 	}
 
 	public void setVariableName(String aVariableName) {
-		this.variableName = aVariableName;
+		if (aVariableName != null && !aVariableName.equals(variableName)) {
+			String oldVariableName = variableName;
+			this.variableName = aVariableName;
+			pcSupport.firePropertyChange(VARIABLE_NAME, oldVariableName, variableName);
+		}
 	}
 
 	@Override
@@ -114,6 +129,16 @@ public class BindingVariable implements BindingPathElement, SettableBindingPathE
 
 	@Override
 	public BindingPathElement getParent() {
+		return null;
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return pcSupport;
+	}
+
+	@Override
+	public String getDeletedProperty() {
 		return null;
 	}
 

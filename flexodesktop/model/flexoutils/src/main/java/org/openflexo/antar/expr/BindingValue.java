@@ -19,6 +19,8 @@
  */
 package org.openflexo.antar.expr;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +52,7 @@ import org.openflexo.xmlcode.InvalidObjectSpecificationException;
  * @author sylvain
  * 
  */
-public class BindingValue extends Expression {
+public class BindingValue extends Expression implements PropertyChangeListener {
 
 	private static final Logger logger = Logger.getLogger(BindingValue.class.getPackage().getName());
 
@@ -279,10 +281,29 @@ public class BindingValue extends Expression {
 	}
 
 	public void setBindingVariable(BindingVariable bindingVariable) {
-		this.bindingVariable = bindingVariable;
+		internallySetBindingVariable(bindingVariable);
 		bindingPath.clear();
 		parsedBindingPath.clear();
 		analysingSuccessfull = _checkBindingPathValid();
+	}
+
+	private void internallySetBindingVariable(BindingVariable aBindingVariable) {
+		if (bindingVariable != aBindingVariable) {
+			if (bindingVariable != null) {
+				bindingVariable.getPropertyChangeSupport().removePropertyChangeListener(this);
+			}
+			bindingVariable = aBindingVariable;
+			if (bindingVariable != null) {
+				bindingVariable.getPropertyChangeSupport().addPropertyChangeListener(this);
+			}
+		}
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(BindingVariable.VARIABLE_NAME) || evt.getPropertyName().equals(BindingVariable.TYPE)) {
+			markedAsToBeReanalized();
+		}
 	}
 
 	public Type getAccessedType() {
@@ -577,8 +598,8 @@ public class BindingValue extends Expression {
 		if (getDataBinding() != null && getParsedBindingPath().size() > 0
 				&& getParsedBindingPath().get(0) instanceof NormalBindingPathElement) {
 			// Seems to be valid
-			bindingVariable = dataBinding.getOwner().getBindingModel()
-					.bindingVariableNamed(((NormalBindingPathElement) getParsedBindingPath().get(0)).property);
+			internallySetBindingVariable(dataBinding.getOwner().getBindingModel()
+					.bindingVariableNamed(((NormalBindingPathElement) getParsedBindingPath().get(0)).property));
 			BindingPathElement current = bindingVariable;
 			// System.out.println("Found binding variable " + bindingVariable);
 			if (bindingVariable == null) {

@@ -35,7 +35,8 @@ public class EditionPatternPatternRolePathElement<PR extends PatternRole<?>> ext
 	@Override
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
 		if (target instanceof EditionPatternInstance) {
-			return ((EditionPatternInstance) target).getPatternActor((PatternRole) patternRole);
+			EditionPatternInstance epi = (EditionPatternInstance) target;
+			return epi.getPatternActor((PatternRole) patternRole);
 		}
 		logger.warning("Please implement me, target=" + target + " context=" + context);
 		return null;

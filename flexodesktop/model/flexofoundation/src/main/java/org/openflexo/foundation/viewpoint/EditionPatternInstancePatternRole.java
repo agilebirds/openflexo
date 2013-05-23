@@ -1,11 +1,14 @@
 package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
+import java.util.logging.Logger;
 
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.ModelObjectActorReference;
 
 public class EditionPatternInstancePatternRole extends PatternRole<EditionPatternInstance> {
+
+	private static final Logger logger = Logger.getLogger(EditionPatternInstancePatternRole.class.getPackage().getName());
 
 	private EditionPattern editionPatternType;
 	private CreationScheme creationScheme;
@@ -14,7 +17,15 @@ public class EditionPatternInstancePatternRole extends PatternRole<EditionPatter
 
 	public EditionPatternInstancePatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
+		// logger.severe("############# Created EditionPatternInstancePatternRole " + Integer.toHexString(hashCode()) + " model version="
+		// + builder.getModelVersion() + " file=" + builder.resource.getFile().getAbsolutePath());
 	}
+
+	/*@Override
+	public void finalizeDeserialization(Object builder) {
+		super.finalizeDeserialization(builder);
+		logger.severe("############# Finalized EditionPatternInstancePatternRole " + Integer.toHexString(hashCode()) + toString());
+	}*/
 
 	@Override
 	public Type getType() {

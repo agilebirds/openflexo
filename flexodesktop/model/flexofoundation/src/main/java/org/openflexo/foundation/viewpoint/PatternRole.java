@@ -99,7 +99,13 @@ public abstract class PatternRole<T> extends EditionPatternObject {
 
 	@Override
 	public String toString() {
-		return getPatternRoleName();
+		return getClass().getSimpleName()
+				+ ":"
+				+ getPatternRoleName()
+				+ "[container="
+				+ (getEditionPattern() != null ? getEditionPattern().getName() + "/"
+						+ (getEditionPattern().getVirtualModel() != null ? getEditionPattern().getVirtualModel().getName() : "null")
+						: "null") + "][" + Integer.toHexString(hashCode()) + "]";
 	}
 
 	public abstract Type getType();
