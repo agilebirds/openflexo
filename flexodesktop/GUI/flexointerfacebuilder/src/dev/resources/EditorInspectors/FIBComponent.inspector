@@ -35,23 +35,23 @@
 				<Number name="index" numberType="IntegerType" data="data.index" constraints="twocols(location=right)"/>
 			</Tab>
 
-			<Tab name="LayoutTab" title="Layout" index="3" layout="twocols" font="SansSerif,0,11" useScrollBar="true" >
+			<Tab name="LayoutTab" title="Layout" index="3" layout="twocols" font="SansSerif,0,11" useScrollBar="true" opaque="false">
 			
-				<Panel name="NoneConstraints" border="titled" borderTitle="free_location_constraints" data="($org.openflexo.fib.model.NoneLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.NoneLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null) &amp;&amp; (data.parent.layout='none')"> 
+				<Panel name="NoneConstraints" border="titled" opaque="false" borderTitle="free_location_constraints" data="($org.openflexo.fib.model.NoneLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.NoneLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null) &amp;&amp; (data.parent.layout='none')"> 
 				</Panel>
 
-				<Panel name="FlowConstraints" border="titled" borderTitle="flow_layout_constraints" data="($org.openflexo.fib.model.FlowLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.FlowLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='flow')"> 
+				<Panel name="FlowConstraints" border="titled" opaque="false" borderTitle="flow_layout_constraints" data="($org.openflexo.fib.model.FlowLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.FlowLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='flow')"> 
 					<Label label="index" constraints="twocols(location=left)"/>
 					<Number name="flowConstraintsIndex" data="data.index" constraints="twocols(location=right)"/>
 				</Panel>
 
-				<Panel name="BorderConstraints" border="titled" borderTitle="border_layout_constraints" data="($org.openflexo.fib.model.BorderLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.BorderLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='border')"> 
+				<Panel name="BorderConstraints" border="titled" opaque="false" borderTitle="border_layout_constraints" data="($org.openflexo.fib.model.BorderLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.BorderLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='border')"> 
 					<Label label="location" constraints="twocols(location=left)"/>
 					<DropDown data="BorderConstraints.data.location" constraints="twocols(location=right)" showReset="false"/>
 				</Panel>
 
-				<Panel name="GridConstraints" border="titled" borderTitle="grid_layout_constraints" data="($org.openflexo.fib.model.GridLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.GridLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='grid')"> 
-					<Panel layout="flow" hGap="5" vGap="0">
+				<Panel name="GridConstraints" border="titled" opaque="false" borderTitle="grid_layout_constraints" data="($org.openflexo.fib.model.GridLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.GridLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='grid')"> 
+					<Panel layout="flow" opaque="false" hGap="5" vGap="0">
 				        <Label label="column"/>
 				        <Number name="gridConstraintsX" numberType="IntegerType" data="GridConstraints.data.x" columns="3"/>
 				        <Label label="row"/>
@@ -59,10 +59,10 @@
 					</Panel>
 				</Panel>
 
-				<Panel name="BoxConstraints" border="titled" borderTitle="box_layout_constraints" data="($org.openflexo.fib.model.BoxLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.BoxLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='box')"> 
+				<Panel name="BoxConstraints" border="titled" opaque="false" borderTitle="box_layout_constraints" data="($org.openflexo.fib.model.BoxLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.BoxLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='box')"> 
 					<Label label="index" constraints="twocols(location=left)"/>
 					<Number name="boxConstraintsIndex" data="BoxConstraints.data.index" constraints="twocols(location=right)"/>
-					<Panel layout="flow" hGap="5" vGap="0">
+					<Panel layout="flow" opaque="false" hGap="5" vGap="0">
 				        <Label label="alignmentX"/>
 				        <Number name="boxConstraintsAlignX" numberType="FloatType" data="BoxConstraints.data.alignmentX" minValue="0.0" maxValue="1.0" increment="0.05" columns="5"/>
 				        <Label label="alignmentY"/>
@@ -70,7 +70,7 @@
 					</Panel>
 				</Panel>
 
-				<Panel name="TwoColsConstraints" border="titled" borderTitle="two_cols_layout_constraints" data="($org.openflexo.fib.model.TwoColsLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.TwoColsLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true;index=100)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='twocols')"> 
+				<Panel name="TwoColsConstraints" border="titled" opaque="false" borderTitle="two_cols_layout_constraints" data="($org.openflexo.fib.model.TwoColsLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.TwoColsLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true;index=100)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='twocols')"> 
 					<Label label="index" constraints="twocols(location=left)"/>
 					<Number name="twoColsConstraintsIndex" data="TwoColsConstraints.data.index" constraints="twocols(location=right)"/>
 					<Label label="location" constraints="twocols(location=left)"/>
@@ -80,7 +80,7 @@
 					<CheckBox data="TwoColsConstraints.data.expandVertically" constraints="twocols(location=left)"/>
 					<Label label="expand_vertically" constraints="twocols(location=right)"/>
 				    <Label label="Insets" constraints="twocols(location=left)"/>
-					<Panel layout="flow" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
+					<Panel layout="flow" opaque="false" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
 				        <Label label="top"/>
 				        <Number name="twoColsConstraintsInsetsTop" numberType="IntegerType" data="TwoColsConstraints.data.insetsTop" columns="1"/>
 				        <Label label="left"/>
@@ -92,23 +92,23 @@
 					</Panel>
 				</Panel>
 
-				<Panel name="GridBagConstraints" border="titled" borderTitle="grid_bag_layout_constraints" data="($org.openflexo.fib.model.GridBagLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.GridBagLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='gridbag')"> 
+				<Panel name="GridBagConstraints" border="titled" opaque="false" borderTitle="grid_bag_layout_constraints" data="($org.openflexo.fib.model.GridBagLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.GridBagLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='gridbag')"> 
 					<Label label="index" constraints="twocols(location=left)"/>
 					<Number name="gridBagConstraintsIndex" data="GridBagConstraints.data.index" constraints="twocols(location=right)"/>
 				    <Label label="gridX" constraints="twocols(location=left)"/>
-					<Panel layout="flow" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
+					<Panel layout="flow" opaque="false" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
 				        <Number name="gridBagConstraintsGridX" numberType="IntegerType" data="GridBagConstraints.data.gridX" columns="3" visible="GridBagConstraints.data.gridX >= 0"/>
 				        <CheckBox data="GridBagConstraints.data.gridXRelative"/>
 				        <Label label="relative"/>
 					</Panel>
 				    <Label label="gridY" constraints="twocols(location=left)"/>
-					<Panel layout="flow" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
+					<Panel layout="flow" opaque="false" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
 				        <Number name="gridBagConstraintsGridY" numberType="IntegerType" data="GridBagConstraints.data.gridY" columns="3" visible="GridBagConstraints.data.gridY >= 0"/>
 				        <CheckBox data="GridBagConstraints.data.gridYRelative"/>
 				        <Label label="relative"/>
 					</Panel>
 				    <Label label="gridWidth" constraints="twocols(location=left)"/>
-					<Panel layout="flow" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
+					<Panel layout="flow" opaque="false" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
 				        <Number name="gridBagConstraintsGridWidth" numberType="IntegerType" data="GridBagConstraints.data.gridWidth" columns="3" visible="GridBagConstraints.data.gridWidth > 0"/>
 				        <CheckBox data="GridBagConstraints.data.gridWidthRelative"/>
 				        <Label label="relative"/>
@@ -116,7 +116,7 @@
 				        <Label label="remainder"/>
 					</Panel>
 				    <Label label="gridHeight" constraints="twocols(location=left)"/>
-					<Panel layout="flow" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
+					<Panel layout="flow" opaque="false" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
 				        <Number name="gridBagConstraintsGridHeight" numberType="IntegerType" data="GridBagConstraints.data.gridHeight" columns="3" visible="GridBagConstraints.data.gridHeight > 0"/>
 				        <CheckBox data="GridBagConstraints.data.gridHeightRelative"/>
 				        <Label label="relative"/>
@@ -124,7 +124,7 @@
 				        <Label label="remainder"/>
 					</Panel>
 				    <Label label="weights" constraints="twocols(location=left)"/>
-					<Panel layout="flow" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
+					<Panel layout="flow" opaque="false" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
 				        <Label label="weightX"/>
 				        <Number name="gridBagConstraintsWeightX" numberType="DoubleType" data="GridBagConstraints.data.weightX" columns="3"/>
 				        <Label label="weightY"/>
@@ -135,14 +135,14 @@
 					<Label label="fill" constraints="twocols(location=left)"/>
 					<DropDown data="GridBagConstraints.data.fill" constraints="twocols(location=right)" showReset="false"/>
 				    <Label label="pads" constraints="twocols(location=left)"/>
-					<Panel layout="flow" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
+					<Panel layout="flow" opaque="false" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
 				        <Label label="padX"/>
 				        <Number name="gridBagConstraintsPadX" numberType="IntegerType" data="GridBagConstraints.data.padX" columns="3"/>
 				        <Label label="padY"/>
 				        <Number name="gridBagConstraintsPadY" numberType="IntegerType" data="GridBagConstraints.data.padY" columns="3"/>
 					</Panel>
 				    <Label label="Insets" constraints="twocols(location=left)"/>
-					<Panel layout="flow" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
+					<Panel layout="flow" opaque="false" hGap="5" vGap="0" constraints="twocols(location=right;expandHorizontally=true)">
 				        <Label label="top"/>
 				        <Number name="gridBagConstraintsInsetsTop" numberType="IntegerType" data="GridBagConstraints.data.insetsTop" columns="1"/>
 				        <Label label="left"/>
@@ -154,9 +154,9 @@
 					</Panel>
 				</Panel>
 
-   			   <Panel layout="twocols" border="titled" borderTitle="component_size_management" constraints="twocols(location=center;index=1;expandVertically=false;expandHorizontally=true)">
+   			   <Panel layout="twocols" border="titled" opaque="false" borderTitle="component_size_management" constraints="twocols(location=center;index=1;expandVertically=false;expandHorizontally=true)">
    			     <CheckBox selected="false" localize="true" name="DefinePreferredSize" data="data.definePreferredDimensions" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
- 			     <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" constraints="twocols(location=center;index=1;expandVertically=false;expandHorizontally=true)">
+ 			     <Panel layout="flow" opaque="false" hGap="5" vGap="0" flowAlignment="LEADING" constraints="twocols(location=center;index=1;expandVertically=false;expandHorizontally=true)">
  			        <Label label="define_preferred_dimensions" localize="true" constraints="flow(index=0)" />
   			        <Number minValue="0" maxValue="65535" increment="5" numberType="IntegerType" columns="3" data="data.width" constraints="flow(index=1)" enable="data.definePreferredDimensions" name="preferredWidth" localize="true" />
   			        <Label label="X" localize="true" constraints="flow(index=2)" enable="data.definePreferredDimensions"/>
@@ -164,7 +164,7 @@
   			        <Label label="pixels" localize="true" constraints="flow(index=4)"/>
   			     </Panel>
     			 <CheckBox selected="false" localize="true" name="DefineMinSize" data="data.defineMinDimensions" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
- 			     <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" constraints="twocols(location=center;index=3;expandVertically=false;expandHorizontally=true)">
+ 			     <Panel layout="flow" opaque="false" hGap="5" vGap="0" flowAlignment="LEADING" constraints="twocols(location=center;index=3;expandVertically=false;expandHorizontally=true)">
  			        <Label label="define_minimum_dimensions" localize="true" constraints="flow(index=0)" />
   			        <Number minValue="0" maxValue="65535" increment="5" numberType="IntegerType" columns="3" data="data.minWidth" constraints="flow(index=1)" enable="data.defineMinDimensions" name="minWidth" localize="true" />
   			        <Label label="X" localize="true" constraints="flow(index=2)" enable="data.defineMinDimensions"/>
@@ -172,7 +172,7 @@
   			        <Label label="pixels" localize="true" constraints="flow(index=4)"/>
   			     </Panel>
     			 <CheckBox selected="false" localize="true" name="DefineMaxSize" data="data.defineMaxDimensions" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
- 			     <Panel layout="flow" hGap="5" vGap="0" flowAlignment="LEADING" constraints="twocols(location=center;index=5;expandVertically=false;expandHorizontally=true)">
+ 			     <Panel layout="flow" opaque="false" hGap="5" vGap="0" flowAlignment="LEADING" constraints="twocols(location=center;index=5;expandVertically=false;expandHorizontally=true)">
  			        <Label label="define_maximum_dimensions" localize="true" constraints="flow(index=0)" />
   			        <Number minValue="0" maxValue="65535" increment="5" numberType="IntegerType" columns="3" data="data.maxWidth" constraints="flow(index=1)" enable="data.defineMaxDimensions" name="maxWidth" localize="true" />
   			        <Label label="X" localize="true" constraints="flow(index=2)" enable="data.defineMaxDimensions"/>
@@ -181,14 +181,14 @@
   			     </Panel>
  		       </Panel>
 
-				<Panel name="SplitLayoutConstraints" border="titled" borderTitle="split_layout_constraints" data="($org.openflexo.fib.model.SplitLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.SplitLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='split')"> 
+				<Panel name="SplitLayoutConstraints" border="titled" opaque="false" borderTitle="split_layout_constraints" data="($org.openflexo.fib.model.SplitLayoutConstraints)data.constraints" dataClassName="org.openflexo.fib.model.SplitLayoutConstraints" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)" visible="(data.parent != null)  &amp;&amp; (data.parent.layout='split')"> 
                    <Label label="identifier" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
                    <DropDown index="1" data="SplitLayoutConstraints.data.splitLeaf" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" format="object.name" localize="true" list="SplitLayoutConstraints.data.availableLeaves" iteratorClassName="org.openflexo.swing.layout.MultiSplitLayout$Leaf" autoSelectFirstRow="true" />
                    <Label label="weight" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
                    <Number minValue="0" maxValue="1" increment="0.05" numberType="FloatType" columns="3" data="SplitLayoutConstraints.data.weight" constraints="twocols(expandHorizontally=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Weight" localize="true" />
 				</Panel>
 
-				<Panel name="ScrollBarPolicy" border="titled" borderTitle="scroll_bar_policy" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)"> 
+				<Panel name="ScrollBarPolicy" border="titled" opaque="false" borderTitle="scroll_bar_policy" layout="twocols" constraints="twocols(location=center;expandHorizontally=true)"> 
 					<CheckBox data="data.useScrollBar" constraints="twocols(location=left)" />
 					<Label label="use_scrollbar" constraints="twocols(location=right)" />
 					<Label label="horizontal_policy" constraints="twocols(location=left)" visible="data.useScrollBar"/>
