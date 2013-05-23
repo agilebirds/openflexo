@@ -20,6 +20,7 @@
 package org.openflexo.technologyadapter.xsd.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
@@ -68,8 +69,8 @@ public abstract class XSOntProperty extends AbstractXSOntConcept implements IFle
 	}
 
 	@Override
-	public List<IFlexoOntologyFeatureAssociation> getFeatureAssociations() {
-		return null;
+	public List<IFlexoOntologyFeatureAssociation> getStructuralFeatureAssociations() {
+		return Collections.emptyList();
 	}
 
 	public List<XSOntRestriction> getReferencingRestrictions() {

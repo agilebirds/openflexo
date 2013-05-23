@@ -20,6 +20,7 @@
 package org.openflexo.technologyadapter.owl.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,6 +33,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.OntologyObjectConverter;
@@ -1116,6 +1118,16 @@ public abstract class OWLConcept<R extends OntResource> extends OWLObject implem
 
 	public OWLOntology getResourceData() {
 		return getFlexoOntology();
+	}
+
+	/**
+	 * Follow the link. (No behavioural features in OWL)
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getBehaviouralFeatureAssociations()
+	 */
+	@Override
+	public List<? extends IFlexoOntologyFeatureAssociation> getBehaviouralFeatureAssociations() {
+		return Collections.emptyList();
 	}
 
 }

@@ -113,7 +113,7 @@ public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyCl
 	}
 
 	@Override
-	public List<? extends IFlexoOntologyFeatureAssociation> getFeatureAssociations() {
+	public List<? extends IFlexoOntologyFeatureAssociation> getStructuralFeatureAssociations() {
 		return restrictions;
 	}
 }

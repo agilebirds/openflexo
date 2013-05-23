@@ -20,6 +20,7 @@
 package org.openflexo.technologyadapter.xsd.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -240,8 +241,8 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 	}
 
 	@Override
-	public List<IFlexoOntologyFeatureAssociation> getFeatureAssociations() {
-		return null;
+	public List<IFlexoOntologyFeatureAssociation> getStructuralFeatureAssociations() {
+		return Collections.emptyList();
 	}
 
 }

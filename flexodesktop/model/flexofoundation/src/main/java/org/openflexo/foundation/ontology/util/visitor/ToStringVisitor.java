@@ -153,9 +153,22 @@ public class ToStringVisitor implements IFlexoOntologyConceptVisitor<String> {
 			}
 			builder.setLength(builder.length() - 2);
 		}
-		if (aClass.getFeatureAssociations().size() != 0) {
+		if (aClass.getStructuralFeatureAssociations().size() != 0) {
 			builder.append("\n");
-			for (IFlexoOntologyFeatureAssociation featureAssociation : aClass.getFeatureAssociations()) {
+			for (IFlexoOntologyFeatureAssociation featureAssociation : aClass.getStructuralFeatureAssociations()) {
+				builder.append("\t Feature - (");
+				builder.append(featureAssociation.getLowerBound() == -1 ? "*" : featureAssociation.getLowerBound());
+				builder.append("..");
+				builder.append(featureAssociation.getUpperBound() == -1 ? "*" : featureAssociation.getUpperBound());
+				builder.append(") : ");
+				builder.append(featureAssociation.getFeature().getName());
+				builder.append("\n");
+			}
+			builder.setLength(builder.length() - 1);
+		}
+		if (aClass.getBehaviouralFeatureAssociations().size() != 0) {
+			builder.append("\n");
+			for (IFlexoOntologyFeatureAssociation featureAssociation : aClass.getBehaviouralFeatureAssociations()) {
 				builder.append("\t Feature - (");
 				builder.append(featureAssociation.getLowerBound() == -1 ? "*" : featureAssociation.getLowerBound());
 				builder.append("..");

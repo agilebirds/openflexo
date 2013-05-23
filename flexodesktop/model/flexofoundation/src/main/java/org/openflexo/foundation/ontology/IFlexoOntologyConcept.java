@@ -58,11 +58,18 @@ public interface IFlexoOntologyConcept extends IFlexoOntologyObject {
 	public IFlexoOntologyConceptContainer getContainer();
 
 	/**
-	 * Association with features for Concept.
+	 * Association with structural features for Concept.
 	 * 
 	 * @return
 	 */
-	public List<? extends IFlexoOntologyFeatureAssociation> getFeatureAssociations();
+	public List<? extends IFlexoOntologyFeatureAssociation> getStructuralFeatureAssociations();
+
+	/**
+	 * Association with behavioural features for Concept.
+	 * 
+	 * @return
+	 */
+	public List<? extends IFlexoOntologyFeatureAssociation> getBehaviouralFeatureAssociations();
 
 	/**
 	 * 

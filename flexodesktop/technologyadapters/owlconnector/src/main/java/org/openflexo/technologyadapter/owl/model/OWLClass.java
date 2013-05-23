@@ -484,7 +484,7 @@ public class OWLClass extends OWLConcept<OntClass> implements IFlexoOntologyClas
 	}
 
 	@Override
-	public List<OWLRestriction> getFeatureAssociations() {
+	public List<OWLRestriction> getStructuralFeatureAssociations() {
 		return getRestrictions();
 	}
 

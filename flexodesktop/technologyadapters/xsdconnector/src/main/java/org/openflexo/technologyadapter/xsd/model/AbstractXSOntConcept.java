@@ -20,10 +20,12 @@
 package org.openflexo.technologyadapter.xsd.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 
 public abstract class AbstractXSOntConcept extends AbstractXSOntObject implements IFlexoOntologyConcept {
@@ -90,7 +92,17 @@ public abstract class AbstractXSOntConcept extends AbstractXSOntObject implement
 	@Override
 	public final List<IFlexoOntologyAnnotation> getAnnotations() {
 		// no annotations defined in XSD/XML technology
-		return null;
+		return Collections.emptyList();
+	}
+
+	/**
+	 * Follow the link. (No behavioural features in XSD/XML technology)
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getBehaviouralFeatureAssociations()
+	 */
+	@Override
+	public List<? extends IFlexoOntologyFeatureAssociation> getBehaviouralFeatureAssociations() {
+		return Collections.emptyList();
 	}
 
 }

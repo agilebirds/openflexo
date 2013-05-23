@@ -20,6 +20,7 @@
 package org.openflexo.technologyadapter.owl.model;
 
 import java.text.Collator;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -316,9 +317,9 @@ public class OWLIndividual extends OWLConcept<Individual> implements IFlexoOntol
 	}
 
 	@Override
-	public List<? extends IFlexoOntologyFeatureAssociation> getFeatureAssociations() {
+	public List<? extends IFlexoOntologyFeatureAssociation> getStructuralFeatureAssociations() {
 		// No feature associations for this kind of concept
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
