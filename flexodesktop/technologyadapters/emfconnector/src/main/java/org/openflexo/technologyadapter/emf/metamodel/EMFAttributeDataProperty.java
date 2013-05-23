@@ -295,15 +295,4 @@ public class EMFAttributeDataProperty extends AEMFMetaModelObjectImpl<EAttribute
 		return ontology.getTechnologyAdapter();
 	}
 
-	/**
-	 * 
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.technologyadapter.emf.metamodel.AEMFMetaModelObjectImpl#isOntologyDataProperty()
-	 */
-	@Override
-	public boolean isOntologyDataProperty() {
-		return true;
-	}
-
 }

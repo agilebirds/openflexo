@@ -52,14 +52,24 @@ public abstract class FlexoOntologyObjectImpl extends FlexoObject {
 
 	public abstract String getDisplayableDescription();
 
-	public abstract boolean isOntology();
+	public final boolean isOntology() {
+		return this instanceof IFlexoOntology;
+	}
 
-	public abstract boolean isOntologyClass();
+	public final boolean isOntologyClass() {
+		return this instanceof IFlexoOntologyClass;
+	}
 
-	public abstract boolean isOntologyIndividual();
+	public final boolean isOntologyIndividual() {
+		return this instanceof IFlexoOntologyIndividual;
+	}
 
-	public abstract boolean isOntologyObjectProperty();
+	public final boolean isOntologyObjectProperty() {
+		return this instanceof IFlexoOntologyObjectProperty;
+	}
 
-	public abstract boolean isOntologyDataProperty();
+	public final boolean isOntologyDataProperty() {
+		return this instanceof IFlexoOntologyDataProperty;
+	}
 
 }

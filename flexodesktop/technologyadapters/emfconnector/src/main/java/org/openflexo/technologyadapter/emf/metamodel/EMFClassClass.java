@@ -381,17 +381,6 @@ public class EMFClassClass extends AEMFMetaModelObjectImpl<EClass> implements IF
 		return getName().equalsIgnoreCase("EObject");
 	}
 
-	/**
-	 * 
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.technologyadapter.emf.metamodel.AEMFMetaModelObjectImpl#isOntologyClass()
-	 */
-	@Override
-	public boolean isOntologyClass() {
-		return true;
-	}
-
 	@Override
 	public String toString() {
 		return "EMFClassClass:" + getName();

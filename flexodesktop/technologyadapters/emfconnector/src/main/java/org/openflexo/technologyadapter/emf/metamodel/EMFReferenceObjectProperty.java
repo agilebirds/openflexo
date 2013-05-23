@@ -297,16 +297,6 @@ public class EMFReferenceObjectProperty extends AEMFMetaModelObjectImpl<EReferen
 		return ontology.getTechnologyAdapter();
 	}
 
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.technologyadapter.emf.metamodel.AEMFMetaModelObjectImpl#isOntologyObjectProperty()
-	 */
-	@Override
-	public boolean isOntologyObjectProperty() {
-		return true;
-	}
-
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub

@@ -304,17 +304,6 @@ public class EMFObjectIndividual extends AEMFModelObjectImpl<EObject> implements
 		return null;
 	}
 
-	/**
-	 * 
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.technologyadapter.emf.model.AEMFModelObjectImpl#isOntologyIndividual()
-	 */
-	@Override
-	public boolean isOntologyIndividual() {
-		return true;
-	}
-
 	@Override
 	public String toString() {
 		// return "EMFObjectIndividual/" + getTypes().get(0) + ":" + getName() + "uri=" + getURI();

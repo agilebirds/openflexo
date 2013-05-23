@@ -46,31 +46,6 @@ public abstract class OWLObject extends FlexoOntologyObjectImpl implements IFlex
 	public abstract OWLOntology getFlexoOntology();
 
 	@Override
-	public boolean isOntology() {
-		return false;
-	}
-
-	@Override
-	public boolean isOntologyClass() {
-		return false;
-	}
-
-	@Override
-	public boolean isOntologyIndividual() {
-		return false;
-	}
-
-	@Override
-	public boolean isOntologyObjectProperty() {
-		return false;
-	}
-
-	@Override
-	public boolean isOntologyDataProperty() {
-		return false;
-	}
-
-	@Override
 	public OWLTechnologyAdapter getTechnologyAdapter() {
 		return technologyAdapter;
 	}

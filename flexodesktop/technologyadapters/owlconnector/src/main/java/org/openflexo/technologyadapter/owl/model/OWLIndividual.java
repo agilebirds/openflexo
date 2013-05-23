@@ -220,11 +220,6 @@ public class OWLIndividual extends OWLConcept<Individual> implements IFlexoOntol
 	}
 
 	@Override
-	public boolean isOntologyIndividual() {
-		return true;
-	}
-
-	@Override
 	protected void recursivelySearchRangeAndDomains() {
 		super.recursivelySearchRangeAndDomains();
 		for (OWLClass aClass : getSuperClasses()) {

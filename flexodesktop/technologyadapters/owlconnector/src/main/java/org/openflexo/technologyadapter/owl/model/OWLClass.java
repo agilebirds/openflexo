@@ -362,11 +362,6 @@ public class OWLClass extends OWLConcept<OntClass> implements IFlexoOntologyClas
 	}
 
 	@Override
-	public boolean isOntologyClass() {
-		return true;
-	}
-
-	@Override
 	protected void recursivelySearchRangeAndDomains() {
 		super.recursivelySearchRangeAndDomains();
 		for (OWLClass aClass : getSuperClasses()) {

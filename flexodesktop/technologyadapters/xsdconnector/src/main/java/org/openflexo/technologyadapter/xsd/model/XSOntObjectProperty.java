@@ -88,11 +88,6 @@ public class XSOntObjectProperty extends XSOntProperty implements IFlexoOntology
 	}
 
 	@Override
-	public boolean isOntologyObjectProperty() {
-		return true;
-	}
-
-	@Override
 	public <T> T accept(IFlexoOntologyConceptVisitor<T> visitor) {
 		return visitor.visit(this);
 	}

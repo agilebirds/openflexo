@@ -103,11 +103,6 @@ public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyCl
 	}
 
 	@Override
-	public boolean isOntologyClass() {
-		return true;
-	}
-
-	@Override
 	public <T> T accept(IFlexoOntologyConceptVisitor<T> visitor) {
 		return visitor.visit(this);
 	}

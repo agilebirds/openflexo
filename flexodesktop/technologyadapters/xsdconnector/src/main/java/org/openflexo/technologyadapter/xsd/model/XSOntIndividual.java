@@ -230,11 +230,6 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 	}
 
 	@Override
-	public boolean isOntologyIndividual() {
-		return true;
-	}
-
-	@Override
 	public <T> T accept(IFlexoOntologyConceptVisitor<T> visitor) {
 		return visitor.visit(this);
 	}

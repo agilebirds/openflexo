@@ -1814,11 +1814,6 @@ public class OWLOntology extends OWLObject implements IFlexoOntology, ResourceDa
 		return o;
 	}
 
-	@Override
-	public boolean isOntology() {
-		return true;
-	}
-
 	/**
 	 * Retrieve an ontology object from its URI, in the context of current ontology.<br>
 	 * The current ontology defines the scope, in which to lookup returned object. This method does NOT try to lookup object from other

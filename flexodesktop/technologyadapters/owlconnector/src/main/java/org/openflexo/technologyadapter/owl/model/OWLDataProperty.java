@@ -126,11 +126,6 @@ public class OWLDataProperty extends OWLProperty implements IFlexoOntologyDataPr
 	}
 
 	@Override
-	public boolean isOntologyDataProperty() {
-		return true;
-	}
-
-	@Override
 	protected void recursivelySearchRangeAndDomains() {
 		super.recursivelySearchRangeAndDomains();
 		for (OWLProperty aProperty : getSuperProperties()) {
