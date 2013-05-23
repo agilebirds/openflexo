@@ -65,6 +65,8 @@ public class ShowHidePortmapRegistery extends FlexoUndoableAction<ShowHidePortma
 		FlexoModelObject.addActionForClass(actionType, SubProcessNode.class);
 	}
 
+	private Boolean visibility;
+
 	ShowHidePortmapRegistery(WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
@@ -72,7 +74,11 @@ public class ShowHidePortmapRegistery extends FlexoUndoableAction<ShowHidePortma
 	@Override
 	protected void doAction(Object context) {
 		if (getPortMapRegistery() != null) {
-			getPortMapRegistery().setIsVisible(!getPortMapRegistery().getIsVisible());
+			if (getVisibility() != null) {
+				getPortMapRegistery().setIsVisible(getVisibility());
+			} else {
+				getPortMapRegistery().setIsVisible(!getPortMapRegistery().getIsVisible());
+			}
 		}
 	}
 
@@ -106,6 +112,14 @@ public class ShowHidePortmapRegistery extends FlexoUndoableAction<ShowHidePortma
 	@Override
 	protected void redoAction(Object context) {
 		doAction(context);
+	}
+
+	public Boolean getVisibility() {
+		return visibility;
+	}
+
+	public void setVisibility(Boolean visibility) {
+		this.visibility = visibility;
 	}
 
 }
