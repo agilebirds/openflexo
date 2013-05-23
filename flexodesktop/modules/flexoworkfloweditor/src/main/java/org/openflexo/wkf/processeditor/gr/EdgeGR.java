@@ -90,7 +90,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		edge.addObserver(this);
 		isInduced = aDrawing.getFirstVisibleObject(edge.getStartNode()) != edge.getStartNode()
 				|| aDrawing.getFirstVisibleObject(edge.getEndNode()) != edge.getEndNode();
-		setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.6f));
+		setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.0f));
 
 		setMiddleSymbol(MiddleSymbolType.NONE);
 		setEndSymbol(EndSymbolType.FILLED_ARROW);
