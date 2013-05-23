@@ -67,8 +67,8 @@ public class ObjectReferenceFeatureAssociationPathElement extends SimplePathElem
 		EMFModel model = ((EMFObjectIndividual) target).getFlexoOntology();
 		Object emfAnswer = ((EMFObjectIndividual) target).getObject().eGet(objectProperty.getObject());
 		Object returned = model.getConverter().convertIndividualReference(model, emfAnswer);
-		System.out.println("ObjectReferenceFeatureAssociationPathElement, Je retourne " + returned + " of "
-				+ (returned != null ? returned.getClass() : null));
+		/*System.out.println("ObjectReferenceFeatureAssociationPathElement, Je retourne " + returned + " of "
+				+ (returned != null ? returned.getClass() : null));*/
 		return returned;
 	}
 

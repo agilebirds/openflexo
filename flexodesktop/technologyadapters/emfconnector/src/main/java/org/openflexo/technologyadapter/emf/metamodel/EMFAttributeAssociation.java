@@ -31,6 +31,8 @@ package org.openflexo.technologyadapter.emf.metamodel;
 import org.eclipse.emf.ecore.EAttribute;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeature;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
+import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 
 /**
  * EMF Reference association.
@@ -97,6 +99,14 @@ public class EMFAttributeAssociation extends AEMFMetaModelObjectImpl<EAttribute>
 	@Override
 	public IFlexoOntologyFeature getFeature() {
 		return ontology.getConverter().convertAttributeProperty(ontology, object);
+	}
+
+	@Override
+	public IFlexoOntologyObject getRange() {
+		if (getFeature() instanceof IFlexoOntologyStructuralProperty) {
+			return ((IFlexoOntologyStructuralProperty) getFeature()).getRange();
+		}
+		return null;
 	}
 
 	/**

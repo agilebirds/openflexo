@@ -19,6 +19,8 @@
  */
 package org.openflexo.technologyadapter.xsd.model;
 
+import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.toolbox.StringUtils;
 
@@ -104,6 +106,14 @@ public class XSOntAttributeRestriction extends XSOntRestriction {
 	@Override
 	public XSOntDataProperty getFeature() {
 		return attributeProperty;
+	}
+
+	@Override
+	public IFlexoOntologyObject getRange() {
+		if (getFeature() instanceof IFlexoOntologyStructuralProperty) {
+			return ((IFlexoOntologyStructuralProperty) getFeature()).getRange();
+		}
+		return null;
 	}
 
 	@Override

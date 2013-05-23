@@ -49,6 +49,13 @@ public interface IFlexoOntologyFeatureAssociation {
 	IFlexoOntologyFeature getFeature();
 
 	/**
+	 * Range of associated feature if any.
+	 * 
+	 * @return
+	 */
+	IFlexoOntologyObject getRange();
+
+	/**
 	 * Min cardinality of association, null when undefined, -1 when Infinite
 	 * 
 	 * @return
