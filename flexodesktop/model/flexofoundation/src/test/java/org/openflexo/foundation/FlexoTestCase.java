@@ -22,6 +22,7 @@ package org.openflexo.foundation;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
@@ -230,7 +231,8 @@ public abstract class FlexoTestCase extends TestCase {
 
 	protected static FlexoResourceCenterService getNewResourceCenter(String name) {
 		try {
-			return DefaultResourceCenterService.getNewInstance(FileUtils.createTempDirectory(name, "ResourceCenter"));
+			return DefaultResourceCenterService.getNewInstance(Collections.singletonList(FileUtils.createTempDirectory(name,
+					"ResourceCenter")));
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail();

@@ -91,4 +91,10 @@ public class ResourceCenterEditor implements HasPropertyChangeSupport {
 			e.printStackTrace();
 		}
 	}
+
+	public void saveResourceCenters() {
+		System.out.println("Save resource centers");
+		rcService.storeDirectoryResourceCenterLocations();
+	}
+
 }

@@ -261,6 +261,14 @@ public abstract class TechnologyAdapter<M extends FlexoModel<M, MM>, MM extends 
 	}
 
 	/**
+	 * Provides a hook to detect when a new resource center was removed
+	 * 
+	 * @param newResourceCenter
+	 */
+	public void resourceCenterRemoved(FlexoResourceCenter removedResourceCenter) {
+	}
+
+	/**
 	 * Return model resource identified by its uri. Lookup is performed on all known resource centers.
 	 * 
 	 * @param modelURI
