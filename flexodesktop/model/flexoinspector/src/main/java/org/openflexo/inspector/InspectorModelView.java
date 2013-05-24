@@ -86,8 +86,6 @@ public class InspectorModelView extends JTabbedPane implements ChangeListener {
 	}
 
 	public void updateFromModel() {
-		/*setBackground(InspectorCst.BACK_COLOR);
-		System.err.println(getBackground());*/
 		for (Enumeration e = _widgets.elements(); e.hasMoreElements();) {
 			InnerTabWidgetView widget = (InnerTabWidgetView) e.nextElement();
 			if (widget instanceof DenaliWidget) {

@@ -25,12 +25,10 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.dnd.DragSource;
-import java.awt.dnd.DragSourceContext;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.logging.Logger;
 
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -52,18 +50,17 @@ public class FIBEditorPalette extends JDialog {
 	private static final Image DROP_OK_IMAGE = FIBIconLibrary.DROP_OK_CURSOR.getImage();
 	private static final Image DROP_KO_IMAGE = FIBIconLibrary.DROP_KO_CURSOR.getImage();
 
-	public static final Cursor dropOK = ToolBox.getPLATFORM()==ToolBox.MACOS?Toolkit.getDefaultToolkit().createCustomCursor(DROP_OK_IMAGE, new Point(16, 16), "Drop OK"):DragSource.DefaultMoveDrop;
-	public static final Cursor dropKO = ToolBox.getPLATFORM()==ToolBox.MACOS?Toolkit.getDefaultToolkit().createCustomCursor(DROP_KO_IMAGE, new Point(16, 16), "Drop KO"):DragSource.DefaultMoveNoDrop;
+	public static final Cursor dropOK = ToolBox.getPLATFORM() == ToolBox.MACOS ? Toolkit.getDefaultToolkit().createCustomCursor(
+			DROP_OK_IMAGE, new Point(16, 16), "Drop OK") : DragSource.DefaultMoveDrop;
+	public static final Cursor dropKO = ToolBox.getPLATFORM() == ToolBox.MACOS ? Toolkit.getDefaultToolkit().createCustomCursor(
+			DROP_KO_IMAGE, new Point(16, 16), "Drop KO") : DragSource.DefaultMoveNoDrop;
 
 	private final JPanel paletteContent;
 
-	//public FIBEditorController controller;
+	private FIBEditorController editorController;
 
-	private DragSourceContext dragSourceContext;
-
-	public FIBEditorPalette(JFrame frame)
-	{
-		super(frame,"Palette",false);
+	public FIBEditorPalette(JFrame frame) {
+		super(frame, "Palette", false);
 
 		paletteContent = new JPanel(null);
 
@@ -72,16 +69,27 @@ public class FIBEditorPalette extends JDialog {
 		for (File f : dir.listFiles(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
-				return name.endsWith(".fib");
+				return dir.isDirectory();
 			}
 		})) {
 			// System.out.println("Read "+f.getAbsolutePath());
-			FIBComponent paletteComponent = FIBLibrary.instance().retrieveFIBComponent(f);
-			if (paletteComponent != null) {
-				addPaletteElement(paletteComponent);
-				logger.info("Loaded palette element: "+paletteComponent+" file: "+f.getName());
-			} else {
-				logger.warning("Not found: "+f.getAbsolutePath());
+
+			File modelFIBFile = new File(f, f.getName() + ".fib");
+			if (modelFIBFile.exists()) {
+				FIBComponent modelComponent = FIBLibrary.instance().retrieveFIBComponent(modelFIBFile);
+				if (modelComponent != null) {
+					File representationFIBFile = new File(f, f.getName() + ".palette");
+					FIBComponent representationComponent = null;
+					if (representationFIBFile.exists()) {
+						representationComponent = FIBLibrary.instance().retrieveFIBComponent(representationFIBFile);
+					} else {
+						representationComponent = FIBLibrary.instance().retrieveFIBComponent(modelFIBFile);
+					}
+					addPaletteElement(modelComponent, representationComponent);
+					logger.info("Loaded palette element: " + modelComponent + " file: " + f.getName());
+				} else {
+					logger.warning("Not found: " + f.getAbsolutePath());
+				}
 			}
 		}
 
@@ -94,32 +102,21 @@ public class FIBEditorPalette extends JDialog {
 				FIBPreferences.setPaletteBounds(bounds);
 			}
 		};
-		validate();
 
 	}
 
-	private PaletteElement addPaletteElement(FIBComponent component)
-	{
-		PaletteElement el = new PaletteElement(component,this);
+	private PaletteElement addPaletteElement(FIBComponent modelComponent, FIBComponent representationComponent) {
+		PaletteElement el = new PaletteElement(modelComponent, representationComponent, this);
 		paletteContent.add(el.getView().getResultingJComponent());
 		return el;
 	}
 
-
-	public PaletteDropListener buildPaletteDropListener(JComponent dropContainer, FIBEditorController controller)
-	{
-		return new PaletteDropListener(this, dropContainer,controller);
+	public FIBEditorController getEditorController() {
+		return editorController;
 	}
 
-	public DragSourceContext getDragSourceContext() {
-		return dragSourceContext;
+	public void setEditorController(FIBEditorController editorController) {
+		this.editorController = editorController;
 	}
-
-	public void setDragSourceContext(DragSourceContext dragSourceContext) {
-		this.dragSourceContext = dragSourceContext;
-	}
-
 
 }
-
-

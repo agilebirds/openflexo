@@ -28,14 +28,12 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.TargetType;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.templates.CGDocTemplates;
 import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.GeneratedDocResource;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.ProjectRestructuration;
-import org.openflexo.foundation.toc.action.AddTOCRepository;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.localization.FlexoLocalization;
@@ -128,13 +126,6 @@ public class GeneratedDoc extends GeneratedOutput {
 	}
 
 	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-		v.add(AddTOCRepository.actionType);
-		return v;
-	}
-
-	@Override
 	public String getInspectorName() {
 		return Inspectors.DG.GENERATED_DOC_INSPECTOR;
 	}
@@ -164,13 +155,10 @@ public class GeneratedDoc extends GeneratedOutput {
 	 * 
 	 * @see org.openflexo.foundation.cg.GeneratedOutput#getOrCreateDefaultRepository()
 	 */
-	/*@Override
-	public GenerationRepository getOrCreateDefaultRepository()
-	{
-	    if (getGeneratedRepositories().size() > 0)
-	        return getGeneratedRepositories().firstElement();
-	    return null;
-	}*/
+	/*
+	 * @Override public GenerationRepository getOrCreateDefaultRepository() { if (getGeneratedRepositories().size() > 0) return
+	 * getGeneratedRepositories().firstElement(); return null; }
+	 */
 
 	@Override
 	public String getHelpText() {

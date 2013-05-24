@@ -204,7 +204,7 @@ public class FindReplaceDialog extends javax.swing.JDialog {
 
 			if (lastMatchPos != -1) {
 				htmlTextPane.setCaretPosition(lastMatchPos + findWhat.length());
-				htmlTextPane.requestFocus();
+				htmlTextPane.requestFocusInWindow();
 				htmlTextPane.select(lastMatchPos, lastMatchPos + findWhat.length());
 			}
 
@@ -243,7 +243,7 @@ public class FindReplaceDialog extends javax.swing.JDialog {
 			htmlDocument.remove(lastMatchPos, findWhat.length());
 			htmlDocument.insertString(lastMatchPos, replaceWith, attributeSet);
 			htmlTextPane.setCaretPosition(lastMatchPos + replaceWith.length());
-			htmlTextPane.requestFocus();
+			htmlTextPane.requestFocusInWindow();
 			htmlTextPane.select(lastMatchPos, lastMatchPos + replaceWith.length());
 		} catch (BadLocationException e) {
 			throw new MetaphaseEditorException(e.getMessage(), e);

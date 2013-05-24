@@ -20,46 +20,75 @@
 package org.openflexo.fib.view.widget;
 
 import java.awt.Font;
-import java.util.Vector;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.logging.Logger;
 
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBFont;
 import org.openflexo.fib.view.FIBWidgetView;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.CustomPopup.ApplyCancelListener;
 import org.openflexo.swing.FontSelector;
-import org.openflexo.swing.FontSelector.FontSelectionModel;
 
-public class FIBFontWidget extends FIBWidgetView<FIBFont, FontSelector, Font> implements FontSelectionModel {
+public class FIBFontWidget extends FIBWidgetView<FIBFont, FontSelector, Font> implements ApplyCancelListener {
 
 	private static final Logger logger = Logger.getLogger(FIBFontWidget.class.getPackage().getName());
 
 	protected FontSelector _selector;
-	private final Vector<ChangeListener> _listeners;
+	private JCheckBox checkBox;
+
+	private JPanel container;
 
 	public FIBFontWidget(FIBFont model, FIBController controller) {
 		super(model, controller);
-
-		_listeners = new Vector<ChangeListener>();
-
-		_selector = new FontSelector(this);
+		_selector = new FontSelector();
 		if (isReadOnly()) {
 			_selector.getDownButton().setEnabled(false);
+		} else {
+			_selector.addApplyCancelListener(this);
 		}
+		_selector.addFocusListener(this);
+		checkBox = new JCheckBox();
+		checkBox.setToolTipText(FlexoLocalization.localizedForKey("undefined_value", checkBox));
+		checkBox.addActionListener(new ActionListener() {
 
-		getJComponent().addFocusListener(this);
-
-		setFont(new Font("SansSerif", Font.PLAIN, 11));
-
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				_selector.setEnabled(!checkBox.isSelected());
+				updateModelFromWidget();
+			}
+		});
+		container = new JPanel(new GridBagLayout());
+		container.setOpaque(false);
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 1.0;
+		container.add(_selector, gbc);
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.weightx = 0;
+		gbc.anchor = GridBagConstraints.LINE_START;
+		container.add(checkBox, gbc);
+		updateCheckboxVisibility();
 		updateFont();
+	}
+
+	public void updateCheckboxVisibility() {
+		checkBox.setVisible(getWidget().getAllowsNull());
 	}
 
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
 		// if (notEquals(getValue(),getSelectedFont())) {
 		widgetUpdating = true;
+		checkBox.setSelected(getValue() == null);
+		_selector.setEnabled((getValue() != null || !getWidget().getAllowsNull()) && isEnabled());
 		setFont(getValue());
 		widgetUpdating = false;
 		return true;
@@ -76,15 +105,20 @@ public class FIBFontWidget extends FIBWidgetView<FIBFont, FontSelector, Font> im
 		if (isReadOnly()) {
 			return false;
 		}
-		setValue(_selector.getEditedObject());
+
+		Font editedObject = null;
+		if (!checkBox.isSelected()) {
+			editedObject = _selector.getEditedObject();
+		}
+		setValue(editedObject);
 		return true;
 		// }
 		// return false;
 	}
 
 	@Override
-	public FontSelector getJComponent() {
-		return _selector;
+	public JComponent getJComponent() {
+		return container;
 	}
 
 	@Override
@@ -97,26 +131,13 @@ public class FIBFontWidget extends FIBWidgetView<FIBFont, FontSelector, Font> im
 	}
 
 	@Override
-	public Font getSelectedFont() {
-		return getValue();
+	public void fireApplyPerformed() {
+		updateModelFromWidget();
 	}
 
 	@Override
-	public void addChangeListener(ChangeListener listener) {
-		_listeners.add(listener);
-	}
+	public void fireCancelPerformed() {
 
-	@Override
-	public void removeChangeListener(ChangeListener listener) {
-		_listeners.remove(listener);
-	}
-
-	@Override
-	public void setSelectedFont(Font font) {
-		setValue(font);
-		for (ChangeListener l : _listeners) {
-			l.stateChanged(new ChangeEvent(this));
-		}
 	}
 
 }

@@ -22,9 +22,10 @@ package org.openflexo.ch;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Window;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.WeakHashMap;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
@@ -51,7 +52,9 @@ public class FCH {
 
 	private static final Logger logger = Logger.getLogger(FCH.class.getPackage().getName());
 
-	private static Hashtable<JComponent, DocItem> _docForComponent = new Hashtable<JComponent, DocItem>();
+	private static WeakHashMap<JComponent, DocItem> _docForComponent = new WeakHashMap<JComponent, DocItem>();
+
+	private static WeakHashMap<JComponent, String> _pendingComponents = new WeakHashMap<JComponent, String>();
 
 	private static synchronized Window getWindowForComponent(JComponent component) {
 		JComponent current = component;
@@ -69,15 +72,13 @@ public class FCH {
 		return null;
 	}
 
-	private static Hashtable<JComponent, String> _pendingComponents = new Hashtable<JComponent, String>();
-
 	private static class SortComponents {
-		private Vector<JComponent> initialVector;
-		private Vector<Component> sortedVector;
+		private List<JComponent> initialVector;
+		private List<Component> sortedVector;
 
-		protected SortComponents(Vector<JComponent> sortingSet, Window window) {
+		protected SortComponents(List<JComponent> sortingSet, Window window) {
 			initialVector = sortingSet;
-			sortedVector = new Vector<Component>();
+			sortedVector = new ArrayList<Component>();
 			populateFrom(window);
 		}
 
@@ -95,7 +96,7 @@ public class FCH {
 			}
 		}
 
-		protected Vector<Component> getSortedVector() {
+		protected List<Component> getSortedVector() {
 			return sortedVector;
 		}
 
@@ -103,40 +104,16 @@ public class FCH {
 
 	public static synchronized void validateWindow(Window window) {
 		// logger.info("Validate window");
-		Vector<JComponent> concernedComponents = new Vector<JComponent>();
-		for (Enumeration<JComponent> en = _pendingComponents.keys(); en.hasMoreElements();) {
-			JComponent next = en.nextElement();
-			if (getWindowForComponent(next) == window) {
+		List<JComponent> concernedComponents = new ArrayList<JComponent>();
+		for (Entry<JComponent, String> e : _pendingComponents.entrySet()) {
+			JComponent next = e.getKey();
+			if (next != null && getWindowForComponent(next) == window) {
 				concernedComponents.add(next);
 			}
 		}
-		/*int i=0;
-		for (Enumeration en=concernedComponents.elements(); en.hasMoreElements();i++) {
-		    JComponent next = (JComponent)en.nextElement();
-		    logger.info("Was "+i+" : "+(String)_pendingComponents.get(next));
-		}*/
-		/*  Collections.sort(concernedComponents,new Comparator() {
-		    public int compare(Object o1, Object o2) {
-		        if (!(o1 instanceof JComponent)) return 0;
-		        if (!(o2 instanceof JComponent)) return 0;
-		        JComponent c1 = (JComponent)o1;
-		        JComponent c2 = (JComponent)o2;
-		        if (c1.isAncestorOf(c2)) return -1;
-		        if (c2.isAncestorOf(c1)) return 1;
-		        return 0;
-		    }
-		});*/
-		Vector<Component> sortedConcernedComponents = (new SortComponents(concernedComponents, window)).getSortedVector();
-
-		/*  i=0;
-		  for (Enumeration en=sortedConcernedComponents.elements(); en.hasMoreElements();i++) {
-		      JComponent next = (JComponent)en.nextElement();
-		      logger.info("Now "+i+" : "+(String)_pendingComponents.get(next));
-		  }*/
-
-		for (Enumeration<Component> en = sortedConcernedComponents.elements(); en.hasMoreElements();) {
-			JComponent next = (JComponent) en.nextElement();
-			validateHelpItem(next, _pendingComponents.get(next));
+		List<Component> sortedConcernedComponents = new SortComponents(concernedComponents, window).getSortedVector();
+		for (Component next : sortedConcernedComponents) {
+			validateHelpItem((JComponent) next, _pendingComponents.get(next));
 			_pendingComponents.remove(next);
 		}
 	}
@@ -146,10 +123,6 @@ public class FCH {
 		if (component != null && anIdentifier != null) {
 			_pendingComponents.put(component, anIdentifier);
 		}
-	}
-
-	public static synchronized String getHelpItem(final JComponent component) {
-		return _pendingComponents.get(component);
 	}
 
 	public static synchronized void validateHelpItem(final JComponent component, final String anIdentifier) {
@@ -213,7 +186,7 @@ public class FCH {
 		JComponent parent = null;
 		DocItem parentItem = null;
 		JComponent current = component;
-		while ((parentItem == null) && (current.getParent() != null) && (current.getParent() instanceof JComponent)) {
+		while (parentItem == null && current.getParent() != null && current.getParent() instanceof JComponent) {
 			current = (JComponent) current.getParent();
 			parentItem = getDocForComponent(current);
 			if (parentItem != null) {
@@ -253,7 +226,8 @@ public class FCH {
 		FlexoFrame frame = module.getFlexoFrame();
 		FlexoMainPane mainPane = module.getFlexoController().getMainPane();
 		if (mainPane != null) {
-			setHelpItem(mainPane.getControlPanel(), controlPanelItem);
+			// TODO: restore help on main pane top bar
+			// setHelpItem(mainPane.getControlPanel(), controlPanelItem);
 		}
 	}
 
@@ -305,7 +279,7 @@ public class FCH {
 			DocItemFolder moduleViewFolder = DocItemFolder.createDocItemFolder(moduleViewIdentifier, "Documentation on that view", folder,
 					drc);
 			mainPaneItem.addToInheritanceChildItems(moduleViewFolder.getPrimaryDocItem());
-			if ((view.getPerspective() != null) && (folder.getPrimaryDocItem() != null)) {
+			if (view.getPerspective() != null && folder.getPrimaryDocItem() != null) {
 				moduleViewFolder.getPrimaryDocItem().addToRelatedToItems(folder.getPrimaryDocItem());
 			}
 		}

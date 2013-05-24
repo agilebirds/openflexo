@@ -32,8 +32,11 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawShapeAction;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.ViewElement;
 import org.openflexo.foundation.view.action.AddShape;
+import org.openflexo.foundation.view.action.ReindexViewElements;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManagingDrawingController;
@@ -46,8 +49,8 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 	private VEShemaModuleView _moduleView;
 	private Hashtable<ViewPointPalette, ContextualPalette> _contextualPalettes;
 
-	public VEShemaController(VEController controller, View shema) {
-		super(new VEShemaRepresentation(shema), controller.getSelectionManager());
+	public VEShemaController(VEController controller, View shema, boolean screenshotOnly) {
+		super(new VEShemaRepresentation(shema, screenshotOnly), controller.getSelectionManager());
 
 		_controller = controller;
 
@@ -72,7 +75,7 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 				System.out.println("OK, perform draw new shape with " + graphicalRepresentation + " et parent: "
 						+ parentGraphicalRepresentation);
 
-				AddShape action = AddShape.actionType.makeNewAction(getShema(), null, getOEController().getEditor());
+				AddShape action = AddShape.actionType.makeNewAction(getShema(), null, getVEController().getEditor());
 				action.setGraphicalRepresentation(graphicalRepresentation);
 				action.setNameSetToNull(true);
 
@@ -92,7 +95,11 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 			_controller.DIAGRAM_PERSPECTIVE.removeFromControllers(this);
 		}
 		super.delete();
-		getDrawing().delete();
+		// Fixed huge bug with graphical representation (which are in the model) deleted when the diagram view was closed
+		// getDrawing().delete();
+		if (getDrawing().getShema() != null) {
+			getDrawing().getShema().deleteObserver(getDrawing());
+		}
 	}
 
 	@Override
@@ -100,7 +107,7 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 		return new VEShemaView(drawing, this);
 	}
 
-	public VEController getOEController() {
+	public VEController getVEController() {
 		return _controller;
 	}
 
@@ -130,10 +137,10 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 			orderedPalettes = new Vector<ViewPointPalette>(_contextualPalettes.keySet());
 			Collections.sort(orderedPalettes);
 			for (ViewPointPalette palette : orderedPalettes) {
-				paletteView.add(palette.getName(), _contextualPalettes.get(palette).getPaletteView());
+				paletteView.add(palette.getName(), _contextualPalettes.get(palette).getPaletteViewInScrollPane());
 			}
-			paletteView.add(FlexoLocalization.localizedForKey("Common", getCommonPalette().getPaletteView()), getCommonPalette()
-					.getPaletteView());
+			paletteView.add(FlexoLocalization.localizedForKey("Common", getCommonPalette().getPaletteViewInScrollPane()),
+					getCommonPalette().getPaletteViewInScrollPane());
 			paletteView.addChangeListener(new ChangeListener() {
 				@Override
 				public void stateChanged(ChangeEvent e) {
@@ -162,4 +169,41 @@ public class VEShemaController extends SelectionManagingDrawingController<VEShem
 		return _controller.getEditor();
 	}
 
+	@Override
+	public boolean upKeyPressed() {
+		if (!super.upKeyPressed()) {
+			FlexoModelObject o = getSelectionManager().getLastSelectedObject();
+			if (o == null) {
+				o = getSelectionManager().getFocusedObject();
+			}
+			if (o instanceof ViewElement) {
+				ReindexViewElements action = ReindexViewElements.actionType.makeNewAction((ViewElement) o, null, getEditor());
+				action.initAsUpReindexing((ViewElement) o);
+				action.doAction();
+				return true;
+			}
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	@Override
+	public boolean downKeyPressed() {
+		if (!super.downKeyPressed()) {
+			FlexoModelObject o = getSelectionManager().getLastSelectedObject();
+			if (o == null) {
+				o = getSelectionManager().getFocusedObject();
+			}
+			if (o instanceof ViewElement) {
+				ReindexViewElements action = ReindexViewElements.actionType.makeNewAction((ViewElement) o, null, getEditor());
+				action.initAsDownReindexing((ViewElement) o);
+				action.doAction();
+				return true;
+			}
+			return false;
+		} else {
+			return true;
+		}
+	}
 }

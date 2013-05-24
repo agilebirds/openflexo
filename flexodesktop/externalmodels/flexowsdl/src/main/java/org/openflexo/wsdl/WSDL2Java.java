@@ -266,10 +266,10 @@ public class WSDL2Java {
 
 					XmlObject urldoc = loader.parse(urlFiles[i], null, options);
 
-					if ((urldoc instanceof org.apache.xmlbeans.impl.xb.substwsdl.DefinitionsDocument)) {
+					if (urldoc instanceof org.apache.xmlbeans.impl.xb.substwsdl.DefinitionsDocument) {
 						addWsdlSchemas(urlFiles[i].toString(), (org.apache.xmlbeans.impl.xb.substwsdl.DefinitionsDocument) urldoc,
 								errorListener, noVDoc, scontentlist);
-					} else if ((urldoc instanceof SchemaDocument)) {
+					} else if (urldoc instanceof SchemaDocument) {
 						System.out
 								.println("CODE DELETED FOR XSD FILES: SEE org.apache.xmlbeans.impl.tool.SchemaCompiler loadTypeSystem method");
 					} else {

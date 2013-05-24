@@ -22,7 +22,6 @@ package org.openflexo.dre.controller.action;
 import java.util.logging.Logger;
 
 import org.openflexo.dre.controller.DREController;
-import org.openflexo.dre.controller.DRESelectionManager;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
 /**
@@ -46,34 +45,31 @@ public class DREControllerActionInitializer extends ControllerActionInitializer 
 		return _DREController;
 	}
 
-	protected DRESelectionManager getDRESelectionManager() {
-		return getDREController().getDRESelectionManager();
-	}
-
 	@Override
 	public void initializeActions() {
 		super.initializeActions();
 
-		(new DRESetPropertyInitializer(this)).init();
+		new DRESetPropertyInitializer(this);
 
-		(new CreateDocItemInitializer(this)).init();
-		(new CreateDocItemFolderInitializer(this)).init();
+		new CreateDocItemInitializer(this);
+		new CreateDocItemFolderInitializer(this);
 
-		(new DeleteDocItemFolderInitializer(this)).init();
+		new DeleteDocItemFolderInitializer(this);
 
-		(new AddToInheritanceChildItemInitializer(this)).init();
-		(new AddToEmbeddingChildItemInitializer(this)).init();
-		(new AddToRelatedToItemInitializer(this)).init();
-		(new RemoveInheritanceChildItemInitializer(this)).init();
-		(new RemoveEmbeddingChildItemInitializer(this)).init();
-		(new RemoveRelatedToItemInitializer(this)).init();
+		new AddToInheritanceChildItemInitializer(this);
+		new AddToEmbeddingChildItemInitializer(this);
+		new AddToRelatedToItemInitializer(this);
+		new RemoveInheritanceChildItemInitializer(this);
+		new RemoveEmbeddingChildItemInitializer(this);
+		new RemoveRelatedToItemInitializer(this);
 
-		(new SubmitVersionInitializer(this)).init();
-		(new ApproveVersionInitializer(this)).init();
-		(new RefuseVersionInitializer(this)).init();
+		new SubmitVersionInitializer(this);
+		new ApproveVersionInitializer(this);
+		new RefuseVersionInitializer(this);
 
-		(new GenerateHelpSetInitializer(this)).init();
-		(new ImportDocSubmissionReportInitializer(this)).init();
+		new GenerateHelpSetInitializer(this);
+		new ImportDocSubmissionReportInitializer(this);
+
 	}
 
 }

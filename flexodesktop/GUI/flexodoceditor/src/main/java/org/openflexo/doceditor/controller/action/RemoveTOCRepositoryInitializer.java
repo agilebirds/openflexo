@@ -19,7 +19,7 @@
  */
 package org.openflexo.doceditor.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -47,7 +47,7 @@ public class RemoveTOCRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RemoveTOCRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveTOCRepository>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveTOCRepository action) {
+			public boolean run(EventObject e, RemoveTOCRepository action) {
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("are_you_sure_you_want_to_remove_this_table_of_content")
 						+ " " + action.getFocusedObject().getTitle());
 			}
@@ -58,7 +58,7 @@ public class RemoveTOCRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RemoveTOCRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RemoveTOCRepository>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveTOCRepository action) {
+			public boolean run(EventObject e, RemoveTOCRepository action) {
 				return true;
 			}
 		};

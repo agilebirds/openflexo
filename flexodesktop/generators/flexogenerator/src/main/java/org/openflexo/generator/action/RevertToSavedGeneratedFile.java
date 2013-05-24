@@ -45,13 +45,13 @@ public class RevertToSavedGeneratedFile extends GCAction<RevertToSavedGeneratedF
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGFile object, Vector<CGObject> globalSelection) {
-			return (object instanceof AbstractCGFile);
+		public boolean isVisibleForSelection(CGFile object, Vector<CGObject> globalSelection) {
+			return object instanceof AbstractCGFile;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGFile object, Vector<CGObject> globalSelection) {
-			return ((object != null) && (object.hasVersionOnDisk()) && (object.isEdited()));
+		public boolean isEnabledForSelection(CGFile object, Vector<CGObject> globalSelection) {
+			return object != null && object.hasVersionOnDisk() && object.isEdited();
 		}
 
 	};

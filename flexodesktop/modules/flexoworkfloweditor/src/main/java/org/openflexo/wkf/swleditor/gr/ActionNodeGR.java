@@ -89,7 +89,7 @@ public class ActionNodeGR extends AbstractActionNodeGR {
 	@Override
 	public double _getDefaultX() {
 		int index = getActionNode().getParentPetriGraph().getIndexForNormalNode(getActionNode());
-		return (index % 4) * 50 + 50;
+		return index % 4 * 50 + 50;
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class ActionNodeGR extends AbstractActionNodeGR {
 	@Override
 	public double _getDefaultY() {
 		int index = getActionNode().getParentPetriGraph().getIndexForNormalNode(getActionNode());
-		return (index / 4) * 50;
+		return index / 4 * 50;
 	}
 
 	@Override

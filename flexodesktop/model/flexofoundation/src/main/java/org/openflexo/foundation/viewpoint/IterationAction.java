@@ -30,6 +30,7 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class IterationAction extends ControlStructureAction {
@@ -38,7 +39,8 @@ public class IterationAction extends ControlStructureAction {
 
 	private String iteratorName = "item";
 
-	public IterationAction() {
+	public IterationAction(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override
@@ -50,10 +52,6 @@ public class IterationAction extends ControlStructureAction {
 	public List<PatternRole> getAvailablePatternRoles() {
 		return getEditionPattern().getPatternRoles();
 	}*/
-
-	public List evaluateIteration(EditionSchemeAction action) {
-		return (List) getIteration().getBindingValue(action);
-	}
 
 	private ViewPointDataBinding iteration;
 
@@ -123,6 +121,13 @@ public class IterationAction extends ControlStructureAction {
 			}
 		});
 		return returned;
+	}
+
+	public List<?> evaluateIteration(EditionSchemeAction action) {
+		if (getIteration().isValid()) {
+			return (List<?>) getIteration().getBindingValue(action);
+		}
+		return null;
 	}
 
 	@Override

@@ -25,7 +25,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Enumeration;
+import java.io.File;
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -40,7 +41,6 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.dg.ProjectDocGenerator;
 import org.openflexo.dg.action.GenerateDocx;
-import org.openflexo.dg.action.GeneratePDF;
 import org.openflexo.dg.action.ReinjectDocx;
 import org.openflexo.dgmodule.DGCst;
 import org.openflexo.dgmodule.DGPreferences;
@@ -50,6 +50,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.dm.CGRepositoryConnected;
@@ -58,6 +59,7 @@ import org.openflexo.foundation.cg.dm.CGStructureRefreshed;
 import org.openflexo.foundation.cg.dm.LogAdded;
 import org.openflexo.foundation.cg.dm.PostBuildStart;
 import org.openflexo.foundation.cg.dm.PostBuildStop;
+import org.openflexo.foundation.rm.ImportedProjectLoaded;
 import org.openflexo.generator.action.GenerateAndWrite;
 import org.openflexo.generator.action.GenerateZip;
 import org.openflexo.generator.action.SynchronizeRepositoryCodeGeneration;
@@ -68,8 +70,8 @@ import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.swing.FlexoFileChooser;
 import org.openflexo.swing.JConsole;
 import org.openflexo.toolbox.LogListener;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.listener.FlexoActionButton;
 
 /**
@@ -106,6 +108,8 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 
 	private final JCheckBox openPostBuildFileCheckBox;
 
+	private FlexoPerspective declaredPerspective;
+
 	public class ConsolePanel extends JPanel {
 		protected JButton clearButton;
 
@@ -133,11 +137,14 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 	 * @param _process
 	 * 
 	 */
-	public DGRepositoryModuleView(DGRepository repository, DGController ctrl) {
+	public DGRepositoryModuleView(DGRepository repository, DGController ctrl, FlexoPerspective perspective) {
 		super(new BorderLayout());
 		codeRepository = repository;
 		repository.addObserver(this);
+		repository.getProject().addObserver(this);
 		this.controller = ctrl;
+
+		declaredPerspective = perspective;
 
 		console = new JConsole();
 		consolePanel = new ConsolePanel(console);
@@ -154,7 +161,12 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				FlexoFileChooser fileChooser = new FlexoFileChooser(SwingUtilities.getWindowAncestor(chooseFileButton));
-				fileChooser.setCurrentDirectory(codeRepository.getDirectory());
+				File directory = codeRepository.getDirectory();
+				if (directory != null) {
+					fileChooser.setCurrentDirectory(directory);
+				} else {
+					fileChooser.setCurrentDirectory(codeRepository.getDefaultSourceDirectory());
+				}
 				fileChooser.setDialogType(JFileChooser.CUSTOM_DIALOG);
 				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 				int returnVal = fileChooser.showDialog(FlexoLocalization.localizedForKey("select"));
@@ -164,7 +176,7 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 			}
 		});
 		northPanel.add(chooseFileButton);
-		generateButton = new FlexoActionButton(SynchronizeRepositoryCodeGeneration.actionType, this, controller.getEditor());
+		generateButton = new FlexoActionButton(SynchronizeRepositoryCodeGeneration.actionType, this, controller);
 		generateButton.setIcon(DGIconLibrary.GENERATE_DOC_BUTTON);
 		generateButton.setDisabledIcon(null);
 		generateButton.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -181,7 +193,7 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 		// }
 		// });
 		northPanel.add(generateButton);
-		generateAndWriteButton = new FlexoActionButton(GenerateAndWrite.actionType, this, controller.getEditor());
+		generateAndWriteButton = new FlexoActionButton(GenerateAndWrite.actionType, this, controller);
 		generateAndWriteButton.setIcon(DGIconLibrary.GENERATE_DOC_AND_WRITE_BUTTON);
 		generateAndWriteButton.setDisabledIcon(null);
 		generateAndWriteButton.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -222,26 +234,26 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 		});
 		buttonPanel.add(chooseWarLocationButton);
 		switch (repository.getFormat()) {
-		case LATEX:
-			postBuildButton = new FlexoActionButton(GeneratePDF.actionType, this, controller.getEditor());
+		/*case LATEX:
+			postBuildButton = new FlexoActionButton(GeneratePDF.actionType, this, controller);
 			postBuildButton.setIcon(DGIconLibrary.GENERATE_PDF);
 			postBuildButton.setText(FlexoLocalization.localizedForKey("generate_PDF", postBuildButton));
 			postBuildButton.setToolTipText(FlexoLocalization.localizedForKey("generate_PDF", postBuildButton));
-			break;
+			break;*/
 		case DOCX:
-			postBuildButton = new FlexoActionButton(GenerateDocx.actionType, this, controller.getEditor());
+			postBuildButton = new FlexoActionButton(GenerateDocx.actionType, this, controller);
 			postBuildButton.setIcon(DGIconLibrary.GENERATE_DOCX);
 			postBuildButton.setText(FlexoLocalization.localizedForKey("generate_docx", postBuildButton));
 			postBuildButton.setToolTipText(FlexoLocalization.localizedForKey("generate_docx", postBuildButton));
 
-			postBuildButton2 = new FlexoActionButton(ReinjectDocx.actionType, this, controller.getEditor());
+			postBuildButton2 = new FlexoActionButton(ReinjectDocx.actionType, this, controller);
 			postBuildButton2.setIcon(DGIconLibrary.REINJECT_DOCX);
 			postBuildButton2.setText(FlexoLocalization.localizedForKey("reinject_docx", postBuildButton2));
 			postBuildButton2.setToolTipText(FlexoLocalization.localizedForKey("reinject_docx", postBuildButton2));
 
 			break;
 		case HTML:
-			postBuildButton = new FlexoActionButton(GenerateZip.actionType, this, controller.getEditor());
+			postBuildButton = new FlexoActionButton(GenerateZip.actionType, this, controller);
 			postBuildButton.setIcon(DGIconLibrary.GENERATE_ZIP);
 			postBuildButton.setText(FlexoLocalization.localizedForKey("generate_zip", postBuildButton));
 			postBuildButton.setToolTipText(FlexoLocalization.localizedForKey("generate_zip", postBuildButton));
@@ -277,30 +289,27 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 		}
 
 		bigButtonsPanel.add(buttonPanel, BorderLayout.SOUTH);
-		/*generateButton.setEnabled(repository.isEnabled());
-		generateAndWriteButton.setEnabled(repository.isEnabled());
-		pdfButton.setEnabled(repository.isEnabled());*/
+		/*
+		 * generateButton.setEnabled(repository.isEnabled()); generateAndWriteButton.setEnabled(repository.isEnabled());
+		 * pdfButton.setEnabled(repository.isEnabled());
+		 */
 		JPanel northPanel2 = new JPanel(new BorderLayout());
 		JPanel checkBoxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		openPostBuildFileCheckBox = new JCheckBox();
 
 		switch (repository.getFormat()) {
-		case LATEX:
+		/*case LATEX:
 			openPostBuildFileCheckBox.setText(FlexoLocalization.localizedForKey("automatically_open_PDF", openPostBuildFileCheckBox));
 			openPostBuildFileCheckBox.setSelected(DGPreferences.getOpenPDF());
 			openPostBuildFileCheckBox.addActionListener(new ActionListener() {
-				/**
-				 * Overrides actionPerformed
-				 * 
-				 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-				 */
+				
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					DGPreferences.setOpenPDF(openPostBuildFileCheckBox.isSelected());
 					FlexoPreferences.savePreferences(true);
 				}
 			});
-			break;
+			break;*/
 		case DOCX:
 			openPostBuildFileCheckBox.setText(FlexoLocalization.localizedForKey("automatically_open_docx", openPostBuildFileCheckBox));
 			openPostBuildFileCheckBox.setSelected(DGPreferences.getOpenDocx());
@@ -370,8 +379,8 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 	 * @see org.openflexo.view.ModuleView#getPerspective()
 	 */
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
-		return controller.CODE_GENERATOR_PERSPECTIVE;
+	public FlexoPerspective getPerspective() {
+		return declaredPerspective;
 	}
 
 	public JPanel getButtonPanel() {
@@ -400,8 +409,21 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
+	public void update(final FlexoObservable observable, final DataModification dataModification) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					update(observable, dataModification);
+				}
+			});
+			return;
+		}
 		if (observable == codeRepository) {
+			if (dataModification instanceof ObjectDeleted) {
+				deleteModuleView();
+				return;
+			}
 			if (dataModification.propertyName() != null && dataModification.propertyName().equals("pdfDirectory")) {
 				chooseWarLocationButton.setText(codeRepository.getPostBuildDirectory() != null ? codeRepository.getPostBuildDirectory()
 						.getAbsolutePath() : FlexoLocalization.localizedForKey("undefined"));
@@ -422,6 +444,8 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 				removeConsoleListener();
 				console.setRefreshOnlyInSwingEventDispatchingThread(true);
 			}
+		} else if (observable == codeRepository.getProject() && dataModification instanceof ImportedProjectLoaded) {
+			updateButtonsWhenPossible();
 		}
 	}
 
@@ -444,6 +468,7 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 	public void deleteModuleView() {
 		controller.removeModuleView(this);
 		codeRepository.deleteObserver(this);
+		codeRepository.getProject().deleteObserver(this);
 		removeConsoleListener();
 		projectGenerator = null;
 	}
@@ -455,9 +480,9 @@ public class DGRepositoryModuleView extends JPanel implements ModuleView<DGRepos
 	private void addConsoleListener() {
 		if (!isListening) {
 			if (projectGenerator == null) {
-				Enumeration<ProjectDocGenerator> en = controller.getProjectGenerators();
-				while (en.hasMoreElements() && projectGenerator == null) {
-					ProjectDocGenerator pdg = en.nextElement();
+				Iterator<ProjectDocGenerator> i = controller.getProjectGenerators().iterator();
+				while (i.hasNext() && projectGenerator == null) {
+					ProjectDocGenerator pdg = i.next();
 					if (pdg.getRepository() == codeRepository) {
 						projectGenerator = pdg;
 					}

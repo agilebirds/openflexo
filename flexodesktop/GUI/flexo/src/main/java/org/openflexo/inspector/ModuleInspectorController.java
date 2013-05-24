@@ -19,21 +19,33 @@
  */
 package org.openflexo.inspector;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.GeneralPreferences;
+import org.openflexo.antar.binding.BooleanStaticBinding;
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.FIBLibrary;
+import org.openflexo.fib.model.DataBinding;
+import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.fib.model.FIBContainer;
+import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.inspector.selection.EmptySelection;
 import org.openflexo.inspector.selection.InspectorSelection;
 import org.openflexo.inspector.selection.MultipleSelection;
 import org.openflexo.inspector.selection.UniqueSelection;
+import org.openflexo.module.UserType;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.FlexoController;
 
@@ -45,6 +57,8 @@ import org.openflexo.view.controller.FlexoController;
  * 
  */
 public class ModuleInspectorController extends Observable implements Observer {
+
+	private static final String CONTROLLER_EDITABLE_BINDING = "controller.flexoController.isEditable(data)";
 
 	static final Logger logger = Logger.getLogger(ModuleInspectorController.class.getPackage().getName());
 
@@ -61,6 +75,21 @@ public class ModuleInspectorController extends Observable implements Observer {
 		this.flexoController = flexoController;
 		inspectors = new Hashtable<Class<?>, FIBInspector>();
 		inspectorDialog = new FIBInspectorDialog(this);
+		Boolean visible = GeneralPreferences.getPreferences().getBooleanProperty("FIBInspector.visible");
+		inspectorDialog.setVisible(visible == null || visible);
+		inspectorDialog.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent e) {
+				GeneralPreferences.getPreferences().setBooleanProperty("FIBInspector.visible", Boolean.TRUE);
+				GeneralPreferences.save();
+			}
+
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				GeneralPreferences.getPreferences().setBooleanProperty("FIBInspector.visible", Boolean.FALSE);
+				GeneralPreferences.save();
+			};
+		});
 		File inspectorsDir = new FileResource("Inspectors/COMMON");
 		loadDirectory(inspectorsDir);
 	}
@@ -89,6 +118,8 @@ public class ModuleInspectorController extends Observable implements Observer {
 			// System.out.println("Read "+f.getAbsolutePath());
 			FIBInspector inspector = (FIBInspector) FIBLibrary.instance().retrieveFIBComponent(f);
 			if (inspector != null) {
+				appendVisibleFor(inspector);
+				appendEditableCondition(inspector);
 				if (inspector.getDataClass() != null) {
 					// try {
 					inspectors.put(inspector.getDataClass(), inspector);
@@ -106,21 +137,60 @@ public class ModuleInspectorController extends Observable implements Observer {
 			}
 		}
 
-		for (Class<?> c : inspectors.keySet()) {
-			FIBInspector inspector = inspectors.get(c);
+		for (FIBInspector inspector : inspectors.values()) {
 			inspector.appendSuperInspectors(this);
 		}
 
-		for (Class<?> c : inspectors.keySet()) {
-			FIBInspector inspector = inspectors.get(c);
-			inspector.recursivelyReorderComponents();
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Initialized inspector for " + inspector.getDataClass());
+		for (FIBInspector inspector : inspectors.values()) {
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Initialized inspector for " + inspector.getDataClass());
 			}
 		}
 
 		setChanged();
 		notifyObservers(new NewInspectorsLoaded());
+	}
+
+	private void appendEditableCondition(FIBComponent component) {
+		if (component instanceof FIBWidget) {
+			FIBWidget widget = (FIBWidget) component;
+			if (widget.getEnable() != null && widget.getEnable().isValid()) {
+				DataBinding enable = widget.getEnable();
+				widget.setEnable(new DataBinding(enable.getBinding().getStringRepresentation() + " & " + CONTROLLER_EDITABLE_BINDING));
+			} else {
+				widget.setEnable(new DataBinding(CONTROLLER_EDITABLE_BINDING));
+			}
+		} else if (component instanceof FIBContainer) {
+			for (FIBComponent child : ((FIBContainer) component).getSubComponents()) {
+				appendEditableCondition(child);
+			}
+		}
+	}
+
+	private void appendVisibleFor(FIBComponent component) {
+		String visibleForParam = component.getParameter("visibleFor");
+		if (visibleForParam != null) {
+			String[] s = visibleForParam.split("[;,\"]");
+			if (s.length > 0) {
+				UserType userType = UserType.getCurrentUserType();
+				boolean ok = false;
+				for (String string : s) {
+					ok |= userType.getName().equalsIgnoreCase(string);
+					ok |= userType.getIdentifier().equalsIgnoreCase(string);
+					if (ok) {
+						break;
+					}
+				}
+				if (!ok) {
+					component.getVisible().setBinding(new BooleanStaticBinding(false));
+				}
+			}
+		}
+		if (component instanceof FIBContainer) {
+			for (FIBComponent child : ((FIBContainer) component).getSubComponents()) {
+				appendVisibleFor(child);
+			}
+		}
 	}
 
 	protected FIBInspector inspectorForObject(Object object) {
@@ -131,14 +201,37 @@ public class ModuleInspectorController extends Observable implements Observer {
 	}
 
 	protected FIBInspector inspectorForClass(Class<?> aClass) {
-		Class<?> c = aClass;
-		while (c != null) {
-			FIBInspector returned = inspectors.get(c);
-			if (returned != null) {
-				return returned;
-			} else {
-				c = c.getSuperclass();
+		if (aClass == null) {
+			return null;
+		}
+		FIBInspector returned = inspectors.get(aClass);
+		if (returned != null) {
+			return returned;
+		} else {
+			Class<?> superclass = aClass.getSuperclass();
+			if (superclass != null) {
+				returned = inspectors.get(aClass);
+				if (returned != null) {
+					return returned;
+				} else {
+					for (Class<?> superInterface : aClass.getInterfaces()) {
+						returned = inspectors.get(superInterface);
+						if (returned != null) {
+							return returned;
+						}
+					}
+					return inspectorForClass(superclass);
+				}
 			}
+		}
+		List<Class<?>> matchingClasses = new ArrayList<Class<?>>();
+		for (Class<?> cl : inspectors.keySet()) {
+			if (cl.isAssignableFrom(aClass)) {
+				matchingClasses.add(cl);
+			}
+		}
+		if (matchingClasses.size() > 0) {
+			return inspectors.get(TypeUtils.getMostSpecializedClass(matchingClasses));
 		}
 		return null;
 	}
@@ -149,6 +242,10 @@ public class ModuleInspectorController extends Observable implements Observer {
 
 	public FIBInspectorDialog getInspectorDialog() {
 		return inspectorDialog;
+	}
+
+	public void refreshComponentVisibility() {
+		inspectorDialog.getInspectorPanel().refreshComponentVisibility();
 	}
 
 	protected void switchToEmptyContent() {

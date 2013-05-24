@@ -258,6 +258,7 @@ public class MouseResizer implements MouseListener, MouseMotionListener {
 				cursor = Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR);
 			}
 			if (cursor != null) {
+
 				setCursorForComponentAndHierarchy(component, cursor);
 			}
 		} else {
@@ -265,15 +266,16 @@ public class MouseResizer implements MouseListener, MouseMotionListener {
 		}
 	}
 
-	private void setCursorForComponentAndHierarchy(Component component2, Cursor cursor) {
-		SwingUtilities.getAncestorOfClass(Window.class, component2).setCursor(cursor);
+	private void setCursorForComponentAndHierarchy(Component component, Cursor cursor) {
+		component.setCursor(cursor);
+		SwingUtilities.getAncestorOfClass(Window.class, component).setCursor(cursor);
 	}
 
 	private boolean isWithinResizeZone(MouseEvent e) {
-		return (e.getX() >= -RESIZE_ZONE_WIDTH && e.getX() <= RESIZE_ZONE_WIDTH)
-				|| (e.getY() >= -RESIZE_ZONE_WIDTH && e.getY() <= RESIZE_ZONE_WIDTH)
-				|| (e.getX() <= getComponentWidth() + RESIZE_ZONE_WIDTH && e.getX() >= getComponentWidth() - RESIZE_ZONE_WIDTH)
-				|| (e.getY() <= getComponentHeight() + RESIZE_ZONE_WIDTH && e.getY() >= getComponentHeight() - RESIZE_ZONE_WIDTH);
+		return e.getX() >= -RESIZE_ZONE_WIDTH && e.getX() <= RESIZE_ZONE_WIDTH || e.getY() >= -RESIZE_ZONE_WIDTH
+				&& e.getY() <= RESIZE_ZONE_WIDTH || e.getX() <= getComponentWidth() + RESIZE_ZONE_WIDTH
+				&& e.getX() >= getComponentWidth() - RESIZE_ZONE_WIDTH || e.getY() <= getComponentHeight() + RESIZE_ZONE_WIDTH
+				&& e.getY() >= getComponentHeight() - RESIZE_ZONE_WIDTH;
 	}
 
 	/**

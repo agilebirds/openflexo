@@ -19,7 +19,7 @@
  */
 package org.openflexo.tm.hibernate.gui.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 
 import javax.swing.Icon;
 
@@ -33,6 +33,7 @@ import org.openflexo.icon.SGIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sgmodule.controller.action.SGControllerActionInitializer;
 import org.openflexo.tm.hibernate.impl.HibernateImplementation;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
@@ -54,10 +55,10 @@ public class CreateHibernateModelActionInitializer extends
 	protected FlexoActionInitializer<CreateHibernateModelAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateHibernateModelAction>() {
 			@Override
-			public boolean run(ActionEvent e, CreateHibernateModelAction action) {
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(HIBERNATE_CREATEMODEL_DIALOG_FIB_RESOURCE_PATH, action, null, true,
-						FlexoLocalization.getMainLocalizer());
-				return (dialog.getStatus() == Status.VALIDATED);
+			public boolean run(EventObject e, CreateHibernateModelAction action) {
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(HIBERNATE_CREATEMODEL_DIALOG_FIB_RESOURCE_PATH, action,
+						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
+				return dialog.getStatus() == Status.VALIDATED;
 			}
 		};
 	}

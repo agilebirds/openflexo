@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation;
 
-import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -32,7 +31,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.StringEncoder.Converter;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Represents type of generation target (proto,hc-wo,engine)
@@ -42,7 +40,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * 
  */
 @Deprecated
-public abstract class CodeType extends TargetType implements StringConvertable, ChoiceList, Serializable {
+public abstract class CodeType extends TargetType implements StringConvertable<CodeType>, ChoiceList {
 
 	public CodeType(FlexoProject project) {
 		super(project);
@@ -51,19 +49,6 @@ public abstract class CodeType extends TargetType implements StringConvertable, 
 	@Override
 	public String getFullyQualifiedName() {
 		return "CODE_TYPE." + getName();
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		if (logger.isLoggable(Level.WARNING)) {
-			logger.warning("Don't do that.");
-		}
-		return null;
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		return null;
 	}
 
 	@Override
@@ -247,7 +232,7 @@ public abstract class CodeType extends TargetType implements StringConvertable, 
 	}
 
 	@Override
-	public StringEncoder.Converter getConverter() {
+	public StringEncoder.Converter<CodeType> getConverter() {
 		return codeTypeConverter;
 	}
 

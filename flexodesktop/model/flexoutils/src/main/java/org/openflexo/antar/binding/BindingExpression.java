@@ -29,21 +29,16 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.MethodCall.MethodCallArgument;
 import org.openflexo.antar.expr.Constant;
+import org.openflexo.antar.expr.Constant.ObjectSymbolicConstant;
 import org.openflexo.antar.expr.DefaultExpressionPrettyPrinter;
-import org.openflexo.antar.expr.EvaluationContext;
 import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.antar.expr.Expression;
+import org.openflexo.antar.expr.ExpressionTransformer;
 import org.openflexo.antar.expr.Function;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TransformException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.Variable;
-import org.openflexo.antar.expr.parser.ExpressionParser.ConstantFactory;
-import org.openflexo.antar.expr.parser.ExpressionParser.DefaultConstantFactory;
-import org.openflexo.antar.expr.parser.ExpressionParser.DefaultFunctionFactory;
-import org.openflexo.antar.expr.parser.ExpressionParser.DefaultVariableFactory;
-import org.openflexo.antar.expr.parser.ExpressionParser.FunctionFactory;
-import org.openflexo.antar.expr.parser.ExpressionParser.VariableFactory;
-import org.openflexo.antar.expr.parser.Value;
-import org.openflexo.antar.expr.parser.Word;
 import org.openflexo.antar.pp.ExpressionPrettyPrinter;
 
 public class BindingExpression extends AbstractBinding {
@@ -115,8 +110,7 @@ public class BindingExpression extends AbstractBinding {
 	public static BindingExpression makeBindingExpression(String value, Bindable owner) {
 		if (owner != null) {
 			BindingExpressionFactory factory = owner.getBindingFactory().getBindingExpressionFactory();
-			factory.setBindable(owner);
-			BindingExpression returned = factory.convertFromString(value);
+			BindingExpression returned = factory.convertFromString(value, owner);
 			returned.setOwner(owner);
 			return returned;
 		}
@@ -175,6 +169,8 @@ public class BindingExpression extends AbstractBinding {
 				constant = new Constant.FloatConstant(((FloatStaticBinding) aStaticBinding).getValue());
 			} else if (aStaticBinding instanceof StringStaticBinding) {
 				constant = new Constant.StringConstant(((StringStaticBinding) aStaticBinding).getValue());
+			} else if (aStaticBinding instanceof NullStaticBinding) {
+				constant = ObjectSymbolicConstant.NULL;
 			}
 		}
 
@@ -198,6 +194,8 @@ public class BindingExpression extends AbstractBinding {
 				staticBinding = new FloatStaticBinding(bd, _bindable, ((Constant.FloatConstant) constant).getValue());
 			} else if (constant instanceof Constant.StringConstant) {
 				staticBinding = new StringStaticBinding(bd, _bindable, ((Constant.StringConstant) constant).getValue());
+			} else if (constant == ObjectSymbolicConstant.NULL) {
+				staticBinding = new NullStaticBinding(bd, _bindable);
 			}
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("staticBinding=" + staticBinding + " bindable=" + staticBinding.getOwner() + " bd="
@@ -205,9 +203,14 @@ public class BindingExpression extends AbstractBinding {
 			}
 		}
 
+		/*@Override
+		public Expression evaluate(EvaluationContext context, Bindable bindable) throws TypeMismatchException {
+			return constant.evaluate(bindable);
+		}*/
+
 		@Override
-		public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
-			return constant.evaluate();
+		public Expression transform(ExpressionTransformer transformer) throws TransformException {
+			return transformer.performTransformation(this);
 		}
 
 		@Override
@@ -241,8 +244,8 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		public BindingValueVariable(String variableName, Bindable bindable) {
-			this(new Variable(variableName), bindable, (bindable != null ? new BindingDefinition("object", Object.class,
-					BindingDefinitionType.GET, true) : null));
+			this(new Variable(variableName), bindable, bindable != null ? new BindingDefinition("object", Object.class,
+					BindingDefinitionType.GET, true) : null);
 		}
 
 		public BindingValueVariable(String variableName, Bindable bindable, BindingDefinition bd) {
@@ -250,8 +253,8 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		public BindingValueVariable(Variable aVariable, Bindable bindable) {
-			this(aVariable, bindable, (bindable != null ? new BindingDefinition("object", Object.class, BindingDefinitionType.GET, true)
-					: null));
+			this(aVariable, bindable, bindable != null ? new BindingDefinition("object", Object.class, BindingDefinitionType.GET, true)
+					: null);
 		}
 
 		public BindingValueVariable(Variable aVariable, Bindable bindable, BindingDefinition bd) {
@@ -259,9 +262,8 @@ public class BindingExpression extends AbstractBinding {
 			setVariable(aVariable);
 			if (bindable != null) {
 				BindingValueFactory factory = bindable.getBindingFactory().getBindingValueFactory();
-				factory.setBindable(bindable);
 				factory.setWarnOnFailure(false);
-				bindingValue = factory.convertFromString(aVariable.getName());
+				bindingValue = factory.convertFromString(aVariable.getName(), bindable);
 				factory.setWarnOnFailure(true);
 			}
 			if (bindingValue == null) {
@@ -296,9 +298,14 @@ public class BindingExpression extends AbstractBinding {
 			this.variable = aVariable;
 		}
 
+		/*@Override
+		public Expression evaluate(EvaluationContext context, Bindable bindable) throws TypeMismatchException {
+			return variable.evaluate(context, bindable);
+		}*/
+
 		@Override
-		public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
-			return variable.evaluate(context);
+		public Expression transform(ExpressionTransformer transformer) throws TransformException {
+			return transformer.performTransformation(this);
 		}
 
 		@Override
@@ -373,8 +380,8 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		public BindingValueFunction(String functionName, Vector<Expression> args, Bindable bindable) {
-			this(new Function(functionName, args), bindable, (bindable != null ? new BindingDefinition("object", Object.class,
-					BindingDefinitionType.GET, true) : null));
+			this(new Function(functionName, args), bindable, bindable != null ? new BindingDefinition("object", Object.class,
+					BindingDefinitionType.GET, true) : null);
 		}
 
 		public BindingValueFunction(String functionName, Vector<Expression> args, Bindable bindable, BindingDefinition bd) {
@@ -382,8 +389,8 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		public BindingValueFunction(Function aFunction, Bindable bindable) {
-			this(aFunction, bindable, (bindable != null ? new BindingDefinition("object", Object.class, BindingDefinitionType.GET, true)
-					: null));
+			this(aFunction, bindable, bindable != null ? new BindingDefinition("object", Object.class, BindingDefinitionType.GET, true)
+					: null);
 			// System.out.println("Je me fabrique une BindingValueFunction avec "+aFunction);
 			// System.out.println("Mon bindable c'est "+bindable);
 			// System.out.println("BindingModel="+bindable.getBindingModel());
@@ -404,9 +411,8 @@ public class BindingExpression extends AbstractBinding {
 
 			if (bindable != null) {
 				BindingValueFactory factory = bindable.getBindingFactory().getBindingValueFactory();
-				factory.setBindable(bindable);
 				factory.setWarnOnFailure(false);
-				bindingValue = factory.convertFromString(analyzeAsBindingValue.toString());
+				bindingValue = factory.convertFromString(analyzeAsBindingValue.toString(), bindable);
 				factory.setWarnOnFailure(true);
 			}
 			if (bindingValue == null) {
@@ -457,9 +463,14 @@ public class BindingExpression extends AbstractBinding {
 			this.function = aFunction;
 		}
 
+		/*@Override
+		public Expression evaluate(EvaluationContext context, Bindable bindable) throws TypeMismatchException {
+			return function.evaluate(context, bindable);
+		}*/
+
 		@Override
-		public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
-			return function.evaluate(context);
+		public Expression transform(ExpressionTransformer transformer) throws TransformException {
+			return transformer.performTransformation(this);
 		}
 
 		@Override
@@ -486,13 +497,15 @@ public class BindingExpression extends AbstractBinding {
 		return expression.getEvaluationType();
 	}
 
-	public BindingExpression evaluate() throws TypeMismatchException {
+	public BindingExpression evaluate() throws TypeMismatchException, NullReferenceException {
 		if (expression == null) {
 			return clone();
 		}
-		EvaluationContext evaluationContext = new EvaluationContext(getConverter().getConstantFactory(), getConverter()
-				.getVariableFactory(), getConverter().getFunctionFactory());
-		Expression evaluatedExpression = expression.evaluate(evaluationContext);
+		/*EvaluationContext evaluationContext = new EvaluationContext(getConverter().getConstantFactory(), getConverter()
+				.getVariableFactory(), getConverter().getFunctionFactory());*/
+		// Expression evaluatedExpression = expression.evaluate(evaluationContext);
+		Expression evaluatedExpression = expression.evaluate();
+		evaluatedExpression = BindingExpressionFactory.convertToOldBindingModel(evaluatedExpression, getOwner());
 		BindingExpression returned = clone();
 		returned.setExpression(evaluatedExpression);
 		return returned;
@@ -670,6 +683,40 @@ public class BindingExpression extends AbstractBinding {
 	}
 
 	@Override
+	public String invalidBindingReason() {
+		if (expression == null) {
+			return "Binding " + this + " not valid because expression is null";
+		}
+
+		if (getAccessedType() == null) {
+			return "Binding " + this + " not valid because accessed type is null";
+		}
+
+		if (getBindingDefinition() == null) {
+			return "Binding " + this + " not valid because binding definition is null";
+		} else if (getBindingDefinition().getIsSettable()) {
+			return "Invalid binding because binding definition is declared as settable for an expression";
+		} else if (getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE) {
+			return "Invalid binding because binding definition is declared as executable for an expression";
+		}
+
+		for (Expression e : expression.getAllAtomicExpressions()) {
+			if (e instanceof BindingValueVariable && !((BindingValueVariable) e).isValid()) {
+				return "Binding " + this + " not valid because invalid part: [" + ((BindingValueVariable) e).getBindingValue() + " reason="
+						+ ((BindingValueVariable) e).getBindingValue().invalidBindingReason() + "]";
+			}
+			if (e instanceof BindingValueFunction && !((BindingValueFunction) e).getBindingValue().isBindingValid()) {
+				return "Binding " + this + " not valid because invalid function: ["
+						+ ((BindingValueFunction) e).getBindingValue().invalidBindingReason() + "]";
+			}
+		}
+
+		return "Binding " + this + " not valid because types are not matching: searched: " + getBindingDefinition().getType() + " have: "
+				+ getAccessedType();
+
+	}
+
+	@Override
 	public void setsWith(AbstractBinding aValue) {
 		super.setsWith(aValue);
 		if (aValue instanceof BindingExpression) {
@@ -687,58 +734,67 @@ public class BindingExpression extends AbstractBinding {
 		return returned;
 	}
 
+	/**
+	 * Evaluates the binding as a GET with supplied binding evaluation context
+	 */
 	@Override
-	public Object getBindingValue(final BindingEvaluationContext context) {
+	public Object getBindingValue(final BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
 		if (expression == null) {
 			return null;
 		}
 
-		// System.out.println("donc j'ai ca: "+getStringRepresentation());
-		// System.out.println("expression: "+expression);
-		// System.out.println("bindable: "+getOwner());
-		final ConstantFactory constantFactory = new DefaultConstantFactory();
-		final DefaultVariableFactory variableFactory = new DefaultVariableFactory();
-		final DefaultFunctionFactory functionFactory = new DefaultFunctionFactory();
+		// System.out.println("Evaluated " + this);
 
-		EvaluationContext evaluationContext = new EvaluationContext(constantFactory, new VariableFactory() {
-			@Override
-			public Expression makeVariable(Word value) {
-				// System.out.println("> makeVariable with "+value);
-				BindingValueVariable variable = new BindingValueVariable(variableFactory.makeVariable(value), getOwner());
-				Object evaluatedVariable = variable.getBindingValue().getBindingValue(context);
-				// System.out.println("> found "+evaluatedVariable);
-				return constantFactory.makeConstant(Value.createConstantValue(evaluatedVariable));
-			}
-		}, new FunctionFactory() {
-			@Override
-			public Expression makeFunction(String functionName, Vector<Expression> args) {
-				// System.out.println("> makeFunction with "+functionName);
-				BindingValueFunction function = new BindingValueFunction(functionFactory.makeFunction(functionName, args), getOwner());
-				Object evaluatedFunction = function.getBindingValue().getBindingValue(context);
-				// System.out.println("> found "+evaluatedFunction);
-				return constantFactory.makeConstant(Value.createConstantValue(evaluatedFunction));
-			}
-		});
-		Expression evaluatedExpression = null;
 		try {
-			evaluatedExpression = expression.evaluate(evaluationContext);
-		} catch (TypeMismatchException e) {
-			// e.printStackTrace();
-			// SGU: I dont have time to resolve this now, but want a clean console
-			// TODO: please reactivate this warning and resolve issues here !!!
-			if (!TypeMismatchException_WARNING) {
-				logger.warning("TypeMismatchException while evaluating " + getStringRepresentation() + " " + e.getMessage());
-				TypeMismatchException_WARNING = true;
+			Expression resolvedExpression = expression.transform(new ExpressionTransformer() {
+				@Override
+				public Expression performTransformation(Expression e) throws TransformException {
+					if (e instanceof BindingValueVariable) {
+						BindingValueVariable variable = (BindingValueVariable) e;
+						Object evaluatedVariable = variable.getBindingValue().getBindingValue(context);
+						return Constant.makeConstant(evaluatedVariable);
+					} else if (e instanceof BindingValueFunction) {
+						BindingValueFunction function = (BindingValueFunction) e;
+						Object evaluatedFunction = function.getBindingValue().getBindingValue(context);
+						return Constant.makeConstant(evaluatedFunction);
+					} else if (e instanceof BindingValueConstant) {
+						BindingValueConstant constant = (BindingValueConstant) e;
+						return constant.getConstant();
+					}
+					return e;
+				}
+			});
+
+			// System.out.println("Resolved expression=" + resolvedExpression);
+
+			Expression evaluatedExpression = resolvedExpression.evaluate();
+
+			// System.out.println("Evaluated expression=" + evaluatedExpression);
+
+			if (evaluatedExpression instanceof Constant) {
+				return ((Constant) evaluatedExpression).getValue();
 			}
+
+			/*if (evaluatedExpression instanceof BinaryOperatorExpression
+					&& ((((BinaryOperatorExpression) evaluatedExpression).getLeftArgument() == ObjectSymbolicConstant.NULL) 
+							|| (((BinaryOperatorExpression) evaluatedExpression).getLeftArgument() == ObjectSymbolicConstant.NULL))) {
+
+			}*/
+
+			logger.warning("Cannot evaluate " + getStringRepresentation() + " max reduction is " + evaluatedExpression
+					+ " resolvedExpression=" + resolvedExpression);
+			return null;
+
+		} catch (NullReferenceException e1) {
+			throw e1;
+		} catch (TypeMismatchException e1) {
+			throw e1;
+		} catch (TransformException e1) {
+			logger.warning("Unexpected TransformException while evaluating " + getStringRepresentation() + " " + e1.getMessage());
+			e1.printStackTrace();
+			return null;
 		}
 
-		// System.out.println("evaluatedExpression="+evaluatedExpression);
-
-		if (evaluatedExpression instanceof Constant) {
-			return ((Constant) evaluatedExpression).getValue();
-		}
-
-		return null;
 	}
 
 	public static boolean TypeMismatchException_WARNING = false;
@@ -767,40 +823,68 @@ public class BindingExpression extends AbstractBinding {
 
 		final ArrayList<Object> returned = new ArrayList<Object>();
 
-		final ConstantFactory constantFactory = new DefaultConstantFactory();
+		try {
+			expression.transform(new ExpressionTransformer() {
+				@Override
+				public Expression performTransformation(Expression e) throws TransformException {
+					if (e instanceof BindingValueVariable) {
+						BindingValueVariable variable = (BindingValueVariable) e;
+						Object evaluatedVariable = variable.getBindingValue().getBindingValue(context);
+						List<Object> list = variable.getBindingValue().getConcernedObjects(context);
+						if (list != null) {
+							returned.addAll(list);
+						}
+					} else if (e instanceof BindingValueFunction) {
+						BindingValueFunction function = (BindingValueFunction) e;
+						Object evaluatedFunction = function.getBindingValue().getBindingValue(context);
+						List<Object> list = function.getBindingValue().getConcernedObjects(context);
+						if (list != null) {
+							returned.addAll(list);
+						}
+					}
+					return e;
+				}
+			});
+		} catch (TransformException e1) {
+			e1.printStackTrace();
+			logger.warning("TypeMismatchException while evaluating " + getStringRepresentation() + " " + e1.getMessage());
+		}
+
+		/*final ConstantFactory constantFactory = new DefaultConstantFactory();
 		final DefaultVariableFactory variableFactory = new DefaultVariableFactory();
 		final DefaultFunctionFactory functionFactory = new DefaultFunctionFactory();
 
 		EvaluationContext evaluationContext = new EvaluationContext(constantFactory, new VariableFactory() {
 			@Override
-			public Expression makeVariable(Word value) {
-				BindingValueVariable variable = new BindingValueVariable(variableFactory.makeVariable(value), getOwner());
+			public Expression makeVariable(Word value, Bindable bindable) {
+				BindingValueVariable variable = new BindingValueVariable(variableFactory.makeVariable(value, bindable), getOwner());
 				Object evaluatedVariable = variable.getBindingValue().getBindingValue(context);
 				List<Object> list = variable.getBindingValue().getConcernedObjects(context);
 				if (list != null) {
 					returned.addAll(list);
 				}
-				return constantFactory.makeConstant(Value.createConstantValue(evaluatedVariable));
+				return constantFactory.makeConstant(Value.createConstantValue(evaluatedVariable), bindable);
 			}
 		}, new FunctionFactory() {
 			@Override
-			public Expression makeFunction(String functionName, Vector<Expression> args) {
-				BindingValueFunction function = new BindingValueFunction(functionFactory.makeFunction(functionName, args), getOwner());
+			public Expression makeFunction(String functionName, List<Expression> args, Bindable bindable) {
+				BindingValueFunction function = new BindingValueFunction(functionFactory.makeFunction(functionName, args, bindable),
+						getOwner());
 				Object evaluatedFunction = function.getBindingValue().getBindingValue(context);
 				List<Object> list = function.getBindingValue().getConcernedObjects(context);
 				if (list != null) {
 					returned.addAll(list);
 				}
-				return constantFactory.makeConstant(Value.createConstantValue(evaluatedFunction));
+				return constantFactory.makeConstant(Value.createConstantValue(evaluatedFunction), bindable);
 			}
 		});
 		Expression evaluatedExpression = null;
 		try {
-			evaluatedExpression = expression.evaluate(evaluationContext);
+			evaluatedExpression = expression.evaluate(evaluationContext, getOwner());
 		} catch (TypeMismatchException e) {
 			// e.printStackTrace();
 			logger.warning("TypeMismatchException while evaluating " + getStringRepresentation() + " " + e.getMessage());
-		}
+		}*/
 
 		return returned;
 
@@ -820,36 +904,64 @@ public class BindingExpression extends AbstractBinding {
 
 		final ArrayList<TargetObject> returned = new ArrayList<TargetObject>();
 
-		final ConstantFactory constantFactory = new DefaultConstantFactory();
+		try {
+			expression.transform(new ExpressionTransformer() {
+				@Override
+				public Expression performTransformation(Expression e) throws TransformException {
+					if (e instanceof BindingValueVariable) {
+						BindingValueVariable variable = (BindingValueVariable) e;
+						Object evaluatedVariable = variable.getBindingValue().getBindingValue(context);
+						List<TargetObject> list = variable.getBindingValue().getTargetObjects(context);
+						if (list != null) {
+							returned.addAll(list);
+						}
+					} else if (e instanceof BindingValueFunction) {
+						BindingValueFunction function = (BindingValueFunction) e;
+						Object evaluatedFunction = function.getBindingValue().getBindingValue(context);
+						List<TargetObject> list = function.getBindingValue().getTargetObjects(context);
+						if (list != null) {
+							returned.addAll(list);
+						}
+					}
+					return e;
+				}
+			});
+		} catch (TransformException e1) {
+			e1.printStackTrace();
+			logger.warning("TypeMismatchException while evaluating " + getStringRepresentation() + " " + e1.getMessage());
+		}
+
+		/*final ConstantFactory constantFactory = new DefaultConstantFactory();
 		final DefaultVariableFactory variableFactory = new DefaultVariableFactory();
 		final DefaultFunctionFactory functionFactory = new DefaultFunctionFactory();
 
 		EvaluationContext evaluationContext = new EvaluationContext(constantFactory, new VariableFactory() {
 			@Override
-			public Expression makeVariable(Word value) {
-				BindingValueVariable variable = new BindingValueVariable(variableFactory.makeVariable(value), getOwner());
+			public Expression makeVariable(Word value, Bindable bindable) {
+				BindingValueVariable variable = new BindingValueVariable(variableFactory.makeVariable(value, bindable), getOwner());
 				Object evaluatedVariable = variable.getBindingValue().getBindingValue(context);
 				List<TargetObject> list = variable.getBindingValue().getTargetObjects(context);
 				if (list != null) {
 					returned.addAll(list);
 				}
-				return constantFactory.makeConstant(Value.createConstantValue(evaluatedVariable));
+				return constantFactory.makeConstant(Value.createConstantValue(evaluatedVariable), bindable);
 			}
 		}, new FunctionFactory() {
 			@Override
-			public Expression makeFunction(String functionName, Vector<Expression> args) {
-				BindingValueFunction function = new BindingValueFunction(functionFactory.makeFunction(functionName, args), getOwner());
+			public Expression makeFunction(String functionName, List<Expression> args, Bindable bindable) {
+				BindingValueFunction function = new BindingValueFunction(functionFactory.makeFunction(functionName, args, bindable),
+						getOwner());
 				Object evaluatedFunction = function.getBindingValue().getBindingValue(context);
 				List<TargetObject> list = function.getBindingValue().getTargetObjects(context);
 				if (list != null) {
 					returned.addAll(list);
 				}
-				return constantFactory.makeConstant(Value.createConstantValue(evaluatedFunction));
+				return constantFactory.makeConstant(Value.createConstantValue(evaluatedFunction), bindable);
 			}
 		});
 		Expression evaluatedExpression = null;
 		try {
-			evaluatedExpression = expression.evaluate(evaluationContext);
+			evaluatedExpression = expression.evaluate(evaluationContext, getOwner());
 		} catch (TypeMismatchException e) {
 			// e.printStackTrace();
 			// SGU: I dont have time to resolve this now, but want a clean console
@@ -858,7 +970,7 @@ public class BindingExpression extends AbstractBinding {
 				logger.warning("TypeMismatchException while evaluating " + getStringRepresentation() + " " + e.getMessage());
 				TypeMismatchException_WARNING = true;
 			}
-		}
+		}*/
 
 		return returned;
 	}

@@ -32,6 +32,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -86,14 +87,11 @@ public class FIBInspectorController implements Observer, ChangeListener {
 			}
 		}
 
-		for (Class c : inspectors.keySet()) {
-			FIBInspector inspector = inspectors.get(c);
+		for (FIBInspector inspector : inspectors.values()) {
 			inspector.appendSuperInspectors(this);
 		}
 
-		for (Class c : inspectors.keySet()) {
-			FIBInspector inspector = inspectors.get(c);
-			inspector.recursivelyReorderComponents();
+		for (FIBInspector inspector : inspectors.values()) {
 
 			FIBView inspectorView = FIBController.makeView(inspector, FIBAbstractEditor.LOCALIZATION);
 			FlexoLocalization.addToLocalizationListeners(inspectorView);
@@ -113,7 +111,7 @@ public class FIBInspectorController implements Observer, ChangeListener {
 		// GPO: Isn't there a bit too much panels here?
 		EMPTY_CONTENT = new JPanel(new BorderLayout());
 		// EMPTY_CONTENT.setPreferredSize(new Dimension(400,400));
-		EMPTY_CONTENT.add(new JLabel("No selection", JLabel.CENTER), BorderLayout.CENTER);
+		EMPTY_CONTENT.add(new JLabel("No selection", SwingConstants.CENTER), BorderLayout.CENTER);
 
 		rootPane = new JPanel(new BorderLayout());
 		inspectorDialog.getContentPane().setLayout(new BorderLayout());
@@ -121,7 +119,7 @@ public class FIBInspectorController implements Observer, ChangeListener {
 
 		switchToEmptyContent();
 		inspectorDialog.setResizable(true);
-		inspectorDialog.validate();
+		rootPane.revalidate();
 		inspectorDialog.setVisible(true);
 	}
 
@@ -156,7 +154,7 @@ public class FIBInspectorController implements Observer, ChangeListener {
 		currentInspectorView = null;
 		rootPane.removeAll();
 		rootPane.add(EMPTY_CONTENT, BorderLayout.CENTER);
-		rootPane.validate();
+		rootPane.revalidate();
 		rootPane.repaint();
 	}
 
@@ -176,7 +174,7 @@ public class FIBInspectorController implements Observer, ChangeListener {
 			currentInspectorView = view;
 			rootPane.removeAll();
 			rootPane.add(currentInspectorView.getResultingJComponent(), BorderLayout.CENTER);
-			rootPane.validate();
+			rootPane.revalidate();
 			rootPane.repaint();
 			currentInspector = newInspector;
 			inspectorDialog.setTitle(newInspector.getParameter("title"));

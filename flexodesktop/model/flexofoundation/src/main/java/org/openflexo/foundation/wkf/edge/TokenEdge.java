@@ -94,11 +94,10 @@ public final class TokenEdge extends FlexoPostCondition<PetriGraphNode, Node> im
 			throw new InvalidEdgeException(this);
 		}
 		// Special stuff to make operation node synchronized if required
-		if ((startNode instanceof ActionNode) && (endNode.getNode() instanceof ActionNode)
-				&& (((ActionNode) endNode.getNode()).isEndNode())) {
+		if (startNode instanceof ActionNode && endNode.getNode() instanceof ActionNode && ((ActionNode) endNode.getNode()).isEndNode()) {
 			ActionNode s = (ActionNode) startNode;
 			ActionNode e = (ActionNode) endNode.getNode();
-			if ((s.getOperationNode() == e.getOperationNode()) && (s.getOperationNode() != null)) {
+			if (s.getOperationNode() == e.getOperationNode() && s.getOperationNode() != null) {
 				s.getOperationNode().setIsSynchronized(true);
 			}
 		}
@@ -184,7 +183,7 @@ public final class TokenEdge extends FlexoPostCondition<PetriGraphNode, Node> im
 				return false;
 			}
 		}
-		return (startNode.getProcess() == nextNode.getProcess());
+		return startNode.getProcess() == nextNode.getProcess();
 
 	}
 
@@ -233,7 +232,7 @@ public final class TokenEdge extends FlexoPostCondition<PetriGraphNode, Node> im
 
 		@Override
 		protected void fixAction() {
-			(getObject()).setTokenIncrem(1);
+			getObject().setTokenIncrem(1);
 		}
 	}
 

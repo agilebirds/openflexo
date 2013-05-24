@@ -96,7 +96,7 @@ public class EndActivityNodeGR extends AbstractActivityNodeGR<ActivityNode> {
 	 */
 	@Override
 	public double _getDefaultY() {
-		return (getActivityNode().getParentPetriGraph().getIndexForEndNode(getActivityNode()) * 80);
+		return getActivityNode().getParentPetriGraph().getIndexForEndNode(getActivityNode()) * 80;
 	}
 
 	@Override

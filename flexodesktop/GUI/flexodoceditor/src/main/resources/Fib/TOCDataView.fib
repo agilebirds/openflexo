@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="gridbag" titleFont="Lucida Grande,0,13" darkLevel="0" dataClassName="org.openflexo.foundation.toc.TOCData" controllerClassName="org.openflexo.doceditor.controller.DEFIBController" name="main">
+  <Image imageFile="../../../../../flexo/src/main/resources/Icons/DG/module-dg-hover-64.png" sizeAdjustment="OriginalSize" align="left" imageWidth="32" imageHeight="32" localize="true" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=10;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
+  <Panel layout="border" border="rounded3d" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=5;insetsLeft=5;insetsRight=5;insetsTop=5;padX=0;padY=0;weightX=1.0;weightY=1.0)" width="80" height="60">
+    <Label label="doc_editor_introduction_text" align="center" localize="true" constraints="border(location=center)" />
+  </Panel>
+  <Button action="controller.addTableOfContent()" buttonType="Trigger" label="add_table_of_contents" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=10;insetsLeft=0;insetsRight=0;insetsTop=10;padX=0;padY=0;weightX=1.0;weightY=0.0)" localize="true" />
+  <LocalizedDictionary>
+    <Localized key="normal_section" lang="English">Normal section</Localized>
+    <Localized key="normal_section" lang="French">Section normale</Localized>
+    <Localized key="normal_section" lang="Dutch">normal_section</Localized>
+    <Localized key="title" lang="English">Title</Localized>
+    <Localized key="title" lang="French">Titre</Localized>
+    <Localized key="title" lang="Dutch">Title</Localized>
+    <Localized key="title_of_section" lang="English">Title of section</Localized>
+    <Localized key="title_of_section" lang="French">Titre de la section</Localized>
+    <Localized key="title_of_section" lang="Dutch">title_of_section</Localized>
+    <Localized key="contents" lang="English">Contents</Localized>
+    <Localized key="contents" lang="French">Contenu</Localized>
+    <Localized key="contents" lang="Dutch">contents</Localized>
+    <Localized key="variables" lang="English">Variables</Localized>
+    <Localized key="variables" lang="French">Variables</Localized>
+    <Localized key="variables" lang="Dutch">variables</Localized>
+    <Localized key="display_title" lang="English">Display title</Localized>
+    <Localized key="display_title" lang="French">Afficher le titre</Localized>
+    <Localized key="display_title" lang="Dutch">display_title</Localized>
+    <Localized key="tables_of_contents" lang="English">Tables of contents</Localized>
+    <Localized key="tables_of_contents" lang="French">Tables des matières</Localized>
+    <Localized key="tables_of_contents" lang="Dutch">tables_of_contents</Localized>
+    <Localized key="doc_editor_introduction_text" lang="English">&lt;html&gt;   &lt;head&gt;        &lt;/head&gt;   &lt;body&gt;     &lt;center&gt;       You are in the Document editor where you can build tables of contents by        creating a section tree from various option of predefined sub-sections        or manually editable sub-sections.     &lt;/center&gt;     &lt;center&gt;       These table of contents will be used on the OpenFlexo Server to create        documents, or will be used by the documentation generator.     &lt;/center&gt;   &lt;/body&gt; &lt;/html&gt;</Localized>
+    <Localized key="doc_editor_introduction_text" lang="French">&lt;html&gt;   &lt;head&gt;        &lt;/head&gt;   &lt;body&gt;     &lt;center&gt;       Vous &amp;#234;tes dans l'&amp;#233;diteur de doc o&amp;#249; vous pouvez cr&amp;#233;er des tables des        mat&amp;#232;res en &amp;#233;ditant un arbre de sections.     &lt;/center&gt;     &lt;center&gt;       Ces tables des mati&amp;#232;res seront utilis&amp;#233;es par le serveur OpenFlexo pour        g&amp;#233;n&amp;#233;rer des documents.     &lt;/center&gt;   &lt;/body&gt; &lt;/html&gt;</Localized>
+    <Localized key="doc_editor_introduction_text" lang="Dutch">You are in the Document editor where you can build tables of contents by creating a section tree from various option of predefined sub-sections or manually editable sub-sections. These table of contents will be used on the OpenFlexo Server to create documents.</Localized>
+    <Localized key="add_table_of_contents" lang="English">Add table of contents</Localized>
+    <Localized key="add_table_of_contents" lang="French">Ajouter une table des matières</Localized>
+    <Localized key="add_table_of_contents" lang="Dutch">add_table_of_contents</Localized>
+  </LocalizedDictionary>
+</Panel>
+

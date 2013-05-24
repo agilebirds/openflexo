@@ -21,6 +21,7 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
@@ -30,8 +31,8 @@ public class DropScheme extends AbstractCreationScheme {
 	private String target;
 	private ShapePatternRole targetPatternRole;
 
-	public DropScheme() {
-		super();
+	public DropScheme(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override
@@ -102,11 +103,11 @@ public class DropScheme extends AbstractCreationScheme {
 	}
 
 	public boolean isValidTarget(EditionPattern aTarget, PatternRole contextRole) {
-		if (getTargetEditionPattern().isAssignableFrom(aTarget)) {
+		if (getTargetEditionPattern() != null && getTargetEditionPattern().isAssignableFrom(aTarget)) {
 			if (targetHasMultipleRoles()) {
 				// TODO make proper implementation when role inheritance will be in use !!!
 				return getTargetPatternRole() == null
-						|| (getTargetPatternRole().getPatternRoleName().equals(contextRole.getPatternRoleName()));
+						|| getTargetPatternRole().getPatternRoleName().equals(contextRole.getPatternRoleName());
 			} else {
 				return true;
 			}

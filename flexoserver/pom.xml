@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>openflexo</artifactId>
-		<version>1.4.4-SNAPSHOT</version>
+		<version>1.5.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexoserver</artifactId>
 	<packaging>pom</packaging>

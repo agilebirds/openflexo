@@ -70,6 +70,6 @@ public class Tuple extends Literal {
 
 	@Override
 	public boolean equals(java.lang.Object o) {
-		return (o instanceof Tuple) && (((Tuple) o).value == this.value) && (((Tuple) o).name.equals(this.name));
+		return o instanceof Tuple && ((Tuple) o).value == this.value && ((Tuple) o).name.equals(this.name);
 	}
 }

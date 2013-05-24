@@ -19,7 +19,7 @@
  */
 package org.openflexo.fps.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -47,7 +47,7 @@ public class OverrideAndUpdateFilesInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<OverrideAndUpdateFiles> getDefaultInitializer() {
 		return new FlexoActionInitializer<OverrideAndUpdateFiles>() {
 			@Override
-			public boolean run(ActionEvent e, OverrideAndUpdateFiles action) {
+			public boolean run(EventObject e, OverrideAndUpdateFiles action) {
 				return FlexoController.confirm(FlexoLocalization
 						.localizedForKey("would_you_really_like_to_override_and_update_those_files"));
 			}
@@ -58,7 +58,7 @@ public class OverrideAndUpdateFilesInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<OverrideAndUpdateFiles> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OverrideAndUpdateFiles>() {
 			@Override
-			public boolean run(ActionEvent e, OverrideAndUpdateFiles action) {
+			public boolean run(EventObject e, OverrideAndUpdateFiles action) {
 				return true;
 			}
 		};

@@ -25,13 +25,15 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class DeclarePatternRole extends AssignableAction {
 
 	private static final Logger logger = Logger.getLogger(DeclarePatternRole.class.getPackage().getName());
 
-	public DeclarePatternRole() {
+	public DeclarePatternRole(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override
@@ -110,12 +112,12 @@ public class DeclarePatternRole extends AssignableAction {
 
 		@Override
 		public ViewPointDataBinding getBinding(DeclarePatternRole object) {
-			return object.getAssignation();
+			return object.getObject();
 		}
 
 		@Override
 		public BindingDefinition getBindingDefinition(DeclarePatternRole object) {
-			return object.getAssignationBindingDefinition();
+			return object.getObjectBindingDefinition();
 		}
 
 	}

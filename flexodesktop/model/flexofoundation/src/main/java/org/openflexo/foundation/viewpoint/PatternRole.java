@@ -24,6 +24,7 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -35,27 +36,15 @@ import org.openflexo.toolbox.StringUtils;
 public abstract class PatternRole extends EditionPatternObject {
 
 	public static enum PatternRoleType {
-		Shape,
-		Connector,
-		Individual,
-		Class,
-		ObjectProperty,
-		DataProperty,
-		IsAStatement,
-		ObjectPropertyStatement,
-		DataPropertyStatement,
-		RestrictionStatement,
-		FlexoModelObject,
-		Diagram,
-		EditionPattern,
-		Primitive
+		Shape, Connector, Individual, Class, Property, ObjectProperty, DataProperty, IsAStatement, ObjectPropertyStatement, DataPropertyStatement, RestrictionStatement, FlexoModelObject, Diagram, EditionPattern, Primitive
 	}
 
 	private EditionPattern _pattern;
 	private String patternRoleName;
 	private String description;
 
-	public PatternRole() {
+	public PatternRole(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	public void setEditionPattern(EditionPattern pattern) {
@@ -130,13 +119,16 @@ public abstract class PatternRole extends EditionPatternObject {
 	public abstract Class<?> getAccessedClass();
 
 	@Override
-	public BindingModel getBindingModel() {
+	public final BindingModel getBindingModel() {
 		return getEditionPattern().getBindingModel();
 	}
 
 	public abstract boolean getIsPrimaryRole();
 
 	public abstract void setIsPrimaryRole(boolean isPrimary);
+
+	// @Override
+	// public abstract String getLanguageRepresentation();
 
 	public static class PatternRoleMustHaveAName extends ValidationRule<PatternRoleMustHaveAName, PatternRole> {
 		public PatternRoleMustHaveAName() {

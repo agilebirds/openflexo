@@ -38,6 +38,14 @@ public class ResourceLocator {
 	private static final Logger logger = Logger.getLogger(ResourceLocator.class.getPackage().getName());
 
 	static File locateFile(String relativePathName) {
+		File locateFile = locateFile(relativePathName, false);
+		if (locateFile != null && locateFile.exists()) {
+			return locateFile;
+		}
+		return locateFile(relativePathName, true);
+	}
+
+	static File locateFile(String relativePathName, boolean lenient) {
 		// logger.info("locateFile: "+relativePathName);
 		for (Enumeration<File> e = getDirectoriesSearchOrder().elements(); e.hasMoreElements();) {
 			File nextTry = new File(e.nextElement(), relativePathName);
@@ -45,7 +53,12 @@ public class ResourceLocator {
 				if (logger.isLoggable(Level.FINER)) {
 					logger.finer("Found " + nextTry.getAbsolutePath());
 				}
-				return nextTry;
+				try {
+					if (nextTry.getCanonicalFile().getName().equals(nextTry.getName()) || lenient) {
+						return nextTry;
+					}
+				} catch (IOException e1) {
+				}
 			} else {
 				if (logger.isLoggable(Level.FINER)) {
 					logger.finer("Searched for a " + nextTry.getAbsolutePath());
@@ -101,7 +114,7 @@ public class ResourceLocator {
 	}
 
 	public static void printDirectoriesSearchOrder(PrintStream out) {
-		out.println("Direcrtories search order is:");
+		out.println("Directories search order is:");
 		for (File file : getDirectoriesSearchOrder()) {
 			out.println(file.getAbsolutePath());
 		}
@@ -120,22 +133,26 @@ public class ResourceLocator {
 
 	private static Vector<File> getDirectoriesSearchOrder() {
 		if (directoriesSearchOrder == null) {
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Initializing directories search order");
-			}
-			directoriesSearchOrder = new Vector<File>();
-			if (preferredResourcePath != null) {
-				if (logger.isLoggable(Level.INFO)) {
-					logger.info("Adding directory " + preferredResourcePath.getAbsolutePath());
+			synchronized (ResourceLocator.class) {
+				if (directoriesSearchOrder == null) {
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("Initializing directories search order");
+					}
+					directoriesSearchOrder = new Vector<File>();
+					if (preferredResourcePath != null) {
+						if (logger.isLoggable(Level.INFO)) {
+							logger.info("Adding directory " + preferredResourcePath.getAbsolutePath());
+						}
+						directoriesSearchOrder.add(preferredResourcePath);
+					}
+					File workingDirectory = new File(System.getProperty("user.dir"));
+					File flexoDesktopDirectory = findProjectDirectoryWithName(workingDirectory, "flexodesktop");
+					if (flexoDesktopDirectory != null) {
+						findAllFlexoProjects(flexoDesktopDirectory, directoriesSearchOrder);
+					}
+					directoriesSearchOrder.add(workingDirectory);
 				}
-				directoriesSearchOrder.add(preferredResourcePath);
 			}
-			File workingDirectory = new File(System.getProperty("user.dir"));
-			File flexoDesktopDirectory = findProjectDirectoryWithName(workingDirectory, "flexodesktop");
-			if (flexoDesktopDirectory != null) {
-				findAllFlexoProjects(flexoDesktopDirectory, directoriesSearchOrder);
-			}
-			directoriesSearchOrder.add(workingDirectory);
 		}
 		return directoriesSearchOrder;
 	}

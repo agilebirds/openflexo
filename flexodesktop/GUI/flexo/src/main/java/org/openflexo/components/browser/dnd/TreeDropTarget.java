@@ -39,6 +39,7 @@ import javax.swing.tree.TreePath;
 import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.view.BrowserView;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.toolbox.ToolBox;
 
 /**
@@ -70,6 +71,10 @@ public class TreeDropTarget implements DropTargetListener {
 		targetTree = tree;
 		target = new DropTarget(targetTree, this);
 		_browser = browser;
+	}
+
+	protected FlexoEditor getEditor() {
+		return targetTree.getBrowserView().getEditor();
 	}
 
 	/*
@@ -124,17 +129,16 @@ public class TreeDropTarget implements DropTargetListener {
 		}
 		if (node == null || !targetAcceptsSource(node, source)) {
 			dtde.rejectDrag();
-			if (ToolBox.getPLATFORM() == ToolBox.MACOS && _browser != null && _browser.getSelectionManager() != null
-					&& _browser.getSelectionManager().getController() != null
-					&& _browser.getSelectionManager().getController().getFlexoFrame() != null) {
-				_browser.getSelectionManager().getController().getFlexoFrame().setCursor(INVALID_CURSOR);
+			if (ToolBox.getPLATFORM() == ToolBox.MACOS && _browser != null && _browser.getController() != null
+					&& _browser.getController().getFlexoFrame() != null) {
+				_browser.getController().getFlexoFrame().setCursor(INVALID_CURSOR);
 			}
 		} else {
 			targetTree.setSelectionPath(path);
 			// start by supporting move operations
 			dtde.acceptDrag(DnDConstants.ACTION_MOVE);
-			if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
-				_browser.getSelectionManager().getController().getFlexoFrame().setCursor(VALID_CURSOR);
+			if (ToolBox.isMacOS() && _browser.getController() != null) {
+				_browser.getController().getFlexoFrame().setCursor(VALID_CURSOR);
 			}
 		}
 	}
@@ -158,6 +162,9 @@ public class TreeDropTarget implements DropTargetListener {
 		DropTargetContext dtc = dtde.getDropTargetContext();
 		JTree tree = (JTree) dtc.getComponent();
 		TreePath parentpath = tree.getClosestPathForLocation(pt.x, pt.y);
+		if (parentpath == null) {
+			return;
+		}
 		BrowserElement destination = (BrowserElement) parentpath.getLastPathComponent();
 		try {
 			Transferable transferable = dtde.getTransferable();

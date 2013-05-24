@@ -71,9 +71,12 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 			radioButtonArray[i] = rb;
 			panel.add(rb);
 			buttonGroup.add(rb);
+			if (object.equals(getValue())) {
+				rb.doClick();
+			}
 		}
 		updateFont();
-		panel.validate();
+		panel.revalidate();
 	}
 
 	@Override
@@ -86,10 +89,14 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 
 			widgetUpdating = true;
 			selectedValue = value;
+			getDynamicModel().setSelected(value);
+			// TODO: handle selected index
 			rebuildRadioButtons();
 
-			if (getValue() == null && getWidget().getAutoSelectFirstRow() && getListModel().getSize() > 0) {
-				radioButtonArray[0].setSelected(true);
+			if (selectedValue == null) {
+				if (getWidget().getAutoSelectFirstRow() && getListModel().getSize() > 0) {
+					radioButtonArray[0].doClick();
+				}
 			}
 
 			widgetUpdating = false;
@@ -115,8 +122,8 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 			if (e.getSource() == button && button.isSelected()) {
 				selectedValue = value;
 				updateModelFromWidget();
-				getDynamicModel().selected = value;
-				getDynamicModel().selectedIndex = index;
+				getDynamicModel().setSelected(value);
+				getDynamicModel().setSelectedIndex(index);
 				notifyDynamicModelChanged();
 			}
 		}
@@ -155,8 +162,10 @@ public class FIBRadioButtonListWidget extends FIBMultipleValueWidget<FIBRadioBut
 	@Override
 	public void updateFont() {
 		super.updateFont();
-		for (JRadioButton rb : radioButtonArray) {
-			rb.setFont(getFont());
+		if (getFont() != null) {
+			for (JRadioButton rb : radioButtonArray) {
+				rb.setFont(getFont());
+			}
 		}
 	}
 

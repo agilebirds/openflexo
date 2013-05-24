@@ -19,7 +19,7 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -36,6 +36,7 @@ import org.openflexo.foundation.sg.implmodel.ImplementationModelDefinition.Dupli
 import org.openflexo.icon.SGIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sgmodule.SGCst;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -57,13 +58,13 @@ public class CreateImplementationModelInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateImplementationModel> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateImplementationModel>() {
 			@Override
-			public boolean run(ActionEvent e, CreateImplementationModel action) {
+			public boolean run(EventObject e, CreateImplementationModel action) {
 				if (action.skipDialog) {
 					return true;
 				}
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(SGCst.CREATE_IMPLEMENTATION_MODEL_DIALOG_FIB, action, null, true,
-						FlexoLocalization.getMainLocalizer());
-				return (dialog.getStatus() == Status.VALIDATED);
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(SGCst.CREATE_IMPLEMENTATION_MODEL_DIALOG_FIB, action,
+						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
+				return dialog.getStatus() == Status.VALIDATED;
 			}
 		};
 	}
@@ -72,7 +73,7 @@ public class CreateImplementationModelInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateImplementationModel> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateImplementationModel>() {
 			@Override
-			public boolean run(ActionEvent e, CreateImplementationModel action) {
+			public boolean run(EventObject e, CreateImplementationModel action) {
 				getController().setCurrentEditedObjectAsModuleView(action.getNewImplementationModelDefinition());
 				return true;
 			}

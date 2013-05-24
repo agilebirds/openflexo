@@ -25,13 +25,10 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.tree.TreeNode;
-
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ws.action.CreateNewWebService;
 import org.openflexo.foundation.ws.dm.ExternalWSServiceRemoved;
 import org.openflexo.foundation.xml.FlexoWSLibraryBuilder;
 import org.openflexo.inspector.InspectableObject;
@@ -68,13 +65,6 @@ public class ExternalWSService extends WSService implements FlexoObserver, Inspe
 		return logger;
 	}
 
-	@Override
-	protected Vector getSpecificActionListForThatClass() {
-		Vector returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateNewWebService.actionType);
-		return returned;
-	}
-
 	/**
 	 * Overrides update
 	 * 
@@ -85,30 +75,16 @@ public class ExternalWSService extends WSService implements FlexoObserver, Inspe
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		// TODO
 		/*
-		if (dataModification instanceof LanguageRemoved) {
-		    Language lg = (Language) ((LanguageRemoved) dataModification).oldValue();
-		    Enumeration en = getKeys().elements();
-		    while (en.hasMoreElements()) {
-		        Key key = (Key) en.nextElement();
-		        values.remove(lg.getName() + "." + key.getName());
-		    }
-		    getValueList().setChanged();
-		    getValueList().notifyObservers(dataModification);
-		} else if (dataModification instanceof LanguageAdded) {
-		    Language lg = (Language) ((LanguageAdded) dataModification).newValue();
-		    Enumeration en = keys.elements();
-		    while (en.hasMoreElements()) {
-		        Key key = (Key) en.nextElement();
-		        Value v = new Value(getDkvModel(), key, lg);
-		        values.put(v.getFullyQualifiedName(), v);
-		    }
-		    getValueList().setChanged();
-		    getValueList().notifyObservers(dataModification);
-		} else if (dataModification instanceof DKVDataModification && ((DKVDataModification)dataModification).propertyName().equals("value")) {
-		    setChanged();
-		    notifyObservers(dataModification);
-		}
-		*/
+		 * if (dataModification instanceof LanguageRemoved) { Language lg = (Language) ((LanguageRemoved) dataModification).oldValue();
+		 * Enumeration en = getKeys().elements(); while (en.hasMoreElements()) { Key key = (Key) en.nextElement();
+		 * values.remove(lg.getName() + "." + key.getName()); } getValueList().setChanged();
+		 * getValueList().notifyObservers(dataModification); } else if (dataModification instanceof LanguageAdded) { Language lg =
+		 * (Language) ((LanguageAdded) dataModification).newValue(); Enumeration en = keys.elements(); while (en.hasMoreElements()) { Key
+		 * key = (Key) en.nextElement(); Value v = new Value(getDkvModel(), key, lg); values.put(v.getFullyQualifiedName(), v); }
+		 * getValueList().setChanged(); getValueList().notifyObservers(dataModification); } else if (dataModification instanceof
+		 * DKVDataModification && ((DKVDataModification)dataModification).propertyName().equals("value")) { setChanged();
+		 * notifyObservers(dataModification); }
+		 */
 	}
 
 	/**
@@ -165,18 +141,13 @@ public class ExternalWSService extends WSService implements FlexoObserver, Inspe
 	// ==========================================================================
 
 	@Override
-	public TreeNode getParent() {
+	public WSFolder getParent() {
 		return getWSLibrary().getExternalWSFolder();
 	}
 
 	@Override
-	public boolean getAllowsChildren() {
-		return true;
-	}
-
-	@Override
-	public Vector getOrderedChildren() {
-		Vector a = new Vector();
+	public Vector<WSObject> getOrderedChildren() {
+		Vector<WSObject> a = new Vector<WSObject>();
 		a.add(getWSPortTypeFolder());
 		a.add(getWSRepositoryFolder());
 		return a;

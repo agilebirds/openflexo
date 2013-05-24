@@ -71,7 +71,7 @@ public class DMSet extends TemporaryFlexoModelObject {
 			if (_packages.get(packageName) == null) {
 				_packages.put(packageName, new PackageReference(packageName));
 			}
-			_packages.get(packageName).add(aClass, parseMethodsAndProperties);
+			_packages.get(packageName).add(aClass, parseMethodsAndProperties, (LoadableDMEntity) null);
 		}
 
 	}
@@ -84,7 +84,7 @@ public class DMSet extends TemporaryFlexoModelObject {
 			if (_packages.get(packageName) == null) {
 				_packages.put(packageName, new PackageReference(packageName));
 			}
-			_packages.get(packageName).add(aClass, parseMethodsAndProperties);
+			_packages.get(packageName).add(aClass, parseMethodsAndProperties, externalRepository);
 		}
 		for (DMEntity e : externalRepository.getEntities().values()) {
 			LoadableDMEntity entity = (LoadableDMEntity) e;
@@ -162,7 +162,7 @@ public class DMSet extends TemporaryFlexoModelObject {
 		}
 	}
 
-	protected static String packageNameForClass(Class aClass) {
+	protected static String packageNameForClass(Class<?> aClass) {
 		return packageNameForClassName(aClass.getName());
 	}
 
@@ -185,7 +185,7 @@ public class DMSet extends TemporaryFlexoModelObject {
 		return packageName;
 	}
 
-	protected static String classNameForClass(Class aClass) {
+	protected static String classNameForClass(Class<?> aClass) {
 		String className = null;
 		StringTokenizer st = new StringTokenizer(aClass.getName(), ".");
 		while (st.hasMoreTokens()) {
@@ -197,7 +197,7 @@ public class DMSet extends TemporaryFlexoModelObject {
 		if (aClass.getTypeParameters().length > 0) {
 			className += "<";
 			boolean isFirst = true;
-			for (TypeVariable tv : aClass.getTypeParameters()) {
+			for (TypeVariable<?> tv : aClass.getTypeParameters()) {
 				className += (isFirst ? "" : ",") + tv.getName();
 				isFirst = false;
 			}
@@ -309,8 +309,10 @@ public class DMSet extends TemporaryFlexoModelObject {
 			return getName() == null ? 0 : getName().hashCode();
 		}
 
-		public ClassReference add(Class<?> aClass, boolean parseMethodsAndProperties) {
-			return add(aClass, parseMethodsAndProperties, null);
+		public ClassReference add(Class<?> aClass, boolean parseMethodsAndProperties, DMRepository repository) {
+			ClassReference aClassReference = new ClassReference(aClass, parseMethodsAndProperties, repository);
+			_classes.add(aClassReference);
+			return aClassReference;
 		}
 
 		public ClassReference add(Class<?> aClass, boolean parseMethodsAndProperties, LoadableDMEntity entity) {
@@ -326,12 +328,19 @@ public class DMSet extends TemporaryFlexoModelObject {
 			private Class<?> _referencedClass;
 
 			public ClassReference(Class<?> aClass, boolean parseMethodsAndProperties, LoadableDMEntity entity) {
+				this(aClass, parseMethodsAndProperties, entity, entity != null ? entity.getRepository() : null);
+			}
+
+			public ClassReference(Class<?> aClass, boolean parseMethodsAndProperties, DMRepository repository) {
+				this(aClass, parseMethodsAndProperties, null, repository);
+			}
+
+			private ClassReference(Class<?> aClass, boolean parseMethodsAndProperties, LoadableDMEntity entity, DMRepository repository) {
 				this(classNameForClass(aClass));
 				_referencedClass = aClass;
-				if (parseMethodsAndProperties) {
+				if (parseMethodsAndProperties && repository != null) {
 					List<String> excludedSignatures = new ArrayList<String>();
-					List<DMProperty> properties = LoadableDMEntity.searchForProperties(aClass, _project.getDataModel(),
-							entity.getRepository(), true,/*true,*/
+					List<DMProperty> properties = LoadableDMEntity.searchForProperties(aClass, _project.getDataModel(), repository, true,/*true,*/
 							false, excludedSignatures);
 					for (DMProperty next : properties) {
 						PropertyReference propertyReference = new PropertyReference(next.getName(), next.getIsSettable(),
@@ -344,7 +353,7 @@ public class DMSet extends TemporaryFlexoModelObject {
 							addToSelectedObjects(propertyReference);
 						}
 					}
-					List<DMMethod> methods = LoadableDMEntity.searchForMethods(aClass, _project.getDataModel(), entity.getRepository(),/*true,true,*/
+					List<DMMethod> methods = LoadableDMEntity.searchForMethods(aClass, _project.getDataModel(), repository,/*true,true,*/
 							false, excludedSignatures);
 					for (DMMethod next : methods) {
 						MethodReference methodReference = new MethodReference(next.getSignature(), next.getSimplifiedSignature(),

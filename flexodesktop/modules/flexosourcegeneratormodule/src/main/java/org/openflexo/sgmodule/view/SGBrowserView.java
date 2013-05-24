@@ -19,22 +19,14 @@
  */
 package org.openflexo.sgmodule.view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import org.openflexo.FlexoCst;
@@ -56,22 +48,12 @@ import org.openflexo.sgmodule.controller.browser.SGBrowser;
  */
 public class SGBrowserView extends BrowserView {
 
-	private SGController controller;
-
 	/**
 	 * @param browser
 	 * @param kl
 	 */
 	public SGBrowserView(SGController controller, ProjectBrowser browser) {
-		super(browser, controller.getKeyEventListener(), controller.getEditor());
-		this.controller = controller;
-
-		FlowLayout flowLayout = new FlowLayout();
-		JPanel viewModePanels = new JPanel(flowLayout);
-		viewModePanels.setBorder(BorderFactory.createEmptyBorder());
-		flowLayout.setHgap(2);
-		// logger.info("hGap="+flowLayout.getHgap()+" vGap="+flowLayout.getVgap());
-
+		super(browser, controller);
 		ViewModeButton interestingFilesViewModeButton = new ViewModeButton(GeneratorIconLibrary.INTERESTING_FILES_VIEW_MODE_ICON,
 				"interesting_files_mode") {
 			@Override
@@ -163,12 +145,12 @@ public class SGBrowserView extends BrowserView {
 			}
 		};
 
-		viewModePanels.add(interestingFilesViewModeButton);
-		viewModePanels.add(generationModifiedViewModeButton);
-		viewModePanels.add(diskModifiedViewModeButton);
-		viewModePanels.add(conflictingFilesViewModeButton);
-		viewModePanels.add(needsReinjectingViewModeButton);
-		viewModePanels.add(generationErrorViewModeButton);
+		addHeaderComponent(interestingFilesViewModeButton);
+		addHeaderComponent(generationModifiedViewModeButton);
+		addHeaderComponent(diskModifiedViewModeButton);
+		addHeaderComponent(conflictingFilesViewModeButton);
+		addHeaderComponent(needsReinjectingViewModeButton);
+		addHeaderComponent(generationErrorViewModeButton);
 
 		String htmlText = "<html><u>" + FlexoLocalization.localizedForKey("all_files") + "</u>" + "</html>";
 		final JLabel seeAllLabels = new JLabel(htmlText, SwingConstants.RIGHT);
@@ -204,60 +186,18 @@ public class SGBrowserView extends BrowserView {
 			}
 		});
 
-		JPanel viewModeSelector = new JPanel(new BorderLayout());
-		viewModeSelector.add(viewModePanels, BorderLayout.WEST);
-		viewModeSelector.add(seeAllLabels, BorderLayout.EAST);
-
-		add(viewModeSelector, BorderLayout.NORTH);
-
+		addHeaderComponent(seeAllLabels);
 		setMinimumSize(new Dimension(SGCst.MINIMUM_BROWSER_VIEW_WIDTH, SGCst.MINIMUM_BROWSER_VIEW_HEIGHT));
-		setPreferredSize(new Dimension(SGCst.PREFERRED_BROWSER_VIEW_WIDTH, SGCst.PREFERRED_BROWSER_VIEW_HEIGHT));
-
-	}
-
-	protected abstract class ViewModeButton extends JButton implements MouseListener, ActionListener {
-		protected ViewModeButton(ImageIcon icon, String unlocalizedDescription) {
-			super(icon);
-			setToolTipText(FlexoLocalization.localizedForKey(unlocalizedDescription));
-			setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-			addMouseListener(this);
-			addActionListener(this);
-		}
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			setBorder(BorderFactory.createEtchedBorder());
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-			setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			setFilters();
-			getBrowser().update();
-		}
-
-		public abstract void setFilters();
 	}
 
 	@Override
 	public SGBrowser getBrowser() {
 		return (SGBrowser) super.getBrowser();
+	}
+
+	@Override
+	public SGController getController() {
+		return (SGController) super.getController();
 	}
 
 	/**
@@ -270,40 +210,11 @@ public class SGBrowserView extends BrowserView {
 		/*  if (object instanceof FlexoWorkflow || object instanceof FlexoProject || object instanceof DMEORepository || object instanceof DMEOModel || object instanceof DMEOEntity || object instanceof OperationNode)
 		      controller.setCurrentEditedObjectAsModuleView(object); */
 		if (object instanceof GenerationRepository) {
-			controller.setCurrentEditedObjectAsModuleView(object);
+			getController().setCurrentEditedObjectAsModuleView(object);
 		} else if (object instanceof CGFile) {
-			/*
-			CGFile file = (CGFile)object;
-			logger.info("File "+file.getFileName()+" resource "+file.getResource()
-					+" status="+file.getGenerationStatus()
-					+" needsGeneration="+file.getResource().needsGeneration()
-					+" lastGenerationDate="+file.getResource().getLastGenerationDate());
-			String s1 = "";
-			for (Enumeration<FlexoResource> en = file.getResource().getDependantResources().elements(false,FlexoResourceManager.getDependancyScheme());en.hasMoreElements();) {
-				FlexoResource res = en.nextElement();
-				s1 += " "+res+"/"+res.getLastUpdate();
-			}
-			logger.info("dependant resources: "+s1);
-			String s2 = "";
-			for (Enumeration<FlexoResource> en = file.getResource().getDependantResources().elements();en.hasMoreElements();) {
-				FlexoResource res = en.nextElement();
-				s2 += " "+res+"/"+res.getLastUpdate();
-			}
-			logger.info("dependant resources: "+s2);
 
-			if (file.getResource() instanceof GenerationAvailableFileResource) {
-				FlexoResourceGenerator generator = ((GenerationAvailableFileResource)file.getResource()).getGenerator();
-				if (generator != null) {
-					String templates = "";
-					for (CGTemplateFile template : generator.getUsedTemplates()) {
-						templates += " "+template.getFileName();
-					}
-					logger.info("used templates: "+templates);
-					logger.info("Generator needs regeneration "+generator.needsGeneration());
-				}
-			}*/
 		}
-		controller.refreshFooter();
+		getController().refreshFooter();
 	}
 
 	/**
@@ -313,7 +224,7 @@ public class SGBrowserView extends BrowserView {
 	 */
 	@Override
 	public void treeDoubleClick(FlexoModelObject object) {
-		controller.setCurrentEditedObjectAsModuleView(object);
+		getController().setCurrentEditedObjectAsModuleView(object);
 	}
 
 }

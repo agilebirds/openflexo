@@ -39,6 +39,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.dg.file.DGImageFile;
@@ -50,6 +51,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGFile.FileContentEditor;
@@ -81,8 +83,8 @@ import org.openflexo.jedit.JEditTextArea.DisplayContext;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.swing.VerticalLayout;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.listener.FlexoActionButton;
 
 /**
@@ -224,58 +226,58 @@ public class DGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 
 			if (isEdited) {
 				FlexoActionButton saveAction = new FlexoActionButton(SaveGeneratedFile.actionType, "save", DGFileModuleView.this,
-						_controller.getEditor());
+						_controller);
 				FlexoActionButton revertToSavedAction = new FlexoActionButton(RevertToSavedGeneratedFile.actionType, "revert_to_saved",
-						DGFileModuleView.this, _controller.getEditor());
+						DGFileModuleView.this, _controller);
 				actionButtons.add(saveAction);
 				actionButtons.add(revertToSavedAction);
 				controlPanel.add(saveAction);
 				controlPanel.add(revertToSavedAction);
 			} else {
 				FlexoActionButton editFileAction = new FlexoActionButton(EditGeneratedFile.actionType, "edit", DGFileModuleView.this,
-						_controller.getEditor());
+						_controller);
 				if (!_cgFile.getMarkedAsDoNotGenerate()) {
 					actionButtons.add(editFileAction);
 				}
 
 				FlexoActionButton generateAction = new FlexoActionButton(GenerateSourceCode.actionType, "regenerate",
-						DGFileModuleView.this, _controller.getEditor());
+						DGFileModuleView.this, _controller);
 				if (!_cgFile.getMarkedAsDoNotGenerate()) {
 					actionButtons.add(generateAction);
 				}
 
 				FlexoActionButton writeFileAction = new FlexoActionButton(WriteModifiedGeneratedFiles.actionType, "write_file",
-						DGFileModuleView.this, _controller.getEditor());
+						DGFileModuleView.this, _controller);
 				if (!_cgFile.getMarkedAsDoNotGenerate()) {
 					actionButtons.add(writeFileAction);
 				}
 
 				FlexoActionButton dismissUnchangedFileAction = new FlexoActionButton(DismissUnchangedGeneratedFiles.actionType,
-						"dismiss_as_unchanged", DGFileModuleView.this, _controller.getEditor());
+						"dismiss_as_unchanged", DGFileModuleView.this, _controller);
 				if (!_cgFile.getMarkedAsDoNotGenerate()) {
 					actionButtons.add(dismissUnchangedFileAction);
 				}
 
 				FlexoActionButton forceRegenerateAction = new FlexoActionButton(ForceRegenerateSourceCode.actionType, "force_regenerate",
-						DGFileModuleView.this, _controller.getEditor());
+						DGFileModuleView.this, _controller);
 				if (!_cgFile.getMarkedAsDoNotGenerate()) {
 					actionButtons.add(forceRegenerateAction);
 				}
 
 				FlexoActionButton acceptDiskVersionAction = new FlexoActionButton(AcceptDiskUpdate.actionType, "accept_disk_version",
-						DGFileModuleView.this, _controller.getEditor());
+						DGFileModuleView.this, _controller);
 				if (!_cgFile.getMarkedAsDoNotGenerate()) {
 					actionButtons.add(acceptDiskVersionAction);
 				}
 
 				FlexoActionButton markAsMergedAction = new FlexoActionButton(MarkAsMerged.actionType, "mark_as_merged",
-						DGFileModuleView.this, _controller.getEditor());
+						DGFileModuleView.this, _controller);
 				if (!_cgFile.getMarkedAsDoNotGenerate()) {
 					actionButtons.add(markAsMergedAction);
 				}
 
 				FlexoActionButton cancelOverridingAction = new FlexoActionButton(CancelOverrideWithVersion.actionType, "cancel_override",
-						DGFileModuleView.this, _controller.getEditor());
+						DGFileModuleView.this, _controller);
 				if (!_cgFile.getMarkedAsDoNotGenerate()) {
 					actionButtons.add(cancelOverridingAction);
 				}
@@ -448,7 +450,7 @@ public class DGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 			_codeDisplayer.getComponent().validate();
 			add(_codeDisplayer.getComponent());
 			validate();
-			_codeDisplayer.getComponent().requestFocus();
+			_codeDisplayer.getComponent().requestFocusInWindow();
 		} else {
 
 			if (_cgFile.getGenerationStatus() == GenerationStatus.CodeGenerationNotAvailable) {
@@ -473,7 +475,7 @@ public class DGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 							public FlexoEditor getEditor() {
 								return _controller.getEditor();
 							}
-						}, _controller.getEditor());
+						}, _controller);
 				JPanel panel = new JPanel(new VerticalLayout());
 				panel.add(new JLabel(FlexoLocalization.localizedForKey("please_synchronize_code_generation"), SwingConstants.CENTER));
 				JPanel buttonPanel = new JPanel(new FlowLayout());
@@ -561,9 +563,22 @@ public class DGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
+	public void update(final FlexoObservable observable, final DataModification dataModification) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("CGFileModuleView : RECEIVED " + dataModification + " for " + observable);
+		}
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					update(observable, dataModification);
+				}
+			});
+			return;
+		}
+		if (dataModification instanceof ObjectDeleted) {
+			deleteModuleView();
+			return;
 		}
 		if (!isShowing()) {
 			return;
@@ -583,8 +598,8 @@ public class DGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 	}
 
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
-		return _controller.CODE_GENERATOR_PERSPECTIVE;
+	public FlexoPerspective getPerspective() {
+		return _controller.DOCUMENTATION_GENERATOR_PERSPECTIVE;
 	}
 
 	@Override

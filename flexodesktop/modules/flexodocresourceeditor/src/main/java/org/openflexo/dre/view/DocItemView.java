@@ -19,17 +19,21 @@
  */
 package org.openflexo.dre.view;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import org.openflexo.dre.AbstractDocItemView;
 import org.openflexo.dre.controller.DREController;
-import org.openflexo.drm.DRMObject;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocResourceManager;
-import org.openflexo.view.FlexoPerspective;
+import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
-public class DocItemView extends AbstractDocItemView {
+public class DocItemView extends AbstractDocItemView implements ModuleView<DocItem>, PropertyChangeListener {
 
 	public DocItemView(DocItem docItem, DREController controller) {
 		super(docItem, controller, controller.getEditor());
+		getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 	}
 
 	public DREController getDREController() {
@@ -38,11 +42,12 @@ public class DocItemView extends AbstractDocItemView {
 
 	@Override
 	public void deleteModuleView() {
+		getRepresentedObject().getPropertyChangeSupport().removePropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 		getDREController().removeModuleView(this);
 	}
 
 	@Override
-	public FlexoPerspective<DRMObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return getDREController().DRE_PERSPECTIVE;
 	}
 
@@ -88,4 +93,15 @@ public class DocItemView extends AbstractDocItemView {
 		return false;
 	}
 
+	@Override
+	public DocItem getRepresentedObject() {
+		return _docItem;
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == getRepresentedObject() && evt.getPropertyName().equals(getRepresentedObject().getDeletedProperty())) {
+			deleteModuleView();
+		}
+	}
 }

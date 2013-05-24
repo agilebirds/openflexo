@@ -19,9 +19,9 @@
  */
 package org.openflexo.action;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.EventObject;
 
 import javax.swing.Icon;
 import javax.swing.JFileChooser;
@@ -29,7 +29,6 @@ import javax.swing.JFileChooser;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.FlexoModule;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
@@ -50,14 +49,6 @@ public class ProjectExcelExportInitializer extends ActionInitializer {
 		super(ProjectExcelExportAction.actionType, controllerActionInitializer);
 	}
 
-	protected static FlexoFrame getActiveModuleFrame() {
-		if (FlexoModule.getActiveModule() != null) {
-			return FlexoModule.getActiveModule().getFlexoFrame();
-		} else {
-			return null;
-		}
-	}
-
 	/**
 	 * Overrides getDefaultInitializer
 	 * 
@@ -69,11 +60,11 @@ public class ProjectExcelExportInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<ProjectExcelExportAction>() {
 
 			@Override
-			public boolean run(ActionEvent event, ProjectExcelExportAction action) {
+			public boolean run(EventObject event, ProjectExcelExportAction action) {
 				JFileChooser chooser = new JFileChooser();
 				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				chooser.setSelectedFile(new File(System.getProperty("user.home"), action.getFocusedObject().getProjectName() + ".csv"));
-				int ret = chooser.showSaveDialog(getActiveModuleFrame());
+				int ret = chooser.showSaveDialog(FlexoFrame.getActiveFrame());
 				if (ret == JFileChooser.APPROVE_OPTION) {
 					action.getFocusedObject().getStatistics().refresh();
 					String s = action.getFocusedObject().getStatistics().excel();

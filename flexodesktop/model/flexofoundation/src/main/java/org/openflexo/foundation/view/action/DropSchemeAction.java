@@ -60,16 +60,20 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return false;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return object instanceof ViewObject;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, ViewObject.class);
+	}
 
 	private ViewObject _parent;
 	private ViewPointPaletteElement _paletteElement;
@@ -90,7 +94,9 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParametersException {
 		logger.info("Drop palette element");
 
-		getEditionPattern().getViewPoint().getViewpointOntology().loadWhenUnloaded();
+		if (getEditionPattern().getViewPoint().getViewpointOntology() != null) {
+			getEditionPattern().getViewPoint().getViewpointOntology().loadWhenUnloaded();
+		}
 
 		editionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
 
@@ -158,7 +164,7 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 	protected ViewShape performAddShape(AddShape action) {
 		ViewShape newShape = super.performAddShape(action);
 		if (newShape != null) {
-			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) newShape.getGraphicalRepresentation();
+			ShapeGraphicalRepresentation<?> gr = newShape.getGraphicalRepresentation();
 			if (action.getPatternRole().getIsPrimaryRepresentationRole()) {
 				// Declare shape as new shape only if it is the primary representation role of the EP
 
@@ -211,6 +217,11 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 		} else {
 			logger.warning("Inconsistant data: shape has not been created");
 		}
+
+		if (action.getExtendParentBoundsToHostThisShape()) {
+			((ShapeGraphicalRepresentation<?>) newShape.getGraphicalRepresentation()).extendParentBoundsToHostThisShape();
+		}
+
 		return newShape;
 	}
 

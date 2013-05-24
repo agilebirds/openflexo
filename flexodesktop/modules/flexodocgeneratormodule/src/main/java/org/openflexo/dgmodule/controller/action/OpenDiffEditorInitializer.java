@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -57,13 +57,12 @@ public class OpenDiffEditorInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<OpenDiffEditor> getDefaultInitializer() {
 		return new FlexoActionInitializer<OpenDiffEditor>() {
 			@Override
-			public boolean run(ActionEvent e, final OpenDiffEditor action) {
+			public boolean run(EventObject e, final OpenDiffEditor action) {
 				EnumDropDownParameter<ContentSourceType> leftSourceParam = new EnumDropDownParameter<ContentSourceType>("leftSource",
 						"left_source", null, ContentSourceType.values()) {
 					@Override
 					public boolean accept(ContentSourceType value) {
-						return ShowFileVersion.getActionTypeFor(value).isEnabled(action.getFocusedObject(), null,
-								getController().getEditor());
+						return ShowFileVersion.getActionTypeFor(value).isEnabled(action.getFocusedObject(), null);
 					}
 				};
 				leftSourceParam.addParameter("showReset", "false");
@@ -75,8 +74,7 @@ public class OpenDiffEditorInitializer extends ActionInitializer {
 						"right_source", null, ContentSourceType.values()) {
 					@Override
 					public boolean accept(ContentSourceType value) {
-						return ShowFileVersion.getActionTypeFor(value).isEnabled(action.getFocusedObject(), null,
-								getController().getEditor());
+						return ShowFileVersion.getActionTypeFor(value).isEnabled(action.getFocusedObject(), null);
 					}
 				};
 				rightSourceParam.addParameter("showReset", "false");
@@ -90,14 +88,14 @@ public class OpenDiffEditorInitializer extends ActionInitializer {
 						FlexoLocalization.localizedForKey("please_choose_sources_that_you_want_to_compare"), leftSourceParam,
 						versionLeftParameter, rightSourceParam, versionRightParameter);
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-					if ((rightSourceParam.getValue() == null) || (leftSourceParam.getValue() == null)) {
+					if (rightSourceParam.getValue() == null || leftSourceParam.getValue() == null) {
 						FlexoController.notify(FlexoLocalization.localizedForKey("please_select_valid_sources"));
 						return false;
 					}
 					ContentSource rightSource = ContentSource.getContentSource(rightSourceParam.getValue(),
-							(versionRightParameter.getValue() != null ? versionRightParameter.getValue().getVersionId() : null));
+							versionRightParameter.getValue() != null ? versionRightParameter.getValue().getVersionId() : null);
 					ContentSource leftSource = ContentSource.getContentSource(leftSourceParam.getValue(),
-							(versionLeftParameter.getValue() != null ? versionLeftParameter.getValue().getVersionId() : null));
+							versionLeftParameter.getValue() != null ? versionLeftParameter.getValue().getVersionId() : null);
 					action.setRightSource(rightSource);
 					action.setLeftSource(leftSource);
 					return true;
@@ -111,7 +109,7 @@ public class OpenDiffEditorInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<OpenDiffEditor> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OpenDiffEditor>() {
 			@Override
-			public boolean run(ActionEvent e, OpenDiffEditor action) {
+			public boolean run(EventObject e, OpenDiffEditor action) {
 				DGFileDiffEditorPopup popup = new DGFileDiffEditorPopup(action.getFocusedObject(), action.getLeftSource(),
 						action.getRightSource(), getControllerActionInitializer().getDGController());
 				popup.setVisible(true);

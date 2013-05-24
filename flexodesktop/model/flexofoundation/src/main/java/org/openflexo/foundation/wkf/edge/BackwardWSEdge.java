@@ -131,8 +131,8 @@ public final class BackwardWSEdge extends ExternalMessageEdge<FlexoPortMap, Flex
 			return false;
 		}
 
-		return ((getStartNode().getProcess() == getEndNode().getProcess()) && (getStartNode().getSubProcessNode().getSubProcess()
-				.getIsWebService()));
+		return getStartNode().getProcess() == getEndNode().getProcess()
+				&& getStartNode().getSubProcessNode().getSubProcess().getIsWebService();
 	}
 
 	public static class BackwardWSEdgeEdgeMustBeValid extends ValidationRule<BackwardWSEdgeEdgeMustBeValid, BackwardWSEdge> {

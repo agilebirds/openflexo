@@ -19,8 +19,8 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -28,11 +28,12 @@ import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.dgmodule.DGPreferences;
-import org.openflexo.dgmodule.view.DGMainPane;
+import org.openflexo.dgmodule.controller.DGController;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
+import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.generator.action.DismissUnchangedGeneratedFiles;
 import org.openflexo.generator.action.GenerateSourceCode;
 import org.openflexo.generator.exception.GenerationException;
@@ -42,7 +43,7 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class GenerateSourceCodeInitializer extends ActionInitializer {
+public class GenerateSourceCodeInitializer extends ActionInitializer<GenerateSourceCode, CGObject, CGObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -56,15 +57,20 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 	}
 
 	@Override
+	public DGController getController() {
+		return (DGController) super.getController();
+	}
+
+	@Override
 	protected FlexoActionInitializer<GenerateSourceCode> getDefaultInitializer() {
 		return new FlexoActionInitializer<GenerateSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateSourceCode action) {
+			public boolean run(EventObject e, GenerateSourceCode action) {
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
 				}
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().setHoldStructure();
+				getController().getBrowser().setHoldStructure();
 				return true;
 			}
 		};
@@ -74,15 +80,15 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<GenerateSourceCode> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<GenerateSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateSourceCode action) {
+			public boolean run(EventObject e, GenerateSourceCode action) {
 				getControllerActionInitializer().getDGController().disposeProgressWindow();
 				action.setSaveBeforeGenerating(DGPreferences.getSaveBeforeGenerating());
 				if (DGPreferences.getAutomaticallyDismissUnchangedFiles()) {
 					DismissUnchangedGeneratedFiles.actionType.makeNewAction(action.getFocusedObject(), action.getGlobalSelection(),
 							action.getEditor()).doAction();
 				}
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().update();
+				getController().getBrowser().resetHoldStructure();
+				getController().getBrowser().update();
 				return true;
 			}
 		};
@@ -94,8 +100,8 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 			@Override
 			public boolean handleException(FlexoException exception, GenerateSourceCode action) {
 				getControllerActionInitializer().getDGController().disposeProgressWindow();
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().update();
+				getController().getBrowser().resetHoldStructure();
+				getController().getBrowser().update();
 				if (exception instanceof GenerationException) {
 					FlexoController.showError(FlexoLocalization.localizedForKey("generation_failed") + ":\n"
 							+ ((GenerationException) exception).getLocalizedMessage());

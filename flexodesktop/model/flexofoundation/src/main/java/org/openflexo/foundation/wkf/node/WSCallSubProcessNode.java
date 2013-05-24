@@ -77,7 +77,7 @@ public class WSCallSubProcessNode extends SubProcessNode {
 	@Override
 	public boolean isAcceptableAsSubProcess(FlexoProcess process, FlexoProcess parentProcess) {
 
-		return (!forceWSCallConsistency) && super.isAcceptableAsSubProcess(process, parentProcess);
+		return !forceWSCallConsistency && super.isAcceptableAsSubProcess(process, parentProcess);
 	}
 
 	@Override

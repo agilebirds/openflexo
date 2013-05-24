@@ -19,8 +19,8 @@
  */
 package org.openflexo.wse.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,6 +46,7 @@ import org.openflexo.foundation.wkf.ws.ServiceInterface;
 import org.openflexo.foundation.ws.ExternalWSService;
 import org.openflexo.foundation.ws.InternalWSService;
 import org.openflexo.foundation.ws.WSService;
+import org.openflexo.foundation.ws.action.AbstractCreateNewWebService;
 import org.openflexo.foundation.ws.action.CreateNewWebService;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileResource;
@@ -72,7 +73,7 @@ public class CreateNewWebServiceInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateNewWebService> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateNewWebService>() {
 			@Override
-			public boolean run(ActionEvent e, CreateNewWebService action) {
+			public boolean run(EventObject e, CreateNewWebService action) {
 				final ParameterDefinition[] params = new ParameterDefinition[9];
 
 				RadioButtonMode EXTERNAL_WS = new RadioButtonMode(new FileResource("Resources/WS/SmallWSIcon.gif"),
@@ -97,7 +98,7 @@ public class CreateNewWebServiceInitializer extends ActionInitializer {
 					@Override
 					public void setValue(File aValue) {
 						super.setValue(aValue);
-						String newSelectedName = (aValue).getName();
+						String newSelectedName = aValue.getName();
 						String newName = null;
 						if (newSelectedName.indexOf(".") > 0) {
 							newName = newSelectedName.substring(0, newSelectedName.indexOf("."));
@@ -150,7 +151,7 @@ public class CreateNewWebServiceInitializer extends ActionInitializer {
 							File wsdlFile = (File) dialog.parameterValueWithName("selectedWSDLFile");
 							action.setNewWebServiceName(externalName);
 							action.setWsdlFile(wsdlFile);
-							action.setWebServiceType(CreateNewWebService.EXTERNAL_WS);
+							action.setWebServiceType(AbstractCreateNewWebService.EXTERNAL_WS);
 							if (!wsdlFile.exists() || wsdlFile.isDirectory()) {
 								FlexoController.notify(FlexoLocalization.localizedForKey("selected_file_does_not_exist"));
 								continue;
@@ -161,7 +162,7 @@ public class CreateNewWebServiceInitializer extends ActionInitializer {
 							}
 							return true;
 						} else if (dialog.parameterValueWithName("mode").equals(INTERNAL_WS)) {
-							action.setWebServiceType(CreateNewWebService.INTERNAL_WS);
+							action.setWebServiceType(AbstractCreateNewWebService.INTERNAL_WS);
 							WKFObject processInterface = (WKFObject) dialog.parameterValueWithName("processInterface");
 
 							if (processInterface instanceof DefaultServiceInterface) {
@@ -207,7 +208,7 @@ public class CreateNewWebServiceInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateNewWebService> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateNewWebService>() {
 			@Override
-			public boolean run(ActionEvent e, CreateNewWebService action) {
+			public boolean run(EventObject e, CreateNewWebService action) {
 				if (action.getNewWebService() == null) {
 					return false;
 				}
@@ -233,20 +234,21 @@ public class CreateNewWebServiceInitializer extends ActionInitializer {
 		return new FlexoExceptionHandler<CreateNewWebService>() {
 			@Override
 			public boolean handleException(FlexoException exception, CreateNewWebService action) {
-				if (action instanceof CreateNewWebService && (action).getWebServiceType().equals(CreateNewWebService.EXTERNAL_WS)) {
+				if (action instanceof CreateNewWebService && action.getWebServiceType().equals(AbstractCreateNewWebService.EXTERNAL_WS)) {
 					if (exception.getLocalizationKey() != null) {
 						FlexoController.showError(FlexoLocalization.localizedForKey("ws_import_interupted") + " : "
-								+ FlexoLocalization.localizedForKey((exception).getLocalizationKey()));
+								+ FlexoLocalization.localizedForKey(exception.getLocalizationKey()));
 						return true;
 					} else {
 						FlexoController.showError(FlexoLocalization.localizedForKey("ws_import_interupted_exception_raised"));
 						return true;
 					}
 
-				} else if (action instanceof CreateNewWebService && (action).getWebServiceType().equals(CreateNewWebService.INTERNAL_WS)) {
+				} else if (action instanceof CreateNewWebService
+						&& action.getWebServiceType().equals(AbstractCreateNewWebService.INTERNAL_WS)) {
 					if (exception.getLocalizationKey() != null) {
 						FlexoController.showError(FlexoLocalization.localizedForKey("ws_add_service_not_completed") + " : "
-								+ FlexoLocalization.localizedForKey((exception).getLocalizationKey()));
+								+ FlexoLocalization.localizedForKey(exception.getLocalizationKey()));
 						return true;
 					} else {
 						FlexoController.showError(FlexoLocalization.localizedForKey("ws_add_service_not_completed_exception_raised"));

@@ -45,17 +45,17 @@ public class ColorUtils {
 			if (rsRGB <= 0.03928) {
 				r = rsRGB / 12.92;
 			} else {
-				r = Math.pow(((rsRGB + 0.055) / 1.055), 2.4);
+				r = Math.pow((rsRGB + 0.055) / 1.055, 2.4);
 			}
 			if (gsRGB <= 0.03928) {
 				g = gsRGB / 12.92;
 			} else {
-				g = Math.pow(((gsRGB + 0.055) / 1.055), 2.4);
+				g = Math.pow((gsRGB + 0.055) / 1.055, 2.4);
 			}
 			if (bsRGB <= 0.03928) {
 				b = bsRGB / 12.92;
 			} else {
-				b = Math.pow(((bsRGB + 0.055) / 1.055), 2.4);
+				b = Math.pow((bsRGB + 0.055) / 1.055, 2.4);
 			}
 			return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 		}

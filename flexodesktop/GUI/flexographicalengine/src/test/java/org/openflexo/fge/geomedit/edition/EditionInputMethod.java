@@ -87,8 +87,8 @@ public abstract class EditionInputMethod<O extends Object, I extends EditionInpu
 	public FGEPoint getPointLocation(MouseEvent e) {
 		Point ptInView = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getController().getDrawingView());
 		FGEPoint returned = new FGEPoint();
-		returned.x = (ptInView.x) / getController().getScale();
-		returned.y = (ptInView.y) / getController().getScale();
+		returned.x = ptInView.x / getController().getScale();
+		returned.y = ptInView.y / getController().getScale();
 		return returned;
 	}
 

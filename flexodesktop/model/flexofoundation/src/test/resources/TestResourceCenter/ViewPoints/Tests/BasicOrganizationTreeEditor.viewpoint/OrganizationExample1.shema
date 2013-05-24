@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Shema id="1" name="OrganizationExample1">
+  <DrawingGraphicalRepresentation id="2" className="org.openflexo.vpm.drawingshema.CalcDrawingShemaGR" width="1000.0" height="1000.0" drawWorkingArea="true" selectionColor="0,0,255" focusColor="255,0,0" backgroundColor="255,255,255" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="0.0" absoluteTextY="0.0" textAlignment="CENTER">
+    <TextStyle id="3" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+  </DrawingGraphicalRepresentation>
+  <ContainedShape id="4" name="Agile Birds S.A.">
+    <ShapeGraphicalRepresentation id="5" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="41.0" y="60.0" width="609.4667433164465" height="486.9425964425965" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="1" isFloatingLabel="true" text="Agile Birds S.A." isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="82.17622789343444" absoluteTextY="21.789713797226586" textAlignment="CENTER">
+      <ForegroundStyle id="6" noStroke="false" color="102,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+      <ColorGradientBackgroundStyle id="7" color1="255,255,102" color2="255,204,204" direction="SOUTH_EAST_NORTH_WEST" useTransparency="true" transparencyLevel="0.5" />
+      <Border id="8" top="5" bottom="5" left="5" right="5" />
+      <ShadowStyle id="9" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+      <RectangleShape id="10" isRounded="true" arcSize="15.0" />
+      <TextStyle id="11" font="SansSerif,1,15" color="102,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+    </ShapeGraphicalRepresentation>
+    <ContainedShape id="12" name="Production">
+      <ShapeGraphicalRepresentation id="13" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="25.0" y="149.0" width="282.427807486631" height="314.231884057971" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="2" isFloatingLabel="true" text="Production" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="57.0" absoluteTextY="23.0" textAlignment="CENTER">
+        <ForegroundStyle id="14" noStroke="false" color="0,102,102" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorGradientBackgroundStyle id="15" color1="0,153,153" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="true" transparencyLevel="0.2" />
+        <Border id="16" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="17" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="18" isRounded="true" arcSize="15.0" />
+        <TextStyle id="19" font="SansSerif,1,13" color="0,51,51" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <ContainedShape id="20" name="Production 1">
+        <ShapeGraphicalRepresentation id="21" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="20.0" y="100.96882690730106" width="239.6537912521039" height="89.48044845501778" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="3" isFloatingLabel="true" text="Production 1" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="53.775920716051395" absoluteTextY="14.999455677852964" textAlignment="CENTER">
+          <ForegroundStyle id="22" noStroke="false" color="102,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorGradientBackgroundStyle id="23" color1="255,153,153" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="true" transparencyLevel="0.2" />
+          <Border id="24" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="25" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <RectangleShape id="26" isRounded="true" arcSize="15.0" />
+          <TextStyle id="27" font="SansSerif,0,11" color="102,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </ShapeGraphicalRepresentation>
+        <ContainedShape id="28" name="Worker">
+          <ShapeGraphicalRepresentation id="29" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="108.4350412521039" y="38.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="4" isFloatingLabel="true" text="Worker" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="26.0" absoluteTextY="36.0" textAlignment="CENTER">
+            <ForegroundStyle id="30" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+            <ImageBackgroundStyle id="31" imageFile="WorkerBlue.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+            <Border id="32" top="5" bottom="5" left="5" right="5" />
+            <ShadowStyle id="33" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+            <RectangleShape id="34" isRounded="false" arcSize="30.0" />
+            <TextStyle id="35" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+          </ShapeGraphicalRepresentation>
+        </ContainedShape>
+        <ContainedShape id="36" name="Worker">
+          <ShapeGraphicalRepresentation id="37" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="165.0" y="39.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="4" isFloatingLabel="true" text="Worker" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="26.0" absoluteTextY="36.0" textAlignment="CENTER">
+            <ForegroundStyle id="38" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+            <ImageBackgroundStyle id="39" imageFile="WorkerBlue.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+            <Border id="40" top="5" bottom="5" left="5" right="5" />
+            <ShadowStyle id="41" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+            <RectangleShape id="42" isRounded="false" arcSize="30.0" />
+            <TextStyle id="43" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+          </ShapeGraphicalRepresentation>
+        </ContainedShape>
+        <ContainedShape id="44" name="Manager">
+          <ShapeGraphicalRepresentation id="45" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="26.0" y="36.0" width="39.21875" height="34.96820256885303" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="4" isFloatingLabel="true" text="Manager" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="24.0" absoluteTextY="44.0" textAlignment="CENTER">
+            <ForegroundStyle id="46" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+            <ImageBackgroundStyle id="47" imageFile="ManagerOperation.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+            <Border id="48" top="5" bottom="5" left="5" right="5" />
+            <ShadowStyle id="49" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+            <RectangleShape id="50" isRounded="false" arcSize="30.0" />
+            <TextStyle id="51" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+          </ShapeGraphicalRepresentation>
+        </ContainedShape>
+      </ContainedShape>
+      <ContainedShape id="52" name="Production 2">
+        <ShapeGraphicalRepresentation id="53" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="20.0" y="203.0" width="240.66851414839027" height="86.71884057971015" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="3" isFloatingLabel="true" text="Production 2" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="55.0" absoluteTextY="18.0" textAlignment="CENTER">
+          <ForegroundStyle id="54" noStroke="false" color="102,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorGradientBackgroundStyle id="55" color1="255,153,153" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="true" transparencyLevel="0.2" />
+          <Border id="56" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="57" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <RectangleShape id="58" isRounded="true" arcSize="15.0" />
+          <TextStyle id="59" font="SansSerif,0,11" color="102,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </ShapeGraphicalRepresentation>
+        <ContainedShape id="60" name="Worker">
+          <ShapeGraphicalRepresentation id="61" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="113.0" y="32.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="4" isFloatingLabel="true" text="Worker" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="26.0" absoluteTextY="36.0" textAlignment="CENTER">
+            <ForegroundStyle id="62" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+            <ImageBackgroundStyle id="63" imageFile="WorkerBlue.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+            <Border id="64" top="5" bottom="5" left="5" right="5" />
+            <ShadowStyle id="65" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+            <RectangleShape id="66" isRounded="false" arcSize="30.0" />
+            <TextStyle id="67" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+          </ShapeGraphicalRepresentation>
+        </ContainedShape>
+        <ContainedShape id="68" name="Worker">
+          <ShapeGraphicalRepresentation id="69" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="171.0" y="31.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="4" isFloatingLabel="true" text="Worker" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="26.0" absoluteTextY="36.0" textAlignment="CENTER">
+            <ForegroundStyle id="70" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+            <ImageBackgroundStyle id="71" imageFile="WorkerBlue.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+            <Border id="72" top="5" bottom="5" left="5" right="5" />
+            <ShadowStyle id="73" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+            <RectangleShape id="74" isRounded="false" arcSize="30.0" />
+            <TextStyle id="75" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+          </ShapeGraphicalRepresentation>
+        </ContainedShape>
+        <ContainedShape id="76" name="Manager">
+          <ShapeGraphicalRepresentation id="77" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="28.0" y="33.0" width="39.21875" height="35.967495959271986" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="4" isFloatingLabel="true" text="Manager" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="26.0" absoluteTextY="43.999293390418956" textAlignment="CENTER">
+            <ForegroundStyle id="78" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+            <ImageBackgroundStyle id="79" imageFile="ManagerOperation.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+            <Border id="80" top="5" bottom="5" left="5" right="5" />
+            <ShadowStyle id="81" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+            <RectangleShape id="82" isRounded="false" arcSize="30.0" />
+            <TextStyle id="83" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+          </ShapeGraphicalRepresentation>
+        </ContainedShape>
+      </ContainedShape>
+      <ContainedShape id="84" name="Production Manager">
+        <ShapeGraphicalRepresentation id="85" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="202.0" y="27.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="3" isFloatingLabel="true" text="Production Manager" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="26.0" absoluteTextY="45.0" textAlignment="CENTER">
+          <ForegroundStyle id="86" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ImageBackgroundStyle id="87" imageFile="ManagerOrange.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="88" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="89" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <RectangleShape id="90" isRounded="false" arcSize="30.0" />
+          <TextStyle id="91" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </ShapeGraphicalRepresentation>
+      </ContainedShape>
+      <ContainedShape id="92" name="Marketing executive">
+        <ShapeGraphicalRepresentation id="93" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="58.0" y="44.0" width="48.531746031746025" height="33.80647740903639" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="3" isFloatingLabel="true" text="Marketing executive" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="27.0" absoluteTextY="44.0" textAlignment="CENTER">
+          <ForegroundStyle id="94" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ImageBackgroundStyle id="95" imageFile="MarketingExecutive.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="96" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="97" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <RectangleShape id="98" isRounded="false" arcSize="30.0" />
+          <TextStyle id="99" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </ShapeGraphicalRepresentation>
+      </ContainedShape>
+    </ContainedShape>
+    <ContainedShape id="100" name="Research and Development">
+      <ShapeGraphicalRepresentation id="101" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="324.0" y="151.0" width="266.5133689839572" height="313.2463768115942" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="2" isFloatingLabel="true" text="Research and Development" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="113.0" absoluteTextY="22.0" textAlignment="CENTER">
+        <ForegroundStyle id="102" noStroke="false" color="0,102,102" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorGradientBackgroundStyle id="103" color1="0,153,153" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="true" transparencyLevel="0.2" />
+        <Border id="104" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="105" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="106" isRounded="true" arcSize="15.0" />
+        <TextStyle id="107" font="SansSerif,1,13" color="0,51,51" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <ContainedShape id="108" name="R&amp;D Manager">
+        <ShapeGraphicalRepresentation id="109" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="199.0" y="27.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="3" isFloatingLabel="true" text="R&amp;D Manager" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="15.0" absoluteTextY="50.0" textAlignment="CENTER">
+          <ForegroundStyle id="110" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ImageBackgroundStyle id="111" imageFile="ManagerYellow.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="112" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="113" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <RectangleShape id="114" isRounded="false" arcSize="30.0" />
+          <TextStyle id="115" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </ShapeGraphicalRepresentation>
+      </ContainedShape>
+      <ContainedShape id="116" name="R&amp;D 2">
+        <ShapeGraphicalRepresentation id="117" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="21.0" y="170.95652173913044" width="223.80661157024798" height="56.85434782608695" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="3" isFloatingLabel="true" text="R&amp;D 2" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="36.0" absoluteTextY="13.0" textAlignment="CENTER">
+          <ForegroundStyle id="118" noStroke="false" color="102,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorGradientBackgroundStyle id="119" color1="255,153,153" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="true" transparencyLevel="0.2" />
+          <Border id="120" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="121" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <RectangleShape id="122" isRounded="true" arcSize="15.0" />
+          <TextStyle id="123" font="SansSerif,0,11" color="102,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </ShapeGraphicalRepresentation>
+        <ContainedShape id="124" name="Worker">
+          <ShapeGraphicalRepresentation id="125" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="103.0" y="10.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="4" isFloatingLabel="true" text="Worker" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="28.0" absoluteTextY="35.0" textAlignment="CENTER">
+            <ForegroundStyle id="126" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+            <ImageBackgroundStyle id="127" imageFile="WorkerYellow.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+            <Border id="128" top="5" bottom="5" left="5" right="5" />
+            <ShadowStyle id="129" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+            <RectangleShape id="130" isRounded="false" arcSize="30.0" />
+            <TextStyle id="131" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+          </ShapeGraphicalRepresentation>
+        </ContainedShape>
+        <ContainedShape id="132" name="Worker">
+          <ShapeGraphicalRepresentation id="133" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="160.0" y="8.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="4" isFloatingLabel="true" text="Worker" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="28.0" absoluteTextY="35.0" textAlignment="CENTER">
+            <ForegroundStyle id="134" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+            <ImageBackgroundStyle id="135" imageFile="WorkerYellow.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+            <Border id="136" top="5" bottom="5" left="5" right="5" />
+            <ShadowStyle id="137" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+            <RectangleShape id="138" isRounded="false" arcSize="30.0" />
+            <TextStyle id="139" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+          </ShapeGraphicalRepresentation>
+        </ContainedShape>
+      </ContainedShape>
+      <ContainedShape id="140" name="R&amp;D 3">
+        <ShapeGraphicalRepresentation id="141" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="22.0" y="235.99936988027724" width="223.74758440246958" height="55.986137366099555" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="3" isFloatingLabel="true" text="R&amp;D 3" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="38.0" absoluteTextY="16.0" textAlignment="CENTER">
+          <ForegroundStyle id="142" noStroke="false" color="102,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorGradientBackgroundStyle id="143" color1="255,153,153" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="true" transparencyLevel="0.2" />
+          <Border id="144" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="145" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <RectangleShape id="146" isRounded="true" arcSize="15.0" />
+          <TextStyle id="147" font="SansSerif,0,11" color="102,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </ShapeGraphicalRepresentation>
+        <ContainedShape id="148" name="Worker">
+          <ShapeGraphicalRepresentation id="149" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="158.0" y="8.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="4" isFloatingLabel="true" text="Worker" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="28.0" absoluteTextY="35.0" textAlignment="CENTER">
+            <ForegroundStyle id="150" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+            <ImageBackgroundStyle id="151" imageFile="WorkerYellow.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+            <Border id="152" top="5" bottom="5" left="5" right="5" />
+            <ShadowStyle id="153" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+            <RectangleShape id="154" isRounded="false" arcSize="30.0" />
+            <TextStyle id="155" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+          </ShapeGraphicalRepresentation>
+        </ContainedShape>
+        <ContainedShape id="156" name="Worker">
+          <ShapeGraphicalRepresentation id="157" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="102.0" y="10.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="4" isFloatingLabel="true" text="Worker" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="28.0" absoluteTextY="35.0" textAlignment="CENTER">
+            <ForegroundStyle id="158" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+            <ImageBackgroundStyle id="159" imageFile="WorkerYellow.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+            <Border id="160" top="5" bottom="5" left="5" right="5" />
+            <ShadowStyle id="161" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+            <RectangleShape id="162" isRounded="false" arcSize="30.0" />
+            <TextStyle id="163" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+          </ShapeGraphicalRepresentation>
+        </ContainedShape>
+      </ContainedShape>
+      <ContainedShape id="164" name="R&amp;D 1">
+        <ShapeGraphicalRepresentation id="165" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="21.0" y="104.01449275362319" width="221.7540106951872" height="58.98550724637681" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="3" isFloatingLabel="true" text="R&amp;D 1" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="35.0" absoluteTextY="14.0" textAlignment="CENTER">
+          <ForegroundStyle id="166" noStroke="false" color="102,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ColorGradientBackgroundStyle id="167" color1="255,153,153" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="true" transparencyLevel="0.2" />
+          <Border id="168" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="169" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <RectangleShape id="170" isRounded="true" arcSize="15.0" />
+          <TextStyle id="171" font="SansSerif,0,11" color="102,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </ShapeGraphicalRepresentation>
+        <ContainedShape id="172" name="Worker">
+          <ShapeGraphicalRepresentation id="173" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="148.0" y="10.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="4" isFloatingLabel="true" text="Worker" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="28.0" absoluteTextY="35.0" textAlignment="CENTER">
+            <ForegroundStyle id="174" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+            <ImageBackgroundStyle id="175" imageFile="WorkerYellow.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+            <Border id="176" top="5" bottom="5" left="5" right="5" />
+            <ShadowStyle id="177" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+            <RectangleShape id="178" isRounded="false" arcSize="30.0" />
+            <TextStyle id="179" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+          </ShapeGraphicalRepresentation>
+        </ContainedShape>
+      </ContainedShape>
+    </ContainedShape>
+    <ContainedShape id="180" name="Accounting">
+      <ShapeGraphicalRepresentation id="181" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="401.0" y="22.0" width="183.95721925133688" height="113.18840579710145" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="2" isFloatingLabel="true" text="Accounting" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="48.0" absoluteTextY="17.0" textAlignment="CENTER">
+        <ForegroundStyle id="182" noStroke="false" color="0,102,102" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ColorGradientBackgroundStyle id="183" color1="0,153,153" color2="255,255,255" direction="SOUTH_EAST_NORTH_WEST" useTransparency="true" transparencyLevel="0.2" />
+        <Border id="184" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="185" drawShadow="true" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="186" isRounded="true" arcSize="15.0" />
+        <TextStyle id="187" font="SansSerif,0,11" color="0,51,51" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+      <ContainedShape id="188" name="Account">
+        <ShapeGraphicalRepresentation id="189" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="73.0" y="41.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="3" isFloatingLabel="true" text="Account" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="23.0" absoluteTextY="42.0" textAlignment="CENTER">
+          <ForegroundStyle id="190" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+          <ImageBackgroundStyle id="191" imageFile="Account.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+          <Border id="192" top="5" bottom="5" left="5" right="5" />
+          <ShadowStyle id="193" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+          <RectangleShape id="194" isRounded="false" arcSize="30.0" />
+          <TextStyle id="195" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+        </ShapeGraphicalRepresentation>
+      </ContainedShape>
+    </ContainedShape>
+    <ContainedShape id="196" name="CEO">
+      <ShapeGraphicalRepresentation id="197" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="183.0" y="42.0" width="57.941513783094166" height="55.99237699237702" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="2" isFloatingLabel="true" text="CEO" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="15.708819132854561" absoluteTextY="10.285744596082354" textAlignment="CENTER">
+        <ForegroundStyle id="198" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="199" imageFile="CEO.png" scaleX="0.8520810850455024" scaleY="0.8483693483693487" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="200" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="201" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="202" isRounded="false" arcSize="30.0" />
+        <TextStyle id="203" font="SansSerif,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+    <ContainedShape id="204" name="Receptionist">
+      <ShapeGraphicalRepresentation id="205" className="org.openflexo.vpm.drawingshema.CalcDrawingShapeGR" x="298.0" y="51.0" width="39.21875" height="38.96537613052885" isVisible="true" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" layer="2" isFloatingLabel="true" text="Receptionist" isMultilineAllowed="false" isReadOnly="false" isSelectable="true" isFocusable="true" relativeTextX="0.5" relativeTextY="0.5" absoluteTextX="22.0" absoluteTextY="40.0" textAlignment="CENTER">
+        <ForegroundStyle id="206" noStroke="true" color="0,0,0" lineWidth="1.0" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
+        <ImageBackgroundStyle id="207" imageFile="Receptionist.png" scaleX="1.0" scaleY="1.0" deltaX="0.0" deltaY="0.0" imageBackgroundType="TRANSPARENT" imageBackgroundColor="255,255,255" fitToShape="false" useTransparency="false" transparencyLevel="0.5" />
+        <Border id="208" top="5" bottom="5" left="5" right="5" />
+        <ShadowStyle id="209" drawShadow="false" shadowDarkness="150" shadowDepth="2" shadowBlur="4" />
+        <RectangleShape id="210" isRounded="false" arcSize="30.0" />
+        <TextStyle id="211" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
+      </ShapeGraphicalRepresentation>
+    </ContainedShape>
+  </ContainedShape>
+</Shema>
+

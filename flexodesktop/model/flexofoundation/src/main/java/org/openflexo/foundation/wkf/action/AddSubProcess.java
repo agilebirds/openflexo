@@ -49,14 +49,14 @@ public class AddSubProcess extends FlexoAction<AddSubProcess, FlexoModelObject, 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return (object instanceof FlexoProcess && !((FlexoProcess) object).isImported())
-					|| (object instanceof ProcessFolder && !((ProcessFolder) object).getProcessNode().isImported())
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return object instanceof FlexoProcess && !((FlexoProcess) object).isImported() || object instanceof ProcessFolder
+					&& (((ProcessFolder) object).getProcessNode() == null || !((ProcessFolder) object).getProcessNode().isImported())
 					|| object instanceof FlexoWorkflow;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return isVisibleForSelection(object, globalSelection);
 		}
 
@@ -66,8 +66,11 @@ public class AddSubProcess extends FlexoAction<AddSubProcess, FlexoModelObject, 
 	private FlexoProcess _parentProcess;
 	private FlexoProcess _newProcess;
 	private FlexoProject _project;
+	private boolean showNewProcess = true;
 
 	static {
+		FlexoModelObject.addActionForClass(AddSubProcess.actionType, FlexoWorkflow.class);
+		FlexoModelObject.addActionForClass(AddSubProcess.actionType, FlexoProcess.class);
 		FlexoModelObject.addActionForClass(AddSubProcess.actionType, ProcessFolder.class);
 	}
 
@@ -99,7 +102,8 @@ public class AddSubProcess extends FlexoAction<AddSubProcess, FlexoModelObject, 
 		}
 		if (getFocusedObject() != null) {
 			_project = getFocusedObject().getProject();
-			_newProcess = FlexoProcess.createNewProcess(_project.getFlexoWorkflow(), getParentProcess(), getNewProcessName(), false);
+			_newProcess = FlexoProcess.createNewProcess(_project.getFlexoWorkflow(), getParentProcess(), getNewProcessName(),
+					getParentProcess() == null && _project.getFlexoWorkflow().getRootProcess() == null);
 		} else {
 			logger.warning("Focused object is null !");
 		}
@@ -107,6 +111,14 @@ public class AddSubProcess extends FlexoAction<AddSubProcess, FlexoModelObject, 
 
 	public FlexoProcess getNewProcess() {
 		return _newProcess;
+	}
+
+	public boolean isShowNewProcess() {
+		return showNewProcess;
+	}
+
+	public void setShowNewProcess(boolean showNewProcess) {
+		this.showNewProcess = showNewProcess;
 	}
 
 }

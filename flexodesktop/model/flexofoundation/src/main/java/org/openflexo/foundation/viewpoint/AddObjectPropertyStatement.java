@@ -26,15 +26,18 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.ObjectPropertyStatement;
+import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.owl.ObjectPropertyStatement;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
@@ -44,8 +47,8 @@ public class AddObjectPropertyStatement extends AddStatement {
 
 	private String objectPropertyURI = null;
 
-	public AddObjectPropertyStatement() {
-		super();
+	public AddObjectPropertyStatement(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override
@@ -68,7 +71,7 @@ public class AddObjectPropertyStatement extends AddStatement {
 	@Override
 	public Type getSubjectType() {
 		if (getObjectProperty() != null && getObjectProperty().getDomain() instanceof OntologyClass) {
-			return (OntologyClass) getObjectProperty().getDomain();
+			return IndividualOfClass.getIndividualOfClass((OntologyClass) getObjectProperty().getDomain());
 		}
 		return super.getSubjectType();
 	}
@@ -83,8 +86,8 @@ public class AddObjectPropertyStatement extends AddStatement {
 			getViewPoint().loadWhenUnloaded();
 		}
 		if (StringUtils.isNotEmpty(objectPropertyURI)) {
-			if (getOntologyLibrary() != null) {
-				return getOntologyLibrary().getObjectProperty(objectPropertyURI);
+			if (getViewPoint().getViewpointOntology() != null) {
+				return getViewPoint().getViewpointOntology().getObjectProperty(objectPropertyURI);
 			}
 		} else {
 			if (getPatternRole() != null) {
@@ -147,8 +150,9 @@ public class AddObjectPropertyStatement extends AddStatement {
 	private BindingDefinition OBJECT = new BindingDefinition("object", OntologyObject.class, BindingDefinitionType.GET, true) {
 		@Override
 		public Type getType() {
-			if (getObjectProperty() != null && getObjectProperty().getRange() instanceof OntologyClass) {
-				return (OntologyClass) getObjectProperty().getRange();
+			if (getObjectProperty() instanceof OntologyObjectProperty
+					&& ((OntologyObjectProperty) getObjectProperty()).getRange() instanceof OntologyClass) {
+				return IndividualOfClass.getIndividualOfClass((OntologyClass) ((OntologyObjectProperty) getObjectProperty()).getRange());
 			}
 			return OntologyObject.class;
 		}

@@ -28,7 +28,7 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.Modules;
 import org.openflexo.module.UserType;
 
 /**
@@ -39,20 +39,22 @@ import org.openflexo.module.UserType;
  */
 public class ApplicationData {
 	private static final Logger logger = Logger.getLogger(ApplicationData.class.getPackage().getName());
+	private final ApplicationContext applicationContext;
 
-	public ApplicationData() {
+	public ApplicationData(ApplicationContext applicationContext) {
+		this.applicationContext = applicationContext;
 		if (!UserType.isCurrentUserTypeDefined()) {
 			logger.warning("ModuleLoader not initialized, initializing it with default values");
 			UserType.setCurrentUserType(UserType.MAINTAINER);
 		}
 	}
 
-	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
+	public ApplicationContext getApplicationContext() {
+		return applicationContext;
 	}
 
 	public List<Module> getAvailableModules() {
-		return getModuleLoader().availableModules();
+		return Modules.getInstance().getAvailableModules();
 	}
 
 	public UserType getUserType() {
@@ -60,7 +62,7 @@ public class ApplicationData {
 	}
 
 	public String getVersion() {
-		return "Version " + FlexoCst.BUSINESS_APPLICATION_VERSION + " (build " + FlexoCst.BUILD_ID + ")";
+		return "Version " + FlexoCst.BUSINESS_APPLICATION_VERSION + " (build " + ApplicationVersion.BUILD_ID + ")";
 	}
 
 	public Vector<File> getLastOpenedProjects() {
@@ -80,10 +82,7 @@ public class ApplicationData {
 	}
 
 	public Module getFavoriteModule() {
-		Module returned = getModuleLoader().getModule(GeneralPreferences.getFavoriteModuleName());
-		if (returned != null && !returned.isAvailable()) {
-			returned = null;
-		}
+		Module returned = Modules.getInstance().getModule(GeneralPreferences.getFavoriteModuleName());
 		if (returned == null) {
 			if (getAvailableModules().size() > 0) {
 				return getAvailableModules().get(0);

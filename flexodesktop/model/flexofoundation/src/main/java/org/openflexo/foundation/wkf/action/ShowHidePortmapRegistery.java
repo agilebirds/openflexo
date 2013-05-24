@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.wkf.WKFObject;
@@ -47,17 +48,24 @@ public class ShowHidePortmapRegistery extends FlexoUndoableAction<ShowHidePortma
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
-			return (object instanceof SubProcessNode && ((SubProcessNode) object).getPortMapRegistery() != null)
+		public boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+			return object instanceof SubProcessNode && ((SubProcessNode) object).getPortMapRegistery() != null
 					|| object instanceof PortMapRegistery;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
 			return isVisibleForSelection(object, globalSelection);
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, PortMapRegistery.class);
+		FlexoModelObject.addActionForClass(actionType, SubProcessNode.class);
+	}
+
+	private Boolean visibility;
 
 	ShowHidePortmapRegistery(WKFObject focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -66,7 +74,11 @@ public class ShowHidePortmapRegistery extends FlexoUndoableAction<ShowHidePortma
 	@Override
 	protected void doAction(Object context) {
 		if (getPortMapRegistery() != null) {
-			getPortMapRegistery().setIsVisible(!getPortMapRegistery().getIsVisible());
+			if (getVisibility() != null) {
+				getPortMapRegistery().setIsVisible(getVisibility());
+			} else {
+				getPortMapRegistery().setIsVisible(!getPortMapRegistery().getIsVisible());
+			}
 		}
 	}
 
@@ -100,6 +112,14 @@ public class ShowHidePortmapRegistery extends FlexoUndoableAction<ShowHidePortma
 	@Override
 	protected void redoAction(Object context) {
 		doAction(context);
+	}
+
+	public Boolean getVisibility() {
+		return visibility;
+	}
+
+	public void setVisibility(Boolean visibility) {
+		this.visibility = visibility;
 	}
 
 }

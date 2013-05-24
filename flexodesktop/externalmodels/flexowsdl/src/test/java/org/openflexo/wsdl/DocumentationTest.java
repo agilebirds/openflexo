@@ -25,6 +25,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResourceManager;
+import org.openflexo.foundation.ws.action.AbstractCreateNewWebService;
 import org.openflexo.foundation.ws.action.CreateNewWebService;
 import org.openflexo.toolbox.FileResource;
 
@@ -40,9 +41,8 @@ public class DocumentationTest extends FlexoTestCase {
 					null);
 			FlexoProject project = editor.getProject();
 
-			CreateNewWebService action = (CreateNewWebService) CreateNewWebService.actionType.makeNewAction(project.getFlexoWSLibrary(),
-					null, editor);
-			action.setWebServiceType(CreateNewWebService.EXTERNAL_WS);
+			CreateNewWebService action = CreateNewWebService.actionType.makeNewAction(project.getFlexoWSLibrary(), null, editor);
+			action.setWebServiceType(AbstractCreateNewWebService.EXTERNAL_WS);
 
 			String externalName = "quizz";
 			File wsdlFile = new FileResource("quiz.wsdl.xml");

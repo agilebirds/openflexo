@@ -30,7 +30,7 @@ import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyObjectProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
-import org.openflexo.foundation.ontology.OntologyStatement;
+import org.openflexo.foundation.ontology.owl.OWLStatement;
 import org.openflexo.toolbox.ImageIconResource;
 
 public class OntologyIconLibrary {
@@ -43,6 +43,7 @@ public class OntologyIconLibrary {
 	public static final ImageIconResource ONTOLOGY_INDIVIDUAL_ICON = new ImageIconResource("Icons/Model/OE/OntologyIndividual.png");
 	public static final ImageIconResource ONTOLOGY_OBJECT_PROPERTY_ICON = new ImageIconResource("Icons/Model/OE/OntologyObjectProperty.png");
 	public static final ImageIconResource ONTOLOGY_DATA_PROPERTY_ICON = new ImageIconResource("Icons/Model/OE/OntologyDataProperty.png");
+	public static final ImageIconResource ONTOLOGY_PROPERTY_ICON = new ImageIconResource("Icons/Model/OE/OntologyProperty.png");
 	public static final ImageIconResource ONTOLOGY_ANNOTATION_PROPERTY_ICON = new ImageIconResource(
 			"Icons/Model/OE/OntologyAnnotationProperty.png");
 	public static final ImageIconResource ONTOLOGY_STATEMENT_ICON = new ImageIconResource("Icons/Model/OE/OntologyStatement.png");
@@ -54,13 +55,13 @@ public class OntologyIconLibrary {
 			return ONTOLOGY_CLASS_ICON;
 		} else if (object instanceof OntologyIndividual) {
 			return ONTOLOGY_INDIVIDUAL_ICON;
-		} else if ((object instanceof OntologyProperty) && ((OntologyProperty) object).isAnnotationProperty()) {
+		} else if (object instanceof OntologyProperty && ((OntologyProperty) object).isAnnotationProperty()) {
 			return ONTOLOGY_ANNOTATION_PROPERTY_ICON;
 		} else if (object instanceof OntologyObjectProperty) {
 			return ONTOLOGY_OBJECT_PROPERTY_ICON;
 		} else if (object instanceof OntologyDataProperty) {
 			return ONTOLOGY_DATA_PROPERTY_ICON;
-		} else if (object instanceof OntologyStatement) {
+		} else if (object instanceof OWLStatement) {
 			return ONTOLOGY_STATEMENT_ICON;
 		}
 		logger.warning("No icon for " + object.getClass());

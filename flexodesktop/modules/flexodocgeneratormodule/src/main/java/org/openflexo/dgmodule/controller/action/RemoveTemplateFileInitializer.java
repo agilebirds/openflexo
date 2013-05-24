@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -49,7 +49,7 @@ public class RemoveTemplateFileInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RemoveTemplateFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveTemplateFile action) {
+			public boolean run(EventObject e, RemoveTemplateFile action) {
 				return FlexoController.confirmWithWarning(FlexoLocalization
 						.localizedForKey("are_you_sure_that_you_want_to_remove_definitely_this_template?"));
 

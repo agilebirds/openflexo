@@ -51,12 +51,12 @@ public class CreateImplementationModel extends FlexoAction<CreateImplementationM
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(GeneratedSources object, Vector<CGObject> globalSelection) {
+		public boolean isVisibleForSelection(GeneratedSources object, Vector<CGObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(GeneratedSources object, Vector<CGObject> globalSelection) {
+		public boolean isEnabledForSelection(GeneratedSources object, Vector<CGObject> globalSelection) {
 			return object != null;
 		}
 

@@ -30,13 +30,13 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
-import javax.swing.SwingUtilities;
 
-import org.openflexo.FlexoCst;
+import org.openflexo.fib.controller.FIBController.Status;
+import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoResourceCenter;
-import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.validation.ValidationModel;
@@ -45,6 +45,7 @@ import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.ExampleDrawingShema;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
+import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.icon.OntologyIconLibrary;
@@ -52,16 +53,14 @@ import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.module.FlexoResourceCenterService;
 import org.openflexo.selection.SelectionManager;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.SelectionManagingController;
 import org.openflexo.view.menu.FlexoMenuBar;
+import org.openflexo.vpm.CEDCst;
 import org.openflexo.vpm.controller.action.CEDControllerActionInitializer;
-import org.openflexo.vpm.view.CEDFrame;
 import org.openflexo.vpm.view.CEDMainPane;
 import org.openflexo.vpm.view.EditionPatternView;
 import org.openflexo.vpm.view.menu.VPMMenuBar;
@@ -71,26 +70,16 @@ import org.openflexo.vpm.view.menu.VPMMenuBar;
  * 
  * @author yourname
  */
-public class VPMController extends FlexoController implements SelectionManagingController, ConsistencyCheckingController {
+public class VPMController extends FlexoController {
 
 	private static final Logger logger = Logger.getLogger(VPMController.class.getPackage().getName());
 
-	// ================================================
-	// ============= Instance variables ===============
-	// ================================================
+	private FlexoResourceCenter resourceCenter;
+	private ViewPointLibrary viewPointLibrary;
+	private OntologyLibrary baseOntologyLibrary;
 
-	protected VPMMenuBar _cedMenuBar;
-	protected CEDFrame _frame;
-
-	protected VPMKeyEventListener _cedKeyEventListener;
-	private final VPMSelectionManager _selectionManager;
-
-	private final FlexoResourceCenter resourceCenter;
-	private final ViewPointLibrary viewPointLibrary;
-	private final OntologyLibrary baseOntologyLibrary;
-
-	public final ViewPointPerspective VIEW_POINT_PERSPECTIVE;
-	public final OntologyPerspective ONTOLOGY_PERSPECTIVE;
+	public ViewPointPerspective VIEW_POINT_PERSPECTIVE;
+	public OntologyPerspective ONTOLOGY_PERSPECTIVE;
 
 	@Override
 	public boolean useNewInspectorScheme() {
@@ -102,46 +91,27 @@ public class VPMController extends FlexoController implements SelectionManagingC
 		return false;
 	}
 
-	// ================================================
-	// ================ Constructor ===================
-	// ================================================
-
 	/**
 	 * Default constructor
 	 */
-	public VPMController(FlexoModule module) throws Exception {
-		super(module.getEditor(), module);
+	public VPMController(FlexoModule module) {
+		super(module);
+	}
 
-		resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
+	@Override
+	protected void initializePerspectives() {
+		resourceCenter = getApplicationContext().getResourceCenterService().getOpenFlexoResourceCenter();
 		viewPointLibrary = resourceCenter.retrieveViewPointLibrary();
 		baseOntologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-
-		_cedMenuBar = (VPMMenuBar) createAndRegisterNewMenuBar();
-		_cedKeyEventListener = new VPMKeyEventListener(this);
-		_frame = new CEDFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _cedKeyEventListener, _cedMenuBar);
-		init(_frame, _cedKeyEventListener, _cedMenuBar);
-
 		resourceSavingInfo = new ArrayList<ResourceSavingInfo>();
-
-		_selectionManager = new VPMSelectionManager(this);
 
 		addToPerspectives(VIEW_POINT_PERSPECTIVE = new ViewPointPerspective(this));
 		addToPerspectives(ONTOLOGY_PERSPECTIVE = new OntologyPerspective(this));
-
-		setDefaultPespective(VIEW_POINT_PERSPECTIVE);
-
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				switchToPerspective(getDefaultPespective());
-				selectAndFocusObject(viewPointLibrary);
-			}
-		});
-
 	}
 
-	protected FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.instance();
+	@Override
+	protected SelectionManager createSelectionManager() {
+		return new VPMSelectionManager(this);
 	}
 
 	@Override
@@ -165,63 +135,20 @@ public class VPMController extends FlexoController implements SelectionManagingC
 	@Override
 	public void initInspectors() {
 		super.initInspectors();
-		if (getSharedInspectorController() != null) {
-			_selectionManager.addObserver(getSharedInspectorController());
-		}
 		if (useNewInspectorScheme()) {
 			loadInspectorGroup("Ontology");
 		}
 
 	}
 
-	public void loadRelativeWindows() {
-		// Build eventual relative windows
-	}
-
-	// ================================================
-	// ============== Instance method =================
-	// ================================================
-
-	public CEDFrame getMainFrame() {
-		return _frame;
-	}
-
-	public VPMMenuBar getEditorMenuBar() {
-		return _cedMenuBar;
-	}
-
-	public void showBrowser() {
-		if (getMainPane() != null) {
-			((CEDMainPane) getMainPane()).showBrowser();
-		}
-	}
-
-	public void hideBrowser() {
-		if (getMainPane() != null) {
-			((CEDMainPane) getMainPane()).hideBrowser();
-		}
-	}
-
 	@Override
 	protected FlexoMainPane createMainPane() {
-		return new CEDMainPane(getEmptyPanel(), getMainFrame(), this);
+		return new CEDMainPane(this);
 	}
-
-	public VPMKeyEventListener getKeyEventListener() {
-		return _cedKeyEventListener;
-	}
-
-	// ================================================
-	// ============ Selection management ==============
-	// ================================================
 
 	@Override
-	public SelectionManager getSelectionManager() {
-		return getCEDSelectionManager();
-	}
-
-	public VPMSelectionManager getCEDSelectionManager() {
-		return _selectionManager;
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+		return getViewPointLibrary();
 	}
 
 	/**
@@ -245,8 +172,8 @@ public class VPMController extends FlexoController implements SelectionManagingC
 				if (cl.getViewPoints().size() > 0) {
 					getSelectionManager().setSelectedObject(cl.getViewPoints().firstElement());
 				}
-			} else if (object instanceof ImportedOntology) {
-				ImportedOntology ontology = (ImportedOntology) object;
+			} else if (object instanceof ImportedOWLOntology) {
+				ImportedOWLOntology ontology = (ImportedOWLOntology) object;
 				VIEW_POINT_PERSPECTIVE.focusOnOntology(ontology);
 				if (ontology.getClasses().size() > 0) {
 					getSelectionManager().setSelectedObject(ontology.getClasses().firstElement());
@@ -336,7 +263,7 @@ public class VPMController extends FlexoController implements SelectionManagingC
 	// ============ Resources management ==============
 	// ================================================
 
-	private final List<ResourceSavingInfo> resourceSavingInfo;
+	private List<ResourceSavingInfo> resourceSavingInfo;
 
 	public void manageResource(FlexoModelObject o) {
 		boolean alreadyRegistered = false;
@@ -375,10 +302,17 @@ public class VPMController extends FlexoController implements SelectionManagingC
 		}
 	}
 
-	public void reviewModifiedResources() {
+	public boolean reviewModifiedResources() {
 		for (ResourceSavingInfo i : resourceSavingInfo) {
 			i.reviewModifiedResource();
 		}
+		FIBDialog<VPMController> dialog = FIBDialog.instanciateAndShowDialog(CEDCst.SAVE_VPM_DIALOG_FIB, this, FlexoFrame.getActiveFrame(),
+				true, FlexoLocalization.getMainLocalizer());
+		if (dialog.getStatus() == Status.VALIDATED) {
+			saveModified();
+			return true;
+		}
+		return false;
 	}
 
 	public static class ResourceSavingInfo {
@@ -394,7 +328,7 @@ public class VPMController extends FlexoController implements SelectionManagingC
 		}
 
 		public Icon getIcon() {
-			if (resource instanceof ImportedOntology) {
+			if (resource instanceof ImportedOWLOntology) {
 				return OntologyIconLibrary.ONTOLOGY_ICON;
 			} else if (resource instanceof ViewPoint) {
 				return VPMIconLibrary.CALC_ICON;
@@ -433,8 +367,8 @@ public class VPMController extends FlexoController implements SelectionManagingC
 		public void saveModified() {
 			if (saveThisResource) {
 				try {
-					if (resource instanceof ImportedOntology) {
-						((ImportedOntology) resource).save();
+					if (resource instanceof ImportedOWLOntology) {
+						((ImportedOWLOntology) resource).save();
 					} else if (resource instanceof ViewPoint) {
 						((ViewPoint) resource).save();
 					} else if (resource instanceof ViewPointPalette) {
@@ -452,6 +386,6 @@ public class VPMController extends FlexoController implements SelectionManagingC
 
 	@Override
 	public ValidationModel getDefaultValidationModel() {
-		return ViewPointObject.VALIDATION_MODEL;
+		return ViewPointLibraryObject.VALIDATION_MODEL;
 	}
 }

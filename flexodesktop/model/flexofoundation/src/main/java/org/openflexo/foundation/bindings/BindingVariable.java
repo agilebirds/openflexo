@@ -27,9 +27,7 @@ import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.Typed;
 import org.openflexo.foundation.dm.dm.DMEntityClassNameChanged;
 import org.openflexo.foundation.dm.dm.EntityDeleted;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Please comment this class
@@ -58,16 +56,6 @@ public class BindingVariable extends FlexoModelObject implements Typed {
 	}
 
 	@Override
-	public FlexoProject getProject() {
-		return _dataModel.getProject();
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		return ((FlexoModelObject) _container).getXMLMapping();
-	}
-
-	@Override
 	public XMLStorageResourceData getXMLResourceData() {
 		if (_container != null) {
 			return ((FlexoModelObject) _container).getXMLResourceData();
@@ -82,7 +70,7 @@ public class BindingVariable extends FlexoModelObject implements Typed {
 
 	@Override
 	public void setType(DMType type) {
-		if ((type == null && _type != null) || (type != null && !type.equals(_type))) {
+		if (type == null && _type != null || type != null && !type.equals(_type)) {
 			DMType oldType = _type;
 			if (oldType != null) {
 				oldType.removeFromTypedWithThisType(this);

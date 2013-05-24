@@ -25,6 +25,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -32,15 +33,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.AbstractBinding.TargetObject;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DependingObjects;
 import org.openflexo.antar.binding.DependingObjects.HasDependencyBinding;
@@ -74,12 +78,16 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	public static final Dimension MINIMUM_SIZE = new Dimension(30, 25);
 
 	private final DynamicFormatter formatter;
+	private DynamicValueBindingContext valueBindingContext;
+	private final DynamicEventListener eventListener;
 
 	private DependingObjects dependingObjects;
 
 	protected FIBWidgetView(M model, FIBController aController) {
 		super(model, aController);
 		formatter = new DynamicFormatter();
+		valueBindingContext = new DynamicValueBindingContext();
+		eventListener = new DynamicEventListener();
 	}
 
 	@Override
@@ -192,6 +200,37 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			return;
 		}
 
+		if (getWidget().getValueTransform() != null && getWidget().getValueTransform().isValid()) {
+			T old = aValue;
+			aValue = (T) getWidget().getValueTransform().getBindingValue(getValueBindingContext(aValue));
+			if (!equals(old, aValue)) {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						updateWidgetFromModel();
+					}
+				});
+			}
+		}
+
+		boolean isValid = true;
+		if (getWidget().getValueValidator() != null && getWidget().getValueValidator().isValid()) {
+			Object object = getWidget().getValueValidator().getBindingValue(getValueBindingContext(aValue));
+			if (object == null) {
+				isValid = false;
+			} else if (object instanceof Boolean) {
+				isValid = (Boolean) object;
+			}
+		}
+		if (!isValid) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					updateWidgetFromModel();
+				}
+			});
+			return;
+		}
 		if (getDynamicModel() != null) {
 			logger.fine("Sets dynamic model value with " + aValue + " for " + getComponent());
 			getDynamicModel().setData(aValue);
@@ -212,13 +251,11 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 		}
 
-		updateDependancies();
-		/*Iterator<FIBComponent> it = getWidget().getMayAltersIterator();
-		while(it.hasNext()) {
-			FIBComponent c = it.next();
-			logger.info("Modified "+aValue+" now update "+c);
-			getController().viewForComponent(c).update();
-		}*/
+		updateDependancies(new Vector<FIBComponent>());
+		/*
+		 * Iterator<FIBComponent> it = getWidget().getMayAltersIterator(); while(it.hasNext()) { FIBComponent c = it.next();
+		 * logger.info("Modified "+aValue+" now update "+c); getController().viewForComponent(c).update(); }
+		 */
 
 		if (getWidget().getValueChangedAction().isValid()) {
 			getWidget().getValueChangedAction().execute(getController());
@@ -226,7 +263,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 	}
 
-	private synchronized void updateDependingObjects() {
+	protected void updateDependingObjects() {
 		if (dependingObjects == null) {
 			dependingObjects = new DependingObjects(this);
 		}
@@ -241,11 +278,11 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 				@Override
 				public void run() {
-					update();
+					update(new Vector<FIBComponent>());
 				}
 			});
 		} else {
-			update();
+			update(new Vector<FIBComponent>());
 		}
 	}
 
@@ -257,11 +294,11 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 				@Override
 				public void run() {
-					update();
+					update(new Vector<FIBComponent>());
 				}
 			});
 		} else {
-			update();
+			update(new Vector<FIBComponent>());
 		}
 	}
 
@@ -297,49 +334,85 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	}
 
 	@Override
-	public void update() {
+	public List<TargetObject> getChainedBindings(AbstractBinding binding, TargetObject object) {
+		return null;
+	}
+
+	/**
+	 * This method is called to update view representing a FIBComponent.<br>
+	 * Callers are all the components that have been updated during current update loop. If the callers contains the component itself, does
+	 * nothing and return.
+	 * 
+	 * @param callers
+	 *            all the components that have been previously updated during current update loop
+	 * @return a flag indicating if component has been updated
+	 */
+	@Override
+	public boolean update(List<FIBComponent> callers) {
 		try {
-			super.update();
+			if (!super.update(callers)) {
+				return false;
+			}
 			updateEnability();
 			// logger.info("Updating "+getWidget()+" value="+getValue());
+
+			// Add the component to the list of callers to avoid loops
+			callers.add(getComponent());
+
 			if (isComponentVisible()) {
 				updateDynamicTooltip();
 				updateDependingObjects();
 				if (updateWidgetFromModel()) {
-					updateDependancies();
+					updateDependancies(callers);
 				}
-			} else if ((dependingObjects == null || !dependingObjects.areDependingObjectsComputed()) && checkValidDataPath()) {
+			} else if (checkValidDataPath()) {
 				// Even if the component is not visible, its visibility may depend
 				// it self from some depending component (which in that situation,
 				// are very important to know, aren'they ?)
 				updateDependingObjects();
 			}
+			return true;
 		} catch (Exception e) {
 			logger.warning("Unexpected exception: " + e.getMessage());
 			e.printStackTrace();
+			return false;
 		}
 	}
 
-	protected void updateDependancies() {
+	protected void updateDependancies(List<FIBComponent> callers) {
 		if (getController() == null) {
 			return;
 		}
+		// logger.info("updateDependancies() for " + getWidget());
 		Iterator<FIBComponent> it = getWidget().getMayAltersIterator();
 		while (it.hasNext()) {
 			FIBComponent c = it.next();
-			logger.fine("###### Component " + getWidget() + ", has been updated, now update " + c);
-			FIBView v = getController().viewForComponent(c);
+			// logger.info("###### Component " + getWidget() + ", has been updated, now update " + c);
+			FIBView<?, ?> v = getController().viewForComponent(c);
 			if (v != null) {
-				v.update();
+				v.update(callers);
 			} else {
 				logger.warning("Cannot find FIBView for component " + c);
 			}
 		}
+		// logger.info("END updateDependancies() for " + getWidget());
 	}
 
 	@Override
-	public void updateDataObject(Object aDataObject) {
-		update();
+	public void updateDataObject(final Object aDataObject) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Update data object invoked outside the EDT!!! please investigate and make sure this is no longer the case. \n\tThis is a very SERIOUS problem! Do not let this pass.");
+			}
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					updateDataObject(aDataObject);
+				}
+			});
+			return;
+		}
+		update(new Vector<FIBComponent>());
 	}
 
 	@Override
@@ -351,6 +424,14 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		}
 	}
 
+	private DynamicValueBindingContext getValueBindingContext(T aValue) {
+		if (valueBindingContext == null) {
+			valueBindingContext = new DynamicValueBindingContext();
+		}
+		valueBindingContext.setValue(aValue);
+		return valueBindingContext;
+	}
+
 	/**
 	 * Return the effective base component to be added to swing hierarchy This component may be encapsulated in a JScrollPane
 	 * 
@@ -360,7 +441,8 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	public abstract JComponent getJComponent();
 
 	/**
-	 * Return the dynamic JComponent, ie the component on which dynamic is applied, and were actions are effective
+	 * Return the dynamic JComponent, ie the component on which dynamic is applied, and were actions are effective. This component must be
+	 * either the same or a child of the one returned by {@link #getJComponent()}.
 	 * 
 	 * @return J
 	 */
@@ -409,6 +491,14 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				return returned;
 			}
 		}
+		if (value instanceof Enum) {
+			String returned = value != null ? ((Enum<?>) value).name() : null;
+			if (getWidget().getLocalize() && returned != null) {
+				return getLocalized(returned);
+			} else {
+				return returned;
+			}
+		}
 		if (value instanceof String) {
 			if (getWidget().getLocalize()) {
 				return getLocalized((String) value);
@@ -426,6 +516,21 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			return (Icon) getWidget().getIcon().getBindingValue(formatter);
 		}
 		return null;
+	}
+
+	public void applySingleClickAction(MouseEvent event) {
+		eventListener.setEvent(event);
+		getWidget().getClickAction().execute(eventListener);
+	}
+
+	public void applyDoubleClickAction(MouseEvent event) {
+		eventListener.setEvent(event);
+		getWidget().getDoubleClickAction().execute(eventListener);
+	}
+
+	public void applyRightClickAction(MouseEvent event) {
+		eventListener.setEvent(event);
+		getWidget().getRightClickAction().execute(eventListener);
 	}
 
 	@Override
@@ -459,7 +564,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 	public final void updateEnability() {
 		if (isComponentEnabled()) {
-			if (enabled == false) {
+			if (!enabled) {
 				// Becomes enabled
 				logger.fine("Component becomes enabled");
 				// System.out.println("Component  becomes enabled "+getJComponent());
@@ -467,7 +572,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 				enabled = true;
 			}
 		} else {
-			if (enabled == true) {
+			if (enabled) {
 				// Becomes disabled
 				logger.fine("Component becomes disabled");
 				// System.out.println("Component  becomes disabled "+getJComponent());
@@ -478,6 +583,12 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	}
 
 	private void enableComponent(Component component) {
+		if (component instanceof JScrollPane) {
+			component = ((JScrollPane) component).getViewport().getView();
+			if (component == null) {
+				return;
+			}
+		}
 		component.setEnabled(true);
 		if (component instanceof Container) {
 			for (Component c : ((Container) component).getComponents()) {
@@ -487,10 +598,33 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	}
 
 	private void disableComponent(Component component) {
+		if (component instanceof JScrollPane) {
+			component = ((JScrollPane) component).getViewport().getView();
+			if (component == null) {
+				return;
+			}
+		}
 		component.setEnabled(false);
 		if (component instanceof Container) {
 			for (Component c : ((Container) component).getComponents()) {
 				disableComponent(c);
+			}
+		}
+	}
+
+	protected class DynamicValueBindingContext implements BindingEvaluationContext {
+		private Object value;
+
+		private void setValue(Object aValue) {
+			value = aValue;
+		}
+
+		@Override
+		public Object getValue(BindingVariable variable) {
+			if (variable.getVariableName().equals("value")) {
+				return value;
+			} else {
+				return getController().getValue(variable);
 			}
 		}
 	}
@@ -506,6 +640,23 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 		public Object getValue(BindingVariable variable) {
 			if (variable.getVariableName().equals("object")) {
 				return value;
+			} else {
+				return getController().getValue(variable);
+			}
+		}
+	}
+
+	protected class DynamicEventListener implements BindingEvaluationContext {
+		private MouseEvent mouseEvent;
+
+		private void setEvent(MouseEvent mouseEvent) {
+			this.mouseEvent = mouseEvent;
+		}
+
+		@Override
+		public Object getValue(BindingVariable variable) {
+			if (variable.getVariableName().equals("event")) {
+				return mouseEvent;
 			} else {
 				return getController().getValue(variable);
 			}

@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.ws.AbstractInPort" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.ws.AbstractInPort" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="3" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
-      <Label label="input_message" localize="true" name="InputMessageDefinitionnameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <TextField validateOnReturn="true" columns="10" passwd="false" localize="true" name="InputMessageDefinitionname" data="data.inputMessageDefinition.name" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab"  opaque="false"/>
+    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="DataTab" opaque="false">
+      <Label label="input_message" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="InputMessageDefinitionnameLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
+      </Label>
+      <TextField index="1" data="data.inputMessageDefinition.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="InputMessageDefinitionname" localize="true" validateOnReturn="true" columns="10">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </TextField>
-      <Table iteratorClassName="org.openflexo.foundation.wkf.ws.MessageEntry" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.inputMessageDefinition.entries" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=true)" name="InputMessageDefinitionentries" localize="true" manageDynamicModel="true">
+      <Table iteratorClassName="org.openflexo.foundation.wkf.ws.MessageEntry" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="InputMessageDefinitionentries" index="3" data="data.inputMessageDefinition.entries" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
         <TextFieldColumn data="iterator.variableName" title="name" columnWidth="50" resizable="true" displayTitle="true" />
         <CustomColumn componentClassName="org.openflexo.components.widget.DMTypeSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.type" format="object.simplifiedStringRepresentation" title="type" columnWidth="50" resizable="true" displayTitle="true">
           <ColumnAssignment variable="component.project" value="iterator.project" />
@@ -15,11 +18,13 @@
         <CheckBoxColumn data="iterator.isMandatory" title="mandatory" columnWidth="25" resizable="true" displayTitle="true" />
         <AddAction method="data.inputMessageDefinition.createNewMessageEntry" name="new" />
         <RemoveAction method="data.inputMessageDefinition.deleteMessageEntry(selected)" isAvailable="data.inputMessageDefinition.isMessageEntryDeletable(selected)" name="delete" />
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Table>
+      <Parameter name="visibleFor" value="ANALYST,DEVELOPER,MAINTAINER" />
     </Tab>
-    <Tab index="1" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab" />
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab" opaque="false">
+      <Parameter name="visibleFor" value="SEMANTICS,SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER" />
+    </Tab>
   </TabPanel>
   <LocalizedDictionary>
     <Localized key="Data" lang="French">Donnée</Localized>
@@ -31,4 +36,3 @@
   </LocalizedDictionary>
   <Parameter name="title" value="AbstractInPort" />
 </Panel>
-

@@ -19,7 +19,7 @@
  */
 package org.openflexo.xml.diff3;
 
-import org.jdom.Element;
+import org.jdom2.Element;
 
 /**
  * This conflict occurs when 2 Elements are inserted under the same parent and that the parent cannot accept more than one child of this

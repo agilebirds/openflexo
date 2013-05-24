@@ -20,11 +20,21 @@
 package org.openflexo.fib.view.widget;
 
 import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.logging.Logger;
+
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBColor;
+import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.view.FIBWidgetView;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.ColorSelector;
 import org.openflexo.swing.CustomPopup.ApplyCancelListener;
 
@@ -34,7 +44,11 @@ public class FIBColorWidget extends FIBWidgetView<FIBColor, ColorSelector, Color
 
 	// public static final Icon ARROW_DOWN = new ImageIconResource("Resources/ArrowDown.gif");
 
+	private JCheckBox checkBox;
+
 	protected ColorSelector _selector;
+
+	private JPanel container;
 
 	public FIBColorWidget(FIBColor model, FIBController controller) {
 		super(model, controller);
@@ -45,9 +59,45 @@ public class FIBColorWidget extends FIBWidgetView<FIBColor, ColorSelector, Color
 		} else {
 			_selector.addApplyCancelListener(this);
 		}
-		getJComponent().addFocusListener(this);
+		_selector.addFocusListener(this);
+		checkBox = new JCheckBox();
+		checkBox.setHorizontalTextPosition(JCheckBox.LEADING);
+		updateCheckboxLabel();
+		checkBox.addActionListener(new ActionListener() {
 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				_selector.setEnabled(!checkBox.isSelected());
+				updateModelFromWidget();
+			}
+		});
+		container = new JPanel(new GridBagLayout());
+		container.setOpaque(false);
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 1.0;
+		container.add(_selector, gbc);
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.weightx = 0;
+		gbc.anchor = GridBagConstraints.LINE_START;
+		container.add(checkBox, gbc);
+		updateCheckboxVisibility();
 		updateFont();
+	}
+
+	private void updateCheckboxLabel() {
+		checkBox.setText(FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "transparent", checkBox));
+		checkBox.setToolTipText(FlexoLocalization.localizedTooltipForKey(FIBModelObject.LOCALIZATION, "undefined_value", checkBox));
+	}
+
+	public void updateCheckboxVisibility() {
+		checkBox.setVisible(getWidget().getAllowsNull());
+	}
+
+	@Override
+	public void updateLanguage() {
+		super.updateLanguage();
+		updateCheckboxLabel();
 	}
 
 	@Override
@@ -62,9 +112,15 @@ public class FIBColorWidget extends FIBWidgetView<FIBColor, ColorSelector, Color
 
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
-		if (notEquals(getValue(), _selector.getEditedObject())) {
+		Color editedObject = _selector.getEditedObject();
+		if (checkBox.isSelected()) {
+			editedObject = null;
+		}
+		if (notEquals(getValue(), editedObject)) {
 			widgetUpdating = true;
 			try {
+				checkBox.setSelected(getValue() == null);
+				_selector.setEnabled((getValue() != null || !getWidget().getAllowsNull()) && isEnabled());
 				setColor(getValue());
 			} finally {
 				widgetUpdating = false;
@@ -79,13 +135,17 @@ public class FIBColorWidget extends FIBWidgetView<FIBColor, ColorSelector, Color
 	 */
 	@Override
 	public synchronized boolean updateModelFromWidget() {
-		if (notEquals(getValue(), _selector.getEditedObject())) {
+		Color editedObject = null;
+		if (!checkBox.isSelected()) {
+			editedObject = _selector.getEditedObject();
+		}
+		if (notEquals(getValue(), editedObject)) {
 			if (isReadOnly()) {
 				return false;
 			}
 			modelUpdating = true;
 			try {
-				setValue(_selector.getEditedObject());
+				setValue(editedObject);
 			} finally {
 				modelUpdating = false;
 			}
@@ -95,8 +155,8 @@ public class FIBColorWidget extends FIBWidgetView<FIBColor, ColorSelector, Color
 	}
 
 	@Override
-	public ColorSelector getJComponent() {
-		return _selector;
+	public JComponent getJComponent() {
+		return container;
 	}
 
 	@Override

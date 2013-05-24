@@ -144,19 +144,7 @@ public abstract class IEInnerDSWidgetView extends IEPanel {
 		 */
 		@Override
 		public void dragDropEnd(DragSourceDropEvent e) {
-			boolean isDropSuccessfull = IEController.isDropSuccessFull;
-			if (!isDropSuccessfull) {
-				return;
-			}
-			IEController.isDropSuccessFull = false;
-			/*
-			 * the dropAction should be what the drop target specified in
-			 * acceptDrop
-			 */
-			// this is the action selected by the drop target
-			if (e.getDropAction() == DnDConstants.ACTION_MOVE) {
-				IEInnerDSWidgetView.this.setName("");
-			}
+
 		}
 
 		/**

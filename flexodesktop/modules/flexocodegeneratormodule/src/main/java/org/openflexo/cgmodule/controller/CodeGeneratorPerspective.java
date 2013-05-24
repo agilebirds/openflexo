@@ -19,11 +19,11 @@ import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.action.AbstractGCAction;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.icon.CGIconLibrary;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
-public class CodeGeneratorPerspective extends FlexoPerspective<FlexoModelObject> {
+public class CodeGeneratorPerspective extends FlexoPerspective {
 
 	/**
 	 * 
@@ -38,31 +38,22 @@ public class CodeGeneratorPerspective extends FlexoPerspective<FlexoModelObject>
 	public CodeGeneratorPerspective(GeneratorController generatorController) {
 		super("code_generation");
 		this.generatorController = generatorController;
+		setTopLeftView(generatorController.getBrowserView());
 	}
 
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
 		return CGIconLibrary.CG_CGP_ACTIVE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return CGIconLibrary.CG_CGP_SELECTED_ICON;
-	}
-
 	@Override
 	public JPanel getFooter() {
-		return this.generatorController._footer;
+		return this.generatorController.getFooter();
 	}
 
 	@Override
@@ -76,7 +67,8 @@ public class CodeGeneratorPerspective extends FlexoPerspective<FlexoModelObject>
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return ((object instanceof GeneratedOutput) || (object instanceof GenerationRepository) || (object instanceof CGFile) || (object instanceof CGTemplate));
+		return object instanceof GeneratedOutput || object instanceof GenerationRepository || object instanceof CGFile
+				|| object instanceof CGTemplate;
 	}
 
 	@Override

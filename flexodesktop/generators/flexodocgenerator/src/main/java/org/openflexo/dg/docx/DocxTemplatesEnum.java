@@ -25,54 +25,26 @@ import java.util.List;
 import java.util.Map;
 
 public enum DocxTemplatesEnum {
-	RELS("docx_.rels.vm", "_rels/.rels", false), APP_XML("docx_app.xml.vm", "docProps/app.xml", false), CORE_XML(
-			"docx_core.xml.vm",
-			"docProps/core.xml",
-			false), DOCUMENT_XML("docx_document.xml.vm", "word/document.xml", true), DOCUMENT_XML_RELS(
-			"docx_document.xml.rels.vm",
-			"word/_rels/document.xml.rels",
-			true), COMMENTS_XML("docx_comments.xml.vm", "word/comments.xml", false), COMMENTS_XML_RELS(
-			"docx_comments.xml.rels.vm",
-			"word/_rels/comments.xml.rels",
-			false), ENDNOTES_XML("docx_endnotes.xml.vm", "word/endnotes.xml", false), ENDNOTES_XML_RELS(
-			"docx_endnotes.xml.rels.vm",
-			"word/_rels/endnotes.xml.rels",
-			false), FOOTER1_XML("docx_footer1.xml.vm", "word/footer1.xml", false), FOOTER1_XML_RELS(
-			"docx_footer1.xml.rels.vm",
-			"word/_rels/footer1.xml.rels",
-			false), FOOTER2_XML("docx_footer2.xml.vm", "word/footer2.xml", false), FOOTER2_XML_RELS(
-			"docx_footer2.xml.rels.vm",
-			"word/_rels/footer2.xml.rels",
-			false), FOOTER3_XML("docx_footer3.xml.vm", "word/footer3.xml", false), FOOTER3_XML_RELS(
-			"docx_footer3.xml.rels.vm",
-			"word/_rels/footer3.xml.rels",
-			false), FONTTABLE_XML("docx_fontTable.xml.vm", "word/fontTable.xml", false), FONTTABLE_XML_RELS(
-			"docx_fontTable.xml.rels.vm",
-			"word/_rels/fontTable.xml.rels",
-			false), FOOTNOTES_XML("docx_footnotes.xml.vm", "word/footnotes.xml", false), FOOTNOTES_XML_RELS(
-			"docx_footnotes.xml.rels.vm",
-			"word/_rels/footnotes.xml.rels",
-			false), HEADER1_XML("docx_header1.xml.vm", "word/header1.xml", false), HEADER1_XML_RELS(
-			"docx_header1.xml.rels.vm",
-			"word/_rels/header1.xml.rels",
-			false), HEADER2_XML("docx_header2.xml.vm", "word/header2.xml", false), HEADER2_XML_RELS(
-			"docx_header2.xml.rels.vm",
-			"word/_rels/header2.xml.rels",
-			false), HEADER3_XML("docx_header3.xml.vm", "word/header3.xml", false), HEADER3_XML_RELS(
-			"docx_header3.xml.rels.vm",
-			"word/_rels/header3.xml.rels",
-			false), NUMBERING_XML("docx_numbering.xml.vm", "word/numbering.xml", false), SETTINGS_XML(
-			"docx_settings.xml.vm",
-			"word/settings.xml",
-			false), WEBSETTINGS_XML("docx_websettings.xml.vm", "word/webSettings.xml", false), STYLES_XML(
-			"docx_styles.xml.vm",
-			"word/styles.xml",
-			false), THEME1_XML("docx_theme1.xml.vm", "word/theme/theme1.xml", false), THEME1_XML_RELS(
-			"docx_theme1.xml.rels.vm",
-			"word/theme/_rels/theme1.xml.rels",
-			false), FLEXONAMES_XML("docx_flexonames.xml.vm", "customXml/flexoNames.xml", false), CONTENT_TYPES_XML(
-			"docx_content_types.xml.vm",
-			"[Content_Types].xml",
+	RELS("docx_.rels.vm", "_rels/.rels", false), APP_XML("docx_app.xml.vm", "docProps/app.xml", false), CORE_XML("docx_core.xml.vm",
+			"docProps/core.xml", false), DOCUMENT_XML("docx_document.xml.vm", "word/document.xml", true), DOCUMENT_XML_RELS(
+			"docx_document.xml.rels.vm", "word/_rels/document.xml.rels", true), COMMENTS_XML("docx_comments.xml.vm", "word/comments.xml",
+			false), COMMENTS_XML_RELS("docx_comments.xml.rels.vm", "word/_rels/comments.xml.rels", false), ENDNOTES_XML(
+			"docx_endnotes.xml.vm", "word/endnotes.xml", false), ENDNOTES_XML_RELS("docx_endnotes.xml.rels.vm",
+			"word/_rels/endnotes.xml.rels", false), FOOTER1_XML("docx_footer1.xml.vm", "word/footer1.xml", false), FOOTER1_XML_RELS(
+			"docx_footer1.xml.rels.vm", "word/_rels/footer1.xml.rels", false), FOOTER2_XML("docx_footer2.xml.vm", "word/footer2.xml", false), FOOTER2_XML_RELS(
+			"docx_footer2.xml.rels.vm", "word/_rels/footer2.xml.rels", false), FOOTER3_XML("docx_footer3.xml.vm", "word/footer3.xml", false), FOOTER3_XML_RELS(
+			"docx_footer3.xml.rels.vm", "word/_rels/footer3.xml.rels", false), FONTTABLE_XML("docx_fontTable.xml.vm", "word/fontTable.xml",
+			false), FONTTABLE_XML_RELS("docx_fontTable.xml.rels.vm", "word/_rels/fontTable.xml.rels", false), FOOTNOTES_XML(
+			"docx_footnotes.xml.vm", "word/footnotes.xml", false), FOOTNOTES_XML_RELS("docx_footnotes.xml.rels.vm",
+			"word/_rels/footnotes.xml.rels", false), HEADER1_XML("docx_header1.xml.vm", "word/header1.xml", false), HEADER1_XML_RELS(
+			"docx_header1.xml.rels.vm", "word/_rels/header1.xml.rels", false), HEADER2_XML("docx_header2.xml.vm", "word/header2.xml", false), HEADER2_XML_RELS(
+			"docx_header2.xml.rels.vm", "word/_rels/header2.xml.rels", false), HEADER3_XML("docx_header3.xml.vm", "word/header3.xml", false), HEADER3_XML_RELS(
+			"docx_header3.xml.rels.vm", "word/_rels/header3.xml.rels", false), NUMBERING_XML("docx_numbering.xml.vm", "word/numbering.xml",
+			false), SETTINGS_XML("docx_settings.xml.vm", "word/settings.xml", false), WEBSETTINGS_XML("docx_websettings.xml.vm",
+			"word/webSettings.xml", false), STYLES_XML("docx_styles.xml.vm", "word/styles.xml", false), THEME1_XML("docx_theme1.xml.vm",
+			"word/theme/theme1.xml", false), THEME1_XML_RELS("docx_theme1.xml.rels.vm", "word/theme/_rels/theme1.xml.rels", false), FLEXONAMES_XML(
+			"docx_flexonames.xml.vm", "customXml/flexoNames.xml", false), EPIVALUES_XML("docx_editionpatterninstancevalues.xml.vm",
+			"customXml/edition_pattern_instance_values.xml", false), CONTENT_TYPES_XML("docx_content_types.xml.vm", "[Content_Types].xml",
 			false);
 
 	private static Map<String, List<DocxTemplatesEnum>> orderedTemplateListGroupedPerGenerator;
@@ -156,6 +128,7 @@ public enum DocxTemplatesEnum {
 			orderedTemplateList.add(FONTTABLE_XML);
 			orderedTemplateList.add(FONTTABLE_XML_RELS);
 			orderedTemplateList.add(FLEXONAMES_XML);
+			orderedTemplateList.add(EPIVALUES_XML);
 			orderedTemplateListGroupedPerGenerator.put(DOCUMENT_XML.toString(), orderedTemplateList);
 
 			// SETTINGS_XML can be generated alone

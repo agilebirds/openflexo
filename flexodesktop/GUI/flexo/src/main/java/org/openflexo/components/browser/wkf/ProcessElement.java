@@ -81,12 +81,14 @@ public class ProcessElement extends BrowserElement {
 
 	@Override
 	public void delete() {
-		if (getFlexoProcess().getProcessNode() != null) {
-			getFlexoProcess().getProcessNode().deleteObserver(this);
-		}
-		if (getFlexoProcess().getActivityPetriGraph() != null) {
-			getFlexoProcess().getActivityPetriGraph().deleteObserver(this);
-			isObserving = false;
+		if (getFlexoProcess() != null) {
+			if (getFlexoProcess().getProcessNode() != null) {
+				getFlexoProcess().getProcessNode().deleteObserver(this);
+			}
+			if (getFlexoProcess().getActivityPetriGraph() != null) {
+				getFlexoProcess().getActivityPetriGraph().deleteObserver(this);
+				isObserving = false;
+			}
 		}
 		super.delete();
 	}
@@ -219,15 +221,6 @@ public class ProcessElement extends BrowserElement {
 	@Override
 	public boolean isNameEditable() {
 		return !isImported();
-	}
-
-	@Override
-	public String getSuffixName() {
-		if (getFlexoProcess().isRootProcess()) {
-			return "[ROOT]";
-		} else {
-			return super.getSuffixName();
-		}
 	}
 
 	@Override

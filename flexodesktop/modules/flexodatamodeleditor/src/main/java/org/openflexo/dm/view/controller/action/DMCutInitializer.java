@@ -19,8 +19,8 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -54,7 +54,7 @@ public class DMCutInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DMCut> getDefaultInitializer() {
 		return new FlexoActionInitializer<DMCut>() {
 			@Override
-			public boolean run(ActionEvent e, DMCut action) {
+			public boolean run(EventObject e, DMCut action) {
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_cut_those_objects"));
 			}
 		};
@@ -64,8 +64,8 @@ public class DMCutInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DMCut> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DMCut>() {
 			@Override
-			public boolean run(ActionEvent e, DMCut action) {
-				getControllerActionInitializer().getDMSelectionManager().performSelectionCut();
+			public boolean run(EventObject e, DMCut action) {
+				getControllerActionInitializer().getSelectionManager().performSelectionCut();
 				return true;
 			}
 		};

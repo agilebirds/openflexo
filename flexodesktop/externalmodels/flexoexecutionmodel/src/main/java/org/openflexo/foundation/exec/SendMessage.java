@@ -31,7 +31,7 @@ public class SendMessage extends ControlGraphBuilder {
 
 	public static ControlGraph sendMessage(ExternalMessageInEdge messageEdge, boolean interprocedural) throws InvalidModelException,
 			NotSupportedException {
-		return (new SendMessage(messageEdge)).makeControlGraph(interprocedural);
+		return new SendMessage(messageEdge).makeControlGraph(interprocedural);
 	}
 
 	protected SendMessage(ExternalMessageInEdge messageEdge) {
@@ -47,8 +47,8 @@ public class SendMessage extends ControlGraphBuilder {
 	@Override
 	protected String getProcedureName() {
 		return "sendMessageTo"
-				+ ToolBox.getJavaName((getServiceOperation() != null ? getServiceOperation().getFullyQualifiedName() + "_"
-						+ getServiceOperation().getFlexoID() : "Null"));
+				+ ToolBox.getJavaName(getServiceOperation() != null ? getServiceOperation().getFullyQualifiedName() + "_"
+						+ getServiceOperation().getFlexoID() : "Null");
 	}
 
 	public ExternalMessageInEdge getMessageEdge() {

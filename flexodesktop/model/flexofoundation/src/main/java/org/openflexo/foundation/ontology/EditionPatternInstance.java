@@ -20,6 +20,8 @@
 package org.openflexo.foundation.ontology;
 
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
@@ -33,8 +35,14 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.ontology.EditionPatternReference.ActorReference;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.view.action.DeletionSchemeAction;
+import org.openflexo.foundation.viewpoint.CloningScheme;
+import org.openflexo.foundation.viewpoint.DeletionScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
+import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.StatementPatternRole;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.logging.FlexoLogger;
@@ -42,6 +50,8 @@ import org.openflexo.logging.FlexoLogger;
 public class EditionPatternInstance extends FlexoObservable implements Bindable, BindingEvaluationContext {
 
 	private static final Logger logger = FlexoLogger.getLogger(EditionPatternReference.class.getPackage().toString());
+
+	protected static final String DELETED_PROPERTY = "deleted";
 
 	private FlexoProject _project;
 	private EditionPattern pattern;
@@ -78,18 +88,6 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 		actors = new Hashtable<String, FlexoModelObject>();
 	}
 
-	public void delete() {
-		logger.warning("TODO: implements EditionPatternInstance deletion !");
-		// Also implement properly #getDeletedProperty()
-	}
-
-	@Override
-	public String getDeletedProperty() {
-		// TODO: when delete will be implemented, a notification will need to be sent and this method should reflect the name of the
-		// property of that notification
-		return null;
-	}
-
 	public FlexoModelObject getPatternActor(String patternRole) {
 		// logger.info(">>>>>>>> EditionPatternInstance "+Integer.toHexString(hashCode())+" getPatternActor() actors="+actors);
 		return actors.get(patternRole);
@@ -102,6 +100,10 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 
 	public void setPatternActor(FlexoModelObject object, PatternRole patternRole) {
 		setObjectForPatternRole(object, patternRole);
+	}
+
+	public void nullifyPatternActor(PatternRole patternRole) {
+		setObjectForPatternRole(null, patternRole);
 	}
 
 	public void setObjectForPatternRole(FlexoModelObject object, PatternRole patternRole) {
@@ -118,7 +120,11 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 				object.registerEditionPatternReference(this, patternRole);
 			}
 
-			actors.put(patternRole.getPatternRoleName(), object);
+			if (object != null) {
+				actors.put(patternRole.getPatternRoleName(), object);
+			} else {
+				actors.remove(patternRole.getPatternRoleName());
+			}
 			setChanged();
 			notifyObservers(new EditionPatternActorChanged(this, patternRole, oldObject, object));
 			// System.out.println("EditionPatternInstance "+Integer.toHexString(hashCode())+" setObjectForPatternRole() actors="+actors);
@@ -141,8 +147,12 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 		return sb.toString();
 	}
 
-	public EditionPattern getPattern() {
+	public EditionPattern getEditionPattern() {
 		return pattern;
+	}
+
+	public EditionPattern getPattern() {
+		return getEditionPattern();
 	}
 
 	public void setPattern(EditionPattern pattern) {
@@ -221,4 +231,111 @@ public class EditionPatternInstance extends FlexoObservable implements Bindable,
 		return null;
 	}
 
+	private boolean deleted = false;
+
+	public boolean deleted() {
+		return deleted;
+	}
+
+	public boolean isDeleted() {
+		return deleted();
+	}
+
+	/**
+	 * Delete this EditionPattern instance using default DeletionScheme
+	 */
+	public void delete() {
+		// Also implement properly #getDeletedProperty()
+		if (getEditionPattern().getDefaultDeletionScheme() != null) {
+			delete(getEditionPattern().getDefaultDeletionScheme());
+		} else {
+			// Generate on-the-fly default deletion scheme
+			delete(getEditionPattern().generateDefaultDeletionScheme());
+		}
+
+	}
+
+	/**
+	 * Delete this EditionPattern instance using supplied DeletionScheme
+	 */
+	public void delete(DeletionScheme deletionScheme) {
+		logger.warning("NEW EditionPatternInstance deletion !");
+		deleted = true;
+		DeletionSchemeAction deletionSchemeAction = DeletionSchemeAction.actionType.makeNewAction(getPatternActor(getEditionPattern()
+				.getPrimaryRepresentationRole()), null, null);
+		deletionSchemeAction.setDeletionScheme(deletionScheme);
+		deletionSchemeAction.setEditionPatternInstanceToDelete(this);
+		deletionSchemeAction.doAction();
+		if (deletionSchemeAction.hasActionExecutionSucceeded()) {
+			logger.info("Successfully performed delete EditionPattern instance " + getEditionPattern());
+		}
+	}
+
+	/**
+	 * Clone this EditionPattern instance using default CloningScheme
+	 */
+	public EditionPatternInstance cloneEditionPatternInstance() {
+		/*if (getEditionPattern().getDefaultDeletionScheme() != null) {
+			delete(getEditionPattern().getDefaultDeletionScheme());
+		} else {
+			// Generate on-the-fly default deletion scheme
+			delete(getEditionPattern().generateDefaultDeletionScheme());
+		}*/
+		System.out.println("cloneEditionPatternInstance() in EditionPatternInstance");
+		return null;
+	}
+
+	/**
+	 * Delete this EditionPattern instance using supplied DeletionScheme
+	 */
+	public EditionPatternInstance cloneEditionPatternInstance(CloningScheme cloningScheme) {
+		/*logger.warning("NEW EditionPatternInstance deletion !");
+		deleted = true;
+		DeletionSchemeAction deletionSchemeAction = DeletionSchemeAction.actionType.makeNewAction(getPatternActor(getEditionPattern()
+				.getPrimaryRepresentationRole()), null, null);
+		deletionSchemeAction.setDeletionScheme(deletionScheme);
+		deletionSchemeAction.setEditionPatternInstanceToDelete(this);
+		deletionSchemeAction.doAction();
+		if (deletionSchemeAction.hasActionExecutionSucceeded()) {
+			logger.info("Successfully performed delete EditionPattern instance " + getEditionPattern());
+		}*/
+		System.out.println("cloneEditionPatternInstance() in EditionPatternInstance with " + cloningScheme);
+		return null;
+	}
+
+	/**
+	 * Return the list of objects that will be deleted if default DeletionScheme is used
+	 */
+	public List<FlexoModelObject> objectsThatWillBeDeleted() {
+		Vector<FlexoModelObject> returned = new Vector<FlexoModelObject>();
+		for (PatternRole pr : getEditionPattern().getPatternRoles()) {
+			if (pr instanceof GraphicalElementPatternRole || pr instanceof IndividualPatternRole || pr instanceof StatementPatternRole) {
+				returned.add(getPatternActor(pr));
+			}
+		}
+		return returned;
+	}
+
+	/**
+	 * Delete this EditionPattern instance using supplied DeletionScheme
+	 */
+	public List<FlexoModelObject> objectsThatWillBeDeleted(DeletionScheme deletionScheme) {
+		return null;
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		// when delete will be implemented, a notification will need to be sent and this method should reflect the name of the
+		// property of that notification
+		return DELETED_PROPERTY;
+	}
+
+	public String getDisplayableName() {
+		for (GraphicalElementPatternRole pr : getPattern().getGraphicalElementPatternRoles()) {
+			if (pr != null && pr.getLabel().isSet() && pr.getLabel().isValid()) {
+				return (String) pr.getLabel().getBindingValue(this);
+			}
+		}
+		return getPattern().getName();
+	}
 }

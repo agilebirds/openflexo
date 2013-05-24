@@ -9,6 +9,7 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.view.ViewElement;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 /**
@@ -31,12 +32,13 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 	private BindingDefinition BD;
 
 	// Use it only for deserialization
-	public GraphicalElementSpecification() {
-		super();
+	public GraphicalElementSpecification(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	public GraphicalElementSpecification(GraphicalElementPatternRole patternRole, GraphicalFeature<T, GR> feature, boolean readOnly,
 			boolean mandatory) {
+		super(null);
 		this.patternRole = patternRole;
 		this.feature = feature;
 		this.readOnly = readOnly;
@@ -57,8 +59,9 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 	}
 
 	public String getFeatureName() {
-		if (feature == null)
+		if (feature == null) {
 			return featureName;
+		}
 		return feature.getName();
 	}
 
@@ -104,7 +107,7 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 
 	@Override
 	public EditionPattern getEditionPattern() {
-		return getPatternRole().getEditionPattern();
+		return getPatternRole() != null ? getPatternRole().getEditionPattern() : null;
 	}
 
 	@Override
@@ -125,7 +128,7 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 
 	@Override
 	public ViewPoint getViewPoint() {
-		return getEditionPattern().getViewPoint();
+		return getEditionPattern() != null ? getEditionPattern().getViewPoint() : null;
 	}
 
 	/**
@@ -135,6 +138,17 @@ public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation
 	 * @param element
 	 */
 	public void applyToGraphicalRepresentation(GR gr, ViewElement element) {
+		/*if (getValue().toString().equals(
+				"(property.label.asString + ((inputAttributeReference.value != \"\") ? (\"=\" + inputAttributeReference.value) : \"\"))")) {
+			System.out.println("value=" + getValue());
+			System.out.println("hasBinding=" + getValue().hasBinding());
+			System.out.println("valid=" + getValue().isValid());
+			System.out.println("reason=" + getValue().getBinding().invalidBindingReason());
+			System.out.println("EPI=" + element.getEditionPatternInstance().debug());
+			System.out.println("Result=" + getValue().getBindingValue(element.getEditionPatternInstance()));
+			System.out.println("Hop");
+		}*/
+
 		getFeature().applyToGraphicalRepresentation(gr, (T) getValue().getBindingValue(element.getEditionPatternInstance()));
 	}
 

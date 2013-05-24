@@ -38,6 +38,7 @@ import org.openflexo.foundation.wkf.dm.RoleChanged;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableActivityNode;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.module.UserType;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
@@ -51,7 +52,7 @@ public abstract class AbstractActivityNodeGR<O extends AbstractActivityNode> ext
 		super(activity, shapeType, aDrawing, isInPalet);
 		setLayer(activity.isEmbedded() ? EMBEDDED_ACTIVITY_LAYER : ACTIVITY_LAYER);
 
-		if (!(activity instanceof SelfExecutableActivityNode)) {
+		if (!(activity instanceof SelfExecutableActivityNode) && !UserType.isLite()) {
 			addToMouseClickControls(new PetriGraphOpener(), true);
 		}
 
@@ -66,8 +67,8 @@ public abstract class AbstractActivityNodeGR<O extends AbstractActivityNode> ext
 				getWorkflow() != null ? getWorkflow().getActivityFont(WKFPreferences.getActivityNodeFont()).getFont() : WKFPreferences
 						.getActivityNodeFont().getFont()));
 		setIsMultilineAllowed(true);
-		setAdjustMinimalWidthToLabelWidth(true);
-		setAdjustMinimalHeightToLabelHeight(true);
+		setAdjustMinimalWidthToLabelWidth(false);
+		setAdjustMinimalHeightToLabelHeight(false);
 	}
 
 	@Override
@@ -102,7 +103,6 @@ public abstract class AbstractActivityNodeGR<O extends AbstractActivityNode> ext
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (dataModification instanceof RoleChanged) {
-			resetLocationConstrainedArea();
 			getDrawing().requestRebuildCompleteHierarchy();
 		}
 		super.update(observable, dataModification);

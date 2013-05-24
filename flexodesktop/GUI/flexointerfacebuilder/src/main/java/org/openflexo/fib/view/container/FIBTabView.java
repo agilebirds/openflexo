@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBTab;
+import org.openflexo.fib.view.FIBView;
 
 public class FIBTabView<C extends FIBTab> extends FIBPanelView<C> {
 
@@ -34,21 +35,48 @@ public class FIBTabView<C extends FIBTab> extends FIBPanelView<C> {
 		super(model, controller);
 	}
 
+	/*
+	 * @Override public void updateDataObject(Object dataObject) {
+	 * System.out.println("Je suis le FIBTabView " + getComponent().getName());
+	 * System.out.println("J'etais visible " + isVisible() +
+	 * " et je deviens visible " + isComponentVisible());
+	 * super.updateDataObject(dataObject); }
+	 */
+
 	@Override
-	protected void performSetIsVisible(boolean isVisible) {
-		super.performSetIsVisible(isVisible);
+	protected void updateVisibility() {
+
+		// logger.info("Called performSetIsVisible " + isVisible + " on TabComponent " + getComponent().getTitle());
+
+		super.updateVisibility();
+		// We need to perform this additional operation here, because JTabbedPane already plays with the "visible" flag to handle the
+		// currently selected/visible tab
 		if (getParentView() instanceof FIBTabPanelView) {
 			FIBTabPanelView parent = (FIBTabPanelView) getParentView();
-			if (isVisible) {
-				parent.getJComponent().add(getResultingJComponent(), getLocalized(getComponent().getTitle()), getComponent().getIndex());
+			if (isVisible() && getResultingJComponent().getParent() == null) {
+				int newIndex = 0;
+				for (FIBView<?, ?> v : getParentView().getSubViews()) {
+					if (v instanceof FIBTabView && v.isComponentVisible()) {
+						FIBTab tab = ((FIBTabView<?>) v).getComponent();
+						if (getComponent().getParent().getIndex(getComponent()) > tab.getParent().getIndex(tab)) {
+							newIndex = parent.getJComponent().indexOfComponent(v.getResultingJComponent()) + 1;
+						}
+					}
+				}
+
+				logger.fine("********** Adding component " + getComponent().getTitle() + " at index " + newIndex);
+
+				parent.getJComponent().add(getResultingJComponent(), getLocalized(getComponent().getTitle()), newIndex);
 				if (wasSelected) {
 					parent.getJComponent().setSelectedComponent(getResultingJComponent());
 				}
-			} else {
-				wasSelected = (parent.getJComponent().getSelectedComponent() == getResultingJComponent());
+			} else if (!isVisible() && getResultingJComponent().getParent() != null) {
+				wasSelected = parent.getJComponent().getSelectedComponent() == getResultingJComponent();
 				parent.getJComponent().remove(getResultingJComponent());
+				logger.fine("********** Removing component " + getComponent().getTitle());
 			}
 		}
+
 	}
 
 }

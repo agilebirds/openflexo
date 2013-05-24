@@ -66,7 +66,7 @@ public class TwoColsLayoutConstraints extends ComponentConstraints {
 	private static final String INSETS_RIGHT = "insetsRight";
 
 	public int getInsetsTop() {
-		return getIntValue(INSETS_TOP, getLocation() == TwoColsLayoutLocation.left ? 5 : 0);
+		return getIntValue(INSETS_TOP, 0);
 	}
 
 	public void setInsetsTop(int insetsTop) {
@@ -82,7 +82,7 @@ public class TwoColsLayoutConstraints extends ComponentConstraints {
 	}
 
 	public int getInsetsLeft() {
-		return getIntValue(INSETS_LEFT, 2);
+		return getIntValue(INSETS_LEFT, 0);
 	}
 
 	public void setInsetsLeft(int insetsLeft) {
@@ -90,7 +90,7 @@ public class TwoColsLayoutConstraints extends ComponentConstraints {
 	}
 
 	public int getInsetsRight() {
-		return getIntValue(INSETS_RIGHT, 2);
+		return getIntValue(INSETS_RIGHT, 0);
 	}
 
 	public void setInsetsRight(int insetsRight) {
@@ -101,14 +101,11 @@ public class TwoColsLayoutConstraints extends ComponentConstraints {
 		super();
 	}
 
-	public TwoColsLayoutConstraints(TwoColsLayoutLocation location, boolean expandHorizontally, boolean expandVertically, int index) {
+	public TwoColsLayoutConstraints(TwoColsLayoutLocation location, boolean expandHorizontally, boolean expandVertically) {
 		super();
 		setLocation(location);
 		setExpandHorizontally(expandHorizontally);
 		setExpandVertically(expandVertically);
-		setIndex(index);
-		if (location == TwoColsLayoutLocation.left)
-			setInsetsTop(5);
 	}
 
 	protected TwoColsLayoutConstraints(String someConstraints) {

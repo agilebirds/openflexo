@@ -66,7 +66,7 @@ public abstract class CustomWidget<T> extends DenaliWidget<T> {
 
 	public boolean getBooleanValueForParameter(String parameterName) {
 		String valueAsString = getPropertyModel().getValueForParameter(parameterName);
-		return (valueAsString.equalsIgnoreCase("true") || valueAsString.equalsIgnoreCase("yes"));
+		return valueAsString.equalsIgnoreCase("true") || valueAsString.equalsIgnoreCase("yes");
 	}
 
 	public Object getDynamicValueForParameter(String parameterName, InspectableObject object) {
@@ -208,6 +208,10 @@ public abstract class CustomWidget<T> extends DenaliWidget<T> {
 
 	public T getEditedValue() {
 		return getObjectValue();
+	}
+
+	public void setEditedValue(T newValue) {
+		setObjectValue(newValue);
 	}
 
 	public Color getColorForObject(T value) {

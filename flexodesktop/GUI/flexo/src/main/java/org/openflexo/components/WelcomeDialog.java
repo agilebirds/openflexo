@@ -21,6 +21,7 @@ package org.openflexo.components;
 
 import java.util.logging.Logger;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.ApplicationData;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBDialog;
@@ -40,8 +41,8 @@ public class WelcomeDialog extends FIBDialog<ApplicationData> {
 
 	public static final FileResource FIB_FILE = new FileResource("Fib/WelcomePanel.fib");
 
-	public WelcomeDialog() {
-		super(FIBLibrary.instance().retrieveFIBComponent(FIB_FILE), new ApplicationData(), FlexoFrame.getActiveFrame(), true,
+	public WelcomeDialog(ApplicationContext context) {
+		super(FIBLibrary.instance().retrieveFIBComponent(FIB_FILE), new ApplicationData(context), FlexoFrame.getActiveFrame(), true,
 				FlexoLocalization.getMainLocalizer());
 		setResizable(false);
 	}

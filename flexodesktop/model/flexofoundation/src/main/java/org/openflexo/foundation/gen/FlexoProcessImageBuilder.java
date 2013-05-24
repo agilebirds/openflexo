@@ -34,7 +34,6 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.module.ModuleLoadingException;
-import org.openflexo.module.external.ExternalModuleDelegater;
 import org.openflexo.module.external.ExternalWKFModule;
 import org.openflexo.module.external.IModuleLoader;
 import org.openflexo.swing.ImageUtils;
@@ -48,16 +47,14 @@ public class FlexoProcessImageBuilder {
 	private static final Logger logger = Logger.getLogger(FlexoProcessImageBuilder.class.getPackage().getName());
 
 	private static void saveImageOfProcess(FlexoProcess process, File dest) {
-		if (ExternalModuleDelegater.getModuleLoader() == null) {
-			return;
-		}
-		IModuleLoader moduleLoader = ExternalModuleDelegater.getModuleLoader();
-		if (!moduleLoader.isWKFLoaded()) {
+
+		IModuleLoader moduleLoader = process.getProject().getModuleLoader();
+		if (moduleLoader == null || !moduleLoader.isWKFLoaded()) {
 			return;
 		}
 		ExternalWKFModule wkfModule = null;
 		try {
-			wkfModule = moduleLoader.getWKFModuleInstance(process.getProject());
+			wkfModule = moduleLoader.getWKFModuleInstance();
 		} catch (ModuleLoadingException e) {
 			logger.warning("cannot load WKF module (and so can't create screenshot)." + e.getMessage());
 			e.printStackTrace();

@@ -90,27 +90,40 @@ public class ProcessDMEntity extends DMEntity {
 		_process = process;
 	}
 
+	// TODO: access to DMType here !!!
+	@Deprecated
 	public DMProperty createBusinessDataProperty(DMEntity type) {
 		return createBusinessDataProperty("businessData", type);
 	}
 
-	public DMProperty createBusinessDataProperty(String propertyName) {
-		return createBusinessDataProperty(propertyName, null);
+	public DMProperty createBusinessDataProperty(DMType type) {
+		return createBusinessDataProperty("businessData", type);
 	}
 
+	public DMProperty createBusinessDataProperty(String propertyName) {
+		return createBusinessDataProperty(propertyName, (DMType) null);
+	}
+
+	// TODO: access to DMType here !!!
+	@Deprecated
 	public DMProperty createBusinessDataProperty(String propertyName, DMEntity type) {
+		return createBusinessDataProperty(propertyName, DMType.makeResolvedDMType(type));
+	}
+
+	public DMProperty createBusinessDataProperty(String propertyName, DMType type) {
 		DMProperty property = getDMProperty(propertyName);
+		DMEntity entity = type.getBaseEntity();
 		if (property == null) {
-			property = new DMProperty(getDMModel(), propertyName, DMType.makeResolvedDMType(type), DMCardinality.SINGLE, true, true,
+			property = new DMProperty(getDMModel(), propertyName, type, DMCardinality.SINGLE, true, true,
 					DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
 			registerProperty(property, false);
-			if (type != null) {
-				type.addObserver(this);
+			if (entity != null) {
+				entity.addObserver(this);
 			}
 		} else {
-			property.setType(DMType.makeResolvedDMType(type), true);
-			if (type != null) {
-				type.addObserver(this);
+			property.setType(type, true);
+			if (entity != null) {
+				entity.addObserver(this);
 			}
 		}
 		return property;

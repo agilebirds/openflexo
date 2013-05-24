@@ -68,10 +68,7 @@ import javax.xml.bind.annotation.XmlType;
 public class TOnAlarmEvent extends TExtensibleElements {
 
 	@XmlElementRefs({
-			@XmlElementRef(
-					name = "repeatEvery",
-					namespace = "http://docs.oasis-open.org/wsbpel/2.0/process/executable",
-					type = JAXBElement.class),
+			@XmlElementRef(name = "repeatEvery", namespace = "http://docs.oasis-open.org/wsbpel/2.0/process/executable", type = JAXBElement.class),
 			@XmlElementRef(name = "for", namespace = "http://docs.oasis-open.org/wsbpel/2.0/process/executable", type = JAXBElement.class),
 			@XmlElementRef(name = "until", namespace = "http://docs.oasis-open.org/wsbpel/2.0/process/executable", type = JAXBElement.class),
 			@XmlElementRef(name = "scope", namespace = "http://docs.oasis-open.org/wsbpel/2.0/process/executable", type = JAXBElement.class) })

@@ -21,13 +21,14 @@ package org.openflexo.doceditormodule;
 
 import java.util.logging.Logger;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.doceditor.DEPreferences;
 import org.openflexo.doceditor.controller.DEController;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
+import org.openflexo.module.Module;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Documentation generator module
@@ -39,17 +40,19 @@ public class DEModule extends FlexoModule {
 	private static final Logger logger = Logger.getLogger(DEModule.class.getPackage().getName());
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.DE };
 
-	public DEModule(InteractiveFlexoEditor projectEditor) throws Exception {
-		super(projectEditor);
-		setFlexoController(new DEController(projectEditor, this));
-		DEPreferences.init(getDEController());
-		if (getProject().getTOCData().getRepositories().size() == 0) {
-			getDEController().setCurrentEditedObjectAsModuleView(getProject().getTOCData());
-			getDEController().selectAndFocusObject(getProject().getTOCData());
-		} else {
-			getDEController().setCurrentEditedObjectAsModuleView(getProject().getTOCData().getRepositories().firstElement());
-			getDEController().selectAndFocusObject(getProject().getTOCData().getRepositories().firstElement());
-		}
+	public DEModule(ApplicationContext applicationContext) {
+		super(applicationContext);
+		DEPreferences.init();
+	}
+
+	@Override
+	protected FlexoController createControllerForModule() {
+		return new DEController(this);
+	}
+
+	@Override
+	public Module getModule() {
+		return Module.DE_MODULE;
 	}
 
 	@Override
@@ -61,24 +64,4 @@ public class DEModule extends FlexoModule {
 		return (DEController) getFlexoController();
 	}
 
-	/**
-	 * Overrides getDefaultObjectToSelect
-	 * 
-	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect()
-	 */
-	@Override
-	public FlexoModelObject getDefaultObjectToSelect() {
-		return getProject().getTOCData();
-	}
-
-	/**
-	 * Overrides moduleWillClose
-	 * 
-	 * @see org.openflexo.module.FlexoModule#moduleWillClose()
-	 */
-	@Override
-	public void moduleWillClose() {
-		super.moduleWillClose();
-		DEPreferences.reset();
-	}
 }

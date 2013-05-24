@@ -16,23 +16,23 @@
 		<property name="dateBinding" label="date" widget="CUSTOM" depends="isTriggerTimer" conditional="isTriggerTimer=true" constraint="5">
 			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
             <param name="binding_definition" value="dateBindingDefinition"/>          
-            <param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+            <param name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST"/>
 		</property>
 		<property name="delay" label="delay" widget="CUSTOM" depends="isTriggerTimer" conditional="isTriggerTimer=true" constraint="6">
 			<param name="className" value="org.openflexo.components.widget.DurationInspectorWidget"/>
 		</property>
 		
 		
-		<property name="fromAddress" label="from" widget="TEXT_FIELD" depends="isMessageSent" conditional="isMessageSent=true" constraint="5">
+		<property name="fromAddress" label="from" widget="TEXT_FIELD" depends="isMessageSent" conditional="isMessageSent=true" constraint="10">
 			<param name="columns" value="10"/>
 		</property>
-		<property name="toAddress" label="to" widget="TEXT_FIELD" depends="isMessageSent" conditional="isMessageSent=true" constraint="6">
+		<property name="toAddress" label="to" widget="TEXT_FIELD" depends="isMessageSent" conditional="isMessageSent=true" constraint="11">
 			<param name="columns" value="10"/>
 		</property>
-		<property name="mailSubject" label="subject" widget="TEXT_FIELD" depends="isMessageSent" conditional="isMessageSent=true" constraint="7">
+		<property name="mailSubject" label="subject" widget="TEXT_FIELD" depends="isMessageSent" conditional="isMessageSent=true" constraint="12">
 			<param name="columns" value="10"/>
 		</property>
-		<property name="mailBody" label="body" widget="TEXT_AREA" depends="isMessageSent" conditional="isMessageSent=true" constraint="8">
+		<property name="mailBody" label="body" widget="TEXT_AREA" depends="isMessageSent" conditional="isMessageSent=true" constraint="13">
 			<param name="rows" value="8"/>
 		</property>
 	</tab>

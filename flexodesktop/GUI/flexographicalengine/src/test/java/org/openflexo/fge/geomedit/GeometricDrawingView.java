@@ -50,9 +50,9 @@ public class GeometricDrawingView extends DrawingView<GeometricDrawing> {
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				Point ptInView = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getController().getDrawingView());
-				lastMouseLocation.x = (ptInView.x) / getController().getScale();
-				lastMouseLocation.y = (ptInView.y) / getController().getScale();
-				getController().getPositionLabel().setText(((int) lastMouseLocation.x) + " x " + ((int) lastMouseLocation.y));
+				lastMouseLocation.x = ptInView.x / getController().getScale();
+				lastMouseLocation.y = ptInView.y / getController().getScale();
+				getController().getPositionLabel().setText((int) lastMouseLocation.x + " x " + (int) lastMouseLocation.y);
 				if (getController().getCurrentEdition() != null
 						&& getController().getCurrentEdition().requireRepaint(lastMouseLocation.clone())) {
 					getPaintManager().repaint(GeometricDrawingView.this);

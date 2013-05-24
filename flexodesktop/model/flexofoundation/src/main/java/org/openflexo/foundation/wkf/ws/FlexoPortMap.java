@@ -29,7 +29,6 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.bindings.Bindable;
 import org.openflexo.foundation.bindings.BindingModel;
 import org.openflexo.foundation.utils.FlexoIndexManager;
@@ -42,8 +41,6 @@ import org.openflexo.foundation.wkf.DuplicateWKFObjectException;
 import org.openflexo.foundation.wkf.FlexoLevel;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
-import org.openflexo.foundation.wkf.action.ShowHidePortmap;
-import org.openflexo.foundation.wkf.action.WKFDelete;
 import org.openflexo.foundation.wkf.dm.ChildrenOrderChanged;
 import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 import org.openflexo.foundation.wkf.edge.MessageEdge;
@@ -111,7 +108,7 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 	}
 
 	public FlexoProcess getRelatedSubProcess() {
-		if ((getPortMapRegistery() != null) && (getPortMapRegistery().getSubProcessNode() != null)) {
+		if (getPortMapRegistery() != null && getPortMapRegistery().getSubProcessNode() != null) {
 			return getPortMapRegistery().getSubProcessNode().getSubProcess();
 		}
 		return null;
@@ -151,7 +148,7 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 		if (logger.isLoggable(Level.FINEST)) {
 			logger.finest("getOperation(): op=" + _operation + " name:" + _portName);
 		}
-		if ((_operation == null) && (_portName != null)) {
+		if (_operation == null && _portName != null) {
 			lookupOperation();
 		}
 		return _operation;
@@ -172,7 +169,7 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 		if (logger.isLoggable(Level.FINEST)) {
 			logger.finest("lookupOperation:" + getServiceInterface());
 		}
-		if ((getServiceInterface() != null) && (_portName != null)) {
+		if (getServiceInterface() != null && _portName != null) {
 			_operation = getServiceInterface().operationWithName(_portName);
 
 			if (_operation == null) {
@@ -210,7 +207,7 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 
 	public void setPortName(String name) {
 		_portName = name;
-		if ((_operation != null) && (!_portName.equals(_operation.getName()))) {
+		if (_operation != null && !_portName.equals(_operation.getName())) {
 			lookupOperation();
 		}
 	}
@@ -273,7 +270,7 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 	private boolean isRegisteredUnderSubProcessNode = false;
 
 	public void registerUnderSubProcessNode() {
-		if ((getSubProcessNode() != null) && (!isRegisteredUnderSubProcessNode)) {
+		if (getSubProcessNode() != null && !isRegisteredUnderSubProcessNode) {
 			getSubProcessNode().addObserver(this);
 			isRegisteredUnderSubProcessNode = true;
 		}
@@ -370,19 +367,6 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 		return super.isContainedIn(obj);
 	}
 
-	/**
-	 * Overrides getSpecificActionListForThatClass
-	 * 
-	 * @see org.openflexo.foundation.wkf.WKFObject#getSpecificActionListForThatClass()
-	 */
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.remove(WKFDelete.actionType);
-		returned.add(ShowHidePortmap.actionType);
-		return returned;
-	}
-
 	@Override
 	public boolean getIsVisible() {
 		return getIsVisible(true);
@@ -441,7 +425,7 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 		if (isBeingCloned()) {
 			return -1;
 		}
-		if ((index == -1) && (getCollection() != null)) {
+		if (index == -1 && getCollection() != null) {
 			index = getCollection().length;
 			FlexoIndexManager.reIndexObjectOfArray(getCollection());
 		}
@@ -477,7 +461,7 @@ public class FlexoPortMap extends AbstractNode implements Bindable, FlexoObserve
 		this.index = index;
 		setChanged();
 		notifyAttributeModification("index", old, index);
-		if (!isDeserializing() && (getPortMapRegistery() != null)) {
+		if (!isDeserializing() && getPortMapRegistery() != null) {
 			getPortMapRegistery().setChanged();
 			getPortMapRegistery().notifyObservers(new ChildrenOrderChanged());
 		}

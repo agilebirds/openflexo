@@ -25,6 +25,7 @@ import java.util.Vector;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.dgmodule.controller.DGController;
 import org.openflexo.foundation.DataModification;
@@ -32,29 +33,33 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.action.FlexoActionSource;
-import org.openflexo.foundation.cg.GeneratedOutput;
+import org.openflexo.foundation.cg.GeneratedDoc;
 import org.openflexo.foundation.cg.action.AddGeneratedCodeRepository;
-import org.openflexo.foundation.toc.action.AddTOCRepository;
-import org.openflexo.view.FlexoPerspective;
+import org.openflexo.foundation.cg.action.ImportDocumentationTemplates;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.listener.FlexoActionButton;
 
 /**
  * @author sylvain
  */
-public class GeneratedDocModuleView extends JPanel implements ModuleView<GeneratedOutput>, FlexoObserver, FlexoActionSource {
-	private GeneratedOutput _gc;
+public class GeneratedDocModuleView extends JPanel implements ModuleView<GeneratedDoc>, FlexoObserver, FlexoActionSource {
+	private GeneratedDoc generatedDocumentation;
 	private DGController _controller;
 	private JComponent addDGRepositoryButton;
-	private JComponent addTOCRepositoryButton;
+	private JComponent addGeneratedDocRepositoryButton;
 	private JPanel panel;
 
-	public GeneratedDocModuleView(GeneratedOutput gc, DGController controller) {
+	private FlexoPerspective declaredPerspective;
+
+	public GeneratedDocModuleView(GeneratedDoc gd, DGController controller, FlexoPerspective perspective) {
 		super(new BorderLayout());
-		_gc = gc;
+		declaredPerspective = perspective;
+		generatedDocumentation = gd;
 		_controller = controller;
-		_gc.addObserver(this);
+		generatedDocumentation.addObserver(this);
 		panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 50));
 		add(panel);
 		validate();
@@ -62,41 +67,55 @@ public class GeneratedDocModuleView extends JPanel implements ModuleView<Generat
 	}
 
 	private void updateView() {
-		if (addTOCRepositoryButton != null) {
-			panel.remove(addTOCRepositoryButton);
-		}
 		if (addDGRepositoryButton != null) {
 			panel.remove(addDGRepositoryButton);
 		}
-		panel.add(addTOCRepositoryButton = new FlexoActionButton(AddTOCRepository.actionType, this, _controller.getEditor()),
+		if (addGeneratedDocRepositoryButton != null) {
+			panel.remove(addGeneratedDocRepositoryButton);
+		}
+		panel.add(addDGRepositoryButton = new FlexoActionButton(AddGeneratedCodeRepository.actionType, this, _controller),
 				BorderLayout.CENTER);
-		panel.add(addDGRepositoryButton = new FlexoActionButton(AddGeneratedCodeRepository.actionType, this, _controller.getEditor()),
+		panel.add(addGeneratedDocRepositoryButton = new FlexoActionButton(ImportDocumentationTemplates.actionType, this, _controller),
 				BorderLayout.CENTER);
 		panel.validate();
 		panel.repaint();
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
-		updateView();
+	public void update(final FlexoObservable observable, final DataModification dataModification) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					update(observable, dataModification);
+				}
+			});
+			return;
+		}
+		if (dataModification instanceof ObjectDeleted) {
+			deleteModuleView();
+		} else {
+			updateView();
+		}
 	}
 
 	@Override
 	public void deleteModuleView() {
 		_controller.removeModuleView(this);
-		_gc.deleteObserver(this);
+		generatedDocumentation.deleteObserver(this);
 		addDGRepositoryButton = null;
+		addGeneratedDocRepositoryButton = null;
 		panel = null;
 	}
 
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
-		return _controller.CODE_GENERATOR_PERSPECTIVE;
+	public FlexoPerspective getPerspective() {
+		return declaredPerspective;
 	}
 
 	@Override
-	public GeneratedOutput getRepresentedObject() {
-		return _gc;
+	public GeneratedDoc getRepresentedObject() {
+		return generatedDocumentation;
 	}
 
 	@Override
@@ -135,7 +154,7 @@ public class GeneratedDocModuleView extends JPanel implements ModuleView<Generat
 	 */
 	@Override
 	public FlexoModelObject getFocusedObject() {
-		return _gc;
+		return generatedDocumentation;
 	}
 
 	/**

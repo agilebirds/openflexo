@@ -19,13 +19,9 @@
  */
 package org.openflexo.foundation.ws;
 
-import java.util.Enumeration;
 import java.util.Vector;
 
-import javax.swing.tree.TreeNode;
-
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
-import org.openflexo.foundation.ws.action.CreateNewWebService;
 
 public abstract class WSFolder extends WSObject {
 
@@ -36,14 +32,7 @@ public abstract class WSFolder extends WSObject {
 		super(dl);
 	}
 
-	public abstract Vector getWSServices();
-
-	@Override
-	protected Vector getSpecificActionListForThatClass() {
-		Vector returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateNewWebService.actionType);
-		return returned;
-	}
+	public abstract Vector<? extends WSService> getWSServices();
 
 	/**
 	 * Overrides getFullyQualifiedName
@@ -68,17 +57,12 @@ public abstract class WSFolder extends WSObject {
 	// ==========================================================================
 
 	@Override
-	public TreeNode getParent() {
+	public FlexoWSLibrary getParent() {
 		return getWSLibrary();
 	}
 
 	@Override
-	public boolean getAllowsChildren() {
-		return true;
-	}
-
-	@Override
-	public Vector getOrderedChildren() {
+	public Vector<? extends WSObject> getOrderedChildren() {
 		return getWSServices();
 	}
 
@@ -106,9 +90,7 @@ public abstract class WSFolder extends WSObject {
 			return null;
 		}
 		WSPortType found = null;
-		Enumeration en = getWSServices().elements();
-		while (en.hasMoreElements()) {
-			WSService group = (WSService) en.nextElement();
+		for (WSService group : getWSServices()) {
 			found = group.getWSPortTypeNamed(name);
 			if (found != null) {
 				return found;
@@ -122,9 +104,7 @@ public abstract class WSFolder extends WSObject {
 			return null;
 		}
 		WSRepository found = null;
-		Enumeration en = getWSServices().elements();
-		while (en.hasMoreElements()) {
-			WSService group = (WSService) en.nextElement();
+		for (WSService group : getWSServices()) {
 			found = group.getWSRepositoryNamed(name);
 			if (found != null) {
 				return found;

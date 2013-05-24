@@ -21,7 +21,7 @@ package org.openflexo.foundation.ontology;
 
 import com.hp.hpl.jena.rdf.model.Literal;
 
-public enum OntologicDataType {
+public enum OntologicDataType implements W3URIDefinitions {
 	// TODO: see http://www.w3.org/TR/xmlschema-2/ to complete list
 
 	String {
@@ -32,7 +32,7 @@ public enum OntologicDataType {
 
 		@Override
 		public java.lang.String getURI() {
-			return "http://www.w3.org/2001/XMLSchema#string";
+			return W3_STRING_DATATYPE_URI;
 		}
 
 		@Override
@@ -48,7 +48,7 @@ public enum OntologicDataType {
 
 		@Override
 		public java.lang.String getURI() {
-			return "http://www.w3.org/2001/XMLSchema#integer";
+			return W3_INTEGER_DATATYPE_URI;
 		}
 
 		@Override
@@ -64,7 +64,7 @@ public enum OntologicDataType {
 
 		@Override
 		public java.lang.String getURI() {
-			return "http://www.w3.org/2001/XMLSchema#int";
+			return W3_INT_DATATYPE_URI;
 		}
 
 		@Override
@@ -80,7 +80,7 @@ public enum OntologicDataType {
 
 		@Override
 		public java.lang.String getURI() {
-			return "http://www.w3.org/2001/XMLSchema#short";
+			return W3_SHORT_DATATYPE_URI;
 		}
 
 		@Override
@@ -96,7 +96,7 @@ public enum OntologicDataType {
 
 		@Override
 		public java.lang.String getURI() {
-			return "http://www.w3.org/2001/XMLSchema#long";
+			return W3_LONG_DATATYPE_URI;
 		}
 
 		@Override
@@ -112,7 +112,7 @@ public enum OntologicDataType {
 
 		@Override
 		public java.lang.String getURI() {
-			return "http://www.w3.org/2001/XMLSchema#byte";
+			return W3_BYTE_DATATYPE_URI;
 		}
 
 		@Override
@@ -128,7 +128,7 @@ public enum OntologicDataType {
 
 		@Override
 		public java.lang.String getURI() {
-			return "http://www.w3.org/2001/XMLSchema#float";
+			return W3_FLOAT_DATATYPE_URI;
 		}
 
 		@Override
@@ -144,7 +144,7 @@ public enum OntologicDataType {
 
 		@Override
 		public java.lang.String getURI() {
-			return "http://www.w3.org/2001/XMLSchema#double";
+			return W3_DOUBLE_DATATYPE_URI;
 		}
 
 		@Override
@@ -160,7 +160,7 @@ public enum OntologicDataType {
 
 		@Override
 		public java.lang.String getURI() {
-			return "http://www.w3.org/2001/XMLSchema#boolean";
+			return W3_BOOLEAN_DATATYPE_URI;
 		}
 
 		@Override

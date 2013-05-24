@@ -69,6 +69,8 @@ public abstract class ComponentConstraints extends Hashtable<String, String> imp
 					return new TwoColsLayoutConstraints(someConstraints);
 				} else if (constraintType.equals(Layout.gridbag.name())) {
 					return new GridBagLayoutConstraints(someConstraints);
+				} else if (constraintType.equals(Layout.split.name())) {
+					return new SplitLayoutConstraints(someConstraints);
 				}
 			} catch (StringIndexOutOfBoundsException e) {
 				logger.warning("Syntax error in ComponentConstraints: " + aValue);
@@ -155,6 +157,22 @@ public abstract class ComponentConstraints extends Hashtable<String, String> imp
 	}
 
 	protected abstract Layout getType();
+
+	public String getStringValue(String key, String defaultValue) {
+		String stringValue = get(key);
+		if (stringValue == null) {
+			logger.info("Ben je trouve pas....... pourtant=" + this);
+			ignoreNotif = true;
+			setStringValue(key, defaultValue);
+			ignoreNotif = false;
+			return defaultValue;
+		}
+		return stringValue;
+	}
+
+	public void setStringValue(String key, String value) {
+		put(key, value);
+	}
 
 	public <E extends Enum> E getEnumValue(String key, Class<E> enumType, E defaultValue) {
 		String stringValue = get(key);
@@ -248,17 +266,14 @@ public abstract class ComponentConstraints extends Hashtable<String, String> imp
 	public abstract void performConstrainedAddition(JComponent container, JComponent contained);
 
 	public final int getIndex() {
-		return getIntValue(INDEX, 0);
+		if (hasIndex()) {
+			return getIntValue(INDEX, 0);
+		}
+		return 0;
 	}
 
 	public final void setIndex(int x) {
 		setIntValue(INDEX, x);
-	}
-
-	public final void setIndexNoNotification(int x) {
-		ignoreNotif = true;
-		setIntValue(INDEX, x);
-		ignoreNotif = false;
 	}
 
 	public final boolean hasIndex() {

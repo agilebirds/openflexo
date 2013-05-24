@@ -38,7 +38,7 @@ import org.openflexo.toolbox.FileFormat;
 public class BuildXmlGenerator extends MetaFileGenerator {
 	private final Logger logger = FlexoLogger.getLogger(BuildXmlGenerator.class.getPackage().getName());
 
-	private static final String FILE_NAME = "build.xml";
+	public static final String FILE_NAME = "build.xml";
 	private static final String IDENTIFIER = "BUILD_XML";
 
 	public BuildXmlGenerator(ProjectGenerator projectGenerator) {

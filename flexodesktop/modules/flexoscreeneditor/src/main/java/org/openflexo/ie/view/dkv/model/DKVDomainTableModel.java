@@ -95,7 +95,7 @@ public class DKVDomainTableModel extends AbstractModel<DKVModel.DomainList, Doma
 
 	@Override
 	public Domain elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return getDomainList().getDomains().elementAt(row);
 		} else {
 			return null;

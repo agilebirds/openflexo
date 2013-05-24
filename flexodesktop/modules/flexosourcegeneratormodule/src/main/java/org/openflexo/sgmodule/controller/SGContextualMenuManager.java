@@ -22,7 +22,6 @@ package org.openflexo.sgmodule.controller;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.ContextualMenuManager;
 
@@ -34,11 +33,8 @@ import org.openflexo.selection.ContextualMenuManager;
  */
 public class SGContextualMenuManager extends ContextualMenuManager {
 
-	private SGController _controller;
-
-	public SGContextualMenuManager(SGSelectionManager selectionManager, FlexoEditor editor, SGController controller) {
-		super(selectionManager, editor);
-		_controller = controller;
+	public SGContextualMenuManager(SGSelectionManager selectionManager, SGController controller) {
+		super(selectionManager, controller);
 	}
 
 	@Override

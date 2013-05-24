@@ -19,7 +19,7 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -49,7 +49,7 @@ public class SaveCustomTemplateFileInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<SaveCustomTemplateFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<SaveCustomTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, SaveCustomTemplateFile action) {
+			public boolean run(EventObject e, SaveCustomTemplateFile action) {
 				return true;
 			}
 		};
@@ -59,9 +59,9 @@ public class SaveCustomTemplateFileInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<SaveCustomTemplateFile> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SaveCustomTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, SaveCustomTemplateFile action) {
-				if ((action.getInvoker() == null) || !(action.getInvoker() instanceof CGTemplateFileModuleView)
-						|| !(((CGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow())) {
+			public boolean run(EventObject e, SaveCustomTemplateFile action) {
+				if (action.getInvoker() == null || !(action.getInvoker() instanceof CGTemplateFileModuleView)
+						|| !((CGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow()) {
 					getControllerActionInitializer().getGeneratorController().selectAndFocusObject(action.getFocusedObject());
 				}
 				return true;

@@ -19,15 +19,9 @@
  */
 package org.openflexo.fib.model;
 
-import java.lang.reflect.Type;
+public class FIBTextArea extends FIBTextWidget {
 
-public class FIBTextArea extends FIBWidget {
-
-	// TODO: handle font
-	public boolean validateOnReturn = false;
-	public Integer columns = null;
 	public Integer rows = null;
-	public String text = null;
 
 	public FIBTextArea() {
 	}
@@ -37,9 +31,20 @@ public class FIBTextArea extends FIBWidget {
 		return "TextArea";
 	}
 
-	@Override
-	public Type getDefaultDataClass() {
-		return String.class;
+	/**
+	 * @return the rows
+	 */
+	public Integer getRows() {
+		return rows;
+	}
+
+	/**
+	 * @param rows
+	 *            the rows to set
+	 */
+	public void setRows(Integer rows) {
+		this.rows = rows;
+
 	}
 
 }

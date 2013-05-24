@@ -49,14 +49,14 @@ public class DeleteExampleDrawingElements extends
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ExampleDrawingObject object, Vector<ExampleDrawingObject> globalSelection) {
+		public boolean isVisibleForSelection(ExampleDrawingObject object, Vector<ExampleDrawingObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection) {
+		public boolean isEnabledForSelection(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection) {
 			Vector<ExampleDrawingObject> objectsToDelete = objectsToDelete(focusedObject, globalSelection);
-			return (objectsToDelete.size() > 0);
+			return objectsToDelete.size() > 0;
 		}
 
 	};

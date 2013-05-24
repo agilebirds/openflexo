@@ -311,7 +311,6 @@ public class IEDTListener implements DropTargetListener {
 			}
 		} catch (Throwable t) {
 			t.printStackTrace();
-			IEController.isDropSuccessFull = false;
 			e.dropComplete(false);
 			return;
 		}
@@ -329,7 +328,6 @@ public class IEDTListener implements DropTargetListener {
 					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Invalid position");
 					}
-					IEController.isDropSuccessFull = false;
 					e.rejectDrop();
 					return;
 				}
@@ -342,7 +340,6 @@ public class IEDTListener implements DropTargetListener {
 				} else if (!/*isValidTargetClassForDropTargetContainer(
 							_dropContainer, droppedWidget.getTargetClassModel())*/isValidDropTargetContainer(
 						_dropContainer.getContainerModel(), newWidget)) {
-					IEController.isDropSuccessFull = false;
 					e.rejectDrop();
 					if (logger.isLoggable(Level.INFO)) {
 						logger.info("Invalid target class:" + droppedWidget.getTargetClassModel() + " for container:"
@@ -370,7 +367,6 @@ public class IEDTListener implements DropTargetListener {
 				dropAction.doAction();
 
 				if (dropAction.hasActionExecutionSucceeded()) {
-					IEController.isDropSuccessFull = true;
 					e.acceptDrop(acceptableActions);
 					((JComponent) _dropContainer).repaint();
 					_ieController.getIESelectionManager().resetSelection();
@@ -378,7 +374,6 @@ public class IEDTListener implements DropTargetListener {
 				}
 
 				else {
-					IEController.isDropSuccessFull = false;
 					e.rejectDrop();
 					return;
 				}
@@ -392,7 +387,6 @@ public class IEDTListener implements DropTargetListener {
 			try {
 				Point position = e.getLocation();
 				if (position.x < 0 || position.y < 0) {
-					IEController.isDropSuccessFull = false;
 					e.rejectDrop();
 					return;
 				}
@@ -405,7 +399,6 @@ public class IEDTListener implements DropTargetListener {
 				 */
 				if (!isValidDropTargetContainer(_dropContainer.getContainerModel(), movedWidget)) {
 					// e.dropComplete(false);
-					IEController.isDropSuccessFull = false;
 					e.rejectDrop();
 
 					return;
@@ -434,7 +427,6 @@ public class IEDTListener implements DropTargetListener {
 						movedWidget.removeFromContainer();
 						insertView(movedWidget, _dropContainer, position);
 					}
-					IEController.isDropSuccessFull = true;
 					e.dropComplete(true);
 					/*
 					 * if (_dropContainer instanceof EmptyCellView) {
@@ -464,15 +456,11 @@ public class IEDTListener implements DropTargetListener {
 				dropAction.doAction();
 
 				if (dropAction.hasActionExecutionSucceeded()) {
-					IEController.isDropSuccessFull = true;
 					e.acceptDrop(acceptableActions);
 					((JComponent) _dropContainer).repaint();
 					_ieController.getIESelectionManager().resetSelection();
 					_ieController.getIESelectionManager().addToSelected(dropAction.getDroppedWidget());
-				}
-
-				else {
-					IEController.isDropSuccessFull = false;
+				} else {
 					e.rejectDrop();
 					return;
 				}
@@ -481,34 +469,10 @@ public class IEDTListener implements DropTargetListener {
 			}
 
 		} else {
-			IEController.isDropSuccessFull = false;
 			e.dropComplete(false);
 			return;
 		}
 
-	}
-
-	/**
-	 * @deprecated DO IT WITH FLEXO ACTION
-	 * @param droppedWidget
-	 * @param parent
-	 * @return
-	 */
-	@Deprecated
-	public IEWidget createModelFromDroppedWidget(IEDSWidget droppedWidget, IEObject parent) {
-		droppedWidget.setProject(_ieController.getProject());
-		IEWidget returned = droppedWidget.getPaletteWidget();
-		droppedWidget.setProject(null);
-		if (parent instanceof IEWOComponent) {
-			returned.setWOComponent((IEWOComponent) parent);
-		} else if (parent instanceof IEWidget) {
-			returned.setWOComponent(((IEWidget) parent).getWOComponent());
-		}
-		returned.setParent(parent);
-		if (logger.isLoggable(Level.FINE)) {
-			logger.finest("returned.setParent(an instance of " + parent.getClass() + ")");
-		}
-		return returned;
 	}
 
 	/**

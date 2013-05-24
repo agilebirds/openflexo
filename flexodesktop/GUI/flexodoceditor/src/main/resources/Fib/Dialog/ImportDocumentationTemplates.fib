@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="twocols" titleFont="Lucida Grande,0,13" darkLevel="0" dataClassName="org.openflexo.foundation.cg.action.ImportDocumentationTemplates" controllerClassName="org.openflexo.view.controller.FlexoFIBController" width="450" height="130">
+  <Label label="documentation_template_file" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+  <File mode="OpenMode" filter="*.zip" title="zip_file_containing_the_documentation_templates" isDirectory="false" data="data.zipFile" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
+  <Label label="generated_domentation_directory" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" />
+  <File mode="SaveMode" filter="" title="directory_where_generated_documents_will_be_placed" isDirectory="true" data="data.documentationGenerationDirectory" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true">
+    <description />
+  </File>
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2"  darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
+    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="Ok" constraints="flow(index=0)" localize="true" />
+    <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="Cancel" constraints="flow(index=1)" localize="true" />
+  </Panel>
+  <LocalizedDictionary>
+    <Localized key="documentation_template_file" lang="English">Documentation template file</Localized>
+    <Localized key="documentation_template_file" lang="French">Fichier de templates de documentation</Localized>
+    <Localized key="documentation_template_file" lang="Dutch">documentation_template_file</Localized>
+    <Localized key="generated_domentation_directory" lang="English">Generated domentation directory</Localized>
+    <Localized key="generated_domentation_directory" lang="French">Répertoire pour la documentation générée</Localized>
+    <Localized key="generated_domentation_directory" lang="Dutch">generated_domentation_directory</Localized>
+    <Localized key="Ok" lang="English">Ok</Localized>
+    <Localized key="Ok" lang="French">Ok</Localized>
+    <Localized key="Ok" lang="Dutch">Ok</Localized>
+    <Localized key="Cancel" lang="English">Cancel</Localized>
+    <Localized key="Cancel" lang="French">Annuler</Localized>
+    <Localized key="Cancel" lang="Dutch">Cancel</Localized>
+  </LocalizedDictionary>
+</Panel>
+

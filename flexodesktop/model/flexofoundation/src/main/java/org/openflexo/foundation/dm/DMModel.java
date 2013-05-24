@@ -37,23 +37,11 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.tree.TreeNode;
-
 import org.openflexo.foundation.CodeType;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.TargetType;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMSet.PackageReference.ClassReference;
 import org.openflexo.foundation.dm.DMType.DMTypeStringConverter;
-import org.openflexo.foundation.dm.action.CreateDMRepository;
-import org.openflexo.foundation.dm.action.CreateProjectDatabaseRepository;
-import org.openflexo.foundation.dm.action.CreateProjectRepository;
-import org.openflexo.foundation.dm.action.ImportExternalDatabaseRepository;
-import org.openflexo.foundation.dm.action.ImportJARFileRepository;
-import org.openflexo.foundation.dm.action.ImportRationalRoseRepository;
-import org.openflexo.foundation.dm.action.ImportThesaurusDatabaseRepository;
-import org.openflexo.foundation.dm.action.ImportThesaurusRepository;
-import org.openflexo.foundation.dm.action.UpdateLoadableDMEntity;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
 import org.openflexo.foundation.dm.dm.DiagramCreated;
 import org.openflexo.foundation.dm.dm.DiagramDeleted;
@@ -211,6 +199,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	}
 
 	private void installEOGenerators() {
+		if (getProject() == null) {
+			return;
+		}
 		Class<?> eoEntityGeneratorClass;
 		try {
 			eoEntityGeneratorClass = Class.forName("org.openflexo.generator.dm.DefaultEOEntityGenerator");
@@ -258,8 +249,7 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		dmTypeConverter = new DMTypeStringConverter(this);
 		project.getStringEncoder()._addConverter(dmTypeConverter);
 		cachedEntitiesForTypes = new CachedEntitiesForTypes();
-		_project = project;
-		_dmModel = this;
+		_dmModel = this;		_project = project;
 		entities = new Hashtable<String, DMEntity>();
 		repositories = new Hashtable<String, DMRepository>();
 		projectRepositories = new Vector<ProjectRepository>();
@@ -282,6 +272,13 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		_declaredTranstypers = new Hashtable<DMType, Vector<DMTranstyper>>();
 		diagrams = new Vector<ERDiagram>();
 		installEOGenerators();
+	}
+	
+	@Override
+	public FlexoProject getProject() {
+		if (getFlexoResource()!=null)
+			return getFlexoResource().getProject();
+		return _project;
 	}
 
 	/**
@@ -336,7 +333,7 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 			}
 			e1.printStackTrace();
 		}
-
+		project.setBuildingDataModel(null);
 		return newDMModel;
 	}
 
@@ -345,8 +342,8 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	 * 
 	 * @return a newly created DMModel
 	 */
-	public static DMModel createNewDMModel(FlexoProject project, FlexoDMResource dmRes) {
-		DMModel newDMModel = new DMModel(project);
+	public static DMModel createNewDMModel(FlexoDMResource dmRes) {
+		DMModel newDMModel = new DMModel(dmRes.getProject());
 		newDMModel.setFlexoResource(dmRes);
 		newDMModel.initializeDefaultRepositories(dmRes);
 		return newDMModel;
@@ -371,6 +368,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 
 	@Override
 	public void initializeDeserialization(Object builder) {
+		if (builder instanceof FlexoDMBuilder) {
+			setFlexoResource(((FlexoDMBuilder) builder).resource);
+		}
 		super.initializeDeserialization(builder);
 		getDmTypeConverter().dataModelStartDeserialization(this);
 	}
@@ -386,7 +386,6 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		// (avoid loop of DataModel loading whene trying to access project.getDataModel()
 		// somewhere in contained objects deserialization
 		if (builder instanceof FlexoDMBuilder) {
-			setProject(((FlexoDMBuilder) builder).getProject());
 			((FlexoDMBuilder) builder).getProject().getFlexoDMResource()._setDeserializingDataModel(this);
 		}
 
@@ -583,16 +582,6 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		_resource = (FlexoDMResource) resource;
 	}
 
-	@Override
-	public FlexoProject getProject() {
-		return _project;
-	}
-
-	@Override
-	public void setProject(FlexoProject aProject) {
-		_project = aProject;
-	}
-
 	/**
 	 * Save this object using ResourceManager scheme
 	 * 
@@ -651,22 +640,6 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 	@Override
 	public boolean isNameValid() {
 		return true;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateDMRepository.actionType);
-		returned.add(CreateProjectRepository.actionType);
-		returned.add(CreateProjectDatabaseRepository.actionType);
-		returned.add(ImportExternalDatabaseRepository.actionType);
-		returned.add(ImportJARFileRepository.actionType);
-		returned.add(ImportRationalRoseRepository.actionType);
-		// returned.add(ImportDenaliFoundationRepository.actionType);
-		returned.add(ImportThesaurusRepository.actionType);
-		returned.add(ImportThesaurusDatabaseRepository.actionType);
-		returned.add(UpdateLoadableDMEntity.actionType);
-		return returned;
 	}
 
 	@Override
@@ -1410,7 +1383,6 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		xmlSchemaRepositories = null;
 		entities = null;
 		repositories = null;
-		_project = null;
 		_resource = null;
 		_modelGroup = null;
 		_internalRepositoryFolder = null;
@@ -1428,19 +1400,9 @@ public class DMModel extends DMObject implements XMLStorageResourceData {
 		_classLibrary = null;
 	}
 
-	// ==========================================================================
-	// ======================== TreeNode implementation
-	// =========================
-	// ==========================================================================
-
 	@Override
-	public TreeNode getParent() {
+	public DMObject getParent() {
 		return null;
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return true;
 	}
 
 	/**

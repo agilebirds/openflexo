@@ -19,7 +19,7 @@
  */
 package org.openflexo.vpm.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -31,6 +31,7 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.viewpoint.action.DeclareShapeInEditionPattern;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
@@ -58,11 +59,11 @@ public class DeclareShapeInEditionPatternInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DeclareShapeInEditionPattern> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeclareShapeInEditionPattern>() {
 			@Override
-			public boolean run(ActionEvent e, DeclareShapeInEditionPattern action) {
+			public boolean run(EventObject e, DeclareShapeInEditionPattern action) {
 
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB, action, null, true,
-						FlexoLocalization.getMainLocalizer());
-				return (dialog.getStatus() == Status.VALIDATED);
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB, action,
+						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
+				return dialog.getStatus() == Status.VALIDATED;
 			}
 		};
 	}
@@ -71,7 +72,7 @@ public class DeclareShapeInEditionPatternInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DeclareShapeInEditionPattern> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DeclareShapeInEditionPattern>() {
 			@Override
-			public boolean run(ActionEvent e, DeclareShapeInEditionPattern action) {
+			public boolean run(EventObject e, DeclareShapeInEditionPattern action) {
 				getController().setCurrentEditedObjectAsModuleView(action.getEditionPattern(), getController().VIEW_POINT_PERSPECTIVE);
 				getController().getSelectionManager().setSelectedObject(action.getEditionPattern().getPrimaryRepresentationRole());
 				return true;

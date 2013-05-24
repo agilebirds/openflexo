@@ -66,7 +66,7 @@ public class ProcessFolderJSFileResource extends JSFileResource<DGJSGenerator<Pr
 	}
 
 	public void registerObserverWhenRequired() {
-		if ((!isObserverRegistered) && (getProcessFolder() != null)) {
+		if (!isObserverRegistered && getProcessFolder() != null) {
 			isObserverRegistered = true;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getProject());
@@ -76,7 +76,8 @@ public class ProcessFolderJSFileResource extends JSFileResource<DGJSGenerator<Pr
 	}
 
 	public static String nameForRepositoryAndProcessFolder(GenerationRepository repository, ProcessFolder processFolder) {
-		return repository.getName() + ".PROCESSFOLDER_JS." + processFolder.getName() + "-" + processFolder.getFlexoID();
+		return repository.getName() + ".PROCESSFOLDER_JS." + processFolder.getName() + "-" + processFolder.getFlexoID()
+				+ (repository.getProject() == processFolder.getProject() ? "" : " " + processFolder.getProject().getProjectURI());
 	}
 
 	public ProcessFolder getProcessFolder() {

@@ -23,6 +23,9 @@ import java.io.PrintStream;
 
 import org.openflexo.antar.expr.BinaryOperator;
 import org.openflexo.antar.expr.BinaryOperatorExpression;
+import org.openflexo.antar.expr.BindingValueAsExpression;
+import org.openflexo.antar.expr.BindingValueAsExpression.AbstractBindingPathElement;
+import org.openflexo.antar.expr.ConditionalExpression;
 import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.Constant.BooleanConstant;
 import org.openflexo.antar.expr.Constant.DateConstant;
@@ -74,6 +77,9 @@ public abstract class ExpressionPrettyPrinter {
 		if (expression == null) {
 			return "null";
 		}
+		if (expression instanceof BindingValueAsExpression) {
+			return makeStringRepresentation((BindingValueAsExpression) expression);
+		}
 		if (expression instanceof Variable) {
 			return makeStringRepresentation((Variable) expression);
 		}
@@ -89,7 +95,10 @@ public abstract class ExpressionPrettyPrinter {
 		if (expression instanceof BinaryOperatorExpression) {
 			return makeStringRepresentation((BinaryOperatorExpression) expression);
 		}
-		// return "<unknown "+expression.getClass().getSimpleName()+">";
+		if (expression instanceof ConditionalExpression) {
+			return makeStringRepresentation((ConditionalExpression) expression);
+		}
+		// return "<unknown " + expression.getClass().getSimpleName() + ">";
 		return expression.toString();
 	}
 
@@ -118,6 +127,10 @@ public abstract class ExpressionPrettyPrinter {
 		return "???";
 	}
 
+	protected abstract String makeStringRepresentation(BindingValueAsExpression bv);
+
+	protected abstract String makeStringRepresentation(AbstractBindingPathElement e);
+
 	protected abstract String makeStringRepresentation(BooleanConstant constant);
 
 	protected abstract String makeStringRepresentation(FloatConstant constant);
@@ -139,5 +152,7 @@ public abstract class ExpressionPrettyPrinter {
 	protected abstract String makeStringRepresentation(UnaryOperatorExpression expression);
 
 	protected abstract String makeStringRepresentation(BinaryOperatorExpression expression);
+
+	protected abstract String makeStringRepresentation(ConditionalExpression expression);
 
 }

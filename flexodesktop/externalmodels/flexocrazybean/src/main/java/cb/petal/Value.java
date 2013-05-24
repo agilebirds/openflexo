@@ -74,6 +74,6 @@ public class Value extends Literal {
 
 	@Override
 	public boolean equals(java.lang.Object o) {
-		return (o instanceof Value) && (((Value) o).value.equals(this.value)) && (((Value) o).name.equals(this.name));
+		return o instanceof Value && ((Value) o).value.equals(this.value) && ((Value) o).name.equals(this.name);
 	}
 }

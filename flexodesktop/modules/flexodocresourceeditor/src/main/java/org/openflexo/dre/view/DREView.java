@@ -30,8 +30,8 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.selection.SelectionListener;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * Please comment this class
@@ -71,11 +71,12 @@ public abstract class DREView<O extends DRMObject> extends CompoundTabularView<O
 
 	@Override
 	public void deleteModuleView() {
+		getRepresentedObject().deleteObserver(this);
 		getDREController().removeModuleView(this);
 	}
 
 	@Override
-	public FlexoPerspective<DRMObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return getDREController().DRE_PERSPECTIVE;
 	}
 

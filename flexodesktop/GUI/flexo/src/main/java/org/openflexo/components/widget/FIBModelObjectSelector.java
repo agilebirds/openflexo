@@ -22,22 +22,25 @@ package org.openflexo.components.widget;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.RGBImageFilter;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
-import java.util.Enumeration;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import org.openflexo.AdvancedPrefs;
 import org.openflexo.antar.binding.BindingDefinition;
@@ -49,13 +52,11 @@ import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
+import org.openflexo.fib.model.FIBList;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
-import org.openflexo.foundation.DefaultFlexoEditor;
+import org.openflexo.fib.view.widget.FIBListWidget;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.action.FlexoAction;
-import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
@@ -63,6 +64,7 @@ import org.openflexo.icon.IconMarker;
 import org.openflexo.swing.TextFieldCustomPopup;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.StringUtils;
+import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoFIBController;
 
 /**
@@ -71,9 +73,8 @@ import org.openflexo.view.controller.FlexoFIBController;
  * @author sguerin
  * 
  */
-public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends TextFieldCustomPopup<T> implements
-		FIBCustomComponent<T, FIBModelObjectSelector>, HasPropertyChangeSupport {
-	@SuppressWarnings("hiding")
+public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> implements FIBCustomComponent<T, FIBModelObjectSelector>,
+		HasPropertyChangeSupport {
 	static final Logger logger = Logger.getLogger(FIBModelObjectSelector.class.getPackage().getName());
 
 	private static final String DELETED = "deleted";
@@ -85,7 +86,7 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	protected SelectorDetailsPanel _selectorPanel;
 
 	private FlexoProject project;
-	private FlexoModelObject selectedObject;
+	private Object selectedObject;
 	private T selectedValue;
 	private final List<T> matchingValues;
 	private T candidateValue;
@@ -95,6 +96,12 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 
 	private PropertyChangeSupport pcSupport;
 
+	private FlexoController flexoController;
+
+	private boolean isFiltered = false;
+
+	private boolean showReset = true;
+
 	public static BindingDefinition SELECTABLE = new BindingDefinition("selectable", Boolean.class, BindingDefinitionType.GET, false);
 
 	public FIBModelObjectSelector(T editedObject) {
@@ -102,9 +109,55 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 		pcSupport = new PropertyChangeSupport(this);
 		setRevertValue(editedObject);
 		setFocusable(true);
-		matchingValues = new Vector<T>();
+		matchingValues = new ArrayList<T>();
 		getTextField().setEditable(true);
+		getTextField().getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				if (!textIsBeeingProgrammaticallyEditing()) {
+					updateMatchingValues();
+				}
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				if (!textIsBeeingProgrammaticallyEditing()) {
+					updateMatchingValues();
+				}
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				if (!textIsBeeingProgrammaticallyEditing()) {
+					updateMatchingValues();
+				}
+			}
+		});
 		getTextField().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							updateMatchingValues();
+							if (matchingValues.size() > 0) {
+								setSelectedValue(matchingValues.get(0));
+								apply();
+							}
+						}
+					});
+				} else if (e.getKeyCode() == KeyEvent.VK_UP) {
+					getFIBListWidget().getDynamicJComponent().requestFocusInWindow();
+					getFIBListWidget().getDynamicJComponent().setSelectedIndex(
+							getFIBListWidget().getDynamicJComponent().getModel().getSize() - 1);
+				} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+					getFIBListWidget().getJComponent().requestFocusInWindow();
+					getFIBListWidget().getDynamicJComponent().setSelectedIndex(0);
+				}
+
+			}
+
 			@Override
 			public void keyTyped(KeyEvent e) {
 
@@ -119,12 +172,12 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 				if (!popupIsShown()) {
 					openPopup();
 				}
-				updateMatchingValues();
+				// updateMatchingValues();
 				if (requestFocus) {
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
-							getTextField().requestFocus();
+							getTextField().requestFocusInWindow();
 							getTextField().select(selectionStart, selectionEnd);
 						}
 					});
@@ -151,7 +204,9 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	@Override
 	public void delete() {
 		super.delete();
-		pcSupport.firePropertyChange(DELETED, false, true);
+		if (pcSupport != null) {
+			pcSupport.firePropertyChange(DELETED, false, true);
+		}
 		matchingValues.clear();
 		pcSupport = null;
 		selectedObject = null;
@@ -169,7 +224,15 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	public void openPopup() {
 		super.openPopup();
 		// System.out.println("Request focus now");
-		getTextField().requestFocus();
+		getTextField().requestFocusInWindow();
+	}
+
+	public boolean isShowReset() {
+		return showReset;
+	}
+
+	public void setShowReset(boolean showReset) {
+		this.showReset = showReset;
 	}
 
 	@Override
@@ -182,7 +245,9 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 		return DELETED;
 	}
 
-	// private String filteredName;
+	public boolean isFiltered() {
+		return StringUtils.isNotEmpty(getFilteredName()) && isFiltered;
+	}
 
 	public String getFilteredName() {
 		// return filteredName;
@@ -196,13 +261,13 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 		// updateMatchingValues();
 	}
 
-	public FlexoModelObject getSelectedObject() {
+	public Object getSelectedObject() {
 		return selectedObject;
 	}
 
-	public void setSelectedObject(FlexoModelObject selectedObject) {
+	public void setSelectedObject(Object selectedObject) {
 		// System.out.println("set selected object: "+selectedObject);
-		FlexoModelObject old = getSelectedObject();
+		Object old = getSelectedObject();
 		this.selectedObject = selectedObject;
 		pcSupport.firePropertyChange("selectedObject", old, selectedObject);
 		if (isAcceptableValue(selectedObject)) {
@@ -227,21 +292,49 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	}
 
 	private void updateMatchingValues() {
+		final List<T> oldMatchingValues = new ArrayList<T>(getMatchingValues());
+		// System.out.println("updateMatchingValues() with " + getFilteredName());
 		matchingValues.clear();
 		if (getAllSelectableValues() != null && getFilteredName() != null) {
-			Enumeration<T> enumeration = getAllSelectableValues();
-			while (enumeration.hasMoreElements()) {
-				T next = enumeration.nextElement();
+			isFiltered = true;
+			for (T next : getAllSelectableValues()) {
 				if (isAcceptableValue(next) && matches(next, getFilteredName())) {
 					matchingValues.add(next);
 				}
 			}
 		}
-		// System.out.println("Objects matching with "+getFilteredName()+" found "+matchingValues.size()+" values");
-		pcSupport.firePropertyChange("matchingValues", null, null);
+		// logger.info("Objects matching with " + getFilteredName() + " found " + matchingValues.size() + " values");
+
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				pcSupport.firePropertyChange("matchingValues", oldMatchingValues, getMatchingValues());
+				if (matchingValues.size() == 1) {
+					setSelectedValue(matchingValues.get(0));
+				}
+			}
+		});
+
+		/*pcSupport.firePropertyChange("matchingValues", oldMatchingValues, getMatchingValues());
+		
 		if (matchingValues.size() == 1) {
 			setSelectedValue(matchingValues.get(0));
-		}
+		}*/
+	}
+
+	private void clearMatchingValues() {
+		isFiltered = false;
+		List<T> oldMatchingValues = new ArrayList<T>(getMatchingValues());
+		matchingValues.clear();
+		pcSupport.firePropertyChange("matchingValues", oldMatchingValues, null);
+	}
+
+	private FIBBrowserWidget getFIBBrowserWidget() {
+		return ((SelectorDetailsPanel) getCustomPanel()).retrieveFIBBrowserWidget();
+	}
+
+	private FIBListWidget getFIBListWidget() {
+		return ((SelectorDetailsPanel) getCustomPanel()).retrieveFIBListWidget();
 	}
 
 	/**
@@ -251,19 +344,19 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	 * 
 	 * Override when required
 	 */
-	protected Enumeration<T> getAllSelectableValues() {
-		Vector<T> listByExploringTree = ((SelectorDetailsPanel) getCustomPanel()).getAllSelectableValues();
-		if (listByExploringTree != null) {
-			return listByExploringTree.elements();
-		}
-		return null;
+	protected Collection<T> getAllSelectableValues() {
+		return ((SelectorDetailsPanel) getCustomPanel()).getAllSelectableValues();
 	}
 
 	/**
 	 * Override when required
 	 */
 	protected boolean matches(T o, String filteredName) {
-		return o.getName() != null && o.getName().startsWith(filteredName);
+		if (o instanceof FlexoModelObject) {
+			return ((FlexoModelObject) o).getName() != null
+					&& ((FlexoModelObject) o).getName().toUpperCase().indexOf(filteredName.toUpperCase()) > -1;
+		}
+		return false;
 	}
 
 	public List<T> getMatchingValues() {
@@ -276,7 +369,13 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 
 	@CustomComponentParameter(name = "project", type = CustomComponentParameter.Type.MANDATORY)
 	public void setProject(FlexoProject project) {
+		if (project == null) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Passing null project. If you rely on project this is unlikely to work");
+			}
+		}
 		this.project = project;
+		pcSupport.firePropertyChange("project", null, project);
 	}
 
 	@Override
@@ -299,6 +398,9 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	@Override
 	protected ResizablePanel createCustomPanel(T editedObject) {
 		_selectorPanel = makeCustomPanel(editedObject);
+		if (flexoController != null) {
+			_selectorPanel.getController().setFlexoController(flexoController);
+		}
 		return _selectorPanel;
 	}
 
@@ -308,7 +410,8 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 
 	@Override
 	public void updateCustomPanel(T editedObject) {
-		// logger.info("updateCustomPanel with "+editedObject+" _selectorPanel="+_selectorPanel);
+		// logger.info("updateCustomPanel with " + editedObject + " _selectorPanel=" + _selectorPanel);
+		setSelectedObject(editedObject);
 		if (_selectorPanel != null) {
 			_selectorPanel.update();
 		}
@@ -335,10 +438,21 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 			setLayout(new BorderLayout());
 			add(fibView.getResultingJComponent(), BorderLayout.CENTER);
 
+			selectValue(anObject);
+		}
+
+		private void selectValue(T value) {
+			FIBBrowserWidget browserWidget = retrieveFIBBrowserWidget();
+			if (browserWidget != null) {
+				// Force reselect value because tree may have been recomputed
+				browserWidget.setSelectedObject(value, true);
+			}
 		}
 
 		public void update() {
 			controller.setDataObject(FIBModelObjectSelector.this);
+			// logger.info("update() selectedValue=" + getSelectedValue() + " selectedObject=" + getSelectedObject());
+			selectValue(getSelectedValue());
 		}
 
 		@Override
@@ -349,8 +463,8 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 		public void delete() {
 		}
 
-		protected Vector<T> getAllSelectableValues() {
-			Vector<T> returned = new Vector<T>();
+		protected Set<T> getAllSelectableValues() {
+			Set<T> returned = new HashSet<T>();
 			FIBBrowserWidget browserWidget = retrieveFIBBrowserWidget();
 			if (browserWidget == null) {
 				return null;
@@ -375,9 +489,26 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 			return null;
 		}
 
+		private FIBListWidget retrieveFIBListWidget() {
+			List<FIBComponent> listComponent = fibComponent.retrieveAllSubComponents();
+			for (FIBComponent c : listComponent) {
+				if (c instanceof FIBList) {
+					return (FIBListWidget) controller.viewForComponent(c);
+				}
+			}
+			return null;
+		}
+
+		public FIBComponent getFIBComponent() {
+			return fibComponent;
+		}
+
+		public SelectorFIBController getController() {
+			return controller;
+		}
 	}
 
-	public static class SelectorFIBController extends FlexoFIBController<FIBModelObjectSelector> {
+	public static class SelectorFIBController extends FlexoFIBController {
 		private final FIBModelObjectSelector selector;
 
 		public SelectorFIBController(FIBComponent component, FIBModelObjectSelector selector) {
@@ -450,6 +581,7 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 
 	@Override
 	public void apply() {
+		clearMatchingValues();
 		setEditedObject(getSelectedValue());
 		setRevertValue(getEditedObject());
 		closePopup();
@@ -479,6 +611,49 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 	 * protected void pointerLeavesPopup() { cancel(); }
 	 */
 
+	public FIBComponent getFIBComponent() {
+		if (getSelectorPanel() != null) {
+			return getSelectorPanel().getFIBComponent();
+		}
+		return null;
+	}
+
+	protected SelectorFIBController getController() {
+		if (getSelectorPanel() == null) {
+			return null;
+		}
+		return getSelectorPanel().getController();
+	}
+
+	protected FIBBrowser getFIBBrowser() {
+		if (getFIBComponent() == null) {
+			return null;
+		}
+		List<FIBComponent> listComponent = getFIBComponent().retrieveAllSubComponents();
+		for (FIBComponent c : listComponent) {
+			if (c instanceof FIBBrowser) {
+				return (FIBBrowser) c;
+			}
+		}
+		return null;
+	}
+
+	protected FIBBrowserWidget retrieveFIBBrowserWidget() {
+		if (getFIBComponent() == null) {
+			return null;
+		}
+		if (getController() == null) {
+			return null;
+		}
+		List<FIBComponent> listComponent = getFIBComponent().retrieveAllSubComponents();
+		for (FIBComponent c : listComponent) {
+			if (c instanceof FIBBrowser) {
+				return (FIBBrowserWidget) getController().viewForComponent(c);
+			}
+		}
+		return null;
+	}
+
 	public SelectorDetailsPanel getSelectorPanel() {
 		return _selectorPanel;
 	}
@@ -493,13 +668,16 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 		if (editedObject == null) {
 			return "";
 		}
-		return editedObject.getFullyQualifiedName();
+		if (editedObject instanceof FlexoModelObject) {
+			return ((FlexoModelObject) editedObject).getFullyQualifiedName();
+		}
+		return editedObject.toString();
 	}
 
 	/**
 	 * Override when required
 	 */
-	protected boolean isAcceptableValue(FlexoModelObject o) {
+	protected boolean isAcceptableValue(Object o) {
 		if (o == null) {
 			return false;
 		}
@@ -556,78 +734,80 @@ public abstract class FIBModelObjectSelector<T extends FlexoModelObject> extends
 		this.candidateValue = candidateValue;
 	}
 
-	public static class FlexoTestEditor extends DefaultFlexoEditor {
-		public FlexoTestEditor(FlexoProject project) {
-			super(project);
-		}
+	public FlexoController getFlexoController() {
+		return flexoController;
+	}
 
-		@Override
-		public <A extends FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> FlexoActionInitializer<? super A> getInitializerFor(
-				FlexoActionType<A, T1, T2> actionType) {
-			FlexoActionInitializer<A> init = new FlexoActionInitializer<A>() {
-
-				@Override
-				public boolean run(ActionEvent event, A action) {
-					boolean reply = action.getActionType().isEnabled(action.getFocusedObject(), action.getGlobalSelection(),
-							FlexoTestEditor.this);
-					if (!reply) {
-						System.err.println("ACTION NOT ENABLED :" + action.getClass() + " on object "
-								+ (action.getFocusedObject() != null ? action.getFocusedObject().getClass() : "null focused object"));
-					}
-					return reply;
-				}
-
-			};
-			return init;
+	public void setFlexoController(FlexoController flexoController) {
+		this.flexoController = flexoController;
+		if (_selectorPanel != null) {
+			_selectorPanel.getController().setFlexoController(flexoController);
 		}
 	}
 
-	/*
-	 * public static void testSelector(final FIBModelObjectSelector selector) {
-	 * final FlexoProject prj = loadProject(); selector.createCustomPanel(null);
-	 * selector.setProject(prj); FIBAbstractEditor editor = new
-	 * FIBAbstractEditor() {
-	 * 
-	 * @Override public Object[] getData() { return
-	 * FIBAbstractEditor.makeArray(selector); }
-	 * 
-	 * @Override public File getFIBFile() { return selector.getFIBFile(); }
-	 * 
-	 * @Override public FIBController getController() { return
-	 * selector.getSelectorPanel().controller; }
-	 * 
-	 * @Override public FIBController makeNewController() { return
-	 * selector.makeCustomFIBController
-	 * (selector.getSelectorPanel().fibComponent); }
-	 * 
-	 * };
-	 * 
-	 * editor.addAction("set_filtered_name",new ActionListener() {
-	 * 
-	 * @Override public void actionPerformed(ActionEvent e) {
-	 * selector.setFilteredName("T"); selector.updateMatchingValues(); } });
-	 * editor.launch(); }
-	 * 
-	 * protected static final FlexoEditorFactory EDITOR_FACTORY = new
-	 * FlexoEditorFactory() { public DefaultFlexoEditor
-	 * makeFlexoEditor(FlexoProject project) { return new
-	 * DefaultFlexoEditor(project); } };
-	 * 
-	 * public static FileResource PRJ_FILE = new
-	 * FileResource("Prj/TestBrowser.prj");
-	 * 
-	 * public static FlexoProject loadProject() { File projectFile = PRJ_FILE;
-	 * FlexoProject project = null; FlexoEditor editor;
-	 * logger.info("Found project "+projectFile.getAbsolutePath()); try { editor
-	 * =
-	 * FlexoResourceManager.initializeExistingProject(projectFile,EDITOR_FACTORY
-	 * ,null); project = editor.getProject(); } catch
-	 * (ProjectLoadingCancelledException e) { // TODO Auto-generated catch block
-	 * e.printStackTrace(); } catch (ProjectInitializerException e) { // TODO
-	 * Auto-generated catch block e.printStackTrace(); }
-	 * logger.info("Successfully loaded project "
-	 * +projectFile.getAbsolutePath());
-	 * 
-	 * return project; }
-	 */
+	/*public static void testSelector(final FIBModelObjectSelector selector) {
+		final FlexoProject prj = loadProject();
+		selector.createCustomPanel(null);
+		selector.setProject(prj);
+		FIBAbstractEditor editor = new FIBAbstractEditor() {
+
+			@Override
+			public Object[] getData() {
+				return FIBAbstractEditor.makeArray(selector);
+			}
+
+			@Override
+			public File getFIBFile() {
+				return selector.getFIBFile();
+			}
+
+			@Override
+			public FIBController getController() {
+				return selector.getSelectorPanel().controller;
+			}
+
+			public FIBController makeNewController() {
+				return selector.makeCustomFIBController(selector.getSelectorPanel().fibComponent);
+			}
+
+		};
+
+		editor.addAction("set_filtered_name", new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				selector.setFilteredName("T");
+				selector.updateMatchingValues();
+			}
+		});
+		editor.launch();
+	}
+
+	protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
+		@Override
+		public DefaultFlexoEditor makeFlexoEditor(FlexoProject project) {
+			return new DefaultFlexoEditor(project);
+		}
+	};
+
+	public static FileResource PRJ_FILE = new FileResource("Prj/TestBrowser.prj");
+
+	public static FlexoProject loadProject() {
+		File projectFile = PRJ_FILE;
+		FlexoProject project = null;
+		FlexoEditor editor;
+		logger.info("Found project " + projectFile.getAbsolutePath());
+		try {
+			editor = FlexoResourceManager.initializeExistingProject(projectFile, EDITOR_FACTORY, null);
+			project = editor.getProject();
+		} catch (ProjectLoadingCancelledException e) { // TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ProjectInitializerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		logger.info("Successfully loaded project " + projectFile.getAbsolutePath());
+
+		return project;
+	}*/
 }

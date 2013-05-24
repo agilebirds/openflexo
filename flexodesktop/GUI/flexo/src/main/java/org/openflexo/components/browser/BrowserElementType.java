@@ -26,6 +26,8 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import org.openflexo.drm.DocItem;
+import org.openflexo.drm.DocItemFolder;
 import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.cg.CGFile;
@@ -103,15 +105,10 @@ import org.openflexo.foundation.ie.widget.IETabWidget;
 import org.openflexo.foundation.ie.widget.IETextAreaWidget;
 import org.openflexo.foundation.ie.widget.IETextFieldWidget;
 import org.openflexo.foundation.ie.widget.IEWysiwygWidget;
-import org.openflexo.foundation.ontology.ImportedOntology;
-import org.openflexo.foundation.ontology.OntologyClass;
-import org.openflexo.foundation.ontology.OntologyDataProperty;
+import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.ontology.OntologyFolder;
-import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.OntologyObjectProperty;
-import org.openflexo.foundation.ontology.OntologyStatement;
-import org.openflexo.foundation.ontology.ProjectOntology;
+import org.openflexo.foundation.ontology.ProjectOWLOntology;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.sg.GeneratedSources;
 import org.openflexo.foundation.sg.SourceRepository;
@@ -205,7 +202,7 @@ import org.openflexo.localization.FlexoLocalization;
  */
 public enum BrowserElementType {
 
-	PROJECT("project", FlexoProject.class, IconLibrary.PROJECT_ICON),
+	PROJECT("project", FlexoProject.class, IconLibrary.OPENFLEXO_NOTEXT_16),
 	WORKFLOW("workflow", FlexoWorkflow.class, WKFIconLibrary.WORKFLOW_ICON),
 	IMPORTED_PROCESS_LIBRARY("imported_process_library", FlexoImportedProcessLibrary.class, WKFIconLibrary.IMPORTED_PROCESS_LIBRARY_ICON),
 	PROCESS("process", FlexoProcess.class, WKFIconLibrary.PROCESS_ICON),
@@ -344,17 +341,14 @@ public enum BrowserElementType {
 			"generated_code_file_intermediate_version",
 			CGFileIntermediateVersion.class,
 			FilesIconLibrary.SMALL_MISC_FILE_ICON),
-	DOC_ITEM_FOLDER("doc_item_folder", null/*Used outside this scope*/, DREIconLibrary.DOC_FOLDER_ICON),
-	UNDOCUMENTED_DOC_ITEM("undocumented_doc_item", null/*Used outside this scope*/, DREIconLibrary.UNDOCUMENTED_DOC_ITEM_ICON),
-	APPROVING_PENDING_DOC_ITEM(
-			"approving_pending_doc_item",
-			null/*Used outside this scope*/,
-			DREIconLibrary.APPROVING_PENDING_DOC_ITEM_ICON),
+	DOC_ITEM_FOLDER("doc_item_folder", DocItemFolder.class, DREIconLibrary.DOC_FOLDER_ICON),
+	UNDOCUMENTED_DOC_ITEM("undocumented_doc_item", DocItem.class, DREIconLibrary.UNDOCUMENTED_DOC_ITEM_ICON),
+	APPROVING_PENDING_DOC_ITEM("approving_pending_doc_item", DocItem.class, DREIconLibrary.APPROVING_PENDING_DOC_ITEM_ICON),
 	AVAILABLE_NEW_VERSION_PENDING_DOC_ITEM(
 			"available_new_version_pending_doc_item",
-			null/*Used outside this scope*/,
+			DocItem.class,
 			DREIconLibrary.AVAILABLE_NEW_VERSION_PENDING_DOC_ITEM_ICON),
-	UP_TO_DATE_DOC_ITEM("available_uptodate_doc_item", null/*Used outside this scope*/, DREIconLibrary.DOC_ITEM_ICON),
+	UP_TO_DATE_DOC_ITEM("available_uptodate_doc_item", DocItem.class, DREIconLibrary.DOC_ITEM_ICON),
 	TOC_DATA("toc_data", TOCData.class, DGIconLibrary.GENERATED_DOC_ICON),
 	DOC_TYPE("doc_type", DocType.class, CGIconLibrary.TARGET_ICON),
 	TOC_ENTRY("toc_entry", TOCEntry.class, DEIconLibrary.TOC_ENTRY_ICON),
@@ -365,18 +359,18 @@ public enum BrowserElementType {
 	CVS_REPOSITORY("cvs_repository", null/*Used outside this scope*/, FPSIconLibrary.CVS_REPOSITORY_ICON),
 	CVS_MODULE("cvs_module", null/*Used outside this scope*/, FPSIconLibrary.CVS_MODULE_ICON),
 	CVS_EXPLORER("cvs_explorer", null/*Used outside this scope*/, UtilsIconLibrary.CLOCK_ICON),
-	SHARED_PROJECT("shared_project", null/*Used outside this scope*/, IconLibrary.PROJECT_ICON),
+	SHARED_PROJECT("shared_project", null/*Used outside this scope*/, IconLibrary.OPENFLEXO_NOTEXT_16),
 	CVS_DIRECTORY("cvs_directory", null/*Used outside this scope*/, IconLibrary.FOLDER_ICON),
 	CVS_FILE("cvs_file", null/*Used outside this scope*/, FilesIconLibrary.SMALL_MISC_FILE_ICON),
-	PROJECT_ONTOLOGY("project_ontology", ProjectOntology.class, OntologyIconLibrary.ONTOLOGY_ICON),
-	IMPORTED_ONTOLOGY("imported_ontology", ImportedOntology.class, OntologyIconLibrary.ONTOLOGY_ICON),
+	PROJECT_ONTOLOGY("project_ontology", ProjectOWLOntology.class, OntologyIconLibrary.ONTOLOGY_ICON),
+	IMPORTED_ONTOLOGY("imported_ontology", ImportedOWLOntology.class, OntologyIconLibrary.ONTOLOGY_ICON),
 	ONTOLOGY_LIBRARY("ontology_library", OntologyLibrary.class, OntologyIconLibrary.ONTOLOGY_LIBRARY_ICON),
 	ONTOLOGY_FOLDER("ontology_folder", OntologyFolder.class, IconLibrary.FOLDER_ICON),
-	ONTOLOGY_CLASS("ontology_class", OntologyClass.class, OntologyIconLibrary.ONTOLOGY_CLASS_ICON),
-	ONTOLOGY_INDIVIDUAL("ontology_individual", OntologyIndividual.class, OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON),
-	ONTOLOGY_DATA_PROPERTY("ontology_data_property", OntologyDataProperty.class, OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON),
-	ONTOLOGY_OBJECT_PROPERTY("ontology_object_property", OntologyObjectProperty.class, OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON),
-	ONTOLOGY_STATEMENT("ontology_statement", OntologyStatement.class, OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON),
+	/*	ONTOLOGY_CLASS("ontology_class", OntologyClass.class, OntologyIconLibrary.ONTOLOGY_CLASS_ICON),
+		ONTOLOGY_INDIVIDUAL("ontology_individual", OntologyIndividual.class, OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON),
+		ONTOLOGY_DATA_PROPERTY("ontology_data_property", OntologyDataProperty.class, OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON),
+		ONTOLOGY_OBJECT_PROPERTY("ontology_object_property", OntologyObjectProperty.class, OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON),
+		ONTOLOGY_STATEMENT("ontology_statement", OntologyStatement.class, OntologyIconLibrary.ONTOLOGY_STATEMENT_ICON),*/
 	CALC_LIBRARY("calc_library", ViewPointLibrary.class, VPMIconLibrary.CALC_LIBRARY_ICON),
 	CALC_FOLDER("calc_folder", ViewPointFolder.class, IconLibrary.FOLDER_ICON),
 	ONTOLOGY_CALC("calc", ViewPoint.class, VPMIconLibrary.CALC_ICON),

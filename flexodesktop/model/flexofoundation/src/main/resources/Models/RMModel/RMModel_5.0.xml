@@ -36,6 +36,8 @@
     <property name="resourcesCount" xmlTag="resourcesCount"/> 
     <property name="projectName" xmlTag="name" attribute="YES"/> 
     <property name="projectURI" xmlTag="projectURI" attribute="YES"/> 
+    <property name="version" xmlTag="version" attribute="YES"/> 
+    <property name="revision" xmlTag="revision" attribute="YES"/> 
     <property name="projectVersionURI" xmlTag="projectVersionURI" attribute="YES"/> 
     <property name="projectDescription" xmlTag="description" text="YES" description="Description of the project"/> 
     <property name="externalRepositories" xmlTag="ProjectExternalRepository" type="vector" primary="yes"/> 
@@ -61,16 +63,23 @@
 	<property name="synchronizedResources" xmlTag="SynchronizedResources"/>
   </entity>
   
-  <entity name="org.openflexo.foundation.rm.DependentResources" xmlTag="DependantResources">
+  <entity name="org.openflexo.foundation.rm.ResourceList" abstract="YES">
 	<property name="serialisationResources" contains="org.openflexo.foundation.rm.FlexoResource" type="vector" primary="no"/>
+	<property name="externalResources" contains="org.openflexo.foundation.rm.ExternalResource" type="vector" primary="yes"/>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.rm.DependentResources" xmlTag="DependantResources">
   </entity>
   
   <entity name="org.openflexo.foundation.rm.AlteredResources" xmlTag="AlteredResources">
-	<property name="serialisationResources" contains="org.openflexo.foundation.rm.FlexoResource" type="vector" primary="no"/>
   </entity>
   
   <entity name="org.openflexo.foundation.rm.SynchronizedResources" xmlTag="SynchronizedResources">
-	<property name="serialisationResources" contains="org.openflexo.foundation.rm.FlexoResource" type="vector" primary="no"/>
+  </entity>
+  
+  <entity name="org.openflexo.foundation.rm.ExternalResource" xmlTag="ExternalResource" contexts="Copy">
+    <property name="projectURI" xmlTag="projectURI"/>
+    <property name="resourceIdentifier" xmlTag="resourceIdentifier"/>
   </entity>
   
   <entity name="org.openflexo.foundation.rm.FlexoFileResource" abstract="YES" contexts="Copy">
@@ -78,6 +87,13 @@
   </entity>
   
   <entity name="org.openflexo.foundation.rm.FlexoStorageResource" abstract="YES">
+  </entity>
+  
+  <entity name="org.openflexo.foundation.rm.FlexoPamelaResource" xmlTag="PamelaResource">
+    <property name="resourceDataClass" xmlTag="class" attribute="YES"/>
+    <property name="name" xmlTag="name" attribute="YES"/>
+    <property name="resourceType" xmlTag="type" attribute="YES"/>
+    <property name="useProjectName" xmlTag="useProjectName" attribute="YES"/>
   </entity>
   
   <entity name="org.openflexo.foundation.rm.FlexoXMLStorageResource" abstract="YES">
@@ -100,13 +116,19 @@
   </entity>
 
   
-  <entity name="org.openflexo.foundation.rm.FlexoWorkflowResource" xmlTag="Workflow"/>
+  <entity name="org.openflexo.foundation.rm.FlexoWorkflowResource" xmlTag="Workflow">
+     <property name="projectURI" xmlTag="projectURI" attribute="YES"/>
+     <property name="resourceType" xmlTag="resourceType" attribute="YES"/>
+     <property name="name" xmlTag="name" attribute="YES"/>
+  </entity>
   
   <entity name="org.openflexo.foundation.rm.FlexoDMResource" xmlTag="DataModel"/>
 
   <entity name="org.openflexo.foundation.rm.FlexoEOModelResource" xmlTag="EOModel"/>
 
   <entity name="org.openflexo.foundation.rm.FlexoProjectOntologyResource" xmlTag="ProjectOntology"/>
+  
+  <entity name="org.openflexo.foundation.rm.FlexoXMLModelResource" xmlTag="XMLModel"/>
 
   <entity name="org.openflexo.foundation.rm.FlexoOEShemaLibraryResource" xmlTag="ShemaLibrary"/>
 
@@ -177,8 +199,6 @@
 
   <entity name="org.openflexo.foundation.rm.FlexoTOCResource" xmlTag="TOCResource"/>
  
-  <entity name="org.openflexo.foundation.rm.FlexoLinksResource" xmlTag="LinksResource"/>
-  
   <entity name="org.openflexo.foundation.rm.cg.CGRepositoryFileResource" abstract="yes" genericTypingStoredIn="resourceClassName">
  	<property name="name" xmlTag="name" attribute="YES"/>
  	<property name="lastAcceptingDate" xmlTag="lastAcceptingDate" attribute="YES"/>
@@ -214,6 +234,7 @@
 
    <entity name="org.openflexo.foundation.rm.FlexoCopiedResource" xmlTag="CopiedResource">
 	   <property name="resourceToCopy" primary="no" context="Copy" contains="org.openflexo.foundation.rm.FlexoFileResource"/>
+	   <property name="externalResourceToCopy" primary="no" context="Copy" contains="org.openflexo.foundation.rm.ExternalResource"/>
    </entity>
    
    <entity name="org.openflexo.foundation.rm.cg.CopyOfFlexoResource" xmlTag="CopyOfFlexoResource">

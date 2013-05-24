@@ -41,6 +41,7 @@ import org.openflexo.foundation.view.ViewShape;
 import org.openflexo.foundation.viewpoint.GraphicalElementAction;
 import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.GraphicalElementSpecification;
+import org.openflexo.foundation.viewpoint.LinkScheme;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.toolbox.ToolBox;
@@ -54,12 +55,24 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 	 * Constructor invoked during deserialization DO NOT use it
 	 */
 	public VEShapeGR(VEShemaBuilder builder) {
-		this(null, null);
+		super(ShapeType.RECTANGLE, null, null);
 	}
 
 	public VEShapeGR(ViewShape aShape, Drawing<?> aDrawing) {
 		super(ShapeType.RECTANGLE, aShape, aDrawing);
 
+		registerShapeGR(aShape, aDrawing);
+	}
+
+	public boolean isGRRegistered = false;
+
+	public boolean isGRRegistered() {
+		return isGRRegistered;
+	}
+
+	public void registerShapeGR(ViewShape aShape, Drawing<?> aDrawing) {
+		setDrawable(aShape);
+		setDrawing(aDrawing);
 		addToMouseClickControls(new VEShemaController.ShowContextualMenuControl());
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
 			addToMouseClickControls(new VEShemaController.ShowContextualMenuControl(true));
@@ -75,9 +88,7 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 		if (aShape != null) {
 			aShape.update();
 		}
-
-		// setBorder(new ShapeGraphicalRepresentation.ShapeBorder(25, 25, 25, 25));
-
+		isGRRegistered = true;
 	}
 
 	private void registerMouseClickControls() {
@@ -115,6 +126,14 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 
 	public ViewShape getOEShape() {
 		return getDrawable();
+	}
+
+	@Override
+	public int getIndex() {
+		if (getOEShape() != null) {
+			return getOEShape().getIndex();
+		}
+		return super.getIndex();
 	}
 
 	@Override
@@ -209,10 +228,37 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 			controlAreas.addElementList(super.getControlAreas());
 			if (getOEShape().providesSupportAsPrimaryRole() && getOEShape().getAvailableLinkSchemeFromThisShape() != null
 					&& getOEShape().getAvailableLinkSchemeFromThisShape().size() > 0) {
-				controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.EAST));
-				controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.WEST));
-				controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.NORTH));
-				controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.SOUTH));
+				boolean northDirectionSupported = false;
+				boolean eastDirectionSupported = false;
+				boolean southDirectionSupported = false;
+				boolean westDirectionSupported = false;
+				for (LinkScheme ls : getOEShape().getAvailableLinkSchemeFromThisShape()) {
+					if (ls.getNorthDirectionSupported()) {
+						northDirectionSupported = true;
+					}
+					if (ls.getEastDirectionSupported()) {
+						eastDirectionSupported = true;
+					}
+					if (ls.getSouthDirectionSupported()) {
+						southDirectionSupported = true;
+					}
+					if (ls.getWestDirectionSupported()) {
+						westDirectionSupported = true;
+					}
+				}
+
+				if (northDirectionSupported) {
+					controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.NORTH));
+				}
+				if (eastDirectionSupported) {
+					controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.EAST));
+				}
+				if (southDirectionSupported) {
+					controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.SOUTH));
+				}
+				if (westDirectionSupported) {
+					controlAreas.addElement(new FloatingPalette(this, getDrawable().getShema(), SimplifiedCardinalDirection.WEST));
+				}
 			}
 		}
 		return controlAreas;
@@ -225,4 +271,5 @@ public class VEShapeGR extends ShapeGraphicalRepresentation<ViewShape> implement
 	public boolean getContinuousTextEditing() {
 		return false;
 	}
+
 }

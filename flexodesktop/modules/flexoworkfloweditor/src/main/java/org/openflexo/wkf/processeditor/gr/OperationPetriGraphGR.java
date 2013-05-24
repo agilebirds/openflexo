@@ -43,8 +43,8 @@ public class OperationPetriGraphGR extends ContainerGR<OperationPetriGraph> {
 
 	@Override
 	public String getLabel() {
-		return (getOperationPetriGraph().getContainer() instanceof AbstractNode ? ((AbstractNode) getOperationPetriGraph().getContainer())
-				.getName() : "???");
+		return getOperationPetriGraph().getContainer() instanceof AbstractNode ? ((AbstractNode) getOperationPetriGraph().getContainer())
+				.getName() : "???";
 	}
 
 	@Override

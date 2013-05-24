@@ -1,7 +1,7 @@
-<inspector title = "EOModel" inheritsfrom="DMObject.inspector">
+<inspector title = "EOModel" inspectedClassName="org.openflexo.foundation.dm.DMEOModel" inheritsfrom="DMObject.inspector">
 	<tab name="Basic" index="0">
 		<property name="entitySubPath" label="entity_subpath" widget="TEXT_FIELD" constraint="0">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="name" label="name" widget="TEXT_FIELD" constraint="1">
 			<param name="columns" value="10"/>

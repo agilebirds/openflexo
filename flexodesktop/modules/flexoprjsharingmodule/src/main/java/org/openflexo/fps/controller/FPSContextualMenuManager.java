@@ -22,7 +22,6 @@ package org.openflexo.fps.controller;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.ContextualMenuManager;
 
@@ -36,8 +35,8 @@ public class FPSContextualMenuManager extends ContextualMenuManager {
 
 	private FPSController _controller;
 
-	public FPSContextualMenuManager(FPSSelectionManager selectionManager, FlexoEditor editor, FPSController controller) {
-		super(selectionManager, editor);
+	public FPSContextualMenuManager(FPSSelectionManager selectionManager, FPSController controller) {
+		super(selectionManager, controller);
 		_controller = controller;
 	}
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="twocols" darkLevel="0" dataClassName="org.openflexo.foundation.ontology.OntologyLibrary" controllerClassName="org.openflexo.view.controller.FlexoFIBController">
+  <Browser root="data" iteratorClassName="org.openflexo.foundation.FlexoModelObject" visibleRowCount="5" rowHeight="18" boundToSelectionManager="true" selectionMode="DiscontiguousTreeSelection" showFooter="true" rootVisible="true" showRootsHandle="true" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="TemplatesBrowser" localize="true" manageDynamicModel="true" clickAction="controller.singleClick(OntologyLibraryBrowser.selected)" doubleClickAction="controller.doubleClick(OntologyLibraryBrowser.selected)">
+    <BrowserElement dataClassName="org.openflexo.foundation.cg.templates.CGDocTemplates" label="&quot;Templates&quot;" icon="controller.iconForObject(templates)" isEditable="false" filtered="false" defaultVisible="true" name="templates">
+      <Children data="templates.applicationRepository" name="applicationTemplate" />
+      <Children data="templates.customDocRepositoriesVector" name="customTemplates" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.cg.templates.CustomCGTemplateRepository" label="customRepository.name" icon="controller.iconForObject(customRepository)" isEditable="false" filtered="false" defaultVisible="true" name="customRepository">
+      <Children data="customRepository.targetSpecificTemplateSets" name="targetSpecificTemplates" />
+      <Children data="customRepository.commonTemplates.templateList" name="commonTemplates" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.cg.templates.CGTemplateRepository" label="&quot;Default templates&quot;" icon="controller.iconForObject(applicationRepository)" isEditable="false" filtered="false" defaultVisible="true" name="applicationRepository">
+      <Children data="applicationRepository.targetSpecificTemplateSets" name="targetSpecificTemplates" />
+      <Children data="applicationRepository.commonTemplates.templateList" name="commonTemplates" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.cg.templates.TargetSpecificCGTemplateSet" label="templateSet.name" icon="controller.iconForObject(templateSet)" isEditable="false" filtered="false" defaultVisible="true" name="templateSet">
+      <Children data="templateSet.templateList" name="templates" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.cg.templates.CGTemplate" label="template.templateName" icon="controller.iconForObject(template)" isEditable="false" filtered="false" defaultVisible="true" name="template" />
+  </Browser>
+  <LocalizedDictionary />
+</Panel>
+

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.cg.CGFile" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Templates" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="TemplatesTab">
+      <Label label="generated" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="IsCodeGenerationAvailableLabel" localize="true" />
+      <CheckBox selected="false" index="1" data="data.isCodeGenerationAvailable" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="IsCodeGenerationAvailable" readOnly="true" localize="true" />
+      <Label label="requires_following_templates" align="center" index="2" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;location=center)" visible="(data.isCodeGenerationAvailable = true)" name="ResourcegeneratorusedTemplatesLabel" localize="true" />
+      <Table iteratorClassName="org.openflexo.foundation.cg.templates.CGTemplate" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="ResourcegeneratorusedTemplates" index="3" data="data.resource.generator.usedTemplates" constraints="twocols(expandHorizontally=true;expandVertically=true;index=3;location=right)" visible="(data.isCodeGenerationAvailable = true)">
+        <IconColumn data="iterator.templateIcon" title="connected" columnWidth="25" resizable="false" displayTitle="false" />
+        <LabelColumn data="iterator.relativePathWithoutSetPrefix" title="file_name" columnWidth="100" resizable="true" displayTitle="true" />
+        <LabelColumn data="iterator.repository.name" title="repository" columnWidth="100" resizable="true" displayTitle="true" />
+        <LabelColumn data="iterator.set.name" title="set" columnWidth="100" resizable="true" displayTitle="true" />
+        <CustomAction method="data.showTemplate(selected)" isAvailable="data.isShowable(selected)" name="show" />
+        <CustomAction method="data.redefineTemplate(selected)" isAvailable="data.isApplicationTemplate(selected)" name="redefine" />
+        <CustomAction method="data.editTemplate(selected)" isAvailable="data.isCustomTemplate(selected)" name="edit" />
+      </Table>
+    </Tab>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="last_generated_on" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="MemoryLastGenerationDateAsStringLabel" localize="true" />
+      <TextField index="1" data="data.generationStatus.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="GenerationStatus" readOnly="true" localize="true" />
+      <Label label="last_written_to_disk_on" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" name="LastGenerationDateAsStringLabel" localize="true" />
+      <TextField index="3" data="data.lastGenerationDateAsString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)" name="LastGenerationDateAsString" readOnly="true" localize="true" />
+      <Label label="disk_modified_date" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" name="DiskLastModifiedDateAsStringLabel" localize="true" />
+      <TextField index="5" data="data.diskLastModifiedDateAsString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" name="DiskLastModifiedDateAsString" readOnly="true" localize="true" />
+      <Label label="last_accepted_on" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" name="LastAcceptingDateAsStringLabel" localize="true" />
+      <TextField index="7" data="data.lastAcceptingDateAsString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;location=right)" name="LastAcceptingDateAsString" readOnly="true" localize="true" />
+      <Label label="last_generation_checked_on" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" name="LastGenerationCheckedDateAsStringLabel" localize="true" />
+      <TextField index="9" data="data.lastGenerationCheckedDateAsString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;location=right)" name="LastGenerationCheckedDateAsString" readOnly="true" localize="true" />
+      <TextField index="1" data="data.memoryLastGenerationDateAsString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;location=right)" name="MemoryLastGenerationDateAsString" readOnly="true" localize="true" />
+      <Label label="status" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;insetsTop=5;location=left)" name="GenerationStatusLabel" localize="true" />
+      <Label label="last_update" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=12;insetsTop=5;location=left)" name="LastUpdateAsStringLabel" localize="true" />
+      <TextField index="13" data="data.lastUpdateAsString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;location=right)" name="LastUpdateAsString" readOnly="true" localize="true" />
+      <Label label="needs_update_reason" index="14" constraints="twocols(expandHorizontally=false;expandVertically=false;index=14;insetsTop=5;location=left)" name="NeedsUpdateReasonLabel" localize="true" />
+      <TextArea index="15" data="data.needsUpdateReason" constraints="twocols(expandHorizontally=true;expandVertically=true;index=15;location=right)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="NeedsUpdateReason" readOnly="true" localize="true" />
+    </Tab>
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="name" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="FileNameLabel" localize="true" />
+      <TextField index="1" data="data.fileName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="FileName" readOnly="true" localize="true" />
+      <Label label="description" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" name="DescriptionLabel" localize="true" />
+      <TextArea rows="10" index="3" data="data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=3;location=right)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="Description" localize="true" />
+      <Label label="path" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" name="PathNameLabel" localize="true" />
+      <TextField index="5" data="data.pathName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" name="PathName" readOnly="true" localize="true" />
+      <Label label="exclude_from_generation" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" name="MarkedAsDoNotGenerateLabel" localize="true" />
+      <CheckBox selected="false" index="9" data="data.markedAsDoNotGenerate" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" name="MarkedAsDoNotGenerate" tooltipText="true if it needs to be ignored when generating" localize="true" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Templates" lang="English">Templates</Localized>
+    <Localized key="Templates" lang="French">Templates</Localized>
+    <Localized key="Templates" lang="Dutch">Templates</Localized>
+    <Localized key="generated" lang="English">generated</Localized>
+    <Localized key="generated" lang="French">generated</Localized>
+    <Localized key="generated" lang="Dutch">generated</Localized>
+    <Localized key="requires_following_templates" lang="English">requires_following_templates</Localized>
+    <Localized key="requires_following_templates" lang="French">requires_following_templates</Localized>
+    <Localized key="requires_following_templates" lang="Dutch">requires_following_templates</Localized>
+    <Localized key="Advanced" lang="English">Advanced</Localized>
+    <Localized key="Advanced" lang="French">Advanced</Localized>
+    <Localized key="Advanced" lang="Dutch">Advanced</Localized>
+    <Localized key="last_generated_on" lang="English">last_generated_on</Localized>
+    <Localized key="last_generated_on" lang="French">last_generated_on</Localized>
+    <Localized key="last_generated_on" lang="Dutch">last_generated_on</Localized>
+    <Localized key="status" lang="English">status</Localized>
+    <Localized key="status" lang="French">status</Localized>
+    <Localized key="status" lang="Dutch">status</Localized>
+    <Localized key="last_written_to_disk_on" lang="English">last_written_to_disk_on</Localized>
+    <Localized key="last_written_to_disk_on" lang="French">last_written_to_disk_on</Localized>
+    <Localized key="last_written_to_disk_on" lang="Dutch">last_written_to_disk_on</Localized>
+    <Localized key="disk_modified_date" lang="English">disk_modified_date</Localized>
+    <Localized key="disk_modified_date" lang="French">disk_modified_date</Localized>
+    <Localized key="disk_modified_date" lang="Dutch">disk_modified_date</Localized>
+    <Localized key="last_accepted_on" lang="English">last_accepted_on</Localized>
+    <Localized key="last_accepted_on" lang="French">last_accepted_on</Localized>
+    <Localized key="last_accepted_on" lang="Dutch">last_accepted_on</Localized>
+    <Localized key="last_generation_checked_on" lang="English">last_generation_checked_on</Localized>
+    <Localized key="last_generation_checked_on" lang="French">last_generation_checked_on</Localized>
+    <Localized key="last_generation_checked_on" lang="Dutch">last_generation_checked_on</Localized>
+    <Localized key="last_update" lang="English">last_update</Localized>
+    <Localized key="last_update" lang="French">last_update</Localized>
+    <Localized key="last_update" lang="Dutch">last_update</Localized>
+    <Localized key="needs_update_reason" lang="English">needs_update_reason</Localized>
+    <Localized key="needs_update_reason" lang="French">needs_update_reason</Localized>
+    <Localized key="needs_update_reason" lang="Dutch">needs_update_reason</Localized>
+    <Localized key="Basic" lang="English">Basic</Localized>
+    <Localized key="Basic" lang="French">Basic</Localized>
+    <Localized key="Basic" lang="Dutch">Basic</Localized>
+    <Localized key="name" lang="English">name</Localized>
+    <Localized key="name" lang="French">name</Localized>
+    <Localized key="name" lang="Dutch">name</Localized>
+    <Localized key="description" lang="English">description</Localized>
+    <Localized key="description" lang="French">description</Localized>
+    <Localized key="description" lang="Dutch">description</Localized>
+    <Localized key="path" lang="English">path</Localized>
+    <Localized key="path" lang="French">path</Localized>
+    <Localized key="path" lang="Dutch">path</Localized>
+    <Localized key="exclude_from_generation" lang="English">exclude_from_generation</Localized>
+    <Localized key="exclude_from_generation" lang="French">exclude_from_generation</Localized>
+    <Localized key="exclude_from_generation" lang="Dutch">exclude_from_generation</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="generated_code_file" />
+</Panel>

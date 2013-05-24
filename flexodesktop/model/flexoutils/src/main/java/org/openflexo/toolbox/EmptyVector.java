@@ -39,6 +39,11 @@ public class EmptyVector<T> extends Vector<T> {
 
 	public static final Vector EMPTY_VECTOR = new EmptyVector();
 
+	@SuppressWarnings("unchecked")
+	public static <T> Vector<T> EMPTY_VECTOR() {
+		return EMPTY_VECTOR;
+	}
+
 	public static <T> Vector<T> EMPTY_VECTOR(Class<T> c) {
 		if (values.get(c) == null) {
 			values.put(c, new EmptyVector<T>());

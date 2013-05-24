@@ -19,7 +19,7 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -50,11 +50,11 @@ public class GoToCorrespondingJavaInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<GoToCorrespondingJava> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<GoToCorrespondingJava>() {
 			@Override
-			public boolean run(ActionEvent e, GoToCorrespondingJava action) {
+			public boolean run(EventObject e, GoToCorrespondingJava action) {
 				CGWOFile file = action.getFocusedObject();
 				for (CGFile f : file.getRepository().getFiles()) {
-					if ((f != file) && (f instanceof CGJavaFile) && (f.getResource() != null)
-							&& (f.getResource().getGenerator() == file.getResource().getGenerator())) {
+					if (f != file && f instanceof CGJavaFile && f.getResource() != null
+							&& f.getResource().getGenerator() == file.getResource().getGenerator()) {
 						getController().setCurrentEditedObjectAsModuleView(f);
 						return true;
 					}

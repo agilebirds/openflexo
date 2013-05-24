@@ -54,16 +54,20 @@ public class SuroundWithConditional extends IEOperatorAction {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
 			return isSelectionValid(sel(object, globalSelection));
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IEWidget.class);
+	}
 
 	private ConditionalOperator newConditional;
 
@@ -74,8 +78,8 @@ public class SuroundWithConditional extends IEOperatorAction {
 	@Override
 	protected void doAction(Object context) {
 		IEObject currentCommonFather = ((IEWidget) getGlobalSelection().elementAt(0)).getParent();
-		IEWOComponent wo = (currentCommonFather instanceof IEWOComponent ? (IEWOComponent) currentCommonFather
-				: ((IEWidget) currentCommonFather).getWOComponent());
+		IEWOComponent wo = currentCommonFather instanceof IEWOComponent ? (IEWOComponent) currentCommonFather
+				: ((IEWidget) currentCommonFather).getWOComponent();
 		sequenceIsNew = false;
 		IESequence seq = findSequenceSurrounding(true);
 		if (seq != null) {

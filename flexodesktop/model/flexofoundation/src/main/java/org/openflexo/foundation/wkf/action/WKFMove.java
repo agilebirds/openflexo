@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.wkf.WKFObject;
@@ -46,16 +47,20 @@ public class WKFMove extends FlexoUndoableAction<WKFMove, WKFObject, WKFObject> 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
-			return true;
+		public boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+			return false;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
-			return ((globalSelection != null) && (globalSelection.size() > 0));
+		public boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+			return globalSelection != null && globalSelection.size() > 0;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, WKFObject.class);
+	}
 
 	private String graphicalContext;
 	private Hashtable<WKFObject, Point2D.Double> initialLocations;

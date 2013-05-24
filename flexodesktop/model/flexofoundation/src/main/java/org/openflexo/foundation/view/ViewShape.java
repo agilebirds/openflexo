@@ -22,10 +22,13 @@ package org.openflexo.foundation.view;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.LinkScheme;
+import org.openflexo.foundation.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 
@@ -58,6 +61,41 @@ public class ViewShape extends ViewElement {
 		super(shema);
 		incomingConnectors = new Vector<ViewConnector>();
 		outgoingConnectors = new Vector<ViewConnector>();
+	}
+
+	@Override
+	public void setDescription(String description) {
+		super.setDescription(description);
+	}
+
+	@Override
+	public ShapeGraphicalRepresentation<ViewShape> getGraphicalRepresentation() {
+		return (ShapeGraphicalRepresentation<ViewShape>) super.getGraphicalRepresentation();
+	}
+
+	/**
+	 * Reset graphical representation to be the one defined in related pattern role
+	 */
+	@Override
+	public void resetGraphicalRepresentation() {
+		getGraphicalRepresentation().setsWith(getPatternRole().getGraphicalRepresentation(), GraphicalRepresentation.Parameters.text,
+				GraphicalRepresentation.Parameters.isVisible, GraphicalRepresentation.Parameters.absoluteTextX,
+				GraphicalRepresentation.Parameters.absoluteTextY, ShapeGraphicalRepresentation.Parameters.x,
+				ShapeGraphicalRepresentation.Parameters.y, ShapeGraphicalRepresentation.Parameters.width,
+				ShapeGraphicalRepresentation.Parameters.height, ShapeGraphicalRepresentation.Parameters.relativeTextX,
+				ShapeGraphicalRepresentation.Parameters.relativeTextY);
+		refreshGraphicalRepresentation();
+	}
+
+	/**
+	 * Refresh graphical representation
+	 */
+	@Override
+	public void refreshGraphicalRepresentation() {
+		super.refreshGraphicalRepresentation();
+		getGraphicalRepresentation().updateConstraints();
+		getGraphicalRepresentation().notifyShapeNeedsToBeRedrawn();
+		getGraphicalRepresentation().notifyObjectHasMoved();
 	}
 
 	@Override
@@ -150,7 +188,7 @@ public class ViewShape extends ViewElement {
 		if (o == this) {
 			return true;
 		}
-		if ((getParent() != null) && (getParent() == o)) {
+		if (getParent() != null && getParent() == o) {
 			return true;
 		}
 		if (getParent() != null) {
@@ -193,12 +231,10 @@ public class ViewShape extends ViewElement {
 
 		for (EditionPattern ep1 : calc.getEditionPatterns()) {
 			for (DropScheme ds : ep1.getDropSchemes()) {
-				if (ds.getTargetEditionPattern() == targetEditionPattern || (ds.getTopTarget() && targetEditionPattern == null)) {
+				if (ds.getTargetEditionPattern() == targetEditionPattern || ds.getTopTarget() && targetEditionPattern == null) {
 					for (EditionPattern ep2 : calc.getEditionPatterns()) {
 						for (LinkScheme ls : ep2.getLinkSchemes()) {
-							if (ls.getFromTargetEditionPattern().isAssignableFrom(getEditionPattern())
-									&& ls.getToTargetEditionPattern().isAssignableFrom(ds.getEditionPattern())
-									&& ls.getIsAvailableWithFloatingPalette()) {
+							if (ls.isValidTarget(getEditionPattern(), ds.getEditionPattern()) && ls.getIsAvailableWithFloatingPalette()) {
 								// This candidate is acceptable
 								availableLinkSchemeFromThisShape.add(new DropAndLinkScheme(ds, ls));
 							}
@@ -228,9 +264,12 @@ public class ViewShape extends ViewElement {
 
 		for (EditionPattern ep : calc.getEditionPatterns()) {
 			for (LinkScheme ls : ep.getLinkSchemes()) {
-				if (ls.getFromTargetEditionPattern().isAssignableFrom(getEditionPattern()) && ls.getIsAvailableWithFloatingPalette()) {
-					// This candidate is acceptable
-					availableLinkSchemeFromThisShape.add(ls);
+				for (EditionPattern ep1 : calc.getEditionPatterns()) {
+					if (ls.isValidTarget(getEditionPattern(), ep1) && ls.getIsAvailableWithFloatingPalette()) {
+						// This candidate is acceptable
+						availableLinkSchemeFromThisShape.add(ls);
+						break;
+					}
 				}
 			}
 		}
@@ -238,4 +277,8 @@ public class ViewShape extends ViewElement {
 		return availableLinkSchemeFromThisShape;
 	}
 
+	@Override
+	public ShapePatternRole getPatternRole() {
+		return (ShapePatternRole) super.getPatternRole();
+	}
 }

@@ -22,6 +22,7 @@ package org.openflexo.foundation.viewpoint;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public abstract class ControlStructureAction extends EditionAction implements ActionContainer {
@@ -30,7 +31,8 @@ public abstract class ControlStructureAction extends EditionAction implements Ac
 
 	private Vector<EditionAction> actions;
 
-	public ControlStructureAction() {
+	public ControlStructureAction(ViewPointBuilder builder) {
+		super(builder);
 		actions = new Vector<EditionAction>();
 	}
 
@@ -138,7 +140,7 @@ public abstract class ControlStructureAction extends EditionAction implements Ac
 
 	@Override
 	public AddShape createAddShapeAction() {
-		AddShape newAction = new AddShape();
+		AddShape newAction = new AddShape(null);
 		if (getEditionPattern().getDefaultShapePatternRole() != null) {
 			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultShapePatternRole().getPatternRoleName()));
 		}
@@ -148,49 +150,49 @@ public abstract class ControlStructureAction extends EditionAction implements Ac
 
 	@Override
 	public AddClass createAddClassAction() {
-		AddClass newAction = new AddClass();
+		AddClass newAction = new AddClass(null);
 		addToActions(newAction);
 		return newAction;
 	}
 
 	@Override
 	public AddIndividual createAddIndividualAction() {
-		AddIndividual newAction = new AddIndividual();
+		AddIndividual newAction = new AddIndividual(null);
 		addToActions(newAction);
 		return newAction;
 	}
 
 	@Override
 	public AddObjectPropertyStatement createAddObjectPropertyStatementAction() {
-		AddObjectPropertyStatement newAction = new AddObjectPropertyStatement();
+		AddObjectPropertyStatement newAction = new AddObjectPropertyStatement(null);
 		addToActions(newAction);
 		return newAction;
 	}
 
 	@Override
 	public AddDataPropertyStatement createAddDataPropertyStatementAction() {
-		AddDataPropertyStatement newAction = new AddDataPropertyStatement();
+		AddDataPropertyStatement newAction = new AddDataPropertyStatement(null);
 		addToActions(newAction);
 		return newAction;
 	}
 
 	@Override
 	public AddIsAStatement createAddIsAPropertyAction() {
-		AddIsAStatement newAction = new AddIsAStatement();
+		AddIsAStatement newAction = new AddIsAStatement(null);
 		addToActions(newAction);
 		return newAction;
 	}
 
 	@Override
 	public AddRestrictionStatement createAddRestrictionAction() {
-		AddRestrictionStatement newAction = new AddRestrictionStatement();
+		AddRestrictionStatement newAction = new AddRestrictionStatement(null);
 		addToActions(newAction);
 		return newAction;
 	}
 
 	@Override
 	public AddConnector createAddConnectorAction() {
-		AddConnector newAction = new AddConnector();
+		AddConnector newAction = new AddConnector(null);
 		if (getEditionPattern().getDefaultConnectorPatternRole() != null) {
 			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultConnectorPatternRole().getPatternRoleName()));
 		}
@@ -200,42 +202,76 @@ public abstract class ControlStructureAction extends EditionAction implements Ac
 
 	@Override
 	public DeclarePatternRole createDeclarePatternRoleAction() {
-		DeclarePatternRole newAction = new DeclarePatternRole();
+		DeclarePatternRole newAction = new DeclarePatternRole(null);
 		addToActions(newAction);
 		return newAction;
 	}
 
 	@Override
 	public GraphicalAction createGraphicalAction() {
-		GraphicalAction newAction = new GraphicalAction();
+		GraphicalAction newAction = new GraphicalAction(null);
 		addToActions(newAction);
 		return newAction;
 	}
 
 	@Override
 	public AddDiagram createAddDiagramAction() {
-		AddDiagram newAction = new AddDiagram();
+		AddDiagram newAction = new AddDiagram(null);
 		addToActions(newAction);
 		return newAction;
 	}
 
 	@Override
 	public AddEditionPattern createAddEditionPatternAction() {
-		AddEditionPattern newAction = new AddEditionPattern();
+		AddEditionPattern newAction = new AddEditionPattern(null);
 		addToActions(newAction);
 		return newAction;
 	}
 
 	@Override
 	public ConditionalAction createConditionalAction() {
-		ConditionalAction newAction = new ConditionalAction();
+		ConditionalAction newAction = new ConditionalAction(null);
 		addToActions(newAction);
 		return newAction;
 	}
 
 	@Override
 	public IterationAction createIterationAction() {
-		IterationAction newAction = new IterationAction();
+		IterationAction newAction = new IterationAction(null);
+		addToActions(newAction);
+		return newAction;
+	}
+
+	@Override
+	public CloneShape createCloneShapeAction() {
+		CloneShape newAction = new CloneShape(null);
+		if (getEditionPattern().getDefaultShapePatternRole() != null) {
+			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultShapePatternRole().getPatternRoleName()));
+		}
+		addToActions(newAction);
+		return newAction;
+	}
+
+	@Override
+	public CloneConnector createCloneConnectorAction() {
+		CloneConnector newAction = new CloneConnector(null);
+		if (getEditionPattern().getDefaultConnectorPatternRole() != null) {
+			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultConnectorPatternRole().getPatternRoleName()));
+		}
+		addToActions(newAction);
+		return newAction;
+	}
+
+	@Override
+	public CloneIndividual createCloneIndividualAction() {
+		CloneIndividual newAction = new CloneIndividual(null);
+		addToActions(newAction);
+		return newAction;
+	}
+
+	@Override
+	public DeleteAction createDeleteAction() {
+		DeleteAction newAction = new DeleteAction(null);
 		addToActions(newAction);
 		return newAction;
 	}

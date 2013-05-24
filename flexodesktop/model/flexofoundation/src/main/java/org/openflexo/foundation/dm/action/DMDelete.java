@@ -51,12 +51,12 @@ public class DMDelete extends FlexoUndoableAction<DMDelete, DMObject, DMObject> 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
+		public boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
 			if (globalSelection == null) {
 				return false;
 			}
@@ -75,6 +75,10 @@ public class DMDelete extends FlexoUndoableAction<DMDelete, DMObject, DMObject> 
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMObject.class);
+	}
 
 	protected DMDelete(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -125,7 +129,7 @@ public class DMDelete extends FlexoUndoableAction<DMDelete, DMObject, DMObject> 
 					boolean includesIt = true;
 					for (Enumeration en2 = getGlobalSelectionAndFocusedObject().elements(); en2.hasMoreElements();) {
 						FlexoModelObject next = (FlexoModelObject) en2.nextElement();
-						if ((next instanceof DMObject) && (((DMObject) next).isDeletable()) && (next != object)) {
+						if (next instanceof DMObject && ((DMObject) next).isDeletable() && next != object) {
 							if (((DMObject) next).getAllEmbeddedDeleted().contains(object)) {
 								includesIt = false;
 							}
@@ -163,7 +167,7 @@ public class DMDelete extends FlexoUndoableAction<DMDelete, DMObject, DMObject> 
 	private void deleteObject(DMObject object) {
 		if (object instanceof DMEOModel) {
 			Boolean deleteEOModelFile = _deletionContexts.get(object);
-			((DMEOModel) object).delete((deleteEOModelFile != null ? deleteEOModelFile.booleanValue() : false));
+			((DMEOModel) object).delete(deleteEOModelFile != null ? deleteEOModelFile.booleanValue() : false);
 		} else if (object instanceof DMEORepository) {
 			Boolean deleteEOModelFiles = _deletionContexts.get(object);
 			if (deleteEOModelFiles == null) {

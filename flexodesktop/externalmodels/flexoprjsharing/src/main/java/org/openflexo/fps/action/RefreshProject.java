@@ -46,13 +46,13 @@ public class RefreshProject extends CVSAction<RefreshProject, SharedProject> {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(SharedProject object, Vector<FPSObject> globalSelection) {
+		public boolean isVisibleForSelection(SharedProject object, Vector<FPSObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(SharedProject object, Vector<FPSObject> globalSelection) {
-			return (object != null);
+		public boolean isEnabledForSelection(SharedProject object, Vector<FPSObject> globalSelection) {
+			return object != null;
 		}
 
 	};

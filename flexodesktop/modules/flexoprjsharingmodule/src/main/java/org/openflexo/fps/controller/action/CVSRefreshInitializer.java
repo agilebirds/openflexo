@@ -25,13 +25,15 @@ import javax.swing.Icon;
 
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
+import org.openflexo.fps.FPSObject;
 import org.openflexo.fps.FlexoAuthentificationException;
 import org.openflexo.fps.action.CVSRefresh;
+import org.openflexo.fps.action.FlexoUnknownHostException;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-public class CVSRefreshInitializer extends ActionInitializer {
+public class CVSRefreshInitializer extends ActionInitializer<CVSRefresh, FPSObject, FPSObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -49,8 +51,15 @@ public class CVSRefreshInitializer extends ActionInitializer {
 		return new FlexoExceptionHandler<CVSRefresh>() {
 			@Override
 			public boolean handleException(FlexoException exception, CVSRefresh action) {
+				boolean redoAction = false;
 				if (exception instanceof FlexoAuthentificationException) {
-					getControllerActionInitializer().handleAuthenticationException((FlexoAuthentificationException) exception);
+					redoAction = getControllerActionInitializer().handleAuthenticationException((FlexoAuthentificationException) exception);
+				} else if (exception instanceof FlexoUnknownHostException) {
+					redoAction = getControllerActionInitializer().handleUnknownHostException((FlexoUnknownHostException) exception);
+				}
+				if (redoAction) {
+					getEditor().performActionType(CVSRefresh.actionType, action.getFocusedObject(), action.getGlobalSelection(), null);
+					return true;
 				}
 				return false;
 			}

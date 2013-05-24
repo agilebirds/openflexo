@@ -24,7 +24,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.NameChanged;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingConnectorRemoved;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShapeInserted;
@@ -44,7 +46,7 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 	// For a CalcDrawingSchema, graphicalRepresentation is a DrawingGraphicalRepresentation
 	// For a CalcDrawingShape, graphicalRepresentation is a ShapeGraphicalRepresentation
 	// For a CalcDrawingConnector, graphicalRepresentation is a ConnectorGraphicalRepresentation
-	private Object _graphicalRepresentation;
+	private GraphicalRepresentation<?> _graphicalRepresentation;
 
 	// ==========================================================================
 	// ============================= Constructor
@@ -54,8 +56,8 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 	/**
 	 * Never use this constructor except for ComponentLibrary
 	 */
-	public ExampleDrawingObject() {
-		super();
+	public ExampleDrawingObject(ViewPointBuilder builder) {
+		super(builder);
 		childs = new Vector<ExampleDrawingObject>();
 	}
 
@@ -137,11 +139,11 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 		}
 	}
 
-	public Object getGraphicalRepresentation() {
+	public GraphicalRepresentation<?> getGraphicalRepresentation() {
 		return _graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(Object graphicalRepresentation) {
+	public void setGraphicalRepresentation(GraphicalRepresentation<?> graphicalRepresentation) {
 		_graphicalRepresentation = graphicalRepresentation;
 		// setChanged();
 	}
@@ -211,6 +213,11 @@ public abstract class ExampleDrawingObject extends ViewPointObject implements Bi
 	@Override
 	public BindingModel getBindingModel() {
 		return getViewPoint().getBindingModel();
+	}
+
+	@Override
+	public String getLanguageRepresentation() {
+		return "<not_implemented:" + getFullyQualifiedName() + ">";
 	}
 
 }

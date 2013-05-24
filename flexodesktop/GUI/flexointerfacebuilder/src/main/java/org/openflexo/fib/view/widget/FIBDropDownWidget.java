@@ -20,10 +20,7 @@
 package org.openflexo.fib.view.widget;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,11 +31,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.ListSelectionModel;
-import javax.swing.UIManager;
 
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBDropDown;
@@ -69,7 +62,7 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 				setValue(null);
 			}
 		});
-		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+		if (!ToolBox.isMacOSLaf()) {
 			dropdownPanel.setBorder(BorderFactory.createEmptyBorder(TOP_COMPENSATING_BORDER, LEFT_COMPENSATING_BORDER,
 					BOTTOM_COMPENSATING_BORDER, RIGHT_COMPENSATING_BORDER));
 		}
@@ -89,93 +82,16 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("initJComboBox()");
 		}
-		Dimension dimTemp = null;
 		Point locTemp = null;
 		Container parentTemp = null;
 		if (jComboBox != null && jComboBox.getParent() != null) {
-			dimTemp = jComboBox.getSize();
 			locTemp = jComboBox.getLocation();
 			parentTemp = jComboBox.getParent();
 			parentTemp.remove(jComboBox);
 			parentTemp.remove(resetButton);
 		}
 		listModel = null;
-		jComboBox = new JComboBox(getListModel()) {
-			// This override is for fixing bug OPENFLEXO-205
-			// The problem comes when the model does not contain the null value
-			// but the selected value is null (ie, selectedIndex==-1).
-			// Currently, this is the only fix I found.
-			private JList list;
-
-			private JList getList() {
-				if (list == null) {
-					list = new JList();
-					list.setFont(getFont());
-					list.setForeground(getForeground());
-					list.setBackground(getBackground());
-					list.setSelectionForeground(UIManager.getColor("ComboBox.selectionForeground"));
-					list.setSelectionBackground(UIManager.getColor("ComboBox.selectionBackground"));
-					list.setBorder(null);
-					list.setCellRenderer(getRenderer());
-					list.setFocusable(false);
-					list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-				}
-				return list;
-			}
-
-			private JButton getArrowButton() {
-				for (Component c : getComponents()) {
-					if (c instanceof JButton) {
-						return (JButton) c;
-					}
-				}
-				return null;
-			}
-
-			@Override
-			public Dimension getPreferredSize() {
-				Dimension preferredSize = super.getPreferredSize();
-				if (getSelectedItem() == null && renderer != null) {
-					Component renderer = getRenderer().getListCellRendererComponent(getList(), null, -1, false, false);
-					Dimension nullDimension = renderer.getPreferredSize();
-					JButton button = getArrowButton();
-					int width = 0;
-					if (button != null) {
-						Insets arrowInsets = button.getInsets();
-						width = button.getPreferredSize().width + arrowInsets.left + arrowInsets.right;
-					} else {
-						width = nullDimension.height; // Let's assume we have an arrow button which is square
-					}
-					nullDimension.width += width; // Take into account arrow button
-					String name = UIManager.getLookAndFeel().getName().toLowerCase();
-					if (name.contains("metal")) {
-						nullDimension.width += 5; // Needs a bit more. Let's not be greedy and give 5 more pixels.
-					} else if (name.contains("nimbus")) {
-						// nimbus seems to be quite ok (it may even be a bit too big)
-					} else {
-						if (name.contains("windows")) {
-							nullDimension.width += 5;// Windows requires 5 more pixels than expected.
-						} else if (name.contains("aqua")) {
-							nullDimension.width += 17;// Aqua requires 17 more pixels than expected.
-						} else {
-							nullDimension.width += 5; // Let's randomly put 5 more pixels. This can't really hurt
-						}
-					}
-					Insets i = getInsets();
-					Insets ri;
-					if (renderer instanceof JComponent) {
-						ri = ((JComponent) renderer).getInsets();
-					} else {
-						ri = new Insets(0, 0, 0, 0);
-					}
-					nullDimension.width += i.left + i.right + ri.left + ri.right;
-					nullDimension.height += i.top + i.bottom + ri.top + ri.right;
-					preferredSize.width = Math.max(preferredSize.width, nullDimension.width);
-					preferredSize.height = Math.max(preferredSize.height, nullDimension.height);
-				}
-				return preferredSize;
-			}
-		};
+		jComboBox = new JComboBox(getListModel());
 		/*if (getDataObject() == null) {
 			Vector<Object> defaultValue = new Vector<Object>();
 			defaultValue.add(FlexoLocalization.localizedForKey("no_selection"));
@@ -241,7 +157,7 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 	 */
 	@Override
 	public synchronized boolean updateModelFromWidget() {
-		if (widgetUpdating) {
+		if (widgetUpdating || modelUpdating) {
 			return false;
 		}
 		if (notEquals(getValue(), jComboBox.getSelectedItem())) {
@@ -294,8 +210,8 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 				selectedItem = anItem;
 				// logger.info("setSelectedItem() with " + anItem + " widgetUpdating=" + widgetUpdating + " modelUpdating=" +
 				// modelUpdating);
-				getDynamicModel().selected = anItem;
-				getDynamicModel().selectedIndex = indexOf(anItem);
+				getDynamicModel().setSelected(anItem);
+				getDynamicModel().setSelectedIndex(indexOf(anItem));
 				if (!widgetUpdating && !modelUpdating) {
 					notifyDynamicModelChanged();
 				}
@@ -306,6 +222,11 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 		@Override
 		public Object getSelectedItem() {
 			return selectedItem;
+		}
+
+		@Override
+		public int hashCode() {
+			return selectedItem == null ? 0 : selectedItem.hashCode();
 		}
 
 		@Override
@@ -333,7 +254,9 @@ public class FIBDropDownWidget extends FIBMultipleValueWidget<FIBDropDown, JComb
 	@Override
 	public void updateFont() {
 		super.updateFont();
-		jComboBox.setFont(getFont());
+		if (getFont() != null) {
+			jComboBox.setFont(getFont());
+		}
 	}
 
 }

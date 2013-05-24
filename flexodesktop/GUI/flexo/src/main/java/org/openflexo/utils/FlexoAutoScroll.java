@@ -62,8 +62,8 @@ public class FlexoAutoScroll {
 		Rectangle inner = scrollable.getParent().getBounds();
 		inner.x += margin;
 		inner.y += margin;
-		inner.height -= (2 * margin);
-		inner.width -= (2 * margin);
+		inner.height -= 2 * margin;
+		inner.width -= 2 * margin;
 		if (p.x < inner.x) {// Move Left
 			JScrollBar bar = scroll.getHorizontalScrollBar();
 			if (bar != null) {

@@ -19,7 +19,8 @@
  */
 package org.openflexo.letparser;
 
-import java.util.Vector;
+import java.util.Arrays;
+import java.util.List;
 
 /*
  * Created on 4 janv. 2006 by sguerin
@@ -35,17 +36,10 @@ public class Operator implements AbstractToken {
 	public static final Operator EQU = new Operator("=", "==", 1);
 	public static final Operator NEQ = new Operator("!=", 1);
 
-	public static Vector<Operator> _knownOperators = null;
+	public static final List<Operator> KNOWN_OPERATORS = Arrays.asList(AND, OR, EQU, NEQ);
 
-	public static Vector<Operator> getKnownOperators() {
-		if (_knownOperators == null) {
-			_knownOperators = new Vector<Operator>();
-			_knownOperators.add(AND);
-			_knownOperators.add(OR);
-			_knownOperators.add(EQU);
-			_knownOperators.add(NEQ);
-		}
-		return _knownOperators;
+	public static List<Operator> getKnownOperators() {
+		return KNOWN_OPERATORS;
 	}
 
 	private String _symbol;

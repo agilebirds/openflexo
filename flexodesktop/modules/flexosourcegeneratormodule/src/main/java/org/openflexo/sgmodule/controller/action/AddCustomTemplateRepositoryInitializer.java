@@ -19,7 +19,7 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -61,7 +61,7 @@ public class AddCustomTemplateRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddCustomTemplateRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddCustomTemplateRepository>() {
 			@Override
-			public boolean run(ActionEvent e, AddCustomTemplateRepository action) {
+			public boolean run(EventObject e, AddCustomTemplateRepository action) {
 				action.setRepositoryType(TemplateRepositoryType.Code);
 				if (action.getNewCustomTemplatesRepositoryName() == null) {
 					CGTemplates templates = action.getFocusedObject().getTemplates();
@@ -91,7 +91,7 @@ public class AddCustomTemplateRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddCustomTemplateRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddCustomTemplateRepository>() {
 			@Override
-			public boolean run(ActionEvent e, AddCustomTemplateRepository action) {
+			public boolean run(EventObject e, AddCustomTemplateRepository action) {
 				if (action.getNewCustomTemplatesRepository() != null
 						&& getProject().getGeneratedCode().getGeneratedRepositories().size() > 0) {
 					Vector<CGRepository> repositories = new Vector<CGRepository>();

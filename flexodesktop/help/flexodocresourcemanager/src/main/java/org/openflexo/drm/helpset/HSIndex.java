@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jdom.DocType;
+import org.jdom2.DocType;
 import org.openflexo.drm.DocItem;
 import org.openflexo.drm.DocResourceCenter;
 import org.openflexo.drm.Language;
@@ -66,7 +66,7 @@ public class HSIndex extends FlexoObject implements XMLSerializable {
 			_rootEntries = new Vector<HSIndexEntry>();
 			for (DocItem next : _drc.getAllItems()) {
 				if (next.isIncluded(configuration)) {
-					if ((next.getInheritanceParentItem() == null) && (!next.getIsEmbedded()) && (next.isPublished())) {
+					if (next.getInheritanceParentItem() == null && !next.getIsEmbedded() && next.isPublished()) {
 						logger.fine("Generate index entry for " + next);
 						_rootEntries.add(new HSIndexEntry(next));
 					}

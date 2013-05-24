@@ -19,7 +19,7 @@
  */
 package org.openflexo.fps.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
@@ -53,23 +53,23 @@ public class AddCVSRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddCVSRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddCVSRepository>() {
 			@Override
-			public boolean run(ActionEvent e, AddCVSRepository action) {
+			public boolean run(EventObject e, AddCVSRepository action) {
 				TextFieldParameter paramName = new TextFieldParameter("name", "cvs_repository_name",
-						(action.getName() == null ? FlexoLocalization.localizedForKey("new_repository") : action.getName()));
-				TextFieldParameter hostName = new TextFieldParameter("hostName", "host_name", (action.getHostName() == null ? ""
-						: action.getHostName()));
+						action.getName() == null ? FlexoLocalization.localizedForKey("new_repository") : action.getName());
+				TextFieldParameter hostName = new TextFieldParameter("hostName", "host_name", action.getHostName() == null ? ""
+						: action.getHostName());
 				TextFieldParameter repository = new TextFieldParameter("cvsRepositoryPath", "cvs_repository_path",
-						(action.getRepository() == null ? "" : action.getRepository()));
+						action.getRepository() == null ? "" : action.getRepository());
 				EnumDropDownParameter<CVSRepository.ConnectionType> connectionTypeParam = new EnumDropDownParameter<CVSRepository.ConnectionType>(
 						"connectionType", "connection_type", CVSRepository.ConnectionType.PServer, CVSRepository.ConnectionType.values());
 				connectionTypeParam.setShowReset(false);
 				IntegerParameter port = new IntegerParameter("port", "port_number", action.getPort());
 				port.setDepends("connectionType");
 				port.setConditional("connectionType=" + '"' + CVSRepository.ConnectionType.SSH.getStringRepresentation() + '"');
-				TextFieldParameter userName = new TextFieldParameter("userName", "user_name", (action.getUserName() == null ? ""
-						: action.getUserName()));
-				TextFieldParameter passwd = new TextFieldParameter("passwd", "password", (action.getPasswd() == null ? ""
-						: action.getPasswd()));
+				TextFieldParameter userName = new TextFieldParameter("userName", "user_name", action.getUserName() == null ? ""
+						: action.getUserName());
+				TextFieldParameter passwd = new TextFieldParameter("passwd", "password", action.getPasswd() == null ? ""
+						: action.getPasswd());
 				passwd.setIsPassword(true);
 				CheckboxParameter storePasswd = new CheckboxParameter("storePasswd", "store_password", action.getStorePasswd());
 
@@ -98,8 +98,8 @@ public class AddCVSRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddCVSRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddCVSRepository>() {
 			@Override
-			public boolean run(ActionEvent e, AddCVSRepository action) {
-				(CVSRefresh.actionType.makeNewEmbeddedAction(action.getNewCVSRepository(), null, action)).doAction();
+			public boolean run(EventObject e, AddCVSRepository action) {
+				CVSRefresh.actionType.makeNewEmbeddedAction(action.getNewCVSRepository(), null, action).doAction();
 				return true;
 			}
 		};

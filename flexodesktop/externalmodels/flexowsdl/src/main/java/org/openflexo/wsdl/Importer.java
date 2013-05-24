@@ -101,9 +101,9 @@ public class Importer implements DataImporter {
 	@Override
 	public Object importInProject(FlexoProject project, File importedFile, Object[] parameters) throws FlexoException {
 		_project = project;
-		String wsGroupName = (parameters.length >= 1 ? (String) parameters[0] : null);
+		String wsGroupName = parameters.length >= 1 ? (String) parameters[0] : null;
 		String repositoryName = wsGroupName + "-Data";
-		flexoAction = (parameters.length >= 2 ? (FlexoAction) parameters[1] : null);
+		flexoAction = parameters.length >= 2 ? (FlexoAction) parameters[1] : null;
 		if (flexoAction != null) {
 			flexoAction.setProgress(FlexoLocalization.localizedForKey("parsing") + " " + importedFile.getName());
 		}
@@ -279,7 +279,6 @@ public class Importer implements DataImporter {
 			String processName = pt.getQName().getLocalPart();
 
 			FlexoWorkflow wkf = getProject().getFlexoWorkflow();
-			wkf.getRootFlexoProcess();
 
 			// will throw a DuplicateResourceException if process already exist
 			FlexoProcess _newProcess = FlexoProcess.createNewProcess(wkf, null, processName, false);
@@ -524,7 +523,7 @@ public class Importer implements DataImporter {
 		DMType defaultType = DMType.makeResolvedDMType(type.getDMModel().getDMEntity(String.class));
 
 		DMProperty newProperty = new DMProperty(type.getDMModel(), /* entity, */newPropertyName, defaultType,
-				(isVector ? DMCardinality.VECTOR : DMCardinality.SINGLE), type.getIsReadOnly(), true,
+				isVector ? DMCardinality.VECTOR : DMCardinality.SINGLE, type.getIsReadOnly(), true,
 				DMPropertyImplementationType.PUBLIC_ACCESSORS_PRIVATE_FIELD);
 		type.registerProperty(newProperty, false);
 		return newProperty;
@@ -561,7 +560,7 @@ public class Importer implements DataImporter {
 		}
 
 		for (int i = 0; i < allTypes.size(); i++) {
-			SchemaType sType = ((SchemaType) allTypes.get(i));
+			SchemaType sType = (SchemaType) allTypes.get(i);
 			treatType(sType, toReturn, repository);
 		}
 		return toReturn;
@@ -642,7 +641,7 @@ public class Importer implements DataImporter {
 			for (int i = 0; i < properties.size(); i++) {
 				SchemaProperty currentProp = (SchemaProperty) properties.get(i);
 				// it looks wierd but if the cardinlaity is "unbounded", getMaxOccurs returns null.
-				boolean vector = (currentProp.getMaxOccurs() == null || currentProp.getMaxOccurs().intValue() > 1);
+				boolean vector = currentProp.getMaxOccurs() == null || currentProp.getMaxOccurs().intValue() > 1;
 				treatProperty(ht, repository, entity, currentProp.getName().getLocalPart(), currentProp.getType(), vector);
 			}
 		}

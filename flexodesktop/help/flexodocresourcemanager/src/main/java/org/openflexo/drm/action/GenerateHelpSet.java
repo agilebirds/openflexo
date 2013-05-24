@@ -27,6 +27,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.drm.DocItemFolder;
+import org.openflexo.drm.DocResourceCenter;
 import org.openflexo.drm.DocResourceManager;
 import org.openflexo.drm.Language;
 import org.openflexo.drm.helpset.DRMHelpSet;
@@ -54,16 +55,21 @@ public class GenerateHelpSet extends FlexoAction<GenerateHelpSet, FlexoModelObje
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return isEnabledForSelection(object, globalSelection);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return ((object != null) && (object instanceof DocItemFolder) && (((DocItemFolder) object).isRootFolder()));
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return object != null && (!(object instanceof DocItemFolder) || ((DocItemFolder) object).isRootFolder());
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DocResourceCenter.class);
+		FlexoModelObject.addActionForClass(actionType, DocItemFolder.class);
+	}
 
 	private String baseName;
 	private String note;
@@ -80,18 +86,13 @@ public class GenerateHelpSet extends FlexoAction<GenerateHelpSet, FlexoModelObje
 		generatedHelpsets = new Hashtable<HelpSetConfiguration, DRMHelpSet>();
 	}
 
-	/*public DRMHelpSet getNewHelpSet() {
-	    return newHelpSet;
-	}
-
-	public Language getLanguage() 
-	{
-	    return language;
-	}
-
-	public void setLanguage(Language language) {
-	    this.language = language;
-	}*/
+	/*
+	 * public DRMHelpSet getNewHelpSet() { return newHelpSet; }
+	 * 
+	 * public Language getLanguage() { return language; }
+	 * 
+	 * public void setLanguage(Language language) { this.language = language; }
+	 */
 
 	public String getBaseName() {
 		if (baseName == null) {

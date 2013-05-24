@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.dm.DMProperty" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Code" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="CodeTab">
+      <Label label="" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" visible="false" name="IsCodeGenerationApplicableLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
+      </Label>
+      <Label align="center" index="1" data="data.codeGenerationNotApplicableLabel" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;location=right)" visible="(data.isCodeGenerationApplicable = false)" height="200" name="CodeGenerationNotApplicableLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
+      </Label>
+      <Label label="implementation_type" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" visible="(data.isCodeGenerationApplicable = true)" name="ImplementationTypeLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
+      </Label>
+      <DropDown showReset="true" index="3" data="data.implementationType" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" visible="(data.isCodeGenerationApplicable = true)" name="ImplementationType" format="object.localizedName" localize="true" list="data.implementationType.availableValues" iteratorClassName="org.openflexo.foundation.dm.DMPropertyImplementationType" autoSelectFirstRow="false">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
+      </DropDown>
+      <Label label="field_name" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" visible="((data.isCodeGenerationApplicable = true) &amp; (((((data.implementationType = &quot;PUBLIC_ACCESSORS_PRIVATE_FIELD&quot;) | (data.implementationType = &quot;PUBLIC_ACCESSORS_PROTECTED_FIELD&quot;)) | (data.implementationType = &quot;PUBLIC_FIELD&quot;)) | (data.implementationType = &quot;PROTECTED_FIELD&quot;)) | (data.implementationType = &quot;PUBLIC_STATIC_FINAL_FIELD&quot;)))" name="FieldNameLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
+      </Label>
+      <TextField index="5" data="data.fieldName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" visible="((data.isCodeGenerationApplicable = true) &amp; (((((data.implementationType = &quot;PUBLIC_ACCESSORS_PRIVATE_FIELD&quot;) | (data.implementationType = &quot;PUBLIC_ACCESSORS_PROTECTED_FIELD&quot;)) | (data.implementationType = &quot;PUBLIC_FIELD&quot;)) | (data.implementationType = &quot;PROTECTED_FIELD&quot;)) | (data.implementationType = &quot;PUBLIC_STATIC_FINAL_FIELD&quot;)))" name="FieldName" localize="true" validateOnReturn="true" columns="10">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
+      </TextField>
+      <CheckBox selected="false" index="1" data="data.isCodeGenerationApplicable" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;location=right)" visible="false" name="IsCodeGenerationApplicable" readOnly="true" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
+      </CheckBox>
+      <Label label="prepend_underscore" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsTop=5;location=left)" visible="((data.isCodeGenerationApplicable = true) &amp; (((data.implementationType = &quot;PUBLIC_ACCESSORS_PRIVATE_FIELD&quot;) | (data.implementationType = &quot;PUBLIC_ACCESSORS_PROTECTED_FIELD&quot;)) | (data.implementationType = &quot;PUBLIC_ACCESSORS_ONLY&quot;)))" name="IsUnderscoredAccessorsLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
+      </Label>
+      <CheckBox selected="false" index="9" data="data.isUnderscoredAccessors" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;location=right)" visible="((data.isCodeGenerationApplicable = true) &amp; (((data.implementationType = &quot;PUBLIC_ACCESSORS_PRIVATE_FIELD&quot;) | (data.implementationType = &quot;PUBLIC_ACCESSORS_PROTECTED_FIELD&quot;)) | (data.implementationType = &quot;PUBLIC_ACCESSORS_ONLY&quot;)))" name="IsUnderscoredAccessors" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
+      </CheckBox>
+    </Tab>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="is_bindable" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" visible="((data.isStatic = false) &amp; (data.isComponentProperty = true))" name="IsBindableLabel" localize="true" />
+      <CheckBox selected="false" index="3" data="data.isBindable" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" visible="((data.isStatic = false) &amp; (data.isComponentProperty = true))" name="IsBindable" tooltipText="Set to true if the value of this property can be defined by a binding" localize="true" />
+      <Label label="is_settable" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" visible="((data.isStatic = false) &amp; (data.isBindable = true))" name="IsSettableLabel" localize="true" />
+      <CheckBox selected="false" index="5" data="data.isSettable" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" visible="((data.isStatic = false) &amp; (data.isBindable = true))" name="IsSettable" tooltipText="Set to true if this property is settable" localize="true" />
+      <Label label="static_modifier" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" name="IsStaticLabel" localize="true" />
+      <CheckBox selected="false" index="7" data="data.isStatic" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" name="IsStatic" localize="true" />
+      <Label label="statically_defined_in_template" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" name="IsStaticallyDefinedInTemplateLabel" localize="true" />
+      <CheckBox selected="false" index="9" data="data.isStaticallyDefinedInTemplate" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" name="IsStaticallyDefinedInTemplate" readOnly="true" tooltipText="Set to true if this property was statically defined in template during last model reinjection" localize="true" />
+      <Label label="key_type" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsTop=5;location=left)" visible="(data.cardinality = &quot;HASHTABLE&quot;)" name="KeyTypeLabel" localize="true" />
+      <Custom componentClassName="org.openflexo.components.widget.DMTypeSelector" localize="true" manageDynamicModel="true" name="KeyType" index="11" data="data.keyType" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;location=right)" visible="(data.cardinality = &quot;HASHTABLE&quot;)">
+        <Assignment variable="component.project" value="data.project" />
+        <Assignment variable="component.owner" value="data" />
+      </Custom>
+    </Tab>
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="name" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="NameLabel" localize="true" />
+      <TextField index="1" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Name" localize="true" validateOnReturn="true" columns="10" />
+      <Label label="type" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" name="TypeLabel" localize="true" />
+      <Custom componentClassName="org.openflexo.components.widget.DMTypeSelector" localize="true" manageDynamicModel="true" name="Type" index="5" data="data.type" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)">
+        <Assignment variable="component.project" value="data.project" />
+        <Assignment variable="component.owner" value="data" />
+      </Custom>
+      <Label label="cardinality" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" name="CardinalityLabel" localize="true" />
+      <DropDown showReset="true" index="7" data="data.cardinality" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" name="Cardinality" format="object.localizedName" localize="true" list="data.cardinality.availableValues" iteratorClassName="org.openflexo.foundation.dm.DMCardinality" autoSelectFirstRow="false" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="implementation_type" lang="English">Implementation type</Localized>
+    <Localized key="implementation_type" lang="French">Implementation</Localized>
+    <Localized key="implementation_type" lang="Dutch">Implementation type</Localized>
+    <Localized key="field_name" lang="English">Field name</Localized>
+    <Localized key="field_name" lang="French">Nom du champ</Localized>
+    <Localized key="field_name" lang="Dutch">Field name</Localized>
+    <Localized key="prepend_underscore" lang="English">Prepend underscore</Localized>
+    <Localized key="prepend_underscore" lang="French">Ajouter un underscore</Localized>
+    <Localized key="prepend_underscore" lang="Dutch">Prepend underscore</Localized>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="is_bindable" lang="English">Is bindable</Localized>
+    <Localized key="is_bindable" lang="French">Est paramétrable</Localized>
+    <Localized key="is_bindable" lang="Dutch">Is bindable</Localized>
+    <Localized key="is_settable" lang="English">Is settable</Localized>
+    <Localized key="is_settable" lang="French">Modifiable</Localized>
+    <Localized key="is_settable" lang="Dutch">Is settable</Localized>
+    <Localized key="static_modifier" lang="English">&lt;html&gt;&lt;tt&gt;static&lt;/tt&gt;&lt;/html&gt;</Localized>
+    <Localized key="static_modifier" lang="French">&lt;html&gt;&lt;tt&gt;static&lt;/tt&gt;&lt;/html&gt;</Localized>
+    <Localized key="static_modifier" lang="Dutch">&lt;html&gt;&lt;tt&gt;static&lt;/tt&gt;&lt;/html&gt;</Localized>
+    <Localized key="statically_defined_in_template" lang="English">Statically defined in template</Localized>
+    <Localized key="statically_defined_in_template" lang="French">Défini statiquement dans le template</Localized>
+    <Localized key="statically_defined_in_template" lang="Dutch">Statically defined in template</Localized>
+    <Localized key="key_type" lang="English">Key type</Localized>
+    <Localized key="key_type" lang="French">Type de la clef</Localized>
+    <Localized key="key_type" lang="Dutch">Key type</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="type" lang="English">Type</Localized>
+    <Localized key="type" lang="French">Type</Localized>
+    <Localized key="type" lang="Dutch">Type</Localized>
+    <Localized key="cardinality" lang="English">Cardinality</Localized>
+    <Localized key="cardinality" lang="French">Cardinalité</Localized>
+    <Localized key="cardinality" lang="Dutch">Cardinality</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Property" />
+</Panel>

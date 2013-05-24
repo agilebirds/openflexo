@@ -137,7 +137,7 @@ public class MySchemaTypeSystemCompiler {
 
 		// construct the state
 		StscState state = StscState.start();
-		boolean validate = (options == null || !options.hasOption(XmlOptions.COMPILE_NO_VALIDATION));
+		boolean validate = options == null || !options.hasOption(XmlOptions.COMPILE_NO_VALIDATION);
 		try {
 			state.setErrorListener(errorWatcher);
 			state.setBindingConfig(config);

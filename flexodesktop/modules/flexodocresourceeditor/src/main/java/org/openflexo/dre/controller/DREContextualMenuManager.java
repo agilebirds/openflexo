@@ -22,7 +22,6 @@ package org.openflexo.dre.controller;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.ContextualMenuManager;
 
@@ -34,8 +33,8 @@ import org.openflexo.selection.ContextualMenuManager;
  */
 public class DREContextualMenuManager extends ContextualMenuManager {
 
-	public DREContextualMenuManager(DRESelectionManager selectionManager, FlexoEditor editor) {
-		super(selectionManager, editor);
+	public DREContextualMenuManager(DRESelectionManager selectionManager, DREController controller) {
+		super(selectionManager, controller);
 	}
 
 	@Override

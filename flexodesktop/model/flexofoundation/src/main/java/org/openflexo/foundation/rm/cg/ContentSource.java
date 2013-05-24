@@ -96,7 +96,7 @@ public class ContentSource {
 	public boolean equals(Object obj) {
 		if (obj instanceof ContentSource) {
 			ContentSource cs = (ContentSource) obj;
-			return ((type == cs.type) && ((version == cs.version) || (version.equals(cs.version))));
+			return type == cs.type && (version == cs.version || version.equals(cs.version));
 		}
 		return super.equals(obj);
 	}

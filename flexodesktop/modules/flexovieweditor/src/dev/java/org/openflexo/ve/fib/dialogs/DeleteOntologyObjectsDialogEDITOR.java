@@ -23,49 +23,39 @@ import java.io.File;
 import java.util.Vector;
 
 import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.foundation.FlexoResourceCenter;
-import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.OntologyObject;
-import org.openflexo.foundation.ontology.action.DeleteOntologyObjects;
-import org.openflexo.module.FlexoResourceCenterService;
-import org.openflexo.module.ModuleLoader;
+import org.openflexo.foundation.ontology.owl.OWLObject;
+import org.openflexo.foundation.ontology.owl.OWLOntology;
+import org.openflexo.foundation.ontology.owl.action.DeleteOntologyObjects;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.ve.VECst;
 
+public class DeleteOntologyObjectsDialogEDITOR extends FIBAbstractEditor {
 
-public class DeleteOntologyObjectsDialogEDITOR {
-
-	
-	public static void main(String[] args)
-	{
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			public Object[] getData() 
-			{
-				String URI = "http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl";
-				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
-				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-				FlexoOntology ontology = ontologyLibrary.getOntology(URI);
-				ontology.loadWhenUnloaded();
-				Vector<OntologyObject> selection = new Vector<OntologyObject>();
-				selection.add(ontologyLibrary.getOntologyObject(URI+"#Actor"));
-				selection.add(ontologyLibrary.getOntologyObject(URI+"#Mission"));
-				selection.add(ontologyLibrary.getOntologyObject(URI+"#hasMission"));
-				selection.add(ontologyLibrary.getOntologyObject(URI+"#description"));
-				DeleteOntologyObjects action = DeleteOntologyObjects.actionType.makeNewAction(null, selection,null);
-				return makeArray(action);
-			}
-			public File getFIBFile() {
-				return VECst.DELETE_ONTOLOGY_OBJECTS_DIALOG_FIB;
-			}
-		};
-		editor.launch();
+	@Override
+	public Object[] getData() {
+		String URI = "http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl";
+		FlexoResourceCenter resourceCenter = DefaultResourceCenterService.getNewInstance().getOpenFlexoResourceCenter();
+		OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
+		OWLOntology ontology = (OWLOntology) ontologyLibrary.getOntology(URI);
+		ontology.loadWhenUnloaded();
+		Vector<OWLObject> selection = new Vector<OWLObject>();
+		selection.add(ontology.getOntologyObject(URI + "#Actor"));
+		selection.add(ontology.getOntologyObject(URI + "#Mission"));
+		selection.add(ontology.getOntologyObject(URI + "#hasMission"));
+		selection.add(ontology.getOntologyObject(URI + "#description"));
+		DeleteOntologyObjects action = DeleteOntologyObjects.actionType.makeNewAction(null, selection, null);
+		return makeArray(action);
 	}
 
-    private static ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	@Override
+	public File getFIBFile() {
+		return VECst.DELETE_ONTOLOGY_OBJECTS_DIALOG_FIB;
+	}
 
-    private static FlexoResourceCenterService getFlexoResourceCenterService(){
-        return FlexoResourceCenterService.instance();
-    }
+	public static void main(String[] args) {
+		main(DeleteOntologyObjectsDialogEDITOR.class);
+	}
+
 }

@@ -35,14 +35,14 @@ import java.util.Vector;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jdom.Attribute;
-import org.jdom.Content;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.Text;
-import org.jdom.filter.Filter;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.Attribute;
+import org.jdom2.Content;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Text;
+import org.jdom2.filter.ElementFilter;
+import org.jdom2.input.SAXBuilder;
 import org.xml.sax.SAXException;
 
 /**
@@ -95,7 +95,7 @@ public class XMLDecoder {
 	 * 
 	 * instance coding the unique identifier of the object
 	 */
-	private Hashtable alreadyDeserialized;
+	private Map<Object, Object> alreadyDeserialized;
 
 	/**
 	 * This the variable used to encode objects as strings. If it is not set, the default instance will be used.
@@ -236,7 +236,7 @@ public class XMLDecoder {
 	public XMLDecoder(XMLMapping anXmlMapping, Object aBuilder, StringEncoder encoder) {
 		super();
 		xmlMapping = anXmlMapping;
-		alreadyDeserialized = new Hashtable();
+		alreadyDeserialized = new Hashtable<Object, Object>();
 		nextReference = 0;
 		builder = aBuilder;
 		stringEncoder = encoder;
@@ -636,6 +636,42 @@ public class XMLDecoder {
 	}
 
 	/**
+	 * Decode and returns a newly created object from input stream with a builder <code>xmlStream</code> according to mapping defined in
+	 * model file <code>modelFile</code>.
+	 * 
+	 * @param modelFile
+	 *            a <code>File</code> value
+	 * @param xmlStream
+	 *            a <code>InputStream</code> value
+	 * @param stringEncoder
+	 *            a <code>StringEncoder</code> value
+	 * @return an <code>XMLSerializable</code> value
+	 * @exception InvalidXMLDataException
+	 *                if an error occurs
+	 * @exception InvalidObjectSpecificationException
+	 *                if an error occurs
+	 * @exception IOException
+	 *                if an error occurs
+	 * @exception SAXException
+	 *                if an error occurs
+	 * @exception ParserConfigurationException
+	 *                if an error occurs
+	 * @exception InvalidModelException
+	 *                if an error occurs
+	 * @exception AccessorInvocationException
+	 *                if an error occurs during accessor invocation
+	 * @throws JDOMException
+	 */
+	public static XMLSerializable decodeObjectWithMappingFile(InputStream xmlStream, File modelFile, Object builder, StringEncoder encoder)
+			throws InvalidXMLDataException, InvalidObjectSpecificationException, IOException, SAXException, ParserConfigurationException,
+			InvalidModelException, AccessorInvocationException, JDOMException {
+
+		XMLDecoder decoder = new XMLDecoder(modelFile, builder, encoder);
+		return decoder.decodeObject(xmlStream);
+
+	}
+
+	/**
 	 * Decode and returns a newly created object from string <code>xmlString</code> according to mapping defined in this
 	 * <code>XMLDecoder</code> object.
 	 * 
@@ -778,18 +814,19 @@ public class XMLDecoder {
 		return reply;
 	}
 
-	static private class ElementWithIDFilter implements Filter {
+	static private class ElementWithIDFilter extends ElementFilter {
 
 		public ElementWithIDFilter() {
 			super();
 		}
 
 		@Override
-		public boolean matches(Object arg0) {
-			if (arg0 instanceof Element) {
-				return ((Element) arg0).getAttributeValue("id") != null;
+		public Element filter(Object arg0) {
+			Element element = super.filter(arg0);
+			if (element != null && element.getAttributeValue("id") != null) {
+				return element;
 			}
-			return false;
+			return null;
 		}
 
 	}
@@ -837,8 +874,7 @@ public class XMLDecoder {
 	private void runDecodingFinalization(Object rootObject) throws AccessorInvocationException {
 		// Debugging.debug("Run decoding finalization");
 		Object[] params = { builder };
-		for (Enumeration e = alreadyDeserialized.elements(); e.hasMoreElements();) {
-			Object next = e.nextElement();
+		for (Object next : alreadyDeserialized.values()) {
 			if (next != rootObject) {
 				// Gros truc degeulasse a modifier plus tard,
 				// quand on aura repondu a la question:
@@ -848,10 +884,7 @@ public class XMLDecoder {
 			}
 		}
 		runDecodingFinalizationForObject(rootObject, params);
-		for (Enumeration e = alreadyDeserialized.keys(); e.hasMoreElements();) {
-			Object next = e.nextElement();
-			alreadyDeserialized.remove(next);
-		}
+		alreadyDeserialized.clear();
 	}
 
 	private void runDecodingFinalizationForObject(Object next, Object[] params) throws AccessorInvocationException {
@@ -983,11 +1016,11 @@ public class XMLDecoder {
 
 					// TODO: Throw here an error in future release but for backward compatibility we leave it for now.
 					Element idRefElement = findElementWithId(node.getDocument(), idrefAttribute.getValue());
-					if (xmlMapping.entityWithXMLTag(idRefElement.getName()) != modelEntity) {
-						System.err.println("SEVERE: Found a referencing object with a non-corresponding entity tag '"
-								+ idRefElement.getName() + "' than the referred object" + node.getName());
-					}
 					if (idRefElement != null) {
+						if (xmlMapping.entityWithXMLTag(idRefElement.getName()) != modelEntity) {
+							System.err.println("SEVERE: Found a referencing object with a non-corresponding entity tag '"
+									+ idRefElement.getName() + "' than the referred object" + node.getName());
+						}
 						return buildObjectFromNodeAndModelEntity(idRefElement, modelEntity);
 					}
 					throw new InvalidXMLDataException("No reference to object with identifier " + reference);
@@ -1074,8 +1107,30 @@ public class XMLDecoder {
 			alreadyDeserialized.put(currentDeserializedReference, returnedObject);
 		}
 
-		for (Enumeration e = modelEntity.getModelProperties(); e.hasMoreElements();) {
-			ModelProperty modelProperty = (ModelProperty) e.nextElement();
+		if (modelEntity != null) {
+			try {
+				Object[] params = { builder };
+				boolean initializationHasBeenPerformed = false;
+				if (xmlMapping.hasBuilderClass()) {
+					if (modelEntity.hasInitializerWithParameter()) {
+						modelEntity.getInitializerWithParameter().invoke(returnedObject, params);
+						initializationHasBeenPerformed = true;
+					}
+				}
+				if (modelEntity.hasInitializerWithoutParameter() && !initializationHasBeenPerformed) {
+					modelEntity.getInitializerWithoutParameter().invoke(returnedObject, null);
+					initializationHasBeenPerformed = true;
+				}
+			} catch (IllegalAccessException e1) {
+				e1.printStackTrace();
+			} catch (InvocationTargetException e2) {
+				e2.getTargetException().printStackTrace();
+				throw new AccessorInvocationException("Exception " + e2.getClass().getName() + " caught during finalization.", e2);
+			}
+		}
+
+		for (Enumeration<ModelProperty> e = modelEntity.getModelProperties(); e.hasMoreElements();) {
+			ModelProperty modelProperty = e.nextElement();
 			setPropertyForObject(node, returnedObject, returnedObjectClass, modelProperty, modelEntity);
 		}
 
@@ -1394,6 +1449,9 @@ public class XMLDecoder {
 			if (modelProperty.isProperties()) {
 				KeyValueCoder.setHashtableForKey(object, propertiesHashtableOfObjectsMatchingHandledXMLTags(node, modelProperty),
 						(HashtableKeyValueProperty) keyValueProperty);
+			} else if (modelProperty.isSafeProperties()) {
+				KeyValueCoder.setHashtableForKey(object, safePropertiesHashtableOfObjectsMatchingHandledXMLTags(node, modelProperty),
+						(HashtableKeyValueProperty) keyValueProperty);
 			} else if (modelProperty.isUnmappedAttributes()) {
 				Vector unmappedAttributes = unmappedAttributes(node, modelProperty, modelEntity);
 				if (unmappedAttributes.size() > 0) {
@@ -1484,7 +1542,7 @@ public class XMLDecoder {
 		return node.getContent(new MultipleNameFilter(modelProperty.getXmlTags(), node)).iterator();
 	}
 
-	private class MultipleNameFilter implements Filter {
+	private class MultipleNameFilter extends ElementFilter {
 		private String[] _tags;
 		private Element _parent;
 
@@ -1495,18 +1553,18 @@ public class XMLDecoder {
 		}
 
 		@Override
-		public boolean matches(Object arg0) {
-			if (!(arg0 instanceof Element)) {
-				return false;
-			}
-			if (_parent.equals(((Element) arg0).getParentElement())) {
-				for (int i = 0; i < _tags.length; i++) {
-					if (((Element) arg0).getName().equals(_tags[i])) {
-						return true;
+		public Element filter(Object content) {
+			Element element = super.filter(content);
+			if (element != null) {
+				if (_parent.equals(element.getParentElement())) {
+					for (int i = 0; i < _tags.length; i++) {
+						if (element.getName().equals(_tags[i])) {
+							return element;
+						}
 					}
 				}
 			}
-			return false;
+			return null;
 		}
 	}
 
@@ -1612,6 +1670,67 @@ public class XMLDecoder {
 		return returnedHashtable;
 	}
 
+	/**
+	 * Return a properties hashtable decoded from elements matching declared handled XML tag of specified <code>modelProperty</code>
+	 */
+	protected Hashtable safePropertiesHashtableOfObjectsMatchingHandledXMLTags(Element node, ModelProperty modelProperty) {
+
+		Hashtable returnedHashtable = new Hashtable();
+
+		List propertiesNodeList = node.getChildren();
+		Element propertiesNode;
+		if (propertiesNodeList.size() == 0) {
+			// throw new InvalidXMLDataException ("Properties tag
+			// '"+modelProperty.getName()+"' not found");
+			return new Hashtable(); // Returns an empty hashtable
+		} else {
+			int i = 0;
+			do {
+				propertiesNode = (Element) propertiesNodeList.get(i);
+				i++;
+			} while (!propertiesNode.getName().equals(modelProperty.getDefaultXmlTag()) && i < propertiesNodeList.size());
+		}
+		if (!propertiesNode.getName().equals(modelProperty.getDefaultXmlTag())) {
+			// throw new InvalidXMLDataException ("Properties tag
+			// '"+modelProperty.getDefaultXmlTag()+"' not found");
+			return new Hashtable(); // Returns an empty hashtable
+		}
+
+		List childElements = propertiesNode.getChildren();
+		for (int j = 0; j < childElements.size(); j++) {
+			Element element = (Element) childElements.get(j);
+			Attribute keyAttr = element.getAttribute(XMLMapping.keyLabel);
+			Attribute classNameAttr = element.getAttribute(XMLMapping.classNameLabel);
+			Class objectType = null;
+			if (classNameAttr != null) {
+				try {
+					objectType = Class.forName(classNameAttr.getValue());
+				} catch (ClassNotFoundException e) {
+					System.err.println("Class not found " + classNameAttr.getValue() + " for " + keyAttr.getValue());
+					// throw new InvalidXMLDataException("Class named '" + classNameAttr.getValue() + "' not found");
+				}
+				String value = element.getAttributeValue(XMLMapping.valueLabel);
+				if (objectType == null || stringEncoder._converterForClass(objectType) == null) {
+					// No converter, just keep reference of that object for persistance
+					// (without instanciating it)
+					// In this case, class matching property is not loaded, and thus
+					// Object is not instanciated. But, we must keep serialized version
+					returnedHashtable.put(keyAttr.getValue(), new PropertiesKeyValueProperty.UndecodableProperty(classNameAttr.getValue(),
+							value));
+				} else {
+					Object decodedValue = stringEncoder._decodeObject(value, objectType);
+					if (decodedValue == null) {
+						System.err.println("Value for " + value + " is null !");
+					} else {
+						returnedHashtable.put(keyAttr.getValue(), decodedValue);
+					}
+				}
+			}
+		}
+
+		return returnedHashtable;
+	}
+
 	private Integer getNextReference() {
 		nextReference++;
 		return Integer.valueOf(nextReference);
@@ -1654,25 +1773,6 @@ public class XMLDecoder {
 
 	public boolean implementsCustomIdMappingScheme() {
 		return xmlMapping.implementsCustomIdMappingScheme();
-	}
-
-	private class IDFilter implements Filter {
-
-		private String _searchedID;
-
-		public IDFilter(String searchedID) {
-			super();
-			_searchedID = searchedID;
-		}
-
-		@Override
-		public boolean matches(Object arg0) {
-			if (arg0 instanceof Element) {
-				return _searchedID.equals(((Element) arg0).getAttributeValue(XMLMapping.idLabel));
-			}
-			return false;
-		}
-
 	}
 
 }

@@ -51,8 +51,7 @@ public abstract class StaticBinding<T> extends AbstractBinding {
 	public static StaticBinding makeStaticBinding(String value, Bindable owner) {
 		if (owner != null) {
 			StaticBindingFactory factory = owner.getBindingFactory().getStaticBindingFactory();
-			factory.setBindable(owner);
-			StaticBinding returned = factory.convertFromString(value);
+			StaticBinding returned = factory.convertFromString(value, owner);
 			returned.setOwner(owner);
 			return returned;
 		}
@@ -112,7 +111,7 @@ public abstract class StaticBinding<T> extends AbstractBinding {
 					return false;
 				}
 			}
-			return ((_owner == sb._owner) && sb.getValue() != null && getValue().equals(sb.getValue()));
+			return _owner == sb._owner && sb.getValue() != null && getValue().equals(sb.getValue());
 		} else {
 			return super.equals(object);
 		}
@@ -176,6 +175,27 @@ public abstract class StaticBinding<T> extends AbstractBinding {
 					+ getBindingDefinition().getType());
 		}
 		return false;
+
+	}
+
+	@Override
+	public String invalidBindingReason() {
+		// logger.setLevel(Level.FINE);
+
+		if (getAccessedType() == null) {
+			return "Invalid binding " + this + " because accessed type is null";
+		}
+
+		if (getBindingDefinition() == null) {
+			return "Invalid binding because binding definition is null";
+		} else if (getBindingDefinition().getIsSettable()) {
+			return "Invalid binding because binding definition is declared as settable for a constant value";
+		} else if (getBindingDefinition().getBindingDefinitionType() == BindingDefinitionType.EXECUTE) {
+			return "Invalid binding because binding definition is declared as executable for a constant value";
+		}
+
+		return "Invalid binding because types doesn't match: " + getAccessedType() + " cannot be assigned to "
+				+ getBindingDefinition().getType();
 
 	}
 

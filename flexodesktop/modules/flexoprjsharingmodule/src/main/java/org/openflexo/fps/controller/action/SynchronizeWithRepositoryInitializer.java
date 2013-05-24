@@ -19,7 +19,7 @@
  */
 package org.openflexo.fps.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -45,7 +45,7 @@ public class SynchronizeWithRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<SynchronizeWithRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<SynchronizeWithRepository>() {
 			@Override
-			public boolean run(ActionEvent e, SynchronizeWithRepository action) {
+			public boolean run(EventObject e, SynchronizeWithRepository action) {
 				return true;
 			}
 		};
@@ -55,7 +55,7 @@ public class SynchronizeWithRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<SynchronizeWithRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SynchronizeWithRepository>() {
 			@Override
-			public boolean run(ActionEvent e, SynchronizeWithRepository action) {
+			public boolean run(EventObject e, SynchronizeWithRepository action) {
 				return true;
 			}
 		};

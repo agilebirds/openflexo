@@ -22,6 +22,7 @@ package org.openflexo.foundation.viewpoint.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -49,13 +50,13 @@ public class AddExampleDrawingShape extends FlexoAction<AddExampleDrawingShape, 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ExampleDrawingObject object, Vector<ExampleDrawingObject> globalSelection) {
+		public boolean isVisibleForSelection(ExampleDrawingObject object, Vector<ExampleDrawingObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ExampleDrawingObject object, Vector<ExampleDrawingObject> globalSelection) {
-			return (object instanceof ExampleDrawingShema || object instanceof ExampleDrawingShape);
+		public boolean isEnabledForSelection(ExampleDrawingObject object, Vector<ExampleDrawingObject> globalSelection) {
+			return object instanceof ExampleDrawingShema || object instanceof ExampleDrawingShape;
 		}
 
 	};
@@ -68,7 +69,7 @@ public class AddExampleDrawingShape extends FlexoAction<AddExampleDrawingShape, 
 	private ExampleDrawingShape _newShape;
 	public String newShapeName;
 	private ExampleDrawingObject _parent;
-	public Object graphicalRepresentation;
+	public ShapeGraphicalRepresentation<?> graphicalRepresentation;
 	public boolean nameSetToNull = false;
 
 	AddExampleDrawingShape(ExampleDrawingObject focusedObject, Vector<ExampleDrawingObject> globalSelection, FlexoEditor editor) {
@@ -83,7 +84,7 @@ public class AddExampleDrawingShape extends FlexoAction<AddExampleDrawingShape, 
 			throw new InvalidParametersException("folder is undefined");
 		}
 
-		_newShape = new ExampleDrawingShape();
+		_newShape = new ExampleDrawingShape(null);
 		if (graphicalRepresentation != null) {
 			_newShape.setGraphicalRepresentation(graphicalRepresentation);
 		}

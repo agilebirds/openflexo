@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.dkv.DKVModel;
@@ -52,12 +53,12 @@ public class AddDomainAction extends FlexoUndoableAction<AddDomainAction, DKVObj
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DKVObject object, Vector<DKVObject> globalSelection) {
+		public boolean isVisibleForSelection(DKVObject object, Vector<DKVObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DKVObject object, Vector<DKVObject> globalSelection) {
+		public boolean isEnabledForSelection(DKVObject object, Vector<DKVObject> globalSelection) {
 			return object instanceof DKVModel.DomainList || object instanceof DKVModel;
 		}
 
@@ -69,6 +70,11 @@ public class AddDomainAction extends FlexoUndoableAction<AddDomainAction, DKVObj
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DKVModel.DomainList.class);
+		FlexoModelObject.addActionForClass(actionType, DKVModel.class);
+	}
 
 	private Domain newDomain;
 	private DKVModel _dkvModel;

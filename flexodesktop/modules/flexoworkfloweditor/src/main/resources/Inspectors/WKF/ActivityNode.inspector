@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.node.ActivityNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.node.ActivityNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="5" title="Stats" layout="twocols" font="SansSerif,0,11" name="StatsTab">
-      <Label align="center" localize="true" name="StatisticsinfoLabel" data="data.statistics.infoLabel" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" width="200" height="60" />
-      <Label label="include_begin_end" localize="true" name="StatisticsincludeBeginEndNodeLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
-      <CheckBox selected="false" localize="true" name="StatisticsincludeBeginEndNode" data="data.statistics.includeBeginEndNode" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" />
-      <Label label="# operations" localize="true" name="StatisticsrealOperationCountLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = false)" />
-      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsrealOperationCount" data="data.statistics.realOperationCount.toString" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = false)" />
-      <Label label="# operations" localize="true" name="StatisticsoperationCountLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = true)" />
-      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsoperationCount" data="data.statistics.operationCount.toString" constraints="twocols(location=right;index=11;expandHorizontally=true;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = true)" />
-      <Label label="# actions" localize="true" name="StatisticsactionCountLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = true)" />
-      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsactionCount" data="data.statistics.actionCount.toString" constraints="twocols(location=right;index=13;expandHorizontally=true;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = true)" />
-      <Label label="# actions" localize="true" name="StatisticsrealActionCountLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = false)" />
-      <TextField passwd="false" readOnly="true" localize="true" name="StatisticsrealActionCount" data="data.statistics.realActionCount.toString" constraints="twocols(location=right;index=13;expandHorizontally=true;expandVertically=false)" visible="(data.statistics.includeBeginEndNode = false)" />
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab" opaque="false">
+      <Label label="task_type" index="20" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TaskTypeLabel" localize="true" />
+      <DropDown showReset="true" index="21" data="data.taskType" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TaskType" localize="true" iteratorClassName="org.openflexo.foundation.wkf.node.TaskType" autoSelectFirstRow="false" />
     </Tab>
-    <Tab index="1" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label label="task_type" localize="true" name="TaskTypeLabel" constraints="twocols(location=left;index=20;expandHorizontally=false;expandVertically=false)" />
-      <DropDown showReset="true" localize="true" name="TaskType" data="data.taskType" constraints="twocols(location=right;index=21;expandHorizontally=false;expandVertically=false)" iteratorClassName="org.openflexo.foundation.wkf.node.TaskType" />
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab" opaque="false">
+      <Parameter name="visibleFor" value="SEMANTICS,SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER " />
+    </Tab>
+    <Tab title="Stats" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="6" font="SansSerif,0,11" name="StatsTab" opaque="false">
+      <Label align="center" index="1" data="data.statistics.infoLabel" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" width="200" height="60" name="StatisticsinfoLabel" localize="true" />
+      <Label label="include_begin_end" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="StatisticsincludeBeginEndNodeLabel" localize="true" />
+      <CheckBox selected="false" index="3" data="data.statistics.includeBeginEndNode" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="StatisticsincludeBeginEndNode" localize="true" />
+      <Label label="# operations" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealOperationCountLabel" localize="true" />
+      <Label label="# operations" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsoperationCountLabel" localize="true" />
+      <TextField index="11" data="data.statistics.realOperationCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealOperationCount" readOnly="true" localize="true" />
+      <TextField index="11" data="data.statistics.operationCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsoperationCount" readOnly="true" localize="true" />
+      <Label label="# actions" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsactionCountLabel" localize="true" />
+      <Label label="# actions" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealActionCountLabel" localize="true" />
+      <TextField index="13" data="data.statistics.actionCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.statistics.includeBeginEndNode = true)" name="StatisticsactionCount" readOnly="true" localize="true" />
+      <TextField index="13" data="data.statistics.realActionCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.statistics.includeBeginEndNode = false)" name="StatisticsrealActionCount" readOnly="true" localize="true" />
+      <Parameter name="visibleFor" value="ANALYST,DEVELOPER,MAINTAINER " />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
@@ -30,7 +33,39 @@
     <Localized key="task_type" lang="English">Task type</Localized>
     <Localized key="task_type" lang="French">Type de tâche</Localized>
     <Localized key="task_type" lang="Dutch">Task type</Localized>
+    <Localized key="Service" lang="English">Service</Localized>
+    <Localized key="Service" lang="French">Service</Localized>
+    <Localized key="Service" lang="Dutch">Service</Localized>
+    <Localized key="BusinessRule" lang="English">Business Rule</Localized>
+    <Localized key="BusinessRule" lang="French">Business Rule</Localized>
+    <Localized key="BusinessRule" lang="Dutch">BusinessRule</Localized>
+    <Localized key="User" lang="English">User</Localized>
+    <Localized key="User" lang="French">User</Localized>
+    <Localized key="User" lang="Dutch">User</Localized>
+    <Localized key="Script" lang="English">Script</Localized>
+    <Localized key="Script" lang="French">Script</Localized>
+    <Localized key="Script" lang="Dutch">Script</Localized>
+    <Localized key="Send" lang="English">Send</Localized>
+    <Localized key="Send" lang="French">Send</Localized>
+    <Localized key="Send" lang="Dutch">Send</Localized>
+    <Localized key="Receive" lang="English">Receive</Localized>
+    <Localized key="Receive" lang="French">Receive</Localized>
+    <Localized key="Receive" lang="Dutch">Receive</Localized>
+    <Localized key="Manual" lang="English">Manual</Localized>
+    <Localized key="Manual" lang="French">Manual</Localized>
+    <Localized key="Manual" lang="Dutch">Manual</Localized>
+    <Localized key="# operations" lang="English"># operations</Localized>
+    <Localized key="# operations" lang="Dutch"># operations</Localized>
+    <Localized key="# actions" lang="English"># actions</Localized>
+    <Localized key="# actions" lang="French"># actions</Localized>
+    <Localized key="# actions" lang="Dutch"># actions</Localized>
+    <Localized key="Basic" lang="English">Basic</Localized>
+    <Localized key="Basic" lang="Dutch">Basic</Localized>
+    <Localized key="Advanced" lang="English">Advanced</Localized>
+    <Localized key="Advanced" lang="Dutch">Advanced</Localized>
+    <Localized key="Stats" lang="English">Stats</Localized>
+    <Localized key="Stats" lang="French">Stats</Localized>
+    <Localized key="Stats" lang="Dutch">Stats</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="Activity Node" />
+  <Parameter name="title" value="Activity" />
 </Panel>
-

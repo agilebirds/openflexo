@@ -26,6 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.IEObject;
@@ -69,16 +70,20 @@ public class MakePartialComponent extends FlexoAction<MakePartialComponent, IEWi
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
+		public boolean isVisibleForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
 			return !(object instanceof IETabWidget);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
+		public boolean isEnabledForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
 			return !(object instanceof IEReusableWidget);
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IEWidget.class);
+	}
 
 	private String _newComponentName;
 	private FlexoComponentFolder _newComponentFolder;
@@ -169,6 +174,7 @@ public class MakePartialComponent extends FlexoAction<MakePartialComponent, IEWi
 				folder, widget.getProject());
 		FlexoComponentResource compRes = compDef.getComponentResource();// Creates the resource
 		comp = new IEReusableComponent(compDef, widget.getProject());
+		comp.setFlexoResource(compRes);
 		for (IEWidget w : widgets) {
 			w.setWOComponent(comp);
 			comp.getRootSequence().addToInnerWidgets(w);
@@ -194,20 +200,20 @@ public class MakePartialComponent extends FlexoAction<MakePartialComponent, IEWi
 		}
 
 		// 5. create a new ReusableWidget to store the ComponentInstance
-		if ((widget instanceof InnerBlocWidgetInterface) && (parent instanceof IEBlocWidget)) {
+		if (widget instanceof InnerBlocWidgetInterface && parent instanceof IEBlocWidget) {
 			reusableWidget = new InnerBlocReusableWidget(woComponent, compDef, (IEBlocWidget) parent, widget.getProject());
-		} else if ((widget instanceof AbstractInnerTableWidget) && (parent instanceof IEWidget)) {
+		} else if (widget instanceof AbstractInnerTableWidget && parent instanceof IEWidget) {
 			reusableWidget = new InnerTableReusableWidget(woComponent, compDef, (IEWidget) parent, widget.getProject());
-		} else if (widget.isTopComponent() && (parent instanceof IESequenceWidget)) {
+		} else if (widget.isTopComponent() && parent instanceof IESequenceWidget) {
 			reusableWidget = new TopComponentReusableWidget(woComponent, compDef, (IESequenceWidget) parent, widget.getProject());
-		} else if ((widget instanceof IESequenceTR) && (parent instanceof IESequenceTR)) {
+		} else if (widget instanceof IESequenceTR && parent instanceof IESequenceTR) {
 			reusableWidget = new ITableRowReusableWidget(woComponent, compDef, parent, widget.getProject());
 		}
 		// 6. Insert the reusableWidget in its parent
 		if (reusableWidget != null) {
-			if ((reusableWidget instanceof InnerBlocReusableWidget) && (parent instanceof IEBlocWidget)) {
+			if (reusableWidget instanceof InnerBlocReusableWidget && parent instanceof IEBlocWidget) {
 				((IEBlocWidget) parent).replaceWidgetByReusable(widget, (InnerBlocReusableWidget) reusableWidget);
-			} else if ((reusableWidget instanceof InnerTableReusableWidget) || (reusableWidget instanceof TopComponentReusableWidget)) {
+			} else if (reusableWidget instanceof InnerTableReusableWidget || reusableWidget instanceof TopComponentReusableWidget) {
 				if (parent instanceof IESequenceWidget) {
 					for (IEWidget w : widgets) {
 						((IESequenceWidget) parent).removeFromInnerWidgets(w, false);

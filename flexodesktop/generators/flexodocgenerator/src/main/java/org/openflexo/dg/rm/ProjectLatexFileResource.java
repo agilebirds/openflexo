@@ -71,7 +71,7 @@ public class ProjectLatexFileResource extends LatexFileResource<DGLatexGenerator
 	}
 
 	public void registerObserverWhenRequired() {
-		if ((!isObserverRegistered) && (getProject() != null)) {
+		if (!isObserverRegistered && getProject() != null) {
 			isObserverRegistered = true;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getProject());

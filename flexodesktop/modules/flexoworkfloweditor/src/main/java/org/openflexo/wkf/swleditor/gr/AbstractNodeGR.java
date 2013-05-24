@@ -26,7 +26,6 @@ import java.util.logging.Logger;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.graphics.DecorationPainter;
 import org.openflexo.fge.graphics.FGEShapeDecorationGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
@@ -35,9 +34,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.wkf.FlexoLevel;
-import org.openflexo.foundation.wkf.dm.LabelLocationChanged;
 import org.openflexo.foundation.wkf.dm.NodeRemoved;
-import org.openflexo.foundation.wkf.dm.ObjectLocationChanged;
 import org.openflexo.foundation.wkf.dm.PetriGraphHasBeenClosed;
 import org.openflexo.foundation.wkf.dm.PetriGraphHasBeenOpened;
 import org.openflexo.foundation.wkf.dm.PostRemoved;
@@ -58,6 +55,14 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 
 	public AbstractNodeGR(O node, ShapeType shapeType, SwimmingLaneRepresentation aDrawing) {
 		super(node, shapeType, aDrawing);
+	}
+
+	@Override
+	public org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints getLocationConstraints() {
+		if (getContainerGraphicalRepresentation() instanceof SWLContainerGR) {
+			return LocationConstraints.CONTAINED_IN_SHAPE;
+		}
+		return super.getLocationConstraints();
 	}
 
 	@Override
@@ -97,13 +102,9 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 			} else if (dataModification instanceof NameChanged) {
 				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
 				checkAndUpdateDimensionIfRequired();
-			} else if (dataModification instanceof ObjectLocationChanged) {
-				handlePositionChanged();
-			} else if (dataModification instanceof LabelLocationChanged) {
-				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.absoluteTextX);
-				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.absoluteTextX);
 			}
 		}
+		super.update(observable, dataModification);
 	}
 
 	private void handlePositionChanged() {
@@ -145,30 +146,6 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 		return Color.WHITE;
 	}
 
-	private FGEArea locationConstrainedArea;
-
-	@Override
-	public FGEArea getLocationConstrainedArea() {
-		GraphicalRepresentation<?> parentContainer = getContainerGraphicalRepresentation();
-		if (parentContainer instanceof SWLContainerGR) {
-			if (locationConstrainedArea == null) {
-				SWLContainerGR parentSWLContainer = (SWLContainerGR) getContainerGraphicalRepresentation();
-				getDrawing();
-				if (parentContainer instanceof RoleContainerGR
-						&& parentContainer.getDrawable() == SwimmingLaneRepresentation.getRepresentationRole(getNode())) {
-					locationConstrainedArea = parentSWLContainer.getLocationConstrainedAreaForChild(this);
-				}
-			}
-			return locationConstrainedArea;
-		} else {
-			return super.getLocationConstrainedArea();
-		}
-	}
-
-	protected final void resetLocationConstrainedArea() {
-		locationConstrainedArea = null;
-	}
-
 	@Override
 	public boolean isAllowedToBeDraggedOutsideParentContainer() {
 		return getContainerGraphicalRepresentation() instanceof RoleContainerGR && getNode().getLevel() == FlexoLevel.ACTIVITY;
@@ -182,7 +159,6 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 	@Override
 	public boolean dragOutsideParentContainerInsideContainer(GraphicalRepresentation<?> container, FGEPoint location) {
 		if (container instanceof RoleContainerGR) {
-			resetLocationConstrainedArea();
 			getDrawing().setRepresentationRole(((RoleContainerGR) container).getRole(), getNode());
 			getNode().setX(location.x, SWIMMING_LANE_EDITOR);
 			getNode().setY(location.y, SWIMMING_LANE_EDITOR);

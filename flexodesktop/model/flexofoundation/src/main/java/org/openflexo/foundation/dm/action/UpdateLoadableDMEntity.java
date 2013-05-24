@@ -30,6 +30,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMEntity;
+import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DMPackage;
 import org.openflexo.foundation.dm.DMSet;
@@ -53,16 +54,22 @@ public class UpdateLoadableDMEntity extends FlexoAction<UpdateLoadableDMEntity, 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
 			return getAllLoadableDMEntities(object, globalSelection).size() > 0;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
+		public boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
 			return isVisibleForSelection(object, globalSelection);
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMModel.class);
+		FlexoModelObject.addActionForClass(actionType, DMPackage.class);
+		FlexoModelObject.addActionForClass(actionType, LoadableDMEntity.class);
+	}
 
 	UpdateLoadableDMEntity(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

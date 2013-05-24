@@ -22,7 +22,6 @@
   
   <entity name="org.openflexo.foundation.wkf.FlexoProcessNode" xmlTag="FlexoProcess" contexts="Root" finalizer="finalizeDeserialization">
     <property name="processResourceName" xmlTag="name" attribute="YES"/> 
-    <property name="fileName" xmlTag="filename" attribute="YES"/> 
     <property name="subProcesses" contains="org.openflexo.foundation.wkf.FlexoProcessNode" type="vector"/> 
   </entity> 
   

@@ -19,16 +19,15 @@ public class AllFilesPerspective extends FPSPerspective {
 	public AllFilesPerspective(FPSController fpsController) {
 		super(fpsController, "all_files");
 		this.fpsController = fpsController;
+
+		setTopLeftView(fpsController.getCvsRepositoryBrowserView());
+		setBottomLeftView(fpsController.getSharedProjectBrowserView());
+		setBottomCenterView(fpsController.getConsoleView());
 	}
 
 	@Override
 	public ImageIcon getActiveIcon() {
 		return FPSIconLibrary.FPS_AFP_ACTIVE_ICON;
-	}
-
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return FPSIconLibrary.FPS_AFP_SELECTED_ICON;
 	}
 
 	@Override

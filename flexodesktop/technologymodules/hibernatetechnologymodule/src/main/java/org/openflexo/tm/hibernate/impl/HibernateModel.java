@@ -227,7 +227,7 @@ public class HibernateModel extends TechnologyModelObject implements FlexoObserv
 
 	public FlexoModelObjectReference<DMRepository> getWatchedRepositoryReference() {
 		if (getWatchedRepository() != null) {
-			return new FlexoModelObjectReference<DMRepository>(getProject(), getWatchedRepository());
+			return new FlexoModelObjectReference<DMRepository>(getWatchedRepository());
 		}
 		return null;
 	}

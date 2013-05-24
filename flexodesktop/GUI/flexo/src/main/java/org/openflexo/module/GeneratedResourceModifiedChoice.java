@@ -103,14 +103,18 @@ public abstract class GeneratedResourceModifiedChoice extends KVCObject implemen
 
 	public static Vector<GeneratedResourceModifiedChoice> getAvailableChoices() {
 		if (availableChoices == null) {
-			availableChoices = new Vector<GeneratedResourceModifiedChoice>();
-			availableChoices.add(ASK);
-			availableChoices.add(IGNORE);
-			availableChoices.add(REINJECT_IN_MODEL);
-			availableChoices.add(AUTOMATICALLY_REINJECT_IN_MODEL);
-			availableChoices.add(ACCEPT);
-			availableChoices.add(ACCEPT_AND_REINJECT);
-			availableChoices.add(ACCEPT_AND_AUTOMATICALLY_REINJECT);
+			synchronized (GeneratedResourceModifiedChoice.class) {
+				if (availableChoices == null) {
+					availableChoices = new Vector<GeneratedResourceModifiedChoice>();
+					availableChoices.add(ASK);
+					availableChoices.add(IGNORE);
+					availableChoices.add(REINJECT_IN_MODEL);
+					availableChoices.add(AUTOMATICALLY_REINJECT_IN_MODEL);
+					availableChoices.add(ACCEPT);
+					availableChoices.add(ACCEPT_AND_REINJECT);
+					availableChoices.add(ACCEPT_AND_AUTOMATICALLY_REINJECT);
+				}
+			}
 		}
 		return availableChoices;
 	}

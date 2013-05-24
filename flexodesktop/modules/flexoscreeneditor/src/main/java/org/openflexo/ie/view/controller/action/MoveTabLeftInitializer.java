@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -51,10 +51,10 @@ public class MoveTabLeftInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<MoveTabLeft> getDefaultInitializer() {
 		return new FlexoActionInitializer<MoveTabLeft>() {
 			@Override
-			public boolean run(ActionEvent e, MoveTabLeft action) {
+			public boolean run(EventObject e, MoveTabLeft action) {
 				IETabWidget tab = null;
 				if (action.getFocusedObject() instanceof IETabWidget) {
-					tab = ((IETabWidget) action.getFocusedObject());
+					tab = (IETabWidget) action.getFocusedObject();
 				}
 				if (action.getInvoker() instanceof DropTabZone) {
 					DropTabZone invoker = (DropTabZone) action.getInvoker();
@@ -65,7 +65,7 @@ public class MoveTabLeftInitializer extends ActionInitializer {
 					}
 				}
 				if (tab != null) {
-					(action).setSelectedTab(tab);
+					action.setSelectedTab(tab);
 					return true;
 				}
 				return false;
@@ -77,7 +77,7 @@ public class MoveTabLeftInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<MoveTabLeft> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MoveTabLeft>() {
 			@Override
-			public boolean run(ActionEvent e, MoveTabLeft action) {
+			public boolean run(EventObject e, MoveTabLeft action) {
 				return true;
 			}
 		};

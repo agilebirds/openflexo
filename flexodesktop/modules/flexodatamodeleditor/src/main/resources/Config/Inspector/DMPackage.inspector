@@ -1,4 +1,4 @@
-<inspector title = "Package" inheritsfrom="DMObject.inspector">
+<inspector title = "Package" inspectedClassName="org.openflexo.foundation.dm.DMPackage" inheritsfrom="DMObject.inspector">
 	<tab name="Basic" index="0">
 		<layout name ="DEFAULT">
 			<param name="aLayoutParamName" value="aLayoutParamValue"/>

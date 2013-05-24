@@ -27,7 +27,8 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.cg.GeneratedDoc;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.toc.TOCData;
 
 /**
  * @author gpolet
@@ -39,12 +40,12 @@ public class AddDocType extends FlexoAction<AddDocType, FlexoModelObject, FlexoM
 			"add_doc_type", FlexoActionType.ADD_ACTION_TYPE) {
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return true;
 		}
 
@@ -56,7 +57,8 @@ public class AddDocType extends FlexoAction<AddDocType, FlexoModelObject, FlexoM
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(AddDocType.actionType, GeneratedDoc.class);
+		FlexoModelObject.addActionForClass(AddDocType.actionType, TOCData.class);
+		FlexoModelObject.addActionForClass(AddDocType.actionType, FlexoProject.class);
 	}
 
 	private String newName;

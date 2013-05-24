@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -53,7 +53,7 @@ public class BindButtonsToActionNodeInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<BindButtonsToActionNode> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<BindButtonsToActionNode>() {
 			@Override
-			public boolean run(ActionEvent e, BindButtonsToActionNode action) {
+			public boolean run(EventObject e, BindButtonsToActionNode action) {
 				OperationNode node = action.getFocusedObject();
 				if (node.getActionPetriGraph() != null && !node.getActionPetriGraph().getIsVisible()) {
 					node.getActionPetriGraph().setIsVisible(true);
@@ -67,7 +67,7 @@ public class BindButtonsToActionNodeInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<BindButtonsToActionNode> getDefaultInitializer() {
 		return new FlexoActionInitializer<BindButtonsToActionNode>() {
 			@Override
-			public boolean run(ActionEvent e, BindButtonsToActionNode action) {
+			public boolean run(EventObject e, BindButtonsToActionNode action) {
 				OperationNode node = action.getFocusedObject();
 				action.setOperationNode(node);
 				Iterator i = node.getAllActionNodes().iterator();

@@ -21,6 +21,10 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.OntologyObjectProperty;
+import org.openflexo.foundation.ontology.owl.OWLClass;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
@@ -30,10 +34,15 @@ public class LinkScheme extends AbstractCreationScheme {
 	private String fromTarget;
 	private String toTarget;
 
+	private boolean northDirectionSupported = true;
+	private boolean eastDirectionSupported = true;
+	private boolean southDirectionSupported = true;
+	private boolean westDirectionSupported = true;
+
 	private boolean isAvailableWithFloatingPalette = true;
 
-	public LinkScheme() {
-		super();
+	public LinkScheme(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override
@@ -93,6 +102,37 @@ public class LinkScheme extends AbstractCreationScheme {
 	}
 
 	public boolean isValidTarget(EditionPattern actualFromTarget, EditionPattern actualToTarget) {
+		if (getEditionPattern().getPrimaryConceptRole() instanceof ObjectPropertyStatementPatternRole) {
+			if (actualFromTarget.getPrimaryConceptRole() instanceof IndividualPatternRole
+					&& actualToTarget.getPrimaryConceptRole() instanceof IndividualPatternRole) {
+				ObjectPropertyStatementPatternRole parentProperty = (ObjectPropertyStatementPatternRole) getEditionPattern()
+						.getPrimaryConceptRole();
+				if (parentProperty.getObjectProperty() instanceof OntologyObjectProperty) {
+					OntologyObjectProperty objectProperty = (OntologyObjectProperty) parentProperty.getObjectProperty();
+
+					OWLClass fromOntologicType = (OWLClass) ((IndividualPatternRole) actualFromTarget.getPrimaryConceptRole())
+							.getOntologicType();
+					OWLClass toOntologicType = (OWLClass) ((IndividualPatternRole) actualToTarget.getPrimaryConceptRole())
+							.getOntologicType();
+					boolean ok = true;
+					OntologyObject range = objectProperty.getRange();
+					if (range instanceof OWLClass) {
+						if (!((OWLClass) range).containsOntologyObject(toOntologicType, true)) {
+							return false;
+						}
+					}
+					for (OWLClass restriction : fromOntologicType.getRestrictions(objectProperty)) {
+						if (!restriction.containsOntologyObject(toOntologicType, true)) {
+							ok = false;
+							break;
+						}
+					}
+					if (!ok) {
+						return false;
+					}
+				}
+			}
+		}
 		return getFromTargetEditionPattern().isAssignableFrom(actualFromTarget)
 				&& getToTargetEditionPattern().isAssignableFrom(actualToTarget);
 	}
@@ -159,6 +199,38 @@ public class LinkScheme extends AbstractCreationScheme {
 
 	public void setIsAvailableWithFloatingPalette(boolean isAvailableWithFloatingPalette) {
 		this.isAvailableWithFloatingPalette = isAvailableWithFloatingPalette;
+	}
+
+	public boolean getNorthDirectionSupported() {
+		return northDirectionSupported;
+	}
+
+	public void setNorthDirectionSupported(boolean northDirectionSupported) {
+		this.northDirectionSupported = northDirectionSupported;
+	}
+
+	public boolean getEastDirectionSupported() {
+		return eastDirectionSupported;
+	}
+
+	public void setEastDirectionSupported(boolean eastDirectionSupported) {
+		this.eastDirectionSupported = eastDirectionSupported;
+	}
+
+	public boolean getSouthDirectionSupported() {
+		return southDirectionSupported;
+	}
+
+	public void setSouthDirectionSupported(boolean southDirectionSupported) {
+		this.southDirectionSupported = southDirectionSupported;
+	}
+
+	public boolean getWestDirectionSupported() {
+		return westDirectionSupported;
+	}
+
+	public void setWestDirectionSupported(boolean westDirectionSupported) {
+		this.westDirectionSupported = westDirectionSupported;
 	}
 
 }

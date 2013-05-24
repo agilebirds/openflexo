@@ -25,11 +25,12 @@ import javax.swing.Icon;
 
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.fib.model.validation.ValidationReport;
 
 public class FIBButton extends FIBWidget {
 
 	public static BindingDefinition BUTTON_ICON = new BindingDefinition("buttonIcon", Icon.class, BindingDefinitionType.GET, false);
-	public static BindingDefinition ACTION = new BindingDefinition("action", Void.class, BindingDefinitionType.EXECUTE, false);
+	public static BindingDefinition ACTION = new BindingDefinition("action", Object.class, BindingDefinitionType.EXECUTE, false);
 
 	public static enum ButtonType {
 		Trigger, Toggle
@@ -40,10 +41,10 @@ public class FIBButton extends FIBWidget {
 	}
 
 	private DataBinding action;
+	private DataBinding buttonIcon;
 	private ButtonType buttonType = ButtonType.Trigger;
 	private String label;
 	private Boolean isDefault;
-	private DataBinding buttonIcon;
 
 	public FIBButton() {
 	}
@@ -127,6 +128,28 @@ public class FIBButton extends FIBWidget {
 			buttonIcon.setBindingDefinition(BUTTON_ICON);
 		}
 		this.buttonIcon = buttonIcon;
+	}
+
+	@Override
+	protected void applyValidation(ValidationReport report) {
+		super.applyValidation(report);
+		performValidation(ActionBindingMustBeValid.class, report);
+	}
+
+	public static class ActionBindingMustBeValid extends BindingMustBeValid<FIBButton> {
+		public ActionBindingMustBeValid() {
+			super("'action'_binding_is_not_valid", FIBButton.class);
+		}
+
+		@Override
+		public DataBinding getBinding(FIBButton object) {
+			return object.getAction();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(FIBButton object) {
+			return ACTION;
+		}
 	}
 
 }

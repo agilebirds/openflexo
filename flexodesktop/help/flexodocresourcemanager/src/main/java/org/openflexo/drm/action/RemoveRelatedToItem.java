@@ -41,13 +41,14 @@ public class RemoveRelatedToItem extends FlexoAction {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return ((object != null) && (object instanceof DocItem) && (globalSelection.size() > 0) && (globalSelection.firstElement() instanceof DocItem));
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return object != null && object instanceof DocItem && globalSelection.size() > 0
+					&& globalSelection.firstElement() instanceof DocItem;
 		}
 
 	};
@@ -60,7 +61,7 @@ public class RemoveRelatedToItem extends FlexoAction {
 
 	@Override
 	protected void doAction(Object context) {
-		if ((getOppositeDocItem() != null) && (getDocItemToRemove() != null)) {
+		if (getOppositeDocItem() != null && getDocItemToRemove() != null) {
 			getOppositeDocItem().removeFromRelatedToItems(getDocItemToRemove());
 		}
 	}
@@ -71,7 +72,7 @@ public class RemoveRelatedToItem extends FlexoAction {
 
 	public DocItem getDocItemToRemove() {
 		if (_docItemToRemove == null) {
-			if ((getFocusedObject() != null) && (getFocusedObject() instanceof DocItem)) {
+			if (getFocusedObject() != null && getFocusedObject() instanceof DocItem) {
 				_docItemToRemove = (DocItem) getFocusedObject();
 			}
 		}
@@ -79,7 +80,7 @@ public class RemoveRelatedToItem extends FlexoAction {
 	}
 
 	public DocItem getOppositeDocItem() {
-		if ((getGlobalSelection().size() > 0) && (getGlobalSelection().firstElement() instanceof DocItem)) {
+		if (getGlobalSelection().size() > 0 && getGlobalSelection().firstElement() instanceof DocItem) {
 			return (DocItem) getGlobalSelection().firstElement();
 		}
 		return null;

@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.ScreenshotResource;
@@ -47,17 +48,20 @@ public class GenerateOperationScreenshot extends FlexoAction<GenerateOperationSc
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(OperationNode object, Vector<OperationNode> globalSelection) {
+		public boolean isVisibleForSelection(OperationNode object, Vector<OperationNode> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(OperationNode object, Vector<OperationNode> globalSelection) {
+		public boolean isEnabledForSelection(OperationNode object, Vector<OperationNode> globalSelection) {
 			return object != null;
 		}
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, OperationNode.class);
+	}
 	private boolean _hasBeenRegenerated;
 
 	GenerateOperationScreenshot(OperationNode focusedObject, Vector<OperationNode> globalSelection, FlexoEditor editor) {

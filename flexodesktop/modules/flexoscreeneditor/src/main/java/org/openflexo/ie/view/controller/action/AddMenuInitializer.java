@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
@@ -52,7 +52,7 @@ public class AddMenuInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddMenu> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddMenu>() {
 			@Override
-			public boolean run(ActionEvent e, AddMenu action) {
+			public boolean run(EventObject e, AddMenu action) {
 				String menuLabel = FlexoController.askForStringMatchingPattern(
 						FlexoLocalization.localizedForKey("enter_label_for_the_new_menu"), Pattern.compile("\\S.*"),
 						FlexoLocalization.localizedForKey("cannot_be_empty"));
@@ -62,8 +62,8 @@ public class AddMenuInitializer extends ActionInitializer {
 				if (((FlexoItemMenu) action.getFocusedObject()).getNavigationMenu().getMenuLabeled(menuLabel) != null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("a_menu_with_such_label_already_exists"));
 				}
-				(action).setMenuLabel(menuLabel);
-				(action).setFather((FlexoItemMenu) action.getFocusedObject());
+				action.setMenuLabel(menuLabel);
+				action.setFather((FlexoItemMenu) action.getFocusedObject());
 				return true;
 			}
 		};
@@ -73,7 +73,7 @@ public class AddMenuInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddMenu> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddMenu>() {
 			@Override
-			public boolean run(ActionEvent e, AddMenu action) {
+			public boolean run(EventObject e, AddMenu action) {
 				return true;
 			}
 		};

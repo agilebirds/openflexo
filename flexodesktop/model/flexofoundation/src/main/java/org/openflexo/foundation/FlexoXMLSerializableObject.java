@@ -66,7 +66,7 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 	public abstract XMLMapping getXMLMapping();
 
 	@Override
-	public final Object instanciateNewBuilder() {
+	public Object instanciateNewBuilder() {
 		return getXMLResourceData().getFlexoXMLFileResource().instanciateNewBuilder();
 	}
 
@@ -112,12 +112,6 @@ public abstract class FlexoXMLSerializableObject extends FlexoObservable impleme
 			}
 			if (builder instanceof FlexoBuilder) {
 				((FlexoBuilder<FlexoXMLStorageResource>) builder).isCloner = true;
-			}
-			if (builder == null) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Model for encoding " + getClass().getName()
-							+ " defines a builder while builder instanciation returns null");
-				}
 			}
 			if (xmlMapping.builderClass().isAssignableFrom(builder.getClass())) {
 				try {

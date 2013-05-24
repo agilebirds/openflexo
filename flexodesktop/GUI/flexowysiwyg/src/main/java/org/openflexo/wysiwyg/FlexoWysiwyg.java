@@ -199,7 +199,7 @@ public abstract class FlexoWysiwyg extends HTMLEditor {
 		getFormattingToolBar().setFloatable(false);
 		getEditingToolBar().setFloatable(false);
 		// to remove the default Border is bad looking on MacOsX L&F
-		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+		if (ToolBox.isMacOSLaf()) {
 			for (int i = 0; i < getFormattingToolBar().getComponentCount(); i++) {
 				if (getFormattingToolBar().getComponent(i) instanceof JComboBox) {
 					JComboBox c = (JComboBox) getFormattingToolBar().getComponent(i);

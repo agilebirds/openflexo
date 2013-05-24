@@ -42,6 +42,7 @@ import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 import org.openflexo.foundation.wkf.node.SelfExecutableNode;
+import org.openflexo.module.UserType;
 
 /**
  * Please comment this class
@@ -97,22 +98,24 @@ public class AbstractActivityNodeElement extends BrowserElement implements Expan
 		if (logger.isLoggable(Level.FINER)) {
 			logger.finer("Building children for activity " + getName());
 		}
-		// We add operation nodes
-		if (getAbstractActivityNode().getOperationPetriGraph() != null) {
-			addObserver();
-			Enumeration en = getAbstractActivityNode().getOperationPetriGraph().getSortedNodes();
-			while (en.hasMoreElements()) {
-				addToChilds((FlexoModelObject) en.nextElement());
-			}
-		} else if (getAbstractActivityNode() instanceof SelfExecutableNode
-				&& ((SelfExecutableNode) getAbstractActivityNode()).getExecutionPetriGraph() != null) {
-			addObserver();
-			Enumeration en = ((SelfExecutableNode) getAbstractActivityNode()).getExecutionPetriGraph().getSortedNodes();
-			while (en.hasMoreElements()) {
-				addToChilds((FlexoModelObject) en.nextElement());
-			}
-			for (WKFGroup group : ((SelfExecutableNode) getAbstractActivityNode()).getExecutionPetriGraph().getGroups()) {
-				addToChilds(group);
+		if (!UserType.isLite()) {
+			// We add operation nodes
+			if (getAbstractActivityNode().getOperationPetriGraph() != null) {
+				addObserver();
+				Enumeration en = getAbstractActivityNode().getOperationPetriGraph().getSortedNodes();
+				while (en.hasMoreElements()) {
+					addToChilds((FlexoModelObject) en.nextElement());
+				}
+			} else if (getAbstractActivityNode() instanceof SelfExecutableNode
+					&& ((SelfExecutableNode) getAbstractActivityNode()).getExecutionPetriGraph() != null) {
+				addObserver();
+				Enumeration en = ((SelfExecutableNode) getAbstractActivityNode()).getExecutionPetriGraph().getSortedNodes();
+				while (en.hasMoreElements()) {
+					addToChilds((FlexoModelObject) en.nextElement());
+				}
+				for (WKFGroup group : ((SelfExecutableNode) getAbstractActivityNode()).getExecutionPetriGraph().getGroups()) {
+					addToChilds(group);
+				}
 			}
 		}
 		/*
@@ -155,7 +158,7 @@ public class AbstractActivityNodeElement extends BrowserElement implements Expan
 	@Override
 	public boolean isExpansionSynchronizedWithData() {
 		if (_browser.getSelectionManager() != null) {
-			return (getAbstractActivityNode().getProcess() == _browser.getSelectionManager().getRootFocusedObject());
+			return getAbstractActivityNode().getProcess() == _browser.getSelectionManager().getRootFocusedObject();
 		}
 		return false;
 	}
@@ -230,8 +233,8 @@ public class AbstractActivityNodeElement extends BrowserElement implements Expan
 			return ((PreConditionElement) next).getPreCondition().isContainedIn(getAbstractActivityNode());
 		} else if (next instanceof PostConditionElement) {
 			FlexoPostCondition edge = ((PostConditionElement) next).getPostCondition();
-			if ((edge.getNextNode() != null && edge.getNextNode().isContainedIn(getAbstractActivityNode()))
-					&& (edge.getStartNode() != null && edge.getStartNode().isContainedIn(getAbstractActivityNode()))) {
+			if (edge.getNextNode() != null && edge.getNextNode().isContainedIn(getAbstractActivityNode()) && edge.getStartNode() != null
+					&& edge.getStartNode().isContainedIn(getAbstractActivityNode())) {
 				return true;
 			}
 			return false;

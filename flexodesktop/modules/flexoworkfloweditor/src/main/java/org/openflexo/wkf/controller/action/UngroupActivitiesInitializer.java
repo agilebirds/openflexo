@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -50,7 +50,7 @@ public class UngroupActivitiesInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<UngroupActivities> getDefaultInitializer() {
 		return new FlexoActionInitializer<UngroupActivities>() {
 			@Override
-			public boolean run(ActionEvent e, UngroupActivities action) {
+			public boolean run(EventObject e, UngroupActivities action) {
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_ungroup_those_activities"));
 			}
 		};
@@ -60,7 +60,7 @@ public class UngroupActivitiesInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<UngroupActivities> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<UngroupActivities>() {
 			@Override
-			public boolean run(ActionEvent e, UngroupActivities action) {
+			public boolean run(EventObject e, UngroupActivities action) {
 				if (getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject() != null
 						&& getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject().isDeleted()) {
 					getControllerActionInitializer().getWKFController().getSelectionManager().resetSelection();

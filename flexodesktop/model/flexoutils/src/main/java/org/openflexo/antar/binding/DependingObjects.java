@@ -22,6 +22,8 @@ public class DependingObjects {
 
 	public static interface HasDependencyBinding extends Observer, PropertyChangeListener {
 		public List<AbstractBinding> getDependencyBindings();
+
+		public List<TargetObject> getChainedBindings(AbstractBinding binding, TargetObject object);
 	}
 
 	private List<TargetObject> dependingObjects;
@@ -35,13 +37,28 @@ public class DependingObjects {
 		this.dependingObjectsAreComputed = false;
 	}
 
-	public synchronized void refreshObserving(BindingEvaluationContext context) {
+	protected void addToDependingObjects(TargetObject object) {
+		dependingObjects.add(object);
+	}
+
+	public synchronized void refreshObserving(BindingEvaluationContext context/*, boolean debug*/) {
+
+		/*if (debug) {
+			logger.info("refreshObserving() for " + observerObject);
+		}*/
 
 		List<TargetObject> updatedDependingObjects = new ArrayList<AbstractBinding.TargetObject>();
 		for (AbstractBinding binding : observerObject.getDependencyBindings()) {
 			List<TargetObject> targetObjects = binding.getTargetObjects(context);
 			if (targetObjects != null) {
 				updatedDependingObjects.addAll(targetObjects);
+				if (targetObjects.size() > 0) {
+					List<TargetObject> chainedBindings = observerObject.getChainedBindings(binding,
+							targetObjects.get(targetObjects.size() - 1));
+					if (chainedBindings != null) {
+						updatedDependingObjects.addAll(chainedBindings);
+					}
+				}
 			}
 		}
 		Set<HasPropertyChangeSupport> set = new HashSet<HasPropertyChangeSupport>();
@@ -73,9 +90,18 @@ public class DependingObjects {
 					logger.fine("Observer " + observerObject + " remove property change listener: " + o.target + " property:"
 							+ o.propertyName);
 				}
+				/*if (debug) {
+					logger.info("Observer " + observerObject + " remove property change listener: " + o.target + " property:"
+							+ o.propertyName);
+				}*/
 				pcSupport.removePropertyChangeListener(o.propertyName, observerObject);
 			} else if (o.target instanceof Observable) {
-				logger.fine("Widget " + observerObject + " remove observable: " + o);
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Widget " + observerObject + " remove observable: " + o);
+				}
+				/*if (debug) {
+					logger.info("Widget " + observerObject + " remove observable: " + o);
+				}*/
 				((Observable) o.target).deleteObserver(observerObject);
 			}
 		}
@@ -83,10 +109,20 @@ public class DependingObjects {
 			dependingObjects.add(o);
 			if (o.target instanceof HasPropertyChangeSupport) {
 				PropertyChangeSupport pcSupport = ((HasPropertyChangeSupport) o.target).getPropertyChangeSupport();
-				logger.fine("Observer " + observerObject + " add property change listener: " + o.target + " property:" + o.propertyName);
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Observer " + observerObject + " add property change listener: " + o.target + " property:" + o.propertyName);
+				}
+				/*if (debug) {
+					logger.info("Observer " + observerObject + " add property change listener: " + o.target + " property:" + o.propertyName);
+				}*/
 				pcSupport.addPropertyChangeListener(o.propertyName, observerObject);
 			} else if (o.target instanceof Observable) {
-				logger.fine("Observer " + observerObject + " add observable: " + o);
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Observer " + observerObject + " add observable: " + o);
+				}
+				/*if (debug) {
+					logger.info("Observer " + observerObject + " add observable: " + o + " for " + o.propertyName);
+				}*/
 				((Observable) o.target).addObserver(observerObject);
 			}
 		}
@@ -111,6 +147,16 @@ public class DependingObjects {
 
 	public boolean areDependingObjectsComputed() {
 		return dependingObjectsAreComputed;
+	}
+
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		sb.append("DependingObjects for " + observerObject + "\n");
+		for (TargetObject o : dependingObjects) {
+			sb.append("> " + o + "\n");
+		}
+		return sb.toString();
 	}
 
 }

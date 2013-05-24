@@ -1,5 +1,4 @@
-#English
-#Tue May 22 11:38:31 CEST 2012
+BOOLEAN=BOOLEAN
 cancel=Cancel
 close_drawing=Close drawing
 edit=Edit
@@ -16,4 +15,5 @@ quit=Quit
 save_drawing=Save drawing
 save_drawing_as=Save drawing as...
 tools=Tools
+undefined_value=undefined_value
 untitled=untitled

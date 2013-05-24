@@ -44,13 +44,13 @@ public class EditUserHelpAction extends FlexoGUIAction<EditUserHelpAction, Flexo
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return (object != null) && (object instanceof OperationComponentDefinition) || (object instanceof IEOperationComponent);
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return object != null && object instanceof OperationComponentDefinition || object instanceof IEOperationComponent;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return (object != null) && (object instanceof OperationComponentDefinition) || (object instanceof IEOperationComponent);
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return object != null && object instanceof OperationComponentDefinition || object instanceof IEOperationComponent;
 		}
 
 	};

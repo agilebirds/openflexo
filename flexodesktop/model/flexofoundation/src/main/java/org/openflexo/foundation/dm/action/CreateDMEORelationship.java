@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMObject;
@@ -50,16 +51,20 @@ public class CreateDMEORelationship extends FlexoAction<CreateDMEORelationship, 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMEOEntity object, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(DMEOEntity object, Vector<DMObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMEOEntity object, Vector<DMObject> globalSelection) {
-			return ((object != null) && (!(object).getIsReadOnly()));
+		public boolean isEnabledForSelection(DMEOEntity object, Vector<DMObject> globalSelection) {
+			return object != null && !object.getIsReadOnly();
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMEOEntity.class);
+	}
 
 	private String _newRelationshipName;
 	private boolean _isFlattenRelationShip;

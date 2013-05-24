@@ -47,6 +47,7 @@ import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGESegment;
@@ -105,6 +106,14 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		adjustMaximalHeightToLabelHeight,
 		foreground,
 		background,
+		selectedForeground,
+		selectedBackground,
+		focusedForeground,
+		focusedBackground,
+		hasSelectedForeground,
+		hasSelectedBackground,
+		hasFocusedForeground,
+		hasFocusedBackground,
 		border,
 		shapeType,
 		shape,
@@ -116,6 +125,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		shapePainter,
 		specificStroke,
 		allowToLeaveBounds,
+		adaptBoundsToContents,
 		xConstraints,
 		yConstraints,
 		widthConstraints,
@@ -145,6 +155,16 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	private ForegroundStyle foreground;
 	private BackgroundStyle background;
 
+	private ForegroundStyle selectedForeground = null;
+	private BackgroundStyle selectedBackground = null;
+	private ForegroundStyle focusedForeground = null;
+	private BackgroundStyle focusedBackground = null;
+
+	private boolean hasSelectedForeground = false;
+	private boolean hasSelectedBackground = false;
+	private boolean hasFocusedForeground = false;
+	private boolean hasFocusedBackground = false;
+
 	private ShapeBorder border = new ShapeBorder();
 
 	private Shape shape = null;
@@ -152,6 +172,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	private ShadowStyle shadowStyle = ShadowStyle.makeDefault();
 
 	private boolean allowToLeaveBounds = true;
+	private boolean adaptBoundsToContents = false;
 
 	/*private boolean drawShadow = true;
 	private int shadowDarkness = FGEConstants.DEFAULT_SHADOW_DARKNESS;
@@ -240,10 +261,10 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 
 	}
 
-	protected FGEShapeGraphics graphics;
-	protected FGEShapeDecorationGraphics decorationGraphics;
-	protected DecorationPainter decorationPainter;
-	protected ShapePainter shapePainter;
+	private FGEShapeGraphics graphics;
+	private FGEShapeDecorationGraphics decorationGraphics;
+	private DecorationPainter decorationPainter;
+	private ShapePainter shapePainter;
 
 	// *******************************************************************************
 	// * Constructor *
@@ -281,7 +302,6 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 					MouseClickControlActionType.MULTIPLE_SELECTION));
 		}
 		addToMouseDragControls(MouseDragControl.makeMouseDragControl("Move", MouseButton.LEFT, MouseDragControlActionType.MOVE));
-		addToMouseDragControls(MouseDragControl.makeMouseDragControl("Zoom", MouseButton.RIGHT, MouseDragControlActionType.ZOOM));
 		addToMouseDragControls(MouseDragControl.makeMouseShiftDragControl("Rectangle selection", MouseButton.LEFT,
 				MouseDragControlActionType.RECTANGLE_SELECTING));
 	}
@@ -345,6 +365,18 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		}
 		if (foreground != null) {
 			foreground.deleteObserver(this);
+		}
+		if (selectedBackground != null) {
+			selectedBackground.deleteObserver(this);
+		}
+		if (selectedForeground != null) {
+			selectedForeground.deleteObserver(this);
+		}
+		if (focusedBackground != null) {
+			focusedBackground.deleteObserver(this);
+		}
+		if (focusedForeground != null) {
+			focusedForeground.deleteObserver(this);
 		}
 		if (shadowStyle != null) {
 			shadowStyle.deleteObserver(this);
@@ -426,6 +458,153 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	// *******************************************************************************
 	// * Location management *
 	// *******************************************************************************
+
+	public void extendParentBoundsToHostThisShape() {
+		if (getParentGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
+			ShapeGraphicalRepresentation<?> parent = (ShapeGraphicalRepresentation) getParentGraphicalRepresentation();
+			parent.extendBoundsToHostContents();
+		}
+	}
+
+	public void extendParentBoundsToHostThisShape2() {
+		// System.out.println("parent=" + getParentGraphicalRepresentation());
+		if (getParentGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
+			ShapeGraphicalRepresentation<?> parent = (ShapeGraphicalRepresentation) getParentGraphicalRepresentation();
+
+			// parent.updateRequiredBoundsForChildGRLocation(this, new FGEPoint(x, y));
+
+			boolean parentNeedsResize = false;
+			FGEDimension newDimension = new FGEDimension(parent.getWidth(), parent.getHeight());
+			boolean parentNeedsRelocate = false;
+			FGEPoint newPosition = new FGEPoint(parent.getX(), parent.getY());
+			double deltaX = 0;
+			double deltaY = 0;
+			if (x < 0) {
+				newPosition.x = newPosition.x + x;
+				parentNeedsRelocate = true;
+				deltaX = -x;
+			}
+			if (y < 0) {
+				newPosition.y = newPosition.y + y;
+				parentNeedsRelocate = true;
+				deltaY = -y;
+			}
+			if (parentNeedsRelocate) {
+				parent.setLocation(newPosition);
+				setLocation(new FGEPoint(getX() - deltaX, getY() - deltaY));
+				parentNeedsResize = true;
+				newDimension = new FGEDimension(parent.getWidth() + deltaX, parent.getHeight() + deltaY);
+			}
+
+			if (x + getWidth() > parent.getWidth()) {
+				newDimension.width = x + getWidth();
+				parentNeedsResize = true;
+			}
+			if (y + getHeight() > parent.getHeight()) {
+				newDimension.height = y + getHeight();
+				parentNeedsResize = true;
+			}
+			if (parentNeedsResize) {
+				parent.setSize(newDimension);
+			}
+
+			if (parentNeedsRelocate) {
+				for (GraphicalRepresentation<?> child : parent.getContainedGraphicalRepresentations()) {
+					if (child instanceof ShapeGraphicalRepresentation && child != this) {
+						ShapeGraphicalRepresentation<?> c = (ShapeGraphicalRepresentation<?>) child;
+						c.setLocation(new FGEPoint(c.getX() + deltaX, c.getY() + deltaY));
+					}
+				}
+			}
+
+			if (parentNeedsRelocate || parentNeedsResize) {
+				FGEPoint oldLocation = new FGEPoint(x, y);
+				notifyObjectMoved(oldLocation);
+				notifyChange(Parameters.x, oldLocation.x, getX());
+				notifyChange(Parameters.y, oldLocation.y, getY());
+			}
+		}
+	}
+
+	/**
+	 * Check and eventually relocate and resize current graphical representation in order to all all contained shape graphical
+	 * representations. Contained graphical representations may substantically be relocated.
+	 */
+	public void extendBoundsToHostContents() {
+
+		// logger.info("Hop: extendBoundsToHostContents");
+
+		boolean needsResize = false;
+		FGEDimension newDimension = new FGEDimension(getWidth(), getHeight());
+		boolean needsRelocate = false;
+		FGEPoint newPosition = new FGEPoint(getX(), getY());
+		double deltaX = 0;
+		double deltaY = 0;
+
+		// First compute the delta to be applied (max of all required delta)
+		for (GraphicalRepresentation<?> child : getContainedGraphicalRepresentations()) {
+			if (child instanceof ShapeGraphicalRepresentation) {
+				ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) child;
+				if (gr.getX() < -deltaX) {
+					deltaX = -gr.getX();
+					needsRelocate = true;
+				}
+				if (gr.getY() < -deltaY) {
+					deltaY = -gr.getY();
+					needsRelocate = true;
+				}
+			}
+		}
+
+		// Relocate
+		if (needsRelocate) {
+			System.out.println("Relocate with deltaX=" + deltaX + " deltaY=" + deltaY);
+			newPosition.x = newPosition.x - deltaX;
+			newPosition.y = newPosition.y - deltaY;
+			setLocation(newPosition);
+			needsResize = true;
+			newDimension = new FGEDimension(getWidth() + deltaX, getHeight() + deltaY);
+			for (GraphicalRepresentation<?> child : getContainedGraphicalRepresentations()) {
+				if (child instanceof ShapeGraphicalRepresentation && child != this) {
+					ShapeGraphicalRepresentation<?> c = (ShapeGraphicalRepresentation<?>) child;
+					c.setLocation(new FGEPoint(c.getX() + deltaX, c.getY() + deltaY));
+				}
+			}
+		}
+
+		// First compute the resize to be applied
+		for (GraphicalRepresentation<?> child : getContainedGraphicalRepresentations()) {
+			if (child instanceof ShapeGraphicalRepresentation) {
+				ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) child;
+				if (gr.getX() + gr.getWidth() > getWidth()) {
+					newDimension.width = gr.x + gr.getWidth();
+					needsResize = true;
+				}
+				if (gr.y + gr.getHeight() > getHeight()) {
+					newDimension.height = gr.y + gr.getHeight();
+					needsResize = true;
+				}
+			}
+		}
+
+		if (needsResize) {
+			System.out.println("Resize to " + newDimension);
+			setSize(newDimension);
+		}
+
+		/*if (needsRelocate || needsResize) {
+			for (GraphicalRepresentation<?> child : getContainedGraphicalRepresentations()) {
+				if (child instanceof ShapeGraphicalRepresentation) {
+					ShapeGraphicalRepresentation<?> c = (ShapeGraphicalRepresentation<?>) child;
+					FGEPoint oldLocation = new FGEPoint(c.getX() - deltaX, c.getY() - deltaY);
+					c.notifyObjectMoved(oldLocation);
+					c.notifyChange(Parameters.x, oldLocation.x, c.getX());
+					c.notifyChange(Parameters.y, oldLocation.y, c.getY());
+				}
+			}
+		}*/
+
+	}
 
 	public double getX() {
 		// SGU: in general case, this is NOT forbidden
@@ -595,6 +774,47 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		Dimension normalizedLabelSize = getNormalizedLabelSize();
 		Rectangle r = new Rectangle(getLabelLocation(1.0), normalizedLabelSize);
 		return r;
+	}
+
+	public FGERectangle getRequiredBoundsForContents() {
+		FGERectangle requiredBounds = null;
+		if (getContainedGraphicalRepresentations() == null) {
+			return new FGERectangle(getMinimalWidth() / 2, getMinimalHeight() / 2, getMinimalWidth(), getMinimalHeight());
+		}
+		for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
+			if (gr instanceof ShapeGraphicalRepresentation) {
+				ShapeGraphicalRepresentation<?> shapeGR = (ShapeGraphicalRepresentation<?>) gr;
+				FGERectangle bounds = shapeGR.getBoundsNoBorder();
+				if (shapeGR.hasText()) {
+					Rectangle labelBounds = shapeGR.getNormalizedLabelBounds(); // getLabelBounds((new JLabel()), 1.0);
+					FGERectangle labelBounds2 = new FGERectangle(labelBounds.x, labelBounds.y, labelBounds.width, labelBounds.height);
+					bounds = bounds.rectangleUnion(labelBounds2);
+				}
+
+				if (requiredBounds == null) {
+					requiredBounds = bounds;
+				} else {
+					requiredBounds = requiredBounds.rectangleUnion(bounds);
+				}
+			}
+		}
+		if (requiredBounds == null) {
+			requiredBounds = new FGERectangle(getMinimalWidth() / 2, getMinimalHeight() / 2, getMinimalWidth(), getMinimalHeight());
+		} else {
+			if (requiredBounds.width < getMinimalWidth()) {
+				requiredBounds.x = requiredBounds.x - (int) ((getMinimalWidth() - requiredBounds.width) / 2.0);
+				requiredBounds.width = getMinimalWidth();
+			}
+			if (requiredBounds.height < getMinimalHeight()) {
+				requiredBounds.y = requiredBounds.y - (int) ((getMinimalHeight() - requiredBounds.height) / 2.0);
+				requiredBounds.height = getMinimalHeight();
+			}
+		}
+
+		requiredBounds.x = requiredBounds.x - getBorder().left;
+		requiredBounds.y = requiredBounds.y - getBorder().top;
+
+		return requiredBounds;
 	}
 
 	private FGERectangle getRequiredBoundsForChildGRLocation(GraphicalRepresentation<?> child, FGEPoint newChildLocation) {
@@ -1058,6 +1278,21 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		}
 	}
 
+	public final boolean getAdaptBoundsToContents() {
+		return adaptBoundsToContents;
+	}
+
+	public void setAdaptBoundsToContents(boolean adaptBoundsToContents) {
+		FGENotification notification = requireChange(Parameters.adaptBoundsToContents, adaptBoundsToContents);
+		if (notification != null) {
+			this.adaptBoundsToContents = adaptBoundsToContents;
+			hasChanged(notification);
+			if (adaptBoundsToContents) {
+				extendBoundsToHostContents();
+			}
+		}
+	}
+
 	public DimensionConstraints getDimensionConstraints() {
 		// Shape dimension constraints may override defaults
 
@@ -1158,10 +1393,18 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 
 		try {
 
+			// if (getAdaptBoundsToContents()) {
+			// extendBoundsToHostContents();
+			// }
+
 			isCheckingDimensionConstraints = true;
+
+			// FGERectangle requiredBounds = getRequiredBoundsForContents();
 
 			boolean changed = false;
 			FGEDimension newDimension = getSize();
+			// double minWidth = (getAdaptBoundsToContents() ? Math.max(getMinimalWidth(), requiredBounds.width) : getMinimalWidth());
+			// double minHeight = (getAdaptBoundsToContents() ? Math.max(getMinimalHeight(), requiredBounds.height) : getMinimalHeight());
 			double minWidth = getMinimalWidth();
 			double minHeight = getMinimalHeight();
 			double maxWidth = getMaximalWidth();
@@ -1470,7 +1713,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	public void updateConstraints() {
 		// System.out.println("updateConstraints() called, valid=" + xConstraints.isValid() + "," + yConstraints.isValid() + ","
 		// + widthConstraints.isValid() + "," + heightConstraints.isValid());
-		logger.info("Called updateConstraints()");
+		logger.fine("Called updateConstraints(), drawable=" + getDrawable() + " index=" + getIndex() + " class=" + getClass());
 		if (xConstraints != null && xConstraints.isValid()) {
 			// System.out.println("x was " + getX() + " constraint=" + xConstraints);
 			updateXPosition();
@@ -1491,6 +1734,7 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 			updateHeightPosition();
 			// System.out.println("height is now " + getHeight());
 		}
+
 	}
 
 	private void updateXPosition() {
@@ -1563,6 +1807,64 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		}
 	}
 
+	public ForegroundStyle getSelectedForeground() {
+		if (selectedForeground == null) {
+			selectedForeground = foreground.clone();
+		}
+		return selectedForeground;
+	}
+
+	public void setSelectedForeground(ForegroundStyle aForeground) {
+		FGENotification notification = requireChange(Parameters.selectedForeground, aForeground, false);
+		if (notification != null) {
+			if (selectedForeground != null) {
+				selectedForeground.deleteObserver(this);
+			}
+			selectedForeground = aForeground;
+			if (aForeground != null) {
+				aForeground.addObserver(this);
+			}
+			hasChanged(notification);
+		}
+	}
+
+	public boolean getHasSelectedForeground() {
+		return hasSelectedForeground;
+	}
+
+	public void setHasSelectedForeground(boolean aFlag) {
+		hasSelectedForeground = aFlag;
+	}
+
+	public ForegroundStyle getFocusedForeground() {
+		if (focusedForeground == null) {
+			focusedForeground = foreground.clone();
+		}
+		return focusedForeground;
+	}
+
+	public void setFocusedForeground(ForegroundStyle aForeground) {
+		FGENotification notification = requireChange(Parameters.focusedForeground, aForeground, false);
+		if (notification != null) {
+			if (focusedForeground != null) {
+				focusedForeground.deleteObserver(this);
+			}
+			focusedForeground = aForeground;
+			if (aForeground != null) {
+				aForeground.addObserver(this);
+			}
+			hasChanged(notification);
+		}
+	}
+
+	public boolean getHasFocusedForeground() {
+		return hasFocusedForeground;
+	}
+
+	public void setHasFocusedForeground(boolean aFlag) {
+		hasFocusedForeground = aFlag;
+	}
+
 	public boolean getNoStroke() {
 		return foreground.getNoStroke();
 	}
@@ -1599,6 +1901,68 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		if (backgroundType != getBackgroundType()) {
 			setBackground(BackgroundStyle.makeBackground(backgroundType));
 		}
+	}
+
+	public BackgroundStyle getSelectedBackground() {
+		if (selectedBackground == null) {
+			selectedBackground = background.clone();
+		}
+		return selectedBackground;
+	}
+
+	public void setSelectedBackground(BackgroundStyle aBackground) {
+		FGENotification notification = requireChange(Parameters.selectedBackground, aBackground, false);
+		if (notification != null) {
+			// background = aBackground.clone();
+			if (selectedBackground != null) {
+				selectedBackground.deleteObserver(this);
+			}
+			selectedBackground = aBackground;
+			// background.setGraphicalRepresentation(this);
+			if (aBackground != null) {
+				aBackground.addObserver(this);
+			}
+			hasChanged(notification);
+		}
+	}
+
+	public boolean getHasSelectedBackground() {
+		return hasSelectedBackground;
+	}
+
+	public void setHasSelectedBackground(boolean aFlag) {
+		hasSelectedBackground = aFlag;
+	}
+
+	public BackgroundStyle getFocusedBackground() {
+		if (focusedBackground == null) {
+			focusedBackground = background.clone();
+		}
+		return focusedBackground;
+	}
+
+	public void setFocusedBackground(BackgroundStyle aBackground) {
+		FGENotification notification = requireChange(Parameters.focusedBackground, aBackground, false);
+		if (notification != null) {
+			// background = aBackground.clone();
+			if (focusedBackground != null) {
+				focusedBackground.deleteObserver(this);
+			}
+			focusedBackground = aBackground;
+			// background.setGraphicalRepresentation(this);
+			if (aBackground != null) {
+				aBackground.addObserver(this);
+			}
+			hasChanged(notification);
+		}
+	}
+
+	public boolean getHasFocusedBackground() {
+		return hasFocusedBackground;
+	}
+
+	public void setHasFocusedBackground(boolean aFlag) {
+		hasFocusedBackground = aFlag;
 	}
 
 	public ShapeBorder getBorder() {
@@ -1901,8 +2265,16 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 	 * @return
 	 */
 	public FGERectangle getBounds() {
-		return new FGERectangle(getX(), getY(), getWidth() + (getBorder() != null ? getBorder().left + getBorder().right : 0),
-				getUnscaledViewHeight());
+		return new FGERectangle(getX(), getY(), getUnscaledViewWidth(), getUnscaledViewHeight());
+	}
+
+	/**
+	 * Return bounds (including border) relative to parent container
+	 * 
+	 * @return
+	 */
+	public FGERectangle getBoundsNoBorder() {
+		return new FGERectangle(getX(), getY(), getWidth(), getHeight());
 	}
 
 	/**
@@ -2284,4 +2656,58 @@ public class ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> 
 		performAutoLayout(getWidth(), getHeight());
 	}
 
+	@Override
+	public void notifyDrawableAdded(GraphicalRepresentation<?> addedGR) {
+		super.notifyDrawableAdded(addedGR);
+		if (getAdaptBoundsToContents()) {
+			extendBoundsToHostContents();
+		}
+	}
+
+	/**
+	 * Returns the area on which the given connector can start. The area is expressed in this normalized coordinates
+	 * 
+	 * @param connectorGR
+	 *            the connector asking where to start
+	 * @return the area on which the given connector can start
+	 */
+	public FGEArea getAllowedStartAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR) {
+		return getShape().getOutline();
+	}
+
+	/**
+	 * Returns the area on which the given connector can end. The area is expressed in this normalized coordinates
+	 * 
+	 * @param connectorGR
+	 *            the connector asking where to end
+	 * @return the area on which the given connector can end
+	 */
+	public FGEArea getAllowedEndAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR) {
+		return getShape().getOutline();
+	}
+
+	/**
+	 * Returns the area on which the given connector can start. The area is expressed in this normalized coordinates
+	 * 
+	 * @param connectorGR
+	 *            the connector asking where to start
+	 * 
+	 * @return the area on which the given connector can start
+	 */
+	public FGEArea getAllowedStartAreaForConnectorForDirection(ConnectorGraphicalRepresentation<?> connectorGR, FGEArea area,
+			SimplifiedCardinalDirection direction) {
+		return area;
+	}
+
+	/**
+	 * Returns the area on which the given connector can end. The area is expressed in this normalized coordinates
+	 * 
+	 * @param connectorGR
+	 *            the connector asking where to end
+	 * @return the area on which the given connector can end
+	 */
+	public FGEArea getAllowedEndAreaForConnectorForDirection(ConnectorGraphicalRepresentation<?> connectorGR, FGEArea area,
+			SimplifiedCardinalDirection direction) {
+		return area;
+	}
 }

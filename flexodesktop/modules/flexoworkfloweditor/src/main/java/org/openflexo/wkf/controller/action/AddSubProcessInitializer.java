@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -30,10 +30,10 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
+import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.ParametersModel;
 import org.openflexo.foundation.param.ProcessParameter;
-import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.InvalidFileNameException;
@@ -64,32 +64,36 @@ public class AddSubProcessInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddSubProcess> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddSubProcess>() {
 			@Override
-			public boolean run(ActionEvent e, AddSubProcess action) {
+			public boolean run(EventObject e, AddSubProcess action) {
+				if (action.getNewProcessName() != null) {
+					return true;
+				}
 				FlexoProcess process = null;
 				if (action.getFocusedObject() instanceof FlexoProcess) {
 					process = (FlexoProcess) action.getFocusedObject();
 				} else if (action.getFocusedObject() instanceof ProcessFolder) {
-					process = ((ProcessFolder) action.getFocusedObject()).getProcessNode().getProcess();
+					if (((ProcessFolder) action.getFocusedObject()).getProcessNode() != null) {
+						process = ((ProcessFolder) action.getFocusedObject()).getProcessNode().getProcess();
+					}
 				}
 				ParameterDefinition[] parameters = new ParameterDefinition[3];
 				String baseName = FlexoLocalization.localizedForKey("new_process_name");
-				parameters[0] = new TextFieldParameter("newProcessName", "name_of_process", getProject().getFlexoWorkflow()
-						.findNextDefaultProcessName(baseName));
-				String UNDER_PROCESS = FlexoLocalization.localizedForKey("under_process");
-				String NO_CONTEXT = FlexoLocalization.localizedForKey("without_context");
-				String[] contexts = { UNDER_PROCESS, NO_CONTEXT };
-				parameters[1] = new RadioButtonListParameter<String>("context", "process_context", process == null ? NO_CONTEXT
-						: UNDER_PROCESS, contexts);
+				TextFieldParameter textFieldParameter = new TextFieldParameter("newProcessName", "name_of_process", getProject()
+						.getFlexoWorkflow().findNextDefaultProcessName(baseName));
+				textFieldParameter.setRequestFocus(true);
+				parameters[0] = textFieldParameter;
+
+				parameters[1] = new CheckboxParameter("no_parent", "reusable_process", true);
 				parameters[2] = new ProcessParameter("parentProcess", "parent_process", process);
-				parameters[2].setDepends("context");
-				parameters[2].setConditional("context=" + '"' + UNDER_PROCESS + '"');
+				parameters[2].setDepends("no_parent");
+				parameters[2].setConditional("no_parent=false");
 				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
 						FlexoLocalization.localizedForKey("create_new_sub_process"),
 						FlexoLocalization.localizedForKey("enter_parameters_for_the_new_sub_process"), new ValidationCondition() {
 							@Override
 							public boolean isValid(ParametersModel model) {
 								errorMessage = FlexoLocalization.localizedForKey("you_must_choose_a_context");
-								return model.parameterForKey("context").getValue() != null;
+								return model.parameterForKey("no_parent").getValue() != null;
 							}
 
 							@Override
@@ -100,7 +104,7 @@ public class AddSubProcessInitializer extends ActionInitializer {
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 					String newProcessName = (String) dialog.parameterValueWithName("newProcessName");
 					FlexoProcess parentProcess;
-					if (dialog.parameterValueWithName("context").equals(UNDER_PROCESS)) {
+					if (dialog.parameterValueWithName("no_parent").equals(Boolean.FALSE)) {
 						parentProcess = (FlexoProcess) dialog.parameterValueWithName("parentProcess");
 					} else {
 						parentProcess = null;
@@ -120,7 +124,7 @@ public class AddSubProcessInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddSubProcess> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddSubProcess>() {
 			@Override
-			public boolean run(ActionEvent e, AddSubProcess action) {
+			public boolean run(EventObject e, AddSubProcess action) {
 				boolean res = true;
 				if (action.getNewProcess() != null
 						&& action.getFocusedObject() instanceof ProcessFolder
@@ -131,7 +135,9 @@ public class AddSubProcessInitializer extends ActionInitializer {
 					add.setDestination((ProcessFolder) action.getFocusedObject());
 					res &= add.doAction().hasActionExecutionSucceeded();
 				}
-				getControllerActionInitializer().getWKFController().setCurrentFlexoProcess(action.getNewProcess());
+				if (action.isShowNewProcess()) {
+					getControllerActionInitializer().getWKFController().setCurrentFlexoProcess(action.getNewProcess());
+				}
 				return res;
 			}
 		};
@@ -143,11 +149,11 @@ public class AddSubProcessInitializer extends ActionInitializer {
 			@Override
 			public boolean handleException(FlexoException exception, AddSubProcess action) {
 				if (exception instanceof DuplicateResourceException) {
-					FlexoController.notify("Process named " + (action).getNewProcessName() + " already exists !");
+					FlexoController.notify("Process named " + action.getNewProcessName() + " already exists !");
 					return false;
 				}
 				if (exception instanceof InvalidFileNameException) {
-					FlexoController.notify("Process named " + (action).getNewProcessName() + " is_not_valid");
+					FlexoController.notify("Process named " + action.getNewProcessName() + " is not valid");
 					return false;
 				}
 				return false;

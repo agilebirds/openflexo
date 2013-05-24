@@ -31,15 +31,12 @@ import org.openflexo.ie.view.controller.IEController;
  */
 public class DKVEditorBrowserView extends BrowserView {
 
-	private IEController _controller;
-
 	/**
 	 * @param browser
 	 * @param kl
 	 */
 	public DKVEditorBrowserView(IEController controller) {
-		super(controller.getDkvEditorBrowser(), controller.getKeyEventListener(), controller.getEditor());
-		_controller = controller;
+		super(controller.getDkvEditorBrowser(), controller);
 		FCH.setHelpItem(this, "dkv-browser");
 	}
 
@@ -51,7 +48,7 @@ public class DKVEditorBrowserView extends BrowserView {
 	@Override
 	public void treeSingleClick(FlexoModelObject object) {
 		if (object instanceof DKVObject) {
-			_controller.setSelectedDKVObject((DKVObject) object);
+			getController().selectAndFocusObject(object);
 		}
 		// If this object is inspectable, inspect it.
 		/*if (object instanceof InspectableObject) {
@@ -68,7 +65,7 @@ public class DKVEditorBrowserView extends BrowserView {
 	@Override
 	public void treeDoubleClick(FlexoModelObject object) {
 		if (object instanceof DKVObject) {
-			_controller.setSelectedDKVObject((DKVObject) object);
+			getController().selectAndFocusObject(object);
 		}
 	}
 

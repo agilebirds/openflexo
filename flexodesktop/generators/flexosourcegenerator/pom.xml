@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>generators</artifactId>
-		<version>1.4.4-SNAPSHOT</version>
+		<version>1.5.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexosourcegenerator</artifactId>
 	<name>Generators :: FlexoSourceGenerator</name>
@@ -29,16 +29,6 @@
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexojavaparser</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexowarbuilder</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexowarbuilder</artifactId>
-			<classifier>resources</classifier>
-			<type>zip</type>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>

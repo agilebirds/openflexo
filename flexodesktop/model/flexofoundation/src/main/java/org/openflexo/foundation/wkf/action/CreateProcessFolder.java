@@ -30,6 +30,7 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.FlexoFolderContainerNode;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoProcessNode;
+import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.ProcessFolder;
 
 public class CreateProcessFolder extends FlexoAction<CreateProcessFolder, FlexoModelObject, FlexoModelObject> {
@@ -49,12 +50,12 @@ public class CreateProcessFolder extends FlexoAction<CreateProcessFolder, FlexoM
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return object != null && !object.isImported();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return (object instanceof FlexoFolderContainerNode || object instanceof FlexoProcess) && !object.isImported();
 		}
 
@@ -95,7 +96,9 @@ public class CreateProcessFolder extends FlexoAction<CreateProcessFolder, FlexoM
 		} else if (getFocusedObject() instanceof FlexoProcess) {
 			return ((FlexoProcess) getFocusedObject()).getProcessNode();
 		} else if (getFocusedObject() instanceof ProcessFolder) {
-			return ((ProcessFolder) getFocusedObject());
+			return (ProcessFolder) getFocusedObject();
+		} else if (getFocusedObject() instanceof FlexoWorkflow) {
+			return (FlexoWorkflow) getFocusedObject();
 		}
 		return null;
 	}

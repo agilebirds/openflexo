@@ -34,6 +34,7 @@ import org.openflexo.fib.model.FIBTableAction;
 import org.openflexo.fib.model.FIBTableAction.FIBAddAction;
 import org.openflexo.fib.model.FIBTableAction.FIBCustomAction;
 import org.openflexo.fib.model.FIBTableAction.FIBRemoveAction;
+import org.openflexo.fib.view.widget.FIBTableWidget;
 
 /**
  * Please comment this class
@@ -49,24 +50,20 @@ public class FIBTableActionListener implements ActionListener, BindingEvaluation
 
 	private Object model;
 
-	private FIBTableModel tableModel;
-	private FIBController controller;
+	private FIBTableWidget tableWidget;
 
-	public FIBTableActionListener(FIBTableAction tableAction, FIBTableModel tableModel, FIBController controller) {
+	public FIBTableActionListener(FIBTableAction tableAction, FIBTableWidget tableWidget) {
 		super();
-		this.controller = controller;
+		this.tableWidget = tableWidget;
 		this.tableAction = tableAction;
 		selectedObject = null;
-		this.tableModel = tableModel;
 		tableAction.addObserver(this);
 	}
 
 	public void delete() {
 		tableAction.deleteObserver(this);
-		this.controller = null;
 		this.tableAction = null;
-		selectedObject = null;
-		this.tableModel = null;
+		this.tableWidget = null;
 	}
 
 	@Override
@@ -75,13 +72,13 @@ public class FIBTableActionListener implements ActionListener, BindingEvaluation
 			FIBAttributeNotification dataModification = (FIBAttributeNotification) arg;
 			if (dataModification.getAttribute() == FIBTableAction.Parameters.method
 					|| dataModification.getAttribute() == FIBTableAction.Parameters.isAvailable) {
-				tableModel.getWidget().updateTable();
+				tableWidget.updateTable();
 			}
 		}
 	}
 
 	public FIBController getController() {
-		return controller;
+		return tableWidget.getController();
 	}
 
 	public boolean isAddAction() {
@@ -123,9 +120,8 @@ public class FIBTableActionListener implements ActionListener, BindingEvaluation
 			// logger.info("controller="+getController()+" of "+getController().getClass().getSimpleName());
 			this.selectedObject = selectedObject;
 			Object newObject = tableAction.getMethod().getBindingValue(this);
-			tableModel.fireTableDataChanged();
-			tableModel.getTableWidget().updateWidgetFromModel();
-			tableModel.getTableWidget().setSelectedObject(newObject);
+			tableWidget.updateWidgetFromModel();
+			tableWidget.setSelectedObject(newObject);
 
 			/*if (newObject != null) {
 				int index = tableModel.getTableWidget().getValue().indexOf(newObject);

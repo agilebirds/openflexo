@@ -19,32 +19,9 @@
  */
 package org.openflexo.foundation.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 
-import org.openflexo.foundation.FlexoException;
+public abstract class FlexoActionRunnable<A extends FlexoAction> {
 
-public abstract class FlexoActionRunnable<A extends FlexoAction> implements Runnable {
-	/*private FlexoAction _action;
-
-	public FlexoAction getAction()
-	{
-	    return _action;
-	}
-
-	public void setAction(FlexoAction action) 
-	{
-	    _action = action;
-	}*/
-
-	@Override
-	public void run() {
-		try {
-			run(null, null);
-		} catch (FlexoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public abstract boolean run(ActionEvent event, A action) throws FlexoException;
+	public abstract boolean run(EventObject event, A action);
 }

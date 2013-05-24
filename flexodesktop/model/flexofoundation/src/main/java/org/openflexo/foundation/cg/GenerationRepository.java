@@ -30,8 +30,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.Format;
 import org.openflexo.foundation.TargetType;
-import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.cg.action.RemoveGeneratedCodeRepository;
 import org.openflexo.foundation.cg.dm.CGDataModification;
 import org.openflexo.foundation.cg.dm.CGFileCreated;
 import org.openflexo.foundation.cg.dm.CGFileDeleted;
@@ -40,14 +38,12 @@ import org.openflexo.foundation.cg.dm.CGRepositoryConnected;
 import org.openflexo.foundation.cg.dm.CGRepositoryDisconnected;
 import org.openflexo.foundation.cg.dm.CGStructureRefreshed;
 import org.openflexo.foundation.cg.dm.CustomTemplateRepositoryChanged;
+import org.openflexo.foundation.cg.dm.LogAdded;
 import org.openflexo.foundation.cg.dm.LongOperationStarted;
 import org.openflexo.foundation.cg.dm.LongOperationStopped;
-import org.openflexo.foundation.cg.dm.LogAdded;
 import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
 import org.openflexo.foundation.cg.version.CGRelease;
 import org.openflexo.foundation.cg.version.CGVersionIdentifier;
-import org.openflexo.foundation.cg.version.action.RegisterNewCGRelease;
-import org.openflexo.foundation.cg.version.action.RevertRepositoryToVersion;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException;
@@ -116,15 +112,6 @@ public abstract class GenerationRepository extends CGObject {
 				file.delete();
 			}
 		}
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(RemoveGeneratedCodeRepository.actionType);
-		returned.add(RegisterNewCGRelease.actionType);
-		returned.add(RevertRepositoryToVersion.actionType);
-		return returned;
 	}
 
 	@Override
@@ -235,8 +222,9 @@ public abstract class GenerationRepository extends CGObject {
 		}
 
 		// Too dangerous (if for example, the repository points to '/' or 'c:\' the consequences could be disatrous
-		/*if (deleteFiles) // Really delete files on disk
-			FileUtils.recursiveDeleteFile(getDirectory());*/
+		/*
+		 * if (deleteFiles) // Really delete files on disk FileUtils.recursiveDeleteFile(getDirectory());
+		 */
 
 		// rebuildStructure();
 		super.delete();
@@ -317,10 +305,14 @@ public abstract class GenerationRepository extends CGObject {
 			}
 			if (_sourceCodeRepository == null) {
 				_sourceCodeRepository = getProject().setDirectoryForRepositoryName(_displayName != null ? _displayName : "Default",
-						new File(System.getProperty("user.home") + "/" + getProject().getProjectName() + "/" + getTarget().getName()));
+						getDefaultSourceDirectory());
 			}
 		}
 		return _sourceCodeRepository;
+	}
+
+	public File getDefaultSourceDirectory() {
+		return new File(System.getProperty("user.home") + "/" + getProject().getProjectName() + "/" + getTarget().getName());
 	}
 
 	@Override
@@ -364,7 +356,7 @@ public abstract class GenerationRepository extends CGObject {
 		isConnected = false;
 		for (CGFile file : getFiles()) {
 			if (file.getResource() != null) {
-				file.getResource().desactivate();
+				file.getResource().deactivate();
 			}
 		}
 		setChanged();

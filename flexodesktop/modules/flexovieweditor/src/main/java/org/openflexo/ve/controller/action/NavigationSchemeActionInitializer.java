@@ -19,12 +19,13 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
@@ -36,7 +37,7 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class NavigationSchemeActionInitializer extends ActionInitializer {
+public class NavigationSchemeActionInitializer extends ActionInitializer<NavigationSchemeAction, FlexoModelObject, FlexoModelObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -53,7 +54,7 @@ public class NavigationSchemeActionInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<NavigationSchemeAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<NavigationSchemeAction>() {
 			@Override
-			public boolean run(ActionEvent e, NavigationSchemeAction action) {
+			public boolean run(EventObject e, NavigationSchemeAction action) {
 				if (!action.evaluateCondition()) {
 					return false;
 				}
@@ -76,7 +77,7 @@ public class NavigationSchemeActionInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<NavigationSchemeAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<NavigationSchemeAction>() {
 			@Override
-			public boolean run(ActionEvent e, NavigationSchemeAction action) {
+			public boolean run(EventObject e, NavigationSchemeAction action) {
 				if (action.getTargetObject() != null) {
 					// Editor will handle switch to right module and perspective, and select target object
 					getEditor().focusOn(action.getTargetObject());

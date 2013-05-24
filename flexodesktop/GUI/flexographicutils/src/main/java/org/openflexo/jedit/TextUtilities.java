@@ -165,7 +165,7 @@ public class TextUtilities {
 		if (noWordSep == null) {
 			noWordSep = "";
 		}
-		boolean selectNoLetter = (!Character.isLetterOrDigit(ch) && noWordSep.indexOf(ch) == -1);
+		boolean selectNoLetter = !Character.isLetterOrDigit(ch) && noWordSep.indexOf(ch) == -1;
 
 		int wordStart = 0;
 		for (int i = pos - 1; i >= 0; i--) {
@@ -193,7 +193,7 @@ public class TextUtilities {
 		if (noWordSep == null) {
 			noWordSep = "";
 		}
-		boolean selectNoLetter = (!Character.isLetterOrDigit(ch) && noWordSep.indexOf(ch) == -1);
+		boolean selectNoLetter = !Character.isLetterOrDigit(ch) && noWordSep.indexOf(ch) == -1;
 
 		int wordEnd = line.length();
 		for (int i = pos; i < line.length(); i++) {

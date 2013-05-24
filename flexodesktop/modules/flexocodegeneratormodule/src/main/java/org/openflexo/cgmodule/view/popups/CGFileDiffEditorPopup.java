@@ -192,7 +192,7 @@ public class CGFileDiffEditorPopup extends FlexoDialog {
 			sourceParam = new EnumDropDownParameter<ContentSourceType>("source", label, source.getType(), ContentSourceType.values()) {
 				@Override
 				public boolean accept(ContentSourceType value) {
-					return ShowFileVersion.getActionTypeFor(value).isEnabled(_cgFile, null, _controller.getEditor());
+					return ShowFileVersion.getActionTypeFor(value).isEnabled(_cgFile, null);
 				}
 
 				@Override
@@ -202,9 +202,9 @@ public class CGFileDiffEditorPopup extends FlexoDialog {
 				}
 			};
 			sourceParam.addParameter("showReset", "false");
-			AbstractCGFileVersion fileVersion = (source.getVersion() != null
+			AbstractCGFileVersion fileVersion = source.getVersion() != null
 					&& _cgFile.getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile ? ((AbstractGeneratedFile) _cgFile
-					.getResource().getGeneratedResourceData()).getHistory().versionWithId(source.getVersion()) : null);
+					.getResource().getGeneratedResourceData()).getHistory().versionWithId(source.getVersion()) : null;
 			versionParam = new CGFileVersionParameter("version", "version", _cgFile, fileVersion) {
 				@Override
 				public void setValue(AbstractCGFileVersion fileVersion) {
@@ -222,13 +222,13 @@ public class CGFileDiffEditorPopup extends FlexoDialog {
 		}
 
 		protected ContentSource getUpdatedContentSource() {
-			if ((sourceParam.getValue() == ContentSourceType.HistoryVersion) && (versionParam.getValue() == null)
+			if (sourceParam.getValue() == ContentSourceType.HistoryVersion && versionParam.getValue() == null
 					&& _cgFile.getResource().getGeneratedResourceData() instanceof AbstractGeneratedFile) {
 				versionParam.setValue(((AbstractGeneratedFile) _cgFile.getResource().getGeneratedResourceData()).getHistory()
 						.versionWithId(_cgFile.getRepository().getLastReleaseVersionIdentifier()));
 			}
-			return ContentSource.getContentSource(sourceParam.getValue(), (versionParam.getValue() != null ? versionParam.getValue()
-					.getVersionId() : null));
+			return ContentSource.getContentSource(sourceParam.getValue(), versionParam.getValue() != null ? versionParam.getValue()
+					.getVersionId() : null);
 		}
 
 	}

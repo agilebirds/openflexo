@@ -80,9 +80,9 @@ public class RectangleGraphicalRepresentation extends GeometricObjectGraphicalRe
 				@Override
 				public void startDragging(DrawingController controller, FGEPoint startPoint) {
 					super.startDragging(controller, startPoint);
-					initialWidth = (getGeometricObject()).width;
-					initialHeight = (getGeometricObject()).height;
-					setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane((getGeometricObject()).getSouthEastPt(),
+					initialWidth = getGeometricObject().width;
+					initialHeight = getGeometricObject().height;
+					setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(getGeometricObject().getSouthEastPt(),
 							CardinalQuadrant.NORTH_WEST));
 				}
 
@@ -92,10 +92,10 @@ public class RectangleGraphicalRepresentation extends GeometricObjectGraphicalRe
 					FGEPoint pt = getNearestPointOnAuthorizedArea(newAbsolutePoint);
 					setPoint(pt);
 
-					(getGeometricObject()).x = pt.x;
-					(getGeometricObject()).y = pt.y;
-					(getGeometricObject()).width = -pt.x + initialPoint.x + initialWidth;
-					(getGeometricObject()).height = -pt.y + initialPoint.y + initialHeight;
+					getGeometricObject().x = pt.x;
+					getGeometricObject().y = pt.y;
+					getGeometricObject().width = -pt.x + initialPoint.x + initialWidth;
+					getGeometricObject().height = -pt.y + initialPoint.y + initialHeight;
 
 					notifyGeometryChanged();
 					return true;
@@ -123,9 +123,9 @@ public class RectangleGraphicalRepresentation extends GeometricObjectGraphicalRe
 				@Override
 				public void startDragging(DrawingController controller, FGEPoint startPoint) {
 					super.startDragging(controller, startPoint);
-					initialWidth = (getGeometricObject()).width;
-					initialHeight = (getGeometricObject()).height;
-					setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane((getGeometricObject()).getNorthWestPt(),
+					initialWidth = getGeometricObject().width;
+					initialHeight = getGeometricObject().height;
+					setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(getGeometricObject().getNorthWestPt(),
 							CardinalQuadrant.SOUTH_EAST));
 				}
 
@@ -135,8 +135,8 @@ public class RectangleGraphicalRepresentation extends GeometricObjectGraphicalRe
 					FGEPoint pt = getNearestPointOnAuthorizedArea(newAbsolutePoint);
 					setPoint(pt);
 
-					(getGeometricObject()).width = pt.x - initialPoint.x + initialWidth;
-					(getGeometricObject()).height = pt.y - initialPoint.y + initialHeight;
+					getGeometricObject().width = pt.x - initialPoint.x + initialWidth;
+					getGeometricObject().height = pt.y - initialPoint.y + initialHeight;
 
 					notifyGeometryChanged();
 					return true;
@@ -169,9 +169,9 @@ public class RectangleGraphicalRepresentation extends GeometricObjectGraphicalRe
 				@Override
 				public void startDragging(DrawingController controller, FGEPoint startPoint) {
 					super.startDragging(controller, startPoint);
-					initialWidth = (getGeometricObject()).width;
-					initialHeight = (getGeometricObject()).height;
-					setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane((getGeometricObject()).getSouthWestPt(),
+					initialWidth = getGeometricObject().width;
+					initialHeight = getGeometricObject().height;
+					setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(getGeometricObject().getSouthWestPt(),
 							CardinalQuadrant.NORTH_EAST));
 				}
 
@@ -181,12 +181,12 @@ public class RectangleGraphicalRepresentation extends GeometricObjectGraphicalRe
 					FGEPoint pt = getNearestPointOnAuthorizedArea(newAbsolutePoint);
 					setPoint(pt);
 
-					(getGeometricObject()).y = pt.y;
-					(getGeometricObject()).width = pt.x - initialPoint.x + initialWidth;
-					(getGeometricObject()).height = -pt.y + initialPoint.y + initialHeight;
+					getGeometricObject().y = pt.y;
+					getGeometricObject().width = pt.x - initialPoint.x + initialWidth;
+					getGeometricObject().height = -pt.y + initialPoint.y + initialHeight;
 
-					nwCP1.setPoint(new FGEPoint((getGeometricObject()).x, pt.y));
-					seCP2.setPoint(new FGEPoint(pt.x, (getGeometricObject()).y + (getGeometricObject()).height));
+					nwCP1.setPoint(new FGEPoint(getGeometricObject().x, pt.y));
+					seCP2.setPoint(new FGEPoint(pt.x, getGeometricObject().y + getGeometricObject().height));
 
 					notifyGeometryChanged();
 					return true;
@@ -219,9 +219,9 @@ public class RectangleGraphicalRepresentation extends GeometricObjectGraphicalRe
 				@Override
 				public void startDragging(DrawingController controller, FGEPoint startPoint) {
 					super.startDragging(controller, startPoint);
-					initialWidth = (getGeometricObject()).width;
-					initialHeight = (getGeometricObject()).height;
-					setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane((getGeometricObject()).getNorthEastPt(),
+					initialWidth = getGeometricObject().width;
+					initialHeight = getGeometricObject().height;
+					setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(getGeometricObject().getNorthEastPt(),
 							CardinalQuadrant.SOUTH_WEST));
 				}
 
@@ -231,12 +231,12 @@ public class RectangleGraphicalRepresentation extends GeometricObjectGraphicalRe
 					FGEPoint pt = getNearestPointOnAuthorizedArea(newAbsolutePoint);
 					setPoint(pt);
 
-					(getGeometricObject()).x = pt.x;
-					(getGeometricObject()).width = -pt.x + initialPoint.x + initialWidth;
-					(getGeometricObject()).height = pt.y - initialPoint.y + initialHeight;
+					getGeometricObject().x = pt.x;
+					getGeometricObject().width = -pt.x + initialPoint.x + initialWidth;
+					getGeometricObject().height = pt.y - initialPoint.y + initialHeight;
 
-					nwCP1.setPoint(new FGEPoint(pt.x, (getGeometricObject()).y));
-					seCP2.setPoint(new FGEPoint((getGeometricObject()).x + (getGeometricObject()).width, pt.y));
+					nwCP1.setPoint(new FGEPoint(pt.x, getGeometricObject().y));
+					seCP2.setPoint(new FGEPoint(getGeometricObject().x + getGeometricObject().width, pt.y));
 
 					notifyGeometryChanged();
 					return true;

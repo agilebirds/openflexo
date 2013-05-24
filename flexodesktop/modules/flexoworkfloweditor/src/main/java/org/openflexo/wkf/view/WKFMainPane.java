@@ -19,8 +19,6 @@
  */
 package org.openflexo.wkf.view;
 
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFGroup;
 import org.openflexo.foundation.wkf.action.OpenExecutionPetriGraph;
@@ -33,7 +31,6 @@ import org.openflexo.foundation.wkf.node.LOOPOperator;
 import org.openflexo.foundation.wkf.node.PetriGraphNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableNode;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.ModuleView;
 import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.swleditor.SwimmingLaneView;
 
@@ -42,30 +39,20 @@ import org.openflexo.wkf.swleditor.SwimmingLaneView;
  * 
  * @author yourname
  */
-public class WKFMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
+public class WKFMainPane extends FlexoMainPane {
 
-	public WKFMainPane(ModuleView moduleView, WKFFrame mainFrame, WKFController controller) {
-		super(moduleView, mainFrame, controller);
+	public WKFMainPane(WKFController controller) {
+		super(controller);
 	}
 
-	public void showProcessBrowser() {
-		showLeftView();
-	}
-
-	public void hideProcessBrowser() {
-		hideLeftView();
-	}
-
-	@Override
 	public boolean isCollapseEnabled() {
 		return true;
 	}
 
-	@Override
 	public void performCollapseAll() {
 		if (getController().getCurrentModuleView() != null
 				&& getController().getCurrentModuleView().getRepresentedObject() instanceof FlexoProcess) {
-			FlexoProcess flexoProcess = ((FlexoProcess) getController().getCurrentModuleView().getRepresentedObject());
+			FlexoProcess flexoProcess = (FlexoProcess) getController().getCurrentModuleView().getRepresentedObject();
 			for (AbstractActivityNode node : flexoProcess.getAllAbstractActivityNodes()) {
 				if (node.hasContainedPetriGraph() && node.getOperationPetriGraph().getIsVisible()) {
 					OpenOperationLevel.actionType.makeNewAction(node, null, getController().getEditor()).doAction();
@@ -93,20 +80,10 @@ public class WKFMainPane extends FlexoMainPane implements GraphicalFlexoObserver
 		}
 	}
 
-	@Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object) {
-		if (object instanceof FlexoProcess) {
-			return (((FlexoProcess) object).getParentProcess());
-		}
-		return null;
-	}
-
-	@Override
 	public boolean isAutoLayoutEnabled() {
 		return getController().getCurrentModuleView() instanceof SwimmingLaneView;
 	}
 
-	@Override
 	public void performAutolayout() {
 		if (getController().getCurrentModuleView() instanceof SwimmingLaneView) {
 			SwimmingLaneView view = (SwimmingLaneView) getController().getCurrentModuleView();

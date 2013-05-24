@@ -52,8 +52,8 @@ import org.openflexo.ie.view.controller.IESelectionManager;
 import org.openflexo.ie.view.dkv.model.DKVDomainTableModel;
 import org.openflexo.ie.view.dkv.model.DKVKeyTableModel;
 import org.openflexo.selection.SelectionListener;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * @author gpolet
@@ -140,10 +140,10 @@ public class DKVModelView extends CompoundTabularView<DKVModel> implements Selec
 	public Domain getSelectedDomain() {
 		IESelectionManager sm = getIEController().getIESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof Domain)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof Domain) {
 			return (Domain) selection.firstElement();
 		}
-		if ((selection.size() == 1) && (selection.firstElement() instanceof Domain.KeyList)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof Domain.KeyList) {
 			return ((Domain.KeyList) selection.firstElement()).getDomain();
 		}
 		if (getSelectedKey() != null) {
@@ -155,7 +155,7 @@ public class DKVModelView extends CompoundTabularView<DKVModel> implements Selec
 	public Key getSelectedKey() {
 		IESelectionManager sm = getIEController().getIESelectionManager();
 		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof Key)) {
+		if (selection.size() == 1 && selection.firstElement() instanceof Key) {
 			return (Key) selection.firstElement();
 		}
 		return null;
@@ -257,12 +257,13 @@ public class DKVModelView extends CompoundTabularView<DKVModel> implements Selec
 
 	@Override
 	public void deleteModuleView() {
+		getDKVModel().addObserver(this);
 		logger.info("Removing view !");
 		getIEController().removeModuleView(this);
 	}
 
 	@Override
-	public FlexoPerspective<DKVModel> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return getIEController().DKV_EDITOR_PERSPECTIVE;
 	}
 

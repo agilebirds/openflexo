@@ -36,7 +36,7 @@ import org.openflexo.drm.DocResourceManager;
 import org.openflexo.help.FlexoHelp;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.Modules;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.controller.FlexoController;
 
@@ -89,14 +89,15 @@ public class HelpMenu extends FlexoMenu implements Observer {
 		add(modelingHelp);
 
 		addSeparator();
-		modulesHelp = new JMenuItem[getModuleLoader().availableModules().size()];
-		for (int i = 0; i < getModuleLoader().availableModules().size(); i++) {
-			Module module = getModuleLoader().availableModules().get(i);
+		modulesHelp = new JMenuItem[Modules.getInstance().getAvailableModules().size()];
+		int i = 0;
+		for (Module module : Modules.getInstance().getAvailableModules()) {
 			modulesHelp[i] = new JMenuItem();
 			modulesHelp[i].setText(FlexoLocalization.localizedForKey(module.getName(), modulesHelp[i]));
 			CSH.setHelpIDString(modulesHelp[i], module.getHelpTopic());
 			modulesHelp[i].addActionListener(helpActionListener);
 			add(modulesHelp[i]);
+			i++;
 		}
 
 		addSeparator();
@@ -132,7 +133,7 @@ public class HelpMenu extends FlexoMenu implements Observer {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					AboutDialog about = new AboutDialog();
+					new AboutDialog();
 				}
 
 			});
@@ -142,8 +143,10 @@ public class HelpMenu extends FlexoMenu implements Observer {
 		FlexoHelp.instance.addObserver(this);
 	}
 
-	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
+	@Override
+	public void dispose() {
+		FlexoHelp.instance.deleteObserver(this);
+		super.dispose();
 	}
 
 	@Override

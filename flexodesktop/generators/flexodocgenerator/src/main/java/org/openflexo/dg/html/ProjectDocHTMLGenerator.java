@@ -46,6 +46,7 @@ import org.openflexo.foundation.cg.templates.CGTemplates;
 import org.openflexo.foundation.cg.templates.TemplateFileNotification;
 import org.openflexo.foundation.rm.FlexoCopiedResource;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -110,11 +111,11 @@ public class ProjectDocHTMLGenerator extends ProjectDocGenerator {
 	public String getMainColor() {
 		StringBuilder sb = new StringBuilder();
 		Color c = getProject().getCssSheet().getTextColor();
-		sb.append(Math.round(c.getRed() * 10000 / 255) / 10000d);
+		sb.append(Math.round(c.getRed() * 10000d / 255) / 10000d);
 		sb.append(',');
-		sb.append(Math.round(c.getGreen() * 10000 / 255) / 10000d);
+		sb.append(Math.round(c.getGreen() * 10000d / 255) / 10000d);
 		sb.append(',');
-		sb.append(Math.round(c.getBlue() * 10000d / 255d) / 10000d);
+		sb.append(Math.round(c.getBlue() * 10000d / 255) / 10000d);
 		return sb.toString();
 	}
 
@@ -135,10 +136,23 @@ public class ProjectDocHTMLGenerator extends ProjectDocGenerator {
 				propertiesGenerator);
 		resources.add(propertiesRes);
 
-		// A JS file per process
-		Vector<FlexoProcess> processes = getProject().getAllLocalFlexoProcesses();
+		buildResourcesForProject(repository, resources, getProject());
+		for (FlexoProjectReference ref : getProject().getResolvedProjectReferences()) {
+			buildResourcesForProject(repository, resources, ref.getReferredProject());
+		}
+		buildResourcesAndSetGeneratorsForCopyOfPackagedResources(resources);
+		buildResourcesAndSetGeneratorsForCopiedResources(resources);
+		screenshotsGenerator.buildResourcesAndSetGenerators(repository, resources);
+	}
+
+	private void buildResourcesForProject(DGRepository repository, Vector<CGRepositoryFileResource> resources, FlexoProject project) {
+		if (project == null) {
+			return;
+		}
+		Vector<FlexoProcess> processes = project.getAllLocalFlexoProcesses();
 		resetSecondaryProgressWindow(processes.size());
 		Set<ProcessFolder> allFolders = new HashSet<ProcessFolder>();
+		allFolders.addAll(project.getWorkflow().getFolders());
 		for (FlexoProcess process : processes) {
 			if (process == null) {
 				continue;
@@ -180,10 +194,6 @@ public class ProjectDocHTMLGenerator extends ProjectDocGenerator {
 				}
 			}
 		}
-
-		buildResourcesAndSetGeneratorsForCopyOfPackagedResources(resources);
-		buildResourcesAndSetGeneratorsForCopiedResources(resources);
-		screenshotsGenerator.buildResourcesAndSetGenerators(repository, resources);
 	}
 
 	protected static final Vector<FileResource> fileResourceToCopy = new Vector<FileResource>();
@@ -225,8 +235,8 @@ public class ProjectDocHTMLGenerator extends ProjectDocGenerator {
 	}
 
 	public ProjectHTMLFileResource getProjectDocResource() {
-		return ((ProjectHTMLFileResource) getProject().resourceForKey(ResourceType.HTML_FILE,
-				ProjectHTMLFileResource.nameForRepositoryAndProject(this.getRepository(), getProject())));
+		return (ProjectHTMLFileResource) getProject().resourceForKey(ResourceType.HTML_FILE,
+				ProjectHTMLFileResource.nameForRepositoryAndProject(this.getRepository(), getProject()));
 	}
 
 	protected long lastLogUpdate;
@@ -238,7 +248,7 @@ public class ProjectDocHTMLGenerator extends ProjectDocGenerator {
 	 */
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (((dataModification.propertyName() != null) && dataModification.propertyName().equals("docType"))) {
+		if (dataModification.propertyName() != null && dataModification.propertyName().equals("docType")) {
 			getTemplateLocator().notifyTemplateModified();
 		}
 		if (dataModification instanceof TemplateFileNotification) {

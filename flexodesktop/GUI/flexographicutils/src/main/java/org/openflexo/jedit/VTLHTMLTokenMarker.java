@@ -57,7 +57,7 @@ public class VTLHTMLTokenMarker extends TokenMarker {
 		boolean backslash = false;
 
 		loop: for (int i = offset; i < length; i++) {
-			int i1 = (i + 1);
+			int i1 = i + 1;
 
 			char c = array[i];
 			if (c == '\\') {
@@ -76,7 +76,7 @@ public class VTLHTMLTokenMarker extends TokenMarker {
 						token = Token.COMMENT1;
 					} else if (js && SyntaxUtilities.regionMatches(true, line, i1, "script>")) {
 						addToken(8, Token.KEYWORD3);
-						lastOffset = lastKeyword = (i += 8);
+						lastOffset = lastKeyword = i += 8;
 						token = JAVASCRIPT;
 					} else if (SyntaxUtilities.regionMatches(false, line, i1, "WEBOBJECT")) {
 						i += 9;
@@ -163,7 +163,7 @@ public class VTLHTMLTokenMarker extends TokenMarker {
 					boolean acceptable = true;
 					int openingP = 0; // # Opening parenthesis
 					int openingB = 0; // # Opening brackets
-					boolean bracketsNotation = (tmp < length && array[tmp] == '{') || (tmp + 1 < length && array[tmp + 1] == '{');
+					boolean bracketsNotation = tmp < length && array[tmp] == '{' || tmp + 1 < length && array[tmp + 1] == '{';
 					if (bracketsNotation) {
 						while (tmp < length && acceptable) {
 							if (array[tmp] == '{') {
@@ -243,7 +243,7 @@ public class VTLHTMLTokenMarker extends TokenMarker {
 			case Token.COMMENT1: // Inside a comment
 				backslash = false;
 				if (SyntaxUtilities.regionMatches(false, line, i, "-->")) {
-					addToken((i + 3) - lastOffset, token);
+					addToken(i + 3 - lastOffset, token);
 					lastOffset = lastKeyword = i + 3;
 					token = Token.NULL;
 				}
@@ -251,7 +251,7 @@ public class VTLHTMLTokenMarker extends TokenMarker {
 			case Token.WEBOBJECT: // Inside a comment
 				backslash = false;
 				if (SyntaxUtilities.regionMatches(false, line, i, ">")) {
-					addToken((i + 1) - lastOffset, token);
+					addToken(i + 1 - lastOffset, token);
 					lastOffset = lastKeyword = i + 1;
 					token = Token.NULL;
 				}
@@ -259,7 +259,7 @@ public class VTLHTMLTokenMarker extends TokenMarker {
 			case Token.TABLE: // Inside a comment
 				backslash = false;
 				if (SyntaxUtilities.regionMatches(false, line, i, ">")) {
-					addToken((i + 1) - lastOffset, token);
+					addToken(i + 1 - lastOffset, token);
 					lastOffset = lastKeyword = i + 1;
 					token = Token.NULL;
 				}
@@ -267,7 +267,7 @@ public class VTLHTMLTokenMarker extends TokenMarker {
 			case Token.TR: // Inside a comment
 				backslash = false;
 				if (SyntaxUtilities.regionMatches(false, line, i, ">")) {
-					addToken((i + 1) - lastOffset, token);
+					addToken(i + 1 - lastOffset, token);
 					lastOffset = lastKeyword = i + 1;
 					token = Token.NULL;
 				}
@@ -275,7 +275,7 @@ public class VTLHTMLTokenMarker extends TokenMarker {
 			case Token.TD: // Inside a comment
 				backslash = false;
 				if (SyntaxUtilities.regionMatches(false, line, i, ">")) {
-					addToken((i + 1) - lastOffset, token);
+					addToken(i + 1 - lastOffset, token);
 					lastOffset = lastKeyword = i + 1;
 					token = Token.NULL;
 				}
@@ -283,37 +283,37 @@ public class VTLHTMLTokenMarker extends TokenMarker {
 			case Token.KEYWORD5: // VTL directives
 				backslash = false;
 				if (SyntaxUtilities.regionMatches(false, line, i, "if")) {
-					addToken((i + 2) - lastOffset, token);
+					addToken(i + 2 - lastOffset, token);
 					lastOffset = lastKeyword = i + 2;
 					i += 2;
 					token = Token.NULL;
 				} else if (SyntaxUtilities.regionMatches(false, line, i, "else")) {
-					addToken((i + 4) - lastOffset, token);
+					addToken(i + 4 - lastOffset, token);
 					lastOffset = lastKeyword = i + 4;
 					i += 4;
 					token = Token.NULL;
 				} else if (SyntaxUtilities.regionMatches(false, line, i, "elseif")) {
-					addToken((i + 6) - lastOffset, token);
+					addToken(i + 6 - lastOffset, token);
 					lastOffset = lastKeyword = i + 6;
 					i += 6;
 					token = Token.NULL;
 				} else if (SyntaxUtilities.regionMatches(false, line, i, "end")) {
-					addToken((i + 3) - lastOffset, token);
+					addToken(i + 3 - lastOffset, token);
 					lastOffset = lastKeyword = i + 3;
 					i += 3;
 					token = Token.NULL;
 				} else if (SyntaxUtilities.regionMatches(false, line, i, "foreach")) {
-					addToken((i + 7) - lastOffset, token);
+					addToken(i + 7 - lastOffset, token);
 					lastOffset = lastKeyword = i + 7;
 					i += 7;
 					token = Token.NULL;
 				} else if (SyntaxUtilities.regionMatches(false, line, i, "macro")) {
-					addToken((i + 5) - lastOffset, token);
+					addToken(i + 5 - lastOffset, token);
 					lastOffset = lastKeyword = i + 5;
 					i += 5;
 					token = Token.NULL;
 				} else if (SyntaxUtilities.regionMatches(false, line, i, "set")) {
-					addToken((i + 3) - lastOffset, token);
+					addToken(i + 3 - lastOffset, token);
 					lastOffset = lastKeyword = i + 3;
 					i += 3;
 					token = Token.NULL;
@@ -330,7 +330,7 @@ public class VTLHTMLTokenMarker extends TokenMarker {
 				if (c == '*' && length - i > 1) {
 					if (array[i1] == '#') {
 						i++;
-						addToken((i + 1) - lastOffset, token);
+						addToken(i + 1 - lastOffset, token);
 						token = Token.NULL;
 						lastOffset = lastKeyword = i + 1;
 					}
@@ -344,7 +344,7 @@ public class VTLHTMLTokenMarker extends TokenMarker {
 					if (SyntaxUtilities.regionMatches(true, line, i1, "/script>")) {
 						addToken(i - lastOffset, Token.NULL);
 						addToken(9, Token.KEYWORD3);
-						lastOffset = lastKeyword = (i += 9);
+						lastOffset = lastKeyword = i += 9;
 						token = Token.NULL;
 					}
 					break;

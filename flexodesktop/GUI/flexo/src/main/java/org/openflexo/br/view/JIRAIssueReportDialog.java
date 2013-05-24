@@ -18,7 +18,6 @@ import java.util.zip.Deflater;
 import org.openflexo.AdvancedPrefs;
 import org.openflexo.ApplicationVersion;
 import org.openflexo.Flexo;
-import org.openflexo.FlexoCst;
 import org.openflexo.br.BugReportManager;
 import org.openflexo.components.ProgressWindow;
 import org.openflexo.fib.controller.FIBController.Status;
@@ -26,8 +25,9 @@ import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
+import org.openflexo.module.Modules;
 import org.openflexo.swing.ImageUtils;
 import org.openflexo.swing.ImageUtils.ImageType;
 import org.openflexo.toolbox.FileResource;
@@ -168,18 +168,21 @@ public class JIRAIssueReportDialog {
 
 	private File attachFile;
 
-	public static void newBugReport(Module module) {
-		newBugReport(null, module);
+	private FlexoProject flexoProject;
+
+	public static void newBugReport(FlexoModule module, FlexoProject project) {
+		newBugReport(null, module, project);
 	}
 
-	public static void newBugReport(Exception e, Module module) {
+	public static void newBugReport(Exception e, FlexoModule module, FlexoProject project) {
 		try {
 			JIRAIssueReportDialog report = new JIRAIssueReportDialog(e);
+			report.setFlexoProject(project);
 			if (module != null) {
 				if (report.getIssue().getIssuetype().getComponentField() != null
 						&& report.getIssue().getIssuetype().getComponentField().getAllowedValues() != null) {
 					for (JIRAComponent comp : report.getIssue().getIssuetype().getComponentField().getAllowedValues()) {
-						if (comp.getId().equals(module.getJiraComponentID())) {
+						if (comp.getId().equals(module.getModule().getJiraComponentID())) {
 							report.getIssue().setComponent(comp);
 							break;
 						}
@@ -230,6 +233,10 @@ public class JIRAIssueReportDialog {
 		}
 	}
 
+	private void setFlexoProject(FlexoProject flexoProject) {
+		this.flexoProject = flexoProject;
+	}
+
 	public JIRAIssueReportDialog() throws JsonSyntaxException, JsonIOException, FileNotFoundException {
 		this(null);
 	}
@@ -252,9 +259,9 @@ public class JIRAIssueReportDialog {
 			}
 			issue.setPriority(major);
 		}
-		sendSystemProperties = true;
+		sendSystemProperties = false;
 		sendScreenshots = false;
-		sendLogs = e != null;
+		sendLogs = true;
 		if (e != null) {
 			issue.setStacktrace(e.getClass().getName() + ": " + e.getMessage() + "\n" + ToolBox.getStackTraceAsString(e));
 		}
@@ -330,8 +337,8 @@ public class JIRAIssueReportDialog {
 				steps++;
 			}
 			if (sendScreenshots) {
-				for (int i = 0; i < FlexoFrame.getFrames().length; i++) {
-					Frame frame = FlexoFrame.getFrames()[i];
+				for (int i = 0; i < Frame.getFrames().length; i++) {
+					Frame frame = Frame.getFrames()[i];
 					if (frame instanceof FlexoFrame) {
 						steps++;
 						for (Window w : frame.getOwnedWindows()) {
@@ -348,11 +355,12 @@ public class JIRAIssueReportDialog {
 		@Override
 		public void run() {
 			ReportProgress progressAdapter = new ReportProgress();
-			String buildid = "build.id = " + FlexoCst.BUILD_ID + "\n";
+			String buildid = "build.id = " + ApplicationVersion.BUILD_ID + "\n";
+			String commitID = "commit.id = " + ApplicationVersion.COMMIT_ID + "\n";
 			if (sendSystemProperties) {
-				issue.setSystemProperties(buildid + ToolBox.getSystemProperties(true));
+				issue.setSystemProperties(buildid + commitID + ToolBox.getSystemProperties(true));
 			} else {
-				issue.setSystemProperties(buildid);
+				issue.setSystemProperties(buildid + commitID);
 			}
 
 			if (getIssue().getIssuetype().getVersionField() != null) {
@@ -416,7 +424,6 @@ public class JIRAIssueReportDialog {
 						}
 					}
 					if (sendProject) {
-						FlexoProject flexoProject = ModuleLoader.instance().getProject();
 						if (flexoProject != null) {
 							File projectDirectory = flexoProject.getProjectDirectory();
 							String directoryName = projectDirectory.getName();
@@ -467,8 +474,8 @@ public class JIRAIssueReportDialog {
 						}
 					}
 					if (sendScreenshots) {
-						for (int i = 0; i < FlexoFrame.getFrames().length; i++) {
-							Frame frame = FlexoFrame.getFrames()[i];
+						for (int i = 0; i < Frame.getFrames().length; i++) {
+							Frame frame = Frame.getFrames()[i];
 							if (frame instanceof FlexoFrame) {
 								ProgressWindow.instance().setProgress(
 										FlexoLocalization.localizedForKey("sending_screenshot") + " " + frame.getTitle());
@@ -519,7 +526,7 @@ public class JIRAIssueReportDialog {
 			return EMPTY_LIST;
 		}
 		List<JIRAComponent> availableModules = new ArrayList<JIRAComponent>();
-		for (Module module : ModuleLoader.instance().availableModules()) {
+		for (Module module : Modules.getInstance().getAvailableModules()) {
 			for (JIRAComponent component : getIssue().getIssuetype().getComponentField().getAllowedValues()) {
 				if (module.getJiraComponentID().equals(component.getId())) {
 					availableModules.add(component);

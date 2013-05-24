@@ -19,7 +19,6 @@
  */
 package org.openflexo.inspector;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -44,7 +43,6 @@ import org.openflexo.inspector.widget.DenaliWidget.WidgetLayout;
 import org.openflexo.inspector.widget.InnerTabWidgetView;
 import org.openflexo.inspector.widget.LineWidget;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.ToolBox;
 
 /**
  * View representing a tab in th inspector
@@ -80,9 +78,6 @@ public class TabModelView extends JPanel {
 		_invisibleWidgets = new Vector<InnerTabWidgetView>();
 		_inspectorModelView = inspectorModelView;
 		setName(FlexoLocalization.localizedForKey(model.name, this));
-		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
-			setBackground(Color.WHITE);
-		}
 		init(model, inspectorModelView);
 	}
 
@@ -505,7 +500,7 @@ public class TabModelView extends JPanel {
 	public void performObserverSwitch(InspectableObject newInspectable) {
 		Enumeration<InnerTabWidgetView> en = _widgets.elements();
 		while (en.hasMoreElements()) {
-			(en.nextElement()).switchObserved(newInspectable);
+			en.nextElement().switchObserved(newInspectable);
 		}
 	}
 
@@ -527,14 +522,14 @@ public class TabModelView extends JPanel {
 
 	public void requestFocusInFirstWidget() {
 		if (_widgets.size() > 0) {
-			_widgets.firstElement().getDynamicComponent().requestFocus();
+			_widgets.firstElement().getDynamicComponent().requestFocusInWindow();
 			// System.out.println("Request focus for "+_widgets.firstElement().getDynamicComponent());
 		}
 	}
 
 	public void requestFocusInSecondWidget() {
 		if (_widgets.size() > 1) {
-			_widgets.elementAt(1).getDynamicComponent().requestFocus();
+			_widgets.elementAt(1).getDynamicComponent().requestFocusInWindow();
 			// System.out.println("Request focus for "+_widgets.elementAt(1).getDynamicComponent());
 		}
 	}

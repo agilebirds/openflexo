@@ -82,7 +82,7 @@ public class BeginOperationNodeGR extends AbstractOperationNodeGR {
 	 */
 	@Override
 	public double _getDefaultY() {
-		return (getOperationNode().getParentPetriGraph().getIndexForBeginNode(getOperationNode()) * 50) + DEFAULT_BEGIN_Y_OFFSET;
+		return getOperationNode().getParentPetriGraph().getIndexForBeginNode(getOperationNode()) * 50 + DEFAULT_BEGIN_Y_OFFSET;
 	}
 
 	@Override

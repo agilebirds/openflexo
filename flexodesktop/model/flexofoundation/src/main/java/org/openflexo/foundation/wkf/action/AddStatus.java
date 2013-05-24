@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.DuplicateStatusException;
@@ -47,17 +48,23 @@ public class AddStatus extends FlexoAction<AddStatus, WKFObject, WKFObject> {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
-			return object instanceof FlexoProcess && !((FlexoProcess) object).isImported();
+		public boolean isVisibleForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+			return false;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(WKFObject object, Vector<WKFObject> globalSelection) {
 			return object != null
-					&& ((object instanceof FlexoProcess && !((FlexoProcess) object).isImported()) || object instanceof StatusList || object instanceof Status);
+					&& (object instanceof FlexoProcess && !((FlexoProcess) object).isImported() || object instanceof StatusList || object instanceof Status);
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, StatusList.class);
+		FlexoModelObject.addActionForClass(actionType, Status.class);
+		FlexoModelObject.addActionForClass(actionType, FlexoProcess.class);
+	}
 
 	private String _newStatusName;
 	private String _newDescription;
@@ -69,7 +76,7 @@ public class AddStatus extends FlexoAction<AddStatus, WKFObject, WKFObject> {
 
 	public FlexoProcess getProcess() {
 		if (getFocusedObject() != null) {
-			return (getFocusedObject()).getProcess();
+			return getFocusedObject().getProcess();
 		}
 		return null;
 	}

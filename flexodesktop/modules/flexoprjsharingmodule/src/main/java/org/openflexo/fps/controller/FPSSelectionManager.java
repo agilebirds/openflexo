@@ -23,8 +23,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.fps.view.menu.FPSMenuBar;
 import org.openflexo.selection.SelectionManager;
+import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
  * Selection manager dedicated to this module
@@ -37,10 +37,10 @@ public class FPSSelectionManager extends SelectionManager {
 
 	public FPSSelectionManager(FPSController controller) {
 		super(controller);
-		FPSMenuBar menuBar = controller.getEditorMenuBar();
+		FlexoMenuBar menuBar = controller.getMenuBar();
 		_clipboard = new FPSClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
 				menuBar.getEditMenu(controller).cutItem);
-		_contextualMenuManager = new FPSContextualMenuManager(this, controller.getEditor(), controller);
+		_contextualMenuManager = new FPSContextualMenuManager(this, controller);
 	}
 
 	public FPSController getFPSController() {

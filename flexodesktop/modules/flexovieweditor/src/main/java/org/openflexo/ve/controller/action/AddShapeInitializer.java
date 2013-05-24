@@ -19,7 +19,7 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -53,8 +53,8 @@ public class AddShapeInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddShape> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddShape>() {
 			@Override
-			public boolean run(ActionEvent e, AddShape action) {
-				if ((action.getNewShapeName() != null || action.isNameSetToNull()) && (action.getParent() != null)) {
+			public boolean run(EventObject e, AddShape action) {
+				if ((action.getNewShapeName() != null || action.isNameSetToNull()) && action.getParent() != null) {
 					return true;
 				}
 
@@ -76,7 +76,7 @@ public class AddShapeInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddShape> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddShape>() {
 			@Override
-			public boolean run(ActionEvent e, AddShape action) {
+			public boolean run(EventObject e, AddShape action) {
 				((VEController) getController()).getSelectionManager().setSelectedObject(action.getNewShape());
 				return true;
 			}

@@ -76,10 +76,6 @@ public abstract class AbstractGeneratedFile implements GeneratedResourceData {
 		return getFlexoResource().getProject();
 	}
 
-	@Override
-	public void setProject(FlexoProject aProject) {
-	}
-
 	public File getFile() {
 		return _file;
 	}
@@ -104,16 +100,15 @@ public abstract class AbstractGeneratedFile implements GeneratedResourceData {
 	}
 
 	public boolean manageHistory() {
-		if ((getFlexoResource() == null) || (getFlexoResource().getCGFile() == null)
-				|| (getFlexoResource().getCGFile().getRepository() == null)) {
+		if (getFlexoResource() == null || getFlexoResource().getCGFile() == null || getFlexoResource().getCGFile().getRepository() == null) {
 			return false;
 		}
 		return getFlexoResource().getCGFile().getRepository().getManageHistory();
 	}
 
 	public boolean fileOnDiskHasBeenEdited() {
-		return (getFlexoResource().getDiskLastModifiedDate().getTime() > getFlexoResource().getLastGenerationDate().getTime()
-				+ FlexoFileResource.ACCEPTABLE_FS_DELAY);
+		return getFlexoResource().getDiskLastModifiedDate().getTime() > getFlexoResource().getLastGenerationDate().getTime()
+				+ FlexoFileResource.ACCEPTABLE_FS_DELAY;
 	}
 
 	public abstract void load() throws LoadGeneratedResourceIOException;

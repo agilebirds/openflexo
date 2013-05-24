@@ -413,14 +413,14 @@ public class LineConnector extends Connector {
 	}
 
 	@Override
-	public void refreshConnector() {
-		if (!needsRefresh()) {
+	public void refreshConnector(boolean force) {
+		if (!force && !needsRefresh()) {
 			return;
 		}
 
 		updateControlPoints();
 
-		super.refreshConnector();
+		super.refreshConnector(force);
 
 		firstUpdated = true;
 
@@ -574,6 +574,15 @@ public class LineConnector extends Connector {
 	@Override
 	public FGEPoint getEndLocation() {
 		return cp2RelativeToEndObject;
+	}
+
+	@Override
+	public LineConnector clone() {
+		LineConnector returned = new LineConnector(null);
+		returned.setLineConnectorType(getLineConnectorType());
+		returned._setCp1RelativeToStartObject(_getCp1RelativeToStartObject());
+		returned._setCp2RelativeToEndObject(_getCp2RelativeToEndObject());
+		return returned;
 	}
 
 }

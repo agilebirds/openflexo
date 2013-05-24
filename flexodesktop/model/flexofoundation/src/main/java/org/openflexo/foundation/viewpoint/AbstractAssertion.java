@@ -24,11 +24,16 @@ import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionAction.EditionActionBindingAttribute;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public abstract class AbstractAssertion extends EditionSchemeObject {
 
 	private AddIndividual _action;
+
+	public AbstractAssertion(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	public void setAction(AddIndividual action) {
 		_action = action;
@@ -64,7 +69,7 @@ public abstract class AbstractAssertion extends EditionSchemeObject {
 
 	@Override
 	public EditionPattern getEditionPattern() {
-		return getScheme().getEditionPattern();
+		return getScheme() != null ? getScheme().getEditionPattern() : null;
 	}
 
 	@Override
@@ -74,7 +79,8 @@ public abstract class AbstractAssertion extends EditionSchemeObject {
 
 	private ViewPointDataBinding conditional;
 
-	private BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET, false);
+	private static final BindingDefinition CONDITIONAL = new BindingDefinition("conditional", Boolean.class, BindingDefinitionType.GET,
+			false);
 
 	public BindingDefinition getConditionalBindingDefinition() {
 		return CONDITIONAL;

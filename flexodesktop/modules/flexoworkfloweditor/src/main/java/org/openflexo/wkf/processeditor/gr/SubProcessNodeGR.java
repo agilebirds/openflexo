@@ -21,7 +21,6 @@ package org.openflexo.wkf.processeditor.gr;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -32,9 +31,9 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
-import org.openflexo.fge.controller.MouseDragControl;
+import org.openflexo.fge.controller.MouseClickControl;
+import org.openflexo.fge.controller.MouseClickControlAction;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
@@ -43,7 +42,6 @@ import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ShapeView;
-import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.gen.FlexoProcessImageBuilder;
@@ -63,13 +61,13 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	private static final Logger logger = Logger.getLogger(SubProcessNodeGR.class.getPackage().getName());
 
-	private static final int MIN_SPACE = 5;
+	private static final int MIN_SPACE = 4;
 	private static final int ICONS_HEIGHT = 20;
 
 	public SubProcessNodeGR(SubProcessNode subProcessNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(subProcessNode, ShapeType.RECTANGLE, aDrawing, isInPalet);
-
-		addToMouseDragControls(new ProcessOpener(), true);
+		setVerticalTextAlignment(VerticalTextAlignment.TOP);
+		addToMouseClickControls(new ProcessOpener(), true);
 		setShapePainter(new ShapePainter() {
 			@Override
 			public void paintShape(FGEShapeGraphics g) {
@@ -106,10 +104,9 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 			public void paintDefaultDecoration(FGEShapeGraphics g) {
 				g.useTextStyle(roleLabelTextStyle);
-				Dimension labelSize = getNormalizedLabelSize();
-				double vGap = getVerticalGap();
-				double absoluteRoleLabelCenterY = vGap * 2 + labelSize.height + getRoleFont().getSize() / 2 - 3 + getExtraSpaceAbove();
-				g.drawString(getSubLabel(), new FGEPoint(0.5, absoluteRoleLabelCenterY / getHeight()), HorizontalTextAlignment.CENTER);
+				g.drawString(getSubLabel(), new FGEPoint(0.5,
+						(roleLabelTextStyle.getFont().getSize() / 2 + MIN_SPACE + getExtraSpaceAbove()) / getHeight()),
+						HorizontalTextAlignment.CENTER);
 
 				FGERectangle expandingRect = getExpandingRect();
 				g.drawImage(WKFIconLibrary.EXPANDABLE_ICON.getImage(), new FGEPoint(expandingRect.x, expandingRect.y));
@@ -135,35 +132,27 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	@Override
 	public int getTopBorder() {
-		return isInPalette ? 5 : PORTMAP_REGISTERY_WIDTH;
+		return isInPalette ? super.getTopBorder() : PORTMAP_REGISTERY_WIDTH;
 	}
 
 	@Override
 	public int getBottomBorder() {
-		return isInPalette ? 5 : PORTMAP_REGISTERY_WIDTH;
+		return isInPalette ? super.getBottomBorder() : PORTMAP_REGISTERY_WIDTH;
 	}
 
 	@Override
 	public int getLeftBorder() {
-		return isInPalette ? 5 : PORTMAP_REGISTERY_WIDTH;
+		return isInPalette ? super.getLeftBorder() : PORTMAP_REGISTERY_WIDTH;
 	}
 
 	@Override
 	public int getRightBorder() {
-		return isInPalette ? 5 : PORTMAP_REGISTERY_WIDTH;
-	}
-
-	protected double getVerticalGap() {
-		Dimension labelSize = getNormalizedLabelSize();
-		return (getHeight() - labelSize.height - getRoleFont().getSize() - ICONS_HEIGHT - getExtraSpaceAbove() - getExtraSpaceBelow()) / 4;
+		return isInPalette ? super.getRightBorder() : PORTMAP_REGISTERY_WIDTH;
 	}
 
 	@Override
 	public double getRelativeTextY() {
-		Dimension labelSize = getNormalizedLabelSize();
-		double vGap = getVerticalGap();
-		double absoluteCenterY = vGap + labelSize.height / 2 + getExtraSpaceAbove();
-		return absoluteCenterY / getHeight();
+		return (roleLabelTextStyle.getFont().getSize() + MIN_SPACE + getExtraSpaceAbove()) / getHeight();
 	}
 
 	@Override
@@ -180,9 +169,7 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 	}
 
 	public FGERectangle getExpandingRect() {
-		Dimension labelSize = getNormalizedLabelSize();
-		double vGap = getVerticalGap();
-		double absoluteIconY = vGap * 3 + labelSize.height + getRoleFont().getSize() + getExtraSpaceAbove();
+		double absoluteIconY = getHeight() - getExtraSpaceBelow() - MIN_SPACE - WKFIconLibrary.EXPANDABLE_ICON.getIconHeight();
 		double absoluteIconX;
 		ImageIcon typeIcon = getImageIcon(getSubProcessNode());
 		if (typeIcon == null) {
@@ -200,9 +187,7 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 		if (typeIcon == null) {
 			return null;
 		}
-		Dimension labelSize = getNormalizedLabelSize();
-		double vGap = getVerticalGap();
-		double absoluteIconY = vGap * 3 + labelSize.height + getRoleFont().getSize() + getExtraSpaceAbove();
+		double absoluteIconY = getHeight() - getExtraSpaceBelow() - MIN_SPACE - WKFIconLibrary.EXPANDABLE_ICON.getIconHeight();
 		double absoluteIconX = (getWidth() - WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() - typeIcon.getIconWidth() - MIN_SPACE) / 2
 				+ WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() + MIN_SPACE;
 		return new FGERectangle(absoluteIconX / getWidth(), absoluteIconY / getHeight(), WKFIconLibrary.EXPANDABLE_ICON.getIconWidth()
@@ -215,9 +200,6 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 		if (typeIcon == null) {
 			return null;
 		}
-		Dimension labelSize = getNormalizedLabelSize();
-		double vGap = getVerticalGap();
-		// double absoluteIconY = vGap*3+labelSize.height+getRoleFont().getSize()+getExtraSpaceAbove();
 		double absoluteIconY = getHeight() - 10 - WKFIconLibrary.EXPANDABLE_ICON.getIconHeight();
 		double absoluteIconX = (getWidth() - WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() - typeIcon.getIconWidth() - MIN_SPACE) / 2
 				+ WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() + MIN_SPACE;
@@ -226,12 +208,13 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	}
 
-	public class ProcessOpener extends MouseDragControl {
+	public class ProcessOpener extends MouseClickControl {
 
 		public ProcessOpener() {
-			super("BPE-Process opener", MouseButton.LEFT, new CustomDragControlAction() {
+			super("BPE-Process opener", MouseButton.LEFT, 1, new MouseClickControlAction() {
+
 				@Override
-				public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
 						MouseEvent event) {
 					logger.info("Opening process");
 					OpenEmbeddedProcess.actionType.makeNewAction(getSubProcessNode(), null, getDrawing().getEditor()).doAction();
@@ -240,25 +223,20 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 				}
 
 				@Override
-				public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
-						MouseEvent event, boolean isSignificativeDrag) {
-					// TODO Auto-generated method stub
-					return false;
-				}
-
-				@Override
-				public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
-						MouseEvent event) {
-					// TODO Auto-generated method stub
-					return false;
+				public MouseClickControlActionType getActionType() {
+					return MouseClickControlActionType.CUSTOM;
 				}
 			}, false, false, false, false);
 		}
 
 		@Override
 		public boolean isApplicable(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent e) {
-			// TODO Auto-generated method stub
 			return super.isApplicable(graphicalRepresentation, controller, e) && isInsideClosingBox(graphicalRepresentation, controller, e);
+		}
+
+		@Override
+		public boolean isModelEditionAction() {
+			return false;
 		}
 
 	}
@@ -274,7 +252,11 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	public static ImageIcon getImageIcon(SubProcessNode spNode) {
 		if (spNode instanceof MultipleInstanceSubProcessNode) {
-			return WKFIconLibrary.MULTIPLE_INSTANCE_SUBPROCESS_ICON;
+			if (((MultipleInstanceSubProcessNode) spNode).getIsSequential()) {
+				return WKFIconLibrary.SEQUENTIAL_MULTIPLE_INSTANCE_SUBPROCESS_ICON;
+			} else {
+				return WKFIconLibrary.MULTIPLE_INSTANCE_SUBPROCESS_ICON;
+			}
 		} else if (spNode instanceof SingleInstanceSubProcessNode) {
 			return null;
 		} else if (spNode instanceof LoopSubProcessNode) {
@@ -307,12 +289,11 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (dataModification instanceof AttributeDataModification
-				&& "subProcess".equals(((AttributeDataModification) dataModification).propertyName())) {
+		if (MultipleInstanceSubProcessNode.IS_SEQUENTIAL.equals(dataModification.propertyName())) {
+			notifyShapeNeedsToBeRedrawn();
+		} else if ("subProcess".equals(dataModification.propertyName())) {
 			getDrawing().updateGraphicalObjectsHierarchy();
-		}
-		if (dataModification instanceof AttributeDataModification
-				&& "displaySubProcessImage".equals(((AttributeDataModification) dataModification).propertyName())) {
+		} else if ("displaySubProcessImage".equals(dataModification.propertyName())) {
 			notifyShapeNeedsToBeRedrawn();
 		}
 		super.update(observable, dataModification);

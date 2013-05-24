@@ -57,7 +57,7 @@ public class ClassView extends QuiduView implements Qualified {
 
 	@Override
 	public String getQualifiedNameParameter() {
-		return (String) params.get(1);
+		return params.get(1);
 	}
 
 	public boolean getShowCompartmentStereotypes() {

@@ -50,7 +50,7 @@ public class RefreshHistory extends AbstractGCAction<RefreshHistory, CGObject> {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
+		public boolean isVisibleForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
 			Vector<CGObject> topLevelObjects = getSelectedTopLevelObjects(focusedObject, globalSelection);
 			for (CGObject obj : topLevelObjects) {
 				if (obj instanceof GeneratedOutput) {
@@ -61,7 +61,7 @@ public class RefreshHistory extends AbstractGCAction<RefreshHistory, CGObject> {
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
+		public boolean isEnabledForSelection(CGObject focusedObject, Vector<CGObject> globalSelection) {
 			GenerationRepository repository = getRepository(focusedObject, globalSelection);
 			if (repository == null) {
 				return false;

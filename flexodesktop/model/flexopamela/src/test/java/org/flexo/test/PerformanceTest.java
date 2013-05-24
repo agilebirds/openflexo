@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import org.openflexo.model.ModelContext;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
-import org.openflexo.model.factory.ModelDefinitionException;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 
 /**
@@ -79,19 +80,19 @@ public class PerformanceTest {
 		@Getter(value = PARENT, inverse = CHILDREN)
 		public ModelObject getParent();
 
-		@Setter(value = PARENT)
+		@Setter(PARENT)
 		public void setParent(ModelObject parent);
 
 		@Getter(value = CHILDREN, cardinality = Cardinality.LIST, inverse = PARENT)
 		public List<ModelObject> getChildren();
 
-		@Setter(value = CHILDREN)
+		@Setter(CHILDREN)
 		public void setChildren(List<ModelObject> children);
 
-		@Adder(id = CHILDREN)
+		@Adder(CHILDREN)
 		public void addToChildren(ModelObject child);
 
-		@Remover(id = CHILDREN)
+		@Remover(CHILDREN)
 		public void removeFromChildren(ModelObject child);
 	}
 
@@ -311,11 +312,10 @@ public class PerformanceTest {
 
 	public static void main(String[] args) throws ModelDefinitionException {
 		PerformanceTest test = new PerformanceTest();
-		ModelFactory factory = new ModelFactory();
-		factory.getModelEntity(ModelObject.class);
+		ModelContext mapping = new ModelContext(ModelObject.class);
+		ModelFactory factory = new ModelFactory(mapping);
 		factory.setListImplementationClass(ArrayList.class);
-		ModelFactory factory2 = new ModelFactory();
-		factory.getModelEntity(ModelObject.class);
+		ModelFactory factory2 = new ModelFactory(mapping);
 		factory.setListImplementationClass(Vector.class);
 		test.testModel(new DumbModelRunnable(), factory, factory2);
 		test.testModel(new BuildBasicModelRunnable(), factory, factory2);

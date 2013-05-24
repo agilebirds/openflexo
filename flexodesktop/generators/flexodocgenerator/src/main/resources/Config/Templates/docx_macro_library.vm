@@ -1,6 +1,6 @@
 #macro(mkbookMark $id $name)
 #set($key=${generator.getNewHolder()})
-#getCurrentUniqueId($key)#incrementCurrentUniqueId
+#getCurrentUniqueId($key)#incrementCurrentUniqueId()
 #set($key = ${key.get()})
 #set($xkey = (${key}*1000000+${id}))
 <w:bookmarkStart w:id="${xkey}" w:name="${name}"/>
@@ -8,7 +8,6 @@
 #end
 
 #macro(render $_object $_level $templateName $_entry)
-<!--Entering macro render : $_object $_level $templateName $_entry -->
     #set($_template = $generator.getTemplatePath($templateName.trim()))
     #if($_template)
         #if(!$objectStack)
@@ -28,7 +27,6 @@
         #set($object = $objectStack.pop())
         #set($level = $levelStack.pop())
     #end
-<!-- Exiting macro render -->
 #end
 
 #macro(renderButtonTable $cd)
@@ -758,21 +756,12 @@ if there is an associated screen make a hyperlink to the screen.
 #macro(tocEntry $_entry)
 <!--Entering macro tocEntry -->
     $!{generator.beginTocEntry($_entry)}
-    #if(${_entry.getStartOnANewPage()})
-        <w:p>
-            <w:r>
-                <w:br w:type="page"/>
-            </w:r>
-        </w:p>
-    #end
-    ##set($templateName = "#getTemplateNameForTocEntry($_entry)")
-    ##set($templateName = "#getTemplateNameForTocEntry($_entry)")
     #set($templateName = ${_entry.getDefaultTemplateName()})
     #if(${_entry.isIteration()})
     	${generator.log("Rendering iteration")}
 
 		#foreach($_item in ${generator.getIterableObjects($_entry)})
-			#void(${generator.iterateOnItem($_entry,$_item)}) ## ICI C'est super foireux comme appel, ça va foutre du texte dans l'XML
+			#void(${generator.iterateOnItem($_entry,$_item)})
 			#if($generator.getItemCondition($_entry))
     			${generator.log("Item is valid, performing rendering for this iteration")}
     			#subTocEntries($_entry)
@@ -789,6 +778,9 @@ if there is an associated screen make a hyperlink to the screen.
     #if(${_entry.getRenderSectionTitle()})
     <w:p>
         <w:pPr>
+        	#if(${_entry.getStartOnANewPage()})
+        	<w:pageBreakBefore/>
+        	#end
             <w:keepNext/>
             <w:pStyle w:val="Heading${_entry.getLevel()}"/>
         </w:pPr>
@@ -797,6 +789,15 @@ if there is an associated screen make a hyperlink to the screen.
         #end
         #renderTocEntryTitle($_entry)
     </w:p>
+    #else
+    <w:p>
+        <w:pPr>
+            #if(${_entry.getStartOnANewPage()})
+            <w:pageBreakBefore/>
+            #end
+            <w:keepNext/>
+        </w:pPr>
+    </w:p>
 	#end
     #if(${_entry.getRenderContent()})
     	#renderTocEntryContent($_entry)
@@ -804,8 +805,10 @@ if there is an associated screen make a hyperlink to the screen.
     #if($templateName)
     	#if(${_entry.getRenderSectionTitle()})
         	#set($newEntryLevel = $_entry.getLevel() + 1)
+        #else
+            #set($newEntryLevel = $_entry.getLevel())
         #end
-        #set($passedObject = $generator.getAccessedModelObject($_entry)))
+        #set($passedObject = $generator.getAccessedModelObject($_entry))
     	${generator.log($templateName, $passedObject)}
         #render($passedObject $newEntryLevel $templateName $_entry)
         ##render($generator.getCondition($_entry) $newEntryLevel $templateName $_entry)
@@ -920,51 +923,60 @@ name of the template corresponding to the specific toc_entry.
 *#
 
 #macro(addAdditionalRels $rels)
-<!--Entering macro addAdditionalRels -->
     #set($additionalRels = ${generator.getNewHolder()})
     #getAdditionalRels($additionalRels)
     #set($additionalRels = ${additionalRels.get()})
     #if(!${additionalRels.contains($rels)})
         #void($additionalRels.add($rels))
     #end
-<!-- Exiting macro addAdditionalRels -->
 #end
 
 #macro(renderAdditionalRels)
-<!--Entering macro renderAdditionalRels -->
     #set($additionalRels = ${generator.getNewHolder()})
     #getAdditionalRels($additionalRels)
     #set($additionalRels = ${additionalRels.get()})
     #foreach($rel in $additionalRels)
         $rel
     #end
-<!-- Exiting macro renderAdditionalRels -->
 #end
 
 #macro(addDataBinding $dataBinding)
-<!--Entering macro addDataBinding -->
     #set($dataBindings = ${generator.getNewHolder()})
     #getDataBindings($dataBindings)
     #set($dataBindings = ${dataBindings.get()})
     #if(!${dataBindings.contains($dataBinding)})
         #void($dataBindings.add($dataBinding))
     #end
-<!-- Exiting macro addDataBinding -->
 #end
 
 #macro(renderDataBindings)
-<!--Entering macro renderDataBindings -->
     #set($dataBindings = ${generator.getNewHolder()})
     #getDataBindings($dataBindings)
     #set($dataBindings = ${dataBindings.get()})
     #foreach($binding in $dataBindings)
         $binding
     #end
-<!-- Exiting macro renderDataBindings -->
+#end
+
+#macro(addEPIValue $epiValue)
+    #set($epiValues = ${generator.getNewHolder()})
+    #getEPIValues($epiValues)
+    #set($epiValues = ${epiValues.get()})
+    #if(!${epiValues.contains($epiValue)})
+        #void($epiValues.add($epiValue))
+    #end
+#end
+
+#macro(renderEPIValues)
+    #set($epiValues = ${generator.getNewHolder()})
+    #getEPIValues($epiValues)
+    #set($epiValues = ${epiValues.get()})
+    #foreach($epiValue in $epiValues)
+        @single $epiValue @end
+    #end
 #end
 
 #macro(renderBullets $bulletWRList $bulletSectionID)
-<!--Entering macro renderBullets -->
     #addNumberingId($bulletSectionID)
     
     #foreach($bulletItem in $bulletWRList)
@@ -980,29 +992,23 @@ name of the template corresponding to the specific toc_entry.
         </w:p>
     #end
     
-<!-- Exiting macro renderBullets -->
 #end
 
 #macro(addNumberingId $numberingId)
-<!--Entering macro addNumberingId -->
     #set($numberingIds = $generator.getNewHolder())
     #getNumberingIds($numberingIds)
     #set($numberingIds = ${numberingIds.get()})
     #void($numberingIds.add($numberingId))
-<!-- Exiting macro addNumberingId -->
 #end
 
 #macro(addOrderedNumberingId $numberingId)
-<!--Entering macro addOrderedNumberingId -->
     #set($orderedNumberingIds = $generator.getNewHolder())
     #getOrderedNumberingIds($orderedNumberingIds)
     #set($orderedNumberingIds = ${orderedNumberingIds.get()})
     #void($orderedNumberingIds.add($numberingId))
-<!-- Exiting macro addOrderedNumberingId -->
 #end
 
 #macro(convertHTML2DocxVelocityXml $html)
-<!--Entering macro convertHTML2DocxVelocityXml -->
     #set($currentUniqueId = $generator.getNewHolder())
     #getCurrentUniqueId($currentUniqueId)
     #set($currentUniqueId = ${currentUniqueId.get()})
@@ -1018,7 +1024,6 @@ name of the template corresponding to the specific toc_entry.
     #foreach($bulletId in ${docxVelocityXmlFromHtml.getOrderedBulletsIds()})
         #addOrderedNumberingId($bulletId)
     #end
-<!-- Exiting macro convertHTML2DocxVelocityXml -->
 #end
 
 #*
@@ -1124,7 +1129,7 @@ name of the template corresponding to the specific toc_entry.
             #if(${_object.getName()})
                 #set($flexoName = "flexoName${_object.getUserIdentifier()}${_object.getFlexoID()}")
                 #set($flexoName = "#escape($flexoName)")
-                <w:dataBinding w:xpath="/flexoNames/${flexoName}[1]"/>
+                <w:dataBinding w:xpath="/OpenFlexo/flexoNames/${flexoName}[1]"/>
                 #addDataBinding("<$flexoName>#escape(${_object.getName()})</$flexoName>")
             #end
             <w:text />
@@ -1199,7 +1204,8 @@ name of the template corresponding to the specific toc_entry.
                     <w:showingPlcHdr/>
                 #end
             #end
-            <w:tag w:val="#escape(${projectGenerator.getFlexoDescriptionTag($_object, $usedTarget)})" />
+            #set($toEscape = ${projectGenerator.getFlexoDescriptionTag($_object, $usedTarget)})
+            <w:tag w:val="#escape($toEscape)" />
             <w:lock w:val="sdtLocked" />
         </w:sdtPr>
         <w:sdtEndPr />
@@ -1583,7 +1589,6 @@ name of the template corresponding to the specific toc_entry.
 *
 *#
 #macro(RoleForWorkFlow $_workflow)
-<!--Entering macro RoleForWorkFlow -->
 
     #if(${_workflow.getRoleList().getRoles().size()}>0 || ${_workflow.getImportedRoleList().getRoles().size()}>0)
         <w:p>
@@ -1617,7 +1622,6 @@ name of the template corresponding to the specific toc_entry.
 
         #renderDocxTable(["Role", "Description"] $rolesTablesContents)
     #end
-<!-- Exiting macro RoleForWorkFlow -->
 #end
 
 #*
@@ -1625,7 +1629,6 @@ name of the template corresponding to the specific toc_entry.
 *
 *#
 #macro(printUsedProcessRef $_node)
-<!--Entering macro printUsedProcessRef -->
     #if($_node.isSubProcessNode())
         #if($node.getSubProcess())
           #if(!$_node.getSubProcess().getDontGenerate())
@@ -1645,11 +1648,9 @@ name of the template corresponding to the specific toc_entry.
                     #getXmlParagraphWithContent("This node does not define which process it uses." $null)
        #end
     #end
-<!-- Exiting macro printUsedProcessRef -->
 #end
 
 #macro(renderScreenshotForObject $_object)
-<!--Entering macro renderScreenshotForObject -->
     #set($image = ${projectGenerator.getScreenshotImageIcon($_object)})
     #set($rid = ${projectGenerator.getRIdForResource(${projectGenerator.getScreenshot($_object)})})
     #set($imageWidth = $image.getIconWidth())
@@ -1710,8 +1711,71 @@ name of the template corresponding to the specific toc_entry.
             </w:drawing>
         </w:r>
     </w:p>
-<!-- Exiting macro renderScreenshotForObject -->
 #end
+
+#macro(renderLandscapeScreenshotForObject $_object)
+    #set($image = ${projectGenerator.getScreenshotImageIcon($_object)})
+    #set($rid = ${projectGenerator.getRIdForResource(${projectGenerator.getScreenshot($_object)})})
+    #set($imageWidth = $image.getIconWidth())
+    #set($imageHeight = $image.getIconHeight())
+    #if($imageWidth > 920)
+        #set($imageWidth = 920)
+        #set($imageHeight = $imageHeight * $imageWidth / $image.getIconWidth())
+    #end
+    #if($imageHeight > 645)
+        #set($imageHeight = 645)
+        #set($imageWidth = $image.getIconWidth() * $imageHeight / $image.getIconHeight())
+    #end
+        
+    #set($imageWidth = $imageWidth * 9525) ##Don't ask me why
+    #set($imageHeight = $imageHeight * 9525) ##Don't ask me why
+    
+    <w:p>
+        <w:pPr>
+            <w:jc w:val="center"/>
+        </w:pPr>
+        <w:r>
+            <w:rPr>
+                <w:noProof/>
+            </w:rPr>
+            <w:drawing>
+                <wp:inline distT="0" distB="0" distL="0" distR="0">
+                    <wp:extent cx="$imageWidth" cy="$imageHeight"/>
+                    <wp:docPr id="#getUniqueId()" name="Picture"/>
+                    <wp:cNvGraphicFramePr>
+                        <a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1"/>
+                    </wp:cNvGraphicFramePr>
+                    <a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">
+                        <a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
+                            <pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
+                                <pic:nvPicPr>
+                                    <pic:cNvPr id="0" name=""/>
+                                    <pic:cNvPicPr/>
+                                </pic:nvPicPr>
+                                <pic:blipFill>
+                                    <a:blip r:embed="$rid"/>
+                                    <a:stretch>
+                                        <a:fillRect/>
+                                    </a:stretch>
+                                </pic:blipFill>
+                                <pic:spPr>
+                                    <a:xfrm>
+                                        <a:off x="0" y="0"/>
+                                        <a:ext cx="$imageWidth" cy="$imageHeight"/>
+                                    </a:xfrm>
+                                    <a:prstGeom prst="rect">
+                                        <a:avLst/>
+                                    </a:prstGeom>
+                                </pic:spPr>
+                            </pic:pic>
+                        </a:graphicData>
+                    </a:graphic>
+                </wp:inline>
+            </w:drawing>
+        </w:r>
+    </w:p>
+#end
+
 #macro(renderImportedImageFile $importedImagePath)
     #renderImportedImageFileWithMaxSize($importedImagePath 514 734)
 #end
@@ -2098,12 +2162,26 @@ name of the template corresponding to the specific toc_entry.
 #end
 
 #macro(renderEPIWithTagAndAlias $_epi $_bindingPath $_enclosingTag $_alias)
+	#renderEPIWithTagAndAliasAndStyle($_epi $_bindingPath $_enclosingTag $_alias "")
+#end
+
+#macro(renderEPIWithTagAndAliasAndStyle $_epi $_bindingPath $_enclosingTag $_alias $_style)
+#*
+* Allowed tags are:
+* - w:p
+* - w:r
+* - w:tc
+* - w:tr
+*#
+#if(!$_style)
+  #set($_style = "")
+#end
 #set($_text = $_epi.evaluate($_bindingPath))
-#set($muliline = $_text.contains($n))
+#set($multiline = $_text.contains($n))
 #if(!$multiline)
     #foreach($patternRole in ${_epi.getPattern().getPatternRoles()})
-        #if(${patternRole.getLabel().toString()}==$_bindingPath)
-            #set($muliline = ${patternRole.getGraphicalRepresentation().getIsMultilineAllowed()})
+        #if(${generator.isInstance($patternRole, "org.openflexo.foundation.viewpoint.GraphicalElementPatternRole")} && ${patternRole.getLabel().toString()}==$_bindingPath)
+            #set($multiline = ${patternRole.getGraphicalRepresentation().getIsMultilineAllowed()})
             #break
         #end
     #end
@@ -2111,7 +2189,7 @@ name of the template corresponding to the specific toc_entry.
 #if(!$multiline)
     #foreach($entry in ${_epi.getPattern().getInspector().getEntries()})
         #if(${entry.getData()}==$_bindingPath)
-            #set($muliline = ${entry.getWidgetName().equals("TextArea")})
+            #set($multiline = ${entry.getWidgetName().equals("TextArea")})
             #break
         #end
     #end
@@ -2123,8 +2201,8 @@ name of the template corresponding to the specific toc_entry.
 #set($_ot="") ## opening tags
 #set($_ct="") ## closing tags
 #if($_enclosingTag=="w:tr")
-    #set($_ot="<w:tr><w:tc><w:p><w:r><w:t>")
-    #set($_ct="</w:t></w:r></w:p></w:tc></w:tr>")
+    #set($_ot="<w:tr>${n}<w:tc>${n}<w:p>${n}<w:r>${n}<w:t>")
+    #set($_ct="</w:t>${n}</w:r>${n}</w:p>${n}</w:tc>${n}</w:tr>")
 #elseif($_enclosingTag=="w:r")
     #set($_ot="<w:r><w:t>")
     #set($_ct="</w:t></w:r>")
@@ -2137,16 +2215,21 @@ name of the template corresponding to the specific toc_entry.
 #end
    <w:sdt>
         <w:sdtPr>
+            #set($_epiTag = ${projectGenerator.getEPITag($_epi, $_bindingPath)})
             <w:alias w:val="#escape($_alias)"/>
-            <w:tag w:val="#escape(${projectGenerator.getEPITag($_epi, $_bindingPath)})" />
+            <w:tag w:val="#escape($_epiTag)" />
             <w:lock w:val="sdtLocked" />
-            <w:text w:multiLine="$muliline"/>
+            <w:text w:multiLine="$multiline"/>
             #if(!$_hasText)
                 <w:showingPlcHdr/>
             #end
+            #set($_epiName = "EPIV_$generator.makeValidXMLName($_epiTag)")
+            <w:dataBinding w:xpath="/OpenFlexo/EditionPatternInstanceValues/${_epiName}[1]"/>
+            #addEPIValue("<${_epiName}>#escape($_text)</${_epiName}>")
         </w:sdtPr>
         <w:sdtContent>
-            $_ot
+            $_ot 
+                $_style
             #if($_hasText)
                 #escape($_text)
             #else
@@ -2177,5 +2260,6 @@ name of the template corresponding to the specific toc_entry.
 #macro(getOrderedNumberingIds $holder)#_getGlobalVariable("orderedNumberingId" $generator.getNewVector() $holder)#end
 
 #macro(getDataBindings $holder)#_getGlobalVariable("dataBindings" $generator.getNewVector() $holder)#end
+#macro(getEPIValues $holder)#_getGlobalVariable("EPIValues" $generator.getNewVector() $holder)#end
 
 #macro(getDateFormat $holder)#_getGlobalVariable("dateFormat" $generator.getDateFormat("dd/MM/yyyy") $holder)#end

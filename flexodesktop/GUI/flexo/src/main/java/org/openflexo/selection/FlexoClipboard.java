@@ -42,7 +42,7 @@ public abstract class FlexoClipboard {
 
 	protected SelectionManager _selectionManager;
 
-	protected Vector _clipboardedObjects;
+	protected Vector<? extends FlexoModelObject> _clipboardedObjects;
 
 	protected JMenuItem _copyMenuItem;
 
@@ -112,7 +112,7 @@ public abstract class FlexoClipboard {
 		return _isPasteEnabled;
 	}
 
-	public boolean performSelectionCopy(Vector<FlexoModelObject> currentlySelectedObjects) {
+	public boolean performSelectionCopy(Vector<? extends FlexoModelObject> currentlySelectedObjects) {
 		if (_isCopyEnabled) {
 			if (isCurrentSelectionValidForCopy(currentlySelectedObjects)) {
 				if (logger.isLoggable(Level.FINE)) {
@@ -155,7 +155,7 @@ public abstract class FlexoClipboard {
 		}
 	}
 
-	public boolean performSelectionCut(Vector<FlexoModelObject> currentlySelectedObjects) {
+	public boolean performSelectionCut(Vector<? extends FlexoModelObject> currentlySelectedObjects) {
 		if (_isCutEnabled) {
 			return performSelectionCopy(currentlySelectedObjects);
 		} else {
@@ -168,8 +168,8 @@ public abstract class FlexoClipboard {
 
 	protected abstract void performSelectionPaste(FlexoModelObject pastingContext, PastingGraphicalContext graphicalContext);
 
-	protected abstract boolean isCurrentSelectionValidForCopy(Vector<FlexoModelObject> currentlySelectedObjects);
+	protected abstract boolean isCurrentSelectionValidForCopy(Vector<? extends FlexoModelObject> currentlySelectedObjects);
 
-	protected abstract boolean performCopyOfSelection(Vector<FlexoModelObject> currentlySelectedObjects);
+	protected abstract boolean performCopyOfSelection(Vector<? extends FlexoModelObject> currentlySelectedObjects);
 
 }

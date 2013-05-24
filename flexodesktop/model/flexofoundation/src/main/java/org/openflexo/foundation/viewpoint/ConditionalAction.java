@@ -24,13 +24,15 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class ConditionalAction extends ControlStructureAction {
 
 	private static final Logger logger = Logger.getLogger(ConditionalAction.class.getPackage().getName());
 
-	public ConditionalAction() {
+	public ConditionalAction(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override
@@ -69,6 +71,14 @@ public class ConditionalAction extends ControlStructureAction {
 			condition.setBindingDefinition(getConditionalBindingDefinition());
 		}
 		this.condition = condition;
+	}
+
+	@Override
+	public boolean evaluateCondition(EditionSchemeAction action) {
+		if (getCondition().isValid()) {
+			return (Boolean) getCondition().getBindingValue(action);
+		}
+		return true;
 	}
 
 	@Override

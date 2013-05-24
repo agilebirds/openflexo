@@ -246,7 +246,7 @@ public class FGEHalfLine extends FGEAbstractLine<FGEHalfLine> {
 		FGEPoint limit = getLimit();
 		FGEPoint p2 = getOppositePointProjection(g);
 		if (limit != null && p2 != null) {
-			(new FGESegment(limit, p2)).paint(g);
+			new FGESegment(limit, p2).paint(g);
 		}
 
 		/*

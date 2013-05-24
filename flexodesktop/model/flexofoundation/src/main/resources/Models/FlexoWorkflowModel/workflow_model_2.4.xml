@@ -53,7 +53,7 @@
   </entity>
 
   <entity name="org.openflexo.foundation.ontology.EditionPatternReference$RestrictionStatementActorReference" xmlTag="RestrictionStatementActorReference">
-      <property name="subjectURI" xmlTag="subjectURI" attribute="YES" description=""/>
+      <!-- <property name="subjectURI" xmlTag="subjectURI" attribute="YES" description=""/> -->
       <property name="propertyURI" xmlTag="propertyURI" attribute="YES" description=""/>
       <property name="objectURI" xmlTag="objectURI" attribute="YES" description=""/>
   </entity>
@@ -102,6 +102,7 @@
     <property name="processResourceName" xmlTag="processResourceName" attribute="YES"/> 
     <property name="subProcesses" xmlTag="FlexoProcess" type="vector" primary="yes"/>
     <property name="index" xmlTag="docIndex" attribute="yes"/>
+    <property name="name" xmlTag="name" attribute="YES"/>
   </entity>
   
   <entity name="org.openflexo.foundation.wkf.ProcessFolder" xmlTag="ProcessFolder">
@@ -123,7 +124,7 @@
  	<property name="isSystemRole" xmlTag="systemRole" attribute="yes" description="Is this role a system role ?"/>
  	<property name="isAssignable" xmlTag="isAssignable" attribute="yes" description="Is this role a assignable to an activity?"/>
   	<property name="index" xmlTag="docIndex" attribute="yes"/>
- 	<property name="roleSpecializations" xmlTag="RoleSpecialization" type="vector" description="List of roles this role is specializing"/>
+ 	<property name="roleSpecializations" xmlTag="RoleSpecialization" copyable="no" type="vector" description="List of roles this role is specializing"/>
   </entity>
   
   <entity name="org.openflexo.foundation.wkf.RoleSpecialization" xmlTag="RoleSpecialization">

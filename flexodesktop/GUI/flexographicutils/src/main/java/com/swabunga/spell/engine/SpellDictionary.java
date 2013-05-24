@@ -52,5 +52,5 @@ public interface SpellDictionary {
 	 * @return List a List of suggested words
 	 * @see com.swabunga.spell.engine.Word
 	 */
-	public List getSuggestions(String sourceWord, int scoreThreshold);
+	public List<Word> getSuggestions(String sourceWord, int scoreThreshold);
 }

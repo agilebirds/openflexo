@@ -206,7 +206,7 @@ public final class RoleCompound extends WorkflowModelObject {
 	}
 
 	public boolean isSingleRole() {
-		return (_roles.size() == 1);
+		return _roles.size() == 1;
 	}
 
 	/**

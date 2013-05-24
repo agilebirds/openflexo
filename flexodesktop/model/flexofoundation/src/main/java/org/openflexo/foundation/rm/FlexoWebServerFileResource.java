@@ -100,7 +100,7 @@ public class FlexoWebServerFileResource extends FlexoImportedResource<FlexoWebSe
 			return super.getResourceFormat();
 		}
 		int index = fileName.lastIndexOf('.');
-		if ((index == -1) || (index == fileName.length())) {
+		if (index == -1 || index == fileName.length()) {
 			return super.getResourceFormat();
 		}
 		FileFormat returned = FileFormat.getDefaultFileFormatByExtension(fileName.substring(index + 1).toLowerCase());
@@ -109,7 +109,7 @@ public class FlexoWebServerFileResource extends FlexoImportedResource<FlexoWebSe
 	}
 
 	@Override
-	protected void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException, LoadResourceException,
+	protected void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependencyLoopException, LoadResourceException,
 			FileNotFoundException, ProjectLoadingCancelledException, FlexoException {
 
 	}
@@ -118,7 +118,6 @@ public class FlexoWebServerFileResource extends FlexoImportedResource<FlexoWebSe
 	protected FlexoWebServerResourceData doImport() throws FlexoException {
 		if (_resourceData == null) {
 			_resourceData = new FlexoWebServerResourceData();
-			_resourceData.setProject(getProject());
 			_resourceData.setFlexoResource(this);
 		}
 		return _resourceData;

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.RoleSpecialization" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.RoleSpecialization" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="4" title="Graphics" layout="twocols" font="SansSerif,0,11" name="GraphicsTab" />
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label label="annotation" localize="true" name="AnnotationLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <TextField validateOnReturn="true" columns="10" passwd="false" localize="true" name="Annotation" data="data.annotation" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
-      <Label label="role" localize="true" name="RoleLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
-      <TextField passwd="false" readOnly="true" format="object.name" localize="true" name="Role" data="data.role.toString" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
-      <Label label="specialize" localize="true" name="ParentRoleLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-      <TextField passwd="false" readOnly="true" format="object.name" localize="true" name="ParentRole" data="data.parentRole.toString" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" />
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab" opaque="false">
+      <Label label="annotation" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="AnnotationLabel" localize="true" />
+      <TextField index="1" data="data.annotation" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Annotation" localize="true" validateOnReturn="true" columns="10" />
+      <Label label="role" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="RoleLabel" localize="true" />
+      <TextField index="3" data="data.role.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Role" readOnly="true" localize="true" />
+      <Label label="specialize" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ParentRoleLabel" localize="true" />
+      <TextField index="5" data="data.parentRole.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="ParentRole" readOnly="true" localize="true" />
     </Tab>
+    <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="20" font="SansSerif,0,11" name="GraphicsTab"  opaque="false"/>
   </TabPanel>
   <LocalizedDictionary>
     <Localized key="Graphics" lang="French">Graphisme</Localized>
@@ -17,13 +17,16 @@
     <Localized key="annotation" lang="English">Annotation</Localized>
     <Localized key="annotation" lang="French">Annotation</Localized>
     <Localized key="annotation" lang="Dutch">Annotation</Localized>
-    <Localized key="role" lang="English">Role</Localized>
-    <Localized key="role" lang="French">Rôle</Localized>
-    <Localized key="role" lang="Dutch">Role</Localized>
-    <Localized key="specialize" lang="English">Specialize</Localized>
-    <Localized key="specialize" lang="French">Spécialiser</Localized>
-    <Localized key="specialize" lang="Dutch">Specialize</Localized>
+    <Localized key="role" lang="English">From</Localized>
+    <Localized key="role" lang="French">De</Localized>
+    <Localized key="role" lang="Dutch">From</Localized>
+    <Localized key="specialize" lang="English">To</Localized>
+    <Localized key="specialize" lang="French">A</Localized>
+    <Localized key="specialize" lang="Dutch">To</Localized>
+    <Localized key="Basic" lang="English">Basic</Localized>
+    <Localized key="Basic" lang="Dutch">Basic</Localized>
+    <Localized key="Graphics" lang="English">Graphics</Localized>
+    <Localized key="Graphics" lang="Dutch">Graphics</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="Role specialization" />
+  <Parameter name="title" value="Role link" />
 </Panel>
-

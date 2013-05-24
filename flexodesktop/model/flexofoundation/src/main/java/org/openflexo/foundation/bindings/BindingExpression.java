@@ -24,25 +24,17 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.expr.BindingValueAsExpression;
 import org.openflexo.antar.expr.Constant;
-import org.openflexo.antar.expr.DefaultExpressionParser;
 import org.openflexo.antar.expr.DefaultExpressionPrettyPrinter;
-import org.openflexo.antar.expr.EvaluationContext;
 import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.antar.expr.Expression;
+import org.openflexo.antar.expr.ExpressionTransformer;
 import org.openflexo.antar.expr.Function;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TransformException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.Variable;
-import org.openflexo.antar.expr.parser.ExpressionParser;
-import org.openflexo.antar.expr.parser.ExpressionParser.ConstantFactory;
-import org.openflexo.antar.expr.parser.ExpressionParser.DefaultConstantFactory;
-import org.openflexo.antar.expr.parser.ExpressionParser.DefaultFunctionFactory;
-import org.openflexo.antar.expr.parser.ExpressionParser.DefaultVariableFactory;
-import org.openflexo.antar.expr.parser.ExpressionParser.FunctionFactory;
-import org.openflexo.antar.expr.parser.ExpressionParser.VariableFactory;
-import org.openflexo.antar.expr.parser.ParseException;
-import org.openflexo.antar.expr.parser.Value;
-import org.openflexo.antar.expr.parser.Word;
 import org.openflexo.antar.java.JavaExpressionPrettyPrinter;
 import org.openflexo.antar.pp.ExpressionPrettyPrinter;
 import org.openflexo.foundation.DataModification;
@@ -178,18 +170,18 @@ public class BindingExpression extends AbstractBinding {
 	}
 
 	public static class BindingExpressionStringConverter extends AbstractBindingStringConverter<BindingExpression> {
-		private ExpressionParser parser;
+		// private ExpressionParser parser;
 		Bindable _bindable;
 
 		public BindingExpressionStringConverter() {
 			super(BindingExpression.class);
-			parser = new DefaultExpressionParser();
+			/*parser = new DefaultExpressionParser();
 			parser.setConstantFactory(new BindingExpressionConstantFactory());
 			parser.setVariableFactory(new BindingExpressionVariableFactory());
-			parser.setFunctionFactory(new BindingExpressionFunctionFactory());
+			parser.setFunctionFactory(new BindingExpressionFunctionFactory());*/
 		}
 
-		public ConstantFactory getConstantFactory() {
+		/*public ConstantFactory getConstantFactory() {
 			return parser.getConstantFactory();
 		}
 
@@ -199,7 +191,7 @@ public class BindingExpression extends AbstractBinding {
 
 		public FunctionFactory getFunctionFactory() {
 			return parser.getFunctionFactory();
-		}
+		}*/
 
 		@Override
 		public BindingExpression convertFromString(String aValue) {
@@ -207,14 +199,17 @@ public class BindingExpression extends AbstractBinding {
 			try {
 				Expression expression = parseExpressionFromString(aValue);
 				returned.expression = expression;
-			} catch (ParseException e) {
+			} catch (org.openflexo.antar.expr.parser.ParseException e) {
 				returned.unparsableValue = aValue;
 			}
 			return returned;
 		}
 
-		public Expression parseExpressionFromString(String aValue) throws ParseException {
-			return parser.parse(aValue);
+		public Expression parseExpressionFromString(String aValue) throws org.openflexo.antar.expr.parser.ParseException {
+
+			Expression parsedExpression = org.openflexo.antar.expr.parser.ExpressionParser.parse(aValue);
+			return convertToOldBindingModel(parsedExpression, _bindable);
+			// return parser.parse(aValue);
 		}
 
 		@Override
@@ -231,15 +226,15 @@ public class BindingExpression extends AbstractBinding {
 			_bindable = bindable;
 		}
 
-		public class BindingExpressionConstantFactory implements ConstantFactory {
+		/*public class BindingExpressionConstantFactory implements ConstantFactory {
 			private DefaultConstantFactory constantFactory = new DefaultConstantFactory();
 
 			@Override
-			public Expression makeConstant(Value value) {
+			public Expression makeConstant(Value value, org.openflexo.antar.binding.Bindable bindable) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Make constant from " + value + " of " + value.getClass().getSimpleName());
 				}
-				return new BindingValueConstant(constantFactory.makeConstant(value), _bindable);
+				return new BindingValueConstant(constantFactory.makeConstant(value, bindable), _bindable);
 			}
 		}
 
@@ -247,11 +242,11 @@ public class BindingExpression extends AbstractBinding {
 			private DefaultVariableFactory variableFactory = new DefaultVariableFactory();
 
 			@Override
-			public Expression makeVariable(Word value) {
+			public Expression makeVariable(Word value, org.openflexo.antar.binding.Bindable bindable) {
 				if (value.getValue().startsWith(DMType.DKV_PREFIX)) {
 					return new BindingValueConstant(new Constant.EnumConstant(value.getValue()), _bindable);
 				}
-				return new BindingValueVariable(variableFactory.makeVariable(value), _bindable);
+				return new BindingValueVariable(variableFactory.makeVariable(value, bindable), _bindable);
 			}
 		}
 
@@ -259,14 +254,14 @@ public class BindingExpression extends AbstractBinding {
 			private DefaultFunctionFactory functionFactory = new DefaultFunctionFactory();
 
 			@Override
-			public Expression makeFunction(String functionName, Vector<Expression> args) {
-				return new BindingValueFunction(functionFactory.makeFunction(functionName, args), _bindable);
+			public Expression makeFunction(String functionName, List<Expression> args, org.openflexo.antar.binding.Bindable bindable) {
+				return new BindingValueFunction(functionFactory.makeFunction(functionName, args, bindable), _bindable);
 			}
-		}
+		}*/
 
-		public ExpressionParser getParser() {
+		/*public ExpressionParser getParser() {
 			return parser;
-		}
+		}*/
 
 		public ExpressionPrettyPrinter getPrettyPrinter() {
 			return prettyPrinter;
@@ -388,9 +383,14 @@ public class BindingExpression extends AbstractBinding {
 			}
 		}
 
+		/*@Override
+		public Expression evaluate(EvaluationContext context, org.openflexo.antar.binding.Bindable bindable) throws TypeMismatchException {
+			return constant.evaluate(bindable);
+		}*/
+
 		@Override
-		public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
-			return constant.evaluate();
+		public Expression transform(ExpressionTransformer transformer) throws TransformException {
+			return transformer.performTransformation(this);
 		}
 
 		@Override
@@ -433,9 +433,9 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		public BindingValueVariable(String variableName, Bindable bindable) {
-			this(new Variable(variableName), bindable, (bindable != null ? new BindingDefinition("object",
+			this(new Variable(variableName), bindable, bindable != null ? new BindingDefinition("object",
 					DMType.makeObjectDMType(((FlexoModelObject) bindable).getProject()), (FlexoModelObject) bindable,
-					BindingDefinitionType.GET, true) : null));
+					BindingDefinitionType.GET, true) : null);
 		}
 
 		public BindingValueVariable(String variableName, Bindable bindable, BindingDefinition bd) {
@@ -443,9 +443,9 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		public BindingValueVariable(Variable aVariable, Bindable bindable) {
-			this(aVariable, bindable, (bindable != null ? new BindingDefinition("object",
+			this(aVariable, bindable, bindable != null ? new BindingDefinition("object",
 					DMType.makeObjectDMType(((FlexoModelObject) bindable).getProject()), (FlexoModelObject) bindable,
-					BindingDefinitionType.GET, true) : null));
+					BindingDefinitionType.GET, true) : null);
 		}
 
 		public BindingValueVariable(Variable aVariable, Bindable bindable, BindingDefinition bd) {
@@ -488,9 +488,14 @@ public class BindingExpression extends AbstractBinding {
 			this.variable = aVariable;
 		}
 
+		/*@Override
+		public Expression evaluate(EvaluationContext context, org.openflexo.antar.binding.Bindable bindable) throws TypeMismatchException {
+			return variable.evaluate(bindable);
+		}*/
+
 		@Override
-		public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
-			return variable.evaluate();
+		public Expression transform(ExpressionTransformer transformer) throws TransformException {
+			return transformer.performTransformation(this);
 		}
 
 		@Override
@@ -575,9 +580,9 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		public BindingValueFunction(String functionName, Vector<Expression> args, Bindable bindable) {
-			this(new Function(functionName, args), bindable, (bindable != null ? new BindingDefinition("object",
+			this(new Function(functionName, args), bindable, bindable != null ? new BindingDefinition("object",
 					DMType.makeObjectDMType(((FlexoModelObject) bindable).getProject()), (FlexoModelObject) bindable,
-					BindingDefinitionType.GET, true) : null));
+					BindingDefinitionType.GET, true) : null);
 		}
 
 		public BindingValueFunction(String functionName, Vector<Expression> args, Bindable bindable, BindingDefinition bd) {
@@ -585,9 +590,9 @@ public class BindingExpression extends AbstractBinding {
 		}
 
 		public BindingValueFunction(Function aFunction, Bindable bindable) {
-			this(aFunction, bindable, (bindable != null ? new BindingDefinition("object",
+			this(aFunction, bindable, bindable != null ? new BindingDefinition("object",
 					DMType.makeObjectDMType(((FlexoModelObject) bindable).getProject()), (FlexoModelObject) bindable,
-					BindingDefinitionType.GET, true) : null));
+					BindingDefinitionType.GET, true) : null);
 		}
 
 		public BindingValueFunction(Function aFunction, Bindable bindable, BindingDefinition bd) {
@@ -658,9 +663,14 @@ public class BindingExpression extends AbstractBinding {
 			this.function = aFunction;
 		}
 
+		/*@Override
+		public Expression evaluate(EvaluationContext context, org.openflexo.antar.binding.Bindable bindable) throws TypeMismatchException {
+			return function.evaluate(bindable);
+		}*/
+
 		@Override
-		public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
-			return function.evaluate();
+		public Expression transform(ExpressionTransformer transformer) throws TransformException {
+			return transformer.performTransformation(this);
 		}
 
 		@Override
@@ -696,13 +706,15 @@ public class BindingExpression extends AbstractBinding {
 		return expression.getEvaluationType();
 	}
 
-	public BindingExpression evaluate() throws TypeMismatchException {
+	public BindingExpression evaluate() throws TypeMismatchException, NullReferenceException {
 		if (expression == null) {
 			return clone();
 		}
-		EvaluationContext evaluationContext = new EvaluationContext(getConverter().getConstantFactory(), getConverter()
-				.getVariableFactory(), getConverter().getFunctionFactory());
-		Expression evaluatedExpression = expression.evaluate(evaluationContext);
+		/*EvaluationContext evaluationContext = new EvaluationContext(getConverter().getConstantFactory(), getConverter()
+		.getVariableFactory(), getConverter().getFunctionFactory());*/
+		// Expression evaluatedExpression = expression.evaluate(evaluationContext);
+		Expression evaluatedExpression = expression.evaluate();
+		evaluatedExpression = convertToOldBindingModel(evaluatedExpression, (Bindable) getOwner());
 		BindingExpression returned = clone();
 		returned.setExpression(evaluatedExpression);
 		return returned;
@@ -862,6 +874,32 @@ public class BindingExpression extends AbstractBinding {
 			return "/* TODO: <UNPARSABLE:" + unparsableValue + ">*/";
 		}
 		return "null";
+	}
+
+	// We apply this transformer to match old binding model
+	@Deprecated
+	protected static Expression convertToOldBindingModel(Expression e, final Bindable bindable) {
+		try {
+			Expression returned = e.transform(new ExpressionTransformer() {
+				@Override
+				public Expression performTransformation(Expression e) throws TransformException {
+					if (e instanceof Constant) {
+						return new BindingValueConstant((Constant) e, bindable);
+					} else if (e instanceof BindingValueAsExpression) {
+						return new BindingValueVariable(((BindingValueAsExpression) e).toString(), bindable);
+					}
+					return e;
+				}
+			});
+
+			System.out.println("Returned = " + returned);
+			return returned;
+
+		} catch (TransformException ex) {
+			logger.warning("Unexpected exception during transforming: " + ex);
+			ex.printStackTrace();
+			return e;
+		}
 	}
 
 }

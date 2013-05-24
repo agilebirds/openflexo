@@ -101,6 +101,7 @@ public abstract class InputHandler extends KeyAdapter {
 	public static final ActionListener TOGGLE_SYNTAX_COLORING = new ToggleSyntaxColoring();
 
 	public static final ActionListener FIND = new Find();
+	public static final ActionListener GOTOLINE = new GotoLine();
 
 	public static final ActionListener COPY = new copy();
 	public static final ActionListener CUT = new cut();
@@ -121,6 +122,16 @@ public abstract class InputHandler extends KeyAdapter {
 		public void actionPerformed(ActionEvent e) {
 			JEditTextArea textArea = getTextArea(e);
 			textArea.showFindDialog();
+		}
+
+	}
+
+	public static class GotoLine implements ActionListener, InputHandler.NonRecordable {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JEditTextArea textArea = getTextArea(e);
+			textArea.showGotoLineDialog();
 		}
 
 	}
@@ -311,7 +322,7 @@ public abstract class InputHandler extends KeyAdapter {
 	 * Returns the number of times the next action will be repeated.
 	 */
 	public int getRepeatCount() {
-		return (repeat ? Math.max(1, repeatCount) : 1);
+		return repeat ? Math.max(1, repeatCount) : 1;
 	}
 
 	/**
@@ -601,7 +612,7 @@ public abstract class InputHandler extends KeyAdapter {
 			}
 
 			try {
-				textArea.getDocument().remove(start, (caret + lineStart) - start);
+				textArea.getDocument().remove(start, caret + lineStart - start);
 			} catch (BadLocationException bl) {
 				bl.printStackTrace();
 			}
@@ -626,7 +637,7 @@ public abstract class InputHandler extends KeyAdapter {
 			if (lastVisibleLine >= textArea.getLineCount()) {
 				lastVisibleLine = Math.min(textArea.getLineCount() - 1, lastVisibleLine);
 			} else {
-				lastVisibleLine -= (textArea.getElectricScroll() + 1);
+				lastVisibleLine -= textArea.getElectricScroll() + 1;
 			}
 
 			int lastVisible = textArea.getLineEndOffset(lastVisibleLine) - 1;
@@ -687,7 +698,7 @@ public abstract class InputHandler extends KeyAdapter {
 			int firstLine = textArea.getFirstLine();
 
 			int firstOfLine = textArea.getLineStartOffset(textArea.getCaretLine());
-			int firstVisibleLine = (firstLine == 0 ? 0 : firstLine + textArea.getElectricScroll());
+			int firstVisibleLine = firstLine == 0 ? 0 : firstLine + textArea.getElectricScroll();
 			int firstVisible = textArea.getLineStartOffset(firstVisibleLine);
 
 			if (caret == 0) {

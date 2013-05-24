@@ -24,6 +24,12 @@ import java.lang.reflect.Type;
 
 public class FIBColor extends FIBWidget {
 
+	public static enum Parameters implements FIBModelAttribute {
+		allowsNull;
+	}
+
+	private boolean allowsNull = true;
+
 	public FIBColor() {
 	}
 
@@ -36,4 +42,17 @@ public class FIBColor extends FIBWidget {
 	public Type getDefaultDataClass() {
 		return Color.class;
 	}
+
+	public boolean getAllowsNull() {
+		return allowsNull;
+	}
+
+	public void setAllowsNull(boolean allowsNull) {
+		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.allowsNull, allowsNull);
+		if (notification != null) {
+			this.allowsNull = allowsNull;
+			hasChanged(notification);
+		}
+	}
+
 }

@@ -19,8 +19,8 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.util.Enumeration;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -50,7 +50,7 @@ public class RefreshTemplatesInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RefreshTemplates> getDefaultInitializer() {
 		return new FlexoActionInitializer<RefreshTemplates>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshTemplates action) {
+			public boolean run(EventObject e, RefreshTemplates action) {
 				return true;
 			}
 		};
@@ -60,7 +60,7 @@ public class RefreshTemplatesInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RefreshTemplates> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RefreshTemplates>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshTemplates action) {
+			public boolean run(EventObject e, RefreshTemplates action) {
 				// Chaque refresh doit faire un clear du cache des TemplateLocator de tous les project generator
 				for (Enumeration<ProjectGenerator> en = getControllerActionInitializer().getGeneratorController().getProjectGenerators(); en
 						.hasMoreElements();) {

@@ -91,7 +91,7 @@ public class EditDistance {
 				int costOfSubst = costOfSubstitutingLetters + matrix[i - 1][j - 1];
 				// if needed, add up the cost of doing a swap
 				int costOfSwap = Integer.MAX_VALUE;
-				boolean isSwap = (i != 1) && (j != 1) && sourceChar == similar.charAt(j - 1) && word.charAt(i - 1) == otherChar;
+				boolean isSwap = i != 1 && j != 1 && sourceChar == similar.charAt(j - 1) && word.charAt(i - 1) == otherChar;
 				if (isSwap) {
 					costOfSwap = costOfSwappingLetters + matrix[i - 2][j - 2];
 				}

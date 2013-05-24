@@ -32,20 +32,18 @@ import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.imported.dm.RoleAlreadyImportedException;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectReference;
+import org.openflexo.foundation.rm.ProjectData;
 import org.openflexo.foundation.utils.FlexoColor;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.wkf.action.AddRole;
 import org.openflexo.foundation.wkf.action.DeleteRole;
-import org.openflexo.foundation.wkf.action.WKFPaste;
-import org.openflexo.foundation.wkf.action.WKFSelectAll;
 import org.openflexo.foundation.wkf.dm.RoleInserted;
 import org.openflexo.foundation.wkf.dm.RoleRemoved;
-import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -66,11 +64,6 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 	private Vector<Role> _roles;
 	public static FlexoActionizer<AddRole, WorkflowModelObject, WorkflowModelObject> addRoleActionizer;
 	public static FlexoActionizer<DeleteRole, Role, WorkflowModelObject> deleteRoleActionizer;
-
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
 
 	public Role importRole(PPMRole role) throws RoleAlreadyImportedException {
 		Role fir = getImportedObjectWithURI(role.getUri());
@@ -97,17 +90,6 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 	}
 
 	/**
-	 * Constructor used during deserialization
-	 * 
-	 * @deprecated (used before version 1.2.1)
-	 */
-	@Deprecated
-	public RoleList(FlexoProcessBuilder builder) {
-		this(builder.getProject(), null);
-		initializeDeserialization(builder);
-	}
-
-	/**
 	 * Default constructor
 	 */
 	public RoleList(FlexoProject project, FlexoWorkflow workflow) {
@@ -122,6 +104,31 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 
 	public boolean isImportedRoleList() {
 		return getWorkflow() != null && getWorkflow().getImportedRoleList() == this;
+	}
+
+	private RoleList roleList;
+
+	@Override
+	public RoleList getUncachedObject() {
+		if (roleList != null) {
+			return roleList;
+		}
+		if (!getWorkflow().isCache()) {
+			return roleList = this;
+		}
+		if (true) {
+			ProjectData projectData = getProject().getProjectData();
+			if (projectData != null) {
+				FlexoProjectReference ref = projectData.getProjectReferenceWithURI(getWorkflow().getProjectURI());
+				if (ref != null) {
+					FlexoProject referredProject = ref.getReferredProject(true);
+					if (referredProject != null) {
+						return roleList = referredProject.getWorkflow().getRoleList();
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -140,14 +147,20 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 	}
 
 	public Role roleWithName(String aName) {
-		for (Enumeration e = getRoles().elements(); e.hasMoreElements();) {
-			Role temp = (Role) e.nextElement();
-			if (temp.getName() != null && temp.getName().equals(aName)) {
-				return temp;
+		for (Role role : getRoles()) {
+			if (role.getName() != null && role.getName().equals(aName)) {
+				return role;
 			}
 		}
-		// if (logger.isLoggable(Level.WARNING)) logger.warning ("Could not find
-		// role named "+aName);
+		return null;
+	}
+
+	public Role getRoleWithFlexoID(long flexoID) {
+		for (Role role : getRoles()) {
+			if (role.getFlexoID() == flexoID) {
+				return role;
+			}
+		}
 		return null;
 	}
 
@@ -273,15 +286,6 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 		}
 		Role.sort(reply);
 		return reply;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddRole.actionType);
-		returned.add(WKFPaste.actionType);
-		returned.add(WKFSelectAll.actionType);
-		return returned;
 	}
 
 	/**

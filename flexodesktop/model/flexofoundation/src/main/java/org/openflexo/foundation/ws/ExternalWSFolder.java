@@ -37,12 +37,12 @@ public class ExternalWSFolder extends WSFolder {
 		super(dl);
 	}
 
-	public Vector getExternalWSServices() {
+	public Vector<ExternalWSService> getExternalWSServices() {
 		return getWSLibrary().getExternalWSServices();
 	}
 
 	@Override
-	public Vector getWSServices() {
+	public Vector<ExternalWSService> getWSServices() {
 		return getExternalWSServices();
 	}
 

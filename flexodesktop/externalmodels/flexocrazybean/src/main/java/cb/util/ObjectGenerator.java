@@ -84,7 +84,7 @@ public class ObjectGenerator extends DescendingVisitor {
 				PetalNode node = (PetalNode) j.next();
 				String type = getShortType(node);
 
-				if (!found.contains(name) && (type != null) && !name.equals("quid") && !name.equals("quidu")) {
+				if (!found.contains(name) && type != null && !name.equals("quid") && !name.equals("quidu")) {
 					String type2 = getLongType(type);
 					String method = Constants.makeName(name);
 					boolean prim = true;

@@ -19,7 +19,7 @@
  */
 package org.openflexo.dre.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.drm.action.RemoveEmbeddingChildItem;
@@ -46,7 +46,7 @@ public class RemoveEmbeddingChildItemInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RemoveEmbeddingChildItem> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveEmbeddingChildItem>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveEmbeddingChildItem action) {
+			public boolean run(EventObject e, RemoveEmbeddingChildItem action) {
 				return true;
 			}
 		};
@@ -56,7 +56,7 @@ public class RemoveEmbeddingChildItemInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RemoveEmbeddingChildItem> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RemoveEmbeddingChildItem>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveEmbeddingChildItem action) {
+			public boolean run(EventObject e, RemoveEmbeddingChildItem action) {
 				return true;
 			}
 		};

@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -39,7 +39,6 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.wkf.controller.WKFController;
-import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
 public class ShowRolesInitializer extends ActionInitializer {
 
@@ -64,20 +63,12 @@ public class ShowRolesInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<ShowRoles>() {
 
 			@Override
-			public boolean run(ActionEvent event, ShowRoles action) {
+			public boolean run(EventObject event, ShowRoles action) {
 				if (action.getProcess() != null) {
-					String context = SwimmingLaneRepresentation.getRoleVisibilityContextForProcess(action.getProcess());
 					Vector<Role> roles = new Vector<Role>();
-					for (Role role : action.getProcess().getWorkflow().getRoleList().getRoles()) {
-						if (!role.getIsVisible(context)) {
+					for (Role role : action.getProcess().getWorkflow().getAllAssignableRoles()) {
+						if (!action.getProcess().isRoleVisible(role)) {
 							roles.add(role);
-						}
-					}
-					if (action.getProcess().getWorkflow().getImportedRoleList() != null) {
-						for (Role role : action.getProcess().getWorkflow().getImportedRoleList().getRoles()) {
-							if (!role.getIsVisible(context)) {
-								roles.add(role);
-							}
 						}
 					}
 					if (roles.size() == 0) {
@@ -94,10 +85,7 @@ public class ShowRolesInitializer extends ActionInitializer {
 							FlexoLocalization.localizedForKey("select_roles_to_show"), params);
 					if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
 						for (Role role : rolesToAdd.getValue()) {
-							role.setIntegerParameter(Integer.MAX_VALUE,
-									SwimmingLaneRepresentation.getRoleIndexContextedParameterForProcess(action.getProcess()));
-							role.setIsVisible(true, context);
-
+							action.getProcess().setRoleVisible(role, true);
 						}
 						return true;
 					} else {
@@ -128,7 +116,7 @@ public class ShowRolesInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ShowRoles> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ShowRoles>() {
 			@Override
-			public boolean run(ActionEvent e, ShowRoles action) {
+			public boolean run(EventObject e, ShowRoles action) {
 				return true;
 			}
 		};

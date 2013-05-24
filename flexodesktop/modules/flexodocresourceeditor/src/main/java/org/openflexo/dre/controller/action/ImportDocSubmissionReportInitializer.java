@@ -19,8 +19,8 @@
  */
 package org.openflexo.dre.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
@@ -53,7 +53,7 @@ public class ImportDocSubmissionReportInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ImportDocSubmissionReport> getDefaultInitializer() {
 		return new FlexoActionInitializer<ImportDocSubmissionReport>() {
 			@Override
-			public boolean run(ActionEvent e, ImportDocSubmissionReport action) {
+			public boolean run(EventObject e, ImportDocSubmissionReport action) {
 				if (action.getDocSubmissionReportFile() == null) {
 					JFileChooser chooser = new JFileChooser();
 					chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -70,7 +70,7 @@ public class ImportDocSubmissionReportInitializer extends ActionInitializer {
 						}
 
 					});
-					if ((chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) && (chooser.getSelectedFile() != null)) {
+					if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION && chooser.getSelectedFile() != null) {
 						action.setDocSubmissionReportFile(chooser.getSelectedFile());
 					} else {
 						return false;
@@ -91,7 +91,7 @@ public class ImportDocSubmissionReportInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ImportDocSubmissionReport> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ImportDocSubmissionReport>() {
 			@Override
-			public boolean run(ActionEvent e, ImportDocSubmissionReport action) {
+			public boolean run(EventObject e, ImportDocSubmissionReport action) {
 				FlexoController.notify(FlexoLocalization.localizedForKey("import_completed"));
 				return true;
 			}

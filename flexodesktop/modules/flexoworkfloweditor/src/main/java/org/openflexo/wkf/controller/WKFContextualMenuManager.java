@@ -22,7 +22,6 @@ package org.openflexo.wkf.controller;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.ContextualMenuManager;
 
@@ -30,8 +29,8 @@ public class WKFContextualMenuManager extends ContextualMenuManager {
 
 	private WKFController _controller;
 
-	public WKFContextualMenuManager(WKFSelectionManager selectionManager, FlexoEditor editor, WKFController controller) {
-		super(selectionManager, editor);
+	public WKFContextualMenuManager(WKFSelectionManager selectionManager, WKFController controller) {
+		super(selectionManager, controller);
 		_controller = controller;
 	}
 

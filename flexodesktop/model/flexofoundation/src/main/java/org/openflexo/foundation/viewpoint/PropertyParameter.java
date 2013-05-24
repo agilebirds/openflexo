@@ -26,9 +26,10 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
-public abstract class PropertyParameter extends EditionSchemeParameter {
+public class PropertyParameter extends EditionSchemeParameter {
 
 	private String domainURI;
 	private String parentPropertyURI;
@@ -36,6 +37,15 @@ public abstract class PropertyParameter extends EditionSchemeParameter {
 	private ViewPointDataBinding domainValue;
 
 	private BindingDefinition DOMAIN_VALUE = new BindingDefinition("domainValue", OntologyClass.class, BindingDefinitionType.GET, false);
+
+	public PropertyParameter(ViewPointBuilder builder) {
+		super(builder);
+	}
+
+	@Override
+	public WidgetType getWidget() {
+		return WidgetType.PROPERTY;
+	}
 
 	@Override
 	public Type getType() {
@@ -52,7 +62,7 @@ public abstract class PropertyParameter extends EditionSchemeParameter {
 
 	public OntologyClass getDomain() {
 		getViewPoint().loadWhenUnloaded();
-		return getOntologyLibrary().getClass(_getDomainURI());
+		return getViewPoint().getViewpointOntology().getClass(_getDomainURI());
 	}
 
 	public void setDomain(OntologyClass c) {
@@ -113,11 +123,11 @@ public abstract class PropertyParameter extends EditionSchemeParameter {
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
 		}
-		return getOntologyLibrary().getProperty(_getParentPropertyURI());
+		return getViewPoint().getViewpointOntology().getProperty(_getParentPropertyURI());
 	}
 
 	public void setParentProperty(OntologyProperty ontologyProperty) {
-		parentPropertyURI = (ontologyProperty != null ? ontologyProperty.getURI() : null);
+		parentPropertyURI = ontologyProperty != null ? ontologyProperty.getURI() : null;
 	}
 
 }

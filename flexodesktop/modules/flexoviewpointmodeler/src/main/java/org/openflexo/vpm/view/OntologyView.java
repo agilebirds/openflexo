@@ -19,26 +19,34 @@
  */
 package org.openflexo.vpm.view;
 
+import java.util.List;
+import java.util.Vector;
+
+import org.openflexo.components.widget.FIBOntologyEditor;
+import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.ontology.AbstractOntologyObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.view.FIBModuleView;
-import org.openflexo.view.FlexoPerspective;
-import org.openflexo.vpm.CEDCst;
+import org.openflexo.selection.SelectionListener;
+import org.openflexo.view.SelectionSynchronizedModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.vpm.controller.VPMController;
 
 /**
- * Please comment this class
+ * This class represent the module view for an ontology.<br>
+ * Underlying representation is supported by FIBOntologyEditor implementation.
  * 
- * @author sguerin
+ * @author sylvain
  * 
  */
-public class OntologyView extends FIBModuleView<FlexoOntology> {
+@SuppressWarnings("serial")
+public class OntologyView extends FIBOntologyEditor implements SelectionSynchronizedModuleView<AbstractOntologyObject> {
 
-	private FlexoPerspective<? super FlexoOntology> declaredPerspective;
+	private FlexoPerspective declaredPerspective;
 
-	public OntologyView(FlexoOntology ontology, VPMController controller, FlexoPerspective<? super FlexoOntology> perspective) {
-		super(ontology, controller, CEDCst.ONTOLOGY_VIEW_FIB);
+	public OntologyView(FlexoOntology object, VPMController controller, FlexoPerspective perspective) {
+		super(object, controller);
 		declaredPerspective = perspective;
-		controller.manageResource(ontology);
+		controller.manageResource((FlexoModelObject) object);
 	}
 
 	@Override
@@ -47,7 +55,39 @@ public class OntologyView extends FIBModuleView<FlexoOntology> {
 	}
 
 	@Override
-	public FlexoPerspective<? super FlexoOntology> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return declaredPerspective;
 	}
+
+	@Override
+	public void deleteView() {
+		deleteModuleView();
+	}
+
+	@Override
+	public void deleteModuleView() {
+		super.deleteView();
+		getFlexoController().removeModuleView(this);
+	}
+
+	@Override
+	public List<SelectionListener> getSelectionListeners() {
+		Vector<SelectionListener> reply = new Vector<SelectionListener>();
+		reply.add(this);
+		return reply;
+	}
+
+	@Override
+	public void willHide() {
+	}
+
+	@Override
+	public void willShow() {
+	}
+
+	@Override
+	public AbstractOntologyObject getRepresentedObject() {
+		return (AbstractOntologyObject) getOntology();
+	}
+
 }

@@ -54,6 +54,6 @@ public abstract class RelationshipView extends QuiduView implements HasQuidu {
 		PetalNode node = getProperty("stereotype");
 
 		// May be boolean otherwise, brrrr
-		return (node instanceof SegLabel) ? (SegLabel) node : null;
+		return node instanceof SegLabel ? (SegLabel) node : null;
 	}
 }

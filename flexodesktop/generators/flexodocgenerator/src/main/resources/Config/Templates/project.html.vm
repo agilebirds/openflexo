@@ -18,6 +18,27 @@
     #end
 #end
 
+#macro(generateImportScriptForProject $_project)
+	    #set($allFolders = ${generator.getNewVector()})
+        <!-- Import here all processes js -->
+        #foreach($processNode in ${_project.getWorkflow().getSortedTopLevelProcesses()})
+            #generateImportScriptForProcess($processNode.getProcess())
+        #end
+        
+        <!-- Import here all process folders js -->
+        #foreach($folder in $allFolders)
+            <script type="text/javascript" prefixDirectoryPath="" src="processes/${generator.nameForProcessFolderNoExt($folder, $repository)}.js"></script>
+        #end
+	    
+	    #if(${_project.getProjectData()})
+	    	#foreach($pRef in $_project.getProjectData().getImportedProjects())
+	    		#if($pRef.getReferredProject())
+	    			#generateImportScriptForProject($pRef.getReferredProject())
+		    	#end
+	    	#end
+    	#end
+#end
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -43,16 +64,8 @@
         <script type="text/javascript" src="resources/scripts/scrollbrowse.js"></script>
         <script type="text/javascript" src="resources/scripts/flexoreader.js"></script>
         
-		#set($allFolders = ${generator.getNewVector()})
-        <!-- Import here all processes js -->
-        #foreach($processNode in ${project.getWorkflow().getSortedTopLevelProcesses()})
-        	#generateImportScriptForProcess($processNode.getProcess())
-        #end
+        #generateImportScriptForProject($project)
         
-		<!-- Import here all process folders js -->
-		#foreach($folder in $allFolders)
-			<script type="text/javascript" prefixDirectoryPath="" src="processes/${generator.nameForProcessFolderNoExt($folder, $repository)}.js"></script>
-		#end
     </head>
     <body>
         <div id="htmlDocPage">

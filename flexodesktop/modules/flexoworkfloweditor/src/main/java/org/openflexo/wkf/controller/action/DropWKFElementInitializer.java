@@ -19,14 +19,15 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
-import org.openflexo.fge.DefaultDrawing;
+import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -46,7 +47,7 @@ import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.foundation.wkf.node.WSCallSubProcessNode;
 import org.openflexo.foundation.wkf.ws.FlexoPortMap;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.selection.SelectionManagingDrawingController;
+import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -70,17 +71,19 @@ public class DropWKFElementInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DropWKFElement> getDefaultInitializer() {
 		return new FlexoActionInitializer<DropWKFElement>() {
 			@Override
-			public boolean run(ActionEvent e, DropWKFElement action) {
+			public boolean run(EventObject e, DropWKFElement action) {
 				if (action.getPetriGraph() == null) {
 					return false;
 				}
 				if (action.getObject() instanceof SubProcessNode && !action.leaveSubProcessNodeUnchanged()) {
 					final SubProcessNode node = (SubProcessNode) action.getObject();
+					node.setName(null);
 					FlexoProcess process = action.getProcess();
+					// Must be called so that process choice works
 					node.setProcess(process);
 					if (node.getSubProcess() == null) {
-						return new SubProcessSelectorDialog(node.getProject(), getControllerActionInitializer()).askAndSetSubProcess(node,
-								process);
+						return new SubProcessSelectorDialog(process.getProject(), getControllerActionInitializer(), node,
+								process.getProcessNode()).askAndSetSubProcess();
 					}
 				}
 
@@ -128,7 +131,7 @@ public class DropWKFElementInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DropWKFElement> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DropWKFElement>() {
 			@Override
-			public boolean run(ActionEvent e, DropWKFElement action) {
+			public boolean run(EventObject e, DropWKFElement action) {
 				getControllerActionInitializer().getWKFController().getSelectionManager().setSelectedObject(action.getObject());
 
 				if (action.getObject() instanceof SubProcessNode && !action.leaveSubProcessNodeUnchanged()) {
@@ -139,45 +142,42 @@ public class DropWKFElementInitializer extends ActionInitializer {
 						if (spNode instanceof SingleInstanceSubProcessNode || spNode instanceof LoopSubProcessNode
 								|| spNode instanceof WSCallSubProcessNode) {
 							for (FlexoPortMap pm : spNode.getPortMapRegistery().getAllDeletePortmaps()) {
-								ShowHidePortmap.actionType.makeNewAction(pm, null, action.getEditor()).doAction();
+								if (pm.getIsVisible()) {
+									ShowHidePortmap.actionType.makeNewAction(pm, null, action.getEditor()).doAction();
+								}
 							}
 						}
 						if (spNode instanceof WSCallSubProcessNode) {
 							for (FlexoPortMap pm : spNode.getPortMapRegistery().getAllOutPortmaps()) {
-								ShowHidePortmap.actionType.makeNewAction(pm, null, action.getEditor()).doAction();
+								if (pm.getIsVisible()) {
+									ShowHidePortmap.actionType.makeNewAction(pm, null, action.getEditor()).doAction();
+								}
 							}
 						}
 						if (spNode instanceof MultipleInstanceSubProcessNode) {
 							for (FlexoPortMap pm : spNode.getPortMapRegistery().getAllOutPortmaps()) {
-								ShowHidePortmap.actionType.makeNewAction(pm, null, action.getEditor()).doAction();
+								if (pm.getIsVisible()) {
+									ShowHidePortmap.actionType.makeNewAction(pm, null, action.getEditor()).doAction();
+								}
 							}
 						}
 						spNode.getPortMapRegistery().resetLocation(ProcessEditorConstants.BASIC_PROCESS_EDITOR);
 						spNode.getPortMapRegistery().resetLocation(SWLEditorConstants.SWIMMING_LANE_EDITOR);
 						if (spNode instanceof SingleInstanceSubProcessNode || spNode instanceof LoopSubProcessNode
 								|| spNode instanceof MultipleInstanceSubProcessNode) {
-							ShowHidePortmapRegistery.actionType.makeNewAction(spNode.getPortMapRegistery(), null, action.getEditor())
-									.doAction();
+							ShowHidePortmapRegistery hideAction = ShowHidePortmapRegistery.actionType.makeNewAction(
+									spNode.getPortMapRegistery(), null, action.getEditor());
+							hideAction.setVisibility(Boolean.FALSE);
+							hideAction.doAction();
 						}
 					}
 				}
-
-				SelectionManagingDrawingController<? extends DefaultDrawing<?>> controller = null;
-				if (getControllerActionInitializer().getWKFController().getCurrentPerspective() == getControllerActionInitializer()
-						.getWKFController().PROCESS_EDITOR_PERSPECTIVE) {
-					controller = getControllerActionInitializer().getWKFController().PROCESS_EDITOR_PERSPECTIVE
-							.getControllerForProcess(action.getProcess());
-				} else if (getControllerActionInitializer().getWKFController().getCurrentPerspective() == getControllerActionInitializer()
-						.getWKFController().SWIMMING_LANE_PERSPECTIVE) {
-					controller = getControllerActionInitializer().getWKFController().SWIMMING_LANE_PERSPECTIVE
-							.getControllerForProcess(action.getProcess());
-				} else {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Drop in WKF but current perspective is neither BPE or SWL");
-					}
+				ModuleView<?> moduleView = getController().moduleViewForObject(action.getProcess(), false);
+				if (!(moduleView instanceof DrawingView<?>)) {
 					return true;
 				}
-				DefaultDrawing<?> drawing = controller.getDrawing();
+				DrawingView<?> drawingView = (DrawingView<?>) moduleView;
+				Drawing<?> drawing = drawingView.getDrawing();
 				ShapeGraphicalRepresentation<?> newNodeGR = (ShapeGraphicalRepresentation<?>) drawing.getGraphicalRepresentation(action
 						.getObject());
 				if (newNodeGR == null) {
@@ -186,7 +186,7 @@ public class DropWKFElementInitializer extends ActionInitializer {
 					}
 					return true;
 				}
-				final ShapeView<?> view = controller.getDrawingView().shapeViewForObject(newNodeGR);
+				final ShapeView<?> view = drawingView.shapeViewForObject(newNodeGR);
 				if (view == null) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Cannot build view for newly created node insertion");

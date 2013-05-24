@@ -22,8 +22,8 @@ package org.openflexo.foundation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -35,7 +35,6 @@ import org.openflexo.foundation.action.DeleteFlexoProperty;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.action.FlexoActionnable;
-import org.openflexo.foundation.action.SetPropertyAction;
 import org.openflexo.foundation.action.SortFlexoProperties;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
@@ -51,10 +50,10 @@ import org.openflexo.inspector.model.TabModel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.logging.FlexoLogger;
-import org.openflexo.toolbox.EmptyVector;
 import org.openflexo.toolbox.HTMLUtils;
 import org.openflexo.ws.client.PPMWebService.PPMObject;
 import org.openflexo.xmlcode.StringEncoder;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Abstract class for all objects involved in FLEXO model definition
@@ -98,7 +97,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 
 	private boolean hasSpecificDescriptions = false;
 
-	private Vector<FlexoModelObjectReference> referencers;
+	private Vector<FlexoModelObjectReference<?>> referencers;
 
 	// Imported objects
 	private boolean isDeletedOnServer = false;
@@ -119,8 +118,8 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	public static void setCurrentUserIdentifier(String aUserIdentifier) {
 		if (aUserIdentifier != null && aUserIdentifier.indexOf('#') > -1) {
 			aUserIdentifier = aUserIdentifier.replace('#', '-');
+			FlexoModelObject.currentUserIdentifier = aUserIdentifier.intern();
 		}
-		FlexoModelObject.currentUserIdentifier = aUserIdentifier.intern();
 	}
 
 	private String userIdentifier;
@@ -136,7 +135,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		if (aUserIdentifier != null && aUserIdentifier.indexOf('#') > -1) {
 			aUserIdentifier = aUserIdentifier.replace('#', '-');
 		}
-		userIdentifier = aUserIdentifier.intern();
+		userIdentifier = aUserIdentifier != null ? aUserIdentifier.intern() : null;
 		if (!isDeserializing()) {
 			fireSerializationIdChanged();
 		}
@@ -159,15 +158,19 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	 */
 	public FlexoModelObject(FlexoProject project) {
 		super();
-		referencers = new Vector<FlexoModelObjectReference>();
+		referencers = new Vector<FlexoModelObjectReference<?>>();
 		specificDescriptions = new TreeMap<String, String>();
 		customProperties = new Vector<FlexoProperty>();
 		_editionPatternReferences = new Vector<EditionPatternReference>();
+		registerObject(project);
+	}
+
+	protected void registerObject(FlexoProject project) {
 		if (project != null) {
-			/*if (project.getLastUniqueIDHasBeenSet() && flexoID < 0) {
-				flexoID = project.getNewFlexoID();
-				System.err.println("Via constructor New flexo ID: "+flexoID);
-			}*/
+			/*
+			 * if (project.getLastUniqueIDHasBeenSet() && flexoID < 0) { flexoID = project.getNewFlexoID();
+			 * System.err.println("Via constructor New flexo ID: "+flexoID); }
+			 */
 			project.register(this);
 			isRegistered = true;
 		} else {
@@ -200,8 +203,16 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	}
 
 	public FlexoProject getProject() {
+		if (getXMLResourceData() != null && getXMLResourceData().getFlexoResource() != null) {
+			return getXMLResourceData().getFlexoResource().getProject();
+		}
+		return null;
+	}
+
+	@Override
+	public XMLMapping getXMLMapping() {
 		if (getXMLResourceData() != null) {
-			return getXMLResourceData().getProject();
+			return getXMLResourceData().getXMLMapping();
 		}
 		return null;
 	}
@@ -250,14 +261,6 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		}
 	}
 
-	public Vector<FlexoLink> getLinks() {
-		return getProject().getFlexoLinks().getLinksFor(this);
-	}
-
-	public void notifyLinksChanged() {
-
-	}
-
 	/**
 	 * Returns wheter this object is imported or not. Object implementing FlexoImportableObject should override this method
 	 * 
@@ -265,6 +268,19 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	 */
 	public boolean isImported() {
 		return false;
+	}
+
+	public boolean isCache() {
+		return false;
+	}
+
+	public FlexoModelObject getUncachedObject() {
+		if (!isCache()) {
+			return this;
+		} else {
+			throw new RuntimeException("Object of type " + getClass().getName()
+					+ " is cached but does not properly override getUncachedObject()! (" + this + ")");
+		}
 	}
 
 	public Class<? extends PPMObject> getEquivalentPPMClass() {
@@ -388,6 +404,10 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		}
 	}
 
+	public String getDisplayableDescription() {
+		return getDisplayableName();
+	}
+
 	/**
 	 * @return
 	 */
@@ -403,13 +423,13 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			return -1;
 		}
 		if (getProject() != null) {
-			if (getProject().getLastUniqueIDHasBeenSet() && flexoID < 0 && !isDeserializing()) {
+			if (flexoID < 0 && getProject().getLastUniqueIDHasBeenSet() && !isDeserializing()) {
 				flexoID = getProject().getNewFlexoID();
 				// setChanged();
-			}
-			if (!isRegistered) {
-				getProject().register(this);
-				isRegistered = true;
+				if (!isRegistered) {
+					registerObject(getProject());
+					isRegistered = true;
+				}
 			}
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -453,40 +473,39 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		return userIdentifier + ID_SEPARATOR + flexoId;
 	}
 
-	private static final Hashtable<Class, Vector<FlexoActionType>> _actionListForClass = new Hashtable<Class, Vector<FlexoActionType>>();
+	/**
+	 * A map that stores the different declared actions for each class
+	 */
+	private static final Map<Class, List<FlexoActionType<?, ?, ?>>> _declaredActionsForClass = new Hashtable<Class, List<FlexoActionType<?, ?, ?>>>();
+	/**
+	 * A map that stores all the actions for each class (computed with the inheritance of each class)
+	 */
+	private static final Hashtable<Class, List<FlexoActionType<?, ?, ?>>> _actionListForClass = new Hashtable<Class, List<FlexoActionType<?, ?, ?>>>();
 
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = new Vector<FlexoActionType>();
-		returned.add(SetPropertyAction.actionType);
-		return returned;
+	public List<FlexoActionType<?, ?, ?>> getActionList() {
+		return getActionList(getClass());
 	}
 
-	public Vector<FlexoActionType> getActionList() {
-		return getActionList(this);
-	}
-
-	private static Vector<FlexoActionType> getActionList(FlexoModelObject object) {
-		Class aClass = object.getClass();
+	public static <T extends FlexoModelObject> List<FlexoActionType<?, ?, ?>> getActionList(Class<T> aClass) {
 		if (_actionListForClass.get(aClass) == null) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("COMPUTE ACTION_LIST FOR " + aClass.getName());
 			}
-			Vector<FlexoActionType> returned = updateActionListFor(object);
+			List<FlexoActionType<?, ?, ?>> returned = updateActionListFor(aClass);
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("DONE. COMPUTE ACTION_LIST FOR " + aClass.getName() + ": " + returned.size() + " action(s) :");
-				for (Enumeration en = returned.elements(); en.hasMoreElements();) {
-					FlexoActionType next = (FlexoActionType) en.nextElement();
+				for (FlexoActionType<?, ?, ?> next : returned) {
 					logger.fine(" " + next.getLocalizedName());
 				}
 				logger.fine(".");
 			}
 			return returned;
 		}
-		Vector<FlexoActionType> returned = _actionListForClass.get(aClass);
+		List<FlexoActionType<?, ?, ?>> returned = _actionListForClass.get(aClass);
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("RETURN (NO COMPUTING) ACTION_LIST FOR " + aClass.getName() + ": " + returned.size() + " action(s) :");
-			for (Enumeration en = returned.elements(); en.hasMoreElements();) {
-				FlexoActionType next = (FlexoActionType) en.nextElement();
+
+			for (FlexoActionType<?, ?, ?> next : returned) {
 				logger.fine(" " + next.getLocalizedName());
 			}
 			logger.fine(".");
@@ -494,16 +513,14 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		return returned;
 	}
 
-	private static final Hashtable<Class, Vector<FlexoActionType>> _declaredActionsForClass = new Hashtable<Class, Vector<FlexoActionType>>();
-
 	public static <T1 extends FlexoModelObject, T extends T1> void addActionForClass(FlexoActionType<?, T1, ?> actionType,
 			Class<T> objectClass) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("addActionForClass: " + actionType + " for " + objectClass);
 		}
-		Vector<FlexoActionType> actions = _declaredActionsForClass.get(objectClass);
+		List<FlexoActionType<?, ?, ?>> actions = _declaredActionsForClass.get(objectClass);
 		if (actions == null) {
-			actions = new Vector<FlexoActionType>();
+			actions = new ArrayList<FlexoActionType<?, ?, ?>>();
 			_declaredActionsForClass.put(objectClass, actions);
 		}
 		if (actionType != null) {
@@ -529,20 +546,16 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 
 	}
 
-	private static Vector<FlexoActionType> updateActionListFor(FlexoModelObject object) {
-		if (object == null) {
-			return EmptyVector.EMPTY_VECTOR(FlexoActionType.class);
-		}
-		Vector<FlexoActionType> newActionList = new Vector<FlexoActionType>();
-		for (Class aClass : _declaredActionsForClass.keySet()) {
-			if (aClass.isAssignableFrom(object.getClass())) {
-				newActionList.addAll(_declaredActionsForClass.get(aClass));
+	private static <T extends FlexoModelObject> List<FlexoActionType<?, ?, ?>> updateActionListFor(Class<T> aClass) {
+		List<FlexoActionType<?, ?, ?>> newActionList = new Vector<FlexoActionType<?, ?, ?>>();
+		for (Map.Entry<Class, List<FlexoActionType<?, ?, ?>>> e : _declaredActionsForClass.entrySet()) {
+			if (e.getKey().isAssignableFrom(aClass)) {
+				newActionList.addAll(e.getValue());
 			}
 		}
-		newActionList.addAll(object.getSpecificActionListForThatClass());
-		_actionListForClass.put(object.getClass(), newActionList);
+		_actionListForClass.put(aClass, newActionList);
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("updateActionListFor() object: " + object);
+			logger.fine("updateActionListFor() class: " + aClass);
 			for (FlexoActionType a : newActionList) {
 				logger.finer(" > " + a);
 			}
@@ -556,8 +569,8 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 	}
 
 	@Override
-	public FlexoActionType getActionTypeAt(int index) {
-		return getActionList().elementAt(index);
+	public FlexoActionType<?, ?, ?> getActionTypeAt(int index) {
+		return getActionList().get(index);
 	}
 
 	public void delete() {
@@ -579,11 +592,14 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			isRegistered = false;
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Project is null for " + this);
+				logger.warning("Project is null for " + this.getClass().getSimpleName() + "_" + this.getFlexoID());
 			}
 		}
 
-		for (EditionPatternReference ref : getEditionPatternReferences()) {
+		for (EditionPatternReference ref : new ArrayList<EditionPatternReference>(getEditionPatternReferences())) {
+			if (ref.getEditionPatternInstance() != null) {
+				ref.getEditionPatternInstance().nullifyPatternActor(ref.getPatternRole());
+			}
 			ref.delete();
 		}
 		_editionPatternReferences.clear();
@@ -619,7 +635,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			}
 		}
 		isDeleted = false;
-		referencers = new Vector<FlexoModelObjectReference>();
+		referencers = new Vector<FlexoModelObjectReference<?>>();
 		setChanged();
 		if (getProject() != null) {
 			getProject().notifyObjectCreated(this);
@@ -1029,7 +1045,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		}
 	}
 
-	public Vector<FlexoModelObjectReference> getReferencers() {
+	public Vector<FlexoModelObjectReference<?>> getReferencers() {
 		return referencers;
 	}
 
@@ -1314,7 +1330,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			return null;
 		}
 		for (EditionPatternReference r : _editionPatternReferences) {
-			System.out.println("1: " + r.getEditionPattern().getName() + "  2: " + editionPattern.getName());
+			// System.out.println("1: " + r.getEditionPattern().getName() + "  2: " + editionPattern.getName());
 			if (r.getEditionPattern().getName().equals(editionPattern.getName())) {
 				return r;
 			}
@@ -1356,25 +1372,14 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		return null;
 	}
 
-	/* private Vector<TabModel> _tabList;
-
-	public Vector<TabModel> inspectionExtraTabs()
-	{
-	if (_tabList == null) {
-		_tabList = new Vector<TabModel>();
-		if (getEditionPatternReferences() != null) {
-			for (EditionPatternReference ref : getEditionPatternReferences()) {
-				EditionPatternInspector inspector = ref.getEditionPattern().getInspector();
-				if (inspector != null) {
-					//for (Integer i : inspector.getTabs().keySet()) {
-					//	_tabList.add(inspector.getTabs().get(i));
-					//}
-				}
-			}
-		}
-	}
-	return _tabList;
-	}*/
+	/*
+	 * private Vector<TabModel> _tabList;
+	 * 
+	 * public Vector<TabModel> inspectionExtraTabs() { if (_tabList == null) { _tabList = new Vector<TabModel>(); if
+	 * (getEditionPatternReferences() != null) { for (EditionPatternReference ref : getEditionPatternReferences()) { EditionPatternInspector
+	 * inspector = ref.getEditionPattern().getInspector(); if (inspector != null) { //for (Integer i : inspector.getTabs().keySet()) { //
+	 * _tabList.add(inspector.getTabs().get(i)); //} } } } } return _tabList; }
+	 */
 
 	public String getInspectorTitle() {
 		// By default, take default inspector name

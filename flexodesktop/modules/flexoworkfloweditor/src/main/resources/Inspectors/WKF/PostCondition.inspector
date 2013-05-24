@@ -1,41 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.edge.FlexoPostCondition" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
-  <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="20" title="Graphics" layout="twocols" font="SansSerif,0,11" name="GraphicsTab">
-      <Label label="hide_when_induced" localize="true" name="HideWhenInducedLabel" constraints="twocols(location=left;index=14;expandHorizontally=false;expandVertically=false)" />
-      <CheckBox selected="false" localize="true" name="HideWhenInduced" data="data.hideWhenInduced" constraints="twocols(location=right;index=15;expandHorizontally=false;expandVertically=false)" />
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.edge.FlexoPostCondition" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="HideWhenInducedSWL" data="data" constraints="border(location=center)">
+    <Parameter name="visibleFor" value="ANALYST,DEVELOPER,MAINTAINER " />
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab" opaque="false">
+      <Label label="is_default_flow" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.canBeDefaultFlow = true)" name="IsDefaultFlowLabel" localize="true" />
+      <CheckBox selected="false" index="7" data="data.isDefaultFlow" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.canBeDefaultFlow = true)" name="IsDefaultFlow" localize="true" />
+      <Label label="has_condition" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="((data.isStartingFromOr = true) &amp; (data.isDefaultFlow = false))" name="IsImplicitConditionalLabel" localize="true" />
+      <Label label="has_condition" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.canBeConditional = true)" name="IsConditionalLabel" localize="true" />
+      <CheckBox selected="false" index="9" data="data.isImplicitConditional" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="((data.isStartingFromOr = true) &amp; (data.isDefaultFlow = false))" name="IsImplicitConditional" localize="true" />
+      <CheckBox selected="false" index="9" data="data.isConditional" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.canBeConditional = true)" name="IsConditional" localize="true" />
+      <Label label="condition_description" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(((data.isConditional = true) &amp; (data.canBeConditional = true)) | ((data.isStartingFromOr = true) &amp; (data.isDefaultFlow = false)))" name="ConditionDescriptionLabel" localize="true" />
+      <HTMLEditor index="11" data="data.conditionDescription" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(((data.isConditional = true) &amp; (data.canBeConditional = true)) | ((data.isStartingFromOr = true) &amp; (data.isDefaultFlow = false)))" name="ConditionDescription" localize="true">
+        <Line1Option index="0" name="ParagraphFormatComboBox" />
+        <Line1Option index="1" name="TextEffectPanel" />
+        <Line1Option index="2" name="TextEffectPanel.BoldButton" />
+        <Line1Option index="3" name="TextEffectPanel.ItalicButton" />
+        <Line1Option index="4" name="TextEffectPanel.UnderlineButton" />
+        <Line1Option index="2" name="ColorPanel" />
+        <Line1Option index="6" name="ColorPanel.TextColorButton" />
+        <Line1Option index="7" name="ColorPanel.BackgroundColorButton" />
+        <Line1Option index="3" name="JustificationPanel" />
+        <Line1Option index="9" name="JustificationPanel.LeftJustifyButton" />
+        <Line1Option index="10" name="JustificationPanel.CenterJustifyButton" />
+        <Line1Option index="11" name="JustificationPanel.RightJustifyButton" />
+        <Line1Option index="12" name="JustificationPanel.BlockJustifyButton" />
+        <Line1Option index="4" name="LinkPanel" />
+        <Line1Option index="14" name="LinkPanel.LinkButton" />
+        <Line1Option index="15" name="LinkPanel.UnlinkButton" />
+        <Line1Option index="5" name="MiscPanel" />
+        <Line1Option index="17" name="MiscPanel.InsertImage" />
+      </HTMLEditor>
+      <Label label="matches_positive_evaluation" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.startOperatorIsIfNode = true)" name="IsPositiveEvaluationLabel" localize="true" />
+      <CheckBox selected="false" index="13" data="data.isPositiveEvaluation" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.startOperatorIsIfNode = true)" name="IsPositiveEvaluation" localize="true" />
     </Tab>
-    <Tab index="6" title="Edge Metrics" layout="twocols" visible="controller.displayInspectorTabForContext(&quot;METRICS&quot;)" font="SansSerif,0,11" name="EdgeMetricsTab">
-      <Label label="metrics" align="center" localize="true" name="MetricsValuesLabel" constraints="twocols(location=center;index=0;expandHorizontally=true;expandVertically=false)" />
-      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsValue" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" data="data.metricsValues" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=true)" name="MetricsValues" localize="true" manageDynamicModel="true">
+    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="DataTab" opaque="false">
+      <Label label="condition" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.isConditional = true)" name="ConditionPrimitiveLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
+      </Label>
+      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="ConditionPrimitive" index="5" data="data.conditionPrimitive" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.isConditional = true)">
+        <Assignment variable="component.bindingDefinition" value="data.conditionPrimitiveBindingDefinition" />
+        <Assignment variable="component.bindable" value="data" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
+      </Custom>
+      <Parameter name="visibleFor" value="ANALYST,DEVELOPER,MAINTAINER " />
+    </Tab>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab" opaque="false">
+      <Label label="isGenericOutput" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IsGenericOutputLabel" localize="true" />
+      <CheckBox selected="false" index="3" data="data.isGenericOutput" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IsGenericOutput" localize="true" />
+      <Parameter name="visibleFor" value="SEMANTICS,SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER " />
+    </Tab>
+    <Tab title="Edge Metrics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="6" visible="controller.displayInspectorTabForContext(&quot;METRICS&quot;)" font="SansSerif,0,11" name="EdgeMetricsTab" opaque="false">
+      <Label label="metrics" align="center" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="MetricsValuesLabel" localize="true" />
+      <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsValue" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="MetricsValues" index="1" data="data.metricsValues" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
         <TextFieldColumn data="iterator.metricsDefinition.name" title="name" columnWidth="100" resizable="true" displayTitle="true" tooltip="iterator.metricsDefinition.description" />
+        <CustomColumn componentClassName="org.openflexo.components.widget.MetricsValueInspectorWidget" customRendering="true" disableTerminateEditOnFocusLost="false" data="iterator.this" format="object.value.toString" title="value" columnWidth="80" resizable="true" displayTitle="true" />
         <TextFieldColumn isEditable="iterator.metricsDefinition.isUnitEditable" data="iterator.unit" title="unit" columnWidth="50" resizable="true" displayTitle="true" />
         <TextFieldColumn data="iterator.description" title="additional_info" columnWidth="120" resizable="true" displayTitle="true" />
         <AddAction method="data.addMetrics" name="new" />
         <RemoveAction method="data.deleteMetrics(selected)" name="delete" />
       </Table>
     </Tab>
-    <Tab index="3" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
-      <Label label="condition" localize="true" name="ConditionPrimitiveLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" visible="(data.isConditional = true)" />
-      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" data="data.conditionPrimitive" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" visible="(data.isConditional = true)" name="ConditionPrimitive" localize="true" manageDynamicModel="true">
-        <Assignment variable="component.bindingDefinition" value="data.conditionPrimitiveBindingDefinition" />
-        <Assignment variable="component.bindable" value="data" />
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
-      </Custom>
+    <Tab title="Graphics_BPE" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="20" visible="controller.displayInspectorTabForContext(&quot;BPE&quot;)" font="SansSerif,0,11" name="GraphicsBPETab" opaque="false">
+      <Label label="hide_when_induced" index="14" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="HideWhenInducedBPELabel" localize="true" />
+      <CheckBox selected="false" index="15" data="data.hideWhenInduced" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="HideWhenInducedBPE" localize="true" />
     </Tab>
-    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab">
-      <Label label="isGenericOutput" localize="true" name="IsGenericOutputLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
-      <CheckBox selected="false" localize="true" name="IsGenericOutput" data="data.isGenericOutput" constraints="twocols(location=right;index=3;expandHorizontally=false;expandVertically=false)" />
-    </Tab>
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label label="is_default_flow" localize="true" name="IsDefaultFlowLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" visible="(data.canBeDefaultFlow = true)" />
-      <CheckBox selected="false" localize="true" name="IsDefaultFlow" data="data.isDefaultFlow" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" visible="(data.canBeDefaultFlow = true)" />
-      <Label label="has_condition" localize="true" name="IsImplicitConditionalLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" visible="((data.isStartingFromOr = true) &amp; (data.isDefaultFlow = false))" />
-      <CheckBox selected="false" localize="true" name="IsImplicitConditional" data="data.isImplicitConditional" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" visible="((data.isStartingFromOr = true) &amp; (data.isDefaultFlow = false))" />
-      <Label label="has_condition" localize="true" name="IsConditionalLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" visible="(data.canBeConditional = true)" />
-      <CheckBox selected="false" localize="true" name="IsConditional" data="data.isConditional" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" visible="(data.canBeConditional = true)" />
-      <Label label="matches_positive_evaluation" localize="true" name="IsPositiveEvaluationLabel" constraints="twocols(location=left;index=12;expandHorizontally=false;expandVertically=false)" visible="(data.startOperatorIsIfNode = true)" />
-      <CheckBox selected="false" localize="true" name="IsPositiveEvaluation" data="data.isPositiveEvaluation" constraints="twocols(location=right;index=13;expandHorizontally=false;expandVertically=false)" visible="(data.startOperatorIsIfNode = true)" />
+    <Tab title="Graphics_BPE" layout="twocols" titleFont="SansSerif,0,12" darkLevel="0" index="21" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" name="GraphicsSWLTab" opaque="false">
+      <Label label="hide_when_induced" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="HideWhenInducedSWLLabel" localize="true" />
+      <CheckBox selected="false" data="data.hideWhenInduced" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="HideWhenInducedSWLLabel" localize="true" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
@@ -59,10 +90,43 @@
     <Localized key="has_condition" lang="English">Has condition</Localized>
     <Localized key="has_condition" lang="French">Est conditionnel</Localized>
     <Localized key="has_condition" lang="Dutch">Has condition</Localized>
+    <Localized key="condition_description" lang="English">Condition description</Localized>
+    <Localized key="condition_description" lang="French">Description de la condition</Localized>
+    <Localized key="condition_description" lang="Dutch">Condition description</Localized>
     <Localized key="matches_positive_evaluation" lang="English">Matches positive evaluation</Localized>
     <Localized key="matches_positive_evaluation" lang="French">Correspond à une évaluation positive</Localized>
     <Localized key="matches_positive_evaluation" lang="Dutch">Matches positive evaluation</Localized>
+    <Localized key="isGenericOutput" lang="English">isGenericOutput</Localized>
+    <Localized key="isGenericOutput" lang="French">isGenericOutput</Localized>
+    <Localized key="isGenericOutput" lang="Dutch">isGenericOutput</Localized>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="value" lang="English">Value</Localized>
+    <Localized key="value" lang="French">Valeur</Localized>
+    <Localized key="value" lang="Dutch">Value</Localized>
+    <Localized key="unit" lang="English">Unit</Localized>
+    <Localized key="unit" lang="French">Unité</Localized>
+    <Localized key="unit" lang="Dutch">Unit</Localized>
+    <Localized key="additional_info" lang="English">Additional info</Localized>
+    <Localized key="additional_info" lang="French">Info supplémentaire</Localized>
+    <Localized key="additional_info" lang="Dutch">Additional info</Localized>
+    <Localized key="new" lang="English">New</Localized>
+    <Localized key="new" lang="French">Nouveau</Localized>
+    <Localized key="new" lang="Dutch">New</Localized>
+    <Localized key="delete" lang="English">Delete</Localized>
+    <Localized key="delete" lang="French">Supprimer</Localized>
+    <Localized key="delete" lang="Dutch">Delete</Localized>
+    <Localized key="Basic" lang="English">Basic</Localized>
+    <Localized key="Basic" lang="Dutch">Basic</Localized>
+    <Localized key="Data" lang="English">Data</Localized>
+    <Localized key="Data" lang="Dutch">Data</Localized>
+    <Localized key="Advanced" lang="English">Advanced</Localized>
+    <Localized key="Advanced" lang="Dutch">Advanced</Localized>
+    <Localized key="Edge Metrics" lang="English">Edge Metrics</Localized>
+    <Localized key="Edge Metrics" lang="Dutch">Edge Metrics</Localized>
+    <Localized key="Graphics" lang="English">Graphics</Localized>
+    <Localized key="Graphics" lang="Dutch">Graphics</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="Post-condition" />
 </Panel>
-

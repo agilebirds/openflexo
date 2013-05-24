@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -60,7 +60,7 @@ public class CreateAssociationInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateAssociation> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateAssociation>() {
 			@Override
-			public boolean run(ActionEvent e, CreateAssociation action) {
+			public boolean run(EventObject e, CreateAssociation action) {
 				return true;
 			}
 		};
@@ -70,7 +70,7 @@ public class CreateAssociationInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateAssociation> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateAssociation>() {
 			@Override
-			public boolean run(ActionEvent e, CreateAssociation action) {
+			public boolean run(EventObject e, CreateAssociation action) {
 
 				getController().getSelectionManager().setSelectedObject(action.getNewAssociation());
 

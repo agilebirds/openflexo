@@ -24,6 +24,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMEntity;
@@ -48,16 +49,20 @@ public class CreateDMTranstyper extends FlexoAction<CreateDMTranstyper, DMEntity
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMEntity object, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(DMEntity object, Vector<DMObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMEntity object, Vector<DMObject> globalSelection) {
+		public boolean isEnabledForSelection(DMEntity object, Vector<DMObject> globalSelection) {
 			return object != null && object.getRepository() != null && !object.getRepository().isReadOnly();
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMEntity.class);
+	}
 
 	private DMEntity _entity;
 	private String _newTranstyperName;

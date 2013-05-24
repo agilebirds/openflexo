@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -51,14 +51,14 @@ public class TopComponentUpInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<TopComponentUp> getDefaultInitializer() {
 		return new FlexoActionInitializer<TopComponentUp>() {
 			@Override
-			public boolean run(ActionEvent e, TopComponentUp action) {
+			public boolean run(EventObject e, TopComponentUp action) {
 				boolean doable = false;
 				IEWidget top = action.getFocusedObject();
 				if (top.getParent() instanceof IESequence) {
 					IESequence<IWidget> c = (IESequence<IWidget>) top.getParent();
 					doable = c.indexOf(top) > 0;
 					if (doable) {
-						(action).setComponent(top);
+						action.setComponent(top);
 					}
 				}
 				return doable;
@@ -70,7 +70,7 @@ public class TopComponentUpInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<TopComponentUp> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<TopComponentUp>() {
 			@Override
-			public boolean run(ActionEvent e, TopComponentUp action) {
+			public boolean run(EventObject e, TopComponentUp action) {
 				return true;
 			}
 		};

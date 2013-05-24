@@ -51,12 +51,12 @@ public class CreateLoopedPetriGraph extends FlexoUndoableAction<CreateLoopedPetr
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(LOOPOperator object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(LOOPOperator object, Vector<WKFObject> globalSelection) {
 			return false; // Action is never visible but always active.
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(LOOPOperator object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(LOOPOperator object, Vector<WKFObject> globalSelection) {
 			return object instanceof SelfExecutableNode && ((SelfExecutableNode) object).getExecutionPetriGraph() == null;
 		}
 

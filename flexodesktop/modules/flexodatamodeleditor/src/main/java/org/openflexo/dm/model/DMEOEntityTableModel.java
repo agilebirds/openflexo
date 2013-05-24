@@ -61,15 +61,15 @@ public class DMEOEntityTableModel extends AbstractModel<DMEOModel, DMEOEntity> {
 			@Override
 			public Icon getIcon(DMEOEntity entity) {
 				if (entity != null) {
-					return (entity.getIsReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON);
+					return entity.getIsReadOnly() ? DMEIconLibrary.READONLY_ICON : DMEIconLibrary.MODIFIABLE_ICON;
 				}
 				return null;
 			}
 
 			@Override
 			public String getLocalizedTooltip(DMEOEntity entity) {
-				return (entity.getIsReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
-						.localizedForKey("is_not_read_only"));
+				return entity.getIsReadOnly() ? FlexoLocalization.localizedForKey("is_read_only") : FlexoLocalization
+						.localizedForKey("is_not_read_only");
 			}
 		});
 		addToColumns(new EditableStringColumn<DMEOEntity>("name", 150) {
@@ -186,7 +186,7 @@ public class DMEOEntityTableModel extends AbstractModel<DMEOModel, DMEOEntity> {
 
 	@Override
 	public DMEOEntity elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return getDMEOModel().getOrderedChildren().elementAt(row);
 		} else {
 			return null;

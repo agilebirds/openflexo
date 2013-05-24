@@ -28,6 +28,9 @@ import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -36,6 +39,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.print.PrinterException;
@@ -62,7 +66,6 @@ import java.util.zip.ZipInputStream;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -80,10 +83,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
 import javax.swing.text.MutableAttributeSet;
@@ -99,6 +104,8 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 
+import org.openflexo.swing.layout.WrapLayout;
+import org.openflexo.toolbox.HTMLUtils;
 import org.openflexo.toolbox.ImageIconResource;
 
 import com.metaphaseeditor.action.AddAttributesAction;
@@ -227,13 +234,17 @@ public class MetaphaseEditorPanel extends JPanel {
 
 	private JPopupMenu contextMenu;
 
+	public static interface ImageInsertRequestHandler {
+		public void insertImage(JTextPane htmlTextPane);
+	}
+
 	private List<ContextMenuListener> contextMenuListeners = new ArrayList<ContextMenuListener>();
 	private List<EditorMouseMotionListener> editorMouseMotionListeners = new ArrayList<EditorMouseMotionListener>();
 
 	private enum ParagraphFormat {
 		PARAGRAPH_FORMAT("Format", null), NORMAL("Normal", Tag.P), HEADING1("Heading 1", Tag.H1), HEADING2("Heading 2", Tag.H2), HEADING3(
-				"Heading 3",
-				Tag.H3), HEADING4("Heading 4", Tag.H4), HEADING5("Heading 5", Tag.H5), HEADING6("Heading 6", Tag.H6), FORMATTED(
+
+		"Heading 3", Tag.H3), HEADING4("Heading 4", Tag.H4), HEADING5("Heading 5", Tag.H5), HEADING6("Heading 6", Tag.H6), FORMATTED(
 				"Formatted",
 				Tag.PRE), ADDRESS("Address", Tag.ADDRESS);
 
@@ -418,12 +429,14 @@ public class MetaphaseEditorPanel extends JPanel {
 
 	private javax.swing.JPanel aboutPanel;
 	private javax.swing.JButton aboutButton;
+	private ImageInsertRequestHandler insertImageRequestHandler;
 
 	public void documentWasEdited() {
 	}
 
 	/** Creates new form MetaphaseEditorPanel */
 	public MetaphaseEditorPanel(MetaphaseEditorConfiguration configuration) {
+		insertImageRequestHandler = new DefaultImageInsertRequestHandler();
 		initComponents();
 		updateComponents(configuration);
 
@@ -437,13 +450,11 @@ public class MetaphaseEditorPanel extends JPanel {
 			@Override
 			public void focusGained(FocusEvent e) {
 				super.focusGained(e);
-				System.out.println("Je chope le focus");
 			}
 
 			@Override
 			public void focusLost(FocusEvent e) {
 				super.focusLost(e);
-				System.out.println("Je perds le focus");
 				documentWasEdited();
 			}
 		});
@@ -520,7 +531,8 @@ public class MetaphaseEditorPanel extends JPanel {
 		superscriptButton.setText("");
 		superscriptButton.setToolTipText("Superscript");
 
-		// TODO: change increase and decrease indent to add inner <li> when inside bulleted or numbered list
+		// TODO: change increase and decrease indent to add inner <li> when
+		// inside bulleted or numbered list
 		increaseIndentButton.setAction(new IncreaseIndentAction("Increase Indent", this));
 		increaseIndentButton.setIcon(new ImageIconResource("Icons/MetaphaseEditor/icons/incindent.png"));
 		increaseIndentButton.setText("");
@@ -561,7 +573,8 @@ public class MetaphaseEditorPanel extends JPanel {
 		unlinkButton.setText("");
 		unlinkButton.setToolTipText("Unlink");
 
-		// TODO: horizontal rule - doesn't insert correctly if within anything other than P, ie. TD or H1
+		// TODO: horizontal rule - doesn't insert correctly if within anything
+		// other than P, ie. TD or H1
 		insertHorizontalLineButton.setAction(new HTMLEditorKit.InsertHTMLTextAction("Insert Horizontal Line", "<hr/>", Tag.P, Tag.HR,
 				Tag.BODY, Tag.HR));
 		insertHorizontalLineButton.setIcon(new ImageIconResource("Icons/MetaphaseEditor/icons/horizontalline.png"));
@@ -1074,7 +1087,10 @@ public class MetaphaseEditorPanel extends JPanel {
 				htmlTextPaneMouseClicked(evt);
 			}
 		});
-		htmlTextPane.addKeyListener(new java.awt.event.KeyAdapter() {
+		Action insertBreakAction = htmlTextPane.getActionMap().get(DefaultEditorKit.insertBreakAction);
+		Action deletePrevCharAction = htmlTextPane.getActionMap().get(DefaultEditorKit.deletePrevCharAction);
+		htmlTextPane.getActionMap().put(DefaultEditorKit.insertBreakAction, new InsertBreakAction(insertBreakAction, deletePrevCharAction));
+		/*htmlTextPane.addKeyListener(new java.awt.event.KeyAdapter() {
 			@Override
 			public void keyPressed(java.awt.event.KeyEvent evt) {
 				htmlTextPaneKeyPressed(evt);
@@ -1089,14 +1105,16 @@ public class MetaphaseEditorPanel extends JPanel {
 			public void keyTyped(java.awt.event.KeyEvent evt) {
 				htmlTextPaneKeyTyped(evt);
 			}
-		});
+		});*/
 		mainScrollPane = new JScrollPane();
+		mainScrollPane.setOpaque(false);
 		mainScrollPane.setViewportView(htmlTextPane);
 
 		setLayout(new BorderLayout());
 
-		toolbarPanel = new JPanel();
-		toolbarPanel.setLayout(new BoxLayout(toolbarPanel, BoxLayout.Y_AXIS));
+		toolbarPanel = new JPanel(new GridBagLayout());
+		toolbarPanel.setOpaque(false);
+		// toolbarPanel.setLayout(new BoxLayout(toolbarPanel, BoxLayout.Y_AXIS));
 
 		add(toolbarPanel, BorderLayout.NORTH);
 		add(mainScrollPane, BorderLayout.CENTER);
@@ -1174,10 +1192,15 @@ public class MetaphaseEditorPanel extends JPanel {
 		if (configuration.hasOption(ABOUT_PANEL_KEY)) {
 			aboutPanel = makeGroup(ABOUT_PANEL_KEY, configuration, aboutButton);
 		}
-
-		toolbarPanel.add(makeLinePanel(1, configuration));
-		toolbarPanel.add(makeLinePanel(2, configuration));
-		toolbarPanel.add(makeLinePanel(3, configuration));
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.weightx = 1.0;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.LINE_START;
+		gbc.gridwidth = GridBagConstraints.REMAINDER;
+		gbc.insets = new Insets(3, 3, 3, 3);
+		toolbarPanel.add(makeLinePanel(1, configuration), gbc);
+		toolbarPanel.add(makeLinePanel(2, configuration), gbc);
+		toolbarPanel.add(makeLinePanel(3, configuration), gbc);
 
 		toolbarPanel.revalidate();
 		toolbarPanel.repaint();
@@ -1185,6 +1208,7 @@ public class MetaphaseEditorPanel extends JPanel {
 
 	private JPanel makeGroup(String groupName, final MetaphaseEditorConfiguration configuration, JButton... buttons) {
 		JPanel returned = new JPanel();
+		returned.setOpaque(false);
 		returned.setName(groupName);
 		// returned.setBorder(BorderFactory.createEtchedBorder());
 		returned.setBorder(BorderFactory.createEmptyBorder());
@@ -1279,7 +1303,9 @@ public class MetaphaseEditorPanel extends JPanel {
 		});
 
 		JPanel returned = new JPanel();
-		returned.setLayout(new FlowLayout(FlowLayout.LEADING, 10, 0));
+		returned.setOpaque(false);
+		returned.setVisible(components.size() > 0);
+		returned.setLayout(new WrapLayout(FlowLayout.LEADING, 10, 0));
 		for (JComponent c : components) {
 			returned.add(c);
 		}
@@ -1308,6 +1334,17 @@ public class MetaphaseEditorPanel extends JPanel {
 
 	public void removeEditorMouseMotionListener(EditorMouseMotionListener editorMouseMotionListener) {
 		editorMouseMotionListeners.remove(editorMouseMotionListener);
+	}
+
+	public Element getParentTag(HTML.Tag tag) {
+		Element e = htmlDocument.getCharacterElement(htmlTextPane.getSelectionStart());
+		while (!e.getName().equalsIgnoreCase("html")) {
+			if (e.getName().equalsIgnoreCase(tag.toString())) {
+				return e;
+			}
+			e = e.getParentElement();
+		}
+		return null;
 	}
 
 	public AttributeSet getSelectedParagraphAttributes() {
@@ -1388,7 +1425,8 @@ public class MetaphaseEditorPanel extends JPanel {
 		} catch (IllegalArgumentException e) {
 			// swallow the exception
 			// seems like a bug in the JTextPane component
-			// only happens occasionally when pasting text at the end of a document
+			// only happens occasionally when pasting text at the end of a
+			// document
 			System.err.println(e.getMessage());
 		}
 	}
@@ -1631,22 +1669,7 @@ public class MetaphaseEditorPanel extends JPanel {
 	}// GEN-LAST:event_anchorButtonActionPerformed
 
 	private void insertImageActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_insertImageActionPerformed
-		try {
-			ImageDialog imageDialog = new ImageDialog(null, true);
-			String html = imageDialog.showDialog();
-			if (html != null) {
-				if (imageDialog.isLink()) {
-					editorKit.insertHTML(htmlDocument, htmlTextPane.getCaretPosition(), html, 0, 0, Tag.A);
-				} else {
-					editorKit.insertHTML(htmlDocument, htmlTextPane.getCaretPosition(), html, 0, 0, Tag.IMG);
-				}
-				refreshAfterAction();
-			}
-		} catch (BadLocationException e) {
-			throw new MetaphaseEditorException(e.getMessage(), e);
-		} catch (IOException e) {
-			throw new MetaphaseEditorException(e.getMessage(), e);
-		}
+		insertImageRequestHandler.insertImage(htmlTextPane);
 	}// GEN-LAST:event_insertImageActionPerformed
 
 	private void insertRemoveBulletedListButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_insertRemoveBulletedListButtonActionPerformed
@@ -1661,11 +1684,8 @@ public class MetaphaseEditorPanel extends JPanel {
 	}// GEN-LAST:event_htmlTextPaneKeyReleased
 
 	private void htmlTextPaneKeyTyped(java.awt.event.KeyEvent evt) {// GEN-FIRST:event_htmlTextPaneKeyTyped
-		if (evt.getKeyChar() == 10) {
-			// TODO: currently this inserts two list items, fix this. PS it's not because of the two actions below, they will only insert
-			// when encountering either a UL or OL
-			new HTMLEditorKit.InsertHTMLTextAction("Insert List Item", "<li></li>", Tag.UL, Tag.LI).actionPerformed(null);
-			new HTMLEditorKit.InsertHTMLTextAction("Insert List Item", "<li></li>", Tag.OL, Tag.LI).actionPerformed(null);
+		if (evt.getKeyChar() == KeyEvent.VK_ENTER) {
+
 		}
 	}// GEN-LAST:event_htmlTextPaneKeyTyped
 
@@ -1693,7 +1713,8 @@ public class MetaphaseEditorPanel extends JPanel {
 	}// GEN-LAST:event_linkButtonActionPerformed
 
 	private void spellcheckButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_spellcheckButtonActionPerformed
-		// JOptionPane.showMessageDialog(null, "The spelling checker functionality is currently unavailable.");
+		// JOptionPane.showMessageDialog(null,
+		// "The spelling checker functionality is currently unavailable.");
 		Thread thread = new Thread() {
 			@Override
 			public void run() {
@@ -1721,7 +1742,7 @@ public class MetaphaseEditorPanel extends JPanel {
 				button.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent ae) {
-						htmlTextPane.requestFocus();
+						htmlTextPane.requestFocusInWindow();
 					}
 				});
 			} else if (vComponents[i] instanceof JComboBox) {
@@ -1730,7 +1751,7 @@ public class MetaphaseEditorPanel extends JPanel {
 
 					@Override
 					public void actionPerformed(ActionEvent ae) {
-						htmlTextPane.requestFocus();
+						htmlTextPane.requestFocusInWindow();
 					}
 				});
 			} else if (vComponents[i] instanceof JPanel) {
@@ -1765,6 +1786,18 @@ public class MetaphaseEditorPanel extends JPanel {
 
 	public void removeContextMenuListener(ContextMenuListener contextMenuListener) {
 		contextMenuListeners.remove(contextMenuListener);
+	}
+
+	public ImageInsertRequestHandler getInsertImageRequestHandler() {
+		return insertImageRequestHandler;
+	}
+
+	public void setInsertImageRequestHandler(ImageInsertRequestHandler insertImageRequestHandler) {
+		if (insertImageRequestHandler != null) {
+			this.insertImageRequestHandler = insertImageRequestHandler;
+		} else {
+			this.insertImageRequestHandler = new DefaultImageInsertRequestHandler();
+		}
 	}
 
 	public void initSpellChecker() {
@@ -1818,7 +1851,7 @@ public class MetaphaseEditorPanel extends JPanel {
 		public void actionPerformed(ActionEvent ae) {
 			JEditorPane editor = getEditor(ae);
 			if (editor != null) {
-				boolean subscript = (StyleConstants.isSubscript(getStyledEditorKit(editor).getInputAttributes())) ? false : true;
+				boolean subscript = StyleConstants.isSubscript(getStyledEditorKit(editor).getInputAttributes()) ? false : true;
 				SimpleAttributeSet sas = new SimpleAttributeSet();
 				StyleConstants.setSubscript(sas, subscript);
 				setCharacterAttributes(editor, sas, false);
@@ -1836,7 +1869,7 @@ public class MetaphaseEditorPanel extends JPanel {
 			JEditorPane editor = getEditor(ae);
 			if (editor != null) {
 				StyledEditorKit kit = getStyledEditorKit(editor);
-				boolean superscript = (StyleConstants.isSuperscript(kit.getInputAttributes())) ? false : true;
+				boolean superscript = StyleConstants.isSuperscript(kit.getInputAttributes()) ? false : true;
 				SimpleAttributeSet sas = new SimpleAttributeSet();
 				StyleConstants.setSuperscript(sas, superscript);
 				setCharacterAttributes(editor, sas, false);
@@ -1854,7 +1887,7 @@ public class MetaphaseEditorPanel extends JPanel {
 			JEditorPane editor = getEditor(ae);
 			if (editor != null) {
 				StyledEditorKit kit = getStyledEditorKit(editor);
-				boolean strikeThrough = (StyleConstants.isStrikeThrough(kit.getInputAttributes())) ? false : true;
+				boolean strikeThrough = StyleConstants.isStrikeThrough(kit.getInputAttributes()) ? false : true;
 				SimpleAttributeSet sas = new SimpleAttributeSet();
 				StyleConstants.setStrikeThrough(sas, strikeThrough);
 				setCharacterAttributes(editor, sas, false);
@@ -1866,18 +1899,74 @@ public class MetaphaseEditorPanel extends JPanel {
 		private Color color;
 
 		public BackgroundColorAction(Color color) {
-			super(StyleConstants.StrikeThrough.toString());
+			super(StyleConstants.Background.toString());
 			this.color = color;
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			JEditorPane editor = getEditor(ae);
-			if (editor != null) {
-				SimpleAttributeSet sas = new SimpleAttributeSet();
-				StyleConstants.setBackground(sas, color);
-				setCharacterAttributes(editor, sas, false);
+			// Add span Tag
+			String htmlStyle = "background-color: #" + HTMLUtils.toHexString(color);
+			SimpleAttributeSet attr = new SimpleAttributeSet();
+			attr.addAttribute(HTML.Attribute.STYLE, htmlStyle);
+			MutableAttributeSet outerAttr = new SimpleAttributeSet();
+			outerAttr.addAttribute(HTML.Tag.SPAN, attr);
+			// Next line is just an instruction to editor to change color
+			StyleConstants.setBackground(outerAttr, this.color);
+			setCharacterAttributes(editor, outerAttr, false);
+
+		}
+	}
+
+	class InsertBreakAction extends HTMLEditorKit.InsertHTMLTextAction {
+
+		private final Action insertBreakAction;
+		private final Action deletePreviousCharAction;
+
+		public InsertBreakAction(Action insertBreakAction, Action deletePreviousCharAction) {
+			super(DefaultEditorKit.insertBreakAction, null, null, null, null, null);
+			this.insertBreakAction = insertBreakAction;
+			this.deletePreviousCharAction = deletePreviousCharAction;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent ae) {
+			try {
+				Element parentListTag = getParentTag(HTML.Tag.UL);
+				if (parentListTag == null) {
+					parentListTag = getParentTag(HTML.Tag.OL);
+				}
+				if (parentListTag != null) {
+					Element li = getParentTag(HTML.Tag.LI);
+					int start = li.getStartOffset();
+					final int end = li.getEndOffset();
+					String liText = htmlTextPane.getText(start, end - start);
+					boolean content = false;
+					for (int i = 0; i < liText.length() && !content; i++) {
+						if (!Character.isWhitespace(liText.charAt(i))) {
+							content = true;
+						}
+					}
+					if (content) {
+						htmlDocument.insertAfterEnd(li, "<li></li>");
+						htmlTextPane.setText(getDocument());
+						htmlTextPane.setCaretPosition(end);
+					} else {
+						deletePreviousCharAction.actionPerformed(ae);
+						htmlDocument.insertAfterEnd(parentListTag, "<p></p>");
+						htmlTextPane.setText(getDocument());
+						htmlTextPane.setCaretPosition(Math.min(Math.max(0, end - 1), htmlDocument.getLength()));
+					}
+				} else if (insertBreakAction != null) {
+					insertBreakAction.actionPerformed(ae);
+				}
+			} catch (BadLocationException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
+
 		}
 	}
 
@@ -1949,7 +2038,7 @@ public class MetaphaseEditorPanel extends JPanel {
 	class HTMLFileFilter extends javax.swing.filechooser.FileFilter {
 		@Override
 		public boolean accept(File f) {
-			return ((f.isDirectory()) || (f.getName().toLowerCase().indexOf(".htm") > 0));
+			return f.isDirectory() || f.getName().toLowerCase().indexOf(".htm") > 0;
 		}
 
 		@Override
@@ -1968,7 +2057,8 @@ public class MetaphaseEditorPanel extends JPanel {
 			ParagraphFormat paragraphFormat = (ParagraphFormat) value;
 			if (paragraphFormat.getTag() != null) {
 				JLabel label = (JLabel) component;
-				// label.setText("<html><" + paragraphFormat.getTag().toString() + ">" + label.getText() + "</" +
+				// label.setText("<html><" + paragraphFormat.getTag().toString()
+				// + ">" + label.getText() + "</" +
 				// paragraphFormat.getTag().toString() + ">");
 			}
 			return component;
@@ -2038,6 +2128,28 @@ public class MetaphaseEditorPanel extends JPanel {
 				for (int i = 0; i < editorMouseMotionListeners.size(); i++) {
 					editorMouseMotionListeners.get(i).mouseMoved(editorMouseEvent);
 				}
+			}
+		}
+	}
+
+	class DefaultImageInsertRequestHandler implements ImageInsertRequestHandler {
+		@Override
+		public void insertImage(JTextPane htmlTextPane) {
+			try {
+				ImageDialog imageDialog = new ImageDialog(SwingUtilities.windowForComponent(htmlTextPane), true);
+				String html = imageDialog.showDialog();
+				if (html != null) {
+					if (imageDialog.isLink()) {
+						editorKit.insertHTML(htmlDocument, htmlTextPane.getCaretPosition(), html, 0, 0, Tag.A);
+					} else {
+						editorKit.insertHTML(htmlDocument, htmlTextPane.getCaretPosition(), html, 0, 0, Tag.IMG);
+					}
+					refreshAfterAction();
+				}
+			} catch (BadLocationException e) {
+				throw new MetaphaseEditorException(e.getMessage(), e);
+			} catch (IOException e) {
+				throw new MetaphaseEditorException(e.getMessage(), e);
 			}
 		}
 	}

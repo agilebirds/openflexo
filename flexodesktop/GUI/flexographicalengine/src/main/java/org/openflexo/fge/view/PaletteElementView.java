@@ -11,6 +11,7 @@ import java.awt.dnd.DragSourceDragEvent;
 import java.awt.dnd.DragSourceDropEvent;
 import java.awt.dnd.DragSourceEvent;
 import java.awt.dnd.DragSourceListener;
+import java.awt.dnd.InvalidDnDOperationException;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.logging.Level;
@@ -24,6 +25,9 @@ import org.openflexo.fge.controller.DrawingPalette.PaletteDrawing;
 import org.openflexo.fge.controller.PaletteElement;
 import org.openflexo.fge.controller.PaletteElement.PaletteElementGraphicalRepresentation;
 import org.openflexo.fge.controller.PaletteElement.PaletteElementTransferable;
+import org.openflexo.toolbox.ToolBox;
+
+import sun.awt.dnd.SunDragSourceContextPeer;
 
 public class PaletteElementView extends ShapeView<PaletteElement> {
 
@@ -143,7 +147,26 @@ public class PaletteElementView extends ShapeView<PaletteElement> {
 
 			Point p = SwingUtilities.convertPoint(e.getComponent(), e.getDragOrigin(), PaletteElementView.this);
 			PaletteElementTransferable transferable = new PaletteElementTransferable(getDrawable(), p);
-
+			if (ToolBox.isMacOS()) {
+				// Need to call this on MacOS.
+				// Scenario to reproduce issue
+				// 1. Drop a sub process node
+				// 2. Choose create a new subprocess
+				// 3. Try to drop another element-->InvalidDnDOperationException
+				synchronized (SunDragSourceContextPeer.class) {
+					try {
+						SunDragSourceContextPeer.checkDragDropInProgress();
+					} catch (InvalidDnDOperationException ex) {
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("For some reason there was still a Dnd in progress. Will set it back to false. God knows why this happens");
+						}
+						if (logger.isLoggable(Level.FINE)) {
+							logger.log(Level.FINE, "Stacktrace for DnD still in progress", ex);
+						}
+						SunDragSourceContextPeer.setDragDropInProgress(false);
+					}
+				}
+			}
 			try {
 				// initial cursor, transferrable, dsource listener
 				e.startDrag(DrawingPalette.dropKO, transferable, dsListener);
@@ -173,7 +196,7 @@ public class PaletteElementView extends ShapeView<PaletteElement> {
 		public void dragDropEnd(DragSourceDropEvent e) {
 			// Resets the screenshot stored by the palette view.
 			getDrawingView().resetCapturedNode();
-			if (e.getDropSuccess() == false) {
+			if (!e.getDropSuccess()) {
 				if (logger.isLoggable(Level.INFO)) {
 					logger.info("Dropping was not successful");
 				}

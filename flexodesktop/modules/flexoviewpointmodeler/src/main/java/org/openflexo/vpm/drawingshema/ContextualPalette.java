@@ -23,13 +23,14 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import javax.swing.JScrollPane;
+
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingPalette;
 import org.openflexo.fge.controller.PaletteElement;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -80,7 +81,7 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 				ContextualPaletteElement e = makePaletteElement(dm.newValue());
 				addElement(e);
 				e.getGraphicalRepresentation().notifyObjectHierarchyHasBeenUpdated();
-				DrawingView<PaletteDrawing> oldPaletteView = getPaletteView();
+				JScrollPane oldPaletteView = getPaletteViewInScrollPane();
 				updatePalette();
 				getController().updatePalette(_calcPalette, oldPaletteView);
 			} else if (dataModification instanceof CalcPaletteElementRemoved) {
@@ -88,7 +89,7 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 				CalcPaletteElementRemoved dm = (CalcPaletteElementRemoved) dataModification;
 				ContextualPaletteElement e = getContextualPaletteElement(dm.oldValue());
 				removeElement(e);
-				DrawingView<PaletteDrawing> oldPaletteView = getPaletteView();
+				JScrollPane oldPaletteView = getPaletteViewInScrollPane();
 				updatePalette();
 				getController().updatePalette(_calcPalette, oldPaletteView);
 			}
@@ -171,7 +172,7 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 						ShapeGraphicalRepresentation<?> shapeGR = (ShapeGraphicalRepresentation<?>) viewPointPaletteElement
 								.getOverridingGraphicalRepresentation(role);
 						if (shapeGR == null) {
-							shapeGR = (ShapeGraphicalRepresentation<?>) role.getGraphicalRepresentation();
+							shapeGR = role.getGraphicalRepresentation();
 						}
 						ExampleDrawingObject container = null;
 						if (role.getParentShapePatternRole() != null) {

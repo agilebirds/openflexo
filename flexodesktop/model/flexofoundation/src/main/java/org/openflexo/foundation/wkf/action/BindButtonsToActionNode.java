@@ -20,12 +20,14 @@
 package org.openflexo.foundation.wkf.action;
 
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
@@ -56,16 +58,20 @@ public class BindButtonsToActionNode extends FlexoAction<BindButtonsToActionNode
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
 			return !(object instanceof SelfExecutableNode);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
-			return ((object != null) && (object).getComponentInstance() != null);
+		public boolean isEnabledForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
+			return object != null && object.getComponentInstance() != null;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, OperationNode.class);
+	}
 
 	protected BindButtonsToActionNode(OperationNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -87,12 +93,12 @@ public class BindButtonsToActionNode extends FlexoAction<BindButtonsToActionNode
 	 * needs to be associated with an action. The values are ActionNode that needs to be associated with the button. If the ActionNode
 	 * returns a <code>null</code> value, then it means that the action needs to be created (it was the dummy ActionNode that was selected).
 	 */
-	private Hashtable associations;
+	private Map<IEHyperlinkWidget, ActionNode> associations;
 
 	/**
 	 * This is the vector of actions (including the dummy) that were selectable to be bound to a button
 	 */
-	private Vector actions;
+	private List<ActionNode> actions;
 
 	/**
 	 * This boolean indicates wheter previous ActionNodes should be kept or not
@@ -144,13 +150,11 @@ public class BindButtonsToActionNode extends FlexoAction<BindButtonsToActionNode
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Ok pressed");
 		}
-		Enumeration en = buttons.elements();
-		while (en.hasMoreElements()) {
-			IEHyperlinkWidget w = (IEHyperlinkWidget) en.nextElement();
+		for (IEHyperlinkWidget w : buttons) {
 			if (!getInsertActionNode()[i++].getValue()) {
 				continue;
 			}
-			ActionNode node = (ActionNode) getAssociations().get(w);
+			ActionNode node = getAssociations().get(w);
 			if (node.getProcess() == null) {
 				node = OperationNode.createNewActionNodeForButton(w, operationNode);
 			} else {
@@ -205,9 +209,7 @@ public class BindButtonsToActionNode extends FlexoAction<BindButtonsToActionNode
 
 	private void cleanActions(boolean cleanActions) {
 		if (cleanActions) {
-			Enumeration en = getActions().elements();
-			while (en.hasMoreElements()) {
-				ActionNode a = (ActionNode) en.nextElement();
+			for (ActionNode a : actions) {
 				if (a.getAssociatedButtonWidget() == null && a.getProcess() != null) {
 					a.delete();
 				}
@@ -219,20 +221,20 @@ public class BindButtonsToActionNode extends FlexoAction<BindButtonsToActionNode
 		node.setAssociatedButtonWidget(w);
 	}
 
-	public Hashtable getAssociations() {
+	public Map<IEHyperlinkWidget, ActionNode> getAssociations() {
 		return associations;
 	}
 
-	public void setAssociations(Hashtable associations) {
-		this.associations = associations;
+	public void setAssociations(Map<IEHyperlinkWidget, ActionNode> map) {
+		this.associations = map;
 	}
 
-	public Vector getActions() {
+	public List<ActionNode> getActions() {
 		return actions;
 	}
 
-	public void setActions(Vector<ActionNode> actions) {
-		this.actions = actions;
+	public void setActions(List<ActionNode> list) {
+		this.actions = list;
 	}
 
 	public boolean getCleanActions() {

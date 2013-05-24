@@ -22,6 +22,7 @@ package org.openflexo.foundation.viewpoint.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -47,13 +48,13 @@ public class AddExampleDrawingConnector extends FlexoAction<AddExampleDrawingCon
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) {
+		public boolean isVisibleForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) {
-			return (shape != null);
+		public boolean isEnabledForSelection(ExampleDrawingShape shape, Vector<ExampleDrawingObject> globalSelection) {
+			return shape != null;
 		}
 
 	};
@@ -66,7 +67,7 @@ public class AddExampleDrawingConnector extends FlexoAction<AddExampleDrawingCon
 	public ExampleDrawingShape toShape;
 	public String newConnectorName;
 	public String annotation;
-	public Object graphicalRepresentation;
+	public ConnectorGraphicalRepresentation<?> graphicalRepresentation;
 
 	private ExampleDrawingConnector _newConnector;
 

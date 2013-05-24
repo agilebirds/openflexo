@@ -181,7 +181,7 @@ public class SendTokenToPrecondition extends ControlGraphBuilder {
 			Expression condition = new BinaryOperatorExpression(BooleanBinaryOperator.EQUALS, getEdgeVariable(),
 					new Constant.IntegerConstant(edge.getFlexoID()));
 			Conditional currentConditional = new Conditional(condition, new Assignment(getTokenIncrementVariable(),
-					new Constant.IntegerConstant((edge instanceof TokenEdge ? ((TokenEdge) edge).getTokenIncrem() : 1))),
+					new Constant.IntegerConstant(edge instanceof TokenEdge ? ((TokenEdge) edge).getTokenIncrem() : 1)),
 					"Precondition receive token from edge " + edge.getDerivedNameFromStartingObject());
 			if (conditional != null) {
 				conditional.setElseStatement(currentConditional);
@@ -230,9 +230,9 @@ public class SendTokenToPrecondition extends ControlGraphBuilder {
 
 		else {
 
-			if (precondition.getIncomingPostConditions().size() == 1 && (precondition.getIncomingPostConditions().firstElement() == edge)
-					&& (tokenIncrement instanceof Constant.IntegerConstant && ((Constant.IntegerConstant) tokenIncrement).getValue() == 1)
-					&& (precondition.getInitTokenNbr() == 0) && (precondition.getTriggerLevel() == 1)) {
+			if (precondition.getIncomingPostConditions().size() == 1 && precondition.getIncomingPostConditions().firstElement() == edge
+					&& tokenIncrement instanceof Constant.IntegerConstant && ((Constant.IntegerConstant) tokenIncrement).getValue() == 1
+					&& precondition.getInitTokenNbr() == 0 && precondition.getTriggerLevel() == 1) {
 				// In this special case where i am the only one edge arriving to this precondition
 				// and if init token number was set to one, i skip the test, asserting this is
 				// trivial workflow logic

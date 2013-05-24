@@ -19,7 +19,6 @@
  */
 package org.openflexo.wkf.swleditor.gr;
 
-import java.awt.Color;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.graphics.BackgroundStyle;
@@ -28,6 +27,7 @@ import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;
+import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
 public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extends AbstractActivityNodeGR<O> {
@@ -50,12 +50,12 @@ public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extend
 
 		getShape().setIsRounded(true);
 
-		foreground = ForegroundStyle.makeStyle(Color.BLACK);
+		foreground = ForegroundStyle.makeStyle(WKFCst.NODE_BORDER_COLOR);
 		foreground.setLineWidth(0.2);
 		setForeground(foreground);
 
-		BackgroundStyle background = BackgroundStyle.makeColorGradientBackground(getMainBgColor(), getOppositeBgColor(),
-				ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
+		BackgroundStyle background = BackgroundStyle.makeColorGradientBackground(getOppositeBgColor(), getMainBgColor(),
+				ColorGradientDirection.NORTH_SOUTH);
 		setBackground(background);
 		// setDecorationPainter(new NodeDecorationPainter());
 	}
@@ -76,7 +76,6 @@ public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extend
 	@Override
 	public void setWidthNoNotification(double width) {
 		getNode().setWidth(width, SWIMMING_LANE_EDITOR);
-		resetLocationConstrainedArea();
 	}
 
 	public double getDefaultWidth() {
@@ -94,7 +93,6 @@ public class NormalAbstractActivityNodeGR<O extends AbstractActivityNode> extend
 	@Override
 	public void setHeightNoNotification(double height) {
 		getNode().setHeight(height, SWIMMING_LANE_EDITOR);
-		resetLocationConstrainedArea();
 	}
 
 	public double getDefaultHeight() {

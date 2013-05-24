@@ -19,16 +19,15 @@ public class RemotelyModifiedPerspective extends FPSPerspective {
 	public RemotelyModifiedPerspective(FPSController fpsController) {
 		super(fpsController, "remotely_modified_files");
 		this.fpsController = fpsController;
+		setTopLeftView(fpsController.getCvsRepositoryBrowserView());
+		setBottomLeftView(fpsController.getSharedProjectBrowserView());
+		setBottomCenterView(fpsController.getConsoleView());
+
 	}
 
 	@Override
 	public ImageIcon getActiveIcon() {
 		return FPSIconLibrary.FPS_RMP_ACTIVE_ICON;
-	}
-
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return FPSIconLibrary.FPS_RMP_SELECTED_ICON;
 	}
 
 	@Override

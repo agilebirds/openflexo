@@ -26,15 +26,17 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ontology.DataPropertyStatement;
+import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.ontology.owl.DataPropertyStatement;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
@@ -44,8 +46,8 @@ public class AddDataPropertyStatement extends AddStatement {
 
 	private String dataPropertyURI = null;
 
-	public AddDataPropertyStatement() {
-		super();
+	public AddDataPropertyStatement(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override
@@ -56,7 +58,7 @@ public class AddDataPropertyStatement extends AddStatement {
 	@Override
 	public Type getSubjectType() {
 		if (getDataProperty() != null && getDataProperty().getDomain() instanceof OntologyClass) {
-			return (OntologyClass) getDataProperty().getDomain();
+			return IndividualOfClass.getIndividualOfClass((OntologyClass) getDataProperty().getDomain());
 		}
 		return super.getSubjectType();
 	}
@@ -83,8 +85,8 @@ public class AddDataPropertyStatement extends AddStatement {
 			getViewPoint().loadWhenUnloaded();
 		}
 		if (StringUtils.isNotEmpty(dataPropertyURI)) {
-			if (getOntologyLibrary() != null) {
-				return getOntologyLibrary().getDataProperty(dataPropertyURI);
+			if (getViewPoint().getViewpointOntology() != null) {
+				return getViewPoint().getViewpointOntology().getDataProperty(dataPropertyURI);
 			}
 		} else {
 			if (getPatternRole() != null) {

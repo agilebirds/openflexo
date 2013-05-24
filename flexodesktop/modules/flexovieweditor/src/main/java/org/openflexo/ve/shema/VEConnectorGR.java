@@ -100,6 +100,14 @@ public class VEConnectorGR extends ConnectorGraphicalRepresentation<ViewConnecto
 	}
 
 	@Override
+	public int getIndex() {
+		if (getOEConnector() != null) {
+			return getOEConnector().getIndex();
+		}
+		return super.getIndex();
+	}
+
+	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == getOEConnector()) {
 			/*if (dataModification instanceof NameChanged) {

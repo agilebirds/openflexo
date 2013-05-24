@@ -85,8 +85,8 @@ public class FGEBand implements FGEArea {
 		if (line2.contains(p)) {
 			return true;
 		}
-		return (line1.getPlaneLocation(testPoint) == line1.getPlaneLocation(p))
-				&& (line2.getPlaneLocation(testPoint) == line2.getPlaneLocation(p));
+		return line1.getPlaneLocation(testPoint) == line1.getPlaneLocation(p)
+				&& line2.getPlaneLocation(testPoint) == line2.getPlaneLocation(p);
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class FGEBand implements FGEArea {
 	}
 
 	public boolean containsLineIgnoreBounds(FGEAbstractLine l) {
-		return (bandContainsPoint(l.getP1()) && bandContainsPoint(l.getP2()));
+		return bandContainsPoint(l.getP1()) && bandContainsPoint(l.getP2());
 	}
 
 	@Override
@@ -476,7 +476,7 @@ public class FGEBand implements FGEArea {
 	public boolean equals(Object obj) {
 		if (obj instanceof FGEBand) {
 			FGEBand b = (FGEBand) obj;
-			return ((line1.overlap(b.line1) || line1.overlap(b.line2)) && (line2.overlap(b.line1) || line2.overlap(b.line2)));
+			return (line1.overlap(b.line1) || line1.overlap(b.line2)) && (line2.overlap(b.line1) || line2.overlap(b.line2));
 		}
 		return false;
 	}

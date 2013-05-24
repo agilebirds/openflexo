@@ -118,6 +118,11 @@ public class DocxVelocityXmlFromHtml {
 		private List<String> bulletsIds = new ArrayList<String>();
 		private boolean needCloseParagraph;
 		private ProjectDocDocxGenerator projectDocxGenerator;
+		private boolean withinT = false;
+
+		private Map<Integer, Integer> rowSpanToDistribute;
+		private int currentColumn = -1;
+		private String align;
 
 		public Html2DocxVelocityXmlParserCallback(int currentUniqueId, boolean isWithinP, ProjectDocDocxGenerator projectDocxGenerator) {
 			super();
@@ -131,12 +136,15 @@ public class DocxVelocityXmlFromHtml {
 		public void handleText(char[] data, int pos) {
 			ensureIsWithinParagraph();
 			ensureIsWithinR();
-
-			sb.append(StringUtils.LINE_SEPARATOR).append("<w:t xml:space=\"preserve\">");
+			if (!withinT) {
+				sb.append(StringUtils.LINE_SEPARATOR).append("<w:t xml:space=\"preserve\">");
+			}
 			sb.append(StringEscapeUtils.escapeXml(XMLCoder.removeUnacceptableChars(new String(data))));
 			sb.append("</w:t>");
 			sb.append(StringUtils.LINE_SEPARATOR).append("</w:r>");
+			withinT = false;
 			withinR = false;
+
 		}
 
 		@Override
@@ -185,9 +193,158 @@ public class DocxVelocityXmlFromHtml {
 				handleStartListItem(a);
 			} else if (t == HTML.Tag.SPAN) {
 				handleStartSpan(a);
+			} else if (t == HTML.Tag.TABLE) {
+				handleStartTable(a);
+			} else if (t == HTML.Tag.TR) {
+				handleStartTableRow(a);
+			} else if (t == HTML.Tag.TD) {
+				handleStartTableCell(a);
 			} else {
 				handleUnknownStartTag(t, pos);
 			}
+		}
+
+		private void handleStartTable(MutableAttributeSet a) {
+
+			sb.append("<w:tbl>\n");
+			sb.append("<w:tblPr>\n");
+			if (a.getAttribute(HTML.Attribute.TITLE) != null) {
+				sb.append("<w:tblCaption w:val=\"")
+						.append(StringEscapeUtils.escapeXml(XMLCoder.removeUnacceptableChars(a.getAttribute(HTML.Attribute.TITLE)
+								.toString()))).append("\" />");
+			}
+			sb.append("            <w:tblStyle w:val=\"TableGrid\"/>\n");
+			sb.append("            <w:tblW w:w=\"0\" w:type=\"auto\"/>\n");
+			sb.append("            <w:jc w:val=\"center\"/>\n");
+			sb.append("            <w:tblBorders>\n");
+			sb.append("                <w:top w:val=\"single\" w:sz=\"4\" w:space=\"0\" w:color=\"auto\"/>\n");
+			sb.append("                <w:left w:val=\"single\" w:sz=\"4\" w:space=\"0\" w:color=\"auto\"/>\n");
+			sb.append("                <w:bottom w:val=\"single\" w:sz=\"4\" w:space=\"0\" w:color=\"auto\"/>\n");
+			sb.append("                <w:right w:val=\"single\" w:sz=\"4\" w:space=\"0\" w:color=\"auto\"/>\n");
+			sb.append("                <w:insideH w:val=\"single\" w:sz=\"4\" w:space=\"0\" w:color=\"auto\"/>\n");
+			sb.append("                <w:insideV w:val=\"single\" w:sz=\"4\" w:space=\"0\" w:color=\"auto\"/>\n");
+			sb.append("            </w:tblBorders>\n");
+			sb.append("            <w:tblCellMar>\n");
+			sb.append("                <w:top w:w=\"57\" w:type=\"dxa\"/>\n");
+			sb.append("                <w:bottom w:w=\"57\" w:type=\"dxa\"/>\n");
+			sb.append("            </w:tblCellMar>\n");
+			sb.append("            <w:tblLook w:val=\"04A0\"/>\n");
+			sb.append("        </w:tblPr>");
+		}
+
+		private void handleEndTable() {
+			sb.append("</w:tbl>");
+		}
+
+		private void handleStartTableRow(MutableAttributeSet a) {
+			sb.append("<w:tr>\n");
+			sb.append("            <w:trPr>\n");
+			sb.append("                <w:cnfStyle w:val=\"100000000000\"/>\n");
+			sb.append("                <w:trHeight w:val=\"300\"/>\n");
+			sb.append("                <w:jc w:val=\"center\"/>\n");
+			sb.append("                <w:cantSplit/>\n");
+			sb.append("            </w:trPr>");
+			currentColumn = 0;
+		}
+
+		private void handleEndTableRow() {
+			sb.append("</w:tr>");
+			currentColumn = -1;
+		}
+
+		private void handleStartTableCell(MutableAttributeSet a) {
+			sb.append("<w:tc>\n");
+			sb.append("                        <w:tcPr>\n");
+			if (a.getAttribute(HTML.Attribute.COLSPAN) != null) {
+				sb.append("<w:gridSpan w:val=\"" + a.getAttribute(HTML.Attribute.COLSPAN) + "\"/>");
+			}
+			Object rowSpan = a.getAttribute(HTML.Attribute.ROWSPAN);
+			if (rowSpan != null) {
+				sb.append("<w:vMerge w:val=\"restart\" />");
+				if (rowSpanToDistribute == null) {
+					rowSpanToDistribute = new HashMap<Integer, Integer>();
+				}
+				rowSpanToDistribute.put(currentColumn, Integer.parseInt(rowSpan.toString()));
+			} else if (rowSpanToDistribute != null && rowSpanToDistribute.get(currentColumn) != null) {
+				int span = rowSpanToDistribute.get(currentColumn);
+				if (span > 1) {
+					sb.append("<w:vMerge/>");
+					if (span > 2) {
+						rowSpanToDistribute.put(currentColumn, span - 1);
+					} else {
+						rowSpanToDistribute.remove(currentColumn);
+					}
+				}
+			}
+			if (a.getAttribute(HTML.Attribute.ALIGN) != null) {
+				setAlignementFromAlignValue(a.getAttribute(HTML.Attribute.ALIGN).toString());
+			}
+			if (a.getAttribute(HTML.Attribute.VALIGN) != null) {
+				String valign = a.getAttribute(HTML.Attribute.VALIGN).toString();
+				if (valign.equalsIgnoreCase("top")) {
+					valign = "top";
+				} else if (valign.equalsIgnoreCase("bottom")) {
+					valign = "bottom";
+				} else {
+					valign = "center";
+				}
+				sb.append("<w:vAlign w:val=\"").append(valign).append("\" />");
+			}
+			if (a.getAttribute(HTML.Attribute.STYLE) != null) {
+				String style = a.getAttribute(HTML.Attribute.STYLE).toString();
+				String[] styles = style.split(";");
+				for (String s : styles) {
+					if (s.startsWith("text-align:")) {
+						int index = s.indexOf(';');
+						if (index < 0) {
+							index = s.length();
+						}
+						setAlignementFromAlignValue(s.substring("text-align:".length(), index).trim());
+					} else if (s.startsWith("background-color")) {
+						int index = s.indexOf(';');
+						if (index < 0) {
+							index = s.length();
+						}
+						Color color = HTMLUtils.extractColorFromString(s.substring("background-color:".length(), index));
+						if (color != null) {
+							sb.append("<w:shd w:val=\"clear\" w:color=\"auto\" w:fill=\"").append(HTMLUtils.toHexString(color))
+									.append("\" />");
+						}
+					}
+				}
+			}
+			sb.append("                            <w:tcBorders>\n");
+			sb.append("                                <w:bottom w:val=\"none\" w:sz=\"0\" w:space=\"0\" w:color=\"auto\"/>\n");
+			sb.append("                            </w:tcBorders>\n");
+			sb.append("                        </w:tcPr>");
+			sb.append("<w:p>\n");
+			sb.append("                                <w:pPr><w:keepNext/></w:pPr>\n");
+			sb.append("                                <w:r>\n");
+			sb.append("                                    <w:t>");
+			withinParagraph = true;
+			withinR = true;
+			withinT = true;
+			currentColumn++;
+		}
+
+		protected void setAlignementFromAlignValue(String value) {
+			if (value.equalsIgnoreCase("justify")) {
+				align = "both";
+			} else if (value.equalsIgnoreCase("left")) {
+				align = "start";
+			} else if (value.equalsIgnoreCase("center")) {
+				align = "center";
+			} else if (value.equalsIgnoreCase("right")) {
+				align = "end";
+			} else {
+				align = null;
+			}
+		}
+
+		private void handleEndTableCell() {
+			align = null;
+			closeParagraph();
+			sb.append("</w:tc>");
 		}
 
 		@Override
@@ -223,6 +380,12 @@ public class DocxVelocityXmlFromHtml {
 				}
 			} else if (t == HTML.Tag.SPAN) {
 				rProperties.pop();
+			} else if (t == HTML.Tag.TABLE) {
+				handleEndTable();
+			} else if (t == HTML.Tag.TR) {
+				handleEndTableRow();
+			} else if (t == HTML.Tag.TD) {
+				handleEndTableCell();
 			} else {
 				handleUnknownEndTag(t, pos);
 			}
@@ -245,7 +408,12 @@ public class DocxVelocityXmlFromHtml {
 		private void closeParagraph() {
 			if (withinParagraph) {
 				if (withinR) {
-					sb.append(StringUtils.LINE_SEPARATOR).append("<w:t></w:t>");
+					if (withinT) {
+						sb.append("</w:t>");
+						withinT = false;
+					} else {
+						sb.append(StringUtils.LINE_SEPARATOR).append("<w:t></w:t>");
+					}
 					sb.append(StringUtils.LINE_SEPARATOR).append("</w:r>");
 					withinR = false;
 				} else if (sb.toString().endsWith("<w:p>")) {
@@ -340,11 +508,7 @@ public class DocxVelocityXmlFromHtml {
 			}
 
 			if (imageHeight == null) {
-				if (imageWidth != null) {
-					imageHeight = new Double(imageWidth / imageRatio).intValue();
-				} else {
-					imageHeight = imageIcon.getIconHeight();
-				}
+				imageHeight = new Double(imageWidth / imageRatio).intValue();
 			}
 
 			if (imageWidth > 514) {
@@ -513,7 +677,6 @@ public class DocxVelocityXmlFromHtml {
 					tmpSb.append(StringUtils.LINE_SEPARATOR).append("</w:numPr>");
 				}
 			}
-
 			tmpSb.append(pProperties.getCurrentDocxProperties());
 
 			if (tmpSb.length() > 0) {
@@ -553,7 +716,7 @@ public class DocxVelocityXmlFromHtml {
 			return currentUniqueId++;
 		}
 
-		private static class HTMLToDocxPropertiesStack {
+		private class HTMLToDocxPropertiesStack {
 			private static final String RSTYLEKEY = "rStyle";
 			private static final String PSTYLEKEY = "pStyle";
 			private static final String LINKSTYLEKEY = "linkStyle"; // Specific key because it applies only if no other rStyle has been set
@@ -644,13 +807,15 @@ public class DocxVelocityXmlFromHtml {
 			public String getCurrentDocxProperties() {
 				Map<String, String> currentProperties = new HashMap<String, String>();
 
-				// Remove double equals properties and keep only the last one
+				// Merge properties
 				for (Map<String, String> propertiesMap : propertiesStack) {
-					for (String attribute : propertiesMap.keySet()) {
-						currentProperties.put(attribute, propertiesMap.get(attribute));
-					}
+					currentProperties.putAll(propertiesMap);
 				}
 
+				if (align != null) {
+					currentProperties.put(CSS.Attribute.TEXT_ALIGN.toString(), StringUtils.LINE_SEPARATOR + "<w:jc w:val=\"" + align
+							+ "\"/>");
+				}
 				// Hack for link style -> only applies if no rStyle set
 				if (currentProperties.containsKey(LINKSTYLEKEY) && currentProperties.containsKey(RSTYLEKEY)) {
 					currentProperties.remove(LINKSTYLEKEY);
@@ -744,4 +909,5 @@ public class DocxVelocityXmlFromHtml {
 			}
 		}
 	}
+
 }

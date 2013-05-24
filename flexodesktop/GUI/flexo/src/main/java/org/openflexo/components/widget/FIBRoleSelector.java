@@ -24,8 +24,9 @@ import java.awt.Image;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageFilter;
 import java.io.File;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -33,7 +34,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import org.openflexo.fib.model.FIBComponent;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
@@ -66,16 +66,11 @@ public class FIBRoleSelector extends FIBModelObjectSelector<Role> {
 	 * Override when required
 	 */
 	@Override
-	protected Enumeration<Role> getAllSelectableValues() {
+	protected Collection<Role> getAllSelectableValues() {
 		if (getProject() != null) {
-			return getProject().getWorkflow().getRoleList().getSortedRoles();
+			return getProject().getWorkflow().getRoleList().getRoles();
 		}
 		return null;
-	}
-
-	@Override
-	protected boolean isAcceptableValue(FlexoModelObject o) {
-		return super.isAcceptableValue(o);
 	}
 
 	@Override
@@ -101,7 +96,7 @@ public class FIBRoleSelector extends FIBModelObjectSelector<Role> {
 			super(component, selector);
 		}
 
-		private final Hashtable<Role, ImageIcon> icons = new Hashtable<Role, ImageIcon>();
+		private final Map<Role, ImageIcon> icons = new HashMap<Role, ImageIcon>();
 
 		public Icon getIconForRole(Role aRole) {
 			if (aRole.getIsSystemRole()) {
@@ -140,12 +135,14 @@ public class FIBRoleSelector extends FIBModelObjectSelector<Role> {
 		}
 
 		private ImageIcon buildCustomIcon(Role aRole) {
-			Color aColor = aRole.getColor();
-			ImageIcon imageIcon = WKFIconLibrary.ROLE_ICON;
-			Image image = imageIcon.getImage();
-			if (aRole == null) {
+			Color aColor;
+			if (aRole != null) {
+				aColor = aRole.getColor();
+			} else {
 				aColor = Color.RED;
 			}
+			ImageIcon imageIcon = WKFIconLibrary.ROLE_ICON;
+			Image image = imageIcon.getImage();
 			Color mainColor = aColor;
 			Color borderColor = new Color((aColor.getRed() + 255) / 2, (aColor.getGreen() + 255) / 2, (aColor.getBlue() + 255) / 2);
 			ImageFilter imgfilter = new ColorSwapFilter(new Color(255, 51, 0), mainColor, new Color(255, 153, 102), borderColor);

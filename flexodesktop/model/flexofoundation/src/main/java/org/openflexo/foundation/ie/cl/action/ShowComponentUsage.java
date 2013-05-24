@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.ie.IEObject;
@@ -47,16 +48,21 @@ public class ShowComponentUsage extends FlexoGUIAction<ShowComponentUsage, IEObj
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) {
+		public boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
-			return (object instanceof ComponentDefinition || object instanceof IEWOComponent);
+		public boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
+			return object instanceof ComponentDefinition || object instanceof IEWOComponent;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IEWOComponent.class);
+		FlexoModelObject.addActionForClass(actionType, ComponentDefinition.class);
+	}
 
 	protected ShowComponentUsage(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

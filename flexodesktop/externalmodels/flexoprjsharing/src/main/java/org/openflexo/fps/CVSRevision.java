@@ -81,7 +81,7 @@ public class CVSRevision extends FPSObject {
 
 	public String getDateAsString() {
 		if (getDate() != null) {
-			return (new SimpleDateFormat("dd/MM HH:mm:ss")).format(getDate());
+			return new SimpleDateFormat("dd/MM HH:mm:ss").format(getDate());
 		}
 		return FlexoLocalization.localizedForKey("unknown");
 	}

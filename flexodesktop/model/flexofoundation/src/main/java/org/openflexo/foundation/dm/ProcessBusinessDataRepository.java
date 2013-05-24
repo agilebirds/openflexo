@@ -25,14 +25,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMMethod.DMMethodParameter;
-import org.openflexo.foundation.dm.action.GenerateProcessesBusinessDataDMEntity;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.xml.FlexoDMBuilder;
@@ -73,16 +70,6 @@ public class ProcessBusinessDataRepository extends DMRepository {
 	 */
 	private ProcessBusinessDataRepository(DMModel dmModel) {
 		super(dmModel);
-	}
-
-	/**
-	 * @see org.openflexo.foundation.dm.DMRepository#getSpecificActionListForThatClass()
-	 */
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> list = super.getSpecificActionListForThatClass();
-		list.add(GenerateProcessesBusinessDataDMEntity.actionType);
-		return list;
 	}
 
 	@Override
@@ -149,7 +136,7 @@ public class ProcessBusinessDataRepository extends DMRepository {
 					"ProcessBusinessData", null);
 			registerEntity(processBusinessDataEntity);
 
-			if (getDMModel().getWORepository().isWebObjectsAvailable()) {
+			if (getDMModel() != null && getDMModel().getWORepository() != null && getDMModel().getWORepository().isWebObjectsAvailable()) {
 				processBusinessDataEntity.setParentType(
 						DMType.makeResolvedDMType(getDMModel().getEntityNamed("com.webobjects.foundation.NSMutableDictionary")), true);
 			}

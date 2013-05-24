@@ -92,7 +92,7 @@ class RcsDiffResponse implements Response {
 
 			String nextLine = dis.readLine();
 
-			boolean useGzip = (nextLine.charAt(0) == 'z');
+			boolean useGzip = nextLine.charAt(0) == 'z';
 
 			int length = Integer.parseInt(useGzip ? nextLine.substring(1) : nextLine);
 
@@ -140,7 +140,7 @@ class RcsDiffResponse implements Response {
 			// for files with conflicts skip the setting of the conflict field.
 			// NOT SURE THIS IS NESSESARY HERE..
 			String conflictString = null;
-			if ((entry.getConflict() != null) && (entry.getConflict().charAt(0) == Entry.HAD_CONFLICTS)) {
+			if (entry.getConflict() != null && entry.getConflict().charAt(0) == Entry.HAD_CONFLICTS) {
 				if (entry.getConflict().charAt(1) == Entry.TIMESTAMP_MATCHES_FILE) {
 					final Date d = new Date(newFile.lastModified());
 					conflictString = getEntryConflict(d, true);

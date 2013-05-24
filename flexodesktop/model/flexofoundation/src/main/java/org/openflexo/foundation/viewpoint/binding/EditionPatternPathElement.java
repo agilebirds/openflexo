@@ -10,10 +10,12 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.SimplePathElement;
+import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 
-public class EditionPatternPathElement<E extends Bindable> implements BindingVariable<EditionPattern>, SimplePathElement<EditionPattern> {
+public class EditionPatternPathElement<E extends Bindable> implements BindingVariable<EditionPatternInstance>,
+		SimplePathElement<EditionPatternInstance> {
 	static final Logger logger = Logger.getLogger(EditionPatternPathElement.class.getPackage().getName());
 
 	private E container;
@@ -102,12 +104,14 @@ public class EditionPatternPathElement<E extends Bindable> implements BindingVar
 	}
 
 	@Override
-	public EditionPattern getBindingValue(Object target, BindingEvaluationContext context) {
-		return editionPattern;
+	public EditionPatternInstance getBindingValue(Object target, BindingEvaluationContext context) {
+		logger.warning("What to return as " + getVariableName() + " with a " + target + " ? "
+				+ (target != null ? "(" + target.getClass().getSimpleName() + ")" : ""));
+		return null;
 	}
 
 	@Override
-	public void setBindingValue(EditionPattern value, Object target, BindingEvaluationContext context) {
+	public void setBindingValue(EditionPatternInstance value, Object target, BindingEvaluationContext context) {
 		// Not settable
 	}
 

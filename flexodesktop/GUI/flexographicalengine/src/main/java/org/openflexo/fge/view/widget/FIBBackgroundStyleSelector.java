@@ -287,7 +287,7 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 			bsFactory = null;
 		}
 
-		public class CustomFIBController extends FIBController<BackgroundStyleFactory> {
+		public class CustomFIBController extends FIBController {
 			public CustomFIBController(FIBComponent component) {
 				super(component);
 			}
@@ -437,6 +437,11 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 				@Override
 				public BackgroundStylePreviewPanel getModel() {
 					return BackgroundStylePreviewPanel.this;
+				}
+
+				@Override
+				public boolean isEditable() {
+					return false;
 				}
 
 			};

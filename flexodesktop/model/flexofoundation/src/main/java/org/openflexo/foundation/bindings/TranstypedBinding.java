@@ -26,8 +26,8 @@ import java.util.logging.Logger;
 import org.openflexo.antar.expr.DefaultExpressionParser;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.Function;
-import org.openflexo.antar.expr.parser.ExpressionParser;
-import org.openflexo.antar.expr.parser.ParseException;
+import org.openflexo.antar.expr.oldparser.ExpressionParser;
+import org.openflexo.antar.expr.oldparser.ParseException;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
@@ -37,14 +37,11 @@ import org.openflexo.foundation.dm.DMMethod;
 import org.openflexo.foundation.dm.DMTranstyper;
 import org.openflexo.foundation.dm.DMTranstyper.DMTranstyperEntry;
 import org.openflexo.foundation.dm.DMType;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.inspector.InspectableObject;
-import org.openflexo.xmlcode.XMLMapping;
 
 public class TranstypedBinding extends AbstractBinding {
 
-	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(TranstypedBinding.class.getPackage().getName());
 
 	private DMTranstyper transtyper;
@@ -100,23 +97,13 @@ public class TranstypedBinding extends AbstractBinding {
 		}
 
 		@Override
-		public FlexoProject getProject() {
-			return TranstypedBinding.this.getProject();
-		}
-
-		@Override
 		public String getFullyQualifiedName() {
 			return TranstypedBinding.this.getFullyQualifiedName() + "." + (getEntry() != null ? entry.getName() : null);
 		}
 
 		@Override
-		public XMLMapping getXMLMapping() {
-			return TranstypedBinding.this.getXMLMapping();
-		}
-
-		@Override
 		public XMLStorageResourceData getXMLResourceData() {
-			return TranstypedBinding.this.getProject();
+			return TranstypedBinding.this.getOwner().getXMLResourceData();
 		}
 
 		@Override
@@ -242,7 +229,7 @@ public class TranstypedBinding extends AbstractBinding {
 
 			try {
 				ExpressionParser parser = new DefaultExpressionParser();
-				Expression parsedExpression = parser.parse(aValue);
+				Expression parsedExpression = parser.parse(aValue, null);
 				if (parsedExpression instanceof Function) {
 					methodName = ((Function) parsedExpression).getName();
 					paramsAsString = new Vector<String>();
@@ -347,7 +334,7 @@ public class TranstypedBinding extends AbstractBinding {
 
 			try {
 				ExpressionParser parser = new DefaultExpressionParser();
-				Expression parsedExpression = parser.parse(aValue);
+				Expression parsedExpression = parser.parse(aValue, null);
 				if (parsedExpression instanceof Function) {
 					fullyQualifiedTranstyperName = ((Function) parsedExpression).getName();
 					paramsAsString = new Vector<String>();

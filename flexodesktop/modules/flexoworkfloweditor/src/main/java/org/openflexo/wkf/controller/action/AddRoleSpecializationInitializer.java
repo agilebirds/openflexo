@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -51,7 +51,7 @@ public class AddRoleSpecializationInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddRoleSpecialization> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddRoleSpecialization>() {
 			@Override
-			public boolean run(ActionEvent e, AddRoleSpecialization action) {
+			public boolean run(EventObject e, AddRoleSpecialization action) {
 				Vector<Role> availableRoles = action.getFocusedObject().getAvailableRolesForSpecialization();
 
 				if (action.getRoleSpecializationAutomaticallyCreated()) {

@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -50,16 +51,20 @@ public class CreateDMEOModel extends FlexoAction<CreateDMEOModel, DMEORepository
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMEORepository object, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(DMEORepository object, Vector<DMObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMEORepository object, Vector<DMObject> globalSelection) {
+		public boolean isEnabledForSelection(DMEORepository object, Vector<DMObject> globalSelection) {
 			return object != null && !object.isReadOnly();
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMEORepository.class);
+	}
 
 	CreateDMEOModel(DMEORepository focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

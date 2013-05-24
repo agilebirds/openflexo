@@ -45,13 +45,13 @@ public class EditCVSFile extends CVSAction<EditCVSFile, CVSFile> {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CVSFile object, Vector<FPSObject> globalSelection) {
-			return (object != null && object.getSharedProject() != null);
+		public boolean isVisibleForSelection(CVSFile object, Vector<FPSObject> globalSelection) {
+			return object != null && object.getSharedProject() != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CVSFile object, Vector<FPSObject> globalSelection) {
-			return ((object != null) && (object.hasVersionOnDisk()) && (!object.isEdited()));
+		public boolean isEnabledForSelection(CVSFile object, Vector<FPSObject> globalSelection) {
+			return object != null && object.hasVersionOnDisk() && !object.isEdited();
 		}
 
 	};
@@ -69,7 +69,7 @@ public class EditCVSFile extends CVSAction<EditCVSFile, CVSFile> {
 	@Override
 	protected void doAction(Object context) {
 		logger.info("Edit file " + getFocusedObject().getFileName());
-		if ((getFocusedObject() != null) && (fileContentEditor != null)) {
+		if (getFocusedObject() != null && fileContentEditor != null) {
 			getFocusedObject().edit(fileContentEditor);
 		}
 	}

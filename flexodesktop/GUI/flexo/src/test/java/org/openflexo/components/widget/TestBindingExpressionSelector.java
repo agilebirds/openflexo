@@ -54,10 +54,7 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.swing.DateSelector;
-import org.openflexo.swing.DurationSelector;
 import org.openflexo.swing.VerticalLayout;
-import org.openflexo.toolbox.Duration;
-import org.openflexo.toolbox.Duration.DurationUnit;
 import org.openflexo.toolbox.FileResource;
 
 public class TestBindingExpressionSelector {
@@ -228,7 +225,6 @@ public class TestBindingExpressionSelector {
 		panel.add(selector7);
 		panel.add(selector8);
 		panel.add(new DateSelector(new Date()));
-		panel.add(new DurationSelector(new Duration(12, DurationUnit.DAYS)));
 		final KeySelector keySelector = new KeySelector(_project, null);
 		panel.add(new DomainSelector(_project, null) {
 			@Override

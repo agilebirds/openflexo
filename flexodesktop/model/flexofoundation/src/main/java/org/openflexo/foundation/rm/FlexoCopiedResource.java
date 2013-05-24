@@ -32,6 +32,7 @@ import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGFile.FileContentEditor;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.generator.IFlexoResourceGenerator;
+import org.openflexo.foundation.rm.ExternalResource.ExternalResourceOwner;
 import org.openflexo.foundation.rm.cg.CGRepositoryFileResource;
 import org.openflexo.foundation.rm.cg.GenerationAvailableFileResourceInterface;
 import org.openflexo.logging.FlexoLogger;
@@ -42,9 +43,11 @@ import org.openflexo.toolbox.FileFormat;
  * 
  */
 public class FlexoCopiedResource extends CGRepositoryFileResource<CopiedFileData, IFlexoResourceGenerator, CGFile> implements
-		GenerationAvailableFileResourceInterface, FlexoObserver {
+		GenerationAvailableFileResourceInterface, FlexoObserver, ExternalResourceOwner {
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoCopiedResource.class.getPackage().getName());
+
+	private ExternalResource externalResourceToCopy;
 
 	private FlexoFileResource resourceToCopy;
 
@@ -99,6 +102,9 @@ public class FlexoCopiedResource extends CGRepositoryFileResource<CopiedFileData
 		if (resourceToCopy != null && resourceToCopy.isDeleted()) {
 			return null;
 		}
+		if (resourceToCopy != null && resourceToCopy.getProject() != getProject() && getProject().isSerializing()) {
+			return null;
+		}
 		return resourceToCopy;
 	}
 
@@ -107,6 +113,32 @@ public class FlexoCopiedResource extends CGRepositoryFileResource<CopiedFileData
 		if (resourceToCopy != null) {
 			resourceToCopy.getProject().addObserver(this);
 		}
+	}
+
+	public ExternalResource getExternalResourceToCopy() {
+		if (resourceToCopy != null && resourceToCopy.getProject() != getProject() && getProject().isSerializing()) {
+			return new ExternalResource(resourceToCopy);
+		}
+		return externalResourceToCopy;
+	}
+
+	public void setExternalResourceToCopy(ExternalResource externalResourceToCopy) {
+		this.externalResourceToCopy = externalResourceToCopy;
+		if (this.externalResourceToCopy != null) {
+			this.externalResourceToCopy.setOwner(this);
+		}
+	}
+
+	@Override
+	public void externalResourceFound(ExternalResource externalResource, FlexoResource resource) {
+		setResourceToCopy((FlexoFileResource) resource);
+		setExternalResourceToCopy(null);
+		externalResource.delete();
+	}
+
+	@Override
+	public void externalResourceNotFound(ExternalResource externalResource) {
+
 	}
 
 	/**
@@ -184,10 +216,14 @@ public class FlexoCopiedResource extends CGRepositoryFileResource<CopiedFileData
 		if (!isDeleted() && !project.isDeserializing() && getProject() != null && getProject().getResourceManagerInstance() != null
 				&& !getProject().getResourceManagerInstance().isLoadingAProject()) {
 			if (resourceToCopy == null) {
-				if (logger.isLoggable(Level.INFO)) {
-					logger.info("This copied resource is no more acceptable because resourceToCopy is null");
+				if (externalResourceToCopy == null) {
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("This copied resource is no more acceptable because resourceToCopy is null");
+					}
+					return false;
+				} else {
+					return true;
 				}
-				return false;
 			} else if (!resourceToCopy.checkIntegrity()) {
 				if (logger.isLoggable(Level.INFO)) {
 					logger.info("This copied resource is no more acceptable because resourceToCopy "
@@ -199,7 +235,7 @@ public class FlexoCopiedResource extends CGRepositoryFileResource<CopiedFileData
 					logger.info("This copied resource is no more acceptable because project is null");
 				}
 				return false;
-			} else if (getProject().resourceForKey(resourceToCopy.getFullyQualifiedName()) == null) {
+			} else if (resourceToCopy.getProject().resourceForKey(resourceToCopy.getFullyQualifiedName()) == null) {
 				if (logger.isLoggable(Level.INFO)) {
 					logger.info("This copied resource is no more acceptable because resourceToCopy is not in project anymore");
 				}
@@ -215,7 +251,8 @@ public class FlexoCopiedResource extends CGRepositoryFileResource<CopiedFileData
 	 * @return
 	 */
 	public static String nameForCopiedResource(GenerationRepository repository, FlexoFileResource res) {
-		return "COPY_OF_" + res.getName() + "_IN_REPOSITORY_" + repository.getName();
+		return "COPY_OF_" + res.getName() + "_IN_REPOSITORY_" + repository.getName()
+				+ (repository.getProject() == res.getProject() ? "" : " " + res.getProject().getProjectURI());
 	}
 
 	/**

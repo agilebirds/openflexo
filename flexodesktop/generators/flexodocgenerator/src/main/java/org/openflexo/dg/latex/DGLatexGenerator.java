@@ -241,11 +241,11 @@ public class DGLatexGenerator<T extends FlexoModelObject> extends DGGenerator<T>
 		if (button.isCustomButton()) {
 			StringBuilder sb = new StringBuilder();
 			Color c = getCss().getTextColor();
-			sb.append(Math.round(c.getRed() * 10000 / 255) / 10000d);
+			sb.append(Math.round(c.getRed() * 10000d / 255) / 10000d);
 			sb.append(',');
-			sb.append(Math.round(c.getGreen() * 10000 / 255) / 10000d);
+			sb.append(Math.round(c.getGreen() * 10000d / 255) / 10000d);
 			sb.append(',');
-			sb.append(Math.round(c.getBlue() * 10000d / 255d) / 10000d);
+			sb.append(Math.round(c.getBlue() * 10000d / 255) / 10000d);
 			return "\\custombutton[" + sb.toString() + "]{" + button.getValue() + "}";
 		} else if (button instanceof IEDynamicImage) {
 			return "\\emph{A dynamic image}";

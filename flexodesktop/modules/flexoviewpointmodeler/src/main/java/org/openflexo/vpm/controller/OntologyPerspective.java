@@ -22,96 +22,50 @@ package org.openflexo.vpm.controller;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import org.openflexo.FlexoCst;
+import org.openflexo.components.widget.FIBOntologyLibraryBrowser;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.EmptyPanel;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.vpm.view.OntologyPerspectiveBrowserView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.vpm.view.OntologyView;
 
-public class OntologyPerspective extends FlexoPerspective<FlexoModelObject> {
+public class OntologyPerspective extends FlexoPerspective {
 
 	private final VPMController _controller;
 
-	/*private OntologyLibraryBrowser _browser;
-	private OntologyBrowser ontologyBrowser;
-	private OEBrowserView _browserView;
-	private OEBrowserView shemaBrowserView;*/
-
-	// private JSplitPane splitPane;
-
-	private final OntologyPerspectiveBrowserView _ontologyPerspectiveBrowserView;
+	private final FIBOntologyLibraryBrowser ontologyLibraryBrowser;
 
 	private final JLabel infoLabel;
 
-	private static final JPanel EMPTY_RIGHT_VIEW = new JPanel();
-
 	/**
 	 * @param controller
-	 *            TODO
 	 * @param name
 	 */
 	public OntologyPerspective(VPMController controller) {
 		super("ontology_perspective");
 		_controller = controller;
-		_ontologyPerspectiveBrowserView = new OntologyPerspectiveBrowserView(controller);
-
-		/*
-		_browser = new OntologyLibraryBrowser(controller);
-		_browserView = new OntologyPerspectiveBrowserView(_browser, _controller, SelectionPolicy.ParticipateToSelection) {
-			@Override
-			public void treeDoubleClick(FlexoModelObject object) {
-				super.treeDoubleClick(object);
-				if (object instanceof FlexoOntology) {
-		    		focusOnOntology((FlexoOntology)object);
-				}
-			}
-			
-		};
-		ontologyBrowser = new OntologyBrowser(controller);
-		shemaBrowserView = new OEBrowserView(ontologyBrowser, controller, SelectionPolicy.ForceSelection);
-		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,_browserView,shemaBrowserView);
-		splitPane.setDividerLocation(0.7);
-		splitPane.setResizeWeight(0.7);*/
+		ontologyLibraryBrowser = new FIBOntologyLibraryBrowser(controller.getBaseOntologyLibrary(), controller);
 		infoLabel = new JLabel("Ontology perspective");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
+		setTopLeftView(ontologyLibraryBrowser);
 	}
-
-	/*public void focusOnOntology(FlexoOntology ontology)
-	{
-		ontologyBrowser.deleteBrowserListener(_browserView); 		            
-		ontologyBrowser.setRepresentedOntology(ontology);
-		ontologyBrowser.update();
-		ontologyBrowser.addBrowserListener(_browserView); 		            
-	}*/
 
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
 		return VPMIconLibrary.VPM_OP_ACTIVE_ICON;
-	}
-
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return VPMIconLibrary.VPM_OP_SELECTED_ICON;
 	}
 
 	@Override
@@ -124,7 +78,7 @@ public class OntologyPerspective extends FlexoPerspective<FlexoModelObject> {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return (object instanceof FlexoOntology);
+		return object instanceof FlexoOntology || object == _controller.getBaseOntologyLibrary();
 	}
 
 	@Override
@@ -137,41 +91,16 @@ public class OntologyPerspective extends FlexoPerspective<FlexoModelObject> {
 	}
 
 	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getLeftView() {
-		return _ontologyPerspectiveBrowserView;
-	}
-
-	@Override
 	public JComponent getFooter() {
 		return infoLabel;
-	}
-
-	@Override
-	public boolean doesPerspectiveControlRightView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getRightView() {
-		return EMPTY_RIGHT_VIEW;
-	}
-
-	@Override
-	public boolean isAlwaysVisible() {
-		return true;
 	}
 
 	public String getWindowTitleforObject(FlexoModelObject object) {
 		if (object instanceof OntologyLibrary) {
 			return FlexoLocalization.localizedForKey("ontology_library");
 		}
-		if (object instanceof ImportedOntology) {
-			return ((ImportedOntology) object).getName();
+		if (object instanceof ImportedOWLOntology) {
+			return ((ImportedOWLOntology) object).getName();
 		}
 		return object.getFullyQualifiedName();
 	}

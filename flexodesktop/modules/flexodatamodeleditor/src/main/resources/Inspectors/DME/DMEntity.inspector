@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.dm.DMEntity" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="last_update" localize="true" name="LastUpdateAsStringLabel" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <TextField passwd="false" index="1" data="data.lastUpdateAsString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="LastUpdateAsString" readOnly="true" localize="true" />
+      <Label label="is_interface" localize="true" name="IsInterfaceLabel" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" visible="(data.isEnumeration = false)" />
+      <CheckBox selected="false" localize="true" name="IsInterface" index="3" data="data.isInterface" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" visible="(data.isEnumeration = false)" />
+      <Label label="is_enumeration" localize="true" name="IsEnumerationLabel" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" visible="(data.isInterface = false)" />
+      <CheckBox selected="false" localize="true" name="IsEnumeration" index="5" data="data.isEnumeration" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;location=right)" visible="(data.isInterface = false)" />
+      <Label label="implemented_types" align="center" localize="true" name="ImplementedTypesLabel" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;location=center)" />
+      <Table iteratorClassName="org.openflexo.foundation.dm.DMType" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="ImplementedTypes" index="7" data="data.implementedTypes" constraints="twocols(expandHorizontally=true;expandVertically=true;index=7;location=right)">
+        <IconColumn data="iterator.icon" title="" columnWidth="30" resizable="false" displayTitle="true" />
+        <CustomColumn componentClassName="org.openflexo.components.widget.DMTypeSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.this" format="object.simplifiedStringRepresentation" title="implements" columnWidth="270" resizable="true" displayTitle="true">
+          <ColumnAssignment variable="component.project" value="iterator.project" />
+          <ColumnAssignment variable="component.owner" value="iterator" />
+        </CustomColumn>
+        <AddAction method="data.createNewImplementedType" isAvailable="data.isImplementedTypeAddable" name="new" />
+        <RemoveAction method="data.deleteImplementedType(selected)" isAvailable="data.isImplementedTypeDeletable(selected)" name="delete" />
+      </Table>
+    </Tab>
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="name" localize="true" name="NameLabel" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" />
+      <TextField validateOnReturn="true" columns="10" passwd="false" index="1" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Name" localize="true" />
+      <Label label="class_name" localize="true" name="EntityClassNameLabel" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" />
+      <TextField validateOnReturn="true" columns="10" passwd="false" index="5" data="data.entityClassName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)" name="EntityClassName" localize="true" />
+      <Label label="package_name" localize="true" name="EntityPackageNameLabel" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" />
+      <TextField passwd="false" index="7" data="data.entityPackageName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" name="EntityPackageName" readOnly="true" localize="true" />
+      <Label label="parent_type" localize="true" name="ParentTypeLabel" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" />
+      <Custom componentClassName="org.openflexo.components.widget.DMTypeSelector" index="9" data="data.parentType" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;location=right)" name="ParentType" localize="true" manageDynamicModel="true">
+        <Assignment variable="component.project" value="data.project" />
+        <Assignment variable="component.owner" value="data" />
+      </Custom>
+      <Label label="type_variables" align="center" localize="true" name="TypeVariablesLabel" index="10" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;location=center)" />
+      <Table iteratorClassName="org.openflexo.foundation.dm.DMEntity$DMTypeVariable" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="TypeVariables" index="11" data="data.typeVariables" constraints="twocols(expandHorizontally=true;expandVertically=true;index=9;location=right)">
+        <TextFieldColumn data="iterator.name" title="name" columnWidth="50" resizable="true" displayTitle="true" />
+        <TextFieldColumn data="iterator.bounds" title="extends" columnWidth="100" resizable="true" displayTitle="true" />
+        <TextFieldColumn data="iterator.description" title="description" columnWidth="200" resizable="true" displayTitle="true" />
+        <AddAction method="data.createNewTypeVariable" isAvailable="data.isTypeVariableAddable" name="new" />
+        <RemoveAction method="data.deleteTypeVariable(selected)" isAvailable="data.isTypeVariableDeletable(selected)" name="delete" />
+      </Table>
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="last_update" lang="English">Last update</Localized>
+    <Localized key="last_update" lang="French">Dernière mise à jour</Localized>
+    <Localized key="last_update" lang="Dutch">Last update</Localized>
+    <Localized key="is_interface" lang="English">Interface</Localized>
+    <Localized key="is_interface" lang="French">Interface</Localized>
+    <Localized key="is_interface" lang="Dutch">Interface</Localized>
+    <Localized key="is_enumeration" lang="English">Enumeration</Localized>
+    <Localized key="is_enumeration" lang="French">Enumération</Localized>
+    <Localized key="is_enumeration" lang="Dutch">Enumeration</Localized>
+    <Localized key="implemented_types" lang="English">Implemented types</Localized>
+    <Localized key="implemented_types" lang="French">Types implémentés</Localized>
+    <Localized key="implemented_types" lang="Dutch">Implemented types</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="class_name" lang="English">Class name</Localized>
+    <Localized key="class_name" lang="French">Classe</Localized>
+    <Localized key="class_name" lang="Dutch">Class name</Localized>
+    <Localized key="package_name" lang="English">Package name</Localized>
+    <Localized key="package_name" lang="French">Paquetage</Localized>
+    <Localized key="package_name" lang="Dutch">Package name</Localized>
+    <Localized key="parent_type" lang="English">Parent type</Localized>
+    <Localized key="parent_type" lang="French">Type du parent</Localized>
+    <Localized key="parent_type" lang="Dutch">Parent type</Localized>
+    <Localized key="type_variables" lang="English">Type variables</Localized>
+    <Localized key="type_variables" lang="French">Variables de type</Localized>
+    <Localized key="type_variables" lang="Dutch">Type variables</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Entity" />
+</Panel>
+

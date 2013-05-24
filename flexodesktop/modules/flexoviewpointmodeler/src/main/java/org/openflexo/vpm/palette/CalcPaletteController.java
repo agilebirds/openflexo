@@ -51,7 +51,6 @@ public class CalcPaletteController extends SelectionManagingDrawingController<Ca
 			if (getDrawingView() != null && _moduleView != null) {
 				_controller.removeModuleView(_moduleView);
 			}
-			_controller.VIEW_POINT_PERSPECTIVE.removeFromControllers(this);
 		}
 		super.delete();
 		getDrawing().delete();
@@ -82,8 +81,8 @@ public class CalcPaletteController extends SelectionManagingDrawingController<Ca
 	public JTabbedPane getPaletteView() {
 		if (paletteView == null) {
 			paletteView = new JTabbedPane();
-			paletteView.add(FlexoLocalization.localizedForKey("Common", getCommonPalette().getPaletteView()), getCommonPalette()
-					.getPaletteView());
+			paletteView.add(FlexoLocalization.localizedForKey("Common", getCommonPalette().getPaletteViewInScrollPane()),
+					getCommonPalette().getPaletteViewInScrollPane());
 		}
 		return paletteView;
 	}

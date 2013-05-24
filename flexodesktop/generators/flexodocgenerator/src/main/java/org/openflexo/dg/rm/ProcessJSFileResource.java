@@ -71,7 +71,7 @@ public class ProcessJSFileResource extends JSFileResource<DGJSGenerator<FlexoPro
 	}
 
 	public void registerObserverWhenRequired() {
-		if ((!isObserverRegistered) && (getProcess() != null)) {
+		if (!isObserverRegistered && getProcess() != null) {
 			isObserverRegistered = true;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("*** addObserver " + getFileName() + " for " + getProject());
@@ -81,7 +81,8 @@ public class ProcessJSFileResource extends JSFileResource<DGJSGenerator<FlexoPro
 	}
 
 	public static String nameForRepositoryAndProcess(GenerationRepository repository, FlexoProcess process) {
-		return repository.getName() + ".PROCESS_JS." + process.getName();
+		return repository.getName() + ".PROCESS_JS." + process.getName()
+				+ (repository.getProject() == process.getProject() ? "" : " " + process.getProject().getProjectURI());
 	}
 
 	public FlexoProcess getProcess() {
@@ -104,9 +105,9 @@ public class ProcessJSFileResource extends JSFileResource<DGJSGenerator<FlexoPro
 		super.rebuildDependancies();
 		if (getProcess() != null) {
 			addToDependentResources(getProcess().getFlexoResource());
-			addToDependentResources(getProject().getScreenshotResource(getProcess(), true));
+			addToDependentResources(getProcess().getProject().getScreenshotResource(getProcess(), true));
 			for (AbstractActivityNode activityNode : getProcess().getAllEmbeddedAbstractActivityNodes()) {
-				addToDependentResources(getProject().getScreenshotResource(activityNode, true));
+				addToDependentResources(getProcess().getProject().getScreenshotResource(activityNode, true));
 			}
 		}
 	}

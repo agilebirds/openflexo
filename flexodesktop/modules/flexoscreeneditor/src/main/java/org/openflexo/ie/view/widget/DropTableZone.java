@@ -44,10 +44,6 @@ public class DropTableZone extends IEPanel implements IEContainer {
 
 	private IEWOComponentView _componentView;
 
-	private boolean holdsNextComputedPreferredSize = false;
-
-	private Dimension preferredSize = null;
-
 	private IEBlocWidgetView _parent;
 
 	private IEWidgetView _tableView;

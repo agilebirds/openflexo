@@ -15,13 +15,13 @@
 	</tab>
 	<tab name="Graphics" index="4" layout="DEFAULT">
 		<!--<property name="nodeLabelPosX" label="label_pos_x" widget="READ_ONLY_INTEGER" constraint="6">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="nodeLabelPosY" label="label_pos_y" widget="READ_ONLY_INTEGER" constraint="7">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="displayLabel" label="display_label" widget="CHECKBOX" constraint="8">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>-->
 	</tab>
 </inspector>

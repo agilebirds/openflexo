@@ -20,18 +20,21 @@
 package org.openflexo.wkf.roleeditor;
 
 import java.awt.Graphics;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.RoleList;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.wkf.roleeditor.DrawRoleSpecializationControl.DrawRoleSpecializationAction;
 
-public class RoleEditorView extends DrawingView<RoleListRepresentation> implements ModuleView<RoleList> {
+public class RoleEditorView extends DrawingView<RoleListRepresentation> implements ModuleView<RoleList>, PropertyChangeListener {
 
 	public RoleEditorView(RoleListRepresentation aDrawing, RoleEditorController controller) {
 		super(aDrawing, controller);
+		getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 	}
 
 	@Override
@@ -40,12 +43,18 @@ public class RoleEditorView extends DrawingView<RoleListRepresentation> implemen
 	}
 
 	@Override
+	public void delete() {
+		getRepresentedObject().getPropertyChangeSupport().removePropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
+		super.delete();
+	}
+
+	@Override
 	public void deleteModuleView() {
 		getController().delete();
 	}
 
 	@Override
-	public FlexoPerspective<RoleList> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return getController().getWKFController().ROLE_EDITOR_PERSPECTIVE;
 	}
 
@@ -103,6 +112,13 @@ public class RoleEditorView extends DrawingView<RoleListRepresentation> implemen
 		}
 		if (floatingPalette != null && !isBuffering) {
 			floatingPalette.paint(g, getController());
+		}
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == getRepresentedObject() && evt.getPropertyName().equals(getRepresentedObject().getDeletedProperty())) {
+			deleteModuleView();
 		}
 	}
 

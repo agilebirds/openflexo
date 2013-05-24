@@ -19,8 +19,8 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -56,7 +56,7 @@ public class IEPasteInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<IEPaste> getDefaultInitializer() {
 		return new FlexoActionInitializer<IEPaste>() {
 			@Override
-			public boolean run(ActionEvent e, IEPaste action) {
+			public boolean run(EventObject e, IEPaste action) {
 				return true;
 			}
 		};
@@ -66,7 +66,7 @@ public class IEPasteInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<IEPaste> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<IEPaste>() {
 			@Override
-			public boolean run(ActionEvent e, IEPaste action) {
+			public boolean run(EventObject e, IEPaste action) {
 				getControllerActionInitializer().getIESelectionManager().performSelectionPaste();
 				return true;
 			}

@@ -151,6 +151,7 @@ public class ContextualPalette extends DrawingPalette {
 					final ShapeGraphicalRepresentation<?> shapeGR = new VEShapeGR(null, null);
 					// boolean wasAllowedToLeaveBounds = getGraphicalRepresentation().getAllowToLeaveBounds();
 					// getGraphicalRepresentation().setAllowToLeaveBounds(true);
+
 					shapeGR.setsWith(getGraphicalRepresentation());
 					// if (!wasAllowedToLeaveBounds) getGraphicalRepresentation().setAllowToLeaveBounds(false);
 					shapeGR.setIsSelectable(true);
@@ -163,12 +164,12 @@ public class ContextualPalette extends DrawingPalette {
 					// if (applyTextStyle) shapeGR.setTextStyle(getController().getToolbox().currentTextStyle);
 					shapeGR.setLocation(dropLocation);
 					shapeGR.setLayer(containerGR.getLayer() + 1);
-					shapeGR.setAllowToLeaveBounds(true);
+					// shapeGR.setAllowToLeaveBounds(true);
 
 					if (element.getEditionPattern() == null) {
 						// No associated edition pattern, just drop shape !
 
-						AddShape action = AddShape.actionType.makeNewAction(container, null, getController().getOEController().getEditor());
+						AddShape action = AddShape.actionType.makeNewAction(container, null, getController().getVEController().getEditor());
 						action.setGraphicalRepresentation(shapeGR);
 						action.setNameSetToNull(false);
 						action.setNewShapeName(getGraphicalRepresentation().getText());
@@ -184,14 +185,14 @@ public class ContextualPalette extends DrawingPalette {
 						if (availableDropPatterns.size() > 1) {
 							JPopupMenu popup = new JPopupMenu();
 							for (final DropScheme dropScheme : availableDropPatterns) {
-								JMenuItem menuItem = new JMenuItem(
-										FlexoLocalization.localizedForKey(dropScheme.getLabel() != null ? dropScheme.getLabel()
-												: dropScheme.getName()));
+								JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey(dropScheme.getViewPoint()
+										.getLocalizedDictionary(),
+										dropScheme.getLabel() != null ? dropScheme.getLabel() : dropScheme.getName()));
 								menuItem.addActionListener(new ActionListener() {
 									@Override
 									public void actionPerformed(ActionEvent e) {
 										DropSchemeAction action = DropSchemeAction.actionType.makeNewAction(container, null,
-												getController().getOEController().getEditor());
+												getController().getVEController().getEditor());
 										action.dropLocation = dropLocation;
 										action.setDropScheme(dropScheme);
 										action.setPaletteElement(element);
@@ -207,7 +208,7 @@ public class ContextualPalette extends DrawingPalette {
 							return true;
 						} else if (availableDropPatterns.size() == 1) {
 							DropSchemeAction action = DropSchemeAction.actionType.makeNewAction(container, null, getController()
-									.getOEController().getEditor());
+									.getVEController().getEditor());
 							action.dropLocation = dropLocation;
 							action.setDropScheme(availableDropPatterns.firstElement());
 							action.setPaletteElement(element);

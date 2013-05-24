@@ -19,7 +19,7 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -46,7 +46,7 @@ public class ResetSourceCodeInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ResetSourceCode> getDefaultInitializer() {
 		return new FlexoActionInitializer<ResetSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, ResetSourceCode action) {
+			public boolean run(EventObject e, ResetSourceCode action) {
 				return true;
 			}
 		};
@@ -56,7 +56,7 @@ public class ResetSourceCodeInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ResetSourceCode> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ResetSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, ResetSourceCode action) {
+			public boolean run(EventObject e, ResetSourceCode action) {
 				return true;
 			}
 		};

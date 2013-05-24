@@ -22,9 +22,7 @@ package org.openflexo.dm.view.controller;
 import java.awt.BorderLayout;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
 
 import org.openflexo.components.browser.ProjectBrowser.DMViewMode;
 import org.openflexo.components.browser.ProjectBrowser.ObjectAddedToSelectionEvent;
@@ -34,11 +32,12 @@ import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DMProperty;
 import org.openflexo.foundation.dm.ERDiagram;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-class PackagePerspective extends DMPerspective<DMObject> {
+class PackagePerspective extends DMPerspective {
 
 	private final DMController _controller;
 
@@ -46,7 +45,6 @@ class PackagePerspective extends DMPerspective<DMObject> {
 	private final PropertiesBrowser propertiesBrowser;
 	private final DMBrowserView _browserView;
 	private final DMBrowserView propertiesBrowserView;
-	private final JPanel leftView;
 
 	/**
 	 * @param controller
@@ -72,47 +70,32 @@ class PackagePerspective extends DMPerspective<DMObject> {
 		};
 		propertiesBrowser = new PropertiesBrowser(controller);
 		propertiesBrowserView = new DMBrowserView(propertiesBrowser, controller);
-		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _browserView, propertiesBrowserView);
-		splitPane.setDividerLocation(0.7);
-		splitPane.setResizeWeight(0.7);
-		leftView = new JPanel(new BorderLayout());
-		leftView.add(splitPane, BorderLayout.CENTER);
-		leftView.add(searchPanel, BorderLayout.NORTH);
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(searchPanel, BorderLayout.NORTH);
+		panel.add(_browserView);
+		setTopLeftView(panel);
+		setBottomLeftView(propertiesBrowserView);
 	}
 
 	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getLeftView() {
-		return leftView;
+	public void setProject(FlexoProject project) {
+		super.setProject(project);
+		_browser.setRootObject(project != null ? project.getDataModel() : null);
 	}
 
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
 		return DMEIconLibrary.DME_PP_ACTIVE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return DMEIconLibrary.DME_PP_SELECTED_ICON;
-	}
-
 	@Override
 	public DMObject getDefaultObject(FlexoModelObject proposedObject) {
-		if ((proposedObject instanceof DMObject) && hasModuleViewForObject(proposedObject)) {
+		if (proposedObject instanceof DMObject && hasModuleViewForObject(proposedObject)) {
 			return (DMObject) proposedObject;
 		}
 		return null;
@@ -121,12 +104,16 @@ class PackagePerspective extends DMPerspective<DMObject> {
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
 		// Only DMProperty or Diagrams objects have no module view representation
-		return !(object instanceof DMProperty) && !(object instanceof ERDiagram);
+		return object instanceof DMProperty || object instanceof ERDiagram;
 	}
 
 	@Override
-	public ModuleView<DMObject> createModuleViewForObject(DMObject object, FlexoController controller) {
-		return _controller.createDMView(object);
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+		if (object instanceof DMObject) {
+			return _controller.createDMView((DMObject) object);
+		} else {
+			return null;
+		}
 	}
 
 	@Override

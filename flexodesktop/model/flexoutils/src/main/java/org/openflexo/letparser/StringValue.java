@@ -52,6 +52,11 @@ public class StringValue extends Value {
 		if (obj instanceof StringValue) {
 			return getStringValue().equals(((StringValue) obj).getStringValue());
 		}
-		return super.equals(obj);
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return getStringValue().hashCode();
 	}
 }

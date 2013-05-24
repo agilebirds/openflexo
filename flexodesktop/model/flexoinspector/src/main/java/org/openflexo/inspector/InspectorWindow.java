@@ -46,7 +46,6 @@ public class InspectorWindow extends JDialog implements InspectingWidget {
 		_controller = controller;
 		// setIconImage(INSPECT_ICON.getImage());
 		getContentPane().setLayout(new BorderLayout());
-		setBackground(InspectorCst.BACK_COLOR);
 		setSize(InspectorCst.INSPECTOR_WINDOW_WIDTH, InspectorCst.INSPECTOR_WINDOW_HEIGHT);
 		setLocation(752, 405);
 		_content = new InspectorTabbedPanel(controller);
@@ -68,7 +67,7 @@ public class InspectorWindow extends JDialog implements InspectingWidget {
 	@Override
 	public void newSelection(InspectorSelection selection) {
 		_content.newSelection(selection);
-		if ((selection instanceof UniqueSelection) && (_content.currentTabPanel != null)) {
+		if (selection instanceof UniqueSelection && _content.currentTabPanel != null) {
 			updateTitle(_content.currentTabPanel);
 		} else {
 			updateTitle();

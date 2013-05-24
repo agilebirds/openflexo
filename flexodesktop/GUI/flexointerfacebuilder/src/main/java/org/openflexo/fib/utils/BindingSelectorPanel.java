@@ -35,6 +35,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.lang.reflect.Type;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.StringTokenizer;
@@ -112,7 +113,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 	JButton _createsButton;
 
-	private Hashtable<BindingPathElement, Hashtable<Type, BindingColumnListModel>> _listModels;
+	private Map<BindingPathElement, Hashtable<Type, BindingColumnListModel>> _listModels;
 
 	Vector<FilteredJList> _lists;
 
@@ -712,7 +713,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 									.getElement(), i);
 							BindingSelectorPanel.this._bindingSelector.setEditedObject(bindingValue);
 							BindingSelectorPanel.this._bindingSelector.fireEditedObjectChanged();
-							listAtIndex(i + 1).requestFocus();
+							listAtIndex(i + 1).requestFocusInWindow();
 						}
 						e.consume();
 					}
@@ -728,7 +729,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 							((BindingValue) bindingValue).disconnect();
 							BindingSelectorPanel.this._bindingSelector.setEditedObject(bindingValue);
 							BindingSelectorPanel.this._bindingSelector.fireEditedObjectChanged();
-							listAtIndex(i).requestFocus();
+							listAtIndex(i).requestFocusInWindow();
 						}
 						e.consume();
 					}
@@ -987,7 +988,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			binding.debugIsBindingValid();
 		}*/
 		if (binding != null && binding.isBindingValid()) {
-			if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+			if (ToolBox.isMacOSLaf()) {
 				_connectButton.setSelected(true);
 			}
 		}
@@ -1719,7 +1720,9 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 							if (TypeUtils.isResolved(columnElement.getResultingType()) && _bindingSelector.getBindable() != null) {
 								// if (columnElement.getElement().getAccessibleBindingPathElements().size() > 0) {
 								if (_bindingSelector.getBindable().getBindingFactory()
-										.getAccessibleBindingPathElements(columnElement.getElement()).size() > 0) {
+										.getAccessibleBindingPathElements(columnElement.getElement()) != null
+										&& _bindingSelector.getBindable().getBindingFactory()
+												.getAccessibleBindingPathElements(columnElement.getElement()).size() > 0) {
 									returned = getIconLabelComponent(label, FIBIconLibrary.ARROW_RIGHT_ICON);
 								} else {
 									if (_bindingSelector.getBindingDefinition() != null
@@ -1961,7 +1964,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
-							BindingSelectorPanel.this._bindingSelector.getTextField().requestFocus();
+							BindingSelectorPanel.this._bindingSelector.getTextField().requestFocusInWindow();
 						}
 					});
 				}
@@ -2072,7 +2075,8 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 					if (endCommonPathIndex < matchingElements.firstElement().getLabel().length()) {
 						char c = matchingElements.firstElement().getLabel().charAt(endCommonPathIndex);
 						for (int i = 1; i < matchingElements.size(); i++) {
-							if (matchingElements.elementAt(i).getLabel().charAt(endCommonPathIndex) != c) {
+							String label = matchingElements.elementAt(i).getLabel();
+							if (endCommonPathIndex < label.length() && label.charAt(endCommonPathIndex) != c) {
 								foundDiff = true;
 							}
 						}
@@ -2105,7 +2109,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					BindingSelectorPanel.this._bindingSelector.getTextField().requestFocus();
+					BindingSelectorPanel.this._bindingSelector.getTextField().requestFocusInWindow();
 				}
 			});
 		}
@@ -2122,13 +2126,14 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		}
 
 		FilteredJList list = listAtIndex(index);
-
-		int currentSelected = list.getSelectedIndex();
-		if (currentSelected > -1) {
-			valueChanged(new ListSelectionEvent(list, currentSelected, currentSelected, false));
-			// list.setSelectedIndex(currentSelected);
-			update();
-			completionInfo = null;
+		if (list != null) {
+			int currentSelected = list.getSelectedIndex();
+			if (currentSelected > -1) {
+				valueChanged(new ListSelectionEvent(list, currentSelected, currentSelected, false));
+				// list.setSelectedIndex(currentSelected);
+				update();
+				completionInfo = null;
+			}
 		}
 
 		if (_bindingSelector.getEditedObject() != null && _bindingSelector.getEditedObject().isBindingValid()) {
@@ -2245,7 +2250,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		} else if (completionInfo != null) {
 			completionInfo.autoComplete();
 		} else {
-			list.requestFocus();
+			list.requestFocusInWindow();
 		}
 	}
 

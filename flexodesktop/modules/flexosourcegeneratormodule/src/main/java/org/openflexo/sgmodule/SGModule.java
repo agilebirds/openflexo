@@ -22,23 +22,19 @@ package org.openflexo.sgmodule;
 import java.util.Collection;
 import java.util.Hashtable;
 
-import org.openflexo.application.FlexoApplication;
+import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.sg.implmodel.SGJarInspectorGroup;
 import org.openflexo.foundation.sg.implmodel.TechnologyModuleDefinition;
 import org.openflexo.foundation.sg.implmodel.TechnologyModuleImplementation;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.external.ExternalSGModule;
 import org.openflexo.sgmodule.controller.SGController;
-import org.openflexo.toolbox.ToolBox;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Source Generator module
@@ -50,56 +46,35 @@ public class SGModule extends FlexoModule implements ExternalSGModule {
 			SGJarInspectorGroup.INSTANCE };
 	private static Hashtable<Class<? extends TechnologyModuleImplementation>, TechnologyModuleGUIFactory> recordedGUIFactories = new Hashtable<Class<? extends TechnologyModuleImplementation>, TechnologyModuleGUIFactory>();
 
-	public SGModule(InteractiveFlexoEditor projectEditor) throws Exception {
-		super(projectEditor);
+	public SGModule(ApplicationContext applicationContext) throws Exception {
+		super(applicationContext);
+		SGPreferences.init();
+	}
 
+	@Override
+	public void initModule() {
+		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
+		super.initModule();
 		// Load all available technology modules.
 		TechnologyModuleDefinition.getAllTechnologyModuleDefinitions();
+	}
 
-		setFlexoController(new SGController(projectEditor, this));
-		getSGController().loadRelativeWindows();
-		SGPreferences.init(getSGController());
-		ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("build_editor"));
+	@Override
+	public Module getModule() {
+		return Module.SG_MODULE;
+	}
 
-		// Put here a code to display default view
-		getSGController().setCurrentEditedObjectAsModuleView(projectEditor.getProject().getGeneratedSources());
-
-		// Retain here all necessary resources
-		// retain(<the_required_resource_data>);
+	@Override
+	protected FlexoController createControllerForModule() {
+		return new SGController(this);
 	}
 
 	public InspectorGroup getInspectorGroup() {
 		return Inspectors.SG;
 	}
 
-	public static String getModuleName() {
-		return SGCst.SG_MODULE_NAME;
-	}
-
-	public static String getModuleShortName() {
-		return SGCst.SG_MODULE_SHORT_NAME;
-	}
-
-	public static String getModuleDescription() {
-		return SGCst.SG_MODULE_DESCRIPTION;
-	}
-
-	public static String getModuleVersion() {
-		return SGCst.SG_MODULE_VERSION;
-	}
-
-	public String getVersion() {
-		return getModuleVersion();
-	}
-
 	public SGController getSGController() {
 		return (SGController) getFlexoController();
-	}
-
-	@Override
-	public FlexoModelObject getDefaultObjectToSelect() {
-		// Implement this
-		return null;
 	}
 
 	@Override

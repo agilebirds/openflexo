@@ -33,4 +33,12 @@ public class ChildrenOrderChanged extends WKFDataModification {
 		super(null, null);
 	}
 
+	/**
+	 * @param oldValue
+	 * @param newValue
+	 */
+	public ChildrenOrderChanged(String property) {
+		super(property, null, null);
+	}
+
 }

@@ -213,13 +213,13 @@ public class WOFile extends AbstractGeneratedFile {
 	 */
 	@Override
 	public boolean isGenerationConflicting() {
-		return (_htmlFile.isGenerationConflicting() || _wodFile.isGenerationConflicting() || _wooFile.isGenerationConflicting());
+		return _htmlFile.isGenerationConflicting() || _wodFile.isGenerationConflicting() || _wooFile.isGenerationConflicting();
 	}
 
 	@Override
 	public boolean doesGenerationKeepFileUnchanged() {
-		return (_htmlFile.doesGenerationKeepFileUnchanged() && _wodFile.doesGenerationKeepFileUnchanged() && _wooFile
-				.doesGenerationKeepFileUnchanged());
+		return _htmlFile.doesGenerationKeepFileUnchanged() && _wodFile.doesGenerationKeepFileUnchanged()
+				&& _wooFile.doesGenerationKeepFileUnchanged();
 	}
 
 	@Override
@@ -231,7 +231,7 @@ public class WOFile extends AbstractGeneratedFile {
 
 	@Override
 	public boolean isOverrideScheduled() {
-		return (_htmlFile.isOverrideScheduled() && _wodFile.isOverrideScheduled() && _wooFile.isOverrideScheduled());
+		return _htmlFile.isOverrideScheduled() && _wodFile.isOverrideScheduled() && _wooFile.isOverrideScheduled();
 	}
 
 	@Override
@@ -255,12 +255,12 @@ public class WOFile extends AbstractGeneratedFile {
 
 	@Override
 	public boolean isTriviallyMergable() {
-		return (_htmlFile.isTriviallyMergable() && _wodFile.isTriviallyMergable() && _wooFile.isTriviallyMergable());
+		return _htmlFile.isTriviallyMergable() && _wodFile.isTriviallyMergable() && _wooFile.isTriviallyMergable();
 	}
 
 	@Override
 	public boolean areAllConflictsResolved() {
-		return (_htmlFile.areAllConflictsResolved() && _wodFile.areAllConflictsResolved() && _wooFile.areAllConflictsResolved());
+		return _htmlFile.areAllConflictsResolved() && _wodFile.areAllConflictsResolved() && _wooFile.areAllConflictsResolved();
 	}
 
 	/*public void generate() throws GenerationException 
@@ -298,8 +298,8 @@ public class WOFile extends AbstractGeneratedFile {
 
 		@Override
 		public String getCurrentGeneration() {
-			if ((getFlexoResource() != null) && (getFlexoResource().getGenerator() != null)
-					&& (getFlexoResource().getGenerator().getGeneratedCode() instanceof GeneratedComponent)) {
+			if (getFlexoResource() != null && getFlexoResource().getGenerator() != null
+					&& getFlexoResource().getGenerator().getGeneratedCode() instanceof GeneratedComponent) {
 				return ((GeneratedComponent) getFlexoResource().getGenerator().getGeneratedCode()).html();
 			}
 			return null;
@@ -372,8 +372,8 @@ public class WOFile extends AbstractGeneratedFile {
 
 		@Override
 		public String getCurrentGeneration() {
-			if ((getFlexoResource() != null) && (getFlexoResource().getGenerator() != null)
-					&& (getFlexoResource().getGenerator().getGeneratedCode() instanceof GeneratedComponent)) {
+			if (getFlexoResource() != null && getFlexoResource().getGenerator() != null
+					&& getFlexoResource().getGenerator().getGeneratedCode() instanceof GeneratedComponent) {
 				return ((GeneratedComponent) getFlexoResource().getGenerator().getGeneratedCode()).wod();
 			}
 			return null;
@@ -446,8 +446,8 @@ public class WOFile extends AbstractGeneratedFile {
 
 		@Override
 		public String getCurrentGeneration() {
-			if ((getFlexoResource() != null) && (getFlexoResource().getGenerator() != null)
-					&& (getFlexoResource().getGenerator().getGeneratedCode() instanceof GeneratedComponent)) {
+			if (getFlexoResource() != null && getFlexoResource().getGenerator() != null
+					&& getFlexoResource().getGenerator().getGeneratedCode() instanceof GeneratedComponent) {
 				return ((GeneratedComponent) getFlexoResource().getGenerator().getGeneratedCode()).woo();
 			}
 			return null;

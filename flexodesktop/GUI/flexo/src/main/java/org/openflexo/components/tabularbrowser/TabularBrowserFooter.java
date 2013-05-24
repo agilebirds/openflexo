@@ -26,7 +26,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,12 +40,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
-import org.openflexo.ColorCst;
 import org.openflexo.FlexoCst;
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ElementTypeBrowserFilter;
-import org.openflexo.components.browser.view.BrowserActionSource;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
@@ -62,22 +65,19 @@ public class TabularBrowserFooter extends JPanel {
 		super();
 		_tabularBrowserView = tabularBrowserView;
 		setBorder(BorderFactory.createEmptyBorder());
-		setBackground(ColorCst.GUI_BACK_COLOR);
 		setLayout(new BorderLayout());
 		// setPreferredSize(new Dimension(FlexoCst.MINIMUM_BROWSER_VIEW_WIDTH,FlexoCst.MINIMUM_BROWSER_CONTROL_PANEL_HEIGHT));
 		setPreferredSize(new Dimension(FlexoCst.MINIMUM_BROWSER_VIEW_WIDTH, 20));
 
 		JPanel plusMinusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-		plusMinusPanel.setBackground(ColorCst.GUI_BACK_COLOR);
 		plusMinusPanel.setBorder(BorderFactory.createEmptyBorder());
 
 		plusButton = new JButton(IconLibrary.BROWSER_PLUS_ICON);
-		plusButton.setBackground(ColorCst.GUI_BACK_COLOR);
 		plusButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!hasMultiplePlusActions()) {
-					plusPressed();
+					TabularBrowserFooter.this.<FlexoAction, FlexoModelObject, FlexoModelObject> plusPressed(e);
 					plusButton.setIcon(IconLibrary.BROWSER_PLUS_ICON);
 				}
 			}
@@ -111,13 +111,12 @@ public class TabularBrowserFooter extends JPanel {
 		// FCH.setHelpItem(plusButton,"plus");
 
 		minusButton = new JButton(IconLibrary.BROWSER_MINUS_ICON);
-		minusButton.setBackground(ColorCst.GUI_BACK_COLOR);
 		minusButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Multiple DELETE ACTION popup menu not implemented yet
 				// If you need it, do the same as for ADD ACTION
-				minusPressed();
+				minusPressed(e);
 				minusButton.setIcon(IconLibrary.BROWSER_MINUS_ICON);
 			}
 
@@ -225,8 +224,9 @@ public class TabularBrowserFooter extends JPanel {
 		// Make the popup menu
 		// popupMenu.add(new JCheckBoxMenuItem("coucou",FlexoCst.BROWSER_MINUS_ICON,true));
 		// popupMenu.add(new JCheckBoxMenuItem("coucou2",FlexoCst.BROWSER_MINUS_ICON,false));
-		for (Enumeration e = _tabularBrowserView.getBrowser().getConfigurableElementTypeFilters().elements(); e.hasMoreElements();) {
-			ElementTypeBrowserFilter filter = (ElementTypeBrowserFilter) e.nextElement();
+		for (Enumeration<ElementTypeBrowserFilter> e = _tabularBrowserView.getBrowser().getConfigurableElementTypeFilters().elements(); e
+				.hasMoreElements();) {
+			ElementTypeBrowserFilter filter = e.nextElement();
 			returned.add(new TabularBrowserFilterMenuItem(filter));
 		}
 
@@ -242,27 +242,40 @@ public class TabularBrowserFooter extends JPanel {
 		return returned;
 	}
 
+	private FlexoEditor getEditor() {
+		return _tabularBrowserView.getEditor();
+	}
+
 	protected void handleSelectionChanged() {
 		FlexoModelObject focusedObject = getFocusedObject();
-		Vector globalSelection = buildGlobalSelection();
+		Vector<FlexoModelObject> globalSelection = buildGlobalSelection();
 		if (_tabularBrowserView.getEditor() == null) {
 			plusButton.setEnabled(false);
 			minusButton.setEnabled(false);
 		} else {
-			plusButton.setEnabled((focusedObject != null) && (getActionTypesWithAddType(focusedObject).size() > 0));
-			minusButton.setEnabled((focusedObject != null) && (getActionTypesWithDeleteType(focusedObject, globalSelection).size() > 0));
+			plusButton.setEnabled(focusedObject != null
+					&& this.<FlexoAction, FlexoModelObject, FlexoModelObject> getActionTypesWithAddType(focusedObject, globalSelection)
+							.size() > 0);
+			minusButton.setEnabled(focusedObject != null
+					&& this.<FlexoAction, FlexoModelObject, FlexoModelObject> getActionTypesWithDeleteType(focusedObject, globalSelection)
+							.size() > 0);
 		}
 		plusActionMenuNeedsRecomputed = true;
 	}
 
-	private Vector getActionTypesWithAddType(FlexoModelObject focusedObject) {
-		Vector returned = new Vector();
-		for (Enumeration en = focusedObject.getActionList().elements(); en.hasMoreElements();) {
-			FlexoActionType next = (FlexoActionType) en.nextElement();
-			if (next.getActionCategory() == FlexoActionType.ADD_ACTION_TYPE) {
-				if (next.isVisible(focusedObject, null, _tabularBrowserView.getEditor())) {
-					if (next.isEnabled(focusedObject, null, _tabularBrowserView.getEditor())) {
-						returned.add(next);
+	@SuppressWarnings("unchecked")
+	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> List<FlexoActionType<A, T1, T2>> getActionTypesWithAddType(
+			FlexoModelObject focusedObject, Vector<? extends FlexoModelObject> globalSelection) {
+		List<FlexoActionType<A, T1, T2>> returned = new ArrayList<FlexoActionType<A, T1, T2>>();
+		for (FlexoActionType<?, ?, ?> actionType : focusedObject.getActionList()) {
+			if (TypeUtils.isAssignableTo(focusedObject, actionType.getFocusedObjectType())
+					&& (globalSelection == null || TypeUtils.isAssignableTo(globalSelection, actionType.getGlobalSelectionType()))) {
+				FlexoActionType<A, T1, T2> cast = (FlexoActionType<A, T1, T2>) actionType;
+				if (cast.getActionCategory() == FlexoActionType.ADD_ACTION_TYPE) {
+					if (getEditor().isActionVisible(cast, (T1) focusedObject, (Vector<T2>) globalSelection)) {
+						if (getEditor().isActionEnabled(cast, (T1) focusedObject, (Vector<T2>) globalSelection)) {
+							returned.add(cast);
+						}
 					}
 				}
 			}
@@ -270,14 +283,19 @@ public class TabularBrowserFooter extends JPanel {
 		return returned;
 	}
 
-	private Vector getActionTypesWithDeleteType(FlexoModelObject focusedObject, Vector globalSelection) {
-		Vector returned = new Vector();
-		for (Enumeration en = focusedObject.getActionList().elements(); en.hasMoreElements();) {
-			FlexoActionType next = (FlexoActionType) en.nextElement();
-			if (next.getActionCategory() == FlexoActionType.DELETE_ACTION_TYPE) {
-				if (next.isVisible(null, globalSelection, _tabularBrowserView.getEditor())) {
-					if (next.isEnabled(null, globalSelection, _tabularBrowserView.getEditor())) {
-						returned.add(next);
+	@SuppressWarnings("unchecked")
+	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> List<FlexoActionType<A, T1, T2>> getActionTypesWithDeleteType(
+			FlexoModelObject focusedObject, Vector<? extends FlexoModelObject> globalSelection) {
+		List<FlexoActionType<A, T1, T2>> returned = new ArrayList<FlexoActionType<A, T1, T2>>();
+		for (FlexoActionType<?, ?, ?> actionType : focusedObject.getActionList()) {
+			if (TypeUtils.isAssignableTo(focusedObject, actionType.getFocusedObjectType())
+					&& (globalSelection == null || TypeUtils.isAssignableTo(globalSelection, actionType.getGlobalSelectionType()))) {
+				FlexoActionType<A, T1, T2> cast = (FlexoActionType<A, T1, T2>) actionType;
+				if (cast.getActionCategory() == FlexoActionType.DELETE_ACTION_TYPE) {
+					if (getEditor().isActionVisible(cast, (T1) focusedObject, (Vector<T2>) globalSelection)) {
+						if (getEditor().isActionEnabled(cast, (T1) focusedObject, (Vector<T2>) globalSelection)) {
+							returned.add(cast);
+						}
 					}
 				}
 			}
@@ -292,20 +310,25 @@ public class TabularBrowserFooter extends JPanel {
 		plusActionMenuNeedsRecomputed = true;
 	}
 
-	protected void plusPressed() {
+	@SuppressWarnings("unchecked")
+	protected <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void plusPressed(ActionEvent e) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Pressed on plus");
 		}
-		FlexoActionType actionType = (FlexoActionType) getActionTypesWithAddType(getFocusedObject()).firstElement();
-		actionType.actionPerformed(new ActionEvent(new BrowserActionSource(_tabularBrowserView.getBrowser(), getFocusedObject(), null,
-				_tabularBrowserView.getEditor()), 1, "TabularBrowserFooter-PlusPressed"));
+		FlexoActionType<A, T1, T2> actionType = this.<A, T1, T2> getActionTypesWithAddType(getFocusedObject(),
+				(Vector<FlexoModelObject>) null).get(0);
+		if (getEditor() != null) {
+			getEditor().performActionType(actionType, (T1) getFocusedObject(), (Vector<T2>) getGlobalSelection(), e);
+		} else if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("No editor available. Ignoring action " + actionType);
+		}
 	}
 
 	protected boolean hasMultiplePlusActions() {
 		if (getFocusedObject() == null) {
 			return false;
 		}
-		return getActionTypesWithAddType(getFocusedObject()).size() > 1;
+		return getActionTypesWithAddType(getFocusedObject(), (Vector) null).size() > 1;
 	}
 
 	private JPopupMenu plusActionMenu = null;
@@ -317,14 +340,13 @@ public class TabularBrowserFooter extends JPanel {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Build plus menu");
 			}
-			for (Enumeration en = getActionTypesWithAddType(getFocusedObject()).elements(); en.hasMoreElements();) {
-				final FlexoActionType action = (FlexoActionType) en.nextElement();
-				JMenuItem menuItem = new JMenuItem(action.getLocalizedName());
+			for (final FlexoActionType<?, FlexoModelObject, FlexoModelObject> actionType : (List<FlexoActionType<?, FlexoModelObject, FlexoModelObject>>) getActionTypesWithAddType(
+					getFocusedObject(), (Vector) null)) {
+				JMenuItem menuItem = new JMenuItem(actionType.getLocalizedName());
 				menuItem.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						action.actionPerformed(new ActionEvent(new BrowserActionSource(_tabularBrowserView.getBrowser(),
-								getFocusedObject(), null, _tabularBrowserView.getEditor()), 1, "TabularBrowserFooter-PlusPressed"));
+						getEditor().performActionType(actionType, getFocusedObject(), getGlobalSelection(), e);
 					}
 				});
 				plusActionMenu.add(menuItem);
@@ -334,14 +356,19 @@ public class TabularBrowserFooter extends JPanel {
 		return plusActionMenu;
 	}
 
-	protected void minusPressed() {
+	protected void minusPressed(ActionEvent e) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Pressed on minus");
 		}
 		Vector globalSelection = buildGlobalSelection();
-		FlexoActionType actionType = (FlexoActionType) getActionTypesWithDeleteType(getFocusedObject(), globalSelection).firstElement();
-		actionType.actionPerformed(new ActionEvent(new BrowserActionSource(_tabularBrowserView.getBrowser(), null, globalSelection,
-				_tabularBrowserView.getEditor()), 2, "TabularBrowserFooter-MinusPressed"));
+
+		FlexoActionType<?, FlexoModelObject, FlexoModelObject> actionType = (FlexoActionType<?, FlexoModelObject, FlexoModelObject>) getActionTypesWithDeleteType(
+				getFocusedObject(), globalSelection).get(0);
+		if (getEditor() != null) {
+			getEditor().performActionType(actionType, getFocusedObject(), globalSelection, e);
+		} else if (logger.isLoggable(Level.WARNING)) {
+			logger.warning("No editor available. Ignoring action " + actionType);
+		}
 	}
 
 	/*private boolean hasMultipleMinusActions()
@@ -357,8 +384,12 @@ public class TabularBrowserFooter extends JPanel {
 		return _tabularBrowserView.getSelectedObject();
 	}
 
-	private Vector buildGlobalSelection() {
-		Vector returned = new Vector();
+	public Vector<FlexoModelObject> getGlobalSelection() {
+		return buildGlobalSelection();
+	}
+
+	private Vector<FlexoModelObject> buildGlobalSelection() {
+		Vector<FlexoModelObject> returned = new Vector<FlexoModelObject>();
 		returned.addAll(_tabularBrowserView.getSelectedObjects());
 		return returned;
 	}
@@ -375,7 +406,7 @@ public class TabularBrowserFooter extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (_filter != null) {
-				_filter.setStatus((isSelected() ? BrowserFilterStatus.SHOW : BrowserFilterStatus.HIDE));
+				_filter.setStatus(isSelected() ? BrowserFilterStatus.SHOW : BrowserFilterStatus.HIDE);
 				if (_tabularBrowserView.getBrowser() != null) {
 					_tabularBrowserView.getBrowser().update();
 				}

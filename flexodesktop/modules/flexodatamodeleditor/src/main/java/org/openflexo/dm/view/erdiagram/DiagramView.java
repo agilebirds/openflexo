@@ -20,6 +20,8 @@
 package org.openflexo.dm.view.erdiagram;
 
 import java.awt.Graphics;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.logging.Logger;
 
 import org.openflexo.dm.view.controller.DiagramPerspective;
@@ -28,18 +30,25 @@ import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.view.ModuleView;
 
-public class DiagramView extends DrawingView<ERDiagramRepresentation> implements ModuleView<ERDiagram> {
+public class DiagramView extends DrawingView<ERDiagramRepresentation> implements ModuleView<ERDiagram>, PropertyChangeListener {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DiagramView.class.getPackage().getName());
 
 	public DiagramView(ERDiagramRepresentation aDrawing, ERDiagramController controller) {
 		super(aDrawing, controller);
+		getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 	}
 
 	@Override
 	public ERDiagramController getController() {
 		return (ERDiagramController) super.getController();
+	}
+
+	@Override
+	public void delete() {
+		getRepresentedObject().getPropertyChangeSupport().removePropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
+		super.delete();
 	}
 
 	@Override
@@ -97,4 +106,10 @@ public class DiagramView extends DrawingView<ERDiagramRepresentation> implements
 			}*/
 	}
 
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == getRepresentedObject() && evt.getPropertyName().equals(getRepresentedObject().getDeletedProperty())) {
+			deleteModuleView();
+		}
+	}
 }

@@ -23,8 +23,8 @@ import java.awt.Color;
 
 public interface ProcessEditorConstants {
 
-	public static final double PROCESS_DEFAULT_WIDTH = 1000;
-	public static final double PROCESS_DEFAULT_HEIGHT = 1000;
+	public static final double PROCESS_DEFAULT_WIDTH = 3000;
+	public static final double PROCESS_DEFAULT_HEIGHT = 5000;
 
 	public static final String BASIC_PROCESS_EDITOR = "bpe";
 
@@ -32,8 +32,8 @@ public interface ProcessEditorConstants {
 
 	public static final String GRID_SIZE_IS_SET = "gridSizeHasBeenSet";
 
-	static final int DEFAULT_ACTIVITY_WIDTH = 80;
-	static final int DEFAULT_ACTIVITY_HEIGHT = 40;
+	static final int DEFAULT_ACTIVITY_WIDTH = 150;
+	static final int DEFAULT_ACTIVITY_HEIGHT = 90;
 
 	public static final Color PORT_REGISTRY_PG_COLOR = new Color(123, 125, 181);
 

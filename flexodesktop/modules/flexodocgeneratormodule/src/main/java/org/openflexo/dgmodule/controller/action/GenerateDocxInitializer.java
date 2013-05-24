@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -58,7 +58,7 @@ public class GenerateDocxInitializer extends ActionInitializer<GenerateDocx, Gen
 	protected FlexoActionInitializer<GenerateDocx> getDefaultInitializer() {
 		return new FlexoActionInitializer<GenerateDocx>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateDocx action) {
+			public boolean run(EventObject e, GenerateDocx action) {
 				DGRepository repository = (DGRepository) action.getFocusedObject();
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
@@ -93,7 +93,7 @@ public class GenerateDocxInitializer extends ActionInitializer<GenerateDocx, Gen
 	protected FlexoActionFinalizer<GenerateDocx> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<GenerateDocx>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateDocx action) {
+			public boolean run(EventObject e, GenerateDocx action) {
 				if (action.getGeneratedDocxFile() != null && action.getGeneratedDocxFile().exists() && DGPreferences.getOpenDocx()) {
 					ToolBox.openFile(action.getGeneratedDocxFile());
 				}

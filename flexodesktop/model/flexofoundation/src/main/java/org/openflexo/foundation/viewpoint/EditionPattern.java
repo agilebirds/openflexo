@@ -21,6 +21,8 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -28,12 +30,15 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.CustomType;
 import org.openflexo.antar.binding.TypeUtils;
-import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.PatternRolePathElement;
+import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeInserted;
 import org.openflexo.foundation.viewpoint.dm.EditionSchemeRemoved;
 import org.openflexo.foundation.viewpoint.dm.PatternRoleInserted;
@@ -69,9 +74,13 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return super.getDescription();
 	}
 
-	public EditionPattern() {
+	public EditionPattern(ViewPointBuilder builder) {
+		super(builder);
 		patternRoles = new Vector<PatternRole>();
 		editionSchemes = new Vector<EditionScheme>();
+		if (builder != null) {
+			setViewPoint(builder.getViewPoint());
+		}
 	}
 
 	@Override
@@ -81,8 +90,19 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 
 	@Override
 	public void delete() {
+		delete(false);
+	}
+
+	public void delete(boolean deleteChildren) {
 		if (getViewPoint() != null) {
 			getViewPoint().removeFromEditionPatterns(this);
+		}
+		for (EditionPattern child : new ArrayList<EditionPattern>(getChildEditionPatterns())) {
+			if (deleteChildren) {
+				child.delete(deleteChildren);
+			} else {
+				child.setParentEditionPattern(null);
+			}
 		}
 		super.delete();
 		deleteObservers();
@@ -207,6 +227,10 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		return getPatternRoles(DataPropertyStatementPatternRole.class);
 	}
 
+	public List<GraphicalElementPatternRole> getGraphicalElementPatternRoles() {
+		return getPatternRoles(GraphicalElementPatternRole.class);
+	}
+
 	public List<ShapePatternRole> getShapePatternRoles() {
 		return getPatternRoles(ShapePatternRole.class);
 	}
@@ -254,98 +278,105 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	}
 
 	public PatternRole createShapePatternRole() {
-		ShapePatternRole newPatternRole = new ShapePatternRole();
+		ShapePatternRole newPatternRole = new ShapePatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("shape"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public ConnectorPatternRole createConnectorPatternRole() {
-		ConnectorPatternRole newPatternRole = new ConnectorPatternRole();
+		ConnectorPatternRole newPatternRole = new ConnectorPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("connector"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public DiagramPatternRole createDiagramPatternRole() {
-		DiagramPatternRole newPatternRole = new DiagramPatternRole();
+		DiagramPatternRole newPatternRole = new DiagramPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("diagram"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public FlexoModelObjectPatternRole createFlexoModelObjectPatternRole() {
-		FlexoModelObjectPatternRole newPatternRole = new FlexoModelObjectPatternRole();
+		FlexoModelObjectPatternRole newPatternRole = new FlexoModelObjectPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("flexoObject"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public EditionPatternPatternRole createEditionPatternPatternRole() {
-		EditionPatternPatternRole newPatternRole = new EditionPatternPatternRole();
+		EditionPatternPatternRole newPatternRole = new EditionPatternPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("editionPattern"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public ClassPatternRole createClassPatternRole() {
-		ClassPatternRole newPatternRole = new ClassPatternRole();
+		ClassPatternRole newPatternRole = new ClassPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("class"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public IndividualPatternRole createIndividualPatternRole() {
-		IndividualPatternRole newPatternRole = new IndividualPatternRole();
+		IndividualPatternRole newPatternRole = new IndividualPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("individual"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
+	public PropertyPatternRole createPropertyPatternRole() {
+		PropertyPatternRole newPatternRole = new PropertyPatternRole(null);
+		newPatternRole.setPatternRoleName(getAvailableRoleName("property"));
+		addToPatternRoles(newPatternRole);
+		return newPatternRole;
+	}
+
 	public ObjectPropertyPatternRole createObjectPropertyPatternRole() {
-		ObjectPropertyPatternRole newPatternRole = new ObjectPropertyPatternRole();
+		ObjectPropertyPatternRole newPatternRole = new ObjectPropertyPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("property"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public DataPropertyPatternRole createDataPropertyPatternRole() {
-		DataPropertyPatternRole newPatternRole = new DataPropertyPatternRole();
+		DataPropertyPatternRole newPatternRole = new DataPropertyPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("property"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public IsAStatementPatternRole createIsAStatementPatternRole() {
-		IsAStatementPatternRole newPatternRole = new IsAStatementPatternRole();
+		IsAStatementPatternRole newPatternRole = new IsAStatementPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public ObjectPropertyStatementPatternRole createObjectPropertyStatementPatternRole() {
-		ObjectPropertyStatementPatternRole newPatternRole = new ObjectPropertyStatementPatternRole();
+		ObjectPropertyStatementPatternRole newPatternRole = new ObjectPropertyStatementPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public DataPropertyStatementPatternRole createDataPropertyStatementPatternRole() {
-		DataPropertyStatementPatternRole newPatternRole = new DataPropertyStatementPatternRole();
+		DataPropertyStatementPatternRole newPatternRole = new DataPropertyStatementPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public RestrictionStatementPatternRole createRestrictionStatementPatternRole() {
-		RestrictionStatementPatternRole newPatternRole = new RestrictionStatementPatternRole();
+		RestrictionStatementPatternRole newPatternRole = new RestrictionStatementPatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("fact"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
 	}
 
 	public PrimitivePatternRole createPrimitivePatternRole() {
-		PrimitivePatternRole newPatternRole = new PrimitivePatternRole();
+		PrimitivePatternRole newPatternRole = new PrimitivePatternRole(null);
 		newPatternRole.setPatternRoleName(getAvailableRoleName("primitive"));
 		addToPatternRoles(newPatternRole);
 		return newPatternRole;
@@ -483,51 +514,105 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	}
 
 	public CreationScheme createCreationScheme() {
-		CreationScheme newCreationScheme = new CreationScheme();
+		CreationScheme newCreationScheme = new CreationScheme(null);
 		newCreationScheme.setName("creation");
 		addToEditionSchemes(newCreationScheme);
 		return newCreationScheme;
 	}
 
-	public DeletionScheme createDeletionScheme() {
-		DeletionScheme newDeletionScheme = new DeletionScheme();
-		newDeletionScheme.setName("deletion");
-		addToEditionSchemes(newDeletionScheme);
-		return newDeletionScheme;
+	public CloningScheme createCloningScheme() {
+		CloningScheme newCloningScheme = new CloningScheme(null);
+		newCloningScheme.setName("clone");
+		addToEditionSchemes(newCloningScheme);
+		return newCloningScheme;
 	}
 
 	public DropScheme createDropScheme() {
-		DropScheme newDropScheme = new DropScheme();
+		DropScheme newDropScheme = new DropScheme(null);
 		newDropScheme.setName("drop");
 		addToEditionSchemes(newDropScheme);
 		return newDropScheme;
 	}
 
 	public LinkScheme createLinkScheme() {
-		LinkScheme newLinkScheme = new LinkScheme();
+		LinkScheme newLinkScheme = new LinkScheme(null);
 		newLinkScheme.setName("link");
 		addToEditionSchemes(newLinkScheme);
 		return newLinkScheme;
 	}
 
 	public ActionScheme createActionScheme() {
-		ActionScheme newActionScheme = new ActionScheme();
+		ActionScheme newActionScheme = new ActionScheme(null);
 		newActionScheme.setName("action");
 		addToEditionSchemes(newActionScheme);
 		return newActionScheme;
 	}
 
 	public NavigationScheme createNavigationScheme() {
-		NavigationScheme newNavigationScheme = new NavigationScheme();
+		NavigationScheme newNavigationScheme = new NavigationScheme(null);
 		newNavigationScheme.setName("navigation");
 		addToEditionSchemes(newNavigationScheme);
 		return newNavigationScheme;
+	}
+
+	public DeletionScheme createDeletionScheme() {
+		DeletionScheme newDeletionScheme = generateDefaultDeletionScheme();
+		return newDeletionScheme;
 	}
 
 	public EditionScheme deleteEditionScheme(EditionScheme editionScheme) {
 		removeFromEditionSchemes(editionScheme);
 		editionScheme.delete();
 		return editionScheme;
+	}
+
+	public DeletionScheme getDefaultDeletionScheme() {
+		if (getDeletionSchemes().size() > 0) {
+			return getDeletionSchemes().firstElement();
+		}
+		return null;
+	}
+
+	public DeletionScheme generateDefaultDeletionScheme() {
+		DeletionScheme newDeletionScheme = new DeletionScheme(null);
+		newDeletionScheme.setName("deletion");
+		Vector<PatternRole> rolesToDelete = new Vector<PatternRole>();
+		for (PatternRole pr : getPatternRoles()) {
+			if (pr instanceof GraphicalElementPatternRole || pr instanceof IndividualPatternRole || pr instanceof StatementPatternRole) {
+				rolesToDelete.add(pr);
+			}
+		}
+		Collections.sort(rolesToDelete, new Comparator<PatternRole>() {
+			@Override
+			public int compare(PatternRole o1, PatternRole o2) {
+				if (o1 instanceof ShapePatternRole && o2 instanceof ConnectorPatternRole) {
+					return 1;
+				} else if (o1 instanceof ConnectorPatternRole && o2 instanceof ShapePatternRole) {
+					return -1;
+				}
+
+				if (o1 instanceof ShapePatternRole) {
+					if (o2 instanceof ShapePatternRole) {
+						if (((ShapePatternRole) o1).isEmbeddedIn((ShapePatternRole) o2)) {
+							return -1;
+						}
+						if (((ShapePatternRole) o2).isEmbeddedIn((ShapePatternRole) o1)) {
+							return 1;
+						}
+						return 0;
+					}
+				}
+				return 0;
+			}
+
+		});
+		for (PatternRole pr : rolesToDelete) {
+			DeleteAction a = new DeleteAction(null);
+			a.setObject(new ViewPointDataBinding(pr.getPatternRoleName()));
+			newDeletionScheme.addToActions(a);
+		}
+		addToEditionSchemes(newDeletionScheme);
+		return newDeletionScheme;
 	}
 
 	public EditionPatternInspector getInspector() {
@@ -572,27 +657,6 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		@Override
 		public EditionPattern convertFromString(String value) {
 			return _resourceCenter.retrieveViewPointLibrary().getEditionPattern(value);
-			/*String viewPointURI;
-			String editionPattern;
-			StringTokenizer st = new StringTokenizer(value, "#");
-			if (st.hasMoreElements()) {
-				viewPointURI = st.nextToken();
-				ViewPoint calc = _resourceCenter.retrieveViewPointLibrary().getOntologyCalc(viewPointURI);
-				if (calc == null) {
-					logger.warning("Could not find calc " + viewPointURI);
-				} else {
-					if (st.hasMoreElements()) {
-						editionPattern = st.nextToken();
-						EditionPattern returned = calc.getEditionPattern(editionPattern);
-						if (calc == null) {
-							logger.warning("@@@@@@@@@@@@@@@@ Could not find edition pattern " + editionPattern);
-						} else {
-							return returned;
-						}
-					}
-				}
-			}
-			return null;*/
 		}
 
 		@Override
@@ -697,6 +761,17 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		notifyBindingModelChanged();
 	}
 
+	@Override
+	public void notifyBindingModelChanged() {
+		super.notifyBindingModelChanged();
+		// SGU: as all pattern roles share the edition pattern binding model, they should
+		// all notify change of their binding models
+		for (PatternRole pr : getPatternRoles()) {
+			pr.notifyBindingModelChanged();
+		}
+		getInspector().notifyBindingModelChanged();
+	}
+
 	public OntologicObjectPatternRole getDefaultPrimaryConceptRole() {
 		List<OntologicObjectPatternRole> roles = getPatternRoles(OntologicObjectPatternRole.class);
 		if (roles.size() > 0) {
@@ -752,7 +827,7 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 
 	@Override
 	public boolean isTypeAssignableFrom(Type aType, boolean permissive) {
-		return (aType == this);
+		return aType == this;
 	}
 
 	/**
@@ -823,12 +898,28 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 	}
 
 	public boolean isAssignableFrom(EditionPattern editionPattern) {
-		if (editionPattern == this)
+		if (editionPattern == this) {
 			return true;
+		}
 		if (editionPattern.getParentEditionPattern() != null) {
 			return isAssignableFrom(editionPattern.getParentEditionPattern());
 		}
 		return false;
+	}
+
+	@Override
+	public String getLanguageRepresentation() {
+		// Voir du cote de GeneratorFormatter pour formatter tout ca
+		StringBuilder sb = new StringBuilder();
+		sb.append("EditionPattern ").append(getName());
+		sb.append(" {").append(StringUtils.LINE_SEPARATOR);
+		sb.append(StringUtils.LINE_SEPARATOR);
+		for (PatternRole pr : getPatternRoles()) {
+			sb.append(pr.getLanguageRepresentation());
+			sb.append(StringUtils.LINE_SEPARATOR);
+		}
+		sb.append("}").append(StringUtils.LINE_SEPARATOR);
+		return sb.toString();
 	}
 
 	public static class EditionPatternShouldHaveRoles extends ValidationRule<EditionPatternShouldHaveRoles, EditionPattern> {
@@ -856,10 +947,55 @@ public class EditionPattern extends EditionPatternObject implements StringConver
 		public ValidationIssue<EditionPatternShouldHaveEditionSchemes, EditionPattern> applyValidation(EditionPattern editionPattern) {
 			if (editionPattern.getEditionSchemes().size() == 0) {
 				return new ValidationWarning<EditionPatternShouldHaveEditionSchemes, EditionPattern>(this, editionPattern,
-						"edition_pattern_role_has_no_edition_scheme");
+						"edition_pattern_has_no_edition_scheme");
 			}
 			return null;
 		}
+	}
+
+	public static class EditionPatternShouldHaveDeletionScheme extends
+			ValidationRule<EditionPatternShouldHaveDeletionScheme, EditionPattern> {
+		public EditionPatternShouldHaveDeletionScheme() {
+			super(EditionPattern.class, "edition_pattern_should_have_deletion_scheme");
+		}
+
+		@Override
+		public ValidationIssue<EditionPatternShouldHaveDeletionScheme, EditionPattern> applyValidation(EditionPattern editionPattern) {
+			if (editionPattern.getDeletionSchemes().size() == 0) {
+				CreateDefaultDeletionScheme fixProposal = new CreateDefaultDeletionScheme(editionPattern);
+				return new ValidationWarning<EditionPatternShouldHaveDeletionScheme, EditionPattern>(this, editionPattern,
+						"edition_pattern_has_no_deletion_scheme", fixProposal);
+			}
+			return null;
+		}
+
+		protected static class CreateDefaultDeletionScheme extends FixProposal<EditionPatternShouldHaveDeletionScheme, EditionPattern> {
+
+			private EditionPattern editionPattern;
+			private DeletionScheme newDefaultDeletionScheme;
+
+			public CreateDefaultDeletionScheme(EditionPattern anEditionPattern) {
+				super("create_default_deletion_scheme");
+				this.editionPattern = anEditionPattern;
+			}
+
+			public EditionPattern getEditionPattern() {
+				return editionPattern;
+			}
+
+			public DeletionScheme getDeletionScheme() {
+				return newDefaultDeletionScheme;
+			}
+
+			@Override
+			protected void fixAction() {
+				newDefaultDeletionScheme = editionPattern.createDeletionScheme();
+				// AddIndividual action = getObject();
+				// action.setAssignation(new ViewPointDataBinding(patternRole.getPatternRoleName()));
+			}
+
+		}
+
 	}
 
 }

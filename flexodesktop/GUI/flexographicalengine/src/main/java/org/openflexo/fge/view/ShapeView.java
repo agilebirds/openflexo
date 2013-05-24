@@ -23,11 +23,12 @@ import java.awt.AlphaComposite;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
+import java.awt.Transparency;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.Observable;
@@ -95,30 +96,6 @@ public class ShapeView<O> extends FGELayeredView<O> {
 		// setToolTipText(getClass().getSimpleName()+hashCode());
 
 		// System.out.println("isDoubleBuffered()="+isDoubleBuffered());
-
-		addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent event) {
-				if (event.getKeyCode() == KeyEvent.VK_UP) {
-					getController().upKeyPressed();
-					event.consume();
-					return;
-				} else if (event.getKeyCode() == KeyEvent.VK_DOWN) {
-					getController().downKeyPressed();
-					event.consume();
-					return;
-				} else if (event.getKeyCode() == KeyEvent.VK_RIGHT) {
-					getController().rightKeyPressed();
-					event.consume();
-					return;
-				} else if (event.getKeyCode() == KeyEvent.VK_LEFT) {
-					getController().leftKeyPressed();
-					event.consume();
-					return;
-				}
-			}
-		});
-
 	}
 
 	public void disableFGEViewMouseListener() {
@@ -359,7 +336,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 				}
 			});
 		} else {
-			// logger.info("For "+getGraphicalRepresentation().getClass().getSimpleName()+" received: "+aNotification);
+			// logger.info("For " + getGraphicalRepresentation().getClass().getSimpleName() + " received: " + aNotification);
 
 			if (aNotification instanceof FGENotification) {
 				FGENotification notification = (FGENotification) aNotification;
@@ -460,23 +437,15 @@ public class ShapeView<O> extends FGELayeredView<O> {
 						getPaintManager().repaint(getParentView());
 					}
 				} else if (notification instanceof ShapeNeedsToBeRedrawn) {
-					if (getPaintManager().isPaintingCacheEnabled()) {
-						/*getPaintManager().resetTemporaryObjects();
-						getPaintManager().invalidate(getGraphicalRepresentation());
-						getPaintManager().repaint(getParentView());*/
-						getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
-						getPaintManager().repaint(this);
-					}
+					getPaintManager().invalidate(getGraphicalRepresentation());
+					getPaintManager().repaint(this);
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.layer) {
 					updateLayer();
 					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
 						getPaintManager().invalidate(getGraphicalRepresentation());
 					}
 					getPaintManager().repaint(this);
-					/*if (getParentView() != null) {
-						getParentView().revalidate();
-						getPaintManager().repaint(this);
-					}*/
+
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isFocused) {
 					getPaintManager().repaint(this);
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.hasText) {
@@ -489,9 +458,10 @@ public class ShapeView<O> extends FGELayeredView<O> {
 						getParent().moveToFront(getLabelView());
 					}
 					getPaintManager().repaint(this);
-
-					requestFocusInWindow();
-					// requestFocus();
+					if (graphicalRepresentation.getIsSelected()) {
+						requestFocusInWindow();
+						// requestFocus();
+					}
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isVisible) {
 					updateVisibility();
 					if (getPaintManager().isPaintingCacheEnabled()) {
@@ -558,10 +528,14 @@ public class ShapeView<O> extends FGELayeredView<O> {
 			if (getLabelView() != null) {
 				bounds = bounds.union(getLabelView().getBounds());
 			}
-			screenshot = new BufferedImage(bounds.width, bounds.height, java.awt.image.BufferedImage.TYPE_INT_ARGB_PRE);// buffered image
-																														// reference passing
-																														// the label's ht
-																														// and width
+			GraphicsConfiguration gc = getGraphicsConfiguration();
+			if (gc == null) {
+				gc = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+			}
+			screenshot = gc.createCompatibleImage(bounds.width, bounds.height, Transparency.TRANSLUCENT);// buffered image
+			// reference passing
+			// the label's ht
+			// and width
 			Graphics2D graphics = screenshot.createGraphics();// creating the graphics for buffered image
 			graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.7f)); // Sets the Composite for the Graphics2D
 																								// context

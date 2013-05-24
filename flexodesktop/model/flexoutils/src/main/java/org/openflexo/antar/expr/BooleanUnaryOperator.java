@@ -20,6 +20,7 @@
 package org.openflexo.antar.expr;
 
 import org.openflexo.antar.expr.Constant.BooleanConstant;
+import org.openflexo.antar.expr.Constant.ObjectSymbolicConstant;
 
 public abstract class BooleanUnaryOperator extends UnaryOperator {
 
@@ -30,9 +31,12 @@ public abstract class BooleanUnaryOperator extends UnaryOperator {
 		}
 
 		@Override
-		public Constant evaluate(Constant arg) throws TypeMismatchException {
+		public Constant evaluate(Constant arg) throws TypeMismatchException, NullReferenceException {
 			if (arg instanceof BooleanConstant) {
 				return BooleanConstant.get(!((BooleanConstant) arg).getValue());
+			}
+			if (arg == ObjectSymbolicConstant.NULL) {
+				throw new NullReferenceException(this);
 			}
 			throw new TypeMismatchException(this, arg.getEvaluationType(), EvaluationType.BOOLEAN);
 		}

@@ -103,14 +103,14 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 		return graphicalRepresentation.getDrawable();
 	}
 
-	public ShapeGraphicalRepresentation getStartObject() {
+	public ShapeGraphicalRepresentation<?> getStartObject() {
 		if (graphicalRepresentation == null) {
 			return null;
 		}
 		return graphicalRepresentation.getStartObject();
 	}
 
-	public ShapeGraphicalRepresentation getEndObject() {
+	public ShapeGraphicalRepresentation<?> getEndObject() {
 		if (graphicalRepresentation == null) {
 			return null;
 		}
@@ -126,7 +126,22 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 	public abstract double distanceToConnector(FGEPoint aPoint, double scale);
 
 	public void setPaintAttributes(FGEConnectorGraphics g) {
-		g.setDefaultForeground(getGraphicalRepresentation().getForeground());
+
+		// Foreground
+		if (getGraphicalRepresentation().getIsSelected()) {
+			if (getGraphicalRepresentation().getHasSelectedForeground()) {
+				g.setDefaultForeground(getGraphicalRepresentation().getSelectedForeground());
+			} else if (getGraphicalRepresentation().getHasFocusedForeground()) {
+				g.setDefaultForeground(getGraphicalRepresentation().getFocusedForeground());
+			} else {
+				g.setDefaultForeground(getGraphicalRepresentation().getForeground());
+			}
+		} else if (getGraphicalRepresentation().getIsFocused() && getGraphicalRepresentation().getHasFocusedForeground()) {
+			g.setDefaultForeground(getGraphicalRepresentation().getFocusedForeground());
+		} else {
+			g.setDefaultForeground(getGraphicalRepresentation().getForeground());
+		}
+
 		g.setDefaultTextStyle(getGraphicalRepresentation().getTextStyle());
 	}
 
@@ -166,7 +181,11 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 
 	public abstract ConnectorType getConnectorType();
 
-	public void refreshConnector() {
+	public final void refreshConnector() {
+		refreshConnector(false);
+	}
+
+	public void refreshConnector(boolean forceRefresh) {
 		/*
 		 * if (FGEConstants.DEBUG || getGraphicalRepresentation().getDebugCoveringArea()) { computeCoveringAreas(); }
 		 */
@@ -189,33 +208,32 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 
 	private boolean layoutOfStartOrEndObjectHasChanged() {
 		// if (true) return true;
-		if ((startShape == null) || ((startShape != null) && (startShape.getShapeType() != getStartObject().getShape().getShapeType()))) {
+		if (startShape == null || startShape != null && startShape.getShapeType() != getStartObject().getShape().getShapeType()) {
 			// logger.info("Layout has changed because start shape change");
 			return true;
 		}
-		if ((startShapeDimension == null) || ((startShapeDimension != null) && !startShapeDimension.equals(getStartObject().getSize()))) {
+		if (startShapeDimension == null || startShapeDimension != null && !startShapeDimension.equals(getStartObject().getSize())) {
 			// logger.info("Layout has changed because start shape dimension change");
 			return true;
 		}
-		if ((startShapeLocation == null)
-				|| ((startShapeLocation != null) && !startShapeLocation.equals(getStartObject().getLocationInDrawing()))) {
+		if (startShapeLocation == null || startShapeLocation != null && !startShapeLocation.equals(getStartObject().getLocationInDrawing())) {
 			// logger.info("Layout has changed because start shape location change");
 			return true;
 		}
-		if ((endShape == null) || ((endShape != null) && (endShape.getShapeType() != getEndObject().getShape().getShapeType()))) {
+		if (endShape == null || endShape != null && endShape.getShapeType() != getEndObject().getShape().getShapeType()) {
 			// logger.info("Layout has changed because end shape change");
 			return true;
 		}
-		if ((endShapeDimension == null) || ((endShapeDimension != null) && !endShapeDimension.equals(getEndObject().getSize()))) {
+		if (endShapeDimension == null || endShapeDimension != null && !endShapeDimension.equals(getEndObject().getSize())) {
 			// logger.info("Layout has changed because end shape dimension change");
 			return true;
 		}
-		if ((endShapeLocation == null) || ((endShapeLocation != null) && !endShapeLocation.equals(getEndObject().getLocationInDrawing()))) {
+		if (endShapeLocation == null || endShapeLocation != null && !endShapeLocation.equals(getEndObject().getLocationInDrawing())) {
 			// logger.info("Layout has changed because end shape location change");
 			return true;
 		}
-		if ((knownConnectorUsedBounds == null)
-				|| ((knownConnectorUsedBounds != null) && !knownConnectorUsedBounds.equals(getConnectorUsedBounds()))) {
+		if (knownConnectorUsedBounds == null || knownConnectorUsedBounds != null
+				&& !knownConnectorUsedBounds.equals(getConnectorUsedBounds())) {
 			// logger.info("Layout has changed because knownConnectorUsedBounds change");
 			return true;
 		}
@@ -341,17 +359,7 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 	public abstract FGERectangle getConnectorUsedBounds();
 
 	@Override
-	public Connector clone() {
-		try {
-			Connector returned = (Connector) super.clone();
-			returned.graphicalRepresentation = null;
-			return returned;
-		} catch (CloneNotSupportedException e) {
-			// cannot happen since we are clonable
-			e.printStackTrace();
-			return null;
-		}
-	}
+	public abstract Connector clone();
 
 	/**
 	 * Return start point, relative to start object

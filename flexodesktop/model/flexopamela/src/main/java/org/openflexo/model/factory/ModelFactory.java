@@ -1,7 +1,13 @@
 package org.openflexo.model.factory;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -9,29 +15,157 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import javassist.util.proxy.MethodFilter;
+import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyObject;
 
-import org.openflexo.model.annotations.ClosureCondition;
-import org.openflexo.model.annotations.Import;
-import org.openflexo.model.annotations.Imports;
-import org.openflexo.model.xml.DefaultStringEncoder;
-import org.openflexo.model.xml.DefaultStringEncoder.Converter;
+import org.jdom2.JDOMException;
+import org.openflexo.model.ModelContext;
+import org.openflexo.model.ModelContextLibrary;
+import org.openflexo.model.ModelEntity;
+import org.openflexo.model.ModelInitializer;
+import org.openflexo.model.ModelProperty;
+import org.openflexo.model.StringConverterLibrary.Converter;
+import org.openflexo.model.StringEncoder;
+import org.openflexo.model.annotations.PastingPoint;
+import org.openflexo.model.exceptions.InvalidDataException;
+import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.exceptions.ModelExecutionException;
 
 public class ModelFactory {
 
-	private Class<?> defaultModelClass = Object.class;;
+	private Class<?> defaultModelClass = Object.class;
 	private Class<? extends List> listImplementationClass = Vector.class;
 	private Class<? extends Map> mapImplementationClass = Hashtable.class;
 
-	private Map<Class, ModelEntity> modelEntities;
-	private Map<String, ModelEntity> modelEntitiesByXmlTag;
+	private Map<Class, PAMELAProxyFactory> proxyFactories;
+	private StringEncoder stringEncoder;
+	private ModelContext modelContext;
 
-	private DefaultStringEncoder stringEncoder;
+	private ModelContext extendedContext;
 
-	public ModelFactory() {
-		modelEntities = new HashMap<Class, ModelEntity>();
-		modelEntitiesByXmlTag = new HashMap<String, ModelEntity>();
-		stringEncoder = new DefaultStringEncoder(this);
+	public class PAMELAProxyFactory<I> extends ProxyFactory {
+		private final ModelEntity<I> modelEntity;
+		private boolean locked = false;
+		private boolean overridingSuperClass = false;
+
+		public PAMELAProxyFactory(ModelEntity<I> modelEntity) throws ModelDefinitionException {
+			super();
+			this.modelEntity = modelEntity;
+			setFilter(new MethodFilter() {
+				@Override
+				public boolean isHandled(Method method) {
+					return Modifier.isAbstract(method.getModifiers()) || method.getName().equals("toString")
+							&& method.getParameterTypes().length == 0 && method.getDeclaringClass() == Object.class;
+				}
+			});
+			Class<?> implementingClass = modelEntity.getImplementingClass();
+			if (implementingClass == null) {
+				implementingClass = defaultModelClass;
+			}
+			super.setSuperclass(implementingClass);
+			Class<?>[] interfaces = { modelEntity.getImplementedInterface() };
+			setInterfaces(interfaces);
+
+		}
+
+		public Class<?> getOverridingSuperClass() {
+			if (overridingSuperClass) {
+				return getSuperclass();
+			} else {
+				return null;
+			}
+		}
+
+		@Override
+		public void setSuperclass(Class clazz) {
+			if (getSuperclass() != clazz) {
+				if (locked) {
+					throw new IllegalStateException("ProxyFactory for " + modelEntity
+							+ " is locked. Super-class can no longer be modified.");
+				}
+			}
+			overridingSuperClass = true;
+			super.setSuperclass(clazz);
+			locked = true;
+		}
+
+		public ModelFactory getModelFactory() {
+			return ModelFactory.this;
+		}
+
+		public ModelEntity<I> getModelEntity() {
+			return modelEntity;
+		}
+
+		public I newInstance(Object... args) throws IllegalArgumentException, NoSuchMethodException, InstantiationException,
+				IllegalAccessException, InvocationTargetException, ModelDefinitionException {
+			if (modelEntity.isAbstract()) {
+				throw new InstantiationException(modelEntity + " is declared as an abstract entity, cannot instantiate it");
+			}
+			locked = true;
+			ProxyMethodHandler<I> handler = new ProxyMethodHandler<I>(this);
+			I returned = (I) create(new Class<?>[0], new Object[0], handler);
+			handler.setObject(returned);
+			if (args == null) {
+				args = new Object[0];
+			}
+			if (args.length > 0 || modelEntity.hasInitializers()) {
+				Class<?>[] types = new Class<?>[args.length];
+				for (int i = 0; i < args.length; i++) {
+					Object o = args[i];
+					if (isProxyObject(o)) {
+						ModelEntity<?> modelEntity = getModelEntityForInstance(o);
+						types[i] = modelEntity.getImplementedInterface();
+					} else {
+						types[i] = o != null ? o.getClass() : null;
+					}
+				}
+				ModelInitializer initializerForArgs = modelEntity.getInitializerForArgs(types);
+				if (initializerForArgs != null) {
+					initializerForArgs.getInitializingMethod().invoke(returned, args);
+				} else {
+					if (args.length > 0) {
+						StringBuilder sb = new StringBuilder();
+						for (Class<?> c : types) {
+							if (sb.length() > 0) {
+								sb.append(',');
+							}
+							sb.append(c.getName());
+
+						}
+						throw new NoSuchMethodException("Could not find any initializer with args " + sb.toString());
+					}
+				}
+			}
+			return returned;
+		}
+	}
+
+	public ModelFactory(Class<?> baseClass) throws ModelDefinitionException {
+		this(ModelContextLibrary.getModelContext(baseClass));
+	}
+
+	public ModelFactory(ModelContext modelContext) {
+		this.modelContext = modelContext;
+		proxyFactories = new HashMap<Class, PAMELAProxyFactory>();
+		stringEncoder = new StringEncoder(this);
+	}
+
+	public ModelContext getModelContext() {
+		return modelContext;
+	}
+
+	ModelContext getExtendedContext() {
+		return extendedContext != null ? extendedContext : modelContext;
+	}
+
+	public <I> I newInstance(ModelEntity<I> modelEntity) {
+		return newInstance(modelEntity, (Object[]) null);
+	}
+
+	public <I> I newInstance(ModelEntity<I> modelEntity, Object... args) {
+		return newInstance(modelEntity.getImplementedInterface(), args);
 	}
 
 	public <I> I newInstance(Class<I> implementedInterface) {
@@ -40,60 +174,86 @@ public class ModelFactory {
 
 	public <I> I newInstance(Class<I> implementedInterface, Object... args) {
 		try {
-			ModelEntity<I> entity = getModelEntity(implementedInterface);
-			if (entity != null) {
-				return entity.newInstance(args);
+			PAMELAProxyFactory<I> proxyFactory = getProxyFactory(implementedInterface, true);
+			return proxyFactory.newInstance(args);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			throw new ModelExecutionException(e);
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+			throw new ModelExecutionException(e);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+			throw new ModelExecutionException(e);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+			throw new ModelExecutionException(e);
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+			throw new ModelExecutionException(e);
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+			throw new ModelExecutionException(e);
+		}
+	}
+
+	<I> I _newInstance(Class<I> implementedInterface, boolean useExtended) {
+		return _newInstance(implementedInterface, useExtended, (Object[]) null);
+	}
+
+	<I> I _newInstance(Class<I> implementedInterface, boolean useExtended, Object... args) {
+		try {
+			PAMELAProxyFactory<I> proxyFactory = getProxyFactory(implementedInterface, true, useExtended);
+			return proxyFactory.newInstance(args);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			throw new ModelExecutionException(e);
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+			throw new ModelExecutionException(e);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+			throw new ModelExecutionException(e);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+			throw new ModelExecutionException(e);
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+			throw new ModelExecutionException(e);
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+			throw new ModelExecutionException(e);
+		}
+	}
+
+	private <I> PAMELAProxyFactory<I> getProxyFactory(Class<I> implementedInterface) throws ModelDefinitionException {
+		return getProxyFactory(implementedInterface, true);
+	}
+
+	private <I> PAMELAProxyFactory<I> getProxyFactory(Class<I> implementedInterface, boolean create) throws ModelDefinitionException {
+		return getProxyFactory(implementedInterface, create, false);
+	}
+
+	private <I> PAMELAProxyFactory<I> getProxyFactory(Class<I> implementedInterface, boolean create, boolean useExtended)
+			throws ModelDefinitionException {
+		PAMELAProxyFactory<I> proxyFactory = proxyFactories.get(implementedInterface);
+		if (proxyFactory == null) {
+			ModelEntity<I> entity;
+			if (useExtended) {
+				entity = getExtendedContext().getModelEntity(implementedInterface);
 			} else {
+				entity = getModelContext().getModelEntity(implementedInterface);
+			}
+			if (entity == null) {
 				throw new ModelExecutionException("Unknown entity '" + implementedInterface.getName()
 						+ "'! Did you forget to import it or to annotated it with @ModelEntity?");
+			} else {
+				if (create) {
+					proxyFactories.put(implementedInterface, proxyFactory = new PAMELAProxyFactory<I>(entity));
+				}
 			}
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ModelDefinitionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-		return null;
-	}
-
-	public <T> ModelEntity<T> getModelEntity(Class<T> implementedInterface) throws ModelDefinitionException {
-		ModelEntity<T> returned = modelEntities.get(implementedInterface);
-		if (returned == null && implementedInterface.getAnnotation(org.openflexo.model.annotations.ModelEntity.class) != null) {
-			modelEntities.put(implementedInterface, returned = new ModelEntity<T>(implementedInterface, this));
-			ModelEntity<?> put = modelEntitiesByXmlTag.put(returned.getXMLTag(), returned);
-			if (put != null) {
-				throw new ModelDefinitionException("Two entities define the same XMLTag '" + returned.getXMLTag()
-						+ "'. Implemented interfaces: " + returned.getImplementedInterface().getName() + " "
-						+ put.getImplementedInterface().getName());
-			}
-			returned.init();
-		}
-		return returned;
-	}
-
-	public ModelEntity<?> getModelEntity(String xmlElementName) {
-		return modelEntitiesByXmlTag.get(xmlElementName);
-	}
-
-	public Iterator<ModelEntity> getEntities() {
-		return modelEntities.values().iterator();
-	}
-
-	public int getEntityCount() {
-		return modelEntities.size();
+		return proxyFactory;
 	}
 
 	public Class<?> getDefaultModelClass() {
@@ -101,7 +261,37 @@ public class ModelFactory {
 	}
 
 	public void setDefaultModelClass(Class<?> defaultModelClass) {
+		Class<?> old = defaultModelClass;
 		this.defaultModelClass = defaultModelClass;
+		for (PAMELAProxyFactory<?> factory : proxyFactories.values()) {
+			if (factory.getSuperclass() == old) {
+				factory.setSuperclass(defaultModelClass);
+			}
+		}
+	}
+
+	public <I> void setImplementingClassForInterface(Class<? extends I> implementingClass, Class<I> implementedInterface)
+			throws ModelDefinitionException {
+		PAMELAProxyFactory<I> proxyFactory = getProxyFactory(implementedInterface, true);
+		proxyFactory.setSuperclass(implementingClass);
+	}
+
+	<I> void setImplementingClassForInterface(Class<? extends I> implementingClass, Class<I> implementedInterface, boolean useExtended)
+			throws ModelDefinitionException {
+		PAMELAProxyFactory<I> proxyFactory = getProxyFactory(implementedInterface, true, useExtended);
+		if (proxyFactory != null) {
+			proxyFactory.setSuperclass(implementingClass);
+		}
+	}
+
+	public <I> void setImplementingClassForEntity(Class<? extends I> implementingClass, ModelEntity<I> entity)
+			throws ModelDefinitionException {
+		setImplementingClassForInterface(implementingClass, entity.getImplementedInterface());
+	}
+
+	<I> void setImplementingClassForEntity(Class<? extends I> implementingClass, ModelEntity<I> entity, boolean useExtended)
+			throws ModelDefinitionException {
+		setImplementingClassForInterface(implementingClass, entity.getImplementedInterface(), useExtended);
 	}
 
 	public Class<? extends List> getListImplementationClass() {
@@ -120,19 +310,11 @@ public class ModelFactory {
 		this.mapImplementationClass = mapImplementationClass;
 	}
 
-	public boolean isModelEntity(Class<?> c) {
-		return c.getAnnotation(org.openflexo.model.annotations.ModelEntity.class) != null;
-	}
-
-	public boolean isStringConvertable(Class<?> c) {
-		return getStringEncoder().isConvertable(c);
-	}
-
 	public boolean isProxyObject(Object object) {
 		return object instanceof ProxyObject;
 	}
 
-	public <I> ModelEntity<I> getModelEntity(I object) {
+	public <I> ModelEntity<I> getModelEntityForInstance(I object) {
 		ProxyMethodHandler<I> handler = getHandler(object);
 		if (handler != null) {
 			return handler.getModelEntity();
@@ -147,7 +329,16 @@ public class ModelFactory {
 		return null;
 	}
 
-	public DefaultStringEncoder getStringEncoder() {
+	<I> ModelEntity<I> importClass(Class<I> klass) throws ModelDefinitionException {
+		ModelEntity<I> modelEntity = modelContext.getModelEntity(klass);
+		if (modelEntity == null) {
+			extendedContext = new ModelContext(klass, getExtendedContext());
+			modelEntity = extendedContext.getModelEntity(klass);
+		}
+		return modelEntity;
+	}
+
+	public StringEncoder getStringEncoder() {
 		return stringEncoder;
 	}
 
@@ -155,47 +346,12 @@ public class ModelFactory {
 		stringEncoder.addConverter(converter);
 	}
 
-	public <I> void importClass(Class<I> type) throws ModelDefinitionException {
-		ModelEntity<I> modelEntity = getModelEntity(type);// Performs the import
-		if (modelEntity == null) {
-			throw new ModelDefinitionException("Type " + type.getClass().getName()
-					+ " is not a model entity. Did you forgot to annotated it with @"
-					+ org.openflexo.model.annotations.ModelEntity.class.getSimpleName());
-		}
-		Imports imports = type.getAnnotation(Imports.class);
-		if (imports != null) {
-			for (Import imp : imports.value()) {
-				importClass(imp.value());
-			}
-		}
+	public boolean isEmbedddedIn(Object parentObject, Object childObject, EmbeddingType embeddingType) {
+		return getEmbeddedObjects(parentObject, embeddingType).contains(childObject);
 	}
 
-	public String debug() {
-		StringBuffer returned = new StringBuffer();
-		returned.append("*************** ModelFactory ****************\n");
-		returned.append("Entities number: " + modelEntities.size() + "\n");
-		returned.append("StringEncoder: " + stringEncoder + "\n");
-		returned.append("listImplementationClass: " + listImplementationClass + "\n");
-		returned.append("mapImplementationClass: " + mapImplementationClass + "\n");
-		for (ModelEntity entity : modelEntities.values()) {
-			returned.append("------------------- ").append(entity.getImplementedInterface().getSimpleName())
-					.append(" -------------------\n");
-			Iterator<ModelProperty> i = entity.getDeclaredProperties();
-			while (i.hasNext()) {
-				ModelProperty property = i.next();
-				returned.append(property.override() ? "  * " : "    ").append(property.getPropertyIdentifier()).append(" ")
-						.append(property.getCardinality()).append(" type=").append(property.getType().getSimpleName()).append("\n");
-			}
-		}
-		return returned.toString();
-	}
-
-	public boolean isEmbedddedIn(Object parentObject, Object childObject) {
-		return getEmbeddedObjects(parentObject).contains(childObject);
-	}
-
-	public boolean isEmbedddedIn(Object parentObject, Object childObject, Object... context) {
-		return getEmbeddedObjects(parentObject, context).contains(childObject);
+	public boolean isEmbedddedIn(Object parentObject, Object childObject, EmbeddingType embeddingType, Object... context) {
+		return getEmbeddedObjects(parentObject, embeddingType, context).contains(childObject);
 	}
 
 	/**
@@ -208,26 +364,26 @@ public class ModelFactory {
 	 * @param context
 	 * @return
 	 */
-	public List<Object> getEmbeddedObjects(Object root, Object... context) {
+	public List<Object> getEmbeddedObjects(Object root, EmbeddingType embeddingType, Object... context) {
 		if (!isProxyObject(root)) {
-			return null;
+			return Collections.emptyList();
 		}
 
 		List<Object> derivedObjectsFromContext = new ArrayList<Object>();
 		if (context != null && context.length > 0) {
 			for (Object o : context) {
 				derivedObjectsFromContext.add(o);
-				derivedObjectsFromContext.addAll(getEmbeddedObjects(o));
+				derivedObjectsFromContext.addAll(getEmbeddedObjects(o, embeddingType));
 			}
 		}
 
 		List<Object> returned = new ArrayList<Object>();
 		try {
-			appendEmbeddedObjects(root, returned);
+			appendEmbeddedObjects(root, returned, embeddingType);
 		} catch (ModelDefinitionException e) {
 			throw new ModelExecutionException(e);
 		}
-		ArrayList<Object> discardedObjects = new ArrayList<Object>();
+		List<Object> discardedObjects = new ArrayList<Object>();
 		for (int i = 0; i < returned.size(); i++) {
 			Object o = returned.get(i);
 			if (o instanceof ConditionalPresence) {
@@ -235,6 +391,7 @@ public class ModelFactory {
 				for (Object other : ((ConditionalPresence) o).requiredPresence) {
 					if (!returned.contains(other) && !derivedObjectsFromContext.contains(other)) {
 						allOthersArePresent = false;
+						break;
 					}
 				}
 				if (allOthersArePresent && !returned.contains(((ConditionalPresence) o).object)) {
@@ -263,52 +420,92 @@ public class ModelFactory {
 		}
 	}
 
-	private void appendEmbedded(ModelProperty p, Object father, List<Object> list, Object child) throws ModelDefinitionException {
+	private void appendEmbedded(ModelProperty p, Object father, List<Object> list, Object child, EmbeddingType embeddingType)
+			throws ModelDefinitionException {
 		if (!isProxyObject(child)) {
 			return;
 		}
 
-		if (p.getEmbedded() == null) {
+		if (p.getEmbedded() == null && p.getComplexEmbedded() == null) {
+			// this property is not embedded
 			return;
 		}
 
-		if (p.getEmbedded().value().length == 0) {
+		boolean append = false;
+		switch (embeddingType) {
+		case CLOSURE:
+			append = p.getEmbedded() != null && p.getEmbedded().closureConditions().length == 0 || p.getComplexEmbedded() != null
+					&& p.getComplexEmbedded().closureConditions().length == 0;
+			break;
+		case DELETION:
+			append = p.getEmbedded() != null && p.getEmbedded().deletionConditions().length == 0 || p.getComplexEmbedded() != null
+					&& p.getComplexEmbedded().deletionConditions().length == 0;
+			break;
+		}
+
+		if (append) {
 			// There is no condition, just append it
 			if (!list.contains(child)) {
-				list.add(child);
 				// System.out.println("Embedded in "+father+" because of "+p+" : "+child);
-				appendEmbeddedObjects(child, list);
+				list.add(child);
+				appendEmbeddedObjects(child, list, embeddingType);
 			}
 		} else {
 			List<Object> requiredPresence = new ArrayList<Object>();
-			for (ClosureCondition c : p.getEmbedded().value()) {
-				ModelEntity closureConditionEntity = getModelEntity(child);
-				ModelProperty closureConditionProperty = getModelEntity(child).getModelProperty(c.id());
-				Object closureConditionRequiredObject = getHandler(child).invokeGetter(closureConditionProperty);
-				requiredPresence.add(closureConditionRequiredObject);
+			if (p.getEmbedded() != null) {
+				switch (embeddingType) {
+				case CLOSURE:
+					for (String c : p.getEmbedded().closureConditions()) {
+						ModelEntity closureConditionEntity = getModelEntityForInstance(child);
+						ModelProperty closureConditionProperty = closureConditionEntity.getModelProperty(c);
+						Object closureConditionRequiredObject = getHandler(child).invokeGetter(closureConditionProperty);
+						if (closureConditionRequiredObject != null) {
+							requiredPresence.add(closureConditionRequiredObject);
+						}
+					}
+					break;
+				case DELETION:
+					for (String c : p.getEmbedded().deletionConditions()) {
+						ModelEntity deletionConditionEntity = getModelEntityForInstance(child);
+						ModelProperty deletionConditionProperty = deletionConditionEntity.getModelProperty(c);
+						Object deletionConditionRequiredObject = getHandler(child).invokeGetter(deletionConditionProperty);
+						if (deletionConditionRequiredObject != null) {
+							requiredPresence.add(deletionConditionRequiredObject);
+						}
+					}
+					break;
+				}
+				if (requiredPresence.size() > 0) {
+					ConditionalPresence conditionalPresence = new ConditionalPresence(child, requiredPresence);
+					list.add(conditionalPresence);
+				} else {
+					if (!list.contains(child)) {
+						// System.out.println("Embedded in "+father+" because of "+p+" : "+child);
+						list.add(child);
+						appendEmbeddedObjects(child, list, embeddingType);
+					}
+				}
 			}
-			ConditionalPresence conditionalPresence = new ConditionalPresence(child, requiredPresence);
-			list.add(conditionalPresence);
 			// System.out.println("Embedded in "+father+" : "+child+" conditioned to required presence of "+requiredPresence);
 		}
 	}
 
-	private void appendEmbeddedObjects(Object father, List<Object> list) throws ModelDefinitionException {
+	private void appendEmbeddedObjects(Object father, List<Object> list, EmbeddingType embeddingType) throws ModelDefinitionException {
 		ProxyMethodHandler handler = getHandler(father);
 		ModelEntity modelEntity = handler.getModelEntity();
 
 		Iterator<ModelProperty<?>> properties = modelEntity.getProperties();
 		while (properties.hasNext()) {
-			ModelProperty p = properties.next();
+			ModelProperty<?> p = properties.next();
 			switch (p.getCardinality()) {
 			case SINGLE:
 				Object oValue = handler.invokeGetter(p);
-				appendEmbedded(p, father, list, oValue);
+				appendEmbedded(p, father, list, oValue, embeddingType);
 				break;
 			case LIST:
-				List values = (List) handler.invokeGetter(p);
+				List<?> values = (List<?>) handler.invokeGetter(p);
 				for (Object o : values) {
-					appendEmbedded(p, father, list, o);
+					appendEmbedded(p, father, list, o, embeddingType);
 				}
 				break;
 			default:
@@ -325,13 +522,59 @@ public class ModelFactory {
 		return null;
 	}
 
-	public void paste(Clipboard clipboard, Object context) throws ModelExecutionException, ModelDefinitionException,
+	public Object paste(Clipboard clipboard, Object context) throws ModelExecutionException, ModelDefinitionException,
 			CloneNotSupportedException {
 		if (!isProxyObject(context)) {
 			throw new ClipboardOperationException("Cannot paste here: context is not valid");
 		}
 
-		getHandler(context).paste(clipboard);
+		return getHandler(context).paste(clipboard);
 	}
 
+	public Object paste(Clipboard clipboard, ModelProperty<?> modelProperty, Object context) throws ModelExecutionException,
+			ModelDefinitionException, CloneNotSupportedException {
+		if (!isProxyObject(context)) {
+			throw new ClipboardOperationException("Cannot paste here: context is not valid");
+		}
+
+		return getHandler(context).paste(clipboard, (ModelProperty) modelProperty);
+	}
+
+	public Object paste(Clipboard clipboard, ModelProperty<?> modelProperty, PastingPoint pp, Object context)
+			throws ModelExecutionException, ModelDefinitionException, CloneNotSupportedException {
+		if (!isProxyObject(context)) {
+			throw new ClipboardOperationException("Cannot paste here: context is not valid");
+		}
+
+		return getHandler(context).paste(clipboard, (ModelProperty) modelProperty, pp);
+	}
+
+	public void serialize(Object object, OutputStream os) throws IOException {
+		serialize(object, os, SerializationPolicy.PERMISSIVE);
+	}
+
+	public void serialize(Object object, OutputStream os, SerializationPolicy policy) throws IOException {
+		XMLSerializer serializer = new XMLSerializer(this, policy);
+		serializer.serializeDocument(object, os);
+	}
+
+	public Object deserialize(InputStream is) throws IOException, JDOMException, InvalidDataException, ModelDefinitionException {
+		return deserialize(is, DeserializationPolicy.PERMISSIVE);
+	}
+
+	public Object deserialize(InputStream is, DeserializationPolicy policy) throws IOException, JDOMException, InvalidDataException,
+			ModelDefinitionException {
+		XMLDeserializer deserializer = new XMLDeserializer(this, policy);
+		return deserializer.deserializeDocument(is);
+	}
+
+	public Object deserialize(String input) throws IOException, JDOMException, InvalidDataException, ModelDefinitionException {
+		return deserialize(input, DeserializationPolicy.PERMISSIVE);
+	}
+
+	public Object deserialize(String input, DeserializationPolicy policy) throws IOException, JDOMException, InvalidDataException,
+			ModelDefinitionException {
+		XMLDeserializer deserializer = new XMLDeserializer(this, policy);
+		return deserializer.deserializeDocument(input);
+	}
 }

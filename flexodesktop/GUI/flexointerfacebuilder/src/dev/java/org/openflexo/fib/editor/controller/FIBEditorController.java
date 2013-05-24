@@ -20,12 +20,23 @@
 package org.openflexo.fib.editor.controller;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.io.File;
+import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
 
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
@@ -34,7 +45,11 @@ import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.fib.editor.FIBGenericEditor;
 import org.openflexo.fib.editor.notifications.FocusedObjectChange;
 import org.openflexo.fib.editor.notifications.SelectedObjectChange;
+import org.openflexo.fib.editor.view.FIBEditableView;
+import org.openflexo.fib.editor.view.FIBEditableViewDelegate;
+import org.openflexo.fib.editor.view.PlaceHolder;
 import org.openflexo.fib.editor.view.container.FIBEditablePanelView;
+import org.openflexo.fib.editor.view.container.FIBEditableSplitPanelView;
 import org.openflexo.fib.editor.view.container.FIBEditableTabPanelView;
 import org.openflexo.fib.editor.view.container.FIBEditableTabView;
 import org.openflexo.fib.editor.view.widget.FIBEditableBrowserWidget;
@@ -44,6 +59,7 @@ import org.openflexo.fib.editor.view.widget.FIBEditableCheckboxWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableColorWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableCustomWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableDropDownWidget;
+import org.openflexo.fib.editor.view.widget.FIBEditableEditorPaneWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableFileWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableFontWidget;
 import org.openflexo.fib.editor.view.widget.FIBEditableHtmlEditorWidget;
@@ -64,6 +80,7 @@ import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBContainer;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBDropDown;
+import org.openflexo.fib.model.FIBEditorPane;
 import org.openflexo.fib.model.FIBFile;
 import org.openflexo.fib.model.FIBFont;
 import org.openflexo.fib.model.FIBHtmlEditor;
@@ -73,16 +90,19 @@ import org.openflexo.fib.model.FIBList;
 import org.openflexo.fib.model.FIBNumber;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBRadioButtonList;
+import org.openflexo.fib.model.FIBSplitPanel;
 import org.openflexo.fib.model.FIBTab;
 import org.openflexo.fib.model.FIBTabPanel;
 import org.openflexo.fib.model.FIBTable;
 import org.openflexo.fib.model.FIBTextArea;
 import org.openflexo.fib.model.FIBTextField;
+import org.openflexo.fib.model.FIBTextPane;
 import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.localization.Language;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.swing.NoInsetsBorder;
 import org.openflexo.toolbox.FileResource;
 
 public class FIBEditorController /*extends FIBController*/extends Observable {
@@ -94,7 +114,7 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 	public static File BROWSER_FIB = new FileResource("Fib/Browser.fib");
 
 	private final JPanel editorPanel;
-	private final FIBView fibPanel;
+	private final FIBView<?, ?> fibPanel;
 	private final FIBGenericEditor editor;
 
 	private FIBComponent selectedObject = null;
@@ -104,11 +124,59 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 
 	private FIBBrowserController browserController;
 
+	private static final Border FOCUSED_BORDER = new NoInsetsBorder(BorderFactory.createLineBorder(Color.RED));
+	private static final Border SELECTED_BORDER = new NoInsetsBorder(BorderFactory.createLineBorder(Color.BLUE));
+
+	private Map<FIBComponent, FIBEditableViewDelegate<?, ?>> viewDelegates;
+
+	private class FibWrappingPanel extends JPanel {
+		public FibWrappingPanel(JComponent wrappedFib) {
+			super(new BorderLayout());
+			add(wrappedFib);
+		}
+
+		@Override
+		public void paint(Graphics g) {
+			super.paint(g);
+			paintFocusedAndSelected(g);
+		}
+
+		private void paintFocusedAndSelected(Graphics g) {
+			FIBEditableViewDelegate<?, ?> focused = viewDelegates.get(getFocusedObject());
+			FIBEditableViewDelegate<?, ?> selected = viewDelegates.get(getSelectedObject());
+			if (focused != null && focused != selected) {
+				Point origin = SwingUtilities.convertPoint(focused.getJComponent(), new Point(), this);
+				Graphics componentGraphics = g.create(origin.x, origin.y, focused.getJComponent().getWidth(), focused.getJComponent()
+						.getHeight());
+				FOCUSED_BORDER.paintBorder(focused.getJComponent(), componentGraphics, 0, 0, focused.getJComponent().getWidth(), focused
+						.getJComponent().getHeight());
+				componentGraphics.dispose();
+			}
+			if (selected != null) {
+				Point origin = SwingUtilities.convertPoint(selected.getJComponent(), new Point(), this);
+				Graphics componentGraphics = g.create(origin.x, origin.y, selected.getJComponent().getWidth(), selected.getJComponent()
+						.getHeight());
+				SELECTED_BORDER.paintBorder(selected.getJComponent(), componentGraphics, 0, 0, selected.getJComponent().getWidth(),
+						selected.getJComponent().getHeight());
+				componentGraphics.dispose();
+			}
+		}
+	}
+
 	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor) {
 		this(fibComponent, editor, null);
-
 		// Class testClass = null;
-		if (fibComponent.getDataClass() != null) {
+		boolean instantiable = fibComponent.getDataClass() != null && !Modifier.isAbstract(fibComponent.getDataClass().getModifiers());
+		if (instantiable) {
+			try {
+				instantiable = fibComponent.getDataClass().getConstructor(new Class[0]) != null;
+			} catch (SecurityException e) {
+				instantiable = false;
+			} catch (NoSuchMethodException e) {
+				instantiable = false;
+			}
+		}
+		if (instantiable) {
 			try {
 				// testClass = Class.forName(fibComponent.getDataClassName());
 				Object testData = fibComponent.getDataClass().newInstance();
@@ -132,6 +200,7 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 
 	public FIBEditorController(FIBComponent fibComponent, FIBGenericEditor editor, Object dataObject, FIBController controller) {
 		this.controller = controller;
+		viewDelegates = new HashMap<FIBComponent, FIBEditableViewDelegate<?, ?>>();
 		controller.setViewFactory(new EditorFIBViewFactory());
 
 		this.editor = editor;
@@ -144,12 +213,13 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 
 		FIBComponent browserComponent = FIBLibrary.instance().retrieveFIBComponent(BROWSER_FIB, false);
 		browserController = new FIBBrowserController(browserComponent, this);
-		FIBView view = FIBController.makeView(browserComponent, browserController);
+		FIBView<?, ?> view = FIBController.makeView(browserComponent, browserController);
 		view.getController().setDataObject(fibComponent);
 
 		fibPanel = controller.buildView();
 
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, view.getResultingJComponent(), fibPanel.getResultingJComponent()/*new JScrollPane(fibPanel.getJComponent())*/);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, view.getResultingJComponent(), new FibWrappingPanel(
+				fibPanel.getResultingJComponent())/*new JScrollPane(fibPanel.getJComponent())*/);
 
 		editorPanel.add(splitPane, BorderLayout.CENTER);
 
@@ -189,7 +259,7 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 		return editor.getPalette();
 	}
 
-	public FIBView getFibPanel() {
+	public FIBView<?, ?> getFibPanel() {
 		return fibPanel;
 	}
 
@@ -204,6 +274,7 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 			focusedObject = aComponent;
 			setChanged();
 			notifyObservers(change);
+			editorPanel.repaint();
 		}
 	}
 
@@ -218,6 +289,7 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 			selectedObject = aComponent;
 			setChanged();
 			notifyObservers(change);
+			editorPanel.repaint();
 		}
 
 		// System.out.println("set selected: "+selectedObject);
@@ -246,7 +318,7 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 		notifyObservers(change2);
 	}
 
-	public FIBView viewForComponent(FIBComponent component) {
+	public FIBView<?, ?> viewForComponent(FIBComponent component) {
 		return controller.viewForComponent(component);
 	}
 
@@ -270,21 +342,33 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 		controller.switchToLanguage(language);
 	}
 
+	public void registerViewDelegate(FIBEditableViewDelegate<?, ?> delegate) {
+		viewDelegates.put(delegate.getFIBComponent(), delegate);
+	}
+
+	public void unregisterViewDelegate(FIBEditableViewDelegate<?, ?> delegate) {
+		if (viewDelegates.get(delegate.getFIBComponent()) == delegate) {
+			viewDelegates.remove(delegate.getFIBComponent());
+		}
+	}
+
 	protected class EditorFIBViewFactory implements FIBViewFactory {
 		@Override
-		public FIBView makeContainer(FIBContainer fibContainer) {
+		public FIBView<?, ?> makeContainer(FIBContainer fibContainer) {
 			if (fibContainer instanceof FIBTab) {
 				return new FIBEditableTabView((FIBTab) fibContainer, FIBEditorController.this);
 			} else if (fibContainer instanceof FIBPanel) {
 				return new FIBEditablePanelView((FIBPanel) fibContainer, FIBEditorController.this);
 			} else if (fibContainer instanceof FIBTabPanel) {
 				return new FIBEditableTabPanelView((FIBTabPanel) fibContainer, FIBEditorController.this);
+			} else if (fibContainer instanceof FIBSplitPanel) {
+				return new FIBEditableSplitPanelView((FIBSplitPanel) fibContainer, FIBEditorController.this);
 			}
 			return null;
 		}
 
 		@Override
-		public FIBWidgetView makeWidget(FIBWidget fibWidget) {
+		public FIBWidgetView<?, ?, ?> makeWidget(FIBWidget fibWidget) {
 			if (fibWidget instanceof FIBTextField) {
 				return new FIBEditableTextFieldWidget((FIBTextField) fibWidget, FIBEditorController.this);
 			}
@@ -355,8 +439,20 @@ public class FIBEditorController /*extends FIBController*/extends Observable {
 			if (fibWidget instanceof FIBCustom) {
 				return new FIBEditableCustomWidget((FIBCustom) fibWidget, FIBEditorController.this);
 			}
+			if (fibWidget instanceof FIBTextPane) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Can't handle editable FIBTextPane!");
+				}
+			}
+			if (fibWidget instanceof FIBEditorPane) {
+				return new FIBEditableEditorPaneWidget((FIBEditorPane) fibWidget, FIBEditorController.this);
+			}
 			return null;
 		}
+	}
+
+	public DropListener buildPaletteDropListener(FIBEditableView<?, ?> editableView, PlaceHolder placeHolder) {
+		return new DropListener(editableView, placeHolder);
 	}
 
 }

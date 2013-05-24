@@ -21,18 +21,16 @@ package org.openflexo.fib.editor.test;
 
 import java.util.Vector;
 
-
-public class Coucou 
-{
+public class Coucou {
 	private String name;
 	public String description;
 	private Vector<Prout> prouts;
 	public boolean showProuts = false;
-	
-	public byte testByte = (byte)127;
+
+	public byte testByte = (byte) 127;
 	public short testShort = 10;
 	public int testInteger = 1089;
-	public long testLong = (long)1099886657;
+	public long testLong = 1099886657;
 	public float testFloat = 98873.7812873f;
 	public double testDouble = 1.9823983276276;
 
@@ -47,51 +45,42 @@ public class Coucou
 		return name;
 	}
 
-	public void setName(String name)
-	{
-		System.out.println("Name: "+name);
+	public void setName(String name) {
+		System.out.println("Name: " + name);
 		this.name = name;
 	}
 
-	public Vector<Prout> getProuts()
-	{
+	public Vector<Prout> getProuts() {
 		return prouts;
 	}
 
-	public void setProuts(Vector<Prout> prouts)
-	{
+	public void setProuts(Vector<Prout> prouts) {
 		this.prouts = prouts;
 	}
 
-	public void addToProuts(Prout aProut)
-	{
+	public void addToProuts(Prout aProut) {
 		prouts.add(aProut);
 	}
 
-	public void removeFromProuts(Prout aProut)
-	{
+	public void removeFromProuts(Prout aProut) {
 		prouts.remove(aProut);
 	}
 
-	public Prout createNewProut()
-	{
+	public Prout createNewProut() {
 		Prout returned = new Prout("hop");
 		addToProuts(returned);
 		return returned;
 	}
 
-	public void deleteProut(Prout prout)
-	{
+	public void deleteProut(Prout prout) {
 		removeFromProuts(prout);
 	}
 
-	public boolean isProutAddable()
-	{
+	public boolean isProutAddable() {
 		return true;
 	}
 
-	public boolean isProutDeletable(Prout aProut)
-	{
+	public boolean isProutDeletable(Prout aProut) {
 		return true;
 	}
 

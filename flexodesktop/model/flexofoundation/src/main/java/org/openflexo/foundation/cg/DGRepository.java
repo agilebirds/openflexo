@@ -29,8 +29,6 @@ import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Format;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.cg.action.AddGeneratedCodeRepository;
 import org.openflexo.foundation.cg.dm.CGDataModification;
 import org.openflexo.foundation.cg.dm.CGRepositoryConnected;
 import org.openflexo.foundation.cg.dm.PostBuildStart;
@@ -38,11 +36,9 @@ import org.openflexo.foundation.cg.dm.PostBuildStop;
 import org.openflexo.foundation.rm.FlexoProject.ImageFile;
 import org.openflexo.foundation.rm.ProjectExternalRepository;
 import org.openflexo.foundation.toc.PredefinedSection;
-import org.openflexo.foundation.toc.PredefinedSection.PredefinedSectionType;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCModification;
 import org.openflexo.foundation.toc.TOCRepository;
-import org.openflexo.foundation.toc.action.DeprecatedAddTOCEntry;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.xml.GeneratedCodeBuilder;
 import org.openflexo.localization.FlexoLocalization;
@@ -117,6 +113,14 @@ public class DGRepository extends GenerationRepository {
 	}
 
 	@Override
+	public void delete() {
+		if (getTocRepositoryRef() != null) {
+			getTocRepositoryRef().delete();
+		}
+		super.delete();
+	}
+
+	@Override
 	protected void deleteExternalRepositories() {
 		if (getPostBuildRepository() != null) {
 			getProject().removeFromExternalRepositories(getPostBuildRepository());
@@ -158,8 +162,8 @@ public class DGRepository extends GenerationRepository {
 		switch (getFormat()) {
 		case HTML:
 			return Inspectors.DG.DG_REPOSITORY_HTML_INSPECTOR;
-		case LATEX:
-			return Inspectors.DG.DG_REPOSITORY_LATEX_INSPECTOR;
+			/*case LATEX:
+				return Inspectors.DG.DG_REPOSITORY_LATEX_INSPECTOR;*/
 		case DOCX:
 			return Inspectors.DG.DG_REPOSITORY_DOCX_INSPECTOR;
 		default:
@@ -192,42 +196,36 @@ public class DGRepository extends GenerationRepository {
 	}
 
 	public CGSymbolicDirectory getSrcSymbolicDirectory() {
-		if (getFormat() == Format.LATEX) {
+		/*if (getFormat() == Format.LATEX) {
 			return getLatexSymbolicDirectory();
-		}
+		}*/
 		return getHTMLSymbolicDirectory();
 	}
 
 	public CGSymbolicDirectory getResourcesSymbolicDirectory() {
-		if (getFormat() == Format.LATEX) {
+		/*if (getFormat() == Format.LATEX) {
 			return getFiguresSymbolicDirectory();
-		}
+		}*/
 		return getSymbolicDirectoryNamed(CGSymbolicDirectory.RESOURCES);
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-		v.add(AddGeneratedCodeRepository.actionType);
-		v.add(DeprecatedAddTOCEntry.actionType);
-		return v;
 	}
 
 	public ProjectExternalRepository getPostBuildRepository() {
 		if (postBuildRepository == null) {
 			postBuildRepository = getProject().getExternalRepositoryWithKey(getName() + getFormat().getPostBuildKey());
 			if (postBuildRepository == null) {
-				postBuildRepository = getProject().setDirectoryForRepositoryName(
-						getName() + getFormat().getPostBuildKey(),
-						getDirectory() != null ? getDirectory().getParentFile() : new File(System.getProperty("user.home") + "/"
-								+ getFormat().getPostBuildKey() + "/" + getName()));
+				postBuildRepository = getProject().setDirectoryForRepositoryName(getName() + getFormat().getPostBuildKey(),
+						getDefaultPostBuildDirectory());
 			}
 			if (postBuildRepository.getDirectory() == null) {
-				postBuildRepository.setDirectory(getDirectory() != null ? getDirectory().getParentFile() : new File(System
-						.getProperty("user.home") + "/" + getFormat().getPostBuildKey() + "/" + getName()));
+				postBuildRepository.setDirectory(getDefaultPostBuildDirectory());
 			}
 		}
 		return postBuildRepository;
+	}
+
+	public File getDefaultPostBuildDirectory() {
+		return getDirectory() != null ? getDirectory().getParentFile() : new File(System.getProperty("user.home") + "/"
+				+ getFormat().getPostBuildKey() + "/" + getName());
 	}
 
 	private String docTypeAsString;
@@ -483,11 +481,11 @@ public class DGRepository extends GenerationRepository {
 		}
 		this.tocRepository = tocRepository;
 		if (tocRepositoryRef != null) {
-			tocRepositoryRef.delete();
+			tocRepositoryRef.delete(false);
 			tocRepositoryRef = null;
 		}
 		if (tocRepository != null) {
-			tocRepositoryRef = new FlexoModelObjectReference<TOCRepository>(getProject(), tocRepository);
+			tocRepositoryRef = new FlexoModelObjectReference<TOCRepository>(tocRepository);
 		} else {
 			tocRepositoryRef = null;
 		}
@@ -510,7 +508,7 @@ public class DGRepository extends GenerationRepository {
 	@Override
 	public Format getFormat() {
 		if (format == null) {
-			format = Format.LATEX; // For compatibility reason
+			format = Format.DOCX; // For compatibility reason
 		}
 		return format;
 	}

@@ -21,17 +21,14 @@ package org.openflexo;
 
 import java.awt.Font;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import org.openflexo.foundation.utils.FlexoFont;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.AutoSaveService;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.prefs.ContextPreferences;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.swing.CustomPopup;
@@ -39,7 +36,6 @@ import org.openflexo.swing.LookAndFeel;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ProxyUtils;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.view.controller.UndoManager;
 
 public class AdvancedPrefs extends ContextPreferences {
 
@@ -47,45 +43,48 @@ public class AdvancedPrefs extends ContextPreferences {
 
 	private static final Class<AdvancedPrefs> ADVANCED_PREFERENCES = AdvancedPrefs.class;
 
-	protected static final String LAST_VISITED_DIRECTORY_KEY = "lastVisitedDirectory";
+	public static final String LAST_VISITED_DIRECTORY_KEY = "lastVisitedDirectory";
 
-	protected static final String ECLIPSE_WORKSPACE_DIRECTORY_KEY = "eclipseWorkspaceDirectory";
+	public static final String ECLIPSE_WORKSPACE_DIRECTORY_KEY = "eclipseWorkspaceDirectory";
 
-	protected static final String BROWSERFONT_KEY = "browser_font";
+	public static final String BROWSERFONT_KEY = "browser_font";
 
-	protected static final String BUG_REPORT_URL_KEY = "bug_report_url";
-	protected static final String BUG_REPORT_USER = "bug_report_user";
-	protected static final String BUG_REPORT_PASWORD = "bug_report_password";
+	public static final String BUG_REPORT_URL_KEY = "bug_report_url";
+	public static final String BUG_REPORT_USER = "bug_report_user";
+	public static final String BUG_REPORT_PASWORD = "bug_report_password";
 
-	protected static final String WEB_SERVICE_INSTANCE = "webServiceInstance";
-	protected static final String WEB_SERVICE_URL_KEY = "webServiceUrl";
-	protected static final String WEB_SERVICE_LOGIN_KEY = "webServiceLogin";
-	protected static final String WEB_SERVICE_PWD_KEY = "webServicePwd";
-	protected static final String WEB_SERVICE_REMEMBERANDDONTASKPARAMSANYMORE_KEY = "rememberAndDontAskWebServiceParamsAnymore";
-	protected static final String FLEXO_SERVER_INSTANCE_URL = "flexoserver_instance_url";
+	public static final String WEB_SERVICE_INSTANCE = "webServiceInstance";
+	public static final String WEB_SERVICE_URL_KEY = "webServiceUrl";
+	public static final String WEB_SERVICE_LOGIN_KEY = "webServiceLogin";
+	public static final String WEB_SERVICE_PWD_KEY = "webServicePwd";
+	public static final String WEB_SERVICE_REMEMBERANDDONTASKPARAMSANYMORE_KEY = "rememberAndDontAskWebServiceParamsAnymore";
+	public static final String FLEXO_SERVER_INSTANCE_URL = "flexoserver_instance_url";
 
-	protected static final String ENABLE_UNDO_MANAGER = "enableUndoManager";
+	public static final String ENABLE_UNDO_MANAGER = "enableUndoManager";
 
-	protected static final String UNDO_LEVELS = "undoLevels";
+	public static final String UNDO_LEVELS = "undoLevels";
 
-	protected static final String SYNCHRONIZED_BROWSER = "synchronizedBrowser";
+	public static final String SYNCHRONIZED_BROWSER = "synchronizedBrowser";
 
-	protected static final String HIGHLIGHT_UNCOMMENTED_ITEMS = "hightlightUncommentedItem";
+	public static final String HIGHLIGHT_UNCOMMENTED_ITEMS = "hightlightUncommentedItem";
 
-	protected static final String CLOSE_POPUP_ON_MOUSE_OUT = "close_popup_on_mouse_out";
+	public static final String CLOSE_POPUP_ON_MOUSE_OUT = "close_popup_on_mouse_out";
 
-	protected static final String LOOK_AND_FEEL = "look_and_feel";
+	public static final String LOOK_AND_FEEL = "look_and_feel";
 
-	protected static final String HIDE_FILTERED_OBJECTS = "hideFilteredObjects";
+	public static final String HIDE_FILTERED_OBJECTS = "hideFilteredObjects";
 
 	private static final String USE_DEFAULT_PROXY_SETTINGS = "UseDefaultProxySettings";
 	private static final String NO_PROXY = "NoProxy";
+	private static final String NO_PROXY_HOSTS = "NoProxyHosts";
 	private static final String HTTP_PROXY_HOST = "HTTPProxyHost";
 	private static final String HTTP_PROXY_PORT = "HTTPProxyPort";
 	private static final String HTTPS_PROXY_HOST = "HTTPSProxyHost";
 	private static final String HTTPS_PROXY_PORT = "HTTPSProxyPort";
 	private static final String PROXY_LOGIN = "ProxyLogin";
 	private static final String PROXY_PASSWORD = "ProxyPassword";
+	public static final String SHOW_ALL_TABS = "show_all_tabs";
+	public static final String PREFERENCE_OVERRIDE_FROM_FLEXO_PROPERTIES_DONE = "preference_override_from_flexo_properties_done";
 
 	@Override
 	public String getName() {
@@ -138,11 +137,7 @@ public class AdvancedPrefs extends ContextPreferences {
 	}
 
 	public static String getBugReportPassword() {
-		String answer = getPreferences().getPasswordProperty(BUG_REPORT_PASWORD);
-		if (answer == null) {
-			setBugReportUrl(answer = "https://bugs.openflexo.com");
-		}
-		return answer;
+		return getPreferences().getPasswordProperty(BUG_REPORT_PASWORD);
 	}
 
 	public static void setBugReportPassword(String password) {
@@ -211,7 +206,6 @@ public class AdvancedPrefs extends ContextPreferences {
 
 	public static void setEnableUndoManager(boolean enableUndoManager) {
 		getPreferences().setProperty(ENABLE_UNDO_MANAGER, String.valueOf(enableUndoManager));
-		UndoManager.setEnable(enableUndoManager);
 	}
 
 	public static boolean getHightlightUncommentedItem() {
@@ -238,7 +232,6 @@ public class AdvancedPrefs extends ContextPreferences {
 
 	public static void setUndoLevels(Integer undoLevels) {
 		getPreferences().setProperty(UNDO_LEVELS, String.valueOf(undoLevels.intValue()));
-		UndoManager.setUndoLevels(undoLevels);
 	}
 
 	public static LookAndFeel getLookAndFeel() {
@@ -262,33 +255,7 @@ public class AdvancedPrefs extends ContextPreferences {
 			value = LookAndFeel.getDefaultLookAndFeel();
 		}
 		getPreferences().setProperty(ToolBox.getPLATFORM() + LOOK_AND_FEEL, LookAndFeel.lookAndFeelConverter.convertToString(value));
-		try {
-			ModuleLoader.setLookAndFeel(LookAndFeel.lookAndFeelConverter.convertToString(value));
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static String getAutoSaveDirectory() {
-		if (getAutoSaveService().getAutoSaveDirectory() != null) {
-			return getAutoSaveService().getAutoSaveDirectory().getAbsolutePath();
-		} else {
-			return FlexoLocalization.localizedForKey("time_traveling_is_disabled");
-		}
-	}
-
-	private static ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
-	private static AutoSaveService getAutoSaveService() {
-		return AutoSaveService.instance();
+		Flexo.initUILAF(LookAndFeel.lookAndFeelConverter.convertToString(value));
 	}
 
 	public static void save() {
@@ -311,13 +278,13 @@ public class AdvancedPrefs extends ContextPreferences {
 	public static String getWebServiceUrl() {
 		String answer = getPreferences().getProperty(WEB_SERVICE_URL_KEY);
 		if (answer == null) {
-			setWebServiceUrl("https://www.flexobpmserver.com/Flexo/WebObjects/FlexoServer.woa/ws/PPMWebService");
+			setWebServiceUrl("https://server.openflexo.com/Flexo/WebObjects/FlexoServer.woa/ws/PPMWebService");
 			return getWebServiceUrl();
 		}
 		return answer;
 	}
 
-	public static FlexoPreferences getPreferences() {
+	public static AdvancedPrefs getPreferences() {
 		return preferences(ADVANCED_PREFERENCES);
 	}
 
@@ -380,11 +347,26 @@ public class AdvancedPrefs extends ContextPreferences {
 					if (sProxyPort != null) {
 						System.setProperty("https.proxyPort", String.valueOf(sProxyPort));
 					}
+					List<String> noProxyHosts = getNoProxyHosts();
+
+					if (noProxyHosts != null && noProxyHosts.size() > 0) {
+						StringBuilder sb = new StringBuilder();
+						for (String noProxyHost : noProxyHosts) {
+							if (sb.length() > 0) {
+								sb.append('|');
+							}
+							sb.append(noProxyHost);
+						}
+						System.setProperty("http.nonProxyHosts", sb.toString());
+					} else {
+						System.clearProperty("http.nonProxyHosts");
+					}
 				} else {
 					System.clearProperty("http.proxyHost");
 					System.clearProperty("http.proxyPort");
 					System.clearProperty("https.proxyHost");
 					System.clearProperty("https.proxyPort");
+					System.clearProperty("http.nonProxyHosts");
 				}
 			} finally {
 				isApplying = false;
@@ -414,7 +396,7 @@ public class AdvancedPrefs extends ContextPreferences {
 				try {
 					noProxy = !ProxyUtils.isProxyEnabled();
 					if (logger.isLoggable(Level.INFO)) {
-						logger.info("This machine seems uses a proxy? " + !noProxy);
+						logger.info("This machine seems to use a proxy? " + !noProxy);
 					}
 				} catch (RuntimeException e) {
 					if (logger.isLoggable(Level.WARNING)) {
@@ -565,11 +547,44 @@ public class AdvancedPrefs extends ContextPreferences {
 		applyProxySettings();
 	}
 
+	public static String getNoProxyHostsString() {
+		String answer = getPreferences().getProperty(NO_PROXY_HOSTS);
+		if (answer == null) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("localhost,127.0.0.1");
+			String localDomain = ProxyUtils.getLocalDomain();
+			if (localDomain != null) {
+				sb.append(",*.").append(localDomain);
+			}
+			setNoProxyHostsString(sb.toString());
+		}
+		return answer;
+	}
+
+	public static void setNoProxyHostsString(String string) {
+		getPreferences().setProperty(NO_PROXY_HOSTS, string, "noProxyHostsString");
+		applyProxySettings();
+	}
+
+	public static List<String> getNoProxyHosts() {
+		String string = getNoProxyHostsString();
+		if (string != null && string.trim().length() > 0) {
+			List<String> list = new ArrayList<String>();
+			String[] s = string.split(",");
+			for (String string2 : s) {
+				list.add(string2.trim());
+			}
+			return list;
+		}
+		return null;
+	}
+
 	public static void redetectProxySettings() {
 		setProxyHost(null);
 		setProxyPort(null);
 		setSProxyHost(null);
 		setSProxyPort(null);
+		setNoProxyHostsString(null);
 	}
 
 	public static String getProxyLogin() {
@@ -614,6 +629,31 @@ public class AdvancedPrefs extends ContextPreferences {
 
 	public static void setWebServiceInstance(String wsInstanceID) {
 		getPreferences().setProperty(WEB_SERVICE_INSTANCE, wsInstanceID);
+	}
+
+	public static boolean getShowAllTabs() {
+		Boolean answer = getPreferences().getBooleanProperty(SHOW_ALL_TABS);
+		if (answer == null) {
+			setShowAllTabs(false);
+			return false;
+		}
+		return answer;
+	}
+
+	public static void setShowAllTabs(boolean showAllTabs) {
+		getPreferences().setBooleanProperty(SHOW_ALL_TABS, showAllTabs);
+	}
+
+	public static boolean getPreferenceOverrideFromFlexoPropertiesDone() {
+		Boolean answer = getPreferences().getBooleanProperty(PREFERENCE_OVERRIDE_FROM_FLEXO_PROPERTIES_DONE);
+		if (answer == null) {
+			return false;
+		}
+		return answer;
+	}
+
+	public static void setPreferenceOverrideFromFlexoPropertiesDone(boolean preferenceOverrideFromFlexoPropertiesDone) {
+		getPreferences().setBooleanProperty(PREFERENCE_OVERRIDE_FROM_FLEXO_PROPERTIES_DONE, preferenceOverrideFromFlexoPropertiesDone);
 	}
 
 }

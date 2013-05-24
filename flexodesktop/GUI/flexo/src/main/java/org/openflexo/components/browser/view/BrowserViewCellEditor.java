@@ -159,7 +159,7 @@ public class BrowserViewCellEditor extends DefaultTreeCellEditor {
 
 				pSize.width += getOffset() + 5;
 
-				Dimension rSize = (getRenderer() != null) ? getRenderer().getPreferredSize() : null;
+				Dimension rSize = getRenderer() != null ? getRenderer().getPreferredSize() : null;
 
 				if (rSize != null) {
 					pSize.height = Math.max(pSize.height, rSize.height);

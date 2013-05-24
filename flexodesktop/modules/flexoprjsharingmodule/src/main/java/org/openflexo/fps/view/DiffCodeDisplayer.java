@@ -117,7 +117,7 @@ public class DiffCodeDisplayer extends CodeDisplayer {
 						+ getCVSFile().getRevisionOnWhichContentOnDiskBeforeMergeWasBasedOn() + " "
 						+ FlexoLocalization.localizedForKey("and") + " " + getCVSFile().getRevision() + ")";
 			} else {
-				leftLabel += (getCVSFile().getRevision() != null ? " - " + getCVSFile().getRevision() : "");
+				leftLabel += getCVSFile().getRevision() != null ? " - " + getCVSFile().getRevision() : "";
 			}
 			String rightLabel = FlexoLocalization.localizedForKey("remote_file_on_cvs_repository")
 					+ (getCVSFile().getRepositoryRevision() != null ? " - " + getCVSFile().getRepositoryRevision() : "");

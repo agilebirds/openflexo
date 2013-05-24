@@ -19,7 +19,7 @@
  */
 package org.openflexo.dre.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
@@ -52,7 +52,7 @@ public class AddToEmbeddingChildItemInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddToEmbeddingChildItem> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddToEmbeddingChildItem>() {
 			@Override
-			public boolean run(ActionEvent e, AddToEmbeddingChildItem action) {
+			public boolean run(EventObject e, AddToEmbeddingChildItem action) {
 				ParameterDefinition[] parameters = new ParameterDefinition[1];
 				parameters[0] = new DocItemParameter("childItem", "choose_an_item", null);
 				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null,
@@ -76,7 +76,7 @@ public class AddToEmbeddingChildItemInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddToEmbeddingChildItem> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddToEmbeddingChildItem>() {
 			@Override
-			public boolean run(ActionEvent e, AddToEmbeddingChildItem action) {
+			public boolean run(EventObject e, AddToEmbeddingChildItem action) {
 				if (getControllerActionInitializer().getDREController().getCurrentDisplayedObjectAsModuleView() == action
 						.getParentDocItem()) {
 					AbstractDocItemView docItemView = (AbstractDocItemView) getControllerActionInitializer().getDREController()

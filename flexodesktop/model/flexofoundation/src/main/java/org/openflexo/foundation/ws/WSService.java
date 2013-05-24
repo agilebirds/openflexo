@@ -30,12 +30,10 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.InvalidArgumentException;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.WSDLRepository;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
-import org.openflexo.foundation.ws.action.WSDelete;
 import org.openflexo.foundation.ws.dm.WSPortTypeAdded;
 import org.openflexo.foundation.ws.dm.WSPortTypeRemoved;
 import org.openflexo.foundation.ws.dm.WSRepositoryAdded;
@@ -51,9 +49,9 @@ public abstract class WSService extends WSObject implements FlexoObserver {
 	protected Vector<WSPortType> wsPortTypes;
 	protected Vector<WSRepository> wsRepositories;
 
-	/*    protected Vector flexoProcesses;
-	    protected Vector wsdlRepositories;
-	  */
+	/*
+	 * protected Vector flexoProcesses; protected Vector wsdlRepositories;
+	 */
 	private FlexoProjectFile wsdlFile;
 	private WSPortTypeFolder wsPortTypeList;
 	private WSRepositoryFolder wsRepositoryList;
@@ -78,17 +76,9 @@ public abstract class WSService extends WSObject implements FlexoObserver {
 		wsPortTypes = new Vector<WSPortType>();
 		wsRepositories = new Vector<WSRepository>();
 		setWSLibrary(wsLib);
-		setProject(wsLib.getProject());
 		wsPortTypeList = new WSPortTypeFolder(this);
 		wsRepositoryList = new WSRepositoryFolder(this);
 
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(WSDelete.actionType);
-		return returned;
 	}
 
 	/**

@@ -62,7 +62,7 @@ public class DMEntityElement extends DMElement {
 
 	@Override
 	public boolean isNameEditable() {
-		return !(getDMEntity().getIsReadOnly());
+		return !getDMEntity().getIsReadOnly();
 	}
 
 	@Override

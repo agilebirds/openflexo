@@ -19,7 +19,7 @@
  */
 package org.openflexo.fps.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -48,7 +48,7 @@ public class RefreshProjectInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RefreshProject> getDefaultInitializer() {
 		return new FlexoActionInitializer<RefreshProject>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshProject action) {
+			public boolean run(EventObject e, RefreshProject action) {
 				return true;
 			}
 		};
@@ -58,7 +58,7 @@ public class RefreshProjectInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RefreshProject> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RefreshProject>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshProject action) {
+			public boolean run(EventObject e, RefreshProject action) {
 				return true;
 			}
 		};

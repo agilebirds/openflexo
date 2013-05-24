@@ -19,8 +19,8 @@
  */
 package org.openflexo.fps.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
@@ -32,7 +32,6 @@ import org.openflexo.foundation.param.InfoLabelParameter;
 import org.openflexo.foundation.param.TextAreaParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.fps.CVSRepository;
 import org.openflexo.fps.FPSPreferences;
 import org.openflexo.fps.action.AddCVSRepository;
@@ -62,14 +61,10 @@ public class ShareProjectInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ShareProject> getDefaultInitializer() {
 		return new FlexoActionInitializer<ShareProject>() {
 			@Override
-			public boolean run(ActionEvent e, ShareProject action) {
+			public boolean run(EventObject e, ShareProject action) {
 				if (action.getProjectDirectory() == null) {
 					File newProjectDirectory;
-					try {
-						newProjectDirectory = OpenProjectComponent.getProjectDirectory();
-					} catch (ProjectLoadingCancelledException e1) {
-						return false;
-					}
+					newProjectDirectory = OpenProjectComponent.getProjectDirectory();
 					if (newProjectDirectory == null) {
 						return false;
 					}
@@ -152,7 +147,7 @@ public class ShareProjectInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ShareProject> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ShareProject>() {
 			@Override
-			public boolean run(ActionEvent e, ShareProject action) {
+			public boolean run(EventObject e, ShareProject action) {
 				if (action.getProject() != null) {
 					getControllerActionInitializer().getFPSController().setSharedProject(action.getProject());
 					FPSPreferences.addToLastOpenedProjects(action.getProject().getModuleDirectory());

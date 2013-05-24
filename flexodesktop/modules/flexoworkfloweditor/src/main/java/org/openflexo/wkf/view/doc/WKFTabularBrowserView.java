@@ -31,7 +31,7 @@ public class WKFTabularBrowserView extends TabularBrowserView {
 	}
 
 	public WKFTabularBrowserView(WKFController controller, TabularBrowserModel model) {
-		super(controller, model, controller.getEditor());
+		super(controller, model);
 		setSynchronizeWithSelectionManager(true);
 	}
 

@@ -23,7 +23,6 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.dre.controller.DREController;
 import org.openflexo.module.Module;
 import org.openflexo.prefs.ModulePreferences;
 import org.openflexo.toolbox.FileResource;
@@ -38,11 +37,11 @@ public final class DREPreferences extends ModulePreferences {
 
 	private static final Logger logger = Logger.getLogger(DREPreferences.class.getPackage().getName());
 
-	private static final Class DRE_PREFERENCES = DREPreferences.class;
+	private static final Class<DREPreferences> DRE_PREFERENCES = DREPreferences.class;
 
 	protected static final String EXAMPLE_PREF_VALUE = "examplePrefValue";
 
-	public static void init(DREController controller) {
+	public static void init() {
 		preferences(DRE_PREFERENCES);
 	}
 

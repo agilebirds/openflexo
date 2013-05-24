@@ -69,6 +69,6 @@ public class Location extends Literal {
 
 	@Override
 	public boolean equals(java.lang.Object o) {
-		return (o instanceof Location) && (((Location) o).value1 == this.value1) && (((Location) o).value2 == this.value2);
+		return o instanceof Location && ((Location) o).value1 == this.value1 && ((Location) o).value2 == this.value2;
 	}
 }

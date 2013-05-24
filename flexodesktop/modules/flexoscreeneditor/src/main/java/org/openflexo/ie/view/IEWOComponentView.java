@@ -105,11 +105,11 @@ import org.openflexo.ie.view.widget.IETextFieldWidgetView;
 import org.openflexo.ie.view.widget.IEWidgetView;
 import org.openflexo.ie.view.widget.IEWysiwygWidgetView;
 import org.openflexo.selection.SelectionListener;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
-public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver, IEViewManaging,
-		SelectionSynchronizedModuleView<ComponentInstance>, ChangeListener {
+public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver, IEViewManaging, ChangeListener,
+		SelectionSynchronizedModuleView<ComponentInstance> {
 
 	public JLabel title;
 	private Hashtable<IEObject, IEWidgetView<?>> _widgetViews;
@@ -457,7 +457,7 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	}
 
 	@Override
-	public FlexoPerspective<ComponentInstance> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return getIEController().COMPONENT_EDITOR_PERSPECTIVE;
 	}
 
@@ -519,12 +519,6 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 	}
 
 	@Override
-	public void stateChanged(ChangeEvent e) {
-		revalidate();
-		repaint();
-	}
-
-	@Override
 	public List<SelectionListener> getSelectionListeners() {
 		Vector<SelectionListener> reply = new Vector<SelectionListener>();
 		reply.add(this);
@@ -574,6 +568,27 @@ public class IEWOComponentView extends IEPanel implements GraphicalFlexoObserver
 			}
 		}
 
+	}
+
+	@Override
+	public void addNotify() {
+		super.addNotify();
+		if (getParent() instanceof JViewport) {
+			((JViewport) getParent()).addChangeListener(this);
+		}
+	}
+
+	@Override
+	public void removeNotify() {
+		if (getParent() instanceof JViewport) {
+			((JViewport) getParent()).removeChangeListener(this);
+		}
+		super.removeNotify();
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		revalidate();
 	}
 
 }

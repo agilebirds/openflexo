@@ -22,7 +22,6 @@ package org.openflexo.dre.controller;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.dre.view.menu.DREMenuBar;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.SelectionManager;
 
@@ -40,10 +39,9 @@ public class DRESelectionManager extends SelectionManager {
 
 	public DRESelectionManager(DREController controller) {
 		super(controller);
-		DREMenuBar menuBar = controller.getEditorMenuBar();
-		_clipboard = new DREClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
-				menuBar.getEditMenu(controller).cutItem);
-		_contextualMenuManager = new DREContextualMenuManager(this, controller.getEditor());
+		_clipboard = new DREClipboard(this, controller.getMenuBar().getEditMenu(controller).copyItem, controller.getMenuBar().getEditMenu(
+				controller).pasteItem, controller.getMenuBar().getEditMenu(controller).cutItem);
+		_contextualMenuManager = new DREContextualMenuManager(this, controller);
 	}
 
 	public DREController getDREController() {

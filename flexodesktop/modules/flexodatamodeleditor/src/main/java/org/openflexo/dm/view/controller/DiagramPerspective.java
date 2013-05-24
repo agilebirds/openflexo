@@ -19,12 +19,9 @@
  */
 package org.openflexo.dm.view.controller;
 
-import java.util.Hashtable;
-
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JSplitPane;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.components.browser.BrowserElementType;
@@ -38,24 +35,19 @@ import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.dm.ExternalRepository;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-public class DiagramPerspective extends DMPerspective<ERDiagram> {
+public class DiagramPerspective extends DMPerspective {
 
-	private final DMController _controller;
+	private final DMController controller;
 
-	private final DMBrowser _browser;
+	private final DMBrowser browser;
 	private final DiagramBrowser diagramBrowser;
-	private final DMBrowserView _browserView;
+	private final DMBrowserView browserView;
 	private final DMBrowserView diagramBrowserView;
-
-	private final JSplitPane splitPane;
-
-	private final Hashtable<ERDiagram, ERDiagramController> _controllers;
-
-	private JSplitPane splitPaneWithRolePaletteAndDocInspectorPanel;
 
 	private final JLabel infoLabel;
 
@@ -66,31 +58,12 @@ public class DiagramPerspective extends DMPerspective<ERDiagram> {
 	 */
 	public DiagramPerspective(DMController controller) {
 		super("er_diagram_perspective", controller);
-		_controller = controller;
-		_controllers = new Hashtable<ERDiagram, ERDiagramController>();
-		_browser = new DMBrowser(controller, true);
-		_browser.setFilterStatus(BrowserElementType.DM_ENTITY, BrowserFilterStatus.HIDE);
-		_browser.setFilterStatus(BrowserElementType.DM_EOENTITY, BrowserFilterStatus.HIDE);
-		if (controller.getDataModel().getJDKRepository().hasDiagrams()) {
-			_browser.setFilterStatus(BrowserElementType.JDK_REPOSITORY, BrowserFilterStatus.SHOW);
-		}
-		if (controller.getDataModel().getWORepository().hasDiagrams()) {
-			_browser.setFilterStatus(BrowserElementType.WO_REPOSITORY, BrowserFilterStatus.SHOW);
-		}
-		for (ExternalRepository rep : controller.getDataModel().getExternalRepositories()) {
-			if (rep.hasDiagrams()) {
-				_browser.setFilterStatus(BrowserElementType.EXTERNAL_REPOSITORY, BrowserFilterStatus.SHOW);
-			}
-		}
-		if (controller.getDataModel().getEOPrototypeRepository().hasDiagrams()) {
-			_browser.setFilterStatus(BrowserElementType.DM_EOPROTOTYPES_REPOSITORY, BrowserFilterStatus.SHOW);
-		}
-		if (controller.getDataModel().getExecutionModelRepository().hasDiagrams()) {
-			_browser.setFilterStatus(BrowserElementType.DM_EXECUTION_MODEL_REPOSITORY, BrowserFilterStatus.SHOW);
-		}
-
-		_browser.setDMViewMode(DMViewMode.Diagrams);
-		_browserView = new DMBrowserView(_browser, _controller) {
+		this.controller = controller;
+		browser = new DMBrowser(controller, true);
+		browser.setFilterStatus(BrowserElementType.DM_ENTITY, BrowserFilterStatus.HIDE);
+		browser.setFilterStatus(BrowserElementType.DM_EOENTITY, BrowserFilterStatus.HIDE);
+		browser.setDMViewMode(DMViewMode.Diagrams);
+		browserView = new DMBrowserView(browser, controller) {
 			@Override
 			public void treeDoubleClick(FlexoModelObject object) {
 				super.treeDoubleClick(object);
@@ -99,51 +72,30 @@ public class DiagramPerspective extends DMPerspective<ERDiagram> {
 				}
 			}
 
-			/*  public void objectAddedToSelection(ObjectAddedToSelectionEvent event)
-			  {
-			  	if (event.getAddedObject() instanceof ERDiagram) {
-			  		diagramBrowser.deleteBrowserListener(this); 		            
-			  		diagramBrowser.setRepresentedDiagram((ERDiagram)event.getAddedObject());
-			  		diagramBrowser.update();
-			  		diagramBrowser.addBrowserListener(this); 		            
-			  	}
-			  	super.objectAddedToSelection(event);
-			  }			*/
 		};
 		diagramBrowser = new DiagramBrowser(controller);
 		diagramBrowserView = new DMBrowserView(diagramBrowser, controller);
-		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, _browserView, diagramBrowserView);
-		splitPane.setDividerLocation(0.7);
-		splitPane.setResizeWeight(0.7);
+		setTopLeftView(browserView);
+		setBottomLeftView(diagramBrowserView);
 		infoLabel = new JLabel("ALT-drag to define inheritance, CTRL-drag to define properties");
 		infoLabel.setFont(FlexoCst.SMALL_FONT);
 	}
 
 	public void focusOnDiagram(ERDiagram diagram) {
-		diagramBrowser.deleteBrowserListener(_browserView);
+		diagramBrowser.deleteBrowserListener(browserView);
 		diagramBrowser.setRepresentedDiagram(diagram);
 		diagramBrowser.update();
-		diagramBrowser.addBrowserListener(_browserView);
+		diagramBrowser.addBrowserListener(browserView);
 	}
 
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
 		return DMEIconLibrary.DME_DP_ACTIVE_ICON;
-	}
-
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return DMEIconLibrary.DME_DP_SELECTED_ICON;
 	}
 
 	@Override
@@ -165,18 +117,12 @@ public class DiagramPerspective extends DMPerspective<ERDiagram> {
 	}
 
 	@Override
-	public ModuleView<ERDiagram> createModuleViewForObject(ERDiagram diagram, FlexoController controller) {
-		return getControllerForDiagram(diagram).getDrawingView();
-	}
-
-	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getLeftView() {
-		return splitPane;
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject diagram, FlexoController controller) {
+		if (diagram instanceof ERDiagram) {
+			return new ERDiagramController((DMController) controller, (ERDiagram) diagram).getDrawingView();
+		} else {
+			return null;
+		}
 	}
 
 	@Override
@@ -192,54 +138,12 @@ public class DiagramPerspective extends DMPerspective<ERDiagram> {
 		return infoLabel;
 	}
 
-	@Override
-	public boolean doesPerspectiveControlRightView() {
-		return false;
-	}
-
-	/*@Override
-	public JComponent getRightView() 
-	{
-		return getSplitPaneWithRolePaletteAndDocInspectorPanel();
-	}*/
-
 	public DiagramView getCurrentDiagramView() {
-		if ((_controller != null) && (_controller.getCurrentModuleView() instanceof DiagramView)) {
-			return (DiagramView) _controller.getCurrentModuleView();
+		if (controller != null && controller.getCurrentModuleView() instanceof DiagramView) {
+			return (DiagramView) controller.getCurrentModuleView();
 		}
 		return null;
 	}
-
-	public ERDiagramController getControllerForDiagram(ERDiagram diagram) {
-		ERDiagramController returned = _controllers.get(diagram);
-		if (returned == null) {
-			returned = new ERDiagramController(_controller, diagram);
-			_controllers.put(diagram, returned);
-		}
-		return returned;
-	}
-
-	/**
-	 * Return Split pane with Role palette and doc inspector panel Disconnect doc inspector panel from its actual parent
-	 * 
-	 * @return
-	 */
-	/*protected JSplitPane getSplitPaneWithRolePaletteAndDocInspectorPanel()
-	{
-		if (splitPaneWithRolePaletteAndDocInspectorPanel == null) {
-			splitPaneWithRolePaletteAndDocInspectorPanel = new JSplitPane(
-					JSplitPane.VERTICAL_SPLIT,
-					getRoleEditorController().getPalette().getPaletteView(),
-					_controller.getDisconnectedDocInspectorPanel());
-			splitPaneWithRolePaletteAndDocInspectorPanel.setResizeWeight(0);
-			splitPaneWithRolePaletteAndDocInspectorPanel.setDividerLocation(WKFCst.PALETTE_DOC_SPLIT_LOCATION);
-		}
-		if (splitPaneWithRolePaletteAndDocInspectorPanel.getBottomComponent() == null) {
-			splitPaneWithRolePaletteAndDocInspectorPanel.setBottomComponent(_controller.getDisconnectedDocInspectorPanel());
-		}
-		new FlexoSplitPaneLocationSaver(splitPaneWithRolePaletteAndDocInspectorPanel,"RolePaletteAndDocInspectorPanel");
-		return splitPaneWithRolePaletteAndDocInspectorPanel;
-	}*/
 
 	protected class DiagramBrowser extends DMBrowser {
 		private ERDiagram representedDiagram = null;
@@ -263,20 +167,47 @@ public class DiagramPerspective extends DMPerspective<ERDiagram> {
 
 	}
 
-	public void removeFromERControllers(ERDiagramController diagramController) {
-		_controllers.remove(diagramController.getDrawing().getDiagram());
+	@Override
+	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
+		super.notifyModuleViewDisplayed(moduleView);
+		if (moduleView instanceof DiagramView) {
+			DiagramView diagram = (DiagramView) moduleView;
+			browser.setRootObject(diagram.getRepresentedObject());
+		}
 	}
 
 	@Override
 	protected boolean browserMayRepresent(DMEntity entity) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	protected void changeBrowserFiltersFor(DMEntity entity) {
-		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void setProject(FlexoProject project) {
+		super.setProject(project);
+		if (project != null) {
+			if (project.getDataModel().getJDKRepository().hasDiagrams()) {
+				browser.setFilterStatus(BrowserElementType.JDK_REPOSITORY, BrowserFilterStatus.SHOW);
+			}
+			if (project.getDataModel().getWORepository().hasDiagrams()) {
+				browser.setFilterStatus(BrowserElementType.WO_REPOSITORY, BrowserFilterStatus.SHOW);
+			}
+			for (ExternalRepository rep : project.getDataModel().getExternalRepositories()) {
+				if (rep.hasDiagrams()) {
+					browser.setFilterStatus(BrowserElementType.EXTERNAL_REPOSITORY, BrowserFilterStatus.SHOW);
+				}
+			}
+			if (project.getDataModel().getEOPrototypeRepository().hasDiagrams()) {
+				browser.setFilterStatus(BrowserElementType.DM_EOPROTOTYPES_REPOSITORY, BrowserFilterStatus.SHOW);
+			}
+			if (project.getDataModel().getExecutionModelRepository().hasDiagrams()) {
+				browser.setFilterStatus(BrowserElementType.DM_EXECUTION_MODEL_REPOSITORY, BrowserFilterStatus.SHOW);
+			}
+		}
 	}
 
 }

@@ -27,19 +27,20 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.cgmodule.controller.GeneratorController;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.cg.GeneratedOutput;
 import org.openflexo.foundation.cg.action.AddGeneratedCodeRepository;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.listener.FlexoActionButton;
 
 /**
@@ -68,8 +69,7 @@ public class GeneratedCodeModuleView extends JPanel implements ModuleView<Genera
 			panel.remove(component);
 		}
 		if (_gc.getGeneratedRepositories().size() == 0) {
-			panel.add(component = new FlexoActionButton(AddGeneratedCodeRepository.actionType, this, _controller.getEditor()),
-					BorderLayout.CENTER);
+			panel.add(component = new FlexoActionButton(AddGeneratedCodeRepository.actionType, this, _controller), BorderLayout.CENTER);
 		} else {
 			panel.add(component = new JLabel(FlexoLocalization.localizedForKey("please_select_a_repository"), SwingConstants.CENTER),
 					BorderLayout.CENTER);
@@ -79,19 +79,33 @@ public class GeneratedCodeModuleView extends JPanel implements ModuleView<Genera
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
-		updateView();
+	public void update(final FlexoObservable observable, final DataModification dataModification) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					update(observable, dataModification);
+				}
+			});
+			return;
+		}
+		if (dataModification instanceof ObjectDeleted) {
+			deleteModuleView();
+		} else {
+			updateView();
+		}
 	}
 
 	@Override
 	public void deleteModuleView() {
+		_gc.deleteObserver(this);
 		_controller.removeModuleView(this);
 		component = null;
 		panel = null;
 	}
 
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return _controller.CODE_GENERATOR_PERSPECTIVE;
 	}
 

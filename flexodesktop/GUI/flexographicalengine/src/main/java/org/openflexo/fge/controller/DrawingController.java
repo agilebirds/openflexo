@@ -47,6 +47,7 @@ import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
@@ -198,9 +199,9 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 			logger.fine("Switch to tool " + aTool);
 			switch (aTool) {
 			case SelectionTool:
-				if (currentTool == EditorTool.DrawShapeTool && drawShapeToolController != null) {
+				/*if (currentTool == EditorTool.DrawShapeTool && drawShapeToolController != null) {
 					drawShapeToolController.makeNewShape();
-				}
+				}*/
 				break;
 			case DrawShapeTool:
 				// if (drawShapeAction != null) {
@@ -309,10 +310,12 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 
 		protected ScalePanel() {
 			super(/* new FlowLayout(FlowLayout.LEFT, 10, 0) */);
+			setOpaque(false);
 			scaleTF = new JTextField(5);
 			int currentScale = (int) (getScale() * 100);
 			scaleTF.setText(currentScale + "%");
 			slider = new JSlider(SwingConstants.HORIZONTAL, 0, MAX_ZOOM_VALUE, currentScale);
+			slider.setOpaque(false);
 			slider.setMajorTickSpacing(100);
 			slider.setMinorTickSpacing(20);
 			slider.setPaintTicks(false/* true */);
@@ -432,7 +435,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		}
 	}
 
-	public ShapeGraphicalRepresentation<?> getFirstSelectedShape() {
+	private ShapeGraphicalRepresentation<?> getFirstSelectedShape() {
 		for (GraphicalRepresentation<?> gr : getSelectedObjects()) {
 			if (gr instanceof ShapeGraphicalRepresentation) {
 				return (ShapeGraphicalRepresentation<?>) gr;
@@ -463,7 +466,9 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	public void setSelectedObject(GraphicalRepresentation<?> aGraphicalRepresentation) {
 		stopEditionOfEditedLabelIfAny();
 		setSelectedObjects(Collections.singletonList(aGraphicalRepresentation));
-		getToolbox().update();
+		if (getToolbox() != null) {
+			getToolbox().update();
+		}
 	}
 
 	public void addToSelectedObjects(GraphicalRepresentation<?> aGraphicalRepresentation) {
@@ -561,7 +566,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		aGraphicalRepresentation.setIsFocused(false);
 	}
 
-	public void toogleFocusSelection(GraphicalRepresentation<?> aGraphicalRepresentation) {
+	public void toggleFocusSelection(GraphicalRepresentation<?> aGraphicalRepresentation) {
 		if (aGraphicalRepresentation.getIsFocused()) {
 			removeFromFocusedObjects(aGraphicalRepresentation);
 		} else {
@@ -718,6 +723,9 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		if (toolbox != null) {
 			toolbox.delete();
 		}
+		focusedObjects.clear();
+		selectedObjects.clear();
+		focusedControlArea = null;
 		toolbox = null;
 		palettes = null;
 		storedSelection = null;
@@ -793,24 +801,44 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	public void notifyHasMoved(MoveInfo currentMove) {
 	}
 
-	public void upKeyPressed() {
+	/**
+	 * Process 'UP' key pressed
+	 * 
+	 * @return boolean indicating if event was successfully processed
+	 */
+	public boolean upKeyPressed() {
 		// System.out.println("Up");
-		keyDrivenMove(0, -1);
+		return getDrawing().isEditable() && keyDrivenMove(0, -1);
 	}
 
-	public void downKeyPressed() {
+	/**
+	 * Process 'DOWN' key pressed
+	 * 
+	 * @return boolean indicating if event was successfully processed
+	 */
+	public boolean downKeyPressed() {
 		// System.out.println("Down");
-		keyDrivenMove(0, 1);
+		return getDrawing().isEditable() && keyDrivenMove(0, 1);
 	}
 
-	public void leftKeyPressed() {
+	/**
+	 * Process 'LEFT' key pressed
+	 * 
+	 * @return boolean indicating if event was successfully processed
+	 */
+	public boolean leftKeyPressed() {
 		// System.out.println("Left");
-		keyDrivenMove(-1, 0);
+		return getDrawing().isEditable() && keyDrivenMove(-1, 0);
 	}
 
-	public void rightKeyPressed() {
+	/**
+	 * Process 'RIGHT' key pressed
+	 * 
+	 * @return boolean indicating if event was successfully processed
+	 */
+	public boolean rightKeyPressed() {
 		// System.out.println("Right");
-		keyDrivenMove(1, 0);
+		return getDrawing().isEditable() && keyDrivenMove(1, 0);
 	}
 
 	private MoveInfo keyDrivenMovingSession;
@@ -819,9 +847,11 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	private synchronized boolean keyDrivenMove(int deltaX, int deltaY) {
 		if (keyDrivenMovingSessionTimer == null && getFirstSelectedShape() != null) {
 			// System.out.println("BEGIN to move with keyboard");
-			startKeyDrivenMovingSession();
-			doMoveInSession(deltaX, deltaY);
-			return true;
+			if (startKeyDrivenMovingSession()) {
+				doMoveInSession(deltaX, deltaY);
+				return true;
+			}
+			return false;
 		} else if (keyDrivenMovingSessionTimer != null) {
 			doMoveInSession(deltaX, deltaY);
 			return true;
@@ -837,15 +867,19 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		keyDrivenMovingSession.moveTo(newLocation);
 	}
 
-	private synchronized void startKeyDrivenMovingSession() {
-		keyDrivenMovingSessionTimer = new KeyDrivenMovingSessionTimer();
-		keyDrivenMovingSessionTimer.start();
+	private synchronized boolean startKeyDrivenMovingSession() {
 
-		ShapeGraphicalRepresentation<?> movedObject = getFirstSelectedShape();
+		if (getFirstSelectedShape().getLocationConstraints() != LocationConstraints.UNMOVABLE) {
 
-		keyDrivenMovingSession = new MoveInfo(movedObject, this);
-
-		notifyWillMove(keyDrivenMovingSession);
+			keyDrivenMovingSessionTimer = new KeyDrivenMovingSessionTimer();
+			keyDrivenMovingSessionTimer.start();
+			ShapeGraphicalRepresentation<?> movedObject = getFirstSelectedShape();
+			keyDrivenMovingSession = new MoveInfo(movedObject, this);
+			notifyWillMove(keyDrivenMovingSession);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	private synchronized void stopKeyDrivenMovingSession() {
@@ -855,7 +889,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	}
 
 	private class KeyDrivenMovingSessionTimer extends Thread {
-		boolean typed = false;
+		volatile boolean typed = false;
 
 		public KeyDrivenMovingSessionTimer() {
 			typed = true;
@@ -864,9 +898,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		@Override
 		public void run() {
 			while (typed) {
-				synchronized (this) {
-					typed = false;
-				}
+				typed = false;
 				try {
 					sleep(500);
 				} catch (InterruptedException e) {

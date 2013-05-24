@@ -47,13 +47,13 @@ public class SubmitDocumentationAction extends FlexoGUIAction<SubmitDocumentatio
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
 			return allowsDocSubmission;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return (allowsDocSubmission && (object != null) && (object instanceof InspectableObject));
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return allowsDocSubmission && object != null && object instanceof InspectableObject;
 		}
 
 		public boolean allowsDocSubmission() {
@@ -76,15 +76,4 @@ public class SubmitDocumentationAction extends FlexoGUIAction<SubmitDocumentatio
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
-	/* public String getLocalizedName ()
-	 {
-	     if (getFocusedObject() != null) {
-	         String shortClassName = null;
-	         String extClassName = getFocusedObject().getClass().getName();
-	         StringTokenizer st = new StringTokenizer(extClassName,".");
-	         while (st.hasMoreTokens()) shortClassName = st.nextToken();
-	         return FlexoLocalization.localizedForKey("submit_doc_for")+" "+shortClassName;
-	     }
-	     return null;
-	 }*/
 }

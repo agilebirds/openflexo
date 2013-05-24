@@ -19,401 +19,559 @@
  */
 package org.openflexo.fib.editor.view;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragGestureEvent;
+import java.awt.dnd.DragGestureListener;
+import java.awt.dnd.DragGestureRecognizer;
+import java.awt.dnd.DragSource;
+import java.awt.dnd.DragSourceContext;
+import java.awt.dnd.DragSourceDragEvent;
+import java.awt.dnd.DragSourceDropEvent;
+import java.awt.dnd.DragSourceEvent;
+import java.awt.dnd.DragSourceListener;
 import java.awt.dnd.DropTarget;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Observable;
-import java.util.Observer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.editor.controller.DraggedFIBComponent;
+import org.openflexo.fib.editor.controller.ExistingElementDrag;
 import org.openflexo.fib.editor.controller.FIBEditorController;
-import org.openflexo.fib.editor.notifications.FIBEditorNotification;
-import org.openflexo.fib.editor.notifications.FocusedObjectChange;
-import org.openflexo.fib.editor.notifications.SelectedObjectChange;
+import org.openflexo.fib.editor.controller.FIBEditorPalette;
+import org.openflexo.fib.editor.view.container.FIBEditableSplitPanelView;
 import org.openflexo.fib.model.FIBAddingNotification;
 import org.openflexo.fib.model.FIBAttributeNotification;
+import org.openflexo.fib.model.FIBColor;
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.fib.model.FIBContainer;
+import org.openflexo.fib.model.FIBFont;
 import org.openflexo.fib.model.FIBModelNotification;
 import org.openflexo.fib.model.FIBMultipleValues;
+import org.openflexo.fib.model.FIBNumber;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBRemovingNotification;
+import org.openflexo.fib.model.FIBTab;
 import org.openflexo.fib.model.FIBWidget;
+import org.openflexo.fib.view.FIBContainerView;
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.fib.view.container.FIBPanelView;
 import org.openflexo.fib.view.container.FIBTabPanelView;
+import org.openflexo.fib.view.container.FIBTabView;
+import org.openflexo.fib.view.widget.FIBColorWidget;
+import org.openflexo.fib.view.widget.FIBFontWidget;
+import org.openflexo.fib.view.widget.FIBNumberWidget;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.swing.Focusable;
 
-public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponent> 
-implements Observer, MouseListener, FocusListener {
+public class FIBEditableViewDelegate<M extends FIBComponent, J extends JComponent> implements MouseListener, FocusListener, Focusable {
 
 	static final Logger logger = FlexoLogger.getLogger(FIBEditableViewDelegate.class.getPackage().getName());
 
-	private Border focusBorder = BorderFactory.createLineBorder(Color.RED);
-	private Border selectedBorder = BorderFactory.createLineBorder(Color.BLUE);
-	
-	private boolean isFocused = false;
-	private boolean isSelected = false;
-	
-	private FIBEditableView<M,J> view;
+	private FIBEditableView<M, J> view;
 
-	public FIBEditableViewDelegate(FIBEditableView<M,J> view) 
-	{
+	private DragSource dragSource;
+	private MoveDGListener dgListener;
+	private MoveDSListener dsListener;
+	private int dragAction = DnDConstants.ACTION_MOVE;
+
+	public FIBEditableViewDelegate(FIBEditableView<M, J> view) {
 		this.view = view;
 
 		view.getJComponent().setFocusable(true);
 		view.getJComponent().setRequestFocusEnabled(true);
-		
+
 		recursivelyAddListenersTo(view.getJComponent());
-		
-		//view.getJComponent().addMouseListener(this);
-		//view.getJComponent().addFocusListener(this);
-		
-		view.getEditorController().addObserver(this);
-		
+
+		// view.getJComponent().addMouseListener(this);
+		// view.getJComponent().addFocusListener(this);
+
+		view.getEditorController().registerViewDelegate(this);
+
 		if (view.getPlaceHolders() != null) {
 			for (PlaceHolder ph : view.getPlaceHolders()) {
 				// Listen to drag'n'drop events
 				new FIBDropTarget(ph);
 			}
-		}	
+		}
+
+		dragSource = DragSource.getDefaultDragSource();
+		dsListener = new MoveDSListener();
+		dgListener = new MoveDGListener();
+
+		if (!(view instanceof FIBEditableSplitPanelView)) {
+			DragGestureRecognizer newDGR = dragSource.createDefaultDragGestureRecognizer(view.getDynamicJComponent(), dragAction,
+					dgListener);
+		}
+
 	}
-	
-	public void delete() 
-	{
-		logger.fine("Delete delegate view="+view);
+
+	public void delete() {
+		logger.fine("Delete delegate view=" + view);
 		recursivelyDeleteListenersFrom(view.getJComponent());
-		view.getEditorController().deleteObserver(this);
+		view.getEditorController().unregisterViewDelegate(this);
 		view = null;
-	}	
-	
-	private void recursivelyAddListenersTo(Component c)
-	{
+	}
+
+	private void recursivelyAddListenersTo(Component c) {
+		/*for (MouseListener ml : c.getMouseListeners()) {
+			c.removeMouseListener(ml);
+		}*/
 		c.addMouseListener(this);
 		c.addFocusListener(this);
 		// Listen to drag'n'drop events
 		new FIBDropTarget(view);
 
 		if (c instanceof Container) {
-			for (Component c2 : ((Container)c).getComponents()) {
-				if (!isComponentRootComponentForAnyFIBView(c2)) recursivelyAddListenersTo(c2);
+			for (Component c2 : ((Container) c).getComponents()) {
+				if (!isComponentRootComponentForAnyFIBView(c2)) {
+					recursivelyAddListenersTo(c2);
+				}
 			}
 		}
 	}
 
-	private void recursivelyDeleteListenersFrom(Component c)
-	{
+	private void recursivelyDeleteListenersFrom(Component c) {
 		c.removeMouseListener(this);
 		c.removeFocusListener(this);
 
 		if (c instanceof Container) {
-			for (Component c2 : ((Container)c).getComponents()) {
-				if (!isComponentRootComponentForAnyFIBView(c2)) recursivelyDeleteListenersFrom(c2);
+			for (Component c2 : ((Container) c).getComponents()) {
+				if (!isComponentRootComponentForAnyFIBView(c2)) {
+					recursivelyDeleteListenersFrom(c2);
+				}
 			}
 		}
 	}
 
-	private boolean isComponentRootComponentForAnyFIBView(Component c)
-	{
-		Enumeration<FIBView> en = getController().getViews();
+	private boolean isComponentRootComponentForAnyFIBView(Component c) {
+		Enumeration<FIBView<?, ?>> en = getController().getViews();
 		while (en.hasMoreElements()) {
-			FIBView v = en.nextElement();
-			if (v.getResultingJComponent() == c) return true;
+			FIBView<?, ?> v = en.nextElement();
+			if (v.getResultingJComponent() == c) {
+				return true;
+			}
 		}
 		return false;
 	}
-	
-	public FIBEditorController getEditorController()
-	{
+
+	public FIBEditorController getEditorController() {
 		return view.getEditorController();
 	}
-	
-	public FIBController getController()
-	{
+
+	public FIBController getController() {
 		return view.getEditorController().getController();
 	}
-	
-	public M getFIBComponent()
-	{
+
+	public M getFIBComponent() {
 		return view.getComponent();
 	}
-	
-	public void setFocused(boolean aFlag)
-	{
-		if (isSelected) return;
-		if (aFlag == isFocused) return;
-		if (aFlag) {
-			//logger.info("Set focused for "+getFIBComponent());
-			isFocused = true;
-			if (view.getJComponent().getBorder() == null) view.getJComponent().setBorder(focusBorder);
-			else view.getJComponent().setBorder(BorderFactory.createCompoundBorder(focusBorder, view.getJComponent().getBorder()));
-		}
-		else {
-			isFocused = false;
-			if (view.getJComponent().getBorder() == focusBorder
-					|| view.getJComponent().getBorder() == selectedBorder) 
-				view.getJComponent().setBorder(null);
-			else if (view.getJComponent().getBorder() instanceof CompoundBorder) {
-				CompoundBorder b = (CompoundBorder)view.getJComponent().getBorder();
-				view.getJComponent().setBorder(b.getInsideBorder());
-			}
-		}
+
+	public JComponent getJComponent() {
+		return view.getJComponent();
 	}
 
-	public void setSelected(boolean aFlag)
-	{
-		if (aFlag == isSelected) return;
-		if (aFlag) {
-			if (isFocused) setFocused(false);
-			isSelected = true;
-			if (view.getJComponent().getBorder() == null) view.getJComponent().setBorder(selectedBorder);
-			else view.getJComponent().setBorder(BorderFactory.createCompoundBorder(selectedBorder, view.getJComponent().getBorder()));
-		}
-		else {
-			isSelected = false;
-			if (view.getJComponent().getBorder() == focusBorder
-					|| view.getJComponent().getBorder() == selectedBorder) 
-				view.getJComponent().setBorder(null);
-			else if (view.getJComponent().getBorder() instanceof CompoundBorder) {
-				CompoundBorder b = (CompoundBorder)view.getJComponent().getBorder();
-				view.getJComponent().setBorder(b.getInsideBorder());
-			}
-		}
-	}
-
-	public void setPlaceHoldersAreVisible(boolean aFlag)
-	{
-		if (view.getPlaceHolders() != null) {
-			for (PlaceHolder ph : view.getPlaceHolders()) {
-				ph.setVisible(aFlag);
-				//if (aFlag) System.out.println("PlaceHolder "+ph+" becomes visible with "+ph.getBounds());
-			}
-		}
-	
-	}
-	
 	@Override
-	public void mouseClicked(MouseEvent e) 
-	{
+	public boolean isFocused() {
+		return getEditorController().getFocusedObject() == getFIBComponent();
+	}
+
+	@Override
+	public void setFocused(boolean focused) {
+		getEditorController().setFocusedObject(getFIBComponent());
+	}
+
+	private List<Object> placeHolderVisibleRequesters = new ArrayList<Object>();
+
+	public void addToPlaceHolderVisibleRequesters(Object requester) {
+		if (!placeHolderVisibleRequesters.contains(requester)) {
+			placeHolderVisibleRequesters.add(requester);
+			updatePlaceHoldersVisibility();
+		}
+	}
+
+	public void removeFromPlaceHolderVisibleRequesters(Object requester) {
+		if (placeHolderVisibleRequesters.remove(requester)) {
+			updatePlaceHoldersVisibility();
+		}
+	}
+
+	private boolean updatePlaceHoldersVisibilityRequested = false;
+
+	private void updatePlaceHoldersVisibility() {
+		if (updatePlaceHoldersVisibilityRequested) {
+			return;
+		}
+		updatePlaceHoldersVisibilityRequested = true;
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				if (view != null) {
+					boolean visible = placeHolderVisibleRequesters.size() > 0;
+					if (view.getPlaceHolders() != null) {
+						for (PlaceHolder ph : view.getPlaceHolders()) {
+							ph.setVisible(visible);
+						}
+					}
+					updatePlaceHoldersVisibilityRequested = false;
+				}
+			}
+		});
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
 		getEditorController().setSelectedObject(getFIBComponent());
-		view.getJComponent().requestFocus();
+		view.getJComponent().requestFocusInWindow();
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if (e.isPopupTrigger() || e.getButton()==MouseEvent.BUTTON3) {
+		if (e.isPopupTrigger() || e.getButton() == MouseEvent.BUTTON3) {
 			getEditorController().getContextualMenu().displayPopupMenu(getFIBComponent(), view.getJComponent(), e);
 		}
 	}
-	
+
 	@Override
-	public void focusLost(FocusEvent e) 
-	{
-		//getController().setSelectedObject(null);
+	public void focusLost(FocusEvent e) {
+		// getController().setSelectedObject(null);
 	}
 
 	@Override
-	public void focusGained(FocusEvent e) 
-	{
+	public void focusGained(FocusEvent e) {
 		getEditorController().setSelectedObject(getFIBComponent());
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent e) 
-	{
+	public void mouseEntered(MouseEvent e) {
 		getEditorController().setFocusedObject(getFIBComponent());
 	}
-	
+
 	@Override
-	public void mouseExited(MouseEvent e) 
-	{
+	public void mouseExited(MouseEvent e) {
 		getEditorController().setFocusedObject(null);
 	}
 
-	@Override
-	public void update(Observable o, Object notification) 
-	{
-		if (notification instanceof FIBEditorNotification) {
-			if (notification instanceof FocusedObjectChange) {
-				FocusedObjectChange focusChange = (FocusedObjectChange)notification;
-				//System.out.println("Receive "+focusChange);
-				if (focusChange.oldValue() == getFIBComponent()) setFocused(false);
-				if (focusChange.newValue() == getFIBComponent()) setFocused(true);
-			}
-			else if (notification instanceof SelectedObjectChange) {
-				SelectedObjectChange selectionChange = (SelectedObjectChange)notification;
-				//System.out.println("Receive "+focusChange);
-				if (selectionChange.oldValue() == getFIBComponent()) setSelected(false);
-				if (selectionChange.newValue() == getFIBComponent()) setSelected(true);
-			}
+	public void receivedModelNotifications(Observable o, FIBModelNotification dataModification) {
+		// System.out.println("receivedModelNotifications o=" + o + " dataModification=" + dataModification);
+
+		if (view == null) {
+			logger.warning("Received ModelNotifications for null view !!!");
+			return;
 		}
-	}
-	
-	public void receivedModelNotifications(Observable o, FIBModelNotification dataModification) 
-	{
-		//System.out.println("receivedModelNotifications o="+o+" dataModification="+dataModification);
-		
-		if (o instanceof FIBPanel && view instanceof FIBPanelView) 
-		{
+
+		if (o instanceof FIBContainer && view instanceof FIBContainerView) {
 			if (dataModification instanceof FIBAddingNotification) {
-				if (((FIBAddingNotification)dataModification).getAddedValue() instanceof FIBComponent) {
-					//addSubComponent((FIBComponent)((FIBAddingNotification)dataModification).getAddedValue());
-					((FIBPanelView)view).updateLayout();
+				if (((FIBAddingNotification) dataModification).getAddedValue() instanceof FIBComponent) {
+					// addSubComponent((FIBComponent)((FIBAddingNotification)dataModification).getAddedValue());
+					((FIBContainerView) view).updateLayout();
 				}
-			}
-			else if (dataModification instanceof FIBRemovingNotification) {
-				if (((FIBRemovingNotification)dataModification).getRemovedValue() instanceof FIBComponent) {
-					//addSubComponent((FIBComponent)((FIBAddingNotification)dataModification).getAddedValue());
-					((FIBPanelView)view).updateLayout();
+			} else if (dataModification instanceof FIBRemovingNotification) {
+				if (((FIBRemovingNotification) dataModification).getRemovedValue() instanceof FIBComponent) {
+					// addSubComponent((FIBComponent)((FIBAddingNotification)dataModification).getAddedValue());
+					((FIBContainerView) view).updateLayout();
 				}
-			}
-			else if (dataModification instanceof FIBAttributeNotification) {
-				FIBAttributeNotification n = (FIBAttributeNotification)dataModification;
-				if (n.getAttribute() == FIBPanel.Parameters.border
-						|| n.getAttribute() == FIBPanel.Parameters.borderColor
-						|| n.getAttribute() == FIBPanel.Parameters.borderTitle
-						|| n.getAttribute() == FIBPanel.Parameters.borderTop
-						|| n.getAttribute() == FIBPanel.Parameters.borderLeft
-						|| n.getAttribute() == FIBPanel.Parameters.borderRight
-						|| n.getAttribute() == FIBPanel.Parameters.borderBottom
-						|| n.getAttribute() == FIBPanel.Parameters.titleFont
-						|| n.getAttribute() == FIBPanel.Parameters.darkLevel) {
-					((FIBPanelView)view).updateBorder();
-				}
-				else if (n.getAttribute() == FIBPanel.Parameters.layout
-						|| n.getAttribute() == FIBPanel.Parameters.flowAlignment
-						|| n.getAttribute() == FIBPanel.Parameters.boxLayoutAxis
-						|| n.getAttribute() == FIBPanel.Parameters.vGap
-						|| n.getAttribute() == FIBPanel.Parameters.hGap
-						|| n.getAttribute() == FIBPanel.Parameters.rows
-						|| n.getAttribute() == FIBPanel.Parameters.cols
-						|| n.getAttribute() == FIBPanel.Parameters.protectContent) {
-					((FIBPanelView)view).updateLayout();
+			} else if (dataModification instanceof FIBAttributeNotification) {
+				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
+				if (n.getAttribute() == FIBContainer.Parameters.subComponents) {
+					((FIBContainerView) view).updateLayout();
 				}
 			}
 		}
 
-		if (o instanceof FIBWidget) 
-		{
-			FIBWidgetView widgetView = (FIBWidgetView)view;
+		if (o instanceof FIBTab && view instanceof FIBTabView) {
 			if (dataModification instanceof FIBAttributeNotification) {
-				FIBAttributeNotification n = (FIBAttributeNotification)dataModification;
+				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
+				if (n.getAttribute() == FIBTab.Parameters.title) {
+					if (view.getParentView() instanceof FIBTabPanelView) {
+						// Arghlll how do we update titles on this.
+					}
+
+				}
+			}
+		}
+
+		if (o instanceof FIBPanel && view instanceof FIBPanelView) {
+			if (dataModification instanceof FIBAttributeNotification) {
+				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
+				if (n.getAttribute() == FIBPanel.Parameters.border || n.getAttribute() == FIBPanel.Parameters.borderColor
+						|| n.getAttribute() == FIBPanel.Parameters.borderTitle || n.getAttribute() == FIBPanel.Parameters.borderTop
+						|| n.getAttribute() == FIBPanel.Parameters.borderLeft || n.getAttribute() == FIBPanel.Parameters.borderRight
+						|| n.getAttribute() == FIBPanel.Parameters.borderBottom || n.getAttribute() == FIBPanel.Parameters.titleFont
+						|| n.getAttribute() == FIBPanel.Parameters.darkLevel) {
+					((FIBPanelView) view).updateBorder();
+				} else if (n.getAttribute() == FIBPanel.Parameters.layout || n.getAttribute() == FIBPanel.Parameters.flowAlignment
+						|| n.getAttribute() == FIBPanel.Parameters.boxLayoutAxis || n.getAttribute() == FIBPanel.Parameters.vGap
+						|| n.getAttribute() == FIBPanel.Parameters.hGap || n.getAttribute() == FIBPanel.Parameters.rows
+						|| n.getAttribute() == FIBPanel.Parameters.cols || n.getAttribute() == FIBPanel.Parameters.protectContent) {
+					((FIBPanelView) view).updateLayout();
+				}
+			}
+		}
+
+		if (o instanceof FIBWidget) {
+			FIBWidgetView widgetView = (FIBWidgetView) view;
+			if (dataModification instanceof FIBAttributeNotification) {
+				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
 				if (n.getAttribute() == FIBWidget.Parameters.manageDynamicModel) {
 					widgetView.getComponent().updateBindingModel();
-				}
-				else if (n.getAttribute() == FIBWidget.Parameters.readOnly) {
+				} else if (n.getAttribute() == FIBWidget.Parameters.readOnly) {
 					widgetView.updateEnability();
 				}
 			}
 		}
 
-		if (o instanceof FIBMultipleValues) 
-		{
+		if (o instanceof FIBMultipleValues) {
 			if (dataModification instanceof FIBAttributeNotification) {
-				FIBAttributeNotification n = (FIBAttributeNotification)dataModification;
-				if (n.getAttribute() == FIBMultipleValues.Parameters.staticList
-						|| n.getAttribute() == FIBMultipleValues.Parameters.list
+				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
+				if (n.getAttribute() == FIBMultipleValues.Parameters.staticList || n.getAttribute() == FIBMultipleValues.Parameters.list
 						|| n.getAttribute() == FIBMultipleValues.Parameters.array) {
 					view.updateDataObject(view.getDataObject());
 				}
 			}
 		}
 
-		if (o instanceof FIBComponent) 
-		{
+		if (o instanceof FIBNumber) {
 			if (dataModification instanceof FIBAttributeNotification) {
-				FIBAttributeNotification n = (FIBAttributeNotification)dataModification;
-				if (n.getAttribute() == FIBComponent.Parameters.constraints
-						|| n.getAttribute() == FIBComponent.Parameters.width
-						|| n.getAttribute() == FIBComponent.Parameters.height
-						|| n.getAttribute() == FIBComponent.Parameters.minWidth
-						|| n.getAttribute() == FIBComponent.Parameters.minHeight
-						|| n.getAttribute() == FIBComponent.Parameters.maxWidth
+				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
+				if (n.getAttribute() == FIBNumber.Parameters.allowsNull) {
+					((FIBNumberWidget<?>) view).updateCheckboxVisibility();
+				} else if (n.getAttribute() == FIBNumber.Parameters.columns) {
+					((FIBNumberWidget<?>) view).updateColumns();
+				}
+			}
+		}
+
+		if (o instanceof FIBFont) {
+			FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
+			if (n.getAttribute() == FIBFont.Parameters.allowsNull) {
+				((FIBFontWidget) view).updateCheckboxVisibility();
+			}
+		}
+		if (o instanceof FIBColor) {
+			FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
+			if (n.getAttribute() == FIBColor.Parameters.allowsNull) {
+				((FIBColorWidget) view).updateCheckboxVisibility();
+			}
+		}
+
+		/*
+		 * if (o instanceof FIBContainer) { if (dataModification instanceof FIBAttributeNotification) { FIBAttributeNotification n =
+		 * (FIBAttributeNotification) dataModification; if (n.getAttribute() == FIBContainer.Parameters.subComponents && view instanceof
+		 * FIBContainerView) { ((FIBContainerView) view).updateLayout(); } } }
+		 */
+
+		if (o instanceof FIBComponent) {
+			if (dataModification instanceof FIBAttributeNotification) {
+				FIBAttributeNotification n = (FIBAttributeNotification) dataModification;
+				if (n.getAttribute() == FIBComponent.Parameters.constraints || n.getAttribute() == FIBComponent.Parameters.width
+						|| n.getAttribute() == FIBComponent.Parameters.height || n.getAttribute() == FIBComponent.Parameters.minWidth
+						|| n.getAttribute() == FIBComponent.Parameters.minHeight || n.getAttribute() == FIBComponent.Parameters.maxWidth
 						|| n.getAttribute() == FIBComponent.Parameters.maxHeight
 						|| n.getAttribute() == FIBComponent.Parameters.useScrollBar
 						|| n.getAttribute() == FIBComponent.Parameters.horizontalScrollbarPolicy
 						|| n.getAttribute() == FIBComponent.Parameters.verticalScrollbarPolicy) {
 					FIBView parentView = view.getParentView();
 					FIBEditorController controller = getEditorController();
-					if (parentView instanceof FIBPanelView) ((FIBPanelView)parentView).updateLayout();
-					if (parentView instanceof FIBTabPanelView) ((FIBTabPanelView)parentView).updateLayout();
+					if (parentView instanceof FIBContainerView) {
+						((FIBContainerView) parentView).updateLayout();
+					}
 					controller.notifyFocusedAndSelectedObject();
-				}
-				else if (n.getAttribute() == FIBComponent.Parameters.data) {
+				} else if (n.getAttribute() == FIBComponent.Parameters.data) {
 					view.updateDataObject(view.getDataObject());
-				}
-				else if (n.getAttribute() == FIBComponent.Parameters.font) {
-					((FIBView)view).updateFont();
-				}
-				else if (n.getAttribute() == FIBComponent.Parameters.backgroundColor
+				} else if (n.getAttribute() == FIBComponent.Parameters.font) {
+					((FIBView) view).updateFont();
+				} else if (n.getAttribute() == FIBComponent.Parameters.backgroundColor
 						|| n.getAttribute() == FIBComponent.Parameters.foregroundColor
 						|| n.getAttribute() == FIBComponent.Parameters.opaque) {
-					((FIBView)view).updateGraphicalProperties();
-					((FIBView)view).getJComponent().revalidate();
-					((FIBView)view).getJComponent().repaint();
+					((FIBView) view).updateGraphicalProperties();
+					((FIBView) view).getJComponent().revalidate();
+					((FIBView) view).getJComponent().repaint();
 				}
 			}
 		}
 	}
-	
-	public static class FIBDropTarget extends DropTarget
-	{
+
+	public static class FIBDropTarget extends DropTarget {
 		private FIBEditableView editableView;
 		private PlaceHolder placeHolder = null;
-		
-		public FIBDropTarget(FIBEditableView editableView) 
-		{
-			super(editableView.getJComponent(), DnDConstants.ACTION_COPY, editableView.getEditorController().getPalette().buildPaletteDropListener(editableView.getJComponent(),editableView.getEditorController()),true);
+
+		public FIBDropTarget(FIBEditableView editableView) {
+			super(editableView.getJComponent(), DnDConstants.ACTION_COPY | DnDConstants.ACTION_MOVE, editableView.getEditorController()
+					.buildPaletteDropListener(editableView, null), true);
 			this.editableView = editableView;
-			logger.fine("Made FIBDropTarget for "+getFIBComponent());
+			logger.fine("Made FIBDropTarget for " + getFIBComponent());
 		}
-		
-		public FIBDropTarget(PlaceHolder placeHolder) 
-		{
-			super(placeHolder, DnDConstants.ACTION_COPY, placeHolder.getView().getEditorController().getPalette().buildPaletteDropListener(placeHolder,placeHolder.getView().getEditorController()),true);
+
+		public FIBDropTarget(PlaceHolder placeHolder) {
+			super(placeHolder, DnDConstants.ACTION_COPY | DnDConstants.ACTION_MOVE, placeHolder.getView().getEditorController()
+					.buildPaletteDropListener(placeHolder.getView(), placeHolder), true);
 			this.placeHolder = placeHolder;
 			this.editableView = placeHolder.getView();
-			logger.fine("Made FIBDropTarget for "+getFIBComponent());
+			logger.fine("Made FIBDropTarget for " + getFIBComponent());
 		}
-		
-		public PlaceHolder getPlaceHolder() 
-		{
+
+		public PlaceHolder getPlaceHolder() {
 			return placeHolder;
 		}
-		
-		public boolean isPlaceHolder()
-		{
+
+		public boolean isPlaceHolder() {
 			return placeHolder != null;
 		}
-		
-		public FIBComponent getFIBComponent() 
-		{
+
+		public FIBComponent getFIBComponent() {
 			return editableView.getComponent();
 		}
-		
-		public FIBEditorController getFIBEditorController()
-		{
+
+		public FIBEditorController getFIBEditorController() {
 			return editableView.getEditorController();
 		}
 
 	}
+
+	/**
+	 * DGListener a listener that will start the drag. has access to top level's dsListener and dragSource
+	 * 
+	 * @see java.awt.dnd.DragGestureListener
+	 * @see java.awt.dnd.DragSource
+	 * @see java.awt.datatransfer.StringSelection
+	 */
+	class MoveDGListener implements DragGestureListener {
+		/**
+		 * Start the drag if the operation is ok. uses java.awt.datatransfer.StringSelection to transfer the label's data
+		 * 
+		 * @param e
+		 *            the event object
+		 */
+		@Override
+		public void dragGestureRecognized(DragGestureEvent e) {
+			logger.fine("dragGestureRecognized");
+
+			// if the action is ok we go ahead
+			// otherwise we punt
+			if ((e.getDragAction() & dragAction) == 0) {
+				return;
+				// get the label's text and put it inside a Transferable
+				// Transferable transferable = new StringSelection(
+				// DragLabel.this.getText() );
+			}
+
+			ExistingElementDrag transferable = new ExistingElementDrag(new DraggedFIBComponent(view.getComponent()), e.getDragOrigin());
+
+			try {
+				// initial cursor, transferrable, dsource listener
+				e.startDrag(FIBEditorPalette.dropKO, transferable, dsListener);
+				logger.info("Starting existing element drag for " + view.getComponent());
+				// getDrawingView().captureDraggedNode(PaletteElementView.this, e);
+			} catch (Exception idoe) {
+				idoe.printStackTrace();
+				logger.warning("Unexpected exception " + idoe);
+			}
+		}
+
+	}
+
+	/**
+	 * DSListener a listener that will track the state of the DnD operation
+	 * 
+	 * @see java.awt.dnd.DragSourceListener
+	 * @see java.awt.dnd.DragSource
+	 * @see java.awt.datatransfer.StringSelection
+	 */
+	public class MoveDSListener implements DragSourceListener {
+
+		/**
+		 * @param e
+		 *            the event
+		 */
+		@Override
+		public void dragDropEnd(DragSourceDropEvent e) {
+
+			System.out.println("dragDropEnd in MoveDSListener");
+
+			// getDrawingView().resetCapturedNode();
+			if (!e.getDropSuccess()) {
+				if (logger.isLoggable(Level.INFO)) {
+					logger.info("Dropping was not successful");
+				}
+				return;
+			}
+			/*
+			 * the dropAction should be what the drop target specified in acceptDrop
+			 */
+			// this is the action selected by the drop target
+			if (e.getDropAction() == DnDConstants.ACTION_MOVE) {
+				System.out.println("Tiens, que se passe-t-il donc ?");
+			}
+
+		}
+
+		/**
+		 * @param e
+		 *            the event
+		 */
+		@Override
+		public void dragEnter(DragSourceDragEvent e) {
+			DragSourceContext context = e.getDragSourceContext();
+			// System.out.println("dragEnter() with "+context+" component="+e.getSource());
+			// intersection of the users selected action, and the source and
+			// target actions
+			int myaction = e.getDropAction();
+			if ((myaction & dragAction) != 0) {
+				context.setCursor(DragSource.DefaultCopyDrop);
+			} else {
+				context.setCursor(DragSource.DefaultCopyNoDrop);
+			}
+		}
+
+		/**
+		 * @param e
+		 *            the event
+		 */
+		@Override
+		public void dragOver(DragSourceDragEvent e) {
+
+		}
+
+		/**
+		 * @param e
+		 *            the event
+		 */
+		@Override
+		public void dragExit(DragSourceEvent e) {
+
+		}
+
+		/**
+		 * for example, press shift during drag to change to a link action
+		 * 
+		 * @param e
+		 *            the event
+		 */
+		@Override
+		public void dropActionChanged(DragSourceDragEvent e) {
+			DragSourceContext context = e.getDragSourceContext();
+			context.setCursor(DragSource.DefaultCopyNoDrop);
+		}
+	}
+
 }

@@ -50,12 +50,12 @@ public class CreateERDiagram extends FlexoAction<CreateERDiagram, DMObject, DMEn
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMObject object, Vector<DMEntity> globalSelection) {
-			return (object instanceof DMModel || object instanceof DMEntity);
+		public boolean isVisibleForSelection(DMObject object, Vector<DMEntity> globalSelection) {
+			return object instanceof DMModel || object instanceof DMEntity;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMObject object, Vector<DMEntity> globalSelection) {
+		public boolean isEnabledForSelection(DMObject object, Vector<DMEntity> globalSelection) {
 			return isVisibleForSelection(object, globalSelection);
 		}
 

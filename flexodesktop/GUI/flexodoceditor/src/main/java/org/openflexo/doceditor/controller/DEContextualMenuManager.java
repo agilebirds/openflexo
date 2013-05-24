@@ -22,26 +22,18 @@ package org.openflexo.doceditor.controller;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.ContextualMenuManager;
 
 public class DEContextualMenuManager extends ContextualMenuManager {
 
-	private DEController _controller;
-
-	public DEContextualMenuManager(DESelectionManager selectionManager, FlexoEditor editor, DEController controller) {
-		super(selectionManager, editor);
-		_controller = controller;
+	public DEContextualMenuManager(DESelectionManager selectionManager, DEController controller) {
+		super(selectionManager, controller);
 	}
 
 	@Override
 	public FlexoModelObject getFocusedObject(Component focusedComponent, MouseEvent e) {
 		return super.getFocusedObject(focusedComponent, e);
-	}
-
-	public DEController getController() {
-		return _controller;
 	}
 
 }

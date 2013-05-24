@@ -70,7 +70,7 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 	private Color rectangleSelectingSelectionColor = Color.BLUE;
 	private Color focusColor = Color.RED;
 	private Color selectionColor = Color.BLUE;
-	private boolean drawWorkingArea = true;
+	private boolean drawWorkingArea = false;
 	private boolean isResizable = false;
 	protected DrawingDecorationPainter decorationPainter;
 
@@ -111,7 +111,6 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 					MouseClickControlActionType.SELECTION));
 			addToMouseDragControls(MouseDragControl.makeMouseDragControl("Rectangle selection", MouseButton.LEFT,
 					MouseDragControlActionType.RECTANGLE_SELECTING));
-			addToMouseDragControls(MouseDragControl.makeMouseDragControl("Zoom", MouseButton.RIGHT, MouseDragControlActionType.ZOOM));
 		}
 		width = 1000;
 		height = 1000;
@@ -347,7 +346,9 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 
 		graphics.setDefaultForeground(fgStyle);
 		graphics.setDefaultBackground(bgStyle);
-		getWorkingArea().paint(graphics);
+		if (drawWorkingArea) {
+			getWorkingArea().paint(graphics);
+		}
 		// If there is a decoration painter and decoration should be painted BEFORE shape, fo it now
 		if (decorationPainter != null && !decorationPainter.paintBeforeDrawing()) {
 			decorationPainter.paintDecoration(decorationGraphics);
@@ -367,8 +368,13 @@ public class DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M
 	}
 
 	@Override
-	public boolean hasText() {
+	public final boolean hasText() {
 		return false;
+	}
+
+	@Override
+	public final String getText() {
+		return null;
 	}
 
 	@Override

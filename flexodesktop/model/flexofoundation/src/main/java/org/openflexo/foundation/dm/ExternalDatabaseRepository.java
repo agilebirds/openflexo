@@ -22,8 +22,6 @@ package org.openflexo.foundation.dm;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.dm.action.ImportDMEOModel;
 import org.openflexo.foundation.dm.eo.DMEORepository;
 import org.openflexo.foundation.xml.FlexoDMBuilder;
 
@@ -73,18 +71,10 @@ public class ExternalDatabaseRepository extends DMEORepository {
 	 * @return
 	 */
 	public static ExternalDatabaseRepository createNewExternalDatabaseRepository(DMModel dmModel, String repositoryName) {
-		Vector eoModelFiles = new Vector();
 		ExternalDatabaseRepository newExternalDatabaseRepository = new ExternalDatabaseRepository(dmModel);
 		newExternalDatabaseRepository.setName(repositoryName);
 		dmModel.addToExternalDatabaseRepositories(newExternalDatabaseRepository);
 		return newExternalDatabaseRepository;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(ImportDMEOModel.actionType);
-		return returned;
 	}
 
 	@Override

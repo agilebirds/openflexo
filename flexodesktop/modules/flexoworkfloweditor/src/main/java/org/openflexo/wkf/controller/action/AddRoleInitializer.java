@@ -20,7 +20,7 @@
 package org.openflexo.wkf.controller.action;
 
 import java.awt.Color;
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -43,16 +43,17 @@ import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.wkf.DuplicateRoleException;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.Role;
+import org.openflexo.foundation.wkf.WorkflowModelObject;
 import org.openflexo.foundation.wkf.action.AddRole;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.wkf.roleeditor.RoleEditorController;
 import org.openflexo.wkf.roleeditor.RoleEditorView;
 
-public class AddRoleInitializer extends ActionInitializer {
+public class AddRoleInitializer extends ActionInitializer<AddRole, WorkflowModelObject, WorkflowModelObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -69,7 +70,7 @@ public class AddRoleInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddRole> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddRole>() {
 			@Override
-			public boolean run(ActionEvent e, AddRole action) {
+			public boolean run(EventObject e, AddRole action) {
 				if (action.getContext() instanceof DuplicateRoleException) {
 					return true;
 				}
@@ -105,7 +106,7 @@ public class AddRoleInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddRole> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddRole>() {
 			@Override
-			public boolean run(ActionEvent e, AddRole action) {
+			public boolean run(EventObject e, AddRole action) {
 				Role newRole = action.getNewRole();
 				if (e != null && e.getSource() instanceof BrowserActionSource) {
 					ProjectBrowser browser = ((BrowserActionSource) e.getSource()).getBrowser();
@@ -116,16 +117,13 @@ public class AddRoleInitializer extends ActionInitializer {
 						}
 					}
 				}
-				if (e != null) {
-					getControllerActionInitializer().getWKFSelectionManager().setSelectedObject(newRole);
-				}
+				getControllerActionInitializer().getSelectionManager().setSelectedObject(newRole);
 				// getControllerActionInitializer().getWKFController().getWorkflowBrowser().focusOn(newRole);
 				if (getControllerActionInitializer().getWKFController().getCurrentPerspective() == getControllerActionInitializer()
 						.getWKFController().ROLE_EDITOR_PERSPECTIVE) {
-					RoleEditorController controller = getControllerActionInitializer().getWKFController().ROLE_EDITOR_PERSPECTIVE
-							.getRoleEditorController();
-					if (controller != null) {
-						RoleEditorView drawing = controller.getDrawingView();
+					ModuleView<?> moduleView = getController().moduleViewForObject(newRole.getRoleList(), false);
+					if (moduleView instanceof RoleEditorView) {
+						RoleEditorView drawing = (RoleEditorView) moduleView;
 						if (drawing != null) {
 							ShapeGraphicalRepresentation<?> roleGR = (ShapeGraphicalRepresentation<?>) drawing.getDrawing()
 									.getGraphicalRepresentation(newRole);
@@ -142,6 +140,12 @@ public class AddRoleInitializer extends ActionInitializer {
 							}
 						}
 					}
+				} else if (getControllerActionInitializer().getWKFController().getCurrentPerspective() == getControllerActionInitializer()
+						.getWKFController().PROCESS_EDITOR_PERSPECTIVE
+						&& getController().getCurrentModuleView() != null
+						&& getController().getCurrentModuleView().getRepresentedObject() instanceof FlexoWorkflow) {
+					getControllerActionInitializer().getWKFController().getControllerModel()
+							.setCurrentPerspective(getControllerActionInitializer().getWKFController().ROLE_EDITOR_PERSPECTIVE);
 				}
 				return true;
 			}

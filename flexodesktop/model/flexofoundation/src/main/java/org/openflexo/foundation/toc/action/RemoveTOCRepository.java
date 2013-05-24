@@ -23,6 +23,7 @@ import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.toc.TOCObject;
@@ -34,12 +35,12 @@ public class RemoveTOCRepository extends FlexoAction<RemoveTOCRepository, TOCRep
 			"remove_toc", FlexoActionType.defaultGroup, FlexoActionType.DELETE_ACTION_TYPE) {
 
 		@Override
-		protected boolean isEnabledForSelection(TOCRepository object, Vector<TOCObject> globalSelection) {
+		public boolean isEnabledForSelection(TOCRepository object, Vector<TOCObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(TOCRepository object, Vector<TOCObject> globalSelection) {
+		public boolean isVisibleForSelection(TOCRepository object, Vector<TOCObject> globalSelection) {
 			return object != null;
 		}
 
@@ -49,6 +50,10 @@ public class RemoveTOCRepository extends FlexoAction<RemoveTOCRepository, TOCRep
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, TOCRepository.class);
+	}
 
 	protected RemoveTOCRepository(TOCRepository focusedObject, Vector<TOCObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

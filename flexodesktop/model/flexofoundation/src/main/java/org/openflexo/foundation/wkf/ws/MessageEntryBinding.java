@@ -26,13 +26,11 @@ import org.openflexo.foundation.bindings.AbstractBinding;
 import org.openflexo.foundation.bindings.Bindable;
 import org.openflexo.foundation.bindings.BindingModel;
 import org.openflexo.foundation.bindings.BindingValue;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.wkf.edge.MessageEdge;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.inspector.InspectableObject;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Please comment this class
@@ -104,8 +102,8 @@ public class MessageEntryBinding extends FlexoModelObject implements Inspectable
 		// logger.info("_messageBindings="+_messageBindings);
 		// if (_messageBindings!=null) logger.info("_messageBindings.getMessageDefinition()="+_messageBindings.getMessageDefinition());
 		// logger.info("_bindingDefinitionName="+_bindingDefinitionName);
-		if ((_bindingDefinition == null) && (_messageBindings != null) && (_messageBindings.getMessageDefinition() != null)
-				&& (_bindingDefinitionName != null)) {
+		if (_bindingDefinition == null && _messageBindings != null && _messageBindings.getMessageDefinition() != null
+				&& _bindingDefinitionName != null) {
 			_bindingDefinition = _messageBindings.getMessageDefinition().entryWithName(_bindingDefinitionName);
 			if (getBindingValue() != null) {
 				if (getBindingValue().getBindingDefinition() == null) {
@@ -144,10 +142,10 @@ public class MessageEntryBinding extends FlexoModelObject implements Inspectable
 
 	public void setMessageBindings(MessageBindings messageBindings) {
 		_messageBindings = messageBindings;
-		if ((_bindingValue != null) && (getMessageEdge() != null)) {
+		if (_bindingValue != null && getMessageEdge() != null) {
 			_bindingValue.setOwner(getMessageEdge());
 		}
-		if ((_messageBindings != null) && (_messageBindings.getMessageDefinition() != null)) {
+		if (_messageBindings != null && _messageBindings.getMessageDefinition() != null) {
 			if (_bindingDefinitionName != null) {
 				setBindingDefinition(_messageBindings.getMessageDefinition().entryWithName(_bindingDefinitionName));
 			}
@@ -173,25 +171,9 @@ public class MessageEntryBinding extends FlexoModelObject implements Inspectable
 	}
 
 	@Override
-	public FlexoProject getProject() {
-		if (_messageBindings != null) {
-			return _messageBindings.getProject();
-		}
-		return null;
-	}
-
-	@Override
 	public String getFullyQualifiedName() {
 		return (_messageBindings != null ? _messageBindings.getFullyQualifiedName() : "null") + "." + getBindingDefinitionName() + "="
 				+ (getBindingValue() == null ? "null" : getBindingValue().getStringRepresentation());
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		if (_messageBindings != null) {
-			return _messageBindings.getXMLMapping();
-		}
-		return null;
 	}
 
 	@Override

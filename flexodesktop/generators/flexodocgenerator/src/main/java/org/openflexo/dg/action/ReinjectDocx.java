@@ -51,7 +51,8 @@ import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.InvalidArgumentException;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGObject;
-import org.openflexo.foundation.cg.GenerationRepository;
+import org.openflexo.foundation.cg.DGRepository;
+import org.openflexo.foundation.cg.GeneratedDoc;
 import org.openflexo.foundation.cg.action.AbstractGCAction;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
@@ -86,12 +87,12 @@ public class ReinjectDocx extends AbstractGCAction<ReinjectDocx, CGObject> {
 			"reinject_docx", FlexoActionType.importMenu, FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		@Override
-		protected boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
+		public boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection) {
+		public boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection) {
 			return true;
 		}
 
@@ -107,7 +108,8 @@ public class ReinjectDocx extends AbstractGCAction<ReinjectDocx, CGObject> {
 	}
 
 	static {
-		FlexoModelObject.addActionForClass(ReinjectDocx.actionType, GenerationRepository.class);
+		FlexoModelObject.addActionForClass(ReinjectDocx.actionType, DGRepository.class);
+		FlexoModelObject.addActionForClass(ReinjectDocx.actionType, GeneratedDoc.class);
 	}
 
 	@Override

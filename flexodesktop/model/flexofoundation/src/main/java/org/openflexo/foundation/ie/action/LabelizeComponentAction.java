@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.IEWOComponent;
@@ -57,17 +58,21 @@ public class LabelizeComponentAction extends FlexoAction<LabelizeComponentAction
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ComponentDefinition object, Vector<ComponentDefinition> globalSelection) {
+		public boolean isVisibleForSelection(ComponentDefinition object, Vector<ComponentDefinition> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ComponentDefinition object, Vector<ComponentDefinition> globalSelection) {
+		public boolean isEnabledForSelection(ComponentDefinition object, Vector<ComponentDefinition> globalSelection) {
 			return object instanceof TopComponentContainer || object instanceof OperationComponentDefinition
 					|| object instanceof PopupComponentDefinition || object instanceof TabComponentDefinition;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, ComponentDefinition.class);
+	}
 
 	protected LabelizeComponentAction(ComponentDefinition focusedObject, Vector<ComponentDefinition> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

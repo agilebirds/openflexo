@@ -45,7 +45,7 @@ public class CreateVerticalLineWithPoint extends Edition {
 	public void paintEdition(FGEDrawingGraphics graphics, FGEPoint lastMouseLocation) {
 		if (currentStep == 0) {
 			graphics.setDefaultForeground(focusedForegroundStyle);
-			(FGELine.makeVerticalLine(lastMouseLocation)).paint(graphics);
+			FGELine.makeVerticalLine(lastMouseLocation).paint(graphics);
 		}
 	}
 }

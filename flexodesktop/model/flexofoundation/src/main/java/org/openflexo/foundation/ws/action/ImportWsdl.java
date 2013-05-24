@@ -23,45 +23,38 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.ws.WSObject;
 
-public class ImportWsdl extends CreateNewWebService {
+public class ImportWsdl extends AbstractCreateNewWebService<ImportWsdl> {
 
 	static final Logger logger = Logger.getLogger(ImportWsdl.class.getPackage().getName());
 
-	public static FlexoActionType actionType = new FlexoActionType("import_wsdl", FlexoActionType.importMenu, FlexoActionType.defaultGroup) {
+	public static FlexoActionType<ImportWsdl, WSObject, WSObject> actionType = new FlexoActionType<ImportWsdl, WSObject, WSObject>(
+			"import_wsdl", FlexoActionType.importMenu, FlexoActionType.defaultGroup) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public FlexoAction makeNewAction(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+		public ImportWsdl makeNewAction(WSObject focusedObject, Vector<WSObject> globalSelection, FlexoEditor editor) {
 			return new ImportWsdl(focusedObject, globalSelection, editor);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(WSObject object, Vector<WSObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isEnabledForSelection(WSObject object, Vector<WSObject> globalSelection) {
 			return true;
 		}
 
 	};
 
-	ImportWsdl(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
+	ImportWsdl(WSObject focusedObject, Vector<WSObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
-	}
-
-	@Override
-	protected void doAction(Object context) throws FlexoException {
-		super.doAction(context);
-
 	}
 
 }

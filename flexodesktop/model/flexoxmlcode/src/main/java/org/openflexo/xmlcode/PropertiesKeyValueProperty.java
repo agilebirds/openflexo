@@ -33,6 +33,8 @@ package org.openflexo.xmlcode;
  */
 public class PropertiesKeyValueProperty extends HashtableKeyValueProperty {
 
+	private boolean safe = false;
+
 	/**
 	 * Creates a new <code>PropertiesKeyValueProperty</code> instance, given an object class.<br>
 	 * To be usable, this property should be set with a correct object (according to object class)
@@ -44,7 +46,7 @@ public class PropertiesKeyValueProperty extends HashtableKeyValueProperty {
 	 * @exception InvalidKeyValuePropertyException
 	 *                if an error occurs
 	 */
-	public PropertiesKeyValueProperty(Class anObjectClass, String propertyName, boolean setMethodIsMandatory)
+	public PropertiesKeyValueProperty(Class<?> anObjectClass, String propertyName, boolean setMethodIsMandatory)
 			throws InvalidKeyValuePropertyException {
 
 		super(anObjectClass, propertyName, setMethodIsMandatory);
@@ -81,6 +83,14 @@ public class PropertiesKeyValueProperty extends HashtableKeyValueProperty {
 	 */
 	public void removeWithKeyValue(String aKey, Object anObject) {
 		super.removeWithKeyValue(aKey, anObject);
+	}
+
+	public boolean isSafe() {
+		return safe;
+	}
+
+	public void setSafe(boolean safe) {
+		this.safe = safe;
 	}
 
 	public static class UndecodableProperty {

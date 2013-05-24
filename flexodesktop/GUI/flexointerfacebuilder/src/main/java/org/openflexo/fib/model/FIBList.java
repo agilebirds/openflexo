@@ -23,8 +23,6 @@ import java.awt.Color;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
-import javax.swing.UIManager;
-
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
@@ -84,18 +82,18 @@ public class FIBList extends FIBMultipleValues {
 
 	private DataBinding selected;
 
-	private int visibleRowCount = 5;
-	private int rowHeight = 20;
+	private Integer visibleRowCount = 5;
+	private Integer rowHeight;
 	private boolean createNewRowOnClick = false;
 	private boolean boundToSelectionManager = false;
 
 	private SelectionMode selectionMode = SelectionMode.MultipleIntervalSelection;
 
-	private Color textSelectionColor = UIManager.getColor("List.selectionForeground");
-	private Color textNonSelectionColor = UIManager.getColor("List.foreground");
-	private Color backgroundSelectionColor = UIManager.getColor("List.selectionBackground");
-	private Color backgroundSecondarySelectionColor = SECONDARY_SELECTION_COLOR;
-	private Color backgroundNonSelectionColor = UIManager.getColor("List.background");
+	private Color textSelectionColor;
+	private Color textNonSelectionColor;
+	private Color backgroundSelectionColor;
+	private Color backgroundSecondarySelectionColor;
+	private Color backgroundNonSelectionColor;
 
 	private LayoutOrientation layoutOrientation = LayoutOrientation.vertical;
 
@@ -137,11 +135,11 @@ public class FIBList extends FIBMultipleValues {
 		}
 	}
 
-	public int getVisibleRowCount() {
+	public Integer getVisibleRowCount() {
 		return visibleRowCount;
 	}
 
-	public void setVisibleRowCount(int visibleRowCount) {
+	public void setVisibleRowCount(Integer visibleRowCount) {
 		FIBAttributeNotification<Integer> notification = requireChange(Parameters.visibleRowCount, visibleRowCount);
 		if (notification != null) {
 			this.visibleRowCount = visibleRowCount;
@@ -149,11 +147,11 @@ public class FIBList extends FIBMultipleValues {
 		}
 	}
 
-	public int getRowHeight() {
+	public Integer getRowHeight() {
 		return rowHeight;
 	}
 
-	public void setRowHeight(int rowHeight) {
+	public void setRowHeight(Integer rowHeight) {
 		FIBAttributeNotification<Integer> notification = requireChange(Parameters.rowHeight, rowHeight);
 		if (notification != null) {
 			this.rowHeight = rowHeight;

@@ -38,12 +38,12 @@ public class AddArtefactMetricsValue extends AddMetricsValue<AddArtefactMetricsV
 			"add_metrics_value", FlexoActionType.ADD_ACTION_TYPE) {
 
 		@Override
-		protected boolean isEnabledForSelection(WKFArtefact object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(WKFArtefact object, Vector<WKFObject> globalSelection) {
 			return object != null && !object.isImported();
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(WKFArtefact object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(WKFArtefact object, Vector<WKFObject> globalSelection) {
 			return false;
 		}
 

@@ -60,7 +60,7 @@ public class ReviewCopiedWOModel extends AbstractTableModel {
 			String componentName = node.getWOComponentName();
 			oldName = componentName;
 			String resourceIdentifier = FlexoOperationComponentResource.resourceIdentifierForName(componentName);
-			if ((process != null) && (process.getProject() != null)) {
+			if (process != null && process.getProject() != null) {
 				int j = 0;
 				String tryMe = resourceIdentifier;
 				while (process.getProject().isRegistered(tryMe)) {
@@ -127,7 +127,7 @@ public class ReviewCopiedWOModel extends AbstractTableModel {
 
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		return (((columnIndex == 0) || (columnIndex == 3)) ? true : false);
+		return columnIndex == 0 || columnIndex == 3 ? true : false;
 	}
 
 	public CopiedWO elementAt(int rowIndex) {

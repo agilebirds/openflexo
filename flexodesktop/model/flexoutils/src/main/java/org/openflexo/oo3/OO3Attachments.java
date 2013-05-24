@@ -76,7 +76,7 @@ public class OO3Attachments implements XMLSerializable {
 	protected void saveToDirectory(File directory) {
 		for (int i = 0; i < attachments.size(); i++) {
 			File curFile = attachments.get(i).file;
-			if (curFile.isFile() && (curFile.exists())) {
+			if (curFile.isFile() && curFile.exists()) {
 				try {
 					FileInputStream is = new FileInputStream(curFile);
 					copyFileToDir(is, curFile.getName(), directory);

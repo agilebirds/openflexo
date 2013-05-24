@@ -140,12 +140,43 @@ public class FlexoFileChooser {
 
 	int _mode;
 
+	/**
+	 * <p>
+	 * All extensions should be prefaced with '*.'
+	 * <p>
+	 * For more than one entry, use the ',' character
+	 * <p>
+	 * Example: '*.xsd, *.owl'
+	 * <p>
+	 * Note: trims whitespaces before and after extensions, and ignores case
+	 * 
+	 * @param filter
+	 */
 	public void setFileFilterAsString(final String filter) {
-		if (filter == null) {
+		if (filter == null || filter.trim().length() == 0) {
 			return;
 		}
-		final String endsWith = filter.substring(filter.indexOf("*") + 1);
+		final String[] extensions = filter.split("[,;]");
+		for (int i = 0; i < extensions.length; i++) {
+			// We add .*? at the beginning to always match the beginning of the string
+			// We trim all starting/ending whitespaces
+			// We replace all '.' by '\.' because a dot means "match anything" but here we want to actually match a '.'
+			// We replace all '*' with '.*?' because for a human, '*' means anything while for regexp '*' is a quantifier.
+			// We also add a '?' to make it reluctant (otherwise .* will eat up everything and the final extension could be not matched)
+			// We make it lower case so that the filter is not case sensitive.
+			extensions[i] = ".*?" + extensions[i].trim().replace(".", "\\.").replace("*", ".*?").toLowerCase();
+		}
 		setFileFilter(new FileFilter() {
+			private boolean accept(String name) {
+				String lowerCase = name.toLowerCase();
+				for (String extension : extensions) {
+					if (lowerCase.matches(extension)) {
+						return true;
+					}
+				}
+				return false;
+			}
+
 			@Override
 			public boolean accept(File f) {
 				if (getImplementationType() == ImplementationType.FileDialogImplementation) {
@@ -157,9 +188,9 @@ public class FlexoFileChooser {
 					}
 				}
 				if (_mode == JFileChooser.DIRECTORIES_ONLY) {
-					return f.isDirectory() && f.getName().endsWith(endsWith);
+					return f.isDirectory() && accept(f.getName());
 				} else {
-					return f.isDirectory() || f.getName().endsWith(endsWith);
+					return f.isDirectory() || accept(f.getName());
 				}
 			}
 

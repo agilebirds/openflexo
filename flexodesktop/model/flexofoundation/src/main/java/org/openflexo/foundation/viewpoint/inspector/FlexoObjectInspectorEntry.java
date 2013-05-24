@@ -20,6 +20,8 @@
 package org.openflexo.foundation.viewpoint.inspector;
 
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ProcessFolder;
 import org.openflexo.foundation.wkf.Role;
@@ -37,7 +39,11 @@ public class FlexoObjectInspectorEntry extends InspectorEntry {
 
 	// TODO: unify this this FlexoObjectType in FlexoObjectParameter and FlexoModelObjectPatternRole
 	public enum FlexoObjectType {
-		Process, ProcessFolder, Role, Activity, Operation, Action
+		Process, ProcessFolder, Role, Activity, Operation, Action, Screen
+	}
+
+	public FlexoObjectInspectorEntry(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	private FlexoObjectType flexoObjectType;
@@ -60,6 +66,8 @@ public class FlexoObjectInspectorEntry extends InspectorEntry {
 			return OperationNode.class;
 		case Action:
 			return ActionNode.class;
+		case Screen:
+			return OperationComponentDefinition.class;
 		default:
 			return FlexoModelObject.class;
 		}
@@ -91,6 +99,8 @@ public class FlexoObjectInspectorEntry extends InspectorEntry {
 			return "OperationSelector";
 		case Action:
 			return "ActionSelector";
+		case Screen:
+			return "ComponentSelector";
 		default:
 			return "FlexoObjectSelector";
 		}

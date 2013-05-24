@@ -86,7 +86,6 @@ public class CVSRepositorySelector extends AbstractBrowserSelector<CVSRepository
 		@Override
 		public Dimension getDefaultSize() {
 			Dimension returned = _browserView.getDefaultSize();
-			returned.width = returned.width;
 			returned.height = returned.height - 100;
 			return returned;
 		}

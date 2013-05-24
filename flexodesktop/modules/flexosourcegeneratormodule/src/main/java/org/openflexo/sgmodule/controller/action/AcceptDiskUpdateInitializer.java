@@ -19,8 +19,8 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -58,20 +58,24 @@ public class AcceptDiskUpdateInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AcceptDiskUpdate> getDefaultInitializer() {
 		return new FlexoActionInitializer<AcceptDiskUpdate>() {
 			@Override
-			public boolean run(ActionEvent e, AcceptDiskUpdate action) {
+			public boolean run(EventObject e, AcceptDiskUpdate action) {
 				if (action.getFilesToAccept().size() == 0) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("no_files_selected"));
 					return false;
-				} else if (action.getFilesToAccept().size() > 1 || (!(action.getFocusedObject() instanceof CGFile))) {
+				} else if (action.getFilesToAccept().size() > 1 || !(action.getFocusedObject() instanceof CGFile)) {
 					SelectFilesPopup popup = new SelectFilesPopup(FlexoLocalization.localizedForKey("accept_disk_version"),
 							FlexoLocalization.localizedForKey("accept_disk_version_description"), "accept_disk_version",
 							action.getFilesToAccept(), action.getFocusedObject().getProject(), getControllerActionInitializer()
 									.getSGController());
-					popup.setVisible(true);
-					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getFileSet().getSelectedFiles().size() > 0)) {
-						action.setFilesToAccept(popup.getFileSet().getSelectedFiles());
-					} else {
-						return false;
+					try {
+						popup.setVisible(true);
+						if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
+							action.setFilesToAccept(popup.getFileSet().getSelectedFiles());
+						} else {
+							return false;
+						}
+					} finally {
+						popup.delete();
 					}
 				} else {
 					// 1 occurence, continue without confirmation
@@ -87,7 +91,7 @@ public class AcceptDiskUpdateInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AcceptDiskUpdate> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AcceptDiskUpdate>() {
 			@Override
-			public boolean run(ActionEvent e, AcceptDiskUpdate action) {
+			public boolean run(EventObject e, AcceptDiskUpdate action) {
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 				return true;

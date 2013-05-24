@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.DuplicateRoleException;
@@ -46,16 +47,20 @@ public class AddRoleSpecialization extends FlexoAction<AddRoleSpecialization, Ro
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(Role role, Vector<WorkflowModelObject> globalSelection) {
+		public boolean isVisibleForSelection(Role role, Vector<WorkflowModelObject> globalSelection) {
 			return role != null && !role.isImported();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(Role role, Vector<WorkflowModelObject> globalSelection) {
-			return (role != null && !role.isDefaultRole() && !role.isImported() && role.getAvailableRolesForSpecialization().size() > 0);
+		public boolean isEnabledForSelection(Role role, Vector<WorkflowModelObject> globalSelection) {
+			return role != null && !role.isDefaultRole() && !role.isImported() && role.getAvailableRolesForSpecialization().size() > 0;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, Role.class);
+	}
 
 	private Role _newParentRole;
 	private String annotation;

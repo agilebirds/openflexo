@@ -23,6 +23,9 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
+import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.model.FIBCustom;
+import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.MetricsValue;
 import org.openflexo.inspector.AbstractController;
@@ -40,7 +43,10 @@ import org.openflexo.inspector.widget.TextFieldWidget;
  * @author gpolet
  * 
  */
-public class MetricsValueInspectorWidget extends CustomInspectorWidget<MetricsValue> {
+@Deprecated
+// TODO Please refactor this widget according to new FIB Technology
+public class MetricsValueInspectorWidget extends CustomInspectorWidget<MetricsValue> implements
+		FIBCustomComponent<MetricsValue, JComponent> {
 
 	protected static final Logger logger = Logger.getLogger(MetricsValueInspectorWidget.class.getPackage().getName());
 
@@ -173,4 +179,50 @@ public class MetricsValueInspectorWidget extends CustomInspectorWidget<MetricsVa
 	public boolean disableTerminateEditOnFocusLost() {
 		return true;
 	}
+
+	@Override
+	public JComponent getJComponent() {
+		return getDynamicComponent();
+	}
+
+	@Override
+	public MetricsValue getEditedObject() {
+		return getEditedValue();
+	}
+
+	@Override
+	public void setEditedObject(MetricsValue object) {
+		setEditedValue(object);
+	}
+
+	@Override
+	public MetricsValue getRevertValue() {
+		// Not handled here
+		return null;
+	}
+
+	@Override
+	public void setRevertValue(MetricsValue object) {
+		// Not handled here
+	}
+
+	@Override
+	public void addApplyCancelListener(org.openflexo.swing.CustomPopup.ApplyCancelListener l) {
+		// Not handled here
+	}
+
+	@Override
+	public void removeApplyCancelListener(org.openflexo.swing.CustomPopup.ApplyCancelListener l) {
+		// Not handled here
+	}
+
+	@Override
+	public Class<MetricsValue> getRepresentedType() {
+		return getDefaultType();
+	}
+
+	@Override
+	public void init(FIBCustom component, FIBController controller) {
+	}
+
 }

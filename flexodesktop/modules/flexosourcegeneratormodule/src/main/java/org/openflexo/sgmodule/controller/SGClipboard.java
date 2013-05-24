@@ -88,7 +88,7 @@ public class SGClipboard extends FlexoClipboard {
 
 	@Override
 	protected boolean isCurrentSelectionValidForCopy(Vector currentlySelectedObjects) {
-		return (getSelectionManager().getSelectionSize() > 0);
+		return getSelectionManager().getSelectionSize() > 0;
 	}
 
 	protected void resetClipboard() {

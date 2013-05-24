@@ -19,15 +19,16 @@
  */
 package org.openflexo.foundation.param;
 
+import java.util.List;
 import java.util.Vector;
 
 import org.openflexo.inspector.widget.DenaliWidget;
 
 public class DynamicDropDownParameter<T> extends ParameterDefinition<T> {
 
-	private Vector<T> _availableValues;
+	private List<T> _availableValues;
 
-	public DynamicDropDownParameter(String name, String label, Vector<T> availableValues, T defaultValue) {
+	public DynamicDropDownParameter(String name, String label, List<T> availableValues, T defaultValue) {
 		super(name, label, defaultValue);
 		addParameter("dynamiclist", "params." + name + ".availableValues");
 		_availableValues = availableValues;
@@ -47,7 +48,7 @@ public class DynamicDropDownParameter<T> extends ParameterDefinition<T> {
 	}
 
 	// Override this if list not defined in constructor
-	public Vector<T> getAvailableValues() {
+	public List<T> getAvailableValues() {
 		return _availableValues;
 	}
 

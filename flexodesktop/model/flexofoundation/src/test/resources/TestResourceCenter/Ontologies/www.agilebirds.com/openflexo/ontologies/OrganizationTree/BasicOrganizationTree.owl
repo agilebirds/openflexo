@@ -1,0 +1,269 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY FlexoConceptsOntology "http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#" >
+    <!ENTITY BasicOrganizationTree "http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#"
+     xml:base="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:FlexoConceptsOntology="http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#"
+     xmlns:BasicOrganizationTree="http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#">
+    <owl:Ontology rdf:about="">
+        <owl:imports rdf:resource="http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl"/>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#inRelationWith -->
+
+    <owl:ObjectProperty rdf:about="&FlexoConceptsOntology;inRelationWith"/>
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isContainedIn -->
+
+    <owl:ObjectProperty rdf:about="#isContainedIn">
+        <rdfs:subPropertyOf rdf:resource="&FlexoConceptsOntology;inRelationWith"/>
+        <rdfs:range rdf:resource="#OrganizationCell"/>
+        <rdfs:domain rdf:resource="#OrganizationCell"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isHeadOf -->
+
+    <owl:ObjectProperty rdf:about="#isHeadOf">
+        <rdfs:subPropertyOf rdf:resource="&FlexoConceptsOntology;inRelationWith"/>
+        <rdfs:domain rdf:resource="#Manager"/>
+        <rdfs:range rdf:resource="#OrganizationCell"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isResponsibleOf -->
+
+    <owl:ObjectProperty rdf:about="#isResponsibleOf">
+        <rdfs:subPropertyOf rdf:resource="&FlexoConceptsOntology;inRelationWith"/>
+        <rdfs:domain rdf:resource="#Manager"/>
+        <rdfs:range rdf:resource="#OrganizationEmployee"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#isUnderResponsabilityOf -->
+
+    <owl:ObjectProperty rdf:about="#isUnderResponsabilityOf">
+        <rdfs:subPropertyOf rdf:resource="&FlexoConceptsOntology;inRelationWith"/>
+        <rdfs:range rdf:resource="#Manager"/>
+        <rdfs:domain rdf:resource="#OrganizationEmployee"/>
+        <owl:inverseOf rdf:resource="#isResponsibleOf"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#jobPerformedBy -->
+
+    <owl:ObjectProperty rdf:about="#jobPerformedBy">
+        <rdfs:subPropertyOf rdf:resource="&FlexoConceptsOntology;inRelationWith"/>
+        <rdfs:domain rdf:resource="#OrganizationEmployee"/>
+        <rdfs:range rdf:resource="#Person"/>
+        <owl:inverseOf rdf:resource="#worksAs"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#worksAs -->
+
+    <owl:ObjectProperty rdf:about="#worksAs">
+        <rdfs:subPropertyOf rdf:resource="&FlexoConceptsOntology;inRelationWith"/>
+        <rdfs:range rdf:resource="#OrganizationEmployee"/>
+        <rdfs:domain rdf:resource="#Person"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#worksIn -->
+
+    <owl:ObjectProperty rdf:about="#worksIn">
+        <rdfs:subPropertyOf rdf:resource="&FlexoConceptsOntology;inRelationWith"/>
+        <rdfs:range rdf:resource="#OrganizationCell"/>
+        <rdfs:domain rdf:resource="#OrganizationEmployee"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#companyName -->
+
+    <owl:DatatypeProperty rdf:about="#companyName">
+        <rdfs:domain rdf:resource="#Company"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#name -->
+
+    <owl:DatatypeProperty rdf:about="#name">
+        <rdfs:domain rdf:resource="#OrganizationCell"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#personFirstName -->
+
+    <owl:DatatypeProperty rdf:about="#personFirstName">
+        <rdfs:domain rdf:resource="#Person"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#personName -->
+
+    <owl:DatatypeProperty rdf:about="#personName">
+        <rdfs:domain rdf:resource="#Person"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#personPicture -->
+
+    <owl:DatatypeProperty rdf:about="#personPicture">
+        <rdfs:comment
+            >Stores image file path here</rdfs:comment>
+        <rdfs:domain rdf:resource="#Person"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#roleName -->
+
+    <owl:DatatypeProperty rdf:about="#roleName">
+        <rdfs:domain rdf:resource="#OrganizationEmployee"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/FlexoConceptsOntology.owl#FlexoConcept -->
+
+    <owl:Class rdf:about="&FlexoConceptsOntology;FlexoConcept"/>
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#Company -->
+
+    <owl:Class rdf:about="#Company">
+        <rdfs:subClassOf rdf:resource="#OrganizationCell"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#Department -->
+
+    <owl:Class rdf:about="#Department">
+        <rdfs:subClassOf rdf:resource="#OrganizationCell"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#Manager -->
+
+    <owl:Class rdf:about="#Manager">
+        <rdfs:subClassOf rdf:resource="#OrganizationEmployee"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#OrganizationCell -->
+
+    <owl:Class rdf:about="#OrganizationCell">
+        <rdfs:subClassOf rdf:resource="&FlexoConceptsOntology;FlexoConcept"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#OrganizationEmployee -->
+
+    <owl:Class rdf:about="#OrganizationEmployee">
+        <rdfs:subClassOf rdf:resource="&FlexoConceptsOntology;FlexoConcept"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#Person -->
+
+    <owl:Class rdf:about="#Person">
+        <rdfs:subClassOf rdf:resource="&FlexoConceptsOntology;FlexoConcept"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#SubDepartment -->
+
+    <owl:Class rdf:about="#SubDepartment">
+        <rdfs:subClassOf rdf:resource="#OrganizationCell"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.agilebirds.com/openflexo/ontologies/OrganizationTree/BasicOrganizationTree.owl#Worker -->
+
+    <owl:Class rdf:about="#Worker">
+        <rdfs:subClassOf rdf:resource="#OrganizationEmployee"/>
+    </owl:Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 2.2.1.1138) http://owlapi.sourceforge.net -->
+

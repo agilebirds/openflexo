@@ -25,7 +25,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.help.ApplicationHelpEntryPoint;
+import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 
 /**
@@ -80,12 +82,6 @@ public class ActivityNode extends AbstractActivityNode implements ApplicationHel
 		}
 	}
 
-	// Used for old models, deprecated now !
-	@Override
-	public void finalizeRoleLinking() {
-		super.finalizeRoleLinking();
-	}
-
 	/**
 	 * Overrides getClassNameKey
 	 * 
@@ -122,6 +118,26 @@ public class ActivityNode extends AbstractActivityNode implements ApplicationHel
 	public boolean mightHaveOperationPetriGraph() {
 		// Implement here some limitations if you want !
 		return true;
+	}
+
+	private boolean objectLoaded = false;
+
+	@Override
+	public void notifyObjectLoaded(FlexoModelObjectReference<?> reference) {
+		try {
+			objectLoaded = true;
+			super.notifyObjectLoaded(reference);
+		} finally {
+			objectLoaded = false;
+		}
+	}
+
+	@Override
+	public void setRole(Role aRole) {
+		super.setRole(aRole);
+		if (!isDeserializing() && aRole != null && aRole.getIsSystemRole() && !objectLoaded) {
+			setTaskType(TaskType.Service);
+		}
 	}
 
 	public TaskType getTaskType() {

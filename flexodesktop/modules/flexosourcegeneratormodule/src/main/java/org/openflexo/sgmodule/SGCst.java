@@ -33,16 +33,8 @@ public class SGCst {
 
 	public static String SG_MODULE_VERSION = "0.0.1";
 
-	public static String SG_MODULE_SHORT_NAME = "SG";
-
-	public static String SG_MODULE_NAME = "sg_module_name";
-
-	public static String SG_MODULE_DESCRIPTION = "sg_module_name_description";
-
 	public static final int MINIMUM_BROWSER_VIEW_WIDTH = 240;
 	public static final int MINIMUM_BROWSER_VIEW_HEIGHT = 0;
-	public static final int PREFERRED_BROWSER_VIEW_WIDTH = 240;
-	public static final int PREFERRED_BROWSER_VIEW_HEIGHT = 240;
 
 	public static int DEFAULT_MAINFRAME_WIDTH = 850;
 	public static int DEFAULT_MAINFRAME_HEIGHT = 600;

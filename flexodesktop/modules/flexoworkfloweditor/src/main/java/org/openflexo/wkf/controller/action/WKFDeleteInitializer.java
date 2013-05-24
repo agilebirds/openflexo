@@ -20,8 +20,8 @@
 package org.openflexo.wkf.controller.action;
 
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.util.Enumeration;
+import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -52,7 +52,6 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.menu.FlexoMenuItem;
 import org.openflexo.wkf.processeditor.ProcessView;
-import org.openflexo.wkf.view.listener.WKFKeyEventListener;
 
 public class WKFDeleteInitializer extends ActionInitializer {
 
@@ -71,13 +70,13 @@ public class WKFDeleteInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<WKFDelete> getDefaultInitializer() {
 		return new FlexoActionInitializer<WKFDelete>() {
 			@Override
-			public boolean run(ActionEvent e, WKFDelete action) {
+			public boolean run(EventObject e, WKFDelete action) {
 				logger.info("Delete in WKF");
 
 				if (!getModule().isActive()) {
 					return false;
 				}
-				Vector v = action.getObjectsToDelete();
+				Vector<WKFObject> v = action.getObjectsToDelete();
 				if (v.size() == 0) {
 					return false;
 				}
@@ -92,17 +91,13 @@ public class WKFDeleteInitializer extends ActionInitializer {
 						return false;
 					}
 					// Cannot delete a process by pressing delete key
-					if (action.getInvoker() instanceof FlexoMenuItem || action.getInvoker() instanceof WKFKeyEventListener) {
+					if (action.getInvoker() instanceof FlexoMenuItem || e instanceof KeyEvent) {
 						logger.fine("refuse to delete a process by pressing delete key");
 						Toolkit.getDefaultToolkit().beep();
 						return false;
 					}
 
 					FlexoProcess process = (FlexoProcess) v.firstElement();
-					if (process.isRootProcess()) {
-						FlexoController.notify(FlexoLocalization.localizedForKey("you_cannot_delete_the_root_process"));
-						return false;
-					}
 					if (action.isNoConfirmation()) {
 						return true;
 					}
@@ -145,13 +140,11 @@ public class WKFDeleteInitializer extends ActionInitializer {
 						return true;
 					}
 					if (FlexoController.confirm(FlexoLocalization.localizedForKey("would_you_like_to_delete_those_objects"))) {
-						Enumeration en = v.elements();
-						while (en.hasMoreElements()) {
-							FlexoModelObject o = (FlexoModelObject) en.nextElement();
+						for (WKFObject o : v) {
 							if (o instanceof FlexoProcess) {
 								if (((FlexoProcess) o).isRootProcess()) {
 									FlexoController.notify(FlexoLocalization.localizedForKey("you_cannot_delete_the_root_process"));
-									action.setDeletionContextForObject(Boolean.FALSE, (FlexoProcess) o);
+									action.setDeletionContextForObject(Boolean.FALSE, o);
 								} else {
 									FlexoProcess process = (FlexoProcess) o;
 									if (process.getAllProcessInstances().size() > 0) {
@@ -185,7 +178,7 @@ public class WKFDeleteInitializer extends ActionInitializer {
 					Vector<TOCEntry> tocEntries = new Vector<TOCEntry>();
 					for (FlexoModelObject object : objects) {
 						if (!object.isDeleted()) {
-							for (FlexoModelObjectReference ref : object.getReferencers()) {
+							for (FlexoModelObjectReference<?> ref : object.getReferencers()) {
 								if (ref.getOwner() instanceof TOCEntry) {
 									tocEntries.add((TOCEntry) ref.getOwner());
 								}
@@ -221,8 +214,9 @@ public class WKFDeleteInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<WKFDelete> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<WKFDelete>() {
 			@Override
-			public boolean run(ActionEvent e, WKFDelete action) {
-				if (action.hasBeenDeleted(getControllerActionInitializer().getWKFController().getCurrentFlexoProcess())) {
+			public boolean run(EventObject e, WKFDelete action) {
+				if (action.hasBeenDeleted(getControllerActionInitializer().getWKFController().getCurrentFlexoProcess())
+						&& getProject().getRootFlexoProcess() != null) {
 					getControllerActionInitializer().getWKFController().setCurrentFlexoProcess(getProject().getRootFlexoProcess());
 				}
 				if (getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject() != null
@@ -253,13 +247,7 @@ public class WKFDeleteInitializer extends ActionInitializer {
 
 	@Override
 	protected KeyStroke getShortcut() {
-		return KeyStroke.getKeyStroke(FlexoCst.BACKSPACE_DELETE_KEY_CODE, 0);
-	}
-
-	@Override
-	public void init() {
-		super.init();
-		getControllerActionInitializer().registerAction(WKFDelete.actionType, KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
+		return KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0);
 	}
 
 }

@@ -44,13 +44,13 @@ public class DeleteMetricsValue extends FlexoAction<DeleteMetricsValue, MetricsV
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(MetricsValue role, Vector<MetricsValue> globalSelection) {
+		public boolean isVisibleForSelection(MetricsValue role, Vector<MetricsValue> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(MetricsValue role, Vector<MetricsValue> globalSelection) {
-			return (role != null || (globalSelection != null && globalSelection.size() > 0));
+		public boolean isEnabledForSelection(MetricsValue role, Vector<MetricsValue> globalSelection) {
+			return role != null || globalSelection != null && globalSelection.size() > 0;
 		}
 
 	};

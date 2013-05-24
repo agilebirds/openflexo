@@ -49,6 +49,21 @@ public class FileUtilTest extends TestCase {
 			String string = validNames[i];
 			assertTrue("File name '" + string + "' should be valid", FileUtils.isStringValidForFileName(string));
 		}
+		assertTrue(FileUtils
+				.isStringValidForFileName("Documentation/ABSTRACTACTIVITY-NewProcess87-Call-the-customer-and-check-if-they-can-wait-until-engineer-is-in-office-Yes-log-comments---No--log-and-do-a-guard-recall--Drop-a-mail-to-2L-INF-team--with-ticket-details33893.png"));
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < 256; i++) {
+			sb.append("a");
+		}
+		assertFalse(FileUtils.isStringValidForFileName(sb.toString()));
+	}
+
+	public void testFileNameFixing() {
+		String s256 = "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"
+				+ "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789";
+		String invalid = s256 + "/" + s256 + ".xml";
+		String valid = s256.substring(0, 240) + "/" + s256.substring(0, 240) + ".xml";
+		assertEquals(valid, FileUtils.getValidFileName(invalid));
 	}
 
 	public void testFileNameCleanUp() throws Exception {

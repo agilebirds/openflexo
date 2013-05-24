@@ -20,21 +20,24 @@
 package org.openflexo.components;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -44,7 +47,6 @@ import javax.swing.SwingUtilities;
 import org.openflexo.FlexoCst;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.icon.IconLibrary;
-import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.FlexoFrame;
 
 /**
@@ -118,6 +120,28 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 
 	protected JPanel mainPane;
 
+	private MouseAdapter mouseListener = new MouseAdapter() {
+
+	};
+
+	private FocusListener focusListener = new FocusListener() {
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			if (getOwner() instanceof JFrame) {
+				Component glassPane = ((JFrame) getOwner()).getGlassPane();
+				if (glassPane.isVisible()) {
+					glassPane.requestFocusInWindow();
+				}
+			}
+		}
+
+		@Override
+		public void focusGained(FocusEvent e) {
+
+		}
+	};
+
 	public static ProgressWindow makeProgressWindow(String title, int steps) {
 		if (_instance != null) {
 			logger.warning("Invoke creation of new progress window while an other one is displayed. Using old one.");
@@ -149,8 +173,8 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		setFocusable(false);
 		mainProgress = 0;
 		secondaryProgress = 0;
-		mainProgressBar = new JProgressBar(0, steps);
-		mainProgressBar.setIndeterminate(false);
+		mainProgressBar = new JProgressBar(0, Math.max(1, steps));
+		mainProgressBar.setIndeterminate(steps <= 0);
 		mainProgressBar.setStringPainted(false);
 		mainProgressBar.setValue(mainProgress);
 		secondaryProgressBar = new JProgressBar();
@@ -194,18 +218,17 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		mainPane.add(secondaryProgressBarLabel);
 		mainPane.add(secondaryProgressBar);
 		// flexoLogo.setBounds(135, 15, 230, 80);
-		label.setBounds(50, /*115*/180, 510, 20);
-		mainProgressBarLabel.setBounds(25, /*150*/205, 560, 15);
-		mainProgressBar.setBounds(25, /*165*/220, 560, 15);
-		secondaryProgressBarLabel.setBounds(25, /*200*/245, 560, 15);
-		secondaryProgressBar.setBounds(25, /*215*/260, 560, 15);
+		label.setBounds(50, /* 115 */180, 510, 20);
+		mainProgressBarLabel.setBounds(25, /* 150 */205, 560, 15);
+		mainProgressBar.setBounds(25, /* 165 */220, 560, 15);
+		secondaryProgressBarLabel.setBounds(25, /* 200 */245, 560, 15);
+		secondaryProgressBar.setBounds(25, /* 215 */260, 560, 15);
 		mainPane.setPreferredSize(new Dimension(600, 300));
 		getContentPane().add(mainPane);
 		setSize(600, 300);
-		center();
 		pack();
+		center();
 		setVisible(true);
-		toFront();
 		paintImmediately();
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Displaying progress window");
@@ -217,17 +240,29 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 	}
 
 	private void paintImmediately() {
-		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
-			paintImmediately((JComponent) getContentPane());
-			// paintImmediately(flexoLogo);
-			paintImmediately(label);
-			paintImmediately(mainProgressBarLabel);
-			paintImmediately(mainProgressBar);
-			paintImmediately(secondaryProgressBarLabel);
-			paintImmediately(secondaryProgressBar);
-		} else {
-			paintImmediately(mainPane);
+		if (!SwingUtilities.isEventDispatchThread()) {
+			repaint();
+			return;
 		}
+		mainPane.paintImmediately(mainPane.getBounds());
+	}
+
+	@Override
+	public void setVisible(boolean b) {
+		if (getOwner() instanceof JFrame) {
+			((JFrame) getOwner()).getGlassPane().setVisible(b);
+			if (b) {
+				((JFrame) getOwner()).getGlassPane().addMouseListener(mouseListener);
+				((JFrame) getOwner()).getGlassPane().addMouseMotionListener(mouseListener);
+				((JFrame) getOwner()).getGlassPane().addFocusListener(focusListener);
+				((JFrame) getOwner()).getGlassPane().requestFocusInWindow();
+			} else {
+				((JFrame) getOwner()).getGlassPane().removeMouseListener(mouseListener);
+				((JFrame) getOwner()).getGlassPane().removeMouseMotionListener(mouseListener);
+				((JFrame) getOwner()).getGlassPane().removeFocusListener(focusListener);
+			}
+		}
+		super.setVisible(b);
 	}
 
 	public static void showProgressWindow(String title, int steps) {
@@ -266,7 +301,9 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		if (initOwner != null) {
 			initOwner.repaint();
 		}
-		_instance = null;
+		if (_instance == this) {
+			_instance = null;
+		}
 	}
 
 	public static ProgressWindow instance() {
@@ -306,11 +343,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		isSecondaryProgressIndeterminate = true;
 		secondaryProgressBar.setIndeterminate(true);
 		secondaryProgressBarLabel.setText("");
-		paintImmediately(label);
-		paintImmediately(mainProgressBarLabel);
-		paintImmediately(mainProgressBar);
-		paintImmediately(secondaryProgressBarLabel);
-		paintImmediately(secondaryProgressBar);
+		paintImmediately();
 	}
 
 	@Override
@@ -331,9 +364,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		secondaryProgressBar.setMaximum(steps);
 		secondaryProgress = 1;
 		secondaryProgressBar.setValue(secondaryProgress);
-		paintImmediately(secondaryProgressBarLabel);
-		paintImmediately(secondaryProgressBar);
-		// toFront();
+		paintImmediately();
 	}
 
 	@Override
@@ -355,8 +386,7 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 			secondaryProgressBar.setIndeterminate(true);
 			secondaryProgressBarLabel.setText("");
 		}
-		paintImmediately(secondaryProgressBarLabel);
-		paintImmediately(secondaryProgressBar);
+		paintImmediately();
 	}
 
 	public static void setProgressInstance(String stepName) {
@@ -377,25 +407,6 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 	public static void setSecondaryProgressInstance(String stepName) {
 		if (instance() != null) {
 			instance().setSecondaryProgress(stepName);
-		}
-	}
-
-	protected void paintImmediately(final JComponent component) {
-		if (!SwingUtilities.isEventDispatchThread()) {
-			repaint();
-			return;
-		}
-		try {
-			if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
-				mainPane.paintImmediately(mainPane.getBounds());
-			} else {
-				Rectangle r = component.getBounds();
-				r.x = 0;
-				r.y = 0;
-				component.paintImmediately(r);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 

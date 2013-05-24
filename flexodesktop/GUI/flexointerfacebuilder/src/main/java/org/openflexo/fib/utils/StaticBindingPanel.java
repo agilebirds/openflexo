@@ -40,6 +40,7 @@ import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.BooleanStaticBinding;
 import org.openflexo.antar.binding.FloatStaticBinding;
 import org.openflexo.antar.binding.IntegerStaticBinding;
+import org.openflexo.antar.binding.NullStaticBinding;
 import org.openflexo.antar.binding.StaticBinding;
 import org.openflexo.antar.binding.StringStaticBinding;
 import org.openflexo.antar.binding.TypeUtils;
@@ -47,7 +48,6 @@ import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.DateSelector;
-import org.openflexo.swing.DurationSelector;
 import org.openflexo.toolbox.ToolBox;
 
 class StaticBindingPanel extends JPanel {
@@ -93,8 +93,8 @@ class StaticBindingPanel extends JPanel {
 			}
 		});
 		add(selectStaticBindingCB);
-		if ((_bindingSelectorPanel._bindingSelector.getBindingDefinition() == null)
-				|| (_bindingSelectorPanel._bindingSelector.getBindingDefinition().getType() == null)) {
+		if (_bindingSelectorPanel._bindingSelector.getBindingDefinition() == null
+				|| _bindingSelectorPanel._bindingSelector.getBindingDefinition().getType() == null) {
 			enterValueTF = new JTextField(10);
 			enterValueTF.setFont(SMALL_FONT);
 			add(enterValueTF);
@@ -235,9 +235,9 @@ class StaticBindingPanel extends JPanel {
 
 		}
 
-		if ((_bindingSelectorPanel._bindingSelector.getBindingDefinition() == null)
-				|| (_bindingSelectorPanel._bindingSelector.getBindingDefinition().getType() == null)
-				|| (TypeUtils.isObject(_bindingSelectorPanel._bindingSelector.getBindingDefinition().getType()))) {
+		if (_bindingSelectorPanel._bindingSelector.getBindingDefinition() == null
+				|| _bindingSelectorPanel._bindingSelector.getBindingDefinition().getType() == null
+				|| TypeUtils.isObject(_bindingSelectorPanel._bindingSelector.getBindingDefinition().getType())) {
 			final String SELECT = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "select");
 			final String BOOLEAN = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "boolean");
 			final String INTEGER = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "integer");
@@ -246,7 +246,8 @@ class StaticBindingPanel extends JPanel {
 			final String DATE = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "date");
 			final String DURATION = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "duration");
 			final String DKV = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "enum");
-			String[] availableValues = { SELECT, BOOLEAN, INTEGER, FLOAT, STRING, DATE, DURATION, DKV };
+			final String NULL = FlexoLocalization.localizedForKey(FIBModelObject.LOCALIZATION, "null");
+			String[] availableValues = { SELECT, BOOLEAN, INTEGER, FLOAT, STRING, DATE, DURATION, DKV, NULL };
 			typeCB = new JComboBox(availableValues);
 			typeCB.addActionListener(new ActionListener() {
 				@Override
@@ -270,26 +271,33 @@ class StaticBindingPanel extends JPanel {
 						_bindingSelectorPanel._bindingSelector.setEditedObject(new StringStaticBinding(
 								_bindingSelectorPanel._bindingSelector.getBindingDefinition(), _bindingSelectorPanel._bindingSelector
 										.getBindable(), ""));
+					} else if (typeCB.getSelectedItem().equals(NULL)) {
+						_bindingSelectorPanel._bindingSelector.setEditedObject(new NullStaticBinding(_bindingSelectorPanel._bindingSelector
+								.getBindingDefinition(), _bindingSelectorPanel._bindingSelector.getBindable()));
 					}
 				}
 			});
-			if (typeCB != null) {
+			isUpdatingPanel = true;
+			if (currentType == EvaluationType.BOOLEAN) {
+				typeCB.setSelectedItem(BOOLEAN);
+			} else if (currentType == EvaluationType.ARITHMETIC_INTEGER) {
+				typeCB.setSelectedItem(INTEGER);
+			} else if (currentType == EvaluationType.ARITHMETIC_FLOAT) {
+				typeCB.setSelectedItem(FLOAT);
+			} else if (currentType == EvaluationType.STRING) {
+				typeCB.setSelectedItem(STRING);
+			} else if (currentType == EvaluationType.DATE) {
+				typeCB.setSelectedItem(DATE);
+			} else if (currentType == EvaluationType.DURATION) {
+				typeCB.setSelectedItem(DURATION);
+			} else if (currentType == EvaluationType.ENUM) {
+				typeCB.setSelectedItem(DKV);
+			}
+			isUpdatingPanel = false;
+
+			if (_bindingSelectorPanel._bindingSelector.getEditedObject() instanceof NullStaticBinding) {
 				isUpdatingPanel = true;
-				if (currentType == EvaluationType.BOOLEAN) {
-					typeCB.setSelectedItem(BOOLEAN);
-				} else if (currentType == EvaluationType.ARITHMETIC_INTEGER) {
-					typeCB.setSelectedItem(INTEGER);
-				} else if (currentType == EvaluationType.ARITHMETIC_FLOAT) {
-					typeCB.setSelectedItem(FLOAT);
-				} else if (currentType == EvaluationType.STRING) {
-					typeCB.setSelectedItem(STRING);
-				} else if (currentType == EvaluationType.DATE) {
-					typeCB.setSelectedItem(DATE);
-				} else if (currentType == EvaluationType.DURATION) {
-					typeCB.setSelectedItem(DURATION);
-				} else if (currentType == EvaluationType.ENUM) {
-					typeCB.setSelectedItem(DKV);
-				}
+				typeCB.setSelectedItem(NULL);
 				isUpdatingPanel = false;
 			}
 

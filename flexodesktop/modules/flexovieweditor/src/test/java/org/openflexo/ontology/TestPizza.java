@@ -25,12 +25,11 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.Iterator;
 
-import org.openflexo.foundation.FlexoResourceCenter;
-import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
+import org.openflexo.foundation.ontology.owl.OWLOntology;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.module.FlexoResourceCenterService;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.toolbox.FileResource;
 
 import com.hp.hpl.jena.ontology.OntClass;
@@ -42,14 +41,14 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 public class TestPizza {
 
 	public static void main(String[] args) {
-		FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
+		FlexoResourceCenter resourceCenter = DefaultResourceCenterService.getNewInstance().getOpenFlexoResourceCenter();
 		OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
 		ViewPointLibrary viewPointLibrary = resourceCenter.retrieveViewPointLibrary();
 
 		File myOntology = new FileResource("MyOntologies/MyPizza.owl");
 
 		System.out.println("Found: " + myOntology);
-		FlexoOntology hop = ontologyLibrary.importOntology("http://prout", myOntology);
+		OWLOntology hop = (OWLOntology) ontologyLibrary.importOntology("http://prout", myOntology);
 
 		// importedOntologyLibraries.debug();
 
@@ -82,7 +81,7 @@ public class TestPizza {
 		OntClass pipiClass = ontModel.createClass(URI + "#" + "pipi");
 		pipiClass.addSuperClass(cacaClass);
 
-		FlexoOntology flexoConceptsOntology = ontologyLibrary.getOntology(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI);
+		OWLOntology flexoConceptsOntology = (OWLOntology) ontologyLibrary.getOntology(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI);
 
 		ontModel.getDocumentManager().loadImport(flexoConceptsOntology.getOntModel(), OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI);
 		ontModel.getDocumentManager().addModel(OntologyLibrary.FLEXO_CONCEPT_ONTOLOGY_URI, flexoConceptsOntology.getOntModel(), true);
@@ -223,11 +222,4 @@ public class TestPizza {
 		System.out.println("Wrote " + createdFile.getName());
 	}
 
-	private static ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
-	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.instance();
-	}
 }

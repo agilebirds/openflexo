@@ -136,7 +136,7 @@ public final class TransferWSEdge extends MessageEdge<FlexoPortMap, FlexoPortMap
 		}
 		FlexoPetriGraph startPG = getStartPortMapRegistery().getSubProcessNode().getParentPetriGraph();
 		FlexoPetriGraph endPG = getEndPortMapRegistery().getSubProcessNode().getParentPetriGraph();
-		return (startPG == endPG);
+		return startPG == endPG;
 	}
 
 	public static class TransferWSEdgeMustBeValid extends ValidationRule<TransferWSEdgeMustBeValid, TransferWSEdge> {

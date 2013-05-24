@@ -19,7 +19,7 @@
  */
 package org.openflexo.wse.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,7 +62,7 @@ public class WSDeleteInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<WSDelete> getDefaultInitializer() {
 		return new FlexoActionInitializer<WSDelete>() {
 			@Override
-			public boolean run(ActionEvent e, WSDelete action) {
+			public boolean run(EventObject e, WSDelete action) {
 				// Selection is empty, nothing to delete, forget it
 				if (action.getObjectsToDelete().size() == 0) {
 					if (logger.isLoggable(Level.INFO)) {
@@ -77,7 +77,7 @@ public class WSDeleteInitializer extends ActionInitializer {
 				// action.getObjectsToDelete());
 				FlexoModelObject lastDeleted = action.getObjectsToDelete().lastElement();
 				if (lastDeleted != null && lastDeleted instanceof WSObject) {
-					lastDeletedParent = (WSObject) ((WSObject) lastDeleted).getParent();
+					lastDeletedParent = ((WSObject) lastDeleted).getParent();
 					action.setContext(lastDeletedParent);
 				} else if (lastDeleted != null && lastDeleted instanceof ServiceInterface) {
 					WSService ws = getProject().getFlexoWSLibrary().getParentOfServiceInterface((ServiceInterface) lastDeleted);
@@ -103,7 +103,7 @@ public class WSDeleteInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<WSDelete> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<WSDelete>() {
 			@Override
-			public boolean run(ActionEvent e, WSDelete action) {
+			public boolean run(EventObject e, WSDelete action) {
 				getControllerActionInitializer().getWSESelectionManager().resetSelection();
 				// getDMSelectionManager().processDeletionOfSelected();
 				WSEView view = (WSEView) getControllerActionInitializer().getWSEController().getCurrentModuleView();
@@ -141,13 +141,7 @@ public class WSDeleteInitializer extends ActionInitializer {
 
 	@Override
 	protected KeyStroke getShortcut() {
-		return KeyStroke.getKeyStroke(FlexoCst.BACKSPACE_DELETE_KEY_CODE, 0);
-	}
-
-	@Override
-	public void init() {
-		super.init();
-		getControllerActionInitializer().registerAction(WSDelete.actionType, KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
+		return KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0);
 	}
 
 }

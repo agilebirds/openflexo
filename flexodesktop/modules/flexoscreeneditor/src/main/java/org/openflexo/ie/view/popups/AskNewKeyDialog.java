@@ -110,9 +110,9 @@ public class AskNewKeyDialog extends FlexoDialog implements ActionListener {
 								newKeyDescriptionTextArea.getText().length() - 1));
 					}
 					if (e.getModifiers() == InputEvent.SHIFT_DOWN_MASK || e.getModifiers() == InputEvent.SHIFT_MASK) {
-						newKeyTextField.requestFocus();
+						newKeyTextField.requestFocusInWindow();
 					} else {
-						valueTextFieldList.get(0).requestFocus();
+						valueTextFieldList.get(0).requestFocusInWindow();
 					}
 					e.consume();
 				}
@@ -294,7 +294,7 @@ public class AskNewKeyDialog extends FlexoDialog implements ActionListener {
 			KeyValueJTextField tf = en.nextElement();
 			String valueText = tf.getText();
 			if (tf.getText() == null || tf.getText().trim().length() == 0
-					|| (newKeyTextField.getText().equals(valueText.substring(0, valueText.length() - 1)))) {
+					|| newKeyTextField.getText().equals(valueText.substring(0, valueText.length() - 1))) {
 				tf.setText(newKeyTextField.getText());
 			}
 		}

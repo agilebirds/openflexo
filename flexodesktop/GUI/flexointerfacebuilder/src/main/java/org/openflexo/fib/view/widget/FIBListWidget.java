@@ -34,7 +34,6 @@ import javax.swing.event.ListSelectionListener;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBListDynamicModel;
 import org.openflexo.fib.controller.FIBSelectable;
-import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBList;
 
 public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object> implements FIBSelectable {
@@ -50,15 +49,15 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 		_list = new JList(listData);
 		_list.setCellRenderer(getListCellRenderer());
 		_list.setSelectionMode(model.getSelectionMode().getMode());
-
-		_list.setVisibleRowCount(model.getVisibleRowCount());
+		if (model.getVisibleRowCount() != null) {
+			_list.setVisibleRowCount(model.getVisibleRowCount());
+		}
 		// _list.setPrototypeCellValue("0123456789012345");
-		_list.setFixedCellHeight(model.getRowHeight());
-
+		if (model.getRowHeight() != null) {
+			_list.setFixedCellHeight(model.getRowHeight());
+		}
 		_list.setLayoutOrientation(model.getLayoutOrientation().getSwingValue());
-
 		_list.addFocusListener(this);
-
 		_list.setBorder(BorderFactory.createEtchedBorder());
 
 		// _list.setMinimumSize(new Dimension(60,60));
@@ -67,12 +66,12 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 		_list.repaint();
 
 		updateListModelWhenRequired();
-
 		updateFont();
 	}
 
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
+		updateListModelWhenRequired();
 		if (getWidget().getData() != null && notEquals(getValue(), _list.getSelectedValue())) {
 
 			if (logger.isLoggable(Level.FINE)) {
@@ -128,7 +127,7 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 			setListModel((FIBListModel) listModel);
 		} else {
 			FIBListModel newListModel = new FIBListModel();
-			if (!newListModel.equals(listModel)) {
+			if (!newListModel.equals(listModel) || didLastKnownValuesChange()) {
 				_list.getSelectionModel().removeListSelectionListener((FIBListModel) listModel);
 				listModel = newListModel;
 				setListModel((FIBListModel) listModel);
@@ -140,6 +139,7 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 	private FIBListModel oldListModel = null;
 
 	private void setListModel(FIBListModel aListModel) {
+		// logger.info("************* Updating GUI with " + aListModel);
 		widgetUpdating = true;
 		if (oldListModel != null) {
 			_list.getSelectionModel().removeListSelectionListener(oldListModel);
@@ -147,8 +147,16 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 		oldListModel = aListModel;
 		_list.setLayoutOrientation(getWidget().getLayoutOrientation().getSwingValue());
 		_list.setSelectionMode(getWidget().getSelectionMode().getMode());
-		_list.setVisibleRowCount(getWidget().getVisibleRowCount());
-		_list.setFixedCellHeight(getWidget().getRowHeight());
+		if (getWidget().getVisibleRowCount() != null) {
+			_list.setVisibleRowCount(getWidget().getVisibleRowCount());
+		} else {
+			_list.setVisibleRowCount(-1);
+		}
+		if (getWidget().getRowHeight() != null) {
+			_list.setFixedCellHeight(getWidget().getRowHeight());
+		} else {
+			_list.setFixedCellHeight(-1);
+		}
 		_list.setModel(aListModel);
 		_list.revalidate();
 		_list.repaint();
@@ -241,8 +249,8 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 				}
 			}
 
-			getDynamicModel().selected = selectedObject;
-			getDynamicModel().selectedIndex = leadIndex;
+			getDynamicModel().setSelected(selectedObject);
+			getDynamicModel().setSelectedIndex(leadIndex);
 			getDynamicModel().selection = selection;
 			notifyDynamicModelChanged();
 
@@ -317,7 +325,9 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 	@Override
 	public void updateFont() {
 		super.updateFont();
-		_list.setFont(getFont());
+		if (getFont() != null) {
+			_list.setFont(getFont());
+		}
 	}
 
 	@Override
@@ -408,19 +418,27 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 
 			if (isSelected) {
 				if (isLastFocusedSelectable()) {
-					setForeground(getWidget().getTextSelectionColor());
-					setBackground(getWidget().getBackgroundSelectionColor());
+					if (getWidget().getTextSelectionColor() != null) {
+						setForeground(getWidget().getTextSelectionColor());
+					}
+					if (getWidget().getBackgroundSelectionColor() != null) {
+						setBackground(getWidget().getBackgroundSelectionColor());
+					}
 				} else {
-					setForeground(getWidget().getTextNonSelectionColor());
-					setBackground(getWidget().getBackgroundSecondarySelectionColor());
+					if (getWidget().getTextNonSelectionColor() != null) {
+						setForeground(getWidget().getTextNonSelectionColor());
+					}
+					if (getWidget().getBackgroundSecondarySelectionColor() != null) {
+						setBackground(getWidget().getBackgroundSecondarySelectionColor());
+					}
 				}
 			} else {
-				if (!isEnabled()) {
-					setForeground(FIBComponent.DISABLED_COLOR);
-				} else {
+				if (getWidget().getTextNonSelectionColor() != null) {
 					setForeground(getWidget().getTextNonSelectionColor());
 				}
-				setBackground(getWidget().getBackgroundNonSelectionColor());
+				if (getWidget().getBackgroundNonSelectionColor() != null) {
+					setBackground(getWidget().getBackgroundNonSelectionColor());
+				}
 			}
 
 			return label;

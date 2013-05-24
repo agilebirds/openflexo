@@ -75,12 +75,12 @@ public class CreateEdge extends FlexoUndoableAction<CreateEdge, AbstractNode, Ab
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(AbstractNode object, Vector<AbstractNode> globalSelection) {
+		public boolean isVisibleForSelection(AbstractNode object, Vector<AbstractNode> globalSelection) {
 			return false;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(AbstractNode object, Vector<AbstractNode> globalSelection) {
+		public boolean isEnabledForSelection(AbstractNode object, Vector<AbstractNode> globalSelection) {
 			return true;
 		}
 
@@ -195,6 +195,7 @@ public class CreateEdge extends FlexoUndoableAction<CreateEdge, AbstractNode, Ab
 			if (getNewEdgeName() != null) {
 				newPostCondition.setName(getNewEdgeName());
 			}
+			newPostCondition.setLocationConstraintFlag(true);
 			newPostCondition.setIsGenericOutput(getIsGenericOutput());
 			newPostCondition.updateMetricsValues();
 			if (getStartingNode() instanceof ContextualEdgeStarting && getOutputContext() != null) {
@@ -249,7 +250,7 @@ public class CreateEdge extends FlexoUndoableAction<CreateEdge, AbstractNode, Ab
 		}
 		if (endNode instanceof FlexoNode) {
 			FlexoNode endFlexoNode = (FlexoNode) endNode;
-			if ((endFlexoNode.isBeginNode()) && (!(startingNode instanceof AbstractInPort))) {
+			if (endFlexoNode.isBeginNode() && !(startingNode instanceof AbstractInPort)) {
 				// This is a induced edge construction
 				if (endFlexoNode.getAttachedPreCondition() != null) {
 					endNodePreCondition = endFlexoNode.getAttachedPreCondition();

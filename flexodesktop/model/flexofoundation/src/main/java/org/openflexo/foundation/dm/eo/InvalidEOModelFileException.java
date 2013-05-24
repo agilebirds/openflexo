@@ -34,12 +34,12 @@ public class InvalidEOModelFileException extends LoadResourceException {
 
 	public InvalidEOModelFileException(FlexoEOModelResource fileResource) {
 		super(fileResource, null);
-		_eoModelFile = fileResource.getResourceFile();
+		_eoModelFile = fileResource != null ? fileResource.getResourceFile() : null;
 	}
 
 	@Override
 	public String getMessage() {
-		if ((_eoModelFile != null) && (_eoModelFile.getFile() != null)) {
+		if (_eoModelFile != null && _eoModelFile.getFile() != null) {
 			return "InvalidEOModelFileException: file: " + _eoModelFile.getFile().getAbsolutePath();
 		} else {
 			return "InvalidEOModelFileException: file is null";

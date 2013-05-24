@@ -26,11 +26,16 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
+import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import javax.annotation.Nullable;
+
 import org.openflexo.antar.expr.EvaluationType;
+
+import com.google.common.primitives.Primitives;
 
 public class TypeUtils {
 
@@ -58,6 +63,22 @@ public class TypeUtils {
 				return null;
 			}
 		}
+		if (aType instanceof WildcardType) {
+			// System.out.println("WildcardType: " + aType);
+			Type[] upperBounds = ((WildcardType) aType).getUpperBounds();
+			Type[] lowerBounds = ((WildcardType) aType).getLowerBounds();
+			// System.out.println("upper=" + upperBounds + " size=" + upperBounds.length);
+			// System.out.println("lower=" + upperBounds + " size=" + lowerBounds.length);
+			if (upperBounds.length == 1 && lowerBounds.length == 0) {
+				return getBaseClass(upperBounds[0]);
+			}
+		}
+		if (aType instanceof TypeVariable) {
+			Type[] bounds = ((TypeVariable<?>) aType).getBounds();
+			if (bounds.length == 1) {
+				return getBaseClass(bounds[0]);
+			}
+		}
 		logger.warning("Not handled: " + aType.getClass().getName());
 		return null;
 	}
@@ -78,7 +99,7 @@ public class TypeUtils {
 		}
 
 		// Special cases
-		if ((parentClass == Object.class) && childClass.isPrimitive()) {
+		if (parentClass == Object.class && childClass.isPrimitive()) {
 			return true;
 		}
 		if (parentClass.isPrimitive()) {
@@ -146,6 +167,14 @@ public class TypeUtils {
 			return Character.class;
 		}
 		return aClass;
+	}
+
+	public static boolean isPrimitive(@Nullable Type type) {
+		return type != null && Primitives.allPrimitiveTypes().contains(type);
+	}
+
+	public static boolean isWrapperClass(@Nullable Class<?> klass) {
+		return klass != null && Primitives.isWrapperType(klass);
 	}
 
 	public static boolean isDouble(Type type) {
@@ -238,6 +267,19 @@ public class TypeUtils {
 		return EvaluationType.LITERAL;
 	}
 
+	public static boolean isAssignableTo(Object object, Type type) {
+		return isTypeAssignableFrom(type, object != null ? object.getClass() : null);
+	}
+
+	public static boolean isAssignableTo(Collection<? extends Object> objects, Type type) {
+		for (Object object : objects) {
+			if (!isAssignableTo(object, type)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public static boolean isTypeAssignableFrom(Type aType, Type anOtherType) {
 		return isTypeAssignableFrom(aType, anOtherType, true);
 	}
@@ -265,7 +307,7 @@ public class TypeUtils {
 		}*/
 
 		// If supplied type is null return false
-		if ((aType == null) || (anOtherType == null)) {
+		if (aType == null || anOtherType == null) {
 			return false;
 		}
 
@@ -274,9 +316,13 @@ public class TypeUtils {
 			return true;
 		}
 
-		// Special case fo Custom types
+		// Special case for Custom types
 		if (aType instanceof CustomType) {
 			return ((CustomType) aType).isTypeAssignableFrom(anOtherType, permissive);
+		}
+
+		if (anOtherType instanceof CustomType && isTypeAssignableFrom(aType, ((CustomType) anOtherType).getBaseClass())) {
+			return true;
 		}
 
 		if (isVoid(aType)) {
@@ -293,7 +339,7 @@ public class TypeUtils {
 		}
 
 		if (isFloat(aType)) {
-			return (isDouble(anOtherType) && permissive) || isFloat(anOtherType) || isLong(anOtherType) || isInteger(anOtherType)
+			return isDouble(anOtherType) && permissive || isFloat(anOtherType) || isLong(anOtherType) || isInteger(anOtherType)
 					|| isShort(anOtherType) || isChar(anOtherType) || isByte(anOtherType);
 		}
 
@@ -302,22 +348,22 @@ public class TypeUtils {
 		}
 
 		if (isInteger(aType)) {
-			return (isLong(anOtherType) && permissive) || isInteger(anOtherType) || isShort(anOtherType) || isChar(anOtherType)
+			return isLong(anOtherType) && permissive || isInteger(anOtherType) || isShort(anOtherType) || isChar(anOtherType)
 					|| isByte(anOtherType);
 		}
 
 		if (isShort(aType)) {
-			return (isLong(anOtherType) && permissive) || (isInteger(anOtherType) && permissive) || isShort(anOtherType)
-					|| isChar(anOtherType) || isByte(anOtherType);
+			return isLong(anOtherType) && permissive || isInteger(anOtherType) && permissive || isShort(anOtherType) || isChar(anOtherType)
+					|| isByte(anOtherType);
 		}
 
 		if (isChar(aType)) {
-			return (isLong(anOtherType) && permissive) || (isInteger(anOtherType) && permissive) || (isShort(anOtherType) && permissive)
+			return isLong(anOtherType) && permissive || isInteger(anOtherType) && permissive || isShort(anOtherType) && permissive
 					|| isChar(anOtherType) || isByte(anOtherType);
 		}
 
 		if (isByte(aType)) {
-			return (isLong(anOtherType) && permissive) || (isInteger(anOtherType) && permissive) || (isShort(anOtherType) && permissive)
+			return isLong(anOtherType) && permissive || isInteger(anOtherType) && permissive || isShort(anOtherType) && permissive
 					|| isChar(anOtherType) || isByte(anOtherType);
 		}
 
@@ -337,7 +383,7 @@ public class TypeUtils {
 			if (anOtherType instanceof GenericArrayType) {
 				return isTypeAssignableFrom(((GenericArrayType) aType).getGenericComponentType(),
 						((GenericArrayType) anOtherType).getGenericComponentType(), permissive);
-			} else if ((anOtherType instanceof Class) && ((Class) anOtherType).isArray()) {
+			} else if (anOtherType instanceof Class && ((Class) anOtherType).isArray()) {
 				return isTypeAssignableFrom(((GenericArrayType) aType).getGenericComponentType(), ((Class) anOtherType).getComponentType(),
 						permissive);
 			}
@@ -345,7 +391,7 @@ public class TypeUtils {
 		}
 
 		// Look if we are on same class
-		if ((aType instanceof Class) && (anOtherType instanceof Class)) {
+		if (aType instanceof Class && anOtherType instanceof Class) {
 			return isClassAncestorOf((Class) aType, (Class) anOtherType);
 		}
 
@@ -355,12 +401,12 @@ public class TypeUtils {
 
 		// logger.info(""+getBaseClass(aType)+" is ancestor of "+getBaseClass(anOtherType));
 
-		if ((aType instanceof Class) || (anOtherType instanceof Class)) {
+		if (aType instanceof Class || anOtherType instanceof Class) {
 			// One of two types is not parameterized, we cannot check, return true
 			return true;
 		}
 
-		if ((aType instanceof ParameterizedType) && (anOtherType instanceof ParameterizedType)) {
+		if (aType instanceof ParameterizedType && anOtherType instanceof ParameterizedType) {
 			ParameterizedType t1 = (ParameterizedType) aType;
 			ParameterizedType t2 = (ParameterizedType) anOtherType;
 
@@ -379,7 +425,7 @@ public class TypeUtils {
 			}
 			return true;
 		}
-
+		return org.apache.commons.lang3.reflect.TypeUtils.isAssignable(anOtherType, aType);
 		/*if (getBaseEntity() == type.getBaseEntity()) {
 			// Base entities are the same, let's analyse parameters
 		
@@ -425,7 +471,7 @@ public class TypeUtils {
 					return isAssignableFrom(parentType,permissive);
 				}*/
 
-		return false;
+		// return false;
 	}
 
 	public static String simpleRepresentation(Type aType) {
@@ -477,8 +523,7 @@ public class TypeUtils {
 	}
 
 	public static boolean isResolved(Type type) {
-		return (type instanceof Class) || (type instanceof GenericArrayType) || (type instanceof ParameterizedType)
-				|| (type instanceof CustomType);
+		return type instanceof Class || type instanceof GenericArrayType || type instanceof ParameterizedType || type instanceof CustomType;
 	}
 
 	/**
@@ -511,14 +556,14 @@ public class TypeUtils {
 		}
 		if (type instanceof WildcardType) {
 			WildcardType w = (WildcardType) type;
-			if ((w.getUpperBounds() != null) && (w.getUpperBounds().length > 0)) {
+			if (w.getUpperBounds() != null && w.getUpperBounds().length > 0) {
 				for (Type b : w.getUpperBounds()) {
 					if (isGeneric(b)) {
 						return true;
 					}
 				}
 			}
-			if ((w.getLowerBounds() != null) && (w.getLowerBounds().length > 0)) {
+			if (w.getLowerBounds() != null && w.getLowerBounds().length > 0) {
 				for (Type b : w.getLowerBounds()) {
 					if (isGeneric(b)) {
 						return true;
@@ -585,7 +630,7 @@ public class TypeUtils {
 							}
 						}
 					}
-				} else if ((context instanceof Class) && (((Class) context).getGenericSuperclass() != null)) {
+				} else if (context instanceof Class && ((Class) context).getGenericSuperclass() != null) {
 					return makeInstantiatedType(type, ((Class) context).getGenericSuperclass());
 				}
 			} else if (gd instanceof Method) {
@@ -617,7 +662,7 @@ public class TypeUtils {
 	public static Type getSuperType(Type type) {
 		if (type instanceof ParameterizedType) {
 			ParameterizedType myType = (ParameterizedType) type;
-			Type superType = ((Class<?>) (myType.getRawType())).getGenericSuperclass();
+			Type superType = ((Class<?>) myType.getRawType()).getGenericSuperclass();
 			if (superType instanceof ParameterizedType) {
 				Type[] actualTypeArguments = new Type[((ParameterizedType) superType).getActualTypeArguments().length];
 				for (int i = 0; i < ((ParameterizedType) superType).getActualTypeArguments().length; i++) {
@@ -634,6 +679,20 @@ public class TypeUtils {
 		}
 
 		return null;
+	}
+
+	public static Type[] getSuperInterfaceTypes(Type type) {
+		if (type instanceof ParameterizedType) {
+			ParameterizedType myType = (ParameterizedType) type;
+			return ((Class<?>) myType.getRawType()).getGenericInterfaces();
+		} else if (type instanceof Class) {
+			return ((Class<?>) type).getGenericInterfaces();
+		}
+		if (type instanceof CustomType) {
+			return getSuperInterfaceTypes(((CustomType) type).getBaseClass());
+		}
+
+		return new Type[0];
 	}
 
 	public static Object castTo(Object object, Type desiredType) {
@@ -668,6 +727,37 @@ public class TypeUtils {
 			}
 		}
 		return object;
+	}
+
+	public static Class<?> getMostSpecializedClass(Collection<Class<?>> someClasses) {
+
+		if (someClasses.size() == 0) {
+			return null;
+		}
+		if (someClasses.size() == 1) {
+			return someClasses.iterator().next();
+		}
+		Class<?>[] array = someClasses.toArray(new Class[someClasses.size()]);
+
+		for (int i = 0; i < someClasses.size(); i++) {
+			for (int j = i + 1; j < someClasses.size(); j++) {
+				Class<?> c1 = array[i];
+				Class<?> c2 = array[j];
+				if (c1.isAssignableFrom(c2)) {
+					someClasses.remove(c1);
+					return getMostSpecializedClass(someClasses);
+				}
+				if (c2.isAssignableFrom(c1)) {
+					someClasses.remove(c2);
+					return getMostSpecializedClass(someClasses);
+				}
+			}
+		}
+
+		// No parent were found, take first item
+		logger.warning("Undefined specializing criteria between " + someClasses);
+		return someClasses.iterator().next();
+
 	}
 
 	// TESTS
@@ -739,18 +829,8 @@ public class TypeUtils {
 	}
 
 	public static void main(String[] args) {
-		Class shouldSucceed = ShouldSucceed.class;
-		for (Method m : shouldSucceed.getMethods()) {
-			checkSucceed(m);
-		}
-		Class shouldFail = ShouldFail.class;
-		for (Method m : shouldFail.getMethods()) {
-			checkFail(m);
-		}
-		Class testSuperType = TestSuperType.class;
-		for (Method m : testSuperType.getMethods()) {
-			checkSuperType(m);
-		}
+		System.err.println(isTypeAssignableFrom(Number.class, Integer.class));
+		System.err.println(org.apache.commons.lang3.reflect.TypeUtils.isAssignable(Integer.class, Number.class));
 	}
 
 }

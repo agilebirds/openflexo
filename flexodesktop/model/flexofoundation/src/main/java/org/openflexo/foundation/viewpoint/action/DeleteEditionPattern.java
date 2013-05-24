@@ -48,12 +48,12 @@ public class DeleteEditionPattern extends FlexoAction<DeleteEditionPattern, Edit
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) {
+		public boolean isVisibleForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) {
+		public boolean isEnabledForSelection(EditionPattern object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
@@ -67,11 +67,21 @@ public class DeleteEditionPattern extends FlexoAction<DeleteEditionPattern, Edit
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
+	private boolean deleteChildren = false;
+
 	@Override
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
 		logger.info("Delete edition pattern");
 
-		getFocusedObject().delete();
+		getFocusedObject().delete(isDeleteChildren());
+	}
+
+	public boolean isDeleteChildren() {
+		return deleteChildren;
+	}
+
+	public void setDeleteChildren(boolean deleteChildren) {
+		this.deleteChildren = deleteChildren;
 	}
 
 }

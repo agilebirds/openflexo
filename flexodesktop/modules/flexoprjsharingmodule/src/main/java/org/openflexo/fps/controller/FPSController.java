@@ -49,7 +49,7 @@ import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.param.CheckboxParameter;
 import org.openflexo.foundation.param.ReadOnlyTextFieldParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
-import org.openflexo.foundation.validation.ValidationModel;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.fps.CVSFile;
 import org.openflexo.fps.CVSRepository;
 import org.openflexo.fps.CVSRepository.ConnectionType;
@@ -60,10 +60,10 @@ import org.openflexo.fps.action.FlexoUnknownHostException;
 import org.openflexo.fps.controller.action.FPSControllerActionInitializer;
 import org.openflexo.fps.controller.browser.CVSRepositoriesBrowser;
 import org.openflexo.fps.controller.browser.SharedProjectBrowser;
+import org.openflexo.fps.view.CVSRepositoryBrowserView;
 import org.openflexo.fps.view.ConsoleView;
-import org.openflexo.fps.view.FPSFrame;
 import org.openflexo.fps.view.FPSMainPane;
-import org.openflexo.fps.view.listener.FPSKeyEventListener;
+import org.openflexo.fps.view.SharedProjectBrowserView;
 import org.openflexo.fps.view.menu.FPSMenuBar;
 import org.openflexo.icon.FPSIconLibrary;
 import org.openflexo.icon.UtilsIconLibrary;
@@ -72,13 +72,12 @@ import org.openflexo.jedit.JEditTextArea;
 import org.openflexo.jedit.JEditTextArea.CursorPositionListener;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.FlexoModule;
-import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.selection.SelectionManager;
+import org.openflexo.toolbox.FileUtils;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.SelectionManagingController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
@@ -86,30 +85,26 @@ import org.openflexo.view.menu.FlexoMenuBar;
  * 
  * @author yourname
  */
-public class FPSController extends FlexoController implements SelectionManagingController {
+public class FPSController extends FlexoController {
 	static final Logger logger = Logger.getLogger(FPSController.class.getPackage().getName());
 
-	public final FlexoPerspective ALL_FILES_PERSPECTIVE = new AllFilesPerspective(this);
-	public final FlexoPerspective INTERESTING_FILES_PERSPECTIVE = new InterestingFilesPerspective(this);
-	public final FlexoPerspective LOCALLY_MODIFIED_PERSPECTIVE = new LocallyModifiedPerspective(this);
-	public final FlexoPerspective REMOTELY_MODIFIED_PERSPECTIVE = new RemotelyModifiedPerspective(this);
-	public final FlexoPerspective CONFLICTING_FILES_PERSPECTIVE = new ConflictingFilesPerspective(this);
+	public FlexoPerspective ALL_FILES_PERSPECTIVE = new AllFilesPerspective(this);
+	public FlexoPerspective INTERESTING_FILES_PERSPECTIVE = new InterestingFilesPerspective(this);
+	public FlexoPerspective LOCALLY_MODIFIED_PERSPECTIVE = new LocallyModifiedPerspective(this);
+	public FlexoPerspective REMOTELY_MODIFIED_PERSPECTIVE = new RemotelyModifiedPerspective(this);
+	public FlexoPerspective CONFLICTING_FILES_PERSPECTIVE = new ConflictingFilesPerspective(this);
 
 	// ================================================
 	// ============= Instance variables ===============
 	// ================================================
 
-	protected FPSMenuBar _fpsMenuBar;
-	protected FPSFrame _frame;
-	protected FPSKeyEventListener _fpsKeyEventListener;
-	private final FPSSelectionManager _selectionManager;
-	private final CVSRepositoriesBrowser _repositoriesBrowser;
-	private final SharedProjectBrowser _sharedProjectBrowser;
+	private CVSRepositoriesBrowser _repositoriesBrowser;
+	private SharedProjectBrowser _sharedProjectBrowser;
 
-	private final CVSRepositoryList _repositories;
+	private CVSRepositoryList _repositories;
 	private SharedProject _sharedProject;
 
-	private final ConsoleView _consoleView;
+	private ConsoleView _consoleView;
 
 	FPSFooter _footer;
 
@@ -119,6 +114,10 @@ public class FPSController extends FlexoController implements SelectionManagingC
 
 	private static FPSController _instance = null;
 
+	private SharedProjectBrowserView sharedProjectBrowserView;
+
+	private CVSRepositoryBrowserView cvsRepositoryBrowserView;
+
 	public static FPSController getInstance() {
 		return _instance;
 	}
@@ -126,43 +125,61 @@ public class FPSController extends FlexoController implements SelectionManagingC
 	/**
 	 * Default constructor
 	 */
-	public FPSController(FlexoModule module) throws Exception {
-		super(module.getEditor(), module);
-
+	public FPSController(FlexoModule module) {
+		super(module);
 		_instance = this;
+	}
+
+	@Override
+	protected void initializePerspectives() {
 		logger.info("Create CVSRepositoryList");
 		_repositories = new CVSRepositoryList();
-		_sharedProject = null;
+		_repositoriesBrowser = new CVSRepositoriesBrowser(this);
+		_sharedProjectBrowser = new SharedProjectBrowser(this);
+		cvsRepositoryBrowserView = new CVSRepositoryBrowserView(this);
+		sharedProjectBrowserView = new SharedProjectBrowserView(this);
 
 		createFooter();
+
+		_consoleView = new ConsoleView();
+		_repositories.loadStoredRepositoryLocation(FileUtils.getApplicationDataDirectory());
+		_footer.refresh();
+
 		addToPerspectives(ALL_FILES_PERSPECTIVE);
 		addToPerspectives(INTERESTING_FILES_PERSPECTIVE);
 		addToPerspectives(LOCALLY_MODIFIED_PERSPECTIVE);
 		addToPerspectives(REMOTELY_MODIFIED_PERSPECTIVE);
 		addToPerspectives(CONFLICTING_FILES_PERSPECTIVE);
-
-		_fpsMenuBar = (FPSMenuBar) createAndRegisterNewMenuBar();
-		_fpsKeyEventListener = new FPSKeyEventListener(this);
-		_frame = new FPSFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _fpsKeyEventListener, _fpsMenuBar);
-		init(_frame, _fpsKeyEventListener, _fpsMenuBar);
-
-		// At this point the InspectorController is not yet loaded
-		_selectionManager = new FPSSelectionManager(this);
-
-		_repositoriesBrowser = new CVSRepositoriesBrowser(this);
-		_sharedProjectBrowser = new SharedProjectBrowser(this);
-
-		_consoleView = new ConsoleView();
-
-		_repositories.loadStoredRepositoryLocation(FlexoPreferences.getApplicationDataDirectory());
-
-		_footer.refresh();
-
 		if (getCurrentPerspective() instanceof FPSPerspective) {
 			((FPSPerspective) getCurrentPerspective()).setFilters();
 			getSharedProjectBrowser().update();
 		}
+	}
 
+	public SharedProjectBrowserView getSharedProjectBrowserView() {
+		return sharedProjectBrowserView;
+	}
+
+	public CVSRepositoryBrowserView getCvsRepositoryBrowserView() {
+		return cvsRepositoryBrowserView;
+	}
+
+	@Override
+	protected SelectionManager createSelectionManager() {
+		return new FPSSelectionManager(this);
+	}
+
+	@Override
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+		return getSharedProject();
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		if (_instance == this) {
+			_instance = null;
+		}
 	}
 
 	@Override
@@ -180,51 +197,9 @@ public class FPSController extends FlexoController implements SelectionManagingC
 		return new FPSMenuBar(this);
 	}
 
-	/**
-	 * Init inspectors
-	 */
-	@Override
-	public void initInspectors() {
-		super.initInspectors();
-		_selectionManager.addObserver(getSharedInspectorController());
-	}
-
-	public void loadRelativeWindows() {
-		// Build eventual relative windows
-	}
-
-	// ================================================
-	// ============== Instance method =================
-	// ================================================
-
-	public ValidationModel getDefaultValidationModel() {
-		// If there is a ValidationModel associated to this module, put it here
-		return null;
-	}
-
-	public FPSFrame getMainFrame() {
-		return _frame;
-	}
-
-	public FPSMenuBar getEditorMenuBar() {
-		return _fpsMenuBar;
-	}
-
-	public void showBrowser() {
-		if (getMainPane() != null) {
-			((FPSMainPane) getMainPane()).showBrowser();
-		}
-	}
-
-	public void hideBrowser() {
-		if (getMainPane() != null) {
-			((FPSMainPane) getMainPane()).hideBrowser();
-		}
-	}
-
 	@Override
 	protected FlexoMainPane createMainPane() {
-		return new FPSMainPane(getEmptyPanel(), getMainFrame(), this);
+		return new FPSMainPane(this);
 	}
 
 	public CVSRepositoriesBrowser getCVSRepositoriesBrowser() {
@@ -233,23 +208,6 @@ public class FPSController extends FlexoController implements SelectionManagingC
 
 	public SharedProjectBrowser getSharedProjectBrowser() {
 		return _sharedProjectBrowser;
-	}
-
-	public FPSKeyEventListener getKeyEventListener() {
-		return _fpsKeyEventListener;
-	}
-
-	// ================================================
-	// ============ Selection management ==============
-	// ================================================
-
-	@Override
-	public SelectionManager getSelectionManager() {
-		return getFPSSelectionManager();
-	}
-
-	public FPSSelectionManager getFPSSelectionManager() {
-		return _selectionManager;
 	}
 
 	/**
@@ -288,7 +246,6 @@ public class FPSController extends FlexoController implements SelectionManagingC
 		}
 		_sharedProject = project;
 		_sharedProjectBrowser.update();
-		_frame.updateTitle();
 		_footer.refresh();
 	}
 
@@ -409,7 +366,7 @@ public class FPSController extends FlexoController implements SelectionManagingC
 		public void focusGained(FocusEvent e) {
 			if (e.getComponent() instanceof JEditTextArea) {
 				((JEditTextArea) e.getComponent()).addToCursorPositionListener(this);
-				_activeGenericCodeDisplayer = ((JEditTextArea) e.getComponent());
+				_activeGenericCodeDisplayer = (JEditTextArea) e.getComponent();
 				refresh();
 			}
 		}
@@ -439,8 +396,8 @@ public class FPSController extends FlexoController implements SelectionManagingC
 				editorStatusLabel.setText(FlexoLocalization.localizedForKey("no_edition"));
 			} else {
 				cursorPositionLabel.setText(_activeGenericCodeDisplayer.getCursorY() + ":" + _activeGenericCodeDisplayer.getCursorX());
-				editorStatusLabel.setText((_activeGenericCodeDisplayer.isEditable() ? FlexoLocalization.localizedForKey("edition")
-						: FlexoLocalization.localizedForKey("read_only")));
+				editorStatusLabel.setText(_activeGenericCodeDisplayer.isEditable() ? FlexoLocalization.localizedForKey("edition")
+						: FlexoLocalization.localizedForKey("read_only"));
 			}
 		}
 
@@ -460,11 +417,6 @@ public class FPSController extends FlexoController implements SelectionManagingC
 	}
 
 	@Override
-	public FlexoPerspective<CVSFile> getCurrentPerspective() {
-		return (FPSPerspective) super.getCurrentPerspective();
-	}
-
-	@Override
 	public String getWindowTitleforObject(FlexoModelObject object) {
 		if (object instanceof CVSFile) {
 			CVSFile cvsFile = (CVSFile) object;
@@ -478,10 +430,10 @@ public class FPSController extends FlexoController implements SelectionManagingC
 		if (repository.isEnabled()) {
 			return true;
 		}
-		ReadOnlyTextFieldParameter userName = new ReadOnlyTextFieldParameter("userName", "user_name",
-				(repository.getUserName() == null ? "" : repository.getUserName()), 20);
-		TextFieldParameter passwd = new TextFieldParameter("passwd", "password", (repository.getPassword() == null ? ""
-				: repository.getPassword()));
+		ReadOnlyTextFieldParameter userName = new ReadOnlyTextFieldParameter("userName", "user_name", repository.getUserName() == null ? ""
+				: repository.getUserName(), 20);
+		TextFieldParameter passwd = new TextFieldParameter("passwd", "password", repository.getPassword() == null ? ""
+				: repository.getPassword());
 		passwd.setIsPassword(true);
 		CheckboxParameter storePasswd = new CheckboxParameter("storePasswd", "store_password", repository.getStorePassword());
 
@@ -504,7 +456,7 @@ public class FPSController extends FlexoController implements SelectionManagingC
 		if (repository.isEnabled()) {
 			return true;
 		}
-		TextFieldParameter host = new TextFieldParameter("host", "host", (repository.getHostName() == null ? "" : repository.getHostName()));
+		TextFieldParameter host = new TextFieldParameter("host", "host", repository.getHostName() == null ? "" : repository.getHostName());
 
 		AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, repository.getName() + " : "
 				+ FlexoLocalization.localizedForKey("unknown_host"), FlexoLocalization.localizedForKey("reenter_host"), host);

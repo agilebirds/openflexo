@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.dm.DMModel" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Stats" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="StatsTab">
+      <Label align="center" index="1" data="data.statistics.infoLabel" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;location=right)" width="200" height="60" name="StatisticsinfoLabel" localize="true" />
+      <Label label="# entities" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsTop=5;location=left)" name="StatisticseoEntityCountLabel" localize="true" />
+      <TextField index="3" data="data.statistics.eoEntityCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;location=right)" name="StatisticseoEntityCount" readOnly="true" localize="true" />
+      <Label label="# attributes" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsTop=5;location=left)" name="StatisticseoAttributeCountLabel" localize="true" />
+      <TextField index="5" data="data.statistics.eoAttributeCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;location=right)" name="StatisticseoAttributeCount" readOnly="true" localize="true" />
+      <Label label="# relationships" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsTop=5;location=left)" name="StatisticseoRelationshipCountLabel" localize="true" />
+      <TextField index="7" data="data.statistics.eoRelationshipCount.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;location=right)" name="StatisticseoRelationshipCount" readOnly="true" localize="true" />
+    </Tab>
+    <Tab title="Code" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="CodeTab">
+      <Label label="eo_code_generation_available" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="EOCodeGenerationAvailableLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
+      </Label>
+      <CheckBox selected="false" index="1" data="data.EOCodeGenerationAvailable" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;location=right)" name="EOCodeGenerationAvailable" readOnly="true" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
+      </CheckBox>
+      <Label label="eo_code_generation_activated" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" visible="(data.EOCodeGenerationAvailable = true)" name="EOCodeGenerationActivatedLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
+      </Label>
+      <CheckBox selected="false" index="3" data="data.EOCodeGenerationActivated" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;location=right)" visible="(data.EOCodeGenerationAvailable = true)" name="EOCodeGenerationActivated" readOnly="true" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
+      </CheckBox>
+    </Tab>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="AdvancedTab">
+      <Label label="default_connection_string" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="GlobalDefaultConnectionStringLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
+      </Label>
+      <TextField index="7" data="data.globalDefaultConnectionString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="GlobalDefaultConnectionString" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
+      </TextField>
+      <Label label="default_username" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" name="GlobalDefaultUsernameLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
+      </Label>
+      <TextField index="9" data="data.globalDefaultUsername" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;location=right)" name="GlobalDefaultUsername" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
+      </TextField>
+      <Label label="default_password" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsTop=5;location=left)" name="GlobalDefaultPasswordLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
+      </Label>
+      <TextField index="11" data="data.globalDefaultPassword" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;location=right)" name="GlobalDefaultPassword" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
+      </TextField>
+    </Tab>
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+      <Label index="1" data="data.helpText" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;location=right)" width="200" height="200" name="HelpText" localize="true" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="# entities" lang="French"># entités</Localized>
+    <Localized key="# attributes" lang="French"># attributs</Localized>
+    <Localized key="# relationships" lang="French"># relations</Localized>
+    <Localized key="eo_code_generation_available" lang="English">EOF code generation available</Localized>
+    <Localized key="eo_code_generation_available" lang="French">Génération de code EOF disponible</Localized>
+    <Localized key="eo_code_generation_available" lang="Dutch">EOF code generation available</Localized>
+    <Localized key="eo_code_generation_activated" lang="English">EOF code generation activated</Localized>
+    <Localized key="eo_code_generation_activated" lang="French">Génération de code EOF activée</Localized>
+    <Localized key="eo_code_generation_activated" lang="Dutch">EOF code generation activated</Localized>
+    <Localized key="Advanced" lang="French">Avancé</Localized>
+    <Localized key="default_connection_string" lang="English">URL</Localized>
+    <Localized key="default_connection_string" lang="French">Adresse</Localized>
+    <Localized key="default_connection_string" lang="Dutch">URL</Localized>
+    <Localized key="default_username" lang="English">User name</Localized>
+    <Localized key="default_username" lang="French">Nom de l'utilisateur</Localized>
+    <Localized key="default_username" lang="Dutch">User name</Localized>
+    <Localized key="default_password" lang="English">Password</Localized>
+    <Localized key="default_password" lang="French">Mot de passe</Localized>
+    <Localized key="default_password" lang="Dutch">Password</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="Data model" />
+</Panel>

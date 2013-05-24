@@ -25,6 +25,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.foundation.wkf.FlexoProcessNode;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.ProcessFolder;
 import org.openflexo.foundation.wkf.Role;
@@ -62,13 +63,9 @@ public class WKFIconLibrary extends IconLibrary {
 
 	// Perspective icons
 	public static final ImageIcon WKF_BPEP_ACTIVE_ICON = new ImageIconResource("Icons/WKF/workflow-perspective.png");
-	public static final ImageIcon WKF_BPEP_SELECTED_ICON = new ImageIconResource("Icons/WKF/workflow-perspective-hover.png");
 	public static final ImageIcon WKF_SWLP_ACTIVE_ICON = new ImageIconResource("Icons/WKF/swimming-lanes-perspective.png");
-	public static final ImageIcon WKF_SWLP_SELECTED_ICON = new ImageIconResource("Icons/WKF/swimming-lanes-perspective-hover.png");
 	public static final ImageIcon WKF_RP_ACTIVE_ICON = new ImageIconResource("Icons/WKF/role-perspective.png");
-	public static final ImageIcon WKF_RP_SELECTED_ICON = new ImageIconResource("Icons/WKF/role-perspective-hover.png");
 	public static final ImageIcon WKF_DOCP_ACTIVE_ICON = new ImageIconResource("Icons/WKF/documentation-perspective.png");
-	public static final ImageIcon WKF_DOCP_SELECTED_ICON = new ImageIconResource("Icons/WKF/documentation-perspective-hover.png");
 
 	// Editor icons
 	public static final ImageIcon FLAT_ICON = new ImageIconResource("Icons/WKF/Flat.gif");
@@ -77,6 +74,8 @@ public class WKFIconLibrary extends IconLibrary {
 	public static final IconMarker WS_MARKER = new IconMarker(new ImageIconResource("Icons/WKF/MarkerWS.gif"), 12, 9);
 
 	public static final ImageIcon MULTIPLE_INSTANCE_SUBPROCESS_ICON = new ImageIconResource("Icons/WKF/MultipleInstanceProcess.gif");
+	public static final ImageIcon SEQUENTIAL_MULTIPLE_INSTANCE_SUBPROCESS_ICON = new ImageIconResource(
+			"Icons/WKF/SequentialMultipleInstanceProcess.gif");
 	public static final ImageIcon LOOP_SUBPROCESS_ICON = new ImageIconResource("Icons/WKF/LoopProcess.gif");
 	public static final ImageIcon WS_CALL_SUBPROCESS_ICON = new ImageIconResource("Icons/WKF/WSCallProcess.gif");
 
@@ -89,13 +88,13 @@ public class WKFIconLibrary extends IconLibrary {
 	public static final ImageIconResource TRIANGLE_RIGHT = new ImageIconResource("Icons/WKF/SWL/ArrowRight.gif");
 
 	// Small model icons
-	public static final ImageIcon WORKFLOW_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Library_WKF.gif");
+	public static final ImageIcon PROCESS_FOLDER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/ProcessFolder.gif");
+	public static final ImageIcon WORKFLOW_ICON = PROCESS_FOLDER_ICON/*new ImageIconResource("Icons/Model/WKF/SmallIcons/Library_WKF.gif")*/;
 	public static final ImageIcon ROLE_LIBRARY_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/Library_Role.gif");
 	public static final ImageIcon IMPORTED_PROCESS_LIBRARY_ICON = new ImageIconResource(
 			"Icons/Model/WKF/SmallIcons/ImportedLibrary_WKF.gif");
 	public static final ImageIcon IMPORTED_ROLE_LIBRARY_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/ImportedLibrary_Role.gif");
 	public static final ImageIconResource PROCESS_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallProcess.gif");
-	public static final ImageIcon PROCESS_FOLDER_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/ProcessFolder.gif");
 	public static final ImageIcon IMPORTED_PROCESS_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallImportedProcess.gif");
 	public static final ImageIcon SUBPROCESS_NODE_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallSubProcessNode.gif");
 	public static final ImageIcon ACTIVITY_NODE_ICON = new ImageIconResource("Icons/Model/WKF/SmallIcons/SmallActivity.gif");
@@ -518,14 +517,14 @@ public class WKFIconLibrary extends IconLibrary {
 	}
 
 	public static ImageIcon getImageIconForPortmap(FlexoPortMap portmap) {
-		if ((portmap.getOperation() != null) && (portmap.getOperation().getPort() != null)) {
+		if (portmap.getOperation() != null && portmap.getOperation().getPort() != null) {
 			return getSmallImageIconForFlexoPort(portmap.getOperation().getPort());
 		}
 		return null;
 	}
 
 	public static ImageIcon getImageIconForPortmap(FlexoPortMap portmap, int orientation) {
-		if ((portmap.getOperation() != null) && (portmap.getOperation().getPort() != null)) {
+		if (portmap.getOperation() != null && portmap.getOperation().getPort() != null) {
 			return getSmallImageIconForFlexoPort(portmap.getOperation().getPort(), orientation);
 		}
 		return null;
@@ -552,6 +551,8 @@ public class WKFIconLibrary extends IconLibrary {
 			return ROLE_LIBRARY_ICON;
 		} else if (object instanceof Role) {
 			return ROLE_ICON;
+		} else if (object instanceof FlexoProcessNode) {
+			return PROCESS_ICON;
 		}
 		logger.warning("iconForObject(WorkflowModelObject) not implemented yet");
 		return null;

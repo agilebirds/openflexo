@@ -21,7 +21,6 @@ package org.openflexo.foundation.view;
 
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Abstract class implemented by all objects involved in Shema Library coding
@@ -53,6 +52,11 @@ public abstract class ViewLibraryObject extends AbstractViewObject {
 		setShemaLibrary(shemaLibrary);
 	}
 
+	public ViewLibrary getViewLibrary() {
+		return getShemaLibrary();
+	}
+
+	@Deprecated
 	public ViewLibrary getShemaLibrary() {
 		return _shemaLibrary;
 	}
@@ -72,13 +76,4 @@ public abstract class ViewLibraryObject extends AbstractViewObject {
 		return getShemaLibrary();
 	}
 
-	/**
-	 * Overrides getXMLMapping
-	 * 
-	 * @see org.openflexo.foundation.ie.IEObject#getXMLMapping()
-	 */
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getShemaLibrary().getXMLMapping();
-	}
 }

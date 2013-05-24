@@ -39,8 +39,8 @@ import org.openflexo.foundation.wkf.ws.ServiceInterface;
 import org.openflexo.foundation.wkf.ws.ServiceOperation;
 import org.openflexo.foundation.ws.WSObject;
 import org.openflexo.selection.SelectionListener;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.wse.controller.WSEController;
 
 /**
@@ -90,7 +90,7 @@ public abstract class WSEView<O extends FlexoModelObject> extends CompoundTabula
 
 			// HYPOTHESE: ca marche que pour des WSObject des WSObjects ! (hum hum...)
 			if (anObject instanceof WSObject) {
-				WSObject parentObject = (WSObject) ((WSObject) anObject).getParent();
+				WSObject parentObject = ((WSObject) anObject).getParent();
 				if (next.getModel().indexOf(parentObject) > -1) {
 					if (next.getSelectedObjects().contains(parentObject)) {
 						next.selectObject(parentObject);
@@ -160,11 +160,12 @@ public abstract class WSEView<O extends FlexoModelObject> extends CompoundTabula
 	@Override
 	public void deleteModuleView() {
 		logger.info("Removing view !");
+		getRepresentedObject().deleteObserver(this);
 		getWSEController().removeModuleView(this);
 	}
 
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return getWSEController().WSE_PERSPECTIVE;
 	}
 

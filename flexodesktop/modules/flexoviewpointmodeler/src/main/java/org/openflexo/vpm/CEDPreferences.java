@@ -24,9 +24,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.module.Module;
+import org.openflexo.prefs.ContextPreferences;
 import org.openflexo.prefs.ModulePreferences;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.vpm.controller.VPMController;
 
 /**
  * Contains preferences for this module
@@ -44,19 +44,16 @@ public final class CEDPreferences extends ModulePreferences {
 
 	protected static final String EXAMPLE_PREF_VALUE = "examplePrefValue";
 
-	private static VPMController _controller;
+	public static void init() {
+		getPreferences();
+	}
 
-	public static void init(VPMController controller) {
-		_controller = controller;
-		preferences(CED_PREFERENCES);
+	public static ContextPreferences getPreferences() {
+		return preferences(CED_PREFERENCES);
 	}
 
 	public CEDPreferences() {
 		super(Module.VPM_MODULE);
-	}
-
-	public static void reset() {
-		_controller = null;
 	}
 
 	@Override
@@ -68,7 +65,7 @@ public final class CEDPreferences extends ModulePreferences {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getExamplePrefValue");
 		}
-		Boolean value = preferences(CED_PREFERENCES).getBooleanProperty(EXAMPLE_PREF_VALUE);
+		Boolean value = getPreferences().getBooleanProperty(EXAMPLE_PREF_VALUE);
 		if (value == null) {
 			setExamplePrefValue(Boolean.FALSE);
 			return getExamplePrefValue();
@@ -80,11 +77,11 @@ public final class CEDPreferences extends ModulePreferences {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setExamplePrefValue");
 		}
-		preferences(CED_PREFERENCES).setBooleanProperty(EXAMPLE_PREF_VALUE, alignOnGrid);
+		getPreferences().setBooleanProperty(EXAMPLE_PREF_VALUE, alignOnGrid);
 	}
 
 	public static int getScreenshotQuality() {
-		Integer limit = preferences(CED_PREFERENCES).getIntegerProperty(SCREENSHOT_QUALITY);
+		Integer limit = getPreferences().getIntegerProperty(SCREENSHOT_QUALITY);
 		if (limit == null) {
 			limit = 100;
 		}
@@ -92,7 +89,7 @@ public final class CEDPreferences extends ModulePreferences {
 	}
 
 	public static void setScreenshotQuality(int limit) {
-		preferences(CED_PREFERENCES).setIntegerProperty(SCREENSHOT_QUALITY, limit);
+		getPreferences().setIntegerProperty(SCREENSHOT_QUALITY, limit);
 	}
 
 }

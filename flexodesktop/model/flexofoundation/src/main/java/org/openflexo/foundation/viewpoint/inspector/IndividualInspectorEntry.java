@@ -24,8 +24,10 @@ import java.lang.reflect.Type;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.ontology.OntologyIndividual;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 /**
@@ -42,10 +44,16 @@ public class IndividualInspectorEntry extends InspectorEntry {
 
 	private BindingDefinition CONCEPT_VALUE = new BindingDefinition("conceptValue", OntologyClass.class, BindingDefinitionType.GET, false);
 
+	private String renderer;
+
+	public IndividualInspectorEntry(ViewPointBuilder builder) {
+		super(builder);
+	}
+
 	@Override
 	public Type getType() {
 		if (getConcept() != null) {
-			return getConcept();
+			return IndividualOfClass.getIndividualOfClass(getConcept());
 		}
 		return super.getType();
 	}
@@ -73,7 +81,7 @@ public class IndividualInspectorEntry extends InspectorEntry {
 			getViewPoint().loadWhenUnloaded();
 		}
 		if (getOntologyLibrary() != null) {
-			return getOntologyLibrary().getClass(_getConceptURI());
+			return getViewPoint().getViewpointOntology().getClass(_getConceptURI());
 		}
 		return null;
 	}
@@ -124,4 +132,21 @@ public class IndividualInspectorEntry extends InspectorEntry {
 		return null;
 	}
 
+	/**
+	 * Return renderer for this individual, under the form eg individual.name
+	 * 
+	 * @return
+	 */
+	public String getRenderer() {
+		return renderer;
+	}
+
+	/**
+	 * Sets renderer for this individual, under the form eg individual.name
+	 * 
+	 * @param renderer
+	 */
+	public void setRenderer(String renderer) {
+		this.renderer = renderer;
+	}
 }

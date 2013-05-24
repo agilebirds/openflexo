@@ -24,6 +24,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.RepresentableFlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -49,14 +50,14 @@ public class AddRole extends FlexoAction<AddRole, WorkflowModelObject, WorkflowM
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(WorkflowModelObject object, Vector<WorkflowModelObject> globalSelection) {
-			return object != null && object instanceof RoleList && !((RoleList) object).isImportedRoleList() || object instanceof Role
+		public boolean isVisibleForSelection(WorkflowModelObject object, Vector<WorkflowModelObject> globalSelection) {
+			return object instanceof RoleList && !((RoleList) object).isImportedRoleList() || object instanceof Role
 					&& !((Role) object).isImported();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(WorkflowModelObject object, Vector<WorkflowModelObject> globalSelection) {
-			return isVisibleForSelection(object, globalSelection);
+		public boolean isEnabledForSelection(WorkflowModelObject object, Vector<WorkflowModelObject> globalSelection) {
+			return isVisibleForSelection(object, globalSelection) || object instanceof FlexoWorkflow;
 		}
 
 	};
@@ -73,8 +74,12 @@ public class AddRole extends FlexoAction<AddRole, WorkflowModelObject, WorkflowM
 
 	private Role _newRole;
 
+	private Role roleToClone;
+
 	static {
-		FlexoWorkflow.addActionForClass(actionType, FlexoWorkflow.class);
+		FlexoModelObject.addActionForClass(actionType, FlexoWorkflow.class);
+		FlexoModelObject.addActionForClass(actionType, RoleList.class);
+		FlexoModelObject.addActionForClass(actionType, Role.class);
 	}
 
 	AddRole(WorkflowModelObject focusedObject, Vector<WorkflowModelObject> globalSelection, FlexoEditor editor) {
@@ -101,7 +106,13 @@ public class AddRole extends FlexoAction<AddRole, WorkflowModelObject, WorkflowM
 		logger.info("Add role");
 		if (getWorkflow() != null) {
 			RoleList roleList = getWorkflow().getRoleList();
-			roleList.addToRoles(_newRole = new Role(getWorkflow(), getNewRoleName()));
+			if (roleToClone != null) {
+				_newRole = (Role) roleToClone.cloneUsingXMLMapping();
+				_newRole.setName(getNewRoleName());
+			} else {
+				_newRole = new Role(getWorkflow(), getNewRoleName());
+			}
+			roleList.addToRoles(_newRole);
 			if (x != -1 && y != -1) {
 				_newRole.setX(x, RepresentableFlexoModelObject.DEFAULT);
 				_newRole.setY(y, RepresentableFlexoModelObject.DEFAULT);
@@ -157,6 +168,10 @@ public class AddRole extends FlexoAction<AddRole, WorkflowModelObject, WorkflowM
 
 	public void setIsSystemRole(boolean isSystemRole) {
 		_isSystemRole = isSystemRole;
+	}
+
+	public void setRoleToClone(Role roleToClone) {
+		this.roleToClone = roleToClone;
 	}
 
 }

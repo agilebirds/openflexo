@@ -25,11 +25,18 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.ie.widget.IEBlocWidget;
+import org.openflexo.foundation.ie.widget.IEHTMLTableWidget;
 import org.openflexo.foundation.ie.widget.IESequence;
+import org.openflexo.foundation.ie.widget.IESequenceTab;
+import org.openflexo.foundation.ie.widget.IESequenceTopComponent;
+import org.openflexo.foundation.ie.widget.IETabContainerWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.ie.widget.IWidget;
+import org.openflexo.foundation.ie.widget.TopComponentReusableWidget;
 import org.openflexo.logging.FlexoLogger;
 
 /**
@@ -51,16 +58,25 @@ public class TopComponentUp extends FlexoAction<TopComponentUp, IEWidget, IEWidg
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
+		public boolean isVisibleForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
-			return (object != null) && object.isTopComponent();
+		public boolean isEnabledForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
+			return object != null && object.isTopComponent();
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IEBlocWidget.class);
+		FlexoModelObject.addActionForClass(actionType, IEHTMLTableWidget.class);
+		FlexoModelObject.addActionForClass(actionType, IESequenceTab.class);
+		FlexoModelObject.addActionForClass(actionType, IESequenceTopComponent.class);
+		FlexoModelObject.addActionForClass(actionType, IETabContainerWidget.class);
+		FlexoModelObject.addActionForClass(actionType, TopComponentReusableWidget.class);
+	}
 
 	private IEWidget component;
 
@@ -84,7 +100,7 @@ public class TopComponentUp extends FlexoAction<TopComponentUp, IEWidget, IEWidg
 		if (logger.isLoggable(Level.FINEST)) {
 			logger.finest("Do action top component up");
 		}
-		if ((getComponent() != null) && (getComponent().getParent() instanceof IESequence)) {
+		if (getComponent() != null && getComponent().getParent() instanceof IESequence) {
 			IESequence<IWidget> c = (IESequence<IWidget>) getComponent().getParent();
 			int i = c.indexOf(getComponent());
 			if (i > 0) {

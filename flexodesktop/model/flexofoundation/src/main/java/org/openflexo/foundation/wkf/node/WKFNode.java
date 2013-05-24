@@ -113,7 +113,7 @@ public abstract class WKFNode extends WKFObject {
 	public Vector<WKFNode> getFromAssociatedNodes() {
 		Vector<WKFNode> v = new Vector<WKFNode>();
 		for (WKFAssociation a : getIncomingAssociations()) {
-			if (!v.contains(a)) {
+			if (!v.contains(a.getStartNode())) {
 				v.add(a.getStartNode());
 			}
 		}
@@ -139,7 +139,7 @@ public abstract class WKFNode extends WKFObject {
 	public final Vector<WKFNode> getAllRelatedFromNodes() {
 		Vector<WKFNode> v = new Vector<WKFNode>();
 		for (WKFEdge<?, ?> a : getAllIncomingEdges()) {
-			if (!v.contains(a)) {
+			if (!v.contains(a.getStartNode())) {
 				v.add(a.getStartNode());
 			}
 		}
@@ -189,7 +189,7 @@ public abstract class WKFNode extends WKFObject {
 	public Vector<WKFNode> getToAssociatedNodes() {
 		Vector<WKFNode> v = new Vector<WKFNode>();
 		for (WKFAssociation a : getOutgoingAssociations()) {
-			if (!v.contains(a)) {
+			if (!v.contains(a.getEndNode())) {
 				v.add(a.getEndNode());
 			}
 		}

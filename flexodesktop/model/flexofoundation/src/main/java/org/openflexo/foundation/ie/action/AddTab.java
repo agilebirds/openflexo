@@ -23,12 +23,14 @@ import java.util.Vector;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 import org.openflexo.foundation.ie.cl.TabComponentDefinition;
 import org.openflexo.foundation.ie.util.FolderType;
 import org.openflexo.foundation.ie.widget.IESequenceTab;
+import org.openflexo.foundation.ie.widget.IETabContainerWidget;
 import org.openflexo.foundation.ie.widget.IETabWidget;
 import org.openflexo.foundation.ie.widget.IEWidget;
 import org.openflexo.foundation.rm.DuplicateResourceException;
@@ -58,16 +60,22 @@ public class AddTab extends FlexoAction<AddTab, IEWidget, IEWidget> {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
+		public boolean isVisibleForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
 			return globalSelection != null && globalSelection.size() == 1;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
-			return ((object != null) && ((object instanceof IESequenceTab) || (object instanceof IETabWidget)));
+		public boolean isEnabledForSelection(IEWidget object, Vector<IEWidget> globalSelection) {
+			return object != null && (object instanceof IESequenceTab || object instanceof IETabWidget);
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IESequenceTab.class);
+		FlexoModelObject.addActionForClass(actionType, IETabContainerWidget.class);
+		FlexoModelObject.addActionForClass(actionType, IETabWidget.class);
+	}
 
 	AddTab(IEWidget focusedObject, Vector<IEWidget> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

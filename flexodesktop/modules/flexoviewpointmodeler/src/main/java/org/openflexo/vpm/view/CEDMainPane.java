@@ -25,10 +25,7 @@ package org.openflexo.vpm.view;
  * Flexo Application Suite
  * (c) Denali 2003-2006
  */
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.ModuleView;
 import org.openflexo.vpm.controller.VPMController;
 
 /**
@@ -36,24 +33,10 @@ import org.openflexo.vpm.controller.VPMController;
  * 
  * @author yourname
  */
-public class CEDMainPane extends FlexoMainPane implements GraphicalFlexoObserver {
+public class CEDMainPane extends FlexoMainPane {
 
-	public CEDMainPane(ModuleView moduleView, CEDFrame mainFrame, VPMController controller) {
-		super(moduleView, mainFrame, controller);
-	}
-
-	public void showBrowser() {
-		showLeftView();
-	}
-
-	public void hideBrowser() {
-		hideLeftView();
-	}
-
-	@Override
-	protected FlexoModelObject getParentObject(FlexoModelObject object) {
-		// Implements it if required
-		return null;
+	public CEDMainPane(VPMController controller) {
+		super(controller);
 	}
 
 }

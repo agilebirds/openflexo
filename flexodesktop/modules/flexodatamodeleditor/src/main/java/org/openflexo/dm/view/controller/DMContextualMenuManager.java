@@ -22,14 +22,14 @@ package org.openflexo.dm.view.controller;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.ContextualMenuManager;
+import org.openflexo.view.controller.FlexoController;
 
 public class DMContextualMenuManager extends ContextualMenuManager {
 
-	public DMContextualMenuManager(DMSelectionManager selectionManager, FlexoEditor editor) {
-		super(selectionManager, editor);
+	public DMContextualMenuManager(DMSelectionManager selectionManager, FlexoController controller) {
+		super(selectionManager, controller);
 	}
 
 	@Override

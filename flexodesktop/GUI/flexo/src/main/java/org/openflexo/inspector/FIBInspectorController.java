@@ -37,7 +37,6 @@ import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternInstancePathElement;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.view.controller.FlexoFIBController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
 
 /**
  * Represents the controller of a FIBInspector (FIBComponent) in the context of Swing graphical inspection
@@ -49,27 +48,16 @@ public class FIBInspectorController extends FlexoFIBController {
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBInspectorController.class.getPackage().getName());
 
-	private InteractiveFlexoEditor editor;
-
 	public FIBInspectorController(FIBComponent component) {
 		super(component);
 	}
 
 	public boolean displayInspectorTabForContext(String context) {
-		if (getEditor() != null && getEditor().getActiveModule() != null && getEditor().getActiveModule().getFlexoController() != null) {
-			return getEditor().getActiveModule().getFlexoController().displayInspectorTabForContext(context);
+		if (getFlexoController() != null) {
+			return getFlexoController().displayInspectorTabForContext(context);
+		} else {
+			return true;
 		}
-		logger.warning("No controller defined here !");
-		return false;
-	}
-
-	@Override
-	public InteractiveFlexoEditor getEditor() {
-		return editor;
-	}
-
-	public void setEditor(InteractiveFlexoEditor editor) {
-		this.editor = editor;
 	}
 
 	@Override
@@ -92,10 +80,11 @@ public class FIBInspectorController extends FlexoFIBController {
 			FIBInspector current = (FIBInspector) component;
 			while (current != null) {
 				File inspectorFile = new File(current.getDefinitionFile());
-				System.out.println("> " + inspectorFile);
+				// System.out.println("> " + inspectorFile);
 				if (inspectorFile.exists()) {
 					JMenuItem menuItem = new JMenuItem(inspectorFile.getName());
-					// We dont use existing inspector which is already aggregated !!!
+					// We dont use existing inspector which is already
+					// aggregated !!!
 					final FIBInspector inspectorToOpen = (FIBInspector) FIBLibrary.instance().retrieveFIBComponent(inspectorFile, false);
 					menuItem.addActionListener(new ActionListener() {
 						@Override

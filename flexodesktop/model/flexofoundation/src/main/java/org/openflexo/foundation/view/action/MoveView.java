@@ -37,12 +37,12 @@ public class MoveView extends FlexoAction<MoveView, ViewDefinition, ViewDefiniti
 			"move_view") {
 
 		@Override
-		protected boolean isEnabledForSelection(ViewDefinition object, Vector<ViewDefinition> globalSelection) {
+		public boolean isEnabledForSelection(ViewDefinition object, Vector<ViewDefinition> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ViewDefinition object, Vector<ViewDefinition> globalSelection) {
+		public boolean isVisibleForSelection(ViewDefinition object, Vector<ViewDefinition> globalSelection) {
 			return false;
 		}
 

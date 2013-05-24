@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="border" titleFont="Lucida Grande,0,13" darkLevel="0">
+  <TabPanel constraints="border(location=center)" width="100" height="60">
+    <Tab title="Tab1" layout="none" hGap="5" vGap="5" flowAlignment="LEADING" titleFont="Lucida Grande,0,13" darkLevel="0" index="1" />
+    <Tab title="Tab2" layout="none" titleFont="Lucida Grande,0,13" darkLevel="0" index="1" visible="checkbox.data" />
+  </TabPanel>
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="LEADING" border="rounded3d" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="border(location=north)">
+    <CheckBox selected="true" constraints="flow(index=0)" name="checkbox" localize="true" manageDynamicModel="true" />
+    <Label label="label" constraints="flow(index=1)" localize="true" />
+  </Panel>
+  <LocalizedDictionary />
+</Panel>
+

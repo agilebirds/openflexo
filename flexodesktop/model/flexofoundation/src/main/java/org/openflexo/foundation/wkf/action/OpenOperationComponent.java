@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.wkf.WKFObject;
@@ -46,16 +47,20 @@ public class OpenOperationComponent extends FlexoGUIAction<OpenOperationComponen
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
-			return ((object != null) && ((object).getNodeType() == NodeType.NORMAL) && ((object).getComponentInstance() != null));
+		public boolean isVisibleForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
+			return object != null && object.getNodeType() == NodeType.NORMAL && object.getComponentInstance() != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
-			return ((object != null) && ((object).getNodeType() == NodeType.NORMAL) && ((object).getComponentInstance() != null));
+		public boolean isEnabledForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
+			return object != null && object.getNodeType() == NodeType.NORMAL && object.getComponentInstance() != null;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, OperationNode.class);
+	}
 
 	OpenOperationComponent(OperationNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

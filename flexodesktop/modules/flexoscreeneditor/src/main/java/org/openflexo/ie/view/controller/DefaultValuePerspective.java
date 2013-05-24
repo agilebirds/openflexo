@@ -20,7 +20,6 @@
 package org.openflexo.ie.view.controller;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.ComponentInstance;
@@ -28,11 +27,11 @@ import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.ie.view.IEExampleValuesView;
 import org.openflexo.ie.view.IEWOComponentView;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
-class DefaultValuePerspective extends FlexoPerspective<ComponentInstance> {
+class DefaultValuePerspective extends FlexoPerspective {
 
 	/**
 		 * 
@@ -47,26 +46,19 @@ class DefaultValuePerspective extends FlexoPerspective<ComponentInstance> {
 	public DefaultValuePerspective(IEController controller) {
 		super("default_values_perspective");
 		_controller = controller;
+		setTopLeftView(controller.getComponentLibraryBrowserView());
+		setBottomLeftView(controller.getComponentBrowserView());
+		setBottomRightView(_controller.getDisconnectedDocInspectorPanel());
 	}
 
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
 		return IconLibrary.LIST_PERSPECTIVE_ACTIVE_ICON;
-	}
-
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return IconLibrary.LIST_PERSPECTIVE_SELECTED_ICON;
 	}
 
 	@Override
@@ -83,13 +75,12 @@ class DefaultValuePerspective extends FlexoPerspective<ComponentInstance> {
 	}
 
 	@Override
-	public ModuleView<ComponentInstance> createModuleViewForObject(ComponentInstance object, FlexoController controller) {
-		return new IEExampleValuesView((IEController) controller, object);
-	}
-
-	@Override
-	public boolean isAlwaysVisible() {
-		return true;
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+		if (object instanceof ComponentInstance) {
+			return new IEExampleValuesView((IEController) controller, (ComponentInstance) object);
+		} else {
+			return null;
+		}
 	}
 
 	@Override
@@ -99,29 +90,8 @@ class DefaultValuePerspective extends FlexoPerspective<ComponentInstance> {
 			ComponentDefinition component = ci.getComponentDefinition();
 			_controller.getComponentLibraryBrowser().focusOn(component);
 			_controller.getSelectionManager().setSelectedObject(component.getWOComponent());
-			_controller.getComponentBrowser().setCurrentComponent(component);
-			_controller.getComponentBrowser().focusOn(component);
+			_controller.getComponentBrowser().setRootObject(component);
 		}
-	}
-
-	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getLeftView() {
-		return _controller.getSplitPaneWithBrowsers();
-	}
-
-	@Override
-	public boolean doesPerspectiveControlRightView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getRightView() {
-		return _controller.getDisconnectedDocInspectorPanel();
 	}
 
 }

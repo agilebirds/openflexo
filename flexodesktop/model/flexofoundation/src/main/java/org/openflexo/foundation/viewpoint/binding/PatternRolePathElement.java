@@ -2,6 +2,7 @@ package org.openflexo.foundation.viewpoint.binding;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -23,6 +24,7 @@ import org.openflexo.foundation.viewpoint.ObjectPropertyPatternRole;
 import org.openflexo.foundation.viewpoint.ObjectPropertyStatementPatternRole;
 import org.openflexo.foundation.viewpoint.OntologicObjectPatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.PropertyPatternRole;
 import org.openflexo.foundation.viewpoint.RestrictionStatementPatternRole;
 import org.openflexo.foundation.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.binding.GraphicalElementPatternRolePathElement.ConnectorPatternRolePathElement;
@@ -34,6 +36,7 @@ import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePath
 import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.OntologicDataPropertyPatternRolePathElement;
 import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.OntologicIndividualPatternRolePathElement;
 import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.OntologicObjectPropertyPatternRolePathElement;
+import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.OntologicPropertyPatternRolePathElement;
 import org.openflexo.foundation.viewpoint.binding.OntologicObjectPatternRolePathElement.RestrictionStatementPatternRolePathElement;
 
 public class PatternRolePathElement<T extends Object> implements SimplePathElement<T>, BindingVariable<T> {
@@ -45,26 +48,23 @@ public class PatternRolePathElement<T extends Object> implements SimplePathEleme
 		if (pr instanceof OntologicObjectPatternRole) {
 			if (pr instanceof ClassPatternRole) {
 				return new OntologicClassPatternRolePathElement((ClassPatternRole) pr, container);
-			}
-			if (pr instanceof IndividualPatternRole) {
+			} else if (pr instanceof IndividualPatternRole) {
 				return new OntologicIndividualPatternRolePathElement((IndividualPatternRole) pr, container);
-			}
-			if (pr instanceof ObjectPropertyPatternRole) {
+			} else if (pr instanceof ObjectPropertyPatternRole) {
 				return new OntologicObjectPropertyPatternRolePathElement((ObjectPropertyPatternRole) pr, container);
-			}
-			if (pr instanceof DataPropertyPatternRole) {
+			} else if (pr instanceof DataPropertyPatternRole) {
 				return new OntologicDataPropertyPatternRolePathElement((DataPropertyPatternRole) pr, container);
-			}
-			if (pr instanceof IsAStatementPatternRole) {
+			} else if (pr instanceof PropertyPatternRole) {
+				return new OntologicPropertyPatternRolePathElement((PropertyPatternRole) pr, container);
+			} else if (pr instanceof DataPropertyPatternRole) {
+				return new OntologicDataPropertyPatternRolePathElement((DataPropertyPatternRole) pr, container);
+			} else if (pr instanceof IsAStatementPatternRole) {
 				return new IsAStatementPatternRolePathElement((IsAStatementPatternRole) pr, container);
-			}
-			if (pr instanceof ObjectPropertyStatementPatternRole) {
+			} else if (pr instanceof ObjectPropertyStatementPatternRole) {
 				return new ObjectPropertyStatementPatternRolePathElement((ObjectPropertyStatementPatternRole) pr, container);
-			}
-			if (pr instanceof DataPropertyStatementPatternRole) {
+			} else if (pr instanceof DataPropertyStatementPatternRole) {
 				return new DataPropertyStatementPatternRolePathElement((DataPropertyStatementPatternRole) pr, container);
-			}
-			if (pr instanceof RestrictionStatementPatternRole) {
+			} else if (pr instanceof RestrictionStatementPatternRole) {
 				return new RestrictionStatementPatternRolePathElement((RestrictionStatementPatternRole) pr, container);
 			} else {
 				logger.warning("Unexpected " + pr);
@@ -94,8 +94,9 @@ public class PatternRolePathElement<T extends Object> implements SimplePathEleme
 	public Class<?> getDeclaringClass() {
 		if (container != null) {
 			return container.getClass();
-		} else
+		} else {
 			return Object.class;
+		}
 	}
 
 	@Override
@@ -144,14 +145,15 @@ public class PatternRolePathElement<T extends Object> implements SimplePathEleme
 		if (target instanceof EditionPatternInstance) {
 			return (T) ((EditionPatternInstance) target).getPatternActor(patternRole);
 		} else {
-			logger.warning("What to return with a " + target + " ?");
+			logger.warning("What to return with a " + target + " ? "
+					+ (target != null ? "(" + target.getClass().getSimpleName() + ")" : ""));
 		}
 		return null;
 	}
 
 	@Override
 	public void setBindingValue(T value, Object target, BindingEvaluationContext context) {
-		if (target instanceof EditionPatternInstance && (value instanceof FlexoModelObject)) {
+		if (target instanceof EditionPatternInstance && value instanceof FlexoModelObject) {
 			((EditionPatternInstance) target).setPatternActor((FlexoModelObject) value, patternRole);
 		} else {
 			logger.warning("What to do with a " + target + " ?");
@@ -159,7 +161,7 @@ public class PatternRolePathElement<T extends Object> implements SimplePathEleme
 	}
 
 	public List<BindingPathElement> getAllProperties() {
-		return EMPTY_LIST;
+		return Collections.emptyList();
 	}
 
 	public PatternRole getPatternRole() {

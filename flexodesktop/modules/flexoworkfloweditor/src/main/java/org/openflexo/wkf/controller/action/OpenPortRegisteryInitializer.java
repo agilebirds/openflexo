@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -30,11 +30,12 @@ import org.openflexo.foundation.action.FlexoActionVisibleCondition;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.action.OpenPortRegistery;
+import org.openflexo.module.UserType;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.wkf.controller.WKFController;
 
-public class OpenPortRegisteryInitializer extends ActionInitializer {
+public class OpenPortRegisteryInitializer extends ActionInitializer<OpenPortRegistery, FlexoProcess, WKFObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -53,13 +54,13 @@ public class OpenPortRegisteryInitializer extends ActionInitializer {
 	}
 
 	@Override
-	protected FlexoActionVisibleCondition getVisibleCondition() {
+	protected FlexoActionVisibleCondition<OpenPortRegistery, FlexoProcess, WKFObject> getVisibleCondition() {
 		return new FlexoActionVisibleCondition<OpenPortRegistery, FlexoProcess, WKFObject>() {
 
 			@Override
 			public boolean isVisible(FlexoActionType<OpenPortRegistery, FlexoProcess, WKFObject> actionType, FlexoProcess object,
 					Vector<WKFObject> globalSelection, FlexoEditor editor) {
-				return getController().getCurrentFlexoProcess() == object;
+				return getController().getCurrentFlexoProcess() == object && !UserType.isLite();
 			}
 		};
 	}
@@ -68,7 +69,7 @@ public class OpenPortRegisteryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<OpenPortRegistery> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OpenPortRegistery>() {
 			@Override
-			public boolean run(ActionEvent e, OpenPortRegistery action) {
+			public boolean run(EventObject e, OpenPortRegistery action) {
 				return true;
 			}
 		};

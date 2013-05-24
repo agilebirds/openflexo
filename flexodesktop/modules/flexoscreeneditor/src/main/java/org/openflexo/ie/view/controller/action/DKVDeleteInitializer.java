@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -40,7 +40,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.SelectionManagingController;
 
 public class DKVDeleteInitializer extends ActionInitializer {
 
@@ -59,7 +58,7 @@ public class DKVDeleteInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DKVDelete> getDefaultInitializer() {
 		return new FlexoActionInitializer<DKVDelete>() {
 			@Override
-			public boolean run(ActionEvent e, DKVDelete action) {
+			public boolean run(EventObject e, DKVDelete action) {
 				if (!FlexoController.confirmWithWarning(FlexoLocalization.localizedForKey("would_you_like_to_delete_those_objects"))) {
 					return false;
 				}
@@ -67,7 +66,7 @@ public class DKVDeleteInitializer extends ActionInitializer {
 				if (action.getFocusedObject() != null && !v.contains(action.getFocusedObject())) {
 					v.add(action.getFocusedObject());
 				}
-				(action).setObjectsToDelete(v);
+				action.setObjectsToDelete(v);
 				Vector<FlexoModelObject> objects = action.getGlobalSelectionAndFocusedObject();
 				Vector<TOCEntry> tocEntries = new Vector<TOCEntry>();
 				for (FlexoModelObject object : objects) {
@@ -107,7 +106,7 @@ public class DKVDeleteInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DKVDelete> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DKVDelete>() {
 			@Override
-			public boolean run(ActionEvent e, DKVDelete action) {
+			public boolean run(EventObject e, DKVDelete action) {
 				Domain domainToSelect = null;
 				if (action.getFocusedObject() instanceof Key) {
 					if (((Key) action.getFocusedObject()).getDomain() != null && ((Key) action.getFocusedObject()).getDomain() != null) {
@@ -119,7 +118,7 @@ public class DKVDeleteInitializer extends ActionInitializer {
 					domainToSelect = ((Key) action.getGlobalSelection().firstElement()).getDomain();
 				}
 				if (domainToSelect != null) {
-					((SelectionManagingController) getController()).getSelectionManager().setSelectedObject(domainToSelect);
+					getController().getSelectionManager().setSelectedObject(domainToSelect);
 				}
 				return true;
 			}

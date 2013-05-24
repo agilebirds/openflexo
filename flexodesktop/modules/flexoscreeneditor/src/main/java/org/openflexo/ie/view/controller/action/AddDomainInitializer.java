@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -57,7 +57,7 @@ public class AddDomainInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddDomainAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddDomainAction>() {
 			@Override
-			public boolean run(ActionEvent e, AddDomainAction action) {
+			public boolean run(EventObject e, AddDomainAction action) {
 				DKVModel model = action.getFocusedObject().getDkvModel();
 				boolean ok = false;
 				while (!ok) {
@@ -87,9 +87,9 @@ public class AddDomainInitializer extends ActionInitializer {
 
 						try {
 							if (model.isDomainNameLegal(newDomainName)) {
-								(action).setDkvModel(model);
-								(action).setNewDomainName(newDomainName);
-								(action).setNewDomainDescription((String) dialog.parameterValueWithName("description"));
+								action.setDkvModel(model);
+								action.setNewDomainName(newDomainName);
+								action.setNewDomainDescription((String) dialog.parameterValueWithName("description"));
 							}
 							ok = true;
 						} catch (DuplicateDKVObjectException e2) {
@@ -112,8 +112,8 @@ public class AddDomainInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddDomainAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddDomainAction>() {
 			@Override
-			public boolean run(ActionEvent e, AddDomainAction action) {
-				getControllerActionInitializer().getIEController().getIESelectionManager().setSelectedObject((action).getNewDomain());
+			public boolean run(EventObject e, AddDomainAction action) {
+				getControllerActionInitializer().getIEController().getIESelectionManager().setSelectedObject(action.getNewDomain());
 				// getController().setCurrentEditedObjectAsModuleView(((AddDomainAction)
 				// action).getNewDomain());
 				return true;

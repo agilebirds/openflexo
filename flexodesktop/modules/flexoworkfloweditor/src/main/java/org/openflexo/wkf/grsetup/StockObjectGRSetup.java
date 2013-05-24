@@ -45,8 +45,8 @@ public class StockObjectGRSetup {
 	public static double getRequiredSize(ShapeGraphicalRepresentation<WKFStockObject> gr, double labelWidth) {
 		Dimension d = gr.getNormalizedLabelSize();
 		double minWidth = 3.0 / 2.0 * (d.width + d.height / 2.0);
-		minWidth /= (1 - gr.getShape().getShape().getEmbeddingBounds().x);
-		double minHeight = 3.0 / 2.0 * (d.height) / gr.getShape().getShape().getEmbeddingBounds().getHeight();
+		minWidth /= 1 - gr.getShape().getShape().getEmbeddingBounds().x;
+		double minHeight = 3.0 / 2.0 * d.height / gr.getShape().getShape().getEmbeddingBounds().getHeight();
 		return Math.max(minWidth, minHeight);
 	}
 }

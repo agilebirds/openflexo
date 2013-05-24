@@ -26,21 +26,4 @@ package org.openflexo.module.external;
  */
 public interface ExternalModule {
 
-	/**
-	 * Focus on this module
-	 */
-	public void focusOn();
-
-	/**
-	 * Focus off this module
-	 */
-	public void focusOff();
-
-	/**
-	 * Close Module after asking confirmation Review unsaved and save Unload in module loader
-	 * 
-	 * @return
-	 */
-	public boolean close();
-
 }

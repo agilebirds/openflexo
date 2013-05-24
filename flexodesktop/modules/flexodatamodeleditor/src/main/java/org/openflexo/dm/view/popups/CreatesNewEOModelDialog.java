@@ -48,6 +48,7 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.FileSelector;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.view.FlexoDialog;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -83,7 +84,7 @@ public class CreatesNewEOModelDialog extends FlexoDialog {
 	public static final int VALIDATE = 1;
 
 	public CreatesNewEOModelDialog(FlexoProject project) {
-		this(project, FlexoController.getActiveFrame());
+		this(project, FlexoFrame.getActiveFrame());
 	}
 
 	public CreatesNewEOModelDialog(FlexoProject project, Frame parent) {
@@ -237,7 +238,7 @@ public class CreatesNewEOModelDialog extends FlexoDialog {
 
 	protected boolean checkEOModelOKForCreation() {
 		String newName = eoModelNameTextField.getText();
-		if ((newName == null) || (newName.trim().equals(""))) {
+		if (newName == null || newName.trim().equals("")) {
 			FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_a_valid_name"));
 			return false;
 		}

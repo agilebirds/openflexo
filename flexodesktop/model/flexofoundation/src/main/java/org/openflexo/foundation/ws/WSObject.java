@@ -19,10 +19,7 @@
  */
 package org.openflexo.foundation.ws;
 
-import java.util.Enumeration;
 import java.util.Vector;
-
-import javax.swing.tree.TreeNode;
 
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
@@ -30,11 +27,8 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.RMNotification;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
-import org.openflexo.xmlcode.XMLMapping;
 
-public abstract class WSObject extends FlexoModelObject implements TreeNode {
-
-	private FlexoProject project;
+public abstract class WSObject extends FlexoModelObject {
 
 	private FlexoWSLibrary wsLibrary;
 
@@ -47,7 +41,6 @@ public abstract class WSObject extends FlexoModelObject implements TreeNode {
 	 */
 	public WSObject(FlexoProject project) {
 		super(project);
-		this.project = project;
 	}
 
 	/**
@@ -56,14 +49,6 @@ public abstract class WSObject extends FlexoModelObject implements TreeNode {
 	public WSObject(FlexoWSLibrary wsl) {
 		super(wsl.getProject());
 		this.wsLibrary = wsl;
-		this.project = wsl.getProject();
-	}
-
-	@Override
-	protected Vector getSpecificActionListForThatClass() {
-		Vector returned = super.getSpecificActionListForThatClass();
-		// returned.add(AddServiceOperation.actionType);
-		return returned;
 	}
 
 	/**
@@ -73,25 +58,6 @@ public abstract class WSObject extends FlexoModelObject implements TreeNode {
 	 */
 	public FlexoResource getFlexoResource() {
 		return wsLibrary.getFlexoResource();
-	}
-
-	/**
-	 * Overrides getProject
-	 * 
-	 * @see org.openflexo.foundation.rm.FlexoResourceData#getProject()
-	 */
-	@Override
-	public FlexoProject getProject() {
-		return project;
-	}
-
-	/**
-	 * Overrides setProject
-	 * 
-	 * @see org.openflexo.foundation.rm.FlexoResourceData#setProject(org.openflexo.foundation.rm.FlexoProject)
-	 */
-	public void setProject(FlexoProject aProject) {
-		this.project = aProject;
 	}
 
 	/**
@@ -147,16 +113,6 @@ public abstract class WSObject extends FlexoModelObject implements TreeNode {
 	}
 
 	/**
-	 * Overrides getXMLMapping
-	 * 
-	 * @see org.openflexo.foundation.FlexoXMLSerializableObject#getXMLMapping()
-	 */
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getWSLibrary().getXMLMapping();
-	}
-
-	/**
 	 * Overrides getXMLResourceData
 	 * 
 	 * @see org.openflexo.foundation.FlexoXMLSerializableObject#getXMLResourceData()
@@ -207,48 +163,9 @@ public abstract class WSObject extends FlexoModelObject implements TreeNode {
 		setWSLibrary(null);
 	}
 
-	// ==========================================================================
-	// ======================== TreeNode implementation
-	// =========================
-	// ==========================================================================
+	public abstract Vector<? extends FlexoModelObject> getOrderedChildren();
 
-	public abstract Vector getOrderedChildren();
-
-	@Override
-	public abstract TreeNode getParent();
-
-	@Override
-	public abstract boolean getAllowsChildren();
-
-	@Override
-	public int getIndex(TreeNode node) {
-		for (int i = 0; i < getChildCount(); i++) {
-			if (node == getChildAt(i)) {
-				return i;
-			}
-		}
-		return 0;
-	}
-
-	@Override
-	public boolean isLeaf() {
-		return getChildCount() == 0;
-	}
-
-	@Override
-	public TreeNode getChildAt(int childIndex) {
-		return (TreeNode) getOrderedChildren().get(childIndex);
-	}
-
-	@Override
-	public int getChildCount() {
-		return getOrderedChildren().size();
-	}
-
-	@Override
-	public Enumeration children() {
-		return getOrderedChildren().elements();
-	}
+	public abstract WSObject getParent();
 
 	@Override
 	public String toString() {

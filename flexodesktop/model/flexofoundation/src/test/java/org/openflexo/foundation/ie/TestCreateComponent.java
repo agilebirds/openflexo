@@ -19,12 +19,9 @@
  */
 package org.openflexo.foundation.ie;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.ie.action.DropIEElement;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
@@ -33,12 +30,9 @@ import org.openflexo.foundation.ie.cl.action.AddComponentFolder;
 import org.openflexo.foundation.ie.util.WidgetType;
 import org.openflexo.foundation.ie.widget.IEBlocWidget;
 import org.openflexo.foundation.ie.widget.IEHTMLTableWidget;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.ToolBox;
 
 public class TestCreateComponent extends FlexoIETestCase {
 
@@ -51,10 +45,6 @@ public class TestCreateComponent extends FlexoIETestCase {
 	private static final String TEST_COMPONENT = "TestComponent";
 	private static final String TEST_COMPONENT_FOLDER = "TestFolder";
 
-	private static FlexoEditor _editor;
-	private static FlexoProject _project;
-	private static File _projectDirectory;
-	private static String _projectIdentifier;
 	private static FlexoComponentLibrary _cl;
 	private static FlexoComponentFolder _cf;
 	private static IEOperationComponent _oc;
@@ -63,21 +53,8 @@ public class TestCreateComponent extends FlexoIETestCase {
 	 * Creates a new empty project in a temp directory
 	 */
 	public void test0CreateProject() {
-		ToolBox.setPlatform();
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
-		try {
-			File tempFile = File.createTempFile(TEST_COMPONENT, "");
-			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");
-			tempFile.delete();
-		} catch (IOException e) {
-			fail();
-		}
-		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
-		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
-		logger.info("Project identifier: " + _projectIdentifier);
-		_editor = FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, null);
-		_project = _editor.getProject();
-		logger.info("Project has been SUCCESSFULLY created");
+		createProject(TEST_COMPONENT);
 	}
 
 	/**

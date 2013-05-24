@@ -59,15 +59,15 @@ public class CreateNode extends FlexoUndoableAction<CreateNode, WKFObject, WKFOb
 		NORMAL_ACTION;
 
 		boolean concernProcess() {
-			return (this == BEGIN_ACTIVITY || this == END_ACTIVITY || this == NORMAL_ACTIVITY);
+			return this == BEGIN_ACTIVITY || this == END_ACTIVITY || this == NORMAL_ACTIVITY;
 		}
 
 		boolean concernActivity() {
-			return (this == BEGIN_OPERATION || this == END_OPERATION || this == NORMAL_OPERATION);
+			return this == BEGIN_OPERATION || this == END_OPERATION || this == NORMAL_OPERATION;
 		}
 
 		boolean concernOperation() {
-			return (this == BEGIN_ACTION || this == END_ACTION || this == NORMAL_ACTION);
+			return this == BEGIN_ACTION || this == END_ACTION || this == NORMAL_ACTION;
 		}
 	}
 
@@ -88,7 +88,12 @@ public class CreateNode extends FlexoUndoableAction<CreateNode, WKFObject, WKFOb
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(WKFObject focusedObject, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(WKFObject focusedObject, Vector<WKFObject> globalSelection) {
+			return false;
+		}
+
+		@Override
+		public boolean isEnabledForSelection(WKFObject focusedObject, Vector<WKFObject> globalSelection) {
 			if (focusedObject instanceof SelfExecutableNode) {
 				return false;
 			}
@@ -102,11 +107,6 @@ public class CreateNode extends FlexoUndoableAction<CreateNode, WKFObject, WKFOb
 				return _type.concernOperation() && ((OperationNode) focusedObject).mightHaveActionPetriGraph();
 			}
 			return false;
-		}
-
-		@Override
-		protected boolean isEnabledForSelection(WKFObject focusedObject, Vector<WKFObject> globalSelection) {
-			return isVisibleForSelection(focusedObject, globalSelection);
 		}
 
 		public CreatedNodeType getCreatedNodeType() {

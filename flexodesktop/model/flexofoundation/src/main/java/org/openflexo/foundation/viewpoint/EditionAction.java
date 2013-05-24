@@ -25,6 +25,7 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
@@ -49,7 +50,11 @@ public abstract class EditionAction extends EditionSchemeObject {
 		AddShape,
 		AddDiagram,
 		AddEditionPattern,
+		CloneShape,
+		CloneConnector,
+		CloneIndividual,
 		DeclarePatternRole,
+		DeleteAction,
 		GraphicalAction,
 		GoToObject,
 		Iteration,
@@ -89,7 +94,8 @@ public abstract class EditionAction extends EditionSchemeObject {
 
 	private BindingModel inferedBindingModel = null;
 
-	public EditionAction() {
+	public EditionAction(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	public abstract EditionActionType getEditionActionType();
@@ -217,11 +223,13 @@ public abstract class EditionAction extends EditionSchemeObject {
 	}
 
 	private void insertActionAtCurrentIndex(EditionAction editionAction) {
-		getActionContainer().insertActionAtIndex(editionAction, getActionContainer().getIndex(this) + 1);
+		if (getActionContainer() != null) {
+			getActionContainer().insertActionAtIndex(editionAction, getActionContainer().getIndex(this) + 1);
+		}
 	}
 
 	public AddShape createAddShapeAction() {
-		AddShape newAction = new AddShape();
+		AddShape newAction = new AddShape(null);
 		if (getEditionPattern().getDefaultShapePatternRole() != null) {
 			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultShapePatternRole().getPatternRoleName()));
 		}
@@ -230,43 +238,43 @@ public abstract class EditionAction extends EditionSchemeObject {
 	}
 
 	public AddClass createAddClassAction() {
-		AddClass newAction = new AddClass();
+		AddClass newAction = new AddClass(null);
 		insertActionAtCurrentIndex(newAction);
 		return newAction;
 	}
 
 	public AddIndividual createAddIndividualAction() {
-		AddIndividual newAction = new AddIndividual();
+		AddIndividual newAction = new AddIndividual(null);
 		insertActionAtCurrentIndex(newAction);
 		return newAction;
 	}
 
 	public AddObjectPropertyStatement createAddObjectPropertyStatementAction() {
-		AddObjectPropertyStatement newAction = new AddObjectPropertyStatement();
+		AddObjectPropertyStatement newAction = new AddObjectPropertyStatement(null);
 		insertActionAtCurrentIndex(newAction);
 		return newAction;
 	}
 
 	public AddDataPropertyStatement createAddDataPropertyStatementAction() {
-		AddDataPropertyStatement newAction = new AddDataPropertyStatement();
+		AddDataPropertyStatement newAction = new AddDataPropertyStatement(null);
 		insertActionAtCurrentIndex(newAction);
 		return newAction;
 	}
 
 	public AddIsAStatement createAddIsAPropertyAction() {
-		AddIsAStatement newAction = new AddIsAStatement();
+		AddIsAStatement newAction = new AddIsAStatement(null);
 		insertActionAtCurrentIndex(newAction);
 		return newAction;
 	}
 
 	public AddRestrictionStatement createAddRestrictionAction() {
-		AddRestrictionStatement newAction = new AddRestrictionStatement();
+		AddRestrictionStatement newAction = new AddRestrictionStatement(null);
 		insertActionAtCurrentIndex(newAction);
 		return newAction;
 	}
 
 	public AddConnector createAddConnectorAction() {
-		AddConnector newAction = new AddConnector();
+		AddConnector newAction = new AddConnector(null);
 		if (getEditionPattern().getDefaultConnectorPatternRole() != null) {
 			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultConnectorPatternRole().getPatternRoleName()));
 		}
@@ -275,37 +283,61 @@ public abstract class EditionAction extends EditionSchemeObject {
 	}
 
 	public DeclarePatternRole createDeclarePatternRoleAction() {
-		DeclarePatternRole newAction = new DeclarePatternRole();
+		DeclarePatternRole newAction = new DeclarePatternRole(null);
 		insertActionAtCurrentIndex(newAction);
 		return newAction;
 	}
 
 	public GraphicalAction createGraphicalAction() {
-		GraphicalAction newAction = new GraphicalAction();
+		GraphicalAction newAction = new GraphicalAction(null);
 		insertActionAtCurrentIndex(newAction);
 		return newAction;
 	}
 
 	public AddDiagram createAddDiagramAction() {
-		AddDiagram newAction = new AddDiagram();
+		AddDiagram newAction = new AddDiagram(null);
 		insertActionAtCurrentIndex(newAction);
 		return newAction;
 	}
 
 	public AddEditionPattern createAddEditionPatternAction() {
-		AddEditionPattern newAction = new AddEditionPattern();
+		AddEditionPattern newAction = new AddEditionPattern(null);
 		insertActionAtCurrentIndex(newAction);
 		return newAction;
 	}
 
 	public ConditionalAction createConditionalAction() {
-		ConditionalAction newAction = new ConditionalAction();
+		ConditionalAction newAction = new ConditionalAction(null);
 		insertActionAtCurrentIndex(newAction);
 		return newAction;
 	}
 
 	public IterationAction createIterationAction() {
-		IterationAction newAction = new IterationAction();
+		IterationAction newAction = new IterationAction(null);
+		insertActionAtCurrentIndex(newAction);
+		return newAction;
+	}
+
+	public CloneShape createCloneShapeAction() {
+		CloneShape newAction = new CloneShape(null);
+		if (getEditionPattern().getDefaultShapePatternRole() != null) {
+			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultShapePatternRole().getPatternRoleName()));
+		}
+		insertActionAtCurrentIndex(newAction);
+		return newAction;
+	}
+
+	public CloneConnector createCloneConnectorAction() {
+		CloneConnector newAction = new CloneConnector(null);
+		if (getEditionPattern().getDefaultConnectorPatternRole() != null) {
+			newAction.setAssignation(new ViewPointDataBinding(getEditionPattern().getDefaultConnectorPatternRole().getPatternRoleName()));
+		}
+		insertActionAtCurrentIndex(newAction);
+		return newAction;
+	}
+
+	public CloneIndividual createCloneIndividualAction() {
+		CloneIndividual newAction = new CloneIndividual(null);
 		insertActionAtCurrentIndex(newAction);
 		return newAction;
 	}

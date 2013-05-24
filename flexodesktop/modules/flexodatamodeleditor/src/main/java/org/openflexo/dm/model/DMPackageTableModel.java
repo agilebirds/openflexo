@@ -56,14 +56,14 @@ public class DMPackageTableModel extends AbstractModel<DMRepository, DMPackage> 
 		addToColumns(new IconColumn<DMPackage>("read_only", 25) {
 			@Override
 			public Icon getIcon(DMPackage aPackage) {
-				return (aPackage.getRepository() == null || aPackage.getRepository().isReadOnly() ? DMEIconLibrary.READONLY_ICON
-						: DMEIconLibrary.MODIFIABLE_ICON);
+				return aPackage.getRepository() == null || aPackage.getRepository().isReadOnly() ? DMEIconLibrary.READONLY_ICON
+						: DMEIconLibrary.MODIFIABLE_ICON;
 			}
 
 			@Override
 			public String getLocalizedTooltip(DMPackage aPackage) {
-				return (aPackage.getRepository() == null || aPackage.getRepository().isReadOnly() ? FlexoLocalization
-						.localizedForKey("is_read_only") : FlexoLocalization.localizedForKey("is_not_read_only"));
+				return aPackage.getRepository() == null || aPackage.getRepository().isReadOnly() ? FlexoLocalization
+						.localizedForKey("is_read_only") : FlexoLocalization.localizedForKey("is_not_read_only");
 			}
 		});
 		addToColumns(new EditableStringColumn<DMPackage>("name", 745) {
@@ -92,7 +92,7 @@ public class DMPackageTableModel extends AbstractModel<DMRepository, DMPackage> 
 
 	@Override
 	public DMPackage elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return (DMPackage) getDMRepository().getOrderedChildren().elementAt(row);
 		} else {
 			return null;

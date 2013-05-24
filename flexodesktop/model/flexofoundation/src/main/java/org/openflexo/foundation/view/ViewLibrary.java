@@ -59,21 +59,11 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 
 	private static final Logger logger = Logger.getLogger(ViewLibrary.class.getPackage().getName());
 
-	// =====================================================================
-	// =========================== Instance variables ======================
-	// =====================================================================
-
-	private FlexoProject _project;
-
 	private FlexoOEShemaLibraryResource _resource;
 
 	private String name;
 
 	private ViewFolder _rootFolder;
-
-	// ========================================================
-	// =================== Constructor ========================
-	// ========================================================
 
 	/**
 	 * Create a new FlexoComponentLibrary.
@@ -90,7 +80,6 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 	 */
 	public ViewLibrary(FlexoProject project) {
 		super(project);
-		_project = project;
 	}
 
 	@Override
@@ -164,16 +153,6 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 	}
 
 	@Override
-	public FlexoProject getProject() {
-		return _project;
-	}
-
-	@Override
-	public void setProject(FlexoProject aProject) {
-		_project = aProject;
-	}
-
-	@Override
 	public String getName() {
 		return name;
 	}
@@ -217,17 +196,17 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 		return temp.size();
 	}
 
-	private void addFolders(Vector<ViewFolder> temp, ViewFolder folder) {
+	private void addFolders(List<ViewFolder> temp, ViewFolder folder) {
 		temp.add(folder);
-		for (Enumeration e = folder.getSubFolders().elements(); e.hasMoreElements();) {
-			ViewFolder currentFolder = (ViewFolder) e.nextElement();
+		for (Enumeration<ViewFolder> e = folder.getSubFolders().elements(); e.hasMoreElements();) {
+			ViewFolder currentFolder = e.nextElement();
 			addFolders(temp, currentFolder);
 		}
 	}
 
 	public ViewFolder getFolderWithName(String folderName) {
-		for (Enumeration e = allFolders(); e.hasMoreElements();) {
-			ViewFolder folder = (ViewFolder) e.nextElement();
+		for (Enumeration<ViewFolder> e = allFolders(); e.hasMoreElements();) {
+			ViewFolder folder = e.nextElement();
 
 			if (folder.getName().equals(folderName)) {
 				return folder;
@@ -269,6 +248,19 @@ public class ViewLibrary extends ViewLibraryObject implements XMLStorageResource
 	// =============================================================
 	// ===================== Accessors =============================
 	// =============================================================
+
+	public List<ViewFolder> getAllFolderList() {
+		List<ViewFolder> answer = new ArrayList<ViewFolder>();
+		addFolder(answer, getRootFolder());
+		return answer;
+	}
+
+	private void addFolder(List<ViewFolder> answer, ViewFolder rootFolder) {
+		answer.add(rootFolder);
+		for (Enumeration<ViewFolder> en = rootFolder.getSortedSubFolders(); en.hasMoreElements();) {
+			addFolder(answer, en.nextElement());
+		}
+	}
 
 	public Vector<ViewDefinition> getAllShemaList() {
 		Vector<ViewDefinition> answer = new Vector<ViewDefinition>();

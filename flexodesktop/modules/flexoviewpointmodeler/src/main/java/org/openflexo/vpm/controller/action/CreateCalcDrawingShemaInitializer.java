@@ -19,7 +19,7 @@
  */
 package org.openflexo.vpm.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -31,6 +31,7 @@ import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.viewpoint.action.CreateExampleDrawing;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
@@ -58,11 +59,11 @@ public class CreateCalcDrawingShemaInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateExampleDrawing> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateExampleDrawing>() {
 			@Override
-			public boolean run(ActionEvent e, CreateExampleDrawing action) {
+			public boolean run(EventObject e, CreateExampleDrawing action) {
 
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.CREATE_EXAMPLE_DRAWING_DIALOG_FIB, action, null, true,
-						FlexoLocalization.getMainLocalizer());
-				return (dialog.getStatus() == Status.VALIDATED);
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.CREATE_EXAMPLE_DRAWING_DIALOG_FIB, action,
+						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
+				return dialog.getStatus() == Status.VALIDATED;
 			}
 		};
 	}
@@ -71,7 +72,7 @@ public class CreateCalcDrawingShemaInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateExampleDrawing> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateExampleDrawing>() {
 			@Override
-			public boolean run(ActionEvent e, CreateExampleDrawing action) {
+			public boolean run(EventObject e, CreateExampleDrawing action) {
 				getController().setCurrentEditedObjectAsModuleView(action.getNewShema(), getController().VIEW_POINT_PERSPECTIVE);
 				return true;
 			}

@@ -28,15 +28,12 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
-import org.openflexo.ColorCst;
 import org.openflexo.inspector.InspectorModelView;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.ToolBox;
 
 /**
  * Defines FlexoPreferences window (very similar to InspectorWindow)
@@ -45,14 +42,11 @@ import org.openflexo.toolbox.ToolBox;
  */
 public class PreferencesWindow extends JFrame {
 
-	public PreferencesWindow(JMenuBar menubar) {
+	public PreferencesWindow() {
 		super();
-		if (ToolBox.getPLATFORM().equals(ToolBox.MACOS)) {
-			setJMenuBar(menubar);
-		}
 		getContentPane().setLayout(new BorderLayout());
 		setSize(PREFERENCES_WINDOW_WIDTH, PREFERENCES_WINDOW_HEIGHT);
-		setLocation(752, 405);
+		setLocationRelativeTo(null);
 		reset();
 		setFocusable(true);
 	}
@@ -66,7 +60,6 @@ public class PreferencesWindow extends JFrame {
 			getContentPane().remove(_currentScrollPane);
 		}
 		setTitle("Preferences");
-		getContentPane().setBackground(ColorCst.GUI_BACK_COLOR);
 		getContentPane().add(_nothingToInspectLabel, BorderLayout.CENTER);
 	}
 

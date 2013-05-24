@@ -42,6 +42,7 @@ import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.action.DropIEElement;
 import org.openflexo.foundation.ie.dm.ButtonAdded;
+import org.openflexo.foundation.ie.dm.StyleSheetFolderChanged;
 import org.openflexo.foundation.ie.dm.WidgetAddedToSequence;
 import org.openflexo.foundation.ie.dm.WidgetRemovedFromSequence;
 import org.openflexo.foundation.ie.util.FlexoConceptualColor;
@@ -60,31 +61,25 @@ import org.openflexo.toolbox.ToolBox;
 public class ButtonPanel extends IEPanel implements IEContainer, GraphicalFlexoObserver {
 	private static final Logger logger = Logger.getLogger(ButtonPanel.class.getPackage().getName());
 
-	// private final AbstractColoredWidgetView _view;
-
 	private final ButtonedWidgetInterface _model;
 
 	private IEWOComponentView _componentView;
 
-	private boolean holdsNextComputedPreferredSize = false;
-
-	private Dimension preferredSize = null;
-
 	public ButtonPanel(IEController ieController, ButtonedWidgetInterface model, IEWOComponentView componentView) {
 		super(ieController);
 		_componentView = componentView;
-		setLayout(new IETDFlowLayout(FlowLayout.LEFT, 3, 1, SwingConstants.CENTER));
+		setLayout(new IETDFlowLayout(FlowLayout.LEFT, 1, 0, SwingConstants.CENTER));
 		this._model = model;
-		setBackground(IEViewUtils.colorFromConceptualColor(FlexoConceptualColor.MAIN_COLOR, model.getFlexoCSS()));
 		this.setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, new IEDTListener(ieController, this, (IEObject) model), true));
 		Enumeration<IEWidget> en = model.getSequenceWidget().elements();
-		IEWidgetView view;
+		IEWidgetView<?> view;
 		while (en.hasMoreElements()) {
 			IEWidget w = en.nextElement();
 			view = _componentView.getViewForWidget(w, true);
 			super.add(view);
 		}
 		validate();
+		model.getProject().addObserver(this);
 		model.addObserver(this);
 		model.getSequenceWidget().addObserver(this);
 		addMouseListener(ieController.getIESelectionManager());
@@ -128,13 +123,14 @@ public class ButtonPanel extends IEPanel implements IEContainer, GraphicalFlexoO
 	public void delete() {
 		if (_model != null) {
 			_model.deleteObserver(this);
+			_model.getProject().addObserver(this);
 			if (_model.getSequenceWidget() != null) {
 				_model.getSequenceWidget().deleteObserver(this);
 			}
 		}
 		Component[] comp = getComponents();
 		for (int i = 0; i < comp.length; i++) {
-			((IEWidgetView) comp[i]).delete();
+			((IEWidgetView<?>) comp[i]).delete();
 		}
 		removeAll();
 		if (getParent() != null) {
@@ -174,13 +170,17 @@ public class ButtonPanel extends IEPanel implements IEContainer, GraphicalFlexoO
 	 */
 	@Override
 	public Color getBackground() {
-		return super.getBackground();
+		if (_model != null) {
+			return IEViewUtils.colorFromConceptualColor(FlexoConceptualColor.MAIN_COLOR, _model.getFlexoCSS());
+		} else {
+			return super.getBackground();
+		}
 	}
 
 	@Override
 	public void update(FlexoObservable observable, DataModification modif) {
 		if (modif instanceof ButtonAdded) {
-			IEWidgetView view = findViewForModel((IEWidget) modif.newValue());
+			IEWidgetView<?> view = findViewForModel((IEWidget) modif.newValue());
 			if (view == null) {
 				if (modif.newValue() instanceof IEHyperlinkWidget) {
 					// the view must be created
@@ -204,40 +204,36 @@ public class ButtonPanel extends IEPanel implements IEContainer, GraphicalFlexoO
 				}
 				super.add(view);
 
-				Enumeration en = removedComponent.elements();
+				Enumeration<Component> en = removedComponent.elements();
 				while (en.hasMoreElements()) {
-					super.add((Component) en.nextElement());
+					super.add(en.nextElement());
 				}
 
 			}
 		} else if (modif instanceof WidgetRemovedFromSequence && observable == getButtonedWidgetModel().getSequenceWidget()) {
-			IEWidgetView view = findViewForModel((IEWidget) modif.oldValue());
+			IEWidgetView<?> view = findViewForModel((IEWidget) modif.oldValue());
 			if (view != null) {
 				remove(view);
 				revalidate();
 				repaint();
 			}
 		} else if (modif instanceof WidgetAddedToSequence && observable == getButtonedWidgetModel().getSequenceWidget()) {
-			IEWidgetView view = _componentView.getViewForWidget((IEWidget) modif.newValue(), true);
+			IEWidgetView<?> view = _componentView.getViewForWidget((IEWidget) modif.newValue(), true);
 			if (view != null) {
 				add(view, ((WidgetAddedToSequence) modif).getIndex());
 				revalidate();
 				repaint();
 			}
+		} else if (modif instanceof StyleSheetFolderChanged) {
+			repaint();
 		}
-		/*
-		 * else if (modif instanceof ButtonRemoved) { //loc has been removed
-		 * IEWidgetView view = findViewForModel((IEWidget)modif.oldValue());
-		 * if(view!=null)remove(view);
-		 * if(view!=null)view.getModel().deleteObserver(view); updateUI(); }
-		 */
 
 	}
 
-	public IEWidgetView findViewForModel(IEWidget button) {
+	public IEWidgetView<?> findViewForModel(IEWidget button) {
 		for (int i = 0; i < getComponents().length; i++) {
-			if (((IEWidgetView) getComponent(i)).getModel().equals(button)) {
-				return (IEWidgetView) getComponent(i);
+			if (((IEWidgetView<?>) getComponent(i)).getModel().equals(button)) {
+				return (IEWidgetView<?>) getComponent(i);
 			}
 		}
 		return null;

@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -52,8 +52,8 @@ public class EditUserHelpInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<EditUserHelpAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<EditUserHelpAction>() {
 			@Override
-			public boolean run(ActionEvent e, EditUserHelpAction action) {
-				return (action.getFocusedObject() instanceof InspectableObject);
+			public boolean run(EventObject e, EditUserHelpAction action) {
+				return action.getFocusedObject() instanceof InspectableObject;
 			}
 		};
 	}
@@ -62,7 +62,7 @@ public class EditUserHelpInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<EditUserHelpAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<EditUserHelpAction>() {
 			@Override
-			public boolean run(ActionEvent e, EditUserHelpAction action) {
+			public boolean run(EventObject e, EditUserHelpAction action) {
 				if (action.getFocusedObject() instanceof IEOperationComponent) {
 					CommentZone commentZone = new CommentZone(getController().getFlexoFrame(),
 							(IEOperationComponent) action.getFocusedObject());

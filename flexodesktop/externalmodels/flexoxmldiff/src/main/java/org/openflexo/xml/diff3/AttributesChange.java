@@ -22,11 +22,13 @@ package org.openflexo.xml.diff3;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.Vector;
 
-import org.jdom.Attribute;
-import org.jdom.Content;
-import org.jdom.Element;
+import org.jdom2.Attribute;
+import org.jdom2.Content;
+import org.jdom2.Element;
 import org.openflexo.xml.diff2.AttributesDiff;
 import org.openflexo.xml.diff3.mergerule.AverageLocation;
 import org.openflexo.xml.diff3.mergerule.AveragePosition;
@@ -95,10 +97,7 @@ public class AttributesChange {
 	}
 
 	private void processToAdditionOfAttributes() {
-		Enumeration<String> en = _diff1.getAddedAttributes().keys();
-		String attributeName = null;
-		while (en.hasMoreElements()) {
-			attributeName = en.nextElement();
+		for (String attributeName : _diff1.getAddedAttributes().keySet()) {
 			if (_diff2.getAddedAttributes().get(attributeName) == null) {
 
 				// here we have test if the added attribute isn't in a deleted part of the tree
@@ -147,9 +146,7 @@ public class AttributesChange {
 			}
 		}
 
-		en = _diff2.getAddedAttributes().keys();
-		while (en.hasMoreElements()) {
-			attributeName = en.nextElement();
+		for (String attributeName : _diff2.getAddedAttributes().keySet()) {
 			if (_diff1.getAddedAttributes().get(attributeName) == null) {
 				// here we have test if the added attribute isn't in a deleted
 				// part of the tree
@@ -181,7 +178,7 @@ public class AttributesChange {
 		}
 	}
 
-	public static boolean elementIsInOneOfThoseTree(Element sourceElement, Vector<Content> removedElements) {
+	public static boolean elementIsInOneOfThoseTree(Element sourceElement, List<Content> removedElements) {
 		Element e = sourceElement;
 		if (removedElements.contains(e)) {
 			return true;
@@ -204,20 +201,17 @@ public class AttributesChange {
 	}
 
 	private void processToUpdateOfAttributes() {
-		Enumeration<Attribute> en = _diff1.getUpdatedAttributes().keys();
 		String attributeName = null;
-		Attribute srcAttribute = null;
-		while (en.hasMoreElements()) {
-			srcAttribute = en.nextElement();
-			attributeName = srcAttribute.getName();
-			if (_diff2.getUpdatedAttributes().get(srcAttribute) == null && _diff2.getDeletedAttributes().get(attributeName) == null) {
+		for (Entry<Attribute, Attribute> e : _diff1.getUpdatedAttributes().entrySet()) {
+			attributeName = e.getKey().getName();
+			if (_diff2.getUpdatedAttributes().get(e.getKey()) == null && _diff2.getDeletedAttributes().get(attributeName) == null) {
 				// here we have test if the added attribute isn't in a deleted
 				// part of the tree
 				if (elementIsInOneOfThoseTree(_diff1.getSourceElement(), _diff2.getDocumentMapping().getRemovedElements())) {
 					// here we have a conflict : the modified attribute is in a
 					// part of the tree that has been deleted
-					UnresolvedAttributesConflict conflict = new UnresolvedAttributesConflict(_merge, _sourceElement, _diff1
-							.getUpdatedAttributes().get(srcAttribute), null, _mergedElement);
+					UnresolvedAttributesConflict conflict = new UnresolvedAttributesConflict(_merge, _sourceElement, e.getValue(), null,
+							_mergedElement);
 					MergeAttributeAction autoResolvedConflictAction = tryAutoResolvingTheUpdateDeleteTreeConflict(conflict);
 					if (autoResolvedConflictAction != null) {
 						// Whooah : this tool is smart enough to solve the
@@ -230,23 +224,23 @@ public class AttributesChange {
 						_unresolvedAttributesConflict.add(conflict);
 					}
 				} else {// non conflicting update
-					_mergeAttributesActions.add(new MergeAttributeAction(0, MergeActionType.UPDATE, attributeName, _diff1
-							.getUpdatedAttributes().get(srcAttribute).getValue(), _mergedElement));
+					_mergeAttributesActions.add(new MergeAttributeAction(0, MergeActionType.UPDATE, attributeName, e.getValue().getValue(),
+							_mergedElement));
 				}
 			} else {
-				if (_diff2.getUpdatedAttributes().get(srcAttribute) != null) {
+				if (_diff2.getUpdatedAttributes().get(e.getKey()) != null) {
 					// the same attribute was updated on both sides
-					if (_diff2.getUpdatedAttributes().get(srcAttribute).getValue()
-							.equals(_diff1.getUpdatedAttributes().get(srcAttribute).getValue())) {
+					if (_diff2.getUpdatedAttributes().get(e.getKey()).getValue()
+							.equals(_diff1.getUpdatedAttributes().get(e.getKey()).getValue())) {
 						// ouf : the same value has been set on both side
-						_mergeAttributesActions.add(new MergeAttributeAction(0, MergeActionType.UPDATE, attributeName, _diff1
-								.getUpdatedAttributes().get(srcAttribute).getValue(), _mergedElement));
+						_mergeAttributesActions.add(new MergeAttributeAction(0, MergeActionType.UPDATE, attributeName, e.getValue()
+								.getValue(), _mergedElement));
 					} else {
 						// !!! WE HAVE A CONFLICT !!!
 						// same attribute updated on both side with different
 						// values !!!
-						UnresolvedAttributesConflict conflict = new UnresolvedAttributesConflict(_merge, _sourceElement, _diff1
-								.getUpdatedAttributes().get(srcAttribute), _diff2.getUpdatedAttributes().get(srcAttribute), _mergedElement);
+						UnresolvedAttributesConflict conflict = new UnresolvedAttributesConflict(_merge, _sourceElement, e.getValue(),
+								_diff2.getUpdatedAttributes().get(e.getKey()), _mergedElement);
 						MergeAttributeAction autoResolvedConflictAction = tryAutoResolvingTheUpdateConflict(conflict);
 						if (autoResolvedConflictAction != null) {
 							// Whooah : this tool is smart enough to solve the conflict
@@ -261,8 +255,8 @@ public class AttributesChange {
 					}
 				} else {
 					// the attribute has been updated in diff1 and deleted in diff2
-					UnresolvedAttributesConflict conflict = new UnresolvedAttributesConflict(_merge, _sourceElement, _diff1
-							.getUpdatedAttributes().get(srcAttribute), null, _mergedElement);
+					UnresolvedAttributesConflict conflict = new UnresolvedAttributesConflict(_merge, _sourceElement, e.getValue(), null,
+							_mergedElement);
 					MergeAttributeAction autoResolvedConflictAction = tryAutoResolvingTheUpdateDeleteConflict(conflict);
 					if (autoResolvedConflictAction != null) {
 						// Whooah : this tool is smart enough to solve the conflict
@@ -277,18 +271,16 @@ public class AttributesChange {
 			}
 		}
 
-		en = _diff2.getUpdatedAttributes().keys();
-		while (en.hasMoreElements()) {
-			srcAttribute = en.nextElement();
-			attributeName = srcAttribute.getName();
-			if (_diff1.getUpdatedAttributes().get(srcAttribute) == null && _diff1.getDeletedAttributes().get(attributeName) == null) {
+		for (Entry<Attribute, Attribute> e : _diff2.getUpdatedAttributes().entrySet()) {
+			attributeName = e.getKey().getName();
+			if (_diff1.getUpdatedAttributes().get(e.getKey()) == null && _diff1.getDeletedAttributes().get(attributeName) == null) {
 				// here we have test if the added attribute isn't in a deleted
 				// part of the tree
 				if (elementIsInOneOfThoseTree(_diff2.getSourceElement(), _diff1.getDocumentMapping().getRemovedElements())) {
 					// here we have a conflict : the modified attribute is in a
 					// part of the tree that has been deleted
-					UnresolvedAttributesConflict conflict = new UnresolvedAttributesConflict(_merge, _sourceElement, null, _diff2
-							.getUpdatedAttributes().get(srcAttribute), _mergedElement);
+					UnresolvedAttributesConflict conflict = new UnresolvedAttributesConflict(_merge, _sourceElement, null, e.getValue(),
+							_mergedElement);
 					MergeAttributeAction autoResolvedConflictAction = tryAutoResolvingTheUpdateDeleteTreeConflict(conflict);
 					if (autoResolvedConflictAction != null) {
 						// Whooah : this tool is smart enough to solve the
@@ -301,16 +293,16 @@ public class AttributesChange {
 						_unresolvedAttributesConflict.add(conflict);
 					}
 				} else {// non conflicting update
-					_mergeAttributesActions.add(new MergeAttributeAction(0, MergeActionType.UPDATE, attributeName, _diff2
-							.getUpdatedAttributes().get(srcAttribute).getValue(), _mergedElement));
+					_mergeAttributesActions.add(new MergeAttributeAction(0, MergeActionType.UPDATE, attributeName, e.getValue().getValue(),
+							_mergedElement));
 				}
 			} else {
-				if (_diff1.getUpdatedAttributes().get(srcAttribute) != null) {
+				if (_diff1.getUpdatedAttributes().get(e.getKey()) != null) {
 					// this case was solved in the previous loop
 				} else {
 					// the attribute has been updated in diff2 and deleted in diff1
-					UnresolvedAttributesConflict conflict = new UnresolvedAttributesConflict(_merge, _sourceElement, null, _diff2
-							.getUpdatedAttributes().get(srcAttribute), _mergedElement);
+					UnresolvedAttributesConflict conflict = new UnresolvedAttributesConflict(_merge, _sourceElement, null, e.getValue(),
+							_mergedElement);
 					MergeAttributeAction autoResolvedConflictAction = tryAutoResolvingTheUpdateDeleteConflict(conflict);
 					if (autoResolvedConflictAction != null) {
 						// Whooah : this tool is smart enough to solve the conflict
@@ -327,24 +319,16 @@ public class AttributesChange {
 	}
 
 	private void processToDeletionOfAttributes() {
-		Enumeration<String> en = _diff1.getDeletedAttributes().keys();
-		String attributeName = null;
-		Attribute sourceAttribute = null;
-		while (en.hasMoreElements()) {
-			attributeName = en.nextElement();
-			sourceAttribute = _diff1.getDeletedAttributes().get(attributeName);
-			if (_diff2.getUpdatedAttributes().get(sourceAttribute) == null) {
-				_mergeAttributesActions.add(new MergeAttributeAction(0, MergeActionType.DELETE, attributeName, null, _mergedElement));
+		for (Entry<String, Attribute> e : _diff1.getDeletedAttributes().entrySet()) {
+			if (_diff2.getUpdatedAttributes().get(e.getValue()) == null) {
+				_mergeAttributesActions.add(new MergeAttributeAction(0, MergeActionType.DELETE, e.getKey(), null, _mergedElement));
 			} else {
 				// this case has been solved in method : processToUpdateOfAttributes
 			}
 		}
-		en = _diff2.getDeletedAttributes().keys();
-		while (en.hasMoreElements()) {
-			attributeName = en.nextElement();
-			sourceAttribute = _diff2.getDeletedAttributes().get(attributeName);
-			if (_diff1.getUpdatedAttributes().get(sourceAttribute) == null) {
-				_mergeAttributesActions.add(new MergeAttributeAction(0, MergeActionType.DELETE, attributeName, null, _mergedElement));
+		for (Entry<String, Attribute> e : _diff2.getDeletedAttributes().entrySet()) {
+			if (_diff1.getUpdatedAttributes().get(e.getValue()) == null) {
+				_mergeAttributesActions.add(new MergeAttributeAction(0, MergeActionType.DELETE, e.getKey(), null, _mergedElement));
 			} else {
 				// this case has been solved in method : processToUpdateOfAttributes
 			}

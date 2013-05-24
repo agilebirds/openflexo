@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.view.ViewDefinition" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
       <Label label="title" localize="true" name="TitleLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
       <TextField columns="10" validateOnReturn="true" passwd="false" localize="true" name="Title" data="data.title" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
@@ -9,7 +8,12 @@
       <TextField columns="10" readOnly="true" passwd="false" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
       <Label label="viewpoint" localize="true" name="ViewpointnameLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
       <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Viewpointname" data="data.calc.name" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" />
+      <Label label="version" localize="true" name="ViewpointVersionLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
+      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="ViewpointVersion" data="data.viewPoint.version" constraints="twocols(location=right;index=7;expandHorizontally=true;expandVertically=false)" />
+      <Label label="index" localize="true" name="IndexLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
+      <Number numberType="IntegerType" columns="5" data="data.index" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" name="Index" localize="true" />
     </Tab>
+    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
   </TabPanel>
   <LocalizedDictionary>
     <Localized key="Advanced" lang="French">Avancé</Localized>

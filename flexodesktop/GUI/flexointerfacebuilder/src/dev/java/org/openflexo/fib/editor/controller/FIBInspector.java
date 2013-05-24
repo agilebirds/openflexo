@@ -30,16 +30,16 @@ import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLCoder;
 
-
 public class FIBInspector extends FIBPanel {
 
-	private boolean superInspectorWereAppened = false;
+	private boolean superInspectorWereAppended = false;
 
-	protected void appendSuperInspectors(FIBInspectorController controller)
-	{
-		if (getDataType() == null) return;
+	protected void appendSuperInspectors(FIBInspectorController controller) {
+		if (getDataType() == null) {
+			return;
+		}
 		if (getDataType() instanceof Class) {
-			FIBInspector superInspector = controller.inspectorForClass(((Class)getDataType()).getSuperclass());
+			FIBInspector superInspector = controller.inspectorForClass(((Class) getDataType()).getSuperclass());
 			if (superInspector != null) {
 				superInspector.appendSuperInspectors(controller);
 				appendSuperInspector(superInspector);
@@ -48,15 +48,13 @@ public class FIBInspector extends FIBPanel {
 	}
 
 	@Override
-	public String toString() 
-	{
-		return "Inspector["+getDataType()+"]";
+	public String toString() {
+		return "Inspector[" + getDataType() + "]";
 	}
-	
-	protected void appendSuperInspector(FIBInspector superInspector)
-	{
-		if (!superInspectorWereAppened) {
-			//System.out.println("Append "+superInspector+" to "+this);
+
+	protected void appendSuperInspector(FIBInspector superInspector) {
+		if (!superInspectorWereAppended) {
+			// System.out.println("Append "+superInspector+" to "+this);
 			/*try {
 				System.out.println("Clone container:\n"+XMLCoder.encodeObjectWithMapping(superInspector, FIBLibrary.getFIBMapping(),StringEncoder.getDefaultInstance()));
 				System.out.println("Found this:\n"+XMLCoder.encodeObjectWithMapping((XMLSerializable)Cloner.cloneObjectWithMapping(superInspector, FIBLibrary.getFIBMapping()), FIBLibrary.getFIBMapping(),StringEncoder.getDefaultInstance()));
@@ -73,20 +71,18 @@ public class FIBInspector extends FIBPanel {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}*/
-			append((FIBPanel)Cloner.cloneObjectWithMapping(superInspector, FIBLibrary.getFIBMapping()));
-			superInspectorWereAppened = true;
+			append((FIBPanel) Cloner.cloneObjectWithMapping(superInspector, FIBLibrary.getFIBMapping()));
+			superInspectorWereAppended = true;
 		}
 	}
 
-	public FIBTabPanel getTabPanel()
-	{
-		return (FIBTabPanel)getSubComponents().firstElement();
+	public FIBTabPanel getTabPanel() {
+		return (FIBTabPanel) getSubComponents().firstElement();
 	}
-	
-	public String getXMLRepresentation()
-	{
+
+	public String getXMLRepresentation() {
 		try {
-			return XMLCoder.encodeObjectWithMapping(this, FIBLibrary.getFIBMapping(),StringEncoder.getDefaultInstance());
+			return XMLCoder.encodeObjectWithMapping(this, FIBLibrary.getFIBMapping(), StringEncoder.getDefaultInstance());
 		} catch (InvalidObjectSpecificationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -102,5 +98,5 @@ public class FIBInspector extends FIBPanel {
 		}
 		return "Error ???";
 	}
-	
+
 }

@@ -23,7 +23,6 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.cgmodule.controller.GeneratorController;
 import org.openflexo.module.GeneratedResourceModifiedChoice;
 import org.openflexo.module.Module;
 import org.openflexo.prefs.ModulePreferences;
@@ -48,15 +47,8 @@ public class GeneratorPreferences extends ModulePreferences {
 	protected static final String choiceWhenGeneratedResourceModifiedKey = "generatedResourceModifiedChoice";
 	protected static final String automaticallyDismissUnchangedFilesKey = "automaticallyDismissUnchangedFiles";
 
-	private static GeneratorController _controller;
-
-	public static void init(GeneratorController controller) {
-		_controller = controller;
+	public static void init() {
 		preferences(CG_PREFERENCES);
-	}
-
-	public static void reset() {
-		_controller = null;
 	}
 
 	public GeneratorPreferences() {
@@ -118,7 +110,6 @@ public class GeneratorPreferences extends ModulePreferences {
 	public static void setGeneratedResourceModifiedChoice(GeneratedResourceModifiedChoice choice) {
 		if (choice != null) {
 			preferences(CG_PREFERENCES).setProperty(choiceWhenGeneratedResourceModifiedKey, choice.getIdentifier());
-			_controller.getCGGeneratedResourceModifiedHook().setDefaultGeneratedResourceModifiedChoice(choice);
 		}
 	}
 

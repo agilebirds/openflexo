@@ -170,6 +170,7 @@ public class FlexoHelp extends Observable {
 		for (int i = 0; i < allFiles.length; i++) {
 			if (allFiles[i].getName().endsWith(endPattern) && (directory == null || allFiles[i].lastModified() > directory.lastModified())) {
 				directory = allFiles[i];
+				break;
 			}
 		}
 		if (directory == null) {

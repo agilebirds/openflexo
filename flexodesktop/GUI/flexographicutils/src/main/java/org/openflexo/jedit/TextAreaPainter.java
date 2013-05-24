@@ -310,7 +310,7 @@ public class TextAreaPainter extends JComponent implements TabExpander {
 	 *            The highlight
 	 */
 	public void addCustomHighlight(Highlight highlight) {
-		highlight.init(textArea, (highlights.size() > 0 ? highlights.firstElement() : null));
+		highlight.init(textArea, highlights.size() > 0 ? highlights.firstElement() : null);
 		highlights.insertElementAt(highlight, 0);
 		repaint();
 	}
@@ -424,7 +424,7 @@ public class TextAreaPainter extends JComponent implements TabExpander {
 	public void paint(Graphics gfx) {
 		int newCursorX = textArea.getCursorX();
 		int newCursorY = textArea.getCursorY();
-		if ((newCursorX != oldCursorX) || (newCursorY != oldCursorY)) {
+		if (newCursorX != oldCursorX || newCursorY != oldCursorY) {
 			oldCursorX = textArea.getCursorX();
 			oldCursorY = textArea.getCursorY();
 			for (CursorPositionListener l : textArea._cursorPositionListeners) {
@@ -509,7 +509,7 @@ public class TextAreaPainter extends JComponent implements TabExpander {
 	@Override
 	public float nextTabStop(float x, int tabOffset) {
 		int offset = textArea.getHorizontalOffset();
-		int ntabs = (tabSize != 0 ? ((int) x - offset) / tabSize : 0);
+		int ntabs = tabSize != 0 ? ((int) x - offset) / tabSize : 0;
 		return (ntabs + 1) * tabSize + offset;
 	}
 
@@ -673,7 +673,7 @@ public class TextAreaPainter extends JComponent implements TabExpander {
 			}
 
 			// "inlined" min/max()
-			gfx.fillRect(x1 > x2 ? x2 : x1, y, x1 > x2 ? (x1 - x2) : (x2 - x1), height);
+			gfx.fillRect(x1 > x2 ? x2 : x1, y, x1 > x2 ? x1 - x2 : x2 - x1, height);
 		}
 
 	}
@@ -696,7 +696,7 @@ public class TextAreaPainter extends JComponent implements TabExpander {
 		if (textArea.isCaretVisible()) {
 			int offset = textArea.getCaretPosition() - textArea.getLineStartOffset(line);
 			int caretX = textArea._offsetToX(line, offset);
-			int caretWidth = ((blockCaret || textArea.isOverwriteEnabled()) ? fm.charWidth('w') : 1);
+			int caretWidth = blockCaret || textArea.isOverwriteEnabled() ? fm.charWidth('w') : 1;
 			y += fm.getLeading() + fm.getMaxDescent();
 			int height = fm.getHeight();
 

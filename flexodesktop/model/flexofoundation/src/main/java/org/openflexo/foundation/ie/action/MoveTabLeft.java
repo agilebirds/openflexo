@@ -26,6 +26,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
+import org.openflexo.foundation.ie.widget.IETabContainerWidget;
 import org.openflexo.foundation.ie.widget.IETabWidget;
 
 public class MoveTabLeft extends FlexoUndoableAction {
@@ -43,16 +44,21 @@ public class MoveTabLeft extends FlexoUndoableAction {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return (object != null) && (object instanceof IETabWidget) && ((IETabWidget) object).getRootParent().getTabCount() > 1;
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return object != null && object instanceof IETabWidget && ((IETabWidget) object).getRootParent().getTabCount() > 1;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IETabContainerWidget.class);
+		FlexoModelObject.addActionForClass(actionType, IETabWidget.class);
+	}
 
 	protected MoveTabLeft(FlexoModelObject focusedObject, Vector globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

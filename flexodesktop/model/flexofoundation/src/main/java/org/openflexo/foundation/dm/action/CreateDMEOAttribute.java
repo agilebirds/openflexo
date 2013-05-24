@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMObject;
@@ -47,16 +48,20 @@ public class CreateDMEOAttribute extends FlexoAction<CreateDMEOAttribute, DMEOEn
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMEOEntity object, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(DMEOEntity object, Vector<DMObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMEOEntity object, Vector<DMObject> globalSelection) {
+		public boolean isEnabledForSelection(DMEOEntity object, Vector<DMObject> globalSelection) {
 			return object != null && !object.getIsReadOnly();
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMEOEntity.class);
+	}
 
 	private DMEOEntity _entity;
 	private String _newAttributeName;

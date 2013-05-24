@@ -44,16 +44,20 @@ public class CreateDocItemFolder extends FlexoAction {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return ((object != null) && (object instanceof DocItemFolder));
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return object != null && object instanceof DocItemFolder;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DocItemFolder.class);
+	}
 
 	private DocItemFolder _parentDocItemFolder;
 	private String _newItemFolderIdentifier;
@@ -92,7 +96,7 @@ public class CreateDocItemFolder extends FlexoAction {
 
 	public DocItemFolder getParentDocItemFolder() {
 		if (_parentDocItemFolder == null) {
-			if ((getFocusedObject() != null) && (getFocusedObject() instanceof DocItemFolder)) {
+			if (getFocusedObject() != null && getFocusedObject() instanceof DocItemFolder) {
 				_parentDocItemFolder = (DocItemFolder) getFocusedObject();
 			}
 		}

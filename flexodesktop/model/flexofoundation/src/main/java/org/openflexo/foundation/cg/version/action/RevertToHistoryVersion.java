@@ -51,22 +51,22 @@ public class RevertToHistoryVersion extends AbstractGCAction<RevertToHistoryVers
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection) {
-			return ((object != null) && ((object instanceof CGFile) || (object instanceof AbstractCGFileVersion)));
+		public boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection) {
+			return object != null && (object instanceof CGFile || object instanceof AbstractCGFileVersion);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
+		public boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
 			if (object == null) {
 				return false;
 			}
 			if (object instanceof CGFile) {
-				return (((CGFile) object).getRepository().getManageHistory())
+				return ((CGFile) object).getRepository().getManageHistory()
 						&& ((CGFile) object).getGenerationStatus().isGenerationAvailable();
 			}
 			if (object instanceof AbstractCGFileVersion) {
-				return (((AbstractCGFileVersion) object).getCGFile().getRepository().getManageHistory())
-						&& (((AbstractCGFileVersion) object).getCGFile()).getGenerationStatus().isGenerationAvailable();
+				return ((AbstractCGFileVersion) object).getCGFile().getRepository().getManageHistory()
+						&& ((AbstractCGFileVersion) object).getCGFile().getGenerationStatus().isGenerationAvailable();
 			}
 			return false;
 		}

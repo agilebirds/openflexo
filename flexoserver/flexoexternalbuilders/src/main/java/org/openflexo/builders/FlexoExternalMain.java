@@ -18,17 +18,15 @@ import org.openflexo.builders.exception.MissingArgumentException;
 import org.openflexo.builders.utils.FlexoBuilderListener;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.FlexoResourceCenter;
 import org.openflexo.foundation.action.FlexoAction;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.logging.FlexoLoggingManager.LoggingManagerDelegate;
 import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.UserType;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.ResourceLocator;
-import org.openflexo.toolbox.ToolBox;
 
 public abstract class FlexoExternalMain implements Runnable {
 
@@ -39,6 +37,8 @@ public abstract class FlexoExternalMain implements Runnable {
 	public static final String DEV_ARGUMENT = "Dev";
 
 	public static final String RESOURCE_PATH_ARGUMENT_PREFIX = "-ResourcePath=";
+
+	public static final String WORKING_DIR = "-WorkingDir=";
 
 	private static final int MISSING_ARGUMENT = -2;
 
@@ -72,7 +72,9 @@ public abstract class FlexoExternalMain implements Runnable {
 
 	private boolean done;
 
-	private FlexoResourceCenter resourceCenter;
+	protected File workingDir = null;
+
+	private FlexoResourceCenterService resourceCenterService;
 
 	public FlexoExternalMain() {
 		try {
@@ -97,13 +99,22 @@ public abstract class FlexoExternalMain implements Runnable {
 					}
 				} else if (args[i].equals(DEV_ARGUMENT)) {
 					isDev = true;
+				} else if (args[i].startsWith(WORKING_DIR)) {
+					String wd = args[i].substring(WORKING_DIR.length());
+					if (wd.startsWith("\"")) {
+						wd = wd.substring(1);
+					}
+					if (wd.endsWith("\"")) {
+						wd = wd.substring(0, wd.length() - 1);
+					}
+					workingDir = new File(wd);
+					workingDir.mkdirs();
 				}
 			}
 		}
 		if (resourcePath == null && !isDev) {
 			throw new MissingArgumentException(RESOURCE_PATH_ARGUMENT_PREFIX);
 		}
-		ToolBox.setPlatform();
 		if (!isDev) {
 			ResourceLocator.resetFlexoResourceLocation(new File(resourcePath));
 		}
@@ -122,8 +133,8 @@ public abstract class FlexoExternalMain implements Runnable {
 		GeneralPreferences.setFavoriteModuleName(Module.WKF_MODULE.getName());
 	}
 
-	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
+	public File getWorkingDir() {
+		return workingDir;
 	}
 
 	@Override
@@ -133,8 +144,7 @@ public abstract class FlexoExternalMain implements Runnable {
 		} catch (Throwable t) {
 			mem = null;
 			System.gc();
-			t.printStackTrace();
-			setExitCodeCleanUpAndExit(UNEXPECTED_EXCEPTION);
+			setExitCodePrintStackTraceCleanUpAndExit(t);
 		}
 	}
 
@@ -239,12 +249,12 @@ public abstract class FlexoExternalMain implements Runnable {
 		setExitCodeCleanUpAndExit(getExitCode() == 0 ? FLEXO_ACTION_FAILED : getExitCode());
 	}
 
-	public FlexoResourceCenter getResourceCenter() {
-		return resourceCenter;
+	public FlexoResourceCenterService getResourceCenterService() {
+		return resourceCenterService;
 	}
 
-	public void setResourceCenter(FlexoResourceCenter resourceCenter) {
-		this.resourceCenter = resourceCenter;
+	public void setResourceCenterService(FlexoResourceCenterService resourceCenter) {
+		this.resourceCenterService = resourceCenter;
 	}
 
 	protected void handleActionFailed(FlexoAction<?, ? extends FlexoModelObject, ? extends FlexoModelObject> action) {
@@ -445,6 +455,11 @@ public abstract class FlexoExternalMain implements Runnable {
 
 	public boolean isDone() {
 		return done;
+	}
+
+	public synchronized void setExitCodePrintStackTraceCleanUpAndExit(Throwable t) {
+		t.printStackTrace();
+		setExitCodeCleanUpAndExit(UNEXPECTED_EXCEPTION);
 	}
 
 	public synchronized void setExitCodeCleanUpAndExit(int exitCode) {

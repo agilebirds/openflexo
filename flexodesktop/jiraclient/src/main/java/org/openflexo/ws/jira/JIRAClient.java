@@ -12,7 +12,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.activation.MimetypesFileTypeMap;
+import javax.activation.FileTypeMap;
 
 import org.apache.commons.codec.binary.Base64;
 import org.openflexo.ws.jira.action.JIRAAction;
@@ -89,10 +89,12 @@ public class JIRAClient {
 		}
 		switch (connection.getResponseCode()) {
 		case 401:
+		case 403:
 			throw new UnauthorizedJIRAAccessException();
 		}
 		InputStream is;
-		if (connection.getResponseCode() > 399) {
+		boolean isErrorStatus = connection.getResponseCode() > 399;
+		if (isErrorStatus) {
 			is = new BufferedInputStream(connection.getErrorStream());
 		} else {
 			is = new BufferedInputStream(connection.getInputStream());
@@ -105,6 +107,9 @@ public class JIRAClient {
 				baos.write(b, 0, read);
 			}
 			String json2 = new String(baos.toByteArray(), "UTF-8");
+			if (isErrorStatus) {
+				throw new IOException(json2 + "\n(Status: " + connection.getResponseCode() + ")");
+			}
 			return JIRAGson.getInstance().fromJson(json2, submit.getResultClass());
 		} finally {
 			is.close();
@@ -201,7 +206,7 @@ public class JIRAClient {
 	}
 
 	private void writeContentType(UTF8OutputStream os, File file) throws UnsupportedEncodingException, IOException {
-		String type = MimetypesFileTypeMap.getDefaultFileTypeMap().getContentType(file);
+		String type = FileTypeMap.getDefaultFileTypeMap().getContentType(file);
 		if (type == null) {
 			type = "attachment/octet-stream";
 		}

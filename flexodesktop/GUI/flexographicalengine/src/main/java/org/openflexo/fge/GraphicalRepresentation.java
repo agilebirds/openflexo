@@ -200,6 +200,11 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 			}
 			return super.equals(obj);
 		}
+
+		@Override
+		public int hashCode() {
+			return super.hashCode();
+		}
 	}
 
 	private Vector<ConstraintDependency> dependancies;
@@ -325,14 +330,25 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	// ***************************************************************************
 
 	public void delete() {
-		isDeleted = true;
-		if (textStyle != null) {
-			textStyle.deleteObserver(this);
+		if (!isDeleted) {
+			isDeleted = true;
+			if (textStyle != null) {
+				textStyle.deleteObserver(this);
+			}
+			_bindingModel = null;
+			setChanged();
+			notifyObservers(new GraphicalRepresentationDeleted(this));
+			deleteObservers();
+			if (getPropertyChangeSupport() != null) {
+				// Property change support can be null if noone is listening. I noone is listening,
+				// it is not needed to fire a property change.
+				getPropertyChangeSupport().firePropertyChange(getDeletedProperty(), false, true);
+				// Fixed huge bug with graphical representation (which are in the model) deleted when the diagram view was closed
+				// TODO: Now we can really set the pcSupport to null here
+				// Until now, it still create big issues
+				// pcSupport = null;
+			}
 		}
-		_bindingModel = null;
-		setChanged();
-		notifyObservers(new GraphicalRepresentationDeleted(this));
-		deleteObservers();
 	}
 
 	@Override
@@ -437,6 +453,11 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 					logger.warning("Cannot clone parameter: " + value);
 					e.printStackTrace();
 				}
+			}
+			// IMPORTANT !!!!!!
+			// Special case for DataBinding, just copy unparsed string, and let framework recompute the binding
+			if (type.equals(DataBinding.class)) {
+				value = new DataBinding(((DataBinding) value).toString());
 			}
 			Object currentValue = objectForKey(parameterKey.name());
 			if (value != currentValue) {
@@ -1078,6 +1099,9 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 		if (notification != null) {
 			this.multilineAllowed = multilineAllowed;
 			hasChanged(notification);
+			if (!multilineAllowed && getText() != null) {
+				setText(getText().replaceAll("\r?\n", " "));
+			}
 		}
 	}
 
@@ -1390,6 +1414,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	public void notifyDrawableAdded(GraphicalRepresentation<?> addedGR) {
 		addedGR.updateBindingModel();
+		// logger.info(">>>>>>>>>> NEW GraphicalRepresentationAdded");
 		setChanged();
 		notifyObservers(new GraphicalRepresentationAdded(addedGR));
 	}
@@ -2152,8 +2177,8 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 	}
 
 	@Override
-	public PropertyChangeSupport getPropertyChangeSupport() {
-		if (pcSupport == null) {
+	public final PropertyChangeSupport getPropertyChangeSupport() {
+		if (pcSupport == null && !isDeleted) {
 			pcSupport = new PropertyChangeSupport(this);
 		}
 		return pcSupport;

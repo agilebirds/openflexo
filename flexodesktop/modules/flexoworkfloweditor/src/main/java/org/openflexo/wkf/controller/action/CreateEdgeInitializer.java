@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -34,8 +34,6 @@ import org.openflexo.foundation.action.FlexoActionRedoFinalizer;
 import org.openflexo.foundation.action.FlexoActionRedoInitializer;
 import org.openflexo.foundation.action.FlexoActionUndoFinalizer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
-import org.openflexo.foundation.action.RedoException;
-import org.openflexo.foundation.action.UndoException;
 import org.openflexo.foundation.param.NodeParameter;
 import org.openflexo.foundation.param.NodeParameter.NodeSelectingConditional;
 import org.openflexo.foundation.param.RadioButtonListParameter;
@@ -112,7 +110,7 @@ public class CreateEdgeInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateEdge> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateEdge>() {
 			@Override
-			public boolean run(ActionEvent e, CreateEdge action) {
+			public boolean run(EventObject e, CreateEdge action) {
 				CreateEdgeExecutionContext executionContext = new CreateEdgeExecutionContext(action);
 				action.setExecutionContext(executionContext);
 
@@ -241,6 +239,7 @@ public class CreateEdgeInitializer extends ActionInitializer {
 							executionContext.createPreCondition = CreatePreCondition.actionType.makeNewEmbeddedAction(
 									(FatherNode) action.getEndNode(), null, action);
 							executionContext.createPreCondition.setAllowsToSelectPreconditionOnly(true);
+							executionContext.createPreCondition.setForceNewCreation(true);
 							executionContext.createPreCondition.doAction();
 							if (!executionContext.createPreCondition.hasActionExecutionSucceeded()) {
 								return false;
@@ -476,7 +475,7 @@ public class CreateEdgeInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateEdge> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateEdge>() {
 			@Override
-			public boolean run(ActionEvent e, CreateEdge action) {
+			public boolean run(EventObject e, CreateEdge action) {
 				if (action.getExecutionContext() instanceof CreateEdgeExecutionContext) {
 					CreateEdgeExecutionContext context = (CreateEdgeExecutionContext) action.getExecutionContext();
 					if (context.createPreCondition != null && context.createPreCondition.getNewPreCondition() != null
@@ -496,7 +495,7 @@ public class CreateEdgeInitializer extends ActionInitializer {
 	protected FlexoActionUndoFinalizer<CreateEdge> getDefaultUndoFinalizer() {
 		return new FlexoActionUndoFinalizer<CreateEdge>() {
 			@Override
-			public boolean run(ActionEvent e, CreateEdge action) throws UndoException {
+			public boolean run(EventObject e, CreateEdge action) {
 				CreateEdgeExecutionContext executionContext = (CreateEdgeExecutionContext) action.getExecutionContext();
 				if (executionContext.createPetriGraph != null) {
 					executionContext.createPetriGraph.undoAction();
@@ -516,7 +515,7 @@ public class CreateEdgeInitializer extends ActionInitializer {
 	protected FlexoActionRedoInitializer<CreateEdge> getDefaultRedoInitializer() {
 		return new FlexoActionRedoInitializer<CreateEdge>() {
 			@Override
-			public boolean run(ActionEvent e, CreateEdge action) throws RedoException {
+			public boolean run(EventObject e, CreateEdge action) {
 				CreateEdgeExecutionContext executionContext = (CreateEdgeExecutionContext) action.getExecutionContext();
 				if (executionContext.createPreCondition != null) {
 					executionContext.createPreCondition.redoAction();
@@ -537,7 +536,7 @@ public class CreateEdgeInitializer extends ActionInitializer {
 	protected FlexoActionRedoFinalizer<CreateEdge> getDefaultRedoFinalizer() {
 		return new FlexoActionRedoFinalizer<CreateEdge>() {
 			@Override
-			public boolean run(ActionEvent e, CreateEdge action) throws RedoException {
+			public boolean run(EventObject e, CreateEdge action) {
 				getControllerActionInitializer().getWKFController().getSelectionManager().setSelectedObject(action.getNewPostCondition());
 				return true;
 			}

@@ -33,6 +33,7 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class AddEditionPattern extends AssignableAction {
@@ -43,7 +44,8 @@ public class AddEditionPattern extends AssignableAction {
 	private CreationScheme creationScheme;
 	private String _creationSchemeURI;
 
-	public AddEditionPattern() {
+	public AddEditionPattern(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override
@@ -122,8 +124,9 @@ public class AddEditionPattern extends AssignableAction {
 	}
 
 	public String _getCreationSchemeURI() {
-		if (getCreationScheme() != null)
+		if (getCreationScheme() != null) {
 			return getCreationScheme().getURI();
+		}
 		return _creationSchemeURI;
 	}
 
@@ -211,11 +214,12 @@ public class AddEditionPattern extends AssignableAction {
 		private BindingDefinition BD;
 
 		// Use it only for deserialization
-		public AddEditionPatternParameter() {
-			super();
+		public AddEditionPatternParameter(ViewPointBuilder builder) {
+			super(builder);
 		}
 
 		public AddEditionPatternParameter(EditionSchemeParameter param) {
+			super(null);
 			this.param = param;
 			BD = new BindingDefinition(param.getName(), param.getType(), BindingDefinitionType.GET, true);
 		}
@@ -260,10 +264,23 @@ public class AddEditionPattern extends AssignableAction {
 		}
 
 		public Object evaluateParameterValue(EditionSchemeAction action) {
-			if (getValue().isValid()) {
+			if (getValue() == null || getValue().isUnset()) {
+				/*logger.info("Le binding for " + param.getName() + " is not set");
+				if (param instanceof URIParameter) {
+					logger.info("C'est une URI, de base " + ((URIParameter) param).getBaseURI());
+					logger.info("Je retourne " + ((URIParameter) param).getBaseURI().getBinding().getBindingValue(action));
+					return ((URIParameter) param).getBaseURI().getBinding().getBindingValue(action);
+				} else if (param.getDefaultValue() != null && param.getDefaultValue().isSet() && param.getDefaultValue().isValid()) {
+					return param.getDefaultValue().getBinding().getBindingValue(action);
+				}
+				if (param.getIsRequired()) {
+					logger.warning("Required parameter missing: " + param + ", some strange behaviour may happen from now...");
+				}*/
+				return null;
+			} else if (getValue().isValid()) {
 				return getValue().getBindingValue(action);
 			} else {
-				System.out.println("C'est pas bon");
+				logger.warning("Invalid binding: " + getValue());
 				getValue().getBinding().debugIsBindingValid();
 			}
 			return null;
@@ -371,7 +388,7 @@ public class AddEditionPattern extends AssignableAction {
 							} else {
 								issues.add(new ValidationError(this, action, "parameter_s_value_is_not_defined: " + p.getParam().getName()));
 							}
-						} else if (!(p.getValue().isValid())) {
+						} else if (!p.getValue().isValid()) {
 							logger.info("Binding NOT valid: " + p.getValue() + " for " + p.paramName + " object="
 									+ p.action.getFullyQualifiedName() + ". Reason follows.");
 							p.getValue().getBinding().debugIsBindingValid();

@@ -41,7 +41,7 @@ public class Process extends QuidObject {
 	}
 
 	public String getNameParameter() {
-		return (String) params.get(0);
+		return params.get(0);
 	}
 
 	public String getDocumentation() {

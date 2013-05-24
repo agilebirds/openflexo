@@ -20,11 +20,14 @@
 package org.openflexo.fib.view.widget;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.Component;
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
@@ -37,10 +40,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.SortOrder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableColumn;
 
+import org.jdesktop.swingx.JXTable;
 import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBSelectable;
@@ -50,31 +57,39 @@ import org.openflexo.fib.model.FIBTableAction;
 import org.openflexo.fib.view.FIBWidgetView;
 import org.openflexo.fib.view.widget.table.FIBTableActionListener;
 import org.openflexo.fib.view.widget.table.FIBTableModel;
+import org.openflexo.fib.view.widget.table.FIBTableWidgetFooter;
 
 /**
  * Widget allowing to display/edit a list of values
  * 
  * @author sguerin
  */
-public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> implements TableModelListener, FIBSelectable {
+public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, Collection<?>> implements TableModelListener, FIBSelectable,
+		ListSelectionListener {
 
 	private static final Logger logger = Logger.getLogger(FIBTableWidget.class.getPackage().getName());
 
-	private JTable _table;
+	private JXTable _table;
 	private final JPanel _dynamicComponent;
 	private final FIBTable _fibTable;
 	private FIBTableModel _tableModel;
 	// private ListSelectionModel _listSelectionModel;
 	private JScrollPane scrollPane;
 
+	private FIBTableWidgetFooter footer;
+
+	private Vector<Object> selection;
+
+	private Object selectedObject;
+
 	public FIBTableWidget(FIBTable fibTable, FIBController controller) {
 		super(fibTable, controller);
 		_fibTable = fibTable;
-
 		_dynamicComponent = new JPanel();
 		_dynamicComponent.setOpaque(false);
 		_dynamicComponent.setLayout(new BorderLayout());
 
+		footer = new FIBTableWidgetFooter(this);
 		buildTable();
 	}
 
@@ -82,25 +97,15 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		return _fibTable;
 	}
 
+	public FIBTableWidgetFooter getFooter() {
+		return footer;
+	}
+
 	public FIBTableModel getTableModel() {
 		if (_tableModel == null) {
 			_tableModel = new FIBTableModel(_fibTable, this, getController());
 		}
 		return _tableModel;
-	}
-
-	public void setVisibleRowCount(int rows) {
-		int height = 0;
-		for (int row = 0; row < rows; row++) {
-			height += _table.getRowHeight(row);
-		}
-		height += _table.getTableHeader().getPreferredSize().height;
-		int width = 0;
-		for (int i = 0; i < getTableModel().getColumnCount(); i++) {
-			width += getTableModel().getDefaultColumnSize(i);
-		}
-		_dynamicComponent.setMinimumSize(new Dimension(width, height));
-		_dynamicComponent.setPreferredSize(new Dimension(width, height));
 	}
 
 	/*public JLabel getLabel()
@@ -116,15 +121,18 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 	    return _label;
 	}*/
 
-	private static final Vector EMPTY_VECTOR = new Vector();
-
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
-		List valuesBeforeUpdating = getTableModel().getValues();
+		List<?> valuesBeforeUpdating = getTableModel().getValues();
 		Object wasSelected = getSelectedObject();
 
 		boolean returned = false;
 
+		// logger.info("----------> updateWidgetFromModel() for " + getTable().getName());
+		if (_fibTable.getEnable().isSet() && _fibTable.getEnable().isValid()) {
+			Boolean enabledValue = (Boolean) _fibTable.getEnable().getBindingValue(getController());
+			_table.setEnabled(enabledValue != null && enabledValue);
+		}
 		if (notEquals(getValue(), getTableModel().getValues())) {
 
 			returned = true;
@@ -157,7 +165,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 			if (getValue() instanceof List && !getValue().equals(valuesBeforeUpdating)) {
 				getTableModel().setValues(getValue());
 			}
-			getTableModel().setModel(getDataObject());
+			footer.setModel(getDataObject());
 		}
 
 		// We restore value if and only if we represent same table
@@ -192,16 +200,6 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		return _table.getSelectionModel();
 	}
 
-	@Override
-	public Object getSelectedObject() {
-		return _tableModel.getSelectedObject();
-	}
-
-	@Override
-	public Vector<Object> getSelection() {
-		return _tableModel.getSelection();
-	}
-
 	public void setSelectedObject(Object object/*, boolean notify*/) {
 		if (getValue() == null) {
 			return;
@@ -212,8 +210,9 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		}
 		logger.fine("FIBTable: setSelectedObject with object " + object + " current is " + getSelectedObject());
 		if (object != null) {
-			int index = getValue().indexOf(object);
+			int index = getTableModel().getValues().indexOf(object);
 			if (index > -1) {
+				index = _table.convertRowIndexToView(index);
 				// if (!notify) _table.getSelectionModel().removeListSelectionListener(getTableModel());
 				getListSelectionModel().setSelectionInterval(index, index);
 				// if (!notify) _table.getSelectionModel().addListSelectionListener(getTableModel());
@@ -257,11 +256,11 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 				logger.fine("Reselect object, and then the edited cell");
 			}
 			FIBTableModel.RowMoveForObjectEvent event = (FIBTableModel.RowMoveForObjectEvent) e;
-			getListSelectionModel().removeListSelectionListener(getTableModel());
+			getListSelectionModel().removeListSelectionListener(this);
 			getListSelectionModel().addSelectionInterval(event.getNewRow(), event.getNewRow());
-			getListSelectionModel().addListSelectionListener(getTableModel());
-			_table.setEditingColumn(event.getColumn());
-			_table.setEditingRow(event.getNewRow());
+			getListSelectionModel().addListSelectionListener(this);
+			_table.setEditingColumn(_table.convertColumnIndexToView(event.getColumn()));
+			_table.setEditingRow(_table.convertRowIndexToView(event.getNewRow()));
 		}
 	}
 
@@ -317,12 +316,21 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		updateDataObject(getDataObject());
 	}
 
+	@Override
+	public synchronized void delete() {
+		// TODO: re-implement this properly and check that all listeners are properly removed.
+		getFooter().delete();
+		deleteTable();
+		getTableModel().removeTableModelListener(this);
+		super.delete();
+	}
+
 	private void deleteTable() {
 		if (_table != null) {
 			_table.removeFocusListener(this);
 		}
 		if (getListSelectionModel() != null) {
-			getListSelectionModel().removeListSelectionListener(getTableModel());
+			getListSelectionModel().removeListSelectionListener(this);
 		}
 		if (scrollPane != null && _fibTable.getCreateNewRowOnClick()) {
 			for (MouseListener l : scrollPane.getMouseListeners()) {
@@ -337,7 +345,17 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 	private void buildTable() {
 		getTableModel().addTableModelListener(this);
 
-		_table = new JTable(getTableModel());
+		_table = new JXTable(getTableModel()) {
+
+			@Override
+			protected void resetDefaultTableCellRendererColors(Component renderer, int row, int column) {
+			}
+
+		};
+		_table.setVisibleRowCount(0);
+		_table.setSortOrderCycle(SortOrder.ASCENDING, SortOrder.DESCENDING, SortOrder.UNSORTED);
+		_table.setAutoCreateRowSorter(true);
+		_table.setFillsViewportHeight(true);
 		_table.setShowHorizontalLines(false);
 		_table.setShowVerticalLines(false);
 		_table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
@@ -364,23 +382,28 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 				col.setCellEditor(getTableModel().columnAt(i).getCellEditor());
 			}
 		}
-
-		if (_fibTable.getRowHeight() > 0) {
+		if (_fibTable.getRowHeight() != null) {
 			_table.setRowHeight(_fibTable.getRowHeight());
+		}
+		if (getTable().getVisibleRowCount() != null) {
+			_table.setVisibleRowCount(getTable().getVisibleRowCount());
+			if (_table.getRowHeight() == 0) {
+				_table.setRowHeight(18);
+			}
 		}
 
 		_table.setSelectionMode(_fibTable.getSelectionMode().getMode());
-		_table.getTableHeader().setReorderingAllowed(false);
+		// _table.getTableHeader().setReorderingAllowed(false);
 
-		_table.getSelectionModel().addListSelectionListener(getTableModel());
+		_table.getSelectionModel().addListSelectionListener(this);
 
 		// _listSelectionModel = _table.getSelectionModel();
 		// _listSelectionModel.addListSelectionListener(this);
 
 		scrollPane = new JScrollPane(_table);
-
+		scrollPane.setOpaque(false);
 		if (_fibTable.getCreateNewRowOnClick()) {
-			scrollPane.addMouseListener(new MouseAdapter() {
+			_table.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					if (_table.getCellEditor() != null) {
@@ -390,11 +413,12 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 					if (_fibTable.getCreateNewRowOnClick()) {
 						if (!e.isConsumed() && e.getClickCount() == 2) {
 							// System.out.println("OK, on essaie de gerer un new par double click");
-							Enumeration<FIBTableActionListener> en = getTableModel().getFooter().getAddActionListeners();
+							Enumeration<FIBTableActionListener> en = getFooter().getAddActionListeners();
 							while (en.hasMoreElements()) {
 								FIBTableActionListener action = en.nextElement();
 								if (action.isAddAction()) {
-									action.actionPerformed(null);
+									action.actionPerformed(new ActionEvent(_table, ActionEvent.ACTION_PERFORMED, null, EventQueue
+											.getMostRecentEventTime(), e.getModifiers()));
 									break;
 								}
 							}
@@ -415,10 +439,9 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		_dynamicComponent.add(scrollPane, BorderLayout.CENTER);
 
 		if (_fibTable.getShowFooter()) {
-			_dynamicComponent.add(getTableModel().getFooter(), BorderLayout.SOUTH);
+			_dynamicComponent.add(getFooter(), BorderLayout.SOUTH);
 		}
 
-		setVisibleRowCount(_fibTable.getVisibleRowCount());
 		_dynamicComponent.revalidate();
 		_dynamicComponent.repaint();
 	}
@@ -434,66 +457,152 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 
 	@Override
 	public boolean mayRepresent(Object o) {
-		try {
-			if (getValue() != null) {
-				return getValue().contains(o);
-			}
-		} catch (ClassCastException e) {
-			logger.warning("ClassCastException in FIBTableWidget: " + e.getMessage());
+		if (getValue() != null) {
+			return getValue().contains(o);
 		}
 		return false;
 	}
 
 	@Override
+	public void valueChanged(ListSelectionEvent e) {
+
+		// Ignore extra messages.
+		if (e.getValueIsAdjusting()) {
+			return;
+		}
+
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("valueChanged() selected index=" + getListSelectionModel().getMinSelectionIndex());
+		}
+
+		int i = getListSelectionModel().getMinSelectionIndex();
+		int leadIndex = getListSelectionModel().getLeadSelectionIndex();
+		if (!getListSelectionModel().isSelectedIndex(leadIndex)) {
+			leadIndex = getListSelectionModel().getAnchorSelectionIndex();
+		}
+		while (!getListSelectionModel().isSelectedIndex(leadIndex) && i <= getListSelectionModel().getMaxSelectionIndex()) {
+			leadIndex = i;
+			i++;
+		}
+		if (leadIndex > -1) {
+			leadIndex = _table.convertRowIndexToModel(leadIndex);
+		}
+		selectedObject = getTableModel().elementAt(leadIndex);
+
+		Vector<Object> oldSelection = selection;
+		selection = new Vector<Object>();
+		for (i = getListSelectionModel().getMinSelectionIndex(); i <= getListSelectionModel().getMaxSelectionIndex(); i++) {
+			if (getListSelectionModel().isSelectedIndex(i)) {
+				selection.add(getTableModel().elementAt(_table.convertRowIndexToModel(i)));
+			}
+		}
+
+		getDynamicModel().selected = selectedObject;
+		getDynamicModel().selection = selection;
+		notifyDynamicModelChanged();
+		footer.handleSelectionChanged();
+		if (getComponent().getSelected().isValid()) {
+			logger.fine("Sets SELECTED binding with " + selectedObject);
+			getComponent().getSelected().setBindingValue(selectedObject, getController());
+		}
+
+		updateFont();
+
+		if (!ignoreNotifications) {
+			getController().updateSelection(this, oldSelection, selection);
+		}
+
+		/*SwingUtilities.invokeLater(new Runnable() {
+			
+			public void run()
+			{
+				System.out.println((isFocused() ? "LEADER" : "SECONDARY")+" Le grand vainqueur est "+selectedObject);
+				System.out.println((isFocused() ? "LEADER" : "SECONDARY")+" La selection est "+selection);
+			}
+		});*/
+
+	}
+
+	private boolean ignoreNotifications = false;
+
+	@Override
+	public Object getSelectedObject() {
+		return selectedObject;
+	}
+
+	@Override
+	public Vector<Object> getSelection() {
+		return selection;
+	}
+
+	@Override
 	public void objectAddedToSelection(Object o) {
-		// logger.info(">>>>>>> objectAddedToSelection "+o);
-		getTableModel().addToSelectionNoNotification(o);
+		int index = getTableModel().getValues().indexOf(o);
+		if (index > -1) {
+			ignoreNotifications = true;
+			index = _table.convertRowIndexToView(index);
+			getListSelectionModel().addSelectionInterval(index, index);
+			ignoreNotifications = false;
+		}
 	}
 
 	@Override
 	public void objectRemovedFromSelection(Object o) {
-		getTableModel().removeFromSelectionNoNotification(o);
+		int index = getTableModel().getValues().indexOf(o);
+		if (index > -1) {
+			ignoreNotifications = true;
+			index = _table.convertRowIndexToView(index);
+			getListSelectionModel().removeSelectionInterval(index, index);
+			ignoreNotifications = false;
+		}
 	}
 
 	@Override
 	public void selectionResetted() {
-		getTableModel().resetSelectionNoNotification();
+		ignoreNotifications = true;
+		getListSelectionModel().clearSelection();
+		ignoreNotifications = false;
 	}
 
 	@Override
 	public void addToSelection(Object o) {
-		// logger.info(">>>>>>> addToSelection "+o);
-		getTableModel().addToSelection(o);
+		int index = getTableModel().getValues().indexOf(o);
+		if (index > -1) {
+			index = _table.convertRowIndexToView(index);
+			getListSelectionModel().addSelectionInterval(index, index);
+		}
 	}
 
 	@Override
 	public void removeFromSelection(Object o) {
-		getTableModel().removeFromSelection(o);
+		int index = getTableModel().getValues().indexOf(o);
+		if (index > -1) {
+			index = _table.convertRowIndexToView(index);
+			getListSelectionModel().removeSelectionInterval(index, index);
+		}
 	}
 
 	@Override
 	public void resetSelection() {
-		getTableModel().resetSelection();
+		getListSelectionModel().clearSelection();
 	}
 
-	private static boolean areSameValuesOrderIndifferent(List l1, List l2) {
+	private static boolean areSameValuesOrderIndifferent(List<?> l1, List<?> l2) {
 		if (l1 == null || l2 == null) {
 			return false;
 		}
 		if (l1.size() != l2.size()) {
 			return false;
 		}
-		Comparator comparator = new Comparator() {
+		Comparator<Object> comparator = new Comparator<Object>() {
 			@Override
 			public int compare(Object o1, Object o2) {
 				return o1.hashCode() - o2.hashCode();
 			}
 		};
-		List sortedL1 = new ArrayList();
-		sortedL1.addAll(l1);
+		List<Object> sortedL1 = new ArrayList<Object>(l1);
 		Collections.sort(sortedL1, comparator);
-		List sortedL2 = new ArrayList();
-		sortedL2.addAll(l2);
+		List<Object> sortedL2 = new ArrayList<Object>(l2);
 		Collections.sort(sortedL2, comparator);
 		for (int i = 0; i < sortedL1.size(); i++) {
 			if (!sortedL1.get(i).equals(sortedL2.get(i))) {

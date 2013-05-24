@@ -33,18 +33,12 @@ import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.RepresentableFlexoModelObject;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.dm.TOCRepositoryChanged;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.dm.eo.DMEOEntity;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.toc.TOCDataBinding.TOCBindingAttribute;
-import org.openflexo.foundation.toc.action.AddTOCEntry;
-import org.openflexo.foundation.toc.action.DeprecatedAddTOCEntry;
-import org.openflexo.foundation.toc.action.MoveTOCEntry;
-import org.openflexo.foundation.toc.action.RemoveTOCEntry;
-import org.openflexo.foundation.toc.action.RepairTOCEntry;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
@@ -101,7 +95,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 
 	public TOCEntry(TOCData generatedCode, FlexoModelObject modelObject) {
 		this(generatedCode);
-		this.objectReference = new FlexoModelObjectReference<FlexoModelObject>(generatedCode.getProject(), modelObject);
+		this.objectReference = new FlexoModelObjectReference<FlexoModelObject>(modelObject);
 		this.objectReference.setSerializeClassName(true); // Even if the object is not loaded yet, we need to know its class name.
 		this.objectReference.setOwner(this);
 		isReadOnly = true;
@@ -175,17 +169,6 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 
 	public void notifyAttributeModification(String attributeName, Object oldValue, Object newValue) {
 		notifyObservers(new AttributeDataModification(attributeName, oldValue, newValue));
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-		v.add(DeprecatedAddTOCEntry.actionType);
-		v.add(AddTOCEntry.actionType);
-		v.add(RemoveTOCEntry.actionType);
-		v.add(RepairTOCEntry.actionType);
-		v.add(MoveTOCEntry.actionType);
-		return v;
 	}
 
 	public boolean acceptsEntryAsChild(TOCEntry entry) {
@@ -372,8 +355,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 			}
 			setChanged();
 			notifyObservers(new TOCModification("tocEntries", null, entry));
-			rebuildBindingModel();
-			entry.rebuildBindingModel();
+			rebuildInferedBindingModel();
 		}
 	}
 
@@ -390,8 +372,7 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 			}
 			setChanged();
 			notifyObservers(new TOCModification("tocEntries", entry, null));
-			rebuildBindingModel();
-			entry.rebuildBindingModel();
+			rebuildInferedBindingModel();
 		}
 	}
 
@@ -460,6 +441,8 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 			AttributeDataModification dm = new AttributeDataModification("index", null, getIndex());
 			dm.setReentrant(true);
 			notifyObservers(dm);
+			setChanged();
+
 		}
 	}
 
@@ -483,11 +466,11 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 			}
 			if (getParent() != null) {
 				getParent().setChanged();
-				getParent().notifyObservers(new ChildrenOrderChanged());
+				getParent().notifyObservers(new ChildrenOrderChanged("sortedTocEntries"));
 			} else {
 				if (getRepository() != null) {
 					getRepository().setChanged();
-					getRepository().notifyObservers(new ChildrenOrderChanged());
+					getRepository().notifyObservers(new ChildrenOrderChanged("sortedTocEntries"));
 				}
 			}
 		}
@@ -616,13 +599,12 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 			objectReference = null;
 		}
 		if (object != null) {
-			objectReference = new FlexoModelObjectReference<FlexoModelObject>(getProject(), object);
+			objectReference = new FlexoModelObjectReference<FlexoModelObject>(object, this);
+			objectReference.setSerializeClassName(true);
 		} else {
 			objectReference = null;
 		}
 		if (objectReference != null) {
-			objectReference.setOwner(this);
-			objectReference.setSerializeClassName(true);
 		}
 	}
 
@@ -952,38 +934,55 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 
 	public void notifyBindingChanged(TOCDataBinding binding) {
 		setChanged();
-		rebuildBindingModel();
+		rebuildInferedBindingModel();
 	}
 
 	public void notifyChange(TOCBindingAttribute bindingAttribute, AbstractBinding oldValue, AbstractBinding value) {
 	}
 
-	private BindingModel bindingModel = null;
-
 	@Override
 	public BindingModel getBindingModel() {
-		if (bindingModel == null) {
-			rebuildBindingModel();
+		if (getParent() != null) {
+			return getParent().getInferedBindingModel();
 		}
-		return bindingModel;
+		return null;
 	}
 
-	protected void rebuildBindingModel() {
-		bindingModel = buildBindingModel();
+	public BindingModel getInferedBindingModel() {
+		if (inferedBindingModel == null) {
+			rebuildInferedBindingModel();
+		}
+		return inferedBindingModel;
+	}
+
+	protected void rebuildInferedBindingModel() {
+		inferedBindingModel = buildInferedBindingModel();
 		for (TOCEntry entry : getTocEntries()) {
-			entry.rebuildBindingModel();
+			entry.rebuildInferedBindingModel();
 		}
 	}
 
-	protected BindingModel buildBindingModel() {
+	protected BindingModel buildInferedBindingModel() {
 		BindingModel returned;
 		if (getParent() == null) {
 			returned = new BindingModel();
 		} else {
-			returned = new BindingModel(getParent().getBindingModel());
+			returned = new BindingModel(getParent().getInferedBindingModel());
 		}
 		return returned;
 	}
+
+	private BindingModel inferedBindingModel = null;
+
+	/*
+	 * @Override public BindingModel getBindingModel() { if (bindingModel == null) { rebuildBindingModel(); } return bindingModel; }
+	 * 
+	 * protected void rebuildBindingModel() { bindingModel = buildBindingModel(); for (TOCEntry entry : getTocEntries()) {
+	 * entry.rebuildBindingModel(); } }
+	 * 
+	 * protected BindingModel buildBindingModel() { BindingModel returned; if (getParent() == null) { returned = new BindingModel(); } else
+	 * { returned = new BindingModel(getParent().getBindingModel()); } return returned; }
+	 */
 
 	@Override
 	public BindingFactory getBindingFactory() {

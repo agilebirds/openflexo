@@ -1,43 +1,58 @@
 package org.openflexo.builders;
 
 import java.io.File;
+import java.io.IOException;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.GeneralPreferences;
 import org.openflexo.builders.exception.MissingArgumentException;
 import org.openflexo.builders.utils.FlexoBuilderEditor;
 import org.openflexo.builders.utils.FlexoBuilderListener;
+import org.openflexo.builders.utils.FlexoBuilderProjectReferenceLoader;
+import org.openflexo.builders.utils.FlexoBuilderResourceCenterService;
+import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoResourceManager;
+import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
 import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
-import org.openflexo.module.ModuleLoader;
-import org.openflexo.module.ProjectLoader;
+import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.toolbox.FileUtils;
 
 public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(FlexoExternalMainWithProject.class
+			.getPackage().getName());
+
 	private static final int PROJECT_LOADING_FAILURE = -8;
 	private static final int PROJECT_CANCELED_FAILURE = -18;
+
+	public static final String SERVER_URL = "serverURL=";
+	public static final String SERVER_LOGIN = "serverLogin=";
+	public static final String SERVER_PASSWORD = "serverPassword=";
 
 	protected java.io.File projectDirectory;
 
 	protected FlexoBuilderEditor editor;
 
 	protected FlexoProject project;
+	private ApplicationContext applicationContext;
 
-	public FlexoExternalMainWithProject() {
-	}
+	protected String serverURL;
+	protected String serverLogin;
+	protected String serverPassword;
 
 	/**
 	 * This is only code by test classes to dereference project from everywhere.
 	 */
 	public void close() {
-		ProjectLoader.instance().closeCurrentProject();
+		applicationContext.getProjectLoader().closeProject(project);
+		applicationContext.getModuleLoader().closeAllModulesWithoutConfirmation();
 		editor = null;
 		project = null;
 	}
@@ -48,28 +63,80 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 		GeneralPreferences.setAutoSaveEnabled(false);
 		GeneralPreferences.save();
 		if (args.length > 0) {
-			for (int i = 0; i < args.length && projectDirectory == null; i++) {
-				if (args[i].startsWith("\"")) {
-					args[i] = args[i].substring(1);
-				}
-				if (args[i].endsWith("\"")) {
-					args[i] = args[i].substring(0, args[i].length() - 1);
-				}
-				projectDirectory = new File(args[i]);
-				if (!projectDirectory.exists()) {
-					projectDirectory = null;
-				} else if (!projectDirectory.getName().toLowerCase().endsWith(".prj")) {
-					projectDirectory = searchProjectDirectory(projectDirectory);
-				} else {
-					break;// Project found!
+			for (int i = 0; i < args.length; i++) {
+				if (args[i].startsWith(SERVER_URL)) {
+					serverURL = args[i].substring(SERVER_URL.length());
+				} else if (args[i].startsWith(SERVER_LOGIN)) {
+					serverLogin = args[i].substring(SERVER_LOGIN.length());
+				} else if (args[i].startsWith(SERVER_PASSWORD)) {
+					serverPassword = args[i].substring(SERVER_PASSWORD.length());
+				} else if (projectDirectory == null) {
+
+					if (args[i].startsWith("\"")) {
+						args[i] = args[i].substring(1);
+					}
+					if (args[i].endsWith("\"")) {
+						args[i] = args[i].substring(0, args[i].length() - 1);
+					}
+					projectDirectory = new File(args[i]);
+					if (!projectDirectory.exists()) {
+						projectDirectory = null;
+					} else if (!projectDirectory.getName().toLowerCase().endsWith(".prj")) {
+						projectDirectory = searchProjectDirectory(projectDirectory);
+					}
 				}
 			}
 		}
 		if (projectDirectory == null) {
 			throw new MissingArgumentException("Project directory");
 		}
+		if (getWorkingDir() == null || !getWorkingDir().exists() || !getWorkingDir().canWrite()) {
+			try {
+				workingDir = FileUtils.createTempDirectory(getClass().getSimpleName(), "");
+			} catch (IOException e) {
+				e.printStackTrace();
+				setExitCodeCleanUpAndExit(LOCAL_IO_EXCEPTION);
+				return;
+			}
+		}
+		applicationContext = new ApplicationContext() {
+
+			@Override
+			public FlexoEditor makeFlexoEditor(FlexoProject project) {
+				FlexoBuilderEditor builderEditor = new FlexoBuilderEditor(FlexoExternalMainWithProject.this, project);
+				builderEditor.setFactory(new FlexoProgressFactory() {
+					@Override
+					public FlexoProgress makeFlexoProgress(String title, int steps) {
+						return new FlexoBuilderProgress(title, steps);
+					}
+				});
+				return builderEditor;
+			}
+
+			@Override
+			protected FlexoResourceCenterService createResourceCenterService() {
+				return FlexoBuilderResourceCenterService.getNewInstance(getWorkingDir());
+			}
+
+			@Override
+			protected FlexoEditor createApplicationEditor() {
+				return new DefaultFlexoEditor(null);
+			}
+
+			@Override
+			public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
+				return null;
+			}
+
+			@Override
+			protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
+				return new FlexoBuilderProjectReferenceLoader(FlexoExternalMainWithProject.this, getProjectLoader(), serverURL,
+						serverLogin, serverPassword);
+			}
+		};
+
 		try {
-			editor = loadProject(projectDirectory);
+			editor = (FlexoBuilderEditor) applicationContext.getProjectLoader().loadProject(projectDirectory);
 		} catch (ProjectLoadingCancelledException e) {
 			// Should not happen in external builder
 			e.printStackTrace();
@@ -81,11 +148,7 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 		project = editor.getProject();
 		project.getGeneratedCode().setFactory(editor);
 		project.getGeneratedDoc().setFactory(editor);
-		/*************************** MEGA-WARNING ***************************/
-		/** ##### DO NOT UNDER ANY (AND I HIGHLY INSIST ON THE "ANY") ##### */
-		/** ########### CIRCUMSTANCES REMOVE THE NEXT LINE ################ */
-		/********************************************************************/
-		ModuleLoader.instance(); // <-- DO NOT REMOVE!!!!!!!!!!!!!!!!!!!!!!!
+
 	}
 
 	@Override
@@ -157,25 +220,6 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 			reportSubStepMessage(stepName);
 		}
 
-	}
-
-	public FlexoBuilderEditor loadProject(File projectDirectory) throws ProjectLoadingCancelledException, ProjectInitializerException {
-		return (FlexoBuilderEditor) FlexoResourceManager.initializeExistingProject(projectDirectory, new FlexoEditorFactory() {
-
-			@Override
-			public FlexoEditor makeFlexoEditor(FlexoProject project) {
-
-				FlexoBuilderEditor builderEditor = new FlexoBuilderEditor(FlexoExternalMainWithProject.this, project);
-				builderEditor.setFactory(new FlexoProgressFactory() {
-					@Override
-					public FlexoProgress makeFlexoProgress(String title, int steps) {
-						return new FlexoBuilderProgress(title, steps);
-					}
-				});
-				return builderEditor;
-			}
-
-		}, getResourceCenter());
 	}
 
 }

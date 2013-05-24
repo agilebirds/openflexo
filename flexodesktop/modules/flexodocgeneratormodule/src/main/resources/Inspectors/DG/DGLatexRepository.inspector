@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.cg.DGRepository" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="PDF" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="PdfTab">
+      <Label align="center" index="1" data="data.localizedPdfInfoString" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;location=right)" width="200" height="350" name="LocalizedPdfInfoString" localize="true" />
+      <Label label="pdf_name" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsTop=5;location=left)" name="PostProductNameLabel" localize="true" />
+      <TextField index="3" data="data.postProductName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;location=right)" name="PostProductName" localize="true" validateOnReturn="true" columns="10" />
+      <Label label="pdf_install_directory" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsTop=5;location=left)" name="PostBuildDirectoryLabel" localize="true" />
+      <File mode="SaveMode" isDirectory="true" index="5" data="data.postBuildDirectory" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;location=right)" name="PostBuildDirectory" localize="true" />
+    </Tab>
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="PDF" lang="English">PDF</Localized>
+    <Localized key="PDF" lang="French">PDF</Localized>
+    <Localized key="PDF" lang="Dutch">PDF</Localized>
+    <Localized key="pdf_name" lang="English">pdf_name</Localized>
+    <Localized key="pdf_name" lang="French">pdf_name</Localized>
+    <Localized key="pdf_name" lang="Dutch">pdf_name</Localized>
+    <Localized key="pdf_install_directory" lang="English">pdf_install_directory</Localized>
+    <Localized key="pdf_install_directory" lang="French">pdf_install_directory</Localized>
+    <Localized key="pdf_install_directory" lang="Dutch">pdf_install_directory</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="generated_doc_repository" />
+</Panel>

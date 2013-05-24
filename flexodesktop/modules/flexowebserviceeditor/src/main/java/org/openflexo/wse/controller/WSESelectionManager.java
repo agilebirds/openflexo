@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.selection.SelectionManager;
-import org.openflexo.wse.view.menu.WSEMenuBar;
+import org.openflexo.view.menu.FlexoMenuBar;
 
 /**
  * Selection manager dedicated to this module
@@ -40,10 +40,10 @@ public class WSESelectionManager extends SelectionManager {
 
 	public WSESelectionManager(WSEController controller) {
 		super(controller);
-		WSEMenuBar menuBar = controller.getEditorMenuBar();
+		FlexoMenuBar menuBar = controller.getMenuBar();
 		_clipboard = new WSEClipboard(this, menuBar.getEditMenu(controller).copyItem, menuBar.getEditMenu(controller).pasteItem,
 				menuBar.getEditMenu(controller).cutItem);
-		_contextualMenuManager = new WSEContextualMenuManager(this, controller.getEditor(), controller);
+		_contextualMenuManager = new WSEContextualMenuManager(this, controller);
 	}
 
 	public WSEController getWSEController() {

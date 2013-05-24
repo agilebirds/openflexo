@@ -67,7 +67,7 @@ public class Debugging {
 		System.err.println("!!! WARNING !!!");
 		System.err.println("Message:\n" + aWarningMessage);
 		System.err.println("StackTrace:\n");
-		(new RuntimeException()).printStackTrace();
+		new RuntimeException().printStackTrace();
 
 	}
 

@@ -113,6 +113,7 @@ public abstract class FPSTestCase extends FlexoTestCase {
 		projectIdentifier = projectDirectory.getName().substring(0, projectDirectory.getName().length() - 4);
 		logger.info("Project identifier: " + projectIdentifier);
 		editor = FlexoResourceManager.initializeNewProject(projectDirectory, EDITOR_FACTORY, null);
+		createSubProcess(projectIdentifier, null, editor);
 		FlexoProject project = editor.getProject();
 		logger.info("Project has been SUCCESSFULLY created");
 

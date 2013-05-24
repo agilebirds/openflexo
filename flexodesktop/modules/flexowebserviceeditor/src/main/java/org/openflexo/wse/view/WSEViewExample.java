@@ -20,17 +20,16 @@
 package org.openflexo.wse.view;
 
 import java.awt.BorderLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.wse.controller.WSEController;
 
 /**
@@ -39,7 +38,7 @@ import org.openflexo.wse.controller.WSEController;
  * @author yourname
  * 
  */
-public class WSEViewExample extends JPanel implements ModuleView, GraphicalFlexoObserver {
+public class WSEViewExample extends JPanel implements ModuleView, PropertyChangeListener {
 
 	private WSEController _controller;
 	private FlexoModelObject _object;
@@ -49,6 +48,7 @@ public class WSEViewExample extends JPanel implements ModuleView, GraphicalFlexo
 		add(new JLabel(object.getFullyQualifiedName(), SwingConstants.CENTER), BorderLayout.CENTER);
 		_controller = controller;
 		_object = object;
+		getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 	}
 
 	public WSEController getWSEController() {
@@ -61,12 +61,8 @@ public class WSEViewExample extends JPanel implements ModuleView, GraphicalFlexo
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
-		// TODO: Implements this
-	}
-
-	@Override
 	public void deleteModuleView() {
+		getRepresentedObject().getPropertyChangeSupport().removePropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 		getWSEController().removeModuleView(this);
 	}
 
@@ -108,4 +104,10 @@ public class WSEViewExample extends JPanel implements ModuleView, GraphicalFlexo
 		return getWSEController().WSE_PERSPECTIVE;
 	}
 
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == getRepresentedObject() && evt.getPropertyName().equals(getRepresentedObject().getDeletedProperty())) {
+			deleteModuleView();
+		}
+	}
 }

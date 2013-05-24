@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.ontology.ProjectOntology;
+import org.openflexo.foundation.ontology.ProjectOWLOntology;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
@@ -36,7 +36,7 @@ import org.openflexo.foundation.utils.ProjectLoadingHandler;
  * @author sguerin
  * 
  */
-public class FlexoProjectOntologyResource extends FlexoStorageResource<ProjectOntology> {
+public class FlexoProjectOntologyResource extends FlexoStorageResource<ProjectOWLOntology> {
 
 	private static final Logger logger = Logger.getLogger(FlexoProjectOntologyResource.class.getPackage().getName());
 
@@ -64,7 +64,7 @@ public class FlexoProjectOntologyResource extends FlexoStorageResource<ProjectOn
 	        logger.info("Build new FlexoEOModelResource");
 	}*/
 
-	public FlexoProjectOntologyResource(FlexoProject aProject, ProjectOntology aProjectOntology, FlexoProjectFile ontologyFile)
+	public FlexoProjectOntologyResource(FlexoProject aProject, ProjectOWLOntology aProjectOntology, FlexoProjectFile ontologyFile)
 			throws InvalidFileNameException, DuplicateResourceException {
 		this(aProject);
 		_resourceData = aProjectOntology;
@@ -83,7 +83,7 @@ public class FlexoProjectOntologyResource extends FlexoStorageResource<ProjectOn
 	}
 
 	public Class getResourceDataClass() {
-		return ProjectOntology.class;
+		return ProjectOWLOntology.class;
 	}
 
 	@Override
@@ -92,7 +92,7 @@ public class FlexoProjectOntologyResource extends FlexoStorageResource<ProjectOn
 	}
 
 	@Override
-	public ProjectOntology performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
+	public ProjectOWLOntology performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
 			throws LoadResourceException {
 		_resourceData = getProject().getProjectOntologyLibrary()._loadProjectOntology(getProject().getURI(), getFile());
 		try {

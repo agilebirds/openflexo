@@ -49,17 +49,20 @@ public class AddServiceInterface extends FlexoAction<AddServiceInterface, FlexoM
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
-			return object instanceof FlexoProcess && !((FlexoProcess) object).isImported();
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+			return false;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return object instanceof WKFObject && !((WKFObject) object).getProcess().isImported();
 		}
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoProcess.class);
+	}
 	private String _newInterfaceName;
 	private ServiceInterface _serviceInterface;
 
@@ -68,7 +71,7 @@ public class AddServiceInterface extends FlexoAction<AddServiceInterface, FlexoM
 	}
 
 	public FlexoProcess getProcess() {
-		if ((getFocusedObject() != null) && (getFocusedObject() instanceof WKFObject)) {
+		if (getFocusedObject() != null && getFocusedObject() instanceof WKFObject) {
 			return ((WKFObject) getFocusedObject()).getProcess();
 		}
 		return null;

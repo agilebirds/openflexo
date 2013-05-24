@@ -78,20 +78,20 @@ public class Function extends Token {
 	}
 
 	protected static Function makeFunction(ListOfToken unparsedList) throws ParseException {
-		if ((unparsedList.size() == 1) && (unparsedList.firstElement() instanceof ListOfToken)) {
+		if (unparsedList.size() == 1 && unparsedList.firstElement() instanceof ListOfToken) {
 			return makeFunction((ListOfToken) unparsedList.firstElement());
 		} else {
 			// On y va, ca rigole plus
 			// System.out.println("makeFunction with "+unparsedList);
-			if ((unparsedList.size() == 2) && (unparsedList.get(0) instanceof Word) && (unparsedList.get(1) instanceof ListOfToken)) {
+			if (unparsedList.size() == 2 && unparsedList.get(0) instanceof Word && unparsedList.get(1) instanceof ListOfToken) {
 				ListOfToken unparsedParamList = (ListOfToken) unparsedList.get(1);
 
 				// Reduce functions first
 				ListOfToken functionsReducedParamList = new ListOfToken();
 				for (int i = 0; i < unparsedParamList.size(); i++) {
 					AbstractToken tok = unparsedParamList.elementAt(i);
-					if ((tok instanceof Word) && (i + 1 < unparsedParamList.size())
-							&& (unparsedParamList.elementAt(i + 1) instanceof ListOfToken)) {
+					if (tok instanceof Word && i + 1 < unparsedParamList.size()
+							&& unparsedParamList.elementAt(i + 1) instanceof ListOfToken) {
 						ListOfToken tryToBuildFunction = new ListOfToken();
 						tryToBuildFunction.add(tok);
 						tryToBuildFunction.add(unparsedParamList.elementAt(i + 1));

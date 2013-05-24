@@ -22,16 +22,20 @@ package org.openflexo.components.validation;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JTabbedPane;
 
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.FlexoModule;
 import org.openflexo.module.UserType;
+import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
 import org.openflexo.view.FlexoDialog;
-import org.openflexo.view.controller.ConsistencyCheckingController;
+import org.openflexo.view.FlexoFrame;
+import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.ControllerModel;
 
 /**
  * Defines the window allowing to perform check consistency, edit validation report, and fix issues. This window is shared by all the
@@ -40,27 +44,30 @@ import org.openflexo.view.controller.ConsistencyCheckingController;
  * @author sguerin
  * 
  */
-public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCheckDialogInterface {
+public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCheckDialogInterface, PropertyChangeListener {
 
-	private ConsistencyCheckingController _controller;
+	private FlexoController _controller;
 
 	private ValidationReportEditor _validationReportEditor;
 
 	private ValidationModelViewer _validationModelViewer;
 
-	public ConsistencyCheckDialog(ConsistencyCheckingController controller) {
+	private PropertyChangeListenerRegistrationManager manager;
+
+	public ConsistencyCheckDialog(FlexoController controller) {
 		this(controller, new ValidationReport(controller.getDefaultValidationModel()));
 	}
 
-	public ConsistencyCheckDialog(ConsistencyCheckingController controller, ValidationReport validationReport) {
+	public ConsistencyCheckDialog(FlexoController controller, ValidationReport validationReport) {
 		this(controller, validationReport, FlexoLocalization.localizedForKey("consistency_check"));
 	}
 
-	public ConsistencyCheckDialog(ConsistencyCheckingController controller, ValidationReport validationReport, String title) {
-		super(controller != null ? controller.getFlexoFrame() : FlexoModule.getActiveModule().getFlexoFrame(), false);
+	public ConsistencyCheckDialog(FlexoController controller, ValidationReport validationReport, String title) {
+		super(controller != null ? controller.getFlexoFrame() : FlexoFrame.getActiveFrame(), false);
 		setController(controller);
 		// setIconImage(IconLibrary.FLEXO_ICON.getImage());
 		setTitle(title);
+		manager = new PropertyChangeListenerRegistrationManager();
 		getContentPane().setLayout(new BorderLayout());
 		_validationReportEditor = new ValidationReportEditor(this, validationReport);
 		_validationModelViewer = new ValidationModelViewer(this, validationReport.getValidationModel());
@@ -81,15 +88,16 @@ public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCh
 		setLocation((dim.width - getSize().width) / 2, (dim.height - getSize().height) / 2);
 	}
 
-	public void setController(ConsistencyCheckingController controller) {
+	public void setController(FlexoController controller) {
 		_controller = controller;
 		if (controller != null && _validationModelViewer != null) {
 			_validationModelViewer.setValidationModel(controller.getDefaultValidationModel());
+			manager.addListener(ControllerModel.CURRENT_EDITOR, this, _controller.getControllerModel());
 		}
 	}
 
 	@Override
-	public ConsistencyCheckingController getController() {
+	public FlexoController getController() {
 		return _controller;
 	}
 
@@ -127,12 +135,10 @@ public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCh
 			_validationReportEditor.getParent().remove(_validationReportEditor);
 		}
 		super.dispose();
-		if (_controller != null) {
-			_controller.cleanUpValidationModel();
-		}
 		_controller = null;
 		_validationModelViewer = null;
 		_validationReportEditor = null;
+		manager.delete();
 		isDisposed = true;
 	}
 
@@ -140,6 +146,15 @@ public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCh
 
 	public boolean isDisposed() {
 		return isDisposed;
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (_controller != null && evt.getSource() == _controller.getControllerModel()) {
+			if (evt.getPropertyName().equals(ControllerModel.CURRENT_EDITOR)) {
+				dispose();
+			}
+		}
 	}
 
 }

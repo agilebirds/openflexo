@@ -19,7 +19,7 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -67,7 +67,7 @@ public class CreateDMTranstyperInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateDMTranstyper> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateDMTranstyper>() {
 			@Override
-			public boolean run(ActionEvent e, final CreateDMTranstyper action) {
+			public boolean run(EventObject e, final CreateDMTranstyper action) {
 				ReadOnlyTextFieldParameter declaringEntityParam = new ReadOnlyTextFieldParameter("declaringEntity", "declaring_entity",
 						action.getEntity().getName());
 				TextFieldParameter nameParam = new TextFieldParameter("transtyperName", "transtyper_name", action.getEntity().getDMModel()
@@ -151,7 +151,7 @@ public class CreateDMTranstyperInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateDMTranstyper> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateDMTranstyper>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDMTranstyper action) {
+			public boolean run(EventObject e, CreateDMTranstyper action) {
 				((DMController) getController()).getSelectionManager().setSelectedObject(action.getNewTranstyper());
 				return true;
 			}

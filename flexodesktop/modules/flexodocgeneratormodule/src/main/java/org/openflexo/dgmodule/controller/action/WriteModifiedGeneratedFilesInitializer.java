@@ -19,8 +19,8 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -29,27 +29,32 @@ import javax.swing.KeyStroke;
 import org.openflexo.FlexoCst;
 import org.openflexo.components.MultipleObjectSelectorPopup;
 import org.openflexo.dgmodule.DGPreferences;
-import org.openflexo.dgmodule.view.DGMainPane;
+import org.openflexo.dgmodule.controller.DGController;
 import org.openflexo.dgmodule.view.popups.SelectFilesPopup;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.cg.CGFile;
+import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.generator.action.WriteModifiedGeneratedFiles;
 import org.openflexo.icon.GeneratorIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.listener.FlexoKeyEventListener;
 
-public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer {
+public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer<WriteModifiedGeneratedFiles, CGObject, CGObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
 	WriteModifiedGeneratedFilesInitializer(DGControllerActionInitializer actionInitializer) {
 		super(WriteModifiedGeneratedFiles.actionType, actionInitializer);
+	}
+
+	@Override
+	public DGController getController() {
+		return (DGController) super.getController();
 	}
 
 	@Override
@@ -61,28 +66,32 @@ public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<WriteModifiedGeneratedFiles> getDefaultInitializer() {
 		return new FlexoActionInitializer<WriteModifiedGeneratedFiles>() {
 			@Override
-			public boolean run(ActionEvent e, WriteModifiedGeneratedFiles action) {
+			public boolean run(EventObject e, WriteModifiedGeneratedFiles action) {
 				if (action.getFilesToWrite().size() == 0) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("no_files_selected"));
 					return false;
-				} else if ((action.getFilesToWrite().size() > 1 || (!(action.getFocusedObject() instanceof CGFile)))
-						&& !(e != null && e.getActionCommand() != null && e.getActionCommand().equals(FlexoKeyEventListener.KEY_PRESSED))) {
+				} else if ((action.getFilesToWrite().size() > 1 || !(action.getFocusedObject() instanceof CGFile))
+						&& !(e instanceof KeyEvent)) {
 					SelectFilesPopup popup = new SelectFilesPopup(FlexoLocalization.localizedForKey("write_modified_files_to_disk"),
 							FlexoLocalization.localizedForKey("write_modified_files_to_disk_description"), "write_to_disk",
 							action.getFilesToWrite(), action.getFocusedObject().getProject(), getControllerActionInitializer()
 									.getDGController());
-					popup.setVisible(true);
-					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getFileSet().getSelectedFiles().size() > 0)) {
-						action.setFilesToWrite(popup.getFileSet().getSelectedFiles());
-						action.setSaveBeforeGenerating(DGPreferences.getSaveBeforeGenerating());
-					} else {
-						return false;
+					try {
+						popup.setVisible(true);
+						if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
+							action.setFilesToWrite(popup.getFileSet().getSelectedFiles());
+							action.setSaveBeforeGenerating(DGPreferences.getSaveBeforeGenerating());
+						} else {
+							return false;
+						}
+					} finally {
+						popup.delete();
 					}
 				} else {
 					// 1 occurence, continue without confirmation
 				}
 				action.setSaveBeforeGenerating(DGPreferences.getSaveBeforeGenerating());
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().setHoldStructure();
+				getController().getBrowser().setHoldStructure();
 				return true;
 			}
 		};
@@ -92,9 +101,9 @@ public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<WriteModifiedGeneratedFiles> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<WriteModifiedGeneratedFiles>() {
 			@Override
-			public boolean run(ActionEvent e, WriteModifiedGeneratedFiles action) {
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().update();
+			public boolean run(EventObject e, WriteModifiedGeneratedFiles action) {
+				getController().getBrowser().resetHoldStructure();
+				getController().getBrowser().update();
 				return true;
 			}
 		};
@@ -105,14 +114,14 @@ public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer {
 		return new FlexoExceptionHandler<WriteModifiedGeneratedFiles>() {
 			@Override
 			public boolean handleException(FlexoException exception, WriteModifiedGeneratedFiles action) {
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().update();
+				getController().getBrowser().resetHoldStructure();
+				getController().getBrowser().update();
 				getControllerActionInitializer().getDGController().disposeProgressWindow();
 				exception.printStackTrace();
 				FlexoController.showError(FlexoLocalization.localizedForKey("file_writing_failed") + ":\n"
 						+ exception.getLocalizedMessage());
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().resetHoldStructure();
-				((DGMainPane) getController().getMainPane()).getDgBrowserView().getBrowser().update();
+				getController().getBrowser().resetHoldStructure();
+				getController().getBrowser().update();
 				return true;
 			}
 		};

@@ -21,11 +21,11 @@ package org.openflexo.fib.view.container;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.util.Collections;
-import java.util.Comparator;
+import java.awt.Rectangle;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -33,6 +33,8 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.Scrollable;
+import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 
 import org.openflexo.fib.controller.FIBController;
@@ -57,20 +59,13 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 		updateBorder();
 	}
 
-	@Override
-	public void updateGraphicalProperties() {
-		super.updateGraphicalProperties();
-		panel.setOpaque(getComponent().getOpaque());
-		panel.setBackground(getComponent().getBackgroundColor());
-	}
-
 	public void updateBorder() {
 		switch (getComponent().getBorder()) {
 		case empty:
-			panel.setBorder(BorderFactory.createEmptyBorder((getComponent().getBorderTop() != null ? getComponent().getBorderTop() : 0),
-					(getComponent().getBorderLeft() != null ? getComponent().getBorderLeft() : 0),
-					(getComponent().getBorderBottom() != null ? getComponent().getBorderBottom() : 0),
-					(getComponent().getBorderRight() != null ? getComponent().getBorderRight() : 0)));
+			panel.setBorder(BorderFactory.createEmptyBorder(getComponent().getBorderTop() != null ? getComponent().getBorderTop() : 0,
+					getComponent().getBorderLeft() != null ? getComponent().getBorderLeft() : 0,
+					getComponent().getBorderBottom() != null ? getComponent().getBorderBottom() : 0,
+					getComponent().getBorderRight() != null ? getComponent().getBorderRight() : 0));
 			break;
 		case etched:
 			panel.setBorder(BorderFactory.createEtchedBorder());
@@ -92,10 +87,10 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 			break;
 		case rounded3d:
 			panel.setBorder(new RoundedBorder(StringUtils.isNotEmpty(getComponent().getBorderTitle()) ? getLocalized(getComponent()
-					.getBorderTitle()) : null, (getComponent().getBorderTop() != null ? getComponent().getBorderTop() : 0), (getComponent()
-					.getBorderLeft() != null ? getComponent().getBorderLeft() : 0),
-					(getComponent().getBorderBottom() != null ? getComponent().getBorderBottom() : 0),
-					(getComponent().getBorderRight() != null ? getComponent().getBorderRight() : 0), getComponent().getTitleFont(),
+					.getBorderTitle()) : null, getComponent().getBorderTop() != null ? getComponent().getBorderTop() : 0, getComponent()
+					.getBorderLeft() != null ? getComponent().getBorderLeft() : 0,
+					getComponent().getBorderBottom() != null ? getComponent().getBorderBottom() : 0,
+					getComponent().getBorderRight() != null ? getComponent().getBorderRight() : 0, getComponent().getTitleFont(),
 					getComponent().retrieveValidForegroundColor(), getComponent().getDarkLevel()));
 			break;
 		default:
@@ -141,7 +136,50 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 
 	@Override
 	protected JPanel createJComponent() {
-		panel = new JPanel();
+		class ScrollablePanel extends JPanel implements Scrollable {
+
+			@Override
+			public Dimension getPreferredScrollableViewportSize() {
+				return getPreferredSize();
+			}
+
+			@Override
+			public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+				switch (orientation) {
+				case SwingConstants.VERTICAL:
+					return visibleRect.height / 10;
+				case SwingConstants.HORIZONTAL:
+					return visibleRect.width / 10;
+				default:
+					throw new IllegalArgumentException("Invalid orientation: " + orientation);
+				}
+			}
+
+			@Override
+			public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+				switch (orientation) {
+				case SwingConstants.VERTICAL:
+					return visibleRect.height;
+				case SwingConstants.HORIZONTAL:
+					return visibleRect.width;
+				default:
+					throw new IllegalArgumentException("Invalid orientation: " + orientation);
+				}
+			}
+
+			@Override
+			public boolean getScrollableTracksViewportWidth() {
+				return FIBPanelView.this.getComponent().isTrackViewPortWidth();
+			}
+
+			@Override
+			public boolean getScrollableTracksViewportHeight() {
+				return FIBPanelView.this.getComponent().isTrackViewPortHeight();
+			}
+
+		}
+
+		panel = new ScrollablePanel();
 		updateGraphicalProperties();
 
 		_setPanelLayoutParameters();
@@ -171,21 +209,6 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 
 		if (getComponent().getLayout() == Layout.flow || getComponent().getLayout() == Layout.box
 				|| getComponent().getLayout() == Layout.twocols || getComponent().getLayout() == Layout.gridbag) {
-
-			Collections.sort(allSubComponents, new Comparator<FIBComponent>() {
-				@Override
-				public int compare(FIBComponent o1, FIBComponent o2) {
-					ComponentConstraints c1 = o1.getConstraints();
-					ComponentConstraints c2 = o2.getConstraints();
-					return c1.getIndex() - c2.getIndex();
-				}
-			});
-
-			int i = 0;
-			for (FIBComponent subComponent : allSubComponents) {
-				(subComponent.getConstraints()).setIndexNoNotification(i);
-				i++;
-			}
 
 			/*System.out.println("Apres le retrieve: ");
 			for (FIBComponent c : allSubComponents) {

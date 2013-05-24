@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
@@ -56,7 +56,7 @@ public abstract class AddMetricsDefinitionInitializer extends ActionInitializer 
 	protected FlexoActionInitializer<AddMetricsDefinition> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddMetricsDefinition>() {
 			@Override
-			public boolean run(ActionEvent e, AddMetricsDefinition action) {
+			public boolean run(EventObject e, AddMetricsDefinition action) {
 				if (action.getNewMetricsName() != null && action.getType() != null) {
 					return true;
 				}

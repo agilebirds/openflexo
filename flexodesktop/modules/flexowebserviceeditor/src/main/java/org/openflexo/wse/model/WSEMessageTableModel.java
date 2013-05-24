@@ -49,11 +49,11 @@ public class WSEMessageTableModel extends AbstractModel<ServiceOperation, Servic
 		addToColumns(new IconColumn<ServiceMessageDefinition>("process_icon", 30) {
 			@Override
 			public Icon getIcon(ServiceMessageDefinition object) {
-				if ((object).isInputMessageDefinition()) {
+				if (object.isInputMessageDefinition()) {
 					return WSEIconLibrary.WS_IN_MESSAGE_LEFT_ICON;
-				} else if ((object).isOutputMessageDefinition()) {
+				} else if (object.isOutputMessageDefinition()) {
 					return WSEIconLibrary.WS_OUT_MESSAGE_LEFT_ICON;
-				} else if ((object).isFaultMessageDefinition()) {
+				} else if (object.isFaultMessageDefinition()) {
 					return WSEIconLibrary.WS_FAULT_MESSAGE__LEFT_ICON;
 				}
 				return null;
@@ -61,11 +61,11 @@ public class WSEMessageTableModel extends AbstractModel<ServiceOperation, Servic
 
 			@Override
 			public String getLocalizedTooltip(ServiceMessageDefinition object) {
-				if ((object).isInputMessageDefinition()) {
+				if (object.isInputMessageDefinition()) {
 					return FlexoLocalization.localizedForKey("input_message_def");
-				} else if ((object).isOutputMessageDefinition()) {
+				} else if (object.isOutputMessageDefinition()) {
 					return FlexoLocalization.localizedForKey("output_message_def");
-				} else if ((object).isFaultMessageDefinition()) {
+				} else if (object.isFaultMessageDefinition()) {
 					return FlexoLocalization.localizedForKey("fault_message_def");
 				}
 				return null;
@@ -76,19 +76,19 @@ public class WSEMessageTableModel extends AbstractModel<ServiceOperation, Servic
 			addToColumns(new StringColumn<ServiceMessageDefinition>("name", 190) {
 				@Override
 				public String getValue(ServiceMessageDefinition object) {
-					return (object).getName();
+					return object.getName();
 				}
 			});
 		} else {
 			addToColumns(new EditableStringColumn<ServiceMessageDefinition>("name", 190) {
 				@Override
 				public String getValue(ServiceMessageDefinition object) {
-					return (object).getName();
+					return object.getName();
 				}
 
 				@Override
 				public void setValue(ServiceMessageDefinition object, String aValue) {
-					(object).setName(aValue);
+					object.setName(aValue);
 					selectObject(object);
 				}
 			});
@@ -126,7 +126,7 @@ public class WSEMessageTableModel extends AbstractModel<ServiceOperation, Servic
 
 	@Override
 	public ServiceMessageDefinition elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return (ServiceMessageDefinition) getMessages().get(row);
 		} else {
 			return null;

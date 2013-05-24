@@ -22,8 +22,6 @@ package org.openflexo.foundation.dm;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import javax.swing.tree.TreeNode;
-
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
 import org.openflexo.foundation.dm.dm.EntityAddedToDiagram;
@@ -114,12 +112,6 @@ public class ERDiagram extends DMObject {
 	}
 
 	@Override
-	public boolean getAllowsChildren() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public Vector<? extends DMObject> getEmbeddedDMObjects() {
 		return entities;
 	}
@@ -130,7 +122,7 @@ public class ERDiagram extends DMObject {
 	}
 
 	@Override
-	public TreeNode getParent() {
+	public DMModel getParent() {
 		return getDMModel();
 	}
 

@@ -39,7 +39,7 @@ public class SymetricPointConstruction extends PointConstruction {
 
 	@Override
 	protected FGEPoint computeData() {
-		return (new FGESegment(pointConstruction.getPoint(), pivotConstruction.getPoint())).getScaledPoint(2);
+		return new FGESegment(pointConstruction.getPoint(), pivotConstruction.getPoint()).getScaledPoint(2);
 	}
 
 	@Override

@@ -47,12 +47,12 @@ public class UngroupActivities extends FlexoAction<UngroupActivities, ActivityGr
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ActivityGroup group, Vector<WKFObject> globalSelection) {
-			return (group != null);
+		public boolean isVisibleForSelection(ActivityGroup group, Vector<WKFObject> globalSelection) {
+			return group != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ActivityGroup object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(ActivityGroup object, Vector<WKFObject> globalSelection) {
 			return isVisibleForSelection(object, globalSelection);
 		}
 

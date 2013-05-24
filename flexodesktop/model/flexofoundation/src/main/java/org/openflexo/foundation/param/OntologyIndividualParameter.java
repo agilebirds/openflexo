@@ -52,7 +52,7 @@ public class OntologyIndividualParameter extends ParameterDefinition<OntologyInd
 	}
 
 	public FlexoModelObject getOntologyClass() {
-		return _ontologyClass;
+		return (FlexoModelObject) _ontologyClass;
 	}
 
 }

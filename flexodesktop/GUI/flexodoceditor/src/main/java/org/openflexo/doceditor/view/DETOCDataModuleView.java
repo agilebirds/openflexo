@@ -34,12 +34,13 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.action.AddTOCRepository;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.listener.FlexoActionButton;
 
 /**
@@ -48,7 +49,7 @@ import org.openflexo.view.listener.FlexoActionButton;
 public class DETOCDataModuleView extends JPanel implements ModuleView<TOCData>, FlexoObserver, FlexoActionSource {
 	private TOCData _gc;
 	private DEController _controller;
-	private JComponent component;
+	private JComponent addTOCRepositoryButton;
 	private JPanel topPanel;
 	private JPanel panel;
 
@@ -67,33 +68,34 @@ public class DETOCDataModuleView extends JPanel implements ModuleView<TOCData>, 
 	}
 
 	private void updateView() {
-		if (component != null) {
-			panel.remove(component);
+		if (addTOCRepositoryButton != null) {
+			panel.remove(addTOCRepositoryButton);
 		}
-		if (_gc.getRepositories().size() == 0) {
-			panel.add(component = new FlexoActionButton(AddTOCRepository.actionType, this, _controller.getEditor()));
-		} else {
-			panel.add(component = new JLabel(FlexoLocalization.localizedForKey("please_select_a_repository"), SwingConstants.CENTER));
-		}
+
+		panel.add(addTOCRepositoryButton = new FlexoActionButton(AddTOCRepository.actionType, this, _controller), BorderLayout.CENTER);
 		panel.validate();
 		panel.repaint();
 	}
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification instanceof ObjectDeleted) {
+			deleteModuleView();
+			return;
+		}
 		updateView();
 	}
 
 	@Override
 	public void deleteModuleView() {
 		_controller.removeModuleView(this);
-		component = null;
+		addTOCRepositoryButton = null;
 		panel = null;
 	}
 
 	@Override
 	public FlexoPerspective getPerspective() {
-		return _controller.getCurrentPerspective();
+		return _controller.TOC_PERSPECTIVE;
 	}
 
 	@Override

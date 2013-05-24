@@ -305,7 +305,7 @@ public abstract class AbstractNode extends WKFNode implements InspectableObject,
 	@Override
 	public void setName(String aName) {
 		String oldValue = getName();
-		if ((oldValue == null) || (!oldValue.equals(aName))) {
+		if (oldValue == null || !oldValue.equals(aName)) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Name was: " + oldValue + " values now: " + aName);
 			}
@@ -325,7 +325,7 @@ public abstract class AbstractNode extends WKFNode implements InspectableObject,
 		Vector<AbstractNode> allNodes = getProcess().getAllAbstractNodes();
 		for (Enumeration<AbstractNode> e = allNodes.elements(); e.hasMoreElements();) {
 			AbstractNode node = e.nextElement();
-			if ((node != this) && (node.getFullyQualifiedName().equalsIgnoreCase(getFullyQualifiedName()))) {
+			if (node != this && node.getFullyQualifiedName().equalsIgnoreCase(getFullyQualifiedName())) {
 				returned.add(node);
 			}
 		}
@@ -470,7 +470,7 @@ public abstract class AbstractNode extends WKFNode implements InspectableObject,
 			Vector<FlexoPostCondition<?, ?>> listOfAllPostToConsider = new Vector<FlexoPostCondition<?, ?>>();
 			listOfAllPostToConsider.addAll(node.getOutgoingPostConditions());
 
-			if ((node instanceof ActivityNode || node instanceof OperationNode)) {
+			if (node instanceof ActivityNode || node instanceof OperationNode) {
 				FlexoNode startNode = (FlexoNode) node;
 				if (startNode.isEndNode()) {
 					// try to find other brother end node with outgoing post
@@ -483,7 +483,7 @@ public abstract class AbstractNode extends WKFNode implements InspectableObject,
 					}
 					if (startNode.getParentPetriGraph().getContainer() instanceof SubProcessNode) {
 						SubProcessNode sub = (SubProcessNode) startNode.getParentPetriGraph().getContainer();
-						if (sub.getPortMapRegistery().getAllOutPortmaps().size() > 0) {
+						if (sub.getPortMapRegistery() != null && sub.getPortMapRegistery().getAllOutPortmaps().size() > 0) {
 							return null;
 						}
 					}
@@ -507,7 +507,7 @@ public abstract class AbstractNode extends WKFNode implements InspectableObject,
 					regular++;
 				}
 			}
-			if (defaultCount > 0 && (regular + conditionalCount) == 0) {
+			if (defaultCount > 0 && regular + conditionalCount == 0) {
 				if (node instanceof OperatorNode && ((OperatorNode) node).isExclusiveGateway()) {
 					return null; // There is a rule on the post conditions to prevent this already!
 				} else {

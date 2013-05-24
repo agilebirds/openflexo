@@ -55,7 +55,7 @@ public abstract class FlexoGeneratedResource<GRD extends GeneratedResourceData> 
 	private Date _lastGenerationDate;
 
 	public Date getLastGenerationDate() {
-		if (_lastGenerationDate == null || (isConnected() && !getFile().exists())) {
+		if (_lastGenerationDate == null || isConnected() && !getFile().exists()) {
 			_lastGenerationDate = getDiskLastModifiedDate();
 		}
 		return _lastGenerationDate;
@@ -84,7 +84,7 @@ public abstract class FlexoGeneratedResource<GRD extends GeneratedResourceData> 
 	 * @return
 	 */
 	public synchronized boolean isLoaded() {
-		return (_resourceData != null);
+		return _resourceData != null;
 	}
 
 	// Enhance visibility of this method
@@ -116,7 +116,7 @@ public abstract class FlexoGeneratedResource<GRD extends GeneratedResourceData> 
 		try {
 			tree = update();
 			return !tree.isEmpty();
-		} catch (ResourceDependancyLoopException e) {
+		} catch (ResourceDependencyLoopException e) {
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.log(Level.SEVERE, "Loop in dependant resources of " + this + "!", e);
 			}
@@ -136,7 +136,7 @@ public abstract class FlexoGeneratedResource<GRD extends GeneratedResourceData> 
 		}
 		try {
 			return needsUpdate();
-		} catch (ResourceDependancyLoopException e) {
+		} catch (ResourceDependencyLoopException e) {
 			// Warns about the exception
 			if (logger.isLoggable(Level.SEVERE)) {
 				logger.log(Level.SEVERE, "Loop in dependant resources of " + this + "!", e);
@@ -146,7 +146,7 @@ public abstract class FlexoGeneratedResource<GRD extends GeneratedResourceData> 
 	}
 
 	@Override
-	protected void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException, FlexoException,
+	protected void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependencyLoopException, FlexoException,
 			FileNotFoundException {
 		// This is a little hack for resource that depends of nothing (which is wrong!!! a generated resource should always depend of
 		// something)

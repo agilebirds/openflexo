@@ -19,24 +19,19 @@
  */
 package org.openflexo.foundation.rm;
 
-import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
-import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.xml.VEShemaLibraryBuilder;
-import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Represents the shema library resource
  * 
  * @author sylvain
  */
-public class FlexoOEShemaLibraryResource extends FlexoXMLStorageResource<ViewLibrary> implements Serializable {
+public class FlexoOEShemaLibraryResource extends FlexoXMLStorageResource<ViewLibrary> {
 
 	private static final Logger logger = Logger.getLogger(FlexoOEShemaLibraryResource.class.getPackage().getName());
 
@@ -119,29 +114,6 @@ public class FlexoOEShemaLibraryResource extends FlexoXMLStorageResource<ViewLib
 	}
 
 	@Override
-	public ViewLibrary performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
-			throws LoadXMLResourceException, ProjectLoadingCancelledException, MalformedXMLException {
-		ViewLibrary library;
-		if (progress != null) {
-			progress.setProgress(FlexoLocalization.localizedForKey("loading_shema_library"));
-		}
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("performLoadResourceData() in FlexoOEShemaLibraryResource");
-		}
-		try {
-			library = super.performLoadResourceData(progress, loadingHandler);
-		} catch (FlexoFileNotFoundException e) {
-			if (logger.isLoggable(Level.SEVERE)) {
-				logger.severe("File " + getFile().getName() + " NOT found");
-			}
-			e.printStackTrace();
-			return null;
-		}
-		library.setProject(getProject());
-		return library;
-	}
-
-	@Override
 	public boolean hasBuilder() {
 		return true;
 	}
@@ -156,7 +128,8 @@ public class FlexoOEShemaLibraryResource extends FlexoXMLStorageResource<ViewLib
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("instanciateNewBuilder in FlexoComponentLibraryResource");
 		}
-		VEShemaLibraryBuilder builder = new VEShemaLibraryBuilder(this, getProject().getResourceCenter().retrieveViewPointLibrary());
+		VEShemaLibraryBuilder builder = new VEShemaLibraryBuilder(this, getProject().getResourceCenter().getOpenFlexoResourceCenter()
+				.retrieveViewPointLibrary());
 		builder.shemaLibrary = _resourceData;
 		return builder;
 	}

@@ -66,7 +66,7 @@ public class CreateCircleWithCenterAndPoint extends Edition {
 
 			graphics.setDefaultForeground(focusedForegroundStyle);
 			center.paint(graphics);
-			(new FGEEllips(center, new FGEDimension(diameter, diameter), Filling.NOT_FILLED)).paint(graphics);
+			new FGEEllips(center, new FGEDimension(diameter, diameter), Filling.NOT_FILLED).paint(graphics);
 		}
 	}
 }

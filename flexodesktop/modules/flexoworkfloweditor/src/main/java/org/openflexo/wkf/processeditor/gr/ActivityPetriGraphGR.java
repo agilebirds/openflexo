@@ -41,8 +41,8 @@ public class ActivityPetriGraphGR extends ContainerGR<ActivityPetriGraph> {
 
 	@Override
 	public String getLabel() {
-		return (getActivityPetriGraph().getContainer() instanceof AbstractNode ? ((AbstractNode) getActivityPetriGraph().getContainer())
-				.getName() : "???");
+		return getActivityPetriGraph().getContainer() instanceof AbstractNode ? ((AbstractNode) getActivityPetriGraph().getContainer())
+				.getName() : "???";
 	}
 
 	@Override

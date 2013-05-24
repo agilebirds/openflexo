@@ -20,13 +20,18 @@
 package org.openflexo.foundation.cg.templates;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 
 import org.openflexo.foundation.TargetType;
 import org.openflexo.foundation.cg.dm.CGDataModification;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.toolbox.EmptyVector;
+
+import com.google.common.collect.ArrayListMultimap;
 
 public abstract class CGTemplateRepository extends CGTemplateObject {
 
@@ -34,12 +39,15 @@ public abstract class CGTemplateRepository extends CGTemplateObject {
 	private File _directory;
 	private CGDirectoryTemplateSet commonTemplates;
 	private Hashtable<TargetType, TargetSpecificCGTemplateSet> targetSpecificTemplates;
-	private Vector<TargetType> availableTargets;
+	private final Vector<TargetType> availableTargets;
 
 	public CGTemplateRepository(File directory, CGTemplates templates, Vector<TargetType> availableTargets) {
 		super();
 		_templates = templates;
 		_directory = directory;
+		if (availableTargets == null) {
+			availableTargets = EmptyVector.EMPTY_VECTOR();
+		}
 		this.availableTargets = availableTargets;
 		commonTemplates = makeCommonTemplateSet();
 		targetSpecificTemplates = new Hashtable<TargetType, TargetSpecificCGTemplateSet>();
@@ -58,11 +66,33 @@ public abstract class CGTemplateRepository extends CGTemplateObject {
 	@Override
 	public void update() {
 		commonTemplates.update();
-		if (availableTargets != null) {
 			for (TargetType target : availableTargets) {
 				TargetSpecificCGTemplateSet specificTargetSet = getTemplateSetForTarget(target);
 				if (specificTargetSet != null) {
 					specificTargetSet.update();
+				}
+			}
+		ArrayListMultimap<String, CGTemplate> templates = ArrayListMultimap.create();
+		for (CGTemplate t : commonTemplates.findAllTemplates()) {
+			templates.put(t.getName(), t);
+		}
+		for (TargetType target : availableTargets) {
+			TargetSpecificCGTemplateSet specificTargetSet = getTemplateSetForTarget(target);
+			if (specificTargetSet != null) {
+				for (CGTemplate t : specificTargetSet.findAllTemplates()) {
+					templates.put(t.getName(), t);
+				}
+			}
+		}
+		for (String key : templates.keySet()) {
+			List<CGTemplate> t = templates.get(key);
+			if (t.size() == 1) {
+				continue;
+			}
+			CGTemplate ref = t.get(0);
+			for (CGTemplate template : t) {
+				if (template != ref && template.getLastUpdate().getTime() == ref.getLastUpdate().getTime()) {
+
 				}
 			}
 		}
@@ -79,6 +109,12 @@ public abstract class CGTemplateRepository extends CGTemplateObject {
 
 	public Enumeration<TargetSpecificCGTemplateSet> getTargetSpecificTemplates() {
 		return targetSpecificTemplates.elements();
+	}
+
+	public List<TargetSpecificCGTemplateSet> getTargetSpecificTemplateSets() {
+		List<TargetSpecificCGTemplateSet> returned = new ArrayList<TargetSpecificCGTemplateSet>();
+		returned.addAll(targetSpecificTemplates.values());
+		return returned;
 	}
 
 	public CGTemplate getTemplateWithRelativePath(String relativePath) {

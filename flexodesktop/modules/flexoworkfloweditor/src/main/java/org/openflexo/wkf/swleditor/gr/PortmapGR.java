@@ -249,6 +249,9 @@ public class PortmapGR extends AbstractNodeGR<FlexoPortMap> {
 
 	@Override
 	public void notifyObjectHasMoved() {
+		if (isLayingout) {
+			return;
+		}
 		super.notifyObjectHasMoved();
 		FlexoPortMap afterPortmap = null;
 		if (observedContainer != null) {

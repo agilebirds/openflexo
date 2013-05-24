@@ -26,14 +26,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.DeletableObject;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ParameteredFixProposal;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
-import org.openflexo.foundation.wkf.action.AddStatus;
 import org.openflexo.foundation.wkf.dm.StatusInserted;
 import org.openflexo.foundation.wkf.dm.StatusRemoved;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
@@ -82,7 +80,7 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 		if (createDefaultStatus) {
 			Status defaultStatus;
 			try {
-				defaultStatus = new Status(process, FlexoLocalization.localizedForKey("default"));
+				defaultStatus = new Status(process, FlexoLocalization.localizedForKey("new"));
 				defaultStatus.setDontGenerate(true);
 				addToStatus(defaultStatus);
 				setDefaultStatus(defaultStatus);
@@ -118,13 +116,6 @@ public final class StatusList extends WKFObject implements DeletableObject, Leve
 		Vector<Status> returned = new Vector<Status>();
 		returned.addAll(getStatus());
 		returned.addAll(getInheritedStatus());
-		return returned;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddStatus.actionType);
 		return returned;
 	}
 

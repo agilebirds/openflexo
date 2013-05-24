@@ -22,13 +22,12 @@ package org.openflexo.wse.controller;
 /*
  * Created in March 06 by Denis VANVYVE Flexo Application Suite (c) Denali 2003-2006
  */
-import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import org.openflexo.FlexoCst;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMObject;
-import org.openflexo.foundation.validation.ValidationModel;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ws.AbstractMessageDefinition;
 import org.openflexo.foundation.wkf.ws.FlexoPort;
@@ -39,16 +38,12 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.FlexoMainPane;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
-import org.openflexo.view.controller.SelectionManagingController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.menu.FlexoMenuBar;
 import org.openflexo.wse.controller.action.WSEControllerActionInitializer;
-import org.openflexo.wse.view.WSEFrame;
 import org.openflexo.wse.view.WSEMainPane;
-import org.openflexo.wse.view.listener.WSEKeyEventListener;
 import org.openflexo.wse.view.menu.WSEMenuBar;
 
 /**
@@ -56,19 +51,11 @@ import org.openflexo.wse.view.menu.WSEMenuBar;
  * 
  * @author yourname
  */
-public class WSEController extends FlexoController implements SelectionManagingController {// , ConsistencyCheckingController {
+public class WSEController extends FlexoController {
 
 	static final Logger logger = Logger.getLogger(WSEController.class.getPackage().getName());
 
-	public final FlexoPerspective<FlexoModelObject> WSE_PERSPECTIVE = new WSEPerspective();
-
-	protected WSEMenuBar _WSEMenuBar;
-
-	protected WSEFrame _frame;
-
-	protected WSEKeyEventListener _WSEKeyEventListener;
-
-	private WSESelectionManager _selectionManager;
+	public FlexoPerspective WSE_PERSPECTIVE;
 
 	private WSEBrowser _browser;
 
@@ -79,19 +66,19 @@ public class WSEController extends FlexoController implements SelectionManagingC
 	/**
 	 * Default constructor
 	 */
-	public WSEController(InteractiveFlexoEditor projectEditor, FlexoModule module) throws Exception {
-		super(projectEditor, module);
-		addToPerspectives(WSE_PERSPECTIVE);
-		setDefaultPespective(WSE_PERSPECTIVE);
-		_WSEMenuBar = (WSEMenuBar) createAndRegisterNewMenuBar();
-		_WSEKeyEventListener = new WSEKeyEventListener(this);
-		_frame = new WSEFrame(FlexoCst.BUSINESS_APPLICATION_VERSION_NAME, this, _WSEKeyEventListener, _WSEMenuBar);
-		init(_frame, _WSEKeyEventListener, _WSEMenuBar);
+	public WSEController(FlexoModule module) {
+		super(module);
+	}
 
-		// At this point the InspectorController is not yet loaded
-		_selectionManager = new WSESelectionManager(this);
-
+	@Override
+	protected void initializePerspectives() {
 		_browser = new WSEBrowser(this);
+		addToPerspectives(WSE_PERSPECTIVE = new WSEPerspective(this));
+	}
+
+	@Override
+	protected SelectionManager createSelectionManager() {
+		return new WSESelectionManager(this);
 	}
 
 	@Override
@@ -109,101 +96,24 @@ public class WSEController extends FlexoController implements SelectionManagingC
 		return new WSEMenuBar(this);
 	}
 
-	/**
-	 * Init inspectors
-	 */
-	@Override
-	public void initInspectors() {
-		super.initInspectors();
-		_selectionManager.addObserver(getSharedInspectorController());
-	}
-
-	public void loadRelativeWindows() {
-		// Build eventual relative windows
-	}
-
-	// ================================================
-	// ============== Instance method =================
-	// ================================================
-
-	public ValidationModel getDefaultValidationModel() {
-		// If there is a ValidationModel associated to this module, put it here
-		return null;
-	}
-
-	public WSEFrame getMainFrame() {
-		return _frame;
-	}
-
-	public WSEMenuBar getEditorMenuBar() {
-		return _WSEMenuBar;
-	}
-
-	public void showBrowser() {
-		if (getMainPane() != null) {
-			((WSEMainPane) getMainPane()).showBrowser();
-		}
-	}
-
-	public void hideBrowser() {
-		if (getMainPane() != null) {
-			((WSEMainPane) getMainPane()).hideBrowser();
-		}
-	}
-
 	@Override
 	protected FlexoMainPane createMainPane() {
-		return new WSEMainPane(getEmptyPanel(), getMainFrame(), this);
+		return new WSEMainPane(this);
 	}
 
 	public WSEBrowser getWSEBrowser() {
 		return _browser;
 	}
 
-	public WSEKeyEventListener getKeyEventListener() {
-		return _WSEKeyEventListener;
-	}
-
-	// ================================================
-	// ============ Selection management ==============
-	// ================================================
-
 	@Override
-	public SelectionManager getSelectionManager() {
-		return getWSESelectionManager();
+	public FlexoModelObject getDefaultObjectToSelect(FlexoProject project) {
+		return project;
 	}
-
-	public WSESelectionManager getWSESelectionManager() {
-		return _selectionManager;
-	}
-
-	/**
-	 * Select the view representing supplied object, if this view exists. Try all to really display supplied object, even if required view
-	 * is not the current displayed view
-	 * 
-	 * @param object
-	 *            : the object to focus on
-	 */
-	@Override
-	public void selectAndFocusObject(FlexoModelObject object) {
-		// TODO: Implements this
-		setCurrentEditedObjectAsModuleView(object);
-	}
-
-	// ================================================
-	// ============ Exception management ==============
-	// ================================================
 
 	@Override
 	public boolean handleException(InspectableObject inspectable, String propertyName, Object value, Throwable exception) {
 		// TODO: Handles here exceptions that may be thrown through the inspector
 		return super.handleException(inspectable, propertyName, value, exception);
-	}
-
-	// VIEWS
-	@Override
-	public Hashtable getLoadedViews() {
-		return super.getLoadedViews();
 	}
 
 	@Override
@@ -224,6 +134,12 @@ public class WSEController extends FlexoController implements SelectionManagingC
 			return ((ServiceOperation) object).getName();
 		}
 		return null;
+	}
+
+	@Override
+	protected void updateEditor(FlexoEditor from, FlexoEditor to) {
+		super.updateEditor(from, to);
+		_browser.setRootObject(to != null && to.getProject() != null ? to.getProject().getFlexoWSLibrary() : null);
 	}
 
 }

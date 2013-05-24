@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.view.View" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.view.View" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="10" title="Graphics" layout="twocols" font="SansSerif,0,11" name="GraphicsTab">
-      <Label label="draw_working_area" localize="true" name="GraphicalRepresentationdrawWorkingAreaLabel" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" />
-      <CheckBox selected="false" localize="true" name="GraphicalRepresentationdrawWorkingArea" data="data.graphicalRepresentation.drawWorkingArea" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" />
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+      <Label label="title" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="TitleLabel" localize="true" />
+      <TextField index="1" data="data.title" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="Title" localize="true" validateOnReturn="true" columns="10" />
+      <Label label="name" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="NameLabel" localize="true" />
+      <TextField index="3" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="Name" readOnly="true" localize="true" columns="10" />
+      <Label label="viewpoint" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="ViewpointnameLabel" localize="true" />
+      <TextField index="5" data="data.viewPoint.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="Viewpointname" readOnly="true" localize="true" columns="10" />
+      <Label label="version" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="ViewpointVersionLabel" localize="true" />
+      <TextField index="7" data="data.viewPoint.version" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="ViewpointVersion" readOnly="true" localize="true" columns="10" />
+      <Label label="index" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="IndexLabel" localize="true" />
+      <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="5" index="9" data="data.index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="Index" localize="true" />
+      <TabPanel name="GRTab" index="10" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.DrawingGraphicalRepresentation" constraints="twocols(expandHorizontally=true;expandVertically=true;index=10;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)">
+        <Tab title="Drawing" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="BasicTab">
+          <Label label="width" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="WidthLabel" localize="true" />
+          <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" columns="10" index="5" data="GRTab.data.width" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="GraphicalRepresentationwidth" localize="true" />
+          <Label label="height" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="HeightLabel" localize="true" />
+          <Number minValue="-1.7976931348623157E308" maxValue="1.7976931348623157E308" increment="1.0" numberType="DoubleType" columns="10" index="7" data="GRTab.data.height" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="GraphicalRepresentationheight" localize="true" />
+          <Label label="background_color" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="BackgroundColorLabel" localize="true" />
+          <Color allowsNull="false" index="9" data="GRTab.data.backgroundColor" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="GraphicalRepresentationbackgroundColor" localize="true" />
+          <Label label="draw_working_area" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="DrawWorkingAreaLabel" localize="true" />
+          <CheckBox selected="false" index="1" data="GRTab.data.drawWorkingArea" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="GraphicalRepresentationdrawWorkingArea" localize="true" />
+        </Tab>
+      </TabPanel>
     </Tab>
-    <Tab index="2" title="Advanced" layout="twocols" font="SansSerif,0,11" name="AdvancedTab" />
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
-      <Label label="title" localize="true" name="TitleLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" validateOnReturn="true" passwd="false" localize="true" name="Title" data="data.title" constraints="twocols(location=right;index=1;expandHorizontally=true;expandVertically=false)" />
-      <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" readOnly="true" passwd="false" localize="true" name="Name" data="data.name" constraints="twocols(location=right;index=3;expandHorizontally=true;expandVertically=false)" />
-      <Label label="viewpoint" localize="true" name="ViewpointnameLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-      <TextField columns="10" passwd="false" readOnly="true" localize="true" name="Viewpointname" data="data.calc.name" constraints="twocols(location=right;index=5;expandHorizontally=true;expandVertically=false)" />
-     <TabPanel name="GRTab" data="data.graphicalRepresentation" dataClassName="org.openflexo.fge.DrawingGraphicalRepresentation" constraints="twocols(location=center;index=6;expandHorizontally=true;expandVertically=true)">
- 
-        <Tab index="0" title="Drawing" layout="twocols" font="SansSerif,0,11" useScrollBar="true" name="BasicTab">
-      <Label label="width" localize="true" name="WidthLabel" constraints="twocols(location=left;index=4;expandHorizontally=false;expandVertically=false)" />
-      <Number numberType="DoubleType" columns="10" data="GRTab.data.width" constraints="twocols(location=right;index=5;expandHorizontally=false;expandVertically=false)" name="GraphicalRepresentationwidth" localize="true" />
-      <Label label="height" localize="true" name="HeightLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" />
-      <Number numberType="DoubleType" columns="10" data="GRTab.data.height" constraints="twocols(location=right;index=7;expandHorizontally=false;expandVertically=false)" name="GraphicalRepresentationheight" localize="true" />
-      <Label label="background_color" localize="true" name="BackgroundColorLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
-      <Color data="GRTab.data.backgroundColor" constraints="twocols(location=right;index=9;expandHorizontally=false;expandVertically=false)" name="GraphicalRepresentationbackgroundColor" localize="true" />
-      <Label label="draw_working_area" localize="true" name="DrawWorkingAreaLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
-      <CheckBox selected="false" localize="true" name="GraphicalRepresentationdrawWorkingArea" data="GRTab.data.drawWorkingArea" constraints="twocols(location=right;index=1;expandHorizontally=false;expandVertically=false)" />
- 		</Tab>
- 		</TabPanel>
-    </Tab>
-    
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="AdvancedTab" />
+    <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="10" font="SansSerif,0,11" name="GraphicsTab" />
   </TabPanel>
   <LocalizedDictionary>
     <Localized key="Graphics" lang="French">Graphisme</Localized>
@@ -51,7 +50,24 @@
     <Localized key="background_color" lang="English">Background color</Localized>
     <Localized key="background_color" lang="French">Couleur de l'arrière-plan</Localized>
     <Localized key="background_color" lang="Dutch">Background color</Localized>
+    <Localized key="title" lang="English">Title</Localized>
+    <Localized key="title" lang="French">Titre</Localized>
+    <Localized key="title" lang="Dutch">Title</Localized>
+    <Localized key="version" lang="English">Version</Localized>
+    <Localized key="version" lang="French">Version</Localized>
+    <Localized key="version" lang="Dutch">Version</Localized>
+    <Localized key="index" lang="English">Index</Localized>
+    <Localized key="index" lang="French">Index</Localized>
+    <Localized key="index" lang="Dutch">Index</Localized>
+    <Localized key="Drawing" lang="English">Drawing</Localized>
+    <Localized key="Drawing" lang="French">Dessin</Localized>
+    <Localized key="Drawing" lang="Dutch">Drawing</Localized>
+    <Localized key="Basic" lang="English">Basic</Localized>
+    <Localized key="Basic" lang="Dutch">Basis</Localized>
+    <Localized key="Advanced" lang="English">Advanced</Localized>
+    <Localized key="Advanced" lang="Dutch">Geavanceerd</Localized>
+    <Localized key="Graphics" lang="English">Graphics</Localized>
+    <Localized key="Graphics" lang="Dutch">Graphics</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="View" />
 </Panel>
-

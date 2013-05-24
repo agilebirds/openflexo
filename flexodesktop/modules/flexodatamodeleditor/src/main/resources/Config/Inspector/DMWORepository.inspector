@@ -1,4 +1,4 @@
-<inspector title = "WORepository" inheritsfrom="DMRepository.inspector">
+<inspector title = "WORepository" inspectedClassName="org.openflexo.foundation.dm.WORepository" inheritsfrom="DMRepository.inspector">
 	<tab name="Basic" index="0">
 		<layout name ="DEFAULT">
 			<param name="aLayoutParamName" value="aLayoutParamValue"/>

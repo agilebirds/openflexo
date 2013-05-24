@@ -66,7 +66,7 @@ public final class SelfExecutableActivityNode extends ActivityNode implements Se
 
 	@Override
 	public void finalizeDeserialization(Object builder) {
-		for (int i = 0; (i < assignments.size()) && (i < assignmentDescriptions.size()); i++) {
+		for (int i = 0; i < assignments.size() && i < assignmentDescriptions.size(); i++) {
 			String desc = assignmentDescriptions.get(i);
 			if ("null".equals(desc)) {
 				desc = null;

@@ -30,6 +30,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Yet another <code>SpellDictionary</code> this one is based on Damien Guillaume's Diskbased dictionary but adds a cache to try to improve
@@ -50,7 +51,7 @@ public class SpellDictionaryCachedDichoDisk extends SpellDictionaryDichoDisk {
 
 	private static int MAX_CACHED = 10000;
 
-	private HashMap suggestionCache = new HashMap(MAX_CACHED);
+	private Map<String, CacheObject> suggestionCache = new HashMap<String, SpellDictionaryCachedDichoDisk.CacheObject>(MAX_CACHED);
 	private String preCacheFileName;
 	private String preCacheDir;
 
@@ -106,8 +107,8 @@ public class SpellDictionaryCachedDichoDisk extends SpellDictionaryDichoDisk {
 	 * Returns a list of strings (words) for the code.
 	 */
 	@Override
-	public List getWords(String code) {
-		List list;
+	public List<String> getWords(String code) {
+		List<String> list;
 		codes++;
 		if (suggestionCache.containsKey(code)) {
 			hits++;
@@ -124,8 +125,8 @@ public class SpellDictionaryCachedDichoDisk extends SpellDictionaryDichoDisk {
 	 * This method returns the cached suggestionlist and also moves the code to the top of the codeRefQueue to indicate this code has
 	 * resentlly been referenced.
 	 */
-	private List getCachedList(String code) {
-		CacheObject obj = (CacheObject) suggestionCache.get(code);
+	private List<String> getCachedList(String code) {
+		CacheObject obj = suggestionCache.get(code);
 		obj.setRefTime();
 		return obj.getSuggestionList();
 	}
@@ -133,18 +134,18 @@ public class SpellDictionaryCachedDichoDisk extends SpellDictionaryDichoDisk {
 	/**
 	 * Adds a code and it's suggestion list to the cache.
 	 */
-	private void addToCache(String code, List l) {
+	private void addToCache(String code, List<String> l) {
 		String c = null;
 		String lowestCode = null;
 		long lowestTime = Long.MAX_VALUE;
-		Iterator it;
+		Iterator<String> it;
 		CacheObject obj;
 
 		if (suggestionCache.size() >= MAX_CACHED) {
 			it = suggestionCache.keySet().iterator();
 			while (it.hasNext()) {
-				c = (String) it.next();
-				obj = (CacheObject) suggestionCache.get(c);
+				c = it.next();
+				obj = suggestionCache.get(c);
 				if (obj.getRefTime() == 0) {
 					lowestCode = c;
 					break;
@@ -164,7 +165,7 @@ public class SpellDictionaryCachedDichoDisk extends SpellDictionaryDichoDisk {
 	 */
 	private void loadPreCache(File dicoFile) throws IOException {
 		String code;
-		List suggestions;
+		List<String> suggestions;
 		long size, time;
 		File preFile;
 		ObjectInputStream in;
@@ -184,7 +185,7 @@ public class SpellDictionaryCachedDichoDisk extends SpellDictionaryDichoDisk {
 			for (int i = 0; i < size; i++) {
 				code = (String) in.readObject();
 				time = in.readLong();
-				suggestions = (List) in.readObject();
+				suggestions = (List<String>) in.readObject();
 				suggestionCache.put(code, new CacheObject(suggestions, time));
 			}
 		} catch (ClassNotFoundException ex) {
@@ -201,7 +202,7 @@ public class SpellDictionaryCachedDichoDisk extends SpellDictionaryDichoDisk {
 		CacheObject obj;
 		File preFile, preDir;
 		ObjectOutputStream out;
-		Iterator it;
+		Iterator<String> it;
 
 		if (preCacheFileName == null || preCacheDir == null) {
 			System.err.println("Precache filename has not been set.");
@@ -217,8 +218,8 @@ public class SpellDictionaryCachedDichoDisk extends SpellDictionaryDichoDisk {
 		it = suggestionCache.keySet().iterator();
 		out.writeLong(suggestionCache.size());
 		while (it.hasNext()) {
-			code = (String) it.next();
-			obj = (CacheObject) suggestionCache.get(code);
+			code = it.next();
+			obj = suggestionCache.get(code);
 			out.writeObject(code);
 			out.writeLong(obj.getRefTime());
 			out.writeObject(obj.getSuggestionList());
@@ -230,19 +231,19 @@ public class SpellDictionaryCachedDichoDisk extends SpellDictionaryDichoDisk {
 	// ------------------------------------------------------------------------
 	private class CacheObject implements Serializable {
 
-		private List suggestions = null;
+		private List<String> suggestions = null;
 		private long refTime = 0;
 
-		public CacheObject(List list) {
+		public CacheObject(List<String> list) {
 			this.suggestions = list;
 		}
 
-		public CacheObject(List list, long time) {
+		public CacheObject(List<String> list, long time) {
 			this.suggestions = list;
 			this.refTime = time;
 		}
 
-		public List getSuggestionList() {
+		public List<String> getSuggestionList() {
 			return suggestions;
 		}
 

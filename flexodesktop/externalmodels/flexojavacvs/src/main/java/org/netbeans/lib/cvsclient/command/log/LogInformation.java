@@ -332,7 +332,7 @@ public class LogInformation extends FileInfoContainer {
 	@Override
 	public String toString() {
 		StringBuffer buf = new StringBuffer(30);
-		buf.append("\nFile: " + ((file != null) ? file.getAbsolutePath() : "null")); // NOI18N
+		buf.append("\nFile: " + (file != null ? file.getAbsolutePath() : "null")); // NOI18N
 		buf.append("\nRepositoryFile: " + repositoryFilename); // NOI18N
 		buf.append("\nHead revision: " + headRevision); // NOI18N
 		return buf.toString();
@@ -368,7 +368,7 @@ public class LogInformation extends FileInfoContainer {
 		public final boolean isBranch() {
 			boolean branch = false;
 			String[] nums = revision.split("\\.");
-			if (nums.length > 2 && (nums.length % 2) == 0) {
+			if (nums.length > 2 && nums.length % 2 == 0) {
 				String lastButOne = nums[nums.length - 2];
 				branch = "0".equals(lastButOne); // NOI18N
 			}

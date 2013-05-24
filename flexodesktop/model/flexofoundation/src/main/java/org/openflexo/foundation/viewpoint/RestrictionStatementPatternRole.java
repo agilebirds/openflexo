@@ -1,9 +1,14 @@
 package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.ontology.RestrictionStatement;
+import org.openflexo.foundation.ontology.owl.SubClassStatement;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
 public class RestrictionStatementPatternRole extends StatementPatternRole {
+
+	public RestrictionStatementPatternRole(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	@Override
 	public PatternRoleType getType() {
@@ -16,8 +21,8 @@ public class RestrictionStatementPatternRole extends StatementPatternRole {
 	}
 
 	@Override
-	public Class<RestrictionStatement> getAccessedClass() {
-		return RestrictionStatement.class;
+	public Class<SubClassStatement> getAccessedClass() {
+		return SubClassStatement.class;
 	}
 
 }

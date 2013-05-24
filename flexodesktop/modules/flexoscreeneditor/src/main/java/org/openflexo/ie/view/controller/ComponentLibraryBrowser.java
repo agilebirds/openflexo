@@ -19,17 +19,11 @@
  */
 package org.openflexo.ie.view.controller;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.FlexoObserver;
-import org.openflexo.foundation.ie.dm.TreeStructureChanged;
 
 /**
  * Browser for WKF module
@@ -37,18 +31,12 @@ import org.openflexo.foundation.ie.dm.TreeStructureChanged;
  * @author sguerin
  * 
  */
-public class ComponentLibraryBrowser extends ProjectBrowser implements FlexoObserver {
+public class ComponentLibraryBrowser extends ProjectBrowser {
 
 	protected static final Logger logger = Logger.getLogger(ComponentLibraryBrowser.class.getPackage().getName());
 
-	protected IEController _controller;
-
 	public ComponentLibraryBrowser(IEController controller) {
-		super(controller.getEditor(), controller.getIESelectionManager());
-		_controller = controller;
-		update();
-		getProject().getFlexoComponentLibrary().addObserver(this);
-
+		super(controller);
 	}
 
 	@Override
@@ -65,31 +53,6 @@ public class ComponentLibraryBrowser extends ProjectBrowser implements FlexoObse
 		setFilterStatus(BrowserElementType.SEQUENCE, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.CONDITIONAL, BrowserFilterStatus.HIDE);
 		setFilterStatus(BrowserElementType.REPETITION, BrowserFilterStatus.HIDE);
-	}
-
-	@Override
-	public FlexoModelObject getDefaultRootObject() {
-		if (getProject() == null) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("project is null !");
-			}
-			return null;
-		} else {
-			return getProject().getFlexoComponentLibrary();
-		}
-	}
-
-	@Override
-	public void update(FlexoObservable o, DataModification arg) {
-		if (o.equals(getProject().getFlexoComponentLibrary())) {
-			if (arg instanceof TreeStructureChanged) {
-				update();
-			}
-		}
-	}
-
-	public void refreshTree() {
-		update();
 	}
 
 }

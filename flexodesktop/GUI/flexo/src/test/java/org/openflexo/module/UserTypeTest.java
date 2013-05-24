@@ -19,10 +19,7 @@
  */
 package org.openflexo.module;
 
-import java.lang.reflect.Field;
-
 import junit.framework.Assert;
-import junit.framework.TestCase;
 
 public class UserTypeTest extends AbstractGuiTest {
 
@@ -30,15 +27,6 @@ public class UserTypeTest extends AbstractGuiTest {
 		UserType.setCurrentUserType(UserType.ANALYST);
 		UserType currentUserType = UserType.getCurrentUserType();
 		Assert.assertEquals("UserType must be analyst.", UserType.ANALYST, currentUserType);
-	}
-
-	public void testSetUserTypeNullThrowIllegalArgumentException() {
-		try {
-			UserType.setCurrentUserType(null);
-			Assert.fail("Should have fail with an IllegalArgumentException.");
-		} catch (IllegalArgumentException e) {
-			// that's expected
-		}
 	}
 
 	public void testSetSameUserTypeTwoTimesDontFail() {

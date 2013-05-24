@@ -95,7 +95,7 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 
 	@Override
 	public void setIsFilled(boolean filled) {
-		_filling = (filled ? Filling.FILLED : Filling.NOT_FILLED);
+		_filling = filled ? Filling.FILLED : Filling.NOT_FILLED;
 	}
 
 	@Override
@@ -201,7 +201,7 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 			return false;
 		}
 		if (l instanceof FGESegment) {
-			return (containsPoint(l.getP1()) && containsPoint(l.getP2()));
+			return containsPoint(l.getP1()) && containsPoint(l.getP2());
 		}
 		return false;
 	}
@@ -282,12 +282,12 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 				test2 = y - lasty;
 			}
 
-			if (test1 < (test2 / (lasty - cury) * (lastx - curx))) {
+			if (test1 < test2 / (lasty - cury) * (lastx - curx)) {
 				hits++;
 			}
 		}
 
-		return ((hits & 1) != 0);
+		return (hits & 1) != 0;
 	}
 
 	/**
@@ -411,7 +411,7 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 			try {
 				if (s.intersectsInsideSegment(line)) {
 					FGEPoint intersection = s.getLineIntersection(line);
-					if (line.contains(intersection)) {
+					if (line.contains(intersection) && (crossed.size() == 0 || !crossed.lastElement().equals(intersection))) {
 						crossed.add(intersection);
 					}
 				}
@@ -862,7 +862,7 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 			if (transform != null) {
 				transform.transform(coords, 0, coords, 0, 1);
 			}
-			return (index == 0 ? SEG_MOVETO : SEG_LINETO);
+			return index == 0 ? SEG_MOVETO : SEG_LINETO;
 		}
 
 		/**
@@ -889,7 +889,7 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 			if (transform != null) {
 				transform.transform(coords, 0, coords, 0, 1);
 			}
-			return (index == 0 ? SEG_MOVETO : SEG_LINETO);
+			return index == 0 ? SEG_MOVETO : SEG_LINETO;
 		}
 	}
 

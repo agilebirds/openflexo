@@ -63,7 +63,7 @@ public class CreateRotatedLineWithPoint extends Edition {
 			graphics.setDefaultForeground(focusedForegroundStyle);
 			FGELine line = ((ObtainLine) inputs.get(0)).getConstruction().getData();
 			double angle = ((ObtainDouble) inputs.get(1)).getInputData();
-			(FGELine.getRotatedLine(line, angle, lastMouseLocation)).paint(graphics);
+			FGELine.getRotatedLine(line, angle, lastMouseLocation).paint(graphics);
 		}
 	}
 }

@@ -41,8 +41,10 @@ import javax.swing.SwingConstants;
 import org.openflexo.ColorCst;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.ie.dm.StyleSheetFolderChanged;
 import org.openflexo.foundation.ie.dm.table.WidgetRemovedFromTable;
 import org.openflexo.foundation.ie.widget.IEHyperlinkWidget;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.ie.IECst;
 import org.openflexo.ie.IEPreferences;
 import org.openflexo.ie.util.TriggerRepaintDocumentListener;
@@ -62,9 +64,11 @@ public class IEHyperlinkWidgetView extends AbstractInnerTableWidgetView<IEHyperl
 
 	private JLabel _jLabel;
 
+	private FlexoProject project;
+
 	public IEHyperlinkWidgetView(IEController ieController, IEHyperlinkWidget model, boolean addDnDSupport, IEWOComponentView view) {
 		super(ieController, model, addDnDSupport, view);
-		// _model = model;
+		project = model.getProject();
 		_jLabel = new JLabel(getModel().getValue()) {
 			/**
 			 * Overrides paint
@@ -104,6 +108,7 @@ public class IEHyperlinkWidgetView extends AbstractInnerTableWidgetView<IEHyperl
 				}
 			}
 		};
+		project.addObserver(this);
 		performLabelTransformation();
 		_jLabel.setMinimumSize(new Dimension(30, 15));
 		_jLabel.setVerticalTextPosition(SwingConstants.CENTER);
@@ -112,8 +117,14 @@ public class IEHyperlinkWidgetView extends AbstractInnerTableWidgetView<IEHyperl
 		_jLabel.addMouseListener(tml);
 		_jLabel.addMouseMotionListener(tml);
 		add(_jLabel);
-		setBackground(getBackgroundColor());
+		setOpaque(false);
 		validate();
+	}
+
+	@Override
+	public void delete() {
+		project.deleteObserver(this);
+		super.delete();
 	}
 
 	private void performLabelTransformation() {
@@ -128,7 +139,6 @@ public class IEHyperlinkWidgetView extends AbstractInnerTableWidgetView<IEHyperl
 			setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
 			_jLabel.setFont(IECst.WOSTRING_FONT);
 			_jLabel.setForeground(ColorCst.HYPERLINK_COLOR);
-			_jLabel.setBackground(getBackgroundColor());
 			_jLabel.setOpaque(false);
 			_jLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 1, 10));
 		}
@@ -136,6 +146,10 @@ public class IEHyperlinkWidgetView extends AbstractInnerTableWidgetView<IEHyperl
 
 	@Override
 	public void update(FlexoObservable arg0, DataModification modif) {
+		if (arg0 == project && modif instanceof StyleSheetFolderChanged) {
+			performLabelTransformation();
+			return;
+		}
 		String propertyName = modif.propertyName();
 		if (propertyName != null) {
 			if (propertyName.equals(BINDING_VALUE_NAME) || propertyName.equals("bindingValue")) {
@@ -259,7 +273,7 @@ public class IEHyperlinkWidgetView extends AbstractInnerTableWidgetView<IEHyperl
 		});
 		remove(_jLabel);
 		add(_jLabelTextField);
-		_jLabelTextField.requestFocus();
+		_jLabelTextField.requestFocusInWindow();
 		_jLabelTextField.selectAll();
 		_jLabelTextField.revalidate();
 		_jLabelTextField.repaint();

@@ -115,7 +115,7 @@ public class DocDisplayer {
 	}
 
 	public void setDisplayContext(DisplayContext context) {
-		if ((_component != null) && (context != null)) {
+		if (_component != null && context != null) {
 			_component.applyDisplayContext(context);
 		}
 	}
@@ -158,8 +158,8 @@ public class DocDisplayer {
 	}
 
 	protected String getASCIIContentForFile(CGFile aFile, ContentSource contentSource) {
-		if ((aFile != null) && (aFile.getResource() != null) && (aFile.getResource().getGeneratedResourceData() != null)
-				&& (aFile.getResource().getGeneratedResourceData() instanceof ASCIIFile)) {
+		if (aFile != null && aFile.getResource() != null && aFile.getResource().getGeneratedResourceData() != null
+				&& aFile.getResource().getGeneratedResourceData() instanceof ASCIIFile) {
 			return ((ASCIIFile) aFile.getResource().getGeneratedResourceData()).getContent(contentSource);
 		}
 		return null;

@@ -25,9 +25,11 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.dkv.DKVModel;
+import org.openflexo.foundation.dkv.DKVModel.LanguageList;
 import org.openflexo.foundation.dkv.DKVObject;
 import org.openflexo.foundation.dkv.Language;
 import org.openflexo.logging.FlexoLogger;
@@ -52,12 +54,12 @@ public class AddLanguageAction extends FlexoUndoableAction<AddLanguageAction, DK
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DKVObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(DKVObject object, Vector globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DKVObject object, Vector globalSelection) {
+		public boolean isEnabledForSelection(DKVObject object, Vector globalSelection) {
 			return object instanceof DKVModel.LanguageList || object instanceof DKVModel;
 		}
 
@@ -69,6 +71,11 @@ public class AddLanguageAction extends FlexoUndoableAction<AddLanguageAction, DK
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DKVModel.class);
+		FlexoModelObject.addActionForClass(actionType, LanguageList.class);
+	}
 
 	private DKVModel _dkvModel;
 	private Language newLanguage;

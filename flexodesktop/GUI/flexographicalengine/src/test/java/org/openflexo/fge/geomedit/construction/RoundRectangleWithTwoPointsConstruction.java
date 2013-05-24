@@ -50,8 +50,8 @@ public class RoundRectangleWithTwoPointsConstruction extends RoundRectangleConst
 		double width = Math.abs(p1.x - p2.x);
 		double height = Math.abs(p1.y - p2.y);
 
-		return new FGERoundRectangle(p.x, p.y, width, height, getArcWidth(), getArcHeight(), (getIsFilled() ? Filling.FILLED
-				: Filling.NOT_FILLED));
+		return new FGERoundRectangle(p.x, p.y, width, height, getArcWidth(), getArcHeight(), getIsFilled() ? Filling.FILLED
+				: Filling.NOT_FILLED);
 	}
 
 	@Override

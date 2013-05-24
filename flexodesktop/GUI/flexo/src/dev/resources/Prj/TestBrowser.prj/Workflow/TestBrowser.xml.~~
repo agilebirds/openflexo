@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlexoProcess id="SYL_417" name="TestBrowser" isWebService="false" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,12:29:35 04/07/2011 951" isDeletedOnServer="false" userID="SYL" flexoID="417" dontGenerate="false" useSpecificDescriptions="false">
+  <StatusList id="SYL_418" DefaultStatus="TestBrowser.STATUS.Default" userID="SYL" flexoID="418" dontGenerate="false" useSpecificDescriptions="false">
+    <Status id="SYL_419" userID="SYL" flexoID="419" dontGenerate="true" useSpecificDescriptions="false" docIndex="1">
+      <label>Default</label>
+    </Status>
+  </StatusList>
+  <ActivityPetriGraph id="SYL_420" userID="SYL" flexoID="420" dontGenerate="false" useSpecificDescriptions="false">
+    <GraphicalProperties>
+      <visible className="java.lang.Boolean">true</visible>
+    </GraphicalProperties>
+    <EventNode id="SYL_421" eventType="Start" trigger="NONE" isCatching="true" userID="SYL" flexoID="421" dontGenerate="true" useSpecificDescriptions="false" docIndex="1" nodeName="Start">
+      <GraphicalProperties>
+        <labelx_bpe className="java.lang.Double">25.0</labelx_bpe>
+        <labely_bpe className="java.lang.Double">50.0</labely_bpe>
+        <posx_bpe className="java.lang.Double">15.0</posx_bpe>
+        <posy_bpe className="java.lang.Double">200.0</posy_bpe>
+      </GraphicalProperties>
+      <IncomingInternalMessageInEdge idref="SYL_422" />
+      <OutgoingTokenEdge id="SYL_642" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="642" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+        <Metrics id="SYL_675" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="675" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+        <GraphicalProperties>
+          <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+          <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+          <fixed_end_location_bpe1_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.0,0.4999999999999995</fixed_end_location_bpe1_FlexoPreCondition>
+          <height_bpe className="java.lang.Double">50.0</height_bpe>
+          <height_swl className="java.lang.Double">40.0</height_swl>
+          <hideWhenInduced className="java.lang.Boolean">false</hideWhenInduced>
+          <labelx_bpe1_2 className="java.lang.Double">0.0</labelx_bpe1_2>
+          <labelx_bpe1_FlexoPreCondition className="java.lang.Double">0.0</labelx_bpe1_FlexoPreCondition>
+          <labely_bpe1_2 className="java.lang.Double">15.0</labely_bpe1_2>
+          <labely_bpe1_FlexoPreCondition className="java.lang.Double">15.0</labely_bpe1_FlexoPreCondition>
+          <middle_symbol_location_bpe1_2 className="java.lang.Double">0.5</middle_symbol_location_bpe1_2>
+          <middle_symbol_location_bpe1_FlexoPreCondition className="java.lang.Double">0.5</middle_symbol_location_bpe1_FlexoPreCondition>
+          <posx_bpe className="java.lang.Double">0.0</posx_bpe>
+          <posx_swl className="java.lang.Double">0.0</posx_swl>
+          <posy_bpe className="java.lang.Double">0.0</posy_bpe>
+          <posy_swl className="java.lang.Double">0.0</posy_swl>
+          <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+          <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+          <width_bpe className="java.lang.Double">100.0</width_bpe>
+          <width_swl className="java.lang.Double">80.0</width_swl>
+        </GraphicalProperties>
+        <StartEventNode idref="SYL_421" />
+        <EndFlexoPreCondition idref="SYL_643" />
+      </OutgoingTokenEdge>
+      <OutgoingTokenEdge id="SYL_663" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="663" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+        <Metrics id="SYL_680" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="680" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+        <GraphicalProperties>
+          <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+          <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+          <crossed_cp_bpe1_1 className="org.openflexo.fge.geom.FGEPoint">0.3801916932907348,0.510752688172043</crossed_cp_bpe1_1>
+          <height_bpe className="java.lang.Double">50.0</height_bpe>
+          <height_swl className="java.lang.Double">40.0</height_swl>
+          <hideWhenInduced className="java.lang.Boolean">false</hideWhenInduced>
+          <labelx_bpe1_1 className="java.lang.Double">0.0</labelx_bpe1_1>
+          <labely_bpe1_1 className="java.lang.Double">15.0</labely_bpe1_1>
+          <middle_symbol_location_bpe1_1 className="java.lang.Double">0.5</middle_symbol_location_bpe1_1>
+          <posx_bpe className="java.lang.Double">0.0</posx_bpe>
+          <posx_swl className="java.lang.Double">0.0</posx_swl>
+          <posy_bpe className="java.lang.Double">0.0</posy_bpe>
+          <posy_swl className="java.lang.Double">0.0</posy_swl>
+          <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+          <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+          <width_bpe className="java.lang.Double">100.0</width_bpe>
+          <width_swl className="java.lang.Double">80.0</width_swl>
+        </GraphicalProperties>
+        <StartEventNode idref="SYL_421" />
+        <EndIFOperator idref="SYL_662" />
+      </OutgoingTokenEdge>
+    </EventNode>
+    <EventNode id="SYL_427" eventType="End" trigger="NONE" isCatching="true" userID="SYL" flexoID="427" dontGenerate="true" useSpecificDescriptions="false" docIndex="2" nodeName="End">
+      <GraphicalProperties>
+        <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+        <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+        <height_bpe className="java.lang.Double">50.0</height_bpe>
+        <height_swl className="java.lang.Double">40.0</height_swl>
+        <labelx_bpe className="java.lang.Double">25.0</labelx_bpe>
+        <labely_bpe className="java.lang.Double">50.0</labely_bpe>
+        <posx_bpe className="java.lang.Double">650.0</posx_bpe>
+        <posx_swl className="java.lang.Double">0.0</posx_swl>
+        <posy_bpe className="java.lang.Double">200.0</posy_bpe>
+        <posy_swl className="java.lang.Double">0.0</posy_swl>
+        <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+        <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+        <width_bpe className="java.lang.Double">100.0</width_bpe>
+        <width_swl className="java.lang.Double">80.0</width_swl>
+      </GraphicalProperties>
+      <IncomingInternalMessageInEdge idref="SYL_428" />
+      <IncomingTokenEdge idref="SYL_651" />
+      <OutgoingInternalMessageOutEdge id="SYL_433" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="433" dontGenerate="false" useSpecificDescriptions="false" name="Process terminated">
+        <OutputMessageBindings id="SYL_434" userID="SYL" flexoID="434" dontGenerate="false" useSpecificDescriptions="false" />
+        <Metrics id="SYL_435" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="435" dontGenerate="false" useSpecificDescriptions="false" />
+        <GraphicalProperties>
+          <hideWhenInduced className="java.lang.Boolean">false</hideWhenInduced>
+        </GraphicalProperties>
+        <StartEventNode idref="SYL_427" />
+        <EndOutPort idref="SYL_436" />
+      </OutgoingInternalMessageOutEdge>
+    </EventNode>
+    <ActivityNode id="SYL_641" userID="SYL" flexoID="641" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" nodeName="Activity" docIndex="3" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" roleTextColor="128,128,128">
+      <taskType>User</taskType>
+      <GraphicalProperties>
+        <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+        <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+        <height_bpe className="java.lang.Double">45.0</height_bpe>
+        <height_swl className="java.lang.Double">40.0</height_swl>
+        <labely_bpe className="java.lang.Double">0.0</labely_bpe>
+        <posx_bpe className="java.lang.Double">184.0</posx_bpe>
+        <posx_swl className="java.lang.Double">0.0</posx_swl>
+        <posy_bpe className="java.lang.Double">195.0</posy_bpe>
+        <posy_swl className="java.lang.Double">0.0</posy_swl>
+        <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+        <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+        <width_bpe className="java.lang.Double">88.0</width_bpe>
+        <width_swl className="java.lang.Double">80.0</width_swl>
+      </GraphicalProperties>
+      <FlexoPreCondition id="SYL_643" initTokenNbr="0" triggerLevel="1" userID="SYL" flexoID="643" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+        <AttachedBeginOperationNode idref="SYL_653" />
+        <GraphicalProperties>
+          <posx_bpe className="java.lang.Double">5.0</posx_bpe>
+          <posy_bpe className="java.lang.Double">27.0</posy_bpe>
+        </GraphicalProperties>
+        <IncomingTokenEdge idref="SYL_642" />
+      </FlexoPreCondition>
+      <OperationPetriGraph id="SYL_652" userID="SYL" flexoID="652" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+        <GraphicalProperties>
+          <height_bpe className="java.lang.Double">93.0</height_bpe>
+          <posx_bpe className="java.lang.Double">63.0</posx_bpe>
+          <posy_bpe className="java.lang.Double">297.0</posy_bpe>
+          <visible className="java.lang.Boolean">true</visible>
+          <width_bpe className="java.lang.Double">365.1</width_bpe>
+        </GraphicalProperties>
+        <OperationNode id="SYL_653" isSynchronized="false" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,00:03:28 30/06/2011 654" userID="SYL" flexoID="653" docFormat="HTML" dontGenerate="true" useSpecificDescriptions="false" nodeName="BEGIN" docIndex="1" nodeType="BEGIN" isWaiting="false" isSelfActivated="false">
+          <GraphicalProperties>
+            <labelx_bpe className="java.lang.Double">25.0</labelx_bpe>
+            <labely_bpe className="java.lang.Double">70.0</labely_bpe>
+            <posx_bpe className="java.lang.Double">0.0</posx_bpe>
+            <posy_bpe className="java.lang.Double">13.0</posy_bpe>
+          </GraphicalProperties>
+          <OutgoingTokenEdge id="SYL_656" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="656" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+            <Metrics id="SYL_676" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="676" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+            <GraphicalProperties>
+              <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+              <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+              <fixed_end_location_bpe2_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.0,0.49999999999999994</fixed_end_location_bpe2_FlexoPreCondition>
+              <height_bpe className="java.lang.Double">50.0</height_bpe>
+              <height_swl className="java.lang.Double">40.0</height_swl>
+              <hideWhenInduced className="java.lang.Boolean">false</hideWhenInduced>
+              <labelx_bpe2_3 className="java.lang.Double">0.0</labelx_bpe2_3>
+              <labelx_bpe2_FlexoPreCondition className="java.lang.Double">0.0</labelx_bpe2_FlexoPreCondition>
+              <labely_bpe2_3 className="java.lang.Double">15.0</labely_bpe2_3>
+              <labely_bpe2_FlexoPreCondition className="java.lang.Double">15.0</labely_bpe2_FlexoPreCondition>
+              <middle_symbol_location_bpe2_3 className="java.lang.Double">0.5</middle_symbol_location_bpe2_3>
+              <middle_symbol_location_bpe2_FlexoPreCondition className="java.lang.Double">0.5</middle_symbol_location_bpe2_FlexoPreCondition>
+              <posx_bpe className="java.lang.Double">0.0</posx_bpe>
+              <posx_swl className="java.lang.Double">0.0</posx_swl>
+              <posy_bpe className="java.lang.Double">0.0</posy_bpe>
+              <posy_swl className="java.lang.Double">0.0</posy_swl>
+              <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+              <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+              <width_bpe className="java.lang.Double">100.0</width_bpe>
+              <width_swl className="java.lang.Double">80.0</width_swl>
+            </GraphicalProperties>
+            <StartOperationNode idref="SYL_653" />
+            <EndFlexoPreCondition idref="SYL_657" />
+          </OutgoingTokenEdge>
+        </OperationNode>
+        <OperationNode id="SYL_654" isSynchronized="false" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,00:03:30 30/06/2011 446" userID="SYL" flexoID="654" docFormat="HTML" dontGenerate="true" useSpecificDescriptions="false" nodeName="END" docIndex="2" nodeType="END" isWaiting="false" isSelfActivated="false">
+          <GraphicalProperties>
+            <labelx_bpe className="java.lang.Double">25.0</labelx_bpe>
+            <labely_bpe className="java.lang.Double">70.0</labely_bpe>
+            <posx_bpe className="java.lang.Double">300.0</posx_bpe>
+            <posy_bpe className="java.lang.Double">13.0</posy_bpe>
+          </GraphicalProperties>
+          <OutgoingTokenEdge id="SYL_647" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="647" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+            <Metrics id="SYL_698" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="698" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+            <GraphicalProperties>
+              <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+              <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+              <fixed_end_location_bpe1_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.0,0.5</fixed_end_location_bpe1_FlexoPreCondition>
+              <fixed_end_location_bpe2_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.0,0.49999999999999994</fixed_end_location_bpe2_FlexoPreCondition>
+              <height_bpe className="java.lang.Double">50.0</height_bpe>
+              <height_swl className="java.lang.Double">40.0</height_swl>
+              <hideWhenInduced className="java.lang.Boolean">false</hideWhenInduced>
+              <labelx_bpe1_2 className="java.lang.Double">-15.0</labelx_bpe1_2>
+              <labelx_bpe1_FlexoPreCondition className="java.lang.Double">0.0</labelx_bpe1_FlexoPreCondition>
+              <labelx_bpe2_FlexoPreCondition className="java.lang.Double">0.0</labelx_bpe2_FlexoPreCondition>
+              <labely_bpe1_2 className="java.lang.Double">-2.7554552980815444E-15</labely_bpe1_2>
+              <labely_bpe1_FlexoPreCondition className="java.lang.Double">15.0</labely_bpe1_FlexoPreCondition>
+              <labely_bpe2_FlexoPreCondition className="java.lang.Double">15.0</labely_bpe2_FlexoPreCondition>
+              <middle_symbol_location_bpe1_2 className="java.lang.Double">0.5</middle_symbol_location_bpe1_2>
+              <middle_symbol_location_bpe1_FlexoPreCondition className="java.lang.Double">0.5</middle_symbol_location_bpe1_FlexoPreCondition>
+              <middle_symbol_location_bpe2_FlexoPreCondition className="java.lang.Double">0.5</middle_symbol_location_bpe2_FlexoPreCondition>
+              <posx_bpe className="java.lang.Double">0.0</posx_bpe>
+              <posx_swl className="java.lang.Double">0.0</posx_swl>
+              <posy_bpe className="java.lang.Double">0.0</posy_bpe>
+              <posy_swl className="java.lang.Double">0.0</posy_swl>
+              <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+              <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+              <width_bpe className="java.lang.Double">100.0</width_bpe>
+              <width_swl className="java.lang.Double">80.0</width_swl>
+            </GraphicalProperties>
+            <StartOperationNode idref="SYL_654" />
+            <EndFlexoPreCondition idref="SYL_648" />
+          </OutgoingTokenEdge>
+          <FlexoPreCondition id="SYL_659" initTokenNbr="0" triggerLevel="1" userID="SYL" flexoID="659" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+            <GraphicalProperties>
+              <posx_bpe className="java.lang.Double">5.0</posx_bpe>
+              <posy_bpe className="java.lang.Double">40.0</posy_bpe>
+            </GraphicalProperties>
+            <IncomingTokenEdge idref="SYL_658" />
+          </FlexoPreCondition>
+        </OperationNode>
+        <OperationNode id="SYL_655" isSynchronized="true" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,00:06:48 30/06/2011 722" userID="SYL" flexoID="655" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" nodeName="Operation" docIndex="3" nodeType="NORMAL" isWaiting="false" isSelfActivated="false">
+          <ActionPetriGraph id="SYL_665" userID="SYL" flexoID="665" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+            <GraphicalProperties>
+              <height_bpe className="java.lang.Double">95.0</height_bpe>
+              <posx_bpe className="java.lang.Double">82.0</posx_bpe>
+              <posy_bpe className="java.lang.Double">438.0</posy_bpe>
+              <visible className="java.lang.Boolean">true</visible>
+              <width_bpe className="java.lang.Double">315.1</width_bpe>
+            </GraphicalProperties>
+            <ActionNode id="SYL_666" actionType="FLEXO_ACTION" associatedButtonFlexoID="-1" displayProcessFlexoID="-1" displayOperationFlexoID="-1" userID="SYL" flexoID="666" docFormat="HTML" dontGenerate="true" useSpecificDescriptions="false" docIndex="1" nodeName="BEGIN" nodeType="BEGIN" isWaiting="false" isSelfActivated="false">
+              <GraphicalProperties>
+                <labelx_bpe className="java.lang.Double">25.0</labelx_bpe>
+                <labely_bpe className="java.lang.Double">70.0</labely_bpe>
+                <posx_bpe className="java.lang.Double">0.0</posx_bpe>
+                <posy_bpe className="java.lang.Double">15.0</posy_bpe>
+              </GraphicalProperties>
+              <OutgoingTokenEdge id="SYL_669" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="669" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+                <Metrics id="SYL_677" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="677" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+                <GraphicalProperties>
+                  <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+                  <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+                  <curve_cp_bpe3_3 className="org.openflexo.fge.geom.FGEPoint">0.5,0.55</curve_cp_bpe3_3>
+                  <height_bpe className="java.lang.Double">50.0</height_bpe>
+                  <height_swl className="java.lang.Double">40.0</height_swl>
+                  <hideWhenInduced className="java.lang.Boolean">false</hideWhenInduced>
+                  <labelx_bpe3_3 className="java.lang.Double">0.0</labelx_bpe3_3>
+                  <labely_bpe3_3 className="java.lang.Double">0.0</labely_bpe3_3>
+                  <posx_bpe className="java.lang.Double">0.0</posx_bpe>
+                  <posx_swl className="java.lang.Double">0.0</posx_swl>
+                  <posy_bpe className="java.lang.Double">0.0</posy_bpe>
+                  <posy_swl className="java.lang.Double">0.0</posy_swl>
+                  <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+                  <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+                  <width_bpe className="java.lang.Double">100.0</width_bpe>
+                  <width_swl className="java.lang.Double">80.0</width_swl>
+                </GraphicalProperties>
+                <StartActionNode idref="SYL_666" />
+                <EndActionNode idref="SYL_668" />
+              </OutgoingTokenEdge>
+            </ActionNode>
+            <ActionNode id="SYL_667" actionType="FLEXO_ACTION" associatedButtonFlexoID="-1" displayProcessFlexoID="-1" displayOperationFlexoID="-1" userID="SYL" flexoID="667" docFormat="HTML" dontGenerate="true" useSpecificDescriptions="false" docIndex="2" nodeName="END" nodeType="END" isWaiting="false" isSelfActivated="false">
+              <GraphicalProperties>
+                <labelx_bpe className="java.lang.Double">25.0</labelx_bpe>
+                <labely_bpe className="java.lang.Double">70.0</labely_bpe>
+                <posx_bpe className="java.lang.Double">250.0</posx_bpe>
+                <posy_bpe className="java.lang.Double">15.0</posy_bpe>
+              </GraphicalProperties>
+              <IncomingTokenEdge idref="SYL_670" />
+              <OutgoingTokenEdge id="SYL_658" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="658" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+                <Metrics id="SYL_679" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="679" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+                <GraphicalProperties>
+                  <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+                  <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+                  <fixed_end_location_bpe2_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.0,0.49999999999999994</fixed_end_location_bpe2_FlexoPreCondition>
+                  <fixed_end_location_bpe3_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.0,0.49999999999999994</fixed_end_location_bpe3_FlexoPreCondition>
+                  <height_bpe className="java.lang.Double">50.0</height_bpe>
+                  <height_swl className="java.lang.Double">40.0</height_swl>
+                  <hideWhenInduced className="java.lang.Boolean">false</hideWhenInduced>
+                  <labelx_bpe2_FlexoPreCondition className="java.lang.Double">0.0</labelx_bpe2_FlexoPreCondition>
+                  <labelx_bpe3_FlexoPreCondition className="java.lang.Double">0.0</labelx_bpe3_FlexoPreCondition>
+                  <labely_bpe2_FlexoPreCondition className="java.lang.Double">15.0</labely_bpe2_FlexoPreCondition>
+                  <labely_bpe3_FlexoPreCondition className="java.lang.Double">15.0</labely_bpe3_FlexoPreCondition>
+                  <middle_symbol_location_bpe2_FlexoPreCondition className="java.lang.Double">0.5</middle_symbol_location_bpe2_FlexoPreCondition>
+                  <middle_symbol_location_bpe3_FlexoPreCondition className="java.lang.Double">0.5</middle_symbol_location_bpe3_FlexoPreCondition>
+                  <posx_bpe className="java.lang.Double">0.0</posx_bpe>
+                  <posx_swl className="java.lang.Double">0.0</posx_swl>
+                  <posy_bpe className="java.lang.Double">0.0</posy_bpe>
+                  <posy_swl className="java.lang.Double">0.0</posy_swl>
+                  <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+                  <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+                  <width_bpe className="java.lang.Double">100.0</width_bpe>
+                  <width_swl className="java.lang.Double">80.0</width_swl>
+                </GraphicalProperties>
+                <StartActionNode idref="SYL_667" />
+                <EndFlexoPreCondition idref="SYL_659" />
+              </OutgoingTokenEdge>
+            </ActionNode>
+            <ActionNode id="SYL_668" actionType="FLEXO_ACTION" associatedButtonFlexoID="-1" displayProcessFlexoID="-1" displayOperationFlexoID="-1" userID="SYL" flexoID="668" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" docIndex="3" nodeName="ACTION" nodeType="NORMAL" isWaiting="false" isSelfActivated="false">
+              <GraphicalProperties>
+                <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+                <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+                <height_bpe className="java.lang.Double">50.0</height_bpe>
+                <height_swl className="java.lang.Double">40.0</height_swl>
+                <labelx_bpe className="java.lang.Double">25.0</labelx_bpe>
+                <labely_bpe className="java.lang.Double">70.0</labely_bpe>
+                <posx_bpe className="java.lang.Double">126.0</posx_bpe>
+                <posx_swl className="java.lang.Double">0.0</posx_swl>
+                <posy_bpe className="java.lang.Double">0.0</posy_bpe>
+                <posy_swl className="java.lang.Double">0.0</posy_swl>
+                <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+                <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+                <width_bpe className="java.lang.Double">100.0</width_bpe>
+                <width_swl className="java.lang.Double">80.0</width_swl>
+              </GraphicalProperties>
+              <IncomingTokenEdge idref="SYL_669" />
+              <OutgoingTokenEdge id="SYL_670" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="670" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+                <Metrics id="SYL_678" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="678" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+                <GraphicalProperties>
+                  <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+                  <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+                  <curve_cp_bpe3_3 className="org.openflexo.fge.geom.FGEPoint">0.5,0.55</curve_cp_bpe3_3>
+                  <height_bpe className="java.lang.Double">50.0</height_bpe>
+                  <height_swl className="java.lang.Double">40.0</height_swl>
+                  <hideWhenInduced className="java.lang.Boolean">false</hideWhenInduced>
+                  <labelx_bpe3_3 className="java.lang.Double">0.0</labelx_bpe3_3>
+                  <labely_bpe3_3 className="java.lang.Double">0.0</labely_bpe3_3>
+                  <posx_bpe className="java.lang.Double">0.0</posx_bpe>
+                  <posx_swl className="java.lang.Double">0.0</posx_swl>
+                  <posy_bpe className="java.lang.Double">0.0</posy_bpe>
+                  <posy_swl className="java.lang.Double">0.0</posy_swl>
+                  <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+                  <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+                  <width_bpe className="java.lang.Double">100.0</width_bpe>
+                  <width_swl className="java.lang.Double">80.0</width_swl>
+                </GraphicalProperties>
+                <StartActionNode idref="SYL_668" />
+                <EndActionNode idref="SYL_667" />
+              </OutgoingTokenEdge>
+            </ActionNode>
+          </ActionPetriGraph>
+          <OperationComponentInstance id="SYL_660" componentName="TestComponent" userID="SYL" flexoID="660" dontGenerate="false" useSpecificDescriptions="false" />
+          <GraphicalProperties>
+            <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+            <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+            <height_bpe className="java.lang.Double">40.0</height_bpe>
+            <height_swl className="java.lang.Double">40.0</height_swl>
+            <labely_bpe className="java.lang.Double">0.0</labely_bpe>
+            <posx_bpe className="java.lang.Double">120.0</posx_bpe>
+            <posx_swl className="java.lang.Double">0.0</posx_swl>
+            <posy_bpe className="java.lang.Double">0.0</posy_bpe>
+            <posy_swl className="java.lang.Double">0.0</posy_swl>
+            <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+            <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+            <width_bpe className="java.lang.Double">80.0</width_bpe>
+            <width_swl className="java.lang.Double">80.0</width_swl>
+          </GraphicalProperties>
+          <FlexoPreCondition id="SYL_657" initTokenNbr="0" triggerLevel="1" userID="SYL" flexoID="657" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+            <AttachedBeginActionNode idref="SYL_666" />
+            <GraphicalProperties>
+              <posx_bpe className="java.lang.Double">5.0</posx_bpe>
+              <posy_bpe className="java.lang.Double">45.0</posy_bpe>
+            </GraphicalProperties>
+            <IncomingTokenEdge idref="SYL_656" />
+          </FlexoPreCondition>
+        </OperationNode>
+      </OperationPetriGraph>
+    </ActivityNode>
+    <ActivityNode id="SYL_644" userID="SYL" flexoID="644" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" nodeName="Activity" docIndex="4" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" roleTextColor="128,128,128">
+      <taskType>User</taskType>
+      <GraphicalProperties>
+        <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+        <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+        <height_bpe className="java.lang.Double">45.0</height_bpe>
+        <height_swl className="java.lang.Double">40.0</height_swl>
+        <labely_bpe className="java.lang.Double">0.0</labely_bpe>
+        <posx_bpe className="java.lang.Double">502.0</posx_bpe>
+        <posx_swl className="java.lang.Double">0.0</posx_swl>
+        <posy_bpe className="java.lang.Double">196.0</posy_bpe>
+        <posy_swl className="java.lang.Double">0.0</posy_swl>
+        <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+        <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+        <width_bpe className="java.lang.Double">88.0</width_bpe>
+        <width_swl className="java.lang.Double">80.0</width_swl>
+      </GraphicalProperties>
+      <FlexoPreCondition id="SYL_650" initTokenNbr="0" triggerLevel="1" userID="SYL" flexoID="650" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+        <AttachedBeginOperationNode idref="SYL_682" />
+        <GraphicalProperties>
+          <posx_bpe className="java.lang.Double">5.0</posx_bpe>
+          <posy_bpe className="java.lang.Double">27.0</posy_bpe>
+        </GraphicalProperties>
+        <IncomingTokenEdge idref="SYL_649" />
+        <IncomingTokenEdge idref="SYL_664" />
+      </FlexoPreCondition>
+      <OperationPetriGraph id="SYL_701" userID="SYL" flexoID="701" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+        <GraphicalProperties>
+          <visible className="java.lang.Boolean">false</visible>
+        </GraphicalProperties>
+        <OperationNode id="SYL_682" isSynchronized="false" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,00:03:18 30/06/2011 263" userID="SYL" flexoID="682" docFormat="HTML" dontGenerate="true" useSpecificDescriptions="false" nodeName="BEGIN" docIndex="1" nodeType="BEGIN" isWaiting="false" isSelfActivated="false" />
+        <OperationNode id="SYL_697" isSynchronized="false" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,00:03:20 30/06/2011 088" userID="SYL" flexoID="697" docFormat="HTML" dontGenerate="true" useSpecificDescriptions="false" nodeName="END" docIndex="2" nodeType="END" isWaiting="false" isSelfActivated="false">
+          <OutgoingTokenEdge id="SYL_651" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="651" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+            <Metrics id="SYL_696" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="696" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+            <GraphicalProperties>
+              <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+              <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+              <height_bpe className="java.lang.Double">50.0</height_bpe>
+              <height_swl className="java.lang.Double">40.0</height_swl>
+              <hideWhenInduced className="java.lang.Boolean">false</hideWhenInduced>
+              <labelx_bpe1_1 className="java.lang.Double">0.0</labelx_bpe1_1>
+              <labely_bpe1_1 className="java.lang.Double">15.0</labely_bpe1_1>
+              <middle_symbol_location_bpe1_1 className="java.lang.Double">0.5</middle_symbol_location_bpe1_1>
+              <posx_bpe className="java.lang.Double">0.0</posx_bpe>
+              <posx_swl className="java.lang.Double">0.0</posx_swl>
+              <posy_bpe className="java.lang.Double">0.0</posy_bpe>
+              <posy_swl className="java.lang.Double">0.0</posy_swl>
+              <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+              <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+              <width_bpe className="java.lang.Double">100.0</width_bpe>
+              <width_swl className="java.lang.Double">80.0</width_swl>
+            </GraphicalProperties>
+            <StartOperationNode idref="SYL_697" />
+            <EndEventNode idref="SYL_427" />
+          </OutgoingTokenEdge>
+        </OperationNode>
+      </OperationPetriGraph>
+    </ActivityNode>
+    <SelfExecutableActivityNode id="SYL_645" userID="SYL" flexoID="645" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" nodeName="Execution" docIndex="5" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" roleTextColor="128,128,128">
+      <ExecutionActivityPetriGraph id="SYL_702" userID="SYL" flexoID="702" dontGenerate="false" useSpecificDescriptions="false">
+        <GraphicalProperties>
+          <height_bpe className="java.lang.Double">80.0</height_bpe>
+          <posx_bpe className="java.lang.Double">206.0</posx_bpe>
+          <posy_bpe className="java.lang.Double">292.0</posy_bpe>
+          <visible className="java.lang.Boolean">false</visible>
+          <width_bpe className="java.lang.Double">365.1</width_bpe>
+        </GraphicalProperties>
+        <ActivityNode id="SYL_699" userID="SYL" flexoID="699" dontGenerate="true" useSpecificDescriptions="false" nodeName="BEGIN" docIndex="1" nodeType="BEGIN" isWaiting="false" isSelfActivated="false" roleTextColor="128,128,128">
+          <GraphicalProperties>
+            <labelx_bpe className="java.lang.Double">25.0</labelx_bpe>
+            <labely_bpe className="java.lang.Double">50.0</labely_bpe>
+            <posx_bpe className="java.lang.Double">0.0</posx_bpe>
+            <posy_bpe className="java.lang.Double">20.0</posy_bpe>
+          </GraphicalProperties>
+          <OperationPetriGraph id="SYL_700" userID="SYL" flexoID="700" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+            <GraphicalProperties>
+              <visible className="java.lang.Boolean">false</visible>
+            </GraphicalProperties>
+            <OperationNode id="SYL_693" isSynchronized="false" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,00:03:16 30/06/2011 550" userID="SYL" flexoID="693" docFormat="HTML" dontGenerate="true" useSpecificDescriptions="false" nodeName="BEGIN" docIndex="1" nodeType="BEGIN" isWaiting="false" isSelfActivated="false">
+              <OutgoingTokenEdge id="SYL_692" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="692" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+                <GraphicalProperties>
+                  <hideWhenInduced className="java.lang.Boolean">false</hideWhenInduced>
+                </GraphicalProperties>
+                <StartOperationNode idref="SYL_693" />
+                <EndFlexoPreCondition idref="SYL_691" />
+              </OutgoingTokenEdge>
+            </OperationNode>
+            <OperationNode id="SYL_690" isSynchronized="true" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,00:03:16 30/06/2011 563" userID="SYL" flexoID="690" docFormat="HTML" dontGenerate="true" useSpecificDescriptions="false" nodeName="END" docIndex="2" nodeType="END" isWaiting="false" isSelfActivated="false">
+              <OutgoingTokenEdge id="SYL_646" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="646" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+                <Metrics id="SYL_689" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="689" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+                <GraphicalProperties>
+                  <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+                  <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+                  <fixed_end_location_bpe2_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.0,0.49999999999999994</fixed_end_location_bpe2_FlexoPreCondition>
+                  <height_bpe className="java.lang.Double">50.0</height_bpe>
+                  <height_swl className="java.lang.Double">40.0</height_swl>
+                  <hideWhenInduced className="java.lang.Boolean">false</hideWhenInduced>
+                  <labelx_bpe2_FlexoPreCondition className="java.lang.Double">-3.67394039744206E-15</labelx_bpe2_FlexoPreCondition>
+                  <labely_bpe2_FlexoPreCondition className="java.lang.Double">15.0</labely_bpe2_FlexoPreCondition>
+                  <middle_symbol_location_bpe2_FlexoPreCondition className="java.lang.Double">0.5</middle_symbol_location_bpe2_FlexoPreCondition>
+                  <posx_bpe className="java.lang.Double">0.0</posx_bpe>
+                  <posx_swl className="java.lang.Double">0.0</posx_swl>
+                  <posy_bpe className="java.lang.Double">0.0</posy_bpe>
+                  <posy_swl className="java.lang.Double">0.0</posy_swl>
+                  <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+                  <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+                  <width_bpe className="java.lang.Double">100.0</width_bpe>
+                  <width_swl className="java.lang.Double">80.0</width_swl>
+                </GraphicalProperties>
+                <StartOperationNode idref="SYL_690" />
+                <EndFlexoPreCondition idref="SYL_685" />
+              </OutgoingTokenEdge>
+              <FlexoPreCondition id="SYL_691" initTokenNbr="0" triggerLevel="1" userID="SYL" flexoID="691" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+                <IncomingTokenEdge idref="SYL_692" />
+              </FlexoPreCondition>
+            </OperationNode>
+          </OperationPetriGraph>
+        </ActivityNode>
+        <ActivityNode id="SYL_684" userID="SYL" flexoID="684" dontGenerate="true" useSpecificDescriptions="false" nodeName="END" docIndex="2" nodeType="END" isWaiting="false" isSelfActivated="false" roleTextColor="128,128,128">
+          <GraphicalProperties>
+            <labelx_bpe className="java.lang.Double">25.0</labelx_bpe>
+            <labely_bpe className="java.lang.Double">50.0</labely_bpe>
+            <posx_bpe className="java.lang.Double">300.0</posx_bpe>
+            <posy_bpe className="java.lang.Double">0.0</posy_bpe>
+          </GraphicalProperties>
+          <OutgoingTokenEdge id="SYL_649" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="649" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+            <Metrics id="SYL_683" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="683" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+            <GraphicalProperties>
+              <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+              <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+              <fixed_end_location_bpe1_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.0,0.5000000000000003</fixed_end_location_bpe1_FlexoPreCondition>
+              <fixed_end_location_bpe2_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.0,0.49999999999999994</fixed_end_location_bpe2_FlexoPreCondition>
+              <height_bpe className="java.lang.Double">50.0</height_bpe>
+              <height_swl className="java.lang.Double">40.0</height_swl>
+              <hideWhenInduced className="java.lang.Boolean">false</hideWhenInduced>
+              <labelx_bpe1_FlexoPreCondition className="java.lang.Double">0.0</labelx_bpe1_FlexoPreCondition>
+              <labelx_bpe2_FlexoPreCondition className="java.lang.Double">15.0</labelx_bpe2_FlexoPreCondition>
+              <labely_bpe1_FlexoPreCondition className="java.lang.Double">15.0</labely_bpe1_FlexoPreCondition>
+              <labely_bpe2_FlexoPreCondition className="java.lang.Double">4.592425496802574E-15</labely_bpe2_FlexoPreCondition>
+              <middle_symbol_location_bpe1_FlexoPreCondition className="java.lang.Double">0.5</middle_symbol_location_bpe1_FlexoPreCondition>
+              <middle_symbol_location_bpe2_FlexoPreCondition className="java.lang.Double">0.5</middle_symbol_location_bpe2_FlexoPreCondition>
+              <posx_bpe className="java.lang.Double">0.0</posx_bpe>
+              <posx_swl className="java.lang.Double">0.0</posx_swl>
+              <posy_bpe className="java.lang.Double">0.0</posy_bpe>
+              <posy_swl className="java.lang.Double">0.0</posy_swl>
+              <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+              <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+              <width_bpe className="java.lang.Double">100.0</width_bpe>
+              <width_swl className="java.lang.Double">80.0</width_swl>
+            </GraphicalProperties>
+            <StartActivityNode idref="SYL_684" />
+            <EndFlexoPreCondition idref="SYL_650" />
+          </OutgoingTokenEdge>
+          <FlexoPreCondition id="SYL_685" initTokenNbr="0" triggerLevel="1" userID="SYL" flexoID="685" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+            <AttachedBeginOperationNode idref="SYL_686" />
+            <GraphicalProperties>
+              <posx_bpe className="java.lang.Double">5.0</posx_bpe>
+              <posy_bpe className="java.lang.Double">20.0</posy_bpe>
+            </GraphicalProperties>
+            <IncomingTokenEdge idref="SYL_646" />
+          </FlexoPreCondition>
+          <OperationPetriGraph id="SYL_694" userID="SYL" flexoID="694" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+            <GraphicalProperties>
+              <visible className="java.lang.Boolean">false</visible>
+            </GraphicalProperties>
+            <OperationNode id="SYL_686" isSynchronized="false" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,00:03:16 30/06/2011 520" userID="SYL" flexoID="686" docFormat="HTML" dontGenerate="true" useSpecificDescriptions="false" nodeName="BEGIN" docIndex="1" nodeType="BEGIN" isWaiting="false" isSelfActivated="false">
+              <OutgoingTokenEdge id="SYL_687" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="687" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+                <GraphicalProperties>
+                  <hideWhenInduced className="java.lang.Boolean">false</hideWhenInduced>
+                </GraphicalProperties>
+                <StartOperationNode idref="SYL_686" />
+                <EndFlexoPreCondition idref="SYL_688" />
+              </OutgoingTokenEdge>
+            </OperationNode>
+            <OperationNode id="SYL_695" isSynchronized="true" componentTextColor="128,128,128" lastUpdate="HH:mm:ss dd/MM/yyyy SSS,00:03:16 30/06/2011 514" userID="SYL" flexoID="695" docFormat="HTML" dontGenerate="true" useSpecificDescriptions="false" nodeName="END" docIndex="2" nodeType="END" isWaiting="false" isSelfActivated="false">
+              <FlexoPreCondition id="SYL_688" initTokenNbr="0" triggerLevel="1" userID="SYL" flexoID="688" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+                <IncomingTokenEdge idref="SYL_687" />
+              </FlexoPreCondition>
+            </OperationNode>
+          </OperationPetriGraph>
+        </ActivityNode>
+      </ExecutionActivityPetriGraph>
+      <GraphicalProperties>
+        <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+        <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+        <height_bpe className="java.lang.Double">50.0</height_bpe>
+        <height_swl className="java.lang.Double">40.0</height_swl>
+        <labelx_bpe className="java.lang.Double">25.0</labelx_bpe>
+        <labely_bpe className="java.lang.Double">50.0</labely_bpe>
+        <posx_bpe className="java.lang.Double">356.0</posx_bpe>
+        <posx_swl className="java.lang.Double">0.0</posx_swl>
+        <posy_bpe className="java.lang.Double">202.0</posy_bpe>
+        <posy_swl className="java.lang.Double">0.0</posy_swl>
+        <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+        <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+        <width_bpe className="java.lang.Double">100.0</width_bpe>
+        <width_swl className="java.lang.Double">80.0</width_swl>
+      </GraphicalProperties>
+      <FlexoPreCondition id="SYL_648" initTokenNbr="0" triggerLevel="1" userID="SYL" flexoID="648" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false">
+        <AttachedBeginActivityNode idref="SYL_699" />
+        <GraphicalProperties>
+          <posx_bpe className="java.lang.Double">5.0</posx_bpe>
+          <posy_bpe className="java.lang.Double">20.0</posy_bpe>
+        </GraphicalProperties>
+        <IncomingTokenEdge idref="SYL_647" />
+      </FlexoPreCondition>
+      <taskType>User</taskType>
+    </SelfExecutableActivityNode>
+    <IFOperator id="SYL_662" userID="SYL" flexoID="662" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" docIndex="6" nodeName="IF">
+      <PositiveEvaluationOutgoingTokenEdge id="SYL_664" tokenIncrem="1" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="664" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" name="Yes">
+        <Metrics id="SYL_681" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="681" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" />
+        <GraphicalProperties>
+          <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+          <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+          <crossed_cp_bpe1_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.24137931034482757,0.4177215189873418</crossed_cp_bpe1_FlexoPreCondition>
+          <fixed_end_location_bpe1_FlexoPreCondition className="org.openflexo.fge.geom.FGEPoint">0.0,0.49999999999999994</fixed_end_location_bpe1_FlexoPreCondition>
+          <height_bpe className="java.lang.Double">50.0</height_bpe>
+          <height_swl className="java.lang.Double">40.0</height_swl>
+          <hideWhenInduced className="java.lang.Boolean">false</hideWhenInduced>
+          <labelx_bpe1_FlexoPreCondition className="java.lang.Double">-55.0</labelx_bpe1_FlexoPreCondition>
+          <labely_bpe1_FlexoPreCondition className="java.lang.Double">-1.0</labely_bpe1_FlexoPreCondition>
+          <middle_symbol_location_bpe1_FlexoPreCondition className="java.lang.Double">0.5</middle_symbol_location_bpe1_FlexoPreCondition>
+          <posx_bpe className="java.lang.Double">0.0</posx_bpe>
+          <posx_swl className="java.lang.Double">0.0</posx_swl>
+          <posy_bpe className="java.lang.Double">0.0</posy_bpe>
+          <posy_swl className="java.lang.Double">0.0</posy_swl>
+          <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+          <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+          <width_bpe className="java.lang.Double">100.0</width_bpe>
+          <width_swl className="java.lang.Double">80.0</width_swl>
+        </GraphicalProperties>
+        <StartIFOperator idref="SYL_662" />
+        <EndFlexoPreCondition idref="SYL_650" />
+      </PositiveEvaluationOutgoingTokenEdge>
+      <GraphicalProperties>
+        <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+        <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+        <height_bpe className="java.lang.Double">50.0</height_bpe>
+        <height_swl className="java.lang.Double">40.0</height_swl>
+        <labelx_bpe className="java.lang.Double">24.0</labelx_bpe>
+        <labely_bpe className="java.lang.Double">-3.0</labely_bpe>
+        <posx_bpe className="java.lang.Double">257.0</posx_bpe>
+        <posx_swl className="java.lang.Double">0.0</posx_swl>
+        <posy_bpe className="java.lang.Double">76.0</posy_bpe>
+        <posy_swl className="java.lang.Double">0.0</posy_swl>
+        <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+        <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+        <width_bpe className="java.lang.Double">100.0</width_bpe>
+        <width_swl className="java.lang.Double">80.0</width_swl>
+      </GraphicalProperties>
+      <IncomingTokenEdge idref="SYL_663" />
+      <OutgoingTokenEdge idref="SYL_664" />
+    </IFOperator>
+    <MultipleInstanceSubProcessNode id="SYL_795" isSequential="false" userID="SYL" flexoID="795" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" nodeName="TestSubProcess" docIndex="7" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" roleTextColor="128,128,128" subProcess="PROCESS.TestSubProcess#SYL_796" displaySubProcessImage="false">
+      <GraphicalProperties>
+        <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+        <height_bpe className="java.lang.Double">85.0</height_bpe>
+        <isPortMapRegisteryVisible className="java.lang.Boolean">false</isPortMapRegisteryVisible>
+        <labely_bpe className="java.lang.Double">0.0</labely_bpe>
+        <posx_bpe className="java.lang.Double">45.0</posx_bpe>
+        <posy_bpe className="java.lang.Double">23.0</posy_bpe>
+        <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+        <width_bpe className="java.lang.Double">115.0</width_bpe>
+      </GraphicalProperties>
+      <PortMapRegistery id="SYL_800" orientation="0" userID="SYL" flexoID="800" dontGenerate="false" useSpecificDescriptions="false">
+        <FlexoPortMap id="SYL_797" portName="NewInstance" docIndex="2" userID="SYL" flexoID="797" dontGenerate="false" useSpecificDescriptions="false">
+          <GraphicalProperties>
+            <labelx_bpe className="java.lang.Double">0.0</labelx_bpe>
+            <labely_bpe className="java.lang.Double">0.0</labely_bpe>
+            <posx_bpe className="java.lang.Double">3.0</posx_bpe>
+            <posy_bpe className="java.lang.Double">0.0</posy_bpe>
+            <visible className="java.lang.Boolean">true</visible>
+          </GraphicalProperties>
+        </FlexoPortMap>
+        <FlexoPortMap id="SYL_798" portName="DeleteInstance" docIndex="1" userID="SYL" flexoID="798" dontGenerate="false" useSpecificDescriptions="false">
+          <GraphicalProperties>
+            <labelx_bpe className="java.lang.Double">0.0</labelx_bpe>
+            <labely_bpe className="java.lang.Double">0.0</labely_bpe>
+            <posx_bpe className="java.lang.Double">19.0</posx_bpe>
+            <posy_bpe className="java.lang.Double">0.0</posy_bpe>
+            <visible className="java.lang.Boolean">true</visible>
+          </GraphicalProperties>
+        </FlexoPortMap>
+        <FlexoPortMap id="SYL_799" portName="OutPort" docIndex="3" userID="SYL" flexoID="799" dontGenerate="false" useSpecificDescriptions="false">
+          <GraphicalProperties>
+            <labelx_bpe className="java.lang.Double">0.0</labelx_bpe>
+            <labely_bpe className="java.lang.Double">0.0</labely_bpe>
+            <posx_bpe className="java.lang.Double">-13.0</posx_bpe>
+            <posy_bpe className="java.lang.Double">0.0</posy_bpe>
+            <visible className="java.lang.Boolean">false</visible>
+          </GraphicalProperties>
+        </FlexoPortMap>
+        <GraphicalProperties>
+          <posx_bpe className="java.lang.Double">68.5</posx_bpe>
+          <posy_bpe className="java.lang.Double">15.0</posy_bpe>
+          <visible className="java.lang.Boolean">false</visible>
+        </GraphicalProperties>
+      </PortMapRegistery>
+    </MultipleInstanceSubProcessNode>
+    <MultipleInstanceSubProcessNode id="SYL_803" isSequential="false" userID="SYL" flexoID="803" docFormat="HTML" dontGenerate="false" useSpecificDescriptions="false" nodeName="TestSubProcess2" docIndex="8" nodeType="NORMAL" isWaiting="false" isSelfActivated="false" roleTextColor="128,128,128" subProcess="PROCESS.TestSubProcess2#SYL_804" displaySubProcessImage="false">
+      <GraphicalProperties>
+        <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+        <height_bpe className="java.lang.Double">85.0</height_bpe>
+        <isPortMapRegisteryVisible className="java.lang.Boolean">false</isPortMapRegisteryVisible>
+        <labely_bpe className="java.lang.Double">0.0</labely_bpe>
+        <posx_bpe className="java.lang.Double">324.0</posx_bpe>
+        <posy_bpe className="java.lang.Double">21.0</posy_bpe>
+        <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+        <width_bpe className="java.lang.Double">115.0</width_bpe>
+      </GraphicalProperties>
+      <PortMapRegistery id="SYL_808" orientation="0" userID="SYL" flexoID="808" dontGenerate="false" useSpecificDescriptions="false">
+        <FlexoPortMap id="SYL_805" portName="NewInstance" docIndex="2" userID="SYL" flexoID="805" dontGenerate="false" useSpecificDescriptions="false">
+          <GraphicalProperties>
+            <labelx_bpe className="java.lang.Double">0.0</labelx_bpe>
+            <labely_bpe className="java.lang.Double">0.0</labely_bpe>
+            <posx_bpe className="java.lang.Double">3.0</posx_bpe>
+            <posy_bpe className="java.lang.Double">0.0</posy_bpe>
+            <visible className="java.lang.Boolean">true</visible>
+          </GraphicalProperties>
+        </FlexoPortMap>
+        <FlexoPortMap id="SYL_806" portName="DeleteInstance" docIndex="1" userID="SYL" flexoID="806" dontGenerate="false" useSpecificDescriptions="false">
+          <GraphicalProperties>
+            <labelx_bpe className="java.lang.Double">0.0</labelx_bpe>
+            <labely_bpe className="java.lang.Double">0.0</labely_bpe>
+            <posx_bpe className="java.lang.Double">19.0</posx_bpe>
+            <posy_bpe className="java.lang.Double">0.0</posy_bpe>
+            <visible className="java.lang.Boolean">true</visible>
+          </GraphicalProperties>
+        </FlexoPortMap>
+        <FlexoPortMap id="SYL_807" portName="OutPort" docIndex="3" userID="SYL" flexoID="807" dontGenerate="false" useSpecificDescriptions="false">
+          <GraphicalProperties>
+            <labelx_bpe className="java.lang.Double">0.0</labelx_bpe>
+            <labely_bpe className="java.lang.Double">0.0</labely_bpe>
+            <posx_bpe className="java.lang.Double">-13.0</posx_bpe>
+            <posy_bpe className="java.lang.Double">0.0</posy_bpe>
+            <visible className="java.lang.Boolean">false</visible>
+          </GraphicalProperties>
+        </FlexoPortMap>
+        <GraphicalProperties>
+          <posx_bpe className="java.lang.Double">68.5</posx_bpe>
+          <posy_bpe className="java.lang.Double">15.0</posy_bpe>
+          <visible className="java.lang.Boolean">false</visible>
+        </GraphicalProperties>
+      </PortMapRegistery>
+    </MultipleInstanceSubProcessNode>
+  </ActivityPetriGraph>
+  <PortRegistery id="SYL_438" isVisible="false" userID="SYL" flexoID="438" dontGenerate="false" useSpecificDescriptions="false">
+    <NewPort id="SYL_425" userID="SYL" flexoID="425" dontGenerate="false" useSpecificDescriptions="false" docIndex="0" nodeName="NewInstance">
+      <OutgoingInternalMessageInEdge id="SYL_422" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="422" dontGenerate="false" useSpecificDescriptions="false">
+        <InputMessageBindings id="SYL_423" userID="SYL" flexoID="423" dontGenerate="false" useSpecificDescriptions="false" />
+        <Metrics id="SYL_424" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="424" dontGenerate="false" useSpecificDescriptions="false" />
+        <GraphicalProperties>
+          <hideWhenInduced className="java.lang.Boolean">false</hideWhenInduced>
+        </GraphicalProperties>
+        <StartNewPort idref="SYL_425" />
+        <EndEventNode idref="SYL_421" />
+      </OutgoingInternalMessageInEdge>
+      <InputMessageDefinition id="SYL_426" userID="SYL" flexoID="426" dontGenerate="false" useSpecificDescriptions="false">
+        <label>Input message name</label>
+      </InputMessageDefinition>
+    </NewPort>
+    <DeletePort id="SYL_431" userID="SYL" flexoID="431" dontGenerate="false" useSpecificDescriptions="false" docIndex="1" nodeName="DeleteInstance">
+      <OutgoingInternalMessageInEdge id="SYL_428" isConditional="false" isDefaultFlow="false" isGenericOutput="false" userID="SYL" flexoID="428" dontGenerate="false" useSpecificDescriptions="false">
+        <InputMessageBindings id="SYL_429" userID="SYL" flexoID="429" dontGenerate="false" useSpecificDescriptions="false" />
+        <Metrics id="SYL_430" metricsDefinition="WORKFLOW.TestBrowser#SYL_385" userID="SYL" flexoID="430" dontGenerate="false" useSpecificDescriptions="false" />
+        <GraphicalProperties>
+          <hideWhenInduced className="java.lang.Boolean">false</hideWhenInduced>
+        </GraphicalProperties>
+        <StartDeletePort idref="SYL_431" />
+        <EndEventNode idref="SYL_427" />
+      </OutgoingInternalMessageInEdge>
+      <InputMessageDefinition id="SYL_432" userID="SYL" flexoID="432" dontGenerate="false" useSpecificDescriptions="false">
+        <label>Input message name</label>
+      </InputMessageDefinition>
+    </DeletePort>
+    <OutPort id="SYL_436" userID="SYL" flexoID="436" dontGenerate="false" useSpecificDescriptions="false" docIndex="2" nodeName="OutPort">
+      <IncomingInternalMessageOutEdge idref="SYL_433" />
+      <OutputMessageDefinition id="SYL_437" userID="SYL" flexoID="437" dontGenerate="false" useSpecificDescriptions="false">
+        <label>Output message name</label>
+      </OutputMessageDefinition>
+    </OutPort>
+    <GraphicalProperties>
+      <visible className="java.lang.Boolean">false</visible>
+    </GraphicalProperties>
+  </PortRegistery>
+  <GraphicalProperties>
+    <alignedOnGrid_bpe className="java.lang.Boolean">false</alignedOnGrid_bpe>
+    <bgColor_bpe className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_bpe>
+    <bgColor_swl className="org.openflexo.foundation.utils.FlexoColor">255,255,255</bgColor_swl>
+    <bpe-gridSizeHasBeenSet className="java.lang.Boolean">true</bpe-gridSizeHasBeenSet>
+    <gridSize_bpe className="java.lang.Integer">15</gridSize_bpe>
+    <height_bpe className="java.lang.Double">1000.0</height_bpe>
+    <height_swl className="java.lang.Double">40.0</height_swl>
+    <posx_bpe className="java.lang.Double">0.0</posx_bpe>
+    <posx_swl className="java.lang.Double">0.0</posx_swl>
+    <posy_bpe className="java.lang.Double">0.0</posy_bpe>
+    <posy_swl className="java.lang.Double">0.0</posy_swl>
+    <scale_bpe className="java.lang.Double">1.0</scale_bpe>
+    <textColor_bpe className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_bpe>
+    <textColor_swl className="org.openflexo.foundation.utils.FlexoColor">0,0,0</textColor_swl>
+    <width_bpe className="java.lang.Double">1000.0</width_bpe>
+    <width_swl className="java.lang.Double">80.0</width_swl>
+  </GraphicalProperties>
+</FlexoProcess>
+

@@ -49,12 +49,12 @@ public class OpenLoopedPetriGraph extends FlexoUndoableAction<OpenLoopedPetriGra
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(LOOPOperator object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(LOOPOperator object, Vector<WKFObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(LOOPOperator object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(LOOPOperator object, Vector<WKFObject> globalSelection) {
 			return isVisibleForSelection(object, globalSelection);
 		}
 
@@ -104,8 +104,8 @@ public class OpenLoopedPetriGraph extends FlexoUndoableAction<OpenLoopedPetriGra
 
 	@Override
 	public String getLocalizedName() {
-		if ((getLOOPOperator()).getExecutionPetriGraph() != null) {
-			if ((getLOOPOperator()).getExecutionPetriGraph().getIsVisible()) {
+		if (getLOOPOperator().getExecutionPetriGraph() != null) {
+			if (getLOOPOperator().getExecutionPetriGraph().getIsVisible()) {
 				return FlexoLocalization.localizedForKey("close_loop_execution_level");
 			} else {
 				return FlexoLocalization.localizedForKey("open_loop_execution_level");

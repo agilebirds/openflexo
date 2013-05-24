@@ -68,7 +68,7 @@ public class WSEDMPackageTableModel extends AbstractModel<DMRepository, DMPackag
 
 	@Override
 	public DMPackage elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return (DMPackage) getDMRepository().getOrderedChildren().elementAt(row);
 		} else {
 			return null;

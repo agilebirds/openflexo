@@ -163,7 +163,7 @@ public class DGHTMLGenerator<T extends FlexoModelObject> extends DGGenerator<T> 
 	 * @see org.openflexo.dg.FlexoLatexResourceGenerator#getSymbolicDirectory(org.openflexo.foundation.cg.GenerationRepository)
 	 */
 	public CGSymbolicDirectory getSymbolicDirectory(DGRepository repository) {
-		return (repository).getHTMLSymbolicDirectory();
+		return repository.getHTMLSymbolicDirectory();
 	}
 
 	/**

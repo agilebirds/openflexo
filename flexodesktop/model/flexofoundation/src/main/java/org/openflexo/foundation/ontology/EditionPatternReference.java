@@ -29,11 +29,18 @@ import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
+import org.openflexo.foundation.ontology.owl.DataPropertyStatement;
+import org.openflexo.foundation.ontology.owl.OWLDataProperty;
+import org.openflexo.foundation.ontology.owl.OWLObject;
+import org.openflexo.foundation.ontology.owl.ObjectPropertyStatement;
+import org.openflexo.foundation.ontology.owl.OntologyRestrictionClass;
+import org.openflexo.foundation.ontology.owl.SubClassStatement;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.foundation.xml.VEShemaBuilder;
@@ -101,31 +108,49 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		}
 	}
 
+	/**
+	 * Delete the reference (not the instance !!!)
+	 */
 	@Override
 	public void delete() {
-		logger.warning("TODO: implements EditionPatternReference deletion !");
+
+		// Why delete the edition pattern instance ????
+		// Just dereference myself
+		/*if (getEditionPatternInstance() != null && !getEditionPatternInstance().isDeleted()) {
+			getEditionPatternInstance().delete();
+		}*/
+
 		super.delete();
+
+		actors.clear();
+		editionPattern = null;
+		patternRole = null;
+		_editionPatternInstance = null;
+
+		// deleteObservers();
 	}
 
 	private void update() {
 		actors.clear();
-		editionPattern = _editionPatternInstance.getPattern();
-		instanceId = _editionPatternInstance.getInstanceId();
-		for (String role : _editionPatternInstance.getActors().keySet()) {
-			// System.out.println("> role : "+role);
-			FlexoModelObject o = _editionPatternInstance.getActors().get(role);
-			if (o instanceof OntologyObject) {
-				actors.put(role, new ConceptActorReference((OntologyObject) o, role, this));
-			} else if (o instanceof ObjectPropertyStatement) {
-				actors.put(role, new ObjectPropertyStatementActorReference((ObjectPropertyStatement) o, role, this));
-			} else if (o instanceof DataPropertyStatement) {
-				actors.put(role, new DataPropertyStatementActorReference((DataPropertyStatement) o, role, this));
-			} else if (o instanceof SubClassStatement) {
-				actors.put(role, new SubClassStatementActorReference((SubClassStatement) o, role, this));
-			} else if (o instanceof ObjectRestrictionStatement) {
-				actors.put(role, new RestrictionStatementActorReference((ObjectRestrictionStatement) o, role, this));
-			} else {
-				actors.put(role, new ModelObjectActorReference(o, role, this));
+		if (_editionPatternInstance != null) {
+			editionPattern = _editionPatternInstance.getPattern();
+			instanceId = _editionPatternInstance.getInstanceId();
+			for (String role : _editionPatternInstance.getActors().keySet()) {
+				// System.out.println("> role : "+role);
+				FlexoModelObject o = _editionPatternInstance.getActors().get(role);
+				if (o instanceof OntologyObject) {
+					actors.put(role, new ConceptActorReference((OntologyObject) o, role, this));
+				} else if (o instanceof ObjectPropertyStatement) {
+					actors.put(role, new ObjectPropertyStatementActorReference((ObjectPropertyStatement) o, role, this));
+				} else if (o instanceof DataPropertyStatement) {
+					actors.put(role, new DataPropertyStatementActorReference((DataPropertyStatement) o, role, this));
+				} else if (o instanceof SubClassStatement) {
+					actors.put(role, new SubClassStatementActorReference((SubClassStatement) o, role, this));
+				} /*else if (o instanceof ObjectRestrictionStatement) {
+					actors.put(role, new RestrictionStatementActorReference((ObjectRestrictionStatement) o, role, this));
+					}*/else {
+					actors.put(role, new ModelObjectActorReference(o, role, this));
+				}
 			}
 		}
 	}
@@ -241,12 +266,12 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public FlexoModelObject retrieveObject() {
 			if (object == null) {
 				getProject().getProjectOntology().loadWhenUnloaded();
-				object = getProject().getProjectOntologyLibrary().getOntologyObject(objectURI);
+				object = getProject().getProjectOntology().getOntologyObject(objectURI);
 			}
 			if (object == null) {
 				logger.warning("Could not retrieve object " + objectURI);
 			}
-			return object;
+			return (FlexoModelObject) object;
 		}
 
 		public String _getObjectURI() {
@@ -314,15 +339,31 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public ObjectPropertyStatement retrieveObject() {
 			if (statement == null) {
 				getProject().getProjectOntology().loadWhenUnloaded();
-				OntologyObject subject = getProject().getProjectOntologyLibrary().getOntologyObject(subjectURI);
+				OntologyObject subject = getProject().getProjectOntology().getOntologyObject(subjectURI);
 				if (subject == null) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Could not find subject with URI " + subjectURI);
 					}
 					return null;
 				}
-				OntologyObjectProperty property = getProject().getProjectOntologyLibrary().getObjectProperty(objectPropertyURI);
-				statement = subject.getObjectPropertyStatement(property);
+				if (subject instanceof OWLObject == false) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Statements aren't supported by non-owl ontologies, subject's URI: " + subjectURI);
+					}
+					return null;
+				}
+
+				OntologyObject object = getProject().getProjectOntology().getOntologyObject(objectURI);
+				if (object == null) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Could not find object with URI " + objectURI);
+					}
+					return null;
+				}
+
+				OntologyObjectProperty property = getProject().getProjectOntology().getObjectProperty(objectPropertyURI);
+				// FIXED HUGE ISSUE HERE, with incorrect deserialization of statements
+				statement = ((OWLObject) subject).getObjectPropertyStatement(property, object);
 				// logger.info("Found statement: "+statement);
 			}
 			if (statement == null) {
@@ -381,9 +422,15 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public DataPropertyStatement retrieveObject() {
 			if (statement == null) {
 				getProject().getProjectOntology().loadWhenUnloaded();
-				OntologyObject subject = getProject().getProjectOntologyLibrary().getOntologyObject(subjectURI);
-				OntologyDataProperty property = getProject().getProjectOntologyLibrary().getDataProperty(dataPropertyURI);
-				statement = subject.getDataPropertyStatement(property);
+				OntologyObject subject = getProject().getProjectOntology().getOntologyObject(subjectURI);
+				if (subject instanceof OWLObject == false) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Statements aren't supported by non-owl ontologies, subject's URI: " + subjectURI);
+					}
+					return null;
+				}
+				OWLDataProperty property = (OWLDataProperty) getProject().getProjectOntology().getDataProperty(dataPropertyURI);
+				statement = ((OWLObject<?>) subject).getDataPropertyStatement(property);
 				// logger.info("Found statement: "+statement);
 			}
 			if (statement == null) {
@@ -394,17 +441,17 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 	}
 
 	public static class RestrictionStatementActorReference extends ActorReference {
-		public ObjectRestrictionStatement statement;
-		public String subjectURI;
+		public OntologyRestrictionClass restriction;
+		// public String subjectURI;
 		public String propertyURI;
 		public String objectURI;
 
-		public RestrictionStatementActorReference(ObjectRestrictionStatement o, String aPatternRole, EditionPatternReference ref) {
+		public RestrictionStatementActorReference(OntologyRestrictionClass o, String aPatternRole, EditionPatternReference ref) {
 			super(ref.getProject());
 			setPatternReference(ref);
 			patternRole = aPatternRole;
-			statement = o;
-			subjectURI = o.getSubject().getURI();
+			restriction = o;
+			// subjectURI = o.getSubject().getURI();
 			objectURI = o.getObject().getURI();
 			propertyURI = o.getProperty().getURI();
 		}
@@ -439,21 +486,23 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		}
 
 		@Override
-		public RestrictionStatement retrieveObject() {
-			if (statement == null) {
+		public OntologyRestrictionClass retrieveObject() {
+			if (restriction == null) {
 				getProject().getProjectOntology().loadWhenUnloaded();
-				OntologyObject subject = getProject().getProjectOntologyLibrary().getOntologyObject(subjectURI);
-				OntologyObject object = getProject().getProjectOntologyLibrary().getOntologyObject(objectURI);
-				OntologyProperty property = getProject().getProjectOntologyLibrary().getProperty(propertyURI);
+				// OntologyObject subject = getProject().getProjectOntologyLibrary().getOntologyObject(subjectURI);
+				OntologyObject object = getProject().getProjectOntology().getOntologyObject(objectURI);
+				OntologyProperty property = getProject().getProjectOntology().getProperty(propertyURI);
 				if (object instanceof OntologyClass) {
-					statement = subject.getObjectRestrictionStatement(property, (OntologyClass) object);
-					logger.info("Found statement: " + statement);
+					// restriction = subject.getObjectRestrictionStatement(property, (OntologyClass) object);
+					// logger.info("Found restriction: " + restriction);
+					// TODO implement this
+					logger.warning("Not implemented !!!");
 				}
 			}
-			if (statement == null) {
+			if (restriction == null) {
 				logger.warning("Could not retrieve object " + objectURI);
 			}
-			return statement;
+			return restriction;
 		}
 	}
 
@@ -504,9 +553,17 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 		public SubClassStatement retrieveObject() {
 			if (statement == null) {
 				getProject().getProjectOntology().loadWhenUnloaded();
-				OntologyObject subject = getProject().getProjectOntologyLibrary().getOntologyObject(subjectURI);
-				OntologyObject parent = getProject().getProjectOntologyLibrary().getOntologyObject(parentURI);
-				statement = subject.getSubClassStatement(parent);
+				OntologyObject subject = getProject().getProjectOntology().getOntologyObject(subjectURI);
+				if (subject instanceof OWLObject == false) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("Statements aren't supported by non-owl ontologies, subject's URI: " + subjectURI);
+					}
+					return null;
+				}
+				OntologyObject parent = getProject().getProjectOntology().getOntologyObject(parentURI);
+				if (subject != null && parent != null) {
+					statement = ((OWLObject<?>) subject).getSubClassStatement(parent);
+				}
 				logger.info("Found statement: " + statement);
 			}
 			if (statement == null) {
@@ -525,7 +582,7 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 			setPatternReference(ref);
 			patternRole = aPatternRole;
 			object = o;
-			objectReference = new FlexoModelObjectReference(getProject(), o);
+			objectReference = new FlexoModelObjectReference(o);
 		}
 
 		// Constructor used during deserialization
@@ -618,6 +675,20 @@ public class EditionPatternReference extends FlexoModelObject implements DataFle
 
 	public void setEditionPattern(EditionPattern pattern) {
 		this.editionPattern = pattern;
+	}
+
+	public ViewPoint getViewPoint() {
+		if (getEditionPattern() != null) {
+			return getEditionPattern().getViewPoint();
+		}
+		return null;
+	}
+
+	public FlexoOntology getViewPointOntology() {
+		if (getViewPoint() != null) {
+			return getViewPoint().getViewpointOntology();
+		}
+		return null;
 	}
 
 	public long getInstanceId() {

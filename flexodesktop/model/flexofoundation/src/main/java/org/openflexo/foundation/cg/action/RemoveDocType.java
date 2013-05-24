@@ -39,17 +39,17 @@ public class RemoveDocType extends FlexoAction<RemoveDocType, DocType, DocType> 
 			"remove_doc_type", FlexoActionType.DELETE_ACTION_TYPE) {
 
 		@Override
-		protected boolean isEnabledForSelection(DocType object, Vector<DocType> globalSelection) {
+		public boolean isEnabledForSelection(DocType object, Vector<DocType> globalSelection) {
 			return isVisibleForSelection(object, globalSelection);
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DocType object, Vector<DocType> globalSelection) {
+		public boolean isVisibleForSelection(DocType object, Vector<DocType> globalSelection) {
 			Vector<FlexoModelObject> v = getGlobalSelectionAndFocusedObject(object, globalSelection);
 			boolean ok = v.size() > 0;
 			for (FlexoModelObject o : v) {
 				for (DefaultDocType defaultDocType : DefaultDocType.values()) {
-					ok &= (o != o.getProject().getDocTypeNamed(defaultDocType.name()));
+					ok &= o != o.getProject().getDocTypeNamed(defaultDocType.name());
 				}
 			}
 			return ok;

@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
@@ -43,8 +43,8 @@ public class MakeFlexoProcessContextFreeInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<MakeFlexoProcessContextFree> getDefaultInitializer() {
 		return new FlexoActionInitializer<MakeFlexoProcessContextFree>() {
 			@Override
-			public boolean run(ActionEvent e, MakeFlexoProcessContextFree action) {
-				return (action.getFocusedObject() != null);
+			public boolean run(EventObject e, MakeFlexoProcessContextFree action) {
+				return action.getFocusedObject() != null;
 			}
 		};
 	}
@@ -53,7 +53,7 @@ public class MakeFlexoProcessContextFreeInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<MakeFlexoProcessContextFree> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MakeFlexoProcessContextFree>() {
 			@Override
-			public boolean run(ActionEvent e, MakeFlexoProcessContextFree action) {
+			public boolean run(EventObject e, MakeFlexoProcessContextFree action) {
 				return true;
 			}
 		};

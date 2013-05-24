@@ -23,17 +23,25 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.jdom.JDOMException;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.ElementFilter;
+import org.jdom2.input.SAXBuilder;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.DataBinding;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.FlexoOntology;
+import org.openflexo.foundation.ontology.ImportedOWLOntology;
 import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.foundation.ontology.dm.OEDataModification;
+import org.openflexo.foundation.ontology.owl.OWLOntology;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaInserted;
@@ -41,7 +49,9 @@ import org.openflexo.foundation.viewpoint.dm.CalcDrawingShemaRemoved;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteInserted;
 import org.openflexo.foundation.viewpoint.dm.CalcPaletteRemoved;
 import org.openflexo.toolbox.FileUtils;
+import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.RelativePathFileConverter;
+import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xmlcode.AccessorInvocationException;
 import org.openflexo.xmlcode.InvalidModelException;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
@@ -51,6 +61,12 @@ import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 
 public class ViewPoint extends ViewPointObject {
+
+	private static final String URI_XML_ATTRIBUTE_NAME = "uri";
+
+	private static final String VIEW_POINT_ELEMENT_XML_TAG = "ViewPoint";
+
+	private static final String VIEWPOINT_DIRECTORY_EXTENSION = ".viewpoint";
 
 	private static final Logger logger = Logger.getLogger(ViewPoint.class.getPackage().getName());
 
@@ -62,6 +78,8 @@ public class ViewPoint extends ViewPointObject {
 	private String name;
 	private String viewPointURI;
 	private String description;
+	private String version;
+
 	private Vector<EditionPattern> editionPatterns;
 	private LocalizedDictionary localizedDictionary;
 
@@ -78,24 +96,44 @@ public class ViewPoint extends ViewPointObject {
 	private boolean isLoading = false;
 	private RelativePathFileConverter relativePathFileConverter;
 
-	public static ViewPoint openViewPoint(File calcDir, ViewPointLibrary library, ViewPointFolder folder) {
-		String baseName = calcDir.getName().substring(0, calcDir.getName().length() - 10);
-		File xmlFile = new File(calcDir, baseName + ".xml");
+	public static File getViewPointFile(File viewPointDirectory) {
+		return new File(viewPointDirectory, getViewPointBaseName(viewPointDirectory) + ".xml");
+	}
+
+	public static String getViewPointBaseName(File viewPointDirectory) {
+		return viewPointDirectory.getName().substring(0, viewPointDirectory.getName().length() - VIEWPOINT_DIRECTORY_EXTENSION.length());
+	}
+
+	public static String getURI(File viewpointDirectory) throws JDOMException, IOException {
+		File viewPointFile = getViewPointFile(viewpointDirectory);
+		Document document = readXMLFile(viewPointFile);
+		Element element = getElement(document, VIEW_POINT_ELEMENT_XML_TAG);
+		return element.getAttributeValue(URI_XML_ATTRIBUTE_NAME);
+	}
+
+	public static ViewPoint openViewPoint(File viewPointDirectory, ViewPointLibrary library, ViewPointFolder folder) {
+
+		String baseName = getViewPointBaseName(viewPointDirectory);
+		File xmlFile = getViewPointFile(viewPointDirectory);
 
 		if (xmlFile.exists()) {
+
+			ImportedOntology viewPointOntology = readViewpointOntology(xmlFile, library);
+
 			FileInputStream inputStream = null;
 			try {
-				RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(calcDir);
+				ViewPointBuilder builder = new ViewPointBuilder(viewPointOntology);
+				RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(viewPointDirectory);
 				inputStream = new FileInputStream(xmlFile);
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("Reading file " + xmlFile.getAbsolutePath());
 				}
-				ViewPoint returned = (ViewPoint) XMLDecoder.decodeObjectWithMapping(inputStream, library.get_VIEW_POINT_MODEL(), null,
+				ViewPoint returned = (ViewPoint) XMLDecoder.decodeObjectWithMapping(inputStream, library.get_VIEW_POINT_MODEL(), builder,
 						new StringEncoder(StringEncoder.getDefaultInstance(), relativePathFileConverter));
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("DONE reading file " + xmlFile.getAbsolutePath());
 				}
-				returned.init(baseName, calcDir, xmlFile, library, folder);
+				returned.init(baseName, viewPointDirectory, xmlFile, library, viewPointOntology, folder);
 				return returned;
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -145,18 +183,139 @@ public class ViewPoint extends ViewPointObject {
 		ViewPoint viewpoint = new ViewPoint();
 		viewpoint.owlFile = owlFile;
 		viewpoint._setViewPointURI(viewpointURI);
-		viewpoint.init(baseName, viewpointDir, xmlFile, library, folder);
+
+		ImportedOntology viewPointOntology = loadViewpointOntology(viewpointURI, owlFile, library);
+
+		viewpoint.init(baseName, viewpointDir, xmlFile, library, viewPointOntology, folder);
 		viewpoint.save();
 		return viewpoint;
 	}
 
+	private static ImportedOntology readViewpointOntology(File viewPointFile, ViewPointLibrary library) {
+
+		if (viewPointFile == null || !viewPointFile.exists() || viewPointFile.length() == 0) {
+			if (viewPointFile.length() == 0) {
+				viewPointFile.delete();
+			}
+			return null;
+		}
+
+		File owlFile = null;
+		String viewPointURI = null;
+
+		Document document;
+		try {
+			logger.fine("Try to find ontology for viewpoint" + viewPointFile);
+			document = readXMLFile(viewPointFile);
+			Element root = getElement(document, VIEW_POINT_ELEMENT_XML_TAG);
+			if (root != null) {
+				String owlFileAttribute = root.getAttributeValue("owlFile");
+				if (owlFileAttribute != null) {
+					owlFile = new File(viewPointFile.getParent(), owlFileAttribute);
+					viewPointURI = root.getAttributeValue(URI_XML_ATTRIBUTE_NAME);
+				}
+			}
+		} catch (JDOMException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		if (owlFile != null && owlFile.exists()) {
+			return loadViewpointOntology(viewPointURI, owlFile, library);
+		}
+
+		return null;
+	}
+
+	private static ImportedOntology loadViewpointOntology(String viewPointURI, File owlFile, ViewPointLibrary library) {
+
+		ImportedOntology viewpointOntology = null;
+
+		if (owlFile.exists()) {
+			logger.fine("Found " + owlFile);
+			String ontologyURI = OWLOntology.findOntologyURI(owlFile);
+			if (StringUtils.isEmpty(ontologyURI)) {
+				ontologyURI = viewPointURI;
+			}
+			viewpointOntology = library.getOntologyLibrary().importOntology(ontologyURI, owlFile);
+			viewpointOntology.setIsReadOnly(false);
+		}
+
+		return viewpointOntology;
+	}
+
+	private static Document readXMLFile(File f) throws JDOMException, IOException {
+		FileInputStream fio = new FileInputStream(f);
+		SAXBuilder parser = new SAXBuilder();
+		Document reply = parser.build(fio);
+		return reply;
+	}
+
+	private static Element getElement(Document document, String name) {
+		Iterator<Element> it = document.getDescendants(new ElementFilter(name));
+		if (it.hasNext()) {
+			return it.next();
+		} else {
+			return null;
+		}
+	}
+
+	private static Element getElement(Element from, String name) {
+		Iterator<Element> it = from.getDescendants(new ElementFilter(name));
+		if (it.hasNext()) {
+			return it.next();
+		} else {
+			return null;
+		}
+	}
+
+	public static class ViewPointBuilder {
+		private ViewPoint viewPoint;
+		private ImportedOntology viewPointOntology;
+
+		public ViewPointBuilder(ViewPoint viewPoint) {
+			this.viewPoint = viewPoint;
+			if (viewPoint != null) {
+				this.viewPointOntology = (ImportedOntology) viewPoint.getViewpointOntology();
+			}
+		}
+
+		public ViewPointBuilder(ImportedOntology viewPointOntology) {
+			this.viewPointOntology = viewPointOntology;
+			// viewPointOntology.loadWhenUnloaded();
+		}
+
+		public ImportedOntology getViewPointOntology() {
+			return viewPointOntology;
+		}
+
+		public ViewPoint getViewPoint() {
+			return viewPoint;
+		}
+
+		public void setViewPoint(ViewPoint viewPoint) {
+			this.viewPoint = viewPoint;
+		}
+	}
+
 	// Used during deserialization, do not use it
-	public ViewPoint() {
-		super();
+	public ViewPoint(ViewPointBuilder builder) {
+		super(builder);
+		if (builder != null) {
+			builder.setViewPoint(this);
+		}
 		editionPatterns = new Vector<EditionPattern>();
 	}
 
-	private void init(String baseName, File viewpointDir, File xmlFile, ViewPointLibrary library, ViewPointFolder folder) {
+	// Used during deserialization, do not use it
+	private ViewPoint() {
+		super(null);
+		editionPatterns = new Vector<EditionPattern>();
+	}
+
+	private void init(String baseName, File viewpointDir, File xmlFile, ViewPointLibrary library, ImportedOntology ontology,
+			ViewPointFolder folder) {
 		logger.info("Registering viewpoint " + baseName + " URI=" + getViewPointURI());
 
 		name = baseName;
@@ -169,7 +328,7 @@ public class ViewPoint extends ViewPointObject {
 
 		this.xmlFile = xmlFile;
 
-		if (owlFile == null) {
+		/*if (owlFile == null) {
 			owlFile = new File(viewpointDir, baseName + ".owl");
 		}
 
@@ -182,7 +341,9 @@ public class ViewPoint extends ViewPointObject {
 		else {
 			logger.warning("Could not find " + owlFile);
 			return;
-		}
+		}*/
+
+		viewpointOntology = ontology;
 
 		for (EditionPattern ep : getEditionPatterns()) {
 			for (PatternRole pr : ep.getPatternRoles()) {
@@ -275,9 +436,11 @@ public class ViewPoint extends ViewPointObject {
 			palettes = new Vector<ViewPointPalette>();
 		}
 		for (File f : dir.listFiles()) {
-			if (!f.isDirectory() && f.getName().endsWith(".palette")) {
+			if (!f.isDirectory() && f.getName().endsWith(".palette") && f.length() > 0) {
 				ViewPointPalette palette = ViewPointPalette.instanciateCalcPalette(this, f);
-				addToCalcPalettes(palette);
+				if (palette != null) {
+					addToCalcPalettes(palette);
+				}
 			} else if (f.isDirectory() && !f.getName().equals("CVS")) {
 				findPalettes(f);
 			}
@@ -384,11 +547,28 @@ public class ViewPoint extends ViewPointObject {
 		this.description = description;
 	}
 
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String aVersion) {
+		if (requireChange(version, aVersion)) {
+			String old = this.version;
+			this.version = aVersion;
+			setChanged();
+			notifyObservers(new OEDataModification("version", old, version));
+		}
+	}
+
+	@Override
 	public FlexoOntology getViewpointOntology() {
+		if (isDeserializing()) {
+			return super.getViewpointOntology();
+		}
 		return viewpointOntology;
 	}
 
-	public void setViewpointOntology(ImportedOntology viewpointOntology) {
+	public void setViewpointOntology(ImportedOWLOntology viewpointOntology) {
 		this.viewpointOntology = viewpointOntology;
 	}
 
@@ -538,7 +718,7 @@ public class ViewPoint extends ViewPointObject {
 	@Override
 	public LocalizedDictionary getLocalizedDictionary() {
 		if (localizedDictionary == null) {
-			localizedDictionary = new LocalizedDictionary();
+			localizedDictionary = new LocalizedDictionary(null);
 			localizedDictionary.setCalc(this);
 		}
 		return localizedDictionary;
@@ -594,10 +774,12 @@ public class ViewPoint extends ViewPointObject {
 		this.owlFile = owlFile;
 	}
 
-	public final void finalizeCalcDeserialization() {
+	@Override
+	public final void finalizeDeserialization(Object builder) {
 		for (EditionPattern ep : getEditionPatterns()) {
 			ep.finalizeEditionPatternDeserialization();
 		}
+		super.finalizeDeserialization(builder);
 	}
 
 	private BindingModel _bindingModel;
@@ -629,5 +811,29 @@ public class ViewPoint extends ViewPointObject {
 	}
 
 	private static EditionPatternBindingFactory EDITION_PATTERN_BINDING_FACTORY = new EditionPatternBindingFactory();
+
+	@Override
+	public String getLanguageRepresentation() {
+		// Voir du cote de GeneratorFormatter pour formatter tout ca
+		StringBuffer sb = new StringBuffer();
+		System.out.println("loaded: " + getViewpointOntology().isLoaded());
+		for (FlexoOntology o : getViewpointOntology().getImportedOntologies()) {
+			if (o != getOntologyLibrary().getOWLOntology()) {
+				String modelName = JavaUtils.getVariableName(o.getName());
+				sb.append("import " + modelName + " as " + o.getURI() + ";" + StringUtils.LINE_SEPARATOR);
+			}
+		}
+		sb.append("ViewDefinition " + getName() + " uri=\"" + getURI() + "\"");
+		sb.append(" {" + StringUtils.LINE_SEPARATOR);
+		// TODO iterate on slots here
+		sb.append("ModelSlot defaultModelSlot implements toto;");
+		sb.append(StringUtils.LINE_SEPARATOR);
+		for (EditionPattern ep : getEditionPatterns()) {
+			sb.append(ep.getLanguageRepresentation());
+			sb.append(StringUtils.LINE_SEPARATOR);
+		}
+		sb.append("}" + StringUtils.LINE_SEPARATOR);
+		return sb.toString();
+	}
 
 }

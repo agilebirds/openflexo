@@ -38,12 +38,9 @@ public class SGIconLibrary extends GeneratorIconLibrary {
 	public static final ImageIcon SG_BIG_ICON = new ImageIconResource("Icons/SG/module-sg-hover-64.png");
 
 	// Perspective icons
-	public static final ImageIcon SG_MRP_ACTIVE_ICON = new ImageIconResource("Icons/SG/MRPerspective_A.gif");
-	public static final ImageIcon SG_MRP_SELECTED_ICON = new ImageIconResource("Icons/SG/MRPerspective_S.gif");
-	public static final ImageIcon SG_SGP_ACTIVE_ICON = new ImageIconResource("Icons/SG/SGPerspective_A.gif");
-	public static final ImageIcon SG_SGP_SELECTED_ICON = new ImageIconResource("Icons/SG/SGPerspective_S.gif");
-	public static final ImageIcon SG_VP_ACTIVE_ICON = new ImageIconResource("Icons/SG/VersionningPerspective_A.gif");
-	public static final ImageIcon SG_VP_SELECTED_ICON = new ImageIconResource("Icons/SG/VersionningPerspective_S.gif");
+	public static final ImageIcon SG_MRP_ACTIVE_ICON = new ImageIconResource("Icons/SG/MRPerspective_A.png");
+	public static final ImageIcon SG_SGP_ACTIVE_ICON = new ImageIconResource("Icons/SG/SGPerspective_A.png");
+	public static final ImageIcon SG_VP_ACTIVE_ICON = new ImageIconResource("Icons/SG/VersionningPerspective_A.png");
 
 	// Model icons
 	public static final ImageIcon GENERATED_CODE_ICON = new ImageIconResource("Icons/SG/GeneratedCode.gif");

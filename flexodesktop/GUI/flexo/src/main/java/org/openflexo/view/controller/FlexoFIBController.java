@@ -20,10 +20,12 @@
 package org.openflexo.view.controller;
 
 import java.awt.event.MouseEvent;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.Flexo;
 import org.openflexo.components.ProgressWindow;
@@ -34,22 +36,12 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
-import org.openflexo.foundation.dm.DMObject;
-import org.openflexo.foundation.ie.IEObject;
-import org.openflexo.foundation.ontology.AbstractOntologyObject;
-import org.openflexo.foundation.toc.TOCObject;
-import org.openflexo.foundation.view.AbstractViewObject;
-import org.openflexo.foundation.viewpoint.ViewPointLibraryObject;
-import org.openflexo.foundation.wkf.WKFObject;
-import org.openflexo.foundation.wkf.WorkflowModelObject;
-import org.openflexo.icon.DEIconLibrary;
-import org.openflexo.icon.DMEIconLibrary;
+import org.openflexo.foundation.action.ImportProject;
+import org.openflexo.foundation.action.RemoveImportedProject;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.icon.OntologyIconLibrary;
-import org.openflexo.icon.SEIconLibrary;
 import org.openflexo.icon.UtilsIconLibrary;
-import org.openflexo.icon.VEIconLibrary;
-import org.openflexo.icon.VPMIconLibrary;
-import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManager;
 
@@ -62,7 +54,7 @@ import org.openflexo.selection.SelectionManager;
  * 
  * @param <T>
  */
-public class FlexoFIBController<T> extends FIBController<T> implements GraphicalFlexoObserver {
+public class FlexoFIBController extends FIBController implements GraphicalFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(FlexoFIBController.class.getPackage().getName());
 
@@ -72,6 +64,13 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 	public static final ImageIcon ARROW_UP = UtilsIconLibrary.ARROW_UP_2;
 	public static final ImageIcon ARROW_BOTTOM = UtilsIconLibrary.ARROW_BOTTOM_2;
 	public static final ImageIcon ARROW_TOP = UtilsIconLibrary.ARROW_TOP_2;
+
+	public static final ImageIcon ONTOLOGY_ICON = OntologyIconLibrary.ONTOLOGY_ICON;
+	public static final ImageIcon ONTOLOGY_CLASS_ICON = OntologyIconLibrary.ONTOLOGY_CLASS_ICON;
+	public static final ImageIcon ONTOLOGY_INDIVIDUAL_ICON = OntologyIconLibrary.ONTOLOGY_INDIVIDUAL_ICON;
+	public static final ImageIcon ONTOLOGY_DATA_PROPERTY_ICON = OntologyIconLibrary.ONTOLOGY_DATA_PROPERTY_ICON;
+	public static final ImageIcon ONTOLOGY_OBJECT_PROPERTY_ICON = OntologyIconLibrary.ONTOLOGY_OBJECT_PROPERTY_ICON;
+	public static final ImageIcon ONTOLOGY_ANNOTATION_PROPERTY_ICON = OntologyIconLibrary.ONTOLOGY_ANNOTATION_PROPERTY_ICON;
 
 	public FlexoFIBController(FIBComponent component) {
 		super(component);
@@ -100,19 +99,31 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 	}
 
 	public SelectionManager getSelectionManager() {
-		if (getFlexoController() instanceof SelectionManagingController) {
-			return ((SelectionManagingController) getFlexoController()).getSelectionManager();
+		if (getFlexoController() != null) {
+			return getFlexoController().getSelectionManager();
 		}
 		return null;
 	}
 
 	@Override
-	public void update(FlexoObservable o, DataModification dataModification) {
+	public void update(final FlexoObservable o, final DataModification dataModification) {
+		if (isDeleted()) {
+			return;
+		}
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					update(o, dataModification);
+				}
+			});
+			return;
+		}
 		getRootView().updateDataObject(getDataObject());
 	}
 
 	@Override
-	public void setDataObject(T anObject) {
+	public void setDataObject(Object anObject) {
 		if (anObject != getDataObject()) {
 			if (getDataObject() instanceof FlexoObservable) {
 				((FlexoObservable) getDataObject()).deleteObserver(this);
@@ -127,38 +138,30 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 		super.setDataObject(anObject);
 	}
 
-	public void singleClick(FlexoModelObject object) {
-		if (getFlexoController() != null) {
-			getFlexoController().objectWasClicked(object);
+	public void singleClick(Object object) {
+		if (getFlexoController() != null && object instanceof FlexoModelObject) {
+			getFlexoController().objectWasClicked((FlexoModelObject) object);
 		}
 	}
 
-	public void doubleClick(FlexoModelObject object) {
-		if (getFlexoController() != null) {
-			getFlexoController().objectWasDoubleClicked(object);
+	public void doubleClick(Object object) {
+		if (getFlexoController() != null && object instanceof FlexoModelObject) {
+			getFlexoController().objectWasDoubleClicked((FlexoModelObject) object);
 		}
 	}
 
-	public ImageIcon iconForObject(FlexoModelObject object) {
-		if (object instanceof WorkflowModelObject) {
-			return WKFIconLibrary.iconForObject((WorkflowModelObject) object);
-		} else if (object instanceof WKFObject) {
-			return WKFIconLibrary.iconForObject((WKFObject) object);
-		} else if (object instanceof IEObject) {
-			return SEIconLibrary.iconForObject((IEObject) object);
-		} else if (object instanceof DMObject) {
-			return DMEIconLibrary.iconForObject((DMObject) object);
-		} else if (object instanceof ViewPointLibraryObject) {
-			return VPMIconLibrary.iconForObject((ViewPointLibraryObject) object);
-		} else if (object instanceof AbstractViewObject) {
-			return VEIconLibrary.iconForObject((AbstractViewObject) object);
-		} else if (object instanceof AbstractOntologyObject) {
-			return OntologyIconLibrary.iconForObject((AbstractOntologyObject) object);
-		} else if (object instanceof TOCObject) {
-			return DEIconLibrary.iconForObject((TOCObject) object);
+	public void rightClick(Object object, MouseEvent e) {
+		if (getFlexoController() != null && object instanceof FlexoModelObject) {
+			getFlexoController().objectWasRightClicked((FlexoModelObject) object, e);
 		}
-		logger.warning("Sorry, no icon defined for " + object + " " + (object != null ? object.getClass() : ""));
-		return null;
+	}
+
+	public ImageIcon iconForObject(Object object) {
+		if (controller != null) {
+			return controller.iconForObject(object);
+		} else {
+			return FlexoController.statelessIconForObject(object);
+		}
 	}
 
 	@Override
@@ -204,5 +207,48 @@ public class FlexoFIBController<T> extends FIBController<T> implements Graphical
 	public ImageIcon getArrowBottom() {
 		return ARROW_BOTTOM;
 	}
+
+	public ImageIcon getOntologyIcon() {
+		return ONTOLOGY_ICON;
+	}
+
+	public ImageIcon getOntologyClassIcon() {
+		return ONTOLOGY_CLASS_ICON;
+	}
+
+	public ImageIcon getOntologyIndividualIcon() {
+		return ONTOLOGY_INDIVIDUAL_ICON;
+	}
+
+	public ImageIcon getOntologyDataPropertyIcon() {
+		return ONTOLOGY_DATA_PROPERTY_ICON;
+	}
+
+	public ImageIcon getOntologyObjectPropertyIcon() {
+		return ONTOLOGY_OBJECT_PROPERTY_ICON;
+	}
+
+	public ImageIcon getOntologyAnnotationPropertyIcon() {
+		return ONTOLOGY_ANNOTATION_PROPERTY_ICON;
+	}
+
+	public void importProject(FlexoProject project) {
+		ImportProject importProject = ImportProject.actionType.makeNewAction(project, null, getEditor());
+		importProject.doAction();
+	}
+
+	public void unimportProject(FlexoProject project, List<FlexoProjectReference> references) {
+		for (FlexoProjectReference ref : references) {
+			RemoveImportedProject removeProject = RemoveImportedProject.actionType.makeNewAction(project, null, getEditor());
+			removeProject.setProjectToRemoveURI(ref.getURI());
+			removeProject.doAction();
+		}
+	}
+
+	/*public void createOntologyClass(FlexoOntology ontology) {
+		System.out.println("Create class for " + ontology);
+		CreateOntologyClass action = CreateOntologyClass.actionType.makeNewAction(ontology, null, getEditor());
+		action.doAction();
+	}*/
 
 }

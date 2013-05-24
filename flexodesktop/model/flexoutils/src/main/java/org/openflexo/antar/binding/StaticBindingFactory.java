@@ -11,7 +11,6 @@ public class StaticBindingFactory extends StringEncoder.Converter<StaticBinding>
 
 	private final DateConverter dateConverter = new DateConverter();
 	private final DurationStringConverter durationConverter = new DurationStringConverter();
-	private Bindable _bindable;
 	boolean warnOnFailure = true;
 
 	public StaticBindingFactory() {
@@ -22,16 +21,12 @@ public class StaticBindingFactory extends StringEncoder.Converter<StaticBinding>
 		warnOnFailure = aFlag;
 	}
 
-	public Bindable getBindable() {
-		return _bindable;
-	}
-
-	public void setBindable(Bindable bindable) {
-		_bindable = bindable;
-	}
-
 	@Override
-	public StaticBinding convertFromString(String aValue) {
+	public StaticBinding convertFromString(String value) {
+		return convertFromString(value, null);
+	}
+
+	public StaticBinding convertFromString(String aValue, Bindable bindable) {
 		if (aValue.startsWith("$") && aValue.length() > 1) {
 			return convertFromString(aValue.substring(1));
 		}
@@ -44,6 +39,8 @@ public class StaticBindingFactory extends StringEncoder.Converter<StaticBinding>
 			return new StringStaticBinding(aValue.substring(1, aValue.length() - 1));
 		} else if (aValue.startsWith("'") && aValue.endsWith("'") && aValue.length() > 1) {
 			return new StringStaticBinding(aValue.substring(1, aValue.length() - 1));
+		} else if (aValue.equalsIgnoreCase("null")) {
+			return new NullStaticBinding();
 		}
 		try {
 			return new IntegerStaticBinding(Long.parseLong(aValue));

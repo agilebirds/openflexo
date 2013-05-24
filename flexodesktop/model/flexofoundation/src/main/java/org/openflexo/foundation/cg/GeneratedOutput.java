@@ -22,8 +22,6 @@ package org.openflexo.foundation.cg;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.cg.action.AddGeneratedCodeRepository;
 import org.openflexo.foundation.cg.dm.CGRepositoryCreated;
 import org.openflexo.foundation.cg.dm.CGRepositoryDeleted;
 import org.openflexo.foundation.cg.templates.CGTemplates;
@@ -52,22 +50,11 @@ public abstract class GeneratedOutput extends CGObject implements XMLStorageReso
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(GeneratedOutput.class.getPackage().getName());
 
-	// ==========================================================================
-	// ============================= Instance variables
-	// =========================
-	// ==========================================================================
-
-	private FlexoProject _project;
 	protected FlexoGeneratedOutputResource _resource;
 
 	private Vector<GenerationRepository> _generatedRepositories;
 
 	private GeneratorFactory factory;
-
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
 
 	/**
 	 * Create a new FlexoComponentLibrary.
@@ -75,15 +62,7 @@ public abstract class GeneratedOutput extends CGObject implements XMLStorageReso
 	public GeneratedOutput(FlexoProject project) {
 		super(project);
 		setGeneratedCode(this);
-		_project = project;
 		_generatedRepositories = new Vector<GenerationRepository>();
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddGeneratedCodeRepository.actionType);
-		return returned;
 	}
 
 	@Override
@@ -118,11 +97,6 @@ public abstract class GeneratedOutput extends CGObject implements XMLStorageReso
 	@Override
 	public void setFlexoResource(FlexoResource resource) {
 		_resource = (FlexoGeneratedOutputResource) resource;
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		return _project;
 	}
 
 	/**
@@ -191,7 +165,7 @@ public abstract class GeneratedOutput extends CGObject implements XMLStorageReso
 
 	@Override
 	public boolean isContainedIn(CGObject obj) {
-		return (obj == this);
+		return obj == this;
 	}
 
 	@Override

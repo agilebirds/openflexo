@@ -20,6 +20,7 @@
 
 package org.openflexo.foundation.toc.action;
 
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Vector;
@@ -30,9 +31,11 @@ import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.WilcardTypeImpl;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.action.DuplicateSectionException;
@@ -41,6 +44,7 @@ import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.ERDiagram;
 import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 import org.openflexo.foundation.toc.ControlSection.ControlSectionBindingAttribute;
+import org.openflexo.foundation.toc.ModelObjectSection;
 import org.openflexo.foundation.toc.ModelObjectSection.ModelObjectSectionBindingAttribute;
 import org.openflexo.foundation.toc.ModelObjectSection.ModelObjectType;
 import org.openflexo.foundation.toc.PredefinedSection;
@@ -50,6 +54,7 @@ import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.toolbox.StringUtils;
@@ -71,19 +76,19 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(TOCObject object, Vector<TOCObject> globalSelection) {
+		public boolean isVisibleForSelection(TOCObject object, Vector<TOCObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(TOCObject object, Vector<TOCObject> globalSelection) {
-			return (object instanceof TOCEntry && ((TOCEntry) object).canHaveChildren());
+		public boolean isEnabledForSelection(TOCObject object, Vector<TOCObject> globalSelection) {
+			return object instanceof TOCEntry && ((TOCEntry) object).canHaveChildren();
 		}
 
 	};
 
-	AddTOCEntry(TOCObject focusedObject, Vector<TOCObject> globalSelection, FlexoEditor editor) {
-		super(actionType, focusedObject, globalSelection, editor);
+	static {
+		FlexoModelObject.addActionForClass(actionType, TOCEntry.class);
 	}
 
 	public static enum KindOfTocEntry {
@@ -135,14 +140,58 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 	private ModelObjectType modelObjectType = ModelObjectType.Process;
 	public FlexoProcess selectedProcess;
 	public ViewDefinition selectedView;
+	public ViewFolder selectedViewFolder;
 	public Role selectedRole;
 	public DMEntity selectedEntity;
 	public OperationComponentDefinition selectedOperationComponent;
 	public ERDiagram selectedERDiagram;
 
-	public String iteratorName = "item";
+	private String iteratorName = "item";
+
+	private TOCDataBinding value;
+
+	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, false) {
+		@Override
+		public Type getType() {
+			return getModelObjectType().getType();
+		};
+	};
+
+	private TOCDataBinding condition;
+
+	private BindingDefinition CONDITION = new BindingDefinition("condition", Boolean.class, BindingDefinitionType.GET, false);
+
+	private TOCDataBinding iteration;
+
+	private Type LIST_BINDING_TYPE = new ParameterizedTypeImpl(List.class, new WilcardTypeImpl(Object.class));;
+
+	private BindingDefinition ITERATION = new BindingDefinition("iteration", LIST_BINDING_TYPE, BindingDefinitionType.GET, false);
+
+	private TOCDataBinding iterationCondition;
+
+	private BindingDefinition ITERATION_CONDITION = new BindingDefinition("iterationCondition", Boolean.class, BindingDefinitionType.GET,
+			false);
+
+	private ConditionalOwner conditionalOwner;
+
+	public class ConditionalOwner implements Bindable {
+		@Override
+		public BindingFactory getBindingFactory() {
+			return AddTOCEntry.this.getBindingFactory();
+		}
+
+		@Override
+		public BindingModel getBindingModel() {
+			return getInferedBindingModel();
+		}
+	}
 
 	private ProcessSection.ProcessDocSectionSubType processDocSectionSubType = ProcessSection.ProcessDocSectionSubType.Doc;
+
+	AddTOCEntry(TOCObject focusedObject, Vector<TOCObject> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+		conditionalOwner = new ConditionalOwner();
+	}
 
 	public TOCRepository getRepository() {
 		return ((TOCEntry) getFocusedObject()).getRepository();
@@ -166,6 +215,9 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 			case View:
 				newEntry = getRepository().createViewSection(getTocEntryTitle(), selectedView, null);
 				break;
+			case ViewFolder:
+				newEntry = getRepository().createViewFolderSection(getTocEntryTitle(), selectedViewFolder, null);
+				break;
 			case Role:
 				newEntry = getRepository().createRoleSection(getTocEntryTitle(), selectedRole, null);
 				break;
@@ -181,6 +233,9 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 			default:
 				break;
 			}
+			if (newEntry != null && getValue() != null && getValue().isSet() && getValue().isValid()) {
+				((ModelObjectSection<?>) newEntry).setValue(new TOCDataBinding(getValue().toString()));
+			}
 			break;
 		case ConditionalSection:
 			newEntry = getRepository().createConditionalSection(
@@ -189,7 +244,7 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 		case IterationSection:
 			newEntry = getRepository().createIterationSection(
 					StringUtils.isNotEmpty(getTocEntryTitle()) ? getTocEntryTitle() : iteratorName + ":" + getIteration().toString(),
-					iteratorName, getIteration(), getCondition());
+					iteratorName, getIteration(), getIterationCondition());
 			break;
 
 		default:
@@ -249,15 +304,6 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 		return newEntry;
 	}
 
-	private TOCDataBinding value;
-
-	private BindingDefinition VALUE = new BindingDefinition("value", Object.class, BindingDefinitionType.GET, false) {
-		@Override
-		public Type getType() {
-			return getModelObjectType().getType();
-		};
-	};
-
 	public BindingDefinition getValueBindingDefinition() {
 		return VALUE;
 	}
@@ -278,17 +324,13 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 		this.value = value;
 	}
 
-	private TOCDataBinding condition;
-
-	private BindingDefinition CONDITION = new BindingDefinition("condition", Boolean.class, BindingDefinitionType.GET, false);
-
 	public BindingDefinition getConditionBindingDefinition() {
 		return CONDITION;
 	}
 
 	public TOCDataBinding getCondition() {
 		if (condition == null && getFocusedObject() instanceof TOCEntry) {
-			condition = new TOCDataBinding(((TOCEntry) getFocusedObject()), ControlSectionBindingAttribute.condition,
+			condition = new TOCDataBinding((TOCEntry) getFocusedObject(), ControlSectionBindingAttribute.condition,
 					getConditionBindingDefinition());
 		}
 		return condition;
@@ -296,18 +338,21 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 
 	public void setCondition(TOCDataBinding condition) {
 		if (condition != null && getFocusedObject() instanceof TOCEntry) {
-			condition.setOwner(((TOCEntry) getFocusedObject()));
+			condition.setOwner((TOCEntry) getFocusedObject());
 			condition.setBindingAttribute(ControlSectionBindingAttribute.condition);
 			condition.setBindingDefinition(getConditionBindingDefinition());
 			this.condition = condition;
 		}
 	}
 
-	private TOCDataBinding iteration;
+	public String getIteratorName() {
+		return iteratorName;
+	}
 
-	private Type LIST_BINDING_TYPE = new ParameterizedTypeImpl(List.class, new WilcardTypeImpl(Object.class));;
-
-	private BindingDefinition ITERATION = new BindingDefinition("iteration", LIST_BINDING_TYPE, BindingDefinitionType.GET, false);
+	public void setIteratorName(String iteratorName) {
+		this.iteratorName = iteratorName;
+		inferedBindingModel = null;
+	}
 
 	public BindingDefinition getIterationBindingDefinition() {
 		return ITERATION;
@@ -330,10 +375,36 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 		this.iteration = iteration;
 	}
 
+	public BindingDefinition getIterationConditionBindingDefinition() {
+		return ITERATION_CONDITION;
+	}
+
+	public TOCDataBinding getIterationCondition() {
+		if (iterationCondition == null && getFocusedObject() instanceof TOCEntry) {
+			iterationCondition = new TOCDataBinding((TOCEntry) getFocusedObject(), ControlSectionBindingAttribute.condition,
+					getIterationConditionBindingDefinition());
+		}
+		return iterationCondition;
+	}
+
+	public void setIterationCondition(TOCDataBinding iterationCondition) {
+		if (iterationCondition != null && getFocusedObject() instanceof TOCEntry) {
+			iterationCondition.setOwner((TOCEntry) getFocusedObject());
+			iterationCondition.setBindingAttribute(ControlSectionBindingAttribute.iterationCondition);
+			iterationCondition.setBindingDefinition(getIterationConditionBindingDefinition());
+			this.iterationCondition = iterationCondition;
+			inferedBindingModel = null;
+		}
+	}
+
+	public ConditionalOwner getConditionalOwner() {
+		return conditionalOwner;
+	}
+
 	@Override
 	public BindingModel getBindingModel() {
 		if (getFocusedObject() instanceof TOCEntry) {
-			return ((TOCEntry) getFocusedObject()).getBindingModel();
+			return ((TOCEntry) getFocusedObject()).getInferedBindingModel();
 		}
 		return null;
 	}
@@ -344,6 +415,36 @@ public class AddTOCEntry extends FlexoAction<AddTOCEntry, TOCObject, TOCObject> 
 			return ((TOCEntry) getFocusedObject()).getBindingFactory();
 		}
 		return null;
+	}
+
+	private BindingModel inferedBindingModel = null;
+
+	protected BindingModel getInferedBindingModel() {
+		if (inferedBindingModel == null && getFocusedObject() instanceof TOCEntry) {
+			inferedBindingModel = new BindingModel(getBindingModel());
+			inferedBindingModel.addToBindingVariables(new BindingVariableImpl(this, iteratorName, getItemType()) {
+				@Override
+				public Type getType() {
+					return getItemType();
+				}
+
+				@Override
+				public String getVariableName() {
+					return iteratorName;
+				}
+			});
+		}
+		return inferedBindingModel;
+	}
+
+	public Type getItemType() {
+		if (getIteration() != null && getIteration().hasBinding()) {
+			Type accessedType = getIteration().getBinding().getAccessedType();
+			if (accessedType instanceof ParameterizedType && ((ParameterizedType) accessedType).getActualTypeArguments().length > 0) {
+				return ((ParameterizedType) accessedType).getActualTypeArguments()[0];
+			}
+		}
+		return Object.class;
 	}
 
 }

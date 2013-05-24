@@ -26,6 +26,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -103,7 +104,7 @@ public class FIBCustom extends FIBWidget {
 
 	@Override
 	public Type getDataType() {
-		if (getData() != null && getData().getBinding() != null) {
+		if (getData() != null && getData().isSet() && getData().isValid()) {
 			return getData().getBinding().getAccessedType();
 		}
 		return getDefaultDataClass();
@@ -113,38 +114,7 @@ public class FIBCustom extends FIBWidget {
 	@Override
 	public Type getDefaultDataClass() {
 		if (getComponentClass() != null && defaultDataClass == null) {
-			FIBCustomComponent customComponent = null;
-			// Try to instanciate the component
-			logger.fine("Searching dataClass for " + getComponentClass());
-			for (Constructor constructor : getComponentClass().getConstructors()) {
-				if (constructor.getGenericParameterTypes().length == 1) {
-					Object[] args = new Object[1];
-					args[0] = null;
-					try {
-						customComponent = (FIBCustomComponent) constructor.newInstance(args);
-						break;
-					} catch (IllegalArgumentException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (InstantiationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IllegalAccessException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (InvocationTargetException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (ClassCastException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-			if (customComponent != null) {
-				defaultDataClass = customComponent.getRepresentedType();
-			}
-			logger.fine("defaultDataClass=" + defaultDataClass);
+			defaultDataClass = getDataClassForComponent(getComponentClass());
 		}
 		if (defaultDataClass != null) {
 			return defaultDataClass;
@@ -162,6 +132,7 @@ public class FIBCustom extends FIBWidget {
 		if (notification != null) {
 			this.componentClass = componentClass;
 			if (componentClass != null) {
+				customComponentBindingModel = null;
 				createCustomComponentBindingModel();
 				for (Method m : componentClass.getMethods()) {
 					FIBCustomComponent.CustomComponentParameter annotation = m
@@ -283,6 +254,11 @@ public class FIBCustom extends FIBWidget {
 
 		private boolean mandatory = true;
 
+		@Override
+		public String toString() {
+			return "assignement(" + variable + "=" + value + ")";
+		}
+
 		public FIBCustomAssignment() {
 		}
 
@@ -403,5 +379,57 @@ public class FIBCustom extends FIBWidget {
 			hasChanged(notification);
 		}
 	}*/
+
+	private static final Hashtable<Class<?>, Class<?>> DATA_CLASS_FOR_COMPONENT = new Hashtable<Class<?>, Class<?>>();
+
+	/**
+	 * Stuff to retrieve default data class from component class<br>
+	 * NB: this is STATIC !!!!
+	 * 
+	 * @param componentClass
+	 * @return
+	 */
+	private static Class<?> getDataClassForComponent(Class<?> componentClass) {
+		Class<?> returned = DATA_CLASS_FOR_COMPONENT.get(componentClass);
+		if (returned == null) {
+			logger.info("Searching dataClass for " + componentClass);
+			FIBCustomComponent customComponent = null;
+			for (Constructor constructor : componentClass.getConstructors()) {
+				if (constructor.getGenericParameterTypes().length == 1) {
+					Object[] args = new Object[1];
+					args[0] = null;
+					try {
+						customComponent = (FIBCustomComponent) constructor.newInstance(args);
+						break;
+					} catch (IllegalArgumentException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						logger.warning("While trying to instanciate " + componentClass + " with null");
+					} catch (InstantiationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ClassCastException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+			logger.info("customComponent=" + customComponent);
+			if (customComponent != null) {
+				returned = customComponent.getRepresentedType();
+				DATA_CLASS_FOR_COMPONENT.put(componentClass, returned);
+				logger.info("Found " + returned);
+				return returned;
+			}
+			return Object.class;
+		}
+		return returned;
+	}
 
 }

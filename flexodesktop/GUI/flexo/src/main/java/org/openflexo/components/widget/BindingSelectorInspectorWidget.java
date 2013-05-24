@@ -115,7 +115,7 @@ public class BindingSelectorInspectorWidget extends CustomInspectorWidget<Abstra
 					logger.fine("Focus gained in " + getClass().getName());
 				}
 				super.focusGained(arg0);
-				_selector.getTextField().requestFocus();
+				_selector.getTextField().requestFocusInWindow();
 				_selector.getTextField().selectAll();
 			}
 
@@ -374,7 +374,7 @@ public class BindingSelectorInspectorWidget extends CustomInspectorWidget<Abstra
 	}*/
 
 	public Color getColorForObject(BindingValue value) {
-		return (value.isBindingValid() ? Color.BLACK : Color.RED);
+		return value.isBindingValid() ? Color.BLACK : Color.RED;
 	}
 
 	@Override

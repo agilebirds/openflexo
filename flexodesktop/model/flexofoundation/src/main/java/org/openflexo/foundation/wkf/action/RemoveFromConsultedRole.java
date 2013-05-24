@@ -32,12 +32,12 @@ public class RemoveFromConsultedRole extends RemoveFromXRole<RemoveFromConsulted
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(Role object, Vector<AbstractActivityNode> globalSelection) {
+		public boolean isVisibleForSelection(Role object, Vector<AbstractActivityNode> globalSelection) {
 			return false;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(Role object, Vector<AbstractActivityNode> globalSelection) {
+		public boolean isEnabledForSelection(Role object, Vector<AbstractActivityNode> globalSelection) {
 			return object != null;
 		}
 

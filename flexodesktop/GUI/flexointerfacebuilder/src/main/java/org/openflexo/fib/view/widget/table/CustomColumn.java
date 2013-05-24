@@ -38,6 +38,8 @@ import javax.swing.table.TableCellRenderer;
 
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.DataBinding;
 import org.openflexo.fib.model.FIBCustom;
@@ -160,7 +162,12 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			Component c;
 			if (isSelected && hasFocus || useCustomViewForCellRendering) {
-				c = getViewCustomWidget(elementAt(row)).getJComponent();
+				FIBCustomComponent<T, ?> customWidgetView = getViewCustomWidget(elementAt(row));
+				if (customWidgetView != null) {
+					c = customWidgetView.getJComponent();
+				} else {
+					c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+				}
 				Color fg = null;
 				Color bg = null;
 				if (isSelected) {
@@ -198,7 +205,7 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 				Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 				if (returned instanceof JLabel) {
 					((JLabel) returned).setText(renderValue((T) value));
-					if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+					if (ToolBox.isMacOSLaf()) {
 						((JLabel) returned).setForeground(getColorFor(value));
 					}
 					((JLabel) returned).setFont(CustomColumn.this.getFont());
@@ -320,7 +327,7 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 	protected Object _editedRowObject;
 
 	protected void setEditedRowObject(Object anObject) {
-		logger.info("setEditedRowObject with " + anObject);
+		// logger.info("setEditedRowObject with " + anObject);
 		_editedRowObject = anObject;
 
 		for (FIBCustomAssignment assign : getColumnModel().getAssignments()) {
@@ -331,7 +338,14 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 			// logger.info("variableDB="+variableDB+" valid="+variableDB.getBinding().isBindingValid());
 			// logger.info("valueDB="+valueDB+" valid="+valueDB.getBinding().isBindingValid());
 			if (valueDB.getBinding().isBindingValid()) {
-				Object value = valueDB.getBinding().getBindingValue(this);
+				Object value = null;
+				try {
+					value = valueDB.getBinding().getBindingValue(this);
+				} catch (TypeMismatchException e) {
+					e.printStackTrace();
+				} catch (NullReferenceException e) {
+					e.printStackTrace();
+				}
 				// logger.info("value="+value);
 				if (variableDB.getBinding().isBindingValid()) {
 					// System.out.println("Assignment "+assign+" set value with "+value);

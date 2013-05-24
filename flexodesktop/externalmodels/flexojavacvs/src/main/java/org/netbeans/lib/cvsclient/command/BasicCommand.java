@@ -185,8 +185,8 @@ public abstract class BasicCommand extends BuildableCommand {
 			String path = files[index].getAbsolutePath();
 			String parentPath = files[index].getParentFile().getAbsolutePath().replace('\\', '/');
 			path = path.replace('\\', '/');
-			if ((path.endsWith(locEnding) && locEnding.indexOf('/') >= 0)
-					|| (files[index].getName().equals(locEnding) && parentPath.equals(localDir))) {
+			if (path.endsWith(locEnding) && locEnding.indexOf('/') >= 0 || files[index].getName().equals(locEnding)
+					&& parentPath.equals(localDir)) {
 				return files[index];
 			}
 		}

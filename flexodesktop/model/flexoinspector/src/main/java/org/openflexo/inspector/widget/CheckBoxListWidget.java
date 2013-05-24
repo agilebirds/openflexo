@@ -103,7 +103,7 @@ public class CheckBoxListWidget extends MultipleValuesWidget {
 		/*if (_fullList.getSize() < 6) {
 		    _panel.setLayout(new GridLayout(_fullList.getSize(), 1));
 		} else {*/
-		_panel.setLayout(new GridLayout((_fullList.getSize() / columns) + (_fullList.getSize() % columns > 0 ? 1 : 0), columns));
+		_panel.setLayout(new GridLayout(_fullList.getSize() / columns + (_fullList.getSize() % columns > 0 ? 1 : 0), columns));
 		// }
 		// _panel.setBackground(InspectorCst.BACK_COLOR);
 		_checkBoxArray = new JCheckBox[_fullList.getSize()];
@@ -118,7 +118,7 @@ public class CheckBoxListWidget extends MultipleValuesWidget {
 		}
 		_selectedList = new Vector();
 		if (objectValue != null) {
-			if (objectValue instanceof Vector || (objectValue instanceof String && ((String) objectValue).startsWith("["))) {
+			if (objectValue instanceof Vector || objectValue instanceof String && ((String) objectValue).startsWith("[")) {
 				if (objectValue instanceof String) {
 					objectValue = convertStringToVector((String) objectValue);
 				}

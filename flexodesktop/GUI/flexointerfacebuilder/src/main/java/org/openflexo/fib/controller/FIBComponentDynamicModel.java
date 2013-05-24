@@ -19,20 +19,37 @@
  */
 package org.openflexo.fib.controller;
 
+import java.beans.PropertyChangeSupport;
+
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.toolbox.HasPropertyChangeSupport;
 
-public class FIBComponentDynamicModel<T> {
+public class FIBComponentDynamicModel<T> implements HasPropertyChangeSupport {
 
+	private static final String DELETED = "deleted";
 	private FIBComponent component;
-	public boolean isVisible;
+	private boolean visible;
 	private T data;
+	private PropertyChangeSupport propertyChangeSupport;
 
 	public FIBComponentDynamicModel(T data) {
-		this.data = data;
+		propertyChangeSupport = new PropertyChangeSupport(this);
+		setData(data);
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		return propertyChangeSupport;
+	}
+
+	@Override
+	public String getDeletedProperty() {
+		return DELETED;
 	}
 
 	public void delete() {
 		data = null;
+		propertyChangeSupport.firePropertyChange(DELETED, false, true);
 	}
 
 	public T getData() {
@@ -41,6 +58,7 @@ public class FIBComponentDynamicModel<T> {
 
 	public void setData(T data) {
 		this.data = data;
+		propertyChangeSupport.firePropertyChange("data", null, data);
 	}
 
 	public FIBComponent getComponent() {
@@ -50,5 +68,14 @@ public class FIBComponentDynamicModel<T> {
 	@Override
 	public String toString() {
 		return "FIBComponentDynamicModel,data=" + getData();
+	}
+
+	public boolean isVisible() {
+		return visible;
+	}
+
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+		propertyChangeSupport.firePropertyChange("visible", null, visible);
 	}
 }

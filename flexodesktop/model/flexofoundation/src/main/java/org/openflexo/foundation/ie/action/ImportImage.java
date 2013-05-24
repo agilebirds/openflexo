@@ -50,12 +50,12 @@ public class ImportImage extends FlexoAction<ImportImage, FlexoModelObject, Flex
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return true;
 		}
 
@@ -63,6 +63,10 @@ public class ImportImage extends FlexoAction<ImportImage, FlexoModelObject, Flex
 
 	static {
 		FlexoModelObject.addActionForClass(actionType, FlexoProject.class);
+	}
+
+	public static String getImageNameFor(String s) {
+		return FileUtils.lowerCaseExtension(FileUtils.removeNonASCIIAndPonctuationAndBadFileNameChars(s).replace('_', '-'));
 	}
 
 	public static boolean isValidImageFile(File file) {
@@ -88,7 +92,7 @@ public class ImportImage extends FlexoAction<ImportImage, FlexoModelObject, Flex
 				 * makeFlexoProgress(FlexoLocalization.localizedForKey("import_image"), 2);
 				 * setProgress(FlexoLocalization.localizedForKey("copying_file_to_project"));
 				 */
-				FlexoResource res = getEditor().getProject().resourceForKey(ResourceType.WEBSERVER, getTargetImageName());
+				FlexoResource<?> res = getEditor().getProject().resourceForKey(ResourceType.WEBSERVER, getTargetImageName());
 				if (res != null) {
 					if (!overwrite) {
 						throw new DuplicateResourceException(res);
@@ -114,8 +118,8 @@ public class ImportImage extends FlexoAction<ImportImage, FlexoModelObject, Flex
 
 	private String getTargetImageName() {
 		if (targetImageName == null) {
-			targetImageName = FileUtils.lowerCaseExtension(FileUtils.removeNonASCIIAndPonctuationAndBadFileNameChars(
-					getImageName() != null ? getImageName() : getFileToImport().getName()).replace('_', '-'));
+			String s = getImageName() != null ? getImageName() : getFileToImport().getName();
+			targetImageName = getImageNameFor(s);
 		}
 		return targetImageName;
 	}

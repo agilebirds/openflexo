@@ -9,9 +9,9 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingFactory;
-import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.viewpoint.GraphicalElementAction.ActionMask;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.dm.GraphicalElementActionInserted;
 import org.openflexo.foundation.viewpoint.dm.GraphicalElementActionRemoved;
@@ -31,7 +31,8 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 
 	private Vector<GraphicalElementAction> actions;
 
-	public GraphicalElementPatternRole() {
+	public GraphicalElementPatternRole(ViewPointBuilder builder) {
+		super(builder);
 		initDefaultSpecifications();
 	}
 
@@ -42,11 +43,11 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 		}
 	}
 
-	public abstract Object getGraphicalRepresentation();
+	public abstract GraphicalRepresentation<?> getGraphicalRepresentation();
 
-	public abstract void setGraphicalRepresentation(Object graphicalRepresentation);
+	public abstract void setGraphicalRepresentation(GraphicalRepresentation<?> graphicalRepresentation);
 
-	public abstract void _setGraphicalRepresentationNoNotification(Object graphicalRepresentation);
+	public abstract void _setGraphicalRepresentationNoNotification(GraphicalRepresentation<?> graphicalRepresentation);
 
 	public static enum GraphicalElementBindingAttribute implements InspectorBindingAttribute {
 		label
@@ -95,16 +96,16 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 		return getEditionPattern().getInspector().getBindingFactory();
 	}
 
-	@Override
+	/*@Override
 	public BindingModel getBindingModel() {
 		return getEditionPattern().getInspector().getBindingModel();
-	}
+	}*/
 
 	public boolean getIsPrimaryRepresentationRole() {
 		if (getEditionPattern() == null) {
 			return false;
 		}
-		return (getEditionPattern().getPrimaryRepresentationRole() == this);
+		return getEditionPattern().getPrimaryRepresentationRole() == this;
 	}
 
 	public void setIsPrimaryRepresentationRole(boolean isPrimary) {
@@ -192,7 +193,7 @@ public abstract class GraphicalElementPatternRole extends PatternRole implements
 	}
 
 	public GraphicalElementAction createAction() {
-		GraphicalElementAction newAction = new GraphicalElementAction();
+		GraphicalElementAction newAction = new GraphicalElementAction(null);
 		addToActions(newAction);
 		return newAction;
 	}

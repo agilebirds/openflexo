@@ -26,8 +26,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.tree.TreeNode;
-
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.dkv.EmptyStringException;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -41,7 +39,6 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
-import org.openflexo.foundation.ws.action.CreateNewWebService;
 import org.openflexo.foundation.ws.dm.ExternalWSServiceAdded;
 import org.openflexo.foundation.ws.dm.ExternalWSServiceRemoved;
 import org.openflexo.foundation.ws.dm.InternalWSServiceAdded;
@@ -127,14 +124,6 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 		setWSLibrary(this);
 		externalWSServices = new Vector<ExternalWSService>();
 		internalWSServices = new Vector<InternalWSService>();
-		setProject(project);
-	}
-
-	@Override
-	protected Vector getSpecificActionListForThatClass() {
-		Vector returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateNewWebService.actionType);
-		return returned;
 	}
 
 	/**
@@ -215,9 +204,9 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 		// wsdl file
 		File copiedFile = new File(ProjectRestructuration.getExpectedWSLibraryDirectory(getWSLibrary().getProject().getProjectDirectory()),
 				wsdlFileToCopy.getName());
-		/* if (progress != null) {
-		     progress.setProgress(FlexoLocalization.localizedForKey("copying") + " " + wsdlFileToCopy.getName());
-		 }*/
+		/*
+		 * if (progress != null) { progress.setProgress(FlexoLocalization.localizedForKey("copying") + " " + wsdlFileToCopy.getName()); }
+		 */
 		try {
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Copying file " + wsdlFileToCopy.getAbsolutePath() + " to " + copiedFile.getAbsolutePath());
@@ -499,24 +488,14 @@ public class FlexoWSLibrary extends WSObject implements XMLStorageResourceData {
 		return null;
 	}
 
-	// ==========================================================================
-	// ======================== TreeNode implementation
-	// =========================
-	// ==========================================================================
-
 	@Override
-	public TreeNode getParent() {
+	public WSObject getParent() {
 		return null;
 	}
 
 	@Override
-	public boolean getAllowsChildren() {
-		return true;
-	}
-
-	@Override
-	public Vector getOrderedChildren() {
-		Vector a = new Vector();
+	public Vector<WSObject> getOrderedChildren() {
+		Vector<WSObject> a = new Vector<WSObject>();
 		a.add(externalWSServiceList);
 		a.add(internalWSServiceList);
 		return a;

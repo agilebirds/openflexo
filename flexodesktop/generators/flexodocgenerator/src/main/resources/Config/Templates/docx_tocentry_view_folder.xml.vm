@@ -1,0 +1,65 @@
+#**
+* Context contains the following keys
+* - project: the current project (class FlexoProject)
+* - projectGenerator: the current Project Generator (class ProjectDocGenerator)
+* - generator: the current generator (DefinitionsDocGenerator)
+* - repository: the current repository for which we generate the doc (DGRepository)
+* - level: the level to use in title.
+* - objet: the view to generate
+*#
+
+#set($viewFolder = $object)
+
+#if($viewFolder)
+
+${generator.log("Rendering view folder")}
+${generator.logO($viewFolder)}
+
+<w:p>   
+    <w:pPr>
+        <w:pStyle w:val="Heading$level"/>
+    </w:pPr>
+    #mkbookMark(${viewFolder.getFlexoID()} ${generator.getReference($viewFolder)})
+    <w:r>
+        <w:t xml:space="preserve">ViewFolder: </w:t>
+    </w:r>
+    #renderName($viewFolder)
+</w:p>
+
+<w:p>
+	<w:r>
+		<w:rPr>
+			<w:pStyle w:val="Heading$level"/>
+			<w:b/>
+			<w:u w:val="single"/>
+		</w:rPr>
+		<w:t xml:space="preserve">Description:</w:t>
+	</w:r>
+</w:p>
+	
+#description($viewFolder)
+
+
+	##renderScreenshotForObject($view)
+
+## Some dummy headers
+
+##set($headers = ["Name", "Description", "ID"])
+
+## Some dummy content
+###set($tableContents = ${generator.getNewVector()})
+
+##foreach($concept in $view.getConcepts()) ## each concept matches a row
+##    #set($row = ${generator.getNewVector()})
+##    #void(${row.add(${concept.getName()})})
+##    #void(${row.add(${concept.getDescription()})})
+##    #void(${row.add(${concept.getFlexoID()})})
+###end
+
+#end
+
+${generator.log("End rendering view folder")}
+
+
+## macro is defined in docx_macro_library.vm: #macro(renderDocxTable $headersArray $contents)
+##renderDocxTable($headers $tableContents)

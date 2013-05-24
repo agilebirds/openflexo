@@ -19,14 +19,10 @@
  */
 package org.openflexo.wkf.processeditor.gr;
 
-import java.awt.Dimension;
-
 import javax.swing.ImageIcon;
 
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
@@ -38,25 +34,19 @@ import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
 public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 
-	private static final int MIN_SPACE = 5;
-
-	private ForegroundStyle foreground;
-	private BackgroundStyle background;
-	private boolean isInPalette = false;
+	private static final int MIN_SPACE = 4;
 
 	public ActivityNodeGR(ActivityNode activityNode, ProcessRepresentation aDrawing, boolean isInPalet) {
 		super(activityNode, ShapeType.RECTANGLE, aDrawing, isInPalet);
 
 		isInPalette = isInPalet;
-
+		setVerticalTextAlignment(VerticalTextAlignment.TOP);
 		setShapePainter(new ShapePainter() {
 			@Override
 			public void paintShape(FGEShapeGraphics g) {
 				g.useTextStyle(roleLabelTextStyle);
-				Dimension labelSize = getNormalizedLabelSize();
-				double vGap = getVerticalGap();
-				double absoluteRoleLabelCenterY = vGap * 2 + labelSize.height + getRoleFont().getSize() / 2 - 3;
-				g.drawString(getSubLabel(), new FGEPoint(0.5, absoluteRoleLabelCenterY / getHeight()), HorizontalTextAlignment.CENTER);
+				g.drawString(getSubLabel(), new FGEPoint(0.5, (roleLabelTextStyle.getFont().getSize() / 2 + 5) / getHeight()),
+						HorizontalTextAlignment.CENTER);
 				if (getImageIcon() != null) {
 					g.drawImage(getImageIcon().getImage(), new FGEPoint(0d, 0d));
 				}
@@ -111,31 +101,20 @@ public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 		}
 	}
 
-	protected double getVerticalGap() {
-		Dimension labelSize = getNormalizedLabelSize();
-		return (getHeight() - labelSize.height - getRoleFont().getSize()) / 3;
-	}
-
 	@Override
 	public double getRelativeTextY() {
-		Dimension labelSize = getNormalizedLabelSize();
-		double vGap = getVerticalGap();
-		double absoluteCenterY = vGap + labelSize.height / 2;
-		return absoluteCenterY / getHeight();
+		int vOffset;
+		if (getImageIcon() != null) {
+			vOffset = Math.max(getImageIcon().getIconHeight(), roleLabelTextStyle.getFont().getSize());
+		} else {
+			vOffset = roleLabelTextStyle.getFont().getSize();
+		}
+		return (vOffset + MIN_SPACE) / getHeight();
 	}
 
 	@Override
 	public double getRequiredHeight(double labelHeight) {
-		return labelHeight + getRoleFont().getSize() + 3 * MIN_SPACE;
-	}
-
-	@Override
-	public double getRequiredWidth(double labelWidth) {
-		double required = super.getRequiredWidth(labelWidth);
-		if (getImageIcon() != null) {
-			required += getImageIcon().getIconWidth() * 2;
-		}
-		return required;
+		return labelHeight + getRoleFont().getSize() + MIN_SPACE;
 	}
 
 	public ActivityNode getActivityNode() {
@@ -147,6 +126,7 @@ public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 		if (dataModification instanceof WKFAttributeDataModification
 				&& "taskType".equals(((WKFAttributeDataModification) dataModification).getAttributeName())) {
 			checkAndUpdateDimensionIfRequired();
+			notifyShapeNeedsToBeRedrawn();
 		}
 		super.update(observable, dataModification);
 	}

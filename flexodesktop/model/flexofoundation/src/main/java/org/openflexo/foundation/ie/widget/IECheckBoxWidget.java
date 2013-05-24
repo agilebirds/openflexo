@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.ie.widget;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -49,7 +48,7 @@ import org.openflexo.foundation.xml.FlexoComponentBuilder;
  * 
  * @author bmangez
  */
-public class IECheckBoxWidget extends IEControlWidget implements Serializable, IEWidgetWithValueList, IEWidgetWithMainBinding {
+public class IECheckBoxWidget extends IEControlWidget implements IEWidgetWithValueList, IEWidgetWithMainBinding {
 	/**
      * 
      */

@@ -22,36 +22,27 @@ package org.openflexo.vpm.fib;
 import java.io.File;
 
 import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.foundation.FlexoResourceCenter;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.module.FlexoResourceCenterService;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.vpm.CEDCst;
 
-public class CalcLibraryViewEDITOR {
+public class CalcLibraryViewEDITOR extends FIBAbstractEditor {
+
+	@Override
+	public Object[] getData() {
+		FlexoResourceCenter resourceCenter = DefaultResourceCenterService.getNewInstance().getOpenFlexoResourceCenter();
+		ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
+		return makeArray(calcLibrary);
+	}
+
+	@Override
+	public File getFIBFile() {
+		return CEDCst.CALC_LIBRARY_VIEW_FIB;
+	}
 
 	public static void main(String[] args) {
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			@Override
-			public Object[] getData() {
-				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter(true);
-				ViewPointLibrary calcLibrary = resourceCenter.retrieveViewPointLibrary();
-				return makeArray(calcLibrary);
-			}
-
-			@Override
-			public File getFIBFile() {
-				return CEDCst.CALC_LIBRARY_VIEW_FIB;
-			}
-		};
-		editor.launch();
+		main(CalcLibraryViewEDITOR.class);
 	}
 
-	private static ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
-	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.instance();
-	}
 }

@@ -44,6 +44,7 @@ import org.openflexo.foundation.wkf.dm.OperationComponentHasBeenSet;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableOperationNode;
 import org.openflexo.icon.SEIconLibrary;
+import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
@@ -66,7 +67,7 @@ public class OperationNodeGR extends AbstractOperationNodeGR {
 		setIsFloatingLabel(false);
 		setRelativeTextX(0.5); // Center label horizontally
 
-		foreground = ForegroundStyle.makeStyle(Color.BLACK);
+		foreground = ForegroundStyle.makeStyle(WKFCst.NODE_BORDER_COLOR);
 		foreground.setLineWidth(0.2);
 		background = BackgroundStyle.makeColorGradientBackground(getMainBgColor(), getOppositeBgColor(),
 				ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
@@ -151,8 +152,8 @@ public class OperationNodeGR extends AbstractOperationNodeGR {
 			setRelativeTextY(0.5); // Label is located on middle
 		}*/
 		setIsMultilineAllowed(true);
-		setAdjustMinimalWidthToLabelWidth(true);
-		setAdjustMinimalHeightToLabelHeight(true);
+		setAdjustMinimalWidthToLabelWidth(false);
+		setAdjustMinimalHeightToLabelHeight(false);
 	}
 
 	@Override

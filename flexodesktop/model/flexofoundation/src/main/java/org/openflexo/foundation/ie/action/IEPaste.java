@@ -23,9 +23,11 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.ie.IEObject;
+import org.openflexo.foundation.ie.widget.IETRWidget;
 
 public class IEPaste extends FlexoUndoableAction<IEPaste, IEObject, IEObject> {
 
@@ -43,16 +45,20 @@ public class IEPaste extends FlexoUndoableAction<IEPaste, IEObject, IEObject> {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) {
+		public boolean isVisibleForSelection(IEObject object, Vector<IEObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
-			return true;
+		public boolean isEnabledForSelection(IEObject object, Vector<IEObject> globalSelection) {
+			return !(object instanceof IETRWidget);
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, IEObject.class);
+	}
 
 	IEPaste(IEObject focusedObject, Vector<IEObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

@@ -72,23 +72,23 @@ public class CVSExplorer extends FPSObject {
 		} else if (obj instanceof CVSRepository) {
 			return _explorable.getCVSRepository() == obj;
 		}
-		return (obj == this);
+		return obj == this;
 	}
 
 	public synchronized boolean isExploring() {
-		return (_status == ExploringStatus.EXPLORING);
+		return _status == ExploringStatus.EXPLORING;
 	}
 
 	public synchronized boolean isExplored() {
-		return (_status == ExploringStatus.EXPLORED);
+		return _status == ExploringStatus.EXPLORED;
 	}
 
 	public synchronized boolean wasExploringRequested() {
-		return (_status == ExploringStatus.EXPLORING || _status == ExploringStatus.EXPLORED);
+		return _status == ExploringStatus.EXPLORING || _status == ExploringStatus.EXPLORED;
 	}
 
 	public synchronized boolean isError() {
-		return (_status == ExploringStatus.ERROR);
+		return _status == ExploringStatus.ERROR;
 	}
 
 	public synchronized void explore() {

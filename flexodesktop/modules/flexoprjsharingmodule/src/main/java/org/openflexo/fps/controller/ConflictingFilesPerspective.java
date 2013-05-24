@@ -19,16 +19,15 @@ public class ConflictingFilesPerspective extends FPSPerspective {
 	public ConflictingFilesPerspective(FPSController fpsController) {
 		super(fpsController, "conflicting_files");
 		this.fpsController = fpsController;
+		setTopLeftView(fpsController.getCvsRepositoryBrowserView());
+		setBottomLeftView(fpsController.getSharedProjectBrowserView());
+		setBottomCenterView(fpsController.getConsoleView());
+
 	}
 
 	@Override
 	public ImageIcon getActiveIcon() {
 		return FPSIconLibrary.FPS_CFP_ACTIVE_ICON;
-	}
-
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return FPSIconLibrary.FPS_CFP_SELECTED_ICON;
 	}
 
 	@Override

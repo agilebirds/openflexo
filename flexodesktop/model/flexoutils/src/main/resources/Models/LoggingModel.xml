@@ -4,15 +4,15 @@
    <property name="records" xmlTag="record" type="vector"/> 
   </entity> 
   <entity name="org.openflexo.logging.LogRecord" xmlTag="record">
-   <property name="date" xmlTag="date"/> 
-   <property name="millis" xmlTag="millis"/> 
-   <property name="sequence" xmlTag="sequence"/> 
-   <property name="logger" xmlTag="logger"/> 
-   <property name="className" xmlTag="class"/> 
-   <property name="methodName" xmlTag="method"/> 
-   <property name="threadId" xmlTag="thread"/> 
+   <property name="date" xmlTag="date" /> 
+   <property name="millis" xmlTag="millis" /> 
+   <property name="sequence" xmlTag="sequence" /> 
+   <property name="logger" xmlTag="logger" /> 
+   <property name="className" xmlTag="class" /> 
+   <property name="methodName" xmlTag="method" /> 
+   <property name="threadId" xmlTag="thread" /> 
    <property name="message" xmlTag="message"/> 
-   <property name="level" xmlTag="level"/> 
+   <property name="level" xmlTag="level" /> 
    <property name="stackTraceAsString" xmlTag="StackTrace" text="yes"/> 
   </entity> 
 </model>

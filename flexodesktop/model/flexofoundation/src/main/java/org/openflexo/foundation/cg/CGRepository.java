@@ -22,7 +22,6 @@ package org.openflexo.foundation.cg;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,8 +30,6 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Format;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.cg.action.AddGeneratedCodeRepository;
 import org.openflexo.foundation.cg.dm.CGDataModification;
 import org.openflexo.foundation.cg.dm.CGRepositoryConnected;
 import org.openflexo.foundation.cg.dm.CGRepositoryDisconnected;
@@ -103,13 +100,6 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 	}
 
 	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddGeneratedCodeRepository.actionType);
-		return returned;
-	}
-
-	@Override
 	public CodeType getTarget() {
 		return getTargetType();
 	}
@@ -148,15 +138,17 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 		}
 		if (_warRepository == null) {
 			try {
-				_warRepository = getProject().setDirectoryForRepositoryName(
-						getName() + "WAR",
-						getDirectory() != null ? getDirectory().getParentFile() : FileUtils.createTempDirectory(getProject()
-								.getProjectName() + "Application", ".war"));
+				_warRepository = getProject().setDirectoryForRepositoryName(getName() + "WAR", getDefaultWARDirectory());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		return _warRepository;
+	}
+
+	private File getDefaultWARDirectory() throws IOException {
+		return getDirectory() != null ? getDirectory().getParentFile() : FileUtils.createTempDirectory(getProject().getProjectName()
+				+ "Application", ".war");
 	}
 
 	public File getWarDirectory() {
@@ -376,7 +368,7 @@ public class CGRepository extends GenerationRepository implements ReferenceOwner
 		readerRepository.addToRepositoriedUsingAsReader(this);
 		readerRepository.addObserver(this);
 		if (readerRepositoryReference == null) {
-			setReaderRepositoryReference(new FlexoModelObjectReference<DGRepository>(getProject(), readerRepository));
+			setReaderRepositoryReference(new FlexoModelObjectReference<DGRepository>(readerRepository));
 		}
 	}
 

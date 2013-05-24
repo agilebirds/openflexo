@@ -53,7 +53,7 @@ public class CommitFiles extends MultipleFileCVSAction<CommitFiles> implements C
 
 		@Override
 		protected boolean accept(CVSFile aFile) {
-			return (aFile.getStatus().isLocallyModified() && !aFile.getStatus().isConflicting());
+			return aFile.getStatus().isLocallyModified() && !aFile.getStatus().isConflicting();
 		}
 
 	};

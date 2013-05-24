@@ -19,17 +19,9 @@
  */
 package org.openflexo.view.menu;
 
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-
-import javax.swing.AbstractAction;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
 
-import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.help.FlexoHelp;
 import org.openflexo.module.Module;
 import org.openflexo.view.controller.FlexoController;
@@ -60,12 +52,21 @@ public abstract class FlexoMenuBar extends JMenuBar {
 		_controller = controller;
 		add(getFileMenu(controller));
 		add(getEditMenu(controller));
-		add(getWindowMenu(controller, module));
 		add(getToolsMenu(controller));
+		add(getWindowMenu(controller, module));
 		if (FlexoHelp.isAvailable()) {
 			add(getHelpMenu(controller));
 		}
 
+	}
+
+	public void dispose() {
+		for (int i = 0; i < getMenuCount(); i++) {
+			JMenu menu = getMenu(i);
+			if (menu instanceof FlexoMenu) {
+				((FlexoMenu) menu).dispose();
+			}
+		}
 	}
 
 	@Override
@@ -157,11 +158,11 @@ public abstract class FlexoMenuBar extends JMenuBar {
 		return _helpMenu;
 	}
 
-	@Override
+	/*@Override
 	protected boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition, boolean pressed) {
 		// TODO Auto-generated method stub
 		boolean b = super.processKeyBinding(ks, e, condition, pressed);
-		if (!b && ks!=null) {
+		if (!b && ks != null) {
 			AbstractAction actionForKey = _controller.getActionForKeyStroke(ks);
 			if (actionForKey != null) {
 				Object eventSource = e.getSource();
@@ -173,5 +174,5 @@ public abstract class FlexoMenuBar extends JMenuBar {
 			}
 		}
 		return b;
-	}
+	}*/
 }

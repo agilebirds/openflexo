@@ -19,7 +19,7 @@
  */
 package org.openflexo.ve.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -34,6 +34,7 @@ import org.openflexo.foundation.view.action.DeleteViewElements;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.ve.VECst;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
@@ -54,10 +55,10 @@ public class DeleteViewElementsInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DeleteViewElements> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteViewElements>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteViewElements action) {
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(VECst.DELETE_VIEW_ELEMENTS_DIALOG_FIB, action, null, true,
-						FlexoLocalization.getMainLocalizer());
-				return (dialog.getStatus() == Status.VALIDATED);
+			public boolean run(EventObject e, DeleteViewElements action) {
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(VECst.DELETE_VIEW_ELEMENTS_DIALOG_FIB, action,
+						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
+				return dialog.getStatus() == Status.VALIDATED;
 			}
 		};
 	}
@@ -66,10 +67,10 @@ public class DeleteViewElementsInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DeleteViewElements> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DeleteViewElements>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteViewElements action) {
-				if (getControllerActionInitializer().getOEController().getSelectionManager().getLastSelectedObject() != null
-						&& getControllerActionInitializer().getOEController().getSelectionManager().getLastSelectedObject().isDeleted()) {
-					getControllerActionInitializer().getOEController().getSelectionManager().resetSelection();
+			public boolean run(EventObject e, DeleteViewElements action) {
+				if (getControllerActionInitializer().getVEController().getSelectionManager().getLastSelectedObject() != null
+						&& getControllerActionInitializer().getVEController().getSelectionManager().getLastSelectedObject().isDeleted()) {
+					getControllerActionInitializer().getVEController().getSelectionManager().resetSelection();
 				}
 				return true;
 			}
@@ -83,13 +84,7 @@ public class DeleteViewElementsInitializer extends ActionInitializer {
 
 	@Override
 	protected KeyStroke getShortcut() {
-		return KeyStroke.getKeyStroke(FlexoCst.BACKSPACE_DELETE_KEY_CODE, 0);
-	}
-
-	@Override
-	public void init() {
-		super.init();
-		getControllerActionInitializer().registerAction(DeleteViewElements.actionType, KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0));
+		return KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0);
 	}
 
 }

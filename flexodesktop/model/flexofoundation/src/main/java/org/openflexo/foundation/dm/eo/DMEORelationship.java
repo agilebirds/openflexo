@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.dm.eo;
 
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -50,7 +49,6 @@ import org.openflexo.foundation.dm.eo.model.EOProperty;
 import org.openflexo.foundation.dm.eo.model.EORelationship;
 import org.openflexo.foundation.dm.eo.model.InvalidJoinException;
 import org.openflexo.foundation.validation.FixProposal;
-import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
@@ -116,9 +114,9 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 		if (eoRelationship != null) {
 			// setName(eoRelationship.name());
 			name = eoRelationship.getName();
-		}
-		if (eoRelationship.getIsFlattened()) {
-			_isFlattenRelationship = true;
+			if (eoRelationship.getIsFlattened()) {
+				_isFlattenRelationship = true;
+			}
 		}
 	}
 
@@ -183,7 +181,7 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 	 * @see org.openflexo.foundation.dm.DMProperty#getEmbeddedDMObjects()
 	 */
 	@Override
-	public Vector getEmbeddedDMObjects() {
+	public Vector<DMObject> getEmbeddedDMObjects() {
 		Vector<DMObject> v = super.getEmbeddedDMObjects();
 		if (v instanceof EmptyVector) {
 			v = new Vector<DMObject>();
@@ -197,7 +195,7 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 		if (getEORelationship() != null) {
 			resetJoins();
 			try {
-				if ((getDMEOEntity() != null) && (getDMEOEntity().getEOEntity() != null)) {
+				if (getDMEOEntity() != null && getDMEOEntity().getEOEntity() != null) {
 					getDMEOEntity().getEOEntity().removeRelationship(getEORelationship());
 				} else if (getEORelationship().getEntity() != null) {
 					if (logger.isLoggable(Level.WARNING)) {
@@ -236,7 +234,7 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 	public EORelationship getEORelationship() {
 		// logger.info("getEORelationship(), _eoRelationship="+_eoRelationship+" getDMEOEntity()="+getDMEOEntity());
 		if (_eoRelationship == null) {
-			if ((getDMEOEntity() != null) && (getDMEOEntity().getEOEntity() != null)) {
+			if (getDMEOEntity() != null && getDMEOEntity().getEOEntity() != null) {
 				try {
 					// logger.info("Build EORelationship");
 					_eoRelationship = getDMEOEntity().getEOEntity().relationshipNamed(getName());
@@ -261,7 +259,7 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 
 	@Override
 	public void setName(String newName) throws IllegalArgumentException, InvalidNameException {
-		if ((name == null) || (!name.equals(newName))) {
+		if (name == null || !name.equals(newName)) {
 			if (!isDeserializing() && (newName == null || !DMRegExp.ENTITY_NAME_PATTERN.matcher(newName).matches())) {
 				throw new InvalidNameException("'" + newName + "' is not a valid name for relationship.");
 			}
@@ -338,7 +336,7 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 
 		if (getEORelationship() != null) {
 			boolean old = getEORelationship().getIsToMany();
-			if ((old && aBoolean) || (!old && !aBoolean)) {
+			if (old && aBoolean || !old && !aBoolean) {
 				return;
 			}
 			getEORelationship().setIsToMany(aBoolean);
@@ -593,10 +591,8 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 	public DMEORelationship getInverse() {
 		try {
 			EOEntity dest = getDestinationEntity().getEOEntity();
-			DMEORelationship inverseCandidate = null;
-			Iterator i = dest.getRelationships().iterator();
-			while (i.hasNext()) {
-				inverseCandidate = getDestinationEntity().getDMEORelationship((EORelationship) i.next());
+			for (EORelationship rel : dest.getRelationships()) {
+				DMEORelationship inverseCandidate = getDestinationEntity().getDMEORelationship(rel);
 				if (isInverseOf(inverseCandidate)) {
 					return inverseCandidate;
 				}
@@ -683,8 +679,7 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 	private void resetJoins() {
 		Vector<DMEOJoin> toDelete = new Vector<DMEOJoin>();
 		toDelete.addAll(_dmEOJoins);
-		for (Enumeration en = toDelete.elements(); en.hasMoreElements();) {
-			DMEOJoin next = (DMEOJoin) en.nextElement();
+		for (DMEOJoin next : toDelete) {
 			next.delete(false);
 		}
 		_dmEOJoins.clear();
@@ -885,9 +880,7 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 	private boolean joinAutomatically(DMEOEntity destinationEntity, boolean isToMany) {
 		boolean throwException = false;
 		if (!isToMany) {
-			Enumeration en = destinationEntity.getPrimaryKeyAttributes().elements();
-			while (en.hasMoreElements()) {
-				DMEOAttribute a = (DMEOAttribute) en.nextElement();
+			for (DMEOAttribute a : destinationEntity.getPrimaryKeyAttributes()) {
 				DMEOAttribute source = getDMEOEntity().getAttributeNamed(a.getName());
 				if (source == null) {
 					source = getDMEOEntity().getAttributeNamedIgnoreCase(a.getName());
@@ -914,9 +907,7 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 				}
 			}
 		} else {
-			Enumeration en = getDMEOEntity().getPrimaryKeyAttributes().elements();
-			while (en.hasMoreElements()) {
-				DMEOAttribute a = (DMEOAttribute) en.nextElement();
+			for (DMEOAttribute a : getDMEOEntity().getPrimaryKeyAttributes()) {
 				DMEOAttribute dest = destinationEntity.getAttributeNamed(a.getName());
 				if (dest == null) {
 					dest = destinationEntity.getAttributeNamedIgnoreCase(a.getName());
@@ -994,17 +985,18 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 	// =================================
 	// ==========================================================================
 
-	public static class DMEORelationshipMustReferToAValidEORelationship extends ValidationRule {
+	public static class DMEORelationshipMustReferToAValidEORelationship extends
+			ValidationRule<DMEORelationshipMustReferToAValidEORelationship, DMEORelationship> {
 		public DMEORelationshipMustReferToAValidEORelationship() {
 			super(DMEORelationship.class, "relationship_must_refer_to_a_valid_eo_relationship");
 		}
 
 		@Override
-		public ValidationIssue applyValidation(final Validable object) {
-			final DMEORelationship property = (DMEORelationship) object;
-			if (property.getEORelationship() == null) {
-				ValidationError error = new ValidationError(this, object,
-						"relationship_($object.name)_must_refer_to_a_valid_eo_relationship");
+		public ValidationIssue<DMEORelationshipMustReferToAValidEORelationship, DMEORelationship> applyValidation(
+				final DMEORelationship object) {
+			if (object.getEORelationship() == null) {
+				ValidationError<DMEORelationshipMustReferToAValidEORelationship, DMEORelationship> error = new ValidationError<DMEORelationshipMustReferToAValidEORelationship, DMEORelationship>(
+						this, object, "relationship_($object.name)_must_refer_to_a_valid_eo_relationship");
 				return error;
 			}
 			return null;
@@ -1012,16 +1004,17 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 
 	}
 
-	public static class DMEORelationshipToManyIsRarellyMandatory extends ValidationRule {
+	public static class DMEORelationshipToManyIsRarellyMandatory extends
+			ValidationRule<DMEORelationshipToManyIsRarellyMandatory, DMEORelationship> {
 		public DMEORelationshipToManyIsRarellyMandatory() {
 			super(DMEORelationship.class, "to_many_relation_ship_is_rarelly_mandatory");
 		}
 
 		@Override
-		public ValidationIssue applyValidation(final Validable object) {
-			final DMEORelationship property = (DMEORelationship) object;
-			if ((property.getIsToMany()) && (property.getEORelationship() != null) && (property.getEORelationship().getIsMandatory())) {
-				ValidationWarning error = new ValidationWarning(this, object, "relationship_($object.name)_is_tomany_and_mandatory");
+		public ValidationIssue<DMEORelationshipToManyIsRarellyMandatory, DMEORelationship> applyValidation(final DMEORelationship object) {
+			if (object.getIsToMany() && object.getEORelationship() != null && object.getEORelationship().getIsMandatory()) {
+				ValidationWarning<DMEORelationshipToManyIsRarellyMandatory, DMEORelationship> error = new ValidationWarning(this, object,
+						"relationship_($object.name)_is_tomany_and_mandatory");
 				error.addToFixProposals(new SetRelationNotMandatory());
 
 				return error;
@@ -1031,7 +1024,7 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 
 	}
 
-	public static class SetRelationNotMandatory extends FixProposal {
+	public static class SetRelationNotMandatory extends FixProposal<DMEORelationshipToManyIsRarellyMandatory, DMEORelationship> {
 
 		public SetRelationNotMandatory() {
 			super("make_relationship_($object.name)_not_mandatory");
@@ -1039,25 +1032,24 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 
 		@Override
 		protected void fixAction() {
-			((DMEORelationship) getObject()).getEORelationship().setIsMandatory(false);
+			getObject().getEORelationship().setIsMandatory(false);
 		}
 	}
 
-	public static class ForeignKeyTypeMustMatchPrimaryKey extends ValidationRule {
+	public static class ForeignKeyTypeMustMatchPrimaryKey extends ValidationRule<ForeignKeyTypeMustMatchPrimaryKey, DMEORelationship> {
 
 		public ForeignKeyTypeMustMatchPrimaryKey() {
 			super(DMEORelationship.class, "foreign_key_type_must_match_primary_key_type");
 		}
 
 		@Override
-		public ValidationIssue applyValidation(Validable object) {
-			final DMEORelationship rel = (DMEORelationship) object;
+		public ValidationIssue<ForeignKeyTypeMustMatchPrimaryKey, DMEORelationship> applyValidation(DMEORelationship rel) {
 			Iterator<DMEOJoin> i = rel.getDMEOJoins().iterator();
 			while (i.hasNext()) {
 				DMEOJoin j = i.next();
 				if (j.getSourceAttribute() != null && j.getDestinationAttribute() != null) {
 					if (j.getSourceAttribute().getPrototype() != j.getDestinationAttribute().getPrototype()) {
-						Vector<FixProposal> v = new Vector<FixProposal>();
+						Vector<FixProposal<ForeignKeyTypeMustMatchPrimaryKey, DMEORelationship>> v = new Vector<FixProposal<ForeignKeyTypeMustMatchPrimaryKey, DMEORelationship>>();
 						if (rel.getIsToMany()) {
 							v.add(new SetPrototype(j.getDestinationAttribute(), j.getSourceAttribute().getPrototype()));
 							v.add(new SetPrototype(j.getSourceAttribute(), j.getDestinationAttribute().getPrototype()));
@@ -1079,7 +1071,7 @@ public class DMEORelationship extends DMEOProperty implements Bindable {
 			return null;
 		}
 
-		public static class SetPrototype extends FixProposal {
+		public static class SetPrototype extends FixProposal<ForeignKeyTypeMustMatchPrimaryKey, DMEORelationship> {
 			private DMEOAttribute source;
 			private DMEOPrototype prototype;
 

@@ -32,7 +32,6 @@ public class ViewSection extends ModelObjectSection<ViewDefinition> {
 	@Override
 	public void setValue(TOCDataBinding value) {
 		super.setValue(value);
-		System.out.println("setValue with " + value);
 	}
 
 	@Override

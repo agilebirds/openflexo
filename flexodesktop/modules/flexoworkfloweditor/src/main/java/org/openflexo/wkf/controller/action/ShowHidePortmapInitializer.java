@@ -19,15 +19,22 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
+import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.action.FlexoActionVisibleCondition;
+import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.action.ShowHidePortmap;
+import org.openflexo.foundation.wkf.ws.FlexoPortMap;
+import org.openflexo.module.UserType;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-public class ShowHidePortmapInitializer extends ActionInitializer {
+public class ShowHidePortmapInitializer extends ActionInitializer<ShowHidePortmap, FlexoPortMap, WKFObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -44,8 +51,20 @@ public class ShowHidePortmapInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ShowHidePortmap> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ShowHidePortmap>() {
 			@Override
-			public boolean run(ActionEvent e, ShowHidePortmap action) {
+			public boolean run(EventObject e, ShowHidePortmap action) {
 				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionVisibleCondition<ShowHidePortmap, FlexoPortMap, WKFObject> getVisibleCondition() {
+		return new FlexoActionVisibleCondition<ShowHidePortmap, FlexoPortMap, WKFObject>() {
+
+			@Override
+			public boolean isVisible(FlexoActionType<ShowHidePortmap, FlexoPortMap, WKFObject> actionType, FlexoPortMap object,
+					Vector<WKFObject> globalSelection, FlexoEditor editor) {
+				return !UserType.isLite();
 			}
 		};
 	}

@@ -30,6 +30,7 @@ package org.openflexo.jedit;
 
 import java.awt.AWTEvent;
 import java.awt.Adjustable;
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
@@ -62,12 +63,17 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.text.NumberFormat;
 import java.util.Enumeration;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
 import javax.swing.SwingUtilities;
@@ -2090,7 +2096,7 @@ public class JEditTextArea extends JComponent implements ITextComponent {
 	class MouseHandler extends MouseAdapter {
 		@Override
 		public void mousePressed(MouseEvent evt) {
-			requestFocus();
+			requestFocusInWindow();
 
 			// Focus events not fired sometimes?
 			setCaretVisible(true);
@@ -2390,36 +2396,70 @@ public class JEditTextArea extends JComponent implements ITextComponent {
 		searchPanel.onFocus();
 	}
 
-	private void createSearchDialog() {
-		if (searchDialog != null) {
-			searchDialog.dispose();
-		}
+	public void showGotoLineDialog() {
+		final Dialog dialog = createNewDialog(FlexoLocalization.localizedForKey("goto_line"));
+		dialog.setModal(true);
+		JPanel panel = new JPanel(new BorderLayout());
+		JLabel label = new JLabel(FlexoLocalization.localizedForKey("line:"));
+		panel.add(label, BorderLayout.WEST);
+		final JFormattedTextField lineNumberTf = new JFormattedTextField(NumberFormat.getIntegerInstance());
+		JPanel tfPanel = new JPanel();
+		tfPanel.add(lineNumberTf);
+		panel.add(tfPanel);
+		JButton go = new JButton(FlexoLocalization.localizedForKey("OK"));
+		ActionListener actionListener = new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (lineNumberTf.getValue() != null) {
+					long line = (Long) lineNumberTf.getValue();
+					scrollTo((int) line, horizontalOffset);
+				}
+			}
+		};
+		go.addActionListener(actionListener);
+		lineNumberTf.addActionListener(actionListener);
+		panel.add(go, BorderLayout.EAST);
+		dialog.add(panel);
+		dialog.pack();
+		dialog.setResizable(false);
+		dialog.setVisible(true);
+		dialog.dispose();
+	}
+
+	private Dialog createNewDialog(String title) {
+		Dialog dialog = null;
 		Window windowAncestor = SwingUtilities.getWindowAncestor(this);
 		if (windowAncestor != null) {
 			if (windowAncestor instanceof Dialog) {
 				if (DIALOG_FACTORY != null) {
-					searchDialog = DIALOG_FACTORY.getNewDialog((Dialog) windowAncestor,
-							FlexoLocalization.localizedForKey("find_and_replace"), false);
+					dialog = DIALOG_FACTORY.getNewDialog((Dialog) windowAncestor, title, false);
 				} else {
-					searchDialog = new Dialog((Dialog) windowAncestor, FlexoLocalization.localizedForKey("find_and_replace"), false);
+					dialog = new Dialog((Dialog) windowAncestor, title, false);
 				}
 			} else if (windowAncestor instanceof Frame) {
 				if (DIALOG_FACTORY != null) {
-					searchDialog = DIALOG_FACTORY.getNewDialog((Frame) windowAncestor,
-							FlexoLocalization.localizedForKey("find_and_replace"), false);
+					dialog = DIALOG_FACTORY.getNewDialog((Frame) windowAncestor, title, false);
 				} else {
-					searchDialog = new Dialog((Frame) windowAncestor, FlexoLocalization.localizedForKey("find_and_replace"), false);
+					dialog = new Dialog((Frame) windowAncestor, title, false);
 				}
 			}
 		}
-		if (searchDialog == null) {
+		if (dialog == null) {
 			if (DIALOG_FACTORY != null) {
-				searchDialog = DIALOG_FACTORY.getNewDialog((Frame) windowAncestor, FlexoLocalization.localizedForKey("find_and_replace"),
-						false);
+				dialog = DIALOG_FACTORY.getNewDialog((Frame) windowAncestor, title, false);
 			} else {
-				searchDialog = new Dialog((Frame) windowAncestor, FlexoLocalization.localizedForKey("find_and_replace"), false);
+				dialog = new Dialog((Frame) windowAncestor, title, false);
 			}
 		}
+		return dialog;
+	}
+
+	private void createSearchDialog() {
+		if (searchDialog != null) {
+			searchDialog.dispose();
+		}
+		searchDialog = createNewDialog(FlexoLocalization.localizedForKey("find_and_replace"));
 		if (searchPanel == null) {
 			searchDialog.add(searchPanel = new TextSearchPanel());
 		} else {

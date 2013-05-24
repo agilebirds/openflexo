@@ -19,10 +19,10 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -67,7 +67,7 @@ public class ImportProcessesInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ImportProcessesAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<ImportProcessesAction>() {
 			@Override
-			public boolean run(ActionEvent e, ImportProcessesAction action) {
+			public boolean run(EventObject e, ImportProcessesAction action) {
 				boolean isFirst = true;
 				PPMProcess[] processes = null;
 				while (processes == null) {
@@ -153,7 +153,7 @@ public class ImportProcessesInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ImportProcessesAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ImportProcessesAction>() {
 			@Override
-			public boolean run(ActionEvent e, ImportProcessesAction action) {
+			public boolean run(EventObject e, ImportProcessesAction action) {
 				if (action.getImportReport() != null && action.getImportReport().getProperlyImported().size() > 0) {
 					/*getController().getSelectionManager().resetSelection();
 					for (FIProcess process : action.getImportReport().getProperlyImported().values()) {

@@ -23,5 +23,14 @@ import org.openflexo.foundation.FlexoException;
 
 public abstract class FlexoExceptionHandler<A extends FlexoAction> {
 
+	/**
+	 * Handles any {@link FlexoException} that may have occurred during the execution of the action.
+	 * 
+	 * @param exception
+	 *            the thrown exception
+	 * @param action
+	 *            the action for which the exception occurred
+	 * @return true, if the {@link FlexoActionFinalizer} should be executed, false otherwise
+	 */
 	public abstract boolean handleException(FlexoException exception, A action);
 }

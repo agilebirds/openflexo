@@ -55,7 +55,7 @@ public class FGEShapeDecorationGraphics extends FGEGraphics {
 	// Decoration graphics doesn't use normalized coordinates system
 	@Override
 	public FGEPoint convertViewCoordinatesToNormalizedPoint(int x, int y) {
-		return new FGEPoint((x) / getScale(), (y) / getScale());
+		return new FGEPoint(x / getScale(), y / getScale());
 	}
 
 }

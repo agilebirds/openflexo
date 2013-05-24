@@ -71,6 +71,10 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 	public static enum Parameters implements GRParameter {
 		connector,
 		foreground,
+		selectedForeground,
+		focusedForeground,
+		hasSelectedForeground,
+		hasFocusedForeground,
 		startSymbol,
 		endSymbol,
 		middleSymbol,
@@ -85,6 +89,12 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 	private Connector connector = null;
 
 	private ForegroundStyle foreground;
+
+	private ForegroundStyle selectedForeground = null;
+	private ForegroundStyle focusedForeground = null;
+
+	private boolean hasSelectedForeground = false;
+	private boolean hasFocusedForeground = false;
 
 	private StartSymbolType startSymbol = StartSymbolType.NONE;
 	private EndSymbolType endSymbol = EndSymbolType.NONE;
@@ -244,6 +254,64 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 		}
 	}
 
+	public ForegroundStyle getSelectedForeground() {
+		if (selectedForeground == null) {
+			selectedForeground = foreground.clone();
+		}
+		return selectedForeground;
+	}
+
+	public void setSelectedForeground(ForegroundStyle aForeground) {
+		FGENotification notification = requireChange(Parameters.selectedForeground, aForeground, false);
+		if (notification != null) {
+			if (selectedForeground != null) {
+				selectedForeground.deleteObserver(this);
+			}
+			selectedForeground = aForeground;
+			if (aForeground != null) {
+				aForeground.addObserver(this);
+			}
+			hasChanged(notification);
+		}
+	}
+
+	public boolean getHasSelectedForeground() {
+		return hasSelectedForeground;
+	}
+
+	public void setHasSelectedForeground(boolean aFlag) {
+		hasSelectedForeground = aFlag;
+	}
+
+	public ForegroundStyle getFocusedForeground() {
+		if (focusedForeground == null) {
+			focusedForeground = foreground.clone();
+		}
+		return focusedForeground;
+	}
+
+	public void setFocusedForeground(ForegroundStyle aForeground) {
+		FGENotification notification = requireChange(Parameters.focusedForeground, aForeground, false);
+		if (notification != null) {
+			if (focusedForeground != null) {
+				focusedForeground.deleteObserver(this);
+			}
+			focusedForeground = aForeground;
+			if (aForeground != null) {
+				aForeground.addObserver(this);
+			}
+			hasChanged(notification);
+		}
+	}
+
+	public boolean getHasFocusedForeground() {
+		return hasFocusedForeground;
+	}
+
+	public void setHasFocusedForeground(boolean aFlag) {
+		hasFocusedForeground = aFlag;
+	}
+
 	@Override
 	public final boolean shouldBeDisplayed() {
 		return super.shouldBeDisplayed();
@@ -280,7 +348,7 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 		return startObject;
 	}
 
-	public final void setStartObject(ShapeGraphicalRepresentation<?> aStartObject) {
+	public void setStartObject(ShapeGraphicalRepresentation<?> aStartObject) {
 		startObject = aStartObject;
 		if (!enabledStartObjectObserving) {
 			enableStartObjectObserving(startObject);
@@ -337,7 +405,7 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 		return endObject;
 	}
 
-	public final void setEndObject(ShapeGraphicalRepresentation<?> anEndObject) {
+	public void setEndObject(ShapeGraphicalRepresentation<?> anEndObject) {
 		endObject = anEndObject;
 		if (!enabledEndObjectObserving) {
 			enableEndObjectObserving(endObject);
@@ -663,7 +731,7 @@ public class ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation
 		}
 		try {
 			if (forceRefresh || connector.needsRefresh()) {
-				connector.refreshConnector();
+				connector.refreshConnector(forceRefresh);
 				checkViewBounds();
 				setChanged();
 				notifyObservers(new ConnectorModified());

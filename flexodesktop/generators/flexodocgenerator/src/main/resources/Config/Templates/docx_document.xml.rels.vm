@@ -10,6 +10,7 @@
   <Relationship Id="rId9" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer1.xml"/>
   <Relationship Id="rId10" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer2.xml"/>
   <Relationship Id="rId12" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" Target="theme/theme1.xml"/>
+  <Relationship Id="rId13" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml" Target="../customXml/edition_pattern_instance_values.xml" />
   
   #foreach($mediaResource in ${projectGenerator.getAllMediaResources()})
   	<Relationship Id="${projectGenerator.getRIdForResource($mediaResource)}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="${projectGenerator.getMediaResourceRelativePath($mediaResource)}"/>

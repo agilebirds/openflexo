@@ -20,6 +20,7 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 
 public class DeletionScheme extends AbstractActionScheme {
@@ -28,8 +29,8 @@ public class DeletionScheme extends AbstractActionScheme {
 		conditional
 	}
 
-	public DeletionScheme() {
-		super();
+	public DeletionScheme(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override

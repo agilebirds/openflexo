@@ -134,6 +134,11 @@ public class ExpanderGR<O extends AbstractNode> extends ConnectorGraphicalRepres
 			controlPoints = new Vector<ControlPoint>();
 		}
 
+		@Override
+		public Connector clone() {
+			return new ExpanderConnector();
+		}
+
 		private void updateControlPoints() {
 			FGEPoint centerOfStartObject = GraphicalRepresentation.convertNormalizedPoint(getStartObject(), new FGEPoint(0.5, 0.5),
 					getGraphicalRepresentation());
@@ -207,8 +212,8 @@ public class ExpanderGR<O extends AbstractNode> extends ConnectorGraphicalRepres
 		private ConnectorControlPoint endP2;
 
 		@Override
-		public void refreshConnector() {
-			super.refreshConnector();
+		public void refreshConnector(boolean force) {
+			super.refreshConnector(force);
 
 			updateControlPoints();
 

@@ -27,7 +27,7 @@ package org.openflexo.foundation.rm;
 public class ResourceRemoved extends RMDataModification {
 
 	public ResourceRemoved(FlexoResource<? extends FlexoResourceData> newResource) {
-		super(newResource, null);
+		super(FlexoProject.RESOURCES, newResource, null);
 	}
 
 	public FlexoResource<? extends FlexoResourceData> getRemovedResource() {

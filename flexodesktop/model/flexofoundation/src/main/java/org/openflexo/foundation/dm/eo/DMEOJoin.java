@@ -23,8 +23,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.tree.TreeNode;
-
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
 import org.openflexo.foundation.dm.eo.model.EOAttribute;
@@ -180,9 +178,9 @@ public class DMEOJoin extends DMObject implements DMEOObject, InspectableObject 
 
 	public boolean isJoinValid() {
 		if (getDMEORelationship() == null) {
-			return ((getSourceAttribute() != null) && (getDestinationAttribute() != null));
+			return getSourceAttribute() != null && getDestinationAttribute() != null;
 		}
-		return (_eoJoin != null);
+		return _eoJoin != null;
 	}
 
 	public void setSourceAttribute(DMEOAttribute sourceAttribute) throws EOAccessException, InvalidJoinException {
@@ -220,9 +218,9 @@ public class DMEOJoin extends DMObject implements DMEOObject, InspectableObject 
 		if (getDMEORelationship() == null) {
 			return;
 		}
-		if ((getEORelationship() != null) && (getDestinationEntity() != null) && (_sourceAttribute != null)
-				&& (_destinationAttribute != null) && (_destinationAttribute.getDMEOEntity() == getDestinationEntity())
-				&& (_sourceAttribute.getEOAttribute() != null) && (_destinationAttribute.getEOAttribute() != null)) {
+		if (getEORelationship() != null && getDestinationEntity() != null && _sourceAttribute != null && _destinationAttribute != null
+				&& _destinationAttribute.getDMEOEntity() == getDestinationEntity() && _sourceAttribute.getEOAttribute() != null
+				&& _destinationAttribute.getEOAttribute() != null) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Make new EOJoin");
 			}
@@ -273,13 +271,8 @@ public class DMEOJoin extends DMObject implements DMEOObject, InspectableObject 
 	}
 
 	@Override
-	public TreeNode getParent() {
+	public DMObject getParent() {
 		return getDMEORelationship();
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return false;
 	}
 
 	/**

@@ -23,6 +23,9 @@ import java.util.Vector;
 
 public class FIBTabPanel extends FIBContainer {
 
+	public FIBTabPanel() {
+	}
+
 	@Override
 	public String getIdentifier() {
 		return null;

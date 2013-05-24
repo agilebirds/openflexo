@@ -19,13 +19,14 @@
  */
 package org.openflexo.inspector.model;
 
+import java.util.List;
 import java.util.Vector;
 
 import org.openflexo.antar.expr.DefaultExpressionParser;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.Function;
 import org.openflexo.antar.expr.Variable;
-import org.openflexo.antar.expr.parser.ParseException;
+import org.openflexo.antar.expr.oldparser.ParseException;
 
 public class PropertyListAction extends ParametersContainerModelObject {
 	public static final String ADD_TYPE = "ADD";
@@ -43,10 +44,10 @@ public class PropertyListAction extends ParametersContainerModelObject {
 	private String isAvailable;
 
 	private Expression methodExpression;
-	private Vector<Expression> methodExpressionArgs;
+	private List<Expression> methodExpressionArgs;
 
 	private Expression isAvailableExpression;
-	private Vector<Expression> isAvailableExpressionArgs;
+	private List<Expression> isAvailableExpressionArgs;
 
 	private Vector<String> availableActionType;
 
@@ -83,7 +84,7 @@ public class PropertyListAction extends ParametersContainerModelObject {
 		this.method = method;
 		DefaultExpressionParser parser = new DefaultExpressionParser();
 		try {
-			methodExpression = parser.parse(method);
+			methodExpression = parser.parse(method, null);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -108,7 +109,7 @@ public class PropertyListAction extends ParametersContainerModelObject {
 		return method;
 	}
 
-	public Vector<Expression> getMethodExpressionArgs() {
+	public List<Expression> getMethodExpressionArgs() {
 		return methodExpressionArgs;
 	}
 
@@ -120,7 +121,7 @@ public class PropertyListAction extends ParametersContainerModelObject {
 		this.isAvailable = isAvailable;
 		DefaultExpressionParser parser = new DefaultExpressionParser();
 		try {
-			isAvailableExpression = parser.parse(isAvailable);
+			isAvailableExpression = parser.parse(isAvailable, null);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -145,7 +146,7 @@ public class PropertyListAction extends ParametersContainerModelObject {
 		return isAvailable;
 	}
 
-	public Vector<Expression> getIsAvailableExpressionArgs() {
+	public List<Expression> getIsAvailableExpressionArgs() {
 		return isAvailableExpressionArgs;
 	}
 

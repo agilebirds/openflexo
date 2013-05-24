@@ -155,11 +155,16 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	public static String nameForProcessNoExt(FlexoProcess process, DGRepository repository) {
-		return cleanFileName(repository.getName() + ".process." + process.getName());
+		return cleanFileName(repository.getName() + ".process." + process.getName() + externalObjectExtension(process, repository));
+	}
+
+	public static String externalObjectExtension(FlexoModelObject object, DGRepository repository) {
+		return repository.getProject() == object.getProject() ? "" : object.getProject().getDisplayName();
 	}
 
 	public static String nameForProcessFolderNoExt(ProcessFolder processFolder, DGRepository repository) {
-		return cleanFileName(repository.getName() + ".processfolder." + processFolder.getName() + "-" + processFolder.getFlexoID());
+		return cleanFileName(repository.getName() + ".processfolder." + processFolder.getName() + "-"
+				+ externalObjectExtension(processFolder, repository) + "-" + processFolder.getFlexoID());
 	}
 
 	public static String nameForDKVNoExt(DGRepository repository) {
@@ -246,16 +251,20 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	public String realNameForDKVNoExt(DGRepository repository) {
-		CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator()
-				.getResourceForObject(repository.getProject().getDKVModel());
-		if (r != null) {
-			String fileName = r.getFileName();
-			if (fileName.endsWith(getFileExtension())) {
-				return fileName.substring(0, fileName.length() - getFileExtension().length());
+		if (getProject().getDKVModel(false) != null) {
+			CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator()
+					.getResourceForObject(repository.getProject().getDKVModel());
+			if (r != null) {
+				String fileName = r.getFileName();
+				if (fileName.endsWith(getFileExtension())) {
+					return fileName.substring(0, fileName.length() - getFileExtension().length());
+				}
+				return fileName;
 			}
-			return fileName;
+			return nameForDKVNoExt(repository);
+		} else {
+			return null;
 		}
-		return nameForDKVNoExt(repository);
 	}
 
 	public String realNameForOperationNoExt(OperationNode operation, DGRepository repository) {
@@ -272,16 +281,19 @@ public abstract class DGGenerator<T extends FlexoModelObject> extends Generator<
 	}
 
 	public String realNameForMenuNoExt(DGRepository repository) {
-		CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator()
-				.getResourceForObject(repository.getProject().getFlexoNavigationMenu());
-		if (r != null) {
-			String fileName = r.getFileName();
-			if (fileName.endsWith(getFileExtension())) {
-				return fileName.substring(0, fileName.length() - getFileExtension().length());
+		if (getProject().getFlexoNavigationMenu(false) != null) {
+			CGRepositoryFileResource<? extends GeneratedResourceData, IFlexoResourceGenerator, CGFile> r = getProjectGenerator()
+					.getResourceForObject(repository.getProject().getFlexoNavigationMenu());
+			if (r != null) {
+				String fileName = r.getFileName();
+				if (fileName.endsWith(getFileExtension())) {
+					return fileName.substring(0, fileName.length() - getFileExtension().length());
+				}
+				return fileName;
 			}
-			return fileName;
+			return nameForMenuNoExt(repository);
 		}
-		return nameForMenuNoExt(repository);
+		return null;
 	}
 
 	public String realNameForComponentNoExt(ComponentDefinition cd, DGRepository repository) {

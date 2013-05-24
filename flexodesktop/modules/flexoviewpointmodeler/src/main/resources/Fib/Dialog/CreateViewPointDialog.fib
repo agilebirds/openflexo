@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="gridbag" titleFont="Lucida Grande,0,13" darkLevel="0" dataClassName="org.openflexo.foundation.viewpoint.action.CreateViewPoint" controllerClassName="org.openflexo.view.controller.FlexoFIBController">
-  <Label label="creates_new_view_point" align="center" localize="true" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,1,15" />
-  <Label label="view_point_name" align="right" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
-  <TextField columns="40" passwd="false" text="TextField" data="data.newCalcName" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="CalcNameTextField" localize="true">
+<Panel layout="gridbag" titleFont="Lucida Grande,0,13" darkLevel="0" dataClassName="org.openflexo.foundation.viewpoint.action.CreateViewPoint" controllerClassName="org.openflexo.view.controller.FlexoFIBController" opaque="false">
+  <Label label="creates_new_view_point" align="center" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,1,15" localize="true" />
+  <Label label="view_point_name" align="right" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <TextField columns="40" text="TextField" data="data.newCalcName" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="CalcNameTextField" localize="true">
     <Dependancy componentName="OntologyFileSelector" />
   </TextField>
-  <Label label="view_point_uri" align="right" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
-  <TextField columns="6" passwd="false" text="TextField" data="data.newCalcURI" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="CalcURITextField" localize="true">
+  <Label label="view_point_uri" align="right" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <TextField columns="6" text="TextField" data="data.newCalcURI" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="CalcURITextField" localize="true">
     <Dependancy componentName="OntologyFileSelector" />
   </TextField>
-  <Label label="label" localize="true" data="data.errorMessage" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=24;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(!((data.isNewCalcNameValid &amp; data.isNewCalcURIValid)))" font="Dialog,2,10" foregroundColor="255,0,0">
+  <Label label="label" data="data.errorMessage" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=24;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(!((data.isNewCalcNameValid &amp; data.isNewCalcURIValid)))" font="Dialog,2,10" foregroundColor="255,0,0" localize="true">
     <Dependancy componentName="CalcNameTextField" />
     <Dependancy componentName="CalcURITextField" />
     <LocalizedDictionary />
   </Label>
-  <Label label="ontological_scope" localize="true" constraints="gridbag(anchor=north_east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)">
+  <Label label="ontological_scope" constraints="gridbag(anchor=north_east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true">
     <LocalizedDictionary />
   </Label>
-  <RadioButtonList format="object.name" localize="true" name="radioButtonList" data="data.ontologicalScopeChoice" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" staticList="" iteratorClassName="org.openflexo.foundation.viewpoint.action.CreateViewPoint$OntologicalScopeChoices" autoSelectFirstRow="true">
+  <RadioButtonList columns="1" hGap="0" vGap="-2" data="data.ontologicalScopeChoice" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="radioButtonList" format="object.name" localize="true" staticList="" iteratorClassName="org.openflexo.foundation.viewpoint.action.CreateViewPoint$OntologicalScopeChoices" autoSelectFirstRow="true">
     <LocalizedDictionary />
   </RadioButtonList>
-  <Label label="ontology_file" align="right" localize="true" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(radioButtonList.selectedIndex = 0)" />
-  <File mode="OpenMode" filter="*.owl" title="Please select an ontology to import as calc ontology" isDirectory="false" data="data.ontologyFile" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=9;insetsBottom=6;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(radioButtonList.selectedIndex = 0)" name="OntologyFileSelector" localize="true">
+  <Label label="ontology_file" align="right" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=8;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(radioButtonList.selectedIndex = 0)" localize="true" />
+  <File mode="OpenMode" filter="*.xsd, *.owl" title="Please select an ontology to import as calc ontology" isDirectory="false" data="data.ontologyFile" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=9;insetsBottom=6;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(radioButtonList.selectedIndex = 0)" name="OntologyFileSelector" localize="true">
     <Dependancy componentName="CreatesOntologyButton" />
   </File>
-  <Label label="" localize="true" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=10;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(radioButtonList.selectedIndex = 1)">
+  <Label label="" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=10;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(radioButtonList.selectedIndex = 1)" localize="true">
     <LocalizedDictionary />
   </Label>
-  <Panel layout="border" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderRight="2" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=11;insetsBottom=5;insetsLeft=0;insetsRight=0;insetsTop=5;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(radioButtonList.selectedIndex = 1)">
-    <Table iteratorClassName="org.openflexo.foundation.ontology.ImportedOntology" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" data="data.importedOntologies" constraints="border(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=11;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(radioButtonList.selectedIndex = 1)">
+  <Panel layout="border" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderRight="2" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=11;insetsBottom=5;insetsLeft=0;insetsRight=0;insetsTop=5;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(radioButtonList.selectedIndex = 1)" opaque="false">
+    <Table iteratorClassName="org.openflexo.foundation.ontology.FlexoOntology" visibleRowCount="5" rowHeight="18" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" data="data.importedOntologies" constraints="border(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=11;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(radioButtonList.selectedIndex = 1)">
       <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="20" resizable="false" displayTitle="false" name="icon" />
       <LabelColumn data="iterator.uRI" title="imported_ontologies" columnWidth="100" resizable="true" displayTitle="true" name="label" />
       <AddAction method="data.addToImportedOntologies(OntologySelector.data)" isAvailable="(OntologySelector.data != null)" name="add_action" />
@@ -36,22 +36,22 @@
       <Dependancy componentName="ImportOntologyButton" />
       <LocalizedDictionary />
     </Table>
-    <Panel layout="border" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="border(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=12;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=south;padX=0;padY=0;weightX=1.0;weightY=0.0)">
+    <Panel layout="border" hGap="5" vGap="5" flowAlignment="LEADING" borderTitle="Panel" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="border(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=12;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=south;padX=0;padY=0;weightX=1.0;weightY=0.0)" opaque="false">
       <Button action="data.addToImportedOntologies(OntologySelector.data)" buttonType="Trigger" label="import_ontology" constraints="border(index=1;location=east)" name="ImportOntologyButton" localize="true" enable="(OntologySelector.data != null)">
         <LocalizedDictionary />
       </Button>
-      <Custom componentClassName="org.openflexo.components.widget.OntologySelector" constraints="border(index=2;location=center)" name="OntologySelector" localize="true" manageDynamicModel="true">
+      <Custom componentClassName="org.openflexo.components.widget.FIBOntologySelector" constraints="border(index=2;location=center)" name="OntologySelector" localize="true" manageDynamicModel="true">
         <Assignment variable="component.ontologyLibrary" value="data.calcFolder.viewPointLibrary.ontologyLibrary" />
       </Custom>
-      <Label label="select_ontology" localize="true" constraints="border(index=0;location=west)">
+      <Label label="select_ontology" constraints="border(index=0;location=west)" localize="true">
         <LocalizedDictionary />
       </Label>
       <LocalizedDictionary />
     </Panel>
   </Panel>
-  <Label label="description" align="right" localize="true" constraints="gridbag(anchor=north_east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=12;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
+  <Label label="description" align="right" constraints="gridbag(anchor=north_east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=12;insetsBottom=0;insetsLeft=20;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
   <TextArea columns="6" rows="5" text="TextArea" data="data.newCalcDescription" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=13;insetsBottom=20;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" localize="true" />
-  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=14;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)">
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="Lucida Grande,0,13" darkLevel="0" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=14;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" opaque="false">
     <Button action="controller.validateAndDispose()" buttonType="Trigger" label="validate" constraints="flow(index=0)" localize="true" enable="data.isValid">
       <Dependancy componentName="CalcNameTextField" />
       <Dependancy componentName="OntologyFileSelector" />
@@ -121,4 +121,3 @@
     <Localized key="CREATES_NEW_ONTOLOGY" lang="Dutch">creates_new_ontology</Localized>
   </LocalizedDictionary>
 </Panel>
-

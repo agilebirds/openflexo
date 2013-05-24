@@ -5,8 +5,6 @@
 // Generated on: 2008.02.08 at 10:43:57 AM CET 
 //
 
-@javax.xml.bind.annotation.XmlSchema(
-		namespace = "http://docs.oasis-open.org/wsbpel/2.0/process/executable",
-		elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://docs.oasis-open.org/wsbpel/2.0/process/executable", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package org.oasis_open.docs.wsbpel._2_0.process.executable;
 

@@ -38,13 +38,14 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import org.jdom.Attribute;
-import org.jdom.DocType;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.Text;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Attribute;
+import org.jdom2.DocType;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.Text;
+import org.jdom2.output.Format;
+import org.jdom2.output.LineSeparator;
+import org.jdom2.output.XMLOutputter;
 import org.openflexo.xmlcode.XMLMapId.NoMapIdEntryException;
 import org.xml.sax.SAXException;
 
@@ -253,8 +254,7 @@ public class XMLCoder {
 		alreadySerialized.clear();
 		serializationIdentifierForObject.clear();
 		orderedElementReferenceList.delete();
-		for (Enumeration en = objectReferences.elements(); en.hasMoreElements();) {
-			ObjectReference next = (ObjectReference) en.nextElement();
+		for (ObjectReference next : objectReferences.values()) {
 			next.delete();
 		}
 		objectReferences.clear();
@@ -1009,7 +1009,9 @@ public class XMLCoder {
 			InvalidModelException, AccessorInvocationException, DuplicateSerializationIdentifierException {
 
 		Document builtDocument = buildDocument(anObject);
-		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		Format prettyFormat = Format.getPrettyFormat();
+		prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+		XMLOutputter outputter = new XMLOutputter(prettyFormat);
 		try {
 			outputter.output(builtDocument, aWriter);
 		} catch (IOException e) {
@@ -1042,7 +1044,9 @@ public class XMLCoder {
 	protected void buildDocumentAndSendToOutputStream(Object anObject, OutputStream out, DocType docType)
 			throws InvalidObjectSpecificationException, InvalidModelException, AccessorInvocationException,
 			DuplicateSerializationIdentifierException {
-		buildDocumentAndSendToOutputStream(anObject, out, docType, Format.getPrettyFormat());
+		Format prettyFormat = Format.getPrettyFormat();
+		prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+		buildDocumentAndSendToOutputStream(anObject, out, docType, prettyFormat);
 	}
 
 	protected void buildDocumentAndSendToOutputStream(Object anObject, OutputStream out, DocType docType, Format format)
@@ -1174,6 +1178,9 @@ public class XMLCoder {
 			}
 			return returned;
 		} catch (InvalidModelException e) {
+			// Remove stack trace because tests failed because of out of memory
+			// TODO: investigate this: we should not come into this section !!!!!
+			// e.printStackTrace();
 			if (aProperty != null) {
 				String textValue = null;
 				if (stringEncoder._isEncodable(anObject.getClass())) {
@@ -1453,7 +1460,7 @@ public class XMLCoder {
 				else if (keyValueProperty instanceof VectorKeyValueProperty) {
 
 					List<?> values = KeyValueDecoder.vectorForKey(anObject, (VectorKeyValueProperty) keyValueProperty);
-					if (values != null) {
+					if (values != null && values.size() > 0) {
 						for (Object o : values) {
 							returnedElement.addContent(buildNewElementFrom(o, aDocument, modelProperty));
 						}
@@ -1463,7 +1470,7 @@ public class XMLCoder {
 				else if (keyValueProperty instanceof ArrayKeyValueProperty) {
 
 					Object[] values = KeyValueDecoder.arrayForKey(anObject, (ArrayKeyValueProperty) keyValueProperty);
-					if (values != null) {
+					if (values != null && values.length > 0) {
 						for (int i = 0; i < values.length; i++) {
 							returnedElement.addContent(buildNewElementFrom(values[i], aDocument, modelProperty));
 						}
@@ -1474,7 +1481,7 @@ public class XMLCoder {
 
 					if (modelProperty.isProperties()) {
 						Map<?, ?> values = KeyValueDecoder.hashtableForKey(anObject, (PropertiesKeyValueProperty) keyValueProperty);
-						if (values != null) {
+						if (values != null && values.size() > 0) {
 							Element propertiesElement = new Element(modelProperty.getDefaultXmlTag());
 							for (Entry<?, ?> e : values.entrySet()) {
 								Object keyAsObject = e.getKey();
@@ -1500,6 +1507,40 @@ public class XMLCoder {
 										valueElement.addContent(textValue);
 									}
 									valueElement.setAttribute(XMLMapping.classNameLabel, value.getClass().getName());
+								}
+
+								propertiesElement.addContent(valueElement);
+							}
+							returnedElement.addContent(propertiesElement);
+						}
+					} else if (modelProperty.isSafeProperties()) {
+						Map<?, ?> values = KeyValueDecoder.hashtableForKey(anObject, (PropertiesKeyValueProperty) keyValueProperty);
+						if (values != null && values.size() > 0) {
+							Element propertiesElement = new Element(modelProperty.getDefaultXmlTag());
+							for (Entry<?, ?> e : values.entrySet()) {
+								Object keyAsObject = e.getKey();
+								if (!(keyAsObject instanceof String)) {
+									throw new InvalidDataException("Properties keys must be instance of String");
+								}
+								String key = (String) keyAsObject;
+								Object value = e.getValue();
+
+								Element valueElement = new Element(XMLMapping.entryLabel);
+								valueElement.setAttribute(XMLMapping.keyLabel, key);
+								String valueAsText = null;
+								String classNameLabel = null;
+								if (value instanceof PropertiesKeyValueProperty.UndecodableProperty) {
+									// In this case, class matching property is not loaded, and thus
+									// Object is not instanciated. But, we must keep serialized version
+									valueAsText = ((PropertiesKeyValueProperty.UndecodableProperty) value).value;
+									classNameLabel = ((PropertiesKeyValueProperty.UndecodableProperty) value).className;
+								} else if (value != null) {
+									valueAsText = stringEncoder._encodeObject(value);
+									classNameLabel = value.getClass().getName();
+								}
+								if (valueAsText != null) {
+									valueElement.setAttribute(XMLMapping.classNameLabel, classNameLabel);
+									valueElement.setAttribute(XMLMapping.valueLabel, valueAsText);
 								}
 
 								propertiesElement.addContent(valueElement);
@@ -1533,7 +1574,7 @@ public class XMLCoder {
 				else if (keyValueProperty instanceof HashtableKeyValueProperty) {
 
 					Map<?, ?> values = KeyValueDecoder.hashtableForKey(anObject, (HashtableKeyValueProperty) keyValueProperty);
-					if (values != null) {
+					if (values != null && values.size() > 0) {
 						if (modelProperty.getKeyToUse() == null) {
 							for (Entry<?, ?> e : values.entrySet()) {
 								Object key = e.getKey();

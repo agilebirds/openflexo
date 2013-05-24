@@ -19,7 +19,7 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.cgmodule.GeneratorPreferences;
@@ -54,10 +54,10 @@ public class ValidateProjectInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ValidateProject> getDefaultInitializer() {
 		return new FlexoActionInitializer<ValidateProject>() {
 			@Override
-			public boolean run(ActionEvent e, ValidateProject action) {
+			public boolean run(EventObject e, ValidateProject action) {
 				// If disabled, don't do it
 				if (action.getContext() instanceof SynchronizeRepositoryCodeGeneration) {
-					return (GeneratorPreferences.getValidateBeforeGenerating());
+					return GeneratorPreferences.getValidateBeforeGenerating();
 				}
 				if (action.getProjectGenerator() != null) {
 					action.getProjectGenerator().startHandleLogs();
@@ -71,7 +71,7 @@ public class ValidateProjectInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ValidateProject> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ValidateProject>() {
 			@Override
-			public boolean run(ActionEvent e, ValidateProject action) {
+			public boolean run(EventObject e, ValidateProject action) {
 				if (action.getProjectGenerator() != null) {
 					action.getProjectGenerator().stopHandleLogs();
 					action.getProjectGenerator().flushLogs();

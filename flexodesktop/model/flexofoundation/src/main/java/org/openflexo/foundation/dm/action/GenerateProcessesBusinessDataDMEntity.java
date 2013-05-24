@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMObject;
@@ -42,15 +43,19 @@ public class GenerateProcessesBusinessDataDMEntity extends
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ProcessBusinessDataRepository object, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(ProcessBusinessDataRepository object, Vector<DMObject> globalSelection) {
 			return isEnabledForSelection(object, globalSelection);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ProcessBusinessDataRepository object, Vector<DMObject> globalSelection) {
+		public boolean isEnabledForSelection(ProcessBusinessDataRepository object, Vector<DMObject> globalSelection) {
 			return true;
 		}
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, ProcessBusinessDataRepository.class);
+	}
 
 	GenerateProcessesBusinessDataDMEntity(ProcessBusinessDataRepository focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

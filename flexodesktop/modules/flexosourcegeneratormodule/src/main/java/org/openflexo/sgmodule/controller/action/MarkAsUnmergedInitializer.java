@@ -19,7 +19,7 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -45,7 +45,7 @@ public class MarkAsUnmergedInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<MarkAsUnmerged> getDefaultInitializer() {
 		return new FlexoActionInitializer<MarkAsUnmerged>() {
 			@Override
-			public boolean run(ActionEvent e, MarkAsUnmerged action) {
+			public boolean run(EventObject e, MarkAsUnmerged action) {
 				action.getProjectGenerator().startHandleLogs();
 				return true;
 			}
@@ -56,7 +56,7 @@ public class MarkAsUnmergedInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<MarkAsUnmerged> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MarkAsUnmerged>() {
 			@Override
-			public boolean run(ActionEvent e, MarkAsUnmerged action) {
+			public boolean run(EventObject e, MarkAsUnmerged action) {
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 				return true;

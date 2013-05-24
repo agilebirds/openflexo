@@ -22,7 +22,7 @@ package org.openflexo.prefs;
 import java.io.File;
 import java.util.Vector;
 
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.inspector.model.TabModel;
 
 /**
  * Please comment this class
@@ -30,24 +30,38 @@ import org.openflexo.foundation.FlexoObject;
  * @author sguerin
  * 
  */
-public abstract class ContextPreferences extends FlexoObject {
+public abstract class ContextPreferences extends FlexoAbstractPreferences {
 
 	private static FlexoPreferences preferences;
 
-	private static final Vector<Class> registeredCP = new Vector<Class>();
-
-	protected static FlexoPreferences preferences(Class contextPreferenceClass) {
+	protected static <CP extends ContextPreferences> CP preferences(Class<CP> contextPreferenceClass) {
 		if (preferences == null) {
 			preferences = FlexoPreferences.instance();
 		}
-		if (!registeredCP.contains(contextPreferenceClass)) {
-			registeredCP.add(contextPreferenceClass);
-			preferences.register(contextPreferenceClass);
-		}
-		return preferences;
+		return preferences.get(contextPreferenceClass);
+	}
+
+	public ContextPreferences() {
+		super(preferences);
 	}
 
 	public abstract String getName();
 
 	public abstract File getInspectorFile();
+
+	@Override
+	public String getInspectorTitle() {
+		return getName();
+	}
+
+	@Override
+	public boolean isDeleted() {
+		return false;
+	}
+
+	@Override
+	public Vector<TabModel> inspectionExtraTabs() {
+		return null;
+	}
+
 }

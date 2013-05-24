@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
 
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -52,13 +53,13 @@ public class AddShape extends FlexoAction<AddShape, ViewObject, ViewObject> {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
+		public boolean isVisibleForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
-			return (object instanceof View || object instanceof ViewShape);
+		public boolean isEnabledForSelection(ViewObject object, Vector<ViewObject> globalSelection) {
+			return object instanceof View || object instanceof ViewShape;
 		}
 
 	};
@@ -71,7 +72,7 @@ public class AddShape extends FlexoAction<AddShape, ViewObject, ViewObject> {
 	private ViewShape _newShape;
 	private String _newShapeName;
 	private ViewObject _parent;
-	private Object _graphicalRepresentation;
+	private ShapeGraphicalRepresentation<?> _graphicalRepresentation;
 	private boolean nameSetToNull = false;
 
 	AddShape(ViewObject focusedObject, Vector<ViewObject> globalSelection, FlexoEditor editor) {
@@ -139,11 +140,11 @@ public class AddShape extends FlexoAction<AddShape, ViewObject, ViewObject> {
 		_newShapeName = newShapeName;
 	}
 
-	public Object getGraphicalRepresentation() {
+	public ShapeGraphicalRepresentation<?> getGraphicalRepresentation() {
 		return _graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(Object graphicalRepresentation) {
+	public void setGraphicalRepresentation(ShapeGraphicalRepresentation<?> graphicalRepresentation) {
 		_graphicalRepresentation = graphicalRepresentation;
 	}
 

@@ -116,7 +116,7 @@ public class GeometricSet implements XMLSerializable, Cloneable, TreeNode {
 		try {
 			coder.encodeObject(this, new FileOutputStream(file));
 			logger.info("Succeeded to save: " + file);
-			System.out.println("> " + (new XMLCoder(mapping)).encodeObject(this));
+			System.out.println("> " + new XMLCoder(mapping).encodeObject(this));
 		} catch (Exception e) {
 			logger.warning("Failed to save: " + file + " unexpected exception: " + e.getMessage());
 			e.printStackTrace();

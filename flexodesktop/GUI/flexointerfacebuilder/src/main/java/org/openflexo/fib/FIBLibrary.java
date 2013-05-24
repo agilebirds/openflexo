@@ -23,12 +23,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Date;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.io.IOUtils;
+import org.jdom2.JDOMException;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.DefaultBindingFactory;
 import org.openflexo.fib.model.ComponentConstraints;
@@ -50,13 +55,15 @@ public class FIBLibrary {
 	protected static XMLMapping _fibMapping;
 	private static FIBLibrary _current;
 
-	private Hashtable<String, FIBComponent> _fibDefinitions;
+	private Map<String, FIBComponent> _fibDefinitions;
+	private Map<File, FIBComponent> fibFileDefinitions;
 
 	private DefaultBindingFactory bindingFactory = new DefaultBindingFactory();
 
 	private FIBLibrary() {
 		super();
 		_fibDefinitions = new Hashtable<String, FIBComponent>();
+		fibFileDefinitions = new Hashtable<File, FIBComponent>();
 	}
 
 	protected static FIBLibrary createInstance() {
@@ -119,7 +126,7 @@ public class FIBLibrary {
 	}
 
 	public boolean componentIsLoaded(File fibFile) {
-		return _fibDefinitions.get(fibFile.getAbsolutePath()) != null;
+		return fibFileDefinitions.get(fibFile) != null;
 	}
 
 	public boolean componentIsLoaded(String fibResourcePath) {
@@ -131,7 +138,8 @@ public class FIBLibrary {
 	}
 
 	public FIBComponent retrieveFIBComponent(File fibFile, boolean useCache) {
-		if (!useCache || _fibDefinitions.get(fibFile.getAbsolutePath()) == null) {
+		FIBComponent fibComponent = fibFileDefinitions.get(fibFile);
+		if (!useCache || fibComponent == null || fibComponent.getLastModified().getTime() < fibFile.lastModified()) {
 
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Load " + fibFile.getAbsolutePath());
@@ -143,20 +151,30 @@ public class FIBLibrary {
 			FileInputStream inputStream = null;
 			try {
 				inputStream = new FileInputStream(fibFile);
-				return retrieveFIBComponent(fibFile.getAbsolutePath(), inputStream, useCache);
+				FIBComponent component = loadFIBComponent(inputStream);
+				component.setLastModified(new Date(fibFile.lastModified()));
+				component.setDefinitionFile(fibFile.getAbsolutePath());
+				fibFileDefinitions.put(fibFile, component);
+				return component;
 			} catch (FileNotFoundException e) {
 				logger.warning("Not found: " + fibFile.getAbsolutePath());
+				return null;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			} catch (JDOMException e) {
+				e.printStackTrace();
 				return null;
 			} finally {
 				IOUtils.closeQuietly(inputStream);
 				StringEncoder.getDefaultInstance()._addConverter(previousConverter);
 			}
 		}
-		return _fibDefinitions.get(fibFile.getAbsolutePath());
+		return fibComponent;
 	}
 
 	public void removeFIBComponentFromCache(File fibFile) {
-		_fibDefinitions.remove(fibFile.getAbsolutePath());
+		fibFileDefinitions.remove(fibFile);
 	}
 
 	public FIBComponent retrieveFIBComponent(String fibResourcePath) {
@@ -177,7 +195,7 @@ public class FIBLibrary {
 
 			try {
 				if (getFIBMapping() != null) {
-					FIBComponent fibComponent = (FIBComponent) XMLDecoder.decodeObjectWithMapping(inputStream, getFIBMapping(), this);
+					FIBComponent fibComponent = loadFIBComponent(inputStream);
 					fibComponent.setDefinitionFile(fibIdentifier);
 					_fibDefinitions.put(fibIdentifier, fibComponent);
 				}
@@ -191,20 +209,36 @@ public class FIBLibrary {
 		return _fibDefinitions.get(fibIdentifier);
 	}
 
+	private FIBComponent loadFIBComponent(InputStream inputStream) throws IOException, JDOMException {
+		return (FIBComponent) XMLDecoder.decodeObjectWithMapping(inputStream, getFIBMapping(), this);
+	}
+
 	public static void save(FIBComponent component, File file) {
 		logger.info("Save to file " + file.getAbsolutePath());
+
+		FileOutputStream out = null;
+		try {
+			out = new FileOutputStream(file);
+			saveComponentToStream(component, file, out);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			IOUtils.closeQuietly(out);
+		}
+
+	}
+
+	public static void saveComponentToStream(FIBComponent component, File file, OutputStream stream) {
 		RelativePathFileConverter relativePathFileConverter = new RelativePathFileConverter(file.getParentFile());
 		XMLCoder coder = new XMLCoder(getFIBMapping(), new StringEncoder(StringEncoder.getDefaultInstance(), relativePathFileConverter));
-
 		try {
-			coder.encodeObject(component, new FileOutputStream(file));
+			coder.encodeObject(component, stream);
 			logger.info("Succeeded to save: " + file);
 			// System.out.println("> "+coder.encodeObject(component));
 		} catch (Exception e) {
 			logger.warning("Failed to save: " + file + " unexpected exception: " + e.getMessage());
 			e.printStackTrace();
 		}
-
 	}
 
 }

@@ -19,8 +19,8 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -71,8 +71,8 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddGeneratedCodeRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddGeneratedCodeRepository>() {
 			@Override
-			public boolean run(ActionEvent e, AddGeneratedCodeRepository action) {
-				if ((action.getNewGeneratedCodeRepositoryName() == null) || (action.getNewGeneratedCodeRepositoryDirectory() == null)) {
+			public boolean run(EventObject e, AddGeneratedCodeRepository action) {
+				if (action.getNewGeneratedCodeRepositoryName() == null || action.getNewGeneratedCodeRepositoryDirectory() == null) {
 					GeneratedOutput gc = action.getFocusedObject().getGeneratedCode();
 					Vector<DGRepository> availableReaderRepositories = new Vector<DGRepository>();
 					for (GenerationRepository r : gc.getProject().getGeneratedDoc().getGeneratedRepositories()) {
@@ -90,11 +90,11 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 							action.getNewTargetType());
 					targetType.setShowReset(false);
 					final TextFieldParameter paramName = new TextFieldParameter("name", "repository_name",
-							(action.getNewGeneratedCodeRepositoryName() == null ? gc.getProject().getNextExternalRepositoryIdentifier(
-									FlexoLocalization.localizedForKey("generated_code")) : action.getNewGeneratedCodeRepositoryName()));
+							action.getNewGeneratedCodeRepositoryName() == null ? gc.getProject().getNextExternalRepositoryIdentifier(
+									FlexoLocalization.localizedForKey("generated_code")) : action.getNewGeneratedCodeRepositoryName());
 					DirectoryParameter paramDir = new DirectoryParameter("directory", "source_directory",
-							(action.getNewGeneratedCodeRepositoryDirectory() == null ? new File(System.getProperty("user.home"), gc
-									.getProject().getProjectName()) : action.getNewGeneratedCodeRepositoryDirectory()));
+							action.getNewGeneratedCodeRepositoryDirectory() == null ? new File(System.getProperty("user.home"), gc
+									.getProject().getProjectName()) : action.getNewGeneratedCodeRepositoryDirectory());
 					final CheckboxParameter includeReader = new CheckboxParameter("includeReader", "include_reader", true);
 					final DynamicDropDownParameter<DGRepository> readerRepository = new DynamicDropDownParameter<DGRepository>(
 							"repository", "reader_repository", availableReaderRepositories,
@@ -108,7 +108,7 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 
 						@Override
 						public void newValueWasSet(ParameterDefinition<DGRepository> param, DGRepository oldValue, DGRepository newValue) {
-							if (includeReader.getValue() && (newValue != null)) {
+							if (includeReader.getValue() && newValue != null) {
 								readerDir.setValue(getReaderParamDir(paramName, newValue));
 							}
 						}
@@ -123,16 +123,16 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 
 								@Override
 								public boolean isValid(ParametersModel model) {
-									if ((paramName.getValue() == null) || (paramName.getValue().trim().length() == 0)) {
+									if (paramName.getValue() == null || paramName.getValue().trim().length() == 0) {
 										errorMessage = FlexoLocalization.localizedForKey("repository_name_cannot_be_empty");
 										return false;
 									}
-									if (includeReader.getValue() && (readerRepository.getValue() == null)) {
+									if (includeReader.getValue() && readerRepository.getValue() == null) {
 										errorMessage = FlexoLocalization.localizedForKey("you_must_provide_a_reader_repository");
 										return false;
 									}
-									if (includeReader.getValue()
-											&& (!readerRepository.getValue().isConnected() && (readerDir.getValue() == null))) {
+									if (includeReader.getValue() && !readerRepository.getValue().isConnected()
+											&& readerDir.getValue() == null) {
 										errorMessage = FlexoLocalization.localizedForKey("reader_not_configured");
 										return false;
 									}
@@ -147,7 +147,7 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 						action.setNewGeneratedCodeRepositoryDirectory(paramDir.getValue());
 						action.setIncludeReader(includeReader.getValue());
 						action.setReaderRepository(readerRepository.getValue());
-						if ((action.getReaderRepository() != null) && !action.getReaderRepository().isConnected()) {
+						if (action.getReaderRepository() != null && !action.getReaderRepository().isConnected()) {
 							action.getReaderRepository().setDirectory(readerDir.getValue());
 						}
 						if (action.isIncludeReader() && !action.getReaderRepository().isConnected()) {
@@ -177,7 +177,7 @@ public class AddGeneratedCodeRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddGeneratedCodeRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddGeneratedCodeRepository>() {
 			@Override
-			public boolean run(ActionEvent e, AddGeneratedCodeRepository action) {
+			public boolean run(EventObject e, AddGeneratedCodeRepository action) {
 				if (action.getNewGeneratedCodeRepository() != null) {
 					getController().setCurrentEditedObjectAsModuleView(action.getNewGeneratedCodeRepository());
 				}

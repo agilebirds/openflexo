@@ -50,7 +50,7 @@ public class RectangleWithTwoPointsConstruction extends RectangleConstruction {
 		double width = Math.abs(p1.x - p2.x);
 		double height = Math.abs(p1.y - p2.y);
 
-		return new FGERectangle(p.x, p.y, width, height, (getIsFilled() ? Filling.FILLED : Filling.NOT_FILLED));
+		return new FGERectangle(p.x, p.y, width, height, getIsFilled() ? Filling.FILLED : Filling.NOT_FILLED);
 	}
 
 	@Override

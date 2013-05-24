@@ -44,7 +44,7 @@ public class ShemaDeleted extends OEDataModification implements RMNotification {
 
 	@Override
 	public boolean propagateToSynchronizedResource(FlexoResource originResource, FlexoResource targetResource) {
-		if ((originResource == shema.getShemaLibrary().getFlexoResource()) /*&& targetResource == component.getComponentResource()*/) {
+		if (originResource == shema.getShemaLibrary().getFlexoResource() /*&& targetResource == component.getComponentResource()*/) {
 			return true;
 		} else {
 			return false;

@@ -28,16 +28,11 @@ import java.util.Vector;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IETopComponent;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.IObject;
 import org.openflexo.foundation.ie.OperationComponentInstance;
-import org.openflexo.foundation.ie.action.AddTab;
-import org.openflexo.foundation.ie.action.SuroundWithRepetition;
-import org.openflexo.foundation.ie.action.TopComponentDown;
-import org.openflexo.foundation.ie.action.TopComponentUp;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.TabComponentDefinition;
 import org.openflexo.foundation.ie.dm.ComponentDeleteRequest;
@@ -150,16 +145,6 @@ public class IESequenceTab extends IESequence<ITabWidget> implements IETopCompon
 	@Override
 	public boolean isSubsequence() {
 		return getParent() instanceof IESequenceTab;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddTab.actionType);
-		returned.add(TopComponentUp.actionType);
-		returned.add(TopComponentDown.actionType);
-		returned.remove(SuroundWithRepetition.actionType);
-		return returned;
 	}
 
 	/**

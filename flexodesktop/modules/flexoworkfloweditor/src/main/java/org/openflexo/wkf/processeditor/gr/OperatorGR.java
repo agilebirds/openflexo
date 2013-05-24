@@ -27,8 +27,11 @@ import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.FlexoLevel;
 import org.openflexo.foundation.wkf.node.OperatorNode;
+import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
@@ -42,31 +45,17 @@ public abstract class OperatorGR<O extends OperatorNode> extends PetriGraphNodeG
 		super(operatorNode, ShapeType.LOSANGE, aDrawing, isInPalet);
 		// setX(getOperatorNode().getPosX());
 		// setY(getOperatorNode().getPosY());
-		setWidth(35);
-		setHeight(35);
-
 		// setText(getOperatorNode().getName());
 		// setAbsoluteTextX(getOperatorNode().getNodeLabelPosX());
 		// setAbsoluteTextY(getOperatorNode().getNodeLabelPosY());
 		setIsFloatingLabel(true);
 
-		foreground = ForegroundStyle.makeStyle(Color.BLACK);
-		foreground.setLineWidth(0.6);
-
-		if (getImageIcon() != null) {
-			background = BackgroundStyle.makeImageBackground(getImageIcon());
-			((BackgroundStyle.BackgroundImage) background).setScaleX(1);
-			((BackgroundStyle.BackgroundImage) background).setScaleY(1);
-			((BackgroundStyle.BackgroundImage) background).setDeltaX(-2);
-			((BackgroundStyle.BackgroundImage) background).setDeltaY(-3);
-		} else {
-			background = BackgroundStyle.makeEmptyBackground();
-		}
+		foreground = ForegroundStyle.makeStyle(WKFCst.NODE_BORDER_COLOR);
+		foreground.setLineWidth(1.0);
 
 		setForeground(foreground);
-		setBackground(background);
 
-		setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
+		updateResizable();
 
 		if (getOperatorNode().getLevel() == FlexoLevel.ACTIVITY) {
 			setLayer(ACTIVITY_LAYER);
@@ -81,14 +70,86 @@ public abstract class OperatorGR<O extends OperatorNode> extends PetriGraphNodeG
 	}
 
 	@Override
+	public double getWidth() {
+		if (isResizable()) {
+			if (!getNode().hasDimensionForContext(BASIC_PROCESS_EDITOR)) {
+				getNode().getWidth(BASIC_PROCESS_EDITOR, DEFAULT_ACTIVITY_WIDTH);
+			}
+			return getNode().getWidth(BASIC_PROCESS_EDITOR);
+		} else {
+			return 35;
+		}
+	}
+
+	@Override
+	public void setWidthNoNotification(double width) {
+		getNode().setWidth(width, BASIC_PROCESS_EDITOR);
+	}
+
+	@Override
+	public double getHeight() {
+		if (isResizable()) {
+			if (!getNode().hasDimensionForContext(BASIC_PROCESS_EDITOR)) {
+				getNode().getHeight(BASIC_PROCESS_EDITOR, DEFAULT_ACTIVITY_HEIGHT);
+			}
+			return getNode().getHeight(BASIC_PROCESS_EDITOR);
+		} else {
+			return 35;
+		}
+	}
+
+	@Override
+	public void setHeightNoNotification(double height) {
+		getNode().setHeight(height, BASIC_PROCESS_EDITOR);
+	}
+
+	private void updateResizable() {
+		if (isResizable()) {
+			setDimensionConstraints(DimensionConstraints.FREELY_RESIZABLE);
+			setAdjustMinimalWidthToLabelWidth(false);
+			setAdjustMinimalHeightToLabelHeight(false);
+			setIsFloatingLabel(false);
+			setBackground(BackgroundStyle.makeEmptyBackground());
+		} else {
+			setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
+			setIsFloatingLabel(true);
+		}
+		//setLineWrap(isResizable());
+		if (getImageIcon() != null) {
+			background = BackgroundStyle.makeImageBackground(getImageIcon());
+			((BackgroundStyle.BackgroundImage) background).setScaleX(1);
+			((BackgroundStyle.BackgroundImage) background).setScaleY(1);
+			((BackgroundStyle.BackgroundImage) background).setDeltaX(-2);
+			((BackgroundStyle.BackgroundImage) background).setDeltaY(-3);
+		} else {
+			background = BackgroundStyle.makeColoredBackground(Color.WHITE);
+		}
+		setBackground(background);
+		notifyObjectResized();
+		notifyShapeNeedsToBeRedrawn();
+	}
+
+	protected boolean isResizable() {
+		return getOperatorNode().isResizable(BASIC_PROCESS_EDITOR);
+	}
+
+	@Override
 	public void updatePropertiesFromWKFPreferences() {
 		super.updatePropertiesFromWKFPreferences();
 		setTextStyle(TextStyle.makeTextStyle(Color.BLACK,
 				getWorkflow() != null ? getWorkflow().getEventFont(WKFPreferences.getEventNodeFont()).getFont() : WKFPreferences
 						.getEventNodeFont().getFont()));
 		setIsMultilineAllowed(true);
-		getShadowStyle().setShadowDepth(1);
-		getShadowStyle().setShadowBlur(3);
+		/*getShadowStyle().setShadowDepth(1);
+		getShadowStyle().setShadowBlur(3);*/
+	}
+
+	@Override
+	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (getDrawable().getResizableKeyForContext(BASIC_PROCESS_EDITOR).equals(dataModification.propertyName())) {
+			updateResizable();
+		}
+		super.update(observable, dataModification);
 	}
 
 	public O getOperatorNode() {

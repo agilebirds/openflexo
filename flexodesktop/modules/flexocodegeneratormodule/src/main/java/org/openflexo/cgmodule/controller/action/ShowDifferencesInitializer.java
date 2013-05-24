@@ -19,7 +19,7 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -55,7 +55,7 @@ public class ShowDifferencesInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ShowDifferences> getDefaultInitializer() {
 		return new FlexoActionInitializer<ShowDifferences>() {
 			@Override
-			public boolean run(ActionEvent e, ShowDifferences action) {
+			public boolean run(EventObject e, ShowDifferences action) {
 				CGFileVersionParameter versionLeftParameter = new CGFileVersionParameter("versionLeft", "left_version", action.getCGFile(),
 						null);
 				CGFileVersionParameter versionRightParameter = new CGFileVersionParameter("versionRight", "right_version",
@@ -65,7 +65,7 @@ public class ShowDifferencesInitializer extends ActionInitializer {
 						FlexoLocalization.localizedForKey("please_choose_versions_that_you_want_to_compare"), versionLeftParameter,
 						versionRightParameter);
 				if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-					if ((versionLeftParameter.getValue() == null) || (versionRightParameter.getValue() == null)) {
+					if (versionLeftParameter.getValue() == null || versionRightParameter.getValue() == null) {
 						FlexoController.notify(FlexoLocalization.localizedForKey("please_select_valid_versions"));
 						return false;
 					}
@@ -86,7 +86,7 @@ public class ShowDifferencesInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ShowDifferences> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ShowDifferences>() {
 			@Override
-			public boolean run(ActionEvent e, ShowDifferences action) {
+			public boolean run(EventObject e, ShowDifferences action) {
 				CGFileDiffEditorPopup popup = new CGFileDiffEditorPopup(action.getCGFile(), action.getLeftSource(),
 						action.getRightSource(), getControllerActionInitializer().getGeneratorController());
 				popup.setVisible(true);

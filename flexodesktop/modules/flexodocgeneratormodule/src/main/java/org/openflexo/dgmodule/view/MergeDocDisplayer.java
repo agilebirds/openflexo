@@ -227,7 +227,7 @@ public class MergeDocDisplayer extends DocDisplayer {
 
 		@Override
 		public void update(Observable o, Object arg) {
-			if ((o == getResultFileMerge()) && (arg instanceof MergeRecomputed)) {
+			if (o == getResultFileMerge() && arg instanceof MergeRecomputed) {
 				logger.info("update() received in ASCIIFileMergeCodeDisplayer for MergeRecomputed");
 				// logger.info("left: "+getResultFileMerge().getLeftSource().getSourceString());
 				int selectedIndex = getSelectedIndex();

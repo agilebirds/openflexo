@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.InvalidParametersException;
@@ -52,17 +53,21 @@ public class SetAndOpenOperationComponent extends FlexoAction<SetAndOpenOperatio
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
-			return ((object != null) && !(object instanceof SelfExecutableNode) && ((object).getNodeType() == NodeType.NORMAL) && ((object)
-					.getComponentInstance() == null));
+		public boolean isVisibleForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
+			return object != null && !(object instanceof SelfExecutableNode) && object.getNodeType() == NodeType.NORMAL
+					&& object.getComponentInstance() == null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
-			return ((object.getNodeType() == NodeType.NORMAL) && (object.getComponentInstance() == null));
+		public boolean isEnabledForSelection(OperationNode object, Vector<WKFObject> globalSelection) {
+			return object.getNodeType() == NodeType.NORMAL && object.getComponentInstance() == null;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, OperationNode.class);
+	}
 
 	SetAndOpenOperationComponent(OperationNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

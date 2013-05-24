@@ -20,7 +20,6 @@
 package org.openflexo.generator;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,9 +28,6 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.openflexo.foundation.CodeType;
-import org.openflexo.foundation.DefaultFlexoEditor;
-import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.dm.FlexoExecutionModelRepository;
 import org.openflexo.foundation.dm.eo.EOPrototypeRepository;
 import org.openflexo.foundation.ie.action.AddTab;
@@ -62,11 +58,9 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.foundation.wkf.utils.OperationAssociatedWithComponentSuccessfully;
 import org.openflexo.generator.action.SynchronizeRepositoryCodeGeneration;
-import org.openflexo.generator.action.ValidateProject;
 import org.openflexo.generator.action.WriteModifiedGeneratedFiles;
 import org.openflexo.generator.rm.OperationComponentJavaFileResource;
 import org.openflexo.logging.FlexoLoggingManager;
-import org.openflexo.toolbox.ToolBox;
 
 public class TestCGRepositoryDeletion extends CGTestCase {
 
@@ -132,20 +126,8 @@ public class TestCGRepositoryDeletion extends CGTestCase {
 	 */
 	public void test0CreateProject() {
 		log("test0CreateProject");
-		ToolBox.setPlatform();
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
-		try {
-			File tempFile = File.createTempFile(TEST_CG, "");
-			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");
-			tempFile.delete();
-		} catch (IOException e) {
-			fail();
-		}
-		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
-		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
-		logger.info("Project identifier: " + _projectIdentifier);
-		_editor = (DefaultFlexoEditor) FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, null);
-		_project = _editor.getProject();
+		createProject(TEST_CG);
 		logger.info("Project has been SUCCESSFULLY created");
 		_bsHook = new DebugBackwardSynchronizationHook();
 		FlexoResourceManager.setBackwardSynchronizationHook(_bsHook);
@@ -510,42 +492,7 @@ public class TestCGRepositoryDeletion extends CGTestCase {
 	public void test10ValidateProject() {
 		log("test10ValidateProject");
 
-		_editor.registerExceptionHandlerFor(ValidateProject.actionType, new FlexoExceptionHandler<ValidateProject>() {
-			@Override
-			public boolean handleException(FlexoException exception, ValidateProject action) {
-				if (action.getIeValidationReport() != null && action.getIeValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from IE:\n" + action.getIeValidationReport().reportAsString());
-				}
-				if (action.getWkfValidationReport() != null && action.getWkfValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from WKF:\n" + action.getWkfValidationReport().reportAsString());
-				}
-				if (action.getDkvValidationReport() != null && action.getDkvValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from DKV:\n" + action.getDkvValidationReport().reportAsString());
-				}
-				if (action.getDmValidationReport() != null && action.getDmValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from DM:\n" + action.getDmValidationReport().reportAsString());
-				}
-				return true;
-			}
-		});
-
-		ValidateProject validateProject = ValidateProject.actionType.makeNewAction(codeRepository, null, _editor);
-		validateProject.doAction();
-
-		// First project is not valid
-		assertFalse(validateProject.isProjectValid());
-
-		// First project is not valid
-		/*try {
-		assertFalse(validateProject.isProjectValid());
-		}
-		catch (AssertionFailedError e) {
-		}
-		fail();*/
-
-		// Try to fix errors (GPO: this is not required anymore, prefix is always set on root folder unless done otherwise explicitly)
-		FlexoComponentFolder rootFolder = _project.getFlexoComponentLibrary().getRootFolder();
-		// rootFolder.setComponentPrefix("TST");
+		validateProject(codeRepository, false);
 
 		// To fix errors we need another process and operation on which we will bind the menu
 		AddSubProcess process = AddSubProcess.actionType.makeNewAction(_project.getFlexoWorkflow(), null, _editor);
@@ -593,12 +540,7 @@ public class TestCGRepositoryDeletion extends CGTestCase {
 		// now we have to define tabs for operations
 		associateTabWithOperations();
 		// Project should be without errors now
-		validateProject = ValidateProject.actionType.makeNewAction(codeRepository, null, _editor);
-		validateProject.doAction();
-		System.out.println(validateProject.readableValidationErrors());
-		assertTrue(validateProject.isProjectValid());
-
-		saveProject();
+		assertProjectIsValid(codeRepository);
 
 	}
 

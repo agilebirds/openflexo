@@ -19,14 +19,19 @@
  */
 package org.openflexo.components.browser;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
@@ -39,11 +44,10 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.icon.UtilsIconLibrary;
-import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.selection.SelectionSynchronizedComponent;
+import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Object that will act as a model for a JTree to represent a browsing perspective of a project
@@ -51,7 +55,7 @@ import org.openflexo.selection.SelectionSynchronizedComponent;
  * @author sguerin
  * 
  */
-public abstract class ProjectBrowser extends DefaultTreeModel implements SelectionSynchronizedComponent {
+public abstract class ProjectBrowser extends DefaultTreeModel implements SelectionSynchronizedComponent, PropertyChangeListener {
 
 	static final Logger logger = Logger.getLogger(ProjectBrowser.class.getPackage().getName());
 
@@ -64,22 +68,22 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 
 	private FlexoModelObject _rootObject = null;
 
-	protected Hashtable<BrowserElementType, BrowserFilterStatus> _filterStatus;
+	protected Map<BrowserElementType, BrowserFilterStatus> _filterStatus;
 
-	protected Hashtable<BrowserElementType, Boolean> _filterDeepBrowsing;
+	protected Map<BrowserElementType, Boolean> _filterDeepBrowsing;
 
-	protected Hashtable<BrowserElementType, ElementTypeBrowserFilter> _filters;
+	protected Map<BrowserElementType, ElementTypeBrowserFilter> _filters;
 
 	// private Vector<ElementTypeBrowserFilter> _elementTypeFilters;
 
-	private Vector<CustomBrowserFilter> _customFilters;
+	private List<CustomBrowserFilter> _customFilters;
 
 	// hashtable where keys are FlexoModelObject objects while values are either
 	// BrowserElement
 	// or a Vector of BrowserElement
-	private Hashtable<FlexoModelObject, Object> _elements = null;
+	private Map<FlexoModelObject, Object> _elements = null;
 
-	private final Vector<ProjectBrowserListener> _browserListeners;
+	private final List<ProjectBrowserListener> _browserListeners;
 
 	private SelectionManager _selectionManager;
 
@@ -93,28 +97,38 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 
 	int rowHeight = DEFAULT_ROW_HEIGHT;
 
+	private FlexoController controller;
+
+	protected PropertyChangeListenerRegistrationManager manager = new PropertyChangeListenerRegistrationManager();
+
+	@Deprecated
 	public ProjectBrowser(FlexoProject project) {
 		this(project, true);
 	}
 
+	@Deprecated
 	public ProjectBrowser(FlexoProject project, boolean initNow) {
 		this(project, null, initNow);
 	}
 
+	@Deprecated
 	public ProjectBrowser(FlexoEditor editor, SelectionManager selectionManager) {
-		this(editor.getProject(), selectionManager, true);
+		this(editor != null ? editor.getProject() : null, selectionManager, true);
 		_editor = editor;
 	}
 
+	@Deprecated
 	public ProjectBrowser(FlexoEditor editor, SelectionManager selectionManager, boolean initNow) {
-		this(editor.getProject(), selectionManager, initNow);
+		this(editor != null ? editor.getProject() : null, selectionManager, initNow);
 		_editor = editor;
 	}
 
+	@Deprecated
 	public ProjectBrowser(FlexoProject project, SelectionManager selectionManager) {
 		this(project, selectionManager, true);
 	}
 
+	@Deprecated
 	public ProjectBrowser(FlexoProject project, SelectionManager selectionManager, boolean initNow) {
 		super(null);
 		_project = project;
@@ -135,17 +149,20 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		}
 	}
 
+	@Deprecated
 	protected ProjectBrowser(BrowserConfiguration configuration, SelectionManager selectionManager, boolean initNow) {
 		super(null);
-		_project = configuration.getProject();
-		_browserElementFactory = configuration.getBrowserElementFactory();
 		_filterStatus = new Hashtable<BrowserElementType, BrowserFilterStatus>();
 		_filterDeepBrowsing = new Hashtable<BrowserElementType, Boolean>();
 		_filters = new Hashtable<BrowserElementType, ElementTypeBrowserFilter>();
 		// _elementTypeFilters = new Vector<ElementTypeBrowserFilter>();
 		_browserListeners = new Vector<ProjectBrowserListener>();
 		_customFilters = new Vector<CustomBrowserFilter>();
-		configuration.configure(this);
+		if (configuration != null) {
+			_project = configuration.getProject();
+			_browserElementFactory = configuration.getBrowserElementFactory();
+			configuration.configure(this);
+		}
 		if (selectionManager != null) {
 			_selectionManager = selectionManager;
 			_selectionManager.addToSelectionListeners(this);
@@ -153,8 +170,40 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		_selectionController = new SelectionController.DefaultSelectionController();
 	}
 
+	protected ProjectBrowser(FlexoController controller) {
+		this(null, controller);
+	}
+
+	protected ProjectBrowser(TreeConfiguration configuration, FlexoController controller) {
+		super(null);
+		this.controller = controller;
+		if (configuration != null) {
+			_browserElementFactory = configuration.getBrowserElementFactory();
+		}
+		_filterStatus = new Hashtable<BrowserElementType, BrowserFilterStatus>();
+		_filterDeepBrowsing = new Hashtable<BrowserElementType, Boolean>();
+		_filters = new Hashtable<BrowserElementType, ElementTypeBrowserFilter>();
+		// _elementTypeFilters = new Vector<ElementTypeBrowserFilter>();
+		_browserListeners = new Vector<ProjectBrowserListener>();
+		_customFilters = new Vector<CustomBrowserFilter>();
+		if (configuration != null) {
+			configuration.configure(this);
+		} else {
+			configure();
+		}
+		if (controller != null && controller.getSelectionManager() != null) {
+			_selectionManager = controller.getSelectionManager();
+			_selectionManager.addToSelectionListeners(this);
+		}
+		_selectionController = new SelectionController.DefaultSelectionController();
+	}
+
 	public boolean showRootNode() {
 		return true;
+	}
+
+	public boolean isRootCollapsable() {
+		return false;
 	}
 
 	public void setSelectionManager(SelectionManager aSelectionManager) {
@@ -237,29 +286,26 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 
 	public ElementTypeBrowserFilter getFilterForElement(BrowserElement element) {
 		BrowserElementType elementType = element.getFilteredElementType();
+		if (elementType == null) {
+			return null;
+		}
 		if (_filters.get(elementType) == null) {
 			// first time we see this element type
 			ElementTypeBrowserFilter newBrowserFilter = element.newBrowserFilter(_filterStatus.get(elementType));
-			/*  if (_filterStatus.get(elementType) != null) {
-			      newBrowserFilter.setStatus((_filterStatus.get(elementType)));
-			      if (logger.isLoggable(Level.FINE))
-			          logger.fine(getClass().getName() + ": Setting filter " + newBrowserFilter.getName() + " status to "
-			                  + (_filterStatus.get(elementType)));
-			      if ((newBrowserFilter.getStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN)
-			              || (newBrowserFilter.getStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN)) {
-			          if (logger.isLoggable(Level.FINE))
-			              logger.fine(getClass().getName() + ": Adding optional filter " + newBrowserFilter.getName());
-			          //_elementTypeFilters.add(newBrowserFilter);
-			          if ((newBrowserFilter.getStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN)) {
-			              newBrowserFilter.setStatus(BrowserFilterStatus.HIDE);
-			          } else if ((newBrowserFilter.getStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN)) {
-			              newBrowserFilter.setStatus(BrowserFilterStatus.SHOW);
-			          }
-			        //  notifyListeners(new OptionalFilterAddedEvent(newBrowserFilter));
-			      }
-			  }*/
+			/*
+			 * if (_filterStatus.get(elementType) != null) { newBrowserFilter.setStatus((_filterStatus.get(elementType))); if
+			 * (logger.isLoggable(Level.FINE)) logger.fine(getClass().getName() + ": Setting filter " + newBrowserFilter.getName() +
+			 * " status to " + (_filterStatus.get(elementType))); if ((newBrowserFilter.getStatus() ==
+			 * BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN) || (newBrowserFilter.getStatus() ==
+			 * BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN)) { if (logger.isLoggable(Level.FINE)) logger.fine(getClass().getName() +
+			 * ": Adding optional filter " + newBrowserFilter.getName()); //_elementTypeFilters.add(newBrowserFilter); if
+			 * ((newBrowserFilter.getStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN)) {
+			 * newBrowserFilter.setStatus(BrowserFilterStatus.HIDE); } else if ((newBrowserFilter.getStatus() ==
+			 * BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN)) { newBrowserFilter.setStatus(BrowserFilterStatus.SHOW); } //
+			 * notifyListeners(new OptionalFilterAddedEvent(newBrowserFilter)); } }
+			 */
 			if (_filterDeepBrowsing.get(elementType) != null) {
-				newBrowserFilter.setDeepBrowsing((_filterDeepBrowsing.get(elementType)).booleanValue());
+				newBrowserFilter.setDeepBrowsing(_filterDeepBrowsing.get(elementType).booleanValue());
 			}
 			_filters.put(elementType, newBrowserFilter);
 			notifyListeners(new OptionalFilterAddedEvent(newBrowserFilter));
@@ -270,22 +316,30 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		return _filters.get(elementType);
 	}
 
+	@Deprecated
 	public FlexoProject getProject() {
 		return _project;
 	}
 
 	/*
-	 * Pour le moment parce que j'ai pas trop le temps, on reconstruit a chaque
-	 * fois tout l'arbre. On pourrait faire un truc beaucoup plus chiade avec
-	 * des MutableNodeTree qui recoivent plein de DataModification toutes plus
-	 * chiadees les unes que les autres, faire des insert nodes, en notifier le
-	 * modele, tout ca....
+	 * Pour le moment parce que j'ai pas trop le temps, on reconstruit a chaque fois tout l'arbre. On pourrait faire un truc beaucoup plus
+	 * chiade avec des MutableNodeTree qui recoivent plein de DataModification toutes plus chiadees les unes que les autres, faire des
+	 * insert nodes, en notifier le modele, tout ca....
 	 */
 	/**
 	 * Brutal update of the whole browser. You rarely need to invoke it, except when you have done big structural changes which are not
 	 * notified (for example filter status modification)
 	 */
 	public void update() {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					update();
+				}
+			});
+			return;
+		}
 		Vector<FlexoModelObject> selectionBeforeUpdate = null;
 		if (getSelectedObjects() != null) {
 			selectionBeforeUpdate = new Vector<FlexoModelObject>(getSelectedObjects());
@@ -306,41 +360,42 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 			}
 		}
 		rebuildTree();
-		update(getRootElement());
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Notifying expansions");
 		}
-		notifyListeners(new ExpansionNotificationEvent());
-		if (selectionBeforeUpdate != null) {
-			for (Enumeration<FlexoModelObject> en = selectionBeforeUpdate.elements(); en.hasMoreElements();) {
-				FlexoModelObject next = en.nextElement();
-				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("Select " + next);
+		if (getRootObject() != null) {
+			notifyListeners(new ExpansionNotificationEvent());
+			if (selectionBeforeUpdate != null) {
+				for (Enumeration<FlexoModelObject> en = selectionBeforeUpdate.elements(); en.hasMoreElements();) {
+					FlexoModelObject next = en.nextElement();
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("Select " + next);
+					}
+					fireObjectSelected(next);
 				}
-				fireObjectSelected(next);
 			}
-		}
-		if (expandedObjects != null) {
-			for (Enumeration<FlexoModelObject> en = expandedObjects.elements(); en.hasMoreElements();) {
-				FlexoModelObject next = en.nextElement();
-				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("Expand " + next);
+			if (expandedObjects != null) {
+				for (Enumeration<FlexoModelObject> en = expandedObjects.elements(); en.hasMoreElements();) {
+					FlexoModelObject next = en.nextElement();
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine("Expand " + next);
+					}
+					expand(next, false);
+					// expandAll(next);
 				}
-				expand(next, false);
-				// expandAll(next);
 			}
 		}
 	}
 
 	/*
-	 * private void expandAll(FlexoModelObject object) { BrowserElement[]
-	 * elements = elementForObject(object); for (int i=0; i<elements.length;
-	 * i++) { BrowserElement el = elements[i]; for (int j=0; j<el.getChildCount();
-	 * j++) { BrowserElement el2 = (BrowserElement)el.getChildAt(j);
-	 * expand(el2.getObject()); } } }
+	 * private void expandAll(FlexoModelObject object) { BrowserElement[] elements = elementForObject(object); for (int i=0;
+	 * i<elements.length; i++) { BrowserElement el = elements[i]; for (int j=0; j<el.getChildCount(); j++) { BrowserElement el2 =
+	 * (BrowserElement)el.getChildAt(j); expand(el2.getObject()); } } }
 	 */
 
 	private BrowserView leadingView;
+
+	private boolean deleted;
 
 	protected BrowserView getLeadingView() {
 		return leadingView;
@@ -392,7 +447,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	public BrowserElement getRootElement() {
-		if (_rootElement == null) {
+		if (_rootElement == null && this.getRootObject() != null) {
 			rebuildTree();
 		}
 		return _rootElement;
@@ -423,12 +478,19 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Rebuild whole tree in ProjectBrowser");
 		}
-		if (getRootObject() != null) {
+		setIsRebuildingStructure();
+		try {
 			if (_elements != null) {
 				clearTree();
 			}
-			_elements = new Hashtable<FlexoModelObject, Object>();
-			_rootElement = makeNewElement(getRootObject(), null);
+			if (getRootObject() != null) {
+				_elements = new Hashtable<FlexoModelObject, Object>();
+				setRoot(_rootElement = makeNewElement(getRootObject(), null));
+			} else {
+				setRoot(null);
+			}
+		} finally {
+			resetIsRebuildingStructure();
 		}
 	}
 
@@ -436,8 +498,37 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Setting root object to be " + aRootObject);
 		}
+		if (this._rootObject != null && this._rootObject.getDeletedProperty() != null) {
+			manager.removeListener(this._rootObject.getDeletedProperty(), this, this._rootObject);
+		}
 		_rootObject = aRootObject;
+		if (this._rootObject != null && this._rootObject.getDeletedProperty() != null) {
+			manager.addListener(this._rootObject.getDeletedProperty(), this, this._rootObject);
+		}
 		update();
+		if (_rootObject != null && !isRootCollapsable()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					if (deleted) {
+						return;
+					}
+					if (showRootNode()) {
+						expand(_rootObject, false);
+					} else {
+						BrowserElement[] elements = elementForObject(_rootObject);
+						List<BrowserElement> children = new ArrayList<BrowserElement>();
+						for (BrowserElement el : elements) {
+							Enumeration<BrowserElement> en = el.children();
+							while (en.hasMoreElements()) {
+								children.add(en.nextElement());
+							}
+						}
+						notifyListeners(new ExpansionNotificationEvent(children.toArray(new BrowserElement[children.size()]), true));
+					}
+				}
+			});
+		}
 	}
 
 	public FlexoModelObject getRootObject() {
@@ -452,28 +543,24 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Delete browser " + getClass().getName());
 		}
-
+		deleted = true;
+		manager.delete();
 		clearTree();
 		_project = null;
 		_rootElement = null;
 		_filterStatus.clear();
 		_filterDeepBrowsing.clear();
 		_filters.clear();
-		// _elementTypeFilters.clear();
 		_browserListeners.clear();
 		_selectionManager = null;
+		controller = null;
 	}
 
 	private void clearTree() {
-		// synchronized (getBrowserLock()) {
 		if (_rootElement != null) {
-
-			// _rootElement.recursiveDeleteChilds();
-
 			_rootElement.delete();
 		}
-		for (Enumeration<Object> e = _elements.elements(); e.hasMoreElements();) {
-			Object obj = e.nextElement();
+		for (Object obj : new ArrayList<Object>(_elements.values())) {
 			if (obj instanceof BrowserElement) {
 				((BrowserElement) obj).delete();
 			} else if (obj instanceof Vector) {
@@ -488,7 +575,6 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		_expansionSynchronizedElements.removeAllElements();
 		_expansionSynchronizedElements = new Vector<ExpansionSynchronizedElement>();
 		_elements = null;
-		// }
 	}
 
 	Vector<ExpansionSynchronizedElement> _expansionSynchronizedElements = new Vector<ExpansionSynchronizedElement>();
@@ -537,6 +623,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	protected void unregisterElementForObject(BrowserElement element, FlexoModelObject modelObject) {
+		if (_elements == null) {
+			return;
+		}
 		if (element.getSelectableObject() != modelObject) {
 			unregisterElementForObject(element, element.getSelectableObject());
 		}
@@ -559,7 +648,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	public boolean isExpansionSynchronizedElement(BrowserElement element) {
-		return ((element instanceof ExpansionSynchronizedElement) && (_expansionSynchronizedElements.contains(element)));
+		return element instanceof ExpansionSynchronizedElement && _expansionSynchronizedElements.contains(element);
 	}
 
 	/**
@@ -581,9 +670,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 			BrowserElement element = (BrowserElement) found;
 			builtVector.add(element.getTreePath());
 		} else if (found instanceof Vector) {
-			Vector elementList = (Vector) found;
-			for (Enumeration e = elementList.elements(); e.hasMoreElements();) {
-				BrowserElement element = (BrowserElement) e.nextElement();
+			Vector<BrowserElement> elementList = (Vector<BrowserElement>) found;
+			for (Enumeration<BrowserElement> e = elementList.elements(); e.hasMoreElements();) {
+				BrowserElement element = e.nextElement();
 				builtVector.add(element.getTreePath());
 			}
 		} else if (found != null) {
@@ -611,43 +700,31 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	 * @return
 	 */
 	protected BrowserElement[] elementForObject(FlexoModelObject object) {
-		Vector<BrowserElement> builtVector = new Vector<BrowserElement>();
-		Object found = (object != null ? _elements.get(object) : null);
+		List<BrowserElement> builtVector = new ArrayList<BrowserElement>();
+		Object found = object != null ? _elements.get(object) : null;
 		if (found instanceof BrowserElement) {
 			BrowserElement element = (BrowserElement) found;
 			builtVector.add(element);
 		} else if (found instanceof Vector) {
-			Vector elementList = (Vector) found;
-			for (Enumeration e = elementList.elements(); e.hasMoreElements();) {
-				BrowserElement element = (BrowserElement) e.nextElement();
-				builtVector.add(element);
-			}
+			builtVector.addAll((Vector) found);
 		} else if (found != null) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Found unexpected " + found.getClass().getName() + " in ProjectBrowser !");
 			}
-			return null;
 		} else {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Found null in ProjectBrowser for object " + object);
 			}
-			return null;
 		}
-		BrowserElement[] returned = new BrowserElement[builtVector.size()];
-		for (int i = 0; i < builtVector.size(); i++) {
-			returned[i] = builtVector.get(i);
-		}
-		return returned;
+		return builtVector.toArray(new BrowserElement[builtVector.size()]);
 	}
 
-	public abstract FlexoModelObject getDefaultRootObject();
+	@Deprecated
+	public FlexoModelObject getDefaultRootObject() {
+		return null;
+	}
 
 	public abstract void configure();
-
-	@Override
-	public Object getRoot() {
-		return getRootElement();
-	}
 
 	@Override
 	public Object getChild(Object parent, int index) {
@@ -695,8 +772,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	}
 
 	public synchronized void notifyListeners(BrowserEvent event) {
-		for (Enumeration<ProjectBrowserListener> e = _browserListeners.elements(); e.hasMoreElements();) {
-			ProjectBrowserListener l = e.nextElement();
+		// TODO: Fix this. It seems that sole Listeners (BrowserView) are removing/adding themselves
+		// during the notification phase (for ExpansionNotificationEvent, for example)
+		for (ProjectBrowserListener l : new ArrayList<ProjectBrowserListener>(_browserListeners)) {
 			if (event instanceof OptionalFilterAddedEvent) {
 				l.optionalFilterAdded((OptionalFilterAddedEvent) event);
 			} else if (event instanceof ObjectAddedToSelectionEvent) {
@@ -705,14 +783,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 				l.objectRemovedFromSelection((ObjectRemovedFromSelectionEvent) event);
 			} else if (event instanceof SelectionClearedEvent) {
 				l.selectionCleared((SelectionClearedEvent) event);
-			}
-			/*
-			 * else if (event instanceof SaveSelectionEvent) {
-			 * l.selectionSaved((SaveSelectionEvent)event); } else if (event
-			 * instanceof RestoreSelectionEvent) {
-			 * l.selectionRestored((RestoreSelectionEvent)event); }
-			 */
-			else if (event instanceof ExpansionNotificationEvent) {
+			} else if (event instanceof ExpansionNotificationEvent) {
 				l.notifyExpansions((ExpansionNotificationEvent) event);
 			} else if (event instanceof EnableExpandingSynchronizationEvent) {
 				l.enableExpandingSynchronization((EnableExpandingSynchronizationEvent) event);
@@ -783,16 +854,6 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		}
 	}
 
-	/*
-	 * protected class SaveSelectionEvent extends BrowserEvent {
-	 *
-	 * protected SaveSelectionEvent() { super(); } }
-	 *
-	 * protected class RestoreSelectionEvent extends BrowserEvent {
-	 *
-	 * protected RestoreSelectionEvent() { super(); } }
-	 */
-
 	public class EnableExpandingSynchronizationEvent extends BrowserEvent {
 
 		protected EnableExpandingSynchronizationEvent() {
@@ -809,9 +870,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 
 	public class ExpansionNotificationEvent extends BrowserEvent {
 
-		protected Vector<TreePath> _pathsToExpand;
+		protected List<TreePath> _pathsToExpand;
 
-		protected Vector<TreePath> _pathsToCollapse;
+		protected List<TreePath> _pathsToCollapse;
 
 		public ExpansionNotificationEvent() {
 			super();
@@ -820,7 +881,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 			for (Enumeration<ExpansionSynchronizedElement> e = _expansionSynchronizedElements.elements(); e.hasMoreElements();) {
 				ExpansionSynchronizedElement element = e.nextElement();
 				TreePath path = element.getTreePath();
-				if ((element).isExpanded()) {
+				if (element.isExpanded()) {
 					_pathsToExpand.add(path);
 				} else {
 					_pathsToCollapse.add(path);
@@ -842,8 +903,8 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 
 		public ExpansionNotificationEvent(BrowserElement[] elements, boolean expand) {
 			super();
-			_pathsToExpand = new Vector<TreePath>();
-			_pathsToCollapse = new Vector<TreePath>();
+			_pathsToExpand = new ArrayList<TreePath>();
+			_pathsToCollapse = new ArrayList<TreePath>();
 			for (int i = 0; i < elements.length; i++) {
 				BrowserElement element = elements[i];
 				TreePath path = element.getTreePath();
@@ -855,11 +916,11 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 			}
 		}
 
-		public Vector<TreePath> pathsToExpand() {
+		public List<TreePath> pathsToExpand() {
 			return _pathsToExpand;
 		}
 
-		public Vector<TreePath> pathsToCollabse() {
+		public List<TreePath> pathsToCollapse() {
 			return _pathsToCollapse;
 		}
 	}
@@ -942,8 +1003,7 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	 * Notify that selection must be saved to be restored later (modification of the structure)
 	 */
 	/*
-	 * public void restoreSelection() { notifyListeners(new
-	 * RestoreSelectionEvent()); }
+	 * public void restoreSelection() { notifyListeners(new RestoreSelectionEvent()); }
 	 */
 
 	@Override
@@ -1006,8 +1066,8 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		}
 	}
 
-	public Enumeration<FlexoModelObject> getAllObjects() {
-		return _elements.keys();
+	public Iterator<FlexoModelObject> getAllObjects() {
+		return _elements.keySet().iterator();
 	}
 
 	public SelectionController getSelectionController() {
@@ -1030,8 +1090,8 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		Vector<ElementTypeBrowserFilter> returned = new Vector<ElementTypeBrowserFilter>();
 		for (BrowserElementType t : _filters.keySet()) {
 			ElementTypeBrowserFilter f = _filters.get(t);
-			if ((f.getInitialFilterStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN)
-					|| (f.getInitialFilterStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN)) {
+			if (f.getInitialFilterStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_HIDDEN
+					|| f.getInitialFilterStatus() == BrowserFilterStatus.OPTIONAL_INITIALLY_SHOWN) {
 				returned.add(f);
 			}
 		}
@@ -1111,7 +1171,9 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 			getSelectionManager().setSelectedObjects(objects);
 		} else {
 			resetSelection();
-			addToSelected(objects);
+			if (objects != null) {
+				addToSelected(objects);
+			}
 		}
 	}
 
@@ -1126,12 +1188,12 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	@Override
 	public boolean mayRepresents(FlexoModelObject anObject) {
 		if (anObject instanceof IEWOComponent) {
-			return (_elements.get(anObject) != null) || mayRepresents(((IEWOComponent) anObject).getComponentDefinition());
+			return _elements.get(anObject) != null || mayRepresents(((IEWOComponent) anObject).getComponentDefinition());
 		}
-		return ((_elements != null) && (anObject != null) && (_elements.get(anObject) != null));
+		return _elements != null && anObject != null && _elements.get(anObject) != null;
 	}
 
-	public Vector<CustomBrowserFilter> getCustomFilters() {
+	public List<CustomBrowserFilter> getCustomFilters() {
 		return _customFilters;
 	}
 
@@ -1202,45 +1264,14 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 		_showOnlyAnnotationProperties = showOnlyAnnotationProperties;
 	}
 
-	// TODO: should NOT be handled at this level
-	private RoleViewMode roleViewMode = RoleViewMode.TOP_DOWN;
-
-	// TODO: should NOT be handled at this level
-	public enum RoleViewMode {
-		TOP_DOWN {
-			@Override
-			public ImageIcon getIcon() {
-				return UtilsIconLibrary.ARROW_DOWN;
-			}
-		},
-		BOTTOM_UP {
-			@Override
-			public ImageIcon getIcon() {
-				return UtilsIconLibrary.ARROW_UP;
-			}
-		},
-		FLAT {
-			@Override
-			public ImageIcon getIcon() {
-				return WKFIconLibrary.FLAT_ICON;
-			}
-		};
-		public abstract ImageIcon getIcon();
-
-		public String getLocalizedName() {
-			return FlexoLocalization.localizedForKey(name().toLowerCase());
+	@Override
+	public void reload(TreeNode node) {
+		if (node instanceof BrowserElement && ((BrowserElement) node).isDeleted()) {
+			return;
 		}
-	}
-
-	// TODO: should NOT be handled at this level
-	public RoleViewMode getRoleViewMode() {
-		return roleViewMode;
-	}
-
-	// TODO: should NOT be handled at this level
-	public void setRoleViewMode(RoleViewMode viewMode) {
-		this.roleViewMode = viewMode;
-		update();
+		setHoldStructure();
+		super.reload(node);
+		resetHoldStructure();
 	}
 
 	public boolean isRebuildingStructure() {
@@ -1273,7 +1304,14 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 	 * @return
 	 */
 	public FlexoEditor getEditor() {
+		if (controller != null) {
+			return controller.getEditor();
+		}
 		return _editor;
+	}
+
+	public FlexoController getController() {
+		return controller;
 	}
 
 	public int getRowHeight() {
@@ -1282,5 +1320,16 @@ public abstract class ProjectBrowser extends DefaultTreeModel implements Selecti
 
 	public void setRowHeight(int rowHeight) {
 		this.rowHeight = rowHeight;
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == this._rootObject && evt.getPropertyName().equals(this._rootObject.getDeletedProperty())) {
+			setRootObject(null);
+		}
+	}
+
+	public boolean showOptionsButton() {
+		return true;
 	}
 }

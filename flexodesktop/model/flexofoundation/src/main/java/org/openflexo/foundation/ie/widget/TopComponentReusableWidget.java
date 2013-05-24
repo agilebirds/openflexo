@@ -26,8 +26,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.ie.IETopComponent;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.ReusableComponentInstance;
-import org.openflexo.foundation.ie.action.TopComponentDown;
-import org.openflexo.foundation.ie.action.TopComponentUp;
 import org.openflexo.foundation.ie.cl.ReusableComponentDefinition;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
@@ -67,19 +65,6 @@ public class TopComponentReusableWidget extends IEReusableWidget<ReusableCompone
 	public String getFullyQualifiedName() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	/**
-	 * Overrides getSpecificActionListForThatClass
-	 * 
-	 * @see org.openflexo.foundation.ie.widget.IEWidget#getSpecificActionListForThatClass()
-	 */
-	@Override
-	protected Vector getSpecificActionListForThatClass() {
-		Vector v = super.getSpecificActionListForThatClass();
-		v.add(TopComponentUp.actionType);
-		v.add(TopComponentDown.actionType);
-		return v;
 	}
 
 	/**

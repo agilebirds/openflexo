@@ -19,16 +19,15 @@ public class InterestingFilesPerspective extends FPSPerspective {
 	public InterestingFilesPerspective(FPSController fpsController) {
 		super(fpsController, "interesting_files");
 		this.fpsController = fpsController;
+		setTopLeftView(fpsController.getCvsRepositoryBrowserView());
+		setBottomLeftView(fpsController.getSharedProjectBrowserView());
+		setBottomCenterView(fpsController.getConsoleView());
+
 	}
 
 	@Override
 	public ImageIcon getActiveIcon() {
 		return FPSIconLibrary.FPS_IFP_ACTIVE_ICON;
-	}
-
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return FPSIconLibrary.FPS_IFP_SELECTED_ICON;
 	}
 
 	@Override

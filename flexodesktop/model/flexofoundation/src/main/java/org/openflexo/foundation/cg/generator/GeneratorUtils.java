@@ -398,7 +398,7 @@ public class GeneratorUtils {
 	 */
 	public static boolean isAlpha(char ch) {
 		// returns true if ch matches [A-Za-z]
-		return ((ch > (char) 64 && ch < (char) 91) || (ch > (char) 96 && ch < (char) 123));
+		return ch > (char) 64 && ch < (char) 91 || ch > (char) 96 && ch < (char) 123;
 	}
 
 	// converts the first character of the string to uppercase, or the second
@@ -435,11 +435,11 @@ public class GeneratorUtils {
 		int day = cal.get(Calendar.DAY_OF_MONTH);
 
 		String dayString = String.valueOf(day);
-		String twoCharsDayString = (day > 9 ? String.valueOf(dayString) : "0" + String.valueOf(dayString));
-		String monthString = (monthIndex + 1 > 9 ? String.valueOf(monthIndex + 1) : "0" + String.valueOf(monthIndex + 1));
+		String twoCharsDayString = day > 9 ? String.valueOf(dayString) : "0" + String.valueOf(dayString);
+		String monthString = monthIndex + 1 > 9 ? String.valueOf(monthIndex + 1) : "0" + String.valueOf(monthIndex + 1);
 		String yearString = String.valueOf(year);
-		String fourCharsYearString = (year < 1000 ? (year < 100 ? (year < 10 ? "000" + yearString : "00" + yearString) : "0" + yearString)
-				: yearString);
+		String fourCharsYearString = year < 1000 ? year < 100 ? year < 10 ? "000" + yearString : "00" + yearString : "0" + yearString
+				: yearString;
 
 		return twoCharsDayString + "/" + monthString + "/" + fourCharsYearString;
 	}
@@ -460,58 +460,58 @@ public class GeneratorUtils {
 			boolean isLower = ("" + c).equals(ch);
 
 			if (ch.equals("a") || ch.equals("�") || ch.equals("�") || ch.equals("�") || ch.equals("�")) {
-				newArray[i] = (isLower ? 'a' : 'A');
+				newArray[i] = isLower ? 'a' : 'A';
 			} else if (ch.equals("b")) {
-				newArray[i] = (isLower ? 'b' : 'B');
+				newArray[i] = isLower ? 'b' : 'B';
 			} else if (ch.equals("c") || ch.equals("�")) {
-				newArray[i] = (isLower ? 'c' : 'C');
+				newArray[i] = isLower ? 'c' : 'C';
 			} else if (ch.equals("d")) {
-				newArray[i] = (isLower ? 'd' : 'D');
+				newArray[i] = isLower ? 'd' : 'D';
 			} else if (ch.equals("e") || ch.equals("�") || ch.equals("�") || ch.equals("�") || ch.equals("�")) {
-				newArray[i] = (isLower ? 'e' : 'E');
+				newArray[i] = isLower ? 'e' : 'E';
 			} else if (ch.equals("f")) {
-				newArray[i] = (isLower ? 'f' : 'F');
+				newArray[i] = isLower ? 'f' : 'F';
 			} else if (ch.equals("g")) {
-				newArray[i] = (isLower ? 'g' : 'G');
+				newArray[i] = isLower ? 'g' : 'G';
 			} else if (ch.equals("h")) {
-				newArray[i] = (isLower ? 'h' : 'H');
+				newArray[i] = isLower ? 'h' : 'H';
 			} else if (ch.equals("i") || ch.equals("�") || ch.equals("�") || ch.equals("�") || ch.equals("�")) {
-				newArray[i] = (isLower ? 'i' : 'I');
+				newArray[i] = isLower ? 'i' : 'I';
 			} else if (ch.equals("j")) {
-				newArray[i] = (isLower ? 'j' : 'J');
+				newArray[i] = isLower ? 'j' : 'J';
 			} else if (ch.equals("k")) {
-				newArray[i] = (isLower ? 'k' : 'K');
+				newArray[i] = isLower ? 'k' : 'K';
 			} else if (ch.equals("l")) {
-				newArray[i] = (isLower ? 'l' : 'L');
+				newArray[i] = isLower ? 'l' : 'L';
 			} else if (ch.equals("m")) {
-				newArray[i] = (isLower ? 'm' : 'M');
+				newArray[i] = isLower ? 'm' : 'M';
 			} else if (ch.equals("n")) {
-				newArray[i] = (isLower ? 'n' : 'N');
+				newArray[i] = isLower ? 'n' : 'N';
 			} else if (ch.equals("o") || ch.equals("�") || ch.equals("�") || ch.equals("�") || ch.equals("�") || ch.equals("�")
 					|| ch.equals("�")) {
-				newArray[i] = (isLower ? 'o' : 'O');
+				newArray[i] = isLower ? 'o' : 'O';
 			} else if (ch.equals("p")) {
-				newArray[i] = (isLower ? 'p' : 'P');
+				newArray[i] = isLower ? 'p' : 'P';
 			} else if (ch.equals("q")) {
-				newArray[i] = (isLower ? 'q' : 'Q');
+				newArray[i] = isLower ? 'q' : 'Q';
 			} else if (ch.equals("r")) {
-				newArray[i] = (isLower ? 'r' : 'R');
+				newArray[i] = isLower ? 'r' : 'R';
 			} else if (ch.equals("s")) {
-				newArray[i] = (isLower ? 's' : 'S');
+				newArray[i] = isLower ? 's' : 'S';
 			} else if (ch.equals("t")) {
-				newArray[i] = (isLower ? 't' : 'T');
+				newArray[i] = isLower ? 't' : 'T';
 			} else if (ch.equals("u") || ch.equals("�") || ch.equals("�") || ch.equals("�")) {
-				newArray[i] = (isLower ? 'u' : 'U');
+				newArray[i] = isLower ? 'u' : 'U';
 			} else if (ch.equals("v")) {
-				newArray[i] = (isLower ? 'v' : 'V');
+				newArray[i] = isLower ? 'v' : 'V';
 			} else if (ch.equals("w")) {
-				newArray[i] = (isLower ? 'w' : 'W');
+				newArray[i] = isLower ? 'w' : 'W';
 			} else if (ch.equals("x")) {
-				newArray[i] = (isLower ? 'x' : 'X');
+				newArray[i] = isLower ? 'x' : 'X';
 			} else if (ch.equals("y")) {
-				newArray[i] = (isLower ? 'y' : 'Y');
+				newArray[i] = isLower ? 'y' : 'Y';
 			} else if (ch.equals("z")) {
-				newArray[i] = (isLower ? 'z' : 'Z');
+				newArray[i] = isLower ? 'z' : 'Z';
 			} else if (ch.equals("0")) {
 				newArray[i] = '0';
 			} else if (ch.equals("1")) {

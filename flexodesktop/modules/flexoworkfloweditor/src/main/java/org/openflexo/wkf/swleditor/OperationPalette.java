@@ -61,9 +61,9 @@ public class OperationPalette extends AbstractWKFPalette {
 	private ContainerValidity DROP_ON_ACTIVITY_FOR_INTERACTIVE_NODE = new ContainerValidity() {
 		@Override
 		public boolean isContainerValid(FlexoModelObject container) {
-			return (container instanceof OperationPetriGraph
-					&& !(((OperationPetriGraph) container).getContainer() instanceof SelfExecutableNode) && !(((OperationPetriGraph) container)
-					.getContainer() instanceof LOOPOperator));
+			return container instanceof OperationPetriGraph
+					&& !(((OperationPetriGraph) container).getContainer() instanceof SelfExecutableNode)
+					&& !(((OperationPetriGraph) container).getContainer() instanceof LOOPOperator);
 		}
 	};
 

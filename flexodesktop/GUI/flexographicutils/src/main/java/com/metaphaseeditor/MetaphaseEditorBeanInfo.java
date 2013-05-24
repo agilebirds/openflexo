@@ -34,11 +34,6 @@ import java.beans.SimpleBeanInfo;
  */
 public class MetaphaseEditorBeanInfo extends SimpleBeanInfo {
 
-	public MetaphaseEditorBeanInfo() {
-		iconNameC16 = "/com/Icons/MetaphaseEditor/icons/metaphase16x16.png";
-		iconNameC32 = "/com/Icons/MetaphaseEditor/icons/metaphase32x32.png";
-	}
-
 	// Bean descriptor information will be obtained from introspection.//GEN-FIRST:BeanDescriptor
 	private static BeanDescriptor beanDescriptor = null;
 
@@ -87,8 +82,8 @@ public class MetaphaseEditorBeanInfo extends SimpleBeanInfo {
 	private static java.awt.Image iconColor32 = null;
 	private static java.awt.Image iconMono16 = null;
 	private static java.awt.Image iconMono32 = null;// GEN-END:IconsDef
-	private static String iconNameC16 = null;// GEN-BEGIN:Icons
-	private static String iconNameC32 = null;
+	private static final String iconNameC16 = "/com/Icons/MetaphaseEditor/icons/metaphase16x16.png";
+	private static final String iconNameC32 = "/com/Icons/MetaphaseEditor/icons/metaphase32x32.png";
 	private static String iconNameM16 = null;
 	private static String iconNameM32 = null;// GEN-END:Icons
 

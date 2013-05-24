@@ -34,54 +34,49 @@ import org.openflexo.fib.model.FIBModelNotification;
 import org.openflexo.fib.view.widget.FIBDropDownWidget;
 import org.openflexo.logging.FlexoLogger;
 
-public class FIBEditableDropDownWidget extends FIBDropDownWidget implements FIBEditableView<FIBDropDown,JComboBox> {
+public class FIBEditableDropDownWidget extends FIBDropDownWidget implements FIBEditableView<FIBDropDown, JComboBox> {
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBEditableDropDownWidget.class.getPackage().getName());
 
-	private final FIBEditableViewDelegate<FIBDropDown,JComboBox> delegate;
-	
+	private final FIBEditableViewDelegate<FIBDropDown, JComboBox> delegate;
+
 	private final FIBEditorController editorController;
-	
+
 	@Override
-	public FIBEditorController getEditorController() 
-	{
+	public FIBEditorController getEditorController() {
 		return editorController;
 	}
-	
-	public FIBEditableDropDownWidget(FIBDropDown model, FIBEditorController editorController)
-	{
-		super(model,editorController.getController());
+
+	public FIBEditableDropDownWidget(FIBDropDown model, FIBEditorController editorController) {
+		super(model, editorController.getController());
 		this.editorController = editorController;
-		
-		delegate = new FIBEditableViewDelegate<FIBDropDown,JComboBox>(this);
+
+		delegate = new FIBEditableViewDelegate<FIBDropDown, JComboBox>(this);
 		model.addObserver(this);
 	}
-	
-	
+
 	@Override
-	public void delete() 
-	{
+	public void delete() {
 		delegate.delete();
 		getComponent().deleteObserver(this);
 		super.delete();
-	}	
-	
-	public Vector<PlaceHolder> getPlaceHolders() 
-	{
+	}
+
+	@Override
+	public Vector<PlaceHolder> getPlaceHolders() {
 		return null;
 	}
-	
-	public FIBEditableViewDelegate<FIBDropDown,JComboBox> getDelegate()
-	{
+
+	@Override
+	public FIBEditableViewDelegate<FIBDropDown, JComboBox> getDelegate() {
 		return delegate;
 	}
-	
+
 	@Override
-	public void update(Observable o, Object dataModification) 
-	{
+	public void update(Observable o, Object dataModification) {
 		if (dataModification instanceof FIBModelNotification) {
-			delegate.receivedModelNotifications(o, (FIBModelNotification)dataModification);
-		}		
+			delegate.receivedModelNotifications(o, (FIBModelNotification) dataModification);
+		}
 	}
 
 }

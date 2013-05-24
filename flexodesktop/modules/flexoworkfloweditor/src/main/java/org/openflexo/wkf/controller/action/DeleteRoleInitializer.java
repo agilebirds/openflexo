@@ -19,12 +19,14 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
+import javax.swing.KeyStroke;
 
+import org.openflexo.FlexoCst;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.wkf.Role;
@@ -53,7 +55,7 @@ public class DeleteRoleInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DeleteRole> getDefaultInitializer() {
 		return new FlexoActionInitializer<DeleteRole>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteRole action) {
+			public boolean run(EventObject e, DeleteRole action) {
 				boolean doIt;
 				Vector<Role> roleToDelete = action.getRoleToDelete();
 				if (roleToDelete.size() == 0) {
@@ -92,7 +94,7 @@ public class DeleteRoleInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DeleteRole> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DeleteRole>() {
 			@Override
-			public boolean run(ActionEvent e, DeleteRole action) {
+			public boolean run(EventObject e, DeleteRole action) {
 				if (getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject() != null
 						&& getControllerActionInitializer().getWKFController().getSelectionManager().getLastSelectedObject().isDeleted()) {
 					getControllerActionInitializer().getWKFController().getSelectionManager().resetSelection();
@@ -107,4 +109,8 @@ public class DeleteRoleInitializer extends ActionInitializer {
 		return IconLibrary.DELETE_ICON;
 	}
 
+	@Override
+	protected KeyStroke getShortcut() {
+		return KeyStroke.getKeyStroke(FlexoCst.DELETE_KEY_CODE, 0);
+	}
 }

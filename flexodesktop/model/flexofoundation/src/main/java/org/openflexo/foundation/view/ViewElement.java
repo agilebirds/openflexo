@@ -39,6 +39,7 @@ import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.GraphicalElementPatternRole;
+import org.openflexo.foundation.viewpoint.GraphicalElementSpecification;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 import org.openflexo.localization.FlexoLocalization;
@@ -72,7 +73,7 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 
 	@Override
 	public void delete() {
-		if (getEditionPatternInstance() != null) {
+		if (getEditionPatternInstance() != null && !getEditionPatternInstance().isDeleted()) {
 			getEditionPatternInstance().delete();
 		}
 		for (TargetObject o : dependingObjects) {
@@ -126,6 +127,21 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 	 */
 	public boolean isBoundInsideEditionPattern() {
 		return getPatternRole() != null;
+	}
+
+	@Override
+	public GraphicalRepresentation<? extends ViewElement> getGraphicalRepresentation() {
+		return (GraphicalRepresentation<? extends ViewElement>) super.getGraphicalRepresentation();
+	}
+
+	/**
+	 * Return a flag indicating if current graphical element is bound inside an edition pattern, and if this element plays a role as primary
+	 * representation,
+	 * 
+	 * @return
+	 */
+	public boolean playsPrimaryRole() {
+		return getPatternRole() != null && getPatternRole().getIsPrimaryRepresentationRole();
 	}
 
 	/*public String getLabelValue() {
@@ -338,7 +354,7 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// System.out.println("**************> ViewElement " + this + " : receive notification " + o);
+		// System.out.println("**************> ViewElement " + this + " : receive notification " + arg + " observable=" + o);
 		update();
 	}
 
@@ -377,10 +393,63 @@ public abstract class ViewElement extends ViewObject implements Bindable, Proper
 		notifyObservers(new ElementUpdated(this));
 	}
 
+	/**
+	 * Apply all graphical element specifications as it was defined in related pattern role
+	 */
+	protected void applyGraphicalElementSpecifications() {
+		if (getPatternRole() != null) {
+			for (GraphicalElementSpecification grSpec : getPatternRole().getGrSpecifications()) {
+				if (grSpec.getValue().isValid()) {
+					grSpec.applyToGraphicalRepresentation(getGraphicalRepresentation(), this);
+				}
+			}
+		}
+
+	}
+
+	/**
+	 * Reset graphical representation to be the one defined in related pattern role
+	 */
+	public abstract void resetGraphicalRepresentation();
+
+	/**
+	 * Refresh graphical representation
+	 */
+	public void refreshGraphicalRepresentation() {
+		applyGraphicalElementSpecifications();
+	}
+
 	@Override
-	public void setGraphicalRepresentation(Object graphicalRepresentation) {
+	public void setGraphicalRepresentation(GraphicalRepresentation<?> graphicalRepresentation) {
 		super.setGraphicalRepresentation(graphicalRepresentation);
 		update();
+	}
+
+	/**
+	 * Return the index of this ViewElement, relative to its position in the list of ViewObject declared to be of same EditionPattern
+	 * 
+	 * @return
+	 */
+	public int getIndexRelativeToEPType() {
+		if (getParent() == null) {
+			return -1;
+		}
+		return getParent().getChildsOfType(getEditionPattern()).indexOf(this);
+	}
+
+	/**
+	 * Sets the index of this ViewElement, relative to its position in the list of ViewObject declared to be of same EditionPattern
+	 * 
+	 * @param index
+	 */
+	public void setIndexRelativeToEPType(int index) {
+		if (getIndexRelativeToEPType() != index && !isDeserializing()) {
+			getParent().setIndexForChildRelativeToEPType(this, index);
+		}
+	}
+
+	protected void notifyIndexChange() {
+		refreshGraphicalRepresentation();
 	}
 
 }

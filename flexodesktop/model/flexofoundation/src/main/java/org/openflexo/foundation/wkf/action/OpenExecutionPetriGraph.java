@@ -53,12 +53,12 @@ public class OpenExecutionPetriGraph extends FlexoUndoableAction<OpenExecutionPe
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(PetriGraphNode object, Vector<WKFObject> globalSelection) {
-			return (object instanceof SelfExecutableNode);
+		public boolean isVisibleForSelection(PetriGraphNode object, Vector<WKFObject> globalSelection) {
+			return object instanceof SelfExecutableNode;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(PetriGraphNode object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(PetriGraphNode object, Vector<WKFObject> globalSelection) {
 			return isVisibleForSelection(object, globalSelection);
 		}
 
@@ -110,8 +110,8 @@ public class OpenExecutionPetriGraph extends FlexoUndoableAction<OpenExecutionPe
 
 	@Override
 	public String getLocalizedName() {
-		if ((getSelfExecutableNode()).getExecutionPetriGraph() != null) {
-			if ((getSelfExecutableNode()).getExecutionPetriGraph().getIsVisible()) {
+		if (getSelfExecutableNode().getExecutionPetriGraph() != null) {
+			if (getSelfExecutableNode().getExecutionPetriGraph().getIsVisible()) {
 				return FlexoLocalization.localizedForKey("close_execution_level");
 			} else {
 				return FlexoLocalization.localizedForKey("open_execution_level");

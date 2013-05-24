@@ -33,8 +33,8 @@ import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.selection.SelectionListener;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * Please comment this class
@@ -71,7 +71,7 @@ public abstract class DMView<O extends DMObject> extends CompoundTabularView<O> 
 			if (next.getModel().indexOf(anObject) > -1) {
 				return next;
 			}
-			DMObject parentObject = (DMObject) anObject.getParent();
+			DMObject parentObject = anObject.getParent();
 			if (next.getModel().indexOf(parentObject) > -1) {
 				if (next.getSelectedObjects().contains(parentObject)) {
 					next.selectObject(parentObject);
@@ -117,12 +117,13 @@ public abstract class DMView<O extends DMObject> extends CompoundTabularView<O> 
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Removing DM view :" + getDMObject().getName());
 		}
+		getModelObject().deleteObserver(this);
 		getDMController().removeModuleView(this);
 	}
 
 	@Override
-	public FlexoPerspective<DMObject> getPerspective() {
-		return getDMController().getDefaultPespective();
+	public FlexoPerspective getPerspective() {
+		return getDMController().REPOSITORY_PERSPECTIVE;
 	}
 
 	/**

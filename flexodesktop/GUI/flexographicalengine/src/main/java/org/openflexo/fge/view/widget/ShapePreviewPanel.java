@@ -95,6 +95,11 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 				return representedDrawing;
 			}
 
+			@Override
+			public boolean isEditable() {
+				return false;
+			}
+
 		};
 		drawingGR = new DrawingGraphicalRepresentation<RepresentedDrawing>(drawing, false);
 		drawingGR.setBackgroundColor(Color.WHITE);

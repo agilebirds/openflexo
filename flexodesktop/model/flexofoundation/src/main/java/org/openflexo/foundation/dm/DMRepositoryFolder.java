@@ -22,7 +22,6 @@ package org.openflexo.foundation.dm;
 import java.util.Vector;
 
 import javax.naming.InvalidNameException;
-import javax.swing.tree.TreeNode;
 
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.localization.FlexoLocalization;
@@ -123,13 +122,8 @@ public abstract class DMRepositoryFolder extends DMObject {
 	}
 
 	@Override
-	public TreeNode getParent() {
+	public DMModel getParent() {
 		return getDMModel();
-	}
-
-	@Override
-	public boolean getAllowsChildren() {
-		return true;
 	}
 
 	@Override

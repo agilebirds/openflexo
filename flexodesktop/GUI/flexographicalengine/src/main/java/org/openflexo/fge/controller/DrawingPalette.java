@@ -134,7 +134,7 @@ public class DrawingPalette {
 	public JScrollPane getPaletteViewInScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane(getPaletteView(), ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-					ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+					ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		}
 		return scrollPane;
 	}
@@ -202,6 +202,11 @@ public class DrawingPalette {
 		@Override
 		public DrawingPalette getModel() {
 			return DrawingPalette.this;
+		}
+
+		@Override
+		public boolean isEditable() {
+			return false;
 		}
 
 	}

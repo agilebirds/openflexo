@@ -1,30 +1,32 @@
 package org.flexo.model;
 
+import org.openflexo.model.StringConverterLibrary.Converter;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Initializer;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Parameter;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.StringConverter;
+import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.model.xml.DefaultStringEncoder.Converter;
-import org.openflexo.model.xml.InvalidDataException;
 
 @ModelEntity
 public interface WKFAnnotation extends FlexoModelObject {
 
 	public static final String TEXT = "text";
 
+	@Override
 	@Initializer
-	public void init();
+	public WKFAnnotation init();
 
+	@Override
 	@Initializer
-	public void init(@Parameter(TEXT) String text);
+	public WKFAnnotation init(@Parameter(TEXT) String text);
 
-	@Getter(value = TEXT)
+	@Getter(TEXT)
 	public String getText();
 
-	@Setter(value = TEXT)
+	@Setter(TEXT)
 	public void setText(String s);
 
 	@StringConverter

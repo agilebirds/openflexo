@@ -9,8 +9,6 @@
   
   <entity name="org.openflexo.foundation.wkf.FlexoProcessNode" xmlTag="flexoprocess">
     <property name="processResourceName" xmlTag="name" attribute="YES"/> 
-    <property name="fileName" xmlTag="filename" attribute="YES"/> 
-    <property name="builderName" xmlTag="buildername" attribute="YES"/> 
     <property name="subProcesses" xmlTag="flexoprocess" type="vector"/> 
   </entity> 
   

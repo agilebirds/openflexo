@@ -27,16 +27,22 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collection;
 import java.util.Enumeration;
+import java.util.regex.Pattern;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.io.IOUtils;
 import org.openflexo.localization.FlexoLocalization;
 
 public class ZipUtils {
+
+	public static final String VALID_ENTRY_NAME_REGEXP = "\\p{ASCII}+";
+	public static final Pattern VALID_ENTRY_NAME_PATTERN = Pattern.compile(VALID_ENTRY_NAME_REGEXP);
 
 	private static final void copyInputStream(InputStream in, OutputStream out) throws IOException {
 		try {
@@ -46,8 +52,8 @@ public class ZipUtils {
 				out.write(buffer, 0, len);
 			}
 		} finally {
-			in.close();
-			out.close();
+			IOUtils.closeQuietly(in);
+			IOUtils.closeQuietly(out);
 		}
 	}
 
@@ -56,7 +62,7 @@ public class ZipUtils {
 	}
 
 	public static final void unzip(File zip, File outputDir, IProgress progress) throws ZipException, IOException {
-		Enumeration entries;
+		Enumeration<? extends ZipEntry> entries;
 		outputDir = outputDir.getCanonicalFile();
 		if (!outputDir.exists()) {
 			boolean b = outputDir.mkdirs();
@@ -74,24 +80,57 @@ public class ZipUtils {
 			progress.resetSecondaryProgress(zipFile.size());
 		}
 		while (entries.hasMoreElements()) {
-			ZipEntry entry = (ZipEntry) entries.nextElement();
+			ZipEntry entry = entries.nextElement();
 			if (progress != null) {
 				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("unzipping") + " " + entry.getName());
+			}
+			if (entry.getName().startsWith("__MACOSX")) {
+				continue;
 			}
 			if (entry.isDirectory()) {
 				// Assume directories are stored parents first then
 				// children.
 				// This is not robust, just for demonstration purposes.
-				(new File(outputDir, entry.getName().replace('\\', '/'))).mkdirs();
+				new File(outputDir, entry.getName().replace('\\', '/')).mkdirs();
 				continue;
 			}
 			File outputFile = new File(outputDir, entry.getName().replace('\\', '/'));
+			if (outputFile.getName().startsWith("._")) {
+				// This block is made to drop MacOS crap added to zip files
+				if (zipFile.getEntry(entry.getName().substring(0, entry.getName().length() - outputFile.getName().length())
+						+ outputFile.getName().substring(2)) != null) {
+					continue;
+				}
+				if (new File(outputFile.getParentFile(), outputFile.getName().substring(2)).exists()) {
+					continue;
+				}
+			}
 			FileUtils.createNewFile(outputFile);
+			InputStream zipStream = null;
+			FileOutputStream fos = null;
 			try {
-				copyInputStream(zipFile.getInputStream(entry), new BufferedOutputStream(new FileOutputStream(outputFile)));
+				zipStream = zipFile.getInputStream(entry);
+				if (zipStream == null) {
+					System.err.println("Could not find input stream for entry: " + entry.getName());
+					continue;
+				}
+				fos = new FileOutputStream(outputFile);
+				copyInputStream(zipStream, new BufferedOutputStream(fos));
 			} catch (IOException e) {
 				e.printStackTrace();
 				System.err.println("Could not extract: " + outputFile.getAbsolutePath() + " maybe some files contains invalid characters.");
+			} finally {
+				IOUtils.closeQuietly(zipStream);
+				IOUtils.closeQuietly(fos);
+			}
+		}
+		Collection<File> listFiles = org.apache.commons.io.FileUtils.listFiles(outputDir, null, true);
+		for (File file : listFiles) {
+			if (file.isFile() && file.getName().startsWith("._")) {
+				File f = new File(file.getParentFile(), file.getName().substring(2));
+				if (f.exists()) {
+					file.delete();
+				}
 			}
 		}
 		zipFile.close();
@@ -228,7 +267,7 @@ public class ZipUtils {
 		String[] dirList = dirToZip.list();
 		for (int i = 0; i < dirList.length; i++) {
 			File f = new File(dirToZip, dirList[i]);
-			if (filter == null || (f != null && filter.accept(f))) {
+			if (filter == null || f != null && filter.accept(f)) {
 				if (f.isDirectory()) {
 					zipDir(pathPrefixSize, f, zos, progress, filter);
 				} else {
@@ -278,8 +317,10 @@ public class ZipUtils {
 
 	public static void main(String[] args) {
 		try {
-			File zip = new File("C:\\Documents and Settings\\gpolet.DENALI\\Desktop\\DeepStageGate.prj.zip");
-			createEmptyZip(zip);
+			File zip = new File("d:/Work/SNA_1LS_REPAIR_VOICE_1_0_RO.zip");
+			File tmp = new File("D:/tmp/TestUnzip");
+			tmp.mkdirs();
+			unzip(zip, tmp);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

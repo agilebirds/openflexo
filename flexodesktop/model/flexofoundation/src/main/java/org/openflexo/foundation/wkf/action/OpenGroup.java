@@ -46,12 +46,12 @@ public class OpenGroup extends FlexoUndoableAction<OpenGroup, WKFGroup, WKFGroup
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(WKFGroup object, Vector<WKFGroup> globalSelection) {
+		public boolean isVisibleForSelection(WKFGroup object, Vector<WKFGroup> globalSelection) {
 			return false;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(WKFGroup object, Vector<WKFGroup> globalSelection) {
+		public boolean isEnabledForSelection(WKFGroup object, Vector<WKFGroup> globalSelection) {
 			return object != null;
 		}
 

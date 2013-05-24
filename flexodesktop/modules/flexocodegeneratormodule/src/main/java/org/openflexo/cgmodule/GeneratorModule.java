@@ -21,13 +21,14 @@ package org.openflexo.cgmodule;
 
 import java.util.logging.Logger;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.cgmodule.controller.GeneratorController;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.module.FlexoModule;
+import org.openflexo.module.Module;
 import org.openflexo.module.external.ExternalGeneratorModule;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Data Model Editor module
@@ -39,18 +40,19 @@ public class GeneratorModule extends FlexoModule implements ExternalGeneratorMod
 	private static final Logger logger = Logger.getLogger(GeneratorModule.class.getPackage().getName());
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.GENERATORS, Inspectors.CG };
 
-	public GeneratorModule(InteractiveFlexoEditor projectEditor) throws Exception {
-		super(projectEditor);
-		setFlexoController(new GeneratorController(projectEditor, this));
-		GeneratorPreferences.init(getGeneratorController());
-		if (getProject().getGeneratedCode().getGeneratedRepositories().size() == 0) {
-			getGeneratorController().setCurrentEditedObjectAsModuleView(getProject().getGeneratedCode());
-			getGeneratorController().selectAndFocusObject(getProject().getGeneratedCode());
-		} else {
-			getGeneratorController().setCurrentEditedObjectAsModuleView(
-					getProject().getGeneratedCode().getGeneratedRepositories().firstElement());
-			getGeneratorController().selectAndFocusObject(getProject().getGeneratedCode().getGeneratedRepositories().firstElement());
-		}
+	public GeneratorModule(ApplicationContext applicationContext) throws Exception {
+		super(applicationContext);
+		GeneratorPreferences.init();
+	}
+
+	@Override
+	public Module getModule() {
+		return Module.CG_MODULE;
+	}
+
+	@Override
+	protected FlexoController createControllerForModule() {
+		return new GeneratorController(this);
 	}
 
 	@Override
@@ -62,25 +64,4 @@ public class GeneratorModule extends FlexoModule implements ExternalGeneratorMod
 		return (GeneratorController) getFlexoController();
 	}
 
-	/**
-	 * Overrides getDefaultObjectToSelect
-	 * 
-	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect()
-	 */
-	@Override
-	public FlexoModelObject getDefaultObjectToSelect() {
-		return getProject().getGeneratedCode();
-	}
-
-	/**
-	 * Overrides moduleWillClose
-	 * 
-	 * @see org.openflexo.module.FlexoModule#moduleWillClose()
-	 */
-	@Override
-	public void moduleWillClose() {
-		super.moduleWillClose();
-		getProject().getGeneratedCode().setFactory(null);
-		GeneratorPreferences.reset();
-	}
 }

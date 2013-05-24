@@ -45,16 +45,20 @@ public class ViewNextOperations extends FlexoGUIAction {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
 			return object instanceof ActionNode;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, ActionNode.class);
+	}
 
 	/**
 	 * @param actionType

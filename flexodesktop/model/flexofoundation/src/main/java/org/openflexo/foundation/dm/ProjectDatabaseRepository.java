@@ -19,12 +19,9 @@
  */
 package org.openflexo.foundation.dm;
 
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.dm.action.ImportDMEOModel;
 import org.openflexo.foundation.dm.eo.DMEORepository;
 import org.openflexo.foundation.xml.FlexoDMBuilder;
 
@@ -70,13 +67,6 @@ public class ProjectDatabaseRepository extends DMEORepository {
 		newProjectDatabaseRepository.setName(repositoryName);
 		dmModel.addToProjectDatabaseRepositories(newProjectDatabaseRepository);
 		return newProjectDatabaseRepository;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(ImportDMEOModel.actionType);
-		return returned;
 	}
 
 	/**

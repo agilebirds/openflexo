@@ -27,16 +27,19 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Vector;
 
-import org.jdom.Content;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.Parent;
-import org.jdom.Text;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Content;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.Parent;
+import org.jdom2.Text;
+import org.jdom2.output.Format;
+import org.jdom2.output.LineSeparator;
+import org.jdom2.output.XMLOutputter;
 import org.openflexo.diff.DiffSource;
 import org.openflexo.diff.merge.IMerge;
 import org.openflexo.diff.merge.MergeChange;
@@ -317,15 +320,15 @@ public class XMLDiff3 extends Observable implements IMerge {
 			if (matching1 != null & matching2 != null) {
 
 				// we are in the most common case : srcContent is still alive in both branch
-				Element buildedElement = (Element) _srcMergedMapping.get(srcContent);
+				Element builtElement = (Element) _srcMergedMapping.get(srcContent);
 
-				if (buildedElement == null) {
-					buildedElement = new Element(((Element) srcContent).getName());
+				if (builtElement == null) {
+					builtElement = new Element(((Element) srcContent).getName());
 				}
-				_srcMergedMapping.put(srcContent, buildedElement);
+				_srcMergedMapping.put(srcContent, builtElement);
 
-				AttributesChange attributesChange = new AttributesChange(this, (matching1).getAttributesDiff(),
-						(matching2).getAttributesDiff(), (Element) srcContent, buildedElement);
+				AttributesChange attributesChange = new AttributesChange(this, matching1.getAttributesDiff(),
+						matching2.getAttributesDiff(), (Element) srcContent, builtElement);
 				// this call is very important since it will fill buildedElement with all it's content
 				attributesChange.getMergedElement();
 				// if we have unresolved conflicts on Attributes, then let's put them into the Diff3 unresolved list
@@ -335,22 +338,22 @@ public class XMLDiff3 extends Observable implements IMerge {
 				// now : let's insert the builded element into it's parent
 				if (parent instanceof Document) {
 					// we are sure that the root Element didn't move : so we don't care about the hasMoved flag
-					((Document) parent).setRootElement(buildedElement);
+					((Document) parent).setRootElement(builtElement);
 				} else {
 					if (hasMoved) {
 						if (parentInMergedDocument != null) {
 							// the new parent exist, so we are able to do the insertion immediately
-							System.err.println("insert a moved element : " + buildedElement + "(id="
-									+ buildedElement.getAttributeValue("id") + ")" + " into " + parentInMergedDocument + "(id="
-									+ parentInMergedDocument.getAttributeValue("id") + ")");
-							insert(parentInMergedDocument, buildedElement, moveInsertionIndex);
+							System.err.println("insert a moved element : " + builtElement + "(id=" + builtElement.getAttributeValue("id")
+									+ ")" + " into " + parentInMergedDocument + "(id=" + parentInMergedDocument.getAttributeValue("id")
+									+ ")");
+							insert(parentInMergedDocument, builtElement, moveInsertionIndex);
 						} else {
 							// the new parent doesn't exist yet, so we put the new Element in a queue
-							System.err.println("queue a moved element : " + buildedElement);
-							_pendingInsertions.put(new IndexedContent(buildedElement, moveInsertionIndex), newParentInTargetOfMapping);
+							System.err.println("queue a moved element : " + builtElement);
+							_pendingInsertions.put(new IndexedContent(builtElement, moveInsertionIndex), newParentInTargetOfMapping);
 						}
 					} else {
-						insert((Element) parent, buildedElement, -1);
+						insert((Element) parent, builtElement, -1);
 					}
 				}
 
@@ -373,7 +376,7 @@ public class XMLDiff3 extends Observable implements IMerge {
 				Content contentToInsertAsAChildOfBuildedElement = null;
 				while (en0.hasMoreElements()) {
 					contentToInsertAsAChildOfBuildedElement = en0.nextElement();
-					insert(buildedElement, contentToInsertAsAChildOfBuildedElement,
+					insert(builtElement, contentToInsertAsAChildOfBuildedElement,
 							contentsToInsert.get(contentToInsertAsAChildOfBuildedElement));
 					// remove the pending insertion
 					_pendingInsertions.remove(contentToInsertAsAChildOfBuildedElement);
@@ -388,24 +391,19 @@ public class XMLDiff3 extends Observable implements IMerge {
 						continue;
 					}
 					if (_srcMergedMapping.get(child) == null) {
-						parse(child, buildedElement);
+						parse(child, builtElement);
 					}
 				}
 
 				// now let's take a look at Element added in _mapping1 to see if one of them must be inserted here
-				Hashtable<Content, Integer> additions1 = _mapping1.getAddedElementsInSourceRef((Element) srcContent);
-				Enumeration<Content> en = additions1.keys();
-				Content itemToInsert = null;
-				while (en.hasMoreElements()) {
-					itemToInsert = en.nextElement();
-					insert(buildedElement, itemToInsert, additions1.get(itemToInsert));
+				Map<Content, Integer> additions1 = _mapping1.getAddedElementsInSourceRef((Element) srcContent);
+				for (Entry<Content, Integer> e : additions1.entrySet()) {
+					insert(builtElement, e.getKey(), e.getValue());
 				}
 				// now let's take a look at Element added in _mapping2 to see if one of them must be inserted here
-				Hashtable<Content, Integer> additions2 = _mapping2.getAddedElementsInSourceRef((Element) srcContent);
-				en = additions2.keys();
-				while (en.hasMoreElements()) {
-					itemToInsert = en.nextElement();
-					insert(buildedElement, itemToInsert, additions2.get(itemToInsert));
+				Map<Content, Integer> additions2 = _mapping2.getAddedElementsInSourceRef((Element) srcContent);
+				for (Entry<Content, Integer> e : additions2.entrySet()) {
+					insert(builtElement, e.getKey(), e.getValue());
 				}
 
 				// before recursive iteration, let's see if there is some new child
@@ -452,19 +450,19 @@ public class XMLDiff3 extends Observable implements IMerge {
 					Text buildedText = new Text(matching2.getTargetText().getText());
 					_srcMergedMapping.put(srcContent, buildedText);
 					// ((Element)parent).addContent(buildedText); // note that we assume that "parent" is not the document
-					_mergeTextsActions.add(new MergeTextAction(_conflictIndex++, MergeActionType.CHOOSE1, ((Element) parent), buildedText,
+					_mergeTextsActions.add(new MergeTextAction(_conflictIndex++, MergeActionType.CHOOSE1, (Element) parent, buildedText,
 							null));
 				} else if (matching2.isUnchanged()) {
 					// so we can get matching1
 					Text buildedText = new Text(matching1.getTargetText().getText());
 					_srcMergedMapping.put(srcContent, buildedText);
 					// ((Element)parent).addContent(buildedText); // note that we assume that "parent" is not the document
-					_mergeTextsActions.add(new MergeTextAction(_conflictIndex++, MergeActionType.CHOOSE1, ((Element) parent), buildedText,
+					_mergeTextsActions.add(new MergeTextAction(_conflictIndex++, MergeActionType.CHOOSE1, (Element) parent, buildedText,
 							null));
 				} else {
 					// change on both side ==> conflict
 					UnresolvedTextConflict conflict = new UnresolvedTextConflict(this, _conflictIndex++, (Element) parent,
-							(matching1).getTargetText(), (matching2).getTargetText());
+							matching1.getTargetText(), matching2.getTargetText());
 					MergeTextAction autoResolvedConflictAction = tryAutoResolvingTextUpdateConflict(conflict);
 					if (autoResolvedConflictAction != null) {
 						// Whooah : this tool is smart enough to solve the conflict
@@ -481,7 +479,7 @@ public class XMLDiff3 extends Observable implements IMerge {
 					// no change in 2, removed in 1 ==> removed
 				} else {
 					// changed in 2, removed in 1 ==> conflict
-					_unresolvedConflict.add(new UnresolvedTextConflict(this, _conflictIndex++, (Element) parent, null, (matching2)
+					_unresolvedConflict.add(new UnresolvedTextConflict(this, _conflictIndex++, (Element) parent, null, matching2
 							.getTargetText()));
 				}
 			} else if (matching1 != null && matching2 == null) {
@@ -489,8 +487,8 @@ public class XMLDiff3 extends Observable implements IMerge {
 					// no change in 1, removed in 2 ==> removed
 				} else {
 					// changed in 1, removed in 2 ==> conflict
-					_unresolvedConflict.add(new UnresolvedTextConflict(this, _conflictIndex++, (Element) parent, (matching1)
-							.getTargetText(), null));
+					_unresolvedConflict.add(new UnresolvedTextConflict(this, _conflictIndex++, (Element) parent, matching1.getTargetText(),
+							null));
 
 				}
 			} else if (matching1 == null && matching2 == null) {
@@ -611,7 +609,7 @@ public class XMLDiff3 extends Observable implements IMerge {
 				}
 			}
 		} else {
-			Iterator<Content> it = parent.getChildren().iterator();
+			Iterator<Element> it = parent.getChildren().iterator();
 			Content c = null;
 			while (it.hasNext()) {
 				c = it.next();
@@ -677,7 +675,9 @@ public class XMLDiff3 extends Observable implements IMerge {
 
 	private String getXMLText(Document doc) {
 		StringWriter writer = new StringWriter();
-		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		Format prettyFormat = Format.getPrettyFormat();
+		prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+		XMLOutputter outputter = new XMLOutputter(prettyFormat);
 		try {
 			outputter.output(doc, writer);
 		} catch (IOException e) {
@@ -688,7 +688,9 @@ public class XMLDiff3 extends Observable implements IMerge {
 
 	public static String getXMLText(Element el) {
 		StringWriter writer = new StringWriter();
-		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		Format prettyFormat = Format.getPrettyFormat();
+		prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+		XMLOutputter outputter = new XMLOutputter(prettyFormat);
 		try {
 			outputter.output(el, writer);
 		} catch (IOException e) {

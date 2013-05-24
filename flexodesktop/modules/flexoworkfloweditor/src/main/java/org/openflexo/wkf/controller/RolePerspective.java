@@ -19,28 +19,33 @@
  */
 package org.openflexo.wkf.controller;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JSplitPane;
+import javax.swing.JPanel;
 
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.RoleList;
 import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.utils.FlexoSplitPaneLocationSaver;
-import org.openflexo.view.FlexoPerspective;
+import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.swing.GlassPaneWrapper;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.wkf.WKFCst;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.wkf.roleeditor.RoleEditorController;
+import org.openflexo.wkf.roleeditor.RoleEditorView;
+import org.openflexo.wkf.view.ImportedRoleView;
 
-public class RolePerspective extends FlexoPerspective<RoleList> {
+public class RolePerspective extends FlexoPerspective {
+
+	private final JLabel infoLabel = new JLabel();
 
 	private final WKFController _controller;
-	private RoleEditorController _roleEditorController;
 
-	private JSplitPane splitPaneWithRolePaletteAndDocInspectorPanel;
+	private JPanel topRightDummy;
+
+	private ImportedRoleView importedRoleView;
 
 	/**
 	 * @param controller
@@ -50,31 +55,54 @@ public class RolePerspective extends FlexoPerspective<RoleList> {
 	public RolePerspective(WKFController controller) {
 		super("role_editor");
 		_controller = controller;
+		topRightDummy = new JPanel();
+		importedRoleView = new ImportedRoleView(controller);
+		infoLabel.setText(FlexoLocalization.localizedForKey("CTRL-drag to create role specialization", infoLabel));
+		setTopLeftView(_controller.getRoleListBrowserView());
+		setFooter(infoLabel);
+
+	}
+
+	public RoleEditorView getCurrentRoleListView() {
+		if (_controller != null && _controller.getCurrentModuleView() instanceof RoleEditorView) {
+			return (RoleEditorView) _controller.getCurrentModuleView();
+		}
+		return null;
+	}
+
+	@Override
+	public JComponent getTopRightView() {
+		if (getCurrentRoleListView() != null) {
+			if (getCurrentRoleListView().getDrawing().isEditable()) {
+				return getCurrentRoleListView().getController().getPalette().getPaletteViewInScrollPane();
+			} else {
+				return new GlassPaneWrapper(getCurrentRoleListView().getController().getPalette().getPaletteViewInScrollPane());
+			}
+		}
+		return topRightDummy;
+	}
+
+	@Override
+	public JComponent getBottomRightView() {
+		if (getCurrentRoleListView() != null) {
+			if (getCurrentRoleListView().getDrawing().isEditable()) {
+				return _controller.getDisconnectedDocInspectorPanel();
+			} else {
+				return new GlassPaneWrapper(_controller.getDisconnectedDocInspectorPanel());
+			}
+		} else {
+			return topRightDummy;
+		}
 	}
 
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
 		return WKFIconLibrary.WKF_RP_ACTIVE_ICON;
-	}
-
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return WKFIconLibrary.WKF_RP_SELECTED_ICON;
-	}
-
-	@Override
-	public boolean isAlwaysVisible() {
-		return true;
 	}
 
 	@Override
@@ -82,32 +110,36 @@ public class RolePerspective extends FlexoPerspective<RoleList> {
 		if (proposedObject != null) {
 			return proposedObject.getProject().getWorkflow().getRoleList();
 		}
-		return _controller.getProject().getWorkflow().getRoleList();
+		return null;
 	}
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return (object instanceof RoleList) && !((RoleList) object).isImportedRoleList();
+		return object instanceof RoleList && !((RoleList) object).isImportedRoleList();
 	}
 
 	@Override
-	public ModuleView<RoleList> createModuleViewForObject(RoleList roleList, FlexoController controller) {
-		return getRoleEditorController().getDrawingView();
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller, boolean editable) {
+		if (object instanceof RoleList) {
+			RoleEditorView drawingView = new RoleEditorController((RoleList) object, _controller).getDrawingView();
+			drawingView.getDrawing().setEditable(editable);
+			return drawingView;
+		} else {
+			return null;
+		}
 	}
 
 	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getLeftView() {
-		return _controller.getRoleListBrowserView();
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+		return createModuleViewForObject(object, controller, false);
 	}
 
 	@Override
 	public JComponent getHeader() {
-		return getRoleEditorController().getScalePanel();
+		if (getCurrentRoleListView() != null) {
+			return getCurrentRoleListView().getController().getScalePanel();
+		}
+		return null;
 	}
 
 	@Override
@@ -115,50 +147,23 @@ public class RolePerspective extends FlexoPerspective<RoleList> {
 		return infoLabel;
 	}
 
-	private final JLabel infoLabel = new JLabel("CTRL-drag to create role specialization");
-
 	@Override
-	public boolean doesPerspectiveControlRightView() {
-		return true;
+	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
+		if (moduleView instanceof RoleEditorView) {
+			importedRoleView.setSelected(((RoleEditorView) moduleView).getRepresentedObject());
+		}
 	}
 
-	@Override
-	public JComponent getRightView() {
-		return getSplitPaneWithRolePaletteAndDocInspectorPanel();
+	protected void updateMiddleLeftView() {
+		if (_controller.getProject() != null && _controller.getProject().hasImportedProjects()) {
+			setMiddleLeftView(importedRoleView);
+		} else {
+			setMiddleLeftView(null);
+		}
 	}
 
-	public RoleEditorController getRoleEditorController() {
-		if (_roleEditorController == null) {
-			_roleEditorController = new RoleEditorController(_controller);
-		}
-		return _roleEditorController;
-	}
-
-	/**
-	 * Return Split pane with Role palette and doc inspector panel Disconnect doc inspector panel from its actual parent
-	 * 
-	 * @return
-	 */
-	protected JSplitPane getSplitPaneWithRolePaletteAndDocInspectorPanel() {
-		if (splitPaneWithRolePaletteAndDocInspectorPanel == null) {
-			splitPaneWithRolePaletteAndDocInspectorPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, getRoleEditorController().getPalette()
-					.getPaletteView(), _controller.getDisconnectedDocInspectorPanel());
-			splitPaneWithRolePaletteAndDocInspectorPanel.setBorder(BorderFactory.createEmptyBorder());
-			splitPaneWithRolePaletteAndDocInspectorPanel.setResizeWeight(0);
-			splitPaneWithRolePaletteAndDocInspectorPanel.setDividerLocation(WKFCst.PALETTE_DOC_SPLIT_LOCATION);
-		}
-		if (splitPaneWithRolePaletteAndDocInspectorPanel.getBottomComponent() == null) {
-			splitPaneWithRolePaletteAndDocInspectorPanel.setBottomComponent(_controller.getDisconnectedDocInspectorPanel());
-		}
-		new FlexoSplitPaneLocationSaver(splitPaneWithRolePaletteAndDocInspectorPanel, "RolePaletteAndDocInspectorPanel");
-		return splitPaneWithRolePaletteAndDocInspectorPanel;
-	}
-
-	public void removeFromRoleController(RoleEditorController roleEditorController) {
-		if (_roleEditorController == roleEditorController) {
-			_roleEditorController = null;
-			splitPaneWithRolePaletteAndDocInspectorPanel = null;
-		}
+	public void setProject(FlexoProject project) {
+		updateMiddleLeftView();
 	}
 
 }

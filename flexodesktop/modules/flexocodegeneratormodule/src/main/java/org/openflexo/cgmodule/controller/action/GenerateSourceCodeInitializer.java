@@ -19,8 +19,8 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -29,7 +29,7 @@ import javax.swing.KeyStroke;
 import org.openflexo.FlexoCst;
 import org.openflexo.cgmodule.GeneratorPreferences;
 import org.openflexo.cgmodule.controller.GeneratorController;
-import org.openflexo.cgmodule.view.GeneratorMainPane;
+import org.openflexo.cgmodule.view.GeneratorBrowserView;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
@@ -65,7 +65,7 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<GenerateSourceCode> getDefaultInitializer() {
 		return new FlexoActionInitializer<GenerateSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateSourceCode action) {
+			public boolean run(EventObject e, GenerateSourceCode action) {
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
 					return false;
@@ -82,7 +82,7 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 				}
 				action.setSaveBeforeGenerating(GeneratorPreferences.getSaveBeforeGenerating());
 				action.getProjectGenerator().startHandleLogs();
-				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().setHoldStructure();
+				getBrowserView().getBrowser().setHoldStructure();
 				return true;
 			}
 		};
@@ -92,9 +92,9 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<GenerateSourceCode> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<GenerateSourceCode>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateSourceCode action) {
-				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().resetHoldStructure();
-				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().update();
+			public boolean run(EventObject e, GenerateSourceCode action) {
+				getBrowserView().getBrowser().resetHoldStructure();
+				getBrowserView().getBrowser().update();
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 				getControllerActionInitializer().getGeneratorController().disposeProgressWindow();
@@ -114,8 +114,8 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 		return new FlexoExceptionHandler<GenerateSourceCode>() {
 			@Override
 			public boolean handleException(FlexoException exception, GenerateSourceCode action) {
-				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().resetHoldStructure();
-				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().update();
+				getBrowserView().getBrowser().resetHoldStructure();
+				getBrowserView().getBrowser().update();
 				getControllerActionInitializer().getGeneratorController().disposeProgressWindow();
 				if (exception instanceof GenerationException) {
 					FlexoController.showError(FlexoLocalization.localizedForKey("generation_failed") + ":\n"
@@ -142,4 +142,9 @@ public class GenerateSourceCodeInitializer extends ActionInitializer {
 	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_G, FlexoCst.META_MASK);
 	}
+
+	protected GeneratorBrowserView getBrowserView() {
+		return getController().getBrowserView();
+	}
+
 }

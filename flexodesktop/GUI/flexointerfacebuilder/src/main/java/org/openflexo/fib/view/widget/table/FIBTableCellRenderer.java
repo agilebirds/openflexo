@@ -9,15 +9,17 @@ import java.awt.Component;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBTable;
 import org.openflexo.fib.view.widget.FIBTableWidget;
 
 class FIBTableCellRenderer<T> extends DefaultTableCellRenderer {
 
 	private final AbstractColumn<T> column;
+	private Color disabledColor;
+	private Color disabledBackgroundColor;
 
 	public FIBTableCellRenderer(AbstractColumn<T> aColumn) {
 		super();
@@ -25,12 +27,19 @@ class FIBTableCellRenderer<T> extends DefaultTableCellRenderer {
 		setFont(column.getColumnModel().retrieveValidFont());
 	}
 
+	@Override
+	public void updateUI() {
+		super.updateUI();
+		disabledColor = UIManager.getDefaults().getColor("Label.disabledForeground");
+		disabledBackgroundColor = UIManager.getDefaults().getColor("TextArea.disabledBackground");
+	}
+
 	public FIBTableModel getTableModel() {
 		return column.getTableModel();
 	}
 
 	public FIBTableWidget getTableWidget() {
-		return column.getTableWidget();
+		return column.getTableModel().getTableWidget();
 	}
 
 	public FIBTable getTable() {
@@ -57,32 +66,54 @@ class FIBTableCellRenderer<T> extends DefaultTableCellRenderer {
 	 */
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+		setForeground(null);
+		setBackground(null);
 		Component returned = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
+		row = table.convertRowIndexToModel(row);
 		if (returned instanceof JComponent) {
 			((JComponent) returned).setToolTipText(this.column.getTooltip(getTableModel().elementAt(row)));
-			((JComponent) returned).setFont(this.column.getColumnModel().retrieveValidFont());
 		}
 
 		if (returned instanceof JLabel) {
 			((JLabel) returned).setText(this.column.getStringRepresentation(value));
 		}
 
-		if (isSelected) {
-			if (getTableWidget().isLastFocusedSelectable()) {
-				setForeground(getTable().getTextSelectionColor());
-				setBackground(getTable().getBackgroundSelectionColor());
+		if (getTableWidget().isEnabled()) {
+			if (isSelected) {
+				if (getTableWidget().isLastFocusedSelectable()) {
+					if (getTable().getTextSelectionColor() != null) {
+						setForeground(getTable().getTextSelectionColor());
+					}
+					if (getTable().getBackgroundSelectionColor() != null) {
+						setBackground(getTable().getBackgroundSelectionColor());
+					}
+				} else {
+					if (getTable().getTextNonSelectionColor() != null) {
+						setForeground(getTable().getTextNonSelectionColor());
+					}
+					if (getTable().getBackgroundSecondarySelectionColor() != null) {
+						setBackground(getTable().getBackgroundSecondarySelectionColor());
+					}
+				}
 			} else {
-				setForeground(getTable().getTextNonSelectionColor());
-				setBackground(getTable().getBackgroundSecondarySelectionColor());
+				if (getTable().getTextNonSelectionColor() != null) {
+					setForeground(getTable().getTextNonSelectionColor());
+				}
+				if (getTable().getBackgroundNonSelectionColor() != null) {
+					setBackground(getTable().getBackgroundNonSelectionColor());
+				}
 			}
 		} else {
-			if (!getTableWidget().isEnabled()) {
-				setForeground(FIBComponent.DISABLED_COLOR);
-			} else {
-				setForeground(getTable().getTextNonSelectionColor());
+			if (disabledColor != null) {
+				setForeground(disabledColor);
+			} else if (getForeground() != null) {
+				setForeground(getForeground().brighter());
 			}
-			setBackground(getTable().getBackgroundNonSelectionColor());
+			if (disabledBackgroundColor != null) {
+				setBackground(disabledBackgroundColor);
+			} else if (getBackground() != null) {
+				setBackground(getBackground().darker());
+			}
 		}
 
 		Color specificColor = this.column.getSpecificColor(getTableModel().elementAt(row));

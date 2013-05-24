@@ -20,7 +20,6 @@
 package org.openflexo.generator;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,9 +29,6 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.openflexo.foundation.CodeType;
-import org.openflexo.foundation.DefaultFlexoEditor;
-import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.cg.generator.GeneratorUtils;
 import org.openflexo.foundation.dm.DuplicateClassNameException;
 import org.openflexo.foundation.dm.FlexoExecutionModelRepository;
@@ -50,7 +46,6 @@ import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoMemoryResource;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoResourceData;
-import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.FlexoStorageResource;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.StorageResourceData;
@@ -65,7 +60,6 @@ import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.generator.action.GenerateSourceCode;
 import org.openflexo.generator.action.SynchronizeRepositoryCodeGeneration;
-import org.openflexo.generator.action.ValidateProject;
 import org.openflexo.generator.action.WriteModifiedGeneratedFiles;
 import org.openflexo.generator.rm.FlexoCopyOfFlexoResource;
 import org.openflexo.generator.rm.ProjectTextFileResource;
@@ -75,7 +69,6 @@ import org.openflexo.generator.rm.TabComponentWOFileResource;
 import org.openflexo.generator.utils.DefaultApplicationConfGenerator;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.ToolBox;
 
 public class TestCG2 extends CGTestCase {
 
@@ -112,20 +105,8 @@ public class TestCG2 extends CGTestCase {
 	 */
 	public void test0CreateProject() {
 		log("test0CreateProject");
-		ToolBox.setPlatform();
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
-		try {
-			File tempFile = File.createTempFile(TEST_CG2, "");
-			_projectDirectory = new File(tempFile.getParentFile(), tempFile.getName() + ".prj");
-			tempFile.delete();
-		} catch (IOException e) {
-			fail();
-		}
-		logger.info("Project directory: " + _projectDirectory.getAbsolutePath());
-		_projectIdentifier = _projectDirectory.getName().substring(0, _projectDirectory.getName().length() - 4);
-		logger.info("Project identifier: " + _projectIdentifier);
-		_editor = (DefaultFlexoEditor) FlexoResourceManager.initializeNewProject(_projectDirectory, EDITOR_FACTORY, null);
-		_project = _editor.getProject();
+		createProject(TEST_CG2);
 		logger.info("Project has been SUCCESSFULLY created");
 
 		assertNotNull(_rmResource = _project.getFlexoRMResource());
@@ -425,30 +406,7 @@ public class TestCG2 extends CGTestCase {
 
 		// Now sets the factory
 
-		_editor.registerExceptionHandlerFor(ValidateProject.actionType, new FlexoExceptionHandler<ValidateProject>() {
-			@Override
-			public boolean handleException(FlexoException exception, ValidateProject action) {
-				if (action.getIeValidationReport() != null && action.getIeValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from IE:\n" + action.getIeValidationReport().reportAsString());
-				}
-				if (action.getWkfValidationReport() != null && action.getWkfValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from WKF:\n" + action.getWkfValidationReport().reportAsString());
-				}
-				if (action.getDkvValidationReport() != null && action.getDkvValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from DKV:\n" + action.getDkvValidationReport().reportAsString());
-				}
-				if (action.getDmValidationReport() != null && action.getDmValidationReport().getErrorNb() > 0) {
-					logger.info("Errors reported from DM:\n" + action.getDmValidationReport().reportAsString());
-				}
-				return true;
-			}
-		});
-
-		ValidateProject validateProject = ValidateProject.actionType.makeNewAction(codeRepository, null, _editor);
-		validateProject.doAction();
-
-		// First project is not valid
-		assertFalse(validateProject.isProjectValid());
+		validateProject(codeRepository, false);
 
 		FlexoComponentFolder rootFolder = _project.getFlexoComponentLibrary().getRootFolder();
 
@@ -459,11 +417,7 @@ public class TestCG2 extends CGTestCase {
 		_project.getFlexoNavigationMenu().getRootMenu().setOperation(_operationNode);
 
 		// Project should be without errors now
-		validateProject = ValidateProject.actionType.makeNewAction(codeRepository, null, _editor);
-		validateProject.doAction();
-		assertTrue(validateProject.isProjectValid());
-
-		saveProject();
+		assertProjectIsValid(codeRepository);
 
 		// Synchronize code generation
 		codeRepository.connect();

@@ -29,10 +29,18 @@ import java.util.List;
  */
 public interface ResourceUpdateHandler {
 
+	public interface GeneratedResourceModifiedHook {
+		public void handleGeneratedResourceModified(FlexoGeneratedResource generatedResource);
+	}
+
 	/**
 	 * @param fileResource
 	 */
 	public void handlesResourceUpdate(FlexoFileResource<? extends FlexoResourceData> fileResource);
+
+	public abstract void setGeneratedResourceModifiedHook(GeneratedResourceModifiedHook generatedResourceModifiedHook);
+
+	public abstract GeneratedResourceModifiedHook getGeneratedResourceModifiedHook();
 
 	public void handlesResourcesUpdate(List<FlexoFileResource<? extends FlexoResourceData>> updatedResources);
 

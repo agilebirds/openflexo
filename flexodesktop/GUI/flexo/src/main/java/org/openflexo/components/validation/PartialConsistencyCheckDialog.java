@@ -29,7 +29,7 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoDialog;
-import org.openflexo.view.controller.ConsistencyCheckingController;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -41,14 +41,14 @@ import org.openflexo.view.controller.FlexoController;
  */
 public class PartialConsistencyCheckDialog extends FlexoDialog implements ConsistencyCheckDialogInterface {
 
-	private ConsistencyCheckingController _controller;
+	private FlexoController _controller;
 
 	private ValidationReportEditor _validationReportEditor;
 
 	private ValidationModelViewer _validationModelViewer;
 
-	public PartialConsistencyCheckDialog(String title, ConsistencyCheckingController controller, ValidationReport validationReport) {
-		super(FlexoController.getActiveFrame(), true);
+	public PartialConsistencyCheckDialog(String title, FlexoController controller, ValidationReport validationReport) {
+		super(FlexoFrame.getActiveFrame(), true);
 		setTitle(title);
 		getContentPane().setLayout(new BorderLayout());
 		_validationReportEditor = new ValidationReportEditor(this, validationReport) {
@@ -90,7 +90,7 @@ public class PartialConsistencyCheckDialog extends FlexoDialog implements Consis
 	}
 
 	@Override
-	public ConsistencyCheckingController getController() {
+	public FlexoController getController() {
 		return _controller;
 	}
 

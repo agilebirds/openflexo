@@ -48,7 +48,6 @@ public class ImplementationModel extends ImplModelObject implements XMLStorageRe
 
 	private static final Logger logger = Logger.getLogger(ImplementationModel.class.getPackage().getName());
 
-	private FlexoProject _project;
 	private ImplementationModelResource _resource;
 	private ImplementationModelDefinition _implModelDefinition;
 	private LinkedHashMap<String, TechnologyModuleImplementation> technologyModules = new LinkedHashMap<String, TechnologyModuleImplementation>(); // <Module
@@ -77,7 +76,6 @@ public class ImplementationModel extends ImplModelObject implements XMLStorageRe
 	public ImplementationModel(ImplementationModelDefinition implModelDefinition, FlexoProject project) {
 		super(project);
 		logger.info("Created new implementation model for project " + project);
-		_project = project;
 		_implModelDefinition = implModelDefinition;
 		setImplementationModel(this);
 	}
@@ -105,16 +103,6 @@ public class ImplementationModel extends ImplModelObject implements XMLStorageRe
 	@Override
 	public void save() throws SaveResourceException {
 		getFlexoResource().saveResourceData();
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		return _project;
-	}
-
-	@Override
-	public void setProject(FlexoProject aProject) {
-		_project = aProject;
 	}
 
 	@Override

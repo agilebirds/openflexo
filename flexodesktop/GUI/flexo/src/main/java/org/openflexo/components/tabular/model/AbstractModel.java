@@ -20,7 +20,7 @@
 package org.openflexo.components.tabular.model;
 
 import java.awt.Component;
-import java.util.Enumeration;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -198,8 +198,7 @@ public abstract class AbstractModel<M extends FlexoModelObject, D extends FlexoM
 	}
 
 	private void updateObservedObjects() {
-		for (Enumeration en = _observedObjects.elements(); en.hasMoreElements();) {
-			FlexoModelObject observed = (FlexoModelObject) en.nextElement();
+		for (FlexoModelObject observed : new ArrayList<FlexoModelObject>(_observedObjects)) {
 			observed.deleteObserver(this);
 		}
 		_observedObjects.clear();
@@ -292,7 +291,7 @@ public abstract class AbstractModel<M extends FlexoModelObject, D extends FlexoM
 
 	@Override
 	public String getColumnName(int col) {
-		AbstractColumn column = columnAt(col);
+		AbstractColumn<D, ?> column = columnAt(col);
 		if (column != null) {
 			return column.getLocalizedTitle();
 		}
@@ -312,7 +311,7 @@ public abstract class AbstractModel<M extends FlexoModelObject, D extends FlexoM
 	}
 
 	public String getColumnTooltip(int col) {
-		AbstractColumn column = columnAt(col);
+		AbstractColumn<D, ?> column = columnAt(col);
 		if (column != null) {
 			return column.getLocalizedTooltip();
 		}
@@ -320,7 +319,7 @@ public abstract class AbstractModel<M extends FlexoModelObject, D extends FlexoM
 	}
 
 	public int getDefaultColumnSize(int col) {
-		AbstractColumn column = columnAt(col);
+		AbstractColumn<D, ?> column = columnAt(col);
 		if (column != null) {
 			return column.getDefaultWidth();
 		}
@@ -328,7 +327,7 @@ public abstract class AbstractModel<M extends FlexoModelObject, D extends FlexoM
 	}
 
 	public boolean getColumnResizable(int col) {
-		AbstractColumn column = columnAt(col);
+		AbstractColumn<D, ?> column = columnAt(col);
 		if (column != null) {
 			return column.getResizable();
 		}
@@ -336,8 +335,8 @@ public abstract class AbstractModel<M extends FlexoModelObject, D extends FlexoM
 	}
 
 	@Override
-	public Class getColumnClass(int col) {
-		AbstractColumn column = columnAt(col);
+	public Class<?> getColumnClass(int col) {
+		AbstractColumn<D, ?> column = columnAt(col);
 		if (column != null) {
 			return column.getValueClass();
 		}
@@ -346,9 +345,9 @@ public abstract class AbstractModel<M extends FlexoModelObject, D extends FlexoM
 
 	@Override
 	public boolean isCellEditable(int row, int col) {
-		AbstractColumn column = columnAt(col);
+		AbstractColumn<D, ?> column = columnAt(col);
 		if (column != null) {
-			FlexoModelObject object = elementAt(row);
+			D object = elementAt(row);
 			return column.isCellEditableFor(object);
 		}
 		return false;
@@ -356,9 +355,9 @@ public abstract class AbstractModel<M extends FlexoModelObject, D extends FlexoM
 
 	@Override
 	public Object getValueAt(int row, int col) {
-		AbstractColumn column = columnAt(col);
+		AbstractColumn<D, ?> column = columnAt(col);
 		if (column != null) {
-			FlexoModelObject object = elementAt(row);
+			D object = elementAt(row);
 			return column.getValueFor(object);
 		}
 		return null;
@@ -367,8 +366,8 @@ public abstract class AbstractModel<M extends FlexoModelObject, D extends FlexoM
 
 	@Override
 	public void setValueAt(Object value, int row, int col) {
-		AbstractColumn column = columnAt(col);
-		if ((column != null) && (column instanceof EditableColumn)) {
+		AbstractColumn<D, ?> column = columnAt(col);
+		if (column != null && column instanceof EditableColumn) {
 			D object = elementAt(row);
 			((EditableColumn) column).setValueFor(object, value);
 			fireCellUpdated(object, row, col);

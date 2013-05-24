@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -49,7 +49,7 @@ public class MoveMenuDownInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<MoveMenuDown> getDefaultInitializer() {
 		return new FlexoActionInitializer<MoveMenuDown>() {
 			@Override
-			public boolean run(ActionEvent e, MoveMenuDown action) {
+			public boolean run(EventObject e, MoveMenuDown action) {
 				boolean doable = false;
 				if (action.getFocusedObject() instanceof FlexoItemMenu) {
 					FlexoItemMenu item = (FlexoItemMenu) action.getFocusedObject();
@@ -59,10 +59,10 @@ public class MoveMenuDownInitializer extends ActionInitializer {
 						}
 					}
 					if (doable) {
-						(action).setItemMenu(item);
+						action.setItemMenu(item);
 					}
 				}
-				return (getModule().isActive()) && doable;
+				return getModule().isActive() && doable;
 			}
 		};
 	}
@@ -71,7 +71,7 @@ public class MoveMenuDownInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<MoveMenuDown> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MoveMenuDown>() {
 			@Override
-			public boolean run(ActionEvent e, MoveMenuDown action) {
+			public boolean run(EventObject e, MoveMenuDown action) {
 				return true;
 			}
 		};

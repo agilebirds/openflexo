@@ -54,7 +54,7 @@ public class RoleSelector extends AbstractBrowserSelector<Role> {
 	@Override
 	public String renderedString(Role editedObject) {
 		if (editedObject != null) {
-			return (editedObject).getName();
+			return editedObject.getName();
 		}
 		return EMPTY_STRING;
 	}
@@ -72,7 +72,6 @@ public class RoleSelector extends AbstractBrowserSelector<Role> {
 		@Override
 		public Dimension getDefaultSize() {
 			Dimension returned = _browserView.getDefaultSize();
-			returned.width = returned.width;
 			returned.height = returned.height - 100;
 			return returned;
 		}

@@ -23,6 +23,7 @@ import java.awt.Dimension;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -41,6 +42,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.WindowConstants;
 
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
@@ -64,7 +66,28 @@ import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLCoder;
 
+//TODO: switch to the right editor controller when switching tab
+//	getPalette().setEditorController(editorController);
 public abstract class FIBAbstractEditor implements FIBGenericEditor {
+
+	/*public static <T extends FIBAbstractEditor> void main(final Class<T> editor) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				T instance;
+				try {
+					instance = editor.newInstance();
+					instance.launch();
+				} catch (InstantiationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+	}*/
 
 	private static final Logger logger = FlexoLogger.getLogger(FIBAbstractEditor.class.getPackage().getName());
 
@@ -118,7 +141,6 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 	public FIBAbstractEditor() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			ToolBox.setPlatform();
 			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
 			FlexoLocalization.initWith(LOCALIZATION);
 		} catch (SecurityException e) {
@@ -150,7 +172,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		palette.setVisible(true);
 
 		frame.setTitle("Flexo Interface Builder Editor");
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		// mainPanel = new JPanel();
 
 		JMenuBar mb = new JMenuBar();
@@ -254,15 +276,16 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 
 		for (Object data : getData()) {
 			final Object d = data;
-			JMenuItem switchDataItem = new JMenuItem(data.toString());
-			switchDataItem.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					switchToData(d);
-				}
-			});
-			fileMenu.add(switchDataItem);
-
+			if (d != null) {
+				JMenuItem switchDataItem = new JMenuItem(data.toString());
+				switchDataItem.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						switchToData(d);
+					}
+				});
+				fileMenu.add(switchDataItem);
+			}
 		}
 
 		if (showExitMenuItem()) {
@@ -277,8 +300,18 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 				inspector.setVisible(true);
 			}
 		});
-		inspectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ToolBox.getPLATFORM() != ToolBox.MACOS ? KeyEvent.CTRL_MASK
-				: KeyEvent.META_MASK));
+		inspectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ToolBox.getPLATFORM() != ToolBox.MACOS ? InputEvent.CTRL_MASK
+				: InputEvent.META_MASK));
+
+		JMenuItem paletteItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "show_palette"));
+		paletteItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				palette.setVisible(true);
+			}
+		});
+		inspectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ToolBox.getPLATFORM() != ToolBox.MACOS ? InputEvent.CTRL_MASK
+				: InputEvent.META_MASK));
 
 		JMenuItem logsItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "logs"));
 		logsItem.addActionListener(new ActionListener() {
@@ -328,6 +361,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		});
 
 		toolsMenu.add(inspectItem);
+		toolsMenu.add(paletteItem);
 		toolsMenu.add(logsItem);
 		toolsMenu.add(localizedItem);
 		toolsMenu.add(displayFileItem);
@@ -383,12 +417,9 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		} else {
 			editorController = new FIBEditorController(fibComponent, this, getData()[0]);
 		}
-
+		getPalette().setEditorController(editorController);
 		frame.getContentPane().add(editorController.getEditorPanel());
-
-		frame.validate();
 		frame.pack();
-
 	}
 
 	public void switchToData(Object data) {
@@ -411,7 +442,6 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		view.getController().setDataObject(editorController.getDataObject());
 		JDialog testInterface = new JDialog(frame, "Test", false);
 		testInterface.getContentPane().add(view.getResultingJComponent());
-		testInterface.validate();
 		testInterface.pack();
 		testInterface.setVisible(true);
 	}
@@ -423,7 +453,6 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		view.getController().setDataObject(editorController.getController());
 		JDialog localizationInterface = new JDialog(frame, FlexoLocalization.localizedForKey(LOCALIZATION, "component_localization"), false);
 		localizationInterface.getContentPane().add(view.getResultingJComponent());
-		localizationInterface.validate();
 		localizationInterface.pack();
 		localizationInterface.setVisible(true);
 	}
@@ -455,10 +484,27 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		System.exit(0);
 	}
 
+	@Deprecated
 	public void launch() {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Launch was not called from EDT. Doing so now, but consider using using FIBSbstractEditor.main(Class)");
+			}
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					launch();
+				}
+			});
+			return;
+		}
 		logger.info(">>>>>>>>>>> Loading FIB...");
-		loadFIB();
-		frame.setVisible(true);
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				init(FIBAbstractEditor.this);
+			}
+		});
 	}
 
 	public static Object[] makeArray(Object... o) {
@@ -474,5 +520,29 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 
 	public boolean showExitMenuItem() {
 		return true;
+	}
+
+	public static <T extends FIBAbstractEditor> void init(T abstractEditor) {
+		abstractEditor.loadFIB();
+		abstractEditor.getFrame().setVisible(true);
+	}
+
+	public static <T extends FIBAbstractEditor> void main(final Class<T> klass) {
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					T abstractEditor = klass.newInstance();
+					init(abstractEditor);
+				} catch (InstantiationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		});
 	}
 }

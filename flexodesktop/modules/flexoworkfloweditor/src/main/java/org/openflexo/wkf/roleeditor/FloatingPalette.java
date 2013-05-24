@@ -109,7 +109,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 	@Override
 	public boolean isDraggable() {
-		return true;
+		return roleGR.getDrawing().isEditable();
 	}
 
 	protected Point currentDraggingLocationInDrawingView = null;
@@ -258,7 +258,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation focusedGR) {
+	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
 		if (drawEdge && currentDraggingLocationInDrawingView != null && isDnd) {
 			try {
 				GraphicalRepresentation<?> targetGR = controller.getGraphicalRepresentation(target);
@@ -279,10 +279,11 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 				Point p = GraphicalRepresentation.convertPoint(controller.getDrawingGraphicalRepresentation(), dropPoint, targetGR,
 						controller.getScale());
 				FGEPoint dropLocation = new FGEPoint(p.x / controller.getScale(), p.y / controller.getScale());
+				Role from = roleGR.getDrawable();
 				Role to = null;
 				switch (mode) {
 				case ROLE:
-					to = createRole(dropLocation, target, direction);
+					to = createRole(dropLocation, target, from, direction);
 					break;
 				case SPECIALIZATION:
 					if (this.to != null) {
@@ -297,8 +298,8 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 					return;
 				}
 
-				AddRoleSpecialization addRoleSpecializationAction = AddRoleSpecialization.actionType.makeNewAction(roleGR.getDrawable(),
-						null, ((RoleEditorController) controller).getEditor());
+				AddRoleSpecialization addRoleSpecializationAction = AddRoleSpecialization.actionType.makeNewAction(from, null,
+						((RoleEditorController) controller).getEditor());
 				addRoleSpecializationAction.setNewParentRole(to);
 				addRoleSpecializationAction.setRoleSpecializationAutomaticallyCreated(true);
 				addRoleSpecializationAction.doAction();
@@ -328,7 +329,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		currentDraggingLocationInDrawingView = null;
 	}
 
-	private Role createRole(FGEPoint dropLocation, RoleList container, SimplifiedCardinalDirection direction) {
+	private Role createRole(FGEPoint dropLocation, RoleList container, Role from, SimplifiedCardinalDirection direction) {
 		FGEPoint locationInDrawing = null;
 		if (controller.getGraphicalRepresentation(container) != null) {
 			locationInDrawing = dropLocation.transform(GraphicalRepresentation.convertCoordinatesAT(
@@ -337,9 +338,9 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 		FlexoWorkflow workflow = container.getWorkflow();
 		AddRole addRole = AddRole.actionType.makeNewAction(workflow, null, controller.getWKFController().getEditor());
-		addRole.setRoleAutomaticallyCreated(true);
 		addRole.setLocation(dropLocation.x, dropLocation.y);
 		addRole.setNewRoleName(workflow.getRoleList().getNextNewUserRoleName());
+		addRole.setRoleToClone(from);
 		addRole.setRoleAutomaticallyCreated(true);
 		addRole.doAction();
 
@@ -396,6 +397,9 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 			return null;
 		}
 		if (/*nodeGR.getIsSelected() ||*/roleGR.isResizing() || roleGR.isMoving()) {
+			return null;
+		}
+		if (!roleGR.getDrawing().isEditable()) {
 			return null;
 		}
 		AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(roleGR, drawingGraphics.getGraphicalRepresentation());

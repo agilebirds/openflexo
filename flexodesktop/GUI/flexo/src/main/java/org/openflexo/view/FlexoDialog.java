@@ -20,11 +20,8 @@
 package org.openflexo.view;
 
 import java.awt.Dialog;
-import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.HeadlessException;
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -116,20 +113,7 @@ public class FlexoDialog extends JDialog {
 	}
 
 	public void centerDialog() {
-		Point center;
-		if (getOwner() != null && getOwner().isVisible()) {
-			center = new Point(getOwner().getLocationOnScreen().x + getOwner().getWidth() / 2, getOwner().getLocationOnScreen().y
-					+ getOwner().getHeight() / 2);
-		} else {
-			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-			center = new Point(screenSize.width / 2, screenSize.height / 2);
-		}
-		setLocation(Math.max(center.x - getSize().width / 2, 0), Math.max(center.y - getSize().height / 2, 0));
-	}
-
-	@Override
-	public void dispose() {
-		super.dispose();
+		setLocationRelativeTo(getOwner());
 	}
 
 	public static final DialogFactory DIALOG_FACTORY = new DialogFactory() {

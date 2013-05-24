@@ -20,6 +20,8 @@
 package org.openflexo.ie.view;
 
 import java.awt.BorderLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -47,11 +49,11 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.ie.view.controller.ComponentBrowser;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.selection.SelectionListener;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.SelectionSynchronizedModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
-public class IEExampleValuesView extends JPanel implements SelectionSynchronizedModuleView<ComponentInstance> {
+public class IEExampleValuesView extends JPanel implements SelectionSynchronizedModuleView<ComponentInstance>, PropertyChangeListener {
 
 	private static final Logger logger = Logger.getLogger(IEExampleValuesView.class.getPackage().getName());
 
@@ -97,6 +99,7 @@ public class IEExampleValuesView extends JPanel implements SelectionSynchronized
 		setLayout(new BorderLayout());
 		add(_treeTable, BorderLayout.CENTER);
 		validate();
+		getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 	}
 
 	@Override
@@ -106,6 +109,7 @@ public class IEExampleValuesView extends JPanel implements SelectionSynchronized
 
 	@Override
 	public void deleteModuleView() {
+		getRepresentedObject().getPropertyChangeSupport().removePropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 		_controller.removeModuleView(this);
 		logger.warning("implements me !");
 	}
@@ -144,7 +148,7 @@ public class IEExampleValuesView extends JPanel implements SelectionSynchronized
 
 			@Override
 			public FlexoModelObject getDefaultRootObject() {
-				return (rootObject).getComponentDefinition();
+				return rootObject.getComponentDefinition();
 			}
 
 			@Override
@@ -283,4 +287,10 @@ public class IEExampleValuesView extends JPanel implements SelectionSynchronized
 		return reply;
 	}
 
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == getRepresentedObject() && evt.getPropertyName().equals(getRepresentedObject().getDeletedProperty())) {
+			deleteModuleView();
+		}
+	}
 }

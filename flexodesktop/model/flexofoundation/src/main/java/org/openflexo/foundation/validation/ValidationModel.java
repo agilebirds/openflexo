@@ -106,6 +106,8 @@ public abstract class ValidationModel extends FlexoListModel {
 		// Get all the objects to validate
 		Vector<? extends Validable> allEmbeddedValidableObjects = object.getAllEmbeddedValidableObjects();
 
+		// logger.info("For object " + object + " objects to validate are: " + allEmbeddedValidableObjects);
+
 		// Remove duplicated objects
 		Vector<Validable> objectsToValidate = new Vector<Validable>();
 		for (Enumeration<? extends Validable> en = allEmbeddedValidableObjects.elements(); en.hasMoreElements();) {
@@ -437,7 +439,7 @@ public abstract class ValidationModel extends FlexoListModel {
 	 * @see javax.swing.ListModel#getElementAt(int)
 	 */
 	@Override
-	public Object getElementAt(int index) {
+	public ValidationRuleSet getElementAt(int index) {
 		return _inheritedRules.get(_keys.elementAt(index));
 	}
 

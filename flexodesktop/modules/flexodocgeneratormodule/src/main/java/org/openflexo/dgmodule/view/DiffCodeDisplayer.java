@@ -184,7 +184,7 @@ public class DiffCodeDisplayer extends DocDisplayer {
 				leftLabel = FlexoLocalization.localizedForKey("last_accepted_version");
 				rightLabel = FlexoLocalization.localizedForKey("file_on_disk");
 				isLeftOriented = false;
-			} else if ((getCGFile().getGenerationStatus() == GenerationStatus.OverrideScheduled)) {
+			} else if (getCGFile().getGenerationStatus() == GenerationStatus.OverrideScheduled) {
 				_diffReport = ComputeDiff.diff(getContentToWriteOnDisk(), getContentOnDisk());
 				leftLabel = FlexoLocalization.localizedForKey("overriden_version") + " ["
 						+ getCGFile().getScheduledOverrideVersion().getStringRepresentation() + "]";

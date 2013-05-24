@@ -57,7 +57,6 @@ public class CheckBoxWidget extends DenaliWidget<Object> {
 		_jPanel.setOpaque(false);
 		_jCheckBox = new JCheckBox();
 		_jCheckBox.setOpaque(false);
-		// _jCheckBox.setBackground(InspectorCst.BACK_COLOR);
 		if (isReadOnly()) {
 			_jCheckBox.setEnabled(false);
 		} else {
@@ -70,7 +69,6 @@ public class CheckBoxWidget extends DenaliWidget<Object> {
 		}
 		_jPanel.add(_jCheckBox, BorderLayout.WEST);
 		_jPanel.add(Box.createGlue(), BorderLayout.CENTER);
-		// _jPanel.setBackground(InspectorCst.BACK_COLOR);
 		getDynamicComponent().addFocusListener(new WidgetFocusListener(this));
 		Boolean b = getPropertyModel().getBooleanValueForParameter("negate");
 		isNegate = b != null && b;

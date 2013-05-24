@@ -43,8 +43,8 @@ public abstract class FJPJavaEntity extends FJPJavaElement implements ParsedJava
 
 	@Override
 	public JavadocItem getJavadoc() {
-		if ((_javadocItem == null)
-				&& ((_qdJavaEntity.getComment() != null) || (_qdJavaEntity.getTags() != null && _qdJavaEntity.getTags().length > 0))) {
+		if (_javadocItem == null
+				&& (_qdJavaEntity.getComment() != null || _qdJavaEntity.getTags() != null && _qdJavaEntity.getTags().length > 0)) {
 			_javadocItem = new JavadocItem(_qdJavaEntity.getComment(), _qdJavaEntity.getTags());
 		}
 		return _javadocItem;

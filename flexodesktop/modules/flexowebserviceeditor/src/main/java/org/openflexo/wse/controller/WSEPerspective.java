@@ -22,9 +22,10 @@ import org.openflexo.foundation.ws.WSPortTypeFolder;
 import org.openflexo.foundation.ws.WSRepositoryFolder;
 import org.openflexo.foundation.ws.WSService;
 import org.openflexo.icon.WSEIconLibrary;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.FlexoPerspective;
+import org.openflexo.wse.view.WSEBrowserView;
 import org.openflexo.wse.view.WSEDMEntityView;
 import org.openflexo.wse.view.WSEDMPackageView;
 import org.openflexo.wse.view.WSEDMRepositoryView;
@@ -38,33 +39,24 @@ import org.openflexo.wse.view.WSERepositoryFolderView;
 import org.openflexo.wse.view.WSEServiceOperationView;
 import org.openflexo.wse.view.WSEServiceView;
 
-public class WSEPerspective extends FlexoPerspective<FlexoModelObject> {
+public class WSEPerspective extends FlexoPerspective {
 
 	/**
 	 * @param name
 	 */
-	public WSEPerspective() {
+	public WSEPerspective(WSEController controller) {
 		super("webserviceeditor_perspective");
+		setTopLeftView(new WSEBrowserView(controller));
 	}
 
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
 		return WSEIconLibrary.WSE_WSEP_ACTIVE_ICON;
-	}
-
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return WSEIconLibrary.WSE_WSEP_SELECTED_ICON;
 	}
 
 	@Override

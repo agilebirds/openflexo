@@ -20,6 +20,8 @@
 package org.openflexo.vpm.palette;
 
 import java.awt.BorderLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
@@ -29,7 +31,7 @@ import org.openflexo.foundation.viewpoint.ViewPointPalette;
 import org.openflexo.view.ModuleView;
 import org.openflexo.vpm.controller.ViewPointPerspective;
 
-public class CalcPaletteModuleView extends JPanel implements ModuleView<ViewPointPalette> {
+public class CalcPaletteModuleView extends JPanel implements ModuleView<ViewPointPalette>, PropertyChangeListener {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CalcPaletteModuleView.class.getPackage().getName());
@@ -40,11 +42,10 @@ public class CalcPaletteModuleView extends JPanel implements ModuleView<ViewPoin
 		super();
 		setLayout(new BorderLayout());
 		_controller = controller;
-
 		add(controller.getDrawingView(), BorderLayout.CENTER);
 		validate();
-
 		controller.getCEDController().manageResource(controller.getCalcPalette());
+		getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 	}
 
 	public CalcPaletteController getController() {
@@ -53,6 +54,7 @@ public class CalcPaletteModuleView extends JPanel implements ModuleView<ViewPoin
 
 	@Override
 	public void deleteModuleView() {
+		getRepresentedObject().getPropertyChangeSupport().removePropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 		getController().delete();
 	}
 
@@ -82,6 +84,13 @@ public class CalcPaletteModuleView extends JPanel implements ModuleView<ViewPoin
 	@Override
 	public void willShow() {
 		getPerspective().focusOnPalette(getRepresentedObject());
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == getRepresentedObject() && evt.getPropertyName().equals(getRepresentedObject().getDeletedProperty())) {
+			deleteModuleView();
+		}
 	}
 
 }

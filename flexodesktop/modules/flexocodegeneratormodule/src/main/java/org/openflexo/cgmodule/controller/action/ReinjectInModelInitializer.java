@@ -19,7 +19,7 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -68,21 +68,25 @@ public class ReinjectInModelInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ReinjectInModel> getDefaultInitializer() {
 		return new FlexoActionInitializer<ReinjectInModel>() {
 			@Override
-			public boolean run(ActionEvent e, ReinjectInModel action) {
+			public boolean run(EventObject e, ReinjectInModel action) {
 				if (action.getFilesToReinjectInModel().size() == 0) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("no_files_selected"));
 					return false;
-				} else if ((action.getFilesToReinjectInModel().size() > 1 || (!(action.getFocusedObject() instanceof CGFile)))
-						&& (!(action.getContext() instanceof AcceptDiskUpdateAndReinjectInModel))) {
+				} else if ((action.getFilesToReinjectInModel().size() > 1 || !(action.getFocusedObject() instanceof CGFile))
+						&& !(action.getContext() instanceof AcceptDiskUpdateAndReinjectInModel)) {
 					SelectFilesPopup popup = new SelectFilesPopup(FlexoLocalization.localizedForKey("reinject_in_model"),
 							FlexoLocalization.localizedForKey("reinject_in_model_description"), "reinject_in_model",
 							action.getFilesToReinjectInModel(), action.getFocusedObject().getProject(), getControllerActionInitializer()
 									.getGeneratorController());
-					popup.setVisible(true);
-					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getFileSet().getSelectedFiles().size() > 0)) {
-						action.setFilesToReinjectInModel(popup.getFileSet().getSelectedFiles());
-					} else {
-						return false;
+					try {
+						popup.setVisible(true);
+						if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
+							action.setFilesToReinjectInModel(popup.getFileSet().getSelectedFiles());
+						} else {
+							return false;
+						}
+					} finally {
+						popup.delete();
 					}
 				} else {
 					// Continue without confirmation nor selection of files
@@ -104,8 +108,7 @@ public class ReinjectInModelInitializer extends ActionInitializer {
 								FlexoLocalization.localizedForKey("please_select_properties_and_methods_to_reinject_in_model"),
 								selectedJavaFiles, getProject(), getControllerActionInitializer().getGeneratorController());
 						popup.setVisible(true);
-						if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE)
-								&& (popup.getDMSet().getSelectedObjects().size() > 0)) {
+						if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getDMSet().getSelectedObjects().size() > 0) {
 							action.setUpdatedSet(popup.getDMSet());
 							action.getProjectGenerator().startHandleLogs();
 							return true;
@@ -151,7 +154,7 @@ public class ReinjectInModelInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ReinjectInModel> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ReinjectInModel>() {
 			@Override
-			public boolean run(ActionEvent e, ReinjectInModel action) {
+			public boolean run(EventObject e, ReinjectInModel action) {
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 				return true;

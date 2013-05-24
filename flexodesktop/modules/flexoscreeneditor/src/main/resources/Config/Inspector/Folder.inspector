@@ -6,7 +6,7 @@
 		</property>
 		<property name="componentPrefix" label="process_prefix" widget="TEXT_FIELD" constraint="1"/>
 		<property name="generationRelativePath" label="generation_sub_path" widget="TEXT_FIELD" constraint="2">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 	</tab>
 	<tab name="Doc" index="2" layout="DEFAULT">

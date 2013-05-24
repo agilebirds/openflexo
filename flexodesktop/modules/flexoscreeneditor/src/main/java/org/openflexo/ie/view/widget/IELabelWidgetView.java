@@ -175,7 +175,7 @@ public class IELabelWidgetView extends AbstractInnerTableWidgetView<IELabelWidge
 		});
 		remove(_jLabel);
 		add(_jLabelTextField);
-		_jLabelTextField.requestFocus();
+		_jLabelTextField.requestFocusInWindow();
 		if (getLabelModel().getValue() != null && getLabelModel().getValue().endsWith(":")) {
 			_jLabelTextField.select(0, _jLabelTextField.getText().length() - 1);
 		} else {

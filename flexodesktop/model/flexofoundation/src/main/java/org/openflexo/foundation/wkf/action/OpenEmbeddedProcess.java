@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.wkf.FlexoProcess;
@@ -46,16 +47,20 @@ public class OpenEmbeddedProcess extends FlexoGUIAction<OpenEmbeddedProcess, Sub
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(SubProcessNode object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(SubProcessNode object, Vector<WKFObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(SubProcessNode object, Vector<WKFObject> globalSelection) {
-			return object != null && object.getSubProcess() != null;
+		public boolean isEnabledForSelection(SubProcessNode object, Vector<WKFObject> globalSelection) {
+			return object != null;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, SubProcessNode.class);
+	}
 
 	OpenEmbeddedProcess(SubProcessNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

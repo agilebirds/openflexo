@@ -22,7 +22,6 @@ package org.openflexo.foundation.rm;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,7 +40,7 @@ import org.openflexo.toolbox.FileUtils;
  * 
  * @author sguerin
  */
-public abstract class FlexoFileResource<RD extends FlexoResourceData> extends FlexoResource<RD> implements Serializable {
+public abstract class FlexoFileResource<RD extends FlexoResourceData> extends FlexoResource<RD> {
 
 	/**
 	 * This constant traduces the delay accepted for the File System to effectively write a file on disk after the date it was requested. If
@@ -105,8 +104,8 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 				if (logger.isLoggable(Level.SEVERE)) {
 					logger.severe("The name " + ((FlexoFileResource) res).getResourceFile().getStringRepresentation()
 							+ " is equivalent to " + aFile.getStringRepresentation() + " and can therefore not be used twice!!");
-					logger.severe("The existing resource is " + ((FlexoFileResource) res).getName()
-							+ "\n The resource we try to associate to the same file is " + getName());
+					logger.severe("The existing resource is " + ((FlexoFileResource) res).getFullyQualifiedName()
+							+ "\n The resource we try to associate to the same file is " + getFullyQualifiedName());
 				}
 				throw new InvalidFileNameException(aFile.getRelativePath());
 			}
@@ -472,7 +471,7 @@ public abstract class FlexoFileResource<RD extends FlexoResourceData> extends Fl
 			FlexoResource next = (FlexoResource) en.nextElement();
 			try {
 				next.update();
-			} catch (ResourceDependancyLoopException e) {
+			} catch (ResourceDependencyLoopException e) {
 				if (logger.isLoggable(Level.SEVERE)) {
 					logger.log(Level.SEVERE, "Loop in dependant resources of " + this + "!", e);
 				}

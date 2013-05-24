@@ -19,8 +19,8 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.util.Enumeration;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -59,7 +59,7 @@ public class SuroundWithConditionalInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<SuroundWithConditional> getDefaultInitializer() {
 		return new FlexoActionInitializer<SuroundWithConditional>() {
 			@Override
-			public boolean run(ActionEvent e, SuroundWithConditional action) {
+			public boolean run(EventObject e, SuroundWithConditional action) {
 				if (action.getFocusedObject() instanceof ITableRow) {
 					Vector<FlexoModelObject> v = (Vector<FlexoModelObject>) action.getGlobalSelection().clone();
 					if (!v.contains(action.getFocusedObject())) {
@@ -122,7 +122,7 @@ public class SuroundWithConditionalInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<SuroundWithConditional> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SuroundWithConditional>() {
 			@Override
-			public boolean run(ActionEvent e, SuroundWithConditional action) {
+			public boolean run(EventObject e, SuroundWithConditional action) {
 				((IEController) getController()).getSelectionManager().setSelectedObject(action.getNewConditional().getOperatedSequence());
 				return true;
 			}

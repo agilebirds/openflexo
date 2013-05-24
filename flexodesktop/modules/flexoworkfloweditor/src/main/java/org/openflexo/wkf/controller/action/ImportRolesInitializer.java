@@ -19,10 +19,10 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -64,7 +64,7 @@ public class ImportRolesInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ImportRolesAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<ImportRolesAction>() {
 			@Override
-			public boolean run(ActionEvent e, ImportRolesAction action) {
+			public boolean run(EventObject e, ImportRolesAction action) {
 				boolean isFirst = true;
 				PPMWebServiceClient client = null;
 				PPMRole[] roles = null;
@@ -152,7 +152,7 @@ public class ImportRolesInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ImportRolesAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ImportRolesAction>() {
 			@Override
-			public boolean run(ActionEvent e, ImportRolesAction action) {
+			public boolean run(EventObject e, ImportRolesAction action) {
 				if (action.getImportReport() != null && action.getImportReport().getProperlyImported().size() > 0) {
 					/*getController().getSelectionManager().resetSelection();
 					for (FIRole role : action.getImportReport().getProperlyImported().values()) {

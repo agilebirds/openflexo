@@ -58,12 +58,12 @@ public class UploadPrjAction extends FlexoAction<UploadPrjAction, FlexoProject, 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoProject object, Vector<FlexoProject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoProject object, Vector<FlexoProject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoProject object, Vector<FlexoProject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoProject object, Vector<FlexoProject> globalSelection) {
 			return true;
 		}
 	};
@@ -80,6 +80,11 @@ public class UploadPrjAction extends FlexoAction<UploadPrjAction, FlexoProject, 
 
 	protected UploadPrjAction(FlexoProject focusedObject, Vector<FlexoProject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	public boolean isLongRunningAction() {
+		return true;
 	}
 
 	@Override

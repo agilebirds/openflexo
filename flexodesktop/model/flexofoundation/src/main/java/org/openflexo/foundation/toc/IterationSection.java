@@ -5,8 +5,10 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
+import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
+import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
@@ -16,6 +18,19 @@ import org.openflexo.foundation.xml.FlexoTOCBuilder;
 public class IterationSection extends ControlSection {
 
 	private String iteratorName;
+	private ConditionalOwner conditionalOwner;
+
+	public class ConditionalOwner implements Bindable {
+		@Override
+		public BindingFactory getBindingFactory() {
+			return IterationSection.this.getBindingFactory();
+		}
+
+		@Override
+		public BindingModel getBindingModel() {
+			return IterationSection.this.getInferedBindingModel();
+		}
+	}
 
 	public IterationSection(FlexoTOCBuilder builder) {
 		this(builder.tocData);
@@ -24,6 +39,7 @@ public class IterationSection extends ControlSection {
 
 	public IterationSection(TOCData data) {
 		super(data);
+		conditionalOwner = new ConditionalOwner();
 	}
 
 	private TOCDataBinding iteration;
@@ -49,11 +65,13 @@ public class IterationSection extends ControlSection {
 	}
 
 	public void setIteration(TOCDataBinding iteration) {
-		iteration.setOwner(this);
-		iteration.setBindingAttribute(ControlSectionBindingAttribute.iteration);
-		iteration.setBindingDefinition(getIterationBindingDefinition());
+		if (iteration != null) {
+			iteration.setOwner(this);
+			iteration.setBindingAttribute(ControlSectionBindingAttribute.iteration);
+			iteration.setBindingDefinition(getIterationBindingDefinition());
+		}
 		this.iteration = iteration;
-		rebuildBindingModel();
+		rebuildInferedBindingModel();
 	}
 
 	private TOCDataBinding condition;
@@ -66,18 +84,18 @@ public class IterationSection extends ControlSection {
 
 	public TOCDataBinding getCondition() {
 		if (condition == null) {
-			condition = new TOCDataBinding(this, ControlSectionBindingAttribute.condition, getConditionBindingDefinition());
+			condition = new TOCDataBinding(conditionalOwner, ControlSectionBindingAttribute.condition, getConditionBindingDefinition());
 		}
 		return condition;
 	}
 
 	public void setCondition(TOCDataBinding condition) {
 		if (condition != null) {
-			condition.setOwner(this);
+			condition.setOwner(conditionalOwner);
 			condition.setBindingAttribute(ControlSectionBindingAttribute.condition);
 			condition.setBindingDefinition(getConditionBindingDefinition());
-			this.condition = condition;
 		}
+		this.condition = condition;
 	}
 
 	public String getIteratorName() {
@@ -98,7 +116,31 @@ public class IterationSection extends ControlSection {
 		return Object.class;
 	}
 
+	public ConditionalOwner getConditionalOwner() {
+		return conditionalOwner;
+	}
+
 	@Override
+	protected BindingModel buildInferedBindingModel() {
+		BindingModel returned = super.buildInferedBindingModel();
+		returned.addToBindingVariables(new BindingVariableImpl(this, getIteratorName(), getItemType()) {
+			@Override
+			public Object getBindingValue(Object target, BindingEvaluationContext context) {
+				logger.info("What should i return for " + getIteratorName() + " ? target " + target + " context=" + context);
+				return super.getBindingValue(target, context);
+			}
+
+			@Override
+			public Type getType() {
+				return getItemType();
+			}
+		});
+		getIteration().finalizeDeserialization();
+		getCondition().finalizeDeserialization();
+		return returned;
+	}
+
+	/*@Override
 	protected BindingModel buildBindingModel() {
 		BindingModel returned = super.buildBindingModel();
 		returned.addToBindingVariables(new BindingVariableImpl(this, getIteratorName(), getItemType()) {
@@ -114,7 +156,7 @@ public class IterationSection extends ControlSection {
 			}
 		});
 		return returned;
-	}
+	}*/
 
 	@Override
 	public void finalizeDeserialization(Object builder) {

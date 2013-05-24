@@ -22,12 +22,18 @@ package org.openflexo.foundation.dm.action;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.dataimporter.DataImporter;
 import org.openflexo.dataimporter.DataImporterLoader;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMObject;
+import org.openflexo.foundation.dm.RationalRoseRepository;
+import org.openflexo.localization.FlexoLocalization;
 
-public class ImportRationalRoseRepository extends CreateDMRepository {
+public class ImportRationalRoseRepository extends CreateDMRepository<ImportRationalRoseRepository> {
 
 	static final Logger logger = Logger.getLogger(ImportRationalRoseRepository.class.getPackage().getName());
 
@@ -43,19 +49,41 @@ public class ImportRationalRoseRepository extends CreateDMRepository {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(DMObject object, Vector<DMObject> globalSelection) {
 			return DataImporterLoader.KnownDataImporter.RATIONAL_ROSE_IMPORTER.isAvailable();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
+		public boolean isEnabledForSelection(DMObject object, Vector<DMObject> globalSelection) {
 			return true;
 		}
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMModel.class);
+	}
+
 	ImportRationalRoseRepository(DMObject focusedObject, Vector<DMObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	protected void doAction(Object context) throws FlexoException {
+		logger.info("Importing from RationalRose...");
+		DataImporter rationalRoseImporter = DataImporterLoader.KnownDataImporter.RATIONAL_ROSE_IMPORTER.getImporter();
+		if (rationalRoseImporter != null) {
+			Object[] params = new Object[3];
+			params[0] = getNewRepositoryName();
+			params[1] = getRationalRosePackageName();
+			params[2] = this;
+			makeFlexoProgress(FlexoLocalization.localizedForKey("importing") + " " + getRationalRoseFile().getName(), 4);
+			_newRepository = (RationalRoseRepository) rationalRoseImporter.importInProject(getProject(), getRationalRoseFile(), params);
+			hideFlexoProgress();
+		} else {
+			logger.warning("Sorry, data importer " + DataImporterLoader.KnownDataImporter.RATIONAL_ROSE_IMPORTER + " not found ");
+		}
+		logger.info("Importing from RationalRose... DONE.");
 	}
 
 	@Override

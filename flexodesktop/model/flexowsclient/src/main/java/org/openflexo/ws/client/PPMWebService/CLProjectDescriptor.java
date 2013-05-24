@@ -185,7 +185,7 @@ public class CLProjectDescriptor implements java.io.Serializable {
 		return getProjectName() + " | owner : " + (currentEditSessionOwner == null ? "-" : currentEditSessionOwner)
 				+ " | current version : " + (currentLastVersion == null ? "-" : currentLastVersion) + " by : "
 				+ (lastUploader == null ? "-" : lastUploader) + " on : "
-				+ (currentLastVersionCreationDate == null ? "-" : dateFormatter.format((currentLastVersionCreationDate).getTime()));
+				+ (currentLastVersionCreationDate == null ? "-" : dateFormatter.format(currentLastVersionCreationDate.getTime()));
 	}
 
 	private java.lang.Object __equalsCalc = null;
@@ -203,22 +203,22 @@ public class CLProjectDescriptor implements java.io.Serializable {
 			return true;
 		}
 		if (__equalsCalc != null) {
-			return (__equalsCalc == obj);
+			return __equalsCalc == obj;
 		}
 		__equalsCalc = obj;
 		boolean _equals;
 		_equals = true
-				&& ((this.currentEditSessionOwner == null && other.getCurrentEditSessionOwner() == null) || (this.currentEditSessionOwner != null && this.currentEditSessionOwner
-						.equals(other.getCurrentEditSessionOwner())))
-				&& ((this.currentLastVersion == null && other.getCurrentLastVersion() == null) || (this.currentLastVersion != null && this.currentLastVersion
-						.equals(other.getCurrentLastVersion())))
-				&& ((this.currentLastVersionCreationDate == null && other.getCurrentLastVersionCreationDate() == null) || (this.currentLastVersionCreationDate != null && this.currentLastVersionCreationDate
-						.equals(other.getCurrentLastVersionCreationDate())))
-				&& ((this.lastUploader == null && other.getLastUploader() == null) || (this.lastUploader != null && this.lastUploader
-						.equals(other.getLastUploader())))
+				&& (this.currentEditSessionOwner == null && other.getCurrentEditSessionOwner() == null || this.currentEditSessionOwner != null
+						&& this.currentEditSessionOwner.equals(other.getCurrentEditSessionOwner()))
+				&& (this.currentLastVersion == null && other.getCurrentLastVersion() == null || this.currentLastVersion != null
+						&& this.currentLastVersion.equals(other.getCurrentLastVersion()))
+				&& (this.currentLastVersionCreationDate == null && other.getCurrentLastVersionCreationDate() == null || this.currentLastVersionCreationDate != null
+						&& this.currentLastVersionCreationDate.equals(other.getCurrentLastVersionCreationDate()))
+				&& (this.lastUploader == null && other.getLastUploader() == null || this.lastUploader != null
+						&& this.lastUploader.equals(other.getLastUploader()))
 				&& this.projectID == other.getProjectID()
-				&& ((this.projectName == null && other.getProjectName() == null) || (this.projectName != null && this.projectName
-						.equals(other.getProjectName()))) && this.uploadAllowed == other.isUploadAllowed();
+				&& (this.projectName == null && other.getProjectName() == null || this.projectName != null
+						&& this.projectName.equals(other.getProjectName())) && this.uploadAllowed == other.isUploadAllowed();
 		__equalsCalc = null;
 		return _equals;
 	}

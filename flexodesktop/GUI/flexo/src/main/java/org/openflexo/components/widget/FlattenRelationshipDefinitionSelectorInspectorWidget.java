@@ -97,7 +97,7 @@ public class FlattenRelationshipDefinitionSelectorInspectorWidget extends Custom
 					logger.fine("Focus gained in " + getClass().getName());
 				}
 				super.focusGained(arg0);
-				_selector.getTextField().requestFocus();
+				_selector.getTextField().requestFocusInWindow();
 				_selector.getTextField().selectAll();
 			}
 
@@ -251,7 +251,7 @@ public class FlattenRelationshipDefinitionSelectorInspectorWidget extends Custom
 	}
 
 	public Color getColorForObject(BindingValue value) {
-		return (value.isBindingValid() ? Color.BLACK : Color.RED);
+		return value.isBindingValid() ? Color.BLACK : Color.RED;
 	}
 
 	@Override

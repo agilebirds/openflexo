@@ -34,6 +34,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
@@ -60,6 +62,10 @@ public class FileUtils {
 	public static enum CopyStrategy {
 		REPLACE, REPLACE_OLD_ONLY, IGNORE_EXISTING
 	}
+
+	private static final String WIN_REGISTRY_DOCUMENTS_KEY_PATH = "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders";
+
+	private static final String WIN_REGISTRY_DOCUMENTS_ATTRIBUTE = "Personal";
 
 	public static final String BAD_CHARACTERS_FOR_FILE_NAME_REG_EXP = "[\"|\\?\\*/<>:\\\\]|[^\\p{ASCII}]";
 
@@ -166,7 +172,7 @@ public class FileUtils {
 					case IGNORE_EXISTING:
 						continue;
 					case REPLACE_OLD_ONLY:
-						if (!getDiskLastModifiedDate(src).after(getDiskLastModifiedDate(destFile))) {
+						if (!getDiskLastModifiedDate(curFile).after(getDiskLastModifiedDate(destFile))) {
 							continue;
 						}
 					default:
@@ -361,7 +367,7 @@ public class FileUtils {
 
 	public static String fileContents(InputStream inputStream, String encoding) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, encoding != null ? encoding : "UTF-8"));
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		String line = null;
 		while ((line = br.readLine()) != null) {
 			sb.append(line);
@@ -390,16 +396,6 @@ public class FileUtils {
 		}
 	}
 
-	/**
-	 * @param file
-	 */
-	/*
-	 * public static void removeSystemFile(File file) { if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) try { Runtime.getRuntime().exec(
-	 * "attrib -S \"" + file.getAbsolutePath() + "\""); } catch (IOException e) { e.printStackTrace(); } catch (Exception e) {
-	 * e.printStackTrace(); }
-	 * 
-	 * }
-	 */
 	public static String convertBackslashesToSlash(String fileName) {
 		return fileName.replaceAll("\\\\", "/");
 	}
@@ -483,7 +479,7 @@ public class FileUtils {
 	}
 
 	public static boolean isStringValidForFileName(String s) {
-		return s != null && !UNACCEPTABLE_CHARS_PATTERN.matcher(s).find() && s.matches(VALID_FILE_NAME_REGEXP);
+		return s != null && !UNACCEPTABLE_CHARS_PATTERN.matcher(s).find() && s.matches(VALID_FILE_NAME_REGEXP) && s.length() < 256;
 	}
 
 	public static String removeNonASCIIAndPonctuationAndBadFileNameChars(String s) {
@@ -511,6 +507,7 @@ public class FileUtils {
 	 * @return
 	 */
 	public static String getValidFileName(String fileName) {
+		fileName = fileName.replace('\\', '/');
 		StringBuffer sb = new StringBuffer();
 		Matcher m = UNACCEPTABLE_SLASH_PATTERN.matcher(fileName);
 		while (m.find()) {
@@ -523,6 +520,37 @@ public class FileUtils {
 			m.appendReplacement(sb, "_");
 		}
 		m.appendTail(sb);
+		fileName = sb.toString();
+		String extension = null;
+		if (fileName.length() > 4) {
+			if (fileName.charAt(fileName.length() - 4) == '.') {
+				extension = fileName.substring(fileName.length() - 4);
+				fileName = fileName.substring(0, fileName.length() - 4);
+			} else if (fileName.charAt(fileName.length() - 5) == '.') {
+				extension = fileName.substring(fileName.length() - 5);
+				fileName = fileName.substring(0, fileName.length() - 5);
+			}
+		}
+		sb.setLength(0);
+		int previous = 0;
+		int index;
+		while ((index = fileName.indexOf('/', previous)) > -1) {
+			if (index - previous > 240) {
+				sb.append(fileName.substring(previous, previous + 240)).append('/');
+			} else {
+				sb.append(fileName.substring(previous, index + 1));
+			}
+			previous = index + 1;
+		}
+		index = fileName.length();
+		if (index - previous > 240) {
+			sb.append(fileName.substring(previous, previous + 240));
+		} else {
+			sb.append(fileName.substring(previous, index));
+		}
+		if (extension != null) {
+			sb.append(extension);
+		}
 		return sb.toString();
 	}
 
@@ -668,12 +696,58 @@ public class FileUtils {
 	}
 
 	/**
+	 * Finds a relative path to a given file, relative to a specified directory.
+	 * 
+	 * @param file
+	 *            file that the relative path should resolve to
+	 * @param relativeToDir
+	 *            directory that the path should be relative to
+	 * @return a relative path. This always uses / as the separator character.
+	 */
+	public static String makeFilePathRelativeToDir(File file, File relativeToDir) throws IOException {
+		String canonicalFile = file.getCanonicalPath();
+		String canonicalRelTo = relativeToDir.getCanonicalPath();
+		String[] filePathComponents = getPathComponents(canonicalFile);
+		String[] relToPathComponents = getPathComponents(canonicalRelTo);
+		int i = 0;
+		while (i < filePathComponents.length && i < relToPathComponents.length && filePathComponents[i].equals(relToPathComponents[i])) {
+			i++;
+		}
+		StringBuffer buf = new StringBuffer();
+		for (int j = i; j < relToPathComponents.length; j++) {
+			buf.append("../");
+		}
+		for (int j = i; j < filePathComponents.length - 1; j++) {
+			buf.append(filePathComponents[j]).append('/');
+		}
+		buf.append(filePathComponents[filePathComponents.length - 1]);
+		return buf.toString();
+	}
+
+	/**
+	 * Splits a path into components using the OS file separator character. This can be used on the results of File.getCanonicalPath().
+	 * 
+	 * @param canonicalPath
+	 *            a file path that uses the OS file separator character
+	 * @return an array of strings, one for each component of the path
+	 */
+	public static String[] getPathComponents(String canonicalPath) {
+		String regex = File.separator;
+		if (regex.equals("\\")) {
+			regex = "\\\\";
+		}
+		return canonicalPath.split(regex);
+	}
+
+	/**
 	 * @param file
 	 * @param wd
 	 * @return
 	 * @throws IOException
 	 */
-	public static String makeFilePathRelativeToDir(File file, File dir) throws IOException {
+	/*public static String makeFilePathRelativeToDir(File file, File dir) throws IOException {
+		System.out.println("file=" + file.getAbsolutePath());
+		System.out.println("dir=" + dir.getAbsolutePath());
 		file = file.getCanonicalFile();
 		dir = dir.getCanonicalFile();
 		String d = dir.getCanonicalPath().replace('\\', '/');
@@ -693,6 +767,7 @@ public class FileUtils {
 			}
 		}
 		File commonFather = new File(common);
+		System.out.println("commonFather=" + commonFather.getAbsolutePath());
 		File parentDir = dir;
 		StringBuilder sb = new StringBuilder();
 		while (parentDir != null && !commonFather.equals(parentDir)) {
@@ -703,8 +778,9 @@ public class FileUtils {
 		if (sb.charAt(0) == '/') {
 			return sb.substring(1);
 		}
+		System.out.println("returned=" + sb.toString());
 		return sb.toString();
-	}
+	}*/
 
 	public static File createTempFile(InputStream in) {
 		File tempFile;
@@ -918,4 +994,57 @@ public class FileUtils {
 		return fileContent;
 	}
 
+	public static File getApplicationDataDirectory() {
+		File dir = new File(System.getProperty("user.home"), ".openflexo");
+		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
+			String appData = System.getenv("APPDATA");
+			if (appData != null) {
+				File f = new File(appData);
+				if (f.isDirectory() && f.canWrite()) {
+					dir = new File(f, "OpenFlexo");
+				}
+			}
+		} else if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+			dir = new File(new File(System.getProperty("user.home")), "Library/OpenFlexo");
+		}
+		return dir;
+	}
+
+	private static final String MACOS_DOC_DIRECTORY_KEY = "docs";
+
+	public static File getDocumentDirectory() {
+		if (ToolBox.isMacOS()) {
+			try {
+				Class<?> fileManagerClass = Class.forName("com.apple.eio.FileManager");
+				short userDomain = fileManagerClass.getField("kUserDomain").getShort(null);
+				Method typeToInt = fileManagerClass.getDeclaredMethod("OSTypeToInt", String.class);
+				Method findFolder = fileManagerClass.getDeclaredMethod("findFolder", short.class, int.class);
+				int docDirectoryInt = (Integer) typeToInt.invoke(null, MACOS_DOC_DIRECTORY_KEY);
+				String documentDirectory = (String) findFolder.invoke(null, userDomain, docDirectoryInt);
+				return new File(documentDirectory);
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (NoSuchFieldException e) {
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				e.printStackTrace();
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		} else if (ToolBox.isWindows()) {
+			String value = WinRegistryAccess.getRegistryValue(WIN_REGISTRY_DOCUMENTS_KEY_PATH, WIN_REGISTRY_DOCUMENTS_ATTRIBUTE,
+					WinRegistryAccess.REG_EXPAND_SZ_TOKEN);
+			value = WinRegistryAccess.substituteEnvironmentVariable(value);
+			if (value != null) {
+				return new File(value);
+			}
+		}
+		return new File(System.getProperty("user.home"), "Documents");
+	}
 }

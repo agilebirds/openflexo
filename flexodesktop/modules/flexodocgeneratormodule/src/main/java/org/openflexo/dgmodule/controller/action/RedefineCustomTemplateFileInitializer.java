@@ -20,7 +20,7 @@
 package org.openflexo.dgmodule.controller.action;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -33,7 +33,6 @@ import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.GenerationRepository;
-import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplates;
 import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
 import org.openflexo.foundation.cg.templates.action.AddCustomTemplateRepository;
@@ -69,7 +68,7 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RedefineCustomTemplateFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<RedefineCustomTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, RedefineCustomTemplateFile action) {
+			public boolean run(EventObject e, RedefineCustomTemplateFile action) {
 				CGTemplates templates = action.getFocusedObject().getTemplates();
 
 				String CREATE_NEW_REPOSITORY = FlexoLocalization.localizedForKey("create_new_repository");
@@ -148,15 +147,14 @@ public class RedefineCustomTemplateFileInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RedefineCustomTemplateFile> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RedefineCustomTemplateFile>() {
 			@Override
-			public boolean run(ActionEvent e, RedefineCustomTemplateFile action) {
+			public boolean run(EventObject e, RedefineCustomTemplateFile action) {
 				if (action.getNewTemplateFile() != null) {
 					if (action.getInvoker() != null && action.getInvoker() instanceof DGTemplateFileModuleView
 							&& ((DGTemplateFileModuleView) action.getInvoker()).isOpenedInSeparateWindow()) {
 						DGTemplateFileModuleView invoker = (DGTemplateFileModuleView) action.getInvoker();
 						FlexoDialog dialog = (FlexoDialog) SwingUtilities.getAncestorOfClass(FlexoDialog.class, invoker);
 						dialog.getContentPane().remove(invoker);
-						DGTemplateFileModuleView newView = (DGTemplateFileModuleView) getControllerActionInitializer().getDGController()
-								.createModuleViewForObjectAndPerspective((CGTemplate) action.getNewTemplateFile(), null);
+						DGTemplateFileModuleView newView = new DGTemplateFileModuleView(action.getNewTemplateFile(), null);
 						newView.setOpenedInSeparateWindow(true);
 						dialog.getContentPane().add(newView, BorderLayout.CENTER);
 						dialog.validate();

@@ -21,17 +21,22 @@ package org.openflexo.foundation.exec.expr;
 
 import java.util.Vector;
 
-import org.openflexo.antar.expr.EvaluationContext;
 import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.antar.expr.ExpressionTransformer;
+import org.openflexo.antar.expr.TransformException;
 import org.openflexo.antar.java.JavaPrettyPrintable;
 
 public abstract class FlexoBuiltInExpression extends Expression implements JavaPrettyPrintable {
 
 	// We won't try to resolve those expression here
-	@Override
-	public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
+	/*@Override
+	public Expression evaluate(EvaluationContext context, Bindable bindable) throws TypeMismatchException {
 		return this;
+	}*/
+
+	@Override
+	public Expression transform(ExpressionTransformer transformer) throws TransformException {
+		return transformer.performTransformation(this);
 	}
 
 	@Override

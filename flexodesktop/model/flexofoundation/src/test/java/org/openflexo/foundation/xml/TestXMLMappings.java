@@ -21,6 +21,7 @@ package org.openflexo.foundation.xml;
 
 import java.lang.reflect.Modifier;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoTestCase;
@@ -62,13 +63,6 @@ public class TestXMLMappings extends FlexoTestCase {
 
 	public void testRMMappings() {
 		checkClassModels(FlexoProject.class);
-		/*XMLMapping rmMapping = xmlMappings.getRMMapping();
-		XMLMapping rmTSMapping = FlexoXMLMappings.getRMTSMapping();
-		Enumeration<ModelEntity> en = rmMapping.getAllModelEntities();
-		while (en.hasMoreElements()) {
-			ModelEntity e = en.nextElement();
-			assertNotNull("No entity with className '"+e.getName()+"' in RM TS mapping", rmTSMapping.entityWithClassName(e.getName()));
-		}*/
 	}
 
 	public void testWorkflowMappings() {
@@ -136,11 +130,7 @@ public class TestXMLMappings extends FlexoTestCase {
 					logger.warning("Failed decoded mapping for class " + aClass.getSimpleName() + ", version " + version);
 					testFails = true;
 				}
-				Enumeration<ModelEntity> en = mapping.getAllModelEntities();
-				while (en.hasMoreElements()) {
-					ModelEntity me = en.nextElement();
-					checkModelEntity(me);
-				}
+				checkXMLMapping(mapping);
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.warning("Failed decoded mapping for class " + aClass.getSimpleName() + ", version " + version + " " + e.getMessage());
@@ -149,6 +139,14 @@ public class TestXMLMappings extends FlexoTestCase {
 		}
 		if (testFails) {
 			fail();
+		}
+	}
+
+	protected void checkXMLMapping(XMLMapping mapping) throws Exception {
+		Iterator<ModelEntity> i = mapping.allModelEntities();
+		while (i.hasNext()) {
+			ModelEntity me = i.next();
+			checkModelEntity(me);
 		}
 	}
 
@@ -168,7 +166,7 @@ public class TestXMLMappings extends FlexoTestCase {
 
 	private void checkAbstracticity(ModelEntity me) throws Exception {
 		String className = me.getName();
-		Class klass = Class.forName(className);
+		Class<?> klass = Class.forName(className);
 		if (!me.isAbstract() && Modifier.isAbstract(klass.getModifiers())) {
 			fail(me.getName() + " is declared as not abstract but class is not instanciable");
 		}

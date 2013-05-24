@@ -20,10 +20,13 @@
 package org.openflexo.dm.view.menu;
 
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.AbstractAction;
 
 import org.openflexo.dm.view.controller.DMController;
+import org.openflexo.view.controller.model.ControllerModel;
 import org.openflexo.view.menu.FlexoMenuItem;
 import org.openflexo.view.menu.ToolsMenu;
 
@@ -31,16 +34,14 @@ public class DMToolsMenu extends ToolsMenu {
 
 	public CheckDataModelConsistencyItem checkDataModelItem;
 
-	protected DMController _controller;
-
 	public DMToolsMenu(DMController controller) {
 		super(controller);
-		_controller = controller;
 
 	}
 
-	public DMController getDMController() {
-		return _controller;
+	@Override
+	public DMController getController() {
+		return (DMController) super.getController();
 	}
 
 	@Override
@@ -52,7 +53,20 @@ public class DMToolsMenu extends ToolsMenu {
 	public class CheckDataModelConsistencyItem extends FlexoMenuItem {
 
 		public CheckDataModelConsistencyItem() {
-			super(new CheckDMConsistencyAction(), "check_datamodel_consistency", null, getDMController(), true);
+			super(new CheckDMConsistencyAction(), "check_datamodel_consistency", null, getController(), true);
+			getController().getControllerModel().getPropertyChangeSupport()
+					.addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, new PropertyChangeListener() {
+
+						@Override
+						public void propertyChange(PropertyChangeEvent evt) {
+							updateState();
+						}
+					});
+			updateState();
+		}
+
+		protected void updateState() {
+			setEnabled(getController().getProject() != null);
 		}
 
 	}
@@ -64,7 +78,9 @@ public class DMToolsMenu extends ToolsMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			getDMController().consistencyCheck(getDMController().getDataModel());
+			if (getController().getDataModel() != null) {
+				getController().consistencyCheck(getController().getDataModel());
+			}
 		}
 
 	}

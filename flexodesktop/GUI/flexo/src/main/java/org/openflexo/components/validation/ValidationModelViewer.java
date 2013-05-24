@@ -124,8 +124,8 @@ public class ValidationModelViewer extends JPanel implements GraphicalFlexoObser
 					return;
 				}
 				int selectedRow = _validationModelList.getSelectedIndex();
-				if ((selectedRow >= 0) && (_validationModel != null) && (selectedRow < _validationModel.getSize())) {
-					ValidationRuleSet ruleSet = (ValidationRuleSet) _validationModel.getElementAt(selectedRow);
+				if (selectedRow >= 0 && _validationModel != null && selectedRow < _validationModel.getSize()) {
+					ValidationRuleSet ruleSet = _validationModel.getElementAt(selectedRow);
 					setCurrentRuleSet(ruleSet);
 				} else {
 					setCurrentRuleSet(null);
@@ -145,7 +145,7 @@ public class ValidationModelViewer extends JPanel implements GraphicalFlexoObser
 					return;
 				}
 				int selectedRow = _ruleSetList.getSelectedIndex();
-				if ((selectedRow >= 0) && (_currentRuleSet != null) && (selectedRow < _currentRuleSet.getSize())) {
+				if (selectedRow >= 0 && _currentRuleSet != null && selectedRow < _currentRuleSet.getSize()) {
 					ValidationRule rule = _currentRuleSet.getElementAt(selectedRow);
 					setCurrentRule(rule);
 				} else {
@@ -313,10 +313,11 @@ public class ValidationModelViewer extends JPanel implements GraphicalFlexoObser
 				public void run() {
 					if (_validationModel.getSize() > 0) {
 						_validationModelList.setSelectedIndex(0);
-						if (((ValidationRuleSet) _validationModel.getElementAt(0)).getRules().size() > 0) {
-							disableButton.setText(((ValidationRuleSet) _validationModel.getElementAt(0)).getRules().firstElement()
-									.getIsEnabled() ? FlexoLocalization.localizedForKey("disableRule", disableButton) : FlexoLocalization
-									.localizedForKey("enableRule", disableButton));
+						if (_validationModel.getElementAt(0).getRules().size() > 0) {
+							disableButton
+									.setText(_validationModel.getElementAt(0).getRules().firstElement().getIsEnabled() ? FlexoLocalization
+											.localizedForKey("disableRule", disableButton) : FlexoLocalization.localizedForKey(
+											"enableRule", disableButton));
 						}
 					}
 					_consistencyCheckDialog.toFront();

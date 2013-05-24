@@ -72,7 +72,7 @@ public class ActionNodeElement extends BrowserElement implements ExpansionSynchr
 		if (isObserving) {
 			return;
 		}
-		if ((getActionNode() instanceof SelfExecutableNode) && (((SelfExecutableNode) getActionNode()).getExecutionPetriGraph() != null)) {
+		if (getActionNode() instanceof SelfExecutableNode && ((SelfExecutableNode) getActionNode()).getExecutionPetriGraph() != null) {
 			((SelfExecutableNode) getActionNode()).getExecutionPetriGraph().addObserver(this);
 			isObserving = true;
 		}
@@ -80,7 +80,7 @@ public class ActionNodeElement extends BrowserElement implements ExpansionSynchr
 
 	@Override
 	public void delete() {
-		if ((getActionNode() instanceof SelfExecutableNode) && (((SelfExecutableNode) getActionNode()).getExecutionPetriGraph() != null)) {
+		if (getActionNode() instanceof SelfExecutableNode && ((SelfExecutableNode) getActionNode()).getExecutionPetriGraph() != null) {
 			((SelfExecutableNode) getActionNode()).getExecutionPetriGraph().deleteObserver(this);
 			isObserving = false;
 		}
@@ -89,7 +89,7 @@ public class ActionNodeElement extends BrowserElement implements ExpansionSynchr
 
 	@Override
 	protected void buildChildrenVector() {
-		if ((getActionNode() instanceof SelfExecutableNode) && (((SelfExecutableNode) getActionNode()).getExecutionPetriGraph() != null)) {
+		if (getActionNode() instanceof SelfExecutableNode && ((SelfExecutableNode) getActionNode()).getExecutionPetriGraph() != null) {
 			addObserver();
 			Enumeration en = ((SelfExecutableNode) getActionNode()).getExecutionPetriGraph().getSortedNodes();
 			while (en.hasMoreElements()) {
@@ -144,12 +144,12 @@ public class ActionNodeElement extends BrowserElement implements ExpansionSynchr
 	 */
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if ((dataModification.propertyName() != null) && dataModification.propertyName().equals("index")) {
+		if (dataModification.propertyName() != null && dataModification.propertyName().equals("index")) {
 			return;
 		}
 		if (_browser != null) {
-			if ((dataModification instanceof ObjectVisibilityChanged) || (dataModification instanceof PetriGraphHasBeenClosed)
-					|| (dataModification instanceof PetriGraphHasBeenOpened)) {
+			if (dataModification instanceof ObjectVisibilityChanged || dataModification instanceof PetriGraphHasBeenClosed
+					|| dataModification instanceof PetriGraphHasBeenOpened) {
 				_browser.notifyExpansionChanged(this);
 			}
 		}
@@ -186,7 +186,7 @@ public class ActionNodeElement extends BrowserElement implements ExpansionSynchr
 	@Override
 	public boolean isExpansionSynchronizedWithData() {
 		if (_browser.getSelectionManager() != null) {
-			return (getActionNode().getProcess() == _browser.getSelectionManager().getRootFocusedObject());
+			return getActionNode().getProcess() == _browser.getSelectionManager().getRootFocusedObject();
 		}
 		return false;
 	}
@@ -197,8 +197,8 @@ public class ActionNodeElement extends BrowserElement implements ExpansionSynchr
 			return ((PreConditionElement) next).getPreCondition().isContainedIn(getActionNode());
 		} else if (next instanceof PostConditionElement) {
 			FlexoPostCondition<?, ?> edge = ((PostConditionElement) next).getPostCondition();
-			if ((edge.getNextNode() != null) && (edge.getStartNode() != null) && (edge.getNextNode().isContainedIn(getActionNode()))
-					&& (edge.getStartNode().isContainedIn(getActionNode()))) {
+			if (edge.getNextNode() != null && edge.getStartNode() != null && edge.getNextNode().isContainedIn(getActionNode())
+					&& edge.getStartNode().isContainedIn(getActionNode())) {
 				return true;
 			}
 			return false;

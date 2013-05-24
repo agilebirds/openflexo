@@ -38,8 +38,7 @@ public class DREIconLibrary extends IconLibrary {
 	public static final ImageIcon DRE_BIG_ICON = new ImageIconResource("Icons/DRE/DRC_A.gif");
 
 	// Perspective icons
-	public static final ImageIcon DRE_DRE_ACTIVE_ICON = new ImageIconResource("Icons/DRE/DREPerspective_A.gif");
-	public static final ImageIcon DRE_DRE_SELECTED_ICON = new ImageIconResource("Icons/DRE/DREPerspective_S.gif");
+	public static final ImageIcon DRE_DRE_ACTIVE_ICON = new ImageIconResource("Icons/DRE/DREPerspective_A.png");
 
 	// Editor icons
 	public static final ImageIcon DOC_FOLDER_ICON = new ImageIconResource("Icons/DRE/Folder.gif");

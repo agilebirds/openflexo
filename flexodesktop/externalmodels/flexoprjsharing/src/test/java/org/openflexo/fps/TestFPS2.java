@@ -36,7 +36,6 @@ import org.openflexo.fps.action.CheckoutProject;
 import org.openflexo.fps.action.ShareProject;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.toolbox.ToolBox;
 
 public class TestFPS2 extends FPSTestCase {
 
@@ -63,7 +62,6 @@ public class TestFPS2 extends FPSTestCase {
 	private static final String TEST_FPS = "TestFPS";
 
 	static {
-		ToolBox.setPlatform();
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		CVSConsole.logger.setLevel(Level.FINE);
 	}

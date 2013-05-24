@@ -43,7 +43,6 @@ import org.openflexo.foundation.wkf.ProcessFolder;
 import org.openflexo.foundation.wkf.node.OperationNode;
 import org.openflexo.generator.exception.GenerationException;
 import org.openflexo.generator.exception.UnexpectedExceptionOccuredException;
-import org.openflexo.module.external.ExternalModuleDelegater;
 import org.openflexo.module.external.ExternalWKFModule;
 
 /**
@@ -209,8 +208,8 @@ public class DGJSGenerator<T extends FlexoModelObject> extends DGGenerator<T> im
 		try {
 			VelocityContext context = defaultContext();
 			if (getObject() instanceof FlexoProcess) {
-				if (ExternalModuleDelegater.getModuleLoader() != null) {
-					wkfModuleInstance = ExternalModuleDelegater.getModuleLoader().getWKFModuleInstance(getObject().getProject());
+				if (getProject().getModuleLoader() != null) {
+					wkfModuleInstance = getProject().getModuleLoader().getWKFModuleInstance();
 					if (wkfModuleInstance != null) {
 						processRepresentation = wkfModuleInstance.getProcessRepresentation((FlexoProcess) getObject(), true);
 						context.put("processRepresentation", processRepresentation);

@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -31,21 +32,28 @@ import java.util.logging.Logger;
 import javax.swing.text.html.CSS;
 import javax.swing.text.html.HTML;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.PackagePart;
 import org.apache.poi.openxml4j.opc.PackagePartName;
 import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.apache.poi.openxml4j.opc.PackagingURIHelper;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.jaxen.JaxenException;
-import org.jaxen.dom4j.Dom4jXPath;
+import org.dom4j.XPath;
 import org.openflexo.docxparser.dto.ParsedHtml;
 import org.openflexo.docxparser.dto.ParsedHtmlResource;
 import org.openflexo.toolbox.HTMLUtils;
 
+import com.google.common.collect.ImmutableMap;
+
 public class OpenXml2Html {
+
 	private static final Logger logger = Logger.getLogger(OpenXml2Html.class.getPackage().toString());
+
+	private static final String DRAWING_ML_NS_PREFIX = "a";
+	private static final Map<String, String> NAMESPACE_URIS = ImmutableMap.of(DRAWING_ML_NS_PREFIX,
+			"http://schemas.openxmlformats.org/drawingml/2006/main");
 
 	private Set<String> availableCssClasses;
 	private String resourcesDirectory;
@@ -107,9 +115,18 @@ public class OpenXml2Html {
 		case w_drawing:
 			parsedHtml.append(getHtmlFromW_DrawingElement(element));
 			break;
+		case w_tbl:
+			parsedHtml.append(getHtmlFromW_TableElement(element));
+			break;
+		case w_tr:
+			parsedHtml.append(getHtmlFromW_TableRowElement(element));
+			break;
+		case w_tc:
+			parsedHtml.append(getHtmlFromW_TableCellElement(element));
+			break;
 		default:
 			// find all w:p inside this element
-			Iterator<?> iterator = element.selectNodes("descendant::w:p").iterator();
+			Iterator<?> iterator = element.elementIterator();
 			while (iterator.hasNext()) {
 				Element childElement = (Element) iterator.next();
 				parsedHtml.append(getRecursiveHtml(childElement));
@@ -118,6 +135,111 @@ public class OpenXml2Html {
 
 		}
 
+		return parsedHtml;
+	}
+
+	private ParsedHtml getHtmlFromW_TableCellElement(Element element) {
+		ParsedHtml parsedHtml = new ParsedHtml();
+		List<Element> paragraphs = element.selectNodes("descendant::w:p");
+		List<Element> descendants;
+		StringBuilder style = new StringBuilder();
+		boolean singleParagraph = paragraphs.size() == 1;
+		String align = null;
+		if (singleParagraph) {
+			Element alignElement = (Element) element.selectSingleNode("w:p/w:pPr/w:jc");
+			if (alignElement != null) {
+				String alignValue = alignElement.attributeValue("val");
+				if (alignValue != null) {
+					if (alignValue.equals("both")) {
+						align = "justify";
+					} else if (alignValue.equals("center")) {
+						align = "center";
+					} else if (alignValue.equals("start")) {
+						align = "left";
+					} else if (alignValue.equals("end")) {
+						align = "right";
+					}
+				}
+			}
+			// If there is only one paragraph we do not repeat it in the HTML, we put directly the text inside the td
+			descendants = element.selectNodes("descendant::w:t");
+		} else {
+			descendants = element.selectNodes("descendant::w:p");
+		}
+		Element shading = (Element) element.selectSingleNode("w:tcPr/w:shd");
+		if (shading != null) {
+			String shadingValue = shading.attributeValue("val");
+			if (shadingValue != null) {
+				Color color = HTMLUtils.extractColorFromString(shadingValue);
+				if (color == null) {
+					color = HTMLUtils.extractColorFromString("#" + shadingValue);
+				}
+				if (color != null) {
+					style.append("background-color: ").append("#").append(HTMLUtils.toHexString(color)).append(";");
+				}
+			}
+		}
+		String valign = null;
+		Element vAlignElement = (Element) element.selectSingleNode("w:tcPr/w:vAlign");
+		if (vAlignElement != null && vAlignElement.attributeValue("val") != null) {
+			valign = vAlignElement.attributeValue("val");
+		}
+		parsedHtml.append("<td ");
+		if (style.length() > 0) {
+			parsedHtml.append("style=\"").append(style.toString()).append("\" ");
+		}
+		if (align != null) {
+			parsedHtml.append("align=\"").append(align).append("\" ");
+		}
+		if (valign != null) {
+			parsedHtml.append("valign=\"").append(valign).append("\" ");
+		}
+		parsedHtml.append(">");
+		for (Element childElement : descendants) {
+			parsedHtml.append(getRecursiveHtml(childElement));
+		}
+
+		parsedHtml.append("</td>");
+		return parsedHtml;
+	}
+
+	private ParsedHtml getHtmlFromW_TableRowElement(Element element) {
+		ParsedHtml parsedHtml = new ParsedHtml();
+		StringBuilder style = new StringBuilder();
+		Element shading = (Element) element.selectSingleNode("w:tcPr/w:shd");
+		if (shading != null) {
+			String shadingValue = shading.attributeValue("val");
+			if (shadingValue != null) {
+				Color color = HTMLUtils.extractColorFromString(shadingValue);
+				if (color == null) {
+					color = HTMLUtils.extractColorFromString("#" + shadingValue);
+				}
+				if (color != null) {
+					style.append("background-color: ").append("#").append(HTMLUtils.toHexString(color)).append(";");
+				}
+			}
+		}
+		parsedHtml.append("<tr ");
+		if (style.length() > 0) {
+			parsedHtml.append("style=\"").append(style.toString()).append("\" ");
+		}
+		parsedHtml.append(">");
+		appendChildRecursively(element, parsedHtml);
+		parsedHtml.append("</tr>");
+		return parsedHtml;
+	}
+
+	private ParsedHtml getHtmlFromW_TableElement(Element element) {
+		ParsedHtml parsedHtml = new ParsedHtml();
+		parsedHtml.append("<table ");
+		Element captionElement = (Element) element.selectSingleNode("w:tblPr/w:tblCaption");
+		if (captionElement != null && captionElement.attributeValue("val") != null) {
+			parsedHtml.append("title=\"").append(StringEscapeUtils.escapeHtml4(captionElement.attributeValue("val").toString()))
+					.append("\" ");
+		}
+		parsedHtml.append(">");
+		appendChildRecursively(element, parsedHtml);
+		parsedHtml.append("</table>");
 		return parsedHtml;
 	}
 
@@ -150,16 +272,13 @@ public class OpenXml2Html {
 			handleNumberingLevel(parsedHtml, foundNumId, foundNumLevel);
 		}
 
-		parsedHtml.appendHtml(currentParagraphProperties.getOpenTag());
+		parsedHtml.append(currentParagraphProperties.getOpenTag());
 
-		for (Iterator<?> iterator = element.elementIterator(); iterator.hasNext();) {
-			Element childElement = (Element) iterator.next();
-			parsedHtml.append(getRecursiveHtml(childElement));
-		}
+		appendChildRecursively(element, parsedHtml);
 
 		closeOpenedSpan(parsedHtml);
 
-		parsedHtml.appendHtml(currentParagraphProperties.getCloseTag());
+		parsedHtml.append(currentParagraphProperties.getCloseTag());
 
 		return parsedHtml;
 	}
@@ -195,15 +314,15 @@ public class OpenXml2Html {
 			String target = element.attributeValue(DocxQName.getQName(OpenXmlTag.w_tgtFrame));
 			String title = element.attributeValue(DocxQName.getQName(OpenXmlTag.w_tooltip));
 
-			parsedHtml.appendHtml("<a href=\"" + href + "\"");
+			parsedHtml.append("<a href=\"" + href + "\"");
 			if (target != null) {
-				parsedHtml.appendHtml(" target=\"" + StringEscapeUtils.escapeHtml(target) + "\"");
+				parsedHtml.append(" target=\"" + StringEscapeUtils.escapeHtml4(target) + "\"");
 			}
 			if (title != null) {
-				parsedHtml.appendHtml(" title=\"" + StringEscapeUtils.escapeHtml(title) + "\"");
+				parsedHtml.append(" title=\"" + StringEscapeUtils.escapeHtml4(title) + "\"");
 			}
 
-			parsedHtml.appendHtml(">");
+			parsedHtml.append(">");
 
 			closeTag = "</a>";
 		} else {
@@ -211,12 +330,9 @@ public class OpenXml2Html {
 			closeTag = "";
 		}
 
-		for (Iterator<?> iterator = element.elementIterator(); iterator.hasNext();) {
-			Element childElement = (Element) iterator.next();
-			parsedHtml.append(getRecursiveHtml(childElement));
-		}
+		appendChildRecursively(element, parsedHtml);
 
-		parsedHtml.appendHtml(closeTag);
+		parsedHtml.append(closeTag);
 
 		return parsedHtml;
 	}
@@ -236,16 +352,20 @@ public class OpenXml2Html {
 			closeOpenedSpan(parsedHtml);
 			currentSpanProperties = elementHTMLProperties;
 			if (!currentSpanProperties.isEmpty()) {
-				parsedHtml.appendHtml(currentSpanProperties.getOpenTag());
+				parsedHtml.append(currentSpanProperties.getOpenTag());
 			}
 		}
 
+		appendChildRecursively(element, parsedHtml);
+
+		return parsedHtml;
+	}
+
+	protected void appendChildRecursively(Element element, ParsedHtml parsedHtml) {
 		for (Iterator<?> iterator = element.elementIterator(); iterator.hasNext();) {
 			Element childElement = (Element) iterator.next();
 			parsedHtml.append(getRecursiveHtml(childElement));
 		}
-
-		return parsedHtml;
 	}
 
 	private ParsedHtml getHtmlFromW_DrawingElement(Element element) {
@@ -257,9 +377,8 @@ public class OpenXml2Html {
 		ParsedHtml parsedHtml = new ParsedHtml();
 
 		try {
-			Dom4jXPath xpath = new Dom4jXPath("descendant::a:blip");
-			xpath.addNamespace(DocxXmlUtil.NAMESPACE_DRAWINGMAIN.getPrefix(), DocxXmlUtil.NAMESPACE_DRAWINGMAIN.getURI());
-
+			XPath xpath = DocumentHelper.createXPath("descendant::" + DRAWING_ML_NS_PREFIX + ":blip");
+			xpath.setNamespaceURIs(NAMESPACE_URIS);
 			Element ablipElement = (Element) xpath.selectSingleNode(element);
 			if (ablipElement == null) {
 				logger.warning("Cannot handle drawing tag: a:blip element not found");
@@ -306,14 +425,14 @@ public class OpenXml2Html {
 				}
 			}
 
-			parsedHtml.appendHtml("<img src=\"" + resourcesDirectory + imageFileName + "\"");
+			parsedHtml.append("<img src=\"" + resourcesDirectory + imageFileName + "\"");
 			if (imageWidth != null) {
-				parsedHtml.appendHtml(" width=\"" + imageWidth + "\"");
+				parsedHtml.append(" width=\"" + imageWidth + "\"");
 			}
 			if (imageHeight != null) {
-				parsedHtml.appendHtml(" height=\"" + imageHeight + "\"");
+				parsedHtml.append(" height=\"" + imageHeight + "\"");
 			}
-			parsedHtml.appendHtml(" />");
+			parsedHtml.append(" />");
 
 			return parsedHtml;
 		} catch (InvalidFormatException e) {
@@ -321,9 +440,6 @@ public class OpenXml2Html {
 			return new ParsedHtml();
 		} catch (IOException e) {
 			logger.log(Level.WARNING, "Cannot handle drawing tag: IOException catched", e);
-			return new ParsedHtml();
-		} catch (JaxenException e) {
-			logger.log(Level.WARNING, "Cannot handle drawing tag: JaxenException catched", e);
 			return new ParsedHtml();
 		}
 	}
@@ -345,7 +461,7 @@ public class OpenXml2Html {
 
 		ParsedHtml parsedHtml = new ParsedHtml();
 
-		parsedHtml.appendHtml(StringEscapeUtils.escapeHtml(element.getText()));
+		parsedHtml.append(StringEscapeUtils.escapeHtml4(element.getText()));
 
 		return parsedHtml;
 	}
@@ -356,12 +472,12 @@ public class OpenXml2Html {
 		boolean needCloseOpenLi = true;
 		while (currentNumLevel != null && (usedNumLevel == null || !currentNumLevel.equals(usedNumLevel))) {
 			if (usedNumLevel == null || currentNumLevel > usedNumLevel) {
-				parsedHtml.appendHtml("</li>");
+				parsedHtml.append("</li>");
 
 				if (isOrderedNumbering(currentNumId, currentNumLevel)) {
-					parsedHtml.appendHtml("</ol>");
+					parsedHtml.append("</ol>");
 				} else {
-					parsedHtml.appendHtml("</ul>");
+					parsedHtml.append("</ul>");
 				}
 
 				currentNumLevel--;
@@ -372,12 +488,12 @@ public class OpenXml2Html {
 				currentNumLevel++;
 
 				if (isOrderedNumbering(currentNumId, currentNumLevel)) {
-					parsedHtml.appendHtml("<ol>");
+					parsedHtml.append("<ol>");
 				} else {
-					parsedHtml.appendHtml("<ul>");
+					parsedHtml.append("<ul>");
 				}
 
-				parsedHtml.appendHtml("<li>");
+				parsedHtml.append("<li>");
 				needCloseOpenLi = false;
 			}
 		}
@@ -385,12 +501,12 @@ public class OpenXml2Html {
 		if (foundNumId != null && !foundNumId.equals(currentNumId)) {
 			for (int i = 0; i <= foundNumLevel; i++) {
 				if (isOrderedNumbering(foundNumId, i)) {
-					parsedHtml.appendHtml("<ol>");
+					parsedHtml.append("<ol>");
 				} else {
-					parsedHtml.appendHtml("<ul>");
+					parsedHtml.append("<ul>");
 				}
 
-				parsedHtml.appendHtml("<li>");
+				parsedHtml.append("<li>");
 			}
 			currentNumLevel = foundNumLevel;
 			needCloseOpenLi = false;
@@ -399,7 +515,7 @@ public class OpenXml2Html {
 		currentNumId = foundNumId;
 
 		if (needCloseOpenLi && currentNumId != null) {
-			parsedHtml.appendHtml("</li><li>");
+			parsedHtml.append("</li><li>");
 		}
 	}
 
@@ -416,7 +532,7 @@ public class OpenXml2Html {
 
 	private void closeOpenedSpan(ParsedHtml parsedHtml) {
 		if (!currentSpanProperties.isEmpty()) {
-			parsedHtml.appendHtml(currentSpanProperties.getCloseTag());
+			parsedHtml.append(currentSpanProperties.getCloseTag());
 			currentSpanProperties = new HTMLProperties();
 		}
 	}

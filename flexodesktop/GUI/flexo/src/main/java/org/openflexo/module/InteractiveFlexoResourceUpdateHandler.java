@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.UnexpectedException;
 import org.openflexo.foundation.cg.templates.CustomCGTemplateRepository;
@@ -56,9 +57,17 @@ import org.openflexo.view.controller.FlexoController;
 public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHandler {
 
 	protected static final Logger logger = Logger.getLogger(InteractiveFlexoResourceUpdateHandler.class.getPackage().getName());
+	private final ApplicationContext applicationContext;
+	private final FlexoProject project;
 
-	public InteractiveFlexoResourceUpdateHandler() {
+	public InteractiveFlexoResourceUpdateHandler(ApplicationContext applicationContext, FlexoProject project) {
 		super();
+		this.applicationContext = applicationContext;
+		this.project = project;
+	}
+
+	private ProjectLoader getProjectLoader() {
+		return applicationContext.getProjectLoader();
 	}
 
 	@Override
@@ -254,6 +263,16 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 
 	@Override
 	public void handlesResourcesUpdate(final List<FlexoFileResource<? extends FlexoResourceData>> updatedResources) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					handlesResourcesUpdate(updatedResources);
+				}
+			});
+			return;
+		}
 		String[] options = new String[2];
 		options[0] = FlexoLocalization.localizedForKey("batch_decision");
 		options[1] = FlexoLocalization.localizedForKey("one_by_one_decidions");
@@ -339,7 +358,6 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 
 				}
 			} else if (choice == OptionWhenStorageResourceFoundAsModifiedOnDisk.OverwriteDiskChange) {
-				FlexoProject project = getModuleLoader().getProject();
 				DependencyAlgorithmScheme scheme = project.getDependancyScheme();
 				// Pessimistic dependancy scheme is cheaper and is not intended for this situation
 				project.setDependancyScheme(DependencyAlgorithmScheme.Pessimistic);
@@ -372,8 +390,6 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 				}
 			} else if (choice == OptionWhenStorageResourceFoundAsConflicting.OverwriteDiskChange) {
 				try {
-					FlexoProject project = getModuleLoader().getProject();
-					;
 					DependencyAlgorithmScheme scheme = project.getDependancyScheme();
 					// Pessimistic dependancy scheme is cheaper and is not intended for this situation
 					project.setDependancyScheme(DependencyAlgorithmScheme.Pessimistic);
@@ -396,62 +412,29 @@ public class InteractiveFlexoResourceUpdateHandler extends FlexoResourceUpdateHa
 		for (FlexoStorageResource<? extends StorageResourceData> flexoStorageResource : updatedStorageResource) {
 			flexoStorageResource.getResourceData().clearIsModified(true);
 		}
-		getModuleLoader().reloadProject();
+		getProjectLoader().reloadProject(project);
 	}
 
 	@Override
 	public void reloadProject(FlexoStorageResource fileResource) throws ProjectLoadingCancelledException, ModuleLoadingException,
 			ProjectInitializerException {
 		fileResource.getResourceData().clearIsModified(true);
-		getModuleLoader().reloadProject();
-	}
-
-	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
-	private ProjectLoader getProjectLoader() {
-		return ProjectLoader.instance();
+		getProjectLoader().reloadProject(project);
 	}
 
 	@Override
-	protected void handleException(String unlocalizedMessage, FlexoException exception) {
+	protected void handleException(final String unlocalizedMessage, final FlexoException exception) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					handleException(unlocalizedMessage, exception);
+				}
+			});
+			return;
+		}
 		exception.printStackTrace();
 		FlexoController.showError(FlexoLocalization.localizedForKey(unlocalizedMessage));
 	}
 
-	@Override
-	protected void generatedResourceModified(FlexoGeneratedResource generatedResource) {
-		if (_generatedResourceModifiedHook == null) {
-			super.generatedResourceModified(generatedResource);
-		} else {
-			_generatedResourceModifiedHook.handleGeneratedResourceModified(generatedResource);
-		}
-	}
-
-	@Override
-	protected void generatedResourcesModified(List<FlexoGeneratedResource<? extends GeneratedResourceData>> generatedResource) {
-		if (_generatedResourceModifiedHook == null) {
-			super.generatedResourcesModified(generatedResource);
-		} else {
-			for (FlexoGeneratedResource<? extends GeneratedResourceData> resource : generatedResource) {
-
-				_generatedResourceModifiedHook.handleGeneratedResourceModified(resource);
-			}
-		}
-	}
-
-	public interface GeneratedResourceModifiedHook {
-		public void handleGeneratedResourceModified(FlexoGeneratedResource generatedResource);
-	}
-
-	private GeneratedResourceModifiedHook _generatedResourceModifiedHook = null;
-
-	public GeneratedResourceModifiedHook getGeneratedResourceModifiedHook() {
-		return _generatedResourceModifiedHook;
-	}
-
-	public void setGeneratedResourceModifiedHook(GeneratedResourceModifiedHook generatedResourceModifiedHook) {
-		_generatedResourceModifiedHook = generatedResourceModifiedHook;
-	}
 }

@@ -49,7 +49,6 @@ import org.openflexo.docxparser.flexotag.FlexoDescriptionTag;
 import org.openflexo.docxparser.flexotag.FlexoEPITag;
 import org.openflexo.docxparser.flexotag.FlexoNameTag;
 import org.openflexo.docxparser.flexotag.FlexoTitleTag;
-import org.openflexo.toolbox.StringUtils;
 
 public class DocxFileParser {
 	protected static final Logger logger = Logger.getLogger(DocxFileParser.class.getPackage().toString());
@@ -130,7 +129,6 @@ public class DocxFileParser {
 			String tagValue = element.attributeValue(DocxQName.getQName(OpenXmlTag.w_val));
 			Element sdtElement = element.getParent().getParent(); // On w:sdt
 			Element sdtContentElement = sdtElement.element(DocxQName.getQName(OpenXmlTag.w_sdtContent));
-
 			try {
 				if (tagValue.startsWith(FlexoDescriptionTag.FLEXODESCRIPTIONTAG)) {
 					FlexoDescriptionTag descTag = new FlexoDescriptionTag(tagValue);
@@ -162,6 +160,12 @@ public class DocxFileParser {
 				} else if (tagValue.startsWith(FlexoEPITag.EPI_TAG)) {
 					FlexoEPITag epiTag = new FlexoEPITag(tagValue);
 
+					// TODO: Here extract the text under 3 forms:
+					// * one line string
+					// * multi-line string
+					// * styled text
+					// Reinjection shall then choose the appropriate extract according the info
+					// available in VP.
 					String text = extractTextContent(sdtContentElement);
 
 					if (text.length() > 0) {
@@ -187,14 +191,18 @@ public class DocxFileParser {
 
 	public String extractTextContent(Element sdtContentElement) {
 		StringBuilder sb = new StringBuilder();
+		/*Iterator<?> iteratorWp = sdtContentElement.selectNodes("descendant::w:p").iterator();
+		while (iteratorWp.hasNext()) {
+			Element wpElement = (Element) iteratorWp.next();*/
 		Iterator<?> iteratorWt = sdtContentElement.selectNodes("descendant::w:t").iterator();
 		while (iteratorWt.hasNext()) {
 			Element textElement = (Element) iteratorWt.next();
-			if (sb.length() > 0) {
-				sb.append(StringUtils.LINE_SEPARATOR);
-			}
 			sb.append(textElement.getText());
 		}
+		/*if (iteratorWp.hasNext()) {
+			sb.append(StringUtils.LINE_SEPARATOR);
+		}
+		}*/
 		return sb.toString().trim();
 	}
 

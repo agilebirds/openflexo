@@ -19,6 +19,8 @@
  */
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
+
 /**
  * Represents an object which is part of the model of an EditionPattern
  * 
@@ -27,12 +29,21 @@ package org.openflexo.foundation.viewpoint;
  */
 public abstract class EditionPatternObject extends ViewPointObject {
 
+	public EditionPatternObject(ViewPointBuilder builder) {
+		super(builder);
+	}
+
 	public abstract EditionPattern getEditionPattern();
 
 	@Override
 	public String getFullyQualifiedName() {
 		return (getViewPoint() != null ? getViewPoint().getFullyQualifiedName() : "null") + "#"
 				+ (getEditionPattern() != null ? getEditionPattern().getName() : "null") + "." + getClass().getSimpleName();
+	}
+
+	@Override
+	public String getLanguageRepresentation() {
+		return "<not_implemented:" + getFullyQualifiedName() + ">";
 	}
 
 }

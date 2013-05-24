@@ -1,5 +1,0 @@
-\textit{This section describes the data displayed in the application screens and popups. (The functions are describes in section \ref{sec:functions}}
-<GEN_IF(SCREEN_DETAIL)>
-<SCREEN_DETAIL></GEN_IF(SCREEN_DETAIL)>
-<GEN_IF(POPUP_DETAIL)>
-<POPUP_DETAIL></GEN_IF(POPUP_DETAIL)>

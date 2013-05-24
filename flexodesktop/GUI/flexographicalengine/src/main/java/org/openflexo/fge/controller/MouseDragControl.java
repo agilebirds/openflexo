@@ -150,6 +150,11 @@ public class MouseDragControl extends MouseControl {
 		}
 	}
 
+	@Override
+	public boolean isModelEditionAction() {
+		return getActionType() != MouseDragControlActionType.RECTANGLE_SELECTING && getActionType() != MouseDragControlActionType.ZOOM;
+	}
+
 	public MouseDragControlActionType getActionType() {
 		if (action != null) {
 			return action.getActionType();

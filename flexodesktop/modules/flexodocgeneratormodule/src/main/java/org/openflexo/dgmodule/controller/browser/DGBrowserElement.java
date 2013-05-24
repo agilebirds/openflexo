@@ -111,8 +111,8 @@ public abstract class DGBrowserElement extends BrowserElement {
 			markers.add(GeneratorIconLibrary.NEEDS_REGENERATE);
 		}
 
-		if ((getObject() instanceof CGFile) && (((CGFile) getObject()).getResource() != null)
-				&& (((CGFile) getObject()).getResource().getGenerator() != null)) {
+		if (getObject() instanceof CGFile && ((CGFile) getObject()).getResource() != null
+				&& ((CGFile) getObject()).getResource().getGenerator() != null) {
 			/*if (((CGFile)getObject()).getResource().getGenerator().needsGeneration())
 				markers.add(NEEDS_REGENERATE);*/
 			if (((CGFile) getObject()).getResource().getGenerator().hasFormattingException()) {
@@ -153,7 +153,7 @@ public abstract class DGBrowserElement extends BrowserElement {
 	 */
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if ((dataModification instanceof GenerationStatusModification) || (dataModification instanceof CGFileWritenOnDisk)) {
+		if (dataModification instanceof GenerationStatusModification || dataModification instanceof CGFileWritenOnDisk) {
 			updateViewWhenPossible();
 			return;
 		}

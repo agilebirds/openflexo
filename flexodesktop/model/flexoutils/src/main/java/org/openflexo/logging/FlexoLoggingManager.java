@@ -20,6 +20,7 @@
 package org.openflexo.logging;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
@@ -27,9 +28,17 @@ import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.jdom2.JDOMException;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.toolbox.StringUtils;
+import org.openflexo.xmlcode.AccessorInvocationException;
+import org.openflexo.xmlcode.InvalidModelException;
+import org.openflexo.xmlcode.InvalidObjectSpecificationException;
+import org.openflexo.xmlcode.InvalidXMLDataException;
 import org.openflexo.xmlcode.StringEncoder;
+import org.openflexo.xmlcode.StringEncoder.Converter;
 import org.openflexo.xmlcode.XMLCoder;
+import org.openflexo.xmlcode.XMLDecoder;
 import org.openflexo.xmlcode.XMLMapping;
 import org.xml.sax.SAXException;
 
@@ -162,7 +171,73 @@ public class FlexoLoggingManager {
 		return _loggingMapping;
 	}
 
+	public static LogRecords loadLogFile(File logFile) {
+
+		try {
+			FileInputStream fis = new FileInputStream(logFile);
+			return (LogRecords) XMLDecoder.decodeObjectWithMapping(fis, getLoggingMapping());
+		} catch (InvalidXMLDataException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidObjectSpecificationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (AccessorInvocationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidModelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JDOMException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		logger.warning("Could not read " + logFile.getAbsolutePath());
+		return null;
+	}
+
+	static class LevelConverter extends Converter<Level> {
+
+		public LevelConverter() {
+			super(Level.class);
+		}
+
+		@Override
+		public Level convertFromString(String value) {
+			if (StringUtils.isEmpty(value)) {
+				return null;
+			}
+			if (value.equals("SEVERE")) {
+				return Level.SEVERE;
+			} else if (value.equals("WARNING")) {
+				return Level.WARNING;
+			} else if (value.equals("INFO")) {
+				return Level.INFO;
+			} else if (value.equals("CONFIG")) {
+				return Level.CONFIG;
+			} else if (value.equals("FINE")) {
+				return Level.FINE;
+			} else if (value.equals("FINER")) {
+				return Level.FINER;
+			} else if (value.equals("FINEST")) {
+				return Level.FINEST;
+			}
+			return null;
+
+		}
+
+		@Override
+		public String convertToString(Level value) {
+			return value.getName();
+		}
+
+	}
+
 	public String logsReport() {
+		// StringEncoder.getDefaultInstance()._addConverter(new LevelConverter());
 		try {
 			return XMLCoder.encodeObjectWithMapping(logRecords, getLoggingMapping(), StringEncoder.getDefaultInstance());
 		} catch (Exception e) {

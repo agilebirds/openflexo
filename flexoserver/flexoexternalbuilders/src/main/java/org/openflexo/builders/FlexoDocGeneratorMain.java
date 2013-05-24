@@ -29,7 +29,6 @@ import org.openflexo.generator.action.SynchronizeRepositoryCodeGeneration;
 import org.openflexo.generator.action.WriteModifiedGeneratedFiles;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.LatexUtils;
 
 public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 
@@ -40,8 +39,6 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 	public static final String TEMPLATES_ARGUMENT_PREFIX = "-Templates=";
 
 	public static final String OUTPUT_FILE_ARGUMENT_PREFIX = "-Output=";
-
-	public static final String WORKING_DIR = "-WorkingDir=";
 
 	public static final String NO_POST_BUILD = "-nopostbuild";
 
@@ -58,9 +55,8 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 	// Variables
 	private File templates = null;
 	private String docType = DefaultDocType.Business.name();
-	private Format format = Format.LATEX;
+	private Format format = Format.DOCX;
 	private String outputPath = null;
-	private String workingDir = null;
 	private boolean noPostBuild = false;
 	private String tocUserID;
 	private long tocFlexoID = -1;
@@ -89,14 +85,6 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 					}
 					if (outputPath.endsWith("\"")) {
 						outputPath = outputPath.substring(0, outputPath.length() - 1);
-					}
-				} else if (args[i].startsWith(WORKING_DIR)) {
-					workingDir = args[i].substring(WORKING_DIR.length());
-					if (workingDir.startsWith("\"")) {
-						workingDir = workingDir.substring(1);
-					}
-					if (workingDir.endsWith("\"")) {
-						workingDir = workingDir.substring(0, workingDir.length() - 1);
 					}
 				} else if (args[i].startsWith(FORMAT)) {
 					String t = args[i].substring(FORMAT.length());
@@ -136,17 +124,12 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 
 	@Override
 	protected void doRun() {
-		File output = null;
-		if (workingDir != null) {
-			output = new File(workingDir);
-			output.mkdirs();
-			if (!output.exists() || !output.canWrite()) {
-				if (logger.isLoggable(Level.WARNING)) {
-					logger.warning("Output path: " + output.getAbsolutePath()
-							+ " either does not exist or does not have write permissions.");
-				}
-				output = null;
+		File output = getWorkingDir();
+		if (!output.exists() || !output.canWrite()) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Output path: " + output.getAbsolutePath() + " either does not exist or does not have write permissions.");
 			}
+			output = null;
 		}
 		if (output == null) {
 			try {
@@ -161,7 +144,7 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 			logger.info("Working directory is: " + output.getAbsolutePath());
 		}
 		File latexDir = new File(output, "Doc" + format.name() + "Source");
-		File pdfDir = new File(output, format == Format.LATEX ? "PDF" : "ZIP");
+		File pdfDir = new File(output, /*format == Format.LATEX ? "PDF" :*/"ZIP");
 		latexDir.mkdirs();
 		pdfDir.mkdirs();
 		if (project != null) {
@@ -240,8 +223,11 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 			}
 			repository.setTocRepository(rep);
 			docType = add.getNewDocType().toString();
-			ConnectCGRepository connect = ConnectCGRepository.actionType.makeNewAction(add.getNewGeneratedCodeRepository(), null, editor);
-			connect.doAction();
+			if (!add.getNewGeneratedCodeRepository().isEnabled()) {
+				ConnectCGRepository connect = ConnectCGRepository.actionType.makeNewAction(add.getNewGeneratedCodeRepository(), null,
+						editor);
+				connect.doAction();
+			}
 			List<FlexoAction<?, ?, ?>> actions = new ArrayList<FlexoAction<?, ?, ?>>();
 			SynchronizeRepositoryCodeGeneration sync = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
 					add.getNewGeneratedCodeRepository(), null, editor);
@@ -254,7 +240,7 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 			final GenerateArtefact<?, ?> generateArtefact;
 			if (!noPostBuild) {
 				switch (format) {
-				case LATEX:
+				/*case LATEX:
 					String latexCommand = LatexUtils.getDefaultLatex2PDFCommand(false); // Little hack for server (see bug #1006055)
 					GeneratePDF pdf = GeneratePDF.actionType
 							.makeNewAction((DGRepository) add.getNewGeneratedCodeRepository(), null, editor);
@@ -263,7 +249,7 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 					pdf.setLatexTimeOutInSeconds(120);
 					actions.add(pdf);
 					generateArtefact = pdf;
-					break;
+					break;*/
 				case HTML:
 					GenerateZip zip = GenerateZip.actionType.makeNewAction(add.getNewGeneratedCodeRepository(), null, editor);
 					zip.setSaveBeforeGenerating(false);
@@ -282,7 +268,7 @@ public class FlexoDocGeneratorMain extends FlexoExternalMainWithProject {
 					if (logger.isLoggable(Level.SEVERE)) {
 						logger.severe("Unknown doc format");
 					}
-					setExitCodeCleanUpAndExit(UNEXPECTED_EXCEPTION);
+					setExitCodeCleanUpAndExit(UNKNOWN_EXIT);
 					break;
 				}
 			} else {

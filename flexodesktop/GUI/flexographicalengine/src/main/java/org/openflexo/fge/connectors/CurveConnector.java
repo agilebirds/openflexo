@@ -351,7 +351,9 @@ public class CurveConnector extends Connector {
 	private FGEQuadCurve curve;
 
 	private void refreshCurve() {
-		curve = FGEQuadCurve.makeCurveFromPoints(cp1.getPoint(), cp.getPoint(), cp2.getPoint());
+		if (cp1 != null && cp != null && cp2 != null) {
+			curve = FGEQuadCurve.makeCurveFromPoints(cp1.getPoint(), cp.getPoint(), cp2.getPoint());
+		}
 	}
 
 	@Override
@@ -405,14 +407,14 @@ public class CurveConnector extends Connector {
 	}
 
 	@Override
-	public void refreshConnector() {
-		if (!needsRefresh()) {
+	public void refreshConnector(boolean force) {
+		if (!force && !needsRefresh()) {
 			return;
 		}
 
 		updateControlPoints();
 
-		super.refreshConnector();
+		super.refreshConnector(force);
 
 		firstUpdated = true;
 
@@ -521,4 +523,15 @@ public class CurveConnector extends Connector {
 		}
 		return 0;
 	}
+
+	@Override
+	public CurveConnector clone() {
+		CurveConnector returned = new CurveConnector(null);
+		returned._setCpPosition(_getCpPosition());
+		returned._setCp1RelativeToStartObject(_getCp1RelativeToStartObject());
+		returned._setCp2RelativeToEndObject(_getCp2RelativeToEndObject());
+		returned.setAreBoundsAdjustable(getAreBoundsAdjustable());
+		return returned;
+	}
+
 }

@@ -19,8 +19,8 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
@@ -58,7 +58,7 @@ public class GenerateEntityFromSelectionInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<GenerateEntityFromSelection> getDefaultInitializer() {
 		return new FlexoActionInitializer<GenerateEntityFromSelection>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateEntityFromSelection action) {
+			public boolean run(EventObject e, GenerateEntityFromSelection action) {
 				return askWidgetMapping(action);
 			}
 		};
@@ -144,7 +144,7 @@ public class GenerateEntityFromSelectionInitializer extends ActionInitializer {
 									.localizedForKey("the_selected_eomodel_cannot_be_modified_please_choose_another_one_or_create_a_new_one");
 							return false;
 						}
-						if (eoModelMode.getValue().equals(CREATE_EOMODEL) && (newEOModelName.getValue() == null)) {
+						if (eoModelMode.getValue().equals(CREATE_EOMODEL) && newEOModelName.getValue() == null) {
 							errorMessage = FlexoLocalization.localizedForKey("please_specify_an_eomodelfilename");
 							return false;
 						}

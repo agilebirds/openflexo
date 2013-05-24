@@ -19,7 +19,7 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -51,7 +51,7 @@ public class RemoveGeneratedCodeRepositoryInitializer extends ActionInitializer 
 	protected FlexoActionInitializer<RemoveGeneratedCodeRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveGeneratedCodeRepository>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveGeneratedCodeRepository action) {
+			public boolean run(EventObject e, RemoveGeneratedCodeRepository action) {
 				CheckboxParameter deleteFiles = new CheckboxParameter("deleteFiles", "also_delete_files_on_disk", false);
 				AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(getProject(), null, action.getLocalizedName(),
 						FlexoLocalization.localizedForKey("would_you_really_like_to_remove_this_generated_code_repository"), deleteFiles);
@@ -69,7 +69,7 @@ public class RemoveGeneratedCodeRepositoryInitializer extends ActionInitializer 
 	protected FlexoActionFinalizer<RemoveGeneratedCodeRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RemoveGeneratedCodeRepository>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveGeneratedCodeRepository action) {
+			public boolean run(EventObject e, RemoveGeneratedCodeRepository action) {
 				return true;
 			}
 		};

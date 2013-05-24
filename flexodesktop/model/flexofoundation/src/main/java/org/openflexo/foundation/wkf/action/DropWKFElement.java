@@ -74,16 +74,20 @@ public class DropWKFElement extends FlexoUndoableAction<DropWKFElement, FlexoPet
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoPetriGraph object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoPetriGraph object, Vector<WKFObject> globalSelection) {
 			return false;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoPetriGraph object, Vector<WKFObject> globalSelection) {
-			return ((object != null) && (object.getProcess() != null));
+		public boolean isEnabledForSelection(FlexoPetriGraph object, Vector<WKFObject> globalSelection) {
+			return object != null && object.getProcess() != null;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoPetriGraph.class);
+	}
 
 	DropWKFElement(FlexoPetriGraph focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -120,20 +124,23 @@ public class DropWKFElement extends FlexoUndoableAction<DropWKFElement, FlexoPet
 	@Override
 	protected void doAction(Object context) throws InvalidLevelException {
 		logger.info("Insert WKF element");
-		if ((getProcess() != null) && (getObject() != null) && (getPetriGraph() != null)) {
+		if (getProcess() != null && getObject() != null && getPetriGraph() != null) {
 			if (getGraphicalContext() != null) {
 				getObject().setX(posX, getGraphicalContext());
 				getObject().setY(posY, getGraphicalContext());
 			}
 			if (getObject() instanceof PetriGraphNode) {
 				PetriGraphNode node = (PetriGraphNode) getObject();
-				if (getRoleToAssociate() != null && getRoleToAssociate() != getProject().getWorkflow().getDefaultRole()) {
+				if (getRoleToAssociate() != null) {
+					if (roleToAssociate == getProject().getWorkflow().getDefaultRole()) {
+						roleToAssociate = null;
+					}
 					if (node instanceof AbstractActivityNode) {
-						((AbstractActivityNode) node).setRole(getRoleToAssociate());
+						((AbstractActivityNode) node).setRole(roleToAssociate);
 					} else if (node instanceof OperatorNode) {
-						((OperatorNode) node).setRole(getRoleToAssociate());
+						((OperatorNode) node).setRole(roleToAssociate);
 					} else if (node instanceof EventNode) {
-						((EventNode) node).setRole(getRoleToAssociate());
+						((EventNode) node).setRole(roleToAssociate);
 					}
 				}
 				if (node instanceof OperatorNode || node instanceof EventNode || node.getLevel() == getPetriGraph().getLevel()) {

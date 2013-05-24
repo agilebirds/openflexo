@@ -136,7 +136,7 @@ public class ObtainPoint extends EditionInput<FGEPoint> {
 				focusedObject.setIsFocused(true);
 			}
 
-			ControlArea<?> controlArea = (focused != null ? getFocusRetriever().getFocusedControlAreaForDrawable(focused, e) : null);
+			ControlArea<?> controlArea = focused != null ? getFocusRetriever().getFocusedControlAreaForDrawable(focused, e) : null;
 			if (controlArea instanceof ControlPoint) {
 				focusedControlPoint = (ControlPoint) controlArea;
 			}
@@ -262,7 +262,7 @@ public class ObtainPoint extends EditionInput<FGEPoint> {
 	@Override
 	public void paint(FGEDrawingGraphics graphics) {
 		super.paint(graphics);
-		if ((getActiveMethod() instanceof ControlPointSelection) || (getActiveMethod() instanceof IntersectionSelection)) {
+		if (getActiveMethod() instanceof ControlPointSelection || getActiveMethod() instanceof IntersectionSelection) {
 			getActiveMethod().paint(graphics);
 		}
 	}

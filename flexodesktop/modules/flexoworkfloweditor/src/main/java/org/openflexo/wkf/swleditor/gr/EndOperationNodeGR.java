@@ -81,7 +81,7 @@ public class EndOperationNodeGR extends AbstractOperationNodeGR {
 	 */
 	@Override
 	public double _getDefaultY() {
-		return (getOperationNode().getParentPetriGraph().getIndexForEndNode(getOperationNode()) * 50) + DEFAULT_BEGIN_Y_OFFSET;
+		return getOperationNode().getParentPetriGraph().getIndexForEndNode(getOperationNode()) * 50 + DEFAULT_BEGIN_Y_OFFSET;
 	}
 
 	@Override

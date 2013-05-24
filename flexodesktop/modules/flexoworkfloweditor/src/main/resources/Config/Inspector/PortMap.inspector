@@ -7,20 +7,20 @@
 			<param name="columns" value="10"/>
 			<param name="validateOnReturn" value="true"/>
 		</property>
-		<property name="isHidden" label="hide_port_map" help="Hides this portmap" widget="CHECKBOX" constraint="0"/>
+		<property name="isHidden" label="hide_port_map" help="Hides this portmap" widget="CHECKBOX" constraint="1"/>
 
-		<property name="hasInputMessage" label="has_input_message" widget="CHECKBOX" constraint="0" conditional="true=false"/>
-		<property name="hasOutputMessage" label="has_output_message" widget="CHECKBOX" constraint="0" conditional="true=false"/>
-		<property name="inputMessageDefinition.name" label="input_message" widget="READ_ONLY_TEXT_FIELD" constraint="1" depends="hasInputMessage" conditional="hasInputMessage=true">
+		<property name="hasInputMessage" label="has_input_message" widget="CHECKBOX" constraint="2" conditional="true=false"/>
+		<property name="hasOutputMessage" label="has_output_message" widget="CHECKBOX" constraint="3" conditional="true=false"/>
+		<property name="inputMessageDefinition.name" label="input_message" widget="READ_ONLY_TEXT_FIELD" constraint="4" depends="hasInputMessage" conditional="hasInputMessage=true">
 			<param name="columns" value="10"/>
 			<param name="validateOnReturn" value="true"/>
-		  <param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		  <param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
-		<property_list name="inputMessageDefinition.entries" label="input_message" constraint="2" depends="hasInputMessage" conditional="hasInputMessage=true">
+		<property_list name="inputMessageDefinition.entries" label="input_message" constraint="5" depends="hasInputMessage" conditional="hasInputMessage=true">
 		  <param name="displayLabel" value="false"/>
 		  <param name="visible_row_count" value="4"/>
 		  <param name="row_height" value="20"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		  <property_list_column name="variableName" label="name" widget="READ_ONLY_TEXT_FIELD">
 			<param name="column_width" value="80"/>
 			<param name="resizable" value="true"/>
@@ -36,16 +36,16 @@
 		  </property_list_column>
 		</property_list>
 
-		<property name="outputMessageDefinition.name" label="output_message" widget="READ_ONLY_TEXT_FIELD" constraint="3" depends="hasOutputMessage" conditional="hasOutputMessage=true">
+		<property name="outputMessageDefinition.name" label="output_message" widget="READ_ONLY_TEXT_FIELD" constraint="6" depends="hasOutputMessage" conditional="hasOutputMessage=true">
 			<param name="columns" value="10"/>
 			<param name="validateOnReturn" value="true"/>
-		  <param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		  <param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
-		<property_list name="outputMessageDefinition.entries" label="output_message" constraint="4" depends="hasOutputMessage" conditional="hasOutputMessage=true">
+		<property_list name="outputMessageDefinition.entries" label="output_message" constraint="7" depends="hasOutputMessage" conditional="hasOutputMessage=true">
 		  <param name="displayLabel" value="false"/>
 		  <param name="visible_row_count" value="4"/>
 		  <param name="row_height" value="20"/>
-		  <param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		  <param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		  <property_list_column name="variableName" label="name" widget="READ_ONLY_TEXT_FIELD">
 			<param name="column_width" value="80"/>
 			<param name="resizable" value="true"/>
@@ -66,6 +66,4 @@
 		<property name="index" label="index" widget="INTEGER" constraint="0"/>
 	</tab>
 
-	<tab name="Graphics" index="4" layout="DEFAULT">
-	</tab>
 </inspector>

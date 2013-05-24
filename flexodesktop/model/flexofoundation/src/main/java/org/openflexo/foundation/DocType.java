@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
 
@@ -29,7 +28,6 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.kvc.ChoiceList;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.xmlcode.StringRepresentable;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Represents type of generation target (Business Technical, UserManual)
@@ -37,7 +35,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * @author sguerin
  * 
  */
-public class DocType extends TargetType implements ChoiceList, Serializable, StringRepresentable {
+public class DocType extends TargetType implements ChoiceList, StringRepresentable {
 
 	public static enum DefaultDocType {
 		Business, Technical, UserManual, Objectives;
@@ -52,6 +50,10 @@ public class DocType extends TargetType implements ChoiceList, Serializable, Str
 		}
 	}
 
+	public static class DocTypeList {
+
+	}
+
 	private String name;
 
 	private FlexoProject project;
@@ -62,7 +64,7 @@ public class DocType extends TargetType implements ChoiceList, Serializable, Str
 		this(project);
 		availableFormats = new Vector<Format>();
 		availableFormats.add(Format.HTML);
-		availableFormats.add(Format.LATEX);
+		// availableFormats.add(Format.LATEX);
 		availableFormats.add(Format.DOCX);
 		name = FileUtils.getValidFileName(name).replace(',', ' '); // Target name are used to build directory structure
 		this.name = name;
@@ -103,26 +105,6 @@ public class DocType extends TargetType implements ChoiceList, Serializable, Str
 	@Override
 	public String getFullyQualifiedName() {
 		return "DOC_TYPE." + getName();
-	}
-
-	/**
-	 * Overrides getProject
-	 * 
-	 * @see org.openflexo.foundation.FlexoModelObject#getProject()
-	 */
-	@Override
-	public FlexoProject getProject() {
-		return project;
-	}
-
-	/**
-	 * Overrides getXMLMapping
-	 * 
-	 * @see org.openflexo.foundation.FlexoXMLSerializableObject#getXMLMapping()
-	 */
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getProject().getXmlMappings().getRMMapping();
 	}
 
 	/**

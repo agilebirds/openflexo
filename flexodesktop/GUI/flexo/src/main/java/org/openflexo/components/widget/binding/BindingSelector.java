@@ -41,7 +41,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.parser.Word;
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBCustom;
@@ -191,7 +190,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 						SwingUtilities.invokeLater(new Runnable() {
 							@Override
 							public void run() {
-								getTextField().requestFocus();
+								getTextField().requestFocusInWindow();
 							}
 						});
 					}
@@ -1038,7 +1037,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 	protected BindingExpression makeBindingExpression() {
 		BindingExpression returned = new BindingExpression(getBindingDefinition(), (FlexoModelObject) getBindable());
 		if (getProject() != null) {
-			returned.setExpression(getProject().getBindingExpressionConverter().getVariableFactory().makeVariable(new Word("")));
+			returned.setExpression(new BindingValueVariable("", getBindable()));
 		}
 		return returned;
 	}
@@ -1150,7 +1149,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				getTextField().requestFocus();
+				getTextField().requestFocusInWindow();
 			}
 		});
 	}

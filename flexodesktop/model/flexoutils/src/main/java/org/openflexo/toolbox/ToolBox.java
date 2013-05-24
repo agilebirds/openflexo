@@ -48,10 +48,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 
 /**
  * @author bmangez <B>Class Description</B>
@@ -67,6 +68,35 @@ public class ToolBox {
 	public static final String MACOS = "MACOS";
 
 	public static final String OTHER = "OTHER";
+
+	static {
+		String osName = System.getProperty("os.name");
+		if (osName.indexOf("Mac OS") > -1) {
+			PLATFORM = MACOS;
+		} else if (osName.indexOf("Windows") > -1) {
+			PLATFORM = WINDOWS;
+		} else if (osName.indexOf("Linux") > -1) {
+			PLATFORM = LINUX;
+		} else {
+			PLATFORM = OTHER;
+		}
+	}
+
+	public static boolean isMacOS() {
+		return PLATFORM == MACOS;
+	}
+
+	public static boolean isWindows() {
+		return PLATFORM == WINDOWS;
+	}
+
+	public static boolean isLinux() {
+		return PLATFORM == LINUX;
+	}
+
+	public static boolean isOther() {
+		return PLATFORM == OTHER;
+	}
 
 	/**
      *
@@ -412,26 +442,7 @@ public class ToolBox {
 	 * @return Returns the pLATFORM.
 	 */
 	public static String getPLATFORM() {
-		if (!platformIsSet) {
-			setPlatform();
-		}
 		return PLATFORM;
-	}
-
-	private static boolean platformIsSet = false;
-
-	public static void setPlatform() {
-		String osName = System.getProperty("os.name");
-		if (osName.indexOf("Mac OS") > -1) {
-			PLATFORM = MACOS;
-		} else if (osName.indexOf("Windows") > -1) {
-			PLATFORM = WINDOWS;
-		} else if (osName.indexOf("Linux") > -1) {
-			PLATFORM = LINUX;
-		} else {
-			PLATFORM = OTHER;
-		}
-		platformIsSet = true;
 	}
 
 	public static class RequestResponse {
@@ -1022,7 +1033,7 @@ public class ToolBox {
 		}
 		if (iterable instanceof Iterable) {
 			List<Object> list = new ArrayList<Object>();
-			for (Object o : (Iterable) iterable) {
+			for (Object o : (Iterable<?>) iterable) {
 				list.add(o);
 			}
 			return list;
@@ -1035,5 +1046,17 @@ public class ToolBox {
 			return list;
 		}
 		return null;
+	}
+
+	public static boolean isMacOSLaf() {
+		return UIManager.getLookAndFeel().getName().equals("Mac OS X");
+	}
+
+	public static boolean isWindowsLaf() {
+		return UIManager.getLookAndFeel().getName().startsWith("Windows");
+	}
+
+	public static boolean isNimbusLaf() {
+		return UIManager.getLookAndFeel().getName().equals("Nimbus");
 	}
 }

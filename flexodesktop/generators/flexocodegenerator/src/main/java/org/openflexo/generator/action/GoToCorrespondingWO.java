@@ -38,12 +38,12 @@ public class GoToCorrespondingWO extends FlexoGUIAction<GoToCorrespondingWO, CGJ
 			"go_to_corresponding_wo", GCAction.SHOW_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		@Override
-		protected boolean isEnabledForSelection(CGJavaFile object, Vector<CGJavaFile> globalSelection) {
+		public boolean isEnabledForSelection(CGJavaFile object, Vector<CGJavaFile> globalSelection) {
 			return object.getResource() instanceof ComponentJavaFileResource;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGJavaFile object, Vector<CGJavaFile> globalSelection) {
+		public boolean isVisibleForSelection(CGJavaFile object, Vector<CGJavaFile> globalSelection) {
 			return object.getResource() instanceof ComponentJavaFileResource;
 		}
 

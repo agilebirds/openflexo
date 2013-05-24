@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.stats;
 
-import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.localization.FlexoLocalization;
@@ -59,26 +58,6 @@ public abstract class FlexoStatistics<T extends FlexoModelObject> extends FlexoO
 
 	public String getLocalizedName() {
 		return FlexoLocalization.localizedForKey("statistics_of") + " " + FlexoLocalization.localizedForKey(getObject().getClassNameKey());
-	}
-
-	/**
-	 * Overrides setChanged
-	 * 
-	 * @see org.openflexo.foundation.FlexoObservable#setChanged()
-	 */
-	@Override
-	protected synchronized void setChanged() {
-		getObject().setChanged(false);
-	}
-
-	/**
-	 * Overrides notifyObservers
-	 * 
-	 * @see org.openflexo.foundation.FlexoObservable#notifyObservers(org.openflexo.foundation.DataModification)
-	 */
-	@Override
-	public void notifyObservers(DataModification arg) {
-		getObject().notifyObservers(arg);
 	}
 
 	public abstract void refresh();

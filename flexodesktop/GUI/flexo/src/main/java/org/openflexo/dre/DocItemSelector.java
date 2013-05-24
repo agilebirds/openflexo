@@ -55,7 +55,7 @@ public class DocItemSelector extends AbstractBrowserSelector<DocItem> {
 	@Override
 	public String renderedString(DocItem editedObject) {
 		if (editedObject != null) {
-			return (editedObject).getIdentifier();
+			return editedObject.getIdentifier();
 		}
 		return EMPTY_STRING;
 	}
@@ -73,7 +73,6 @@ public class DocItemSelector extends AbstractBrowserSelector<DocItem> {
 		@Override
 		public Dimension getDefaultSize() {
 			Dimension returned = _browserView.getDefaultSize();
-			returned.width = returned.width;
 			returned.height = returned.height - 100;
 			return returned;
 		}

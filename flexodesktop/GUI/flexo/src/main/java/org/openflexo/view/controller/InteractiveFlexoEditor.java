@@ -19,18 +19,24 @@
  */
 package org.openflexo.view.controller;
 
+import java.util.EventObject;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Stack;
 import java.util.Vector;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.components.ProgressWindow;
-import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.DefaultFlexoEditor;
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoAction.ExecutionStatus;
@@ -44,9 +50,14 @@ import org.openflexo.foundation.action.FlexoActionUndoFinalizer;
 import org.openflexo.foundation.action.FlexoActionUndoInitializer;
 import org.openflexo.foundation.action.FlexoActionVisibleCondition;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
+import org.openflexo.foundation.action.FlexoGUIAction;
+import org.openflexo.foundation.action.FlexoUndoableAction;
+import org.openflexo.foundation.action.UndoManager;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.ie.IEObject;
+import org.openflexo.foundation.rm.DefaultFlexoResourceUpdateHandler;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.ResourceUpdateHandler;
 import org.openflexo.foundation.utils.FlexoDocFormat;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
@@ -54,192 +65,48 @@ import org.openflexo.foundation.view.ViewObject;
 import org.openflexo.foundation.view.action.ActionSchemeActionType;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.ws.WSObject;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
 
-public abstract class InteractiveFlexoEditor implements FlexoEditor {
+public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 
 	private static final Logger logger = FlexoLogger.getLogger(InteractiveFlexoEditor.class.getPackage().getName());
 
 	private static final boolean WARN_MODEL_MODIFICATIONS_OUTSIDE_FLEXO_ACTION_LAYER = false;
 
-	protected class ModuleContext {
-		private final Hashtable<Class<? extends FlexoActionType>, FlexoActionInitializer> _initializers;
-		private final Hashtable<Class<? extends FlexoActionType>, FlexoActionFinalizer> _finalizers;
-		private final Hashtable<Class<? extends FlexoActionType>, FlexoActionUndoInitializer> _undoInitializers;
-		private final Hashtable<Class<? extends FlexoActionType>, FlexoActionUndoFinalizer> _undoFinalizers;
-		private final Hashtable<Class<? extends FlexoActionType>, FlexoActionRedoInitializer> _redoInitializers;
-		private final Hashtable<Class<? extends FlexoActionType>, FlexoActionRedoFinalizer> _redoFinalizers;
-		private final Hashtable<Class<? extends FlexoActionType>, FlexoExceptionHandler> _exceptionHandlers;
-		private final Hashtable<Class<? extends FlexoActionType>, FlexoActionEnableCondition> _enableConditions;
-		private final Hashtable<Class<? extends FlexoActionType>, FlexoActionVisibleCondition> _visibleConditions;
-
-		protected ModuleContext() {
-			_initializers = new Hashtable<Class<? extends FlexoActionType>, FlexoActionInitializer>();
-			_finalizers = new Hashtable<Class<? extends FlexoActionType>, FlexoActionFinalizer>();
-			_undoInitializers = new Hashtable<Class<? extends FlexoActionType>, FlexoActionUndoInitializer>();
-			_undoFinalizers = new Hashtable<Class<? extends FlexoActionType>, FlexoActionUndoFinalizer>();
-			_redoInitializers = new Hashtable<Class<? extends FlexoActionType>, FlexoActionRedoInitializer>();
-			_redoFinalizers = new Hashtable<Class<? extends FlexoActionType>, FlexoActionRedoFinalizer>();
-			_exceptionHandlers = new Hashtable<Class<? extends FlexoActionType>, FlexoExceptionHandler>();
-			_enableConditions = new Hashtable<Class<? extends FlexoActionType>, FlexoActionEnableCondition>();
-			_visibleConditions = new Hashtable<Class<? extends FlexoActionType>, FlexoActionVisibleCondition>();
-
-		}
-
-		protected FlexoActionFinalizer getFinalizerFor(FlexoActionType actionType) {
-			return _finalizers.get(actionType.getClass());
-		}
-
-		protected FlexoActionInitializer getInitializerFor(FlexoActionType actionType) {
-			return _initializers.get(actionType.getClass());
-		}
-
-		protected FlexoActionUndoFinalizer getUndoFinalizerFor(FlexoActionType actionType) {
-			return _undoFinalizers.get(actionType.getClass());
-		}
-
-		protected FlexoActionUndoInitializer getUndoInitializerFor(FlexoActionType actionType) {
-			return _undoInitializers.get(actionType.getClass());
-		}
-
-		protected FlexoActionRedoFinalizer getRedoFinalizerFor(FlexoActionType actionType) {
-			return _redoFinalizers.get(actionType.getClass());
-		}
-
-		protected FlexoActionRedoInitializer getRedoInitializerFor(FlexoActionType actionType) {
-			return _redoInitializers.get(actionType.getClass());
-		}
-
-		protected FlexoActionEnableCondition getEnableConditionFor(FlexoActionType actionType) {
-			return _enableConditions.get(actionType.getClass());
-		}
-
-		protected FlexoActionVisibleCondition getVisibleConditionFor(FlexoActionType actionType) {
-			return _visibleConditions.get(actionType.getClass());
-		}
-
-		protected FlexoExceptionHandler getExceptionHandlerFor(FlexoActionType actionType) {
-			return _exceptionHandlers.get(actionType.getClass());
-		}
-
-		protected void registerFinalizerFor(FlexoActionType actionType, FlexoActionFinalizer finalizer) {
-			_finalizers.put(actionType.getClass(), finalizer);
-		}
-
-		protected void registerFinalizerFor(Class<? extends FlexoActionType<?, ?, ?>> actionTypeClass, FlexoActionFinalizer finalizer) {
-			_finalizers.put(actionTypeClass, finalizer);
-		}
-
-		protected void registerInitializerFor(FlexoActionType actionType, FlexoActionInitializer initializer) {
-			_initializers.put(actionType.getClass(), initializer);
-		}
-
-		protected void registerInitializerFor(Class<? extends FlexoActionType<?, ?, ?>> actionTypeClass, FlexoActionInitializer initializer) {
-			_initializers.put(actionTypeClass, initializer);
-		}
-
-		protected void registerUndoFinalizerFor(FlexoActionType actionType, FlexoActionUndoFinalizer undoFinalizer) {
-			_undoFinalizers.put(actionType.getClass(), undoFinalizer);
-		}
-
-		protected void registerUndoFinalizerFor(Class<? extends FlexoActionType<?, ?, ?>> actionTypeClass,
-				FlexoActionUndoFinalizer undoFinalizer) {
-			_undoFinalizers.put(actionTypeClass, undoFinalizer);
-		}
-
-		protected void registerUndoInitializerFor(FlexoActionType actionType, FlexoActionUndoInitializer undoInitializer) {
-			_undoInitializers.put(actionType.getClass(), undoInitializer);
-		}
-
-		protected void registerUndoInitializerFor(Class<? extends FlexoActionType<?, ?, ?>> actionTypeClass,
-				FlexoActionUndoInitializer undoInitializer) {
-			_undoInitializers.put(actionTypeClass, undoInitializer);
-		}
-
-		protected void registerRedoFinalizerFor(FlexoActionType actionType, FlexoActionRedoFinalizer redoFinalizer) {
-			_redoFinalizers.put(actionType.getClass(), redoFinalizer);
-		}
-
-		protected void registerRedoFinalizerFor(Class<? extends FlexoActionType<?, ?, ?>> actionTypeClass,
-				FlexoActionRedoFinalizer redoFinalizer) {
-			_redoFinalizers.put(actionTypeClass, redoFinalizer);
-		}
-
-		protected void registerRedoInitializerFor(FlexoActionType actionType, FlexoActionRedoInitializer redoInitializer) {
-			_redoInitializers.put(actionType.getClass(), redoInitializer);
-		}
-
-		protected void registerRedoInitializerFor(Class<? extends FlexoActionType<?, ?, ?>> actionTypeClass,
-				FlexoActionRedoInitializer redoInitializer) {
-			_redoInitializers.put(actionTypeClass, redoInitializer);
-		}
-
-		protected void registerEnableConditionFor(FlexoActionType actionType, FlexoActionEnableCondition enableCondition) {
-			_enableConditions.put(actionType.getClass(), enableCondition);
-		}
-
-		protected void registerEnableConditionFor(Class<? extends FlexoActionType<?, ?, ?>> actionTypeClass,
-				FlexoActionEnableCondition enableCondition) {
-			_enableConditions.put(actionTypeClass, enableCondition);
-		}
-
-		protected void registerVisibleConditionFor(FlexoActionType actionType, FlexoActionVisibleCondition enableCondition) {
-			_visibleConditions.put(actionType.getClass(), enableCondition);
-		}
-
-		protected void registerVisibleConditionFor(Class<? extends FlexoActionType<?, ?, ?>> actionTypeClass,
-				FlexoActionVisibleCondition enableCondition) {
-			_visibleConditions.put(actionTypeClass, enableCondition);
-		}
-
-		protected void registerExceptionHandlerFor(FlexoActionType actionType, FlexoExceptionHandler exceptionHandler) {
-			_exceptionHandlers.put(actionType.getClass(), exceptionHandler);
-		}
-
-		protected void registerExceptionHandlerFor(Class<? extends FlexoActionType<?, ?, ?>> actionTypeClass,
-				FlexoExceptionHandler exceptionHandler) {
-			_exceptionHandlers.put(actionTypeClass, exceptionHandler);
-		}
-
-	}
-
-	protected Hashtable<FlexoModule, ModuleContext> _moduleContexts;
-
-	private FlexoProject _project;
 	private final UndoManager _undoManager;
 	private ScenarioRecorder _scenarioRecorder;
-	private final Vector<FlexoActionType> _registeredActions;
-	private final Hashtable<FlexoActionType, Icon> _enabledIcons;
-	private final Hashtable<FlexoActionType, Icon> _disabledIcons;
 
-	private final Hashtable<FlexoAction, Vector<FlexoModelObject>> _createdAndNotNotifiedObjects;
-	private final Hashtable<FlexoAction, Vector<FlexoModelObject>> _deletedAndNotNotifiedObjects;
+	private final Hashtable<FlexoAction<?, ?, ?>, Vector<FlexoModelObject>> _createdAndNotNotifiedObjects;
+	private final Hashtable<FlexoAction<?, ?, ?>, Vector<FlexoModelObject>> _deletedAndNotNotifiedObjects;
 
-	private Stack<FlexoAction> _currentlyPerformedActionStack = null;
-	private Stack<FlexoAction> _currentlyUndoneActionStack = null;
-	private Stack<FlexoAction> _currentlyRedoneActionStack = null;
+	private Stack<FlexoAction<?, ?, ?>> _currentlyPerformedActionStack = null;
+	private Stack<FlexoAction<?, ?, ?>> _currentlyUndoneActionStack = null;
+	private Stack<FlexoAction<?, ?, ?>> _currentlyRedoneActionStack = null;
 
 	private final FlexoProgressFactory _progressFactory;
 
-	InteractiveFlexoEditor() {
-		_moduleContexts = new Hashtable<FlexoModule, ModuleContext>();
-		_enabledIcons = new Hashtable<FlexoActionType, Icon>();
-		_disabledIcons = new Hashtable<FlexoActionType, Icon>();
+	private final ApplicationContext applicationContext;
 
+	private Map<FlexoModule, ControllerActionInitializer> actionInitializers;
+
+	public InteractiveFlexoEditor(ApplicationContext applicationContext, FlexoProject project) {
+		super(project);
+		this.applicationContext = applicationContext;
+		actionInitializers = new Hashtable<FlexoModule, ControllerActionInitializer>();
 		_undoManager = new UndoManager();
 		if (ScenarioRecorder.ENABLE) {
 			_scenarioRecorder = new ScenarioRecorder();
 		}
-		_registeredActions = new Vector<FlexoActionType>();
-		_createdAndNotNotifiedObjects = new Hashtable<FlexoAction, Vector<FlexoModelObject>>();
-		_deletedAndNotNotifiedObjects = new Hashtable<FlexoAction, Vector<FlexoModelObject>>();
-		_currentlyPerformedActionStack = new Stack<FlexoAction>();
-		_currentlyUndoneActionStack = new Stack<FlexoAction>();
-		_currentlyRedoneActionStack = new Stack<FlexoAction>();
+		_createdAndNotNotifiedObjects = new Hashtable<FlexoAction<?, ?, ?>, Vector<FlexoModelObject>>();
+		_deletedAndNotNotifiedObjects = new Hashtable<FlexoAction<?, ?, ?>, Vector<FlexoModelObject>>();
+		_currentlyPerformedActionStack = new Stack<FlexoAction<?, ?, ?>>();
+		_currentlyUndoneActionStack = new Stack<FlexoAction<?, ?, ?>>();
+		_currentlyRedoneActionStack = new Stack<FlexoAction<?, ?, ?>>();
 		_progressFactory = new FlexoProgressFactory() {
 			@Override
 			public FlexoProgress makeFlexoProgress(String title, int steps) {
@@ -249,68 +116,280 @@ public abstract class InteractiveFlexoEditor implements FlexoEditor {
 
 	}
 
-	public InteractiveFlexoEditor(FlexoProject project) {
-		this();
-		_project = project;
-		_project.addToEditors(this);
+	private ModuleLoader getModuleLoader() {
+		return applicationContext.getModuleLoader();
 	}
 
 	@Override
-	public <A extends org.openflexo.foundation.action.FlexoAction<?, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void executeAction(
-			final A action) throws org.openflexo.foundation.FlexoException {
-		if (action.isLongRunningAction() && SwingUtilities.isEventDispatchThread()) {
-			ProgressWindow.showProgressWindow(action.getLocalizedName(), 100);
-			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-				@Override
-				protected Void doInBackground() throws Exception {
-					try {
-						action.execute();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					return null;
-				}
+	public ResourceUpdateHandler getResourceUpdateHandler() {
+		return new DefaultFlexoResourceUpdateHandler();
+	}
 
-				@Override
-				protected void done() {
-					super.done();
-					if (!action.isEmbedded()) {
-						if (ProgressWindow.hasInstance()) {
+	@Override
+	public boolean isInteractive() {
+		return true;
+	}
+
+	@Override
+	public <A extends org.openflexo.foundation.action.FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performAction(
+			final A action, final EventObject e) {
+		if (!action.getActionType().isEnabled(action.getFocusedObject(), action.getGlobalSelection())) {
+			return null;
+		}
+		if (!(action instanceof FlexoGUIAction<?, ?, ?>) && action.getFocusedObject() != null
+				&& action.getFocusedObject().getProject() != getProject()) {
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Cannot execute action because focused object is within another project than the one of this editor");
+			}
+			return null;
+		}
+
+		executeAction(action, e);
+		return action;
+	}
+
+	private <A extends org.openflexo.foundation.action.FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A executeAction(
+			final A action, final EventObject event) {
+		final boolean progressIsShowing = ProgressWindow.hasInstance();
+		boolean confirmDoAction = runInitializer(action, event);
+		if (confirmDoAction) {
+			actionWillBePerformed(action);
+			if (action.isLongRunningAction() && SwingUtilities.isEventDispatchThread()) {
+				ProgressWindow.showProgressWindow(action.getLocalizedName(), 100);
+				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+					@Override
+					protected Void doInBackground() throws Exception {
+						runAction(action);
+						return null;
+					}
+
+					@Override
+					protected void done() {
+						super.done();
+						try {
+							get();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						} catch (ExecutionException e) {
+							e.printStackTrace();
+							if (e.getCause() instanceof FlexoException) {
+								if (!runExceptionHandler((FlexoException) e.getCause(), action)) {
+									if (!progressIsShowing) {
+										ProgressWindow.hideProgressWindow();
+									}
+									return;
+								}
+							} else {
+								throw new RuntimeException(FlexoLocalization.localizedForKey("action_failed") + " "
+										+ action.getLocalizedName(), e.getCause());
+							}
+						}
+						runFinalizer(action, event);
+						if (!progressIsShowing) {
 							ProgressWindow.hideProgressWindow();
 						}
 					}
+				};
+				worker.execute();
+				return action;
+			} else {
+				try {
+					runAction(action);
+				} catch (FlexoException exception) {
+					if (!runExceptionHandler(exception, action)) {
+						return null;
+					}
 				}
-			};
-			worker.execute();
-		} else {
-			action.execute();
+				runFinalizer(action, event);
+				if (!progressIsShowing) {
+					ProgressWindow.hideProgressWindow();
+				}
+			}
+		}
+
+		return action;
+	}
+
+	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> boolean runInitializer(A action,
+			EventObject event) {
+		ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(action.getActionType());
+		if (actionInitializer != null) {
+			FlexoActionInitializer<A> initializer = actionInitializer.getDefaultInitializer();
+			if (initializer != null) {
+				return initializer.run(event, action);
+			}
+		}
+		return true;
+	}
+
+	private <A extends org.openflexo.foundation.action.FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void runAction(
+			final A action) throws FlexoException {
+		if (getProject() != null) {
+			getProject().clearRecentlyCreatedObjects();
+		}
+		action.doActionInContext();
+		if (getProject() != null) {
+			getProject().notifyRecentlyCreatedObjects();
+		}
+		actionHasBeenPerformed(action, true); // Action succeeded
+	}
+
+	private <A extends org.openflexo.foundation.action.FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void runFinalizer(
+			final A action, EventObject event) {
+		ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(action.getActionType());
+		if (actionInitializer != null) {
+			FlexoActionFinalizer<A> finalizer = actionInitializer.getDefaultFinalizer();
+			if (finalizer != null) {
+				finalizer.run(event, action);
+			}
 		}
 	}
 
-	public abstract boolean isAutoSaveEnabledByDefault();
+	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> boolean runExceptionHandler(
+			FlexoException exception, final A action) {
+		actionHasBeenPerformed(action, false); // Action failed
+		ProgressWindow.hideProgressWindow();
+		FlexoExceptionHandler<A> exceptionHandler = null;
+		ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(action.getActionType());
+		if (actionInitializer != null) {
+			exceptionHandler = actionInitializer.getDefaultExceptionHandler();
+		}
+		if (exceptionHandler != null) {
+			if (exceptionHandler.handleException(exception, action)) {
+				// The exception has been handled, we may still have to execute finalizer, if any
+				return true;
+			} else {
+				return false;
+			}
 
-	@Override
-	public FlexoProject getProject() {
-		return _project;
+		} else {
+			return false;
+		}
 	}
 
+	@Override
+	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performUndoAction(
+			final A action, final EventObject event) {
+		boolean confirmUndoAction = true;
+		ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(action.getActionType());
+		FlexoActionUndoInitializer<A> initializer = null;
+		if (actionInitializer != null) {
+			initializer = actionInitializer.getDefaultUndoInitializer();
+			if (initializer != null) {
+				confirmUndoAction = initializer.run(event, action);
+			}
+		}
+
+		if (confirmUndoAction) {
+			actionWillBeUndone(action);
+			try {
+				if (getProject() != null) {
+					getProject().clearRecentlyCreatedObjects();
+				}
+				action.doActionInContext();
+				if (getProject() != null) {
+					getProject().notifyRecentlyCreatedObjects();
+				}
+				actionHasBeenUndone(action, true); // Action succeeded
+			} catch (FlexoException exception) {
+				actionHasBeenUndone(action, false); // Action failed
+				ProgressWindow.hideProgressWindow();
+				FlexoExceptionHandler<A> exceptionHandler = null;
+				if (actionInitializer != null) {
+					exceptionHandler = actionInitializer.getDefaultExceptionHandler();
+				}
+				if (exceptionHandler != null) {
+					if (exceptionHandler.handleException(exception, action)) {
+						// The exception has been handled, we may still have to execute finalizer, if any
+					} else {
+						return action;
+					}
+				} else {
+					return action;
+				}
+			}
+
+			FlexoActionUndoFinalizer<A> finalizer = null;
+			if (actionInitializer != null) {
+				finalizer = actionInitializer.getDefaultUndoFinalizer();
+				if (finalizer != null) {
+					confirmUndoAction = finalizer.run(event, action);
+				}
+			}
+		}
+		ProgressWindow.hideProgressWindow();
+		return action;
+	}
+
+	@Override
+	public <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> A performRedoAction(
+			A action, EventObject event) {
+		boolean confirmRedoAction = true;
+		ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(action.getActionType());
+		FlexoActionRedoInitializer<A> initializer = null;
+		if (actionInitializer != null) {
+			initializer = actionInitializer.getDefaultRedoInitializer();
+			if (initializer != null) {
+				confirmRedoAction = initializer.run(event, action);
+			}
+		}
+
+		if (confirmRedoAction) {
+			actionWillBeRedone(action);
+			try {
+				if (getProject() != null) {
+					getProject().clearRecentlyCreatedObjects();
+				}
+				action.redoActionInContext();
+				if (getProject() != null) {
+					getProject().notifyRecentlyCreatedObjects();
+				}
+				actionHasBeenRedone(action, true); // Action succeeded
+			} catch (FlexoException exception) {
+				actionHasBeenUndone(action, false); // Action failed
+				ProgressWindow.hideProgressWindow();
+				FlexoExceptionHandler<A> exceptionHandler = null;
+				if (actionInitializer != null) {
+					exceptionHandler = actionInitializer.getDefaultExceptionHandler();
+				}
+				if (exceptionHandler != null) {
+					if (exceptionHandler.handleException(exception, action)) {
+						// The exception has been handled, we may still have to execute finalizer, if any
+					} else {
+						return action;
+					}
+				} else {
+					return action;
+				}
+			}
+
+			FlexoActionRedoFinalizer<A> finalizer = null;
+			if (actionInitializer != null) {
+				finalizer = actionInitializer.getDefaultRedoFinalizer();
+				if (finalizer != null) {
+					confirmRedoAction = finalizer.run(event, action);
+				}
+			}
+		}
+		ProgressWindow.hideProgressWindow();
+		return action;
+	}
+
+	@Override
 	public UndoManager getUndoManager() {
 		return _undoManager;
 	}
 
-	private static final int NUMBER_OF_ACTIONS_BETWEEN_NOTIFICATIONS = 4;
-
-	@Override
-	public void actionWillBePerformed(FlexoAction action) {
+	private <A extends org.openflexo.foundation.action.FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionWillBePerformed(
+			A action) {
 		_undoManager.actionWillBePerformed(action);
 		_currentlyPerformedActionStack.push(action);
 		_createdAndNotNotifiedObjects.put(action, new Vector<FlexoModelObject>());
 		_deletedAndNotNotifiedObjects.put(action, new Vector<FlexoModelObject>());
 	}
 
-	@Override
-	public void actionHasBeenPerformed(FlexoAction action, boolean success) {
+	private <A extends org.openflexo.foundation.action.FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionHasBeenPerformed(
+			A action, boolean success) {
 		_undoManager.actionHasBeenPerformed(action, success);
 		if (success) {
 			if (_scenarioRecorder != null) {
@@ -319,7 +398,7 @@ public abstract class InteractiveFlexoEditor implements FlexoEditor {
 				}
 			}
 		}
-		FlexoAction popAction = _currentlyPerformedActionStack.pop();
+		FlexoAction<?, ?, ?> popAction = _currentlyPerformedActionStack.pop();
 		if (popAction != action) {
 			logger.warning("Expected to pop " + action + " but found " + popAction);
 		}
@@ -343,92 +422,34 @@ public abstract class InteractiveFlexoEditor implements FlexoEditor {
 		_deletedAndNotNotifiedObjects.remove(action);
 	}
 
-	@Override
-	public void actionWillBeUndone(FlexoAction action) {
+	private <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionWillBeUndone(
+			A action) {
 		_undoManager.actionWillBeUndone(action);
 		_currentlyUndoneActionStack.push(action);
 	}
 
-	@Override
-	public void actionHasBeenUndone(FlexoAction action, boolean success) {
+	private <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionHasBeenUndone(
+			A action, boolean success) {
 		_undoManager.actionHasBeenUndone(action, success);
-		FlexoAction popAction = _currentlyUndoneActionStack.pop();
+		FlexoAction<?, ?, ?> popAction = _currentlyUndoneActionStack.pop();
 		if (popAction != action) {
 			logger.warning("Expected to pop " + action + " but found " + popAction);
 		}
 	}
 
-	@Override
-	public void actionWillBeRedone(FlexoAction action) {
+	private <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionWillBeRedone(
+			A action) {
 		_undoManager.actionWillBeRedone(action);
 		_currentlyRedoneActionStack.push(action);
 	}
 
-	@Override
-	public void actionHasBeenRedone(FlexoAction action, boolean success) {
+	private <A extends FlexoUndoableAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> void actionHasBeenRedone(
+			A action, boolean success) {
 		_undoManager.actionHasBeenRedone(action, success);
-		FlexoAction popAction = _currentlyRedoneActionStack.pop();
+		FlexoAction<?, ?, ?> popAction = _currentlyRedoneActionStack.pop();
 		if (popAction != action) {
 			logger.warning("Expected to pop " + action + " but found " + popAction);
 		}
-	}
-
-	public void registerAction(FlexoActionType actionType) {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Register action " + actionType);
-		}
-		_registeredActions.add(actionType);
-	}
-
-	public void registerIcons(FlexoActionType actionType, Icon enabledIcon, Icon disabledIcon) {
-		if (enabledIcon != null) {
-			_enabledIcons.put(actionType, enabledIcon);
-		}
-		if (disabledIcon != null) {
-			_disabledIcons.put(actionType, disabledIcon);
-		}
-	}
-
-	// Only explicitely registered actions are enabled
-	@Override
-	public boolean isActionEnabled(FlexoActionType actionType) {
-		if (actionType instanceof ActionSchemeActionType) {
-			return true;
-		}
-		return _registeredActions.contains(actionType);
-	}
-
-	// Only explicitely registered actions are visible
-	@Override
-	public boolean isActionVisible(FlexoActionType actionType) {
-		return _registeredActions.contains(actionType);
-	}
-
-	public static final InteractiveFlexoEditorFactory FACTORY = new InteractiveFlexoEditorFactory();
-
-	protected static class InteractiveFlexoEditorFactory implements FlexoEditorFactory {
-		@Override
-		public InteractiveFlexoEditor makeFlexoEditor(FlexoProject project) {
-			return new InteractiveFlexoEditor(project) {
-
-				@Override
-				public boolean isAutoSaveEnabledByDefault() {
-					return true;
-				}
-
-			};
-		}
-	}
-
-	public static final InteractiveFlexoEditor makeInteractiveEditorWithoutProject() {
-		return new InteractiveFlexoEditor() {
-
-			@Override
-			public boolean isAutoSaveEnabledByDefault() {
-				return true;
-			}
-
-		};
 	}
 
 	@Override
@@ -466,252 +487,6 @@ public abstract class InteractiveFlexoEditor implements FlexoEditor {
 		}
 	}
 
-	// private FlexoAction getCurrentlyPerformedAction()
-	// {
-	// if (!_currentlyPerformedActionStack.isEmpty()) return _currentlyPerformedActionStack.peek();
-	// if (!_currentlyUndoneActionStack.isEmpty()) return _currentlyUndoneActionStack.peek();
-	// if (!_currentlyRedoneActionStack.isEmpty()) return _currentlyRedoneActionStack.peek();
-	// return null;
-	// }
-
-	public FlexoModule getActiveModule() {
-		return FlexoModule.getActiveModule();
-	}
-
-	@Override
-	public FlexoActionFinalizer getFinalizerFor(FlexoActionType actionType) {
-		if (moduleContextForModule(getActiveModule()) != null) {
-			return moduleContextForModule(getActiveModule()).getFinalizerFor(actionType);
-		}
-		return null;
-	}
-
-	@Override
-	public FlexoActionInitializer getInitializerFor(FlexoActionType actionType) {
-		if (moduleContextForModule(getActiveModule()) != null) {
-			return moduleContextForModule(getActiveModule()).getInitializerFor(actionType);
-		}
-		return null;
-	}
-
-	@Override
-	public FlexoActionUndoFinalizer getUndoFinalizerFor(FlexoActionType actionType) {
-		if (moduleContextForModule(getActiveModule()) != null) {
-			return moduleContextForModule(getActiveModule()).getUndoFinalizerFor(actionType);
-		}
-		return null;
-	}
-
-	@Override
-	public FlexoActionUndoInitializer getUndoInitializerFor(FlexoActionType actionType) {
-		if (moduleContextForModule(getActiveModule()) != null) {
-			return moduleContextForModule(getActiveModule()).getUndoInitializerFor(actionType);
-		}
-		return null;
-	}
-
-	@Override
-	public FlexoActionRedoFinalizer getRedoFinalizerFor(FlexoActionType actionType) {
-		if (moduleContextForModule(getActiveModule()) != null) {
-			return moduleContextForModule(getActiveModule()).getRedoFinalizerFor(actionType);
-		}
-		return null;
-	}
-
-	@Override
-	public FlexoActionRedoInitializer getRedoInitializerFor(FlexoActionType actionType) {
-		if (moduleContextForModule(getActiveModule()) != null) {
-			return moduleContextForModule(getActiveModule()).getRedoInitializerFor(actionType);
-		}
-		return null;
-	}
-
-	@Override
-	public FlexoActionEnableCondition getEnableConditionFor(FlexoActionType actionType) {
-		if (moduleContextForModule(getActiveModule()) != null) {
-			return moduleContextForModule(getActiveModule()).getEnableConditionFor(actionType);
-		}
-		return null;
-	}
-
-	@Override
-	public FlexoActionVisibleCondition getVisibleConditionFor(FlexoActionType actionType) {
-		if (moduleContextForModule(getActiveModule()) != null) {
-			return moduleContextForModule(getActiveModule()).getVisibleConditionFor(actionType);
-		}
-		return null;
-	}
-
-	@Override
-	public FlexoExceptionHandler getExceptionHandlerFor(FlexoActionType actionType) {
-		if (moduleContextForModule(getActiveModule()) != null) {
-			return moduleContextForModule(getActiveModule()).getExceptionHandlerFor(actionType);
-		}
-		return null;
-	}
-
-	private ModuleContext moduleContextForModule(FlexoModule module) {
-		if (module == null) {
-			return null;
-		}
-		if (_moduleContexts.get(module) == null) {
-			_moduleContexts.put(module, new ModuleContext());
-		}
-		return _moduleContexts.get(module);
-	}
-
-	public void registerFinalizerFor(FlexoActionType actionType, FlexoActionFinalizer finalizer, FlexoModule module) {
-		if (moduleContextForModule(module) != null) {
-			moduleContextForModule(module).registerFinalizerFor(actionType, finalizer);
-		} else {
-			logger.warning("Null module !");
-		}
-	}
-
-	public void registerFinalizerFor(Class<? extends FlexoActionType<?, ?, ?>> aClass, FlexoActionFinalizer finalizer, FlexoModule module) {
-		if (moduleContextForModule(module) != null) {
-			moduleContextForModule(module).registerFinalizerFor(aClass, finalizer);
-		} else {
-			logger.warning("Null module !");
-		}
-	}
-
-	public void registerInitializerFor(FlexoActionType actionType, FlexoActionInitializer initializer, FlexoModule module) {
-		if (moduleContextForModule(module) != null) {
-			moduleContextForModule(module).registerInitializerFor(actionType, initializer);
-		} else {
-			logger.warning("Null module !");
-		}
-	}
-
-	public void registerInitializerFor(Class<? extends FlexoActionType<?, ?, ?>> aClass, FlexoActionInitializer initializer,
-			FlexoModule module) {
-		if (moduleContextForModule(module) != null) {
-			moduleContextForModule(module).registerInitializerFor(aClass, initializer);
-		} else {
-			logger.warning("Null module !");
-		}
-	}
-
-	public void registerUndoFinalizerFor(FlexoActionType actionType, FlexoActionUndoFinalizer undoFinalizer, FlexoModule module) {
-		if (moduleContextForModule(module) != null) {
-			moduleContextForModule(module).registerUndoFinalizerFor(actionType, undoFinalizer);
-		} else {
-			logger.warning("Null module !");
-		}
-	}
-
-	public void registerUndoFinalizerFor(Class<? extends FlexoActionType<?, ?, ?>> aClass, FlexoActionUndoFinalizer undoFinalizer,
-			FlexoModule module) {
-		if (moduleContextForModule(module) != null) {
-			moduleContextForModule(module).registerUndoFinalizerFor(aClass, undoFinalizer);
-		} else {
-			logger.warning("Null module !");
-		}
-	}
-
-	public void registerUndoInitializerFor(FlexoActionType actionType, FlexoActionUndoInitializer undoInitializer, FlexoModule module) {
-		if (moduleContextForModule(module) != null) {
-			moduleContextForModule(module).registerUndoInitializerFor(actionType, undoInitializer);
-		} else {
-			logger.warning("Null module !");
-		}
-	}
-
-	public void registerUndoInitializerFor(Class<? extends FlexoActionType<?, ?, ?>> aClass, FlexoActionUndoInitializer undoInitializer,
-			FlexoModule module) {
-		if (moduleContextForModule(module) != null) {
-			moduleContextForModule(module).registerUndoInitializerFor(aClass, undoInitializer);
-		} else {
-			logger.warning("Null module !");
-		}
-	}
-
-	public void registerRedoFinalizerFor(FlexoActionType actionType, FlexoActionRedoFinalizer redoFinalizer, FlexoModule module) {
-		if (moduleContextForModule(module) != null) {
-			moduleContextForModule(module).registerRedoFinalizerFor(actionType, redoFinalizer);
-		} else {
-			logger.warning("Null module !");
-		}
-	}
-
-	public void registerRedoFinalizerFor(Class<? extends FlexoActionType<?, ?, ?>> aClass, FlexoActionRedoFinalizer redoFinalizer,
-			FlexoModule module) {
-		if (moduleContextForModule(module) != null) {
-			moduleContextForModule(module).registerRedoFinalizerFor(aClass, redoFinalizer);
-		} else {
-			logger.warning("Null module !");
-		}
-	}
-
-	public void registerRedoInitializerFor(FlexoActionType actionType, FlexoActionRedoInitializer redoInitializer, FlexoModule module) {
-		if (moduleContextForModule(module) != null) {
-			moduleContextForModule(module).registerRedoInitializerFor(actionType, redoInitializer);
-		} else {
-			logger.warning("Null module !");
-		}
-	}
-
-	public void registerRedoInitializerFor(Class<? extends FlexoActionType<?, ?, ?>> aClass, FlexoActionRedoInitializer redoInitializer,
-			FlexoModule module) {
-		if (moduleContextForModule(module) != null) {
-			moduleContextForModule(module).registerRedoInitializerFor(aClass, redoInitializer);
-		} else {
-			logger.warning("Null module !");
-		}
-	}
-
-	public void registerEnableConditionFor(FlexoActionType actionType, FlexoActionEnableCondition enableCondition, FlexoModule module) {
-		if (moduleContextForModule(module) != null) {
-			moduleContextForModule(module).registerEnableConditionFor(actionType, enableCondition);
-		} else {
-			logger.warning("Null module !");
-		}
-	}
-
-	public void registerEnableConditionFor(Class<? extends FlexoActionType<?, ?, ?>> aClass, FlexoActionEnableCondition enableCondition,
-			FlexoModule module) {
-		if (moduleContextForModule(module) != null) {
-			moduleContextForModule(module).registerEnableConditionFor(aClass, enableCondition);
-		} else {
-			logger.warning("Null module !");
-		}
-	}
-
-	public void registerVisibleConditionFor(FlexoActionType actionType, FlexoActionVisibleCondition visibleCondition, FlexoModule module) {
-		if (moduleContextForModule(module) != null) {
-			moduleContextForModule(module).registerVisibleConditionFor(actionType, visibleCondition);
-		} else {
-			logger.warning("Null module !");
-		}
-	}
-
-	public void registerVisibleConditionFor(Class<? extends FlexoActionType<?, ?, ?>> aClass, FlexoActionVisibleCondition visibleCondition,
-			FlexoModule module) {
-		if (moduleContextForModule(module) != null) {
-			moduleContextForModule(module).registerVisibleConditionFor(aClass, visibleCondition);
-		} else {
-			logger.warning("Null module !");
-		}
-	}
-
-	public void registerExceptionHandlerFor(FlexoActionType actionType, FlexoExceptionHandler exceptionHandler, FlexoModule module) {
-		if (moduleContextForModule(module) != null) {
-			moduleContextForModule(module).registerExceptionHandlerFor(actionType, exceptionHandler);
-		} else {
-			logger.warning("Null module !");
-		}
-	}
-
-	public void registerExceptionHandlerFor(Class<? extends FlexoActionType<?, ?, ?>> aClass, FlexoExceptionHandler exceptionHandler,
-			FlexoModule module) {
-		if (moduleContextForModule(module) != null) {
-			moduleContextForModule(module).registerExceptionHandlerFor(aClass, exceptionHandler);
-		} else {
-			logger.warning("Null module !");
-		}
-	}
-
 	@Override
 	public boolean performResourceScanning() {
 		return true;
@@ -731,25 +506,15 @@ public abstract class InteractiveFlexoEditor implements FlexoEditor {
 
 		try {
 			if (object instanceof WKFObject) {
-				if (ModuleLoader.instance().getActiveModule() != Module.WKF_MODULE) {
-					ModuleLoader.instance().switchToModule(Module.WKF_MODULE, getProject());
-				}
+				getModuleLoader().switchToModule(Module.WKF_MODULE);
 			} else if (object instanceof IEObject) {
-				if (ModuleLoader.instance().getActiveModule() != Module.IE_MODULE) {
-					ModuleLoader.instance().switchToModule(Module.IE_MODULE, getProject());
-				}
+				getModuleLoader().switchToModule(Module.IE_MODULE);
 			} else if (object instanceof DMObject) {
-				if (ModuleLoader.instance().getActiveModule() != Module.DM_MODULE) {
-					ModuleLoader.instance().switchToModule(Module.DM_MODULE, getProject());
-				}
+				getModuleLoader().switchToModule(Module.DM_MODULE);
 			} else if (object instanceof WSObject) {
-				if (ModuleLoader.instance().getActiveModule() != Module.WSE_MODULE) {
-					ModuleLoader.instance().switchToModule(Module.WSE_MODULE, getProject());
-				}
+				getModuleLoader().switchToModule(Module.WSE_MODULE);
 			} else if (object instanceof ViewObject) {
-				if (ModuleLoader.instance().getActiveModule() != Module.VE_MODULE) {
-					ModuleLoader.instance().switchToModule(Module.VE_MODULE, getProject());
-				}
+				getModuleLoader().switchToModule(Module.VE_MODULE);
 			}
 		} catch (ModuleLoadingException e) {
 			logger.warning("Cannot load module " + e.getModule());
@@ -757,20 +522,100 @@ public abstract class InteractiveFlexoEditor implements FlexoEditor {
 		}
 
 		// Only interactive editor handle this
-		getActiveModule().getFlexoController().setCurrentEditedObjectAsModuleView(object);
-		if (getActiveModule().getFlexoController() instanceof SelectionManagingController) {
-			((SelectionManagingController) getActiveModule().getFlexoController()).getSelectionManager().setSelectedObject(object);
+		getModuleLoader().getActiveModule().getFlexoController().setCurrentEditedObjectAsModuleView(object);
+		getModuleLoader().getActiveModule().getFlexoController().getSelectionManager().setSelectedObject(object);
+	}
+
+	public void registerControllerActionInitializer(ControllerActionInitializer controllerActionInitializer) {
+		actionInitializers.put(controllerActionInitializer.getModule(), controllerActionInitializer);
+	}
+
+	public void unregisterControllerActionInitializer(ControllerActionInitializer controllerActionInitializer) {
+		actionInitializers.remove(controllerActionInitializer.getModule());
+	}
+
+	private ControllerActionInitializer getCurrentControllerActionInitializer() {
+		return actionInitializers.get(getModuleLoader().getActiveModule());
+	}
+
+	private <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> ActionInitializer<A, T1, T2> getActionInitializer(
+			FlexoActionType<A, T1, T2> actionType) {
+		ControllerActionInitializer currentControllerActionInitializer = getCurrentControllerActionInitializer();
+		if (currentControllerActionInitializer != null) {
+			return currentControllerActionInitializer.getActionInitializer(actionType);
 		}
+		return null;
 	}
 
 	@Override
-	public Icon getEnabledIconFor(FlexoActionType actionType) {
-		return _enabledIcons.get(actionType);
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> boolean isActionEnabled(
+			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection) {
+		if (actionType instanceof ActionSchemeActionType) {
+			return true;
+		}
+		if (actionType.isEnabled(focusedObject, globalSelection)) {
+			ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(actionType);
+			if (actionInitializer != null) {
+				FlexoActionEnableCondition<A, T1, T2> condition = actionInitializer.getEnableCondition();
+				if (condition != null) {
+					return condition.isEnabled(actionType, focusedObject, globalSelection, this);
+				}
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
-	public Icon getDisabledIconFor(FlexoActionType actionType) {
-		return _disabledIcons.get(actionType);
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> boolean isActionVisible(
+			FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection) {
+		if (actionType.isVisibleForSelection(focusedObject, globalSelection)) {
+			ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(actionType);
+			if (actionInitializer != null) {
+				FlexoActionVisibleCondition<A, T1, T2> condition = actionInitializer.getVisibleCondition();
+				if (condition != null) {
+					return condition.isVisible(actionType, focusedObject, globalSelection, this);
+				}
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> Icon getEnabledIconFor(
+			FlexoActionType<A, T1, T2> actionType) {
+		ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(actionType);
+		if (actionInitializer != null) {
+			return actionInitializer.getEnabledIcon();
+		}
+		return null;
+	}
+
+	@Override
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> Icon getDisabledIconFor(
+			FlexoActionType<A, T1, T2> actionType) {
+		ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(actionType);
+		if (actionInitializer != null) {
+			return actionInitializer.getDisabledIcon();
+		}
+		return null;
+	}
+
+	@Override
+	public <A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> KeyStroke getKeyStrokeFor(
+			FlexoActionType<A, T1, T2> actionType) {
+		ActionInitializer<A, T1, T2> actionInitializer = getActionInitializer(actionType);
+		if (actionInitializer != null) {
+			return actionInitializer.getShortcut();
+		}
+		return null;
 	}
 
 }

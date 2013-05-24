@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
 
 import org.openflexo.fib.editor.controller.EditorAction.ActionAvailability;
 import org.openflexo.fib.editor.controller.EditorAction.ActionPerformer;
@@ -22,18 +21,18 @@ import org.openflexo.fib.model.FIBModelObject;
 import org.openflexo.fib.model.FIBPanel;
 import org.openflexo.fib.model.FIBPanel.Border;
 import org.openflexo.fib.model.FIBPanel.Layout;
+import org.openflexo.fib.model.FIBSplitPanel;
+import org.openflexo.fib.model.SplitLayoutConstraints;
 import org.openflexo.logging.FlexoLogger;
 
-public class ContextualMenu
-{
+public class ContextualMenu {
 	private static final Logger logger = FlexoLogger.getLogger(ContextualMenu.class.getPackage().getName());
 
 	private FIBEditorController editorController;
-	private Hashtable<EditorAction,PopupMenuItem> actions;
+	private Hashtable<EditorAction, PopupMenuItem> actions;
 	private JPopupMenu menu;
 
-	public ContextualMenu(FIBEditorController anEditorController)
-	{
+	public ContextualMenu(FIBEditorController anEditorController) {
 		this.editorController = anEditorController;
 		actions = new Hashtable<EditorAction, PopupMenuItem>();
 		menu = new JPopupMenu();
@@ -53,12 +52,12 @@ public class ContextualMenu
 		addToActions(new EditorAction("Delete", FIBEditorIconLibrary.DELETE_ICON, new ActionPerformer() {
 			@Override
 			public FIBModelObject performAction(FIBModelObject object) {
-				FIBComponent parent = ((FIBComponent)object).getParent();
-				boolean deleteIt = JOptionPane.showConfirmDialog(editorController.getEditor().getFrame(),
-						object+": really delete this component (undoable operation) ?", "information",
-						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE) == JOptionPane.YES_OPTION;
+				FIBComponent parent = ((FIBComponent) object).getParent();
+				boolean deleteIt = JOptionPane.showConfirmDialog(editorController.getEditor().getFrame(), object
+						+ ": really delete this component (undoable operation) ?", "information", JOptionPane.YES_NO_CANCEL_OPTION,
+						JOptionPane.INFORMATION_MESSAGE) == JOptionPane.YES_OPTION;
 				if (deleteIt) {
-					logger.info("Removing object "+object);
+					logger.info("Removing object " + object);
 					object.delete();
 				}
 				return parent;
@@ -73,34 +72,52 @@ public class ContextualMenu
 		addToActions(new EditorAction("Wrap with panel", null, new ActionPerformer() {
 			@Override
 			public FIBModelObject performAction(FIBModelObject object) {
-				FIBComponent component = (FIBComponent)object;
+				FIBComponent component = (FIBComponent) object;
 				FIBContainer parent = component.getParent();
 				parent.removeFromSubComponents(component);
 				FIBPanel newPanel = new FIBPanel();
 				newPanel.setLayout(Layout.border);
 				newPanel.setBorder(Border.titled);
+				newPanel.finalizeDeserialization();
 				parent.addToSubComponents(newPanel, component.getConstraints());
-				newPanel.addToSubComponents(component,new BorderLayoutConstraints(BorderLayoutLocation.center));
+				newPanel.addToSubComponents(component, new BorderLayoutConstraints(BorderLayoutLocation.center));
 				return parent;
 			}
 		}, new ActionAvailability() {
 			@Override
 			public boolean isAvailableFor(FIBModelObject object) {
-				return object instanceof FIBComponent
-						&& ((FIBComponent)object).getParent() != null;
+				return object instanceof FIBComponent && ((FIBComponent) object).getParent() != null;
+			}
+		}));
+
+		addToActions(new EditorAction("Wrap with split panel", null, new ActionPerformer() {
+			@Override
+			public FIBModelObject performAction(FIBModelObject object) {
+				FIBComponent component = (FIBComponent) object;
+				FIBContainer parent = component.getParent();
+				parent.removeFromSubComponents(component);
+				FIBSplitPanel newPanel = new FIBSplitPanel();
+				newPanel.makeDefaultHorizontalLayout();
+				parent.addToSubComponents(newPanel, component.getConstraints());
+				newPanel.addToSubComponents(component,
+						SplitLayoutConstraints.makeSplitLayoutConstraints(newPanel.getFirstEmptyPlaceHolder()));
+				return parent;
+			}
+		}, new ActionAvailability() {
+			@Override
+			public boolean isAvailableFor(FIBModelObject object) {
+				return object instanceof FIBComponent && ((FIBComponent) object).getParent() != null;
 			}
 		}));
 	}
 
-	public void addToActions(EditorAction action)
-	{
+	public void addToActions(EditorAction action) {
 		PopupMenuItem newMenuItem = new PopupMenuItem(action);
 		menu.add(newMenuItem);
-		actions.put(action,newMenuItem);
+		actions.put(action, newMenuItem);
 	}
 
-	public void displayPopupMenu(FIBModelObject object,Component invoker, MouseEvent e)
-	{
+	public void displayPopupMenu(FIBModelObject object, Component invoker, MouseEvent e) {
 		for (EditorAction action : actions.keySet()) {
 			PopupMenuItem menuItem = actions.get(action);
 			menuItem.setObject(object);
@@ -108,39 +125,33 @@ public class ContextualMenu
 		menu.show(invoker, e.getPoint().x, e.getPoint().y);
 	}
 
-	class PopupMenuItem extends JMenuItem
-	{
+	class PopupMenuItem extends JMenuItem {
 		private FIBModelObject object;
 		private EditorAction action;
 
-		public PopupMenuItem(EditorAction anAction)
-		{
-			super(anAction.getActionName(),anAction.getActionIcon());
+		public PopupMenuItem(EditorAction anAction) {
+			super(anAction.getActionName(), anAction.getActionIcon());
 			this.action = anAction;
 			addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					FIBModelObject selectThis = action.getPerformer().performAction(object);
 					if (selectThis instanceof FIBComponent) {
-						editorController.setSelectedObject((FIBComponent)selectThis);
+						editorController.setSelectedObject((FIBComponent) selectThis);
 					}
 				}
 			});
 		}
 
-		public FIBModelObject getObject()
-		{
+		public FIBModelObject getObject() {
 			return object;
 		}
 
-		public void setObject(FIBModelObject object)
-		{
+		public void setObject(FIBModelObject object) {
 			this.object = object;
 			setVisible(action.getAvailability().isAvailableFor(object));
 		}
 
 	}
-
-
 
 }

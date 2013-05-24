@@ -19,18 +19,14 @@
  */
 package org.openflexo.wkf.swleditor.gr;
 
-import static org.openflexo.wkf.swleditor.gr.ContainerGR.logger;
+import static org.openflexo.wkf.swleditor.gr.ContainerGR.*;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
-import java.awt.geom.AffineTransform;
 import java.util.List;
-import java.util.Vector;
 
 import javax.swing.SwingUtilities;
 
@@ -41,16 +37,13 @@ import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.cp.ControlArea;
+import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.geom.FGESegment;
-import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEHalfLine;
-import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.DecorationPainter;
-import org.openflexo.fge.graphics.FGEGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle.CapStyle;
 import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
@@ -67,7 +60,6 @@ import org.openflexo.foundation.wkf.dm.PortRemoved;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.foundation.wkf.ws.PortRegistery;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
@@ -79,8 +71,7 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 	protected ForegroundStyle decorationForeground;
 	protected BackgroundStyle decorationBackground;
 	protected ForegroundStyle closingBoxForeground;
-
-	protected SWLContainerControls controlsArea;
+	private SWLContainerResizeAreas controlAreas;
 
 	public PortRegisteryGR(PortRegistery portRegistery, SwimmingLaneRepresentation aDrawing) {
 		super(portRegistery, ShapeType.RECTANGLE, aDrawing);
@@ -135,10 +126,10 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 		setBackground(BackgroundStyle.makeEmptyBackground());
 
 		portRegistery.addObserver(this);
-
+		setMinimalHeight(120);
 		addToMouseDragControls(new PortRegisteryCloser(), true);
 
-		setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
+		setDimensionConstraints(DimensionConstraints.WIDTH_FIXED);
 
 		setLocationConstraints(LocationConstraints.AREA_CONSTRAINED);
 		setLocationConstrainedArea(FGEHalfLine.makeHalfLine(new FGEPoint(SWIMMING_LANE_BORDER, SWIMMING_LANE_BORDER),
@@ -146,7 +137,12 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 
 		anchorLocation();
 
-		updateControlArea();
+		controlAreas = new SWLContainerResizeAreas(this);
+	}
+
+	@Override
+	public List<? extends ControlArea<?>> getControlAreas() {
+		return controlAreas.getControlAreas();
 	}
 
 	public PortRegistery getPortRegistery() {
@@ -229,28 +225,8 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 			} else if (dataModification instanceof ObjectVisibilityChanged) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 			} else if (dataModification instanceof WKFAttributeDataModification) {
-				if (((WKFAttributeDataModification) dataModification).getAttributeName().equals(getDrawing().SWIMMING_LANE_NB_KEY())) {
-					getDrawing().invalidateGraphicalObjectsHierarchy(getPortRegistery());
-					getDrawing().updateGraphicalObjectsHierarchy();
-					for (GraphicalRepresentation<?> gr : getDrawing().getDrawingGraphicalRepresentation()
-							.getContainedGraphicalRepresentations()) {
-						if (gr instanceof ShapeGraphicalRepresentation<?>) {
-							((ShapeGraphicalRepresentation<?>) gr).notifyObjectHasMoved();
-						}
-					}
-				} else if (((WKFAttributeDataModification) dataModification).getAttributeName().equals(
-						getDrawing().SWIMMING_LANE_HEIGHT_KEY())) {
-					getDrawing().invalidateGraphicalObjectsHierarchy(getPortRegistery());
-					getDrawing().updateGraphicalObjectsHierarchy();
-					for (GraphicalRepresentation<?> gr : getDrawing().getDrawingGraphicalRepresentation()
-							.getContainedGraphicalRepresentations()) {
-						if (gr instanceof ShapeGraphicalRepresentation<?>) {
-							((ShapeGraphicalRepresentation<?>) gr).notifyObjectHasMoved();
-							((ShapeGraphicalRepresentation<?>) gr).notifyShapeNeedsToBeRedrawn();
-						}
-					}
-				} else if (((WKFAttributeDataModification) dataModification).getAttributeName().equals(
-						getDrawing().SWIMMING_LANE_INDEX_KEY())) {
+				if (((WKFAttributeDataModification) dataModification).getAttributeName().equals(
+						getDrawing().SWIMMING_LANE_INDEX_KEY(getPortRegistery()))) {
 					getDrawing().reindexForNewObjectIndex(getPortRegistery());
 				} else {
 					notifyShapeNeedsToBeRedrawn();
@@ -265,8 +241,18 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 	}
 
 	@Override
+	public void setWidthNoNotification(double aValue) {
+		getDrawingGraphicalRepresentation().setWidth(aValue + 2 * SWIMMING_LANE_BORDER);
+	}
+
+	@Override
 	public double getHeight() {
-		return getSwimmingLaneHeight() * getSwimmingLaneNb();
+		return getDrawing().getHeight(getPortRegistery());
+	}
+
+	@Override
+	public void setHeightNoNotification(double height) {
+		getDrawing().setHeight(getPortRegistery(), height);
 	}
 
 	@Override
@@ -298,29 +284,10 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 		closingBoxForeground.setLineWidth(0.2);
 	}
 
-	private void anchorLocation() {
+	@Override
+	public void anchorLocation() {
 		setX(SWIMMING_LANE_BORDER);
 		setY(getDrawing().yForObject(getPortRegistery()));
-	}
-
-	@Override
-	public int getSwimmingLaneNb() {
-		return getDrawing().getSwimmingLaneNb(getPortRegistery());
-	}
-
-	@Override
-	public void setSwimmingLaneNb(int swlNb) {
-		getDrawing().setSwimmingLaneNb(swlNb, getPortRegistery());
-	}
-
-	@Override
-	public int getSwimmingLaneHeight() {
-		return getDrawing().getSwimmingLaneHeight(getPortRegistery());
-	}
-
-	@Override
-	public void setSwimmingLaneHeight(int height) {
-		getDrawing().setSwimmingLaneHeight(height, getPortRegistery());
 	}
 
 	private boolean objectIsBeeingDragged = false;
@@ -348,72 +315,14 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 	}
 
 	@Override
-	public FGEArea getLocationConstrainedAreaForChild(AbstractNodeGR node) {
-		Vector<FGESegment> lines = new Vector<FGESegment>();
-		for (int i = 0; i < getSwimmingLaneNb(); i++) {
-			double x1 = SWIMMING_LANE_BORDER - node.getBorder().left;
-			double x2 = getWidth() - SWIMMING_LANE_BORDER - node.getWidth() - node.getBorder().left;
-			double y = i * getHeight() / getSwimmingLaneNb() + getHeight() / getSwimmingLaneNb() / 2 - node.getHeight() / 2
-					- node.getBorder().top;
-			lines.add(new FGESegment(x1, y, x2, y));
-		}
-		return FGEUnionArea.makeUnion(lines);
+	public void notifyObjectResized(FGEDimension oldSize) {
+		super.notifyObjectResized(oldSize);
+		getDrawing().relayoutRoleContainers();
 	}
 
 	@Override
 	public void notifyObjectHasResized() {
-		for (GraphicalRepresentation gr : getContainedGraphicalRepresentations()) {
-			if (gr instanceof AbstractNodeGR) {
-				((AbstractNodeGR) gr).resetLocationConstrainedArea();
-			}
-		}
 		super.notifyObjectHasResized();
-		updateControlArea();
+		getDrawing().relayoutRoleContainers();
 	}
-
-	@Override
-	public List<? extends ControlArea<?>> getControlAreas() {
-		return concatenedList;
-	}
-
-	private FGEArea lanes;
-	private ControlArea<?> lanesArea;
-	private ConcatenedList<ControlArea<?>> concatenedList;
-
-	private void updateControlArea() {
-		Vector<FGESegment> lines = new Vector<FGESegment>();
-		for (int i = 0; i < getSwimmingLaneNb(); i++) {
-			double y = i / (double) getSwimmingLaneNb() + 1 / (double) getSwimmingLaneNb() / 2;
-			lines.add(new FGESegment(0, y, 1, y));
-		}
-		lanes = FGEUnionArea.makeUnion(lines);
-		lanesArea = new ControlArea<FGEArea>(this, lanes) {
-			@Override
-			public Cursor getDraggingCursor() {
-				return Cursor.getDefaultCursor();
-			}
-
-			@Override
-			public boolean isDraggable() {
-				return false;
-			}
-
-			@Override
-			public Rectangle paint(FGEGraphics drawingGraphics) {
-				Graphics2D oldGraphics = drawingGraphics.cloneGraphics();
-				drawingGraphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY, 0.4f, DashStyle.BIG_DASHES));
-				AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(PortRegisteryGR.this,
-						drawingGraphics.getGraphicalRepresentation());
-				getArea().transform(at).paint(drawingGraphics);
-				drawingGraphics.releaseClonedGraphics(oldGraphics);
-				return null;
-			}
-		};
-		controlsArea = new SWLContainerControls(this);
-		concatenedList = new ConcatenedList<ControlArea<?>>();
-		concatenedList.addElementList(getShape().getControlPoints());
-		concatenedList.addElement(lanesArea);
-		concatenedList.addElement(controlsArea);
-	}
-
 }

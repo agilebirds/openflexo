@@ -27,6 +27,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.action.LoadAllImportedProject;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.cg.GeneratedOutput;
@@ -34,7 +35,6 @@ import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.generator.AbstractProjectGenerator;
 import org.openflexo.generator.exception.GenerationException;
-import org.openflexo.generator.exception.ModelValidationException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.PlaySound;
 
@@ -55,7 +55,7 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(GenerationRepository focusedObject, Vector<CGObject> globalSelection) {
+		public boolean isVisibleForSelection(GenerationRepository focusedObject, Vector<CGObject> globalSelection) {
 			Vector<CGObject> topLevelObjects = getSelectedTopLevelObjects(focusedObject, globalSelection);
 			for (CGObject obj : topLevelObjects) {
 				if (obj instanceof GeneratedOutput) {
@@ -66,7 +66,7 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(GenerationRepository focusedObject, Vector<CGObject> globalSelection) {
+		public boolean isEnabledForSelection(GenerationRepository focusedObject, Vector<CGObject> globalSelection) {
 			GenerationRepository repository = getRepository(focusedObject, globalSelection);
 			if (repository == null) {
 				return false;
@@ -84,9 +84,9 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
-	private ValidateProject validateProjectAction;
-
 	private boolean hasFailed = false;
+
+	private ValidateProject validateProjectAction;
 
 	@Override
 	public boolean isLongRunningAction() {
@@ -97,6 +97,16 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 	protected void doAction(Object context) throws GenerationException, SaveResourceException, FlexoException {
 		logger.info("Synchronize repository code generation " + getFocusedObject());
 		PlaySound.tryToPlayRandomSound();
+
+		if (!getProjectGenerator().getProject().areAllImportedProjectsLoaded()) {
+			LoadAllImportedProject loadAllImportedProject = LoadAllImportedProject.actionType.makeNewEmbeddedAction(getFocusedObject(),
+					null, this);
+			loadAllImportedProject.doAction();
+			if (!loadAllImportedProject.hasActionExecutionSucceeded()) {
+				throw new FlexoException(FlexoLocalization.localizedForKey("missing_imported_projects"));
+			}
+		}
+
 		AbstractProjectGenerator<? extends GenerationRepository> pg = getProjectGenerator();
 		pg.setAction(this);
 
@@ -110,16 +120,13 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 			// Validate project
 			validateProjectAction = ValidateProject.actionType.makeNewEmbeddedAction(getRepository(), null, this);
 			validateProjectAction.setContext(this);
-			try {
-				validateProjectAction.doAction(null);
-			} catch (ModelValidationException e) {
+			validateProjectAction.doAction();
+			if (!validateProjectAction.isProjectValid()) {
 				_continueAfterValidation = false;
 				hasFailed = true;
 				if (logger.isLoggable(Level.INFO)) {
-					logger.info("Synchronization has failed because of validation:\n" + e.getDetails());
+					logger.info("Synchronization has failed because of validation:\n" + validateProjectAction.readableValidationErrors());
 				}
-			} catch (FlexoException e) {
-				throw e;
 			}
 
 			// Don't continue if validation failed and continue requested anymay
@@ -139,7 +146,9 @@ public class SynchronizeRepositoryCodeGeneration extends GCAction<SynchronizeRep
 			GenerateSourceCode generateSourceCode = GenerateSourceCode.actionType.makeNewEmbeddedAction(getFocusedObject(),
 					getGlobalSelection(), this);
 			generateSourceCode.doAction();
-			hasFailed &= generateSourceCode.didGenerationSucceeded();
+			if (hasFailed) {
+				hasFailed = generateSourceCode.didGenerationSucceeded();
+			}
 		} finally {
 			hideFlexoProgress();
 		}

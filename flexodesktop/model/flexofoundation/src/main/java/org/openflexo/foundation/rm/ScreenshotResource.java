@@ -308,8 +308,7 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 
 	@Override
 	public boolean checkIntegrity() {
-		return getSourceReference() != null
-				&& (getModelObject() != null || sourceReference.getResource() != null && sourceReference.getResource().getIsLoading());
+		return getSourceReference() != null;
 	}
 
 	public FlexoModelObject getModelObject() {
@@ -422,15 +421,6 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 		@Override
 		public FlexoProject getProject() {
 			return getFlexoResource().getProject();
-		}
-
-		/**
-		 * Overrides setProject
-		 * 
-		 * @see org.openflexo.foundation.rm.FlexoResourceData#setProject(org.openflexo.foundation.rm.FlexoProject)
-		 */
-		@Override
-		public void setProject(FlexoProject aProject) {
 		}
 
 		@Override
@@ -556,7 +546,7 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 		willBeDeleted = true;
 		stopObserving();
 		if (sourceReference != null) {
-			sourceReference.delete();
+			sourceReference.delete(false);
 		}
 		super.delete(deleteFile);
 	}
@@ -666,7 +656,7 @@ public class ScreenshotResource extends FlexoGeneratedResource<ScreenshotResourc
 	}
 
 	private void setSource(FlexoModelObject o) {
-		setSourceReference(new FlexoModelObjectReference<FlexoModelObject>(o.getProject(), o));
+		setSourceReference(new FlexoModelObjectReference<FlexoModelObject>(o, this));
 	}
 
 	@Override

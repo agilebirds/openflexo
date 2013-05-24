@@ -13,7 +13,6 @@ import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
 import org.openflexo.AdvancedPrefs;
-import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.ws.jira.JIRAGson;
@@ -37,7 +36,7 @@ public class BugReportManager {
 	private JIRAProject project;
 
 	BugReportManager() {
-		userProjectFile = new File(FlexoPreferences.getApplicationDataDirectory(), PROJECT_FILE.getName());
+		userProjectFile = new File(FileUtils.getApplicationDataDirectory(), PROJECT_FILE.getName());
 		if (!userProjectFile.exists()) {
 			copyOriginalToUserFile();
 		}

@@ -27,10 +27,9 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.ApplicationContext;
 import org.openflexo.foundation.InspectorGroup;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.ie.ComponentInstance;
 import org.openflexo.foundation.ie.IEReusableComponent;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.wkf.node.OperationNode;
@@ -38,9 +37,10 @@ import org.openflexo.ie.view.IEReusableWidgetComponentView;
 import org.openflexo.ie.view.IEWOComponentView;
 import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.module.FlexoModule;
+import org.openflexo.module.Module;
 import org.openflexo.module.external.ExternalIEController;
 import org.openflexo.module.external.ExternalIEModule;
-import org.openflexo.view.controller.InteractiveFlexoEditor;
+import org.openflexo.view.controller.FlexoController;
 
 /**
  * Interface Editor module
@@ -53,26 +53,14 @@ public class IEModule extends FlexoModule implements ExternalIEModule {
 	private static final InspectorGroup[] inspectorGroups = new InspectorGroup[] { Inspectors.IE };
 	private IEWOComponentView componentView;
 
-	public IEModule(InteractiveFlexoEditor projectEditor) throws Exception {
-		super(projectEditor);
-		setFlexoController(new IEController(projectEditor, this));
-		IEPreferences.init(getIEController());
-		getProject().getFlexoWorkflow();
-		// We retains all the resources of the workflow, since GUI operations
-		// could
-		// modify processes (eg NextPageEdges creating)
-		/*
-		 * retain(project.getFlexoWorkflow()); for (Enumeration
-		 * e=project.getFlexoWorkflow().getAllFlexoProcesses().elements();
-		 * e.hasMoreElements();) { retain((FlexoProcess)e.nextElement()); }
-		 */
-		retain(getProject().getFlexoComponentLibrary());
-		retain(getProject().getFlexoNavigationMenu());
+	public IEModule(ApplicationContext applicationContext) throws Exception {
+		super(applicationContext);
+		IEPreferences.init();
+	}
 
-		getIEController().initWithEmptyPanel();
-
-		getIEController().loadRelativeWindows();
-
+	@Override
+	public Module getModule() {
+		return Module.IE_MODULE;
 	}
 
 	@Override
@@ -84,14 +72,9 @@ public class IEModule extends FlexoModule implements ExternalIEModule {
 		return (IEController) getFlexoController();
 	}
 
-	// ==========================================================================
-	// ========================== ExternalIEModule
-	// ==============================
-	// ==========================================================================
-
 	@Override
-	public void showScreenInterface(ComponentInstance component) {
-		getIEController().setSelectedComponent(component);
+	protected FlexoController createControllerForModule() {
+		return new IEController(this);
 	}
 
 	@Override
@@ -175,16 +158,6 @@ public class IEModule extends FlexoModule implements ExternalIEModule {
 		pane.doLayout();
 		pane.repaint();
 		return pane;
-	}
-
-	/**
-	 * Overrides getDefaultObjectToSelect
-	 * 
-	 * @see org.openflexo.module.FlexoModule#getDefaultObjectToSelect()
-	 */
-	@Override
-	public FlexoModelObject getDefaultObjectToSelect() {
-		return null;// getProject().getFlexoComponentLibrary();
 	}
 
 }

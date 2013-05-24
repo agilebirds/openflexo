@@ -19,7 +19,7 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -55,21 +55,25 @@ public class AcceptDiskUpdateAndReinjectInModelnitializer extends ActionInitiali
 	protected FlexoActionInitializer<AcceptDiskUpdateAndReinjectInModel> getDefaultInitializer() {
 		return new FlexoActionInitializer<AcceptDiskUpdateAndReinjectInModel>() {
 			@Override
-			public boolean run(ActionEvent e, AcceptDiskUpdateAndReinjectInModel action) {
+			public boolean run(EventObject e, AcceptDiskUpdateAndReinjectInModel action) {
 				if (action.getFilesToAccept().size() == 0) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("no_files_selected"));
 					return false;
-				} else if (action.getFilesToAccept().size() > 1 || (!(action.getFocusedObject() instanceof CGFile))) {
+				} else if (action.getFilesToAccept().size() > 1 || !(action.getFocusedObject() instanceof CGFile)) {
 					SelectFilesPopup popup = new SelectFilesPopup(
 							FlexoLocalization.localizedForKey("accept_disk_version_and_reinject_in_model"),
 							FlexoLocalization.localizedForKey("accept_disk_version_and_reinject_in_model_description"),
 							"accept_disk_version_and_reinject_in_model", action.getFilesToAccept(), action.getFocusedObject().getProject(),
 							getControllerActionInitializer().getGeneratorController());
-					popup.setVisible(true);
-					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getFileSet().getSelectedFiles().size() > 0)) {
-						action.setFilesToAccept(popup.getFileSet().getSelectedFiles());
-					} else {
-						return false;
+					try {
+						popup.setVisible(true);
+						if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
+							action.setFilesToAccept(popup.getFileSet().getSelectedFiles());
+						} else {
+							return false;
+						}
+					} finally {
+						popup.delete();
 					}
 				} else {
 					// 1 occurence, continue without confirmation
@@ -85,7 +89,7 @@ public class AcceptDiskUpdateAndReinjectInModelnitializer extends ActionInitiali
 	protected FlexoActionFinalizer<AcceptDiskUpdateAndReinjectInModel> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AcceptDiskUpdateAndReinjectInModel>() {
 			@Override
-			public boolean run(ActionEvent e, AcceptDiskUpdateAndReinjectInModel action) {
+			public boolean run(EventObject e, AcceptDiskUpdateAndReinjectInModel action) {
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 				return true;

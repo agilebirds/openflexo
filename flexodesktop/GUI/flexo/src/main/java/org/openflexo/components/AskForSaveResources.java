@@ -50,7 +50,7 @@ import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
 import org.openflexo.foundation.rm.StorageResourceData;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoDialog;
-import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.FlexoFrame;
 
 /**
  * Dialog allowing to select resources to save
@@ -88,7 +88,7 @@ public class AskForSaveResources extends FlexoDialog {
 	 */
 	public AskForSaveResources(String title, String validateLabel, String emptyValidateLabel,
 			List<FlexoStorageResource<? extends StorageResourceData>> resources) {
-		super(FlexoController.getActiveFrame(), true);
+		super(FlexoFrame.getActiveFrame(), true);
 		returned = CANCEL;
 		setTitle(title);
 		getContentPane().setLayout(new BorderLayout());

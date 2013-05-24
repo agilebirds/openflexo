@@ -31,7 +31,6 @@ import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
-import org.openflexo.toolbox.ToolBox;
 import org.openflexo.toolbox.ZipUtils;
 
 public class TestConvertion extends FlexoTestCase {
@@ -65,7 +64,6 @@ public class TestConvertion extends FlexoTestCase {
 
 	private void openAndRunValidation(String name, String zipName, String prjName, CodeType codeType) {
 		log("Convert : " + name);
-		ToolBox.setPlatform();
 		FlexoLoggingManager.forceInitialize(-1, true, null, Level.INFO, null);
 		File outputDir = null;
 		try {

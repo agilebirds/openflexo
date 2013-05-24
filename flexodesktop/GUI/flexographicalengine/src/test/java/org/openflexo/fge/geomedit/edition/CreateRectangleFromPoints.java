@@ -68,7 +68,7 @@ public class CreateRectangleFromPoints extends Edition {
 
 			graphics.setDefaultForeground(focusedForegroundStyle);
 			p1.paint(graphics);
-			(new FGERectangle(p.x, p.y, width, height)).paint(graphics);
+			new FGERectangle(p.x, p.y, width, height).paint(graphics);
 		}
 	}
 }

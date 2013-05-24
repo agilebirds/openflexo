@@ -14,12 +14,12 @@ public class TestDocGeneration extends AbstractTestExternalBuilders<FlexoDocGene
 		super(FlexoDocGeneratorMain.class);
 	}
 
-	@Test
-	public void testPDFGeneration() {
-		Format format = Format.LATEX;
-		createDocForFormat(format, false);
-	}
-
+	/*	@Test
+		public void testPDFGeneration() {
+			Format format = Format.LATEX;
+			createDocForFormat(format, false);
+		}
+	*/
 	@Test
 	public void testHTMLGeneration() {
 		Format format = Format.HTML;

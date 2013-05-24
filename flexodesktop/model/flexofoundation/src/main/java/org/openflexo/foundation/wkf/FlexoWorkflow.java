@@ -26,7 +26,11 @@ package org.openflexo.foundation.wkf;
  * Created by benoit on Mar 3, 2004
  */
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
@@ -34,12 +38,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.AttributeDataModification;
-import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.NameChanged;
 import org.openflexo.foundation.TargetType;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.dm.DMCardinality;
 import org.openflexo.foundation.dm.DMEntity;
@@ -59,17 +60,21 @@ import org.openflexo.foundation.ie.widget.IETabWidget;
 import org.openflexo.foundation.imported.dm.ProcessAlreadyImportedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoWorkflowResource;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
 import org.openflexo.foundation.rm.ImportedProcessLibraryCreated;
 import org.openflexo.foundation.rm.ImportedRoleLibraryCreated;
 import org.openflexo.foundation.rm.InvalidFileNameException;
+import org.openflexo.foundation.rm.ProjectData;
 import org.openflexo.foundation.rm.ProjectRestructuration;
+import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.utils.FlexoIndexManager;
+import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.Validable;
@@ -79,7 +84,6 @@ import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.wkf.MetricsDefinition.MetricsType;
 import org.openflexo.foundation.wkf.MetricsValue.MetricsValueOwner;
 import org.openflexo.foundation.wkf.action.AddMetricsDefinition;
-import org.openflexo.foundation.wkf.action.AddSubProcess;
 import org.openflexo.foundation.wkf.action.DeleteMetricsDefinition;
 import org.openflexo.foundation.wkf.dm.ProcessInserted;
 import org.openflexo.foundation.wkf.dm.ProcessRemoved;
@@ -93,8 +97,10 @@ import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.ws.client.PPMWebService.PPMProcess;
+import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * A FlexoWorkflow represent all the processes defined in corresponding project, and their hierarchy. A FlexoWorkflow always codes one and
@@ -104,15 +110,24 @@ import org.openflexo.ws.client.PPMWebService.PPMProcess;
  * @author benoit,sylvain
  */
 
-public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageResourceData, InspectableObject {
+public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorageResourceData, InspectableObject {
 
 	public static final String ALL_ASSIGNABLE_ROLES = "allAssignableRoles";
 
 	public enum GraphicalProperties {
-		CONNECTOR_REPRESENTATION("connectorRepresentation"), COMPONENT_FONT("componentFont"), ROLE_FONT("roleFont"), EVENT_FONT("eventFont"), ACTION_FONT(
-				"actionFont"), OPERATION_FONT("operationFont"), ACTIVITY_FONT("activityFont"), ARTEFACT_FONT("artefactFont"), EDGE_FONT(
-				"edgeFont"), SHOW_MESSAGES("showMessages"), SHOW_WO_NAME("showWOName"), SHOW_SHADOWS("showShadows"), USE_TRANSPARENCY(
-				"useTransparency");
+		CONNECTOR_REPRESENTATION("connectorRepresentation"),
+		COMPONENT_FONT("componentFont"),
+		ROLE_FONT("roleFont"),
+		EVENT_FONT("eventFont"),
+		ACTION_FONT("actionFont"),
+		OPERATION_FONT("operationFont"),
+		ACTIVITY_FONT("activityFont"),
+		ARTEFACT_FONT("artefactFont"),
+		EDGE_FONT("edgeFont"),
+		SHOW_MESSAGES("showMessages"),
+		SHOW_WO_NAME("showWOName"),
+		SHOW_SHADOWS("showShadows"),
+		USE_TRANSPARENCY("useTransparency");
 		private String serializationName;
 
 		GraphicalProperties(String s) {
@@ -127,12 +142,6 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 
 	private static final Logger logger = Logger.getLogger(FlexoWorkflow.class.getPackage().getName());
 
-	// ==========================================================================
-	// ============================= Instance variables
-	// =========================
-	// ==========================================================================
-
-	private FlexoProject _project;
 	private FlexoWorkflowResource _resource;
 
 	private FlexoProcessNode _rootProcessNode;
@@ -140,12 +149,12 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	private Vector<FlexoProcessNode> _topLevelNodeProcesses;
 	private Vector<FlexoProcessNode> importedRootNodeProcesses;
 
-	private String _workflowName;
-
 	private RoleList _roleList;
 	private RoleList importedRoleList;
 
-	private Vector<Role> allAssignableRoles;
+	private List<Role> allAssignableRoles;
+
+	private String projectURI;
 
 	public static FlexoActionizer<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject> addProcessMetricsDefinitionActionizer;
 	public static FlexoActionizer<AddMetricsDefinition, FlexoWorkflow, WorkflowModelObject> addActivityMetricsDefinitionActionizer;
@@ -155,14 +164,10 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 
 	public static FlexoActionizer<DeleteMetricsDefinition, MetricsDefinition, MetricsDefinition> deleteMetricsDefinitionActionizer;
 
-	// ==========================================================
-	// ================= Constructor ============================
-	// ==========================================================
-
 	public FlexoWorkflow(FlexoWorkflowBuilder builder) {
 		this(builder.getProject());
 		builder.workflow = this;
-		_resource = builder.resource;
+		setFlexoResource(builder.resource);
 		initializeDeserialization(builder);
 	}
 
@@ -170,12 +175,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	 * Create a new FlexoWorkflow.
 	 */
 	public FlexoWorkflow(FlexoProject project) {
-		super(project);
-		if (project == null) {
-			logger.severe("No project for Workflow");
-		} else {
-			setProject(project);
-		}
+		super(project, null);
 		_topLevelNodeProcesses = new Vector<FlexoProcessNode>();
 		importedRootNodeProcesses = new Vector<FlexoProcessNode>();
 		processMetricsDefinitions = new Vector<MetricsDefinition>();
@@ -183,7 +183,11 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		operationMetricsDefinitions = new Vector<MetricsDefinition>();
 		edgeMetricsDefinitions = new Vector<MetricsDefinition>();
 		artefactMetricsDefinitions = new Vector<MetricsDefinition>();
-		setWorkflowName(project.getProjectName());
+		try {
+			setName(project.getProjectName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -194,6 +198,11 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	@Override
 	public FlexoXMLStorageResource getFlexoXMLFileResource() {
 		return _resource;
+	}
+
+	@Override
+	public XMLMapping getXMLMapping() {
+		return getProject().getXmlMappings().getWorkflowMapping();
 	}
 
 	/**
@@ -208,7 +217,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	}
 
 	@Override
-	public FlexoWorkflow getFlexoWorkflow() {
+	public FlexoWorkflow getWorkflow() {
 		return this;
 	}
 
@@ -218,7 +227,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	 * @return a newly created workflow
 	 * @throws InvalidFileNameException
 	 */
-	public static FlexoWorkflow createNewWorkflow(FlexoProject project) throws InvalidFileNameException {
+	public static FlexoWorkflow createNewWorkflow(FlexoProject project) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("BEGIN createNewWorkflow(), project=" + project);
 		}
@@ -226,7 +235,13 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 
 		File wkfFile = ProjectRestructuration.getExpectedWorkflowFile(project, project.getProjectName());
 		FlexoProjectFile workflowFile = new FlexoProjectFile(wkfFile, project);
-		FlexoWorkflowResource wkfRes = new FlexoWorkflowResource(project, newWorkflow, workflowFile);
+		FlexoWorkflowResource wkfRes = null;
+		try {
+			wkfRes = new FlexoWorkflowResource(project, newWorkflow, workflowFile);
+		} catch (InvalidFileNameException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 		try {
 			project.registerResource(wkfRes);
 		} catch (DuplicateResourceException e) {
@@ -241,7 +256,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		newWorkflow.createDefaultEdgeMetricsDefinitions();
 		newWorkflow.createDefaultArtefactMetricsDefinitions();
 
-		FlexoProcess.createNewRootProcess(newWorkflow);
+		// FlexoProcess.createNewRootProcess(newWorkflow);
 
 		try {
 			wkfRes.saveResourceData();
@@ -260,14 +275,6 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	}
 
 	@Override
-	public FlexoProject getProject() {
-		if (_resource != null) {
-			return _resource.getProject();
-		}
-		return _project;
-	}
-
-	@Override
 	public String getFullyQualifiedName() {
 		return getProject().getProjectName() + ".WORKFLOW";
 	}
@@ -275,16 +282,20 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	@Override
 	public void setFlexoResource(FlexoResource resource) {
 		_resource = (FlexoWorkflowResource) resource;
-		_project = null;
+		registerOnProject();
 	}
 
 	@Override
-	public void setProject(FlexoProject aProject) {
-		_project = aProject;
+	public String getName() {
+		if (isCache()) {
+			return super.getName();
+		} else {
+			return getProject().getDisplayName();
+		}
 	}
 
 	/**
-	 * Save this object using ResourceManager scheme Additionnaly save all known processes related to this workflow
+	 * Save this object using ResourceManager scheme Additionally save all known processes related to this workflow
 	 * 
 	 * Overrides
 	 * 
@@ -297,16 +308,11 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	}
 
 	public String getWorkflowName() {
-		return _workflowName;
+		return getName();
 	}
 
-	public void setWorkflowName(String newName) {
-		if (newName != _workflowName) {
-			String _oldName = _workflowName;
-			_workflowName = newName;
-			setChanged();
-			notifyObservers(new NameChanged(_oldName, newName));
-		}
+	public void setWorkflowName(String newName) throws Exception {
+		super.setName(newName);
 	}
 
 	public File getFile() {
@@ -333,6 +339,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 				processNode.setIndexValue(_getTopLevelNodeProcesses().size());
 				FlexoIndexManager.reIndexObjectOfArray(_getTopLevelNodeProcesses().toArray(new FlexoProcessNode[0]));
 			}
+			clearOrphanProcesses();
 			setChanged();
 			notifyObservers(new ProcessInserted(processNode.getProcess(), null));
 		}
@@ -341,9 +348,38 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	public void removeFromTopLevelNodeProcesses(FlexoProcessNode processNode) {
 		if (_topLevelNodeProcesses.contains(processNode)) {
 			_topLevelNodeProcesses.remove(processNode);
+			clearOrphanProcesses();
 			setChanged();
 			notifyObservers(new ProcessRemoved(processNode.getProcess(), null));
 		}
+	}
+
+	private Vector<FlexoProcessNode> orphanProcesses;
+
+	public Vector<FlexoProcessNode> getOrphanProcesses() {
+		if (orphanProcesses == null) {
+			orphanProcesses = new Vector<FlexoProcessNode>();
+			for (Enumeration<FlexoProcessNode> en = getSortedTopLevelProcesses(); en.hasMoreElements();) {
+				FlexoProcessNode node = en.nextElement();
+				if (node.getParentFolder() == null) {
+					node.setIndex(orphanProcesses.size() + 1);
+					orphanProcesses.add(node);
+				}
+			}
+		}
+		return orphanProcesses;
+	}
+
+	public Enumeration<FlexoProcessNode> getSortedOrphanSubprocesses() {
+		disableObserving();
+		FlexoProcessNode[] o = FlexoIndexManager.sortArray(getOrphanProcesses().toArray(new FlexoProcessNode[0]));
+		enableObserving();
+		return ToolBox.getEnumeration(o);
+	}
+
+	public void clearOrphanProcesses() {
+		orphanProcesses = null;
+		getPropertyChangeSupport().firePropertyChange("sortedOrphanSubprocesses", this.orphanProcesses, null);
 	}
 
 	public Vector<FlexoProcessNode> getImportedRootNodeProcesses() {
@@ -450,13 +486,6 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		return fip;
 	}
 
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddSubProcess.actionType);
-		return returned;
-	}
-
 	// Used by templates in doc
 	public Enumeration<FlexoProcessNode> getSortedTopLevelProcesses() {
 		disableObserving();
@@ -519,7 +548,7 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	 * 
 	 * @return an Vector of FlexoProcessNode elements
 	 */
-	private Vector<FlexoProcessNode> getAllLocalProcessNodes() {
+	public Vector<FlexoProcessNode> getAllLocalProcessNodes() {
 		Vector<FlexoProcessNode> temp = new Vector<FlexoProcessNode>();
 		for (Enumeration<FlexoProcessNode> en = _topLevelNodeProcesses.elements(); en.hasMoreElements();) {
 			FlexoProcessNode aTopLevelProcessNode = en.nextElement();
@@ -767,6 +796,21 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		return null;
 	}
 
+	public FlexoProcessNode getLocalFlexoProcessNodeWithFlexoID(long flexoID) {
+		for (Enumeration<FlexoProcessNode> e = allLocalProcessNodes(); e.hasMoreElements();) {
+			FlexoProcessNode process = e.nextElement();
+			if (process != null) {
+				if (process.getFlexoID() == flexoID) {
+					return process;
+				}
+			}
+		}
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("Could not find process node with ID " + flexoID);
+		}
+		return null;
+	}
+
 	public FlexoProcess getLocalFlexoProcessWithFlexoID(long flexoID) {
 		for (Enumeration<FlexoProcessNode> e = allLocalProcessNodes(); e.hasMoreElements();) {
 			FlexoProcess process = e.nextElement().getProcess();
@@ -845,7 +889,6 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 				setRootProcess(_getTopLevelNodeProcesses().firstElement().getProcess());
 				return getRootProcess();
 			} else {
-				logger.severe("No process found !");
 				return null;
 			}
 		}
@@ -856,12 +899,6 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	}
 
 	public void setRootProcess(FlexoProcess aProcess) {
-		if (aProcess == null) {
-			logger.warning("Null not authorized as root process !");
-			setChanged();
-			notifyObserversAsReentrantModification(new DataModification("rootProcess", getRootProcess(), getRootProcess()));
-			return;
-		}
 		_setRootProcessNode(aProcess.getProcessNode());
 
 	}
@@ -1228,27 +1265,72 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 
 	public void clearAssignableRolesCache() {
 		allAssignableRoles = null;
+		if (manager != null) {
+			manager.delete();
+		}
+		manager = null;
 		notifyAttributeModification(ALL_ASSIGNABLE_ROLES, null, null);
 	}
 
-	public Vector<Role> getAllAssignableRoles() {
-		if (allAssignableRoles == null) {
-			allAssignableRoles = new Vector<Role>();
+	private PropertyChangeListenerRegistrationManager manager;
 
-			for (Role r : getRoleList().getRoles()) {
-				if (r.getIsAssignable()) {
-					allAssignableRoles.add(r);
+	public List<Role> getAllAssignableRoles() {
+		if (allAssignableRoles == null) {
+			manager = new PropertyChangeListenerRegistrationManager();
+			allAssignableRoles = new ArrayList<Role>();
+			RoleList roleList = getRoleList();
+			appendRoles(roleList, allAssignableRoles);
+			if (!isCache()) {
+				if (getProject().getProjectData() != null) {
+					manager.addListener(ProjectData.IMPORTED_PROJECTS, new PropertyChangeListener() {
+
+						@Override
+						public void propertyChange(PropertyChangeEvent evt) {
+							clearAssignableRolesCache();
+						}
+					}, getProject().getProjectData());
+					for (FlexoProjectReference ref : getProject().getProjectData().getImportedProjects()) {
+						manager.addListener(FlexoProjectReference.WORKFLOW, new PropertyChangeListener() {
+
+							@Override
+							public void propertyChange(PropertyChangeEvent evt) {
+								clearAssignableRolesCache();
+							}
+						}, ref);
+						if (ref.getWorkflow() != null) {
+							allAssignableRoles.addAll(ref.getWorkflow().getAllAssignableRoles());
+							manager.addListener(ALL_ASSIGNABLE_ROLES, new PropertyChangeListener() {
+
+								@Override
+								public void propertyChange(PropertyChangeEvent evt) {
+									clearAssignableRolesCache();
+								}
+							}, ref.getWorkflow());
+						}
+					}
+				} else {
+					manager.addListener(FlexoProject.PROJECT_DATA, new PropertyChangeListener() {
+
+						@Override
+						public void propertyChange(PropertyChangeEvent evt) {
+							clearAssignableRolesCache();
+						}
+					}, getProject());
 				}
 			}
-			if (getImportedRoleList() != null) {
-				for (Role r : getImportedRoleList().getRoles()) {
-					if (r.getIsAssignable()) {
-						allAssignableRoles.add(r);
-					}
+			allAssignableRoles = Collections.unmodifiableList(allAssignableRoles);
+		}
+		return allAssignableRoles;
+	}
+
+	private void appendRoles(RoleList roleList, List<Role> reply) {
+		if (roleList != null) {
+			for (Role r : roleList.getRoles()) {
+				if (r.getIsAssignable()) {
+					reply.add(r);
 				}
 			}
 		}
-		return allAssignableRoles;
 	}
 
 	public Vector<Role> getAllSortedRoles() {
@@ -1313,11 +1395,6 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		returned.addAll(getOperationMetricsDefinitions());
 		return returned;
 	}
-
-	// ==========================================================================
-	// ============================= Validation
-	// =================================
-	// ==========================================================================
 
 	public static class WorkflowMustHaveARootProcess extends ValidationRule<WorkflowMustHaveARootProcess, FlexoWorkflow> {
 		public WorkflowMustHaveARootProcess() {
@@ -1507,10 +1584,10 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 	}
 
 	/**
-	 * Recovery method use to detect and repair inconstencies in the model regarding Process and ProcessDMEntities.
+	 * Recovery method use to detect and repair inconsistencies in the model regarding Process and ProcessDMEntities.
 	 */
 
-	public void checkProcessDMEntitiesConsitency() {
+	public void checkProcessDMEntitiesConsistency() {
 		int processCount = getAllLocalFlexoProcesses().size();
 		int processDMEntityCount = getProject().getDataModel().getProcessInstanceRepository().getEntities().size();
 		if (processCount != processDMEntityCount) {
@@ -1964,6 +2041,75 @@ public class FlexoWorkflow extends WorkflowModelObject implements XMLStorageReso
 		} else if (!alwaysDefined && found != null && found.getValue() == null) {
 			found.delete();
 		}
+	}
+
+	public String getProjectURI() {
+		if (isCache()) {
+			return getFlexoResource().getProjectURI();
+		} else {
+			return getProject().getURI();
+		}
+	}
+
+	public Role getCachedRole(FlexoModelObjectReference<Role> reference) {
+		if (reference.getObject() != null) {
+			return reference.getObject();
+		} else {
+			ProjectData data = getProject().getProjectData();
+			if (data != null) {
+				String projectURI = reference.getEnclosingProjectIdentifier();
+				if (projectURI != null) {
+					FlexoProjectReference projectRef = data.getProjectReferenceWithURI(projectURI, true);
+					if (projectRef != null) {
+						return projectRef.getWorkflow().getRoleList().getRoleWithFlexoID(reference.getFlexoID());
+					}
+				} else {
+					if (reference.getResourceIdentifier() != null) {
+						String projectName = reference.getResourceIdentifier().substring(ResourceType.WORKFLOW.getName().length() + 1);
+						List<FlexoProjectReference> refs = data.getProjectReferenceWithName(projectName, true);
+						for (FlexoProjectReference ref : refs) {
+							FlexoWorkflow workflow = ref.getWorkflow();
+							if (workflow == null) {
+								continue;
+							}
+							Role r = workflow.getRoleList().getRoleWithFlexoID(reference.getFlexoID());
+							if (r != null) {
+								reference._setEnclosingProjectIdentifier(ref.getURI());
+								return r;
+							}
+						}
+						for (FlexoProjectReference ref : data.getImportedProjects()) {
+							FlexoWorkflow workflow = ref.getWorkflow();
+							if (workflow == null) {
+								continue;
+							}
+
+							Role r = workflow.getRoleList().getRoleWithFlexoID(reference.getFlexoID());
+							if (r != null) {
+								reference._setEnclosingProjectIdentifier(ref.getURI());
+								return r;
+							}
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public boolean isCache() {
+		return getFlexoResource() != null && getFlexoResource().isCache();
+	}
+
+	@Override
+	public FlexoModelObject getUncachedObject() {
+		return super.getUncachedObject();
+	}
+
+	@Override
+	public FlexoProcessNode getProcessNode() {
+		return null;
 	}
 
 }

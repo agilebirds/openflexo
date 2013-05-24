@@ -19,12 +19,12 @@
  */
 package org.openflexo.view.menu;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.Enumeration;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Hashtable;
-import java.util.Vector;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,24 +37,20 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
 import org.openflexo.FlexoCst;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.utils.ProjectInitializerException;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ModuleLoadingException;
 import org.openflexo.view.FlexoRelativeWindow;
-import org.openflexo.view.controller.ConsistencyCheckingController;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.ControllerModel;
 
 /**
  * Automatic builded 'Windows' menu for modules
  * 
  * @author sguerin
  */
-public class WindowMenu extends FlexoMenu {
+public class WindowMenu extends FlexoMenu implements PropertyChangeListener {
 
 	private static final Logger logger = Logger.getLogger(WindowMenu.class.getPackage().getName());
 
@@ -73,9 +69,7 @@ public class WindowMenu extends FlexoMenu {
 
 	private int windowFirstIndex = -1;
 
-	private int windowCount = 0;
-
-	private Hashtable<FlexoRelativeWindow, RelativeWindowItem> relativeWindowItems;
+	private Map<FlexoRelativeWindow, RelativeWindowItem> relativeWindowItems;
 
 	protected CloseModuleItem closeModuleItem;
 
@@ -84,12 +78,7 @@ public class WindowMenu extends FlexoMenu {
 	/**
 	 * Hashtable where key is the class object representing module and value a JMenuItem
 	 */
-	private Hashtable<Module, JMenuItem> _loadWindowMenuItems = new Hashtable<Module, JMenuItem>();
-
-	/**
-	 * Hashtable where key is the class object representing module and value a Hashtable of JCheckBoxMenuItem
-	 */
-	private Hashtable<Module, JCheckBoxMenuItem> _availableWindowMenuItems = new Hashtable<Module, JCheckBoxMenuItem>();
+	private Map<Module, JMenuItem> moduleMenuItems = new Hashtable<Module, JMenuItem>();
 
 	protected FlexoMenuItem controlPanelItem;
 
@@ -97,29 +86,28 @@ public class WindowMenu extends FlexoMenu {
 
 	protected PaletteItem paletteItem;
 
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
 	public WindowMenu(FlexoController controller, Module module) {
 		super("window", controller);
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Build NEW module menu for " + module.getName());
 		}
-		for (Enumeration e = getModuleLoader().loadedModules(); e.hasMoreElements();) {
-			Module next = ((FlexoModule) e.nextElement()).getModule();
-			createNewAvailableModuleItem(next, true);
+		loadWindowMenu = new JMenu();
+		for (Module m : controller.getModuleLoader().getAvailableModules()) {
+			JMenuItem item = new JMenuItem(new SwitchToModuleAction(m));
+			item.setText(FlexoLocalization.localizedForKey(m.getName(), item));
+			item.setIcon(m.getSmallIcon());
+			moduleMenuItems.put(m, item);
+			if (getModuleLoader().isLoaded(m)) {
+				add(item);
+			} else {
+				loadWindowMenu.add(item);
+			}
 		}
 		addSeparator();
 
-		loadWindowMenu = new JMenu();
 		loadWindowMenu.setText(FlexoLocalization.localizedForKey("load_module", loadWindowMenu));
 		add(loadWindowMenu);
 
-		for (Module next : getModuleLoader().unloadedButAvailableModules()) {
-			createNewLoadModuleItem(next);
-		}
 		add(closeModuleItem = new CloseModuleItem());
 
 		addSeparator();
@@ -127,18 +115,11 @@ public class WindowMenu extends FlexoMenu {
 		add(inspectorWindowItem = new InspectorWindowItem());
 		add(preferencesWindowItem = new PreferencesWindowItem());
 		windowFirstIndex = getItemCount();
-		if (controller instanceof ConsistencyCheckingController) {
+		if (controller.getDefaultValidationModel() != null) {
 			add(checkConsistencyWindowItem = new CheckConsistencyWindowItem());
 			windowFirstIndex = getItemCount();
 		}
 		relativeWindowItems = new Hashtable<FlexoRelativeWindow, RelativeWindowItem>();
-
-		Vector<WindowMenu> menus = _moduleMenus.get(module);
-		if (menus == null) {
-			menus = new Vector<WindowMenu>();
-			_moduleMenus.put(module, menus);
-		}
-		menus.add(this);
 
 		addSeparator();
 		add(controlPanelItem = new ControlPanelItem());
@@ -161,18 +142,21 @@ public class WindowMenu extends FlexoMenu {
 			}
 
 		});
+		manager.addListener(ModuleLoader.MODULE_LOADED, this, getModuleLoader());
+		manager.addListener(ModuleLoader.MODULE_UNLOADED, this, getModuleLoader());
 	}
 
-	private static ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
+	@Override
+	protected ModuleLoader getModuleLoader() {
+		return getController().getModuleLoader();
 	}
 
 	protected void updateWindowState() {
 		if (getController().getInspectorWindow() != null) {
 			inspectorWindowItem.setState(getController().getInspectorWindow().isVisible());
 		}
-		if (getController().getPreferencesWindow() != null) {
-			preferencesWindowItem.setState(getController().getPreferencesWindow().isVisible());
+		if (getController().getPreferencesWindow(false) != null) {
+			preferencesWindowItem.setState(getController().getPreferencesWindow(false).isVisible());
 		}
 		if (checkConsistencyWindowItem != null) {
 			if (getController().getConsistencyCheckWindow(false) != null) {
@@ -181,9 +165,8 @@ public class WindowMenu extends FlexoMenu {
 				checkConsistencyWindowItem.setEnabled(false);
 			}
 		}
-		for (Enumeration en = relativeWindowItems.elements(); en.hasMoreElements();) {
-			RelativeWindowItem next = (RelativeWindowItem) en.nextElement();
-			next.setState(next.action.window.isVisible());
+		for (Map.Entry<FlexoRelativeWindow, RelativeWindowItem> next : relativeWindowItems.entrySet()) {
+			next.getValue().setState(next.getValue().action.window.isVisible());
 		}
 	}
 
@@ -193,17 +176,14 @@ public class WindowMenu extends FlexoMenu {
 		}
 		RelativeWindowItem relativeWindowItem;
 		insert(relativeWindowItem = new RelativeWindowItem(window), windowFirstIndex);
-		windowCount++;
 		relativeWindowItems.put(window, relativeWindowItem);
 	}
 
 	public void removeFlexoRelativeWindowMenu(FlexoRelativeWindow window) {
 		RelativeWindowItem relativeWindowItem = relativeWindowItems.get(window);
-
 		if (relativeWindowItem != null) {
 			remove(relativeWindowItem);
 			relativeWindowItems.remove(window);
-			windowCount--;
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Inconsistent data in WindowMenu");
@@ -223,11 +203,6 @@ public class WindowMenu extends FlexoMenu {
 		}
 	}
 
-	// ==========================================================================
-	// ============================= InspectorWindow
-	// ============================
-	// ==========================================================================
-
 	public class InspectorWindowItem extends JCheckBoxMenuItem {
 
 		public InspectorWindowItem() {
@@ -236,7 +211,7 @@ public class WindowMenu extends FlexoMenu {
 			setAction(action);
 			KeyStroke accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_I, FlexoCst.META_MASK);
 			setAccelerator(accelerator);
-			getController().registerActionForKeyStroke(action, accelerator);
+			getController().registerActionForKeyStroke(action, accelerator, "inspect");
 			setText(FlexoLocalization.localizedForKey("inspector", this));
 		}
 
@@ -253,11 +228,6 @@ public class WindowMenu extends FlexoMenu {
 		}
 
 	}
-
-	// ==========================================================================
-	// ============================= PreferencesWindow
-	// ============================
-	// ==========================================================================
 
 	public class PreferencesWindowItem extends JCheckBoxMenuItem {
 
@@ -280,11 +250,6 @@ public class WindowMenu extends FlexoMenu {
 		}
 
 	}
-
-	// ==========================================================================
-	// ========================= CheckConsistencyWindow
-	// =========================
-	// ==========================================================================
 
 	public class CheckConsistencyWindowItem extends JCheckBoxMenuItem {
 
@@ -310,12 +275,6 @@ public class WindowMenu extends FlexoMenu {
 		}
 
 	}
-
-	// ==========================================================================
-	// ==========================================================================
-	// =============================== RelativeWindow
-	// ===============================
-	// ==========================================================================
 
 	public class RelativeWindowItem extends JCheckBoxMenuItem {
 		protected RelativeWindowAction action;
@@ -344,27 +303,7 @@ public class WindowMenu extends FlexoMenu {
 		}
 	}
 
-	// ==========================================================================
-	// ==========================================================================
-	// ==========================================================================
-	// ==========================================================================
-	// ==========================================================================
-	// ==========================================================================
-	// ==========================================================================
-	// ==========================================================================
-
-	/**
-	 * Hashtable where key is the
-	 * 
-	 * <pre>
-	 * Module
-	 * </pre>
-	 * 
-	 * object representing module and value a WindowMenu
-	 */
-	private static Hashtable<Module, Vector<WindowMenu>> _moduleMenus = new Hashtable<Module, Vector<WindowMenu>>();
-
-	public static class SwitchToModuleAction extends AbstractAction {
+	public class SwitchToModuleAction extends AbstractAction {
 		private Module _module;
 
 		private JCheckBoxMenuItem _menuItem;
@@ -377,13 +316,11 @@ public class WindowMenu extends FlexoMenu {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			try {
-				getModuleLoader().switchToModule(_module, null);
+				getController().getModuleLoader().switchToModule(_module);
 			} catch (ModuleLoadingException e) {
 				FlexoController.notify("Cannot load module." + e.getMessage());
 				return;
 			}
-			_menuItem.setState(ModuleLoader.instance().getActiveModule() == _module);
-			_menuItem.setIcon(_module.getSmallIcon());
 		}
 
 		public void setItem(JCheckBoxMenuItem menuItem) {
@@ -391,205 +328,24 @@ public class WindowMenu extends FlexoMenu {
 		}
 	}
 
-	public static class LoadModuleAction extends AbstractAction {
-		private Module module;
-
-		public LoadModuleAction(Module module) {
-			super();
-			this.module = module;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			FlexoProject currentProject = getModuleLoader().getProject();
-			if (currentProject == null && module.requireProject()) {
-				try {
-					ModuleLoader.instance().openProject(null, module);
-				} catch (ProjectLoadingCancelledException e) {
-					e.printStackTrace();
-				} catch (ModuleLoadingException e) {
-					e.printStackTrace();
-					FlexoController.notify(FlexoLocalization.localizedForKey("could_not_load_module") + " " + e.getModule());
-				} catch (ProjectInitializerException e) {
-					e.printStackTrace();
-					FlexoController.notify(FlexoLocalization.localizedForKey("could_not_open_project_located_at")
-							+ e.getProjectDirectory().getAbsolutePath());
-				}
-			} else {
-				try {
-					getModuleLoader().switchToModule(module, currentProject);
-				} catch (ModuleLoadingException e) {
-					FlexoController.notify("Cannot load module." + e.getMessage());
-					return;
-				}
-			}
-		}
-	}
-
-	protected static Module getActiveModule() {
-		if (FlexoModule.getActiveModule() != null) {
-			return FlexoModule.getActiveModule().getModule();
-		} else {
-			return null;
-		}
-	}
-
-	public static void notifySwitchToModule(Module module) {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("notifySwitchToModule() called:  ActiveModule=" + getActiveModule());
-		}
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Notify switching to module " + module);
-		}
-		if (getActiveModule() == module) {
-			// No need to switch, it's already the right one !
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("No need to switch ");
-			}
-			return;
-		} else {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Notify switching to module " + module + " DOING it.");
-			}
-			if (getActiveModule() != null && getActiveModule().isLoaded()) {
-				if (logger.isLoggable(Level.FINE)) {
-					logger.fine("Focus OFF module " + getActiveModule());
-				}
-				try {
-					getModuleLoader().getModuleInstance(getActiveModule(), getModuleLoader().getProject()).focusOff();
-				} catch (ModuleLoadingException e) {
-					logger.severe("Module is Active, so it must be loaded and this exception should NEVER occurs. "
-							+ "PLEASE INVESTIGATE AND  FIX");
-					e.printStackTrace();
-				}
-			}
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Updating menus for " + module);
-			}
-			for (Enumeration e = _moduleMenus.elements(); e.hasMoreElements();) {
-				Vector menus = (Vector) e.nextElement();
-				for (int i = 0; i < menus.size(); i++) {
-					WindowMenu menu = (WindowMenu) menus.elementAt(i);
-					menu.notifyNewActiveModule(module);
-				}
-			}
-		}
-	}
-
-	private void notifyNewActiveModule(Module module) {
-		for (Enumeration e = _availableWindowMenuItems.keys(); e.hasMoreElements();) {
-			Module next = (Module) e.nextElement();
-			JCheckBoxMenuItem menuItem = _availableWindowMenuItems.get(next);
-			if (next.getSmallIcon() != null) {
-				menuItem.setIcon(next.getSmallIcon());
-			}
-			if (next != module) {
-				menuItem.setState(false);
-			} else {
-				menuItem.setState(true);
-			}
-		}
-	}
-
-	public static void notifyModuleLoaded(Module module) {
-		for (Enumeration e = _moduleMenus.elements(); e.hasMoreElements();) {
-			Vector menus = (Vector) e.nextElement();
-			for (int i = 0; i < menus.size(); i++) {
-				WindowMenu menu = (WindowMenu) menus.elementAt(i);
-				menu.notifyModuleHasBeenLoaded(module);
-			}
-		}
-	}
-
-	public static void notifyModuleUnloaded(Module module) {
-		for (Enumeration e = _moduleMenus.elements(); e.hasMoreElements();) {
-			Vector menus = (Vector) e.nextElement();
-			for (int i = 0; i < menus.size(); i++) {
-				WindowMenu menu = (WindowMenu) menus.elementAt(i);
-				menu.notifyModuleHasBeenUnloaded(module);
-			}
-		}
-	}
-
 	private void notifyModuleHasBeenLoaded(Module module) {
-		// remove from all loadWindowMenu
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("loadWindowMenu contained:");
-		}
-		Component[] menuComponents = loadWindowMenu.getMenuComponents();
-		for (int i = 0; i < menuComponents.length; i++) {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Component: " + ((JMenuItem) menuComponents[i]).getText());
-			}
-		}
-		JMenuItem toRemove = _loadWindowMenuItems.get(module);
-		if (toRemove != null) {
-			loadWindowMenu.remove(toRemove);
-		} else {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("No _loadWindowMenuItems for module " + module.getName());
-			}
-		}
-		_loadWindowMenuItems.remove(module);
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("loadWindowMenu contains now:");
-		}
-		menuComponents = loadWindowMenu.getMenuComponents();
-		for (int i = 0; i < menuComponents.length; i++) {
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Component: " + ((JMenuItem) menuComponents[i]).getText());
-			}
-		}
-
-		// add to available
-		createNewAvailableModuleItem(module, false);
+		JMenuItem item = moduleMenuItems.get(module);
+		insert(item, getController().getModuleLoader().getLoadedModules().indexOf(module));
 	}
 
 	private void notifyModuleHasBeenUnloaded(Module module) {
-		// add to loadWindowMenu
-		createNewLoadModuleItem(module);
-
-		// remove from available
-		remove(_availableWindowMenuItems.get(module));
-		_availableWindowMenuItems.remove(module);
-
+		JMenuItem item = moduleMenuItems.get(module);
+		loadWindowMenu.insert(item, getController().getModuleLoader().getUnloadedModules().indexOf(module));
 	}
 
-	private JCheckBoxMenuItem createNewAvailableModuleItem(Module module, boolean init) {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("ADD TO new available Module : " + module.getName());
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getPropertyName().equals(ModuleLoader.MODULE_LOADED)) {
+			notifyModuleHasBeenLoaded((Module) evt.getNewValue());
+		} else if (evt.getPropertyName().equals(ModuleLoader.MODULE_UNLOADED)) {
+			notifyModuleHasBeenUnloaded((Module) evt.getOldValue());
 		}
-		SwitchToModuleAction action;
-		JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(action = new SwitchToModuleAction(module));
-		action.setItem(menuItem);
-		menuItem.setText(FlexoLocalization.localizedForKey(module.getName(), menuItem));
-		if (module.getSmallIcon() != null) {
-			menuItem.setIcon(module.getSmallIcon());
-		}
-		/*
-		 * if (init) { add(menuItem); } else { insert(menuItem, getItemCount() - 3); }
-		 */
-		insert(menuItem, 0);
-		_availableWindowMenuItems.put(module, menuItem);
-		return menuItem;
 	}
-
-	private JMenuItem createNewLoadModuleItem(Module module) {
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("ADD to loadable Module : " + module.getName());
-		}
-		JMenuItem menuItem = new JMenuItem(new LoadModuleAction(module));
-		menuItem.setText(FlexoLocalization.localizedForKey(module.getName(), menuItem));
-		menuItem.setIcon(module.getSmallIcon());
-		loadWindowMenu.add(menuItem);
-		_loadWindowMenuItems.put(module, menuItem);
-		return menuItem;
-	}
-
-	// ==========================================================================
-	// ============================= CloseModule
-	// ================================
-	// ==========================================================================
 
 	public class CloseModuleItem extends JMenuItem {
 
@@ -607,26 +363,14 @@ public class WindowMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if (getActiveModule() != null) {
-				try {
-					getModuleLoader().getModuleInstance(getActiveModule(), getModuleLoader().getProject()).close();
-				} catch (ModuleLoadingException e) {
-					logger.severe("Module is Active, so it must be loaded and this exception should NEVER occurs. "
-							+ "PLEASE INVESTIGATE AND  FIX");
-					e.printStackTrace();
-				}
-			}
+			getModuleLoader().closeModule(getController().getModule());
 		}
 	}
-
-	// =============================================================
-	// ================ Hide/Show Control Panel ====================
-	// =============================================================
 
 	public class ControlPanelItem extends FlexoMenuItem {
 		public ControlPanelItem() {
 			super(new ControlPanelAction(), "hide_control_panel", null, getController(), true);
-			((ControlPanelAction) _action).setItem(this);
+			((ControlPanelAction) getAction()).setItem(this);
 		}
 
 	}
@@ -659,10 +403,6 @@ public class WindowMenu extends FlexoMenu {
 
 	}
 
-	// =============================================================
-	// =================== Hide/Show Palette =======================
-	// =============================================================
-
 	public String getHidePaletteString() {
 		return "hide_palette";
 	}
@@ -674,11 +414,12 @@ public class WindowMenu extends FlexoMenu {
 	public class PaletteItem extends FlexoMenuItem {
 		public PaletteItem() {
 			super(new PaletteAction(), getHidePaletteString(), null, getController(), true);
-			((PaletteAction) _action).setItem(this);
+			updateText();
+			manager.addListener(ControllerModel.RIGHT_VIEW_VISIBLE, this, getController().getControllerModel());
 		}
 
-		public void updateText(boolean showed) {
-			if (!showed) {
+		public void updateText() {
+			if (!getController().getControllerModel().isRightViewVisible()) {
 				setText(FlexoLocalization.localizedForKey(getShowPaletteString()));
 			} else {
 				setText(FlexoLocalization.localizedForKey(getHidePaletteString()));
@@ -688,45 +429,36 @@ public class WindowMenu extends FlexoMenu {
 	}
 
 	public class PaletteAction extends AbstractAction {
-		private PaletteItem _item;
-		private boolean isShowed;
 
 		public PaletteAction() {
 			super();
 		}
 
-		public void setItem(PaletteItem item) {
-			_item = item;
-		}
-
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			isShowed = getController().rightViewIsVisible();
-			if (isShowed) {
-				getController().hideRightView();
-				isShowed = false;
-			} else {
-				getController().showRightView();
-				isShowed = true;
-			}
-			_item.updateText(isShowed);
+			getController().getControllerModel().setRightViewVisible(!getController().getControllerModel().isRightViewVisible());
 		}
 
 	}
 
-	// ==========================================================================
-	// ==================== Hide/Show Process Browser
-	// ===========================
-	// ==========================================================================
-
 	public class BrowserItem extends FlexoMenuItem {
 		public BrowserItem() {
 			super(new BrowserAction(), "hide_browser", null, getController(), true);
-			((BrowserAction) _action).setItem(this);
+			updateText();
+			manager.addListener(ControllerModel.LEFT_VIEW_VISIBLE, this, getController().getControllerModel());
 		}
 
-		public void updateText(boolean showed) {
-			if (!showed) {
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (evt.getPropertyName().equals(ControllerModel.LEFT_VIEW_VISIBLE)) {
+				updateText();
+			} else {
+				super.propertyChange(evt);
+			}
+		}
+
+		private void updateText() {
+			if (!getController().getControllerModel().isLeftViewVisible()) {
 				setText(FlexoLocalization.localizedForKey("show_browser"));
 			} else {
 				setText(FlexoLocalization.localizedForKey("hide_browser"));
@@ -734,34 +466,19 @@ public class WindowMenu extends FlexoMenu {
 		}
 
 		public BrowserAction getProcessBrowserAction() {
-			return (BrowserAction) _action;
+			return (BrowserAction) getAction();
 		}
 	}
 
 	public class BrowserAction extends AbstractAction {
-		private boolean isShowed;
-
-		private BrowserItem _item;
 
 		public BrowserAction() {
 			super();
 		}
 
-		public void setItem(BrowserItem item) {
-			_item = item;
-		}
-
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			isShowed = getController().leftViewIsVisible();
-			if (isShowed) {
-				getController().hideLeftView();
-				isShowed = false;
-			} else {
-				getController().showLeftView();
-				isShowed = true;
-			}
-			_item.updateText(isShowed);
+			getController().getControllerModel().setLeftViewVisible(!getController().getControllerModel().isLeftViewVisible());
 		}
 
 	}
@@ -772,10 +489,6 @@ public class WindowMenu extends FlexoMenu {
 
 	public PaletteItem getPaletteItem() {
 		return paletteItem;
-	}
-
-	public static void reset() {
-		_moduleMenus.clear();
 	}
 
 }

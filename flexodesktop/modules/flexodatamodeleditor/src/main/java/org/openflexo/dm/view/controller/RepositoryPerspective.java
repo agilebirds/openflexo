@@ -22,7 +22,6 @@ package org.openflexo.dm.view.controller;
 import java.awt.BorderLayout;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 
 import org.openflexo.components.browser.BrowserElementType;
@@ -39,13 +38,13 @@ import org.openflexo.foundation.dm.FlexoExecutionModelRepository;
 import org.openflexo.foundation.dm.JDKRepository;
 import org.openflexo.foundation.dm.WORepository;
 import org.openflexo.foundation.dm.eo.EOPrototypeRepository;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
 
-class RepositoryPerspective extends DMPerspective<DMObject> {
+class RepositoryPerspective extends DMPerspective {
 
-	private final DMController _controller;
 	private final DMBrowser _browser;
 	private final DMBrowserView _browserView;
 	private final JPanel leftView;
@@ -57,48 +56,34 @@ class RepositoryPerspective extends DMPerspective<DMObject> {
 	 */
 	public RepositoryPerspective(DMController controller) {
 		super("repository_perspective", controller);
-		_controller = controller;
 		_browser = new DMBrowser(controller);
 		_browser.setDMViewMode(DMViewMode.Repositories);
-		_browserView = new DMBrowserView(_browser, _controller);
+		_browserView = new DMBrowserView(_browser, controller);
 		leftView = new JPanel(new BorderLayout());
 		leftView.add(_browserView, BorderLayout.CENTER);
 		leftView.add(searchPanel, BorderLayout.NORTH);
+		setTopLeftView(leftView);
 	}
 
 	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getLeftView() {
-		return leftView;
+	public void setProject(FlexoProject project) {
+		super.setProject(project);
+		_browser.setRootObject(project != null ? project.getDataModel() : null);
 	}
 
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
 		return DMEIconLibrary.DME_RP_ACTIVE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
-	 */
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return DMEIconLibrary.DME_RP_SELECTED_ICON;
-	}
-
 	@Override
 	public DMObject getDefaultObject(FlexoModelObject proposedObject) {
-		if ((proposedObject instanceof DMObject) && hasModuleViewForObject(proposedObject)) {
+		if (proposedObject instanceof DMObject && hasModuleViewForObject(proposedObject)) {
 			return (DMObject) proposedObject;
 		}
 		return null;
@@ -111,8 +96,12 @@ class RepositoryPerspective extends DMPerspective<DMObject> {
 	}
 
 	@Override
-	public ModuleView<? extends DMObject> createModuleViewForObject(DMObject object, FlexoController controller) {
-		return _controller.createDMView(object);
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+		if (object instanceof DMObject) {
+			return getController().createDMView((DMObject) object);
+		} else {
+			return null;
+		}
 	}
 
 	@Override

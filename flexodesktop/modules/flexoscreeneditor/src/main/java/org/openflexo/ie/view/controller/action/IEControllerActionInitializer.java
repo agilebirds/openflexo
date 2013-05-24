@@ -30,15 +30,12 @@ public class IEControllerActionInitializer extends ControllerActionInitializer {
 
 	protected static final Logger logger = Logger.getLogger(IEControllerActionInitializer.class.getPackage().getName());
 
-	private IEController _ieController;
-
 	public IEControllerActionInitializer(IEController controller) {
 		super(controller);
-		_ieController = controller;
 	}
 
 	protected IEController getIEController() {
-		return _ieController;
+		return (IEController) getController();
 	}
 
 	protected IESelectionManager getIESelectionManager() {
@@ -49,72 +46,71 @@ public class IEControllerActionInitializer extends ControllerActionInitializer {
 	public void initializeActions() {
 		super.initializeActions();
 
-		(new IESetPropertyInitializer(this)).init();
+		new IESetPropertyInitializer(this);
 
-		(new IECopyInitializer(this)).init();
-		(new IECutInitializer(this)).init();
-		(new IEPasteInitializer(this)).init();
-		(new IEDeleteInitializer(this)).init();
-		(new IESelectAllInitializer(this)).init();
+		new IECopyInitializer(this);
+		new IECutInitializer(this);
+		new IEPasteInitializer(this);
+		new IEDeleteInitializer(this);
+		new IESelectAllInitializer(this);
 
-		(new AddTabInitializer(this)).init();
-		(new MoveTabLeftInitializer(this)).init();
-		(new MoveTabRightInitializer(this)).init();
+		new AddTabInitializer(this);
+		new MoveTabLeftInitializer(this);
+		new MoveTabRightInitializer(this);
 
-		// (new MakePartialComponentInitializer(this)).init();
+		new InsertRowAfterInitializer(this);
+		new InsertRowBeforeInitializer(this);
+		new InsertColAfterInitializer(this);
+		new InsertColBeforeInitializer(this);
 
-		(new InsertRowAfterInitializer(this)).init();
-		(new InsertRowBeforeInitializer(this)).init();
-		(new InsertColAfterInitializer(this)).init();
-		(new InsertColBeforeInitializer(this)).init();
+		new AddComponentInitializer(this);
+		new AddComponentFolderInitializer(this);
+		new DuplicateComponentInitializer(this);
 
-		(new AddComponentInitializer(this)).init();
-		(new AddComponentFolderInitializer(this)).init();
-		(new DuplicateComponentInitializer(this)).init();
+		new IncreaseColSpanInitializer(this);
+		new IncreaseRowSpanInitializer(this);
+		new DecreaseRowSpanInitializer(this);
+		new DecreaseColSpanInitializer(this);
 
-		(new IncreaseColSpanInitializer(this)).init();
-		(new IncreaseRowSpanInitializer(this)).init();
-		(new DecreaseRowSpanInitializer(this)).init();
-		(new DecreaseColSpanInitializer(this)).init();
+		new SuroundWithConditionalInitializer(this);
+		new SuroundWithRepetitionInitializer(this);
+		new UnwrapConditionalInitializer(this);
+		new UnwrapRepetitionInitializer(this);
 
-		(new SuroundWithConditionalInitializer(this)).init();
-		(new SuroundWithRepetitionInitializer(this)).init();
-		(new UnwrapConditionalInitializer(this)).init();
-		(new UnwrapRepetitionInitializer(this)).init();
+		new DeleteRowInitializer(this);
+		new DeleteColInitializer(this);
 
-		(new DeleteRowInitializer(this)).init();
-		(new DeleteColInitializer(this)).init();
+		new TopComponentUpInitializer(this);
+		new TopComponentDownInitializer(this);
 
-		(new TopComponentUpInitializer(this)).init();
-		(new TopComponentDownInitializer(this)).init();
+		new AddMenuInitializer(this);
+		new MoveMenuUpperInitializer(this);
+		new MoveMenuUpInitializer(this);
+		new MoveMenuDownInitializer(this);
 
-		(new AddMenuInitializer(this)).init();
-		(new MoveMenuUpperInitializer(this)).init();
-		(new MoveMenuUpInitializer(this)).init();
-		(new MoveMenuDownInitializer(this)).init();
+		new ExportToPaletteInitializer(this);
 
-		(new ExportToPaletteInitializer(this)).init();
+		new DropIEElementInitializer(this);
+		new MoveIEElementInitializer(this);
+		new LabelizeComponentInitializer(this);
 
-		(new DropIEElementInitializer(this)).init();
-		(new MoveIEElementInitializer(this)).init();
-		(new LabelizeComponentInitializer(this)).init();
-
-		(new PrintComponentInitializer(this)).init();
+		new PrintComponentInitializer(this);
 
 		// DKV
-		(new AddLanguageInitializer(this)).init();
-		(new AddDomainInitializer(this)).init();
-		(new AddKeyInitializer(this)).init();
-		(new DKVDeleteInitializer(this)).init();
+		new AddLanguageInitializer(this);
+		new AddDomainInitializer(this);
+		new AddKeyInitializer(this);
+		new DKVDeleteInitializer(this);
 
-		(new ImportImageInitializer(this)).init();
+		new ImportImageInitializer(this);
 
-		(new EditUserHelpInitializer(this)).init();
+		new EditUserHelpInitializer(this);
 
-		(new GenerateEntityFromSelectionInitializer(this)).init();
+		new GenerateEntityFromSelectionInitializer(this);
 
 		// GUI action
-		new ShowComponentUsageInitializer(this).init();
+		new ShowComponentUsageInitializer(this);
+
 	}
 
 }

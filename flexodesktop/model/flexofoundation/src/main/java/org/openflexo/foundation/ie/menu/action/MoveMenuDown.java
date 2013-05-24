@@ -50,17 +50,21 @@ public class MoveMenuDown extends FlexoAction {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
-			return (object != null) && (object instanceof FlexoItemMenu) && (((FlexoItemMenu) object).getFather() != null)
-					&& !((((FlexoItemMenu) object).getFather()).getSubItems().lastElement().equals(object));
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector globalSelection) {
+			return object != null && object instanceof FlexoItemMenu && ((FlexoItemMenu) object).getFather() != null
+					&& !((FlexoItemMenu) object).getFather().getSubItems().lastElement().equals(object);
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoItemMenu.class);
+	}
 
 	private FlexoItemMenu itemMenu;
 

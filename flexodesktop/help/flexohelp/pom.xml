@@ -7,18 +7,10 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>help</artifactId>
-		<version>1.4.4-SNAPSHOT</version>
+		<version>1.5.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexohelp</artifactId>
 	<name>Help :: FlexoHelp</name>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
 	<dependencies>
 		<dependency>
 			<groupId>org.openflexo</groupId>

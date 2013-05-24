@@ -19,7 +19,7 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -48,7 +48,7 @@ public class RemoveCustomTemplateRepositoryInitializer extends ActionInitializer
 	protected FlexoActionInitializer<RemoveCustomTemplateRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveCustomTemplateRepository>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveCustomTemplateRepository action) {
+			public boolean run(EventObject e, RemoveCustomTemplateRepository action) {
 				return true;
 			}
 		};
@@ -58,7 +58,7 @@ public class RemoveCustomTemplateRepositoryInitializer extends ActionInitializer
 	protected FlexoActionFinalizer<RemoveCustomTemplateRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RemoveCustomTemplateRepository>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveCustomTemplateRepository action) {
+			public boolean run(EventObject e, RemoveCustomTemplateRepository action) {
 				return true;
 			}
 		};

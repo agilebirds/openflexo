@@ -40,16 +40,15 @@ public class FIBImageWidget extends FIBWidgetView<FIBImage, JLabel, Image> imple
 
 	public FIBImageWidget(FIBImage model, FIBController controller) {
 		super(model, controller);
+		labelWidget = new JLabel();
+		labelWidget.setFocusable(false); // There is not much point in giving focus to a label since there is no KeyBindings nor KeyListener
+											// on it.
 		if (model.getData().isValid()) {
-			labelWidget = new JLabel(" ");
-		} else {
-			labelWidget = new JLabel();
+			labelWidget.setText(" ");
 		}
 		updateFont();
 		updateAlign();
 		updateImage();
-		// updatePreferredSize();
-
 	}
 
 	@Override
@@ -88,16 +87,9 @@ public class FIBImageWidget extends FIBWidgetView<FIBImage, JLabel, Image> imple
 
 	protected void updateImage() {
 		if (getWidget().getData().isValid()) {
-			SwingUtilities.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					if (!isDeleted()) {
-						Image image = getValue();
-						updateImageDefaultSize(image);
-						labelWidget.setIcon(makeImageIcon(image));
-					}
-				}
-			});
+			Image image = getValue();
+			updateImageDefaultSize(image);
+			labelWidget.setIcon(makeImageIcon(image));
 		} else if (getWidget().getImageFile() != null) {
 			if (getWidget().getImageFile().exists()) {
 				Image image = ImageUtils.loadImageFromFile(getWidget().getImageFile());
@@ -129,6 +121,8 @@ public class FIBImageWidget extends FIBWidgetView<FIBImage, JLabel, Image> imple
 					return null;
 				}
 			}
+			// This is just looking for troubles because it makes a loop in layout
+			//
 			if (getJComponent().getWidth() == 0 || getJComponent().getHeight() == 0) {
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
@@ -138,9 +132,9 @@ public class FIBImageWidget extends FIBWidgetView<FIBImage, JLabel, Image> imple
 				});
 				return new ImageIcon(image);
 			}
-			double widthRatio = ((double) getJComponent().getWidth()) / (imageWidth);
-			double heightRatio = ((double) getJComponent().getHeight()) / (imageHeight);
-			double ratio = (widthRatio < heightRatio ? widthRatio : heightRatio);
+			double widthRatio = (double) getJComponent().getWidth() / imageWidth;
+			double heightRatio = (double) getJComponent().getHeight() / imageHeight;
+			double ratio = widthRatio < heightRatio ? widthRatio : heightRatio;
 			int newWidth = (int) (imageWidth * ratio);
 			int newHeight = (int) (imageHeight * ratio);
 			return new ImageIcon(image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH));

@@ -26,18 +26,17 @@ import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 
-
 public class ForegroundStylePanelEDITOR {
 
-
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			public Object[] getData()
-			{
+			@Override
+			public Object[] getData() {
 				ForegroundStyle fs = ForegroundStyle.makeDefault();
 				return FIBAbstractEditor.makeArray(fs);
 			}
+
+			@Override
 			public File getFIBFile() {
 				return FIBForegroundStyleSelector.FIB_FILE;
 			}

@@ -48,13 +48,13 @@ public class ShowFileHistory extends FlexoGUIAction<ShowFileHistory, CGFile, CGO
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGFile object, Vector<CGObject> globalSelection) {
-			return (object != null);
+		public boolean isVisibleForSelection(CGFile object, Vector<CGObject> globalSelection) {
+			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGFile object, Vector<CGObject> globalSelection) {
-			return ((object != null) && (object.getRepository().getManageHistory()));
+		public boolean isEnabledForSelection(CGFile object, Vector<CGObject> globalSelection) {
+			return object != null && object.getRepository().getManageHistory();
 		}
 
 	};

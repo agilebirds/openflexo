@@ -20,12 +20,18 @@
 package org.openflexo.fib.view.widget;
 
 import java.awt.ComponentOrientation;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
+import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.SpinnerNumberModel;
@@ -34,9 +40,11 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBNumber;
 import org.openflexo.fib.view.FIBWidgetView;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.ToolBox;
 
 /**
@@ -52,6 +60,10 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 
 	protected boolean ignoreTextfieldChanges = false;
 
+	private JPanel container;
+
+	private JCheckBox checkBox;
+
 	JSpinner valueChooser;
 
 	/**
@@ -65,9 +77,21 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 		Number max = model.getMaxValue();
 		Number inc = model.getIncrement();
 
+		container = new JPanel(new GridBagLayout());
+		container.setOpaque(false);
+		checkBox = new JCheckBox();
+		checkBox.setToolTipText(FlexoLocalization.localizedForKey("undefined_value", checkBox));
+		checkBox.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				valueChooser.setEnabled(!checkBox.isSelected());
+				updateModelFromWidget();
+			}
+		});
 		SpinnerNumberModel valueModel = makeSpinnerModel();
 		valueChooser = new JSpinner(valueModel);
-		valueChooser.setEditor(new JSpinner.NumberEditor(valueChooser /*, "#.##"*/));
+		valueChooser.setEditor(new JSpinner.NumberEditor(valueChooser /* , "#.##" */));
 		valueChooser.setValue(getDefaultValue());
 		valueChooser.addChangeListener(new ChangeListener() {
 			@Override
@@ -81,7 +105,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 		JComponent editor = valueChooser.getEditor();
 		if (editor instanceof DefaultEditor) {
 			((DefaultEditor) editor).getTextField().setHorizontalAlignment(SwingConstants.LEFT);
-			if (ToolBox.getPLATFORM() != ToolBox.MACOS) {
+			if (!ToolBox.isMacOSLaf()) {
 				((DefaultEditor) editor).getTextField().setBorder(BorderFactory.createEmptyBorder(0, 3, 0, 0));
 			}
 		}
@@ -98,6 +122,15 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 
 		getJComponent().addFocusListener(this);
 		getTextField().addFocusListener(this);
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 1.0;
+		container.add(valueChooser, gbc);
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.weightx = 0;
+		gbc.anchor = GridBagConstraints.LINE_START;
+		container.add(checkBox, gbc);
+		updateCheckboxVisibility();
 		updateFont();
 	}
 
@@ -121,10 +154,15 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
 		// logger.info("updateWidgetFromModel() with "+getValue());
-
-		if (notEquals(getValue(), getEditedValue())) {
+		T editedValue = null;
+		if (!checkBox.isSelected()) {
+			editedValue = getEditedValue();
+		}
+		if (notEquals(getValue(), editedValue)) {
 
 			widgetUpdating = true;
+			valueChooser.setEnabled((getValue() != null || !getWidget().getAllowsNull()) && isEnabled());
+			checkBox.setSelected(getValue() == null);
 			T currentValue = null;
 
 			if (getValue() == null) {
@@ -161,12 +199,16 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 	 */
 	@Override
 	public synchronized boolean updateModelFromWidget() {
-		if (notEquals(getValue(), getEditedValue())) {
+		T editedValue = null;
+		if (!checkBox.isSelected()) {
+			editedValue = getEditedValue();
+		}
+		if (notEquals(getValue(), editedValue)) {
 			if (isReadOnly()) {
 				return false;
 			}
 			modelUpdating = true;
-			setValue(getEditedValue());
+			setValue(editedValue);
 			modelUpdating = false;
 			return true;
 		}
@@ -174,8 +216,8 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 	}
 
 	@Override
-	public JSpinner getJComponent() {
-		return valueChooser;
+	public JPanel getJComponent() {
+		return container;
 	}
 
 	@Override
@@ -281,7 +323,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 			if (getWidget().getMinValue() != null && getWidget().getMinValue().intValue() > 0) {
 				return getWidget().getMinValue().intValue();
 			}
-			return new Integer(0);
+			return Integer.valueOf(0);
 		}
 
 		@Override
@@ -314,7 +356,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 
 		@Override
 		public Long getDefaultValue() {
-			return new Long(0);
+			return Long.valueOf(0);
 		}
 
 		@Override
@@ -347,7 +389,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 
 		@Override
 		public Float getDefaultValue() {
-			return new Float(0);
+			return Float.valueOf(0.0f);
 		}
 
 		@Override
@@ -380,7 +422,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 
 		@Override
 		public Double getDefaultValue() {
-			return new Double(0);
+			return Double.valueOf(0.0);
 		}
 
 		@Override
@@ -392,6 +434,19 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 		public int getDefaultColumns() {
 			return 10;
 		}
+	}
+
+	public void updateCheckboxVisibility() {
+		checkBox.setVisible(getWidget().getAllowsNull() && !TypeUtils.isPrimitive(getComponent().getDataType()));
+	}
+
+	public void updateColumns() {
+		if (getComponent().getColumns() != null) {
+			getTextField().setColumns(getComponent().getColumns());
+		} else {
+			getTextField().setColumns(0);
+		}
+		container.revalidate();
 	}
 
 }

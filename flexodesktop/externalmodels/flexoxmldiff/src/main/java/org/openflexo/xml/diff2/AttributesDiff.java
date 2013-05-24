@@ -21,15 +21,16 @@ package org.openflexo.xml.diff2;
 
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 
-import org.jdom.Attribute;
-import org.jdom.Element;
+import org.jdom2.Attribute;
+import org.jdom2.Element;
 
 public class AttributesDiff {
 
-	private Hashtable<String, Attribute> deletedAttributes;
-	private Hashtable<String, Attribute> addedAttributes;
-	private Hashtable<Attribute, Attribute> updatedAttributes;
+	private Map<String, Attribute> deletedAttributes;
+	private Map<String, Attribute> addedAttributes;
+	private Map<Attribute, Attribute> updatedAttributes;
 	private boolean _noDiff = true;
 	private DocumentsMapping _documentMapping;
 	private Element _sourceElement;
@@ -75,15 +76,15 @@ public class AttributesDiff {
 		return _noDiff;
 	}
 
-	public Hashtable<String, Attribute> getDeletedAttributes() {
+	public Map<String, Attribute> getDeletedAttributes() {
 		return deletedAttributes;
 	}
 
-	public Hashtable<String, Attribute> getAddedAttributes() {
+	public Map<String, Attribute> getAddedAttributes() {
 		return addedAttributes;
 	}
 
-	public Hashtable<Attribute, Attribute> getUpdatedAttributes() {
+	public Map<Attribute, Attribute> getUpdatedAttributes() {
 		return updatedAttributes;
 	}
 

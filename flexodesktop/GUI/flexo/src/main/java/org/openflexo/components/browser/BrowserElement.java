@@ -198,7 +198,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 		BrowserElement current = this;
 		while (i >= 0) {
 			path[i] = current;
-			current = (BrowserElement) current.getParent();
+			current = current.getParent();
 			i--;
 		}
 		return new TreePath(path);
@@ -277,8 +277,9 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 		// getIcon is only valid when accessed from the BrowserElement.getIcon method, because it
 		// can be overridden. Am I wrong?
 
-		/*return new ElementTypeBrowserFilter(getFilteredElementType().getName(), getFilteredElementType()
-		    .getIcon());*/
+		/*
+		 * return new ElementTypeBrowserFilter(getFilteredElementType().getName(), getFilteredElementType() .getIcon());
+		 */
 		if (initialFilterStatus == null) {
 			initialFilterStatus = BrowserFilterStatus.SHOW;
 		}
@@ -311,19 +312,11 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 					_childs.add(newElement);
 					elementHasBeenAdded = true;
 				} else if (_browser.requiresDeepBrowsing(newElement)) {
-					Vector<BrowserElement> childrenToRemove = new Vector<BrowserElement>();
-					for (Enumeration e = newElement.children(); e.hasMoreElements();) {
-						BrowserElement newElement2 = (BrowserElement) e.nextElement();
-						childrenToRemove.add(newElement2);
-						newElement2._parent = this;
-						_childs.add(newElement2);
-					}
-					for (BrowserElement element : childrenToRemove) {
-						newElement.removeFromChilds(element);
+					for (BrowserElement newElement2 : newElement._childs) {
+						addToChilds(newElement2.getObject());
 					}
 				}
-				// DVA April 06: if deepBrowsing is on, do not delete element and children...
-				if (!elementHasBeenAdded && !_browser.requiresDeepBrowsing(newElement)) {
+				if (!elementHasBeenAdded) {
 					newElement.recursiveDeleteChilds();
 					newElement.delete();
 				}
@@ -364,11 +357,17 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 			logger.fine(getClass().getName() + " receive DataModification " + dataModification.getClass().getName());
 		}
 		if (_browser != null) {
+			if (dataModification instanceof ObjectDeleted) {
+				if (!isDeleted()) {
+					delete();
+				}
+				return;
+			}
 			if ((dataModification instanceof WKFDataModification || dataModification instanceof IEDataModification
 					|| dataModification instanceof DKVDataModification || dataModification instanceof DMDataModification
 					|| dataModification instanceof WSDataModification || dataModification instanceof OEDataModification
 					|| dataModification instanceof CGDataModification || dataModification instanceof SGDataModification
-					|| dataModification instanceof ObjectDeleted || dataModification instanceof TOCModification || dataModification instanceof NameChanged)
+					|| dataModification instanceof TOCModification || dataModification instanceof NameChanged)
 					&& !(dataModification instanceof ObjectLocationChanged)
 					&& !(dataModification instanceof ObjectSizeChanged)
 					&& !(dataModification instanceof ObjectNeedsRefresh)) {
@@ -388,7 +387,7 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 				repaintRequested = true;
 			}
 		}
-		if (!SwingUtilities.isEventDispatchThread() || _browser.isRebuildingStructure()) {
+		if (!SwingUtilities.isEventDispatchThread() || _browser.isRebuildingStructure() || _browser.isHoldingStructure()) {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
@@ -407,18 +406,15 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 		if (isDeleted) {
 			return;
 		}
-		_browser.reload(this);
+		_browser.nodeChanged(this);
 		repaintRequested = false;
 	}
 
 	private boolean refreshRequested = false;
 
-	/*    protected void refresh()
-	    {
-	        refreshRequestedWhenPossible = false;
-	        rebuildChildren();
-	    }
-	    */
+	/*
+	 * protected void refresh() { refreshRequestedWhenPossible = false; rebuildChildren(); }
+	 */
 	// public boolean refreshRequestedWhenPossible = false;
 
 	public void refreshWhenPossible() {
@@ -461,18 +457,23 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 		_browser.setIsRebuildingStructure();
 		try {
 			Vector<FlexoModelObject> expanded = _browser.getExpandedObjects();
+			Vector<FlexoModelObject> selectedObjects = _browser.getSelectedObjects();
 			_browser.fireResetSelection();// Clears the selection in the JTree
 			recursiveDeleteChilds();
 			_childs = new Vector<BrowserElement>();
 			buildChildrenVector();
 			_browser.reload(this);
-			_browser.updateSelection(); // Resynch this project browser with the Selection manager-->Jtree will then be resynched with this
-										// browser
-
+			if (_browser.getSelectionManager() != null) {
+				_browser.updateSelection(); // Resynch this project browser with the Selection manager-->Jtree will then be resynched with
+											// this
+											// browser
+			} else {
+				_browser.setSelectedObjects(selectedObjects);
+			}
 			Enumeration<FlexoModelObject> en1 = expanded.elements();
 			while (en1.hasMoreElements()) {
-				Object o = en1.nextElement();
-				_browser.expand((FlexoModelObject) o, false);
+				FlexoModelObject o = en1.nextElement();
+				_browser.expand(o, false);
 			}
 		} finally {
 			_browser.resetIsRebuildingStructure();
@@ -483,6 +484,10 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 
 	protected boolean refreshHasBeenRequested() {
 		return refreshRequested;
+	}
+
+	public boolean isRoot() {
+		return !isDeleted() && getParent() == null;
 	}
 
 	// ==========================================================================
@@ -509,12 +514,12 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 	}
 
 	@Override
-	public TreeNode getParent() {
+	public BrowserElement getParent() {
 		return _parent;
 	}
 
 	@Override
-	public Enumeration children() {
+	public Enumeration<BrowserElement> children() {
 		return _childs.elements();
 	}
 
@@ -530,8 +535,8 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 	@Override
 	public int getIndex(TreeNode node) {
 		int returned = 0;
-		for (Enumeration e = children(); e.hasMoreElements(); returned++) {
-			if (node == (TreeNode) e.nextElement()) {
+		for (Enumeration<BrowserElement> e = children(); e.hasMoreElements(); returned++) {
+			if (node == e.nextElement()) {
 				return returned;
 			}
 		}
@@ -557,9 +562,9 @@ public abstract class BrowserElement implements TreeNode, FlexoObserver {
 		}
 		return className + (isDeleted ? "(DELETED)[" : "[") + getObject() + "]";
 		/*
-		return getClass().getName() + (isDeleted ? "(DELETED)[" : "[") + getObject() + "]/"
-		        + hashCode() + "/"
-		        + ((_browser == null) ? "browser=null" : "browser=" + _browser.hashCode());*/
+		 * return getClass().getName() + (isDeleted ? "(DELETED)[" : "[") + getObject() + "]/" + hashCode() + "/" + ((_browser == null) ?
+		 * "browser=null" : "browser=" + _browser.hashCode());
+		 */
 	}
 
 	/**

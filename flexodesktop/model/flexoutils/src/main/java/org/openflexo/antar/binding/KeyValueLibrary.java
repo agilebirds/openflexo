@@ -23,6 +23,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
@@ -102,28 +104,41 @@ public class KeyValueLibrary {
 		Vector<KeyValueProperty> returned = accessibleKeyValueProperties.get(declaringType);
 		if (returned == null) {
 			returned = new Vector<KeyValueProperty>();
-			Type current = declaringType;
-			while (current != null) {
-				Vector<KeyValueProperty> declaredProperties = getDeclaredProperties(current);
-				for (KeyValueProperty p : declaredProperties) {
-					boolean isAlreadyContained = false;
-					for (KeyValueProperty p2 : returned) {
-						if (p.getName().equals(p2.getName())) {
-							isAlreadyContained = true;
-							break;
-						}
-					}
-					if (!isAlreadyContained) {
-						returned.add(p);
-					}
+			appendAccessibleProperties(declaringType, returned);
+			Collections.sort(returned, new Comparator<KeyValueProperty>() {
+
+				@Override
+				public int compare(KeyValueProperty o1, KeyValueProperty o2) {
+					return o1.getName().compareTo(o2.getName());
 				}
-				// returned.addAll(getDeclaredProperties(current));
-				current = TypeUtils.getSuperType(current);
-				// current = current.getSuperclass();
-			}
+			});
 			accessibleKeyValueProperties.put(declaringType, returned);
 		}
 		return returned;
+	}
+
+	public static void appendAccessibleProperties(Type declaringType, Vector<KeyValueProperty> returned) {
+		Type current = declaringType;
+		while (current != null) {
+			Vector<KeyValueProperty> declaredProperties = getDeclaredProperties(current);
+			for (KeyValueProperty p : declaredProperties) {
+				boolean isAlreadyContained = false;
+				for (KeyValueProperty p2 : returned) {
+					if (p.getName().equals(p2.getName())) {
+						isAlreadyContained = true;
+						break;
+					}
+				}
+				if (!isAlreadyContained) {
+					returned.add(p);
+				}
+			}
+			for (Type t : TypeUtils.getSuperInterfaceTypes(current)) {
+				appendAccessibleProperties(t, returned);
+			}
+			// returned.addAll(getDeclaredProperties(current));
+			current = TypeUtils.getSuperType(current);
+		}
 	}
 
 	public static Vector<MethodDefinition> getAccessibleMethods(Type declaringType) {
@@ -136,6 +151,13 @@ public class KeyValueLibrary {
 				current = TypeUtils.getSuperType(current);
 				// current = current.getSuperclass();
 			}
+			Collections.sort(returned, new Comparator<MethodDefinition>() {
+
+				@Override
+				public int compare(MethodDefinition o1, MethodDefinition o2) {
+					return o1.getSignature().compareTo(o2.getSignature());
+				}
+			});
 			accessibleMethods.put(declaringType, returned);
 		}
 		return returned;
@@ -178,7 +200,13 @@ public class KeyValueLibrary {
 			}
 			e.printStackTrace();
 		}
+		Collections.sort(returned, new Comparator<MethodDefinition>() {
 
+			@Override
+			public int compare(MethodDefinition o1, MethodDefinition o2) {
+				return o1.getSignature().compareTo(o2.getSignature());
+			}
+		});
 		return returned;
 	}
 
@@ -186,7 +214,7 @@ public class KeyValueLibrary {
 			Vector<String> excludedSignatures) {
 		Vector<KeyValueProperty> returned = new Vector<KeyValueProperty>();
 
-		Class theClass = TypeUtils.getBaseClass(declaringTypeType);
+		Class<?> theClass = TypeUtils.getBaseClass(declaringTypeType);
 		if (theClass == null) {
 			logger.warning("Cannot search properties for type: " + declaringTypeType);
 			return null;
@@ -228,6 +256,13 @@ public class KeyValueLibrary {
 			}
 			e.printStackTrace();
 		}
+		Collections.sort(returned, new Comparator<KeyValueProperty>() {
+
+			@Override
+			public int compare(KeyValueProperty o1, KeyValueProperty o2) {
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
 		return returned;
 	}
 

@@ -19,8 +19,8 @@
  */
 package org.openflexo.vpm.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -37,6 +37,7 @@ import org.openflexo.foundation.gen.ScreenshotGenerator;
 import org.openflexo.foundation.viewpoint.action.PushToPalette;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.CEDCst;
@@ -66,11 +67,11 @@ public class PushToPaletteInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<PushToPalette> getDefaultInitializer() {
 		return new FlexoActionInitializer<PushToPalette>() {
 			@Override
-			public boolean run(ActionEvent e, PushToPalette action) {
+			public boolean run(EventObject e, PushToPalette action) {
 				if (getController().getCurrentModuleView() instanceof CalcDrawingShemaModuleView
 						&& action.getFocusedObject().getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 					CalcDrawingShemaController c = ((CalcDrawingShemaModuleView) getController().getCurrentModuleView()).getController();
-					ShapeGraphicalRepresentation gr = (ShapeGraphicalRepresentation) action.getFocusedObject().getGraphicalRepresentation();
+					ShapeGraphicalRepresentation gr = action.getFocusedObject().getGraphicalRepresentation();
 					ShapeView shapeView = c.getDrawingView().shapeViewForObject(gr);
 					BufferedImage image = shapeView.getScreenshot();
 					ShapeBorder b = gr.getBorder();
@@ -81,8 +82,8 @@ public class PushToPaletteInitializer extends ActionInitializer {
 					// action.setScreenshot(ScreenshotGenerator.trimImage(image));
 				}
 
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.PUSH_TO_PALETTE_DIALOG_FIB, action, null, true,
-						FlexoLocalization.getMainLocalizer());
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(CEDCst.PUSH_TO_PALETTE_DIALOG_FIB, action,
+						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
 				if (dialog.getStatus() == Status.VALIDATED) {
 					return true;
 				}
@@ -95,7 +96,7 @@ public class PushToPaletteInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<PushToPalette> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<PushToPalette>() {
 			@Override
-			public boolean run(ActionEvent e, PushToPalette action) {
+			public boolean run(EventObject e, PushToPalette action) {
 				getController().setCurrentEditedObjectAsModuleView(action.palette, getController().VIEW_POINT_PERSPECTIVE);
 				getController().getSelectionManager().setSelectedObject(action.getNewPaletteElement());
 				return true;

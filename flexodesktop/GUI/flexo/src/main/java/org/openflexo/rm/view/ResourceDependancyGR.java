@@ -61,7 +61,7 @@ public class ResourceDependancyGR extends ConnectorGraphicalRepresentation<Resou
 
 	@Override
 	public String getText() {
-		return (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getResourceDependancy().getLastSynchronizationDate());
+		return new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getResourceDependancy().getLastSynchronizationDate());
 	}
 
 }

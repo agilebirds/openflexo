@@ -191,7 +191,7 @@ public class IEHeaderWidgetView extends AbstractInnerTableWidgetView<IEHeaderWid
 		});
 		remove(_jLabel);
 		add(_jLabelTextField);
-		_jLabelTextField.requestFocus();
+		_jLabelTextField.requestFocusInWindow();
 		_jLabelTextField.selectAll();
 		_jLabelTextField.revalidate();
 		_jLabelTextField.repaint();

@@ -25,13 +25,21 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.OntologyDataProperty;
 import org.openflexo.foundation.ontology.OntologyProperty;
+import org.openflexo.foundation.validation.ValidationError;
+import org.openflexo.foundation.validation.ValidationIssue;
+import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.EditionAction.EditionActionBindingAttribute;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 
 public class DataPropertyAssertion extends AbstractAssertion {
 
 	private String dataPropertyURI;
+
+	public DataPropertyAssertion(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	public String _getDataPropertyURI() {
 		return dataPropertyURI;
@@ -47,8 +55,8 @@ public class DataPropertyAssertion extends AbstractAssertion {
 	}
 
 	public OntologyProperty getOntologyProperty() {
-		if (getOntologyLibrary() != null) {
-			return getOntologyLibrary().getProperty(_getDataPropertyURI());
+		if (getViewPoint().getViewpointOntology() != null) {
+			return getViewPoint().getViewpointOntology().getProperty(_getDataPropertyURI());
 		}
 		return null;
 	}
@@ -96,6 +104,41 @@ public class DataPropertyAssertion extends AbstractAssertion {
 		value.setBindingAttribute(EditionActionBindingAttribute.value);
 		value.setBindingDefinition(getValueBindingDefinition());
 		this.value = value;
+	}
+
+	public static class DataPropertyAssertionMustDefineAnOntologyProperty extends
+			ValidationRule<DataPropertyAssertionMustDefineAnOntologyProperty, DataPropertyAssertion> {
+		public DataPropertyAssertionMustDefineAnOntologyProperty() {
+			super(DataPropertyAssertion.class, "data_property_assertion_must_define_an_ontology_property");
+		}
+
+		@Override
+		public ValidationIssue<DataPropertyAssertionMustDefineAnOntologyProperty, DataPropertyAssertion> applyValidation(
+				DataPropertyAssertion assertion) {
+			if (assertion.getOntologyProperty() == null) {
+				return new ValidationError<DataPropertyAssertionMustDefineAnOntologyProperty, DataPropertyAssertion>(this, assertion,
+						"data_property_assertion_does_not_define_an_ontology_property");
+			}
+			return null;
+		}
+
+	}
+
+	public static class ValueBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<DataPropertyAssertion> {
+		public ValueBindingIsRequiredAndMustBeValid() {
+			super("'value'_binding_is_required_and_must_be_valid", DataPropertyAssertion.class);
+		}
+
+		@Override
+		public ViewPointDataBinding getBinding(DataPropertyAssertion object) {
+			return object.getValue();
+		}
+
+		@Override
+		public BindingDefinition getBindingDefinition(DataPropertyAssertion object) {
+			return object.getValueBindingDefinition();
+		}
+
 	}
 
 }

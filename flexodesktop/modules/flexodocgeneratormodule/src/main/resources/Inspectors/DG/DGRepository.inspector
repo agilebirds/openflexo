@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.cg.DGRepository" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+  <TabPanel name="Tab" constraints="border(location=center)">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="BasicTab">
+      <Label label="format" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="FormatLabel" localize="true" />
+      <TextField index="3" data="data.format.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Format" readOnly="true" localize="true" />
+      <Label label="doc_type" index="16" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="DocTypeLabel" localize="true" />
+      <DropDown index="17" data="data.docType" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="DocType" format="object.name" localize="true" list="data.docType.availableValues" iteratorClassName="org.openflexo.foundation.DocType" autoSelectFirstRow="false" />
+      <Label label="name" index="18" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="NameLabel" localize="true" />
+      <TextField index="19" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Name" readOnly="true" localize="true" />
+      <Label label="source_directory" index="20" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="DirectoryLabel" localize="true" />
+      <File mode="SaveMode" isDirectory="true" index="21" data="data.directory" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Directory" localize="true" />
+      <Label label="table_of_content" index="22" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TocRepositoryLabel" localize="true" />
+      <DropDown showReset="true" index="23" data="data.tocRepository" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="TocRepository" format="object.title" localize="true" list="data.project.tOCData.repositories" iteratorClassName="org.openflexo.foundation.toc.TOCRepository" autoSelectFirstRow="false" />
+      <Label label="templates_repository" index="24" constraints="twocols(expandHorizontally=false;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="PreferredTemplateRepositoryLabel" localize="true" />
+      <DropDown showReset="true" index="25" data="data.preferredTemplateRepository" constraints="twocols(expandHorizontally=false;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="PreferredTemplateRepository" format="object.name" localize="true" list="data.generatedCode.templates.customDocRepositoriesVector" iteratorClassName="org.openflexo.foundation.cg.templates.CustomCGTemplateRepository" autoSelectFirstRow="false" />
+    </Tab>
+    <Tab title="History" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="HistoryTab">
+      <Label label="manage_history" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ManageHistoryLabel" localize="true" />
+      <CheckBox selected="false" index="1" data="data.manageHistory" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="ManageHistory" localize="true" />
+      <Label label="releases" align="center" index="2" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="(data.manageHistory = true)" name="ReleasesLabel" localize="true" />
+      <Table iteratorClassName="org.openflexo.foundation.cg.version.CGRelease" visibleRowCount="10" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="41,90,209" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="Releases" index="3" data="data.releases" constraints="twocols(expandHorizontally=true;expandVertically=true;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.manageHistory = true)">
+        <LabelColumn data="iterator.versionIdentifier" title="version" columnWidth="100" resizable="true" displayTitle="true" />
+        <LabelColumn data="iterator.name" title="name" columnWidth="150" resizable="true" displayTitle="true" />
+        <LabelColumn data="iterator.date" title="date" columnWidth="200" resizable="true" displayTitle="true" />
+        <LabelColumn data="iterator.userId" title="user" columnWidth="100" resizable="true" displayTitle="true" />
+      </Table>
+    </Tab>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab" />
+  </TabPanel>
+  <LocalizedDictionary>
+    <Localized key="History" lang="English">History</Localized>
+    <Localized key="History" lang="French">Historique</Localized>
+    <Localized key="History" lang="Dutch">History</Localized>
+    <Localized key="manage_history" lang="English">Manage history</Localized>
+    <Localized key="manage_history" lang="French">Gere l'historique</Localized>
+    <Localized key="manage_history" lang="Dutch">Manage history</Localized>
+    <Localized key="releases" lang="English">Releases</Localized>
+    <Localized key="releases" lang="French">Releases</Localized>
+    <Localized key="releases" lang="Dutch">Releases</Localized>
+    <Localized key="Advanced" lang="English">Advanced</Localized>
+    <Localized key="Advanced" lang="French">Advanced</Localized>
+    <Localized key="Advanced" lang="Dutch">Advanced</Localized>
+    <Localized key="Basic" lang="English">Basic</Localized>
+    <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="Basic" lang="Dutch">Basic</Localized>
+    <Localized key="format" lang="English">format</Localized>
+    <Localized key="format" lang="French">format</Localized>
+    <Localized key="format" lang="Dutch">format</Localized>
+    <Localized key="doc_type" lang="English">Doc type</Localized>
+    <Localized key="doc_type" lang="French">Type de doc</Localized>
+    <Localized key="doc_type" lang="Dutch">Doc type</Localized>
+    <Localized key="name" lang="English">Name</Localized>
+    <Localized key="name" lang="French">Nom</Localized>
+    <Localized key="name" lang="Dutch">Name</Localized>
+    <Localized key="source_directory" lang="English">Source directory</Localized>
+    <Localized key="source_directory" lang="French">Répertoire avec les sources</Localized>
+    <Localized key="source_directory" lang="Dutch">Source directory</Localized>
+    <Localized key="table_of_content" lang="English">Table of content</Localized>
+    <Localized key="table_of_content" lang="French">Table des matières</Localized>
+    <Localized key="table_of_content" lang="Dutch">Table of content</Localized>
+    <Localized key="templates_repository" lang="English">Template repository</Localized>
+    <Localized key="templates_repository" lang="French">Répertoire des templates</Localized>
+    <Localized key="templates_repository" lang="Dutch">Template repository</Localized>
+    <Localized key="Business" lang="English">Business</Localized>
+    <Localized key="Business" lang="French">Business</Localized>
+    <Localized key="Business" lang="Dutch">Business</Localized>
+    <Localized key="Technical" lang="English">Technical</Localized>
+    <Localized key="Technical" lang="French">Technique</Localized>
+    <Localized key="Technical" lang="Dutch">Technical</Localized>
+    <Localized key="UserManual" lang="English">Use case</Localized>
+    <Localized key="UserManual" lang="French">Cas d'utilisation</Localized>
+    <Localized key="UserManual" lang="Dutch">Use case</Localized>
+    <Localized key="Use case" lang="English">Use case</Localized>
+    <Localized key="Use case" lang="French">Use case</Localized>
+    <Localized key="Use case" lang="Dutch">Use case</Localized>
+    <Localized key="Objectives" lang="English">Objectives</Localized>
+    <Localized key="Objectives" lang="French">Objectifs</Localized>
+    <Localized key="Objectives" lang="Dutch">Objectives</Localized>
+    <Localized key="BusinessTechnical" lang="English">BusinessTechnical</Localized>
+    <Localized key="BusinessTechnical" lang="French">BusinessTechnical</Localized>
+    <Localized key="BusinessTechnical" lang="Dutch">BusinessTechnical</Localized>
+    <Localized key="Foodco" lang="English">Foodco</Localized>
+    <Localized key="Foodco" lang="French">Foodco</Localized>
+    <Localized key="Foodco" lang="Dutch">Foodco</Localized>
+    <Localized key="DBN Toc" lang="English">DBN Toc</Localized>
+    <Localized key="DBN Toc" lang="French">DBN Toc</Localized>
+    <Localized key="DBN Toc" lang="Dutch">DBN Toc</Localized>
+    <Localized key="BDNTemplates" lang="English">BDNTemplates</Localized>
+    <Localized key="BDNTemplates" lang="French">BDNTemplates</Localized>
+    <Localized key="BDNTemplates" lang="Dutch">BDNTemplates</Localized>
+    <Localized key="version" lang="English">Version</Localized>
+    <Localized key="version" lang="French">Version</Localized>
+    <Localized key="version" lang="Dutch">Version</Localized>
+    <Localized key="date" lang="English">Date</Localized>
+    <Localized key="date" lang="French">Date</Localized>
+    <Localized key="date" lang="Dutch">Date</Localized>
+    <Localized key="user" lang="English">User</Localized>
+    <Localized key="user" lang="French">Utilisateur</Localized>
+    <Localized key="user" lang="Dutch">User</Localized>
+    <Localized key="Technique" lang="English">Technical</Localized>
+    <Localized key="Technique" lang="French">Technique</Localized>
+    <Localized key="Technique" lang="Dutch">Technical</Localized>
+    <Localized key="Cas d'utilisation" lang="English">Cas d'utilisation</Localized>
+    <Localized key="Cas d'utilisation" lang="French">Cas d'utilisation</Localized>
+    <Localized key="Cas d'utilisation" lang="Dutch">Cas d'utilisation</Localized>
+    <Localized key="Objectifs" lang="English">Objectives</Localized>
+    <Localized key="Objectifs" lang="French">Objectifs</Localized>
+    <Localized key="Objectifs" lang="Dutch">Objectives</Localized>
+  </LocalizedDictionary>
+  <Parameter name="title" value="generated_doc_repository" />
+</Panel>

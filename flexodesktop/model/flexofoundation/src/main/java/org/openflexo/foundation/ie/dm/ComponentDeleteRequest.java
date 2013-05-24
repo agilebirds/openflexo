@@ -66,7 +66,7 @@ public class ComponentDeleteRequest extends IEDataModification implements RMNoti
 
 	@Override
 	public boolean propagateToSynchronizedResource(FlexoResource originResource, FlexoResource targetResource) {
-		if ((originResource == component.getComponentLibrary().getFlexoResource()) /*&& targetResource == component.getComponentResource()*/) {
+		if (originResource == component.getComponentLibrary().getFlexoResource() /*&& targetResource == component.getComponentResource()*/) {
 			return true;
 		} else {
 			return false;

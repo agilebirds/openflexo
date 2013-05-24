@@ -31,7 +31,6 @@ import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
 import org.openflexo.toolbox.EmptyVector;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * A WorkflowModelObject represents an object declared as workflow level. This means that its visibility is not related to a particular
@@ -46,83 +45,47 @@ public abstract class WorkflowModelObject extends RepresentableFlexoModelObject 
 
 	protected static final Vector<WorkflowModelObject> EMPTY_VECTOR = EmptyVector.EMPTY_VECTOR(WorkflowModelObject.class);
 
-	// ================================================================
-	// ====================== Instance variables ======================
-	// ================================================================
-
-	private FlexoWorkflow _workflow;
-	private FlexoProject _project;
-
-	// ==========================================================
-	// ================= Constructor ============================
-	// ==========================================================
+	private final FlexoWorkflow workflow;
 
 	/**
 	 * Create a new WorkflowModelObject.
 	 */
 	public WorkflowModelObject(FlexoProject project, FlexoWorkflow workflow) {
 		super(project);
-		_project = project;
-		_workflow = workflow;
+		this.workflow = workflow;
+		if (workflow != null) {
+			registerOnProject();
+		}
 	}
 
-	/**
-	 * Create a new WorkflowModelObject.
-	 */
-	public WorkflowModelObject(FlexoProject project) {
-		this(project, null);
+	@Override
+	protected void registerObject(FlexoProject project) {
 	}
 
-	public FlexoWorkflow getFlexoWorkflow() {
-		if (_workflow != null) {
-			return _workflow;
+	protected void registerOnProject() {
+		if (getWorkflow().getFlexoResource() != null && !getWorkflow().isCache()) {
+			super.registerObject(getProject());
 		}
-		if (_project != null && !isDeserializing) {
-			return _project.getWorkflow();
-		}
-		return null;
+	}
+
+	@Override
+	public boolean isCache() {
+		return getWorkflow().isCache();
 	}
 
 	public FlexoWorkflow getWorkflow() {
-		return getFlexoWorkflow();
+		return workflow;
 	}
 
-	/**
-	 * Returns reference to the main object in which this XML-serializable object is contained relating to storing scheme: here it's the
-	 * workflow itself
-	 * 
-	 * @return this
-	 */
 	@Override
 	public XMLStorageResourceData getXMLResourceData() {
-		return getFlexoWorkflow();
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		if (getFlexoWorkflow() != null) {
-			return getFlexoWorkflow().getProject();
-		}
-		return null;
+		return getWorkflow();
 	}
 
 	public void notifyAttributeModification(String attributeName, Object oldValue, Object newValue) {
 		setChanged();
 		notifyObservers(new WKFAttributeDataModification(attributeName, oldValue, newValue));
 	}
-
-	// ========================================================================
-	// ========================= XML Serialization ============================
-	// ========================================================================
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getProject().getXmlMappings().getWorkflowMapping();
-	}
-
-	// ========================================================================
-	// ========================= Validable interface ==========================
-	// ========================================================================
 
 	/**
 	 * Return default validation model for this object

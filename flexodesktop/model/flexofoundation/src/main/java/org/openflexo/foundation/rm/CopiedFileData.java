@@ -153,14 +153,4 @@ public class CopiedFileData implements GeneratedResourceData {
 
 	}
 
-	/**
-	 * Overrides setProject
-	 * 
-	 * @see org.openflexo.foundation.rm.FlexoResourceData#setProject(org.openflexo.foundation.rm.FlexoProject)
-	 */
-	@Override
-	public void setProject(FlexoProject aProject) {
-
-	}
-
 }

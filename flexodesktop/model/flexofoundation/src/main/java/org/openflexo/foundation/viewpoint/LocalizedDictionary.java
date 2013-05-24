@@ -27,6 +27,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
@@ -41,9 +42,13 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 	private final Hashtable<Language, Hashtable<String, String>> _values;
 	private Vector<DynamicEntry> dynamicEntries = null;
 
-	public LocalizedDictionary() {
+	public LocalizedDictionary(ViewPointBuilder builder) {
+		super(builder);
 		_entries = new Vector<LocalizedEntry>();
 		_values = new Hashtable<Language, Hashtable<String, String>>();
+		if (builder != null) {
+			_calc = builder.getViewPoint();
+		}
 	}
 
 	@Override
@@ -82,7 +87,7 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 
 	private LocalizedEntry getEntry(Language language, String key) {
 		for (LocalizedEntry entry : getEntries()) {
-			if ((Language.retrieveLanguage(entry.getLanguage()) == language) && key.equals(entry.getKey())) {
+			if (Language.retrieveLanguage(entry.getLanguage()) == language && key.equals(entry.getKey())) {
 				return entry;
 			}
 		}
@@ -329,6 +334,11 @@ public class LocalizedDictionary extends ViewPointObject implements LocalizedDel
 	@Override
 	public LocalizedDelegate getParent() {
 		return FlexoLocalization.getMainLocalizer();
+	}
+
+	@Override
+	public String getLanguageRepresentation() {
+		return "<not_implemented:" + getFullyQualifiedName() + ">";
 	}
 
 }

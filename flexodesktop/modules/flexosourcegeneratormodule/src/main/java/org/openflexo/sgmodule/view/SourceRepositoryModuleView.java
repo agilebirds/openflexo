@@ -44,6 +44,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.cg.dm.CGRepositoryConnected;
 import org.openflexo.foundation.cg.dm.CGRepositoryDisconnected;
@@ -60,8 +61,8 @@ import org.openflexo.swing.FlexoFileChooser;
 import org.openflexo.swing.JConsole;
 import org.openflexo.toolbox.LogListener;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.listener.FlexoActionButton;
 
 /**
@@ -226,13 +227,17 @@ public class SourceRepositoryModuleView extends JPanel implements ModuleView<Sou
 	 * @see org.openflexo.view.ModuleView#getPerspective()
 	 */
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return controller.CODE_GENERATION_PERSPECTIVE;
 	}
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
 		if (observable == sourceRepository /*|| observable == sourceRepository.getReaderRepository()*/) {
+			if (dataModification instanceof ObjectDeleted) {
+				deleteModuleView();
+				return;
+			}
 			if (dataModification.propertyName() != null && dataModification.propertyName().equals("warDirectory")) {
 				// chooseWarLocationButton.setText(sourceRepository.getWarDirectory()!=null?sourceRepository.getWarDirectory().getAbsolutePath():FlexoLocalization.localizedForKey("undefined"));
 			} else if (dataModification.propertyName() != null && dataModification.propertyName().equals("directory")) {
@@ -259,7 +264,7 @@ public class SourceRepositoryModuleView extends JPanel implements ModuleView<Sou
 			}
 		}
 		// generateButton.setEnabled(SynchronizeRepositoryCodeGeneration.actionType.isEnabled(sourceRepository,null,controller.getEditor()));
-		// warButton.setEnabled(GenerateWAR.actionType.isEnabled(codeRepository, null, controller.getEditor()));
+		// warButton.setEnabled(GenerateWAR.actionType.isEnabled(codeRepository, null,_controller));
 	}
 
 	/**
@@ -403,11 +408,11 @@ public class SourceRepositoryModuleView extends JPanel implements ModuleView<Sou
 
 			controlPanel = new JPanel(new FlowLayout());
 			FlexoActionButton synchronizeAction = new FlexoActionButton(SynchronizeRepositoryCodeGeneration.actionType, "synchronize",
-					SourceRepositoryModuleView.this, controller.getEditor());
+					SourceRepositoryModuleView.this, controller);
 			FlexoActionButton generateAction = new FlexoActionButton(GenerateSourceCode.actionType, "generate",
-					SourceRepositoryModuleView.this, controller.getEditor());
+					SourceRepositoryModuleView.this, controller);
 			FlexoActionButton writeAction = new FlexoActionButton(WriteModifiedGeneratedFiles.actionType, "write_files",
-					SourceRepositoryModuleView.this, controller.getEditor());
+					SourceRepositoryModuleView.this, controller);
 			actionButtons.add(synchronizeAction);
 			actionButtons.add(generateAction);
 			actionButtons.add(writeAction);

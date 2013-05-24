@@ -52,30 +52,17 @@ public class FIBPanel extends FIBContainer {
 	private Font titleFont = null;
 	private int darkLevel = 0;
 
+	private boolean trackViewPortWidth = true;
+	private boolean trackViewPortHeight = true;
+
 	private boolean protectContent = false;
 
 	public static enum Parameters implements FIBModelAttribute {
-		layout,
-		flowAlignment,
-		boxLayoutAxis,
-		hGap,
-		vGap,
-		cols,
-		rows,
-		border,
-		borderColor,
-		borderTitle,
-		borderTop,
-		borderBottom,
-		borderLeft,
-		borderRight,
-		titleFont,
-		darkLevel,
-		protectContent
+		layout, flowAlignment, boxLayoutAxis, hGap, vGap, cols, rows, border, borderColor, borderTitle, borderTop, borderBottom, borderLeft, borderRight, titleFont, darkLevel, protectContent, trackViewPortWidth, trackViewPortHeight;
 	}
 
 	public static enum Layout {
-		none, flow, border, grid, box, twocols, gridbag
+		none, flow, border, grid, box, twocols, gridbag, split
 	}
 
 	public static enum FlowLayoutAlignment {
@@ -425,6 +412,30 @@ public class FIBPanel extends FIBContainer {
 		FIBAttributeNotification<Integer> notification = requireChange(Parameters.darkLevel, darkLevel);
 		if (notification != null) {
 			this.darkLevel = darkLevel;
+			hasChanged(notification);
+		}
+	}
+
+	public boolean isTrackViewPortWidth() {
+		return trackViewPortWidth;
+	}
+
+	public void setTrackViewPortWidth(boolean trackViewPortWidth) {
+		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.trackViewPortWidth, trackViewPortWidth);
+		if (notification != null) {
+			this.trackViewPortWidth = trackViewPortWidth;
+			hasChanged(notification);
+		}
+	}
+
+	public boolean isTrackViewPortHeight() {
+		return trackViewPortHeight;
+	}
+
+	public void setTrackViewPortHeight(boolean trackViewPortHeight) {
+		FIBAttributeNotification<Boolean> notification = requireChange(Parameters.trackViewPortHeight, trackViewPortHeight);
+		if (notification != null) {
+			this.trackViewPortHeight = trackViewPortHeight;
 			hasChanged(notification);
 		}
 	}

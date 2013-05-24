@@ -23,6 +23,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Observable;
@@ -31,15 +33,13 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.ListSelectionModel;
 import javax.swing.event.EventListenerList;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
 import org.openflexo.fib.controller.FIBController;
+import org.openflexo.fib.model.FIBButtonColumn;
 import org.openflexo.fib.model.FIBCheckBoxColumn;
 import org.openflexo.fib.model.FIBCustomColumn;
 import org.openflexo.fib.model.FIBDropDownColumn;
@@ -58,17 +58,14 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
  * @author sguerin
  * 
  */
-public class FIBTableModel extends DefaultTableModel implements ListSelectionListener {
+public class FIBTableModel extends AbstractTableModel {
 
 	private static final Logger logger = Logger.getLogger(FIBTableModel.class.getPackage().getName());
 
-	private List _values;
+	private List<Object> _values;
 	private Vector<AbstractColumn> _columns;
-	private final FIBTableWidgetFooter _footer;
 	private FIBTable _fibTable;
 	private FIBTableWidget _widget;
-	private Object selectedObject;
-	private Vector<Object> selection;
 
 	private final Hashtable<Object, RowObjectModificationTracker> _rowObjectModificationTrackers;
 
@@ -88,8 +85,6 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 		}
 
 		_rowObjectModificationTrackers = new Hashtable<Object, RowObjectModificationTracker>();
-
-		_footer = new FIBTableWidgetFooter(fibTable, this, widget);
 
 	}
 
@@ -118,8 +113,6 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 			c.delete();
 		}
 
-		_footer.delete();
-
 		_columns.clear();
 		if (_values != null) {
 			_values.clear();
@@ -135,26 +128,24 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 		return _widget;
 	}
 
-	public List getValues() {
+	public List<Object> getValues() {
 		return _values;
 	}
 
-	private static final Vector EMPTY_VECTOR = new Vector();
-
-	public void setValues(List values) {
+	public void setValues(Collection<?> values) {
 		// logger.info("setValues with "+values);
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setValues() with " + values);
 		}
-		List newValues = values;
+		Collection<?> newValues = values;
 		if (values == null) {
-			newValues = EMPTY_VECTOR;
+			newValues = Collections.emptyList();
 		}
 
-		List oldValues = _values;
-		_values = new ArrayList();
-		ArrayList removedValues = new ArrayList();
-		ArrayList addedValues = new ArrayList();
+		List<Object> oldValues = _values;
+		_values = new ArrayList<Object>();
+		List<Object> removedValues = new ArrayList<Object>();
+		List<Object> addedValues = new ArrayList<Object>();
 		if (oldValues != null) {
 			removedValues.addAll(oldValues);
 		}
@@ -195,7 +186,7 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 
 		}
 
-		fireModelObjectHasChanged(oldValues, newValues);
+		fireModelObjectHasChanged(oldValues, _values);
 		fireTableDataChanged();
 	}
 
@@ -222,6 +213,10 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			// System.out.println("Row object "+evt.getSource()+" : propertyChange "+evt);
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("table " + getTable().getName() + " propertyChange for " + rowObject + " source=" + evt.getSource() + " evt="
+						+ evt);
+			}
 			updateRow();
 		}
 
@@ -243,26 +238,27 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 	 * @see EventListenerList
 	 * @see javax.swing.JTable#tableChanged(TableModelEvent)
 	 */
-	public void fireModelObjectHasChanged(List oldValues, List newValues) {
+	public void fireModelObjectHasChanged(List<Object> oldValues, List<Object> newValues) {
+		// logger.info("fireModelObjectHasChanged in " + getTable().getName() + " from " + oldValues + " to " + newValues);
 		fireTableChanged(new ModelObjectHasChanged(this, oldValues, newValues));
 	}
 
 	public class ModelObjectHasChanged extends TableModelEvent {
-		private final List _oldValues;
+		private final List<Object> _oldValues;
 
-		private final List _newValues;
+		private final List<Object> _newValues;
 
-		public ModelObjectHasChanged(TableModel source, List oldValues, List newValues) {
+		public ModelObjectHasChanged(TableModel source, List<Object> oldValues, List<Object> newValues) {
 			super(source);
 			_oldValues = oldValues;
 			_newValues = newValues;
 		}
 
-		public List getNewValues() {
+		public List<Object> getNewValues() {
 			return _newValues;
 		}
 
-		public List getOldValues() {
+		public List<Object> getOldValues() {
 			return _oldValues;
 		}
 	}
@@ -276,7 +272,7 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 	}
 
 	public Object elementAt(int row) {
-		if ((getValues() != null) && (row >= 0) && (row < getValues().size())) {
+		if (getValues() != null && row >= 0 && row < getValues().size()) {
 			return getValues().get(row);
 		}
 		return null;
@@ -369,7 +365,7 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		AbstractColumn column = columnAt(col);
-		if ((column != null) && (column instanceof EditableColumn)) {
+		if (column != null && column instanceof EditableColumn) {
 			Object object = elementAt(row);
 			((EditableColumn) column).setValueFor(object, value);
 			fireCellUpdated(object, row, col);
@@ -447,32 +443,18 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 		return _controls.elements();
 	}*/
 
-	public FIBTableWidgetFooter getFooter() {
-		return _footer;
-
-		/*  if (controlPanel == null) {
-		    controlPanel = new JPanel() {
-		         @Override
-		        public void remove(int index)
-		        {
-		            super.remove(index);
-		        }
-		    };
-		    controlPanel.setLayout(new FlowLayout());
-		    controlPanel.setOpaque(false);
-		}
-		return controlPanel;*/
+	/*  if (controlPanel == null) {
+	    controlPanel = new JPanel() {
+	         @Override
+	        public void remove(int index)
+	        {
+	            super.remove(index);
+	        }
+	    };
+	    controlPanel.setLayout(new FlowLayout());
+	    controlPanel.setOpaque(false);
 	}
-
-	public void setModel(Object model) {
-		_footer.setModel(model);
-
-		/* for (Enumeration en = _controls.elements(); en.hasMoreElements();) {
-		    PropertyListActionListener actionListener = (PropertyListActionListener) en.nextElement();
-			actionListener.setModel(model);
-		}
-		updateControls(null);*/
-	}
+	return controlPanel;*/
 
 	public FIBTableColumn getPropertyListColumnWithTitle(String title) {
 		return _fibTable.getColumnWithTitle(title);
@@ -488,6 +470,11 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 		}
 	}
 
+	/**
+	 * @return the table widget associated with this model.
+	 * @deprecated model should not have access to its view nor its controller
+	 */
+	@Deprecated
 	protected FIBTableWidget getTableWidget() {
 		return _widget;
 	}
@@ -507,122 +494,11 @@ public class FIBTableModel extends DefaultTableModel implements ListSelectionLis
 			return new NumberColumn((FIBNumberColumn) column, this, controller);
 		} else if (column instanceof FIBCustomColumn) {
 			return new CustomColumn((FIBCustomColumn) column, this, controller);
+		} else if (column instanceof FIBButtonColumn) {
+			return new ButtonColumn((FIBButtonColumn) column, this, controller);
 		}
 		return null;
 
-	}
-
-	public Object getSelectedObject() {
-		return selectedObject;
-	}
-
-	public Vector<Object> getSelection() {
-		return selection;
-	}
-
-	public ListSelectionModel getListSelectionModel() {
-		return _widget.getListSelectionModel();
-	}
-
-	/*public boolean isFocused()
-	{
-		return _widget.isFocused();
-	}*/
-
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-
-		// Ignore extra messages.
-		if (e.getValueIsAdjusting()) {
-			return;
-		}
-
-		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("valueChanged() selected index=" + getListSelectionModel().getMinSelectionIndex());
-		}
-
-		int i = getListSelectionModel().getMinSelectionIndex();
-		int leadIndex = getListSelectionModel().getLeadSelectionIndex();
-		if (!getListSelectionModel().isSelectedIndex(leadIndex)) {
-			leadIndex = getListSelectionModel().getAnchorSelectionIndex();
-		}
-		while (!getListSelectionModel().isSelectedIndex(leadIndex) && i <= getListSelectionModel().getMaxSelectionIndex()) {
-			leadIndex = i;
-			i++;
-		}
-
-		selectedObject = elementAt(leadIndex);
-
-		Vector<Object> oldSelection = selection;
-		selection = new Vector<Object>();
-		for (i = getListSelectionModel().getMinSelectionIndex(); i <= getListSelectionModel().getMaxSelectionIndex(); i++) {
-			if (getListSelectionModel().isSelectedIndex(i)) {
-				selection.add(elementAt(i));
-			}
-		}
-
-		_widget.getDynamicModel().selected = selectedObject;
-		_widget.getDynamicModel().selection = selection;
-		_widget.notifyDynamicModelChanged();
-
-		if (_widget.getComponent().getSelected().isValid()) {
-			logger.fine("Sets SELECTED binding with " + selectedObject);
-			_widget.getComponent().getSelected().setBindingValue(selectedObject, _widget.getController());
-		}
-
-		_widget.updateFont();
-
-		if (!ignoreNotifications) {
-			_widget.getController().updateSelection(_widget, oldSelection, selection);
-		}
-
-		_footer.handleSelectionChanged();
-
-		/*SwingUtilities.invokeLater(new Runnable() {
-			
-			public void run()
-			{
-				System.out.println((isFocused() ? "LEADER" : "SECONDARY")+" Le grand vainqueur est "+selectedObject);
-				System.out.println((isFocused() ? "LEADER" : "SECONDARY")+" La selection est "+selection);
-			}
-		});*/
-
-	}
-
-	private boolean ignoreNotifications = false;
-
-	public void addToSelectionNoNotification(Object o) {
-		int index = getWidget().getValue().indexOf(o);
-		ignoreNotifications = true;
-		getListSelectionModel().addSelectionInterval(index, index);
-		ignoreNotifications = false;
-	}
-
-	public void removeFromSelectionNoNotification(Object o) {
-		int index = getWidget().getValue().indexOf(o);
-		ignoreNotifications = true;
-		getListSelectionModel().removeSelectionInterval(index, index);
-		ignoreNotifications = false;
-	}
-
-	public void resetSelectionNoNotification() {
-		ignoreNotifications = true;
-		getListSelectionModel().clearSelection();
-		ignoreNotifications = false;
-	}
-
-	public void addToSelection(Object o) {
-		int index = getWidget().getValue().indexOf(o);
-		getListSelectionModel().addSelectionInterval(index, index);
-	}
-
-	public void removeFromSelection(Object o) {
-		int index = getWidget().getValue().indexOf(o);
-		getListSelectionModel().removeSelectionInterval(index, index);
-	}
-
-	public void resetSelection() {
-		getListSelectionModel().clearSelection();
 	}
 
 }

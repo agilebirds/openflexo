@@ -54,7 +54,6 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.swing.FlexoFileChooser;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.toolbox.ToolBox;
 import org.openflexo.xmlcode.StringEncoder;
 
 public class TestDrawingEditor {
@@ -84,7 +83,6 @@ public class TestDrawingEditor {
 	private static void init() {
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			ToolBox.setPlatform();
 			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
 			FlexoLocalization.initWith(LOCALIZATION);
 		} catch (SecurityException e) {

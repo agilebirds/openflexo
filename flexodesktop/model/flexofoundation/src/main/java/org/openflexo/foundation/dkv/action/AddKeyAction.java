@@ -27,10 +27,12 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.dkv.DKVObject;
 import org.openflexo.foundation.dkv.Domain;
+import org.openflexo.foundation.dkv.Domain.KeyList;
 import org.openflexo.foundation.dkv.Key;
 import org.openflexo.foundation.dkv.Language;
 import org.openflexo.logging.FlexoLogger;
@@ -54,12 +56,12 @@ public class AddKeyAction extends FlexoUndoableAction<AddKeyAction, DKVObject, D
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DKVObject object, Vector globalSelection) {
+		public boolean isVisibleForSelection(DKVObject object, Vector globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DKVObject object, Vector globalSelection) {
+		public boolean isEnabledForSelection(DKVObject object, Vector globalSelection) {
 			return object instanceof Domain || object instanceof Domain.KeyList;
 		}
 
@@ -71,6 +73,11 @@ public class AddKeyAction extends FlexoUndoableAction<AddKeyAction, DKVObject, D
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, Domain.class);
+		FlexoModelObject.addActionForClass(actionType, KeyList.class);
+	}
 
 	private Key newKey;
 	private Domain _domain;

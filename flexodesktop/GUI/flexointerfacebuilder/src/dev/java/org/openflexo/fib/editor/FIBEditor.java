@@ -23,6 +23,7 @@ import java.awt.Rectangle;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -45,12 +46,14 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
@@ -80,6 +83,8 @@ import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLCoder;
 
+// TODO: switch to the right editor controller when switching tab
+// 		getPalette().setEditorController(editorController);
 public class FIBEditor implements FIBGenericEditor {
 
 	public static class FIBPreferences {
@@ -226,7 +231,6 @@ public class FIBEditor implements FIBGenericEditor {
 		}*/
 
 		try {
-			ToolBox.setPlatform();
 			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
 			FlexoLocalization.initWith(FIBAbstractEditor.LOCALIZATION);
 		} catch (SecurityException e) {
@@ -237,22 +241,14 @@ public class FIBEditor implements FIBGenericEditor {
 			e.printStackTrace();
 		}
 
-		FIBEditor editor = new FIBEditor();
-		editor.showPanel();
-
-		/*(new Thread(new Runnable() {
-			public void run()
-			{
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				logger.info("Stopping application");
-				System.exit(-1);
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				FIBEditor editor = new FIBEditor();
+				editor.showPanel();
 			}
-		})).start();*/
+		});
+
 	}
 
 	private final JFrame frame;
@@ -343,7 +339,7 @@ public class FIBEditor implements FIBGenericEditor {
 
 		menuBar = new MenuBar();
 
-		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -352,7 +348,7 @@ public class FIBEditor implements FIBGenericEditor {
 		});
 		frame.setJMenuBar(menuBar);
 		frame.getContentPane().add(mainPanel);
-		frame.validate();
+		mainPanel.revalidate();
 		frame.setVisible(true);
 	}
 
@@ -372,10 +368,11 @@ public class FIBEditor implements FIBGenericEditor {
 	public void newFIB() {
 		FIBPanel fibComponent = new FIBPanel();
 		fibComponent.setLayout(Layout.border);
-
+		fibComponent.finalizeDeserialization();
 		EditedFIB newEditedFIB = new EditedFIB("New.fib", new File("NewComponent.fib"), fibComponent);
 
 		editorController = new FIBEditorController(fibComponent, this);
+		getPalette().setEditorController(editorController);
 
 		mainPanel.newEditedComponent(newEditedFIB, editorController);
 
@@ -389,10 +386,15 @@ public class FIBEditor implements FIBGenericEditor {
 	}
 
 	public void loadFIB(File fibFile) {
+		if (!fibFile.exists()) {
+			JOptionPane.showMessageDialog(frame, "File " + fibFile.getAbsolutePath() + " does not exist anymore");
+			return;
+		}
 		FIBPreferences.setLastFile(fibFile);
 		FIBComponent fibComponent = FIBLibrary.instance().retrieveFIBComponent(fibFile, false);
 		EditedFIB newEditedFIB = new EditedFIB(fibFile.getName(), fibFile, fibComponent);
 		editorController = new FIBEditorController(fibComponent, this);
+		getPalette().setEditorController(editorController);
 		mainPanel.newEditedComponent(newEditedFIB, editorController);
 	}
 
@@ -449,7 +451,6 @@ public class FIBEditor implements FIBGenericEditor {
 
 		JDialog testInterface = new JDialog(frame, "Test", false);
 		testInterface.getContentPane().add(view.getResultingJComponent());
-		testInterface.validate();
 		testInterface.pack();
 		testInterface.setVisible(true);
 	}
@@ -467,7 +468,6 @@ public class FIBEditor implements FIBGenericEditor {
 		JDialog localizationInterface = new JDialog(frame, FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION,
 				"component_localization"), false);
 		localizationInterface.getContentPane().add(view.getResultingJComponent());
-		localizationInterface.validate();
 		localizationInterface.pack();
 		localizationInterface.setVisible(true);
 	}
@@ -547,6 +547,8 @@ public class FIBEditor implements FIBGenericEditor {
 		private JMenuItem componentValidationItem;
 
 		private JMenu openRecent;
+
+		private JMenuItem showPaletteItem;
 
 		public MenuBar() {
 			fileMenu = new JMenu(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "file"));
@@ -691,9 +693,16 @@ public class FIBEditor implements FIBGenericEditor {
 					getInspector().setVisible(true);
 				}
 			});
-			inspectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ToolBox.getPLATFORM() != ToolBox.MACOS ? KeyEvent.CTRL_MASK
-					: KeyEvent.META_MASK));
+			inspectItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, ToolBox.getPLATFORM() != ToolBox.MACOS ? InputEvent.CTRL_MASK
+					: InputEvent.META_MASK));
+			showPaletteItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "show_palette"));
+			showPaletteItem.addActionListener(new ActionListener() {
 
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					getPalette().setVisible(true);
+				}
+			});
 			logsItem = new JMenuItem(FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "logs"));
 			logsItem.addActionListener(new ActionListener() {
 				@Override
@@ -743,6 +752,7 @@ public class FIBEditor implements FIBGenericEditor {
 			});
 
 			toolsMenu.add(inspectItem);
+			toolsMenu.add(showPaletteItem);
 			toolsMenu.add(logsItem);
 			toolsMenu.add(localizedItem);
 			toolsMenu.add(displayFileItem);
@@ -808,7 +818,7 @@ public class FIBEditor implements FIBGenericEditor {
 			editedComponents.add(edited);
 			controllers.put(edited, controller);
 			add(controller.getEditorPanel(), edited.title);
-			frame.validate();
+			revalidate();
 			setSelectedIndex(getComponentCount() - 1);
 		}
 

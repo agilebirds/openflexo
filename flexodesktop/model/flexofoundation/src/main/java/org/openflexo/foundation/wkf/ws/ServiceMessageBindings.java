@@ -169,7 +169,7 @@ public abstract class ServiceMessageBindings extends WKFObject implements Bindab
 	}
 
 	public Vector<ServiceMessageEntryBinding> getBindings() {
-		if ((_bindings != null) && (getMessageDefinition() != null) && (_bindings.size() != getMessageDefinition().getEntries().size())) {
+		if (_bindings != null && getMessageDefinition() != null && _bindings.size() != getMessageDefinition().getEntries().size()) {
 			updateBindings();
 		}
 		return _bindings;
@@ -220,7 +220,7 @@ public abstract class ServiceMessageBindings extends WKFObject implements Bindab
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("received update in ServiceMessageBindings " + dataModification);
 		}
-		if ((o == getMessageDefinition()) && ((dataModification instanceof BindingAdded) || (dataModification instanceof BindingRemoved))) {
+		if (o == getMessageDefinition() && (dataModification instanceof BindingAdded || dataModification instanceof BindingRemoved)) {
 			updateBindings();
 		}
 	}

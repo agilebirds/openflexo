@@ -50,12 +50,12 @@ public class AddPaletteElement extends FlexoAction<AddPaletteElement, ViewPointP
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ViewPointPalette object, Vector<ViewPointObject> globalSelection) {
+		public boolean isVisibleForSelection(ViewPointPalette object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ViewPointPalette object, Vector<ViewPointObject> globalSelection) {
+		public boolean isEnabledForSelection(ViewPointPalette object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 

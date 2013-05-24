@@ -21,29 +21,58 @@ package org.openflexo.fib;
 
 import java.io.File;
 
+import org.openflexo.ApplicationContext;
 import org.openflexo.ApplicationData;
 import org.openflexo.components.WelcomeDialog;
 import org.openflexo.fib.editor.FIBAbstractEditor;
+import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
+import org.openflexo.foundation.utils.DefaultProjectLoadingHandler;
+import org.openflexo.foundation.utils.ProjectLoadingHandler;
+import org.openflexo.view.controller.InteractiveFlexoEditor;
 
+public class WelcomePanelEDITOR extends FIBAbstractEditor {
 
-public class WelcomePanelEDITOR {
+	@Override
+	public Object[] getData() {
+		ApplicationData applicationData = new ApplicationData(new ApplicationContext() {
 
-
-	public static void main(String[] args)
-	{
-		//ModuleLoader.initializeModules(UserType.MAINTAINER, false);
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
-			public Object[] getData()
-			{
-				ApplicationData applicationData = new ApplicationData();
-				return FIBAbstractEditor.makeArray(applicationData);
+			public FlexoEditor makeFlexoEditor(FlexoProject project) {
+				return new InteractiveFlexoEditor(this, project);
 			}
+
 			@Override
-			public File getFIBFile() {
-				return WelcomeDialog.FIB_FILE;
+			public FlexoEditor createApplicationEditor() {
+				return new InteractiveFlexoEditor(this, null);
 			}
-		};
-		editor.launch();
+
+			@Override
+			protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
+				return null;
+			}
+
+			@Override
+			public ProjectLoadingHandler getProjectLoadingHandler(File projectDirectory) {
+				return new DefaultProjectLoadingHandler();
+			}
+
+			@Override
+			protected FlexoResourceCenterService createResourceCenterService() {
+				return null;
+			}
+		});
+		return FIBAbstractEditor.makeArray(applicationData);
+	}
+
+	@Override
+	public File getFIBFile() {
+		return WelcomeDialog.FIB_FILE;
+	}
+
+	public static void main(String[] args) {
+		main(WelcomePanelEDITOR.class);
 	}
 }

@@ -22,6 +22,8 @@
 
 package com.metaphaseeditor;
 
+import java.awt.Window;
+
 import javax.swing.JOptionPane;
 
 import org.openflexo.toolbox.ImageIconResource;
@@ -63,12 +65,13 @@ public class ImageDialog extends javax.swing.JDialog {
 	private boolean link = false;
 
 	/** Creates new form ImageDialog */
-	public ImageDialog(java.awt.Frame parent, boolean modal) {
-		super(parent, modal);
+	public ImageDialog(Window parent, boolean modal) {
+		super(parent);
+		setModal(modal);
 		initComponents();
 		setIconImage(new ImageIconResource("Icons/MetaphaseEditor/icons/metaphase16x16.png").getImage());
 
-		setLocationRelativeTo(null);
+		setLocationRelativeTo(parent);
 
 		alignComboBox.removeAllItems();
 		Alignment[] alignments = Alignment.values();

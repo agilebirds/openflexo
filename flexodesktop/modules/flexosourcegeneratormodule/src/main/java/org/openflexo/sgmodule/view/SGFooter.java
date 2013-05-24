@@ -31,6 +31,7 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.foundation.DataModification;
@@ -142,7 +143,7 @@ public class SGFooter extends JPanel implements GraphicalFlexoObserver, FocusLis
 				statusLabel.setForeground(Color.BLACK);
 				displayItemStatus = false;
 			} else {
-				if ((_sgController.getProjectGenerator(repositoryToConsider) == null)
+				if (_sgController.getProjectGenerator(repositoryToConsider) == null
 						|| !_sgController.getProjectGenerator(repositoryToConsider).hasBeenInitialized()) {
 					statusLabel.setText(repName + FlexoLocalization.localizedForKey("code_generation_not_synchronized"));
 					displayItemStatus = false;
@@ -193,7 +194,16 @@ public class SGFooter extends JPanel implements GraphicalFlexoObserver, FocusLis
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
+	public void update(final FlexoObservable observable, final DataModification dataModification) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					update(observable, dataModification);
+				}
+			});
+			return;
+		}
 		refresh();
 	}
 
@@ -201,7 +211,7 @@ public class SGFooter extends JPanel implements GraphicalFlexoObserver, FocusLis
 	public void focusGained(FocusEvent e) {
 		if (e.getComponent() instanceof JEditTextArea) {
 			((JEditTextArea) e.getComponent()).addToCursorPositionListener(this);
-			_activeGenericCodeDisplayer = ((JEditTextArea) e.getComponent());
+			_activeGenericCodeDisplayer = (JEditTextArea) e.getComponent();
 			refresh();
 		}
 	}
@@ -231,8 +241,8 @@ public class SGFooter extends JPanel implements GraphicalFlexoObserver, FocusLis
 			editorStatusLabel.setText(FlexoLocalization.localizedForKey("no_edition"));
 		} else {
 			cursorPositionLabel.setText(_activeGenericCodeDisplayer.getCursorY() + ":" + _activeGenericCodeDisplayer.getCursorX());
-			editorStatusLabel.setText((_activeGenericCodeDisplayer.isEditable() ? FlexoLocalization.localizedForKey("edition")
-					: FlexoLocalization.localizedForKey("read_only")));
+			editorStatusLabel.setText(_activeGenericCodeDisplayer.isEditable() ? FlexoLocalization.localizedForKey("edition")
+					: FlexoLocalization.localizedForKey("read_only"));
 		}
 	}
 

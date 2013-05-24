@@ -19,7 +19,7 @@
  */
 package org.openflexo.doceditor.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -47,7 +47,7 @@ public class RemoveDocTypeInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RemoveDocType> getDefaultInitializer() {
 		return new FlexoActionInitializer<RemoveDocType>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveDocType action) {
+			public boolean run(EventObject e, RemoveDocType action) {
 				return FlexoController.confirm(FlexoLocalization.localizedForKey("are_you_sure_you_want_to_remove_the_doc_type") + " "
 						+ action.getFocusedObject().getName());
 			}
@@ -58,7 +58,7 @@ public class RemoveDocTypeInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RemoveDocType> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RemoveDocType>() {
 			@Override
-			public boolean run(ActionEvent e, RemoveDocType action) {
+			public boolean run(EventObject e, RemoveDocType action) {
 				return true;
 			}
 		};

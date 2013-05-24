@@ -44,7 +44,7 @@ import org.openflexo.localization.FlexoLocalization;
  * @author sguerin
  * 
  */
-public class FontSelector extends CustomPopup<Font> implements ChangeListener {
+public class FontSelector extends CustomPopup<Font> implements FontSelectionModel {
 
 	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FontSelector.class.getPackage().getName());
@@ -52,26 +52,13 @@ public class FontSelector extends CustomPopup<Font> implements ChangeListener {
 	private Font _revertValue;
 
 	protected FontDetailsPanel _selectorPanel;
-	protected FontSelectionModel _fsm;
 
-	public static Font DEFAULT_FONT = new JPanel().getFont();
+	private static final Font DEFAULT_FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
 
-	public FontSelector(FontSelectionModel fsm) {
-		super(fsm.getSelectedFont() != null ? fsm.getSelectedFont() : DEFAULT_FONT);
-		_fsm = fsm;
-		if (fsm.getSelectedFont() == null) {
-			fsm.setSelectedFont(DEFAULT_FONT);
-		}
-		_fsm.addChangeListener(this);
-		setRevertValue(fsm.getSelectedFont());
+	public FontSelector() {
+		super(DEFAULT_FONT);
 		setFocusable(true);
 		getFrontComponent().update();
-	}
-
-	@Override
-	public void delete() {
-		super.delete();
-		_fsm.removeChangeListener(this);
 	}
 
 	@Override
@@ -89,6 +76,47 @@ public class FontSelector extends CustomPopup<Font> implements ChangeListener {
 
 	public Font getRevertValue() {
 		return _revertValue;
+	}
+
+	@Override
+	public Font getEditedObject() {
+		Font editedObject = super.getEditedObject();
+		if (editedObject == null) {
+			return DEFAULT_FONT;
+		}
+		return editedObject;
+	}
+
+	@Override
+	public void setEditedObject(Font font) {
+		super.setEditedObject(font);
+		for (ChangeListener l : listenerList.getListeners(ChangeListener.class)) {
+			l.stateChanged(new ChangeEvent(this));
+		}
+	}
+
+	@Override
+	public Font getSelectedFont() {
+		if (getEditedObject() != null) {
+			return getEditedObject();
+		} else {
+			return DEFAULT_FONT;
+		}
+	}
+
+	@Override
+	public void setSelectedFont(Font font) {
+		setEditedObject(font);
+	}
+
+	@Override
+	public void addChangeListener(ChangeListener listener) {
+		listenerList.add(ChangeListener.class, listener);
+	}
+
+	@Override
+	public void removeChangeListener(ChangeListener listener) {
+		listenerList.remove(ChangeListener.class, listener);
 	}
 
 	@Override
@@ -122,9 +150,7 @@ public class FontSelector extends CustomPopup<Font> implements ChangeListener {
 		protected FontDetailsPanel(Font editedFont) {
 			super();
 
-			_fsm.setSelectedFont(editedFont);
-
-			fontChooser = new JFontChooser(_fsm);
+			fontChooser = new JFontChooser(FontSelector.this);
 
 			setLayout(new BorderLayout());
 			add(fontChooser, BorderLayout.CENTER);
@@ -161,27 +187,6 @@ public class FontSelector extends CustomPopup<Font> implements ChangeListener {
 	}
 
 	@Override
-	public Font getEditedObject() {
-		if (_fsm != null) {
-			if (_fsm.getSelectedFont() != null) {
-				return _fsm.getSelectedFont();
-			} else {
-				return DEFAULT_FONT;
-			}
-		}
-		return DEFAULT_FONT;
-	}
-
-	@Override
-	public void setEditedObject(Font font) {
-		if (font == null) {
-			font = DEFAULT_FONT;
-		}
-		_fsm.setSelectedFont(font);
-		super.setEditedObject(font);
-	}
-
-	@Override
 	public void apply() {
 		setRevertValue(getEditedObject());
 		closePopup();
@@ -200,7 +205,6 @@ public class FontSelector extends CustomPopup<Font> implements ChangeListener {
 
 	@Override
 	protected void deletePopup() {
-		_fsm.removeChangeListener(this);
 		if (_selectorPanel != null) {
 			_selectorPanel.delete();
 		}
@@ -246,23 +250,12 @@ public class FontSelector extends CustomPopup<Font> implements ChangeListener {
 		protected void update() {
 			// logger.info("Update front panel with "+JFontChooser.fontDescription(getEditedObject())+" font="+getEditedObject());
 			previewLabel.setFont(getEditedObject());
-			previewLabel.setText(JFontChooser.fontDescription(getEditedObject()));
+			if (FontSelector.super.getEditedObject() != null) {
+				previewLabel.setText(JFontChooser.fontDescription(getEditedObject()));
+			} else {
+				previewLabel.setText("");
+			}
 		}
-	}
-
-	@Override
-	public void stateChanged(ChangeEvent e) {
-		getFrontComponent().update();
-	}
-
-	public static interface FontSelectionModel {
-		Font getSelectedFont();
-
-		void setSelectedFont(Font font);
-
-		void addChangeListener(ChangeListener listener);
-
-		void removeChangeListener(ChangeListener listener);
 	}
 
 }

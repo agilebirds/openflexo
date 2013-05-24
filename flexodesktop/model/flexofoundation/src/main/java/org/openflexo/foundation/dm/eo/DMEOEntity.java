@@ -26,18 +26,17 @@ import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
-import javax.swing.tree.TreeNode;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMObject;
@@ -47,8 +46,6 @@ import org.openflexo.foundation.dm.DMRepository;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DuplicateClassNameException;
 import org.openflexo.foundation.dm.DuplicateMethodSignatureException;
-import org.openflexo.foundation.dm.action.CreateDMEOAttribute;
-import org.openflexo.foundation.dm.action.CreateDMEORelationship;
 import org.openflexo.foundation.dm.dm.DMAttributeDataModification;
 import org.openflexo.foundation.dm.dm.DMEntityClassNameChanged;
 import org.openflexo.foundation.dm.dm.DMEntityNameChanged;
@@ -62,7 +59,6 @@ import org.openflexo.foundation.dm.javaparser.ParserNotInstalledException;
 import org.openflexo.foundation.dm.javaparser.SourceCodeOwner;
 import org.openflexo.foundation.stats.DMEOEntityStatistics;
 import org.openflexo.foundation.validation.FixProposal;
-import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
@@ -88,15 +84,15 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 
 	private DMEOModel _dmEOModel;
 
-	private Vector<DMEOAttribute> _primaryKeyAttributes;
+	private List<DMEOAttribute> _primaryKeyAttributes;
 
 	private boolean _primaryKeyAttributesNeedsRecomputing;
 
-	private Vector<DMProperty> _classProperties;
+	private List<DMProperty> _classProperties;
 
 	private boolean _classPropertiesNeedsRecomputing;
 
-	private Vector<DMEOAttribute> _attributesUsedForLocking;
+	private List<DMEOAttribute> _attributesUsedForLocking;
 
 	private boolean _attributesUsedForLockingNeedsRecomputing;
 
@@ -216,23 +212,21 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 			// relationship
 			// (objects with no reference to a EOObject): remove them
 			Vector<DMProperty> propertiesToDelete = new Vector<DMProperty>();
-			for (Enumeration en = getProperties().elements(); en.hasMoreElements();) {
-				DMProperty next = (DMProperty) en.nextElement();
-				if ((next instanceof DMEOAttribute) && (((DMEOAttribute) next).getEOAttribute() == null)) {
+			for (DMProperty next : getProperties().values()) {
+				if (next instanceof DMEOAttribute && ((DMEOAttribute) next).getEOAttribute() == null) {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Delete dereferenced attribute " + next.getName());
 					}
 					propertiesToDelete.add(next);
 				}
-				if ((next instanceof DMEORelationship) && (((DMEORelationship) next).getEORelationship() == null)) {
+				if (next instanceof DMEORelationship && ((DMEORelationship) next).getEORelationship() == null) {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Delete dereferenced relationship " + next.getName());
 					}
 					propertiesToDelete.add(next);
 				}
 			}
-			for (Enumeration en = propertiesToDelete.elements(); en.hasMoreElements();) {
-				DMProperty toDelete = (DMProperty) en.nextElement();
+			for (DMProperty toDelete : propertiesToDelete) {
 				toDelete.delete();
 			}
 			_primaryKeyAttributesNeedsRecomputing = true;
@@ -249,7 +243,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 			}
 
 			try {
-				Vector<DMProperty> attributesToDelete = new Vector<DMProperty>();
+				List<DMEOAttribute> attributesToDelete = new ArrayList<DMEOAttribute>();
 				attributesToDelete.addAll(getOrderedAttributes());
 
 				for (Iterator<EOAttribute> i = new Vector<EOAttribute>(eoEntity.getAttributes()).iterator(); i.hasNext();) {
@@ -257,7 +251,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 					EOAttribute eoAttribute = i.next();
 
 					DMEOAttribute foundAttribute = lookupDMEOAttributeWithName(eoAttribute.getName());
-					if ((foundAttribute != null) && (foundAttribute.getDMEOEntity() != this)) {
+					if (foundAttribute != null && foundAttribute.getDMEOEntity() != this) {
 						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Lookup dereferenced EOAttribute " + foundAttribute.getName() + "! Trying to repair...");
 						}
@@ -289,8 +283,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 					}
 				}
 
-				for (Enumeration en = attributesToDelete.elements(); en.hasMoreElements();) {
-					DMEOAttribute toDelete = (DMEOAttribute) en.nextElement();
+				for (DMEOAttribute toDelete : attributesToDelete) {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Delete DMEOAttribute " + toDelete.getName());
 					}
@@ -314,13 +307,12 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 			}
 
 			try {
-				Vector<DMProperty> relationshipsToDelete = new Vector<DMProperty>();
+				List<DMEORelationship> relationshipsToDelete = new ArrayList<DMEORelationship>();
 				relationshipsToDelete.addAll(getOrderedRelationships());
 
-				for (Iterator<EORelationship> i = new Vector<EORelationship>(eoEntity.getRelationships()).iterator(); i.hasNext();) {
-					EORelationship eoRelationship = i.next();
+				for (EORelationship eoRelationship : new ArrayList<EORelationship>(eoEntity.getRelationships())) {
 					DMEORelationship foundRelationship = lookupDMEORelationshipWithName(eoRelationship.getName());
-					if ((foundRelationship != null) && (foundRelationship.getDMEOEntity() != this)) {
+					if (foundRelationship != null && foundRelationship.getDMEOEntity() != this) {
 						if (logger.isLoggable(Level.WARNING)) {
 							logger.warning("Lookup dereferenced EORelationship " + foundRelationship.getName() + "! Trying to repair...");
 						}
@@ -346,8 +338,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 					}
 				}
 
-				for (Enumeration en = relationshipsToDelete.elements(); en.hasMoreElements();) {
-					DMEORelationship toDelete = (DMEORelationship) en.nextElement();
+				for (DMEORelationship toDelete : relationshipsToDelete) {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Delete DMEORelationship " + toDelete.getName());
 					}
@@ -370,14 +361,14 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 	 */
 	@Override
 	public Vector<DMObject> getEmbeddedDMObjects() {
-		Vector v = super.getEmbeddedDMObjects();
+		Vector<DMObject> v = super.getEmbeddedDMObjects();
 		v.addAll(getAttributes().values());
 		v.addAll(getRelationships().values());
 		return v;
 	}
 
 	public boolean isPrototypeEntity() {
-		return (getRepository() instanceof EOPrototypeRepository);
+		return getRepository() instanceof EOPrototypeRepository;
 	}
 
 	@Override
@@ -462,7 +453,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 		if (!isDeserializing() && (newName == null || !DMRegExp.ENTITY_NAME_PATTERN.matcher(newName).matches())) {
 			throw new InvalidNameException();
 		}
-		if ((name == null) || (!name.equals(newName))) {
+		if (name == null || !name.equals(newName)) {
 			DMRepository containerRepository = getRepository();
 			if (!isDeserializing()) {
 				if (containerRepository != null) {
@@ -518,7 +509,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 
 	@Override
 	public void setRepository(DMRepository repository, boolean notify) {
-		if ((repository instanceof DMEORepository) || (repository == null)) {
+		if (repository instanceof DMEORepository || repository == null) {
 			super.setRepository(repository, notify);
 		} else {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -530,7 +521,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 	@Override
 	public DMType getParentType() {
 		if (_parentType == null) {
-			if ((_parentEOEntity != null) && (getDMEORepository() != null)) {
+			if (_parentEOEntity != null && getDMEORepository() != null) {
 				_parentType = DMType.makeResolvedDMType(getDMModel().getDMEOEntity(_parentEOEntity));
 			} else {
 				DMEntity defaultParentEntity = getDMModel().getDefaultParentDMEOEntity();
@@ -553,7 +544,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 
 	@Override
 	public void setParentType(DMType parentType, boolean notify) {
-		if ((parentType == null && _parentType != null) || (parentType != null && !parentType.equals(_parentType))) {
+		if (parentType == null && _parentType != null || parentType != null && !parentType.equals(_parentType)) {
 
 			if (parentType == null) {
 				super.setParentType(parentType, notify);
@@ -627,7 +618,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 
 	public EOEntity getEOEntity() {
 		if (_eoEntity == null) {
-			if ((getDMEOModel() != null) && (getDMEOModel().getEOModel() != null)) {
+			if (getDMEOModel() != null && getDMEOModel().getEOModel() != null) {
 				try {
 					_eoEntity = getDMEOModel().getEOModel().entityNamed(getName());
 				} catch (IllegalArgumentException e) {
@@ -644,14 +635,6 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 		_eoEntity = eoEntity;
 		_primaryKeyAttributesNeedsRecomputing = true;
 		_attributesUsedForLockingNeedsRecomputing = true;
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(CreateDMEOAttribute.actionType);
-		returned.add(CreateDMEORelationship.actionType);
-		return returned;
 	}
 
 	@Override
@@ -748,9 +731,8 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 	}
 
 	public boolean hasNullify() {
-		Enumeration en = _relationshipsForEORelationships.elements();
-		while (en.hasMoreElements()) {
-			if (((DMEORelationship) en.nextElement()).isNullify()) {
+		for (DMEORelationship rel : _relationshipsForEORelationships.values()) {
+			if (rel.isNullify()) {
 				return true;
 			}
 		}
@@ -758,9 +740,8 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 	}
 
 	public boolean hasCascade() {
-		Enumeration en = _relationshipsForEORelationships.elements();
-		while (en.hasMoreElements()) {
-			if (((DMEORelationship) en.nextElement()).isCascade()) {
+		for (DMEORelationship rel : _relationshipsForEORelationships.values()) {
+			if (rel.isCascade()) {
 				return true;
 			}
 		}
@@ -782,7 +763,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 		if (!isDeserializing() && (anEntityClassName == null || !DMRegExp.ENTITY_NAME_PATTERN.matcher(anEntityClassName).matches())) {
 			throw new InvalidNameException();
 		}
-		if ((getEntityClassName() == null) || (!getEntityClassName().equals(anEntityClassName))) {
+		if (getEntityClassName() == null || !getEntityClassName().equals(anEntityClassName)) {
 			if (getEOEntity() != null) {
 				if (getDMModel().getDMEntity(getEntityPackageName(), anEntityClassName) != null) {
 					throw new DuplicateClassNameException(getEntityPackageName() + "." + anEntityClassName);
@@ -830,7 +811,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 	 * 
 	 * @return a Vector of DMEOAttribute
 	 */
-	public Vector<DMEOAttribute> getPrimaryKeyAttributes() {
+	public List<DMEOAttribute> getPrimaryKeyAttributes() {
 		if (_primaryKeyAttributesNeedsRecomputing) {
 			_primaryKeyAttributes = buildPrimaryKeyAttributes();
 		}
@@ -842,12 +823,11 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 		buildPrimaryKeyAttributes();
 	}
 
-	private Vector<DMEOAttribute> buildPrimaryKeyAttributes() {
+	private List<DMEOAttribute> buildPrimaryKeyAttributes() {
 		synchronized (_primaryKeyAttributes) {
 			_primaryKeyAttributes.clear();
 			if (getEOEntity() != null) {
-				for (Iterator<EOAttribute> i = getEOEntity().getPrimaryKeyAttributes().iterator(); i.hasNext();) {
-					EOAttribute eoAttribute = i.next();
+				for (EOAttribute eoAttribute : getEOEntity().getPrimaryKeyAttributes()) {
 					DMEOAttribute dmEOAttribute = getDMEOAttribute(eoAttribute);
 					if (dmEOAttribute != null) {
 						_primaryKeyAttributes.add(dmEOAttribute);
@@ -869,7 +849,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 	 * 
 	 * @return a Vector of DMEOAttribute
 	 */
-	public Vector getAttributesUsedForLocking() {
+	public List<DMEOAttribute> getAttributesUsedForLocking() {
 		if (_attributesUsedForLockingNeedsRecomputing) {
 			_attributesUsedForLocking = buildAttributesUsedForLocking();
 		}
@@ -881,11 +861,10 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 		buildAttributesUsedForLocking();
 	}
 
-	private Vector<DMEOAttribute> buildAttributesUsedForLocking() {
+	private List<DMEOAttribute> buildAttributesUsedForLocking() {
 		_attributesUsedForLocking.clear();
 		if (getEOEntity() != null) {
-			for (Iterator<EOAttribute> i = getEOEntity().getAttributesUsedForLocking().iterator(); i.hasNext();) {
-				EOAttribute eoAttribute = i.next();
+			for (EOAttribute eoAttribute : getEOEntity().getAttributesUsedForLocking()) {
 				DMEOAttribute dmEOAttribute = getDMEOAttribute(eoAttribute);
 				if (dmEOAttribute != null) {
 					_attributesUsedForLocking.add(dmEOAttribute);
@@ -905,7 +884,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 	 * 
 	 * @return a Vector of DMEOProperty
 	 */
-	public Vector<DMProperty> getClassProperties() {
+	public List<DMProperty> getClassProperties() {
 		if (_classPropertiesNeedsRecomputing) {
 			_classProperties = buildClassProperties();
 		}
@@ -917,11 +896,10 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 		buildClassProperties();
 	}
 
-	private Vector<DMProperty> buildClassProperties() {
+	private List<DMProperty> buildClassProperties() {
 		_classProperties.clear();
 		if (getEOEntity() != null) {
-			for (Iterator<EOProperty> i = getEOEntity().getClassProperties().iterator(); i.hasNext();) {
-				EOProperty eoProperty = i.next();
+			for (EOProperty eoProperty : getEOEntity().getClassProperties()) {
 				if (eoProperty instanceof EOAttribute) {
 					EOAttribute eoAttribute = (EOAttribute) eoProperty;
 					DMEOAttribute dmEOAttribute = getDMEOAttribute(eoAttribute);
@@ -946,8 +924,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 	 * Called during DMEORepository finalizeSerialization()
 	 */
 	public void finalizePropertiesRegistering() {
-		for (Enumeration en = getProperties().elements(); en.hasMoreElements();) {
-			DMProperty next = (DMProperty) en.nextElement();
+		for (DMProperty next : getProperties().values()) {
 			if (next instanceof DMEOAttribute) {
 				internallyRegisterDMEOAttribute((DMEOAttribute) next);
 			}
@@ -1035,11 +1012,11 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 	@Override
 	public void removePropertyWithKey(String propertyName, boolean notify) {
 		DMProperty property = getDMProperty(propertyName);
-		if ((property != null) && (property instanceof DMEOAttribute)) {
+		if (property != null && property instanceof DMEOAttribute) {
 			DMEOAttribute dmEOAttribute = (DMEOAttribute) property;
 			internallyUnregisterDMEOAttribute(dmEOAttribute);
 		}
-		if ((property != null) && (property instanceof DMEORelationship)) {
+		if (property != null && property instanceof DMEORelationship) {
 			DMEORelationship dmEORelationship = (DMEORelationship) property;
 			internallyUnregisterDMEORelationship(dmEORelationship);
 		}
@@ -1172,9 +1149,8 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 			} else {
 				_orderedSingleProperties = new Vector<DMProperty>();
 			}
-			for (Enumeration en = getProperties().elements(); en.hasMoreElements();) {
-				DMProperty next = (DMProperty) en.nextElement();
-				if ((!(next instanceof DMEOAttribute)) && (!(next instanceof DMEORelationship))) {
+			for (DMProperty next : getProperties().values()) {
+				if (!(next instanceof DMEOAttribute) && !(next instanceof DMEORelationship)) {
 					_orderedSingleProperties.add(next);
 				}
 			}
@@ -1184,7 +1160,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 			if (_orderedAttributes != null) {
 				_orderedAttributes.removeAllElements();
 			} else {
-				_orderedAttributes = new Vector();
+				_orderedAttributes = new Vector<DMEOAttribute>();
 			}
 			if (_attributesForEOAttributes != null) {
 				_orderedAttributes.addAll(_attributesForEOAttributes.values());
@@ -1195,7 +1171,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 			if (_orderedRelationships != null) {
 				_orderedRelationships.removeAllElements();
 			} else {
-				_orderedRelationships = new Vector();
+				_orderedRelationships = new Vector<DMEORelationship>();
 			}
 			_orderedRelationships.addAll(_relationshipsForEORelationships.values());
 			Collections.sort(_orderedRelationships, propertyComparator);
@@ -1213,20 +1189,20 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 	}
 
 	@Override
-	public TreeNode getParent() {
+	public DMEOModel getParent() {
 		return getDMEOModel();
 	}
 
-	public static class DMEOEntityMustReferToAValidEOEntity extends ValidationRule {
+	public static class DMEOEntityMustReferToAValidEOEntity extends ValidationRule<DMEOEntityMustReferToAValidEOEntity, DMEOEntity> {
 		public DMEOEntityMustReferToAValidEOEntity() {
 			super(DMEOEntity.class, "eoentity_must_refer_to_a_valid_eo_entity");
 		}
 
 		@Override
-		public ValidationIssue applyValidation(final Validable object) {
-			final DMEOEntity entity = (DMEOEntity) object;
+		public ValidationIssue<DMEOEntityMustReferToAValidEOEntity, DMEOEntity> applyValidation(final DMEOEntity entity) {
 			if (entity.getEOEntity() == null) {
-				ValidationError error = new ValidationError(this, object, "eoentity_($object.name)_must_refer_to_a_valid_eo_entity");
+				ValidationError<DMEOEntityMustReferToAValidEOEntity, DMEOEntity> error = new ValidationError<DMEOEntityMustReferToAValidEOEntity, DMEOEntity>(
+						this, entity, "eoentity_($object.name)_must_refer_to_a_valid_eo_entity");
 				return error;
 			}
 			return null;
@@ -1234,17 +1210,16 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 
 	}
 
-	public static class DMEOEntityMustAtLeastOnePrimaryKey extends ValidationRule {
+	public static class DMEOEntityMustAtLeastOnePrimaryKey extends ValidationRule<DMEOEntityMustAtLeastOnePrimaryKey, DMEOEntity> {
 		public DMEOEntityMustAtLeastOnePrimaryKey() {
 			super(DMEOEntity.class, "eoentity_must_have_at_least_one_primary_key");
 		}
 
 		@Override
-		public ValidationIssue applyValidation(final Validable object) {
-			final DMEOEntity entity = (DMEOEntity) object;
+		public ValidationIssue<DMEOEntityMustAtLeastOnePrimaryKey, DMEOEntity> applyValidation(final DMEOEntity entity) {
 			if (entity.getEOEntity() != null && entity.getEOEntity().getPrimaryKeyAttributes().size() == 0) {
-				ValidationError error = new ValidationError(this, object,
-						"eoentity_($object.name)_must_have_at_least_one_primary_key_attribute");
+				ValidationError<DMEOEntityMustAtLeastOnePrimaryKey, DMEOEntity> error = new ValidationError<DMEOEntityMustAtLeastOnePrimaryKey, DMEOEntity>(
+						this, entity, "eoentity_($object.name)_must_have_at_least_one_primary_key_attribute");
 				Iterator<DMEOAttribute> it = entity.getAttributes().values().iterator();
 				while (it.hasNext()) {
 					error.addToFixProposals(new SetAttributePrimaryKey(it.next()));
@@ -1256,7 +1231,7 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 
 	}
 
-	public static class SetAttributePrimaryKey extends FixProposal {
+	public static class SetAttributePrimaryKey extends FixProposal<DMEOEntityMustAtLeastOnePrimaryKey, DMEOEntity> {
 
 		DMEOAttribute attribute;
 
@@ -1471,9 +1446,8 @@ public class DMEOEntity extends DMEntity implements DMEOObject, SourceCodeOwner 
 
 	@Override
 	public boolean codeIsComputable() {
-		Enumeration<DMProperty> en = getClassProperties().elements();
-		while (en.hasMoreElements()) {
-			if (!en.nextElement().codeIsComputable()) {
+		for (DMProperty prop : getClassProperties()) {
+			if (!prop.codeIsComputable()) {
 				return false;
 			}
 		}

@@ -49,7 +49,7 @@ public class GenerateDocx extends GenerateArtefact<GenerateDocx, GenerationRepos
 			"generate_docx", GENERATE_MENU, WAR_GROUP, FlexoActionType.NORMAL_ACTION_TYPE) {
 
 		@Override
-		protected boolean isEnabledForSelection(GenerationRepository repository, Vector<CGObject> globalSelection) {
+		public boolean isEnabledForSelection(GenerationRepository repository, Vector<CGObject> globalSelection) {
 			if (repository.getFormat() != Format.DOCX || !(repository instanceof DGRepository)) {
 				return false;
 			}
@@ -58,7 +58,7 @@ public class GenerateDocx extends GenerateArtefact<GenerateDocx, GenerationRepos
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
+		public boolean isVisibleForSelection(GenerationRepository object, Vector<CGObject> globalSelection) {
 			return object instanceof DGRepository && ((DGRepository) object).getFormat() == Format.DOCX;
 		}
 

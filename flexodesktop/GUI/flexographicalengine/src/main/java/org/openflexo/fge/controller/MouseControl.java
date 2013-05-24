@@ -36,6 +36,8 @@ public abstract class MouseControl extends DefaultInspectableObject {
 	public boolean altPressed = false;
 	public MouseButton button;
 
+	private boolean modelEditionAction = true;
+
 	public boolean isApplicable(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent e) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Called isApplicable(MouseEvent) for " + this + " event=" + e);
@@ -92,6 +94,10 @@ public abstract class MouseControl extends DefaultInspectableObject {
 
 		// Everything seems ok, return true
 		return true;
+	}
+
+	public boolean isModelEditionAction() {
+		return modelEditionAction;
 	}
 
 	@Override

@@ -29,6 +29,7 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.toolbox.StringUtils;
 
@@ -82,8 +83,8 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 	private ViewPointDataBinding data;
 	private ViewPointDataBinding conditional;
 
-	public InspectorEntry() {
-		super();
+	public InspectorEntry(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	public Type getType() {
@@ -139,6 +140,10 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 
 	public boolean isSingleEntry() {
 		return true;
+	}
+
+	public int getIndex() {
+		return getInspector().getEntries().indexOf(this);
 	}
 
 	@Override

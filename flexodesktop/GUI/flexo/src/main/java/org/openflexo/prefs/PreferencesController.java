@@ -21,13 +21,10 @@ package org.openflexo.prefs;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.swing.JMenuBar;
 
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -39,13 +36,10 @@ import org.openflexo.inspector.InspectingWidget;
 import org.openflexo.inspector.InspectorDelegate;
 import org.openflexo.inspector.InspectorModelView;
 import org.openflexo.inspector.InspectorWidgetConfiguration;
-import org.openflexo.inspector.LabelFontMetrics;
-import org.openflexo.inspector.TabModelView;
 import org.openflexo.inspector.model.InspectorMapping;
 import org.openflexo.inspector.model.InspectorModel;
 import org.openflexo.inspector.model.TabModel;
 import org.openflexo.inspector.selection.InspectorSelection;
-import org.openflexo.inspector.widget.DenaliWidget;
 import org.openflexo.module.UserType;
 import org.openflexo.view.controller.FlexoInspectorController;
 import org.openflexo.xmlcode.XMLCoder;
@@ -70,21 +64,11 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 
 	private static PreferencesController _current;
 
-	private static InspectorModelView _inpectorPanel;
+	private InspectorModelView _inpectorPanel;
 
-	private static InspectorModel _inspector;
+	private InspectorModel _inspector;
 
-	public static PreferencesWindow _preferencesWindow;
-
-	public static LabelFontMetrics labelFontMetrics = new LabelFontMetrics(DenaliWidget.DEFAULT_LABEL_FONT);
-
-	public static String lastInspectedPropertyName;
-
-	public static String lastInspectedTabName;
-
-	public static TabModelView nextFocusedTab;
-
-	public static DenaliWidget nextFocusedWidget;
+	private PreferencesWindow _preferencesWindow;
 
 	private FlexoPreferences _prefs;
 
@@ -95,7 +79,7 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 	// ================================
 	// ==========================================================================
 
-	protected PreferencesController(FlexoPreferences prefs, JMenuBar menubar) throws Exception {
+	protected PreferencesController(FlexoPreferences prefs) throws Exception {
 
 		super();
 
@@ -105,18 +89,15 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 		_inspector = new InspectorModel();
 		_inspector.title = "Preferences";
 
-		_preferencesWindow = new PreferencesWindow(menubar);
-
 		_prefs = prefs;
 
 		prefs.addObserver(this);
 	}
 
-	public static PreferencesController createInstance(FlexoPreferences prefs, JMenuBar menuBar) {
+	private static PreferencesController createInstance(FlexoPreferences prefs) {
 		try {
-			_current = new PreferencesController(prefs, menuBar);
-			for (Enumeration<ContextPreferences> e = prefs.contextPreferencesVector.elements(); e.hasMoreElements();) {
-				ContextPreferences next = e.nextElement();
+			_current = new PreferencesController(prefs);
+			for (ContextPreferences next : prefs.contextualPreferences.values()) {
 				_current.importInspectorFile(next.getName(), next.getInspectorFile());
 			}
 		} catch (Exception e) {
@@ -131,22 +112,17 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 
 	public static PreferencesController instance() {
 		if (_current == null) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Implementation error : there is no instance of PreferencesController.");
-			}
-			(new Exception()).printStackTrace();
+			createInstance(FlexoPreferences.instance());
 		}
 		return _current;
 	}
 
 	public static boolean hasInstance() {
-		return (_current != null);
+		return _current != null;
 	}
 
 	public static void register(ContextPreferences cp) {
-		if (hasInstance()) {
-			instance().importInspectorFile(cp.getName(), cp.getInspectorFile());
-		}
+		instance().importInspectorFile(cp.getName(), cp.getInspectorFile());
 	}
 
 	public boolean importInspectorFile(String name, File inspectorFile) {
@@ -189,15 +165,25 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 	}
 
 	public void showPreferences() {
+		getPreferencesWindow(true);
 		update();
-		_preferencesWindow.setVisible(true);
+		getPreferencesWindow().setVisible(true);
 	}
 
 	public void resetWindow() {
-		_preferencesWindow.reset();
+		if (_preferencesWindow != null) {
+			_preferencesWindow.reset();
+		}
 	}
 
 	public PreferencesWindow getPreferencesWindow() {
+		return getPreferencesWindow(true);
+	}
+
+	public PreferencesWindow getPreferencesWindow(boolean create) {
+		if (_preferencesWindow == null && create) {
+			_preferencesWindow = new PreferencesWindow();
+		}
 		return _preferencesWindow;
 	}
 
@@ -214,10 +200,8 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 		if (arg1 instanceof PreferencesHaveChanged) {
 			// Nothing special for now
 		}
-
-		_preferencesWindow.setTabPanel(getInspectorTabPanel());
-
 		if (_preferencesWindow != null) {
+			_preferencesWindow.setTabPanel(getInspectorTabPanel());
 			_preferencesWindow.enableSaveAndRevertButtons();
 		}
 	}

@@ -69,6 +69,7 @@ import org.openflexo.foundation.view.action.LinkSchemeAction;
 import org.openflexo.foundation.viewpoint.DropScheme;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.LinkScheme;
+import org.openflexo.foundation.viewpoint.LocalizedDictionary;
 import org.openflexo.localization.FlexoLocalization;
 
 public class FloatingPalette extends ControlArea<FGERoundRectangle> implements Observer {
@@ -121,7 +122,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 	@Override
 	public boolean isDraggable() {
-		return true;
+		return shapeGR.getDrawing().isEditable();
 	}
 
 	protected Point currentDraggingLocationInDrawingView = null;
@@ -270,7 +271,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation focusedGR) {
+	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
 		if (drawEdge && currentDraggingLocationInDrawingView != null && isDnd) {
 			try {
 				GraphicalRepresentation<?> targetGR = controller.getGraphicalRepresentation(target);
@@ -355,9 +356,22 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 		JPopupMenu popup = new JPopupMenu();
 		for (final DropAndLinkScheme dropAndLinkScheme : shapeGR.getOEShape().getAvailableDropAndLinkSchemeFromThisShape(targetEP)) {
-			JMenuItem menuItem = new JMenuItem(
-					FlexoLocalization.localizedForKey(dropAndLinkScheme.linkScheme.getLabel() != null ? dropAndLinkScheme.linkScheme
-							.getLabel() : dropAndLinkScheme.linkScheme.getName()));
+			LocalizedDictionary localizedDictionary = dropAndLinkScheme.linkScheme.getViewPoint().getLocalizedDictionary();
+			String linkLabel = dropAndLinkScheme.linkScheme.getLabel() != null ? dropAndLinkScheme.linkScheme.getLabel()
+					: dropAndLinkScheme.linkScheme.getName();
+			String localizedLinkLabel = localizedDictionary
+					.getLocalizedForKeyAndLanguage(linkLabel, FlexoLocalization.getCurrentLanguage());
+			if (localizedLinkLabel == null) {
+				localizedLinkLabel = FlexoLocalization.localizedForKey(linkLabel);
+			}
+			String dropLabel = dropAndLinkScheme.dropScheme.getEditionPattern().getName();
+			String localizedDropLabel = localizedDictionary
+					.getLocalizedForKeyAndLanguage(dropLabel, FlexoLocalization.getCurrentLanguage());
+			if (localizedDropLabel == null) {
+				localizedDropLabel = FlexoLocalization.localizedForKey(dropLabel);
+			}
+			String withNew = FlexoLocalization.localizedForKey("with_new");
+			JMenuItem menuItem = new JMenuItem(localizedLinkLabel + " " + withNew + " " + localizedDropLabel);
 			final ViewObject finalContainer = container;
 			menuItem.addActionListener(new ActionListener() {
 				@Override
@@ -379,11 +393,10 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		final ViewShape from = shapeGR.getDrawable();
 		if (from.getShema().getCalc() != null && from.getEditionPattern() != null && to.getEditionPattern() != null) {
 			availableConnectors = from.getShema().getCalc().getConnectorsMatching(from.getEditionPattern(), to.getEditionPattern());
-
 		}
 
 		if (availableConnectors.size() == 1) {
-			LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, (controller).getOEController()
+			LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, controller.getVEController()
 					.getEditor());
 			action.setLinkScheme(availableConnectors.firstElement());
 			action.setFromShape(from);
@@ -395,14 +408,19 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 			for (final LinkScheme linkScheme : availableConnectors) {
 				// final CalcPaletteConnector connector = availableConnectors.get(linkScheme);
 				// System.out.println("Available: "+paletteConnector.getEditionPattern().getName());
-				JMenuItem menuItem = new JMenuItem(FlexoLocalization.localizedForKey(linkScheme.getLabel() != null ? linkScheme.getLabel()
-						: linkScheme.getName()));
+				LocalizedDictionary localizedDictionary = linkScheme.getViewPoint().getLocalizedDictionary();
+				String label = linkScheme.getLabel() != null ? linkScheme.getLabel() : linkScheme.getName();
+				String localized = localizedDictionary.getLocalizedForKeyAndLanguage(label, FlexoLocalization.getCurrentLanguage());
+				if (localized == null) {
+					localized = FlexoLocalization.localizedForKey(label);
+				}
+				JMenuItem menuItem = new JMenuItem(localized);
 				menuItem.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						// System.out.println("Action "+paletteConnector.getEditionPattern().getName());
-						LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, (controller)
-								.getOEController().getEditor());
+						LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, controller
+								.getVEController().getEditor());
 						action.setLinkScheme(linkScheme);
 						action.setFromShape(from);
 						action.setToShape(to);
@@ -429,12 +447,17 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 			popup.show((Component) controller.getDrawingView().viewForObject(controller.getGraphicalRepresentation(target)),
 					(int) dropLocation.x, (int) dropLocation.y);
 		} else {
-			AddConnector action = AddConnector.actionType.makeNewAction(shapeGR.getDrawable(), null, (controller).getOEController()
+			AddConnector action = AddConnector.actionType.makeNewAction(shapeGR.getDrawable(), null, controller.getVEController()
+					.getEditor());
+		}
+		// It is no more possible to create a link without semantic from floating palette
+		/*else {
+			AddConnector action = AddConnector.actionType.makeNewAction(shapeGR.getDrawable(), null, (controller).getVEController()
 					.getEditor());
 			action.setToShape(to);
 			action.setAutomaticallyCreateConnector(true);
 			action.doAction();
-		}
+			}*/
 
 	}
 
@@ -495,7 +518,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 	private ViewShape createNewShape(FGEPoint dropLocation, ViewObject container, DropScheme dropScheme) {
 
-		DropSchemeAction dropSchemeAction = DropSchemeAction.actionType.makeNewAction(container, null, controller.getOEController()
+		DropSchemeAction dropSchemeAction = DropSchemeAction.actionType.makeNewAction(container, null, controller.getVEController()
 				.getEditor());
 		dropSchemeAction.setDropScheme(dropScheme);
 		dropSchemeAction.escapeParameterRetrievingWhenValid = true;
@@ -527,7 +550,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 	private ViewConnector createNewConnector(ViewShape from, ViewShape to, LinkScheme linkScheme) {
 
-		LinkSchemeAction linkSchemeAction = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, controller.getOEController()
+		LinkSchemeAction linkSchemeAction = LinkSchemeAction.actionType.makeNewAction(from.getShema(), null, controller.getVEController()
 				.getEditor());
 		linkSchemeAction.setLinkScheme(linkScheme);
 		linkSchemeAction.setFromShape(from);
@@ -546,6 +569,9 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 			return null;
 		}
 		if (/*nodeGR.getIsSelected() ||*/shapeGR.isResizing() || shapeGR.isMoving()) {
+			return null;
+		}
+		if (!shapeGR.getDrawing().isEditable()) {
 			return null;
 		}
 		AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(shapeGR, drawingGraphics.getGraphicalRepresentation());

@@ -35,7 +35,7 @@ public abstract class FIBTableColumn extends FIBModelObject {
 
 	private static final Logger logger = Logger.getLogger(FIBTableColumn.class.getPackage().getName());
 
-	private FIBTable table;
+	private FIBTableComponent table;
 
 	public static enum Parameters implements FIBModelAttribute {
 		data, format, tooltip, title, tooltipText, columnWidth, resizable, displayTitle, font, color, bgColor, valueChangedAction
@@ -43,7 +43,7 @@ public abstract class FIBTableColumn extends FIBModelObject {
 	}
 
 	public static enum ColumnType {
-		CheckBox, Custom, DropDown, Icon, Label, Number, TextField
+		CheckBox, Custom, DropDown, Icon, Label, Number, TextField, Button;
 	}
 
 	private static BindingDefinition DATA = new BindingDefinition("data", Object.class, BindingDefinitionType.GET, false);
@@ -73,11 +73,11 @@ public abstract class FIBTableColumn extends FIBModelObject {
 		formatter = new FIBFormatter();
 	}
 
-	public FIBTable getTable() {
+	public FIBTableComponent getTable() {
 		return table;
 	}
 
-	public void setTable(FIBTable table) {
+	public void setTable(FIBTableComponent table) {
 		this.table = table;
 	}
 
@@ -265,7 +265,7 @@ public abstract class FIBTableColumn extends FIBModelObject {
 		}
 
 		private void createFormatterBindingModel() {
-			formatterBindingModel = new BindingModel();
+			formatterBindingModel = new BindingModel(getTable().getTableBindingModel());
 			formatterBindingModel.addToBindingVariables(new BindingVariableImpl<Object>(this, "object", Object.class) {
 				@Override
 				public Type getType() {

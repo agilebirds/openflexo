@@ -26,7 +26,6 @@ package org.openflexo.foundation.wkf;
  * Created by benoit on Mar 3, 2004
  */
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -37,7 +36,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.RepresentableFlexoModelObject;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.validation.Validable;
@@ -46,15 +44,8 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.foundation.validation.ValidationRule;
-import org.openflexo.foundation.wkf.action.WKFCopy;
-import org.openflexo.foundation.wkf.action.WKFCut;
-import org.openflexo.foundation.wkf.action.WKFDelete;
-import org.openflexo.foundation.wkf.action.WKFPaste;
-import org.openflexo.foundation.wkf.action.WKFSelectAll;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
-import org.openflexo.foundation.xml.FlexoXMLMappings;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * A WKFObject instance represents an object (model in MVC paradigm) of a process (or be the process itself). This is the root class for all
@@ -69,7 +60,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * 
  * @author benoit, sylvain
  */
-public abstract class WKFObject extends RepresentableFlexoModelObject implements Validable, Serializable {
+public abstract class WKFObject extends RepresentableFlexoModelObject implements Validable {
 
 	private static final Logger logger = Logger.getLogger(WKFObject.class.getPackage().getName());
 
@@ -127,14 +118,6 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 		_process = p;
 	}
 
-	@Override
-	public FlexoProject getProject() {
-		if (getProcess() != null) {
-			return getProcess().getProject();
-		}
-		return null;
-	}
-
 	/**
 	 * Return a Vector of all embedded WKFObjects (Note must include itself in this vector)
 	 * 
@@ -153,8 +136,8 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 			queue.add(object);
 		}
 		if (object.getAllEmbeddedWKFObjects() != null) {
-			Enumeration en = object.getAllEmbeddedWKFObjects().elements();
-			Object candidate = null;
+			Enumeration<? extends WKFObject> en = object.getAllEmbeddedWKFObjects().elements();
+			WKFObject candidate = null;
 			while (en.hasMoreElements()) {
 				candidate = en.nextElement();
 				if (candidate == null) {
@@ -165,33 +148,13 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 					continue;
 				}
 				if (!queue.contains(candidate)) {
-					queue.add((WKFObject) candidate);
-					processToAdditionOfEmbedded((WKFObject) candidate, queue);
+					queue.add(candidate);
+					processToAdditionOfEmbedded(candidate, queue);
 				}
 			}
 		}
 
 	}
-
-	// ==========================================================================
-	// ========================= XML Serialization ============================
-	// ==========================================================================
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		if (getProcess() != null) {
-			return getProcess().getXMLMapping();
-		} else if (getProject() != null) {
-			return getProject().getXmlMappings().getWKFMapping();
-		} else {
-			return new FlexoXMLMappings().getWKFMapping();
-		}
-	}
-
-	// ==========================================================================
-	// ============================== KeyValueCoding
-	// ============================
-	// ==========================================================================
 
 	@Override
 	public Object objectForKey(String key) {
@@ -210,7 +173,7 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 	public void setObjectForKey(Object object, String key) {
 		Object oldValue = objectForKey(key);
 		super.setObjectForKey(object, key);
-		if (((oldValue != null) && (!oldValue.equals(object))) || ((oldValue == null) && (object != null))) {
+		if (oldValue != null && !oldValue.equals(object) || oldValue == null && object != null) {
 			// logger.info("Obj: "+getClass().getName()+" property: "+key+" was "+oldValue+" is now "+object);
 			notifyModification(key, oldValue, object);
 		}
@@ -238,21 +201,6 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 	}
 
 	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(WKFCut.actionType);
-		returned.add(WKFCopy.actionType);
-		returned.add(WKFPaste.actionType);
-		returned.add(WKFDelete.actionType);
-		returned.add(WKFSelectAll.actionType);
-		return returned;
-	}
-
-	// ===================================================================
-	// =========================== FlexoObserver =========================
-	// ===================================================================
-
-	@Override
 	public void delete() {
 		super.delete();
 	}
@@ -268,7 +216,7 @@ public abstract class WKFObject extends RepresentableFlexoModelObject implements
 	public boolean isContainedIn(WKFObject obj) {
 		// logger.warning
 		// ("Contains not IMPLEMENTED for "+getClass().getName()+" and "+obj.getClass().getName()+": default implementation returns true only if supplied object is the owner process: override in sub-classes !");
-		return (obj == getProcess());
+		return obj == getProcess();
 	}
 
 	public boolean contains(WKFObject obj) {

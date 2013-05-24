@@ -29,6 +29,7 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.view.action.DropSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 import org.openflexo.toolbox.StringUtils;
@@ -38,21 +39,7 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 	private static final Logger logger = Logger.getLogger(EditionSchemeParameter.class.getPackage().getName());
 
 	public static enum WidgetType {
-		URI,
-		TEXT_FIELD,
-		LOCALIZED_TEXT_FIELD,
-		TEXT_AREA,
-		INTEGER,
-		FLOAT,
-		CHECKBOX,
-		DROPDOWN,
-		INDIVIDUAL,
-		CLASS,
-		OBJECT_PROPERTY,
-		DATA_PROPERTY,
-		FLEXO_OBJECT,
-		LIST,
-		EDITION_PATTERN;
+		URI, TEXT_FIELD, LOCALIZED_TEXT_FIELD, TEXT_AREA, INTEGER, FLOAT, CHECKBOX, DROPDOWN, INDIVIDUAL, CLASS, PROPERTY, OBJECT_PROPERTY, DATA_PROPERTY, FLEXO_OBJECT, LIST, EDITION_PATTERN;
 	}
 
 	private String name;
@@ -69,7 +56,8 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 		conditional, baseURI, defaultValue, list, domainValue, rangeValue, parentClassValue, conceptValue
 	}
 
-	public EditionSchemeParameter() {
+	public EditionSchemeParameter(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	@Override
@@ -124,7 +112,10 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 
 	@Override
 	public ViewPoint getViewPoint() {
-		return getScheme().getViewPoint();
+		if (getScheme() != null) {
+			return getScheme().getViewPoint();
+		}
+		return null;
 	}
 
 	@Override
@@ -195,7 +186,7 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 
 	@Override
 	public EditionPattern getEditionPattern() {
-		return getScheme().getEditionPattern();
+		return getScheme() != null ? getScheme().getEditionPattern() : null;
 	}
 
 	@Override
@@ -220,11 +211,11 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 	}
 
 	public Object getDefaultValue(EditionSchemeAction<?> action) {
-		ViewPointPaletteElement paletteElement = (action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement()
-				: null);
+		ViewPointPaletteElement paletteElement = action instanceof DropSchemeAction ? ((DropSchemeAction) action).getPaletteElement()
+				: null;
 
 		// System.out.println("Default value for "+element.getName()+" ???");
-		if (getUsePaletteLabelAsDefaultValue() && (paletteElement != null)) {
+		if (getUsePaletteLabelAsDefaultValue() && paletteElement != null) {
 			return paletteElement.getName();
 		}
 		if (getDefaultValue().isValid()) {

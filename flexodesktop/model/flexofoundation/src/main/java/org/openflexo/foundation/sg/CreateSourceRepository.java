@@ -24,6 +24,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.DuplicateCodeRepositoryNameException;
@@ -52,16 +53,21 @@ public class CreateSourceRepository extends AbstractGCAction<CreateSourceReposit
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection) {
+		public boolean isVisibleForSelection(CGObject object, Vector<CGObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
-			return ((object != null) && (object.getGeneratedCode() instanceof GeneratedSources));
+		public boolean isEnabledForSelection(CGObject object, Vector<CGObject> globalSelection) {
+			return object != null && object.getGeneratedCode() instanceof GeneratedSources;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, GeneratedSources.class);
+		FlexoModelObject.addActionForClass(actionType, SourceRepository.class);
+	}
 
 	private SourceRepository _newSourceRepository;
 

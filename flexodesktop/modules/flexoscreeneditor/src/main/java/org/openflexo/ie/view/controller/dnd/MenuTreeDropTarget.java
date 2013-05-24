@@ -47,7 +47,7 @@ public class MenuTreeDropTarget extends TreeDropTarget {
 
 	@Override
 	public boolean handleDrop(BrowserElement moved, BrowserElement destination) {
-		if ((moved instanceof FlexoItemMenuElement) && ((destination instanceof FlexoItemMenuElement))) {
+		if (moved instanceof FlexoItemMenuElement && destination instanceof FlexoItemMenuElement) {
 			FlexoItemMenu movedMenu = ((FlexoItemMenuElement) moved).getItemMenu();
 			FlexoItemMenu newParentMenu = null;
 			FlexoItemMenu oldParentMenu = movedMenu.getFather();

@@ -117,7 +117,7 @@ public class DMEOPrototypeTableModel extends AbstractModel<EOPrototypeRepository
 
 	@Override
 	public DMEOPrototype elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return (DMEOPrototype) getPrototypeRepository().getOrderedChildren().elementAt(row);
 		} else {
 			return null;

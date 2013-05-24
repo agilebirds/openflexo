@@ -38,7 +38,7 @@ public class TextEditionHistory {
 	}
 
 	public void retain() {
-		if ((index > -1) && (list.size() - 1 > index)) {
+		if (index > -1 && list.size() - 1 > index) {
 			while (index < list.size() - 1) {
 				list.removeLast();
 			}
@@ -51,7 +51,7 @@ public class TextEditionHistory {
 	}
 
 	public boolean isUndoable() {
-		return (index > 0);
+		return index > 0;
 	}
 
 	public void undo() {
@@ -62,7 +62,7 @@ public class TextEditionHistory {
 	}
 
 	public boolean isRedoable() {
-		return (index < list.size() - 1);
+		return index < list.size() - 1;
 	}
 
 	public void redo() {

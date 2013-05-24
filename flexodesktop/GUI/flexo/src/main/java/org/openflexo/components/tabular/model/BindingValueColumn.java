@@ -63,7 +63,7 @@ public abstract class BindingValueColumn<D extends FlexoModelObject> extends Cus
 
 	private void updateSelectorWith(BindingSelector selector, D rowObject, AbstractBinding value) {
 		AbstractBinding oldBV = selector.getEditedObject();
-		if ((oldBV == null) || (!oldBV.equals(value))) {
+		if (oldBV == null || !oldBV.equals(value)) {
 			selector.setEditedObjectAndUpdateBDAndOwner(value);
 			selector.setRevertValue(value != null ? value.clone() : null);
 			/*if (allowsNewEntryCreation(value)) {

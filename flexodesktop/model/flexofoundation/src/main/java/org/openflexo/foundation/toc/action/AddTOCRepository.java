@@ -19,15 +19,18 @@
  */
 package org.openflexo.foundation.toc.action;
 
+import java.io.File;
 import java.util.Vector;
 
 import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.InvalidArgumentException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.cg.GeneratedDoc;
+import org.openflexo.foundation.cg.action.AddDocType;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCObject;
 import org.openflexo.foundation.toc.TOCRepository;
@@ -39,12 +42,12 @@ public class AddTOCRepository extends FlexoAction<AddTOCRepository, FlexoModelOb
 			"add_toc", FlexoActionType.newMenu, FlexoActionType.defaultGroup, FlexoActionType.ADD_ACTION_TYPE) {
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<TOCObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector<TOCObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<TOCObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector<TOCObject> globalSelection) {
 			return true;
 		}
 
@@ -55,43 +58,72 @@ public class AddTOCRepository extends FlexoAction<AddTOCRepository, FlexoModelOb
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, TOCData.class);
+		FlexoModelObject.addActionForClass(actionType, GeneratedDoc.class);
+	}
+
 	private String repositoryName;
 
 	private DocType docType;
 
 	private TOCRepository newRepository;
-	private TOCRepository tocTemplate;
+	private File tocTemplate;
 
-	public TOCRepository getTocTemplate() {
+	public File getTocTemplate() {
 		return tocTemplate;
 	}
 
-	public void setTocTemplate(TOCRepository tocTemplate) {
+	public void setTocTemplate(File tocTemplate) {
 		this.tocTemplate = tocTemplate;
 	}
 
 	protected AddTOCRepository(FlexoModelObject focusedObject, Vector<TOCObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
-
 	}
 
 	@Override
 	protected void doAction(Object context) throws FlexoException {
-		if (getRepositoryName() == null || getRepositoryName().trim().length() == 0) {
-			throw new InvalidArgumentException(FlexoLocalization.localizedForKey("name_cannot_be_empty"), "name_cannot_be_empty");
+		if (tocTemplate != null && tocTemplate.exists()) {
+			newRepository = TOCRepository.createTOCRepositoryFromTemplate(getData(), tocTemplate);
+		} else {
+			newRepository = TOCRepository.createTOCRepositoryForDocType(getData(), getDocType());
 		}
-		String attempt = getRepositoryName();
+		if (getDocType() != null) {
+			newRepository.setDocType(getDocType());
+		}
+		String attempt = newRepository.getTitle();
 		int i = 1;
+		boolean updateTitle = false;
 		while (getData().getRepositoryWithTitle(attempt) != null) {
-			attempt = getRepositoryName() + "-" + i++;
+			updateTitle = true;
+			attempt = newRepository.getTitle() + "-" + i++;
 		}
-		newRepository = new TOCRepository(getData(), getDocType(), getTocTemplate());
-		newRepository.setTitle(attempt);
+		if (updateTitle) {
+			newRepository.setTitle(attempt);
+		}
+		if (docType == null) {
+			String docTypeName = newRepository.getDocTypeAsString();
+			DocType docType = getProject().getDocTypeNamed(docTypeName);
+			if (docType == null) {
+				AddDocType addDocType = AddDocType.actionType.makeNewEmbeddedAction(getProject(), null, this);
+				addDocType.setNewName(docTypeName);
+				addDocType.doAction();
+				if (!addDocType.hasActionExecutionSucceeded()) {
+					throw new FlexoException(FlexoLocalization.localizedForKey("could_not_add_doc_type"));
+				}
+				this.docType = addDocType.getNewDocType();
+			}
+		}
 		getData().addToRepositories(newRepository);
 	}
 
 	private TOCData getData() {
-		return getFocusedObject().getProject().getTOCData();
+		return getProject().getTOCData();
+	}
+
+	private FlexoProject getProject() {
+		return getFocusedObject().getProject();
 	}
 
 	public String getRepositoryName() {
@@ -103,6 +135,9 @@ public class AddTOCRepository extends FlexoAction<AddTOCRepository, FlexoModelOb
 	}
 
 	public DocType getDocType() {
+		if (docType == null) {
+			return getProject().getDocTypes().get(0);
+		}
 		return docType;
 	}
 

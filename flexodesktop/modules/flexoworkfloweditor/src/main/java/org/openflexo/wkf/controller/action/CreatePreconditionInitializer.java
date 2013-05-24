@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,21 +27,23 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 
 import org.openflexo.components.AskParametersDialog;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.InvalidArgumentException;
 import org.openflexo.foundation.action.ExecutionContext;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoActionRedoInitializer;
+import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoActionUndoFinalizer;
+import org.openflexo.foundation.action.FlexoActionVisibleCondition;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
-import org.openflexo.foundation.action.RedoException;
-import org.openflexo.foundation.action.UndoException;
 import org.openflexo.foundation.param.NodeParameter;
 import org.openflexo.foundation.param.NodeParameter.NodeSelectingConditional;
 import org.openflexo.foundation.param.RadioButtonListParameter;
 import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
+import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.action.CreateExecutionPetriGraph;
 import org.openflexo.foundation.wkf.action.CreateNode;
 import org.openflexo.foundation.wkf.action.CreatePetriGraph;
@@ -56,11 +58,12 @@ import org.openflexo.foundation.wkf.node.SelfExecutableNode;
 import org.openflexo.foundation.wkf.node.SelfExecutableOperationNode;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.module.UserType;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class CreatePreconditionInitializer extends ActionInitializer {
+public class CreatePreconditionInitializer extends ActionInitializer<CreatePreCondition, FlexoNode, WKFObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -89,7 +92,7 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreatePreCondition> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreatePreCondition>() {
 			@Override
-			public boolean run(ActionEvent e, final CreatePreCondition action) {
+			public boolean run(EventObject e, final CreatePreCondition action) {
 				CreatePreConditionExecutionContext executionContext = new CreatePreConditionExecutionContext(action);
 				action.setExecutionContext(executionContext);
 
@@ -126,15 +129,30 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 						}
 					}
 					if (action.getAttachedBeginNode() == null && pg != null) {
+						if (action.isForceNewCreation()) {
+							String nodeNameProposal;
+							if (action.getFocusedObject() instanceof AbstractActivityNode) {
+								nodeNameProposal = pg.getProcess().findNextInitialName(FlexoLocalization.localizedForKey("begin_node"),
+										(AbstractActivityNode) action.getFocusedObject());
+							} else if (action.getFocusedObject() instanceof OperationNode) {
+								nodeNameProposal = pg.getProcess().findNextInitialName(FlexoLocalization.localizedForKey("begin_node"),
+										(OperationNode) action.getFocusedObject());
+							} else {
+								if (logger.isLoggable(Level.WARNING)) {
+									logger.warning("Unknown father node type: " + action.getFocusedObject().getClassNameKey());
+								}
+								nodeNameProposal = FlexoLocalization.localizedForKey("begin_node");
+							}
+							return createNewBeginNode(action, executionContext, nodeNameProposal);
+						}
 						Vector<FlexoNode> unboundBeginNodes = pg.getUnboundBeginNodes();
 						Vector<FlexoNode> alreadyBoundBeginNodes = pg.getBoundBeginNodes();
 
-						FlexoNode firstUnboundBeginNode = (unboundBeginNodes.size() > 0 ? unboundBeginNodes.firstElement() : null);
-						FlexoNode firstBoundBeginNode = (alreadyBoundBeginNodes.size() > 0 ? alreadyBoundBeginNodes.firstElement() : null);
+						FlexoNode firstUnboundBeginNode = unboundBeginNodes.size() > 0 ? unboundBeginNodes.firstElement() : null;
+						FlexoNode firstBoundBeginNode = alreadyBoundBeginNodes.size() > 0 ? alreadyBoundBeginNodes.firstElement() : null;
 
 						boolean hasUnboundBeginNodes = unboundBeginNodes.size() > 0;
 						boolean hasAlreadyBoundBeginNodes = alreadyBoundBeginNodes.size() > 0;
-						;
 						if (unboundBeginNodes.size() != 1 || hasAlreadyBoundBeginNodes) {
 							String CREATE_NEW_BEGIN_NODE = FlexoLocalization.localizedForKey("create_new_begin_node");
 							String CHOOSE_EXISTING_UNBOUND_BEGIN_NODE = FlexoLocalization
@@ -153,9 +171,9 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 							String[] choices = availableChoices.toArray(new String[availableChoices.size()]);
 							RadioButtonListParameter<String> choiceParam = new RadioButtonListParameter<String>("choice",
 									"choose_an_option",
-									(firstUnboundBeginNode != null ? CHOOSE_EXISTING_UNBOUND_BEGIN_NODE : (firstBoundBeginNode != null
+									firstUnboundBeginNode != null ? CHOOSE_EXISTING_UNBOUND_BEGIN_NODE : firstBoundBeginNode != null
 											&& action.allowsToSelectPreconditionOnly() ? CHOOSE_EXISTING_ALREADY_BOUND_BEGIN_NODE
-											: CREATE_NEW_BEGIN_NODE)), choices);
+											: CREATE_NEW_BEGIN_NODE, choices);
 							String nodeNameProposal;
 							if (action.getFocusedObject() instanceof AbstractActivityNode) {
 								nodeNameProposal = pg.getProcess().findNextInitialName(FlexoLocalization.localizedForKey("begin_node"),
@@ -212,43 +230,7 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 									action.setSelectedPreCondition(((FlexoNode) alreadyBoundNodeParameter.getValue())
 											.getAttachedPreCondition());
 								} else if (choiceParam.getValue().equals(CREATE_NEW_BEGIN_NODE)) {
-									if (action.getFocusedObject() instanceof AbstractActivityNode
-											|| action.getFocusedObject() instanceof OperationNode
-											|| action.getFocusedObject() instanceof SelfExecutableNode) {
-										if (action.getFocusedObject() instanceof SelfExecutableNode) {
-											if (action.getFocusedObject() instanceof SelfExecutableActivityNode) {
-												executionContext.createBeginNodeAction = CreateNode.createActivityBeginNode
-														.makeNewEmbeddedAction(action.getFocusedObject(), null, action);
-											} else if (action.getFocusedObject() instanceof SelfExecutableOperationNode) {
-												executionContext.createBeginNodeAction = CreateNode.createOperationBeginNode
-														.makeNewEmbeddedAction(action.getFocusedObject(), null, action);
-											} else {
-												executionContext.createBeginNodeAction = CreateNode.createActionBeginNode
-														.makeNewEmbeddedAction(action.getFocusedObject(), null, action);
-											}
-										} else {
-											if (action.getFocusedObject() instanceof AbstractActivityNode) {
-												executionContext.createBeginNodeAction = CreateNode.createOperationBeginNode
-														.makeNewEmbeddedAction(action.getFocusedObject(), null, action);
-											} else {
-												executionContext.createBeginNodeAction = CreateNode.createActionBeginNode
-														.makeNewEmbeddedAction(action.getFocusedObject(), null, action);
-											}
-										}
-										executionContext.createBeginNodeAction.setNewNodeName(newBeginNodeNameParam.getValue());
-										executionContext.createBeginNodeAction.doAction();
-										if (!executionContext.createBeginNodeAction.hasActionExecutionSucceeded()) {
-											if (executionContext.createPg != null) {
-												try {
-													executionContext.createPg.undoAction();
-												} catch (UndoException e1) {
-													e1.printStackTrace();
-												}
-											}
-											return false;
-										}
-										action.setAttachedBeginNode((FlexoNode) executionContext.createBeginNodeAction.getNewNode());
-									}
+									return createNewBeginNode(action, executionContext, newBeginNodeNameParam.getValue());
 								}
 								return true;
 							} else {
@@ -262,6 +244,44 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 				}
 				return true;
 			}
+
+			public boolean createNewBeginNode(final CreatePreCondition action, CreatePreConditionExecutionContext executionContext,
+					String name) {
+				if (action.getFocusedObject() instanceof AbstractActivityNode || action.getFocusedObject() instanceof OperationNode
+						|| action.getFocusedObject() instanceof SelfExecutableNode) {
+					if (action.getFocusedObject() instanceof SelfExecutableNode) {
+						if (action.getFocusedObject() instanceof SelfExecutableActivityNode) {
+							executionContext.createBeginNodeAction = CreateNode.createActivityBeginNode.makeNewEmbeddedAction(
+									action.getFocusedObject(), null, action);
+						} else if (action.getFocusedObject() instanceof SelfExecutableOperationNode) {
+							executionContext.createBeginNodeAction = CreateNode.createOperationBeginNode.makeNewEmbeddedAction(
+									action.getFocusedObject(), null, action);
+						} else {
+							executionContext.createBeginNodeAction = CreateNode.createActionBeginNode.makeNewEmbeddedAction(
+									action.getFocusedObject(), null, action);
+						}
+					} else {
+						if (action.getFocusedObject() instanceof AbstractActivityNode) {
+							executionContext.createBeginNodeAction = CreateNode.createOperationBeginNode.makeNewEmbeddedAction(
+									action.getFocusedObject(), null, action);
+						} else {
+							executionContext.createBeginNodeAction = CreateNode.createActionBeginNode.makeNewEmbeddedAction(
+									action.getFocusedObject(), null, action);
+						}
+					}
+					executionContext.createBeginNodeAction.setNewNodeName(name);
+					executionContext.createBeginNodeAction.doAction();
+					if (!executionContext.createBeginNodeAction.hasActionExecutionSucceeded()) {
+						if (executionContext.createPg != null) {
+							executionContext.createPg.undoAction();
+
+						}
+						return false;
+					}
+					action.setAttachedBeginNode((FlexoNode) executionContext.createBeginNodeAction.getNewNode());
+				}
+				return true;
+			}
 		};
 	}
 
@@ -269,7 +289,7 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreatePreCondition> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreatePreCondition>() {
 			@Override
-			public boolean run(ActionEvent e, CreatePreCondition action) {
+			public boolean run(EventObject e, CreatePreCondition action) {
 				if (!action.isEmbedded()) {
 					getControllerActionInitializer().getWKFController().getSelectionManager()
 							.setSelectedObject(action.getNewPreCondition());
@@ -283,7 +303,7 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 	protected FlexoActionUndoFinalizer<CreatePreCondition> getDefaultUndoFinalizer() {
 		return new FlexoActionUndoFinalizer<CreatePreCondition>() {
 			@Override
-			public boolean run(ActionEvent e, CreatePreCondition action) throws UndoException {
+			public boolean run(EventObject e, CreatePreCondition action) {
 				CreatePreConditionExecutionContext executionContext = (CreatePreConditionExecutionContext) action.getExecutionContext();
 				if (executionContext.createBeginNodeAction != null) {
 					executionContext.createBeginNodeAction.undoAction();
@@ -303,7 +323,7 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 	protected FlexoActionRedoInitializer<CreatePreCondition> getDefaultRedoInitializer() {
 		return new FlexoActionRedoInitializer<CreatePreCondition>() {
 			@Override
-			public boolean run(ActionEvent e, CreatePreCondition action) throws RedoException {
+			public boolean run(EventObject e, CreatePreCondition action) {
 				CreatePreConditionExecutionContext executionContext = (CreatePreConditionExecutionContext) action.getExecutionContext();
 				if (executionContext.createPg != null) {
 					executionContext.createPg.redoAction();
@@ -315,6 +335,18 @@ public class CreatePreconditionInitializer extends ActionInitializer {
 					executionContext.createBeginNodeAction.redoAction();
 				}
 				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionVisibleCondition<CreatePreCondition, FlexoNode, WKFObject> getVisibleCondition() {
+		return new FlexoActionVisibleCondition<CreatePreCondition, FlexoNode, WKFObject>() {
+
+			@Override
+			public boolean isVisible(FlexoActionType<CreatePreCondition, FlexoNode, WKFObject> actionType, FlexoNode object,
+					Vector<WKFObject> globalSelection, FlexoEditor editor) {
+				return UserType.isDevelopperRelease() || UserType.isMaintainerRelease();
 			}
 		};
 	}

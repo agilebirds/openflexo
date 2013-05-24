@@ -22,6 +22,12 @@ public abstract class ModelObjectSection<T extends FlexoModelObject> extends TOC
 				return org.openflexo.foundation.view.ViewDefinition.class;
 			}
 		},
+		ViewFolder {
+			@Override
+			public Type getType() {
+				return org.openflexo.foundation.view.ViewFolder.class;
+			}
+		},
 		Process {
 			@Override
 			public Type getType() {
@@ -115,19 +121,15 @@ public abstract class ModelObjectSection<T extends FlexoModelObject> extends TOC
 	}
 
 	public void setModelObject(T modelObject) {
-		System.out.println("set model object with " + modelObject);
 		if (modelObjectReference != null) {
-			modelObjectReference.delete();
+			modelObjectReference.delete(false);
 			modelObjectReference = null;
 		}
 		if (modelObject != null) {
-			modelObjectReference = new FlexoModelObjectReference<FlexoModelObject>(getProject(), modelObject);
+			modelObjectReference = new FlexoModelObjectReference<FlexoModelObject>(modelObject, this);
+			modelObjectReference.setSerializeClassName(true);
 		} else {
 			modelObjectReference = null;
-		}
-		if (modelObjectReference != null) {
-			modelObjectReference.setOwner(this);
-			modelObjectReference.setSerializeClassName(true);
 		}
 	}
 

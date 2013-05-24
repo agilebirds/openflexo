@@ -2,7 +2,7 @@
 
 <model>
 
-  <entity name="org.openflexo.fib.model.FIBModelObject" abstract="yes" finalizer="finalizeDeserialization"> 
+  <entity name="org.openflexo.fib.model.FIBModelObject" abstract="yes" finalizer="finalizeDeserialization" initializer="initializeDeserialization"> 
     <property name="name" xmlTag="name" attribute="YES"/> 
     <property name="description" xmlTag="description"/> 
     <property name="parameters" xmlTag="Parameter" type="vector"/> 
@@ -18,13 +18,14 @@
   </entity>
    
   <entity name="org.openflexo.fib.model.FIBComponent" abstract="yes"> 
+    <property name="index" xmlTag="index" attribute="YES" ignoreDefaultValue="-1"/> 
     <property name="data" xmlTag="data" attribute="YES"/> 
     <property name="dataClass" xmlTag="dataClassName" attribute="YES"/> 
     <property name="controllerClass" xmlTag="controllerClassName" attribute="YES"/> 
     <property name="constraints" xmlTag="constraints" attribute="YES"/> 
     <property name="visible" xmlTag="visible" attribute="YES"/> 
     <property name="font" xmlTag="font" attribute="YES"/> 
-    <property name="opaque" xmlTag="opaque" attribute="YES" ignoreDefaultValue="false"/> 
+    <property name="opaque" xmlTag="opaque" attribute="YES"/> 
     <property name="backgroundColor" xmlTag="backgroundColor" attribute="YES"/> 
     <property name="foregroundColor" xmlTag="foregroundColor" attribute="YES"/> 
     <property name="width" xmlTag="width" attribute="YES"/> 
@@ -71,16 +72,44 @@
     <property name="borderRight" xmlTag="borderRight" attribute="YES"/> 
     <property name="titleFont" xmlTag="titleFont" attribute="YES"/> 
     <property name="darkLevel" xmlTag="darkLevel" attribute="YES"/> 
-    <property name="protectContent" xmlTag="protectContent" attribute="YES" ignoreDefaultValue="false"/>     
+    <property name="protectContent" xmlTag="protectContent" attribute="YES" ignoreDefaultValue="false"/>
+    <property name="trackViewPortWidth" xmlTag="trackViewPortWidth" attribute="YES" ignoreDefaultValue="true"/>
+    <property name="trackViewPortHeight" xmlTag="trackViewPortHeight" attribute="YES" ignoreDefaultValue="true"/>
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBTab" xmlTag="Tab"> 
-     <property name="index" xmlTag="index" attribute="YES"/> 
      <property name="title" xmlTag="title" attribute="YES"/> 
   </entity>
    
   <entity name="org.openflexo.fib.model.FIBTabPanel" xmlTag="TabPanel"> 
   </entity>
+   
+  <entity name="org.openflexo.fib.model.FIBSplitPanel" xmlTag="SplitPanel"> 
+    <property name="split" contains="org.openflexo.swing.layout.MultiSplitLayout$Split"/> 
+  </entity>
+ 
+  <entity name="org.openflexo.swing.layout.MultiSplitLayout$Node" abstract="yes"> 
+  </entity>
+   
+  <entity name="org.openflexo.swing.layout.MultiSplitLayout$Leaf" xmlTag="Leaf"> 
+    <property name="name" xmlTag="name" attribute="YES"/> 
+    <property name="weight" xmlTag="weight" attribute="YES"/> 
+  </entity>
+   
+  <entity name="org.openflexo.swing.layout.MultiSplitLayout$Divider" xmlTag="Divider"> 
+  </entity>
+   
+  <entity name="org.openflexo.swing.layout.MultiSplitLayout$Split" abstract="yes"> 
+    <property name="name" xmlTag="name" attribute="YES"/> 
+    <property name="weight" xmlTag="weight" attribute="YES"/> 
+    <property name="children" type="vector" contains="org.openflexo.swing.layout.MultiSplitLayout$Node"/> 
+  </entity>
+   
+  <entity name="org.openflexo.swing.layout.MultiSplitLayout$RowSplit" xmlTag="RowSplit"> 
+  </entity>
+   
+  <entity name="org.openflexo.swing.layout.MultiSplitLayout$ColSplit" xmlTag="ColSplit"> 
+  </entity> 
    
   <entity name="org.openflexo.fib.model.FIBWidget" abstract="yes"> 
     <property name="readOnly" xmlTag="readOnly" attribute="YES" ignoreDefaultValue="false"/> 
@@ -94,12 +123,15 @@
     <property name="clickAction" xmlTag="clickAction" attribute="YES"/> 
     <property name="doubleClickAction" xmlTag="doubleClickAction" attribute="YES"/> 
     <property name="rightClickAction" xmlTag="rightClickAction" attribute="YES"/> 
+    <property name="enterPressedAction" xmlTag="enterPressedAction" attribute="YES"/> 
     <property name="valueChangedAction" xmlTag="valueChangedAction" attribute="YES"/> 
-  </entity>
+    <property name="valueTransform" xmlTag="valueTransform" attribute="YES"/> 
+    <property name="valueValidator" xmlTag="valueValidator" attribute="YES"/> 
+ </entity>
   
   <entity name="org.openflexo.fib.model.FIBLabel" xmlTag="Label"> 
     <property name="label" xmlTag="label" attribute="YES"/> 
-    <property name="align" xmlTag="align" attribute="YES" ignoreDefaultValue="left"/> 
+    <property name="align" xmlTag="align" attribute="YES" ignoreDefaultValue="left"/>
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBImage" xmlTag="Image"> 
@@ -150,12 +182,16 @@
     <property name="selected" xmlTag="selected" attribute="YES"/> 
     <property name="layoutOrientation" xmlTag="layoutOrientation" attribute="YES"/> 
   </entity>
-
-  <entity name="org.openflexo.fib.model.FIBTextField" xmlTag="TextField"> 
+  
+   <entity name="org.openflexo.fib.model.FIBTextWidget" abstract="yes">
     <property name="validateOnReturn" xmlTag="validateOnReturn" attribute="YES" ignoreDefaultValue="false"/> 
     <property name="columns" xmlTag="columns" attribute="YES"/> 
+    <property name="text" xmlTag="text" attribute="YES"/>
+    <property name="editable" xmlTag="editable" attribute="YES"/>
+   </entity> 
+
+  <entity name="org.openflexo.fib.model.FIBTextField" xmlTag="TextField"> 
     <property name="passwd" xmlTag="passwd" attribute="YES" ignoreDefaultValue="false"/> 
-    <property name="text" xmlTag="text" attribute="YES"/> 
    </entity>
  
   <entity name="org.openflexo.fib.model.FIBTextArea" xmlTag="TextArea"> 
@@ -163,6 +199,13 @@
     <property name="columns" xmlTag="columns" attribute="YES"/> 
     <property name="rows" xmlTag="rows" attribute="YES"/> 
     <property name="text" xmlTag="text" attribute="YES"/> 
+  </entity>
+  
+  <entity name="org.openflexo.fib.model.FIBEditorPane" xmlTag="EditorPane"> 
+    <property name="contentType" xmlTag="contentType" attribute="YES"/> 
+  </entity>
+  
+  <entity name="org.openflexo.fib.model.FIBTextPane" xmlTag="TextPane"> 
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBHtmlEditor" xmlTag="HTMLEditor"> 
@@ -177,6 +220,7 @@
 
   <entity name="org.openflexo.fib.model.FIBNumber" xmlTag="Number"> 
     <property name="validateOnReturn" xmlTag="validateOnReturn" attribute="YES" ignoreDefaultValue="false"/> 
+    <property name="allowsNull" xmlTag="allowsNull" attribute="YES" ignoreDefaultValue="true"/> 
     <property name="minValue" xmlTag="minValue" attribute="YES"/> 
     <property name="maxValue" xmlTag="maxValue" attribute="YES"/> 
     <property name="increment" xmlTag="increment" attribute="YES"/> 
@@ -184,28 +228,30 @@
     <property name="columns" xmlTag="columns" attribute="YES"/> 
   </entity>
   
-  <entity name="org.openflexo.fib.model.FIBColor" xmlTag="Color"> 
+  <entity name="org.openflexo.fib.model.FIBColor" xmlTag="Color">
+    <property name="allowsNull" xmlTag="allowsNull" attribute="YES" ignoreDefaultValue="true"/>
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBFont" xmlTag="Font"> 
     <property name="sampleText" xmlTag="sampleText" attribute="YES"/> 
+    <property name="allowsNull" xmlTag="allowsNull" attribute="YES" ignoreDefaultValue="true"/>
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBFile" xmlTag="File"> 
     <property name="mode" xmlTag="mode" attribute="YES"/> 
     <property name="filter" xmlTag="filter" attribute="YES"/> 
     <property name="title" xmlTag="title" attribute="YES"/> 
-    <property name="isDirectory" xmlTag="isDirectory" attribute="YES"/> 
+    <property name="directory" xmlTag="isDirectory" attribute="YES"/> 
     <property name="defaultDirectory" xmlTag="defaultDirectory" attribute="YES"/> 
     <property name="columns" xmlTag="columns" attribute="YES"/> 
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBButton" xmlTag="Button"> 
     <property name="action" xmlTag="action" attribute="YES"/> 
+    <property name="buttonIcon" xmlTag="buttonIcon" attribute="YES"/> 
     <property name="buttonType" xmlTag="buttonType" attribute="YES"/> 
     <property name="label" xmlTag="label" attribute="YES"/> 
     <property name="isDefault" xmlTag="default" attribute="YES" ignoreDefaultValue="false"/> 
-    <property name="buttonIcon" xmlTag="buttonIcon" attribute="YES"/> 
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBCustom" xmlTag="Custom"> 
@@ -251,6 +297,7 @@
     <property name="filtered" xmlTag="filtered" attribute="YES"/> 
     <property name="defaultVisible" xmlTag="defaultVisible" attribute="YES"/> 
     <property name="font" xmlTag="font" attribute="YES"/> 
+    <property name="dynamicFont" xmlTag="dynamicFont" attribute="YES"/> 
     <property name="children" type="vector" contains="org.openflexo.fib.model.FIBBrowserElement$FIBBrowserElementChildren"/> 
     <property name="actions" type="vector" contains="org.openflexo.fib.model.FIBBrowserAction"/> 
   </entity>
@@ -292,6 +339,10 @@
     <property name="backgroundSelectionColor" xmlTag="backgroundSelectionColor" attribute="YES"/> 
     <property name="backgroundSecondarySelectionColor" xmlTag="backgroundSecondarySelectionColor" attribute="YES"/> 
     <property name="backgroundNonSelectionColor" xmlTag="backgroundNonSelectionColor" attribute="YES"/> 
+  </entity>
+  
+  <entity name="org.openflexo.fib.model.FIBTreeTable" xmlTag="TreeTable">
+    <property name="columns" type="vector" contains="org.openflexo.fib.model.FIBTableColumn"/>
   </entity>
      
   <entity name="org.openflexo.fib.model.FIBTableAction" abstract="yes"> 
@@ -346,6 +397,10 @@
    <property name="numberType" xmlTag="numberType" attribute="YES"/> 
    </entity>
   
+  <entity name="org.openflexo.fib.model.FIBButtonColumn" xmlTag="ButtonColumn"> 
+      <property name="action" xmlTag="action" attribute="YES"/> 
+  </entity>
+  
   <entity name="org.openflexo.fib.model.FIBCustomColumn" xmlTag="CustomColumn"> 
     <property name="componentClass" xmlTag="componentClassName" attribute="YES"/> 
     <property name="customRendering" xmlTag="customRendering" attribute="YES"/> 
@@ -357,7 +412,5 @@
     <property name="variable" xmlTag="variable" attribute="YES"/> 
     <property name="value" xmlTag="value" attribute="YES"/> 
   </entity>
-  
-  
-  
+    
  </model>

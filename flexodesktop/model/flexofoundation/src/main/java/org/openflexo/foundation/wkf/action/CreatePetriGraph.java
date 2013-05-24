@@ -24,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.wkf.ActionPetriGraph;
@@ -54,16 +55,20 @@ public class CreatePetriGraph extends FlexoUndoableAction<CreatePetriGraph, Fath
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FatherNode object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(FatherNode object, Vector<WKFObject> globalSelection) {
 			return false; // Action is never visible but always active.
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FatherNode object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(FatherNode object, Vector<WKFObject> globalSelection) {
 			return object.getContainedPetriGraph() == null;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, FatherNode.class);
+	}
 
 	CreatePetriGraph(FatherNode focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

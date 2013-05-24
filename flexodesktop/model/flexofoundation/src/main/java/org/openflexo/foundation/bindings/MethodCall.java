@@ -33,9 +33,7 @@ import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.Typed;
 import org.openflexo.foundation.dm.dm.DMEntityClassNameChanged;
 import org.openflexo.foundation.dm.dm.EntityDeleted;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
-import org.openflexo.xmlcode.XMLMapping;
 
 public class MethodCall extends FlexoModelObject implements Typed, BindingValue.BindingPathElement {
 
@@ -153,22 +151,6 @@ public class MethodCall extends FlexoModelObject implements Typed, BindingValue.
 	@Override
 	public String getFullyQualifiedName() {
 		return "METHOD_CALL." + getSerializationRepresentation();
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		if (_owner != null) {
-			return _owner.getProject();
-		}
-		return null;
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		if (_owner != null) {
-			return _owner.getXMLMapping();
-		}
-		return null;
 	}
 
 	@Override

@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.NameChanged;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.help.ApplicationHelpEntryPoint;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.utils.FlexoModelObjectReference.ReferenceOwner;
@@ -37,9 +36,8 @@ import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.foundation.wkf.FlexoProcessNode;
 import org.openflexo.foundation.wkf.WKFObject;
-import org.openflexo.foundation.wkf.action.OpenEmbeddedProcess;
-import org.openflexo.foundation.wkf.action.ShowHidePortmapRegistery;
 import org.openflexo.foundation.wkf.dm.ObjectVisibilityChanged;
 import org.openflexo.foundation.wkf.dm.PortMapInserted;
 import org.openflexo.foundation.wkf.dm.PortMapRegisteryInserted;
@@ -64,7 +62,7 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 
 	private static final Logger logger = Logger.getLogger(SubProcessNode.class.getPackage().getName());
 
-	protected FlexoProcess _subProcess;
+	private FlexoModelObjectReference<FlexoProcess> _subProcess;
 
 	// serialized. If null, then the serviceInterface to use is the DefaultServiceInterface
 	private ServiceInterface _serviceInterface;
@@ -117,14 +115,6 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 		}
 	}
 
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(OpenEmbeddedProcess.actionType);
-		returned.add(ShowHidePortmapRegistery.actionType);
-		return returned;
-	}
-
 	public boolean isAcceptableAsSubProcess(FlexoProcess aProcess) {
 		if (aProcess == null) {
 			return true; // Null value is allowed in the context of edition
@@ -137,14 +127,36 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 		if (parentProcess != null && parentProcess.isImported()) {
 			return false;
 		}
-		if (aProcess.isImported()) {
-			return aProcess.isTopLevelProcess();
+		if (aProcess.isTopLevelProcess()) {
+			return true;
 		}
 
 		if (parentProcess == null) {
-			return /*!aProcess.isRootProcess()*/true;// Allowed to invoke the root process
+			return /* !aProcess.isRootProcess() */true;// Allowed to invoke the root process
 		} else {
 			return parentProcess.isAncestorOf(getProcess());
+		}
+	}
+
+	public boolean isAcceptableAsSubProcess(FlexoProcessNode existingProcessNode) {
+		if (existingProcessNode == null) {
+			return true; // Null value is allowed in the context of edition
+		}
+		return isAcceptableAsSubProcess(existingProcessNode, existingProcessNode.getFatherProcessNode());
+	}
+
+	public boolean isAcceptableAsSubProcess(FlexoProcessNode aProcess, FlexoProcessNode parentProcess) {
+		if (parentProcess != null && parentProcess.isImported()) {
+			return false;
+		}
+		if (aProcess.isTopLevelProcess()) {
+			return true;
+		}
+
+		if (parentProcess == null) {
+			return /* !aProcess.isRootProcess() */true;// Allowed to invoke the root process
+		} else {
+			return parentProcess.isAncestorOf(getProcess().getProcessNode());
 		}
 	}
 
@@ -167,49 +179,23 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 
 	// Used when serializing
 	public FlexoModelObjectReference<FlexoProcess> getSubProcessReference() {
-		if (getSubProcess() != null) {
-			return new FlexoModelObjectReference<FlexoProcess>(getProject(), getSubProcess());
-		} else {
-			return _deserializedReference;
-		}
+		return _subProcess;
 	}
-
-	private FlexoModelObjectReference<FlexoProcess> _deserializedReference;
 
 	// Used when deserializing
 	public void setSubProcessReference(FlexoModelObjectReference<FlexoProcess> aSubProcessReference) {
-		FlexoProcess subProcess = aSubProcessReference.getObject(false); // False because we never know if a loop is possible...
-		if (subProcess != null) {
-			setSubProcess(subProcess);
-		} else {
-			_deserializedReference = aSubProcessReference;
-			_deserializedReference.setOwner(this);
+		if (aSubProcessReference != null) {
+			_subProcess = aSubProcessReference;
+			_subProcess.setOwner(this);
 		}
-	}
-
-	@Override
-	public void notifyObjectLoaded(FlexoModelObjectReference<?> reference) {
-		if (reference == _deserializedReference) {
-			getSubProcess();
-		}
-	}
-
-	@Override
-	public void objectCantBeFound(FlexoModelObjectReference<?> reference) {
-		if (reference == _deserializedReference) {
-			setSubProcess(null, false);
-		}
-	}
-
-	@Override
-	public void objectSerializationIdChanged(FlexoModelObjectReference<?> reference) {
-		setChanged();
 	}
 
 	@Override
 	public void objectDeleted(FlexoModelObjectReference<?> reference) {
-		if (reference == _deserializedReference) {
+		if (reference == _subProcess) {
 			setSubProcess(null);
+		} else {
+			super.objectDeleted(reference);
 		}
 	}
 
@@ -217,16 +203,24 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 		return getSubProcess() != null;
 	}
 
-	public FlexoProcess getSubProcess() {
-		if (_subProcess == null) {
-			if (_deserializedReference != null) {
-				FlexoProcess object = _deserializedReference.getObject(false);
-				if (object != null) {
-					setSubProcess(object, false);
-				}
-			}
+	public boolean hasSubProcessReference() {
+		return _subProcess != null;
+	}
+
+	public FlexoProcess getSubProcess(boolean forceLoading) {
+		if (_subProcess != null) {
+			return _subProcess.getObject(forceLoading);
+		} else {
+			return null;
 		}
-		return _subProcess;
+	}
+
+	public FlexoProcess getSubProcess() {
+		if (_subProcess != null) {
+			return _subProcess.getObject();
+		} else {
+			return null;
+		}
 	}
 
 	public void setSubProcess(FlexoProcess aSubProcess) {
@@ -246,20 +240,22 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 	}
 
 	public void setSubProcess(FlexoProcess aSubProcess, boolean notify) {
-		if (_subProcess != aSubProcess) {
-			if (aSubProcess != null && !isAcceptableAsSubProcess(aSubProcess) && !isDeserializing() && _deserializedReference == null) {
+		if (getSubProcess() != aSubProcess) {
+			if (aSubProcess != null && !isAcceptableAsSubProcess(aSubProcess) && !isDeserializing()) {
 				logger.warning("Sorry, this process is not acceptable as sub-process for this SubProcessNode");
 				return;
 			}
-			FlexoProcess oldSubProcess = _subProcess;
+			FlexoProcess oldSubProcess = _subProcess != null ? _subProcess.getObject(false) : null;
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("setSubProcess() with " + aSubProcess + " for " + this);
 			}
-
-			_subProcess = aSubProcess;
-			_deserializedReference = null;
+			if (aSubProcess != null) {
+				_subProcess = new FlexoModelObjectReference<FlexoProcess>(aSubProcess, this);
+			} else {
+				_subProcess = null;
+			}
 			if (_subProcess != null && !isCreatedByCloning()) {
-				if (getProcess() != null && getProcess() != _subProcess) {
+				if (getProcess() != null && getProcess() != aSubProcess) {
 					getProcess().getFlexoResource().addToDependentResources(aSubProcess.getFlexoResource());
 				}
 				aSubProcess.addToSubProcessNodes(this);
@@ -394,11 +390,8 @@ public abstract class SubProcessNode extends AbstractActivityNode implements App
 	public void setSubProcessName(String subProcessName) {
 		// Not relevant anymore
 		/*
-		if (getSubProcess() != null) {
-		    _subProcess = null;
-		}
-		_subProcessName = subProcessName;
-		_subProcess = getSubProcess();*/
+		 * if (getSubProcess() != null) { _subProcess = null; } _subProcessName = subProcessName; _subProcess = getSubProcess();
+		 */
 	}
 
 	public PortMapRegistery getPortMapRegistery() {

@@ -36,7 +36,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.openflexo.ColorCst;
 import org.openflexo.foundation.wkf.Status;
 import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.foundation.wkf.node.OperationNode;
@@ -65,8 +64,6 @@ public class ViewNextOperationPopup extends FlexoDialog {
 		this.controller = controller;
 		setTitle(FlexoLocalization.localizedForKey("next_operations_for_node ") + node.getName());
 		initUI(node.getNextOperationsForAction());
-		validate();
-		doLayout();
 		pack();
 		if (getWidth() < 300) {
 			setSize(300, getHeight());
@@ -80,8 +77,6 @@ public class ViewNextOperationPopup extends FlexoDialog {
 	private void initUI(List<WorkflowPathToOperationNode> v) {
 		setMinimumSize(new Dimension(300, 150));
 		setLayout(new VerticalLayout(4, 4, 4));
-		getContentPane().setBackground(ColorCst.GUI_BACK_COLOR);
-		setBackground(ColorCst.GUI_BACK_COLOR);
 
 		List<WorkflowPathToOperationNode> pathWithOperationNodeList = new ArrayList<WorkflowPathToOperationNode>();
 		for (WorkflowPathToOperationNode workflowPath : v) {
@@ -92,9 +87,9 @@ public class ViewNextOperationPopup extends FlexoDialog {
 
 		if (pathWithOperationNodeList.size() == 0) {
 			JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 1, 1));
-			panel.setBackground(ColorCst.GUI_BACK_COLOR);
+			panel.setOpaque(false);
 			JLabel l = new JLabel(FlexoLocalization.localizedForKey("no_next_operations"));
-			l.setBackground(ColorCst.GUI_BACK_COLOR);
+			l.setOpaque(false);
 			panel.add(l);
 			add(panel);
 		} else {
@@ -109,7 +104,7 @@ public class ViewNextOperationPopup extends FlexoDialog {
 			}
 		}
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 1, 1));
-		panel.setBackground(ColorCst.GUI_BACK_COLOR);
+		panel.setOpaque(false);
 		JButton button = new JButton(FlexoLocalization.localizedForKey("ok"));
 		button.addActionListener(new ActionListener() {
 
@@ -152,7 +147,7 @@ public class ViewNextOperationPopup extends FlexoDialog {
 		}
 
 		private void initUI() {
-			setBackground(ColorCst.GUI_BACK_COLOR);
+			setOpaque(false);
 			StringBuilder sb = new StringBuilder();
 			if (operation.getProcess() != node.getProcess()) {
 				sb.append(operation.getProcess().getName()).append(">");
@@ -167,7 +162,7 @@ public class ViewNextOperationPopup extends FlexoDialog {
 				sb.append(" - Status: " + status.getName());
 			}
 			label = new JLabel();
-			label.setBackground(ColorCst.GUI_BACK_COLOR);
+			label.setOpaque(false);
 			label.setText(sb.toString());
 			label.addMouseListener(new MouseListener() {
 

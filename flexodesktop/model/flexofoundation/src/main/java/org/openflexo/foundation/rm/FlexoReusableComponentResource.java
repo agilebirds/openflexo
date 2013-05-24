@@ -19,26 +19,21 @@
  */
 package org.openflexo.foundation.rm;
 
-import java.io.Serializable;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ie.IEReusableComponent;
-import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.FlexoComponentFolder;
 import org.openflexo.foundation.ie.cl.ReusableComponentDefinition;
 import org.openflexo.foundation.ie.util.FolderType;
-import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
-import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
-import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 
 /**
  * @author bmangez <B>Class Description</B>
  */
-public class FlexoReusableComponentResource extends FlexoComponentResource implements Serializable {
+public class FlexoReusableComponentResource extends FlexoComponentResource {
 
 	private static final Logger logger = Logger.getLogger(FlexoTabComponentResource.class.getPackage().getName());
 
@@ -88,17 +83,6 @@ public class FlexoReusableComponentResource extends FlexoComponentResource imple
 	@Override
 	public IEReusableComponent getWOComponent() {
 		return (IEReusableComponent) getResourceData();
-	}
-
-	@Override
-	public IEWOComponent performLoadResourceData(FlexoProgress progress, ProjectLoadingHandler loadingHandler)
-			throws LoadXMLResourceException, FlexoFileNotFoundException, ProjectLoadingCancelledException, MalformedXMLException {
-		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Loading component " + getName());
-		}
-		IEReusableComponent singleWidgetComponent = (IEReusableComponent) super.performLoadResourceData(progress, loadingHandler);
-		singleWidgetComponent.setProject(getProject());
-		return singleWidgetComponent;
 	}
 
 	private ReusableComponentDefinition _componentDefinition;

@@ -47,13 +47,13 @@ public class EditCustomTemplateFile extends FlexoAction<EditCustomTemplateFile, 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection) {
-			return ((object != null) && (object.isCustomTemplate()));
+		public boolean isVisibleForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection) {
+			return object != null && object.isCustomTemplate();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection) {
-			return ((object != null) && (object.isCustomTemplate()) && (!object.isEdited()));
+		public boolean isEnabledForSelection(CGTemplateFile object, Vector<CGTemplateObject> globalSelection) {
+			return object != null && object.isCustomTemplate() && !object.isEdited();
 		}
 
 	};
@@ -71,7 +71,7 @@ public class EditCustomTemplateFile extends FlexoAction<EditCustomTemplateFile, 
 	@Override
 	protected void doAction(Object context) {
 		logger.info("Edit CustomTemplateFile " + getFocusedObject());
-		if ((getFocusedObject() != null) && (templateFileContentEditor != null)) {
+		if (getFocusedObject() != null && templateFileContentEditor != null) {
 			getFocusedObject().edit(templateFileContentEditor);
 		}
 	}

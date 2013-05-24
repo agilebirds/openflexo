@@ -19,7 +19,8 @@
  */
 package org.openflexo.fib.view.widget;
 
-import java.awt.FlowLayout;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,6 +29,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -74,30 +76,25 @@ public class FIBCheckboxListWidget extends FIBMultipleValueWidget<FIBCheckboxLis
 		labelsArray = new JLabel[getListModel().getSize()];
 		for (int i = 0; i < getListModel().getSize(); i++) {
 			Object object = getListModel().getElementAt(i);
+			String text = getStringRepresentation(object);
+			JCheckBox cb = new JCheckBox(text, containsObject(object));
+			cb.setOpaque(false);
+			cb.addActionListener(new CheckboxListener(cb, object, i));
+			checkboxesArray[i] = cb;
 			if (getWidget().getShowIcon() && getWidget().getIcon().isSet() && getWidget().getIcon().isValid()) {
-				JPanel itemPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 2, 0));
-				itemPanel.setOpaque(false);
-				JCheckBox rb = new JCheckBox("", containsObject(object));
-				rb.setOpaque(false);
-				rb.addActionListener(new CheckboxListener(rb, object, i));
-				checkboxesArray[i] = rb;
-				itemPanel.add(rb);
-				itemPanel.add(new JLabel(getIconRepresentation(object)));
-				JLabel label = new JLabel(getStringRepresentation(object));
-				labelsArray[i] = label;
-				itemPanel.add(label);
-				panel.add(itemPanel);
-			} else {
-				JCheckBox rb = new JCheckBox(getStringRepresentation(object), containsObject(object));
-				rb.setOpaque(false);
-				rb.addActionListener(new CheckboxListener(rb, object, i));
-				checkboxesArray[i] = rb;
-				panel.add(rb);
+				cb.setHorizontalAlignment(JCheckBox.LEFT);
+				cb.setText(null);
+				final JLabel label = new JLabel(text, getIconRepresentation(object), JLabel.LEADING);
+				Dimension ps = cb.getPreferredSize();
+				cb.setLayout(new BorderLayout());
+				label.setLabelFor(cb);
+				label.setBorder(BorderFactory.createEmptyBorder(0, ps.width, 0, 0));
+				cb.add(label);
 			}
-			// buttonGroup.add(rb);
+			panel.add(cb);
 		}
 		updateFont();
-		panel.validate();
+		panel.revalidate();
 	}
 
 	@Override
@@ -146,8 +143,8 @@ public class FIBCheckboxListWidget extends FIBMultipleValueWidget<FIBCheckboxLis
 					}
 				}
 				updateModelFromWidget();
-				getDynamicModel().selected = value;
-				getDynamicModel().selectedIndex = index;
+				getDynamicModel().setSelected(value);
+				getDynamicModel().setSelectedIndex(index);
 				notifyDynamicModelChanged();
 			}
 		}
@@ -186,13 +183,16 @@ public class FIBCheckboxListWidget extends FIBMultipleValueWidget<FIBCheckboxLis
 	@Override
 	public void updateFont() {
 		super.updateFont();
-		for (JCheckBox cb : checkboxesArray) {
-			cb.setFont(getFont());
+		if (getFont() != null) {
+			for (JCheckBox cb : checkboxesArray) {
+				cb.setFont(getFont());
+			}
 		}
 		if (getWidget().getShowIcon() && getWidget().getIcon().isSet() && getWidget().getIcon().isValid()) {
 			for (JLabel l : labelsArray) {
-				if (l != null)
+				if (l != null) {
 					l.setFont(getFont());
+				}
 			}
 		}
 	}

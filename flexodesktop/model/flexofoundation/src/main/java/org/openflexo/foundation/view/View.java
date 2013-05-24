@@ -33,6 +33,7 @@ import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.ontology.EditionPatternInstance;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.ontology.dm.ShemaDeleted;
+import org.openflexo.foundation.ontology.owl.OWLOntology.OntologyNotFoundException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoOEShemaResource;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -49,10 +50,11 @@ public class View extends ViewObject implements XMLStorageResourceData {
 
 	private static final Logger logger = Logger.getLogger(View.class.getPackage().getName());
 
-	private FlexoProject _project;
 	private FlexoOEShemaResource _resource;
-	private ViewDefinition _shemaDefinition;
-	private ViewPoint _calc;
+	private ViewDefinition _viewDefinition;
+	private ViewPoint _viewpoint;
+
+	private final FlexoProject project;
 
 	/**
 	 * Constructor invoked during deserialization
@@ -72,19 +74,38 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	 */
 	public View(ViewDefinition shemaDefinition, FlexoProject project) {
 		super(project);
+		this.project = project;
 		logger.info("Created new shema with project " + project);
-		_project = project;
-		_shemaDefinition = shemaDefinition;
+		_viewDefinition = shemaDefinition;
 		setShema(this);
-		if (getCalc() != null) {
-			getCalc().loadWhenUnloaded();
+		loadViewpointIfRequiredAndEnsureOntologyImports(project);
+	}
+
+	@Override
+	public FlexoProject getProject() {
+		if (getFlexoResource() != null) {
+			return super.getProject();
+		}
+		return project;
+	}
+
+	private void loadViewpointIfRequiredAndEnsureOntologyImports(FlexoProject project) {
+		if (getViewPoint() != null) {
+			getViewPoint().loadWhenUnloaded();
+			if (getViewPoint().getViewpointOntology() != null) {
+				try {
+					if (project.getProjectOntology().importOntology(getViewPoint().getViewpointOntology())) {
+						logger.info("Imported missing viewpoint ontology: " + getViewPoint().getViewpointOntology());
+					}
+				} catch (OntologyNotFoundException e) {
+					logger.severe("Could not find viewpoint ontology: " + getViewPoint().getViewpointOntology());
+				}
+			}
 		}
 	}
 
 	public Collection<EditionPatternInstance> getEPInstances(String epName) {
-		System.out.println("Search " + epName);
 		EditionPattern ep = getCalc().getEditionPattern(epName);
-		System.out.println("Found " + ep);
 		return getEPInstances(ep);
 	}
 
@@ -97,7 +118,7 @@ public class View extends ViewObject implements XMLStorageResourceData {
 			if (epr == null) {
 				continue;
 			}
-			if (/*epr.isPrimaryRole() && */epr.getEditionPattern() == ep) {
+			if (/* epr.isPrimaryRole() && */epr.getEditionPattern() == ep) {
 				epis.add(epr.getEditionPatternInstance());
 			}
 		}
@@ -106,11 +127,10 @@ public class View extends ViewObject implements XMLStorageResourceData {
 			if (epr == null) {
 				continue;
 			}
-			if (/*epr.isPrimaryRole() && */epr.getEditionPattern() == ep) {
+			if (/* epr.isPrimaryRole() && */epr.getEditionPattern() == ep) {
 				epis.add(epr.getEditionPatternInstance());
 			}
 		}
-		System.out.println("Return " + epis);
 		return epis;
 	}
 
@@ -127,7 +147,7 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	}
 
 	public ViewDefinition getShemaDefinition() {
-		return _shemaDefinition;
+		return _viewDefinition;
 	}
 
 	@Override
@@ -148,16 +168,6 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	@Override
 	public void save() throws SaveResourceException {
 		getFlexoResource().saveResourceData();
-	}
-
-	@Override
-	public FlexoProject getProject() {
-		return _project;
-	}
-
-	@Override
-	public void setProject(FlexoProject aProject) {
-		_project = aProject;
 	}
 
 	@Override
@@ -191,6 +201,21 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	public void setTitle(String title) throws DuplicateResourceException, InvalidNameException {
 		if (getShemaDefinition() != null) {
 			getShemaDefinition().setTitle(title);
+		}
+	}
+
+	@Override
+	public int getIndex() {
+		if (getShemaDefinition() != null) {
+			return getShemaDefinition().getIndex();
+		}
+		return -1;
+	}
+
+	@Override
+	public void setIndex(int index) {
+		if (getShemaDefinition() != null) {
+			getShemaDefinition().setIndex(index);
 		}
 	}
 
@@ -251,6 +276,7 @@ public class View extends ViewObject implements XMLStorageResourceData {
 		return getCalc();
 	}
 
+	@Deprecated
 	public ViewPoint getCalc() {
 		if (getShemaDefinition() != null) {
 			return getShemaDefinition().getCalc();

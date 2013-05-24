@@ -137,7 +137,7 @@ public class DateSelector extends TextFieldCustomPopup<Date> {
 			formatter = new SimpleDateFormat();
 		}
 		formatter.applyPattern("MMMM d, yyyy");
-		return (formatter.format(getDate()));
+		return formatter.format(getDate());
 	}
 
 	protected class CalendarPanel extends ResizablePanel {

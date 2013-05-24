@@ -19,8 +19,8 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -58,7 +58,7 @@ public class WKFSelectAllInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<WKFSelectAll> getDefaultInitializer() {
 		return new FlexoActionInitializer<WKFSelectAll>() {
 			@Override
-			public boolean run(ActionEvent e, WKFSelectAll action) {
+			public boolean run(EventObject e, WKFSelectAll action) {
 				return true;
 			}
 		};
@@ -68,7 +68,7 @@ public class WKFSelectAllInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<WKFSelectAll> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<WKFSelectAll>() {
 			@Override
-			public boolean run(ActionEvent e, WKFSelectAll action) {
+			public boolean run(EventObject e, WKFSelectAll action) {
 				if (action.getFocusedObject() instanceof WKFObject) {
 
 					WKFObject focused = (WKFObject) action.getFocusedObject();
@@ -82,7 +82,7 @@ public class WKFSelectAllInitializer extends ActionInitializer {
 					}
 					if (pg != null) {
 						Vector<PetriGraphNode> newSelection = pg.getNodes();
-						getControllerActionInitializer().getWKFSelectionManager().setSelectedObjects(newSelection);
+						getControllerActionInitializer().getSelectionManager().setSelectedObjects(newSelection);
 						return true;
 					}
 					return false;
@@ -99,7 +99,7 @@ public class WKFSelectAllInitializer extends ActionInitializer {
 					}
 					if (rl != null) {
 						Vector<Role> newSelection = rl.getRoles();
-						getControllerActionInitializer().getWKFSelectionManager().setSelectedObjects(newSelection);
+						getControllerActionInitializer().getSelectionManager().setSelectedObjects(newSelection);
 						return true;
 					}
 					return false;

@@ -19,7 +19,7 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -35,6 +35,7 @@ import org.openflexo.foundation.sg.implmodel.exception.TechnologyModuleCompatibi
 import org.openflexo.icon.SGIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sgmodule.SGCst;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -56,10 +57,10 @@ public class CreateTechnologyModuleImplementationInitializer extends ActionIniti
 	protected FlexoActionInitializer<CreateTechnologyModuleImplementation> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateTechnologyModuleImplementation>() {
 			@Override
-			public boolean run(ActionEvent e, CreateTechnologyModuleImplementation action) {
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(SGCst.CREATE_TECHNOLOGY_MODULE_IMPLEMENTATION_DIALOG_FIB, action, null,
-						true, FlexoLocalization.getMainLocalizer());
-				return (dialog.getStatus() == Status.VALIDATED);
+			public boolean run(EventObject e, CreateTechnologyModuleImplementation action) {
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(SGCst.CREATE_TECHNOLOGY_MODULE_IMPLEMENTATION_DIALOG_FIB, action,
+						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
+				return dialog.getStatus() == Status.VALIDATED;
 			}
 		};
 	}
@@ -69,7 +70,7 @@ public class CreateTechnologyModuleImplementationInitializer extends ActionIniti
 		return new FlexoExceptionHandler<CreateTechnologyModuleImplementation>() {
 			@Override
 			public boolean handleException(FlexoException exception, CreateTechnologyModuleImplementation action) {
-				if ((exception instanceof InvalidParametersException) || (exception instanceof TechnologyModuleCompatibilityCheckException)) {
+				if (exception instanceof InvalidParametersException || exception instanceof TechnologyModuleCompatibilityCheckException) {
 					FlexoController.notify(exception.getLocalizedMessage());
 					return true;
 				}

@@ -90,7 +90,6 @@ public class ServiceInterfaceSelector extends AbstractBrowserSelector<WKFObject>
 		@Override
 		public Dimension getDefaultSize() {
 			Dimension returned = _browserView.getDefaultSize();
-			returned.width = returned.width;
 			returned.height = returned.height - 100;
 			return returned;
 		}
@@ -127,6 +126,7 @@ public class ServiceInterfaceSelector extends AbstractBrowserSelector<WKFObject>
 			setFilterStatus(BrowserElementType.DKV_MODEL, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.MENU_ITEM, BrowserFilterStatus.HIDE);
 			setFilterStatus(BrowserElementType.WS_LIBRARY, BrowserFilterStatus.HIDE);
+			setFilterStatus(BrowserElementType.PROJECT, BrowserFilterStatus.HIDE, true);
 			setFilterStatus(BrowserElementType.PROCESS_FOLDER, BrowserFilterStatus.SHOW, true);
 			// setFilterStatus(BrowserElementType.PORT_REGISTERY, BrowserFilter.ACTIVATE);
 			// no DefaultServiceInterface Element yet.... So we show the portRegistry instead...

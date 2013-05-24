@@ -19,8 +19,8 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -29,10 +29,16 @@ import javax.swing.KeyStroke;
 import org.openflexo.FlexoCst;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.icon.IconLibrary;
+import org.openflexo.ie.view.controller.IEController;
 import org.openflexo.ie.view.print.PrintComponentAction;
+import org.openflexo.ie.view.print.PrintComponentPreviewDialog;
+import org.openflexo.ie.view.print.PrintableIEWOComponentView;
+import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 
 public class PrintComponentInitializer extends ActionInitializer {
 
@@ -51,8 +57,15 @@ public class PrintComponentInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<PrintComponentAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<PrintComponentAction>() {
 			@Override
-			public boolean run(ActionEvent e, PrintComponentAction action) {
-				return true;
+			public boolean run(EventObject e, PrintComponentAction anAction) {
+				if (anAction.getFocusedObject() == null) {
+					if (getController().getCurrentEditedComponent() != null) {
+						anAction.setFocusedObject(getController().getCurrentEditedComponent().getComponentDefinition().getWOComponent());
+					} else {
+						FlexoController.showError(FlexoLocalization.localizedForKey("sorry_no_component_to_print"));
+					}
+				}
+				return anAction.getFocusedObject() != null;
 			}
 		};
 	}
@@ -61,16 +74,14 @@ public class PrintComponentInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<PrintComponentAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<PrintComponentAction>() {
 			@Override
-			public boolean run(ActionEvent e, PrintComponentAction action) {
-				return true;
+			public boolean run(EventObject e, final PrintComponentAction anAction) {
+				ComponentDefinition cd = anAction.getComponent().getComponentDefinition();
+				final PrintableIEWOComponentView printableComponentView = new PrintableIEWOComponentView(cd.getDummyComponentInstance(),
+						getController());
+				PrintComponentPreviewDialog dialog = new PrintComponentPreviewDialog(getController(), printableComponentView);
+				return dialog.getStatus() == PrintComponentPreviewDialog.ReturnedStatus.CONTINUE_PRINTING;
 			}
 		};
-	}
-
-	@Override
-	public void init() {
-		PrintComponentAction.initWithController(getControllerActionInitializer().getIEController());
-		getControllerActionInitializer().registerAction(PrintComponentAction.actionType, getShortcut());
 	}
 
 	@Override
@@ -81,6 +92,11 @@ public class PrintComponentInitializer extends ActionInitializer {
 	@Override
 	protected KeyStroke getShortcut() {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_P, FlexoCst.META_MASK);
+	}
+
+	@Override
+	public IEController getController() {
+		return getControllerActionInitializer().getIEController();
 	}
 
 }

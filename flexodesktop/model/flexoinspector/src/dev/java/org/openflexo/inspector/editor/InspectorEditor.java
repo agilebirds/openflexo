@@ -18,6 +18,7 @@
  *
  */
 package org.openflexo.inspector.editor;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -25,6 +26,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JDialog;
@@ -36,34 +38,35 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import org.openflexo.inspector.editor.InspectorInspector;
+import org.openflexo.fib.utils.FlexoLoggingViewer;
+import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.inspector.model.InspectorModel;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.swing.FlexoFileChooser;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.toolbox.ToolBox;
-
 
 public class InspectorEditor {
 
 	private static final Logger logger = FlexoLogger.getLogger(InspectorEditor.class.getPackage().getName());
 
-	public static void main(String[] args) 
-	{
+	// Instanciate a new localizer in directory src/dev/resources/FIBEditorLocalizer
+	// linked to parent localizer (which is Openflexo main localizer)
+	public static LocalizedDelegateGUIImpl LOCALIZATION = new LocalizedDelegateGUIImpl(new FileResource("FIBEditorLocalized"),
+			new LocalizedDelegateGUIImpl(new FileResource("Localized"), null, false), true);
+
+	public static void main(String[] args) {
 		try {
 			Class.forName("org.openflexo.Flexo");
 		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		try {
-			ToolBox.setPlatform();
-			FlexoLoggingManager.initialize();
-			FlexoLoggingManager.setKeepLogTrace(true);
-			FlexoLoggingManager.setLogCount(-1);
+			// ToolBox.setPlatform();
+			FlexoLoggingManager.initialize(-1, true, null, Level.INFO, null);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -74,7 +77,7 @@ public class InspectorEditor {
 
 		InspectorEditor editor = new InspectorEditor();
 		editor.showPanel();
-		
+
 		/*(new Thread(new Runnable() {
 			public void run()
 			{
@@ -89,58 +92,55 @@ public class InspectorEditor {
 			}
 		})).start();*/
 	}
-	
+
 	private JFrame frame;
 	private JDialog paletteDialog;
 	private FlexoFileChooser fileChooser;
 	private EditorController controller;
-	
+
 	private InspectorInspector inspector;
 
-	public class EditedInspector
-	{
+	public class EditedInspector {
 		public File inspectorFile;
 		public InspectorModel inspectorModel;
+
 		public void save() {
 			// TODO Auto-generated method stub
-			
+
 		}
 	}
-	
+
 	private EditedInspector currentInspector;
-	
-	public InspectorEditor()
-	{
+
+	public InspectorEditor() {
 		super();
 		frame = new JFrame();
-		frame.setPreferredSize(new Dimension(1000,800));
+		frame.setPreferredSize(new Dimension(1000, 800));
 		fileChooser = new FlexoFileChooser(frame);
 		fileChooser.setFileFilterAsString("*.inspector");
 		fileChooser.setCurrentDirectory(new FileResource("Inspectors"));
-		
+
 		inspector = new InspectorInspector();
-		
+
 		controller = new EditorController();
-		
-		paletteDialog = new JDialog(frame,"Palette",false);
+
+		paletteDialog = new JDialog(frame, "Palette", false);
 		JPanel emptyContent = new JPanel();
-		emptyContent.setPreferredSize(new Dimension(300,300));
+		emptyContent.setPreferredSize(new Dimension(300, 300));
 		paletteDialog.getContentPane().add(emptyContent);
-		paletteDialog.setLocation(1010,0);
+		paletteDialog.setLocation(1010, 0);
 		paletteDialog.pack();
 		paletteDialog.setVisible(true);
 	}
-	
+
 	private JPanel mainPanel;
 	private JTabbedPane tabbedPane;
-	
-	private void updateFrameTitle()
-	{
+
+	private void updateFrameTitle() {
 		frame.setTitle("Inspector editor");
 	}
-	
-	public void showPanel() 
-	{
+
+	public void showPanel() {
 		frame.setTitle("Inspector editor");
 		mainPanel = new JPanel(new BorderLayout());
 
@@ -149,50 +149,55 @@ public class InspectorEditor {
 		JMenu editMenu = new JMenu(FlexoLocalization.localizedForKey("edit"));
 		JMenu toolsMenu = new JMenu(FlexoLocalization.localizedForKey("tools"));
 		JMenu helpMenu = new JMenu(FlexoLocalization.localizedForKey("help"));
-		
-		
+
 		JMenuItem newItem = new JMenuItem(FlexoLocalization.localizedForKey("new_inspector"));
 		newItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				newInspector();
 			}
 		});
-		
+
 		JMenuItem loadItem = new JMenuItem(FlexoLocalization.localizedForKey("open_inspector"));
 		loadItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				loadInspector();
 			}
 		});
-		
+
 		JMenuItem saveItem = new JMenuItem(FlexoLocalization.localizedForKey("save_inspector"));
 		saveItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				saveInspector();
 			}
 		});
-		
+
 		JMenuItem saveAsItem = new JMenuItem(FlexoLocalization.localizedForKey("save_inspector_as"));
 		saveAsItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				saveInspectorAs();
 			}
 		});
-		
+
 		JMenuItem closeItem = new JMenuItem(FlexoLocalization.localizedForKey("close_inspector"));
 		closeItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				closeInspector();
 			}
 		});
-		
+
 		JMenuItem quitItem = new JMenuItem(FlexoLocalization.localizedForKey("quit"));
 		quitItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				quit();
 			}
 		});
-		
+
 		fileMenu.add(newItem);
 		fileMenu.add(loadItem);
 		fileMenu.add(saveItem);
@@ -200,9 +205,10 @@ public class InspectorEditor {
 		fileMenu.add(closeItem);
 		fileMenu.addSeparator();
 		fileMenu.add(quitItem);
-		
+
 		JMenuItem inspectItem = new JMenuItem(FlexoLocalization.localizedForKey("inspect"));
 		inspectItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				inspector.getWindow().setVisible(true);
 			}
@@ -210,61 +216,58 @@ public class InspectorEditor {
 
 		JMenuItem logsItem = new JMenuItem(FlexoLocalization.localizedForKey("logs"));
 		logsItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
-				FlexoLoggingManager.showLoggingViewer();
+				FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance(), frame);
 			}
 		});
-		
+
 		JMenuItem localizedItem = new JMenuItem(FlexoLocalization.localizedForKey("localized_editor"));
 		localizedItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
-			       FlexoLocalization.showLocalizedEditor();
+				LOCALIZATION.showLocalizedEditor(frame);
 			}
 		});
-		
+
 		toolsMenu.add(inspectItem);
 		toolsMenu.add(logsItem);
 		toolsMenu.add(localizedItem);
-		
+
 		mb.add(fileMenu);
 		mb.add(editMenu);
 		mb.add(toolsMenu);
 		mb.add(helpMenu);
-		
+
 		frame.setJMenuBar(mb);
-		
 
 		frame.getContentPane().add(mainPanel);
 		frame.validate();
 		frame.pack();
 
-		inspector.getWindow().setLocation(1010,400);
-		inspector.getWindow().setPreferredSize(new Dimension(300,300));
+		inspector.getWindow().setLocation(1010, 400);
+		inspector.getWindow().setPreferredSize(new Dimension(300, 300));
 		inspector.getWindow().setVisible(true);
 
 		frame.setVisible(true);
 
 	}
-	
-	public void quit()
-	{
+
+	public void quit() {
 		frame.dispose();
 		System.exit(0);
 	}
 
-	public void closeInspector()
-	{
+	public void closeInspector() {
 		logger.warning("Not implemented yet");
 	}
 
-	public void newInspector()
-	{
-		//MyDrawing newDrawing = MyDrawing.makeNewDrawing();
-		//addDrawing(newDrawing);
+	public void newInspector() {
+		// MyDrawing newDrawing = MyDrawing.makeNewDrawing();
+		// addDrawing(newDrawing);
 	}
 
-	public void loadInspector()
-	{
+	public void loadInspector() {
 		if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
 			InspectorModel inspector = null;
@@ -274,36 +277,34 @@ public class InspectorEditor {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println("Inspector: "+inspector);
-			mainPanel.add(new EditedInspectorView(inspector),BorderLayout.CENTER);
+			System.out.println("Inspector: " + inspector);
+			mainPanel.add(new EditedInspectorView(inspector), BorderLayout.CENTER);
 			frame.validate();
 		}
 	}
 
-	public void saveInspector()
-	{
-		if (currentInspector == null) return;
+	public void saveInspector() {
+		if (currentInspector == null)
+			return;
 		if (currentInspector.inspectorFile == null) {
 			saveInspectorAs();
-		}
-		else {
+		} else {
 			currentInspector.save();
 		}
 	}
 
-	public void saveInspectorAs()
-	{
-		if (currentInspector == null) return;
+	public void saveInspectorAs() {
+		if (currentInspector == null)
+			return;
 		if (fileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
-			if (!file.getName().endsWith(".drw")) file = new File(file.getParentFile(),file.getName()+".drw");
+			if (!file.getName().endsWith(".drw"))
+				file = new File(file.getParentFile(), file.getName() + ".drw");
 			currentInspector.inspectorFile = file;
 			updateFrameTitle();
 			currentInspector.save();
-		}
-		else {
+		} else {
 			return;
 		}
 	}
 }
-

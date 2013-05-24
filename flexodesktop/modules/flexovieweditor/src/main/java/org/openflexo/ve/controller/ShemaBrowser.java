@@ -19,27 +19,10 @@
  */
 package org.openflexo.ve.controller;
 
-import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.view.View;
-
 class ShemaBrowser extends VEBrowser {
-	private View representedShema = null;
 
 	protected ShemaBrowser(VEController controller) {
 		super(controller);
-	}
-
-	protected View getRepresentedShema() {
-		return representedShema;
-	}
-
-	protected void setRepresentedShema(View representedShema) {
-		this.representedShema = representedShema;
-	}
-
-	@Override
-	public FlexoModelObject getDefaultRootObject() {
-		return representedShema;
 	}
 
 }

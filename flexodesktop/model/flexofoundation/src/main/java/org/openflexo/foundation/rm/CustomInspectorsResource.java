@@ -67,7 +67,7 @@ public class CustomInspectorsResource extends FlexoDirectoryResource {
 	 * @see org.openflexo.foundation.rm.FlexoResource#performUpdating(org.openflexo.foundation.rm.FlexoResourceTree)
 	 */
 	@Override
-	protected void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException, LoadResourceException,
+	protected void performUpdating(FlexoResourceTree updatedResources) throws ResourceDependencyLoopException, LoadResourceException,
 			FileNotFoundException, ProjectLoadingCancelledException {
 
 	}

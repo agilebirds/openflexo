@@ -1,12 +1,14 @@
 package org.openflexo.model.annotations;
 
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.openflexo.model.factory.ModelExecutionException;
+import org.openflexo.model.exceptions.ModelExecutionException;
 
+@Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target(value = ElementType.TYPE)
 public @interface ModelEntity {

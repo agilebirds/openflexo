@@ -21,8 +21,6 @@ package org.openflexo.antar.expr;
 
 import java.util.Vector;
 
-import org.openflexo.antar.expr.Constant.BooleanConstant;
-
 public class BinaryOperatorExpression extends Expression {
 
 	private BinaryOperator operator;
@@ -38,15 +36,6 @@ public class BinaryOperatorExpression extends Expression {
 
 	@Override
 	public int getDepth() {
-		/* GPO: Removal of all System.exit()
-		 * if (leftArgument == this) {
-			(new Exception("C'est quoi ce bazard ???")).printStackTrace();
-			System.exit(-1);
-		}
-		if (rightArgument == this) {
-			(new Exception("C'est quoi ce bazard ???")).printStackTrace();
-			System.exit(-1);
-		}*/
 		return Math.max(leftArgument.getDepth(), rightArgument.getDepth()) + 1;
 	}
 
@@ -90,21 +79,20 @@ public class BinaryOperatorExpression extends Expression {
 		 */
 	}
 
-	@Override
-	public Expression evaluate(EvaluationContext context) throws TypeMismatchException {
+	/*@Override
+	public Expression evaluate(EvaluationContext context, Bindable bindable) throws TypeMismatchException {
 		_checkSemanticallyAcceptable();
 		// System.out.println("left="+leftArgument+" of "+leftArgument.getClass().getSimpleName()+" as "+leftArgument.evaluate(context)+" of "+leftArgument.evaluate(context).getClass().getSimpleName());
 		// System.out.println("right="+rightArgument+" of "+rightArgument.getClass().getSimpleName()+" as "+rightArgument.evaluate(context)+" of "+rightArgument.evaluate(context).getClass().getSimpleName());
 
-		Expression evaluatedLeftArgument = leftArgument.evaluate(context);
-		;
+		Expression evaluatedLeftArgument = leftArgument.evaluate(context, bindable);
 
 		// special case for AND operator, lazy evaluation
 		if (operator == BooleanBinaryOperator.AND && evaluatedLeftArgument == BooleanConstant.FALSE) {
 			return BooleanConstant.FALSE; // No need to analyze further
 		}
 
-		Expression evaluatedRightArgument = rightArgument.evaluate(context);
+		Expression evaluatedRightArgument = rightArgument.evaluate(context, bindable);
 
 		if (evaluatedLeftArgument instanceof Constant && evaluatedRightArgument instanceof Constant) {
 			Constant returned = operator.evaluate((Constant) evaluatedLeftArgument, (Constant) evaluatedRightArgument);
@@ -117,6 +105,20 @@ public class BinaryOperatorExpression extends Expression {
 			return operator.evaluate(evaluatedLeftArgument, (Constant) evaluatedRightArgument);
 		}
 		return new BinaryOperatorExpression(operator, evaluatedLeftArgument, evaluatedRightArgument);
+	}*/
+
+	@Override
+	public Expression transform(ExpressionTransformer transformer) throws TransformException {
+
+		Expression expression = this;
+		Expression transformedLeftArgument = leftArgument.transform(transformer);
+		Expression transformedRightArgument = rightArgument.transform(transformer);
+
+		if (!transformedLeftArgument.equals(leftArgument) || !transformedRightArgument.equals(rightArgument)) {
+			expression = new BinaryOperatorExpression(operator, transformedLeftArgument, transformedRightArgument);
+		}
+
+		return transformer.performTransformation(expression);
 	}
 
 	@Override
@@ -130,6 +132,16 @@ public class BinaryOperatorExpression extends Expression {
 		returned.add(getLeftArgument());
 		returned.add(getRightArgument());
 		return returned;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof BinaryOperatorExpression) {
+			BinaryOperatorExpression e = (BinaryOperatorExpression) obj;
+			return getOperator().equals(e.getOperator()) && getLeftArgument().equals(e.getLeftArgument())
+					&& getRightArgument().equals(e.getRightArgument());
+		}
+		return super.equals(obj);
 	}
 
 }

@@ -22,41 +22,33 @@ package org.openflexo.ve.fib.dialogs;
 import java.io.File;
 
 import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.foundation.FlexoResourceCenter;
-import org.openflexo.foundation.ontology.FlexoOntology;
 import org.openflexo.foundation.ontology.OntologyLibrary;
-import org.openflexo.foundation.ontology.action.CreateOntologyIndividual;
-import org.openflexo.module.FlexoResourceCenterService;
-import org.openflexo.module.ModuleLoader;
+import org.openflexo.foundation.ontology.owl.OWLOntology;
+import org.openflexo.foundation.ontology.owl.action.CreateOntologyIndividual;
+import org.openflexo.foundation.resource.DefaultResourceCenterService;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.ve.VECst;
 
+public class CreateOntologyIndividualDialogEDITOR extends FIBAbstractEditor {
 
-public class CreateOntologyIndividualDialogEDITOR {
-
-	
-	public static void main(String[] args)
-	{
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			public Object[] getData() 
-			{
-				FlexoResourceCenter resourceCenter = getFlexoResourceCenterService().getFlexoResourceCenter();
-				OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
-				FlexoOntology ontology = ontologyLibrary.getOntology("http://www.agilebirds.com/openflexo/ontologies/FlexoMethodology/FLXOrganizationalStructure.owl");
-				CreateOntologyIndividual action = CreateOntologyIndividual.actionType.makeNewAction(ontology, null,null);
-				return makeArray(action);
-			}
-			public File getFIBFile() {
-				return VECst.CREATE_ONTOLOGY_INDIVIDUAL_FIB;
-			}
-		};
-		editor.launch();
+	@Override
+	public Object[] getData() {
+		FlexoResourceCenter resourceCenter = DefaultResourceCenterService.getNewInstance().getOpenFlexoResourceCenter();
+		OntologyLibrary ontologyLibrary = resourceCenter.retrieveBaseOntologyLibrary();
+		OWLOntology ontology = (OWLOntology) ontologyLibrary
+				.getOntology("http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl");
+		ontology.loadWhenUnloaded();
+		CreateOntologyIndividual action = CreateOntologyIndividual.actionType.makeNewAction(ontology, null, null);
+		return makeArray(action);
 	}
 
-    private static ModuleLoader getModuleLoader(){
-        return ModuleLoader.instance();
-    }
+	@Override
+	public File getFIBFile() {
+		return VECst.CREATE_ONTOLOGY_INDIVIDUAL_FIB;
+	}
 
-    private static FlexoResourceCenterService getFlexoResourceCenterService(){
-        return FlexoResourceCenterService.instance();
-    }
+	public static void main(String[] args) {
+		main(CreateOntologyIndividualDialogEDITOR.class);
+	}
+
 }

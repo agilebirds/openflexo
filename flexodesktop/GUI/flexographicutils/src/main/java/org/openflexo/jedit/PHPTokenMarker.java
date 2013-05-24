@@ -50,7 +50,7 @@ public class PHPTokenMarker extends TokenMarker {
 		boolean backslash = false;
 
 		loop: for (int i = offset; i < length; i++) {
-			int i1 = (i + 1);
+			int i1 = i + 1;
 
 			char c = array[i];
 			if (c == '\\') {

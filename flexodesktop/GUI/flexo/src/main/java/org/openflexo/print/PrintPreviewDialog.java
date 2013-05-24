@@ -315,6 +315,9 @@ public class PrintPreviewDialog extends FlexoDialog {
 				logger.warning("No project specified !");
 			}
 		}
+		if (dest == null) {
+			return;
+		}
 
 		ScreenshotGenerator.ScreenshotImage image = ScreenshotGenerator.getImage(getPrintableComponent().getFlexoModelObject());
 

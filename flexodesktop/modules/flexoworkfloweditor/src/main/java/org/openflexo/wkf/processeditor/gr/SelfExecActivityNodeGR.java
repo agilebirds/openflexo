@@ -42,6 +42,7 @@ import org.openflexo.foundation.wkf.dm.RoleChanged;
 import org.openflexo.foundation.wkf.dm.RoleColorChange;
 import org.openflexo.foundation.wkf.node.SelfExecutableActivityNode;
 import org.openflexo.icon.WKFIconLibrary;
+import org.openflexo.module.UserType;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
 
@@ -63,8 +64,9 @@ public class SelfExecActivityNodeGR extends AbstractActivityNodeGR<SelfExecutabl
 
 		updatePropertiesFromWKFPreferences();
 		setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
-
-		addToMouseClickControls(new ExecutionPetriGraphOpener(), true);
+		if (!UserType.isLite()) {
+			addToMouseClickControls(new ExecutionPetriGraphOpener(), true);
+		}
 		if (activityNode.hasExecutionPetriGraph()) {
 			activityNode.getExecutionPetriGraph().addObserver(this);
 		}
@@ -129,12 +131,12 @@ public class SelfExecActivityNodeGR extends AbstractActivityNodeGR<SelfExecutabl
 				updatePropertiesFromWKFPreferences();
 			}
 		}
-		if ((dataModification instanceof RoleColorChange) || "color".equals(dataModification.propertyName())) {
+		if (dataModification instanceof RoleColorChange || "color".equals(dataModification.propertyName())) {
 			updatePropertiesFromWKFPreferences();
 		}
 		if (getDrawable().hasExecutionPetriGraph()) {
 			if (observable == getDrawable().getExecutionPetriGraph()) {
-				if ((dataModification instanceof GroupInserted) || (dataModification instanceof GroupRemoved)) {
+				if (dataModification instanceof GroupInserted || dataModification instanceof GroupRemoved) {
 					getDrawing().invalidateGraphicalObjectsHierarchy(getDrawable().getProcess());
 					getDrawing().updateGraphicalObjectsHierarchy();
 				}

@@ -19,10 +19,9 @@
  */
 package org.openflexo.doceditor.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileInputStream;
+import java.util.EventObject;
 import java.util.Vector;
 
 import javax.swing.Icon;
@@ -37,15 +36,12 @@ import org.openflexo.foundation.param.DynamicDropDownParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
 import org.openflexo.foundation.param.ParametersModel;
 import org.openflexo.foundation.param.TextFieldParameter;
-import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.foundation.toc.action.AddTOCRepository;
-import org.openflexo.foundation.xml.FlexoTOCBuilder;
 import org.openflexo.icon.DEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.xmlcode.XMLDecoder;
 
 public class AddTOCRepositoryInitializer extends ActionInitializer {
 
@@ -58,7 +54,10 @@ public class AddTOCRepositoryInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<AddTOCRepository>() {
 
 			@Override
-			public boolean run(ActionEvent event, AddTOCRepository action) {
+			public boolean run(EventObject event, AddTOCRepository action) {
+				if (action.getRepositoryName() != null && action.getDocType() != null || action.getTocTemplate() != null) {
+					return true;
+				}
 				ParameterDefinition[] def = new ParameterDefinition[3];
 				def[0] = new TextFieldParameter("name", "toc_name", "");
 				ChoiceListParameter<DocType> docTypeParameter = new ChoiceListParameter<DocType>("docType", "base_model", getProject()
@@ -70,12 +69,12 @@ public class AddTOCRepositoryInitializer extends ActionInitializer {
 				File[] availableTemplates = tocTemplateDirectory.listFiles(new FileFilter() {
 					@Override
 					public boolean accept(File pathname) {
-						return pathname.isFile() && pathname.getName().endsWith(".xml");
+						return pathname.isFile() && pathname.getName().endsWith(".toc.xml");
 					}
 				});
 				Vector<String> templatesList = new Vector<String>();
 				for (File f : availableTemplates) {
-					templatesList.add(f.getName().substring(0, f.getName().length() - 4));
+					templatesList.add(f.getName().substring(0, f.getName().length() - 8));
 				}
 				DynamicDropDownParameter<String> tocTemplateParameter = new DynamicDropDownParameter<String>("tocTemplate", "toc_template",
 						templatesList, null);
@@ -111,12 +110,10 @@ public class AddTOCRepositoryInitializer extends ActionInitializer {
 					action.setDocType((DocType) def[1].getValue());
 
 					if (def[2].getValue() != null) {
-						String tocTemplateFileName = def[2].getValue() + ".xml";
+						String tocTemplateFileName = def[2].getValue() + ".toc.xml";
 						File tocTemplateFile = new FileResource("Config/TOCTemplates/" + tocTemplateFileName);
 						try {
-							TOCRepository tocTemplate = (TOCRepository) XMLDecoder.decodeObjectWithMappingFile(new FileInputStream(
-									tocTemplateFile), new FileResource("Models/TOCModel/toc_template_0.1.xml"), new FlexoTOCBuilder(null));
-							action.setTocTemplate(tocTemplate);
+							action.setTocTemplate(tocTemplateFile);
 						} catch (Exception e) {
 							e.printStackTrace();
 							FlexoController.showError(e.getMessage());
@@ -141,11 +138,11 @@ public class AddTOCRepositoryInitializer extends ActionInitializer {
 		return new FlexoActionFinalizer<AddTOCRepository>() {
 
 			@Override
-			public boolean run(ActionEvent event, AddTOCRepository action) {
+			public boolean run(EventObject event, AddTOCRepository action) {
 				if (action.getNewRepository() != null) {
 					getController().setCurrentEditedObjectAsModuleView(action.getNewRepository());
 				}
-				return false;
+				return true;
 			}
 
 		};

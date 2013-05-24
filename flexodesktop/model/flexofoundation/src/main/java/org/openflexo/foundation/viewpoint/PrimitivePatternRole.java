@@ -1,5 +1,6 @@
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.localization.FlexoLocalization;
 
 public class PrimitivePatternRole extends PatternRole {
@@ -9,6 +10,10 @@ public class PrimitivePatternRole extends PatternRole {
 	}
 
 	private PrimitiveType primitiveType;
+
+	public PrimitivePatternRole(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	@Override
 	public PatternRoleType getType() {

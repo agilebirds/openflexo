@@ -19,8 +19,8 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -51,7 +51,7 @@ public class WKFCopyInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<WKFCopy> getDefaultInitializer() {
 		return new FlexoActionInitializer<WKFCopy>() {
 			@Override
-			public boolean run(ActionEvent e, WKFCopy action) {
+			public boolean run(EventObject e, WKFCopy action) {
 				logger.info("Copy in WKF");
 				return getModule().isActive();
 			}
@@ -62,8 +62,8 @@ public class WKFCopyInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<WKFCopy> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<WKFCopy>() {
 			@Override
-			public boolean run(ActionEvent e, WKFCopy action) {
-				getControllerActionInitializer().getWKFSelectionManager().performSelectionCopy();
+			public boolean run(EventObject e, WKFCopy action) {
+				getControllerActionInitializer().getSelectionManager().performSelectionCopy();
 				return true;
 			}
 		};

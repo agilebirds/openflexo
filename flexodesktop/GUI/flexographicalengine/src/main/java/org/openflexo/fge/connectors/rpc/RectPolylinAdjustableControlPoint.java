@@ -63,7 +63,7 @@ public abstract class RectPolylinAdjustableControlPoint extends ConnectorAdjusti
 	}
 
 	@Override
-	public final void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
+	public final void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
 		super.stopDragging(controller, focusedGR);
 		getConnector().setWasManuallyAdjusted(true);
 		getConnector()._connectorChanged(false);

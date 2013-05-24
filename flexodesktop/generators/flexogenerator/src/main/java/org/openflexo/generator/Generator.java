@@ -25,9 +25,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -36,6 +38,8 @@ import java.util.TreeMap;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.collections.BidiMap;
 import org.apache.commons.collections.bidimap.DualHashBidiMap;
@@ -92,6 +96,11 @@ import org.openflexo.velocity.PostVelocityParser;
 
 public abstract class Generator<T extends FlexoModelObject, R extends GenerationRepository> extends FlexoObservable implements
 		DataFlexoObserver {
+
+	private static final String VALID_XML_REGEXP = "[A-Z_a-z\\u00C0\\u00D6\\u00D8-\\u00F6"
+			+ "\\u00F8-\\u02ff\\u0370-\\u037d\\u037f-\\u1fff\\u200c\\u200d\\u2070-\\u218f"
+			+ "\\u2c00-\\u2fef\\u3001-\\udfff\\uf900-\\ufdcf\\ufdf0-\\ufffd\\-\\.0-9" + "\\u00b7\\u0300-\\u036f\\u203f-\\u2040]*";
+	private static final Pattern VALID_XML_PATTERN = Pattern.compile(VALID_XML_REGEXP);
 
 	private static final List<Class<?>> TOOL_CLASSES = Arrays.asList(AlternatorTool.class, ComparisonDateTool.class, ConversionTool.class,
 			DateTool.class, DisplayTool.class, EscapeTool.class, RenderTool.class, SortTool.class);
@@ -360,7 +369,7 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 
 		} catch (TemplateNotFoundException e) {
 			throw e;
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			if (e instanceof MethodInvocationException) {
 				if (((MethodInvocationException) e).getWrappedThrowable() != null) {
 					((MethodInvocationException) e).getWrappedThrowable().printStackTrace();
@@ -644,6 +653,10 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		return new TreeMap<Object, Object>();
 	}
 
+	public LinkedHashMap<Object, Object> getNewLinkedHashMap() {
+		return new LinkedHashMap<Object, Object>();
+	}
+
 	public Properties getNewProperties() {
 		return new Properties();
 	}
@@ -670,6 +683,36 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 
 	public void sortVectorOfModelObject(List<FlexoModelObject> vectorToSort) {
 		Collections.sort(vectorToSort, new FlexoModelObject.FlexoDefaultComparator<FlexoModelObject>());
+	}
+
+	public void sortEPIs(List<EditionPatternInstance> vectorToSort, final String binding) {
+		Collections.sort(vectorToSort, new Comparator<EditionPatternInstance>() {
+
+			@Override
+			public int compare(EditionPatternInstance o1, EditionPatternInstance o2) {
+				Object e1 = o1.evaluate(binding);
+				Object e2 = o2.evaluate(binding);
+				if (e1 == null) {
+					if (e2 == null) {
+						return 0;
+					} else {
+						return -1;
+					}
+				} else if (e2 == null) {
+					return 1;
+				}
+				if (e1 instanceof Comparable && e2 instanceof Comparable) {
+					try {
+						((Comparable) e1).compareTo(e2);
+					} catch (ClassCastException e) {
+						if (logger.isLoggable(Level.WARNING)) {
+							logger.warning("Could not compare " + e1 + " with " + e2 + " Using string compare");
+						}
+					}
+				}
+				return e1.toString().compareTo(e2.toString());
+			}
+		});
 	}
 
 	public static String escapeStringForHTML(String s) {
@@ -710,6 +753,30 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 
 	public static String removeAllWhiteCharacters(String text) {
 		return removeAllWhiteCharacters(text, " ");
+	}
+
+	public static String makeValidXMLName(String name) {
+		if (name == null) {
+			return name;
+		}
+		Matcher m = VALID_XML_PATTERN.matcher(name);
+		StringBuilder sb = new StringBuilder(name.length());
+		int lastMatch = 0;
+		while (m.find()) {
+			if (m.start() > lastMatch) {
+				for (int i = lastMatch; i < m.start(); i++) {
+					sb.append('_');
+				}
+			}
+			sb.append(m.group());
+			lastMatch = m.end();
+		}
+		if (lastMatch < name.length()) {
+			for (int i = lastMatch; i < name.length(); i++) {
+				sb.append('_');
+			}
+		}
+		return sb.toString();
 	}
 
 	public static String escapeStringForXML(String string) {
@@ -797,4 +864,11 @@ public abstract class Generator<T extends FlexoModelObject, R extends Generation
 		}
 	}
 
+	public static void main(String[] args) {
+		String s = "²&é\"'(§è!çà)-_°0987654321³azertyuiop$^µùmlkjhgfdcsq<wxcvbn,;:=/*-+";
+		String xmlName = makeValidXMLName(s);
+		System.err.println(s);
+		System.err.println(xmlName);
+		System.err.println(s.length() + " " + xmlName.length());
+	}
 }

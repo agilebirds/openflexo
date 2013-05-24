@@ -62,8 +62,9 @@ public class JarLoader implements ImportedResourceData {
 	private Manifest manifest;
 	Set<String> classNames = new HashSet<String>();
 	private JarClassLoader classLoader;
-	FlexoProject _project;
 	private FlexoJarResource _jarResource;
+
+	private final FlexoProject project;
 
 	ExternalRepository getJarRepository() {
 		if (_jarResource != null) {
@@ -92,8 +93,8 @@ public class JarLoader implements ImportedResourceData {
 			FlexoProgress progress) {
 		super();
 		_jarResource = jarResource;
-		_project = project;
-		classLoader = _project.getJarClassLoader();
+		this.project = project;
+		classLoader = getProject().getJarClassLoader();
 		try {
 			jarFile = new JarFile(aJarFile);
 			if (logger.isLoggable(Level.INFO)) {
@@ -119,7 +120,6 @@ public class JarLoader implements ImportedResourceData {
 		classLoader = null;
 		jarFile = null;
 		manifest = null;
-		_project = null;
 	}
 
 	public boolean contains(String className) {
@@ -199,12 +199,7 @@ public class JarLoader implements ImportedResourceData {
 
 	@Override
 	public FlexoProject getProject() {
-		return _project;
-	}
-
-	@Override
-	public void setProject(FlexoProject aProject) {
-		_project = aProject;
+		return project;
 	}
 
 	// Degager tout ce qu'il y a en dessous

@@ -26,6 +26,8 @@ package org.openflexo.view.menu;
  * Created by benoit on Mar 12, 2004
  */
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -38,25 +40,24 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.controller.SelectionManagingController;
+import org.openflexo.view.controller.action.EditionAction;
 
 /**
  * Give a shortcut to the item and register the action near the FlexoMainController
  * 
  * @author benoit
  */
-public class FlexoMenuItem extends JMenuItem implements FlexoActionSource {
+public class FlexoMenuItem extends JMenuItem implements FlexoActionSource, PropertyChangeListener {
 
 	private static final Logger logger = FlexoLogger.getLogger(FlexoMenuItem.class.getPackage().getName());
 
 	private final FlexoController _controller;
 
-	protected AbstractAction _action;
+	private FlexoActionType actionType;
 
 	public FlexoMenuItem(FlexoController controller, String unlocalizedMenuName) {
 		super();
@@ -68,10 +69,9 @@ public class FlexoMenuItem extends JMenuItem implements FlexoActionSource {
 			boolean localizeActionName) {
 		super(action);
 		_controller = controller;
-		_action = action;
 		if (accelerator != null) {
 			setAccelerator(accelerator);
-			_controller.registerActionForKeyStroke(action, accelerator);
+			_controller.registerActionForKeyStroke(action, accelerator, flexoActionName);
 		}
 		if (localizeActionName) {
 			setText(FlexoLocalization.localizedForKey(flexoActionName, this));
@@ -91,35 +91,21 @@ public class FlexoMenuItem extends JMenuItem implements FlexoActionSource {
 	}
 
 	public FlexoMenuItem(FlexoActionType actionType, FlexoController controller) {
-		super(actionType);
+		super();
+		this.actionType = actionType;
 		_controller = controller;
-		_action = actionType;
-		if (actionType.getKeyStroke() != null) {
-			setAccelerator(actionType.getKeyStroke());
-		}
-		if (controller.getEditor().getEnabledIconFor(actionType) != null) {
-			setIcon(controller.getEditor().getEnabledIconFor(actionType));
-		}
-		if (controller.getEditor().getDisabledIconFor(actionType) != null) {
-			setDisabledIcon(controller.getEditor().getDisabledIconFor(actionType));
-		}
+		setAction(new EditionAction(actionType, this));
 		setText(FlexoLocalization.localizedForKey(actionType.getUnlocalizedName(), this));
 	}
 
 	@Override
 	public FlexoModelObject getFocusedObject() {
-		if (_controller instanceof SelectionManagingController) {
-			return (((SelectionManagingController) _controller).getSelectionManager().getLastSelectedObject());
-		}
-		return null;
+		return _controller.getSelectionManager().getLastSelectedObject();
 	}
 
 	@Override
 	public Vector<FlexoModelObject> getGlobalSelection() {
-		if (_controller instanceof SelectionManagingController) {
-			return (((SelectionManagingController) _controller).getSelectionManager().getSelection());
-		}
-		return null;
+		return _controller.getSelectionManager().getSelection();
 	}
 
 	@Override
@@ -128,27 +114,24 @@ public class FlexoMenuItem extends JMenuItem implements FlexoActionSource {
 	}
 
 	private SelectionManager getSelectionManager() {
-		if (_controller instanceof SelectionManagingController) {
-			return ((SelectionManagingController) _controller).getSelectionManager();
-		}
-		return null;
+		return _controller.getSelectionManager();
 	}
 
 	/**
      * 
      */
 	public void itemWillShow() {
-		if (_action instanceof FlexoGUIAction) {
-			setEnabled(true);
-			return;
-		}
-		if ((_action instanceof FlexoActionType) && (getSelectionManager() != null)) {
-			if (((getFocusedObject() == null) || (getFocusedObject().getActionList().indexOf((_action)) > -1))) {
-				setEnabled(((FlexoActionType) _action).isEnabled(getFocusedObject(), getGlobalSelection(), _controller.getEditor()));
+		if (actionType instanceof FlexoActionType && getSelectionManager() != null) {
+			if (getFocusedObject() == null || getFocusedObject().getActionList().indexOf(actionType) > -1) {
+				setEnabled(actionType.isEnabled(getFocusedObject(), getGlobalSelection()));
 			} else {
 				setEnabled(false);
 			}
 		}
 	}
 
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		// Nothing is done by default
+	}
 }

@@ -19,8 +19,8 @@
  */
 package org.openflexo.foundation.rm;
 
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Thrown when one or more SaveResourceException were raised during resource saving
@@ -30,11 +30,16 @@ import java.util.Vector;
  */
 public class SaveResourceExceptionList extends Exception {
 
-	protected Vector _saveExceptions;
+	protected List<SaveResourceException> _saveExceptions;
+
+	public SaveResourceExceptionList(List<SaveResourceException> exceptions) {
+		super();
+		_saveExceptions = exceptions;
+	}
 
 	public SaveResourceExceptionList(SaveResourceException exception) {
 		super();
-		_saveExceptions = new Vector();
+		_saveExceptions = new ArrayList<SaveResourceException>();
 		registerNewException(exception);
 	}
 
@@ -42,16 +47,15 @@ public class SaveResourceExceptionList extends Exception {
 		_saveExceptions.add(exception);
 	}
 
-	public Vector getSaveExceptions() {
+	public List<SaveResourceException> getSaveExceptions() {
 		return _saveExceptions;
 	}
 
 	public String errorFilesList() {
-		String errorFiles = "";
-		for (Enumeration en = getSaveExceptions().elements(); en.hasMoreElements();) {
-			SaveResourceException excep = (SaveResourceException) en.nextElement();
-			errorFiles += errorFiles + excep.getFileResource().getFile().getName() + "\n";
+		StringBuilder sb = new StringBuilder();
+		for (SaveResourceException excep : _saveExceptions) {
+			sb.append(excep.getFileResource().getFile().getName()).append('\n');
 		}
-		return errorFiles;
+		return sb.toString();
 	}
 }

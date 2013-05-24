@@ -28,7 +28,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
-import javax.swing.tree.TreeNode;
 
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
@@ -36,12 +35,6 @@ import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.RepresentableFlexoModelObject;
-import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.dm.action.DMCopy;
-import org.openflexo.foundation.dm.action.DMCut;
-import org.openflexo.foundation.dm.action.DMDelete;
-import org.openflexo.foundation.dm.action.DMPaste;
-import org.openflexo.foundation.dm.action.ResetSourceCode;
 import org.openflexo.foundation.dm.dm.ChildrenReordered;
 import org.openflexo.foundation.dm.eo.DMEOModel;
 import org.openflexo.foundation.dm.eo.DMEOObject;
@@ -61,7 +54,6 @@ import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.ReservedKeyword;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Abstract representation of an object defined in the data model
@@ -70,7 +62,7 @@ import org.openflexo.xmlcode.XMLMapping;
  * 
  */
 public abstract class DMObject extends RepresentableFlexoModelObject implements InspectableObject, DeletableObject, Validable,
-		DataFlexoObserver, TreeNode {
+		DataFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(DMObject.class.getPackage().getName());
 
@@ -94,15 +86,6 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 
 	public DMObject(FlexoProject project) {
 		super(project);
-	}
-
-	// ==========================================================================
-	// ========================= XML Serialization ============================
-	// ==========================================================================
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		return getDMModel().getXMLMapping();
 	}
 
 	private DMGenericDeclaration _previousDMGenericDeclaration = null;
@@ -145,29 +128,10 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 	}
 
 	@Override
-	public FlexoProject getProject() {
-		if (getDMModel() != null) {
-			return getDMModel().getProject();
-		}
-		return null;
-	}
-
-	@Override
 	public abstract String getName();
 
 	@Override
 	public abstract void setName(String aName) throws InvalidNameException, FlexoException;
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(ResetSourceCode.actionType);
-		returned.add(DMCut.actionType);
-		returned.add(DMCopy.actionType);
-		returned.add(DMPaste.actionType);
-		returned.add(DMDelete.actionType);
-		return returned;
-	}
 
 	/**
 	 * used by velocity (dynamic invacation: DON'T delete !)
@@ -387,48 +351,9 @@ public abstract class DMObject extends RepresentableFlexoModelObject implements 
 
 	public abstract boolean isDeletable();
 
-	// ==========================================================================
-	// ======================== TreeNode implementation
-	// =========================
-	// ==========================================================================
-
 	public abstract Vector<? extends DMObject> getOrderedChildren();
 
-	@Override
-	public abstract TreeNode getParent();
-
-	@Override
-	public abstract boolean getAllowsChildren();
-
-	@Override
-	public int getIndex(TreeNode node) {
-		for (int i = 0; i < getChildCount(); i++) {
-			if (node == getChildAt(i)) {
-				return i;
-			}
-		}
-		return 0;
-	}
-
-	@Override
-	public boolean isLeaf() {
-		return getChildCount() == 0;
-	}
-
-	@Override
-	public TreeNode getChildAt(int childIndex) {
-		return getOrderedChildren().get(childIndex);
-	}
-
-	@Override
-	public int getChildCount() {
-		return getOrderedChildren().size();
-	}
-
-	@Override
-	public Enumeration<? extends DMObject> children() {
-		return getOrderedChildren().elements();
-	}
+	public abstract DMObject getParent();
 
 	@Override
 	public String toString() {

@@ -43,12 +43,12 @@ public class AddProcessMetricsDefinition extends AddMetricsDefinition {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoWorkflow object, Vector<WorkflowModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoWorkflow object, Vector<WorkflowModelObject> globalSelection) {
 			return false;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoWorkflow object, Vector<WorkflowModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoWorkflow object, Vector<WorkflowModelObject> globalSelection) {
 			return object != null;
 		}
 

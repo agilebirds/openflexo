@@ -385,7 +385,7 @@ public class CheckoutCommand extends BasicCommand implements TemporaryFileCreato
 			requests.add(FIRST_INDEX, new ArgumentRequest("-r")); // NOI18N
 			requests.add(SECOND_INDEX, new ArgumentRequest(getCheckoutByRevision()));
 		}
-		if (checkoutDirectory != null && (!checkoutDirectory.equals(""))) {
+		if (checkoutDirectory != null && !checkoutDirectory.equals("")) {
 			requests.add(FIRST_INDEX, new ArgumentRequest("-d")); // NOI18N
 			requests.add(SECOND_INDEX, new ArgumentRequest(getCheckoutDirectory()));
 		}
@@ -541,7 +541,7 @@ public class CheckoutCommand extends BasicCommand implements TemporaryFileCreato
 	 */
 	public boolean isNotShortenPaths() {
 		// Use the same logic as cvs from cvshome.org.
-		return notShortenPaths || (!isNotShortenSet && checkoutDirectory == null);
+		return notShortenPaths || !isNotShortenSet && checkoutDirectory == null;
 	}
 
 	/**

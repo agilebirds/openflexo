@@ -26,7 +26,6 @@ import java.util.logging.Logger;
 import org.openflexo.module.Module;
 import org.openflexo.prefs.ModulePreferences;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.ve.controller.VEController;
 
 /**
  * Contains preferences for this module
@@ -38,23 +37,18 @@ public final class VEPreferences extends ModulePreferences {
 
 	private static final Logger logger = Logger.getLogger(VEPreferences.class.getPackage().getName());
 
-	private static final Class OE_PREFERENCES = VEPreferences.class;
+	private static final Class<VEPreferences> OE_PREFERENCES = VEPreferences.class;
 
 	protected static final String SCREENSHOT_QUALITY = "screenshotQuality";
 
 	protected static final String EXAMPLE_PREF_VALUE = "examplePrefValue";
 
-	private static VEController _controller;
-
-	public static void init(VEController controller) {
-		_controller = controller;
-		preferences(OE_PREFERENCES);
+	public static void init() {
+		getPreferences();
 	}
 
-	public static void reset(VEController controller) {
-		if (_controller == controller) {
-			_controller = null;
-		}
+	public static VEPreferences getPreferences() {
+		return preferences(OE_PREFERENCES);
 	}
 
 	public VEPreferences() {
@@ -70,7 +64,7 @@ public final class VEPreferences extends ModulePreferences {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("getExamplePrefValue");
 		}
-		Boolean value = preferences(OE_PREFERENCES).getBooleanProperty(EXAMPLE_PREF_VALUE);
+		Boolean value = getPreferences().getBooleanProperty(EXAMPLE_PREF_VALUE);
 		if (value == null) {
 			setExamplePrefValue(Boolean.FALSE);
 			return getExamplePrefValue();
@@ -82,11 +76,11 @@ public final class VEPreferences extends ModulePreferences {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("setExamplePrefValue");
 		}
-		preferences(OE_PREFERENCES).setBooleanProperty(EXAMPLE_PREF_VALUE, alignOnGrid);
+		getPreferences().setBooleanProperty(EXAMPLE_PREF_VALUE, alignOnGrid);
 	}
 
 	public static int getScreenshotQuality() {
-		Integer limit = preferences(OE_PREFERENCES).getIntegerProperty(SCREENSHOT_QUALITY);
+		Integer limit = getPreferences().getIntegerProperty(SCREENSHOT_QUALITY);
 		if (limit == null) {
 			limit = 100;
 		}
@@ -94,7 +88,7 @@ public final class VEPreferences extends ModulePreferences {
 	}
 
 	public static void setScreenshotQuality(int limit) {
-		preferences(OE_PREFERENCES).setIntegerProperty(SCREENSHOT_QUALITY, limit);
+		getPreferences().setIntegerProperty(SCREENSHOT_QUALITY, limit);
 	}
 
 }

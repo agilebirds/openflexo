@@ -1,5 +1,7 @@
 package org.openflexo.foundation.viewpoint;
 
+import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.ProcessFolder;
 import org.openflexo.foundation.wkf.Role;
@@ -13,10 +15,14 @@ public class FlexoModelObjectPatternRole extends PatternRole {
 
 	// TODO: unify this this FlexoObjectType in FlexoObjectParameter and FlexoObjectInspectorEntry
 	public static enum FlexoModelObjectType {
-		Process, ProcessFolder, Role, Activity, Operation, Action, Event
+		Process, ProcessFolder, Role, Activity, Operation, Action, Event, Screen
 	}
 
 	private FlexoModelObjectType flexoModelObjectType;
+
+	public FlexoModelObjectPatternRole(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	@Override
 	public PatternRoleType getType() {
@@ -51,6 +57,8 @@ public class FlexoModelObjectPatternRole extends PatternRole {
 			return FlexoLocalization.localizedForKey("action");
 		case Event:
 			return FlexoLocalization.localizedForKey("event");
+		case Screen:
+			return FlexoLocalization.localizedForKey("screen");
 		default:
 			return null;
 		}
@@ -76,6 +84,8 @@ public class FlexoModelObjectPatternRole extends PatternRole {
 			return ActionNode.class;
 		case Event:
 			return EventNode.class;
+		case Screen:
+			return OperationComponentDefinition.class;
 		default:
 			return null;
 		}

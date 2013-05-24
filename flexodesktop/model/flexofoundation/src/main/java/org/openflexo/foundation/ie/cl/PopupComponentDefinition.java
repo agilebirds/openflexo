@@ -68,7 +68,7 @@ public final class PopupComponentDefinition extends ComponentDefinition implemen
 		super(aComponentName, componentLibrary, aFolder, prj);
 		if (checkUnicity) {
 			String resourceIdentifier = FlexoPopupComponentResource.resourceIdentifierForName(aComponentName);
-			if ((aFolder != null) && (aFolder.getProject() != null) && (aFolder.getProject().isRegistered(resourceIdentifier))) {
+			if (aFolder != null && aFolder.getProject() != null && aFolder.getProject().isRegistered(resourceIdentifier)) {
 				aFolder.removeFromComponents(this);
 				throw new DuplicateResourceException(resourceIdentifier);
 			}

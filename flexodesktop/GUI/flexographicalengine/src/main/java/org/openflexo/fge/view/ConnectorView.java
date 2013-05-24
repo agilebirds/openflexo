@@ -275,7 +275,10 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 					super.paint(g);
 				}
 			} else {
-				getPaintManager().renderUsingBuffer((Graphics2D) g, g.getClipBounds(), getGraphicalRepresentation(), getScale());
+				if (!getPaintManager().renderUsingBuffer((Graphics2D) g, g.getClipBounds(), getGraphicalRepresentation(), getScale())) {
+					getGraphicalRepresentation().paint(g, getController());
+					super.paint(g);
+				}
 
 				/*
 				// Use buffer
@@ -367,7 +370,10 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isFocused) {
 					getPaintManager().repaint(this);
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isSelected) {
-					getPaintManager().repaint(this);
+					// TODO: ugly hack, please fix this, implement a ForceRepaint in FGEPaintManager
+					if (graphicalRepresentation.getIsSelected()) {
+						requestFocusInWindow();
+					}
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.hasText) {
 					updateLabelView();
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isVisible) {

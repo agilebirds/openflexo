@@ -20,9 +20,11 @@
 package org.openflexo.inspector.model;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -91,17 +93,17 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 		return hasValueForParameter("staticlist");
 	}
 
-	public Vector getStaticList() {
+	public List<String> getStaticList() {
 		if (hasStaticList()) {
 			String list = getValueForParameter("staticlist");
 			StringTokenizer strTok = new StringTokenizer(list, ",");
-			Vector<String> answer = new Vector<String>();
+			List<String> answer = new ArrayList<String>();
 			while (strTok.hasMoreTokens()) {
 				answer.add(strTok.nextToken());
 			}
 			return answer;
 		} else {
-			return new Vector<String>();
+			return Collections.emptyList();
 		}
 	}
 
@@ -109,21 +111,21 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 		return hasValueForParameter("dynamiclist");
 	}
 
-	public Vector getDynamicList(InspectableObject object) {
+	public List<?> getDynamicList(InspectableObject object) {
 		if (hasDynamicList()) {
 			try {
 				String listAccessor = getValueForParameter("dynamiclist");
 				Object currentObject = getObjectForMultipleAccessors(object, listAccessor);
-				if (currentObject instanceof Vector) {
-					return (Vector) currentObject;
+				if (currentObject instanceof List) {
+					return (List) currentObject;
 				} else if (currentObject == null) {
-					return new Vector();
+					return Collections.emptyList();
 				} else {
 					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Succeeded access to " + listAccessor + " but answer is not a Vector but a :"
+						logger.warning("Succeeded access to " + listAccessor + " but answer is not a List but a :"
 								+ currentObject.getClass().getName() + " value=" + currentObject);
 					}
-					return new Vector();
+					return Collections.emptyList();
 				}
 			} catch (Exception e) {
 				if (logger.isLoggable(Level.WARNING)) {
@@ -131,10 +133,10 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 							+ e.getMessage());
 				}
 				e.printStackTrace();
-				return new Vector();
+				return Collections.emptyList();
 			}
 		} else {
-			return new Vector();
+			return Collections.emptyList();
 		}
 	}
 
@@ -150,7 +152,7 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 		StringTokenizer strTok = new StringTokenizer(listAccessor, ".");
 		String accessor;
 		Object currentObject = object;
-		while (strTok.hasMoreTokens() && (currentObject != null) && (currentObject instanceof KeyValueCoding)) {
+		while (strTok.hasMoreTokens() && currentObject != null && currentObject instanceof KeyValueCoding) {
 			accessor = strTok.nextToken();
 			if (currentObject != null) {
 				currentObject = ((KeyValueCoding) currentObject).objectForKey(accessor);
@@ -225,7 +227,7 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 	public String getStringRepresentation(Object object) {
 		if (object instanceof String) {
 			return (String) object;
-		} else if ((object instanceof KeyValueCoding) && (hasFormatter())) {
+		} else if (object instanceof KeyValueCoding && hasFormatter()) {
 			return getFormattedObject((KeyValueCoding) object);
 		} else if (object instanceof StringConvertable) {
 			return ((StringConvertable) object).getConverter().convertToString(object);
@@ -253,7 +255,7 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 	}
 
 	public boolean isEditable(Object object) {
-		if (hasValueForParameter("isEditable") && (object instanceof KeyValueCoding)) {
+		if (hasValueForParameter("isEditable") && object instanceof KeyValueCoding) {
 			Object currentObject = getObjectForMultipleAccessors((KeyValueCoding) object, getValueForParameter("isEditable"));
 			if (currentObject instanceof Boolean) {
 				return (Boolean) currentObject;
@@ -341,7 +343,7 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 		StringTokenizer strTok = new StringTokenizer(keyPath, ".");
 		String accessor;
 		Object currentObject = object;
-		while (strTok.hasMoreTokens() && (currentObject != null) && (currentObject instanceof KeyValueCoding)) {
+		while (strTok.hasMoreTokens() && currentObject != null && currentObject instanceof KeyValueCoding) {
 			accessor = strTok.nextToken();
 			if (strTok.hasMoreTokens()) {
 				if (currentObject != null) {
@@ -384,7 +386,12 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 		try {
 			KeyValueCoding target = getTargetObject(inspectable);
 			if (target != null) {
-				target.objectForKey(getLastAccessor());
+				String lastAccessor = getLastAccessor();
+				if (lastAccessor != null) {
+					target.objectForKey(lastAccessor);
+				} else {
+					return false;
+				}
 				return true;
 			} else {
 				return false;
@@ -452,7 +459,7 @@ public class PropertyModel extends ParametersContainerModelObject implements Inn
 				}
 				return;
 			}
-		} else if ((newValue != null) && (oldValue.equals(newValue))) {
+		} else if (newValue != null && oldValue.equals(newValue)) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Same value. Ignored.");
 			}

@@ -36,7 +36,7 @@ public class OldestDate extends MergeAttributeRule {
 	public boolean canBeApplyed() {
 		return ("lastAcceptingDate".equals(_conflict.attributeName()) || "lastGenerationCheckedDate".equals(_conflict.attributeName())
 				|| "lastModelReinjectingDate".equals(_conflict.attributeName()) || "lastImportDate".equals(_conflict.attributeName()) || "lastGenerationDate"
-					.equals(_conflict.attributeName())) && (_conflict.getRootElementName().equals("Project"));
+					.equals(_conflict.attributeName())) && _conflict.getRootElementName().equals("Project");
 	}
 
 	@Override

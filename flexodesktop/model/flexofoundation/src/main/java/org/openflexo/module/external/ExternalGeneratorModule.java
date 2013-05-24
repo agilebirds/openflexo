@@ -19,7 +19,6 @@
  */
 package org.openflexo.module.external;
 
-
 /**
  * External view of the Generator Module
  * 

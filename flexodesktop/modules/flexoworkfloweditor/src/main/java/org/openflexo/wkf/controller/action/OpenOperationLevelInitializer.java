@@ -19,18 +19,25 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
+import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
+import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.action.FlexoActionVisibleCondition;
 import org.openflexo.foundation.wkf.OperationPetriGraph;
+import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.action.OpenOperationLevel;
+import org.openflexo.foundation.wkf.node.AbstractActivityNode;
+import org.openflexo.module.UserType;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.wkf.processeditor.ProcessView;
 import org.openflexo.wkf.swleditor.SwimmingLaneView;
 
-public class OpenOperationLevelInitializer extends ActionInitializer {
+public class OpenOperationLevelInitializer extends ActionInitializer<OpenOperationLevel, AbstractActivityNode, WKFObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -47,7 +54,7 @@ public class OpenOperationLevelInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<OpenOperationLevel> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OpenOperationLevel>() {
 			@Override
-			public boolean run(ActionEvent e, OpenOperationLevel action) {
+			public boolean run(EventObject e, OpenOperationLevel action) {
 				OperationPetriGraph petriGraph = action.getFocusedObject().getOperationPetriGraph();
 				if (petriGraph != null && petriGraph.getIsVisible()) {
 					if (getController().getCurrentModuleView() instanceof ProcessView) {
@@ -57,6 +64,18 @@ public class OpenOperationLevelInitializer extends ActionInitializer {
 					}
 				}
 				return true;
+			}
+		};
+	}
+
+	@Override
+	protected FlexoActionVisibleCondition<OpenOperationLevel, AbstractActivityNode, WKFObject> getVisibleCondition() {
+		return new FlexoActionVisibleCondition<OpenOperationLevel, AbstractActivityNode, WKFObject>() {
+
+			@Override
+			public boolean isVisible(FlexoActionType<OpenOperationLevel, AbstractActivityNode, WKFObject> actionType,
+					AbstractActivityNode object, Vector<WKFObject> globalSelection, FlexoEditor editor) {
+				return !UserType.isLite();
 			}
 		};
 	}

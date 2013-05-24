@@ -90,7 +90,7 @@ public abstract class AbstractColumn {
 	}
 
 	public String getLocalizedTitle() {
-		if ((_title == null) || (!_displayTitle)) {
+		if (_title == null || !_displayTitle) {
 			return " ";
 		}
 		return FlexoLocalization.localizedForKey(getTitle());

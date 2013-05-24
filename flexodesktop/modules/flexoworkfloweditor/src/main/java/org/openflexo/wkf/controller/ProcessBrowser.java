@@ -19,13 +19,14 @@
  */
 package org.openflexo.wkf.controller;
 
+import java.beans.PropertyChangeEvent;
 import java.util.logging.Logger;
 
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.view.controller.model.ControllerModel;
 
 /**
  * Browser for WKF module, browse only one process, with details
@@ -37,25 +38,25 @@ public class ProcessBrowser extends ProjectBrowser {
 
 	private static final Logger logger = Logger.getLogger(ProcessBrowser.class.getPackage().getName());
 
-	// ==========================================================================
-	// ============================= Variables
-	// ==================================
-	// ==========================================================================
-
-	protected WKFController _controller;
-
-	protected FlexoProcess _currentProcess;
-
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
 	public ProcessBrowser(WKFController controller) {
-		super(controller.getEditor(), controller.getWKFSelectionManager());
-		_controller = controller;
-		setCurrentProcess(controller.getCurrentFlexoProcess());
+		super(controller);
+		if (controller != null) {
+			manager.addListener(ControllerModel.CURRENT_OBJECT, this, controller.getControllerModel());
+		}
+	}
 
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (getController() != null && evt.getSource() == getController().getControllerModel()) {
+			if (evt.getPropertyName().equals(ControllerModel.CURRENT_OBJECT)) {
+				if (getController().getControllerModel().getCurrentObject() instanceof FlexoProcess) {
+					setRootObject(getController().getControllerModel().getCurrentObject());
+				} else {
+					setRootObject(null);
+				}
+			}
+		}
+		super.propertyChange(evt);
 	}
 
 	@Override
@@ -75,17 +76,4 @@ public class ProcessBrowser extends ProjectBrowser {
 		setFilterStatus(BrowserElementType.PROCESS_FOLDER, BrowserFilterStatus.HIDE);
 	}
 
-	@Override
-	public FlexoModelObject getDefaultRootObject() {
-		return _currentProcess;
-	}
-
-	public FlexoProcess getCurrentProcess() {
-		return _currentProcess;
-	}
-
-	public void setCurrentProcess(FlexoProcess process) {
-		_currentProcess = process;
-		update();
-	}
 }

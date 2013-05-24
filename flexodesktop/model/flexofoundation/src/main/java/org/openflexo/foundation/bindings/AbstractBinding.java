@@ -30,7 +30,6 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.xmlcode.StringConvertable;
 import org.openflexo.xmlcode.StringEncoder;
-import org.openflexo.xmlcode.XMLMapping;
 
 public abstract class AbstractBinding extends FlexoModelObject implements Bindable, DataFlexoObserver, Cloneable,
 		StringConvertable<AbstractBinding>, Serializable {
@@ -61,22 +60,6 @@ public abstract class AbstractBinding extends FlexoModelObject implements Bindab
 	public abstract String getClassNameKey();
 
 	public abstract String getJavaCodeStringRepresentation();
-
-	@Override
-	public final FlexoProject getProject() {
-		if (_owner != null) {
-			return _owner.getProject();
-		}
-		return null;
-	}
-
-	@Override
-	public final XMLMapping getXMLMapping() {
-		if (_owner != null) {
-			return _owner.getXMLMapping();
-		}
-		return null;
-	}
 
 	@Override
 	public final XMLStorageResourceData getXMLResourceData() {
@@ -293,7 +276,7 @@ public abstract class AbstractBinding extends FlexoModelObject implements Bindab
 					return false;
 				}
 			}
-			return ((_owner == bv._owner) && (getStringRepresentation().equals(bv.getStringRepresentation())));
+			return _owner == bv._owner && getStringRepresentation().equals(bv.getStringRepresentation());
 		} else {
 			return super.equals(object);
 		}

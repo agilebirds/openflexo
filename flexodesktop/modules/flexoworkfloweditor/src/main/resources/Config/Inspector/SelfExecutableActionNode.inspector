@@ -18,13 +18,13 @@
 			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
 			<param name="binding_definition" value="executionPrimitiveBindingDefinition"/>			
 			<param name="activate_compound_bindings" value="true"/>			
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST"/>
 		</property>
 		<property_list name="assignments" label="assignments" constraint="3">
 		  <param name="displayLabel" value="true"/>
 		  <param name="visible_row_count" value="3"/>
 		  <param name="row_height" value="20"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST"/>
  		  <property_list_column name="receiver" label="receiver" widget="CUSTOM">
 			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
 			<param name="binding_definition" value="receiverBindingDefinition"/>			

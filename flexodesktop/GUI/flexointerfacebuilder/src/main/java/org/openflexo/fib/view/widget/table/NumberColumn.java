@@ -19,11 +19,11 @@
  */
 package org.openflexo.fib.view.widget.table;
 
-import java.awt.Color;
 import java.awt.Component;
 
-import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
+import javax.swing.InputVerifier;
+import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -88,9 +88,24 @@ public class NumberColumn extends AbstractColumn<Number> implements EditableColu
 			editor = new DefaultCellEditor(new JTextField()) {
 				@Override
 				public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+
 					final JTextField textfield = (JTextField) super.getTableCellEditorComponent(table, value, isSelected, row, column);
-					textfield.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-					textfield.setText(((Number) value).toString());
+					textfield.setInputVerifier(new InputVerifier() {
+
+						@Override
+						public boolean verify(JComponent input) {
+							if (input instanceof JTextField) {
+								String text = ((JTextField) input).getText();
+								return text == null || text.trim().length() == 0 || getValue(text) != null;
+							}
+							return true;
+						}
+					});
+					if (value != null) {
+						textfield.setText(((Number) value).toString());
+					} else {
+						textfield.setText("");
+					}
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
@@ -102,26 +117,38 @@ public class NumberColumn extends AbstractColumn<Number> implements EditableColu
 
 				@Override
 				public Number getCellEditorValue() {
-					switch (getColumnModel().getNumberType()) {
-					case ByteType:
-						return Byte.parseByte((String) super.getCellEditorValue());
-					case ShortType:
-						return Short.parseShort((String) super.getCellEditorValue());
-					case IntegerType:
-						return Integer.parseInt((String) super.getCellEditorValue());
-					case LongType:
-						return Long.parseLong((String) super.getCellEditorValue());
-					case FloatType:
-						return Float.parseFloat((String) super.getCellEditorValue());
-					case DoubleType:
-						return Double.parseDouble((String) super.getCellEditorValue());
-					default:
-						return null;
+					Object cellEditorValue = super.getCellEditorValue();
+					if (cellEditorValue != null && cellEditorValue.toString().trim().length() > 0) {
+						return getValue(cellEditorValue.toString().trim());
 					}
+					return null;
+				}
+
+				private Number getValue(String value) {
+					try {
+						switch (getColumnModel().getNumberType()) {
+						case ByteType:
+							return Byte.parseByte(value);
+						case ShortType:
+							return Short.parseShort(value);
+						case IntegerType:
+							return Integer.parseInt(value);
+						case LongType:
+							return Long.parseLong(value);
+						case FloatType:
+							return Float.parseFloat(value);
+						case DoubleType:
+							return Double.parseDouble(value);
+						default:
+							return null;
+						}
+					} catch (NumberFormatException e) {
+						e.printStackTrace();
+					}
+					return null;
 				}
 			};
 		}
 		return editor;
 	}
-
 }

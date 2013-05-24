@@ -120,12 +120,12 @@ import org.openflexo.foundation.param.TextFieldParameter;
 import org.openflexo.icon.DMEIconLibrary;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.module.FlexoModule;
 import org.openflexo.swing.ButtonsControlPanel;
 import org.openflexo.swing.MouseOverButton;
 import org.openflexo.swing.VerticalLayout;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
 
 class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel implements ListSelectionListener {
@@ -167,6 +167,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		_listModels = new Hashtable<DMType, BindingColumnListModel>();
 		_rootBindingColumnListModel = null;
 		_lists = new Vector<FilteredJList>();
+
 	}
 
 	@Override
@@ -421,7 +422,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 				}
 				Frame owner = null;
 				if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
-					owner = FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getFlexoFrame() : null;/*(Frame) SwingUtilities.getAncestorOfClass(Frame.class, _createsButton);*/
+					owner = FlexoFrame.getActiveFrame();
 				} else {
 					owner = (Frame) SwingUtilities.getAncestorOfClass(Frame.class, _createsButton);
 				}
@@ -981,6 +982,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			bindingValueRepresentation.setLineWrap(true);
 			topPane.add(bindingValueRepresentation, BorderLayout.CENTER);
 			topPane.add(labelPanel, BorderLayout.SOUTH);
+			updateUI();
 		} else {
 			topPane = labelPanel;
 		}
@@ -1243,7 +1245,9 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 				new Exception("oops").printStackTrace();
 			}
 			setFilter(null);
-			super.setModel(model);
+			if (model != null) {
+				super.setModel(model);
+			}
 		}
 
 		@Override
@@ -1327,7 +1331,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 									.getElementAt(0).getElement(), i);
 							BindingSelectorPanel.this._bindingSelector.setEditedObject(bindingValue);
 							BindingSelectorPanel.this._bindingSelector.fireEditedObjectChanged();
-							listAtIndex(i + 1).requestFocus();
+							listAtIndex(i + 1).requestFocusInWindow();
 						}
 						e.consume();
 					}
@@ -1343,7 +1347,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 							((BindingValue) bindingValue).disconnect();
 							BindingSelectorPanel.this._bindingSelector.setEditedObject(bindingValue);
 							BindingSelectorPanel.this._bindingSelector.fireEditedObjectChanged();
-							listAtIndex(i).requestFocus();
+							listAtIndex(i).requestFocusInWindow();
 						}
 						e.consume();
 					}
@@ -1541,7 +1545,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 			if (_bindingSelector.editionMode == EditionMode.COMPOUND_BINDING) {
 				bindingValueRepresentation.setText(_bindingSelector.renderedString(bindingValue));
-				bindingValueRepresentation.setForeground(bindingValue.isBindingValid() ? Color.BLACK : Color.RED);
+				bindingValueRepresentation.setForeground(bindingValue.isBindingValid() ? defaultTextareaForeground : Color.RED);
 				updateMethodCallPanel();
 			}
 
@@ -1572,12 +1576,12 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		// Set connect button state
 		_connectButton.setEnabled(binding != null && binding.isBindingValid());
 		if (binding != null && binding.isBindingValid()) {
-			if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+			if (ToolBox.isMacOSLaf()) {
 				_connectButton.setSelected(true);
 			}
 		}
 		if (binding != null) {
-			_bindingSelector.getTextField().setForeground(binding.isBindingValid() ? Color.BLACK : Color.RED);
+			_bindingSelector.getTextField().setForeground(binding.isBindingValid() ? defaultTextfieldForeground : Color.RED);
 		}
 
 		if (_bindingSelector.getAllowsStaticValues() && staticBindingPanel != null) {
@@ -2421,7 +2425,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
-							BindingSelectorPanel.this._bindingSelector.getTextField().requestFocus();
+							BindingSelectorPanel.this._bindingSelector.getTextField().requestFocusInWindow();
 						}
 					});
 				}
@@ -2439,7 +2443,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			if (textValue == null || !textValue.equals(_bindingSelector.renderedString(_bindingSelector.getEditedObject()))) {
 				_bindingSelector.getTextField().setForeground(Color.RED);
 			} else {
-				_bindingSelector.getTextField().setForeground(Color.BLACK);
+				_bindingSelector.getTextField().setForeground(defaultTextfieldForeground);
 			}
 
 		} finally {
@@ -2500,6 +2504,10 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 
 	private CompletionInfo completionInfo;
 
+	private Color defaultTextareaForeground;
+
+	private Color defaultTextfieldForeground;
+
 	protected class CompletionInfo {
 		String validPath = null;
 		String completionInitPath = null;
@@ -2552,7 +2560,7 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					BindingSelectorPanel.this._bindingSelector.getTextField().requestFocus();
+					BindingSelectorPanel.this._bindingSelector.getTextField().requestFocusInWindow();
 				}
 			});
 		}
@@ -2633,9 +2641,9 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 			_bindingSelector.openPopup();
 		}
 		if (_bindingSelector.getEditedObject() != null) {
-			listAtIndex(StringUtils.countMatches(_bindingSelector.getTextField().getText(), ".")).requestFocus();
+			listAtIndex(StringUtils.countMatches(_bindingSelector.getTextField().getText(), ".")).requestFocusInWindow();
 		} else {
-			listAtIndex(0).requestFocus();
+			listAtIndex(0).requestFocusInWindow();
 		}
 	}
 
@@ -2647,7 +2655,6 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		BindingColumnListModel listModel = listAtIndex(dotCount).getModel();
 		String subPartialPath = inputText.substring(inputText.lastIndexOf(".") + 1);
 		Vector<Integer> pathElementIndex = new Vector<Integer>();
-		;
 		BindingColumnElement pathElement = findElementMatching(listModel, subPartialPath, pathElementIndex);
 		return pathElement != null;
 	}
@@ -2687,4 +2694,14 @@ class BindingSelectorPanel extends BindingSelector.AbstractBindingSelectorPanel 
 		return (BindingValue) _bindingSelector.getEditedObject();
 	}
 
+	@Override
+	public void updateUI() {
+		super.updateUI();
+		if (bindingValueRepresentation != null) {
+			defaultTextareaForeground = bindingValueRepresentation.getForeground();
+		}
+		if (_bindingSelector != null && _bindingSelector.getTextField() != null) {
+			defaultTextfieldForeground = _bindingSelector.getTextField().getForeground();
+		}
+	}
 }

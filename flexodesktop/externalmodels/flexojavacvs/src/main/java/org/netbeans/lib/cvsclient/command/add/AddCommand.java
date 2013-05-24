@@ -171,8 +171,8 @@ public class AddCommand extends BuildableCommand {
 			String path = files[index].getAbsolutePath();
 			String parentPath = files[index].getParentFile().getAbsolutePath().replace('\\', '/');
 			path = path.replace('\\', '/');
-			if ((path.endsWith(locEnding) && locEnding.indexOf('/') >= 0)
-					|| (files[index].getName().equals(locEnding) && parentPath.equals(localDir))) {
+			if (path.endsWith(locEnding) && locEnding.indexOf('/') >= 0 || files[index].getName().equals(locEnding)
+					&& parentPath.equals(localDir)) {
 				return files[index];
 			}
 		}
@@ -384,7 +384,7 @@ public class AddCommand extends BuildableCommand {
 
 		// if no wrappers are found to match the server and local settings, try
 		// the wrappers for this local directory
-		if (!wrapperFound && (directoryLevelWrappers != null) && (directoryLevelWrappers != EMPTYWRAPPER)) {
+		if (!wrapperFound && directoryLevelWrappers != null && directoryLevelWrappers != EMPTYWRAPPER) {
 			for (Iterator it = directoryLevelWrappers.keySet().iterator(); it.hasNext();) {
 				SimpleStringPattern pattern = (SimpleStringPattern) it.next();
 				if (pattern.doesMatch(filename)) {

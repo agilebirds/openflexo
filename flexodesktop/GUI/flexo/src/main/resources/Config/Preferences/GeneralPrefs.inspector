@@ -18,8 +18,8 @@
 
 	<!--<property name="inspectorAlwaysOnTop" label="inspector_always_on_top" widget="CHECKBOX" constraint="9"/>-->
 	
-	<property name="autoSaveEnabled" label="enable_auto_save" widget="CHECKBOX" constraint="15"/>
+	<!--<property name="autoSaveEnabled" label="enable_auto_save" widget="CHECKBOX" constraint="15"/>
 	<property name="autoSaveDirectory" label="auto_save_directory" widget="READ_ONLY_TEXT_FIELD" depends ="autoSaveEnabled" constraint="16"/>
 	<property name="autoSaveInterval" label="auto_save_interval (minutes)" widget="INTEGER" depends ="autoSaveEnabled" conditional="autoSaveEnabled=true" constraint="17"/>
-	<property name="autoSaveLimit" label="limit (0=no_limit)" widget="INTEGER" depends ="autoSaveEnabled" conditional="autoSaveEnabled=true" constraint="18"/>
+	<property name="autoSaveLimit" label="limit (0=no_limit)" widget="INTEGER" depends ="autoSaveEnabled" conditional="autoSaveEnabled=true" constraint="18"/>-->
 </tab>

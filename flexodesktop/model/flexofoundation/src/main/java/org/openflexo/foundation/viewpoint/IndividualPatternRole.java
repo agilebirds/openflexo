@@ -5,8 +5,13 @@ import org.openflexo.foundation.ontology.OntologyIndividual;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public class IndividualPatternRole extends OntologicObjectPatternRole {
+
+	public IndividualPatternRole(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	@Override
 	public PatternRoleType getType() {
@@ -39,15 +44,15 @@ public class IndividualPatternRole extends OntologicObjectPatternRole {
 	public OntologyClass getOntologicType() {
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
-		}
-		if (getOntologyLibrary() != null) {
-			return getOntologyLibrary().getClass(_getConceptURI());
+			if (getViewPoint().getViewpointOntology() != null) {
+				return getViewPoint().getViewpointOntology().getClass(_getConceptURI());
+			}
 		}
 		return null;
 	}
 
 	public void setOntologicType(OntologyClass ontologyClass) {
-		conceptURI = (ontologyClass != null ? ontologyClass.getURI() : null);
+		conceptURI = ontologyClass != null ? ontologyClass.getURI() : null;
 	}
 
 	public static class IndividualPatternRoleMustDefineAValidConceptClass extends

@@ -36,13 +36,13 @@ public class ConvertIntoLocalRole extends FlexoAction<ConvertIntoLocalRole, Role
 			"convert_into_local_role") {
 
 		@Override
-		protected boolean isEnabledForSelection(Role object, Vector<Role> globalSelection) {
+		public boolean isEnabledForSelection(Role object, Vector<Role> globalSelection) {
 			return isVisibleForSelection(object, globalSelection)
 					&& object.getWorkflow().getRoleList().roleWithName(object.getName()) == null;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(Role object, Vector<Role> globalSelection) {
+		public boolean isVisibleForSelection(Role object, Vector<Role> globalSelection) {
 			return object != null && object.isImported() && object.isDeletedOnServer();
 		}
 

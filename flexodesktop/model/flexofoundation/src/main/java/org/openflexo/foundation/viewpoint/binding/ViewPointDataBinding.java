@@ -25,6 +25,8 @@ import org.openflexo.antar.binding.AbstractBinding;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.inspector.InspectorBindingAttribute;
 import org.openflexo.xmlcode.StringConvertable;
@@ -67,6 +69,9 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 		setOwner(owner);
 		setBindingAttribute(attribute);
 		setBindingDefinition(df);
+		/*if (df == null) {
+			System.out.println("Binding " + this + " has been created with NULL binding definition !!!");
+		}*/
 	}
 
 	public ViewPointDataBinding(String unparsed) {
@@ -76,7 +81,13 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 	public Object getBindingValue(BindingEvaluationContext context) {
 		// logger.info("getBindingValue() "+this);
 		if (getBinding() != null) {
-			return getBinding().getBindingValue(context);
+			try {
+				return getBinding().getBindingValue(context);
+			} catch (TypeMismatchException e) {
+				return null;
+			} catch (NullReferenceException e) {
+				return null;
+			}
 		}
 		return null;
 	}
@@ -101,10 +112,13 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 
 	public void setBindingDefinition(BindingDefinition bindingDefinition) {
 		this.bindingDefinition = bindingDefinition;
+		/*if (bindingDefinition == null) {
+			System.out.println("Binding " + this + " has been set with NULL binding definition !!!");
+		}*/
 	}
 
 	public AbstractBinding getBinding() {
-		if (binding == null) {
+		if (binding == null && !isDeserializing) {
 			finalizeDeserialization();
 		}
 		return binding;
@@ -122,7 +136,7 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 				return; // No change
 			} else {
 				this.binding = value;
-				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
+				unparsedBinding = value != null ? value.getStringRepresentation() : null;
 				updateDependancies();
 				if (bindingAttribute != null) {
 					owner.notifyChange(bindingAttribute, oldValue, value);
@@ -135,7 +149,7 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 				return; // No change
 			} else {
 				this.binding = value;
-				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
+				unparsedBinding = value != null ? value.getStringRepresentation() : null;
 				logger.info("Binding takes now value " + value);
 				updateDependancies();
 				if (bindingAttribute != null) {
@@ -179,17 +193,24 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 		this.owner = owner;
 	}
 
+	private boolean isDeserializing = false;
+
 	protected void finalizeDeserialization() {
 		if (getUnparsedBinding() == null) {
 			return;
 		}
 
+		if (isDeserializing) {
+			return;
+		}
+
+		isDeserializing = true;
+
 		// System.out.println("BindingModel: "+getOwner().getBindingModel());
 		if (getOwner() != null) {
 			BindingFactory factory = getOwner().getBindingFactory();
 			if (factory != null) {
-				factory.setBindable(getOwner());
-				binding = factory.convertFromString(getUnparsedBinding());
+				binding = factory.convertFromString(getUnparsedBinding(), getOwner());
 				binding.setBindingDefinition(getBindingDefinition());
 				// System.out.println(">>>>>>>>>>>>>> Binding: "+binding.getStringRepresentation()+" owner="+binding.getOwner());
 				// System.out.println("binding.isBindingValid()="+binding.isBindingValid());
@@ -205,6 +226,8 @@ public class ViewPointDataBinding implements StringConvertable<ViewPointDataBind
 		}
 
 		updateDependancies();
+
+		isDeserializing = false;
 	}
 
 	protected void updateDependancies() {

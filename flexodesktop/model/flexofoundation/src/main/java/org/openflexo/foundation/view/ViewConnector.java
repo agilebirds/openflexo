@@ -21,7 +21,10 @@ package org.openflexo.foundation.view;
 
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.xml.VEShemaBuilder;
 
 public class ViewConnector extends ViewElement {
@@ -59,6 +62,31 @@ public class ViewConnector extends ViewElement {
 		super(shema);
 		setStartShape(aStartShape);
 		setEndShape(anEndShape);
+	}
+
+	@Override
+	public ConnectorGraphicalRepresentation<ViewConnector> getGraphicalRepresentation() {
+		return (ConnectorGraphicalRepresentation<ViewConnector>) super.getGraphicalRepresentation();
+	}
+
+	/**
+	 * Reset graphical representation to be the one defined in related pattern role
+	 */
+	@Override
+	public void resetGraphicalRepresentation() {
+		getGraphicalRepresentation().setsWith(getPatternRole().getGraphicalRepresentation(), GraphicalRepresentation.Parameters.text,
+				GraphicalRepresentation.Parameters.isVisible, GraphicalRepresentation.Parameters.absoluteTextX,
+				GraphicalRepresentation.Parameters.absoluteTextY);
+		refreshGraphicalRepresentation();
+	}
+
+	/**
+	 * Refresh graphical representation
+	 */
+	@Override
+	public void refreshGraphicalRepresentation() {
+		super.refreshGraphicalRepresentation();
+		getGraphicalRepresentation().notifyConnectorChanged();
 	}
 
 	@Override
@@ -121,7 +149,7 @@ public class ViewConnector extends ViewElement {
 		if (o == this) {
 			return true;
 		}
-		if ((getParent() != null) && (getParent() == o)) {
+		if (getParent() != null && getParent() == o) {
 			return true;
 		}
 		if (getParent() != null) {
@@ -133,6 +161,11 @@ public class ViewConnector extends ViewElement {
 	@Override
 	public String getDisplayableDescription() {
 		return "Connector" + (getEditionPattern() != null ? " representing " + getEditionPattern() : "");
+	}
+
+	@Override
+	public ConnectorPatternRole getPatternRole() {
+		return (ConnectorPatternRole) super.getPatternRole();
 	}
 
 }

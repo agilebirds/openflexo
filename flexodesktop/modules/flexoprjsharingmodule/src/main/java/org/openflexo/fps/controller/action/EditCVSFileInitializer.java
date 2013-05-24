@@ -19,7 +19,7 @@
  */
 package org.openflexo.fps.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -49,7 +49,7 @@ public class EditCVSFileInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<EditCVSFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<EditCVSFile>() {
 			@Override
-			public boolean run(ActionEvent e, EditCVSFile action) {
+			public boolean run(EventObject e, EditCVSFile action) {
 				FileContentEditor editor = (FileContentEditor) getControllerActionInitializer().getFPSController().moduleViewForObject(
 						action.getFocusedObject());
 				if (editor != null) {
@@ -65,7 +65,7 @@ public class EditCVSFileInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<EditCVSFile> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<EditCVSFile>() {
 			@Override
-			public boolean run(ActionEvent e, EditCVSFile action) {
+			public boolean run(EventObject e, EditCVSFile action) {
 				getControllerActionInitializer().getFPSController().setCurrentEditedObjectAsModuleView(action.getFocusedObject());
 				getControllerActionInitializer().getFPSController().selectAndFocusObject(action.getFocusedObject());
 				return true;

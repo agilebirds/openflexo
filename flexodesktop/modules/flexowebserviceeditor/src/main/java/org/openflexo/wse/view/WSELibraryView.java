@@ -31,8 +31,8 @@ import org.openflexo.foundation.ws.FlexoWSLibrary;
 import org.openflexo.foundation.ws.WSFolder;
 import org.openflexo.foundation.ws.action.CreateNewWebService;
 import org.openflexo.foundation.ws.action.WSDelete;
+import org.openflexo.selection.SelectionManager;
 import org.openflexo.wse.controller.WSEController;
-import org.openflexo.wse.controller.WSESelectionManager;
 import org.openflexo.wse.model.WSEFolderTableModel;
 import org.openflexo.wse.model.WSEServiceTableModel;
 
@@ -57,7 +57,7 @@ public class WSELibraryView extends WSEView<FlexoWSLibrary> {
 
 		addAction(new TabularViewAction(CreateNewWebService.actionType, "ws_add_webservice", controller.getEditor()) {
 			@Override
-			protected Vector getGlobalSelection() {
+			protected Vector<FlexoModelObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -79,7 +79,7 @@ public class WSELibraryView extends WSEView<FlexoWSLibrary> {
 		    });*/
 		addAction(new TabularViewAction(WSDelete.actionType, "delete_webservice", controller.getEditor()) {
 			@Override
-			protected Vector getGlobalSelection() {
+			protected Vector<FlexoModelObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -110,9 +110,9 @@ public class WSELibraryView extends WSEView<FlexoWSLibrary> {
 	}
 
 	public WSFolder getSelectedWSFolder() {
-		WSESelectionManager sm = getWSEController().getWSESelectionManager();
-		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof WSFolder)) {
+		SelectionManager sm = getWSEController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
+		if (selection.size() == 1 && selection.firstElement() instanceof WSFolder) {
 			return (WSFolder) selection.firstElement();
 		}
 		return null;

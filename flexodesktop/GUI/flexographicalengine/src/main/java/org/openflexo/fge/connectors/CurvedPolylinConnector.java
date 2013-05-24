@@ -105,14 +105,14 @@ public class CurvedPolylinConnector extends Connector {
 	}
 
 	@Override
-	public void refreshConnector() {
-		if (!needsRefresh()) {
+	public void refreshConnector(boolean force) {
+		if (!force && !needsRefresh()) {
 			return;
 		}
 
 		updateControlPoints();
 
-		super.refreshConnector();
+		super.refreshConnector(force);
 
 		// firstUpdated = true;
 
@@ -155,6 +155,12 @@ public class CurvedPolylinConnector extends Connector {
 	@Override
 	public FGEPoint getEndLocation() {
 		return p2;
+	}
+
+	@Override
+	public CurvedPolylinConnector clone() {
+		CurvedPolylinConnector returned = new CurvedPolylinConnector(null);
+		return returned;
 	}
 
 }

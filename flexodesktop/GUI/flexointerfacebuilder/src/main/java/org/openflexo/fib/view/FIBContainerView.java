@@ -19,12 +19,15 @@
  */
 package org.openflexo.fib.view;
 
-import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.fib.controller.FIBController;
@@ -51,6 +54,9 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 
 	@Override
 	public void delete() {
+		if (isDeleted()) {
+			return;
+		}
 		subComponents.clear();
 		constraints.clear();
 		subComponents = null;
@@ -69,9 +75,7 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 			addJComponent(j);
 		}
 
-		if (getComponent().getWidth() != null && getComponent().getHeight() != null) {
-			getJComponent().setPreferredSize(new Dimension(getComponent().getWidth(), getComponent().getHeight()));
-		}
+		updatePreferredSize();
 
 		updateFont();
 
@@ -84,6 +88,7 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 	protected abstract void retrieveContainedJComponentsAndConstraints();
 
 	protected void addJComponent(JComponent c) {
+		// logger.info("addJComponent constraints=" + c);
 		Object constraint = constraints.get(c);
 		logger.fine(getComponent() + ": addJComponent " + c + " constraint=" + constraint);
 		if (constraint == null) {
@@ -112,10 +117,22 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 	}
 
 	@Override
-	public void updateDataObject(Object dataObject) {
-		update();
+	public void updateDataObject(final Object dataObject) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Update data object invoked outside the EDT!!! please investigate and make sure this is no longer the case. \n\tThis is a very SERIOUS problem! Do not let this pass.");
+			}
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					updateDataObject(dataObject);
+				}
+			});
+			return;
+		}
+		update(new Vector<FIBComponent>());
 		if (isComponentVisible()) {
-			for (FIBView v : subViews) {
+			for (FIBView v : new ArrayList<FIBView>(subViews)) {
 				v.updateDataObject(dataObject);
 			}
 			if (getDynamicModel() != null) {
@@ -150,9 +167,18 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 		}
 	}
 
+	/**
+	 * This method is called to update view representing a FIBComponent.<br>
+	 * Callers are all the components that have been updated during current update loop. If the callers contains the component itself, does
+	 * nothing and return.
+	 * 
+	 * @param callers
+	 *            all the components that have been previously updated during current update loop
+	 * @return a flag indicating if component has been updated
+	 */
 	@Override
-	public void update() {
-		super.update();
+	public boolean update(List<FIBComponent> callers) {
+		return super.update(callers);
 	}
 
 	protected void registerViewForComponent(FIBView view, FIBComponent component) {
@@ -160,16 +186,26 @@ public abstract class FIBContainerView<M extends FIBContainer, J extends JCompon
 	}
 
 	protected void registerComponentWithConstraints(JComponent component, Object constraint) {
+		registerComponentWithConstraints(component, constraint, -1);
+	}
+
+	protected void registerComponentWithConstraints(JComponent component, Object constraint, int index) {
 		logger.fine("Register component: " + component + " constraint=" + constraint);
-		subComponents.add(component);
+		if (index < 0 || index > subComponents.size()) {
+			index = subComponents.size();
+		}
+		subComponents.add(index, component);
 		if (constraint != null) {
 			constraints.put(component, constraint);
 		}
 	}
 
+	protected void registerComponentWithConstraints(JComponent component, int index) {
+		registerComponentWithConstraints(component, null, index);
+	}
+
 	protected void registerComponentWithConstraints(JComponent component) {
-		logger.fine("Register component: " + component + " without any constraint");
-		subComponents.add(component);
+		registerComponentWithConstraints(component, null, -1);
 	}
 
 	/*protected void registerComponentWithConstraints(JComponent component, int index)

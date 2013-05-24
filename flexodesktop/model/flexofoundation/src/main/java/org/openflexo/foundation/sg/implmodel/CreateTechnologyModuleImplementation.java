@@ -53,12 +53,12 @@ public class CreateTechnologyModuleImplementation extends
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ImplementationModel object, Vector<ImplementationModel> globalSelection) {
+		public boolean isVisibleForSelection(ImplementationModel object, Vector<ImplementationModel> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ImplementationModel object, Vector<ImplementationModel> globalSelection) {
+		public boolean isEnabledForSelection(ImplementationModel object, Vector<ImplementationModel> globalSelection) {
 			return object != null;
 		}
 
@@ -68,9 +68,9 @@ public class CreateTechnologyModuleImplementation extends
 		FlexoModelObject.addActionForClass(CreateTechnologyModuleImplementation.actionType, ImplementationModel.class);
 	}
 
-	public TechnologyModuleDefinition technologyModuleDefinition;
-	public TechnologyModuleImplementation newTechnologyModuleImplementation;
-	public String errorMessage;
+	private TechnologyModuleDefinition technologyModuleDefinition;
+	private TechnologyModuleImplementation newTechnologyModuleImplementation;
+	private String errorMessage;
 
 	CreateTechnologyModuleImplementation(ImplementationModel focusedObject, Vector<ImplementationModel> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -80,13 +80,13 @@ public class CreateTechnologyModuleImplementation extends
 	protected void doAction(Object context) throws InvalidParametersException, TechnologyModuleCompatibilityCheckException {
 		logger.info("Add technology module implementation");
 
-		if (technologyModuleDefinition == null) {
+		if (getTechnologyModuleDefinition() == null) {
 			throw new InvalidParametersException("no_selected_technology_module");
 		}
 
-		newTechnologyModuleImplementation = technologyModuleDefinition.createNewImplementation(getFocusedObject());
-		logger.info("Created technology module implementation " + newTechnologyModuleImplementation + " for model "
-				+ newTechnologyModuleImplementation.getImplementationModel());
+		newTechnologyModuleImplementation = getTechnologyModuleDefinition().createNewImplementation(getFocusedObject());
+		logger.info("Created technology module implementation " + getNewTechnologyModuleImplementation() + " for model "
+				+ getNewTechnologyModuleImplementation().getImplementationModel());
 	}
 
 	public TechnologyModuleImplementation getNewTechnologyModuleImplementation() {
@@ -125,5 +125,21 @@ public class CreateTechnologyModuleImplementation extends
 		});
 
 		return result;
+	}
+
+	public TechnologyModuleDefinition getTechnologyModuleDefinition() {
+		return technologyModuleDefinition;
+	}
+
+	public void setTechnologyModuleDefinition(TechnologyModuleDefinition technologyModuleDefinition) {
+		this.technologyModuleDefinition = technologyModuleDefinition;
+	}
+
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+	public void setErrorMessage(String errorMessage) {
+		this.errorMessage = errorMessage;
 	}
 }

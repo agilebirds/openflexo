@@ -10,12 +10,12 @@
 		<property name="parentProcessInstance" label="parent_instance" widget="CUSTOM" constraint="4">
 			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
 			<param name="binding_definition" value="parentProcessInstanceBindingDefinition"/>			
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="returnedProcessInstance" label="returned_instance" widget="CUSTOM" constraint="5">
 			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
 			<param name="binding_definition" value="returnedProcessInstanceBindingDefinition"/>			
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 	</tab>
 

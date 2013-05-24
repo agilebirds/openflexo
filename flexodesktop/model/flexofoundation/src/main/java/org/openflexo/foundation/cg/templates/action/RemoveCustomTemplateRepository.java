@@ -48,13 +48,13 @@ public class RemoveCustomTemplateRepository extends
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(CustomCGTemplateRepository object, Vector<CGTemplateObject> globalSelection) {
+		public boolean isVisibleForSelection(CustomCGTemplateRepository object, Vector<CGTemplateObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(CustomCGTemplateRepository object, Vector<CGTemplateObject> globalSelection) {
-			return (object != null);
+		public boolean isEnabledForSelection(CustomCGTemplateRepository object, Vector<CGTemplateObject> globalSelection) {
+			return object != null;
 		}
 
 	};

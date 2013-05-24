@@ -20,8 +20,8 @@
 package org.openflexo.prefs;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,6 +33,9 @@ import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.xmlcode.InvalidObjectSpecificationException;
 
+import com.google.common.collect.ClassToInstanceMap;
+import com.google.common.collect.MutableClassToInstanceMap;
+
 /**
  * This class is intented to modelize preferences of Flexo application To be accessed through all the application, all methods are
  * statically defined.
@@ -43,19 +46,23 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 
 	private static final String FLEXO_PREFS_FILE_NAME = "Flexo.prefs";
 	private static final Logger logger = Logger.getLogger(FlexoPreferences.class.getPackage().getName());
-	private static File appDataDirectory;
 
-	protected Vector<ContextPreferences> contextPreferencesVector;
+	protected ClassToInstanceMap<ContextPreferences> contextualPreferences;
 
 	protected FlexoPreferences(File preferencesFile) {
 		super(preferencesFile);
-		contextPreferencesVector = new Vector<ContextPreferences>();
+		contextualPreferences = MutableClassToInstanceMap.create();
 	}
 
-	protected void register(Class<ContextPreferences> contextPreferencesClass) {
-		ContextPreferences cp = null;
+	protected <CP extends ContextPreferences> CP get(Class<CP> contextPreferencesClass) {
+		CP cp = contextualPreferences.getInstance(contextPreferencesClass);
+		if (cp != null) {
+			return cp;
+		}
 		try {
 			cp = contextPreferencesClass.newInstance();
+			contextualPreferences.putInstance(contextPreferencesClass, cp);
+			PreferencesController.register(cp);
 		} catch (InstantiationException e) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Exception raised: " + e.getClass().getName() + ". See console for details.");
@@ -67,68 +74,20 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 			}
 			e.printStackTrace();
 		}
-		if (!contextPreferencesVector.contains(cp)) {
-			contextPreferencesVector.add(cp);
-			PreferencesController.register(cp);
-		}
+		return cp;
 	}
 
 	// STATIC METHODS
-
-	private static FlexoPreferences loadPreferencesFromFile() {
-		File prefsFile = getPrefsFile();
-		if (!prefsFile.exists()) {
-			File oldFile = getOldPrefsFile();
-			if (oldFile.exists()) {
-				try {
-					FileUtils.copyFileToFile(oldFile, prefsFile);
-				} catch (IOException e) {
-					// Let's log it, but too bad, he's gonna loose his prefs.
-					e.printStackTrace();
-				}
-			}
-		}
-		return new FlexoPreferences(prefsFile);
-	}
 
 	private static File getOldPrefsFile() {
 		File prefDir = new File(new File(System.getProperty("user.home")), "Library/Flexo");
 		return new File(prefDir, FLEXO_PREFS_FILE_NAME);
 	}
 
-	public static File getApplicationDataDirectory() {
-		if (appDataDirectory == null) {
-			File prefDir = new File(new File(System.getProperty("user.home")), "Library/OpenFlexo");
-			if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
-				String appData = System.getenv("APPDATA");
-				if (appData != null) {
-					File f = new File(appData);
-					if (f.isDirectory() && f.canWrite()) {
-						prefDir = new File(f, "OpenFlexo");
-					}
-				}
-			} else if (ToolBox.getPLATFORM() == ToolBox.LINUX) {
-				prefDir = new File(System.getProperty("user.home"), ".openflexo");
-			}
-			appDataDirectory = prefDir;
-		}
-		return appDataDirectory;
-	}
-
-	public static void setAppDataDirectory(File someDir) {
-		if (appDataDirectory != null && !appDataDirectory.getAbsoluteFile().equals(someDir.getAbsoluteFile())) {
-			throw new IllegalStateException("Application Data Directory is already define in :" + appDataDirectory.getAbsolutePath());
-		}
-		if (appDataDirectory == null) {
-			appDataDirectory = someDir;
-		}
-	}
-
 	public static File getPrefsFile() {
-		return new File(getApplicationDataDirectory(), FLEXO_PREFS_FILE_NAME);
+		return new File(FileUtils.getApplicationDataDirectory(), FLEXO_PREFS_FILE_NAME);
 	}
 
-	@Override
 	public File getPreferencesFile() {
 		return getPrefsFile();
 	}
@@ -137,12 +96,50 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 		instance();
 	}
 
+	protected void saveToFile(boolean warning) {
+		try {
+			File preferenceFile = getPreferencesFile();
+			if (!preferenceFile.exists()) {
+				preferenceFile.createNewFile();
+			}
+			if (logger.isLoggable(Level.FINE)) {
+				logger.fine("Saving preferences to file: " + preferenceFile.getAbsolutePath());
+			}
+			if (logger.isLoggable(Level.FINE)) {
+				logger.finer("properties:" + getPreferencesProperties());
+			}
+			getPreferencesProperties().store(new FileOutputStream(preferenceFile), "Flexo Preferences");
+		} catch (Exception e) {
+			if (warning) {
+				if (logger.isLoggable(Level.WARNING)) {
+					logger.warning("Unable to save preferences");
+				}
+			}
+		}
+	}
+
 	public static FlexoPreferences instance() {
 		if (_instance == null) {
-			_instance = loadPreferencesFromFile();
-			FlexoLocalization.setCurrentLanguage(GeneralPreferences.getLanguage());
-			if (logger.isLoggable(Level.INFO)) {
-				logger.info("Preferences have been loaded");
+			synchronized (FlexoPreferences.class) {
+				if (_instance == null) {
+					File prefsFile = getPrefsFile();
+					if (!prefsFile.exists()) {
+						File oldFile = getOldPrefsFile();
+						if (oldFile.exists()) {
+							try {
+								FileUtils.copyFileToFile(oldFile, prefsFile);
+							} catch (IOException e) {
+								// Let's log it, but too bad, he's gonna loose his prefs.
+								e.printStackTrace();
+							}
+						}
+					}
+					_instance = new FlexoPreferences(prefsFile);
+					FlexoLocalization.setCurrentLanguage(GeneralPreferences.getLanguage());
+					if (logger.isLoggable(Level.INFO)) {
+						logger.info("Preferences have been loaded");
+					}
+				}
 			}
 		}
 		return _instance;
@@ -172,10 +169,8 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.finer("FAILED for this");
 			}
-			for (Enumeration<ContextPreferences> en = contextPreferencesVector.elements(); en.hasMoreElements();) {
-				ContextPreferences next = null;
+			for (ContextPreferences next : contextualPreferences.values()) {
 				try {
-					next = en.nextElement();
 					return next.objectForKey(key);
 				} catch (InvalidObjectSpecificationException e2) {
 					if (logger.isLoggable(Level.FINE)) {
@@ -201,10 +196,8 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.finer("FAILED for this");
 			}
-			for (Enumeration<ContextPreferences> en = contextPreferencesVector.elements(); en.hasMoreElements();) {
-				ContextPreferences next = null;
+			for (ContextPreferences next : contextualPreferences.values()) {
 				try {
-					next = en.nextElement();
 					next.setObjectForKey(object, key);
 					return;
 				} catch (InvalidObjectSpecificationException e2) {
@@ -231,10 +224,8 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.finer("FAILED for this");
 			}
-			for (Enumeration<ContextPreferences> en = contextPreferencesVector.elements(); en.hasMoreElements();) {
-				ContextPreferences next = null;
+			for (ContextPreferences next : contextualPreferences.values()) {
 				try {
-					next = en.nextElement();
 					return next.getTypeForKey(key);
 				} catch (InvalidObjectSpecificationException e2) {
 					if (logger.isLoggable(Level.FINE)) {
@@ -273,11 +264,23 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 	public static File getLogDirectory() {
 		File outputDir = new File(System.getProperty("user.home") + "/Library/Logs/OpenFlexo");
 		if (ToolBox.getPLATFORM() == ToolBox.WINDOWS) {
+			boolean ok = false;
 			String appData = System.getenv("LOCALAPPDATA");
 			if (appData != null) {
 				File f = new File(appData);
 				if (f.isDirectory() && f.canWrite()) {
 					outputDir = new File(f, "OpenFlexo/Logs");
+					ok = true;
+				}
+				if (!ok) {
+					appData = System.getenv("APPDATA");
+					if (appData != null) {
+						f = new File(appData);
+						if (f.isDirectory() && f.canWrite()) {
+							outputDir = new File(f, "OpenFlexo/Logs");
+							ok = true;
+						}
+					}
 				}
 			}
 		} else if (ToolBox.getPLATFORM() == ToolBox.LINUX) {

@@ -19,8 +19,8 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -28,7 +28,8 @@ import javax.swing.KeyStroke;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.cgmodule.GeneratorPreferences;
-import org.openflexo.cgmodule.view.GeneratorMainPane;
+import org.openflexo.cgmodule.controller.GeneratorController;
+import org.openflexo.cgmodule.view.GeneratorBrowserView;
 import org.openflexo.cgmodule.view.popups.SelectFilesPopup;
 import org.openflexo.components.MultipleObjectSelectorPopup;
 import org.openflexo.foundation.FlexoException;
@@ -42,7 +43,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.view.listener.FlexoKeyEventListener;
 
 public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer {
 
@@ -62,32 +62,40 @@ public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer {
 		return KeyStroke.getKeyStroke(KeyEvent.VK_D, FlexoCst.META_MASK);
 	}
 
+	protected GeneratorBrowserView getBrowserView() {
+		return ((GeneratorController) getController()).getBrowserView();
+	}
+
 	@Override
 	protected FlexoActionInitializer<WriteModifiedGeneratedFiles> getDefaultInitializer() {
 		return new FlexoActionInitializer<WriteModifiedGeneratedFiles>() {
 			@Override
-			public boolean run(ActionEvent e, WriteModifiedGeneratedFiles action) {
+			public boolean run(EventObject e, WriteModifiedGeneratedFiles action) {
 				if (action.getFilesToWrite().size() == 0) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("no_files_selected"));
 					return false;
-				} else if ((action.getFilesToWrite().size() > 1 || (!(action.getFocusedObject() instanceof CGFile)))
-						&& !(e != null && e.getActionCommand() != null && e.getActionCommand().equals(FlexoKeyEventListener.KEY_PRESSED))) {
+				} else if ((action.getFilesToWrite().size() > 1 || !(action.getFocusedObject() instanceof CGFile))
+						&& !(e instanceof KeyEvent)) {
 					SelectFilesPopup popup = new SelectFilesPopup(FlexoLocalization.localizedForKey("write_modified_files_to_disk"),
 							FlexoLocalization.localizedForKey("write_modified_files_to_disk_description"), "write_to_disk",
 							action.getFilesToWrite(), action.getFocusedObject().getProject(), getControllerActionInitializer()
 									.getGeneratorController());
-					popup.setVisible(true);
-					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getFileSet().getSelectedFiles().size() > 0)) {
-						action.setFilesToWrite(popup.getFileSet().getSelectedFiles());
-					} else {
-						return false;
+					try {
+						popup.setVisible(true);
+						if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getFileSet().getSelectedFiles().size() > 0) {
+							action.setFilesToWrite(popup.getFileSet().getSelectedFiles());
+						} else {
+							return false;
+						}
+					} finally {
+						popup.delete();
 					}
 				} else {
 					// 1 occurence or if the user used the shortcut, continue without confirmation
 				}
 				action.setSaveBeforeGenerating(GeneratorPreferences.getSaveBeforeGenerating());
 				action.getProjectGenerator().startHandleLogs();
-				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().setHoldStructure();
+				getBrowserView().getBrowser().setHoldStructure();
 				return true;
 			}
 		};
@@ -97,9 +105,9 @@ public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<WriteModifiedGeneratedFiles> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<WriteModifiedGeneratedFiles>() {
 			@Override
-			public boolean run(ActionEvent e, WriteModifiedGeneratedFiles action) {
-				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().resetHoldStructure();
-				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().update();
+			public boolean run(EventObject e, WriteModifiedGeneratedFiles action) {
+				getBrowserView().getBrowser().resetHoldStructure();
+				getBrowserView().getBrowser().update();
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 				return true;
@@ -112,8 +120,8 @@ public class WriteModifiedGeneratedFilesInitializer extends ActionInitializer {
 		return new FlexoExceptionHandler<WriteModifiedGeneratedFiles>() {
 			@Override
 			public boolean handleException(FlexoException exception, WriteModifiedGeneratedFiles action) {
-				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().resetHoldStructure();
-				((GeneratorMainPane) getController().getMainPane()).getBrowserView().getBrowser().update();
+				getBrowserView().getBrowser().resetHoldStructure();
+				getBrowserView().getBrowser().update();
 				getControllerActionInitializer().getGeneratorController().disposeProgressWindow();
 				exception.printStackTrace();
 				FlexoController.showError(FlexoLocalization.localizedForKey("file_writing_failed") + ":\n"

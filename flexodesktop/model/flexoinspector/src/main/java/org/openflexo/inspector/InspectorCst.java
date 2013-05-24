@@ -21,8 +21,6 @@ package org.openflexo.inspector;
 
 import java.awt.Color;
 
-import org.openflexo.toolbox.ToolBox;
-
 /**
  * Constants used by FlexoInspector project
  * 
@@ -42,5 +40,4 @@ public class InspectorCst {
 
 	public static final Color NON_ODD_LINES_PROPERTY_LIST_TABLE_VIEW_COLOR = Color.WHITE;
 
-	public static Color BACK_COLOR = ToolBox.getPLATFORM() == ToolBox.MACOS ? null : Color.WHITE;
 }

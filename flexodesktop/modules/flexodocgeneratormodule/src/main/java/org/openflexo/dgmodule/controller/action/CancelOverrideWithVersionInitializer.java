@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -48,7 +48,7 @@ public class CancelOverrideWithVersionInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CancelOverrideWithVersion> getDefaultInitializer() {
 		return new FlexoActionInitializer<CancelOverrideWithVersion>() {
 			@Override
-			public boolean run(ActionEvent e, CancelOverrideWithVersion action) {
+			public boolean run(EventObject e, CancelOverrideWithVersion action) {
 				return true;
 			}
 		};
@@ -58,7 +58,7 @@ public class CancelOverrideWithVersionInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CancelOverrideWithVersion> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CancelOverrideWithVersion>() {
 			@Override
-			public boolean run(ActionEvent e, CancelOverrideWithVersion action) {
+			public boolean run(EventObject e, CancelOverrideWithVersion action) {
 				return true;
 			}
 		};

@@ -19,8 +19,8 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -63,7 +63,7 @@ public class ImportTemplatesInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ImportTemplates> getDefaultInitializer() {
 		return new FlexoActionInitializer<ImportTemplates>() {
 			@Override
-			public boolean run(ActionEvent e, ImportTemplates action) {
+			public boolean run(EventObject e, ImportTemplates action) {
 				CGTemplates templates = action.getFocusedObject().getTemplates();
 				boolean hasTemplateRepositories = templates.getCustomCodeRepositoriesVector().size() > 0;
 				ParameterDefinition[] params;

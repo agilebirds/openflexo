@@ -50,17 +50,20 @@ public class AddServiceOperation extends FlexoAction<AddServiceOperation, FlexoM
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return object instanceof ServiceInterface;
 		}
 
 	};
 
+	static {
+		FlexoModelObject.addActionForClass(actionType, ServiceInterface.class);
+	}
 	private String _newOperationName;
 
 	private FlexoPort _relatedPort;
@@ -74,7 +77,7 @@ public class AddServiceOperation extends FlexoAction<AddServiceOperation, FlexoM
 	}
 
 	public FlexoProcess getProcess() {
-		if ((getFocusedObject() != null) && (getFocusedObject() instanceof ServiceInterface)) {
+		if (getFocusedObject() != null && getFocusedObject() instanceof ServiceInterface) {
 			return ((WKFObject) getFocusedObject()).getProcess();
 		}
 		return null;
@@ -101,8 +104,8 @@ public class AddServiceOperation extends FlexoAction<AddServiceOperation, FlexoM
 		if (_serviceInterface != null) {
 			return _serviceInterface;
 		}
-		if ((getFocusedObject() != null) && (getFocusedObject() instanceof ServiceInterface)) {
-			return ((ServiceInterface) getFocusedObject());
+		if (getFocusedObject() != null && getFocusedObject() instanceof ServiceInterface) {
+			return (ServiceInterface) getFocusedObject();
 		}
 		return null;
 	}

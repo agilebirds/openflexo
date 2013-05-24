@@ -1,4 +1,5 @@
 package org.openflexo.fib;
+
 /*
  * (c) Copyright 2010-2011 AgileBirds
  *
@@ -19,13 +20,7 @@ package org.openflexo.fib;
  *
  */
 
-
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.Observable;
-import java.util.Vector;
 
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.DefaultFlexoEditor;
@@ -37,53 +32,47 @@ import org.openflexo.foundation.utils.ProjectInitializerException;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
 import org.openflexo.toolbox.FileResource;
 
-
-public class TestProjectBrowser {
+public class TestProjectBrowser extends FIBAbstractEditor {
 
 	public static FileResource PRJ_FILE = new FileResource("Prj/TestBrowser.prj");
 	public static FileResource FIB_FILE = new FileResource("Fib/ProjectBrowser.fib");
 
 	protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
+		@Override
 		public DefaultFlexoEditor makeFlexoEditor(FlexoProject project) {
 			return new DefaultFlexoEditor(project);
 		}
 	};
 
-	public static void main(String[] args)
-	{
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			public Object[] getData()
-			{
-				return FIBAbstractEditor.makeArray(loadProject());
-			}
-			public File getFIBFile() {
-				return FIB_FILE;
-			}
-		};
-		/*editor.addAction("change_name",new ActionListener() {		
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				class1.setName("new_class_1_name");
-			}
-		});*/
-		editor.launch();
+	@Override
+	public Object[] getData() {
+		return FIBAbstractEditor.makeArray(loadProject());
 	}
-	
-	public static FlexoProject loadProject()
-	{
+
+	@Override
+	public File getFIBFile() {
+		return FIB_FILE;
+	}
+
+	public static void main(String[] args) {
+		main(TestProjectBrowser.class);
+	}
+
+	public static FlexoProject loadProject() {
 		FlexoProject project = null;
 		FlexoEditor editor;
 		File projectFile = PRJ_FILE;
-		//File projectFile = new File("C:\\Documents and Settings\\gpolet.DENALI\\Desktop\\FlexoProjects\\test_forFlexoServer_1.1\\test.prj");
-		//File projectFile = new File("/Users/sylvain/Documents/TestsFlexo/TestBindingSelector.prj");
-		//File projectFile = new File("/Users/sylvain/Documents/TestsFlexo/BA/TestActivityGroup.prj");
-		//File projectFile = new File("/Users/sylvain/Documents/TestsFlexo/BA/TestOperatorConversion/TestOperator.prj");
-		//File projectFile = new File("/Users/sylvain/Documents/TestsFlexo/BA/TestSPNodesConversion/TestSPNodesConversion.prj");
-		//File projectFile = new File("/Users/sylvain/Documents/TestsFlexo/BA/TestInducedEdges.prj");
-		//FileResource projectFile = new FileResource("src/dev/resources/TestFGE.prj");
-		System.out.println("Found project "+projectFile.getAbsolutePath());
+		// File projectFile = new
+		// File("C:\\Documents and Settings\\gpolet.DENALI\\Desktop\\FlexoProjects\\test_forFlexoServer_1.1\\test.prj");
+		// File projectFile = new File("/Users/sylvain/Documents/TestsFlexo/TestBindingSelector.prj");
+		// File projectFile = new File("/Users/sylvain/Documents/TestsFlexo/BA/TestActivityGroup.prj");
+		// File projectFile = new File("/Users/sylvain/Documents/TestsFlexo/BA/TestOperatorConversion/TestOperator.prj");
+		// File projectFile = new File("/Users/sylvain/Documents/TestsFlexo/BA/TestSPNodesConversion/TestSPNodesConversion.prj");
+		// File projectFile = new File("/Users/sylvain/Documents/TestsFlexo/BA/TestInducedEdges.prj");
+		// FileResource projectFile = new FileResource("src/dev/resources/TestFGE.prj");
+		System.out.println("Found project " + projectFile.getAbsolutePath());
 		try {
-			editor = FlexoResourceManager.initializeExistingProject(projectFile,EDITOR_FACTORY,null);
+			editor = FlexoResourceManager.initializeExistingProject(projectFile, EDITOR_FACTORY, null);
 			project = editor.getProject();
 		} catch (ProjectLoadingCancelledException e) {
 			// TODO Auto-generated catch block
@@ -92,7 +81,7 @@ public class TestProjectBrowser {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("Successfully loaded project "+projectFile.getAbsolutePath());
+		System.out.println("Successfully loaded project " + projectFile.getAbsolutePath());
 
 		return project;
 	}

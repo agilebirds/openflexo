@@ -23,12 +23,10 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.bindings.Bindable;
 import org.openflexo.foundation.bindings.BindingModel;
 import org.openflexo.foundation.bindings.BindingValue;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.inspector.InspectableObject;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * container for a Binding. (a binding value)
@@ -94,7 +92,7 @@ public class ServiceMessageEntryBinding extends FlexoModelObject implements Insp
 	}
 
 	public void lookupBindingDefinition() {
-		if ((_bindingDefinition == null) && (_messageBindings != null) && (_bindingDefinitionName != null)) {
+		if (_bindingDefinition == null && _messageBindings != null && _bindingDefinitionName != null) {
 			_bindingDefinition = _messageBindings.getMessageDefinition().entryWithName(_bindingDefinitionName);
 			if (getBindingValue() != null) {
 				if (getBindingValue().getBindingDefinition() == null) {
@@ -133,10 +131,10 @@ public class ServiceMessageEntryBinding extends FlexoModelObject implements Insp
 
 	public void setMessageBindings(ServiceMessageBindings messageBindings) {
 		_messageBindings = messageBindings;
-		if ((_bindingValue != null) && _messageBindings != null) {
+		if (_bindingValue != null && _messageBindings != null) {
 			_bindingValue.setOwner(_messageBindings);
 		}
-		if ((_messageBindings != null) && (_messageBindings.getMessageDefinition() != null)) {
+		if (_messageBindings != null && _messageBindings.getMessageDefinition() != null) {
 			if (_bindingDefinitionName != null) {
 				setBindingDefinition(_messageBindings.getMessageDefinition().entryWithName(_bindingDefinitionName));
 			}
@@ -161,25 +159,9 @@ public class ServiceMessageEntryBinding extends FlexoModelObject implements Insp
 	}
 
 	@Override
-	public FlexoProject getProject() {
-		if (_messageBindings != null) {
-			return _messageBindings.getProject();
-		}
-		return null;
-	}
-
-	@Override
 	public String getFullyQualifiedName() {
 		return (_messageBindings != null ? _messageBindings.getFullyQualifiedName() : "null") + "." + getBindingDefinitionName() + "="
 				+ (getBindingValue() == null ? "null" : getBindingValue().getStringRepresentation());
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		if (_messageBindings != null) {
-			return _messageBindings.getXMLMapping();
-		}
-		return null;
 	}
 
 	@Override

@@ -36,6 +36,7 @@ public class ViewPointValidationModel extends ValidationModel {
 
 		registerRule(new EditionPattern.EditionPatternShouldHaveRoles());
 		registerRule(new EditionPattern.EditionPatternShouldHaveEditionSchemes());
+		registerRule(new EditionPattern.EditionPatternShouldHaveDeletionScheme());
 
 		registerRule(new PatternRole.PatternRoleMustHaveAName());
 		registerRule(new ClassPatternRole.ClassPatternRoleMustDefineAValidConceptClass());
@@ -52,6 +53,11 @@ public class ViewPointValidationModel extends ValidationModel {
 
 		registerRule(new AddIndividual.AddIndividualActionMustDefineAnOntologyClass());
 		registerRule(new AddIndividual.URIBindingIsRequiredAndMustBeValid());
+
+		registerRule(new DataPropertyAssertion.DataPropertyAssertionMustDefineAnOntologyProperty());
+		registerRule(new DataPropertyAssertion.ValueBindingIsRequiredAndMustBeValid());
+		registerRule(new ObjectPropertyAssertion.ObjectPropertyAssertionMustDefineAnOntologyProperty());
+		registerRule(new ObjectPropertyAssertion.ObjectBindingIsRequiredAndMustBeValid());
 
 		registerRule(new AddClass.AddClassActionMustDefineAnOntologyClass());
 		registerRule(new AddClass.URIBindingIsRequiredAndMustBeValid());
@@ -71,6 +77,8 @@ public class ViewPointValidationModel extends ValidationModel {
 
 		registerRule(new DeclarePatternRole.AssignationBindingIsRequiredAndMustBeValid());
 		registerRule(new DeclarePatternRole.ObjectBindingIsRequiredAndMustBeValid());
+
+		registerRule(new DeleteAction.ObjectToDeleteBindingIsRequiredAndMustBeValid());
 
 		registerRule(new GraphicalAction.GraphicalActionMustHaveASubject());
 		registerRule(new GraphicalAction.GraphicalActionMustDefineAValue());

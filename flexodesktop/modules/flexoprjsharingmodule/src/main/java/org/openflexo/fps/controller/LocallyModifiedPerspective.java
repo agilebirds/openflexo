@@ -19,16 +19,15 @@ public class LocallyModifiedPerspective extends FPSPerspective {
 	public LocallyModifiedPerspective(FPSController fpsController) {
 		super(fpsController, "locally_modified_files");
 		this.fpsController = fpsController;
+		setTopLeftView(fpsController.getCvsRepositoryBrowserView());
+		setBottomLeftView(fpsController.getSharedProjectBrowserView());
+		setBottomCenterView(fpsController.getConsoleView());
+
 	}
 
 	@Override
 	public ImageIcon getActiveIcon() {
 		return FPSIconLibrary.FPS_LMP_ACTIVE_ICON;
-	}
-
-	@Override
-	public ImageIcon getSelectedIcon() {
-		return FPSIconLibrary.FPS_LMP_SELECTED_ICON;
 	}
 
 	@Override

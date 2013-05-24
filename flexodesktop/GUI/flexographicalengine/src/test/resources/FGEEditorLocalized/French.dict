@@ -1,5 +1,4 @@
-#French
-#Tue May 22 11:38:31 CEST 2012
+BOOLEAN=BOOLEEN
 cancel=Annuler
 close_drawing=Fermer le dessin
 edit=Edition
@@ -16,4 +15,5 @@ quit=Quitter
 save_drawing=Sauver le dessin
 save_drawing_as=Sauver le dessin sous...
 tools=Outils
+undefined_value=undefined_value
 untitled=sans titre

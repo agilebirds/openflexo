@@ -35,6 +35,8 @@ public class ProjectRestructuration {
 
 	public static final String OELIB_EXTENSION = ".oelib";
 
+	public static final String CACHE_EXTENSION = ".cache";
+
 	public static final String OWL_EXTENSION = ".owl";
 
 	public static final String WS_EXTENSION = ".ws";
@@ -85,6 +87,8 @@ public class ProjectRestructuration {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ProjectRestructuration.class.getPackage().getName());
+
+	public static final String CACHE_DIR = "Cache";
 
 	public static final String WORKFLOW_DIR = "Workflow";
 
@@ -258,6 +262,10 @@ public class ProjectRestructuration {
 		return project.getProjectName() + TOC_EXTENSION;
 	}
 
+	public static File getExpectedCacheDir(FlexoProject project) {
+		return new File(project.getProjectDirectory(), CACHE_DIR);
+	}
+
 	public static File getExpectedGeneratedCodeFile(FlexoProject project) {
 		return new File(getExpectedGeneratedCodeDirectory(project.getProjectDirectory()), getGeneratedCodeFileName(project));
 	}
@@ -314,12 +322,20 @@ public class ProjectRestructuration {
 		return new File(getExpectedOntologyDirectory(project.getProjectDirectory()), ontologyName + OWL_EXTENSION);
 	}
 
+	public static File getExpectedProjectDataFile(FlexoProject project) {
+		return new File(project.getProjectDirectory(), project.getName() + XML_EXTENSION);
+	}
+
 	public static String getShemaLibraryFileName(FlexoProject project) {
 		return project.getProjectName() + OELIB_EXTENSION;
 	}
 
 	public static File getExpectedShemaLibFile(FlexoProject project) {
 		return new File(getExpectedOntologyDirectory(project.getProjectDirectory()), getShemaLibraryFileName(project));
+	}
+
+	public static File getExpectedImportedWorkflowFile(FlexoProject flexoProject, FlexoProjectReference reference) {
+		return new File(getExpectedCacheDir(flexoProject), reference.getName() + CACHE_EXTENSION);
 	}
 
 }

@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.foundation.wkf.edge.ExternalMessageOutEdge" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.edge.ExternalMessageOutEdge" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab index="3" title="Data" layout="twocols" font="SansSerif,0,11" name="DataTab">
-      <Label label="accessed_instance" localize="true" name="AccessedProcessInstanceLabel" constraints="twocols(location=left;index=8;expandHorizontally=false;expandVertically=false)" />
-      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" data="data.accessedProcessInstance" constraints="twocols(location=right;index=9;expandHorizontally=true;expandVertically=false)" name="AccessedProcessInstance" localize="true" manageDynamicModel="true">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab"  opaque="false"/>
+    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="DataTab" opaque="false">
+      <Label label="accessed_instance" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="AccessedProcessInstanceLabel" localize="true">
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
+      </Label>
+      <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="AccessedProcessInstance" index="9" data="data.accessedProcessInstance" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
         <Assignment variable="component.bindingDefinition" value="data.accessedProcessInstanceBindingDefinition" />
         <Assignment variable="component.bindable" value="data" />
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Custom>
+      <Parameter name="visibleFor" value="ANALYST,DEVELOPER,MAINTAINER" />
     </Tab>
-    <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab" />
   </TabPanel>
   <LocalizedDictionary>
     <Localized key="Data" lang="French">Donnée</Localized>
-    <Localized key="accessed_instance" lang="English">Accessed ProcessInstance</Localized>
+    <Localized key="accessed_instance" lang="English">Accessed Process Instance</Localized>
     <Localized key="accessed_instance" lang="French">Instance de processus accédé</Localized>
-    <Localized key="accessed_instance" lang="Dutch">Accessed ProcessInstance</Localized>
+    <Localized key="accessed_instance" lang="Dutch">Accessed Process Instance</Localized>
     <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="Basic" lang="English">Basic</Localized>
+    <Localized key="Basic" lang="Dutch">Basic</Localized>
+    <Localized key="Data" lang="English">Data</Localized>
+    <Localized key="Data" lang="Dutch">Data</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="External Message OUT edge" />
+  <Parameter name="title" value="Sequential flow" />
 </Panel>
-

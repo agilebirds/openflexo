@@ -39,9 +39,9 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.cgmodule.controller.GeneratorController;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.cg.CGRepository;
 import org.openflexo.foundation.cg.dm.CGRepositoryConnected;
 import org.openflexo.foundation.cg.dm.CGRepositoryDisconnected;
@@ -55,8 +55,8 @@ import org.openflexo.swing.JConsole;
 import org.openflexo.swing.JConsoleOutputStream;
 import org.openflexo.toolbox.LogListener;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * 
@@ -142,7 +142,7 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 		generateButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (SynchronizeRepositoryCodeGeneration.actionType.isEnabled(codeRepository, null, controller.getEditor())) {
+				if (SynchronizeRepositoryCodeGeneration.actionType.isEnabled(codeRepository, null)) {
 					SynchronizeRepositoryCodeGeneration action = SynchronizeRepositoryCodeGeneration.actionType.makeNewAction(
 							codeRepository, null, controller.getEditor());
 					action.doAction();
@@ -178,7 +178,7 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 		warButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (GenerateWAR.actionType.isEnabled(codeRepository, null, controller.getEditor())) {
+				if (GenerateWAR.actionType.isEnabled(codeRepository, null)) {
 					GenerateWAR action = GenerateWAR.actionType.makeNewAction(codeRepository, null, controller.getEditor());
 					action.setCustomErrStream(new JConsoleOutputStream(console, Color.RED));
 					action.setCustomOutStream(new JConsoleOutputStream(console, Color.BLACK));
@@ -189,7 +189,6 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 				}
 			}
 		});
-		warButton.setEnabled(GenerateWAR.actionType.isEnabled(codeRepository, null, controller.getEditor()));
 		secondPanel.add(warButton);
 		bigButtonsPanel.add(secondPanel);
 		if (repository.includeReader()) {
@@ -215,7 +214,6 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 
 		// chooseFileButton.setEnabled(repository.isEnabled());
 		// chooseWarLocationButton.setEnabled(repository.isEnabled());
-		generateButton.setEnabled(SynchronizeRepositoryCodeGeneration.actionType.isEnabled(repository, null, controller.getEditor()));
 		console = new JConsole();
 		if (controller.getProjectGenerator(codeRepository) != null) {
 			controller.getProjectGenerator(codeRepository).addToLogListeners(this);
@@ -227,10 +225,10 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 			console.clear();
 			console.log(FlexoLocalization.localizedForKey("repository_disconnected"), Color.BLUE);
 		}
-		/*console.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-		console.setFont(FlexoCst.CODE_FONT);
-		console.setForeground(Color.DARK_GRAY);
-		console.setEditable(false);*/
+		/*
+		 * console.setBorder(BorderFactory.createEmptyBorder(5,5,5,5)); console.setFont(FlexoCst.CODE_FONT);
+		 * console.setForeground(Color.DARK_GRAY); console.setEditable(false);
+		 */
 
 		add(bigButtonsPanel, BorderLayout.NORTH);
 		// add(new JScrollPane(console),BorderLayout.CENTER);
@@ -238,9 +236,14 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 			consolePanel = new ConsolePanel(console);
 			add(consolePanel, BorderLayout.CENTER);
 		}
-
-		validate();
+		updateButtons();
+		revalidate();
 		// repaint();
+	}
+
+	private void updateButtons() {
+		generateButton.setEnabled(SynchronizeRepositoryCodeGeneration.actionType.isEnabled(codeRepository, null));
+		warButton.setEnabled(GenerateWAR.actionType.isEnabled(codeRepository, null));
 	}
 
 	private class GeneratorButton extends JButton {
@@ -264,11 +267,9 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 			}
 		}
 
-		/*public void setEnabled(boolean aBoolean)
-		{
-			super.setEnabled(aBoolean);
-			setForeground(aBoolean?Color.BLACK:Color.GRAY);
-		}*/
+		/*
+		 * public void setEnabled(boolean aBoolean) { super.setEnabled(aBoolean); setForeground(aBoolean?Color.BLACK:Color.GRAY); }
+		 */
 	}
 
 	/**
@@ -277,13 +278,26 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 	 * @see org.openflexo.view.ModuleView#getPerspective()
 	 */
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return controller.CODE_GENERATOR_PERSPECTIVE;
 	}
 
 	@Override
-	public void update(FlexoObservable observable, DataModification dataModification) {
+	public void update(final FlexoObservable observable, final DataModification dataModification) {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					update(observable, dataModification);
+				}
+			});
+			return;
+		}
 		if (observable == codeRepository || observable == codeRepository.getReaderRepository()) {
+			if (observable == codeRepository && dataModification instanceof ObjectDeleted) {
+				deleteModuleView();
+				return;
+			}
 			if (dataModification.propertyName() != null && dataModification.propertyName().equals("warDirectory")) {
 				chooseWarLocationButton.setText(codeRepository.getWarDirectory() != null ? codeRepository.getWarDirectory()
 						.getAbsolutePath() : FlexoLocalization.localizedForKey("undefined"));
@@ -310,8 +324,7 @@ public class CGRepositoryModuleView extends JPanel implements ModuleView<CGRepos
 				}
 			}
 		}
-		generateButton.setEnabled(SynchronizeRepositoryCodeGeneration.actionType.isEnabled(codeRepository, null, controller.getEditor()));
-		warButton.setEnabled(GenerateWAR.actionType.isEnabled(codeRepository, null, controller.getEditor()));
+		updateButtons();
 	}
 
 	/**

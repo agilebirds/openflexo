@@ -20,6 +20,7 @@
 package org.openflexo.wkf.swleditor;
 
 import java.awt.dnd.InvalidDnDOperationException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
@@ -41,6 +42,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.RepresentableFlexoModelObject;
+import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.wkf.ActionPetriGraph;
 import org.openflexo.foundation.wkf.ActivityPetriGraph;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
@@ -54,6 +56,7 @@ import org.openflexo.foundation.wkf.WKFArtefact;
 import org.openflexo.foundation.wkf.WKFDataObject;
 import org.openflexo.foundation.wkf.WKFDataSource;
 import org.openflexo.foundation.wkf.WKFGroup;
+import org.openflexo.foundation.wkf.WKFMessageArtifact;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.WKFStockObject;
 import org.openflexo.foundation.wkf.dm.ArtefactInserted;
@@ -66,8 +69,6 @@ import org.openflexo.foundation.wkf.dm.ObjectVisibilityChanged;
 import org.openflexo.foundation.wkf.dm.PortRegisteryHasBeenClosed;
 import org.openflexo.foundation.wkf.dm.PortRegisteryHasBeenOpened;
 import org.openflexo.foundation.wkf.dm.PostInserted;
-import org.openflexo.foundation.wkf.dm.RoleInserted;
-import org.openflexo.foundation.wkf.dm.RoleRemoved;
 import org.openflexo.foundation.wkf.edge.FlexoPostCondition;
 import org.openflexo.foundation.wkf.edge.InternalMessageEdge;
 import org.openflexo.foundation.wkf.edge.MessageEdge;
@@ -83,7 +84,6 @@ import org.openflexo.foundation.wkf.node.ComplexOperator;
 import org.openflexo.foundation.wkf.node.EventNode;
 import org.openflexo.foundation.wkf.node.ExclusiveEventBasedOperator;
 import org.openflexo.foundation.wkf.node.FatherNode;
-import org.openflexo.foundation.wkf.node.FlexoNode;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 import org.openflexo.foundation.wkf.node.IFOperator;
 import org.openflexo.foundation.wkf.node.InclusiveOperator;
@@ -102,6 +102,8 @@ import org.openflexo.foundation.wkf.ws.FlexoPortMap;
 import org.openflexo.foundation.wkf.ws.PortMapRegistery;
 import org.openflexo.foundation.wkf.ws.PortRegistery;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.module.UserType;
+import org.openflexo.wkf.controller.WKFController;
 import org.openflexo.wkf.swleditor.gr.AbstractActionNodeGR;
 import org.openflexo.wkf.swleditor.gr.AbstractActivityNodeGR;
 import org.openflexo.wkf.swleditor.gr.AbstractOperationNodeGR;
@@ -125,6 +127,7 @@ import org.openflexo.wkf.swleditor.gr.EventNodeGR;
 import org.openflexo.wkf.swleditor.gr.ExpanderGR;
 import org.openflexo.wkf.swleditor.gr.ExpanderGR.Expander;
 import org.openflexo.wkf.swleditor.gr.MessageEdgeGR;
+import org.openflexo.wkf.swleditor.gr.MessageGR;
 import org.openflexo.wkf.swleditor.gr.NormalAbstractActivityNodeGR;
 import org.openflexo.wkf.swleditor.gr.OperationNodeGR;
 import org.openflexo.wkf.swleditor.gr.OperationPetriGraphGR;
@@ -144,6 +147,7 @@ import org.openflexo.wkf.swleditor.gr.PreAndBeginNodeAssociationGR;
 import org.openflexo.wkf.swleditor.gr.PreAndBeginNodeAssociationGR.PreAndBeginNodeAssociation;
 import org.openflexo.wkf.swleditor.gr.PreConditionGR;
 import org.openflexo.wkf.swleditor.gr.RoleContainerGR;
+import org.openflexo.wkf.swleditor.gr.SWLContainerGR;
 import org.openflexo.wkf.swleditor.gr.SelfExecActionNodeGR;
 import org.openflexo.wkf.swleditor.gr.SelfExecActivityNodeGR;
 import org.openflexo.wkf.swleditor.gr.SelfExecOperationNodeGR;
@@ -158,7 +162,7 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 
 	protected static final Logger logger = Logger.getLogger(SwimmingLaneRepresentation.class.getPackage().getName());
 
-	private FlexoEditor editor;
+	private WKFController controller;
 	private DrawingGraphicalRepresentation<FlexoProcess> graphicalRepresentation;
 
 	private SwimmingLaneRepresentationObjectVisibilityDelegate visibilityDelegate;
@@ -187,7 +191,8 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 					&& ((PetriGraphNode) targetObject).getParentPetriGraph() == targetObject.getProcess().getActivityPetriGraph()) {
 				return true;
 			} else if (targetObject instanceof FlexoPetriGraph) {
-				return ((FlexoPetriGraph) targetObject).getIsVisible() && isVisible(((FlexoPetriGraph) targetObject).getContainer());
+				return (!UserType.isLite() || ((FlexoPetriGraph) targetObject).isRootPetriGraph())
+						&& ((FlexoPetriGraph) targetObject).getIsVisible() && isVisible(((FlexoPetriGraph) targetObject).getContainer());
 			} else if (targetObject instanceof PortRegistery) {
 				return ((PortRegistery) targetObject).getIsVisible();
 			} else if (targetObject instanceof WKFEdge) {
@@ -233,6 +238,7 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 			AbstractNode concernedNode = null;
 			if (targetObject instanceof FlexoPreCondition) {
 				concernedNode = ((FlexoPreCondition) targetObject).getAttachedNode();
+				targetObject = concernedNode;
 			} else if (targetObject instanceof AbstractNode) {
 				concernedNode = (AbstractNode) targetObject;
 			} else if (targetObject instanceof WKFArtefact) {
@@ -327,6 +333,7 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 	/**
 	 * @return
 	 */
+	@Deprecated
 	public static String getRoleVisibilityContextForProcess(FlexoProcess process) {
 		return SWLEditorConstants.SWIMMING_LANE_EDITOR + "_" + process.getFlexoID();
 	}
@@ -334,6 +341,7 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 	/**
 	 * @return
 	 */
+	@Deprecated
 	public static String getRoleIndexContextedParameterForProcess(FlexoProcess process) {
 		return SWLEditorConstants.SWIMMING_LANE_INDEX_KEY + "_" + process.getFlexoID();
 	}
@@ -341,6 +349,7 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 	/**
 	 * @return
 	 */
+	@Deprecated
 	public static String getRoleNumberOfLaneContextedParameterForProcess(FlexoProcess process) {
 		return SWLEditorConstants.SWIMMING_LANE_NB_KEY + "_" + process.getFlexoID();
 	}
@@ -348,8 +357,53 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 	/**
 	 * @return
 	 */
+	@Deprecated
 	public static String getRoleLaneHeightContextedParameterForProcess(FlexoProcess process) {
 		return SWLEditorConstants.SWIMMING_LANE_HEIGHT_KEY + "_" + process.getFlexoID();
+	}
+
+	/**
+	 * @return
+	 */
+	public static String getRoleIndexContextedParameterForProcess(FlexoProcess process, RepresentableFlexoModelObject object) {
+		return SWLEditorConstants.SWIMMING_LANE_INDEX_KEY + "_"
+				+ FlexoModelObjectReference.getSerializationRepresentationForObject(object, false);
+	}
+
+	/**
+	 * @return
+	 */
+	public static String getRoleNumberOfLaneContextedParameterForProcess(FlexoProcess process, RepresentableFlexoModelObject object) {
+		return SWLEditorConstants.SWIMMING_LANE_NB_KEY + "_"
+				+ FlexoModelObjectReference.getSerializationRepresentationForObject(object, false);
+	}
+
+	/**
+	 * @return
+	 */
+	public static String getRoleLaneHeightContextedParameterForProcess(FlexoProcess process, RepresentableFlexoModelObject object) {
+		return SWLEditorConstants.SWIMMING_LANE_HEIGHT_KEY + "_"
+				+ FlexoModelObjectReference.getSerializationRepresentationForObject(object, false);
+	}
+
+	public static boolean loadAllReferencedRole(FlexoProcess process) {
+		for (AbstractNode a : process.getActivityPetriGraph().getAllEmbeddedAbstractNodes()) {
+			Role role = null;
+			if (a instanceof AbstractActivityNode) {
+				role = ((AbstractActivityNode) a).getRole();
+			} else if (a instanceof EventNode) {
+				role = ((EventNode) a).getRole();
+			} else if (a instanceof OperatorNode) {
+				role = ((OperatorNode) a).getRole();
+			}
+			if (role != null && role.getRole(true) == null) {
+				return false;
+			}
+		}
+		for (FlexoModelObjectReference<Role> role : new ArrayList<FlexoModelObjectReference<Role>>(process.getVisibleRoles())) {
+			role.getObject(true);
+		}
+		return true;
 	}
 
 	/**
@@ -363,14 +417,14 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 	public static final SwimmingLaneRepresentationObjectVisibilityDelegate DEFAULT_VISIBILITY = new SwimmingLaneRepresentationDefaultVisibilityDelegate();
 	public static final SwimmingLaneRepresentationObjectVisibilityDelegate SHOW_ALL = new SwimmingLaneRepresentationShowAllObjectsDelegate();
 
-	public SwimmingLaneRepresentation(FlexoProcess process, FlexoEditor anEditor) {
-		this(process, anEditor, DEFAULT_VISIBILITY);
+	public SwimmingLaneRepresentation(FlexoProcess process, WKFController controller) {
+		this(process, controller, DEFAULT_VISIBILITY);
 	}
 
-	public SwimmingLaneRepresentation(FlexoProcess process, FlexoEditor anEditor,
+	public SwimmingLaneRepresentation(FlexoProcess process, WKFController controller,
 			SwimmingLaneRepresentationObjectVisibilityDelegate visibilityDelegate) {
 		super(process);
-		this.editor = anEditor;
+		this.controller = controller;
 		this.visibilityDelegate = visibilityDelegate != null ? visibilityDelegate : DEFAULT_VISIBILITY;
 
 		graphicalRepresentation = new SwimmingLaneGraphicalRepresentation(this, process);
@@ -390,10 +444,6 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 		process.addObserver(this);
 		process.getActivityPetriGraph().addObserver(this);
 		process.getWorkflow().addObserver(this);
-		process.getWorkflow().getRoleList().addObserver(this);
-		for (Role role : process.getWorkflow().getRoleList().getRoles()) {
-			role.addObserver(this);
-		}
 		updateGraphicalObjectsHierarchy();
 	}
 
@@ -402,10 +452,6 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 		getFlexoProcess().deleteObserver(this);
 		getFlexoProcess().getActivityPetriGraph().deleteObserver(this);
 		getFlexoProcess().getWorkflow().deleteObserver(this);
-		getFlexoProcess().getWorkflow().getRoleList().deleteObserver(this);
-		for (Role role : getFlexoProcess().getWorkflow().getRoleList().getRoles()) {
-			role.deleteObserver(this);
-		}
 		super.delete();
 	}
 
@@ -418,11 +464,9 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 	}
 
 	protected double computeHeight() {
-		double returned = SWIMMING_LANE_BORDER;
+		double returned = 2 * SWIMMING_LANE_BORDER;
 		for (RepresentableFlexoModelObject o : orderedMainObjects()) {
-			int swlNb = getSwimmingLaneNb(o);
-			int swlHeight = getSwimmingLaneHeight(o);
-			returned += swlNb * swlHeight + 2 * SWIMMING_LANE_BORDER;
+			returned += getHeight(o);
 		}
 		return returned;
 	}
@@ -433,9 +477,7 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 			if (o == object) {
 				return returned;
 			}
-			int swlNb = getSwimmingLaneNb(o);
-			int swlHeight = getSwimmingLaneHeight(o);
-			returned += swlNb * swlHeight + 2 * SWIMMING_LANE_BORDER;
+			returned += getHeight(o);
 		}
 		logger.warning("Unexpected situation here");
 		return returned;
@@ -449,37 +491,25 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 		if (isVisible(getProcess().getWorkflow().getRoleList().getDefaultRole())) {
 			returned.add(getProcess().getWorkflow().getRoleList().getDefaultRole());
 		}
-		for (Role role : getProcess().getWorkflow().getRoleList().getRoles()) {
+		for (Role role : getProcess().getWorkflow().getAllAssignableRoles()) {
 			if (isVisible(role)) {
 				returned.add(role);
 			}
 		}
-		if (getProcess().getWorkflow().getImportedRoleList() != null) {
-			for (Role role : getProcess().getWorkflow().getImportedRoleList().getRoles()) {
-				if (isVisible(role)) {
-					returned.add(role);
-				}
-			}
-		}
-		int next = 0;
-		for (int i = 0; i < returned.size(); i++) {
-			next = Math.max(next + 1, returned.get(i).getIntegerParameter(SWIMMING_LANE_INDEX_KEY(), next));
-		}
 		Collections.sort(returned, new Comparator<RepresentableFlexoModelObject>() {
 			@Override
 			public int compare(RepresentableFlexoModelObject o1, RepresentableFlexoModelObject o2) {
-				return o1.getIntegerParameter(SWIMMING_LANE_INDEX_KEY()) - o2.getIntegerParameter(SWIMMING_LANE_INDEX_KEY());
+				return getSwimmingLaneIndex(o1, Integer.MAX_VALUE) - getSwimmingLaneIndex(o2, Integer.MAX_VALUE);
 			}
 		});
 		for (int i = 0; i < returned.size(); i++) {
 			// Note that following is not notified (important to avoid loop)
-			returned.get(i)._setGraphicalPropertyForKey(i, SWIMMING_LANE_INDEX_KEY());
+			getProcess()._setGraphicalPropertyForKey(i, SWIMMING_LANE_INDEX_KEY(returned.get(i)));
 		}
 		return returned;
 	}
 
 	public void reindexObjectForNewVerticalLocation(RepresentableFlexoModelObject object, double y) {
-		RepresentableFlexoModelObject after = null;
 		int newIndex = 0;
 		int currentIndex = -1;
 		Vector<RepresentableFlexoModelObject> objects = orderedMainObjects();
@@ -490,7 +520,6 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 			}
 			if (o != object && y > yForObject(o) && i + 1 > newIndex) {
 				newIndex = i + 1;
-				after = o;
 			}
 		}
 		if (newIndex > currentIndex) {
@@ -502,10 +531,9 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 			objects.insertElementAt(object, newIndex);
 			for (int i = 0; i < objects.size(); i++) {
 				// Note that following is not notified (important to avoid loop)
-				objects.get(i)._setGraphicalPropertyForKey(i, SWIMMING_LANE_INDEX_KEY());
+				getProcess()._setGraphicalPropertyForKey(i, SWIMMING_LANE_INDEX_KEY(objects.get(i)));
 			}
 		}
-		object.setChanged();
 	}
 
 	public Vector<RoleContainerGR> getAllVisibleRoleContainers() {
@@ -521,40 +549,53 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 	public void reindexForNewObjectIndex(RepresentableFlexoModelObject object) {
 		Vector<RepresentableFlexoModelObject> objects = orderedMainObjects();
 		objects.remove(object);
-		objects.insertElementAt(object, Math.min(object.getIntegerParameter(SWIMMING_LANE_INDEX_KEY()), objects.size()));
+		objects.insertElementAt(object, Math.min(getSwimmingLaneIndex(object, Integer.MAX_VALUE), objects.size()));
 		for (int i = 0; i < objects.size(); i++) {
 			// Note that following is not notified (important to avoid loop)
-			objects.get(i)._setGraphicalPropertyForKey(i, SWIMMING_LANE_INDEX_KEY());
+			setSwimmingLaneIndex(i, objects.get(i));
 		}
 		updateLocations();
 	}
 
+	@Deprecated
 	public int getSwimmingLaneNb(RepresentableFlexoModelObject object) {
-		return object.getIntegerParameter(SWIMMING_LANE_NB_KEY(), 1);
+		return object.hasGraphicalPropertyForKey(SWIMMING_LANE_NB_KEY()) ? object.getIntegerParameter(SWIMMING_LANE_NB_KEY(), 1) : 1;
 	}
 
-	public void setSwimmingLaneNb(int swlNb, RepresentableFlexoModelObject object) {
-		object.setIntegerParameter(swlNb, SWIMMING_LANE_NB_KEY());
-	}
-
+	@Deprecated
 	public int getSwimmingLaneHeight(RepresentableFlexoModelObject object) {
-		return object.getIntegerParameter(SWIMMING_LANE_HEIGHT_KEY(), DEFAULT_SWIMMING_LANE_HEIGHT);
+		return object.hasGraphicalPropertyForKey(SWIMMING_LANE_HEIGHT_KEY()) ? object.getIntegerParameter(SWIMMING_LANE_HEIGHT_KEY(),
+				DEFAULT_SWIMMING_LANE_HEIGHT) : DEFAULT_SWIMMING_LANE_HEIGHT;
 	}
 
-	public void setSwimmingLaneHeight(int height, RepresentableFlexoModelObject object) {
-		object.setIntegerParameter(height, SWIMMING_LANE_HEIGHT_KEY());
+	public int getSwimmingLaneIndex(RepresentableFlexoModelObject object, int defaultValue) {
+		int index = object.hasGraphicalPropertyForKey(SWIMMING_LANE_INDEX_KEY()) ? object.getIntegerParameter(SWIMMING_LANE_INDEX_KEY(),
+				defaultValue) : defaultValue;
+		return getProcess().getIntegerParameter(SWIMMING_LANE_INDEX_KEY(object), index);
 	}
 
+	public void setSwimmingLaneIndex(int index, RepresentableFlexoModelObject object) {
+		getProcess().setIntegerParameter(index, SWIMMING_LANE_INDEX_KEY(object));
+	}
+
+	@Deprecated
 	public String SWIMMING_LANE_INDEX_KEY() {
 		return getRoleIndexContextedParameterForProcess(getProcess());
 	}
 
+	@Deprecated
 	public String SWIMMING_LANE_NB_KEY() {
 		return getRoleNumberOfLaneContextedParameterForProcess(getProcess());
 	}
 
+	@Deprecated
 	public String SWIMMING_LANE_HEIGHT_KEY() {
+
 		return getRoleLaneHeightContextedParameterForProcess(getProcess());
+	}
+
+	public String SWIMMING_LANE_INDEX_KEY(RepresentableFlexoModelObject object) {
+		return getRoleIndexContextedParameterForProcess(getProcess(), object);
 	}
 
 	private void addRole(Role role) {
@@ -577,19 +618,7 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 
 	private void addNode(AbstractNode node, FlexoModelObject container) {
 		addDrawable(node, container);
-		if (node instanceof FlexoNode) {
-			for (FlexoPreCondition pre : ((FlexoNode) node).getPreConditions()) {
-				addDrawable(pre, node);
-				if (pre.getAttachedBeginNode() != null && isVisible(pre.getAttachedBeginNode())) {
-					addDrawable(preAndBeginNodeAssociationForPrecondition(pre), getProcess());
-				}
-			}
-		}
-		/*if (node instanceof EdgeStarting) {
-			for (FlexoPostCondition post : ((EdgeStarting)node).getOutgoingPostConditions()) {
-				addDrawable(post,getProcess());
-			}
-		}*/
+
 		if (node instanceof SubProcessNode) {
 			SubProcessNode subProcessNode = (SubProcessNode) node;
 			if (subProcessNode.getPortMapRegistery() != null) {
@@ -655,17 +684,9 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 		if (isVisible(getProcess().getWorkflow().getRoleList().getDefaultRole())) {
 			addRole(getProcess().getWorkflow().getRoleList().getDefaultRole());
 		}
-		for (Role role : getProcess().getWorkflow().getRoleList().getRoles()) {
-			if (isVisible(role)) {
-				addRole(role);
-			}
-		}
-
-		if (getProcess().getWorkflow().getImportedRoleList() != null) {
-			for (Role role : getProcess().getWorkflow().getImportedRoleList().getRoles()) {
-				if (isVisible(role)) {
-					addRole(role);
-				}
+		for (Role role : getProcess().getWorkflow().getAllAssignableRoles()) {
+			if (role != null && role.getRole(true) != null && isVisible(role)) {
+				addRole(role.getRole(true));
 			}
 		}
 
@@ -713,11 +734,11 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 		if (role.isDefaultRole()) {
 			return roleMustBeShown;
 		}
-		if (role.getIsVisible(getRoleVisibilityContextForProcess(getProcess()), roleMustBeShown)) {
+		if (getProcess().isRoleVisible(role)) {
 			return true;
 		}
 		if (roleMustBeShown) {
-			role.setIsVisible(true, getRoleVisibilityContextForProcess(getProcess()));
+			getProcess().setRoleVisible(role, true);
 		}
 		return roleMustBeShown;
 	}
@@ -916,6 +937,9 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 		if (aDrawable instanceof WKFStockObject) {
 			return new StockObjectGR((WKFStockObject) aDrawable, this);
 		}
+		if (aDrawable instanceof WKFMessageArtifact) {
+			return new MessageGR((WKFMessageArtifact) aDrawable, this);
+		}
 		logger.warning("Cannot build GraphicalRepresentation for " + aDrawable);
 		return null;
 	}
@@ -929,15 +953,6 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 					|| dataModification instanceof AssociationInserted || dataModification instanceof PostInserted) {
 				updateGraphicalObjectsHierarchy();
 			}
-			if (dataModification instanceof RoleInserted) {
-				((Role) dataModification.newValue()).addObserver(this);
-				updateGraphicalObjectsHierarchy();
-				updateLocations();
-			}
-			if (dataModification instanceof RoleRemoved) {
-				((Role) dataModification.oldValue()).deleteObserver(this);
-				requestRebuildCompleteHierarchy();
-			}
 			if (dataModification instanceof PortRegisteryHasBeenOpened) {
 				updateGraphicalObjectsHierarchy();
 				updateLocations();
@@ -949,11 +964,8 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 				updateLocations();
 			} else if (dataModification instanceof ObjectSizeChanged) {
 				updateDimensions();
-			}
-		} else if (observable instanceof Role) {
-			if (dataModification instanceof ObjectVisibilityChanged) {
-				updateGraphicalObjectsHierarchy();
-				updateLocations();
+			} else if (FlexoProcess.VISIBLE_ROLES.equals(dataModification.propertyName())) {
+				requestRebuildCompleteHierarchy();
 			}
 		} else if (observable == getFlexoProcess().getWorkflow()) {
 			if (FlexoWorkflow.GraphicalProperties.SHOW_SHADOWS.getSerializationName().equals(dataModification.propertyName())) {
@@ -1055,19 +1067,23 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				rebuildCompleteHierarchy();
-				synchronized (SunDragSourceContextPeer.class) {
-					try {
-						SunDragSourceContextPeer.checkDragDropInProgress();
-					} catch (InvalidDnDOperationException e1) {
-						if (logger.isLoggable(Level.WARNING)) {
-							logger.warning("For some reason there was still a Dnd in progress. Will set it back to false. God knows why this happens");
+				try {
+					rebuildCompleteHierarchy();
+					synchronized (SunDragSourceContextPeer.class) {
+						try {
+							SunDragSourceContextPeer.checkDragDropInProgress();
+						} catch (InvalidDnDOperationException e1) {
+							if (logger.isLoggable(Level.WARNING)) {
+								logger.warning("For some reason there was still a Dnd in progress. Will set it back to false. God knows why this happens");
+							}
+							if (logger.isLoggable(Level.FINE)) {
+								logger.log(Level.FINE, "Stacktrace for DnD still in progress", e1);
+							}
+							SunDragSourceContextPeer.setDragDropInProgress(false);
 						}
-						if (logger.isLoggable(Level.FINE)) {
-							logger.log(Level.FINE, "Stacktrace for DnD still in progress", e1);
-						}
-						SunDragSourceContextPeer.setDragDropInProgress(false);
 					}
+				} finally {
+					rebuildRequested = false;
 				}
 			}
 		});
@@ -1095,7 +1111,7 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 	}
 
 	public FlexoEditor getEditor() {
-		return editor;
+		return controller.getEditor();
 	}
 
 	public static final String REPRESENTATION_ROLE_KEY = "role";
@@ -1178,7 +1194,23 @@ public class SwimmingLaneRepresentation extends DefaultDrawing<FlexoProcess> imp
 		invalidateGraphicalObjectsHierarchy();
 		updateGraphicalObjectsHierarchy();
 		updateLocations();
-		rebuildRequested = false;
 	}
 
+	public void relayoutRoleContainers() {
+		for (RepresentableFlexoModelObject o : orderedMainObjects()) {
+			GraphicalRepresentation<RepresentableFlexoModelObject> gr = getGraphicalRepresentation(o);
+			if (gr instanceof SWLContainerGR) {
+				((SWLContainerGR) gr).anchorLocation();
+			}
+		}
+	}
+
+	public double getHeight(RepresentableFlexoModelObject o) {
+		double defaultValue = getSwimmingLaneHeight(o) * getSwimmingLaneNb(o);
+		return getProcess().getHeight(FlexoModelObjectReference.getSerializationRepresentationForObject(o, false), defaultValue);
+	}
+
+	public void setHeight(RepresentableFlexoModelObject o, double height) {
+		getProcess().setHeight(height, FlexoModelObjectReference.getSerializationRepresentationForObject(o, false));
+	}
 }

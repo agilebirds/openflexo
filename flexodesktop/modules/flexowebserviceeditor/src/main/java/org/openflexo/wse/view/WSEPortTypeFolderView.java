@@ -25,13 +25,14 @@ import java.util.logging.Logger;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.ws.ServiceInterface;
 import org.openflexo.foundation.wkf.ws.ServiceOperation;
 import org.openflexo.foundation.ws.ExternalWSService;
 import org.openflexo.foundation.ws.WSPortTypeFolder;
 import org.openflexo.foundation.ws.WSService;
+import org.openflexo.selection.SelectionManager;
 import org.openflexo.wse.controller.WSEController;
-import org.openflexo.wse.controller.WSESelectionManager;
 import org.openflexo.wse.model.WSEOperationTableModel;
 import org.openflexo.wse.model.WSEPortTypeTableModel;
 
@@ -114,9 +115,9 @@ public class WSEPortTypeFolderView extends WSEView<WSPortTypeFolder> {
 	}
 
 	public ServiceInterface getSelectedServiceInterface() {
-		WSESelectionManager sm = getWSEController().getWSESelectionManager();
-		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof ServiceInterface)) {
+		SelectionManager sm = getWSEController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
+		if (selection.size() == 1 && selection.firstElement() instanceof ServiceInterface) {
 			return (ServiceInterface) selection.firstElement();
 		}
 		if (getSelectedServiceOperation() != null) {
@@ -127,9 +128,9 @@ public class WSEPortTypeFolderView extends WSEView<WSPortTypeFolder> {
 	}
 
 	public ServiceOperation getSelectedServiceOperation() {
-		WSESelectionManager sm = getWSEController().getWSESelectionManager();
-		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof ServiceOperation)) {
+		SelectionManager sm = getWSEController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
+		if (selection.size() == 1 && selection.firstElement() instanceof ServiceOperation) {
 			return (ServiceOperation) selection.firstElement();
 		}
 		return null;

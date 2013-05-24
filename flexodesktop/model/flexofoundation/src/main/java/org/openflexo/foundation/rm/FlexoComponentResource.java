@@ -28,11 +28,11 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.jdom.Attribute;
-import org.jdom.Content;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.filter.ElementFilter;
+import org.jdom2.Attribute;
+import org.jdom2.Content;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.filter.ElementFilter;
 import org.openflexo.foundation.ie.ComponentInstance;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
@@ -142,9 +142,6 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 			component.setFlexoResource(this);
 			_resourceData = component;
 		}
-		if (component != null) {
-			component.setProject(getProject());
-		}
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Notify loading for component " + getComponentDefinition().getName());
 		}
@@ -241,18 +238,18 @@ public abstract class FlexoComponentResource extends FlexoXMLStorageResource<IEW
 					if (logger.isLoggable(Level.FINE)) {
 						logger.info("OPTIMIST DEPENDANCY CHECKING for COMPONENT " + getComponentDefinition().getName());
 						logger.info("entityLastUpdate["
-								+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getComponentDefinition().getComponentDMEntity()
+								+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getComponentDefinition().getComponentDMEntity()
 										.getLastUpdate()) + "]" + " < requestDate["
-								+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(requestDate) + "]");
+								+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(requestDate) + "]");
 					}
 					return false;
 				}
 				if (logger.isLoggable(Level.FINE)) {
 					logger.info("FAILED / OPTIMIST DEPENDANCY CHECKING for COMPONENT " + getComponentDefinition().getName());
 					logger.info("entityLastUpdate["
-							+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(getComponentDefinition().getComponentDMEntity()
+							+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(getComponentDefinition().getComponentDMEntity()
 									.getLastUpdate()) + "]" + " > requestDate["
-							+ (new SimpleDateFormat("dd/MM HH:mm:ss SSS")).format(requestDate) + "]");
+							+ new SimpleDateFormat("dd/MM HH:mm:ss SSS").format(requestDate) + "]");
 				}
 			}
 		}

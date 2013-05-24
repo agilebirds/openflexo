@@ -25,7 +25,6 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.components.browser.dnd.TreeDropTarget;
 import org.openflexo.components.browser.view.BrowserView.FlexoJTree;
-import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.foundation.toc.action.MoveTOCEntry;
@@ -34,11 +33,8 @@ import org.openflexo.view.controller.FlexoController;
 
 public class TOCTreeDropTarget extends TreeDropTarget {
 
-	private FlexoEditor editor;
-
 	public TOCTreeDropTarget(FlexoJTree tree, ProjectBrowser browser) {
 		super(tree, browser);
-		editor = tree.getEditor();
 	}
 
 	@Override
@@ -52,7 +48,7 @@ public class TOCTreeDropTarget extends TreeDropTarget {
 				}
 				Vector<TOCEntry> v = new Vector<TOCEntry>();
 				v.add(dragged);
-				return MoveTOCEntry.actionType.isEnabled(over, v, editor);
+				return MoveTOCEntry.actionType.isEnabled(over, v);
 			} else if (targ instanceof TOCRepositoryElement) {
 				TOCRepository over = ((TOCRepositoryElement) targ).getRepository();
 				if (over == null || dragged == null) {
@@ -60,7 +56,7 @@ public class TOCTreeDropTarget extends TreeDropTarget {
 				}
 				Vector<TOCEntry> v = new Vector<TOCEntry>();
 				v.add(dragged);
-				return MoveTOCEntry.actionType.isEnabled(over, v, editor);
+				return MoveTOCEntry.actionType.isEnabled(over, v);
 			}
 		}
 		return false;
@@ -74,14 +70,14 @@ public class TOCTreeDropTarget extends TreeDropTarget {
 				TOCEntry over = ((TOCEntryElement) targ).getEntry();
 				Vector<TOCEntry> v = new Vector<TOCEntry>();
 				v.add(dragged);
-				MoveTOCEntry move = MoveTOCEntry.actionType.makeNewAction(over, v, editor);
+				MoveTOCEntry move = MoveTOCEntry.actionType.makeNewAction(over, v, getEditor());
 				move.doAction();
 				return move.hasActionExecutionSucceeded();
 			} else if (targ instanceof TOCRepositoryElement) {
 				TOCRepository over = ((TOCRepositoryElement) targ).getRepository();
 				Vector<TOCEntry> v = new Vector<TOCEntry>();
 				v.add(dragged);
-				MoveTOCEntry move = MoveTOCEntry.actionType.makeNewAction(over, v, editor);
+				MoveTOCEntry move = MoveTOCEntry.actionType.makeNewAction(over, v, getEditor());
 				move.doAction();
 				return move.hasActionExecutionSucceeded();
 			}

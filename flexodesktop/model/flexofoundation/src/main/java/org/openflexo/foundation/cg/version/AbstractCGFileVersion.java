@@ -117,7 +117,7 @@ public abstract class AbstractCGFileVersion extends CGObject {
 
 	public String getDateAsString() {
 		if (getDate() != null) {
-			return (new SimpleDateFormat("dd/MM HH:mm:ss")).format(getDate());
+			return new SimpleDateFormat("dd/MM HH:mm:ss").format(getDate());
 		}
 		return "";
 	}
@@ -129,7 +129,7 @@ public abstract class AbstractCGFileVersion extends CGObject {
 	public String getContent() throws IOFlexoException {
 		if (_cgFile.getResource().getGeneratedResourceData() instanceof ASCIIFile) {
 			if (_content == null) {
-				if ((_file != null) && (_file.exists())) {
+				if (_file != null && _file.exists()) {
 					try {
 						_content = FileUtils.fileContents(_file);
 					} catch (IOException e) {
@@ -149,7 +149,7 @@ public abstract class AbstractCGFileVersion extends CGObject {
 		File htmlFile = null;
 		if (_cgFile.getResource().getGeneratedResourceData() instanceof WOFile) {
 			if (_content == null) {
-				if ((_file != null) && (_file.exists())) {
+				if (_file != null && _file.exists()) {
 					String name = getFile().getName().substring(0, getFile().getName().indexOf(".wo"));
 					try {
 						htmlFile = new File(getFile(), name + ".html" + "." + _versionId.toString());
@@ -176,7 +176,7 @@ public abstract class AbstractCGFileVersion extends CGObject {
 		File wodFile = null;
 		if (_cgFile.getResource().getGeneratedResourceData() instanceof WOFile) {
 			if (_content == null) {
-				if ((_file != null) && (_file.exists())) {
+				if (_file != null && _file.exists()) {
 					String name = getFile().getName().substring(0, getFile().getName().indexOf(".wo"));
 					try {
 						wodFile = new File(getFile(), name + ".wod" + "." + _versionId.toString());
@@ -203,7 +203,7 @@ public abstract class AbstractCGFileVersion extends CGObject {
 		File wooFile = null;
 		if (_cgFile.getResource().getGeneratedResourceData() instanceof WOFile) {
 			if (_content == null) {
-				if ((_file != null) && (_file.exists())) {
+				if (_file != null && _file.exists()) {
 					String name = getFile().getName().substring(0, getFile().getName().indexOf(".wo"));
 					try {
 						wooFile = new File(getFile(), name + ".woo" + "." + _versionId.toString());

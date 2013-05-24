@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.wkf.WKFObject;
@@ -46,16 +47,20 @@ public class ShowHidePortmap extends FlexoUndoableAction<ShowHidePortmap, FlexoP
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoPortMap object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoPortMap object, Vector<WKFObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoPortMap object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoPortMap object, Vector<WKFObject> globalSelection) {
 			return true;
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoPortMap.class);
+	}
 
 	ShowHidePortmap(FlexoPortMap focusedObject, Vector<WKFObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);

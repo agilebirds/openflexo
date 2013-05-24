@@ -19,7 +19,7 @@
  */
 package org.openflexo.fps.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -48,7 +48,7 @@ public class SaveCVSFileInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<SaveCVSFile> getDefaultInitializer() {
 		return new FlexoActionInitializer<SaveCVSFile>() {
 			@Override
-			public boolean run(ActionEvent e, SaveCVSFile action) {
+			public boolean run(EventObject e, SaveCVSFile action) {
 				return true;
 			}
 		};
@@ -58,7 +58,7 @@ public class SaveCVSFileInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<SaveCVSFile> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SaveCVSFile>() {
 			@Override
-			public boolean run(ActionEvent e, SaveCVSFile action) {
+			public boolean run(EventObject e, SaveCVSFile action) {
 				getControllerActionInitializer().getFPSController().selectAndFocusObject(action.getFocusedObject());
 				return true;
 			}

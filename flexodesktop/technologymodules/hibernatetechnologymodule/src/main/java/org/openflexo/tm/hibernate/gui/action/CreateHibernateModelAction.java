@@ -54,12 +54,12 @@ public class CreateHibernateModelAction extends FlexoAction<CreateHibernateModel
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(HibernateImplementation object, Vector<HibernateImplementation> globalSelection) {
+		public boolean isVisibleForSelection(HibernateImplementation object, Vector<HibernateImplementation> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(HibernateImplementation object, Vector<HibernateImplementation> globalSelection) {
+		public boolean isEnabledForSelection(HibernateImplementation object, Vector<HibernateImplementation> globalSelection) {
 			return object != null;
 		}
 

@@ -38,7 +38,7 @@ public interface InspectorDelegate {
 
 	public void setLocalizedPropertyName(String name);
 
-	public boolean handlesObjectOfClass(Class c);
+	public boolean handlesObjectOfClass(Class<?> c);
 
-	public void performAction(ActionEvent e, String actionName, Object object);
+	public boolean performAction(ActionEvent e, String actionName, Object object);
 }

@@ -24,39 +24,28 @@ import java.io.File;
 
 import org.openflexo.doceditor.DECst;
 import org.openflexo.fib.ProjectDialogEDITOR;
-import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.toc.action.AddTOCEntry;
-import org.openflexo.module.FlexoResourceCenterService;
-import org.openflexo.module.ModuleLoader;
 import org.openflexo.toolbox.FileResource;
 
 public class CreateTOCEntryDialogEDITOR extends ProjectDialogEDITOR {
 
+	@Override
+	public Object[] getData() {
+		FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
+		FlexoProject project = editor.getProject();
+		AddTOCEntry action = AddTOCEntry.actionType.makeNewAction(project.getTOCData(), null, editor);
+		return makeArray(action);
+	}
+
+	@Override
+	public File getFIBFile() {
+		return DECst.CREATE_TOC_ENTRY_DIALOG_FIB;
+	}
+
 	public static void main(String[] args) {
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			@Override
-			public Object[] getData() {
-				FlexoEditor editor = loadProject(new FileResource("Prj/TestVE.prj"));
-				FlexoProject project = editor.getProject();
-				AddTOCEntry action = AddTOCEntry.actionType.makeNewAction(project.getTOCData(), null, editor);
-				return makeArray(action);
-			}
-
-			@Override
-			public File getFIBFile() {
-				return DECst.CREATE_TOC_ENTRY_DIALOG_FIB;
-			}
-		};
-		editor.launch();
+		main(CreateTOCEntryDialogEDITOR.class);
 	}
 
-	private static ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
-	private static FlexoResourceCenterService getFlexoResourceCenterService() {
-		return FlexoResourceCenterService.instance();
-	}
 }

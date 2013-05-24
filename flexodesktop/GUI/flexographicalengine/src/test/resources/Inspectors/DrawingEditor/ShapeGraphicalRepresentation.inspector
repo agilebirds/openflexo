@@ -1,7 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.fge.drawingeditor.FIBInspector" layout="border" dataClassName="org.openflexo.fge.ShapeGraphicalRepresentation" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center;index=0)">
-    <Tab index="3" title="Edition" layout="twocols" font="SansSerif,0,11" name="EditionTab" />
+    <Tab index="3" title="Edition" layout="twocols" font="SansSerif,0,11" name="EditionTab">
+      <Label label="is_selectable" localize="true" name="IsSelectableLabel" constraints="twocols(location=left;index=2;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" borderLeft="2" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+       <CheckBox selected="false" localize="true" name="IsSelectable" data="data.isSelectable"  useScrollBar="false" />
+        <CheckBox data="data.hasSelectedForeground" enable="data.isSelectable" selected="true" localize="true" constraints="flow(index=1)" />
+        <Label label="use" localize="true" enable="data.isSelectable" constraints="flow(index=2;location=east)" />
+        <Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector" enable="data.isSelectable &amp;&amp; data.hasSelectedForeground" data="data.selectedForeground" constraints="flow(index=3)" />
+        <CheckBox data="data.hasSelectedBackground" enable="data.isSelectable" selected="true" localize="true" constraints="flow(index=4)" />
+        <Label label="use" localize="true" enable="data.isSelectable" constraints="flow(index=5)" />
+        <Custom componentClassName="org.openflexo.fge.view.widget.FIBBackgroundStyleSelector" enable="data.isSelectable &amp;&amp; data.hasSelectedBackground" data="data.selectedBackground" constraints="flow(index=6)" />
+        <Label label="cp" enable="data.isSelectable" localize="true" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+        <CheckBox selected="false" enable="data.isSelectable" localize="true" data="data.drawControlPointsWhenSelected" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      </Panel>
+      <Label label="is_focusable" localize="true" name="IsFocusableLabel" constraints="twocols(location=left;index=6;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      <Panel layout="flow" hGap="0" vGap="0" flowAlignment="LEADING" borderTitle="Panel" borderLeft="2" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)">
+        <CheckBox selected="false" localize="true" name="IsFocusable" data="data.isFocusable" constraints="flow(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" />
+        <CheckBox data="data.hasFocusedForeground" selected="true" localize="true" enable="data.isFocusable" constraints="flow(index=1)" />
+        <Label label="use" localize="true" enable="data.isFocusable" constraints="flow(index=2;location=east)" />
+        <Custom componentClassName="org.openflexo.fge.view.widget.FIBForegroundStyleSelector" enable="data.isFocusable &amp;&amp; data.hasFocusedForeground" data="data.focusedForeground" constraints="flow(index=3)" />
+        <CheckBox data="data.hasFocusedBackground" selected="true" localize="true" enable="data.isFocusable" constraints="flow(index=4)" />
+        <Label label="use" localize="true" enable="data.isFocusable" constraints="flow(index=5)" />
+        <Custom componentClassName="org.openflexo.fge.view.widget.FIBBackgroundStyleSelector" enable="data.isFocusable &amp;&amp; data.hasFocusedBackground" data="data.focusedBackground" constraints="flow(index=6)" />
+        <Label label="cp" enable="data.isFocusable" localize="true" constraints="twocols(location=left;index=10;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+        <CheckBox selected="false" enable="data.isFocusable" localize="true" data="data.drawControlPointsWhenFocused" constraints="twocols(location=right;index=11;expandHorizontally=false;expandVertically=false)" useScrollBar="false" />
+      </Panel>
+    </Tab>
     <Tab index="2" title="Location/Size" layout="twocols" font="SansSerif,0,11" name="LocationSizeTab">
       <Label label="layer" localize="true" name="LayerLabel" constraints="twocols(location=left;index=0;expandVertically=false;expandHorizontally=false)" />
       <Number minValue="0" maxValue="65535" increment="1" numberType="IntegerType" columns="10" data="data.layer" constraints="twocols(location=right;index=1;expandVertically=false;expandHorizontally=false)" name="Layer" localize="true" />
@@ -54,6 +79,12 @@
       </Panel>
       <Label label="is_visible" localize="true" name="IsVisibleLabel" constraints="twocols(location=left;index=20;expandVertically=false;expandHorizontally=false)" />
       <CheckBox selected="false" localize="true" name="IsVisible" data="data.isVisible" constraints="twocols(location=right;index=21;expandVertically=false;expandHorizontally=false)" />
+      <Label label="allows_to_leave_bounds" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)"/>
+      <CheckBox selected="true" localize="true" name="checkbox" data="data.allowToLeaveBounds" constraints="twocols(expandHorizontally=true;expandVertically=false;index=23;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
+      <Label label="adapt_bounds_to_host_contents" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=24;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)"/>
+      <CheckBox selected="true" localize="true" name="checkbox" data="data.adaptBoundsToContents" constraints="twocols(expandHorizontally=true;expandVertically=false;index=25;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" />
+      <Label label="index" localize="true" constraints="twocols(expandHorizontally=true;expandVertically=false;index=26;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)"/>
+      <Number minValue="0" maxValue="65535" increment="1" numberType="IntegerType" columns="3" data="data.index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=27;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Integer" localize="true" />
     </Tab>
     <Tab index="1" title="Text" layout="twocols" font="SansSerif,0,11" name="TextTab">
       <Label label="floating_label" localize="true" name="IsFloatingLabelLabel" constraints="twocols(location=left;index=14;expandVertically=false;expandHorizontally=false)" />

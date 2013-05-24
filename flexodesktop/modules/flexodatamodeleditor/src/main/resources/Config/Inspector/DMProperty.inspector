@@ -1,4 +1,4 @@
-<inspector title = "Property" inheritsfrom="DMObject.inspector">
+<inspector title = "Property" inspectedClassName="org.openflexo.foundation.dm.DMProperty" inheritsfrom="DMObject.inspector">
 	<tab name="Basic" index="0">
 		<property name="name" label="name" widget="TEXT_FIELD" constraint="0">
 			<param name="columns" value="10"/>
@@ -25,7 +25,7 @@
 	<tab name="Code" index="3">
 		
 		<property name="isCodeGenerationApplicable" label="" widget="READ_ONLY_CHECKBOX" constraint="0" depends="isCodeGenerationApplicable" conditional="true=false" >
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property> <!-- never displayed, just for conditionals -->
 		<property name="codeGenerationNotApplicableLabel" widget="LABEL" constraint="0" depends="isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=false">
 			<param name="displayLabel" value="false"/>
@@ -34,28 +34,28 @@
 			<param name="widgetLayout" value="1COL"/>
 			<param name="align" value="center"/>
 			<param name="height" value="200"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		
 		
 		<property name="implementationType" label="implementation_type" widget="DROPDOWN" constraint="1" depends="isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true">
 			<param name="format" value="localizedName"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="fieldName" label="field_name" widget="TEXT_FIELD" constraint="2" depends="implementationType,isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true AND (implementationType=PUBLIC_ACCESSORS_PRIVATE_FIELD OR implementationType=PUBLIC_ACCESSORS_PROTECTED_FIELD OR implementationType=PUBLIC_FIELD OR implementationType=PROTECTED_FIELD OR implementationType=PUBLIC_STATIC_FINAL_FIELD)" >
 			<param name="columns" value="10"/>
 			<param name="validateOnReturn" value="true"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="isUnderscoredAccessors" label="prepend_underscore" widget="CHECKBOX" constraint="4" depends="implementationType,isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true AND (implementationType=PUBLIC_ACCESSORS_PRIVATE_FIELD OR implementationType=PUBLIC_ACCESSORS_PROTECTED_FIELD OR implementationType=PUBLIC_ACCESSORS_ONLY)">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 
 		<property name="fieldSourceCode" label="field_code" widget="CUSTOM" constraint="10" depends="implementationType,isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true AND (implementationType=PUBLIC_ACCESSORS_PRIVATE_FIELD OR implementationType=PUBLIC_ACCESSORS_PROTECTED_FIELD OR implementationType=PUBLIC_FIELD OR implementationType=PROTECTED_FIELD OR implementationType=PUBLIC_STATIC_FINAL_FIELD)">
 			<param name="className" value="org.openflexo.components.widget.JavaSourceCodeInspectorWidget"/>
 			<param name="rows" value="5"/>
 			<param name="columns" value="20"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 
 		<!--<property name="hasFieldParseErrors" label="has_parse_errors" widget="READ_ONLY_CHECKBOX" constraint="5" depends="fieldCode,isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true AND fieldCode=false"/>
@@ -64,20 +64,20 @@
 			<param name="expandHorizontally" value="true"/> 
 			<param name="widgetLayout" value="1COL"/>
 			<param name="align" value="CENTER"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="fieldCode" label="field_code" widget="JAVA_CODE" constraint="7" depends="implementationType,isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true AND (implementationType=PUBLIC_ACCESSORS_PRIVATE_FIELD OR implementationType=PUBLIC_ACCESSORS_PROTECTED_FIELD OR implementationType=PUBLIC_FIELD OR implementationType=PROTECTED_FIELD OR implementationType=PUBLIC_STATIC_FINAL_FIELD)" >
 			<param name="readOnly" value="false"/>
 			<param name="rows" value="2"/>
 			<param name="columns" value="20"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>-->
 
 		<property name="getterSourceCode" label="getter_code" widget="CUSTOM" constraint="10" depends="implementationType,isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true AND (implementationType=PUBLIC_ACCESSORS_PRIVATE_FIELD OR implementationType=PUBLIC_ACCESSORS_PROTECTED_FIELD OR implementationType=PUBLIC_ACCESSORS_ONLY)">
 			<param name="className" value="org.openflexo.components.widget.JavaSourceCodeInspectorWidget"/>
 			<param name="rows" value="5"/>
 			<param name="columns" value="20"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 
 		
@@ -98,7 +98,7 @@
 			<param name="className" value="org.openflexo.components.widget.JavaSourceCodeInspectorWidget"/>
 			<param name="rows" value="5"/>
 			<param name="columns" value="20"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 
 		<!--<property name="hasSetterParseErrors" label="has_parse_errors" widget="READ_ONLY_CHECKBOX" constraint="11" depends="setterCode,isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true AND setterCode=false"/>
@@ -118,7 +118,7 @@
 			<param name="className" value="org.openflexo.components.widget.JavaSourceCodeInspectorWidget"/>
 			<param name="rows" value="5"/>
 			<param name="columns" value="20"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 
 		<!--<property name="hasAdditionAccessorParseErrors" label="has_parse_errors" widget="READ_ONLY_CHECKBOX" constraint="14" depends="additionCode,isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true AND additionCode=false"/>
@@ -138,7 +138,7 @@
 			<param name="className" value="org.openflexo.components.widget.JavaSourceCodeInspectorWidget"/>
 			<param name="rows" value="5"/>
 			<param name="columns" value="20"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 
 		<!--<property name="hasRemovalAccessorParseErrors" label="has_parse_errors" widget="READ_ONLY_CHECKBOX" constraint="17" depends="removalCode,isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true AND removalCode=false"/>

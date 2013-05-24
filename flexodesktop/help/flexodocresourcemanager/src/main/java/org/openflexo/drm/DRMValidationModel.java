@@ -55,7 +55,7 @@ public class DRMValidationModel extends ValidationModel {
 	 */
 	@Override
 	protected boolean shouldNotifyValidation(Validable next) {
-		return (next instanceof DocResourceCenter);
+		return next instanceof DocResourceCenter;
 	}
 
 	/**

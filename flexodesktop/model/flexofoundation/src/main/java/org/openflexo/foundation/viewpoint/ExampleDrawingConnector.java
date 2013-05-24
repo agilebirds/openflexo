@@ -21,7 +21,9 @@ package org.openflexo.foundation.viewpoint;
 
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public class ExampleDrawingConnector extends ExampleDrawingObject {
 
@@ -35,8 +37,8 @@ public class ExampleDrawingConnector extends ExampleDrawingObject {
 	 * 
 	 * @param componentDefinition
 	 */
-	public ExampleDrawingConnector() {
-		super();
+	public ExampleDrawingConnector(ViewPointBuilder builder) {
+		super(builder);
 	}
 
 	/**
@@ -45,7 +47,7 @@ public class ExampleDrawingConnector extends ExampleDrawingObject {
 	 * @param shemaDefinition
 	 */
 	public ExampleDrawingConnector(ExampleDrawingShape aStartShape, ExampleDrawingShape anEndShape) {
-		super();
+		super(null);
 		setStartShape(aStartShape);
 		setEndShape(anEndShape);
 	}
@@ -57,6 +59,11 @@ public class ExampleDrawingConnector extends ExampleDrawingObject {
 		}
 		super.delete();
 		deleteObservers();
+	}
+
+	@Override
+	public ConnectorGraphicalRepresentation<?> getGraphicalRepresentation() {
+		return (ConnectorGraphicalRepresentation<?>) super.getGraphicalRepresentation();
 	}
 
 	@Override
@@ -97,7 +104,7 @@ public class ExampleDrawingConnector extends ExampleDrawingObject {
 		if (o == this) {
 			return true;
 		}
-		if ((getParent() != null) && (getParent() == o)) {
+		if (getParent() != null && getParent() == o) {
 			return true;
 		}
 		if (getParent() != null) {

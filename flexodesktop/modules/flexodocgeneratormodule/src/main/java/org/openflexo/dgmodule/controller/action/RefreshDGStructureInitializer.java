@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -48,7 +48,7 @@ public class RefreshDGStructureInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RefreshCGStructure> getDefaultInitializer() {
 		return new FlexoActionInitializer<RefreshCGStructure>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshCGStructure action) {
+			public boolean run(EventObject e, RefreshCGStructure action) {
 				return true;
 			}
 		};
@@ -58,7 +58,7 @@ public class RefreshDGStructureInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RefreshCGStructure> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RefreshCGStructure>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshCGStructure action) {
+			public boolean run(EventObject e, RefreshCGStructure action) {
 				return true;
 			}
 		};

@@ -21,8 +21,12 @@ package org.openflexo.fib.utils;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
@@ -38,8 +42,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.AbstractListModel;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JList;
-import javax.swing.JRootPane;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -53,15 +59,16 @@ import org.openflexo.antar.binding.BindingExpression;
 import org.openflexo.antar.binding.BindingExpression.BindingValueConstant;
 import org.openflexo.antar.binding.BindingExpression.BindingValueFunction;
 import org.openflexo.antar.binding.BindingExpression.BindingValueVariable;
-import org.openflexo.antar.binding.BindingExpressionFactory;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingModelChanged;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.BindingValue;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.BindingVariableImpl;
 import org.openflexo.antar.binding.BooleanStaticBinding;
 import org.openflexo.antar.binding.ComplexPathElement;
+import org.openflexo.antar.binding.DefaultBindingFactory;
 import org.openflexo.antar.binding.FloatStaticBinding;
 import org.openflexo.antar.binding.IntegerStaticBinding;
 import org.openflexo.antar.binding.MethodCall;
@@ -72,14 +79,15 @@ import org.openflexo.antar.binding.StaticBindingFactory;
 import org.openflexo.antar.binding.StringStaticBinding;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.Expression;
-import org.openflexo.antar.expr.parser.Word;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.icon.UtilsIconLibrary;
+import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.swing.ButtonsControlPanel;
 import org.openflexo.swing.SwingUtils;
 import org.openflexo.swing.TextFieldCustomPopup;
+import org.openflexo.swing.VerticalLayout;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.StringUtils;
 
@@ -133,6 +141,10 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 	public KeyAdapter shortcutsKeyAdapter;
 	private DocumentListener documentListener;
 
+	private Color defaultForeground;
+
+	private Color defaultSelectedColor;
+
 	public BindingSelector(AbstractBinding editedObject) {
 		this(editedObject, -1);
 	}
@@ -155,9 +167,8 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 				if (logger.isLoggable(Level.FINER)) {
 					logger.finer("focus lost for " + (opposite != null ? SwingUtils.getComponentPath(opposite) : "null"));
 				}
-				if (opposite != null && !(opposite instanceof JRootPane)
-						&& !SwingUtils.isComponentContainedInContainer(opposite, getParent())
-						&& !SwingUtils.isComponentContainedInContainer(opposite, _selectorPanel)) {
+				if (opposite == null || !SwingUtilities.isDescendingFrom(opposite, BindingSelector.this)
+						&& !SwingUtilities.isDescendingFrom(opposite, _selectorPanel)) {
 					// Little hook used to automatically apply a valid value which has generally been edited
 					// By typing text in text field
 					if (getEditedObject() != null && getEditedObject().isBindingValid()) {
@@ -186,7 +197,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 						SwingUtilities.invokeLater(new Runnable() {
 							@Override
 							public void run() {
-								getTextField().requestFocus();
+								getTextField().requestFocusInWindow();
 							}
 						});
 					}
@@ -273,7 +284,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 
 		getTextField().addKeyListener(shortcutsKeyAdapter);
 		getTextField().getDocument().addDocumentListener(documentListener);
-
+		updateUI(); // Just to initiate the default color values
 		// setEditedObjectAndUpdateBDAndOwner(editedObject);
 		setEditedObject(editedObject);
 
@@ -293,6 +304,15 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 				}
 			}
 		}).start();*/
+	}
+
+	@Override
+	public void updateUI() {
+		super.updateUI();
+		if (getTextField() != null) {
+			defaultForeground = getTextField().getForeground();
+			defaultSelectedColor = getTextField().getSelectedTextColor();
+		}
 	}
 
 	@Override
@@ -317,6 +337,8 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Decoded as VALID binding: " + newEditedBinding);
 					}
+					getTextField().setForeground(defaultForeground);
+					getTextField().setSelectedTextColor(defaultSelectedColor);
 					if (!newEditedBinding.equals(getEditedObject())) {
 						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("This is a new one, i take this");
@@ -327,7 +349,6 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 						if (logger.isLoggable(Level.FINE)) {
 							logger.fine("Skipping as it represents the same binding");
 						}
-						getTextField().setForeground(Color.BLACK);
 						return;
 					}
 				} else {
@@ -335,6 +356,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 						logger.fine("Decoded as INVALID binding: " + newEditedBinding + " trying to synchronize panel");
 					}
 					getTextField().setForeground(Color.RED);
+					getTextField().setSelectedTextColor(Color.RED);
 					if (_selectorPanel != null) {
 						_selectorPanel.synchronizePanelWithTextFieldValue(textValue);
 					}
@@ -347,6 +369,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 					logger.fine("Couldn't decode as binding, trying to synchronize panel anyway");
 				}
 				getTextField().setForeground(Color.RED);
+				getTextField().setSelectedTextColor(Color.RED);
 				if (_selectorPanel != null) {
 					_selectorPanel.synchronizePanelWithTextFieldValue(textValue);
 				}
@@ -400,9 +423,11 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		super.setEditedObject(object);
 
 		if (getEditedObject() != null && getEditedObject().isBindingValid()) {
-			getTextField().setForeground(Color.BLACK);
+			getTextField().setForeground(defaultForeground);
+			getTextField().setSelectedTextColor(defaultSelectedColor);
 		} else {
 			getTextField().setForeground(Color.RED);
+			getTextField().setSelectedTextColor(Color.RED);
 		}
 
 	}
@@ -505,9 +530,11 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 				getTextField().setText(renderedString(getEditedObject()));
 			}
 			if (getEditedObject() != null) {
-				getTextField().setForeground(getEditedObject().isBindingValid() ? Color.BLACK : Color.RED);
+				getTextField().setForeground(getEditedObject().isBindingValid() ? defaultForeground : Color.RED);
+				getTextField().setSelectedTextColor(getEditedObject().isBindingValid() ? defaultSelectedColor : Color.RED);
 			} else {
 				getTextField().setForeground(Color.RED);
+				getTextField().setSelectedTextColor(Color.RED);
 			}
 			_isProgrammaticalySet = false;
 		}
@@ -781,8 +808,10 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		}
 		if (_bindable instanceof HasPropertyChangeSupport) {
 			// System.out.println("registering " + bindable + " for " + this);
-			((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport().addPropertyChangeListener(
-					BindingModelChanged.BINDING_MODEL_CHANGED, this);
+			if (((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport() != null) {
+				((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport().addPropertyChangeListener(
+						BindingModelChanged.BINDING_MODEL_CHANGED, this);
+			}
 		}
 	}
 
@@ -791,7 +820,9 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 			((Observable) _bindable).deleteObserver(this);
 		}
 		if (_bindable instanceof HasPropertyChangeSupport) {
-			((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport().removePropertyChangeListener(this);
+			if (((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport() != null) {
+				((HasPropertyChangeSupport) _bindable).getPropertyChangeSupport().removePropertyChangeListener(this);
+			}
 		}
 	}
 
@@ -919,9 +950,9 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 
 	protected BindingExpression makeBindingExpression() {
 		if (getBindable() != null) {
-			BindingExpressionFactory factory = getBindable().getBindingFactory().getBindingExpressionFactory();
+			// BindingExpressionFactory factory = getBindable().getBindingFactory().getBindingExpressionFactory();
 			BindingExpression returned = new BindingExpression(getBindingDefinition(), getBindable());
-			returned.setExpression(factory.getVariableFactory().makeVariable(new Word("")));
+			returned.setExpression(new BindingValueVariable("", getBindable()));
 			return returned;
 		}
 		return null;
@@ -1029,7 +1060,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				getTextField().requestFocus();
+				getTextField().requestFocusInWindow();
 			}
 		});
 	}
@@ -1045,9 +1076,11 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 				if (bindingValue instanceof BindingValue) {
 					((BindingValue) bindingValue).connect();
 				}
-				getTextField().setForeground(Color.BLACK);
+				getTextField().setForeground(defaultForeground);
+				getTextField().setSelectedTextColor(defaultSelectedColor);
 			} else {
 				getTextField().setForeground(Color.RED);
+				getTextField().setSelectedTextColor(Color.RED);
 			}
 			_revertBindingValue = bindingValue.clone();
 		} else {
@@ -1119,7 +1152,8 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 			}
 		} else {
 			if (selectedValue.getElement() instanceof SimplePathElement) {
-				if (selectedValue != bindingValue.getBindingPathElementAtIndex(index - 1)) {
+				// FIXED invalid type object comparison
+				if (selectedValue.getElement() != bindingValue.getBindingPathElementAtIndex(index - 1)) {
 					bindingValue.setBindingPathElementAtIndex(selectedValue.getElement(), index - 1);
 					setEditedObject(bindingValue);
 					fireEditedObjectChanged();
@@ -1250,8 +1284,7 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 				logger.info("bindable=" + getBindable());
 			}
 			factory.setWarnOnFailure(false);
-			factory.setBindable(getBindable());
-			AbstractBinding returned = factory.convertFromString(stringValue);
+			AbstractBinding returned = factory.convertFromString(stringValue, getBindable());
 			if (returned == null) {
 				return null;
 			}
@@ -1279,4 +1312,83 @@ public class BindingSelector extends TextFieldCustomPopup<AbstractBinding> imple
 		return this;
 	}
 
+	public static class TestBindable implements Bindable {
+		private BindingFactory bindingFactory = new DefaultBindingFactory();
+		private BindingModel bindingModel = new BindingModel();
+
+		public TestBindable() {
+			bindingModel.addToBindingVariables(new BindingVariableImpl(this, "aString", String.class));
+			bindingModel.addToBindingVariables(new BindingVariableImpl(this, "anInteger", Integer.class));
+			bindingModel.addToBindingVariables(new BindingVariableImpl(this, "aFloat", Float.TYPE));
+		}
+
+		@Override
+		public BindingModel getBindingModel() {
+			return bindingModel;
+		}
+
+		@Override
+		public BindingFactory getBindingFactory() {
+			return bindingFactory;
+		}
+	}
+
+	public static void main(String[] args) {
+		final JDialog dialog = new JDialog((Frame) null, false);
+
+		JButton closeButton = new JButton("Close");
+		closeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialog.dispose();
+				System.exit(0);
+			}
+		});
+
+		JButton logButton = new JButton("Logs");
+		logButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				FlexoLoggingViewer.showLoggingViewer(FlexoLoggingManager.instance(), dialog);
+			}
+		});
+
+		Bindable testBindable = new TestBindable();
+		BindingDefinition bd = new BindingDefinition("testString", String.class, BindingDefinitionType.GET, true);
+
+		BindingFactory factory = new DefaultBindingFactory();
+		AbstractBinding binding = factory.convertFromString("aString", testBindable);
+		binding.setBindingDefinition(bd);
+		// AbstractBinding bv = operatorIF.getConditionPrimitive();
+
+		BindingSelector _selector = new BindingSelector(null) {
+			@Override
+			public void apply() {
+				super.apply();
+				System.out.println("Apply, getEditedObject()=" + getEditedObject());
+			}
+
+			@Override
+			public void cancel() {
+				super.cancel();
+				System.out.println("Cancel, getEditedObject()=" + getEditedObject());
+			}
+		};
+		_selector.setBindable(testBindable);
+		_selector.setBindingDefinition(bd);
+		_selector.setEditedObject(binding);
+		_selector.setRevertValue(binding.clone());
+
+		JPanel panel = new JPanel(new VerticalLayout());
+		panel.add(_selector);
+
+		panel.add(closeButton);
+		panel.add(logButton);
+
+		dialog.setPreferredSize(new Dimension(550, 600));
+		dialog.getContentPane().add(panel);
+		dialog.pack();
+
+		dialog.setVisible(true);
+	}
 }

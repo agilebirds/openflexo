@@ -30,7 +30,6 @@ public class ValidationWindow {
 		validationDialog = new JDialog(frame, FlexoLocalization.localizedForKey(FIBAbstractEditor.LOCALIZATION, "component_validation"),
 				false);
 		validationDialog.getContentPane().add(validationView.getResultingJComponent());
-		validationDialog.validate();
 		validationDialog.pack();
 	}
 

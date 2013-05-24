@@ -20,6 +20,8 @@
 package org.openflexo.wkf.processeditor;
 
 import java.awt.Graphics;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.view.DrawingView;
@@ -32,12 +34,13 @@ import org.openflexo.wkf.processeditor.DrawEdgeControl.DrawEdgeAction;
 import org.openflexo.wkf.processeditor.gr.EdgeGR;
 import org.openflexo.wkf.processeditor.gr.NodePalette;
 
-public class ProcessView extends DrawingView<ProcessRepresentation> implements ModuleView<FlexoProcess> {
+public class ProcessView extends DrawingView<ProcessRepresentation> implements ModuleView<FlexoProcess>, PropertyChangeListener {
 
 	private static final Logger logger = Logger.getLogger(ProcessView.class.getPackage().getName());
 
 	public ProcessView(ProcessRepresentation aDrawing, ProcessEditorController controller) {
 		super(aDrawing, controller);
+		getRepresentedObject().getPropertyChangeSupport().addPropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
 	}
 
 	@Override
@@ -48,6 +51,12 @@ public class ProcessView extends DrawingView<ProcessRepresentation> implements M
 	@Override
 	public ProcessEditorController getController() {
 		return (ProcessEditorController) super.getController();
+	}
+
+	@Override
+	public void delete() {
+		getRepresentedObject().getPropertyChangeSupport().removePropertyChangeListener(getRepresentedObject().getDeletedProperty(), this);
+		super.delete();
 	}
 
 	@Override
@@ -125,6 +134,13 @@ public class ProcessView extends DrawingView<ProcessRepresentation> implements M
 			if (gr instanceof EdgeGR) {
 				((EdgeGR<WKFEdge<?, ?>>) gr).updatePropertiesFromWKFPreferences();
 			}
+		}
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (evt.getSource() == getRepresentedObject() && evt.getPropertyName().equals(getRepresentedObject().getDeletedProperty())) {
+			deleteModuleView();
 		}
 	}
 

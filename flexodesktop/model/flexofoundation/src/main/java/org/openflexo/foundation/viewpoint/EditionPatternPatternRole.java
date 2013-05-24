@@ -1,12 +1,17 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 
 public class EditionPatternPatternRole extends PatternRole {
 
 	private EditionPattern editionPatternType;
 	private CreationScheme creationScheme;
 	private String _creationSchemeURI;
+
+	public EditionPatternPatternRole(ViewPointBuilder builder) {
+		super(builder);
+	}
 
 	@Override
 	public PatternRoleType getType() {
@@ -56,8 +61,9 @@ public class EditionPatternPatternRole extends PatternRole {
 	}
 
 	public String _getCreationSchemeURI() {
-		if (getCreationScheme() != null)
+		if (getCreationScheme() != null) {
 			return getCreationScheme().getURI();
+		}
 		return _creationSchemeURI;
 	}
 

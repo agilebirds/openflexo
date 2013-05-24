@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
@@ -52,14 +52,14 @@ public class DecreaseColSpanInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<DecreaseColSpan> getDefaultInitializer() {
 		return new FlexoActionInitializer<DecreaseColSpan>() {
 			@Override
-			public boolean run(ActionEvent e, DecreaseColSpan action) {
+			public boolean run(EventObject e, DecreaseColSpan action) {
 				if (action.getInvoker() instanceof IETDWidgetView
 						&& ((IETDWidgetView) action.getInvoker()).getSequenceModel().getParent() instanceof IETDWidget) {
 					IETDWidgetView invoker = (IETDWidgetView) action.getInvoker();
-					(action).setSelectedTD(invoker.td());
+					action.setSelectedTD(invoker.td());
 					return true;
 				} else if (action.getFocusedObject() instanceof IETDWidget) {
-					(action).setSelectedTD((IETDWidget) action.getFocusedObject());
+					action.setSelectedTD((IETDWidget) action.getFocusedObject());
 					return true;
 				}
 				return false;
@@ -71,7 +71,7 @@ public class DecreaseColSpanInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<DecreaseColSpan> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<DecreaseColSpan>() {
 			@Override
-			public boolean run(ActionEvent e, DecreaseColSpan action) {
+			public boolean run(EventObject e, DecreaseColSpan action) {
 				return true;
 			}
 		};

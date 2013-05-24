@@ -1,4 +1,4 @@
-<inspector title = "EORelationship" inheritsfrom="DMEOProperty.inspector">
+<inspector title = "EORelationship" inspectedClassName="org.openflexo.foundation.dm.DMEORelationship" inheritsfrom="DMEOProperty.inspector">
 	<tab name="Basic" index="0">
 		<property name="isToMany" label="is_to_many" widget="CHECKBOX" constraint="4" help="true if this is a to-many relationship"/>
 		<property name="destinationEntity" label="destination" widget="CUSTOM" constraint="5">

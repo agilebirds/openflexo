@@ -29,13 +29,11 @@ import org.openflexo.foundation.bindings.AbstractBinding;
 import org.openflexo.foundation.bindings.Bindable;
 import org.openflexo.foundation.bindings.BindingModel;
 import org.openflexo.foundation.bindings.ComponentBindingDefinition;
-import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.xml.FlexoComponentBuilder;
 import org.openflexo.foundation.xml.FlexoNavigationMenuBuilder;
 import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.inspector.InspectableObject;
-import org.openflexo.xmlcode.XMLMapping;
 
 /**
  * Please comment this class
@@ -105,7 +103,7 @@ public class ComponentInstanceBinding extends FlexoModelObject implements Inspec
 	}
 
 	public ComponentBindingDefinition getBindingDefinition() {
-		if ((_bindingDefinition == null) && (_componentInstance != null) && (_bindingDefinitionName != null)) {
+		if (_bindingDefinition == null && _componentInstance != null && _bindingDefinitionName != null) {
 			_bindingDefinition = _componentInstance.getComponentDefinition().bindingDefinitionNamed(_bindingDefinitionName);
 		}
 		return _bindingDefinition;
@@ -169,26 +167,10 @@ public class ComponentInstanceBinding extends FlexoModelObject implements Inspec
 	}
 
 	@Override
-	public FlexoProject getProject() {
-		if (_componentInstance != null) {
-			return _componentInstance.getProject();
-		}
-		return null;
-	}
-
-	@Override
 	public String getFullyQualifiedName() {
 		return new StringBuffer(_componentInstance != null ? _componentInstance.getFullyQualifiedName() : "null").append(".")
 				.append(getBindingDefinitionName()).append("=")
-				.append((getBindingValue() == null ? "null" : getBindingValue().getStringRepresentation())).toString();
-	}
-
-	@Override
-	public XMLMapping getXMLMapping() {
-		if (_componentInstance != null) {
-			return _componentInstance.getXMLMapping();
-		}
-		return null;
+				.append(getBindingValue() == null ? "null" : getBindingValue().getStringRepresentation()).toString();
 	}
 
 	@Override
@@ -229,7 +211,7 @@ public class ComponentInstanceBinding extends FlexoModelObject implements Inspec
 		public int compare(ComponentInstanceBinding o1, ComponentInstanceBinding o2) {
 			String s1 = o1.getBindingDefinitionName();
 			String s2 = o2.getBindingDefinitionName();
-			if ((s1 != null) && (s2 != null)) {
+			if (s1 != null && s2 != null) {
 				return Collator.getInstance().compare(s1, s2);
 			} else {
 				return 0;

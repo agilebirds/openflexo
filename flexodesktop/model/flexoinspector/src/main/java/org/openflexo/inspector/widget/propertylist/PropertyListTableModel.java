@@ -143,7 +143,7 @@ public class PropertyListTableModel extends DefaultTableModel {
 	}
 
 	public InspectableObject elementAt(int row) {
-		if ((getValues() != null) && (row >= 0) && (row < getValues().size())) {
+		if (getValues() != null && row >= 0 && row < getValues().size()) {
 			Object returned = getValues().get(row);
 			if (returned instanceof InspectableObject) {
 				// logger.info("element at "+row+" is "+returned);
@@ -245,7 +245,7 @@ public class PropertyListTableModel extends DefaultTableModel {
 	@Override
 	public void setValueAt(Object value, int row, int col) {
 		AbstractColumn column = columnAt(col);
-		if ((column != null) && (column instanceof EditableColumn)) {
+		if (column != null && column instanceof EditableColumn) {
 			InspectableObject object = elementAt(row);
 			((EditableColumn) column).setValueFor(object, value);
 			fireCellUpdated(object, row, col);

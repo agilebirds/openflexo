@@ -51,7 +51,7 @@ public class CEDCst {
 	public static final int PALETTE_DOC_SPLIT_LOCATION = 300;
 
 	// General components
-	public static File ONTOLOGY_VIEW_FIB = new FileResource("Fib/OntologyView.fib");
+	// public static File ONTOLOGY_VIEW_FIB = new FileResource("Fib/OntologyView.fib");
 	public static File CALC_LIBRARY_VIEW_FIB = new FileResource("Fib/ViewPointLibraryView.fib");
 	public static File CALC_VIEW_FIB = new FileResource("Fib/ViewPointView.fib");
 	public static File EDITION_PATTERN_VIEW_FIB = new FileResource("Fib/EditionPatternView.fib");

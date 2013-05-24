@@ -36,7 +36,6 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.DuplicateRoleException;
 import org.openflexo.foundation.wkf.Role;
-import org.openflexo.foundation.wkf.RoleSpecialization;
 import org.openflexo.foundation.wkf.dm.RoleColorChange;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
@@ -58,23 +57,7 @@ public class RoleElement extends BrowserElement {
 
 	@Override
 	protected void buildChildrenVector() {
-		switch (getProjectBrowser().getRoleViewMode()) {
-		case TOP_DOWN:
-			for (Role role : getRole().getRolesSpecializingMyself()) {
-				if (role != getRole()) {
-					addToChilds(role);
-				}
-			}
-			break;
-		case BOTTOM_UP:
-			for (RoleSpecialization rSpec : getRole().getRoleSpecializations()) {
-				addToChilds(rSpec.getParentRole());
-			}
-			break;
-		case FLAT:
-			// No children in FLAT mode
-			break;
-		}
+
 	}
 
 	@Override
@@ -141,10 +124,7 @@ public class RoleElement extends BrowserElement {
 	private IconMarker[] getIconMarkers() {
 		int count = 0;
 		if (getRole().isImported()) {
-			count++;
-			if (getRole().isDeletedOnServer()) {
-				count++;
-			}
+			count = 2;
 		}
 		IconMarker[] markers = null;
 		if (count > 0) {
@@ -152,9 +132,7 @@ public class RoleElement extends BrowserElement {
 		}
 		if (getRole().isImported()) {
 			markers[0] = IconLibrary.IMPORT;
-			if (getRole().isDeletedOnServer()) {
-				markers[1] = IconLibrary.WARNING;
-			}
+			markers[1] = IconLibrary.WARNING;
 		}
 		return markers;
 	}

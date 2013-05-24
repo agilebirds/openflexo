@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -46,13 +46,13 @@ public class MoveMenuUpperInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<MoveMenuUpperLevel> getDefaultInitializer() {
 		return new FlexoActionInitializer<MoveMenuUpperLevel>() {
 			@Override
-			public boolean run(ActionEvent e, MoveMenuUpperLevel action) {
+			public boolean run(EventObject e, MoveMenuUpperLevel action) {
 				boolean doable = false;
 				if (action.getFocusedObject() instanceof FlexoItemMenu) {
 					FlexoItemMenu item = (FlexoItemMenu) action.getFocusedObject();
 					doable = item.getFather() != null && item.getFather().getFather() != null;
 					if (doable) {
-						(action).setItemMenu(item);
+						action.setItemMenu(item);
 					}
 				}
 				return doable;
@@ -64,7 +64,7 @@ public class MoveMenuUpperInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<MoveMenuUpperLevel> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<MoveMenuUpperLevel>() {
 			@Override
-			public boolean run(ActionEvent e, MoveMenuUpperLevel action) {
+			public boolean run(EventObject e, MoveMenuUpperLevel action) {
 				return true;
 			}
 		};

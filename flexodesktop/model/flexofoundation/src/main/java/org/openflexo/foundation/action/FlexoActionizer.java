@@ -25,16 +25,20 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 
 public class FlexoActionizer<A extends FlexoAction<A, T1, T2>, T1 extends FlexoModelObject, T2 extends FlexoModelObject> {
-	private FlexoActionType<A, T1, T2> _actionType;
-	private FlexoEditor _editor;
+	public interface EditorProvider {
+		public FlexoEditor getEditor();
+	}
 
-	public FlexoActionizer(FlexoActionType<A, T1, T2> actionType, FlexoEditor editor) {
+	private FlexoActionType<A, T1, T2> _actionType;
+	private final EditorProvider editorProvider;
+
+	public FlexoActionizer(FlexoActionType<A, T1, T2> actionType, EditorProvider editorProvider) {
 		_actionType = actionType;
-		_editor = editor;
+		this.editorProvider = editorProvider;
 	}
 
 	public void run(T1 focusedObject, Vector<T2> globalSelection) {
-		A action = _actionType.makeNewAction(focusedObject, globalSelection, _editor);
+		A action = _actionType.makeNewAction(focusedObject, globalSelection, editorProvider.getEditor());
 		action.doAction();
 	}
 }

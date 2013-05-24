@@ -19,8 +19,8 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.dgmodule.DGPreferences;
@@ -56,7 +56,7 @@ public class GenerateZipInitializer extends ActionInitializer<GenerateZip, Gener
 	protected FlexoActionInitializer<GenerateZip> getDefaultInitializer() {
 		return new FlexoActionInitializer<GenerateZip>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateZip action) {
+			public boolean run(EventObject e, GenerateZip action) {
 				DGRepository repository = (DGRepository) action.getFocusedObject();
 				if (action.getRepository().getDirectory() == null) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("please_supply_valid_directory"));
@@ -91,7 +91,7 @@ public class GenerateZipInitializer extends ActionInitializer<GenerateZip, Gener
 	protected FlexoActionFinalizer<GenerateZip> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<GenerateZip>() {
 			@Override
-			public boolean run(ActionEvent e, GenerateZip action) {
+			public boolean run(EventObject e, GenerateZip action) {
 				if (action.getGeneratedZipFile() != null && DGPreferences.getShowZIP()) {
 					if (action.getGeneratedZipFile() != null && action.getGeneratedZipFile().exists()) {
 						try {

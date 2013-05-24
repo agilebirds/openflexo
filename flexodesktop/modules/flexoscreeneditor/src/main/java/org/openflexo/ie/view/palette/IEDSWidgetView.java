@@ -151,7 +151,7 @@ public class IEDSWidgetView extends IEPanel {
 	// ==========================================================================
 
 	public void removeWidget() {
-		_model.delete(getIEController().getProject());
+		_model.delete();
 		if (getParent() != null) {
 			Container parent = getParent();
 			parent.remove(this);

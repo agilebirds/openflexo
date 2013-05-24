@@ -20,6 +20,8 @@
 package org.openflexo.fge.geom.area;
 
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.geom.FGEAbstractLine;
@@ -112,11 +114,28 @@ public class FGESubstractionArea extends FGEOperationArea {
 		if (substractedArea instanceof FGEEmptyArea) {
 			return containerArea.clone();
 		}
-		if (checkNonNullIntersection && (containerArea.intersect(substractedArea) instanceof FGEEmptyArea)) {
+		if (checkNonNullIntersection && containerArea.intersect(substractedArea) instanceof FGEEmptyArea) {
 			return containerArea.clone();
 		}
 		if (substractedArea.containsArea(containerArea)) {
 			return new FGEEmptyArea();
+		}
+		if (containerArea instanceof FGEUnionArea) {
+			List<FGEArea> objects = new ArrayList<FGEArea>();
+			FGEUnionArea union = (FGEUnionArea) containerArea;
+			for (FGEArea a : union.getObjects()) {
+				if (substractedArea.containsArea(a)) {
+					continue;
+				}
+				objects.add(makeSubstraction(a, substractedArea, isStrict));
+			}
+			if (objects.size() == 0) {
+				return new FGEEmptyArea();
+			} else if (objects.size() == 1) {
+				return objects.get(0);
+			} else {
+				return FGEUnionArea.makeUnion(objects);
+			}
 		}
 		return new FGESubstractionArea(containerArea, substractedArea, isStrict);
 	}
@@ -129,7 +148,7 @@ public class FGESubstractionArea extends FGEOperationArea {
 	@Override
 	public boolean containsPoint(FGEPoint p) {
 		return containerArea.containsPoint(p)
-				&& (!substractedArea.containsPoint(p) || (!isStrict() && isPointLocatedOnSubstractedAreaBorder(p)));
+				&& (!substractedArea.containsPoint(p) || !isStrict() && isPointLocatedOnSubstractedAreaBorder(p));
 	}
 
 	@Override

@@ -24,22 +24,34 @@ import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.expr.Constant.ObjectSymbolicConstant;
 import org.openflexo.antar.expr.parser.ExpressionParser;
-import org.openflexo.antar.expr.parser.ExpressionParser.FunctionFactory;
-import org.openflexo.antar.expr.parser.ExpressionParser.VariableFactory;
 import org.openflexo.antar.expr.parser.ParseException;
-import org.openflexo.antar.expr.parser.Word;
 
+/**
+ * Represents a symbolic expression
+ * 
+ * @author sylvain
+ * 
+ */
 public abstract class Expression {
 
 	private static final Logger logger = Logger.getLogger(Expression.class.getPackage().getName());
 
-	public final Expression evaluate() throws TypeMismatchException {
-		return evaluate((EvaluationContext) null);
-	}
+	public abstract Expression transform(ExpressionTransformer transformer) throws TransformException;
 
-	public abstract Expression evaluate(EvaluationContext context) throws TypeMismatchException;
+	public final Expression evaluate() throws TypeMismatchException, NullReferenceException {
+		try {
+			return transform(new ExpressionEvaluator());
+		} catch (TypeMismatchException e) {
+			throw e;
+		} catch (NullReferenceException e) {
+			throw e;
+		} catch (TransformException e) {
+			logger.warning("Unexpected exception occured during evaluation " + e);
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	public abstract int getDepth();
 
@@ -55,7 +67,7 @@ public abstract class Expression {
 		if (obj == null) {
 			return false;
 		} else if (obj instanceof Expression) {
-			return toString().equalsIgnoreCase(((Expression) obj).toString());
+			return getClass().equals(obj.getClass()) && toString().equalsIgnoreCase(((Expression) obj).toString());
 		}
 		return super.equals(obj);
 	}
@@ -108,9 +120,28 @@ public abstract class Expression {
 	 * @throws TypeMismatchException
 	 */
 	public Expression evaluate(final Hashtable<String, ?> variables) throws TypeMismatchException {
-		return evaluate(new EvaluationContext(new ExpressionParser.DefaultConstantFactory(), new VariableFactory() {
+		try {
+			Expression resolvedExpression = transform(new ExpressionTransformer() {
+				@Override
+				public Expression performTransformation(Expression e) throws TransformException {
+					if (e instanceof BindingValueAsExpression) {
+						BindingValueAsExpression bv = (BindingValueAsExpression) e;
+						if (bv.isSimpleVariable() && variables.get(bv.toString()) != null) {
+							return Constant.makeConstant(variables.get(bv.toString()));
+						}
+					}
+					return e;
+				}
+			});
+			return resolvedExpression.evaluate();
+		} catch (TransformException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		/*return evaluate(new EvaluationContext(new ExpressionParser.DefaultConstantFactory(), new VariableFactory() {
 			@Override
-			public Expression makeVariable(Word value) {
+			public Expression makeVariable(Word value, Bindable bindable) {
 				Object valueObject = variables.get(value.getValue());
 				if (valueObject == null) {
 					return ObjectSymbolicConstant.NULL;
@@ -130,13 +161,13 @@ public abstract class Expression {
 				} else if (valueObject instanceof Double) {
 					return new Constant.FloatConstant((Double) valueObject);
 				} else if (valueObject instanceof Boolean) {
-					return ((Boolean) valueObject ? Constant.BooleanConstant.TRUE : Constant.BooleanConstant.FALSE);
+					return (Boolean) valueObject ? Constant.BooleanConstant.TRUE : Constant.BooleanConstant.FALSE;
 				}
 				// TODO Handle others
 				// return new Variable(value.getValue());
 				return new Constant.StringConstant(value.getValue());
 			}
-		}, new ExpressionParser.DefaultFunctionFactory()));
+		}, new ExpressionParser.DefaultFunctionFactory()), bindable);*/
 
 	}
 
@@ -153,22 +184,39 @@ public abstract class Expression {
 			return false;
 		}
 		logger.warning("Unresolved expression: " + evaluation);
-		/*try {
-			logger.warning("variables="+variables);
-			logger.warning("extractVariables="+extractVariables(evaluation.toString()));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}*/
 		throw new UnresolvedExpressionException();
 	}
 
 	public static Vector<Variable> extractVariables(String anExpression) throws ParseException, TypeMismatchException {
 		final Hashtable<String, Variable> returnedHash = new Hashtable<String, Variable>();
-		DefaultExpressionParser parser = new DefaultExpressionParser();
-		Expression expression = parser.parse(anExpression);
+		try {
+			Expression e = ExpressionParser.parse(anExpression);
+			e.transform(new ExpressionTransformer() {
+				@Override
+				public Expression performTransformation(Expression e) throws TransformException {
+					if (e instanceof BindingValueAsExpression) {
+						String variableName = ((BindingValueAsExpression) e).toString();
+						Variable returned = returnedHash.get(variableName);
+						if (returned == null) {
+							returned = new Variable(variableName);
+							returnedHash.put(variableName, returned);
+						}
+						return returned;
+					}
+					return e;
+				}
+			});
+		} catch (ParseException e1) {
+			throw e1;
+		} catch (TransformException e) {
+			e.printStackTrace();
+		}
+
+		/*DefaultExpressionParser parser = new DefaultExpressionParser();
+		Expression expression = parser.parse(anExpression, bindable);
 		expression.evaluate(new EvaluationContext(new ExpressionParser.DefaultConstantFactory(), new VariableFactory() {
 			@Override
-			public Expression makeVariable(Word value) {
+			public Expression makeVariable(Word value, Bindable bindable) {
 				Variable returned = returnedHash.get(value.getValue());
 				if (returned == null) {
 					returned = new Variable(value.getValue());
@@ -176,7 +224,8 @@ public abstract class Expression {
 				}
 				return returned;
 			}
-		}, new ExpressionParser.DefaultFunctionFactory()));
+		}, new ExpressionParser.DefaultFunctionFactory()), bindable);*/
+
 		Vector<Variable> returned = new Vector<Variable>();
 		for (String v : returnedHash.keySet()) {
 			returned.add(returnedHash.get(v));
@@ -186,11 +235,35 @@ public abstract class Expression {
 
 	public static Vector<Expression> extractPrimitives(String anExpression) throws ParseException, TypeMismatchException {
 		final Hashtable<String, Expression> returnedHash = new Hashtable<String, Expression>();
-		DefaultExpressionParser parser = new DefaultExpressionParser();
-		Expression expression = parser.parse(anExpression);
+
+		try {
+			Expression e = ExpressionParser.parse(anExpression);
+			e.transform(new ExpressionTransformer() {
+				@Override
+				public Expression performTransformation(Expression e) throws TransformException {
+					if (e instanceof BindingValueAsExpression) {
+						String variableName = ((BindingValueAsExpression) e).toString();
+						Expression returned = returnedHash.get(variableName);
+						if (returned == null) {
+							returned = new Variable(variableName);
+							returnedHash.put(variableName, returned);
+						}
+						return returned;
+					}
+					return e;
+				}
+			});
+		} catch (org.openflexo.antar.expr.parser.ParseException e1) {
+			e1.printStackTrace();
+		} catch (TransformException e) {
+			e.printStackTrace();
+		}
+
+		/*DefaultExpressionParser parser = new DefaultExpressionParser();
+		Expression expression = parser.parse(anExpression, bindable);
 		expression.evaluate(new EvaluationContext(new ExpressionParser.DefaultConstantFactory(), new VariableFactory() {
 			@Override
-			public Expression makeVariable(Word value) {
+			public Expression makeVariable(Word value, Bindable bindable) {
 				Expression returned = returnedHash.get(value.getValue());
 				if (returned == null) {
 					returned = new Variable(value.getValue());
@@ -200,7 +273,7 @@ public abstract class Expression {
 			}
 		}, new FunctionFactory() {
 			@Override
-			public Expression makeFunction(String functionName, Vector<Expression> args) {
+			public Expression makeFunction(String functionName, List<Expression> args, Bindable bindable) {
 				StringBuffer key = new StringBuffer();
 				key.append(functionName + "(");
 				for (int i = 0; i < args.size(); i++) {
@@ -214,7 +287,9 @@ public abstract class Expression {
 				}
 				return returned;
 			}
-		}));
+		}), bindable);
+		*/
+
 		Vector<Expression> returned = new Vector<Expression>();
 		for (String v : returnedHash.keySet()) {
 			returned.add(returnedHash.get(v));
@@ -222,4 +297,8 @@ public abstract class Expression {
 		return returned;
 	}
 
+	@Override
+	public int hashCode() {
+		return (getClass().getName() + "@[" + toString() + "]").hashCode();
+	}
 }

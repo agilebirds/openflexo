@@ -94,7 +94,7 @@ public class BPELControlGraphBuilder extends ControlGraphBuilder {
 		 *  - several edges enter the same node (case of a if)
 		 */
 		while (!(currentNode instanceof FlexoPort) && !(acc.lookingForAnd() && currentNode instanceof ANDOperator)
-				&& (!(acc.lookingForIf() && getIncomingEdges(currentNode) != 1))) {
+				&& !(acc.lookingForIf() && getIncomingEdges(currentNode) != 1)) {
 			ControlGraph toAdd = handleNode(currentNode, acc);
 			if (toAdd != null) {
 				toReturn.addToStatements(toAdd);
@@ -197,7 +197,7 @@ public class BPELControlGraphBuilder extends ControlGraphBuilder {
 
 		BindingValue target = a.getReceiver();
 
-		Variable receiver = new Variable((BPELPrettyPrinter.getInstance()).makeStringRepresentation(target));
+		Variable receiver = new Variable(BPELPrettyPrinter.getInstance().makeStringRepresentation(target));
 
 		AbstractBinding value = a.getValue();
 		Expression expr = null;
@@ -211,7 +211,7 @@ public class BPELControlGraphBuilder extends ControlGraphBuilder {
 			expr = new Variable((String) ((StaticBinding) value).getValue());
 		} else {
 			try {
-				expr = (new DefaultExpressionParser()).parse(value.toString());
+				expr = new DefaultExpressionParser().parse(value.toString(), null);
 			} catch (Exception e) {
 				System.out.println("Could not parse expression... " + value.toString());
 				e.printStackTrace();
@@ -282,9 +282,9 @@ public class BPELControlGraphBuilder extends ControlGraphBuilder {
 		BPELWSInvocation invoc = new BPELWSInvocation(n.getSubProcessNode());
 		System.out.println("added service invocation");
 
-		if ((n.getSubProcessNode().getActivationAssignments() != null && n.getSubProcessNode().getActivationAssignments().size() > 0)
-				|| (n.getSubProcessNode().getDesactivationAssignments() != null && n.getSubProcessNode().getDesactivationAssignments()
-						.size() > 0)) {
+		if (n.getSubProcessNode().getActivationAssignments() != null && n.getSubProcessNode().getActivationAssignments().size() > 0
+				|| n.getSubProcessNode().getDesactivationAssignments() != null
+				&& n.getSubProcessNode().getDesactivationAssignments().size() > 0) {
 
 			Sequence seq = new Sequence();
 			if (n.getSubProcessNode().getActivationAssignments() != null) {

@@ -28,13 +28,13 @@ import org.openflexo.components.tabular.TabularViewAction;
 import org.openflexo.dm.model.DMRepositoryFolderTableModel;
 import org.openflexo.dm.model.DMRepositoryTableModel;
 import org.openflexo.dm.view.controller.DMController;
-import org.openflexo.dm.view.controller.DMSelectionManager;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMRepository;
-import org.openflexo.foundation.dm.action.CreateDMRepository;
+import org.openflexo.foundation.dm.action.CreateAnyDMRepository;
 import org.openflexo.foundation.dm.action.DMDelete;
 import org.openflexo.foundation.dm.action.UpdateDMRepository;
+import org.openflexo.selection.SelectionManager;
 
 /**
  * View allowing to represent/edit a DMModel object
@@ -53,9 +53,9 @@ public class DMModelView extends DMView<DMModel> {
 	public DMModelView(DMModel model, DMController controller) {
 		super(model, controller, "data_model");
 
-		addAction(new TabularViewAction(CreateDMRepository.actionType, "add_repository", controller.getEditor()) {
+		addAction(new TabularViewAction(CreateAnyDMRepository.actionType, "add_repository", controller.getEditor()) {
 			@Override
-			protected Vector getGlobalSelection() {
+			protected Vector<FlexoModelObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -66,7 +66,7 @@ public class DMModelView extends DMView<DMModel> {
 		});
 		addAction(new TabularViewAction(UpdateDMRepository.actionType, controller.getEditor()) {
 			@Override
-			protected Vector getGlobalSelection() {
+			protected Vector<FlexoModelObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -77,7 +77,7 @@ public class DMModelView extends DMView<DMModel> {
 		});
 		addAction(new TabularViewAction(DMDelete.actionType, "delete_repository", controller.getEditor()) {
 			@Override
-			protected Vector getGlobalSelection() {
+			protected Vector<FlexoModelObject> getGlobalSelection() {
 				return getViewSelection();
 			}
 
@@ -105,9 +105,9 @@ public class DMModelView extends DMView<DMModel> {
 	}
 
 	public DMRepository getSelectedDMRepository() {
-		DMSelectionManager sm = getDMController().getDMSelectionManager();
-		Vector selection = sm.getSelection();
-		if ((selection.size() == 1) && (selection.firstElement() instanceof DMRepository)) {
+		SelectionManager sm = getDMController().getSelectionManager();
+		Vector<FlexoModelObject> selection = sm.getSelection();
+		if (selection.size() == 1 && selection.firstElement() instanceof DMRepository) {
 			return (DMRepository) selection.firstElement();
 		}
 		return null;

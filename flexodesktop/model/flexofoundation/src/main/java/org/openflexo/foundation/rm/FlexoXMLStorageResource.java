@@ -30,7 +30,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.jdom.JDOMException;
+import org.jdom2.JDOMException;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoXMLSerializableObject;
@@ -133,6 +133,12 @@ public abstract class FlexoXMLStorageResource<XMLRD extends XMLStorageResourceDa
 				if (logger.isLoggable(Level.WARNING)) {
 					logger.warning("Could not load resource data for resource " + getResourceIdentifier() + " message: " + e.getMessage());
 				}
+				e.printStackTrace();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ResourceDependencyLoopException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

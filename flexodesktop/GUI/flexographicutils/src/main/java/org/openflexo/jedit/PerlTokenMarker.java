@@ -76,7 +76,7 @@ public class PerlTokenMarker extends TokenMarker {
 
 		boolean backslash = false;
 		loop: for (int i = offset; i < length; i++) {
-			int i1 = (i + 1);
+			int i1 = i + 1;
 
 			char c = array[i];
 			if (c == '\\') {
@@ -474,11 +474,11 @@ public class PerlTokenMarker extends TokenMarker {
 		int idx1 = start;
 		int idx2 = start + len - 1;
 
-		while ((idx1 <= idx2) && (!Character.isLetterOrDigit(array[idx1]))) {
+		while (idx1 <= idx2 && !Character.isLetterOrDigit(array[idx1])) {
 			idx1++;
 		}
 
-		while ((idx1 <= idx2) && (!Character.isLetterOrDigit(array[idx2]))) {
+		while (idx1 <= idx2 && !Character.isLetterOrDigit(array[idx2])) {
 			idx2--;
 		}
 

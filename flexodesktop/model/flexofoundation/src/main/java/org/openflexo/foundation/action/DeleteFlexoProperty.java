@@ -32,12 +32,12 @@ public class DeleteFlexoProperty extends FlexoAction<DeleteFlexoProperty, FlexoP
 			"delete_flexo_property") {
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoProperty object, Vector<FlexoProperty> globalSelection) {
+		public boolean isEnabledForSelection(FlexoProperty object, Vector<FlexoProperty> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoProperty object, Vector<FlexoProperty> globalSelection) {
+		public boolean isVisibleForSelection(FlexoProperty object, Vector<FlexoProperty> globalSelection) {
 			return false;
 		}
 

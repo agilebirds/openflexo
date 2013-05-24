@@ -11,7 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
 import org.openflexo.fib.view.widget.browser.FIBBrowserModel.BrowserCell;
 
@@ -22,12 +21,24 @@ public class FIBBrowserCellRenderer extends DefaultTreeCellRenderer {
 	public FIBBrowserCellRenderer(FIBBrowserWidget widget) {
 		super();
 		this.widget = widget;
-		setTextSelectionColor(widget.getBrowser().getTextSelectionColor());
-		setTextNonSelectionColor(widget.getBrowser().getTextNonSelectionColor());
-		setBackgroundSelectionColor(widget.getBrowser().getBackgroundSelectionColor());
-		setBackgroundNonSelectionColor(widget.getBrowser().getBackgroundNonSelectionColor());
-		setBorderSelectionColor(widget.getBrowser().getBorderSelectionColor());
-		setFont(widget.getFont());
+		if (widget.getBrowser().getTextSelectionColor() != null) {
+			setTextSelectionColor(widget.getBrowser().getTextSelectionColor());
+		}
+		if (widget.getBrowser().getTextNonSelectionColor() != null) {
+			setTextNonSelectionColor(widget.getBrowser().getTextNonSelectionColor());
+		}
+		if (widget.getBrowser().getBackgroundSelectionColor() != null) {
+			setBackgroundSelectionColor(widget.getBrowser().getBackgroundSelectionColor());
+		}
+		if (widget.getBrowser().getBackgroundNonSelectionColor() != null) {
+			setBackgroundNonSelectionColor(widget.getBrowser().getBackgroundNonSelectionColor());
+		}
+		if (widget.getBrowser().getBorderSelectionColor() != null) {
+			setBorderSelectionColor(widget.getBrowser().getBorderSelectionColor());
+		}
+		if (widget.getFont() != null) {
+			setFont(widget.getFont());
+		}
 	}
 
 	/**
@@ -56,27 +67,37 @@ public class FIBBrowserCellRenderer extends DefaultTreeCellRenderer {
 
 			if (sel) {
 				if (widget.isLastFocusedSelectable()) {
-					setTextSelectionColor(widget.getBrowser().getTextSelectionColor());
-					setBackgroundSelectionColor(widget.getBrowser().getBackgroundSelectionColor());
+					if (widget.getBrowser().getTextSelectionColor() != null) {
+						setTextSelectionColor(widget.getBrowser().getTextSelectionColor());
+					}
+					if (widget.getBrowser().getBackgroundSelectionColor() != null) {
+						setBackgroundSelectionColor(widget.getBrowser().getBackgroundSelectionColor());
+					}
 				} else {
-					setTextSelectionColor(widget.getBrowser().getTextNonSelectionColor());
-					setBackgroundSelectionColor(widget.getBrowser().getBackgroundSecondarySelectionColor());
-				}
-			}
-
-			if (!widget.isEnabled()) {
-				setTextNonSelectionColor(FIBComponent.DISABLED_COLOR);
-			} else {
-				if (isEnabled(representedObject)) {
-					setTextNonSelectionColor(widget.getBrowser().getTextNonSelectionColor());
-				} else {
-					setTextNonSelectionColor(FIBComponent.DISABLED_COLOR);
+					if (widget.getBrowser().getTextNonSelectionColor() != null) {
+						setTextSelectionColor(widget.getBrowser().getTextNonSelectionColor());
+					}
+					if (widget.getBrowser().getBackgroundSecondarySelectionColor() != null) {
+						setBackgroundSelectionColor(widget.getBrowser().getBackgroundSecondarySelectionColor());
+					}
 				}
 			}
 
 			JLabel returned = (JLabel) super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+			if (widget.isEnabled()) {
+				if (isEnabled(representedObject)) {
+					if (widget.getBrowser().getTextNonSelectionColor() != null) {
+						setTextNonSelectionColor(widget.getBrowser().getTextNonSelectionColor());
+					}
+				} else {
+					setEnabled(false);
+				}
+			}
 
-			returned.setFont(getFont(representedObject));
+			Font font = getFont(representedObject);
+			if (font != null) {
+				returned.setFont(font);
+			}
 			returned.setText(getLabel(representedObject));
 			returned.setIcon(getIcon(representedObject));
 			returned.setToolTipText(getTooltip(representedObject));
@@ -137,7 +158,7 @@ public class FIBBrowserCellRenderer extends DefaultTreeCellRenderer {
 	protected Font getFont(Object object) {
 		FIBBrowserElementType elementType = getElementType(object);
 		if (elementType != null) {
-			return elementType.getFont();
+			return elementType.getFont(object);
 		}
 		return widget.getFont();
 	}

@@ -21,11 +21,16 @@ package org.openflexo.wkf.controller;
 
 import java.util.logging.Logger;
 
+import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
+import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.wkf.WKFObject;
+import org.openflexo.foundation.wkf.WorkflowModelObject;
+import org.openflexo.module.UserType;
 
 /**
  * Browser for WKF module, browse all processes without details
@@ -36,27 +41,41 @@ import org.openflexo.foundation.rm.FlexoProject;
 public class WorkflowBrowser extends ProjectBrowser {
 
 	protected static final Logger logger = Logger.getLogger(WorkflowBrowser.class.getPackage().getName());
-
-	// ==========================================================================
-	// ============================= Variables
-	// ==================================
-	// ==========================================================================
-
-	protected WKFController _controller;
-
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
+	private final WKFController wkfController;
 
 	public WorkflowBrowser(FlexoProject project) {
-		super(project);
+		this((WKFController) null);
+		setRootObject(project);
 	}
 
 	public WorkflowBrowser(WKFController controller) {
-		super(controller.getEditor(), controller.getWKFSelectionManager());
-		_controller = controller;
-		update();
+		super(controller);
+		wkfController = controller;
+	}
+
+	@Override
+	public FlexoEditor getEditor() {
+		return wkfController.getEditor();
+	}
+
+	@Override
+	public void fireObjectSelected(FlexoModelObject object) {
+		if (object instanceof WKFObject) {
+			object = ((WKFObject) object).getProcess();
+		}
+		super.fireObjectSelected(object);
+	}
+
+	@Override
+	public boolean showOptionsButton() {
+		return !UserType.isLite() && !UserType.isCustomerRelease();
+	}
+
+	@Override
+	protected boolean activateBrowsingFor(BrowserElement newElement) {
+		return newElement.getObject().getProject() == getRootObject().getProject()
+				&& (!(newElement.getObject() instanceof WorkflowModelObject) || !((WorkflowModelObject) newElement.getObject())
+						.getWorkflow().isCache()) && super.activateBrowsingFor(newElement);
 	}
 
 	@Override
@@ -102,11 +121,6 @@ public class WorkflowBrowser extends ProjectBrowser {
 	@Override
 	public boolean showRootNode() {
 		return false;
-	}
-
-	@Override
-	public FlexoModelObject getDefaultRootObject() {
-		return getProject();
 	}
 
 }

@@ -19,7 +19,7 @@
  */
 package org.openflexo.doceditor.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.doceditor.DECst;
@@ -32,6 +32,7 @@ import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.cg.action.InvalidLevelException;
 import org.openflexo.foundation.toc.action.AddTOCEntry;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -48,11 +49,11 @@ public class AddTOCEntryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddTOCEntry> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddTOCEntry>() {
 			@Override
-			public boolean run(ActionEvent e, AddTOCEntry action) {
+			public boolean run(EventObject e, AddTOCEntry action) {
 
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(DECst.CREATE_TOC_ENTRY_DIALOG_FIB, action, null, true,
-						FlexoLocalization.getMainLocalizer());
-				return (dialog.getStatus() == Status.VALIDATED);
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(DECst.CREATE_TOC_ENTRY_DIALOG_FIB, action,
+						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
+				return dialog.getStatus() == Status.VALIDATED;
 			}
 		};
 	}
@@ -61,7 +62,7 @@ public class AddTOCEntryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddTOCEntry> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddTOCEntry>() {
 			@Override
-			public boolean run(ActionEvent e, AddTOCEntry action) {
+			public boolean run(EventObject e, AddTOCEntry action) {
 				return true;
 			}
 		};

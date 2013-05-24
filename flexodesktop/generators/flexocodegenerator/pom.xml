@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>generators</artifactId>
-		<version>1.4.4-SNAPSHOT</version>
+		<version>1.5.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexocodegenerator</artifactId>
 	<name>Generators :: FlexoCodeGenerator</name>
@@ -45,19 +45,9 @@
 			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
+		<dependency>  
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexojavaparser</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexowarbuilder</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexowarbuilder</artifactId>
-			<classifier>resources</classifier>
-			<type>zip</type>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
@@ -73,6 +63,10 @@
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexobpel</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

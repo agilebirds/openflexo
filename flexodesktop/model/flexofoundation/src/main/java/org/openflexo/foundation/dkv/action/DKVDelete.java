@@ -25,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoUndoableAction;
 import org.openflexo.foundation.dkv.DKVObject;
@@ -46,12 +47,12 @@ public class DKVDelete extends FlexoUndoableAction<DKVDelete, DKVObject, DKVObje
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DKVObject object, Vector<DKVObject> globalSelection) {
+		public boolean isVisibleForSelection(DKVObject object, Vector<DKVObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DKVObject object, Vector<DKVObject> globalSelection) {
+		public boolean isEnabledForSelection(DKVObject object, Vector<DKVObject> globalSelection) {
 			Enumeration en = globalSelection.elements();
 			while (en.hasMoreElements()) {
 				Object o = en.nextElement();
@@ -59,7 +60,7 @@ public class DKVDelete extends FlexoUndoableAction<DKVDelete, DKVObject, DKVObje
 					return false;
 				}
 			}
-			return (object.isDeleteAble()) || (globalSelection.size() > 0);
+			return object.isDeleteAble() || globalSelection.size() > 0;
 		}
 
 		private String[] persistentProperties = { "objectsToDelete" };
@@ -70,6 +71,10 @@ public class DKVDelete extends FlexoUndoableAction<DKVDelete, DKVObject, DKVObje
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DKVObject.class);
+	}
 
 	private Vector objectsToDelete;
 

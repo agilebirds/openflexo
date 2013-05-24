@@ -55,12 +55,12 @@ public class ShareProject extends CVSAction<ShareProject, FPSObject> {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FPSObject object, Vector<FPSObject> globalSelection) {
+		public boolean isVisibleForSelection(FPSObject object, Vector<FPSObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FPSObject object, Vector<FPSObject> globalSelection) {
+		public boolean isEnabledForSelection(FPSObject object, Vector<FPSObject> globalSelection) {
 			return getRepositoryList(object) != null;
 		}
 

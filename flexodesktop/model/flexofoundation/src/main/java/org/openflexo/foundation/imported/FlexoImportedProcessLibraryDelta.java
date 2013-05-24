@@ -26,6 +26,7 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.ws.client.PPMWebService.PPMProcess;
 
+@Deprecated
 public class FlexoImportedProcessLibraryDelta {
 
 	public interface DeltaVisitor {

@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionExecutionFailed;
 import org.openflexo.foundation.action.FlexoActionType;
@@ -91,18 +92,22 @@ public class CreateComponentFromEntity extends FlexoAction<CreateComponentFromEn
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMEntity object, Vector<DMEntity> globalSelection) {
+		public boolean isVisibleForSelection(DMEntity object, Vector<DMEntity> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMEntity object, Vector<DMEntity> globalSelection) {
+		public boolean isEnabledForSelection(DMEntity object, Vector<DMEntity> globalSelection) {
 			return object != null
 					&& (globalSelection == null || globalSelection.size() == 0 || globalSelection.size() == 1
 							&& globalSelection.firstElement() == object);
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMEntity.class);
+	}
 
 	private ComponentType componentType;
 
@@ -248,9 +253,9 @@ public class CreateComponentFromEntity extends FlexoAction<CreateComponentFromEn
 				if (p.getType() == null) {
 					break;
 				}
-				/*if(p.getType().isBoolean())
-				    ((IEStringWidget)droppedWidget).setFieldType(TextFieldType.)
-				else */
+				/*
+				 * if(p.getType().isBoolean()) ((IEStringWidget)droppedWidget).setFieldType(TextFieldType.) else
+				 */
 				if (p.getType().isString() || p.getType().isChar()) {
 					((IEStringWidget) droppedWidget).setFieldType(TextFieldType.TEXT);
 				} else if (p.getType().isInteger()) {

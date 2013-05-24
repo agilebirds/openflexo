@@ -44,12 +44,12 @@ public class SetPropertyAction extends FlexoUndoableAction<SetPropertyAction, Fl
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isEnabledForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
+		public boolean isVisibleForSelection(FlexoModelObject object, Vector<FlexoModelObject> globalSelection) {
 			return false;
 		}
 
@@ -81,6 +81,10 @@ public class SetPropertyAction extends FlexoUndoableAction<SetPropertyAction, Fl
 	private String localizedPropertyName;
 
 	private boolean performValidate = true;
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, FlexoModelObject.class);
+	}
 
 	/**
 	 * @param actionType

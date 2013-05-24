@@ -22,7 +22,6 @@ package org.openflexo.doceditor;
 import java.io.File;
 import java.util.logging.Logger;
 
-import org.openflexo.doceditor.controller.DEController;
 import org.openflexo.module.Module;
 import org.openflexo.prefs.ModulePreferences;
 import org.openflexo.toolbox.FileResource;
@@ -37,17 +36,10 @@ public class DEPreferences extends ModulePreferences {
 
 	private static final Logger logger = Logger.getLogger(DEPreferences.class.getPackage().getName());
 
-	private static final Class DE_PREFERENCES = DEPreferences.class;
+	private static final Class<DEPreferences> DE_PREFERENCES = DEPreferences.class;
 
-	private static DEController _controller;
-
-	public static void init(DEController c) {
-		_controller = c;
+	public static void init() {
 		preferences(DE_PREFERENCES);
-	}
-
-	public static void reset() {
-		_controller = null;
 	}
 
 	public DEPreferences() {

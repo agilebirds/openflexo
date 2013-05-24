@@ -40,13 +40,22 @@ import java.util.logging.Logger;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.JViewport;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.plaf.basic.BasicScrollPaneUI;
+import javax.swing.plaf.basic.BasicTextPaneUI;
+import javax.swing.plaf.basic.BasicViewportUI;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
@@ -63,6 +72,7 @@ import org.openflexo.fge.notifications.ObjectHasMoved;
 import org.openflexo.fge.notifications.ObjectHasResized;
 import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
+import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
 import org.openflexo.fge.view.listener.LabelViewMouseListener;
 import org.openflexo.swing.FlexoSwingUtils;
 import org.openflexo.toolbox.ToolBox;
@@ -100,10 +110,23 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	public class TextComponent extends JTextPane {
 
 		public TextComponent() {
+			setUI(new BasicTextPaneUI());
 			setOpaque(false);
 			setEditable(false);
 			setAutoscrolls(false);
 			setFocusable(true);
+		}
+
+		@Override
+		public Dimension getPreferredSize() {
+			if (getText().length() == 0) {
+				return new Dimension(30, getFont().getSize());
+			}
+			return super.getPreferredSize();
+		}
+
+		@Override
+		public void updateUI() {
 		}
 
 		protected void updateCursor() {
@@ -138,7 +161,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 			setDoubleBuffered(!b);
 			if (b) {
 				removeFGEMouseListener();
-				requestFocus();
+				requestFocusInWindow();
 				selectAll();
 			} else {
 				addFGEMouseListener();
@@ -160,6 +183,8 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	private boolean initialized = false;
 
 	public LabelView(GraphicalRepresentation<O> graphicalRepresentation, DrawingController<?> controller, FGEView<?> delegateView) {
+		setUI(new BasicScrollPaneUI());
+		getViewport().setUI(new BasicViewportUI());
 		this.controller = controller;
 		this.graphicalRepresentation = graphicalRepresentation;
 		this.delegateView = delegateView;
@@ -167,14 +192,47 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		this.textComponent = new TextComponent();
 		this.textComponentListener = new LabelDocumentListener();
 		textComponent.addMouseListener(new InOutMouseListener());
-		setViewportView(textComponent);
-		setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-		// Note: if for debug purposes you add a Border to the textComponent, this could mess up the labels preferredSize computation.
+		((AbstractDocument) textComponent.getDocument()).setDocumentFilter(new DocumentFilter() {
+			@Override
+			public void insertString(FilterBypass fb, int offset, String text, AttributeSet attr) throws BadLocationException {
+				if (!getGraphicalRepresentation().getIsMultilineAllowed()) {
+					if (text.equals("\n") || text.equals("\r\n")) {
+						return;
+					}
+				}
+				text = filteredText(text);
+				super.insertString(fb, offset, text, attr);
+			}
+
+			@Override
+			public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+				if (!getGraphicalRepresentation().getIsMultilineAllowed()) {
+					if (length == 0) {
+						if (text.equals("\n") || text.equals("\r\n")) {
+							return;
+						}
+					}
+				}
+				text = filteredText(text);
+				super.replace(fb, offset, length, text, attrs);
+			}
+
+			private String filteredText(String text) {
+				if (!getGraphicalRepresentation().getIsMultilineAllowed()) {
+					return text.replaceAll("\r?\n", " ");
+				}
+				return text;
+			}
+		});
 		getViewport().setBorder(null);
-		setBorder(null);
-		setOpaque(false);
 		getViewport().setOpaque(false);
+		setViewportView(textComponent);
+		setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		// Note: if for debug purposes you add a Border to the textComponent, this could mess up the labels preferredSize computation.
+		setBorder(null);
+		setViewportBorder(null);
+		setOpaque(false);
 		graphicalRepresentation.setLabelMetricsProvider(this);
 		textComponent.setLocation(0, 0);
 		updateFont();
@@ -183,6 +241,10 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		validate();
 		initialized = true;
 		textComponent.setEditable(false);
+	}
+
+	@Override
+	public void updateUI() {
 	}
 
 	public void registerTextListener() {
@@ -204,6 +266,10 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 			public void setViewPosition(Point p) {
 				// We don't want to scroll so we prevent the view port
 				// from moving.
+			}
+
+			@Override
+			public void updateUI() {
 			}
 		};
 	}
@@ -347,7 +413,10 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 
 			if (aNotification instanceof FGENotification) {
 				FGENotification notification = (FGENotification) aNotification;
-				if (notification.getParameter() == GraphicalRepresentation.Parameters.text) {
+				if (notification.getParameter() == GraphicalRepresentation.Parameters.text
+				// There are some GR in WKF that rely on ShapeNeedsToBeRedrawn notification to update text (this can be removed once we
+				// properly use appropriate bindings
+						|| aNotification instanceof ShapeNeedsToBeRedrawn) {
 					updateText();
 					getPaintManager().repaint(this);
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.textStyle) {
@@ -524,7 +593,8 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		StyleConstants.setForeground(set, color);
 		textComponent.setForeground(color);
 		textComponent.setDisabledTextColor(color);
-		textComponent.setParagraphAttributes(set, true);
+		StyledDocument document = textComponent.getStyledDocument();
+		document.setParagraphAttributes(0, document.getLength(), set, true);
 		textComponent.validate();
 		updateBounds();
 	}
@@ -581,7 +651,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	}
 
 	public void startEdition() {
-		if (!getGraphicalRepresentation().getIsLabelEditable()) {
+		if (!getGraphicalRepresentation().getDrawing().isEditable() || !getGraphicalRepresentation().getIsLabelEditable()) {
 			return;
 		}
 		if (logger.isLoggable(Level.INFO)) {

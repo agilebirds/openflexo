@@ -19,7 +19,7 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -35,6 +35,7 @@ import org.openflexo.foundation.sg.CreateSourceRepository;
 import org.openflexo.icon.SGIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.sgmodule.SGCst;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -56,11 +57,11 @@ public class CreateSourceRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateSourceRepository> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateSourceRepository>() {
 			@Override
-			public boolean run(ActionEvent e, CreateSourceRepository action) {
+			public boolean run(EventObject e, CreateSourceRepository action) {
 
-				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(SGCst.CREATE_SOURCE_REPOSITORY_DIALOG_FIB, action, null, true,
-						FlexoLocalization.getMainLocalizer());
-				return (dialog.getStatus() == Status.VALIDATED);
+				FIBDialog dialog = FIBDialog.instanciateAndShowDialog(SGCst.CREATE_SOURCE_REPOSITORY_DIALOG_FIB, action,
+						FlexoFrame.getActiveFrame(), true, FlexoLocalization.getMainLocalizer());
+				return dialog.getStatus() == Status.VALIDATED;
 			}
 
 		};
@@ -70,7 +71,7 @@ public class CreateSourceRepositoryInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateSourceRepository> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateSourceRepository>() {
 			@Override
-			public boolean run(ActionEvent e, CreateSourceRepository action) {
+			public boolean run(EventObject e, CreateSourceRepository action) {
 				if (action.getNewSourceRepository() != null) {
 					getController().setCurrentEditedObjectAsModuleView(action.getNewSourceRepository());
 				}

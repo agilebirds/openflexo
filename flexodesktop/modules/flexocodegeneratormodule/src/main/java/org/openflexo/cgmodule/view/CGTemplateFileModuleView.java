@@ -43,6 +43,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.cg.templates.CGTemplate;
 import org.openflexo.foundation.cg.templates.CGTemplateFile;
@@ -72,8 +73,8 @@ import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.FileFormat;
 import org.openflexo.toolbox.FileFormat.TextFileFormat;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.listener.FlexoActionButton;
 
 /**
@@ -122,15 +123,15 @@ public class CGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 			logger.warning("I should not come here !");
 		}
 
-		if ((_controller != null) && (_codeDisplayer != null)) {
+		if (_controller != null && _codeDisplayer != null) {
 			_codeDisplayer.addToFocusListener(_controller.getFooter());
 			_codeDisplayer.getInputHandler().addKeyBinding((ToolBox.getPLATFORM() == ToolBox.MACOS ? "M" : "C") + "+S",
 					new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							if ((_CGTemplate instanceof CGTemplateFile) && ((CGTemplateFile) _CGTemplate).isEdited()) {
+							if (_CGTemplate instanceof CGTemplateFile && ((CGTemplateFile) _CGTemplate).isEdited()) {
 								SaveCustomTemplateFile save = SaveCustomTemplateFile.actionType.makeNewAction((CGTemplateFile) _CGTemplate,
-										null, _controller.getEditor());
+										null, getEditor());
 								save.doAction();
 							}
 						}
@@ -174,13 +175,13 @@ public class CGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 			controlPanel = new JPanel(new FlowLayout());
 			if (_CGTemplate.isCustomTemplate()) {
 				FlexoActionButton editAction = new FlexoActionButton(EditCustomTemplateFile.actionType, "edit",
-						CGTemplateFileModuleView.this, _controller.getEditor());
+						CGTemplateFileModuleView.this, _controller);
 				FlexoActionButton saveAction = new FlexoActionButton(SaveCustomTemplateFile.actionType, "save",
-						CGTemplateFileModuleView.this, _controller.getEditor());
+						CGTemplateFileModuleView.this, _controller);
 				FlexoActionButton cancelAction = new FlexoActionButton(CancelEditionOfCustomTemplateFile.actionType, "cancel",
-						CGTemplateFileModuleView.this, _controller.getEditor());
+						CGTemplateFileModuleView.this, _controller);
 				FlexoActionButton refreshAction = new FlexoActionButton(RefreshTemplates.actionType, "reload",
-						CGTemplateFileModuleView.this, _controller.getEditor());
+						CGTemplateFileModuleView.this, _controller);
 				actionButtons.add(editAction);
 				actionButtons.add(saveAction);
 				actionButtons.add(cancelAction);
@@ -192,7 +193,7 @@ public class CGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 				controlPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 			} else {
 				FlexoActionButton redefineAction = new FlexoActionButton(RedefineCustomTemplateFile.actionType,
-						CGTemplateFileModuleView.this, _controller.getEditor());
+						CGTemplateFileModuleView.this, _controller);
 				actionButtons.add(redefineAction);
 				controlPanel.add(redefineAction);
 			}
@@ -212,7 +213,7 @@ public class CGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 
 		protected void update() {
 			title.setText(_CGTemplate.getTemplateName()
-					+ ((_CGTemplate instanceof CGTemplateFile) && ((CGTemplateFile) _CGTemplate).isEdited() ? "["
+					+ (_CGTemplate instanceof CGTemplateFile && ((CGTemplateFile) _CGTemplate).isEdited() ? "["
 							+ FlexoLocalization.localizedForKey("edited") + "]" : ""));
 			for (FlexoActionButton button : actionButtons) {
 				button.update();
@@ -226,6 +227,10 @@ public class CGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification instanceof ObjectDeleted) {
+			deleteModuleView();
+			return;
+		}
 		DisplayContext previousDisplayContext = null;
 		if (_codeDisplayer != null) {
 			previousDisplayContext = _codeDisplayer.getDisplayContext();
@@ -248,7 +253,7 @@ public class CGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 			_codeDisplayer.refresh();
 		}
 
-		if ((previousDisplayContext != null) && (_codeDisplayer != null)) {
+		if (previousDisplayContext != null && _codeDisplayer != null) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Restore display context: " + previousDisplayContext);
 			}
@@ -266,7 +271,7 @@ public class CGTemplateFileModuleView extends JPanel implements ModuleView<CGTem
 	}
 
 	@Override
-	public FlexoPerspective<FlexoModelObject> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return _controller.CODE_GENERATOR_PERSPECTIVE;
 	}
 

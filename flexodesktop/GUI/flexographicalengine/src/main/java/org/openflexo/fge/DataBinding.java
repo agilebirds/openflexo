@@ -27,6 +27,8 @@ import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.binding.AbstractBinding.TargetObject;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fge.GraphicalRepresentation.DependencyLoopException;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.xmlcode.StringConvertable;
@@ -78,7 +80,13 @@ public class DataBinding implements StringConvertable<DataBinding> {
 	public Object getBindingValue(BindingEvaluationContext context) {
 		// logger.info("getBindingValue() "+this);
 		if (getBinding() != null) {
-			return getBinding().getBindingValue(context);
+			try {
+				return getBinding().getBindingValue(context);
+			} catch (TypeMismatchException e) {
+				return null;
+			} catch (NullReferenceException e) {
+				return null;
+			}
 		}
 		return null;
 	}
@@ -124,7 +132,7 @@ public class DataBinding implements StringConvertable<DataBinding> {
 				return; // No change
 			} else {
 				this.binding = value;
-				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
+				unparsedBinding = value != null ? value.getStringRepresentation() : null;
 				updateDependancies();
 				if (bindingAttribute != null) {
 					owner.notifyChange(bindingAttribute, oldValue, value);
@@ -137,7 +145,7 @@ public class DataBinding implements StringConvertable<DataBinding> {
 				return; // No change
 			} else {
 				this.binding = value;
-				unparsedBinding = (value != null ? value.getStringRepresentation() : null);
+				unparsedBinding = value != null ? value.getStringRepresentation() : null;
 				logger.info("Binding takes now value " + value);
 				updateDependancies();
 				if (bindingAttribute != null) {
@@ -189,8 +197,7 @@ public class DataBinding implements StringConvertable<DataBinding> {
 		// System.out.println("BindingModel: "+getOwner().getBindingModel());
 		if (getOwner() != null) {
 			BindingFactory factory = getOwner().getBindingFactory();
-			factory.setBindable(getOwner());
-			binding = factory.convertFromString(getUnparsedBinding());
+			binding = factory.convertFromString(getUnparsedBinding(), getOwner());
 			binding.setBindingDefinition(getBindingDefinition());
 			// System.out.println(">>>>>>>>>>>>>> Binding: "+binding.getStringRepresentation()+" owner="+binding.getOwner());
 			// System.out.println("binding.isBindingValid()="+binding.isBindingValid());
@@ -198,7 +205,7 @@ public class DataBinding implements StringConvertable<DataBinding> {
 
 		if (!binding.isBindingValid()) {
 			logger.warning("Binding not valid: " + binding + " for owner " + getOwner() + " context="
-					+ (getOwner() != null ? (getOwner()).getRootGraphicalRepresentation() : null));
+					+ (getOwner() != null ? getOwner().getRootGraphicalRepresentation() : null));
 			/*logger.info("BindingModel="+getOwner().getBindingModel());
 			BindingExpression.logger.setLevel(Level.FINE);
 			binding = factory.convertFromString(getUnparsedBinding());

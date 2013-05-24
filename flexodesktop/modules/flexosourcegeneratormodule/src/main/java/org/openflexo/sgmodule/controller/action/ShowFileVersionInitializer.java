@@ -19,24 +19,28 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.cg.CGFile;
+import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.param.CGFileVersionParameter;
 import org.openflexo.generator.action.ShowFileVersion;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-public class ShowFileVersionInitializer extends ActionInitializer {
+public class ShowFileVersionInitializer extends ActionInitializer<ShowFileVersion, CGFile, CGObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	ShowFileVersionInitializer(SGControllerActionInitializer actionInitializer) {
-		super(null, actionInitializer);
+	ShowFileVersionInitializer(FlexoActionType<ShowFileVersion, CGFile, CGObject> actionType,
+			SGControllerActionInitializer actionInitializer) {
+		super(actionType, actionInitializer);
 	}
 
 	@Override
@@ -48,7 +52,7 @@ public class ShowFileVersionInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<ShowFileVersion> getDefaultInitializer() {
 		return new FlexoActionInitializer<ShowFileVersion>() {
 			@Override
-			public boolean run(ActionEvent e, ShowFileVersion action) {
+			public boolean run(EventObject e, ShowFileVersion action) {
 				if (action.getActionType() == ShowFileVersion.showHistoryVersion) {
 					CGFileVersionParameter versionParameter = new CGFileVersionParameter("version", "version", action.getFocusedObject(),
 							null);
@@ -70,30 +74,12 @@ public class ShowFileVersionInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<ShowFileVersion> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ShowFileVersion>() {
 			@Override
-			public boolean run(ActionEvent e, ShowFileVersion action) {
+			public boolean run(EventObject e, ShowFileVersion action) {
 				getControllerActionInitializer().getSGController()
 						.getPopupShowingFileVersion(action.getFocusedObject(), action.getSource()).setVisible(true);
 				return true;
 			}
 		};
-	}
-
-	@Override
-	public void init() {
-		initActionType(ShowFileVersion.showPureGeneration, getDefaultInitializer(), getDefaultFinalizer(), getDefaultExceptionHandler(),
-				getEnableCondition(), getVisibleCondition(), null, null, null);
-		initActionType(ShowFileVersion.showGeneratedMerge, getDefaultInitializer(), getDefaultFinalizer(), getDefaultExceptionHandler(),
-				getEnableCondition(), getVisibleCondition(), null, null, null);
-		initActionType(ShowFileVersion.showContentOnDisk, getDefaultInitializer(), getDefaultFinalizer(), getDefaultExceptionHandler(),
-				getEnableCondition(), getVisibleCondition(), null, null, null);
-		initActionType(ShowFileVersion.showResultFileMerge, getDefaultInitializer(), getDefaultFinalizer(), getDefaultExceptionHandler(),
-				getEnableCondition(), getVisibleCondition(), null, null, null);
-		initActionType(ShowFileVersion.showLastGenerated, getDefaultInitializer(), getDefaultFinalizer(), getDefaultExceptionHandler(),
-				getEnableCondition(), getVisibleCondition(), null, null, null);
-		initActionType(ShowFileVersion.showLastAccepted, getDefaultInitializer(), getDefaultFinalizer(), getDefaultExceptionHandler(),
-				getEnableCondition(), getVisibleCondition(), null, null, null);
-		initActionType(ShowFileVersion.showHistoryVersion, getDefaultInitializer(), getDefaultFinalizer(), getDefaultExceptionHandler(),
-				getEnableCondition(), getVisibleCondition(), null, null, null);
 	}
 
 }

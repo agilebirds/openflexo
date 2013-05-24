@@ -20,11 +20,9 @@
 package org.openflexo.foundation.rm;
 
 public class CSSResourceData implements ImportedResourceData {
-	private FlexoProject _project;
 	private FlexoCSSResource _cssResource;
 
 	public CSSResourceData(FlexoProject aProject, FlexoCSSResource resource) {
-		_project = aProject;
 		_cssResource = resource;
 	}
 
@@ -35,17 +33,12 @@ public class CSSResourceData implements ImportedResourceData {
 
 	@Override
 	public FlexoProject getProject() {
-		return _project;
+		return _cssResource.getProject();
 	}
 
 	@Override
 	public void setFlexoResource(FlexoResource resource) throws DuplicateResourceException {
 		_cssResource = (FlexoCSSResource) resource;
-	}
-
-	@Override
-	public void setProject(FlexoProject project) {
-		this._project = project;
 	}
 
 }

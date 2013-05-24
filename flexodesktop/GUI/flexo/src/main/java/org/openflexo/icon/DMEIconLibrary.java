@@ -52,14 +52,10 @@ public class DMEIconLibrary extends IconLibrary {
 	public static final ImageIcon DME_BIG_ICON = new ImageIconResource("Icons/DME/module-dme-hover-64.png");
 
 	// Perspective icons
-	public static final ImageIcon DME_RP_ACTIVE_ICON = new ImageIconResource("Icons/DME/RepositoryPerspective_A.gif");
-	public static final ImageIcon DME_RP_SELECTED_ICON = new ImageIconResource("Icons/DME/RepositoryPerspective_S.gif");
-	public static final ImageIcon DME_PP_ACTIVE_ICON = new ImageIconResource("Icons/DME/PackagePerspective_A.gif");
-	public static final ImageIcon DME_PP_SELECTED_ICON = new ImageIconResource("Icons/DME/PackagePerspective_S.gif");
-	public static final ImageIcon DME_HP_ACTIVE_ICON = new ImageIconResource("Icons/DME/HierarchyPerspective_A.gif");
-	public static final ImageIcon DME_HP_SELECTED_ICON = new ImageIconResource("Icons/DME/HierarchyPerspective_S.gif");
-	public static final ImageIcon DME_DP_ACTIVE_ICON = new ImageIconResource("Icons/DME/DiagramPerspective_A.gif");
-	public static final ImageIcon DME_DP_SELECTED_ICON = new ImageIconResource("Icons/DME/DiagramPerspective_S.gif");
+	public static final ImageIcon DME_RP_ACTIVE_ICON = new ImageIconResource("Icons/DME/RepositoryPerspective_A.png");
+	public static final ImageIcon DME_PP_ACTIVE_ICON = new ImageIconResource("Icons/DME/PackagePerspective_A.png");
+	public static final ImageIcon DME_HP_ACTIVE_ICON = new ImageIconResource("Icons/DME/HierarchyPerspective_A.png");
+	public static final ImageIcon DME_DP_ACTIVE_ICON = new ImageIconResource("Icons/DME/DiagramPerspective_A.png");
 
 	// Editor icons
 	public static final ImageIcon CONNECTED_ICON = new ImageIconResource("Icons/DME/Utils/Connected.gif");
@@ -126,7 +122,7 @@ public class DMEIconLibrary extends IconLibrary {
 			}
 			return null;
 		} else if (object instanceof DMEOJoin) {
-			return (((DMEOJoin) object).isJoinValid() ? DMEIconLibrary.CONNECTED_ICON : DMEIconLibrary.DISCONNECTED_ICON);
+			return ((DMEOJoin) object).isJoinValid() ? DMEIconLibrary.CONNECTED_ICON : DMEIconLibrary.DISCONNECTED_ICON;
 		} else if (object instanceof DMTranstyper) {
 			return DMEIconLibrary.DM_TRANSTYPER_ICON;
 		} else if (object instanceof DMTranstyperEntry) {
@@ -138,7 +134,7 @@ public class DMEIconLibrary extends IconLibrary {
 	public static Icon iconForType(DMType type) {
 		if (type.getKindOfType() == KindOfType.UNRESOLVED) {
 			return IconLibrary.UNFIXABLE_ERROR_ICON;
-		} else if ((type.getKindOfType() == KindOfType.RESOLVED) || (type.getKindOfType() == KindOfType.RESOLVED_ARRAY)) {
+		} else if (type.getKindOfType() == KindOfType.RESOLVED || type.getKindOfType() == KindOfType.RESOLVED_ARRAY) {
 			if (type.getBaseEntity().getIsNormalClass()) {
 				return DMEIconLibrary.DM_ENTITY_CLASS_ICON;
 			} else if (type.getBaseEntity().getIsInterface()) {

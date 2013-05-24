@@ -35,9 +35,10 @@ import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.FlexoImportableObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoActionizer;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectReference;
+import org.openflexo.foundation.rm.ProjectData;
 import org.openflexo.foundation.utils.FlexoIndexManager;
 import org.openflexo.foundation.utils.Sortable;
 import org.openflexo.foundation.validation.FixProposal;
@@ -45,13 +46,7 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.validation.ValidationWarning;
-import org.openflexo.foundation.wkf.action.AddRole;
 import org.openflexo.foundation.wkf.action.AddRoleSpecialization;
-import org.openflexo.foundation.wkf.action.DeleteRole;
-import org.openflexo.foundation.wkf.action.WKFCopy;
-import org.openflexo.foundation.wkf.action.WKFCut;
-import org.openflexo.foundation.wkf.action.WKFPaste;
-import org.openflexo.foundation.wkf.action.WKFSelectAll;
 import org.openflexo.foundation.wkf.dm.ChildrenOrderChanged;
 import org.openflexo.foundation.wkf.dm.RoleColorChange;
 import org.openflexo.foundation.wkf.dm.RoleNameChange;
@@ -60,7 +55,6 @@ import org.openflexo.foundation.wkf.node.AbstractActivityNode;
 import org.openflexo.foundation.wkf.node.AbstractNode;
 import org.openflexo.foundation.wkf.node.EventNode;
 import org.openflexo.foundation.wkf.node.OperatorNode;
-import org.openflexo.foundation.xml.FlexoProcessBuilder;
 import org.openflexo.foundation.xml.FlexoWorkflowBuilder;
 import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
@@ -79,11 +73,7 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	private static final Logger logger = Logger.getLogger(Role.class.getPackage().getName());
 
 	private String roleName;
-	// private FlexoColor roleColor;
 	private int index = -1;
-
-	// private int posX = 0;
-	// private int posY = 0;
 
 	private boolean isSystemRole = false;
 	private boolean isAssignable = true;
@@ -92,27 +82,11 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 
 	public static FlexoActionizer<AddRoleSpecialization, Role, WorkflowModelObject> addParentRoleActionizer;
 
-	// ==========================================================================
-	// ============================= Constructor
-	// ================================
-	// ==========================================================================
-
 	/**
 	 * Constructor used during deserialization
 	 */
 	public Role(FlexoWorkflowBuilder builder) {
 		this(builder.getProject(), builder.workflow);
-		initializeDeserialization(builder);
-	}
-
-	/**
-	 * Constructor used during deserialization
-	 * 
-	 * @deprecated (used before version 1.2.1)
-	 */
-	@Deprecated
-	public Role(FlexoProcessBuilder builder) {
-		this(builder.getProject(), null);
 		initializeDeserialization(builder);
 	}
 
@@ -151,19 +125,6 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	}
 
 	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		returned.add(AddRole.actionType);
-		returned.add(AddRoleSpecialization.actionType);
-		returned.add(WKFCut.actionType);
-		returned.add(WKFCopy.actionType);
-		returned.add(WKFPaste.actionType);
-		returned.add(WKFSelectAll.actionType);
-		returned.add(DeleteRole.actionType);
-		return returned;
-	}
-
-	@Override
 	public String getName() {
 		return roleName;
 	}
@@ -194,8 +155,7 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 	/*
 	 * public String getDescription() { return roleDescription; }
 	 * 
-	 * public void setDescription(String aDescription) { roleDescription =
-	 * aDescription; }
+	 * public void setDescription(String aDescription) { roleDescription = aDescription; }
 	 */
 	public Color getColor() {
 		return getBgColor(DEFAULT);
@@ -237,10 +197,6 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 		returned.add(this);
 		return returned;
 	}
-
-	// ==========================================================================
-	// ================================= Delete ===============================
-	// ==========================================================================
 
 	public Vector<AbstractNode> getNodesUsingRole() {
 		Vector<AbstractNode> returned = new Vector<AbstractNode>();
@@ -326,8 +282,41 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 		return isImported;
 	}
 
+	@Override
+	public Role getUncachedObject() {
+		return getRole(true);
+	}
+
+	public Role getRole() {
+		return getRole(false);
+	}
+
+	private Role role;
+
+	public Role getRole(boolean force) {
+		if (role != null) {
+			return role;
+		}
+		if (!getWorkflow().isCache()) {
+			return role = this;
+		}
+		if (force) {
+			ProjectData projectData = getProject().getProjectData();
+			if (projectData != null) {
+				FlexoProjectReference ref = projectData.getProjectReferenceWithURI(getWorkflow().getProjectURI());
+				if (ref != null) {
+					FlexoProject referredProject = ref.getReferredProject(true);
+					if (referredProject != null) {
+						return role = referredProject.getWorkflow().getRoleList().roleWithName(getName());
+					}
+				}
+			}
+		}
+		return null;
+	}
+
 	public static Role createImportedRoleFromRole(RoleList roleList, PPMRole role) {
-		Role fir = new Role(roleList.getFlexoWorkflow(), role.getName());
+		Role fir = new Role(roleList.getWorkflow(), role.getName());
 		fir.isImported = true;
 		fir.updateFromObject(role);
 		return fir;
@@ -670,7 +659,7 @@ public final class Role extends WorkflowModelObject implements FlexoImportableOb
 		if (aFlag != isAssignable) {
 			this.isAssignable = aFlag;
 			notifyAttributeModification("isAssignable", !aFlag, aFlag);
-			if (getWorkflow() != null) {
+			if (getWorkflow() != null && !isDeserializing()) {
 				getWorkflow().clearAssignableRolesCache();
 			}
 		}

@@ -52,7 +52,9 @@ import org.openflexo.fge.geom.FGERectPolylin;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGESegment;
 import org.openflexo.fge.geom.FGEShape;
+import org.openflexo.fge.geom.area.DefaultAreaProvider;
 import org.openflexo.fge.geom.area.FGEArea;
+import org.openflexo.fge.geom.area.FGEAreaProvider;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
@@ -303,8 +305,8 @@ public class RectPolylinConnector extends Connector {
 	}
 
 	@Override
-	public void refreshConnector() {
-		if (!needsRefresh()) {
+	public void refreshConnector(boolean force) {
+		if (!force && !needsRefresh()) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Skipping refreshConnector() for " + getGraphicalRepresentation().getDrawable());
 			}
@@ -321,7 +323,7 @@ public class RectPolylinConnector extends Connector {
 			updateMiddleSymbolLocationControlPoint();
 		}
 
-		super.refreshConnector();
+		super.refreshConnector(force);
 
 		firstUpdated = true;
 
@@ -863,7 +865,7 @@ public class RectPolylinConnector extends Connector {
 	 *            : relative to start object
 	 */
 	public void setFixedStartLocation(FGEPoint aPoint) {
-		if (!isStartingLocationFixed) {
+		if (!isStartingLocationFixed && aPoint != null) {
 			isStartingLocationFixed = true;
 		}
 		if (getStartObject() != null) {
@@ -910,7 +912,7 @@ public class RectPolylinConnector extends Connector {
 	 *            , relative to end object
 	 */
 	public void setFixedEndLocation(FGEPoint aPoint) {
-		if (!isEndingLocationFixed) {
+		if (!isEndingLocationFixed && aPoint != null) {
 			isEndingLocationFixed = true;
 		}
 		if (getEndObject() != null) {
@@ -946,7 +948,7 @@ public class RectPolylinConnector extends Connector {
 
 	private Vector<SimplifiedCardinalDirection> _getAllowedStartOrientationsDueToFixedStartingLocation() {
 		Vector<SimplifiedCardinalDirection> returned = new Vector<SimplifiedCardinalDirection>();
-		FGEShape startArea = getStartObject().getShape().getOutline();
+		FGEArea startArea = getStartObject().getAllowedStartAreaForConnector(getGraphicalRepresentation());
 		// startArea.setIsFilled(false);
 		for (SimplifiedCardinalDirection o : SimplifiedCardinalDirection.values()) {
 			if (startArea.getAnchorAreaFrom(o).containsPoint(getFixedStartLocation())) {
@@ -1025,7 +1027,7 @@ public class RectPolylinConnector extends Connector {
 
 	private Vector<SimplifiedCardinalDirection> _getAllowedEndOrientationsDueToFixedEndingLocation() {
 		Vector<SimplifiedCardinalDirection> returned = new Vector<SimplifiedCardinalDirection>();
-		FGEShape endArea = getEndObject().getShape().getOutline();
+		FGEArea endArea = getEndObject().getAllowedEndAreaForConnector(getGraphicalRepresentation());
 		// endArea.setIsFilled(false);
 		for (SimplifiedCardinalDirection o : SimplifiedCardinalDirection.values()) {
 			// if (endArea.getOrthogonalPerspectiveArea(o).containsPoint(getFixedEndLocation())) returned.add(o);
@@ -1227,7 +1229,7 @@ public class RectPolylinConnector extends Connector {
 	protected FGEArea retrieveAllowedStartArea(boolean takeFixedControlPointUnderAccount) {
 		AffineTransform at1 = GraphicalRepresentation.convertNormalizedCoordinatesAT(getStartObject(), getGraphicalRepresentation());
 
-		FGEArea startArea = getStartObject().getShape().getOutline().transform(at1);
+		FGEArea startArea = getStartObject().getAllowedStartAreaForConnector(getGraphicalRepresentation()).transform(at1);
 		/*
 		 * if (startArea instanceof FGEShape) { ((FGEShape<?>)startArea).setIsFilled(false); }
 		 */
@@ -1316,7 +1318,7 @@ public class RectPolylinConnector extends Connector {
 	protected FGEArea retrieveAllowedEndArea(boolean takeFixedControlPointUnderAccount) {
 		AffineTransform at2 = GraphicalRepresentation.convertNormalizedCoordinatesAT(getEndObject(), getGraphicalRepresentation());
 
-		FGEArea endArea = getEndObject().getShape().getOutline().transform(at2);
+		FGEArea endArea = getEndObject().getAllowedEndAreaForConnector(getGraphicalRepresentation()).transform(at2);
 		/*
 		 * if (endArea instanceof FGEShape) { ((FGEShape<?>)endArea).setIsFilled(false); }
 		 */
@@ -1622,24 +1624,26 @@ public class RectPolylinConnector extends Connector {
 		}
 
 		else {
-			for (int i = 0; i < potentialStartOrientations.size(); i++) {
-				for (int j = 0; j < potentialEndOrientations.size(); j++) {
-					if (allowedStartOrientations.contains(potentialStartOrientations.get(i))
-							&& allowedEndOrientations.contains(potentialEndOrientations.get(j))) {
-						FGERectPolylin newPolylin = new FGERectPolylin(startArea, potentialStartOrientations.get(i), endArea,
-								potentialEndOrientations.get(j), getStraightLineWhenPossible(), getOverlapXResultingFromPixelOverlap(),
-								getOverlapYResultingFromPixelOverlap());
-						potentialPolylin.add(newPolylin);
-						if (newPolylin.doesRespectAllConstraints() && newPolylin.getLength() < minimalLength + FGEGeometricObject.EPSILON /*
-																																			* Hysteresis
-																																			* to
-																																			* avoid
-																																			* blinking
-																																			*/) {
-							polylin = newPolylin;
-							minimalLength = newPolylin.getLength();
-							choosenStartOrientation = potentialStartOrientations.get(i);
-							choosenEndOrientation = potentialEndOrientations.get(j);
+			for (SimplifiedCardinalDirection startOrientation : potentialStartOrientations) {
+				if (allowedStartOrientations.contains(startOrientation)) {
+					for (SimplifiedCardinalDirection endOrientation : potentialEndOrientations) {
+						if (allowedEndOrientations.contains(endOrientation)) {
+							FGERectPolylin newPolylin = new FGERectPolylin(startArea, startOrientation, endArea, endOrientation,
+									getStraightLineWhenPossible(), getOverlapXResultingFromPixelOverlap(),
+									getOverlapYResultingFromPixelOverlap());
+							potentialPolylin.add(newPolylin);
+							if (newPolylin.doesRespectAllConstraints()
+									&& newPolylin.getLength() < minimalLength + FGEGeometricObject.EPSILON /*
+																											* Hysteresis
+																											* to
+																											* avoid
+																											* blinking
+																											*/) {
+								polylin = newPolylin;
+								minimalLength = newPolylin.getLength();
+								choosenStartOrientation = startOrientation;
+								choosenEndOrientation = endOrientation;
+							}
 						}
 					}
 				}
@@ -1682,26 +1686,37 @@ public class RectPolylinConnector extends Connector {
 	 * crossedControlPoint is defined, compute the shortest polylin respecting start and end constraints (positions and/or orientations)
 	 */
 	private void _updateAsBasicallyAdjustable() {
-		FGEArea startArea = retrieveStartArea();
-		FGEArea endArea = retrieveEndArea();
-
+		final FGEArea startArea = retrieveStartArea();
+		final FGEArea endArea = retrieveEndArea();
 		Vector<SimplifiedCardinalDirection> allowedStartOrientations = getAllowedStartOrientations();
 		Vector<SimplifiedCardinalDirection> allowedEndOrientations = getAllowedEndOrientations();
 
 		FGERectPolylin newPolylin;
 
+		FGEAreaProvider<SimplifiedCardinalDirection> startAreaProvider = getIsStartingLocationFixed() ? new DefaultAreaProvider<SimplifiedCardinalDirection>(
+				startArea) : new FGEAreaProvider<SimplifiedCardinalDirection>() {
+			@Override
+			public FGEArea getArea(SimplifiedCardinalDirection input) {
+				return getStartObject().getAllowedStartAreaForConnectorForDirection(getGraphicalRepresentation(), startArea, input);
+			}
+		};
+		FGEAreaProvider<SimplifiedCardinalDirection> endAreaProvider = getIsEndingLocationFixed() ? new DefaultAreaProvider<SimplifiedCardinalDirection>(
+				endArea) : new FGEAreaProvider<SimplifiedCardinalDirection>() {
+			@Override
+			public FGEArea getArea(SimplifiedCardinalDirection input) {
+				return getEndObject().getAllowedEndAreaForConnectorForDirection(getGraphicalRepresentation(), endArea, input);
+			}
+		};
 		if (_crossedPoint != null) {
 
 			// System.out.println("startArea="+startArea);
 			// System.out.println("endArea="+endArea);
-			newPolylin = FGERectPolylin.makeRectPolylinCrossingPoint(startArea, endArea, _crossedPoint, true,
+			newPolylin = FGERectPolylin.makeRectPolylinCrossingPoint(startAreaProvider, endAreaProvider, _crossedPoint, true,
 					getOverlapXResultingFromPixelOverlap(), getOverlapYResultingFromPixelOverlap(),
 					SimplifiedCardinalDirection.allDirectionsExcept(allowedStartOrientations),
 					SimplifiedCardinalDirection.allDirectionsExcept(allowedEndOrientations));
-		}
-
-		else {
-			newPolylin = FGERectPolylin.makeShortestRectPolylin(startArea, endArea, getStraightLineWhenPossible(),
+		} else {
+			newPolylin = FGERectPolylin.makeShortestRectPolylin(startAreaProvider, endAreaProvider, getStraightLineWhenPossible(),
 					getOverlapXResultingFromPixelOverlap(), getOverlapYResultingFromPixelOverlap(),
 					SimplifiedCardinalDirection.allDirectionsExcept(allowedStartOrientations),
 					SimplifiedCardinalDirection.allDirectionsExcept(allowedEndOrientations));
@@ -1784,8 +1799,8 @@ public class RectPolylinConnector extends Connector {
 				if (pointRelativeToStartObject != null) {
 					if (i == 0) {
 						// This is the start object, when not, put it on starting object shape outline
-						pointRelativeToStartObject = getStartObject().getShape().getOutline()
-								.nearestOutlinePoint(pointRelativeToStartObject);
+						pointRelativeToStartObject = getStartObject().getAllowedStartAreaForConnector(getGraphicalRepresentation())
+								.getNearestPoint(pointRelativeToStartObject);
 						polylin.updatePointAt(i, GraphicalRepresentation.convertNormalizedPoint(getStartObject(),
 								pointRelativeToStartObject, getGraphicalRepresentation()));
 					} else if (i == 1 && polylin.getPointsNb() >= 6) {
@@ -1809,7 +1824,8 @@ public class RectPolylinConnector extends Connector {
 				if (pointRelativeToEndObject != null) {
 					if (i == polylin.getPointsNb() - 1) {
 						// This is the end object, when not, put it on ending object shape outline
-						pointRelativeToEndObject = getEndObject().getShape().getOutline().nearestOutlinePoint(pointRelativeToEndObject);
+						pointRelativeToEndObject = getEndObject().getAllowedEndAreaForConnector(getGraphicalRepresentation())
+								.getNearestPoint(pointRelativeToEndObject);
 						polylin.updatePointAt(i, GraphicalRepresentation.convertNormalizedPoint(getEndObject(), pointRelativeToEndObject,
 								getGraphicalRepresentation()));
 					} else if (i == polylin.getPointsNb() - 2 && polylin.getPointsNb() >= 6) {
@@ -2159,7 +2175,6 @@ public class RectPolylinConnector extends Connector {
 
 		// Retrieve control point location to update
 		FGEPoint startCPLocation = polylin.getPointAt(0);
-
 		if (startCPLocation == null) {
 			return;
 		}
@@ -2510,6 +2525,31 @@ public class RectPolylinConnector extends Connector {
 		FGEPoint returned = GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), polylin.getLastPoint(),
 				getEndObject());
 		returned = getEndObject().getShape().getShape().getNearestPoint(returned);
+		return returned;
+	}
+
+	@Override
+	public RectPolylinConnector clone() {
+		RectPolylinConnector returned = new RectPolylinConnector(null);
+		returned.setRectPolylinConstraints(getRectPolylinConstraints());
+		returned.setStraightLineWhenPossible(getStraightLineWhenPossible());
+		returned.setAdjustability(getAdjustability());
+		returned.setStartOrientation(getStartOrientation());
+		returned.setEndOrientation(getEndOrientation());
+		returned.setIsRounded(getIsRounded());
+		returned.setArcSize(getArcSize());
+		returned.setIsStartingLocationFixed(getIsStartingLocationFixed());
+		if (getIsStartingLocationFixed()) {
+			returned.setFixedStartLocation(getFixedStartLocation());
+		}
+		returned.setIsEndingLocationFixed(getIsEndingLocationFixed());
+		if (getIsEndingLocationFixed()) {
+			returned.setFixedEndLocation(getFixedEndLocation());
+		}
+		returned.setIsStartingLocationDraggable(getIsStartingLocationDraggable());
+		returned.setIsEndingLocationDraggable(getIsEndingLocationDraggable());
+		returned.setCrossedControlPoint(getCrossedControlPoint());
+		returned._setPolylin(_getPolylin());
 		return returned;
 	}
 

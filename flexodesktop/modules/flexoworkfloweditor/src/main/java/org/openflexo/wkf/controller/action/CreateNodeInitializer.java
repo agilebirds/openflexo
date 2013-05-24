@@ -19,28 +19,39 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
+
+import javax.swing.Icon;
 
 import org.openflexo.components.AskParametersDialog;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.action.FlexoActionRedoFinalizer;
+import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoExceptionHandler;
 import org.openflexo.foundation.param.TextFieldParameter;
+import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.action.CreateNode;
-import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 
-public class CreateNodeInitializer extends ActionInitializer {
+public class CreateNodeInitializer extends ActionInitializer<CreateNode, WKFObject, WKFObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
+	private final Icon icon;
 
-	CreateNodeInitializer(WKFControllerActionInitializer actionInitializer) {
-		super(null, actionInitializer);
+	CreateNodeInitializer(FlexoActionType<CreateNode, WKFObject, WKFObject> actionType, Icon icon,
+			WKFControllerActionInitializer actionInitializer) {
+		super(actionType, actionInitializer);
+		this.icon = icon;
+	}
+
+	@Override
+	protected Icon getEnabledIcon() {
+		return icon;
 	}
 
 	@Override
@@ -52,7 +63,7 @@ public class CreateNodeInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateNode> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateNode>() {
 			@Override
-			public boolean run(ActionEvent e, CreateNode action) {
+			public boolean run(EventObject e, CreateNode action) {
 				if (!action.isNewNodeNameInitialized()) {
 					TextFieldParameter newNodeNameParam = new TextFieldParameter("newBeginNodeName", "new_node_name",
 							action.getNewNodeName());
@@ -75,7 +86,7 @@ public class CreateNodeInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateNode> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateNode>() {
 			@Override
-			public boolean run(ActionEvent e, CreateNode action) {
+			public boolean run(EventObject e, CreateNode action) {
 				getControllerActionInitializer().getWKFController().getSelectionManager().setSelectedObject(action.getNewNode());
 				return true;
 			}
@@ -86,7 +97,7 @@ public class CreateNodeInitializer extends ActionInitializer {
 	protected FlexoActionRedoFinalizer<CreateNode> getDefaultRedoFinalizer() {
 		return new FlexoActionRedoFinalizer<CreateNode>() {
 			@Override
-			public boolean run(ActionEvent e, CreateNode action) {
+			public boolean run(EventObject e, CreateNode action) {
 				getControllerActionInitializer().getWKFController().getSelectionManager().setSelectedObject(action.getNewNode());
 				return true;
 			}
@@ -101,39 +112,6 @@ public class CreateNodeInitializer extends ActionInitializer {
 				return false;
 			}
 		};
-	}
-
-	@Override
-	public void init() {
-		initActionType(CreateNode.createActivityBeginNode, getDefaultInitializer(), getDefaultFinalizer(), getDefaultUndoInitializer(),
-				getDefaultUndoFinalizer(), getDefaultRedoInitializer(), getDefaultRedoFinalizer(), getDefaultExceptionHandler(),
-				getEnableCondition(), getVisibleCondition(), getShortcut(), WKFIconLibrary.BEGIN_ACTIVITY_ICON, getDisabledIcon());
-		initActionType(CreateNode.createActivityEndNode, getDefaultInitializer(), getDefaultFinalizer(), getDefaultUndoInitializer(),
-				getDefaultUndoFinalizer(), getDefaultRedoInitializer(), getDefaultRedoFinalizer(), getDefaultExceptionHandler(),
-				getEnableCondition(), getVisibleCondition(), getShortcut(), WKFIconLibrary.END_ACTIVITY_ICON, getDisabledIcon());
-		initActionType(CreateNode.createActivityNormalNode, getDefaultInitializer(), getDefaultFinalizer(), getDefaultUndoInitializer(),
-				getDefaultUndoFinalizer(), getDefaultRedoInitializer(), getDefaultRedoFinalizer(), getDefaultExceptionHandler(),
-				getEnableCondition(), getVisibleCondition(), getShortcut(), WKFIconLibrary.ACTIVITY_NODE_ICON, getDisabledIcon());
-
-		initActionType(CreateNode.createOperationBeginNode, getDefaultInitializer(), getDefaultFinalizer(), getDefaultUndoInitializer(),
-				getDefaultUndoFinalizer(), getDefaultRedoInitializer(), getDefaultRedoFinalizer(), getDefaultExceptionHandler(),
-				getEnableCondition(), getVisibleCondition(), getShortcut(), WKFIconLibrary.BEGIN_OPERATION_ICON, getDisabledIcon());
-		initActionType(CreateNode.createOperationEndNode, getDefaultInitializer(), getDefaultFinalizer(), getDefaultUndoInitializer(),
-				getDefaultUndoFinalizer(), getDefaultRedoInitializer(), getDefaultRedoFinalizer(), getDefaultExceptionHandler(),
-				getEnableCondition(), getVisibleCondition(), getShortcut(), WKFIconLibrary.END_OPERATION_ICON, getDisabledIcon());
-		initActionType(CreateNode.createOperationNormalNode, getDefaultInitializer(), getDefaultFinalizer(), getDefaultUndoInitializer(),
-				getDefaultUndoFinalizer(), getDefaultRedoInitializer(), getDefaultRedoFinalizer(), getDefaultExceptionHandler(),
-				getEnableCondition(), getVisibleCondition(), getShortcut(), WKFIconLibrary.OPERATION_NODE_ICON, getDisabledIcon());
-
-		initActionType(CreateNode.createActionBeginNode, getDefaultInitializer(), getDefaultFinalizer(), getDefaultUndoInitializer(),
-				getDefaultUndoFinalizer(), getDefaultRedoInitializer(), getDefaultRedoFinalizer(), getDefaultExceptionHandler(),
-				getEnableCondition(), getVisibleCondition(), getShortcut(), WKFIconLibrary.BEGIN_ACTION_ICON, getDisabledIcon());
-		initActionType(CreateNode.createActionEndNode, getDefaultInitializer(), getDefaultFinalizer(), getDefaultUndoInitializer(),
-				getDefaultUndoFinalizer(), getDefaultRedoInitializer(), getDefaultRedoFinalizer(), getDefaultExceptionHandler(),
-				getEnableCondition(), getVisibleCondition(), getShortcut(), WKFIconLibrary.END_ACTION_ICON, getDisabledIcon());
-		initActionType(CreateNode.createActionNormalNode, getDefaultInitializer(), getDefaultFinalizer(), getDefaultUndoInitializer(),
-				getDefaultUndoFinalizer(), getDefaultRedoInitializer(), getDefaultRedoFinalizer(), getDefaultExceptionHandler(),
-				getEnableCondition(), getVisibleCondition(), getShortcut(), WKFIconLibrary.ACTION_NODE_ICON, getDisabledIcon());
 	}
 
 }

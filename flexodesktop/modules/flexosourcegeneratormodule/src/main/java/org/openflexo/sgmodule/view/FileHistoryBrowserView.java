@@ -19,6 +19,8 @@
  */
 package org.openflexo.sgmodule.view;
 
+import org.openflexo.components.browser.BrowserElementType;
+import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.tabular.model.StringColumn;
 import org.openflexo.components.tabularbrowser.TabularBrowserModel;
 import org.openflexo.components.tabularbrowser.TabularBrowserView;
@@ -27,21 +29,21 @@ import org.openflexo.foundation.cg.CGFile;
 import org.openflexo.foundation.cg.CGObject;
 import org.openflexo.foundation.cg.version.AbstractCGFileVersion;
 import org.openflexo.sgmodule.controller.SGController;
-import org.openflexo.sgmodule.controller.browser.SGBrowser;
 
 public class FileHistoryBrowserView extends TabularBrowserView {
 
 	private CGFile _cgFile;
 
 	public FileHistoryBrowserView(SGController controller, CGFile cgFile, int visibleRowCount) {
-		super(controller, makeTabularBrowserModel(cgFile), visibleRowCount, controller.getEditor());
+		super(controller, makeTabularBrowserModel(cgFile), visibleRowCount);
 		_cgFile = cgFile;
 		setVisibleRowCount(visibleRowCount);
 		setSynchronizeWithSelectionManager(true);
 	}
 
 	private static TabularBrowserModel makeTabularBrowserModel(CGFile cgFile) {
-		TabularBrowserModel model = new TabularBrowserModel(SGBrowser.makeBrowserConfigurationForFileHistory(cgFile), " ", 300);
+		TabularBrowserModel model = new TabularBrowserModel(null, " ", 300);
+		model.setFilterStatus(BrowserElementType.FILE_RELEASE_VERSION, BrowserFilterStatus.SHOW);
 		model.addToColumns(new StringColumn<CGObject>("kind", 150) {
 			@Override
 			public String getValue(CGObject object) {
@@ -75,16 +77,17 @@ public class FileHistoryBrowserView extends TabularBrowserView {
 				return object.getDescription();
 			}
 		});
+		model.setRootObject(cgFile);
 		return model;
 	}
 
 	@Override
 	public boolean mayRepresents(FlexoModelObject anObject) {
 		if (anObject instanceof CGFile) {
-			return (anObject == _cgFile);
+			return anObject == _cgFile;
 		}
 		if (anObject instanceof AbstractCGFileVersion) {
-			return (((AbstractCGFileVersion) anObject).getCGFile() == _cgFile);
+			return ((AbstractCGFileVersion) anObject).getCGFile() == _cgFile;
 		}
 		return false;
 	}

@@ -32,7 +32,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import org.openflexo.ColorCst;
 import org.openflexo.FlexoCst;
 import org.openflexo.dm.view.TypeHierarchyPanel;
 import org.openflexo.dm.view.controller.DMController;
@@ -59,8 +58,6 @@ public class TypeHierarchyPopup extends FlexoDialog {
 		String description = FlexoLocalization.localizedForKey("type_hierarchy_description");
 		setTitle(title);
 		getContentPane().setLayout(new BorderLayout());
-
-		setBackground(ColorCst.GUI_BACK_COLOR);
 
 		JPanel topPanel = new JPanel();
 

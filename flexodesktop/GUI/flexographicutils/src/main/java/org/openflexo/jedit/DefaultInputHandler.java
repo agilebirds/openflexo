@@ -106,6 +106,8 @@ public class DefaultInputHandler extends InputHandler {
 			addKeyBinding("M+V", PASTE);
 			addKeyBinding("M+A", SELECT_ALL);
 			addKeyBinding("M+F", FIND);
+			addKeyBinding("M+G", GOTOLINE);
+			addKeyBinding("M+L", GOTOLINE);
 
 			addKeyBinding("MA+UP", COPY_LINE_UP);
 			addKeyBinding("MA+DOWN", COPY_LINE_DOWN);
@@ -117,6 +119,8 @@ public class DefaultInputHandler extends InputHandler {
 			addKeyBinding("C+V", PASTE);
 			addKeyBinding("C+A", SELECT_ALL);
 			addKeyBinding("C+F", FIND);
+			addKeyBinding("C+G", GOTOLINE);
+			addKeyBinding("C+L", GOTOLINE);
 			// addKeyBinding("C+Z",UNDO);
 			// addKeyBinding("C+Y",REDO);
 			addKeyBinding("CA+UP", COPY_LINE_UP);
@@ -237,7 +241,7 @@ public class DefaultInputHandler extends InputHandler {
 			} else if (o instanceof ActionListener) {
 				currentBindings = bindings;
 
-				executeAction(((ActionListener) o), evt.getSource(), null);
+				executeAction((ActionListener) o, evt.getSource(), null);
 
 				evt.consume();
 				return;
@@ -265,7 +269,7 @@ public class DefaultInputHandler extends InputHandler {
 				// Take care that keyCode may values 0 and data stored in keyChar !!!
 				// (SGU, 16/05/2007)
 				KeyStroke keyStroke;
-				if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+				if (c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z') {
 					keyStroke = KeyStroke.getKeyStroke(Character.toUpperCase(c), modifiers);
 				} else {
 					keyStroke = KeyStroke.getKeyStroke(keyCode, modifiers);
@@ -297,7 +301,7 @@ public class DefaultInputHandler extends InputHandler {
 				// 0-9 adds another 'digit' to the repeat number
 				if (repeat && Character.isDigit(c)) {
 					repeatCount *= 10;
-					repeatCount += (c - '0');
+					repeatCount += c - '0';
 					return;
 				}
 

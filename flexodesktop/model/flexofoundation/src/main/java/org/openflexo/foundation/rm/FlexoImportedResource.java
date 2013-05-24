@@ -41,7 +41,7 @@ public abstract class FlexoImportedResource<RD extends ImportedResourceData> ext
 	protected abstract RD doImport() throws FlexoException;
 
 	@Override
-	protected void performUpdating(FlexoResourceTree updatedResources) throws FileNotFoundException, ResourceDependancyLoopException,
+	protected void performUpdating(FlexoResourceTree updatedResources) throws FileNotFoundException, ResourceDependencyLoopException,
 			FlexoException {
 		if (!isLoaded()) {
 			importResourceData();
@@ -61,7 +61,7 @@ public abstract class FlexoImportedResource<RD extends ImportedResourceData> ext
 		}
 	}
 
-	public final void backwardSynchronizeWith(FlexoResourceTree updatedResources) throws ResourceDependancyLoopException, FlexoException,
+	public final void backwardSynchronizeWith(FlexoResourceTree updatedResources) throws ResourceDependencyLoopException, FlexoException,
 			FileNotFoundException {
 		if (!updatedResources.isEmpty()) {
 			if (logger.isLoggable(Level.FINE)) {
@@ -170,7 +170,7 @@ public abstract class FlexoImportedResource<RD extends ImportedResourceData> ext
 					logger.warning("Could not load resource data for resource " + getResourceIdentifier());
 				}
 				e.printStackTrace();
-			} catch (ResourceDependancyLoopException e) {
+			} catch (ResourceDependencyLoopException e) {
 				if (logger.isLoggable(Level.SEVERE)) {
 					logger.log(Level.SEVERE, "Loop in dependant resources of " + this + "!", e);
 				}

@@ -38,12 +38,12 @@ public class AddActivityMetricsValue extends AddMetricsValue<AddActivityMetricsV
 			"add_metrics_value", FlexoActionType.ADD_ACTION_TYPE) {
 
 		@Override
-		protected boolean isEnabledForSelection(AbstractActivityNode object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(AbstractActivityNode object, Vector<WKFObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(AbstractActivityNode object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(AbstractActivityNode object, Vector<WKFObject> globalSelection) {
 			return false;
 		}
 

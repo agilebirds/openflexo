@@ -21,11 +21,9 @@ package org.openflexo.foundation.wkf.node;
 
 import java.util.Vector;
 
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
-import org.openflexo.foundation.wkf.action.CreatePetriGraph;
 import org.openflexo.foundation.wkf.dm.PetriGraphSet;
 
 /**
@@ -47,7 +45,7 @@ public abstract class FatherNode extends FlexoNode {
 	}
 
 	public boolean hasContainedPetriGraph() {
-		return (containedPetriGraph != null);
+		return containedPetriGraph != null;
 	}
 
 	public void setContainedPetriGraph(FlexoPetriGraph aPetriGraph) {
@@ -106,20 +104,12 @@ public abstract class FatherNode extends FlexoNode {
 	 * 
 	 * @return Vector of FlexoNode
 	 */
-	public Vector getSubNodes() {
+	public Vector<PetriGraphNode> getSubNodes() {
 		if (containedPetriGraph != null) {
 			return containedPetriGraph.getNodes();
 		} else {
-			return new Vector();
+			return new Vector<PetriGraphNode>();
 		}
-	}
-
-	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> returned = super.getSpecificActionListForThatClass();
-		// returned.add(OpenOperationLevel.actionType);
-		returned.add(CreatePetriGraph.actionType);
-		return returned;
 	}
 
 	@Override

@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -56,7 +56,7 @@ public class ReinjectDocxInitializer extends ActionInitializer<ReinjectDocx, CGO
 	protected FlexoActionInitializer<ReinjectDocx> getDefaultInitializer() {
 		return new FlexoActionInitializer<ReinjectDocx>() {
 			@Override
-			public boolean run(ActionEvent e, ReinjectDocx action) {
+			public boolean run(EventObject e, ReinjectDocx action) {
 				FlexoFileChooser fileChooser = new FlexoFileChooser(SwingUtilities.getWindowAncestor(getController().getMainPane()));
 				fileChooser.setCurrentDirectory(((DGRepository) action.getRepository()).getPostBuildDirectory());
 				fileChooser.setFileFilterAsString("*.docx");
@@ -77,7 +77,7 @@ public class ReinjectDocxInitializer extends ActionInitializer<ReinjectDocx, CGO
 	protected FlexoActionFinalizer<ReinjectDocx> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<ReinjectDocx>() {
 			@Override
-			public boolean run(ActionEvent e, ReinjectDocx action) {
+			public boolean run(EventObject e, ReinjectDocx action) {
 				FlexoController.notify(FlexoLocalization.localizedForKey("reinject_docx_succeed")
 						+ "\n"
 						+ FlexoLocalization.localizedForKey("number_of_updated_description")

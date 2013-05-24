@@ -20,7 +20,7 @@
 package org.openflexo.ie.view.controller.action;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
@@ -58,13 +58,13 @@ public class AddComponentFolderInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<AddComponentFolder> getDefaultInitializer() {
 		return new FlexoActionInitializer<AddComponentFolder>() {
 			@Override
-			public boolean run(ActionEvent e, AddComponentFolder action) {
+			public boolean run(EventObject e, AddComponentFolder action) {
 				FlexoComponentFolder parentFolder = null;
-				if ((action.getFocusedObject() != null) && (action.getFocusedObject() instanceof ComponentDefinition)) {
+				if (action.getFocusedObject() != null && action.getFocusedObject() instanceof ComponentDefinition) {
 					parentFolder = ((ComponentDefinition) action.getFocusedObject()).getFolder();
-				} else if ((action.getFocusedObject() != null) && (action.getFocusedObject() instanceof FlexoComponentFolder)) {
+				} else if (action.getFocusedObject() != null && action.getFocusedObject() instanceof FlexoComponentFolder) {
 					parentFolder = (FlexoComponentFolder) action.getFocusedObject();
-				} else if ((action.getFocusedObject() != null) && (action.getFocusedObject() instanceof FlexoComponentLibrary)) {
+				} else if (action.getFocusedObject() != null && action.getFocusedObject() instanceof FlexoComponentLibrary) {
 					parentFolder = ((FlexoComponentLibrary) action.getFocusedObject()).getRootFolder();
 				}
 				if (parentFolder != null) {
@@ -86,8 +86,8 @@ public class AddComponentFolderInitializer extends ActionInitializer {
 							newFolderName = null;
 						}
 					}
-					(action).setParentFolder(parentFolder);
-					(action).setNewFolderName(newFolderName);
+					action.setParentFolder(parentFolder);
+					action.setNewFolderName(newFolderName);
 					return true;
 				} else {
 					return false;
@@ -100,7 +100,7 @@ public class AddComponentFolderInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<AddComponentFolder> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<AddComponentFolder>() {
 			@Override
-			public boolean run(ActionEvent e, AddComponentFolder action) {
+			public boolean run(EventObject e, AddComponentFolder action) {
 				// Update ProjectBrowser (normally it should be done with a
 				// notification)
 				// TODO: do it properly with a notification

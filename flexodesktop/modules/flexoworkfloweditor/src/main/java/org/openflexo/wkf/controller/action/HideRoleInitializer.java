@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -58,15 +58,13 @@ public class HideRoleInitializer extends ActionInitializer {
 		return new FlexoActionInitializer<HideRole>() {
 
 			@Override
-			public boolean run(ActionEvent event, HideRole action) {
+			public boolean run(EventObject event, HideRole action) {
 				if (action.getRole() != null) {
-					action.getRole().setIsVisible(false,
-							SwimmingLaneRepresentation.getRoleVisibilityContextForProcess(getController().getCurrentFlexoProcess()));
+					getController().getCurrentFlexoProcess().setRoleVisible(action.getRole(), false);
 					if (action.getGlobalSelection() != null) {
 						for (Role role : action.getGlobalSelection()) {
 							if (!SwimmingLaneRepresentation.roleMustBeShown(role, getController().getCurrentFlexoProcess())) {
-								role.setIsVisible(false, SwimmingLaneRepresentation.getRoleVisibilityContextForProcess(getController()
-										.getCurrentFlexoProcess()));
+								getController().getCurrentFlexoProcess().setRoleVisible(role, false);
 							}
 						}
 					}
@@ -95,7 +93,7 @@ public class HideRoleInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<HideRole> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<HideRole>() {
 			@Override
-			public boolean run(ActionEvent e, HideRole action) {
+			public boolean run(EventObject e, HideRole action) {
 				return true;
 			}
 		};

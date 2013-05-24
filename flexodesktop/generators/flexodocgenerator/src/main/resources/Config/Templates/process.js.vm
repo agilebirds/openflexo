@@ -171,12 +171,12 @@
         descDiv.appendChild(h2Element);
         
         /*ROLE*/
-        #if(${generator.isInstance($node, "org.openflexo.foundation.wkf.node.AbstractActivityNode")} && ${node.getRoleName()})
+        #if(${generator.isInstance($node, "org.openflexo.foundation.wkf.node.AbstractActivityNode")} && ${node.getRole().getName()})
             var h3RoleElement = document.createElement('h3');
             h3RoleElement.appendChild(document.createTextNode('Role: '));
             var spanH3RoleContentElement = document.createElement('span');
             spanH3RoleContentElement.className = 'htmlDocHContent';
-            spanH3RoleContentElement.innerHTML = '${generator.escapeStringForHTML(${node.getRoleName()})}';
+            spanH3RoleContentElement.innerHTML = '${generator.escapeStringForHTML(${node.getRole().getName()})}';
             h3RoleElement.appendChild(spanH3RoleContentElement);
             
             descDiv.appendChild(h3RoleElement);
@@ -209,7 +209,7 @@
             
             divDescriptionElement.appendChild(pMailElement);
         #end
-        #if($generator.isInstance($node,"org.openflexo.foundation.wkf.MetricsValue.MetricsValueOwner") && !${node.getMetricsValues().isEmpty()})
+        #if($generator.isInstance($node,"org.openflexo.foundation.wkf.MetricsValue$MetricsValueOwner") && !${node.getMetricsValues().isEmpty()})
             var divMetricsElement = document.createElement('div');
             divMetricsElement.className = 'htmlDocMetrics';
             
@@ -419,11 +419,11 @@
 			#set($screenshotName = "")
 			#if(${generator.isInstance($node,"org.openflexo.foundation.wkf.WKFArtefact")})
 				#set($screenShot = ${generator.screenshot($node.getParentPetriGraph().getContainer(), $projectGenerator)})
-				#set($trimInfo = ${project.getScreenshotResource($node.getParentPetriGraph().getContainer(), true).getTrimInfo()})
+				#set($trimInfo = ${node.getParentPetriGraph().getContainer().getProject().getScreenshotResource($node.getParentPetriGraph().getContainer(), true).getTrimInfo()})
 				#set($screenshotName = ${generator.screenshotName($node.getParentPetriGraph().getContainer(), $projectGenerator)})
 			#else
 				#set($screenShot = ${generator.screenshot($node, $projectGenerator)})
-				#set($trimInfo = ${project.getScreenshotResource($node, true).getTrimInfo()})
+				#set($trimInfo = ${node.getProject().getScreenshotResource($node, true).getTrimInfo()})
 				#set($screenshotName = ${generator.screenshotName($node, $projectGenerator)})
 			#end
             var imgElement = document.createElement('img');
@@ -545,8 +545,7 @@
 		#if(!${generator.isInstance($node,"org.openflexo.foundation.wkf.WKFArtefact")})
 			#set($index=${node.getIndex()})
 		#end
-        FlexoReader.addNode2(new FlexoNode('$uri', '$name', #getNodeLevel($node), #getNodeType($node), $index, fctCreateDivDescription, fctCreateContent), #if($fatherNodeId)'$fatherNodeId'#else null#end, #if(${generator.isInstance($node,"org.openflexo.foundation.wkf.WKFArtefact")}  ||  ${node.getClassNameKey()} == "operator_node"  ||  ${node.getClassNameKey()} == "activity_node" || ${node.oneAncestorIsNotGenerated()}) false #else true #end);
-        
+        FlexoReader.addNode2(new FlexoNode('$uri', '$name', #getNodeLevel($node), #getNodeType($node), $index, fctCreateDivDescription, fctCreateContent), #if($fatherNodeId)'$fatherNodeId'#else null#end, #if(${generator.isInstance($node,"org.openflexo.foundation.wkf.WKFArtefact")}  ||  ${node.getClassNameKey()} == "operator_node"  ||  ${node.getClassNameKey()} == "activity_node" || ${node.oneAncestorIsNotGenerated()} || ${node.getLevel()} != "PROCESS") false #else true #end);
         #if(${node.getLevel()} == "ACTIVITY" && ${node.getOperationPetriGraph()})
             #foreach($subNode in ${node.getOperationPetriGraph().getNodes()})
                 #generateNodesCreation($subNode ${node.getURI()})
@@ -573,8 +572,8 @@
 #end
 
 #set($process = $object)
-
-function initProcess${process.getFlexoID()}()
+#set($pName = ${javaUtils.getVariableName("${process.getProject().getDisplayName()}_${process.getName()}_${process.getFlexoID()}")})
+function initProcess${pName}()
 {
     var fctCreateDivDescription = null;
     var fctCreateContent = null;
@@ -582,5 +581,5 @@ function initProcess${process.getFlexoID()}()
     #generateNodesCreation($process ${process.getParentProcess().getURI()})
 }
 
-initProcess${process.getFlexoID()}();
+initProcess${pName}();
 

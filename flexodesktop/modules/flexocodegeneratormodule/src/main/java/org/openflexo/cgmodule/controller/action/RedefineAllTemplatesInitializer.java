@@ -19,7 +19,7 @@
  */
 package org.openflexo.cgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -60,14 +60,14 @@ public class RedefineAllTemplatesInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RedefineAllTemplates> getDefaultInitializer() {
 		return new FlexoActionInitializer<RedefineAllTemplates>() {
 			@Override
-			public boolean run(ActionEvent e, RedefineAllTemplates action) {
+			public boolean run(EventObject e, RedefineAllTemplates action) {
 				CGTemplates templates = action.getFocusedObject().getTemplates();
 
 				String CREATE_NEW_REPOSITORY = FlexoLocalization.localizedForKey("create_new_repository");
 				String CHOOSE_EXISTING_REPOSITORY = FlexoLocalization.localizedForKey("choose_existing_repository");
 				String[] locationChoices = { CREATE_NEW_REPOSITORY, CHOOSE_EXISTING_REPOSITORY };
 				RadioButtonListParameter<String> repositoryChoiceParam = new RadioButtonListParameter<String>("location", "location",
-						(templates.getCustomCodeRepositoriesVector().size() > 0 ? CHOOSE_EXISTING_REPOSITORY : CREATE_NEW_REPOSITORY),
+						templates.getCustomCodeRepositoriesVector().size() > 0 ? CHOOSE_EXISTING_REPOSITORY : CREATE_NEW_REPOSITORY,
 						locationChoices);
 				TextFieldParameter newRepositoryNameParam = new TextFieldParameter("name", "custom_template_repository_name",
 						templates.getNextGeneratedCodeRepositoryName());
@@ -77,9 +77,9 @@ public class RedefineAllTemplatesInitializer extends ActionInitializer {
 						"customRepository",
 						"custom_templates_repository",
 						templates.getCustomCodeRepositoriesVector(),
-						(getControllerActionInitializer().getGeneratorController().getLastEditedCGRepository() != null ? getControllerActionInitializer()
+						getControllerActionInitializer().getGeneratorController().getLastEditedCGRepository() != null ? getControllerActionInitializer()
 								.getGeneratorController().getLastEditedCGRepository().getPreferredTemplateRepository()
-								: null));
+								: null);
 				customRepositoryParam.setFormatter("name");
 				customRepositoryParam.setDepends("location");
 				customRepositoryParam.setConditional("location=" + '"' + CHOOSE_EXISTING_REPOSITORY + '"');

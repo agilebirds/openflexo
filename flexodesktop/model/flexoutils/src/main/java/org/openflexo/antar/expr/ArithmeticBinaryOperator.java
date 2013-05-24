@@ -25,6 +25,7 @@ import org.openflexo.antar.expr.Constant.DateConstant;
 import org.openflexo.antar.expr.Constant.DurationConstant;
 import org.openflexo.antar.expr.Constant.FloatConstant;
 import org.openflexo.antar.expr.Constant.IntegerConstant;
+import org.openflexo.antar.expr.Constant.ObjectSymbolicConstant;
 import org.openflexo.antar.expr.Constant.StringConstant;
 import org.openflexo.toolbox.Duration;
 
@@ -61,6 +62,8 @@ public abstract class ArithmeticBinaryOperator extends BinaryOperator {
 				} else if (rightArg instanceof DurationConstant) {
 					return new StringConstant(((StringConstant) leftArg).getValue()
 							+ ((DurationConstant) rightArg).getDuration().getSerializationRepresentation());
+				} else if (rightArg == ObjectSymbolicConstant.NULL) {
+					return new StringConstant(((StringConstant) leftArg).getValue() + "null");
 				}
 			} else if (leftArg instanceof DurationConstant) {
 				if (rightArg instanceof DurationConstant) {
@@ -76,6 +79,8 @@ public abstract class ArithmeticBinaryOperator extends BinaryOperator {
 							((DurationConstant) rightArg).getDuration()));
 				}
 			}
+			// System.out.println("leftArg=" + leftArg + " of " + leftArg.getClass() + " eval type =" + leftArg.getEvaluationType());
+			// System.out.println("rightArg=" + rightArg + " of " + rightArg.getClass() + " eval type =" + rightArg.getEvaluationType());
 			throw new TypeMismatchException(this, leftArg.getEvaluationType(), rightArg.getEvaluationType(), EvaluationType.values());
 		}
 
@@ -262,6 +267,40 @@ public abstract class ArithmeticBinaryOperator extends BinaryOperator {
 		@Override
 		public String getName() {
 			return "division";
+		}
+	};
+
+	public static final ArithmeticBinaryOperator MOD = new ArithmeticBinaryOperator() {
+		@Override
+		public int getPriority() {
+			return 2;
+		}
+
+		@Override
+		public Constant evaluate(Constant leftArg, Constant rightArg) throws TypeMismatchException {
+			if (leftArg instanceof ArithmeticConstant && rightArg instanceof ArithmeticConstant) {
+				return new FloatConstant(((ArithmeticConstant) leftArg).getArithmeticValue()
+						% ((ArithmeticConstant) rightArg).getArithmeticValue());
+			}
+			throw new TypeMismatchException(this, leftArg.getEvaluationType(), rightArg.getEvaluationType(),
+					EvaluationType.ARITHMETIC_FLOAT, EvaluationType.ARITHMETIC_INTEGER);
+		}
+
+		@Override
+		public EvaluationType getEvaluationType(EvaluationType leftOperandType, EvaluationType rightOperandType)
+				throws TypeMismatchException {
+			if (leftOperandType.isArithmeticOrLiteral()) {
+				if (rightOperandType.isArithmeticOrLiteral()) {
+					return EvaluationType.ARITHMETIC_FLOAT;
+				}
+			}
+			throw new TypeMismatchException(this, leftOperandType, rightOperandType, EvaluationType.ARITHMETIC_FLOAT,
+					EvaluationType.ARITHMETIC_INTEGER, EvaluationType.LITERAL);
+		}
+
+		@Override
+		public String getName() {
+			return "mod";
 		}
 	};
 

@@ -26,11 +26,11 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 
+import org.openflexo.fib.utils.DurationSelector;
 import org.openflexo.inspector.AbstractController;
 import org.openflexo.inspector.model.PropertyModel;
 import org.openflexo.inspector.widget.WidgetFocusListener;
 import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.swing.DurationSelector;
 import org.openflexo.toolbox.Duration;
 
 /**
@@ -79,7 +79,7 @@ public class DurationInspectorWidget extends CustomInspectorWidget<Duration> {
 					logger.fine("Focus gained in " + getClass().getName());
 				}
 				super.focusGained(arg0);
-				_selector.getTextField().requestFocus();
+				_selector.getTextField().requestFocusInWindow();
 				_selector.getTextField().selectAll();
 			}
 

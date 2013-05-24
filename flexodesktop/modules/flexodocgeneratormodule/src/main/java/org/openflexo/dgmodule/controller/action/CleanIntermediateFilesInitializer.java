@@ -19,7 +19,7 @@
  */
 package org.openflexo.dgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -52,7 +52,7 @@ public class CleanIntermediateFilesInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CleanIntermediateFiles> getDefaultInitializer() {
 		return new FlexoActionInitializer<CleanIntermediateFiles>() {
 			@Override
-			public boolean run(ActionEvent e, CleanIntermediateFiles action) {
+			public boolean run(EventObject e, CleanIntermediateFiles action) {
 				ParameterDefinition[] params = new ParameterDefinition[action.getRepository().getReleases().size() + 2];
 				params[0] = new InfoLabelParameter("info", "info", action.getLocalizedDescription(), false, 6, 30);
 				params[1] = new CheckboxParameter("beforeFirstRelease", "clean_all_intermediate_versions_before_first_release", true);
@@ -86,7 +86,7 @@ public class CleanIntermediateFilesInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CleanIntermediateFiles> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CleanIntermediateFiles>() {
 			@Override
-			public boolean run(ActionEvent e, CleanIntermediateFiles action) {
+			public boolean run(EventObject e, CleanIntermediateFiles action) {
 				return true;
 			}
 		};

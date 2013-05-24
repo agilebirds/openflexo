@@ -43,6 +43,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.rm.ResourceType;
 import org.openflexo.fps.CVSFile;
@@ -63,8 +64,8 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.swing.VerticalLayout;
 import org.openflexo.toolbox.ImageIconResource;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.listener.FlexoActionButton;
 
 /**
@@ -92,7 +93,7 @@ public class CVSFileModuleView extends JPanel implements ModuleView<CVSFile>, Fl
 	}
 
 	private void updateView(boolean forceRebuild) {
-		if ((forceRebuild) || (cvsStatus == CVSStatus.Unknown) || (cvsStatus != _cvsFile.getStatus()) || (isEdited != _cvsFile.isEdited())) {
+		if (forceRebuild || cvsStatus == CVSStatus.Unknown || cvsStatus != _cvsFile.getStatus() || isEdited != _cvsFile.isEdited()) {
 			logger.fine("CVSFileModuleView :" + _cvsFile.getFileName() + " rebuild view for new status " + _cvsFile.getStatus());
 			rebuildView();
 			_header.update();
@@ -180,36 +181,36 @@ public class CVSFileModuleView extends JPanel implements ModuleView<CVSFile>, Fl
 
 			if (isEdited) {
 				FlexoActionButton saveAction = new FlexoActionButton(SaveCVSFile.actionType, "save", CVSFileModuleView.this,
-						_controller.getEditor());
+						getController());
 				FlexoActionButton revertToSavedAction = new FlexoActionButton(RevertToSavedCVSFile.actionType, "revert_to_saved",
-						CVSFileModuleView.this, _controller.getEditor());
+						CVSFileModuleView.this, getController());
 				actionButtons.add(saveAction);
 				actionButtons.add(revertToSavedAction);
 				controlPanel.add(saveAction);
 				controlPanel.add(revertToSavedAction);
 			} else {
 				FlexoActionButton editFileAction = new FlexoActionButton(EditCVSFile.actionType, "edit", CVSFileModuleView.this,
-						_controller.getEditor());
+						getController());
 				actionButtons.add(editFileAction);
 				controlPanel.add(editFileAction);
 
 				if (_cvsFile.getStatus().isConflicting()) {
 					FlexoActionButton markAsMergedFileAction = new FlexoActionButton(MarkAsMergedFiles.actionType, "mark_as_merged",
-							CVSFileModuleView.this, _controller.getEditor());
+							CVSFileModuleView.this, getController());
 					actionButtons.add(markAsMergedFileAction);
 					controlPanel.add(markAsMergedFileAction);
 				}
 
 				if (_cvsFile.getStatus().isLocallyModified() && !_cvsFile.getStatus().isConflicting()) {
 					FlexoActionButton commitFileAction = new FlexoActionButton(CommitFiles.actionType, "commit", CVSFileModuleView.this,
-							_controller.getEditor());
+							getController());
 					actionButtons.add(commitFileAction);
 					controlPanel.add(commitFileAction);
 				}
 
 				if (_cvsFile.getStatus().isRemotelyModified() && !_cvsFile.getStatus().isConflicting()) {
 					FlexoActionButton updateFileAction = new FlexoActionButton(UpdateFiles.actionType, "update", CVSFileModuleView.this,
-							_controller.getEditor());
+							getController());
 					actionButtons.add(updateFileAction);
 					controlPanel.add(updateFileAction);
 				}
@@ -402,7 +403,7 @@ public class CVSFileModuleView extends JPanel implements ModuleView<CVSFile>, Fl
 			_codeDisplayer.getComponent().validate();
 			add(_codeDisplayer.getComponent());
 			validate();
-			_codeDisplayer.getComponent().requestFocus();
+			_codeDisplayer.getComponent().requestFocusInWindow();
 		}
 
 		else {
@@ -437,6 +438,10 @@ public class CVSFileModuleView extends JPanel implements ModuleView<CVSFile>, Fl
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification instanceof ObjectDeleted) {
+			deleteModuleView();
+			return;
+		}
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("CGFileModuleView : RECEIVED " + dataModification + " for " + observable);
 		}
@@ -462,7 +467,7 @@ public class CVSFileModuleView extends JPanel implements ModuleView<CVSFile>, Fl
 	}
 
 	@Override
-	public FlexoPerspective<CVSFile> getPerspective() {
+	public FlexoPerspective getPerspective() {
 		return _controller.getCurrentPerspective();
 	}
 

@@ -194,7 +194,7 @@ public class EOPrototypeRepository extends DMEORepository {
 	}
 
 	public DMEOPrototype getPrototype(EOAttribute prototypeAttribute) {
-		return (DMEOPrototype) (getEOPrototypeEntity().getAttribute(prototypeAttribute));
+		return (DMEOPrototype) getEOPrototypeEntity().getAttribute(prototypeAttribute);
 	}
 
 	public DMEOPrototype getPrototypeNamed(String protoName) {

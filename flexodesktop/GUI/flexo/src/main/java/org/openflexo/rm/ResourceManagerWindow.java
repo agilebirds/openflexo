@@ -29,7 +29,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -49,6 +48,7 @@ import org.openflexo.foundation.rm.SaveResourceExceptionList;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.FlexoDialog;
+import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -77,7 +77,7 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 	// private RMViewerController rmViewerController;
 
 	public ResourceManagerWindow(FlexoProject project) {
-		super((JFrame) null, false);
+		super(FlexoFrame.getActiveFrame(), false);
 		setTitle(FlexoLocalization.localizedForKey("resource_manager"));
 		getContentPane().setLayout(new BorderLayout());
 		_storageResourcesPanel = new ResourceManagerPanel(project, new ResourceManagerModel.StorageResourceModel(project), this);
@@ -103,7 +103,6 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 					if (_storageResourcesPanel.getSelectedResource() != null) {
 						try {
 							((FlexoStorageResource) _storageResourcesPanel.getSelectedResource()).saveResourceData();
-							toFront();
 						} catch (SaveResourceException e1) {
 							// Warns about the exception
 							if (logger.isLoggable(Level.WARNING)) {
@@ -123,14 +122,13 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 					try {
 						FlexoResource resourceToLoad = getActivePanel().getSelectedResource();
 						if (resourceToLoad instanceof FlexoStorageResource) {
-							((FlexoStorageResource) resourceToLoad).loadResourceData();
+							((FlexoStorageResource) resourceToLoad).getResourceData();
 						} else if (resourceToLoad instanceof FlexoImportedResource) {
 							((FlexoImportedResource) resourceToLoad).importResourceData();
 						} else if (resourceToLoad instanceof FlexoGeneratedResource) {
 							((FlexoGeneratedResource) resourceToLoad).getGeneratedResourceData();
 						}
 						getActivePanel().getRMModel().fireTableDataChanged();
-						toFront();
 					} catch (FlexoException exception) {
 						// Warns about the exception
 						if (logger.isLoggable(Level.WARNING)) {
@@ -148,7 +146,6 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 				if (getActivePanel().getSelectedResource() != null) {
 					getActivePanel().getSelectedResource().delete();
 					getActivePanel().getRMModel().fireTableDataChanged();
-					toFront();
 				}
 			}
 		});
@@ -177,7 +174,6 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 					}
 				}
 				_importedResourcesPanel.getRMModel().fireTableDataChanged();
-				toFront();
 			}
 		});
 
@@ -193,7 +189,6 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 				_importedResourcesPanel.getRMModel().fireTableDataChanged();
 				_importedResourcesPanel.getRMModel().fireTableDataChanged();
 				_generatedResourcesPanel.getRMModel().fireTableDataChanged();
-				toFront();
 			}
 		});
 
@@ -206,7 +201,6 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 				_importedResourcesPanel.getRMModel().fireTableDataChanged();
 				_importedResourcesPanel.getRMModel().fireTableDataChanged();
 				_generatedResourcesPanel.getRMModel().fireTableDataChanged();
-				toFront();
 			}
 		});
 
@@ -253,6 +247,10 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 		setVisible(true);
 	}
 
+	public FlexoProject getProject() {
+		return _project;
+	}
+
 	@Override
 	public void dispose() {
 		super.dispose();
@@ -262,8 +260,8 @@ public class ResourceManagerWindow extends FlexoDialog implements ChangeListener
 	}
 
 	protected void update() {
-		saveSelectedButton.setEnabled(getActivePanel() != null && (getActivePanel() == _storageResourcesPanel)
-				&& (getActivePanel().getSelectedResource() != null));
+		saveSelectedButton.setEnabled(getActivePanel() != null && getActivePanel() == _storageResourcesPanel
+				&& getActivePanel().getSelectedResource() != null);
 		loadSelectedButton.setEnabled(getActivePanel() != null && getActivePanel().getSelectedResource() != null);
 		deleteSelectedButton.setEnabled(getActivePanel() != null && getActivePanel().getSelectedResource() != null);
 	}

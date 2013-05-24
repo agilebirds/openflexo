@@ -32,8 +32,9 @@ import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.FlexoOntology;
-import org.openflexo.foundation.ontology.FlexoOntology.OntologyNotFoundException;
-import org.openflexo.foundation.ontology.ImportedOntology;
+import org.openflexo.foundation.ontology.ImportedOWLOntology;
+import org.openflexo.foundation.ontology.owl.OWLOntology;
+import org.openflexo.foundation.ontology.owl.OWLOntology.OntologyNotFoundException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointFolder;
@@ -62,12 +63,12 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(ViewPointLibraryObject object, Vector<ViewPointObject> globalSelection) {
+		public boolean isVisibleForSelection(ViewPointLibraryObject object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(ViewPointLibraryObject object, Vector<ViewPointObject> globalSelection) {
+		public boolean isEnabledForSelection(ViewPointLibraryObject object, Vector<ViewPointObject> globalSelection) {
 			return object != null;
 		}
 
@@ -89,9 +90,9 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 	private String _newCalcDescription;
 	private File _ontologyFile;
 	private ViewPointFolder _calcFolder;
-	private ViewPoint _newCalc;
+	private ViewPoint _newViewPoint;
 
-	public Vector<ImportedOntology> importedOntologies = new Vector<ImportedOntology>();
+	public Vector<FlexoOntology> importedOntologies = new Vector<FlexoOntology>();
 
 	// private boolean createsOntology = false;
 
@@ -122,20 +123,25 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 		}
 
 		// Instanciate new Calc
-		_newCalc = ViewPoint.newViewPoint(getBaseName(), getNewCalcURI(), getOntologyFile(), newCalcDir, viewPointLibrary, getCalcFolder());
-		_newCalc.setDescription(getNewCalcDescription());
+		_newViewPoint = ViewPoint.newViewPoint(getBaseName(), getNewCalcURI(), getOntologyFile(), newCalcDir, viewPointLibrary,
+				getCalcFolder());
+		_newViewPoint.setDescription(getNewCalcDescription());
 
 		// And register it to the library
-		viewPointLibrary.registerViewPoint(_newCalc);
+		viewPointLibrary.registerViewPoint(_newViewPoint);
 	}
 
-	private ImportedOntology buildOntology() {
+	private ImportedOWLOntology buildOntology() {
 		_ontologyFile = new File(getCalcDir(), getBaseName() + ".owl");
-		ImportedOntology newOntology = ImportedOntology.createNewImportedOntology(getNewCalcURI(), _ontologyFile, getCalcFolder()
+		ImportedOWLOntology newOntology = ImportedOWLOntology.createNewImportedOntology(getNewCalcURI(), _ontologyFile, getCalcFolder()
 				.getOntologyLibrary());
-		for (ImportedOntology importedOntology : importedOntologies) {
+		for (FlexoOntology importedOntology : importedOntologies) {
 			try {
-				newOntology.importOntology(importedOntology);
+				if (importedOntology instanceof OWLOntology) {
+					newOntology.importOntology(importedOntology);
+				} else {
+					logger.warning("Could not import anything else than an OWL ontology");
+				}
 			} catch (OntologyNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -158,7 +164,7 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 
 	public String getNewCalcURI() {
 		if (StringUtils.isEmpty(_newCalcURI) && getOntologyFile() != null) {
-			return FlexoOntology.findOntologyURI(getOntologyFile());
+			return OWLOntology.findOntologyURI(getOntologyFile());
 		}
 		return _newCalcURI;
 	}
@@ -182,8 +188,8 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 	public void setOntologyFile(File ontologyFile) {
 		this._ontologyFile = ontologyFile;
 		if (ontologyFile != null) {
-			String ontologyURI = FlexoOntology.findOntologyURI(getOntologyFile());
-			String ontologyName = ToolBox.getJavaClassName(FlexoOntology.findOntologyName(getOntologyFile()));
+			String ontologyURI = OWLOntology.findOntologyURI(getOntologyFile());
+			String ontologyName = ToolBox.getJavaClassName(OWLOntology.findOntologyName(getOntologyFile()));
 			if (ontologyName == null && ontologyFile != null && ontologyFile.getName().length() > 4) {
 				ontologyName = ontologyFile.getName().substring(0, ontologyFile.getName().length() - 4);
 			}
@@ -246,13 +252,13 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 			return false;
 		}
 		if (ontologicalScopeChoice == OntologicalScopeChoices.IMPORT_EXISTING_ONTOLOGY) {
-			return (getOntologyFile() != null);
+			return getOntologyFile() != null;
 		}
 		return true;
 	}
 
-	public ViewPoint getNewCalc() {
-		return _newCalc;
+	public ViewPoint getNewViewPoint() {
+		return _newViewPoint;
 	}
 
 	private String getBaseName() {
@@ -269,12 +275,12 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, ViewPointLibra
 		_ontologyFile = new File(getCalcDir(), getBaseName() + ".owl");
 	}*/
 
-	public void addToImportedOntologies(ImportedOntology ontology) {
+	public void addToImportedOntologies(FlexoOntology ontology) {
 		System.out.println("import ontology " + ontology);
 		importedOntologies.add(ontology);
 	}
 
-	public void removeFromImportedOntologies(ImportedOntology ontology) {
+	public void removeFromImportedOntologies(FlexoOntology ontology) {
 		System.out.println("remove ontology " + ontology);
 		importedOntologies.remove(ontology);
 	}

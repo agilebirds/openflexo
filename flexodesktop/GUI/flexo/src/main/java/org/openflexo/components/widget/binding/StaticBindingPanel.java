@@ -39,6 +39,7 @@ import javax.swing.event.ChangeListener;
 import org.openflexo.FlexoCst;
 import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.components.widget.KeySelector;
+import org.openflexo.fib.utils.DurationSelector;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.bindings.AbstractBinding;
 import org.openflexo.foundation.bindings.BooleanStaticBinding;
@@ -53,7 +54,6 @@ import org.openflexo.foundation.dkv.Key;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.swing.DateSelector;
-import org.openflexo.swing.DurationSelector;
 import org.openflexo.toolbox.Duration;
 import org.openflexo.toolbox.Duration.DurationUnit;
 import org.openflexo.toolbox.ToolBox;
@@ -100,8 +100,8 @@ class StaticBindingPanel extends JPanel {
 			}
 		});
 		add(selectStaticBindingCB);
-		if ((_bindingSelectorPanel._bindingSelector.getBindingDefinition() == null)
-				|| (_bindingSelectorPanel._bindingSelector.getBindingDefinition().getType() == null)) {
+		if (_bindingSelectorPanel._bindingSelector.getBindingDefinition() == null
+				|| _bindingSelectorPanel._bindingSelector.getBindingDefinition().getType() == null) {
 			enterValueTF = new JTextField(10);
 			enterValueTF.setFont(FlexoCst.SMALL_FONT);
 			add(enterValueTF);
@@ -121,7 +121,7 @@ class StaticBindingPanel extends JPanel {
 								(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), selectedKey));
 						if (!StaticBindingPanel.this._bindingSelectorPanel._connectButton.isEnabled() && selectedKey != null) {
 							StaticBindingPanel.this._bindingSelectorPanel._connectButton.setEnabled(true);
-							if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+							if (ToolBox.isMacOSLaf()) {
 								StaticBindingPanel.this._bindingSelectorPanel._connectButton.setSelected(true);
 							}
 						}
@@ -275,7 +275,7 @@ class StaticBindingPanel extends JPanel {
 								(FlexoModelObject) _bindingSelectorPanel._bindingSelector.getBindable(), selectedDate));
 						if (!StaticBindingPanel.this._bindingSelectorPanel._connectButton.isEnabled() && selectedDate != null) {
 							StaticBindingPanel.this._bindingSelectorPanel._connectButton.setEnabled(true);
-							if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+							if (ToolBox.isMacOSLaf()) {
 								StaticBindingPanel.this._bindingSelectorPanel._connectButton.setSelected(true);
 							}
 						}
@@ -309,7 +309,7 @@ class StaticBindingPanel extends JPanel {
 												.getEditedObject()));
 						if (!StaticBindingPanel.this._bindingSelectorPanel._connectButton.isEnabled() && selectedDuration != null) {
 							StaticBindingPanel.this._bindingSelectorPanel._connectButton.setEnabled(true);
-							if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
+							if (ToolBox.isMacOSLaf()) {
 								StaticBindingPanel.this._bindingSelectorPanel._connectButton.setSelected(true);
 							}
 						}
@@ -348,9 +348,9 @@ class StaticBindingPanel extends JPanel {
 
 		}
 
-		if ((_bindingSelectorPanel._bindingSelector.getBindingDefinition() == null)
-				|| (_bindingSelectorPanel._bindingSelector.getBindingDefinition().getType() == null)
-				|| (_bindingSelectorPanel._bindingSelector.getBindingDefinition().getType().isObject())) {
+		if (_bindingSelectorPanel._bindingSelector.getBindingDefinition() == null
+				|| _bindingSelectorPanel._bindingSelector.getBindingDefinition().getType() == null
+				|| _bindingSelectorPanel._bindingSelector.getBindingDefinition().getType().isObject()) {
 			final String SELECT = FlexoLocalization.localizedForKey("select");
 			final String BOOLEAN = FlexoLocalization.localizedForKey("boolean");
 			final String INTEGER = FlexoLocalization.localizedForKey("integer");
@@ -399,28 +399,25 @@ class StaticBindingPanel extends JPanel {
 					}
 				}
 			});
-			if (typeCB != null) {
-				isUpdatingPanel = true;
-				if (currentType == EvaluationType.BOOLEAN) {
-					typeCB.setSelectedItem(BOOLEAN);
-				} else if (currentType == EvaluationType.ARITHMETIC_INTEGER) {
-					typeCB.setSelectedItem(INTEGER);
-				} else if (currentType == EvaluationType.ARITHMETIC_FLOAT) {
-					typeCB.setSelectedItem(FLOAT);
-				} else if (currentType == EvaluationType.STRING) {
-					typeCB.setSelectedItem(STRING);
-				} else if (currentType == EvaluationType.DATE) {
-					typeCB.setSelectedItem(DATE);
-				} else if (currentType == EvaluationType.DURATION) {
-					typeCB.setSelectedItem(DURATION);
-				} else if (currentType == EvaluationType.ENUM) {
-					typeCB.setSelectedItem(DKV);
-				}
-				isUpdatingPanel = false;
+			isUpdatingPanel = true;
+			if (currentType == EvaluationType.BOOLEAN) {
+				typeCB.setSelectedItem(BOOLEAN);
+			} else if (currentType == EvaluationType.ARITHMETIC_INTEGER) {
+				typeCB.setSelectedItem(INTEGER);
+			} else if (currentType == EvaluationType.ARITHMETIC_FLOAT) {
+				typeCB.setSelectedItem(FLOAT);
+			} else if (currentType == EvaluationType.STRING) {
+				typeCB.setSelectedItem(STRING);
+			} else if (currentType == EvaluationType.DATE) {
+				typeCB.setSelectedItem(DATE);
+			} else if (currentType == EvaluationType.DURATION) {
+				typeCB.setSelectedItem(DURATION);
+			} else if (currentType == EvaluationType.ENUM) {
+				typeCB.setSelectedItem(DKV);
 			}
-
 			typeCB.setFont(FlexoCst.SMALL_FONT);
 			add(typeCB);
+			isUpdatingPanel = false;
 		}
 
 	}

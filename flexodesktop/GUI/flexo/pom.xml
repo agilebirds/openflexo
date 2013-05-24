@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>GUI</artifactId>
-		<version>1.4.4-SNAPSHOT</version>
+		<version>1.5.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>flexo</artifactId>
 	<name>GUI :: Flexo</name>
@@ -25,17 +25,22 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 			</plugin>
 			<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>**/*/FlexoFIBValidationTest.java</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/*/FlexoFIBValidationTest.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
+		<dependency>
+			<groupId>org.openflexo.utils</groupId>
+			<artifactId>macos_ui_simulation</artifactId>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>jiraclient</artifactId>
@@ -74,12 +79,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexohelp</artifactId>
-			<classifier>resources</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
 			<artifactId>flexodocresourcemanager</artifactId>
 			<classifier>resources</classifier>
 			<type>zip</type>
@@ -101,11 +100,6 @@
 			<artifactId>mail</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.apple.common</groupId>
-			<artifactId>ui_simulation</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexographicutils</artifactId>
 		</dependency>
@@ -116,16 +110,21 @@
 			<type>zip</type>
 		</dependency>
 		<dependency>
-            <groupId>org.openflexo</groupId>
-            <artifactId>flexointerfacebuilder</artifactId>
-            <classifier>tests</classifier>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>flexointerfacebuilder</artifactId>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>
 

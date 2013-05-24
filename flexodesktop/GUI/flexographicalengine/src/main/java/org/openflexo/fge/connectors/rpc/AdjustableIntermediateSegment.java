@@ -350,7 +350,7 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 	}
 
 	@Override
-	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
+	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
 		if (beforePreviousSegment != null && beforePreviousSegment.overlap(currentSegment)) {
 			getConnector()._simplifyLayoutOfCurrentPolylinByDeletingTwoPoints(index - 1);
 		}

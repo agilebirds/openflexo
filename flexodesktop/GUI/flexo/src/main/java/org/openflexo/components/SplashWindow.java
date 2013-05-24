@@ -24,7 +24,6 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
-import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -33,6 +32,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
+import org.openflexo.ApplicationVersion;
 import org.openflexo.FlexoCst;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.module.UserType;
@@ -67,8 +67,8 @@ public class SplashWindow extends JDialog {
 		getContentPane().add(businessLabel);
 		businessLabel.setBounds(260, 195, 280, 15);
 
-		JLabel versionLabel = new JLabel("Version " + FlexoCst.BUSINESS_APPLICATION_VERSION + " (build " + FlexoCst.BUILD_ID + ")",
-				SwingConstants.RIGHT);
+		JLabel versionLabel = new JLabel("Version " + FlexoCst.BUSINESS_APPLICATION_VERSION + " (build " + ApplicationVersion.BUILD_ID
+				+ ")", SwingConstants.RIGHT);
 		versionLabel.setForeground(Color.DARK_GRAY);
 		versionLabel.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		getContentPane().add(versionLabel);
@@ -112,7 +112,7 @@ public class SplashWindow extends JDialog {
 		getContentPane().add(urlLabel);
 		urlLabel.setBounds(290, 263, 280, 12);
 
-		JLabel copyrightLabel = new JLabel("(c) Copyright Agile Birds sprl, 2012, all rights reserved", SwingConstants.RIGHT);
+		JLabel copyrightLabel = new JLabel("(c) Copyright Agile Birds sprl, 2013, all rights reserved", SwingConstants.RIGHT);
 		copyrightLabel.setForeground(Color.DARK_GRAY);
 		copyrightLabel.setFont(new Font("SansSerif", Font.PLAIN, 9));
 		getContentPane().add(copyrightLabel);
@@ -122,9 +122,7 @@ public class SplashWindow extends JDialog {
 		splash.setBounds(0, 0, imageDim.width, imageDim.height);
 		validate();
 		setSize(imageDim);
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		setLocation(screenSize.width / 2 - getWidth() / 2, screenSize.height / 2 - getHeight() / 2);
-
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 }

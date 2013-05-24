@@ -19,7 +19,7 @@
  */
 package org.openflexo.sgmodule.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -59,7 +59,7 @@ public class UpdateModelInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<UpdateModel> getDefaultInitializer() {
 		return new FlexoActionInitializer<UpdateModel>() {
 			@Override
-			public boolean run(ActionEvent e, UpdateModel action) {
+			public boolean run(EventObject e, UpdateModel action) {
 				Vector<SGJavaFile> selectedJavaFiles = new Vector<SGJavaFile>();
 				for (ModelReinjectableFile f : action.getFilesToUpdate()) {
 					if (f instanceof SGJavaFile) {
@@ -72,7 +72,7 @@ public class UpdateModelInitializer extends ActionInitializer {
 							FlexoLocalization.localizedForKey("please_select_properties_and_methods_to_update"), selectedJavaFiles,
 							getProject(), getControllerActionInitializer().getSGController());
 					popup.setVisible(true);
-					if ((popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE) && (popup.getDMSet().getSelectedObjects().size() > 0)) {
+					if (popup.getStatus() == MultipleObjectSelectorPopup.VALIDATE && popup.getDMSet().getSelectedObjects().size() > 0) {
 						action.setUpdatedSet(popup.getDMSet());
 						action.getProjectGenerator().startHandleLogs();
 						return true;
@@ -91,7 +91,7 @@ public class UpdateModelInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<UpdateModel> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<UpdateModel>() {
 			@Override
-			public boolean run(ActionEvent e, UpdateModel action) {
+			public boolean run(EventObject e, UpdateModel action) {
 				action.getProjectGenerator().stopHandleLogs();
 				action.getProjectGenerator().flushLogs();
 				return true;

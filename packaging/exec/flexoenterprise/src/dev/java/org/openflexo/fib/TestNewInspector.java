@@ -86,7 +86,7 @@ public class TestNewInspector {
 				final ImageIcon ACTIVE_ICON = new ImageIconResource("Resources/Flexo/WorkflowPerspective_A.gif");
 				final ImageIcon SELECTED_ICON = new ImageIconResource("Resources/Flexo/WorkflowPerspective_S.gif");
 
-				returned.getController().addToPerspectives(new FlexoPerspective<FlexoModelObject>("default") {
+				returned.getController().addToPerspectives(new FlexoPerspective("default") {
 
 					@Override
 					public ModuleView<? extends FlexoModelObject> createModuleViewForObject(

@@ -21,8 +21,7 @@ package org.openflexo.fib.editor.test;
 
 import java.util.Vector;
 
-public class Prout 
-{
+public class Prout {
 	public String name;
 	public String description;
 	public Vector<Toto> totoList;
@@ -30,13 +29,13 @@ public class Prout
 	public Prout(String aName) {
 		name = aName;
 		totoList = new Vector<Toto>();
-		totoList.add(new Toto("youp","une description pour youp"));
-		totoList.add(new Toto("la","une description pour la"));
-		totoList.add(new Toto("boum","une description pour boum"));
+		totoList.add(new Toto("youp", "une description pour youp"));
+		totoList.add(new Toto("la", "une description pour la"));
+		totoList.add(new Toto("boum", "une description pour boum"));
 	}
 
 	@Override
 	public String toString() {
-		return "Prout: name="+name+" description="+description;
+		return "Prout: name=" + name + " description=" + description;
 	}
 }

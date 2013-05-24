@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMMethod;
@@ -46,16 +47,20 @@ public class DuplicateDMMethod extends FlexoAction<DuplicateDMMethod, DMMethod, 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMMethod method, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(DMMethod method, Vector<DMObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMMethod method, Vector<DMObject> globalSelection) {
+		public boolean isEnabledForSelection(DMMethod method, Vector<DMObject> globalSelection) {
 			return method != null && method.getEntity() != null && !method.getEntity().getIsReadOnly();
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMMethod.class);
+	}
 
 	private DMMethod _methodToDuplicate;
 	private String _newMethodName;

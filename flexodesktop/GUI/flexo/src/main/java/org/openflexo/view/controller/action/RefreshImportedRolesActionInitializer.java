@@ -19,7 +19,7 @@
  */
 package org.openflexo.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import javax.swing.Icon;
@@ -51,7 +51,7 @@ public class RefreshImportedRolesActionInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<RefreshImportedRoleAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<RefreshImportedRoleAction>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshImportedRoleAction action) {
+			public boolean run(EventObject e, RefreshImportedRoleAction action) {
 
 				PPMWebServiceClient client = getController().getWSClient();
 				if (client != null) {
@@ -74,7 +74,7 @@ public class RefreshImportedRolesActionInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<RefreshImportedRoleAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<RefreshImportedRoleAction>() {
 			@Override
-			public boolean run(ActionEvent e, RefreshImportedRoleAction action) {
+			public boolean run(EventObject e, RefreshImportedRoleAction action) {
 				if (!action.isAutomaticAction()) {
 					FlexoController.notify(action.getReport());
 				}

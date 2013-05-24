@@ -279,6 +279,7 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 			return;
 		}
 		FlexoIndexManager.switchIndexForKey(this.index, index, this);
+		Collections.sort(getFolder().getViews(), FlexoIndexManager.INDEX_COMPARATOR);
 		if (getIndex() != index) {
 			setChanged();
 			AttributeDataModification dm = new AttributeDataModification("index", null, getIndex());
@@ -304,6 +305,10 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 		if (!isDeserializing() && !isCreatedByCloning() && getFolder() != null) {
 			getFolder().setChanged();
 			getFolder().notifyObservers(new ChildrenOrderChanged());
+			if (getFolder() == getViewLibrary().getRootFolder()) {
+				getViewLibrary().setChanged();
+				getViewLibrary().notifyObservers(new ChildrenOrderChanged());
+			}
 		}
 	}
 
@@ -345,7 +350,7 @@ public class ViewDefinition extends ViewLibraryObject implements Sortable {
 		if (getFolder() == null) {
 			return null;
 		}
-		return getFolder().getShemas().toArray(new ViewDefinition[0]);
+		return getFolder().getViews().toArray(new ViewDefinition[0]);
 	}
 
 	public boolean isLoaded() {

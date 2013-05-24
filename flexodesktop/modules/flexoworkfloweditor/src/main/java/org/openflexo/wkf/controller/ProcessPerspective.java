@@ -19,37 +19,37 @@
  */
 package org.openflexo.wkf.controller;
 
-import java.beans.PropertyChangeListener;
-import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JSplitPane;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.utils.FlexoSplitPaneLocationSaver;
-import org.openflexo.view.FlexoPerspective;
+import org.openflexo.module.UserType;
+import org.openflexo.swing.GlassPaneWrapper;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
-import org.openflexo.wkf.WKFCst;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.wkf.processeditor.ProcessEditorController;
 import org.openflexo.wkf.processeditor.ProcessView;
+import org.openflexo.wkf.view.ImportedWorkflowView;
+import org.openflexo.wkf.view.WKFProjectModuleView;
 
-public class ProcessPerspective extends FlexoPerspective<FlexoProcess> {
+public class ProcessPerspective extends FlexoPerspective {
 	static final Logger logger = Logger.getLogger(ProcessPerspective.class.getPackage().getName());
 
 	private final WKFController _controller;
 
-	private final Hashtable<FlexoProcess, ProcessEditorController> _controllerForProcess;
-	private final Hashtable<ProcessEditorController, JSplitPane> _splitPaneForProcess;
+	private JComponent topRightDummy;
 
-	// private JSplitPane splitPaneWithWKFPalettesAndDocInspectorPanel;
+	private ImportedWorkflowView importedWorkflowView;
 
 	/**
 	 * @param controller
@@ -59,123 +59,96 @@ public class ProcessPerspective extends FlexoPerspective<FlexoProcess> {
 	public ProcessPerspective(WKFController controller) {
 		super("process_edition");
 		_controller = controller;
-		_controllerForProcess = new Hashtable<FlexoProcess, ProcessEditorController>();
-		_splitPaneForProcess = new Hashtable<ProcessEditorController, JSplitPane>();
-	}
-
-	public ProcessEditorController getControllerForProcess(FlexoProcess process) {
-		ProcessEditorController returned = _controllerForProcess.get(process);
-		if (returned == null) {
-			returned = new ProcessEditorController(_controller, process);
-			_controllerForProcess.put(process, returned);
+		topRightDummy = new JPanel();
+		importedWorkflowView = new ImportedWorkflowView(controller);
+		setTopLeftView(_controller.getWkfBrowserView());
+		if (!UserType.isLite()) {
+			setBottomLeftView(_controller.getProcessBrowserView());
 		}
-		return returned;
+
 	}
 
-	public void removeProcessController(ProcessEditorController controller) {
-		_controllerForProcess.remove(controller.getDrawing().getFlexoProcess());
-		_splitPaneForProcess.remove(controller);
+	@Override
+	public JComponent getTopRightView() {
+		if (getCurrentProcessView() != null) {
+			if (getCurrentProcessView().getDrawing().isEditable()) {
+				return getCurrentProcessView().getController().getPaletteView();
+			} else {
+				return new GlassPaneWrapper(getCurrentProcessView().getController().getPaletteView());
+			}
+		} else {
+			return topRightDummy;
+		}
+	}
+
+	@Override
+	public JComponent getBottomRightView() {
+		if (getCurrentProcessView() != null) {
+			if (getCurrentProcessView().getDrawing().isEditable()) {
+				return _controller.getDisconnectedDocInspectorPanel();
+			} else {
+				return new GlassPaneWrapper(_controller.getDisconnectedDocInspectorPanel());
+			}
+		} else {
+			return topRightDummy;
+		}
 	}
 
 	/**
 	 * Overrides getIcon
 	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getActiveIcon()
+	 * @see org.openflexo.view.controller.model.FlexoPerspective#getActiveIcon()
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
 		return WKFIconLibrary.WKF_BPEP_ACTIVE_ICON;
 	}
 
-	/**
-	 * Overrides getSelectedIcon
-	 * 
-	 * @see org.openflexo.view.FlexoPerspective#getSelectedIcon()
-	 */
 	@Override
-	public ImageIcon getSelectedIcon() {
-		return WKFIconLibrary.WKF_BPEP_SELECTED_ICON;
-	}
-
-	@Override
-	public boolean isAlwaysVisible() {
-		return true;
-	}
-
-	@Override
-	public FlexoProcess getDefaultObject(FlexoModelObject proposedObject) {
+	public FlexoModelObject getDefaultObject(FlexoModelObject proposedObject) {
 		if (proposedObject instanceof WKFObject) {
 			return ((WKFObject) proposedObject).getProcess();
+		} else if (proposedObject != null && proposedObject.getProject() != null) {
+			if (proposedObject.getProject().getRootFlexoProcess() != null) {
+				return proposedObject.getProject().getRootFlexoProcess();
+			} else {
+				return proposedObject.getProject().getWorkflow();
+			}
+		} else {
+			return null;
 		}
-		return _controller.getProject().getRootFlexoProcess();
 	}
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return (object instanceof FlexoProcess) && !((FlexoProcess) object).isImported();
+		return object instanceof FlexoProcess && !((FlexoProcess) object).isImported() || object instanceof FlexoWorkflow
+				&& !((FlexoWorkflow) object).isCache();
 	}
 
 	@Override
-	public ProcessView createModuleViewForObject(FlexoProcess process, FlexoController controller) {
-		return getControllerForProcess(process).getDrawingView();
-	}
-
-	@Override
-	public boolean doesPerspectiveControlLeftView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getLeftView() {
-		return _controller.getWorkflowProcessBrowserViews();
-	}
-
-	@Override
-	public boolean doesPerspectiveControlRightView() {
-		return true;
-	}
-
-	@Override
-	public JComponent getRightView() {
-		if (getCurrentProcessView() == null) {
-			return new JPanel();
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller, boolean editable) {
+		if (object instanceof FlexoProcess) {
+			ProcessView drawingView = new ProcessEditorController(_controller, (FlexoProcess) object).getDrawingView();
+			drawingView.getDrawing().setEditable(editable);
+			return drawingView;
+		} else if (object instanceof FlexoWorkflow) {
+			return new WKFProjectModuleView((FlexoWorkflow) object, _controller, this);
+		} else {
+			return null;
 		}
-		return getSplitPaneWithWKFPalettesAndDocInspectorPanel();
+
+	}
+
+	@Override
+	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
+		return createModuleViewForObject(object, controller, true);
 	}
 
 	public ProcessView getCurrentProcessView() {
-		if ((_controller != null) && (_controller.getCurrentModuleView() instanceof ProcessView)) {
+		if (_controller != null && _controller.getCurrentModuleView() instanceof ProcessView) {
 			return (ProcessView) _controller.getCurrentModuleView();
 		}
 		return null;
-	}
-
-	/**
-	 * Return Split pane with Role palette and doc inspector panel Disconnect doc inspector panel from its actual parent
-	 * 
-	 * @return
-	 */
-	protected JSplitPane getSplitPaneWithWKFPalettesAndDocInspectorPanel() {
-		JSplitPane splitPaneWithWKFPalettesAndDocInspectorPanel = _splitPaneForProcess.get(getCurrentProcessView().getController());
-		if (splitPaneWithWKFPalettesAndDocInspectorPanel == null) {
-			splitPaneWithWKFPalettesAndDocInspectorPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, getCurrentProcessView()
-					.getController().getPaletteView(), _controller.getDisconnectedDocInspectorPanel());
-			splitPaneWithWKFPalettesAndDocInspectorPanel.setResizeWeight(0);
-			splitPaneWithWKFPalettesAndDocInspectorPanel.setDividerLocation(WKFCst.PALETTE_DOC_SPLIT_LOCATION);
-			splitPaneWithWKFPalettesAndDocInspectorPanel.setBorder(BorderFactory.createEmptyBorder());
-			_splitPaneForProcess.put(getCurrentProcessView().getController(), splitPaneWithWKFPalettesAndDocInspectorPanel);
-		}
-		if (splitPaneWithWKFPalettesAndDocInspectorPanel.getBottomComponent() == null) {
-			splitPaneWithWKFPalettesAndDocInspectorPanel.setBottomComponent(_controller.getDisconnectedDocInspectorPanel());
-		}
-		PropertyChangeListener[] listeners = splitPaneWithWKFPalettesAndDocInspectorPanel.getPropertyChangeListeners();
-		for (PropertyChangeListener listener : listeners) {
-			if (listener instanceof FlexoSplitPaneLocationSaver) {
-				splitPaneWithWKFPalettesAndDocInspectorPanel.removePropertyChangeListener(listener);
-			}
-		}
-		new FlexoSplitPaneLocationSaver(splitPaneWithWKFPalettesAndDocInspectorPanel, "WKFPaletteAndDocInspectorPanel");
-		return splitPaneWithWKFPalettesAndDocInspectorPanel;
 	}
 
 	@Override
@@ -186,20 +159,34 @@ public class ProcessPerspective extends FlexoPerspective<FlexoProcess> {
 		return null;
 	}
 
-	// SGU: dynamic handling now
-	// private ProcessView currentProcessView = null;
-
 	@Override
-	public void notifyModuleViewDisplayed(ModuleView<?> moduleView) {
+	public void notifyModuleViewDisplayed(final ModuleView<?> moduleView) {
 		// currentProcessView = (ProcessView) moduleView;
 		if (moduleView instanceof ProcessView) {
-			FlexoProcess process = ((ProcessView) moduleView).getRepresentedObject();
-			process.addObserver(_controller.getMainFrame());
-			_controller.getProcessBrowser().setCurrentProcess(process);
-			_controller.getExternalProcessBrowser().setCurrentProcess(process);
-			_controller.getWorkflowBrowser().focusOn(process);
-			_controller.getSelectionManager().setSelectedObject(process);
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					FlexoProcess process = ((ProcessView) moduleView).getRepresentedObject();
+					_controller.getProcessBrowser().setRootObject(process);
+					_controller.getExternalProcessBrowser().setRootObject(process);
+					_controller.getWorkflowBrowser().focusOn(process);
+					_controller.getSelectionManager().setSelectedObject(process);
+					importedWorkflowView.setSelected(process.getProcessNode());
+				}
+			});
 		}
+	}
+
+	protected void updateMiddleLeftView() {
+		if (_controller.getProject() != null && _controller.getProject().hasImportedProjects()) {
+			setMiddleLeftView(importedWorkflowView);
+		} else {
+			setMiddleLeftView(null);
+		}
+	}
+
+	public void setProject(FlexoProject project) {
+		updateMiddleLeftView();
 	}
 
 }

@@ -23,7 +23,7 @@
     <property name="serializationResources" contains="org.openflexo.foundation.rm.FlexoResource" type="hashtable" key="resourceIdentifier" primary="yes"/> 
    </entity> 
   
-  <entity name="org.openflexo.foundation.rm.FlexoResource" xmlTag="FlexoResource">
+  <entity name="org.openflexo.foundation.rm.FlexoResource" abstract="YES">
   	<property name="userIdentifier" xmlTag="userID" attribute="YES" description="Unique ID of the user (used for team synchronization)"/>
 	<property name="lastSynchronizedForResources" xmlTag="LastSynchronizedWithResourceEntry" type="hashtable" key="resource"/>
   </entity>

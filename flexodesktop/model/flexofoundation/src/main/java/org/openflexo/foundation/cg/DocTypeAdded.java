@@ -34,7 +34,7 @@ public class DocTypeAdded extends CGDataModification {
 	 * @param newValue
 	 */
 	public DocTypeAdded(DocType newDocType) {
-		super(null, newDocType);
+		super("docTypes", null, newDocType);
 	}
 
 }

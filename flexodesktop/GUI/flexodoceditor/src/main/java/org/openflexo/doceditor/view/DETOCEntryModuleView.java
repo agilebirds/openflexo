@@ -43,14 +43,15 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
+import org.openflexo.foundation.ObjectDeleted;
 import org.openflexo.foundation.action.FlexoActionSource;
 import org.openflexo.foundation.toc.TOCEntry;
 import org.openflexo.icon.DEIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.swing.VerticalLayout;
-import org.openflexo.view.FlexoPerspective;
 import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 import org.openflexo.view.listener.FlexoActionButton;
 import org.openflexo.wysiwyg.FlexoWysiwyg;
 import org.openflexo.wysiwyg.FlexoWysiwygLight;
@@ -143,8 +144,8 @@ public class DETOCEntryModuleView extends JPanel implements ModuleView<TOCEntry>
 			textarea.setEnabled(false);
 			String key = "description_"
 					+ (_entry.getIdentifier() != null ? _entry.getIdentifier().name().toLowerCase()
-							: (_entry.getObjectReference() != null ? _entry.getObjectReference().getKlass().getSimpleName()
-									: "unknown_section"));
+							: _entry.getObjectReference() != null ? _entry.getObjectReference().getKlass().getSimpleName()
+									: "unknown_section");
 			textarea.setText(FlexoLocalization.localizedForKey(key, textarea));
 			panel.add(textarea);
 			add(panel, BorderLayout.CENTER);
@@ -160,6 +161,10 @@ public class DETOCEntryModuleView extends JPanel implements ModuleView<TOCEntry>
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
+		if (dataModification instanceof ObjectDeleted) {
+			deleteModuleView();
+			return;
+		}
 		if (updatingModel) {
 			return;
 		}

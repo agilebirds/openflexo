@@ -19,7 +19,7 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,7 +53,7 @@ public class CreateDMPackageInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateDMPackage> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateDMPackage>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDMPackage action) {
+			public boolean run(EventObject e, CreateDMPackage action) {
 				String newPackageName = FlexoController.askForStringMatchingPattern(
 						FlexoLocalization.localizedForKey("please_enter_a_package_name"), DMRegExp.PACKAGE_NAME_PATTERN,
 						FlexoLocalization.localizedForKey("package_must_start_with_a_letter_followed_by_any_letter_or_number"));
@@ -70,7 +70,7 @@ public class CreateDMPackageInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateDMPackage> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateDMPackage>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDMPackage action) {
+			public boolean run(EventObject e, CreateDMPackage action) {
 				if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getRepository()) {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Finalizer for CreateDMPackage in DMRepositoryView");

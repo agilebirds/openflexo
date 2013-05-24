@@ -22,7 +22,6 @@ package org.openflexo.components.widget;
 import java.io.File;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.wkf.ProcessFolder;
 import org.openflexo.toolbox.FileResource;
 
@@ -40,11 +39,6 @@ public class FIBProcessFolderSelector extends FIBModelObjectSelector<ProcessFold
 
 	public FIBProcessFolderSelector(ProcessFolder editedObject) {
 		super(editedObject);
-	}
-
-	@Override
-	protected boolean isAcceptableValue(FlexoModelObject o) {
-		return super.isAcceptableValue(o);
 	}
 
 	@Override

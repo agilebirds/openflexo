@@ -19,6 +19,7 @@
  */
 package org.openflexo.fib.model;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +27,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingDefinition.BindingDefinitionType;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariableImpl;
 
 public abstract class FIBBrowserAction extends FIBModelObject {
 
@@ -43,6 +45,8 @@ public abstract class FIBBrowserAction extends FIBModelObject {
 
 	private DataBinding method;
 	private DataBinding isAvailable;
+
+	private BindingModel actionBindingModel;
 
 	public static BindingDefinition METHOD = new BindingDefinition("method", Object.class, BindingDefinitionType.EXECUTE, false);
 	public static BindingDefinition IS_AVAILABLE = new BindingDefinition("isAvailable", Boolean.class, BindingDefinitionType.EXECUTE, false);
@@ -94,7 +98,16 @@ public abstract class FIBBrowserAction extends FIBModelObject {
 	@Override
 	public BindingModel getBindingModel() {
 		if (getBrowserElement() != null) {
-			return getBrowserElement().getActionBindingModel();
+			if (actionBindingModel == null) {
+				actionBindingModel = new BindingModel(getBrowserElement().getActionBindingModel());
+				actionBindingModel.addToBindingVariables(new BindingVariableImpl<Object>(this, "action", Object.class) {
+					@Override
+					public Type getType() {
+						return FIBBrowserAction.this.getClass();
+					}
+				});
+			}
+			return actionBindingModel;
 		}
 		return null;
 	}
@@ -107,6 +120,9 @@ public abstract class FIBBrowserAction extends FIBModelObject {
 		super.finalizeDeserialization();
 		if (method != null) {
 			method.finalizeDeserialization();
+		}
+		if (isAvailable != null) {
+			isAvailable.finalizeDeserialization();
 		}
 	}
 

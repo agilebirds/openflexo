@@ -44,6 +44,10 @@ public abstract class DRMObject extends FlexoModelObject implements Validable {
 	}
 
 	@Override
+	protected void registerObject(FlexoProject project) {
+	}
+
+	@Override
 	public FlexoProject getProject() {
 		// TODO Auto-generated method stub
 		return null;

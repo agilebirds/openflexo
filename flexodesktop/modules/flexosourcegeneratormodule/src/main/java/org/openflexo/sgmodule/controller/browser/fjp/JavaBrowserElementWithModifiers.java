@@ -64,7 +64,7 @@ public abstract class JavaBrowserElementWithModifiers extends JavaBrowserElement
 			markers.add(JavaIconLibrary.ABSTRACT_MARKER);
 		} else if (getObject().isSynchronized()) {
 			markers.add(JavaIconLibrary.SYNCHRONIZED_MARKER);
-		} else if ((getObject() instanceof FJPJavaMethod) && ((FJPJavaMethod) getObject()).isConstructor()) {
+		} else if (getObject() instanceof FJPJavaMethod && ((FJPJavaMethod) getObject()).isConstructor()) {
 			markers.add(JavaIconLibrary.CONSTRUCTOR_MARKER);
 		}
 		// Get icon with all markers

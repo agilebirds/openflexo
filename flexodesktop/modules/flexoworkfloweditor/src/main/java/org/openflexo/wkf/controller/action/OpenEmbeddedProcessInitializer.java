@@ -19,11 +19,13 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
+import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.action.OpenEmbeddedProcess;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
 import org.openflexo.localization.FlexoLocalization;
@@ -31,7 +33,7 @@ import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
 
-public class OpenEmbeddedProcessInitializer extends ActionInitializer {
+public class OpenEmbeddedProcessInitializer extends ActionInitializer<OpenEmbeddedProcess, SubProcessNode, WKFObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -48,14 +50,21 @@ public class OpenEmbeddedProcessInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<OpenEmbeddedProcess> getDefaultInitializer() {
 		return new FlexoActionInitializer<OpenEmbeddedProcess>() {
 			@Override
-			public boolean run(ActionEvent e, OpenEmbeddedProcess action) {
+			public boolean run(EventObject e, OpenEmbeddedProcess action) {
+				if (action.getFocusedObject().hasSubProcessReference()) {
+					return action.getFocusedObject().getSubProcess(true) != null;
+				}
 				if (action.getProcessToOpen() != null && action.getProcessToOpen().isImported()) {
 					FlexoController.notify(FlexoLocalization.localizedForKey("you_cannot_edit/inspect_an_imported_process"));
 					return false;
 				}
 				if (action.getProcessToOpen() == null) {
-					return new SubProcessSelectorDialog(action.getFocusedObject().getProject(), getControllerActionInitializer())
-							.askAndSetSubProcess(action.getFocusedObject(), action.getFocusedObject().getProcess());
+					if (action.getFocusedObject().getProcess().getProject() == getEditor().getProject()) {
+						return new SubProcessSelectorDialog(action.getFocusedObject().getProject(), getControllerActionInitializer(),
+								action.getFocusedObject(), action.getFocusedObject().getProcess().getProcessNode()).askAndSetSubProcess();
+					} else {
+						return false;
+					}
 				}
 				return true;
 			}
@@ -66,9 +75,12 @@ public class OpenEmbeddedProcessInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<OpenEmbeddedProcess> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<OpenEmbeddedProcess>() {
 			@Override
-			public boolean run(ActionEvent e, OpenEmbeddedProcess action) {
-				if (action.getFocusedObject() instanceof SubProcessNode && action.getFocusedObject().getSubProcess() != null) {
-					getControllerActionInitializer().getWKFController().setCurrentFlexoProcess(action.getFocusedObject().getSubProcess());
+			public boolean run(EventObject e, OpenEmbeddedProcess action) {
+				if (action.getFocusedObject() instanceof SubProcessNode && action.getFocusedObject().hasSubProcessReference()) {
+					FlexoProcess subProcess = action.getFocusedObject().getSubProcess(true);
+					if (subProcess != null) {
+						getControllerActionInitializer().getWKFController().setCurrentFlexoProcess(subProcess);
+					}
 				}
 				return true;
 			}

@@ -207,16 +207,17 @@ public class KeyValueProperty extends Observable implements SimplePathElement<Ob
 		String propertyNameWithFirstCharToUpperCase = propertyName.substring(0, 1).toUpperCase()
 				+ propertyName.substring(1, propertyName.length());
 
-		String[] tries = new String[4];
+		String[] tries = new String[5];
 
 		tries[0] = "get" + propertyNameWithFirstCharToUpperCase;
 		tries[1] = propertyName;
 		tries[2] = "_" + propertyName;
 		tries[3] = "_get" + propertyNameWithFirstCharToUpperCase;
+		tries[4] = "is" + propertyNameWithFirstCharToUpperCase;
 
-		for (int i = 0; i < 4; i++) {
+		for (String trie : tries) {
 			try {
-				return lastClass.getMethod(tries[i], null);
+				return lastClass.getMethod(trie, null);
 			} catch (SecurityException err) {
 				// we continue
 			} catch (NoSuchMethodException err) {

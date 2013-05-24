@@ -71,7 +71,7 @@ public abstract class MessageEdge<S extends AbstractNode, E extends AbstractNode
 	public abstract FlexoPort getFlexoPort();
 
 	public MessageBindings getInputMessage() {
-		if (getInputMessageDefinition() != null && isInputPort() && (_inputMessage == null)) {
+		if (getInputMessageDefinition() != null && isInputPort() && _inputMessage == null) {
 			_inputMessage = new MessageBindings(this, getInputMessageDefinition());
 		}
 		return _inputMessage;
@@ -84,7 +84,7 @@ public abstract class MessageEdge<S extends AbstractNode, E extends AbstractNode
 	}
 
 	public MessageBindings getOutputMessage() {
-		if (getOutputMessageDefinition() != null && isOutputPort() && (_outputMessage == null)) {
+		if (getOutputMessageDefinition() != null && isOutputPort() && _outputMessage == null) {
 			_outputMessage = new MessageBindings(this, getOutputMessageDefinition());
 		}
 		return _outputMessage;

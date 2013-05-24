@@ -52,7 +52,7 @@ public class WSEDMPropertyTableModel extends AbstractModel<DMEntity, DMProperty>
 		addToColumns(new StringColumn<DMProperty>("name", 150) {
 			@Override
 			public String getValue(DMProperty object) {
-				return (object).getName();
+				return object.getName();
 			}
 
 			/*  public void setValue(FlexoModelObject object, String aValue)
@@ -63,8 +63,8 @@ public class WSEDMPropertyTableModel extends AbstractModel<DMEntity, DMProperty>
 		addToColumns(new StringColumn<DMProperty>("cardinality", 150) {
 			@Override
 			public String getValue(DMProperty object) {
-				if ((object).getCardinality() != null) {
-					return (object).getCardinality().getName();
+				if (object.getCardinality() != null) {
+					return object.getCardinality().getName();
 				}
 				return "";
 			}
@@ -89,8 +89,8 @@ public class WSEDMPropertyTableModel extends AbstractModel<DMEntity, DMProperty>
 		addToColumns(new StringColumn<DMProperty>("type", 150) {
 			@Override
 			public String getValue(DMProperty object) {
-				if ((object).getType() != null) {
-					return (object).getType().getName();
+				if (object.getType() != null) {
+					return object.getType().getName();
 				}
 				return "";
 			}
@@ -127,7 +127,7 @@ public class WSEDMPropertyTableModel extends AbstractModel<DMEntity, DMProperty>
 
 	@Override
 	public DMProperty elementAt(int row) {
-		if ((row >= 0) && (row < getRowCount())) {
+		if (row >= 0 && row < getRowCount()) {
 			return getDMEntity().getOrderedSingleProperties().elementAt(row);
 		} else {
 			return null;

@@ -6,14 +6,13 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Insets;
 
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 
 import org.openflexo.fib.utils.FIBIconLibrary;
 import org.openflexo.toolbox.StringUtils;
 
 public class RoundedBorder implements Border {
-	protected Insets insets;
-
 	private String title;
 	private int top = 2;
 	private int bottom = 2;
@@ -33,8 +32,6 @@ public class RoundedBorder implements Border {
 		this.textColor = textColor;
 		this.textFont = textFont;
 		this.darkLevel = darkLevel;
-		boolean titled = StringUtils.isNotEmpty(title);
-		insets = new Insets(5 + top + (titled ? textFont.getSize() + 5 : 0), 5 + left, 5 + bottom, 5 + right);
 	}
 
 	public RoundedBorder(int top, int left, int bottom, int right) {
@@ -47,7 +44,8 @@ public class RoundedBorder implements Border {
 
 	@Override
 	public Insets getBorderInsets(Component c) {
-		return insets;
+		Font f = textFont != null ? textFont : UIManager.getFont("TitledBorder.font");
+		return new Insets(5 + top + (StringUtils.isNotEmpty(title) ? f.getSize() + 5 : 0), 5 + left, 5 + bottom, 5 + right);
 	}
 
 	@Override
@@ -58,14 +56,21 @@ public class RoundedBorder implements Border {
 	@Override
 	public void paintBorder(Component c, Graphics g, int x, int y, int w, int h) {
 		boolean titled = StringUtils.isNotEmpty(title);
-		int TOP = top + (titled ? textFont.getSize() + 5 : 0);
+		Font f = textFont != null ? textFont : UIManager.getFont("TitledBorder.font");
+		int TOP = top + (titled ? f.getSize() + 5 : 0);
 		int BOTTOM = bottom;
 		int LEFT = left;
 		int RIGHT = right;
 
 		if (titled) {
-			g.setFont(textFont);
-			g.setColor(textColor);
+			if (textFont != null) {
+				g.setFont(textFont);
+			} else {
+				g.setFont(UIManager.getFont("TitledBorder.font"));
+			}
+			if (textColor != null) {
+				g.setColor(textColor);
+			}
 			g.drawString(title, LEFT + 5, TOP - 3);
 		}
 		g.drawImage(FIBIconLibrary.ROUND_PANEL_BORDER_TOP_LEFT.getImage(), LEFT, TOP, null);

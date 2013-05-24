@@ -19,7 +19,7 @@
  */
 package org.openflexo.wkf.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -61,7 +61,7 @@ public class WKFSetPropertyInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<SetPropertyAction> getDefaultInitializer() {
 		return new FlexoActionInitializer<SetPropertyAction>() {
 			@Override
-			public boolean run(ActionEvent e, SetPropertyAction action) {
+			public boolean run(EventObject e, SetPropertyAction action) {
 				if (action.getFocusedObject() == null) {
 					return false;
 				}
@@ -82,7 +82,7 @@ public class WKFSetPropertyInitializer extends ActionInitializer {
 						message = "would_you_really_like_to_move_process_($0)_to_($1)";
 					}
 					return FlexoController.confirm(FlexoLocalization.localizedForKeyWithParams(message, movedProcess.getName(),
-							(newParentProcess != null ? newParentProcess.getName() : null)));
+							newParentProcess != null ? newParentProcess.getName() : null));
 				}
 
 				/*if (exception instanceof ProcessMovingConfirmation) {
@@ -124,15 +124,16 @@ public class WKFSetPropertyInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<SetPropertyAction> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<SetPropertyAction>() {
 			@Override
-			public boolean run(ActionEvent e, SetPropertyAction action) {
+			public boolean run(EventObject e, SetPropertyAction action) {
 				if (action.getFocusedObject() instanceof FlexoProcess && action.getKey().equals("parentProcess")) {
 					FlexoProcess movedProcess = (FlexoProcess) action.getFocusedObject();
 					((WKFController) getController()).getWorkflowBrowser().focusOn(movedProcess);
 				} else if (action.getFocusedObject() instanceof SubProcessNode && action.getKey().equals("subProcess")) {
 					if (action.getPreviousValue() instanceof FlexoProcess && ((FlexoProcess) action.getPreviousValue()).isImported()
 							&& !(action.getValue() instanceof FlexoProcess && ((FlexoProcess) action.getValue()).isImported())) {
-						if ((action.getFocusedObject() instanceof SingleInstanceSubProcessNode
-								|| action.getFocusedObject() instanceof WSCallSubProcessNode || action.getFocusedObject() instanceof LoopSubProcessNode)) {
+						if (action.getFocusedObject() instanceof SingleInstanceSubProcessNode
+								|| action.getFocusedObject() instanceof WSCallSubProcessNode
+								|| action.getFocusedObject() instanceof LoopSubProcessNode) {
 							if (((SubProcessNode) action.getFocusedObject()).getPreConditions().size() > 0) {
 								WKFDelete delete = WKFDelete.actionType
 										.makeNewAction(null,
@@ -181,7 +182,7 @@ public class WKFSetPropertyInitializer extends ActionInitializer {
 								((InvalidProcessReferencesException) exception).report.setLocalizedTitle(FlexoLocalization
 										.localizedForKey("refactoring_has_generated_following_inconsistency"));
 								PartialConsistencyCheckDialog pccd = new PartialConsistencyCheckDialog(
-										FlexoLocalization.localizedForKey("moving_process"), (WKFController) getController(),
+										FlexoLocalization.localizedForKey("moving_process"), getController(),
 										((InvalidProcessReferencesException) exception).report);
 								pccd.show();
 							}

@@ -106,6 +106,16 @@ public class LoopSubProcessNode extends SubProcessNode {
 		deleteObservers();
 	}
 
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "sequential_sub_process";
+	}
+
 	@Override
 	public String getInspectorName() {
 		return Inspectors.WKF.LOOP_SUB_PROCESS_NODE_INSPECTOR;

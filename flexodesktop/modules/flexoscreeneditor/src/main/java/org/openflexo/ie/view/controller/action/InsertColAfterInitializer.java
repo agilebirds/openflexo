@@ -19,7 +19,7 @@
  */
 package org.openflexo.ie.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionFinalizer;
@@ -45,7 +45,7 @@ public class InsertColAfterInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<InsertColAfter> getDefaultInitializer() {
 		return new FlexoActionInitializer<InsertColAfter>() {
 			@Override
-			public boolean run(ActionEvent e, InsertColAfter action) {
+			public boolean run(EventObject e, InsertColAfter action) {
 				return true;
 			}
 		};
@@ -55,7 +55,7 @@ public class InsertColAfterInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<InsertColAfter> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<InsertColAfter>() {
 			@Override
-			public boolean run(ActionEvent e, InsertColAfter action) {
+			public boolean run(EventObject e, InsertColAfter action) {
 				return true;
 			}
 		};

@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.openflexo</groupId>
 		<artifactId>technologymodules</artifactId>
-		<version>1.4.4-SNAPSHOT</version>
+		<version>1.5.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>javatechnologymodule</artifactId>
 	<name>JavaTechnologyModule</name>
@@ -13,12 +13,10 @@
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexosourcegeneratormodule</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jdt</groupId>
 			<artifactId>core</artifactId>
-			<version>3.3.0-v_771</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.eclipse.core</groupId>
@@ -33,7 +31,6 @@
 		<dependency>
 			<groupId>org.eclipse.core</groupId>
 			<artifactId>runtime</artifactId>
-			<version>3.3.100-v20070530</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.eclipse.equinox</groupId>
@@ -48,7 +45,6 @@
 		<dependency>
 			<groupId>org.eclipse.equinox</groupId>
 			<artifactId>app</artifactId>
-			<version>1.0.0-v20070606</version>
 			<exclusions>
                 <exclusion>
                     <groupId>org.eclipse.equinox</groupId>
@@ -59,7 +55,6 @@
 		<dependency>
 			<groupId>org.eclipse.equinox</groupId>
 			<artifactId>common</artifactId>
-			<version>3.3.0-v20070426</version>
 		</dependency>
 	</dependencies>
 </project>

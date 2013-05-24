@@ -47,12 +47,12 @@ public class OpenOperationLevel extends FlexoUndoableAction<OpenOperationLevel, 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(AbstractActivityNode object, Vector<WKFObject> globalSelection) {
+		public boolean isVisibleForSelection(AbstractActivityNode object, Vector<WKFObject> globalSelection) {
 			return object.mightHaveOperationPetriGraph();
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(AbstractActivityNode object, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(AbstractActivityNode object, Vector<WKFObject> globalSelection) {
 			return object.mightHaveOperationPetriGraph();
 		}
 
@@ -92,8 +92,8 @@ public class OpenOperationLevel extends FlexoUndoableAction<OpenOperationLevel, 
 
 	@Override
 	public String getLocalizedName() {
-		if ((getFocusedObject()).getOperationPetriGraph() != null) {
-			if ((getFocusedObject()).getOperationPetriGraph().getIsVisible()) {
+		if (getFocusedObject().getOperationPetriGraph() != null) {
+			if (getFocusedObject().getOperationPetriGraph().getIsVisible()) {
 				return FlexoLocalization.localizedForKey("close_operation_level");
 			} else {
 				return FlexoLocalization.localizedForKey("open_operation_level");

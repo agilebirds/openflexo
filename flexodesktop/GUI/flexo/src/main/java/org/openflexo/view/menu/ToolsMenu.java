@@ -21,6 +21,8 @@ package org.openflexo.view.menu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,13 +56,11 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
 import org.openflexo.module.AutoSaveService;
-import org.openflexo.module.FlexoModule;
 import org.openflexo.module.Module;
-import org.openflexo.module.ModuleLoader;
-import org.openflexo.module.ProjectLoader;
 import org.openflexo.module.UserType;
 import org.openflexo.prefs.FlexoPreferences;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.model.ControllerModel;
 
 /**
  * Automatic builded 'Tools' menu for modules
@@ -93,7 +93,7 @@ public class ToolsMenu extends FlexoMenu {
 	public ToolsMenu(FlexoController controller) {
 		super("tools", controller);
 		addSpecificItems();
-		if (!UserType.isCustomerRelease() && !UserType.isAnalystRelease()) {
+		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			add(loggingItem = new LoggingItem());
 			add(localizedEditorItem = new LocalizedEditorItem());
 			add(rmItem = new ResourceManagerItem());
@@ -104,7 +104,7 @@ public class ToolsMenu extends FlexoMenu {
 			addSeparator();
 			add(saveDocSubmissions = new SaveDocSubmissionItem());
 		}
-		if (!UserType.isCustomerRelease() && !UserType.isAnalystRelease()) {
+		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			addSeparator();
 			add(repairProject = new RepairProjectItem());
 		}
@@ -180,12 +180,13 @@ public class ToolsMenu extends FlexoMenu {
 
 	}
 
-	public class ResourceManagerAction extends AbstractAction {
+	public class ResourceManagerAction extends AbstractAction implements PropertyChangeListener {
 		public ResourceManagerAction() {
 			super();
-			if (getController().getProject() == null) {
-				setEnabled(false);
+			if (getController() != null) {
+				manager.addListener(ControllerModel.CURRENT_EDITOR, this, getController().getControllerModel());
 			}
+			updateEnability();
 		}
 
 		@Override
@@ -193,13 +194,24 @@ public class ToolsMenu extends FlexoMenu {
 			if (getController().getProject() == null) {
 				return;
 			}
-			getProjectLoader().getRMWindow(getController().getProject()).show();
+			getController().getRMWindow(getController().getProject()).show();
 		}
 
-	}
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (getController() != null) {
+				if (evt.getSource() == getController().getControllerModel()) {
+					if (ControllerModel.CURRENT_EDITOR.equals(evt.getPropertyName())) {
+						updateEnability();
+					}
+				}
+			}
+		}
 
-	private ProjectLoader getProjectLoader() {
-		return ProjectLoader.instance();
+		private void updateEnability() {
+			setEnabled(getController() != null && getController().getProject() != null);
+		}
+
 	}
 
 	// ==========================================================================
@@ -221,7 +233,7 @@ public class ToolsMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			JIRAIssueReportDialog.newBugReport(FlexoModule.getActiveModule() != null ? FlexoModule.getActiveModule().getModule() : null);
+			JIRAIssueReportDialog.newBugReport(getController().getModule(), getController().getProject());
 		}
 
 	}
@@ -288,12 +300,13 @@ public class ToolsMenu extends FlexoMenu {
 
 	}
 
-	public class RepairProjectAction extends AbstractAction implements GraphicalFlexoObserver {
+	public class RepairProjectAction extends AbstractAction implements GraphicalFlexoObserver, PropertyChangeListener {
 		public RepairProjectAction() {
 			super();
-			if (getController().getProject() == null) {
-				setEnabled(false);
+			if (getController() != null) {
+				manager.addListener(ControllerModel.CURRENT_EDITOR, this, getController().getControllerModel());
 			}
+			updateEnability();
 		}
 
 		@Override
@@ -342,6 +355,20 @@ public class ToolsMenu extends FlexoMenu {
 			}
 		}
 
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			if (getController() != null) {
+				if (evt.getSource() == getController().getControllerModel()) {
+					if (ControllerModel.CURRENT_EDITOR.equals(evt.getPropertyName())) {
+						updateEnability();
+					}
+				}
+			}
+		}
+
+		private void updateEnability() {
+			setEnabled(getController() != null && getController().getProject() != null);
+		}
 	}
 
 	private ConsistencyCheckDialog repairProjectWindow = null;
@@ -355,6 +382,10 @@ public class ToolsMenu extends FlexoMenu {
 		return repairProjectWindow;
 	}
 
+	protected AutoSaveService getAutoSaveService() {
+		return getController().getProjectLoader().getAutoSaveService(getController().getProject());
+	}
+
 	public class TimeTraveler extends FlexoMenuItem {
 
 		public TimeTraveler() {
@@ -366,15 +397,16 @@ public class ToolsMenu extends FlexoMenu {
 	public class TimeTravelAction extends AbstractAction {
 		public TimeTravelAction() {
 			super();
+			setEnabled(false);
 			if (getController().getProject() == null) {
-				setEnabled(false);
 			}
 		}
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if (getAutoSaveService().isTimeTravelingAvailable()) {
-				getAutoSaveService().showTimeTravelerDialog();
+			AutoSaveService autoSaveService = getAutoSaveService();
+			if (autoSaveService != null) {
+				autoSaveService.showTimeTravelerDialog();
 			} else {
 				if (FlexoController.confirm(FlexoLocalization.localizedForKey("time_traveling_is_disabled") + ". "
 						+ FlexoLocalization.localizedForKey("would_you_like_to_activate_it_now?"))) {
@@ -386,11 +418,4 @@ public class ToolsMenu extends FlexoMenu {
 		}
 	}
 
-	private ModuleLoader getModuleLoader() {
-		return ModuleLoader.instance();
-	}
-
-	private AutoSaveService getAutoSaveService() {
-		return AutoSaveService.instance();
-	}
 }

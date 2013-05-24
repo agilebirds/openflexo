@@ -24,7 +24,6 @@ import java.io.FileInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
-import java.util.Vector;
 import java.util.logging.Level;
 
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
@@ -34,7 +33,6 @@ import org.openflexo.foundation.DocType;
 import org.openflexo.foundation.DocType.DefaultDocType;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.Inspectors;
-import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.cg.dm.CGDataModification;
 import org.openflexo.foundation.dm.DMEntity;
 import org.openflexo.foundation.dm.ERDiagram;
@@ -42,9 +40,8 @@ import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.ImageFile;
 import org.openflexo.foundation.toc.PredefinedSection.PredefinedSectionType;
-import org.openflexo.foundation.toc.action.RemoveTOCEntry;
-import org.openflexo.foundation.toc.action.RemoveTOCRepository;
 import org.openflexo.foundation.view.ViewDefinition;
+import org.openflexo.foundation.view.ViewFolder;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.xml.FlexoTOCBuilder;
@@ -52,6 +49,8 @@ import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.XMLDecoder;
 
 public class TOCRepository extends TOCEntry {
+
+	private static final File TOC_TEMPLATE_MODEL = new FileResource("Models/TOCModel/toc_template_0.1.xml");
 
 	private DocType docType;
 
@@ -75,33 +74,30 @@ public class TOCRepository extends TOCEntry {
 
 	private ImageFile logo;
 
-	public TOCRepository(TOCData data, DocType docType, TOCRepository tocTemplate) {
-		this(data);
-		this.docType = docType != null ? docType : data.getProject().getDocTypes().get(0);
-		if (tocTemplate == null) {
-			TOCRepository defaultTocTemplate = null;
-			if (docType.getName().equals(DefaultDocType.Technical.name())) {
-				defaultTocTemplate = loadTOCTemplate("SRS");
-			} else {
-				defaultTocTemplate = loadTOCTemplate("BRS");
-			}
-			createEntriesFromTemplate(defaultTocTemplate);
-		} else {
-			createEntriesFromTemplate(tocTemplate);
-		}
-	}
-
-	private TOCRepository loadTOCTemplate(String templateName) {
-		String tocTemplateFileName = templateName + ".xml";
-		File tocTemplateFile = new FileResource("Config/TOCTemplates/" + tocTemplateFileName);
+	public static TOCRepository createTOCRepositoryFromTemplate(TOCData data, File tocTemplateFile) {
 		try {
-			TOCRepository tocTemplate = (TOCRepository) XMLDecoder.decodeObjectWithMappingFile(new FileInputStream(tocTemplateFile),
-					new FileResource("Models/TOCModel/toc_template_0.1.xml"), new FlexoTOCBuilder(null));
-			return tocTemplate;
+			FlexoTOCBuilder builder = new FlexoTOCBuilder(data.getFlexoResource());
+			builder.tocData = data;
+			builder.isCloner = true;
+			TOCRepository tocRepositories = (TOCRepository) XMLDecoder.decodeObjectWithMappingFile(new FileInputStream(tocTemplateFile),
+					TOC_TEMPLATE_MODEL, builder, data.getProject().getStringEncoder());
+			return tocRepositories;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
+	}
+
+	public static TOCRepository createTOCRepositoryForDocType(TOCData data, DocType docType) {
+		String templateName;
+		if (docType.getName().equals(DefaultDocType.Technical.name())) {
+			templateName = "SRS";
+		} else {
+			templateName = "BRS";
+		}
+		String tocTemplateFileName = templateName + ".toc.xml";
+		File tocTemplateFile = new FileResource("Config/TOCTemplates/" + tocTemplateFileName);
+		return createTOCRepositoryFromTemplate(data, tocTemplateFile);
 	}
 
 	private void createEntriesFromTemplate(TOCRepository tocTemplate) {
@@ -133,14 +129,6 @@ public class TOCRepository extends TOCEntry {
 	}
 
 	@Override
-	protected Vector<FlexoActionType> getSpecificActionListForThatClass() {
-		Vector<FlexoActionType> v = super.getSpecificActionListForThatClass();
-		v.remove(RemoveTOCEntry.actionType);
-		v.add(RemoveTOCRepository.actionType);
-		return v;
-	}
-
-	@Override
 	public String getClassNameKey() {
 		return "table_of_content";
 	}
@@ -151,14 +139,16 @@ public class TOCRepository extends TOCEntry {
 	}
 
 	public DocType getDocType() {
-		if (docType == null && getProject().getDocTypes().size() > 0) {
-			docType = getProject().getDocTypes().get(0);
-		}
-		if (docTypeAsString != null) {
-			DocType dt = getProject().getDocTypeNamed(docTypeAsString);
-			if (dt != null) {
-				docType = dt;
-				docTypeAsString = null;
+		if (getProject() != null) {
+			if (docType == null && getProject().getDocTypes().size() > 0) {
+				docType = getProject().getDocTypes().get(0);
+			}
+			if (docTypeAsString != null) {
+				DocType dt = getProject().getDocTypeNamed(docTypeAsString);
+				if (dt != null) {
+					docType = dt;
+					docTypeAsString = null;
+				}
 			}
 		}
 		return docType;
@@ -173,6 +163,9 @@ public class TOCRepository extends TOCEntry {
 	}
 
 	public String getDocTypeAsString() {
+		if (getProject() == null) {
+			return docTypeAsString;
+		}
 		if (getDocType() != null) {
 			return getDocType().getName();
 		} else {
@@ -425,6 +418,14 @@ public class TOCRepository extends TOCEntry {
 		return reply;
 	}
 
+	public ViewFolderSection createViewFolderSection(String title, ViewFolder folder, TOCDataBinding value) {
+		ViewFolderSection reply = new ViewFolderSection(getData());
+		reply.setTitle(title);
+		reply.setModelObject(folder);
+		reply.setValue(value);
+		return reply;
+	}
+
 	public RoleSection createRoleSection(String title, Role role, TOCDataBinding value) {
 		RoleSection reply = new RoleSection(getData());
 		reply.setTitle(title);
@@ -458,7 +459,21 @@ public class TOCRepository extends TOCEntry {
 		return reply;
 	}
 
+	private BindingModel bindingModel = null;
+
 	@Override
+	public BindingModel getBindingModel() {
+		if (bindingModel == null) {
+			bindingModel = buildBindingModel();
+		}
+		return bindingModel;
+	}
+
+	@Override
+	public BindingModel getInferedBindingModel() {
+		return getBindingModel();
+	}
+
 	protected BindingModel buildBindingModel() {
 		BindingModel returned = new BindingModel();
 		returned.addToBindingVariables(new BindingVariableImpl(this, "project", FlexoProject.class) {

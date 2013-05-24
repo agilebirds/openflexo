@@ -19,14 +19,12 @@
  */
 package org.openflexo.foundation.rm;
 
-import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.openflexo.foundation.FlexoException;
+import org.jdom2.Document;
+import org.jdom2.Element;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingCancelledException;
@@ -45,9 +43,17 @@ import org.openflexo.toolbox.FlexoVersion;
  * @author sguerin
  * 
  */
-public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow> implements Serializable {
+public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow> {
 
 	private static final Logger logger = Logger.getLogger(FlexoWorkflowResource.class.getPackage().getName());
+
+	private String projectURI;
+
+	private ResourceType resourceType = ResourceType.WORKFLOW;
+
+	private String name;
+
+	private boolean useProjectName;
 
 	/**
 	 * Constructor used for XML Serialization: never try to instanciate resource from this constructor
@@ -59,30 +65,64 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 		builder.notifyResourceLoading(this);
 	}
 
-	public FlexoWorkflowResource(FlexoProject aProject) {
+	private FlexoWorkflowResource(FlexoProject aProject) {
 		super(aProject);
-	}
-
-	public FlexoWorkflowResource(FlexoProject aProject, FlexoProjectFile workflowFile) throws InvalidFileNameException {
-		this(aProject);
-		setResourceFile(workflowFile);
 	}
 
 	public FlexoWorkflowResource(FlexoProject aProject, FlexoWorkflow workflow, FlexoProjectFile workflowFile)
 			throws InvalidFileNameException {
-		this(aProject, workflowFile);
+		this(aProject);
 		_resourceData = workflow;
+		setResourceFile(workflowFile);
 		workflow.setFlexoResource(this);
+	}
+
+	public FlexoWorkflowResource(FlexoProject aProject, FlexoWorkflow workflow, FlexoProjectFile workflowFile, ResourceType resourceType,
+			String name) throws InvalidFileNameException {
+		this(aProject);
+		this.resourceType = resourceType;
+		this.name = name;
+		this._resourceData = workflow;
+		setResourceFile(workflowFile);
+
 	}
 
 	@Override
 	public ResourceType getResourceType() {
-		return ResourceType.WORKFLOW;
+		return resourceType;
+	}
+
+	public void setResourceType(ResourceType resourceType) {
+		this.resourceType = resourceType;
+	}
+
+	public void replaceWithWorkflow(FlexoWorkflow workflow) {
+		_resourceData = workflow;
+		setChanged();
 	}
 
 	@Override
 	public String getName() {
+		if (name != null) {
+			return name;
+		}
 		return getProject().getProjectName();
+	}
+
+	@Override
+	public void setName(String aName) {
+		this.name = aName;
+	}
+
+	public boolean isUseProjectName() {
+		return useProjectName;
+	}
+
+	public void setUseProjectName(boolean useProjectName) {
+		this.useProjectName = useProjectName;
+		if (useProjectName) {
+			name = null;
+		}
 	}
 
 	@Override
@@ -101,34 +141,45 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 			logger.fine("loadResourceData() in FlexoWorkflowResource");
 		}
 		workflow = super.performLoadResourceData(progress, loadingHandler);
-		workflow.setProject(getProject());
 		// Load all processes
 		if (progress != null) {
 			progress.setProgress(FlexoLocalization.localizedForKey("loading_processes"));
 			progress.resetSecondaryProgress(project.getFlexoWorkflow().allLocalProcessesCount());
 		}
-		loadProcesses(progress, workflow, workflow.allImportedProcessNodes());
-		loadProcesses(progress, workflow, workflow.allLocalProcessNodes());
-		for (Enumeration<FlexoProcessNode> e = workflow.allLocalProcessNodes(); e.hasMoreElements();) {
-			FlexoProcessNode nextProcessNode = e.nextElement();
-			FlexoProcess next = nextProcessNode.getProcess();
-			if (next != null) {
-				if (next.getProcessDMEntity() != null) {
-					next.getProcessDMEntity().updateParentProcessPropertyIfRequired();
+		if (!isCache()) {
+			loadProcesses(progress, workflow, workflow.allImportedProcessNodes());
+			loadProcesses(progress, workflow, workflow.allLocalProcessNodes());
+			for (Enumeration<FlexoProcessNode> e = workflow.allLocalProcessNodes(); e.hasMoreElements();) {
+				FlexoProcessNode nextProcessNode = e.nextElement();
+				FlexoProcess next = nextProcessNode.getProcess();
+				if (next != null) {
+					if (next.getProcessDMEntity() != null) {
+						next.getProcessDMEntity().updateParentProcessPropertyIfRequired();
+					}
+					next.finalizeProcessBindings();
+					next.resolveObjectReferences();
+					next.clearIsModified(true);
+					next.setLastUpdate(null);// resets last update date.
+				} else {
+					if (logger.isLoggable(Level.SEVERE)) {
+						logger.severe("No FlexoProcess linked with processsNode : '" + nextProcessNode.getName()
+								+ "' !!! Could not load process, removing process node !");
+					}
+					nextProcessNode.delete();
 				}
-				next.finalizeProcessBindings();
-				next.resolveObjectReferences();
-				next.clearIsModified(true);
-				next.setLastUpdate(null);// resets last update date.
-			} else {
-				if (logger.isLoggable(Level.SEVERE)) {
-					logger.severe("No FlexoProcess linked with processsNode : '" + nextProcessNode.getName()
-							+ "' !!! Could not load process, removing process node !");
-				}
-				nextProcessNode.delete();
 			}
 		}
 		return workflow;
+	}
+
+	public boolean isCache() {
+		return getProjectURI() != null && !getProjectURI().equals(getProject().getURI());
+	}
+
+	@Override
+	protected void saveResourceData(boolean clearIsModified)
+			throws org.openflexo.foundation.rm.FlexoXMLStorageResource.SaveXMLResourceException, SaveResourcePermissionDeniedException {
+		super.saveResourceData(clearIsModified && getResourceData().getProject() == getProject());
 	}
 
 	/**
@@ -142,14 +193,8 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 				progress.setSecondaryProgress(FlexoLocalization.localizedForKey("loading_process") + " " + next.getName());
 			}
 			if (project.getFlexoProcessResource(next.getProcessResourceName()) != null) {
-				try {
-					FlexoProcess process = project.getFlexoProcessResource(next.getProcessResourceName()).loadResourceData();
-					next.setProcess(process);
-				} catch (FlexoException e1) {
-					// Warns about the exception
-					logger.warning("Exception raised: " + e1.getClass().getName() + ". See console for details.");
-					e1.printStackTrace();
-				}
+				FlexoProcess process = project.getFlexoProcessResource(next.getProcessResourceName()).getResourceData();
+				next.setProcess(process);
 			}
 		}
 	}
@@ -159,7 +204,7 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 	 * 
 	 * @param v1
 	 * @param v2
-	 * @return boolean indicating if conversion was sucessfull
+	 * @return boolean indicating if conversion was successful
 	 */
 	@Override
 	protected boolean convertResourceFileFromVersionToVersion(FlexoVersion vers1, FlexoVersion vers2) {
@@ -174,7 +219,7 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 				root_Element = _document.getRootElement();
 				Element newWorkflowElement = new Element("flexoworkflow");
 				newWorkflowElement.setAttribute("workflowName", getName());
-				newWorkflowElement.setContent((Element) root_Element.clone());
+				newWorkflowElement.setContent(root_Element.clone());
 				_document.setRootElement(newWorkflowElement);
 				FileWritingLock lock = willWriteOnDisk();
 				if (logger.isLoggable(Level.INFO)) {
@@ -229,6 +274,14 @@ public class FlexoWorkflowResource extends FlexoXMLStorageResource<FlexoWorkflow
 	@Override
 	protected boolean repairDuplicateSerializationIdentifier() {
 		return false;
+	}
+
+	public String getProjectURI() {
+		return projectURI;
+	}
+
+	public void setProjectURI(String projectURI) {
+		this.projectURI = projectURI;
 	}
 
 }

@@ -20,14 +20,13 @@
 package org.openflexo.foundation.rm;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.filter.ElementFilter;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.filter.ElementFilter;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ie.cl.FlexoComponentLibrary;
 import org.openflexo.foundation.utils.FlexoProgress;
@@ -44,7 +43,7 @@ import org.openflexo.toolbox.FlexoVersion;
  * 
  * @author bmangez
  */
-public class FlexoComponentLibraryResource extends FlexoXMLStorageResource<FlexoComponentLibrary> implements Serializable {
+public class FlexoComponentLibraryResource extends FlexoXMLStorageResource<FlexoComponentLibrary> {
 	private static final Logger logger = Logger.getLogger(FlexoComponentLibraryResource.class.getPackage().getName());
 
 	/**
@@ -121,7 +120,7 @@ public class FlexoComponentLibraryResource extends FlexoXMLStorageResource<Flexo
 	}
 
 	@Override
-	public Class getResourceDataClass() {
+	public Class<FlexoComponentLibrary> getResourceDataClass() {
 		return FlexoComponentLibrary.class;
 	}
 
@@ -156,7 +155,6 @@ public class FlexoComponentLibraryResource extends FlexoXMLStorageResource<Flexo
 			e.printStackTrace();
 			return null;
 		}
-		library.setProject(getProject());
 		return library;
 	}
 
@@ -236,7 +234,6 @@ public class FlexoComponentLibraryResource extends FlexoXMLStorageResource<Flexo
 	}
 
 	protected class ComponentLibraryConverter1 {
-		@SuppressWarnings("hiding")
 		private final Logger logger = Logger.getLogger(FlexoComponentLibraryResource.ComponentLibraryConverter1.class.getPackage()
 				.getName());
 
@@ -265,9 +262,9 @@ public class FlexoComponentLibraryResource extends FlexoXMLStorageResource<Flexo
 			if (logger.isLoggable(Level.INFO)) {
 				logger.info("Try to convert menu items to new NAVIGATION_MENU resource !");
 			}
-			Iterator menuElementIterator = document.getDescendants(new ElementFilter("FlexoItemMenu"));
+			Iterator<Element> menuElementIterator = document.getDescendants(new ElementFilter("FlexoItemMenu"));
 			if (menuElementIterator.hasNext()) {
-				Element rootMenuItemElement = (Element) ((Element) menuElementIterator.next()).clone();
+				Element rootMenuItemElement = menuElementIterator.next().clone();
 				Element navigationMenuElement = new Element("FlexoNavigationMenu");
 				navigationMenuElement.setAttribute("id", "1");
 				navigationMenuElement.addContent(rootMenuItemElement);

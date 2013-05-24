@@ -115,12 +115,12 @@ public class AddPort extends FlexoAction<AddPort, WKFObject, WKFObject> {
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(WKFObject focusedObject, Vector<WKFObject> globalSelection) {
-			return isEnabledForSelection(focusedObject, globalSelection);
+		public boolean isVisibleForSelection(WKFObject focusedObject, Vector<WKFObject> globalSelection) {
+			return !(focusedObject instanceof FlexoProcess);
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(WKFObject focusedObject, Vector<WKFObject> globalSelection) {
+		public boolean isEnabledForSelection(WKFObject focusedObject, Vector<WKFObject> globalSelection) {
 			return focusedObject != null && !focusedObject.getProcess().isImported();
 		}
 
@@ -179,7 +179,7 @@ public class AddPort extends FlexoAction<AddPort, WKFObject, WKFObject> {
 
 	public FlexoProcess getProcess() {
 		if (getFocusedObject() != null) {
-			return (getFocusedObject()).getProcess();
+			return getFocusedObject().getProcess();
 		}
 		return null;
 	}
@@ -207,7 +207,7 @@ public class AddPort extends FlexoAction<AddPort, WKFObject, WKFObject> {
 	@Override
 	protected void doAction(Object context) {
 		logger.info("Add port");
-		if ((getProcess() != null) && (!getProcess().isImported())) {
+		if (getProcess() != null && !getProcess().isImported()) {
 			if (getNewPortType() == CreatedPortType.NEW_PORT) {
 				_newPort = new NewPort(getProcess(), getNewPortName());
 				setPositionWhenRequired();

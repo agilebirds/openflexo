@@ -116,6 +116,8 @@ public abstract class AbstractWKFPalette extends DrawingPalette {
 						action = AddPort.createOutPort.makeNewAction((PortRegistery) gr.getDrawable(), null, getController().getEditor());
 					} else if (object instanceof InOutPort) {
 						action = AddPort.createInOutPort.makeNewAction((PortRegistery) gr.getDrawable(), null, getController().getEditor());
+					} else {
+						return false;
 					}
 					action.setNewPortName(((FlexoPort) object).getDefaultName());
 
@@ -130,7 +132,7 @@ public abstract class AbstractWKFPalette extends DrawingPalette {
 				}
 			}
 
-			else if (gr.getDrawable() instanceof AbstractActivityNode && (object instanceof EventNode)) {
+			else if (gr.getDrawable() instanceof AbstractActivityNode && object instanceof EventNode) {
 				container = ((AbstractActivityNode) gr.getDrawable()).getProcess().getActivityPetriGraph();
 				((EventNode) object).setBoundaryOf((AbstractActivityNode) gr.getDrawable());
 				DropWKFElement action = createAndExecuteDropElementAction(dropLocation, container, null, true);
@@ -140,7 +142,13 @@ public abstract class AbstractWKFPalette extends DrawingPalette {
 
 			else {
 				Role roleWhereToDrop = null;
-				SwimmingLaneRepresentation swlRepresentation = ((SWLObjectGR) gr).getDrawing();
+				SwimmingLaneRepresentation swlRepresentation = null;
+				if (gr instanceof SwimmingLaneGraphicalRepresentation) {
+					swlRepresentation = ((SwimmingLaneGraphicalRepresentation) gr).getSwimmingLaneRepresentation();
+					container = swlRepresentation.getProcess().getActivityPetriGraph();
+				} else {
+					swlRepresentation = ((SWLObjectGR) gr).getDrawing();
+				}
 				if (gr.getDrawable() instanceof FlexoPetriGraph) {
 					container = (FlexoPetriGraph) gr.getDrawable();
 				}

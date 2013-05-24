@@ -41,7 +41,7 @@ public abstract class MultipleFileCVSAction<A extends MultipleFileCVSAction<A>> 
 
 	private static final Logger logger = Logger.getLogger(MultipleFileCVSAction.class.getPackage().getName());
 
-	public static abstract class MultipleFileCVSActionType<A extends MultipleFileCVSAction<?>> extends
+	public static abstract class MultipleFileCVSActionType<A extends MultipleFileCVSAction<A>> extends
 			FlexoActionType<A, FPSObject, FPSObject> {
 		protected MultipleFileCVSActionType(String actionName, ActionMenu actionMenu, ActionGroup actionGroup, int actionCategory) {
 			super(actionName, actionMenu, actionGroup, actionCategory);
@@ -52,7 +52,7 @@ public abstract class MultipleFileCVSAction<A extends MultipleFileCVSAction<A>> 
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(FPSObject focusedObject, Vector<FPSObject> globalSelection) {
+		public boolean isVisibleForSelection(FPSObject focusedObject, Vector<FPSObject> globalSelection) {
 			Vector<FPSObject> topLevelObjects = getSelectedTopLevelObjects(focusedObject, globalSelection);
 			for (FPSObject obj : topLevelObjects) {
 				if (!(obj instanceof CVSAbstractFile)) {
@@ -65,7 +65,7 @@ public abstract class MultipleFileCVSAction<A extends MultipleFileCVSAction<A>> 
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(FPSObject focusedObject, Vector<FPSObject> globalSelection) {
+		public boolean isEnabledForSelection(FPSObject focusedObject, Vector<FPSObject> globalSelection) {
 			SharedProject project = getSharedProject(focusedObject, globalSelection);
 			if (project == null) {
 				return false;

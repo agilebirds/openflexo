@@ -19,7 +19,7 @@
  */
 package org.openflexo.dm.view.controller.action;
 
-import java.awt.event.ActionEvent;
+import java.util.EventObject;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,7 +51,7 @@ public class CreateDMEOAttributeInitializer extends ActionInitializer {
 	protected FlexoActionInitializer<CreateDMEOAttribute> getDefaultInitializer() {
 		return new FlexoActionInitializer<CreateDMEOAttribute>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDMEOAttribute action) {
+			public boolean run(EventObject e, CreateDMEOAttribute action) {
 				return true;
 			}
 		};
@@ -61,7 +61,7 @@ public class CreateDMEOAttributeInitializer extends ActionInitializer {
 	protected FlexoActionFinalizer<CreateDMEOAttribute> getDefaultFinalizer() {
 		return new FlexoActionFinalizer<CreateDMEOAttribute>() {
 			@Override
-			public boolean run(ActionEvent e, CreateDMEOAttribute action) {
+			public boolean run(EventObject e, CreateDMEOAttribute action) {
 				if (getControllerActionInitializer().getDMController().getCurrentEditedObject() == action.getEntity().getDMEOModel()) {
 					if (logger.isLoggable(Level.FINE)) {
 						logger.fine("Finalizer for CreateDMEOAttribute in DMEOModelView");

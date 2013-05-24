@@ -43,7 +43,7 @@ public class Module extends QuidObject implements Named, StereoTyped {
 
 	@Override
 	public String getNameParameter() {
-		return (String) params.get(0);
+		return params.get(0);
 	}
 
 	public void setTypeParameter(String o) {
@@ -51,7 +51,7 @@ public class Module extends QuidObject implements Named, StereoTyped {
 	}
 
 	public String getTypeParameter() {
-		return (String) params.get(1);
+		return params.get(1);
 	}
 
 	public void setSpecificationParameter(String o) {
@@ -59,7 +59,7 @@ public class Module extends QuidObject implements Named, StereoTyped {
 	}
 
 	public String getSpecificationParameter() {
-		return (String) params.get(2);
+		return params.get(2);
 	}
 
 	public List getAttributes() {

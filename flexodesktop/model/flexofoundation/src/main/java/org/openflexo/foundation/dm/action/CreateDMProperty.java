@@ -23,6 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.dm.DMCardinality;
@@ -47,16 +48,20 @@ public class CreateDMProperty extends FlexoAction<CreateDMProperty, DMEntity, DM
 		}
 
 		@Override
-		protected boolean isVisibleForSelection(DMEntity object, Vector<DMObject> globalSelection) {
+		public boolean isVisibleForSelection(DMEntity object, Vector<DMObject> globalSelection) {
 			return true;
 		}
 
 		@Override
-		protected boolean isEnabledForSelection(DMEntity object, Vector<DMObject> globalSelection) {
-			return ((object != null) && (!object.getIsReadOnly()) && !(object instanceof ProcessDMEntity));
+		public boolean isEnabledForSelection(DMEntity object, Vector<DMObject> globalSelection) {
+			return object != null && !object.getIsReadOnly() && !(object instanceof ProcessDMEntity);
 		}
 
 	};
+
+	static {
+		FlexoModelObject.addActionForClass(actionType, DMEntity.class);
+	}
 
 	private DMEntity _entity;
 	private String _newPropertyName;
@@ -74,7 +79,7 @@ public class CreateDMProperty extends FlexoAction<CreateDMProperty, DMEntity, DM
 			if (_newPropertyName == null) {
 				_newPropertyName = getEntity().getDMModel().getNextDefautPropertyName(getEntity());
 			}
-			_newProperty = new DMProperty(getEntity().getDMModel(), /*getEntity(),*/_newPropertyName, null, DMCardinality.SINGLE,
+			_newProperty = new DMProperty(getEntity().getDMModel(), /* getEntity(), */_newPropertyName, null, DMCardinality.SINGLE,
 					getEntity().getIsReadOnly(), true, getEntity().getPropertyDefaultImplementationType());
 			getEntity().registerProperty(_newProperty, _newPropertyIsBindable);
 		}

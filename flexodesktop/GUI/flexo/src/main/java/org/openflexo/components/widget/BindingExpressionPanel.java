@@ -58,13 +58,13 @@ import org.openflexo.antar.expr.BooleanUnaryOperator;
 import org.openflexo.antar.expr.DefaultExpressionPrettyPrinter;
 import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.antar.expr.Expression;
+import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.Operator;
 import org.openflexo.antar.expr.OperatorNotSupportedException;
 import org.openflexo.antar.expr.SymbolicConstant;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.antar.expr.UnaryOperator;
 import org.openflexo.antar.expr.UnaryOperatorExpression;
-import org.openflexo.antar.expr.parser.ParseException;
 import org.openflexo.antar.pp.ExpressionPrettyPrinter;
 import org.openflexo.components.widget.binding.BindingSelector;
 import org.openflexo.fib.utils.FIBIconLibrary;
@@ -270,8 +270,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 			try {
 				EvaluationType evaluationType = _bindingExpression.getEvaluationType();
 
-				if (_bindingExpression != null && _bindingExpression.getBindingDefinition() != null
-						&& _bindingExpression.getBindingDefinition().getType() != null) {
+				if (_bindingExpression.getBindingDefinition() != null && _bindingExpression.getBindingDefinition().getType() != null) {
 					EvaluationType wantedEvaluationType = DMType.kindOf(_bindingExpression.getBindingDefinition().getType());
 					if (wantedEvaluationType == EvaluationType.LITERAL || evaluationType == wantedEvaluationType
 							|| wantedEvaluationType == EvaluationType.ARITHMETIC_FLOAT
@@ -296,6 +295,9 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 				}
 
 			} catch (TypeMismatchException e) {
+				status = ExpressionParsingStatus.INVALID;
+				message = e.getHTMLLocalizedMessage();
+			} catch (NullReferenceException e) {
 				status = ExpressionParsingStatus.INVALID;
 				message = e.getHTMLLocalizedMessage();
 			}
@@ -356,7 +358,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 					logger.warning("Could not access to BindingExpressionConverter : project=" + getProject());
 					return;
 				}
-				if (_bindingExpression != null && _bindingExpression.getOwner() instanceof Bindable) {
+				if (_bindingExpression.getOwner() instanceof Bindable) {
 					converter.setBindable((Bindable) _bindingExpression.getOwner());
 				}
 				newExpression = converter.parseExpressionFromString(expressionTA.getText());
@@ -367,7 +369,7 @@ public class BindingExpressionPanel extends JPanel implements FocusListener {
 				update();
 				fireEditedExpressionChanged(_bindingExpression);
 			}
-		} catch (ParseException e) {
+		} catch (org.openflexo.antar.expr.parser.ParseException e) {
 			message = "ERROR: cannot parse " + expressionTA.getText();
 			status = ExpressionParsingStatus.INVALID;
 			updateAdditionalInformations();
