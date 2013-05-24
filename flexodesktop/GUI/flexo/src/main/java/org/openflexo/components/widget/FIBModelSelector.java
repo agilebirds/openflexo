@@ -23,13 +23,15 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.toolbox.FileResource;
 
 /**
- * Widget allowing to select a Model while browsing in Information Space
+ * Widget allowing to select a Model while browsing in Information Space<br>
+ * You may select a meta-model selected model should conform.
  * 
  * @author sguerin
  * 
@@ -43,6 +45,7 @@ public class FIBModelSelector extends FIBModelObjectSelector<FlexoModelResource>
 	private InformationSpace informationSpace;
 	private TechnologyAdapter<?, ?> technologyAdapter;
 	private FlexoResourceCenter resourceCenter;
+	private FlexoMetaModelResource metaModelResource;
 
 	public FIBModelSelector(FlexoModelResource editedObject) {
 		super(editedObject);
@@ -100,6 +103,29 @@ public class FIBModelSelector extends FIBModelObjectSelector<FlexoModelResource>
 
 	public void setResourceCenter(FlexoResourceCenter resourceCenter) {
 		this.resourceCenter = resourceCenter;
+	}
+
+	public FlexoMetaModelResource getMetaModelResource() {
+		return metaModelResource;
+	}
+
+	@CustomComponentParameter(name = "metaModelResource", type = CustomComponentParameter.Type.OPTIONAL)
+	public void setMetaModelResource(FlexoMetaModelResource metaModelResource) {
+		this.metaModelResource = metaModelResource;
+	}
+
+	@Override
+	protected boolean isAcceptableValue(Object o) {
+		if (getMetaModelResource() == null) {
+			return super.isAcceptableValue(o);
+		} else {
+			if (super.isAcceptableValue(o)) {
+				if (o instanceof FlexoModelResource) {
+					return ((FlexoModelResource) o).getMetaModelResource().equals(getMetaModelResource());
+				}
+			}
+			return false;
+		}
 	}
 
 	// Please uncomment this for a live test

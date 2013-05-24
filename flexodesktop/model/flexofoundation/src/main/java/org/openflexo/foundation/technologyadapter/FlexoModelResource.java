@@ -25,7 +25,39 @@ public interface FlexoModelResource<M extends FlexoModel<M, MM>, MM extends Flex
 	@Setter(META_MODEL_RESOURCE)
 	public void setMetaModelResource(FlexoMetaModelResource<M, MM> aMetaModelResource);
 
+	/**
+	 * Return the model this resource is storing (same as {@link #getModel()}
+	 * 
+	 * @return
+	 */
 	public M getModelData();
 
+	/**
+	 * Return the model this resource is storing (same as {@link #getModelData()}
+	 * 
+	 * @return
+	 */
 	public M getModel();
+
+	/**
+	 * Return flag indicating in this model resource appear to conform to supplied meta-model resource. Assertion is performed, that
+	 * execution of this method should not cause any of both resource to be loaded (lazy evalution method). If strong checking is required,
+	 * prefer to use {@link #isConformTo(FlexoMetaModelResource)} method.
+	 * 
+	 * 
+	 * @param aMetaModelResource
+	 * @return
+	 */
+	// public boolean appearToConformTo(FlexoMetaModelResource<M, MM> aMetaModelResource);
+
+	/**
+	 * Return flag indicating in this model resource appear to conform to supplied meta-model resource.<br>
+	 * As strong checking is required, the loading of the resources might be necessary
+	 * 
+	 * 
+	 * @param aMetaModelResource
+	 * @return
+	 */
+	// public boolean isConformTo(FlexoMetaModelResource<M, MM> aMetaModelResource);
+
 }
