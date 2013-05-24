@@ -91,15 +91,20 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 			if (StringUtils.isNotEmpty(vpi.version)) {
 				returned.setVersion(new FlexoVersion(vpi.version));
 			}
-			boolean hasBeenConverted = false;
+			/*boolean hasBeenConverted = false;
 			if (StringUtils.isEmpty(vpi.modelVersion)) {
 				// This is the old model, convert to new model
 				restructureViewPointFrom0_1(viewPointDirectory, xmlFile);
 				hasBeenConverted = true;
-			}
+			}*/
 
-			returned.setModelVersion(StringUtils.isNotEmpty(vpi.modelVersion) ? new FlexoVersion(vpi.modelVersion) : returned
-					.latestVersion());
+			if (StringUtils.isEmpty(vpi.modelVersion)) {
+				returned.setModelVersion(new FlexoVersion("0.1"));
+			} else {
+				returned.setModelVersion(new FlexoVersion(vpi.modelVersion));
+			}
+			// returned.setModelVersion(StringUtils.isNotEmpty(vpi.modelVersion) ? new FlexoVersion(vpi.modelVersion) : returned
+			// .latestVersion());
 			returned.setViewPointLibrary(viewPointLibrary);
 			viewPointLibrary.registerViewPoint(returned);
 
@@ -215,6 +220,18 @@ public abstract class ViewPointResourceImpl extends FlexoXMLFileResourceImpl<Vie
 	@Override
 	public boolean hasBuilder() {
 		return true;
+	}
+
+	/**
+	 * Return flag indicating if this resource is loadable<br>
+	 * By default, such resource is loadable if based on 1.6 architecture (model version greater or equals to 1.0)
+	 * 
+	 * @return
+	 */
+	@Override
+	public boolean isLoadable() {
+		FlexoVersion VERSION_1_0 = new FlexoVersion("1.0");
+		return getModelVersion().equals(VERSION_1_0) || getModelVersion().isGreaterThan(VERSION_1_0);
 	}
 
 	private static class ViewPointInfo {

@@ -52,7 +52,7 @@ public class LoadResourceAction extends FlexoAction<LoadResourceAction, FlexoObj
 
 		@Override
 		public boolean isEnabledForSelection(FlexoObject object, Vector<FlexoObject> globalSelection) {
-			return isVisibleForSelection(object, globalSelection);
+			return object instanceof FlexoResource && ((FlexoResource) object).isLoadable() && !((FlexoResource) object).isLoaded();
 		}
 
 	};
