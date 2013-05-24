@@ -39,4 +39,5 @@ public interface ViewPointResource extends FlexoXMLFileResource<ViewPoint> {
 
 	public List<VirtualModelResource> getVirtualModelResources();
 
+	public boolean isDeprecatedVersion();
 }

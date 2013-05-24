@@ -30,12 +30,18 @@ import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.logging.FlexoLogger;
 
+/**
+ * This action is called to load a {@link FlexoResource}
+ * 
+ * @author sylvain
+ * 
+ */
 public class LoadResourceAction extends FlexoAction<LoadResourceAction, FlexoObject, FlexoObject> {
 
 	private static final Logger logger = FlexoLogger.getLogger(LoadResourceAction.class.getPackage().getName());
 
 	public static FlexoActionType<LoadResourceAction, FlexoObject, FlexoObject> actionType = new FlexoActionType<LoadResourceAction, FlexoObject, FlexoObject>(
-			"load_resource", FlexoActionType.inspectGroup) {
+			"load_resource", FlexoActionType.defaultGroup) {
 
 		/**
 		 * Factory method
