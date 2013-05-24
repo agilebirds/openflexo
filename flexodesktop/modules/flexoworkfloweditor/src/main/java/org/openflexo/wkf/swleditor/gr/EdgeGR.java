@@ -55,6 +55,7 @@ import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 import org.openflexo.foundation.wkf.node.IFOperator;
 import org.openflexo.toolbox.ToolBox;
+import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.processeditor.gr.EdgeGR.EdgeRepresentation;
 import org.openflexo.wkf.swleditor.SwimmingLaneEditorController;
@@ -79,7 +80,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		isInduced = aDrawing.getFirstVisibleObject(edge.getStartNode()) != edge.getStartNode()
 				|| aDrawing.getFirstVisibleObject(edge.getEndNode()) != edge.getEndNode();
 
-		setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.0f));
+		setForeground(ForegroundStyle.makeStyle(WKFCst.EDGE_COLOR, 1.0f));
 
 		setMiddleSymbol(MiddleSymbolType.NONE);
 		setEndSymbol(EndSymbolType.FILLED_ARROW);

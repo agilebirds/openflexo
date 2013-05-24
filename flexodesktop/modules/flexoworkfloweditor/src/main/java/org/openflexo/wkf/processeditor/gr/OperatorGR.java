@@ -31,6 +31,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.FlexoLevel;
 import org.openflexo.foundation.wkf.node.OperatorNode;
+import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
@@ -49,8 +50,8 @@ public abstract class OperatorGR<O extends OperatorNode> extends PetriGraphNodeG
 		// setAbsoluteTextY(getOperatorNode().getNodeLabelPosY());
 		setIsFloatingLabel(true);
 
-		foreground = ForegroundStyle.makeStyle(Color.BLACK);
-		foreground.setLineWidth(0.6);
+		foreground = ForegroundStyle.makeStyle(WKFCst.NODE_BORDER_COLOR);
+		foreground.setLineWidth(1.0);
 
 		setForeground(foreground);
 
@@ -113,6 +114,7 @@ public abstract class OperatorGR<O extends OperatorNode> extends PetriGraphNodeG
 			setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
 			setIsFloatingLabel(true);
 		}
+		//setLineWrap(isResizable());
 		if (getImageIcon() != null) {
 			background = BackgroundStyle.makeImageBackground(getImageIcon());
 			((BackgroundStyle.BackgroundImage) background).setScaleX(1);

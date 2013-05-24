@@ -90,6 +90,10 @@ public class WKFCst {
 
 	public static final Border level2Border = BorderFactory.createLineBorder(level2Color, 1);
 
+	public static final Color EDGE_COLOR = Color.BLACK;
+
+	public static final Color NODE_BORDER_COLOR = Color.DARK_GRAY;
+
 	public static Color getOpenNodeColorForNodeLevel(FlexoLevel level) {
 		if (level == FlexoLevel.ACTIVITY) {
 			return level0Color;

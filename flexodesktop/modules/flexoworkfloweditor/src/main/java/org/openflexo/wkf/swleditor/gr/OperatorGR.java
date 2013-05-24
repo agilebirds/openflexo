@@ -32,6 +32,7 @@ import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.FlexoLevel;
 import org.openflexo.foundation.wkf.dm.RoleChanged;
 import org.openflexo.foundation.wkf.node.OperatorNode;
+import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
@@ -51,7 +52,7 @@ public abstract class OperatorGR<O extends OperatorNode> extends PetriGraphNodeG
 		// setAbsoluteTextY(getOperatorNode().getNodeLabelPosY());
 		setIsFloatingLabel(true);
 
-		foreground = ForegroundStyle.makeStyle(Color.BLACK);
+		foreground = ForegroundStyle.makeStyle(WKFCst.NODE_BORDER_COLOR);
 		foreground.setLineWidth(0.6);
 		setForeground(foreground);
 		updateResizable();

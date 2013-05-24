@@ -19,13 +19,12 @@
  */
 package org.openflexo.wkf.swleditor.gr;
 
-import java.awt.Color;
-
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.rpc.RectPolylinConnector;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.foundation.wkf.edge.MessageEdge;
+import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
 public class MessageEdgeGR extends EdgeGR<MessageEdge<?, ?>> {
@@ -107,10 +106,10 @@ public class MessageEdgeGR extends EdgeGR<MessageEdge<?, ?>> {
 		super.updatePropertiesFromWKFPreferences();
 		if (getStartObject() instanceof PortmapGR || getEndObject() instanceof PortmapGR || getStartObject() instanceof PortGR
 				|| getEndObject() instanceof PortGR) {
-			setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.6f, DashStyle.MEDIUM_DASHES));
+			setForeground(ForegroundStyle.makeStyle(WKFCst.EDGE_COLOR, 1.0f, DashStyle.MEDIUM_DASHES));
 			setEndSymbol(EndSymbolType.PLAIN_ARROW);
 		} else {
-			setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.6f));
+			setForeground(ForegroundStyle.makeStyle(WKFCst.EDGE_COLOR, 1.0f));
 			setEndSymbol(EndSymbolType.FILLED_ARROW);
 		}
 	}

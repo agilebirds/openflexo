@@ -68,6 +68,7 @@ import org.openflexo.foundation.wkf.node.IFOperator;
 import org.openflexo.foundation.wkf.node.PetriGraphNode;
 import org.openflexo.inspector.HasIcon;
 import org.openflexo.toolbox.ToolBox;
+import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.processeditor.ProcessEditorController;
@@ -90,7 +91,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		edge.addObserver(this);
 		isInduced = aDrawing.getFirstVisibleObject(edge.getStartNode()) != edge.getStartNode()
 				|| aDrawing.getFirstVisibleObject(edge.getEndNode()) != edge.getEndNode();
-		setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.0f));
+		setForeground(ForegroundStyle.makeStyle(WKFCst.EDGE_COLOR, 1.0f));
 
 		setMiddleSymbol(MiddleSymbolType.NONE);
 		setEndSymbol(EndSymbolType.FILLED_ARROW);
