@@ -27,11 +27,9 @@ import java.util.Vector;
 
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlPoint;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolylin;
 import org.openflexo.fge.geom.FGERectPolylin;
-import org.openflexo.fge.geom.area.DefaultAreaProvider;
 import org.openflexo.fge.geomedit.ComputedControlPoint;
 import org.openflexo.fge.geomedit.DraggableControlPoint;
 import org.openflexo.fge.geomedit.GeometricDrawing;
@@ -97,10 +95,8 @@ public class PolylinGraphicalRepresentation extends GeometricObjectGraphicalRepr
 						rectPoly.getOverlap());
 				graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.GRAY));
 				tempPoly.paint(graphics);*/
-				FGERectPolylin polylinCrossingPoint = FGERectPolylin.makeRectPolylinCrossingPoint(
-						new DefaultAreaProvider<SimplifiedCardinalDirection>(rectPoly.getPointAt(1)),
-						new DefaultAreaProvider<SimplifiedCardinalDirection>(rectPoly.getPointAt(3)), rectPoly.getPointAt(2), true,
-						rectPoly.getOverlapX(), rectPoly.getOverlapY()
+				FGERectPolylin polylinCrossingPoint = FGERectPolylin.makeRectPolylinCrossingPoint(rectPoly.getPointAt(1),
+						rectPoly.getPointAt(3), rectPoly.getPointAt(2), true, rectPoly.getOverlapX(), rectPoly.getOverlapY()
 				/*,null, 
 					null*/);
 

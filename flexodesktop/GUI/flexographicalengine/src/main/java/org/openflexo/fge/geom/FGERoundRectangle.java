@@ -446,18 +446,23 @@ public class FGERoundRectangle extends RoundRectangle2D.Double implements FGEGeo
 		if (hp.containsArea(this)) {
 			return this.clone();
 		}
-		if (computeLineIntersection(hp.line) instanceof FGEEmptyArea) {
+		FGEArea computeLineIntersection = computeLineIntersection(hp.line);
+		if (computeLineIntersection instanceof FGEEmptyArea) {
 			return new FGEEmptyArea();
 		} else {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("computeHalfPlaneIntersection() for rectangle when halfplane cross rectangle");
 			}
-			FGEArea a = computeLineIntersection(hp.line);
+			FGEArea a = computeLineIntersection;
 			Vector<FGEPoint> pts = new Vector<FGEPoint>();
 			if (a instanceof FGEUnionArea && ((FGEUnionArea) a).isUnionOfPoints() && ((FGEUnionArea) a).getObjects().size() == 2) {
 				pts.add((FGEPoint) ((FGEUnionArea) a).getObjects().firstElement());
 				pts.add((FGEPoint) ((FGEUnionArea) a).getObjects().elementAt(1));
 			} else if (a instanceof FGESegment) {
+				if (getArcExcludedEast().containsArea(a) || getArcExcludedWest().containsArea(a) || getArcExcludedNorth().containsArea(a)
+						|| getArcExcludedSouth().containsArea(a)) {
+					return a;
+				}
 				pts.add(((FGESegment) a).getP1());
 				pts.add(((FGESegment) a).getP2());
 			}
@@ -521,8 +526,67 @@ public class FGERoundRectangle extends RoundRectangle2D.Double implements FGEGeo
 			} else if (returned instanceof FGESegment) {
 				p1 = ((FGESegment) returned).getP1();
 				p2 = ((FGESegment) returned).getP2();
-				if (containsPoint(p1) && containsPoint(p2)) {
+				boolean p1Contained = containsPoint(p1);
+				boolean p2Contained = containsPoint(p2);
+				if (p1Contained && p2Contained) {
 					return returned;
+				} else if (p1Contained || p2Contained) {
+					FGEPoint contained = p1Contained ? p1 : p2;
+					FGEArea p = getNorthEastRound().intersect(returned);
+					if (p instanceof FGEPoint) {
+						return new FGESegment(contained, (FGEPoint) p);
+					}
+					p = getNorthWestRound().intersect(returned);
+					if (p instanceof FGEPoint) {
+						return new FGESegment(contained, (FGEPoint) p);
+					}
+					p = getSouthEastRound().intersect(returned);
+					if (p instanceof FGEPoint) {
+						return new FGESegment(contained, (FGEPoint) p);
+					}
+					p = getSouthWestRound().intersect(returned);
+					if (p instanceof FGEPoint) {
+						return new FGESegment(contained, (FGEPoint) p);
+					}
+				} else {
+					FGEArea area = getNorthEastRound().intersect(returned);
+					FGEPoint p = null;
+					if (area instanceof FGEPoint) {
+						if (p != null) {
+							return new FGESegment(p, (FGEPoint) area);
+						} else {
+							p = (FGEPoint) area;
+						}
+					}
+					area = getNorthWestRound().intersect(returned);
+					if (area instanceof FGEPoint) {
+						if (p != null) {
+							return new FGESegment(p, (FGEPoint) area);
+						} else {
+							p = (FGEPoint) area;
+						}
+					}
+					area = getSouthEastRound().intersect(returned);
+					if (area instanceof FGEPoint) {
+						if (p != null) {
+							return new FGESegment(p, (FGEPoint) area);
+						} else {
+							p = (FGEPoint) area;
+						}
+					}
+					area = getSouthWestRound().intersect(returned);
+					if (area instanceof FGEPoint) {
+						if (p != null) {
+							return new FGESegment(p, (FGEPoint) area);
+						} else {
+							p = (FGEPoint) area;
+						}
+					}
+					if (p != null) {
+						return p;
+					} else {
+						return new FGEEmptyArea();
+					}
 				}
 			} else {
 				logger.warning("Unexpected " + returned);
@@ -779,17 +843,36 @@ public class FGERoundRectangle extends RoundRectangle2D.Double implements FGEGeo
 	@Override
 	public FGEArea getAnchorAreaFrom(SimplifiedCardinalDirection orientation) {
 		if (orientation == SimplifiedCardinalDirection.NORTH) {
-			// return getNorth();
-			return new FGEUnionArea(getArcExcludedNorth(), getNorthWestRound(), getNorthEastRound());
+			FGEArc northWestRound = getNorthWestRound();
+			northWestRound.extent = 45;
+			FGEArc northEastRound = getNorthEastRound();
+			northEastRound.extent = 45;
+			northEastRound.start += 45;
+			return new FGEUnionArea(getArcExcludedNorth(), northWestRound, northEastRound);
 		} else if (orientation == SimplifiedCardinalDirection.SOUTH) {
 			// return getSouth();
-			return new FGEUnionArea(getArcExcludedSouth(), getSouthWestRound(), getSouthEastRound());
+			FGEArc southWestRound = getSouthWestRound();
+			southWestRound.start += 45;
+			southWestRound.extent = 45;
+			FGEArc southEastRound = getSouthEastRound();
+			southEastRound.extent = 45;
+			return new FGEUnionArea(getArcExcludedSouth(), southWestRound, southEastRound);
 		} else if (orientation == SimplifiedCardinalDirection.EAST) {
 			// return getEast();
-			return new FGEUnionArea(getArcExcludedEast(), getNorthEastRound(), getSouthEastRound());
+			FGEArc northEastRound = getNorthEastRound();
+			northEastRound.extent = 45;
+			FGEArc southEastRound = getSouthEastRound();
+			southEastRound.extent = 45;
+			southEastRound.start += 45;
+			return new FGEUnionArea(getArcExcludedEast(), northEastRound, southEastRound);
 		} else if (orientation == SimplifiedCardinalDirection.WEST) {
 			// return getWest();
-			return new FGEUnionArea(getArcExcludedWest(), getNorthWestRound(), getSouthWestRound());
+			FGEArc northWestRound = getNorthWestRound();
+			northWestRound.extent = 45;
+			northWestRound.start += 45;
+			FGEArc southWestRound = getSouthWestRound();
+			southWestRound.extent = 45;
+			return new FGEUnionArea(getArcExcludedWest(), northWestRound, southWestRound);
 		}
 		logger.warning("Unexpected: " + orientation);
 		return null;

@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.AbstractBinding.BindingEvaluationContext;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.toolbox.ToolBox;
 
 public class MethodCall extends Observable implements ComplexPathElement<Object> {
 
@@ -140,12 +141,19 @@ public class MethodCall extends Observable implements ComplexPathElement<Object>
 				} else if (methodName.startsWith("is")) {
 					methodNames.add("set" + methodName.substring(2));
 					methodNames.add("_set" + methodName.substring(2));
+					methodNames.add("set" + ToolBox.capitalize(methodName));
+					methodNames.add("_set" + ToolBox.capitalize(methodName));
 				} else if (methodName.startsWith("_is")) {
 					methodNames.add("_set" + methodName.substring(2));
 					methodNames.add("set" + methodName.substring(2));
+					methodNames.add("set" + ToolBox.capitalize(methodName, true));
+					methodNames.add("_set" + ToolBox.capitalize(methodName, true));
 				}
 				methodNames.add("set" + methodName);
 				methodNames.add("_set" + methodName);
+				methodNames.add("set" + ToolBox.capitalize(methodName, true));
+				methodNames.add("_set" + ToolBox.capitalize(methodName, true));
+
 				for (String string : methodNames) {
 					try {
 						Method method2 = getDeclaringClass().getMethod(string, parameterTypes);

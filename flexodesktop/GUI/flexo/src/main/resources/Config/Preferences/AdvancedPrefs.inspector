@@ -38,6 +38,7 @@
 	<property name="lookAndFeel" label="look_and_feel" widget="DROPDOWN" constraint="14">
 		<param name="format" value="name"/>
 		<param name="showReset" value="false"/>
+		<param name="visibleFor" value="MAINTAINER,DEVELOPER,SEMANTICS,SEMANTICSPLUS"/>
 	</property>
     <property name="webServiceUrl" label="web_service_url" widget="TEXT_FIELD" constraint="15">
        <param name="validateOnReturn" value="true"/>

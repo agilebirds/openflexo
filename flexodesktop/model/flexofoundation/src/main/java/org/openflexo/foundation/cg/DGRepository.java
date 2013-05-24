@@ -481,7 +481,7 @@ public class DGRepository extends GenerationRepository {
 		}
 		this.tocRepository = tocRepository;
 		if (tocRepositoryRef != null) {
-			tocRepositoryRef.delete();
+			tocRepositoryRef.delete(false);
 			tocRepositoryRef = null;
 		}
 		if (tocRepository != null) {

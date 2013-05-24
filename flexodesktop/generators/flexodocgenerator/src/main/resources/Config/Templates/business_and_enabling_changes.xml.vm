@@ -1,0 +1,231 @@
+<w:p>
+    <w:pPr>
+        <w:keepNext/>
+        <w:pStyle w:val="Heading${level}"/>
+    </w:pPr>
+    <w:r>
+        <w:t xml:space="preserve">Business and Enabling Change Table</w:t>
+    </w:r>
+</w:p>
+#set($changes = $generator.getNewList())
+#void($changes.addAll($view.getEPInstances($view.getViewPoint().getEditionPattern("BusinesssChange"))))
+#void($changes.addAll($view.getEPInstances($view.getViewPoint().getEditionPattern("EnablingChange"))))
+
+<w:tbl>
+    <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:w="0" w:type="auto"/>
+        <w:jc w:val="center"/>
+        <w:tblBorders>
+            <w:top w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+            <w:left w:val="none" w:sz="4" w:space="0" w:color="auto"/>
+            <w:bottom w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+            <w:right w:val="none" w:sz="4" w:space="0" w:color="auto"/>
+            <w:insideH w:val="single" w:sz="4" w:space="0" w:color="auto"/>
+            <w:insideV w:val="none" w:sz="4" w:space="0" w:color="auto"/>
+        </w:tblBorders>
+        <w:tblCellMar>
+            <w:top w:w="57" w:type="dxa"/>
+            <w:bottom w:w="57" w:type="dxa"/>
+        </w:tblCellMar>
+        <w:tblLook w:val="04A0"/>
+    </w:tblPr>
+    ## Header row
+    <w:tr>
+        <w:trPr>
+            <w:cnfStyle w:val="100000000000"/>
+            <w:trHeight w:val="300"/>
+            <w:jc w:val="start"/>
+            <w:cantSplit/>
+        </w:trPr>
+        <w:tc>
+            <w:tcPr>
+                <w:vAlign w:val="top"/>
+                <w:tcBorders>
+                    <w:bottom w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+                </w:tcBorders>
+            </w:tcPr>
+            <w:p>
+                <w:pPr><w:keepNext/></w:pPr>
+                <w:r>
+                    <w:rPr>
+                        <w:b/>
+                    </w:rPr>
+                    <w:t>Change or enabler member and dependent benefits</w:t>
+                </w:r>
+            </w:p>
+        </w:tc>
+        <w:tc>
+            <w:tcPr>
+                <w:vAlign w:val="top"/>
+                <w:tcBorders>
+                    <w:bottom w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+                </w:tcBorders>
+            </w:tcPr>
+            <w:p>
+                <w:pPr><w:keepNext/></w:pPr>
+                <w:r>
+                    <w:rPr>
+                        <w:b/>
+                    </w:rPr>
+                    <w:t>Description</w:t>
+                </w:r>
+            </w:p>
+        </w:tc>
+        <w:tc>
+            <w:tcPr>
+                <w:vAlign w:val="top"/>
+                <w:tcBorders>
+                    <w:bottom w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+                </w:tcBorders>
+            </w:tcPr>
+            <w:p>
+                <w:pPr><w:keepNext/></w:pPr>
+                <w:r>
+                    <w:rPr>
+                        <w:b/>
+                    </w:rPr>
+                    <w:t>Responsibility (and involvement)</w:t>
+                </w:r>
+            </w:p>
+        </w:tc>
+        <w:tc>
+            <w:tcPr>
+                <w:vAlign w:val="top"/>
+                <w:tcBorders>
+                    <w:bottom w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+                </w:tcBorders>
+            </w:tcPr>
+            <w:p>
+                <w:pPr><w:keepNext/></w:pPr>
+                <w:r>
+                    <w:rPr>
+                        <w:b/>
+                    </w:rPr>
+                    <w:t>Prerequisite or consequent changes</w:t>
+                </w:r>
+            </w:p>
+        </w:tc>
+        <w:tc>
+            <w:tcPr>
+                <w:vAlign w:val="top"/>
+                <w:tcBorders>
+                    <w:bottom w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+                </w:tcBorders>
+            </w:tcPr>
+            <w:p>
+                <w:pPr><w:keepNext/></w:pPr>
+                <w:r>
+                    <w:rPr>
+                        <w:b/>
+                    </w:rPr>
+                    <w:t>Evidence of completion</w:t>
+                </w:r>
+            </w:p>
+        </w:tc>
+        <w:tc>
+            <w:tcPr>
+                <w:vAlign w:val="top"/>
+                <w:tcBorders>
+                    <w:bottom w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+                </w:tcBorders>
+            </w:tcPr>
+            <w:p>
+                <w:pPr><w:keepNext/></w:pPr>
+                <w:r>
+                    <w:rPr>
+                        <w:b/>
+                    </w:rPr>
+                    <w:t>Due Date</w:t>
+                </w:r>
+            </w:p>
+        </w:tc>
+    </w:tr>
+    
+    ## Body rows
+    #foreach($c in $changes)
+    <w:tr>
+        <w:trPr>
+            <w:cnfStyle w:val="100000000000"/>
+            <w:trHeight w:val="300"/>
+            <w:jc w:val="start"/>
+            <w:cantSplit/>
+        </w:trPr>
+        <w:tc>
+            <w:tcPr>
+                <w:vAlign w:val="top"/>
+            </w:tcPr>
+            #renderEPIWithTagAndAlias($c "individual.bdnID" "w:p" "BDN ID")
+            #set($benefits = $generator.getNewList())
+            #set($changes2 = $generator.getNewList())
+            #related($changes2 $c "BusinesssChange")
+            #related($changes2 $c "EnablingChange")
+            #related($benefits $c "Benefit")
+            #foreach($c1 in $changes2)
+               #related($benefits $c1 "Benefit")
+            #end
+            #foreach($b in $benefits)
+                #renderEPIWithTagAndAlias($b "individual.name" "w:p" "Name")
+            #end
+        </w:tc>
+        <w:tc>
+            <w:tcPr>
+                <w:vAlign w:val="top"/>
+            </w:tcPr>
+            #renderEPIWithTagAndAlias($c "individual.name" "w:p" "Name")
+        </w:tc>
+        <w:tc>
+            <w:tcPr>
+                <w:vAlign w:val="top"/>
+                <w:tcBorders>
+                    <w:bottom w:val="none" w:sz="0" w:space="0" w:color="auto"/>
+                </w:tcBorders>
+            </w:tcPr>
+            #renderEPIWithTagAndAlias($c "individual.hasOwner.lastName" "w:p" "Owner")
+        </w:tc>
+        <w:tc>
+            <w:tcPr>
+                <w:vAlign w:val="top"/>
+            </w:tcPr>
+            #set($changes3 = $generator.getNewList())
+            #set($bcChanges = $generator.getNewList())
+            #reverseRelated($bcChanges $c "BusinesssChange")
+            #reverseRelated($changes3 $c "EnablingChange")
+            #void($changes3.addAll($bcChanges))
+            #foreach($bc $bcChanges)
+                #reverseRelated($changes3 $bc "EnablingChange")
+            #end
+            #if($changes3.size()>0)
+            #foreach($c3 in $changes3)
+                #renderEPIWithTag($c3 "individual.name" "w:p")
+            #end
+            #else
+            <w:p/>
+            #end
+        </w:tc>
+        <w:tc>
+            <w:tcPr>
+                <w:vAlign w:val="top"/>
+            </w:tcPr>
+            #renderEPIWithTag($c "individual.hasEvidenceOfCompletion" "w:p")
+        </w:tc>
+        <w:tc>
+            <w:tcPr>
+                <w:vAlign w:val="top"/>
+            </w:tcPr>
+            #renderEPIWithTagAndAlias($c "individual.dueDate" "w:p" "Due date")
+        </w:tc>
+    </w:tr>
+    #end
+</w:tbl>
+<w:p>
+    <w:pPr>
+        <w:sectPr>
+            <w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/>
+            <w:pgMar w:top="1417" w:right="1417" w:bottom="1417"
+                w:left="1417" w:header="708" w:footer="708" w:gutter="0" />
+            <w:cols w:space="708" />
+            <w:docGrid w:linePitch="360" />
+        </w:sectPr>
+    </w:pPr>
+</w:p>

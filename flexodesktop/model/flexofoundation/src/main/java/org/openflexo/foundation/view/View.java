@@ -92,12 +92,14 @@ public class View extends ViewObject implements XMLStorageResourceData {
 	private void loadViewpointIfRequiredAndEnsureOntologyImports(FlexoProject project) {
 		if (getViewPoint() != null) {
 			getViewPoint().loadWhenUnloaded();
-			try {
-				if (project.getProjectOntology().importOntology(getViewPoint().getViewpointOntology())) {
-					logger.info("Imported missing viewpoint ontology: " + getViewPoint().getViewpointOntology());
+			if (getViewPoint().getViewpointOntology() != null) {
+				try {
+					if (project.getProjectOntology().importOntology(getViewPoint().getViewpointOntology())) {
+						logger.info("Imported missing viewpoint ontology: " + getViewPoint().getViewpointOntology());
+					}
+				} catch (OntologyNotFoundException e) {
+					logger.severe("Could not find viewpoint ontology: " + getViewPoint().getViewpointOntology());
 				}
-			} catch (OntologyNotFoundException e) {
-				logger.severe("Could not find viewpoint ontology: " + getViewPoint().getViewpointOntology());
 			}
 		}
 	}

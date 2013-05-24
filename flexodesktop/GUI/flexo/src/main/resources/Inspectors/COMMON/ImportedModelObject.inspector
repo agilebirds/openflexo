@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.FlexoModelObject" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="AdvancedTab">
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="2" font="SansSerif,0,11" name="AdvancedTab" opaque="false">
       <Label label="flexo_id" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="FlexoIDLabel" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
@@ -17,7 +17,7 @@
         <CustomAction method="data.sortProperties" isAvailable="data.canSortProperties" name="sort" />
       </Table>
     </Tab>
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="BasicTab">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="BasicTab" opaque="false">
       <Label label="name" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" name="NameLabel" localize="true" />
       <TextField index="3" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;location=right)" name="Name" readOnly="true" localize="true" />
       <Label label="description" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsTop=5;location=left)" name="DescriptionLabel" localize="true" />

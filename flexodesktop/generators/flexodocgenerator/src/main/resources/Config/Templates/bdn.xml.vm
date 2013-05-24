@@ -1,0 +1,67 @@
+<w:p>
+    <w:pPr>
+        <w:keepNext/>
+        <w:pStyle w:val="Heading${level}"/>
+    </w:pPr>
+    <w:r>
+        <w:t xml:space="preserve">#escape("View: ${view.getName()}")</w:t>
+    </w:r>
+</w:p>
+#description($view)
+<w:p>
+    <w:pPr>
+        <w:sectPr>
+            <w:pgSz w:w="11906" w:h="16838" />
+            <w:pgMar w:top="1417" w:right="1417" w:bottom="1417"
+                w:left="1417" w:header="708" w:footer="708" w:gutter="0" />
+            <w:cols w:space="708" />
+            <w:docGrid w:linePitch="360" />
+        </w:sectPr>
+    </w:pPr>
+</w:p>
+#renderLandscapeScreenshotForObject($view)
+<w:p>
+    <w:pPr>
+        <w:sectPr>
+            <w:pgSz w:w="16838" w:h="11906" w:orient="landscape" />
+            <w:pgMar w:top="1417" w:right="1417" w:bottom="1417"
+                w:left="1417" w:header="708" w:footer="708" w:gutter="0" />
+            <w:cols w:space="708" />
+            <w:docGrid w:linePitch="360" />
+        </w:sectPr>
+    </w:pPr>
+</w:p>
+#set($headers = $generator.getNewList())
+#set($paths = $generator.getNewList())
+#set($rows = $generator.getNewList())
+#set($epis = $generator.getNewList())
+#void($headers.add("BDN ID"))
+#void($paths.add("individual.bdnID"))
+#void($headers.add("Name"))
+#void($paths.add("individual.name"))
+#void($headers.add("Owner"))
+#void($paths.add("individual.hasOwner.lastName"))
+#void($headers.add("Description"))
+#void($paths.add("individual.description"))
+#set($tag = "w:p")
+#void($epis.addAll($view.getEPInstances($view.getViewPoint().getEditionPattern("Objective"))))
+#void($epis.addAll($view.getEPInstances($view.getViewPoint().getEditionPattern("Benefit"))))
+#void($epis.addAll($view.getEPInstances($view.getViewPoint().getEditionPattern("BusinesssChange"))))
+#void($epis.addAll($view.getEPInstances($view.getViewPoint().getEditionPattern("EnablingChange"))))
+#void($epis.addAll($view.getEPInstances($view.getViewPoint().getEditionPattern("Enabler"))))
+#void($epis.addAll($view.getEPInstances($view.getViewPoint().getEditionPattern("Driver"))))
+#if($epis.size()>0)
+    #foreach($epi in $epis)
+      #set($row = $generator.getNewList())
+      #foreach($path in $paths)
+      	  #set($alias = ${headers.get(${foreach.index})})
+          #void($row.add("#renderEPIWithTagAndAlias($epi $path $tag $alias)"))
+      #end
+      #void($rows.add($row))
+    #end
+    #renderDocxTable2($headers $rows $falseValue)
+#end
+
+#parse($generator.getTemplatePath("benefit_table.xml.vm"))
+#parse($generator.getTemplatePath("business_and_enabling_changes.xml.vm"))
+#parse($generator.getTemplatePath("benefit_measurement_table.xml.vm"))

@@ -26,4 +26,6 @@ public class ApplicationVersion {
 	// This field must be non-final because it will be generated during the build procedure.
 	// If you declare this field final, then the compiler will copy it's value directly and you will not see the value of the build
 	public static String BUILD_ID = "dev";
+
+	public static String COMMIT_ID = "dev";
 }

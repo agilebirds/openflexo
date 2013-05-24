@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.FlexoModelObject" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="DocTab">
+    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" opaque="false" name="DocTab">
       <Custom componentClassName="org.openflexo.components.widget.FIBDescriptionWidget" localize="true" manageDynamicModel="true" name="SpecificDescriptions" index="20" data="data" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" width="200" height="100" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" />
       <CheckBox selected="false" index="28" data="data.dontGenerate" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="DontGenerate" localize="true" />
       <Label label="dont_generate" index="29" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=right)" name="DontGenerateLabel" localize="true" />
     </Tab>
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab">
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" opaque="false" name="AdvancedTab">
       <Label label="flexo_id" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="FlexoIDLabel" localize="true">
         <Parameter name="visibleFor" value="SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER" />
       </Label>
@@ -62,18 +62,18 @@
     <Localized key="Id" lang="English">Id</Localized>
     <Localized key="Id" lang="French">Id</Localized>
     <Localized key="Id" lang="Dutch">Id</Localized>
-    <Localized key="EditionPattern" lang="English">EditionPattern</Localized>
-    <Localized key="EditionPattern" lang="French">EditionPattern</Localized>
-    <Localized key="EditionPattern" lang="Dutch">EditionPattern</Localized>
-    <Localized key="PatternRole" lang="English">PatternRole</Localized>
-    <Localized key="PatternRole" lang="French">PatternRole</Localized>
-    <Localized key="PatternRole" lang="Dutch">PatternRole</Localized>
+    <Localized key="EditionPattern" lang="English">Edition Pattern</Localized>
+    <Localized key="EditionPattern" lang="French">Edition Pattern</Localized>
+    <Localized key="EditionPattern" lang="Dutch">Edition Pattern</Localized>
+    <Localized key="PatternRole" lang="English">Pattern Role</Localized>
+    <Localized key="PatternRole" lang="French">Pattern Role</Localized>
+    <Localized key="PatternRole" lang="Dutch">Pattern Role</Localized>
     <Localized key="pattern_role" lang="English">Pattern Role</Localized>
     <Localized key="pattern_role" lang="French">Pattern Role</Localized>
     <Localized key="pattern_role" lang="Dutch">Pattern Role</Localized>
-    <Localized key="actor" lang="English">actor</Localized>
-    <Localized key="actor" lang="French">actor</Localized>
-    <Localized key="actor" lang="Dutch">actor</Localized>
+    <Localized key="actor" lang="English">Actor</Localized>
+    <Localized key="actor" lang="French">Acteur</Localized>
+    <Localized key="actor" lang="Dutch">Actor</Localized>
     <Localized key="name" lang="English">Name</Localized>
     <Localized key="name" lang="French">Nom</Localized>
     <Localized key="name" lang="Dutch">Name</Localized>
@@ -93,7 +93,7 @@
     <Localized key="Doc" lang="French">Doc</Localized>
     <Localized key="Doc" lang="Dutch">Doc</Localized>
     <Localized key="Advanced" lang="English">Advanced</Localized>
-    <Localized key="Advanced" lang="Dutch">Advanced</Localized>
+    <Localized key="Advanced" lang="Dutch">Geavanceerd</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="ModelObject" />
 </Panel>

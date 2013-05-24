@@ -96,7 +96,11 @@ public class DGScreenshotFile extends AbstractCGFile {
 	 */
 	@Override
 	public Date getLastGenerationDate() {
-		return new Date(((ScreenshotResource) getResource().getResourceToCopy()).getLastGenerationDate().getTime());
+		if ((ScreenshotResource) getResource().getResourceToCopy() != null) {
+			return new Date(((ScreenshotResource) getResource().getResourceToCopy()).getLastGenerationDate().getTime());
+		} else {
+			return null;
+		}
 	}
 
 	/**

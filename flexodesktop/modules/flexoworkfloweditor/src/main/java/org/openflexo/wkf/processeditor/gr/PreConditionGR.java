@@ -59,7 +59,7 @@ public class PreConditionGR extends AbstractNodeGR<FlexoPreCondition> implements
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(PreConditionGR.class.getPackage().getName());
 
-	private static final int PRECONDITION_SIZE = 10;
+	public static final int PRECONDITION_SIZE = 10;
 
 	private ForegroundStyle foreground;
 	private BackgroundStyle background;

@@ -34,6 +34,8 @@ import org.openflexo.foundation.xml.FlexoProcessBuilder;
  */
 public class MultipleInstanceSubProcessNode extends SubProcessNode {
 
+	public static final String IS_SEQUENTIAL = "isSequential";
+
 	private static final Logger logger = Logger.getLogger(MultipleInstanceSubProcessNode.class.getPackage().getName());
 
 	// isSequential == false -> FORK, isSequential == true -> LOOP
@@ -99,6 +101,8 @@ public class MultipleInstanceSubProcessNode extends SubProcessNode {
 
 	public void setIsSequential(boolean isSequential) {
 		this.isSequential = isSequential;
+		setChanged();
+		notifyAttributeModification(IS_SEQUENTIAL, !isSequential, isSequential);
 	}
 
 	@Override

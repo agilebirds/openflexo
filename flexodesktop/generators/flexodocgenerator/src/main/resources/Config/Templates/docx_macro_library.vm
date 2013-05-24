@@ -756,13 +756,6 @@ if there is an associated screen make a hyperlink to the screen.
 #macro(tocEntry $_entry)
 <!--Entering macro tocEntry -->
     $!{generator.beginTocEntry($_entry)}
-    #if(${_entry.getStartOnANewPage()})
-        <w:p>
-            <w:r>
-                <w:br w:type="page"/>
-            </w:r>
-        </w:p>
-    #end
     #set($templateName = ${_entry.getDefaultTemplateName()})
     #if(${_entry.isIteration()})
     	${generator.log("Rendering iteration")}
@@ -785,6 +778,9 @@ if there is an associated screen make a hyperlink to the screen.
     #if(${_entry.getRenderSectionTitle()})
     <w:p>
         <w:pPr>
+        	#if(${_entry.getStartOnANewPage()})
+        	<w:pageBreakBefore/>
+        	#end
             <w:keepNext/>
             <w:pStyle w:val="Heading${_entry.getLevel()}"/>
         </w:pPr>
@@ -792,6 +788,15 @@ if there is an associated screen make a hyperlink to the screen.
            #mkbookMark(${_entry.getObject().getFlexoID()} ${generator.getReference($_entry.getObject())})
         #end
         #renderTocEntryTitle($_entry)
+    </w:p>
+    #else
+    <w:p>
+        <w:pPr>
+            #if(${_entry.getStartOnANewPage()})
+            <w:pageBreakBefore/>
+            #end
+            <w:keepNext/>
+        </w:pPr>
     </w:p>
 	#end
     #if(${_entry.getRenderContent()})

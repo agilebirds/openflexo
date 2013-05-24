@@ -21,7 +21,6 @@ package org.openflexo.wkf.swleditor.gr;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
@@ -41,7 +40,6 @@ import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ShapeView;
-import org.openflexo.foundation.AttributeDataModification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.utils.FlexoFont;
@@ -65,6 +63,7 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	public SubProcessNodeGR(SubProcessNode subProcessNode, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
 		super(subProcessNode, ShapeType.RECTANGLE, aDrawing, isInPalet);
+		setVerticalTextAlignment(VerticalTextAlignment.TOP);
 		addToMouseClickControls(new ProcessOpener(), true);
 		/*setBorder(new ShapeGraphicalRepresentation.ShapeBorder(
 				PortmapRegisteryGR.PORTMAP_REGISTERY_WIDTH,
@@ -93,22 +92,22 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	@Override
 	int getTopBorder() {
-		return isInPalette ? 5 : PORTMAP_REGISTERY_WIDTH;
+		return isInPalette ? super.getTopBorder() : PORTMAP_REGISTERY_WIDTH;
 	}
 
 	@Override
 	int getBottomBorder() {
-		return isInPalette ? 5 : PORTMAP_REGISTERY_WIDTH;
+		return isInPalette ? super.getBottomBorder() : PORTMAP_REGISTERY_WIDTH;
 	}
 
 	@Override
 	int getLeftBorder() {
-		return isInPalette ? 5 : PORTMAP_REGISTERY_WIDTH;
+		return isInPalette ? super.getLeftBorder() : PORTMAP_REGISTERY_WIDTH;
 	}
 
 	@Override
 	int getRightBorder() {
-		return isInPalette ? 5 : PORTMAP_REGISTERY_WIDTH;
+		return isInPalette ? super.getRightBorder() : PORTMAP_REGISTERY_WIDTH;
 	}
 
 	protected FlexoFont getRoleFont() {
@@ -118,17 +117,9 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 		return WKFPreferences.getRoleFont();
 	}
 
-	protected double getVerticalGap() {
-		Dimension labelSize = getNormalizedLabelSize();
-		return (getHeight() - labelSize.height - getRoleFont().getSize() - ICONS_HEIGHT - getExtraSpaceAbove() - getExtraSpaceBelow()) / 4;
-	}
-
 	@Override
 	public double getRelativeTextY() {
-		Dimension labelSize = getNormalizedLabelSize();
-		double vGap = getVerticalGap();
-		double absoluteCenterY = vGap + labelSize.height / 2 + getExtraSpaceAbove();
-		return absoluteCenterY / getHeight();
+		return getExtraSpaceAbove() / getHeight();
 	}
 
 	@Override
@@ -145,9 +136,7 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 	}
 
 	public FGERectangle getExpandingRect() {
-		Dimension labelSize = getNormalizedLabelSize();
-		double vGap = getVerticalGap();
-		double absoluteIconY = vGap * 3 + labelSize.height + getRoleFont().getSize() + getExtraSpaceAbove();
+		double absoluteIconY = getHeight() - getExtraSpaceBelow() - MIN_SPACE - WKFIconLibrary.EXPANDABLE_ICON.getIconHeight();
 		double absoluteIconX;
 		ImageIcon typeIcon = getImageIcon(getSubProcessNode());
 		if (typeIcon == null) {
@@ -160,14 +149,12 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	}
 
-	protected FGERectangle getAdditionalSymbolRect() {
+	public FGERectangle getAdditionalSymbolRect() {
 		ImageIcon typeIcon = getImageIcon(getSubProcessNode());
 		if (typeIcon == null) {
 			return null;
 		}
-		Dimension labelSize = getNormalizedLabelSize();
-		double vGap = getVerticalGap();
-		double absoluteIconY = vGap * 3 + labelSize.height + getRoleFont().getSize() + getExtraSpaceAbove();
+		double absoluteIconY = getHeight() - getExtraSpaceBelow() - MIN_SPACE - WKFIconLibrary.EXPANDABLE_ICON.getIconHeight();
 		double absoluteIconX = (getWidth() - WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() - typeIcon.getIconWidth() - MIN_SPACE) / 2
 				+ WKFIconLibrary.EXPANDABLE_ICON.getIconWidth() + MIN_SPACE;
 		return new FGERectangle(absoluteIconX / getWidth(), absoluteIconY / getHeight(), WKFIconLibrary.EXPANDABLE_ICON.getIconWidth()
@@ -177,7 +164,11 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	public static ImageIcon getImageIcon(SubProcessNode spNode) {
 		if (spNode instanceof MultipleInstanceSubProcessNode) {
-			return WKFIconLibrary.MULTIPLE_INSTANCE_SUBPROCESS_ICON;
+			if (((MultipleInstanceSubProcessNode) spNode).getIsSequential()) {
+				return WKFIconLibrary.SEQUENTIAL_MULTIPLE_INSTANCE_SUBPROCESS_ICON;
+			} else {
+				return WKFIconLibrary.MULTIPLE_INSTANCE_SUBPROCESS_ICON;
+			}
 		} else if (spNode instanceof SingleInstanceSubProcessNode) {
 			return null;
 		} else if (spNode instanceof LoopSubProcessNode) {
@@ -210,9 +201,10 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 
 	@Override
 	public void update(FlexoObservable observable, DataModification dataModification) {
-		if (dataModification instanceof AttributeDataModification
-				&& "subProcess".equals(((AttributeDataModification) dataModification).propertyName())) {
+		if ("subProcess".equals(dataModification.propertyName())) {
 			getDrawing().updateGraphicalObjectsHierarchy();
+		} else if (MultipleInstanceSubProcessNode.IS_SEQUENTIAL.equals(dataModification.propertyName())) {
+			notifyShapeNeedsToBeRedrawn();
 		}
 		super.update(observable, dataModification);
 	}

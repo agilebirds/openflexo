@@ -2068,7 +2068,23 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 						String projectName = reference.getResourceIdentifier().substring(ResourceType.WORKFLOW.getName().length() + 1);
 						List<FlexoProjectReference> refs = data.getProjectReferenceWithName(projectName, true);
 						for (FlexoProjectReference ref : refs) {
-							Role r = ref.getWorkflow().getRoleList().getRoleWithFlexoID(reference.getFlexoID());
+							FlexoWorkflow workflow = ref.getWorkflow();
+							if (workflow == null) {
+								continue;
+							}
+							Role r = workflow.getRoleList().getRoleWithFlexoID(reference.getFlexoID());
+							if (r != null) {
+								reference._setEnclosingProjectIdentifier(ref.getURI());
+								return r;
+							}
+						}
+						for (FlexoProjectReference ref : data.getImportedProjects()) {
+							FlexoWorkflow workflow = ref.getWorkflow();
+							if (workflow == null) {
+								continue;
+							}
+
+							Role r = workflow.getRoleList().getRoleWithFlexoID(reference.getFlexoID());
 							if (r != null) {
 								reference._setEnclosingProjectIdentifier(ref.getURI());
 								return r;

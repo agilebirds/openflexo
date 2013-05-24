@@ -34,9 +34,11 @@ import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
 public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 
+	private static final int MIN_SPACE = 4;
+
 	public ActivityNodeGR(ActivityNode activityNode, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
 		super(activityNode, ShapeType.RECTANGLE, aDrawing, isInPalet);
-
+		setVerticalTextAlignment(VerticalTextAlignment.TOP);
 		setShapePainter(new ShapePainter() {
 			@Override
 			public void paintShape(FGEShapeGraphics g) {
@@ -48,6 +50,12 @@ public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 
 		updatePropertiesFromWKFPreferences();
 
+	}
+
+	@Override
+	public double getRelativeTextY() {
+		int vOffset = getImageIcon() != null ? getImageIcon().getIconHeight() : 10;
+		return (vOffset + MIN_SPACE) / getHeight();
 	}
 
 	@Override
@@ -113,6 +121,7 @@ public class ActivityNodeGR extends NormalAbstractActivityNodeGR<ActivityNode> {
 		if (dataModification instanceof WKFAttributeDataModification
 				&& "taskType".equals(((WKFAttributeDataModification) dataModification).getAttributeName())) {
 			checkAndUpdateDimensionIfRequired();
+			notifyShapeNeedsToBeRedrawn();
 		}
 		super.update(observable, dataModification);
 	}

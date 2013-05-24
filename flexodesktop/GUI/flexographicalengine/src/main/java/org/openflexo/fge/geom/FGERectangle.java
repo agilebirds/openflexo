@@ -57,6 +57,10 @@ public class FGERectangle extends Rectangle2D.Double implements FGEGeometricObje
 		this(aX, aY, aWidth, aHeight, Filling.NOT_FILLED);
 	}
 
+	public FGERectangle(FGERectangle rectangle) {
+		this(rectangle.x, rectangle.y, rectangle.width, rectangle.height, rectangle._filling);
+	}
+
 	public FGERectangle(double aX, double aY, double aWidth, double aHeight, Filling filling) {
 		super(aX, aY, aWidth, aHeight);
 		if (aWidth < 0) {

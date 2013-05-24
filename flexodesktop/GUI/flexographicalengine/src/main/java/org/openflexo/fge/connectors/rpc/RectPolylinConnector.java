@@ -55,9 +55,6 @@ import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.geom.area.DefaultAreaProvider;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEAreaProvider;
-import org.openflexo.fge.geom.area.FGEEmptyArea;
-import org.openflexo.fge.geom.area.FGEHalfPlane;
-import org.openflexo.fge.geom.area.FGEIntersectionArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
@@ -308,8 +305,8 @@ public class RectPolylinConnector extends Connector {
 	}
 
 	@Override
-	public void refreshConnector() {
-		if (!needsRefresh()) {
+	public void refreshConnector(boolean force) {
+		if (!force && !needsRefresh()) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Skipping refreshConnector() for " + getGraphicalRepresentation().getDrawable());
 			}
@@ -326,7 +323,7 @@ public class RectPolylinConnector extends Connector {
 			updateMiddleSymbolLocationControlPoint();
 		}
 
-		super.refreshConnector();
+		super.refreshConnector(force);
 
 		firstUpdated = true;
 
@@ -1627,24 +1624,26 @@ public class RectPolylinConnector extends Connector {
 		}
 
 		else {
-			for (int i = 0; i < potentialStartOrientations.size(); i++) {
-				for (int j = 0; j < potentialEndOrientations.size(); j++) {
-					if (allowedStartOrientations.contains(potentialStartOrientations.get(i))
-							&& allowedEndOrientations.contains(potentialEndOrientations.get(j))) {
-						FGERectPolylin newPolylin = new FGERectPolylin(startArea, potentialStartOrientations.get(i), endArea,
-								potentialEndOrientations.get(j), getStraightLineWhenPossible(), getOverlapXResultingFromPixelOverlap(),
-								getOverlapYResultingFromPixelOverlap());
-						potentialPolylin.add(newPolylin);
-						if (newPolylin.doesRespectAllConstraints() && newPolylin.getLength() < minimalLength + FGEGeometricObject.EPSILON /*
-																																			* Hysteresis
-																																			* to
-																																			* avoid
-																																			* blinking
-																																			*/) {
-							polylin = newPolylin;
-							minimalLength = newPolylin.getLength();
-							choosenStartOrientation = potentialStartOrientations.get(i);
-							choosenEndOrientation = potentialEndOrientations.get(j);
+			for (SimplifiedCardinalDirection startOrientation : potentialStartOrientations) {
+				if (allowedStartOrientations.contains(startOrientation)) {
+					for (SimplifiedCardinalDirection endOrientation : potentialEndOrientations) {
+						if (allowedEndOrientations.contains(endOrientation)) {
+							FGERectPolylin newPolylin = new FGERectPolylin(startArea, startOrientation, endArea, endOrientation,
+									getStraightLineWhenPossible(), getOverlapXResultingFromPixelOverlap(),
+									getOverlapYResultingFromPixelOverlap());
+							potentialPolylin.add(newPolylin);
+							if (newPolylin.doesRespectAllConstraints()
+									&& newPolylin.getLength() < minimalLength + FGEGeometricObject.EPSILON /*
+																											* Hysteresis
+																											* to
+																											* avoid
+																											* blinking
+																											*/) {
+								polylin = newPolylin;
+								minimalLength = newPolylin.getLength();
+								choosenStartOrientation = startOrientation;
+								choosenEndOrientation = endOrientation;
+							}
 						}
 					}
 				}
@@ -1698,34 +1697,14 @@ public class RectPolylinConnector extends Connector {
 				startArea) : new FGEAreaProvider<SimplifiedCardinalDirection>() {
 			@Override
 			public FGEArea getArea(SimplifiedCardinalDirection input) {
-				AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(getStartObject(), getGraphicalRepresentation());
-				FGEHalfPlane makeFGEHalfPlane = FGEHalfPlane.makeFGEHalfPlane(input.getNormalizedRepresentativePoint(),
-						input.getCardinalDirectionEquivalent()).transform(at);
-				FGEArea makeIntersection = FGEIntersectionArea.makeIntersection(startArea, makeFGEHalfPlane);
-				if (makeIntersection instanceof FGEEmptyArea) {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Intersection of " + startArea + " and " + makeFGEHalfPlane + " return empty area");
-					}
-					return startArea;
-				}
-				return makeIntersection;
+				return getStartObject().getAllowedStartAreaForConnectorForDirection(getGraphicalRepresentation(), startArea, input);
 			}
 		};
 		FGEAreaProvider<SimplifiedCardinalDirection> endAreaProvider = getIsEndingLocationFixed() ? new DefaultAreaProvider<SimplifiedCardinalDirection>(
 				endArea) : new FGEAreaProvider<SimplifiedCardinalDirection>() {
 			@Override
 			public FGEArea getArea(SimplifiedCardinalDirection input) {
-				AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(getEndObject(), getGraphicalRepresentation());
-				FGEHalfPlane makeFGEHalfPlane = FGEHalfPlane.makeFGEHalfPlane(input.getNormalizedRepresentativePoint(),
-						input.getCardinalDirectionEquivalent()).transform(at);
-				FGEArea makeIntersection = FGEIntersectionArea.makeIntersection(endArea, makeFGEHalfPlane);
-				if (makeIntersection instanceof FGEEmptyArea) {
-					if (logger.isLoggable(Level.WARNING)) {
-						logger.warning("Intersection of " + endArea + " and " + makeFGEHalfPlane + " return empty area");
-					}
-					return endArea;
-				}
-				return makeIntersection;
+				return getEndObject().getAllowedEndAreaForConnectorForDirection(getGraphicalRepresentation(), endArea, input);
 			}
 		};
 		if (_crossedPoint != null) {

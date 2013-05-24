@@ -24,6 +24,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Arc2D;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEUtils;
@@ -33,6 +34,7 @@ import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEExclusiveOrArea;
 import org.openflexo.fge.geom.area.FGEHalfBand;
 import org.openflexo.fge.geom.area.FGEHalfLine;
+import org.openflexo.fge.geom.area.FGEHalfPlane;
 import org.openflexo.fge.geom.area.FGEIntersectionArea;
 import org.openflexo.fge.geom.area.FGESubstractionArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
@@ -783,8 +785,43 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 			FGEArea returned = intersect(boundsIntersect);
 			if (returned instanceof FGEIntersectionArea) {
 				// Cannot do better, sorry
+				if (logger.isLoggable(Level.FINE)) {
+					logger.fine("Unable to compute intersection between " + this + " and " + area);
+				}
 			}
 			return returned;
+		}
+		if (area instanceof FGEHalfPlane) {
+			FGEHalfPlane hp = (FGEHalfPlane) area;
+			FGELine line = hp.line;
+			FGEArea intersect = intersect(line);
+			FGEPoint p1 = null;
+			FGEPoint p2 = null;
+			if (intersect instanceof FGEUnionArea && ((FGEUnionArea) intersect).isUnionOfPoints()
+					&& ((FGEUnionArea) intersect).getObjects().size() > 1) {
+				p1 = (FGEPoint) ((FGEUnionArea) intersect).getObjects().get(0);
+				p2 = (FGEPoint) ((FGEUnionArea) intersect).getObjects().get(1);
+			} else if (intersect instanceof FGESegment) {
+				p1 = ((FGESegment) intersect).getP1();
+				p2 = ((FGESegment) intersect).getP2();
+			} else if (intersect instanceof FGEPoint) {
+				return intersect;
+			}
+			if (p1 != null && p2 != null) {
+				ArcType type = getFGEArcType();
+				if (type == ArcType.PIE) {
+					type = line.contains(getCenter()) ? ArcType.PIE : ArcType.CHORD;
+				}
+				double startAngle = Math.toDegrees(angleForPoint(p1));
+				double endAngle = Math.toDegrees(angleForPoint(p2));
+				FGEArc arc1 = new FGEArc(x, y, width, height, startAngle, endAngle - startAngle + (endAngle >= startAngle ? 0 : 360), type);
+				FGEArc arc2 = new FGEArc(x, y, width, height, endAngle, startAngle - endAngle + (startAngle >= endAngle ? 0 : 360), type);
+				if (hp.containsPoint(arc1.getMiddle())) {
+					return arc1;
+				} else {
+					return arc2;
+				}
+			}
 		}
 
 		FGEIntersectionArea returned = new FGEIntersectionArea(this, area);
@@ -912,7 +949,7 @@ public class FGEArc extends Arc2D.Double implements FGEGeometricObject<FGEArc>, 
 	public void paint(FGEGraphics g) {
 		if (getFGEArcType() == ArcType.CHORD || getFGEArcType() == ArcType.PIE) {
 			g.useDefaultBackgroundStyle();
-			g.fillArc(getX(), getY(), getWidth(), getHeight(), getAngleStart(), getAngleExtent());
+			g.fillArc(getX(), getY(), getWidth(), getHeight(), getAngleStart(), getAngleExtent(), getFGEArcType() == ArcType.CHORD);
 		}
 		g.useDefaultForegroundStyle();
 		Stroke defaultForegroundStroke = null;

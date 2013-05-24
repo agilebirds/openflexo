@@ -121,9 +121,8 @@ public abstract class ModelObjectSection<T extends FlexoModelObject> extends TOC
 	}
 
 	public void setModelObject(T modelObject) {
-		System.out.println("set model object with " + modelObject);
 		if (modelObjectReference != null) {
-			modelObjectReference.delete();
+			modelObjectReference.delete(false);
 			modelObjectReference = null;
 		}
 		if (modelObject != null) {

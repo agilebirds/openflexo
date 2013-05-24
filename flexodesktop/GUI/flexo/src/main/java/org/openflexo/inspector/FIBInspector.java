@@ -25,7 +25,10 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingDefinition;
 import org.openflexo.antar.binding.BindingFactory;
+import org.openflexo.antar.binding.StaticBinding;
+import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.components.widget.FIBIndividualSelector;
 import org.openflexo.components.widget.FIBPropertySelector;
 import org.openflexo.fib.FIBLibrary;
@@ -45,6 +48,7 @@ import org.openflexo.fib.model.FIBWidget;
 import org.openflexo.fib.model.TwoColsLayoutConstraints;
 import org.openflexo.fib.model.TwoColsLayoutConstraints.TwoColsLayoutLocation;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 import org.openflexo.foundation.ontology.EditionPatternReference;
 import org.openflexo.foundation.ontology.OntologyClass;
 import org.openflexo.foundation.viewpoint.EditionPattern;
@@ -547,6 +551,59 @@ public class FIBInspector extends FIBPanel {
 						new DataBinding("data.project"), true));
 				newTab.addToSubComponents(actionSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
 				return actionSelector;
+
+			case Screen:
+				FIBCustom componentSelector = new FIBCustom();
+				componentSelector.setComponentClass(org.openflexo.components.widget.FIBComponentSelector.class);
+				componentSelector.addToAssignments(new FIBCustomAssignment(componentSelector, new DataBinding("component.project"),
+						new DataBinding("data.project"), true));
+				class CustomStaticBinding extends StaticBinding<Class<OperationComponentDefinition>> {
+
+					@Override
+					public EvaluationType getEvaluationType() {
+						return EvaluationType.LITERAL;
+					}
+
+					@Override
+					public Class<OperationComponentDefinition> getValue() {
+						return OperationComponentDefinition.class;
+					}
+
+					@Override
+					public void setValue(Class<OperationComponentDefinition> aValue) {
+
+					}
+
+					@Override
+					public Class<Class<OperationComponentDefinition>> getStaticBindingClass() {
+						return (Class<Class<OperationComponentDefinition>>) getValue().getClass();
+					}
+
+					@Override
+					public StaticBinding<Class<OperationComponentDefinition>> clone() {
+						return new CustomStaticBinding();
+					}
+
+					@Override
+					public String getStringRepresentation() {
+						return getValue().getName();
+					}
+				}
+
+				final CustomStaticBinding binding = new CustomStaticBinding();
+				DataBinding value = new DataBinding(OperationComponentDefinition.class.getName()) {
+					@Override
+					public void setBindingDefinition(BindingDefinition bindingDefinition) {
+						super.setBindingDefinition(bindingDefinition);
+						binding.setBindingDefinition(bindingDefinition);
+					}
+				};
+				componentSelector.addToAssignments(new FIBCustomAssignment(componentSelector, new DataBinding("component.type"), value,
+						true));
+				newTab.addToSubComponents(componentSelector, new TwoColsLayoutConstraints(TwoColsLayoutLocation.right, true, false));
+				value.setBinding(binding);
+				binding.setBindingDefinition(value.getBindingDefinition());
+				return componentSelector;
 
 			default:
 				break;

@@ -20,7 +20,6 @@
 package org.openflexo.fib.view.widget.table;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -71,16 +70,13 @@ public class FIBTableWidgetFooter extends JPanel {
 		_widget = widget;
 
 		initializeActions(widget);
-
+		setOpaque(false);
 		setBorder(BorderFactory.createEmptyBorder());
 		setLayout(new BorderLayout());
-		// setPreferredSize(new
-		// Dimension(FlexoCst.MINIMUM_BROWSER_VIEW_WIDTH,FlexoCst.MINIMUM_BROWSER_CONTROL_PANEL_HEIGHT));
-		setPreferredSize(new Dimension(MINIMUM_BROWSER_VIEW_WIDTH, 20));
 
 		JPanel plusMinusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		plusMinusPanel.setBorder(BorderFactory.createEmptyBorder());
-
+		plusMinusPanel.setOpaque(false);
 		plusButton = new JButton(FIBIconLibrary.BROWSER_PLUS_ICON);
 		plusButton.addActionListener(new ActionListener() {
 			@Override

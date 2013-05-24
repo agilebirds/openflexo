@@ -19,7 +19,6 @@
  */
 package org.openflexo.wkf.processeditor.gr;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -45,6 +44,7 @@ import org.openflexo.foundation.wkf.WKFAnnotation;
 import org.openflexo.foundation.wkf.dm.AssociationInserted;
 import org.openflexo.foundation.wkf.dm.AssociationRemoved;
 import org.openflexo.foundation.wkf.edge.WKFAssociation;
+import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
 public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
@@ -98,7 +98,7 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 						}
 					}
 					if (drawLeft) {
-						g.setDefaultForeground(ForegroundStyle.makeStyle(Color.darkGray));
+						g.setDefaultForeground(ForegroundStyle.makeStyle(WKFCst.EDGE_COLOR));
 						g.useDefaultForegroundStyle();
 						for (int i = 0; i < INCOMING_ANNOTATION_BORDER.length - 1; i++) {
 							FGEPoint p1 = INCOMING_ANNOTATION_BORDER[i];
@@ -107,7 +107,7 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 						}
 					}
 					if (drawRight) {
-						g.setDefaultForeground(ForegroundStyle.makeStyle(Color.darkGray));
+						g.setDefaultForeground(ForegroundStyle.makeStyle(WKFCst.EDGE_COLOR));
 						g.useDefaultForegroundStyle();
 						for (int i = 0; i < OUTGOING_ANNOTATION_BORDER.length - 1; i++) {
 							FGEPoint p1 = OUTGOING_ANNOTATION_BORDER[i];
@@ -228,7 +228,8 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 			setForeground(ForegroundStyle.makeNone());
 			setIsFloatingLabel(false);
 			setAdjustMinimalWidthToLabelWidth(true);
-			setAdjustMinimalHeightToLabelHeight(true);
+			setAdjustMinimalHeightToLabelHeight(false);
+			setMinimalHeight(20);
 			setAdjustMaximalWidthToLabelWidth(true);
 			setAdjustMaximalHeightToLabelHeight(true);
 			setDimensionConstraints(DimensionConstraints.UNRESIZABLE);

@@ -31,6 +31,7 @@ import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationReport;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.UserType;
+import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
 import org.openflexo.view.FlexoDialog;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
@@ -51,6 +52,8 @@ public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCh
 
 	private ValidationModelViewer _validationModelViewer;
 
+	private PropertyChangeListenerRegistrationManager manager;
+
 	public ConsistencyCheckDialog(FlexoController controller) {
 		this(controller, new ValidationReport(controller.getDefaultValidationModel()));
 	}
@@ -64,6 +67,7 @@ public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCh
 		setController(controller);
 		// setIconImage(IconLibrary.FLEXO_ICON.getImage());
 		setTitle(title);
+		manager = new PropertyChangeListenerRegistrationManager();
 		getContentPane().setLayout(new BorderLayout());
 		_validationReportEditor = new ValidationReportEditor(this, validationReport);
 		_validationModelViewer = new ValidationModelViewer(this, validationReport.getValidationModel());
@@ -88,7 +92,7 @@ public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCh
 		_controller = controller;
 		if (controller != null && _validationModelViewer != null) {
 			_validationModelViewer.setValidationModel(controller.getDefaultValidationModel());
-			_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, this);
+			manager.addListener(ControllerModel.CURRENT_EDITOR, this, _controller.getControllerModel());
 		}
 	}
 
@@ -134,6 +138,7 @@ public class ConsistencyCheckDialog extends FlexoDialog implements ConsistencyCh
 		_controller = null;
 		_validationModelViewer = null;
 		_validationReportEditor = null;
+		manager.delete();
 		isDisposed = true;
 	}
 

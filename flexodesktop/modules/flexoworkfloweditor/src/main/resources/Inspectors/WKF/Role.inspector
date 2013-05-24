@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.Role" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab" opaque="false">
       <Label label="name" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="NameLabel" localize="true" />
       <TextField index="1" data="data.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Name" localize="true" validateOnReturn="true" columns="10" />
       <Label label="color" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ColorLabel" localize="true" />
@@ -18,22 +18,16 @@
         <RemoveAction method="data.performDeleteRoleSpecialization(selected)" isAvailable="data.isRoleSpecializationDeletable(selected)" name="delete" />
       </Table>
     </Tab>
-    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="DocTab">
+    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="DocTab" opaque="false">
       <Label label="index" index="23" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IndexLabel" localize="true" />
       <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" index="24" data="data.index" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Index" localize="true" />
     </Tab>
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab">
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab" opaque="false">
       <Label label="flexo_id" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="FlexoIDLabel" localize="true" />
       <TextField index="1" data="data.flexoID.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="FlexoID" readOnly="true" localize="true" />
       <Parameter name="visibleFor" value="SEMANTICS,SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER" />
     </Tab>
-    <Tab title="Graphics_SWL" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="21" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" font="SansSerif,0,11" name="GraphicsSWLTab">
-      <Label label="swimming_lane_number" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IntegerParameterswlNb1Label" localize="true" />
-      <Number minValue="1" maxValue="255" increment="1" numberType="IntegerType" columns="10" index="1" data="data.getIntegerParameter(&quot;swl_nb&quot;,1)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IntegerParameterswlNb1" localize="true" />
-      <Label label="swimming_lane_height" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IntegerParameterswlHeight80Label" localize="true" />
-      <Number minValue="30" maxValue="1000" increment="1" numberType="IntegerType" columns="10" index="3" data="data.getIntegerParameter(&quot;swl_height&quot;,80)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IntegerParameterswlHeight80" localize="true" />
-      <Label label="index" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="IntegerParameterswlIndex80Label" localize="true" />
-      <Number minValue="0" maxValue="255" increment="1" numberType="IntegerType" columns="10" index="5" data="data.getIntegerParameter(&quot;swl_index&quot;,80)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="IntegerParameterswlIndex80" localize="true" />
+    <Tab title="Graphics_SWL" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="21" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" font="SansSerif,0,11" name="GraphicsSWLTab" opaque="false">
       <Label label="text_color" index="12" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="TextColorswlLabel" localize="true">
         <Parameter name="visibleFor" value="DEVELOPER,MAINTAINER" />
       </Label>
@@ -43,7 +37,7 @@
       <Label label="back_color" index="14" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ColorLabel" localize="true" />
       <Color allowsNull="false" index="15" data="data.color" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Color" localize="true" />
     </Tab>
-    <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="22" visible="controller.displayInspectorTabForContext(&quot;ROLE_EDITOR&quot;)" font="SansSerif,0,11" name="GraphicsTab">
+    <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="22" visible="controller.displayInspectorTabForContext(&quot;ROLE_EDITOR&quot;)" font="SansSerif,0,11" name="GraphicsTab" opaque="false">
       <Label label="x" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="XdefaultLabel" localize="true" />
       <Number minValue="-Infinity" maxValue="Infinity" increment="1.0" numberType="DoubleType" columns="10" index="5" data="data.getX(&quot;default&quot;)" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Xdefault" localize="true" />
       <Label label="y" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="YdefaultLabel" localize="true" />

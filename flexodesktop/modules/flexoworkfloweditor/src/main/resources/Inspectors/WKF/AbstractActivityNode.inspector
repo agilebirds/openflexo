@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.node.AbstractActivityNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab" opaque="false">
       <Label label="roleR" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="RoleLabel" localize="true" />
       <DropDown showReset="true" index="1" data="data.role" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="Role" format="data.getRoleNameForInspector(object)" localize="true" list="data.project.workflow.allAssignableRoles" iteratorClassName="org.openflexo.foundation.wkf.Role" autoSelectFirstRow="false" />
       <Label label="roleA" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="RoleALabel" localize="true" />
@@ -19,7 +19,7 @@
         <RemoveAction method="data.removeInformedRole(selected)" name="remove" />
       </Table>
     </Tab>
-    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="DocTab">
+    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="DocTab" opaque="false">
       <Label label="acronym" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="AcronymLabel" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
@@ -27,7 +27,7 @@
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </TextField>
     </Tab>
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab">
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab" opaque="false">
       <Label label="css_sheet" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
         <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
@@ -36,7 +36,7 @@
       </DropDown>
       <Parameter name="visibleFor" value="SEMANTICS,SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER " />
     </Tab>
-    <Tab title="Graphics_BPE" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="20" visible="controller.displayInspectorTabForContext(&quot;BPE&quot;)" font="SansSerif,0,11" name="GraphicsBPETab">
+    <Tab title="Graphics_BPE" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="20" visible="controller.displayInspectorTabForContext(&quot;BPE&quot;)" font="SansSerif,0,11" name="GraphicsBPETab" opaque="false">
       <Label label="back_color" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BgColorbpeLabel" localize="true">
         <Parameter name="hidden" value="true" />
       </Label>
@@ -50,7 +50,7 @@
         <Parameter name="hidden" value="true" />
       </Color>
     </Tab>
-    <Tab title="Graphics_SWL" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="21" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" font="SansSerif,0,11" name="GraphicsSWLTab">
+    <Tab title="Graphics_SWL" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="21" visible="controller.displayInspectorTabForContext(&quot;SWL&quot;)" font="SansSerif,0,11" name="GraphicsSWLTab" opaque="false">
       <Label label="back_color" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="BgColorswlLabel" localize="true">
         <Parameter name="hidden" value="true" />
       </Label>
@@ -64,7 +64,7 @@
         <Parameter name="hidden" value="true" />
       </Color>
     </Tab>
-    <Tab title="Activity Metrics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="8" visible="controller.displayInspectorTabForContext(&quot;METRICS&quot;)" font="SansSerif,0,11" name="ActivityMetricsTab">
+    <Tab title="Activity Metrics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="8" visible="controller.displayInspectorTabForContext(&quot;METRICS&quot;)" font="SansSerif,0,11" name="ActivityMetricsTab" opaque="false">
       <Label label="metrics" align="center" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="MetricsValuesLabel" localize="true" />
       <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsValue" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="MetricsValues" index="1" data="data.metricsValues" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
         <TextFieldColumn data="iterator.metricsDefinition.name" title="name" columnWidth="100" resizable="true" displayTitle="true" tooltip="iterator.metricsDefinition.description" />

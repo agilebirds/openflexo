@@ -20,10 +20,8 @@
 package org.openflexo.fge.view.listener;
 
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Window;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.MouseEvent;
@@ -63,10 +61,12 @@ public class FocusRetriever {
 
 	private boolean cursorChanged = false;
 
+	private Component cursoredComponent;
+
 	private void resetCursorIfRequired() {
 		if (cursorChanged) {
-			Component frame = SwingUtilities.getAncestorOfClass(Window.class, drawingView);
-			frame.setCursor(Cursor.getDefaultCursor());
+			cursoredComponent.setCursor(null);
+			cursoredComponent = null;
 			cursorChanged = false;
 			getController()._setFocusedControlArea(null);
 		}
@@ -83,8 +83,11 @@ public class FocusRetriever {
 			drawingView.getController().setFocusedFloatingLabel(focusOnFloatingLabel(newFocusedObject, event) ? newFocusedObject : null);
 			ControlArea<?> cp = getFocusedControlAreaForDrawable(newFocusedObject, event);
 			if (cp != null) {
-				Component frame = SwingUtilities.getAncestorOfClass(Window.class, drawingView);
-				frame.setCursor(cp.getDraggingCursor());
+				if (cursoredComponent != null) {
+					cursoredComponent.setCursor(null);
+				}
+				cursoredComponent = event.getComponent();
+				cursoredComponent.setCursor(cp.getDraggingCursor());
 				cursorChanged = true;
 				getController()._setFocusedControlArea(cp);
 			} else {
@@ -116,7 +119,8 @@ public class FocusRetriever {
 		}
 
 		FGEView<?> view = drawingView.viewForObject(graphicalRepresentation);
-		FGEView<?> containerView = drawingView.viewForObject(graphicalRepresentation.getContainerGraphicalRepresentation());
+		FGEView<?> containerView = graphicalRepresentation == drawingView.getGraphicalRepresentation() ? drawingView : drawingView
+				.viewForObject(graphicalRepresentation.getContainerGraphicalRepresentation());
 		Point p = SwingUtilities.convertPoint(eventSource, eventLocation, (Component) containerView);
 		if (graphicalRepresentation.getHasText()) {
 			LabelView<?> labelView = view.getLabelView();
@@ -388,25 +392,30 @@ public class FocusRetriever {
 									// it is closer than the other edge
 									// or if its middle symbol is closer (within
 									// selection range of course)
-									if (distance < distanceToNearestConnector) {
+									if (gr.getIsSelected()) {
+										distance = 0;
+									}
+									if (distance < distanceToNearestConnector || gr.getIsSelected()) {
 										// If we are clearly nearer than another
 										// connector, then this is the one the
 										// user has selected
 										distanceToNearestConnector = distance;
 										nearestConnector = gr;
-										for (ControlArea<?> ca : gr.getControlAreas()) {
-											// Point pt1 =
-											// gr.convertNormalizedPointToViewCoordinates(ca.getPoint(),
-											// getScale());
-											// Point pt2 =
-											// gr.convertNormalizedPointToViewCoordinates(p3,
-											// getScale());
-											// double cpDistance =
-											// Point2D.distance(pt1.x,pt1.y,pt2.x,pt2.y);
-											double cpDistance = ca.getDistanceToArea(p3, getScale());
-											if (cpDistance < selectionDistance && cpDistance < distance) {
-												// System.out.println("Detected control point");
-												distanceToNearestConnector = cpDistance;
+										if (!gr.getIsSelected()) {
+											for (ControlArea<?> ca : gr.getControlAreas()) {
+												// Point pt1 =
+												// gr.convertNormalizedPointToViewCoordinates(ca.getPoint(),
+												// getScale());
+												// Point pt2 =
+												// gr.convertNormalizedPointToViewCoordinates(p3,
+												// getScale());
+												// double cpDistance =
+												// Point2D.distance(pt1.x,pt1.y,pt2.x,pt2.y);
+												double cpDistance = ca.getDistanceToArea(p3, getScale());
+												if (cpDistance < selectionDistance && cpDistance < distance) {
+													// System.out.println("Detected control point");
+													distanceToNearestConnector = cpDistance;
+												}
 											}
 										}
 										smallestDistanceToCPOfNearestConnector = updateSmallestDistanceToCPForConnector(gr, p2, distance);
@@ -427,7 +436,7 @@ public class FocusRetriever {
 											// We have found a control area
 											// which is closer than the previous
 											// selected connector
-											if (cpDistance < selectionDistance && cpDistance < distance) {
+											if (cpDistance < selectionDistance && cpDistance < distanceToNearestConnector) {
 												// System.out.println("Detected control point");
 												distanceToNearestConnector = cpDistance;
 												nearestConnector = gr;

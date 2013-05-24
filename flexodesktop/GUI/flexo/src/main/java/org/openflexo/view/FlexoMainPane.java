@@ -527,12 +527,14 @@ public class FlexoMainPane extends JPanel implements PropertyChangeListener {
 		Node left = getNodeForName(centerLayout.getModel(), LayoutColumns.LEFT.name());
 		updateVisibility(left, controller.getControllerModel().isLeftViewVisible());
 		centerPanel.revalidate();
+		centerPanel.repaint();
 	}
 
 	private void updateRightViewVisibility() {
 		Node right = getNodeForName(centerLayout.getModel(), LayoutColumns.RIGHT.name());
 		updateVisibility(right, controller.getControllerModel().isRightViewVisible());
 		centerPanel.revalidate();
+		centerPanel.repaint();
 	}
 
 	private void updateVisibility(Node root, boolean visible) {

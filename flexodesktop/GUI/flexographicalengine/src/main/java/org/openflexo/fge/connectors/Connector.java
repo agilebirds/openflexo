@@ -103,14 +103,14 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 		return graphicalRepresentation.getDrawable();
 	}
 
-	public ShapeGraphicalRepresentation getStartObject() {
+	public ShapeGraphicalRepresentation<?> getStartObject() {
 		if (graphicalRepresentation == null) {
 			return null;
 		}
 		return graphicalRepresentation.getStartObject();
 	}
 
-	public ShapeGraphicalRepresentation getEndObject() {
+	public ShapeGraphicalRepresentation<?> getEndObject() {
 		if (graphicalRepresentation == null) {
 			return null;
 		}
@@ -181,7 +181,11 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 
 	public abstract ConnectorType getConnectorType();
 
-	public void refreshConnector() {
+	public final void refreshConnector() {
+		refreshConnector(false);
+	}
+
+	public void refreshConnector(boolean forceRefresh) {
 		/*
 		 * if (FGEConstants.DEBUG || getGraphicalRepresentation().getDebugCoveringArea()) { computeCoveringAreas(); }
 		 */
