@@ -96,7 +96,11 @@ public class DGImageFile extends AbstractCGFile {
 	 */
 	@Override
 	public Date getLastGenerationDate() {
-		return new Date(((FlexoImportedResource) getResource().getResourceToCopy()).getLastUpdate().getTime());
+		if ((FlexoImportedResource) getResource().getResourceToCopy() != null) {
+			return new Date(((FlexoImportedResource) getResource().getResourceToCopy()).getLastUpdate().getTime());
+		} else {
+			return null;
+		}
 	}
 
 	/**

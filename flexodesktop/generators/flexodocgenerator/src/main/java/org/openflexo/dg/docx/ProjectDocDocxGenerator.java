@@ -385,8 +385,9 @@ public class ProjectDocDocxGenerator extends ProjectDocGenerator {
 			if (r.getFile().exists()) {
 				return new ImageIcon(r.getFile().getAbsolutePath());
 			}
-
-			return new ImageIcon(r.getResourceToCopy().getFile().getAbsolutePath());
+			if (r.getResourceToCopy() != null) {
+				return new ImageIcon(r.getResourceToCopy().getFile().getAbsolutePath());
+			}
 		}
 
 		ScreenshotResource screenshotResource = o.getProject().getScreenshotResource(o, true);
