@@ -176,13 +176,23 @@ public class EMFClassClass extends AEMFMetaModelObjectImpl<EClass> implements IF
 	 * Return association with features for this concept.<br>
 	 * Note that this method consider inheritance
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getFeatureAssociations()
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getStructuralFeatureAssociations()
 	 */
 	@Override
-	public List<IFlexoOntologyFeatureAssociation> getFeatureAssociations() {
+	public List<IFlexoOntologyFeatureAssociation> getStructuralFeatureAssociations() {
 		List<IFlexoOntologyFeatureAssociation> featureAssociations = new ArrayList<IFlexoOntologyFeatureAssociation>();
 		appendFeatureAssociation(this, featureAssociations);
 		return Collections.unmodifiableList(featureAssociations);
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getBehaviouralFeatureAssociations()
+	 */
+	@Override
+	public List<? extends IFlexoOntologyFeatureAssociation> getBehaviouralFeatureAssociations() {
+		return Collections.emptyList();
 	}
 
 	private void appendFeatureAssociation(EMFClassClass aClass, List<IFlexoOntologyFeatureAssociation> answer) {
@@ -379,17 +389,6 @@ public class EMFClassClass extends AEMFMetaModelObjectImpl<EClass> implements IF
 	@Deprecated
 	public boolean isRootConcept() {
 		return getName().equalsIgnoreCase("EObject");
-	}
-
-	/**
-	 * 
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.technologyadapter.emf.metamodel.AEMFMetaModelObjectImpl#isOntologyClass()
-	 */
-	@Override
-	public boolean isOntologyClass() {
-		return true;
 	}
 
 	@Override

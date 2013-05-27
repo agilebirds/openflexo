@@ -109,11 +109,6 @@ public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyCl
 	}
 
 	@Override
-	public boolean isOntologyClass() {
-		return true;
-	}
-
-	@Override
 	public <T> T accept(IFlexoOntologyConceptVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
@@ -124,7 +119,7 @@ public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyCl
 	}
 
 	@Override
-	public List<? extends IFlexoOntologyFeatureAssociation> getFeatureAssociations() {
+	public List<? extends IFlexoOntologyFeatureAssociation> getStructuralFeatureAssociations() {
 		List<XSOntRestriction> returned = new ArrayList<XSOntRestriction>();
 		for (XSOntRestriction xsOntRest : restrictions.values()) {
 				returned.add(xsOntRest);

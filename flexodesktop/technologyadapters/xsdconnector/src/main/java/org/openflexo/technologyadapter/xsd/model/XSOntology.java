@@ -137,11 +137,10 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		if (element.getType().isComplexType()) {
 			logger.info("CG DEBUG XML : this element maps to a class : " + element.getName());
 			return true;
-		}
-		else {
+		} else {
 
 			logger.info("CG DEBUG XML : this element does no map to a class : " + element.getName());
-			return false;	
+			return false;
 		}
 		// TODO check if there's a need to check for attribute if SimpleType.
 	}
@@ -159,14 +158,14 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		classes.clear();
 		thingClass = new XSOntClass(this, "Thing", XS_THING_URI, getTechnologyAdapter());
 		addClass(thingClass);
-/*
- * Ne semble pas nécessaire étant donné qu'on ne peut pas créer des choses de ce type
-		for (XSComplexType complexType : fetcher.getComplexTypes()) {
-			XSOntClass xsClass = loadClass(complexType);
-			xsClass.addToSuperClasses(getRootConcept());
-		}
-	*/	
-		
+		/*
+		 * Ne semble pas nécessaire étant donné qu'on ne peut pas créer des choses de ce type
+				for (XSComplexType complexType : fetcher.getComplexTypes()) {
+					XSOntClass xsClass = loadClass(complexType);
+					xsClass.addToSuperClasses(getRootConcept());
+				}
+			*/
+
 		for (XSElementDecl element : fetcher.getElementDecls()) {
 			if (mapsToClass(element)) {
 				XSOntClass xsClass = loadClass(element);
@@ -267,7 +266,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 
 		for (XSComplexType complexType : fetcher.getComplexTypes()) {
 			XSOntClass c = getClass(fetcher.getUri(complexType));
-			if (c != null){
+			if (c != null) {
 				XSOntObjectProperty cHasChild = loadPrefixedProperty(complexType, hasChild);
 				cHasChild.newRangeFound(c);
 				addDomainIfPossible(cHasChild, c.getURI());
@@ -570,11 +569,6 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	public XSOntObjectProperty createObjectProperty(String name, XSOntObjectProperty superProperty, XSOntClass domain, XSOntClass range)
 			throws DuplicateURIException {
 		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public boolean isOntology() {
-		return true;
 	}
 
 	public static String findOntologyURI(File f) {

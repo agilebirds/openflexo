@@ -77,7 +77,8 @@ public final class EMFBindingFactory extends TechnologyAdapterBindingFactory {
 			IndividualOfClass parentType = (IndividualOfClass) parent.getType();
 			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
 			if (parentType.getOntologyClass() instanceof EMFClassClass) {
-				for (IFlexoOntologyFeatureAssociation fa : ((EMFClassClass) parentType.getOntologyClass()).getFeatureAssociations()) {
+				for (IFlexoOntologyFeatureAssociation fa : ((EMFClassClass) parentType.getOntologyClass())
+						.getStructuralFeatureAssociations()) {
 					returned.add(getSimplePathElement(fa, parent));
 				}
 			}
@@ -89,6 +90,7 @@ public final class EMFBindingFactory extends TechnologyAdapterBindingFactory {
 
 	@Override
 	public List<? extends FunctionPathElement> getAccessibleFunctionPathElements(BindingPathElement parent) {
+		// TODO: implements same as above, with behavioural features
 		return Collections.emptyList();
 	}
 

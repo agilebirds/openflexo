@@ -42,6 +42,18 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 	}
 
 	/**
+	 * Return flag indicating if this resource is loadable<br>
+	 * By default, a resource is always loadable, then this method always returns true
+	 * 
+	 * @return
+	 */
+	@Override
+	public boolean isLoadable() {
+		// By default, a resource is always loadable, then this method always returns true
+		return true;
+	}
+
+	/**
 	 * Returns the &quot;real&quot; resource data of this resource. This may cause the loading of the resource data.
 	 * 
 	 * @param progress
@@ -52,7 +64,7 @@ public abstract class FlexoResourceImpl<RD extends ResourceData<RD>> extends Fle
 	@Override
 	public RD getResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceLoadingCancelledException,
 			ResourceDependencyLoopException, FileNotFoundException, FlexoException {
-		if (resourceData == null) {
+		if (resourceData == null && isLoadable()) {
 			// The resourceData is null, we try to load it
 			resourceData = loadResourceData(progress);
 			// That's fine, resource is loaded, now let's notify the loading of the resources

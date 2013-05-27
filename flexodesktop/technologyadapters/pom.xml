@@ -17,11 +17,11 @@
 		<module>mdtumlconnector</module>
 	</modules>
 	<build>
-		<resources>
+		<!--  <resources>
 			<resource>
 				<directory>src/main/resources</directory>
 			</resource>
-		</resources>
+		</resources> --> 
 	</build>
 </project>
 

@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.components.widget.FIBIndividualSelector;
 import org.openflexo.components.widget.FIBPropertySelector;
@@ -48,6 +49,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.utils.FlexoModelObjectReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
 import org.openflexo.foundation.viewpoint.LocalizedDictionary;
 import org.openflexo.foundation.viewpoint.inspector.CheckboxInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.ClassInspectorEntry;
@@ -268,21 +270,25 @@ public class FIBInspector extends FIBPanel {
 
 		currentEditionPatterns.clear();
 
-		EditionPattern editionPatternsToDisplay;
-
 		for (EditionPattern ep : tabsForEPI.keySet()) {
 			if (object.getEditionPattern() == ep) {
 				tabsForEPI.get(ep).setVisible(DataBinding.makeFalseBinding());
 			}
 		}
 
-		editionPatternsToDisplay = object.getEditionPattern();
 		if (ensureCreationOfTabForEPI(object.getEditionPattern())) {
 			returned = true;
 		}
 		FIBTab tab = tabsForEPI.get(object.getEditionPattern());
 		tab.setVisible(DataBinding.makeTrueBinding());
 		currentEditionPatterns.add(object.getEditionPattern());
+
+		// VERY IMPORTANT
+		// We MUST here redefine the type of inspected data
+		BindingVariable bv = getBindingModel().bindingVariableNamed("data");
+		if (bv != null && object != null) {
+			bv.setType(EditionPatternInstanceType.getEditionPatternInstanceType(object.getEditionPattern()));
+		}
 
 		return returned;
 	}
@@ -545,8 +551,8 @@ public class FIBInspector extends FIBPanel {
 	}
 
 	protected String getEditionPatternIdentifierForEPIReference(EditionPattern ep) {
-		return "data.getEditionPatternInstance(\"" + ep.getName() + "\")";
-		// return ep.getViewPoint().getName() + "_" + ep.getName() + "_" + refIndex;
+		// Instead of just referencing ep name, reference the URI (in case of in same VP, many EP have same name)
+		return "data.getEditionPatternInstance(\"" + ep.getURI() + "\")";
 	}
 
 	protected String getEditionPatternIdentifierForEPI(EditionPattern ep) {

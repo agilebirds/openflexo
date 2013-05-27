@@ -14,6 +14,7 @@ import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterAdded;
+import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterRemoved;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -135,6 +136,13 @@ public abstract class DefaultTechnologyAdapterService extends FlexoServiceImpl i
 				rc.initialize(this);
 				for (TechnologyAdapter<?, ?> ta : getTechnologyAdapters()) {
 					ta.resourceCenterAdded(rc);
+				}
+			}
+			if (notification instanceof ResourceCenterRemoved) {
+				FlexoResourceCenter rc = ((ResourceCenterRemoved) notification).getRemovedResourceCenter();
+				rc.initialize(this);
+				for (TechnologyAdapter<?, ?> ta : getTechnologyAdapters()) {
+					ta.resourceCenterRemoved(rc);
 				}
 			}
 		}

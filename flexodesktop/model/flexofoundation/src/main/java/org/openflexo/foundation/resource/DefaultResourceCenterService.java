@@ -1,7 +1,7 @@
 package org.openflexo.foundation.resource;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.List;
 
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceImpl;
@@ -28,6 +28,11 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 
 	private UserResourceCenter userResourceCenter;
 
+	/**
+	 * Instantiate a new DefaultResourceCenterService with only the UserResourceCenter
+	 * 
+	 * @return
+	 */
 	public static FlexoResourceCenterService getNewInstance() {
 		try {
 			ModelFactory factory = new ModelFactory(FlexoResourceCenterService.class);
@@ -41,20 +46,31 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 		return null;
 	}
 
-	public static FlexoResourceCenterService getNewInstance(File resourceCenterDirectory) {
+	/**
+	 * Instantiate a new DefaultResourceCenterService with the UserResourceCenter and with some instances of DirectoryResourceCenter
+	 * matching all supplied directories
+	 * 
+	 * @return
+	 */
+	public static FlexoResourceCenterService getNewInstance(List<File> resourceCenterDirectories) {
 		DefaultResourceCenterService returned = (DefaultResourceCenterService) getNewInstance();
-		if (resourceCenterDirectory != null && resourceCenterDirectory.isDirectory() && resourceCenterDirectory.exists()) {
+		for (File directory : resourceCenterDirectories) {
+			if (directory != null && directory.isDirectory() && directory.exists()) {
+				returned.addToDirectoryResourceCenter(directory);
+			}
+		}
+		/*if (resourceCenterDirectory != null && resourceCenterDirectory.isDirectory() && resourceCenterDirectory.exists()) {
 			returned.addToDirectoryResourceCenter(resourceCenterDirectory);
 		} else {
 			File defaultRCFile = tryToFindDefaultResourceCenterDirectory();
 			if (defaultRCFile != null && defaultRCFile.isDirectory() && defaultRCFile.exists()) {
 				returned.addToDirectoryResourceCenter(defaultRCFile);
 			}
-		}
+		}*/
 		return returned;
 	}
 
-	private static File tryToFindDefaultResourceCenterDirectory() {
+	/*private static File tryToFindDefaultResourceCenterDirectory() {
 		File root = FileUtils.getApplicationDataDirectory();
 		File file = null;
 		boolean ok = false;
@@ -84,7 +100,7 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 			}
 		}
 		return file;
-	}
+	}*/
 
 	public DefaultResourceCenterService() {
 	}
@@ -118,6 +134,14 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 		}
 	}
 
+	@Override
+	public void removeFromResourceCenters(FlexoResourceCenter resourceCenter) {
+		performSuperRemover(RESOURCE_CENTERS, resourceCenter);
+		if (getServiceManager() != null) {
+			getServiceManager().notify(this, new ResourceCenterRemoved(resourceCenter));
+		}
+	}
+
 	/**
 	 * Notification of a new ResourceCenter added to the list of referenced resource centers
 	 * 
@@ -136,6 +160,44 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 		}
 	}
 
+	/**
+	 * Notification of a new ResourceCenter removed from the list of referenced resource centers
+	 * 
+	 * @author sylvain
+	 * 
+	 */
+	public class ResourceCenterRemoved implements ServiceNotification {
+		private FlexoResourceCenter removedResourceCenter;
+
+		public ResourceCenterRemoved(FlexoResourceCenter removedResourceCenter) {
+			this.removedResourceCenter = removedResourceCenter;
+		}
+
+		public FlexoResourceCenter getRemovedResourceCenter() {
+			return removedResourceCenter;
+		}
+	}
+
+	/**
+	 * Save all locations for registered resource centers on disk
+	 */
+	@Override
+	public void storeDirectoryResourceCenterLocations() {
+		if (getServiceManager() != null) {
+			System.out.println("Saving the directory resource center locations...");
+			getServiceManager().notify(this, new ResourceCenterListShouldBeStored());
+		}
+	}
+
+	/**
+	 * Notification of a new ResourceCenter added to the list of referenced resource centers
+	 * 
+	 * @author sylvain
+	 * 
+	 */
+	public class ResourceCenterListShouldBeStored implements ServiceNotification {
+	}
+
 	@Override
 	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
 		if (notification instanceof ProjectLoaded) {
@@ -150,4 +212,5 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 			}
 		}
 	}
+
 }

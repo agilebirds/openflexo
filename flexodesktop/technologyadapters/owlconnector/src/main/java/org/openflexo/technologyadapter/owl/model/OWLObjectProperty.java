@@ -102,11 +102,6 @@ public class OWLObjectProperty extends OWLProperty implements IFlexoOntologyObje
 				+ (getRange() != null ? getRange().getURI() : "?") + "<br>" + "</html>";
 	}
 
-	@Override
-	public boolean isOntologyObjectProperty() {
-		return true;
-	}
-
 	public boolean isLiteralRange() {
 		return getRange() == getOntology().getOntologyObject(RDFSURIDefinitions.RDFS_LITERAL_URI);
 	}

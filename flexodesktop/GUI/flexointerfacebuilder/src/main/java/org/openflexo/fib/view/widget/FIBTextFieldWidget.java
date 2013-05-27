@@ -169,6 +169,43 @@ public class FIBTextFieldWidget extends FIBWidgetView<FIBTextField, JTextField, 
 		return String.class;
 	}
 
+	// DEBUG
+	/*@Override
+	public String getValue() {
+		if (getWidget().getData().toString().equals("data.getEditionPatternInstance(\"CityGR\").city.cityInModel1.name")) {
+
+			System.out.println("getWidget().getData()=" + getWidget().getData());
+			System.out.println("getWidget().getData().isValid()=" + getWidget().getData().isValid());
+			System.out.println("getWidget().getData().invalidBindingReason()=" + getWidget().getData().invalidBindingReason());
+			System.out.println("getBindingEvaluationContext()=" + getBindingEvaluationContext());
+
+			DataBinding db1 = new DataBinding("data", getWidget().getData().getOwner(), Object.class, BindingDefinitionType.GET);
+			DataBinding db2 = new DataBinding("data.getEditionPatternInstance(\"CityGR\")", getWidget().getData().getOwner(), Object.class,
+					BindingDefinitionType.GET);
+			DataBinding db3 = new DataBinding("data.getEditionPatternInstance(\"CityGR\").city", getWidget().getData().getOwner(),
+					Object.class, BindingDefinitionType.GET);
+			DataBinding db4 = new DataBinding("data.getEditionPatternInstance(\"CityGR\").city.cityInModel1", getWidget().getData()
+					.getOwner(), Object.class, BindingDefinitionType.GET);
+			DataBinding db5 = new DataBinding("data.getEditionPatternInstance(\"CityGR\").city.cityInModel1.name", getWidget().getData()
+					.getOwner(), Object.class, BindingDefinitionType.GET);
+
+			try {
+				System.out.println("db1=" + db1.getBindingValue(getBindingEvaluationContext()));
+				System.out.println("db2=" + db2.getBindingValue(getBindingEvaluationContext()));
+				System.out.println("db3=" + db3.getBindingValue(getBindingEvaluationContext()));
+				System.out.println("db4=" + db4.getBindingValue(getBindingEvaluationContext()));
+				System.out.println("db5=" + db5.getBindingValue(getBindingEvaluationContext()));
+			} catch (TypeMismatchException e) {
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+		return super.getValue();
+	}*/
+
 	@Override
 	public synchronized boolean updateWidgetFromModel() {
 		if (notEquals(getValue(), textField.getText())) {

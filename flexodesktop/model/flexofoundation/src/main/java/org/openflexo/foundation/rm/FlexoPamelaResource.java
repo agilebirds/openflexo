@@ -171,7 +171,7 @@ public class FlexoPamelaResource<SRD extends StorageResourceData<SRD>> extends F
 	}
 
 	@Override
-	protected boolean isLoadable() {
+	public boolean isLoadable() {
 		return super.isLoadable() && resourceDataClass != null;
 	}
 

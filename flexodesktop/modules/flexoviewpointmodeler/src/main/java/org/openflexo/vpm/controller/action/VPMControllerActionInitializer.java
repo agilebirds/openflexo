@@ -79,6 +79,9 @@ public class VPMControllerActionInitializer extends ControllerActionInitializer 
 		new AddDiagramPaletteElementInitializer(this);
 		new DeleteDiagramPaletteElementInitializer(this);
 
+		// Misc
+		new ConvertViewPoint1ActionInitializer(this);
+
 	}
 
 }

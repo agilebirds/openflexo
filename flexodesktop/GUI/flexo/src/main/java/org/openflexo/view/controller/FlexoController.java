@@ -1815,7 +1815,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		// logger.info("Object was double-clicked: " + object);
 		if (object instanceof FlexoResource<?>) {
 			FlexoObject resourceData = null;
-			if (!((FlexoResource<?>) object).isLoaded()) {
+			if (((FlexoResource<?>) object).isLoadable() && !((FlexoResource<?>) object).isLoaded()) {
 				FlexoProgress progress = getEditor().getFlexoProgressFactory().makeFlexoProgress("loading_resource", 3);
 				try {
 					resourceData = (FlexoObject) ((FlexoResource<?>) object).getResourceData(progress);

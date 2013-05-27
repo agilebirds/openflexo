@@ -39,4 +39,8 @@ public interface FlexoResourceCenterService extends FlexoService, AccessibleProx
 
 	public UserResourceCenter getUserResourceCenter();
 
+	/**
+	 * Save all locations for registered resource centers on disk
+	 */
+	public void storeDirectoryResourceCenterLocations();
 }

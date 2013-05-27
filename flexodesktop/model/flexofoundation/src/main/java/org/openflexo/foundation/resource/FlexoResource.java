@@ -225,6 +225,13 @@ public interface FlexoResource<RD extends ResourceData<RD>> {
 	public boolean isLoaded();
 
 	/**
+	 * Return flag indicating if this resource is loadable
+	 * 
+	 * @return
+	 */
+	public boolean isLoadable();
+
+	/**
 	 * Returns the &quot;real&quot; resource data of this resource. This may cause the loading of the resource data.
 	 * 
 	 * @param progress

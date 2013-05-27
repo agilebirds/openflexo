@@ -557,56 +557,6 @@ public class EMFMetaModel extends FlexoOntologyObjectImpl implements FlexoMetaMo
 		return this;
 	}
 
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#isOntology()
-	 */
-	@Override
-	public boolean isOntology() {
-		return true;
-	}
-
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#isOntologyClass()
-	 */
-	@Override
-	public boolean isOntologyClass() {
-		return false;
-	}
-
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#isOntologyIndividual()
-	 */
-	@Override
-	public boolean isOntologyIndividual() {
-		return false;
-	}
-
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#isOntologyObjectProperty()
-	 */
-	@Override
-	public boolean isOntologyObjectProperty() {
-		return false;
-	}
-
-	/**
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.ontology.FlexoOntologyObjectImpl#isOntologyDataProperty()
-	 */
-	@Override
-	public boolean isOntologyDataProperty() {
-		return false;
-	}
-
 	@Override
 	public String toString() {
 		return "EMFMetaModel:" + getURI();

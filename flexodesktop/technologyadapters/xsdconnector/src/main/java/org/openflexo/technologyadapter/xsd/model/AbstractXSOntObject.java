@@ -103,29 +103,4 @@ public abstract class AbstractXSOntObject extends FlexoOntologyObjectImpl implem
 		return getURI();
 	}
 
-	@Override
-	public boolean isOntology() {
-		return false;
-	}
-
-	@Override
-	public boolean isOntologyClass() {
-		return false;
-	}
-
-	@Override
-	public boolean isOntologyIndividual() {
-		return false;
-	}
-
-	@Override
-	public boolean isOntologyObjectProperty() {
-		return false;
-	}
-
-	@Override
-	public boolean isOntologyDataProperty() {
-		return false;
-	}
-
 }

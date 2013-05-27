@@ -80,11 +80,6 @@ public class XSOntDataProperty extends XSOntProperty implements IFlexoOntologyDa
 
 
 	@Override
-	public boolean isOntologyDataProperty() {
-		return true;
-	}
-
-	@Override
 	public <T> T accept(IFlexoOntologyConceptVisitor<T> visitor) {
 		return visitor.visit(this);
 	}

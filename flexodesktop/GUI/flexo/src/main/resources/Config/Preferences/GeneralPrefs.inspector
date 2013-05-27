@@ -14,7 +14,7 @@
 		<param name="validateOnReturn" value="true"/>
 	</property>-->
 
-	<property name="localResourceCenterDirectory" label="resource_center" widget="DIRECTORY" constraint="2"/>
+	<!--  <property name="localResourceCenterDirectory" label="resource_center" widget="DIRECTORY" constraint="2"/>-->
 
 	<!--<property name="inspectorAlwaysOnTop" label="inspector_always_on_top" widget="CHECKBOX" constraint="9"/>-->
 	

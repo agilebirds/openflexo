@@ -364,9 +364,9 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 			} else {
 				diagramTA = new DiagramTechnologyAdapter();
 			}
-			DiagramModelSlot diagramMS = diagramTA.createNewModelSlot(this);
+			/*DiagramModelSlot diagramMS = diagramTA.createNewModelSlot(this);
 			diagramMS.setName("diagram");
-			addToModelSlots(diagramMS);
+			addToModelSlots(diagramMS);*/
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

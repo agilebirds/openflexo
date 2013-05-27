@@ -155,10 +155,20 @@ public class EMFAttributeObjectProperty extends AEMFMetaModelObjectImpl<EAttribu
 	/**
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getFeatureAssociations()
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getStructuralFeatureAssociations()
 	 */
 	@Override
-	public List<IFlexoOntologyFeatureAssociation> getFeatureAssociations() {
+	public List<IFlexoOntologyFeatureAssociation> getStructuralFeatureAssociations() {
+		return Collections.emptyList();
+	}
+
+	/**
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getBehaviouralFeatureAssociations()
+	 */
+	@Override
+	public List<? extends IFlexoOntologyFeatureAssociation> getBehaviouralFeatureAssociations() {
 		return Collections.emptyList();
 	}
 
@@ -294,17 +304,6 @@ public class EMFAttributeObjectProperty extends AEMFMetaModelObjectImpl<EAttribu
 	@Override
 	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
 		return ontology.getTechnologyAdapter();
-	}
-
-	/**
-	 * 
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.technologyadapter.emf.metamodel.AEMFMetaModelObjectImpl#isOntologyObjectProperty()
-	 */
-	@Override
-	public boolean isOntologyObjectProperty() {
-		return true;
 	}
 
 }

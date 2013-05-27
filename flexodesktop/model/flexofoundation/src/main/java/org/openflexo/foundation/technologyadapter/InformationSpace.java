@@ -7,6 +7,7 @@ import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterAdded;
+import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterRemoved;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 
@@ -41,6 +42,10 @@ public class InformationSpace extends FlexoServiceImpl {
 		if (notification instanceof ResourceCenterAdded) {
 			setChanged();
 			notifyObservers(new DataModification(null, ((ResourceCenterAdded) notification).getAddedResourceCenter()));
+		}
+		if (notification instanceof ResourceCenterRemoved) {
+			setChanged();
+			notifyObservers(new DataModification(((ResourceCenterRemoved) notification).getRemovedResourceCenter(), null));
 		}
 		super.receiveNotification(caller, notification);
 	}
