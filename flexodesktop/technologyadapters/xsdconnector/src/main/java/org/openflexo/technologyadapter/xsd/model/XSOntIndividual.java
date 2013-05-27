@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
@@ -40,17 +41,48 @@ import org.w3c.dom.Element;
 
 public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntologyIndividual, XSOntologyURIDefinitions {
 
+
 	private XSOntClass type;
 	private Map<XSOntProperty, XSPropertyValue> values = new HashMap<XSOntProperty, XSPropertyValue>();
 	private Set<XSOntIndividual> children = new HashSet<XSOntIndividual>();
 	private XSOntIndividual parent;
-	private String guid;
 	
-	protected XSOntIndividual(XSOntology ontology, String name, XSDTechnologyAdapter adapter) {
-		super(ontology, name, null, adapter);
-		setGuid(UUID.randomUUID().toString());
+
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(AbstractXSOntObject.class
+			.getPackage().getName());
+
+	/**
+	 * Default Constructor
+	 * 
+	 * @param adapter
+	 */
+
+	protected XSOntIndividual(XSDTechnologyAdapter adapter) {
+		super(adapter);
 	}
 
+	
+
+	@Override
+	public String getName() {
+		// calculated, as it as no actual Meaning for an XML Individual
+		// so give the last part of the URI
+		String objURI = getURI();
+		if (objURI != null )
+			return objURI.substring(objURI.lastIndexOf("#"));
+		else
+			return null;
+		
+	}
+
+	@Override
+	public void setName(String name) {
+		// name is calculated, it cannot be set
+		// in fact, it has no sense in the general case
+		logger.warning("Name of an Individual can not be set");
+	}
+
+	
 	public XSOntClass getType() {
 		return type;
 	}
@@ -252,11 +284,4 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 		return null;
 	}
 
-	public String getGuid() {
-		return guid;
-	}
-
-	public void setGuid(String guid) {
-		this.guid = guid;
-	}
 }

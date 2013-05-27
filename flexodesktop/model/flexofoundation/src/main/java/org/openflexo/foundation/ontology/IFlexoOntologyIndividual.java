@@ -81,7 +81,7 @@ public interface IFlexoOntologyIndividual extends IFlexoOntologyConcept {
 	 * @return
 	 */
 	public IFlexoOntologyPropertyValue getPropertyValue(IFlexoOntologyStructuralProperty property);
-
+	
 	/**
 	 * Add newValue as a value for supplied property<br>
 	 * Return the {@link IFlexoOntologyPropertyValue} matching supplied property and defined for this individual<br>

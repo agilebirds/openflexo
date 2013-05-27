@@ -68,28 +68,15 @@ public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOnt
 	@Override
 	public XSOntIndividual performAction(EditionSchemeAction action) {
 		XSOntClass father = getOntologyClass();
-		// IFlexoOntologyConcept father = action.getOntologyObject(getProject());
-		// System.out.println("Individual name param = "+action.getIndividualNameParameter());
-		// String individualName = (String)getParameterValues().get(action.getIndividualNameParameter().getName());
-		String individualName = null;
-		try {
-			individualName = getIndividualName().getBindingValue(action);
-		} catch (TypeMismatchException e1) {
-			e1.printStackTrace();
-		} catch (NullReferenceException e1) {
-			e1.printStackTrace();
-		} catch (InvocationTargetException e1) {
-			e1.printStackTrace();
-		}
-		// System.out.println("individualName="+individualName);
+		
 		XSOntIndividual newIndividual = null;
 		try {
 
 			ModelSlotInstance<XMLModel, XSDMetaModel> modelSlotInstance = getModelSlotInstance(action);
+			XMLModel model = getModelSlotInstance(action).getModel();
 			
-			newIndividual = getModelSlotInstance(action).getModel().createOntologyIndividual(individualName, father);
+			newIndividual = model.createOntologyIndividual( father);
 			
-			logger.info("********* Added individual " + newIndividual.getName() + " as " + father);
 
 			for (DataPropertyAssertion dataPropertyAssertion : getDataAssertions()) {
 				if (dataPropertyAssertion.evaluateCondition(action)) {
@@ -108,6 +95,13 @@ public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOnt
 			}
 			modelSlotInstance.getModel().setIsModified();
 
+			// add it to the model
+			// Two phase creation, then addition, to be able to process URIs once you have the property values
+			
+			model.addIndividual(newIndividual);
+			
+			logger.info("********* Added individual " + newIndividual.getName() + " as " + father);
+			
 			return newIndividual;
 		} catch (DuplicateURIException e) {
 			e.printStackTrace();

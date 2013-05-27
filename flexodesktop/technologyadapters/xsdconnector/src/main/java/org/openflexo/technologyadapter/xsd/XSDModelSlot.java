@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.foundation.FlexoProperty;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
@@ -47,6 +48,7 @@ import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntClass;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 import org.openflexo.technologyadapter.xsd.model.XSOntProperty;
+import org.openflexo.technologyadapter.xsd.model.XSOntRestriction;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSClassPatternRole;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSIndividualPatternRole;
@@ -177,10 +179,14 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 	  public static class XSURIProcessor implements XMLSerializable
 	  {
 	    
+		// mapping styles enumeration
+		  
+		public static final String ATTRIBUTE_VALUE = "attribute";
+		  
 		// Properties actually used to calculate URis
 		  
 		private XSOntClass mappedClass;
-		private XSOntProperty baseAttributeForURI;
+	//	private XSOntProperty baseAttributeForURI; Not sure we need this
 	    private XSDModelSlot modelSlot;
 	    
 	    
@@ -196,7 +202,7 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 	    private String typeURI;
 	    private String mappingStyle;
 	    private String attributeName;
-	    
+
 	    public String _getTypeURI(){
 	    	if (mappedClass != null){
 	    		return mappedClass.getURI();
@@ -234,7 +240,8 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 	    		public void reset() {
 			modelSlot = null;
 			mappedClass = null;
-			baseAttributeForURI = null;
+		    mappingStyle = null;
+			// baseAttributeForURI = null;
 			}
 
 		public void bindtypeURIToMappedClass(){
@@ -274,18 +281,30 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 
 		// URI Calculation
 		
-		public String processURI(AbstractXSOntObject xsO) {
+		public String processURI(ModelSlotInstance msInstance,AbstractXSOntObject xsO) {
 			// if processor not initialized
 			if (mappedClass == null) {
 				bindtypeURIToMappedClass();
 			}
 			// processor should be initialized
 			if (mappedClass == null) {
-				logger.warning("Cannot process URI as URIProcessor is not initialized");
+				logger.warning("Cannot process URI as URIProcessor is not initialized for that class: " + typeURI);
 				return null;
 			}
 			else {
-				return new String ("TODO TODO Prout");
+				if (attributeName != null) {
+									    
+					// TODO FlexoProperty property = mappedClass.
+					
+					XSOntRestriction restriction = (XSOntRestriction) mappedClass.getFeatureAssociationNamed(attributeName);
+					logger.info("to stop");
+					Object value = ((XSOntIndividual)xsO).getPropertyValue((XSOntProperty)restriction.getProperty());
+					return msInstance.getModelURI()+"#"+(String)value;
+					
+				}
+				else 
+					logger.warning("Cannot process URI - Unexpected or Unspecified mapping parameters");
+					return null;
 			}
 		}
 
@@ -303,7 +322,7 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 		String typeURI = xsO.getType().getURI().replace(this.getMetaModelURI(),"");
 		XSURIProcessor mapParams = uriProcessors.get(typeURI);
 		
-		return mapParams.processURI(xsO);
+		return mapParams.processURI(msInstance,xsO);
 		
 	}
 
