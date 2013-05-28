@@ -75,6 +75,8 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 	 */
 	// private Hashtable<JButton,PropertyListActionListener> _controls;
 
+	private int nbOfBrowserCells = 0;
+
 	public FIBBrowserModel(FIBBrowser fibBrowser, FIBBrowserWidget widget, FIBController controller) {
 		super(null);
 		contents = Multimaps.synchronizedMultimap(ArrayListMultimap.<Object, BrowserCell> create());
@@ -124,10 +126,19 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 		if (root == null) {
 			return false;
 		}
+
+		// nbOfBrowserCells = 0;
+
 		BrowserCell rootCell = retrieveBrowserCell(root, null);
 		if (getRoot() != rootCell) {
+			if (getRoot() != null) {
+				((BrowserCell) getRoot()).delete();
+			}
 			logger.fine("updateRootObject() with " + root + " rootCell=" + rootCell);
 			setRoot(rootCell);
+
+			logger.info("nbOfBrowserCells = " + nbOfBrowserCells);
+
 			return true;
 		}
 		return false;
@@ -194,6 +205,8 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 	}
 
 	private BrowserCell retrieveBrowserCell(Object representedObject, BrowserCell parent) {
+		/*System.out.println("retrieveBrowserCell for " + representedObject + " parent="
+				+ (parent != null ? parent.getRepresentedObject() : "null"));*/
 		ArrayList<BrowserCell> cells = new ArrayList<FIBBrowserModel.BrowserCell>(contents.get(representedObject));
 		// Collection<BrowserCell> cells = contents.get(representedObject);
 		if (cells != null) {
@@ -205,6 +218,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 		}
 		BrowserCell returned = new BrowserCell(representedObject, parent);
 		contents.put(representedObject, returned);
+		// returned.update(false);
 		return returned;
 	}
 
@@ -223,8 +237,8 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 	public class BrowserCell implements TreeNode, Observer, HasDependencyBinding {
 		private Object representedObject;
 		private FIBBrowserElementType browserElementType;
-		private BrowserCell father;
-		private final Vector<BrowserCell> children;
+		/*pu besoin*/private BrowserCell father;
+		/*pu besoin*/private final Vector<BrowserCell> children;
 		private boolean isDeleted = false;
 		private boolean isVisible = true;
 		private DependingObjects dependingObjects;
@@ -241,6 +255,14 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 				dependingObjects.refreshObserving(browserElementType);
 			}
 			update(false);
+
+			logger.info("Build BrowserCell for " + representedObject + " " + FIBBrowserModel.this);
+
+			nbOfBrowserCells++;
+
+			if (nbOfBrowserCells % 100 == 0) {
+				logger.info("nbOfBrowserCells=" + nbOfBrowserCells + " represented=" + representedObject);
+			}
 		}
 
 		@Override
@@ -302,6 +324,9 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 		}
 
 		public void delete() {
+
+			nbOfBrowserCells--;
+
 			logger.fine("Delete BrowserCell for " + representedObject);
 
 			for (BrowserCell c : children) {
