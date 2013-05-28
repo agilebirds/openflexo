@@ -137,8 +137,7 @@ public abstract class EMFModelResourceImpl extends FlexoFileResourceImpl<EMFMode
 			setResourceData(resourceData);
 			return resourceData;
 		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
+			throw new FlexoException(e);
 		}
 	}
 
