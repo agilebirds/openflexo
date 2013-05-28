@@ -235,19 +235,6 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 			} else { // Use default
 				model = new OntologyBrowserModel(getOntology());
 			}
-			model.addObserver(new Observer() {
-				@Override
-				public void update(Observable o, Object arg) {
-					if (arg instanceof OntologyBrowserModelRecomputed) {
-						SwingUtilities.invokeLater(new Runnable() {
-							@Override
-							public void run() {
-								getPropertyChangeSupport().firePropertyChange("model", null, getModel());
-							}
-						});
-					}
-				}
-			});
 			model.setStrictMode(getStrictMode());
 			model.setHierarchicalMode(getHierarchicalMode());
 			model.setDisplayPropertiesInClasses(getDisplayPropertiesInClasses());
@@ -258,6 +245,14 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 			model.setShowDataProperties(getShowDataProperties());
 			model.setShowAnnotationProperties(getShowAnnotationProperties());
 			model.recomputeStructure();
+			model.addObserver(new Observer() {
+				@Override
+				public void update(Observable o, Object arg) {
+					if (arg instanceof OntologyBrowserModelRecomputed) {
+						performFireModelUpdated();
+					}
+				}
+			});
 		}
 		return model;
 	}
@@ -267,10 +262,22 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 			model.delete();
 			model = null;
 			setDataObject(this);
+			performFireModelUpdated();
+		}
+	}
+
+	private boolean modelWillBeUpdated = false;
+
+	private void performFireModelUpdated() {
+		if (modelWillBeUpdated) {
+			return;
+		} else {
+			modelWillBeUpdated = true;
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
 					getPropertyChangeSupport().firePropertyChange("model", null, getModel());
+					modelWillBeUpdated = false;
 				}
 			});
 		}
