@@ -37,6 +37,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 
 /**
  * Abstract class representing a fetch request, which is a primitive allowing to browse in the model while configuring requests
@@ -56,6 +57,35 @@ public abstract class FetchRequest<M extends FlexoModel<M, MM>, MM extends Flexo
 	public FetchRequest(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 		conditions = new Vector<FetchRequestCondition>();
+	}
+
+	@Override
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		if (getAssignation().isSet()) {
+			out.append(getAssignation().toString() + " = ", context);
+		}
+		out.append(getClass().getSimpleName(), context);
+		return out.toString();
+	}
+
+	protected String getWhereClausesFMLRepresentation(FMLRepresentationContext context) {
+		if (conditions.size() > 0) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("where ");
+			if (conditions.size() > 1) {
+				sb.append("(");
+			}
+			boolean isFirst = true;
+			for (FetchRequestCondition c : conditions) {
+				sb.append(c.getCondition().toString() + (isFirst ? "" : " and "));
+			}
+			if (conditions.size() > 1) {
+				sb.append(")");
+			}
+			return sb.toString();
+		}
+		return null;
 	}
 
 	@Override

@@ -35,6 +35,7 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.diagram.model.DiagramRootPane;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.ChainedCollection;
@@ -119,6 +120,33 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	@Override
 	public String getFullyQualifiedName() {
 		return (getEditionPattern() != null ? getEditionPattern().getFullyQualifiedName() : "null") + "." + getName();
+	}
+
+	@Override
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		out.append(getClass().getSimpleName() + " " + getName() + "(" + getParametersFMLRepresentation(context) + ") {", context);
+		out.append(StringUtils.LINE_SEPARATOR, context);
+		for (EditionAction action : getActions()) {
+			out.append(action.getFMLRepresentation(context), context, 1);
+			out.append(StringUtils.LINE_SEPARATOR, context);
+		}
+		out.append("}", context);
+		out.append(StringUtils.LINE_SEPARATOR, context);
+		return out.toString();
+	}
+
+	protected String getParametersFMLRepresentation(FMLRepresentationContext context) {
+		if (getParameters().size() > 0) {
+			StringBuffer sb = new StringBuffer();
+			boolean isFirst = true;
+			for (EditionSchemeParameter p : getParameters()) {
+				sb.append((isFirst ? "" : ", ") + TypeUtils.simpleRepresentation(p.getType()) + " " + p.getName());
+				isFirst = false;
+			}
+			return sb.toString();
+		}
+		return "";
 	}
 
 	/**

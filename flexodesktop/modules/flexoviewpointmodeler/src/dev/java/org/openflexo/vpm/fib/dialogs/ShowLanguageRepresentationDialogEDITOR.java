@@ -25,7 +25,7 @@ import org.openflexo.TestApplicationContext;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
-import org.openflexo.foundation.viewpoint.action.ShowLanguageRepresentation;
+import org.openflexo.foundation.viewpoint.action.ShowFMLRepresentation;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.vpm.VPMCst;
 
@@ -38,13 +38,13 @@ public class ShowLanguageRepresentationDialogEDITOR extends FIBAbstractEditor {
 		ViewPointLibrary viewPointLibrary = testApplicationContext.getViewPointLibrary();
 
 		ViewPoint vp = viewPointLibrary.getViewPoint("http://www.agilebirds.com/openflexo/ViewPoints/Basic/BasicOntology.owl");
-		ShowLanguageRepresentation action = ShowLanguageRepresentation.actionType.makeNewAction(vp, null, null);
+		ShowFMLRepresentation action = ShowFMLRepresentation.actionType.makeNewAction(vp, null, null);
 		return makeArray(action);
 	}
 
 	@Override
 	public File getFIBFile() {
-		return VPMCst.SHOW_LANGUAGE_REPRESENTATION_DIALOG_FIB;
+		return VPMCst.SHOW_FML_REPRESENTATION_DIALOG_FIB;
 	}
 
 	public static void main(String[] args) {

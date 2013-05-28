@@ -24,17 +24,17 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
-import org.openflexo.foundation.viewpoint.action.ShowLanguageRepresentation;
+import org.openflexo.foundation.viewpoint.action.ShowFMLRepresentation;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.vpm.VPMCst;
 
-public class ShowLanguageRepresentationInitializer extends ActionInitializer<ShowLanguageRepresentation, ViewPointObject, ViewPointObject> {
+public class ShowFMLRepresentationInitializer extends ActionInitializer<ShowFMLRepresentation, ViewPointObject, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	public ShowLanguageRepresentationInitializer(VPMControllerActionInitializer actionInitializer) {
-		super(ShowLanguageRepresentation.actionType, actionInitializer);
+	public ShowFMLRepresentationInitializer(VPMControllerActionInitializer actionInitializer) {
+		super(ShowFMLRepresentation.actionType, actionInitializer);
 	}
 
 	@Override
@@ -43,11 +43,11 @@ public class ShowLanguageRepresentationInitializer extends ActionInitializer<Sho
 	}
 
 	@Override
-	protected FlexoActionInitializer<ShowLanguageRepresentation> getDefaultInitializer() {
-		return new FlexoActionInitializer<ShowLanguageRepresentation>() {
+	protected FlexoActionInitializer<ShowFMLRepresentation> getDefaultInitializer() {
+		return new FlexoActionInitializer<ShowFMLRepresentation>() {
 			@Override
-			public boolean run(EventObject e, ShowLanguageRepresentation action) {
-				return instanciateAndShowDialog(action, VPMCst.SHOW_LANGUAGE_REPRESENTATION_DIALOG_FIB);
+			public boolean run(EventObject e, ShowFMLRepresentation action) {
+				return instanciateAndShowDialog(action, VPMCst.SHOW_FML_REPRESENTATION_DIALOG_FIB);
 			}
 
 		};

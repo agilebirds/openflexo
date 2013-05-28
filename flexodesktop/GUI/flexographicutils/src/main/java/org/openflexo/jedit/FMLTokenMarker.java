@@ -48,9 +48,26 @@ public class FMLTokenMarker extends CTokenMarker {
 			javaKeywords.add("EditionPattern", Token.KEYWORD1);
 			javaKeywords.add("PatternRole", Token.KEYWORD1);
 
+			javaKeywords.add("ActionScheme", Token.KEYWORD3);
+			javaKeywords.add("CreationScheme", Token.KEYWORD3);
+			javaKeywords.add("DeletionScheme", Token.KEYWORD3);
+			javaKeywords.add("SynchronizationScheme", Token.KEYWORD3);
+			javaKeywords.add("DropScheme", Token.KEYWORD3);
+			javaKeywords.add("LinkScheme", Token.KEYWORD3);
+			javaKeywords.add("CloningScheme", Token.KEYWORD3);
+
+			javaKeywords.add("MatchEditionPatternInstance", Token.KEYWORD4);
+			javaKeywords.add("SelectEditionPatternInstance", Token.KEYWORD4);
+
 			javaKeywords.add("conformTo", Token.KEYWORD2);
 			javaKeywords.add("type", Token.KEYWORD2);
 			javaKeywords.add("uri", Token.KEYWORD2);
+			javaKeywords.add("as", Token.KEYWORD2);
+			javaKeywords.add("from", Token.KEYWORD2);
+			javaKeywords.add("where", Token.KEYWORD2);
+			javaKeywords.add("match", Token.KEYWORD2);
+			javaKeywords.add("in", Token.KEYWORD2);
+			javaKeywords.add("using", Token.KEYWORD2);
 
 			javaKeywords.add("byte", Token.KEYWORD1);
 			javaKeywords.add("char", Token.KEYWORD1);

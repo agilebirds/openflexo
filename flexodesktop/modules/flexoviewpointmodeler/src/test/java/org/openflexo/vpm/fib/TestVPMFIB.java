@@ -80,7 +80,7 @@ public class TestVPMFIB extends FIBTestCase {
 	}
 
 	public void testShowLanguageRepresentationDialog() {
-		validateFIB(VPMCst.SHOW_LANGUAGE_REPRESENTATION_DIALOG_FIB);
+		validateFIB(VPMCst.SHOW_FML_REPRESENTATION_DIALOG_FIB);
 	}
 
 	public void testDiagramPaletteBrowser() {

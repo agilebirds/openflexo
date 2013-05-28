@@ -48,7 +48,7 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
-import org.openflexo.foundation.viewpoint.ViewPointObject.LanguageRepresentationContext.LanguageRepresentationOutput;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.dm.EditionPatternCreated;
 import org.openflexo.foundation.viewpoint.dm.EditionPatternDeleted;
 import org.openflexo.foundation.viewpoint.dm.ModelSlotAdded;
@@ -704,26 +704,45 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	}
 
 	@Override
-	public String getLanguageRepresentation(LanguageRepresentationContext context) {
-		// Voir du cote de GeneratorFormatter pour formatter tout ca
-		LanguageRepresentationOutput out = new LanguageRepresentationOutput(context);
-		out.append("VirtualModel " + getName() + " type=" + getClass().getSimpleName() + " uri=\"" + getURI() + "\"");
-		out.append(" {" + StringUtils.LINE_SEPARATOR);
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		out.append("VirtualModel " + getName() + " type=" + getClass().getSimpleName() + " uri=\"" + getURI() + "\"", context);
+		out.append(" {" + StringUtils.LINE_SEPARATOR, context);
 
-		for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
-			// out.append("Prout");
-			if (modelSlot.getMetaModelResource() != null) {
-				out.append(modelSlot);
+		if (getModelSlots().size() > 0) {
+			out.append(StringUtils.LINE_SEPARATOR, context);
+			for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
+				if (modelSlot.getMetaModelResource() != null) {
+					out.append(modelSlot.getFMLRepresentation(context), context, 1);
+					out.append(StringUtils.LINE_SEPARATOR, context, 1);
+				}
 			}
-			// out.append("Hop");
 		}
 
-		out.append(StringUtils.LINE_SEPARATOR);
-		for (EditionPattern ep : getEditionPatterns()) {
-			out.append(ep);
-			out.append(StringUtils.LINE_SEPARATOR);
+		if (getPatternRoles().size() > 0) {
+			out.append(StringUtils.LINE_SEPARATOR, context);
+			for (PatternRole pr : getPatternRoles()) {
+				out.append(pr.getFMLRepresentation(context), context, 1);
+				out.append(StringUtils.LINE_SEPARATOR, context);
+			}
 		}
-		out.append("}" + StringUtils.LINE_SEPARATOR);
+
+		if (getEditionSchemes().size() > 0) {
+			out.append(StringUtils.LINE_SEPARATOR, context);
+			for (EditionScheme es : getEditionSchemes()) {
+				out.append(es.getFMLRepresentation(context), context, 1);
+				out.append(StringUtils.LINE_SEPARATOR, context);
+			}
+		}
+
+		if (getEditionPatterns().size() > 0) {
+			out.append(StringUtils.LINE_SEPARATOR, context);
+			for (EditionPattern ep : getEditionPatterns()) {
+				out.append(ep.getFMLRepresentation(context), context, 1);
+				out.append(StringUtils.LINE_SEPARATOR, context);
+			}
+		}
+		out.append("}" + StringUtils.LINE_SEPARATOR, context);
 		return out.toString();
 	}
 

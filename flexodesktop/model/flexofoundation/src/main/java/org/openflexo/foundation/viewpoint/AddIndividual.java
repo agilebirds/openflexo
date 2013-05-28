@@ -33,6 +33,7 @@ import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
@@ -51,6 +52,40 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 		super(builder);
 		dataAssertions = new Vector<DataPropertyAssertion>();
 		objectAssertions = new Vector<ObjectPropertyAssertion>();
+	}
+
+	@Override
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		if (getAssignation().isSet()) {
+			out.append(getAssignation().toString() + " = (", context);
+		}
+		out.append(getClass().getSimpleName() + " conformTo " + getOntologyClass().getName() + " from " + getModelSlot().getName() + " {"
+				+ StringUtils.LINE_SEPARATOR, context);
+		out.append(getAssertionsFMLRepresentation(context), context);
+		out.append("}", context);
+		if (getAssignation().isSet()) {
+			out.append(")", context);
+		}
+		return out.toString();
+	}
+
+	protected String getAssertionsFMLRepresentation(FMLRepresentationContext context) {
+		if (getDataAssertions().size() > 0) {
+			StringBuffer sb = new StringBuffer();
+			for (DataPropertyAssertion a : getDataAssertions()) {
+				sb.append("  " + a.getOntologyProperty().getName() + " = " + a.getValue().toString() + ";" + StringUtils.LINE_SEPARATOR);
+			}
+			return sb.toString();
+		}
+		if (getObjectAssertions().size() > 0) {
+			StringBuffer sb = new StringBuffer();
+			for (ObjectPropertyAssertion a : getObjectAssertions()) {
+				sb.append("  " + a.getOntologyProperty().getName() + " = " + a.getObject().toString() + ";" + StringUtils.LINE_SEPARATOR);
+			}
+			return sb.toString();
+		}
+		return null;
 	}
 
 	@Override

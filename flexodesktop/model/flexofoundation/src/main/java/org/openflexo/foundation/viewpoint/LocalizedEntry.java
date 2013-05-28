@@ -94,7 +94,7 @@ public class LocalizedEntry extends ViewPointObject {
 	}
 
 	@Override
-	public String getLanguageRepresentation(LanguageRepresentationContext context) {
+	public String getFMLRepresentation(FMLRepresentationContext context) {
 		return "<not_implemented:" + getFullyQualifiedName() + ">";
 	}
 

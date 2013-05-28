@@ -7,6 +7,7 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationChanged;
 import org.openflexo.foundation.view.diagram.model.dm.GraphicalRepresentationModified;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.localization.FlexoLocalization;
 
@@ -28,6 +29,13 @@ public class ShapePatternRole extends GraphicalElementPatternRole<DiagramShape> 
 		for (GraphicalFeature<?, ?> GF : AVAILABLE_FEATURES) {
 			grSpecifications.add(new GraphicalElementSpecification(this, GF, false, true));
 		}
+	}
+
+	@Override
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		out.append("PatternRole " + getName() + " as Shape from " + getVirtualModel().getReflexiveModelSlot().getName() + ";", context);
+		return out.toString();
 	}
 
 	@Override

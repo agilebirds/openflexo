@@ -26,7 +26,7 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
-import org.openflexo.foundation.viewpoint.ViewPointObject.LanguageRepresentationContext.LanguageRepresentationOutput;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.toolbox.StringUtils;
@@ -269,11 +269,10 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	}
 
 	@Override
-	public String getLanguageRepresentation(LanguageRepresentationContext context) {
-		// Voir du cote de GeneratorFormatter pour formatter tout ca
-		LanguageRepresentationOutput out = new LanguageRepresentationOutput(context);
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
 		out.append("ModelSlot " + getName() + " type=" + getClass().getSimpleName() + " conformTo=\"" + getMetaModelURI() + "\""
-				+ " required=" + getIsRequired() + " readOnly=" + getIsReadOnly() + ";");
+				+ " required=" + getIsRequired() + " readOnly=" + getIsReadOnly() + ";", context);
 		return out.toString();
 	}
 

@@ -30,6 +30,7 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 
 public class AssignationAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends AssignableAction<M, MM, Object> {
 
@@ -39,6 +40,13 @@ public class AssignationAction<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 
 	public AssignationAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
+	}
+
+	@Override
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		out.append(getAssignation().toString() + " = " + getValue().toString() + ";", context);
+		return out.toString();
 	}
 
 	@Override
