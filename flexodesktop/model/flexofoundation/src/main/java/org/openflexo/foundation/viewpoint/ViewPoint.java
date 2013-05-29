@@ -54,7 +54,7 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
-import org.openflexo.foundation.viewpoint.ViewPointObject.LanguageRepresentationContext.LanguageRepresentationOutput;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternBindingFactory;
 import org.openflexo.foundation.viewpoint.dm.ModelSlotAdded;
 import org.openflexo.foundation.viewpoint.dm.ModelSlotRemoved;
@@ -589,30 +589,30 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	}
 
 	@Override
-	public String getLanguageRepresentation(LanguageRepresentationContext context) {
+	public String getFMLRepresentation(FMLRepresentationContext context) {
 		// Voir du cote de GeneratorFormatter pour formatter tout ca
-		LanguageRepresentationOutput out = new LanguageRepresentationOutput(context);
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
 
 		for (FlexoMetaModelResource<?, ?> mm : getAllMetaModels()) {
-			out.append("import " + mm.getURI() + ";");
-			out.append(StringUtils.LINE_SEPARATOR);
+			out.append("import " + mm.getURI() + ";", context);
+			out.append(StringUtils.LINE_SEPARATOR, context);
 		}
 
-		out.append("ViewDefinition " + getName() + " uri=\"" + getURI() + "\"");
-		out.append(" {" + StringUtils.LINE_SEPARATOR);
+		out.append("ViewDefinition " + getName() + " uri=\"" + getURI() + "\"", context);
+		out.append(" {" + StringUtils.LINE_SEPARATOR, context);
 
 		for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
 			if (modelSlot.getMetaModelResource() != null) {
-				out.append(modelSlot);
+				out.append(modelSlot.getFMLRepresentation(context), context);
 			}
 		}
 
-		out.append(StringUtils.LINE_SEPARATOR);
+		out.append(StringUtils.LINE_SEPARATOR, context);
 		for (VirtualModel<?> vm : getVirtualModels()) {
-			out.append(vm);
-			out.append(StringUtils.LINE_SEPARATOR);
+			out.append(vm.getFMLRepresentation(context), context, 1);
+			out.append(StringUtils.LINE_SEPARATOR, context, 1);
 		}
-		out.append("}" + StringUtils.LINE_SEPARATOR);
+		out.append("}" + StringUtils.LINE_SEPARATOR, context);
 		return out.toString();
 	}
 

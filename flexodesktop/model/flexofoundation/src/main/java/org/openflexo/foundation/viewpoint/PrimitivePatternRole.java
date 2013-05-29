@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 
@@ -20,6 +21,13 @@ public class PrimitivePatternRole extends PatternRole<Object> {
 
 	public PrimitivePatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
+	}
+
+	@Override
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		out.append("PatternRole " + getName() + " as " + getPreciseType() + ";", context);
+		return out.toString();
 	}
 
 	public PrimitiveType getPrimitiveType() {

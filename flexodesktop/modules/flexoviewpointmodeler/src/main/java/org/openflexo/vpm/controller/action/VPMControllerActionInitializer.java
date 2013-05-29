@@ -63,7 +63,7 @@ public class VPMControllerActionInitializer extends ControllerActionInitializer 
 		new AddEditionPatternInitializer(this);
 		new DeleteEditionPatternInitializer(this);
 		new DuplicateEditionPatternInitializer(this);
-		new ShowLanguageRepresentationInitializer(this);
+		new ShowFMLRepresentationInitializer(this);
 
 		// ExampleDiagram edition
 		new CreateExampleDiagramInitializer(this);

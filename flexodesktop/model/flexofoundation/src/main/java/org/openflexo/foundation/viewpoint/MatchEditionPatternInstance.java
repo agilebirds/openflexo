@@ -45,6 +45,7 @@ import org.openflexo.foundation.view.action.CreationSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.action.SynchronizationSchemeAction;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 
 /**
  * This action is used to perform synchronization regarding an {@link EditionPatternInstance} in a given {@link VirtualModelInstance}.<br>
@@ -70,6 +71,52 @@ public class MatchEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends
 
 	public MatchEditionPatternInstance(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
+	}
+
+	@Override
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		if (getAssignation().isSet()) {
+			out.append(getAssignation().toString() + " = (", context);
+		}
+		out.append(getClass().getSimpleName() + " as " + getEditionPatternType().getName() + " "
+				+ getMatchingCriteriasFMLRepresentation(context) + " using " + getCreationScheme().getEditionPattern().getName() + ":"
+				+ getCreationScheme().getName() + "(" + getCreationSchemeParametersFMLRepresentation(context) + ")", context);
+		if (getAssignation().isSet()) {
+			out.append(")", context);
+		}
+		return out.toString();
+	}
+
+	protected String getMatchingCriteriasFMLRepresentation(FMLRepresentationContext context) {
+		if (matchingCriterias.size() > 0) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("match ");
+			if (matchingCriterias.size() > 1) {
+				sb.append("(");
+			}
+			for (MatchingCriteria mc : matchingCriterias) {
+				sb.append(mc.getPatternRole().getName() + "=" + mc.getValue().toString() + ";");
+			}
+			if (matchingCriterias.size() > 1) {
+				sb.append(")");
+			}
+			return sb.toString();
+		}
+		return null;
+	}
+
+	protected String getCreationSchemeParametersFMLRepresentation(FMLRepresentationContext context) {
+		if (getParameters().size() > 0) {
+			StringBuffer sb = new StringBuffer();
+			boolean isFirst = true;
+			for (CreateEditionPatternInstanceParameter p : getParameters()) {
+				sb.append((isFirst ? "" : ",") + p.getValue().toString());
+				isFirst = false;
+			}
+			return sb.toString();
+		}
+		return null;
 	}
 
 	@Override

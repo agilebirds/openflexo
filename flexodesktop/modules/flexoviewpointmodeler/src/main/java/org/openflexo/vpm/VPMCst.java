@@ -70,6 +70,6 @@ public class VPMCst {
 	public static File DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB = new FileResource(
 			"Fib/Dialog/DeclareConnectorInEditionPatternDialog.fib");
 	public static File PUSH_TO_PALETTE_DIALOG_FIB = new FileResource("Fib/Dialog/PushToPaletteDialog.fib");
-	public static File SHOW_LANGUAGE_REPRESENTATION_DIALOG_FIB = new FileResource("Fib/Dialog/ShowLanguageRepresentationDialog.fib");
+	public static File SHOW_FML_REPRESENTATION_DIALOG_FIB = new FileResource("Fib/Dialog/ShowFMLRepresentationDialog.fib");
 
 }

@@ -28,21 +28,21 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.FlexoGUIAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 
-public class ShowLanguageRepresentation extends FlexoGUIAction<ShowLanguageRepresentation, ViewPointObject, ViewPointObject> {
+public class ShowFMLRepresentation extends FlexoGUIAction<ShowFMLRepresentation, ViewPointObject, ViewPointObject> {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(ShowLanguageRepresentation.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ShowFMLRepresentation.class.getPackage().getName());
 
-	public static FlexoActionType<ShowLanguageRepresentation, ViewPointObject, ViewPointObject> actionType = new FlexoActionType<ShowLanguageRepresentation, ViewPointObject, ViewPointObject>(
-			"show_language_representation", FlexoActionType.inspectGroup) {
+	public static FlexoActionType<ShowFMLRepresentation, ViewPointObject, ViewPointObject> actionType = new FlexoActionType<ShowFMLRepresentation, ViewPointObject, ViewPointObject>(
+			"show_flexo_modelling_language_representation", FlexoActionType.inspectGroup) {
 
 		/**
 		 * Factory method
 		 */
 		@Override
-		public ShowLanguageRepresentation makeNewAction(ViewPointObject focusedObject, Vector<ViewPointObject> globalSelection,
+		public ShowFMLRepresentation makeNewAction(ViewPointObject focusedObject, Vector<ViewPointObject> globalSelection,
 				FlexoEditor editor) {
-			return new ShowLanguageRepresentation(focusedObject, globalSelection, editor);
+			return new ShowFMLRepresentation(focusedObject, globalSelection, editor);
 		}
 
 		@Override
@@ -58,10 +58,10 @@ public class ShowLanguageRepresentation extends FlexoGUIAction<ShowLanguageRepre
 	};
 
 	static {
-		FlexoModelObject.addActionForClass(ShowLanguageRepresentation.actionType, ViewPointObject.class);
+		FlexoModelObject.addActionForClass(ShowFMLRepresentation.actionType, ViewPointObject.class);
 	}
 
-	protected ShowLanguageRepresentation(ViewPointObject focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
+	protected ShowFMLRepresentation(ViewPointObject focusedObject, Vector<ViewPointObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 

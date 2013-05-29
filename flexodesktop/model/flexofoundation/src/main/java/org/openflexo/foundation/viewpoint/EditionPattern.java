@@ -41,6 +41,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRo
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.NavigationScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.binding.PatternRoleBindingVariable;
 import org.openflexo.foundation.viewpoint.dm.EditionPatternConstraintInserted;
 import org.openflexo.foundation.viewpoint.dm.EditionPatternConstraintRemoved;
@@ -837,18 +838,34 @@ public class EditionPattern extends EditionPatternObject {
 	}
 
 	@Override
-	public String getLanguageRepresentation(LanguageRepresentationContext context) {
+	public String getFMLRepresentation(FMLRepresentationContext context) {
 		// Voir du cote de GeneratorFormatter pour formatter tout ca
-		StringBuilder sb = new StringBuilder();
-		sb.append("EditionPattern ").append(getName());
-		sb.append(" {").append(StringUtils.LINE_SEPARATOR);
-		sb.append(StringUtils.LINE_SEPARATOR);
-		for (PatternRole pr : getPatternRoles()) {
-			sb.append(pr.getLanguageRepresentation());
-			sb.append(StringUtils.LINE_SEPARATOR);
+
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		out.append("EditionPattern " + getName(), context);
+		if (getParentEditionPattern() != null) {
+			out.append(" extends " + getParentEditionPattern().getName(), context);
 		}
-		sb.append("}").append(StringUtils.LINE_SEPARATOR);
-		return sb.toString();
+		out.append(" {" + StringUtils.LINE_SEPARATOR, context);
+
+		if (getPatternRoles().size() > 0) {
+			out.append(StringUtils.LINE_SEPARATOR, context);
+			for (PatternRole pr : getPatternRoles()) {
+				out.append(pr.getFMLRepresentation(context), context, 1);
+				out.append(StringUtils.LINE_SEPARATOR, context);
+			}
+		}
+
+		if (getEditionSchemes().size() > 0) {
+			out.append(StringUtils.LINE_SEPARATOR, context);
+			for (EditionScheme es : getEditionSchemes()) {
+				out.append(es.getFMLRepresentation(context), context, 1);
+				out.append(StringUtils.LINE_SEPARATOR, context);
+			}
+		}
+
+		out.append("}" + StringUtils.LINE_SEPARATOR, context);
+		return out.toString();
 	}
 
 	public static class EditionPatternShouldHaveRoles extends ValidationRule<EditionPatternShouldHaveRoles, EditionPattern> {

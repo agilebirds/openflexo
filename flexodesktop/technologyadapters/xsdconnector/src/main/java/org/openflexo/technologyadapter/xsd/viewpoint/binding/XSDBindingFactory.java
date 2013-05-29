@@ -65,7 +65,7 @@ public final class XSDBindingFactory extends TechnologyAdapterBindingFactory {
 		IndividualOfClass parentType = (IndividualOfClass) parent.getType();
 		List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
 		if (parentType.getOntologyClass() instanceof XSOntClass) {
-			for (IFlexoOntologyFeatureAssociation fa : ((XSOntClass) parentType.getOntologyClass()).getFeatureAssociations()) {
+			for (IFlexoOntologyFeatureAssociation fa : ((XSOntClass) parentType.getOntologyClass()).getStructuralFeatureAssociations()) {
 				returned.add(getSimplePathElement(fa, parent));
 			}
 		}

@@ -161,12 +161,14 @@ public class FIBEditorWidget extends FIBWidgetView<FIBEditor, JEditTextArea, Str
 
 		updateFont();
 		updateTokenMarkerStyle();
+
+		textArea.setCaretPosition(0);
 	}
 
 	@Override
 	public void focusGained(FocusEvent event) {
 		super.focusGained(event);
-		textArea.selectAll();
+		// textArea.selectAll();
 	}
 
 	@Override
@@ -199,6 +201,7 @@ public class FIBEditorWidget extends FIBWidgetView<FIBEditor, JEditTextArea, Str
 			widgetUpdating = true;
 			try {
 				textArea.setText(getValue());
+				textArea.setCaretPosition(0);
 			} finally {
 				widgetUpdating = false;
 			}

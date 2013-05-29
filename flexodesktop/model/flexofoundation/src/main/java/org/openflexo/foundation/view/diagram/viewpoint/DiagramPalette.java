@@ -318,7 +318,7 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 	}
 
 	@Override
-	public String getLanguageRepresentation(LanguageRepresentationContext context) {
+	public String getFMLRepresentation(FMLRepresentationContext context) {
 		return "<not_implemented:" + getFullyQualifiedName() + ">";
 	}
 

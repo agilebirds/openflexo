@@ -60,7 +60,25 @@ public class FIBEditorPaneWidget extends FIBWidgetView<FIBEditorPane, JEditorPan
 
 	public FIBEditorPaneWidget(FIBEditorPane model, FIBController controller) {
 		super(model, controller);
-		editorPane = new JEditorPane();
+		editorPane = new JEditorPane() /*{
+										@Override
+										public void setCaretPosition(int position) {
+										logger.info("setCaretPosition with " + position + " in FIBEditorPaneWidget");
+										super.setCaretPosition(position);
+										};
+
+										@Override
+										public void selectAll() {
+										logger.info("selectAll() in FIBEditorPaneWidget");
+										super.selectAll();
+										};
+
+										@Override
+										public void setText(String t) {
+										logger.info("setText with " + t + " in FIBEditorPaneWidget");
+										super.setText(t);
+										}
+										}*/;
 		panel = new JPanel(new BorderLayout());
 		panel.setOpaque(false);
 		panel.add(editorPane, BorderLayout.CENTER);
@@ -115,6 +133,8 @@ public class FIBEditorPaneWidget extends FIBWidgetView<FIBEditorPane, JEditorPan
 		editorPane.setEnabled(true);
 
 		updateFont();
+
+		editorPane.setCaretPosition(0);
 	}
 
 	protected void updateContentType() {
@@ -128,7 +148,8 @@ public class FIBEditorPaneWidget extends FIBWidgetView<FIBEditorPane, JEditorPan
 	@Override
 	public void focusGained(FocusEvent event) {
 		super.focusGained(event);
-		editorPane.selectAll();
+		System.out.println("Ici on rechoppe le focus");
+		// editorPane.selectAll();
 	}
 
 	@Override
@@ -162,6 +183,7 @@ public class FIBEditorPaneWidget extends FIBWidgetView<FIBEditorPane, JEditorPan
 			try {
 				editorPane.setText(getValue());
 				updateFont();
+				editorPane.setCaretPosition(0);
 			} finally {
 				widgetUpdating = false;
 			}

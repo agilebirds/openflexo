@@ -224,7 +224,7 @@ public abstract class ExampleDiagramObject extends NamedViewPointObject implemen
 	}
 
 	@Override
-	public String getLanguageRepresentation(LanguageRepresentationContext context) {
+	public String getFMLRepresentation(FMLRepresentationContext context) {
 		return "<not_implemented:" + getFullyQualifiedName() + ">";
 	}
 
