@@ -90,4 +90,20 @@ public class FGEIconLibrary {
 	public static final ImageIconResource BIG_DASHES_ICON = new ImageIconResource("Icons/BigDashes.gif");
 	public static final ImageIconResource DOTS_DASHES_ICON = new ImageIconResource("Icons/Dots.gif");
 	public static final ImageIconResource DOTS_LINES_DASHES_ICON = new ImageIconResource("Icons/DotLines.gif");
+
+	public static final ImageIconResource TEXT_ALIGN_CENTER_ICON = new ImageIconResource("Icons/Layout/TextAlignCenter.png");
+	public static final ImageIconResource TEXT_ALIGN_JUSTIFY_ICON = new ImageIconResource("Icons/Layout/TextAlignJustify.png");
+	public static final ImageIconResource TEXT_ALIGN_LEFT_ICON = new ImageIconResource("Icons/Layout/TextAlignLeft.png");
+	public static final ImageIconResource TEXT_ALIGN_RIGHT_ICON = new ImageIconResource("Icons/Layout/TextAlignRight.png");
+
+	public static final ImageIconResource ALIGN_LEFT_ICON = new ImageIconResource("Icons/Layout/AlignLeft.png");
+	public static final ImageIconResource ALIGN_RIGHT_ICON = new ImageIconResource("Icons/Layout/AlignRight.png");
+	public static final ImageIconResource ALIGN_CENTER_ICON = new ImageIconResource("Icons/Layout/AlignCenter.png");
+	public static final ImageIconResource ALIGN_TOP_ICON = new ImageIconResource("Icons/Layout/AlignTop.png");
+	public static final ImageIconResource ALIGN_MIDDLE_ICON = new ImageIconResource("Icons/Layout/AlignMiddle.png");
+	public static final ImageIconResource ALIGN_BOTTOM_ICON = new ImageIconResource("Icons/Layout/AlignBottom.png");
+
+	public static final ImageIconResource MOVE_BACK_ICON = new ImageIconResource("Icons/Layout/MoveBack.png");
+	public static final ImageIconResource MOVE_FRONT_ICON = new ImageIconResource("Icons/Layout/MoveFront.png");
+
 }

@@ -222,7 +222,9 @@ public class TestDrawingEditor {
 		topPanel.add(currentDrawing.getEditedDrawing().getController().getToolbox().getToolboxPanel(), BorderLayout.WEST);
 		topPanel2.add(currentDrawing.getEditedDrawing().getController().getScalePanel(), BorderLayout.EAST);*/
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		topPanel.add(currentDrawing.getEditedDrawing().getController().getToolbox().getToolPanel());
 		topPanel.add(currentDrawing.getEditedDrawing().getController().getToolbox().getStyleToolBar());
+		topPanel.add(currentDrawing.getEditedDrawing().getController().getToolbox().getLayoutToolBar());
 		topPanel.add(currentDrawing.getEditedDrawing().getController().getScalePanel());
 
 		mainPanel.add(topPanel, BorderLayout.NORTH);
