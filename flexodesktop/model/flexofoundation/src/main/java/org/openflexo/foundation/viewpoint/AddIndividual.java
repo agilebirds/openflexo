@@ -60,8 +60,8 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 		if (getAssignation().isSet()) {
 			out.append(getAssignation().toString() + " = (", context);
 		}
-		out.append(getClass().getSimpleName() + " conformTo " + getOntologyClass().getName() + " from " + getModelSlot().getName() + " {"
-				+ StringUtils.LINE_SEPARATOR, context);
+		out.append(getClass().getSimpleName() + (getOntologyClass() != null ? " conformTo " + getOntologyClass().getName() : "") + " from "
+				+ getModelSlot().getName() + " {" + StringUtils.LINE_SEPARATOR, context);
 		out.append(getAssertionsFMLRepresentation(context), context);
 		out.append("}", context);
 		if (getAssignation().isSet()) {
