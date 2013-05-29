@@ -96,6 +96,10 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 
 	public void recomputeStructure() {
 
+		logger.info("BEGIN recomputeStructure for " + getContext());
+
+		occurences = 0;
+
 		isRecomputingStructure = true;
 		if (getHierarchicalMode()) {
 			computeHierarchicalStructure();
@@ -105,6 +109,9 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 		isRecomputingStructure = false;
 		setChanged();
 		notifyObservers(new OntologyBrowserModelRecomputed());
+
+		logger.info("Build a browser model with " + occurences + " occurences");
+		logger.info("END recomputeStructure for " + getContext());
 	}
 
 	public static class OntologyBrowserModelRecomputed {
@@ -481,6 +488,8 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 		}
 	}
 
+	private int occurences = 0;
+
 	private void addChildren(IFlexoOntologyObject parent, IFlexoOntologyObject child) {
 		List<FlexoOntologyObjectImpl> v = structure.get(parent);
 		if (v == null) {
@@ -490,6 +499,7 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 		if (!v.contains(child)) {
 			v.add((FlexoOntologyObjectImpl) child);
 		}
+		occurences++;
 	}
 
 	private void computeHierarchicalStructure() {

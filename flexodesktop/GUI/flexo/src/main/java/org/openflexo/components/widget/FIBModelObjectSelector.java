@@ -303,7 +303,7 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 				}
 			}
 		}
-		logger.info("Objects matching with " + getFilteredName() + " found " + matchingValues.size() + " values");
+		logger.fine("Objects matching with " + getFilteredName() + " found " + matchingValues.size() + " values");
 
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -475,7 +475,7 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 			if (browserWidget == null) {
 				return null;
 			}
-			Iterator<Object> it = browserWidget.getBrowserModel().retrieveContents();
+			Iterator<Object> it = browserWidget.getBrowserModel().recursivelyExploreModelToRetrieveContents();
 			while (it.hasNext()) {
 				Object o = it.next();
 				if (getRepresentedType().isAssignableFrom(o.getClass())) {

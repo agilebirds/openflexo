@@ -36,12 +36,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
+import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.event.TreeWillExpandListener;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeSelectionModel;
+import javax.swing.tree.ExpandVetoException;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -338,6 +341,23 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 				}
 			}
 		};
+		_tree.addTreeWillExpandListener(new TreeWillExpandListener() {
+
+			@Override
+			public void treeWillExpand(TreeExpansionEvent event) throws ExpandVetoException {
+				TreePath path = event.getPath();
+				if (path.getLastPathComponent() instanceof BrowserCell) {
+					BrowserCell node = (BrowserCell) path.getLastPathComponent();
+					node.loadChildren(getBrowserModel(), null);
+				}
+			}
+
+			@Override
+			public void treeWillCollapse(TreeExpansionEvent event) throws ExpandVetoException {
+
+			}
+		});
+
 		if (ToolBox.isMacOS()) {
 			_tree.setSelectionModel(new DefaultTreeSelectionModel() {
 				@Override
@@ -550,7 +570,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		System.out.println("Old LEAD="
 				+ (e.getOldLeadSelectionPath() != null ? e.getOldLeadSelectionPath().getLastPathComponent() : "null")); */
 
-		if (e.getNewLeadSelectionPath() == null || (BrowserCell) e.getNewLeadSelectionPath().getLastPathComponent() == null) {
+		if (e.getNewLeadSelectionPath() == null || e.getNewLeadSelectionPath().getLastPathComponent() == null) {
 			selectedObject = null;
 		} else {
 			selectedObject = ((BrowserCell) e.getNewLeadSelectionPath().getLastPathComponent()).getRepresentedObject();
