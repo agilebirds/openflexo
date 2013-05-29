@@ -1,5 +1,6 @@
 /*
- * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2010-2012 AgileBirds
+ * (c) Copyright 2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -20,10 +21,16 @@
 
 package org.openflexo.technologyadapter.mdtuml;
 
+import java.io.File;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
+import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
+import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
+import org.openflexo.technologyadapter.emf.model.EMFModel;
+import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
 import org.openflexo.technologyadapter.emf.viewpoint.binding.EMFBindingFactory;
 
 /**
@@ -35,6 +42,10 @@ import org.openflexo.technologyadapter.emf.viewpoint.binding.EMFBindingFactory;
 public class MDTUMLTechnologyAdapter extends EMFTechnologyAdapter {
 
 	protected static final Logger logger = Logger.getLogger(MDTUMLTechnologyAdapter.class.getPackage().getName());
+
+	private static String UML_FILE_EXTENSION = ".uml";
+
+	private static final EMFBindingFactory BINDING_FACTORY = new EMFBindingFactory();
 
 	/**
 	 * 
@@ -56,6 +67,52 @@ public class MDTUMLTechnologyAdapter extends EMFTechnologyAdapter {
 		return "MDT-UML technology adapter";
 	}
 
-	
-	
+	/**
+	 * 
+	 * 
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#isValidMetaModelFile(File aMetaModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
+	 */
+	public boolean isValidMetaModelFile(File aMetaModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
+	{
+		return false;
+	}
+
+	/**
+	 * 
+	 * 
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#isValidModelFile(File aModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
+	 */
+	public boolean isValidModelFile(File aModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
+	{
+
+		boolean valid = false;
+		if (aModelFile.exists())
+		{
+			if ((aModelFile.getName().endsWith(UML_FILE_EXTENSION)) && 
+					(aModelFile.isFile())) {
+				valid = true;
+			}
+		}
+		return valid;
+		}
+
+
+	/**
+	 * 
+	 * 
+	 * Follow the link.
+	 * 
+	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#isValidModelFile(File aModelFile, FlexoResource<EMFMetaModel> metaModelResource, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
+	 */
+	public boolean isValidModelFile(File aModelFile, FlexoResource<EMFMetaModel> metaModelResource, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
+	{
+		// EMFMetaModelResource emfMetaModelResource = (EMFMetaModelResource)metaModelResource;
+		return isValidModelFile(aModelFile, technologyContextManager);
+	}
+
+
 }
