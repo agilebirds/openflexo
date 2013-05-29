@@ -1,5 +1,6 @@
 /*
- * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2010-2012 AgileBirds
+ * (c) Copyright 2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -26,6 +27,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
@@ -83,8 +85,9 @@ public abstract class SelectIndividual<M extends FlexoModel<M, MM>, MM extends F
 		return null;
 	}
 
-	public void setType(IFlexoOntologyClass ontologyClass) {
+	public void setType(EditionSchemeAction action, IFlexoOntologyClass ontologyClass) {
 		if (ontologyClass != null) {
+			
 			typeURI = ontologyClass.getURI();
 		} else {
 			typeURI = null;

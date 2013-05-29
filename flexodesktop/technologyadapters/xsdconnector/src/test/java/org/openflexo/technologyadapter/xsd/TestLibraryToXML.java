@@ -42,10 +42,11 @@ public class TestLibraryToXML extends FlexoTestCase {
 				logger.warning("Failed to load.");
 			}
 		} else {
-			XSOntIndividual library = lib.createOntologyIndividual("myLibrary", lib.getClass(LIBRARY_URI));
-			XSOntIndividual book1 = lib.createOntologyIndividual("book1", lib.getClass(BOOK_URI));
+			// TODO : this wont work anymore as we suppressed name's significance for XSOntIndividual
+			XSOntIndividual library = lib.createOntologyIndividual( lib.getClass(LIBRARY_URI));
+			XSOntIndividual book1 = lib.createOntologyIndividual(lib.getClass(BOOK_URI));
 			book1.addToPropertyValue(lib.getProperty(BOOK_TITLE_URI), "My First Book");
-			XSOntIndividual book2 = lib.createOntologyIndividual("book2", lib.getClass(BOOK_URI));
+			XSOntIndividual book2 = lib.createOntologyIndividual( lib.getClass(BOOK_URI));
 			book2.addToPropertyValue(lib.getProperty(BOOK_TITLE_URI), "My Second Book");
 			library.addChild(book1);
 			library.addChild(book2);

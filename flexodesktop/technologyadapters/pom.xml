@@ -15,6 +15,7 @@
 		<module>xsdconnector</module>
 		<module>emfconnector</module>
 		<module>mdtumlconnector</module>
+		<module>csvconnector</module>
 	</modules>
 	<build>
 		<!--  <resources>

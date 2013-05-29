@@ -63,4 +63,19 @@ public class XSDataPropertyValue extends XSPropertyValue implements IFlexoOntolo
 	public void removeFromValues(Object value) {
 		values.remove(value);
 	}
+
+	@Override
+	public String toString() {
+		String result = new String();
+
+		// TODO Work in progress
+		
+		for (Object o : values){
+			if (o instanceof String) {
+				result = result.concat((String) o);
+			}
+		}
+		return result;
+	}
+	
 }

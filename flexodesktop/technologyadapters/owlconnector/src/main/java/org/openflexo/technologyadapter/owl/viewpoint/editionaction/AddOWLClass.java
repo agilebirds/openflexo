@@ -35,6 +35,8 @@ public class AddOWLClass extends AddClass<OWLOntology, OWLOntology, OWLClass> {
 
 	private static final Logger logger = Logger.getLogger(AddOWLClass.class.getPackage().getName());
 
+
+
 	private String dataPropertyURI = null;
 
 	public AddOWLClass(VirtualModel.VirtualModelBuilder builder) {
