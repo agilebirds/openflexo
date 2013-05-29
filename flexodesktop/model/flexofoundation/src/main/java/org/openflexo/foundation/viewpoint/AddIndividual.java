@@ -44,7 +44,7 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 
 	private Vector<DataPropertyAssertion> dataAssertions;
 	private Vector<ObjectPropertyAssertion> objectAssertions;
-	private String ontologyClassURI = null;
+	protected String ontologyClassURI = null;
 
 	private DataBinding<String> individualName;
 

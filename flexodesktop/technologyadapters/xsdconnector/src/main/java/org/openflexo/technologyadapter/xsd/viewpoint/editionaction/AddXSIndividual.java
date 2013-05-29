@@ -25,6 +25,8 @@ import java.util.logging.Logger;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.DuplicateURIException;
+import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
@@ -33,13 +35,21 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.xsd.model.XMLModel;
 import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntClass;
+import org.openflexo.technologyadapter.xsd.model.XSOntDataProperty;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 
 public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOntIndividual> {
 
-	private static final Logger logger = Logger.getLogger(AddXSIndividual.class.getPackage().getName());
+	@Override
+	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
+		// TODO Auto-generated method stub
+		super.setOntologyClass(ontologyClass);
+		if ( ontologyClassURI == null) {
+			logger.warning("OntologyURI is null for XSIndividual");
+		}
+	}
 
-	private String dataPropertyURI = null;
+	private static final Logger logger = Logger.getLogger(AddXSIndividual.class.getPackage().getName());
 
 	public AddXSIndividual(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
@@ -58,28 +68,24 @@ public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOnt
 	@Override
 	public XSOntIndividual performAction(EditionSchemeAction action) {
 		XSOntClass father = getOntologyClass();
-		// IFlexoOntologyConcept father = action.getOntologyObject(getProject());
-		// System.out.println("Individual name param = "+action.getIndividualNameParameter());
-		// String individualName = (String)getParameterValues().get(action.getIndividualNameParameter().getName());
-		String individualName = null;
-		try {
-			individualName = getIndividualName().getBindingValue(action);
-		} catch (TypeMismatchException e1) {
-			e1.printStackTrace();
-		} catch (NullReferenceException e1) {
-			e1.printStackTrace();
-		} catch (InvocationTargetException e1) {
-			e1.printStackTrace();
-		}
-		// System.out.println("individualName="+individualName);
+		
 		XSOntIndividual newIndividual = null;
 		try {
-			newIndividual = getModelSlotInstance(action).getModel().createOntologyIndividual(individualName, father);
-			logger.info("********* Added individual " + newIndividual.getName() + " as " + father);
+
+			ModelSlotInstance<XMLModel, XSDMetaModel> modelSlotInstance = getModelSlotInstance(action);
+			XMLModel model = getModelSlotInstance(action).getModel();
+			
+			newIndividual = model.createOntologyIndividual( father);
+			
 
 			for (DataPropertyAssertion dataPropertyAssertion : getDataAssertions()) {
 				if (dataPropertyAssertion.evaluateCondition(action)) {
-					// ... TODO
+					logger.info("DataPropertyAssertion=" + dataPropertyAssertion);
+					XSOntDataProperty property = (XSOntDataProperty) dataPropertyAssertion.getOntologyProperty();
+					logger.info("Property=" + property);
+					Object value = dataPropertyAssertion.getValue(action);
+					logger.info("Value=" + value);
+					newIndividual.addToPropertyValue(property, value);
 				}
 			}
 			for (ObjectPropertyAssertion objectPropertyAssertion : getObjectAssertions()) {
@@ -87,7 +93,15 @@ public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOnt
 					// ... TODO
 				}
 			}
+			modelSlotInstance.getModel().setIsModified();
 
+			// add it to the model
+			// Two phase creation, then addition, to be able to process URIs once you have the property values
+			
+			model.addIndividual(newIndividual);
+			
+			logger.info("********* Added individual " + newIndividual.getName() + " as " + father);
+			
 			return newIndividual;
 		} catch (DuplicateURIException e) {
 			e.printStackTrace();

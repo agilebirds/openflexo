@@ -47,7 +47,7 @@ import org.openflexo.technologyadapter.xsd.model.XSOntology;
 import org.openflexo.technologyadapter.xsd.rm.XMLModelResource;
 import org.openflexo.technologyadapter.xsd.rm.XMLModelResourceImpl;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
-import org.openflexo.technologyadapter.xsd.viewpoint.XSDBindingFactory;
+import org.openflexo.technologyadapter.xsd.viewpoint.binding.XSDBindingFactory;
 
 /**
  * This class defines and implements the XSD/XML technology adapter
