@@ -26,6 +26,7 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
 import org.openflexo.foundation.rm.DiagramSpecificationResource;
 import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.rm.VirtualModelResource;
@@ -363,6 +364,13 @@ public class VPMIconLibrary extends IconLibrary {
 			} else if (object instanceof TextFieldInspectorEntry) {
 				return TEXT_FIELD_ICON;
 			}
+		} else if (object instanceof IFlexoOntologyPropertyValue) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((IFlexoOntologyPropertyValue) object).getProperty()
+					.getTechnologyAdapter());
+			if (tac != null) {
+				return tac.getIconForPropertyValue(((IFlexoOntologyPropertyValue) object).getClass());
+			}
+			return null;
 		}
 		logger.warning("No icon for " + object.getClass());
 		return UNKNOWN_ICON;

@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeObjectProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFClassClass;
@@ -33,6 +34,9 @@ import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
+import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualAttributeDataPropertyValue;
+import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualAttributeObjectPropertyValue;
+import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualReferenceObjectPropertyValue;
 import org.openflexo.toolbox.ImageIconResource;
 
 public class EMFIconLibrary {
@@ -69,8 +73,27 @@ public class EMFIconLibrary {
 			return EMF_ATTRIBUTE_ICON;
 		} else if (EMFAttributeObjectProperty.class.isAssignableFrom(objectClass)) {
 			return EMF_ATTRIBUTE_ICON;
+		} else if (EMFObjectIndividualAttributeDataPropertyValue.class.isAssignableFrom(objectClass)) {
+			return EMF_ATTRIBUTE_ICON;
+		} else if (EMFObjectIndividualAttributeObjectPropertyValue.class.isAssignableFrom(objectClass)) {
+			return EMF_ATTRIBUTE_ICON;
+		} else if (EMFObjectIndividualReferenceObjectPropertyValue.class.isAssignableFrom(objectClass)) {
+			return EMF_REFERENCE_ICON;
 		}
 		logger.warning("No icon for " + objectClass);
 		return null;
 	}
+
+	public static ImageIcon iconForPropertyValue(Class<? extends IFlexoOntologyPropertyValue> objectClass) {
+		if (EMFObjectIndividualAttributeDataPropertyValue.class.isAssignableFrom(objectClass)) {
+			return EMF_ATTRIBUTE_ICON;
+		} else if (EMFObjectIndividualAttributeObjectPropertyValue.class.isAssignableFrom(objectClass)) {
+			return EMF_ATTRIBUTE_ICON;
+		} else if (EMFObjectIndividualReferenceObjectPropertyValue.class.isAssignableFrom(objectClass)) {
+			return EMF_REFERENCE_ICON;
+		}
+		logger.warning("No icon for " + objectClass);
+		return null;
+	}
+
 }

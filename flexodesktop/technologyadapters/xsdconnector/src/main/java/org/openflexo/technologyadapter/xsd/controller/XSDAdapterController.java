@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 import org.openflexo.components.widget.OntologyBrowserModel;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.icon.IconFactory;
@@ -94,6 +95,17 @@ public class XSDAdapterController extends TechnologyAdapterController<XSDTechnol
 	public ImageIcon getIconForOntologyObject(Class<? extends IFlexoOntologyObject> objectClass) {
 		if (AbstractXSOntObject.class.isAssignableFrom(objectClass))
 			return XSDIconLibrary.iconForObject((Class<? extends AbstractXSOntObject>) objectClass);
+		return null;
+	}
+
+	/**
+	 * Return icon representing supplied property value
+	 * 
+	 * @param object
+	 * @return
+	 */
+	@Override
+	public ImageIcon getIconForPropertyValue(Class<? extends IFlexoOntologyPropertyValue> objectClass) {
 		return null;
 	}
 

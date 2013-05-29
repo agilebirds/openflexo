@@ -112,6 +112,7 @@ import org.openflexo.foundation.ie.IEObject;
 import org.openflexo.foundation.ie.IEWOComponent;
 import org.openflexo.foundation.ie.cl.ComponentDefinition;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
@@ -2127,6 +2128,12 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((IFlexoOntologyObject) object).getTechnologyAdapter());
 			if (tac != null) {
 				return tac.getIconForOntologyObject(((IFlexoOntologyObject) object).getClass());
+			}
+		} else if (object instanceof IFlexoOntologyPropertyValue) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((IFlexoOntologyPropertyValue) object).getProperty()
+					.getTechnologyAdapter());
+			if (tac != null) {
+				return tac.getIconForPropertyValue(((IFlexoOntologyPropertyValue) object).getClass());
 			}
 		} else if (object instanceof TOCObject) {
 			return DEIconLibrary.iconForObject((TOCObject) object);
