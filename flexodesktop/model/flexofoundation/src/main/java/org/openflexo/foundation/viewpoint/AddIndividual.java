@@ -60,8 +60,8 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 		if (getAssignation().isSet()) {
 			out.append(getAssignation().toString() + " = (", context);
 		}
-		out.append(getClass().getSimpleName() + " conformTo " + getOntologyClass().getName() + " from " + getModelSlot().getName() + " {"
-				+ StringUtils.LINE_SEPARATOR, context);
+		out.append(getClass().getSimpleName() + (getOntologyClass() != null ? " conformTo " + getOntologyClass().getName() : "") + " from "
+				+ getModelSlot().getName() + " {" + StringUtils.LINE_SEPARATOR, context);
 		out.append(getAssertionsFMLRepresentation(context), context);
 		out.append("}", context);
 		if (getAssignation().isSet()) {
@@ -74,7 +74,9 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 		if (getDataAssertions().size() > 0) {
 			StringBuffer sb = new StringBuffer();
 			for (DataPropertyAssertion a : getDataAssertions()) {
-				sb.append("  " + a.getOntologyProperty().getName() + " = " + a.getValue().toString() + ";" + StringUtils.LINE_SEPARATOR);
+				if (a.getOntologyProperty() != null) {
+					sb.append("  " + a.getOntologyProperty().getName() + " = " + a.getValue().toString() + ";" + StringUtils.LINE_SEPARATOR);
+				}
 			}
 			return sb.toString();
 		}
