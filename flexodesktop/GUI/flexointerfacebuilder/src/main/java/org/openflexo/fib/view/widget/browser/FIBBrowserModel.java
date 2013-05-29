@@ -38,7 +38,6 @@ import java.util.logging.Logger;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
@@ -55,7 +54,6 @@ import org.openflexo.fib.model.FIBBrowser;
 import org.openflexo.fib.model.FIBBrowserElement;
 import org.openflexo.fib.model.FIBBrowserElement.FIBBrowserElementChildren;
 import org.openflexo.fib.view.widget.FIBBrowserWidget;
-import org.openflexo.fib.view.widget.browser.TestJTree.MyTreeNode;
 import org.openflexo.toolbox.ToolBox;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -289,15 +287,6 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 		@Override
 		public BrowserCell getParent() {
 			return (BrowserCell) super.getParent();
-		}
-
-		private void setChildren(List<MyTreeNode> children) {
-			removeAllChildren();
-			setAllowsChildren(children.size() > 0);
-			for (MutableTreeNode node : children) {
-				add(node);
-			}
-			loaded = true;
 		}
 
 		public Object getRepresentedObject() {
