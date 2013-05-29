@@ -28,6 +28,8 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.layout.ForceDirectedPlacementLayout;
+import org.openflexo.fge.layout.Layout;
 import org.openflexo.fge.view.FGEView;
 
 public class SelectionAction extends MouseClickControlAction {
@@ -42,6 +44,9 @@ public class SelectionAction extends MouseClickControlAction {
 			return false;
 		}
 
+		Layout l = new ForceDirectedPlacementLayout(graphicalRepresentation);
+		l.runLayout();
+		
 		if (graphicalRepresentation.getIsSelectable()) {
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Select " + graphicalRepresentation);
