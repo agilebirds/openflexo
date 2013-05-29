@@ -74,7 +74,9 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 		if (getDataAssertions().size() > 0) {
 			StringBuffer sb = new StringBuffer();
 			for (DataPropertyAssertion a : getDataAssertions()) {
-				sb.append("  " + a.getOntologyProperty().getName() + " = " + a.getValue().toString() + ";" + StringUtils.LINE_SEPARATOR);
+				if (a.getOntologyProperty() != null) {
+					sb.append("  " + a.getOntologyProperty().getName() + " = " + a.getValue().toString() + ";" + StringUtils.LINE_SEPARATOR);
+				}
 			}
 			return sb.toString();
 		}
