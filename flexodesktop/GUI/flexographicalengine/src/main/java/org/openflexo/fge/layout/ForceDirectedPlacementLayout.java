@@ -39,8 +39,8 @@ public class ForceDirectedPlacementLayout extends Layout{
 	@Override
 	public void runLayout() {
 			
-		for(int i=0;i<50;i++)
-		{
+		//for(int i=0;i<100;i++)
+		//{
 			// Apply repulsive forces
 			repulsiveForcesComputation();
 			// Apply attractive forces
@@ -49,7 +49,7 @@ public class ForceDirectedPlacementLayout extends Layout{
 	       // gravityForcesComputation();
 	        // Apply layout
 	        applyLayout();
-		}
+		//}
 	}
 	
 	

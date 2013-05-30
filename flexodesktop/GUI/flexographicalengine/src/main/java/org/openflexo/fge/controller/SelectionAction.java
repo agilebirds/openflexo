@@ -21,10 +21,15 @@ package org.openflexo.fge.controller;
 
 import java.awt.Component;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
+import javax.swing.Timer;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
@@ -33,6 +38,9 @@ import org.openflexo.fge.layout.Layout;
 import org.openflexo.fge.view.FGEView;
 
 public class SelectionAction extends MouseClickControlAction {
+	
+	private GraphicalRepresentation<?> g;
+	
 	@Override
 	public MouseClickControlActionType getActionType() {
 		return MouseClickControlActionType.SELECTION;
@@ -44,8 +52,52 @@ public class SelectionAction extends MouseClickControlAction {
 			return false;
 		}
 
-		Layout l = new ForceDirectedPlacementLayout(graphicalRepresentation);
-		l.runLayout();
+		/*
+		 * TEMP
+		 */
+		this.g = graphicalRepresentation;
+		
+		ActionListener taskPerformer = new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+            	runAction();
+            	}
+            };
+        Timer timer = new Timer( 1 , taskPerformer);
+        timer.setRepeats(true);
+        timer.start();
+
+        try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		/*SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() 
+		{
+			@Override
+			protected Void doInBackground() throws Exception {
+				runAction();
+				return null;
+			}
+
+			@Override
+			protected void done() {
+				super.done();
+				try {
+					get();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					e.printStackTrace();
+				}
+			}
+			};
+		worker.execute();
+	*/
+		/*
+		 * END
+		 */
 		
 		if (graphicalRepresentation.getIsSelectable()) {
 			if (logger.isLoggable(Level.FINE)) {
@@ -64,4 +116,10 @@ public class SelectionAction extends MouseClickControlAction {
 			return false;
 		}
 	}
+	
+	private void runAction(){
+		Layout l = new ForceDirectedPlacementLayout(g);
+		l.runLayout();
+	}
+		
 }

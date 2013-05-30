@@ -1,6 +1,7 @@
 package org.openflexo.fge.layout;
 
-import org.openflexo.fge.drawingeditor.MyShapeGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
+
 
 public class LayoutedNode {
 	private double deplacementX;
@@ -23,20 +24,20 @@ public class LayoutedNode {
 
 	private double deplacementY;
 	
-	private MyShapeGraphicalRepresentation graphicalRepresentation;
+	private ShapeGraphicalRepresentation<?> graphicalRepresentation;
 	
 	public LayoutedNode(int deplacement,
-			MyShapeGraphicalRepresentation graphicalRepresentation) {
+			ShapeGraphicalRepresentation<?> graphicalRepresentation) {
 		super();
 		this.graphicalRepresentation = graphicalRepresentation;
 	}
 
-	public MyShapeGraphicalRepresentation getGraphicalRepresentation() {
+	public ShapeGraphicalRepresentation<?> getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
 	public void setGraphicalRepresentation(
-			MyShapeGraphicalRepresentation graphicalRepresentation) {
+			ShapeGraphicalRepresentation<?> graphicalRepresentation) {
 		this.graphicalRepresentation = graphicalRepresentation;
 	}
 	
