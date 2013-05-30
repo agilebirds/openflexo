@@ -20,12 +20,12 @@
 package org.openflexo.fib.view.widget.browser;
 
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -36,9 +36,9 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
@@ -124,10 +124,17 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 		if (root == null) {
 			return false;
 		}
+
+		// nbOfBrowserCells = 0;
+
 		BrowserCell rootCell = retrieveBrowserCell(root, null);
 		if (getRoot() != rootCell) {
+			if (getRoot() != null) {
+				((BrowserCell) getRoot()).delete();
+			}
 			logger.fine("updateRootObject() with " + root + " rootCell=" + rootCell);
 			setRoot(rootCell);
+
 			return true;
 		}
 		return false;
@@ -189,22 +196,44 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 		return contents;
 	}
 
-	public Iterator<Object> retrieveContents() {
+	/**
+	 * Obtain an iteration on all values which may be contained in this browser, by explicitely deeply-exploring all the tree.<br>
+	 * Warning ! This method is dangerous for the perfs, and should never be called on a big "model"
+	 * 
+	 * @return
+	 */
+	public Iterator<Object> recursivelyExploreModelToRetrieveContents() {
+		// We load all when not already up-t-date
+		if (!exhaustiveContentsIsUpToDate) {
+			if (getRoot() instanceof BrowserCell) {
+				System.out.println("!!!!! On se refait tout !!!!");
+				((BrowserCell) getRoot()).update(true);
+				exhaustiveContentsIsUpToDate = true;
+			}
+		}
 		return contents.keys().iterator();
 	}
 
+	/**
+	 * Flag indicating is exhaustive contents (obtained after deep-browsing) is up-to-date
+	 */
+	boolean exhaustiveContentsIsUpToDate = false;
+
 	private BrowserCell retrieveBrowserCell(Object representedObject, BrowserCell parent) {
+		/*System.out.println("retrieveBrowserCell for " + representedObject + " parent="
+				+ (parent != null ? parent.getRepresentedObject() : "null"));*/
 		ArrayList<BrowserCell> cells = new ArrayList<FIBBrowserModel.BrowserCell>(contents.get(representedObject));
 		// Collection<BrowserCell> cells = contents.get(representedObject);
 		if (cells != null) {
 			for (BrowserCell cell : cells) {
-				if (cell.getFather() == parent) {
+				if (cell.getParent() == parent) {
 					return cell;
 				}
 			}
 		}
 		BrowserCell returned = new BrowserCell(representedObject, parent);
 		contents.put(representedObject, returned);
+		// returned.update(false);
 		return returned;
 	}
 
@@ -220,32 +249,62 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 		return contents.get(representedObject);
 	}
 
-	public class BrowserCell implements TreeNode, Observer, HasDependencyBinding {
-		private Object representedObject;
+	public class LoadingCell extends DefaultMutableTreeNode {
+		public LoadingCell() {
+			super("Loading...", false);
+		}
+	}
+
+	public class BrowserCell extends DefaultMutableTreeNode implements Observer, HasDependencyBinding {
+
+		private boolean loaded = false;
+
 		private FIBBrowserElementType browserElementType;
-		private BrowserCell father;
-		private final Vector<BrowserCell> children;
 		private boolean isDeleted = false;
 		private boolean isVisible = true;
 		private DependingObjects dependingObjects;
 
 		public BrowserCell(Object representedObject, BrowserCell father) {
-			// logger.info("Build new BrowserCell for "+representedObject);
-			this.representedObject = representedObject;
+			setParent(father);
+			setAllowsChildren(true);
+			setUserObject(representedObject);
 			browserElementType = elementTypeForClass(representedObject.getClass());
-			this.father = father;
-			children = new Vector<BrowserCell>();
+
+			final List<?> newChildrenObjects = browserElementType.getChildrenFor(getRepresentedObject());
+
+			if (newChildrenObjects.size() > 0) {
+				// System.out.println("For " + representedObject + " found " + newChildrenObjects.size() + " children: " +
+				// newChildrenObjects);
+				add(new LoadingCell());
+			}
 
 			if (browserElementType != null) {
 				dependingObjects = new DependingObjects(this);
 				dependingObjects.refreshObserving(browserElementType);
 			}
+		}
+
+		@Override
+		public BrowserCell getParent() {
+			return (BrowserCell) super.getParent();
+		}
+
+		public Object getRepresentedObject() {
+			return getUserObject();
+		}
+
+		public void loadChildren(final DefaultTreeModel model, final PropertyChangeListener progressListener) {
+			if (loaded) {
+				return;
+			}
+
 			update(false);
+
 		}
 
 		@Override
 		public List<DataBinding<?>> getDependencyBindings() {
-			return getBrowserElementType().getDependencyBindings(representedObject);
+			return getBrowserElementType().getDependencyBindings(getRepresentedObject());
 		}
 
 		@Override
@@ -302,17 +361,20 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 		}
 
 		public void delete() {
-			logger.fine("Delete BrowserCell for " + representedObject);
 
-			for (BrowserCell c : children) {
-				c.delete();
+			logger.fine("Delete BrowserCell for " + getRepresentedObject());
+
+			for (Object c : children) {
+				if (c instanceof BrowserCell) {
+					((BrowserCell) c).delete();
+				}
 			}
 
 			if (dependingObjects != null) {
 				dependingObjects.stopObserving();
 			}
 
-			if (representedObject != null) {
+			if (getRepresentedObject() != null) {
 				removeBrowserCell(this);
 			}
 
@@ -324,9 +386,9 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 				selection.remove(representedObject);
 			}
 			 */
-			this.representedObject = null;
+			setUserObject(null);
 			browserElementType = null;
-			this.father = null;
+			setParent(null);
 			children.clear();
 			isDeleted = true;
 		}
@@ -345,31 +407,43 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 
 			// logger.info("**************** update() "+this);
 			if (browserElementType == null) {
-				logger.warning("Not element type registered for " + representedObject);
+				logger.warning("No element type registered for " + getRepresentedObject());
 				return;
 			}
 
 			// Special case for cells that were declared as invisible
 			// When becomes visible, must tells to parent to update
 			if (!isVisible) {
-				if (browserElementType.isVisible(representedObject)) {
+				if (browserElementType.isVisible(getRepresentedObject())) {
 					logger.fine("Cell " + this + " becomes visible");
-					father.update(recursively);
+					getParent().update(recursively);
 				}
 			}
 
-			List<BrowserCell> oldChildren = new ArrayList<BrowserCell>(children);
-			List<BrowserCell> removedChildren = new ArrayList<BrowserCell>(children);
+			List<BrowserCell> oldChildren;
+			List<BrowserCell> removedChildren;
 			List<BrowserCell> newChildren = new ArrayList<BrowserCell>();
-			final List<?> newChildrenObjects = /*(isEnabled ?*/browserElementType.getChildrenFor(representedObject) /*: new Vector())*/;
+
+			if (children == null) {
+				oldChildren = new ArrayList<BrowserCell>();
+				removedChildren = new ArrayList<BrowserCell>();
+			} else {
+				if (children.size() == 1 && children.firstElement() instanceof LoadingCell) {
+					removeAllChildren();
+				}
+				oldChildren = new ArrayList<BrowserCell>(children);
+				removedChildren = new ArrayList<BrowserCell>(children);
+			}
+
+			final List<?> newChildrenObjects = /*(isEnabled ?*/browserElementType.getChildrenFor(getRepresentedObject()) /*: new Vector())*/;
 			int index = 0;
 
 			for (Object o : newChildrenObjects) {
-				if (o != null && o != representedObject) {
+				if (o != null && o != getRepresentedObject()) {
 					BrowserCell cell = retrieveBrowserCell(o, this);
 					FIBBrowserElementType childElementType = elementTypeForClass(o.getClass());
 					if (childElementType != null && childElementType.isVisible(o)) {
-						if (children.contains(cell)) {
+						if (children != null && children.contains(cell)) {
 							// OK, child still here
 							removedChildren.remove(cell);
 							if (recursively) {
@@ -378,6 +452,9 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 							index = children.indexOf(cell) + 1;
 						} else {
 							newChildren.add(cell);
+							if (children == null) {
+								children = new Vector();
+							}
 							children.insertElementAt(cell, index);
 							index++;
 						}
@@ -387,16 +464,20 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 				}
 			}
 			for (BrowserCell c : removedChildren) {
-				children.remove(c);
+				if (children != null) {
+					children.remove(c);
+				}
 				c.delete();
 			}
 
 			boolean requireSorting = false;
-			for (int i = 0; i < children.size() - 1; i++) {
-				BrowserCell c1 = children.elementAt(i);
-				BrowserCell c2 = children.elementAt(i + 1);
-				if (newChildrenObjects.indexOf(c1.representedObject) != newChildrenObjects.indexOf(c2.representedObject) - 1) {
-					requireSorting = true;
+			if (children != null) {
+				for (int i = 0; i < children.size() - 1; i++) {
+					BrowserCell c1 = (BrowserCell) children.elementAt(i);
+					BrowserCell c2 = (BrowserCell) children.elementAt(i + 1);
+					if (newChildrenObjects.indexOf(c1.getRepresentedObject()) != newChildrenObjects.indexOf(c2.getRepresentedObject()) - 1) {
+						requireSorting = true;
+					}
 				}
 			}
 
@@ -408,7 +489,8 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 				Collections.sort(children, new Comparator<BrowserCell>() {
 					@Override
 					public int compare(BrowserCell o1, BrowserCell o2) {
-						return newChildrenObjects.indexOf(o1.representedObject) - newChildrenObjects.indexOf(o2.representedObject);
+						return newChildrenObjects.indexOf(o1.getRepresentedObject())
+								- newChildrenObjects.indexOf(o2.getRepresentedObject());
 					}
 				});
 			}
@@ -421,6 +503,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 
 			if (removedChildren.size() > 0 || newChildren.size() > 0) {
 				structureChanged = true;
+				exhaustiveContentsIsUpToDate = false;
 				if (oldChildren.size() == 0) {
 					// Special case, i don't undertand why (SGU)
 					// OK, issue seems to be MacOS only but workaround works on all platforms.
@@ -508,7 +591,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 		@Override
 		public void update(Observable o, Object arg) {
 			// logger.info("Object " + o + " received " + arg);
-			if (!isDeleted && o == representedObject) {
+			if (!isDeleted && o == getRepresentedObject()) {
 				update(false);
 			}
 		}
@@ -522,10 +605,6 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 			}
 		}
 
-		public Object getRepresentedObject() {
-			return representedObject;
-		}
-
 		public FIBBrowserElement getBrowserElement() {
 			return browserElementType.getBrowserElement();
 		}
@@ -534,52 +613,8 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 			return browserElementType;
 		}
 
-		@Override
-		public Enumeration<BrowserCell> children() {
-			return children.elements();
-		}
-
-		@Override
-		public boolean getAllowsChildren() {
-			return true;
-		}
-
-		@Override
-		public TreeNode getChildAt(int childIndex) {
-			return children.get(childIndex);
-		}
-
-		@Override
-		public int getChildCount() {
-			return children.size();
-		}
-
-		@Override
-		public int getIndex(TreeNode node) {
-			return children.indexOf(node);
-		}
-
-		public BrowserCell getFather() {
-			return father;
-		}
-
-		@Override
-		public TreeNode getParent() {
-			return getFather();
-		}
-
-		@Override
-		public boolean isLeaf() {
-			return getChildCount() == 0;
-		}
-
-		@Override
-		public String toString() {
-			return "BrowserCell[" + getRepresentedObject() + "]";
-		}
-
 		public TreePath getTreePath() {
-			return new TreePath(getPathToRoot(this));
+			return new TreePath(getPathToRoot(this, 0));
 		}
 
 	}

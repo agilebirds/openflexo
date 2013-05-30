@@ -41,9 +41,16 @@
 	</entity>
 
 	<entity name="org.openflexo.technologyadapter.owl.OWLModelSlot" xmlTag="OWLModelSlot">
-	</entity>
-
-	<entity name="org.openflexo.technologyadapter.xsd.XSDModelSlot" xmlTag="XSDModelSlot">
+	</entity>	
+	
+    <entity name="org.openflexo.technologyadapter.xsd.XSDModelSlot$XSURIProcessor" xmlTag="URIProcessor" >
+    	<property name="typeURI" xmlTag="typeURI" attribute="YES" />
+    	<property name="mappingStyle" xmlTag="mappingStyle" attribute="YES" />
+    	<property name="attributeName" xmlTag="attributeName" attribute="YES" />
+    </entity>
+ 
+	<entity name="org.openflexo.technologyadapter.xsd.XSDModelSlot" xmlTag="XSDModelSlot" >
+		<property name="uriProcessorsList" type="vector" contains="org.openflexo.technologyadapter.xsd.XSDModelSlot$XSURIProcessor" />
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.LocalizedDictionary"

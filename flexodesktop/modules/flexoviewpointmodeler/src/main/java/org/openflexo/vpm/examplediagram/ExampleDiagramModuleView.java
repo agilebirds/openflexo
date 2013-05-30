@@ -44,7 +44,9 @@ public class ExampleDiagramModuleView extends JPanel implements ModuleView<Examp
 		setLayout(new BorderLayout());
 		_controller = controller;
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		topPanel.add(_controller.getToolbox().getToolPanel());
 		topPanel.add(_controller.getToolbox().getStyleToolBar());
+		topPanel.add(_controller.getToolbox().getLayoutToolBar());
 		add(topPanel, BorderLayout.NORTH);
 		add(new JScrollPane(_controller.getDrawingView()), BorderLayout.CENTER);
 		validate();

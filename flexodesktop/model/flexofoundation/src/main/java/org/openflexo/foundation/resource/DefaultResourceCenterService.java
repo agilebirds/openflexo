@@ -20,6 +20,12 @@ import org.openflexo.toolbox.FileUtils;
  */
 public abstract class DefaultResourceCenterService extends FlexoServiceImpl implements FlexoResourceCenterService {
 
+	@Override
+	public void initialize() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	private UserResourceCenter userResourceCenter;
 
 	/**

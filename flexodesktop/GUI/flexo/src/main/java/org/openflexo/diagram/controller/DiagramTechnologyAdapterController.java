@@ -5,6 +5,7 @@ import javax.swing.ImageIcon;
 import org.openflexo.components.widget.OntologyBrowserModel;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
 import org.openflexo.foundation.view.diagram.DiagramTechnologyAdapter;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
@@ -78,6 +79,17 @@ public class DiagramTechnologyAdapterController extends TechnologyAdapterControl
 	 */
 	@Override
 	public ImageIcon getIconForOntologyObject(Class<? extends IFlexoOntologyObject> objectClass) {
+		return null;
+	}
+
+	/**
+	 * Return icon representing supplied property value
+	 * 
+	 * @param object
+	 * @return
+	 */
+	@Override
+	public ImageIcon getIconForPropertyValue(Class<? extends IFlexoOntologyPropertyValue> objectClass) {
 		return null;
 	}
 

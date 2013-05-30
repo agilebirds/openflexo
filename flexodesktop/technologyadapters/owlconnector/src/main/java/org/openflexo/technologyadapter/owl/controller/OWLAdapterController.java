@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 import org.openflexo.components.widget.OntologyBrowserModel;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.icon.IconFactory;
@@ -120,6 +121,17 @@ public class OWLAdapterController extends TechnologyAdapterController<OWLTechnol
 		if (OWLObject.class.isAssignableFrom(objectClass))
 			return OWLIconLibrary.iconForObject((Class<? extends OWLObject>) objectClass);
 		return null;
+	}
+
+	/**
+	 * Return icon representing supplied property value
+	 * 
+	 * @param object
+	 * @return
+	 */
+	@Override
+	public ImageIcon getIconForPropertyValue(Class<? extends IFlexoOntologyPropertyValue> objectClass) {
+		return OWLIconLibrary.ONTOLOGY_STATEMENT_ICON;
 	}
 
 	/**

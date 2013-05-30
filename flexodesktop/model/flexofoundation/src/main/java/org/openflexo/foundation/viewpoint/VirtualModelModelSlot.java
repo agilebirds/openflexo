@@ -1,3 +1,24 @@
+/*
+ * (c) Copyright 2010-2012 AgileBirds
+ * (c) Copyright 2013 Openflexo
+ *
+ * This file is part of OpenFlexo.
+ *
+ * OpenFlexo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenFlexo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 package org.openflexo.foundation.viewpoint;
 
 import java.util.logging.Logger;
@@ -12,6 +33,7 @@ import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
@@ -22,7 +44,7 @@ import org.openflexo.toolbox.StringUtils;
 /**
  * Implementation of the ModelSlot class for the Openflexo built-in diagram technology adapter
  * 
- * @author sylvain
+ * @author sylvain, christophe
  * 
  */
 @DeclarePatternRoles({ @DeclarePatternRole(EditionPatternInstancePatternRole.class) // EditionPattern
@@ -160,4 +182,27 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	public boolean isReflexiveModelSlot() {
 		return getName().equals(VirtualModel.REFLEXIVE_MODEL_SLOT_NAME) && getVirtualModelResource() == getVirtualModel().getResource();
 	}
+
+	/** 
+	 * 
+	 * @param msInstance
+	 * @param o
+	 * @return URI as String
+	 */
+	public String getURIForObject(ModelSlotInstance msInstance, Object o)
+	  {
+	    logger.warning("This method should be refined by child classes");
+	    return null;
+	  }
+
+	/**
+	 * @param msInstance
+	 * @param objectURI
+	 * @return the Object
+	 */
+	  public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI)
+	  {
+		logger.warning("This method should be refined by child classes");
+	    return null;
+	  }
 }

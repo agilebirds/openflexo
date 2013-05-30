@@ -1,5 +1,6 @@
 /*
- * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2010-201 AgileBirds
+ * (c) Copyright 2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -181,11 +182,6 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 			return getView().getProject();
 		}
 		return super.getProject();
-	}
-
-	@Override
-	public Object getObject(String objectURI) {
-		return null;
 	}
 
 	/**
@@ -544,6 +540,12 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	 * @return
 	 */
 	public Object getValueForVariable(BindingVariable variable) {
+		return null;
+	}
+
+	@Override
+	public Object getObject(String objectURI) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

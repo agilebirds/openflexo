@@ -96,6 +96,8 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 
 	public void recomputeStructure() {
 
+		logger.fine("BEGIN recomputeStructure for " + getContext());
+
 		isRecomputingStructure = true;
 		if (getHierarchicalMode()) {
 			computeHierarchicalStructure();
@@ -105,6 +107,8 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 		isRecomputingStructure = false;
 		setChanged();
 		notifyObservers(new OntologyBrowserModelRecomputed());
+
+		logger.fine("END recomputeStructure for " + getContext());
 	}
 
 	public static class OntologyBrowserModelRecomputed {

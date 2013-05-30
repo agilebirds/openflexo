@@ -38,6 +38,7 @@ public class XSOntAttributeRestriction extends XSOntRestriction {
 		this.attributeProperty = ontology.getDataProperty(propertyURI);
 		this.attributeProperty.addToReferencingRestriction(this);
 		this.attributeUse = attributeUse;
+		this.setName(attributeUse.getDecl().getName());
 	}
 
 	@Override

@@ -289,18 +289,38 @@ public class BindingValue extends Expression implements PropertyChangeListener {
 
 	private void internallySetBindingVariable(BindingVariable aBindingVariable) {
 		if (bindingVariable != aBindingVariable) {
+			// logger.info("Ici pour " + this + " with " + aBindingVariable + " (was " + bindingVariable + ")");
+			// if (false) {
+			// logger.info("Ici ");
+			// Thread.dumpStack();
+			// }
 			if (bindingVariable != null) {
-				bindingVariable.getPropertyChangeSupport().removePropertyChangeListener(this);
+				bindingVariable.getPropertyChangeSupport().removePropertyChangeListener(BindingVariable.TYPE, this);
+				bindingVariable.getPropertyChangeSupport().removePropertyChangeListener(BindingVariable.VARIABLE_NAME, this);
 			}
 			bindingVariable = aBindingVariable;
 			if (bindingVariable != null) {
-				bindingVariable.getPropertyChangeSupport().addPropertyChangeListener(this);
+				bindingVariable.getPropertyChangeSupport().addPropertyChangeListener(BindingVariable.TYPE, this);
+				bindingVariable.getPropertyChangeSupport().addPropertyChangeListener(BindingVariable.VARIABLE_NAME, this);
 			}
+			// System.out.println("Pour " + bindingVariable + " j'ai comme listeners: "
+			// + bindingVariable.getPropertyChangeSupport().getPropertyChangeListeners(BindingVariable.VARIABLE_NAME).length);
+			// if (bindingVariable.getPropertyChangeSupport().getPropertyChangeListeners(BindingVariable.VARIABLE_NAME).length > 1000) {
+			// System.out.println("OK, on arrete la");
+			// PropertyChangeListener[] all = bindingVariable.getPropertyChangeSupport().getPropertyChangeListeners(
+			// BindingVariable.VARIABLE_NAME);
+			// System.out.println("Hop");
+			// }
+			// }
 		}
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
+		// if (false) {
+		// logger.info("Et la avec " + evt);
+		// Thread.dumpStack();
+		// }
 		if (evt.getPropertyName().equals(BindingVariable.VARIABLE_NAME) || evt.getPropertyName().equals(BindingVariable.TYPE)) {
 			markedAsToBeReanalized();
 		}
@@ -423,9 +443,9 @@ public class BindingValue extends Expression implements PropertyChangeListener {
 
 	public void markedAsToBeReanalized() {
 		needsToBeReanalized = true;
-		if (isValid()) {
+		/*if (isValid()) {
 			analysingSuccessfull = true;
-		}
+		}*/
 	}
 
 	public boolean isValid(DataBinding<?> dataBinding) {
@@ -553,7 +573,7 @@ public class BindingValue extends Expression implements PropertyChangeListener {
 	public boolean equals(Object obj) {
 		if (obj instanceof BindingValue) {
 			BindingValue e = (BindingValue) obj;
-			return getParsedBindingPath().equals(e.getParsedBindingPath());
+			return dataBinding == e.dataBinding && getParsedBindingPath().equals(e.getParsedBindingPath());
 		}
 		return super.equals(obj);
 	}

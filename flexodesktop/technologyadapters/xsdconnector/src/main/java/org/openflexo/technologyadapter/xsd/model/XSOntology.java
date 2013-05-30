@@ -495,23 +495,51 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		}
 		return new ArrayList<XSOntIndividual>(result.values());
 	}
+	
+	/**
+	 * 
+	 * createOntologyIndividual
+	 * 
+	 * 			Creates a new ontology individual WITHOUT adding it to the individuals of that particular ontology yet
+	 * 			This is because we need to have all the object property values before calculating URIs (by ModelSlot) 
+	 * 	
+	 * @param type
+	 * @return
+	 * @throws DuplicateURIException
+	 */
 
-	public XSOntIndividual createOntologyIndividual(String name, XSOntClass type) throws DuplicateURIException {
-		String uri = getURI() + "#" + name;
-		if (getOntologyObject(uri) != null) {
-			throw new DuplicateURIException(uri);
-		}
-		if (type instanceof XSOntClass == false) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Individual '" + name + "' with type '" + type.getURI() + "' can't be created in a XSOntology");
-			}
-			return null;
-		}
-		XSOntIndividual individual = new XSOntIndividual(this, name, uri, getTechnologyAdapter());
+	public XSOntIndividual createOntologyIndividual(XSOntClass type)  {
+		
+		XSOntIndividual individual = new XSOntIndividual(getTechnologyAdapter());
+		
+		
 		individual.setType(type);
-		individuals.put(individual.getURI(), individual);
 		return individual;
+	}	
+	
+	/**
+	 * 
+	 * addIndividual
+	 * 
+	 * 			add a new Individual to the ontoloty
+	 * 	
+	 * @param name
+	 * @param type
+	 * @return
+	 * @throws DuplicateURIException
+	 */
+
+	public void addIndividual(XSOntIndividual individual) throws DuplicateURIException {
+		String indUri = individual.getURI();
+		if ( individuals.get(indUri) != null ) {
+			throw new  DuplicateURIException(indUri);
+		}
+		else {
+			individuals.put(indUri, individual);
+		}
 	}
+	
+	
 
 	@Override
 	public IFlexoOntologyConcept getOntologyObject(String objectURI) {
@@ -544,7 +572,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	}
 
 	public static String findOntologyURI(File f) {
-		return "http://www.openflexo.org/test/" + f.getName();
+		return "http://www.openflexo.org/XSD/" + f.getName();
 	}
 
 	@Override

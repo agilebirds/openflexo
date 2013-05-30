@@ -1,5 +1,6 @@
 /*
- * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2010-2012 AgileBirds
+ * (c) Copyright 2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -17,9 +18,11 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 package org.openflexo.technologyadapter.xsd.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -27,8 +30,12 @@ import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
+import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
+import org.openflexo.technologyadapter.xsd.XSDModelSlot.XSURIProcessor;
 import org.openflexo.toolbox.StringUtils;
+
+import com.sun.xml.xsom.impl.scd.Iterators.Map;
 
 public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyClass, XSOntologyURIDefinitions {
 
@@ -36,7 +43,8 @@ public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyCl
 			.getName());
 
 	private final List<XSOntClass> superClasses = new ArrayList<XSOntClass>();
-	private final List<XSOntRestriction> restrictions = new ArrayList<XSOntRestriction>();
+	// CG : changed to map to enable to access restrictions by name
+	private final HashMap<String,XSOntRestriction> restrictions = new HashMap<String,XSOntRestriction>();
 
 	protected XSOntClass(XSOntology ontology, String name, String uri, XSDTechnologyAdapter adapter) {
 		super(ontology, name, uri, adapter);
@@ -71,7 +79,7 @@ public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyCl
 			return;
 		}
 		if (aClass instanceof XSOntRestriction) {
-			restrictions.add((XSOntRestriction) aClass);
+			restrictions.put(aClass.getName(), (XSOntRestriction) aClass);
 		}
 		superClasses.add((XSOntClass) aClass);
 	}
@@ -114,6 +122,16 @@ public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyCl
 
 	@Override
 	public List<? extends IFlexoOntologyFeatureAssociation> getStructuralFeatureAssociations() {
-		return restrictions;
+		List<XSOntRestriction> returned = new ArrayList<XSOntRestriction>();
+		for (XSOntRestriction xsOntRest : restrictions.values()) {
+				returned.add(xsOntRest);
+			}
+		return returned;
 	}
+
+
+	public XSOntRestriction getFeatureAssociationNamed(String name) {
+		return restrictions.get(name);
+	}
+	
 }

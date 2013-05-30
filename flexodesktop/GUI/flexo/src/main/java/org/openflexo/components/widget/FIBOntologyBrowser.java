@@ -394,7 +394,7 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 		if (browserWidget == null) {
 			return null;
 		}
-		Iterator<Object> it = browserWidget.getBrowserModel().retrieveContents();
+		Iterator<Object> it = browserWidget.getBrowserModel().recursivelyExploreModelToRetrieveContents();
 		while (it.hasNext()) {
 			Object o = it.next();
 			if (o instanceof IFlexoOntologyConcept) {

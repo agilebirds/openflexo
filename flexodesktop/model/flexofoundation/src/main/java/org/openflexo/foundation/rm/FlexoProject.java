@@ -4530,6 +4530,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return null;
 	}
 
+	/** TODO Remove, because Project Ontology does not exist anymore */
 	/*	public Set<FlexoOntology> getAllMetaModels() {
 			Set<FlexoOntology> allMetaModels = new HashSet<FlexoOntology>();
 			for (ViewDefinition viewDefinition : getShemaLibrary().getAllShemaList()) {
@@ -4591,7 +4592,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		return null;
 	}
-
+	
 	/**
 	 * Retrieve ontology class from its URI.<br>
 	 * Note that search is performed in the scope of current project only
@@ -4621,7 +4622,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		return null;
 	}
-
 	/**
 	 * Retrieve ontology property from its URI.<br>
 	 * Note that search is performed in the scope of current project only
@@ -4666,6 +4666,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		return null;
 	}
+	
 
 	/**
 	 * Return true if URI is well formed and valid regarding its unicity (no one other object has same URI)
@@ -4682,7 +4683,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		return conceptURI.equals(ToolBox.getJavaName(conceptURI, true, false)) && !isDuplicatedURI(ontologyURI, conceptURI);
 	}
-
 	/**
 	 * Return true if URI is duplicated in the context of this project
 	 * 
@@ -4700,6 +4700,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		return false;
 	}
+	
 
 	/**
 	 * Retrieve model or metamodel conform to {@link IFlexoOntology} and referenced by its URI<br>
@@ -4719,7 +4720,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		return null;
 	}
-
 	/**
 	 * Retrieve model referenced by its URI<br>
 	 * Note that search is performed in the scope of current project only

@@ -9,6 +9,7 @@ import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
@@ -16,6 +17,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.technologyadapter.owl.model.OWLObject;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementPatternRole;
 import org.openflexo.technologyadapter.owl.viewpoint.OWLClassPatternRole;
@@ -185,6 +187,18 @@ public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntolog
 	@Override
 	public <FR extends FetchRequest<?, ?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
 		return null;
+	}
+	
+
+	@Override
+	public String getURIForObject(ModelSlotInstance msInstance, Object o) {
+		return ((OWLObject) o).getURI();
+	}
+
+	@Override
+	public Object retrieveObjectWithURI(ModelSlotInstance msInstance,
+			String objectURI) {
+		return msInstance.getModel().getObject(objectURI);
 	}
 
 }
