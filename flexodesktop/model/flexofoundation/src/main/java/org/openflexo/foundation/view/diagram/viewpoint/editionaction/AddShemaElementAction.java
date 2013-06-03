@@ -20,8 +20,11 @@
 package org.openflexo.foundation.view.diagram.viewpoint.editionaction;
 
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
+import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.toolbox.StringUtils;
 
 public abstract class AddShemaElementAction<T extends DiagramElement<?>> extends DiagramAction<T> {
 
@@ -33,5 +36,30 @@ public abstract class AddShemaElementAction<T extends DiagramElement<?>> extends
 	protected void updatePatternRoleType()
 	{
 	}*/
+
+	@Override
+	public GraphicalElementPatternRole<?> getPatternRole() {
+		PatternRole superPatternRole = super.getPatternRole();
+		if (superPatternRole instanceof GraphicalElementPatternRole) {
+			return (GraphicalElementPatternRole) superPatternRole;
+		} else if (superPatternRole != null) {
+			// logger.warning("Unexpected pattern role of type " + superPatternRole.getClass().getSimpleName());
+			return null;
+		}
+		return null;
+	}
+
+	protected String getGraphicalElementSpecificationFMLRepresentation(FMLRepresentationContext context) {
+		if (getPatternRole().getGrSpecifications().size() > 0) {
+			StringBuffer sb = new StringBuffer();
+			for (GraphicalElementSpecification ges : getPatternRole().getGrSpecifications()) {
+				if (ges.getValue().isSet()) {
+					sb.append("  " + ges.getFeatureName() + " = " + ges.getValue().toString() + ";" + StringUtils.LINE_SEPARATOR);
+				}
+			}
+			return sb.toString();
+		}
+		return null;
+	}
 
 }

@@ -47,7 +47,9 @@ import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.toolbox.StringUtils;
 
 /**
  * This edition primitive addresses the creation of a new connector linking two shapes in a diagram
@@ -66,6 +68,23 @@ public class AddConnector extends AddShemaElementAction<DiagramConnector> {
 	@Override
 	public EditionActionType getEditionActionType() {
 		return EditionActionType.AddConnector;
+	}
+
+	@Override
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
+		if (getAssignation().isSet()) {
+			out.append(getAssignation().toString() + " = (", context);
+		}
+		out.append(
+				getClass().getSimpleName() + " conformTo Connector from " + getModelSlot().getName() + " {" + StringUtils.LINE_SEPARATOR,
+				context);
+		out.append(getGraphicalElementSpecificationFMLRepresentation(context), context);
+		out.append("}", context);
+		if (getAssignation().isSet()) {
+			out.append(")", context);
+		}
+		return out.toString();
 	}
 
 	/*@Override
