@@ -364,9 +364,11 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 
 			logger.fine("Delete BrowserCell for " + getRepresentedObject());
 
-			for (Object c : children) {
-				if (c instanceof BrowserCell) {
-					((BrowserCell) c).delete();
+			if (children != null) {
+				for (Object c : children) {
+					if (c instanceof BrowserCell) {
+						((BrowserCell) c).delete();
+					}
 				}
 			}
 
@@ -389,7 +391,9 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 			setUserObject(null);
 			browserElementType = null;
 			setParent(null);
-			children.clear();
+			if (children != null) {
+				children.clear();
+			}
 			isDeleted = true;
 		}
 
