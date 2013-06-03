@@ -26,12 +26,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -205,14 +207,20 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 	public Iterator<Object> recursivelyExploreModelToRetrieveContents() {
 		// We load all when not already up-t-date
 		if (!exhaustiveContentsIsUpToDate) {
+			computedExhaustiveContents.clear();
 			if (getRoot() instanceof BrowserCell) {
-				System.out.println("!!!!! On se refait tout !!!!");
+				logger.info("!!!!! called recursivelyExploreModelToRetrieveContents() !!!!");
 				((BrowserCell) getRoot()).update(true);
 				exhaustiveContentsIsUpToDate = true;
 			}
 		}
 		return contents.keys().iterator();
 	}
+
+	/**
+	 * This set is used during exploration of all exhaustive contents, in order not no enter in an infinite loop
+	 */
+	private Set<Object> computedExhaustiveContents = new HashSet<Object>();
 
 	/**
 	 * Flag indicating is exhaustive contents (obtained after deep-browsing) is up-to-date
@@ -298,8 +306,14 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 				return;
 			}
 
+			loaded = true;
+
 			update(false);
 
+		}
+
+		public boolean isLoaded() {
+			return loaded;
 		}
 
 		@Override
@@ -399,15 +413,14 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 
 		public void update(boolean recursively) {
 
-			// Sylvain: Fix issue with inspector switching to "Multiple selection"
-			// If object being updated is the current selection, then the next valueChanged() in FIBBrowserWidget
-			// will add a new object in the selection without removing this represented object
-			// A possible fix is to force reset the selection when represented object of updated cell is in the selection
-			/*boolean wasSelected = false;
-			if (widget.getSelection().contains(representedObject)) {
-				wasSelected = true;
-				widget.removeFromSelection(representedObject);
-			}*/
+			List<BrowserCell> cellsToForceUpdate = new ArrayList<BrowserCell>();
+
+			loaded = true;
+
+			// During exploration of all exhaustive contents, in order not no enter in an infinite loop
+			if (recursively) {
+				computedExhaustiveContents.add(getRepresentedObject());
+			}
 
 			// logger.info("**************** update() "+this);
 			if (browserElementType == null) {
@@ -443,6 +456,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 			int index = 0;
 
 			for (Object o : newChildrenObjects) {
+
 				if (o != null && o != getRepresentedObject()) {
 					BrowserCell cell = retrieveBrowserCell(o, this);
 					FIBBrowserElementType childElementType = elementTypeForClass(o.getClass());
@@ -461,6 +475,13 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 							}
 							children.insertElementAt(cell, index);
 							index++;
+							// In order not to enter in possibly infinite loop, force update contents of this cell
+							// only if cell not loaded and if represented object was not already registered
+							if (recursively && !cell.isLoaded() && !computedExhaustiveContents.contains(cell.getRepresentedObject())) {
+								// Do it at the end
+								cellsToForceUpdate.add(cell);
+								// cell.update(true);
+							}
 						}
 					} else {
 						cell.isVisible = false;
@@ -549,14 +570,14 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 				// Might happen when a structural modification will call parent's nodeChanged()
 				// An ArrayIndexOutOfBoundsException might be raised here
 				// We should investigate further, but since no real consequences are raised here, we just ignore exception
-				e.printStackTrace();
+				// e.printStackTrace();
 				logger.warning("Unexpected ArrayIndexOutOfBoundsException when refreshing browser, no severity but please investigate");
 				nodeStructureChanged(this);
 			} catch (NullPointerException e) {
 				// Might happen when a structural modification will call parent's nodeChanged()
 				// An NullPointerException might be raised here
 				// We should investigate further, but since no real consequences are raised here, we just ignore exception
-				e.printStackTrace();
+				// e.printStackTrace();
 				logger.warning("Unexpected NullPointerException when refreshing browser, no severity but please investigate");
 			}
 
@@ -590,6 +611,10 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 			}*/
 
 			dependingObjects.refreshObserving(browserElementType);
+
+			for (BrowserCell cell : cellsToForceUpdate) {
+				cell.update(true);
+			}
 		}
 
 		@Override
