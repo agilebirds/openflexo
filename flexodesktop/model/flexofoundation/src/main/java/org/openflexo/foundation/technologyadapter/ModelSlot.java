@@ -35,6 +35,7 @@ import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.validation.Validable;
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
@@ -51,7 +52,6 @@ import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationConte
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.toolbox.StringUtils;
-import org.openflexo.foundation.view.ModelSlotInstance;
 
 /**
  * A model slot is a named object providing symbolic access to a model conform to a meta-model (see {@link FlexoMetaModel}). <br>
@@ -416,25 +416,57 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	public abstract ModelSlotInstanceConfiguration<? extends ModelSlot<M, MM>> createConfiguration(CreateVirtualModelInstance<?> action);
 
 	/**
-	 * Model Slot is responsible for URI mapping 
+	 * Model Slot is responsible for URI mapping
 	 * 
 	 */
-	  
-	/** 
-	* 
-	* @param msInstance
-	* @param o
-	* @return URI as String
+
+	/**
+	 * 
+	 * @param msInstance
+	 * @param o
+	 * @return URI as String
 	 */
 
-    public abstract String getURIForObject(ModelSlotInstance msInstance, Object o);
-    
+	public abstract String getURIForObject(ModelSlotInstance msInstance, Object o);
+
 	/**
 	 * @param msInstance
 	 * @param objectURI
 	 * @return the Object
 	 */
 
-    public abstract Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI);
+	public abstract Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI);
+
+	/**
+	 * Return first found class matching supplied class.<br>
+	 * Returned class is generally the specialized class related to a particular technology
+	 * 
+	 * @param patternRoleClass
+	 * @return
+	 */
+	public <PR extends PatternRole> Class<? extends PR> getPatternRoleClass(Class<PR> patternRoleClass) {
+		for (Class patternRoleType : getAvailablePatternRoleTypes()) {
+			if (patternRoleClass.isAssignableFrom(patternRoleType)) {
+				return patternRoleType;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Return first found class matching supplied class.<br>
+	 * Returned class is generally the specialized class related to a particular technology
+	 * 
+	 * @param patternRoleClass
+	 * @return
+	 */
+	public <EA extends EditionAction> Class<? extends EA> getEditionActionClass(Class<EA> editionActionClass) {
+		for (Class editionActionType : getAvailableEditionActionTypes()) {
+			if (editionActionClass.isAssignableFrom(editionActionType)) {
+				return editionActionType;
+			}
+		}
+		return null;
+	}
 
 }

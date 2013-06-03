@@ -195,6 +195,7 @@ public class EditionPattern extends EditionPatternObject {
 		}
 		setChanged();
 		notifyObservers(new EditionSchemeInserted(anEditionScheme, this));
+		anEditionScheme.updateBindingModels();
 	}
 
 	public void removeFromEditionSchemes(EditionScheme anEditionScheme) {

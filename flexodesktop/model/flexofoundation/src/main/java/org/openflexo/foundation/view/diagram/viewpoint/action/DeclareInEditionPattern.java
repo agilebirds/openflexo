@@ -19,12 +19,14 @@
  */
 package org.openflexo.foundation.view.diagram.viewpoint.action;
 
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
@@ -38,9 +40,15 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 
 	private EditionPattern editionPattern;
 
+	private FlexoOntologyModelSlot<?, ?> modelSlot;
+
 	DeclareInEditionPattern(FlexoActionType<A, T1, ExampleDiagramObject> actionType, T1 focusedObject,
 			Vector<ExampleDiagramObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
+		List<FlexoOntologyModelSlot> availableModelSlots = focusedObject.getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class);
+		if (availableModelSlots.size() > 0) {
+			modelSlot = availableModelSlots.get(0);
+		}
 		drawingObjectEntries = new Vector<DeclareInEditionPattern<A, T1>.ExampleDrawingObjectEntry>();
 		int shapeIndex = 1;
 		int connectorIndex = 1;
@@ -66,6 +74,7 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 
 	public DeclareInEditionPatternChoices primaryChoice = DeclareInEditionPatternChoices.CREATES_EDITION_PATTERN;
 
+	@Override
 	public abstract boolean isValid();
 
 	public EditionPattern getEditionPattern() {
@@ -136,5 +145,13 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 			}
 		}
 		return null;
+	}
+
+	public FlexoOntologyModelSlot<?, ?> getModelSlot() {
+		return modelSlot;
+	}
+
+	public void setModelSlot(FlexoOntologyModelSlot<?, ?> modelSlot) {
+		this.modelSlot = modelSlot;
 	}
 }

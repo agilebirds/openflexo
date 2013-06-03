@@ -28,39 +28,21 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.ontology.BuiltInDataType;
-import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
-import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
-import org.openflexo.foundation.ontology.IFlexoOntologyFeature;
-import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
-import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
-import org.openflexo.foundation.viewpoint.CheckboxParameter;
-import org.openflexo.foundation.viewpoint.DeclarePatternRole;
+import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.EditionPattern;
-import org.openflexo.foundation.viewpoint.EditionSchemeParameter;
-import org.openflexo.foundation.viewpoint.FloatParameter;
-import org.openflexo.foundation.viewpoint.IndividualParameter;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
-import org.openflexo.foundation.viewpoint.IntegerParameter;
-import org.openflexo.foundation.viewpoint.TextFieldParameter;
 import org.openflexo.foundation.viewpoint.URIParameter;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.inspector.CheckboxInspectorEntry;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
-import org.openflexo.foundation.viewpoint.inspector.FloatInspectorEntry;
-import org.openflexo.foundation.viewpoint.inspector.InspectorEntry;
-import org.openflexo.foundation.viewpoint.inspector.IntegerInspectorEntry;
-import org.openflexo.foundation.viewpoint.inspector.TextFieldInspectorEntry;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
@@ -113,7 +95,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 	private EditionPattern newEditionPattern;
 	private Hashtable<ExampleDrawingObjectEntry, GraphicalElementPatternRole> newGraphicalElementPatternRoles;
 
-	public Vector<PropertyEntry> propertyEntries = new Vector<PropertyEntry>();
+	// public Vector<PropertyEntry> propertyEntries = new Vector<PropertyEntry>();
 
 	DeclareShapeInEditionPattern(ExampleDiagramShape focusedObject, Vector<ExampleDiagramObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
@@ -140,11 +122,14 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					newEditionPattern = new EditionPattern(builder);
 					newEditionPattern.setName(getEditionPatternName());
 
+					// And add the newly created edition pattern
+					getFocusedObject().getVirtualModel().addToEditionPatterns(newEditionPattern);
+
 					// Find best URI base candidate
-					PropertyEntry mainPropertyDescriptor = selectBestEntryForURIBaseName();
+					// PropertyEntry mainPropertyDescriptor = selectBestEntryForURIBaseName();
 
 					// Create individual pattern role
-					IndividualPatternRole individualPatternRole = null; // new IndividualPatternRole(builder);
+					IndividualPatternRole individualPatternRole = getModelSlot().makeIndividualPatternRole(getConcept());
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
 						individualPatternRole.setPatternRoleName(getIndividualPatternRoleName());
 						individualPatternRole.setOntologicType(getConcept());
@@ -162,16 +147,15 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 							if (entry.graphicalObject instanceof ExampleDiagramShape) {
 								ShapePatternRole newShapePatternRole = new ShapePatternRole(builder);
 								newShapePatternRole.setPatternRoleName(entry.patternRoleName);
-								if (mainPropertyDescriptor != null && entry.isMainEntry()) {
+								/*if (mainPropertyDescriptor != null && entry.isMainEntry()) {
 									newShapePatternRole.setLabel(new DataBinding<String>(getIndividualPatternRoleName() + "."
 											+ mainPropertyDescriptor.property.getName()));
-								} else {
-									newShapePatternRole.setReadOnlyLabel(true);
-									if (StringUtils.isNotEmpty(entry.graphicalObject.getName())) {
-										newShapePatternRole
-												.setLabel(new DataBinding<String>("\"" + entry.graphicalObject.getName() + "\""));
-									}
+								} else {*/
+								newShapePatternRole.setReadOnlyLabel(true);
+								if (StringUtils.isNotEmpty(entry.graphicalObject.getName())) {
+									newShapePatternRole.setLabel(new DataBinding<String>("\"" + entry.graphicalObject.getName() + "\""));
 								}
+								// }
 								newShapePatternRole.setExampleLabel(((ShapeGraphicalRepresentation) entry.graphicalObject
 										.getGraphicalRepresentation()).getText());
 								// We clone here the GR (fixed unfocusable GR bug)
@@ -195,7 +179,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					newEditionPattern.setPrimaryRepresentationRole(primaryRepresentationRole);
 
 					// Create other individual roles
-					Vector<IndividualPatternRole> otherRoles = new Vector<IndividualPatternRole>();
+					/*Vector<IndividualPatternRole> otherRoles = new Vector<IndividualPatternRole>();
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
 						for (PropertyEntry e : propertyEntries) {
 							if (e.selectEntry) {
@@ -211,11 +195,15 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 								}
 							}
 						}
-					}
+					}*/
 
 					// Create new drop scheme
 					DropScheme newDropScheme = new DropScheme(builder);
 					newDropScheme.setName(getDropSchemeName());
+
+					// Add new drop scheme
+					newEditionPattern.addToEditionSchemes(newDropScheme);
+
 					newDropScheme.setTopTarget(isTopLevel);
 					if (!isTopLevel) {
 						newDropScheme.setTargetEditionPattern(containerEditionPattern);
@@ -223,8 +211,8 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 					// Parameters
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
-						Vector<PropertyEntry> candidates = new Vector<PropertyEntry>();
-						for (PropertyEntry e : propertyEntries) {
+						// Vector<PropertyEntry> candidates = new Vector<PropertyEntry>();
+						/*for (PropertyEntry e : propertyEntries) {
 							if (e != null && e.selectEntry) {
 								EditionSchemeParameter newParameter = null;
 								if (e.property instanceof IFlexoOntologyDataProperty) {
@@ -269,25 +257,27 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 									newDropScheme.addToParameters(newParameter);
 								}
 							}
-						}
+						}*/
 
 						URIParameter uriParameter = new URIParameter(builder);
 						uriParameter.setName("uri");
 						uriParameter.setLabel("uri");
-						if (mainPropertyDescriptor != null) {
+						/*if (mainPropertyDescriptor != null) {
 							uriParameter.setBaseURI(new DataBinding<String>(mainPropertyDescriptor.property.getName()));
-						}
+						}*/
 						newDropScheme.addToParameters(uriParameter);
 
 						// Declare pattern role
-						for (IndividualPatternRole r : otherRoles) {
+						/*for (IndividualPatternRole r : otherRoles) {
 							DeclarePatternRole action = new DeclarePatternRole(builder);
 							action.setAssignation(new DataBinding<Object>(r.getPatternRoleName()));
 							action.setObject(new DataBinding<Object>("parameters." + r.getName()));
 							newDropScheme.addToActions(action);
-						}
+						}*/
 
 						// Add individual action
+						AddIndividual newAddIndividual = getModelSlot().makeAddIndividualAction(individualPatternRole, newDropScheme);
+
 						/*AddIndividual newAddIndividual = new AddIndividual(builder);
 						newAddIndividual.setAssignation(new ViewPointDataBinding(individualPatternRole.getPatternRoleName()));
 						newAddIndividual.setIndividualName(new ViewPointDataBinding("parameters.uri"));
@@ -308,8 +298,8 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 									newAddIndividual.addToDataAssertions(propertyAssertion);
 								}
 							}
-						}
-						newDropScheme.addToActions(newAddIndividual);*/
+						}*/
+						newDropScheme.addToActions(newAddIndividual);
 					}
 
 					// Add shape/connector actions
@@ -318,6 +308,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 						if (graphicalElementPatternRole instanceof ShapePatternRole) {
 							// Add shape action
 							AddShape newAddShape = new AddShape(builder);
+							newDropScheme.addToActions(newAddShape);
 							newAddShape.setAssignation(new DataBinding<Object>(graphicalElementPatternRole.getPatternRoleName()));
 							if (mainPatternRole) {
 								if (isTopLevel) {
@@ -328,18 +319,14 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 								}
 							}
 							mainPatternRole = false;
-							newDropScheme.addToActions(newAddShape);
 						}
 					}
-
-					// Add new drop scheme
-					newEditionPattern.addToEditionSchemes(newDropScheme);
 
 					// Add inspector
 					EditionPatternInspector inspector = newEditionPattern.getInspector();
 					inspector.setInspectorTitle(getEditionPatternName());
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
-						for (PropertyEntry e : propertyEntries) {
+						/*for (PropertyEntry e : propertyEntries) {
 							if (e.selectEntry) {
 								if (e.property instanceof IFlexoOntologyObjectProperty) {
 									IFlexoOntologyConcept range = ((IFlexoOntologyObjectProperty) e.property).getRange();
@@ -383,11 +370,8 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 									}
 								}
 							}
-						}
+						}*/
 					}
-
-					// And add the newly created edition pattern
-					getFocusedObject().getVirtualModel().addToEditionPatterns(newEditionPattern);
 
 				default:
 					break;
@@ -447,14 +431,14 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 	public void setConcept(IFlexoOntologyClass concept) {
 		this.concept = concept;
-		propertyEntries.clear();
+		/*propertyEntries.clear();
 		IFlexoOntology ownerOntology = concept.getOntology();
 		for (IFlexoOntologyFeature p : concept.getPropertiesTakingMySelfAsDomain()) {
 			if (p.getOntology() == ownerOntology && p instanceof IFlexoOntologyStructuralProperty) {
 				PropertyEntry newEntry = new PropertyEntry((IFlexoOntologyStructuralProperty) p);
 				propertyEntries.add(newEntry);
 			}
-		}
+		}*/
 	}
 
 	public String getEditionPatternName() {
@@ -502,7 +486,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 		this.dropSchemeName = dropSchemeName;
 	}
 
-	public class PropertyEntry {
+	/*public class PropertyEntry {
 
 		public IFlexoOntologyStructuralProperty property;
 		public String label;
@@ -520,9 +504,9 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 		public String getRange() {
 			return property.getRange().getName();
 		}
-	}
+	}*/
 
-	private PropertyEntry selectBestEntryForURIBaseName() {
+	/*private PropertyEntry selectBestEntryForURIBaseName() {
 		Vector<PropertyEntry> candidates = new Vector<PropertyEntry>();
 		for (PropertyEntry e : propertyEntries) {
 			if (e.selectEntry && e.property instanceof IFlexoOntologyDataProperty
@@ -534,9 +518,9 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 			return candidates.firstElement();
 		}
 		return null;
-	}
+	}*/
 
-	public PropertyEntry createPropertyEntry() {
+	/*public PropertyEntry createPropertyEntry() {
 		PropertyEntry newPropertyEntry = new PropertyEntry(null);
 		propertyEntries.add(newPropertyEntry);
 		return newPropertyEntry;
@@ -558,7 +542,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 			e.selectEntry = false;
 		}
 	}
-
+	*/
 	@Override
 	public EditionPattern getEditionPattern() {
 		if (primaryChoice == DeclareInEditionPatternChoices.CREATES_EDITION_PATTERN) {
