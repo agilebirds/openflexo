@@ -86,6 +86,7 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 		DiagramSpecification diagramSpecification = new DiagramSpecification(viewPoint);
 		dsRes.setResourceData(diagramSpecification);
 		diagramSpecification.setResource(dsRes);
+		diagramSpecification.makeReflexiveModelSlot();
 		diagramSpecification.save();
 		return diagramSpecification;
 	}
@@ -104,6 +105,8 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 	 */
 	public DiagramSpecification(ViewPoint viewPoint) {
 		this((VirtualModel.VirtualModelBuilder) null);
+		setViewPoint(viewPoint);
+
 		/*if (viewPoint.getViewPointLibrary().getServiceManager() != null
 				&& viewPoint.getViewPointLibrary().getServiceManager().getService(TechnologyAdapterService.class) != null) {
 			DiagramTechnologyAdapter diagramTA = viewPoint.getViewPointLibrary().getServiceManager()

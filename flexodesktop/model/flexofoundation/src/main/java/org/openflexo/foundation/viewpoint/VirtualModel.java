@@ -106,6 +106,7 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 		VirtualModel virtualModel = new VirtualModel(viewPoint);
 		vmRes.setResourceData(virtualModel);
 		virtualModel.setResource(vmRes);
+		virtualModel.makeReflexiveModelSlot();
 		virtualModel.save();
 		return virtualModel;
 	}
@@ -129,6 +130,7 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	 */
 	public VirtualModel(ViewPoint viewPoint) {
 		this((VirtualModel.VirtualModelBuilder) null);
+		setViewPoint(viewPoint);
 	}
 
 	@Override
