@@ -42,16 +42,16 @@
         </Panel>
         <Panel layout="border" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="0" constraints="split(anchor=west;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=west;padX=0;padY=0;splitIdentifier=left;weightX=0.3;weightY=1.0)" name="ActionBrowserPanel">
           <Panel layout="box" boxLayoutAxis="Y_AXIS" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" index="0" constraints="border(index=0;location=east)" name="ActionControlPanel">
-            <Button action="EditionSchemePanel.data.actionFirst(EditionActionBrowser.selected)" buttonIcon="controller.arrowTop" buttonType="Trigger" label="" localize="true" enable="((EditionActionBrowser.selected != null) &amp; (EditionActionBrowser.selected.index &gt; 0))" index="0" constraints="box(alignmentX=0.5;alignmentY=0.5;index=0;location=north)" opaque="false">
+            <Button action="data.actionFirst(EditionActionBrowser.selected)" buttonIcon="controller.arrowTop" buttonType="Trigger" label="" localize="true" enable="((EditionActionBrowser.selected != null) &amp; (EditionActionBrowser.selected.index &gt; 0))" index="0" constraints="box(alignmentX=0.5;alignmentY=0.5;index=0;location=north)" opaque="false">
               <LocalizedDictionary />
             </Button>
-            <Button action="EditionSchemePanel.data.actionUp(EditionActionBrowser.selected)" buttonIcon="controller.arrowUp" buttonType="Trigger" label="" localize="true" enable="((EditionActionBrowser.selected != null) &amp; (EditionActionBrowser.selected.index &gt; 0))" index="1" constraints="box(alignmentX=0.5;alignmentY=0.5;index=1;location=south)" opaque="false">
+            <Button action="data.actionUp(EditionActionBrowser.selected)" buttonIcon="controller.arrowUp" buttonType="Trigger" label="" localize="true" enable="((EditionActionBrowser.selected != null) &amp; (EditionActionBrowser.selected.index &gt; 0))" index="1" constraints="box(alignmentX=0.5;alignmentY=0.5;index=1;location=south)" opaque="false">
               <LocalizedDictionary />
             </Button>
-            <Button action="EditionSchemePanel.data.actionDown(EditionActionBrowser.selected)" buttonIcon="controller.arrowDown" buttonType="Trigger" label="" localize="true" enable="((EditionActionBrowser.selected != null) &amp; (EditionActionBrowser.selected.index &lt; (data.actions.size - 1)))" index="2" constraints="box(alignmentX=0.5;alignmentY=0.5;index=2;location=east)" opaque="false">
+            <Button action="data.actionDown(EditionActionBrowser.selected)" buttonIcon="controller.arrowDown" buttonType="Trigger" label="" localize="true" enable="((EditionActionBrowser.selected != null) &amp; (EditionActionBrowser.selected.index &lt; (data.actions.size - 1)))" index="2" constraints="box(alignmentX=0.5;alignmentY=0.5;index=2;location=east)" opaque="false">
               <LocalizedDictionary />
             </Button>
-            <Button action="EditionSchemePanel.data.actionLast(EditionActionBrowser.selected)" buttonIcon="controller.arrowBottom" buttonType="Trigger" label="" localize="true" enable="((EditionActionBrowser.selected != null) &amp; (EditionActionBrowser.selected.index &lt; (data.actions.size - 1)))" index="3" constraints="box(alignmentX=0.5;alignmentY=0.5;index=3;location=west)" opaque="false">
+            <Button action="data.actionLast(EditionActionBrowser.selected)" buttonIcon="controller.arrowBottom" buttonType="Trigger" label="" localize="true" enable="((EditionActionBrowser.selected != null) &amp; (EditionActionBrowser.selected.index &lt; (data.actions.size - 1)))" index="3" constraints="box(alignmentX=0.5;alignmentY=0.5;index=3;location=west)" opaque="false">
               <LocalizedDictionary />
             </Button>
             <LocalizedDictionary />
