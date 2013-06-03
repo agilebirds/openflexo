@@ -711,6 +711,10 @@ public class KeyValueDecoder {
 	public static Object objectForKey(Object object, KeyValueProperty keyValueProperty) throws InvalidObjectSpecificationException,
 			AccessorInvocationException {
 
+		if (keyValueProperty == null) {
+			return null;
+		}
+
 		try {
 			return keyValueProperty.getObjectValue(object);
 		} catch (AccessorInvocationException e) {
