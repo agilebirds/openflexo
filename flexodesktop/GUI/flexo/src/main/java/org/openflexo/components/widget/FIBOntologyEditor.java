@@ -365,6 +365,7 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 				returned.add((IFlexoOntologyConcept) o);
 			}
 		}
+		// System.out.println("Returned: (" + returned.size() + ") " + returned);
 		return returned;
 	}
 
