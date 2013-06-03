@@ -278,15 +278,16 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 			setUserObject(representedObject);
 			browserElementType = elementTypeForClass(representedObject.getClass());
 
-			final List<?> newChildrenObjects = browserElementType.getChildrenFor(getRepresentedObject());
-
-			if (newChildrenObjects.size() > 0) {
-				// System.out.println("For " + representedObject + " found " + newChildrenObjects.size() + " children: " +
-				// newChildrenObjects);
-				add(new LoadingCell());
-			}
-
 			if (browserElementType != null) {
+
+				final List<?> newChildrenObjects = browserElementType.getChildrenFor(getRepresentedObject());
+
+				if (newChildrenObjects.size() > 0) {
+					// System.out.println("For " + representedObject + " found " + newChildrenObjects.size() + " children: " +
+					// newChildrenObjects);
+					add(new LoadingCell());
+				}
+
 				dependingObjects = new DependingObjects(this);
 				dependingObjects.refreshObserving(browserElementType);
 			}
