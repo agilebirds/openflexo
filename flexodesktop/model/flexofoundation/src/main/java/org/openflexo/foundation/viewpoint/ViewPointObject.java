@@ -218,6 +218,9 @@ public abstract class ViewPointObject extends XMLSerializableFlexoObject impleme
 			}
 
 			public void append(String s, FMLRepresentationContext context, int indentation) {
+				if (s == null) {
+					return;
+				}
 				StringTokenizer st = new StringTokenizer(s, StringUtils.LINE_SEPARATOR, true);
 				while (st.hasMoreTokens()) {
 					String l = st.nextToken();
