@@ -308,6 +308,10 @@ public class FIBBrowserElement extends FIBModelObject {
 		return null;
 	}
 
+	public void updateBindingModel() {
+		actionBindingModel = null;
+	}
+
 	public BindingModel getActionBindingModel() {
 		if (actionBindingModel == null) {
 			createActionBindingModel();

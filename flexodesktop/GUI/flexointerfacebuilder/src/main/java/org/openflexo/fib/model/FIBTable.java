@@ -190,6 +190,13 @@ public class FIBTable extends FIBWidget implements FIBTableComponent /*implement
 	}
 
 	@Override
+	public void updateBindingModel() {
+		super.updateBindingModel();
+		tableBindingModel = null;
+		actionBindingModel = null;
+	}
+
+	@Override
 	public BindingModel getTableBindingModel() {
 		if (tableBindingModel == null) {
 			createTableBindingModel();
