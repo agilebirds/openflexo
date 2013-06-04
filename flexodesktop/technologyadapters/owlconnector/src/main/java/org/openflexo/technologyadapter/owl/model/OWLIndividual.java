@@ -329,14 +329,12 @@ public class OWLIndividual extends OWLConcept<Individual> implements IFlexoOntol
 
 	@Override
 	public List<? extends IFlexoOntologyPropertyValue> getPropertyValues() {
-		logger.warning("Not implemented yet");
-		return null;
+		return getAllPropertyStatements();
 	}
 
 	@Override
 	public IFlexoOntologyPropertyValue getPropertyValue(IFlexoOntologyStructuralProperty property) {
-		logger.warning("Not implemented yet");
-		return null;
+		return getPropertyStatement(property);
 	}
 
 	@Override

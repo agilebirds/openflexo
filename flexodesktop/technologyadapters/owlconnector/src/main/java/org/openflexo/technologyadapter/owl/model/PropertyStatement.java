@@ -22,6 +22,7 @@ package org.openflexo.technologyadapter.owl.model;
 import java.util.Vector;
 
 import org.openflexo.foundation.DataModification;
+import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
 import org.openflexo.localization.Language;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import org.openflexo.toolbox.StringUtils;
@@ -29,7 +30,7 @@ import org.openflexo.toolbox.StringUtils;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Statement;
 
-public abstract class PropertyStatement extends OWLStatement {
+public abstract class PropertyStatement extends OWLStatement implements IFlexoOntologyPropertyValue {
 
 	public static final String AS_STRING = "asString";
 	public static final String AS_BOOLEAN = "asBoolean";
@@ -45,6 +46,7 @@ public abstract class PropertyStatement extends OWLStatement {
 		super(subject, s, adapter);
 	}
 
+	@Override
 	public abstract OWLProperty getProperty();
 
 	public abstract Literal getLiteral();
