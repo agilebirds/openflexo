@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 import org.openflexo.foundation.viewpoint.AbstractCreationScheme;
@@ -13,6 +14,7 @@ import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.toolbox.JavaUtils;
 
 /**
  * Implementation of a ModelSlot in a technology conform to FlexoOntology layer
@@ -61,4 +63,50 @@ public abstract class FlexoOntologyModelSlot<M extends FlexoModel<M, MM>, MM ext
 		return returned;
 	}
 
+	/**
+	 * Return a new String (full URI) uniquely identifying a new object in related technology, according to the conventions of related
+	 * technology
+	 * 
+	 * @param msInstance
+	 * @param proposedName
+	 * @return
+	 */
+	public String generateUniqueURI(ModelSlotInstance msInstance, String proposedName) {
+		if (msInstance == null || msInstance.getModel() == null) {
+			return null;
+		}
+		return msInstance.getModelURI() + "#" + generateUniqueURIName(msInstance, proposedName);
+	}
+
+	/**
+	 * Return a new String (the simple name) uniquely identifying a new object in related technology, according to the conventions of
+	 * related technology
+	 * 
+	 * @param msInstance
+	 * @param proposedName
+	 * @return
+	 */
+	public String generateUniqueURIName(ModelSlotInstance msInstance, String proposedName) {
+		if (msInstance == null || msInstance.getModel() == null) {
+			return proposedName;
+		}
+		return generateUniqueURIName(msInstance, proposedName, msInstance.getModelURI() + "#");
+	}
+
+	public String generateUniqueURIName(ModelSlotInstance msInstance, String proposedName, String uriPrefix) {
+		if (msInstance == null || msInstance.getModel() == null) {
+			return proposedName;
+		}
+		String baseName = JavaUtils.getClassName(proposedName);
+		boolean unique = false;
+		int testThis = 0;
+		while (!unique) {
+			unique = (msInstance.getModel().getObject(uriPrefix + baseName) == null);
+			if (!unique) {
+				testThis++;
+				baseName = proposedName + testThis;
+			}
+		}
+		return baseName;
+	}
 }

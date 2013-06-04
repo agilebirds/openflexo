@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.view.action;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
@@ -27,6 +28,8 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.SettableBindingEvaluationContext;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoEditor;
@@ -34,6 +37,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
@@ -65,7 +69,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 	private static final Logger logger = Logger.getLogger(EditionSchemeAction.class.getPackage().getName());
 
 	protected Hashtable<String, Object> variables;
-	protected Hashtable<EditionSchemeParameter, Object> parameterValues;
+	protected ParameterValues parameterValues;
 	protected Hashtable<ListParameter, List> parameterListValues;
 
 	public boolean escapeParameterRetrievingWhenValid = true;
@@ -74,7 +78,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 			Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		variables = new Hashtable<String, Object>();
-		parameterValues = new Hashtable<EditionSchemeParameter, Object>();
+		parameterValues = new ParameterValues();
 		parameterListValues = new Hashtable<ListParameter, List>();
 	}
 
@@ -333,7 +337,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 		return null;
 	}
 
-	public Hashtable<EditionSchemeParameter, Object> getParametersValues() {
+	public ParameterValues getParametersValues() {
 		return parameterValues;
 	}
 
@@ -344,4 +348,47 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 	}
 
 	public static final String PARAMETER_VALUE_CHANGED = "parameterValueChanged";
+
+	public class ParameterValues extends Hashtable<EditionSchemeParameter, Object> {
+
+		@Override
+		public synchronized Object put(EditionSchemeParameter parameter, Object value) {
+			Object returned = super.put(parameter, value);
+			for (EditionSchemeParameter p : parameter.getEditionScheme().getParameters()) {
+				if (p != parameter && p instanceof URIParameter && ((URIParameter) p).getModelSlot() instanceof FlexoOntologyModelSlot) {
+					URIParameter uriParam = (URIParameter) p;
+					FlexoOntologyModelSlot modelSlot = uriParam.getModelSlot();
+					String newURI;
+					try {
+						newURI = uriParam.getBaseURI().getBindingValue(EditionSchemeAction.this);
+						newURI = modelSlot.generateUniqueURIName(getVirtualModelInstance().getModelSlotInstance(modelSlot), newURI);
+						super.put(uriParam, newURI);
+					} catch (TypeMismatchException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (NullReferenceException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+			parameterValueChanged();
+			return returned;
+		}
+	}
+
+	public String retrieveFullURI(EditionSchemeParameter parameter) {
+		if (parameter instanceof URIParameter) {
+			URIParameter uriParam = (URIParameter) parameter;
+			if (uriParam.getModelSlot() instanceof FlexoOntologyModelSlot) {
+				FlexoOntologyModelSlot modelSlot = uriParam.getModelSlot();
+				return modelSlot.generateUniqueURI(getVirtualModelInstance().getModelSlotInstance(modelSlot),
+						(String) getParameterValue(parameter));
+			}
+		}
+		return "Invalid URI";
+	}
 }
