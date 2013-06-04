@@ -353,7 +353,7 @@ public class FIBListWidget extends FIBMultipleValueWidget<FIBList, JList, Object
 
 	@Override
 	public FIBListDynamicModel createDynamicModel() {
-		return new FIBListDynamicModel(null);
+		return new FIBListDynamicModel(null, getComponent());
 	}
 
 	@Override

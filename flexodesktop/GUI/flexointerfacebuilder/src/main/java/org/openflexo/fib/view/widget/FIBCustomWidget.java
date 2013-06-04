@@ -287,7 +287,7 @@ public class FIBCustomWidget<J extends JComponent, T> extends FIBWidgetView<FIBC
 
 	@Override
 	public FIBCustomDynamicModel<T, FIBCustomComponent<T, J>> createDynamicModel() {
-		return new FIBCustomDynamicModel<T, FIBCustomComponent<T, J>>(null);
+		return new FIBCustomDynamicModel<T, FIBCustomComponent<T, J>>(null, getComponent());
 	}
 
 	@Override

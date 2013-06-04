@@ -270,7 +270,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 	@Override
 	public FIBBrowserDynamicModel createDynamicModel() {
-		return new FIBBrowserDynamicModel(null);
+		return new FIBBrowserDynamicModel(null, getComponent());
 	}
 
 	@Override

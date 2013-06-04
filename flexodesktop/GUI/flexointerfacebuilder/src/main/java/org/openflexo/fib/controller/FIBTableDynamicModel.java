@@ -20,12 +20,41 @@
 package org.openflexo.fib.controller;
 
 import java.util.List;
+import java.util.logging.Logger;
+
+import org.openflexo.fib.model.FIBTable;
 
 public class FIBTableDynamicModel<T, O> extends FIBComponentDynamicModel<T> {
-	public O selected;
-	public List<O> selection;
 
-	public FIBTableDynamicModel(T data) {
-		super(data);
+	static final Logger logger = Logger.getLogger(FIBTableDynamicModel.class.getPackage().getName());
+
+	private O selected;
+	private List<O> selection;
+
+	public FIBTableDynamicModel(T data, FIBTable component) {
+		super(data, component);
 	}
+
+	@Override
+	public String toString() {
+		return super.toString() + ",selected=" + selected;
+	}
+
+	public O getSelected() {
+		return selected;
+	}
+
+	public void setSelected(O selected) {
+		System.out.println("Set selected for " + this + " with " + selected);
+		this.selected = selected;
+	}
+
+	public List<O> getSelection() {
+		return selection;
+	}
+
+	public void setSelection(List<O> selection) {
+		this.selection = selection;
+	}
+
 }

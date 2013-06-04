@@ -32,7 +32,8 @@ public class FIBComponentDynamicModel<T> implements HasPropertyChangeSupport {
 	private T data;
 	private PropertyChangeSupport propertyChangeSupport;
 
-	public FIBComponentDynamicModel(T data) {
+	public FIBComponentDynamicModel(T data, FIBComponent component) {
+		this.component = component;
 		propertyChangeSupport = new PropertyChangeSupport(this);
 		setData(data);
 	}
@@ -67,7 +68,7 @@ public class FIBComponentDynamicModel<T> implements HasPropertyChangeSupport {
 
 	@Override
 	public String toString() {
-		return "FIBComponentDynamicModel,data=" + getData();
+		return getClass().getSimpleName() + (component != null ? "/" + component.getName() : "") + ",data=" + getData();
 	}
 
 	public boolean isVisible() {

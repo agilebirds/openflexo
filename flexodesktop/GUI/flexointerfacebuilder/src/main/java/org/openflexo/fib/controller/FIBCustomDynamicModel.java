@@ -19,12 +19,13 @@
  */
 package org.openflexo.fib.controller;
 
+import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 
 public class FIBCustomDynamicModel<T, C extends FIBCustomComponent<T, ?>> extends FIBComponentDynamicModel<T> {
 	public C customComponent;
 
-	public FIBCustomDynamicModel(T data) {
-		super(data);
+	public FIBCustomDynamicModel(T data, FIBCustom component) {
+		super(data, component);
 	}
 }

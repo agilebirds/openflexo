@@ -431,7 +431,7 @@ public abstract class FIBMultipleValueWidget<W extends FIBMultipleValues, C exte
 	}
 
 	private <O> FIBMultipleValuesDynamicModel<T, O> buildDynamicModel(Class<O> aClass) {
-		return new FIBMultipleValuesDynamicModel<T, O>(null);
+		return new FIBMultipleValuesDynamicModel<T, O>(null, getComponent());
 	}
 
 	@Override

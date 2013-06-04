@@ -318,7 +318,7 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	}
 
 	private <T> FIBComponentDynamicModel<T> buildDynamicModel(Class<T> type) {
-		return new FIBComponentDynamicModel<T>((T) getDefaultData());
+		return new FIBComponentDynamicModel<T>((T) getDefaultData(), getComponent());
 	}
 
 	public Object getDefaultData() {

@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -55,6 +56,7 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBSelectable;
 import org.openflexo.fib.controller.FIBTableDynamicModel;
+import org.openflexo.fib.model.FIBComponent;
 import org.openflexo.fib.model.FIBTable;
 import org.openflexo.fib.model.FIBTableAction;
 import org.openflexo.fib.view.FIBWidgetView;
@@ -290,7 +292,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, Collection<?
 
 	@Override
 	public FIBTableDynamicModel createDynamicModel() {
-		return new FIBTableDynamicModel(null);
+		return new FIBTableDynamicModel(null, getComponent());
 	}
 
 	@Override
@@ -511,8 +513,18 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, Collection<?
 			}
 		}
 
-		getDynamicModel().selected = selectedObject;
-		getDynamicModel().selection = selection;
+		if (getWidget().getName().equals("ParametersTable")) {
+			System.out.println("Bon, on selectionne " + selectedObject);
+			Iterator<FIBComponent> it = getComponent().getMayAltersIterator();
+			while (it.hasNext()) {
+				FIBComponent c = it.next();
+				System.out.println("now update " + c);
+			}
+			System.out.println("Que se passe-t-il apres ?");
+		}
+
+		getDynamicModel().setSelected(selectedObject);
+		getDynamicModel().setSelection(selection);
 		notifyDynamicModelChanged();
 		footer.handleSelectionChanged();
 		if (getComponent().getSelected().isValid()) {

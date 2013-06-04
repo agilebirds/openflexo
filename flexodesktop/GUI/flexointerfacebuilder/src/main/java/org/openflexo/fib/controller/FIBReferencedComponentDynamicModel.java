@@ -20,11 +20,12 @@
 package org.openflexo.fib.controller;
 
 import org.openflexo.fib.model.FIBComponent;
+import org.openflexo.fib.model.FIBReferencedComponent;
 
 public class FIBReferencedComponentDynamicModel<T> extends FIBComponentDynamicModel<T> {
 	public FIBComponent referencedComponent;
 
-	public FIBReferencedComponentDynamicModel(T data) {
-		super(data);
+	public FIBReferencedComponentDynamicModel(T data, FIBReferencedComponent component) {
+		super(data, component);
 	}
 }

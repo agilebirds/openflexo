@@ -175,7 +175,7 @@ public class FIBReferencedComponentWidget extends FIBWidgetView<FIBReferencedCom
 
 	@Override
 	public FIBReferencedComponentDynamicModel createDynamicModel() {
-		return new FIBReferencedComponentDynamicModel(null);
+		return new FIBReferencedComponentDynamicModel(null, getComponent());
 	}
 
 	public void updateComponent() {
