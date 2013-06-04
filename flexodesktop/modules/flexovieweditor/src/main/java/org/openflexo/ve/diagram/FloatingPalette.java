@@ -394,7 +394,6 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		if (from.getDiagram().getViewPoint() != null && from.getEditionPattern() != null && to.getEditionPattern() != null) {
 			availableConnectors = from.getDiagramSpecification().getConnectorsMatching(from.getEditionPattern(), to.getEditionPattern());
 		}
-
 		if (availableConnectors.size() == 1) {
 			LinkSchemeAction action = LinkSchemeAction.actionType.makeNewAction(from.getDiagram(), null, controller.getVEController()
 					.getEditor());

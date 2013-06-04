@@ -219,6 +219,7 @@ public class AddConnector extends AddShemaElementAction<DiagramConnector> {
 
 	@Override
 	public DiagramConnector performAction(EditionSchemeAction action) {
+
 		DiagramShape fromShape = getFromShape(action);
 		DiagramShape toShape = getToShape(action);
 		DiagramConnector newConnector = new DiagramConnector(fromShape.getDiagram(), fromShape, toShape);
