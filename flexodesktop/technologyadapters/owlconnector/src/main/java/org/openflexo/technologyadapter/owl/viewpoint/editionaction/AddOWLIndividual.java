@@ -90,7 +90,9 @@ public class AddOWLIndividual extends AddIndividual<OWLOntology, OWLOntology, OW
 							OWLProperty property = (OWLProperty) dataPropertyAssertion.getOntologyProperty();
 							logger.info("Property=" + property);
 							Object value = dataPropertyAssertion.getValue(action);
-							newIndividual.addPropertyStatement(property, value);
+							if (value != null) {
+								newIndividual.addPropertyStatement(property, value);
+							}
 						}
 					}
 					for (ObjectPropertyAssertion objectPropertyAssertion : getObjectAssertions()) {
@@ -101,7 +103,9 @@ public class AddOWLIndividual extends AddIndividual<OWLOntology, OWLOntology, OW
 							if (property instanceof OWLObjectProperty) {
 								if (((OWLObjectProperty) property).isLiteralRange()) {
 									Object value = objectPropertyAssertion.getValue(action);
-									newIndividual.addPropertyStatement(property, value);
+									if (value != null) {
+										newIndividual.addPropertyStatement(property, value);
+									}
 								} else {
 									OWLConcept<?> assertionObject = (OWLConcept<?>) objectPropertyAssertion.getAssertionObject(action);
 									if (assertionObject != null) {
