@@ -44,14 +44,13 @@
                 <AddAction method="data.createCloningScheme" name="new_cloning_scheme" />
                 <AddAction method="data.createSynchronizationScheme" name="new_synchronization_scheme" />
               </Table>
-              <Panel layout="border" border="rounded3d" borderTitle="Parameters for EditionScheme" borderTop="2" borderBottom="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="1" index="0" constraints="split(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=0;gridY=1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=west;padX=0;padY=0;splitIdentifier=right;weightX=0.5;weightY=1.0;x=0;y=0)" opaque="false">
+             <Panel layout="border" border="rounded3d" borderTitle="Parameters for EditionScheme" borderTop="2" borderBottom="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="1" index="0" constraints="split(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=0;gridY=1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=west;padX=0;padY=0;splitIdentifier=right;weightX=0.5;weightY=1.0;x=0;y=0)" opaque="false">
                 <Table iteratorClassName="org.openflexo.foundation.viewpoint.EditionSchemeParameter" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" enable="(EditionSchemeTable.selected != null)" manageDynamicModel="true" name="ParametersTable" index="0" data="EditionSchemeTable.selected.parameters" constraints="border(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=0;gridY=1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.5;weightY=1.0;x=0;y=0)" font="SansSerif.plain,0,12">
                   <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="20" resizable="false" displayTitle="false" name="icon" />
                   <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" />
                   <TextFieldColumn data="iterator.label" title="label" columnWidth="100" resizable="true" displayTitle="true" />
                   <DropDownColumn data="iterator.widget" title="widget" columnWidth="80" resizable="true" displayTitle="true" name="dropdown" />
                   <AddAction method="EditionSchemeTable.selected.createTextFieldParameter" name="add_textfield_parameter" />
-                  <AddAction method="EditionSchemeTable.selected.createLocalizedTextFieldParameter" name="add_localized_textfield_parameter" />
                   <AddAction method="EditionSchemeTable.selected.createTextAreaParameter" name="add_textarea_parameter" />
                   <AddAction method="EditionSchemeTable.selected.createIntegerParameter" name="add_integer_parameter" />
                   <AddAction method="EditionSchemeTable.selected.createCheckBoxParameter" name="add_checkbox_parameter" />
@@ -67,17 +66,21 @@
                   <AddAction method="EditionSchemeTable.selected.createEditionPatternInstanceParameter" name="add_edition_pattern_instance_parameter" />
                   <AddAction method="EditionSchemeTable.selected.createPropertyParameter" name="add_property_parameter" />
                 </Table>
-                <Panel layout="box" boxLayoutAxis="Y_AXIS" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(location=east)" name="ParametersOrderingPanel">
-                  <Button action="EditionSchemePanel.data.parameterFirst(ParametersTable.selected)" buttonIcon="controller.arrowTop" buttonType="Trigger" label="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &gt; 0))" index="0" constraints="box(alignmentX=0.5;alignmentY=0.5;index=0;location=west)">
+                <Panel layout="box" boxLayoutAxis="Y_AXIS" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(location=east)" opaque="false" name="ParametersOrderingPanel">
+                  <Button action="EditionSchemeTable.selected.parameterFirst(ParametersTable.selected)" buttonIcon="controller.arrowTop" buttonType="Trigger" label="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &gt; 0))" index="0" constraints="box(alignmentX=0.5;alignmentY=0.5;index=0;location=west)">
+                    <Dependancy componentName="ParametersTable" />
                     <LocalizedDictionary />
                   </Button>
-                  <Button action="EditionSchemePanel.data.parameterUp(ParametersTable.selected)" buttonIcon="controller.arrowUp" buttonType="Trigger" label="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &gt; 0))" index="1" constraints="box(alignmentX=0.5;alignmentY=0.5;index=1;location=north)">
+                  <Button action="EditionSchemeTable.selected.parameterUp(ParametersTable.selected)" buttonIcon="controller.arrowUp" buttonType="Trigger" label="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &gt; 0))" index="1" constraints="box(alignmentX=0.5;alignmentY=0.5;index=1;location=north)">
+                    <Dependancy componentName="ParametersTable" />
                     <LocalizedDictionary />
                   </Button>
-                  <Button action="EditionSchemePanel.data.parameterDown(ParametersTable.selected)" buttonIcon="controller.arrowDown" buttonType="Trigger" label="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &lt; (EditionSchemePanel.data.parameters.size - 1)))" index="2" constraints="box(alignmentX=0.5;alignmentY=0.5;index=2;location=center)">
+                  <Button action="EditionSchemeTable.selected.parameterDown(ParametersTable.selected)" buttonIcon="controller.arrowDown" buttonType="Trigger" label="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &lt; (EditionSchemeTable.selected.parameters.size - 1)))" index="2" constraints="box(alignmentX=0.5;alignmentY=0.5;index=2;location=center)">
+                    <Dependancy componentName="ParametersTable" />
                     <LocalizedDictionary />
                   </Button>
-                  <Button action="EditionSchemePanel.data.parameterLast(ParametersTable.selected)" buttonIcon="controller.arrowBottom" buttonType="Trigger" label="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &lt; (EditionSchemePanel.data.parameters.size - 1)))" index="3" constraints="box(alignmentX=0.5;alignmentY=0.5;index=3;location=east)">
+                  <Button action="EditionSchemeTable.selected.parameterLast(ParametersTable.selected)" buttonIcon="controller.arrowBottom" buttonType="Trigger" label="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &lt; (EditionSchemeTable.selected.parameters.size - 1)))" index="3" constraints="box(alignmentX=0.5;alignmentY=0.5;index=3;location=east)">
+                    <Dependancy componentName="ParametersTable" />
                     <LocalizedDictionary />
                   </Button>
                   <LocalizedDictionary />

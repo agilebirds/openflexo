@@ -141,7 +141,7 @@ public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM ext
 			actions.remove(a);
 			actions.insertElementAt(a, index - 1);
 			setChanged();
-			notifyObservers();
+			notifyChange("actions", null, actions);
 		}
 	}
 
@@ -152,7 +152,7 @@ public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM ext
 			actions.remove(a);
 			actions.insertElementAt(a, index + 1);
 			setChanged();
-			notifyObservers();
+			notifyChange("actions", null, actions);
 		}
 	}
 
@@ -161,7 +161,7 @@ public abstract class ControlStructureAction<M extends FlexoModel<M, MM>, MM ext
 		actions.remove(a);
 		actions.add(a);
 		setChanged();
-		notifyObservers();
+		notifyChange("actions", null, actions);
 	}
 
 	/*	@Override

@@ -29,6 +29,7 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.Function;
 import org.openflexo.antar.binding.TypeUtils;
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
@@ -240,7 +241,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		actions.remove(a);
 		actions.insertElementAt(a, 0);
 		setChanged();
-		notifyObservers();
+		notifyChange("actions", null, actions);
 	}
 
 	@Override
@@ -250,7 +251,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 			actions.remove(a);
 			actions.insertElementAt(a, index - 1);
 			setChanged();
-			notifyObservers();
+			notifyChange("actions", null, actions);
 		}
 	}
 
@@ -261,7 +262,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 			actions.remove(a);
 			actions.insertElementAt(a, index + 1);
 			setChanged();
-			notifyObservers();
+			notifyChange("actions", null, actions);
 		}
 	}
 
@@ -270,7 +271,7 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		actions.remove(a);
 		actions.add(a);
 		setChanged();
-		notifyObservers();
+		notifyChange("actions", null, actions);
 	}
 
 	public Vector<EditionSchemeParameter> getParameters() {
@@ -298,37 +299,41 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 	}
 
 	public void parameterFirst(EditionSchemeParameter p) {
+		System.out.println("parameterFirst()");
 		parameters.remove(p);
 		parameters.insertElementAt(p, 0);
 		setChanged();
-		notifyObservers();
+		notifyObservers(new DataModification("parameters", null, parameters));
 	}
 
 	public void parameterUp(EditionSchemeParameter p) {
+		System.out.println("parameterUp()");
 		int index = parameters.indexOf(p);
 		if (index > 0) {
 			parameters.remove(p);
 			parameters.insertElementAt(p, index - 1);
 			setChanged();
-			notifyObservers();
+			notifyObservers(new DataModification("parameters", null, parameters));
 		}
 	}
 
 	public void parameterDown(EditionSchemeParameter p) {
+		System.out.println("parameterDown()");
 		int index = parameters.indexOf(p);
 		if (index > -1) {
 			parameters.remove(p);
 			parameters.insertElementAt(p, index + 1);
 			setChanged();
-			notifyObservers();
+			notifyObservers(new DataModification("parameters", null, parameters));
 		}
 	}
 
 	public void parameterLast(EditionSchemeParameter p) {
+		System.out.println("parameterLast()");
 		parameters.remove(p);
 		parameters.add(p);
 		setChanged();
-		notifyObservers();
+		notifyObservers(new DataModification("parameters", null, parameters));
 	}
 
 	public EditionSchemeParameter getParameter(String name) {
