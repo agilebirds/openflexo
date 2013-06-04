@@ -6,6 +6,7 @@ import java.util.List;
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceImpl;
 import org.openflexo.foundation.FlexoServiceManager.ServiceRegistered;
+import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl.WillWriteFileOnDiskNotification;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
@@ -23,7 +24,7 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 	@Override
 	public void initialize() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	private UserResourceCenter userResourceCenter;
@@ -203,6 +204,13 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 		if (notification instanceof ProjectLoaded) {
 			ProjectResourceCenter pRC = ProjectResourceCenter.instanciateProjectResourceCenter(((ProjectLoaded) notification).getProject());
 			addToResourceCenters(pRC);
+		}
+		if (notification instanceof WillWriteFileOnDiskNotification) {
+			for (FlexoResourceCenter rc : getResourceCenters()) {
+				if (rc instanceof FileSystemBasedResourceCenter) {
+					((FileSystemBasedResourceCenter) rc).willWrite(((WillWriteFileOnDiskNotification) notification).getFile());
+				}
+			}
 		}
 		if (caller instanceof TechnologyAdapterService) {
 			if (notification instanceof ServiceRegistered) {

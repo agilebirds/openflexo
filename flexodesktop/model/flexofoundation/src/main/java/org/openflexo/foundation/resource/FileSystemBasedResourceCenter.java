@@ -21,7 +21,9 @@ package org.openflexo.foundation.resource;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -429,33 +431,51 @@ public abstract class FileSystemBasedResourceCenter extends FileResourceReposito
 		}
 	}
 
-	protected void fileModified(File file) {
-		System.out.println("File MODIFIED " + file.getName() + " in " + file.getParentFile().getAbsolutePath());
-		// System.out.println("Aborting in FileSystemBasedResourceCenter");
-		// System.exit(-1);
+	protected synchronized void fileModified(File file) {
+		if (!isIgnorable(file)) {
+			System.out.println("File MODIFIED " + file.getName() + " in " + file.getParentFile().getAbsolutePath());
+		}
 	}
 
-	protected void fileAdded(File file) {
-		System.out.println("File ADDED " + file.getName() + " in " + file.getParentFile().getAbsolutePath());
-		analyseAsViewPoint(file);
-		if (technologyAdapterService != null) {
-			for (TechnologyAdapter adapter : technologyAdapterService.getTechnologyAdapters()) {
-				logger.info("Initializing resource center " + this + " with adapter " + adapter.getName());
-				TechnologyContextManager technologyContextManager = technologyAdapterService.getTechnologyContextManager(adapter);
-				FlexoResource<? extends FlexoMetaModel> mmRes = tryToRetrieveMetaModel(file, adapter, technologyContextManager);
-				if (mmRes != null) {
-					registerAsMetaModel(file, mmRes, adapter, technologyContextManager);
-				}
-				FlexoModelResource<?, ?> modelRes = tryToRetrieveModel(file, adapter, technologyContextManager);
-				if (modelRes != null) {
-					registerAsModel(file, modelRes, modelRes.getMetaModelResource(), adapter, technologyContextManager);
+	protected synchronized void fileAdded(File file) {
+		if (!isIgnorable(file)) {
+			System.out.println("File ADDED " + file.getName() + " in " + file.getParentFile().getAbsolutePath());
+			analyseAsViewPoint(file);
+			if (technologyAdapterService != null) {
+				for (TechnologyAdapter adapter : technologyAdapterService.getTechnologyAdapters()) {
+					logger.info("Initializing resource center " + this + " with adapter " + adapter.getName());
+					TechnologyContextManager technologyContextManager = technologyAdapterService.getTechnologyContextManager(adapter);
+					FlexoResource<? extends FlexoMetaModel> mmRes = tryToRetrieveMetaModel(file, adapter, technologyContextManager);
+					if (mmRes != null) {
+						registerAsMetaModel(file, mmRes, adapter, technologyContextManager);
+					}
+					FlexoModelResource<?, ?> modelRes = tryToRetrieveModel(file, adapter, technologyContextManager);
+					if (modelRes != null) {
+						registerAsModel(file, modelRes, modelRes.getMetaModelResource(), adapter, technologyContextManager);
+					}
 				}
 			}
 		}
 	}
 
-	protected void fileDeleted(File file) {
-		System.out.println("File DELETED " + file.getName() + " in " + file.getParentFile().getAbsolutePath());
+	protected synchronized void fileDeleted(File file) {
+		if (!isIgnorable(file)) {
+			System.out.println("File DELETED " + file.getName() + " in " + file.getParentFile().getAbsolutePath());
+		}
 	}
 
+	private List<File> willBeWrittenFiles = new ArrayList<File>();
+
+	public synchronized void willWrite(File file) {
+		willBeWrittenFiles.add(file);
+	}
+
+	public synchronized boolean isIgnorable(File file) {
+		if (willBeWrittenFiles.contains(file)) {
+			System.out.println("File IGNORED: " + file);
+			willBeWrittenFiles.remove(file);
+			return true;
+		}
+		return false;
+	}
 }

@@ -101,7 +101,7 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, RepositoryFold
 
 		logger.info("Creating viewpoint " + newViewPointDir.getAbsolutePath());
 
-		newViewPointDir.mkdirs();
+		// newViewPointDir.mkdirs();
 
 		/*if (ontologicalScopeChoice == OntologicalScopeChoices.CREATES_NEW_ONTOLOGY) {
 			buildOntology();
@@ -221,6 +221,7 @@ public class CreateViewPoint extends FlexoAction<CreateViewPoint, RepositoryFold
 
 	public String errorMessage;
 
+	@Override
 	public boolean isValid() {
 		if (!isNewViewPointNameValid()) {
 			return false;
