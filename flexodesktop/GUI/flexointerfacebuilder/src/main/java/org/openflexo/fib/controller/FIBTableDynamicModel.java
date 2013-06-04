@@ -45,7 +45,7 @@ public class FIBTableDynamicModel<T, O> extends FIBComponentDynamicModel<T> {
 	}
 
 	public void setSelected(O selected) {
-		System.out.println("Set selected for " + this + " with " + selected);
+		// System.out.println("Set selected for " + this + " with " + selected);
 		this.selected = selected;
 	}
 
