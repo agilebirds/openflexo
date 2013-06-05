@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" dataClassName="org.openflexo.fge.view.widget.FIBLayoutSelector$LayoutFactory" controllerClassName="org.openflexo.fge.view.widget.FIBLayoutSelector$LayoutDetailsPanel$CustomFIBController" font="SansSerif,0,11" opaque="false" width="300" height="310" name="LayoutPanel">
+  <Panel layout="border" border="rounded3d" borderTop="2" borderBottom="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" name="SelectionPanel">
+    <Label label="Layout Selection" constraints="border(location=west)" name="LayoutSelection" localize="true" />
+    <DropDown data="data.layoutType" constraints="border(location=center)" name="layoutDropdown" localize="true" iteratorClassName="org.openflexo.fge.layout.Layout$LayoutType" autoSelectFirstRow="true">
+      <Dependancy componentName="SelectionPanel" />
+    </DropDown>
+  </Panel>
+  <Panel layout="twocols" border="rounded3d" borderTop="2" borderBottom="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="0" data="($org.openflexo.fge.layout.NoneLayout)data.layout" dataClassName="org.openflexo.fge.layout.NoneLayout" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" visible="(data.layoutType.name = &quot;NONE&quot;)" name="NoneLayoutPanel">
+    <Label label="None Layout Panel" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="NoneLayoutPanel" localize="true" />
+    <Dependancy componentName="layoutDropdown" />
+  </Panel>
+  <Panel layout="twocols" border="rounded3d" borderTop="2" borderBottom="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="0" data="($org.openflexo.fge.layout.HierarchicalPlacementLayout)data.layout" dataClassName="org.openflexo.fge.layout.HierarchicalPlacementLayout" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" visible="(data.layoutType.name = &quot;HIERARCHICAL_PLACEMENT&quot;)" name="HierarchicalLayoutPanel">
+    <Label label="Hierarchical Layout Panel" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="HierarchicalLayoutPanel" localize="true" />
+    <Label label="&lt;right&gt;" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" />
+    <Dependancy componentName="layoutDropdown" />
+  </Panel>
+  <Panel layout="twocols" border="rounded3d" borderTop="2" borderBottom="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="0" data="($org.openflexo.fge.layout.ForceDirectedPlacementLayout)data.layout" dataClassName="org.openflexo.fge.layout.ForceDirectedPlacementLayout" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" visible="(data.layoutType.name = &quot;FORCE_DIRECTED_PLACEMENT&quot;)" name="ForceLayoutPanel">
+    <Label label="Force Layout Panel" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="ForceLayoutPanel" localize="true" />
+    <Label label="&lt;right&gt;" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" localize="true" />
+    <Label label="K" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="K" localize="true" />
+    <Number minValue="1" maxValue="500" increment="1" numberType="IntegerType" columns="3" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="K" localize="true" />
+    <Label label="Displace" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="Displace" localize="true" />
+    <Number minValue="-2147483648" maxValue="2147483647" increment="1" numberType="IntegerType" columns="3" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="Displace" localize="true" />
+    <Label label="Temperature" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" name="Temperature" localize="true" />
+    <Number minValue="1" maxValue="50" increment="1" numberType="IntegerType" columns="3" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="temperature" localize="true" valueChangedAction="ForceLayoutPanel.data.temperature" />
+    <Dependancy componentName="layoutDropdown" />
+  </Panel>
+  <Panel layout="twocols" border="rounded3d" borderTop="2" borderBottom="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" name="ConrolPanel">
+    <Button action="controller.apply" buttonType="Trigger" label="apply" localize="true" name="apply" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)">
+      <Dependancy componentName="layoutDropdown" />
+    </Button>
+    <Button action="controller.cancel()" buttonType="Trigger" label="Cancel" localize="true" name="Cancel" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center)" />
+  </Panel>
+  <LocalizedDictionary />
+</Panel>

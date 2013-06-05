@@ -56,6 +56,8 @@ import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.graphics.TextStyle;
+import org.openflexo.fge.layout.Layout;
+import org.openflexo.fge.layout.Layout.LayoutType;
 import org.openflexo.fge.notifications.GraphicalObjectsHierarchyRebuildEnded;
 import org.openflexo.fge.notifications.GraphicalObjectsHierarchyRebuildStarted;
 import org.openflexo.fge.shapes.Shape;
@@ -87,6 +89,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	private TextStyle currentTextStyle;
 	private ShadowStyle currentShadowStyle;
 	private Shape currentShape;
+	private Layout currentLayout;
 
 	private ScalePanel _scalePanel;
 	private EditorToolbox toolbox;
@@ -117,6 +120,7 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		currentTextStyle = TextStyle.makeDefault();
 		currentShadowStyle = ShadowStyle.makeDefault();
 		currentShape = Shape.makeShape(ShapeType.RECTANGLE, null);
+		setCurrentLayout(Layout.makeLayout(LayoutType.FORCE_DIRECTED_PLACEMENT, null));
 
 		toolbox = new EditorToolbox(this);
 
@@ -263,6 +267,14 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 
 	public void setCurrentShape(Shape currentShape) {
 		this.currentShape = currentShape;
+	}
+	
+	public Layout getCurrentLayout() {
+		return currentLayout;
+	}
+
+	public void setCurrentLayout(Layout currentLayout) {
+		this.currentLayout = currentLayout;
 	}
 
 	public double getScale() {

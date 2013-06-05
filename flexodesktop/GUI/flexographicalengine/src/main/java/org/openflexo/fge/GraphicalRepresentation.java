@@ -49,6 +49,7 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.JavaBindingFactory;
 import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.fge.GRVariable.GRVariableType;
+import org.openflexo.fge.ShapeGraphicalRepresentation.Parameters;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseControl.MouseButton;
@@ -60,6 +61,7 @@ import org.openflexo.fge.geom.FGERectPolylin;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.DrawUtils;
 import org.openflexo.fge.graphics.TextStyle;
+import org.openflexo.fge.layout.Layout;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.GraphicalRepresentationAdded;
 import org.openflexo.fge.notifications.GraphicalRepresentationDeleted;
@@ -68,6 +70,8 @@ import org.openflexo.fge.notifications.LabelHasEdited;
 import org.openflexo.fge.notifications.LabelHasMoved;
 import org.openflexo.fge.notifications.LabelWillEdit;
 import org.openflexo.fge.notifications.LabelWillMove;
+import org.openflexo.fge.shapes.Shape;
+import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.inspector.DefaultInspectableObject;
 import org.openflexo.toolbox.FileResource;
@@ -138,6 +142,7 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	private TextStyle textStyle = TextStyle.makeDefault();
 	private String text;
+	private Layout layout;
 	private boolean multilineAllowed = false;
 	private boolean lineWrap = false;
 	private boolean continuousTextEditing = true;
@@ -1919,6 +1924,14 @@ public abstract class GraphicalRepresentation<O> extends DefaultInspectableObjec
 
 	public void setSpecificStroke(Stroke aStroke) {
 		specificStroke = aStroke;
+	}
+	
+	public Layout getLayout() {
+		return layout;
+	}
+
+	public void setLayout(Layout layout) {
+		this.layout = layout;
 	}
 
 	// *******************************************************************************

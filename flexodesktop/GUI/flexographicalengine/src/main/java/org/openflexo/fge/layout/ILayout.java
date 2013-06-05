@@ -1,5 +1,13 @@
 package org.openflexo.fge.layout;
 
 public interface ILayout {
-	public void runLayout();
+	
+	// The possible type of layout
+	public static enum LayoutStatus {
+		COMPLETE, PROGRESS
+	}
+	
+	public LayoutStatus runLayout();
+	
+	public LayoutStatus getStatus();
 }

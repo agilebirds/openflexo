@@ -1,34 +1,34 @@
 package org.openflexo.fge.layout;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 
 public class LayoutedGraph {
 
-	private Vector<LayoutedNode> nodes;
+	private ArrayList<LayoutedNode> nodes;
 	
-	private Vector<LayoutedEdge> egdes;
+	private ArrayList<LayoutedEdge> egdes;
 
-	public LayoutedGraph(Vector<LayoutedNode> nodes, Vector<LayoutedEdge> egdes) {
+	public LayoutedGraph(ArrayList<LayoutedNode> nodes, ArrayList<LayoutedEdge> egdes) {
 		super();
 		this.nodes = nodes;
 		this.egdes = egdes;
 	}
 
-	public Vector<LayoutedNode> getNodes() {
+	public ArrayList<LayoutedNode> getNodes() {
 		return nodes;
 	}
 
-	public void setNodes(Vector<LayoutedNode> nodes) {
+	public void setNodes(ArrayList<LayoutedNode> nodes) {
 		this.nodes = nodes;
 	}
 
-	public Vector<LayoutedEdge> getEgdes() {
+	public ArrayList<LayoutedEdge> getEgdes() {
 		return egdes;
 	}
 
-	public void setEgdes(Vector<LayoutedEdge> egdes) {
+	public void setEgdes(ArrayList<LayoutedEdge> egdes) {
 		this.egdes = egdes;
 	}
 	

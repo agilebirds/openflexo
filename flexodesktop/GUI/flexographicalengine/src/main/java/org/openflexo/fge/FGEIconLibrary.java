@@ -96,13 +96,19 @@ public class FGEIconLibrary {
 	public static final ImageIconResource TEXT_ALIGN_LEFT_ICON = new ImageIconResource("Icons/Layout/TextAlignLeft.png");
 	public static final ImageIconResource TEXT_ALIGN_RIGHT_ICON = new ImageIconResource("Icons/Layout/TextAlignRight.png");
 
+	/*
+	 * Layout Icons
+	 */
+	// Standard layout icons
 	public static final ImageIconResource ALIGN_LEFT_ICON = new ImageIconResource("Icons/Layout/AlignLeft.png");
 	public static final ImageIconResource ALIGN_RIGHT_ICON = new ImageIconResource("Icons/Layout/AlignRight.png");
 	public static final ImageIconResource ALIGN_CENTER_ICON = new ImageIconResource("Icons/Layout/AlignCenter.png");
 	public static final ImageIconResource ALIGN_TOP_ICON = new ImageIconResource("Icons/Layout/AlignTop.png");
 	public static final ImageIconResource ALIGN_MIDDLE_ICON = new ImageIconResource("Icons/Layout/AlignMiddle.png");
 	public static final ImageIconResource ALIGN_BOTTOM_ICON = new ImageIconResource("Icons/Layout/AlignBottom.png");
-
+	// Custom layout icons
+	public static final ImageIconResource FORCE_DIRECTED_ICON = new ImageIconResource("Icons/Layout/ForceDirected.png");
+	
 	public static final ImageIconResource MOVE_BACK_ICON = new ImageIconResource("Icons/Layout/MoveBack.png");
 	public static final ImageIconResource MOVE_FRONT_ICON = new ImageIconResource("Icons/Layout/MoveFront.png");
 

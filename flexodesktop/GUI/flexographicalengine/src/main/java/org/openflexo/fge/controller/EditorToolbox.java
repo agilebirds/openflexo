@@ -21,16 +21,20 @@ package org.openflexo.fge.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.Box;
 import javax.swing.JToolBar;
+import javax.swing.Timer;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.layout.Layout;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
+import org.openflexo.fge.view.widget.FIBLayoutSelector;
 import org.openflexo.fge.view.widget.FIBShadowStyleSelector;
 import org.openflexo.fge.view.widget.FIBShapeSelector;
 import org.openflexo.fge.view.widget.FIBTextStyleSelector;
@@ -47,6 +51,7 @@ public class EditorToolbox {
 	private FIBBackgroundStyleSelector backgroundSelector;
 	private FIBTextStyleSelector textStyleSelector;
 	private FIBShadowStyleSelector shadowStyleSelector;
+	private FIBLayoutSelector layoutSelector;
 	private FIBShapeSelector shapeSelector;
 
 	DrawingController<?> controller;
@@ -77,6 +82,10 @@ public class EditorToolbox {
 		if (textStyleSelector != null) {
 			textStyleSelector.delete();
 			textStyleSelector = null;
+		}
+		if (layoutSelector != null) {
+			layoutSelector.delete();
+			layoutSelector = null;
 		}
 		selectedShapes.clear();
 		selectedConnectors.clear();
@@ -164,11 +173,24 @@ public class EditorToolbox {
 					}
 				}
 			};
+			layoutSelector = new FIBLayoutSelector(controller.getCurrentLayout()) {
+				@Override
+				public void apply() {
+					super.apply();
+					if (selectedGR.size() > 0) {
+						Layout layout = (Layout)getEditedObject();
+						layout.fillLayoutGraph(selectedGR);
+					} else {
+						controller.setCurrentLayout(getEditedObject().clone());
+					}
+				}
+			};
 			stylesToolBar.add(getToolPanel());
 			stylesToolBar.addSeparator();
 			stylesToolBar.add(foregroundSelector);
 			stylesToolBar.add(backgroundSelector);
 			stylesToolBar.add(shapeSelector);
+			stylesToolBar.add(layoutSelector);
 			stylesToolBar.add(shadowStyleSelector);
 			stylesToolBar.add(textStyleSelector);
 			stylesToolBar.add(Box.createHorizontalGlue());

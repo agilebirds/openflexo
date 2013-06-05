@@ -3,13 +3,44 @@ package org.openflexo.fge.layout;
 import org.openflexo.fge.GraphicalRepresentation;
 
 public class ForceDirectedPlacementLayout extends Layout{
+
+	private int gravity = 2;
+	private int temperature = 30;
 	
-	private int area = 500; //{W * L are the width and length of the frame};
-	private int gravity = 5;
+	private LayoutStatus layoutStatus;
+	
+	public void setLayoutStatus(LayoutStatus layoutStatus) {
+		this.layoutStatus = layoutStatus;
+	}
+
+	public int getGravity() {
+		return gravity;
+	}
+
+	public void setGravity(int gravity) {
+		this.gravity = gravity;
+	}
+
+	public float getMaxDisplace() {
+		return maxDisplace;
+	}
+
+	public void setMaxDisplace(float maxDisplace) {
+		this.maxDisplace = maxDisplace;
+	}
+
+	public float getK() {
+		return k;
+	}
+
+	public void setK(float k) {
+		this.k = k;
+	}
+
 	private double deplacementX;
 	private double deplacementY;
-	float maxDisplace = (float) (Math.sqrt(area) / 30f);  
-	float k = 50*((float) Math.sqrt(area) / (1f + getLayoutedGraph().getNodes().size()));	
+	float maxDisplace = (float) (Math.sqrt(getArea()) / 5f);  
+	float k = 30*((float) Math.sqrt(getArea()) / (1f + getLayoutedGraph().getNodes().size()));	
 	
 	public ForceDirectedPlacementLayout(GraphicalRepresentation<?> graphicalRp) {
 		super(graphicalRp);
@@ -37,22 +68,35 @@ public class ForceDirectedPlacementLayout extends Layout{
 	}
 	
 	@Override
-	public void runLayout() {
-			
-		//for(int i=0;i<100;i++)
-		//{
-			// Apply repulsive forces
-			repulsiveForcesComputation();
-			// Apply attractive forces
-			attractiveForcesComputation();
-			// gravity
-	       // gravityForcesComputation();
-	        // Apply layout
-	        applyLayout();
-		//}
+	public LayoutStatus runLayout() {
+		
+		// Apply repulsive forces
+		repulsiveForcesComputation();
+		// Apply attractive forces
+		attractiveForcesComputation();
+		// gravity
+		gravityForcesComputation();
+		// Apply layout
+		   
+		applyLayout(getLayoutedGraph());
+		decreaseTemperature();
+		if(temperature<=0)setLayoutStatus(LayoutStatus.COMPLETE);
+		else{setLayoutStatus(LayoutStatus.PROGRESS);}
+	    return layoutStatus;
 	}
 	
 	
+	public int getTemperature() {
+		return temperature;
+	}
+
+	public void setTemperature(int temperature) {
+		this.temperature = temperature;
+	}
+
+	private void decreaseTemperature(){
+		temperature = temperature - 1;
+	}
 	
 	private void repulsiveForcesComputation(){
 		// Repulsive forces
@@ -60,10 +104,10 @@ public class ForceDirectedPlacementLayout extends Layout{
 			for(LayoutedNode nodeTarget:getLayoutedGraph().getNodes()){
 				if(nodeSource!=nodeTarget){
 					// Calculate distance between nodes
-					double deltaX = (nodeSource.getGraphicalRepresentation().getX()) - (nodeTarget.getGraphicalRepresentation().getX());
-					double deltaY = (nodeSource.getGraphicalRepresentation().getY()) - (nodeTarget.getGraphicalRepresentation().getY());
-					double distance =  Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-					if(distance>0)
+					double deltaX = (nodeSource.getCurrentX()) - (nodeTarget.getCurrentX());
+					double deltaY = (nodeSource.getCurrentY()) - (nodeTarget.getCurrentY());
+					float distance = distance(deltaX,deltaY);
+					if(distance>20)
 					{
 						// calculate repulsive force
 						deplacementX = (deltaX/distance)*repulsiveForceFunction(k,distance);
@@ -83,10 +127,10 @@ public class ForceDirectedPlacementLayout extends Layout{
 			LayoutedNode nodeSource = edge.getSource();
 			LayoutedNode nodeTarget = edge.getTarget();
 			// Calculate distance between nodes
-			double deltaX = (nodeSource.getGraphicalRepresentation().getX()) - (nodeTarget.getGraphicalRepresentation().getX());
-			double deltaY = (nodeSource.getGraphicalRepresentation().getY()) - (nodeTarget.getGraphicalRepresentation().getY());
-			double distance =  Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-			if(distance>0){
+			double deltaX = (nodeSource.getCurrentX()) - (nodeTarget.getCurrentX());
+			double deltaY = (nodeSource.getCurrentY()) - (nodeTarget.getCurrentY());
+			float distance = distance(deltaX,deltaY);
+			if(distance>20){
 				// calculate attractive force
 				deplacementX= (deltaX/distance)*attractiveForceFunction(distance,k);
 				deplacementY= (deltaY/distance)*attractiveForceFunction(distance,k);
@@ -101,23 +145,39 @@ public class ForceDirectedPlacementLayout extends Layout{
 	
 	private void gravityForcesComputation(){
 		for (LayoutedNode n : getLayoutedGraph().getNodes()) {
-            float d = (float) Math.sqrt(n.getGraphicalRepresentation().getX() * n.getGraphicalRepresentation().getX() + n.getGraphicalRepresentation().getY() * n.getGraphicalRepresentation().getY());
-            float gf = 0.01f * k * (float) gravity * d;
-            n.setDeplacementX(n.getDeplacementX()-gf*(n.getGraphicalRepresentation().getX())/d);
-            n.setDeplacementY(n.getDeplacementY()-gf*(n.getGraphicalRepresentation().getY())/d);
+			float dist = distance(n.getCurrentX(),n.getCurrentY());
+            float gf = 0.01f * k * (float) gravity * dist;
+            n.setDeplacementX(n.getDeplacementX()-gf*(n.getCurrentX())/dist);
+            n.setDeplacementY(n.getDeplacementY()-gf*(n.getCurrentY())/dist);
         }
 	}
 	
-	private void applyLayout(){
-		 for (LayoutedNode n : getLayoutedGraph().getNodes()) {
-	            double xDist = n.getDeplacementX();
-	            double yDist = n.getDeplacementY();
-	            float dist = (float) Math.sqrt(xDist * xDist + yDist * yDist);
-	            if (dist > 0 ) {
-	                float limitedDist = Math.min(maxDisplace, dist);
-	                n.getGraphicalRepresentation().setX(n.getGraphicalRepresentation().getX() + xDist / dist * limitedDist);
-	                n.getGraphicalRepresentation().setY(n.getGraphicalRepresentation().getY() + yDist / dist * limitedDist);
-	            }
-	      }
+	@Override
+	public void applyLayout(LayoutedGraph layoutedGraph){
+		for (LayoutedNode n : layoutedGraph.getNodes()) {
+	        float dist = distance(n.getDeplacementX(),n.getDeplacementY());
+	        if (dist > 20 ) {
+	            float limitedDist = Math.min(maxDisplace, dist);
+	            n.setDeplacementX(n.getDeplacementX()/dist*limitedDist);
+	            n.setDeplacementY(n.getDeplacementY()/dist*limitedDist);
+	            n.computeNewPosition();
+	            n.applyNewPosition();
+	        }
+		}
+	}
+
+	private float distance(double n1, double n2){
+		  float dist = (float) Math.sqrt(n1 * n1 + n2 * n2);
+		  return dist;
+	}
+	
+	@Override
+	public LayoutType getLayoutType() {
+		return LayoutType.FORCE_DIRECTED_PLACEMENT;
+	}
+
+	@Override
+	public LayoutStatus getStatus() {
+		return layoutStatus;
 	}
 }

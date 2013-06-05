@@ -51,53 +51,6 @@ public class SelectionAction extends MouseClickControlAction {
 		if (controller.getDrawingView() == null) {
 			return false;
 		}
-
-		/*
-		 * TEMP
-		 */
-		this.g = graphicalRepresentation;
-		
-		ActionListener taskPerformer = new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
-            	runAction();
-            	}
-            };
-        Timer timer = new Timer( 1 , taskPerformer);
-        timer.setRepeats(true);
-        timer.start();
-
-        try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		/*SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() 
-		{
-			@Override
-			protected Void doInBackground() throws Exception {
-				runAction();
-				return null;
-			}
-
-			@Override
-			protected void done() {
-				super.done();
-				try {
-					get();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					e.printStackTrace();
-				}
-			}
-			};
-		worker.execute();
-	*/
-		/*
-		 * END
-		 */
 		
 		if (graphicalRepresentation.getIsSelectable()) {
 			if (logger.isLoggable(Level.FINE)) {
@@ -117,9 +70,4 @@ public class SelectionAction extends MouseClickControlAction {
 		}
 	}
 	
-	private void runAction(){
-		Layout l = new ForceDirectedPlacementLayout(g);
-		l.runLayout();
-	}
-		
 }
