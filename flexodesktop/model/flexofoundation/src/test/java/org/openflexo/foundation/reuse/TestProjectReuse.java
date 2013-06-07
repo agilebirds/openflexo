@@ -140,7 +140,7 @@ public class TestProjectReuse extends FlexoTestCase {
 		rootProject.close();
 		importedProject.close();
 		importedProject = null;
-		rootEditor = reloadProject(rootProjectDirectory, new ProjectReferenceLoader());
+		rootEditor = reloadProject(rootProjectDirectory);
 		rootProject = rootEditor.getProject();
 		rootProject.getProjectData().getImportedProjects().get(0).getReferredProject(true);
 		assertNotNull(importedProject); // Imported project should be automatically re-assigned a new value with the project reference

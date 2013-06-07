@@ -41,7 +41,7 @@ import org.openflexo.foundation.xml.XMLSerializationService;
  * @author sylvain
  * 
  */
-public abstract class DefaultFlexoServiceManager extends FlexoServiceManager {
+public class DefaultFlexoServiceManager extends FlexoServiceManager {
 
 	public DefaultFlexoServiceManager() {
 		XMLSerializationService xmlSerializationService = createXMLSerializationService();
@@ -90,6 +90,18 @@ public abstract class DefaultFlexoServiceManager extends FlexoServiceManager {
 	@Override
 	protected InformationSpace createInformationSpace() {
 		return new InformationSpace();
+	}
+
+	@Override
+	protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
+		// Please override
+		return null;
+	}
+
+	@Override
+	protected FlexoEditor createApplicationEditor() {
+		// Please override
+		return null;
 	}
 
 	public String debug() {

@@ -70,7 +70,6 @@ import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoOperationComponentResource;
 import org.openflexo.foundation.rm.FlexoProcessResource;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoResourceManager;
 import org.openflexo.foundation.rm.FlexoStorageResource;
@@ -191,11 +190,6 @@ public abstract class FlexoTestCase extends TestCase {
 		serviceManager = new DefaultFlexoServiceManager() {
 
 			@Override
-			protected FlexoProjectReferenceLoader createProjectReferenceLoader() {
-				return null;
-			}
-
-			@Override
 			protected FlexoEditor createApplicationEditor() {
 				return new FlexoTestEditor(null);
 			}
@@ -291,14 +285,10 @@ public abstract class FlexoTestCase extends TestCase {
 	}
 
 	protected FlexoEditor reloadProject(File prjDir) {
-		return reloadProject(prjDir, serviceManager.getProjectReferenceLoader());
-	}
-
-	protected FlexoEditor reloadProject(File prjDir, FlexoProjectReferenceLoader projectReferenceLoader) {
 		try {
 			FlexoEditor _editor = null;
 			assertNotNull(_editor = FlexoResourceManager.initializeExistingProject(prjDir, null, EDITOR_FACTORY,
-					new DefaultProjectLoadingHandler(), projectReferenceLoader, serviceManager));
+					new DefaultProjectLoadingHandler(), serviceManager));
 			// The next line is really a trouble maker and eventually causes more problems than solutions. FlexoProject can't be renamed on
 			// the fly
 			// without having a severe impact on many resources and importer projects. I therefore now comment this line which made me lost
