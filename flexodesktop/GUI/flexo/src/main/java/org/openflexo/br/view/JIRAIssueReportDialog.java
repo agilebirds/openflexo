@@ -34,6 +34,7 @@ import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
+import org.openflexo.toolbox.StringUtils;
 import org.openflexo.toolbox.ToolBox;
 import org.openflexo.toolbox.ZipUtils;
 import org.openflexo.view.FlexoDialog;
@@ -575,5 +576,10 @@ public class JIRAIssueReportDialog {
 
 	public void setSendProject(boolean sendProject) {
 		this.sendProject = sendProject;
+	}
+
+	public boolean isValid() {
+		return getIssue() != null && getIssue().getIssuetype() != null && StringUtils.isNotEmpty(getIssue().getSummary())
+				&& StringUtils.isNotEmpty(getIssue().getDescription());
 	}
 }
