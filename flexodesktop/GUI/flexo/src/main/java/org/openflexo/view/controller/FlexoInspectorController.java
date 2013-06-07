@@ -313,20 +313,6 @@ public abstract class FlexoInspectorController extends InspectorController {
 		return true;
 	}
 
-	/*private File _inspectorDirectory;
-
-	protected File getInspectorDirectory()
-	{
-		if (_inspectorDirectory == null) {
-			_inspectorDirectory = new FileResource("FlexoWorkflowEditor/src/main/resources/Config/Inspector");
-			if (!_inspectorDirectory.exists()) {
-				logger.warning("Inspector directory NOT FOUND ! (searched "+_inspectorDirectory+")");
-			}
-			else System.out.println("Found "+_inspectorDirectory);
-		}
-		return _inspectorDirectory;
-	}*/
-
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
 		final JDialog dialog = new JDialog(frame);

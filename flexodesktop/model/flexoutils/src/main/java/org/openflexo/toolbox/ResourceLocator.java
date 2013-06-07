@@ -178,7 +178,8 @@ public class ResourceLocator {
 		if (new File(dir, "pom.xml").exists()) {
 			files.add(dir);
 			for (File f : dir.listFiles()) {
-				if (f.getName().startsWith("flexo") || f.getName().equals("technologyadaptersintegration")) {
+				if (f.getName().startsWith("flexo") || f.getName().contains("connector")
+						|| f.getName().equals("technologyadaptersintegration")) {
 					addProjectResourceDirs(files, f);
 				} else if (f.isDirectory()) {
 					findAllFlexoProjects(f, files);

@@ -41,8 +41,7 @@ public class XSDAdapterController extends TechnologyAdapterController<XSDTechnol
 	@Override
 	public void initializeActions(ControllerActionInitializer actionInitializer) {
 
-		actionInitializer.getController().getModuleInspectorController()
-				.loadDirectory(new FileResource("src/main/resources/Inspectors/XSD"));
+		actionInitializer.getController().getModuleInspectorController().loadDirectory(new FileResource("Inspectors/XSD"));
 	}
 
 	/**

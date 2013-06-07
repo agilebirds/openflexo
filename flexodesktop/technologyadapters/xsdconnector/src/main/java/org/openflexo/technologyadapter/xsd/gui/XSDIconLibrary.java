@@ -35,13 +35,13 @@ public class XSDIconLibrary {
 
 	private static final Logger logger = Logger.getLogger(XSDIconLibrary.class.getPackage().getName());
 
-	public static final ImageIconResource XSD_TECHNOLOGY_BIG_ICON = new ImageIconResource("src/main/resources/Icons/XSDTechnology32.png");
-	public static final ImageIconResource XSD_TECHNOLOGY_ICON = new ImageIconResource("src/main/resources/Icons/XSDTechnology.png");
-	public static final ImageIconResource XSD_FILE_ICON = new ImageIconResource("src/main/resources/Icons/XSDFile.png");
-	public static final ImageIconResource XML_FILE_ICON = new ImageIconResource("src/main/resources/Icons/XMLFile.png");
-	public static final ImageIconResource XSD_CLASS_ICON = new ImageIconResource("src/main/resources/Icons/XSDClass.png");
-	public static final ImageIconResource XSD_INDIVIDUAL_ICON = new ImageIconResource("src/main/resources/Icons/XSDIndividual.png");
-	public static final ImageIconResource XSD_PROPERTY_ICON = new ImageIconResource("src/main/resources/Icons/XSDProperty.png");
+	public static final ImageIconResource XSD_TECHNOLOGY_BIG_ICON = new ImageIconResource("Icons/XSDTechnology32.png");
+	public static final ImageIconResource XSD_TECHNOLOGY_ICON = new ImageIconResource("Icons/XSDTechnology.png");
+	public static final ImageIconResource XSD_FILE_ICON = new ImageIconResource("Icons/XSDFile.png");
+	public static final ImageIconResource XML_FILE_ICON = new ImageIconResource("Icons/XMLFile.png");
+	public static final ImageIconResource XSD_CLASS_ICON = new ImageIconResource("Icons/XSDClass.png");
+	public static final ImageIconResource XSD_INDIVIDUAL_ICON = new ImageIconResource("Icons/XSDIndividual.png");
+	public static final ImageIconResource XSD_PROPERTY_ICON = new ImageIconResource("Icons/XSDProperty.png");
 
 	public static ImageIcon iconForObject(Class<? extends AbstractXSOntObject> objectClass) {
 		if (XSDMetaModel.class.isAssignableFrom(objectClass)) {

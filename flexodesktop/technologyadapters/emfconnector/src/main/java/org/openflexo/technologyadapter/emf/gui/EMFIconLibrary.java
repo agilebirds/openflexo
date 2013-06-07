@@ -43,16 +43,16 @@ public class EMFIconLibrary {
 
 	private static final Logger logger = Logger.getLogger(EMFIconLibrary.class.getPackage().getName());
 
-	public static final ImageIconResource EMF_TECHNOLOGY_BIG_ICON = new ImageIconResource("src/main/resources/Icons/EMFTechnology32.png");
-	public static final ImageIconResource EMF_TECHNOLOGY_ICON = new ImageIconResource("src/main/resources/Icons/EMFTechnology.png");
-	public static final ImageIconResource ECORE_FILE_ICON = new ImageIconResource("src/main/resources/Icons/EMFTechnology.png");
-	public static final ImageIconResource EMF_FILE_ICON = new ImageIconResource("src/main/resources/Icons/EMFTechnology.png");
-	public static final ImageIconResource EMF_CLASS_ICON = new ImageIconResource("src/main/resources/Icons/EClass.gif");
-	public static final ImageIconResource EMF_ENUM_ICON = new ImageIconResource("src/main/resources/Icons/EEnum.gif");
-	public static final ImageIconResource EMF_ENUM_LITERAL_ICON = new ImageIconResource("src/main/resources/Icons/EEnumLiteral.gif");
-	public static final ImageIconResource EMF_INDIVIDUAL_ICON = new ImageIconResource("src/main/resources/Icons/EObject.gif");
-	public static final ImageIconResource EMF_REFERENCE_ICON = new ImageIconResource("src/main/resources/Icons/EReference.gif");
-	public static final ImageIconResource EMF_ATTRIBUTE_ICON = new ImageIconResource("src/main/resources/Icons/EAttribute.gif");
+	public static final ImageIconResource EMF_TECHNOLOGY_BIG_ICON = new ImageIconResource("Icons/EMFTechnology32.png");
+	public static final ImageIconResource EMF_TECHNOLOGY_ICON = new ImageIconResource("Icons/EMFTechnology.png");
+	public static final ImageIconResource ECORE_FILE_ICON = new ImageIconResource("Icons/EMFTechnology.png");
+	public static final ImageIconResource EMF_FILE_ICON = new ImageIconResource("Icons/EMFTechnology.png");
+	public static final ImageIconResource EMF_CLASS_ICON = new ImageIconResource("Icons/EClass.gif");
+	public static final ImageIconResource EMF_ENUM_ICON = new ImageIconResource("Icons/EEnum.gif");
+	public static final ImageIconResource EMF_ENUM_LITERAL_ICON = new ImageIconResource("Icons/EEnumLiteral.gif");
+	public static final ImageIconResource EMF_INDIVIDUAL_ICON = new ImageIconResource("Icons/EObject.gif");
+	public static final ImageIconResource EMF_REFERENCE_ICON = new ImageIconResource("Icons/EReference.gif");
+	public static final ImageIconResource EMF_ATTRIBUTE_ICON = new ImageIconResource("Icons/EAttribute.gif");
 
 	public static ImageIcon iconForObject(Class<? extends IFlexoOntologyObject> objectClass) {
 		if (EMFMetaModel.class.isAssignableFrom(objectClass)) {

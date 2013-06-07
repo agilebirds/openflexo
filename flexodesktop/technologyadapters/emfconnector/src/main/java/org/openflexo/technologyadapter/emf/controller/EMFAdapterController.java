@@ -68,8 +68,7 @@ public class EMFAdapterController extends TechnologyAdapterController<EMFTechnol
 	@Override
 	public void initializeActions(ControllerActionInitializer actionInitializer) {
 
-		actionInitializer.getController().getModuleInspectorController()
-				.loadDirectory(new FileResource("src/main/resources/Inspectors/EMF"));
+		actionInitializer.getController().getModuleInspectorController().loadDirectory(new FileResource("Inspectors/EMF"));
 	}
 
 	/**
