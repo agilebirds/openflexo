@@ -188,6 +188,12 @@ public class FlexoOntologyModelSlotInstanceConfiguration<MS extends FlexoOntolog
 			return false;
 		}
 		if (getOption() == DefaultModelSlotInstanceConfigurationOption.SelectExistingModel) {
+			if (getResourceCenter() == null) {
+				logger.warning("Null resource center");
+			}
+			if (getModelResource() == null) {
+				logger.warning("Null model resource");
+			}
 			return getResourceCenter() != null && getModelResource() != null;
 		} else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel) {
 			return StringUtils.isNotEmpty(getModelUri()) && StringUtils.isNotEmpty(getRelativePath())
@@ -200,5 +206,4 @@ public class FlexoOntologyModelSlotInstanceConfiguration<MS extends FlexoOntolog
 		}
 		return false;
 	}
-
 }

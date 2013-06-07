@@ -469,4 +469,8 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 		return null;
 	}
 
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + ":" + getName();
+	}
 }
