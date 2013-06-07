@@ -145,7 +145,7 @@ public class ViewPointPerspective extends FlexoPerspective {
 	 */
 	@Override
 	public ImageIcon getActiveIcon() {
-		return VPMIconLibrary.VPM_VPE_ACTIVE_ICON;
+		return VPMIconLibrary.VIEWPOINT_ICON;
 	}
 
 	@Override
