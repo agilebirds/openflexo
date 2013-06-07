@@ -192,8 +192,8 @@ public class Flexo {
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS || !isDev) {
 			getResourcePath();
 		}
-		ResourceLocator.printDirectoriesSearchOrder(System.err);
 		remapStandardOuputs(isDev);
+		ResourceLocator.printDirectoriesSearchOrder(System.err);
 		UserType userTypeNamed = UserType.getUserTypeNamed(userTypeName);
 		UserType.setCurrentUserType(userTypeNamed);
 		SplashWindow splashWindow = null;
