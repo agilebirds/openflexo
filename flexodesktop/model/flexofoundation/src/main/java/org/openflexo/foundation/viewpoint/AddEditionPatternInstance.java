@@ -134,11 +134,11 @@ public class AddEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends F
 	}
 
 	public CreationScheme getCreationScheme() {
-		if (getPatternRole() instanceof EditionPatternInstancePatternRole) {
-			return ((EditionPatternInstancePatternRole) getPatternRole()).getCreationScheme();
-		}
 		if (creationScheme == null && _creationSchemeURI != null && getViewPointLibrary() != null) {
 			creationScheme = (CreationScheme) getViewPointLibrary().getEditionScheme(_creationSchemeURI);
+		}
+		if (creationScheme == null && getPatternRole() instanceof EditionPatternInstancePatternRole) {
+			creationScheme = ((EditionPatternInstancePatternRole) getPatternRole()).getCreationScheme();
 		}
 		return creationScheme;
 	}
