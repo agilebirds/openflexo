@@ -22,9 +22,9 @@
       <Tab title="behaviour" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="0" constraints="border(index=1;location=center)" name="EditionSchemeTab">
         <SplitPanel index="0" constraints="border(index=0;location=center)">
           <ColSplit name="ColSplit" weight="0.0">
-            <Leaf name="top" weight="0.5" />
+            <Leaf name="top" weight="0.20000000298023224" />
             <Divider />
-            <Leaf name="bottom" weight="0.5" />
+            <Leaf name="bottom" weight="0.800000011920929" />
           </ColSplit>
           <Panel layout="border" borderTitle="Panel" borderTop="9" borderBottom="15" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="0" constraints="split(index=0;location=north;splitIdentifier=top)" opaque="false" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED">
             <SplitPanel index="0" constraints="border(index=0;location=center)">
@@ -44,14 +44,14 @@
                 <CustomAction method="selected.duplicate((selected.name + &quot;Copy&quot;))" name="duplicate" />
                 <AddAction method="data.createCloningScheme" name="new_cloning_scheme" />
               </Table>
-             <Panel layout="border" border="rounded3d" borderTitle="Parameters for EditionScheme" borderTop="2" borderBottom="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="1" index="0" constraints="split(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=0;gridY=1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=west;padX=0;padY=0;splitIdentifier=right;weightX=0.5;weightY=1.0;x=0;y=0)" opaque="false">
+              <Panel layout="border" border="rounded3d" borderTitle="Parameters for EditionScheme" borderTop="2" borderBottom="2" borderRight="2" titleFont="SansSerif,0,11" darkLevel="1" index="0" constraints="split(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=0;gridY=1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=west;padX=0;padY=0;splitIdentifier=right;weightX=0.5;weightY=1.0;x=0;y=0)" opaque="false">
                 <Table iteratorClassName="org.openflexo.foundation.viewpoint.EditionSchemeParameter" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" enable="(EditionSchemeTable.selected != null)" manageDynamicModel="true" name="ParametersTable" index="0" data="EditionSchemeTable.selected.parameters" constraints="border(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=0;gridY=1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=center;padX=0;padY=0;weightX=0.5;weightY=1.0;x=0;y=0)" font="SansSerif.plain,0,12">
                   <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="20" resizable="false" displayTitle="false" name="icon" />
                   <TextFieldColumn data="iterator.name" title="name" columnWidth="100" resizable="true" displayTitle="true" />
                   <TextFieldColumn data="iterator.label" title="label" columnWidth="100" resizable="true" displayTitle="true" />
                   <DropDownColumn data="iterator.widget" title="widget" columnWidth="80" resizable="true" displayTitle="true" name="dropdown" />
                   <AddAction method="EditionSchemeTable.selected.createTextFieldParameter" name="add_textfield_parameter" />
-                   <AddAction method="EditionSchemeTable.selected.createTextAreaParameter" name="add_textarea_parameter" />
+                  <AddAction method="EditionSchemeTable.selected.createTextAreaParameter" name="add_textarea_parameter" />
                   <AddAction method="EditionSchemeTable.selected.createIntegerParameter" name="add_integer_parameter" />
                   <AddAction method="EditionSchemeTable.selected.createCheckBoxParameter" name="add_checkbox_parameter" />
                   <AddAction method="EditionSchemeTable.selected.createDropDownParameter" name="add_dropdown_parameter" />
