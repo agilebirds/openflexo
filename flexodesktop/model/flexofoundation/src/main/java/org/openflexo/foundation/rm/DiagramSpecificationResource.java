@@ -14,7 +14,17 @@ import org.openflexo.model.annotations.XMLElement;
 @XMLElement
 public interface DiagramSpecificationResource extends VirtualModelResource<DiagramSpecification> {
 
+	/**
+	 * Return virtual model stored by this resource<br>
+	 * Load the resource data when unloaded
+	 */
 	public DiagramSpecification getDiagramSpecification();
+
+	/**
+	 * Return virtual model stored by this resource when loaded<br>
+	 * Do not force the resource data to be loaded
+	 */
+	public DiagramSpecification getLoadedDiagramSpecification();
 
 	public List<ExampleDiagramResource> getExampleDiagramResources();
 

@@ -3,6 +3,7 @@ package org.openflexo.foundation.view.diagram.rm;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
@@ -87,6 +88,24 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 		return true;
 	}
 
+	/**
+	 * Return example diagram stored by this resource<br>
+	 * Do not force load the resource data
+	 * 
+	 * @return
+	 */
+	@Override
+	public ExampleDiagram getLoadedExampleDiagram() {
+		if (isLoaded()) {
+			return getExampleDiagram();
+		}
+		return null;
+	}
+
+	/**
+	 * Return example diagram stored by this resource<br>
+	 * Load the resource data when unloaded
+	 */
 	@Override
 	public ExampleDiagram getExampleDiagram() {
 		try {
@@ -120,6 +139,10 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 		ExampleDiagram returned = super.loadResourceData(progress);
 		returned.init(getContainer().getDiagramSpecification(), getFile().getName().substring(0, getFile().getName().length() - 8));
 		getContainer().getDiagramSpecification().addToExampleDiagrams(returned);
+		setChanged();
+		notifyObservers(new DataModification("exampleDiagram", null, returned));
+		setChanged();
+		notifyObservers(new DataModification("loadedExampleDiagram", null, returned));
 		returned.clearIsModified();
 		return returned;
 	}

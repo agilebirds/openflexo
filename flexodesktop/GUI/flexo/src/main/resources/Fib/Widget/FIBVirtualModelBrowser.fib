@@ -6,13 +6,13 @@
       <Children data="virtualModel.allRootEditionPatterns" visible="" cast="" name="editionPatterns" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.foundation.technologyadapter.ModelSlot" label="(((modelSlot.name + &quot; - [&quot;) + modelSlot.technologyAdapter.name) + &quot;]&quot;)" icon="controller.iconForObject(modelSlot)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="modelSlot" />
-    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionPattern" label="" icon="controller.iconForObject(editionPattern)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="editionPattern">
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionPattern" label="editionPattern.name" icon="controller.iconForObject(editionPattern)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="editionPattern">
       <Children data="editionPattern.childEditionPatterns" visible="" cast="" name="children" />
       <Children data="editionPattern.inspector" visible="" cast="" name="inspector" />
       <Children data="editionPattern.structuralFacet" visible="" cast="" name="structural" />
       <Children data="editionPattern.behaviouralFacet" visible="" cast="" name="behavioural" />
     </BrowserElement>
-    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.PatternRole" label="" icon="controller.iconForObject(patternRole)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="patternRole" />
+    <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.PatternRole" label="patternRole.name" icon="controller.iconForObject(patternRole)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="patternRole" />
     <BrowserElement dataClassName="org.openflexo.foundation.viewpoint.EditionScheme" label="editionScheme.name" icon="controller.iconForObject(editionScheme)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="editionScheme">
       <Children data="editionScheme.editionSchemeParameters" visible="(editionScheme.parameters.size &gt; 0)" cast="" name="parameters" />
       <Children data="editionScheme.actions" visible="" cast="" name="actions" />

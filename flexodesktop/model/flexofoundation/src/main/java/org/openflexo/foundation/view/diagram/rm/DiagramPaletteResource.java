@@ -17,7 +17,19 @@ public interface DiagramPaletteResource extends FlexoXMLFileResource<DiagramPale
 
 	public static final String VIEW_POINT_LIBRARY = "viewPointLibrary";
 
+	/**
+	 * Return diagram palette stored by this resource<br>
+	 * Load the resource data when unloaded
+	 */
 	public DiagramPalette getDiagramPalette();
+
+	/**
+	 * Return diagram palette stored by this resource<br>
+	 * Do not force load the resource data
+	 * 
+	 * @return
+	 */
+	public DiagramPalette getLoadedDiagramPalette();
 
 	@Getter(value = VIEW_POINT_LIBRARY, ignoreType = true)
 	public ViewPointLibrary getViewPointLibrary();
