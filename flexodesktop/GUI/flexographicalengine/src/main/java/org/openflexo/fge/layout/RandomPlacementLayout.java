@@ -37,7 +37,7 @@ public class RandomPlacementLayout extends Layout{
 	
 	@Override
 	public LayoutType getLayoutType() {
-		return LayoutType.FORCE_DIRECTED_PLACEMENT;
+		return LayoutType.RANDOM_PLACEMENT;
 	}
 
 	@Override

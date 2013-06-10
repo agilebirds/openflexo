@@ -206,29 +206,13 @@ public class FIBLayoutSelector extends CustomPopup<Layout> implements
 		// Controller for the detail layout panel
 		public class CustomFIBController extends FIBController {
 			
-			private Timer timer;
-			
 			public CustomFIBController(FIBComponent component) {
 				super(component);
 			}
 
 			public void apply() {
+				//setEditedObject(layout);
 				FIBLayoutSelector.this.apply();
-				
-				/*
-				 * This is the control action activated by the apply button of the frame.
-				 * It results to apply the layout algorithm 
-				 */
-				timer = new Timer(0, new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						setEditedObject(layoutFactory.getLayout());
-	            		layoutFactory.getLayout().runLayout();
-	            		if(layoutFactory.getLayout().getStatus().equals(LayoutStatus.COMPLETE)) timer.stop();
-					}
-				});
-				timer.start();
-			
 			}
 
 			public void cancel() {
@@ -314,7 +298,6 @@ public class FIBLayoutSelector extends CustomPopup<Layout> implements
 			if (getEditedObject() == null) {
 				return;
 			}
-			//lineGR.setlayout(getEditedObject());
 		}
 
 	}
@@ -382,6 +365,9 @@ public class FIBLayoutSelector extends CustomPopup<Layout> implements
 					layout = ((Layout) layout).makeLayout(layoutType, null);
 					break;
 				case RANDOM_PLACEMENT:
+					layout = ((Layout) layout).makeLayout(layoutType, null);
+					break;
+				case CIRCULAR_PLACEMENT:
 					layout = ((Layout) layout).makeLayout(layoutType, null);
 					break;
 				default:

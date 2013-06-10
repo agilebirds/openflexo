@@ -87,11 +87,12 @@ public class HierarchicalPlacementLayout extends Layout{
 
 	@Override
 	public LayoutType getLayoutType() {
-		return LayoutType.FORCE_DIRECTED_PLACEMENT;
+		return LayoutType.HIERARCHICAL_PLACEMENT;
 	}
 
 	@Override
 	public LayoutStatus getStatus() {
 		return layoutStatus;
 	}
+
 }

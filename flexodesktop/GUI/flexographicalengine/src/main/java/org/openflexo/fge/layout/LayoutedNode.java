@@ -1,5 +1,7 @@
 package org.openflexo.fge.layout;
 
+import java.util.HashMap;
+
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 
 
@@ -10,7 +12,19 @@ public class LayoutedNode {
 	private double deplacementX;
 	private double deplacementY;
 	
+	private HashMap<Integer,Position> positions;
+	
 	private ShapeGraphicalRepresentation<?> graphicalRepresentation;
+	
+	public int getXForStep(int step){
+		Position position = positions.get(step);
+		return position.getX();
+	}
+	
+	public int getYForStep(int step){
+		Position position = positions.get(step);
+		return position.getY();
+	}
 	
 	public double getDeplacementX() {
 		return deplacementX;
@@ -32,6 +46,7 @@ public class LayoutedNode {
 			ShapeGraphicalRepresentation<?> graphicalRepresentation) {
 		super();
 		this.graphicalRepresentation = graphicalRepresentation;
+		positions = new HashMap<Integer,Position>();
 	}
 
 	public ShapeGraphicalRepresentation<?> getGraphicalRepresentation() {

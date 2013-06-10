@@ -18,6 +18,8 @@ public abstract class Layout extends KVCObject implements XMLSerializable, Clone
 	// Size of the area to perform the layout
 	private int area = 300;
 	
+	private int stepNumber;
+	
 	private int nodesNumber;
 	
 	private Layout layout;
@@ -40,7 +42,7 @@ public abstract class Layout extends KVCObject implements XMLSerializable, Clone
 
 	// The possible type of layout
 	public static enum LayoutType {
-		NONE, FORCE_DIRECTED_PLACEMENT, HIERARCHICAL_PLACEMENT, RANDOM_PLACEMENT
+		NONE, FORCE_DIRECTED_PLACEMENT, HIERARCHICAL_PLACEMENT, RANDOM_PLACEMENT, CIRCULAR_PLACEMENT
 	}
 
 	@Override
@@ -133,14 +135,25 @@ public abstract class Layout extends KVCObject implements XMLSerializable, Clone
 			return new NoneLayout(aGraphicalRepresentation);
 		} else if (type == LayoutType.RANDOM_PLACEMENT) {
 			return new RandomPlacementLayout(aGraphicalRepresentation);
+		} else if (type == LayoutType.CIRCULAR_PLACEMENT) {
+			return new CircularPlacementLayout(aGraphicalRepresentation);
 		} 
 		return null;
 	}
 	
-	public void applyLayout(LayoutedGraph layoutedGraph){
-		for (LayoutedNode n : layoutedGraph.getNodes()) {
-	        n.getGraphicalRepresentation().setX(n.getGraphicalRepresentation().getX() + n.getDeplacementX());
-	        n.getGraphicalRepresentation().setY(n.getGraphicalRepresentation().getY() + n.getDeplacementY());
+	/**
+	 * Apply the layout graphically.
+	 * @param layoutedGraph
+	 * @param steps
+	 */
+	public void applyLayout(LayoutedGraph layoutedGraph, int steps){
+		for(int i=0;i<steps;i++){
+			for (LayoutedNode n : layoutedGraph.getNodes()) {
+				if(n.move){
+					 n.getGraphicalRepresentation().setX(n.getXForStep(step));
+				     n.getGraphicalRepresentation().setY(n.getYForStep(step));
+				}    
+			}
 		}
 	}
 
@@ -160,4 +173,8 @@ public abstract class Layout extends KVCObject implements XMLSerializable, Clone
 		this.nodesNumber = nodesNumber;
 	}
 	
+	public float distance(double n1, double n2){
+		  float dist = (float) Math.sqrt(n1 * n1 + n2 * n2);
+		  return dist;
+	}
 }

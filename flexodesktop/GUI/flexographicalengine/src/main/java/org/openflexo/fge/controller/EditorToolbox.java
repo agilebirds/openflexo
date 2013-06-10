@@ -19,6 +19,8 @@
  */
 package org.openflexo.fge.controller;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -32,6 +34,7 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.layout.Layout;
+import org.openflexo.fge.layout.ILayout.LayoutStatus;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBLayoutSelector;
@@ -53,7 +56,10 @@ public class EditorToolbox {
 	private FIBShadowStyleSelector shadowStyleSelector;
 	private FIBLayoutSelector layoutSelector;
 	private FIBShapeSelector shapeSelector;
-
+	
+	private Timer timer;
+	private Layout layout;
+	
 	DrawingController<?> controller;
 
 	public EditorToolbox(DrawingController controller) {
@@ -178,8 +184,22 @@ public class EditorToolbox {
 				public void apply() {
 					super.apply();
 					if (selectedGR.size() > 0) {
-						Layout layout = (Layout)getEditedObject();
+						layout = (Layout)getEditedObject();
 						layout.fillLayoutGraph(selectedGR);
+						
+						/*
+						 * This is the control action activated by the apply button of the frame.
+						 * It results to apply the layout algorithm 
+						 */
+						timer = new Timer(0, new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								layout.runLayout();
+			            		if(layout.getStatus().equals(LayoutStatus.COMPLETE)) timer.stop();
+							}
+						});
+						timer.start();
+
 					} else {
 						controller.setCurrentLayout(getEditedObject().clone());
 					}
