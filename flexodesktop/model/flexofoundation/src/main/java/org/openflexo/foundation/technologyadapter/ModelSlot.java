@@ -23,6 +23,7 @@ package org.openflexo.foundation.technologyadapter;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -182,6 +183,8 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	public void setViewPoint(ViewPoint viewPoint) {
 		this.viewPoint = viewPoint;
 	}
+
+	public abstract Type getType();
 
 	public final FlexoResource<M> createProjectSpecificEmptyModel(View view, String filename, String modelUri,
 			FlexoResource<MM> metaModelResource) {

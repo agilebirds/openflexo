@@ -728,7 +728,10 @@ public abstract class EditionScheme extends EditionSchemeObject implements Actio
 		if (getEditionPattern() != null) {
 			bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.THIS, EditionPatternInstanceType
 					.getEditionPatternInstanceType(getEditionPattern())));
-			if (getEditionPattern().getVirtualModel() != null) {
+			if (getEditionPattern().getVirtualModel() instanceof DiagramSpecification) {
+				bindingModel.addToBindingVariables(new BindingVariable(DiagramEditionScheme.DIAGRAM, EditionPatternInstanceType
+						.getEditionPatternInstanceType(getEditionPattern().getVirtualModel())));
+			} else {
 				bindingModel.addToBindingVariables(new BindingVariable(EditionScheme.VIRTUAL_MODEL_INSTANCE, EditionPatternInstanceType
 						.getEditionPatternInstanceType(getEditionPattern().getVirtualModel())));
 			}

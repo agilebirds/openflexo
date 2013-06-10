@@ -1,5 +1,6 @@
 package org.openflexo.technologyadapter.owl;
 
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
@@ -188,7 +189,6 @@ public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntolog
 	public <FR extends FetchRequest<?, ?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
 		return null;
 	}
-	
 
 	@Override
 	public String getURIForObject(ModelSlotInstance msInstance, Object o) {
@@ -196,9 +196,13 @@ public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntolog
 	}
 
 	@Override
-	public Object retrieveObjectWithURI(ModelSlotInstance msInstance,
-			String objectURI) {
+	public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) {
 		return msInstance.getModel().getObject(objectURI);
+	}
+
+	@Override
+	public Type getType() {
+		return OWLOntology.class;
 	}
 
 }

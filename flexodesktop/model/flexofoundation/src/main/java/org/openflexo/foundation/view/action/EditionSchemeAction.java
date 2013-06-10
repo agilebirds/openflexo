@@ -41,6 +41,7 @@ import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -302,6 +303,8 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 		} else if (variable.getVariableName().equals(EditionScheme.THIS)) {
 			return getEditionPatternInstance();
 		} else if (variable.getVariableName().equals(EditionScheme.VIRTUAL_MODEL_INSTANCE)) {
+			return getVirtualModelInstance();
+		} else if (variable.getVariableName().equals(DiagramEditionScheme.DIAGRAM)) {
 			return getVirtualModelInstance();
 		}
 

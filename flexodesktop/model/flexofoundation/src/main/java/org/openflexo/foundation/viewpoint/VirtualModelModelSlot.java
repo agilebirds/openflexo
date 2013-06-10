@@ -21,6 +21,7 @@
 
 package org.openflexo.foundation.viewpoint;
 
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
@@ -150,6 +151,11 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	}
 
 	@Override
+	public Type getType() {
+		return EditionPatternInstanceType.getEditionPatternInstanceType(getAddressedVirtualModel());
+	}
+
+	@Override
 	public String getMetaModelURI() {
 		if (virtualModelResource != null) {
 			return virtualModelResource.getURI();
@@ -183,26 +189,26 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 		return getName().equals(VirtualModel.REFLEXIVE_MODEL_SLOT_NAME) && getVirtualModelResource() == getVirtualModel().getResource();
 	}
 
-	/** 
+	/**
 	 * 
 	 * @param msInstance
 	 * @param o
 	 * @return URI as String
 	 */
-	public String getURIForObject(ModelSlotInstance msInstance, Object o)
-	  {
-	    logger.warning("This method should be refined by child classes");
-	    return null;
-	  }
+	@Override
+	public String getURIForObject(ModelSlotInstance msInstance, Object o) {
+		logger.warning("This method should be refined by child classes");
+		return null;
+	}
 
 	/**
 	 * @param msInstance
 	 * @param objectURI
 	 * @return the Object
 	 */
-	  public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI)
-	  {
+	@Override
+	public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) {
 		logger.warning("This method should be refined by child classes");
-	    return null;
-	  }
+		return null;
+	}
 }

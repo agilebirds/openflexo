@@ -73,6 +73,9 @@ public class AddEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends F
 
 	public VirtualModelInstance getVirtualModelInstance(EditionSchemeAction action) {
 		try {
+			// System.out.println("getVirtualModelInstance() with " + getVirtualModelInstance());
+			// System.out.println("Valid=" + getVirtualModelInstance().isValid() + " " + getVirtualModelInstance().invalidBindingReason());
+			// System.out.println("returned: " + getVirtualModelInstance().getBindingValue(action));
 			return getVirtualModelInstance().getBindingValue(action);
 		} catch (TypeMismatchException e) {
 			e.printStackTrace();
@@ -200,7 +203,7 @@ public class AddEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends F
 
 	@Override
 	public EditionPatternInstance performAction(EditionSchemeAction action) {
-		logger.info("Perform performAddEditionPattern " + action);
+		logger.info("Perform performAddEditionPatternInstance " + action);
 		VirtualModelInstance vmInstance = getVirtualModelInstance(action);
 		logger.info("VirtualModelInstance: " + vmInstance);
 		CreationSchemeAction creationSchemeAction = CreationSchemeAction.actionType.makeNewEmbeddedAction(vmInstance, null, action);
