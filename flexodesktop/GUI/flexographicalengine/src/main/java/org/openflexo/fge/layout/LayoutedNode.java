@@ -7,25 +7,16 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 
 public class LayoutedNode {
 	
-	private double nextX;
-	private double nextY;
-	private double deplacementX;
-	private double deplacementY;
+	// The set of positions a layouted Node can have through the time.
+	private HashMap<Integer,LayoutedNodePosition> positions;
 	
-	private HashMap<Integer,Position> positions;
-	
+	// The represented shape for this layouted node
 	private ShapeGraphicalRepresentation<?> graphicalRepresentation;
 	
-	public int getXForStep(int step){
-		Position position = positions.get(step);
-		return position.getX();
-	}
+	private double deplacementX;
 	
-	public int getYForStep(int step){
-		Position position = positions.get(step);
-		return position.getY();
-	}
-	
+	private double deplacementY;
+
 	public double getDeplacementX() {
 		return deplacementX;
 	}
@@ -41,39 +32,82 @@ public class LayoutedNode {
 	public void setDeplacementY(double deplacementY) {
 		this.deplacementY = deplacementY;
 	}
+
+	/**
+	 * Get the X value at a particular step of the algorithm
+	 * @param step
+	 * @return
+	 */
+	public double getXForStep(int step){
+		LayoutedNodePosition position = positions.get(step);
+		return position.getX();
+	}
 	
-	public LayoutedNode(int deplacement,
+	/**
+	 * Get the Y value at a particular step of the algorithm
+	 * @param step
+	 * @return
+	 */
+	public double getYForStep(int step){
+		LayoutedNodePosition position = positions.get(step);
+		return position.getY();
+	}
+	
+	public LayoutedNode(int numberOfSteps,
 			ShapeGraphicalRepresentation<?> graphicalRepresentation) {
 		super();
 		this.graphicalRepresentation = graphicalRepresentation;
-		positions = new HashMap<Integer,Position>();
+		positions = new HashMap<Integer,LayoutedNodePosition>();
+		
+		
+		// Create the initial position
+		LayoutedNodePosition position = new LayoutedNodePosition();
+		position.setX(graphicalRepresentation.getX());
+		position.setY(graphicalRepresentation.getY());
+		positions.put(0, position);
+		
+		for(int step=1;step<numberOfSteps;step++){
+			createPosition(step, graphicalRepresentation.getX(), graphicalRepresentation.getY());
+		}
+		
+		setDeplacementX(0);
+		setDeplacementY(0);
 	}
 
 	public ShapeGraphicalRepresentation<?> getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
-	
-	public double getCurrentX(){
-		return graphicalRepresentation.getX();
-	}
-	
-	public double getCurrentY(){
-		return graphicalRepresentation.getY();
-	}
 
+	/**
+	 * 
+	 * @param graphicalRepresentation
+	 */
 	public void setGraphicalRepresentation(
 			ShapeGraphicalRepresentation<?> graphicalRepresentation) {
 		this.graphicalRepresentation = graphicalRepresentation;
 	}
 	
-	public void computeNewPosition(){
-		nextX = this.graphicalRepresentation.getX() + deplacementX;
-		nextY = this.graphicalRepresentation.getY() + deplacementY;
+	/**
+	 * Update the postition for a particular step
+	 * @param step
+	 * @param x
+	 * @param y
+	 */
+	public void updatePosition(int step, double x, double y){
+		LayoutedNodePosition position = positions.get(step);
+		position.setX(x);
+		position.setY(y);
+		positions.put(step, position);
 	}
 	
-	public void applyNewPosition(){
-		this.graphicalRepresentation.setX(nextX);
-		this.graphicalRepresentation.setY(nextY);
+	/**
+	 * Create a new position for this node and a particular step. 
+	 */
+	public void createPosition(int step, double x, double y){
+		LayoutedNodePosition position = new LayoutedNodePosition();
+		position.setX(x);
+		position.setY(y);
+		positions.put(step, position);
 	}
 	
 }

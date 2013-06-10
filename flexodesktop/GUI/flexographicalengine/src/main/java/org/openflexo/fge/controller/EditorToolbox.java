@@ -33,8 +33,12 @@ import javax.swing.Timer;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.controller.LayoutToolBar.Animation;
+import org.openflexo.fge.controller.LayoutToolBar.TranslationTransition;
+import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.layout.Layout;
 import org.openflexo.fge.layout.ILayout.LayoutStatus;
+import org.openflexo.fge.layout.LayoutedNode;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBLayoutSelector;
@@ -186,19 +190,32 @@ public class EditorToolbox {
 					if (selectedGR.size() > 0) {
 						layout = (Layout)getEditedObject();
 						layout.fillLayoutGraph(selectedGR);
+						layout.runLayout();
+						
+						List<TranslationTransition> tts = new ArrayList<EditorToolbox.TranslationTransition>();
+						
+						//for(int step = 0;step<layout.getStepNumber();step++){
+							for (LayoutedNode node : layout.getLayoutedGraph().getNodes()) {
+								ShapeGraphicalRepresentation<Object> gr = (ShapeGraphicalRepresentation<Object>) node.getGraphicalRepresentation() ;
+								tts.add(new TranslationTransition(gr, gr.getLocation(), new FGEPoint(node.getXForStep(layout.getStepNumber()-1), node.getYForStep(layout.getStepNumber()-1))));
+							}	
+						//}
+
+						performTransitions(tts);
+						
 						
 						/*
 						 * This is the control action activated by the apply button of the frame.
 						 * It results to apply the layout algorithm 
 						 */
-						timer = new Timer(0, new ActionListener() {
+						/*timer = new Timer(1, new ActionListener() {
 							@Override
 							public void actionPerformed(ActionEvent e) {
-								layout.runLayout();
+								layout.applyLayout();
 			            		if(layout.getStatus().equals(LayoutStatus.COMPLETE)) timer.stop();
 							}
 						});
-						timer.start();
+						timer.start();*/
 
 					} else {
 						controller.setCurrentLayout(getEditedObject().clone());
@@ -275,5 +292,59 @@ public class EditorToolbox {
 
 	public List<GraphicalRepresentation> getSelectedGR() {
 		return selectedGR;
+	}
+	
+	public class TranslationTransition {
+		private ShapeGraphicalRepresentation gr;
+		private FGEPoint oldLocation;
+		private FGEPoint newLocation;
+
+		public TranslationTransition(ShapeGraphicalRepresentation gr, FGEPoint oldLocation, FGEPoint newLocation) {
+			super();
+			this.gr = gr;
+			this.oldLocation = oldLocation;
+			this.newLocation = newLocation;
+		}
+
+		public void performStep(int step, int totalSteps) {
+			System.out.println("Computing ");
+			gr.setLocation(new FGEPoint(oldLocation.x - (oldLocation.x - newLocation.x) * step / totalSteps, oldLocation.y
+					- (oldLocation.y - newLocation.y) * step / totalSteps));
+		}
+	}
+
+	public class Animation {
+		private int currentStep = 0;
+		private int steps;
+		private List<TranslationTransition> transitions;
+		private Timer timer;
+
+		public Animation(List<TranslationTransition> transitions, int steps) {
+			super();
+			this.currentStep = 0;
+			this.steps = steps;
+			this.transitions = transitions;
+		}
+
+		public void performAnimation() {
+			currentStep = 0;
+			timer = new Timer(0, new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					for (final TranslationTransition tt : transitions) {
+						tt.performStep(currentStep, steps);
+					}
+					currentStep++;
+					if (currentStep > steps) {
+						timer.stop();
+					}
+				}
+			});
+			timer.start();
+		}
+	}
+
+	public void performTransitions(final List<TranslationTransition> transitions) {
+		new Animation(transitions, 50).performAnimation();
 	}
 }

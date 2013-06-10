@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.layout.ILayout.LayoutStatus;
 import org.openflexo.kvc.KVCObject;
 import org.openflexo.xmlcode.XMLSerializable;
 
@@ -16,26 +17,20 @@ public abstract class Layout extends KVCObject implements XMLSerializable, Clone
 	private static final Logger logger = Logger.getLogger(Layout.class.getPackage().getName());
 	
 	// Size of the area to perform the layout
-	private int area = 300;
+	private int area = 200;
 	
-	private int stepNumber;
+	private int stepNumber = 100;
 	
 	private int nodesNumber;
 	
 	private Layout layout;
 
-	public Layout getLayout() {
-		return layout;
-	}
-
-	public void setLayout(Layout layout) {
-		this.layout = layout;
-	}
-
 	// The graphical representation that maintain this layout
 	private GraphicalRepresentation<?> graphicalRp; 
 	
 	private LayoutedGraph layoutedGraph;
+
+	private LayoutStatus layoutStatus;
 	
 	// Return the type of the layout
 	public abstract LayoutType getLayoutType();
@@ -56,15 +51,6 @@ public abstract class Layout extends KVCObject implements XMLSerializable, Clone
 		}
 	}
 	
-	public LayoutedGraph getLayoutedGraph() {
-		return layoutedGraph;
-	}
-
-	public void setLayoutedGraph(LayoutedGraph layoutedGraph) {
-		this.layoutedGraph = layoutedGraph;
-	}
-
-	
 	public Layout(){
 		layoutedGraph = new LayoutedGraph(new ArrayList<LayoutedNode>(),new ArrayList<LayoutedEdge>());
 	}
@@ -78,6 +64,7 @@ public abstract class Layout extends KVCObject implements XMLSerializable, Clone
 		this.graphicalRp = graphicalRp;
 		layoutedGraph = new LayoutedGraph(new ArrayList<LayoutedNode>(),new ArrayList<LayoutedEdge>());
 		if(this.graphicalRp!=null)setNodesNumber(graphicalRp.getContainedGraphicalRepresentations().size()) ;
+		layoutStatus=LayoutStatus.PROGRESS;
 	}
 
 	
@@ -88,9 +75,9 @@ public abstract class Layout extends KVCObject implements XMLSerializable, Clone
 	public void fillLayoutGraph(LayoutedGraph g) {
 		for(GraphicalRepresentation<?> subGraphicalRp : this.graphicalRp.getOrderedContainedGraphicalRepresentations()){
 			if(subGraphicalRp instanceof ShapeGraphicalRepresentation){
-				LayoutedNode n = new LayoutedNode(0,(ShapeGraphicalRepresentation<?>)subGraphicalRp);
-				n.setDeplacementX(0);
-				n.setDeplacementY(0);
+				LayoutedNode n = new LayoutedNode(stepNumber,(ShapeGraphicalRepresentation<?>)subGraphicalRp);
+				//n.setDeplacementX(0);
+				//n.setDeplacementY(0);
 				g.getNodes().add(n);
 			}
 			else{
@@ -100,16 +87,23 @@ public abstract class Layout extends KVCObject implements XMLSerializable, Clone
 		}
 	}
 	
+	public int getStepNumber() {
+		return stepNumber;
+	}
+
+	public void setStepNumber(int stepNumber) {
+		this.stepNumber = stepNumber;
+	}
+
 	/**
 	 * Create a graph with layouted elements
 	 * @param g
 	 */
 	public void fillLayoutGraph(List<GraphicalRepresentation> grs) {
+		layoutedGraph.getNodes().clear();
 		for(GraphicalRepresentation<?> subGraphicalRp : grs){
 			if(subGraphicalRp instanceof ShapeGraphicalRepresentation){
-				LayoutedNode n = new LayoutedNode(0,(ShapeGraphicalRepresentation<?>)subGraphicalRp);
-				n.setDeplacementX(0);
-				n.setDeplacementY(0);
+				LayoutedNode n = new LayoutedNode(stepNumber,(ShapeGraphicalRepresentation<?>)subGraphicalRp);
 				layoutedGraph.getNodes().add(n);
 			}
 			else{
@@ -146,15 +140,14 @@ public abstract class Layout extends KVCObject implements XMLSerializable, Clone
 	 * @param layoutedGraph
 	 * @param steps
 	 */
-	public void applyLayout(LayoutedGraph layoutedGraph, int steps){
-		for(int i=0;i<steps;i++){
+	public void applyLayout(){
+		for(int i=0;i<getStepNumber();i++){
 			for (LayoutedNode n : layoutedGraph.getNodes()) {
-				if(n.move){
-					 n.getGraphicalRepresentation().setX(n.getXForStep(step));
-				     n.getGraphicalRepresentation().setY(n.getYForStep(step));
-				}    
+				n.getGraphicalRepresentation().setX(n.getXForStep(i));
+				n.getGraphicalRepresentation().setY(n.getYForStep(i));
 			}
 		}
+		layoutStatus=LayoutStatus.COMPLETE;
 	}
 
 	public int getArea() {
@@ -177,4 +170,28 @@ public abstract class Layout extends KVCObject implements XMLSerializable, Clone
 		  float dist = (float) Math.sqrt(n1 * n1 + n2 * n2);
 		  return dist;
 	}
+	
+	public Layout getLayout() {
+		return layout;
+	}
+	
+
+	@Override
+	public LayoutStatus getStatus() {
+		// TODO Auto-generated method stub
+		return layoutStatus;
+	}
+
+	public void setLayout(Layout layout) {
+		this.layout = layout;
+	}
+
+	public LayoutedGraph getLayoutedGraph() {
+		return layoutedGraph;
+	}
+
+	public void setLayoutedGraph(LayoutedGraph layoutedGraph) {
+		this.layoutedGraph = layoutedGraph;
+	}
+
 }
