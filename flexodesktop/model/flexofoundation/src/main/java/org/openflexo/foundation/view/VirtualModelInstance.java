@@ -202,14 +202,19 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	 * @return
 	 */
 	protected EditionPatternInstance registerEditionPatternInstance(EditionPatternInstance epi) {
-		Map<Long, EditionPatternInstance> hash = editionPatternInstances.get(epi.getEditionPattern());
-		if (hash == null) {
-			hash = new Hashtable<Long, EditionPatternInstance>();
-			editionPatternInstances.put(epi.getEditionPattern(), hash);
+		if (epi.getEditionPattern() == null) {
+			logger.warning("Could not register EditionPatternInstance with null EditionPattern: " + epi);
+			logger.warning("EPI: " + epi.debug());
+		} else {
+			Map<Long, EditionPatternInstance> hash = editionPatternInstances.get(epi.getEditionPattern());
+			if (hash == null) {
+				hash = new Hashtable<Long, EditionPatternInstance>();
+				editionPatternInstances.put(epi.getEditionPattern(), hash);
+			}
+			hash.put(epi.getFlexoID(), epi);
+			// System.out.println("Registered EPI " + epi + " in " + epi.getEditionPattern());
+			// System.out.println("Registered: " + getEPInstances(epi.getEditionPattern()));
 		}
-		hash.put(epi.getFlexoID(), epi);
-		// System.out.println("Registered EPI " + epi + " in " + epi.getEditionPattern());
-		// System.out.println("Registered: " + getEPInstances(epi.getEditionPattern()));
 		return epi;
 	}
 

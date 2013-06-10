@@ -169,7 +169,7 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 
 	public String debug() {
 		StringBuffer sb = new StringBuffer();
-		sb.append("EditionPattern: " + editionPattern.getName() + "\n");
+		sb.append("EditionPattern: " + (editionPattern != null ? editionPattern.getName() : getEditionPatternURI() + "[NOT_FOUND]") + "\n");
 		sb.append("Instance: " + getFlexoID() + " hash=" + Integer.toHexString(hashCode()) + "\n");
 		for (PatternRole<?> patternRole : actors.keySet()) {
 			FlexoModelObject object = actors.get(patternRole);
@@ -564,8 +564,8 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + ":" + getEditionPattern().getName() + "_" + (getName() != null ? getName() : getFlexoID())
-				+ (hasValidRenderer() ? " [" + getStringRepresentation() + "]" : "");
+		return getClass().getSimpleName() + ":" + (getEditionPattern() != null ? getEditionPattern().getName() : "null") + "_"
+				+ (getName() != null ? getName() : getFlexoID()) + (hasValidRenderer() ? " [" + getStringRepresentation() + "]" : "");
 	}
 
 }
