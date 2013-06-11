@@ -27,7 +27,6 @@ import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
-import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
@@ -59,8 +58,9 @@ public abstract class SelectIndividual<M extends FlexoModel<M, MM>, MM extends F
 		if (getAssignation().isSet()) {
 			out.append(getAssignation().toString() + " = (", context);
 		}
-		out.append(getClass().getSimpleName() + (getModelSlot() != null ? " from " + getModelSlot().getName() : " ") + " as "
-				+ getType().getName() + (getConditions().size() > 0 ? " " + getWhereClausesFMLRepresentation(context) : ""), context);
+		out.append(getClass().getSimpleName() + (getModelSlot() != null ? " from " + getModelSlot().getName() : " ")
+				+ (getType() != null ? " as " + getType().getName() : "")
+				+ (getConditions().size() > 0 ? " " + getWhereClausesFMLRepresentation(context) : ""), context);
 		if (getAssignation().isSet()) {
 			out.append(")", context);
 		}
@@ -85,9 +85,8 @@ public abstract class SelectIndividual<M extends FlexoModel<M, MM>, MM extends F
 		return null;
 	}
 
-	public void setType(EditionSchemeAction action, IFlexoOntologyClass ontologyClass) {
+	public void setType(IFlexoOntologyClass ontologyClass) {
 		if (ontologyClass != null) {
-			
 			typeURI = ontologyClass.getURI();
 		} else {
 			typeURI = null;
