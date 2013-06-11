@@ -84,11 +84,13 @@ public class ResourceCenterEditor implements HasPropertyChangeSupport {
 	}
 
 	public void refreshResourceCenter(FlexoResourceCenter rc) {
-		System.out.println("Refresh resource center " + rc);
-		try {
-			rc.update();
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (rc != null) {
+			System.out.println("Refresh resource center " + rc);
+			try {
+				rc.update();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
