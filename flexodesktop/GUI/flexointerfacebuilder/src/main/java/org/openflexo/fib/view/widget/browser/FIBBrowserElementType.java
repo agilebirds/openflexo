@@ -175,7 +175,7 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 			try {
 				return browserElementDefinition.getLabel().getBindingValue(this);
 			} catch (TypeMismatchException e) {
-				//System.out.println("While evaluating " + browserElementDefinition.getLabel());
+				// System.out.println("While evaluating " + browserElementDefinition.getLabel());
 				e.printStackTrace();
 			} catch (NullReferenceException e) {
 				e.printStackTrace();
@@ -393,6 +393,10 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 			List<?> list = ToolBox.getListFromIterable(bindingValue);
 			if (list != null && children.getCast().isSet()) {
 				list = Lists.transform(list, new CastFunction(children));
+			}
+			// Remove all occurences of null (caused by cast)
+			while (list.contains(null)) {
+				list.remove(null);
 			}
 			return list;
 		} else {
