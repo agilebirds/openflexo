@@ -41,7 +41,8 @@ public class InformationSpace extends FlexoServiceImpl {
 	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
 		if (notification instanceof ResourceCenterAdded) {
 			setChanged();
-			notifyObservers(new DataModification(null, ((ResourceCenterAdded) notification).getAddedResourceCenter()));
+			notifyObservers(new DataModification("getAllModelRepositories(TechnologyAdapter<?,?>)",
+					((ResourceCenterAdded) notification).getAddedResourceCenter()));
 		}
 		if (notification instanceof ResourceCenterRemoved) {
 			setChanged();
