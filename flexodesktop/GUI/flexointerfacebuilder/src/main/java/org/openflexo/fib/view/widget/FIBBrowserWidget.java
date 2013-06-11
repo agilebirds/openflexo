@@ -572,21 +572,25 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 
 		if (e.getNewLeadSelectionPath() == null || e.getNewLeadSelectionPath().getLastPathComponent() == null) {
 			selectedObject = null;
-		} else {
+		} else if (e.getNewLeadSelectionPath().getLastPathComponent() instanceof BrowserCell) {
 			selectedObject = ((BrowserCell) e.getNewLeadSelectionPath().getLastPathComponent()).getRepresentedObject();
-		}
-		for (TreePath tp : e.getPaths()) {
-			Object obj = ((BrowserCell) tp.getLastPathComponent()).getRepresentedObject();
-			if (obj != null
-					&& (getBrowser().getIteratorClass() == null || getBrowser().getIteratorClass().isAssignableFrom(obj.getClass()))) {
-				if (e.isAddedPath(tp)) {
-					if (!selection.contains(obj)) {
-						selection.add(obj);
+			for (TreePath tp : e.getPaths()) {
+				if (tp.getLastPathComponent() instanceof BrowserCell) {
+					Object obj = ((BrowserCell) tp.getLastPathComponent()).getRepresentedObject();
+					if (obj != null
+							&& (getBrowser().getIteratorClass() == null || getBrowser().getIteratorClass().isAssignableFrom(obj.getClass()))) {
+						if (e.isAddedPath(tp)) {
+							if (!selection.contains(obj)) {
+								selection.add(obj);
+							}
+						} else {
+							selection.remove(obj);
+						}
 					}
-				} else {
-					selection.remove(obj);
 				}
 			}
+		} else {
+			selectedObject = null;
 		}
 
 		// logger.info("BrowserModel, selected object is now "+selectedObject);
