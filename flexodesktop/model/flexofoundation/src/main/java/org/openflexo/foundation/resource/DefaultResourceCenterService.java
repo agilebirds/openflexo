@@ -21,12 +21,6 @@ import org.openflexo.toolbox.FileUtils;
  */
 public abstract class DefaultResourceCenterService extends FlexoServiceImpl implements FlexoResourceCenterService {
 
-	@Override
-	public void initialize() {
-		// TODO Auto-generated method stub
-
-	}
-
 	private UserResourceCenter userResourceCenter;
 
 	/**
@@ -197,6 +191,26 @@ public abstract class DefaultResourceCenterService extends FlexoServiceImpl impl
 	 * 
 	 */
 	public class ResourceCenterListShouldBeStored implements ServiceNotification {
+	}
+
+	@Override
+	public void initialize() {
+		if (getResourceCenters().size() <= 1) {
+			if (getServiceManager() != null) {
+				System.out.println("Trying to install default packaged resource center");
+				getServiceManager().notify(this, new DefaultPackageResourceCenterIsNotInstalled());
+			}
+		}
+
+	}
+
+	/**
+	 * Notification of a new ResourceCenter added to the list of referenced resource centers
+	 * 
+	 * @author sylvain
+	 * 
+	 */
+	public class DefaultPackageResourceCenterIsNotInstalled implements ServiceNotification {
 	}
 
 	@Override

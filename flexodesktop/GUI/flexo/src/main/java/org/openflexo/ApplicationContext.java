@@ -10,6 +10,7 @@ import org.openflexo.foundation.FlexoEditor.FlexoEditorFactory;
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoService.ServiceNotification;
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
+import org.openflexo.foundation.resource.DefaultResourceCenterService.DefaultPackageResourceCenterIsNotInstalled;
 import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterListShouldBeStored;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
@@ -95,8 +96,15 @@ public abstract class ApplicationContext extends DefaultFlexoServiceManager impl
 					rcList.add(((DirectoryResourceCenter) rc).getDirectory());
 				}
 			}
-			System.out.println("OK, we save it: " + rcList);
 			GeneralPreferences.saveDirectoryResourceCenterList(rcList);
+		} else if (notification instanceof DefaultPackageResourceCenterIsNotInstalled && caller instanceof FlexoResourceCenterService) {
+			defaultPackagedResourceCenterIsNotInstalled = true;
 		}
+	}
+
+	private boolean defaultPackagedResourceCenterIsNotInstalled;
+
+	public boolean defaultPackagedResourceCenterIsToBeInstalled() {
+		return defaultPackagedResourceCenterIsNotInstalled;
 	}
 }

@@ -124,6 +124,9 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 	 */
 	public boolean updateRootObject(Object root) {
 		if (root == null) {
+			// TODO: check this
+			logger.warning("Not implemented: please check this");
+			setRoot(null);
 			return false;
 		}
 
@@ -136,6 +139,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 			}
 			logger.fine("updateRootObject() with " + root + " rootCell=" + rootCell);
 			setRoot(rootCell);
+			// rootCell.loadChildren(this, null);
 
 			return true;
 		}

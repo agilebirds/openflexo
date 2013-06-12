@@ -162,6 +162,12 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 		}
 
 		boolean returned = getBrowserModel().updateRootObject(getRootValue());
+		if (returned)
+			try {
+				_tree.fireTreeWillExpand(new TreePath(_tree.getModel().getRoot()));
+			} catch (ExpandVetoException e1) {
+				e1.printStackTrace();
+			}
 		/*if (!getBrowser().getRootVisible() && ((BrowserCell) getBrowserModel().getRoot()).getChildCount() == 1) {
 			// Only one cell and roots are hidden, expand this first cell
 			SwingUtilities.invokeLater(new Runnable() {
