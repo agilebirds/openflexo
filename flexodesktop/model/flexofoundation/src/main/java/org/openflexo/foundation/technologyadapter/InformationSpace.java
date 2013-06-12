@@ -41,8 +41,7 @@ public class InformationSpace extends FlexoServiceImpl {
 	public void receiveNotification(FlexoService caller, ServiceNotification notification) {
 		if (notification instanceof ResourceCenterAdded) {
 			setChanged();
-			notifyObservers(new DataModification("getAllModelRepositories(TechnologyAdapter<?,?>)",
-					((ResourceCenterAdded) notification).getAddedResourceCenter()));
+			notifyObservers(new DataModification(null, ((ResourceCenterAdded) notification).getAddedResourceCenter()));
 		}
 		if (notification instanceof ResourceCenterRemoved) {
 			setChanged();
@@ -59,7 +58,9 @@ public class InformationSpace extends FlexoServiceImpl {
 	 * @return
 	 */
 	public List<ModelRepository<?, ?, ?, ?>> getAllModelRepositories(TechnologyAdapter<?, ?> technologyAdapter) {
+		// System.out.println("getAllModelRepositories() ???");
 		if (getServiceManager() != null) {
+			// System.out.println("return " + getServiceManager().getTechnologyAdapterService().getAllModelRepositories(technologyAdapter));
 			return getServiceManager().getTechnologyAdapterService().getAllModelRepositories(technologyAdapter);
 		}
 		return null;
@@ -73,7 +74,10 @@ public class InformationSpace extends FlexoServiceImpl {
 	 * @return
 	 */
 	public List<MetaModelRepository<?, ?, ?, ?>> getAllMetaModelRepositories(TechnologyAdapter<?, ?> technologyAdapter) {
+		// logger.info("getAllMetaModelRepositories() ???");
 		if (getServiceManager() != null) {
+			// System.out .println("return " +
+			// getServiceManager().getTechnologyAdapterService().getAllMetaModelRepositories(technologyAdapter));
 			return getServiceManager().getTechnologyAdapterService().getAllMetaModelRepositories(technologyAdapter);
 		}
 		return null;
