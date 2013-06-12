@@ -391,9 +391,9 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 				e.printStackTrace();
 			}
 			List<?> list = ToolBox.getListFromIterable(bindingValue);
-			List returned = list;
 			if (list != null && children.getCast().isSet()) {
 				list = Lists.transform(list, new CastFunction(children));
+				List returned = list;
 				// Remove all occurences of null (caused by cast)
 				/*while (list.contains(null)) {
 					list.remove(null);
@@ -409,8 +409,9 @@ public class FIBBrowserElementType implements BindingEvaluationContext, Observer
 						}
 					}
 				}
+				return returned;
 			}
-			return returned;
+			return list;
 		} else {
 			return null;
 		}
