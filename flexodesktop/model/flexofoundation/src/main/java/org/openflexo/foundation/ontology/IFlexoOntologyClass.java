@@ -60,15 +60,6 @@ public interface IFlexoOntologyClass extends IFlexoOntologyConcept {
 	boolean isSuperClassOf(IFlexoOntologyClass aClass);
 
 	/**
-	 * Is this a Super Concept of anObject.
-	 * 
-	 * 
-	 * @return
-	 */
-	@Override
-	boolean isSuperConceptOf(IFlexoOntologyConcept aConcept);
-
-	/**
 	 * Return flag indicating if this class is a named class (that may happen in some technologies)
 	 * 
 	 * @return

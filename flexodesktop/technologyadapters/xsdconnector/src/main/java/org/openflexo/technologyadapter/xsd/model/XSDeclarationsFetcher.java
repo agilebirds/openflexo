@@ -46,6 +46,7 @@ import com.sun.xml.xsom.XSParticle;
 import com.sun.xml.xsom.XSSchema;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.XSSimpleType;
+import com.sun.xml.xsom.XSType;
 import com.sun.xml.xsom.XSWildcard;
 import com.sun.xml.xsom.XSXPath;
 import com.sun.xml.xsom.visitor.XSVisitor;
@@ -99,9 +100,18 @@ public class XSDeclarationsFetcher implements XSVisitor {
 		return null;
 	}
 
-	public String getOwnerUri(String uri) {
+	public String getOwnerURI(String uri) {
 		XSDeclaration declaration = getDeclaration(uri);
 		XSDeclaration declOwner = getOwner(declaration);
+		if (declOwner instanceof XSElementDecl ){
+			XSType xsType = ((XSElementDecl) declOwner).getType();
+			if (xsType.getName() != null ){
+				return this.getUri(xsType);
+			}
+			else {
+				return this.getUri(declOwner);
+			}
+		}
 		if (declOwner != null) {
 			return getUri(declOwner);
 		}
@@ -209,6 +219,8 @@ public class XSDeclarationsFetcher implements XSVisitor {
 
 	@Override
 	public void complexType(XSComplexType complexType) {
+
+		
 		if (complexType.isGlobal()) {
 			if (register(complexType) == false) {
 				return;
@@ -231,7 +243,7 @@ public class XSDeclarationsFetcher implements XSVisitor {
 			attributeUse(attributeUse);
 		}
 	}
-	
+
 	private void attContainer(XSElementDecl attContainer) {
 		XSComplexType xst = (XSComplexType) attContainer.getType();
 		for (XSAttributeUse attributeUse : xst.getDeclaredAttributeUses()) {
@@ -310,7 +322,7 @@ public class XSDeclarationsFetcher implements XSVisitor {
 		if (elementDecl.getType().isLocal()) {
 			logger.info("XML DEBUG CG: there is a local type here? " + elementDecl.getName());
 			// TODO If it's global it has already been visited, make sure.
-			elementDecl.getType().visit(this);
+			elementDecl.getType().visit(this);			
 		}
 		else if (elementDecl.getType().isComplexType()){
 			attContainer(elementDecl);

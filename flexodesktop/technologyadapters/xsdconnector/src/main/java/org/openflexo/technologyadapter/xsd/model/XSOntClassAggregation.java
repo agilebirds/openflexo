@@ -26,37 +26,44 @@ import org.openflexo.toolbox.StringUtils;
 
 import com.sun.xml.xsom.XSAttributeUse;
 
-public class XSOntAttributeRestriction extends XSOntRestriction {
+public class XSOntClassAggregation extends XSOntFeatureAssociation{
 
-	private final XSOntDataProperty attributeProperty;
-	private final XSAttributeUse attributeUse;
 
-	protected XSOntAttributeRestriction(XSOntology ontology, XSOntClass domainClass, XSAttributeUse attributeUse,
-			XSDTechnologyAdapter adapter) {
+	private final XSOntObjectProperty objectProperty;
+	
+	protected XSOntClassAggregation(XSOntology ontology,
+			XSOntClass domainClass, XSDTechnologyAdapter adapter) {
 		super(ontology, domainClass, adapter);
-		String propertyURI = ontology.getFetcher().getUri(attributeUse.getDecl());
-		this.attributeProperty = ontology.getDataProperty(propertyURI);
-		this.attributeProperty.addToReferencingRestriction(this);
-		this.attributeUse = attributeUse;
-		this.setName(attributeUse.getDecl().getName());
+		objectProperty = null; 
 	}
 
+
+	protected XSOntClassAggregation(XSOntology ontology, XSOntClass domainClass, XSAttributeUse attributeUse,
+			XSDTechnologyAdapter adapter) {
+		super(ontology,domainClass,adapter);
+		String propertyURI = ontology.getFetcher().getUri(attributeUse.getDecl());
+		this.objectProperty = ontology.getObjectProperty(propertyURI);
+	}
+
+	protected XSOntClassAggregation(XSOntology ontology, XSOntClass domainClass, XSOntObjectProperty property, XSDTechnologyAdapter adapter) {
+		super(ontology,domainClass,adapter);
+		this.objectProperty = property;
+	}
+
+	
 	@Override
-	public XSOntDataProperty getProperty() {
+	public XSOntObjectProperty getProperty() {
 		return getAttributeProperty();
 	}
 
 	@Override
 	public boolean isAttributeRestriction() {
-		return true;
+		return false;
 	}
 
-	public XSAttributeUse getAttributeUse() {
-		return attributeUse;
-	}
 
-	public XSOntDataProperty getAttributeProperty() {
-		return attributeProperty;
+	public XSOntObjectProperty getAttributeProperty() {
+		return objectProperty;
 	}
 
 	public boolean hasDefaultValue() {
@@ -64,9 +71,6 @@ public class XSOntAttributeRestriction extends XSOntRestriction {
 	}
 
 	public String getDefaultValue() {
-		if (attributeUse.getDefaultValue() != null) {
-			return attributeUse.getDefaultValue().toString();
-		}
 		return null;
 	}
 
@@ -75,21 +79,17 @@ public class XSOntAttributeRestriction extends XSOntRestriction {
 	}
 
 	public String getFixedValue() {
-		if (attributeUse.getFixedValue() != null) {
-			return attributeUse.getFixedValue().toString();
-		}
 		return null;
 	}
 
 	public boolean isRequired() {
-		return attributeUse.isRequired();
+		return false;
 	}
 
 	@Override
 	public String getDisplayableDescription() {
-		StringBuffer buffer = new StringBuffer("Attribute ");
-		buffer.append(attributeUse.getDecl().getName());
-		buffer.append(" (").append(attributeProperty.getRange().toString()).append(") is ");
+		StringBuffer buffer = new StringBuffer("InnerElement ");
+		buffer.append(" (").append(objectProperty.getRange().toString()).append(") is ");
 		if (isRequired()) {
 			buffer.append("required");
 		} else {
@@ -105,8 +105,8 @@ public class XSOntAttributeRestriction extends XSOntRestriction {
 	}
 
 	@Override
-	public XSOntDataProperty getFeature() {
-		return attributeProperty;
+	public XSOntObjectProperty getFeature() {
+		return objectProperty;
 	}
 
 	@Override

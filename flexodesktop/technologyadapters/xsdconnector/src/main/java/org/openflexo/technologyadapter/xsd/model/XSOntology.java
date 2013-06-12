@@ -1,5 +1,6 @@
 /*
- * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2010-2012 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -44,13 +45,10 @@ import org.openflexo.foundation.ontology.W3URIDefinitions;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.w3c.dom.Document;
 
-import com.sun.xml.xsom.XSAttGroupDecl;
 import com.sun.xml.xsom.XSAttributeDecl;
-import com.sun.xml.xsom.XSAttributeUse;
 import com.sun.xml.xsom.XSComplexType;
 import com.sun.xml.xsom.XSDeclaration;
 import com.sun.xml.xsom.XSElementDecl;
-import com.sun.xml.xsom.XSModelGroupDecl;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.XSSimpleType;
 
@@ -135,14 +133,10 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 
 	private static boolean mapsToClass(XSElementDecl element) {
 		if (element.getType().isComplexType()) {
-			logger.info("CG DEBUG XML : this element maps to a class : " + element.getName());
 			return true;
 		} else {
-
-			logger.info("CG DEBUG XML : this element does no map to a class : " + element.getName());
 			return false;
 		}
-		// TODO check if there's a need to check for attribute if SimpleType.
 	}
 
 	private XSOntClass loadClass(XSDeclaration declaration) {
@@ -158,32 +152,25 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		classes.clear();
 		thingClass = new XSOntClass(this, "Thing", XS_THING_URI, getTechnologyAdapter());
 		addClass(thingClass);
-		/*
-		 * Ne semble pas nécessaire étant donné qu'on ne peut pas créer des choses de ce type
-				for (XSComplexType complexType : fetcher.getComplexTypes()) {
-					XSOntClass xsClass = loadClass(complexType);
-					xsClass.addToSuperClasses(getRootConcept());
-				}
-			*/
 
+
+		for (XSComplexType complexType : fetcher.getComplexTypes()) {
+				XSOntClass xsClass = loadClass(complexType);
+				xsClass.addToSuperClasses(getRootConcept());
+		}
+		
 		for (XSElementDecl element : fetcher.getElementDecls()) {
 			if (mapsToClass(element)) {
 				XSOntClass xsClass = loadClass(element);
 				try {
-					/* XSOntClass superClass = classes.get(fetcher.getUri(element.getType())); */
-					xsClass.addToSuperClasses(getRootConcept());
+					XSOntClass superClass = classes.get(fetcher.getUri(element.getType()));
+					/* TODO : yet does this have a sense for XML? */
+					// xsClass.addToSuperClasses(getRootConcept());
+					xsClass.addToSuperClasses(superClass);
 				} catch (Exception e) {
-
+					logger.info("XSOntology: unable to set superclass for "+ element.getName());
 				}
 			}
-		}
-		for (XSAttGroupDecl attGroup : fetcher.getAttGroupDecls()) {
-			XSOntClass xsClass = loadClass(attGroup);
-			xsClass.addToSuperClasses(getRootConcept());
-		}
-		for (XSModelGroupDecl modelGroup : fetcher.getModelGroupDecls()) {
-			XSOntClass xsClass = loadClass(modelGroup);
-			xsClass.addToSuperClasses(getRootConcept());
 		}
 	}
 
@@ -197,7 +184,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	}
 
 	private void addDomainIfPossible(XSOntProperty property, String conceptUri) {
-		String ownerUri = fetcher.getOwnerUri(conceptUri);
+		String ownerUri = fetcher.getOwnerURI(conceptUri);
 		if (ownerUri != null) {
 			XSOntClass owner = getClass(ownerUri);
 			if (owner != null) {
@@ -207,7 +194,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		}
 	}
 
-	private XSOntDataProperty loadDataProperty(XSDeclaration declaration) {
+	private XSOntDataProperty createDataProperty(XSDeclaration declaration) {
 		String name = declaration.getName();
 		String uri = fetcher.getUri(declaration);
 		XSOntDataProperty xsDataProperty = new XSOntDataProperty(this, name, uri, getTechnologyAdapter());
@@ -218,91 +205,58 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 
 	private void loadDataProperties() {
 		dataProperties.clear();
+		/*
 		for (XSSimpleType simpleType : fetcher.getSimpleTypes()) {
 			XSOntDataProperty xsDataProperty = loadDataProperty(simpleType);
 			xsDataProperty.setDataType(computeDataType(simpleType));
 		}
+		 */
+/*S
+		for (XSComplexType complexType : fetcher.getComplexTypes()) {
+			if (complexType.isLocal()){
+				// TODO Manage Local Types
+				XSElementDecl ownerElem = complexType.getScope();
+				XSOntClass xsClass = loadClass(ownerElem);
+				xsClass.addToSuperClasses(getRootConcept());
+			}
+		}
+*/
+
 		for (XSElementDecl element : fetcher.getElementDecls()) {
-			logger.info("CG XML DEBUG load Data Properties for : " + element.getName());
 			if (mapsToClass(element) == false) {
-				XSOntDataProperty xsDataProperty = loadDataProperty(element);
+				XSOntDataProperty xsDataProperty = createDataProperty(element);
 				xsDataProperty.setDataType(computeDataType(element.getType().asSimpleType()));
 			}
 		}
+
 		for (XSAttributeDecl attribute : fetcher.getAttributeDecls()) {
-			XSOntDataProperty xsDataProperty = loadDataProperty(attribute);
+			XSOntDataProperty xsDataProperty = createDataProperty(attribute);
 			xsDataProperty.setIsFromAttribute(true);
 			xsDataProperty.setDataType(computeDataType(attribute.getType()));
 		}
+
 	}
 
-	private XSOntObjectProperty loadPrefixedProperty(XSDeclaration declaration, XSOntObjectProperty parent) {
-		String prefix = parent.getName();
-		String name = prefix + declaration.getName();
+	private XSOntObjectProperty createProperty(XSDeclaration declaration) {
+		String name = declaration.getName();
 		String uri = fetcher.getNamespace(declaration) + "#" + name;
 		XSOntObjectProperty property = new XSOntObjectProperty(this, name, uri, getTechnologyAdapter());
-		property.addSuperProperty(parent);
 		objectProperties.put(property.getURI(), property);
 		return property;
 	}
 
 	private void loadObjectProperties() {
-		objectProperties.clear();
-		XSOntObjectProperty hasChild = new XSOntObjectProperty(this, XS_HASCHILD_PROPERTY_NAME, getTechnologyAdapter());
-		objectProperties.put(hasChild.getURI(), hasChild);
-		XSOntObjectProperty hasParent = new XSOntObjectProperty(this, XS_HASPARENT_PROPERTY_NAME, getTechnologyAdapter());
-		objectProperties.put(hasParent.getURI(), hasParent);
-
-		for (XSElementDecl element : fetcher.getElementDecls()) {
-			if (mapsToClass(element)) {
-				String uri = fetcher.getUri(element);
-				XSOntClass ontClass = getClass(uri);
-				ontClass.addPropertyTakingMyselfAsRange(hasChild);
-				ontClass.addPropertyTakingMyselfAsDomain(hasChild);
-				ontClass.addPropertyTakingMyselfAsRange(hasParent);
-				ontClass.addPropertyTakingMyselfAsDomain(hasParent);
-			}
-		}
-
-		for (XSComplexType complexType : fetcher.getComplexTypes()) {
-			XSOntClass c = getClass(fetcher.getUri(complexType));
-			if (c != null) {
-				XSOntObjectProperty cHasChild = loadPrefixedProperty(complexType, hasChild);
-				cHasChild.newRangeFound(c);
-				addDomainIfPossible(cHasChild, c.getURI());
-				XSOntObjectProperty cHasParent = loadPrefixedProperty(complexType, hasParent);
-				cHasParent.newRangeFound(c);
-				addDomainIfPossible(cHasParent, c.getURI());
-			}
-		}
+		objectProperties.clear();	
 
 		for (XSElementDecl element : fetcher.getElementDecls()) {
 			if (mapsToClass(element)) {
 				XSOntClass c = getClass(fetcher.getUri(element));
-				XSOntObjectProperty cHasChild = loadPrefixedProperty(element, hasChild);
+				XSOntObjectProperty cHasChild = createProperty(element);
 				cHasChild.newRangeFound(c);
 				addDomainIfPossible(cHasChild, c.getURI());
-				XSOntObjectProperty cHasParent = loadPrefixedProperty(element, hasParent);
-				cHasParent.newRangeFound(c);
-				addDomainIfPossible(cHasParent, c.getURI());
 			}
 		}
-	}
 
-	private void loadRestrictions() {
-		// Attributes
-		for (XSOntClass xsClass : classes.values()) {
-			XSDeclaration declaration = fetcher.getDeclaration(xsClass.getURI());
-			if (fetcher.getAttributeUses(declaration) != null) {
-				for (XSAttributeUse attributeUse : fetcher.getAttributeUses(declaration)) {
-					XSOntAttributeRestriction restriction = new XSOntAttributeRestriction(this, xsClass, attributeUse,
-							getTechnologyAdapter());
-					xsClass.addToSuperClasses(restriction);
-				}
-			}
-		}
-		// Elements
-		// TODO
 	}
 
 	private void loadIndividuals() {
@@ -338,11 +292,10 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		if (schemaSet != null) {
 			fetcher = new XSDeclarationsFetcher();
 			fetcher.fetch(schemaSet);
-			clearAllRangeAndDomain(); // TODO CG, pas sur que ce soit utile cette merde!
+			clearAllRangeAndDomain(); 
 			loadClasses();
 			loadDataProperties();
 			loadObjectProperties();
-			loadRestrictions();
 			loadIndividuals();
 			isLoaded = true;
 		}
@@ -495,7 +448,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		}
 		return new ArrayList<XSOntIndividual>(result.values());
 	}
-	
+
 	/**
 	 * 
 	 * createOntologyIndividual
@@ -509,14 +462,14 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	 */
 
 	public XSOntIndividual createOntologyIndividual(XSOntClass type)  {
-		
+
 		XSOntIndividual individual = new XSOntIndividual(getTechnologyAdapter());
-		
-		
+
+
 		individual.setType(type);
 		return individual;
 	}	
-	
+
 	/**
 	 * 
 	 * addIndividual
@@ -538,8 +491,8 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 			individuals.put(indUri, individual);
 		}
 	}
-	
-	
+
+
 
 	@Override
 	public IFlexoOntologyConcept getOntologyObject(String objectURI) {

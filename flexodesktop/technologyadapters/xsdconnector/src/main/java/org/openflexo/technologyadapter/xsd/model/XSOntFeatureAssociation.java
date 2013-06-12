@@ -22,11 +22,11 @@ package org.openflexo.technologyadapter.xsd.model;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 
-public abstract class XSOntRestriction extends XSOntClass implements IFlexoOntologyFeatureAssociation {
+public abstract class XSOntFeatureAssociation extends AbstractXSOntObject implements IFlexoOntologyFeatureAssociation {
 
 	private final XSOntClass domainClass;
 
-	protected XSOntRestriction(XSOntology ontology, XSOntClass domainClass, XSDTechnologyAdapter adapter) {
+	protected XSOntFeatureAssociation(XSOntology ontology, XSOntClass domainClass, XSDTechnologyAdapter adapter) {
 		super(ontology, null, null, adapter);
 		this.domainClass = domainClass;
 	}
@@ -35,9 +35,9 @@ public abstract class XSOntRestriction extends XSOntClass implements IFlexoOntol
 		return false;
 	}
 
-	public XSOntAttributeRestriction asAttributeRestriction() {
+	public XSOntAttributeAssociation asAttributeRestriction() {
 		if (isAttributeRestriction()) {
-			return (XSOntAttributeRestriction) this;
+			return (XSOntAttributeAssociation) this;
 		}
 		return null;
 	}

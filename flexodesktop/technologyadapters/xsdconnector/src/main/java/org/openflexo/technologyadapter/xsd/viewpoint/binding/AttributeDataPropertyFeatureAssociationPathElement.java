@@ -10,18 +10,18 @@ import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.technologyadapter.xsd.model.XSOntAttributeRestriction;
+import org.openflexo.technologyadapter.xsd.model.XSOntAttributeAssociation;
 import org.openflexo.technologyadapter.xsd.model.XSOntDataProperty;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 
 public class AttributeDataPropertyFeatureAssociationPathElement extends SimplePathElement {
 
 	private XSOntDataProperty dataProperty;
-	private XSOntAttributeRestriction association;
+	private XSOntAttributeAssociation association;
 
 	private static final Logger logger = Logger.getLogger(AttributeDataPropertyFeatureAssociationPathElement.class.getPackage().getName());
 
-	public AttributeDataPropertyFeatureAssociationPathElement(BindingPathElement parent, XSOntAttributeRestriction association,
+	public AttributeDataPropertyFeatureAssociationPathElement(BindingPathElement parent, XSOntAttributeAssociation association,
 			XSOntDataProperty property) {
 		super(parent, property.getName(), property.getRange().getAccessedType());
 		this.association = association;

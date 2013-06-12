@@ -28,14 +28,11 @@ import java.util.logging.Level;
 
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
-import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
-import org.openflexo.technologyadapter.xsd.XSDModelSlot.XSURIProcessor;
 import org.openflexo.toolbox.StringUtils;
-
-import com.sun.xml.xsom.impl.scd.Iterators.Map;
 
 public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyClass, XSOntologyURIDefinitions {
 
@@ -43,8 +40,7 @@ public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyCl
 			.getName());
 
 	private final List<XSOntClass> superClasses = new ArrayList<XSOntClass>();
-	// CG : changed to map to enable to access restrictions by name
-	private final HashMap<String,XSOntRestriction> restrictions = new HashMap<String,XSOntRestriction>();
+	private final HashMap<String,XSOntFeatureAssociation> featureAssociations = new HashMap<String,XSOntFeatureAssociation>();
 
 	protected XSOntClass(XSOntology ontology, String name, String uri, XSDTechnologyAdapter adapter) {
 		super(ontology, name, uri, adapter);
@@ -67,6 +63,33 @@ public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyCl
 	}
 
 	@Override
+	public boolean isSuperConceptOf(IFlexoOntologyConcept concept) {
+		if (concept instanceof XSOntClass){
+		return isSuperClassOf((IFlexoOntologyClass) concept);
+		}
+		else return false;
+	}
+
+	@Override
+	public boolean isSubConceptOf(IFlexoOntologyConcept concept) {
+		if (concept instanceof XSOntClass){
+		return concept.isSuperConceptOf(this);
+		}
+		else return false;
+	}
+
+	@Override
+	public void addPropertyTakingMyselfAsDomain(XSOntProperty property) {
+		super.addPropertyTakingMyselfAsDomain(property);
+		if (property instanceof XSOntDataProperty ) {
+			featureAssociations.put(property.getName(), new XSOntAttributeAssociation(getOntology(), this, (XSOntDataProperty) property, (XSDTechnologyAdapter) this.getTechnologyAdapter()));
+		}
+		if (property instanceof XSOntObjectProperty ) {
+			featureAssociations.put(property.getName(), new XSOntClassAggregation(getOntology(), this, (XSOntObjectProperty) property, (XSDTechnologyAdapter) this.getTechnologyAdapter()));
+		}
+	}
+
+	@Override
 	public List<XSOntClass> getSuperClasses() {
 		return superClasses;
 	}
@@ -78,9 +101,6 @@ public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyCl
 			}
 			return;
 		}
-		if (aClass instanceof XSOntRestriction) {
-			restrictions.put(aClass.getName(), (XSOntRestriction) aClass);
-		}
 		superClasses.add((XSOntClass) aClass);
 	}
 
@@ -90,8 +110,14 @@ public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyCl
 
 	@Override
 	public List<? extends IFlexoOntologyClass> getSubClasses(IFlexoOntology context) {
-		// TODO Auto-generated method stub
-		return null;
+		List<XSOntClass> listAllClasses = getOntology().getAccessibleClasses();
+		ArrayList<XSOntClass> returned = new ArrayList<XSOntClass>();
+		for (XSOntClass aClass : listAllClasses){
+			if (aClass instanceof XSOntClass && isSuperClassOf(aClass)) {
+				returned.add((XSOntClass) aClass);
+			}
+		}
+		return returned;
 	}
 
 	@Override
@@ -122,16 +148,16 @@ public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyCl
 
 	@Override
 	public List<? extends IFlexoOntologyFeatureAssociation> getStructuralFeatureAssociations() {
-		List<XSOntRestriction> returned = new ArrayList<XSOntRestriction>();
-		for (XSOntRestriction xsOntRest : restrictions.values()) {
-				returned.add(xsOntRest);
-			}
+		List<XSOntFeatureAssociation> returned = new ArrayList<XSOntFeatureAssociation>();
+		for (XSOntFeatureAssociation xsOntRest : featureAssociations.values()) {
+			returned.add(xsOntRest);
+		}
 		return returned;
 	}
 
 
-	public XSOntRestriction getFeatureAssociationNamed(String name) {
-		return restrictions.get(name);
+	public XSOntFeatureAssociation getFeatureAssociationNamed(String name) {
+		return featureAssociations.get(name);
 	}
-	
+
 }

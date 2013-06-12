@@ -31,12 +31,12 @@ public abstract class XSOntProperty extends AbstractXSOntConcept implements IFle
 
 	private XSOntClass domain;
 	private boolean noDomainFoundYet = true;
-	private List<XSOntRestriction> referencingRestrictions;
+	private List<XSOntFeatureAssociation> referencingRestrictions;
 
 	protected XSOntProperty(XSOntology ontology, String name, String uri, XSDTechnologyAdapter adapter) {
 		super(ontology, name, uri, adapter);
 		domain = ontology.getRootConcept();
-		referencingRestrictions = new ArrayList<XSOntRestriction>();
+		referencingRestrictions = new ArrayList<XSOntFeatureAssociation>();
 	}
 
 	@Override
@@ -73,20 +73,20 @@ public abstract class XSOntProperty extends AbstractXSOntConcept implements IFle
 		return Collections.emptyList();
 	}
 
-	public List<XSOntRestriction> getReferencingRestrictions() {
+	public List<XSOntFeatureAssociation> getReferencingRestrictions() {
 		return referencingRestrictions;
 	}
 
-	public void addToReferencingRestriction(XSOntRestriction aRestriction) {
+	public void addToReferencingRestriction(XSOntFeatureAssociation aRestriction) {
 		referencingRestrictions.add(aRestriction);
 	}
 
-	public void removeFromReferencingRestriction(XSOntRestriction aRestriction) {
+	public void removeFromReferencingRestriction(XSOntFeatureAssociation aRestriction) {
 		referencingRestrictions.remove(aRestriction);
 	}
 
 	@Override
-	public List<XSOntRestriction> getReferencingFeatureAssociations() {
+	public List<XSOntFeatureAssociation> getReferencingFeatureAssociations() {
 		return getReferencingRestrictions();
 	}
 }

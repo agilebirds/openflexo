@@ -46,7 +46,7 @@ import org.openflexo.technologyadapter.xsd.model.XMLModel;
 import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntClass;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
-import org.openflexo.technologyadapter.xsd.model.XSOntRestriction;
+import org.openflexo.technologyadapter.xsd.model.XSOntFeatureAssociation;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSClassPatternRole;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSIndividualPatternRole;
@@ -280,7 +280,7 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 
 					// TODO FlexoProperty property = mappedClass.
 
-					XSOntRestriction restriction = mappedClass.getFeatureAssociationNamed(attributeName);
+					XSOntFeatureAssociation restriction = mappedClass.getFeatureAssociationNamed(attributeName);
 					logger.info("to stop");
 					Object value = ((XSOntIndividual) xsO).getPropertyValue(restriction.getProperty());
 					return msInstance.getModelURI() + "#" + (String) value;
