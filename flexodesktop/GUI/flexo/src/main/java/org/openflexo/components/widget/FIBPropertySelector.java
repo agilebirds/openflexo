@@ -189,7 +189,7 @@ public class FIBPropertySelector extends FIBModelObjectSelector<IFlexoOntologySt
 
 	@CustomComponentParameter(name = "domain", type = CustomComponentParameter.Type.OPTIONAL)
 	public void setDomain(IFlexoOntologyClass domain) {
-		System.out.println("INGORED !!!!! PropertySelector, setDomain() with " + domain);
+		// System.out.println("INGORED !!!!! PropertySelector, setDomain() with " + domain);
 		this.domain = domain;
 	}
 
