@@ -48,4 +48,8 @@ public class FileResourceRepository<R extends FlexoResource<?>> extends Resource
 		return directory;
 	}
 
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "/" + getDirectory() + " with " + getAllResources().size() + " resources";
+	}
 }
