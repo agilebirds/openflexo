@@ -62,7 +62,7 @@ public class SelectEMFObjectIndividual extends SelectIndividual<EMFModel, EMFMet
 			return null;
 		}
 
-		System.out.println("Selecting EMFObjectIndividuals in " + getModelSlotInstance(action).getModel() + " with type=" + getType());
+		// System.out.println("Selecting EMFObjectIndividuals in " + getModelSlotInstance(action).getModel() + " with type=" + getType());
 		List<EMFObjectIndividual> selectedIndividuals = new ArrayList<EMFObjectIndividual>(0);
 		EMFModel emfModel = getModelSlotInstance(action).getModel();
 		Resource resource = emfModel.getEMFResource();
@@ -106,7 +106,7 @@ public class SelectEMFObjectIndividual extends SelectIndividual<EMFModel, EMFMet
 
 		List<EMFObjectIndividual> returned = filterWithConditions(selectedIndividuals, action);
 
-		System.out.println("SelectEMFObjectIndividual, without filtering =" + selectedIndividuals + " after filtering=" + returned);
+		// System.out.println("SelectEMFObjectIndividual, without filtering =" + selectedIndividuals + " after filtering=" + returned);
 
 		return returned;
 	}

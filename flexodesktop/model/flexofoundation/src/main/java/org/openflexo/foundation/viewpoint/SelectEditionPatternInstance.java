@@ -142,7 +142,7 @@ public class SelectEditionPatternInstance<VMI extends VirtualModelInstance<VMI, 
 		if (getModelSlot() instanceof VirtualModelModelSlot) {
 			ModelSlotInstance modelSlotInstance = action.getVirtualModelInstance().getModelSlotInstance(getModelSlot());
 			if (modelSlotInstance != null) {
-				System.out.println("modelSlotInstance=" + modelSlotInstance + " model=" + modelSlotInstance.getModel());
+				// System.out.println("modelSlotInstance=" + modelSlotInstance + " model=" + modelSlotInstance.getModel());
 				vmi = (VirtualModelInstance<VMI, VM>) modelSlotInstance.getModel();
 			} else {
 				logger.warning("Cannot find ModelSlotInstance for " + getModelSlot());
