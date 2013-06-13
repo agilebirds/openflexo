@@ -19,11 +19,8 @@
  */
 package org.openflexo.technologyadapter.xsd.viewpoint.editionaction;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.expr.NullReferenceException;
-import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.view.ModelSlotInstance;
@@ -32,6 +29,7 @@ import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.technologyadapter.xsd.XSDModelSlot;
 import org.openflexo.technologyadapter.xsd.model.XMLModel;
 import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntClass;
@@ -73,11 +71,12 @@ public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOnt
 		try {
 
 			ModelSlotInstance<XMLModel, XSDMetaModel> modelSlotInstance = getModelSlotInstance(action);
-			XMLModel model = getModelSlotInstance(action).getModel();
+			XMLModel model = modelSlotInstance.getModel();
+			XSDModelSlot modelSlot = (XSDModelSlot) modelSlotInstance.getModelSlot();
 			
+		
 			newIndividual = model.createOntologyIndividual( father);
 			
-
 			for (DataPropertyAssertion dataPropertyAssertion : getDataAssertions()) {
 				if (dataPropertyAssertion.evaluateCondition(action)) {
 					logger.info("DataPropertyAssertion=" + dataPropertyAssertion);
@@ -88,19 +87,27 @@ public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOnt
 					newIndividual.addToPropertyValue(property, value);
 				}
 			}
+			
 			for (ObjectPropertyAssertion objectPropertyAssertion : getObjectAssertions()) {
 				if (objectPropertyAssertion.evaluateCondition(action)) {
 					// ... TODO
+					logger.warning("***** AddObjectProperty Not Implemented yet");
 				}
 			}
-			modelSlotInstance.getModel().setIsModified();
 
 			// add it to the model
 			// Two phase creation, then addition, to be able to process URIs once you have the property values
+			// and verify that there is no duplicate URIs
 			
-			model.addIndividual(newIndividual);
-			
-			logger.info("********* Added individual " + newIndividual.getName() + " as " + father);
+			String processedURI = modelSlot.getURIForObject(modelSlotInstance, newIndividual);
+			Object o = modelSlot.retrieveObjectWithURI(modelSlotInstance, processedURI);
+			if (o == null ) {
+				model.addIndividual(newIndividual);
+				model.setIsModified();
+			}
+			else {
+				throw new DuplicateURIException("Error while creating Individual of type " + father.getURI());
+			}
 			
 			return newIndividual;
 		} catch (DuplicateURIException e) {

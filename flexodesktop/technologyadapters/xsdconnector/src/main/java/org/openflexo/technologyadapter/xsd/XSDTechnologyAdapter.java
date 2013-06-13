@@ -210,9 +210,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	 */
 	public  XMLModelResource createEmptyModel(File modelFile, String modelUri, FlexoResource<XSDMetaModel> metaModelResource,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
-
-		logger.warning("xsdconnector: URI not supported ");
-		
+	
 		modelUri = modelFile.toURI().toString();
 
 		XMLModelResource ModelResource = XMLModelResourceImpl.makeXMLModelResource(modelUri, modelFile, (XSDMetaModelResource) metaModelResource, (XSDTechnologyContextManager) technologyContextManager);

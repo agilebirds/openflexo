@@ -45,6 +45,8 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 
 	private XSOntClass type;
 	private Map<XSOntProperty, XSPropertyValue> values = new HashMap<XSOntProperty, XSPropertyValue>();
+	
+	// TODO : check if this is actually useful ?!?
 	private Set<XSOntIndividual> children = new HashSet<XSOntIndividual>();
 	private XSOntIndividual parent;
 	
@@ -62,7 +64,14 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 		super(adapter);
 	}
 
-	
+
+	@Override
+	public String getURI() {
+		// TODO Auto-generated method stub
+		return super.getURI();
+	}
+
+
 
 	@Override
 	public String getName() {

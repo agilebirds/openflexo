@@ -63,7 +63,8 @@ public class ConceptActorReference<T extends IFlexoOntologyObject> extends Actor
 
 	public String _getObjectURI() {
 		if (object != null) {
-			return object.getURI();
+			ModelSlotInstance msInstance = getModelSlotInstance();
+		    objectURI = msInstance.getModelSlot().getURIForObject(msInstance, object);
 		}
 		return objectURI;
 	}

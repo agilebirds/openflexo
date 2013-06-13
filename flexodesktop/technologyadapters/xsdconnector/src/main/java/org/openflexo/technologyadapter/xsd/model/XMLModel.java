@@ -1,5 +1,6 @@
 /*
- * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2010-2012 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -20,10 +21,13 @@
 package org.openflexo.technologyadapter.xsd.model;
 
 import java.io.File;
+import java.util.List;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.ontology.IFlexoOntologyMetaModel;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.technologyadapter.xsd.XSDModelSlot;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.technologyadapter.xsd.rm.XMLModelResource;
 
@@ -33,18 +37,25 @@ public class XMLModel extends XSOntology implements FlexoModel<XMLModel, XSDMeta
 
 	private XMLModelResource modelResource;
 
-	public XMLModel(String ontologyURI, File xsdFile, XSDTechnologyAdapter adapter) {
-		super(ontologyURI, xsdFile, adapter);
+	public XMLModel(String ontologyURI, File xmlFile, XSDTechnologyAdapter adapter) {
+		super(ontologyURI, xmlFile, adapter);
 	}
-
+	
 	@Override
 	public XSDMetaModel getMetaModel() {
 		logger.warning("Access to meta model not implemented yet");
 		return null;
 	}
+	
+	@Override
+	public List<IFlexoOntologyMetaModel> getMetaModels() {
+		logger.warning("Access to meta model not implemented yet");
+		return null;
+	}
+
 
 	/**
-	 * Return the resource, as a {@link EMFModelResource}
+	 * Return the resource, as a {@link XMLModelResource}
 	 */
 	@Override
 	public XMLModelResource getResource() {

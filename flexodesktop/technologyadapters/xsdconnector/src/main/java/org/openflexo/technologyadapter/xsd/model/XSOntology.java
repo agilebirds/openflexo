@@ -39,6 +39,7 @@ import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyContainer;
+import org.openflexo.foundation.ontology.IFlexoOntologyModel;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.OntologyUtils;
 import org.openflexo.foundation.ontology.W3URIDefinitions;
@@ -52,12 +53,12 @@ import com.sun.xml.xsom.XSElementDecl;
 import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.XSSimpleType;
 
-public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOntology, XSOntologyURIDefinitions, W3URIDefinitions {
+public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOntology, XSOntologyURIDefinitions, W3URIDefinitions, IFlexoOntologyModel {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntology.class.getPackage()
 			.getName());
 
-	private final File originalXsdFile;
+	private final File originalFile;
 	private XSSchemaSet schemaSet;
 	private XSDeclarationsFetcher fetcher;
 
@@ -73,9 +74,9 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	private final Map<String, XSOntIndividual> individuals = new HashMap<String, XSOntIndividual>();
 	private final Map<XSSimpleType, XSDDataType> dataTypes = new HashMap<XSSimpleType, XSDDataType>();
 
-	public XSOntology(String ontologyURI, File xsdFile, XSDTechnologyAdapter adapter) {
-		super(null, computeName(xsdFile), ontologyURI, adapter);
-		this.originalXsdFile = xsdFile;
+	public XSOntology(String ontologyURI, File xmlFile, XSDTechnologyAdapter adapter) {
+		super(null, computeName(xmlFile), ontologyURI, adapter);
+		this.originalFile = xmlFile;
 	}
 
 	private static String computeName(File xsdFile) {
@@ -288,7 +289,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		}
 		isLoading = true;
 		isLoaded = false;
-		schemaSet = XSOMUtils.read(originalXsdFile);
+		schemaSet = XSOMUtils.read(originalFile);
 		if (schemaSet != null) {
 			fetcher = new XSDeclarationsFetcher();
 			fetcher.fetch(schemaSet);
@@ -358,9 +359,6 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 						}
 					}
 				}
-			}
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Couldn't find ontology class from URI " + classURI);
 			}
 		}
 		return result;
@@ -482,14 +480,9 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	 * @throws DuplicateURIException
 	 */
 
-	public void addIndividual(XSOntIndividual individual) throws DuplicateURIException {
+	public void addIndividual(XSOntIndividual individual) {
 		String indUri = individual.getURI();
-		if ( individuals.get(indUri) != null ) {
-			throw new  DuplicateURIException(indUri);
-		}
-		else {
-			individuals.put(indUri, individual);
-		}
+		individuals.put(indUri, individual);
 	}
 
 

@@ -20,13 +20,17 @@
 package org.openflexo.technologyadapter.xsd.model;
 
 import java.io.File;
+import java.util.List;
 
+import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.IFlexoOntologyMetaModel;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
+import org.openflexo.xmlcode.StringEncoder.Converter;
 
 public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaModel> {
 
@@ -87,5 +91,12 @@ public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaMo
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public List<IFlexoOntologyMetaModel> getMetaModels() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

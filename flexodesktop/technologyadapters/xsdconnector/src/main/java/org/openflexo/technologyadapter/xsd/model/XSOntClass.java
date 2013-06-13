@@ -147,17 +147,31 @@ public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyCl
 	}
 
 	@Override
-	public List<? extends IFlexoOntologyFeatureAssociation> getStructuralFeatureAssociations() {
+	public List<XSOntFeatureAssociation> getStructuralFeatureAssociations() {
 		List<XSOntFeatureAssociation> returned = new ArrayList<XSOntFeatureAssociation>();
 		for (XSOntFeatureAssociation xsOntRest : featureAssociations.values()) {
 			returned.add(xsOntRest);
 		}
+		for (XSOntClass sc: this.getSuperClasses()) {
+			returned.addAll(sc.getStructuralFeatureAssociations());
+			}
 		return returned;
 	}
 
 
 	public XSOntFeatureAssociation getFeatureAssociationNamed(String name) {
-		return featureAssociations.get(name);
+		XSOntFeatureAssociation returned = null;
+		returned = featureAssociations.get(name);
+		if (returned == null) {
+			// Check if property exists in superclasses
+			for (XSOntClass sc: this.getSuperClasses()) {
+				returned = sc.getFeatureAssociationNamed(name);
+				if (returned != null){
+					return returned;
+				}
+			}
+		}
+		return returned;
 	}
 
 }

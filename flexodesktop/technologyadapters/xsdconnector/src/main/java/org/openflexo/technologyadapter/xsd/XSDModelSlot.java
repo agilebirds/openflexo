@@ -47,6 +47,7 @@ import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntClass;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 import org.openflexo.technologyadapter.xsd.model.XSOntFeatureAssociation;
+import org.openflexo.technologyadapter.xsd.model.XSPropertyValue;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSClassPatternRole;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSIndividualPatternRole;
@@ -279,11 +280,11 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 				if (attributeName != null) {
 
 					// TODO FlexoProperty property = mappedClass.
-
-					XSOntFeatureAssociation restriction = mappedClass.getFeatureAssociationNamed(attributeName);
+					logger.info("trying to get the fuck our of here");
+					XSOntFeatureAssociation fAssoc = mappedClass.getFeatureAssociationNamed(attributeName);
 					logger.info("to stop");
-					Object value = ((XSOntIndividual) xsO).getPropertyValue(restriction.getProperty());
-					return msInstance.getModelURI() + "#" + (String) value;
+					XSPropertyValue value = ((XSOntIndividual) xsO).getPropertyValue(fAssoc.getProperty());
+					return msInstance.getModelURI() + "#" + value.toString();
 
 				} else
 					logger.warning("Cannot process URI - Unexpected or Unspecified mapping parameters");
@@ -304,8 +305,15 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 
 		String typeURI = xsO.getType().getURI().replace(this.getMetaModelURI(), "");
 		XSURIProcessor mapParams = uriProcessors.get(typeURI);
-
-		return mapParams.processURI(msInstance, xsO);
+		
+		if (mapParams != null){
+			return mapParams.processURI(msInstance, xsO);	
+		}
+		else {
+			logger.warning("XSDModelSlot: enable to get the URIProcessor for element of type: "+xsO.getType().getName());
+			return null;
+		}
+		
 
 	}
 

@@ -1,3 +1,23 @@
+/*
+ * (c) Copyright 2010-2012 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
+ *
+ * This file is part of OpenFlexo.
+ *
+ * OpenFlexo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenFlexo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 package org.openflexo.technologyadapter.xsd.viewpoint.binding;
 
 import java.util.ArrayList;
@@ -18,12 +38,14 @@ import org.openflexo.foundation.viewpoint.TechnologySpecificCustomType;
 import org.openflexo.technologyadapter.xsd.model.XSOntAttributeAssociation;
 import org.openflexo.technologyadapter.xsd.model.XSOntClass;
 import org.openflexo.technologyadapter.xsd.model.XSOntDataProperty;
+
 /**
  * This class represent the {@link BindingFactory} dedicated to handle XSD technology-specific binding elements
  * 
- * @author sylvain
+ * @author sylvain, christophe
  * 
  */
+
 public final class XSDBindingFactory extends TechnologyAdapterBindingFactory {
 	static final Logger logger = Logger.getLogger(XSDBindingFactory.class.getPackage().getName());
 
@@ -54,25 +76,26 @@ public final class XSDBindingFactory extends TechnologyAdapterBindingFactory {
 			return true;
 		}
 		if ((technologySpecificType instanceof SubPropertyOfProperty)
-		/*&& ((SubPropertyOfProperty) technologySpecificType).getOntologyProperty() instanceof*/) {
+				/*&& ((SubPropertyOfProperty) technologySpecificType).getOntologyProperty() instanceof*/) {
 			return true;
 		}
 		return false;
 	}
 
 	@Override
-	public List<? extends SimplePathElement> getAccessibleSimplePathElements(BindingPathElement parent) {if (parent.getType() instanceof IndividualOfClass) {
-		IndividualOfClass parentType = (IndividualOfClass) parent.getType();
-		List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
-		if (parentType.getOntologyClass() instanceof XSOntClass) {
-			for (IFlexoOntologyFeatureAssociation fa : ((XSOntClass) parentType.getOntologyClass()).getStructuralFeatureAssociations()) {
-				returned.add(getSimplePathElement(fa, parent));
+	public List<? extends SimplePathElement> getAccessibleSimplePathElements(BindingPathElement parent) {
+		if (parent.getType() instanceof IndividualOfClass) {
+			IndividualOfClass parentType = (IndividualOfClass) parent.getType();
+			List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
+			if (parentType.getOntologyClass() instanceof XSOntClass) {
+				for (IFlexoOntologyFeatureAssociation fa : ((XSOntClass) parentType.getOntologyClass()).getStructuralFeatureAssociations()) {
+					returned.add(getSimplePathElement(fa, parent));
+				}
 			}
+			return returned;
 		}
-		return returned;
-	}
 
-	return super.getAccessibleSimplePathElements(parent);
+		return super.getAccessibleSimplePathElements(parent);
 	}
 
 	@Override
