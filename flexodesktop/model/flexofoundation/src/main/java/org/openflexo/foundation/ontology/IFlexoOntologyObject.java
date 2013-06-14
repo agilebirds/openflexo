@@ -73,6 +73,6 @@ public interface IFlexoOntologyObject {
 	 * 
 	 * @return
 	 */
-	public TechnologyAdapter<?, ?> getTechnologyAdapter();
+	public TechnologyAdapter getTechnologyAdapter();
 
 }

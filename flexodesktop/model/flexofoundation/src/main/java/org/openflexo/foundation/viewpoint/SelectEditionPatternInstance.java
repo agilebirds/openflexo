@@ -40,8 +40,7 @@ import org.openflexo.toolbox.StringUtils;
  * @param <MM>
  * @param <T>
  */
-public class SelectEditionPatternInstance<VMI extends VirtualModelInstance<VMI, VM>, VM extends VirtualModel<VM>> extends
-		FetchRequest<VMI, VM, EditionPatternInstance> {
+public class SelectEditionPatternInstance extends FetchRequest<EditionPatternInstance> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(SelectEditionPatternInstance.class.getPackage().getName());
 
@@ -138,12 +137,12 @@ public class SelectEditionPatternInstance<VMI extends VirtualModelInstance<VMI, 
 
 	@Override
 	public List<EditionPatternInstance> performAction(EditionSchemeAction action) {
-		VirtualModelInstance<VMI, VM> vmi = null;
+		VirtualModelInstance vmi = null;
 		if (getModelSlot() instanceof VirtualModelModelSlot) {
 			ModelSlotInstance modelSlotInstance = action.getVirtualModelInstance().getModelSlotInstance(getModelSlot());
 			if (modelSlotInstance != null) {
 				// System.out.println("modelSlotInstance=" + modelSlotInstance + " model=" + modelSlotInstance.getModel());
-				vmi = (VirtualModelInstance<VMI, VM>) modelSlotInstance.getModel();
+				vmi = (VirtualModelInstance) modelSlotInstance.getResourceData();
 			} else {
 				logger.warning("Cannot find ModelSlotInstance for " + getModelSlot());
 			}

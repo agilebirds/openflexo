@@ -334,7 +334,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	private FlexoProjectReferenceLoader projectReferenceLoader;
 
 	private List<ModelSlotInstance> models;
-	private Map<View, Map<ModelSlot<?, ?>, ModelSlotInstance>> modelsAssociationMap; // Do not serialize this
+	private Map<View, Map<ModelSlot, ModelSlotInstance>> modelsAssociationMap; // Do not serialize this
 
 	private class ResourceHashtable extends TreeMap<String, FlexoResource<? extends FlexoResourceData>> {
 		public ResourceHashtable() {
@@ -4748,7 +4748,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			if (vr.isLoaded()) {
 				View v = vr.getView();
 				for (ModelSlotInstance<?, ?> msi : v.getModelSlotInstances()) {
-					returned.add(msi.getModel());
+					returned.add(msi.getResourceData());
 				}
 			}
 		}

@@ -75,7 +75,7 @@ public class CreateVirtualModelInstanceInitializer extends ActionInitializer<Cre
 						if (step == 0) {
 							result = instanciateShowDialogAndReturnStatus(action, VECst.CREATE_VIRTUAL_MODEL_INSTANCE_DIALOG_FIB);
 						} else {
-							ModelSlot<?, ?> configuredModelSlot = action.getVirtualModel().getModelSlots().get(step - 1);
+							ModelSlot configuredModelSlot = action.getVirtualModel().getModelSlots().get(step - 1);
 							result = instanciateShowDialogAndReturnStatus(action.getModelSlotInstanceConfiguration(configuredModelSlot),
 									VECst.CONFIGURE_MODEL_SLOT_INSTANCE_DIALOG_FIB);
 						}

@@ -155,7 +155,7 @@ public class DropScheme extends AbstractCreationScheme implements DiagramEdition
 	 */
 	@Override
 	public <A extends EditionAction<M, MM, ?>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> A createAction(
-			Class<A> actionClass, ModelSlot<M, MM> modelSlot) {
+			Class<A> actionClass, ModelSlot modelSlot) {
 		A newAction = super.createAction(actionClass, modelSlot);
 		if (newAction instanceof AddShape) {
 			if (isTopTarget()) {

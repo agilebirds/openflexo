@@ -9,7 +9,7 @@ import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
-import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
@@ -60,7 +60,7 @@ import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddSubClassSt
 		@DeclareEditionAction(AddRestrictionStatement.class), // Add class
 		@DeclareEditionAction(AddSubClassStatement.class), // Add class
 })
-public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntology> {
+public class OWLModelSlot extends TypeSafeModelSlot<OWLOntology, OWLOntology> {
 
 	private static final Logger logger = Logger.getLogger(OWLModelSlot.class.getPackage().getName());
 
@@ -197,7 +197,7 @@ public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntolog
 
 	@Override
 	public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) {
-		return msInstance.getModel().getObject(objectURI);
+		return msInstance.getResourceData().getObject(objectURI);
 	}
 
 	@Override

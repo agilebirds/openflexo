@@ -54,15 +54,15 @@ import org.openflexo.toolbox.StringUtils;
 })
 @DeclareFetchRequests({ @DeclareFetchRequest(SelectEditionPatternInstance.class) // Select EditionPatternInstance
 })
-public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM extends VirtualModel<VM>> extends ModelSlot<VMI, VM> {
+public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM extends VirtualModel<VM>> extends ModelSlot<VMI> {
 
 	private static final Logger logger = Logger.getLogger(VirtualModelModelSlot.class.getPackage().getName());
 
-	public VirtualModelModelSlot(ViewPoint viewPoint, VirtualModelTechnologyAdapter<VMI, VM> adapter) {
+	public VirtualModelModelSlot(ViewPoint viewPoint, VirtualModelTechnologyAdapter adapter) {
 		super(viewPoint, adapter);
 	}
 
-	public VirtualModelModelSlot(VirtualModel<?> virtualModel, VirtualModelTechnologyAdapter<VMI, VM> adapter) {
+	public VirtualModelModelSlot(VirtualModel<?> virtualModel, VirtualModelTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
 	}
 
@@ -115,7 +115,7 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	}
 
 	@Override
-	public <EA extends EditionAction<?, ?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
+	public <EA extends EditionAction<?,?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddEditionPatternInstance.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddEditionPatternInstance(null);
 		}
@@ -123,7 +123,7 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	}
 
 	@Override
-	public <FR extends FetchRequest<?, ?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
+	public <FR extends FetchRequest<?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
 		if (SelectEditionPatternInstance.class.isAssignableFrom(fetchRequestClass)) {
 			return (FR) new SelectEditionPatternInstance(null);
 		}
@@ -131,7 +131,8 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	}
 
 	@Override
-	public ModelSlotInstanceConfiguration<? extends VirtualModelModelSlot<VMI, VM>> createConfiguration(CreateVirtualModelInstance<?> action) {
+	public ModelSlotInstanceConfiguration<? extends VirtualModelModelSlot<VMI, VM>, VMI> createConfiguration(
+			CreateVirtualModelInstance<?> action) {
 		return new VirtualModelModelSlotInstanceConfiguration<VirtualModelModelSlot<VMI, VM>>(this, action);
 	}
 
@@ -155,7 +156,6 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 		return EditionPatternInstanceType.getEditionPatternInstanceType(getAddressedVirtualModel());
 	}
 
-	@Override
 	public String getMetaModelURI() {
 		if (virtualModelResource != null) {
 			return virtualModelResource.getURI();
@@ -163,7 +163,6 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 		return virtualModelURI;
 	}
 
-	@Override
 	public void setMetaModelURI(String metaModelURI) {
 		this.virtualModelURI = metaModelURI;
 	}

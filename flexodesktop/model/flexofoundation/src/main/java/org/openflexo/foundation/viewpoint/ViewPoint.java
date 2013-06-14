@@ -104,7 +104,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 
 	private LocalizedDictionary localizedDictionary;
 	private ViewPointLibrary _library;
-	private List<ModelSlot<?, ?>> modelSlots;
+	private List<ModelSlot> modelSlots;
 	private List<VirtualModel<?>> virtualModels;
 	private ViewPointResource resource;
 	private BindingModel bindingModel;
@@ -148,7 +148,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 			builder.setViewPoint(this);
 			resource = builder.resource;
 		}
-		modelSlots = new ArrayList<ModelSlot<?, ?>>();
+		modelSlots = new ArrayList<ModelSlot>();
 		virtualModels = new ArrayList<VirtualModel<?>>();
 	}
 
@@ -432,7 +432,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		// For all "old" viewpoints, we consider a OWL model slot
 		try {
 			Class owlTechnologyAdapterClass = Class.forName("org.openflexo.technologyadapter.owl.OWLTechnologyAdapter");
-			TechnologyAdapter<?, ?> OWL = viewPointLibrary.getServiceManager().getTechnologyAdapterService()
+			TechnologyAdapter OWL = viewPointLibrary.getServiceManager().getTechnologyAdapterService()
 					.getTechnologyAdapter(owlTechnologyAdapterClass);
 
 			String importedOntology = null;
@@ -472,7 +472,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 						+ r.getURI());
 			}
 
-			ModelSlot<?, ?> ms = OWL.createNewModelSlot(this);
+			ModelSlot ms = OWL.createNewModelSlot(this);
 			ms.setName("owl");
 			ms.setMetaModelResource(r);
 			addToModelSlots(ms);
@@ -527,31 +527,31 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 	// ============================== Model Slots ===============================
 	// ==========================================================================
 
-	public void setModelSlots(List<ModelSlot<?, ?>> modelSlots) {
+	public void setModelSlots(List<ModelSlot> modelSlots) {
 		this.modelSlots = modelSlots;
 	}
 
-	public List<ModelSlot<?, ?>> getModelSlots() {
+	public List<ModelSlot> getModelSlots() {
 		return modelSlots;
 	}
 
-	public void addToModelSlots(ModelSlot<?, ?> modelSlot) {
+	public void addToModelSlots(ModelSlot modelSlot) {
 		modelSlots.add(modelSlot);
 		modelSlot.setViewPoint(this);
 		setChanged();
 		notifyObservers(new ModelSlotAdded(modelSlot, this));
 	}
 
-	public void removeFromModelSlots(ModelSlot<?, ?> modelSlot) {
+	public void removeFromModelSlots(ModelSlot modelSlot) {
 		modelSlots.remove(modelSlot);
 		modelSlot.setViewPoint(null);
 		setChanged();
 		notifyObservers(new ModelSlotRemoved(modelSlot, this));
 	}
 
-	public <MS extends ModelSlot<?, ?>> List<MS> getModelSlots(Class<MS> msType) {
+	public <MS extends ModelSlot> List<MS> getModelSlots(Class<MS> msType) {
 		List<MS> returned = new ArrayList<MS>();
-		for (ModelSlot<?, ?> ms : getModelSlots()) {
+		for (ModelSlot ms : getModelSlots()) {
 			if (TypeUtils.isTypeAssignableFrom(msType, ms.getClass())) {
 				returned.add((MS) ms);
 			}
@@ -559,8 +559,8 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		return returned;
 	}
 
-	public ModelSlot<?, ?> getModelSlot(String modelSlotName) {
-		for (ModelSlot<?, ?> ms : getModelSlots()) {
+	public ModelSlot getModelSlot(String modelSlotName) {
+		for (ModelSlot ms : getModelSlots()) {
 			if (ms.getName().equals(modelSlotName)) {
 				return ms;
 			}
@@ -568,9 +568,9 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		return null;
 	}
 
-	public List<ModelSlot<?, ?>> getRequiredModelSlots() {
-		List<ModelSlot<?, ?>> requiredModelSlots = new ArrayList<ModelSlot<?, ?>>();
-		for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
+	public List<ModelSlot> getRequiredModelSlots() {
+		List<ModelSlot> requiredModelSlots = new ArrayList<ModelSlot>();
+		for (ModelSlot modelSlot : getModelSlots()) {
 			if (modelSlot.getIsRequired()) {
 				requiredModelSlots.add(modelSlot);
 			}
@@ -580,7 +580,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 
 	public Set<FlexoMetaModelResource<?, ?>> getAllMetaModels() {
 		Set<FlexoMetaModelResource<?, ?>> allMetaModels = new HashSet<FlexoMetaModelResource<?, ?>>();
-		for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
+		for (ModelSlot modelSlot : getModelSlots()) {
 			if (modelSlot.getMetaModelResource() != null) {
 				allMetaModels.add(modelSlot.getMetaModelResource());
 			}
@@ -601,7 +601,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		out.append("ViewDefinition " + getName() + " uri=\"" + getURI() + "\"", context);
 		out.append(" {" + StringUtils.LINE_SEPARATOR, context);
 
-		for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
+		for (ModelSlot modelSlot : getModelSlots()) {
 			if (modelSlot.getMetaModelResource() != null) {
 				out.append(modelSlot.getFMLRepresentation(context), context);
 			}

@@ -20,7 +20,7 @@
 package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
-import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 
 public abstract class OntologicObjectPatternRole<T extends IFlexoOntologyObject> extends PatternRole<T> {
@@ -58,23 +58,23 @@ public abstract class OntologicObjectPatternRole<T extends IFlexoOntologyObject>
 	}
 
 	@Override
-	public FlexoOntologyModelSlot<?, ?> getModelSlot() {
-		FlexoOntologyModelSlot<?, ?> returned = null;
-		ModelSlot<?, ?> superMS = super.getModelSlot();
-		if (superMS instanceof FlexoOntologyModelSlot) {
-			returned = (FlexoOntologyModelSlot<?, ?>) super.getModelSlot();
+	public TypeSafeModelSlot getModelSlot() {
+		TypeSafeModelSlot returned = null;
+		ModelSlot superMS = super.getModelSlot();
+		if (superMS instanceof TypeSafeModelSlot) {
+			returned = (TypeSafeModelSlot) super.getModelSlot();
 		}
 		if (returned == null) {
-			if (getVirtualModel() != null && getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class).size() > 0) {
-				return getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class).get(0);
+			if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypeSafeModelSlot.class).size() > 0) {
+				return getVirtualModel().getModelSlots(TypeSafeModelSlot.class).get(0);
 			}
 		}
 		return returned;
 	}
 
 	@Override
-	public void setModelSlot(ModelSlot<?, ?> modelSlot) {
-		if (modelSlot instanceof FlexoOntologyModelSlot) {
+	public void setModelSlot(ModelSlot modelSlot) {
+		if (modelSlot instanceof TypeSafeModelSlot) {
 			super.setModelSlot(modelSlot);
 		}
 	}

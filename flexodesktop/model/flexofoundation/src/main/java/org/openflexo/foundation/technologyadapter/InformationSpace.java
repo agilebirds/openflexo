@@ -30,7 +30,7 @@ public class InformationSpace extends FlexoServiceImpl {
 	public void initialize() {
 	}
 
-	public List<TechnologyAdapter<?, ?>> getTechnologyAdapters() {
+	public List<TechnologyAdapter> getTechnologyAdapters() {
 		if (getServiceManager() != null) {
 			return getServiceManager().getTechnologyAdapterService().getTechnologyAdapters();
 		}
@@ -57,7 +57,7 @@ public class InformationSpace extends FlexoServiceImpl {
 	 * @param technologyAdapter
 	 * @return
 	 */
-	public List<ModelRepository<?, ?, ?, ?>> getAllModelRepositories(TechnologyAdapter<?, ?> technologyAdapter) {
+	public List<ModelRepository<?, ?, ?, ?>> getAllModelRepositories(TechnologyAdapter technologyAdapter) {
 		// System.out.println("getAllModelRepositories() ???");
 		if (getServiceManager() != null) {
 			// System.out.println("return " + getServiceManager().getTechnologyAdapterService().getAllModelRepositories(technologyAdapter));
@@ -73,7 +73,7 @@ public class InformationSpace extends FlexoServiceImpl {
 	 * @param technologyAdapter
 	 * @return
 	 */
-	public List<MetaModelRepository<?, ?, ?, ?>> getAllMetaModelRepositories(TechnologyAdapter<?, ?> technologyAdapter) {
+	public List<MetaModelRepository<?, ?, ?, ?>> getAllMetaModelRepositories(TechnologyAdapter technologyAdapter) {
 		// logger.info("getAllMetaModelRepositories() ???");
 		if (getServiceManager() != null) {
 			// System.out .println("return " +
@@ -93,7 +93,7 @@ public class InformationSpace extends FlexoServiceImpl {
 		return null;
 	}
 
-	public FlexoMetaModelResource<?, ?> getMetaModelWithURI(String uri, TechnologyAdapter<?, ?> technologyAdapter) {
+	public FlexoMetaModelResource<?, ?> getMetaModelWithURI(String uri, TechnologyAdapter technologyAdapter) {
 		if (technologyAdapter != null && technologyAdapter.getTechnologyContextManager() != null) {
 			return technologyAdapter.getTechnologyContextManager().getMetaModelWithURI(uri);
 		}
@@ -117,7 +117,7 @@ public class InformationSpace extends FlexoServiceImpl {
 		return null;
 	}
 
-	public FlexoModelResource<?, ?> getModelWithURI(String uri, TechnologyAdapter<?, ?> technologyAdapter) {
+	public FlexoModelResource<?, ?> getModelWithURI(String uri, TechnologyAdapter technologyAdapter) {
 		if (technologyAdapter == null) {
 			logger.warning("Unexpected null " + technologyAdapter);
 			return null;

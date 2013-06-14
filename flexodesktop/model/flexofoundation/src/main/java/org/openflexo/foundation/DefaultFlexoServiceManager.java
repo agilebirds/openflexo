@@ -132,7 +132,7 @@ public class DefaultFlexoServiceManager extends FlexoServiceManager {
 		if (getInformationSpace() != null) {
 			sb.append("**********************************************\n");
 			sb.append("Information Space\n");
-			for (TechnologyAdapter<?, ?> ta : getTechnologyAdapterService().getTechnologyAdapters()) {
+			for (TechnologyAdapter ta : getTechnologyAdapterService().getTechnologyAdapters()) {
 				for (MetaModelRepository<?, ?, ?, ?> mmRep : getInformationSpace().getAllMetaModelRepositories(ta)) {
 					System.out.println("Technology adapter: " + ta + " meta-model repository: " + mmRep + "\n");
 					for (FlexoResource<?> r : mmRep.getAllResources()) {
@@ -140,7 +140,7 @@ public class DefaultFlexoServiceManager extends FlexoServiceManager {
 					}
 				}
 			}
-			for (TechnologyAdapter<?, ?> ta : getTechnologyAdapterService().getTechnologyAdapters()) {
+			for (TechnologyAdapter ta : getTechnologyAdapterService().getTechnologyAdapters()) {
 				for (ModelRepository<?, ?, ?, ?> mRep : getInformationSpace().getAllModelRepositories(ta)) {
 					System.out.println("Technology adapter: " + ta + " model repository: " + mRep);
 					for (FlexoResource<?> r : mRep.getAllResources()) {

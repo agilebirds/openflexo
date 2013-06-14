@@ -49,7 +49,7 @@ public class SubPropertyOfProperty implements TechnologySpecificCustomType {
 	}
 
 	@Override
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+	public TechnologyAdapter getTechnologyAdapter() {
 		if (getOntologyProperty() != null) {
 			return getOntologyProperty().getTechnologyAdapter();
 		}

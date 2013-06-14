@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
@@ -32,26 +31,26 @@ import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 import org.openflexo.toolbox.StringUtils;
 
 /**
- * This class is used to stored the configuration of a {@link FlexoOntologyModelSlot} which has to be instantiated
+ * This class is used to stored the configuration of a {@link TypeSafeModelSlot} which has to be instantiated
  * 
  * 
  * @author sylvain
  * 
  */
-public class FlexoOntologyModelSlotInstanceConfiguration<MS extends FlexoOntologyModelSlot<?, ?>> extends
-		ModelSlotInstanceConfiguration<MS> {
+public class TypeSafeModelSlotInstanceConfiguration<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, MS extends TypeSafeModelSlot<M, MM>>
+		extends ModelSlotInstanceConfiguration<MS, M> {
 
-	private static final Logger logger = Logger.getLogger(FlexoOntologyModelSlotInstanceConfiguration.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(TypeSafeModelSlotInstanceConfiguration.class.getPackage().getName());
 
 	private List<ModelSlotInstanceConfigurationOption> options;
 
 	private FlexoResourceCenter resourceCenter;
-	private FlexoModelResource<?, ?> modelResource;
+	private FlexoModelResource<M, MM> modelResource;
 	private String modelUri;
 	private String relativePath;
 	private String filename;
 
-	protected FlexoOntologyModelSlotInstanceConfiguration(MS ms, CreateVirtualModelInstance<?> action) {
+	protected TypeSafeModelSlotInstanceConfiguration(MS ms, CreateVirtualModelInstance<?> action) {
 		super(ms, action);
 		resourceCenter = action.getFocusedObject().getViewPoint().getViewPointLibrary().getServiceManager().getResourceCenterService()
 				.getUserResourceCenter();
@@ -70,15 +69,11 @@ public class FlexoOntologyModelSlotInstanceConfiguration<MS extends FlexoOntolog
 		if (option == DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel) {
 			modelUri = getAction().getFocusedObject().getProject().getURI() + "/Models/myModel";
 			relativePath = "/";
-			filename = "myModel"
-					+ getModelSlot().getTechnologyAdapter()
-							.getExpectedModelExtension((FlexoResource) getModelSlot().getMetaModelResource());
+			filename = "myModel" + getModelSlot().getTechnologyAdapter().getExpectedModelExtension(getModelSlot().getMetaModelResource());
 		} else if (option == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
 			modelUri = "ResourceCenter/Models/";
 			relativePath = "/";
-			filename = "myModel"
-					+ getModelSlot().getTechnologyAdapter()
-							.getExpectedModelExtension((FlexoResource) getModelSlot().getMetaModelResource());
+			filename = "myModel" + getModelSlot().getTechnologyAdapter().getExpectedModelExtension(getModelSlot().getMetaModelResource());
 		} else if (option == DefaultModelSlotInstanceConfigurationOption.SelectExistingModel) {
 			modelUri = null;
 			relativePath = null;
@@ -92,26 +87,25 @@ public class FlexoOntologyModelSlotInstanceConfiguration<MS extends FlexoOntolog
 	}
 
 	@Override
-	public ModelSlotInstance<?, ?> createModelSlotInstance(VirtualModelInstance<?, ?> vmInstance) {
-		ModelSlotInstance<?, ?> returned = new ModelSlotInstance(vmInstance, getModelSlot());
+	public ModelSlotInstance<M> createModelSlotInstance(VirtualModelInstance<?, ?> vmInstance) {
+		ModelSlotInstance<M> returned = new ModelSlotInstance<M>(vmInstance, getModelSlot());
 		configureModelSlotInstance(returned);
 		return returned;
 	}
 
-	protected <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> ModelSlotInstance<M, MM> configureModelSlotInstance(
-			ModelSlotInstance<M, MM> msInstance) {
+	protected ModelSlotInstance<M> configureModelSlotInstance(ModelSlotInstance<M> msInstance) {
 		if (getOption() == DefaultModelSlotInstanceConfigurationOption.SelectExistingModel) {
 			if (modelResource != null) {
 				System.out.println("Select model with uri " + getModelResource().getURI());
-				msInstance.setModel((M) getModelResource().getModel());
+				msInstance.setResourceData(getModelResource().getModel());
 			} else {
 				logger.warning("No model for model slot " + getModelSlot());
 			}
 		} else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel) {
-			modelResource = createProjectSpecificEmptyModel(msInstance, (ModelSlot<?, ?>) getModelSlot());
+			modelResource = createProjectSpecificEmptyModel(msInstance, getModelSlot());
 			System.out.println("***** modelResource = " + modelResource);
 			if (modelResource != null) {
-				msInstance.setModel((M) getModelResource().getModel());
+				msInstance.setResourceData(getModelResource().getModel());
 				System.out.println("***** Created model resource " + getModelResource());
 				System.out.println("***** Created model " + getModelResource().getModel());
 				System.out.println("***** Created model with uri=" + getModelResource().getModel().getURI());
@@ -119,9 +113,9 @@ public class FlexoOntologyModelSlotInstanceConfiguration<MS extends FlexoOntolog
 				logger.warning("Could not create ProjectSpecificEmtpyModel for model slot " + getModelSlot());
 			}
 		} else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
-			modelResource = createSharedEmptyModel(msInstance, (ModelSlot<?, ?>) getModelSlot());
+			modelResource = createSharedEmptyModel(msInstance, getModelSlot());
 			if (modelResource != null) {
-				msInstance.setModel((M) getModelResource().getModel());
+				msInstance.setResourceData(getModelResource().getModel());
 			} else {
 				logger.warning("Could not create SharedEmptyModel for model slot " + getModelSlot());
 			}
@@ -130,16 +124,14 @@ public class FlexoOntologyModelSlotInstanceConfiguration<MS extends FlexoOntolog
 		return null;
 	}
 
-	private <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> FlexoModelResource<M, MM> createProjectSpecificEmptyModel(
-			ModelSlotInstance msInstance, ModelSlot<M, MM> modelSlot) {
-		return (FlexoModelResource<M, MM>) modelSlot.createProjectSpecificEmptyModel(msInstance.getView(), getFilename(), getModelUri(),
+	private FlexoModelResource<M, MM> createProjectSpecificEmptyModel(ModelSlotInstance<M> msInstance, MS modelSlot) {
+		return modelSlot.createProjectSpecificEmptyModel(msInstance.getView(), getFilename(), getModelUri(),
 				modelSlot.getMetaModelResource());
 	}
 
-	private <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> FlexoModelResource<M, MM> createSharedEmptyModel(
-			ModelSlotInstance msInstance, ModelSlot<M, MM> modelSlot) {
-		return (FlexoModelResource<M, MM>) modelSlot.createSharedEmptyModel(getResourceCenter(), getRelativePath(), getFilename(),
-				getModelUri(), modelSlot.getMetaModelResource());
+	private FlexoModelResource<M, MM> createSharedEmptyModel(ModelSlotInstance<M> msInstance, MS modelSlot) {
+		return modelSlot.createSharedEmptyModel(getResourceCenter(), getRelativePath(), getFilename(), getModelUri(),
+				modelSlot.getMetaModelResource());
 	}
 
 	public FlexoResourceCenter getResourceCenter() {
@@ -174,11 +166,11 @@ public class FlexoOntologyModelSlotInstanceConfiguration<MS extends FlexoOntolog
 		this.filename = filename;
 	}
 
-	public FlexoModelResource<?, ?> getModelResource() {
+	public FlexoModelResource<M, MM> getModelResource() {
 		return modelResource;
 	}
 
-	public void setModelResource(FlexoModelResource<?, ?> modelResource) {
+	public void setModelResource(FlexoModelResource<M, MM> modelResource) {
 		this.modelResource = modelResource;
 	}
 

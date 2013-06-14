@@ -34,6 +34,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.resource.FlexoXMLFileResource;
+import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
@@ -77,8 +78,8 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	private static final Logger logger = Logger.getLogger(VirtualModelInstance.class.getPackage().getName());
 
 	private VirtualModelInstanceResource<VMI> resource;
-	private List<ModelSlotInstance<?, ?>> modelSlotInstances;
-	// private Map<ModelSlot<?, ?>, FlexoModel<?, ?>> modelsMap = new HashMap<ModelSlot<?, ?>, FlexoModel<?, ?>>(); // Do not serialize
+	private List<ModelSlotInstance<?>> modelSlotInstances;
+	// private Map<ModelSlot, FlexoModel<?, ?>> modelsMap = new HashMap<ModelSlot, FlexoModel<?, ?>>(); // Do not serialize
 	// this.
 	private String title;
 
@@ -120,7 +121,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	public VirtualModelInstance(View view, VirtualModel virtualModel) {
 		super(virtualModel, null, view.getProject());
 		logger.info("Created new VirtualModelInstance for virtual model " + virtualModel);
-		modelSlotInstances = new ArrayList<ModelSlotInstance<?, ?>>();
+		modelSlotInstances = new ArrayList<ModelSlotInstance<?>>();
 		editionPatternInstances = new Hashtable<EditionPattern, Map<Long, EditionPatternInstance>>();
 	}
 
@@ -171,7 +172,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	}
 
 	@Override
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+	public TechnologyAdapter getTechnologyAdapter() {
 		// TODO
 		return null;
 	}
@@ -397,16 +398,15 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	 * @param modelSlot
 	 * @return
 	 */
-	public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> ModelSlotInstance<M, MM> getModelSlotInstance(
-			ModelSlot<M, MM> modelSlot) {
-		for (ModelSlotInstance<?, ?> msInstance : getModelSlotInstances()) {
+	public <RD extends ResourceData<RD>> ModelSlotInstance<RD> getModelSlotInstance(ModelSlot modelSlot) {
+		for (ModelSlotInstance<?> msInstance : getModelSlotInstances()) {
 			if (msInstance.getModelSlot() == modelSlot) {
-				return (ModelSlotInstance<M, MM>) msInstance;
+				return (ModelSlotInstance<RD>) msInstance;
 			}
 		}
 		if (modelSlot instanceof VirtualModelModelSlot && ((VirtualModelModelSlot) modelSlot).isReflexiveModelSlot()) {
 			ModelSlotInstance reflexiveModelSlotInstance = new ModelSlotInstance(getView(), modelSlot);
-			reflexiveModelSlotInstance.setModel(this);
+			reflexiveModelSlotInstance.setResourceData(this);
 			addToModelSlotInstances(reflexiveModelSlotInstance);
 			return reflexiveModelSlotInstance;
 		}
@@ -423,8 +423,8 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	 * @param modelSlot
 	 * @return
 	 */
-	public ModelSlotInstance<?, ?> getModelSlotInstance(String modelSlotName) {
-		for (ModelSlotInstance<?, ?> msInstance : getModelSlotInstances()) {
+	public ModelSlotInstance<?> getModelSlotInstance(String modelSlotName) {
+		for (ModelSlotInstance<?> msInstance : getModelSlotInstances()) {
 			if (msInstance.getModelSlot().getName().equals(modelSlotName)) {
 				return msInstance;
 			}
@@ -433,15 +433,15 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 		return null;
 	}
 
-	public void setModelSlotInstances(List<ModelSlotInstance<?, ?>> instances) {
+	public void setModelSlotInstances(List<ModelSlotInstance<?>> instances) {
 		this.modelSlotInstances = instances;
 	}
 
-	public List<ModelSlotInstance<?, ?>> getModelSlotInstances() {
+	public List<ModelSlotInstance<?>> getModelSlotInstances() {
 		return modelSlotInstances;
 	}
 
-	public void removeFromModelSlotInstance(ModelSlotInstance<?, ?> instance) {
+	public void removeFromModelSlotInstance(ModelSlotInstance<?> instance) {
 		if (modelSlotInstances.contains(instance)) {
 			instance.setVirtualModelInstance(null);
 			modelSlotInstances.remove(instance);
@@ -450,7 +450,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 		}
 	}
 
-	public void addToModelSlotInstances(ModelSlotInstance<?, ?> instance) {
+	public void addToModelSlotInstances(ModelSlotInstance<?> instance) {
 		if (!modelSlotInstances.contains(instance)) {
 			instance.setVirtualModelInstance(this);
 			modelSlotInstances.add(instance);
@@ -482,8 +482,8 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	public Set<FlexoModel<?, ?>> getAllModels() {
 		Set<FlexoModel<?, ?>> allModels = new HashSet<FlexoModel<?, ?>>();
 		for (ModelSlotInstance instance : getModelSlotInstances()) {
-			if (instance.getModel() != null) {
-				allModels.add(instance.getModel());
+			if (instance.getResourceData() != null) {
+				allModels.add(instance.getResourceData());
 			}
 		}
 		return allModels;

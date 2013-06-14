@@ -23,12 +23,15 @@ package org.openflexo.foundation.view;
 
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.ResourceData;
+import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.VirtualModelInstanceResource;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
+import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
 import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
 import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
@@ -46,14 +49,15 @@ import org.openflexo.toolbox.StringUtils;
  * @see View
  * 
  */
-public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends VirtualModelInstanceObject {
+public abstract class ModelSlotInstance<MS extends ModelSlot<RD>, RD extends ResourceData<RD>> extends VirtualModelInstanceObject {
 
 	private static final Logger logger = Logger.getLogger(ModelSlotInstance.class.getPackage().getName());
 
 	private View view;
 	private VirtualModelInstance<?, ?> vmInstance;
-	private ModelSlot<M, MM> modelSlot;
-	private M model;
+	private MS modelSlot;
+	private RD resourceData;
+	private TechnologyAdapterResource<RD> resource;
 	// Serialization/deserialization only, do not use
 	private String modelURI;
 	// Serialization/deserialization only, do not use
@@ -68,6 +72,10 @@ public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 		initializeDeserialization(builder);
 	}
 
+	protected ModelSlotInstance(FlexoProject project) {
+		super(project);
+	}
+
 	/**
 	 * Constructor invoked during deserialization
 	 * 
@@ -77,13 +85,13 @@ public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 		initializeDeserialization(builder);
 	}
 
-	public ModelSlotInstance(View view, ModelSlot<M, MM> modelSlot) {
+	public ModelSlotInstance(View view, MS modelSlot) {
 		super(view.getProject());
 		this.view = view;
 		this.modelSlot = modelSlot;
 	}
 
-	public ModelSlotInstance(VirtualModelInstance<?, ?> vmInstance, ModelSlot<M, MM> modelSlot) {
+	public ModelSlotInstance(VirtualModelInstance<?, ?> vmInstance, MS modelSlot) {
 		super(vmInstance.getProject());
 		this.vmInstance = vmInstance;
 		this.view = vmInstance.getView();
@@ -118,51 +126,58 @@ public class ModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMeta
 		this.vmInstance = vmInstance;
 	}
 
-	public void setModelSlot(ModelSlot<M, MM> modelSlot) {
+	public void setModelSlot(MS modelSlot) {
 		this.modelSlot = modelSlot;
 	}
 
-	public ModelSlot<M, MM> getModelSlot() {
+	public MS getModelSlot() {
 		if (getVirtualModelInstance() != null && modelSlot == null && StringUtils.isNotEmpty(modelSlotName)) {
-			modelSlot = (ModelSlot<M, MM>) getVirtualModelInstance().getVirtualModel().getModelSlot(modelSlotName);
+			modelSlot = (MS) getVirtualModelInstance().getVirtualModel().getModelSlot(modelSlotName);
 		}
 		return modelSlot;
 	}
 
-	public void setModel(M model) {
-		this.model = model;
+	public void setResourceData(RD resourceData) {
+		this.resourceData = resourceData;
+		this.resource = (TechnologyAdapterResource<RD>) resourceData.getResource();
 	}
 
-	public M getModel() {
-		if (getVirtualModelInstance() != null && model == null && StringUtils.isNotEmpty(modelURI)) {
+	// TODO: rename as getResourceData
+	public RD getResourceData() {
+		if (getVirtualModelInstance() != null && resourceData == null && StringUtils.isNotEmpty(modelURI)) {
 			if (getModelSlot() instanceof VirtualModelModelSlot) {
 				VirtualModelInstanceResource vmiResource = getProject().getViewLibrary().getVirtualModelInstance(modelURI);
 				if (vmiResource != null) {
-					model = (M) vmiResource.getVirtualModelInstance();
+					resourceData = (RD) vmiResource.getVirtualModelInstance();
+				}
+			} else if (getModelSlot() instanceof TypeSafeModelSlot) {
+				FlexoModelResource<?, ?> modelResource = getVirtualModelInstance().getInformationSpace().getModelWithURI(modelURI);
+				if (modelResource != null) {
+					resourceData = (RD) modelResource.getModel();
 				}
 			} else {
-				FlexoModelResource<M, MM> modelResource = (FlexoModelResource<M, MM>) getVirtualModelInstance().getInformationSpace()
-						.getModelWithURI(modelURI);
-				if (modelResource != null) {
-					model = modelResource.getModel();
-				}
+				logger.warning("Please implement me ! (getModel() in ModelSlotInstance");
 			}
 		}
 		// Special case to handle reflexive model slots
-		if (model == null && getVirtualModelInstance() != null
+		if (resourceData == null && getVirtualModelInstance() != null
 				&& getModelSlot().equals(getVirtualModelInstance().getVirtualModel().getReflexiveModelSlot())) {
-			model = (M) getVirtualModelInstance();
+			resourceData = (RD) getVirtualModelInstance();
 		}
-		if (model == null && StringUtils.isNotEmpty(modelURI)) {
+		if (resourceData == null && StringUtils.isNotEmpty(modelURI)) {
 			logger.warning("cannot find model " + modelURI);
 		}
-		return model;
+		return resourceData;
+	}
+
+	public TechnologyAdapterResource<RD> getResource() {
+		return resource;
 	}
 
 	// Serialization/deserialization only, do not use
 	public String getModelURI() {
-		if (getModel() != null) {
-			return getModel().getURI();
+		if (getResource() != null) {
+			return getResource().getURI();
 		}
 		return modelURI;
 	}

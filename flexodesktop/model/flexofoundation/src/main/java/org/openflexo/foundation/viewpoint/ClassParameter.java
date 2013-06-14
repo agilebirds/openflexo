@@ -28,7 +28,7 @@ import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
 
 public class ClassParameter extends InnerModelSlotParameter {
 
@@ -113,11 +113,11 @@ public class ClassParameter extends InnerModelSlotParameter {
 	}
 
 	@Override
-	public FlexoOntologyModelSlot<?, ?> getModelSlot() {
-		FlexoOntologyModelSlot<?, ?> returned = (FlexoOntologyModelSlot<?, ?>) super.getModelSlot();
+	public TypeSafeModelSlot getModelSlot() {
+		TypeSafeModelSlot returned = (TypeSafeModelSlot) super.getModelSlot();
 		if (returned == null) {
-			if (getVirtualModel() != null && getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class).size() > 0) {
-				return getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class).get(0);
+			if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypeSafeModelSlot.class).size() > 0) {
+				return getVirtualModel().getModelSlots(TypeSafeModelSlot.class).get(0);
 			}
 		}
 		return returned;

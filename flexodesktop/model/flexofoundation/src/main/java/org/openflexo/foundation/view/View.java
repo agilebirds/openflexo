@@ -282,7 +282,7 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 	 * @return
 	 */
 	public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> ModelSlotInstance<M, MM> getModelSlotInstance(
-			ModelSlot<M, MM> modelSlot) {
+			ModelSlot modelSlot) {
 		// TODO
 		logger.warning("Please implement me");
 		return null;
@@ -304,7 +304,7 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 		modelSlotInstances.add(instance);
 	}
 
-	/*public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> void setModel(ModelSlot<M, MM> modelSlot, M model) {
+	/*public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> void setModel(ModelSlot modelSlot, M model) {
 		modelsMap.put(modelSlot, model);
 		for (ModelSlotInstance instance : modelSlotInstances) {
 			if (instance.getModelSlot().equals(modelSlot)) {
@@ -317,7 +317,7 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 		modelSlotInstances.add(instance);
 	}
 
-	public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> M getModel(ModelSlot<M, MM> modelSlot, boolean createIfDoesNotExist) {
+	public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> M getModel(ModelSlot modelSlot, boolean createIfDoesNotExist) {
 		M model = (M) modelsMap.get(modelSlot);
 		if (createIfDoesNotExist && model == null) {
 			try {
@@ -342,7 +342,7 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 		return model;
 	}
 
-	public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> M getModel(ModelSlot<M, MM> modelSlot) {
+	public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> M getModel(ModelSlot modelSlot) {
 		return getModel(modelSlot, true);
 	}*/
 
@@ -359,8 +359,8 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 	public Set<FlexoModel<?, ?>> getAllModels() {
 		Set<FlexoModel<?, ?>> allModels = new HashSet<FlexoModel<?, ?>>();
 		for (ModelSlotInstance<?, ?> instance : getModelSlotInstances()) {
-			if (instance.getModel() != null) {
-				allModels.add(instance.getModel());
+			if (instance.getResourceData() != null) {
+				allModels.add(instance.getResourceData());
 			}
 		}
 		return allModels;

@@ -32,7 +32,7 @@ import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
-import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
@@ -66,7 +66,7 @@ import org.openflexo.xmlcode.XMLSerializable;
 @DeclareEditionActions({ @DeclareEditionAction(AddXSIndividual.class), // Add instance
 		@DeclareEditionAction(AddXSClass.class) // Add class
 })
-public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel> {
+public class XSDModelSlot extends TypeSafeModelSlot<XMLModel, XSDMetaModel> {
 
 	private static final Logger logger = Logger.getLogger(XSDModelSlot.class.getPackage().getName());
 
@@ -311,7 +311,7 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 
 	@Override
 	public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) {
-		return msInstance.getModel().getObject(objectURI);
+		return msInstance.getResourceData().getObject(objectURI);
 	}
 
 	// ==========================================================================

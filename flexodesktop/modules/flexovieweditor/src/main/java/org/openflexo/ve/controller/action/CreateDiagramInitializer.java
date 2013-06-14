@@ -63,7 +63,7 @@ public class CreateDiagramInitializer extends ActionInitializer<CreateDiagram, V
 		return instanciateShowDialogAndReturnStatus(action, VECst.CHOOSE_AND_CONFIGURE_CREATION_SCHEME_DIALOG_FIB);
 	}
 
-	private Status configureModelSlot(CreateDiagram action, ModelSlot<?, ?> configuredModelSlot) {
+	private Status configureModelSlot(CreateDiagram action, ModelSlot configuredModelSlot) {
 		return instanciateShowDialogAndReturnStatus(action.getModelSlotInstanceConfiguration(configuredModelSlot),
 				VECst.CONFIGURE_MODEL_SLOT_INSTANCE_DIALOG_FIB);
 	}
@@ -86,7 +86,7 @@ public class CreateDiagramInitializer extends ActionInitializer<CreateDiagram, V
 								&& action.getDiagramSpecification().hasCreationScheme()) {
 							result = chooseAndConfigureCreationScheme(action);
 						} else {
-							ModelSlot<?, ?> configuredModelSlot = action.getVirtualModel().getModelSlots().get(step - 1);
+							ModelSlot configuredModelSlot = action.getVirtualModel().getModelSlots().get(step - 1);
 							result = configureModelSlot(action, configuredModelSlot);
 						}
 						if (result == Status.CANCELED) {

@@ -45,17 +45,17 @@ import org.openflexo.foundation.resource.FlexoResourceCenterService;
  * @author sylvain
  * 
  */
-public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends FlexoObject {
+public abstract class TechnologyContextManager extends FlexoObject {
 
 	private static final Logger logger = Logger.getLogger(TechnologyContextManager.class.getPackage().getName());
 
-	private TechnologyAdapter<M, MM> adapter;
+	private TechnologyAdapter adapter;
 	private FlexoResourceCenterService resourceCenterService;
 
 	/** Stores all known metamodels where key is the URI of metamodel */
-	protected Map<String, FlexoMetaModelResource<M, MM>> metamodels = new HashMap<String, FlexoMetaModelResource<M, MM>>();
+	protected Map<String, FlexoMetaModelResource<?, ?>> metamodels = new HashMap<String, FlexoMetaModelResource<?, ?>>();
 	/** Stores all known models where key is the URI of model */
-	protected Map<String, FlexoModelResource<M, MM>> models = new HashMap<String, FlexoModelResource<M, MM>>();
+	protected Map<String, FlexoModelResource<?, ?>> models = new HashMap<String, FlexoModelResource<?, ?>>();
 
 	protected Hashtable<IFlexoOntologyClass, IndividualOfClass> individualsOfClass;
 	protected Hashtable<IFlexoOntologyClass, SubClassOfClass> subclassesOfClass;
@@ -91,7 +91,7 @@ public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM e
 		}
 	}
 
-	public TechnologyContextManager(TechnologyAdapter<M, MM> adapter, FlexoResourceCenterService resourceCenterService) {
+	public TechnologyContextManager(TechnologyAdapter adapter, FlexoResourceCenterService resourceCenterService) {
 		this.adapter = adapter;
 		this.resourceCenterService = resourceCenterService;
 		individualsOfClass = new Hashtable<IFlexoOntologyClass, IndividualOfClass>();
@@ -99,7 +99,7 @@ public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM e
 		subpropertiesOfProperty = new Hashtable<IFlexoOntologyStructuralProperty, SubPropertyOfProperty>();
 	}
 
-	public TechnologyAdapter<M, MM> getTechnologyAdapter() {
+	public TechnologyAdapter getTechnologyAdapter() {
 		return adapter;
 	}
 
@@ -117,7 +117,7 @@ public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM e
 	 * 
 	 * @param newModel
 	 */
-	public void registerMetaModel(FlexoMetaModelResource<M, MM> newMetaModelResource) {
+	public void registerMetaModel(FlexoMetaModelResource<?, ?> newMetaModelResource) {
 		metamodels.put(newMetaModelResource.getURI(), newMetaModelResource);
 	}
 
@@ -126,7 +126,7 @@ public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM e
 	 * 
 	 * @param newModel
 	 */
-	public void registerModel(FlexoModelResource<M, MM> newModelResource) {
+	public void registerModel(FlexoModelResource<?, ?> newModelResource) {
 		models.put(newModelResource.getURI(), newModelResource);
 	}
 
@@ -136,7 +136,7 @@ public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM e
 	 * @param uri
 	 * @return
 	 */
-	public FlexoMetaModelResource<M, MM> getMetaModelWithURI(String uri) {
+	public FlexoMetaModelResource<?, ?> getMetaModelWithURI(String uri) {
 		return metamodels.get(uri);
 	}
 
@@ -146,11 +146,11 @@ public abstract class TechnologyContextManager<M extends FlexoModel<M, MM>, MM e
 	 * @param uri
 	 * @return
 	 */
-	public FlexoModelResource<M, MM> getModelWithURI(String uri) {
+	public FlexoModelResource<?, ?> getModelWithURI(String uri) {
 		return models.get(uri);
 	}
 
-	public Collection<FlexoMetaModelResource<M, MM>> getAllMetaModels() {
+	public Collection<FlexoMetaModelResource<?, ?>> getAllMetaModels() {
 		return metamodels.values();
 	}
 }

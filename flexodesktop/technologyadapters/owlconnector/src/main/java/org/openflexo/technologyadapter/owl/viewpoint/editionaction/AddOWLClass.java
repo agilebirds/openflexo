@@ -28,14 +28,12 @@ import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddClass;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.technologyadapter.owl.OWLModelSlot;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
-import org.openflexo.technologyadapter.owl.model.OWLOntology;
 
-public class AddOWLClass extends AddClass<OWLOntology, OWLOntology, OWLClass> {
+public class AddOWLClass extends AddClass<OWLModelSlot, OWLClass> {
 
 	private static final Logger logger = Logger.getLogger(AddOWLClass.class.getPackage().getName());
-
-
 
 	private String dataPropertyURI = null;
 
@@ -69,7 +67,7 @@ public class AddOWLClass extends AddClass<OWLOntology, OWLOntology, OWLClass> {
 		OWLClass newClass = null;
 		try {
 			logger.info("Adding class " + newClassName + " as " + father);
-			newClass = getModelSlotInstance(action).getModel().createOntologyClass(newClassName, father);
+			newClass = getModelSlotInstance(action).getResourceData().createOntologyClass(newClassName, father);
 			logger.info("Added class " + newClass.getName() + " as " + father);
 		} catch (DuplicateURIException e) {
 			e.printStackTrace();

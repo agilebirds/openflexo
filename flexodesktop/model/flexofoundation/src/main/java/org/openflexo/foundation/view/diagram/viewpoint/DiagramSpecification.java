@@ -330,7 +330,7 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 		// For all "old" viewpoints, we consider a OWL model slot
 		try {
 			Class owlTechnologyAdapterClass = Class.forName("org.openflexo.technologyadapter.owl.OWLTechnologyAdapter");
-			TechnologyAdapter<?, ?> OWL = viewPointLibrary.getServiceManager().getTechnologyAdapterService()
+			TechnologyAdapter OWL = viewPointLibrary.getServiceManager().getTechnologyAdapterService()
 					.getTechnologyAdapter(owlTechnologyAdapterClass);
 
 			String importedOntology = null;
@@ -355,7 +355,7 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 						+ r.getURI());
 			}*/
 
-			ModelSlot<?, ?> ms = OWL.createNewModelSlot(this);
+			ModelSlot ms = OWL.createNewModelSlot(this);
 			ms.setName("owl");
 			ms.setMetaModelResource(r);
 			addToModelSlots(ms);

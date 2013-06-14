@@ -33,7 +33,6 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterBindingFactory;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
-import org.openflexo.foundation.view.VirtualModelInstance;
 
 /**
  * This class defines and implements the Openflexo built-in virtual model technology adapter
@@ -41,8 +40,7 @@ import org.openflexo.foundation.view.VirtualModelInstance;
  * @author sylvain
  * 
  */
-public class VirtualModelTechnologyAdapter<VMI extends VirtualModelInstance<VMI, VM>, VM extends VirtualModel<VM>> extends
-		TechnologyAdapter<VMI, VM> {
+public class VirtualModelTechnologyAdapter extends TechnologyAdapter {
 
 	private static final Logger logger = Logger.getLogger(VirtualModelTechnologyAdapter.class.getPackage().getName());
 
@@ -55,13 +53,13 @@ public class VirtualModelTechnologyAdapter<VMI extends VirtualModelInstance<VMI,
 	}
 
 	@Override
-	public VirtualModelModelSlot<VMI, VM> createNewModelSlot(ViewPoint viewPoint) {
-		return new VirtualModelModelSlot<VMI, VM>(viewPoint, this);
+	public VirtualModelModelSlot createNewModelSlot(ViewPoint viewPoint) {
+		return new VirtualModelModelSlot(viewPoint, this);
 	}
 
 	@Override
-	public VirtualModelModelSlot<VMI, VM> createNewModelSlot(VirtualModel<?> virtualModel) {
-		return new VirtualModelModelSlot<VMI, VM>(virtualModel, this);
+	public VirtualModelModelSlot createNewModelSlot(VirtualModel<?> virtualModel) {
+		return new VirtualModelModelSlot(virtualModel, this);
 	}
 
 	/**

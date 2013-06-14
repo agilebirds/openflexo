@@ -59,8 +59,8 @@ public abstract class FileSystemBasedResourceCenter extends FileResourceReposito
 	private File rootDirectory;
 
 	private ViewPointRepository viewPointRepository;
-	private HashMap<TechnologyAdapter<?, ?>, ModelRepository<?, ?, ?, ?>> modelRepositories = new HashMap<TechnologyAdapter<?, ?>, ModelRepository<?, ?, ?, ?>>();
-	private HashMap<TechnologyAdapter<?, ?>, MetaModelRepository<?, ?, ?, ?>> metaModelRepositories = new HashMap<TechnologyAdapter<?, ?>, MetaModelRepository<?, ?, ?, ?>>();
+	private HashMap<TechnologyAdapter, ModelRepository<?, ?, ?, ?>> modelRepositories = new HashMap<TechnologyAdapter, ModelRepository<?, ?, ?, ?>>();
+	private HashMap<TechnologyAdapter, MetaModelRepository<?, ?, ?, ?>> metaModelRepositories = new HashMap<TechnologyAdapter, MetaModelRepository<?, ?, ?, ?>>();
 
 	private TechnologyAdapterService technologyAdapterService;
 
@@ -168,7 +168,7 @@ public abstract class FileSystemBasedResourceCenter extends FileResourceReposito
 	public void initialize(TechnologyAdapterService technologyAdapterService) {
 		logger.info("Initializing " + technologyAdapterService);
 		this.technologyAdapterService = technologyAdapterService;
-		for (TechnologyAdapter<?, ?> adapter : technologyAdapterService.getTechnologyAdapters()) {
+		for (TechnologyAdapter adapter : technologyAdapterService.getTechnologyAdapters()) {
 			logger.info("Initializing resource center " + this + " with adapter " + adapter.getName());
 			TechnologyContextManager<?, ?> technologyContextManager = technologyAdapterService.getTechnologyContextManager(adapter);
 			initializeForTechnology(adapter, technologyContextManager);

@@ -188,7 +188,7 @@ public class AddEMFObjectIndividualAttributeDataPropertyValue extends SetEMFProp
 	public EMFObjectIndividualAttributeDataPropertyValue performAction(EditionSchemeAction action) {
 		EMFObjectIndividualAttributeDataPropertyValue result = null;
 		ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
-		EMFModel model = modelSlotInstance.getModel();
+		EMFModel model = modelSlotInstance.getResourceData();
 		// // Add Attribute in EMF
 		getSubject(action).getObject().eSet(((EMFAttributeDataProperty) getDataProperty()).getObject(), getValue(action));
 		// // Instanciate Wrapper

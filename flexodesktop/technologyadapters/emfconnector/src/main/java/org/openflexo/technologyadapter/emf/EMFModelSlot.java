@@ -32,7 +32,7 @@ import org.openflexo.foundation.technologyadapter.DeclareFetchRequest;
 import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
-import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
@@ -72,7 +72,7 @@ import org.openflexo.technologyadapter.emf.viewpoint.editionaction.SelectEMFObje
 })
 @DeclareFetchRequests({ @DeclareFetchRequest(SelectEMFObjectIndividual.class) // Allows to select some EMFObjectIndividual
 })
-public class EMFModelSlot extends FlexoOntologyModelSlot<EMFModel, EMFMetaModel> {
+public class EMFModelSlot extends TypeSafeModelSlot<EMFModel, EMFMetaModel> {
 
 	private static final Logger logger = Logger.getLogger(EMFModelSlot.class.getPackage().getName());
 
@@ -189,7 +189,7 @@ public class EMFModelSlot extends FlexoOntologyModelSlot<EMFModel, EMFMetaModel>
 
 	@Override
 	public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) {
-		return msInstance.getModel().getObject(objectURI);
+		return msInstance.getResourceData().getObject(objectURI);
 	}
 
 	@Override

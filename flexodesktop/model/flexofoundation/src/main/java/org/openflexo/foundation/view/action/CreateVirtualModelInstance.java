@@ -109,7 +109,7 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 	public CreateVirtualModelInstance(FlexoActionType<A, View, FlexoModelObject> actionType, View focusedObject,
 			Vector<FlexoModelObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
-		modelSlotConfigurations = new Hashtable<ModelSlot<?, ?>, ModelSlotInstanceConfiguration<?>>();
+		modelSlotConfigurations = new Hashtable<ModelSlot<?>, ModelSlotInstanceConfiguration<?, ?>>();
 	}
 
 	public abstract VirtualModelInstanceResource makeVirtualModelInstanceResource() throws InvalidFileNameException, SaveResourceException;
@@ -143,8 +143,8 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 
 		System.out.println("OK, we have created the file " + newVirtualModelInstanceResource.getFile().getAbsolutePath());
 
-		for (ModelSlot<?, ?> ms : virtualModel.getModelSlots()) {
-			ModelSlotInstanceConfiguration<?> configuration = getModelSlotInstanceConfiguration(ms);
+		for (ModelSlot ms : virtualModel.getModelSlots()) {
+			ModelSlotInstanceConfiguration<?, ?> configuration = getModelSlotInstanceConfiguration(ms);
 			if (configuration.isValidConfiguration()) {
 				newVirtualModelInstance.addToModelSlotInstances(configuration.createModelSlotInstance(newVirtualModelInstance));
 			} else {
@@ -240,7 +240,7 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 		return newVirtualModelInstance;
 	}
 
-	private Hashtable<ModelSlot<?, ?>, ModelSlotInstanceConfiguration<?>> modelSlotConfigurations;
+	private Hashtable<ModelSlot, ModelSlotInstanceConfiguration<?, ?>> modelSlotConfigurations;
 
 	public VirtualModel<?> getVirtualModel() {
 		return virtualModel;
@@ -251,14 +251,14 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 			this.virtualModel = virtualModel;
 			modelSlotConfigurations.clear();
 			if (this.virtualModel != null) {
-				for (ModelSlot<?, ?> ms : this.virtualModel.getModelSlots()) {
+				for (ModelSlot<?> ms : this.virtualModel.getModelSlots()) {
 					modelSlotConfigurations.put(ms, ms.createConfiguration(this));
 				}
 			}
 		}
 	}
 
-	public ModelSlotInstanceConfiguration<?> getModelSlotInstanceConfiguration(ModelSlot<?, ?> ms) {
+	public ModelSlotInstanceConfiguration<?, ?> getModelSlotInstanceConfiguration(ModelSlot ms) {
 		return modelSlotConfigurations.get(ms);
 	}
 
@@ -274,7 +274,7 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 		if (getVirtualModel() == null) {
 			return false;
 		}
-		for (ModelSlot<?, ?> ms : virtualModel.getModelSlots()) {
+		for (ModelSlot ms : virtualModel.getModelSlots()) {
 			ModelSlotInstanceConfiguration<?> configuration = getModelSlotInstanceConfiguration(ms);
 			if (!configuration.isValidConfiguration()) {
 				return false;

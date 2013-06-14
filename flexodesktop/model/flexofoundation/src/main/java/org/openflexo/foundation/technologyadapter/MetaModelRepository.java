@@ -36,7 +36,7 @@ import org.openflexo.foundation.resource.ResourceRepository;
  * @param <R>
  * @param <TA>
  */
-public abstract class MetaModelRepository<R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>>
+public abstract class MetaModelRepository<R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter>
 		extends FileResourceRepository<R> {
 	/** Logger. */
 	private static final Logger logger = Logger.getLogger(MetaModelRepository.class.getPackage().getName());

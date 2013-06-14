@@ -36,7 +36,7 @@ import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
  * @author sylvain
  * 
  */
-public class VirtualModelModelSlotInstanceConfiguration<MS extends VirtualModelModelSlot<?, ?>> extends ModelSlotInstanceConfiguration<MS> {
+public class VirtualModelModelSlotInstanceConfiguration<MS extends VirtualModelModelSlot> extends ModelSlotInstanceConfiguration<MS> {
 
 	private static final Logger logger = Logger.getLogger(VirtualModelModelSlotInstanceConfiguration.class.getPackage().getName());
 

@@ -57,14 +57,14 @@ public class SelectEMFObjectIndividual extends SelectIndividual<EMFModel, EMFMet
 			logger.warning("Could not access model slot instance. Abort.");
 			return null;
 		}
-		if (getModelSlotInstance(action).getModel() == null) {
+		if (getModelSlotInstance(action).getResourceData() == null) {
 			logger.warning("Could not access model adressed by model slot instance. Abort.");
 			return null;
 		}
 
 		// System.out.println("Selecting EMFObjectIndividuals in " + getModelSlotInstance(action).getModel() + " with type=" + getType());
 		List<EMFObjectIndividual> selectedIndividuals = new ArrayList<EMFObjectIndividual>(0);
-		EMFModel emfModel = getModelSlotInstance(action).getModel();
+		EMFModel emfModel = getModelSlotInstance(action).getResourceData();
 		Resource resource = emfModel.getEMFResource();
 		IFlexoOntologyClass flexoOntologyClass = getType();
 		List<EObject> selectedEMFIndividuals = new ArrayList<EObject>();

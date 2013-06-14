@@ -11,5 +11,5 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
  */
 public interface TechnologySpecificCustomType extends CustomType {
 
-	public TechnologyAdapter<?, ?> getTechnologyAdapter();
+	public TechnologyAdapter getTechnologyAdapter();
 }

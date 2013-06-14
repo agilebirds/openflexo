@@ -33,12 +33,12 @@ public class ModelSlotRemoved extends ViewPointDataModification {
 
 	private ViewPoint viewPoint;
 
-	public ModelSlotRemoved(ModelSlot<?, ?> modelSlot, ViewPoint viewPoint) {
+	public ModelSlotRemoved(ModelSlot modelSlot, ViewPoint viewPoint) {
 		super("modelSlots", modelSlot, null);
 		this.viewPoint = viewPoint;
 	}
 
-	public ModelSlotRemoved(ModelSlot<?, ?> modelSlot, VirtualModel virtualModel) {
+	public ModelSlotRemoved(ModelSlot modelSlot, VirtualModel virtualModel) {
 		super("modelSlots", virtualModel, null);
 		this.viewPoint = viewPoint;
 	}

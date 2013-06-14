@@ -21,7 +21,6 @@ package org.openflexo.foundation.viewpoint;
 
 import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.DataModification;
@@ -42,11 +41,11 @@ import org.openflexo.toolbox.StringUtils;
  */
 public abstract class PatternRole<T> extends EditionPatternObject {
 
-	private static final Logger logger = Logger.getLogger(PatternRole.class.getPackage().getName());
+	// private static final Logger logger = Logger.getLogger(PatternRole.class.getPackage().getName());
 
 	private EditionPattern _pattern;
 
-	private ModelSlot<?, ?> modelSlot;
+	private ModelSlot<?> modelSlot;
 
 	public PatternRole(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
@@ -62,11 +61,11 @@ public abstract class PatternRole<T> extends EditionPatternObject {
 		return null;
 	}
 
-	public ModelSlot<?, ?> getModelSlot() {
+	public ModelSlot<?> getModelSlot() {
 		return modelSlot;
 	}
 
-	public void setModelSlot(ModelSlot<?, ?> modelSlot) {
+	public void setModelSlot(ModelSlot<?> modelSlot) {
 		this.modelSlot = modelSlot;
 		setChanged();
 		notifyObservers(new DataModification("modelSlot", null, modelSlot));

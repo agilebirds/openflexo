@@ -75,7 +75,7 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, ViewPointObjec
 
 	public String modelSlotName;
 	public String description;
-	public TechnologyAdapter<?, ?> technologyAdapter;
+	public TechnologyAdapter technologyAdapter;
 	public FlexoMetaModelResource<?, ?> mmRes;
 	public VirtualModelResource vmRes;
 	public boolean required = true;
@@ -115,7 +115,7 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, ViewPointObjec
 
 	}
 
-	public ModelSlot<?, ?> getNewModelSlot() {
+	public ModelSlot getNewModelSlot() {
 		return newModelSlot;
 	}
 

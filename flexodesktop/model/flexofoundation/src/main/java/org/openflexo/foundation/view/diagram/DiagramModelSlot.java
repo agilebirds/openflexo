@@ -126,7 +126,7 @@ public class DiagramModelSlot extends VirtualModelModelSlot<Diagram, DiagramSpec
 	}
 
 	@Override
-	public <EA extends EditionAction<?, ?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
+	public <EA extends EditionAction<?,?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddDiagram.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddDiagram(null);
 		} else if (AddShape.class.isAssignableFrom(editionActionClass)) {

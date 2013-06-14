@@ -78,7 +78,7 @@ public class EditionPatternInstanceParameter extends InnerModelSlotParameter {
 	}
 
 	@Override
-	public void setModelSlot(ModelSlot<?, ?> modelSlot) {
+	public void setModelSlot(ModelSlot modelSlot) {
 		super.setModelSlot(modelSlot);
 		setChanged();
 		notifyObservers(new DataModification("modelSlotVirtualModel", null, modelSlot));

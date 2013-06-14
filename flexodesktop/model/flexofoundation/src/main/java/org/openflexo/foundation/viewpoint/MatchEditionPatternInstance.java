@@ -31,15 +31,12 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.validation.CompoundIssue;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.CreationSchemeAction;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
@@ -58,8 +55,7 @@ import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationConte
  * @param <M>
  * @param <MM>
  */
-public class MatchEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends
-		AssignableAction<M, MM, EditionPatternInstance> {
+public class MatchEditionPatternInstance extends AssignableAction<EditionPatternInstance> {
 
 	private static final Logger logger = Logger.getLogger(MatchEditionPatternInstance.class.getPackage().getName());
 
@@ -655,16 +651,16 @@ public class MatchEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends
 	}
 
 	public static class MatchEditionPatternInstanceParametersMustBeValid extends
-			ValidationRule<MatchEditionPatternInstanceParametersMustBeValid, MatchEditionPatternInstance<?, ?>> {
+			ValidationRule<MatchEditionPatternInstanceParametersMustBeValid, MatchEditionPatternInstance> {
 		public MatchEditionPatternInstanceParametersMustBeValid() {
 			super(MatchEditionPatternInstance.class, "match_edition_pattern_parameters_must_be_valid");
 		}
 
 		@Override
-		public ValidationIssue<MatchEditionPatternInstanceParametersMustBeValid, MatchEditionPatternInstance<?, ?>> applyValidation(
-				MatchEditionPatternInstance<?, ?> action) {
+		public ValidationIssue<MatchEditionPatternInstanceParametersMustBeValid, MatchEditionPatternInstance> applyValidation(
+				MatchEditionPatternInstance action) {
 			if (action.getCreationScheme() != null) {
-				Vector<ValidationIssue<MatchEditionPatternInstanceParametersMustBeValid, MatchEditionPatternInstance<?, ?>>> issues = new Vector<ValidationIssue<MatchEditionPatternInstanceParametersMustBeValid, MatchEditionPatternInstance<?, ?>>>();
+				Vector<ValidationIssue<MatchEditionPatternInstanceParametersMustBeValid, MatchEditionPatternInstance>> issues = new Vector<ValidationIssue<MatchEditionPatternInstanceParametersMustBeValid, MatchEditionPatternInstance>>();
 				for (CreateEditionPatternInstanceParameter p : action.getParameters()) {
 					if (p.getParam().getIsRequired()) {
 						if (p.getValue() == null || !p.getValue().isSet()) {
@@ -686,7 +682,7 @@ public class MatchEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends
 				} else if (issues.size() == 1) {
 					return issues.firstElement();
 				} else {
-					return new CompoundIssue<MatchEditionPatternInstance.MatchEditionPatternInstanceParametersMustBeValid, MatchEditionPatternInstance<?, ?>>(
+					return new CompoundIssue<MatchEditionPatternInstance.MatchEditionPatternInstanceParametersMustBeValid, MatchEditionPatternInstance>(
 							action, issues);
 				}
 			}
@@ -701,7 +697,7 @@ public class MatchEditionPatternInstance<M extends FlexoModel<M, MM>, MM extends
 		}
 
 		@Override
-		public DataBinding<View> getBinding(MatchEditionPatternInstance object) {
+		public DataBinding<VirtualModelInstance> getBinding(MatchEditionPatternInstance object) {
 			return object.getVirtualModelInstance();
 		}
 

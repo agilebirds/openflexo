@@ -198,7 +198,7 @@ public class AddEMFObjectIndividualReferenceObjectPropertyValue<T> extends
 	public EMFObjectIndividualReferenceObjectPropertyValue performAction(EditionSchemeAction action) {
 		EMFObjectIndividualReferenceObjectPropertyValue result = null;
 		ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
-		EMFModel model = modelSlotInstance.getModel();
+		EMFModel model = modelSlotInstance.getResourceData();
 		// Add Reference in EMF
 		getSubject(action).getObject().eSet(((EMFReferenceObjectProperty) getObjectProperty()).getObject(), getObject(action));
 		// if (referenceObjectProperty.getObject().getUpperBound() != 1) {

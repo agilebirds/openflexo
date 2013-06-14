@@ -30,6 +30,6 @@ public interface FlexoMetaModel<MM extends FlexoMetaModel<MM>> extends /*Storage
 	 * 
 	 * @return
 	 */
-	public TechnologyAdapter<?, ?> getTechnologyAdapter();
+	public TechnologyAdapter getTechnologyAdapter();
 
 }

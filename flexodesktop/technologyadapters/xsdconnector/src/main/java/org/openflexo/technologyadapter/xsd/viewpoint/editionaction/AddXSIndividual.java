@@ -73,7 +73,7 @@ public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOnt
 		try {
 
 			ModelSlotInstance<XMLModel, XSDMetaModel> modelSlotInstance = getModelSlotInstance(action);
-			XMLModel model = getModelSlotInstance(action).getModel();
+			XMLModel model = getModelSlotInstance(action).getResourceData();
 			
 			newIndividual = model.createOntologyIndividual( father);
 			
@@ -93,7 +93,7 @@ public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOnt
 					// ... TODO
 				}
 			}
-			modelSlotInstance.getModel().setIsModified();
+			modelSlotInstance.getResourceData().setIsModified();
 
 			// add it to the model
 			// Two phase creation, then addition, to be able to process URIs once you have the property values

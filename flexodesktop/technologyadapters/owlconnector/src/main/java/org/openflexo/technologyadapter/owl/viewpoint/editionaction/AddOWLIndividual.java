@@ -78,10 +78,10 @@ public class AddOWLIndividual extends AddIndividual<OWLOntology, OWLOntology, OW
 		OWLIndividual newIndividual = null;
 		try {
 			if (getModelSlotInstance(action) != null) {
-				if (getModelSlotInstance(action).getModel() != null) {
+				if (getModelSlotInstance(action).getResourceData() != null) {
 					logger.info("Adding individual individualName=" + getIndividualName() + " father =" + getOntologyClass());
 					logger.info("Adding individual individualName=" + individualName + " father =" + father);
-					newIndividual = getModelSlotInstance(action).getModel().createOntologyIndividual(individualName, father);
+					newIndividual = getModelSlotInstance(action).getResourceData().createOntologyIndividual(individualName, father);
 					logger.info("********* Added individual " + newIndividual.getName() + " as " + father);
 
 					for (DataPropertyAssertion dataPropertyAssertion : getDataAssertions()) {
