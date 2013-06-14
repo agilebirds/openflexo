@@ -61,9 +61,10 @@ public abstract class TypeSafeModelSlot<M extends FlexoModel<M, MM>, MM extends 
 		return returned;
 	}
 
-	public AddIndividual<?, ?, ?> makeAddIndividualAction(IndividualPatternRole<?> patternRole, AbstractCreationScheme creationScheme) {
-		Class<? extends AddIndividual> addIndividualClass = getEditionActionClass(AddIndividual.class);
-		AddIndividual<?, ?, ?> returned = makeEditionAction(addIndividualClass);
+	public AddIndividual<? extends TypeSafeModelSlot, ?> makeAddIndividualAction(IndividualPatternRole<?> patternRole,
+			AbstractCreationScheme creationScheme) {
+		Class<? extends AddIndividual<? extends TypeSafeModelSlot, ?>> addIndividualClass = (Class<? extends AddIndividual<? extends TypeSafeModelSlot, ?>>) getEditionActionClass(AddIndividual.class);
+		AddIndividual<? extends TypeSafeModelSlot, ?> returned = makeEditionAction(addIndividualClass);
 
 		returned.setAssignation(new DataBinding(patternRole.getPatternRoleName()));
 		if (creationScheme.getParameter("uri") != null) {

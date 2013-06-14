@@ -78,7 +78,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	private static final Logger logger = Logger.getLogger(VirtualModelInstance.class.getPackage().getName());
 
 	private VirtualModelInstanceResource<VMI> resource;
-	private List<ModelSlotInstance<?>> modelSlotInstances;
+	private List<ModelSlotInstance<?, ?>> modelSlotInstances;
 	// private Map<ModelSlot, FlexoModel<?, ?>> modelsMap = new HashMap<ModelSlot, FlexoModel<?, ?>>(); // Do not serialize
 	// this.
 	private String title;
@@ -121,7 +121,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	public VirtualModelInstance(View view, VirtualModel virtualModel) {
 		super(virtualModel, null, view.getProject());
 		logger.info("Created new VirtualModelInstance for virtual model " + virtualModel);
-		modelSlotInstances = new ArrayList<ModelSlotInstance<?>>();
+		modelSlotInstances = new ArrayList<ModelSlotInstance<?, ?>>();
 		editionPatternInstances = new Hashtable<EditionPattern, Map<Long, EditionPatternInstance>>();
 	}
 
@@ -398,10 +398,10 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	 * @param modelSlot
 	 * @return
 	 */
-	public <RD extends ResourceData<RD>> ModelSlotInstance<RD> getModelSlotInstance(ModelSlot modelSlot) {
-		for (ModelSlotInstance<?> msInstance : getModelSlotInstances()) {
+	public <RD extends ResourceData<RD>> ModelSlotInstance<?, RD> getModelSlotInstance(ModelSlot modelSlot) {
+		for (ModelSlotInstance<?, ?> msInstance : getModelSlotInstances()) {
 			if (msInstance.getModelSlot() == modelSlot) {
-				return (ModelSlotInstance<RD>) msInstance;
+				return (ModelSlotInstance<?, RD>) msInstance;
 			}
 		}
 		if (modelSlot instanceof VirtualModelModelSlot && ((VirtualModelModelSlot) modelSlot).isReflexiveModelSlot()) {
@@ -423,7 +423,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	 * @param modelSlot
 	 * @return
 	 */
-	public ModelSlotInstance<?> getModelSlotInstance(String modelSlotName) {
+	public <RD extends ResourceData<RD>> ModelSlotInstance<?, RD> getModelSlotInstance(String modelSlotName) {
 		for (ModelSlotInstance<?> msInstance : getModelSlotInstances()) {
 			if (msInstance.getModelSlot().getName().equals(modelSlotName)) {
 				return msInstance;
@@ -433,11 +433,11 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 		return null;
 	}
 
-	public void setModelSlotInstances(List<ModelSlotInstance<?>> instances) {
+	public void setModelSlotInstances(List<ModelSlotInstance<?, ?>> instances) {
 		this.modelSlotInstances = instances;
 	}
 
-	public List<ModelSlotInstance<?>> getModelSlotInstances() {
+	public List<ModelSlotInstance<?, ?>> getModelSlotInstances() {
 		return modelSlotInstances;
 	}
 

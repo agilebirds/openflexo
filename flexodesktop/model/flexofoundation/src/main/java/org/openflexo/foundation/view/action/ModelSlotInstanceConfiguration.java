@@ -116,5 +116,5 @@ public abstract class ModelSlotInstanceConfiguration<MS extends ModelSlot<RD>, R
 		return option != null;
 	}
 
-	public abstract ModelSlotInstance<RD> createModelSlotInstance(VirtualModelInstance<?, ?> msInstance);
+	public abstract ModelSlotInstance<MS, RD> createModelSlotInstance(VirtualModelInstance<?, ?> msInstance);
 }

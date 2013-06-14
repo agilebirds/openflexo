@@ -189,7 +189,7 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 	 * @param actionClass
 	 * @return
 	 */
-	public <A extends EditionAction<?,?>> A createAction(Class<A> actionClass) {
+	public <A extends EditionAction<?, ?>> A createAction(Class<A> actionClass) {
 		Class[] constructorParams = new Class[1];
 		constructorParams[0] = VirtualModel.VirtualModelBuilder.class;
 		try {
@@ -328,7 +328,7 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 	 * @param editionActionClass
 	 * @return
 	 */
-	public abstract <EA extends EditionAction<?,?>> EA makeEditionAction(Class<EA> editionActionClass);
+	public abstract <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass);
 
 	/**
 	 * Creates and return a new {@link FetchRequest} of supplied class.<br>
@@ -338,7 +338,7 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 	 * @param fetchRequestClass
 	 * @return
 	 */
-	public abstract <FR extends FetchRequest<?>> FR makeFetchRequest(Class<FR> fetchRequestClass);
+	public abstract <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass);
 
 	public abstract ModelSlotInstanceConfiguration<? extends ModelSlot<RD>, RD> createConfiguration(CreateVirtualModelInstance<?> action);
 
@@ -354,7 +354,7 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 	 * @return URI as String
 	 */
 
-	public abstract String getURIForObject(ModelSlotInstance<RD> msInstance, Object o);
+	public abstract String getURIForObject(ModelSlotInstance<? extends ModelSlot, RD> msInstance, Object o);
 
 	/**
 	 * @param msInstance
@@ -362,7 +362,7 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 	 * @return the Object
 	 */
 
-	public abstract Object retrieveObjectWithURI(ModelSlotInstance<RD> msInstance, String objectURI);
+	public abstract Object retrieveObjectWithURI(ModelSlotInstance<? extends ModelSlot, RD> msInstance, String objectURI);
 
 	/**
 	 * Return first found class matching supplied class.<br>

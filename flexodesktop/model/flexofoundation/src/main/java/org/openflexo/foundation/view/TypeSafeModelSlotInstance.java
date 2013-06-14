@@ -25,21 +25,14 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
 import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 
 /**
- * Concretize the binding of a {@link ModelSlot} to a concrete {@link FlexoModel}<br>
- * This is the binding point between a {@link ModelSlot} and its concretization in a {@link VirtualModelInstance}
  * 
- * The {@link TypeSafeModelSlotInstance} are instantiated inside a {@link View}
- * 
- * @author Luka Le Roux, Sylvain Guerin
- * @see ModelSlot
- * @see FlexoModel
- * @see View
+ * @author Sylvain Guerin
+ * @see TypeSafeModelSlot
  * 
  */
 public class TypeSafeModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, MS extends TypeSafeModelSlot<M, MM>>

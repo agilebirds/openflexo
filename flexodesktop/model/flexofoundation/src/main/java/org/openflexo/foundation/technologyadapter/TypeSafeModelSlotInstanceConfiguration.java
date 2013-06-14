@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
@@ -87,13 +87,13 @@ public class TypeSafeModelSlotInstanceConfiguration<M extends FlexoModel<M, MM>,
 	}
 
 	@Override
-	public ModelSlotInstance<M> createModelSlotInstance(VirtualModelInstance<?, ?> vmInstance) {
-		ModelSlotInstance<M> returned = new ModelSlotInstance<M>(vmInstance, getModelSlot());
+	public TypeSafeModelSlotInstance<M, MM, MS> createModelSlotInstance(VirtualModelInstance<?, ?> vmInstance) {
+		TypeSafeModelSlotInstance<M, MM, MS> returned = new TypeSafeModelSlotInstance<M, MM, MS>(vmInstance, getModelSlot());
 		configureModelSlotInstance(returned);
 		return returned;
 	}
 
-	protected ModelSlotInstance<M> configureModelSlotInstance(ModelSlotInstance<M> msInstance) {
+	protected TypeSafeModelSlotInstance<M, MM, MS> configureModelSlotInstance(TypeSafeModelSlotInstance<M, MM, MS> msInstance) {
 		if (getOption() == DefaultModelSlotInstanceConfigurationOption.SelectExistingModel) {
 			if (modelResource != null) {
 				System.out.println("Select model with uri " + getModelResource().getURI());
@@ -124,12 +124,12 @@ public class TypeSafeModelSlotInstanceConfiguration<M extends FlexoModel<M, MM>,
 		return null;
 	}
 
-	private FlexoModelResource<M, MM> createProjectSpecificEmptyModel(ModelSlotInstance<M> msInstance, MS modelSlot) {
+	private FlexoModelResource<M, MM> createProjectSpecificEmptyModel(TypeSafeModelSlotInstance<M, MM, MS> msInstance, MS modelSlot) {
 		return modelSlot.createProjectSpecificEmptyModel(msInstance.getView(), getFilename(), getModelUri(),
 				modelSlot.getMetaModelResource());
 	}
 
-	private FlexoModelResource<M, MM> createSharedEmptyModel(ModelSlotInstance<M> msInstance, MS modelSlot) {
+	private FlexoModelResource<M, MM> createSharedEmptyModel(TypeSafeModelSlotInstance<M, MM, MS> msInstance, MS modelSlot) {
 		return modelSlot.createSharedEmptyModel(getResourceCenter(), getRelativePath(), getFilename(), getModelUri(),
 				modelSlot.getMetaModelResource());
 	}
