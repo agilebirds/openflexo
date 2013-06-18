@@ -405,7 +405,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 			}
 		}
 		if (modelSlot instanceof VirtualModelModelSlot && ((VirtualModelModelSlot) modelSlot).isReflexiveModelSlot()) {
-			ModelSlotInstance reflexiveModelSlotInstance = new ModelSlotInstance(getView(), modelSlot);
+			ModelSlotInstance reflexiveModelSlotInstance = new VirtualModelModelSlotInstance(getView(), (VirtualModelModelSlot) modelSlot);
 			reflexiveModelSlotInstance.setResourceData(this);
 			addToModelSlotInstances(reflexiveModelSlotInstance);
 			return reflexiveModelSlotInstance;
@@ -441,7 +441,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 		return modelSlotInstances;
 	}
 
-	public void removeFromModelSlotInstance(ModelSlotInstance<?> instance) {
+	public void removeFromModelSlotInstance(ModelSlotInstance<?, ?> instance) {
 		if (modelSlotInstances.contains(instance)) {
 			instance.setVirtualModelInstance(null);
 			modelSlotInstances.remove(instance);
@@ -450,7 +450,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 		}
 	}
 
-	public void addToModelSlotInstances(ModelSlotInstance<?> instance) {
+	public void addToModelSlotInstances(ModelSlotInstance<?, ?> instance) {
 		if (!modelSlotInstances.contains(instance)) {
 			instance.setVirtualModelInstance(this);
 			modelSlotInstances.add(instance);

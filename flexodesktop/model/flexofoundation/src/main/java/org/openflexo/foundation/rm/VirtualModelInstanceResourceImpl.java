@@ -13,9 +13,11 @@ import org.jdom2.JDOMException;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoXMLFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModelTechnologyAdapter;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
@@ -177,6 +179,19 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 		getContainer().getView().addToVirtualModelInstances(returned);
 		returned.clearIsModified();
 		return returned;
+	}
+
+	@Override
+	public TechnologyAdapter getTechnologyAdapter() {
+		if (getServiceManager() != null) {
+			return getServiceManager().getTechnologyAdapterService().getTechnologyAdapter(VirtualModelTechnologyAdapter.class);
+		}
+		return null;
+	}
+
+	@Override
+	public void setTechnologyAdapter(TechnologyAdapter technologyAdapter) {
+		// Not applicable
 	}
 
 }

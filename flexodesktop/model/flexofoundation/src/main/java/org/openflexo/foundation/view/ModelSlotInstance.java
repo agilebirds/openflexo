@@ -25,14 +25,10 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.rm.VirtualModelInstanceResource;
 import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
-import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
-import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
 import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.toolbox.StringUtils;
@@ -56,10 +52,8 @@ public abstract class ModelSlotInstance<MS extends ModelSlot<RD>, RD extends Res
 	private View view;
 	private VirtualModelInstance<?, ?> vmInstance;
 	private MS modelSlot;
-	private RD resourceData;
-	private TechnologyAdapterResource<RD> resource;
-	// Serialization/deserialization only, do not use
-	private String modelURI;
+	protected RD resourceData;
+	protected TechnologyAdapterResource<RD> resource;
 	// Serialization/deserialization only, do not use
 	private String modelSlotName;
 
@@ -143,32 +137,7 @@ public abstract class ModelSlotInstance<MS extends ModelSlot<RD>, RD extends Res
 	}
 
 	// TODO: rename as getResourceData
-	public RD getResourceData() {
-		if (getVirtualModelInstance() != null && resourceData == null && StringUtils.isNotEmpty(modelURI)) {
-			if (getModelSlot() instanceof VirtualModelModelSlot) {
-				VirtualModelInstanceResource vmiResource = getProject().getViewLibrary().getVirtualModelInstance(modelURI);
-				if (vmiResource != null) {
-					resourceData = (RD) vmiResource.getVirtualModelInstance();
-				}
-			} else if (getModelSlot() instanceof TypeSafeModelSlot) {
-				FlexoModelResource<?, ?> modelResource = getVirtualModelInstance().getInformationSpace().getModelWithURI(modelURI);
-				if (modelResource != null) {
-					resourceData = (RD) modelResource.getModel();
-				}
-			} else {
-				logger.warning("Please implement me ! (getModel() in ModelSlotInstance");
-			}
-		}
-		// Special case to handle reflexive model slots
-		if (resourceData == null && getVirtualModelInstance() != null
-				&& getModelSlot().equals(getVirtualModelInstance().getVirtualModel().getReflexiveModelSlot())) {
-			resourceData = (RD) getVirtualModelInstance();
-		}
-		if (resourceData == null && StringUtils.isNotEmpty(modelURI)) {
-			logger.warning("cannot find model " + modelURI);
-		}
-		return resourceData;
-	}
+	public abstract RD getResourceData();
 
 	public TechnologyAdapterResource<RD> getResource() {
 		return resource;

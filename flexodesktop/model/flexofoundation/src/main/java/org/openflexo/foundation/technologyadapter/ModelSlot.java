@@ -76,9 +76,9 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 	private ViewPoint viewPoint;
 	private VirtualModel<?> virtualModel;
 
-	private List<Class<? extends PatternRole>> availablePatternRoleTypes;
-	private List<Class<? extends EditionAction>> availableEditionActionTypes;
-	private List<Class<? extends EditionAction>> availableFetchRequestActionTypes;
+	private List<Class<? extends PatternRole<?>>> availablePatternRoleTypes;
+	private List<Class<? extends EditionAction<?, ?>>> availableEditionActionTypes;
+	private List<Class<? extends EditionAction<?, ?>>> availableFetchRequestActionTypes;
 
 	protected ModelSlot(ViewPoint viewPoint, TechnologyAdapter technologyAdapter) {
 		super((VirtualModel.VirtualModelBuilder) null);
@@ -260,15 +260,15 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 	@Deprecated
 	public abstract BindingVariable makePatternRolePathElement(PatternRole<?> pr, Bindable container);
 
-	public List<Class<? extends PatternRole>> getAvailablePatternRoleTypes() {
+	public List<Class<? extends PatternRole<?>>> getAvailablePatternRoleTypes() {
 		if (availablePatternRoleTypes == null) {
 			availablePatternRoleTypes = computeAvailablePatternRoleTypes();
 		}
 		return availablePatternRoleTypes;
 	}
 
-	private List<Class<? extends PatternRole>> computeAvailablePatternRoleTypes() {
-		availablePatternRoleTypes = new ArrayList<Class<? extends PatternRole>>();
+	private List<Class<? extends PatternRole<?>>> computeAvailablePatternRoleTypes() {
+		availablePatternRoleTypes = new ArrayList<Class<? extends PatternRole<?>>>();
 		Class<?> cl = getClass();
 		if (cl.isAnnotationPresent(DeclarePatternRoles.class)) {
 			DeclarePatternRoles allPatternRoles = cl.getAnnotation(DeclarePatternRoles.class);
@@ -282,15 +282,15 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 		return availablePatternRoleTypes;
 	}
 
-	public List<Class<? extends EditionAction>> getAvailableEditionActionTypes() {
+	public List<Class<? extends EditionAction<?, ?>>> getAvailableEditionActionTypes() {
 		if (availableEditionActionTypes == null) {
 			availableEditionActionTypes = computeAvailableEditionActionTypes();
 		}
 		return availableEditionActionTypes;
 	}
 
-	private List<Class<? extends EditionAction>> computeAvailableEditionActionTypes() {
-		availableEditionActionTypes = new ArrayList<Class<? extends EditionAction>>();
+	private List<Class<? extends EditionAction<?, ?>>> computeAvailableEditionActionTypes() {
+		availableEditionActionTypes = new ArrayList<Class<? extends EditionAction<?, ?>>>();
 		Class<?> cl = getClass();
 		if (cl.isAnnotationPresent(DeclareEditionActions.class)) {
 			DeclareEditionActions allEditionActions = cl.getAnnotation(DeclareEditionActions.class);
@@ -301,15 +301,15 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 		return availableEditionActionTypes;
 	}
 
-	public List<Class<? extends EditionAction>> getAvailableFetchRequestActionTypes() {
+	public List<Class<? extends EditionAction<?, ?>>> getAvailableFetchRequestActionTypes() {
 		if (availableFetchRequestActionTypes == null) {
 			availableFetchRequestActionTypes = computeAvailableFetchRequestActionTypes();
 		}
 		return availableFetchRequestActionTypes;
 	}
 
-	private List<Class<? extends EditionAction>> computeAvailableFetchRequestActionTypes() {
-		availableFetchRequestActionTypes = new ArrayList<Class<? extends EditionAction>>();
+	private List<Class<? extends EditionAction<?, ?>>> computeAvailableFetchRequestActionTypes() {
+		availableFetchRequestActionTypes = new ArrayList<Class<? extends EditionAction<?, ?>>>();
 		Class<?> cl = getClass();
 		if (cl.isAnnotationPresent(DeclareFetchRequests.class)) {
 			DeclareFetchRequests allFetchRequestActions = cl.getAnnotation(DeclareFetchRequests.class);
@@ -354,7 +354,7 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 	 * @return URI as String
 	 */
 
-	public abstract String getURIForObject(ModelSlotInstance<? extends ModelSlot, RD> msInstance, Object o);
+	public abstract String getURIForObject(ModelSlotInstance<? extends ModelSlot<RD>, RD> msInstance, Object o);
 
 	/**
 	 * @param msInstance
@@ -362,7 +362,7 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 	 * @return the Object
 	 */
 
-	public abstract Object retrieveObjectWithURI(ModelSlotInstance<? extends ModelSlot, RD> msInstance, String objectURI);
+	public abstract Object retrieveObjectWithURI(ModelSlotInstance<? extends ModelSlot<RD>, RD> msInstance, String objectURI);
 
 	/**
 	 * Return first found class matching supplied class.<br>
@@ -371,10 +371,10 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 	 * @param patternRoleClass
 	 * @return
 	 */
-	public <PR extends PatternRole> Class<? extends PR> getPatternRoleClass(Class<PR> patternRoleClass) {
-		for (Class patternRoleType : getAvailablePatternRoleTypes()) {
+	public <PR extends PatternRole<?>> Class<? extends PR> getPatternRoleClass(Class<PR> patternRoleClass) {
+		for (Class<?> patternRoleType : getAvailablePatternRoleTypes()) {
 			if (patternRoleClass.isAssignableFrom(patternRoleType)) {
-				return patternRoleType;
+				return (Class<? extends PR>) patternRoleType;
 			}
 		}
 		return null;

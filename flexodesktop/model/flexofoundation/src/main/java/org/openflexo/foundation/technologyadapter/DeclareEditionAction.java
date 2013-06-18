@@ -13,5 +13,5 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 @Target(value = ElementType.TYPE)
 public @interface DeclareEditionAction {
 
-	public Class<? extends EditionAction> value();
+	public Class<? extends EditionAction<?, ?>> value();
 }

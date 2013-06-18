@@ -13,5 +13,5 @@ import org.openflexo.foundation.viewpoint.FetchRequest;
 @Target(value = ElementType.TYPE)
 public @interface DeclareFetchRequest {
 
-	public Class<? extends FetchRequest> value();
+	public Class<? extends FetchRequest<?, ?>> value();
 }

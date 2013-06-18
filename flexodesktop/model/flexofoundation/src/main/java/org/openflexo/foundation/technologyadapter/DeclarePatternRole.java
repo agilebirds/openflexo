@@ -13,5 +13,5 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 @Target(value = ElementType.TYPE)
 public @interface DeclarePatternRole {
 
-	public Class<? extends PatternRole> value();
+	public Class<? extends PatternRole<?>> value();
 }
