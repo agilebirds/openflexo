@@ -43,9 +43,6 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.technologyadapter.excel.model.ExcelModel;
 import org.openflexo.technologyadapter.excel.model.ExcelMetaModel;
-import org.openflexo.technologyadapter.xsd.rm.ExcelModelResource;
-import org.openflexo.technologyadapter.xsd.rm.ExcelModelResourceImpl;
-import org.openflexo.technologyadapter.xsd.rm.ExcelMetaModelResource;
 
 /**
  * This class defines and implements the E technology adapter

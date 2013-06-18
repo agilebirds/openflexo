@@ -22,58 +22,48 @@ package org.openflexo.technologyadapter.excel.model;
 import java.io.File;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ontology.FlexoOntologyObjectImpl;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
-import org.openflexo.technologyadapter.xsd.rm.ExcelModelResource;
 
-public class ExcelModel extends FlexoOntologyObjectImpl implements FlexoModel<ExcelModel, ExcelMetaModel> {
+public class ExcelModel extends FlexoObject implements FlexoModel<ExcelModel, ExcelMetaModel> {
 
-	protected static final Logger logger = Logger.getLogger(ExcelModel.class.getPackage().getName());
-
-	private ExcelModelResource modelResource;
-
-
-	/**
-	 * Return the resource, as a {@link ExcelModelResource}
-	 */
 	@Override
-	public ExcelModelResource getResource() {
-		return modelResource;
+	public FlexoResource<ExcelModel> getResource() {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
+
+	@Override
+	public void setResource(FlexoResource<ExcelModel> resource) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ExcelMetaModel getMetaModel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public String getURI() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public Object getObject(String objectURI) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public IFlexoOntology getFlexoOntology() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getDisplayableDescription() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -84,14 +74,6 @@ public class ExcelModel extends FlexoOntologyObjectImpl implements FlexoModel<Ex
 		return null;
 	}
 
-	public void setResource(FlexoResource<ExcelModel> resource) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public ExcelMetaModel getMetaModel() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 }

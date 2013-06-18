@@ -53,13 +53,11 @@ import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelCel
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelRow;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelSheet;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelWorkbook;
-import org.openflexo.technologyadapter.xsd.rm.ExcelMetaModelResource;
-import org.openflexo.xmlcode.XMLSerializable;
 
 /**
  * Implementation of the ModelSlot class for the Excel technology adapter
  * 
- * @author Vincent Leilde
+ * @author Vincent Leildé, Sylvain Guérin
  * 
  */
 @DeclarePatternRoles({ 
@@ -149,7 +147,7 @@ public class BasicExcelModelSlot extends ModelSlot<ExcelModel, ExcelMetaModel> {
 	@Override
 	public <EA extends EditionAction<?, ?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddExcelSheet.class.isAssignableFrom(editionActionClass)) {
-			return (EA) new AddExcelSheet();
+			return (EA) new AddExcelSheet(null);
 		} else if (AddExcelWorkbook.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddExcelWorkbook(null);
 		} else if (AddExcelCell.class.isAssignableFrom(editionActionClass)) {
