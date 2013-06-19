@@ -235,6 +235,20 @@ public abstract class TechnologyAdapter {
 	}
 
 	/**
+	 * Initialize the supplied resource center with the technology<br>
+	 * ResourceCenter is scanned, ResourceRepositories are created and new technology-specific resources are build and registered.
+	 * 
+	 * @param resourceCenter
+	 */
+	public abstract <I> void initializeResourceCenter(FlexoResourceCenter<I> resourceCenter);
+
+	public abstract <I> boolean isIgnorable(FlexoResourceCenter<I> resourceCenter, I contents);
+
+	public abstract <I> void contentsAdded(FlexoResourceCenter<I> resourceCenter, I contents);
+
+	protected abstract <I> void contentsDeleted(FlexoResourceCenter<I> resourceCenter, I contents);
+
+	/**
 	 * Provides a hook to detect when a new resource center was added or discovered
 	 * 
 	 * @param newResourceCenter

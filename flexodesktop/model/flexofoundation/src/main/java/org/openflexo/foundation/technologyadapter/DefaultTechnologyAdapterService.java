@@ -1,10 +1,8 @@
 package org.openflexo.foundation.technologyadapter;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.logging.Logger;
@@ -175,7 +173,8 @@ public abstract class DefaultTechnologyAdapterService extends FlexoServiceImpl i
 		}
 		return returned;
 	}*/
-	@Override
+
+	/*@Override
 	public List<ModelRepository<?, ?, ?, ?>> getAllModelRepositories(TechnologyAdapter technologyAdapter) {
 		List<ModelRepository<?, ?, ?, ?>> returned = new ArrayList<ModelRepository<?, ?, ?, ?>>();
 		for (FlexoResourceCenter rc : getFlexoResourceCenterService().getResourceCenters()) {
@@ -185,7 +184,7 @@ public abstract class DefaultTechnologyAdapterService extends FlexoServiceImpl i
 			}
 		}
 		return returned;
-	}
+	}*/
 
 	/**
 	 * Return the list of all non-empty {@link MetaModelRepository} discoverable in the scope of {@link FlexoServiceManager}, related to
@@ -203,7 +202,7 @@ public abstract class DefaultTechnologyAdapterService extends FlexoServiceImpl i
 		}
 		return returned;
 	}*/
-	@Override
+	/*@Override
 	public List<MetaModelRepository<?, ?, ?, ?>> getAllMetaModelRepositories(TechnologyAdapter technologyAdapter) {
 		List<MetaModelRepository<?, ?, ?, ?>> returned = new ArrayList<MetaModelRepository<?, ?, ?, ?>>();
 		for (FlexoResourceCenter rc : getFlexoResourceCenterService().getResourceCenters()) {
@@ -213,7 +212,7 @@ public abstract class DefaultTechnologyAdapterService extends FlexoServiceImpl i
 			}
 		}
 		return returned;
-	}
+	}*/
 
 	public static void main(String[] args) {
 		FlexoResourceCenterService rcService = DefaultResourceCenterService.getNewInstance();

@@ -76,7 +76,7 @@ public interface FlexoResourceCenter<I> {
 	 * @return a list of all resources available in this resource center.
 	 */
 	public @Nonnull
-	Collection<FlexoResource<?>> getAllResources(@Nullable IProgress progress);
+	Collection<? extends FlexoResource<?>> getAllResources(@Nullable IProgress progress);
 
 	/**
 	 * Returns the resource identified by the given <code>uri</code> and the provided <code>version</code>.

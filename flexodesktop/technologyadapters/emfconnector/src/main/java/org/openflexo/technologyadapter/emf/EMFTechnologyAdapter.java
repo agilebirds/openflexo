@@ -89,6 +89,13 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 		return "EMF technology adapter";
 	}
 
+	/**
+	 * Initialize the supplied resource center with the technology<br>
+	 * ResourceCenter is scanned, ResourceRepositories are created and new technology-specific resources are build and registered.
+	 * 
+	 * @param resourceCenter
+	 */
+	@Override
 	public <I> void initializeResourceCenter(FlexoResourceCenter<I> resourceCenter) {
 
 		EMFTechnologyContextManager technologyContextManager = (EMFTechnologyContextManager) getTechnologyAdapterService()
@@ -110,27 +117,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 		while (it.hasNext()) {
 			if (it instanceof File) {
 				File candidateFile = (File) it;
-				if (isValidMetaModelFile(candidateFile, technologyContextManager)) {
-					EMFMetaModelResource mmRes = retrieveMetaModelResource(candidateFile, technologyContextManager);
-					if (mmRes != null) {
-						RepositoryFolder<EMFMetaModelResource> folder;
-						try {
-							folder = mmRepository.getRepositoryFolder(candidateFile, true);
-							mmRepository.registerResource(mmRes, folder);
-						} catch (IOException e1) {
-							e1.printStackTrace();
-						}
-						// Also register the resource in the ResourceCenter seen as a ResourceRepository
-						if (resourceCenter instanceof ResourceRepository) {
-							try {
-								((ResourceRepository) resourceCenter).registerResource(mmRes,
-										((ResourceRepository<?>) resourceCenter).getRepositoryFolder(candidateFile, true));
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-						}
-					}
-				}
+				EMFMetaModelResource mmRes = tryToLookupMetaModel(resourceCenter, candidateFile);
 			}
 		}
 
@@ -140,30 +127,92 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 		while (it.hasNext()) {
 			if (it instanceof File) {
 				File candidateFile = (File) it;
-				for (EMFMetaModelResource mmRes : mmRepository.getAllResources()) {
-					if (isValidModelFile(candidateFile, mmRes, technologyContextManager)) {
-						EMFModelResource mRes = retrieveModelResource(candidateFile, mmRes, technologyContextManager);
-						if (mRes != null) {
-							RepositoryFolder<EMFModelResource> folder;
-							try {
-								folder = modelRepository.getRepositoryFolder(candidateFile, true);
-								modelRepository.registerResource(mRes, folder);
-							} catch (IOException e1) {
-								e1.printStackTrace();
-							}
-							// Also register the resource in the ResourceCenter seen as a ResourceRepository
-							if (resourceCenter instanceof ResourceRepository) {
-								try {
-									((ResourceRepository) resourceCenter).registerResource(mmRes,
-											((ResourceRepository<?>) resourceCenter).getRepositoryFolder(candidateFile, true));
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
-							}
-						}
+				EMFModelResource mRes = tryToLookupModel(resourceCenter, candidateFile);
+			}
+		}
+	}
+
+	protected EMFMetaModelResource tryToLookupMetaModel(FlexoResourceCenter<?> resourceCenter, File candidateFile) {
+		EMFTechnologyContextManager technologyContextManager = getTechnologyContextManager();
+		if (isValidMetaModelFile(candidateFile, technologyContextManager)) {
+			EMFMetaModelResource mmRes = retrieveMetaModelResource(candidateFile, technologyContextManager);
+			EMFMetaModelRepository mmRepository = resourceCenter.getRepository(EMFMetaModelRepository.class, this);
+			if (mmRes != null) {
+				RepositoryFolder<EMFMetaModelResource> folder;
+				try {
+					folder = mmRepository.getRepositoryFolder(candidateFile, true);
+					mmRepository.registerResource(mmRes, folder);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				// Also register the resource in the ResourceCenter seen as a ResourceRepository
+				if (resourceCenter instanceof ResourceRepository) {
+					try {
+						((ResourceRepository) resourceCenter).registerResource(mmRes,
+								((ResourceRepository<?>) resourceCenter).getRepositoryFolder(candidateFile, true));
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
 				}
+				return mmRes;
 			}
+		}
+		return null;
+	}
+
+	protected EMFModelResource tryToLookupModel(FlexoResourceCenter<?> resourceCenter, File candidateFile) {
+		EMFTechnologyContextManager technologyContextManager = getTechnologyContextManager();
+		EMFMetaModelRepository mmRepository = resourceCenter.getRepository(EMFMetaModelRepository.class, this);
+		EMFModelRepository modelRepository = resourceCenter.getRepository(EMFModelRepository.class, this);
+		for (EMFMetaModelResource mmRes : mmRepository.getAllResources()) {
+			if (isValidModelFile(candidateFile, mmRes, technologyContextManager)) {
+				EMFModelResource mRes = retrieveModelResource(candidateFile, mmRes, technologyContextManager);
+				if (mRes != null) {
+					RepositoryFolder<EMFModelResource> folder;
+					try {
+						folder = modelRepository.getRepositoryFolder(candidateFile, true);
+						modelRepository.registerResource(mRes, folder);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					// Also register the resource in the ResourceCenter seen as a ResourceRepository
+					if (resourceCenter instanceof ResourceRepository) {
+						try {
+							((ResourceRepository) resourceCenter).registerResource(mmRes,
+									((ResourceRepository<?>) resourceCenter).getRepositoryFolder(candidateFile, true));
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+					return mRes;
+				}
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public <I> boolean isIgnorable(FlexoResourceCenter<I> resourceCenter, I contents) {
+		return false;
+	}
+
+	@Override
+	public <I> void contentsAdded(FlexoResourceCenter<I> resourceCenter, I contents) {
+		if (contents instanceof File) {
+			File candidateFile = (File) contents;
+			if (tryToLookupMetaModel(resourceCenter, candidateFile) != null) {
+				// This is a meta-model, this one has just been registered
+			} else {
+				tryToLookupModel(resourceCenter, candidateFile);
+			}
+		}
+	}
+
+	@Override
+	protected <I> void contentsDeleted(FlexoResourceCenter<I> resourceCenter, I contents) {
+		if (contents instanceof File) {
+			System.out
+					.println("File DELETED " + ((File) contents).getName() + " in " + ((File) contents).getParentFile().getAbsolutePath());
 		}
 	}
 
@@ -361,20 +410,20 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 	 * @return
 	 */
 	/*protected EMFModelResource createModelResource(File aModelFile, EMFMetaModelResource emfMetaModelResource,
-			EMFTechnologyContextManager emfTechnologyContextManager) {
-		EMFModelResource emfModelResource = null;
-		try {
-			emfModelResource = new EMFModelResource(aModelFile, emfMetaModelResource, this, URI.createFileURI(aModelFile.getAbsolutePath())
-					.toString());
-			emfModelResource.setServiceManager(getTechnologyAdapterService().getServiceManager());
+	EMFTechnologyContextManager emfTechnologyContextManager) {
+	EMFModelResource emfModelResource = null;
+	try {
+	emfModelResource = new EMFModelResource(aModelFile, emfMetaModelResource, this, URI.createFileURI(aModelFile.getAbsolutePath())
+			.toString());
+	emfModelResource.setServiceManager(getTechnologyAdapterService().getServiceManager());
 
-			emfTechnologyContextManager.registerModel(emfModelResource);
-		} catch (InvalidFileNameException e) {
-			e.printStackTrace();
-		} catch (DuplicateResourceException e) {
-			e.printStackTrace();
-		}
-		return emfModelResource;
+	emfTechnologyContextManager.registerModel(emfModelResource);
+	} catch (InvalidFileNameException e) {
+	e.printStackTrace();
+	} catch (DuplicateResourceException e) {
+	e.printStackTrace();
+	}
+	return emfModelResource;
 	}*/
 
 	/**

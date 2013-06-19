@@ -3,7 +3,6 @@ package org.openflexo.foundation.technologyadapter;
 import java.util.List;
 
 import org.openflexo.foundation.FlexoService;
-import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.model.annotations.Adder;
@@ -75,7 +74,7 @@ public interface TechnologyAdapterService extends FlexoService {
 	 * @param technologyAdapter
 	 * @return
 	 */
-	public List<ModelRepository<?, ?, ?, ?>> getAllModelRepositories(TechnologyAdapter technologyAdapter);
+	// public List<ModelRepository<?, ?, ?, ?>> getAllModelRepositories(TechnologyAdapter technologyAdapter);
 
 	/*public <R extends FlexoResource<? extends M>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> List<ModelRepository<R, M, MM, TA>> getAllModelRepositories(
 			TA technologyAdapter);*/
@@ -87,7 +86,7 @@ public interface TechnologyAdapterService extends FlexoService {
 	 * @param technologyAdapter
 	 * @return
 	 */
-	public List<MetaModelRepository<?, ?, ?, ?>> getAllMetaModelRepositories(TechnologyAdapter technologyAdapter);
+	// public List<MetaModelRepository<?, ?, ?, ?>> getAllMetaModelRepositories(TechnologyAdapter technologyAdapter);
 	/*public <R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> List<MetaModelRepository<R, M, MM, TA>> getAllMetaModelRepositories(
 			TA technologyAdapter);*/
 }
