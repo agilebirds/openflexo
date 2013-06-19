@@ -36,10 +36,8 @@ import org.openflexo.foundation.dm.eo.model.TestEOModelCreation;
 import org.openflexo.foundation.dm.eo.model.TestEOModelLoad;
 import org.openflexo.foundation.ie.TestCreateComponent;
 import org.openflexo.foundation.ie.menu.action.TestMenu;
-import org.openflexo.foundation.imported.ImportedObjectTestSuite;
 import org.openflexo.foundation.rm.TestRM;
 import org.openflexo.foundation.wkf.TestDropWKFElement;
-import org.openflexo.foundation.xml.TestXMLMappings;
 import org.openflexo.utils.UtilsTestSuite;
 import org.openflexo.xmlcode.examples.XMLCoDeTestSuite;
 
@@ -55,8 +53,8 @@ public class AllTests {
 			addStaticTestCase(testClass, suite);
 		} catch (ClassNotFoundException e) {
 			System.out.println("WARNING : class '" + testClassName + "' not found in classpath and will be skipped.");
-			System.out
-					.println("Add project " + flexoProjectName + " to your runtime unit test classpath to run this test class :" + testClassName);
+			System.out.println("Add project " + flexoProjectName + " to your runtime unit test classpath to run this test class :"
+					+ testClassName);
 		}
 	}
 
@@ -83,7 +81,7 @@ public class AllTests {
 	public static Test suite() {
 		TestSuite suite = new TestSuite("Test for FlexoFoundation model");
 
-		addStaticTestCase(TestXMLMappings.class, suite);
+		// addStaticTestCase(TestXMLMappings.class, suite);
 		addStaticTestCase(TestEOModelCreation.class, suite);
 		addStaticTestCase(TestEOModelLoad.class, suite);
 		addStaticTestCase(TestRM.class, suite);
@@ -98,7 +96,7 @@ public class AllTests {
 		addStaticTestCase(TestDMType.class, suite);
 		addStaticTestCase(TestPopulateDKV.class, suite);
 		addStaticTestCase(TestCGFoundation.class, suite);
-		addStaticTestCase(ImportedObjectTestSuite.class, suite);
+		// addStaticTestCase(ImportedObjectTestSuite.class, suite);
 		addTestCaseDynamic("org.openflexo.fge.geom.TestGeom", "TestGraphicalEngineGeometry", suite);
 		addTestCaseDynamic("org.openflexo.fge.geom.TestRectPolylin", "TestGraphicalEngineGeometryForRectPolylin", suite);
 		addTestCaseDynamic("org.openflexo.fge.geom.TestUnion", "TestGraphicalEngineGeometry", suite);
