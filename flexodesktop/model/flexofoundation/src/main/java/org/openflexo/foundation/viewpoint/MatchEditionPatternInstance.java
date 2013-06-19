@@ -55,7 +55,7 @@ import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationConte
  * @param <M>
  * @param <MM>
  */
-public class MatchEditionPatternInstance extends AssignableAction<EditionPatternInstance> {
+public class MatchEditionPatternInstance extends AssignableAction<VirtualModelModelSlot<?, ?>, EditionPatternInstance> {
 
 	private static final Logger logger = Logger.getLogger(MatchEditionPatternInstance.class.getPackage().getName());
 

@@ -96,4 +96,17 @@ public class VirtualModelModelSlotInstance<VMI extends VirtualModelInstance<VMI,
 		return resourceData;
 	}
 
+	// Serialization/deserialization only, do not use
+	public String getVirtualModelInstanceURI() {
+		if (getResource() != null) {
+			return getResource().getURI();
+		}
+		return virtualModelInstanceURI;
+	}
+
+	// Serialization/deserialization only, do not use
+	public void setVirtualModelInstanceURI(String virtualModelInstanceURI) {
+		this.virtualModelInstanceURI = virtualModelInstanceURI;
+	}
+
 }

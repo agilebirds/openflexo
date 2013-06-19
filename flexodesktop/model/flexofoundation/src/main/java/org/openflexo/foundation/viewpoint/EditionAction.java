@@ -143,7 +143,7 @@ public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionS
 		return getAvailableModelSlots(VirtualModelModelSlot.class);
 	}
 
-	public ModelSlotInstance<?> getModelSlotInstance(EditionSchemeAction action) {
+	public ModelSlotInstance<MS, ?> getModelSlotInstance(EditionSchemeAction action) {
 		if (action.getVirtualModelInstance() != null) {
 			return action.getVirtualModelInstance().getModelSlotInstance(getModelSlot());
 		} else {

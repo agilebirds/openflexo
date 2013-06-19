@@ -240,7 +240,7 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 		return newVirtualModelInstance;
 	}
 
-	private Hashtable<ModelSlot, ModelSlotInstanceConfiguration<?, ?>> modelSlotConfigurations;
+	private Hashtable<ModelSlot<?>, ModelSlotInstanceConfiguration<?, ?>> modelSlotConfigurations;
 
 	public VirtualModel<?> getVirtualModel() {
 		return virtualModel;
@@ -275,7 +275,7 @@ public abstract class CreateVirtualModelInstance<A extends CreateVirtualModelIns
 			return false;
 		}
 		for (ModelSlot ms : virtualModel.getModelSlots()) {
-			ModelSlotInstanceConfiguration<?> configuration = getModelSlotInstanceConfiguration(ms);
+			ModelSlotInstanceConfiguration<?, ?> configuration = getModelSlotInstanceConfiguration(ms);
 			if (!configuration.isValidConfiguration()) {
 				return false;
 			}

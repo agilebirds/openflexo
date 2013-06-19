@@ -50,7 +50,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecifica
  * @param <M>
  * @param <MM>
  */
-public class AddEditionPatternInstance extends AssignableAction<EditionPatternInstance> {
+public class AddEditionPatternInstance extends AssignableAction<VirtualModelModelSlot<?, ?>, EditionPatternInstance> {
 
 	private static final Logger logger = Logger.getLogger(AddEditionPatternInstance.class.getPackage().getName());
 

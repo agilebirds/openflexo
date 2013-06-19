@@ -22,8 +22,6 @@ package org.openflexo.foundation.view.diagram.viewpoint;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
@@ -154,8 +152,7 @@ public class DropScheme extends AbstractCreationScheme implements DiagramEdition
 	 * @return newly created {@link EditionAction}
 	 */
 	@Override
-	public <A extends EditionAction<M, MM, ?>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> A createAction(
-			Class<A> actionClass, ModelSlot modelSlot) {
+	public <A extends EditionAction<?, ?>> A createAction(Class<A> actionClass, ModelSlot<?> modelSlot) {
 		A newAction = super.createAction(actionClass, modelSlot);
 		if (newAction instanceof AddShape) {
 			if (isTopTarget()) {

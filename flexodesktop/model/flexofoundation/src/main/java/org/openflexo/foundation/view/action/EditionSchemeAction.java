@@ -39,6 +39,7 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
 import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
@@ -364,7 +365,8 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 					String newURI;
 					try {
 						newURI = uriParam.getBaseURI().getBindingValue(EditionSchemeAction.this);
-						newURI = modelSlot.generateUniqueURIName(getVirtualModelInstance().getModelSlotInstance(modelSlot), newURI);
+						newURI = modelSlot.generateUniqueURIName((TypeSafeModelSlotInstance) getVirtualModelInstance()
+								.getModelSlotInstance(modelSlot), newURI);
 						super.put(uriParam, newURI);
 					} catch (TypeMismatchException e) {
 						// TODO Auto-generated catch block
@@ -388,7 +390,7 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 			URIParameter uriParam = (URIParameter) parameter;
 			if (uriParam.getModelSlot() instanceof TypeSafeModelSlot) {
 				TypeSafeModelSlot modelSlot = uriParam.getModelSlot();
-				return modelSlot.generateUniqueURI(getVirtualModelInstance().getModelSlotInstance(modelSlot),
+				return modelSlot.generateUniqueURI((TypeSafeModelSlotInstance) getVirtualModelInstance().getModelSlotInstance(modelSlot),
 						(String) getParameterValue(parameter));
 			}
 		}

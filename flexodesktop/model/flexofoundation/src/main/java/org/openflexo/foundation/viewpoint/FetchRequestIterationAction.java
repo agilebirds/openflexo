@@ -73,11 +73,11 @@ public class FetchRequestIterationAction extends ControlStructureAction {
 		rebuildInferedBindingModel();
 	}
 
-	public FetchRequest<?> getFetchRequest() {
+	public FetchRequest<?, ?> getFetchRequest() {
 		return fetchRequest;
 	}
 
-	public void setFetchRequest(FetchRequest<?> fetchRequest) {
+	public void setFetchRequest(FetchRequest<?, ?> fetchRequest) {
 		fetchRequest.setActionContainer(this);
 		fetchRequest.setEmbeddingIteration(this);
 		this.fetchRequest = fetchRequest;
@@ -137,7 +137,7 @@ public class FetchRequestIterationAction extends ControlStructureAction {
 	}
 
 	@Override
-	public void addToActions(EditionAction<?,?> action) {
+	public void addToActions(EditionAction<?, ?> action) {
 		// Big hack to prevent XMLCoDe to also append FetchRequest to the list of embedded actions
 		// Should be removed either by the fixing of XMLCoDe or by the switch to PAMELA
 		if (getFetchRequest() != action) {

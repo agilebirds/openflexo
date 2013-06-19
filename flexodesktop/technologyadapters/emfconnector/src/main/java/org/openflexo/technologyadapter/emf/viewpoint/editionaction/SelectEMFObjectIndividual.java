@@ -27,10 +27,12 @@ import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.SelectIndividual;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.technologyadapter.emf.EMFModelSlot;
 import org.openflexo.technologyadapter.emf.metamodel.EMFClassClass;
 import org.openflexo.technologyadapter.emf.metamodel.EMFEnumClass;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
@@ -43,7 +45,7 @@ import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
  * 
  * @author sylvain
  */
-public class SelectEMFObjectIndividual extends SelectIndividual<EMFModel, EMFMetaModel, EMFObjectIndividual> {
+public class SelectEMFObjectIndividual extends SelectIndividual<EMFModelSlot, EMFObjectIndividual> {
 
 	private static final Logger logger = Logger.getLogger(SelectEMFObjectIndividual.class.getPackage().getName());
 
@@ -109,6 +111,11 @@ public class SelectEMFObjectIndividual extends SelectIndividual<EMFModel, EMFMet
 		// System.out.println("SelectEMFObjectIndividual, without filtering =" + selectedIndividuals + " after filtering=" + returned);
 
 		return returned;
+	}
+
+	@Override
+	public TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot> getModelSlotInstance(EditionSchemeAction action) {
+		return (TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot>) super.getModelSlotInstance(action);
 	}
 
 }

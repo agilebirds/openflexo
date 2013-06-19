@@ -51,6 +51,7 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
 import org.openflexo.foundation.validation.ValidationModel;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
@@ -472,7 +473,7 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 						+ r.getURI());
 			}
 
-			ModelSlot ms = OWL.createNewModelSlot(this);
+			TypeSafeModelSlot ms = (TypeSafeModelSlot) OWL.createNewModelSlot(this);
 			ms.setName("owl");
 			ms.setMetaModelResource(r);
 			addToModelSlots(ms);
@@ -578,11 +579,14 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		return modelSlots;
 	}
 
+	@Deprecated
 	public Set<FlexoMetaModelResource<?, ?>> getAllMetaModels() {
 		Set<FlexoMetaModelResource<?, ?>> allMetaModels = new HashSet<FlexoMetaModelResource<?, ?>>();
 		for (ModelSlot modelSlot : getModelSlots()) {
-			if (modelSlot.getMetaModelResource() != null) {
-				allMetaModels.add(modelSlot.getMetaModelResource());
+			if (modelSlot instanceof TypeSafeModelSlot) {
+				if (((TypeSafeModelSlot) modelSlot).getMetaModelResource() != null) {
+					allMetaModels.add(((TypeSafeModelSlot) modelSlot).getMetaModelResource());
+				}
 			}
 		}
 		return allMetaModels;
@@ -602,9 +606,9 @@ public class ViewPoint extends NamedViewPointObject implements XMLStorageResourc
 		out.append(" {" + StringUtils.LINE_SEPARATOR, context);
 
 		for (ModelSlot modelSlot : getModelSlots()) {
-			if (modelSlot.getMetaModelResource() != null) {
-				out.append(modelSlot.getFMLRepresentation(context), context);
-			}
+			// if (modelSlot.getMetaModelResource() != null) {
+			out.append(modelSlot.getFMLRepresentation(context), context);
+			// }
 		}
 
 		out.append(StringUtils.LINE_SEPARATOR, context);

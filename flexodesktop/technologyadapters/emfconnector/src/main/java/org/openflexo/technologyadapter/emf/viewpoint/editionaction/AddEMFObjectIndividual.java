@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
@@ -34,6 +34,7 @@ import org.openflexo.technologyadapter.emf.EMFModelSlot;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeObjectProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFClassClass;
+import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.metamodel.EMFReferenceObjectProperty;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
@@ -69,7 +70,7 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModelSlot, EMFObjec
 	@Override
 	public EMFObjectIndividual performAction(EditionSchemeAction action) {
 		EMFObjectIndividual result = null;
-		ModelSlotInstance<EMFModel> modelSlotInstance = getModelSlotInstance(action);
+		TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot> modelSlotInstance = (TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot>) getModelSlotInstance(action);
 		if (modelSlotInstance.getResourceData() != null) {
 			IFlexoOntologyClass aClass = getOntologyClass();
 			if (aClass instanceof EMFClassClass) {

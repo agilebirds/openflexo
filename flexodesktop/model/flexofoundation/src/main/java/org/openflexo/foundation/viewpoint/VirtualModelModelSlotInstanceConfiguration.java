@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.rm.VirtualModelInstanceResource;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.VirtualModelModelSlotInstance;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 
@@ -36,7 +37,8 @@ import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
  * @author sylvain
  * 
  */
-public class VirtualModelModelSlotInstanceConfiguration<MS extends VirtualModelModelSlot> extends ModelSlotInstanceConfiguration<MS> {
+public class VirtualModelModelSlotInstanceConfiguration<MS extends VirtualModelModelSlot<VMI, VM>, VMI extends VirtualModelInstance<VMI, VM>, VM extends VirtualModel<VM>>
+		extends ModelSlotInstanceConfiguration<MS, VMI> {
 
 	private static final Logger logger = Logger.getLogger(VirtualModelModelSlotInstanceConfiguration.class.getPackage().getName());
 
@@ -63,14 +65,14 @@ public class VirtualModelModelSlotInstanceConfiguration<MS extends VirtualModelM
 	}
 
 	@Override
-	public ModelSlotInstance<?, ?> createModelSlotInstance(VirtualModelInstance<?, ?> vmInstance) {
-		ModelSlotInstance<?, ?> returned = new ModelSlotInstance(vmInstance, getModelSlot());
+	public ModelSlotInstance<MS, VMI> createModelSlotInstance(VirtualModelInstance<?, ?> vmInstance) {
+		VirtualModelModelSlotInstance<VMI, VM> returned = new VirtualModelModelSlotInstance<VMI, VM>(vmInstance, getModelSlot());
 		if (getAddressedVirtualModelInstanceResource() != null) {
-			returned.setModelURI(getAddressedVirtualModelInstanceResource().getURI());
+			returned.setVirtualModelInstanceURI(getAddressedVirtualModelInstanceResource().getURI());
 		} else {
 			logger.warning("Addressed virtual model instance is null");
 		}
-		return returned;
+		return (ModelSlotInstance<MS, VMI>) returned;
 	}
 
 	public VirtualModelInstanceResource getAddressedVirtualModelInstanceResource() {

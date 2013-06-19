@@ -33,11 +33,11 @@ import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
-import org.openflexo.foundation.viewpoint.VirtualModelTechnologyAdapter;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
@@ -98,10 +98,10 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, ViewPointObjec
 				newModelSlot = technologyAdapter.createNewModelSlot((ViewPoint) getFocusedObject());
 			}
 			newModelSlot.setName(modelSlotName);
-			if (technologyAdapter instanceof VirtualModelTechnologyAdapter) {
+			if (newModelSlot instanceof VirtualModelModelSlot) {
 				((VirtualModelModelSlot) newModelSlot).setVirtualModelResource(vmRes);
-			} else {
-				newModelSlot.setMetaModelResource(mmRes);
+			} else if (newModelSlot instanceof TypeSafeModelSlot) {
+				((TypeSafeModelSlot) newModelSlot).setMetaModelResource(mmRes);
 			}
 			newModelSlot.setIsRequired(required);
 			newModelSlot.setIsReadOnly(readOnly);

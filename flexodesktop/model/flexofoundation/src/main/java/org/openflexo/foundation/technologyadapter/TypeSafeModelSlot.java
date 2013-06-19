@@ -6,7 +6,7 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
@@ -81,7 +81,7 @@ public abstract class TypeSafeModelSlot<M extends FlexoModel<M, MM>, MM extends 
 	 * @param proposedName
 	 * @return
 	 */
-	public String generateUniqueURI(ModelSlotInstance msInstance, String proposedName) {
+	public String generateUniqueURI(TypeSafeModelSlotInstance msInstance, String proposedName) {
 		if (msInstance == null || msInstance.getResourceData() == null) {
 			return null;
 		}
@@ -96,14 +96,14 @@ public abstract class TypeSafeModelSlot<M extends FlexoModel<M, MM>, MM extends 
 	 * @param proposedName
 	 * @return
 	 */
-	public String generateUniqueURIName(ModelSlotInstance msInstance, String proposedName) {
+	public String generateUniqueURIName(TypeSafeModelSlotInstance msInstance, String proposedName) {
 		if (msInstance == null || msInstance.getResourceData() == null) {
 			return proposedName;
 		}
 		return generateUniqueURIName(msInstance, proposedName, msInstance.getModelURI() + "#");
 	}
 
-	public String generateUniqueURIName(ModelSlotInstance msInstance, String proposedName, String uriPrefix) {
+	public String generateUniqueURIName(TypeSafeModelSlotInstance msInstance, String proposedName, String uriPrefix) {
 		if (msInstance == null || msInstance.getResourceData() == null) {
 			return proposedName;
 		}
@@ -111,7 +111,7 @@ public abstract class TypeSafeModelSlot<M extends FlexoModel<M, MM>, MM extends 
 		boolean unique = false;
 		int testThis = 0;
 		while (!unique) {
-			unique = ((FlexoModel) msInstance.getResourceData()).getObject(uriPrefix + baseName) == null;
+			unique = msInstance.getResourceData().getObject(uriPrefix + baseName) == null;
 			if (!unique) {
 				testThis++;
 				baseName = proposedName + testThis;

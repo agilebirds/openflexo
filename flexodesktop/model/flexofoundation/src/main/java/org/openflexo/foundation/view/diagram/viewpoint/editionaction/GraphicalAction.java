@@ -30,13 +30,12 @@ import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
+import org.openflexo.foundation.view.diagram.DiagramModelSlot;
 import org.openflexo.foundation.view.diagram.model.DiagramConnector;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
@@ -47,7 +46,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 
-public class GraphicalAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends EditionAction<M, MM, DiagramElement> {
+public class GraphicalAction extends EditionAction<DiagramModelSlot, DiagramElement<?>> {
 
 	private static final Logger logger = Logger.getLogger(GraphicalAction.class.getPackage().getName());
 

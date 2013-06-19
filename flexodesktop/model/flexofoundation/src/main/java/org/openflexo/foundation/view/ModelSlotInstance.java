@@ -144,19 +144,6 @@ public abstract class ModelSlotInstance<MS extends ModelSlot<RD>, RD extends Res
 	}
 
 	// Serialization/deserialization only, do not use
-	public String getModelURI() {
-		if (getResource() != null) {
-			return getResource().getURI();
-		}
-		return modelURI;
-	}
-
-	// Serialization/deserialization only, do not use
-	public void setModelURI(String modelURI) {
-		this.modelURI = modelURI;
-	}
-
-	// Serialization/deserialization only, do not use
 	public String getModelSlotName() {
 		if (getModelSlot() != null) {
 			return getModelSlot().getName();

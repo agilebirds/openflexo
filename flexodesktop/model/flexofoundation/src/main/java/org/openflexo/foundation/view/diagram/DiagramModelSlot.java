@@ -11,7 +11,6 @@ import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
-import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 import org.openflexo.foundation.view.diagram.action.CreateDiagram;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
@@ -126,7 +125,7 @@ public class DiagramModelSlot extends VirtualModelModelSlot<Diagram, DiagramSpec
 	}
 
 	@Override
-	public <EA extends EditionAction<?,?>> EA makeEditionAction(Class<EA> editionActionClass) {
+	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddDiagram.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddDiagram(null);
 		} else if (AddShape.class.isAssignableFrom(editionActionClass)) {
@@ -148,8 +147,7 @@ public class DiagramModelSlot extends VirtualModelModelSlot<Diagram, DiagramSpec
 	}
 
 	@Override
-	public ModelSlotInstanceConfiguration<? extends VirtualModelModelSlot<Diagram, DiagramSpecification>> createConfiguration(
-			CreateVirtualModelInstance<?> action) {
+	public DiagramModelSlotInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
 		if (action instanceof CreateDiagram) {
 			return new DiagramModelSlotInstanceConfiguration(this, (CreateDiagram) action);
 		} else {

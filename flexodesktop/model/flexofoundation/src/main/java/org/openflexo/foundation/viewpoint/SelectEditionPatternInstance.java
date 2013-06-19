@@ -40,7 +40,7 @@ import org.openflexo.toolbox.StringUtils;
  * @param <MM>
  * @param <T>
  */
-public class SelectEditionPatternInstance extends FetchRequest<EditionPatternInstance> {
+public class SelectEditionPatternInstance extends FetchRequest<VirtualModelModelSlot<?, ?>, EditionPatternInstance> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(SelectEditionPatternInstance.class.getPackage().getName());
 

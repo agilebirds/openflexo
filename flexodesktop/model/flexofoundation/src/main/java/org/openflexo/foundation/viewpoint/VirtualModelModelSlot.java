@@ -115,7 +115,7 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	}
 
 	@Override
-	public <EA extends EditionAction<?,?>> EA makeEditionAction(Class<EA> editionActionClass) {
+	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddEditionPatternInstance.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddEditionPatternInstance(null);
 		}
@@ -123,7 +123,7 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	}
 
 	@Override
-	public <FR extends FetchRequest<?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
+	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
 		if (SelectEditionPatternInstance.class.isAssignableFrom(fetchRequestClass)) {
 			return (FR) new SelectEditionPatternInstance(null);
 		}
@@ -133,7 +133,7 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	@Override
 	public ModelSlotInstanceConfiguration<? extends VirtualModelModelSlot<VMI, VM>, VMI> createConfiguration(
 			CreateVirtualModelInstance<?> action) {
-		return new VirtualModelModelSlotInstanceConfiguration<VirtualModelModelSlot<VMI, VM>>(this, action);
+		return new VirtualModelModelSlotInstanceConfiguration<VirtualModelModelSlot<VMI, VM>, VMI, VM>(this, action);
 	}
 
 	private VirtualModelResource<?> virtualModelResource;

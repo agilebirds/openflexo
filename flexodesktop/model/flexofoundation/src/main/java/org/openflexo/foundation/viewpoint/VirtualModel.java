@@ -45,6 +45,7 @@ import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
+import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
@@ -567,16 +568,19 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	}
 
 	/**
-	 * Return the list of all models used in the scope of current project<br>
-	 * To compute this this, iterate on each View, then each ModelSlotInstance
+	 * Return the list of all metamodels used in the scope of this virtual model
 	 * 
 	 * @return
 	 */
+	@Deprecated
 	public Set<FlexoMetaModel<?>> getAllReferencedMetaModels() {
 		HashSet<FlexoMetaModel<?>> returned = new HashSet<FlexoMetaModel<?>>();
 		for (ModelSlot modelSlot : getModelSlots()) {
-			if (modelSlot.getMetaModelResource() != null) {
-				returned.add(modelSlot.getMetaModelResource().getMetaModelData());
+			if (modelSlot instanceof TypeSafeModelSlot) {
+				TypeSafeModelSlot tsModelSlot = (TypeSafeModelSlot) modelSlot;
+				if (tsModelSlot.getMetaModelResource() != null) {
+					returned.add(tsModelSlot.getMetaModelResource().getMetaModelData());
+				}
 			}
 		}
 		return returned;
@@ -714,10 +718,10 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 		if (getModelSlots().size() > 0) {
 			out.append(StringUtils.LINE_SEPARATOR, context);
 			for (ModelSlot modelSlot : getModelSlots()) {
-				if (modelSlot.getMetaModelResource() != null) {
-					out.append(modelSlot.getFMLRepresentation(context), context, 1);
-					out.append(StringUtils.LINE_SEPARATOR, context, 1);
-				}
+				// if (modelSlot.getMetaModelResource() != null) {
+				out.append(modelSlot.getFMLRepresentation(context), context, 1);
+				out.append(StringUtils.LINE_SEPARATOR, context, 1);
+				// }
 			}
 		}
 

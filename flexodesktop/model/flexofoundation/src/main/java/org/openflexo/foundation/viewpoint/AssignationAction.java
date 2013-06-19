@@ -27,10 +27,11 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 
-public class AssignationAction<T> extends AssignableAction<T> {
+public class AssignationAction<T> extends AssignableAction<ModelSlot<?>, T> {
 
 	private static final Logger logger = Logger.getLogger(AssignationAction.class.getPackage().getName());
 

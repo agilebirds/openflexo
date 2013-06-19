@@ -31,9 +31,9 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.rm.DiagramSpecificationResource;
 import org.openflexo.foundation.rm.DiagramSpecificationResourceImpl;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
+import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
 import org.openflexo.foundation.view.diagram.DiagramModelSlot;
 import org.openflexo.foundation.view.diagram.DiagramTechnologyAdapter;
 import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
@@ -355,7 +355,7 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 						+ r.getURI());
 			}*/
 
-			ModelSlot ms = OWL.createNewModelSlot(this);
+			TypeSafeModelSlot ms = (TypeSafeModelSlot) OWL.createNewModelSlot(this);
 			ms.setName("owl");
 			ms.setMetaModelResource(r);
 			addToModelSlots(ms);

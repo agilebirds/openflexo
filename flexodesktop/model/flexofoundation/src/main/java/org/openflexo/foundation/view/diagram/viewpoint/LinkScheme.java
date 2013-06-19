@@ -22,8 +22,6 @@ package org.openflexo.foundation.view.diagram.viewpoint;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddConnector;
@@ -146,13 +144,12 @@ public class LinkScheme extends AbstractCreationScheme implements DiagramEdition
 	}
 
 	/**
-	 * Overrides {@link #createAction(Class, ModelSlot)} by providing default value for top level container
+	 * Overrides {@link #createAction(Class, ModelSlot)} by providing default value for from and to targets
 	 * 
 	 * @return newly created {@link EditionAction}
 	 */
 	@Override
-	public <A extends EditionAction<M, MM, ?>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> A createAction(
-			Class<A> actionClass, ModelSlot modelSlot) {
+	public <A extends EditionAction<?, ?>> A createAction(Class<A> actionClass, ModelSlot<?> modelSlot) {
 		A returned = super.createAction(actionClass, modelSlot);
 		if (returned instanceof AddConnector) {
 			AddConnector newAction = (AddConnector) returned;

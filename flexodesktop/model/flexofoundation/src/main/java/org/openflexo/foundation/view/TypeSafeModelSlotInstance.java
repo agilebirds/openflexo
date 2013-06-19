@@ -90,4 +90,17 @@ public class TypeSafeModelSlotInstance<M extends FlexoModel<M, MM>, MM extends F
 		return resourceData;
 	}
 
+	// Serialization/deserialization only, do not use
+	public String getModelURI() {
+		if (getResource() != null) {
+			return getResource().getURI();
+		}
+		return modelURI;
+	}
+
+	// Serialization/deserialization only, do not use
+	public void setModelURI(String modelURI) {
+		this.modelURI = modelURI;
+	}
+
 }
