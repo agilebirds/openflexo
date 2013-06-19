@@ -24,14 +24,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
+import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 
 public class EMFTechnologyContextManager extends TechnologyContextManager {
 
-	/** All known models, stored by File */
-	protected Map<File, EMFModelResource> models = new HashMap<File, EMFModelResource>();
+	/** Stores all known metamodels where key is the URI of metamodel */
+	protected Map<String, EMFMetaModelResource> metamodels = new HashMap<String, EMFMetaModelResource>();
+	/** Stores all known models where key is the URI of model */
+	protected Map<String, EMFModelResource> models = new HashMap<String, EMFModelResource>();
 
 	public EMFTechnologyContextManager(EMFTechnologyAdapter adapter, FlexoResourceCenterService resourceCenterService) {
 		super(adapter, resourceCenterService);
@@ -46,12 +48,24 @@ public class EMFTechnologyContextManager extends TechnologyContextManager {
 		return models.get(modelFile);
 	}
 
-	@Override
-	public void registerResource(TechnologyAdapterResource<?> resource) {
-		super.registerResource(resource);
-		if (resource instanceof EMFModelResource) {
-			models.put(((EMFModelResource) resource).getFile(), (EMFModelResource) resource);
-		}
+	/**
+	 * Called when a new meta model was registered, notify the {@link TechnologyContextManager}
+	 * 
+	 * @param newModel
+	 */
+	public void registerMetaModel(EMFMetaModelResource newMetaModelResource) {
+		registerResource(newMetaModelResource);
+		metamodels.put(newMetaModelResource.getURI(), newMetaModelResource);
+	}
+
+	/**
+	 * Called when a new model was registered, notify the {@link TechnologyContextManager}
+	 * 
+	 * @param newModel
+	 */
+	public void registerModel(EMFModelResource newModelResource) {
+		registerResource(newModelResource);
+		models.put(newModelResource.getURI(), newModelResource);
 	}
 
 }
