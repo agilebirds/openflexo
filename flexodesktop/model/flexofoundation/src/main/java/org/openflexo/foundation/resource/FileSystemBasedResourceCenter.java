@@ -52,7 +52,8 @@ import org.openflexo.foundation.viewpoint.ViewPointRepository;
  * @author sylvain
  * 
  */
-public abstract class FileSystemBasedResourceCenter extends FileResourceRepository<FlexoResource<?>> implements FlexoResourceCenter {
+public abstract class FileSystemBasedResourceCenter extends FileResourceRepository<FlexoFileResource<?>> implements
+		FlexoResourceCenter<File> {
 
 	protected static final Logger logger = Logger.getLogger(FileSystemBasedResourceCenter.class.getPackage().getName());
 
@@ -176,6 +177,19 @@ public abstract class FileSystemBasedResourceCenter extends FileResourceReposito
 	}
 
 	private <MR extends FlexoModelResource<M, MM>, M extends FlexoModel<M, MM>, MMR extends FlexoMetaModelResource<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> void initializeForTechnology(
+			TA technologyAdapter, TechnologyContextManager<?, ?> technologyContextManager) {
+		MetaModelRepository<MMR, M, MM, TA> mmRepository = (MetaModelRepository<MMR, M, MM, TA>) technologyAdapter
+				.createMetaModelRepository(this);
+		if (mmRepository != null) {
+			metaModelRepositories.put(technologyAdapter, mmRepository);
+			ModelRepository<MR, M, MM, TA> modelRepository = (ModelRepository<MR, M, MM, TA>) technologyAdapter.createModelRepository(this);
+			modelRepositories.put(technologyAdapter, modelRepository);
+			exploreDirectoryLookingForMetaModels(rootDirectory, technologyAdapter, technologyContextManager, mmRepository);
+			exploreDirectoryLookingForModels(rootDirectory, technologyAdapter, technologyContextManager, mmRepository, modelRepository);
+		}
+	}
+
+	private <MR extends FlexoModelResource<M, MM>, M extends FlexoModel<M, MM>, MMR extends FlexoMetaModelResource<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> void initializeForTechnologyOld(
 			TA technologyAdapter, TechnologyContextManager<?, ?> technologyContextManager) {
 		MetaModelRepository<MMR, M, MM, TA> mmRepository = (MetaModelRepository<MMR, M, MM, TA>) technologyAdapter
 				.createMetaModelRepository(this);

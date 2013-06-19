@@ -38,7 +38,7 @@ public class EMFMetaModelRepository extends MetaModelRepository<EMFMetaModelReso
 	 * @param adapter
 	 * @param resourceCenter
 	 */
-	public EMFMetaModelRepository(EMFTechnologyAdapter adapter, FlexoResourceCenter resourceCenter) {
+	public EMFMetaModelRepository(EMFTechnologyAdapter adapter, FlexoResourceCenter<?> resourceCenter) {
 		super(adapter, resourceCenter);
 	}
 }

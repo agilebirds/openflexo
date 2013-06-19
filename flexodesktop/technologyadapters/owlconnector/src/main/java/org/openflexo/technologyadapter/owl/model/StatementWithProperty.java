@@ -58,7 +58,7 @@ public class StatementWithProperty implements TechnologySpecificCustomType {
 	}
 
 	@Override
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+	public TechnologyAdapter getTechnologyAdapter() {
 		if (getProperty() != null) {
 			return getProperty().getTechnologyAdapter();
 		}

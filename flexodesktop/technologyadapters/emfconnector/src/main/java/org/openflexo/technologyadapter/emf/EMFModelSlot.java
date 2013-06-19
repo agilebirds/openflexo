@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclareFetchRequest;
@@ -33,17 +34,14 @@ import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
-import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
-import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 import org.openflexo.technologyadapter.emf.viewpoint.EMFObjectIndividualPatternRole;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividual;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividualAttributeDataPropertyValue;
@@ -83,9 +81,9 @@ public class EMFModelSlot extends TypeSafeModelSlot<EMFModel, EMFMetaModel> {
 	 * @param viewPoint
 	 * @param adapter
 	 */
-	public EMFModelSlot(ViewPoint viewPoint, EMFTechnologyAdapter adapter) {
+	/*public EMFModelSlot(ViewPoint viewPoint, EMFTechnologyAdapter adapter) {
 		super(viewPoint, adapter);
-	}
+	}*/
 
 	/**
 	 * 
@@ -114,9 +112,9 @@ public class EMFModelSlot extends TypeSafeModelSlot<EMFModel, EMFMetaModel> {
 	 * 
 	 * @param builder
 	 */
-	public EMFModelSlot(ViewPointBuilder builder) {
+	/*public EMFModelSlot(ViewPointBuilder builder) {
 		super(builder);
-	}
+	}*/
 
 	@Override
 	public Class<EMFTechnologyAdapter> getTechnologyAdapterClass() {
@@ -155,7 +153,7 @@ public class EMFModelSlot extends TypeSafeModelSlot<EMFModel, EMFMetaModel> {
 	}
 
 	@Override
-	public <EA extends EditionAction<?, ?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
+	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddEMFObjectIndividual.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddEMFObjectIndividual(null);
 		} else if (AddEMFObjectIndividualAttributeDataPropertyValue.class.isAssignableFrom(editionActionClass)) {
@@ -175,7 +173,7 @@ public class EMFModelSlot extends TypeSafeModelSlot<EMFModel, EMFMetaModel> {
 	}
 
 	@Override
-	public <FR extends FetchRequest<?, ?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
+	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
 		if (SelectEMFObjectIndividual.class.isAssignableFrom(fetchRequestClass)) {
 			return (FR) new SelectEMFObjectIndividual(null);
 		}
@@ -183,13 +181,19 @@ public class EMFModelSlot extends TypeSafeModelSlot<EMFModel, EMFMetaModel> {
 	}
 
 	@Override
-	public String getURIForObject(ModelSlotInstance msInstance, Object o) {
-		return ((EMFObjectIndividual) o).getURI();
+	public String getURIForObject(
+			TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, ? extends TypeSafeModelSlot<EMFModel, EMFMetaModel>> msInstance, Object o) {
+		if (o instanceof IFlexoOntologyObject) {
+			return ((IFlexoOntologyObject) o).getURI();
+		}
+		return null;
 	}
 
 	@Override
-	public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) {
-		return msInstance.getResourceData().getObject(objectURI);
+	public Object retrieveObjectWithURI(
+			TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, ? extends TypeSafeModelSlot<EMFModel, EMFMetaModel>> msInstance,
+			String objectURI) {
+		return (msInstance.getResourceData().getObject(objectURI));
 	}
 
 	@Override

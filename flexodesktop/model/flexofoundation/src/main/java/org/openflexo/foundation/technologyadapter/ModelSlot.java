@@ -45,7 +45,6 @@ import org.openflexo.foundation.viewpoint.NamedViewPointObject;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
@@ -80,11 +79,11 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 	private List<Class<? extends EditionAction<?, ?>>> availableEditionActionTypes;
 	private List<Class<? extends EditionAction<?, ?>>> availableFetchRequestActionTypes;
 
-	protected ModelSlot(ViewPoint viewPoint, TechnologyAdapter technologyAdapter) {
+	/*protected ModelSlot(ViewPoint viewPoint, TechnologyAdapter technologyAdapter) {
 		super((VirtualModel.VirtualModelBuilder) null);
 		this.viewPoint = viewPoint;
 		this.technologyAdapter = technologyAdapter;
-	}
+	}*/
 
 	protected ModelSlot(VirtualModel<?> virtualModel, TechnologyAdapter technologyAdapter) {
 		super((VirtualModel.VirtualModelBuilder) null);
@@ -106,7 +105,7 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 		}
 	}
 
-	public ModelSlot(ViewPointBuilder builder) {
+	/*public ModelSlot(ViewPointBuilder builder) {
 		super(builder);
 
 		if (builder != null) {
@@ -117,7 +116,7 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 						.getTechnologyAdapter(getTechnologyAdapterClass());
 			}
 		}
-	}
+	}*/
 
 	@Override
 	public String getURI() {

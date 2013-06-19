@@ -42,7 +42,7 @@ import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualReferenceObj
  * @author gbesancon
  * 
  */
-public class RemoveEMFObjectIndividualReferenceObjectPropertyValue<T> extends
+public class RemoveEMFObjectIndividualReferenceObjectPropertyValue extends
 		AssignableAction<EMFModelSlot, EMFObjectIndividualReferenceObjectPropertyValue> {
 
 	/**

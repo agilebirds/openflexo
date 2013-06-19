@@ -23,18 +23,15 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.technologyadapter.FlexoModelResource;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
-import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
-import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 
-public class EMFTechnologyContextManager extends TechnologyContextManager<EMFModel, EMFMetaModel> {
+public class EMFTechnologyContextManager extends TechnologyContextManager {
 
 	/** All known models, stored by File */
-	protected Map<File, FlexoResource<EMFModel>> models = new HashMap<File, FlexoResource<EMFModel>>();
+	protected Map<File, EMFModelResource> models = new HashMap<File, EMFModelResource>();
 
 	public EMFTechnologyContextManager(EMFTechnologyAdapter adapter, FlexoResourceCenterService resourceCenterService) {
 		super(adapter, resourceCenterService);
@@ -46,14 +43,14 @@ public class EMFTechnologyContextManager extends TechnologyContextManager<EMFMod
 	}
 
 	public EMFModelResource getModel(File modelFile) {
-		return (EMFModelResource) models.get(modelFile);
+		return models.get(modelFile);
 	}
 
 	@Override
-	public void registerModel(FlexoModelResource<EMFModel, EMFMetaModel> newModelResource) {
-		super.registerModel(newModelResource);
-		if (newModelResource instanceof EMFModelResource) {
-			models.put(((EMFModelResource) newModelResource).getFile(), newModelResource);
+	public void registerResource(TechnologyAdapterResource<?> resource) {
+		super.registerResource(resource);
+		if (resource instanceof EMFModelResource) {
+			models.put(((EMFModelResource) resource).getFile(), (EMFModelResource) resource);
 		}
 	}
 

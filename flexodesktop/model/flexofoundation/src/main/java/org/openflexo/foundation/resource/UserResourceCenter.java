@@ -39,7 +39,7 @@ import org.openflexo.model.factory.SerializationPolicy;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
 
-public class UserResourceCenter /*extends FileSystemBasedResourceCenter*/implements FlexoResourceCenter {
+public class UserResourceCenter /*extends FileSystemBasedResourceCenter*/implements FlexoResourceCenter<File> {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(UserResourceCenter.class
 			.getPackage().getName());

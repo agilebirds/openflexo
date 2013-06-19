@@ -42,7 +42,7 @@ import org.openflexo.technologyadapter.emf.model.EMFObjectIndividualAttributeDat
  * @author gbesancon
  * 
  */
-public class RemoveEMFObjectIndividualAttributeDataPropertyValue<T> extends
+public class RemoveEMFObjectIndividualAttributeDataPropertyValue extends
 		AssignableAction<EMFModelSlot, EMFObjectIndividualAttributeDataPropertyValue> {
 
 	/**

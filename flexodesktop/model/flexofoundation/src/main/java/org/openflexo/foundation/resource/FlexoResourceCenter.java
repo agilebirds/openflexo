@@ -20,15 +20,13 @@
 package org.openflexo.foundation.resource;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
-import org.openflexo.foundation.technologyadapter.MetaModelRepository;
-import org.openflexo.foundation.technologyadapter.ModelRepository;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -40,11 +38,21 @@ import org.openflexo.toolbox.IProgress;
 /**
  * A {@link FlexoResourceCenter} is a symbolic repository storing {@link FlexoResource}
  * 
+ * @param <I>
+ *            I is the type of iterable items this resource center stores
+ * 
  * @author sylvain
  * 
  */
 @ModelEntity
-public interface FlexoResourceCenter {
+public interface FlexoResourceCenter<I> {
+
+	/**
+	 * Return a user-friendly named identifier for this resource center
+	 * 
+	 * @return
+	 */
+	public String getName();
 
 	/**
 	 * Initialize the FlexoResourceCenter by retrieving viewpoints defined in this {@link FlexoResourceCenter}<br>
@@ -68,7 +76,7 @@ public interface FlexoResourceCenter {
 	 * @return a list of all resources available in this resource center.
 	 */
 	public @Nonnull
-	List<FlexoResource<?>> getAllResources(@Nullable IProgress progress);
+	Collection<FlexoResource<?>> getAllResources(@Nullable IProgress progress);
 
 	/**
 	 * Returns the resource identified by the given <code>uri</code> and the provided <code>version</code>.
@@ -134,38 +142,30 @@ public interface FlexoResourceCenter {
 	public ViewPointRepository getViewPointRepository();
 
 	/**
-	 * Retrieve model repository for a given {@link TechnologyAdapter}
+	 * Returns an iterator over a set of elements of type I, which are iterables items this resource center stores
 	 * 
-	 * @param technologyAdapter
-	 * @return
+	 * @return an Iterator.
 	 */
-	public <R extends FlexoResource<? extends M>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> ModelRepository<R, M, MM, TA> getModelRepository(
-			TA technologyAdapter);
-
-	// public ViewPointLibrary getViewPointLibrary();
+	public Iterator<I> iterator();
 
 	/**
-	 * Retrieve meta-model repository for a given {@link TechnologyAdapter}
+	 * Retrieve repository matching supplied type and technology
 	 * 
+	 * @param repositoryType
 	 * @param technologyAdapter
-	 * @return
+	 * @return the registered repository
 	 */
-	public <R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> MetaModelRepository<R, M, MM, TA> getMetaModelRepository(
-			TA technologyAdapter);
-
-	/*@Deprecated
-	public ViewPointLibrary retrieveViewPointLibrary();
-
-	@Deprecated
-	public ViewPoint getOntologyCalc(String ontologyCalcUri);
-
-	@Deprecated
-	public File getNewCalcSandboxDirectory();*/
+	public <R extends ResourceRepository<?>> R getRepository(Class<? extends R> repositoryType, TechnologyAdapter technologyAdapter);
 
 	/**
-	 * Return a uer-friendly named identifier for this resource center
+	 * Register supplied repository for a given type and technology
 	 * 
-	 * @return
+	 * @param repository
+	 *            the non-null repository to register
+	 * @param repositoryType
+	 * @param technologyAdapter
 	 */
-	public String getName();
+	public <R extends ResourceRepository<?>> void registerRepository(R repository, Class<? extends R> repositoryType,
+			TechnologyAdapter technologyAdapter);
+
 }

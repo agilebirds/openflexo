@@ -6,6 +6,7 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
@@ -13,8 +14,6 @@ import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 import org.openflexo.foundation.viewpoint.AbstractCreationScheme;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
-import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
@@ -33,9 +32,9 @@ public abstract class TypeSafeModelSlot<M extends FlexoModel<M, MM>, MM extends 
 	private FlexoMetaModelResource<M, MM> metaModelResource;
 	private String metaModelURI;
 
-	protected TypeSafeModelSlot(ViewPoint viewPoint, TechnologyAdapter technologyAdapter) {
+	/*protected TypeSafeModelSlot(ViewPoint viewPoint, TechnologyAdapter technologyAdapter) {
 		super(viewPoint, technologyAdapter);
-	}
+	}*/
 
 	protected TypeSafeModelSlot(VirtualModel<?> virtualModel, TechnologyAdapter technologyAdapter) {
 		super(virtualModel, technologyAdapter);
@@ -45,9 +44,9 @@ public abstract class TypeSafeModelSlot<M extends FlexoModel<M, MM>, MM extends 
 		super(builder);
 	}
 
-	public TypeSafeModelSlot(ViewPointBuilder builder) {
+	/*public TypeSafeModelSlot(ViewPointBuilder builder) {
 		super(builder);
-	}
+	}*/
 
 	@Override
 	public ModelSlotInstanceConfiguration<TypeSafeModelSlot<M, MM>, M> createConfiguration(CreateVirtualModelInstance<?> action) {
@@ -173,5 +172,20 @@ public abstract class TypeSafeModelSlot<M extends FlexoModel<M, MM>, MM extends 
 				+ " required=" + getIsRequired() + " readOnly=" + getIsReadOnly() + ";", context);
 		return out.toString();
 	}
+
+	@Override
+	public final String getURIForObject(ModelSlotInstance msInstance, Object o) {
+		return getURIForObject((TypeSafeModelSlotInstance<M, MM, ? extends TypeSafeModelSlot<M, MM>>) msInstance, o);
+	}
+
+	@Override
+	public final Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) {
+		return retrieveObjectWithURI((TypeSafeModelSlotInstance<M, MM, ? extends TypeSafeModelSlot<M, MM>>) msInstance, objectURI);
+	}
+
+	public abstract String getURIForObject(TypeSafeModelSlotInstance<M, MM, ? extends TypeSafeModelSlot<M, MM>> msInstance, Object o);
+
+	public abstract Object retrieveObjectWithURI(TypeSafeModelSlotInstance<M, MM, ? extends TypeSafeModelSlot<M, MM>> msInstance,
+			String objectURI);
 
 }

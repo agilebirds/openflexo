@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.technologyadapter;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -52,10 +51,8 @@ public abstract class TechnologyContextManager extends FlexoObject {
 	private TechnologyAdapter adapter;
 	private FlexoResourceCenterService resourceCenterService;
 
-	/** Stores all known metamodels where key is the URI of metamodel */
-	protected Map<String, FlexoMetaModelResource<?, ?>> metamodels = new HashMap<String, FlexoMetaModelResource<?, ?>>();
-	/** Stores all known models where key is the URI of model */
-	protected Map<String, FlexoModelResource<?, ?>> models = new HashMap<String, FlexoModelResource<?, ?>>();
+	/** Stores all known resources where key is the URI of resource */
+	protected Map<String, TechnologyAdapterResource<?>> resources = new HashMap<String, TechnologyAdapterResource<?>>();
 
 	protected Hashtable<IFlexoOntologyClass, IndividualOfClass> individualsOfClass;
 	protected Hashtable<IFlexoOntologyClass, SubClassOfClass> subclassesOfClass;
@@ -113,44 +110,22 @@ public abstract class TechnologyContextManager extends FlexoObject {
 	}
 
 	/**
-	 * Called when a new meta model was registered, notify the {@link TechnologyContextManager}
+	 * Called when a new resource was registered, notify the {@link TechnologyContextManager}
 	 * 
 	 * @param newModel
 	 */
-	public void registerMetaModel(FlexoMetaModelResource<?, ?> newMetaModelResource) {
-		metamodels.put(newMetaModelResource.getURI(), newMetaModelResource);
+	public void registerResource(TechnologyAdapterResource<?> resource) {
+		resources.put(resource.getURI(), resource);
 	}
 
 	/**
-	 * Called when a new model was registered, notify the {@link TechnologyContextManager}
-	 * 
-	 * @param newModel
-	 */
-	public void registerModel(FlexoModelResource<?, ?> newModelResource) {
-		models.put(newModelResource.getURI(), newModelResource);
-	}
-
-	/**
-	 * Return resource storing metamodel identified by supplied uri, asserting this metamodel has been registered in this technology
+	 * Return resource identified by supplied uri, asserting this resource has been registered in this technology
 	 * 
 	 * @param uri
 	 * @return
 	 */
-	public FlexoMetaModelResource<?, ?> getMetaModelWithURI(String uri) {
-		return metamodels.get(uri);
+	public TechnologyAdapterResource<?> getResourceWithURI(String uri) {
+		return resources.get(uri);
 	}
 
-	/**
-	 * Return resource storing model identified by supplied uri, asserting this model has been registered in this technology
-	 * 
-	 * @param uri
-	 * @return
-	 */
-	public FlexoModelResource<?, ?> getModelWithURI(String uri) {
-		return models.get(uri);
-	}
-
-	public Collection<FlexoMetaModelResource<?, ?>> getAllMetaModels() {
-		return metamodels.values();
-	}
 }

@@ -29,7 +29,7 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
 
-public class ProjectResourceCenter extends FileSystemBasedResourceCenter implements FlexoResourceCenter {
+public class ProjectResourceCenter extends FileSystemBasedResourceCenter {
 
 	protected static final Logger logger = Logger.getLogger(ProjectResourceCenter.class.getPackage().getName());
 

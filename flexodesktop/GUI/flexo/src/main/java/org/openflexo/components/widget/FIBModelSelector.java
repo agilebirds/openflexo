@@ -43,7 +43,7 @@ public class FIBModelSelector extends FIBModelObjectSelector<FlexoModelResource>
 	public static FileResource FIB_FILE = new FileResource("Fib/ModelSelector.fib");
 
 	private InformationSpace informationSpace;
-	private TechnologyAdapter<?, ?> technologyAdapter;
+	private TechnologyAdapter technologyAdapter;
 	private FlexoResourceCenter resourceCenter;
 	private FlexoMetaModelResource metaModelResource;
 
@@ -79,12 +79,12 @@ public class FIBModelSelector extends FIBModelObjectSelector<FlexoModelResource>
 		updateCustomPanel(getEditedObject());
 	}
 
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+	public TechnologyAdapter getTechnologyAdapter() {
 		return technologyAdapter;
 	}
 
 	@CustomComponentParameter(name = "technologyAdapter", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setTechnologyAdapter(TechnologyAdapter<?, ?> technologyAdapter) {
+	public void setTechnologyAdapter(TechnologyAdapter technologyAdapter) {
 		this.technologyAdapter = technologyAdapter;
 		updateCustomPanel(getEditedObject());
 	}
@@ -167,7 +167,7 @@ public class FIBModelSelector extends FIBModelObjectSelector<FlexoModelResource>
 				selector.setInformationSpace(informationSpace);
 				//try {
 				//	selector.setTechnologyAdapter(serviceManager.getTechnologyAdapterService().getTechnologyAdapter(
-				//			(Class<TechnologyAdapter<?, ?>>) Class.forName("org.openflexo.technologyadapter.emf.EMFTechnologyAdapter")));
+				//			(Class<TechnologyAdapter>) Class.forName("org.openflexo.technologyadapter.emf.EMFTechnologyAdapter")));
 				//} catch (ClassNotFoundException e) {
 				//	e.printStackTrace();
 				//}

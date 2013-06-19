@@ -58,7 +58,7 @@ import org.openflexo.toolbox.StringUtils;
  * @author gbesancon
  * 
  */
-public class AddEMFObjectIndividualReferenceObjectPropertyValue<T> extends
+public class AddEMFObjectIndividualReferenceObjectPropertyValue extends
 		SetEMFPropertyValue<EMFObjectIndividualReferenceObjectPropertyValue> implements SetObjectPropertyValueAction {
 
 	private String objectPropertyURI = null;
