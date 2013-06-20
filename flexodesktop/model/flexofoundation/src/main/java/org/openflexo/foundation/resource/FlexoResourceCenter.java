@@ -187,5 +187,5 @@ public interface FlexoResourceCenter<I> {
 	 * @param technologyAdapter
 	 * @return
 	 */
-	public List<ResourceRepository<?>> getRegistedRepositories(TechnologyAdapter technologyAdapter);
+	public Collection<ResourceRepository<?>> getRegistedRepositories(TechnologyAdapter technologyAdapter);
 }

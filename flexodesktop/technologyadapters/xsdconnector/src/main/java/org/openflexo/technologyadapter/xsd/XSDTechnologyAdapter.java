@@ -131,8 +131,9 @@ public class XSDTechnologyAdapter extends TechnologyAdapter {
 		Iterator<I> it = resourceCenter.iterator();
 
 		while (it.hasNext()) {
-			if (it instanceof File) {
-				File candidateFile = (File) it;
+			I item = it.next();
+			if (item instanceof File) {
+				File candidateFile = (File) item;
 				XSDMetaModelResource mmRes = tryToLookupMetaModel(resourceCenter, candidateFile);
 			}
 		}
@@ -141,8 +142,9 @@ public class XSDTechnologyAdapter extends TechnologyAdapter {
 		it = resourceCenter.iterator();
 
 		while (it.hasNext()) {
-			if (it instanceof File) {
-				File candidateFile = (File) it;
+			I item = it.next();
+			if (item instanceof File) {
+				File candidateFile = (File) item;
 				XMLModelResource mRes = tryToLookupModel(resourceCenter, candidateFile);
 			}
 		}
@@ -238,7 +240,9 @@ public class XSDTechnologyAdapter extends TechnologyAdapter {
 	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#createMetaModelRepository(org.openflexo.foundation.resource.FlexoResourceCenter)
 	 */
 	public XSDMetaModelRepository createMetaModelRepository(FlexoResourceCenter<?> resourceCenter) {
-		return new XSDMetaModelRepository(this, resourceCenter);
+		XSDMetaModelRepository returned = new XSDMetaModelRepository(this, resourceCenter);
+		resourceCenter.registerRepository(returned, XSDMetaModelRepository.class, this);
+		return returned;
 	}
 
 	/**
@@ -248,7 +252,9 @@ public class XSDTechnologyAdapter extends TechnologyAdapter {
 	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#createModelRepository(org.openflexo.foundation.resource.FlexoResourceCenter)
 	 */
 	public XMLModelRepository createModelRepository(FlexoResourceCenter<?> resourceCenter) {
-		return new XMLModelRepository(this, resourceCenter);
+		XMLModelRepository returned = new XMLModelRepository(this, resourceCenter);
+		resourceCenter.registerRepository(returned, XMLModelRepository.class, this);
+		return returned;
 	}
 
 	/**
@@ -347,7 +353,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter {
 	 * @param technologyContextManager
 	 * @return
 	 */
-	public XMLModelResource createEmptyXMLFile(File modelFile, String modelUri, FlexoResource<XSDMetaModel> metaModelResource) {
+	public XMLModelResource createNewXMLFile(File modelFile, String modelUri, FlexoResource<XSDMetaModel> metaModelResource) {
 
 		logger.warning("xsdconnector: URI not supported ");
 
@@ -367,19 +373,19 @@ public class XSDTechnologyAdapter extends TechnologyAdapter {
 	 * @param metaModel
 	 * @return
 	 */
-	public XMLModelResource createEmptyXMLFile(FlexoProject project, String filename, String modelUri, FlexoResource<XSDMetaModel> metaModel) {
+	public XMLModelResource createNewXMLFile(FlexoProject project, String filename, String modelUri, FlexoResource<XSDMetaModel> metaModel) {
 
 		File modelFile = new File(FlexoProject.getProjectSpecificModelsDirectory(project), filename);
 
-		return createEmptyXMLFile(modelFile, modelUri, metaModel);
+		return createNewXMLFile(modelFile, modelUri, metaModel);
 
 	}
 
-	public XMLModelResource createEmptyXMLFile(FileSystemBasedResourceCenter resourceCenter, String relativePath, String filename,
+	public XMLModelResource createNewXMLFile(FileSystemBasedResourceCenter resourceCenter, String relativePath, String filename,
 			String modelUri, FlexoResource<XSDMetaModel> metaModelResource) {
 		File modelDirectory = new File(resourceCenter.getRootDirectory(), relativePath);
 		File modelFile = new File(modelDirectory, filename);
-		return createEmptyXMLFile(modelFile, modelUri, metaModelResource);
+		return createNewXMLFile(modelFile, modelUri, metaModelResource);
 	}
 
 	@Override

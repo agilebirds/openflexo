@@ -25,11 +25,13 @@ import java.util.logging.Logger;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.DuplicateURIException;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddClass;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.owl.OWLModelSlot;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
+import org.openflexo.technologyadapter.owl.model.OWLOntology;
 
 public class AddOWLClass extends AddClass<OWLModelSlot, OWLClass> {
 
@@ -73,6 +75,11 @@ public class AddOWLClass extends AddClass<OWLModelSlot, OWLClass> {
 			e.printStackTrace();
 		}
 		return newClass;
+	}
+
+	@Override
+	public TypeSafeModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot> getModelSlotInstance(EditionSchemeAction action) {
+		return (TypeSafeModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot>) super.getModelSlotInstance(action);
 	}
 
 }

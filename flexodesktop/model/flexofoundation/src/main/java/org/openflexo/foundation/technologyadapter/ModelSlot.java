@@ -267,7 +267,7 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 		if (cl.isAnnotationPresent(DeclarePatternRoles.class)) {
 			DeclarePatternRoles allPatternRoles = cl.getAnnotation(DeclarePatternRoles.class);
 			for (DeclarePatternRole patternRoleDeclaration : allPatternRoles.value()) {
-				availablePatternRoleTypes.add(patternRoleDeclaration.value());
+				availablePatternRoleTypes.add(patternRoleDeclaration.patternRoleClass());
 			}
 		}
 		// availablePatternRoleTypes.add(EditionPatternPatternRole.class);

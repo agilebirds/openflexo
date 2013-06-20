@@ -380,13 +380,13 @@ public class XSDModelSlot extends TypeSafeModelSlot<XMLModel, XSDMetaModel> {
 	@Override
 	public XMLModelResource createProjectSpecificEmptyModel(View view, String filename, String modelUri,
 			FlexoMetaModelResource<XMLModel, XSDMetaModel> metaModelResource) {
-		return getTechnologyAdapter().createEmptyXMLFile(view.getProject(), filename, modelUri, metaModelResource);
+		return getTechnologyAdapter().createNewXMLFile(view.getProject(), filename, modelUri, metaModelResource);
 	}
 
 	@Override
 	public XMLModelResource createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter, String relativePath, String filename,
 			String modelUri, FlexoMetaModelResource<XMLModel, XSDMetaModel> metaModelResource) {
-		return getTechnologyAdapter().createEmptyXMLFile((FileSystemBasedResourceCenter) resourceCenter, relativePath, filename, modelUri,
+		return getTechnologyAdapter().createNewXMLFile((FileSystemBasedResourceCenter) resourceCenter, relativePath, filename, modelUri,
 				(XSDMetaModelResource) metaModelResource);
 	}
 

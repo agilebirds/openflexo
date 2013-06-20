@@ -24,8 +24,6 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
@@ -47,12 +45,13 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain, christophe
  * 
  */
-@DeclarePatternRoles({ @DeclarePatternRole(EditionPatternInstancePatternRole.class) // EditionPattern
+@DeclarePatternRoles({ // All pattern roles available through this model slot
+@DeclarePatternRole(FML = "EditionPatternInstance", patternRoleClass = EditionPatternInstancePatternRole.class) // EditionPatternInstance
 })
-@DeclareEditionActions({ @DeclareEditionAction(AddEditionPatternInstance.class) // Add EditionPatternInstance
-})
-@DeclareFetchRequests({ @DeclareFetchRequest(SelectEditionPatternInstance.class) // Select EditionPatternInstance
-})
+@DeclareEditionActions({ // All edition actions available through this model slot
+@DeclareEditionAction(FML = "AddEditionPatternInstance", editionActionClass = AddEditionPatternInstance.class) })
+@DeclareFetchRequests({ // All requests available through this model slot
+@DeclareFetchRequest(FML = "SelectEditionPatternInstance", fetchRequestClass = SelectEditionPatternInstance.class) })
 public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM extends VirtualModel<VM>> extends ModelSlot<VMI> {
 
 	private static final Logger logger = Logger.getLogger(VirtualModelModelSlot.class.getPackage().getName());
@@ -81,18 +80,6 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	@Override
 	public Class getTechnologyAdapterClass() {
 		return VirtualModelTechnologyAdapter.class;
-	}
-
-	@Override
-	public BindingVariable makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
-		/*if (pr instanceof ShapePatternRole) {
-			return new ShapePatternRolePathElement((ShapePatternRole) pr, container);
-		} else if (pr instanceof ConnectorPatternRole) {
-			return new ConnectorPatternRolePathElement((ConnectorPatternRole) pr, container);
-		} else {
-			return null;
-		}*/
-		return null;
 	}
 
 	@Override

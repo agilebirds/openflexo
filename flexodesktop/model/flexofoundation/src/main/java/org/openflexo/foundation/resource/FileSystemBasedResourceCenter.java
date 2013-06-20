@@ -22,6 +22,7 @@ package org.openflexo.foundation.resource;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -279,22 +280,38 @@ public abstract class FileSystemBasedResourceCenter extends FileResourceReposito
 		return false;
 	}
 
+	private HashMap<TechnologyAdapter, HashMap<Class<? extends ResourceRepository<?>>, ResourceRepository<?>>> repositories = new HashMap<TechnologyAdapter, HashMap<Class<? extends ResourceRepository<?>>, ResourceRepository<?>>>();
+
+	private HashMap<Class<? extends ResourceRepository<?>>, ResourceRepository<?>> getRepositoriesForAdapter(
+			TechnologyAdapter technologyAdapter) {
+		HashMap<Class<? extends ResourceRepository<?>>, ResourceRepository<?>> map = repositories.get(technologyAdapter);
+		if (map == null) {
+			map = new HashMap<Class<? extends ResourceRepository<?>>, ResourceRepository<?>>();
+			repositories.put(technologyAdapter, map);
+		}
+		return map;
+	}
+
 	@Override
 	public final <R extends ResourceRepository<?>> R getRepository(Class<? extends R> repositoryType, TechnologyAdapter technologyAdapter) {
-		// TODO Auto-generated method stub
-		return null;
+		HashMap<Class<? extends ResourceRepository<?>>, ResourceRepository<?>> map = getRepositoriesForAdapter(technologyAdapter);
+		return (R) map.get(repositoryType);
 	}
 
 	@Override
 	public final <R extends ResourceRepository<?>> void registerRepository(R repository, Class<? extends R> repositoryType,
 			TechnologyAdapter technologyAdapter) {
-		// TODO Auto-generated method stub
+		HashMap<Class<? extends ResourceRepository<?>>, ResourceRepository<?>> map = getRepositoriesForAdapter(technologyAdapter);
+		if (map.get(repositoryType) == null) {
+			map.put(repositoryType, repository);
+		} else {
+			logger.warning("Repository already registered: " + repositoryType + " for " + repository);
+		}
 	}
 
 	@Override
-	public List<ResourceRepository<?>> getRegistedRepositories(TechnologyAdapter technologyAdapter) {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<ResourceRepository<?>> getRegistedRepositories(TechnologyAdapter technologyAdapter) {
+		return getRepositoriesForAdapter(technologyAdapter).values();
 	}
 
 	@Override

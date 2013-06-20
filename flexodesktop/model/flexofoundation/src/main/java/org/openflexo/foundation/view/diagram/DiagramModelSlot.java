@@ -2,8 +2,6 @@ package org.openflexo.foundation.view.diagram;
 
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclareFetchRequest;
@@ -36,19 +34,20 @@ import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
  * @author sylvain
  * 
  */
-@DeclarePatternRoles({ @DeclarePatternRole(DiagramPatternRole.class), // Diagrams
-		@DeclarePatternRole(ShapePatternRole.class), // Shapes
-		@DeclarePatternRole(ConnectorPatternRole.class), // Connectors
-		@DeclarePatternRole(EditionPatternInstancePatternRole.class) // EditionPatternInstance
+@DeclarePatternRoles({ // All pattern roles available through this model slot
+@DeclarePatternRole(FML = "Diagram", patternRoleClass = DiagramPatternRole.class), // Diagrams
+		@DeclarePatternRole(FML = "Shape", patternRoleClass = ShapePatternRole.class), // Shapes
+		@DeclarePatternRole(FML = "Connector", patternRoleClass = ConnectorPatternRole.class), // Connectors
+		@DeclarePatternRole(FML = "EditionPatternInstance", patternRoleClass = EditionPatternInstancePatternRole.class) // EditionPatternInstance
 })
-@DeclareEditionActions({ @DeclareEditionAction(AddDiagram.class), // Add diagram
-		@DeclareEditionAction(AddShape.class), // Add shape
-		@DeclareEditionAction(AddConnector.class), // Add connector
-		@DeclareEditionAction(GraphicalAction.class), // Graphical action
-		@DeclareEditionAction(AddEditionPatternInstance.class) // Add EditionPatternInstance
-})
-@DeclareFetchRequests({ @DeclareFetchRequest(SelectEditionPatternInstance.class) // Allows to select some EditionPatternInstance
-})
+@DeclareEditionActions({ // All edition actions available through this model slot
+@DeclareEditionAction(FML = "AddDiagram", editionActionClass = AddDiagram.class),
+		@DeclareEditionAction(FML = "AddShape", editionActionClass = AddShape.class),
+		@DeclareEditionAction(FML = "AddConnector", editionActionClass = AddConnector.class),
+		@DeclareEditionAction(FML = "GraphicalAction", editionActionClass = GraphicalAction.class),
+		@DeclareEditionAction(FML = "AddEditionPatternInstance", editionActionClass = AddEditionPatternInstance.class) })
+@DeclareFetchRequests({ // All requests available through this model slot
+@DeclareFetchRequest(FML = "SelectEditionPatternInstance", fetchRequestClass = SelectEditionPatternInstance.class) })
 public class DiagramModelSlot extends VirtualModelModelSlot<Diagram, DiagramSpecification> {
 
 	private static final Logger logger = Logger.getLogger(DiagramModelSlot.class.getPackage().getName());
@@ -77,18 +76,6 @@ public class DiagramModelSlot extends VirtualModelModelSlot<Diagram, DiagramSpec
 	@Override
 	public Class<DiagramTechnologyAdapter> getTechnologyAdapterClass() {
 		return DiagramTechnologyAdapter.class;
-	}
-
-	@Override
-	public BindingVariable makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
-		/*if (pr instanceof ShapePatternRole) {
-			return new ShapePatternRolePathElement((ShapePatternRole) pr, container);
-		} else if (pr instanceof ConnectorPatternRole) {
-			return new ConnectorPatternRolePathElement((ConnectorPatternRole) pr, container);
-		} else {
-			return null;
-		}*/
-		return null;
 	}
 
 	@Override

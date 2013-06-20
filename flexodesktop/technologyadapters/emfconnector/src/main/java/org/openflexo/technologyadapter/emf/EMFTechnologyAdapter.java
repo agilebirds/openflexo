@@ -131,8 +131,9 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 		Iterator<I> it = resourceCenter.iterator();
 
 		while (it.hasNext()) {
-			if (it instanceof File) {
-				File candidateFile = (File) it;
+			I item = it.next();
+			if (item instanceof File) {
+				File candidateFile = (File) item;
 				EMFMetaModelResource mmRes = tryToLookupMetaModel(resourceCenter, candidateFile);
 			}
 		}
@@ -141,8 +142,9 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 		it = resourceCenter.iterator();
 
 		while (it.hasNext()) {
-			if (it instanceof File) {
-				File candidateFile = (File) it;
+			I item = it.next();
+			if (item instanceof File) {
+				File candidateFile = (File) item;
 				EMFModelResource mRes = tryToLookupModel(resourceCenter, candidateFile);
 			}
 		}
@@ -239,7 +241,9 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#createMetaModelRepository(org.openflexo.foundation.resource.FlexoResourceCenter)
 	 */
 	public EMFMetaModelRepository createMetaModelRepository(FlexoResourceCenter<?> resourceCenter) {
-		return new EMFMetaModelRepository(this, resourceCenter);
+		EMFMetaModelRepository returned = new EMFMetaModelRepository(this, resourceCenter);
+		resourceCenter.registerRepository(returned, EMFMetaModelRepository.class, this);
+		return returned;
 	}
 
 	/**
@@ -249,7 +253,9 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#createModelRepository(org.openflexo.foundation.resource.FlexoResourceCenter)
 	 */
 	public EMFModelRepository createModelRepository(FlexoResourceCenter<?> resourceCenter) {
-		return new EMFModelRepository(this, resourceCenter);
+		EMFModelRepository returned = new EMFModelRepository(this, resourceCenter);
+		resourceCenter.registerRepository(returned, EMFModelRepository.class, this);
+		return returned;
 	}
 
 	/**
