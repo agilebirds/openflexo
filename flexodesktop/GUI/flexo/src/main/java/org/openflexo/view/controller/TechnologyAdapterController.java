@@ -51,7 +51,7 @@ import org.openflexo.icon.VPMIconLibrary;
  * @author sylvain
  * 
  */
-public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<?, ?>> {
+public abstract class TechnologyAdapterController<TA extends TechnologyAdapter> {
 
 	private static final Logger logger = Logger.getLogger(TechnologyAdapterController.class.getPackage().getName());
 

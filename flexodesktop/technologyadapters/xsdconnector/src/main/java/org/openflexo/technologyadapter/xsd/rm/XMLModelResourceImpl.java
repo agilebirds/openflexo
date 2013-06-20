@@ -22,7 +22,6 @@ package org.openflexo.technologyadapter.xsd.rm;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,7 +45,6 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.technologyadapter.xsd.model.XMLModel;
-import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.model.XSDTechnologyContextManager;
 import org.openflexo.toolbox.IProgress;
 
@@ -82,7 +80,7 @@ public abstract class XMLModelResourceImpl extends FlexoFileResourceImpl<XMLMode
 			returned.setTechnologyAdapter(technologyContextManager.getTechnologyAdapter());
 			returned.setTechnologyContextManager(technologyContextManager);
 			returned.setMetaModelResource(xsdMetaModelResource);
-			technologyContextManager.registerModel(returned);
+			technologyContextManager.registerResource(returned);
 			// Creates the XML model from scratch
 			returned.setResourceData(new XMLModel(modelURI, xsdMetaModelResource.getFile(), technologyContextManager.getTechnologyAdapter()));
 			return returned;
@@ -113,7 +111,7 @@ public abstract class XMLModelResourceImpl extends FlexoFileResourceImpl<XMLMode
 			returned.setTechnologyAdapter(technologyContextManager.getTechnologyAdapter());
 			returned.setTechnologyContextManager(technologyContextManager);
 			returned.setMetaModelResource(xsdMetaModelResource);
-			technologyContextManager.registerModel(returned);
+			technologyContextManager.registerResource(returned);
 			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();

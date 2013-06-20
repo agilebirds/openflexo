@@ -22,6 +22,7 @@ package org.openflexo.foundation.view.action;
 import java.util.List;
 
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.ModelSlotInstance;
@@ -34,7 +35,7 @@ import org.openflexo.foundation.view.VirtualModelInstance;
  * @author sylvain
  * 
  */
-public abstract class ModelSlotInstanceConfiguration<MS extends ModelSlot<?, ?>> extends FlexoObject {
+public abstract class ModelSlotInstanceConfiguration<MS extends ModelSlot<RD>, RD extends ResourceData<RD>> extends FlexoObject {
 
 	private CreateVirtualModelInstance<?> action;
 	private MS modelSlot;
@@ -115,5 +116,5 @@ public abstract class ModelSlotInstanceConfiguration<MS extends ModelSlot<?, ?>>
 		return option != null;
 	}
 
-	public abstract ModelSlotInstance<?, ?> createModelSlotInstance(VirtualModelInstance<?, ?> msInstance);
+	public abstract ModelSlotInstance<MS, RD> createModelSlotInstance(VirtualModelInstance<?, ?> msInstance);
 }

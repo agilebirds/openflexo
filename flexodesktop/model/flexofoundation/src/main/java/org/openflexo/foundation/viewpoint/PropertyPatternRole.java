@@ -5,7 +5,7 @@ import java.lang.reflect.Type;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.SubPropertyOfProperty;
-import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.ConceptActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
@@ -89,11 +89,11 @@ public abstract class PropertyPatternRole<T extends IFlexoOntologyStructuralProp
 	}
 
 	@Override
-	public FlexoOntologyModelSlot<?, ?> getModelSlot() {
-		FlexoOntologyModelSlot<?, ?> returned = super.getModelSlot();
+	public TypeSafeModelSlot getModelSlot() {
+		TypeSafeModelSlot returned = super.getModelSlot();
 		if (returned == null) {
-			if (getVirtualModel() != null && getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class).size() > 0) {
-				return getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class).get(0);
+			if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypeSafeModelSlot.class).size() > 0) {
+				return getVirtualModel().getModelSlots(TypeSafeModelSlot.class).get(0);
 			}
 		}
 		return returned;

@@ -30,8 +30,6 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.ModelSlotInstance;
@@ -45,7 +43,7 @@ import org.openflexo.foundation.view.action.EditionSchemeAction;
  * @author sylvain
  * 
  */
-public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends EditionSchemeObject {
+public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionSchemeObject {
 
 	private static final Logger logger = Logger.getLogger(EditionAction.class.getPackage().getName());
 
@@ -78,11 +76,7 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 		SelectEditionPatternInstance
 	}
 
-	private ModelSlot<M, MM> modelSlot;
-
-	// private EditionScheme _scheme;
-	private String description;
-	// private String patternRole;
+	private MS modelSlot;
 
 	private DataBinding<Boolean> conditional;
 
@@ -128,15 +122,15 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 		return null;
 	}
 
-	public ModelSlot<M, MM> getModelSlot() {
+	public MS getModelSlot() {
 		return modelSlot;
 	}
 
-	public void setModelSlot(ModelSlot<M, MM> modelSlot) {
+	public void setModelSlot(MS modelSlot) {
 		this.modelSlot = modelSlot;
 	}
 
-	public <MS extends ModelSlot<?, ?>> List<MS> getAvailableModelSlots(Class<MS> msType) {
+	public <MS2 extends ModelSlot<?>> List<MS2> getAvailableModelSlots(Class<MS2> msType) {
 		if (getEditionPattern() != null && getEditionPattern().getVirtualModel() != null) {
 			return getEditionPattern().getVirtualModel().getModelSlots(msType);
 		} else if (getEditionPattern() instanceof VirtualModel) {
@@ -149,7 +143,7 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 		return getAvailableModelSlots(VirtualModelModelSlot.class);
 	}
 
-	public ModelSlotInstance<M, MM> getModelSlotInstance(EditionSchemeAction action) {
+	public ModelSlotInstance<MS, ?> getModelSlotInstance(EditionSchemeAction action) {
 		if (action.getVirtualModelInstance() != null) {
 			return action.getVirtualModelInstance().getModelSlotInstance(getModelSlot());
 		} else {
@@ -181,7 +175,7 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 	 * @param action
 	 * @return
 	 */
-	public static void performBatchOfActions(Collection<EditionAction<?, ?, ?>> actions, EditionSchemeAction contextAction) {
+	public static void performBatchOfActions(Collection<EditionAction<?, ?>> actions, EditionSchemeAction contextAction) {
 
 		Hashtable<EditionAction, Object> performedActions = new Hashtable<EditionAction, Object>();
 
@@ -320,7 +314,7 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 		rebuildInferedBindingModel();
 	}
 
-	private void insertActionAtCurrentIndex(EditionAction editionAction) {
+	private void insertActionAtCurrentIndex(EditionAction<?, ?> editionAction) {
 		if (getActionContainer() != null) {
 			getActionContainer().insertActionAtIndex(editionAction, getActionContainer().getIndex(this) + 1);
 		}
@@ -447,7 +441,7 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 	 * 
 	 * @return newly created {@link EditionAction}
 	 */
-	public <A extends EditionAction<M, MM, ?>> A createActionAtCurrentIndex(Class<A> actionClass, ModelSlot<M, MM> modelSlot) {
+	public <A extends EditionAction<?, ?>> A createActionAtCurrentIndex(Class<A> actionClass, ModelSlot<?> modelSlot) {
 		A newAction = modelSlot.createAction(actionClass);
 		insertActionAtCurrentIndex(newAction);
 		return null;

@@ -19,24 +19,14 @@
  */
 package org.openflexo.technologyadapter.owl.model;
 
-import java.util.logging.Logger;
-
 import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.technologyadapter.MetaModelRepository;
+import org.openflexo.foundation.technologyadapter.ModelRepository;
 import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
 import org.openflexo.technologyadapter.owl.rm.OWLOntologyResource;
 
-/**
- * Stores all OWL ontologies which are defined in a given {@link FlexoResourceCenter}
- * 
- * @author sylvain
- * 
- */
-public class OWLMetaModelRepository extends MetaModelRepository<OWLOntologyResource, OWLOntology, OWLOntology, OWLTechnologyAdapter> {
-	private static final Logger logger = Logger.getLogger(OWLOntologyLibrary.class.getPackage().getName());
+public class OWLOntologyRepository extends ModelRepository<OWLOntologyResource, OWLOntology, OWLOntology, OWLTechnologyAdapter> {
 
-	public OWLMetaModelRepository(OWLTechnologyAdapter adapter, FlexoResourceCenter rc) {
+	public OWLOntologyRepository(OWLTechnologyAdapter adapter, FlexoResourceCenter<?> rc) {
 		super(adapter, rc);
 	}
-
 }

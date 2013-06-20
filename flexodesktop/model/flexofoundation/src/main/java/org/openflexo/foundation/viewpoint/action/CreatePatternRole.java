@@ -79,7 +79,7 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 
 	private String patternRoleName;
 	public String description;
-	public ModelSlot<?, ?> modelSlot;
+	public ModelSlot modelSlot;
 	public Class<? extends PatternRole> patternRoleClass;
 	public IFlexoOntologyClass individualType;
 	public EditionPattern editionPatternInstanceType;

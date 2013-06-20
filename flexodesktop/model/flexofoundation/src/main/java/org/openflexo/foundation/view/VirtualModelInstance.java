@@ -34,6 +34,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.resource.FlexoXMLFileResource;
+import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoResource;
@@ -47,6 +48,7 @@ import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
 import org.openflexo.foundation.view.action.SynchronizationSchemeAction;
 import org.openflexo.foundation.view.action.SynchronizationSchemeActionType;
 import org.openflexo.foundation.viewpoint.EditionPattern;
@@ -78,7 +80,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 
 	private VirtualModelInstanceResource<VMI> resource;
 	private List<ModelSlotInstance<?, ?>> modelSlotInstances;
-	// private Map<ModelSlot<?, ?>, FlexoModel<?, ?>> modelsMap = new HashMap<ModelSlot<?, ?>, FlexoModel<?, ?>>(); // Do not serialize
+	// private Map<ModelSlot, FlexoModel<?, ?>> modelsMap = new HashMap<ModelSlot, FlexoModel<?, ?>>(); // Do not serialize
 	// this.
 	private String title;
 
@@ -171,7 +173,7 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	}
 
 	@Override
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+	public TechnologyAdapter getTechnologyAdapter() {
 		// TODO
 		return null;
 	}
@@ -397,16 +399,15 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	 * @param modelSlot
 	 * @return
 	 */
-	public <M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> ModelSlotInstance<M, MM> getModelSlotInstance(
-			ModelSlot<M, MM> modelSlot) {
+	public <RD extends ResourceData<RD>> ModelSlotInstance<?, RD> getModelSlotInstance(ModelSlot<RD> modelSlot) {
 		for (ModelSlotInstance<?, ?> msInstance : getModelSlotInstances()) {
 			if (msInstance.getModelSlot() == modelSlot) {
-				return (ModelSlotInstance<M, MM>) msInstance;
+				return (ModelSlotInstance<?, RD>) msInstance;
 			}
 		}
 		if (modelSlot instanceof VirtualModelModelSlot && ((VirtualModelModelSlot) modelSlot).isReflexiveModelSlot()) {
-			ModelSlotInstance reflexiveModelSlotInstance = new ModelSlotInstance(getView(), modelSlot);
-			reflexiveModelSlotInstance.setModel(this);
+			ModelSlotInstance reflexiveModelSlotInstance = new VirtualModelModelSlotInstance(getView(), (VirtualModelModelSlot) modelSlot);
+			reflexiveModelSlotInstance.setResourceData(this);
 			addToModelSlotInstances(reflexiveModelSlotInstance);
 			return reflexiveModelSlotInstance;
 		}
@@ -423,10 +424,10 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	 * @param modelSlot
 	 * @return
 	 */
-	public ModelSlotInstance<?, ?> getModelSlotInstance(String modelSlotName) {
+	public <RD extends ResourceData<RD>> ModelSlotInstance<?, RD> getModelSlotInstance(String modelSlotName) {
 		for (ModelSlotInstance<?, ?> msInstance : getModelSlotInstances()) {
 			if (msInstance.getModelSlot().getName().equals(modelSlotName)) {
-				return msInstance;
+				return (ModelSlotInstance<?, RD>) msInstance;
 			}
 		}
 		logger.warning("Cannot find ModelSlotInstance named " + modelSlotName);
@@ -464,11 +465,13 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	 * 
 	 * @return
 	 */
+	@Deprecated
 	public Set<FlexoMetaModel> getAllMetaModels() {
 		Set<FlexoMetaModel> allMetaModels = new HashSet<FlexoMetaModel>();
 		for (ModelSlotInstance instance : getModelSlotInstances()) {
-			if (instance.getModelSlot() != null && instance.getModelSlot().getMetaModelResource() != null) {
-				allMetaModels.add(instance.getModelSlot().getMetaModelResource().getMetaModelData());
+			if (instance.getModelSlot() instanceof TypeSafeModelSlot
+					&& ((TypeSafeModelSlot) instance.getModelSlot()).getMetaModelResource() != null) {
+				allMetaModels.add(((TypeSafeModelSlot) instance.getModelSlot()).getMetaModelResource().getMetaModelData());
 			}
 		}
 		return allMetaModels;
@@ -479,11 +482,12 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	 * 
 	 * @return
 	 */
+	@Deprecated
 	public Set<FlexoModel<?, ?>> getAllModels() {
 		Set<FlexoModel<?, ?>> allModels = new HashSet<FlexoModel<?, ?>>();
 		for (ModelSlotInstance instance : getModelSlotInstances()) {
-			if (instance.getModel() != null) {
-				allModels.add(instance.getModel());
+			if (instance.getResourceData() instanceof FlexoModel) {
+				allModels.add((FlexoModel<?, ?>) instance.getResourceData());
 			}
 		}
 		return allModels;

@@ -28,8 +28,9 @@ import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.toolbox.StringUtils;
 
@@ -42,15 +43,15 @@ public class URIParameter extends InnerModelSlotParameter {
 	}
 
 	@Override
-	public FlexoOntologyModelSlot<?, ?> getModelSlot() {
-		ModelSlot<?, ?> returned = super.getModelSlot();
-		if (returned instanceof FlexoOntologyModelSlot) {
-			return (FlexoOntologyModelSlot<?, ?>) returned;
+	public TypeSafeModelSlot getModelSlot() {
+		ModelSlot returned = super.getModelSlot();
+		if (returned instanceof TypeSafeModelSlot) {
+			return (TypeSafeModelSlot) returned;
 		}
 		if (returned == null) {
 			if (getEditionScheme() != null && getEditionScheme().getVirtualModel() != null) {
-				if (getEditionScheme().getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class).size() > 0) {
-					return getEditionScheme().getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class).get(0);
+				if (getEditionScheme().getVirtualModel().getModelSlots(TypeSafeModelSlot.class).size() > 0) {
+					return getEditionScheme().getVirtualModel().getModelSlots(TypeSafeModelSlot.class).get(0);
 				}
 			}
 		}
@@ -140,9 +141,10 @@ public class URIParameter extends InnerModelSlotParameter {
 			if (baseProposal == null) {
 				return null;
 			}
-			FlexoOntologyModelSlot modelSlot = getModelSlot();
+			TypeSafeModelSlot modelSlot = getModelSlot();
 
-			return modelSlot.generateUniqueURIName(action.getVirtualModelInstance().getModelSlotInstance(modelSlot), baseProposal);
+			return modelSlot.generateUniqueURIName(
+					(TypeSafeModelSlotInstance) action.getVirtualModelInstance().getModelSlotInstance(modelSlot), baseProposal);
 
 			/*baseProposal = JavaUtils.getClassName(baseProposal);
 			String proposal = baseProposal;

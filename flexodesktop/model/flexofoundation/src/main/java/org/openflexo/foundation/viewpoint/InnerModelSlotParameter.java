@@ -24,17 +24,17 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 
 public abstract class InnerModelSlotParameter extends EditionSchemeParameter {
 
-	private ModelSlot<?, ?> modelSlot;
+	private ModelSlot modelSlot;
 
 	public InnerModelSlotParameter(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 
-	public ModelSlot<?, ?> getModelSlot() {
+	public ModelSlot getModelSlot() {
 		return modelSlot;
 	}
 
-	public void setModelSlot(ModelSlot<?, ?> modelSlot) {
+	public void setModelSlot(ModelSlot modelSlot) {
 		this.modelSlot = modelSlot;
 		setChanged();
 		notifyObservers(new DataModification("modelSlot", null, modelSlot));

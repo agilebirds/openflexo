@@ -24,8 +24,11 @@ import java.util.List;
 
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
+import org.openflexo.foundation.view.VirtualModelModelSlotInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 import org.openflexo.foundation.view.diagram.action.CreateDiagram;
+import org.openflexo.foundation.view.diagram.model.Diagram;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.VirtualModelModelSlotInstanceConfiguration;
 
 /**
@@ -35,7 +38,8 @@ import org.openflexo.foundation.viewpoint.VirtualModelModelSlotInstanceConfigura
  * @author sylvain
  * 
  */
-public class DiagramModelSlotInstanceConfiguration extends VirtualModelModelSlotInstanceConfiguration<DiagramModelSlot> {
+public class DiagramModelSlotInstanceConfiguration extends
+		VirtualModelModelSlotInstanceConfiguration<DiagramModelSlot, Diagram, DiagramSpecification> {
 
 	private List<ModelSlotInstanceConfigurationOption> options;
 
@@ -64,8 +68,9 @@ public class DiagramModelSlotInstanceConfiguration extends VirtualModelModelSlot
 	}
 
 	@Override
-	public ModelSlotInstance<?, ?> createModelSlotInstance(VirtualModelInstance<?, ?> vmInstance) {
-		ModelSlotInstance<?, ?> returned = new ModelSlotInstance(vmInstance, getModelSlot());
+	public ModelSlotInstance<DiagramModelSlot, Diagram> createModelSlotInstance(VirtualModelInstance<?, ?> vmInstance) {
+		VirtualModelModelSlotInstance returned = new VirtualModelModelSlotInstance<Diagram, DiagramSpecification>(vmInstance,
+				getModelSlot());
 		// No need to store a model, this is a built-in scheme
 		return returned;
 	}

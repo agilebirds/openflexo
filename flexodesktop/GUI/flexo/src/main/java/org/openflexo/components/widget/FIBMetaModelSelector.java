@@ -73,14 +73,14 @@ public class FIBMetaModelSelector extends FIBModelObjectSelector<FlexoMetaModelR
 		updateCustomPanel(getEditedObject());
 	}
 
-	private TechnologyAdapter<?, ?> technologyAdapter;
+	private TechnologyAdapter technologyAdapter;
 
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+	public TechnologyAdapter getTechnologyAdapter() {
 		return technologyAdapter;
 	}
 
 	@CustomComponentParameter(name = "technologyAdapter", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setTechnologyAdapter(TechnologyAdapter<?, ?> technologyAdapter) {
+	public void setTechnologyAdapter(TechnologyAdapter technologyAdapter) {
 		this.technologyAdapter = technologyAdapter;
 		updateCustomPanel(getEditedObject());
 	}
@@ -132,7 +132,7 @@ public class FIBMetaModelSelector extends FIBModelObjectSelector<FlexoMetaModelR
 				selector.setInformationSpace(informationSpace);
 				try {
 					selector.setTechnologyAdapter(serviceManager.getTechnologyAdapterService().getTechnologyAdapter(
-							(Class<TechnologyAdapter<?, ?>>) Class.forName("org.openflexo.technologyadapter.emf.EMFTechnologyAdapter")));
+							(Class<TechnologyAdapter>) Class.forName("org.openflexo.technologyadapter.emf.EMFTechnologyAdapter")));
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
 				}

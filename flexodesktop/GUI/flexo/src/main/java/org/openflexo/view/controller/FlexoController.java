@@ -1994,7 +1994,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 	 * @param technologyAdapter
 	 * @return
 	 */
-	public static <TA extends TechnologyAdapter<?, ?>> TechnologyAdapterController<TA> getTechnologyAdapterController(TA technologyAdapter) {
+	public static <TA extends TechnologyAdapter> TechnologyAdapterController<TA> getTechnologyAdapterController(TA technologyAdapter) {
 		if (technologyAdapter != null) {
 			FlexoServiceManager sm = technologyAdapter.getTechnologyAdapterService().getServiceManager();
 			if (sm != null) {
@@ -2098,8 +2098,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 				return statelessIconForObject(((RepositoryFolder) object).getResourceRepository().getOwner());
 			}
 			return IconLibrary.FOLDER_ICON;
-		} else if (object instanceof TechnologyAdapter<?, ?>) {
-			TechnologyAdapterController<?> tac = getTechnologyAdapterController((TechnologyAdapter<?, ?>) object);
+		} else if (object instanceof TechnologyAdapter) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController((TechnologyAdapter) object);
 			if (tac != null) {
 				return tac.getTechnologyIcon();
 			}

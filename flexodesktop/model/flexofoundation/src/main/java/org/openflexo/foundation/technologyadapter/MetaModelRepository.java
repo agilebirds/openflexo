@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.resource.FileResourceRepository;
 import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
-import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.FlexoFileResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ResourceRepository;
 
@@ -36,7 +36,7 @@ import org.openflexo.foundation.resource.ResourceRepository;
  * @param <R>
  * @param <TA>
  */
-public abstract class MetaModelRepository<R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>>
+public abstract class MetaModelRepository<R extends FlexoFileResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter>
 		extends FileResourceRepository<R> {
 	/** Logger. */
 	private static final Logger logger = Logger.getLogger(MetaModelRepository.class.getPackage().getName());
@@ -44,7 +44,7 @@ public abstract class MetaModelRepository<R extends FlexoResource<? extends MM>,
 	/** Technological Adapter. */
 	private TA technologyAdapter;
 	/** Flexo Resource Center. */
-	private FlexoResourceCenter resourceCenter;
+	private FlexoResourceCenter<?> resourceCenter;
 
 	/**
 	 * Constructor.
@@ -52,7 +52,7 @@ public abstract class MetaModelRepository<R extends FlexoResource<? extends MM>,
 	 * @param technologyAdapter
 	 * @param resourceCenter
 	 */
-	public MetaModelRepository(TA technologyAdapter, FlexoResourceCenter resourceCenter) {
+	public MetaModelRepository(TA technologyAdapter, FlexoResourceCenter<?> resourceCenter) {
 		super(resourceCenter, resourceCenter instanceof FileSystemBasedResourceCenter ? ((FileSystemBasedResourceCenter) resourceCenter)
 				.getRootDirectory() : null);
 		this.technologyAdapter = technologyAdapter;

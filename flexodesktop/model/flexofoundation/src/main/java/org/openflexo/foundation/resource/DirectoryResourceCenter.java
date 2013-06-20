@@ -21,8 +21,7 @@ package org.openflexo.foundation.resource;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
+import java.util.Collection;
 import java.util.logging.Logger;
 
 import org.openflexo.toolbox.FlexoVersion;
@@ -34,7 +33,7 @@ import org.openflexo.toolbox.IProgress;
  * @author sylvain
  * 
  */
-public class DirectoryResourceCenter extends FileSystemBasedResourceCenter implements FlexoResourceCenter {
+public class DirectoryResourceCenter extends FileSystemBasedResourceCenter {
 
 	protected static final Logger logger = Logger.getLogger(DirectoryResourceCenter.class.getPackage().getName());
 
@@ -57,18 +56,8 @@ public class DirectoryResourceCenter extends FileSystemBasedResourceCenter imple
 	}
 
 	@Override
-	public List<FlexoResource<?>> getAllResources(IProgress progress) {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public <T extends ResourceData<T>> List<FlexoResource<T>> retrieveResource(String uri, Class<T> type, IProgress progress) {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public <T extends ResourceData<T>> FlexoResource<T> retrieveResource(String uri, FlexoVersion version, Class<T> type, IProgress progress) {
-		return null;
+	public Collection<FlexoFileResource<?>> getAllResources(IProgress progress) {
+		return getAllResources();
 	}
 
 	@Override

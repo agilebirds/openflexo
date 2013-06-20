@@ -24,11 +24,10 @@ import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.resource.ResourceManager;
+import org.openflexo.foundation.resource.ResourceRepository;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
 import org.openflexo.foundation.technologyadapter.DefaultTechnologyAdapterService;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
-import org.openflexo.foundation.technologyadapter.MetaModelRepository;
-import org.openflexo.foundation.technologyadapter.ModelRepository;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -125,26 +124,18 @@ public class DefaultFlexoServiceManager extends FlexoServiceManager {
 			sb.append("**********************************************\n");
 			sb.append("Resource Center Service: " + getResourceCenterService().getClass().getSimpleName() + " resource centers: "
 					+ getResourceCenterService().getResourceCenters().size() + "\n");
-			for (FlexoResourceCenter rc : getResourceCenterService().getResourceCenters()) {
+			for (FlexoResourceCenter<?> rc : getResourceCenterService().getResourceCenters()) {
 				sb.append("> " + rc.getName() + "\n");
 			}
 		}
 		if (getInformationSpace() != null) {
 			sb.append("**********************************************\n");
 			sb.append("Information Space\n");
-			for (TechnologyAdapter<?, ?> ta : getTechnologyAdapterService().getTechnologyAdapters()) {
-				for (MetaModelRepository<?, ?, ?, ?> mmRep : getInformationSpace().getAllMetaModelRepositories(ta)) {
-					System.out.println("Technology adapter: " + ta + " meta-model repository: " + mmRep + "\n");
-					for (FlexoResource<?> r : mmRep.getAllResources()) {
+			for (TechnologyAdapter ta : getTechnologyAdapterService().getTechnologyAdapters()) {
+				for (ResourceRepository<?> rep : getInformationSpace().getAllRepositories(ta)) {
+					System.out.println("Technology adapter: " + ta + " repository: " + rep + "\n");
+					for (FlexoResource<?> r : rep.getAllResources()) {
 						sb.append("> " + r.getURI() + "\n");
-					}
-				}
-			}
-			for (TechnologyAdapter<?, ?> ta : getTechnologyAdapterService().getTechnologyAdapters()) {
-				for (ModelRepository<?, ?, ?, ?> mRep : getInformationSpace().getAllModelRepositories(ta)) {
-					System.out.println("Technology adapter: " + ta + " model repository: " + mRep);
-					for (FlexoResource<?> r : mRep.getAllResources()) {
-						System.out.println("> " + r.getURI());
 					}
 				}
 			}

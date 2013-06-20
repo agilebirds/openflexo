@@ -20,8 +20,8 @@ public interface TechnologyAdapterResource<RD extends ResourceData<RD>> extends 
 	public static final String TECHNOLOGY_ADAPTER = "technologyAdapter";
 
 	@Getter(value = TECHNOLOGY_ADAPTER, ignoreType = true)
-	public TechnologyAdapter<?, ?> getTechnologyAdapter();
+	public TechnologyAdapter getTechnologyAdapter();
 
 	@Setter(TECHNOLOGY_ADAPTER)
-	public void setTechnologyAdapter(TechnologyAdapter<?, ?> technologyAdapter);
+	public void setTechnologyAdapter(TechnologyAdapter technologyAdapter);
 }

@@ -37,8 +37,8 @@ import org.openflexo.foundation.resource.RepositoryFolder;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.rm.ViewResource;
-import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlotInstanceConfiguration;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeSafeModelSlotInstanceConfiguration;
 import org.openflexo.foundation.view.action.CreateView;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration.DefaultModelSlotInstanceConfigurationOption;
 import org.openflexo.foundation.view.diagram.DiagramModelSlotInstanceConfiguration;
@@ -135,16 +135,16 @@ public class TestEMFCityMappingView extends FlexoTestCase {
 		// Populate modelSlots
 		assertEquals(3, cityMappingViewPoint.getDefaultDiagramSpecification().getModelSlots().size());
 		// Model Slot Diagram
-		ModelSlot<?, ?> diagramModelSlot = cityMappingViewPoint.getDefaultDiagramSpecification().getModelSlot("diagram");
+		ModelSlot diagramModelSlot = cityMappingViewPoint.getDefaultDiagramSpecification().getModelSlot("diagram");
 		assertNotNull(diagramModelSlot);
 		DiagramModelSlotInstanceConfiguration diagramModelSlotConfiguration = (DiagramModelSlotInstanceConfiguration) createDiagram
 				.getModelSlotInstanceConfiguration(diagramModelSlot);
 		diagramModelSlotConfiguration.setOption(DefaultModelSlotInstanceConfigurationOption.Autoconfigure);
 		assertTrue(diagramModelSlotConfiguration.isValidConfiguration());
 		// Model Slot city1
-		ModelSlot<?, ?> city1ModelSlot = cityMappingViewPoint.getDefaultDiagramSpecification().getModelSlot("city1");
+		ModelSlot city1ModelSlot = cityMappingViewPoint.getDefaultDiagramSpecification().getModelSlot("city1");
 		assertNotNull(city1ModelSlot);
-		FlexoOntologyModelSlotInstanceConfiguration city1ModelSlotConfiguration = (FlexoOntologyModelSlotInstanceConfiguration) createDiagram
+		TypeSafeModelSlotInstanceConfiguration city1ModelSlotConfiguration = (TypeSafeModelSlotInstanceConfiguration) createDiagram
 				.getModelSlotInstanceConfiguration(city1ModelSlot);
 		city1ModelSlotConfiguration.setOption(DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel);
 		city1ModelSlotConfiguration.setModelUri("http://www.thalesgroup.com/openflexo/emf/CityMapping/myCity1");
@@ -152,9 +152,9 @@ public class TestEMFCityMappingView extends FlexoTestCase {
 		city1ModelSlotConfiguration.setFilename("city.city1");
 		assertTrue(city1ModelSlotConfiguration.isValidConfiguration());
 		// Model Slot city2
-		ModelSlot<?, ?> city2ModelSlot = cityMappingViewPoint.getDefaultDiagramSpecification().getModelSlot("city2");
+		ModelSlot city2ModelSlot = cityMappingViewPoint.getDefaultDiagramSpecification().getModelSlot("city2");
 		assertNotNull(city2ModelSlot);
-		FlexoOntologyModelSlotInstanceConfiguration city2ModelSlotConfiguration = (FlexoOntologyModelSlotInstanceConfiguration) createDiagram
+		TypeSafeModelSlotInstanceConfiguration city2ModelSlotConfiguration = (TypeSafeModelSlotInstanceConfiguration) createDiagram
 				.getModelSlotInstanceConfiguration(city2ModelSlot);
 		city2ModelSlotConfiguration.setOption(DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel);
 		city2ModelSlotConfiguration.setModelUri("http://www.thalesgroup.com/openflexo/emf/CityMapping/myCity2");
@@ -179,11 +179,13 @@ public class TestEMFCityMappingView extends FlexoTestCase {
 		assertEquals(3, newDiagram.getModelSlotInstances().size());
 		ModelSlotInstance<?, ?> diagramModelSlotInstance = newDiagram.getModelSlotInstance("diagram");
 		assertNotNull(diagramModelSlotInstance);
-		ModelSlotInstance<?, ?> city1ModelSlotInstance = newDiagram.getModelSlotInstance("city1");
+		TypeSafeModelSlotInstance<?, ?, ?> city1ModelSlotInstance = (TypeSafeModelSlotInstance<?, ?, ?>) newDiagram
+				.getModelSlotInstance("city1");
 		assertNotNull(city1ModelSlotInstance);
-		ModelSlotInstance<?, ?> city2ModelSlotInstance = newDiagram.getModelSlotInstance("city2");
+		TypeSafeModelSlotInstance<?, ?, ?> city2ModelSlotInstance = (TypeSafeModelSlotInstance<?, ?, ?>) newDiagram
+				.getModelSlotInstance("city2");
 		assertNotNull(city2ModelSlotInstance);
-		System.out.println("DiagramModel=" + diagramModelSlotInstance.getModelURI());
+		// System.out.println("DiagramModel=" + diagramModelSlotInstance.getModelURI());
 		System.out.println("City1Model=" + city1ModelSlotInstance.getModelURI());
 		System.out.println("City2Model=" + city2ModelSlotInstance.getModelURI());
 		assertNotNull(city1ModelSlotInstance.getModelURI());
