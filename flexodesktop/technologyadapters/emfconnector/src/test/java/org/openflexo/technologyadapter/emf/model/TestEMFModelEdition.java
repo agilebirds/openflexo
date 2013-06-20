@@ -84,7 +84,7 @@ public class TestEMFModelEdition {
 			EMFModelResource emfModelResource = null;
 			try {
 				emfModelResource = technologicalAdapter.createNewEMFModel(File.createTempFile("coucou", ".emf"), "myURI",
-						emfMetaModelResource, technologicalAdapter.getTechnologyContextManager());
+						emfMetaModelResource);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

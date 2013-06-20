@@ -209,7 +209,7 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 	}
 
 	@Override
-	protected <I> void contentsDeleted(FlexoResourceCenter<I> resourceCenter, I contents) {
+	public <I> void contentsDeleted(FlexoResourceCenter<I> resourceCenter, I contents) {
 		if (contents instanceof File) {
 			System.out
 					.println("File DELETED " + ((File) contents).getName() + " in " + ((File) contents).getParentFile().getAbsolutePath());
@@ -436,10 +436,9 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 	 * @param technologyContextManager
 	 * @return
 	 */
-	public EMFModelResource createNewEMFModel(FlexoProject project, String filename, String modelUri,
-			EMFMetaModelResource metaModelResource, EMFTechnologyContextManager technologyContextManager) {
+	public EMFModelResource createNewEMFModel(FlexoProject project, String filename, String modelUri, EMFMetaModelResource metaModelResource) {
 		File modelFile = new File(FlexoProject.getProjectSpecificModelsDirectory(project), filename);
-		return createNewEMFModel(modelFile, modelUri, metaModelResource, technologyContextManager);
+		return createNewEMFModel(modelFile, modelUri, metaModelResource);
 	}
 
 	/**
@@ -451,10 +450,10 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 	 * @return
 	 */
 	public EMFModelResource createNewEMFModel(FileSystemBasedResourceCenter resourceCenter, String relativePath, String filename,
-			String modelUri, EMFMetaModelResource metaModelResource, EMFTechnologyContextManager technologyContextManager) {
+			String modelUri, EMFMetaModelResource metaModelResource) {
 		File modelDirectory = new File(resourceCenter.getRootDirectory(), relativePath);
 		File modelFile = new File(modelDirectory, filename);
-		return createNewEMFModel(modelFile, modelUri, metaModelResource, technologyContextManager);
+		return createNewEMFModel(modelFile, modelUri, metaModelResource);
 	}
 
 	/**
@@ -466,12 +465,11 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 	 * @param technologyContextManager
 	 * @return
 	 */
-	public EMFModelResource createNewEMFModel(File modelFile, String modelUri, EMFMetaModelResource metaModelResource,
-			EMFTechnologyContextManager technologyContextManager) {
+	public EMFModelResource createNewEMFModel(File modelFile, String modelUri, EMFMetaModelResource metaModelResource) {
 		EMFMetaModelResource emfMetaModelResource = metaModelResource;
 		EMFModelResource emfModelResource = EMFModelResourceImpl.makeEMFModelResource(modelUri, modelFile, emfMetaModelResource,
-				technologyContextManager);
-		technologyContextManager.registerResource(emfModelResource);
+				getTechnologyContextManager());
+		getTechnologyContextManager().registerResource(emfModelResource);
 		try {
 			emfModelResource.save(null);
 		} catch (SaveResourceException e) {

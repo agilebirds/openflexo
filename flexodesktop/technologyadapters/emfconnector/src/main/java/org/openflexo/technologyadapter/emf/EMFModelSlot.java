@@ -27,14 +27,19 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclareFetchRequest;
 import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
 import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
@@ -42,6 +47,8 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
+import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
+import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 import org.openflexo.technologyadapter.emf.viewpoint.EMFObjectIndividualPatternRole;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividual;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividualAttributeDataPropertyValue;
@@ -119,6 +126,14 @@ public class EMFModelSlot extends TypeSafeModelSlot<EMFModel, EMFMetaModel> {
 	@Override
 	public Class<EMFTechnologyAdapter> getTechnologyAdapterClass() {
 		return EMFTechnologyAdapter.class;
+	}
+
+	/**
+	 * Instanciate a new model slot instance configuration for this model slot
+	 */
+	@Override
+	public EMFModelSlotInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
+		return new EMFModelSlotInstanceConfiguration(this, action);
 	}
 
 	/**
@@ -201,4 +216,21 @@ public class EMFModelSlot extends TypeSafeModelSlot<EMFModel, EMFMetaModel> {
 		return EMFModel.class;
 	}
 
+	@Override
+	public EMFTechnologyAdapter getTechnologyAdapter() {
+		return (EMFTechnologyAdapter) super.getTechnologyAdapter();
+	}
+
+	@Override
+	public EMFModelResource createProjectSpecificEmptyModel(View view, String filename, String modelUri,
+			FlexoMetaModelResource<EMFModel, EMFMetaModel> metaModelResource) {
+		return getTechnologyAdapter().createNewEMFModel(view.getProject(), filename, modelUri, (EMFMetaModelResource) metaModelResource);
+	}
+
+	@Override
+	public EMFModelResource createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter, String relativePath, String filename,
+			String modelUri, FlexoMetaModelResource<EMFModel, EMFMetaModel> metaModelResource) {
+		return getTechnologyAdapter().createNewEMFModel((FileSystemBasedResourceCenter) resourceCenter, relativePath, filename, modelUri,
+				(EMFMetaModelResource) metaModelResource);
+	}
 }

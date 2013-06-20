@@ -1,8 +1,10 @@
 package org.openflexo.foundation.technologyadapter;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.logging.Logger;
@@ -15,6 +17,7 @@ import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCe
 import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterRemoved;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.resource.ResourceRepository;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 
@@ -213,6 +216,22 @@ public abstract class DefaultTechnologyAdapterService extends FlexoServiceImpl i
 		}
 		return returned;
 	}*/
+
+	/**
+	 * Return the list of all non-empty {@link ResourceRepository} discovered in the scope of {@link FlexoServiceManager}, related to
+	 * technology as supplied by {@link TechnologyAdapter} parameter
+	 * 
+	 * @param technologyAdapter
+	 * @return
+	 */
+	@Override
+	public List<ResourceRepository<?>> getAllRepositories(TechnologyAdapter technologyAdapter) {
+		List<ResourceRepository<?>> returned = new ArrayList<ResourceRepository<?>>();
+		for (FlexoResourceCenter<?> rc : getFlexoResourceCenterService().getResourceCenters()) {
+			returned.addAll(rc.getRegistedRepositories(technologyAdapter));
+		}
+		return returned;
+	}
 
 	public static void main(String[] args) {
 		FlexoResourceCenterService rcService = DefaultResourceCenterService.getNewInstance();

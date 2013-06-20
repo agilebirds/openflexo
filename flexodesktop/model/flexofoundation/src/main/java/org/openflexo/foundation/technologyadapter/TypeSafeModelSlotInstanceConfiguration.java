@@ -37,18 +37,18 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain
  * 
  */
-public class TypeSafeModelSlotInstanceConfiguration<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, MS extends TypeSafeModelSlot<M, MM>>
+public abstract class TypeSafeModelSlotInstanceConfiguration<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, MS extends TypeSafeModelSlot<M, MM>>
 		extends ModelSlotInstanceConfiguration<MS, M> {
 
 	private static final Logger logger = Logger.getLogger(TypeSafeModelSlotInstanceConfiguration.class.getPackage().getName());
 
-	private List<ModelSlotInstanceConfigurationOption> options;
+	protected List<ModelSlotInstanceConfigurationOption> options;
 
-	private FlexoResourceCenter resourceCenter;
-	private FlexoModelResource<M, MM> modelResource;
-	private String modelUri;
-	private String relativePath;
-	private String filename;
+	protected FlexoResourceCenter<?> resourceCenter;
+	protected FlexoModelResource<M, MM> modelResource;
+	protected String modelUri;
+	protected String relativePath;
+	protected String filename;
 
 	protected TypeSafeModelSlotInstanceConfiguration(MS ms, CreateVirtualModelInstance<?> action) {
 		super(ms, action);
@@ -66,15 +66,7 @@ public class TypeSafeModelSlotInstanceConfiguration<M extends FlexoModel<M, MM>,
 	@Override
 	public void setOption(org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration.ModelSlotInstanceConfigurationOption option) {
 		super.setOption(option);
-		if (option == DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel) {
-			modelUri = getAction().getFocusedObject().getProject().getURI() + "/Models/myModel";
-			relativePath = "/";
-			filename = "myModel" + getModelSlot().getTechnologyAdapter().getExpectedModelExtension(getModelSlot().getMetaModelResource());
-		} else if (option == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
-			modelUri = "ResourceCenter/Models/";
-			relativePath = "/";
-			filename = "myModel" + getModelSlot().getTechnologyAdapter().getExpectedModelExtension(getModelSlot().getMetaModelResource());
-		} else if (option == DefaultModelSlotInstanceConfigurationOption.SelectExistingModel) {
+		if (option == DefaultModelSlotInstanceConfigurationOption.SelectExistingModel) {
 			modelUri = null;
 			relativePath = null;
 			filename = null;

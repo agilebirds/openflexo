@@ -132,7 +132,6 @@ public abstract class AddIndividual<MS extends TypeSafeModelSlot<?, ?>, T extend
 
 	@Override
 	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
-		System.out.println("!!!!!!!! Je sette la classe avec " + ontologyClass);
 		if (ontologyClass != null) {
 			if (getPatternRole() instanceof IndividualPatternRole) {
 				if (getPatternRole().getOntologicType().isSuperConceptOf(ontologyClass)) {

@@ -250,7 +250,7 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 		return out.toString();
 	}
 
-	public final TechnologyAdapter getTechnologyAdapter() {
+	public TechnologyAdapter getTechnologyAdapter() {
 		return technologyAdapter;
 	}
 

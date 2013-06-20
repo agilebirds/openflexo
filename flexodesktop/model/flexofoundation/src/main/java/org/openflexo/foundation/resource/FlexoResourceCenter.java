@@ -97,6 +97,19 @@ public interface FlexoResourceCenter<I> {
 			@Nonnull Class<T> type, @Nullable IProgress progress);
 
 	/**
+	 * Returns the resource identified by the given <code>uri</code>.<br>
+	 * Returns resource with last version if more than one version is registered
+	 * 
+	 * @param uri
+	 *            the URI of the resource
+	 * @param progress
+	 *            a progress monitor that will be notified of the progress of this task. This parameter can be <code>null</code>
+	 * @return the resource with the given <code>uri</code>, or null if it cannot be found.
+	 */
+	public @Nullable
+	FlexoResource<?> retrieveResource(@Nonnull String uri, @Nullable IProgress progress);
+
+	/**
 	 * Returns all available versions of the resource identified by the given <code>uri</code>
 	 * 
 	 * @param uri
@@ -168,4 +181,11 @@ public interface FlexoResourceCenter<I> {
 	public <R extends ResourceRepository<?>> void registerRepository(R repository, Class<? extends R> repositoryType,
 			TechnologyAdapter technologyAdapter);
 
+	/**
+	 * Return the list of all {@link ResourceRepository} registered in this ResourceCenter for a given technology
+	 * 
+	 * @param technologyAdapter
+	 * @return
+	 */
+	public List<ResourceRepository<?>> getRegistedRepositories(TechnologyAdapter technologyAdapter);
 }

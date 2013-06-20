@@ -246,7 +246,7 @@ public abstract class TechnologyAdapter {
 
 	public abstract <I> void contentsAdded(FlexoResourceCenter<I> resourceCenter, I contents);
 
-	protected abstract <I> void contentsDeleted(FlexoResourceCenter<I> resourceCenter, I contents);
+	public abstract <I> void contentsDeleted(FlexoResourceCenter<I> resourceCenter, I contents);
 
 	/**
 	 * Provides a hook to detect when a new resource center was added or discovered

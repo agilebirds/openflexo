@@ -38,7 +38,6 @@ import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.toolbox.StringUtils;
 
@@ -58,9 +57,9 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 
 	private static final Logger logger = Logger.getLogger(VirtualModelModelSlot.class.getPackage().getName());
 
-	public VirtualModelModelSlot(ViewPoint viewPoint, VirtualModelTechnologyAdapter adapter) {
+	/*public VirtualModelModelSlot(ViewPoint viewPoint, VirtualModelTechnologyAdapter adapter) {
 		super(viewPoint, adapter);
-	}
+	}*/
 
 	public VirtualModelModelSlot(VirtualModel<?> virtualModel, VirtualModelTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
@@ -70,9 +69,9 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 		super(builder);
 	}
 
-	public VirtualModelModelSlot(ViewPointBuilder builder) {
+	/*public VirtualModelModelSlot(ViewPointBuilder builder) {
 		super(builder);
-	}
+	}*/
 
 	@Override
 	public String getFullyQualifiedName() {

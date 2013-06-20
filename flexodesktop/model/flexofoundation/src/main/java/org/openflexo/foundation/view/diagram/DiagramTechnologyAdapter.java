@@ -21,9 +21,9 @@ package org.openflexo.foundation.view.diagram;
 
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
-import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModelTechnologyAdapter;
 
@@ -46,13 +46,11 @@ public class DiagramTechnologyAdapter extends VirtualModelTechnologyAdapter {
 	}
 
 	@Override
-	public DiagramModelSlot createNewModelSlot(ViewPoint viewPoint) {
-		return new DiagramModelSlot(viewPoint, this);
-	}
-
-	@Override
-	public DiagramModelSlot createNewModelSlot(VirtualModel<?> virtualModel) {
-		return new DiagramModelSlot((DiagramSpecification) virtualModel, this);
+	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel<?> virtualModel) {
+		if (DiagramModelSlot.class.isAssignableFrom(modelSlotClass)) {
+			return (MS) new DiagramModelSlot((DiagramSpecification) virtualModel, this);
+		}
+		return super.makeModelSlot(modelSlotClass, virtualModel);
 	}
 
 }

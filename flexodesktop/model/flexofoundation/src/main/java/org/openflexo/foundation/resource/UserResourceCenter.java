@@ -36,6 +36,9 @@ import org.openflexo.model.factory.SerializationPolicy;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
 
+// TODO: SGU: i don't know the status of this.
+// This class was initiated by Guillaume before the huge 1.6 refactoring.
+// Those works need to be merged
 public class UserResourceCenter /*extends FileSystemBasedResourceCenter*/implements FlexoResourceCenter<File> {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(UserResourceCenter.class
@@ -144,6 +147,12 @@ public class UserResourceCenter /*extends FileSystemBasedResourceCenter*/impleme
 		}
 		return returned;
 
+	}
+
+	@Override
+	public FlexoResource<?> retrieveResource(String uri, IProgress progress) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -274,7 +283,11 @@ public class UserResourceCenter /*extends FileSystemBasedResourceCenter*/impleme
 	public <R extends ResourceRepository<?>> void registerRepository(R repository, Class<? extends R> repositoryType,
 			TechnologyAdapter technologyAdapter) {
 		// TODO Auto-generated method stub
-
 	}
 
+	@Override
+	public List<ResourceRepository<?>> getRegistedRepositories(TechnologyAdapter technologyAdapter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

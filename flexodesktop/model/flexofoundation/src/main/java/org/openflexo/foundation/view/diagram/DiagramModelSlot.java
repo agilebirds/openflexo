@@ -27,8 +27,6 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.SelectEditionPatternInstance;
-import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
 
@@ -47,7 +45,6 @@ import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
 		@DeclareEditionAction(AddShape.class), // Add shape
 		@DeclareEditionAction(AddConnector.class), // Add connector
 		@DeclareEditionAction(GraphicalAction.class), // Graphical action
-		@DeclareEditionAction(DeleteAction.class), // Delete action
 		@DeclareEditionAction(AddEditionPatternInstance.class) // Add EditionPatternInstance
 })
 @DeclareFetchRequests({ @DeclareFetchRequest(SelectEditionPatternInstance.class) // Allows to select some EditionPatternInstance
@@ -56,9 +53,9 @@ public class DiagramModelSlot extends VirtualModelModelSlot<Diagram, DiagramSpec
 
 	private static final Logger logger = Logger.getLogger(DiagramModelSlot.class.getPackage().getName());
 
-	public DiagramModelSlot(ViewPoint viewPoint, DiagramTechnologyAdapter adapter) {
+	/*public DiagramModelSlot(ViewPoint viewPoint, DiagramTechnologyAdapter adapter) {
 		super(viewPoint, adapter);
-	}
+	}*/
 
 	public DiagramModelSlot(DiagramSpecification diagramSpecification, DiagramTechnologyAdapter adapter) {
 		super(diagramSpecification, adapter);
@@ -68,9 +65,9 @@ public class DiagramModelSlot extends VirtualModelModelSlot<Diagram, DiagramSpec
 		super(builder);
 	}
 
-	public DiagramModelSlot(ViewPointBuilder builder) {
+	/*public DiagramModelSlot(ViewPointBuilder builder) {
 		super(builder);
-	}
+	}*/
 
 	@Override
 	public String getFullyQualifiedName() {

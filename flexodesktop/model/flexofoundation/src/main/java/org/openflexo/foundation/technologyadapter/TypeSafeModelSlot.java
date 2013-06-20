@@ -4,7 +4,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
@@ -21,8 +20,11 @@ import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
 /**
- * Implementation of a ModelSlot in a technology conform to FlexoOntology layer (strict metamodelling) This model slot is dedicated to
- * strict-metamodelling as it provides a symbolic access to a model conform to a meta-model (see {@link FlexoMetaModel}). <br>
+ * Implementation of a ModelSlot in a given technology implementing model conformance.<br>
+ * This model slot provides a symbolic access to a model conform to a meta-model (basic conformance contract). <br>
+ * 
+ * @see FlexoModel
+ * @see FlexoMetaModel
  * 
  */
 public abstract class TypeSafeModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends ModelSlot<M> {
@@ -48,11 +50,19 @@ public abstract class TypeSafeModelSlot<M extends FlexoModel<M, MM>, MM extends 
 		super(builder);
 	}*/
 
+	/**
+	 * Instanciate a new model slot instance configuration for this model slot
+	 */
 	@Override
-	public ModelSlotInstanceConfiguration<TypeSafeModelSlot<M, MM>, M> createConfiguration(CreateVirtualModelInstance<?> action) {
-		return new TypeSafeModelSlotInstanceConfiguration<M, MM, TypeSafeModelSlot<M, MM>>(this, action);
-	}
+	public abstract ModelSlotInstanceConfiguration<? extends TypeSafeModelSlot<M, MM>, M> createConfiguration(
+			CreateVirtualModelInstance<?> action);
 
+	/**
+	 * Instantiate a new IndividualPatternRole
+	 * 
+	 * @param ontClass
+	 * @return
+	 */
 	public IndividualPatternRole<?> makeIndividualPatternRole(IFlexoOntologyClass ontClass) {
 		Class<? extends IndividualPatternRole> individualPRClass = getPatternRoleClass(IndividualPatternRole.class);
 		IndividualPatternRole<?> returned = makePatternRole(individualPRClass);
@@ -119,34 +129,34 @@ public abstract class TypeSafeModelSlot<M extends FlexoModel<M, MM>, MM extends 
 		return baseName;
 	}
 
-	public final FlexoModelResource<M, MM> createProjectSpecificEmptyModel(View view, String filename, String modelUri,
-			FlexoMetaModelResource<M, MM> metaModelResource) {
-		return (FlexoModelResource<M, MM>) getTechnologyAdapter().createEmptyModel(view.getProject(), filename, modelUri,
-				metaModelResource, getTechnologyAdapter().getTechnologyContextManager());
-	};
+	public abstract FlexoModelResource<M, MM> createProjectSpecificEmptyModel(View view, String filename, String modelUri,
+			FlexoMetaModelResource<M, MM> metaModelResource)/* {
+															return (FlexoModelResource<M, MM>) getTechnologyAdapter().createEmptyModel(view.getProject(), filename, modelUri,
+															metaModelResource, getTechnologyAdapter().getTechnologyContextManager());
+															};*/;
 
-	public final FlexoModelResource<M, MM> createSharedEmptyModel(FlexoResourceCenter resourceCenter, String relativePath, String filename,
-			String modelUri, FlexoMetaModelResource<M, MM> metaModelResource) {
-		if (resourceCenter instanceof FileSystemBasedResourceCenter) {
-			return (FlexoModelResource<M, MM>) getTechnologyAdapter().createEmptyModel((FileSystemBasedResourceCenter) resourceCenter,
-					relativePath, filename, modelUri, metaModelResource, getTechnologyAdapter().getTechnologyContextManager());
-		} else {
-			logger.warning("Cannot create shared model in a non file-system-based resource center");
-			return null;
-		}
-	};
+	public abstract FlexoModelResource<M, MM> createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter, String relativePath,
+			String filename, String modelUri, FlexoMetaModelResource<M, MM> metaModelResource)/* {
+																								if (resourceCenter instanceof FileSystemBasedResourceCenter) {
+																								return (FlexoModelResource<M, MM>) getTechnologyAdapter().createEmptyModel((FileSystemBasedResourceCenter) resourceCenter,
+																								relativePath, filename, modelUri, metaModelResource, getTechnologyAdapter().getTechnologyContextManager());
+																								} else {
+																								logger.warning("Cannot create shared model in a non file-system-based resource center");
+																								return null;
+																								}
+																								};*/;
 
 	public FlexoMetaModelResource<M, MM> getMetaModelResource() {
 		if (metaModelResource == null && StringUtils.isNotEmpty(metaModelURI) && getInformationSpace() != null) {
-			metaModelResource = (FlexoMetaModelResource<M, MM>) getInformationSpace().getMetaModelWithURI(metaModelURI);
+			metaModelResource = (FlexoMetaModelResource<M, MM>) getInformationSpace().getResource(metaModelURI);
 			logger.info("Looked-up " + metaModelResource);
 		}
 		// Temporary hack to lookup parent slot (to be refactored)
-		if (metaModelResource == null && getVirtualModel() != null && getViewPoint() != null) {
+		/*if (metaModelResource == null && getVirtualModel() != null && getViewPoint() != null) {
 			if (getViewPoint().getModelSlot(getName()) != null) {
 				return ((TypeSafeModelSlot) getViewPoint().getModelSlot(getName())).getMetaModelResource();
 			}
-		}
+		}*/
 		return metaModelResource;
 	}
 

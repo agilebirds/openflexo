@@ -20,7 +20,6 @@
 package org.openflexo.foundation.view.diagram.viewpoint;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -30,10 +29,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.rm.DiagramSpecificationResource;
 import org.openflexo.foundation.rm.DiagramSpecificationResourceImpl;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
 import org.openflexo.foundation.view.diagram.DiagramModelSlot;
 import org.openflexo.foundation.view.diagram.DiagramTechnologyAdapter;
 import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
@@ -48,7 +44,6 @@ import org.openflexo.foundation.viewpoint.dm.DiagramPaletteRemoved;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramInserted;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramRemoved;
 import org.openflexo.toolbox.ChainedCollection;
-import org.openflexo.toolbox.FlexoVersion;
 
 /**
  * A {@link DiagramSpecification} is the specification of a Diagram
@@ -123,7 +118,7 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 				&& getViewPoint().getViewPointLibrary().getServiceManager().getService(TechnologyAdapterService.class) != null) {
 			DiagramTechnologyAdapter diagramTA = getViewPoint().getViewPointLibrary().getServiceManager()
 					.getService(TechnologyAdapterService.class).getTechnologyAdapter(DiagramTechnologyAdapter.class);
-			DiagramModelSlot returned = diagramTA.createNewModelSlot(this);
+			DiagramModelSlot returned = diagramTA.makeModelSlot(DiagramModelSlot.class, this);
 			returned.setVirtualModelResource(getResource());
 			returned.setName(REFLEXIVE_MODEL_SLOT_NAME);
 			addToModelSlots(returned);
@@ -315,65 +310,13 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 
 	@Override
 	public final void finalizeDeserialization(Object builder) {
-		if (builder instanceof VirtualModel.VirtualModelBuilder
+		/*if (builder instanceof VirtualModel.VirtualModelBuilder
 				&& ((VirtualModel.VirtualModelBuilder) builder).getModelVersion().isLesserThan(new FlexoVersion("1.0"))) {
 			// There were no model slots before 1.0, please add them
 			convertTo_1_0(((VirtualModel.VirtualModelBuilder) builder).getViewPointLibrary());
-		}
+		}*/
 		super.finalizeDeserialization(builder);
 		updateBindingModel();
-	}
-
-	@Deprecated
-	private void convertTo_1_0(ViewPointLibrary viewPointLibrary) {
-		logger.info("Converting diagram specification from Openflexo 1.4.5 version");
-		// For all "old" viewpoints, we consider a OWL model slot
-		try {
-			Class owlTechnologyAdapterClass = Class.forName("org.openflexo.technologyadapter.owl.OWLTechnologyAdapter");
-			TechnologyAdapter OWL = viewPointLibrary.getServiceManager().getTechnologyAdapterService()
-					.getTechnologyAdapter(owlTechnologyAdapterClass);
-
-			String importedOntology = null;
-			for (File owlFile : getResource().getDirectory().listFiles(new FilenameFilter() {
-				@Override
-				public boolean accept(File dir, String name) {
-					return (name.endsWith(".owl"));
-				}
-			})) {
-				if (owlFile.exists()) {
-					importedOntology = ViewPoint.findOntologyImports(owlFile);
-					owlFile.delete();
-				}
-			}
-
-			FlexoMetaModelResource r = OWL.getMetaModelResource(importedOntology);
-			if (r == null) {
-				r = OWL.getMetaModelResource("http://www.agilebirds.com" + importedOntology);
-			}
-			/*if (r != null) {
-				logger.info("************************ For ViewPoint " + getURI() + " declaring OWL model slot targetting meta-model "
-						+ r.getURI());
-			}*/
-
-			TypeSafeModelSlot ms = (TypeSafeModelSlot) OWL.createNewModelSlot(this);
-			ms.setName("owl");
-			ms.setMetaModelResource(r);
-			addToModelSlots(ms);
-			DiagramTechnologyAdapter diagramTA = null;
-			if (viewPointLibrary.getServiceManager() != null
-					&& viewPointLibrary.getServiceManager().getService(TechnologyAdapterService.class) != null) {
-				diagramTA = viewPointLibrary.getServiceManager().getService(TechnologyAdapterService.class)
-						.getTechnologyAdapter(DiagramTechnologyAdapter.class);
-			} else {
-				diagramTA = new DiagramTechnologyAdapter();
-			}
-			/*DiagramModelSlot diagramMS = diagramTA.createNewModelSlot(this);
-			diagramMS.setName("diagram");
-			addToModelSlots(diagramMS);*/
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 }
