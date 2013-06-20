@@ -106,40 +106,7 @@ public class InformationSpace extends FlexoServiceImpl {
 		return (FlexoResource<T>) getResource(uri);
 	}
 
-	/**
-	 * Return the list of all non-empty {@link ModelRepository} discoverable in the scope of {@link FlexoServiceManager}, related to
-	 * technology as supplied by {@link TechnologyAdapter} parameter
-	 * 
-	 * @param technologyAdapter
-	 * @return
-	 */
-	/*public List<ModelRepository<?, ?, ?, ?>> getAllModelRepositories(TechnologyAdapter technologyAdapter) {
-		// System.out.println("getAllModelRepositories() ???");
-		if (getServiceManager() != null) {
-			// System.out.println("return " + getServiceManager().getTechnologyAdapterService().getAllModelRepositories(technologyAdapter));
-			return getServiceManager().getTechnologyAdapterService().getAllModelRepositories(technologyAdapter);
-		}
-		return null;
-	}*/
-
-	/**
-	 * Return the list of all non-empty {@link MetaModelRepository} discoverable in the scope of {@link FlexoServiceManager}, related to
-	 * technology as supplied by {@link TechnologyAdapter} parameter
-	 * 
-	 * @param technologyAdapter
-	 * @return
-	 */
-	/*public List<MetaModelRepository<?, ?, ?, ?>> getAllMetaModelRepositories(TechnologyAdapter technologyAdapter) {
-		// logger.info("getAllMetaModelRepositories() ???");
-		if (getServiceManager() != null) {
-			// System.out .println("return " +
-			// getServiceManager().getTechnologyAdapterService().getAllMetaModelRepositories(technologyAdapter));
-			return getServiceManager().getTechnologyAdapterService().getAllMetaModelRepositories(technologyAdapter);
-		}
-		return null;
-	}*/
-
-	/*public FlexoMetaModelResource<?, ?> getMetaModelWithURI(String uri) {
+	public FlexoMetaModelResource<?, ?> getMetaModelWithURI(String uri) {
 		for (TechnologyAdapter ta : getServiceManager().getTechnologyAdapterService().getTechnologyAdapters()) {
 			FlexoMetaModelResource<?, ?> returned = getMetaModelWithURI(uri, ta);
 			if (returned != null) {
@@ -147,16 +114,16 @@ public class InformationSpace extends FlexoServiceImpl {
 			}
 		}
 		return null;
-	}*/
+	}
 
-	/*public FlexoMetaModelResource<?, ?> getMetaModelWithURI(String uri, TechnologyAdapter technologyAdapter) {
+	public FlexoMetaModelResource<?, ?> getMetaModelWithURI(String uri, TechnologyAdapter technologyAdapter) {
 		if (technologyAdapter != null && technologyAdapter.getTechnologyContextManager() != null) {
-			return technologyAdapter.getTechnologyContextManager().getMetaModelWithURI(uri);
+			return (FlexoMetaModelResource<?, ?>) technologyAdapter.getTechnologyContextManager().getResourceWithURI(uri);
 		}
 		return null;
-	}*/
+	}
 
-	/*public FlexoModelResource<?, ?> getModelWithURI(String uri) {
+	public FlexoModelResource<?, ?> getModelWithURI(String uri) {
 		for (TechnologyAdapter ta : getServiceManager().getTechnologyAdapterService().getTechnologyAdapters()) {
 			FlexoModelResource<?, ?> returned = getModelWithURI(uri, ta);
 			if (returned != null) {
@@ -164,9 +131,9 @@ public class InformationSpace extends FlexoServiceImpl {
 			}
 		}
 		return null;
-	}*/
+	}
 
-	/*public FlexoModelResource<?, ?> getModelWithURI(String uri, TechnologyAdapter technologyAdapter) {
+	public FlexoModelResource<?, ?> getModelWithURI(String uri, TechnologyAdapter technologyAdapter) {
 		if (technologyAdapter == null) {
 			logger.warning("Unexpected null " + technologyAdapter);
 			return null;
@@ -174,6 +141,6 @@ public class InformationSpace extends FlexoServiceImpl {
 			// logger.warning("Unexpected null technologyContextManager for " + technologyAdapter);
 			return null;
 		}
-		return technologyAdapter.getTechnologyContextManager().getModelWithURI(uri);
-	}*/
+		return (FlexoModelResource<?, ?>) technologyAdapter.getTechnologyContextManager().getResourceWithURI(uri);
+	}
 }

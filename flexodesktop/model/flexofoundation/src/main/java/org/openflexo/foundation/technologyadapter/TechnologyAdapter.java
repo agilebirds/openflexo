@@ -19,12 +19,17 @@
  */
 package org.openflexo.foundation.technologyadapter;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.resource.RepositoryFolder;
+import org.openflexo.foundation.resource.ResourceRepository;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 
 /**
@@ -329,5 +334,21 @@ public abstract class TechnologyAdapter {
 	 * @return
 	 */
 	public abstract <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel<?> virtualModel);
+
+	/**
+	 * Retrieve (creates it when not existant) folder containing supplied file
+	 * 
+	 * @param repository
+	 * @param aFile
+	 * @return
+	 */
+	protected <R extends FlexoResource<?>> RepositoryFolder<R> retrieveRepositoryFolder(ResourceRepository<R> repository, File aFile) {
+		try {
+			return repository.getRepositoryFolder(aFile, true);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return repository.getRootFolder();
+		}
+	}
 
 }

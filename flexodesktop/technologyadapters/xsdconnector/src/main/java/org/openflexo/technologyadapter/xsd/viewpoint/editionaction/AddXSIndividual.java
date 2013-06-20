@@ -19,32 +19,30 @@
  */
 package org.openflexo.technologyadapter.xsd.viewpoint.editionaction;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.expr.NullReferenceException;
-import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.technologyadapter.xsd.XSDModelSlot;
 import org.openflexo.technologyadapter.xsd.model.XMLModel;
 import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntClass;
 import org.openflexo.technologyadapter.xsd.model.XSOntDataProperty;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 
-public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOntIndividual> {
+public class AddXSIndividual extends AddIndividual<XSDModelSlot, XSOntIndividual> {
 
 	@Override
 	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
 		// TODO Auto-generated method stub
 		super.setOntologyClass(ontologyClass);
-		if ( ontologyClassURI == null) {
+		if (ontologyClassURI == null) {
 			logger.warning("OntologyURI is null for XSIndividual");
 		}
 	}
@@ -68,15 +66,14 @@ public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOnt
 	@Override
 	public XSOntIndividual performAction(EditionSchemeAction action) {
 		XSOntClass father = getOntologyClass();
-		
+
 		XSOntIndividual newIndividual = null;
 		try {
 
-			ModelSlotInstance<XMLModel, XSDMetaModel> modelSlotInstance = getModelSlotInstance(action);
-			XMLModel model = getModelSlotInstance(action).getResourceData();
-			
-			newIndividual = model.createOntologyIndividual( father);
-			
+			TypeSafeModelSlotInstance<XMLModel, XSDMetaModel, XSDModelSlot> modelSlotInstance = (TypeSafeModelSlotInstance<XMLModel, XSDMetaModel, XSDModelSlot>) getModelSlotInstance(action);
+			XMLModel model = modelSlotInstance.getResourceData();
+
+			newIndividual = model.createOntologyIndividual(father);
 
 			for (DataPropertyAssertion dataPropertyAssertion : getDataAssertions()) {
 				if (dataPropertyAssertion.evaluateCondition(action)) {
@@ -97,11 +94,11 @@ public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOnt
 
 			// add it to the model
 			// Two phase creation, then addition, to be able to process URIs once you have the property values
-			
+
 			model.addIndividual(newIndividual);
-			
+
 			logger.info("********* Added individual " + newIndividual.getName() + " as " + father);
-			
+
 			return newIndividual;
 		} catch (DuplicateURIException e) {
 			e.printStackTrace();

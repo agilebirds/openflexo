@@ -29,9 +29,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.ModelSlotInstance;
@@ -256,9 +254,6 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 
 	public abstract Class<? extends TechnologyAdapter> getTechnologyAdapterClass();
 
-	@Deprecated
-	public abstract BindingVariable makePatternRolePathElement(PatternRole<?> pr, Bindable container);
-
 	public List<Class<? extends PatternRole<?>>> getAvailablePatternRoleTypes() {
 		if (availablePatternRoleTypes == null) {
 			availablePatternRoleTypes = computeAvailablePatternRoleTypes();
@@ -294,7 +289,7 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 		if (cl.isAnnotationPresent(DeclareEditionActions.class)) {
 			DeclareEditionActions allEditionActions = cl.getAnnotation(DeclareEditionActions.class);
 			for (DeclareEditionAction patternRoleDeclaration : allEditionActions.value()) {
-				availableEditionActionTypes.add(patternRoleDeclaration.value());
+				availableEditionActionTypes.add(patternRoleDeclaration.editionActionClass());
 			}
 		}
 		return availableEditionActionTypes;
@@ -313,7 +308,7 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 		if (cl.isAnnotationPresent(DeclareFetchRequests.class)) {
 			DeclareFetchRequests allFetchRequestActions = cl.getAnnotation(DeclareFetchRequests.class);
 			for (DeclareFetchRequest fetchRequestDeclaration : allFetchRequestActions.value()) {
-				availableFetchRequestActionTypes.add(fetchRequestDeclaration.value());
+				availableFetchRequestActionTypes.add(fetchRequestDeclaration.fetchRequestClass());
 			}
 		}
 		return availableFetchRequestActionTypes;

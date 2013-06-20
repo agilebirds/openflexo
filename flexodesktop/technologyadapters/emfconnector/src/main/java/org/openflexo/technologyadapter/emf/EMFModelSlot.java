@@ -24,8 +24,6 @@ package org.openflexo.technologyadapter.emf;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
@@ -65,18 +63,26 @@ import org.openflexo.technologyadapter.emf.viewpoint.editionaction.SelectEMFObje
  * @author sylvain
  * 
  */
-@DeclarePatternRoles({ @DeclarePatternRole(EMFObjectIndividualPatternRole.class) // Instances
-})
-@DeclareEditionActions({ @DeclareEditionAction(AddEMFObjectIndividual.class), // Add instance
-		@DeclareEditionAction(AddEMFObjectIndividualAttributeDataPropertyValue.class), // Add Attribute Data Value
-		@DeclareEditionAction(AddEMFObjectIndividualAttributeObjectPropertyValue.class), // Add Attribute Object Value
-		@DeclareEditionAction(AddEMFObjectIndividualReferenceObjectPropertyValue.class), // Add Reference Object Value
-		@DeclareEditionAction(RemoveEMFObjectIndividualAttributeDataPropertyValue.class), // Remove Attribute Data Value
-		@DeclareEditionAction(RemoveEMFObjectIndividualAttributeObjectPropertyValue.class), // Remove Attribute Object Value
-		@DeclareEditionAction(RemoveEMFObjectIndividualReferenceObjectPropertyValue.class) // Remove Reference Object Value
-})
-@DeclareFetchRequests({ @DeclareFetchRequest(SelectEMFObjectIndividual.class) // Allows to select some EMFObjectIndividual
-})
+@DeclarePatternRoles({ // All pattern roles available through this model slot
+@DeclarePatternRole(FML = "EMFObjectIndividual", patternRoleClass = EMFObjectIndividualPatternRole.class) })
+@DeclareEditionActions({ // All edition actions available through this model slot
+		@DeclareEditionAction(FML = "AddEMFObjectIndividual", editionActionClass = AddEMFObjectIndividual.class),
+		@DeclareEditionAction(FML = "AddDataPropertyValue", editionActionClass = AddEMFObjectIndividualAttributeDataPropertyValue.class),
+		@DeclareEditionAction(FML = "AddObjectPropertyValue", editionActionClass = AddEMFObjectIndividualAttributeObjectPropertyValue.class),
+		@DeclareEditionAction(
+				FML = "AddReferencePropertyValue",
+				editionActionClass = AddEMFObjectIndividualReferenceObjectPropertyValue.class),
+		@DeclareEditionAction(
+				FML = "RemoveDataPropertyValue",
+				editionActionClass = RemoveEMFObjectIndividualAttributeDataPropertyValue.class),
+		@DeclareEditionAction(
+				FML = "RemoveObjectPropertyValue",
+				editionActionClass = RemoveEMFObjectIndividualAttributeObjectPropertyValue.class),
+		@DeclareEditionAction(
+				FML = "RemoveReferencePropertyValue",
+				editionActionClass = RemoveEMFObjectIndividualReferenceObjectPropertyValue.class) })
+@DeclareFetchRequests({ // All requests available through this model slot
+@DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectEMFObjectIndividual.class) })
 public class EMFModelSlot extends TypeSafeModelSlot<EMFModel, EMFMetaModel> {
 
 	private static final Logger logger = Logger.getLogger(EMFModelSlot.class.getPackage().getName());
@@ -159,12 +165,6 @@ public class EMFModelSlot extends TypeSafeModelSlot<EMFModel, EMFMetaModel> {
 			return "individual";
 		}
 		return super.defaultPatternRoleName(patternRoleClass);
-	}
-
-	@Override
-	@Deprecated
-	public BindingVariable makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
-		return null;
 	}
 
 	@Override
