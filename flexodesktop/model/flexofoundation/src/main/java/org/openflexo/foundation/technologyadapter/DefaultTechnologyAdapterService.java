@@ -228,7 +228,10 @@ public abstract class DefaultTechnologyAdapterService extends FlexoServiceImpl i
 	public List<ResourceRepository<?>> getAllRepositories(TechnologyAdapter technologyAdapter) {
 		List<ResourceRepository<?>> returned = new ArrayList<ResourceRepository<?>>();
 		for (FlexoResourceCenter<?> rc : getFlexoResourceCenterService().getResourceCenters()) {
-			returned.addAll(rc.getRegistedRepositories(technologyAdapter));
+			Collection<ResourceRepository<?>> repCollection = rc.getRegistedRepositories(technologyAdapter);
+			if (repCollection != null) {
+				returned.addAll(repCollection);
+			}
 		}
 		return returned;
 	}
