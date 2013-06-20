@@ -118,7 +118,7 @@ public abstract class AddIndividual<MS extends TypeSafeModelSlot<?, ?>, T extend
 	@Override
 	public IFlexoOntologyClass getOntologyClass() {
 		// System.out.println("AddIndividual: ontologyClassURI=" + ontologyClassURI);
-		if (StringUtils.isNotEmpty(ontologyClassURI)) {
+		if (StringUtils.isNotEmpty(ontologyClassURI) && getVirtualModel() != null) {
 			return getVirtualModel().getOntologyClass(ontologyClassURI);
 		} else {
 			if (getPatternRole() != null) {
