@@ -17,63 +17,57 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.technologyadapter.excel.model;
+package org.openflexo.technologyadapter.excel.viewpoint;
 
-import java.io.File;
-import java.util.logging.Logger;
+import java.lang.reflect.Type;
 
-import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.ontology.FlexoOntologyObjectImpl;
-import org.openflexo.foundation.ontology.IFlexoOntology;
-import org.openflexo.foundation.resource.FlexoResource;
-import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.view.ActorReference;
+import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.viewpoint.PatternRole;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.technologyadapter.excel.model.semantics.BusinessConceptInstance;
 
-public class ExcelModel extends FlexoObject implements FlexoModel<ExcelModel, ExcelMetaModel> {
+public class BusinessConceptInstancePatternRole extends PatternRole<BusinessConceptInstance> {
+
+	public BusinessConceptInstancePatternRole(VirtualModelBuilder builder) {
+		super(builder);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
-	public FlexoResource<ExcelModel> getResource() {
+	public Type getType() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void setResource(FlexoResource<ExcelModel> resource) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public ExcelMetaModel getMetaModel() {
+	public String getPreciseType() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getURI() {
+	public boolean getIsPrimaryRole() {
 		// TODO Auto-generated method stub
-		return null;
+		return false;
 	}
 
 	@Override
-	public Object getObject(String objectURI) {
+	public void setIsPrimaryRole(boolean isPrimary) {
 		// TODO Auto-generated method stub
-		return null;
+
 	}
 
 	@Override
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+	public boolean defaultBehaviourIsToBeDeleted() {
 		// TODO Auto-generated method stub
-		return null;
+		return false;
 	}
 
 	@Override
-	public String getFullyQualifiedName() {
+	public ActorReference<BusinessConceptInstance> makeActorReference(BusinessConceptInstance object, EditionPatternInstance epi) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	
 
 }

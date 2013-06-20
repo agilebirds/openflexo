@@ -21,154 +21,81 @@ package openflexo.technologyadapter.excel;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.util.Iterator;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
-import org.openflexo.foundation.resource.FlexoFileResource;
-import org.openflexo.foundation.resource.FlexoResource;
+import openflexo.technologyadapter.excel.rm.ExcelMetaModelRepository;
+import openflexo.technologyadapter.excel.rm.ExcelModelRepository;
+import openflexo.technologyadapter.excel.rm.ExcelWorkbookRepository;
+import openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
+import openflexo.technologyadapter.excel.rm.ExcelWorkbookResourceImpl;
+
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
-import org.openflexo.foundation.technologyadapter.MetaModelRepository;
-import org.openflexo.foundation.technologyadapter.ModelRepository;
+import org.openflexo.foundation.resource.RepositoryFolder;
+import org.openflexo.foundation.resource.ResourceRepository;
+import org.openflexo.foundation.technologyadapter.DeclareModelSlot;
+import org.openflexo.foundation.technologyadapter.DeclareModelSlots;
+import org.openflexo.foundation.technologyadapter.DeclareRepositoryType;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterBindingFactory;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
-import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.model.exceptions.ModelDefinitionException;
-import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.technologyadapter.excel.model.ExcelModel;
-import org.openflexo.technologyadapter.excel.model.ExcelMetaModel;
+import org.openflexo.technologyadapter.excel.viewpoint.binding.ExcelBindingFactory;
 
 /**
- * This class defines and implements the E technology adapter
+ * This class defines and implements the Excel technology adapter
  * 
  * @author sylvain, vincent, Christophe
  * 
  */
+@DeclareModelSlots({ // ModelSlot(s) declaration
+@DeclareModelSlot(FML = "BasicExcelModelSlot", modelSlotClass = BasicExcelModelSlot.class), // Pure spreadsheet interpretation
+		@DeclareModelSlot(FML = "SemanticsExcelModelSlot", modelSlotClass = SemanticsExcelModelSlot.class) // Wrapping into business objects
+})
+@DeclareRepositoryType({ ExcelWorkbookRepository.class, ExcelMetaModelRepository.class, ExcelModelRepository.class })
+public class ExcelTechnologyAdapter extends TechnologyAdapter {
 
-public class ExcelTechnologyAdapter extends TechnologyAdapter<ExcelModel, ExcelMetaModel> {
+	protected static final Logger logger = Logger.getLogger(ExcelTechnologyAdapter.class.getPackage().getName());
 
-	
+	private static final ExcelBindingFactory BINDING_FACTORY = new ExcelBindingFactory();
+
+	/**
+	 * 
+	 * Constructor.
+	 * 
+	 * @throws TechnologyAdapterInitializationException
+	 */
+	public ExcelTechnologyAdapter() throws TechnologyAdapterInitializationException {
+	}
+
 	@Override
 	public String getName() {
 		return "Excel technology adapter";
 	}
 
 	@Override
-	public BasicExcelModelSlot createNewModelSlot(ViewPoint viewPoint) {
-		return new BasicExcelModelSlot(viewPoint, this);
+	public TechnologyContextManager createTechnologyContextManager(FlexoResourceCenterService service) {
+		return new ExcelTechnologyContextManager(this, service);
 	}
 
+	/**
+	 * Creates and return a new {@link ModelSlot} of supplied class.<br>
+	 * This responsability is delegated to the {@link TechnologyAdapter} which manages with introspection its own {@link ModelSlot} types
+	 * 
+	 * @param modelSlotClass
+	 * @return
+	 */
 	@Override
-	public BasicExcelModelSlot createNewModelSlot(VirtualModel<?> virtualModel) {
-		return new BasicExcelModelSlot(virtualModel, this);
-	}
-
-	@Override
-	public String retrieveMetaModelURI(
-			File aMetaModelFile,
-			TechnologyContextManager<ExcelModel, ExcelMetaModel> technologyContextManager) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public FlexoResource<ExcelMetaModel> retrieveMetaModelResource(
-			File aMetaModelFile,
-			TechnologyContextManager<ExcelModel, ExcelMetaModel> technologyContextManager) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean isValidModelFile(
-			File aModelFile,
-			FlexoResource<ExcelMetaModel> metaModelResource,
-			TechnologyContextManager<ExcelModel, ExcelMetaModel> technologyContextManager) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isValidModelFile(
-			File aModelFile,
-			TechnologyContextManager<ExcelModel, ExcelMetaModel> technologyContextManager) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public String retrieveModelURI(
-			File aModelFile,
-			FlexoResource<ExcelMetaModel> metaModelResource,
-			TechnologyContextManager<ExcelModel, ExcelMetaModel> technologyContextManager) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public FlexoResource<ExcelModel> retrieveModelResource(
-			File aModelFile,
-			TechnologyContextManager<ExcelModel, ExcelMetaModel> technologyContextManager) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public FlexoResource<ExcelModel> retrieveModelResource(
-			File aModelFile,
-			FlexoResource<ExcelMetaModel> metaModelResource,
-			TechnologyContextManager<ExcelModel, ExcelMetaModel> technologyContextManager) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public FlexoResource<ExcelModel> createEmptyModel(
-			FileSystemBasedResourceCenter resourceCenter,
-			String relativePath,
-			String filename,
-			String modelUri,
-			FlexoResource<ExcelMetaModel> metaModelResource,
-			TechnologyContextManager<ExcelModel, ExcelMetaModel> technologyContextManager) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public FlexoResource<ExcelModel> createEmptyModel(
-			FlexoProject project,
-			String filename,
-			String modelUri,
-			FlexoResource<ExcelMetaModel> metaModelResource,
-			TechnologyContextManager<ExcelModel, ExcelMetaModel> technologyContextManager) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <R extends FlexoResource<? extends ExcelModel>> ModelRepository<R, ExcelModel, ExcelMetaModel, ? extends TechnologyAdapter<ExcelModel, ExcelMetaModel>> createModelRepository(
-			FlexoResourceCenter resourceCenter) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <R extends FlexoResource<? extends ExcelMetaModel>> MetaModelRepository<R, ExcelModel, ExcelMetaModel, ? extends TechnologyAdapter<ExcelModel, ExcelMetaModel>> createMetaModelRepository(
-			FlexoResourceCenter resourceCenter) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public TechnologyContextManager<ExcelModel, ExcelMetaModel> createTechnologyContextManager(
-			FlexoResourceCenterService service) {
-		// TODO Auto-generated method stub
+	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel<?> virtualModel) {
+		if (BasicExcelModelSlot.class.isAssignableFrom(modelSlotClass)) {
+			return (MS) new BasicExcelModelSlot(virtualModel, this);
+		} else if (SemanticsExcelModelSlot.class.isAssignableFrom(modelSlotClass)) {
+			return (MS) new SemanticsExcelModelSlot(virtualModel, this);
+		}
+		logger.warning("Unexpected model slot: " + modelSlotClass.getName());
 		return null;
 	}
 
@@ -178,27 +105,116 @@ public class ExcelTechnologyAdapter extends TechnologyAdapter<ExcelModel, ExcelM
 		return null;
 	}
 
+	/**
+	 * Initialize the supplied resource center with the technology<br>
+	 * ResourceCenter is scanned, ResourceRepositories are created and new technology-specific resources are build and registered.
+	 * 
+	 * @param resourceCenter
+	 */
 	@Override
-	public String getExpectedMetaModelExtension() {
-		// TODO Auto-generated method stub
+	public <I> void initializeResourceCenter(FlexoResourceCenter<I> resourceCenter) {
+
+		ExcelWorkbookRepository wbRepository = resourceCenter.getRepository(ExcelWorkbookRepository.class, this);
+		if (wbRepository == null) {
+			wbRepository = createWorkbookRepository(resourceCenter);
+		}
+
+		Iterator<I> it = resourceCenter.iterator();
+
+		while (it.hasNext()) {
+			I item = it.next();
+			if (item instanceof File) {
+				File candidateFile = (File) item;
+				ExcelWorkbookResource wbRes = tryToLookupWorkbook(resourceCenter, candidateFile);
+			}
+		}
+
+	}
+
+	protected ExcelWorkbookResource tryToLookupWorkbook(FlexoResourceCenter<?> resourceCenter, File candidateFile) {
+		ExcelTechnologyContextManager technologyContextManager = getTechnologyContextManager();
+		if (isValidWorkbookFile(candidateFile)) {
+			ExcelWorkbookResource wbRes = retrieveWorkbookResource(candidateFile);
+			ExcelWorkbookRepository wbRepository = resourceCenter.getRepository(ExcelWorkbookRepository.class, this);
+			if (wbRes != null) {
+				RepositoryFolder<ExcelWorkbookResource> folder;
+				try {
+					folder = wbRepository.getRepositoryFolder(candidateFile, true);
+					wbRepository.registerResource(wbRes, folder);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				// Also register the resource in the ResourceCenter seen as a ResourceRepository
+				if (resourceCenter instanceof ResourceRepository) {
+					try {
+						((ResourceRepository) resourceCenter).registerResource(wbRes,
+								((ResourceRepository<?>) resourceCenter).getRepositoryFolder(candidateFile, true));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				return wbRes;
+			}
+		}
 		return null;
 	}
 
-	@Override
-	public String getExpectedModelExtension(
-			FlexoResource<ExcelMetaModel> metaModel) {
-		// TODO Auto-generated method stub
-		return null;
+	/**
+	 * Instantiate new workbook resource stored in supplied model file<br>
+	 * *
+	 */
+	public ExcelWorkbookResource retrieveWorkbookResource(File workbookFile) {
+		ExcelWorkbookResource wbResource = null;
+
+		// TODO: try to look-up already found file
+
+		wbResource = ExcelWorkbookResourceImpl.retrieveExcelWorkbookResource(workbookFile, getTechnologyContextManager());
+
+		return wbResource;
+	}
+
+	/**
+	 * Return flag indicating if supplied file appears as a valid workbook
+	 * 
+	 * @param candidateFile
+	 * 
+	 * @return
+	 */
+	public boolean isValidWorkbookFile(File candidateFile) {
+		return candidateFile.getName().endsWith(".xls");
 	}
 
 	@Override
-	public boolean isValidMetaModelFile(
-			File aMetaModelFile,
-			TechnologyContextManager<ExcelModel, ExcelMetaModel> technologyContextManager) {
-		// TODO Auto-generated method stub
+	public <I> boolean isIgnorable(FlexoResourceCenter<I> resourceCenter, I contents) {
 		return false;
 	}
 
-	
+	@Override
+	public <I> void contentsAdded(FlexoResourceCenter<I> resourceCenter, I contents) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public <I> void contentsDeleted(FlexoResourceCenter<I> resourceCenter, I contents) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public ExcelTechnologyContextManager getTechnologyContextManager() {
+		return (ExcelTechnologyContextManager) super.getTechnologyContextManager();
+	}
+
+	/**
+	 * 
+	 * Create a workbook repository for current {@link TechnologyAdapter} and supplied {@link FlexoResourceCenter}
+	 * 
+	 */
+	public ExcelWorkbookRepository createWorkbookRepository(FlexoResourceCenter<?> resourceCenter) {
+		ExcelWorkbookRepository returned = new ExcelWorkbookRepository(this, resourceCenter);
+		resourceCenter.registerRepository(returned, ExcelWorkbookRepository.class, this);
+		return returned;
+	}
 
 }

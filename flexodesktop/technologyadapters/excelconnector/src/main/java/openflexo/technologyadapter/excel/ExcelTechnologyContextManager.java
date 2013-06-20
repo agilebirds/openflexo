@@ -17,17 +17,20 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.technologyadapter.emf.model;
+package openflexo.technologyadapter.excel;
 
-import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.technologyadapter.ModelRepository;
-import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
-import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
-import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 
-public class EMFModelRepository extends ModelRepository<EMFModelResource, EMFModel, EMFMetaModel, EMFTechnologyAdapter> {
+public class ExcelTechnologyContextManager extends TechnologyContextManager {
 
-	public EMFModelRepository(EMFTechnologyAdapter adapter, FlexoResourceCenter<?> resourceCenter) {
-		super(adapter, resourceCenter);
+	public ExcelTechnologyContextManager(ExcelTechnologyAdapter adapter, FlexoResourceCenterService resourceCenterService) {
+		super(adapter, resourceCenterService);
 	}
+
+	@Override
+	public ExcelTechnologyAdapter getTechnologyAdapter() {
+		return (ExcelTechnologyAdapter) super.getTechnologyAdapter();
+	}
+
 }

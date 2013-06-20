@@ -1,12 +1,16 @@
 package org.openflexo.technologyadapter.excel.model;
 
-import org.apache.poi.ss.usermodel.Workbook;
-import org.openflexo.foundation.FlexoObject;
+import openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
 
-public class ExcelWorkbook extends FlexoObject{
+import org.apache.poi.ss.usermodel.Workbook;
+import org.openflexo.foundation.resource.FlexoResource;
+import org.openflexo.foundation.resource.ResourceData;
+
+public class ExcelWorkbook extends ExcelObject implements ResourceData<ExcelWorkbook> {
 
 	private Workbook workbook;
-	
+	private ExcelWorkbookResource resource;
+
 	public Workbook getWorkbook() {
 		return workbook;
 	}
@@ -17,9 +21,13 @@ public class ExcelWorkbook extends FlexoObject{
 	}
 
 	@Override
-	public String getFullyQualifiedName() {
-		// TODO Auto-generated method stub
-		return null;
+	public FlexoResource<ExcelWorkbook> getResource() {
+		return resource;
+	}
+
+	@Override
+	public void setResource(FlexoResource<ExcelWorkbook> resource) {
+		this.resource = (ExcelWorkbookResource) resource;
 	}
 
 }

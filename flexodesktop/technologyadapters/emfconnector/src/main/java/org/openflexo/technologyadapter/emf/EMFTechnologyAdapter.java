@@ -46,9 +46,9 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
-import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModelRepository;
-import org.openflexo.technologyadapter.emf.model.EMFModelRepository;
+import org.openflexo.technologyadapter.emf.rm.EMFMetaModelRepository;
 import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
+import org.openflexo.technologyadapter.emf.rm.EMFModelRepository;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResourceImpl;
 import org.openflexo.technologyadapter.emf.viewpoint.binding.EMFBindingFactory;
@@ -493,12 +493,6 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 		return new EMFTechnologyContextManager(this, service);
 	}
 
-	/**
-	 * 
-	 * Follow the link.
-	 * 
-	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#getTechnologyContextManager()
-	 */
 	@Override
 	public EMFTechnologyContextManager getTechnologyContextManager() {
 		return (EMFTechnologyContextManager) super.getTechnologyContextManager();

@@ -17,18 +17,12 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.technologyadapter.excel.model;
+package org.openflexo.technologyadapter.excel.model.semantics;
 
-import java.io.File;
-
-import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoResource;
-import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.technologyadapter.excel.model.ExcelObject;
 
-public class ExcelMetaModel extends FlexoObject implements FlexoMetaModel<ExcelMetaModel> {
+public class ExcelMetaModel extends ExcelObject implements FlexoMetaModel<ExcelMetaModel> {
 
 	@Override
 	public org.openflexo.foundation.resource.FlexoResource<ExcelMetaModel> getResource() {
@@ -37,10 +31,9 @@ public class ExcelMetaModel extends FlexoObject implements FlexoMetaModel<ExcelM
 	}
 
 	@Override
-	public void setResource(
-			org.openflexo.foundation.resource.FlexoResource<ExcelMetaModel> resource) {
+	public void setResource(org.openflexo.foundation.resource.FlexoResource<ExcelMetaModel> resource) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -58,7 +51,7 @@ public class ExcelMetaModel extends FlexoObject implements FlexoMetaModel<ExcelM
 	@Override
 	public void setIsReadOnly(boolean b) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -66,19 +59,5 @@ public class ExcelMetaModel extends FlexoObject implements FlexoMetaModel<ExcelM
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
 
 }

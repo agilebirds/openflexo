@@ -35,8 +35,9 @@ import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
-import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModelRepository;
+import org.openflexo.technologyadapter.emf.rm.EMFMetaModelRepository;
 import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
+import org.openflexo.technologyadapter.emf.rm.EMFModelRepository;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 
 /**

@@ -1,9 +1,8 @@
 package org.openflexo.technologyadapter.excel.model;
 
 import org.apache.poi.ss.usermodel.Row;
-import org.openflexo.foundation.FlexoObject;
 
-public class ExcelRow extends FlexoObject{
+public class ExcelRow extends ExcelObject {
 
 	private Row row;
 
@@ -14,12 +13,6 @@ public class ExcelRow extends FlexoObject{
 	public ExcelRow(Row row) {
 		super();
 		this.row = row;
-	}
-
-	@Override
-	public String getFullyQualifiedName() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

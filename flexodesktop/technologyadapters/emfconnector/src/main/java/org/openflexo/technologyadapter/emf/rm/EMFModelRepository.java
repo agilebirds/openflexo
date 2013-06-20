@@ -17,28 +17,17 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.technologyadapter.emf.metamodel;
+package org.openflexo.technologyadapter.emf.rm;
 
 import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.technologyadapter.MetaModelRepository;
+import org.openflexo.foundation.technologyadapter.ModelRepository;
 import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
+import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
-import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
 
-/**
- * EMF Meta Model Repository.
- * 
- * @author gbesancon
- */
-public class EMFMetaModelRepository extends MetaModelRepository<EMFMetaModelResource, EMFModel, EMFMetaModel, EMFTechnologyAdapter> {
+public class EMFModelRepository extends ModelRepository<EMFModelResource, EMFModel, EMFMetaModel, EMFTechnologyAdapter> {
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param adapter
-	 * @param resourceCenter
-	 */
-	public EMFMetaModelRepository(EMFTechnologyAdapter adapter, FlexoResourceCenter<?> resourceCenter) {
+	public EMFModelRepository(EMFTechnologyAdapter adapter, FlexoResourceCenter<?> resourceCenter) {
 		super(adapter, resourceCenter);
 	}
 }

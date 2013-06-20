@@ -23,12 +23,16 @@ package openflexo.technologyadapter.excel;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
+import org.openflexo.foundation.technologyadapter.FlexoModelResource;
+import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -36,46 +40,43 @@ import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
-import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
+import org.openflexo.technologyadapter.excel.model.semantics.ExcelMetaModel;
+import org.openflexo.technologyadapter.excel.model.semantics.ExcelModel;
+import org.openflexo.technologyadapter.excel.viewpoint.BusinessConceptInstancePatternRole;
+import org.openflexo.technologyadapter.excel.viewpoint.BusinessConceptTypePatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelCellPatternRole;
-import org.openflexo.technologyadapter.excel.viewpoint.ExcelColumnPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelRowPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelSheetPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelWorkbookPatternRole;
+import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddBusinessConceptInstance;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelCell;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelRow;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelSheet;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelWorkbook;
 
 /**
- * Implementation of a basic ModelSlot class for the Excel technology adapter<br>
- * This model slot reflects a basic interpretation of a workbook, with basic excel notions, such as workbook, sheet, row, col, and cell
+ * Implementation of the ModelSlot class for the Excel technology adapter<br>
+ * We assert here that the spreadsheet is interpretated through a ExcelMetaModel, and data are wrapped into BusinessConcepts.
  * 
  * @author Vincent Leildé, Sylvain Guérin
  * 
  */
 @DeclarePatternRoles({ // All pattern roles available through this model slot
-@DeclarePatternRole(FML = "ExcelWorkbook", patternRoleClass = ExcelWorkbookPatternRole.class), // Workbook
-		@DeclarePatternRole(FML = "ExcelSheet", patternRoleClass = ExcelSheetPatternRole.class), // Sheet
-		@DeclarePatternRole(FML = "ExcelColumn", patternRoleClass = ExcelColumnPatternRole.class), // Sheet
-		@DeclarePatternRole(FML = "ExcelRow", patternRoleClass = ExcelRowPatternRole.class), // Row
-		@DeclarePatternRole(FML = "ExcelCell", patternRoleClass = ExcelCellPatternRole.class) // Cell
+@DeclarePatternRole(FML = "BusinessConceptType", patternRoleClass = BusinessConceptTypePatternRole.class), // Workbook
+		@DeclarePatternRole(FML = "BusinessConceptInstance", patternRoleClass = BusinessConceptInstancePatternRole.class) // Cell
 })
 @DeclareEditionActions({ // All edition actions available through this model slot
-@DeclareEditionAction(FML = "AddExcelWorkbook", editionActionClass = AddExcelWorkbook.class), // Add workbook
-		@DeclareEditionAction(FML = "AddExcelCell", editionActionClass = AddExcelCell.class), // Add cell
-		@DeclareEditionAction(FML = "AddExcelRow", editionActionClass = AddExcelRow.class), // Add row
-		@DeclareEditionAction(FML = "AddExcelSheet", editionActionClass = AddExcelSheet.class) // Add sheet
+@DeclareEditionAction(FML = "AddBusinessConceptInstance", editionActionClass = AddBusinessConceptInstance.class) // Add instance of BC
 })
-public class BasicExcelModelSlot extends ModelSlot<ExcelWorkbook> {
+public class SemanticsExcelModelSlot extends TypeSafeModelSlot<ExcelModel, ExcelMetaModel> {
 
-	private static final Logger logger = Logger.getLogger(BasicExcelModelSlot.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(SemanticsExcelModelSlot.class.getPackage().getName());
 
-	public BasicExcelModelSlot(VirtualModel<?> virtualModel, ExcelTechnologyAdapter adapter) {
+	public SemanticsExcelModelSlot(VirtualModel<?> virtualModel, ExcelTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
 	}
 
-	public BasicExcelModelSlot(VirtualModelBuilder builder) {
+	public SemanticsExcelModelSlot(VirtualModelBuilder builder) {
 		super(builder);
 	}
 
@@ -123,7 +124,7 @@ public class BasicExcelModelSlot extends ModelSlot<ExcelWorkbook> {
 
 	/**
 	 * Creates and return a new {@link EditionAction} of supplied class.<br>
-	 * This responsability is delegated to the Excel-specific {@link BasicExcelModelSlot} which manages with introspection its own
+	 * This responsability is delegated to the Excel-specific {@link SemanticsExcelModelSlot} which manages with introspection its own
 	 * {@link EditionAction} types related to Excel technology
 	 * 
 	 * @param editionActionClass
@@ -145,30 +146,48 @@ public class BasicExcelModelSlot extends ModelSlot<ExcelWorkbook> {
 	}
 
 	@Override
-	public Type getType() {
-		return ExcelWorkbook.class;
-	}
-
-	@Override
 	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
+		return null;
+	}
+
+	@Override
+	public Type getType() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ModelSlotInstanceConfiguration<BasicExcelModelSlot, ExcelWorkbook> createConfiguration(CreateVirtualModelInstance<?> action) {
+	public ModelSlotInstanceConfiguration<SemanticsExcelModelSlot, ExcelModel> createConfiguration(CreateVirtualModelInstance<?> action) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getURIForObject(ModelSlotInstance<? extends ModelSlot<ExcelWorkbook>, ExcelWorkbook> msInstance, Object o) {
+	public FlexoModelResource<ExcelModel, ExcelMetaModel> createProjectSpecificEmptyModel(View view, String filename, String modelUri,
+			FlexoMetaModelResource<ExcelModel, ExcelMetaModel> metaModelResource) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object retrieveObjectWithURI(ModelSlotInstance<? extends ModelSlot<ExcelWorkbook>, ExcelWorkbook> msInstance, String objectURI) {
+	public FlexoModelResource<ExcelModel, ExcelMetaModel> createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter,
+			String relativePath, String filename, String modelUri, FlexoMetaModelResource<ExcelModel, ExcelMetaModel> metaModelResource) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getURIForObject(
+			TypeSafeModelSlotInstance<ExcelModel, ExcelMetaModel, ? extends TypeSafeModelSlot<ExcelModel, ExcelMetaModel>> msInstance,
+			Object o) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object retrieveObjectWithURI(
+			TypeSafeModelSlotInstance<ExcelModel, ExcelMetaModel, ? extends TypeSafeModelSlot<ExcelModel, ExcelMetaModel>> msInstance,
+			String objectURI) {
 		// TODO Auto-generated method stub
 		return null;
 	}

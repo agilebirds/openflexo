@@ -2,16 +2,16 @@ package org.openflexo.technologyadapter.excel.viewpoint.editionaction;
 
 import java.lang.reflect.Type;
 
-import openflexo.technologyadapter.excel.BasicExcelModelSlot;
+import openflexo.technologyadapter.excel.SemanticsExcelModelSlot;
 
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
-import org.openflexo.technologyadapter.excel.model.ExcelRow;
+import org.openflexo.technologyadapter.excel.model.semantics.BusinessConceptInstance;
 
-public class AddExcelRow extends AssignableAction<BasicExcelModelSlot, ExcelRow> {
+public class AddBusinessConceptInstance extends AssignableAction<SemanticsExcelModelSlot, BusinessConceptInstance> {
 
-	public AddExcelRow(VirtualModelBuilder builder) {
+	public AddBusinessConceptInstance(VirtualModelBuilder builder) {
 		super(builder);
 		// TODO Auto-generated constructor stub
 	}
@@ -29,7 +29,7 @@ public class AddExcelRow extends AssignableAction<BasicExcelModelSlot, ExcelRow>
 	}
 
 	@Override
-	public ExcelRow performAction(EditionSchemeAction action) {
+	public BusinessConceptInstance performAction(EditionSchemeAction action) {
 		// TODO Auto-generated method stub
 		return null;
 	}

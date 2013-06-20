@@ -45,7 +45,7 @@ import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
-import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModelRepository;
+import org.openflexo.technologyadapter.emf.rm.EMFMetaModelRepository;
 import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividual;
