@@ -364,7 +364,11 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 					String newURI;
 					try {
 						newURI = uriParam.getBaseURI().getBindingValue(EditionSchemeAction.this);
+						if (newURI == null) {
+							newURI = "generatedURI";
+						}
 						newURI = modelSlot.generateUniqueURIName(getVirtualModelInstance().getModelSlotInstance(modelSlot), newURI);
+						logger.info("Generated new URI " + newURI + " for " + getVirtualModelInstance().getModelSlotInstance(modelSlot));
 						super.put(uriParam, newURI);
 					} catch (TypeMismatchException e) {
 						// TODO Auto-generated catch block
