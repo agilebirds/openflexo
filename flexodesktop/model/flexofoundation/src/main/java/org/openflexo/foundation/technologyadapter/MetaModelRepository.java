@@ -19,10 +19,6 @@
  */
 package org.openflexo.foundation.technologyadapter;
 
-import java.util.logging.Logger;
-
-import org.openflexo.foundation.resource.FileResourceRepository;
-import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoFileResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ResourceRepository;
@@ -36,15 +32,8 @@ import org.openflexo.foundation.resource.ResourceRepository;
  * @param <R>
  * @param <TA>
  */
-public abstract class MetaModelRepository<R extends FlexoFileResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter>
-		extends FileResourceRepository<R> {
-	/** Logger. */
-	private static final Logger logger = Logger.getLogger(MetaModelRepository.class.getPackage().getName());
-
-	/** Technological Adapter. */
-	private TA technologyAdapter;
-	/** Flexo Resource Center. */
-	private FlexoResourceCenter<?> resourceCenter;
+public abstract class MetaModelRepository<R extends FlexoMetaModelResource<M, MM> & FlexoFileResource<MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter>
+		extends TechnologyAdapterFileResourceRepository<R, TA, MM> {
 
 	/**
 	 * Constructor.
@@ -53,40 +42,9 @@ public abstract class MetaModelRepository<R extends FlexoFileResource<? extends 
 	 * @param resourceCenter
 	 */
 	public MetaModelRepository(TA technologyAdapter, FlexoResourceCenter<?> resourceCenter) {
-		super(resourceCenter, resourceCenter instanceof FileSystemBasedResourceCenter ? ((FileSystemBasedResourceCenter) resourceCenter)
-				.getRootDirectory() : null);
-		this.technologyAdapter = technologyAdapter;
-		this.resourceCenter = resourceCenter;
-		getRootFolder().setName(resourceCenter.getName());
+		super(technologyAdapter, resourceCenter);
 		getRootFolder().setDescription(
 				"MetaModelRepository for technology " + technologyAdapter.getName() + " resource center: " + resourceCenter);
 	}
 
-	/**
-	 * Getter of technologyAdapter.
-	 * 
-	 * @return the technologyAdapter value
-	 */
-	public TA getTechnologyAdapter() {
-		return technologyAdapter;
-	}
-
-	/**
-	 * Getter of resourceCenter.
-	 * 
-	 * @return the resourceCenter value
-	 */
-	public FlexoResourceCenter getResourceCenter() {
-		return resourceCenter;
-	}
-
-	/**
-	 * Setter of resourceCenter.
-	 * 
-	 * @param resourceCenter
-	 *            the resourceCenter to set
-	 */
-	public void setResourceCenter(FlexoResourceCenter resourceCenter) {
-		this.resourceCenter = resourceCenter;
-	}
 }

@@ -17,18 +17,12 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package openflexo.technologyadapter.excel;
+package org.openflexo.technologyadapter.excel;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.logging.Logger;
-
-import openflexo.technologyadapter.excel.rm.ExcelMetaModelRepository;
-import openflexo.technologyadapter.excel.rm.ExcelModelRepository;
-import openflexo.technologyadapter.excel.rm.ExcelWorkbookRepository;
-import openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
-import openflexo.technologyadapter.excel.rm.ExcelWorkbookResourceImpl;
 
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
@@ -43,6 +37,11 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapterBindingFactor
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.technologyadapter.excel.rm.ExcelMetaModelRepository;
+import org.openflexo.technologyadapter.excel.rm.ExcelModelRepository;
+import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookRepository;
+import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
+import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResourceImpl;
 import org.openflexo.technologyadapter.excel.viewpoint.binding.ExcelBindingFactory;
 
 /**
@@ -181,7 +180,7 @@ public class ExcelTechnologyAdapter extends TechnologyAdapter {
 	 * @return
 	 */
 	public boolean isValidWorkbookFile(File candidateFile) {
-		return candidateFile.getName().endsWith(".xls");
+		return candidateFile.getName().endsWith(".xlsx");
 	}
 
 	@Override
@@ -191,8 +190,11 @@ public class ExcelTechnologyAdapter extends TechnologyAdapter {
 
 	@Override
 	public <I> void contentsAdded(FlexoResourceCenter<I> resourceCenter, I contents) {
-		// TODO Auto-generated method stub
-
+		if (contents instanceof File) {
+			File candidateFile = (File) contents;
+			if (tryToLookupWorkbook(resourceCenter, candidateFile) != null) {
+			}
+		}
 	}
 
 	@Override

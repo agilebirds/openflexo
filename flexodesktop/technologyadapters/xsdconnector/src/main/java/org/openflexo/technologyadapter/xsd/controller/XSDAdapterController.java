@@ -6,8 +6,7 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.components.widget.OntologyBrowserModel;
 import org.openflexo.foundation.ontology.IFlexoOntology;
-import org.openflexo.foundation.ontology.IFlexoOntologyObject;
-import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
+import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.icon.IconFactory;
@@ -91,20 +90,10 @@ public class XSDAdapterController extends TechnologyAdapterController<XSDTechnol
 	 * @return
 	 */
 	@Override
-	public ImageIcon getIconForOntologyObject(Class<? extends IFlexoOntologyObject> objectClass) {
-		if (AbstractXSOntObject.class.isAssignableFrom(objectClass))
+	public ImageIcon getIconForTechnologyObject(Class<? extends TechnologyObject> objectClass) {
+		if (AbstractXSOntObject.class.isAssignableFrom(objectClass)) {
 			return XSDIconLibrary.iconForObject((Class<? extends AbstractXSOntObject>) objectClass);
-		return null;
-	}
-
-	/**
-	 * Return icon representing supplied property value
-	 * 
-	 * @param object
-	 * @return
-	 */
-	@Override
-	public ImageIcon getIconForPropertyValue(Class<? extends IFlexoOntologyPropertyValue> objectClass) {
+		}
 		return null;
 	}
 
@@ -117,9 +106,9 @@ public class XSDAdapterController extends TechnologyAdapterController<XSDTechnol
 	@Override
 	public ImageIcon getIconForPatternRole(Class<? extends PatternRole> patternRoleClass) {
 		if (XSClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return getIconForOntologyObject(XSOntClass.class);
+			return getIconForTechnologyObject(XSOntClass.class);
 		} else if (XSIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return getIconForOntologyObject(XSOntIndividual.class);
+			return getIconForTechnologyObject(XSOntIndividual.class);
 		}
 		return null;
 	}
@@ -133,9 +122,9 @@ public class XSDAdapterController extends TechnologyAdapterController<XSDTechnol
 	@Override
 	public ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass) {
 		if (AddXSIndividual.class.isAssignableFrom(editionActionClass)) {
-			return IconFactory.getImageIcon(getIconForOntologyObject(XSOntIndividual.class), IconLibrary.DUPLICATE);
+			return IconFactory.getImageIcon(getIconForTechnologyObject(XSOntIndividual.class), IconLibrary.DUPLICATE);
 		} else if (AddXSClass.class.isAssignableFrom(editionActionClass)) {
-			return IconFactory.getImageIcon(getIconForOntologyObject(XSOntClass.class), IconLibrary.DUPLICATE);
+			return IconFactory.getImageIcon(getIconForTechnologyObject(XSOntClass.class), IconLibrary.DUPLICATE);
 		}
 		return super.getIconForEditionAction(editionActionClass);
 	}

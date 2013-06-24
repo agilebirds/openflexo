@@ -2,11 +2,11 @@ package org.openflexo.technologyadapter.excel.viewpoint.editionaction;
 
 import java.lang.reflect.Type;
 
-import openflexo.technologyadapter.excel.SemanticsExcelModelSlot;
 
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.technologyadapter.excel.SemanticsExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.semantics.BusinessConceptInstance;
 
 public class AddBusinessConceptInstance extends AssignableAction<SemanticsExcelModelSlot, BusinessConceptInstance> {

@@ -20,9 +20,14 @@
 package org.openflexo.technologyadapter.excel.model.semantics;
 
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 import org.openflexo.technologyadapter.excel.model.ExcelObject;
 
 public class ExcelMetaModel extends ExcelObject implements FlexoMetaModel<ExcelMetaModel> {
+
+	public ExcelMetaModel(ExcelTechnologyAdapter adapter) {
+		super(adapter);
+	}
 
 	@Override
 	public org.openflexo.foundation.resource.FlexoResource<ExcelMetaModel> getResource() {

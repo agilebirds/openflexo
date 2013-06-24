@@ -1,6 +1,7 @@
 package org.openflexo.technologyadapter.excel.model;
 
 import org.apache.poi.ss.usermodel.Row;
+import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 
 public class ExcelRow extends ExcelObject {
 
@@ -10,8 +11,8 @@ public class ExcelRow extends ExcelObject {
 		return row;
 	}
 
-	public ExcelRow(Row row) {
-		super();
+	public ExcelRow(Row row, ExcelTechnologyAdapter adapter) {
+		super(adapter);
 		this.row = row;
 	}
 

@@ -18,7 +18,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package openflexo.technologyadapter.excel;
+package org.openflexo.technologyadapter.excel;
 
 import java.lang.reflect.Type;
 import java.util.logging.Logger;

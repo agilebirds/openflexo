@@ -45,7 +45,7 @@ import org.openflexo.toolbox.IProgress;
  * 
  */
 @ModelEntity
-public interface FlexoResourceCenter<I> {
+public interface FlexoResourceCenter<I> extends Iterable<I> {
 
 	/**
 	 * Return a user-friendly named identifier for this resource center
@@ -159,6 +159,7 @@ public interface FlexoResourceCenter<I> {
 	 * 
 	 * @return an Iterator.
 	 */
+	@Override
 	public Iterator<I> iterator();
 
 	/**

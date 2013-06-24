@@ -26,12 +26,12 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.foundation.FlexoServiceManager;
-import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
 import org.openflexo.foundation.rm.DiagramSpecificationResource;
 import org.openflexo.foundation.rm.ViewPointResource;
 import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
 import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
@@ -220,14 +220,14 @@ public class VPMIconLibrary extends IconLibrary {
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((DataPropertyAssertion) object).getAction().getModelSlot()
 					.getTechnologyAdapter());
 			if (tac != null && ((DataPropertyAssertion) object).getOntologyProperty() != null) {
-				return tac.getIconForOntologyObject(((DataPropertyAssertion) object).getOntologyProperty().getClass());
+				return tac.getIconForTechnologyObject(((DataPropertyAssertion) object).getOntologyProperty().getClass());
 			}
 			return null;
 		} else if (object instanceof ObjectPropertyAssertion) {
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((ObjectPropertyAssertion) object).getAction()
 					.getModelSlot().getTechnologyAdapter());
 			if (tac != null && ((ObjectPropertyAssertion) object).getOntologyProperty() != null) {
-				return tac.getIconForOntologyObject(((ObjectPropertyAssertion) object).getOntologyProperty().getClass());
+				return tac.getIconForTechnologyObject(((ObjectPropertyAssertion) object).getOntologyProperty().getClass());
 			}
 			return null;
 		} else if (object instanceof ExampleDiagramConnector) {
@@ -348,7 +348,7 @@ public class VPMIconLibrary extends IconLibrary {
 			if (tac != null) {
 				Type accessedType = ((OntologicObjectPatternRole<?>) object).getType();
 				Class accessedTypeBaseClass = TypeUtils.getBaseClass(accessedType);
-				return tac.getIconForOntologyObject(accessedTypeBaseClass);
+				return tac.getIconForTechnologyObject(accessedTypeBaseClass);
 			}
 		} else if (object instanceof LocalizedDictionary) {
 			return LOCALIZATION_ICON;
@@ -364,11 +364,10 @@ public class VPMIconLibrary extends IconLibrary {
 			} else if (object instanceof TextFieldInspectorEntry) {
 				return TEXT_FIELD_ICON;
 			}
-		} else if (object instanceof IFlexoOntologyPropertyValue) {
-			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((IFlexoOntologyPropertyValue) object).getProperty()
-					.getTechnologyAdapter());
+		} else if (object instanceof TechnologyObject) {
+			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((TechnologyObject) object).getTechnologyAdapter());
 			if (tac != null) {
-				return tac.getIconForPropertyValue(((IFlexoOntologyPropertyValue) object).getClass());
+				return tac.getIconForTechnologyObject(((TechnologyObject) object).getClass());
 			}
 			return null;
 		}

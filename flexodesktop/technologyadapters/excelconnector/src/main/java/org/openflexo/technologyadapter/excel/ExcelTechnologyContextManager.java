@@ -17,24 +17,20 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package openflexo.technologyadapter.excel.rm;
+package org.openflexo.technologyadapter.excel;
 
-import openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
+import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 
-import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.technologyadapter.ModelRepository;
-import org.openflexo.technologyadapter.excel.model.semantics.ExcelMetaModel;
-import org.openflexo.technologyadapter.excel.model.semantics.ExcelModel;
+public class ExcelTechnologyContextManager extends TechnologyContextManager {
 
-/**
- * Excel model repository
- * 
- * @author sylvain
- * 
- */
-public class ExcelModelRepository extends ModelRepository<ExcelModelResource, ExcelModel, ExcelMetaModel, ExcelTechnologyAdapter> {
-
-	public ExcelModelRepository(ExcelTechnologyAdapter adapter, FlexoResourceCenter<?> resourceCenter) {
-		super(adapter, resourceCenter);
+	public ExcelTechnologyContextManager(ExcelTechnologyAdapter adapter, FlexoResourceCenterService resourceCenterService) {
+		super(adapter, resourceCenterService);
 	}
+
+	@Override
+	public ExcelTechnologyAdapter getTechnologyAdapter() {
+		return (ExcelTechnologyAdapter) super.getTechnologyAdapter();
+	}
+
 }

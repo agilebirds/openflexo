@@ -17,18 +17,16 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package openflexo.technologyadapter.excel.rm;
-
-import openflexo.technologyadapter.excel.ExcelTechnologyContextManager;
+package org.openflexo.technologyadapter.excel.rm;
 
 import org.openflexo.foundation.resource.FlexoFileResource;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
-import org.openflexo.technologyadapter.excel.model.semantics.ExcelMetaModel;
-import org.openflexo.technologyadapter.excel.model.semantics.ExcelModel;
+import org.openflexo.technologyadapter.excel.ExcelTechnologyContextManager;
+import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
 /**
  * EMF Model Resource.
@@ -36,8 +34,8 @@ import org.openflexo.technologyadapter.excel.model.semantics.ExcelModel;
  * @author gbesancon
  */
 @ModelEntity
-@ImplementationClass(ExcelModelResourceImpl.class)
-public interface ExcelMetaModelResource extends FlexoFileResource<ExcelMetaModel>, FlexoMetaModelResource<ExcelModel, ExcelMetaModel> {
+@ImplementationClass(ExcelWorkbookResourceImpl.class)
+public interface ExcelWorkbookResource extends FlexoFileResource<ExcelWorkbook>, TechnologyAdapterResource<ExcelWorkbook> {
 
 	public static final String TECHNOLOGY_CONTEXT_MANAGER = "technologyContextManager";
 

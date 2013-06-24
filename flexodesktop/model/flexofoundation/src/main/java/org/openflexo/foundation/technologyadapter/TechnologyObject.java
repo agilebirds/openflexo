@@ -17,24 +17,21 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package openflexo.technologyadapter.excel.rm;
-
-import openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
-
-import org.openflexo.foundation.resource.FileResourceRepository;
-import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
+package org.openflexo.foundation.technologyadapter;
 
 /**
- * Excel workbook repository
+ * Implemented by all objects specific to a given technology
  * 
  * @author sylvain
  * 
  */
-public class ExcelWorkbookRepository extends FileResourceRepository<ExcelWorkbookResource> {
+public interface TechnologyObject {
 
-	public ExcelWorkbookRepository(ExcelTechnologyAdapter adapter, FlexoResourceCenter<?> resourceCenter) {
-		super(adapter, resourceCenter instanceof FileSystemBasedResourceCenter ? ((FileSystemBasedResourceCenter) resourceCenter)
-				.getRootDirectory() : null);
-	}
+	/**
+	 * Return the {@link TechnologyAdapter} of technical space where this concept exists
+	 * 
+	 * @return
+	 */
+	public TechnologyAdapter getTechnologyAdapter();
+
 }

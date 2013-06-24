@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package openflexo.technologyadapter.excel.rm;
+package org.openflexo.technologyadapter.excel.rm;
 
 import java.io.FileNotFoundException;
 import java.util.logging.Logger;
