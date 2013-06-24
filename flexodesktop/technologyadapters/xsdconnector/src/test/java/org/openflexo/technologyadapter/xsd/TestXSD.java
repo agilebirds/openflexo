@@ -65,7 +65,8 @@ public class TestXSD extends FlexoTestCase {
 		modelRepository = resourceCenter.getModelRepository(xsdAdapter);
 		assertNotNull(mmRepository);
 		assertNotNull(modelRepository);
-		assertEquals(2, mmRepository.getAllResources().size());
+		assertEquals(3, mmRepository.getAllResources().size());
+		assertEquals(3, modelRepository.getAllResources().size());
 	}
 
 	public void test1LibraryMetaModelPresentAndLoaded() {

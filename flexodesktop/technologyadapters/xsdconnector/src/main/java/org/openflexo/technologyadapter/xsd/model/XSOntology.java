@@ -28,7 +28,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -93,7 +92,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	}
 
 	public Set<XSOntology> getAllImportedOntologies() {
-		return OntologyUtils.getAllImportedOntologies(this);
+		return Collections.EMPTY_SET;
 	}
 
 	@Override
@@ -429,6 +428,18 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	@Override
 	public List<XSOntIndividual> getIndividuals() {
 		return new ArrayList<XSOntIndividual>(individuals.values());
+	}
+
+
+	// TODO, TO BE OPTIMIZED
+	public List<XSOntIndividual> getIndividualsOfClass(XSOntClass aClass) {
+		ArrayList<XSOntIndividual> returned = new ArrayList<XSOntIndividual>();
+		for (XSOntIndividual o : individuals.values()){
+			if (o.getType() == aClass) {
+				returned.add(o);
+			}
+		}
+		return returned;
 	}
 
 	@Override

@@ -82,12 +82,12 @@ public class XSDeclarationsFetcher implements XSVisitor {
 				}
 			}
 		}
-		logUris();
+		// logUris();
 	}
 
 	public void fetch(XSSchema schema) {
 		schema.visit(this);
-		logUris();
+		// logUris();
 	}
 
 	public XSDeclaration getDeclaration(String uri) {

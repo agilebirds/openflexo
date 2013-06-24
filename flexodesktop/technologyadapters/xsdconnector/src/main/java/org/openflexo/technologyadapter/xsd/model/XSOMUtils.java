@@ -36,8 +36,9 @@ public class XSOMUtils {
 			.getName());
 
 	public static XSSchemaSet read(File xsdFile) {
+		// TODO: check if all XML files should be read in the same way
 		if (logger.isLoggable(Level.INFO)) {
-			logger.info("Loading a XML Schema from file " + xsdFile.getName());
+			logger.info("Loading an XML file " + xsdFile.getName());
 		}
 		XSOMParser parser = new XSOMParser();
 		parser.setErrorHandler(new ErrorHandler() {

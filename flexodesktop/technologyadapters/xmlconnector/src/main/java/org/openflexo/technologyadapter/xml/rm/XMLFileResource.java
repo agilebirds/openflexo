@@ -18,30 +18,27 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.technologyadapter.xsd.rm;
 
+package org.openflexo.technologyadapter.xml.rm;
 import org.openflexo.foundation.resource.FlexoFileResource;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
-import org.openflexo.technologyadapter.xsd.model.XMLModel;
-import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
-import org.openflexo.technologyadapter.xsd.model.XSDTechnologyContextManager;
+import org.openflexo.technologyadapter.xml.model.XMLTechnologyContextManager;
+import org.openflexo.technologyadapter.xml.model.XMLModel;
 
 @ModelEntity
-@ImplementationClass(XMLModelResourceImpl.class)
-public interface XMLModelResource extends FlexoFileResource<XMLModel>, FlexoModelResource<XMLModel, XSDMetaModel>, FlexoModel<XMLModelResource, XMLModelResource>, FlexoMetaModel<XMLModelResource> {
+@ImplementationClass(XMLFileResourceImpl.class)
+public interface XMLFileResource  extends FlexoFileResource<XMLModel>,  TechnologyAdapterResource<XMLModel>, FlexoModelResource<XMLModel,XMLModel> {
 
-	public static final String TECHNOLOGY_CONTEXT_MANAGER = "technologyContextManager";
+	public static final String TECHNOLOGY_CONTEXT_MANAGER = "XMLTechnologyContextManager";
 
 	@Getter(value = TECHNOLOGY_CONTEXT_MANAGER, ignoreType = true)
-	public XSDTechnologyContextManager getTechnologyContextManager();
+	public XMLTechnologyContextManager getTechnologyContextManager();
 
 	@Setter(TECHNOLOGY_CONTEXT_MANAGER)
-	public void setTechnologyContextManager(XSDTechnologyContextManager technologyContextManager);
-
+	public void setTechnologyContextManager(XMLTechnologyContextManager technologyContextManager);
 }

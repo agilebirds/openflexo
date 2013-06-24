@@ -714,6 +714,17 @@
 				<version>${project.version}</version>
 				<classifier>resources</classifier>
 				<type>zip</type>
+			</dependency><dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>xmlconnector</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>xmlconnector</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
 			</dependency>
 
 

@@ -16,6 +16,7 @@
 		<module>emfconnector</module>
 		<module>mdtumlconnector</module>
 		<module>csvconnector</module>
+		<module>xmlconnector</module>
 	</modules>
 	<build>
 		<!--  <resources>

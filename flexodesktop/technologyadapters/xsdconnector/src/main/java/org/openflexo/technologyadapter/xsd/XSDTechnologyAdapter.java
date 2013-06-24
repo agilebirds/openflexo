@@ -1,5 +1,6 @@
 /*
- * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2010-2012 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -33,6 +34,7 @@ import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.VirtualModel;
@@ -58,7 +60,7 @@ import org.openflexo.technologyadapter.xsd.viewpoint.binding.XSDBindingFactory;
 
 public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaModel> {
 
-	private static final String CatalogFileNames = "catalog-v0.ofcat";
+	private static final String TAName = "XSD/XML technology adapter";
 	
 	protected static final Logger logger = Logger.getLogger(XSDTechnologyAdapter.class.getPackage().getName());
 
@@ -69,7 +71,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 
 	@Override
 	public String getName() {
-		return "XSD/XML technology adapter";
+		return TAName;
 	}
 
 	@Override
@@ -116,10 +118,6 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	@Override
 	public String retrieveModelURI(File aModelFile, FlexoResource<XSDMetaModel> metaModelResource,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
-		
-		// TODO Manage URIs properly
-		
-		logger.warning("xsdconnector: Have to deal properly with URIs");
 		
 		return aModelFile.toURI().toString();
 	}
@@ -186,11 +184,11 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	public XMLModelResource retrieveModelResource(File aModelFile,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
 		
-		for (FlexoMetaModelResource<XMLModel, XSDMetaModel> mmRes : technologyContextManager.getAllMetaModels()) {
+		for (TechnologyAdapterResource<XSDMetaModel> mmRes : technologyContextManager.getAllMetaModels()) {
 			if (isValidModelFile(aModelFile, mmRes, technologyContextManager)) {
 				
 				XMLModelResource xmlModelResource = (XMLModelResource) retrieveModelResource(aModelFile, mmRes, technologyContextManager);
-				xmlModelResource.setMetaModelResource(mmRes);
+				xmlModelResource.setMetaModelResource((FlexoMetaModelResource<XMLModel, XSDMetaModel>) mmRes);
 				technologyContextManager.registerModel(xmlModelResource);
 				
 				return  xmlModelResource;
