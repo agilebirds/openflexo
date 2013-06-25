@@ -43,6 +43,10 @@
 			<artifactId>xml-resolver</artifactId>
 			<version>1.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>xmlconnector</artifactId>
+		</dependency>
 	</dependencies>
 </project>
 

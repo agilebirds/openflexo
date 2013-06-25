@@ -21,10 +21,15 @@
 
 package org.openflexo.technologyadapter.xml.model;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.resource.FlexoResource;
@@ -33,6 +38,9 @@ import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.technologyadapter.xml.XMLTechnologyAdapter;
 import org.openflexo.technologyadapter.xml.rm.XMLFileResource;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 
 /**
  * @author xtof
@@ -40,9 +48,15 @@ import org.openflexo.technologyadapter.xml.rm.XMLFileResource;
  */
 public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLModel>, FlexoMetaModel<XMLModel>  {
 
+	// Constants
+	
+	private static final String Version = "0";
+	
+	// Attributes
+	
 
 	protected static final Logger logger = Logger.getLogger(XMLModel.class.getPackage().getName());
-	private XMLFileResource xmlResource;
+	private FlexoResource<?> xmlResource;
 	private boolean isReadOnly = true;
 	private XMLTechnologyAdapter technologyAdapter;
 
@@ -74,7 +88,7 @@ public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLMod
 
 	@Override
 	public XMLFileResource getResource() {
-		return xmlResource;
+		return (XMLFileResource) xmlResource;
 	}
 
 	@Override
@@ -121,26 +135,61 @@ public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLMod
 		return null;
 	}
 
-
 	
-	public Collection<XMLIndividual> getIndividuals() {
-		return individuals.values();
+	public List<? extends XMLIndividual> getIndividuals() {
+		return new ArrayList<XMLIndividual>(individuals.values());
 	}
 
-	public void addIndividual(XMLIndividual anIndividual) {
-		individuals.put(anIndividual.getURI(), anIndividual);
 
+
+	// TODO, TO BE OPTIMIZED
+	public List<XMLIndividual> getIndividualsOfType(XMLType aType) {
+		ArrayList<XMLIndividual> returned = new ArrayList<XMLIndividual>();
+		for (XMLIndividual o : individuals.values()){
+			if (o.getType() == aType) {
+				returned.add(o);
+			}
+		}
+		return returned;
 	}
 
-	public XMLType getTypeNamed(String qName) {
-		return types.get(qName);
-	}
-
-	public void addType(String name, XMLType aType) {
-	types.put(name, aType);
+	public XMLIndividual createIndividual(XMLType aType) throws Exception {
+		
+		XMLIndividual anIndividual = new XMLIndividual(this, aType);
+		this.addIndividual(anIndividual);
+		return anIndividual;
 		
 	}
+	public void addIndividual(XMLIndividual anIndividual) {
+		individuals.put(anIndividual.getUUID(), anIndividual);
+		this.setChanged();
+
+	}
+
+	public XMLType getTypeFromURI(String uri) {
+		return types.get(uri);
+	}
+
+	public void addType(XMLType aType) {
+	types.put(aType.getURI(), aType);
+	this.setChanged();
+	}
+
+	public List<? extends XMLType> getTypes() {
+		return new ArrayList<XMLType>(types.values());
+	}
+	public Document toXML() throws ParserConfigurationException {
+		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+		Document doc = docBuilder.newDocument();
+		
+		Element rootNode = getRoot().toXML(doc);
+		doc.appendChild( rootNode );
+
+		return doc;
+	}
 
 
+	
 
 }

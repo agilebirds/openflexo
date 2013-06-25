@@ -22,6 +22,7 @@
 package org.openflexo.technologyadapter.xml;
 
 import java.lang.reflect.Type;
+import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingVariable;
@@ -52,6 +53,9 @@ import org.openflexo.technologyadapter.xml.viewpoint.XMLIndividualPatternRole;
 })
 public class XMLModelSlot extends ModelSlot<XMLModel, XMLModel> {
 
+	private static final Logger logger = Logger.getLogger(ModelSlot.class.getPackage().getName());
+
+	
 	protected XMLModelSlot(ViewPoint viewPoint,
 			TechnologyAdapter<XMLModel, XMLModel> technologyAdapter) {
 		super(viewPoint, technologyAdapter);

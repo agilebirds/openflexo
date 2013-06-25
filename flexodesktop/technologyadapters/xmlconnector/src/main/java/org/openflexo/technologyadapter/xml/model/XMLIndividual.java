@@ -20,21 +20,21 @@
  */
 package org.openflexo.technologyadapter.xml.model;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.xml.sax.Attributes;
 
 /**
  * 
- * an XMLIndividual represents a single instance of XML Element
+ * an XMLIndividual represents a single instance of XML Element in a XMLModel
  * 
  * 
  * @author xtof
@@ -42,20 +42,23 @@ import org.xml.sax.Attributes;
  */
 
 
-public class XMLIndividual extends FlexoObject implements IFlexoOntologyObject {
+public class XMLIndividual extends XMLObject {
 
-	
-	// TODO : check if this is actually useful ?!?
-	private Set<XMLIndividual> children = new HashSet<XMLIndividual>();
-	private Map<String, XMLAttribute> values = new HashMap<String, XMLAttribute>();
-	private XMLIndividual parent;
-	private XMLModel containerModel;
-	private XMLType myType;
-	
+	//Constants
+
+	public static final String CDATA_ATTR_NAME = "CDATA";
+
 	/* Properties */
-	
+
+	private Map<XMLType,Set<XMLIndividual>> children = null;
+	private Map<String, XMLAttribute> attributes = null;
+	private XMLIndividual parent =null;
+	private XMLModel containerModel = null;
+	private XMLType myType = null;
+
 	private String Name;
-	
+	private String uuid;
+
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XMLIndividual.class
 			.getPackage().getName());
@@ -66,38 +69,37 @@ public class XMLIndividual extends FlexoObject implements IFlexoOntologyObject {
 	 * @param adapter
 	 */
 
-	protected XMLIndividual(XMLModel model) {
+	protected XMLIndividual(XMLModel containerModel) {
 		super();
-		this.containerModel = model;
-	}
-
-
-	public XMLIndividual(XMLModel containerModel, String name,
-			Attributes attributes) throws Exception {
-
-		this.setName(name);
 		this.containerModel = containerModel;
-		// TODO create AttributeProperties
-		// TODO set Type
-		// TODO calculate URIs
+		uuid = UUID.randomUUID().toString();
+		attributes = new HashMap<String, XMLAttribute>();
+		children = new HashMap<XMLType, Set<XMLIndividual>>();
+	}
+
+	public XMLIndividual(XMLModel xmlModel, XMLType aType) {
+		this.setName(aType.getName());
+		this.containerModel = xmlModel;
+		this.setType(aType);
+		uuid = UUID.randomUUID().toString();
+		attributes = new HashMap<String, XMLAttribute>();
+		children = new HashMap<XMLType, Set<XMLIndividual>>();
 	}
 
 
-
-	protected Element toXML(Document doc) {
-		Element element = doc.createElement(Name);
-		return element;
+	public String getContentDATA(){
+		return (String) attributes.get(CDATA_ATTR_NAME).getValue();
 	}
 
+	//************ Accessors
 
 	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
-		// TODO Auto-generated method stub
 		return containerModel.getTechnologyAdapter();
 	}
 
 
-	public void setName(String name) throws Exception {
-			this.Name = name;
+	public void setName(String name) {
+		this.Name = name;
 	}
 
 
@@ -108,42 +110,100 @@ public class XMLIndividual extends FlexoObject implements IFlexoOntologyObject {
 	}
 
 
-	@Override
 	public String getName() {
 		return Name;
 	}
 
 
-	@Override
-	public String getURI() {
-		// TODO Auto-generated method stub
-		return Name;
+
+	public Object getAttributeValue(String attributeName) {
+
+		XMLAttribute attr = attributes.get(attributeName);
+		
+		if (attr != null){
+			return attr.getValue();
+		}
+		else return null;
+	}
+
+	public void addChild(XMLIndividual anIndividual) {
+		XMLType aType = anIndividual.getType();
+		Set<XMLIndividual> typedSet = children.get(aType);
+		
+		if (typedSet == null) {
+			typedSet = new HashSet<XMLIndividual>();
+			children.put(aType, typedSet);
+		}
+		typedSet.add(anIndividual);
+		anIndividual.setParent(this);
 	}
 
 
-	public void addChild(XMLIndividual anIndividual) {
-		children.add(anIndividual);
+	private void setParent(XMLIndividual xmlIndividual) {
+		parent = xmlIndividual;
 	}
 
 
 	public Set<XMLIndividual> getChildren() {
-		return children;
+
+		Set<XMLIndividual> returned = new HashSet<XMLIndividual>();
+		
+		for (Set<XMLIndividual> s : children.values()){
+			returned.addAll(s);
+		}
+		return returned;
 	}
 
 
-	/**
-	 * @return the Type of this element
-	 */
+	public XMLIndividual getParent() {
+		return parent;
+	}
+
+
 	public XMLType getType() {
 		return myType;
 	}
 
 
-	/**
-	 * @param set the type of this Element
-	 */
 	public void setType(XMLType myClass) {
 		this.myType = myClass;
+	}
+
+
+	public String getUUID() {
+		return uuid;
+	}
+
+
+	public Collection<XMLAttribute> getAttributes() {
+		return attributes.values();
+	}
+
+
+	public void addAttribute(String aName, XMLAttribute attr) {
+		if (attributes == null){
+			logger.warning("Attribute collection is null");
+			attributes = new HashMap<String, XMLAttribute>();
+		}
+		attributes.put(aName,attr);
+		
+	}
+
+	public Element toXML(Document doc) {
+		String nsURI = getType().getNameSpaceURI();
+		Element element = null;
+		if(nsURI != null){
+			element = (Element) doc.createElementNS(nsURI, getType().getFullyQualifiedName());
+		}
+		else {
+			element = (Element) doc.createElement(getType().getName());
+		}
+		
+		for (XMLIndividual i : getChildren()){
+			element.appendChild(i.toXML(doc));
+		}
+		
+		return element;
 	}
 
 }

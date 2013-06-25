@@ -1,4 +1,3 @@
-
 /*
  * (c) Copyright 2010-2012 AgileBirds
  * (c) Copyright 2012-2013 Openflexo
@@ -20,30 +19,16 @@
  *
  */
 
-package org.openflexo.technologyadapter.xml.gui;
+package org.openflexo.technologyadapter.xml.model;
 
-import java.util.logging.Logger;
-
-import org.openflexo.technologyadapter.xml.model.XMLModel;
+import org.openflexo.foundation.FlexoObject;
 
 /**
- * Model supporting browsing through models or metamodels conform to {@link FlexoOntology} API<br>
- * 
- * Developers note: this model is shared by many widgets. Please modify it with caution.
- * 
- * @see FIBOWLClassSelector
- * @see FIBOWLIndividualSelector
- * @see FIBOWLPropertySelector
- * 
- * @author sguerin
+ * @author xtof
+ *
  */
-public class XMLModelBrowserModel  {
+public abstract class XMLObject extends FlexoObject {
 
-	static final Logger logger = Logger.getLogger(XMLModelBrowserModel.class.getPackage().getName());
-
-	public XMLModelBrowserModel(XMLModel model) {
-		// TODO ....
-		logger.warning("XMLModelBrowserModel is NOT IMPLEMENTED" );
-	}
+	// Only for genericity purpose for now...
 
 }

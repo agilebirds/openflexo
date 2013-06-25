@@ -46,8 +46,9 @@ import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.model.XSDMetaModelRepository;
 import org.openflexo.technologyadapter.xsd.model.XSDTechnologyContextManager;
 import org.openflexo.technologyadapter.xsd.model.XSOntology;
-import org.openflexo.technologyadapter.xsd.rm.XMLModelResource;
-import org.openflexo.technologyadapter.xsd.rm.XMLModelResourceImpl;
+import org.openflexo.technologyadapter.xml.model.XMLTechnologyContextManager;
+import org.openflexo.technologyadapter.xml.rm.XMLFileResource;
+import org.openflexo.technologyadapter.xml.rm.XMLFileResourceImpl;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 import org.openflexo.technologyadapter.xsd.viewpoint.binding.XSDBindingFactory;
 
@@ -167,10 +168,10 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	 *      org.openflexo.foundation.resource.FlexoResource, org.openflexo.foundation.technologyadapter.TechnologyContextManager)
 	 */
 	@Override
-	public XMLModelResource retrieveModelResource(File aModelFile, FlexoResource<XSDMetaModel> metaModelResource,
+	public FlexoResource<XMLModel>  retrieveModelResource(File aModelFile, FlexoResource<XSDMetaModel> metaModelResource,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
 		
-		XMLModelResource xmlModelResource = XMLModelResourceImpl.retrieveXMLModelResource(aModelFile,
+		 XMLFileResource  xmlModelResource = XMLFileResourceImpl.retrieveXMLModelResource(aModelFile,
 				(XSDMetaModelResource) metaModelResource, getTechnologyContextManager());
 		
 		XSDTechnologyContextManager xsdContextManager = (XSDTechnologyContextManager) technologyContextManager;
@@ -206,12 +207,12 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	 * @param technologyContextManager
 	 * @return
 	 */
-	public  XMLModelResource createEmptyModel(File modelFile, String modelUri, FlexoResource<XSDMetaModel> metaModelResource,
+	public   XMLFileResource  createEmptyModel(File modelFile, String modelUri, FlexoResource<XSDMetaModel> metaModelResource,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
 	
 		modelUri = modelFile.toURI().toString();
 
-		XMLModelResource ModelResource = XMLModelResourceImpl.makeXMLModelResource(modelUri, modelFile, (XSDMetaModelResource) metaModelResource, (XSDTechnologyContextManager) technologyContextManager);
+		 XMLFileResource  ModelResource = XMLFileResourceImpl.makeXMLModelResource(modelUri, modelFile, (XSDMetaModelResource) metaModelResource, (XSDTechnologyContextManager) technologyContextManager);
 		technologyContextManager.registerModel(ModelResource);
 		return ModelResource;
 
@@ -225,7 +226,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLModel, XSDMetaMod
 	 * @return
 	 */
 	@Override
-	public XMLModelResource createEmptyModel(FlexoProject project, String filename, String modelUri, FlexoResource<XSDMetaModel> metaModel,
+	public  XMLFileResource createEmptyModel(FlexoProject project, String filename, String modelUri, FlexoResource<XSDMetaModel> metaModel,
 			TechnologyContextManager<XMLModel, XSDMetaModel> technologyContextManager) {
 		
 		

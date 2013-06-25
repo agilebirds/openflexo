@@ -18,6 +18,8 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+
 package org.openflexo.technologyadapter.xsd.model;
 
 import java.io.File;
@@ -42,40 +44,46 @@ import org.openflexo.foundation.ontology.IFlexoOntologyModel;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.OntologyUtils;
 import org.openflexo.foundation.ontology.W3URIDefinitions;
+import org.openflexo.foundation.resource.FlexoFileResource;
+import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.w3c.dom.Document;
 
-import com.sun.xml.xsom.XSAttributeDecl;
-import com.sun.xml.xsom.XSComplexType;
-import com.sun.xml.xsom.XSDeclaration;
-import com.sun.xml.xsom.XSElementDecl;
-import com.sun.xml.xsom.XSSchemaSet;
 import com.sun.xml.xsom.XSSimpleType;
+
+
+
+
+/**
+ *
+ * This class defines and implements the XSD/XML Abstract Ontology Class
+ * 
+ * @author sylvain, luka, Christophe
+ * 
+ */
 
 public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOntology, XSOntologyURIDefinitions, W3URIDefinitions, IFlexoOntologyModel {
 
-	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntology.class.getPackage()
-			.getName());
-
-	private final File originalFile;
-	private XSSchemaSet schemaSet;
-	private XSDeclarationsFetcher fetcher;
-
-	private boolean isLoaded = false;
-	private boolean isLoading = false;
-	private boolean isReadOnly = true;
 
 	private XSOntClass thingClass;
 
-	private final Map<String, XSOntClass> classes = new HashMap<String, XSOntClass>();
-	private final Map<String, XSOntDataProperty> dataProperties = new HashMap<String, XSOntDataProperty>();
-	private final Map<String, XSOntObjectProperty> objectProperties = new HashMap<String, XSOntObjectProperty>();
-	private final Map<String, XSOntIndividual> individuals = new HashMap<String, XSOntIndividual>();
-	private final Map<XSSimpleType, XSDDataType> dataTypes = new HashMap<XSSimpleType, XSDDataType>();
+	protected FlexoResource<?>  modelResource;
+	
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntology.class.getPackage()
+			.getName());
+
+
+	// Objects contained in the Model + MetaModel / Ontology
+	
+	protected final Map<XSSimpleType, XSDDataType> dataTypes = new HashMap<XSSimpleType, XSDDataType>();
+	protected final Map<String, XSOntDataProperty> dataProperties = new HashMap<String, XSOntDataProperty>();
+	protected final Map<String, XSOntClass> classes = new HashMap<String, XSOntClass>();
+	protected final Map<String, XSOntObjectProperty> objectProperties = new HashMap<String, XSOntObjectProperty>();
+	protected final Map<String, XSOntIndividual> individuals = new HashMap<String, XSOntIndividual>();
 
 	public XSOntology(String ontologyURI, File xmlFile, XSDTechnologyAdapter adapter) {
 		super(null, computeName(xmlFile), ontologyURI, adapter);
-		this.originalFile = xmlFile;
 	}
 
 	private static String computeName(File xsdFile) {
@@ -91,32 +99,6 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		return Collections.emptyList();
 	}
 
-	public Set<XSOntology> getAllImportedOntologies() {
-		return Collections.EMPTY_SET;
-	}
-
-	@Override
-	public boolean getIsReadOnly() {
-		return isReadOnly;
-	}
-
-	public void setReadOnly(boolean isReadOnly) {
-		this.isReadOnly = isReadOnly;
-	}
-
-	@Override
-	public XSOntology getFlexoOntology() {
-		return this;
-	}
-
-	@Override
-	public XSOntology getOntology() {
-		return this;
-	}
-
-	protected XSDeclarationsFetcher getFetcher() {
-		return fetcher;
-	}
 
 	private boolean addClass(XSOntClass c) {
 		if (classes.containsKey(c.getURI()) == false) {
@@ -129,215 +111,6 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	@Override
 	public XSOntClass getRootConcept() {
 		return thingClass;
-	}
-
-	private static boolean mapsToClass(XSElementDecl element) {
-		if (element.getType().isComplexType()) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private XSOntClass loadClass(XSDeclaration declaration) {
-		String name = declaration.getName();
-		String uri = fetcher.getUri(declaration);
-		XSOntClass xsClass = new XSOntClass(this, name, uri, getTechnologyAdapter());
-		classes.put(uri, xsClass);
-		return xsClass;
-	}
-
-	private void loadClasses() {
-		// TODO if a declaration (base) type is derived, get the correct superclass
-		classes.clear();
-		thingClass = new XSOntClass(this, "Thing", XS_THING_URI, getTechnologyAdapter());
-		addClass(thingClass);
-
-
-		for (XSComplexType complexType : fetcher.getComplexTypes()) {
-				XSOntClass xsClass = loadClass(complexType);
-				xsClass.addToSuperClasses(getRootConcept());
-		}
-		
-		for (XSElementDecl element : fetcher.getElementDecls()) {
-			if (mapsToClass(element)) {
-				XSOntClass xsClass = loadClass(element);
-				try {
-					XSOntClass superClass = classes.get(fetcher.getUri(element.getType()));
-					/* TODO : yet does this have a sense for XML? */
-					// xsClass.addToSuperClasses(getRootConcept());
-					xsClass.addToSuperClasses(superClass);
-				} catch (Exception e) {
-					logger.info("XSOntology: unable to set superclass for "+ element.getName());
-				}
-			}
-		}
-	}
-
-	private XSDDataType computeDataType(XSSimpleType simpleType) {
-		XSDDataType returned = dataTypes.get(simpleType);
-		if (returned == null) {
-			returned = new XSDDataType(simpleType, this, getTechnologyAdapter());
-			dataTypes.put(simpleType, returned);
-		}
-		return returned;
-	}
-
-	private void addDomainIfPossible(XSOntProperty property, String conceptUri) {
-		String ownerUri = fetcher.getOwnerURI(conceptUri);
-		if (ownerUri != null) {
-			XSOntClass owner = getClass(ownerUri);
-			if (owner != null) {
-				property.newDomainFound(owner);
-				owner.addPropertyTakingMyselfAsDomain(property);
-			}
-		}
-	}
-
-	private XSOntDataProperty createDataProperty(XSDeclaration declaration) {
-		String name = declaration.getName();
-		String uri = fetcher.getUri(declaration);
-		XSOntDataProperty xsDataProperty = new XSOntDataProperty(this, name, uri, getTechnologyAdapter());
-		dataProperties.put(uri, xsDataProperty);
-		addDomainIfPossible(xsDataProperty, uri);
-		return xsDataProperty;
-	}
-
-	private void loadDataProperties() {
-		dataProperties.clear();
-		/*
-		for (XSSimpleType simpleType : fetcher.getSimpleTypes()) {
-			XSOntDataProperty xsDataProperty = loadDataProperty(simpleType);
-			xsDataProperty.setDataType(computeDataType(simpleType));
-		}
-		 */
-/*S
-		for (XSComplexType complexType : fetcher.getComplexTypes()) {
-			if (complexType.isLocal()){
-				// TODO Manage Local Types
-				XSElementDecl ownerElem = complexType.getScope();
-				XSOntClass xsClass = loadClass(ownerElem);
-				xsClass.addToSuperClasses(getRootConcept());
-			}
-		}
-*/
-
-		for (XSElementDecl element : fetcher.getElementDecls()) {
-			if (mapsToClass(element) == false) {
-				XSOntDataProperty xsDataProperty = createDataProperty(element);
-				xsDataProperty.setDataType(computeDataType(element.getType().asSimpleType()));
-			}
-		}
-
-		for (XSAttributeDecl attribute : fetcher.getAttributeDecls()) {
-			XSOntDataProperty xsDataProperty = createDataProperty(attribute);
-			xsDataProperty.setIsFromAttribute(true);
-			xsDataProperty.setDataType(computeDataType(attribute.getType()));
-		}
-
-	}
-
-	private XSOntObjectProperty createProperty(XSDeclaration declaration) {
-		String name = declaration.getName();
-		String uri = fetcher.getNamespace(declaration) + "#" + name;
-		XSOntObjectProperty property = new XSOntObjectProperty(this, name, uri, getTechnologyAdapter());
-		objectProperties.put(property.getURI(), property);
-		return property;
-	}
-
-	private void loadObjectProperties() {
-		objectProperties.clear();	
-
-		for (XSElementDecl element : fetcher.getElementDecls()) {
-			if (mapsToClass(element)) {
-				XSOntClass c = getClass(fetcher.getUri(element));
-				XSOntObjectProperty cHasChild = createProperty(element);
-				cHasChild.newRangeFound(c);
-				addDomainIfPossible(cHasChild, c.getURI());
-			}
-		}
-
-	}
-
-	private void loadIndividuals() {
-		individuals.clear();
-	}
-
-	private void clearAllRangeAndDomain() {
-		for (XSOntClass o : classes.values()) {
-			o.clearPropertiesTakingMyselfAsRangeOrDomain();
-		}
-		for (XSOntDataProperty o : dataProperties.values()) {
-			o.clearPropertiesTakingMyselfAsRangeOrDomain();
-			o.resetDomain();
-		}
-		for (XSOntObjectProperty o : objectProperties.values()) {
-			o.clearPropertiesTakingMyselfAsRangeOrDomain();
-			o.resetDomain();
-			o.resetRange();
-			o.clearSuperProperties();
-		}
-		for (XSOntIndividual o : individuals.values()) {
-			o.clearPropertiesTakingMyselfAsRangeOrDomain();
-		}
-	}
-
-	public boolean load() {
-		if (isLoading() == true) {
-			return false;
-		}
-		isLoading = true;
-		isLoaded = false;
-		schemaSet = XSOMUtils.read(originalFile);
-		if (schemaSet != null) {
-			fetcher = new XSDeclarationsFetcher();
-			fetcher.fetch(schemaSet);
-			clearAllRangeAndDomain(); 
-			loadClasses();
-			loadDataProperties();
-			loadObjectProperties();
-			loadIndividuals();
-			isLoaded = true;
-		}
-		isLoading = false;
-		return isLoaded;
-	}
-
-	public boolean loadWhenUnloaded() {
-		if (isLoaded() == false) {
-			return load();
-		}
-		return false;
-	}
-
-	public boolean isLoaded() {
-		return isLoaded;
-	}
-
-	public boolean isLoading() {
-		return isLoading;
-	}
-
-	private Set<XSOntIndividual> getRootElements() {
-		Set<XSOntIndividual> result = new HashSet<XSOntIndividual>();
-		for (XSOntIndividual individual : this.getIndividuals()) {
-			if (individual.getParent() == null) {
-				result.add(individual);
-			}
-		}
-		return result;
-	}
-
-	public Document toXML() throws ParserConfigurationException {
-		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-		Document doc = docBuilder.newDocument();
-
-		for (XSOntIndividual individual : getRootElements()) {
-			doc.appendChild(individual.toXML(doc));
-		}
-
-		return doc;
 	}
 
 	@Override
@@ -374,27 +147,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		return new ArrayList<XSOntClass>(result.values());
 	}
 
-	@Override
-	public List<XSOntDataProperty> getDataProperties() {
-		return new ArrayList<XSOntDataProperty>(dataProperties.values());
-	}
-
-	@Override
-	public List<XSOntDataProperty> getAccessibleDataProperties() {
-		Map<String, XSOntDataProperty> result = new HashMap<String, XSOntDataProperty>();
-		for (XSOntology o : getAllImportedOntologies()) {
-			for (XSOntDataProperty c : o.getDataProperties()) {
-				result.put(c.getURI(), c);
-			}
-		}
-		return new ArrayList<XSOntDataProperty>(result.values());
-	}
-
-	@Override
-	public XSOntDataProperty getDataProperty(String propertyURI) {
-		return dataProperties.get(propertyURI);
-	}
-
+	
 	@Override
 	public List<XSOntObjectProperty> getObjectProperties() {
 		return new ArrayList<XSOntObjectProperty>(objectProperties.values());
@@ -408,7 +161,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	@Override
 	public List<XSOntObjectProperty> getAccessibleObjectProperties() {
 		Map<String, XSOntObjectProperty> result = new HashMap<String, XSOntObjectProperty>();
-		for (XSOntology o : getAllImportedOntologies()) {
+		for (XSOntology o : getImportedOntologies()) {
 			for (XSOntObjectProperty op : o.getObjectProperties()) {
 				result.put(op.getURI(), op);
 			}
@@ -450,7 +203,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	@Override
 	public List<XSOntIndividual> getAccessibleIndividuals() {
 		Map<String, XSOntIndividual> result = new HashMap<String, XSOntIndividual>();
-		for (XSOntology o : getAllImportedOntologies()) {
+		for (XSOntology o : getImportedOntologies()) {
 			for (XSOntIndividual i : o.getIndividuals()) {
 				result.put(i.getURI(), i);
 			}
@@ -510,12 +263,17 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		return result;
 	}
 
-	public XSOntClass createOntologyClass(String name) throws DuplicateURIException {
-		throw new UnsupportedOperationException();
+	public XSOntClass createOntologyClass(String name, String uri) throws DuplicateURIException {
+		XSOntClass xsClass = new XSOntClass(this, name, uri, getTechnologyAdapter());
+		xsClass.addToSuperClasses(getRootConcept());
+		addClass(xsClass);
+		return xsClass;
 	}
 
-	public XSOntClass createOntologyClass(String name, XSOntClass superClass) throws DuplicateURIException {
-		throw new UnsupportedOperationException();
+	public XSOntClass createOntologyClass(String name, String uri, XSOntClass superClass) throws DuplicateURIException {
+		XSOntClass xsClass = createOntologyClass(name,uri);
+		xsClass.addToSuperClasses(getRootConcept());
+		return xsClass;
 	}
 
 	public XSOntDataProperty createDataProperty(String name, XSOntDataProperty superProperty, XSOntClass domain, XSDDataType dataType)
@@ -541,6 +299,17 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		return getOntologyObject(objectURI);
 	}
 
+
+	private Set<XSOntIndividual> getRootElements() {
+		Set<XSOntIndividual> result = new HashSet<XSOntIndividual>();
+		for (XSOntIndividual individual : this.getIndividuals()) {
+			if (individual.getParent() == null) {
+				result.add(individual);
+			}
+		}
+		return result;
+	}
+	
 	@Override
 	public List<IFlexoOntologyContainer> getSubContainers() {
 		// TODO implement this
@@ -616,4 +385,37 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		return result;
 	}
 
+	
+	public void clearAllRangeAndDomain() {
+		for (XSOntClass o : classes.values()) {
+			o.clearPropertiesTakingMyselfAsRangeOrDomain();
+		}
+		for (XSOntDataProperty o : dataProperties.values()) {
+			o.clearPropertiesTakingMyselfAsRangeOrDomain();
+			o.resetDomain();
+		}
+		for (XSOntObjectProperty o : objectProperties.values()) {
+			o.clearPropertiesTakingMyselfAsRangeOrDomain();
+			o.resetDomain();
+			o.resetRange();
+			o.clearSuperProperties();
+		}
+		for (XSOntIndividual o : individuals.values()) {
+			o.clearPropertiesTakingMyselfAsRangeOrDomain();
+		}
+	}
+	
+	public Document toXML() throws ParserConfigurationException {
+		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+		Document doc = docBuilder.newDocument();
+
+		for (XSOntIndividual individual : getRootElements()) {
+			doc.appendChild(individual.toXML(doc));
+		}
+
+		return doc;
+	}
+
+	
 }

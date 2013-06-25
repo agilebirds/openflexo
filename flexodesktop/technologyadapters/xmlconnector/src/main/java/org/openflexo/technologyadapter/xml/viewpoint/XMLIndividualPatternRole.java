@@ -34,6 +34,8 @@ import org.openflexo.technologyadapter.xml.model.XMLIndividual;
  */
 public class XMLIndividualPatternRole extends PatternRole<XMLIndividual> {
 
+	private String individualURI;
+	
 	public XMLIndividualPatternRole(VirtualModelBuilder builder) {
 		super(builder);
 	}
@@ -71,8 +73,15 @@ public class XMLIndividualPatternRole extends PatternRole<XMLIndividual> {
 	@Override
 	public ActorReference<XMLIndividual> makeActorReference(
 			XMLIndividual object, EditionPatternInstance epi) {
-		// TODO Auto-generated method stub
-		return null;
+		return new XMLActorReference(object, this, epi);
 	}
 
+	public String _geIndividualURI() {
+		return individualURI;
+	}
+
+	public void _setIndividualURI(String conceptURI) {
+		this.individualURI = conceptURI;
+	}
+	
 }

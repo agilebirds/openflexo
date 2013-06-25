@@ -27,8 +27,8 @@ import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
-import org.openflexo.technologyadapter.xml.model.XMLTechnologyContextManager;
 import org.openflexo.technologyadapter.xml.model.XMLModel;
+import org.openflexo.technologyadapter.xml.model.XMLTechnologyContextManager;
 
 @ModelEntity
 @ImplementationClass(XMLFileResourceImpl.class)

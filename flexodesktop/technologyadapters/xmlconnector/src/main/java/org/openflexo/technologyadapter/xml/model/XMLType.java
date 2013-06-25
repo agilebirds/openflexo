@@ -20,15 +20,13 @@
  */
 package org.openflexo.technologyadapter.xml.model;
 
+import java.lang.reflect.Type;
+
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.Attributes;
 
 
-public class XMLType extends FlexoObject implements IFlexoOntologyObject {
+public class XMLType extends XMLObject implements Type {
 
 	
 	private XMLModel containerModel;
@@ -36,7 +34,9 @@ public class XMLType extends FlexoObject implements IFlexoOntologyObject {
 	/* Properties */
 	
 	private String Name;
-	
+	private String NameSpaceURI;
+	private String NSPrefix;
+
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XMLType.class
 			.getPackage().getName());
@@ -48,17 +48,32 @@ public class XMLType extends FlexoObject implements IFlexoOntologyObject {
 	 * @param adapter
 	 */
 
-	public XMLType(String qName, XMLModel model) {
+	public XMLType(String aName, XMLModel model) {
 		super();
 		this.containerModel = model;
 		try {
-			this.setName(qName);
+			this.setName(aName);
+			this.NameSpaceURI = null;
+			this.NSPrefix = null;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
+
+	public XMLType(String nsURI, String lName, String qName, XMLModel model) {
+		super();
+		this.containerModel = model;
+		try {
+			this.setName(lName);
+			this.setNameSpaceURI(nsURI);
+			NSPrefix = qName.replaceAll(":"+lName, "");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 
 	public void setName(String name) throws Exception {
@@ -68,30 +83,41 @@ public class XMLType extends FlexoObject implements IFlexoOntologyObject {
 
 	@Override
 	public String getFullyQualifiedName() {
-		// TODO Auto-generated method stub
-		return Name;
+		if (NameSpaceURI != null && !NameSpaceURI.isEmpty())	return NSPrefix +":"+ Name;
+		else return Name;
 	}
 
 
-	@Override
 	public String getName() {
 		return Name;
 	}
 
 
-	@Override
-	public String getURI() {
-		// TODO Auto-generated method stub
-		return Name;
+	public String getNameSpaceURI() {
+		return NameSpaceURI;
+	}
+
+	public void setNameSpaceURI(String nameSpaceURI) {
+		NameSpaceURI = nameSpaceURI;
 	}
 
 
 
-	@Override
+	public String getURI() {
+		if (NameSpaceURI != null) {
+		return NameSpaceURI + "#" + Name;
+		}
+		else {
+			return Name;
+		}
+	}
+
+
+
 	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
-		// TODO Auto-generated method stub
 		return containerModel.getTechnologyAdapter();
 	}
+
 
 
 }

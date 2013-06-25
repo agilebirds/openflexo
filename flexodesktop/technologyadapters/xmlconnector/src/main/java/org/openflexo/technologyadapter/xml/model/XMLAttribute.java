@@ -1,224 +1,116 @@
-/**
- * 
+
+/*
+ * (c) Copyright 2010-2012 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
+ *
+ * This file is part of OpenFlexo.
+ *
+ * OpenFlexo is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * OpenFlexo is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
+ *
  */
+
 package org.openflexo.technologyadapter.xml.model;
 
-import java.util.List;
+import java.lang.reflect.Type;
 
-import org.openflexo.foundation.ontology.IFlexoOntology;
-import org.openflexo.foundation.ontology.IFlexoOntologyAnnotation;
-import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
-import org.openflexo.foundation.ontology.IFlexoOntologyConceptContainer;
-import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
-import org.openflexo.foundation.ontology.IFlexoOntologyFeature;
-import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
-import org.openflexo.foundation.ontology.IFlexoOntologyObject;
-import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.FlexoObject;
+
 
 /**
+ * 
+ * Represents an XML Attribute in an XMLModel
+ * 
  * @author xtof
  *
  */
-public class XMLAttribute implements IFlexoOntologyStructuralProperty {
-
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyFeature#getReferencingFeatureAssociations()
-	 */
-	@Override
-	public List<? extends IFlexoOntologyFeatureAssociation> getReferencingFeatureAssociations() {
-		// TODO Auto-generated method stub
-		return null;
+public class XMLAttribute extends FlexoObject {
+	
+	// Properties
+	private String name;
+	private Object value;
+	private Type myType;
+	private XMLIndividual container;
+	
+	
+	public XMLAttribute (String aName, Type aType, String aValue){
+		super();
+		name = aName;
+		setType(aType);
+		value = aValue;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getOntology()
-	 */
-	@Override
-	public IFlexoOntology getOntology() {
-		// TODO Auto-generated method stub
-		return null;
+	public XMLAttribute (String aName){
+		super();
+		name = aName;
 	}
-
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getAnnotations()
-	 */
-	@Override
-	public List<? extends IFlexoOntologyAnnotation> getAnnotations() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getContainer()
-	 */
-	@Override
-	public IFlexoOntologyConceptContainer getContainer() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getStructuralFeatureAssociations()
-	 */
-	@Override
-	public List<? extends IFlexoOntologyFeatureAssociation> getStructuralFeatureAssociations() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getBehaviouralFeatureAssociations()
-	 */
-	@Override
-	public List<? extends IFlexoOntologyFeatureAssociation> getBehaviouralFeatureAssociations() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#isSuperConceptOf(org.openflexo.foundation.ontology.IFlexoOntologyConcept)
-	 */
-	@Override
-	public boolean isSuperConceptOf(IFlexoOntologyConcept concept) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#isSubConceptOf(org.openflexo.foundation.ontology.IFlexoOntologyConcept)
-	 */
-	@Override
-	public boolean isSubConceptOf(IFlexoOntologyConcept concept) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#accept(org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor)
-	 */
-	@Override
-	public <T> T accept(IFlexoOntologyConceptVisitor<T> visitor) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#equalsToConcept(org.openflexo.foundation.ontology.IFlexoOntologyConcept)
-	 */
-	@Override
-	public boolean equalsToConcept(IFlexoOntologyConcept concept) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getPropertiesTakingMySelfAsRange()
-	 */
-	@Override
-	public List<? extends IFlexoOntologyStructuralProperty> getPropertiesTakingMySelfAsRange() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyConcept#getPropertiesTakingMySelfAsDomain()
-	 */
-	@Override
-	public List<? extends IFlexoOntologyFeature> getPropertiesTakingMySelfAsDomain() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#getName()
-	 */
-	@Override
+	
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return name;
 	}
+	
+	public void setName(String aName) {
+		name = aName;
+	}
+	
 
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#setName(java.lang.String)
+	/**
+	 * @return the value
 	 */
-	@Override
-	public void setName(String name) throws Exception {
-		// TODO Auto-generated method stub
-
+	public Object getValue() {
+		return value;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#getURI()
+	/**
+	 * @param value the value to set
 	 */
-	@Override
-	public String getURI() {
-		// TODO Auto-generated method stub
-		return null;
+	public void setValue(Object aValue) {
+		this.value = aValue;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#getDescription()
+	/**
+	 * @return the myType
 	 */
-	@Override
-	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+	public Type getType() {
+		return myType;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#getTechnologyAdapter()
+	/**
+	 * @param myType the myType to set
 	 */
-	@Override
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
-		// TODO Auto-generated method stub
-		return null;
+	public void setType(Type myType) {
+		this.myType = myType;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty#getDomain()
+	/**
+	 * @return the containedIn
 	 */
-	@Override
-	public IFlexoOntologyConcept getDomain() {
-		// TODO Auto-generated method stub
-		return null;
+	public XMLIndividual getContainer() {
+		return container;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty#getRange()
+	/**
+	 * @param containedIn the containedIn to set
 	 */
-	@Override
-	public IFlexoOntologyObject getRange() {
-		// TODO Auto-generated method stub
-		return null;
+	public void setContainer(XMLIndividual containedIn) {
+		this.container = containedIn;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty#isAnnotationProperty()
-	 */
 	@Override
-	public boolean isAnnotationProperty() {
-		// TODO Auto-generated method stub
-		return false;
+	public String getFullyQualifiedName() {
+		return name;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty#getSuperProperties()
-	 */
-	@Override
-	public List<? extends IFlexoOntologyStructuralProperty> getSuperProperties() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty#getSubProperties(org.openflexo.foundation.ontology.IFlexoOntology)
-	 */
-	@Override
-	public List<? extends IFlexoOntologyStructuralProperty> getSubProperties(
-			IFlexoOntology context) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 }

@@ -150,13 +150,19 @@ public class XMLAdapterController extends TechnologyAdapterController<XMLTechnol
 		return super.getIconForEditionAction(editionActionClass);
 	}
 
-	public XMLModelBrowserModel makeOntologyBrowserModel(IFlexoOntology context) {
+	public XMLModelBrowserModel makeOntologyBrowserModel(XMLModel context) {
 		if (context instanceof XMLModel) {
 			return new XMLModelBrowserModel((XMLModel) context);
 		} else {
 			logger.warning("Unexpected " + context);
 			return null;
 		}
+	}
+
+	@Override
+	public OntologyBrowserModel makeOntologyBrowserModel(IFlexoOntology context) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
