@@ -16,4 +16,9 @@ public class ExcelSheet extends ExcelObject {
 		this.sheet = sheet;
 	}
 
+	@Override
+	public String getName() {
+		return sheet.getSheetName();
+	}
+
 }

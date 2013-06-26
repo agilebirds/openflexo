@@ -100,8 +100,7 @@ public class ExcelTechnologyAdapter extends TechnologyAdapter {
 
 	@Override
 	public TechnologyAdapterBindingFactory getTechnologyAdapterBindingFactory() {
-		// TODO Auto-generated method stub
-		return null;
+		return BINDING_FACTORY;
 	}
 
 	/**
@@ -180,7 +179,7 @@ public class ExcelTechnologyAdapter extends TechnologyAdapter {
 	 * @return
 	 */
 	public boolean isValidWorkbookFile(File candidateFile) {
-		return candidateFile.getName().endsWith(".xlsx");
+		return (candidateFile.getName().endsWith(".xlsx"))||(candidateFile.getName().endsWith(".xls"));
 	}
 
 	@Override

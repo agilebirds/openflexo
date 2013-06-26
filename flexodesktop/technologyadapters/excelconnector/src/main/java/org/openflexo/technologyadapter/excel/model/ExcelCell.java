@@ -16,4 +16,10 @@ public class ExcelCell extends ExcelObject {
 		this.cell = cell;
 	}
 
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

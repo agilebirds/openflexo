@@ -20,10 +20,16 @@
 package org.openflexo.technologyadapter.excel.rm;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.poi.hssf.model.Workbook;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
@@ -33,8 +39,10 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
+import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyContextManager;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
+import org.openflexo.technologyadapter.excel.model.io.BasicExcelModelConverter;
 import org.openflexo.technologyadapter.excel.model.semantics.ExcelModel;
 import org.openflexo.toolbox.IProgress;
 
@@ -121,7 +129,20 @@ public abstract class ExcelWorkbookResourceImpl extends FlexoFileResourceImpl<Ex
 	@Override
 	public ExcelWorkbook loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
 			FileNotFoundException, FlexoException {
-		ExcelWorkbook resourceData = null; // TODO: insert loading code here
+		
+		ExcelWorkbook resourceData = null;
+		 // TODO: insert loading code here
+		
+		try {
+			FileInputStream fis = new FileInputStream(getFile());
+			HSSFWorkbook wbOpenned = new HSSFWorkbook(fis);
+			//XSSFWorkbook wbOpenned = new XSSFWorkbook(fis);
+			BasicExcelModelConverter converter = new BasicExcelModelConverter();
+			resourceData= converter.convertExcelWorkbook(wbOpenned,(ExcelTechnologyAdapter) getTechnologyAdapter());
+			fis.close(); 
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
 		setResourceData(resourceData);
 		return resourceData;
 	}

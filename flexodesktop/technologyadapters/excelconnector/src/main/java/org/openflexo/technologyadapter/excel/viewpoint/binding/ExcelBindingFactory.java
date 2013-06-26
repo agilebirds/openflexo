@@ -32,13 +32,29 @@ public final class ExcelBindingFactory extends TechnologyAdapterBindingFactory {
 
 	@Override
 	public boolean handleType(TechnologySpecificCustomType technologySpecificType) {
+		if ((technologySpecificType instanceof ExcelSheetType)) {
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public List<? extends SimplePathElement> getAccessibleSimplePathElements(BindingPathElement parent) {
-		// TODO
-		return super.getAccessibleSimplePathElements(parent);
+		/*if (object instanceof EMFAttributeAssociation) {
+			if (((EMFAttributeAssociation) object).getFeature() instanceof EMFAttributeDataProperty) {
+				return new AttributeDataPropertyFeatureAssociationPathElement(parent, (EMFAttributeAssociation) object,
+						(EMFAttributeDataProperty) ((EMFAttributeAssociation) object).getFeature());
+			} else if (((EMFAttributeAssociation) object).getFeature() instanceof EMFAttributeObjectProperty) {
+				return new AttributeObjectPropertyFeatureAssociationPathElement(parent, (EMFAttributeAssociation) object,
+						(EMFAttributeObjectProperty) ((EMFAttributeAssociation) object).getFeature());
+			}
+		} else if (object instanceof EMFReferenceAssociation
+				&& ((EMFReferenceAssociation) object).getFeature() instanceof EMFReferenceObjectProperty) {
+			return new ObjectReferenceFeatureAssociationPathElement(parent, (EMFReferenceAssociation) object,
+					(EMFReferenceObjectProperty) ((EMFReferenceAssociation) object).getFeature());
+		}
+		logger.warning("Unexpected " + object);*/
+		return null;
 	}
 
 	@Override

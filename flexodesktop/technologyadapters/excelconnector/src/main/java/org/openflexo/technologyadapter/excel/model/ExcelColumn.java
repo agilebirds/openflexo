@@ -11,4 +11,10 @@ public class ExcelColumn extends ExcelObject {
 		this.colNumber = colNumber;
 	}
 
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
