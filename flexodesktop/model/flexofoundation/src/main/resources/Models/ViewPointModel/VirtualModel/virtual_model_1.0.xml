@@ -42,6 +42,9 @@
 
 	<entity name="org.openflexo.technologyadapter.emf.EMFModelSlot" xmlTag="EMFModelSlot">
 	</entity>
+	
+	<entity name="org.openflexo.technologyadapter.excel.BasicExcelModelSlot" xmlTag="BasicExcelModelSlot">
+	</entity>
 
 	<entity name="org.openflexo.technologyadapter.owl.OWLModelSlot" xmlTag="OWLModelSlot">
 	</entity>	
@@ -230,6 +233,12 @@
 	</entity>
 
 	<entity name="org.openflexo.technologyadapter.xsd.viewpoint.XSIndividualPatternRole" xmlTag="XSIndividualPatternRole">
+	</entity>
+	
+	<entity name="org.openflexo.technologyadapter.excel.viewpoint.ExcelWorkbookPatternRole" xmlTag="ExcelWorkbookPatternRole">
+	</entity>
+	
+	<entity name="org.openflexo.technologyadapter.excel.viewpoint.ExcelSheetPatternRole" xmlTag="ExcelSheetPatternRole">
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.DataPropertyPatternRole" abstract="yes">
@@ -530,6 +539,14 @@
 		xmlTag="AddEMFObjectIndividual">
 	</entity>
 	
+	<entity name="org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelWorkbook"
+		xmlTag="AddExcelWorkbook">
+	</entity>
+	
+	<entity name="org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelSheet"
+		xmlTag="AddExcelSheet">
+	</entity>
+	
 	<entity name="org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSIndividual"
 		xmlTag="AddXSIndividual">
 	</entity>
@@ -669,6 +686,9 @@
 	</entity>
 
 	<entity name="org.openflexo.technologyadapter.emf.viewpoint.editionaction.SelectEMFObjectIndividual" xmlTag="SelectEMFObjectIndividual">
+	</entity>
+	
+	<entity name="org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelSheet" xmlTag="SelectExcelSheet">
 	</entity>
 	
 	<entity
