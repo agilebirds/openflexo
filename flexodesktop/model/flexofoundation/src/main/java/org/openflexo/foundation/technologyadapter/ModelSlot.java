@@ -29,15 +29,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.BindingVariable;
-import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
-import org.openflexo.foundation.resource.FlexoResource;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.ModelSlotInstance;
-import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -48,49 +43,47 @@ import org.openflexo.foundation.viewpoint.NamedViewPointObject;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.PrimitivePatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
-import org.openflexo.toolbox.StringUtils;
 
 /**
- * A model slot is a named object providing symbolic access to a model conform to a meta-model (see {@link FlexoMetaModel}). <br>
+ * A model slot is a named object providing access to a particular data encoded in a given technology A model slot should be seen as a
+ * connector.<br>
+ * A model slot formalize a contract for accessing to a data
+ * 
  * It is defined at viewpoint level. <br>
- * A view (viewpoint instance) binds used slots to their models within the project.
+ * A {@link ModelSlotInstance} binds used slots to some data within the project.
  * 
- * @param <M>
- *            Type of {@link FlexoModel} handled by this ModelSlot
- * @param <MM>
- *            {@link FlexoMetaModel} which model handled by this ModelSlot is conform to
+ * @param <RD>
+ *            Type of resource data handled by this ModelSlot
  * 
- * @author Luka Le Roux, Sylvain Guerin
+ * @author Sylvain Guerin
  * @see org.openflexo.foundation.viewpoint.ViewPoint
  * @see org.openflexo.foundation.view.View
+ * @see org.openflexo.foundation.view.ModelSlotInstance
  * */
-public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends NamedViewPointObject {
+public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPointObject {
 
 	private static final Logger logger = Logger.getLogger(ModelSlot.class.getPackage().getName());
 
 	private boolean isRequired;
 	private boolean isReadOnly;
-	private FlexoMetaModelResource<M, MM> metaModelResource;
-	private String metaModelURI;
-	private TechnologyAdapter<M, MM> technologyAdapter;
+	private TechnologyAdapter technologyAdapter;
 	private ViewPoint viewPoint;
 	private VirtualModel<?> virtualModel;
 
-	private List<Class<? extends PatternRole>> availablePatternRoleTypes;
-	private List<Class<? extends EditionAction>> availableEditionActionTypes;
-	private List<Class<? extends EditionAction>> availableFetchRequestActionTypes;
+	private List<Class<? extends PatternRole<?>>> availablePatternRoleTypes;
+	private List<Class<? extends EditionAction<?, ?>>> availableEditionActionTypes;
+	private List<Class<? extends EditionAction<?, ?>>> availableFetchRequestActionTypes;
 
-	protected ModelSlot(ViewPoint viewPoint, TechnologyAdapter<M, MM> technologyAdapter) {
+	/*protected ModelSlot(ViewPoint viewPoint, TechnologyAdapter technologyAdapter) {
 		super((VirtualModel.VirtualModelBuilder) null);
 		this.viewPoint = viewPoint;
 		this.technologyAdapter = technologyAdapter;
-	}
+	}*/
 
-	protected ModelSlot(VirtualModel<?> virtualModel, TechnologyAdapter<M, MM> technologyAdapter) {
+	protected ModelSlot(VirtualModel<?> virtualModel, TechnologyAdapter technologyAdapter) {
 		super((VirtualModel.VirtualModelBuilder) null);
 		this.virtualModel = virtualModel;
 		this.viewPoint = virtualModel.getViewPoint();
@@ -110,7 +103,7 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 		}
 	}
 
-	public ModelSlot(ViewPointBuilder builder) {
+	/*public ModelSlot(ViewPointBuilder builder) {
 		super(builder);
 
 		if (builder != null) {
@@ -121,7 +114,7 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 						.getTechnologyAdapter(getTechnologyAdapterClass());
 			}
 		}
-	}
+	}*/
 
 	@Override
 	public String getURI() {
@@ -186,23 +179,6 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 
 	public abstract Type getType();
 
-	public final FlexoResource<M> createProjectSpecificEmptyModel(View view, String filename, String modelUri,
-			FlexoResource<MM> metaModelResource) {
-		return getTechnologyAdapter().createEmptyModel(view.getProject(), filename, modelUri, metaModelResource,
-				technologyAdapter.getTechnologyContextManager());
-	};
-
-	public final FlexoResource<M> createSharedEmptyModel(FlexoResourceCenter resourceCenter, String relativePath, String filename,
-			String modelUri, FlexoResource<MM> metaModelResource) {
-		if (resourceCenter instanceof FileSystemBasedResourceCenter) {
-			return getTechnologyAdapter().createEmptyModel((FileSystemBasedResourceCenter) resourceCenter, relativePath, filename,
-					modelUri, metaModelResource, technologyAdapter.getTechnologyContextManager());
-		} else {
-			logger.warning("Cannot create shared model in a non file-system-based resource center");
-			return null;
-		}
-	};
-
 	/**
 	 * Instantiate new action of required type<br>
 	 * Default implementation. Override when required.
@@ -210,7 +186,7 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	 * @param actionClass
 	 * @return
 	 */
-	public <A extends EditionAction<M, MM, ?>> A createAction(Class<A> actionClass) {
+	public <A extends EditionAction<?, ?>> A createAction(Class<A> actionClass) {
 		Class[] constructorParams = new Class[1];
 		constructorParams[0] = VirtualModel.VirtualModelBuilder.class;
 		try {
@@ -243,35 +219,6 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 		}
 	}
 
-	public FlexoMetaModelResource<M, MM> getMetaModelResource() {
-		if (metaModelResource == null && StringUtils.isNotEmpty(metaModelURI) && getInformationSpace() != null) {
-			metaModelResource = (FlexoMetaModelResource<M, MM>) getInformationSpace().getMetaModelWithURI(metaModelURI);
-			logger.info("Looked-up " + metaModelResource);
-		}
-		// Temporary hack to lookup parent slot (to be refactored)
-		if (metaModelResource == null && getVirtualModel() != null && getViewPoint() != null) {
-			if (getViewPoint().getModelSlot(getName()) != null) {
-				return (FlexoMetaModelResource<M, MM>) getViewPoint().getModelSlot(getName()).getMetaModelResource();
-			}
-		}
-		return metaModelResource;
-	}
-
-	public void setMetaModelResource(FlexoMetaModelResource<M, MM> metaModelResource) {
-		this.metaModelResource = metaModelResource;
-	}
-
-	public String getMetaModelURI() {
-		if (metaModelResource != null) {
-			return metaModelResource.getURI();
-		}
-		return metaModelURI;
-	}
-
-	public void setMetaModelURI(String metaModelURI) {
-		this.metaModelURI = metaModelURI;
-	}
-
 	public boolean getIsReadOnly() {
 		return isReadOnly;
 	}
@@ -296,60 +243,31 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	@Override
 	public String getFMLRepresentation(FMLRepresentationContext context) {
 		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
-		out.append("ModelSlot " + getName() + " type=" + getClass().getSimpleName() + " conformTo=\"" + getMetaModelURI() + "\""
-				+ " required=" + getIsRequired() + " readOnly=" + getIsReadOnly() + ";", context);
+		out.append("ModelSlot " + getName() + " type=" + getClass().getSimpleName() + "\"" + " required=" + getIsRequired() + " readOnly="
+				+ getIsReadOnly() + ";", context);
 		return out.toString();
 	}
 
-	public final TechnologyAdapter<M, MM> getTechnologyAdapter() {
+	public TechnologyAdapter getTechnologyAdapter() {
 		return technologyAdapter;
 	}
 
-	public abstract Class<? extends TechnologyAdapter<M, MM>> getTechnologyAdapterClass();
+	public abstract Class<? extends TechnologyAdapter> getTechnologyAdapterClass();
 
-	@Deprecated
-	public abstract BindingVariable makePatternRolePathElement(PatternRole<?> pr, Bindable container);
-
-	/*public static BindingVariable<?> makePatternRolePathElement2(PatternRole pr, Bindable container) {
-		if (pr instanceof OntologicObjectPatternRole) {
-			if (pr instanceof ClassPatternRole) {
-				return new OntologicClassPatternRolePathElement((ClassPatternRole) pr, container);
-			} else if (pr instanceof IndividualPatternRole) {
-				return new OntologicIndividualPatternRolePathElement((IndividualPatternRole) pr, container);
-			} else if (pr instanceof ObjectPropertyPatternRole) {
-				return new OntologicObjectPropertyPatternRolePathElement((ObjectPropertyPatternRole) pr, container);
-			} else if (pr instanceof DataPropertyPatternRole) {
-				return new OntologicDataPropertyPatternRolePathElement((DataPropertyPatternRole) pr, container);
-			} else if (pr instanceof PropertyPatternRole) {
-				return new OntologicPropertyPatternRolePathElement((PropertyPatternRole) pr, container);
-			} else if (pr instanceof DataPropertyPatternRole) {
-				return new OntologicDataPropertyPatternRolePathElement((DataPropertyPatternRole) pr, container);
-			} else {
-				logger.warning("Unexpected " + pr);
-				return null;
-			}
-		} else if (pr instanceof EditionPatternPatternRole) {
-			return new EditionPatternPathElement(pr.getPatternRoleName(), ((EditionPatternPatternRole) pr).getEditionPatternType(),
-					container);
-		} else {
-			return null;
-		}
-	}*/
-
-	public List<Class<? extends PatternRole>> getAvailablePatternRoleTypes() {
+	public List<Class<? extends PatternRole<?>>> getAvailablePatternRoleTypes() {
 		if (availablePatternRoleTypes == null) {
 			availablePatternRoleTypes = computeAvailablePatternRoleTypes();
 		}
 		return availablePatternRoleTypes;
 	}
 
-	private List<Class<? extends PatternRole>> computeAvailablePatternRoleTypes() {
-		availablePatternRoleTypes = new ArrayList<Class<? extends PatternRole>>();
+	private List<Class<? extends PatternRole<?>>> computeAvailablePatternRoleTypes() {
+		availablePatternRoleTypes = new ArrayList<Class<? extends PatternRole<?>>>();
 		Class<?> cl = getClass();
 		if (cl.isAnnotationPresent(DeclarePatternRoles.class)) {
 			DeclarePatternRoles allPatternRoles = cl.getAnnotation(DeclarePatternRoles.class);
 			for (DeclarePatternRole patternRoleDeclaration : allPatternRoles.value()) {
-				availablePatternRoleTypes.add(patternRoleDeclaration.value());
+				availablePatternRoleTypes.add(patternRoleDeclaration.patternRoleClass());
 			}
 		}
 		// availablePatternRoleTypes.add(EditionPatternPatternRole.class);
@@ -358,39 +276,39 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 		return availablePatternRoleTypes;
 	}
 
-	public List<Class<? extends EditionAction>> getAvailableEditionActionTypes() {
+	public List<Class<? extends EditionAction<?, ?>>> getAvailableEditionActionTypes() {
 		if (availableEditionActionTypes == null) {
 			availableEditionActionTypes = computeAvailableEditionActionTypes();
 		}
 		return availableEditionActionTypes;
 	}
 
-	private List<Class<? extends EditionAction>> computeAvailableEditionActionTypes() {
-		availableEditionActionTypes = new ArrayList<Class<? extends EditionAction>>();
+	private List<Class<? extends EditionAction<?, ?>>> computeAvailableEditionActionTypes() {
+		availableEditionActionTypes = new ArrayList<Class<? extends EditionAction<?, ?>>>();
 		Class<?> cl = getClass();
 		if (cl.isAnnotationPresent(DeclareEditionActions.class)) {
 			DeclareEditionActions allEditionActions = cl.getAnnotation(DeclareEditionActions.class);
 			for (DeclareEditionAction patternRoleDeclaration : allEditionActions.value()) {
-				availableEditionActionTypes.add(patternRoleDeclaration.value());
+				availableEditionActionTypes.add(patternRoleDeclaration.editionActionClass());
 			}
 		}
 		return availableEditionActionTypes;
 	}
 
-	public List<Class<? extends EditionAction>> getAvailableFetchRequestActionTypes() {
+	public List<Class<? extends EditionAction<?, ?>>> getAvailableFetchRequestActionTypes() {
 		if (availableFetchRequestActionTypes == null) {
 			availableFetchRequestActionTypes = computeAvailableFetchRequestActionTypes();
 		}
 		return availableFetchRequestActionTypes;
 	}
 
-	private List<Class<? extends EditionAction>> computeAvailableFetchRequestActionTypes() {
-		availableFetchRequestActionTypes = new ArrayList<Class<? extends EditionAction>>();
+	private List<Class<? extends EditionAction<?, ?>>> computeAvailableFetchRequestActionTypes() {
+		availableFetchRequestActionTypes = new ArrayList<Class<? extends EditionAction<?, ?>>>();
 		Class<?> cl = getClass();
 		if (cl.isAnnotationPresent(DeclareFetchRequests.class)) {
 			DeclareFetchRequests allFetchRequestActions = cl.getAnnotation(DeclareFetchRequests.class);
 			for (DeclareFetchRequest fetchRequestDeclaration : allFetchRequestActions.value()) {
-				availableFetchRequestActionTypes.add(fetchRequestDeclaration.value());
+				availableFetchRequestActionTypes.add(fetchRequestDeclaration.fetchRequestClass());
 			}
 		}
 		return availableFetchRequestActionTypes;
@@ -404,7 +322,7 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	 * @param editionActionClass
 	 * @return
 	 */
-	public abstract <EA extends EditionAction<?, ?, ?>> EA makeEditionAction(Class<EA> editionActionClass);
+	public abstract <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass);
 
 	/**
 	 * Creates and return a new {@link FetchRequest} of supplied class.<br>
@@ -414,9 +332,9 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	 * @param fetchRequestClass
 	 * @return
 	 */
-	public abstract <FR extends FetchRequest<?, ?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass);
+	public abstract <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass);
 
-	public abstract ModelSlotInstanceConfiguration<? extends ModelSlot<M, MM>> createConfiguration(CreateVirtualModelInstance<?> action);
+	public abstract ModelSlotInstanceConfiguration<? extends ModelSlot<RD>, RD> createConfiguration(CreateVirtualModelInstance<?> action);
 
 	/**
 	 * Model Slot is responsible for URI mapping
@@ -430,7 +348,7 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	 * @return URI as String
 	 */
 
-	public abstract String getURIForObject(ModelSlotInstance msInstance, Object o);
+	public abstract String getURIForObject(ModelSlotInstance<? extends ModelSlot<RD>, RD> msInstance, Object o);
 
 	/**
 	 * @param msInstance
@@ -438,7 +356,7 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	 * @return the Object
 	 */
 
-	public abstract Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI);
+	public abstract Object retrieveObjectWithURI(ModelSlotInstance<? extends ModelSlot<RD>, RD> msInstance, String objectURI);
 
 	/**
 	 * Return first found class matching supplied class.<br>
@@ -447,10 +365,10 @@ public abstract class ModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMet
 	 * @param patternRoleClass
 	 * @return
 	 */
-	public <PR extends PatternRole> Class<? extends PR> getPatternRoleClass(Class<PR> patternRoleClass) {
-		for (Class patternRoleType : getAvailablePatternRoleTypes()) {
+	public <PR extends PatternRole<?>> Class<? extends PR> getPatternRoleClass(Class<PR> patternRoleClass) {
+		for (Class<?> patternRoleType : getAvailablePatternRoleTypes()) {
 			if (patternRoleClass.isAssignableFrom(patternRoleType)) {
-				return patternRoleType;
+				return (Class<? extends PR>) patternRoleType;
 			}
 		}
 		return null;

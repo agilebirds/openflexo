@@ -301,7 +301,7 @@ public class EMFAttributeDataProperty extends AEMFMetaModelObjectImpl<EAttribute
 	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#getTechnologyAdapter()
 	 */
 	@Override
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+	public TechnologyAdapter getTechnologyAdapter() {
 		return ontology.getTechnologyAdapter();
 	}
 

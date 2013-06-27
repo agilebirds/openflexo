@@ -77,7 +77,7 @@ public abstract class DefaultTechnologyAdapterControllerService extends FlexoSer
 	 * @return
 	 */
 	@Override
-	public <TAC extends TechnologyAdapterController<TA>, TA extends TechnologyAdapter<?, ?>> TAC getTechnologyAdapterController(
+	public <TAC extends TechnologyAdapterController<TA>, TA extends TechnologyAdapter> TAC getTechnologyAdapterController(
 			Class<TAC> technologyAdapterControllerClass) {
 		return (TAC) loadedAdapters.get(technologyAdapterControllerClass);
 	}
@@ -90,7 +90,7 @@ public abstract class DefaultTechnologyAdapterControllerService extends FlexoSer
 	 * @return
 	 */
 	@Override
-	public <TAC extends TechnologyAdapterController<TA>, TA extends TechnologyAdapter<?, ?>> TAC getTechnologyAdapterController(
+	public <TAC extends TechnologyAdapterController<TA>, TA extends TechnologyAdapter> TAC getTechnologyAdapterController(
 			TA technologyAdapter) {
 		for (TechnologyAdapterController<?> tac : loadedAdapters.values()) {
 			if (tac.getTechnologyAdapter() == technologyAdapter) {

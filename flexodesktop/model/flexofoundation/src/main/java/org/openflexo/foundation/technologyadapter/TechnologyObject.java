@@ -17,16 +17,21 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.technologyadapter.owl.model;
+package org.openflexo.foundation.technologyadapter;
 
-import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.technologyadapter.ModelRepository;
-import org.openflexo.technologyadapter.owl.OWLTechnologyAdapter;
-import org.openflexo.technologyadapter.owl.rm.OWLOntologyResource;
+/**
+ * Implemented by all objects specific to a given technology
+ * 
+ * @author sylvain
+ * 
+ */
+public interface TechnologyObject {
 
-public class OWLModelRepository extends ModelRepository<OWLOntologyResource, OWLOntology, OWLOntology, OWLTechnologyAdapter> {
+	/**
+	 * Return the {@link TechnologyAdapter} of technical space where this concept exists
+	 * 
+	 * @return
+	 */
+	public TechnologyAdapter getTechnologyAdapter();
 
-	public OWLModelRepository(OWLTechnologyAdapter adapter, FlexoResourceCenter rc) {
-		super(adapter, rc);
-	}
 }

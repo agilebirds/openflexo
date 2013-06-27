@@ -91,7 +91,7 @@ public class CreateEditionAction extends FlexoAction<CreateEditionAction, Editio
 	public String description;
 	public CreateEditionActionChoice actionChoice = CreateEditionActionChoice.BuiltInAction;
 	private LayoutChoice layoutChoice;
-	public ModelSlot<?, ?> modelSlot;
+	public ModelSlot modelSlot;
 	public Class<? extends EditionAction> builtInActionClass;
 	public Class<? extends EditionAction> controlActionClass;
 	public Class<? extends EditionAction> modelSlotSpecificActionClass;

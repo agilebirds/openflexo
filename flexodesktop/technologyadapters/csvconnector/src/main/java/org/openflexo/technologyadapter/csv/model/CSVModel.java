@@ -221,7 +221,7 @@ implements FlexoModel<CSVModel, CSVMetaModel>, IFlexoOntologyModel
 		return null;
 	}
 
-	public TechnologyAdapter<?, ?> getTechnologyAdapter()
+	public TechnologyAdapter getTechnologyAdapter()
 	{
 		return null;
 	}

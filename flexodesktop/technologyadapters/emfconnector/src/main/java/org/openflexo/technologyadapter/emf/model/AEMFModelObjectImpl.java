@@ -30,6 +30,7 @@ package org.openflexo.technologyadapter.emf.model;
 
 import org.eclipse.emf.ecore.EObject;
 import org.openflexo.foundation.ontology.FlexoOntologyObjectImpl;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 
 /**
  * Abstract Simple implementation of Flexo ontology object.
@@ -50,6 +51,10 @@ public abstract class AEMFModelObjectImpl<T extends EObject> extends FlexoOntolo
 	public AEMFModelObjectImpl(EMFModel ontology, T object) {
 		this.ontology = ontology;
 		this.object = object;
+	}
+
+	public TechnologyAdapter getTechnologyAdapter() {
+		return getEMFModel().getTechnologyAdapter();
 	}
 
 	/**

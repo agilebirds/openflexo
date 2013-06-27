@@ -508,7 +508,7 @@ public class EMFModel extends FlexoOntologyObjectImpl implements FlexoModel<EMFM
 	 * @see org.openflexo.foundation.technologyadapter.FlexoModel#getTechnologyAdapter()
 	 */
 	@Override
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+	public TechnologyAdapter getTechnologyAdapter() {
 		return metaModel.getTechnologyAdapter();
 	}
 

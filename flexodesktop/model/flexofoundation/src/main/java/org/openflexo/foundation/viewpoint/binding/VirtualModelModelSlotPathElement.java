@@ -11,7 +11,7 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.VirtualModelInstance;
 
-public class VirtualModelModelSlotPathElement<MS extends ModelSlot<?, ?>> extends SimplePathElement {
+public class VirtualModelModelSlotPathElement<MS extends ModelSlot> extends SimplePathElement {
 
 	private static final Logger logger = Logger.getLogger(VirtualModelModelSlotPathElement.class.getPackage().getName());
 
@@ -36,7 +36,7 @@ public class VirtualModelModelSlotPathElement<MS extends ModelSlot<?, ?>> extend
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
 		if (target instanceof VirtualModelInstance) {
 			VirtualModelInstance mvi = (VirtualModelInstance) target;
-			return mvi.getModelSlotInstance(modelSlot).getModel();
+			return mvi.getModelSlotInstance(modelSlot).getResourceData();
 		}
 		logger.warning("Please implement me, target=" + target + " context=" + context);
 		return null;

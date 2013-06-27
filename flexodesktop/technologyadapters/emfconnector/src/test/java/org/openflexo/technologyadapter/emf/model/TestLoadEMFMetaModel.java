@@ -32,13 +32,12 @@ import java.util.Collection;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoTestCase;
-import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.technologyadapter.MetaModelRepository;
-import org.openflexo.foundation.technologyadapter.ModelRepository;
 import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
+import org.openflexo.technologyadapter.emf.rm.EMFMetaModelRepository;
 import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
+import org.openflexo.technologyadapter.emf.rm.EMFModelRepository;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 
 /**
@@ -65,20 +64,18 @@ public class TestLoadEMFMetaModel extends FlexoTestCase {
 		EMFTechnologyAdapter technologicalAdapter = serviceManager.getTechnologyAdapterService().getTechnologyAdapter(
 				EMFTechnologyAdapter.class);
 
-		for (FlexoResourceCenter resourceCenter : serviceManager.getResourceCenterService().getResourceCenters()) {
-			MetaModelRepository<FlexoResource<EMFMetaModel>, EMFModel, EMFMetaModel, EMFTechnologyAdapter> metaModelRepository = resourceCenter
-					.getMetaModelRepository(technologicalAdapter);
+		for (FlexoResourceCenter<?> resourceCenter : serviceManager.getResourceCenterService().getResourceCenters()) {
+			EMFMetaModelRepository metaModelRepository = resourceCenter.getRepository(EMFMetaModelRepository.class, technologicalAdapter);
 			assertNotNull(metaModelRepository);
-			Collection<FlexoResource<EMFMetaModel>> metaModelResources = metaModelRepository.getAllResources();
-			for (FlexoResource<EMFMetaModel> metaModelResource : metaModelResources) {
-				EMFMetaModel metaModel = ((EMFMetaModelResource) metaModelResource).getMetaModelData();
+			Collection<EMFMetaModelResource> metaModelResources = metaModelRepository.getAllResources();
+			for (EMFMetaModelResource metaModelResource : metaModelResources) {
+				EMFMetaModel metaModel = metaModelResource.getMetaModelData();
 				assertNotNull(metaModel);
 			}
-			ModelRepository<FlexoResource<EMFModel>, EMFModel, EMFMetaModel, EMFTechnologyAdapter> modelRepository = resourceCenter
-					.getModelRepository(technologicalAdapter);
-			Collection<FlexoResource<EMFModel>> modelResources = modelRepository.getAllResources();
-			for (FlexoResource<EMFModel> modelResource : modelResources) {
-				EMFModel model = ((EMFModelResource) modelResource).getModel();
+			EMFModelRepository modelRepository = resourceCenter.getRepository(EMFModelRepository.class, technologicalAdapter);
+			Collection<EMFModelResource> modelResources = modelRepository.getAllResources();
+			for (EMFModelResource modelResource : modelResources) {
+				EMFModel model = modelResource.getModel();
 				assertNotNull(model);
 			}
 		}

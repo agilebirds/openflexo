@@ -30,15 +30,17 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IndividualOfClass;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.SetPropertyValueAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.technologyadapter.emf.EMFModelSlot;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
 
-public abstract class SetEMFPropertyValue<T> extends AssignableAction<EMFModel, EMFMetaModel, T> implements SetPropertyValueAction {
+public abstract class SetEMFPropertyValue<T> extends AssignableAction<EMFModelSlot, T> implements SetPropertyValueAction {
 
 	private static final Logger logger = Logger.getLogger(SetEMFPropertyValue.class.getPackage().getName());
 
@@ -95,6 +97,12 @@ public abstract class SetEMFPropertyValue<T> extends AssignableAction<EMFModel, 
 			subject.setBindingName("subject");
 		}
 		this.subject = subject;
+	}
+
+	@Override
+	public TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot> getModelSlotInstance(EditionSchemeAction action) {
+		return (TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot>) super.getModelSlotInstance(action);
+
 	}
 
 	public static class SubjectIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<SetEMFPropertyValue> {

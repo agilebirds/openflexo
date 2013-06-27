@@ -23,8 +23,7 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.foundation.ontology.IFlexoOntologyObject;
-import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
+import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeObjectProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFClassClass;
@@ -54,7 +53,7 @@ public class EMFIconLibrary {
 	public static final ImageIconResource EMF_REFERENCE_ICON = new ImageIconResource("Icons/EReference.gif");
 	public static final ImageIconResource EMF_ATTRIBUTE_ICON = new ImageIconResource("Icons/EAttribute.gif");
 
-	public static ImageIcon iconForObject(Class<? extends IFlexoOntologyObject> objectClass) {
+	public static ImageIcon iconForObject(Class<? extends TechnologyObject> objectClass) {
 		if (EMFMetaModel.class.isAssignableFrom(objectClass)) {
 			return ECORE_FILE_ICON;
 		} else if (EMFModel.class.isAssignableFrom(objectClass)) {
@@ -79,13 +78,7 @@ public class EMFIconLibrary {
 			return EMF_ATTRIBUTE_ICON;
 		} else if (EMFObjectIndividualReferenceObjectPropertyValue.class.isAssignableFrom(objectClass)) {
 			return EMF_REFERENCE_ICON;
-		}
-		logger.warning("No icon for " + objectClass);
-		return null;
-	}
-
-	public static ImageIcon iconForPropertyValue(Class<? extends IFlexoOntologyPropertyValue> objectClass) {
-		if (EMFObjectIndividualAttributeDataPropertyValue.class.isAssignableFrom(objectClass)) {
+		} else if (EMFObjectIndividualAttributeDataPropertyValue.class.isAssignableFrom(objectClass)) {
 			return EMF_ATTRIBUTE_ICON;
 		} else if (EMFObjectIndividualAttributeObjectPropertyValue.class.isAssignableFrom(objectClass)) {
 			return EMF_ATTRIBUTE_ICON;

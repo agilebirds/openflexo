@@ -304,7 +304,7 @@ public class EMFEnumIndividual extends AEMFMetaModelObjectImpl<EEnumLiteral> imp
 	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#getTechnologyAdapter()
 	 */
 	@Override
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+	public TechnologyAdapter getTechnologyAdapter() {
 		return ontology.getTechnologyAdapter();
 	}
 }

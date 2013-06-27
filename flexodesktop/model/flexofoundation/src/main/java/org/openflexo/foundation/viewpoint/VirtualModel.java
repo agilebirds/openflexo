@@ -45,6 +45,7 @@ import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
+import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
@@ -76,7 +77,7 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 
 	private ViewPoint viewPoint;
 	private Vector<EditionPattern> editionPatterns;
-	private List<ModelSlot<?, ?>> modelSlots;
+	private List<ModelSlot> modelSlots;
 	private BindingModel bindingModel;
 	private VirtualModelResource<VM> resource;
 	private LocalizedDictionary localizedDictionary;
@@ -119,7 +120,7 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 			resource = (VirtualModelResource<VM>) builder.resource;
 			viewPoint = builder.getViewPoint();
 		}
-		modelSlots = new ArrayList<ModelSlot<?, ?>>();
+		modelSlots = new ArrayList<ModelSlot>();
 		editionPatterns = new Vector<EditionPattern>();
 	}
 
@@ -144,7 +145,7 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 		getReflexiveModelSlot();
 	}
 
-	private ModelSlot<? extends VirtualModelInstance<?, VM>, VM> reflexiveModelSlot;
+	private VirtualModelModelSlot reflexiveModelSlot;
 
 	public static final String REFLEXIVE_MODEL_SLOT_NAME = "this";
 
@@ -154,22 +155,22 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	 * 
 	 * @return
 	 */
-	public <VMI extends VirtualModelInstance<VMI, VM>> ModelSlot<VMI, VM> getReflexiveModelSlot() {
+	public VirtualModelModelSlot getReflexiveModelSlot() {
 		if (reflexiveModelSlot == null) {
-			reflexiveModelSlot = (ModelSlot<VMI, VM>) getModelSlot(REFLEXIVE_MODEL_SLOT_NAME);
+			reflexiveModelSlot = (VirtualModelModelSlot) getModelSlot(REFLEXIVE_MODEL_SLOT_NAME);
 			if (reflexiveModelSlot == null) {
 				reflexiveModelSlot = makeReflexiveModelSlot();
 			}
 		}
-		return (ModelSlot<VMI, VM>) reflexiveModelSlot;
+		return reflexiveModelSlot;
 	}
 
-	protected <VMI extends VirtualModelInstance<VMI, VM>> VirtualModelModelSlot<VMI, VM> makeReflexiveModelSlot() {
+	protected VirtualModelModelSlot makeReflexiveModelSlot() {
 		if (getViewPoint().getViewPointLibrary().getServiceManager() != null
 				&& getViewPoint().getViewPointLibrary().getServiceManager().getService(TechnologyAdapterService.class) != null) {
-			VirtualModelTechnologyAdapter<VMI, VM> builtInTA = getViewPoint().getViewPointLibrary().getServiceManager()
+			VirtualModelTechnologyAdapter builtInTA = getViewPoint().getViewPointLibrary().getServiceManager()
 					.getService(TechnologyAdapterService.class).getTechnologyAdapter(VirtualModelTechnologyAdapter.class);
-			VirtualModelModelSlot<VMI, VM> returned = builtInTA.createNewModelSlot(this);
+			VirtualModelModelSlot returned = builtInTA.makeModelSlot(VirtualModelModelSlot.class, this);
 			returned.setVirtualModelResource(getResource());
 			returned.setName(REFLEXIVE_MODEL_SLOT_NAME);
 			addToModelSlots(returned);
@@ -351,16 +352,16 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	// ============================== Model Slots ===============================
 	// ==========================================================================
 
-	public void setModelSlots(List<ModelSlot<?, ?>> modelSlots) {
+	public void setModelSlots(List<ModelSlot> modelSlots) {
 		this.modelSlots = modelSlots;
 	}
 
-	public List<ModelSlot<?, ?>> getModelSlots() {
+	public List<ModelSlot> getModelSlots() {
 		// System.out.println("getModelSlots=" + modelSlots);
 		return modelSlots;
 	}
 
-	public void addToModelSlots(ModelSlot<?, ?> modelSlot) {
+	public void addToModelSlots(ModelSlot modelSlot) {
 		// System.out.println("Add to model slots " + modelSlot);
 		modelSlots.add(modelSlot);
 		modelSlot.setVirtualModel(this);
@@ -368,7 +369,7 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 		notifyObservers(new ModelSlotAdded(modelSlot, this));
 	}
 
-	public void removeFromModelSlots(ModelSlot<?, ?> modelSlot) {
+	public void removeFromModelSlots(ModelSlot modelSlot) {
 		// System.out.println("Remove from model slots " + modelSlot);
 		modelSlots.remove(modelSlot);
 		modelSlot.setVirtualModel(null);
@@ -376,14 +377,14 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 		notifyObservers(new ModelSlotRemoved(modelSlot, this));
 	}
 
-	public void deleteModelSlot(ModelSlot<?, ?> modelSlot) {
+	public void deleteModelSlot(ModelSlot modelSlot) {
 		removeFromModelSlots(modelSlot);
 		modelSlot.delete();
 	}
 
-	public <MS extends ModelSlot<?, ?>> List<MS> getModelSlots(Class<MS> msType) {
+	public <MS extends ModelSlot> List<MS> getModelSlots(Class<MS> msType) {
 		List<MS> returned = new ArrayList<MS>();
-		for (ModelSlot<?, ?> ms : getModelSlots()) {
+		for (ModelSlot ms : getModelSlots()) {
 			if (TypeUtils.isTypeAssignableFrom(msType, ms.getClass())) {
 				returned.add((MS) ms);
 			}
@@ -391,8 +392,8 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 		return returned;
 	}
 
-	public ModelSlot<?, ?> getModelSlot(String modelSlotName) {
-		for (ModelSlot<?, ?> ms : getModelSlots()) {
+	public ModelSlot getModelSlot(String modelSlotName) {
+		for (ModelSlot ms : getModelSlots()) {
 			if (ms.getName().equals(modelSlotName)) {
 				return ms;
 			}
@@ -400,9 +401,9 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 		return null;
 	}
 
-	public List<ModelSlot<?, ?>> getRequiredModelSlots() {
-		List<ModelSlot<?, ?>> requiredModelSlots = new ArrayList<ModelSlot<?, ?>>();
-		for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
+	public List<ModelSlot> getRequiredModelSlots() {
+		List<ModelSlot> requiredModelSlots = new ArrayList<ModelSlot>();
+		for (ModelSlot modelSlot : getModelSlots()) {
 			if (modelSlot.getIsRequired()) {
 				requiredModelSlots.add(modelSlot);
 			}
@@ -567,16 +568,19 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	}
 
 	/**
-	 * Return the list of all models used in the scope of current project<br>
-	 * To compute this this, iterate on each View, then each ModelSlotInstance
+	 * Return the list of all metamodels used in the scope of this virtual model
 	 * 
 	 * @return
 	 */
+	@Deprecated
 	public Set<FlexoMetaModel<?>> getAllReferencedMetaModels() {
 		HashSet<FlexoMetaModel<?>> returned = new HashSet<FlexoMetaModel<?>>();
-		for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
-			if (modelSlot.getMetaModelResource() != null) {
-				returned.add(modelSlot.getMetaModelResource().getMetaModelData());
+		for (ModelSlot modelSlot : getModelSlots()) {
+			if (modelSlot instanceof TypeSafeModelSlot) {
+				TypeSafeModelSlot tsModelSlot = (TypeSafeModelSlot) modelSlot;
+				if (tsModelSlot.getMetaModelResource() != null) {
+					returned.add(tsModelSlot.getMetaModelResource().getMetaModelData());
+				}
 			}
 		}
 		return returned;
@@ -631,7 +635,7 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	}
 
 	@Override
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+	public TechnologyAdapter getTechnologyAdapter() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -713,11 +717,11 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 
 		if (getModelSlots().size() > 0) {
 			out.append(StringUtils.LINE_SEPARATOR, context);
-			for (ModelSlot<?, ?> modelSlot : getModelSlots()) {
-				if (modelSlot.getMetaModelResource() != null) {
-					out.append(modelSlot.getFMLRepresentation(context), context, 1);
-					out.append(StringUtils.LINE_SEPARATOR, context, 1);
-				}
+			for (ModelSlot modelSlot : getModelSlots()) {
+				// if (modelSlot.getMetaModelResource() != null) {
+				out.append(modelSlot.getFMLRepresentation(context), context, 1);
+				out.append(StringUtils.LINE_SEPARATOR, context, 1);
+				// }
 			}
 		}
 

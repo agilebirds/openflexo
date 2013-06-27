@@ -220,7 +220,7 @@ public class AddRestrictionStatement extends AddStatement<OWLStatement> {
 		if (subject instanceof OWLClass && object instanceof OWLClass && property instanceof OWLProperty) {
 			RestrictionType restrictionType = getRestrictionType(action);
 			int cardinality = getCardinality(action);
-			OWLRestriction restriction = getModelSlotInstance(action).getModel().createRestriction((OWLClass) subject, property,
+			OWLRestriction restriction = getModelSlotInstance(action).getResourceData().createRestriction((OWLClass) subject, property,
 					restrictionType, cardinality, (OWLClass) object);
 
 			if (subject instanceof OWLClass) {

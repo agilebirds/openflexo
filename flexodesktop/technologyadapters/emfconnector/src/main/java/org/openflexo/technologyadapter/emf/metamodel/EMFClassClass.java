@@ -365,7 +365,7 @@ public class EMFClassClass extends AEMFMetaModelObjectImpl<EClass> implements IF
 	 * @see org.openflexo.foundation.ontology.IFlexoOntologyObject#getTechnologyAdapter()
 	 */
 	@Override
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+	public TechnologyAdapter getTechnologyAdapter() {
 		return ontology.getTechnologyAdapter();
 	}
 

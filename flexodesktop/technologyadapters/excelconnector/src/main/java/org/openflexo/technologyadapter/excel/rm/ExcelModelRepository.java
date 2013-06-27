@@ -17,17 +17,24 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.technologyadapter.emf.model;
+package org.openflexo.technologyadapter.excel.rm;
+
 
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.ModelRepository;
-import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
-import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
-import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
+import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
+import org.openflexo.technologyadapter.excel.model.semantics.ExcelMetaModel;
+import org.openflexo.technologyadapter.excel.model.semantics.ExcelModel;
 
-public class EMFModelRepository extends ModelRepository<EMFModelResource, EMFModel, EMFMetaModel, EMFTechnologyAdapter> {
+/**
+ * Excel model repository
+ * 
+ * @author sylvain
+ * 
+ */
+public class ExcelModelRepository extends ModelRepository<ExcelModelResource, ExcelModel, ExcelMetaModel, ExcelTechnologyAdapter> {
 
-	public EMFModelRepository(EMFTechnologyAdapter adapter, FlexoResourceCenter resourceCenter) {
+	public ExcelModelRepository(ExcelTechnologyAdapter adapter, FlexoResourceCenter<?> resourceCenter) {
 		super(adapter, resourceCenter);
 	}
 }

@@ -6,8 +6,7 @@ import javax.swing.ImageIcon;
 
 import org.openflexo.components.widget.OntologyBrowserModel;
 import org.openflexo.foundation.ontology.IFlexoOntology;
-import org.openflexo.foundation.ontology.IFlexoOntologyObject;
-import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
+import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.icon.IconFactory;
@@ -23,6 +22,7 @@ import org.openflexo.technologyadapter.owl.model.OWLObject;
 import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLProperty;
+import org.openflexo.technologyadapter.owl.model.OWLStatement;
 import org.openflexo.technologyadapter.owl.model.ObjectPropertyStatement;
 import org.openflexo.technologyadapter.owl.model.PropertyStatement;
 import org.openflexo.technologyadapter.owl.model.SubClassStatement;
@@ -115,21 +115,13 @@ public class OWLAdapterController extends TechnologyAdapterController<OWLTechnol
 	 * @return
 	 */
 	@Override
-	public ImageIcon getIconForOntologyObject(Class<? extends IFlexoOntologyObject> objectClass) {
-		if (OWLObject.class.isAssignableFrom(objectClass))
+	public ImageIcon getIconForTechnologyObject(Class<? extends TechnologyObject> objectClass) {
+		if (OWLObject.class.isAssignableFrom(objectClass)) {
 			return OWLIconLibrary.iconForObject((Class<? extends OWLObject>) objectClass);
+		} else if (OWLStatement.class.isAssignableFrom(objectClass)) {
+			return OWLIconLibrary.ONTOLOGY_STATEMENT_ICON;
+		}
 		return null;
-	}
-
-	/**
-	 * Return icon representing supplied property value
-	 * 
-	 * @param object
-	 * @return
-	 */
-	@Override
-	public ImageIcon getIconForPropertyValue(Class<? extends IFlexoOntologyPropertyValue> objectClass) {
-		return OWLIconLibrary.ONTOLOGY_STATEMENT_ICON;
 	}
 
 	/**
@@ -141,23 +133,23 @@ public class OWLAdapterController extends TechnologyAdapterController<OWLTechnol
 	@Override
 	public ImageIcon getIconForPatternRole(Class<? extends PatternRole> patternRoleClass) {
 		if (OWLClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return getIconForOntologyObject(OWLClass.class);
+			return getIconForTechnologyObject(OWLClass.class);
 		} else if (OWLIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return getIconForOntologyObject(OWLIndividual.class);
+			return getIconForTechnologyObject(OWLIndividual.class);
 		} else if (OWLDataPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return getIconForOntologyObject(OWLDataProperty.class);
+			return getIconForTechnologyObject(OWLDataProperty.class);
 		} else if (OWLObjectPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return getIconForOntologyObject(OWLObjectProperty.class);
+			return getIconForTechnologyObject(OWLObjectProperty.class);
 		} else if (OWLPropertyPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return getIconForOntologyObject(OWLProperty.class);
+			return getIconForTechnologyObject(OWLProperty.class);
 		} else if (DataPropertyStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return getIconForOntologyObject(DataPropertyStatement.class);
+			return getIconForTechnologyObject(DataPropertyStatement.class);
 		} else if (ObjectPropertyStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return getIconForOntologyObject(ObjectPropertyStatement.class);
+			return getIconForTechnologyObject(ObjectPropertyStatement.class);
 		} else if (RestrictionStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return getIconForOntologyObject(PropertyStatement.class);
+			return getIconForTechnologyObject(PropertyStatement.class);
 		} else if (SubClassStatementPatternRole.class.isAssignableFrom(patternRoleClass)) {
-			return getIconForOntologyObject(SubClassStatement.class);
+			return getIconForTechnologyObject(SubClassStatement.class);
 		}
 		return null;
 	}
@@ -171,9 +163,9 @@ public class OWLAdapterController extends TechnologyAdapterController<OWLTechnol
 	@Override
 	public ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass) {
 		if (AddOWLIndividual.class.isAssignableFrom(editionActionClass)) {
-			return IconFactory.getImageIcon(getIconForOntologyObject(OWLIndividual.class), IconLibrary.DUPLICATE);
+			return IconFactory.getImageIcon(getIconForTechnologyObject(OWLIndividual.class), IconLibrary.DUPLICATE);
 		} else if (AddOWLClass.class.isAssignableFrom(editionActionClass)) {
-			return IconFactory.getImageIcon(getIconForOntologyObject(OWLClass.class), IconLibrary.DUPLICATE);
+			return IconFactory.getImageIcon(getIconForTechnologyObject(OWLClass.class), IconLibrary.DUPLICATE);
 		}
 		return super.getIconForEditionAction(editionActionClass);
 	}
