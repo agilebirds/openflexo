@@ -21,6 +21,9 @@ package org.openflexo.foundation.viewpoint;
 
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.Inspectors;
+import org.openflexo.foundation.ontology.OntologyObject;
+import org.openflexo.foundation.ontology.OntologyObjectProperty;
+import org.openflexo.foundation.ontology.owl.OWLClass;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.binding.EditionPatternPathElement;
 import org.openflexo.foundation.viewpoint.binding.ViewPointDataBinding;
@@ -99,6 +102,37 @@ public class LinkScheme extends AbstractCreationScheme {
 	}
 
 	public boolean isValidTarget(EditionPattern actualFromTarget, EditionPattern actualToTarget) {
+		if (getEditionPattern().getPrimaryConceptRole() instanceof ObjectPropertyStatementPatternRole) {
+			if (actualFromTarget.getPrimaryConceptRole() instanceof IndividualPatternRole
+					&& actualToTarget.getPrimaryConceptRole() instanceof IndividualPatternRole) {
+				ObjectPropertyStatementPatternRole parentProperty = (ObjectPropertyStatementPatternRole) getEditionPattern()
+						.getPrimaryConceptRole();
+				if (parentProperty.getObjectProperty() instanceof OntologyObjectProperty) {
+					OntologyObjectProperty objectProperty = (OntologyObjectProperty) parentProperty.getObjectProperty();
+
+					OWLClass fromOntologicType = (OWLClass) ((IndividualPatternRole) actualFromTarget.getPrimaryConceptRole())
+							.getOntologicType();
+					OWLClass toOntologicType = (OWLClass) ((IndividualPatternRole) actualToTarget.getPrimaryConceptRole())
+							.getOntologicType();
+					boolean ok = true;
+					OntologyObject range = objectProperty.getRange();
+					if (range instanceof OWLClass) {
+						if (!((OWLClass) range).containsOntologyObject(toOntologicType, true)) {
+							return false;
+						}
+					}
+					for (OWLClass restriction : fromOntologicType.getRestrictions(objectProperty)) {
+						if (!restriction.containsOntologyObject(toOntologicType, true)) {
+							ok = false;
+							break;
+						}
+					}
+					if (!ok) {
+						return false;
+					}
+				}
+			}
+		}
 		return getFromTargetEditionPattern().isAssignableFrom(actualFromTarget)
 				&& getToTargetEditionPattern().isAssignableFrom(actualToTarget);
 	}

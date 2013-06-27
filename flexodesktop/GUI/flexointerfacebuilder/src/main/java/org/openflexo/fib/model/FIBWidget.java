@@ -472,8 +472,10 @@ public abstract class FIBWidget extends FIBComponent {
 	@Override
 	public void updateBindingModel() {
 		super.updateBindingModel();
-		getEventListener().createEventListenerBindingModel();
-		getFormatter().createFormatterBindingModel();
+		if (deserializationPerformed) {
+			getEventListener().createEventListenerBindingModel();
+			getFormatter().createFormatterBindingModel();
+		}
 	}
 
 	public FIBEventListener getEventListener() {

@@ -320,16 +320,18 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 	@Override
 	public String toString() {
 		boolean isFirst = true;
-		StringBuffer returned = new StringBuffer();
+		StringBuilder returned = new StringBuilder();
 		if (getExecutionContext() != null) {
 			for (String key : getExecutionContext().getObjectsCreatedWhileExecutingAction().keySet()) {
 				FlexoModelObject o = getExecutionContext().getObjectsCreatedWhileExecutingAction().get(key);
-				returned.append((isFirst ? "" : " ") + "CREATED:" + key + "/" + o.getClass().getSimpleName() + "/" + o.getFlexoID());
+				returned.append(isFirst ? "" : " ").append("CREATED:").append(key).append("/").append(o.getClass().getSimpleName())
+						.append("/").append(o.getFlexoID());
 				isFirst = false;
 			}
 			for (String key : getExecutionContext().getObjectsDeletedWhileExecutingAction().keySet()) {
 				FlexoModelObject o = getExecutionContext().getObjectsDeletedWhileExecutingAction().get(key);
-				returned.append((isFirst ? "" : " ") + "DELETED:" + key + "/" + o.getClass().getSimpleName() + "/" + o.getFlexoID());
+				returned.append(isFirst ? "" : " ").append("DELETED:").append(key).append("/").append(o.getClass().getSimpleName())
+						.append("/").append(o.getFlexoID());
 				isFirst = false;
 			}
 		}

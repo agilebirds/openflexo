@@ -155,6 +155,10 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 		return new Vector<FlexoModule>(_modules.values()).elements();
 	}
 
+	public int getLoadedModuleCount() {
+		return _modules.size();
+	}
+
 	/**
 	 * Return all unloaded modules but available modules as a Vector of Module instances
 	 * 
@@ -235,6 +239,26 @@ public class ModuleLoader implements IModuleLoader, HasPropertyChangeSupport {
 
 	public List<Module> getAvailableModules() {
 		return Modules.getInstance().getAvailableModules();
+	}
+
+	public List<Module> getLoadedModules() {
+		List<Module> list = new ArrayList<Module>();
+		for (Module module : getAvailableModules()) {
+			if (isLoaded(module)) {
+				list.add(module);
+			}
+		}
+		return list;
+	}
+
+	public List<Module> getUnloadedModules() {
+		List<Module> list = new ArrayList<Module>();
+		for (Module module : getAvailableModules()) {
+			if (!isLoaded(module)) {
+				list.add(module);
+			}
+		}
+		return list;
 	}
 
 	public boolean isLoaded(Module module) {

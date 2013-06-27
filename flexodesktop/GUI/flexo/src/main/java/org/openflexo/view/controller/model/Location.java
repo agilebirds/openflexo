@@ -84,7 +84,7 @@ public class Location extends ControllerModelObject {
 	}
 
 	public boolean isEditable() {
-		return getObject().getProject() == getEditor().getProject();
+		return getObject().getProject() == null || getObject().getProject() == getEditor().getProject();
 	}
 
 }

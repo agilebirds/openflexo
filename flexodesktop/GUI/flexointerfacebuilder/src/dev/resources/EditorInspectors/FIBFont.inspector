@@ -10,7 +10,8 @@
 			
 				<Label label="sample_text" constraints="twocols(location=left;expandHorizontally=true)"/>
 				<TextField data="data.sampleText" constraints="twocols(location=right)" columns="15"/>
-				
+				<Label label="allowsNull" constraints="twocols(location=left)"/>
+                <CheckBox data="data.allowsNull"/>
 			</Tab>
 						
 		</TabPanel>

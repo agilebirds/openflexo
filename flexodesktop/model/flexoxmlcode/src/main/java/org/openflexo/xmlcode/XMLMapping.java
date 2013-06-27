@@ -224,8 +224,14 @@ public class XMLMapping {
 	/** Defines 'className' label */
 	public static final String classNameLabel = "className";
 
+	/** Defines 'className' label */
+	public static final String entryLabel = "Entry";
+
 	/** Defines 'key' label */
 	public static final String keyLabel = "key";
+
+	/** Defines 'key' label */
+	public static final String valueLabel = "value";
 
 	/** Defines 'text' label */
 	public static final String textLabel = "text";
@@ -251,11 +257,17 @@ public class XMLMapping {
 	/** Defines 'properties' label */
 	public static final String propertiesLabel = "properties";
 
+	/** Defines 'properties' label */
+	public static final String safePropertiesLabel = "safeproperties";
+
 	/** Defines 'unmappedAttributes' label */
 	public static final String unmappedAttributesLabel = "unmappedAttributes";
 
 	/** Defines 'finalizer' label */
 	public static final String finalizerLabel = "finalizer";
+
+	/** Defines 'initializer' label */
+	public static final String initializerLabel = "initializer";
 
 	/** Defines 'contexts' label */
 	public static final String contextsLabel = "contexts";

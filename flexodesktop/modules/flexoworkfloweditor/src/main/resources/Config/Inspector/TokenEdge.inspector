@@ -5,7 +5,7 @@
 			<param name="aLayoutParamName" value="aLayoutParamValue"/>
 		</layout>
 		<property name="tokenIncrem" label="increment" widget="INTEGER" constraint="2">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 	</tab>
 	

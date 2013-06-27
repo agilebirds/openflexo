@@ -179,7 +179,24 @@ public class ProxyUtils {
 			e.printStackTrace();
 		}
 		return null;
+	}
 
+	public static String getLocalDomain() {
+		try {
+			InetAddress localaddr = InetAddress.getLocalHost();
+			String hostName = localaddr.getHostName();
+			// my.local.domain.com
+			if (hostName != null) {
+				int index = hostName.lastIndexOf('.');
+				index = hostName.lastIndexOf('.', index - 1);
+				if (index > -1) {
+					return hostName.substring(index + 1); // domain.com
+				}
+			}
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public static void main(String[] args) {

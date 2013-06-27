@@ -89,8 +89,6 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 		_inspector = new InspectorModel();
 		_inspector.title = "Preferences";
 
-		_preferencesWindow = new PreferencesWindow();
-
 		_prefs = prefs;
 
 		prefs.addObserver(this);
@@ -167,15 +165,25 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 	}
 
 	public void showPreferences() {
+		getPreferencesWindow(true);
 		update();
-		_preferencesWindow.setVisible(true);
+		getPreferencesWindow().setVisible(true);
 	}
 
 	public void resetWindow() {
-		_preferencesWindow.reset();
+		if (_preferencesWindow != null) {
+			_preferencesWindow.reset();
+		}
 	}
 
 	public PreferencesWindow getPreferencesWindow() {
+		return getPreferencesWindow(true);
+	}
+
+	public PreferencesWindow getPreferencesWindow(boolean create) {
+		if (_preferencesWindow == null && create) {
+			_preferencesWindow = new PreferencesWindow();
+		}
 		return _preferencesWindow;
 	}
 
@@ -192,8 +200,10 @@ public class PreferencesController implements FlexoObserver, AbstractController,
 		if (arg1 instanceof PreferencesHaveChanged) {
 			// Nothing special for now
 		}
-		_preferencesWindow.setTabPanel(getInspectorTabPanel());
-		_preferencesWindow.enableSaveAndRevertButtons();
+		if (_preferencesWindow != null) {
+			_preferencesWindow.setTabPanel(getInspectorTabPanel());
+			_preferencesWindow.enableSaveAndRevertButtons();
+		}
 	}
 
 	public void update() {

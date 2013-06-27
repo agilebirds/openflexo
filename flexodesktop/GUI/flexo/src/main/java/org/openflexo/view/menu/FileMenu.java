@@ -304,8 +304,7 @@ public class FileMenu extends FlexoMenu {
 		public SaveProjectAction() {
 			super();
 			if (getController() != null) {
-				getController().getControllerModel().getPropertyChangeSupport()
-						.addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, this);
+				manager.addListener(ControllerModel.CURRENT_EDITOR, this, getController().getControllerModel());
 			}
 			updateEnability();
 		}
@@ -521,7 +520,7 @@ public class FileMenu extends FlexoMenu {
 		public SaveAllProjectAction() {
 			super();
 			if (getProjectLoader() != null) {
-				getProjectLoader().getPropertyChangeSupport().addPropertyChangeListener(ProjectLoader.ROOT_PROJECTS, this);
+				manager.addListener(ProjectLoader.ROOT_PROJECTS, this, getProjectLoader());
 			}
 			updateEnability();
 		}

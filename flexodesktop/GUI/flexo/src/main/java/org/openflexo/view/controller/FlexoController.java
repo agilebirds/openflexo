@@ -25,7 +25,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.HeadlessException;
-import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -101,6 +100,7 @@ import org.openflexo.foundation.cg.GeneratedCode;
 import org.openflexo.foundation.cg.GeneratedDoc;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.foundation.cg.templates.CGTemplateObject;
+import org.openflexo.foundation.dkv.DKVObject;
 import org.openflexo.foundation.dm.DMObject;
 import org.openflexo.foundation.dm.DuplicateClassNameException;
 import org.openflexo.foundation.ie.IEObject;
@@ -269,6 +269,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		});
 		mainPane = createMainPane();
 		getFlexoFrame().getContentPane().add(mainPane, BorderLayout.CENTER);
+		((JComponent) getFlexoFrame().getContentPane()).revalidate();
 		initInspectors();
 		initializePerspectives();
 		if (getModule().getModule().requireProject()) {
@@ -600,8 +601,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		}
 	}
 
-	public PreferencesWindow getPreferencesWindow() {
-		return PreferencesController.instance().getPreferencesWindow();
+	public PreferencesWindow getPreferencesWindow(boolean create) {
+		return PreferencesController.instance().getPreferencesWindow(create);
 	}
 
 	public void showPreferences() {
@@ -952,22 +953,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 					dialog.getHeight(), Toolkit.getDefaultToolkit().getScreenSize().height));
 		}
 		dialog.setSize(maxDim);
-		if (window != null && window.isVisible()) {
-			Point locationOnScreen = window.getLocationOnScreen();
-			if (locationOnScreen.x < 0) {
-				locationOnScreen.x = 0;
-			}
-			if (locationOnScreen.y < 0) {
-				locationOnScreen.y = 0;
-			}
-			Dimension dim = new Dimension(locationOnScreen.x + window.getWidth() / 2, locationOnScreen.y + window.getHeight() / 2);
-			dialog.setLocation(Math.max(dim.width - dialog.getSize().width / 2, 0), Math.max(dim.height - dialog.getSize().height / 2, 0));
-		} else {
-			Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-			dialog.setLocation(Math.max((dim.width - dialog.getSize().width) / 2, 0),
-					Math.max((dim.height - dialog.getSize().height) / 2, 0));
-		}
-		pane.selectInitialValue();
+		dialog.setLocationRelativeTo(window);
 		dialog.setVisible(true);
 		// pane.selectInitialValue();
 		dialog.dispose();
@@ -1873,7 +1859,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		ImageIcon iconForObject = statelessIconForObject(object);
 		if (iconForObject != null) {
 			if (getModule().getModule().requireProject() && object instanceof FlexoModelObject && getProject() != null
-					&& ((FlexoModelObject) object).getProject() != getProject()
+					&& ((FlexoModelObject) object).getProject() != getProject() && ((FlexoModelObject) object).getProject() != null
 					&& (!(object instanceof FlexoProject) || !getProjectLoader().getRootProjects().contains(object))) {
 				iconForObject = IconFactory.getImageIcon(iconForObject, new IconMarker[] { IconLibrary.IMPORT });
 			} else if (object instanceof FlexoProjectReference) {
@@ -1901,6 +1887,8 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			return WKFIconLibrary.iconForObject((WKFObject) object);
 		} else if (object instanceof IEObject) {
 			return SEIconLibrary.iconForObject((IEObject) object);
+		} else if (object instanceof DKVObject) {
+			return SEIconLibrary.iconForObject((DKVObject) object);
 		} else if (object instanceof DMObject) {
 			return DMEIconLibrary.iconForObject((DMObject) object);
 		} else if (object instanceof ViewPointLibraryObject) {

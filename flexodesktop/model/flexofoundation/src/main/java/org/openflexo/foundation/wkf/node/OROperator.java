@@ -48,7 +48,7 @@ public class OROperator extends CommonOutputOperatorNode {
 
 	@Override
 	public String getDefaultName() {
-		return FlexoLocalization.localizedForKey("OR");
+		return FlexoLocalization.localizedForKey("gateway");
 	}
 
 }

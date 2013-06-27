@@ -174,6 +174,9 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 							e.printStackTrace();
 							if (e.getCause() instanceof FlexoException) {
 								if (!runExceptionHandler((FlexoException) e.getCause(), action)) {
+									if (!progressIsShowing) {
+										ProgressWindow.hideProgressWindow();
+									}
 									return;
 								}
 							} else {

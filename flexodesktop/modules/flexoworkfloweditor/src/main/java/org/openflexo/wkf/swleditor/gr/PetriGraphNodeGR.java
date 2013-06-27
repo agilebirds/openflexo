@@ -24,7 +24,12 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.cp.ControlArea;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
+import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.geom.area.FGEArea;
+import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.wkf.FlexoPetriGraph;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
@@ -32,12 +37,16 @@ import org.openflexo.foundation.wkf.node.PetriGraphNode;
 import org.openflexo.foundation.wkf.node.WKFNode;
 import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.wkf.processeditor.ProcessEditorConstants;
+import org.openflexo.wkf.processeditor.gr.EdgeGR;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
 public abstract class PetriGraphNodeGR<O extends PetriGraphNode> extends AbstractNodeGR<O> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(PetriGraphNodeGR.class.getPackage().getName());
+
+	protected static final FGEArea CONNECTOR_LOCATION_AREA = FGEUnionArea.makeUnion(new FGEPoint(0, 0.5), new FGEPoint(0.5, 0),
+			new FGEPoint(1, 0.5), new FGEPoint(0.5, 1));
 
 	private ConcatenedList<ControlArea<?>> concatenedList;
 	protected boolean isInPalette = false;
@@ -47,6 +56,50 @@ public abstract class PetriGraphNodeGR<O extends PetriGraphNode> extends Abstrac
 	public PetriGraphNodeGR(O node, ShapeType shapeType, SwimmingLaneRepresentation aDrawing, boolean isInPalet) {
 		super(node, shapeType, aDrawing);
 		this.isInPalette = isInPalet;
+	}
+
+	@Override
+	public FGEArea getAllowedStartAreaForConnectorForDirection(ConnectorGraphicalRepresentation<?> connectorGR, FGEArea area,
+			SimplifiedCardinalDirection direction) {
+		if (isStartAreaConstrained(connectorGR)) {
+			return convertNormalizedPoint(this, direction.getNormalizedRepresentativePoint(), connectorGR);
+		}
+		return super.getAllowedStartAreaForConnectorForDirection(connectorGR, area, direction);
+	}
+
+	@Override
+	public FGEArea getAllowedStartAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR) {
+		if (isStartAreaConstrained(connectorGR)) {
+			return CONNECTOR_LOCATION_AREA;
+		}
+		return super.getAllowedStartAreaForConnector(connectorGR);
+	}
+
+	protected boolean isStartAreaConstrained(ConnectorGraphicalRepresentation<?> connectorGR) {
+		return connectorGR instanceof EdgeGR && !((EdgeGR<?>) connectorGR).startLocationManuallyAdjusted()
+				&& ((EdgeGR<?>) connectorGR).getEdge().hasLocationConstraintFlag();
+	}
+
+	@Override
+	public FGEArea getAllowedEndAreaForConnectorForDirection(ConnectorGraphicalRepresentation<?> connectorGR, FGEArea area,
+			SimplifiedCardinalDirection direction) {
+		if (isEndAreaConstrained(connectorGR)) {
+			return convertNormalizedPoint(this, direction.getNormalizedRepresentativePoint(), connectorGR);
+		}
+		return super.getAllowedEndAreaForConnectorForDirection(connectorGR, area, direction);
+	}
+
+	@Override
+	public FGEArea getAllowedEndAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR) {
+		if (isEndAreaConstrained(connectorGR)) {
+			return CONNECTOR_LOCATION_AREA;
+		}
+		return super.getAllowedEndAreaForConnector(connectorGR);
+	}
+
+	protected boolean isEndAreaConstrained(ConnectorGraphicalRepresentation<?> connectorGR) {
+		return connectorGR instanceof EdgeGR && !((EdgeGR<?>) connectorGR).endLocationManuallyAdjusted()
+				&& ((EdgeGR<?>) connectorGR).getEdge().hasLocationConstraintFlag();
 	}
 
 	@Override

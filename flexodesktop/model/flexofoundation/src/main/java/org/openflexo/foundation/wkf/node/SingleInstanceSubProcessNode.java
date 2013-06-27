@@ -76,6 +76,16 @@ public class SingleInstanceSubProcessNode extends SubProcessNode {
 		deleteObservers();
 	}
 
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "sub_process_call_activity";
+	}
+
 	@Override
 	public String getInspectorName() {
 		return Inspectors.WKF.SINGLE_INSTANCE_SUB_PROCESS_NODE_INSPECTOR;

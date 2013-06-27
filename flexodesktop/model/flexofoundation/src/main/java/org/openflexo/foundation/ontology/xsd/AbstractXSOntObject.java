@@ -115,6 +115,11 @@ public abstract class AbstractXSOntObject extends AbstractOntologyObject impleme
 	}
 
 	@Override
+	public boolean containsOntologyObject(OntologyObject o, boolean inherited) {
+		return o == this || inherited && isSuperConceptOf(o);
+	}
+
+	@Override
 	public XSOntology getOntology() {
 		return ontology;
 	}

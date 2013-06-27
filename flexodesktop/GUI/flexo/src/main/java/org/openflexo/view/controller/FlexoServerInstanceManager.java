@@ -120,7 +120,7 @@ public class FlexoServerInstanceManager {
 				FlexoServerAddressBook defaultAddressBook = getDefaultAddressBook();
 				FlexoServerInstance other = getOtherInstance();
 				defaultAddressBook.addToInstances(other);
-				filterAddressBook(addressBook);
+				filterAddressBook(defaultAddressBook);
 				return defaultAddressBook;
 			}
 		}

@@ -335,8 +335,15 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 		updatePreferredSize();
 		updateMaximumSize();
 		updateMinimumSize();
+		updateOpacity();
 		updateBackgroundColor();
 		updateForegroundColor();
+	}
+
+	protected void updateOpacity() {
+		if (getComponent().getOpaque() != null) {
+			getDynamicJComponent().setOpaque(getComponent().getOpaque());
+		}
 	}
 
 	protected void updatePreferredSize() {

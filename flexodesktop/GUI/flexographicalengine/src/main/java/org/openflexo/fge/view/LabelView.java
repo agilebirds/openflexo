@@ -118,6 +118,14 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		}
 
 		@Override
+		public Dimension getPreferredSize() {
+			if (getText().length() == 0) {
+				return new Dimension(30, getFont().getSize());
+			}
+			return super.getPreferredSize();
+		}
+
+		@Override
 		public void updateUI() {
 		}
 

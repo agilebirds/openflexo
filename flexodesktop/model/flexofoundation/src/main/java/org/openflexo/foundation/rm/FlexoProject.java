@@ -1006,6 +1006,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return returned;
 	}
 
+	private boolean closed = false;
+
 	/**
 	 * Close this project Don't save anything
 	 * 
@@ -1013,6 +1015,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * 
 	 */
 	public void close() {
+		if (closed) {
+			return;
+		}
+		closed = true;
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Closing project...");
 		}
@@ -1145,6 +1151,10 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			resources.remove(resourceIdentifier);
 			setChanged();
 			notifyObservers(new ResourceRemoved(resource));
+		} else {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Could not remove resource with resourceIdentifier " + resourceIdentifier);
+			}
 		}
 	}
 
@@ -1241,11 +1251,9 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			}
 			identifier = null;
 			for (Entry<String, FlexoResource<? extends FlexoResourceData>> r : resources.entrySet()) {
-				{
-					if (r.getValue() == resource) {
-						identifier = r.getKey();
-						break;
-					}
+				if (r.getValue() == resource) {
+					identifier = r.getKey();
+					break;
 				}
 			}
 		}

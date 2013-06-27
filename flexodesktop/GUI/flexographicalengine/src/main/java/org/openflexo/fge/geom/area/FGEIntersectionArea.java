@@ -20,6 +20,8 @@
 package org.openflexo.fge.geom.area;
 
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -39,38 +41,38 @@ public class FGEIntersectionArea extends FGEOperationArea {
 	private Vector<FGEArea> _objects;
 
 	public static FGEArea makeIntersection(FGEArea... objects) {
-		Vector<FGEArea> v = new Vector<FGEArea>();
-		for (FGEArea o : objects) {
-			v.add(o.clone());
-		}
-		return makeIntersection(v);
+		return makeIntersection(Arrays.asList(objects));
 	}
 
 	public static FGEArea makeIntersection(List<? extends FGEArea> objects) {
-		Vector<FGEArea> nonEmbeddedObjects = new Vector<FGEArea>();
-		for (int i = 0; i < objects.size(); i++) {
-			FGEArea a1 = objects.get(i);
-			if (a1 instanceof FGEEmptyArea) {
-				return new FGEEmptyArea();
-			}
-			boolean isAlreadyContained = false;
-			for (FGEArea a2 : nonEmbeddedObjects) {
-				if (a2.containsArea(a1)) {
-					// forget a1;
-					isAlreadyContained = true;
+		// 1. Amongst the complete list, are there any objects which are completely contained by another? If yes, then the containing-object
+		// is no longer necessary since, the contained object is equal to the intersection of the containing object and the contained
+		// object.
+		// For example, the intersection of a point and a line (considering that the point is on that line, it intersects that line), is the
+		// point itself.
+		List<FGEArea> areas = getDevelopedAreas(objects);
+
+		List<FGEArea> nonEmbeddedObjects = new ArrayList<FGEArea>();
+		for (FGEArea area : areas) {
+			boolean shouldAdd = true;
+			for (FGEArea a : nonEmbeddedObjects) {
+				if (area.containsArea(a)) {
+					shouldAdd = false;
 				}
 			}
-			if (!isAlreadyContained) {
+			if (shouldAdd) {
 				Vector<FGEArea> noMoreNecessaryObjects = new Vector<FGEArea>();
-				for (FGEArea a2 : nonEmbeddedObjects) {
-					if (a1.containsArea(a2)) {
-						noMoreNecessaryObjects.add(a2);
+				for (FGEArea a : nonEmbeddedObjects) {
+					if (a.containsArea(area)) {
+						noMoreNecessaryObjects.add(a);
 					}
 				}
 				for (FGEArea removeThat : noMoreNecessaryObjects) {
-					nonEmbeddedObjects.remove(removeThat);
+					while (nonEmbeddedObjects.remove(removeThat)) {
+						;
+					}
 				}
-				nonEmbeddedObjects.add(a1);
+				nonEmbeddedObjects.add(area);
 			}
 		}
 
@@ -103,7 +105,7 @@ public class FGEIntersectionArea extends FGEOperationArea {
 		if (nonEmbeddedObjects.size() == 0) {
 			return new FGEEmptyArea();
 		} else if (nonEmbeddedObjects.size() == 1) {
-			return nonEmbeddedObjects.firstElement().clone();
+			return nonEmbeddedObjects.get(0).clone();
 		} else {
 			FGEIntersectionArea returned = new FGEIntersectionArea(nonEmbeddedObjects);
 
@@ -115,14 +117,27 @@ public class FGEIntersectionArea extends FGEOperationArea {
 		}
 	}
 
+	private static List<FGEArea> getDevelopedAreas(List<? extends FGEArea> objects) {
+		List<FGEArea> areas = new ArrayList<FGEArea>();
+		for (FGEArea area : objects) {
+			if (area instanceof FGEIntersectionArea) {
+				areas.addAll(getDevelopedAreas(((FGEIntersectionArea) area).getObjects()));
+			} else {
+				areas.add(area);
+			}
+		}
+		return areas;
+	}
+
 	public static void main(String[] args) {
-		FGELine line1 = new FGELine(new FGEPoint(0, 0), new FGEPoint(0, 1));
-		FGELine line2 = new FGELine(new FGEPoint(0, 1), new FGEPoint(1, 1));
-		FGELine line3 = new FGELine(new FGEPoint(0, 0), new FGEPoint(1, 1));
-		FGELine line4 = new FGELine(new FGEPoint(0, 1), new FGEPoint(1, 0));
+		FGELine line1 = new FGELine(new FGEPoint(0, 0), new FGEPoint(0, 1));// Vertical left line
+		FGELine line2 = new FGELine(new FGEPoint(0, 1), new FGEPoint(1, 1));// Horizontal bottom line
+		FGELine line3 = new FGELine(new FGEPoint(0, 0), new FGEPoint(1, 1));// Diagonal line (top-left to bottom-right)
+		FGELine line4 = new FGELine(new FGEPoint(0, 1), new FGEPoint(1, 0));// Diagonal line (top-right to bottom-left)
 
 		System.out.println("Intersection1: " + makeIntersection(line1, line2));
 		System.out.println("Intersection2: " + makeIntersection(line3, line2));
+		System.out.println("Intersection2: " + makeIntersection(line3, line4));
 		System.out.println("Intersection3: " + makeIntersection(line1, line2, line3));
 		System.out.println("Intersection4: " + makeIntersection(line1, line2, line4));
 	}

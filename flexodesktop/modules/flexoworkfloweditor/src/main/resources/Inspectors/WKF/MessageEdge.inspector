@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.edge.MessageEdge" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab" />
-    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="DataTab">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab"  opaque="false"/>
+    <Tab title="Data" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" font="SansSerif,0,11" name="DataTab" opaque="false">
       <Label label="has_output_message" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="false" name="HasOutputMessageLabel" localize="true" />
       <Label label="input_message" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.hasInputMessage = true)" name="InputMessagenameLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Label>
       <Label label="has_input_message" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="false" name="HasInputMessageLabel" localize="true" />
       <CheckBox selected="false" index="1" data="data.hasInputMessage" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="false" name="HasInputMessage" localize="true" />
       <TextField index="1" data="data.inputMessage.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.hasInputMessage = true)" name="InputMessagename" readOnly="true" localize="true" validateOnReturn="true" columns="10">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </TextField>
       <CheckBox selected="false" index="1" data="data.hasOutputMessage" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="false" name="HasOutputMessage" localize="true" />
       <Table iteratorClassName="org.openflexo.foundation.wkf.ws.MessageEntryBinding" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="InputMessagebindings" index="3" data="data.inputMessage.bindings" constraints="twocols(expandHorizontally=true;expandVertically=true;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.hasInputMessage = true)">
@@ -25,13 +25,13 @@
         </CustomColumn>
         <AddAction method="data.inputMessage.createNewBinding" name="new" />
         <RemoveAction method="data.inputMessage.deleteBinding(selected)" isAvailable="data.inputMessage.isBindingDeletable(selected)" name="delete" />
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Table>
       <Label label="output_message" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(data.hasOutputMessage = true)" name="OutputMessagenameLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Label>
       <TextField index="5" data="data.outputMessage.name" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.hasOutputMessage = true)" name="OutputMessagename" readOnly="true" localize="true" validateOnReturn="true" columns="10">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </TextField>
       <Table iteratorClassName="org.openflexo.foundation.wkf.ws.MessageEntryBinding" visibleRowCount="4" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="OutputMessagebindings" index="7" data="data.outputMessage.bindings" constraints="twocols(expandHorizontally=true;expandVertically=true;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(data.hasOutputMessage = true)">
         <TextFieldColumn data="iterator.bindingDefinition.variableName" title="name" columnWidth="80" resizable="true" displayTitle="true" />
@@ -45,7 +45,7 @@
         </CustomColumn>
         <AddAction method="data.outputMessage.createNewBinding" name="new" />
         <RemoveAction method="data.outputMessage.deleteBinding(selected)" isAvailable="data.outputMessage.isBindingDeletable(selected)" name="delete" />
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST" />
       </Table>
       <Parameter name="visibleFor" value="ANALYST,DEVELOPER,MAINTAINER" />
     </Tab>
@@ -66,5 +66,5 @@
     <Localized key="output_message" lang="Dutch">Output message</Localized>
     <Localized key="Basic" lang="French">Basique</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="Message edge" />
+  <Parameter name="title" value="Message flow" />
 </Panel>

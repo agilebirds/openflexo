@@ -20,6 +20,7 @@
 package org.openflexo.view.controller;
 
 import java.awt.event.MouseEvent;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.naming.InvalidNameException;
@@ -35,6 +36,10 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
+import org.openflexo.foundation.action.ImportProject;
+import org.openflexo.foundation.action.RemoveImportedProject;
+import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.icon.OntologyIconLibrary;
 import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
@@ -133,21 +138,21 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 		super.setDataObject(anObject);
 	}
 
-	public void singleClick(FlexoModelObject object) {
-		if (getFlexoController() != null) {
-			getFlexoController().objectWasClicked(object);
+	public void singleClick(Object object) {
+		if (getFlexoController() != null && object instanceof FlexoModelObject) {
+			getFlexoController().objectWasClicked((FlexoModelObject) object);
 		}
 	}
 
-	public void doubleClick(FlexoModelObject object) {
-		if (getFlexoController() != null) {
-			getFlexoController().objectWasDoubleClicked(object);
+	public void doubleClick(Object object) {
+		if (getFlexoController() != null && object instanceof FlexoModelObject) {
+			getFlexoController().objectWasDoubleClicked((FlexoModelObject) object);
 		}
 	}
 
-	public void rightClick(FlexoModelObject object, MouseEvent e) {
-		if (getFlexoController() != null) {
-			getFlexoController().objectWasRightClicked(object, e);
+	public void rightClick(Object object, MouseEvent e) {
+		if (getFlexoController() != null && object instanceof FlexoModelObject) {
+			getFlexoController().objectWasRightClicked((FlexoModelObject) object, e);
 		}
 	}
 
@@ -225,6 +230,19 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 
 	public ImageIcon getOntologyAnnotationPropertyIcon() {
 		return ONTOLOGY_ANNOTATION_PROPERTY_ICON;
+	}
+
+	public void importProject(FlexoProject project) {
+		ImportProject importProject = ImportProject.actionType.makeNewAction(project, null, getEditor());
+		importProject.doAction();
+	}
+
+	public void unimportProject(FlexoProject project, List<FlexoProjectReference> references) {
+		for (FlexoProjectReference ref : references) {
+			RemoveImportedProject removeProject = RemoveImportedProject.actionType.makeNewAction(project, null, getEditor());
+			removeProject.setProjectToRemoveURI(ref.getURI());
+			removeProject.doAction();
+		}
 	}
 
 	/*public void createOntologyClass(FlexoOntology ontology) {

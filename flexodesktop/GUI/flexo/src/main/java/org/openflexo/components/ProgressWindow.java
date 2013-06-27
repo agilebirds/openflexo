@@ -173,8 +173,8 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		setFocusable(false);
 		mainProgress = 0;
 		secondaryProgress = 0;
-		mainProgressBar = new JProgressBar(0, steps);
-		mainProgressBar.setIndeterminate(false);
+		mainProgressBar = new JProgressBar(0, Math.max(1, steps));
+		mainProgressBar.setIndeterminate(steps <= 0);
 		mainProgressBar.setStringPainted(false);
 		mainProgressBar.setValue(mainProgress);
 		secondaryProgressBar = new JProgressBar();
@@ -226,8 +226,8 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 		mainPane.setPreferredSize(new Dimension(600, 300));
 		getContentPane().add(mainPane);
 		setSize(600, 300);
-		center();
 		pack();
+		center();
 		setVisible(true);
 		paintImmediately();
 		if (logger.isLoggable(Level.FINE)) {

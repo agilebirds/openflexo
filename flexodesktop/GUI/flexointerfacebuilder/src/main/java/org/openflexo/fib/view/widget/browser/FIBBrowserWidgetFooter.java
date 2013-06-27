@@ -135,6 +135,7 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 					}
 				}
 				if (listeners.size() == 1) {
+					listeners.get(0).setSelectedObject(_widget.getSelectedObject());
 					listeners.get(0).actionPerformed(e);
 				} else if (listeners.size() > 1) {
 					JPopupMenu popupMenu = new JPopupMenu();
@@ -166,6 +167,7 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 
 	public FIBBrowserWidgetFooter(FIBBrowserWidget widget) {
 		super();
+		setOpaque(false);
 		_widget = widget;
 
 		initializeActions(widget);
@@ -199,8 +201,10 @@ public class FIBBrowserWidgetFooter extends JPanel implements MouseListener, Win
 		JPanel plusMinusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
 		plusMinusPanel.add(plusButton.getButton());
 		plusMinusPanel.add(minusButton.getButton());
+		plusMinusPanel.setOpaque(false);
 		JPanel optionsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
 		optionsPanel.add(optionsButton.getButton());
+		optionsPanel.setOpaque(false);
 		if (hasFilters()) {
 			optionsPanel.add(filtersButton);
 		}

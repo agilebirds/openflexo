@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.FlexoWorkflow" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Metrics Definition" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" visible="controller.displayInspectorTabForContext(&quot;METRICS&quot;)" font="SansSerif,0,11" name="MetricsDefinitionTab">
+    <Tab title="Metrics Definition" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="3" visible="controller.displayInspectorTabForContext(&quot;METRICS&quot;)" font="SansSerif,0,11" name="MetricsDefinitionTab" opaque="false">
       <Label label="process_metrics" align="center" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="ProcessMetricsDefinitionsLabel" localize="true" />
       <Table iteratorClassName="org.openflexo.foundation.wkf.MetricsDefinition" visibleRowCount="5" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="42,91,213" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="ProcessMetricsDefinitions" index="1" data="data.processMetricsDefinitions" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
         <TextFieldColumn data="iterator.name" title="value" columnWidth="100" resizable="true" displayTitle="true" />
@@ -53,16 +53,16 @@
         <RemoveAction method="data.deleteMetricsDefinition(selected)" name="delete" />
       </Table>
     </Tab>
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab">
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab" opaque="false">
       <Label label="flexo_id" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="FlexoIDLabel" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </Label>
       <TextField index="1" data="data.flexoID.toString" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="FlexoID" readOnly="true" localize="true">
-        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="MAINTAINER,DEVELOPER" />
       </TextField>
       <Parameter name="visibleFor" value="SEMANTICS,SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER" />
     </Tab>
-    <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="21" font="SansSerif,0,11" name="GraphicsTab">
+    <Tab title="Graphics" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="21" font="SansSerif,0,11" name="GraphicsTab" opaque="false">
       <Label label="name" index="2" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="WorkflowNameLabel" localize="true" />
       <TextField index="3" data="data.workflowName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="WorkflowName" localize="true" />
       <Label label="use_transparency" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="UseTransparencyLabel" localize="true" />

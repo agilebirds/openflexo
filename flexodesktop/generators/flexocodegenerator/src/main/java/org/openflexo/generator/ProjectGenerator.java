@@ -278,7 +278,10 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository> imp
 		defaultProperties.put("war.file", warFile.getAbsolutePath());
 		defaultProperties.put("zipped.api.file", ZIPPED_API_FILE.getAbsolutePath());
 		defaultProperties.put("zipped.framework.file", ZIPPED_FRAMEWORK_FILE.getAbsolutePath());
-		defaultProperties.put("flexo.framework.dir", getProject().getFrameworksToEmbedDirectory().getAbsolutePath());
+		File[] listFiles = getProject().getFrameworksToEmbedDirectory().listFiles();
+		if (listFiles != null && listFiles.length > 0) {
+			defaultProperties.put("flexo.framework.dir", getProject().getFrameworksToEmbedDirectory().getAbsolutePath());
+		}
 		defaultProperties.put("woproject.lib", WOPROJECT_JAR.getAbsolutePath());
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Copying repository (" + getRepository().getDirectory().getAbsolutePath() + ") to temp dir: "
@@ -301,6 +304,7 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository> imp
 		File buildFile = new File(genTempOutputDir, BuildXmlGenerator.FILE_NAME);
 		try {
 			ProjectHelper.getProjectHelper().parse(project, buildFile);
+			project.setBaseDir(genTempOutputDir);
 		} catch (BuildException e) {
 			e.printStackTrace();
 			setGenerationException(new WARBuildingException(new Exception("Configuration file " + buildFile
@@ -313,6 +317,9 @@ public class ProjectGenerator extends AbstractProjectGenerator<CGRepository> imp
 			project.setUserProperty(e.getKey(), e.getValue());
 		}
 		project.addBuildListener(this);
+		if (logger.isLoggable(Level.INFO)) {
+			logger.info("Ant file is " + project.getProperty("ant.file"));
+		}
 		try {
 			project.executeTarget(project.getDefaultTarget());
 		} catch (BuildException e) {

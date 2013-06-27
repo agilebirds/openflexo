@@ -42,6 +42,12 @@
               <description>No description</description>
             </EmbeddingChildDocItem>
           </InheritanceChildDocItem>
+          <InheritanceChildDocItem id="SGJavaFile" identifier="SGJavaFile" embedded="false" hidden="true">
+            <description>No description</description>
+            <EmbeddingChildDocItem id="SGJavaFile-lastModelReinjectingDateAsString" identifier="SGJavaFile-lastModelReinjectingDateAsString" embedded="true" hidden="true">
+              <description>No description</description>
+            </EmbeddingChildDocItem>
+          </InheritanceChildDocItem>
           <EmbeddingChildDocItem id="CGFile-resource.generator.usedTemplates" identifier="CGFile-resource.generator.usedTemplates" embedded="true" hidden="false">
             <description>No description</description>
           </EmbeddingChildDocItem>
@@ -11727,6 +11733,277 @@ forward to the next nodes.</description>
         <DocItem idref="ProjectOntology" />
         <DocItem idref="ProjectOntology-helpText" />
       </DocItemFolder>
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoModelSG" primaryDocItemId="SG" identifier="SG">
+        <description>No description</description>
+        <DocItem id="GeneratedSources" identifier="GeneratedSources" embedded="false" hidden="true">
+          <description>No description</description>
+          <EmbeddingChildDocItem id="GeneratedSources-helpText" identifier="GeneratedSources-helpText" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+        </DocItem>
+        <DocItem idref="GeneratedSources-helpText" />
+        <DocItem id="SG" identifier="SG" embedded="false" hidden="true">
+          <description>No description</description>
+        </DocItem>
+        <DocItem id="SGApplicationTemplateRepository" identifier="SGApplicationTemplateRepository" embedded="false" hidden="true">
+          <description>No description</description>
+          <EmbeddingChildDocItem id="SGApplicationTemplateRepository-helpText" identifier="SGApplicationTemplateRepository-helpText" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+        </DocItem>
+        <DocItem idref="SGApplicationTemplateRepository-helpText" />
+        <DocItem idref="SGJavaFile" />
+        <DocItem idref="SGJavaFile-lastModelReinjectingDateAsString" />
+        <DocItem id="SGRepository" identifier="SGRepository" embedded="false" hidden="true">
+          <description>No description</description>
+          <EmbeddingChildDocItem id="SGRepository-releases" identifier="SGRepository-releases" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="SGRepository-manageHistory" identifier="SGRepository-manageHistory" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="SGRepository-name" identifier="SGRepository-name" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="SGRepository-displayName" identifier="SGRepository-displayName" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="SGRepository-directory" identifier="SGRepository-directory" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="SGRepository-preferredTemplateRepository" identifier="SGRepository-preferredTemplateRepository" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="SGRepository-description" identifier="SGRepository-description" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+        </DocItem>
+        <DocItem idref="SGRepository-description" />
+        <DocItem idref="SGRepository-directory" />
+        <DocItem idref="SGRepository-displayName" />
+        <DocItem idref="SGRepository-manageHistory" />
+        <DocItem idref="SGRepository-name" />
+        <DocItem idref="SGRepository-preferredTemplateRepository" />
+        <DocItem idref="SGRepository-releases" />
+      </DocItemFolder>
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoModelSGJar" primaryDocItemId="SGJar" identifier="SGJar">
+        <description>No description</description>
+        <DocItem id="BpsLibImplementation" identifier="BpsLibImplementation" embedded="false" hidden="true">
+          <description>No description</description>
+          <EmbeddingChildDocItem id="BpsLibImplementation-includeMails" identifier="BpsLibImplementation-includeMails" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="BpsLibImplementation-includeLocalization" identifier="BpsLibImplementation-includeLocalization" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+        </DocItem>
+        <DocItem idref="BpsLibImplementation-includeLocalization" />
+        <DocItem idref="BpsLibImplementation-includeMails" />
+        <DocItem id="HibernateAttribute" identifier="HibernateAttribute" embedded="false" hidden="true">
+          <description>No description</description>
+          <EmbeddingChildDocItem id="HibernateAttribute-specificDescriptions" identifier="HibernateAttribute-specificDescriptions" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateAttribute-update" identifier="HibernateAttribute-update" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateAttribute-columnName" identifier="HibernateAttribute-columnName" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateAttribute-primaryKey" identifier="HibernateAttribute-primaryKey" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateAttribute-name" identifier="HibernateAttribute-name" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateAttribute-hibernateEnum" identifier="HibernateAttribute-hibernateEnum" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateAttribute-type" identifier="HibernateAttribute-type" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateAttribute-notNull" identifier="HibernateAttribute-notNull" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateAttribute-length" identifier="HibernateAttribute-length" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateAttribute-unique" identifier="HibernateAttribute-unique" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+        </DocItem>
+        <DocItem idref="HibernateAttribute-columnName" />
+        <DocItem idref="HibernateAttribute-hibernateEnum" />
+        <DocItem idref="HibernateAttribute-length" />
+        <DocItem idref="HibernateAttribute-name" />
+        <DocItem idref="HibernateAttribute-notNull" />
+        <DocItem idref="HibernateAttribute-primaryKey" />
+        <DocItem idref="HibernateAttribute-specificDescriptions" />
+        <DocItem idref="HibernateAttribute-type" />
+        <DocItem idref="HibernateAttribute-unique" />
+        <DocItem idref="HibernateAttribute-update" />
+        <DocItem id="HibernateEntity" identifier="HibernateEntity" embedded="false" hidden="true">
+          <description>No description</description>
+          <EmbeddingChildDocItem id="HibernateEntity-specificDescriptions" identifier="HibernateEntity-specificDescriptions" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateEntity-tableName" identifier="HibernateEntity-tableName" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateEntity-name" identifier="HibernateEntity-name" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateEntity-father" identifier="HibernateEntity-father" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateEntity-optimisticLocking" identifier="HibernateEntity-optimisticLocking" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+        </DocItem>
+        <DocItem idref="HibernateEntity-father" />
+        <DocItem idref="HibernateEntity-name" />
+        <DocItem idref="HibernateEntity-optimisticLocking" />
+        <DocItem idref="HibernateEntity-specificDescriptions" />
+        <DocItem idref="HibernateEntity-tableName" />
+        <DocItem id="HibernateEnum" identifier="HibernateEnum" embedded="false" hidden="true">
+          <description>No description</description>
+          <EmbeddingChildDocItem id="HibernateEnum-name" identifier="HibernateEnum-name" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateEnum-specificDescriptions" identifier="HibernateEnum-specificDescriptions" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+        </DocItem>
+        <DocItem idref="HibernateEnum-name" />
+        <DocItem idref="HibernateEnum-specificDescriptions" />
+        <DocItem id="HibernateEnumValue" identifier="HibernateEnumValue" embedded="false" hidden="true">
+          <description>No description</description>
+          <EmbeddingChildDocItem id="HibernateEnumValue-name" identifier="HibernateEnumValue-name" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateEnumValue-specificDescriptions" identifier="HibernateEnumValue-specificDescriptions" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+        </DocItem>
+        <DocItem idref="HibernateEnumValue-name" />
+        <DocItem idref="HibernateEnumValue-specificDescriptions" />
+        <DocItem id="HibernateImplementation" identifier="HibernateImplementation" embedded="false" hidden="true">
+          <description>No description</description>
+          <EmbeddingChildDocItem id="HibernateImplementation-specificDescriptions" identifier="HibernateImplementation-specificDescriptions" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateImplementation-database" identifier="HibernateImplementation-database" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+        </DocItem>
+        <DocItem idref="HibernateImplementation-database" />
+        <DocItem idref="HibernateImplementation-specificDescriptions" />
+        <DocItem id="HibernateModel" identifier="HibernateModel" embedded="false" hidden="true">
+          <description>No description</description>
+          <EmbeddingChildDocItem id="HibernateModel-specificDescriptions" identifier="HibernateModel-specificDescriptions" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateModel-name" identifier="HibernateModel-name" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateModel-watchedRepository" identifier="HibernateModel-watchedRepository" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+        </DocItem>
+        <DocItem idref="HibernateModel-name" />
+        <DocItem idref="HibernateModel-specificDescriptions" />
+        <DocItem idref="HibernateModel-watchedRepository" />
+        <DocItem id="HibernateRelationship" identifier="HibernateRelationship" embedded="false" hidden="true">
+          <description>No description</description>
+          <EmbeddingChildDocItem id="HibernateRelationship-specificDescriptions" identifier="HibernateRelationship-specificDescriptions" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateRelationship-inverse.toMany" identifier="HibernateRelationship-inverse.toMany" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateRelationship-inverse.lazy" identifier="HibernateRelationship-inverse.lazy" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateRelationship-isInverse" identifier="HibernateRelationship-isInverse" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateRelationship-hasInverse" identifier="HibernateRelationship-hasInverse" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateRelationship-inverse.nameOrBuiltAutomaticOne" identifier="HibernateRelationship-inverse.nameOrBuiltAutomaticOne" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateRelationship-inverse.notNull" identifier="HibernateRelationship-inverse.notNull" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateRelationship-inverse.cascadeTypes" identifier="HibernateRelationship-inverse.cascadeTypes" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateRelationship-destination" identifier="HibernateRelationship-destination" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateRelationship-nameOrBuiltAutomaticOne" identifier="HibernateRelationship-nameOrBuiltAutomaticOne" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateRelationship-cascadeTypes" identifier="HibernateRelationship-cascadeTypes" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateRelationship-lazy" identifier="HibernateRelationship-lazy" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateRelationship-notNull" identifier="HibernateRelationship-notNull" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateRelationship-toMany" identifier="HibernateRelationship-toMany" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="HibernateRelationship-indexColumnName" identifier="HibernateRelationship-indexColumnName" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+        </DocItem>
+        <DocItem idref="HibernateRelationship-cascadeTypes" />
+        <DocItem idref="HibernateRelationship-destination" />
+        <DocItem idref="HibernateRelationship-hasInverse" />
+        <DocItem idref="HibernateRelationship-indexColumnName" />
+        <DocItem idref="HibernateRelationship-inverse.cascadeTypes" />
+        <DocItem idref="HibernateRelationship-inverse.lazy" />
+        <DocItem idref="HibernateRelationship-inverse.nameOrBuiltAutomaticOne" />
+        <DocItem idref="HibernateRelationship-inverse.notNull" />
+        <DocItem idref="HibernateRelationship-inverse.toMany" />
+        <DocItem idref="HibernateRelationship-isInverse" />
+        <DocItem idref="HibernateRelationship-lazy" />
+        <DocItem idref="HibernateRelationship-nameOrBuiltAutomaticOne" />
+        <DocItem idref="HibernateRelationship-notNull" />
+        <DocItem idref="HibernateRelationship-specificDescriptions" />
+        <DocItem idref="HibernateRelationship-toMany" />
+        <DocItem id="JavaImplementation" identifier="JavaImplementation" embedded="false" hidden="true">
+          <description>No description</description>
+          <EmbeddingChildDocItem id="JavaImplementation-projectName" identifier="JavaImplementation-projectName" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="JavaImplementation-archiveName" identifier="JavaImplementation-archiveName" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="JavaImplementation-rootPackage" identifier="JavaImplementation-rootPackage" embedded="true" hidden="true">
+            <description>No description</description>
+          </EmbeddingChildDocItem>
+        </DocItem>
+        <DocItem idref="JavaImplementation-archiveName" />
+        <DocItem idref="JavaImplementation-projectName" />
+        <DocItem idref="JavaImplementation-rootPackage" />
+        <DocItem id="MavenImplementation" identifier="MavenImplementation" embedded="false" hidden="true">
+          <description>No description</description>
+        </DocItem>
+        <DocItem id="PostgresImplementation" identifier="PostgresImplementation" embedded="false" hidden="true">
+          <description>No description</description>
+        </DocItem>
+        <DocItem id="SGJar" identifier="SGJar" embedded="false" hidden="true">
+          <description>No description</description>
+        </DocItem>
+        <DocItem id="SpringImplementation" identifier="SpringImplementation" embedded="false" hidden="true">
+          <description>No description</description>
+        </DocItem>
+      </DocItemFolder>
       <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoModelWKF" primaryDocItemId="WKF" identifier="WKF">
         <description>No description</description>
         <DocItem idref="AbstractActivityNode" />
@@ -13065,6 +13342,7 @@ forward to the next nodes.</description>
                     <description>No description</description>
                     <EmbeddingChildDocItem id="GeneratedDocModuleView-add_repository" identifier="GeneratedDocModuleView-add_repository" embedded="false" hidden="false" />
                     <EmbeddingChildDocItem id="GeneratedDocModuleView-add_toc" identifier="GeneratedDocModuleView-add_toc" embedded="false" hidden="false" />
+                    <EmbeddingChildDocItem id="GeneratedDocModuleView-import_documentation_templates" identifier="GeneratedDocModuleView-import_documentation_templates" embedded="false" hidden="true" />
                     <RelatedToDocItem idref="code_generation" />
                     <RelatedToDocItem idref="code_generation" />
                   </RelatedToDocItem>
@@ -13119,6 +13397,7 @@ forward to the next nodes.</description>
               <DocItem idref="GeneratedDocModuleView" />
               <DocItem idref="GeneratedDocModuleView-add_repository" />
               <DocItem idref="GeneratedDocModuleView-add_toc" />
+              <DocItem idref="GeneratedDocModuleView-import_documentation_templates" />
             </DocItemFolder>
             <DocItem idref="code_generation" />
           </DocItemFolder>
@@ -13547,9 +13826,7 @@ forward to the next nodes.</description>
               <EmbeddingChildDocItem id="DMModelView-add_repository..." identifier="DMModelView-add_repository..." embedded="false" hidden="false" />
               <EmbeddingChildDocItem id="DMModelView-update_repository" identifier="DMModelView-update_repository" embedded="false" hidden="false" />
               <EmbeddingChildDocItem id="DMModelView-delete" identifier="DMModelView-delete" embedded="false" hidden="false" />
-              <EmbeddingChildDocItem id="DMModelView-add_repository" identifier="DMModelView-add_repository" embedded="false" hidden="true">
-                <description />
-              </EmbeddingChildDocItem>
+              <EmbeddingChildDocItem id="DMModelView-add_repository" identifier="DMModelView-add_repository" embedded="false" hidden="true" />
             </DocItem>
             <DocItem idref="DMModelView-add_repository" />
             <DocItem idref="DMModelView-add_repository..." />
@@ -14177,6 +14454,11 @@ forward to the next nodes.</description>
                       <RelatedToDocItem idref="process_edition" />
                       <RelatedToDocItem idref="process_edition" />
                     </RelatedToDocItem>
+                    <RelatedToDocItem id="WKFProjectModuleView" identifier="WKFProjectModuleView" embedded="false" hidden="true">
+                      <description>No description</description>
+                      <RelatedToDocItem idref="process_edition" />
+                      <RelatedToDocItem idref="process_edition" />
+                    </RelatedToDocItem>
                     <RelatedToDocItem idref="FlexoProcessView" />
                     <title key="ENGLISH">Perspective Process Edition</title>
                   </RelatedToDocItem>
@@ -14253,6 +14535,7 @@ forward to the next nodes.</description>
                     <RelatedToDocItem idref="SwimmingLaneView" />
                   </RelatedToDocItem>
                 </InheritanceChildDocItem>
+                <InheritanceChildDocItem idref="WKFProjectModuleView" />
                 <EmbeddingChildDocItem idref="process_edition" />
                 <EmbeddingChildDocItem idref="documentation" />
                 <EmbeddingChildDocItem idref="role_editor" />
@@ -14488,6 +14771,9 @@ forward to the next nodes.</description>
             <EmbeddingChildDocItem id="vpm-control-panel-forward" identifier="vpm-control-panel-forward" embedded="false" hidden="true" />
             <EmbeddingChildDocItem id="vpm-control-panel-toggle-hide-show-left-panel" identifier="vpm-control-panel-toggle-hide-show-left-panel" embedded="false" hidden="true" />
             <EmbeddingChildDocItem id="vpm-control-panel-toggle-hide-show-right-panel" identifier="vpm-control-panel-toggle-hide-show-right-panel" embedded="false" hidden="true" />
+          </InheritanceChildDocItem>
+          <InheritanceChildDocItem id="sg-control-panel" identifier="sg-control-panel" embedded="false" hidden="true">
+            <description>No description</description>
           </InheritanceChildDocItem>
           <title key="ENGLISH">Panel Central Control</title>
           <DocItemVersion id="general control panel_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
@@ -14731,6 +15017,9 @@ forward to the next nodes.</description>
             <EmbeddingChildDocItem id="vpm-left-view-plus" identifier="vpm-left-view-plus" embedded="false" hidden="true" />
             <EmbeddingChildDocItem id="vpm-left-view-minus" identifier="vpm-left-view-minus" embedded="false" hidden="true" />
             <EmbeddingChildDocItem id="vpm-left-view-options" identifier="vpm-left-view-options" embedded="false" hidden="true" />
+          </InheritanceChildDocItem>
+          <InheritanceChildDocItem id="sg-left-view" identifier="sg-left-view" embedded="false" hidden="true">
+            <description>No description</description>
           </InheritanceChildDocItem>
           <title key="ENGLISH">Panel Left</title>
           <DocItemVersion id="general left view_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
@@ -15008,6 +15297,9 @@ forward to the next nodes.</description>
             <InheritanceChildDocItem idref="CalcDrawingShemaModuleView" />
             <InheritanceChildDocItem idref="OntologyView" />
           </InheritanceChildDocItem>
+          <InheritanceChildDocItem id="sg-main-pane" identifier="sg-main-pane" embedded="false" hidden="true">
+            <description>No description</description>
+          </InheritanceChildDocItem>
           <title key="ENGLISH">Panel Central</title>
           <DocItemVersion id="general main pane_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
           <DocItemAction id="SUBMITTED_ON_general main pane_1.0.0ENGLISH" authorId="dsnyers" actionDate="HH:mm:ss dd/MM/yyyy,21:46:51 11/06/2007" actionType="SUBMITTED">
@@ -15078,6 +15370,15 @@ forward to the next nodes.</description>
               <DocItemVersion idref="vpm_1.0.2ENGLISH" />
             </DocItemAction>
           </InheritanceChildDocItem>
+          <InheritanceChildDocItem id="sg" identifier="sg" embedded="false" hidden="true">
+            <description>No description</description>
+            <EmbeddingChildDocItem idref="sg-main-pane" />
+            <EmbeddingChildDocItem idref="sg-control-panel" />
+            <EmbeddingChildDocItem idref="sg-left-view" />
+            <EmbeddingChildDocItem id="sg-right-view" identifier="sg-right-view" embedded="false" hidden="true">
+              <description>No description</description>
+            </EmbeddingChildDocItem>
+          </InheritanceChildDocItem>
           <EmbeddingChildDocItem idref="general main pane" />
           <EmbeddingChildDocItem idref="general control panel" />
           <EmbeddingChildDocItem idref="general left view" />
@@ -15123,6 +15424,7 @@ forward to the next nodes.</description>
             <InheritanceChildDocItem idref="oe-right-view" />
             <InheritanceChildDocItem idref="ve-right-view" />
             <InheritanceChildDocItem idref="vpm-right-view" />
+            <InheritanceChildDocItem idref="sg-right-view" />
             <title key="ENGLISH">Panel Right</title>
             <DocItemVersion id="general right view_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />
             <DocItemAction id="SUBMITTED_ON_general right view_1.0.0ENGLISH" authorId="dsnyers" actionDate="HH:mm:ss dd/MM/yyyy,21:48:38 11/06/2007" actionType="SUBMITTED">
@@ -15337,6 +15639,26 @@ forward to the next nodes.</description>
         </DocItemFolder>
         <DocItem idref="oe" />
       </DocItemFolder>
+      <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetsg" primaryDocItemId="sg" identifier="sg">
+        <description />
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetsgsg-control-panel" primaryDocItemId="sg-control-panel" identifier="sg-control-panel">
+          <description />
+          <DocItem idref="sg-control-panel" />
+        </DocItemFolder>
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetsgsg-left-view" primaryDocItemId="sg-left-view" identifier="sg-left-view">
+          <description />
+          <DocItem idref="sg-left-view" />
+        </DocItemFolder>
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetsgsg-main-pane" primaryDocItemId="sg-main-pane" identifier="sg-main-pane">
+          <description />
+          <DocItem idref="sg-main-pane" />
+        </DocItemFolder>
+        <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetsgsg-right-view" primaryDocItemId="sg-right-view" identifier="sg-right-view">
+          <description />
+          <DocItem idref="sg-right-view" />
+        </DocItemFolder>
+        <DocItem idref="sg" />
+      </DocItemFolder>
       <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetve" primaryDocItemId="ve" identifier="ve">
         <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetveve-control-panel" primaryDocItemId="ve-control-panel" identifier="ve-control-panel">
           <DocItem idref="ve-control-panel" />
@@ -15452,6 +15774,10 @@ forward to the next nodes.</description>
             <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-main-paneprocess_editionWKFDocumentationView2" primaryDocItemId="WKFDocumentationView2" identifier="WKFDocumentationView2">
               <description>Documentation on that view</description>
               <DocItem idref="WKFDocumentationView2" />
+            </DocItemFolder>
+            <DocItemFolder id="Folder: FlexoDocResourceCenterFlexoToolSetwkfwkf-main-paneprocess_editionWKFProjectModuleView" primaryDocItemId="WKFProjectModuleView" identifier="WKFProjectModuleView">
+              <description>Documentation on that view</description>
+              <DocItem idref="WKFProjectModuleView" />
             </DocItemFolder>
             <DocItem idref="process_edition" />
           </DocItemFolder>
@@ -15715,16 +16041,9 @@ forward to the next nodes.</description>
         </EmbeddingChildDocItem>
         <EmbeddingChildDocItem id="ie-palette" identifier="ie-palette" embedded="false" hidden="true" />
         <EmbeddingChildDocItem id="dm-browser" identifier="dm-browser" embedded="false" hidden="true">
-          <description />
-          <EmbeddingChildDocItem id="dm-browser-plus" identifier="dm-browser-plus" embedded="false" hidden="true">
-            <description />
-          </EmbeddingChildDocItem>
-          <EmbeddingChildDocItem id="dm-browser-minus" identifier="dm-browser-minus" embedded="false" hidden="true">
-            <description />
-          </EmbeddingChildDocItem>
-          <EmbeddingChildDocItem id="dm-browser-options" identifier="dm-browser-options" embedded="false" hidden="true">
-            <description />
-          </EmbeddingChildDocItem>
+          <EmbeddingChildDocItem id="dm-browser-plus" identifier="dm-browser-plus" embedded="false" hidden="true" />
+          <EmbeddingChildDocItem id="dm-browser-minus" identifier="dm-browser-minus" embedded="false" hidden="true" />
+          <EmbeddingChildDocItem id="dm-browser-options" identifier="dm-browser-options" embedded="false" hidden="true" />
         </EmbeddingChildDocItem>
         <title key="ENGLISH">Flexo Tool Set</title>
         <DocItemVersion id="FlexoToolSet_1.0.0ENGLISH" languageId="ENGLISH" version="1.0.0" />

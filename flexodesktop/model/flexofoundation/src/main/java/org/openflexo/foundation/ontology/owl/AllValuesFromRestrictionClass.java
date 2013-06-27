@@ -22,6 +22,7 @@ package org.openflexo.foundation.ontology.owl;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.OntologicDataType;
+import org.openflexo.foundation.ontology.OntologyObject;
 
 import com.hp.hpl.jena.ontology.AllValuesFromRestriction;
 import com.hp.hpl.jena.ontology.OntClass;
@@ -38,6 +39,19 @@ public class AllValuesFromRestrictionClass extends OntologyRestrictionClass {
 		super(aRestriction, ontology);
 		this.restriction = aRestriction;
 		retrieveRestrictionInformations();
+	}
+
+	@Override
+	public boolean containsOntologyObject(OntologyObject o, boolean inherited) {
+		boolean contains = super.containsOntologyObject(o, inherited);
+		if (contains) {
+			return true;
+		}
+		if (getObject() != null) {
+			return getObject().containsOntologyObject(o, inherited);
+		} else {
+			return false;
+		}
 	}
 
 	@Override

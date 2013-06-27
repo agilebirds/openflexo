@@ -2,7 +2,7 @@
 
 <model>
 
-  <entity name="org.openflexo.fib.model.FIBModelObject" abstract="yes" finalizer="finalizeDeserialization"> 
+  <entity name="org.openflexo.fib.model.FIBModelObject" abstract="yes" finalizer="finalizeDeserialization" initializer="initializeDeserialization"> 
     <property name="name" xmlTag="name" attribute="YES"/> 
     <property name="description" xmlTag="description"/> 
     <property name="parameters" xmlTag="Parameter" type="vector"/> 
@@ -25,7 +25,7 @@
     <property name="constraints" xmlTag="constraints" attribute="YES"/> 
     <property name="visible" xmlTag="visible" attribute="YES"/> 
     <property name="font" xmlTag="font" attribute="YES"/> 
-    <property name="opaque" xmlTag="opaque" attribute="YES" ignoreDefaultValue="false"/> 
+    <property name="opaque" xmlTag="opaque" attribute="YES"/> 
     <property name="backgroundColor" xmlTag="backgroundColor" attribute="YES"/> 
     <property name="foregroundColor" xmlTag="foregroundColor" attribute="YES"/> 
     <property name="width" xmlTag="width" attribute="YES"/> 
@@ -131,7 +131,7 @@
   
   <entity name="org.openflexo.fib.model.FIBLabel" xmlTag="Label"> 
     <property name="label" xmlTag="label" attribute="YES"/> 
-    <property name="align" xmlTag="align" attribute="YES" ignoreDefaultValue="left"/> 
+    <property name="align" xmlTag="align" attribute="YES" ignoreDefaultValue="left"/>
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBImage" xmlTag="Image"> 
@@ -199,6 +199,13 @@
     <property name="columns" xmlTag="columns" attribute="YES"/> 
     <property name="rows" xmlTag="rows" attribute="YES"/> 
     <property name="text" xmlTag="text" attribute="YES"/> 
+  </entity>
+  
+  <entity name="org.openflexo.fib.model.FIBEditorPane" xmlTag="EditorPane"> 
+    <property name="contentType" xmlTag="contentType" attribute="YES"/> 
+  </entity>
+  
+  <entity name="org.openflexo.fib.model.FIBTextPane" xmlTag="TextPane"> 
   </entity>
   
   <entity name="org.openflexo.fib.model.FIBHtmlEditor" xmlTag="HTMLEditor"> 

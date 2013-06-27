@@ -31,6 +31,7 @@ import javax.swing.event.MenuListener;
 
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.module.ModuleLoader;
+import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
 import org.openflexo.view.controller.FlexoController;
 
 /**
@@ -51,14 +52,17 @@ public abstract class FlexoMenu extends JMenu implements MouseListener, MenuList
 
 	protected FlexoMenu(String value, FlexoController controller) {
 		super();
+		manager = new PropertyChangeListenerRegistrationManager();
 		setController(controller);
 		setText(FlexoLocalization.localizedForKey(value, this));
 		addMouseListener(this);
 		addMenuListener(this);
 	}
 
-	public void dispose() {
+	protected PropertyChangeListenerRegistrationManager manager;
 
+	public void dispose() {
+		manager.delete();
 	}
 
 	// ==========================================================================

@@ -45,6 +45,7 @@ public class ModelProperty {
 		VECTOR_PROPERTY_TYPE,
 		HASHTABLE_PROPERTY_TYPE,
 		PROPERTIES_PROPERTY_TYPE,
+		SAFE_PROPERTIES_PROPERTY_TYPE,
 		UNMAPPED_ATTRIBUTES_TYPE,
 		COMPLEX_PROPERTY_TYPE;
 	}
@@ -204,7 +205,8 @@ public class ModelProperty {
 			throw new InvalidModelException("No attribute 'name' defined for tag 'property' in model file");
 		}
 
-		if (xmlTag == null && !isText && propertyType != PropertyType.PROPERTIES_PROPERTY_TYPE && contains == null) {
+		if (xmlTag == null && !isText && propertyType != PropertyType.PROPERTIES_PROPERTY_TYPE
+				&& propertyType != PropertyType.SAFE_PROPERTIES_PROPERTY_TYPE && contains == null) {
 			throw new InvalidModelException(
 					"No attribute 'xmlTag' or 'contains' defined for tag 'property' in model file while xml tag 'text' is not set to true.");
 		}
@@ -257,6 +259,10 @@ public class ModelProperty {
 
 		else if (propertyType == PropertyType.PROPERTIES_PROPERTY_TYPE) {
 			keyValueProperty = new PropertiesKeyValueProperty(modelEntity.getRelatedClass(), name, !getModel().serializeOnly);
+			handledXMLTags = null;
+		} else if (propertyType == PropertyType.SAFE_PROPERTIES_PROPERTY_TYPE) {
+			keyValueProperty = new PropertiesKeyValueProperty(modelEntity.getRelatedClass(), name, !getModel().serializeOnly);
+			((PropertiesKeyValueProperty) keyValueProperty).setSafe(true);
 			handledXMLTags = null;
 		}
 
@@ -336,6 +342,8 @@ public class ModelProperty {
 					propertyType = PropertyType.HASHTABLE_PROPERTY_TYPE;
 				} else if (tempAttribute.getNodeValue().equalsIgnoreCase(XMLMapping.propertiesLabel)) {
 					propertyType = PropertyType.PROPERTIES_PROPERTY_TYPE;
+				} else if (tempAttribute.getNodeValue().equalsIgnoreCase(XMLMapping.safePropertiesLabel)) {
+					propertyType = PropertyType.SAFE_PROPERTIES_PROPERTY_TYPE;
 				} else if (tempAttribute.getNodeValue().equalsIgnoreCase(XMLMapping.unmappedAttributesLabel)) {
 					propertyType = PropertyType.UNMAPPED_ATTRIBUTES_TYPE;
 				} else {
@@ -444,6 +452,8 @@ public class ModelProperty {
 				returnedString += " " + XMLMapping.typeLabel + "=" + '"' + XMLMapping.hashtableLabel + '"';
 			} else if (propertyType == PropertyType.PROPERTIES_PROPERTY_TYPE) {
 				returnedString += " " + XMLMapping.typeLabel + "=" + '"' + XMLMapping.propertiesLabel + '"';
+			} else if (propertyType == PropertyType.SAFE_PROPERTIES_PROPERTY_TYPE) {
+				returnedString += " " + XMLMapping.typeLabel + "=" + '"' + XMLMapping.safePropertiesLabel + '"';
 			} else if (propertyType == PropertyType.UNMAPPED_ATTRIBUTES_TYPE) {
 				returnedString += " " + XMLMapping.typeLabel + "=" + '"' + XMLMapping.unmappedAttributesLabel + '"';
 			} else {
@@ -616,6 +626,10 @@ public class ModelProperty {
 
 	public boolean isProperties() {
 		return propertyType == PropertyType.PROPERTIES_PROPERTY_TYPE;
+	}
+
+	public boolean isSafeProperties() {
+		return propertyType == PropertyType.SAFE_PROPERTIES_PROPERTY_TYPE;
 	}
 
 	public boolean isUnmappedAttributes() {

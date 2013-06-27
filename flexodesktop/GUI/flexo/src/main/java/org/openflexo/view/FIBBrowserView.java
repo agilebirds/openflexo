@@ -40,7 +40,7 @@ import org.openflexo.view.controller.FlexoController;
  * @author sguerin
  * 
  */
-public abstract class FIBBrowserView<O extends FlexoModelObject> extends SelectionSynchronizedFIBView implements FIBSelectionListener {
+public abstract class FIBBrowserView<O> extends SelectionSynchronizedFIBView implements FIBSelectionListener {
 	static final Logger logger = Logger.getLogger(FIBBrowserView.class.getPackage().getName());
 
 	// private O representedObject;

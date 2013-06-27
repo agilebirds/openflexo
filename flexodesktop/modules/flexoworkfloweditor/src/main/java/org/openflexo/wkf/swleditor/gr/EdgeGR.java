@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
+import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
 import org.openflexo.fge.connectors.CurveConnector;
@@ -42,6 +43,7 @@ import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.NameChanged;
+import org.openflexo.foundation.RepresentableFlexoModelObject;
 import org.openflexo.foundation.utils.FlexoFont;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.dm.PostInserted;
@@ -53,6 +55,7 @@ import org.openflexo.foundation.wkf.node.ActionNode;
 import org.openflexo.foundation.wkf.node.FlexoPreCondition;
 import org.openflexo.foundation.wkf.node.IFOperator;
 import org.openflexo.toolbox.ToolBox;
+import org.openflexo.wkf.WKFCst;
 import org.openflexo.wkf.WKFPreferences;
 import org.openflexo.wkf.processeditor.gr.EdgeGR.EdgeRepresentation;
 import org.openflexo.wkf.swleditor.SwimmingLaneEditorController;
@@ -77,10 +80,10 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		isInduced = aDrawing.getFirstVisibleObject(edge.getStartNode()) != edge.getStartNode()
 				|| aDrawing.getFirstVisibleObject(edge.getEndNode()) != edge.getEndNode();
 
-		setForeground(ForegroundStyle.makeStyle(Color.DARK_GRAY, 1.6f));
+		setForeground(ForegroundStyle.makeStyle(WKFCst.EDGE_COLOR, 1.0f));
 
-		setMiddleSymbol(MiddleSymbolType.FILLED_ARROW);
-
+		setMiddleSymbol(MiddleSymbolType.NONE);
+		setEndSymbol(EndSymbolType.FILLED_ARROW);
 		addToMouseClickControls(new ResetLayout(), true);
 
 		addToMouseClickControls(new SwimmingLaneEditorController.ShowContextualMenuControl(false));
@@ -276,6 +279,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 
 	public void resetLayout() {
 		if (getConnector() instanceof RectPolylinConnector) {
+			getEdge().setLocationConstraintFlag(true);
 			((RectPolylinConnector) getConnector()).setIsStartingLocationFixed(false);
 			((RectPolylinConnector) getConnector()).setIsEndingLocationFixed(false);
 			if (WKFPreferences.getConnectorAdjustability() == RectPolylinAdjustability.FULLY_ADJUSTABLE) {
@@ -318,11 +322,23 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		if (getConnector() instanceof RectPolylinConnector) {
 			if (getStartObject() instanceof AnnotationGR) {
 				startOrientationFixed = true;
-				newStartOrientation = SimplifiedCardinalDirection.WEST;
+				double d = getStartObject().getLocationInDrawing().x + getStartObject().getWidth() / 2;
+				double e = getEndObject().getLocationInDrawing().x + getEndObject().getWidth() / 2;
+				if (d > e) {
+					newStartOrientation = SimplifiedCardinalDirection.WEST;
+				} else {
+					newStartOrientation = SimplifiedCardinalDirection.EAST;
+				}
 			}
 			if (getEndObject() instanceof AnnotationGR) {
 				endOrientationFixed = true;
-				newEndOrientation = SimplifiedCardinalDirection.WEST;
+				double d = getStartObject().getLocationInDrawing().x + getStartObject().getWidth() / 2;
+				double e = getEndObject().getLocationInDrawing().x + getEndObject().getWidth() / 2;
+				if (d < e) {
+					newEndOrientation = SimplifiedCardinalDirection.WEST;
+				} else {
+					newEndOrientation = SimplifiedCardinalDirection.EAST;
+				}
 			}
 		}
 
@@ -482,6 +498,14 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		getEdge()._setGraphicalPropertyForKey(relativeMiddleSymbolLocation, getRelativeMiddleSymbolLocationKey());
 	}
 
+	public boolean startLocationManuallyAdjusted() {
+		return getConnector() instanceof RectPolylinConnector && ((RectPolylinConnector) getConnector()).getIsStartingLocationFixed();
+	}
+
+	public boolean endLocationManuallyAdjusted() {
+		return getConnector() instanceof RectPolylinConnector && ((RectPolylinConnector) getConnector()).getIsEndingLocationFixed();
+	}
+
 	private boolean isPolylinConverterRegistered = false;
 
 	private void ensurePolylinConverterIsRegistered() {
@@ -529,18 +553,24 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 			if (dataModification instanceof PostInserted || dataModification instanceof PostRemoved) {
 				getDrawing().updateGraphicalObjectsHierarchy();
 			} else if (dataModification instanceof WKFAttributeDataModification) {
-				if (((WKFAttributeDataModification) dataModification).getAttributeName().equals(FlexoPostCondition.EDGE_REPRESENTATION)) {
+				String propertyName = ((WKFAttributeDataModification) dataModification).propertyName();
+				if (FlexoPostCondition.EDGE_REPRESENTATION.equals(propertyName)) {
 					updatePropertiesFromWKFPreferences();
 					refreshConnector();
-				} else if ("isConditional".equals(((WKFAttributeDataModification) dataModification).propertyName())) {
+				} else if ("isConditional".equals(propertyName)) {
 					refreshConnector(true);
 				} else if ("isDefaultFlow".equals(((WKFAttributeDataModification) dataModification).propertyName())) {
+					refreshConnector(true);
+				} else if (WKFEdge.LOCATION_CONSTRAINT_FLAG.equals(propertyName) && (Boolean) dataModification.newValue()) {
 					refreshConnector(true);
 				}
 			} else if (dataModification instanceof NameChanged) {
 				notifyAttributeChange(org.openflexo.fge.GraphicalRepresentation.Parameters.text);
 			} else if ("hideWhenInduced".equals(dataModification.propertyName())) {
 				getDrawing().updateGraphicalObjectsHierarchy();
+			} else if (RepresentableFlexoModelObject.getBgColorKeyForContext(SWIMMING_LANE_EDITOR).equals(dataModification.propertyName())
+					|| RepresentableFlexoModelObject.getFgColorKeyForContext(SWIMMING_LANE_EDITOR).equals(dataModification.propertyName())) {
+				updatePropertiesFromWKFPreferences();
 			}
 		}
 	}
@@ -565,8 +595,8 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		if (isInsideSameActionPetriGraph()) {
 			type = EdgeRepresentation.CURVE;
 		}
-		TextStyle ts = TextStyle.makeTextStyle(Color.BLACK, getEdgeFont().getFont());
-		ts.setBackgroundColor(Color.WHITE);
+		TextStyle ts = TextStyle.makeTextStyle(getDrawable().getFgColor(SWIMMING_LANE_EDITOR, Color.BLACK), getEdgeFont().getFont());
+		ts.setBackgroundColor(getDrawable().getBgColor(SWIMMING_LANE_EDITOR, Color.WHITE));
 		ts.setIsBackgroundColored(true);
 		setTextStyle(ts);
 		setConnector(makeConnector(type.getConnectorType()));

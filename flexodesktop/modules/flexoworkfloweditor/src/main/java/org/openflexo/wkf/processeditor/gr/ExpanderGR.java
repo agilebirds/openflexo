@@ -201,8 +201,8 @@ public class ExpanderGR<O extends AbstractNode> extends ConnectorGraphicalRepres
 		private ConnectorControlPoint endP2;
 
 		@Override
-		public void refreshConnector() {
-			super.refreshConnector();
+		public void refreshConnector(boolean force) {
+			super.refreshConnector(force);
 
 			updateControlPoints();
 

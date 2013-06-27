@@ -65,8 +65,7 @@ public class TestViewpoints extends FlexoTestCase {
 	 */
 	public void test0LoadTestResourceCenter() {
 		log("test0LoadTestResourceCenter()");
-		testResourceCenter = LocalResourceCenterImplementation.instanciateTestLocalResourceCenterImplementation(new FileResource(
-				"TestResourceCenter"));
+		testResourceCenter = new LocalResourceCenterImplementation(new FileResource("TestResourceCenter"), false);
 
 		System.out.println(testResourceCenter.retrieveViewPointLibrary().getViewPoints());
 	}
@@ -134,7 +133,7 @@ public class TestViewpoints extends FlexoTestCase {
 
 		assertViewPointIsValid(testResourceCenter.retrieveViewPointLibrary().getViewPoint(
 				"http://www.agilebirds.com/openflexo/ViewPoints/SKOS/SKOSThesaurusEditor.owl"));
-
+		testResourceCenter = null;
 	}
 
 }

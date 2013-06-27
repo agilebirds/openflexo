@@ -34,15 +34,19 @@ public class TextFieldParameter extends ParameterDefinition<String> {
 	}
 
 	public void setValidateOnReturn(boolean validateOnReturn) {
-		addParameter(TextFieldWidget.VALIDATE_ON_RETURN, "" + validateOnReturn);
+		addParameter(TextFieldWidget.VALIDATE_ON_RETURN, String.valueOf(validateOnReturn));
 	}
 
 	public void setIsPassword(boolean isPassword) {
-		addParameter(TextFieldWidget.PASSWORD_PARAM, "" + isPassword);
+		addParameter(TextFieldWidget.PASSWORD_PARAM, String.valueOf(isPassword));
 	}
 
 	public void setColumns(int cols) {
-		addParameter(TextFieldWidget.COLUMNS_PARAM, "" + cols);
+		addParameter(TextFieldWidget.COLUMNS_PARAM, String.valueOf(cols));
+	}
+
+	public void setRequestFocus(boolean requestFocus) {
+		addParameter(TextFieldWidget.REQUEST_FOCUS, String.valueOf(requestFocus));
 	}
 
 	@Override

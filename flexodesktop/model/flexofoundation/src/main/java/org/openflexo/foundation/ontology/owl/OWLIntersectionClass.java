@@ -21,6 +21,8 @@ package org.openflexo.foundation.ontology.owl;
 
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.ontology.OntologyObject;
+
 import com.hp.hpl.jena.ontology.IntersectionClass;
 
 public class OWLIntersectionClass extends OWLOperatorClass {
@@ -33,6 +35,20 @@ public class OWLIntersectionClass extends OWLOperatorClass {
 		super(anOntClass, ontology);
 		this.ontClass = anOntClass;
 		init();
+	}
+
+	@Override
+	public boolean containsOntologyObject(OntologyObject o, boolean inherited) {
+		boolean contains = super.containsOntologyObject(o, inherited);
+		if (contains) {
+			return true;
+		}
+		for (OWLClass c : getOperands()) {
+			if (!c.containsOntologyObject(o, inherited)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override

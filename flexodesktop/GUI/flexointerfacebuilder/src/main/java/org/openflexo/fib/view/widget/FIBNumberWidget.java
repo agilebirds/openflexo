@@ -323,7 +323,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 			if (getWidget().getMinValue() != null && getWidget().getMinValue().intValue() > 0) {
 				return getWidget().getMinValue().intValue();
 			}
-			return new Integer(0);
+			return Integer.valueOf(0);
 		}
 
 		@Override
@@ -356,7 +356,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 
 		@Override
 		public Long getDefaultValue() {
-			return new Long(0);
+			return Long.valueOf(0);
 		}
 
 		@Override
@@ -389,7 +389,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 
 		@Override
 		public Float getDefaultValue() {
-			return new Float(0);
+			return Float.valueOf(0.0f);
 		}
 
 		@Override
@@ -422,7 +422,7 @@ public abstract class FIBNumberWidget<T extends Number> extends FIBWidgetView<FI
 
 		@Override
 		public Double getDefaultValue() {
-			return new Double(0);
+			return Double.valueOf(0.0);
 		}
 
 		@Override

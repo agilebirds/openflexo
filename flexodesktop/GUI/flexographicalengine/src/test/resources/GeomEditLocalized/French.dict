@@ -1,5 +1,3 @@
-#French
-#Wed Sep 12 15:42:41 CEST 2012
 close_drawing=Fermer le dessin
 edit=Edition
 file=Fichier
@@ -14,4 +12,5 @@ quit=Quitter
 save_drawing=Sauver le dessin
 save_drawing_as=Sauver le dessin sous...
 tools=Outils
+undefined_value=undefined_value
 untitled=sans titre

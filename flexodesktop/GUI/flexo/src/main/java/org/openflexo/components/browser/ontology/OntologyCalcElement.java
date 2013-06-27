@@ -42,7 +42,9 @@ public class OntologyCalcElement extends BrowserElement {
 
 	@Override
 	protected void buildChildrenVector() {
-		addToChilds((FlexoModelObject) getCalc().getViewpointOntology());
+		if (getCalc().getViewpointOntology() != null) {
+			addToChilds((FlexoModelObject) getCalc().getViewpointOntology());
+		}
 		for (EditionPattern ep : getCalc().getEditionPatterns()) {
 			if (ep.getParentEditionPattern() == null) {
 				addToChilds(ep);

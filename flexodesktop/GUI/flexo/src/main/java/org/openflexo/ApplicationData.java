@@ -62,7 +62,7 @@ public class ApplicationData {
 	}
 
 	public String getVersion() {
-		return "Version " + FlexoCst.BUSINESS_APPLICATION_VERSION + " (build " + FlexoCst.BUILD_ID + ")";
+		return "Version " + FlexoCst.BUSINESS_APPLICATION_VERSION + " (build " + ApplicationVersion.BUILD_ID + ")";
 	}
 
 	public Vector<File> getLastOpenedProjects() {

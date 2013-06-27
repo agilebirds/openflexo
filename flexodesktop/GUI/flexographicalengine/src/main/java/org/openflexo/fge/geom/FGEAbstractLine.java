@@ -43,6 +43,7 @@ public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FGEAbstractLine.class.getPackage().getName());
 
+	// Equation is a*x + b*y + c = 0
 	private double a;
 	private double b;
 	private double c;
@@ -290,7 +291,7 @@ public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.
 		}
 	}
 
-	public boolean isParallelTo(FGEAbstractLine aLine) {
+	public boolean isParallelTo(FGEAbstractLine<?> aLine) {
 		double a1 = aLine.a;
 		double b1 = aLine.b;
 
@@ -303,7 +304,7 @@ public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.
 		}
 	}
 
-	public boolean isOrthogonalTo(FGEAbstractLine aLine) {
+	public boolean isOrthogonalTo(FGEAbstractLine<?> aLine) {
 		double a1 = aLine.a;
 		double b1 = aLine.b;
 
@@ -487,7 +488,9 @@ public abstract class FGEAbstractLine<L extends FGEAbstractLine> extends Line2D.
 		if (area instanceof FGEArc) {
 			return ((FGEArc) area).intersect(this);
 		}
-
+		if (area instanceof FGEPolygon) {
+			return ((FGEPolygon) area).intersect(this);
+		}
 		FGEIntersectionArea returned = new FGEIntersectionArea(this, area);
 		if (returned.isDevelopable()) {
 			return returned.makeDevelopped();

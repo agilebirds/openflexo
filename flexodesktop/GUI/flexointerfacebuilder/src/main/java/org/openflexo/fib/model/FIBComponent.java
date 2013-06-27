@@ -141,7 +141,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	private DataBinding visible;
 
 	private Font font;
-	private boolean opaque = false;
+	private Boolean opaque;
 	private Color backgroundColor;
 	private Color foregroundColor;
 
@@ -476,10 +476,12 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	}
 
 	public void updateBindingModel() {
-		logger.fine("updateBindingModel()");
-		if (getRootComponent() != null) {
-			getRootComponent()._bindingModel = null;
-			getRootComponent().createBindingModel();
+		if (deserializationPerformed) {
+			logger.fine("updateBindingModel()");
+			if (getRootComponent() != null) {
+				getRootComponent()._bindingModel = null;
+				getRootComponent().createBindingModel();
+			}
 		}
 	}
 
@@ -539,13 +541,20 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 	public void notifiedBindingModelRecreated() {
 	}
 
-	protected boolean deserializationPerformed = false;
+	protected boolean deserializationPerformed = true;
+
+	@Override
+	public void initializeDeserialization() {
+		super.initializeDeserialization();
+		deserializationPerformed = false;
+	}
 
 	@Override
 	public void finalizeDeserialization() {
 		// System.out.println("finalizeDeserialization for "+this+" isRoot="+isRootComponent());
 
 		super.finalizeDeserialization();
+		deserializationPerformed = true;
 
 		if (getRootComponent().getBindingModel() == null) {
 			getRootComponent().createBindingModel();
@@ -561,8 +570,6 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 		if (visible != null) {
 			visible.finalizeDeserialization();
 		}
-
-		deserializationPerformed = true;
 
 		/*if (conditional != null) {
 			Vector<Variable> variables;
@@ -1050,9 +1057,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 			name = null;
 		}
 		super.setName(name);
-		if (deserializationPerformed) {
-			updateBindingModel();
-		}
+		updateBindingModel();
 	}
 
 	@Override
@@ -1070,9 +1075,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 
 		} else {
 			super.addToParameters(p);
-			if (deserializationPerformed) {
-				updateBindingModel();
-			}
+			updateBindingModel();
 		}
 	}
 

@@ -411,7 +411,7 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 			try {
 				if (s.intersectsInsideSegment(line)) {
 					FGEPoint intersection = s.getLineIntersection(line);
-					if (line.contains(intersection)) {
+					if (line.contains(intersection) && (crossed.size() == 0 || !crossed.lastElement().equals(intersection))) {
 						crossed.add(intersection);
 					}
 				}

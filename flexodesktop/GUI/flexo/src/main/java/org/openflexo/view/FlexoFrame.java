@@ -206,23 +206,6 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 		_controller = controller;
 		_relativeWindows = new Vector<FlexoRelativeWindow>();
 		_displayedRelativeWindows = new Vector<FlexoRelativeWindow>();
-		_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, this);
-		if (defaultFrame != null) {
-			disposeDefaultFrameWhenPossible();
-		}
-		if (ToolBox.getPLATFORM() != ToolBox.WINDOWS) {
-			setIconImage(controller.getModule().getModule().getBigIcon().getImage());
-		} else {
-			setIconImage(IconLibrary.OPENFLEXO_NOTEXT_128.getImage());
-		}
-		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		setResizable(true);
-		setFocusable(true);
-
-		/**
-		 * Listeners
-		 */
-		addWindowListener(windowListener = new FlexoModuleWindowListener());
 		Rectangle bounds = GeneralPreferences.getBoundForFrameWithID(getController().getModule().getShortName() + "Frame");
 		if (bounds != null) {
 			// In case we remove a screen (if you go from 3 to 2 screen, go to hell, that's all you deserve ;-))
@@ -244,17 +227,53 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 				&& ((state & Frame.MAXIMIZED_BOTH) == Frame.MAXIMIZED_BOTH || (state & Frame.MAXIMIZED_HORIZ) == Frame.MAXIMIZED_HORIZ || (state & Frame.MAXIMIZED_VERT) == Frame.MAXIMIZED_VERT)) {
 			setExtendedState(GeneralPreferences.getFrameStateForFrameWithID(getController().getModule().getShortName() + "Frame"));
 		}
+		_controller.getControllerModel().getPropertyChangeSupport().addPropertyChangeListener(ControllerModel.CURRENT_EDITOR, this);
+		if (defaultFrame != null) {
+			disposeDefaultFrameWhenPossible();
+		}
+		if (ToolBox.getPLATFORM() != ToolBox.WINDOWS) {
+			setIconImage(controller.getModule().getModule().getBigIcon().getImage());
+		} else {
+			setIconImage(IconLibrary.OPENFLEXO_NOTEXT_128.getImage());
+		}
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		setResizable(true);
+		setFocusable(true);
+
+		/**
+		 * Listeners
+		 */
+		addWindowListener(windowListener = new FlexoModuleWindowListener());
+		addComponentListener(windowResizeListener = new ComponentAdapter() {
+
+			@Override
+			public void componentMoved(ComponentEvent e) {
+				saveBoundsInPreferenceWhenPossible();
+			}
+
+			@Override
+			public void componentResized(ComponentEvent e) {
+				saveBoundsInPreferenceWhenPossible();
+			}
+
+		});
 	}
 
 	public FlexoModule getModule() {
-		return getController().getModule();
+		if (getController() != null) {
+			return getController().getModule();
+		} else {
+			return null;
+		}
 	}
 
 	protected void switchToModule() {
-		try {
-			getModuleLoader().switchToModule(getModule().getModule());
-		} catch (ModuleLoadingException e1) {
-			e1.printStackTrace();
+		if (getModule() != null) {
+			try {
+				getModuleLoader().switchToModule(getModule().getModule());
+			} catch (ModuleLoadingException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 
@@ -337,7 +356,7 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 		}
 	}
 
-	static final String WINDOW_MODIFIED = "windowModified";
+	private static final String WINDOW_MODIFIED = "windowModified";
 
 	@Override
 	public void update(final FlexoObservable observable, final DataModification dataModification) {
@@ -389,27 +408,9 @@ public final class FlexoFrame extends JFrame implements GraphicalFlexoObserver, 
 		if (getController() != null) {
 			if (mainFrameIsVisible && getModule() != null && getModule().isActive() || !mainFrameIsVisible) {
 				setRelativeVisible(mainFrameIsVisible);
-				super.setVisible(mainFrameIsVisible);
 			}
-			if (windowResizeListener == null) {
-				windowResizeListener = new ComponentAdapter() {
-
-					@Override
-					public void componentMoved(ComponentEvent e) {
-						saveBoundsInPreferenceWhenPossible();
-					}
-
-					@Override
-					public void componentResized(ComponentEvent e) {
-						saveBoundsInPreferenceWhenPossible();
-					}
-
-				};
-				addComponentListener(windowResizeListener);
-			}
-		} else {
-			super.setVisible(mainFrameIsVisible);
 		}
+		super.setVisible(mainFrameIsVisible);
 	}
 
 	public void setRelativeVisible(boolean relativeWindowsAreVisible) {

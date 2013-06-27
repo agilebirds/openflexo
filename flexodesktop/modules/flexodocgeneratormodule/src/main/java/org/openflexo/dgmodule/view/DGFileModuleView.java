@@ -120,7 +120,7 @@ public class DGFileModuleView extends JPanel implements ModuleView<CGFile>, Flex
 					.getResource();
 			if (resource instanceof CopyOfFileResource) {
 				imagePath = ((CopyOfFileResource) resource).getResourceToCopy().getAbsolutePath();
-			} else if (resource instanceof FlexoCopiedResource) {
+			} else if (resource instanceof FlexoCopiedResource && ((FlexoCopiedResource) resource).getResourceToCopy() != null) {
 				imagePath = ((FlexoCopiedResource) resource).getResourceToCopy().getFile().getAbsolutePath();
 			}
 			if (imagePath != null) {

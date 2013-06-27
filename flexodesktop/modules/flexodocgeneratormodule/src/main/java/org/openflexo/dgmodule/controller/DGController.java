@@ -37,6 +37,7 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.components.AskParametersDialog;
@@ -130,8 +131,13 @@ public class DGController extends DEController implements FlexoObserver, Project
 	 */
 	public DGController(FlexoModule module) {
 		super(module);
-		_projectGenerators = new Hashtable<DGRepository, ProjectDocGenerator>();
+	}
 
+	private Map<DGRepository, ProjectDocGenerator> getProjectGeneratorsMap() {
+		if (_projectGenerators == null) {
+			_projectGenerators = new Hashtable<DGRepository, ProjectDocGenerator>();
+		}
+		return _projectGenerators;
 	}
 
 	@Override
@@ -213,7 +219,7 @@ public class DGController extends DEController implements FlexoObserver, Project
 				refreshProgressWindow(((GenerationProgressNotification) dataModification).getProgressMessage());
 			}
 		} else if (observable instanceof DGRepository && dataModification instanceof ObjectDeleted) {
-			observedRepositories.remove(observable);
+			getObservedRepositories().remove(observable);
 			observable.deleteObserver(this);
 		}
 	}
@@ -234,31 +240,31 @@ public class DGController extends DEController implements FlexoObserver, Project
 		if (!repository.isConnected()) {
 			return null;
 		}
-		ProjectDocGenerator returned = _projectGenerators.get(repository);
+		ProjectDocGenerator returned = getProjectGeneratorsMap().get(repository);
 		if (returned == null) {
 			try {
 				switch (repository.getFormat()) {
 				/*case LATEX:
-					returned = new ProjectDocLatexGenerator(getProject(), repository);
+					returned = new ProjectDocLatexGenerator(repository.getProject(), repository);
 					break;*/
 				case HTML:
-					returned = new ProjectDocHTMLGenerator(getProject(), repository);
+					returned = new ProjectDocHTMLGenerator(repository.getProject(), repository);
 					break;
 				case DOCX:
-					returned = new ProjectDocDocxGenerator(getProject(), repository);
+					returned = new ProjectDocDocxGenerator(repository.getProject(), repository);
 					break;
 				}
 			} catch (GenerationException e) {
 				showError(e.getLocalizedMessage());
 				return null;
 			}
-			_projectGenerators.put(repository, returned);
+			getProjectGeneratorsMap().put(repository, returned);
 		}
 		return returned;
 	}
 
 	public Collection<ProjectDocGenerator> getProjectGenerators() {
-		return _projectGenerators.values();
+		return getProjectGeneratorsMap().values();
 	}
 
 	/**
@@ -289,7 +295,7 @@ public class DGController extends DEController implements FlexoObserver, Project
 
 	GenerationRepository _lastEditedCGRepository;
 
-	protected Vector<DGRepository> observedRepositories = new Vector<DGRepository>();
+	private Vector<DGRepository> observedRepositories;
 
 	public void refreshFooter() {
 		_footer.refresh();
@@ -408,8 +414,8 @@ public class DGController extends DEController implements FlexoObserver, Project
 			// logger.info("Refresh footer with "+repositoryToConsider);
 			boolean displayItemStatus;
 			if (repositoryToConsider != null) {
-				if (!observedRepositories.contains(repositoryToConsider)) {
-					observedRepositories.add(repositoryToConsider);
+				if (!getObservedRepositories().contains(repositoryToConsider)) {
+					getObservedRepositories().add(repositoryToConsider);
 					repositoryToConsider.addObserver(this);
 				}
 				String repName = "[" + repositoryToConsider.getName() + "] ";
@@ -418,7 +424,7 @@ public class DGController extends DEController implements FlexoObserver, Project
 					statusLabel.setForeground(Color.BLACK);
 					displayItemStatus = false;
 				} else {
-					if (_projectGenerators.get(repositoryToConsider) == null) {
+					if (getProjectGeneratorsMap().get(repositoryToConsider) == null) {
 						statusLabel.setText(repName + FlexoLocalization.localizedForKey("doc_generation_not_synchronized"));
 						displayItemStatus = false;
 					} else {
@@ -464,7 +470,16 @@ public class DGController extends DEController implements FlexoObserver, Project
 		}
 
 		@Override
-		public void update(FlexoObservable observable, DataModification dataModification) {
+		public void update(final FlexoObservable observable, final DataModification dataModification) {
+			if (!SwingUtilities.isEventDispatchThread()) {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						update(observable, dataModification);
+					}
+				});
+				return;
+			}
 			refresh();
 		}
 
@@ -575,4 +590,10 @@ public class DGController extends DEController implements FlexoObserver, Project
 		_CGGeneratedResourceModifiedHook = generatedResourceModifiedHook;
 	}
 
+	private Vector<DGRepository> getObservedRepositories() {
+		if (observedRepositories == null) {
+			observedRepositories = new Vector<DGRepository>();
+		}
+		return observedRepositories;
+	}
 }

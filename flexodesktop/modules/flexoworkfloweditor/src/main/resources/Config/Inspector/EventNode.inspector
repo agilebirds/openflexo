@@ -16,7 +16,7 @@
 		<property name="dateBinding" label="date" widget="CUSTOM" depends="isTriggerTimer" conditional="isTriggerTimer=true" constraint="5">
 			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
             <param name="binding_definition" value="dateBindingDefinition"/>          
-            <param name="visibleFor" value="MAINTAINER,DEVELOPPER,ANALYST"/>
+            <param name="visibleFor" value="MAINTAINER,DEVELOPER,ANALYST"/>
 		</property>
 		<property name="delay" label="delay" widget="CUSTOM" depends="isTriggerTimer" conditional="isTriggerTimer=true" constraint="6">
 			<param name="className" value="org.openflexo.components.widget.DurationInspectorWidget"/>

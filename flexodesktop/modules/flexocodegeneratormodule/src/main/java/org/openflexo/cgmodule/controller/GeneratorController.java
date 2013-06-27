@@ -37,6 +37,7 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import org.openflexo.FlexoCst;
 import org.openflexo.cgmodule.GeneratorPreferences;
@@ -122,7 +123,13 @@ public class GeneratorController extends FlexoController implements GCAction.Pro
 	public GeneratorController(FlexoModule module) {
 		super(module);
 		_CGGeneratedResourceModifiedHook = new CGGeneratedResourceModifiedHook();
-		_projectGenerators = new Hashtable<GenerationRepository, ProjectGenerator>();
+	}
+
+	private Hashtable<GenerationRepository, ProjectGenerator> getProjectGeneratorsMap() {
+		if (_projectGenerators == null) {
+			_projectGenerators = new Hashtable<GenerationRepository, ProjectGenerator>();
+		}
+		return _projectGenerators;
 	}
 
 	@Override
@@ -218,24 +225,24 @@ public class GeneratorController extends FlexoController implements GCAction.Pro
 	}
 
 	public ProjectGenerator getProjectGenerator(CGRepository repository) {
-		ProjectGenerator returned = _projectGenerators.get(repository);
+		ProjectGenerator returned = getProjectGeneratorsMap().get(repository);
 		if (!repository.isConnected()) {
 			return returned;
 		}
 		if (returned == null) {
 			try {
-				returned = new ProjectGenerator(getProject(), repository);
+				returned = new ProjectGenerator(repository.getProject(), repository);
 			} catch (GenerationException e) {
 				showError(e.getLocalizedMessage());
 				return null;
 			}
-			_projectGenerators.put(repository, returned);
+			getProjectGeneratorsMap().put(repository, returned);
 		}
 		return returned;
 	}
 
 	public Enumeration<ProjectGenerator> getProjectGenerators() {
-		return _projectGenerators.elements();
+		return getProjectGeneratorsMap().elements();
 	}
 
 	@Override
@@ -269,7 +276,7 @@ public class GeneratorController extends FlexoController implements GCAction.Pro
 
 	public GenerationRepository _lastEditedCGRepository;
 
-	private List<GenerationRepository> observedRepositories = new Vector<GenerationRepository>();
+	private List<GenerationRepository> observedRepositories;
 
 	public void refreshFooter() {
 		_footer.refresh();
@@ -387,8 +394,8 @@ public class GeneratorController extends FlexoController implements GCAction.Pro
 			// logger.info("Refresh footer with "+repositoryToConsider);
 			boolean displayItemStatus;
 			if (repositoryToConsider != null) {
-				if (!observedRepositories.contains(repositoryToConsider)) {
-					observedRepositories.add(repositoryToConsider);
+				if (!getObservedRepositories().contains(repositoryToConsider)) {
+					getObservedRepositories().add(repositoryToConsider);
 					repositoryToConsider.addObserver(this);
 				}
 				String repName = "[" + repositoryToConsider.getName() + "] ";
@@ -397,8 +404,8 @@ public class GeneratorController extends FlexoController implements GCAction.Pro
 					statusLabel.setForeground(Color.BLACK);
 					displayItemStatus = false;
 				} else {
-					if (_projectGenerators.get(repositoryToConsider) == null
-							|| !_projectGenerators.get(repositoryToConsider).hasBeenInitialized()) {
+					if (getProjectGeneratorsMap().get(repositoryToConsider) == null
+							|| !getProjectGeneratorsMap().get(repositoryToConsider).hasBeenInitialized()) {
 						statusLabel.setText(repName + FlexoLocalization.localizedForKey("code_generation_not_synchronized"));
 						displayItemStatus = false;
 					} else {
@@ -448,7 +455,16 @@ public class GeneratorController extends FlexoController implements GCAction.Pro
 		}
 
 		@Override
-		public void update(FlexoObservable observable, DataModification dataModification) {
+		public void update(final FlexoObservable observable, final DataModification dataModification) {
+			if (!SwingUtilities.isEventDispatchThread()) {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						update(observable, dataModification);
+					}
+				});
+				return;
+			}
 			refresh();
 		}
 
@@ -607,4 +623,12 @@ public class GeneratorController extends FlexoController implements GCAction.Pro
 
 		return null;
 	}
+
+	private List<GenerationRepository> getObservedRepositories() {
+		if (observedRepositories == null) {
+			observedRepositories = new Vector<GenerationRepository>();
+		}
+		return observedRepositories;
+	}
+
 }

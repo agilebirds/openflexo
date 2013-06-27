@@ -21,15 +21,12 @@ package org.openflexo.wkf.swleditor.gr;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
@@ -39,21 +36,17 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
+import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.geom.FGESegment;
-import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEHalfLine;
-import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage;
 import org.openflexo.fge.graphics.BackgroundStyle.BackgroundImage.ImageBackgroundType;
 import org.openflexo.fge.graphics.BackgroundStyle.ColorGradient.ColorGradientDirection;
 import org.openflexo.fge.graphics.DecorationPainter;
-import org.openflexo.fge.graphics.FGEGraphics;
 import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ShapeView;
@@ -67,16 +60,17 @@ import org.openflexo.foundation.wkf.dm.ObjectLocationChanged;
 import org.openflexo.foundation.wkf.dm.ObjectSizeChanged;
 import org.openflexo.foundation.wkf.dm.RoleColorChange;
 import org.openflexo.foundation.wkf.dm.RoleNameChange;
+import org.openflexo.foundation.wkf.dm.RoleRemoved;
 import org.openflexo.foundation.wkf.dm.WKFAttributeDataModification;
-import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.toolbox.FileResource;
-import org.openflexo.wkf.swleditor.AnnotationMouseClickControl;
 import org.openflexo.wkf.swleditor.SWLEditorConstants;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
 public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR {
 
 	static final Logger logger = Logger.getLogger(OperationNodeGR.class.getPackage().getName());
+
+	private static final TextStyle ROLE_LABEL_TEXT_STYLE = TextStyle.makeTextStyle(Color.BLACK, new Font("Arial", Font.PLAIN, 12));
 
 	protected BackgroundStyle background;
 	protected ForegroundStyle decorationForeground;
@@ -87,19 +81,17 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 
 	protected Color mainColor, backColor, emphasizedMainColor, emphasizedBackColor;
 
-	protected SWLContainerControls controlsArea;
+	private SWLContainerResizeAreas controlAreas;
 
 	public RoleContainerGR(Role role, SwimmingLaneRepresentation aDrawing) {
 		super(role, ShapeType.RECTANGLE, aDrawing);
-
+		((org.openflexo.fge.shapes.Rectangle) getShape()).setIsRounded(false);
 		setLayer(SWLEditorConstants.ROLE_LAYER);
 
 		setMinimalWidth(180);
 		setMinimalHeight(80);
-
+		setBorder(new ShapeBorder(0, 0, 0, 0));
 		// setDimensionConstraints(DimensionConstraints.CONTAINER);
-
-		setBorder(new ShapeGraphicalRepresentation.ShapeBorder(0, CONTAINER_LABEL_HEIGHT, 0, 0));
 
 		/*mainColor = role.getColor();
 		backColor = new Color ((255*3+mainColor.getRed())/4,(255*3+mainColor.getGreen())/4,(255*3+mainColor.getBlue())/4);
@@ -114,11 +106,19 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 		setDecorationPainter(new DecorationPainter() {
 			@Override
 			public void paintDecoration(org.openflexo.fge.graphics.FGEShapeDecorationGraphics g) {
-				double arcSize = 25;
 				g.useBackgroundStyle(background);
-				g.fillRoundRect(0, 0, g.getWidth() - 1, g.getHeight() - 1 + CONTAINER_LABEL_HEIGHT, arcSize, arcSize);
+				g.fillRect(0, 0, g.getWidth() - 1, g.getHeight() - 1);
 				g.useForegroundStyle(decorationForeground);
-				g.drawRoundRect(0, 0, g.getWidth() - 1, g.getHeight() - 1 + CONTAINER_LABEL_HEIGHT, arcSize, arcSize);
+				g.drawRect(0, 0, g.getWidth() - 1, g.getHeight() - 1);
+				double x = 10 + ROLE_LABEL_TEXT_STYLE.getFont().getSize();
+				g.drawLine(x, 0, x, getHeight());
+				g.useTextStyle(ROLE_LABEL_TEXT_STYLE);
+				double y = getHeight() / 2;
+				AffineTransform at = AffineTransform.getScaleInstance(g.getScale(), g.getScale());
+				int orientation = -90;
+				at.concatenate(AffineTransform.getRotateInstance(Math.toRadians(orientation)));
+
+				g.drawString(getDrawable().getName(), x, y, orientation, HorizontalTextAlignment.CENTER);
 			};
 
 			@Override
@@ -131,16 +131,19 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 
 		role.addObserver(this);
 
-		setDimensionConstraints(DimensionConstraints.UNRESIZABLE);
+		setDimensionConstraints(DimensionConstraints.FREELY_RESIZABLE);
 
 		setLocationConstraints(LocationConstraints.AREA_CONSTRAINED);
 		setLocationConstrainedArea(FGEHalfLine.makeHalfLine(new FGEPoint(SWIMMING_LANE_BORDER, SWIMMING_LANE_BORDER),
 				SimplifiedCardinalDirection.SOUTH));
-
+		setMinimalHeight(120);
 		anchorLocation();
+		controlAreas = new SWLContainerResizeAreas(this);
+	}
 
-		updateControlArea();
-		addToMouseClickControls(new AnnotationMouseClickControl());
+	@Override
+	public List<? extends ControlArea<?>> getControlAreas() {
+		return controlAreas.getControlAreas();
 	}
 
 	/*@Override
@@ -199,7 +202,7 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 				backColor.getGreen() / 2 + 128, backColor.getBlue() / 2 + 128), ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 
 		decorationForeground = ForegroundStyle.makeStyle(mainColor);
-		decorationForeground.setLineWidth(0.2);
+		decorationForeground.setLineWidth(0.4);
 
 		if (getRole().getIsSystemRole()) {
 			decorationBackground = BackgroundStyle.makeImageBackground(SYSTEM_ROLE_ICON);
@@ -252,7 +255,8 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 	}
 	 */
 
-	private void anchorLocation() {
+	@Override
+	public void anchorLocation() {
 		setX(SWIMMING_LANE_BORDER);
 		setY(getDrawing().yForObject(getRole()));
 	}
@@ -264,7 +268,17 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 
 	@Override
 	public double getHeight() {
-		return getSwimmingLaneHeight() * getSwimmingLaneNb();
+		return getDrawing().getHeight(getRole());
+	}
+
+	@Override
+	public void setHeightNoNotification(double height) {
+		getDrawing().setHeight(getRole(), height);
+	}
+
+	@Override
+	public void setWidthNoNotification(double aValue) {
+		getDrawingGraphicalRepresentation().setWidth(aValue + 2 * SWIMMING_LANE_BORDER);
 	}
 
 	@Override
@@ -289,29 +303,8 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 			} else if (dataModification instanceof ObjectSizeChanged) {
 				notifyObjectResized();
 			} else if (dataModification instanceof WKFAttributeDataModification) {
-				if (((WKFAttributeDataModification) dataModification).getAttributeName().equals(getDrawing().SWIMMING_LANE_NB_KEY())) {
-					getDrawing().invalidateGraphicalObjectsHierarchy(getRole());
-					getDrawing().updateGraphicalObjectsHierarchy();
-					for (GraphicalRepresentation<?> gr : getDrawing().getDrawingGraphicalRepresentation()
-							.getContainedGraphicalRepresentations()) {
-						if (gr instanceof RoleContainerGR) {
-							((RoleContainerGR) gr).notifyObjectHasMoved();
-						}
-					}
-					getDrawingGraphicalRepresentation().notifyObjectResized(null);
-				} else if (((WKFAttributeDataModification) dataModification).getAttributeName().equals(
-						getDrawing().SWIMMING_LANE_HEIGHT_KEY())) {
-					getDrawing().invalidateGraphicalObjectsHierarchy(getRole());
-					getDrawing().updateGraphicalObjectsHierarchy();
-					for (GraphicalRepresentation<?> gr : getDrawing().getDrawingGraphicalRepresentation()
-							.getContainedGraphicalRepresentations()) {
-						if (gr instanceof RoleContainerGR) {
-							((RoleContainerGR) gr).notifyObjectHasMoved();
-						}
-					}
-					getDrawingGraphicalRepresentation().notifyObjectResized(null);
-				} else if (((WKFAttributeDataModification) dataModification).getAttributeName().equals(
-						getDrawing().SWIMMING_LANE_INDEX_KEY())) {
+				if (((WKFAttributeDataModification) dataModification).getAttributeName().equals(
+						getDrawing().SWIMMING_LANE_INDEX_KEY(getRole()))) {
 					getDrawing().reindexForNewObjectIndex(getRole());
 				} else if ("isSystemRole".equals(((WKFAttributeDataModification) dataModification).getAttributeName())) {
 					updatePropertiesFromWKFPreferences();
@@ -321,6 +314,8 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 				}
 			} else if (dataModification instanceof ConvertedIntoLocalObject) {
 				setIsLabelEditable(!getRole().isImported());
+			} else if (dataModification instanceof RoleRemoved) {
+				getDrawing().requestRebuildCompleteHierarchy();
 			}
 		}
 	}
@@ -339,26 +334,6 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 			emphasizedBackColor = FGEUtils.emphasizedColor(backColor);
 			updatePropertiesFromWKFPreferences();
 		}
-	}
-
-	@Override
-	public int getSwimmingLaneNb() {
-		return getDrawing().getSwimmingLaneNb(getRole());
-	}
-
-	@Override
-	public void setSwimmingLaneNb(int swlNb) {
-		getDrawing().setSwimmingLaneNb(swlNb, getRole());
-	}
-
-	@Override
-	public int getSwimmingLaneHeight() {
-		return getDrawing().getSwimmingLaneHeight(getRole());
-	}
-
-	@Override
-	public void setSwimmingLaneHeight(int height) {
-		getDrawing().setSwimmingLaneHeight(height, getRole());
 	}
 
 	private boolean objectIsBeeingDragged = false;
@@ -386,57 +361,16 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 	}
 
 	@Override
-	public void notifyObjectHasResized() {
-		super.notifyObjectHasResized();
-		updateControlArea();
+	public void notifyObjectResized(FGEDimension oldSize) {
+		super.notifyObjectResized(oldSize);
+		if (isRegistered()) {
+			getDrawing().relayoutRoleContainers();
+		}
 	}
 
 	@Override
-	public List<? extends ControlArea<?>> getControlAreas() {
-		return concatenedList;
-	}
-
-	private FGEArea lanes;
-	private ControlArea<?> lanesArea;
-	private ConcatenedList<ControlArea<?>> concatenedList;
-
-	private void updateControlArea() {
-		Vector<FGESegment> lines = new Vector<FGESegment>();
-		for (int i = 0; i < getSwimmingLaneNb(); i++) {
-			double y = i / (double) getSwimmingLaneNb() + 1 / (double) getSwimmingLaneNb() / 2;
-			lines.add(new FGESegment(0, y, 1, y));
-		}
-		lanes = FGEUnionArea.makeUnion(lines);
-		lanesArea = new ControlArea<FGEArea>(this, lanes) {
-			@Override
-			public Cursor getDraggingCursor() {
-				return Cursor.getDefaultCursor();
-			}
-
-			@Override
-			public boolean isDraggable() {
-				return false;
-			}
-
-			@Override
-			public Rectangle paint(FGEGraphics drawingGraphics) {
-				Graphics2D oldGraphics = drawingGraphics.cloneGraphics();
-				drawingGraphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY, 0.4f, DashStyle.BIG_DASHES));
-				AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(RoleContainerGR.this,
-						drawingGraphics.getGraphicalRepresentation());
-				getArea().transform(at).paint(drawingGraphics);
-				drawingGraphics.releaseClonedGraphics(oldGraphics);
-				return null;
-			}
-		};
-		controlsArea = new SWLContainerControls(this);
-		concatenedList = new ConcatenedList<ControlArea<?>>();
-		concatenedList.addElementList(super.getControlAreas());
-		concatenedList.addElement(lanesArea);
-		concatenedList.addElement(controlsArea);
-	}
-
-	public ControlArea getLanesArea() {
-		return lanesArea;
+	public void notifyObjectHasResized() {
+		super.notifyObjectHasResized();
+		getDrawing().relayoutRoleContainers();
 	}
 }

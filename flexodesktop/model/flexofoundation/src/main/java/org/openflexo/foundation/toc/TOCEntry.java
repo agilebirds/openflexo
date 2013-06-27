@@ -441,6 +441,8 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 			AttributeDataModification dm = new AttributeDataModification("index", null, getIndex());
 			dm.setReentrant(true);
 			notifyObservers(dm);
+			setChanged();
+
 		}
 	}
 
@@ -464,11 +466,11 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 			}
 			if (getParent() != null) {
 				getParent().setChanged();
-				getParent().notifyObservers(new ChildrenOrderChanged());
+				getParent().notifyObservers(new ChildrenOrderChanged("sortedTocEntries"));
 			} else {
 				if (getRepository() != null) {
 					getRepository().setChanged();
-					getRepository().notifyObservers(new ChildrenOrderChanged());
+					getRepository().notifyObservers(new ChildrenOrderChanged("sortedTocEntries"));
 				}
 			}
 		}

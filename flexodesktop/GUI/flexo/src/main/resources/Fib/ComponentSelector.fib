@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="twocols" darkLevel="0" dataClassName="org.openflexo.components.widget.FIBComponentSelector" controllerClassName="org.openflexo.components.widget.FIBComponentSelector$CustomFIBController" opaque="false" width="270" height="300">
+  <Panel layout="gridbag" borderTitle="Panel" darkLevel="0" index="1" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" opaque="false" name="Matches">
+    <Label align="right" index="0" data="((&quot;Found &quot; + data.matchingValues.size) + &quot; matches&quot;)" constraints="gridbag(anchor=east;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=5;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="((data.matchingValues.size != 1) &amp; data.isFiltered)" name="MatchesLabel" localize="true" />
+  </Panel>
+  <Browser root="data.project.flexoComponentLibrary.rootFolder" iteratorClassName="org.openflexo.foundation.FlexoModelObject" visibleRowCount="5" rowHeight="18" boundToSelectionManager="false" selectionMode="DiscontiguousTreeSelection" selected="data.selectedObject" showFooter="true" rootVisible="true" showRootsHandle="true" localize="true" manageDynamicModel="true" clickAction="controller.selectedObjectChanged()" doubleClickAction="controller.apply()" enterPressedAction="controller.apply()" name="ComponentBrowser" index="2" constraints="twocols(expandHorizontally=true;expandVertically=true;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)">
+    <BrowserElement dataClassName="org.openflexo.foundation.ie.cl.FlexoComponentFolder" label="Folder.name" icon="controller.iconForObject(Folder)" isEditable="false" filtered="false" defaultVisible="true" name="Folder">
+      <Children data="Folder.subFolders" name="folders" />
+      <Children data="Folder.getComponents(data.type,false)" name="components" />
+    </BrowserElement>
+    <BrowserElement dataClassName="org.openflexo.foundation.ie.cl.ComponentDefinition" label="Component.name" icon="controller.iconForObject(Component)" isEditable="false" filtered="false" defaultVisible="true" name="Component" />
+  </Browser>
+  <Panel layout="flow" hGap="5" vGap="0" flowAlignment="CENTER" borderTitle="Panel" darkLevel="0" index="3" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" opaque="false">
+    <Button action="controller.apply()" buttonType="Trigger" label="apply" localize="true" enable="(data.selectedValue != null)" index="0" constraints="flow(index=0)" />
+    <Button action="controller.cancel()" buttonType="Trigger" label="cancel" localize="true" index="1" constraints="flow(index=1)" />
+    <Button action="controller.reset()" buttonType="Trigger" label="reset" localize="true" index="2" constraints="flow(index=2)" />
+  </Panel>
+  <List visibleRowCount="5" createNewRowOnClick="false" boundToSelectionManager="true" selectionMode="MultipleIntervalSelection" selected="data.selectedValue" layoutOrientation="vertical" index="0" constraints="twocols(expandHorizontally=true;expandVertically=true;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" visible="(data.matchingValues.size &gt; 1)" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="PotentialMatches" format="object.name" icon="controller.getIconForProcess(object)" localize="true" manageDynamicModel="true" clickAction="controller.selectedObjectChanged()" doubleClickAction="controller.apply()" enterPressedAction="controller.apply()" list="data.matchingValues" showIcon="true" iteratorClassName="org.openflexo.foundation.wkf.FlexoProcess" autoSelectFirstRow="true" />
+  <LocalizedDictionary />
+</Panel>

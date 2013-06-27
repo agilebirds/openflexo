@@ -3,12 +3,12 @@
 		<property name="navigationMenu.userProfileProcess" label="profile_process" widget="CUSTOM" constraint="9">
 			<param name="className" value="org.openflexo.components.widget.ProcessInspectorWidget"/>
 			<param name="isSelectable" value="isAcceptableAsDisplayProcess"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="navigationMenu.userProfileOperation" label="profile_operation" widget="DROPDOWN" constraint="10">
 			<param name="dynamiclist" value="navigationMenu.userProfileProcess.allOperationNodesWithComponent"/>
 			<param name="format" value="name"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 	</tab>
 	<tab name="Doc" index="1" layout="DEFAULT">

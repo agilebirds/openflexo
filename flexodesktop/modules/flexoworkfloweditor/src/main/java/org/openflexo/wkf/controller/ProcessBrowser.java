@@ -19,11 +19,14 @@
  */
 package org.openflexo.wkf.controller;
 
+import java.beans.PropertyChangeEvent;
 import java.util.logging.Logger;
 
 import org.openflexo.components.browser.BrowserElementType;
 import org.openflexo.components.browser.BrowserFilter.BrowserFilterStatus;
 import org.openflexo.components.browser.ProjectBrowser;
+import org.openflexo.foundation.wkf.FlexoProcess;
+import org.openflexo.view.controller.model.ControllerModel;
 
 /**
  * Browser for WKF module, browse only one process, with details
@@ -37,6 +40,23 @@ public class ProcessBrowser extends ProjectBrowser {
 
 	public ProcessBrowser(WKFController controller) {
 		super(controller);
+		if (controller != null) {
+			manager.addListener(ControllerModel.CURRENT_OBJECT, this, controller.getControllerModel());
+		}
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if (getController() != null && evt.getSource() == getController().getControllerModel()) {
+			if (evt.getPropertyName().equals(ControllerModel.CURRENT_OBJECT)) {
+				if (getController().getControllerModel().getCurrentObject() instanceof FlexoProcess) {
+					setRootObject(getController().getControllerModel().getCurrentObject());
+				} else {
+					setRootObject(null);
+				}
+			}
+		}
+		super.propertyChange(evt);
 	}
 
 	@Override

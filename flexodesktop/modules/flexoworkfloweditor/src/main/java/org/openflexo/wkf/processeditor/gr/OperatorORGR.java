@@ -33,6 +33,6 @@ public class OperatorORGR extends OperatorGR<OROperator> {
 
 	@Override
 	public ImageIcon getImageIcon() {
-		return WKFIconLibrary.OR_OPERATOR_ICON;
+		return isResizable() ? null : WKFIconLibrary.OR_OPERATOR_ICON;
 	}
 }

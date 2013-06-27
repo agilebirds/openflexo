@@ -554,7 +554,7 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 
 	@Override
 	public boolean isSubConceptOf(OntologyObject concept) {
-		return concept.isSuperConceptOf(concept);
+		return concept.isSuperConceptOf(this);
 	}
 
 	public PropertyStatement createNewCommentAnnotation() {
@@ -1007,12 +1007,12 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 		alreadyDone.add(ontology);
 		for (OWLProperty p : ontology.getObjectProperties()) {
 			for (OWLObject<?> o : p.getRangeList()) {
-				if (o == this) {
+				if (o.containsOntologyObject(this, false)) {
 					rangeProperties.add(p);
 				}
 			}
 			for (OWLObject<?> o : p.getDomainList()) {
-				if (o == this) {
+				if (o.containsOntologyObject(this, false)) {
 					domainProperties.add(p);
 				}
 			}
@@ -1025,12 +1025,12 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 		}
 		for (OWLProperty p : ontology.getDataProperties()) {
 			for (OWLObject<?> o : p.getRangeList()) {
-				if (o == this) {
+				if (o.containsOntologyObject(this, false)) {
 					rangeProperties.add(p);
 				}
 			}
 			for (OWLObject<?> o : p.getDomainList()) {
-				if (o == this) {
+				if (o.containsOntologyObject(this, false)) {
 					domainProperties.add(p);
 				}
 			}
@@ -1101,5 +1101,10 @@ public abstract class OWLObject<R extends OntResource> extends AbstractOWLObject
 			return false;
 		}
 		return StringUtils.isNotEmpty(getURI()) && getURI().equals(o.getURI());
+	}
+
+	@Override
+	public boolean containsOntologyObject(OntologyObject o, boolean inherited) {
+		return o == this || inherited && isSuperConceptOf(o);
 	}
 }

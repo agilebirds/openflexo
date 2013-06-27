@@ -15,13 +15,13 @@
 			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
 			<param name="binding_definition" value="activationPrimitiveBindingDefinition"/>			
 			<param name="activate_compound_bindings" value="true"/>			
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property_list name="activationAssignments" label="activation_assignments" constraint="2">
 		  <param name="displayLabel" value="true"/>
 		  <param name="visible_row_count" value="3"/>
 		  <param name="row_height" value="20"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
  		  <property_list_column name="receiver" label="receiver" widget="CUSTOM">
 			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
 			<param name="binding_definition" value="receiverBindingDefinition"/>			
@@ -46,13 +46,13 @@
 			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
 			<param name="binding_definition" value="desactivationPrimitiveBindingDefinition"/>			
 			<param name="activate_compound_bindings" value="true"/>			
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property_list name="desactivationAssignments" label="desactivation_assignments" constraint="4">
 		  <param name="displayLabel" value="true"/>
 		  <param name="visible_row_count" value="3"/>
 		  <param name="row_height" value="20"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
  		  <property_list_column name="receiver" label="receiver" widget="CUSTOM">
 			<param name="className" value="org.openflexo.components.widget.BindingSelectorInspectorWidget"/>
 			<param name="binding_definition" value="receiverBindingDefinition"/>			

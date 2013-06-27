@@ -655,7 +655,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	}
 
 	public void notifyUseSimpleEventPaletteHasChanged() {
-		JOptionPane.showMessageDialog(getPreferencesWindow(),
+		JOptionPane.showMessageDialog(getPreferencesWindow(false),
 				FlexoLocalization.localizedForKey("You must restart OpenFlexo to enable this change."),
 				FlexoLocalization.localizedForKey("Restart required"), JOptionPane.INFORMATION_MESSAGE);
 	}

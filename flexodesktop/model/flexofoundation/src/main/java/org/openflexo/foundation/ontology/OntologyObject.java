@@ -140,6 +140,18 @@ public interface OntologyObject {
 	 */
 	public boolean equalsToConcept(OntologyObject o);
 
+	/**
+	 * Returns whether this ontology object contains the given ontology object. This should return true if the considered object
+	 * semantically "contains" this. Typically, the union of 2 classes should return true for itself and the 2 classes.
+	 * 
+	 * @param o
+	 *            the ontology object to consider.
+	 * @param inherited
+	 *            whether to consider inheritance or not in the containment lookup.
+	 * @return
+	 */
+	public boolean containsOntologyObject(OntologyObject o, boolean inherited);
+
 	// NB: implemented in FlexoModelObject
 	public void registerEditionPatternReference(EditionPatternInstance editionPatternInstance, PatternRole patternRole);
 

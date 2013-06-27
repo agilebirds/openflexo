@@ -34,6 +34,8 @@ import org.openflexo.foundation.xml.FlexoProcessBuilder;
  */
 public class MultipleInstanceSubProcessNode extends SubProcessNode {
 
+	public static final String IS_SEQUENTIAL = "isSequential";
+
 	private static final Logger logger = Logger.getLogger(MultipleInstanceSubProcessNode.class.getPackage().getName());
 
 	// isSequential == false -> FORK, isSequential == true -> LOOP
@@ -78,6 +80,16 @@ public class MultipleInstanceSubProcessNode extends SubProcessNode {
 		deleteObservers();
 	}
 
+	/**
+	 * Overrides getClassNameKey
+	 * 
+	 * @see org.openflexo.foundation.FlexoModelObject#getClassNameKey()
+	 */
+	@Override
+	public String getClassNameKey() {
+		return "parallel_sub_process";
+	}
+
 	@Override
 	public String getInspectorName() {
 		return Inspectors.WKF.MULTIPLE_INSTANCE_SUB_PROCESS_NODE_INSPECTOR;
@@ -89,6 +101,8 @@ public class MultipleInstanceSubProcessNode extends SubProcessNode {
 
 	public void setIsSequential(boolean isSequential) {
 		this.isSequential = isSequential;
+		setChanged();
+		notifyAttributeModification(IS_SEQUENTIAL, !isSequential, isSequential);
 	}
 
 	@Override

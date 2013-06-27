@@ -46,7 +46,6 @@ public class FlexoPreferences extends FlexoAbstractPreferences {
 
 	private static final String FLEXO_PREFS_FILE_NAME = "Flexo.prefs";
 	private static final Logger logger = Logger.getLogger(FlexoPreferences.class.getPackage().getName());
-	private static File appDataDirectory;
 
 	protected ClassToInstanceMap<ContextPreferences> contextualPreferences;
 

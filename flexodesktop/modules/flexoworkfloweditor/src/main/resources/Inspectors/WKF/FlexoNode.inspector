@@ -2,23 +2,23 @@
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.node.FlexoNode" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
     <Parameter name="visibleFor" value="SEMANTICS,SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER " />
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab" opaque="false">
       <Label label="new_status" index="26" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="NewStatusLabel" localize="true" />
       <DropDown showReset="true" index="27" data="data.newStatus" constraints="twocols(expandHorizontally=false;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="NewStatus" format="object.nameAndProcess" localize="true" list="data.process.statusList.allAvailableStatus" iteratorClassName="org.openflexo.foundation.wkf.Status" autoSelectFirstRow="false" />
     </Tab>
-    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="DocTab" />
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab">
+    <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="1" font="SansSerif,0,11" name="DocTab"  opaque="false"/>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab" opaque="false">
       <Label label="activation_primitive" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="ActivationPrimitiveLabel" localize="true">
-        <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPER" />
       </Label>
       <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="ActivationPrimitive" index="1" data="data.activationPrimitive" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
         <Assignment variable="component.bindingDefinition" value="data.activationPrimitiveBindingDefinition" />
         <Assignment variable="component.allowsCompoundBindings" value="true" />
         <Assignment variable="component.bindable" value="data" />
-        <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPER" />
       </Custom>
       <Label label="activation_assignments" align="center" index="2" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="ActivationAssignmentsLabel" localize="true">
-        <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPER" />
       </Label>
       <Table iteratorClassName="org.openflexo.foundation.bindings.BindingAssignment" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="ActivationAssignments" index="3" data="data.activationAssignments" constraints="twocols(expandHorizontally=true;expandVertically=true;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
         <CustomColumn componentClassName="org.openflexo.components.widget.binding.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.receiver" format="object.stringRepresentation" title="receiver" columnWidth="150" resizable="true" displayTitle="true">
@@ -32,19 +32,19 @@
         </CustomColumn>
         <AddAction method="data.createActivationAssignement" name="new" />
         <RemoveAction method="data.deleteActivationAssignement(selected)" isAvailable="data.isActivationAssignementDeletable(selected)" name="delete" />
-        <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPER" />
       </Table>
       <Label label="desactivation_primitive" index="4" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="DesactivationPrimitiveLabel" localize="true">
-        <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPER" />
       </Label>
       <Custom componentClassName="org.openflexo.components.widget.binding.BindingSelector" localize="true" manageDynamicModel="true" name="DesactivationPrimitive" index="5" data="data.desactivationPrimitive" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
         <Assignment variable="component.bindingDefinition" value="data.desactivationPrimitiveBindingDefinition" />
         <Assignment variable="component.allowsCompoundBindings" value="true" />
         <Assignment variable="component.bindable" value="data" />
-        <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPER" />
       </Custom>
       <Label label="desactivation_assignments" align="center" index="6" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" name="DesactivationAssignmentsLabel" localize="true">
-        <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPER" />
       </Label>
       <Table iteratorClassName="org.openflexo.foundation.bindings.BindingAssignment" visibleRowCount="3" rowHeight="20" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="true" selectionMode="MultipleIntervalSelection" textSelectionColor="255,255,255" textNonSelectionColor="0,0,0" backgroundSelectionColor="26,96,206" backgroundSecondarySelectionColor="173,215,255" backgroundNonSelectionColor="255,255,255" localize="true" manageDynamicModel="true" name="DesactivationAssignments" index="7" data="data.desactivationAssignments" constraints="twocols(expandHorizontally=true;expandVertically=true;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
         <CustomColumn componentClassName="org.openflexo.components.widget.binding.BindingSelector" customRendering="false" disableTerminateEditOnFocusLost="false" data="iterator.receiver" format="object.stringRepresentation" title="receiver" columnWidth="150" resizable="true" displayTitle="true">
@@ -58,9 +58,9 @@
         </CustomColumn>
         <AddAction method="data.createDesactivationAssignement" name="new" />
         <RemoveAction method="data.deleteDesactivationAssignement(selected)" isAvailable="data.isDesactivationAssignementDeletable(selected)" name="delete" />
-        <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPPER" />
+        <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPER" />
       </Table>
-      <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPPER" />
+      <Parameter name="visibleFor" value="ANALYST,MAINTAINER,DEVELOPER" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>

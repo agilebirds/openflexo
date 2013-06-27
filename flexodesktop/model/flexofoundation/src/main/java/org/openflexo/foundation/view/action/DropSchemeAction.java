@@ -94,7 +94,9 @@ public class DropSchemeAction extends EditionSchemeAction<DropSchemeAction> {
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParametersException {
 		logger.info("Drop palette element");
 
-		getEditionPattern().getViewPoint().getViewpointOntology().loadWhenUnloaded();
+		if (getEditionPattern().getViewPoint().getViewpointOntology() != null) {
+			getEditionPattern().getViewPoint().getViewpointOntology().loadWhenUnloaded();
+		}
 
 		editionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
 

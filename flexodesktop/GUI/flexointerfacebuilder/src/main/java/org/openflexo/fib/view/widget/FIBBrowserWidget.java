@@ -387,9 +387,13 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
-							getJTree().expandPath(
-									new TreePath(new Object[] { (BrowserCell) getBrowserModel().getRoot(),
-											((BrowserCell) getBrowserModel().getRoot()).getChildAt(0) }));
+							// See issue OPENFLEXO-516. Sometimes, the condition may have become false.
+							if (!getBrowser().getRootVisible() && (BrowserCell) getBrowserModel().getRoot() != null
+									&& ((BrowserCell) getBrowserModel().getRoot()).getChildCount() == 1) {
+								getJTree().expandPath(
+										new TreePath(new Object[] { (BrowserCell) getBrowserModel().getRoot(),
+												((BrowserCell) getBrowserModel().getRoot()).getChildAt(0) }));
+							}
 						}
 					});
 				}
@@ -409,7 +413,7 @@ public class FIBBrowserWidget extends FIBWidgetView<FIBBrowser, JTree, Object> i
 	}
 
 	public boolean isLastFocusedSelectable() {
-		return getController().getLastFocusedSelectable() == this;
+		return getController() != null && getController().getLastFocusedSelectable() == this;
 	}
 
 	@Override

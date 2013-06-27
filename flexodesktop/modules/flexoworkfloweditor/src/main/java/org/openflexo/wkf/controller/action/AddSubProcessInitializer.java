@@ -78,8 +78,10 @@ public class AddSubProcessInitializer extends ActionInitializer {
 				}
 				ParameterDefinition[] parameters = new ParameterDefinition[3];
 				String baseName = FlexoLocalization.localizedForKey("new_process_name");
-				parameters[0] = new TextFieldParameter("newProcessName", "name_of_process", getProject().getFlexoWorkflow()
-						.findNextDefaultProcessName(baseName));
+				TextFieldParameter textFieldParameter = new TextFieldParameter("newProcessName", "name_of_process", getProject()
+						.getFlexoWorkflow().findNextDefaultProcessName(baseName));
+				textFieldParameter.setRequestFocus(true);
+				parameters[0] = textFieldParameter;
 
 				parameters[1] = new CheckboxParameter("no_parent", "reusable_process", true);
 				parameters[2] = new ProcessParameter("parentProcess", "parent_process", process);

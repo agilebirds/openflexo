@@ -18,11 +18,11 @@
 	#else ##Is activity node
 		#if($node.isSubProcessNode())
 			#if($node.isFork())
-				Activity (parallel sub-process): 
+				Parallel sub-process: 
 			#elseif($node.isLoop())
-				Activity (loop sub-process): 
+				Sequential sub-process: 
         	#elseif($node.isSingle())
-				Activity bloc: 
+				Activity: 
 			#elseif($a.isWSCall()) 
 				Activity  (WS call sub-process): 
 			#else

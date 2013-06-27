@@ -43,6 +43,7 @@ import org.openflexo.foundation.wkf.WKFArtefact;
 import org.openflexo.foundation.wkf.WKFDataObject;
 import org.openflexo.foundation.wkf.WKFDataSource;
 import org.openflexo.foundation.wkf.WKFGroup;
+import org.openflexo.foundation.wkf.WKFMessageArtifact;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.WKFStockObject;
 import org.openflexo.foundation.wkf.dm.ArtefactInserted;
@@ -116,6 +117,7 @@ import org.openflexo.wkf.processeditor.gr.ExpandedActivityGroupGR;
 import org.openflexo.wkf.processeditor.gr.ExpanderGR;
 import org.openflexo.wkf.processeditor.gr.ExpanderGR.Expander;
 import org.openflexo.wkf.processeditor.gr.MessageEdgeGR;
+import org.openflexo.wkf.processeditor.gr.MessageGR;
 import org.openflexo.wkf.processeditor.gr.NormalAbstractActivityNodeGR;
 import org.openflexo.wkf.processeditor.gr.OperationNodeGR;
 import org.openflexo.wkf.processeditor.gr.OperationPetriGraphGR;
@@ -214,6 +216,7 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 			AbstractNode concernedNode = null;
 			if (targetObject instanceof FlexoPreCondition) {
 				concernedNode = ((FlexoPreCondition) targetObject).getAttachedNode();
+				targetObject = concernedNode;
 			} else if (targetObject instanceof AbstractNode) {
 				concernedNode = (AbstractNode) targetObject;
 			} else if (targetObject instanceof WKFArtefact) {
@@ -429,13 +432,13 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 	private void addNode(AbstractNode node, WKFObject container) {
 		addDrawable(node, container);
 		if (node instanceof FlexoNode) {
-			for (FlexoPreCondition pre : ((FlexoNode) node).getPreConditions()) {
+			/*for (FlexoPreCondition pre : ((FlexoNode) node).getPreConditions()) {
 				addDrawable(pre, node);
 				if (pre.getAttachedBeginNode() != null && pre.getAttachedBeginNode().getParentPetriGraph() != null
 						&& isVisible(pre.getAttachedBeginNode().getParentPetriGraph())) {
 					addDrawable(preAndBeginNodeAssociationForPrecondition(pre), getProcess());
 				}
-			}
+			}*/
 		}
 
 		if (node instanceof AbstractActivityNode) {
@@ -764,6 +767,9 @@ public class ProcessRepresentation extends DefaultDrawing<FlexoProcess> implemen
 		}
 		if (aDrawable instanceof WKFStockObject) {
 			return new StockObjectGR((WKFStockObject) aDrawable, this);
+		}
+		if (aDrawable instanceof WKFMessageArtifact) {
+			return new MessageGR((WKFMessageArtifact) aDrawable, this);
 		}
 		logger.warning("Cannot build GraphicalRepresentation for " + aDrawable);
 		return null;

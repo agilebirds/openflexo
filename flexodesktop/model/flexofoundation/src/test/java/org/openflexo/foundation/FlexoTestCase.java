@@ -188,7 +188,7 @@ public abstract class FlexoTestCase extends TestCase {
 
 	protected static FlexoResourceCenterService getNewResourceCenter(String name) {
 		try {
-			return DefaultResourceCenterService.getNewInstance(FileUtils.createTempDirectory(name, "ResourceCenter"));
+			return DefaultResourceCenterService.getNewInstance(FileUtils.createTempDirectory(name, "ResourceCenter"), false);
 		} catch (IOException e) {
 			e.printStackTrace();
 			fail();

@@ -65,8 +65,16 @@ public class PropertyChangeListenerRegistrationManager {
 		}
 	}
 
+	public void addListener(PropertyChangeListener listener, HasPropertyChangeSupport hasPropertyChangeSupport) {
+		addListener(null, listener, hasPropertyChangeSupport);
+	}
+
 	public void addListener(String propertyName, PropertyChangeListener listener, HasPropertyChangeSupport hasPropertyChangeSupport) {
 		new PropertyChangeListenerRegistration(propertyName, listener, hasPropertyChangeSupport);
+	}
+
+	public void removeListener(PropertyChangeListener listener, HasPropertyChangeSupport hasPropertyChangeSupport) {
+		removeListener(null, listener, hasPropertyChangeSupport);
 	}
 
 	public void removeListener(String propertyName, PropertyChangeListener listener, HasPropertyChangeSupport hasPropertyChangeSupport) {

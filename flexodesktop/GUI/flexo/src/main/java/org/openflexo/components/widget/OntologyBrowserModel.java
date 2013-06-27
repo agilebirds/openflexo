@@ -296,7 +296,7 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 
 		if (object instanceof OntologyProperty && getDomain() != null) {
 			OntologyProperty p = (OntologyProperty) object;
-			if (p instanceof OWLProperty && (((OWLProperty) p).getDomainList().size() > 0)) {
+			if (p instanceof OWLProperty && ((OWLProperty) p).getDomainList().size() > 0) {
 				OWLProperty owlProperty = (OWLProperty) p;
 				boolean hasASuperClass = false;
 				for (OWLObject d : owlProperty.getDomainList()) {
@@ -629,7 +629,7 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 			for (OWLObject d : owlProperty.getDomainList()) {
 				OntologyClass domainClass = (searchedOntology != null ? searchedOntology : getContext()).getClass(d.getURI());
 				if (domainClass != null && (searchedOntology == null || domainClass.getFlexoOntology() == searchedOntology)) {
-					if (getDomain() == null || domainClass.isSuperClassOf(getDomain())) {
+					if (getDomain() == null || getDomain().containsOntologyObject(domainClass, true)) {
 						potentialStorageClasses.add(domainClass);
 					} else {
 						// Do not add it, it does not concern this
@@ -733,7 +733,7 @@ public class OntologyBrowserModel extends Observable implements FlexoObserver {
 			return false;
 		} else {
 			for (OntologyClass c2 : someClasses) {
-				if (c2.isSuperConceptOf(c) /*&& c2 != c*/ && (!c2.getURI().equals(c.getURI()))) {
+				if (c2.isSuperConceptOf(c) /*&& c2 != c*/&& !c2.getURI().equals(c.getURI())) {
 					return true;
 				}
 			}

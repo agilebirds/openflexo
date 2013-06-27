@@ -15,10 +15,10 @@
 	<tab name="Code" index="2">
 		
 		<property name="isCodeGenerationApplicable" label="" widget="READ_ONLY_CHECKBOX" constraint="0" depends="isCodeGenerationApplicable" conditional="true=false" >
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property> <!-- never displayed, just for conditionals -->
 		<property name="isCodeGenerationAvailable" label="" widget="READ_ONLY_CHECKBOX" constraint="0" depends="isCodeGenerationAvailable" conditional="true=false" >
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property> <!-- never displayed, just for conditionals -->
 		<property name="codeGenerationNotApplicableLabel" widget="LABEL" constraint="0" depends="isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=false">
 			<param name="displayLabel" value="false"/>
@@ -27,17 +27,17 @@
 			<param name="widgetLayout" value="1COL"/>
 			<param name="align" value="center"/>
 			<param name="height" value="200"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		<property name="activateEOCodeGeneration" label="activate_eo_code_generation" widget="BUTTON" constraint="1" depends="isCodeGenerationApplicable,isCodeGenerationAvailable" conditional="isCodeGenerationApplicable=false AND isCodeGenerationAvailable=true">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 		
 		<property name="generatedCode.code" label="generated_code" widget="JAVA_CODE" constraint="3" depends="isCodeGenerationApplicable" conditional="isCodeGenerationApplicable=true" >
 			<param name="readOnly" value="true"/>
 			<param name="rows" value="2"/>
 			<param name="columns" value="20"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 	</tab>
 

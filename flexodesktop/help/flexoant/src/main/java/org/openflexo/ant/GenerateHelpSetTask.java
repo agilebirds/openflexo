@@ -59,7 +59,8 @@ public class GenerateHelpSetTask extends Task {
 	// The method executing the task
 	@Override
 	public void execute() throws BuildException {
-		GenerateHelpSet action = GenerateHelpSet.actionType.makeNewAction(null, null, new DefaultFlexoEditor(null));
+		GenerateHelpSet action = GenerateHelpSet.actionType.makeNewAction(DocResourceManager.instance().getDocResourceCenter(), null,
+				new DefaultFlexoEditor(null));
 		action.setNote("none");
 		action.setBaseName(baseName);
 		for (HelpLanguage language : languages) {

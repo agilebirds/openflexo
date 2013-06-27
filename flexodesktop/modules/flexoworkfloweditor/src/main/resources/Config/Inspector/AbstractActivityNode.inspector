@@ -50,17 +50,17 @@
 		</property_list>
 		<property name="cssSheet" label="css_sheet" widget="DROPDOWN" constraint="7">
 			<param name="format" value="name"/>
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 	</tab>
 
 	<tab name="Advanced" index="2" layout="DEFAULT">
-		<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+		<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 	</tab>
 	
 	<tab name="Doc" index="1" layout="DEFAULT">
 		<property name="acronym" label="acronym" widget="TEXT_FIELD" constraint="1">
-			<param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+			<param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
 		</property>
 	</tab>
 	

@@ -27,6 +27,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Enumeration;
@@ -63,7 +64,7 @@ import org.openflexo.fib.view.widget.table.FIBTableWidgetFooter;
  * 
  * @author sguerin
  */
-public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> implements TableModelListener, FIBSelectable,
+public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, Collection<?>> implements TableModelListener, FIBSelectable,
 		ListSelectionListener {
 
 	private static final Logger logger = Logger.getLogger(FIBTableWidget.class.getPackage().getName());
@@ -209,7 +210,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		}
 		logger.fine("FIBTable: setSelectedObject with object " + object + " current is " + getSelectedObject());
 		if (object != null) {
-			int index = getValue().indexOf(object);
+			int index = getTableModel().getValues().indexOf(object);
 			if (index > -1) {
 				index = _table.convertRowIndexToView(index);
 				// if (!notify) _table.getSelectionModel().removeListSelectionListener(getTableModel());
@@ -351,6 +352,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 			}
 
 		};
+		_table.setVisibleRowCount(0);
 		_table.setSortOrderCycle(SortOrder.ASCENDING, SortOrder.DESCENDING, SortOrder.UNSORTED);
 		_table.setAutoCreateRowSorter(true);
 		_table.setFillsViewportHeight(true);
@@ -399,7 +401,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 		// _listSelectionModel.addListSelectionListener(this);
 
 		scrollPane = new JScrollPane(_table);
-
+		scrollPane.setOpaque(false);
 		if (_fibTable.getCreateNewRowOnClick()) {
 			_table.addMouseListener(new MouseAdapter() {
 				@Override
@@ -535,7 +537,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 
 	@Override
 	public void objectAddedToSelection(Object o) {
-		int index = getValue().indexOf(o);
+		int index = getTableModel().getValues().indexOf(o);
 		if (index > -1) {
 			ignoreNotifications = true;
 			index = _table.convertRowIndexToView(index);
@@ -546,7 +548,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 
 	@Override
 	public void objectRemovedFromSelection(Object o) {
-		int index = getValue().indexOf(o);
+		int index = getTableModel().getValues().indexOf(o);
 		if (index > -1) {
 			ignoreNotifications = true;
 			index = _table.convertRowIndexToView(index);
@@ -564,7 +566,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 
 	@Override
 	public void addToSelection(Object o) {
-		int index = getValue().indexOf(o);
+		int index = getTableModel().getValues().indexOf(o);
 		if (index > -1) {
 			index = _table.convertRowIndexToView(index);
 			getListSelectionModel().addSelectionInterval(index, index);
@@ -573,7 +575,7 @@ public class FIBTableWidget extends FIBWidgetView<FIBTable, JTable, List<?>> imp
 
 	@Override
 	public void removeFromSelection(Object o) {
-		int index = getValue().indexOf(o);
+		int index = getTableModel().getValues().indexOf(o);
 		if (index > -1) {
 			index = _table.convertRowIndexToView(index);
 			getListSelectionModel().removeSelectionInterval(index, index);

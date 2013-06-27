@@ -59,13 +59,6 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 		updateBorder();
 	}
 
-	@Override
-	public void updateGraphicalProperties() {
-		super.updateGraphicalProperties();
-		panel.setOpaque(getComponent().getOpaque());
-		panel.setBackground(getComponent().getBackgroundColor());
-	}
-
 	public void updateBorder() {
 		switch (getComponent().getBorder()) {
 		case empty:

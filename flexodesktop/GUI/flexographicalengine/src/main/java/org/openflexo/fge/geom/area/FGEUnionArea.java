@@ -459,7 +459,7 @@ public class FGEUnionArea extends FGEOperationArea {
 			for (FGEArea a : unionAnchorArea.getObjects()) {
 				newObjects.add(a.getOrthogonalPerspectiveArea(orientation));
 			}
-			return new FGEUnionArea(newObjects);
+			return FGEUnionArea.makeUnion(newObjects);
 		} else {
 			return anchorArea.getOrthogonalPerspectiveArea(orientation);
 		}
@@ -478,7 +478,7 @@ public class FGEUnionArea extends FGEOperationArea {
 		for (FGEArea a : getObjects()) {
 			newObjects.add(a.getAnchorAreaFrom(direction));
 		}
-		return new FGEUnionArea(newObjects);
+		return FGEUnionArea.makeUnion(newObjects);
 	}
 
 	/**

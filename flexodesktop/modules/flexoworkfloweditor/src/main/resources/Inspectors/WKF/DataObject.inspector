@@ -1,14 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.wkf.WKFDataObject" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
-    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="BasicTab" />
-    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" name="AdvancedTab">
+    <Tab title="Basic" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" opaque="false" name="BasicTab">
+      <Label label="type" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" name="typeLabel" localize="true" />
+      <DropDown showReset="true" data="data.type" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="type" localize="true" iteratorClassName="org.openflexo.foundation.wkf.WKFDataObject$DataObjectType" autoSelectFirstRow="false" />
+      <Label label="collection" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <CheckBox selected="false" data="data.isCollection" constraints="twocols(expandHorizontally=false;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" />
+    </Tab>
+    <Tab title="Advanced" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="4" font="SansSerif,0,11" opaque="false" name="AdvancedTab">
       <Parameter name="visibleFor" value="SEMANTICS,SEMANTICSPLUS,ANALYST,DEVELOPER,MAINTAINER" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
     <Localized key="Advanced" lang="French">Avancé</Localized>
     <Localized key="Basic" lang="French">Basique</Localized>
+    <Localized key="type" lang="English">Type</Localized>
+    <Localized key="type" lang="French">Type</Localized>
+    <Localized key="type" lang="Dutch">Type</Localized>
+    <Localized key="INPUT" lang="English">INPUT</Localized>
+    <Localized key="INPUT" lang="French">ENTREE</Localized>
+    <Localized key="INPUT" lang="Dutch">INPUT</Localized>
+    <Localized key="OUTPUT" lang="English">OUTPUT</Localized>
+    <Localized key="OUTPUT" lang="French">SORTIE</Localized>
+    <Localized key="OUTPUT" lang="Dutch">OUTPUT</Localized>
+    <Localized key="collection" lang="English">Collection</Localized>
+    <Localized key="collection" lang="French">Collection</Localized>
+    <Localized key="collection" lang="Dutch">Collection</Localized>
+    <Localized key="Basic" lang="English">Basic</Localized>
+    <Localized key="Basic" lang="Dutch">Basis</Localized>
+    <Localized key="Advanced" lang="English">Advanced</Localized>
+    <Localized key="Advanced" lang="Dutch">Geavanceerd</Localized>
   </LocalizedDictionary>
   <Parameter name="title" value="Data object" />
 </Panel>

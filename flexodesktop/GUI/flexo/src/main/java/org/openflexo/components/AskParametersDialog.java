@@ -36,7 +36,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 
 import org.openflexo.foundation.param.LabelParameter;
 import org.openflexo.foundation.param.ParameterDefinition;
@@ -258,18 +257,11 @@ public class AskParametersDialog extends FlexoDialog implements ValueListener {
 		validate();
 		pack();
 		// GPO: Forces width of dialog to be at least 250px
+		paramsPanel.requestFocusInFirstWidget();
 		if (getWidth() < 250) {
 			setSize(250, getHeight());
 		}
 		paramsPanel.valueChange(_parametersModel);
-
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				paramsPanel.requestFocusInSecondWidget();
-			}
-		});
-
 	}
 
 	@Override

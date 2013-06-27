@@ -140,6 +140,12 @@ public class AddRoleInitializer extends ActionInitializer<AddRole, WorkflowModel
 							}
 						}
 					}
+				} else if (getControllerActionInitializer().getWKFController().getCurrentPerspective() == getControllerActionInitializer()
+						.getWKFController().PROCESS_EDITOR_PERSPECTIVE
+						&& getController().getCurrentModuleView() != null
+						&& getController().getCurrentModuleView().getRepresentedObject() instanceof FlexoWorkflow) {
+					getControllerActionInitializer().getWKFController().getControllerModel()
+							.setCurrentPerspective(getControllerActionInitializer().getWKFController().ROLE_EDITOR_PERSPECTIVE);
 				}
 				return true;
 			}

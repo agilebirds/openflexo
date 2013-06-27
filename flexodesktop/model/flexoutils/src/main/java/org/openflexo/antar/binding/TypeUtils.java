@@ -73,6 +73,12 @@ public class TypeUtils {
 				return getBaseClass(upperBounds[0]);
 			}
 		}
+		if (aType instanceof TypeVariable) {
+			Type[] bounds = ((TypeVariable<?>) aType).getBounds();
+			if (bounds.length == 1) {
+				return getBaseClass(bounds[0]);
+			}
+		}
 		logger.warning("Not handled: " + aType.getClass().getName());
 		return null;
 	}
@@ -419,7 +425,7 @@ public class TypeUtils {
 			}
 			return true;
 		}
-
+		return org.apache.commons.lang3.reflect.TypeUtils.isAssignable(anOtherType, aType);
 		/*if (getBaseEntity() == type.getBaseEntity()) {
 			// Base entities are the same, let's analyse parameters
 		
@@ -465,7 +471,7 @@ public class TypeUtils {
 					return isAssignableFrom(parentType,permissive);
 				}*/
 
-		return false;
+		// return false;
 	}
 
 	public static String simpleRepresentation(Type aType) {
@@ -823,21 +829,8 @@ public class TypeUtils {
 	}
 
 	public static void main(String[] args) {
-		/*Class shouldSucceed = ShouldSucceed.class;
-		for (Method m : shouldSucceed.getMethods()) {
-			checkSucceed(m);
-		}
-		Class shouldFail = ShouldFail.class;
-		for (Method m : shouldFail.getMethods()) {
-			checkFail(m);
-		}
-		Class testSuperType = TestSuperType.class;
-		for (Method m : testSuperType.getMethods()) {
-			checkSuperType(m);
-		}*/
-		Class<Void> void1 = Void.TYPE;
-		System.err.println(isTypeAssignableFrom(Object.class, void1));
-		System.err.println(Object.class.isAssignableFrom(void1));
+		System.err.println(isTypeAssignableFrom(Number.class, Integer.class));
+		System.err.println(org.apache.commons.lang3.reflect.TypeUtils.isAssignable(Integer.class, Number.class));
 	}
 
 }

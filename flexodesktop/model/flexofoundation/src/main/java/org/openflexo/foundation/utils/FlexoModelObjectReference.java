@@ -93,6 +93,9 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 
 	private FlexoXMLStorageResource resource;
 
+	private boolean deleted = false;
+	private String modelObjectIdentifier;
+
 	public FlexoModelObjectReference(O object, ReferenceOwner owner) {
 		this(object);
 		setOwner(owner);
@@ -124,6 +127,7 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 
 	public FlexoModelObjectReference(FlexoProject project, String modelObjectIdentifier) {
 		this.referringProject = project;
+		this.modelObjectIdentifier = modelObjectIdentifier;
 		if (referringProject != null) {
 			referringProject.addToObjectReferences(this);
 		}
@@ -150,18 +154,28 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 	}
 
 	public void delete() {
-		if (getReferringProject() != null) {
-			getReferringProject().removeObjectReferences(this);
+		delete(true);
+	}
+
+	public void delete(boolean notify) {
+		if (!deleted) {
+			deleted = true;
+			if (getReferringProject() != null) {
+				getReferringProject().removeObjectReferences(this);
+			}
+			if (getResource(false) != null) {
+				getResource(false).removeResourceLoadingListener(this);
+				getResource(false).getPropertyChangeSupport().removePropertyChangeListener("name", this);
+			}
+			if (modelObject != null) {
+				modelObject.removeFromReferencers(this);
+			}
+			if (owner != null) {
+				owner.objectDeleted(this);
+			}
+			owner = null;
+			modelObject = null;
 		}
-		if (getResource(false) != null) {
-			getResource(false).removeResourceLoadingListener(this);
-			getResource(false).getPropertyChangeSupport().removePropertyChangeListener("name", this);
-		}
-		if (modelObject != null) {
-			modelObject.removeFromReferencers(this);
-		}
-		owner = null;
-		modelObject = null;
 	}
 
 	public O getObject() {
@@ -205,7 +219,9 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 					} else {
 						status = ReferenceStatus.NOT_FOUND;
 					}
-					owner.objectCantBeFound(this);
+					if (force) {
+						owner.objectCantBeFound(this);
+					}
 				}
 			}
 		}
@@ -216,6 +232,7 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 		if (getEnclosingProject(force) != null) {
 			FlexoXMLStorageResource res = getResource(force);
 			if (res == null) {
+
 				return null;
 			}
 			if (force && !res.isLoaded()) {
@@ -236,6 +253,9 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 			FlexoProject enclosingProject = getEnclosingProject(force);
 			if (enclosingProject != null) {
 				resource = (FlexoXMLStorageResource) enclosingProject.resourceForKey(resourceIdentifier);
+				if (resource == null && enclosingProjectIdentifier == null) {
+
+				}
 				if (resource != null) {
 					resource.addResourceLoadingListener(this);
 					resource.getPropertyChangeSupport().addPropertyChangeListener("name", this);
@@ -319,6 +339,12 @@ public class FlexoModelObjectReference<O extends FlexoModelObject> extends Flexo
 			this.owner = owner;
 			if (this.owner != null && this.owner.getProject() != null) {
 				this.owner.getProject().addToObjectReferences(this);
+			} else {
+				if (owner != null) {
+					if (logger.isLoggable(Level.WARNING)) {
+						logger.warning("No project found for " + owner + " " + getStringRepresentation());
+					}
+				}
 			}
 		}
 	}

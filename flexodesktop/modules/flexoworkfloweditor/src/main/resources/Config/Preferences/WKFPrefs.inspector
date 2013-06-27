@@ -54,7 +54,7 @@
         <param name="formatter" value="name"/>
         <param name="columns" value="10"/>
         <param name="showReset" value="false"/>
-        <param name="visibleFor" value="MAINTAINER,DEVELOPPER"/>
+        <param name="visibleFor" value="MAINTAINER,DEVELOPER"/>
     </property>
 <!--    <property name="activityConnector" label="activity_edge_representation" widget="DROPDOWN" constraint="22">
         <param name="formatter" value="name"/>

@@ -44,6 +44,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Text;
 import org.jdom2.output.Format;
+import org.jdom2.output.LineSeparator;
 import org.jdom2.output.XMLOutputter;
 import org.openflexo.xmlcode.XMLMapId.NoMapIdEntryException;
 import org.xml.sax.SAXException;
@@ -253,8 +254,7 @@ public class XMLCoder {
 		alreadySerialized.clear();
 		serializationIdentifierForObject.clear();
 		orderedElementReferenceList.delete();
-		for (Enumeration en = objectReferences.elements(); en.hasMoreElements();) {
-			ObjectReference next = (ObjectReference) en.nextElement();
+		for (ObjectReference next : objectReferences.values()) {
 			next.delete();
 		}
 		objectReferences.clear();
@@ -1009,7 +1009,9 @@ public class XMLCoder {
 			InvalidModelException, AccessorInvocationException, DuplicateSerializationIdentifierException {
 
 		Document builtDocument = buildDocument(anObject);
-		XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+		Format prettyFormat = Format.getPrettyFormat();
+		prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+		XMLOutputter outputter = new XMLOutputter(prettyFormat);
 		try {
 			outputter.output(builtDocument, aWriter);
 		} catch (IOException e) {
@@ -1042,7 +1044,9 @@ public class XMLCoder {
 	protected void buildDocumentAndSendToOutputStream(Object anObject, OutputStream out, DocType docType)
 			throws InvalidObjectSpecificationException, InvalidModelException, AccessorInvocationException,
 			DuplicateSerializationIdentifierException {
-		buildDocumentAndSendToOutputStream(anObject, out, docType, Format.getPrettyFormat());
+		Format prettyFormat = Format.getPrettyFormat();
+		prettyFormat.setLineSeparator(LineSeparator.SYSTEM);
+		buildDocumentAndSendToOutputStream(anObject, out, docType, prettyFormat);
 	}
 
 	protected void buildDocumentAndSendToOutputStream(Object anObject, OutputStream out, DocType docType, Format format)
@@ -1503,6 +1507,40 @@ public class XMLCoder {
 										valueElement.addContent(textValue);
 									}
 									valueElement.setAttribute(XMLMapping.classNameLabel, value.getClass().getName());
+								}
+
+								propertiesElement.addContent(valueElement);
+							}
+							returnedElement.addContent(propertiesElement);
+						}
+					} else if (modelProperty.isSafeProperties()) {
+						Map<?, ?> values = KeyValueDecoder.hashtableForKey(anObject, (PropertiesKeyValueProperty) keyValueProperty);
+						if (values != null && values.size() > 0) {
+							Element propertiesElement = new Element(modelProperty.getDefaultXmlTag());
+							for (Entry<?, ?> e : values.entrySet()) {
+								Object keyAsObject = e.getKey();
+								if (!(keyAsObject instanceof String)) {
+									throw new InvalidDataException("Properties keys must be instance of String");
+								}
+								String key = (String) keyAsObject;
+								Object value = e.getValue();
+
+								Element valueElement = new Element(XMLMapping.entryLabel);
+								valueElement.setAttribute(XMLMapping.keyLabel, key);
+								String valueAsText = null;
+								String classNameLabel = null;
+								if (value instanceof PropertiesKeyValueProperty.UndecodableProperty) {
+									// In this case, class matching property is not loaded, and thus
+									// Object is not instanciated. But, we must keep serialized version
+									valueAsText = ((PropertiesKeyValueProperty.UndecodableProperty) value).value;
+									classNameLabel = ((PropertiesKeyValueProperty.UndecodableProperty) value).className;
+								} else if (value != null) {
+									valueAsText = stringEncoder._encodeObject(value);
+									classNameLabel = value.getClass().getName();
+								}
+								if (valueAsText != null) {
+									valueElement.setAttribute(XMLMapping.classNameLabel, classNameLabel);
+									valueElement.setAttribute(XMLMapping.valueLabel, valueAsText);
 								}
 
 								propertiesElement.addContent(valueElement);

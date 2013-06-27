@@ -180,6 +180,10 @@ public abstract class FGEGraphics {
 				+ stroke.getLineJoin() + ")-(cap=" + stroke.getEndCap() + ")-(dash=" + stroke.getDashPhase() + ")";
 	}
 
+	public TextStyle getCurrentTextStyle() {
+		return currentTextStyle;
+	}
+
 	public BackgroundStyle getDefaultBackground() {
 		return defaultBackground;
 	}
@@ -635,11 +639,20 @@ public abstract class FGEGraphics {
 	}
 
 	public void fillArc(double x, double y, double width, double height, double angleStart, double arcAngle) {
+		fillArc(x, y, width, height, angleStart, arcAngle, false);
+	}
+
+	public void fillArc(double x, double y, double width, double height, double angleStart, double arcAngle, boolean chord) {
 		Rectangle r = convertNormalizedRectangleToViewCoordinates(x, y, width, height);
 		if (currentBackground instanceof BackgroundStyle.BackgroundImage) {
-			Arc2D.Double a = new Arc2D.Double(r.x, r.y, r.width, r.height, (int) angleStart, (int) arcAngle, Arc2D.PIE);
+			Arc2D.Double a = new Arc2D.Double(r.x, r.y, r.width, r.height, (int) angleStart, (int) arcAngle, chord ? Arc2D.CHORD
+					: Arc2D.PIE);
 			fillInShapeWithImage(a);
 		} else {
+			if (chord) {
+				Arc2D.Double a = new Arc2D.Double(r.x, r.y, r.width, r.height, (int) angleStart, (int) arcAngle, Arc2D.CHORD);
+				g2d.setClip(a);
+			}
 			g2d.fillArc(r.x, r.y, r.width, r.height, (int) angleStart, (int) arcAngle);
 		}
 		if (logger.isLoggable(Level.FINER)) {
@@ -742,6 +755,9 @@ public abstract class FGEGraphics {
 	}
 
 	public FGERectangle drawString(String text, double x, double y, int orientation, HorizontalTextAlignment alignment) {
+		if (text == null || text.length() == 0) {
+			return new FGERectangle();
+		}
 		Point p = convertNormalizedPointToViewCoordinates(x, y);
 		Font oldFont = g2d.getFont();
 		AffineTransform at = AffineTransform.getScaleInstance(getScale(), getScale());
@@ -749,32 +765,37 @@ public abstract class FGEGraphics {
 			at.concatenate(AffineTransform.getRotateInstance(Math.toRadians(orientation)));
 		}
 		Font font = oldFont.deriveFont(at);
+		Rectangle2D b = g2d.getFontMetrics().getStringBounds(text, g2d);
 		g2d.setFont(font);
-		Rectangle2D bounds = g2d.getFontMetrics().getStringBounds(text, g2d);
 		/*FGERectangle returned = convertViewCoordinatesToNormalizedRectangle(
 				(int)(bounds.getX()+p.x-bounds.getWidth()/2),
 				(int)(bounds.getY()+p.y+bounds.getHeight()/2),
 				(int)bounds.getWidth(),(int)bounds.getHeight());*/
+		FGERectangle bounds = new FGERectangle(b.getX(), b.getY(), b.getWidth(), b.getHeight());
+		if (orientation != 0) {
+			bounds = bounds.transform(AffineTransform.getRotateInstance(Math.toRadians(orientation))).getEmbeddingBounds();
+		}
+		int x2 = (int) (p.x - bounds.getWidth() / 2);
+		int y2 = (int) (p.y + bounds.getHeight() / 2);
+		switch (alignment) {
+		case LEFT:
+			x2 = p.x;
+			break;
+		case RIGHT:
+			x2 = (int) (p.x - bounds.getWidth());
+			break;
+		case CENTER:
+		default:
+			break;
+		}
+		// GPO: Je crois que c'est complètement foireux si le background est "colored"
 		if (currentTextStyle.getIsBackgroundColored()) {
 			g2d.setColor(currentTextStyle.getBackgroundColor());
 			g2d.fillRect((int) (bounds.getX() + p.x - bounds.getWidth() / 2), (int) (bounds.getY() + p.y + bounds.getHeight() / 2),
 					(int) bounds.getWidth(), (int) bounds.getHeight());
 			g2d.setColor(currentTextStyle.getColor());
 		}
-		switch (alignment) {
-		case CENTER:
-			g2d.drawString(text, (int) (p.x - bounds.getWidth() / 2), (int) (p.y + bounds.getHeight() / 2));
-			break;
-		case LEFT:
-			g2d.drawString(text, p.x, (int) (p.y + bounds.getHeight() / 2));
-			break;
-		case RIGHT:
-			g2d.drawString(text, (int) (p.x - bounds.getWidth()), (int) (p.y + bounds.getHeight() / 2));
-			break;
-		default:
-			g2d.drawString(text, (int) (p.x - bounds.getWidth() / 2), (int) (p.y + bounds.getHeight() / 2));
-			break;
-		}
+		g2d.drawString(text, x2, y2);
 		g2d.setFont(oldFont);
 		return convertViewCoordinatesToNormalizedRectangle((int) (bounds.getX() + p.x - bounds.getWidth() / 2),
 				(int) (bounds.getY() + p.y + bounds.getHeight() / 2), (int) bounds.getWidth(), (int) bounds.getHeight());
