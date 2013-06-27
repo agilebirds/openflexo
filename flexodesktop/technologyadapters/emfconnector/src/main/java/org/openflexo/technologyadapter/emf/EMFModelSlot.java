@@ -44,6 +44,8 @@ import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
+import org.openflexo.technologyadapter.emf.viewpoint.EMFClassClassPatternRole;
+import org.openflexo.technologyadapter.emf.viewpoint.EMFEnumClassPatternRole;
 import org.openflexo.technologyadapter.emf.viewpoint.EMFObjectIndividualPatternRole;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividual;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividualAttributeDataPropertyValue;
@@ -60,7 +62,9 @@ import org.openflexo.technologyadapter.emf.viewpoint.editionaction.SelectEMFObje
  * @author sylvain
  * 
  */
-@DeclarePatternRoles({ @DeclarePatternRole(EMFObjectIndividualPatternRole.class) // Instances
+@DeclarePatternRoles({ @DeclarePatternRole(EMFObjectIndividualPatternRole.class), // Instances
+		@DeclarePatternRole(EMFClassClassPatternRole.class), // Classes
+		@DeclarePatternRole(EMFEnumClassPatternRole.class) // Enumerations
 })
 @DeclareEditionActions({ @DeclareEditionAction(AddEMFObjectIndividual.class), // Add instance
 		@DeclareEditionAction(AddEMFObjectIndividualAttributeDataPropertyValue.class), // Add Attribute Data Value

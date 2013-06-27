@@ -226,6 +226,12 @@
 	<entity name="org.openflexo.technologyadapter.emf.viewpoint.EMFObjectIndividualPatternRole" xmlTag="EMFObjectIndividualPatternRole">
 	</entity>
 
+	<entity name="org.openflexo.technologyadapter.emf.viewpoint.EMFClassClassPatternRole" xmlTag="EMFClassClassPatternRole">
+	</entity>
+
+	<entity name="org.openflexo.technologyadapter.emf.viewpoint.EMFEnumClassPatternRole" xmlTag="EMFEnumClassPatternRole">
+	</entity>
+
 	<entity name="org.openflexo.technologyadapter.xsd.viewpoint.XSIndividualPatternRole" xmlTag="XSIndividualPatternRole">
 	</entity>
 
