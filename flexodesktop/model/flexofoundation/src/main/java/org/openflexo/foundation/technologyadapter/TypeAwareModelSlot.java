@@ -34,10 +34,6 @@ public abstract class TypeAwareModelSlot<M extends FlexoModel<M, MM>, MM extends
 	private FlexoMetaModelResource<M, MM> metaModelResource;
 	private String metaModelURI;
 
-	/*protected TypeSafeModelSlot(ViewPoint viewPoint, TechnologyAdapter technologyAdapter) {
-		super(viewPoint, technologyAdapter);
-	}*/
-
 	protected TypeAwareModelSlot(VirtualModel<?> virtualModel, TechnologyAdapter technologyAdapter) {
 		super(virtualModel, technologyAdapter);
 	}
@@ -45,10 +41,6 @@ public abstract class TypeAwareModelSlot<M extends FlexoModel<M, MM>, MM extends
 	protected TypeAwareModelSlot(VirtualModelBuilder builder) {
 		super(builder);
 	}
-
-	/*public TypeSafeModelSlot(ViewPointBuilder builder) {
-		super(builder);
-	}*/
 
 	/**
 	 * Instanciate a new model slot instance configuration for this model slot
