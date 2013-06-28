@@ -61,22 +61,14 @@
 
   <entity name="org.openflexo.foundation.ontology.EditionPatternReference$ModelObjectActorReference" xmlTag="ModelObjectActorReference">
       <property name="objectReference" xmlTag="objectReference" attribute="YES" description=""/>
-   </entity>
+  </entity>
   
-  
-  <entity name="org.openflexo.foundation.FlexoImportableObject" abstract="YES">
-    <property name="isDeletedOnServer" xmlTag="isDeletedOnServer" attribute="YES" description="Unique ID generated and maintained by Flexo"/>
-    <property name="URI" xmlTag="URI" attribute="YES" description=""/>
-    <property name="versionURI" xmlTag="versionURI" attribute="YES" description=""/>
-    <property name="URIFromSourceObject" xmlTag="URISource" attribute="YES" description="the URI of the object this object was issued from"/>
-  </entity>    
-
   <entity name="org.openflexo.foundation.FlexoProperty" xmlTag="FlexoProperty">
      <property name="name" xmlTag="name" attribute="yes"/>
      <property name="value" xmlTag="value" attribute="yes"/>
   </entity>
   
-   <entity name="org.openflexo.foundation.RepresentableFlexoModelObject" abstract="YES">
+  <entity name="org.openflexo.foundation.RepresentableFlexoModelObject" abstract="YES">
     <description>Contains data used for graphical representations</description>
     <property name="graphicalProperties" xmlTag="GraphicalProperties" type="properties" description="Dynamic properties storing data used for graphical representation"/> 
   </entity>

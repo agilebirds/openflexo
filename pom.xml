@@ -13,20 +13,21 @@
 		<url>${organization.url}</url>
 	</organization>
 	<properties>
+		<ant.version>1.9.0</ant.version>
 		<compiler.source>1.6</compiler.source>
 		<compiler.target>1.6</compiler.target>
-		<source.encoding>UTF-8</source.encoding>
-		<resource.encoding>UTF-8</resource.encoding>
+		<jersey.version>1.17.1</jersey.version>
+		<organization.name>AgileBirds</organization.name>
+		<organization.url>http://www.agilebirds.com/</organization.url>
+		<organization.logo>http://www.agilebirds.com/_Ressources/img/header_Logo.gif</organization.logo>
 		<!-- need this so that sonar run properly. don't know what the difference 
 			with source.encoding. todo : investigate difference between source.encoding 
 			and project.build.sourceEncoding -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<product.name>OpenFlexo</product.name>
-		<organization.name>AgileBirds</organization.name>
-		<organization.url>http://www.agilebirds.com/</organization.url>
-		<organization.logo>http://www.agilebirds.com/_Ressources/img/header_Logo.gif</organization.logo>
+		<resource.encoding>UTF-8</resource.encoding>
+		<source.encoding>UTF-8</source.encoding>
 		<swingx.version>1.6.3</swingx.version>
-		<ant.version>1.9.0</ant.version>
 	</properties>
 	<scm>
 		<connection>scm:git:ssh://git@github.com:agilebirds/openflexo.git</connection>
@@ -182,6 +183,19 @@
 										</configurator>
 									</action>
 								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+						                <groupId>org.jvnet.ws.wadl</groupId>
+						                <artifactId>wadl-client-plugin</artifactId>
+										<versionRange>[1.0,)</versionRange>
+										<goals>
+											<goal>generate</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
@@ -199,6 +213,11 @@
 						<encoding>${resource.encoding}</encoding>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.3</version>
+			  </plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
@@ -267,11 +286,6 @@
 				<version>${project.version}</version>
 				<classifier>resources</classifier>
 				<type>zip</type>
-			</dependency>
-			<dependency>
-				<groupId>org.openflexo</groupId>
-				<artifactId>flexowsclient</artifactId>
-				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openflexo</groupId>
@@ -720,6 +734,21 @@
 				<version>${project.version}</version>
 				<type>pom</type>
 			</dependency>
+	        <dependency>
+	            <groupId>com.agilebirds.server</groupId>
+	            <artifactId>flexoserver-model</artifactId>
+	            <version>1.0-SNAPSHOT</version>
+	        </dependency>
+	        <dependency>
+	            <groupId>com.sun.jersey</groupId>
+	            <artifactId>jersey-client</artifactId>
+	            <version>${jersey.version}</version>
+	        </dependency>
+            <dependency>
+                <groupId>com.sun.jersey.contribs</groupId>
+                <artifactId>jersey-multipart</artifactId>
+                <version>${jersey.version}</version>
+            </dependency>
 
 			<!-- tests -->
 			<dependency>
@@ -739,6 +768,11 @@
 				<artifactId>commons-io</artifactId>
 				<version>1.4</version>
 			</dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.8</version>
+            </dependency>
 			<dependency>
 				<groupId>jalopy</groupId>
 				<artifactId>jalopy</artifactId>
@@ -773,11 +807,6 @@
 				<groupId>xml-apis</groupId>
 				<artifactId>xml-apis</artifactId>
 				<version>2.0.2</version>
-			</dependency>
-			<dependency>
-				<groupId>axis</groupId>
-				<artifactId>axis</artifactId>
-				<version>1.4</version>
 			</dependency>
 			<dependency>
 				<groupId>javax.mail</groupId>

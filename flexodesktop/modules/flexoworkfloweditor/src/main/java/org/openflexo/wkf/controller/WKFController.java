@@ -346,11 +346,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	public void setCurrentFlexoProcess(FlexoProcess process) {
 		if (getCurrentPerspective() == PROCESS_EDITOR_PERSPECTIVE || getCurrentPerspective() == SWIMMING_LANE_PERSPECTIVE
 				|| getCurrentPerspective() == DOCUMENTATION_PERSPECTIVE) {
-			if (process.isImported()) {
-				setCurrentImportedProcess(process);
-			} else {
-				setCurrentEditedObjectAsModuleView(process);
-			}
+			setCurrentEditedObjectAsModuleView(process);
 		}
 	}
 
@@ -387,7 +383,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 				return;
 			}
 		}
-		if (object instanceof FlexoProcess && ((FlexoProcess) object).isImported()) {
+		if (object instanceof FlexoProcess) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Trying to set an imported process as current module view: returning!");
 			}
@@ -396,11 +392,6 @@ public class WKFController extends FlexoController implements PrintManagingContr
 		if (object instanceof RoleList || object instanceof FlexoProcess) {
 			super.setCurrentEditedObjectAsModuleView(object, perspective);
 		}
-	}
-
-	public void setCurrentImportedProcess(FlexoProcess subProcess) {
-		// TODO Auto-generated method stub
-		System.out.println("WKFController.setCurrentImportedProcess : please implement something here !");
 	}
 
 	public FlexoProcess getCurrentFlexoProcess() {

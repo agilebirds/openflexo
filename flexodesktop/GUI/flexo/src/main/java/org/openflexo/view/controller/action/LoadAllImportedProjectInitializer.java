@@ -32,7 +32,7 @@ import org.openflexo.view.controller.ControllerActionInitializer;
 public class LoadAllImportedProjectInitializer extends ActionInitializer<LoadAllImportedProject, FlexoModelObject, FlexoModelObject> {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(RefreshImportedProcessesActionInitializer.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(LoadAllImportedProjectInitializer.class.getPackage().getName());
 
 	public LoadAllImportedProjectInitializer(ControllerActionInitializer actionInitializer) {
 		super(LoadAllImportedProject.actionType, actionInitializer);

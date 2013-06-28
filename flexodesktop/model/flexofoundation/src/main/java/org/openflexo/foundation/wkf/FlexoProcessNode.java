@@ -106,15 +106,6 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 	}
 
 	@Override
-	public boolean isImported() {
-		if (getFatherProcessNode() != null) {
-			return getFatherProcessNode().isImported();
-		} else {
-			return getWorkflow().getImportedRootNodeProcesses().contains(this);
-		}
-	}
-
-	@Override
 	public FlexoProcessNode getProcessNode() {
 		return this;
 	}
@@ -127,16 +118,11 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 		if (_father == fatherProcessNode) {
 			return;
 		}
-		boolean isImported = isImported();
 		// 1. remove from current father
 		if (_father != null) {
 			_father.removeFromSubProcesses(this);
 		} else {
-			if (isImported) {
-				getWorkflow().removeFromImportedRootNodeProcesses(this);
-			} else {
-				getWorkflow().removeFromTopLevelNodeProcesses(this);
-			}
+			getWorkflow().removeFromTopLevelNodeProcesses(this);
 		}
 		// 2. We set the father
 		_father = fatherProcessNode;
@@ -226,7 +212,6 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 
 	@Override
 	public void delete() {
-		boolean isImported = isImported();
 		if (getParentFolder() != null) {
 			getParentFolder().removeFromProcesses(this);
 		}
@@ -235,11 +220,7 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 			_father = null;
 			setProcess(null);
 		} else if (getWorkflow() != null) {
-			if (isImported) {
-				getWorkflow().removeFromImportedRootNodeProcesses(this);
-			} else {
-				getWorkflow().removeFromTopLevelNodeProcesses(this);
-			}
+			getWorkflow().removeFromTopLevelNodeProcesses(this);
 		}
 		super.delete();
 	}
@@ -447,8 +428,6 @@ public class FlexoProcessNode extends FlexoFolderContainerNode implements Sortab
 		} else {
 			if (getFatherProcessNode() != null) {
 				return getFatherProcessNode().getOrphanProcesses().indexOf(this) + 1;
-			} else if (isImported()) {
-				return getWorkflow().getImportedRootNodeProcesses().indexOf(this) + 1;
 			} else {
 				return getWorkflow().getTopLevelFlexoProcesses().indexOf(this) + 1;
 			}

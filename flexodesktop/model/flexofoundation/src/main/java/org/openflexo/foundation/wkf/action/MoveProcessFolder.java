@@ -80,12 +80,6 @@ public class MoveProcessFolder extends FlexoAction<MoveProcessFolder, ProcessFol
 			}
 			return;
 		}
-		if (getDestination().isImported()) {
-			if (logger.isLoggable(Level.WARNING)) {
-				logger.warning("Cannot move a folder to an imported object");
-			}
-			return;
-		}
 		if (getDestination().getProcessNode() == null) {
 			if (logger.isLoggable(Level.WARNING)) {
 				logger.warning("Destination has no parent process node! Returning now");

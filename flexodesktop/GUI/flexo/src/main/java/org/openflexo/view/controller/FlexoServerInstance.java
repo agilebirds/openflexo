@@ -17,6 +17,7 @@ public interface FlexoServerInstance {
 
 	public static final String URL = "url";
 	public static final String WS_URL = "ws_url";
+	public static final String REST_URL = "restURL";
 	public static final String ID = "id";
 	public static final String NAME = "name";
 	public static final String USER_TYPES = "userTypes";
@@ -42,6 +43,13 @@ public interface FlexoServerInstance {
 
 	@Setter(WS_URL)
 	public void setWSURL(String url);
+
+	@Getter(REST_URL)
+	@XMLAttribute
+	public String getRestURL();
+
+	@Setter(REST_URL)
+	public void setRestURL(String url);
 
 	@Getter(NAME)
 	@XMLAttribute

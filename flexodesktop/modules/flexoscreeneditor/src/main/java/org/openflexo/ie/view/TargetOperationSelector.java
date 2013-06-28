@@ -46,7 +46,6 @@ import javax.swing.event.DocumentListener;
 
 import org.openflexo.components.widget.ProcessSelector;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.ie.menu.FlexoItemMenu;
@@ -211,16 +210,6 @@ class TargetOperationSelector extends JPanel implements FlexoObserver {
 				model.setProcess(getEditedObject());
 			}
 
-			@Override
-			public boolean isSelectable(FlexoModelObject object) {
-				boolean isSelectable = super.isSelectable(object);
-				if (isSelectable) {
-					if (object instanceof FlexoProcess) {
-						return model.isAcceptableAsDisplayProcess((FlexoProcess) object);
-					}
-				}
-				return isSelectable;
-			}
 		};
 		selector.setPreferredSize(new Dimension(200, 25));
 		JLabel label = new JLabel();

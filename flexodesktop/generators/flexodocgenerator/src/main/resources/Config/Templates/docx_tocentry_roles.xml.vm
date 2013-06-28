@@ -7,7 +7,7 @@
 * - level: the level to use in title.
 *#
 #set($workflow = ${project.getWorkflow()})
-#if(${workflow.getRoleList().getRoles().size()}>0 || ${workflow.getImportedRoleList().getRoles().size()}>0)
+#if(${workflow.getRoleList().getRoles().size()}>0)
 	
 	#if(${workflow.getRoleList().getRoles().size()}>0)
 		#renderScreenshotForObject(${workflow.getRoleList()})
@@ -23,12 +23,6 @@
 	#foreach($role in ${workflow.getSortedRoles()})
 		#set($row = $generator.getNewVector())
 		#void($row.add("<w:p>#renderNameWithRPr($role '<w:b/>')</w:p>"))
-		#void($row.add("#description($role)"))
-		#void($rolesTablesContents.add($row))
-	#end
-	#foreach($role in ${workflow.getImportedRoleList().getSortedRoles()})
-		#set($row = $generator.getNewVector())
-        #void($row.add("<w:p>#renderNameWithRPr($role '<w:b/>')</w:p>"))
 		#void($row.add("#description($role)"))
 		#void($rolesTablesContents.add($row))
 	#end

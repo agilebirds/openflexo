@@ -25,7 +25,6 @@ import org.openflexo.components.browser.BrowserElement;
 import org.openflexo.components.browser.BrowserElementFactory;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.FlexoModelObject;
-import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.ProcessFolder;
@@ -126,8 +125,6 @@ public class WKFBrowserElementFactory implements BrowserElementFactory {
 			return new ServiceOperationElement((ServiceOperation) object, browser, parent);
 		} else if (object instanceof WKFGroup) {
 			return new GroupElement((WKFGroup) object, browser, parent);
-		} else if (object instanceof FlexoImportedProcessLibrary) {
-			return new ImportedProcessLibraryElement((FlexoImportedProcessLibrary) object, browser, parent);
 		} else if (object instanceof ProcessFolder) {
 			return new ProcessFolderElement((ProcessFolder) object, browser, parent);
 		}

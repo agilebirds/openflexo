@@ -47,7 +47,7 @@ public class GenerateProcessScreenshot extends FlexoAction<GenerateProcessScreen
 
 		@Override
 		public boolean isVisibleForSelection(FlexoProcess object, Vector<FlexoProcess> globalSelection) {
-			return object != null && !object.isImported();
+			return object != null;
 		}
 
 		@Override

@@ -92,7 +92,6 @@ import org.openflexo.foundation.dm.DMModel;
 import org.openflexo.foundation.dm.DMType;
 import org.openflexo.foundation.dm.DMValidationModel;
 import org.openflexo.foundation.dm.JarClassLoader;
-import org.openflexo.foundation.gen.FlexoProcessImageNotificationCenter;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
 import org.openflexo.foundation.ie.IEOperationComponent;
 import org.openflexo.foundation.ie.IEPopupComponent;
@@ -142,7 +141,6 @@ import org.openflexo.foundation.utils.FlexoProjectFile;
 import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.foundation.validation.CompoundIssue;
 import org.openflexo.foundation.validation.FixProposal;
-import org.openflexo.foundation.validation.FlexoImportedObjectValidationModel;
 import org.openflexo.foundation.validation.FlexoProjectValidationModel;
 import org.openflexo.foundation.validation.InformationIssue;
 import org.openflexo.foundation.validation.Validable;
@@ -155,7 +153,6 @@ import org.openflexo.foundation.view.ViewLibrary;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPattern.EditionPatternConverter;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.wkf.FlexoImportedProcessLibrary;
 import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.FlexoWorkflow;
 import org.openflexo.foundation.wkf.Role;
@@ -291,7 +288,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	protected transient ResourceHashtable resources;
 
 	private FlexoProjectValidationModel projectValidationModel;
-	private FlexoImportedObjectValidationModel importedObjectValidationModel;
 
 	private static int ID = 0;
 
@@ -546,7 +542,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Saving project... DONE");
 		}
-		FlexoProcessImageNotificationCenter.getInstance().notifyNewImage();
 	}
 
 	/**
@@ -2176,13 +2171,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			projectValidationModel = new FlexoProjectValidationModel(this);
 		}
 		return projectValidationModel;
-	}
-
-	public ValidationModel getImportedObjectValidationModel() {
-		if (importedObjectValidationModel == null) {
-			importedObjectValidationModel = new FlexoImportedObjectValidationModel(this);
-		}
-		return importedObjectValidationModel;
 	}
 
 	/**
@@ -4251,26 +4239,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			}
 		}
 		return ontologyLibrary;
-	}
-
-	/*
-	 * private CalcLibrary calcLibrary = null;
-	 * 
-	 * public CalcLibrary getCalcLibrary() { return getCalcLibrary(true); }
-	 * 
-	 * public CalcLibrary getCalcLibrary(boolean createIfNotExist) { if (calcLibrary == null) { if (createIfNotExist) calcLibrary = new
-	 * CalcLibrary(getOntologyLibrary()); else return null; } return calcLibrary; }
-	 */
-
-	public FlexoImportedProcessLibrary getImportedProcessLibrary() {
-		if (getFlexoWorkflow(false) == null) {
-			return null;
-		}
-		return getWorkflow().getImportedProcessLibrary();
-	}
-
-	public RoleList getImportedRoleList() {
-		return getWorkflow().getImportedRoleList();
 	}
 
 	public boolean getIsLocalized() {

@@ -486,10 +486,6 @@ public class FlexoItemMenu extends IEObject implements DeletableObject, Validabl
 		notifyObservers(new DisplayProcessSet(old, displayProcess));
 	}
 
-	public boolean isAcceptableAsDisplayProcess(FlexoProcess process) {
-		return process != null && !process.isImported();
-	}
-
 	public long getOperationFlexoID() {
 		if (getOperation() != null) {
 			return getOperation().getFlexoID();

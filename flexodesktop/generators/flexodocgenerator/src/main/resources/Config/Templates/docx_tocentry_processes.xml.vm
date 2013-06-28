@@ -26,15 +26,3 @@
 	#end
 #end 
 
-#foreach($process in $workflow.getSortedImportedProcesses())
-#if(!$process.getDontGenerate())
-		<w:p>
-			<w:r>
-				<w:pPr>
-  					<w:pageBreakBefore/>
-				</w:pPr>
-			</w:r>
-		</w:p>
-	#renderProcess($process $level)
-#end 
-#end 

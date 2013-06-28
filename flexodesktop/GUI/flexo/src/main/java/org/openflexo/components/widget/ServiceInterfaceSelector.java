@@ -147,7 +147,7 @@ public class ServiceInterfaceSelector extends AbstractBrowserSelector<WKFObject>
 	public boolean isSelectable(FlexoModelObject object) {
 		if (object instanceof FlexoProcess) {
 			FlexoProcess p = (FlexoProcess) object;
-			return !p.isImported() || p.isTopLevelProcess();
+			return p.isTopLevelProcess();
 		}
 		if (object instanceof PortRegistery || object instanceof ServiceInterface) {
 			return true;

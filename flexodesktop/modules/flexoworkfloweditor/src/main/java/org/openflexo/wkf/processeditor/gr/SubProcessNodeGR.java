@@ -24,7 +24,6 @@ import java.awt.Component;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
@@ -44,8 +43,6 @@ import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
-import org.openflexo.foundation.gen.FlexoProcessImageBuilder;
-import org.openflexo.foundation.gen.FlexoProcessImageNotificationCenter;
 import org.openflexo.foundation.wkf.action.OpenEmbeddedProcess;
 import org.openflexo.foundation.wkf.node.LoopSubProcessNode;
 import org.openflexo.foundation.wkf.node.MultipleInstanceSubProcessNode;
@@ -76,13 +73,6 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 					paintDefaultDecoration(g);
 				} else {
 					ImageIcon snapshot = null;
-					if (getSubProcessNode().getSubProcess() != null) {
-						try {
-							snapshot = FlexoProcessImageBuilder.getSnapshot(getSubProcessNode().getSubProcess());
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
 					if (snapshot != null) {
 						Image image = ImageUtils.getThumbnail(snapshot, (int) getWidth() - 13, (int) getHeight() - 13).getImage();
 						double x = Math.max(10.0, (getWidth() - 10.0 - image.getWidth(null)) / 2);
@@ -118,15 +108,7 @@ public class SubProcessNodeGR extends NormalAbstractActivityNodeGR<SubProcessNod
 				}
 			};
 		});
-		FlexoProcessImageNotificationCenter.getInstance().addObserver(this);
 		updatePropertiesFromWKFPreferences();
-
-	}
-
-	@Override
-	public void delete() {
-		FlexoProcessImageNotificationCenter.getInstance().deleteObserver(this);
-		super.delete();
 
 	}
 

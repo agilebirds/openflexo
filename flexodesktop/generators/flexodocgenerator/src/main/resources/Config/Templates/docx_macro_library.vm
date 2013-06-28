@@ -1290,11 +1290,7 @@ name of the template corresponding to the specific toc_entry.
         </w:pPr>
         #mkbookMark(${process.getFlexoID()} ${generator.getReference($process)})
         <w:r>
-            #if($process.isImported())
-                <w:t xml:space="preserve">Referenced Process: </w:t>
-            #else
-                <w:t xml:space="preserve">Process: </w:t>
-            #end
+           <w:t xml:space="preserve">Process: </w:t>
     #else ## root process
         <w:r>
             <w:rPr>
@@ -1306,9 +1302,7 @@ name of the template corresponding to the specific toc_entry.
         </w:r>
         #renderName($process)
     </w:p>
-    #if($process.isImported())
-        #description($process)
-    #elseif($process.isRootProcess())
+    #if($process.isRootProcess())
         #set($currentTocEntry = ${generator.getNewHolder()})
         #getCurrentTocEntry($currentTocEntry)
         #set($currentTocEntry = ${currentTocEntry.get()})
@@ -1590,7 +1584,7 @@ name of the template corresponding to the specific toc_entry.
 *#
 #macro(RoleForWorkFlow $_workflow)
 
-    #if(${_workflow.getRoleList().getRoles().size()}>0 || ${_workflow.getImportedRoleList().getRoles().size()}>0)
+    #if(${_workflow.getRoleList().getRoles().size()}>0)
         <w:p>
             <w:pPr>
                 <w:pStyle w:val="Heading$level"/>
@@ -1613,13 +1607,6 @@ name of the template corresponding to the specific toc_entry.
             #void($row.add("#description($role)"))
             #void($rolesTablesContents.add($row))
         #end
-        #foreach($role in ${_workflow.getImportedRoleList().getSortedRoles()})
-            #set($row = $generator.getNewVector())
-            #void($row.add("<w:p>#renderNameWithRPr($role '<w:b/>')</w:p>"))
-            #void($row.add("#description($role)"))
-            #void($rolesTablesContents.add($row))
-        #end
-
         #renderDocxTable(["Role", "Description"] $rolesTablesContents)
     #end
 #end

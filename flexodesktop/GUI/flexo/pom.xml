@@ -11,14 +11,6 @@
 	<artifactId>flexo</artifactId>
 	<name>GUI :: Flexo</name>
 	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>client-config.wsdd</include>
-				</includes>
-			</resource>
-		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -33,6 +25,35 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+                <groupId>org.jvnet.ws.wadl</groupId>
+                <artifactId>wadl-client-plugin</artifactId>
+                <version>1.1.5</version>
+                <executions>
+                    <execution>
+                        <!-- The id 'default-cli' should not be changed as it allows to execute 
+                            this plugin from the command line. Executions with the specific id 'default-cli' 
+                            are automatically chosen by the command line -->
+                        <!-- To run this plugin, simply invoke : mvn wadl-client:generate -->
+                        <id>default-cli</id>
+                        <configuration>
+                            <autoPackaging>false</autoPackaging>
+                            <targetDirectory>src/main/java</targetDirectory>
+                            <packageName>org.openflexo.rest.client</packageName>
+                            <targets>
+                                <url>http://localhost:9090/Flexo/rest/application.wadl</url>
+                            </targets>
+                            <!-- <wadlOptions> <wadlOption> <wadl>localhost:9090/Flexo/rest/application.wadl</wadl> 
+                                <impl>true</impl> <packagename>org.openflexo.rest.client</packagename> <schemaPackagenames> 
+                                <schemaPackagename>http://www.agilebirds.com/openflexo=org.openflexo.rest.model</schemaPackagename> 
+                                </schemaPackagenames> </wadlOption> </wadlOptions> -->
+                        </configuration>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
 	<dependencies>
@@ -99,6 +120,14 @@
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey.contribs</groupId>
+            <artifactId>jersey-multipart</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>flexographicutils</artifactId>

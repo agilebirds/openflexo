@@ -39,7 +39,7 @@ public class AddArtefactMetricsValue extends AddMetricsValue<AddArtefactMetricsV
 
 		@Override
 		public boolean isEnabledForSelection(WKFArtefact object, Vector<WKFObject> globalSelection) {
-			return object != null && !object.isImported();
+			return object != null;
 		}
 
 		@Override

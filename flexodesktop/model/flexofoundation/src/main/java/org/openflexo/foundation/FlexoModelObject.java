@@ -51,7 +51,6 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.localization.Language;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.HTMLUtils;
-import org.openflexo.ws.client.PPMWebService.PPMObject;
 import org.openflexo.xmlcode.StringEncoder;
 import org.openflexo.xmlcode.XMLMapping;
 
@@ -217,59 +216,6 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		return null;
 	}
 
-	public boolean isDeletedOnServer() {
-		return isDeletedOnServer;
-	}
-
-	public void setIsDeletedOnServer(boolean isDeletedOnServer) {
-		if (this.isDeletedOnServer == isDeletedOnServer) {
-			return;
-		}
-		this.isDeletedOnServer = isDeletedOnServer;
-		setChanged();
-		notifyObservers(new DataModification("isDeletedOnServer", !this.isDeletedOnServer, isDeletedOnServer));
-	}
-
-	public void markAsDeletedOnServer() {
-		setIsDeletedOnServer(true);
-	}
-
-	public void copyObjectAttributesInto(PPMObject object) {
-		object.setName(getName());
-		object.setUri(getURI());
-		object.setVersionUri(getVersionURI());
-		object.setGeneralDescription(getDescription());
-		object.setBusinessDescription(getBusinessDescription());
-		object.setTechnicalDescription(getTechnicalDescription());
-		object.setUserManualDescription(getUserManualDescription());
-	}
-
-	protected void updateFromObject(PPMObject object) {
-		setIsDeletedOnServer(false);
-		setURI(object.getUri());
-		setVersionURI(object.getVersionUri());
-		setDescription(object.getGeneralDescription());
-		setBusinessDescription(object.getBusinessDescription());
-		setTechnicalDescription(object.getTechnicalDescription());
-		setUserManualDescription(object.getUserManualDescription());
-		try {
-			setName(object.getName());
-		} catch (Exception e) {
-			if (logger.isLoggable(Level.SEVERE)) {
-				logger.log(Level.SEVERE, "setName threw an exception on " + this + "! This should never happen for imported objects", e);
-			}
-		}
-	}
-
-	/**
-	 * Returns wheter this object is imported or not. Object implementing FlexoImportableObject should override this method
-	 * 
-	 * @return true if this object is imported.
-	 */
-	public boolean isImported() {
-		return false;
-	}
-
 	public boolean isCache() {
 		return false;
 	}
@@ -281,44 +227,6 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 			throw new RuntimeException("Object of type " + getClass().getName()
 					+ " is cached but does not properly override getUncachedObject()! (" + this + ")");
 		}
-	}
-
-	public Class<? extends PPMObject> getEquivalentPPMClass() {
-		return null;
-	}
-
-	protected boolean isEquivalentTo(PPMObject object) {
-		if (object == null) {
-			return false;
-		}
-		if (isDeletedOnServer()) {
-			return false;
-		}
-		if (getEquivalentPPMClass() != object.getClass()) {
-			return false;
-		}
-		if (stringHasChanged(getName(), object.getName())) {
-			return false;
-		}
-		if (stringHasChanged(getURI(), object.getUri())) {
-			return false;
-		}
-		if (stringHasChanged(getVersionURI(), object.getVersionUri())) {
-			return false;
-		}
-		if (stringHasChanged(getDescription(), object.getGeneralDescription())) {
-			return false;
-		}
-		if (stringHasChanged(getBusinessDescription(), object.getBusinessDescription())) {
-			return false;
-		}
-		if (stringHasChanged(getTechnicalDescription(), object.getTechnicalDescription())) {
-			return false;
-		}
-		if (stringHasChanged(getUserManualDescription(), object.getUserManualDescription())) {
-			return false;
-		}
-		return true;
 	}
 
 	public static <O extends FlexoModelObject> O getObjectWithURI(Vector<O> objects, String uri) {
@@ -334,9 +242,6 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		if (getProject() == null) {
 			throw new RuntimeException("Project is undefined for object " + getClass().getName());
 		}
-		if (isImported() || uri != null) {
-			return uri;
-		}
 		if (isSerializing()) {
 			return null; // We never serialize URI for unimported objects
 		}
@@ -351,7 +256,7 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 		if (getProject() == null) {
 			throw new RuntimeException("Project is undefined for object " + getClass().getName());
 		}
-		if (isImported() || versionURI != null) {
+		if (versionURI != null) {
 			return versionURI;
 		}
 		if (isSerializing()) {
@@ -729,12 +634,6 @@ public abstract class FlexoModelObject extends FlexoXMLSerializableObject implem
 
 	public String getDutchClassName() {
 		return FlexoLocalization.localizedForKeyAndLanguage(getClassNameKey(), Language.DUTCH);
-	}
-
-	private static final String EMPTY_STRING = "";
-
-	public boolean isDocEditable() {
-		return !isImported();
 	}
 
 	public String getDescription() {

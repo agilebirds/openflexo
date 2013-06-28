@@ -28,10 +28,8 @@ import org.openflexo.foundation.wkf.FlexoProcess;
 import org.openflexo.foundation.wkf.WKFObject;
 import org.openflexo.foundation.wkf.action.OpenEmbeddedProcess;
 import org.openflexo.foundation.wkf.node.SubProcessNode;
-import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.view.controller.FlexoController;
 
 public class OpenEmbeddedProcessInitializer extends ActionInitializer<OpenEmbeddedProcess, SubProcessNode, WKFObject> {
 
@@ -53,10 +51,6 @@ public class OpenEmbeddedProcessInitializer extends ActionInitializer<OpenEmbedd
 			public boolean run(EventObject e, OpenEmbeddedProcess action) {
 				if (action.getFocusedObject().hasSubProcessReference()) {
 					return action.getFocusedObject().getSubProcess(true) != null;
-				}
-				if (action.getProcessToOpen() != null && action.getProcessToOpen().isImported()) {
-					FlexoController.notify(FlexoLocalization.localizedForKey("you_cannot_edit/inspect_an_imported_process"));
-					return false;
 				}
 				if (action.getProcessToOpen() == null) {
 					if (action.getFocusedObject().getProcess().getProject() == getEditor().getProject()) {

@@ -19,7 +19,6 @@
  */
 package org.openflexo.components.browser.wkf;
 
-import javax.swing.Icon;
 import javax.swing.tree.TreePath;
 
 import org.openflexo.components.browser.BrowserElement;
@@ -28,10 +27,6 @@ import org.openflexo.components.browser.ExpansionSynchronizedElement;
 import org.openflexo.components.browser.ProjectBrowser;
 import org.openflexo.foundation.wkf.Role;
 import org.openflexo.foundation.wkf.RoleList;
-import org.openflexo.icon.IconFactory;
-import org.openflexo.icon.IconLibrary;
-import org.openflexo.icon.WKFIconLibrary;
-import org.openflexo.localization.FlexoLocalization;
 
 /**
  * Browser element representing all the roles of a process
@@ -48,19 +43,6 @@ public class RoleListElement extends BrowserElement implements ExpansionSynchron
 	@Override
 	public TreePath getTreePath() {
 		return super.getTreePath();
-	}
-
-	@Override
-	public Icon getIcon() {
-		if (getRoleList().isImportedRoleList() || !isRoot() && getParent().getElementType() == BrowserElementType.ROLE_LIST) {
-			if (getRoleList().isImportedRoleList()) {
-				return IconFactory.getImageIcon(WKFIconLibrary.IMPORTED_ROLE_LIBRARY_ICON, IconLibrary.WARNING);
-			} else {
-				return WKFIconLibrary.IMPORTED_ROLE_LIBRARY_ICON;
-			}
-		} else {
-			return super.getIcon();
-		}
 	}
 
 	@Override
@@ -91,15 +73,6 @@ public class RoleListElement extends BrowserElement implements ExpansionSynchron
 	@Override
 	protected BrowserElementType getFilteredElementType() {
 		return BrowserElementType.ROLE;
-	}
-
-	@Override
-	public String getName() {
-		if (getRoleList().isImportedRoleList()) {
-			return "[PPM]" + FlexoLocalization.localizedForKey("imported_role_library");
-		} else {
-			return super.getName();
-		}
 	}
 
 	@Override

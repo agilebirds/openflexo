@@ -33,7 +33,6 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.action.FlexoActionizer;
-import org.openflexo.foundation.imported.dm.RoleAlreadyImportedException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.ProjectData;
@@ -49,7 +48,6 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.EmptyVector;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.ws.client.PPMWebService.PPMRole;
 
 /**
  * Represents the list of roles for the workflow
@@ -65,22 +63,6 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 	public static FlexoActionizer<AddRole, WorkflowModelObject, WorkflowModelObject> addRoleActionizer;
 	public static FlexoActionizer<DeleteRole, Role, WorkflowModelObject> deleteRoleActionizer;
 
-	public Role importRole(PPMRole role) throws RoleAlreadyImportedException {
-		Role fir = getImportedObjectWithURI(role.getUri());
-		if (fir != null) {
-			throw new RoleAlreadyImportedException(role, fir);
-		}
-		fir = Role.createImportedRoleFromRole(this, role);
-		try {
-			addToRoles(fir);
-		} catch (DuplicateRoleException e) {
-			if (logger.isLoggable(Level.SEVERE)) {
-				logger.log(Level.SEVERE, "Duplicate exception while importing role: " + role + " this should never happen!", e);
-			}
-		}
-		return fir;
-	}
-
 	/**
 	 * Constructor used during deserialization
 	 */
@@ -95,15 +77,6 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 	public RoleList(FlexoProject project, FlexoWorkflow workflow) {
 		super(project, workflow);
 		_roles = new Vector<Role>();
-	}
-
-	@Override
-	public boolean isImported() {
-		return isImportedRoleList();
-	}
-
-	public boolean isImportedRoleList() {
-		return getWorkflow() != null && getWorkflow().getImportedRoleList() == this;
 	}
 
 	private RoleList roleList;
@@ -193,28 +166,26 @@ public final class RoleList extends WorkflowModelObject implements DataFlexoObse
 	}
 
 	public void addToRoles(Role aRole, boolean replaceExisting) throws DuplicateRoleException {
-		if (!aRole.isImported() && !isImportedRoleList()) {
-			if (aRole.getName() == null) {
-				aRole.setName(aRole.getIsSystemRole() ? getNextNewSystemRoleName() : getNextNewUserRoleName());
+		if (aRole.getName() == null) {
+			aRole.setName(aRole.getIsSystemRole() ? getNextNewSystemRoleName() : getNextNewUserRoleName());
+		}
+		if (logger.isLoggable(Level.FINE)) {
+			logger.fine("addToRoles with " + aRole.getFullyQualifiedName());
+		}
+		Role roleWithName = roleWithName(aRole.getName());
+		if (roleWithName != null) {
+			if (roleWithName == aRole) {
+				return;
 			}
-			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("addToRoles with " + aRole.getFullyQualifiedName());
-			}
-			Role roleWithName = roleWithName(aRole.getName());
-			if (roleWithName != null) {
-				if (roleWithName == aRole) {
+			if (!replaceExisting) {
+				if (isDeserializing()) {
+					aRole.setName(aRole.getName() + "-1");
+					addToRoles(aRole);
 					return;
 				}
-				if (!replaceExisting) {
-					if (isDeserializing()) {
-						aRole.setName(aRole.getName() + "-1");
-						addToRoles(aRole);
-						return;
-					}
-					throw new DuplicateRoleException(aRole.getName());
-				} else {
-					_roles.remove(roleWithName);
-				}
+				throw new DuplicateRoleException(aRole.getName());
+			} else {
+				_roles.remove(roleWithName);
 			}
 		}
 		if (!_roles.contains(aRole)) {

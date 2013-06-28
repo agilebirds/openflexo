@@ -31,15 +31,6 @@ This variant applies from the root process.
     	<!-- ignored-->
         #end
     #end 
-    <!-- loop on imported processes -->
-    #foreach($process in ${workflow.getSortedImportedProcesses()})
-    <!-- process: $process -->
-    #if(!$process.getDontGenerate())
-    	#renderRaciBody($process $level)
-    #else
-    	<!-- ignored-->
-    #end ##if
-    #end ##foreach
     </w:tbl>
 #end
 

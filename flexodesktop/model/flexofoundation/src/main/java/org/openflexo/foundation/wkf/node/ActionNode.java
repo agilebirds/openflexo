@@ -361,7 +361,7 @@ public class ActionNode extends FlexoNode implements ChildNode, ComponentInstanc
 	}
 
 	public boolean isAcceptableAsDisplayProcess(FlexoProcess process) {
-		return process != null && !process.isImported();
+		return process != null;
 	}
 
 	public long getDisplayOperationFlexoID() {

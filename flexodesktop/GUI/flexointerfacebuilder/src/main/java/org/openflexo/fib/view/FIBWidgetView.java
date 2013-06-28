@@ -563,6 +563,9 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 	}
 
 	public final void updateEnability() {
+		if ("Send".equals(getComponent().getName())) {
+			System.err.println("coucou");
+		}
 		if (isComponentEnabled()) {
 			if (!enabled) {
 				// Becomes enabled

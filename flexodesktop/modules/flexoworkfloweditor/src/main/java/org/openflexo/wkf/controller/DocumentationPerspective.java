@@ -70,7 +70,7 @@ public class DocumentationPerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoModelObject object) {
-		return object instanceof FlexoProcess && !((FlexoProcess) object).isImported();
+		return object instanceof FlexoProcess;
 	}
 
 	@Override

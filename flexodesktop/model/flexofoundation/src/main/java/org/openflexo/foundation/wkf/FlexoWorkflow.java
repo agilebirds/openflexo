@@ -57,15 +57,12 @@ import org.openflexo.foundation.ie.TabComponentInstance;
 import org.openflexo.foundation.ie.cl.OperationComponentDefinition;
 import org.openflexo.foundation.ie.cl.TabComponentDefinition;
 import org.openflexo.foundation.ie.widget.IETabWidget;
-import org.openflexo.foundation.imported.dm.ProcessAlreadyImportedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProjectReference;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoWorkflowResource;
 import org.openflexo.foundation.rm.FlexoXMLStorageResource;
-import org.openflexo.foundation.rm.ImportedProcessLibraryCreated;
-import org.openflexo.foundation.rm.ImportedRoleLibraryCreated;
 import org.openflexo.foundation.rm.InvalidFileNameException;
 import org.openflexo.foundation.rm.ProjectData;
 import org.openflexo.foundation.rm.ProjectRestructuration;
@@ -99,7 +96,6 @@ import org.openflexo.inspector.InspectableObject;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.PropertyChangeListenerRegistrationManager;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.ws.client.PPMWebService.PPMProcess;
 import org.openflexo.xmlcode.XMLMapping;
 
 /**
@@ -147,10 +143,8 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 	private FlexoProcessNode _rootProcessNode;
 
 	private Vector<FlexoProcessNode> _topLevelNodeProcesses;
-	private Vector<FlexoProcessNode> importedRootNodeProcesses;
 
 	private RoleList _roleList;
-	private RoleList importedRoleList;
 
 	private List<Role> allAssignableRoles;
 
@@ -177,7 +171,6 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 	public FlexoWorkflow(FlexoProject project) {
 		super(project, null);
 		_topLevelNodeProcesses = new Vector<FlexoProcessNode>();
-		importedRootNodeProcesses = new Vector<FlexoProcessNode>();
 		processMetricsDefinitions = new Vector<MetricsDefinition>();
 		activityMetricsDefinitions = new Vector<MetricsDefinition>();
 		operationMetricsDefinitions = new Vector<MetricsDefinition>();
@@ -382,40 +375,6 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 		getPropertyChangeSupport().firePropertyChange("sortedOrphanSubprocesses", this.orphanProcesses, null);
 	}
 
-	public Vector<FlexoProcessNode> getImportedRootNodeProcesses() {
-		return importedRootNodeProcesses;
-	}
-
-	public void setImportedRootNodeProcesses(Vector<FlexoProcessNode> importedRootNodeProcesses) {
-		this.importedRootNodeProcesses = importedRootNodeProcesses;
-	}
-
-	public void addToImportedRootNodeProcesses(FlexoProcessNode processNode) {
-		if (!importedRootNodeProcesses.contains(processNode)) {
-
-			if (isDeserializing() && processNode.getFatherProcessNode() != null) {
-				logger.severe("Found a sub process ('" + processNode.getName() + "') at top level -> Ignoring !");
-				return;
-			}
-			importedRootNodeProcesses.add(processNode);
-			processNode.setFatherProcessNode(null);
-			if (!isDeserializing()) {
-				processNode.setIndexValue(getImportedRootNodeProcesses().size());
-				FlexoIndexManager.reIndexObjectOfArray(getImportedRootNodeProcesses().toArray(new FlexoProcessNode[0]));
-			}
-			setChanged();
-			notifyObservers(new ProcessInserted(processNode.getProcess(), null));
-		}
-	}
-
-	public void removeFromImportedRootNodeProcesses(FlexoProcessNode processNode) {
-		if (importedRootNodeProcesses.contains(processNode)) {
-			importedRootNodeProcesses.remove(processNode);
-			setChanged();
-			notifyObservers(new ProcessRemoved(processNode.getProcess(), null));
-		}
-	}
-
 	public Vector<FlexoProcess> getTopLevelFlexoProcesses() {
 		Vector<FlexoProcess> v = new Vector<FlexoProcess>();
 		for (FlexoProcessNode node : _getTopLevelNodeProcesses()) {
@@ -424,66 +383,8 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 		return v;
 	}
 
-	public Vector<FlexoProcess> getImportedProcesses() {
-		Vector<FlexoProcess> v = new Vector<FlexoProcess>();
-		for (FlexoProcessNode node : getImportedRootNodeProcesses()) {
-			v.add(node.getProcess());
-		}
-		return v;
-	}
-
-	public Vector<FlexoProcess> getNotDeletedImportedProcesses() {
-		Vector<FlexoProcess> v = new Vector<FlexoProcess>();
-		for (FlexoProcessNode node : getImportedRootNodeProcesses()) {
-			if (!node.getProcess().isDeletedOnServer()) {
-				v.add(node.getProcess());
-			}
-		}
-		return v;
-	}
-
-	public FlexoProcess getImportedProcessWithURI(String uri) {
-		return getObjectWithURI(getImportedProcesses(), uri);
-	}
-
 	public FlexoProcess getProcessWithURI(String uri) {
 		return getObjectWithURI(getAllFlexoProcesses(), uri);
-	}
-
-	public FlexoProcess getRecursivelyImportedProcessWithURI(String uri) {
-		return getRecursivelyImportedProcessWithURI(getImportedProcesses(), uri);
-	}
-
-	public static FlexoProcess getRecursivelyImportedProcessWithURI(Vector<FlexoProcess> processes, String uri) {
-		FlexoProcess fip = getObjectWithURI(processes, uri);
-		if (fip == null) {
-			Enumeration<FlexoProcess> en = processes.elements();
-			while (en.hasMoreElements() && fip == null) {
-				FlexoProcess p = en.nextElement();
-				fip = getRecursivelyImportedProcessWithURI(p.getSubProcesses(), uri);
-			}
-		}
-		return fip;
-	}
-
-	public FlexoProcess importProcess(PPMProcess process) throws ProcessAlreadyImportedException, InvalidFileNameException,
-			DuplicateResourceException, InvalidParentProcessException, InvalidProcessReferencesException {
-		FlexoProcess fip = getImportedProcessWithURI(process.getUri());
-		if (fip != null) {
-			throw new ProcessAlreadyImportedException(process, fip);
-		}
-		fip = getRecursivelyImportedProcessWithURI(process.getUri());
-		if (fip != null) {
-			fip.setParentProcess(null);
-			try {
-				fip.updateFromObject(process);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else {
-			fip = FlexoProcess.createImportedProcessFromProcess(this, process);
-		}
-		return fip;
 	}
 
 	// Used by templates in doc
@@ -492,24 +393,6 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 		FlexoProcessNode[] o = FlexoIndexManager.sortArray(_getTopLevelNodeProcesses().toArray(new FlexoProcessNode[0]));
 		enableObserving();
 		return ToolBox.getEnumeration(o);
-	}
-
-	public Enumeration<FlexoProcessNode> getSortedTopLevelImportedProcesses() {
-		disableObserving();
-		FlexoProcessNode[] o = FlexoIndexManager.sortArray(getImportedRootNodeProcesses().toArray(new FlexoProcessNode[0]));
-		enableObserving();
-		return ToolBox.getEnumeration(o);
-	}
-
-	public Enumeration<FlexoProcess> getSortedImportedProcesses() {
-		disableObserving();
-		Vector<FlexoProcess> vector = new Vector<FlexoProcess>();
-		Enumeration<FlexoProcessNode> en = getSortedTopLevelImportedProcesses();
-		while (en.hasMoreElements()) {
-			vector.add(en.nextElement().getProcess());
-		}
-		enableObserving();
-		return vector.elements();
 	}
 
 	private void addProcesses(Vector<FlexoProcessNode> temp, FlexoProcessNode process) {
@@ -598,65 +481,6 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 	 * 
 	 * @return an Enumeration of FlexoProcessNode elements
 	 */
-	public Enumeration<FlexoProcessNode> allImportedProcessNodes() {
-		return getAllImportedProcessNodes().elements();
-	}
-
-	/**
-	 * TODO: optimize me later ! Return an vector of all processes, by recursively explore the tree
-	 * 
-	 * @return an Vector of FlexoProcessNode elements
-	 */
-	private Vector<FlexoProcessNode> getAllImportedProcessNodes() {
-		Vector<FlexoProcessNode> temp = new Vector<FlexoProcessNode>();
-		for (Enumeration<FlexoProcessNode> en = importedRootNodeProcesses.elements(); en.hasMoreElements();) {
-			FlexoProcessNode aTopLevelProcessNode = en.nextElement();
-			addProcesses(temp, aTopLevelProcessNode);
-		}
-		return temp;
-	}
-
-	/**
-	 * TODO: optimize me later ! Return number of processes
-	 * 
-	 * @return int: number of processes declared in this workflow
-	 */
-	public int allImportedProcessesCount() {
-		return getAllImportedProcessNodes().size();
-	}
-
-	/**
-	 * TODO: optimize me later ! Return a Vector of all FlexoProcess objects defined in this workflow
-	 * 
-	 * @return Vector of FlexoProcess
-	 */
-	public Vector<FlexoProcess> getAllImportedFlexoProcesses() {
-		// TODO: optimize me
-		Vector<FlexoProcess> returned = new Vector<FlexoProcess>();
-		for (Enumeration<FlexoProcessNode> e = allImportedProcessNodes(); e.hasMoreElements();) {
-			FlexoProcessNode currentProcessNode = e.nextElement();
-			FlexoProcess process = currentProcessNode.getProcess();
-			if (process != null) {
-				if (!returned.contains(process)) {
-					returned.add(process);
-				}
-			} else {
-				if (logger.isLoggable(Level.SEVERE)) {
-					logger.severe("ProcessNode:" + currentProcessNode.getName() + " have a null FlexoProcess, remove it !");
-				}
-				currentProcessNode.delete();
-				removeFromTopLevelNodeProcesses(currentProcessNode);
-				setChanged();
-			}
-		}
-		return returned;
-	}
-
-	/**
-	 * TODO: optimize me later ! Return an enumeration of all processes, by recursively explore the tree
-	 * 
-	 * @return an Enumeration of FlexoProcessNode elements
-	 */
 	public Enumeration<FlexoProcessNode> allProcessNodes() {
 		return getAllProcessNodes().elements();
 	}
@@ -669,7 +493,6 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 	private Vector<FlexoProcessNode> getAllProcessNodes() {
 		Vector<FlexoProcessNode> temp = new Vector<FlexoProcessNode>();
 		temp.addAll(getAllLocalProcessNodes());
-		temp.addAll(getAllImportedProcessNodes());
 		return temp;
 	}
 
@@ -726,25 +549,6 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 		return returned;
 	}
 
-	public Vector<FlexoProcess> getAllImportedTopLevelFlexoProcesses() {
-		Vector<FlexoProcess> returned = new Vector<FlexoProcess>();
-		for (Enumeration<FlexoProcessNode> e = allImportedProcessNodes(); e.hasMoreElements();) {
-			FlexoProcessNode currentProcessNode = e.nextElement();
-			FlexoProcess process = currentProcessNode.getProcess();
-			if (process != null) {
-				if (!returned.contains(process)) {
-					returned.add(process);
-				}
-			} else {
-				if (logger.isLoggable(Level.SEVERE)) {
-					logger.severe("ProcessNode:" + currentProcessNode.getName() + " have a null FlexoProcess, remove it !");
-				}
-				currentProcessNode.delete();
-			}
-		}
-		return returned;
-	}
-
 	public Vector<FlexoProcess> getAllTopLevelFlexoProcesses() {
 		Vector<FlexoProcess> returned = new Vector<FlexoProcess>();
 		for (Enumeration<FlexoProcessNode> e = allProcessNodes(); e.hasMoreElements();) {
@@ -777,7 +581,6 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 			FlexoProcess p = e.nextElement();
 			returned.addAll(p.getAllEmbeddedWKFObjects());
 		}
-		returned.addAll(getAllImportedFlexoProcesses());
 		return returned;
 	}
 
@@ -993,29 +796,6 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 	 */
 	public void setRoleList(RoleList list) {
 		_roleList = list;
-	}
-
-	/**
-	 * @return
-	 */
-	public RoleList getImportedRoleList() {
-		return getImportedRoleList(false);
-	}
-
-	public RoleList getImportedRoleList(boolean createIfNotExist) {
-		if (importedRoleList == null && !isDeserializing() && !isSerializing() && createIfNotExist) {
-			importedRoleList = new RoleList(getProject(), this);
-			setChanged();
-			notifyObservers(new ImportedRoleLibraryCreated());
-		}
-		return importedRoleList;
-	}
-
-	/**
-	 * @param list
-	 */
-	public void setImportedRoleList(RoleList list) {
-		importedRoleList = list;
 	}
 
 	@Override
@@ -1257,9 +1037,6 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 	public Vector<Role> getAllRoles() {
 		Vector<Role> reply = new Vector<Role>();
 		reply.addAll(getRoleList().getRoles());
-		if (getImportedRoleList() != null) {
-			reply.addAll(getImportedRoleList().getRoles());
-		}
 		return reply;
 	}
 
@@ -1336,29 +1113,12 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 	public Vector<Role> getAllSortedRoles() {
 		Vector<Role> reply = new Vector<Role>();
 		reply.addAll(getRoleList().getSortedRolesVector());
-		if (getImportedRoleList() != null) {
-			reply.addAll(getImportedRoleList().getSortedRolesVector());
-		}
 		return reply;
 	}
 
 	public Role getRoleWithURI(String uri) {
 		Role reply = getRoleList().getImportedObjectWithURI(uri);
-		if (reply == null && getImportedRoleList() != null) {
-			reply = getImportedRoleList().getImportedObjectWithURI(uri);
-		}
 		return reply;
-	}
-
-	private FlexoImportedProcessLibrary importedProcessLibrary;
-
-	public FlexoImportedProcessLibrary getImportedProcessLibrary() {
-		if (importedProcessLibrary == null && getImportedProcesses().size() > 0) {
-			importedProcessLibrary = new FlexoImportedProcessLibrary(this);
-			setChanged(false);
-			notifyObservers(new ImportedProcessLibraryCreated());
-		}
-		return importedProcessLibrary;
 	}
 
 	/**
@@ -1387,9 +1147,6 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 			returned.addAll(p.getAllEmbeddedValidableObjects());
 		}
 		returned.addAll(getRoleList().getAllEmbeddedValidableObjects());
-		if (getImportedRoleList() != null) {
-			returned.addAll(getImportedRoleList().getAllEmbeddedValidableObjects());
-		}
 		returned.addAll(getProcessMetricsDefinitions());
 		returned.addAll(getActivityMetricsDefinitions());
 		returned.addAll(getOperationMetricsDefinitions());
@@ -1555,9 +1312,6 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 		Enumeration<FlexoModelObject> en = getAllEmbeddedWKFObjects().elements();
 		while (en.hasMoreElements()) {
 			FlexoModelObject p = en.nextElement();
-			if (p instanceof FlexoProcess && ((FlexoProcess) p).isImported()) {
-				continue;
-			}
 			if (p instanceof ApplicationHelpEntryPoint) {
 				if (p instanceof PetriGraphNode) {
 					if (!((PetriGraphNode) p).getDontGenerateRecursive()) {
@@ -1597,9 +1351,6 @@ public class FlexoWorkflow extends FlexoFolderContainerNode implements XMLStorag
 		Enumeration<FlexoProcess> en = getAllLocalFlexoProcesses().elements();
 		while (en.hasMoreElements()) {
 			FlexoProcess process = en.nextElement();
-			if (process.isImported()) {
-				continue;
-			}
 			ProcessDMEntity processEntity = process.getProcessDMEntity();
 			if (processEntity == null) {
 				logger.severe("No process entity found for " + process.getName());
