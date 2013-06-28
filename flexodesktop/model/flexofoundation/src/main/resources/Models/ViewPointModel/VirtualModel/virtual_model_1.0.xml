@@ -30,7 +30,7 @@
 		<property name="isReadOnly" xmlTag="isReadOnly" attribute="YES" />
 	</entity>
 
-	<entity name="org.openflexo.foundation.technologyadapter.TypeSafeModelSlot" abstract="yes" contexts="Addressed">
+	<entity name="org.openflexo.foundation.technologyadapter.TypeAwareModelSlot" abstract="yes" contexts="Addressed">
 		<property name="metaModelURI" xmlTag="metaModelURI" attribute="YES" />
 	</entity>
 

@@ -37,7 +37,7 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
@@ -359,9 +359,9 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 		public synchronized Object put(EditionSchemeParameter parameter, Object value) {
 			Object returned = super.put(parameter, value);
 			for (EditionSchemeParameter p : parameter.getEditionScheme().getParameters()) {
-				if (p != parameter && p instanceof URIParameter && ((URIParameter) p).getModelSlot() instanceof TypeSafeModelSlot) {
+				if (p != parameter && p instanceof URIParameter && ((URIParameter) p).getModelSlot() instanceof TypeAwareModelSlot) {
 					URIParameter uriParam = (URIParameter) p;
-					TypeSafeModelSlot modelSlot = uriParam.getModelSlot();
+					TypeAwareModelSlot modelSlot = uriParam.getModelSlot();
 					String newURI;
 					try {
 						newURI = uriParam.getBaseURI().getBindingValue(EditionSchemeAction.this);
@@ -388,8 +388,8 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 	public String retrieveFullURI(EditionSchemeParameter parameter) {
 		if (parameter instanceof URIParameter) {
 			URIParameter uriParam = (URIParameter) parameter;
-			if (uriParam.getModelSlot() instanceof TypeSafeModelSlot) {
-				TypeSafeModelSlot modelSlot = uriParam.getModelSlot();
+			if (uriParam.getModelSlot() instanceof TypeAwareModelSlot) {
+				TypeAwareModelSlot modelSlot = uriParam.getModelSlot();
 				return modelSlot.generateUniqueURI((TypeSafeModelSlotInstance) getVirtualModelInstance().getModelSlotInstance(modelSlot),
 						(String) getParameterValue(parameter));
 			}

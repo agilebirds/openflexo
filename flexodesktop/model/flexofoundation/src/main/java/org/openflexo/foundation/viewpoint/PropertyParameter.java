@@ -29,9 +29,9 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 
-public class PropertyParameter extends InnerModelSlotParameter<TypeSafeModelSlot<?, ?>> {
+public class PropertyParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>> {
 
 	private String domainURI;
 	private String parentPropertyURI;
@@ -132,11 +132,11 @@ public class PropertyParameter extends InnerModelSlotParameter<TypeSafeModelSlot
 	}
 
 	@Override
-	public TypeSafeModelSlot<?, ?> getModelSlot() {
-		TypeSafeModelSlot<?, ?> returned = super.getModelSlot();
+	public TypeAwareModelSlot<?, ?> getModelSlot() {
+		TypeAwareModelSlot<?, ?> returned = super.getModelSlot();
 		if (returned == null) {
-			if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypeSafeModelSlot.class).size() > 0) {
-				return getVirtualModel().getModelSlots(TypeSafeModelSlot.class).get(0);
+			if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypeAwareModelSlot.class).size() > 0) {
+				return getVirtualModel().getModelSlots(TypeAwareModelSlot.class).get(0);
 			}
 		}
 		return returned;

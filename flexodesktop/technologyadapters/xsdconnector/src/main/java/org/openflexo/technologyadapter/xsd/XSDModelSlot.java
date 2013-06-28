@@ -34,7 +34,7 @@ import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
@@ -71,7 +71,7 @@ import org.openflexo.xmlcode.XMLSerializable;
 		@DeclareEditionAction(FML = "AddXSClass", editionActionClass = AddXSClass.class) })
 @DeclareFetchRequests({ // All requests available through this model slot
 })
-public class XSDModelSlot extends TypeSafeModelSlot<XMLModel, XSDMetaModel> {
+public class XSDModelSlot extends TypeAwareModelSlot<XMLModel, XSDMetaModel> {
 
 	private static final Logger logger = Logger.getLogger(XSDModelSlot.class.getPackage().getName());
 
@@ -306,7 +306,7 @@ public class XSDModelSlot extends TypeSafeModelSlot<XMLModel, XSDMetaModel> {
 
 	@Override
 	public String getURIForObject(
-			TypeSafeModelSlotInstance<XMLModel, XSDMetaModel, ? extends TypeSafeModelSlot<XMLModel, XSDMetaModel>> msInstance, Object o) {
+			TypeSafeModelSlotInstance<XMLModel, XSDMetaModel, ? extends TypeAwareModelSlot<XMLModel, XSDMetaModel>> msInstance, Object o) {
 		XSOntIndividual xsO = (XSOntIndividual) o;
 
 		String typeURI = xsO.getType().getURI().replace(this.getMetaModelURI(), "");
@@ -317,7 +317,7 @@ public class XSDModelSlot extends TypeSafeModelSlot<XMLModel, XSDMetaModel> {
 
 	@Override
 	public Object retrieveObjectWithURI(
-			TypeSafeModelSlotInstance<XMLModel, XSDMetaModel, ? extends TypeSafeModelSlot<XMLModel, XSDMetaModel>> msInstance,
+			TypeSafeModelSlotInstance<XMLModel, XSDMetaModel, ? extends TypeAwareModelSlot<XMLModel, XSDMetaModel>> msInstance,
 			String objectURI) {
 		return msInstance.getResourceData().getObject(objectURI);
 	}

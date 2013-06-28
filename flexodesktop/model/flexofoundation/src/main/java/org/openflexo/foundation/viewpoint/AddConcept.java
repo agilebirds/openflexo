@@ -24,12 +24,12 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.logging.FlexoLogger;
 
-public abstract class AddConcept<MS extends TypeSafeModelSlot<?, ?>, T> extends AssignableAction<MS, T> {
+public abstract class AddConcept<MS extends TypeAwareModelSlot<?, ?>, T> extends AssignableAction<MS, T> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddConcept.class.getPackage().getName());
 
@@ -77,7 +77,7 @@ public abstract class AddConcept<MS extends TypeSafeModelSlot<?, ?>, T> extends 
 		MS returned = super.getModelSlot();
 		if (returned == null && getVirtualModel() != null) {
 			@SuppressWarnings("rawtypes")
-			List<TypeSafeModelSlot> msList = getVirtualModel().getModelSlots(TypeSafeModelSlot.class);
+			List<TypeAwareModelSlot> msList = getVirtualModel().getModelSlots(TypeAwareModelSlot.class);
 			if (msList.size() > 0) {
 				return (MS) msList.get(0);
 			}

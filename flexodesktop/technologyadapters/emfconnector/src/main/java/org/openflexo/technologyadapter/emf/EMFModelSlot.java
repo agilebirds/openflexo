@@ -34,7 +34,7 @@ import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
@@ -88,7 +88,7 @@ import org.openflexo.technologyadapter.emf.viewpoint.editionaction.SelectEMFObje
 				editionActionClass = RemoveEMFObjectIndividualReferenceObjectPropertyValue.class) })
 @DeclareFetchRequests({ // All requests available through this model slot
 @DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectEMFObjectIndividual.class) })
-public class EMFModelSlot extends TypeSafeModelSlot<EMFModel, EMFMetaModel> {
+public class EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel> {
 
 	private static final Logger logger = Logger.getLogger(EMFModelSlot.class.getPackage().getName());
 
@@ -206,7 +206,7 @@ public class EMFModelSlot extends TypeSafeModelSlot<EMFModel, EMFMetaModel> {
 
 	@Override
 	public String getURIForObject(
-			TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, ? extends TypeSafeModelSlot<EMFModel, EMFMetaModel>> msInstance, Object o) {
+			TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, ? extends TypeAwareModelSlot<EMFModel, EMFMetaModel>> msInstance, Object o) {
 		if (o instanceof IFlexoOntologyObject) {
 			return ((IFlexoOntologyObject) o).getURI();
 		}
@@ -215,7 +215,7 @@ public class EMFModelSlot extends TypeSafeModelSlot<EMFModel, EMFMetaModel> {
 
 	@Override
 	public Object retrieveObjectWithURI(
-			TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, ? extends TypeSafeModelSlot<EMFModel, EMFMetaModel>> msInstance,
+			TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, ? extends TypeAwareModelSlot<EMFModel, EMFMetaModel>> msInstance,
 			String objectURI) {
 		return msInstance.getResourceData().getObject(objectURI);
 	}

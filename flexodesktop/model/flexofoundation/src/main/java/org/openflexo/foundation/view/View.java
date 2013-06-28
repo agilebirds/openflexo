@@ -42,7 +42,7 @@ import org.openflexo.foundation.rm.XMLStorageResourceData;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.toolbox.FlexoVersion;
@@ -354,9 +354,9 @@ public class View extends ViewObject implements XMLStorageResourceData<View> {
 	public Set<FlexoMetaModel<?>> getAllMetaModels() {
 		Set<FlexoMetaModel<?>> allMetaModels = new HashSet<FlexoMetaModel<?>>();
 		for (ModelSlotInstance<?, ?> instance : getModelSlotInstances()) {
-			if (instance.getModelSlot() instanceof TypeSafeModelSlot
-					&& ((TypeSafeModelSlot) instance.getModelSlot()).getMetaModelResource() != null) {
-				allMetaModels.add(((TypeSafeModelSlot) instance.getModelSlot()).getMetaModelResource().getMetaModelData());
+			if (instance.getModelSlot() instanceof TypeAwareModelSlot
+					&& ((TypeAwareModelSlot) instance.getModelSlot()).getMetaModelResource() != null) {
+				allMetaModels.add(((TypeAwareModelSlot) instance.getModelSlot()).getMetaModelResource().getMetaModelData());
 			}
 		}
 		return allMetaModels;

@@ -30,9 +30,9 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IndividualOfClass;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 
-public class IndividualParameter extends InnerModelSlotParameter<TypeSafeModelSlot<?, ?>> {
+public class IndividualParameter extends InnerModelSlotParameter<TypeAwareModelSlot<?, ?>> {
 
 	private String conceptURI;
 	private DataBinding<IFlexoOntologyClass> conceptValue;
@@ -137,12 +137,12 @@ public class IndividualParameter extends InnerModelSlotParameter<TypeSafeModelSl
 	}
 
 	@Override
-	public TypeSafeModelSlot<?, ?> getModelSlot() {
-		if (super.getModelSlot() instanceof TypeSafeModelSlot) {
-			TypeSafeModelSlot<?, ?> returned = super.getModelSlot();
+	public TypeAwareModelSlot<?, ?> getModelSlot() {
+		if (super.getModelSlot() instanceof TypeAwareModelSlot) {
+			TypeAwareModelSlot<?, ?> returned = super.getModelSlot();
 			if (returned == null) {
-				if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypeSafeModelSlot.class).size() > 0) {
-					return getVirtualModel().getModelSlots(TypeSafeModelSlot.class).get(0);
+				if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypeAwareModelSlot.class).size() > 0) {
+					return getVirtualModel().getModelSlots(TypeAwareModelSlot.class).get(0);
 				}
 			}
 			return returned;

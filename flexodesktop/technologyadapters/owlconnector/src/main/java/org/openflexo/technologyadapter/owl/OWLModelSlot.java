@@ -10,7 +10,7 @@ import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
@@ -63,7 +63,7 @@ import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddSubClassSt
 		@DeclareEditionAction(FML = "AddRestrictionStatement", editionActionClass = AddRestrictionStatement.class), // Add class
 		@DeclareEditionAction(FML = "AddSubClassStatement", editionActionClass = AddSubClassStatement.class), // Add class
 })
-public class OWLModelSlot extends TypeSafeModelSlot<OWLOntology, OWLOntology> {
+public class OWLModelSlot extends TypeAwareModelSlot<OWLOntology, OWLOntology> {
 
 	private static final Logger logger = Logger.getLogger(OWLModelSlot.class.getPackage().getName());
 
@@ -186,13 +186,13 @@ public class OWLModelSlot extends TypeSafeModelSlot<OWLOntology, OWLOntology> {
 
 	@Override
 	public String getURIForObject(
-			TypeSafeModelSlotInstance<OWLOntology, OWLOntology, ? extends TypeSafeModelSlot<OWLOntology, OWLOntology>> msInstance, Object o) {
+			TypeSafeModelSlotInstance<OWLOntology, OWLOntology, ? extends TypeAwareModelSlot<OWLOntology, OWLOntology>> msInstance, Object o) {
 		return ((OWLObject) o).getURI();
 	}
 
 	@Override
 	public Object retrieveObjectWithURI(
-			TypeSafeModelSlotInstance<OWLOntology, OWLOntology, ? extends TypeSafeModelSlot<OWLOntology, OWLOntology>> msInstance,
+			TypeSafeModelSlotInstance<OWLOntology, OWLOntology, ? extends TypeAwareModelSlot<OWLOntology, OWLOntology>> msInstance,
 			String objectURI) {
 		return msInstance.getResourceData().getObject(objectURI);
 	}
