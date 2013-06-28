@@ -348,38 +348,45 @@ public class Flexo {
 
 			@Override
 			protected PasswordAuthentication getPasswordAuthentication() {
-				try {
-					if (previous == getRequestingURL()) {
-						count++;
-					}
-					if (previous != getRequestingURL() && AdvancedPrefs.getProxyLogin() != null && AdvancedPrefs.getProxyPassword() != null) {
-						count = 0;
-					} else {
-						if (count < 3) {
-							TextFieldParameter[] params = new TextFieldParameter[2];
-							params[0] = new TextFieldParameter("login", "login", AdvancedPrefs.getProxyLogin());
-							params[1] = new TextFieldParameter("password", "password", AdvancedPrefs.getProxyPassword());
-							params[1].setIsPassword(true);
-							AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(null,
-									FlexoLocalization.localizedForKey("enter_proxy_login_password"),
-									FlexoLocalization.localizedForKey("enter_proxy_login_password"), params);
-							if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
-								AdvancedPrefs.setProxyLogin(params[0].getValue());
-								AdvancedPrefs.setProxyPassword(params[1].getValue());
-								AdvancedPrefs.save();
-							} else {
-								throw new CancelException();
-							}
-						} else {
-							if (logger.isLoggable(Level.WARNING)) {
-								logger.warning("Too many attempts (3) failed. Throwing exception to prevent locking.");
-							}
-							throw new TooManyFailedAttemptException();
+				if (getRequestingHost().equals(AdvancedPrefs.getProxyHost()) && AdvancedPrefs.getProxyPort().equals(getRequestingPort())
+						|| getRequestingHost().equals(AdvancedPrefs.getSProxyHost())
+						&& AdvancedPrefs.getSProxyPort().equals(getRequestingPort())) {
+					try {
+						if (previous == getRequestingURL()) {
+							count++;
 						}
+						if (previous != getRequestingURL() && AdvancedPrefs.getProxyLogin() != null
+								&& AdvancedPrefs.getProxyPassword() != null) {
+							count = 0;
+						} else {
+							if (count < 3) {
+								TextFieldParameter[] params = new TextFieldParameter[2];
+								params[0] = new TextFieldParameter("login", "login", AdvancedPrefs.getProxyLogin());
+								params[1] = new TextFieldParameter("password", "password", AdvancedPrefs.getProxyPassword());
+								params[1].setIsPassword(true);
+								AskParametersDialog dialog = AskParametersDialog.createAskParametersDialog(null,
+										FlexoLocalization.localizedForKey("enter_proxy_login_password"),
+										FlexoLocalization.localizedForKey("enter_proxy_login_password"), params);
+								if (dialog.getStatus() == AskParametersDialog.VALIDATE) {
+									AdvancedPrefs.setProxyLogin(params[0].getValue());
+									AdvancedPrefs.setProxyPassword(params[1].getValue());
+									AdvancedPrefs.save();
+								} else {
+									throw new CancelException();
+								}
+							} else {
+								if (logger.isLoggable(Level.WARNING)) {
+									logger.warning("Too many attempts (3) failed. Throwing exception to prevent locking.");
+								}
+								throw new TooManyFailedAttemptException();
+							}
+						}
+						return new PasswordAuthentication(AdvancedPrefs.getProxyLogin(), AdvancedPrefs.getProxyPassword().toCharArray());
+					} finally {
+						previous = getRequestingURL();
 					}
-					return new PasswordAuthentication(AdvancedPrefs.getProxyLogin(), AdvancedPrefs.getProxyPassword().toCharArray());
-				} finally {
-					previous = getRequestingURL();
+				} else {
+					return null;
 				}
 			}
 		});
