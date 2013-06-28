@@ -103,9 +103,9 @@ public class UploadProjectInitializer extends ActionInitializer<UploadProjectAct
 								});
 						if (projects.size() > 0) {
 							projectId = projects.get(0).getProjectId();
-						} else /* if (Arrays.asList(ROLE_ADMIN, ROLE_ACCOUNT_ADMIN).contains(user.getUsertype())) {
-								
-								}*/{
+						} /*else if (Arrays.asList(ROLE_ADMIN, ROLE_ACCOUNT_ADMIN).contains(user.getUsertype())) {
+							
+							}*/else {
 							FlexoController.notify(FlexoLocalization.localizedForKey("your_project_is_not_handled_by_the_server"));
 							return false;
 						}
