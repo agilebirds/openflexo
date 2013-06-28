@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.technologyadapter.xml.model.IXMLIndividual;
 import org.openflexo.technologyadapter.xml.model.XMLIndividual;
 import org.openflexo.technologyadapter.xml.model.XMLModel;
 import org.openflexo.technologyadapter.xml.model.XMLTechnologyContextManager;
@@ -154,7 +155,7 @@ public class XSURIProcessor implements XMLSerializable {
 		} else {
 			if (mappingStyle.equals(ATTRIBUTE_VALUE) && attributeName != null) {
 
-				Object value = ((XMLIndividual) xsO).getAttributeValue(attributeName);
+				Object value = ((IXMLIndividual) xsO).getAttributeValue(attributeName);
 				try {
 					builtURI = URLEncoder.encode(value.toString(),"UTF-8");
 				} catch (UnsupportedEncodingException e) {
@@ -179,7 +180,7 @@ public class XSURIProcessor implements XMLSerializable {
 	// get the Object given the URI
 	public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) {
 
-		XMLIndividual o = uriCache.get(objectURI);
+		IXMLIndividual o = uriCache.get(objectURI);
 
 		// if processor not initialized
 		if (mappedClass == null) {
@@ -191,9 +192,9 @@ public class XSURIProcessor implements XMLSerializable {
 
 			if (mappingStyle.equals(ATTRIBUTE_VALUE) && attributeName != null) {
 
-				for (XMLIndividual obj: ((XMLModel) msInstance.getModel()).getIndividualsOfType(mappedClass)){
+				for (IXMLIndividual obj: ((XMLModel) msInstance.getModel()).getIndividualsOfType(mappedClass)){
 
-					Object value = ((XMLIndividual) obj).getAttributeValue(attributeName);
+					Object value = ((IXMLIndividual) obj).getAttributeValue(attributeName);
 					try {
 						if (value.equals(URLDecoder.decode(objectURI,"UTF-8"))){
 							return obj;

@@ -10,31 +10,28 @@ import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
-import org.openflexo.technologyadapter.xsd.model.XSOntAttributeAssociation;
-import org.openflexo.technologyadapter.xsd.model.XSOntDataProperty;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntDataProperty;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 
-public class AttributeDataPropertyFeatureAssociationPathElement extends SimplePathElement {
+public class AttributeDataPropertyPathElement extends SimplePathElement {
 
-	private XSOntDataProperty dataProperty;
-	private XSOntAttributeAssociation association;
+	private XSOntDataProperty property;
 
-	private static final Logger logger = Logger.getLogger(AttributeDataPropertyFeatureAssociationPathElement.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(AttributeDataPropertyPathElement.class.getPackage().getName());
 
-	public AttributeDataPropertyFeatureAssociationPathElement(BindingPathElement parent, XSOntAttributeAssociation association,
-			XSOntDataProperty property) {
+	public AttributeDataPropertyPathElement(BindingPathElement parent, XSOntDataProperty property) {
 		super(parent, property.getName(), property.getRange().getAccessedType());
-		this.association = association;
-		dataProperty = property;
+		this.property = property;
 	}
 
 	public XSOntDataProperty getDataProperty() {
-		return dataProperty;
+		return property;
 	}
 
 	@Override
 	public Type getType() {
-		if (association.getUpperBound() == null || (association.getUpperBound() >= 0 && association.getUpperBound() <= 1)) {
+		if (property.getUpperBound() == null || (property.getUpperBound() >= 0 && property.getUpperBound() <= 1)) {
 			// Single cardinality
 			if (getDataProperty() != null && getDataProperty().getRange() != null) {
 				return getDataProperty().getRange().getAccessedType();
@@ -55,7 +52,7 @@ public class AttributeDataPropertyFeatureAssociationPathElement extends SimplePa
 
 	@Override
 	public String getTooltipText(Type resultingType) {
-		return "DataAttribute " + dataProperty.getDisplayableDescription();
+		return "DataAttribute " + property.getDisplayableDescription();
 	}
 
 	@Override
@@ -69,6 +66,7 @@ public class AttributeDataPropertyFeatureAssociationPathElement extends SimplePa
 	@Override
 	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) throws TypeMismatchException,
 			NullReferenceException {
-		((XSOntIndividual) target).getPropertyNamed(getPropertyName()).setValue((String) value);
+		XSOntProperty prop = ((XSOntIndividual) target).getAttributeByName(getPropertyName());
+		((XSOntIndividual) target).addToPropertyValue(prop, value);
 	}
 }

@@ -18,39 +18,47 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.technologyadapter.xsd.model;
+package org.openflexo.technologyadapter.xsd.metamodel;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.IFlexoOntologyMetaModel;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoResource;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.technologyadapter.xml.model.IXMLMetaModel;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
+import org.openflexo.technologyadapter.xsd.model.XSOntology;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
-import org.openflexo.xmlcode.StringEncoder.Converter;
 
-import com.sun.xml.xsom.XSDeclaration;
 import com.sun.xml.xsom.XSSimpleType;
 import com.sun.xml.xsom.XSType;
 
 
-public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaModel> {
+public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaModel>,IXMLMetaModel {
 
 
-	
+
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSDMetaModel.class.getPackage()
 			.getName());
 
 
+	private XSOntClass thingClass;
+
+
+
 	public XSDMetaModel(String ontologyURI, File xsdFile, XSDTechnologyAdapter adapter) {
 		super(ontologyURI,xsdFile,adapter);
+
+		this.thingClass = new XSOntClass(this,"Thing", XS_THING_URI, getTechnologyAdapter());
+
+		addClass(thingClass);
 	}
 
 	@Override
@@ -74,53 +82,43 @@ public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaMo
 	}
 
 
-	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
-		// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
-		// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
-		public XSDMetaModelResource getFlexoResource() {
-			return (XSDMetaModelResource) modelResource;
-		}
+	@Override
+	public FlexoResource<XSDMetaModel> getResource() {
+		return (XSDMetaModelResource) modelResource;
+	}
 
-		// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
-		// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
-		// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
-		public void setFlexoResource(@SuppressWarnings("rawtypes") FlexoResource resource) throws DuplicateResourceException {
-			if (resource instanceof XSDMetaModelResource) {
-				this.modelResource = (XSDMetaModelResource) resource;
-			}
-		}
+	@Override
+	public void setResource(FlexoResource<XSDMetaModel> resource) {
+		this.modelResource =  (XSDMetaModelResource) resource;
+	}
 
-		// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
-		// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
-		// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
-		@Override
-		public org.openflexo.foundation.resource.FlexoResource<XSDMetaModel> getResource() {
-			return getFlexoResource();
-		}
 
-		// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
-		// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
-		// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
-		@Override
-		public void setResource(org.openflexo.foundation.resource.FlexoResource<XSDMetaModel> resource) {
-			try {
-				setFlexoResource((FlexoResource<?>) resource);
-			} catch (DuplicateResourceException e) {
-				e.printStackTrace();
-			}
-		}
 
-	
+
+	//*****************************************************************************
+	// IXMLMetaModel related Functions
+
+
+	@Override
+	public Type getTypeFromURI(String uri) {
+		return this.getClass(uri);
+	}
+
+	@Override
+	public Type createNewType(String uri, String localName, String qName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	//*****************************************************************************
 	// IFlexoOntology related Functions
-	
-	
+
+
 	@Override
 	public List<XSOntDataProperty> getDataProperties() {
 		return new ArrayList<XSOntDataProperty>(dataProperties.values());
 	}
-	
+
 	@Override
 	public List<XSOntDataProperty> getAccessibleDataProperties() {
 		Map<String, XSOntDataProperty> result = new HashMap<String, XSOntDataProperty>();
@@ -137,8 +135,12 @@ public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaMo
 		return dataProperties.get(propertyURI);
 	}
 
-	
-	
+
+	@Override
+	public XSOntClass getRootConcept() {
+		return thingClass;
+	}
+
 	//*****************************************************************************
 	// Utility Functions when building the model
 
@@ -149,6 +151,35 @@ public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaMo
 			dataTypes.put(simpleType, returned);
 		}
 		return returned;
+	}
+
+
+	private boolean addClass(XSOntClass c) {
+		if (classes.containsKey(c.getURI()) == false) {
+			classes.put(c.getURI(), c);
+			return true;
+		}
+		return false;
+	}
+
+	public XSOntClass createOntologyClass(String name, String uri) throws DuplicateURIException {
+		XSOntClass xsClass = new XSOntClass(this, name, uri, getTechnologyAdapter());
+		xsClass.addToSuperClasses(getRootConcept());
+		addClass(xsClass);
+		return xsClass;
+	}
+
+	public XSOntClass createOntologyClass(String name, String uri, XSOntClass superClass) throws DuplicateURIException {
+		XSOntClass xsClass = createOntologyClass(name,uri);
+		xsClass.addToSuperClasses(superClass);
+		return xsClass;
+	}
+
+
+	public XSOntClass createOntologyClass(String name, XSOntClass superClass) throws DuplicateURIException {
+		String uri = this.getURI() + "#" + "name";
+		XSOntClass xsClass = createOntologyClass(name,uri, superClass);
+		return xsClass;
 	}
 
 
@@ -166,7 +197,6 @@ public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaMo
 		return property;
 	}
 
-	
 
-	
+
 }

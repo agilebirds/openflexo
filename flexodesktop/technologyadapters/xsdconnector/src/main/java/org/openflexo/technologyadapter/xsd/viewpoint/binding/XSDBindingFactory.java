@@ -35,9 +35,8 @@ import org.openflexo.foundation.ontology.SubClassOfClass;
 import org.openflexo.foundation.ontology.SubPropertyOfProperty;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterBindingFactory;
 import org.openflexo.foundation.viewpoint.TechnologySpecificCustomType;
-import org.openflexo.technologyadapter.xsd.model.XSOntAttributeAssociation;
-import org.openflexo.technologyadapter.xsd.model.XSOntClass;
-import org.openflexo.technologyadapter.xsd.model.XSOntDataProperty;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntDataProperty;
 
 /**
  * This class represent the {@link BindingFactory} dedicated to handle XSD technology-specific binding elements
@@ -55,11 +54,10 @@ public final class XSDBindingFactory extends TechnologyAdapterBindingFactory {
 
 	@Override
 	protected SimplePathElement makeSimplePathElement(Object object, BindingPathElement parent) {
-		if (object instanceof XSOntAttributeAssociation ){
-			XSOntAttributeAssociation attr = (XSOntAttributeAssociation) object;
+		if (object instanceof XSOntDataProperty ){
+			XSOntDataProperty attr = (XSOntDataProperty) object;
 
-			return new AttributeDataPropertyFeatureAssociationPathElement(parent, attr,
-					(XSOntDataProperty) attr.getFeature());
+			return new AttributeDataPropertyPathElement(parent, attr);
 		}
 		logger.warning("Unexpected " + object);
 		return null;

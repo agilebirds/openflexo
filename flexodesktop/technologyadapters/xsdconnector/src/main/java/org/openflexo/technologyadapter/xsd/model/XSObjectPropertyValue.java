@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectPropertyValue;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntObjectProperty;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 
 /**
  * Implementation of an Object Property values in XSD/XML technology.<br>

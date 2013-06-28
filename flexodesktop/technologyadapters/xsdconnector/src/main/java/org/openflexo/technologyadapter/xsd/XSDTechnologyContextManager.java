@@ -1,8 +1,9 @@
-package org.openflexo.technologyadapter.xsd.model;
+package org.openflexo.technologyadapter.xsd;
 
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
-import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
+import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
+import org.openflexo.technologyadapter.xsd.model.XMLModel;
 
 public class XSDTechnologyContextManager extends TechnologyContextManager<XMLModel, XSDMetaModel> {
 

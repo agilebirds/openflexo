@@ -17,19 +17,22 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.technologyadapter.xsd.model;
+package org.openflexo.technologyadapter.xsd.metamodel;
 
+import java.lang.reflect.Type;
 import java.util.logging.Level;
 
 import org.openflexo.foundation.ontology.BuiltInDataType;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataType;
 import org.openflexo.foundation.ontology.W3URIDefinitions;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
+import org.openflexo.technologyadapter.xsd.model.AbstractXSOntObject;
+import org.openflexo.technologyadapter.xsd.model.XSOntology;
 
 import com.sun.xml.xsom.XSDeclaration;
 import com.sun.xml.xsom.XSSimpleType;
 
-public class XSDDataType extends AbstractXSOntObject implements IFlexoOntologyDataType, W3URIDefinitions {
+public class XSDDataType extends AbstractXSOntObject implements IFlexoOntologyDataType, W3URIDefinitions, Type {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntology.class.getPackage()
 			.getName());

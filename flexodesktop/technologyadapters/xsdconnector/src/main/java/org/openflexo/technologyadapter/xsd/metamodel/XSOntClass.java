@@ -19,9 +19,11 @@
  *
  */
 
-package org.openflexo.technologyadapter.xsd.model;
+package org.openflexo.technologyadapter.xsd.metamodel;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -32,15 +34,18 @@ import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
 import org.openflexo.foundation.ontology.IFlexoOntologyConceptVisitor;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
+import org.openflexo.technologyadapter.xsd.model.AbstractXSOntConcept;
+import org.openflexo.technologyadapter.xsd.model.XSOntology;
+import org.openflexo.technologyadapter.xsd.model.XSOntologyURIDefinitions;
 import org.openflexo.toolbox.StringUtils;
 
-public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyClass, XSOntologyURIDefinitions {
+public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyClass, XSOntologyURIDefinitions, Type {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntClass.class.getPackage()
 			.getName());
 
 	private final List<XSOntClass> superClasses = new ArrayList<XSOntClass>();
-	private final HashMap<String,XSOntFeatureAssociation> featureAssociations = new HashMap<String,XSOntFeatureAssociation>();
+	private final HashMap<String,XSOntProperty> properties = new HashMap<String,XSOntProperty>();
 
 	protected XSOntClass(XSOntology ontology, String name, String uri, XSDTechnologyAdapter adapter) {
 		super(ontology, name, uri, adapter);
@@ -81,12 +86,7 @@ public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyCl
 	@Override
 	public void addPropertyTakingMyselfAsDomain(XSOntProperty property) {
 		super.addPropertyTakingMyselfAsDomain(property);
-		if (property instanceof XSOntDataProperty ) {
-			featureAssociations.put(property.getName(), new XSOntAttributeAssociation(getOntology(), this, (XSOntDataProperty) property, (XSDTechnologyAdapter) this.getTechnologyAdapter()));
-		}
-		if (property instanceof XSOntObjectProperty ) {
-			featureAssociations.put(property.getName(), new XSOntClassAggregation(getOntology(), this, (XSOntObjectProperty) property, (XSDTechnologyAdapter) this.getTechnologyAdapter()));
-		}
+			properties.put(property.getName(), property);
 	}
 
 	@Override
@@ -147,25 +147,25 @@ public class XSOntClass extends AbstractXSOntConcept implements IFlexoOntologyCl
 	}
 
 	@Override
-	public List<XSOntFeatureAssociation> getStructuralFeatureAssociations() {
-		List<XSOntFeatureAssociation> returned = new ArrayList<XSOntFeatureAssociation>();
-		for (XSOntFeatureAssociation xsOntRest : featureAssociations.values()) {
+	public List<? extends IFlexoOntologyFeatureAssociation> getStructuralFeatureAssociations() {
+		List<XSOntProperty> returned = new ArrayList<XSOntProperty>();
+		for (XSOntProperty xsOntRest : properties.values()) {
 			returned.add(xsOntRest);
 		}
 		for (XSOntClass sc: this.getSuperClasses()) {
-			returned.addAll(sc.getStructuralFeatureAssociations());
+			returned.addAll((Collection<? extends XSOntProperty>) sc.getStructuralFeatureAssociations());
 			}
-		return returned;
+		return (List<? extends IFlexoOntologyFeatureAssociation>) returned;
 	}
 
 
-	public XSOntFeatureAssociation getFeatureAssociationNamed(String name) {
-		XSOntFeatureAssociation returned = null;
-		returned = featureAssociations.get(name);
+	public XSOntProperty getPropertyByName(String name) {
+		XSOntProperty returned = null;
+		returned = properties.get(name);
 		if (returned == null) {
 			// Check if property exists in superclasses
 			for (XSOntClass sc: this.getSuperClasses()) {
-				returned = sc.getFeatureAssociationNamed(name);
+				returned = sc.getPropertyByName(name);
 				if (returned != null){
 					return returned;
 				}

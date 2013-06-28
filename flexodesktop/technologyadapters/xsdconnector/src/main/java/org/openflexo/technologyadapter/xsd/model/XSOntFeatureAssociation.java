@@ -19,8 +19,13 @@
  */
 package org.openflexo.technologyadapter.xsd.model;
 
+import java.lang.reflect.Type;
+
 import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
+import org.openflexo.technologyadapter.xml.model.IXMLAttribute;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 
 public abstract class XSOntFeatureAssociation extends AbstractXSOntObject implements IFlexoOntologyFeatureAssociation {
 
@@ -35,17 +40,5 @@ public abstract class XSOntFeatureAssociation extends AbstractXSOntObject implem
 		return false;
 	}
 
-	public XSOntAttributeAssociation asAttributeRestriction() {
-		if (isAttributeRestriction()) {
-			return (XSOntAttributeAssociation) this;
-		}
-		return null;
-	}
 
-	@Override
-	public XSOntClass getDomain() {
-		return domainClass;
-	}
-
-	public abstract XSOntProperty getProperty();
 }

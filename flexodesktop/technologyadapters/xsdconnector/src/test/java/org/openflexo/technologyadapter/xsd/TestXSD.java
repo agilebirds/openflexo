@@ -20,26 +20,32 @@
 package org.openflexo.technologyadapter.xsd;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.logging.Logger;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.TestApplicationContext;
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.technologyadapter.MetaModelRepository;
 import org.openflexo.foundation.technologyadapter.ModelRepository;
+import org.openflexo.technologyadapter.xml.model.XMLType;
+import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
 import org.openflexo.technologyadapter.xsd.model.XMLModel;
-import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
-import org.openflexo.technologyadapter.xsd.model.XSDMetaModelRepository;
+import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelRepository;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 import org.openflexo.toolbox.FileResource;
 
 public class TestXSD extends FlexoTestCase {
 
-	protected static final Logger logger = Logger.getLogger(TestPopulateDKV.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(TestXSD.class.getPackage().getName());
 
 	private static ApplicationContext testApplicationContext;
 	private static XSDTechnologyAdapter xsdAdapter;
@@ -51,13 +57,24 @@ public class TestXSD extends FlexoTestCase {
 		super(name);
 	}
 
+
+
+	private static final void dumpTypes(XSDMetaModel model){
+		for (XSOntClass t : model.getClasses()){
+			System.out.println("Known Type: " + t.getName()+" -> "+ t.getFullyQualifiedName() + "[" +t.getURI()+ "]");
+		}
+		System.out.println();
+		System.out.flush();
+		System.out.flush();
+	}
+	
 	/**
 	 * Instanciate test ResourceCenter
 	 */
 	public void test0LoadTestResourceCenter() {
 		log("test0LoadTestResourceCenter()");
-		testApplicationContext = new TestApplicationContext(new FileResource("src/test/resources/XSD"));
-		resourceCenter = new DirectoryResourceCenter(new File("src/test/resources/XSD"));
+		testApplicationContext = new TestApplicationContext(new FileResource("src/test/resources"));
+		resourceCenter = new DirectoryResourceCenter(new File("src/test/resources"));
 		testApplicationContext.getResourceCenterService().addToResourceCenters(resourceCenter);
 		resourceCenter.initialize(testApplicationContext.getTechnologyAdapterService());
 		xsdAdapter = testApplicationContext.getTechnologyAdapterService().getTechnologyAdapter(XSDTechnologyAdapter.class);
@@ -66,10 +83,10 @@ public class TestXSD extends FlexoTestCase {
 		assertNotNull(mmRepository);
 		assertNotNull(modelRepository);
 		assertEquals(3, mmRepository.getAllResources().size());
-		assertEquals(3, modelRepository.getAllResources().size());
+		assertTrue(modelRepository.getAllResources().size()>3);
 	}
 
-	public void test1LibraryMetaModelPresentAndLoaded() {
+	public void test1LibraryMetaModelPresentAndLoaded() throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
 
 		log("test1LibraryMetaModelPresentAndLoaded()");
 
@@ -79,10 +96,11 @@ public class TestXSD extends FlexoTestCase {
 		XSDMetaModelResource libraryRes = (XSDMetaModelResource) mmRepository.getResource("http://www.openflexo.org/XSD/library.xsd");
 		assertNotNull(libraryRes);
 		assertFalse(libraryRes.isLoaded());
-		assertNotNull(libraryRes.getMetaModelData());
+		assertNotNull(libraryRes.loadResourceData(null));
 		assertTrue(libraryRes.isLoaded());
 
-		logger.info("Classes: " + libraryRes.getMetaModelData().getClasses());
+		logger.info("Classes: " );
+		dumpTypes(libraryRes.getMetaModelData());
 
 		// TODO: implement tests
 		logger.warning("Please perform some checks here");
@@ -96,12 +114,11 @@ public class TestXSD extends FlexoTestCase {
 
 		XSDMetaModelResource mavenRes = (XSDMetaModelResource) mmRepository.getResource("http://www.openflexo.org/XSD/maven-v4_0_0.xsd");
 		assertNotNull(mavenRes);
-		assertFalse(mavenRes.isLoaded());
 		assertNotNull(mavenRes.getMetaModelData());
-		assertTrue(mavenRes.isLoaded());
 
-		logger.info("Classes: " + mavenRes.getMetaModelData().getClasses());
-
+		logger.info("Classes: " );
+		dumpTypes(mavenRes.getMetaModelData());
+		
 		// TODO: implement tests
 		logger.warning("Please perform some checks here");
 	}

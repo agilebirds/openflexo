@@ -1,5 +1,6 @@
 /*
- * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2010-2012 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -17,19 +18,25 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.technologyadapter.xsd.model;
 
-import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
-import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
+package org.openflexo.technologyadapter.xml.model;
+
+import java.lang.reflect.Type;
 
 /**
- * Implementation of a Property value in XSD/XML technology
- * 
- * @author sylvain
+ *
+ * This interface defines additional methods to be defined by all MetaModel that 
+ * will be used when populating a XMLModel using the XMLSaxHandler
+ *
+ * @author xtof
+ *
  */
-public abstract class XSPropertyValue implements IFlexoOntologyPropertyValue {
+public interface IXMLMetaModel {
 
-	@Override
-	public abstract XSOntProperty getProperty();
+	public Type getTypeFromURI(String string);
+
+	public Type createNewType(String uri, String localName, String qName);
+	
+
 
 }

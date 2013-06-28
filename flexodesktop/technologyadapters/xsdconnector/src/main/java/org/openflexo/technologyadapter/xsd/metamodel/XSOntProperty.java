@@ -17,36 +17,35 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.technologyadapter.xsd.model;
+package org.openflexo.technologyadapter.xsd.metamodel;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
+import org.openflexo.technologyadapter.xml.model.IXMLAttribute;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
+import org.openflexo.technologyadapter.xsd.model.AbstractXSOntConcept;
+import org.openflexo.technologyadapter.xsd.model.XSOntFeatureAssociation;
+import org.openflexo.technologyadapter.xsd.model.XSOntology;
+import org.openflexo.technologyadapter.xsd.model.XSOntologyURIDefinitions;
 
-public abstract class XSOntProperty extends AbstractXSOntConcept implements IFlexoOntologyStructuralProperty, XSOntologyURIDefinitions {
+public abstract class XSOntProperty extends AbstractXSOntConcept implements IFlexoOntologyFeatureAssociation,  IFlexoOntologyStructuralProperty, XSOntologyURIDefinitions, IXMLAttribute {
 
-	private XSOntClass domain;
+	protected XSOntClass domain;
 	private boolean noDomainFoundYet = true;
-	private List<XSOntFeatureAssociation> referencingRestrictions;
 
 	protected XSOntProperty(XSOntology ontology, String name, String uri, XSDTechnologyAdapter adapter) {
 		super(ontology, name, uri, adapter);
 		domain = ontology.getRootConcept();
-		referencingRestrictions = new ArrayList<XSOntFeatureAssociation>();
 	}
 
 	@Override
 	public boolean isAnnotationProperty() {
 		return false;
-	}
-
-	@Override
-	public XSOntClass getDomain() {
-		return domain;
 	}
 
 	public void newDomainFound(XSOntClass domain) {
@@ -62,6 +61,18 @@ public abstract class XSOntProperty extends AbstractXSOntConcept implements IFle
 		this.domain = getOntology().getRootConcept();
 		noDomainFoundYet = true;
 	}
+	
+
+	@Override
+	public XSOntClass getDomain() {
+		return domain;
+	}
+
+
+	@Override
+	public Type getAttributeType() {
+		return (Type) this.getRange();
+	}
 
 	@Override
 	public XSOntology getContainer() {
@@ -71,22 +82,5 @@ public abstract class XSOntProperty extends AbstractXSOntConcept implements IFle
 	@Override
 	public List<IFlexoOntologyFeatureAssociation> getStructuralFeatureAssociations() {
 		return Collections.emptyList();
-	}
-
-	public List<XSOntFeatureAssociation> getReferencingRestrictions() {
-		return referencingRestrictions;
-	}
-
-	public void addToReferencingRestriction(XSOntFeatureAssociation aRestriction) {
-		referencingRestrictions.add(aRestriction);
-	}
-
-	public void removeFromReferencingRestriction(XSOntFeatureAssociation aRestriction) {
-		referencingRestrictions.remove(aRestriction);
-	}
-
-	@Override
-	public List<XSOntFeatureAssociation> getReferencingFeatureAssociations() {
-		return getReferencingRestrictions();
 	}
 }

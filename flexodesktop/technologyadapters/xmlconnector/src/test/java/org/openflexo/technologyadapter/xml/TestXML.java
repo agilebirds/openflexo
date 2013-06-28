@@ -20,19 +20,24 @@
 package org.openflexo.technologyadapter.xml;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.TestApplicationContext;
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoTestCase;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.technologyadapter.MetaModelRepository;
 import org.openflexo.foundation.technologyadapter.ModelRepository;
+import org.openflexo.technologyadapter.xml.model.IXMLIndividual;
 import org.openflexo.technologyadapter.xml.model.XMLAttribute;
 import org.openflexo.technologyadapter.xml.model.XMLIndividual;
 import org.openflexo.technologyadapter.xml.model.XMLModel;
@@ -44,7 +49,7 @@ import org.openflexo.toolbox.FileResource;
 
 public class TestXML extends FlexoTestCase {
 
-	protected static final Logger logger = Logger.getLogger(TestPopulateDKV.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(TestXML.class.getPackage().getName());
 
 	private static ApplicationContext testApplicationContext;
 	private static XMLTechnologyAdapter xmlAdapter;
@@ -57,22 +62,23 @@ public class TestXML extends FlexoTestCase {
 		super(name);
 	}
 
-	private static final void dumpIndividual(XMLIndividual indiv, String prefix){
+	private static final void dumpIndividual(IXMLIndividual<XMLIndividual,XMLAttribute> indiv, String prefix){
 
 		System.out.println(prefix + "Indiv : " + indiv.getName() + "  ==> " + indiv.getUUID());
 		for (XMLAttribute a : indiv.getAttributes()){
-			System.out.println(prefix +"  attr: " + a.getName() + " = " + a.getValue().toString());
+			System.out.println(prefix +"    * attr: " + a.getName() + " = " + a.getValue().toString());
 		}
-		System.out.println();
-		for (XMLIndividual x: indiv.getChildren()) dumpIndividual(x,prefix +"-----");
+		for (IXMLIndividual<XMLIndividual,XMLAttribute> x: indiv.getChildren()) dumpIndividual(x,prefix +"      ");
+		System.out.flush();
 	}
 
 
 	private static final void dumpTypes(XMLModel model){
 		for (XMLType t : model.getTypes()){
 			System.out.println("Inferred Type: " + t.getName()+" -> "+ t.getFullyQualifiedName() + "[" +t.getURI()+ "]");
+			System.out.println("");
+			System.out.flush();
 		}
-		System.out.println();
 	}
 	/**
 	 * Instanciate test ResourceCenter
@@ -94,7 +100,7 @@ public class TestXML extends FlexoTestCase {
 		assertTrue(modelRepository.getAllResources().size()>3);
 	}
 
-	public void test1LoadFileAndDump() {
+	public void test1LoadFileAndDump() throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
 
 		log("test1LoadFileAndDump()");
 
@@ -104,6 +110,7 @@ public class TestXML extends FlexoTestCase {
 		assertNotNull(modelRes);
 		assertFalse(modelRes.isLoaded());
 		assertNotNull(modelRes.getModelData());
+		assertNotNull(modelRes.loadResourceData(null));
 		assertTrue(modelRes.isLoaded());
 
 		// dumpTypes(modelRes.getModel());
@@ -115,7 +122,7 @@ public class TestXML extends FlexoTestCase {
 
 	}
 
-	public void test2LoadFileAndDump() {
+	public void test2LoadFileAndDump() throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
 
 		log("test2LoadFileAndDump()");
 
@@ -125,6 +132,7 @@ public class TestXML extends FlexoTestCase {
 		assertNotNull(modelRes);
 		assertFalse(modelRes.isLoaded());
 		assertNotNull(modelRes.getModelData());
+		assertNotNull(modelRes.loadResourceData(null));
 		assertTrue(modelRes.isLoaded());
 
 		// dumpTypes(modelRes.getModel());
@@ -134,7 +142,7 @@ public class TestXML extends FlexoTestCase {
 		// dumpIndividual(modelRes.getModelData().getRoot(),"");
 	}
 
-	public void test3LoadFileAndDump() {
+	public void test3LoadFileAndDump() throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
 
 		log("test3LoadFileAndDump()");
 
@@ -144,6 +152,7 @@ public class TestXML extends FlexoTestCase {
 		assertNotNull(modelRes);
 		assertFalse(modelRes.isLoaded());
 		assertNotNull(modelRes.getModelData());
+		assertNotNull(modelRes.loadResourceData(null));
 		assertTrue(modelRes.isLoaded());
 
 		assertNotNull(modelRes.getModel().getTypeFromURI("http://www.example.org/Library#Library"));
@@ -173,13 +182,25 @@ public class TestXML extends FlexoTestCase {
 			aType = new XMLType ("http://zutalors.com","Blib","pt:Blib",aModel);
 			aModel.addType(aType);
 
-			XMLIndividual rootIndividual = aModel.createIndividual(aModel.getTypeFromURI("http://montest.com#Blob"));
+			XMLIndividual rootIndividual = (XMLIndividual) aModel.addNewIndividual(aModel.getTypeFromURI("http://montest.com#Blob"));
 			aModel.setRoot(rootIndividual);
-			XMLIndividual anIndividual = aModel.createIndividual(aType);
+			XMLIndividual anIndividual = (XMLIndividual) aModel.addNewIndividual(aType);
+			XMLAttribute anAttr = (XMLAttribute) aModel.createAttribute("name", String.class, "Mon velo court");
+			anIndividual.addAttribute(anAttr.getName(), anAttr);
+			rootIndividual.addChild(anIndividual);
+			anIndividual = (XMLIndividual) aModel.addNewIndividual(aType);
+			anAttr = (XMLAttribute) aModel.createAttribute("name", String.class, "Pan");
+			anIndividual.addAttribute(anAttr.getName(), anAttr);
+			anAttr = (XMLAttribute) aModel.createAttribute("ID", String.class, "17");
+			anIndividual.addAttribute(anAttr.getName(), anAttr);
 			rootIndividual.addChild(anIndividual);
 			
 
 			assertNotNull(anIndividual);
+			
+
+			dumpTypes(modelRes.getModel());
+			dumpIndividual(modelRes.getModel().getRoot(),"");
 			
 			modelRes.save(null);
 			

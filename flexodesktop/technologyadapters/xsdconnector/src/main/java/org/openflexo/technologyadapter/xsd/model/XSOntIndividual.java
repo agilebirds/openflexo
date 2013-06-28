@@ -19,7 +19,9 @@
  */
 package org.openflexo.technologyadapter.xsd.model;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,20 +38,27 @@ import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.OntologyUtils;
+import org.openflexo.technologyadapter.xml.model.IXMLIndividual;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntDataProperty;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntObjectProperty;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntologyIndividual, XSOntologyURIDefinitions {
+public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntologyIndividual, XSOntologyURIDefinitions, IXMLIndividual<XSOntIndividual,XSOntProperty> {
 
 
 	private XSOntClass type;
 	private Map<XSOntProperty, XSPropertyValue> values = new HashMap<XSOntProperty, XSPropertyValue>();
-	
+
 	// TODO : check if this is actually useful ?!?
 	private Set<XSOntIndividual> children = new HashSet<XSOntIndividual>();
 	private XSOntIndividual parent;
 	
+	private String uuid;
+
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(AbstractXSOntObject.class
 			.getPackage().getName());
@@ -62,43 +71,46 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 
 	protected XSOntIndividual(XSDTechnologyAdapter adapter) {
 		super(adapter);
+		uuid = UUID.randomUUID().toString();
 	}
 
 
 	@Override
 	public String getURI() {
-		// TODO Auto-generated method stub
-		return super.getURI();
+
+		// FIXME URI is a non-sense here, as it is calculated by the ModelSlot
+		return uuid;
 	}
 
 
 
 	@Override
 	public String getName() {
-		// calculated, as it as no actual Meaning for an XML Individual
-		// so give the last part of the URI
 		String objURI = getURI();
-		if (objURI != null )
-			return objURI.substring(objURI.lastIndexOf("#"));
+		if (objURI != null ){
+			// return objURI.substring(objURI.lastIndexOf("#"));
+			return "TagName:"+type.getName()+ " / UUID:"+objURI;
+		}
 		else
-			return null;
-		
+			return "TagName:"+type.getName();
+
 	}
 
 	@Override
 	public void setName(String name) {
 		// name is calculated, it cannot be set
 		// in fact, it has no sense in the general case
-		logger.warning("Name of an Individual can not be set");
+		// FIXME URI and Name are a non-sense here, as it is calculated by the ModelSlot
+		// This should be removed when inheritance to FlexoOntology will be fixed
 	}
 
-	
-	public XSOntClass getType() {
-		return type;
+
+	public Type getType() {
+		return (Type) type;
 	}
 
-	public void setType(XSOntClass type) {
-		this.type = type;
+	public void setType(Type type) {
+		this.type = (XSOntClass) type;
 	}
 
 	@Override
@@ -110,7 +122,7 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 	public List<XSOntClass> getTypes() {
 		List<XSOntClass> result = new ArrayList<XSOntClass>();
 		if (getType() != null) {
-			result.add(getType());
+			result.add((XSOntClass) getType());
 		}
 		return result;
 	}
@@ -123,7 +135,7 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 	}
 
 	public void removeFromTypes(IFlexoOntologyClass aType) {
-		if (getType().equalsToConcept(aType)) {
+		if (((XSOntClass)getType()).equalsToConcept(aType)) {
 			setType(null);
 		}
 	}
@@ -152,6 +164,61 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 		}*/
 		return values.get(property);
 	}
+
+
+	@Override
+	public String getContentDATA() {
+		XSOntProperty propCDATA = ((XSOntClass)this.getType()).getPropertyByName(CDATA_ATTR_NAME);
+		if (propCDATA != null){
+			XSPropertyValue val= this.getPropertyValue(propCDATA);
+			if (val != null) return val.getValues().toString();
+		}
+		return null;
+	}
+
+
+	@Override
+	public Object getAttributeValue(String attributeName) {
+
+		XSOntProperty property = ((XSOntClass)this.getType()).getPropertyByName(attributeName);
+		if (property != null){
+			XSPropertyValue val= this.getPropertyValue(property);	
+			return val.getValues();
+		}
+		return null;
+	}
+
+	@Override
+	public XSOntProperty getAttributeByName(String aName) {
+		return ((XSOntClass)this.getType()).getPropertyByName(aName);
+	}
+
+	@Override
+	public Set<XSOntIndividual> getChildren() {
+
+		return children;
+	}
+
+
+	@Override
+	public String getUUID() {
+		return uuid;
+	}
+
+
+	@Override
+	public Collection<? extends XSOntProperty> getAttributes() {
+
+		return   (Collection<? extends XSOntProperty>) ((XSOntClass) this.getType()).getStructuralFeatureAssociations();
+	}
+
+
+	@Override
+	public void addAttribute(String aName, XSOntProperty attr) {
+		// TODO Auto-generated method stub
+		logger.info("So Many Things to do...Should Add something to create Attribute: " + aName);
+	}
+
 
 	/**
 	 * Add newValue as a value for supplied property<br>
@@ -245,17 +312,19 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 		this.parent = parent;
 	}
 
-	protected XSOntIndividual getParent() {
+	public XSOntIndividual  getParent() {
 		return parent;
 	}
-
-	public void addChild(XSOntIndividual child) {
-		children.add(child);
-		child.setParent(this);
+	
+   @Override
+	public void addChild(IXMLIndividual<XSOntIndividual,XSOntProperty> child) {
+		children.add((XSOntIndividual) child);
+		((XSOntIndividual) child).setParent(this);
 	}
 
-	protected Element toXML(Document doc) {
-		Element element = doc.createElement(getType().getName());
+
+	public Element toXML(Document doc) {
+		Element element = doc.createElement(((XSOntClass) getType()).getName());
 		for (XSOntIndividual child : children) {
 			Element childElement = child.toXML(doc);
 			element.appendChild(childElement);
@@ -285,8 +354,11 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 	}
 
 	@Override
-	public List<IFlexoOntologyFeatureAssociation> getStructuralFeatureAssociations() {
+	public List<XSOntFeatureAssociation> getStructuralFeatureAssociations() {
 		return Collections.emptyList();
 	}
+
+
+
 
 }

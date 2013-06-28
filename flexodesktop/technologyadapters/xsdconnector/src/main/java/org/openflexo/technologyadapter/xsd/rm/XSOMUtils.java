@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.technologyadapter.xsd.model;
+package org.openflexo.technologyadapter.xsd.rm;
 
 import java.io.File;
 import java.io.IOException;

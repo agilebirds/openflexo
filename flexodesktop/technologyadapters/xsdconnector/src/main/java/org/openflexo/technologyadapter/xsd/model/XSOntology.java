@@ -44,10 +44,13 @@ import org.openflexo.foundation.ontology.IFlexoOntologyModel;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.OntologyUtils;
 import org.openflexo.foundation.ontology.W3URIDefinitions;
-import org.openflexo.foundation.resource.FlexoFileResource;
-import org.openflexo.foundation.rm.DuplicateResourceException;
-import org.openflexo.foundation.rm.FlexoResource;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
+import org.openflexo.technologyadapter.xsd.metamodel.XSDDataType;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntDataProperty;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntObjectProperty;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 import org.w3c.dom.Document;
 
 import com.sun.xml.xsom.XSSimpleType;
@@ -65,8 +68,6 @@ import com.sun.xml.xsom.XSSimpleType;
 
 public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOntology, XSOntologyURIDefinitions, W3URIDefinitions, IFlexoOntologyModel {
 
-
-	private XSOntClass thingClass;
 
 	protected FlexoResource<?>  modelResource;
 	
@@ -100,17 +101,9 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	}
 
 
-	private boolean addClass(XSOntClass c) {
-		if (classes.containsKey(c.getURI()) == false) {
-			classes.put(c.getURI(), c);
-			return true;
-		}
-		return false;
-	}
-
 	@Override
 	public XSOntClass getRootConcept() {
-		return thingClass;
+		return null;
 	}
 
 	@Override
@@ -226,8 +219,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 	public XSOntIndividual createOntologyIndividual(XSOntClass type)  {
 
 		XSOntIndividual individual = new XSOntIndividual(getTechnologyAdapter());
-
-
+		individual.setName(type.getName());
 		individual.setType(type);
 		return individual;
 	}	
@@ -262,30 +254,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		}
 		return result;
 	}
-
-	public XSOntClass createOntologyClass(String name, String uri) throws DuplicateURIException {
-		XSOntClass xsClass = new XSOntClass(this, name, uri, getTechnologyAdapter());
-		xsClass.addToSuperClasses(getRootConcept());
-		addClass(xsClass);
-		return xsClass;
-	}
-
-	public XSOntClass createOntologyClass(String name, String uri, XSOntClass superClass) throws DuplicateURIException {
-		XSOntClass xsClass = createOntologyClass(name,uri);
-		xsClass.addToSuperClasses(getRootConcept());
-		return xsClass;
-	}
-
-	public XSOntDataProperty createDataProperty(String name, XSOntDataProperty superProperty, XSOntClass domain, XSDDataType dataType)
-			throws DuplicateURIException {
-		throw new UnsupportedOperationException();
-	}
-
-	public XSOntObjectProperty createObjectProperty(String name, XSOntObjectProperty superProperty, XSOntClass domain, XSOntClass range)
-			throws DuplicateURIException {
-		throw new UnsupportedOperationException();
-	}
-
+	
 	public static String findOntologyURI(File f) {
 		return "http://www.openflexo.org/XSD/" + f.getName();
 	}

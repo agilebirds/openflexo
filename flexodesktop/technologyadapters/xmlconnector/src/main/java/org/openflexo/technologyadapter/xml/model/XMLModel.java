@@ -21,6 +21,7 @@
 
 package org.openflexo.technologyadapter.xml.model;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +47,7 @@ import org.w3c.dom.Element;
  * @author xtof
  *
  */
-public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLModel>, FlexoMetaModel<XMLModel>  {
+public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLModel>, FlexoMetaModel<XMLModel>, IXMLMetaModel, IXMLModel  {
 
 	// Constants
 	
@@ -62,7 +63,7 @@ public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLMod
 
 	private Map<String, XMLIndividual> individuals;
 	private Map<String, XMLType> types;
-	private XMLIndividual root = null;
+	private IXMLIndividual<?, ?> root = null;
 	
 	public XMLModel(TechnologyAdapter<?, ?> technologyAdapter) {
 		super();
@@ -74,15 +75,15 @@ public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLMod
 	/**
 	 * @return the rootNode
 	 */
-	public XMLIndividual getRoot() {
-		return root;
+	public IXMLIndividual<XMLIndividual, XMLAttribute> getRoot() {
+		return (IXMLIndividual<XMLIndividual, XMLAttribute>) root;
 	}
 
 
 	/**
 	 * @return the rootNode
 	 */
-	public void setRoot(XMLIndividual indiv) {
+	public void setRoot(IXMLIndividual<?,?> indiv) {
 		root = indiv;
 	}
 
@@ -153,19 +154,34 @@ public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLMod
 		return returned;
 	}
 
-	public XMLIndividual createIndividual(XMLType aType) throws Exception {
-		
-		XMLIndividual anIndividual = new XMLIndividual(this, aType);
+	@Override
+	public Object addNewIndividual(Type aType) {
+		XMLIndividual anIndividual = new XMLIndividual(this, (XMLType) aType);
 		this.addIndividual(anIndividual);
 		return anIndividual;
-		
 	}
+
+
 	public void addIndividual(XMLIndividual anIndividual) {
 		individuals.put(anIndividual.getUUID(), anIndividual);
 		this.setChanged();
 
 	}
 
+
+	@Override
+	public XMLType createNewType(String uri, String localName, String qName) {
+		XMLType nType = new XMLType(uri,localName,qName, this);
+		this.addType(nType);
+		return nType;
+	}
+	
+	@Override
+	public Object createAttribute(String attrLName, Type aType, String value) {
+		XMLAttribute attr = new XMLAttribute (attrLName, aType , value);
+		return attr;
+	}
+	
 	public XMLType getTypeFromURI(String uri) {
 		return types.get(uri);
 	}
@@ -178,6 +194,7 @@ public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLMod
 	public List<? extends XMLType> getTypes() {
 		return new ArrayList<XMLType>(types.values());
 	}
+	
 	public Document toXML() throws ParserConfigurationException {
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -189,7 +206,5 @@ public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLMod
 		return doc;
 	}
 
-
-	
 
 }

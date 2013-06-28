@@ -29,11 +29,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 import org.openflexo.technologyadapter.xsd.model.AbstractXSOntObject;
-import org.openflexo.technologyadapter.xsd.model.XSOntClass;
 import org.openflexo.technologyadapter.xsd.model.XSOntFeatureAssociation;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
-import org.openflexo.technologyadapter.xsd.model.XSOntProperty;
 import org.openflexo.technologyadapter.xsd.model.XSOntology;
 import org.openflexo.technologyadapter.xsd.model.XSPropertyValue;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
@@ -120,7 +120,7 @@ public class XSURIProcessor implements XMLSerializable {
 				if (mmResource != null) {
 					mappedClass = mmResource.getMetaModelData().getClass(typeURI.toString());
 					if (attributeName != null) {
-						baseAttributeForURI = (XSOntProperty) mappedClass.getFeatureAssociationNamed(attributeName).getProperty();
+						baseAttributeForURI = (XSOntProperty) mappedClass.getPropertyByName(attributeName);
 					}
 				} else {
 					XSDModelSlot.logger.warning("unable to map typeURI to an OntClass, as metaModelResource is Null ");
@@ -158,8 +158,8 @@ public class XSURIProcessor implements XMLSerializable {
 		} else {
 			if (mappingStyle.equals(ATTRIBUTE_VALUE) && attributeName != null) {
 
-				XSOntFeatureAssociation fAssoc = mappedClass.getFeatureAssociationNamed(attributeName);
-				XSPropertyValue value = ((XSOntIndividual) xsO).getPropertyValue(fAssoc.getProperty());
+				XSOntProperty aProperty = mappedClass.getPropertyByName(attributeName);
+				XSPropertyValue value = ((XSOntIndividual) xsO).getPropertyValue(aProperty);
 				try {
 					builtURI = URLEncoder.encode(value.toString(),"UTF-8");
 				} catch (UnsupportedEncodingException e) {
@@ -198,8 +198,8 @@ public class XSURIProcessor implements XMLSerializable {
 
 				for (XSOntIndividual obj: ((XSOntology) msInstance.getModel()).getIndividualsOfClass(mappedClass)){
 
-					XSOntFeatureAssociation fAssoc = mappedClass.getFeatureAssociationNamed(attributeName);
-					XSPropertyValue value = ((XSOntIndividual) obj).getPropertyValue(fAssoc.getProperty());
+					XSOntProperty aProperty = mappedClass.getPropertyByName(attributeName);
+					XSPropertyValue value = ((XSOntIndividual) obj).getPropertyValue(aProperty);
 					try {
 						if (value.equals(URLDecoder.decode(objectURI,"UTF-8"))){
 							return obj;

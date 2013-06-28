@@ -28,9 +28,9 @@ import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddClass;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
 import org.openflexo.technologyadapter.xsd.model.XMLModel;
-import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
-import org.openflexo.technologyadapter.xsd.model.XSOntClass;
 
 public class AddXSClass extends AddClass<XMLModel, XSDMetaModel, XSOntClass> {
 
@@ -68,7 +68,7 @@ public class AddXSClass extends AddClass<XMLModel, XSDMetaModel, XSOntClass> {
 		XSOntClass newClass = null;
 		try {
 			logger.info("Adding class " + newClassName + " as " + father);
-			newClass = getModelSlotInstance(action).getModel().createOntologyClass(newClassName, father);
+			newClass = getModelSlotInstance(action).getModel().getMetaModel().createOntologyClass(newClassName, father);
 			logger.info("Added class " + newClass.getName() + " as " + father);
 		} catch (DuplicateURIException e) {
 			e.printStackTrace();

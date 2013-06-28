@@ -1,5 +1,6 @@
 /*
- * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2010-2012 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -17,14 +18,15 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.technologyadapter.xsd.model;
+package org.openflexo.technologyadapter.xsd.rm;
 
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.ModelRepository;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
-import org.openflexo.technologyadapter.xsd.rm.XMLModelResource;
+import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
+import org.openflexo.technologyadapter.xsd.model.XMLModel;
 
-public class XMLModelRepository extends ModelRepository<XMLModelResource, XMLModel, XSDMetaModel, XSDTechnologyAdapter> {
+public class XMLModelRepository extends ModelRepository<XMLXSDFileResource, XMLModel, XSDMetaModel, XSDTechnologyAdapter> {
 
 	public XMLModelRepository(XSDTechnologyAdapter adapter, FlexoResourceCenter resourceCenter) {
 		super(adapter, resourceCenter);

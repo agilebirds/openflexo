@@ -21,78 +21,107 @@
 package org.openflexo.technologyadapter.xsd.model;
 
 import java.io.File;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
+import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
 import org.openflexo.foundation.ontology.IFlexoOntologyMetaModel;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.technologyadapter.xml.model.IXMLModel;
-import org.openflexo.technologyadapter.xml.rm.XMLFileResource;
-import org.openflexo.technologyadapter.xsd.XSDModelSlot;
+import org.openflexo.technologyadapter.xml.model.IXMLIndividual;
+import org.openflexo.technologyadapter.xml.model.XMLAttribute;
+import org.openflexo.technologyadapter.xml.model.XMLIndividual;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
+import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
+import org.openflexo.technologyadapter.xsd.rm.XMLXSDFileResource;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
-public class XMLModel extends XSOntology implements IXMLModel<XMLModel, XSDMetaModel> {
+public class XMLModel extends XSOntology implements FlexoModel<XMLModel, XSDMetaModel>, IXMLModel {
+
+	private XSDMetaModel metaModel= null;
+	private XSOntIndividual rootElem = null;
 
 	protected static final Logger logger = Logger.getLogger(XMLModel.class.getPackage().getName());
 
 	public XMLModel(String ontologyURI, File xmlFile, XSDTechnologyAdapter adapter) {
 		super(ontologyURI, xmlFile, adapter);
 	}
-	
+
+	public XMLModel(String ontologyURI, File xmlFile, XSDTechnologyAdapter adapter, XSDMetaModel mm) {
+		super(ontologyURI, xmlFile, adapter);
+		metaModel = mm;
+	}
+
+
+	public void setMetaModel(XSDMetaModel metaModelData) {
+		this.metaModel = metaModelData;
+		
+	}
+
+
 	@Override
 	public XSDMetaModel getMetaModel() {
-		logger.warning("Access to meta model not implemented yet");
-		return null;
+		return metaModel;
 	}
-	
+
 	@Override
 	public List<IFlexoOntologyMetaModel> getMetaModels() {
-		logger.warning("Access to meta model not implemented yet");
-		return null;
+		List<IFlexoOntologyMetaModel> list = new ArrayList<IFlexoOntologyMetaModel>();
+		list.add((IFlexoOntologyMetaModel) metaModel);
+		return list;
 	}
 
 
-	// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
-		// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
-		// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
-		public XMLFileResource<XSDTechnologyContextManager> getFlexoResource() {
-			return (XMLFileResource<XSDTechnologyContextManager>) modelResource;
-		}
+	@Override
+	public Object addNewIndividual(Type aType) {
+		
+		XSOntIndividual indiv = this.createOntologyIndividual((XSOntClass) aType);
+		individuals.put(indiv.getUUID(),indiv);
+		return indiv;
+		
+	}
 
-		// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
-		// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
-		// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
-		public void setFlexoResource(@SuppressWarnings("rawtypes") FlexoResource resource) throws DuplicateResourceException {
-			if (resource instanceof XSDMetaModelResource) {
-				this.modelResource = (XMLFileResource<XSDTechnologyContextManager>) resource;
-			}
-		}
+	@Override
+	public void setRoot(IXMLIndividual<?,?> anIndividual) {
+		rootElem = (XSOntIndividual) anIndividual;
 
-		// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
-		// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
-		// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
-		@Override
-		public org.openflexo.foundation.resource.FlexoResource<XMLModel> getResource() {
-			return (FlexoResource<XMLModel>) getFlexoResource();
-		}
+	}
 
-		// TODO: we need to temporarily keep both pairs or methods getFlexoResource()/getResource() and setFlexoResource()/setResource() until
-		// old implementation and new implementation of FlexoResource will be merged. To keep backward compatibility with former implementation
-		// of ResourceManager, we have to deal with that. This should be fixed early 2013 (sylvain)
-		@Override
-		public void setResource(org.openflexo.foundation.resource.FlexoResource<XMLModel> resource) {
-			try {
-				setFlexoResource((FlexoResource<?>) resource);
-			} catch (DuplicateResourceException e) {
-				e.printStackTrace();
-			}
-		}
+
+	/**
+	 * @return the rootNode
+	 */
+	public IXMLIndividual<XSOntIndividual,XSOntProperty> getRoot() {
+		return (IXMLIndividual<XSOntIndividual,XSOntProperty>) rootElem;
+	}
+
+
+	@Override
+	public FlexoResource<XMLModel> getResource() {
+		return (XMLXSDFileResource) modelResource;
+	}
+
+
+
+	public void setResource(FlexoResource<XMLModel> resource) {
+		this.modelResource = (XMLXSDFileResource) resource;
+	}
 
 
 	public void save() throws SaveResourceException {
@@ -115,5 +144,26 @@ public class XMLModel extends XSOntology implements IXMLModel<XMLModel, XSDMetaM
 		// Those should only be available for MetaModels
 		return Collections.emptyList();
 	}
+
+
+	public Document toXML() throws ParserConfigurationException {
+		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+		Document doc = docBuilder.newDocument();
+
+		Element rootNode = getRoot().toXML(doc);
+		doc.appendChild( rootNode );
+
+		return doc;
+	}
+
+	@Override
+	public Object createAttribute(String attrName, Type aType, String value) {
+		// XSOntDataProperty newProperty = new XSOntDataProperty(this, attrName, this.getURI()+"#", this.getTechnologyAdapter());
+		
+		logger.warning("TO IMPLEMENT " + attrName +" --- " + aType.toString() + "("+value+")");
+		return null;
+	}
+
 
 }

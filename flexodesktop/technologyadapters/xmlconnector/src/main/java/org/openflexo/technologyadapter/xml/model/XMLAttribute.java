@@ -34,13 +34,13 @@ import org.openflexo.foundation.FlexoObject;
  * @author xtof
  *
  */
-public class XMLAttribute extends FlexoObject {
+public class XMLAttribute extends FlexoObject implements IXMLAttribute {
 	
 	// Properties
 	private String name;
 	private Object value;
 	private Type myType;
-	private XMLIndividual container;
+	private IXMLIndividual<?, ?> container;
 	
 	
 	public XMLAttribute (String aName, Type aType, String aValue){
@@ -95,20 +95,36 @@ public class XMLAttribute extends FlexoObject {
 	/**
 	 * @return the containedIn
 	 */
-	public XMLIndividual getContainer() {
+	public IXMLIndividual<?, ?> getContainer() {
 		return container;
 	}
 
 	/**
 	 * @param containedIn the containedIn to set
 	 */
-	public void setContainer(XMLIndividual containedIn) {
+	public void setContainer(IXMLIndividual<?, ?> containedIn) {
 		this.container = containedIn;
 	}
 
 	@Override
 	public String getFullyQualifiedName() {
 		return name;
+	}
+
+	@Override
+	public boolean isSimpleAttribute() {
+		return true;
+	}
+
+	@Override
+	public void addValue(IXMLIndividual<?, ?> indiv, Object value) {
+		setValue(value);
+		
+	}
+
+	@Override
+	public Type getAttributeType() {
+		return myType;
 	}
 
 	

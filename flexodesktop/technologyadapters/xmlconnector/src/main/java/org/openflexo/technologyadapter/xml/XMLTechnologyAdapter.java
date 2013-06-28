@@ -39,11 +39,11 @@ import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.xml.model.XMLTechnologyContextManager;
-import org.openflexo.technologyadapter.xml.model.XMLMetaModelRepository;
 import org.openflexo.technologyadapter.xml.model.XMLModel;
 import org.openflexo.technologyadapter.xml.rm.XMLFileResource;
 import org.openflexo.technologyadapter.xml.rm.XMLFileResourceImpl;
-import org.openflexo.technologyadapter.xml.model.XMLModelRepository;
+import org.openflexo.technologyadapter.xml.rm.XMLMetaModelRepository;
+import org.openflexo.technologyadapter.xml.rm.XMLModelRepository;
 /**
  * @author xtof
  *

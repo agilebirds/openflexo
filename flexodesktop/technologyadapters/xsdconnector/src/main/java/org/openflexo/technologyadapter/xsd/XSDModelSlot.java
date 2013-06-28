@@ -36,13 +36,15 @@ import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
+import org.openflexo.foundation.viewpoint.NamedViewPointObject;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
 import org.openflexo.technologyadapter.xsd.model.XMLModel;
-import org.openflexo.technologyadapter.xsd.model.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSClassPatternRole;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSIndividualPatternRole;
@@ -169,14 +171,14 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 
 		XSOntIndividual xsO = (XSOntIndividual) o;
 
-		String ltypeURI = xsO.getType().getURI().replace(this.getMetaModelURI(), "");
+		String ltypeURI = ((XSOntClass) xsO.getType()).getURI().replace(this.getMetaModelURI(), "");
 		XSURIProcessor mapParams = uriProcessors.get(ltypeURI);
 
 		if (mapParams != null){
 			return mapParams.getURIForObject(msInstance, xsO);	
 		}
 		else {
-			logger.warning("XSDModelSlot: enable to get the URIProcessor for element of type: "+xsO.getType().getName());
+			logger.warning("XSDModelSlot: enable to get the URIProcessor for element of type: "+((XSOntClass) xsO.getType()).getName());
 			return null;
 		}
 

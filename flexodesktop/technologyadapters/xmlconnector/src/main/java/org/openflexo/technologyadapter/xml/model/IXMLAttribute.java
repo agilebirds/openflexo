@@ -1,5 +1,6 @@
 /*
- * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2010-2012 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -17,16 +18,26 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.technologyadapter.xsd.model;
 
-import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.technologyadapter.MetaModelRepository;
-import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
-import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
+package org.openflexo.technologyadapter.xml.model;
 
-public class XSDMetaModelRepository extends MetaModelRepository<XSDMetaModelResource, XMLModel, XSDMetaModel, XSDTechnologyAdapter> {
+import java.lang.reflect.Type;
 
-	public XSDMetaModelRepository(XSDTechnologyAdapter adapter, FlexoResourceCenter resourceCenter) {
-		super(adapter, resourceCenter);
-	}
+
+/**
+ *
+ * This interface defines additional methods to be defined by all XMLAttribute that 
+ * will be manipulated by the XMLSaxHandler
+ *
+ * @author xtof
+ *
+ */
+
+public interface IXMLAttribute {
+
+	 public boolean isSimpleAttribute();
+	 
+	 public void addValue(IXMLIndividual<?, ?> indiv, Object value);
+	 
+	 public Type getAttributeType();
 }

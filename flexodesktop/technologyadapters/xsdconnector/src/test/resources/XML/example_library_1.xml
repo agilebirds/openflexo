@@ -7,4 +7,10 @@
    <p:category>Mystery</p:category>
    <p:author>Le Lapin</p:author>
   </p:books>
+  <p:books>
+   <p:title>tutu</p:title>
+   <p:pages>37</p:pages>
+   <p:category>Biography</p:category>
+   <p:author>La Poule</p:author>
+  </p:books>
 </p:Library>
