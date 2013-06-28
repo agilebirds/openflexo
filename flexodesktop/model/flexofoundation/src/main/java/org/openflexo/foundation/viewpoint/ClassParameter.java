@@ -30,7 +30,7 @@ import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
 
-public class ClassParameter extends InnerModelSlotParameter {
+public class ClassParameter extends InnerModelSlotParameter<TypeSafeModelSlot<?, ?>> {
 
 	private String conceptURI;
 	private DataBinding<IFlexoOntologyClass> conceptValue;
@@ -113,8 +113,8 @@ public class ClassParameter extends InnerModelSlotParameter {
 	}
 
 	@Override
-	public TypeSafeModelSlot getModelSlot() {
-		TypeSafeModelSlot returned = (TypeSafeModelSlot) super.getModelSlot();
+	public TypeSafeModelSlot<?, ?> getModelSlot() {
+		TypeSafeModelSlot<?, ?> returned = super.getModelSlot();
 		if (returned == null) {
 			if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypeSafeModelSlot.class).size() > 0) {
 				return getVirtualModel().getModelSlots(TypeSafeModelSlot.class).get(0);

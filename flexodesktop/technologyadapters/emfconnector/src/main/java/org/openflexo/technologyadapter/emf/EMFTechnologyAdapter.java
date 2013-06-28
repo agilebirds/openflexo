@@ -60,7 +60,8 @@ import org.openflexo.technologyadapter.emf.viewpoint.binding.EMFBindingFactory;
  * 
  */
 @DeclareModelSlots({ // ModelSlot(s) declaration
-@DeclareModelSlot(FML = "EMFModelSlot", modelSlotClass = EMFModelSlot.class) // Classical type-safe interpretation
+@DeclareModelSlot(FML = "EMFModelSlot", modelSlotClass = EMFModelSlot.class), // Classical type-safe interpretation
+		@DeclareModelSlot(FML = "EMFMetaModelSlot", modelSlotClass = EMFMetaModelSlot.class) // Classical type-safe interpretation
 })
 @DeclareRepositoryType({ EMFMetaModelRepository.class, EMFModelRepository.class })
 public class EMFTechnologyAdapter extends TechnologyAdapter {
@@ -100,6 +101,8 @@ public class EMFTechnologyAdapter extends TechnologyAdapter {
 	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel<?> virtualModel) {
 		if (EMFModelSlot.class.isAssignableFrom(modelSlotClass)) {
 			return (MS) new EMFModelSlot(virtualModel, this);
+		} else if (EMFMetaModelSlot.class.isAssignableFrom(modelSlotClass)) {
+			return (MS) new EMFMetaModelSlot(virtualModel, this);
 		}
 		logger.warning("Unexpected model slot: " + modelSlotClass.getName());
 		return null;

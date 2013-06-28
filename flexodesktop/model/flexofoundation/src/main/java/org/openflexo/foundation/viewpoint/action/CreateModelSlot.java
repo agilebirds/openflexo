@@ -167,4 +167,9 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, VirtualModel, 
 	public void setModelSlotClass(Class<? extends ModelSlot<?>> modelSlotClass) {
 		this.modelSlotClass = modelSlotClass;
 	}
+
+	public boolean isTypeAwareModelSlot() {
+		return getModelSlotClass() != null && TypeSafeModelSlot.class.isAssignableFrom(getModelSlotClass());
+	}
+
 }

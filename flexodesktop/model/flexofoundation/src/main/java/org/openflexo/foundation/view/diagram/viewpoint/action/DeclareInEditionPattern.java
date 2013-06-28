@@ -40,7 +40,7 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 
 	private EditionPattern editionPattern;
 
-	private TypeSafeModelSlot modelSlot;
+	private TypeSafeModelSlot<?, ?> modelSlot;
 
 	DeclareInEditionPattern(FlexoActionType<A, T1, ExampleDiagramObject> actionType, T1 focusedObject,
 			Vector<ExampleDiagramObject> globalSelection, FlexoEditor editor) {
@@ -147,11 +147,11 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 		return null;
 	}
 
-	public TypeSafeModelSlot getModelSlot() {
+	public TypeSafeModelSlot<?, ?> getModelSlot() {
 		return modelSlot;
 	}
 
-	public void setModelSlot(TypeSafeModelSlot modelSlot) {
+	public void setModelSlot(TypeSafeModelSlot<?, ?> modelSlot) {
 		this.modelSlot = modelSlot;
 	}
 }

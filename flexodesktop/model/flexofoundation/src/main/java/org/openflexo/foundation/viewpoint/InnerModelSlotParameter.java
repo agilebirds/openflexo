@@ -22,19 +22,19 @@ package org.openflexo.foundation.viewpoint;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 
-public abstract class InnerModelSlotParameter extends EditionSchemeParameter {
+public abstract class InnerModelSlotParameter<MS extends ModelSlot<?>> extends EditionSchemeParameter {
 
-	private ModelSlot modelSlot;
+	private MS modelSlot;
 
 	public InnerModelSlotParameter(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 
-	public ModelSlot getModelSlot() {
+	public MS getModelSlot() {
 		return modelSlot;
 	}
 
-	public void setModelSlot(ModelSlot modelSlot) {
+	public void setModelSlot(MS modelSlot) {
 		this.modelSlot = modelSlot;
 		setChanged();
 		notifyObservers(new DataModification("modelSlot", null, modelSlot));

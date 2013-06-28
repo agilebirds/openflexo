@@ -31,7 +31,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
 
-public class PropertyParameter extends InnerModelSlotParameter {
+public class PropertyParameter extends InnerModelSlotParameter<TypeSafeModelSlot<?, ?>> {
 
 	private String domainURI;
 	private String parentPropertyURI;
@@ -132,8 +132,8 @@ public class PropertyParameter extends InnerModelSlotParameter {
 	}
 
 	@Override
-	public TypeSafeModelSlot getModelSlot() {
-		TypeSafeModelSlot returned = (TypeSafeModelSlot) super.getModelSlot();
+	public TypeSafeModelSlot<?, ?> getModelSlot() {
+		TypeSafeModelSlot<?, ?> returned = super.getModelSlot();
 		if (returned == null) {
 			if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypeSafeModelSlot.class).size() > 0) {
 				return getVirtualModel().getModelSlots(TypeSafeModelSlot.class).get(0);

@@ -60,7 +60,8 @@ import org.openflexo.technologyadapter.emf.viewpoint.editionaction.RemoveEMFObje
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.SelectEMFObjectIndividual;
 
 /**
- * Implementation of the ModelSlot class for the EMF technology adapter
+ * Implementation of the ModelSlot class for the EMF technology adapter<br>
+ * We expect here to connect an EMF model conform to an EMFMetaModel
  * 
  * @author sylvain
  * 

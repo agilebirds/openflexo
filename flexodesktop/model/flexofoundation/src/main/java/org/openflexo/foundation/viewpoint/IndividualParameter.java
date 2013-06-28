@@ -32,7 +32,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
 
-public class IndividualParameter extends InnerModelSlotParameter {
+public class IndividualParameter extends InnerModelSlotParameter<TypeSafeModelSlot<?, ?>> {
 
 	private String conceptURI;
 	private DataBinding<IFlexoOntologyClass> conceptValue;
@@ -137,9 +137,9 @@ public class IndividualParameter extends InnerModelSlotParameter {
 	}
 
 	@Override
-	public TypeSafeModelSlot getModelSlot() {
+	public TypeSafeModelSlot<?, ?> getModelSlot() {
 		if (super.getModelSlot() instanceof TypeSafeModelSlot) {
-			TypeSafeModelSlot returned = (TypeSafeModelSlot) super.getModelSlot();
+			TypeSafeModelSlot<?, ?> returned = super.getModelSlot();
 			if (returned == null) {
 				if (getVirtualModel() != null && getVirtualModel().getModelSlots(TypeSafeModelSlot.class).size() > 0) {
 					return getVirtualModel().getModelSlots(TypeSafeModelSlot.class).get(0);
