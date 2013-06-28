@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jdom2.JDOMException;
 import org.openflexo.AdvancedPrefs;
 import org.openflexo.localization.FlexoLocalization;
@@ -131,13 +132,6 @@ public class FlexoServerInstanceManager {
 	}
 
 	private void filterAddressBook(FlexoServerAddressBook book) {
-		// conservative behavior. (see history, but is really relevant ?)
-		try {
-			UserType.getCurrentUserType();
-		} catch (IllegalStateException e) {
-			return;
-		}
-
 		for (FlexoServerInstance instance : new ArrayList<FlexoServerInstance>(book.getInstances())) {
 			if (instance.getUserTypes().size() > 0) {
 				boolean keepIt = false;
@@ -150,6 +144,10 @@ public class FlexoServerInstanceManager {
 				}
 				if (!keepIt) {
 					book.removeFromInstances(instance);
+				} else if (StringUtils.isEmpty(instance.getRestURL())) {
+					if (instance.getURL() != null) {
+						instance.setRestURL(instance.getURL() + "Flexo/rest");
+					}
 				}
 			}
 		}
