@@ -2,93 +2,9 @@
 <Panel className="org.openflexo.inspector.FIBInspector" layout="border" titleFont="SansSerif,0,12" darkLevel="0" dataClassName="org.openflexo.foundation.FlexoModelObject" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
     <Tab title="Doc" layout="twocols" titleFont="SansSerif,0,11" darkLevel="0" index="0" font="SansSerif,0,11" name="DocTab" opaque="false">
-      <Label label="description" localize="true" name="DescriptionLabel" index="0" constraints="twocols(expandHorizontally=false;expandVertically=false;index=0;insetsTop=5;location=left)" visible="(data.isDocEditable = false)" />
-      <HTMLEditor index="1" data="data.description" constraints="twocols(expandHorizontally=true;expandVertically=true;index=1;location=right)" visible="(data.isDocEditable = false)" name="Description" localize="true" opaque="false">
-        <Line1Option index="0" name="ParagraphFormatComboBox" />
-        <Line1Option index="1" name="TextEffectPanel" />
-        <Line1Option index="2" name="TextEffectPanel.BoldButton" />
-        <Line1Option index="3" name="TextEffectPanel.ItalicButton" />
-        <Line1Option index="4" name="TextEffectPanel.UnderlineButton" />
-        <Line1Option index="2" name="ColorPanel" />
-        <Line1Option index="6" name="ColorPanel.TextColorButton" />
-        <Line1Option index="7" name="ColorPanel.BackgroundColorButton" />
-        <Line1Option index="3" name="JustificationPanel" />
-        <Line1Option index="9" name="JustificationPanel.LeftJustifyButton" />
-        <Line1Option index="10" name="JustificationPanel.CenterJustifyButton" />
-        <Line1Option index="11" name="JustificationPanel.RightJustifyButton" />
-        <Line1Option index="12" name="JustificationPanel.BlockJustifyButton" />
-        <Line1Option index="4" name="LinkPanel" />
-        <Line1Option index="14" name="LinkPanel.LinkButton" />
-        <Line1Option index="15" name="LinkPanel.UnlinkButton" />
-        <Line1Option index="5" name="MiscPanel" />
-        <Line1Option index="17" name="MiscPanel.InsertImage" />
-      </HTMLEditor>
-      <Custom componentClassName="org.openflexo.components.widget.FIBDescriptionWidget" index="5" data="data" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;location=right)" visible="(data.isDocEditable = true)" name="SpecificDescriptions" localize="true" manageDynamicModel="true" />
-      <Label label="business_description" localize="true" name="BusinessDescriptionLabel" index="6" constraints="twocols(expandHorizontally=false;expandVertically=false;index=3;insetsTop=5;location=left)" visible="((data.businessDescription != null) &amp; (data.isDocEditable = false))" />
-      <HTMLEditor index="7" data="data.businessDescription" constraints="twocols(expandHorizontally=true;expandVertically=true;index=4;location=right)" visible="((data.businessDescription != null) &amp; (data.isDocEditable = false))" name="BusinessDescription" localize="true" opaque="false">
-        <Line1Option index="0" name="ParagraphFormatComboBox" />
-        <Line1Option index="1" name="TextEffectPanel" />
-        <Line1Option index="2" name="TextEffectPanel.BoldButton" />
-        <Line1Option index="3" name="TextEffectPanel.ItalicButton" />
-        <Line1Option index="4" name="TextEffectPanel.UnderlineButton" />
-        <Line1Option index="2" name="ColorPanel" />
-        <Line1Option index="6" name="ColorPanel.TextColorButton" />
-        <Line1Option index="7" name="ColorPanel.BackgroundColorButton" />
-        <Line1Option index="3" name="JustificationPanel" />
-        <Line1Option index="9" name="JustificationPanel.LeftJustifyButton" />
-        <Line1Option index="10" name="JustificationPanel.CenterJustifyButton" />
-        <Line1Option index="11" name="JustificationPanel.RightJustifyButton" />
-        <Line1Option index="12" name="JustificationPanel.BlockJustifyButton" />
-        <Line1Option index="4" name="LinkPanel" />
-        <Line1Option index="14" name="LinkPanel.LinkButton" />
-        <Line1Option index="15" name="LinkPanel.UnlinkButton" />
-        <Line1Option index="5" name="MiscPanel" />
-        <Line1Option index="17" name="MiscPanel.InsertImage" />
-      </HTMLEditor>
-      <Label label="dont_generate" localize="true" name="DontGenerateLabel" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsTop=5;location=left)" visible="(data.isDocEditable = true)" />
-      <Label label="technical_description" localize="true" name="TechnicalDescriptionLabel" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=6;insetsTop=5;location=left)" visible="((data.technicalDescription != null) &amp; (data.isDocEditable = false))" />
-      <CheckBox selected="false" localize="true" name="DontGenerate" index="9" data="data.dontGenerate" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" visible="(data.isDocEditable = true)" />
-      <HTMLEditor index="9" data="data.technicalDescription" constraints="twocols(expandHorizontally=true;expandVertically=true;index=8;location=right)" visible="((data.technicalDescription != null) &amp; (data.isDocEditable = false))" name="TechnicalDescription" localize="true">
-        <Line1Option index="0" name="ParagraphFormatComboBox" />
-        <Line1Option index="1" name="TextEffectPanel" />
-        <Line1Option index="2" name="TextEffectPanel.BoldButton" />
-        <Line1Option index="3" name="TextEffectPanel.ItalicButton" />
-        <Line1Option index="4" name="TextEffectPanel.UnderlineButton" />
-        <Line1Option index="2" name="ColorPanel" />
-        <Line1Option index="6" name="ColorPanel.TextColorButton" />
-        <Line1Option index="7" name="ColorPanel.BackgroundColorButton" />
-        <Line1Option index="3" name="JustificationPanel" />
-        <Line1Option index="9" name="JustificationPanel.LeftJustifyButton" />
-        <Line1Option index="10" name="JustificationPanel.CenterJustifyButton" />
-        <Line1Option index="11" name="JustificationPanel.RightJustifyButton" />
-        <Line1Option index="12" name="JustificationPanel.BlockJustifyButton" />
-        <Line1Option index="4" name="LinkPanel" />
-        <Line1Option index="14" name="LinkPanel.LinkButton" />
-        <Line1Option index="15" name="LinkPanel.UnlinkButton" />
-        <Line1Option index="5" name="MiscPanel" />
-        <Line1Option index="17" name="MiscPanel.InsertImage" />
-      </HTMLEditor>
-      <Label label="user_manual_description" localize="true" name="UserManualDescriptionLabel" index="10" constraints="twocols(expandHorizontally=false;expandVertically=false;index=9;insetsTop=5;location=left)" visible="((data.userManualDescription != null) &amp; (data.isDocEditable = false))" />
-      <HTMLEditor index="11" data="data.userManualDescription" constraints="twocols(expandHorizontally=true;expandVertically=true;index=10;location=right)" visible="((data.userManualDescription != null) &amp; (data.isDocEditable = false))" name="UserManualDescription" localize="true">
-        <Line1Option index="0" name="ParagraphFormatComboBox" />
-        <Line1Option index="1" name="TextEffectPanel" />
-        <Line1Option index="2" name="TextEffectPanel.BoldButton" />
-        <Line1Option index="3" name="TextEffectPanel.ItalicButton" />
-        <Line1Option index="4" name="TextEffectPanel.UnderlineButton" />
-        <Line1Option index="2" name="ColorPanel" />
-        <Line1Option index="6" name="ColorPanel.TextColorButton" />
-        <Line1Option index="7" name="ColorPanel.BackgroundColorButton" />
-        <Line1Option index="3" name="JustificationPanel" />
-        <Line1Option index="9" name="JustificationPanel.LeftJustifyButton" />
-        <Line1Option index="10" name="JustificationPanel.CenterJustifyButton" />
-        <Line1Option index="11" name="JustificationPanel.RightJustifyButton" />
-        <Line1Option index="12" name="JustificationPanel.BlockJustifyButton" />
-        <Line1Option index="4" name="LinkPanel" />
-        <Line1Option index="14" name="LinkPanel.LinkButton" />
-        <Line1Option index="15" name="LinkPanel.UnlinkButton" />
-        <Line1Option index="5" name="MiscPanel" />
-        <Line1Option index="17" name="MiscPanel.InsertImage" />
-      </HTMLEditor>
+      <Custom componentClassName="org.openflexo.components.widget.FIBDescriptionWidget" index="5" data="data" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;location=right)" name="SpecificDescriptions" localize="true" manageDynamicModel="true" />
+      <Label label="dont_generate" localize="true" name="DontGenerateLabel" index="8" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsTop=5;location=left)" />
+      <CheckBox selected="false" localize="true" name="DontGenerate" index="9" data="data.dontGenerate" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;location=right)" />
     </Tab>
   </TabPanel>
   <LocalizedDictionary>
