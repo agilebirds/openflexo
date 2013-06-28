@@ -34,10 +34,10 @@ public class XMLIconLibrary {
 
 	private static final Logger logger = Logger.getLogger(XMLIconLibrary.class.getPackage().getName());
 
-	public static final ImageIconResource XSD_TECHNOLOGY_BIG_ICON = new ImageIconResource("Icons/XSDTechnology32.png");
-	public static final ImageIconResource XSD_TECHNOLOGY_ICON = new ImageIconResource("Icons/XSDTechnology.png");
+	public static final ImageIconResource XSD_TECHNOLOGY_BIG_ICON = new ImageIconResource("Icons/XMLTechnology32.png");
+	public static final ImageIconResource XSD_TECHNOLOGY_ICON = new ImageIconResource("Icons/XMLTechnology.png");
 	public static final ImageIconResource XML_FILE_ICON = new ImageIconResource("Icons/XMLFile.png");
-	public static final ImageIconResource XML_INDIVIDUAL_ICON = new ImageIconResource("Icons/XSDIndividual.png");
+	public static final ImageIconResource XML_INDIVIDUAL_ICON = new ImageIconResource("Icons/XMLIndividual.png");
 
 	public static ImageIcon iconForObject(Class objectClass) {
 		if (XMLModel.class.isAssignableFrom(objectClass)) {

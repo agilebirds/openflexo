@@ -52,18 +52,18 @@ import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class XMLModel extends XSOntology implements FlexoModel<XMLModel, XSDMetaModel>, IXMLModel {
+public class XMLXSDModel extends XSOntology implements FlexoModel<XMLXSDModel, XSDMetaModel>, IXMLModel {
 
 	private XSDMetaModel metaModel= null;
 	private XSOntIndividual rootElem = null;
 
-	protected static final Logger logger = Logger.getLogger(XMLModel.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(XMLXSDModel.class.getPackage().getName());
 
-	public XMLModel(String ontologyURI, File xmlFile, XSDTechnologyAdapter adapter) {
+	public XMLXSDModel(String ontologyURI, File xmlFile, XSDTechnologyAdapter adapter) {
 		super(ontologyURI, xmlFile, adapter);
 	}
 
-	public XMLModel(String ontologyURI, File xmlFile, XSDTechnologyAdapter adapter, XSDMetaModel mm) {
+	public XMLXSDModel(String ontologyURI, File xmlFile, XSDTechnologyAdapter adapter, XSDMetaModel mm) {
 		super(ontologyURI, xmlFile, adapter);
 		metaModel = mm;
 	}
@@ -113,13 +113,13 @@ public class XMLModel extends XSOntology implements FlexoModel<XMLModel, XSDMeta
 
 
 	@Override
-	public FlexoResource<XMLModel> getResource() {
+	public FlexoResource<XMLXSDModel> getResource() {
 		return (XMLXSDFileResource) modelResource;
 	}
 
 
 
-	public void setResource(FlexoResource<XMLModel> resource) {
+	public void setResource(FlexoResource<XMLXSDModel> resource) {
 		this.modelResource = (XMLXSDFileResource) resource;
 	}
 

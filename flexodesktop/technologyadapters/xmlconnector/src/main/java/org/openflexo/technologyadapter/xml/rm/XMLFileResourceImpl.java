@@ -65,7 +65,7 @@ FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
 
 	static final String CDATA_TYPE_NAME = "CDATA";
 
-	protected static final Logger logger = Logger.getLogger(XMLModel.class
+	protected static final Logger logger = Logger.getLogger(XMLFileResourceImpl.class
 			.getPackage().getName());
 
 	// Properties 

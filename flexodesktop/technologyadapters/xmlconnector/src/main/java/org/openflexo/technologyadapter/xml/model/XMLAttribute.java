@@ -127,6 +127,10 @@ public class XMLAttribute extends FlexoObject implements IXMLAttribute {
 		return myType;
 	}
 
+	public String getDisplayableDescription() {
+		return this.getName();
+	}
+
 	
 
 }

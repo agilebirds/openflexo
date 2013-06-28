@@ -30,9 +30,9 @@ import org.openflexo.foundation.viewpoint.AddClass;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
-import org.openflexo.technologyadapter.xsd.model.XMLModel;
+import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 
-public class AddXSClass extends AddClass<XMLModel, XSDMetaModel, XSOntClass> {
+public class AddXSClass extends AddClass<XMLXSDModel, XSDMetaModel, XSOntClass> {
 
 	private static final Logger logger = Logger.getLogger(AddXSClass.class.getPackage().getName());
 

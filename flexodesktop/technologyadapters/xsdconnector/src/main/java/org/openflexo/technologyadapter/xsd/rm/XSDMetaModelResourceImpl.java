@@ -96,8 +96,6 @@ public abstract class XSDMetaModelResourceImpl extends FlexoFileResourceImpl<XSD
 			returned.setURI(uri);
 			returned.setName("Unnamed");
 			returned.setFile(xsdMetaModelFile);
-			returned.setResourceData(new XSDMetaModel(returned.getURI(), returned.getFile(), (XSDTechnologyAdapter) adapter));
-			returned.getMetaModelData().setResource(returned);
 			return returned;
 		} catch (ModelDefinitionException e) {
 			e.printStackTrace();
@@ -252,6 +250,12 @@ public abstract class XSDMetaModelResourceImpl extends FlexoFileResourceImpl<XSD
 
 
 	public boolean load() {
+
+		if (resourceData == null){
+		this.resourceData =  new XSDMetaModel(getURI(), getFile(), (XSDTechnologyAdapter) getTechnologyAdapter());
+		resourceData.setResource(this);
+		}
+		
 		if (isLoading() == true) {
 			return false;
 		}
@@ -279,6 +283,7 @@ public abstract class XSDMetaModelResourceImpl extends FlexoFileResourceImpl<XSD
 		return true;
 	}
 
+	@Override
 	public boolean isLoaded() {
 		return isLoaded;
 	}

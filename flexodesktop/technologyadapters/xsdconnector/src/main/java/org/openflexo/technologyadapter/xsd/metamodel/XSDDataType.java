@@ -34,7 +34,7 @@ import com.sun.xml.xsom.XSSimpleType;
 
 public class XSDDataType extends AbstractXSOntObject implements IFlexoOntologyDataType, W3URIDefinitions, Type {
 
-	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntology.class.getPackage()
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSDDataType.class.getPackage()
 			.getName());
 
 	private BuiltInDataType builtInDataType;

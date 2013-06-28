@@ -33,7 +33,7 @@ import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.technologyadapter.xml.model.IXMLIndividual;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
-import org.openflexo.technologyadapter.xsd.model.XMLModel;
+import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 import org.openflexo.technologyadapter.xsd.model.XSOntology;
 import org.openflexo.technologyadapter.xsd.model.XSPropertyValue;
@@ -56,8 +56,8 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 	private static ApplicationContext testApplicationContext;
 	private static XSDTechnologyAdapter xsdAdapter;
 	private static FlexoResourceCenter resourceCenter;
-	private static ModelRepository<FlexoResource<XMLModel>, XMLModel, XSDMetaModel, XSDTechnologyAdapter> modelRepository;
-	private static MetaModelRepository<FlexoResource<XSDMetaModel>, XMLModel, XSDMetaModel, XSDTechnologyAdapter> metamodelRepository;
+	private static ModelRepository<FlexoResource<XMLXSDModel>, XMLXSDModel, XSDMetaModel, XSDTechnologyAdapter> modelRepository;
+	private static MetaModelRepository<FlexoResource<XSDMetaModel>, XMLXSDModel, XSDMetaModel, XSDTechnologyAdapter> metamodelRepository;
 	private static String baseDirName;
 
 
@@ -113,14 +113,14 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 
 		XSDMetaModelResource mmLibraryRes = (XSDMetaModelResource) metamodelRepository.getResource("http://www.openflexo.org/XSD/library.xsd");
 
-		XMLModel mLib = libraryRes.getModelData();
+		XMLXSDModel mLib = libraryRes.getModelData();
 
 		libraryRes.setMetaModelResource(mmLibraryRes);
 		mmLibraryRes.loadResourceData(null);
 		libraryRes.loadResourceData(null);
 
 		assertNotNull(mLib);
-		assertTrue(((XMLModel) mLib).getResource().isLoaded());
+		assertTrue(((XMLXSDModel) mLib).getResource().isLoaded());
 
 		dumpIndividual(mLib.getRoot(), "---");
 
@@ -153,7 +153,7 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 
 			XMLXSDFileResource libRes = (XMLXSDFileResource) xsdAdapter.createEmptyModel((FileSystemBasedResourceCenter) resourceCenter, "GenXML", "library.xml", mmLibraryRes, xsdAdapter.getTechnologyContextManager());
 
-			XMLModel lib = (XMLModel) libRes.getModel();
+			XMLXSDModel lib = (XMLXSDModel) libRes.getModel();
 
 			// TODO : this wont work anymore as we suppressed name's significance for XSOntIndividual
 			XSOntIndividual library = lib.createOntologyIndividual( mmLib.getClass(LIBRARY_URI));

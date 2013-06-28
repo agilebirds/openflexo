@@ -38,7 +38,7 @@ import org.openflexo.foundation.technologyadapter.ModelRepository;
 import org.openflexo.technologyadapter.xml.model.XMLType;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
-import org.openflexo.technologyadapter.xsd.model.XMLModel;
+import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelRepository;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 import org.openflexo.toolbox.FileResource;
@@ -50,8 +50,8 @@ public class TestXSD extends FlexoTestCase {
 	private static ApplicationContext testApplicationContext;
 	private static XSDTechnologyAdapter xsdAdapter;
 	private static FlexoResourceCenter resourceCenter;
-	private static MetaModelRepository<XSDMetaModelResource, XMLModel, XSDMetaModel, XSDTechnologyAdapter> mmRepository;
-	private static ModelRepository<FlexoResource<XMLModel>, XMLModel, XSDMetaModel, XSDTechnologyAdapter> modelRepository;
+	private static MetaModelRepository<XSDMetaModelResource, XMLXSDModel, XSDMetaModel, XSDTechnologyAdapter> mmRepository;
+	private static ModelRepository<FlexoResource<XMLXSDModel>, XMLXSDModel, XSDMetaModel, XSDTechnologyAdapter> modelRepository;
 
 	public TestXSD(String name) {
 		super(name);

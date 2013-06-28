@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
+<Panel className="org.openflexo.inspector.FIBInspector" layout="border" dataClassName="org.openflexo.technologyadapter.xsd.model.XMLXSDModel" controllerClassName="org.openflexo.inspector.FIBInspectorController" font="SansSerif,0,12" name="Inspector">
   <TabPanel name="Tab" constraints="border(location=center)">
     <Tab index="0" title="Basic" layout="twocols" font="SansSerif,0,11" name="BasicTab">
       <Label label="name" localize="true" name="NameLabel" constraints="twocols(location=left;index=0;expandHorizontally=false;expandVertically=false)" />
@@ -14,6 +14,6 @@
   <LocalizedDictionary>
     <Localized key="Advanced" lang="French">Avancé</Localized>
   </LocalizedDictionary>
-  <Parameter name="title" value="XSD Meta Model" />
+  <Parameter name="title" value="XML Model" />
 </Panel>
 

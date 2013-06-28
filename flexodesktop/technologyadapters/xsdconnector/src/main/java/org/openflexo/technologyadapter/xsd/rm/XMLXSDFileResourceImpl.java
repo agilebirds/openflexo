@@ -22,13 +22,12 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.IOUtils;
 import org.openflexo.foundation.FlexoException;
-import org.openflexo.foundation.resource.FlexoFileResource;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.rm.FlexoFileResource.FileWritingLock;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
-import org.openflexo.foundation.rm.FlexoFileResource.FileWritingLock;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.model.factory.ModelFactory;
@@ -36,8 +35,7 @@ import org.openflexo.technologyadapter.xml.rm.XMLSAXHandler;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyContextManager;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
-import org.openflexo.technologyadapter.xsd.model.XMLModel;
-import org.openflexo.technologyadapter.xsd.model.XSOntFeatureAssociation;
+import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 import org.openflexo.toolbox.IProgress;
 
@@ -45,13 +43,13 @@ import org.openflexo.toolbox.IProgress;
  * @author xtof
  *
  */
-public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLModel> implements XMLXSDFileResource  {
+public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXSDModel> implements XMLXSDFileResource  {
 
 	//Constants
 
 	static final String CDATA_TYPE_NAME = "CDATA";
 
-	protected static final Logger logger = Logger.getLogger(XMLModel.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(XMLXSDFileResourceImpl.class.getPackage().getName());
 	
 
 	private XSDMetaModelResource metamodelResource = null;
@@ -82,9 +80,9 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLMo
 			returned.setServiceManager(technologyContextManager.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
 			returned.setTechnologyAdapter(technologyContextManager.getTechnologyAdapter());
 			returned.setTechnologyContextManager(technologyContextManager);
-			returned.setResourceData(new XMLModel(modelUri, xmlFile, technologyContextManager.getTechnologyAdapter()));
+			returned.setResourceData(new XMLXSDModel(modelUri, xmlFile, technologyContextManager.getTechnologyAdapter()));
 			returned.getModel().setResource(returned);
-			technologyContextManager.registerModel((FlexoModelResource<XMLModel, XSDMetaModel>) returned);
+			technologyContextManager.registerModel((FlexoModelResource<XMLXSDModel, XSDMetaModel>) returned);
 			return returned;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -165,12 +163,12 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLMo
 		
 
 	@Override
-	public XMLModel getModel() {
+	public XMLXSDModel getModel() {
 		return resourceData;
 	}
 
 	@Override
-	public XMLModel getModelData() {
+	public XMLXSDModel getModelData() {
 		return resourceData;
 	}
 
@@ -178,7 +176,7 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLMo
 	// FIXME: behavior here is contradictory with the Lifecycle of the SuperClass => Fix This!
 	
 	@Override
-	public XMLModel getResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceLoadingCancelledException,
+	public XMLXSDModel getResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceLoadingCancelledException,
 			ResourceDependencyLoopException, FileNotFoundException, FlexoException {
 		if (resourceData != null && isLoadable()) {
 			resourceData = loadResourceData(progress);
@@ -188,7 +186,7 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLMo
 	}
 	
 	@Override
-	public XMLModel loadResourceData(IProgress progress)
+	public XMLXSDModel loadResourceData(IProgress progress)
 			throws ResourceLoadingCancelledException,
 			ResourceDependencyLoopException, FileNotFoundException,
 			FlexoException {
@@ -204,7 +202,7 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLMo
 				SAXParser saxParser = factory.newSAXParser();
 
 
-				XMLSAXHandler<XMLModel, XSDMetaModel,XSOntIndividual, XSOntProperty> handler = new XMLSAXHandler<XMLModel, XSDMetaModel,XSOntIndividual, XSOntProperty>(this,false); 
+				XMLSAXHandler<XMLXSDModel, XSDMetaModel,XSOntIndividual, XSOntProperty> handler = new XMLSAXHandler<XMLXSDModel, XSDMetaModel,XSOntIndividual, XSOntProperty>(this,false); 
 				saxParser.parse(this.getFile(), handler);
 
 				isLoaded = true;
@@ -220,7 +218,7 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLMo
 
 
 	@Override
-	public FlexoMetaModelResource<XMLModel, XSDMetaModel> getMetaModelResource() {
+	public FlexoMetaModelResource<XMLXSDModel, XSDMetaModel> getMetaModelResource() {
 		return metamodelResource;
 	}
 
@@ -229,7 +227,7 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLMo
 	 */
 	@Override
 	public void setMetaModelResource(
-			FlexoMetaModelResource<XMLModel, XSDMetaModel> mmRes) {
+			FlexoMetaModelResource<XMLXSDModel, XSDMetaModel> mmRes) {
 
 		metamodelResource = (XSDMetaModelResource) mmRes;
 		
@@ -247,8 +245,8 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLMo
 	}
 
 	@Override
-	public Class<XMLModel> getResourceDataClass() {
-		return XMLModel.class;
+	public Class<XMLXSDModel> getResourceDataClass() {
+		return XMLXSDModel.class;
 	}
 
 

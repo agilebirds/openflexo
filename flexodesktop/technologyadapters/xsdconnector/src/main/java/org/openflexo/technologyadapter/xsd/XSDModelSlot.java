@@ -44,7 +44,7 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
-import org.openflexo.technologyadapter.xsd.model.XMLModel;
+import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSClassPatternRole;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSIndividualPatternRole;
@@ -63,7 +63,7 @@ import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSIndividu
 @DeclareEditionActions({ @DeclareEditionAction(AddXSIndividual.class), // Add instance
 	@DeclareEditionAction(AddXSClass.class) // Add class
 })
-public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel> {
+public class XSDModelSlot extends FlexoOntologyModelSlot<XMLXSDModel, XSDMetaModel> {
 
 	static final Logger logger = Logger.getLogger(XSDModelSlot.class.getPackage().getName());
 
@@ -243,7 +243,7 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLModel, XSDMetaModel>
 
 	@Override
 	public Type getType() {
-		return XMLModel.class;
+		return XMLXSDModel.class;
 	}
 
 }

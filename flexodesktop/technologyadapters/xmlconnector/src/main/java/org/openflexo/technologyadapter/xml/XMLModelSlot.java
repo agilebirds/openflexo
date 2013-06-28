@@ -53,7 +53,7 @@ import org.openflexo.technologyadapter.xml.viewpoint.XMLIndividualPatternRole;
 })
 public class XMLModelSlot extends ModelSlot<XMLModel, XMLModel> {
 
-	private static final Logger logger = Logger.getLogger(ModelSlot.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(XMLModelSlot.class.getPackage().getName());
 
 	
 	protected XMLModelSlot(ViewPoint viewPoint,

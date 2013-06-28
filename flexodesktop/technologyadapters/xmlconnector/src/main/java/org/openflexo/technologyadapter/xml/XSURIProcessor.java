@@ -50,7 +50,7 @@ import org.openflexo.xmlcode.XMLSerializable;
 
 public class XSURIProcessor implements XMLSerializable {
 
-	private static final Logger logger = Logger.getLogger(ModelSlot.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(XSURIProcessor.class.getPackage().getName());
 
 	// mapping styles enumeration
 

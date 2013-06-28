@@ -31,7 +31,7 @@ import org.xml.sax.ext.DefaultHandler2;
 public class XMLSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMetaModel<MM>, IC, AC extends IXMLAttribute> extends DefaultHandler2 {
 
 
-	protected static final Logger logger = Logger.getLogger(TestPopulateDKV.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(XMLSAXHandler.class.getPackage().getName());
 
 	/**
 	 * 

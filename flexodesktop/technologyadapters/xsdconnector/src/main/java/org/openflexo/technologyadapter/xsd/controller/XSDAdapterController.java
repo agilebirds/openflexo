@@ -19,7 +19,7 @@ import org.openflexo.technologyadapter.xsd.gui.XSDMetaModelBrowserModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
 import org.openflexo.technologyadapter.xsd.model.AbstractXSOntObject;
-import org.openflexo.technologyadapter.xsd.model.XMLModel;
+import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSClassPatternRole;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSIndividualPatternRole;
@@ -144,8 +144,8 @@ public class XSDAdapterController extends TechnologyAdapterController<XSDTechnol
 	public OntologyBrowserModel makeOntologyBrowserModel(IFlexoOntology context) {
 		if (context instanceof XSDMetaModel) {
 			return new XSDMetaModelBrowserModel((XSDMetaModel) context);
-		} else if (context instanceof XMLModel) {
-			return new XMLModelBrowserModel((XMLModel) context);
+		} else if (context instanceof XMLXSDModel) {
+			return new XMLModelBrowserModel((XMLXSDModel) context);
 		} else {
 			logger.warning("Unexpected " + context);
 			return null;

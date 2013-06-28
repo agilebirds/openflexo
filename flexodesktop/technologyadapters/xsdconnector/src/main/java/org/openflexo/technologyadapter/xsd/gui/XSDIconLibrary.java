@@ -29,7 +29,7 @@ import org.openflexo.technologyadapter.xsd.metamodel.XSOntDataProperty;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntObjectProperty;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 import org.openflexo.technologyadapter.xsd.model.AbstractXSOntObject;
-import org.openflexo.technologyadapter.xsd.model.XMLModel;
+import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 import org.openflexo.toolbox.ImageIconResource;
 
@@ -50,7 +50,7 @@ public class XSDIconLibrary {
 	public static ImageIcon iconForObject(Class<? extends AbstractXSOntObject> objectClass) {
 		if (XSDMetaModel.class.isAssignableFrom(objectClass)) {
 			return XSD_FILE_ICON;
-		} else if (XMLModel.class.isAssignableFrom(objectClass)) {
+		} else if (XMLXSDModel.class.isAssignableFrom(objectClass)) {
 			return XML_FILE_ICON;
 		} else if (XSOntClass.class.isAssignableFrom(objectClass)) {
 			return XSD_CLASS_ICON;

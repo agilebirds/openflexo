@@ -32,7 +32,6 @@ import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 import org.openflexo.technologyadapter.xsd.model.AbstractXSOntObject;
-import org.openflexo.technologyadapter.xsd.model.XSOntFeatureAssociation;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 import org.openflexo.technologyadapter.xsd.model.XSOntology;
 import org.openflexo.technologyadapter.xsd.model.XSPropertyValue;
@@ -156,7 +155,7 @@ public class XSURIProcessor implements XMLSerializable {
 			XSDModelSlot.logger.warning("Cannot process URI as URIProcessor is not initialized for that class: " + typeURI);
 			return null;
 		} else {
-			if (mappingStyle.equals(ATTRIBUTE_VALUE) && attributeName != null) {
+			if (mappingStyle.equals(ATTRIBUTE_VALUE) && attributeName != null && mappedClass != null) {
 
 				XSOntProperty aProperty = mappedClass.getPropertyByName(attributeName);
 				XSPropertyValue value = ((XSOntIndividual) xsO).getPropertyValue(aProperty);

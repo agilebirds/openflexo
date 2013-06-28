@@ -33,10 +33,10 @@ import org.openflexo.technologyadapter.xsd.XSDModelSlot;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntDataProperty;
-import org.openflexo.technologyadapter.xsd.model.XMLModel;
+import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 
-public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOntIndividual> {
+public class AddXSIndividual extends AddIndividual<XMLXSDModel, XSDMetaModel, XSOntIndividual> {
 
 	@Override
 	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
@@ -70,8 +70,8 @@ public class AddXSIndividual extends AddIndividual<XMLModel, XSDMetaModel, XSOnt
 		XSOntIndividual newIndividual = null;
 		try {
 
-			ModelSlotInstance<XMLModel, XSDMetaModel> modelSlotInstance = getModelSlotInstance(action);
-			XMLModel model = modelSlotInstance.getModel();
+			ModelSlotInstance<XMLXSDModel, XSDMetaModel> modelSlotInstance = getModelSlotInstance(action);
+			XMLXSDModel model = modelSlotInstance.getModel();
 			XSDModelSlot modelSlot = (XSDModelSlot) modelSlotInstance.getModelSlot();
 			
 		

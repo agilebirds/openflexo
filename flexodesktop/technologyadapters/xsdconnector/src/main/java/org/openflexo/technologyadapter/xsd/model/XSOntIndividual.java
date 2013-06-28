@@ -60,7 +60,7 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 	private String uuid;
 
 
-	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(AbstractXSOntObject.class
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntIndividual.class
 			.getPackage().getName());
 
 	/**
@@ -354,7 +354,7 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 	}
 
 	@Override
-	public List<XSOntFeatureAssociation> getStructuralFeatureAssociations() {
+	public List<XSOntProperty> getStructuralFeatureAssociations() {
 		return Collections.emptyList();
 	}
 

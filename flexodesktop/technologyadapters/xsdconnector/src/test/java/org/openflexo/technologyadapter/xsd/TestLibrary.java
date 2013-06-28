@@ -21,7 +21,7 @@ import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntDataProperty;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntObjectProperty;
-import org.openflexo.technologyadapter.xsd.model.XMLModel;
+import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.AbstractXSOntObject;
 import org.openflexo.technologyadapter.xsd.model.XSOntology;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
@@ -37,8 +37,8 @@ public class TestLibrary extends FlexoTestCase {
 	private static ApplicationContext testApplicationContext;
 	private static XSDTechnologyAdapter xsdAdapter;
 	private static FlexoResourceCenter resourceCenter;
-	private static ModelRepository<FlexoResource<XMLModel>, XMLModel, XSDMetaModel, XSDTechnologyAdapter> modelRepository;
-	private static MetaModelRepository<FlexoResource<XSDMetaModel>, XMLModel, XSDMetaModel, XSDTechnologyAdapter> metamodelRepository;
+	private static ModelRepository<FlexoResource<XMLXSDModel>, XMLXSDModel, XSDMetaModel, XSDTechnologyAdapter> modelRepository;
+	private static MetaModelRepository<FlexoResource<XSDMetaModel>, XMLXSDModel, XSDMetaModel, XSDTechnologyAdapter> metamodelRepository;
 	private static String baseDirName;
 
 	public static File openTestXSD(String filename) throws FileNotFoundException {

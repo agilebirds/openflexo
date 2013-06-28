@@ -36,7 +36,7 @@ import org.openflexo.technologyadapter.xml.model.XMLObject;
 
 public class XMLActorReference<T extends XMLObject> extends ActorReference<T> {
 
-	private static final Logger logger = FlexoLogger.getLogger(ConceptActorReference.class.getPackage().toString());
+	private static final Logger logger = FlexoLogger.getLogger(XMLActorReference.class.getPackage().toString());
 
 	private T object;
 	private String objectURI;
