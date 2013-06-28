@@ -17,18 +17,17 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.view;
+package org.openflexo.components.widget;
 
 import java.util.List;
 import java.util.Vector;
 
-import org.openflexo.components.widget.FIBOntologyEditor;
-import org.openflexo.foundation.ontology.FlexoOntologyObjectImpl;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.selection.SelectionListener;
 import org.openflexo.view.SelectionSynchronizedModuleView;
+import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
-import org.openflexo.vpm.controller.VPMController;
 
 /**
  * This class represent the module view for an ontology.<br>
@@ -38,18 +37,13 @@ import org.openflexo.vpm.controller.VPMController;
  * 
  */
 @SuppressWarnings("serial")
-public class OntologyView extends FIBOntologyEditor implements SelectionSynchronizedModuleView<FlexoOntologyObjectImpl> {
+public class OntologyView<T extends FlexoObject & IFlexoOntology> extends FIBOntologyEditor implements SelectionSynchronizedModuleView<T> {
 
 	private FlexoPerspective declaredPerspective;
 
-	public OntologyView(IFlexoOntology object, VPMController controller, FlexoPerspective perspective) {
+	public OntologyView(T object, FlexoController controller, FlexoPerspective perspective) {
 		super(object, controller);
 		declaredPerspective = perspective;
-	}
-
-	@Override
-	public VPMController getFlexoController() {
-		return (VPMController) super.getFlexoController();
 	}
 
 	@Override
@@ -84,8 +78,8 @@ public class OntologyView extends FIBOntologyEditor implements SelectionSynchron
 	}
 
 	@Override
-	public FlexoOntologyObjectImpl getRepresentedObject() {
-		return (FlexoOntologyObjectImpl) getOntology();
+	public T getRepresentedObject() {
+		return (T) getOntology();
 	}
 
 }

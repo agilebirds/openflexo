@@ -44,6 +44,7 @@ import org.openflexo.icon.UtilsIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.StringUtils;
+import org.openflexo.view.controller.IFlexoOntologyTechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
@@ -263,11 +264,16 @@ public class FIBOntologyBrowser extends DefaultFIBCustomComponent<FIBOntologyBro
 		if (model == null) {
 			if (getTechnologyAdapter() != null) {
 				// Use technology specific browser model
-				TechnologyAdapterController technologyAdapterController = getTechnologyAdapter().getTechnologyAdapterService()
+				TechnologyAdapterController<?> technologyAdapterController = getTechnologyAdapter().getTechnologyAdapterService()
 						.getServiceManager().getService(TechnologyAdapterControllerService.class)
 						.getTechnologyAdapterController(technologyAdapter);
-				model = technologyAdapterController.makeOntologyBrowserModel(getOntology());
-			} else { // Use default
+				if (technologyAdapterController instanceof IFlexoOntologyTechnologyAdapterController) {
+					model = ((IFlexoOntologyTechnologyAdapterController) technologyAdapterController)
+							.makeOntologyBrowserModel(getOntology());
+				}
+			}
+			if (model == null) {
+				// Use default
 				model = new OntologyBrowserModel(getOntology());
 			}
 			model.addObserver(new Observer() {

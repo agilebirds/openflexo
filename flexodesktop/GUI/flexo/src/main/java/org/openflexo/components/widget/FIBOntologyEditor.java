@@ -46,6 +46,7 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.view.SelectionSynchronizedFIBView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.IFlexoOntologyTechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
@@ -55,6 +56,7 @@ import org.openflexo.view.controller.TechnologyAdapterControllerService;
  * @author sguerin
  * 
  */
+@SuppressWarnings("serial")
 public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 	static final Logger logger = Logger.getLogger(FIBOntologyEditor.class.getPackage().getName());
 
@@ -228,11 +230,16 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 		if (model == null) {
 			if (getTechnologyAdapter() != null) {
 				// Use technology specific browser model
-				TechnologyAdapterController technologyAdapterController = getTechnologyAdapter().getTechnologyAdapterService()
+				TechnologyAdapterController<?> technologyAdapterController = getTechnologyAdapter().getTechnologyAdapterService()
 						.getServiceManager().getService(TechnologyAdapterControllerService.class)
 						.getTechnologyAdapterController(technologyAdapter);
-				model = technologyAdapterController.makeOntologyBrowserModel(getOntology());
-			} else { // Use default
+				if (technologyAdapterController instanceof IFlexoOntologyTechnologyAdapterController) {
+					model = ((IFlexoOntologyTechnologyAdapterController) technologyAdapterController)
+							.makeOntologyBrowserModel(getOntology());
+				}
+			}
+			if (model == null) {
+				// Use default
 				model = new OntologyBrowserModel(getOntology());
 			}
 			model.setStrictMode(getStrictMode());
