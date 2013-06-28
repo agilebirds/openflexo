@@ -1591,7 +1591,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		params.setWSURL(AdvancedPrefs.getWebServiceUrl());
 		params.setRemember(AdvancedPrefs.getRememberAndDontAskWebServiceParamsAnymore());
 		if (params.getWSInstance() != null && !params.getWSInstance().getID().equals(FlexoServerInstance.OTHER_ID)) {
-			params.setWSURL(params.getWSInstance().getWSURL());
+			params.setWSURL(params.getWSInstance().getRestURL());
 		}
 		if (forceDialog || !params.getRemember() || params.getWSURL() == null || params.getWSLogin() == null
 				|| params.getWSPassword() == null || !isWSUrlValid(params.getWSURL()) || urlSeemsIncorrect(params.getWSURL())) {
@@ -1605,6 +1605,9 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 				}
 				String password = params.getWSPassword();
 				params.setWSPassword(params.getWSPassword());
+				if (params.getWSURL() == null) {
+
+				}
 				try {
 					new URI(params.getWSURL());
 				} catch (URISyntaxException e1) {
