@@ -160,9 +160,12 @@ public class FIBLibrary {
 				logger.warning("Not found: " + fibFile.getAbsolutePath());
 				return null;
 			} catch (IOException e) {
+				logger.warning("IO exception: " + fibFile.getAbsolutePath());
+
 				e.printStackTrace();
 				return null;
 			} catch (JDOMException e) {
+				logger.warning("Parse exception for: " + fibFile.getAbsolutePath());
 				e.printStackTrace();
 				return null;
 			} finally {
