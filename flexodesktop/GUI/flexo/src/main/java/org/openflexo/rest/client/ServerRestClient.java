@@ -75,11 +75,11 @@ public class ServerRestClient {
 
 			@Override
 			public ClientResponse handle(ClientRequest cr) throws ClientHandlerException {
-				if (cr.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
+				if (!cr.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
 					if (userName != null && password != null) {
 						try {
 							cr.getHeaders().add(HttpHeaders.AUTHORIZATION,
-									Base64.encodeBase64String((userName + ":" + password).getBytes("ISO-8859-1")));
+									"Basic " + Base64.encodeBase64String((userName + ":" + password).getBytes("ISO-8859-1")));
 						} catch (UnsupportedEncodingException e) {
 							// Should never happen
 							e.printStackTrace();
