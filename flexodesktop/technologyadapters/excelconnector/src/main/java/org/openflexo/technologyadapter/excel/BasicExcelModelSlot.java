@@ -23,14 +23,18 @@ package org.openflexo.technologyadapter.excel;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclareFetchRequest;
 import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -39,6 +43,7 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
+import org.openflexo.technologyadapter.excel.rm.ExcelModelResource;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelCellPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelColumnPatternRole;
 import org.openflexo.technologyadapter.excel.viewpoint.ExcelRowPatternRole;
@@ -167,8 +172,7 @@ public class BasicExcelModelSlot extends ModelSlot<ExcelWorkbook> {
 
 	@Override
 	public ModelSlotInstanceConfiguration<BasicExcelModelSlot, ExcelWorkbook> createConfiguration(CreateVirtualModelInstance<?> action) {
-		// TODO Auto-generated method stub
-		return null;
+		return new BasicExcelModelSlotInstanceConfiguration(this, action);
 	}
 
 	@Override
@@ -182,5 +186,6 @@ public class BasicExcelModelSlot extends ModelSlot<ExcelWorkbook> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 
 }
