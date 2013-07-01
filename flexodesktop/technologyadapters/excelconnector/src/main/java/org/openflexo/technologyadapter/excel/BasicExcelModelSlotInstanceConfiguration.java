@@ -1,10 +1,14 @@
 package org.openflexo.technologyadapter.excel;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
@@ -65,33 +69,32 @@ public class BasicExcelModelSlotInstanceConfiguration extends ModelSlotInstanceC
 
 
 	protected ModelSlotInstance<BasicExcelModelSlot,ExcelWorkbook> configureModelSlotInstance(ModelSlotInstance<BasicExcelModelSlot,ExcelWorkbook> msInstance) {
-		/*if (getOption() == DefaultModelSlotInstanceConfigurationOption.SelectExistingModel) {
+		if (getOption() == DefaultModelSlotInstanceConfigurationOption.SelectExistingModel) {
 			if (modelResource != null) {
 				System.out.println("Select model with uri " + getModelResource().getURI());
-				msInstance.setResourceData(getModelResource().getModel());
+				try {
+					msInstance.setResourceData(getModelResource().getResourceData(null));
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ResourceLoadingCancelledException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ResourceDependencyLoopException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (FlexoException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			} else {
 				logger.warning("No model for model slot " + getModelSlot());
 			}
 		} else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreatePrivateNewModel) {
-			modelResource = createProjectSpecificEmptyModel(msInstance, getModelSlot());
-			System.out.println("***** modelResource = " + modelResource);
-			if (modelResource != null) {
-				msInstance.setResourceData(getModelResource().getModel());
-				System.out.println("***** Created model resource " + getModelResource());
-				System.out.println("***** Created model " + getModelResource().getModel());
-				System.out.println("***** Created model with uri=" + getModelResource().getModel().getURI());
-			} else {
-				logger.warning("Could not create ProjectSpecificEmtpyModel for model slot " + getModelSlot());
-			}
+			
 		} else if (getOption() == DefaultModelSlotInstanceConfigurationOption.CreateSharedNewModel) {
-			modelResource = createSharedEmptyModel(msInstance, getModelSlot());
-			if (modelResource != null) {
-				msInstance.setResourceData(getModelResource().getModel());
-			} else {
-				logger.warning("Could not create SharedEmptyModel for model slot " + getModelSlot());
-			}
-			return msInstance;
-		}*/
+			
+		}
 		return null;
 	}
 
