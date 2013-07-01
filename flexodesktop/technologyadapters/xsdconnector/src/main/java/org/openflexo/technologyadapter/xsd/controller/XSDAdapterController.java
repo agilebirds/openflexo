@@ -5,6 +5,8 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 import org.openflexo.components.widget.OntologyBrowserModel;
+import org.openflexo.components.widget.OntologyView;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -25,10 +27,16 @@ import org.openflexo.technologyadapter.xsd.viewpoint.XSIndividualPatternRole;
 import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSClass;
 import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSIndividual;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.view.EmptyPanel;
+import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.IFlexoOntologyTechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
-public class XSDAdapterController extends TechnologyAdapterController<XSDTechnologyAdapter> {
+public class XSDAdapterController extends TechnologyAdapterController<XSDTechnologyAdapter> implements
+		IFlexoOntologyTechnologyAdapterController {
 
 	static final Logger logger = Logger.getLogger(XSDAdapterController.class.getPackage().getName());
 
@@ -139,6 +147,32 @@ public class XSDAdapterController extends TechnologyAdapterController<XSDTechnol
 			logger.warning("Unexpected " + context);
 			return null;
 		}
+	}
+
+	@Override
+	public boolean hasModuleViewForObject(FlexoObject object) {
+		return object instanceof XSDMetaModel || object instanceof XMLModel;
+	}
+
+	@Override
+	public <T extends FlexoObject> ModuleView<T> createModuleViewForObject(T object, FlexoController controller,
+			FlexoPerspective perspective) {
+		if (object instanceof XMLModel) {
+			OntologyView<XMLModel> returned = new OntologyView<XMLModel>((XMLModel) object, controller, perspective);
+			returned.setShowClasses(false);
+			returned.setShowDataProperties(false);
+			returned.setShowObjectProperties(false);
+			returned.setShowAnnotationProperties(false);
+			return (ModuleView<T>) returned;
+		} else if (object instanceof XSDMetaModel) {
+			OntologyView<XSDMetaModel> returned = new OntologyView<XSDMetaModel>((XSDMetaModel) object, controller, perspective);
+			returned.setShowClasses(true);
+			returned.setShowDataProperties(true);
+			returned.setShowObjectProperties(true);
+			returned.setShowAnnotationProperties(true);
+			return (ModuleView<T>) returned;
+		}
+		return new EmptyPanel<T>(controller, perspective, object);
 	}
 
 }

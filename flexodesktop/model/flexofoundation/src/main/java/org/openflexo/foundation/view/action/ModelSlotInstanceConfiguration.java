@@ -53,6 +53,10 @@ public abstract class ModelSlotInstanceConfiguration<MS extends ModelSlot<RD>, R
 		 */
 		SelectExistingModel,
 		/**
+		 * Retrieve an existing metamodel from a ResourceCenter
+		 */
+		SelectExistingMetaModel,
+		/**
 		 * Create a dedicated model in the scope of current {@link FlexoProject}
 		 */
 		CreatePrivateNewModel,

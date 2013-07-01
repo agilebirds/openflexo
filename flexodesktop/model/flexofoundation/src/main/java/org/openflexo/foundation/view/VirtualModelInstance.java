@@ -48,7 +48,7 @@ import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.action.SynchronizationSchemeAction;
 import org.openflexo.foundation.view.action.SynchronizationSchemeActionType;
 import org.openflexo.foundation.viewpoint.EditionPattern;
@@ -469,9 +469,9 @@ public class VirtualModelInstance<VMI extends VirtualModelInstance<VMI, VM>, VM 
 	public Set<FlexoMetaModel> getAllMetaModels() {
 		Set<FlexoMetaModel> allMetaModels = new HashSet<FlexoMetaModel>();
 		for (ModelSlotInstance instance : getModelSlotInstances()) {
-			if (instance.getModelSlot() instanceof TypeSafeModelSlot
-					&& ((TypeSafeModelSlot) instance.getModelSlot()).getMetaModelResource() != null) {
-				allMetaModels.add(((TypeSafeModelSlot) instance.getModelSlot()).getMetaModelResource().getMetaModelData());
+			if (instance.getModelSlot() instanceof TypeAwareModelSlot
+					&& ((TypeAwareModelSlot) instance.getModelSlot()).getMetaModelResource() != null) {
+				allMetaModels.add(((TypeAwareModelSlot) instance.getModelSlot()).getMetaModelResource().getMetaModelData());
 			}
 		}
 		return allMetaModels;

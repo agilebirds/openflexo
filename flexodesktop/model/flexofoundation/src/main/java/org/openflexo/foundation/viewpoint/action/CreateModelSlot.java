@@ -33,7 +33,7 @@ import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
@@ -100,8 +100,8 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, VirtualModel, 
 			newModelSlot.setName(modelSlotName);
 			if (newModelSlot instanceof VirtualModelModelSlot) {
 				((VirtualModelModelSlot<?, ?>) newModelSlot).setVirtualModelResource(vmRes);
-			} else if (newModelSlot instanceof TypeSafeModelSlot) {
-				((TypeSafeModelSlot) newModelSlot).setMetaModelResource(mmRes);
+			} else if (newModelSlot instanceof TypeAwareModelSlot) {
+				((TypeAwareModelSlot) newModelSlot).setMetaModelResource(mmRes);
 			}
 			newModelSlot.setIsRequired(required);
 			newModelSlot.setIsReadOnly(readOnly);
@@ -148,7 +148,7 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, VirtualModel, 
 		} else if (getModelSlotClass() == null) {
 			validityMessage = NO_MODEL_SLOT_TYPE;
 			return false;
-		} else if (mmRes == null && TypeSafeModelSlot.class.isAssignableFrom(getModelSlotClass())) {
+		} else if (mmRes == null && TypeAwareModelSlot.class.isAssignableFrom(getModelSlotClass())) {
 			validityMessage = NO_META_MODEL;
 			return true;
 		} else {
@@ -167,4 +167,9 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, VirtualModel, 
 	public void setModelSlotClass(Class<? extends ModelSlot<?>> modelSlotClass) {
 		this.modelSlotClass = modelSlotClass;
 	}
+
+	public boolean isTypeAwareModelSlot() {
+		return getModelSlotClass() != null && TypeAwareModelSlot.class.isAssignableFrom(getModelSlotClass());
+	}
+
 }

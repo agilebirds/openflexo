@@ -34,7 +34,7 @@ import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
@@ -47,6 +47,8 @@ import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
 import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
+import org.openflexo.technologyadapter.emf.viewpoint.EMFClassClassPatternRole;
+import org.openflexo.technologyadapter.emf.viewpoint.EMFEnumClassPatternRole;
 import org.openflexo.technologyadapter.emf.viewpoint.EMFObjectIndividualPatternRole;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividual;
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividualAttributeDataPropertyValue;
@@ -58,13 +60,16 @@ import org.openflexo.technologyadapter.emf.viewpoint.editionaction.RemoveEMFObje
 import org.openflexo.technologyadapter.emf.viewpoint.editionaction.SelectEMFObjectIndividual;
 
 /**
- * Implementation of the ModelSlot class for the EMF technology adapter
+ * Implementation of the ModelSlot class for the EMF technology adapter<br>
+ * We expect here to connect an EMF model conform to an EMFMetaModel
  * 
  * @author sylvain
  * 
  */
 @DeclarePatternRoles({ // All pattern roles available through this model slot
-@DeclarePatternRole(FML = "EMFObjectIndividual", patternRoleClass = EMFObjectIndividualPatternRole.class) })
+@DeclarePatternRole(FML = "EMFObjectIndividual", patternRoleClass = EMFObjectIndividualPatternRole.class),
+		@DeclarePatternRole(FML = "EMFClassClass", patternRoleClass = EMFClassClassPatternRole.class),
+		@DeclarePatternRole(FML = "EMFEnumClass", patternRoleClass = EMFEnumClassPatternRole.class) })
 @DeclareEditionActions({ // All edition actions available through this model slot
 		@DeclareEditionAction(FML = "AddEMFObjectIndividual", editionActionClass = AddEMFObjectIndividual.class),
 		@DeclareEditionAction(FML = "AddDataPropertyValue", editionActionClass = AddEMFObjectIndividualAttributeDataPropertyValue.class),
@@ -83,7 +88,7 @@ import org.openflexo.technologyadapter.emf.viewpoint.editionaction.SelectEMFObje
 				editionActionClass = RemoveEMFObjectIndividualReferenceObjectPropertyValue.class) })
 @DeclareFetchRequests({ // All requests available through this model slot
 @DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectEMFObjectIndividual.class) })
-public class EMFModelSlot extends TypeSafeModelSlot<EMFModel, EMFMetaModel> {
+public class EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel> {
 
 	private static final Logger logger = Logger.getLogger(EMFModelSlot.class.getPackage().getName());
 
@@ -144,8 +149,8 @@ public class EMFModelSlot extends TypeSafeModelSlot<EMFModel, EMFMetaModel> {
 
 	/**
 	 * Creates and return a new {@link PatternRole} of supplied class.<br>
-	 * This responsability is delegated to the OWL-specific {@link OWLModelSlot} which manages with introspection its own
-	 * {@link PatternRole} types related to OWL technology
+	 * This responsability is delegated to the EMF-specific {@link EMFModelSlot} which manages with introspection its own
+	 * {@link PatternRole} types related to EMF technology
 	 * 
 	 * @param patternRoleClass
 	 * @return
@@ -154,6 +159,10 @@ public class EMFModelSlot extends TypeSafeModelSlot<EMFModel, EMFMetaModel> {
 	public <PR extends PatternRole<?>> PR makePatternRole(Class<PR> patternRoleClass) {
 		if (EMFObjectIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return (PR) new EMFObjectIndividualPatternRole(null);
+		} else if (EMFClassClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return (PR) new EMFClassClassPatternRole(null);
+		} else if (EMFEnumClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return (PR) new EMFEnumClassPatternRole(null);
 		}
 		logger.warning("Unexpected pattern role: " + patternRoleClass.getName());
 		return null;
@@ -197,7 +206,7 @@ public class EMFModelSlot extends TypeSafeModelSlot<EMFModel, EMFMetaModel> {
 
 	@Override
 	public String getURIForObject(
-			TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, ? extends TypeSafeModelSlot<EMFModel, EMFMetaModel>> msInstance, Object o) {
+			TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, ? extends TypeAwareModelSlot<EMFModel, EMFMetaModel>> msInstance, Object o) {
 		if (o instanceof IFlexoOntologyObject) {
 			return ((IFlexoOntologyObject) o).getURI();
 		}
@@ -206,9 +215,9 @@ public class EMFModelSlot extends TypeSafeModelSlot<EMFModel, EMFMetaModel> {
 
 	@Override
 	public Object retrieveObjectWithURI(
-			TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, ? extends TypeSafeModelSlot<EMFModel, EMFMetaModel>> msInstance,
+			TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, ? extends TypeAwareModelSlot<EMFModel, EMFMetaModel>> msInstance,
 			String objectURI) {
-		return (msInstance.getResourceData().getObject(objectURI));
+		return msInstance.getResourceData().getObject(objectURI);
 	}
 
 	@Override
