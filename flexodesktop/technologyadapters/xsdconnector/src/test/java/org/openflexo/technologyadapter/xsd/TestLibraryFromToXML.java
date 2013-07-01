@@ -111,9 +111,9 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 
 		XMLXSDFileResource libraryRes = (XMLXSDFileResource) modelRepository.getResource("file:" + baseDirName + "/XML/example_library_1.xml");
 
-		XSDMetaModelResource mmLibraryRes = (XSDMetaModelResource) metamodelRepository.getResource("http://www.openflexo.org/XSD/library.xsd");
+		XSDMetaModelResource mmLibraryRes = (XSDMetaModelResource) metamodelRepository.getResource("http://www.example.org/Library");
 
-		XMLXSDModel mLib = libraryRes.getModelData();
+		XMLXSDModel mLib = libraryRes.getModel();
 
 		libraryRes.setMetaModelResource(mmLibraryRes);
 		mmLibraryRes.loadResourceData(null);
@@ -134,7 +134,7 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 		assertNotNull(metamodelRepository);
 		assertNotNull(modelRepository);
 
-		XSDMetaModelResource mmLibraryRes = (XSDMetaModelResource) metamodelRepository.getResource("http://www.openflexo.org/XSD/library.xsd");
+		XSDMetaModelResource mmLibraryRes = (XSDMetaModelResource) metamodelRepository.getResource("http://www.example.org/Library");
 
 		if (!mmLibraryRes.isLoaded()){
 			mmLibraryRes.loadResourceData(null);

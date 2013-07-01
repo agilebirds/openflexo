@@ -47,18 +47,20 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 
 	//Constants
 
+
+
 	static final String CDATA_TYPE_NAME = "CDATA";
 
 	protected static final Logger logger = Logger.getLogger(XMLXSDFileResourceImpl.class.getPackage().getName());
-	
+
 
 	private XSDMetaModelResource metamodelResource = null;
 
 	// Properties 
 
 	private boolean isLoaded = false;
-	
-	
+
+
 	/**
 	 * 
 	 * @param modelURI
@@ -67,10 +69,10 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 	 * @param technologyContextManager
 	 * @return
 	 */
-	public static XMLXSDFileResource makeXMLModelResource(String modelUri,
+	public static XMLXSDFileResource makeXMLXSDModelResource(String modelUri,
 			File xmlFile, XSDMetaModelResource metaModelResource,
 			XSDTechnologyContextManager technologyContextManager) {
-		
+
 		try {
 			ModelFactory factory = new ModelFactory(XMLXSDFileResource.class);
 			XMLXSDFileResourceImpl returned = (XMLXSDFileResourceImpl) factory.newInstance(XMLXSDFileResource.class);
@@ -82,14 +84,25 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 			returned.setTechnologyContextManager(technologyContextManager);
 			returned.setResourceData(new XMLXSDModel(modelUri, xmlFile, technologyContextManager.getTechnologyAdapter()));
 			returned.getModel().setResource(returned);
+			returned.setMetaModelResource(metaModelResource);
+
 			technologyContextManager.registerModel((FlexoModelResource<XMLXSDModel, XSDMetaModel>) returned);
+
+			// FIXME : comment ça marche le resource Manager?
+			// test pour créer le fichier si jamais il n'existe pas
+
+			if(!xmlFile.exists()){
+				returned.save(null);
+				returned.isLoaded = true;
+			}
+
 			return returned;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.openflexo.foundation.resource.FlexoResource#save(org.openflexo.toolbox.IProgress)
 	 */
@@ -98,7 +111,7 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 	public void save(IProgress progress) throws SaveResourceException{
 
 		File myFile = this.getFile();
-		
+
 		if (!myFile.exists()){
 			//Creates a new file
 			try {
@@ -115,7 +128,7 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 			}
 			throw new SaveResourcePermissionDeniedException(this);
 		}
-		
+
 		if (resourceData != null) {
 			FileWritingLock lock = willWriteOnDisk();
 			writeToFile();
@@ -160,7 +173,7 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 		}
 		logger.info("Wrote " + getFile());
 	}
-		
+
 
 	@Override
 	public XMLXSDModel getModel() {
@@ -169,22 +182,35 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 
 	@Override
 	public XMLXSDModel getModelData() {
-		return resourceData;
-	}
-
-
-	// FIXME: behavior here is contradictory with the Lifecycle of the SuperClass => Fix This!
-	
-	@Override
-	public XMLXSDModel getResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceLoadingCancelledException,
-			ResourceDependencyLoopException, FileNotFoundException, FlexoException {
-		if (resourceData != null && isLoadable()) {
-			resourceData = loadResourceData(progress);
-			notifyResourceLoaded();
+		if (!isLoaded()){
+			try {
+				resourceData = loadResourceData(null);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ResourceLoadingCancelledException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ResourceDependencyLoopException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (FlexoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return resourceData;
 	}
-	
+
+	/**
+	 * URI here is the full path to the file
+	 */
+	@Override
+	public String getURI() {
+		return this.getFile().toURI().toString();
+	}
+
+
 	@Override
 	public XMLXSDModel loadResourceData(IProgress progress)
 			throws ResourceLoadingCancelledException,
@@ -206,7 +232,7 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 				saxParser.parse(this.getFile(), handler);
 
 				isLoaded = true;
-				
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -230,9 +256,9 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 			FlexoMetaModelResource<XMLXSDModel, XSDMetaModel> mmRes) {
 
 		metamodelResource = (XSDMetaModelResource) mmRes;
-		
-		this.getModelData().setMetaModel(mmRes.getMetaModelData());
-		
+
+		this.getModel().setMetaModel(mmRes.getMetaModelData());
+
 	}
 
 	/* (non-Javadoc)
@@ -252,11 +278,11 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 
 
 	// Lifecycle Management
-	
+
 
 	public boolean isLoaded() {
 		return isLoaded;
 	}
 
-	
+
 }

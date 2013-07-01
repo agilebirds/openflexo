@@ -185,14 +185,11 @@ public class TestXML extends FlexoTestCase {
 			XMLIndividual rootIndividual = (XMLIndividual) aModel.addNewIndividual(aModel.getTypeFromURI("http://montest.com#Blob"));
 			aModel.setRoot(rootIndividual);
 			XMLIndividual anIndividual = (XMLIndividual) aModel.addNewIndividual(aType);
-			XMLAttribute anAttr = (XMLAttribute) aModel.createAttribute("name", String.class, "Mon velo court");
-			anIndividual.addAttribute(anAttr.getName(), anAttr);
+			XMLAttribute anAttr =(XMLAttribute) anIndividual.createAttribute("name", String.class, "Mon velo court");
 			rootIndividual.addChild(anIndividual);
 			anIndividual = (XMLIndividual) aModel.addNewIndividual(aType);
-			anAttr = (XMLAttribute) aModel.createAttribute("name", String.class, "Pan");
-			anIndividual.addAttribute(anAttr.getName(), anAttr);
-			anAttr = (XMLAttribute) aModel.createAttribute("ID", String.class, "17");
-			anIndividual.addAttribute(anAttr.getName(), anAttr);
+			anAttr = (XMLAttribute) anIndividual.createAttribute("name", String.class, "Pan");
+			anAttr = (XMLAttribute) anIndividual.createAttribute("ID", String.class, "17");
 			rootIndividual.addChild(anIndividual);
 			
 

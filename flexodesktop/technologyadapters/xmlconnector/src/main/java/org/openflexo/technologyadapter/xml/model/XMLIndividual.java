@@ -110,6 +110,7 @@ public class XMLIndividual extends XMLObject implements IXMLIndividual<XMLIndivi
 	@Override
 	public void setName(String name) {
 		this.Name = name;
+		this.notifyObservers();
 	}
 
 
@@ -161,6 +162,7 @@ public class XMLIndividual extends XMLObject implements IXMLIndividual<XMLIndivi
 		}
 		typedSet.add((XMLIndividual) anIndividual);
 		((XMLIndividual) anIndividual).setParent(this);
+		this.notifyObservers();
 	}
 
 
@@ -228,20 +230,22 @@ public class XMLIndividual extends XMLObject implements IXMLIndividual<XMLIndivi
 		return (Collection<? extends XMLAttribute>) attributes.values();
 	}
 
-
-	/* (non-Javadoc)
-	 * @see org.openflexo.technologyadapter.xml.model.IXMLIndividual#addAttribute(java.lang.String, org.openflexo.technologyadapter.xml.model.XMLAttribute)
-	 */
 	@Override
-	public void addAttribute(String aName, XMLAttribute attr) {
+	public Object createAttribute(String attrLName, Type aType, String value) {
+		XMLAttribute attr = new XMLAttribute (attrLName, aType , value);
+		
 		if (attributes == null){
 			logger.warning("Attribute collection is null");
 			attributes = new HashMap<String, XMLAttribute>();
 		}
-		attributes.put(aName,attr);
 		
+		attributes.put(attrLName,attr);
+		
+		this.notifyObservers();
+		
+		return attr;
 	}
-
+	
 
 	@Override
 	public XMLAttribute getAttributeByName(String aName) {

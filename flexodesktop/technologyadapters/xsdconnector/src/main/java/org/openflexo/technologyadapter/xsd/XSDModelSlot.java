@@ -171,14 +171,14 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLXSDModel, XSDMetaMod
 
 		XSOntIndividual xsO = (XSOntIndividual) o;
 
-		String ltypeURI = ((XSOntClass) xsO.getType()).getURI().replace(this.getMetaModelURI(), "");
+		String ltypeURI = ((XSOntClass) xsO.getType()).getURI();
 		XSURIProcessor mapParams = uriProcessors.get(ltypeURI);
 
 		if (mapParams != null){
 			return mapParams.getURIForObject(msInstance, xsO);	
 		}
 		else {
-			logger.warning("XSDModelSlot: enable to get the URIProcessor for element of type: "+((XSOntClass) xsO.getType()).getName());
+			logger.warning("XSDModelSlot: unable to get the URIProcessor for element of type: "+((XSOntClass) xsO.getType()).getName());
 			return null;
 		}
 

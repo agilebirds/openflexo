@@ -31,7 +31,7 @@ public abstract class AbstractXSOntObject extends FlexoOntologyObjectImpl implem
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(AbstractXSOntObject.class
 			.getPackage().getName());
 
-	private String uri;
+	protected String uri;
 	private String name;
 	private XSOntology ontology;
 

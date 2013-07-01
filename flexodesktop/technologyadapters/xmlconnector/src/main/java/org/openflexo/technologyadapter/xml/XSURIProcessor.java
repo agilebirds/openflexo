@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.technologyadapter.xml.model.IXMLIndividual;
@@ -187,6 +188,13 @@ public class XSURIProcessor implements XMLSerializable {
 			bindtypeURIToMappedClass();
 		}
 
+		// modelResource must also be loaded!
+		
+		FlexoModelResource resource = (FlexoModelResource) msInstance.getModel().getResource();
+		if (!resource.isLoaded()) {
+			resource.getModelData();
+		}
+		
 		// retrieve object
 		if (o == null) {
 

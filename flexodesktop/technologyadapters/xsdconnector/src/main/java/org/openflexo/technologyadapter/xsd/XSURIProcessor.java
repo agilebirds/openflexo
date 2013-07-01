@@ -28,6 +28,7 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
@@ -190,17 +191,26 @@ public class XSURIProcessor implements XMLSerializable {
 			bindtypeURIToMappedClass();
 		}
 
+		// modelResource must also be loaded!
+		
+		FlexoModelResource resource = (FlexoModelResource) msInstance.getModel().getResource();
+		if (!resource.isLoaded()) {
+			resource.getModelData();
+		}
+		
 		// retrieve object
 		if (o == null) {
 
 			if (mappingStyle.equals(ATTRIBUTE_VALUE) && attributeName != null) {
 
+				XSOntProperty aProperty = mappedClass.getPropertyByName(attributeName);
+				String attrValue = URI.create(objectURI).getQuery();
+				
 				for (XSOntIndividual obj: ((XSOntology) msInstance.getModel()).getIndividualsOfClass(mappedClass)){
 
-					XSOntProperty aProperty = mappedClass.getPropertyByName(attributeName);
 					XSPropertyValue value = ((XSOntIndividual) obj).getPropertyValue(aProperty);
 					try {
-						if (value.equals(URLDecoder.decode(objectURI,"UTF-8"))){
+						if (value.equals(URLDecoder.decode(attrValue,"UTF-8"))){
 							return obj;
 						}
 					} catch (UnsupportedEncodingException e) {

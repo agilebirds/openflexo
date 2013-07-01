@@ -41,7 +41,6 @@ public interface IXMLModel {
 
 	public IXMLIndividual<?, ?> getRoot();
 
-	public Object createAttribute(String attrLName, Type aType, String value);
 
 
 }

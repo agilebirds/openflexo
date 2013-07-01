@@ -36,6 +36,7 @@ public class TestLibrary extends FlexoTestCase {
 
 	private static ApplicationContext testApplicationContext;
 	private static XSDTechnologyAdapter xsdAdapter;
+	private static XSDTechnologyContextManager xsdContextManager;
 	private static FlexoResourceCenter resourceCenter;
 	private static ModelRepository<FlexoResource<XMLXSDModel>, XMLXSDModel, XSDMetaModel, XSDTechnologyAdapter> modelRepository;
 	private static MetaModelRepository<FlexoResource<XSDMetaModel>, XMLXSDModel, XSDMetaModel, XSDTechnologyAdapter> metamodelRepository;
@@ -110,6 +111,7 @@ public class TestLibrary extends FlexoTestCase {
 		testApplicationContext.getResourceCenterService().addToResourceCenters(resourceCenter);
 		resourceCenter.initialize(testApplicationContext.getTechnologyAdapterService());
 		xsdAdapter = testApplicationContext.getTechnologyAdapterService().getTechnologyAdapter(XSDTechnologyAdapter.class);
+		xsdContextManager = xsdAdapter.getTechnologyContextManager();
 		modelRepository = resourceCenter.getModelRepository(xsdAdapter);
 		metamodelRepository = resourceCenter.getMetaModelRepository(xsdAdapter);
 		baseDirName=((DirectoryResourceCenter)resourceCenter).getDirectory().getCanonicalPath();
@@ -126,7 +128,7 @@ public class TestLibrary extends FlexoTestCase {
 		testApplicationContext = new TestApplicationContext(new FileResource("src/test/resources/"));
 		
 		try {
-			libRes = XSDMetaModelResourceImpl.makeXSDMetaModelResource(openTestXSD(FILE_NAME), "http://www.openflexo.org/test/XSD/library.owl", xsdAdapter);
+			libRes = XSDMetaModelResourceImpl.makeXSDMetaModelResource(openTestXSD(FILE_NAME), "http://www.openflexo.org/test/XSD/library.owl", xsdContextManager);
 			lib = new XSDMetaModel("http://www.openflexo.org/test/XSD/library.owl", openTestXSD(FILE_NAME), xsdAdapter);
 			lib.setResource(libRes);
 			libRes.setResourceData(lib);

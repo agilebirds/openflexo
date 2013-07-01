@@ -60,8 +60,8 @@ public interface IXMLIndividual<IC, AC extends IXMLAttribute > {
 	public abstract AC getAttributeByName(String aName);
 
 	public abstract Collection<? extends AC> getAttributes();
-
-	public abstract void addAttribute(String aName, AC attr);
+	
+	public abstract Object createAttribute(String attrLName, Type aType, String value);
 	
 	public abstract void addChild(IXMLIndividual<IC,AC> anIndividual);
 

@@ -42,6 +42,7 @@ public class XSOntDataProperty extends XSOntProperty implements IFlexoOntologyDa
 
 	private XSDDataType dataType;
 	private boolean isFromAttribute = false;
+	// FIXME : attributeUse is null most of the time => when an element is used to define a property
 	private XSAttributeUse attributeUse = null;
 
 	protected XSOntDataProperty(XSOntology ontology, String name, String uri, XSDTechnologyAdapter adapter) {
@@ -52,7 +53,7 @@ public class XSOntDataProperty extends XSOntProperty implements IFlexoOntologyDa
 		super(ontology, name, uri, adapter);
 		this.domain = domainClass;
 	}
-	
+
 	protected XSOntDataProperty(XSOntology ontology, String name, String uri, XSOntClass domainClass,XSAttributeUse attributeUse, XSDTechnologyAdapter adapter) {
 		super(ontology, name, uri, adapter);
 		this.domain = domainClass;
@@ -100,8 +101,10 @@ public class XSOntDataProperty extends XSOntProperty implements IFlexoOntologyDa
 	}
 
 	public String getDefaultValue() {
-		if (attributeUse.getDefaultValue() != null) {
-			return attributeUse.getDefaultValue().toString();
+		if (attributeUse != null){
+			if (attributeUse.getDefaultValue() != null) {
+				return attributeUse.getDefaultValue().toString();
+			}
 		}
 		return null;
 	}
@@ -111,8 +114,10 @@ public class XSOntDataProperty extends XSOntProperty implements IFlexoOntologyDa
 	}
 
 	public String getFixedValue() {
-		if (attributeUse.getFixedValue() != null) {
-			return attributeUse.getFixedValue().toString();
+		if (attributeUse != null){
+			if (attributeUse.getFixedValue() != null) {
+				return attributeUse.getFixedValue().toString();
+			}
 		}
 		return null;
 	}
@@ -127,7 +132,7 @@ public class XSOntDataProperty extends XSOntProperty implements IFlexoOntologyDa
 	@Override
 	public String getDisplayableDescription() {
 		StringBuffer buffer = new StringBuffer("Attribute ");
-		buffer.append(attributeUse.getDecl().getName());
+		buffer.append(getName());
 		buffer.append(" (").append(getRange().toString()).append(") is ");
 		if (isRequired()) {
 			buffer.append("required");
@@ -142,7 +147,7 @@ public class XSOntDataProperty extends XSOntProperty implements IFlexoOntologyDa
 		}
 		return buffer.toString();
 	}
-	
+
 
 	@Override
 	public Integer getLowerBound() {
@@ -166,10 +171,10 @@ public class XSOntDataProperty extends XSOntProperty implements IFlexoOntologyDa
 
 	@Override
 	public void addValue(IXMLIndividual<?, ?> indiv, Object value) {
-		
+
 		XSOntIndividual anIndividual = (XSOntIndividual) indiv;
 		anIndividual.addToPropertyValue(this, value);
-		
+
 	}
 
 	@Override

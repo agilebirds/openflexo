@@ -159,7 +159,8 @@ public class XSOntObjectProperty extends XSOntProperty implements IFlexoOntology
 
 	@Override
 	public Integer getUpperBound() {
-		return 1;
+		// Object Properties are unbound
+		return -1;
 	}
 
 

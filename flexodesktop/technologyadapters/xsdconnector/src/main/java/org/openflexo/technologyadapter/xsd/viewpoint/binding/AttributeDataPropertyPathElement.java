@@ -12,6 +12,7 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntDataProperty;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
+import org.openflexo.technologyadapter.xsd.model.XSDataPropertyValue;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 
 public class AttributeDataPropertyPathElement extends SimplePathElement {
@@ -31,18 +32,21 @@ public class AttributeDataPropertyPathElement extends SimplePathElement {
 
 	@Override
 	public Type getType() {
-		if (property.getUpperBound() == null || (property.getUpperBound() >= 0 && property.getUpperBound() <= 1)) {
-			// Single cardinality
-			if (getDataProperty() != null && getDataProperty().getRange() != null) {
-				return getDataProperty().getRange().getAccessedType();
+		if (property  != null) {
+			if (property.getUpperBound() == null || (property.getUpperBound() >= 0 && property.getUpperBound() <= 1)) {
+				// Single cardinality
+				if (property.getRange() != null) {
+					return property.getRange().getAccessedType();
+				}
+				return Object.class;
+			} else {
+				if (property != null && property.getRange() != null) {
+					return new ParameterizedTypeImpl(List.class, property.getRange().getAccessedType());
+				}
+				return new ParameterizedTypeImpl(List.class, Object.class);
 			}
-			return Object.class;
-		} else {
-			if (getDataProperty() != null && getDataProperty().getRange() != null) {
-				return new ParameterizedTypeImpl(List.class, getDataProperty().getRange().getAccessedType());
-			}
-			return new ParameterizedTypeImpl(List.class, Object.class);
 		}
+		return null;
 	}
 
 	@Override
@@ -57,15 +61,14 @@ public class AttributeDataPropertyPathElement extends SimplePathElement {
 
 	@Override
 	public Object getBindingValue(Object target, BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException {
-		Object xsdAnswer = ((XSOntIndividual) target).getPropertyValue(getDataProperty());
-		// System.out.println("AttributeDataPropertyFeatureAssociationPathElement, returning " + emfAnswer + " of " + (emfAnswer != null ?
-		// emfAnswer.getClass() : null));
-		return xsdAnswer;
+		XSDataPropertyValue xsdAnswer = (XSDataPropertyValue) ((XSOntIndividual) target).getPropertyValue(getDataProperty());
+		// FIXME simple for now but...
+		return xsdAnswer.getValue();
 	}
 
 	@Override
 	public void setBindingValue(Object value, Object target, BindingEvaluationContext context) throws TypeMismatchException,
-			NullReferenceException {
+	NullReferenceException {
 		XSOntProperty prop = ((XSOntIndividual) target).getAttributeByName(getPropertyName());
 		((XSOntIndividual) target).addToPropertyValue(prop, value);
 	}

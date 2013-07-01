@@ -85,6 +85,7 @@ public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLMod
 	 */
 	public void setRoot(IXMLIndividual<?,?> indiv) {
 		root = indiv;
+		setChanged();
 	}
 
 	@Override
@@ -173,13 +174,8 @@ public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLMod
 	public XMLType createNewType(String uri, String localName, String qName) {
 		XMLType nType = new XMLType(uri,localName,qName, this);
 		this.addType(nType);
+		setChanged();
 		return nType;
-	}
-	
-	@Override
-	public Object createAttribute(String attrLName, Type aType, String value) {
-		XMLAttribute attr = new XMLAttribute (attrLName, aType , value);
-		return attr;
 	}
 	
 	public XMLType getTypeFromURI(String uri) {
@@ -200,8 +196,12 @@ public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLMod
 		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 		Document doc = docBuilder.newDocument();
 		
-		Element rootNode = getRoot().toXML(doc);
-		doc.appendChild( rootNode );
+		XMLIndividual rootIndiv = (XMLIndividual) getRoot();
+
+		if (rootIndiv != null ){
+			Element rootNode = rootIndiv.toXML(doc);
+			doc.appendChild( rootNode );
+		}
 
 		return doc;
 	}

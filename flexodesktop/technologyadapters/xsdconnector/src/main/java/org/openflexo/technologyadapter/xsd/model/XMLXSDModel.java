@@ -32,6 +32,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.ontology.IFlexoOntologyDataProperty;
 import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
 import org.openflexo.foundation.ontology.IFlexoOntologyMetaModel;
@@ -46,6 +47,7 @@ import org.openflexo.technologyadapter.xml.model.XMLIndividual;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
+import org.openflexo.technologyadapter.xsd.metamodel.XSOntDataProperty;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 import org.openflexo.technologyadapter.xsd.rm.XMLXSDFileResource;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
@@ -61,17 +63,20 @@ public class XMLXSDModel extends XSOntology implements FlexoModel<XMLXSDModel, X
 
 	public XMLXSDModel(String ontologyURI, File xmlFile, XSDTechnologyAdapter adapter) {
 		super(ontologyURI, xmlFile, adapter);
+		uri = xmlFile.toURI().toString();
 	}
 
 	public XMLXSDModel(String ontologyURI, File xmlFile, XSDTechnologyAdapter adapter, XSDMetaModel mm) {
 		super(ontologyURI, xmlFile, adapter);
 		metaModel = mm;
+		uri = xmlFile.toURI().toString();
 	}
 
 
 	public void setMetaModel(XSDMetaModel metaModelData) {
 		this.metaModel = metaModelData;
-		
+		setChanged();
+
 	}
 
 
@@ -90,16 +95,18 @@ public class XMLXSDModel extends XSOntology implements FlexoModel<XMLXSDModel, X
 
 	@Override
 	public Object addNewIndividual(Type aType) {
-		
+
 		XSOntIndividual indiv = this.createOntologyIndividual((XSOntClass) aType);
 		individuals.put(indiv.getUUID(),indiv);
+		setChanged();
 		return indiv;
-		
+
 	}
 
 	@Override
 	public void setRoot(IXMLIndividual<?,?> anIndividual) {
 		rootElem = (XSOntIndividual) anIndividual;
+		setChanged();
 
 	}
 
@@ -151,18 +158,13 @@ public class XMLXSDModel extends XSOntology implements FlexoModel<XMLXSDModel, X
 		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 		Document doc = docBuilder.newDocument();
 
-		Element rootNode = getRoot().toXML(doc);
-		doc.appendChild( rootNode );
+		XSOntIndividual rootIndiv = (XSOntIndividual) getRoot();
 
+		if (rootIndiv != null ){
+			Element rootNode = rootIndiv.toXML(doc);
+			doc.appendChild( rootNode );
+		}
 		return doc;
-	}
-
-	@Override
-	public Object createAttribute(String attrName, Type aType, String value) {
-		// XSOntDataProperty newProperty = new XSOntDataProperty(this, attrName, this.getURI()+"#", this.getTechnologyAdapter());
-		
-		logger.warning("TO IMPLEMENT " + attrName +" --- " + aType.toString() + "("+value+")");
-		return null;
 	}
 
 

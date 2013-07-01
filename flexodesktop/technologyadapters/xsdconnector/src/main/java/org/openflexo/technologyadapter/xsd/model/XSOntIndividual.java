@@ -214,10 +214,21 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 
 
 	@Override
-	public void addAttribute(String aName, XSOntProperty attr) {
-		// TODO Auto-generated method stub
-		logger.info("So Many Things to do...Should Add something to create Attribute: " + aName);
+	public Object createAttribute(String attrLName, Type aType, String value) {
+		
+		XSOntProperty property = this.type.getPropertyByName(attrLName);
+		XSPropertyValue propValue = null;
+		
+		if (property != null) {
+			propValue = this.addToPropertyValue(property, value);
+		}
+		else {
+			logger.info("So Many Things to do...Should Add something to create Attribute: " + attrLName);
+		}
+		
+		return propValue;
 	}
+
 
 
 	/**
@@ -357,7 +368,6 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 	public List<XSOntProperty> getStructuralFeatureAssociations() {
 		return Collections.emptyList();
 	}
-
 
 
 

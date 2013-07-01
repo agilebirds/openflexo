@@ -108,7 +108,6 @@ public class XMLTechnologyAdapter extends TechnologyAdapter<XMLModel, XMLModel> 
 	@Override
 	public boolean isValidModelFile(File aModelFile,
 			TechnologyContextManager<XMLModel, XMLModel> technologyContextManager) {
-
 		if ( aModelFile.exists() &&  aModelFile.getName().endsWith(XML_EXTENSION)) return true;
 		else return false;
 	}

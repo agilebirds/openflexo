@@ -89,17 +89,26 @@ FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
 			returned.setName(xmlFile.getName());
 			returned.setFile(xmlFile);
 			returned.setURI(xmlFile.toURI().toString());
-			returned.setServiceManager(technologyContextManager
-					.getTechnologyAdapter().getTechnologyAdapterService()
-					.getServiceManager());
-			returned.setTechnologyAdapter(technologyContextManager
-					.getTechnologyAdapter());
+			returned.setServiceManager(technologyContextManager.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
+			returned.setTechnologyAdapter(technologyContextManager.getTechnologyAdapter());
 			returned.setTechnologyContextManager(technologyContextManager);
-			technologyContextManager
-			.registerModel((FlexoModelResource<XMLModel, XMLModel>) returned);
-			returned.setResourceData(new XMLModel(technologyContextManager
-					.getTechnologyAdapter()));
-			returned.getModel().setResource(returned);
+
+			technologyContextManager.registerModel((FlexoModelResource<XMLModel, XMLModel>) returned);
+
+			// FIXME : comment ça marche le resource Manager?
+			// test pour créer le fichier si jamais il n'existe pas
+
+			if(!xmlFile.exists()){
+				
+				if (returned.resourceData == null){
+					returned.resourceData = new XMLModel(technologyContextManager.getTechnologyAdapter());
+					returned.resourceData.setResource(returned);
+				}
+
+				returned.save(null);
+				returned.isLoaded = true;
+			}
+
 			return returned;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -152,6 +161,15 @@ FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
 
 	}
 
+	/**
+	 * URI here is the full path to the file
+	 */
+	@Override
+	public String getURI() {
+		return this.getFile().toURI().toString();
+	}
+
+
 	private void writeToFile() throws SaveResourceException {
 
 		FileOutputStream out = null;
@@ -190,17 +208,22 @@ FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
 
 	@Override
 	public XMLModel getModelData() {
-		return resourceData;
-	}
-	
-	// FIXME: behavior here is contradictory with the Lifecycle of the SuperClass => Fix This!
-	
-	@Override
-	public XMLModel getResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceLoadingCancelledException,
-			ResourceDependencyLoopException, FileNotFoundException, FlexoException {
-		if (resourceData != null && isLoadable()) {
-			resourceData = loadResourceData(progress);
-			notifyResourceLoaded();
+		if (!isLoaded()){
+			try {
+				resourceData = loadResourceData(null);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ResourceLoadingCancelledException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ResourceDependencyLoopException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (FlexoException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return resourceData;
 	}
@@ -209,7 +232,13 @@ FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
 	public XMLModel loadResourceData(IProgress progress)
 			throws ResourceLoadingCancelledException,
 			ResourceDependencyLoopException, FileNotFoundException,
+
 			FlexoException {
+
+		if (resourceData == null){
+			resourceData = new XMLModel(this.getTechnologyAdapter());
+			resourceData.setResource(this);
+		}
 
 		if (!isLoaded()) {
 
@@ -243,11 +272,11 @@ FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
 	}
 
 	// Lifecycle Management
-	
+
 
 	public boolean isLoaded() {
 		return isLoaded;
 	}
 
-	
+
 }

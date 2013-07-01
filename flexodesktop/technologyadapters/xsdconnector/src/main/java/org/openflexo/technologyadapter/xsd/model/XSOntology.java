@@ -51,6 +51,7 @@ import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntDataProperty;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntObjectProperty;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
+import org.openflexo.technologyadapter.xsd.rm.XMLXSDNameSpaceFinder;
 import org.w3c.dom.Document;
 
 import com.sun.xml.xsom.XSSimpleType;
@@ -70,13 +71,13 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 
 
 	protected FlexoResource<?>  modelResource;
-	
+
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(XSOntology.class.getPackage()
 			.getName());
 
 
 	// Objects contained in the Model + MetaModel / Ontology
-	
+
 	protected final Map<XSSimpleType, XSDDataType> dataTypes = new HashMap<XSSimpleType, XSDDataType>();
 	protected final Map<String, XSOntDataProperty> dataProperties = new HashMap<String, XSOntDataProperty>();
 	protected final Map<String, XSOntClass> classes = new HashMap<String, XSOntClass>();
@@ -140,7 +141,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		return new ArrayList<XSOntClass>(result.values());
 	}
 
-	
+
 	@Override
 	public List<XSOntObjectProperty> getObjectProperties() {
 		return new ArrayList<XSOntObjectProperty>(objectProperties.values());
@@ -254,9 +255,16 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		}
 		return result;
 	}
-	
-	public static String findOntologyURI(File f) {
-		return "http://www.openflexo.org/XSD/" + f.getName();
+
+	public static String findNamespaceURI(File f) {
+		// This is for MetaModel Only => should not be used for XML Models
+		// FIXME : useless for models
+		String schemaURI = XMLXSDNameSpaceFinder.findNameSpace(f);
+		if (!schemaURI.equals("")){
+			return schemaURI;
+		}else{
+			return "http://www.openflexo.org/XSD/" + f.getName();
+		}
 	}
 
 	@Override
@@ -278,7 +286,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		}
 		return result;
 	}
-	
+
 	@Override
 	public List<IFlexoOntologyContainer> getSubContainers() {
 		// TODO implement this
@@ -354,7 +362,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		return result;
 	}
 
-	
+
 	public void clearAllRangeAndDomain() {
 		for (XSOntClass o : classes.values()) {
 			o.clearPropertiesTakingMyselfAsRangeOrDomain();
@@ -373,7 +381,7 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 			o.clearPropertiesTakingMyselfAsRangeOrDomain();
 		}
 	}
-	
+
 	public Document toXML() throws ParserConfigurationException {
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -386,5 +394,5 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		return doc;
 	}
 
-	
+
 }

@@ -122,7 +122,12 @@ public class XSDeclarationsFetcher implements XSVisitor {
 	public String getNamespace(XSDeclaration declaration) {
 		if (declaration.isLocal()) {
 			XSDeclaration owner = getOwner(declaration);
-			return getNamespace(getOwner(declaration)) + "/" + owner.getName();
+			if (owner != null) {
+			return getNamespace(owner) + "/" + owner.getName();
+			}
+			else {
+				return "" ;
+			}
 		}
 		return declaration.getTargetNamespace();
 	}
@@ -321,7 +326,6 @@ public class XSDeclarationsFetcher implements XSVisitor {
 		path.push(elementDecl);
 
 		if (elementDecl.getType().isLocal()) {
-			logger.info("XML DEBUG CG: there is a local type here? " + elementDecl.getName());
 			// TODO If it's global it has already been visited, make sure.
 			elementDecl.getType().visit(this);			
 		}
