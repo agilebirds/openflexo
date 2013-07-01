@@ -17,27 +17,19 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.foundation.viewpoint;
+package org.openflexo.view.controller;
 
-import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.components.widget.OntologyBrowserModel;
+import org.openflexo.foundation.ontology.IFlexoOntology;
 
-public abstract class InnerModelSlotParameter<MS extends ModelSlot<?>> extends EditionSchemeParameter {
+/**
+ * Implemented by all TechnologyAdapterController implementing a technology conform to IFlexoOntology layer
+ * 
+ * @author sylvain
+ * 
+ */
+public interface IFlexoOntologyTechnologyAdapterController {
 
-	private MS modelSlot;
-
-	public InnerModelSlotParameter(VirtualModel.VirtualModelBuilder builder) {
-		super(builder);
-	}
-
-	public MS getModelSlot() {
-		return modelSlot;
-	}
-
-	public void setModelSlot(MS modelSlot) {
-		this.modelSlot = modelSlot;
-		setChanged();
-		notifyObservers(new DataModification("modelSlot", null, modelSlot));
-	}
+	public abstract OntologyBrowserModel makeOntologyBrowserModel(IFlexoOntology context);
 
 }

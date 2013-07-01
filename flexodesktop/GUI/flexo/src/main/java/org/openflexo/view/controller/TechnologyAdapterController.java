@@ -23,8 +23,7 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.components.widget.OntologyBrowserModel;
-import org.openflexo.foundation.ontology.IFlexoOntology;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
@@ -40,6 +39,8 @@ import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.icon.VPMIconLibrary;
+import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * This class represents a technology-specific controller provided by a {@link TechnologyAdapter}<br>
@@ -171,5 +172,9 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter> 
 
 	}
 
-	public abstract OntologyBrowserModel makeOntologyBrowserModel(IFlexoOntology context);
+	public abstract boolean hasModuleViewForObject(FlexoObject object);
+
+	public abstract <T extends FlexoObject> ModuleView<T> createModuleViewForObject(T object, FlexoController controller,
+			FlexoPerspective perspective);
+
 }

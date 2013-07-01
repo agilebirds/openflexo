@@ -27,34 +27,26 @@ import org.openflexo.toolbox.StringUtils;
  * @see FlexoMetaModel
  * 
  */
-public abstract class TypeSafeModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends ModelSlot<M> {
+public abstract class TypeAwareModelSlot<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends ModelSlot<M> {
 
-	private static final Logger logger = Logger.getLogger(TypeSafeModelSlot.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(TypeAwareModelSlot.class.getPackage().getName());
 
 	private FlexoMetaModelResource<M, MM> metaModelResource;
 	private String metaModelURI;
 
-	/*protected TypeSafeModelSlot(ViewPoint viewPoint, TechnologyAdapter technologyAdapter) {
-		super(viewPoint, technologyAdapter);
-	}*/
-
-	protected TypeSafeModelSlot(VirtualModel<?> virtualModel, TechnologyAdapter technologyAdapter) {
+	protected TypeAwareModelSlot(VirtualModel<?> virtualModel, TechnologyAdapter technologyAdapter) {
 		super(virtualModel, technologyAdapter);
 	}
 
-	protected TypeSafeModelSlot(VirtualModelBuilder builder) {
+	protected TypeAwareModelSlot(VirtualModelBuilder builder) {
 		super(builder);
 	}
-
-	/*public TypeSafeModelSlot(ViewPointBuilder builder) {
-		super(builder);
-	}*/
 
 	/**
 	 * Instanciate a new model slot instance configuration for this model slot
 	 */
 	@Override
-	public abstract ModelSlotInstanceConfiguration<? extends TypeSafeModelSlot<M, MM>, M> createConfiguration(
+	public abstract ModelSlotInstanceConfiguration<? extends TypeAwareModelSlot<M, MM>, M> createConfiguration(
 			CreateVirtualModelInstance<?> action);
 
 	/**
@@ -70,10 +62,10 @@ public abstract class TypeSafeModelSlot<M extends FlexoModel<M, MM>, MM extends 
 		return returned;
 	}
 
-	public AddIndividual<? extends TypeSafeModelSlot, ?> makeAddIndividualAction(IndividualPatternRole<?> patternRole,
+	public AddIndividual<? extends TypeAwareModelSlot, ?> makeAddIndividualAction(IndividualPatternRole<?> patternRole,
 			AbstractCreationScheme creationScheme) {
-		Class<? extends AddIndividual<? extends TypeSafeModelSlot, ?>> addIndividualClass = (Class<? extends AddIndividual<? extends TypeSafeModelSlot, ?>>) getEditionActionClass(AddIndividual.class);
-		AddIndividual<? extends TypeSafeModelSlot, ?> returned = makeEditionAction(addIndividualClass);
+		Class<? extends AddIndividual<? extends TypeAwareModelSlot, ?>> addIndividualClass = (Class<? extends AddIndividual<? extends TypeAwareModelSlot, ?>>) getEditionActionClass(AddIndividual.class);
+		AddIndividual<? extends TypeAwareModelSlot, ?> returned = makeEditionAction(addIndividualClass);
 
 		returned.setAssignation(new DataBinding(patternRole.getPatternRoleName()));
 		if (creationScheme.getParameter("uri") != null) {
@@ -150,7 +142,7 @@ public abstract class TypeSafeModelSlot<M extends FlexoModel<M, MM>, MM extends 
 		if (metaModelResource == null && StringUtils.isNotEmpty(metaModelURI) && getInformationSpace() != null) {
 			metaModelResource = (FlexoMetaModelResource<M, MM>) getInformationSpace().getMetaModelWithURI(metaModelURI,
 					getTechnologyAdapter());
-			logger.info("Looked-up " + metaModelResource);
+			logger.info("Looked-up " + metaModelResource + " for " + metaModelURI);
 		}
 		// Temporary hack to lookup parent slot (to be refactored)
 		/*if (metaModelResource == null && getVirtualModel() != null && getViewPoint() != null) {
@@ -186,17 +178,17 @@ public abstract class TypeSafeModelSlot<M extends FlexoModel<M, MM>, MM extends 
 
 	@Override
 	public final String getURIForObject(ModelSlotInstance msInstance, Object o) {
-		return getURIForObject((TypeSafeModelSlotInstance<M, MM, ? extends TypeSafeModelSlot<M, MM>>) msInstance, o);
+		return getURIForObject((TypeSafeModelSlotInstance<M, MM, ? extends TypeAwareModelSlot<M, MM>>) msInstance, o);
 	}
 
 	@Override
 	public final Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) {
-		return retrieveObjectWithURI((TypeSafeModelSlotInstance<M, MM, ? extends TypeSafeModelSlot<M, MM>>) msInstance, objectURI);
+		return retrieveObjectWithURI((TypeSafeModelSlotInstance<M, MM, ? extends TypeAwareModelSlot<M, MM>>) msInstance, objectURI);
 	}
 
-	public abstract String getURIForObject(TypeSafeModelSlotInstance<M, MM, ? extends TypeSafeModelSlot<M, MM>> msInstance, Object o);
+	public abstract String getURIForObject(TypeSafeModelSlotInstance<M, MM, ? extends TypeAwareModelSlot<M, MM>> msInstance, Object o);
 
-	public abstract Object retrieveObjectWithURI(TypeSafeModelSlotInstance<M, MM, ? extends TypeSafeModelSlot<M, MM>> msInstance,
+	public abstract Object retrieveObjectWithURI(TypeSafeModelSlotInstance<M, MM, ? extends TypeAwareModelSlot<M, MM>> msInstance,
 			String objectURI);
 
 }

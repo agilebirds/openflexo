@@ -27,20 +27,20 @@ import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.toolbox.StringUtils;
 
 /**
  * Concretize the binding of a {@link ModelSlot} to a concrete {@link FlexoModel} conform to a given {@link FlexoMetaModel}<br>
- * This is the binding point between a {@link TypeSafeModelSlot} and its concretization in a {@link VirtualModelInstance}
+ * This is the binding point between a {@link TypeAwareModelSlot} and its concretization in a {@link VirtualModelInstance}
  * 
  * @author Sylvain Guerin
- * @see TypeSafeModelSlot
+ * @see TypeAwareModelSlot
  * 
  */
-public class TypeSafeModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, MS extends TypeSafeModelSlot<M, MM>>
+public class TypeSafeModelSlotInstance<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, MS extends TypeAwareModelSlot<M, MM>>
 		extends ModelSlotInstance<MS, M> {
 
 	private static final Logger logger = Logger.getLogger(TypeSafeModelSlotInstance.class.getPackage().getName());

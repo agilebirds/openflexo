@@ -23,20 +23,12 @@ package org.openflexo.technologyadapter.excel;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
-import org.openflexo.foundation.technologyadapter.FlexoModelResource;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
 import org.openflexo.foundation.view.ModelSlotInstance;
-import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
-import org.openflexo.toolbox.StringUtils;
 
-public class BasicExcelModelSlotInstance<MS extends BasicExcelModelSlot>
-		extends ModelSlotInstance<BasicExcelModelSlot, ExcelWorkbook> {
+public class BasicExcelModelSlotInstance<MS extends BasicExcelModelSlot> extends ModelSlotInstance<BasicExcelModelSlot, ExcelWorkbook> {
 
 	private static final Logger logger = Logger.getLogger(BasicExcelModelSlotInstance.class.getPackage().getName());
 
@@ -60,7 +52,6 @@ public class BasicExcelModelSlotInstance<MS extends BasicExcelModelSlot>
 		super(builder.getProject());
 		initializeDeserialization(builder);
 	}
-
 
 	@Override
 	public ExcelWorkbook getResourceData() {

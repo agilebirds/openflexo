@@ -45,7 +45,7 @@ import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.EditionPatternInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.VirtualModelInstance;
@@ -576,8 +576,8 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	public Set<FlexoMetaModel<?>> getAllReferencedMetaModels() {
 		HashSet<FlexoMetaModel<?>> returned = new HashSet<FlexoMetaModel<?>>();
 		for (ModelSlot modelSlot : getModelSlots()) {
-			if (modelSlot instanceof TypeSafeModelSlot) {
-				TypeSafeModelSlot tsModelSlot = (TypeSafeModelSlot) modelSlot;
+			if (modelSlot instanceof TypeAwareModelSlot) {
+				TypeAwareModelSlot tsModelSlot = (TypeAwareModelSlot) modelSlot;
 				if (tsModelSlot.getMetaModelResource() != null) {
 					returned.add(tsModelSlot.getMetaModelResource().getMetaModelData());
 				}
