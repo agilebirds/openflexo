@@ -19,40 +19,46 @@
  */
 package org.openflexo.fge;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Stroke;
-import java.util.Observable;
-import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.GraphicalRepresentation.GRParameter;
+import org.openflexo.fge.impl.ForegroundStyleImpl;
 import org.openflexo.inspector.HasIcon;
-import org.openflexo.localization.FlexoLocalization;
-import org.openflexo.xmlcode.XMLSerializable;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-public class ForegroundStyle extends Observable implements XMLSerializable, Cloneable {
-	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(ForegroundStyle.class.getPackage().getName());
+/**
+ * Represent foreground properties (line properties) which should be applied to a graphical representation
+ * 
+ * @author sylvain
+ * 
+ */
+@ModelEntity
+@ImplementationClass(ForegroundStyleImpl.class)
+@XMLElement(xmlTag = "ForegroundStyle")
+public interface ForegroundStyle extends FGEStyle {
+
+	// Property keys
+
+	public static final String COLOR = "color";
+	public static final String LINE_WIDTH = "lineWidth";
+	public static final String CAP_STYLE = "capStyle";
+	public static final String JOIN_STYLE = "joinStyle";
+	public static final String DASH_STYLE = "dashStyle";
+	public static final String NO_STROKE = "noStroke";
+	public static final String USE_TRANSPARENCY = "useTransparency";
+	public static final String TRANSPARENCY_LEVEL = "transparencyLevel";
 
 	public static enum Parameters implements GRParameter {
 		color, lineWidth, capStyle, joinStyle, dashStyle, noStroke, useTransparency, transparencyLevel
 	}
-
-	private boolean noStroke = false;
-
-	private Color color;
-	private double lineWidth;
-	private JoinStyle joinStyle;
-	private CapStyle capStyle;
-	private DashStyle dashStyle;
-
-	private boolean useTransparency = false;
-	private float transparencyLevel = 0.5f; // Between 0.0 and 1.0
-
-	private Stroke stroke;
-	private double strokeScale;
 
 	public static enum JoinStyle implements HasIcon {
 		/**
@@ -195,238 +201,78 @@ public class ForegroundStyle extends Observable implements XMLSerializable, Clon
 			}
 			return 0;
 		}
-
 	}
 
-	public ForegroundStyle() {
-		super();
-		noStroke = false;
-		color = Color.BLACK;
-		lineWidth = 1.0;
-		joinStyle = JoinStyle.JOIN_MITER;
-		capStyle = CapStyle.CAP_SQUARE;
-		dashStyle = DashStyle.PLAIN_STROKE;
-	}
+	// *******************************************************************************
+	// * Properties
+	// *******************************************************************************
 
-	public ForegroundStyle(Color aColor) {
-		this();
-		color = aColor;
-	}
+	@Getter(value = COLOR)
+	@XMLAttribute
+	public Color getColor();
 
-	public static ForegroundStyle makeDefault() {
-		return new ForegroundStyle();
-	}
+	@Setter(value = COLOR)
+	public void setColor(Color aColor);
 
-	public static ForegroundStyle makeNone() {
-		ForegroundStyle returned = new ForegroundStyle();
-		returned.setNoStroke(true);
-		return returned;
-	}
+	@Getter(value = LINE_WIDTH, defaultValue = "1.0")
+	@XMLAttribute
+	public double getLineWidth();
 
-	public static ForegroundStyle makeStyle(Color aColor) {
-		return new ForegroundStyle(aColor);
-	}
+	@Setter(value = LINE_WIDTH)
+	public void setLineWidth(double aLineWidth);
 
-	public static ForegroundStyle makeStyle(Color aColor, float aLineWidth) {
-		ForegroundStyle returned = new ForegroundStyle(aColor);
-		returned.setLineWidth(aLineWidth);
-		return returned;
-	}
+	@Getter(value = CAP_STYLE)
+	@XMLAttribute
+	public CapStyle getCapStyle();
 
-	public static ForegroundStyle makeStyle(Color aColor, float aLineWidth, JoinStyle joinStyle, CapStyle capStyle, DashStyle dashStyle) {
-		ForegroundStyle returned = new ForegroundStyle(aColor);
-		returned.setLineWidth(aLineWidth);
-		returned.setJoinStyle(joinStyle);
-		returned.setCapStyle(capStyle);
-		returned.setDashStyle(dashStyle);
-		return returned;
-	}
+	@Setter(value = CAP_STYLE)
+	public void setCapStyle(CapStyle aCapStyle);
 
-	public static ForegroundStyle makeStyle(Color aColor, float aLineWidth, DashStyle dashStyle) {
-		ForegroundStyle returned = new ForegroundStyle(aColor);
-		returned.setLineWidth(aLineWidth);
-		returned.setDashStyle(dashStyle);
-		return returned;
-	}
+	@Getter(value = JOIN_STYLE)
+	@XMLAttribute
+	public JoinStyle getJoinStyle();
 
-	public CapStyle getCapStyle() {
-		return capStyle;
-	}
+	@Setter(value = JOIN_STYLE)
+	public void setJoinStyle(JoinStyle aJoinStyle);
 
-	public void setCapStyle(CapStyle aCapStyle) {
-		if (requireChange(this.color, aCapStyle)) {
-			CapStyle oldCapStyle = capStyle;
-			this.capStyle = aCapStyle;
-			stroke = null;
-			setChanged();
-			notifyObservers(new FGENotification(Parameters.capStyle, oldCapStyle, aCapStyle));
-		}
-	}
+	@Getter(value = DASH_STYLE)
+	@XMLAttribute
+	public DashStyle getDashStyle();
 
-	public Color getColor() {
-		return color;
-	}
+	@Setter(value = DASH_STYLE)
+	public void setDashStyle(DashStyle aDashStyle);
 
-	public void setColor(Color aColor) {
-		if (requireChange(this.color, aColor)) {
-			java.awt.Color oldColor = color;
-			this.color = aColor;
-			setChanged();
-			notifyObservers(new FGENotification(Parameters.color, oldColor, aColor));
-		}
-	}
+	@Getter(value = NO_STROKE, defaultValue = "false")
+	@XMLAttribute
+	public boolean getNoStroke();
 
-	public void setColorNoNotification(Color aColor) {
-		this.color = aColor;
-	}
+	@Setter(value = NO_STROKE)
+	public void setNoStroke(boolean aFlag);
 
-	public DashStyle getDashStyle() {
-		return dashStyle;
-	}
+	@Getter(value = TRANSPARENCY_LEVEL, defaultValue = "0.5")
+	@XMLAttribute
+	public float getTransparencyLevel();
 
-	public void setDashStyle(DashStyle aDashStyle) {
-		if (requireChange(this.color, aDashStyle)) {
-			DashStyle oldDashStyle = dashStyle;
-			this.dashStyle = aDashStyle;
-			stroke = null;
-			setChanged();
-			notifyObservers(new FGENotification(Parameters.dashStyle, oldDashStyle, dashStyle));
-		}
-	}
+	@Setter(value = TRANSPARENCY_LEVEL)
+	public void setTransparencyLevel(float aLevel);
 
-	public JoinStyle getJoinStyle() {
-		return joinStyle;
-	}
+	@Getter(value = USE_TRANSPARENCY, defaultValue = "false")
+	@XMLAttribute
+	public boolean getUseTransparency();
 
-	public void setJoinStyle(JoinStyle aJoinStyle) {
-		if (requireChange(this.joinStyle, aJoinStyle)) {
-			JoinStyle oldJoinStyle = joinStyle;
-			this.joinStyle = aJoinStyle;
-			stroke = null;
-			setChanged();
-			notifyObservers(new FGENotification(Parameters.joinStyle, oldJoinStyle, aJoinStyle));
-		}
-	}
+	@Setter(value = USE_TRANSPARENCY)
+	public void setUseTransparency(boolean aFlag);
 
-	public double getLineWidth() {
-		return lineWidth;
-	}
+	// *******************************************************************************
+	// * Utils
+	// *******************************************************************************
 
-	public void setLineWidth(double aLineWidth) {
-		if (requireChange(this.lineWidth, aLineWidth)) {
-			double oldLineWidth = lineWidth;
-			lineWidth = aLineWidth;
-			stroke = null;
-			setChanged();
-			notifyObservers(new FGENotification(Parameters.lineWidth, oldLineWidth, aLineWidth));
-		}
-	}
+	public void setColorNoNotification(Color aColor);
 
-	public boolean getNoStroke() {
-		return noStroke;
-	}
+	public Stroke getStroke(double scale);
 
-	public void setNoStroke(boolean aFlag) {
-		if (requireChange(this.noStroke, aFlag)) {
-			boolean oldValue = noStroke;
-			this.noStroke = aFlag;
-			setChanged();
-			notifyObservers(new FGENotification(Parameters.noStroke, oldValue, aFlag));
-		}
-	}
+	public ForegroundStyle clone();
 
-	public Stroke getStroke(double scale) {
-		if (stroke == null || scale != strokeScale) {
-			if (dashStyle == DashStyle.PLAIN_STROKE) {
-				stroke = new BasicStroke((float) (lineWidth * scale), capStyle.ordinal(), joinStyle.ordinal());
-			} else {
-				float[] scaledDashArray = new float[dashStyle.getDashArray().length];
-				for (int i = 0; i < dashStyle.getDashArray().length; i++) {
-					scaledDashArray[i] = (float) (dashStyle.getDashArray()[i] * scale * lineWidth);
-				}
-				float scaledDashedPhase = (float) (dashStyle.getDashPhase() * scale * lineWidth);
-				stroke = new BasicStroke((float) (lineWidth * scale), capStyle.ordinal(), joinStyle.ordinal(), 10, scaledDashArray,
-						scaledDashedPhase);
-			}
-			strokeScale = scale;
-		}
-		return stroke;
-	}
-
-	public float getTransparencyLevel() {
-		return transparencyLevel;
-	}
-
-	public void setTransparencyLevel(float aLevel) {
-		if (requireChange(this.transparencyLevel, aLevel)) {
-			float oldValue = transparencyLevel;
-			this.transparencyLevel = aLevel;
-			setChanged();
-			notifyObservers(new FGENotification(Parameters.transparencyLevel, oldValue, aLevel));
-		}
-	}
-
-	public boolean getUseTransparency() {
-		return useTransparency;
-	}
-
-	public void setUseTransparency(boolean aFlag) {
-		if (requireChange(this.useTransparency, aFlag)) {
-			boolean oldValue = useTransparency;
-			this.useTransparency = aFlag;
-			setChanged();
-			notifyObservers(new FGENotification(Parameters.useTransparency, oldValue, aFlag));
-		}
-	}
-
-	@Override
-	public ForegroundStyle clone() {
-		try {
-			ForegroundStyle returned = (ForegroundStyle) super.clone();
-			return returned;
-		} catch (CloneNotSupportedException e) {
-			// cannot happen since we are clonable
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	@Override
-	public String toString() {
-		return "ForegroundStyle " + Integer.toHexString(hashCode()) + " [noStroke=" + noStroke + ",lineWidth=" + lineWidth + ",color="
-				+ color + ",joinStyle=" + joinStyle + ",capStyle=" + capStyle + ",dashStyle=" + dashStyle + ",useTransparency="
-				+ useTransparency + ",transparencyLevel=" + transparencyLevel + "]";
-	}
-
-	public String toNiceString() {
-		if (getNoStroke()) {
-			return FlexoLocalization.localizedForKey(GraphicalRepresentation.LOCALIZATION, "no_stroke");
-		} else {
-			return lineWidth + "pt, " + color;
-		}
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof ForegroundStyle) {
-			// logger.info("Equals called for ForegroundStyle !!!!!!!!!");
-			ForegroundStyle fs = (ForegroundStyle) obj;
-			return getNoStroke() == fs.getNoStroke() && getLineWidth() == fs.getLineWidth() && getColor() == fs.getColor()
-					&& getJoinStyle() == fs.getJoinStyle() && getCapStyle() == fs.getCapStyle() && getDashStyle() == fs.getDashStyle()
-					&& getUseTransparency() == fs.getUseTransparency() && getTransparencyLevel() == fs.getTransparencyLevel();
-		}
-		return super.equals(obj);
-	}
-
-	private boolean requireChange(Object oldObject, Object newObject) {
-		if (oldObject == null) {
-			if (newObject == null) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-		return !oldObject.equals(newObject);
-	}
+	public String toNiceString();
 
 }

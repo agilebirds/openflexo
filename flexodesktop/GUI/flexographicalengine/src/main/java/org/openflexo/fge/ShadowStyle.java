@@ -19,117 +19,66 @@
  */
 package org.openflexo.fge;
 
-import java.util.Observable;
+import org.openflexo.fge.GraphicalRepresentation.GRParameter;
+import org.openflexo.fge.impl.ShadowStyleImpl;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-import org.openflexo.fge.notifications.FGENotification;
-import org.openflexo.xmlcode.XMLSerializable;
+/**
+ * Represent shadow properties which should be applied to a graphical representation
+ * 
+ * @author sylvain
+ * 
+ */
+@ModelEntity
+@ImplementationClass(ShadowStyleImpl.class)
+@XMLElement(xmlTag = "ShadowStyle")
+public interface ShadowStyle extends FGEStyle {
 
-public class ShadowStyle extends Observable implements XMLSerializable, Cloneable {
+	public static final String NONE_CONFIGURATION = "none";
+	public static final String DEFAULT_CONFIGURATION = "default";
 
-	private boolean drawShadow;
-	private int shadowDarkness;
-	private int shadowDepth;
-	private int shadowBlur;
+	public static final String DRAW_SHADOW = "drawShadow";
+	public static final String SHADOW_DARKNESS = "shadowDarkness";
+	public static final String SHADOW_DEPTH = "shadowDepth";
+	public static final String SHADOW_BLUR = "shadowBlur";
 
 	public static enum Parameters implements GRParameter {
 		drawShadow, shadowDarkness, shadowDepth, shadowBlur
 	}
 
-	public ShadowStyle() {
-		drawShadow = true;
-		shadowDarkness = FGEConstants.DEFAULT_SHADOW_DARKNESS;
-		shadowDepth = FGEConstants.DEFAULT_SHADOW_DEEP;
-		shadowBlur = FGEConstants.DEFAULT_SHADOW_BLUR;
-	}
+	@Getter(value = DRAW_SHADOW, defaultValue = "true")
+	@XMLAttribute
+	public boolean getDrawShadow();
 
-	public static ShadowStyle makeNone() {
-		ShadowStyle returned = new ShadowStyle();
-		returned.drawShadow = false;
-		returned.shadowDepth = 0;
-		return returned;
-	}
+	@Setter(value = DRAW_SHADOW)
+	public void setDrawShadow(boolean aFlag);
 
-	public static ShadowStyle makeDefault() {
-		return new ShadowStyle();
-	}
+	@Getter(value = SHADOW_DARKNESS, defaultValue = "150")
+	@XMLAttribute
+	public int getShadowDarkness();
 
-	public boolean getDrawShadow() {
-		return drawShadow;
-	}
+	@Setter(value = SHADOW_DARKNESS)
+	public void setShadowDarkness(int aValue);
 
-	public void setDrawShadow(boolean aFlag) {
-		if (requireChange(this.drawShadow, aFlag)) {
-			boolean oldValue = drawShadow;
-			this.drawShadow = aFlag;
-			setChanged();
-			notifyObservers(new FGENotification(Parameters.drawShadow, oldValue, aFlag));
-		}
-	}
+	@Getter(value = SHADOW_DEPTH, defaultValue = "2")
+	@XMLAttribute
+	public int getShadowDepth();
 
-	public int getShadowDarkness() {
-		return shadowDarkness;
-	}
+	@Setter(value = SHADOW_DEPTH)
+	public void setShadowDepth(int aValue);
 
-	public void setShadowDarkness(int aValue) {
-		if (requireChange(this.shadowDarkness, aValue)) {
-			int oldShadowDarkness = shadowDarkness;
-			shadowDarkness = aValue;
-			setChanged();
-			notifyObservers(new FGENotification(Parameters.shadowDarkness, oldShadowDarkness, aValue));
-		}
-	}
+	@Getter(value = SHADOW_BLUR, defaultValue = "4")
+	@XMLAttribute
+	public int getShadowBlur();
 
-	public int getShadowDepth() {
-		return shadowDepth;
-	}
+	@Setter(value = SHADOW_BLUR)
+	public void setShadowBlur(int aValue);
 
-	@Deprecated
-	public int getShadowDeep() {
-		return getShadowDepth();
-	}
-
-	public void setShadowDepth(int aValue) {
-		if (requireChange(this.shadowDepth, aValue)) {
-			int oldShadowDeep = shadowDepth;
-			shadowDepth = aValue;
-			setChanged();
-			notifyObservers(new FGENotification(Parameters.shadowDepth, oldShadowDeep, aValue));
-		}
-	}
-
-	public int getShadowBlur() {
-		return shadowBlur;
-	}
-
-	public void setShadowBlur(int aValue) {
-		if (requireChange(this.shadowBlur, aValue)) {
-			int oldShadowBlur = shadowBlur;
-			shadowBlur = aValue;
-			setChanged();
-			notifyObservers(new FGENotification(Parameters.shadowBlur, oldShadowBlur, aValue));
-		}
-	}
-
-	@Override
-	public ShadowStyle clone() {
-		try {
-			return (ShadowStyle) super.clone();
-		} catch (CloneNotSupportedException e) {
-			// cannot happen, we are clonable
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	private boolean requireChange(Object oldObject, Object newObject) {
-		if (oldObject == null) {
-			if (newObject == null) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-		return !oldObject.equals(newObject);
-	}
+	public ShadowStyle clone();
 
 }

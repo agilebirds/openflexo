@@ -549,8 +549,8 @@ public class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @return a newly created BackgroundStyle
 	 */
-	public BackgroundStyle.None makeEmptyBackground() {
-		BackgroundStyle.None returned = newInstance(None.class);
+	public NoneBackgroundStyle makeEmptyBackground() {
+		NoneBackgroundStyle returned = newInstance(NoneBackgroundStyle.class);
 		returned.setFGEModelFactory(this);
 		return returned;
 	}
@@ -562,8 +562,8 @@ public class FGEModelFactory extends ModelFactory {
 	 *            color to be used as plain colored background
 	 * @return a newly created BackgroundStyle
 	 */
-	public BackgroundStyle.Color makeColoredBackground(Color aColor) {
-		BackgroundStyle.Color returned = newInstance(BackgroundStyle.Color.class);
+	public ColorBackgroundStyle makeColoredBackground(Color aColor) {
+		ColorBackgroundStyle returned = newInstance(ColorBackgroundStyle.class);
 		returned.setFGEModelFactory(this);
 		returned.setColor(aColor);
 		return returned;
@@ -578,8 +578,8 @@ public class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @return a newly created BackgroundStyle
 	 */
-	public BackgroundStyle.ColorGradient makeColorGradientBackground(Color color1, Color color2, ColorGradientDirection direction) {
-		BackgroundStyle.ColorGradient returned = newInstance(BackgroundStyle.ColorGradient.class);
+	public ColorGradientBackgroundStyle makeColorGradientBackground(Color color1, Color color2, ColorGradientDirection direction) {
+		ColorGradientBackgroundStyle returned = newInstance(ColorGradientBackgroundStyle.class);
 		returned.setFGEModelFactory(this);
 		returned.setColor1(color1);
 		returned.setColor2(color2);
@@ -596,8 +596,8 @@ public class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @return a newly created BackgroundStyle
 	 */
-	public BackgroundStyle.Texture makeTexturedBackground(TextureType textureType, Color color1, Color color2) {
-		BackgroundStyle.Texture returned = newInstance(BackgroundStyle.Texture.class);
+	public TextureBackgroundStyle makeTexturedBackground(TextureType textureType, Color color1, Color color2) {
+		TextureBackgroundStyle returned = newInstance(TextureBackgroundStyle.class);
 		returned.setFGEModelFactory(this);
 		returned.setColor1(color1);
 		returned.setColor2(color2);
@@ -613,8 +613,8 @@ public class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @return a newly created BackgroundStyle
 	 */
-	public BackgroundStyle.BackgroundImage makeImageBackground(File imageFile) {
-		BackgroundStyle.BackgroundImage returned = newInstance(BackgroundStyle.BackgroundImage.class);
+	public BackgroundImageBackgroundStyle makeImageBackground(File imageFile) {
+		BackgroundImageBackgroundStyle returned = newInstance(BackgroundImageBackgroundStyle.class);
 		returned.setFGEModelFactory(this);
 		returned.setImageFile(imageFile);
 		return returned;
@@ -627,8 +627,8 @@ public class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @return a newly created BackgroundStyle
 	 */
-	public BackgroundStyle.BackgroundImage makeImageBackground(Image image) {
-		BackgroundStyle.BackgroundImage returned = newInstance(BackgroundStyle.BackgroundImage.class);
+	public BackgroundImageBackgroundStyle makeImageBackground(Image image) {
+		BackgroundImageBackgroundStyle returned = newInstance(BackgroundImageBackgroundStyle.class);
 		returned.setFGEModelFactory(this);
 		returned.setImage(image);
 		return returned;

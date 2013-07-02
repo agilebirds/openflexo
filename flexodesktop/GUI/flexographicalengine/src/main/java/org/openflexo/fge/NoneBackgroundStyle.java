@@ -1,22 +1,19 @@
 package org.openflexo.fge;
 
-import java.awt.Paint;
+import org.openflexo.fge.impl.NoneBackgroundStyleImpl;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
-import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
+/**
+ * Represent an invisible background
+ * 
+ * @author sylvain
+ * 
+ */
+@ModelEntity
+@ImplementationClass(NoneBackgroundStyleImpl.class)
+@XMLElement(xmlTag = "NoneBackgroundStyle")
+public interface NoneBackgroundStyle extends BackgroundStyle {
 
-public class NoneBackgroundStyle extends BackgroundStyle {
-	@Override
-	public Paint getPaint(GraphicalRepresentation gr, double scale) {
-		return null;
-	}
-
-	@Override
-	public BackgroundStyleType getBackgroundStyleType() {
-		return BackgroundStyleType.NONE;
-	}
-
-	@Override
-	public String toString() {
-		return "BackgroundStyle.NONE";
-	}
 }

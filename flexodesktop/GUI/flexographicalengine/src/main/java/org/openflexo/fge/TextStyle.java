@@ -21,130 +21,78 @@ package org.openflexo.fge;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.util.Observable;
-import java.util.logging.Logger;
 
-import org.openflexo.fge.notifications.FGENotification;
-import org.openflexo.xmlcode.XMLSerializable;
+import org.openflexo.fge.GraphicalRepresentation.GRParameter;
+import org.openflexo.fge.impl.TextStyleImpl;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-public class TextStyle extends Observable implements XMLSerializable, Cloneable {
-	private static final Logger logger = Logger.getLogger(TextStyle.class.getPackage().getName());
+/**
+ * Represent text properties which should be applied to a graphical representation
+ * 
+ * @author sylvain
+ * 
+ */
+@ModelEntity
+@ImplementationClass(TextStyleImpl.class)
+@XMLElement(xmlTag = "TextStyle")
+public interface TextStyle extends FGEStyle {
 
-	private Color color;
-	private Color backgroundColor = Color.WHITE;
-	private Font font;
-	private int orientation = 0; // angle in degree
-	private boolean backgroundColored = false;
+	// Property keys
+
+	public static final String COLOR = "color";
+	public static final String BACKGROUND_COLOR = "backgroundColor";
+	public static final String FONT = "font";
+	public static final String ORIENTATION = "orientation";
+	public static final String IS_BACKGROUND_COLORED = "isBackgroundColored";
 
 	public static enum Parameters implements GRParameter {
 		color, backgroundColor, font, orientation, backgroundColored
 	}
 
-	public TextStyle() {
-		super();
-		color = FGEConstants.DEFAULT_TEXT_COLOR;
-		font = FGEConstants.DEFAULT_TEXT_FONT;
-	}
+	// *******************************************************************************
+	// * Properties
+	// *******************************************************************************
 
-	public TextStyle(Color aColor, Font aFont) {
-		this();
-		color = aColor;
-		font = aFont;
-	}
+	@Getter(value = COLOR)
+	@XMLAttribute
+	public Color getColor();
 
-	public static TextStyle makeDefault() {
-		return makeTextStyle(FGEConstants.DEFAULT_TEXT_COLOR, FGEConstants.DEFAULT_TEXT_FONT);
-	}
+	@Setter(value = COLOR)
+	public void setColor(Color aColor);
 
-	public static TextStyle makeTextStyle(Color aColor, Font aFont) {
-		return new TextStyle(aColor, aFont);
-	}
+	@Getter(value = BACKGROUND_COLOR)
+	@XMLAttribute
+	public Color getBackgroundColor();
 
-	public Color getColor() {
-		return color;
-	}
+	@Setter(value = BACKGROUND_COLOR)
+	public void setBackgroundColor(Color aColor);
 
-	public void setColor(Color aColor) {
-		if (requireChange(this.color, aColor)) {
-			Color oldColor = color;
-			this.color = aColor;
-			setChanged();
-			notifyObservers(new FGENotification(Parameters.color, oldColor, aColor));
-		}
-	}
+	@Getter(value = FONT)
+	@XMLAttribute
+	public Font getFont();
 
-	public Font getFont() {
-		return font;
-	}
+	@Setter(value = FONT)
+	public void setFont(Font aFont);
 
-	public void setFont(Font aFont) {
-		if (requireChange(this.font, aFont)) {
-			Font oldFont = this.font;
-			this.font = aFont;
-			setChanged();
-			notifyObservers(new FGENotification(Parameters.font, oldFont, aFont));
-		}
-	}
+	@Getter(value = ORIENTATION, defaultValue = "0")
+	@XMLAttribute
+	public int getOrientation();
 
-	public int getOrientation() {
-		return orientation;
-	}
+	@Setter(value = ORIENTATION)
+	public void setOrientation(int anOrientation);
 
-	public void setOrientation(int anOrientation) {
-		if (requireChange(this.orientation, anOrientation)) {
-			int oldOrientation = this.orientation;
-			orientation = anOrientation;
-			setChanged();
-			notifyObservers(new FGENotification(Parameters.orientation, oldOrientation, anOrientation));
-		}
-	}
+	@Getter(value = IS_BACKGROUND_COLORED, defaultValue = "false")
+	@XMLAttribute
+	public boolean getIsBackgroundColored();
 
-	public Color getBackgroundColor() {
-		return backgroundColor;
-	}
+	@Setter(value = IS_BACKGROUND_COLORED)
+	public void setIsBackgroundColored(boolean aFlag);
 
-	public void setBackgroundColor(Color aColor) {
-		if (requireChange(this.backgroundColor, aColor)) {
-			Color oldColor = backgroundColor;
-			this.backgroundColor = aColor;
-			setChanged();
-			notifyObservers(new FGENotification(Parameters.backgroundColor, oldColor, aColor));
-		}
-	}
-
-	public boolean getIsBackgroundColored() {
-		return backgroundColored;
-	}
-
-	public void setIsBackgroundColored(boolean aFlag) {
-		if (requireChange(this.backgroundColored, aFlag)) {
-			boolean oldValue = backgroundColored;
-			this.backgroundColored = aFlag;
-			setChanged();
-			notifyObservers(new FGENotification(Parameters.backgroundColored, oldValue, aFlag));
-		}
-	}
-
-	@Override
-	public TextStyle clone() {
-		try {
-			return (TextStyle) super.clone();
-		} catch (CloneNotSupportedException e) {
-			// cannot happen since we are clonable
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	private boolean requireChange(Object oldObject, Object newObject) {
-		if (oldObject == null) {
-			if (newObject == null) {
-				return false;
-			} else {
-				return true;
-			}
-		}
-		return !oldObject.equals(newObject);
-	}
+	public TextStyle clone();
 
 }
