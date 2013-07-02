@@ -121,7 +121,7 @@ public class FlexoFIBController extends FIBController implements GraphicalFlexoO
 		getRootView().updateDataObject(getDataObject());
 	}
 
-	public TechnologyAdapterController<?> getTechnologyAdapterController(TechnologyAdapter<?, ?> technologyAdapter) {
+	public TechnologyAdapterController<?> getTechnologyAdapterController(TechnologyAdapter technologyAdapter) {
 		if (getFlexoController() != null) {
 			return getFlexoController().getApplicationContext().getTechnologyAdapterControllerService()
 					.getTechnologyAdapterController(technologyAdapter);

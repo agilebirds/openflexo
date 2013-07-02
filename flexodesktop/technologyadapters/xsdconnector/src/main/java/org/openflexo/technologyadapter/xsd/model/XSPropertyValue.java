@@ -21,7 +21,7 @@ package org.openflexo.technologyadapter.xsd.model;
 
 import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
-
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 /**
  * Implementation of a Property value in XSD/XML technology
  * 
@@ -32,4 +32,8 @@ public abstract class XSPropertyValue implements IFlexoOntologyPropertyValue {
 	@Override
 	public abstract XSOntProperty getProperty();
 
+	@Override
+	public TechnologyAdapter getTechnologyAdapter() {
+		return getProperty().getTechnologyAdapter();
+	}
 }

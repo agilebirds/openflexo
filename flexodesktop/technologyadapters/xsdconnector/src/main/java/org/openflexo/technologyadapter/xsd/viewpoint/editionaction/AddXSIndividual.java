@@ -1,5 +1,6 @@
 /*
- * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2010-2012 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -24,6 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
@@ -34,15 +36,17 @@ import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntDataProperty;
 import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
+
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 
-public class AddXSIndividual extends AddIndividual<XMLXSDModel, XSDMetaModel, XSOntIndividual> {
+
+public class AddXSIndividual extends AddIndividual<XSDModelSlot, XSOntIndividual> {
 
 	@Override
 	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
 		// TODO Auto-generated method stub
 		super.setOntologyClass(ontologyClass);
-		if ( ontologyClassURI == null) {
+		if (ontologyClassURI == null) {
 			logger.warning("OntologyURI is null for XSIndividual");
 		}
 	}
@@ -66,17 +70,16 @@ public class AddXSIndividual extends AddIndividual<XMLXSDModel, XSDMetaModel, XS
 	@Override
 	public XSOntIndividual performAction(EditionSchemeAction action) {
 		XSOntClass father = getOntologyClass();
-		
+
 		XSOntIndividual newIndividual = null;
 		try {
 
-			ModelSlotInstance<XMLXSDModel, XSDMetaModel> modelSlotInstance = getModelSlotInstance(action);
-			XMLXSDModel model = modelSlotInstance.getModel();
+			TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot> modelSlotInstance = (TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot>) getModelSlotInstance(action);
+			XMLXSDModel model = modelSlotInstance.getResourceData();
 			XSDModelSlot modelSlot = (XSDModelSlot) modelSlotInstance.getModelSlot();
-			
-		
-			newIndividual = model.createOntologyIndividual( father);
-			
+
+			newIndividual = model.createOntologyIndividual(father);
+
 			for (DataPropertyAssertion dataPropertyAssertion : getDataAssertions()) {
 				if (dataPropertyAssertion.evaluateCondition(action)) {
 					logger.info("DataPropertyAssertion=" + dataPropertyAssertion);
@@ -87,7 +90,7 @@ public class AddXSIndividual extends AddIndividual<XMLXSDModel, XSDMetaModel, XS
 					newIndividual.addToPropertyValue(property, value);
 				}
 			}
-			
+
 			for (ObjectPropertyAssertion objectPropertyAssertion : getObjectAssertions()) {
 				if (objectPropertyAssertion.evaluateCondition(action)) {
 					// ... TODO
@@ -95,20 +98,22 @@ public class AddXSIndividual extends AddIndividual<XMLXSDModel, XSDMetaModel, XS
 				}
 			}
 
+
+
 			// add it to the model
 			// Two phase creation, then addition, to be able to process URIs once you have the property values
 			// and verify that there is no duplicate URIs
-			
+
 			String processedURI = modelSlot.getURIForObject(modelSlotInstance, newIndividual);
 			Object o = modelSlot.retrieveObjectWithURI(modelSlotInstance, processedURI);
 			if (o == null ) {
 				model.addIndividual(newIndividual);
-				model.setIsModified();
+				modelSlotInstance.getResourceData().setIsModified();
 			}
 			else {
 				throw new DuplicateURIException("Error while creating Individual of type " + father.getURI());
 			}
-			
+
 			return newIndividual;
 		} catch (DuplicateURIException e) {
 			e.printStackTrace();

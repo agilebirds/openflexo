@@ -40,6 +40,7 @@ import org.openflexo.foundation.rm.FlexoFileResource;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
+import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.technologyadapter.csv.CSVTechnologyAdapter;
@@ -64,7 +65,7 @@ public abstract class CSVModelResourceImpl extends FlexoFileResourceImpl<CSVMode
      returned.setServiceManager(technologyContextManager.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
      returned.setTechnologyAdapter(technologyContextManager.getTechnologyAdapter());
      returned.setTechnologyContextManager(technologyContextManager);
-     technologyContextManager.registerModel(returned);
+     ((TechnologyContextManager) technologyContextManager).registerResource(returned);
 
      return returned;
     } catch (ModelDefinitionException e) {
@@ -85,7 +86,7 @@ public abstract class CSVModelResourceImpl extends FlexoFileResourceImpl<CSVMode
      returned.setServiceManager(technologyContextManager.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
      returned.setTechnologyAdapter(technologyContextManager.getTechnologyAdapter());
      returned.setTechnologyContextManager(technologyContextManager);
-     technologyContextManager.registerModel(returned);
+     technologyContextManager.registerResource(returned);
      return returned;
     } catch (ModelDefinitionException e) {
      e.printStackTrace();

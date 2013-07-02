@@ -24,12 +24,13 @@ import java.util.logging.Logger;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.technologyadapter.emf.EMFModelSlot;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeDataProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFAttributeObjectProperty;
 import org.openflexo.technologyadapter.emf.metamodel.EMFClassClass;
@@ -44,7 +45,7 @@ import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
  * @author gbesancon
  * 
  */
-public class AddEMFObjectIndividual extends AddIndividual<EMFModel, EMFMetaModel, EMFObjectIndividual> {
+public class AddEMFObjectIndividual extends AddIndividual<EMFModelSlot, EMFObjectIndividual> {
 
 	private static final Logger logger = Logger.getLogger(AddEMFObjectIndividual.class.getPackage().getName());
 
@@ -69,16 +70,17 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModel, EMFMetaModel
 	@Override
 	public EMFObjectIndividual performAction(EditionSchemeAction action) {
 		EMFObjectIndividual result = null;
-		ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
-		if (modelSlotInstance.getModel() != null) {
+		TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot> modelSlotInstance = (TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot>) getModelSlotInstance(action);
+		if (modelSlotInstance.getResourceData() != null) {
 			IFlexoOntologyClass aClass = getOntologyClass();
 			if (aClass instanceof EMFClassClass) {
 				EMFClassClass emfClassClass = (EMFClassClass) aClass;
 				// Create EMF Object
 				EObject eObject = EcoreUtil.create(emfClassClass.getObject());
-				modelSlotInstance.getModel().getEMFResource().getContents().add(eObject);
+				modelSlotInstance.getResourceData().getEMFResource().getContents().add(eObject);
 				// Instanciate Wrapper.
-				result = modelSlotInstance.getModel().getConverter().convertObjectIndividual(modelSlotInstance.getModel(), eObject);
+				result = modelSlotInstance.getResourceData().getConverter()
+						.convertObjectIndividual(modelSlotInstance.getResourceData(), eObject);
 				for (DataPropertyAssertion dataPropertyAssertion : getDataAssertions()) {
 					if (dataPropertyAssertion.evaluateCondition(action)) {
 						logger.info("DataPropertyAssertion=" + dataPropertyAssertion);
@@ -118,7 +120,7 @@ public class AddEMFObjectIndividual extends AddIndividual<EMFModel, EMFMetaModel
 						}
 					}
 				}
-				modelSlotInstance.getModel().setIsModified();
+				modelSlotInstance.getResourceData().setIsModified();
 				logger.info("********* Added individual " + result.getName() + " as " + aClass.getName());
 			} else {
 				logger.warning("Not allowed to create new Enum values. getOntologyClass()=" + getOntologyClass());

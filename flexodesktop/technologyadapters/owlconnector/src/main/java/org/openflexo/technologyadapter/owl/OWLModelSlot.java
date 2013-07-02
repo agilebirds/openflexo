@@ -3,23 +3,25 @@ package org.openflexo.technologyadapter.owl;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
-import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
-import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.owl.model.OWLObject;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
+import org.openflexo.technologyadapter.owl.rm.OWLOntologyResource;
 import org.openflexo.technologyadapter.owl.viewpoint.DataPropertyStatementPatternRole;
 import org.openflexo.technologyadapter.owl.viewpoint.OWLClassPatternRole;
 import org.openflexo.technologyadapter.owl.viewpoint.OWLDataPropertyPatternRole;
@@ -43,30 +45,31 @@ import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddSubClassSt
  * @author sylvain, luka
  * 
  */
-@DeclarePatternRoles({ @DeclarePatternRole(OWLIndividualPatternRole.class), // Instances
-		@DeclarePatternRole(OWLClassPatternRole.class), // Classes
-		@DeclarePatternRole(OWLDataPropertyPatternRole.class), // Data properties
-		@DeclarePatternRole(OWLObjectPropertyPatternRole.class), // Object properties
-		@DeclarePatternRole(OWLPropertyPatternRole.class), // Properties
-		@DeclarePatternRole(DataPropertyStatementPatternRole.class), // Data property statements
-		@DeclarePatternRole(ObjectPropertyStatementPatternRole.class), // Object property statements
-		@DeclarePatternRole(RestrictionStatementPatternRole.class), // Restriction statements
-		@DeclarePatternRole(SubClassStatementPatternRole.class) // Subclass statement */
+@DeclarePatternRoles({ // All pattern roles available through this model slot
+@DeclarePatternRole(FML = "OWLIndividual", patternRoleClass = OWLIndividualPatternRole.class),
+		@DeclarePatternRole(FML = "OWLClass", patternRoleClass = OWLClassPatternRole.class),
+		@DeclarePatternRole(FML = "OWLDataProperty", patternRoleClass = OWLDataPropertyPatternRole.class),
+		@DeclarePatternRole(FML = "OWLObjectProperty", patternRoleClass = OWLObjectPropertyPatternRole.class),
+		@DeclarePatternRole(FML = "OWLProperty", patternRoleClass = OWLPropertyPatternRole.class),
+		@DeclarePatternRole(FML = "DataPropertyStatement", patternRoleClass = DataPropertyStatementPatternRole.class),
+		@DeclarePatternRole(FML = "ObjectPropertyStatement", patternRoleClass = ObjectPropertyStatementPatternRole.class),
+		// @DeclarePatternRole(FML = "RestrictionStatement", patternRoleClass = RestrictionStatementPatternRole.class),
+		@DeclarePatternRole(FML = "SubClassStatement", patternRoleClass = SubClassStatementPatternRole.class) })
+@DeclareEditionActions({ // All edition actions available through this model slot
+@DeclareEditionAction(FML = "AddOWLIndividual", editionActionClass = AddOWLIndividual.class), // Add instance
+		@DeclareEditionAction(FML = "AddOWLClass", editionActionClass = AddOWLClass.class), // Add class
+		@DeclareEditionAction(FML = "AddDataPropertyStatement", editionActionClass = AddDataPropertyStatement.class), // Add class
+		@DeclareEditionAction(FML = "AddObjectPropertyStatement", editionActionClass = AddObjectPropertyStatement.class), // Add class
+		@DeclareEditionAction(FML = "AddRestrictionStatement", editionActionClass = AddRestrictionStatement.class), // Add class
+		@DeclareEditionAction(FML = "AddSubClassStatement", editionActionClass = AddSubClassStatement.class), // Add class
 })
-@DeclareEditionActions({ @DeclareEditionAction(AddOWLIndividual.class), // Add instance
-		@DeclareEditionAction(AddOWLClass.class), // Add class
-		@DeclareEditionAction(AddDataPropertyStatement.class), // Add class
-		@DeclareEditionAction(AddObjectPropertyStatement.class), // Add class
-		@DeclareEditionAction(AddRestrictionStatement.class), // Add class
-		@DeclareEditionAction(AddSubClassStatement.class), // Add class
-})
-public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntology> {
+public class OWLModelSlot extends TypeAwareModelSlot<OWLOntology, OWLOntology> {
 
 	private static final Logger logger = Logger.getLogger(OWLModelSlot.class.getPackage().getName());
 
-	public OWLModelSlot(ViewPoint viewPoint, OWLTechnologyAdapter adapter) {
+	/*public OWLModelSlot(ViewPoint viewPoint, OWLTechnologyAdapter adapter) {
 		super(viewPoint, adapter);
-	}
+	}*/
 
 	public OWLModelSlot(VirtualModel<?> virtualModel, OWLTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
@@ -76,30 +79,21 @@ public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntolog
 		super(builder);
 	}
 
-	public OWLModelSlot(ViewPointBuilder builder) {
+	/*public OWLModelSlot(ViewPointBuilder builder) {
 		super(builder);
-	}
+	}*/
 
 	@Override
 	public Class<OWLTechnologyAdapter> getTechnologyAdapterClass() {
 		return OWLTechnologyAdapter.class;
 	}
 
+	/**
+	 * Instanciate a new model slot instance configuration for this model slot
+	 */
 	@Override
-	public BindingVariable makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
-		/*if (pr instanceof SubClassStatementPatternRole) {
-			return new IsAStatementPatternRolePathElement((SubClassStatementPatternRole) pr, container);
-		} else if (pr instanceof ObjectPropertyStatementPatternRole) {
-			return new ObjectPropertyStatementPatternRolePathElement((ObjectPropertyStatementPatternRole) pr, container);
-		} else if (pr instanceof DataPropertyStatementPatternRole) {
-			return new DataPropertyStatementPatternRolePathElement((DataPropertyStatementPatternRole) pr, container);
-		} else if (pr instanceof RestrictionStatementPatternRole) {
-			return new RestrictionStatementPatternRolePathElement((RestrictionStatementPatternRole) pr, container);
-		} else {
-			logger.warning("Unexpected " + pr);
-			return null;
-		}*/
-		return null;
+	public OWLModelSlotInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
+		return new OWLModelSlotInstanceConfiguration(this, action);
 	}
 
 	/**
@@ -168,7 +162,7 @@ public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntolog
 	 * @return
 	 */
 	@Override
-	public <EA extends EditionAction<?, ?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
+	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddOWLIndividual.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddOWLIndividual(null);
 		} else if (AddOWLClass.class.isAssignableFrom(editionActionClass)) {
@@ -186,23 +180,44 @@ public class OWLModelSlot extends FlexoOntologyModelSlot<OWLOntology, OWLOntolog
 	}
 
 	@Override
-	public <FR extends FetchRequest<?, ?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
+	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
 		return null;
 	}
 
 	@Override
-	public String getURIForObject(ModelSlotInstance msInstance, Object o) {
+	public String getURIForObject(
+			TypeSafeModelSlotInstance<OWLOntology, OWLOntology, ? extends TypeAwareModelSlot<OWLOntology, OWLOntology>> msInstance, Object o) {
 		return ((OWLObject) o).getURI();
 	}
 
 	@Override
-	public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) {
-		return msInstance.getModel().getObject(objectURI);
+	public Object retrieveObjectWithURI(
+			TypeSafeModelSlotInstance<OWLOntology, OWLOntology, ? extends TypeAwareModelSlot<OWLOntology, OWLOntology>> msInstance,
+			String objectURI) {
+		return msInstance.getResourceData().getObject(objectURI);
 	}
 
 	@Override
 	public Type getType() {
 		return OWLOntology.class;
+	}
+
+	@Override
+	public OWLTechnologyAdapter getTechnologyAdapter() {
+		return (OWLTechnologyAdapter) super.getTechnologyAdapter();
+	}
+
+	@Override
+	public OWLOntologyResource createProjectSpecificEmptyModel(View view, String filename, String modelUri,
+			FlexoMetaModelResource<OWLOntology, OWLOntology> metaModelResource) {
+		return getTechnologyAdapter().createNewOntology(view.getProject(), filename, modelUri, metaModelResource);
+	}
+
+	@Override
+	public OWLOntologyResource createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter, String relativePath, String filename,
+			String modelUri, FlexoMetaModelResource<OWLOntology, OWLOntology> metaModelResource) {
+		return getTechnologyAdapter().createNewOntology((FileSystemBasedResourceCenter) resourceCenter, relativePath, filename, modelUri,
+				(OWLOntologyResource) metaModelResource);
 	}
 
 }

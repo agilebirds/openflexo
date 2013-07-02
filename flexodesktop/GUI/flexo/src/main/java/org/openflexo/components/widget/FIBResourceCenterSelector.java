@@ -114,7 +114,7 @@ public class FIBResourceCenterSelector extends FIBModelObjectSelector<FlexoResou
 				selector.setResourceCenterService(serviceManager.getResourceCenterService());
 				//try {
 				//	selector.setTechnologyAdapter(serviceManager.getTechnologyAdapterService().getTechnologyAdapter(
-				//			(Class<TechnologyAdapter<?, ?>>) Class.forName("org.openflexo.technologyadapter.emf.EMFTechnologyAdapter")));
+				//			(Class<TechnologyAdapter>) Class.forName("org.openflexo.technologyadapter.emf.EMFTechnologyAdapter")));
 				//} catch (ClassNotFoundException e) {
 				//	e.printStackTrace();
 				//}

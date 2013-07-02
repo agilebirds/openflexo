@@ -24,6 +24,8 @@ import org.openflexo.technologyadapter.xsd.metamodel.XSOntObjectProperty;
 import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.AbstractXSOntObject;
 import org.openflexo.technologyadapter.xsd.model.XSOntology;
+import org.openflexo.technologyadapter.xsd.rm.XMLModelRepository;
+import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelRepository;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResourceImpl;
 import org.openflexo.toolbox.FileResource;
@@ -38,8 +40,8 @@ public class TestLibrary extends FlexoTestCase {
 	private static XSDTechnologyAdapter xsdAdapter;
 	private static XSDTechnologyContextManager xsdContextManager;
 	private static FlexoResourceCenter resourceCenter;
-	private static ModelRepository<FlexoResource<XMLXSDModel>, XMLXSDModel, XSDMetaModel, XSDTechnologyAdapter> modelRepository;
-	private static MetaModelRepository<FlexoResource<XSDMetaModel>, XMLXSDModel, XSDMetaModel, XSDTechnologyAdapter> metamodelRepository;
+	private static XSDMetaModelRepository mmRepository;
+	private static XMLModelRepository modelRepository;
 	private static String baseDirName;
 
 	public static File openTestXSD(String filename) throws FileNotFoundException {
@@ -112,12 +114,12 @@ public class TestLibrary extends FlexoTestCase {
 		resourceCenter.initialize(testApplicationContext.getTechnologyAdapterService());
 		xsdAdapter = testApplicationContext.getTechnologyAdapterService().getTechnologyAdapter(XSDTechnologyAdapter.class);
 		xsdContextManager = xsdAdapter.getTechnologyContextManager();
-		modelRepository = resourceCenter.getModelRepository(xsdAdapter);
-		metamodelRepository = resourceCenter.getMetaModelRepository(xsdAdapter);
+		mmRepository = (XSDMetaModelRepository) resourceCenter.getRepository(XSDMetaModelRepository.class, xsdAdapter);
+		modelRepository = (XMLModelRepository) resourceCenter.getRepository(XMLModelRepository.class, xsdAdapter);
 		baseDirName=((DirectoryResourceCenter)resourceCenter).getDirectory().getCanonicalPath();
 		assertNotNull(modelRepository);
-		assertNotNull(metamodelRepository);
-		assertEquals(3, metamodelRepository.getAllResources().size());
+		assertNotNull(mmRepository);
+		assertEquals(3, mmRepository.getAllResources().size());
 		assertTrue(modelRepository.getAllResources().size()>2);
 	}
 	

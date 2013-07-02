@@ -79,7 +79,7 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 
 	private String patternRoleName;
 	public String description;
-	public ModelSlot<?, ?> modelSlot;
+	public ModelSlot<?> modelSlot;
 	public Class<? extends PatternRole> patternRoleClass;
 	public IFlexoOntologyClass individualType;
 	public EditionPattern editionPatternInstanceType;
@@ -109,7 +109,7 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 		this.patternRoleName = patternRoleName;
 	}
 
-	public List<Class<? extends PatternRole>> getAvailablePatternRoleTypes() {
+	public List<Class<? extends PatternRole<?>>> getAvailablePatternRoleTypes() {
 		if (modelSlot != null) {
 			return modelSlot.getAvailablePatternRoleTypes();
 		}
@@ -183,12 +183,14 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 
 	public VirtualModel<?> getModelSlotVirtualModel() {
 		if (modelSlot instanceof VirtualModelModelSlot) {
-			return ((VirtualModelModelSlot) modelSlot).getVirtualModelResource().getVirtualModel();
+			if (((VirtualModelModelSlot<?, ?>) modelSlot).getVirtualModelResource() != null) {
+				return ((VirtualModelModelSlot<?, ?>) modelSlot).getVirtualModelResource().getVirtualModel();
+			}
 		}
 		return null;
 	}
 
-	public List<ModelSlot> getAvailableModelSlots() {
+	public List<ModelSlot<?>> getAvailableModelSlots() {
 		if (getFocusedObject() instanceof VirtualModel) {
 			return ((VirtualModel) getFocusedObject()).getModelSlots();
 		} else {

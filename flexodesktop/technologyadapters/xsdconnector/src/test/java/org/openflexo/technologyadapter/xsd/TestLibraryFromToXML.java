@@ -37,7 +37,9 @@ import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 import org.openflexo.technologyadapter.xsd.model.XSOntology;
 import org.openflexo.technologyadapter.xsd.model.XSPropertyValue;
+import org.openflexo.technologyadapter.xsd.rm.XMLModelRepository;
 import org.openflexo.technologyadapter.xsd.rm.XMLXSDFileResource;
+import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelRepository;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResourceImpl;
 import org.openflexo.toolbox.FileResource;
@@ -56,8 +58,8 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 	private static ApplicationContext testApplicationContext;
 	private static XSDTechnologyAdapter xsdAdapter;
 	private static FlexoResourceCenter resourceCenter;
-	private static ModelRepository<FlexoResource<XMLXSDModel>, XMLXSDModel, XSDMetaModel, XSDTechnologyAdapter> modelRepository;
-	private static MetaModelRepository<FlexoResource<XSDMetaModel>, XMLXSDModel, XSDMetaModel, XSDTechnologyAdapter> metamodelRepository;
+	private static XSDMetaModelRepository mmRepository;
+	private static XMLModelRepository modelRepository;
 	private static String baseDirName;
 
 
@@ -93,12 +95,12 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 		testApplicationContext.getResourceCenterService().addToResourceCenters(resourceCenter);
 		resourceCenter.initialize(testApplicationContext.getTechnologyAdapterService());
 		xsdAdapter = testApplicationContext.getTechnologyAdapterService().getTechnologyAdapter(XSDTechnologyAdapter.class);
-		modelRepository = resourceCenter.getModelRepository(xsdAdapter);
-		metamodelRepository = resourceCenter.getMetaModelRepository(xsdAdapter);
+		mmRepository = (XSDMetaModelRepository) resourceCenter.getRepository(XSDMetaModelRepository.class, xsdAdapter);
+		modelRepository = (XMLModelRepository) resourceCenter.getRepository(XMLModelRepository.class, xsdAdapter);
 		baseDirName=((DirectoryResourceCenter)resourceCenter).getDirectory().getCanonicalPath();
 		assertNotNull(modelRepository);
-		assertNotNull(metamodelRepository);
-		assertEquals(3, metamodelRepository.getAllResources().size());
+		assertNotNull(mmRepository);
+		assertEquals(3, mmRepository.getAllResources().size());
 		assertTrue(modelRepository.getAllResources().size()>2);
 	}
 
@@ -106,12 +108,12 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 
 		log("test0LibraryFromXML()");
 
-		assertNotNull(metamodelRepository);
+		assertNotNull(mmRepository);
 		assertNotNull(modelRepository);
 
 		XMLXSDFileResource libraryRes = (XMLXSDFileResource) modelRepository.getResource("file:" + baseDirName + "/XML/example_library_1.xml");
 
-		XSDMetaModelResource mmLibraryRes = (XSDMetaModelResource) metamodelRepository.getResource("http://www.example.org/Library");
+		XSDMetaModelResource mmLibraryRes = (XSDMetaModelResource) mmRepository.getResource("http://www.example.org/Library");
 
 		XMLXSDModel mLib = libraryRes.getModel();
 
@@ -131,10 +133,10 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 
 		log("test1LibraryToXML()");
 
-		assertNotNull(metamodelRepository);
+		assertNotNull(mmRepository);
 		assertNotNull(modelRepository);
 
-		XSDMetaModelResource mmLibraryRes = (XSDMetaModelResource) metamodelRepository.getResource("http://www.example.org/Library");
+		XSDMetaModelResource mmLibraryRes = (XSDMetaModelResource) mmRepository.getResource("http://www.example.org/Library");
 
 		if (!mmLibraryRes.isLoaded()){
 			mmLibraryRes.loadResourceData(null);
@@ -151,7 +153,7 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 		} else {
 
 
-			XMLXSDFileResource libRes = (XMLXSDFileResource) xsdAdapter.createEmptyModel((FileSystemBasedResourceCenter) resourceCenter, "GenXML", "library.xml", mmLibraryRes, xsdAdapter.getTechnologyContextManager());
+			XMLXSDFileResource libRes = (XMLXSDFileResource) xsdAdapter.createNewXMLFile((FileSystemBasedResourceCenter) resourceCenter, "GenXML", "library.xml", mmLibraryRes);
 
 			XMLXSDModel lib = (XMLXSDModel) libRes.getModel();
 

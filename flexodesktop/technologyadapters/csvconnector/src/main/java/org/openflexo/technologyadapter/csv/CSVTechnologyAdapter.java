@@ -40,7 +40,7 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.csv.model.CSVMetaModel;
 import org.openflexo.technologyadapter.csv.model.CSVModel;
 
-public class CSVTechnologyAdapter extends TechnologyAdapter<CSVModel, CSVMetaModel>
+public class CSVTechnologyAdapter extends TechnologyAdapter
 {
  private static String CSV_FILE_EXTENSION = ".csv";
 
@@ -56,83 +56,74 @@ public class CSVTechnologyAdapter extends TechnologyAdapter<CSVModel, CSVMetaMod
    return new String("CSV Technology Adapter");
   }
 
-  public ModelSlot<CSVModel, CSVMetaModel> createNewModelSlot(ViewPoint viewPoint)
+  public ModelSlot<CSVModel> createNewModelSlot(ViewPoint viewPoint)
   {
    return null;
   }
 
-  public ModelSlot<CSVModel, CSVMetaModel> createNewModelSlot(VirtualModel<?> virtualModel)
+  public ModelSlot<CSVModel> createNewModelSlot(VirtualModel<?> virtualModel)
   {
    return null;
   }
 
-  public boolean isValidMetaModelFile(File aMetaModelFile, TechnologyContextManager<CSVModel, CSVMetaModel> technologyContextManager)
+  public boolean isValidMetaModelFile(File aMetaModelFile, TechnologyContextManager technologyContextManager)
   {
    return false;
   }
 
-  public String retrieveMetaModelURI(File aMetaModelFile, TechnologyContextManager<CSVModel, CSVMetaModel> technologyContextManager)
+  public String retrieveMetaModelURI(File aMetaModelFile, TechnologyContextManager technologyContextManager)
   {
    return null;
   }
 
-  public FlexoResource<CSVMetaModel> retrieveMetaModelResource(File aMetaModelFile, TechnologyContextManager<CSVModel, CSVMetaModel> technologyContextManager)
+  public FlexoResource<CSVMetaModel> retrieveMetaModelResource(File aMetaModelFile, TechnologyContextManager technologyContextManager)
   {
    return null;
   }
 
-  public boolean isValidModelFile(File aModelFile, FlexoResource<CSVMetaModel> metaModelResource, TechnologyContextManager<CSVModel, CSVMetaModel> technologyContextManager)
+  public boolean isValidModelFile(File aModelFile, FlexoResource<CSVMetaModel> metaModelResource, TechnologyContextManager technologyContextManager)
   {
    logger.info("Est-ce que c'est un CSV: " + aModelFile.getAbsolutePath());
    return aModelFile.getName().endsWith(CSV_FILE_EXTENSION);
   }
 
-  public boolean isValidModelFile(File aModelFile, TechnologyContextManager<CSVModel, CSVMetaModel> technologyContextManager)
+  public boolean isValidModelFile(File aModelFile, TechnologyContextManager technologyContextManager)
   {
    logger.info("Est-ce que c'est un CSV: " + aModelFile.getAbsolutePath());
    return aModelFile.getName().endsWith(CSV_FILE_EXTENSION);
   }
 
-  public String retrieveModelURI(File aModelFile, FlexoResource<CSVMetaModel> metaModelResource, TechnologyContextManager<CSVModel, CSVMetaModel> technologyContextManager)
+  public String retrieveModelURI(File aModelFile, FlexoResource<CSVMetaModel> metaModelResource, TechnologyContextManager technologyContextManager)
   {
    return null;
   }
 
-  public FlexoResource<CSVModel> retrieveModelResource(File aModelFile, TechnologyContextManager<CSVModel, CSVMetaModel> technologyContextManager)
+  public FlexoResource<CSVModel> retrieveModelResource(File aModelFile, TechnologyContextManager technologyContextManager)
   {
    logger.info("Nouveau CSV à prendre en compte: " + aModelFile.getAbsolutePath());
 
    return null;
   }
 
-  public FlexoResource<CSVModel> retrieveModelResource(File aModelFile, FlexoResource<CSVMetaModel> metaModelResource, TechnologyContextManager<CSVModel, CSVMetaModel> technologyContextManager)
+  public FlexoResource<CSVModel> retrieveModelResource(File aModelFile, FlexoResource<CSVMetaModel> metaModelResource, TechnologyContextManager technologyContextManager)
   {
    logger.info("Nouveau CSV à prendre en compte: " + aModelFile.getAbsolutePath());
 
    return null;
   }
 
-  public FlexoResource<CSVModel> createEmptyModel(FileSystemBasedResourceCenter resourceCenter, String relativePath, String filename, String modelUri, FlexoResource<CSVMetaModel> metaModelResource, TechnologyContextManager<CSVModel, CSVMetaModel> technologyContextManager)
+  public FlexoResource<CSVModel> createEmptyModel(FileSystemBasedResourceCenter resourceCenter, String relativePath, String filename, String modelUri, FlexoResource<CSVMetaModel> metaModelResource, TechnologyContextManager technologyContextManager)
   {
    return null;
   }
 
-  public FlexoResource<CSVModel> createEmptyModel(FlexoProject project, String filename, String modelUri, FlexoResource<CSVMetaModel> metaModelResource, TechnologyContextManager<CSVModel, CSVMetaModel> technologyContextManager)
+  public FlexoResource<CSVModel> createEmptyModel(FlexoProject project, String filename, String modelUri, FlexoResource<CSVMetaModel> metaModelResource, TechnologyContextManager technologyContextManager)
   {
    return null;
   }
 
-  public <R extends FlexoResource<? extends CSVModel>> ModelRepository<R, CSVModel, CSVMetaModel, ? extends TechnologyAdapter<CSVModel, CSVMetaModel>> createModelRepository(FlexoResourceCenter resourceCenter)
-  {
-   return null;
-  }
 
-  public <R extends FlexoResource<? extends CSVMetaModel>> MetaModelRepository<R, CSVModel, CSVMetaModel, ? extends TechnologyAdapter<CSVModel, CSVMetaModel>> createMetaModelRepository(FlexoResourceCenter resourceCenter)
-  {
-   return null;
-  }
-
-  public TechnologyContextManager<CSVModel, CSVMetaModel> createTechnologyContextManager(FlexoResourceCenterService service)
+  public TechnologyContextManager createTechnologyContextManager(FlexoResourceCenterService service)
   {
    return null;
   }
@@ -151,4 +142,36 @@ public class CSVTechnologyAdapter extends TechnologyAdapter<CSVModel, CSVMetaMod
   {
    return CSV_FILE_EXTENSION;
   }
+
+@Override
+public <I> void initializeResourceCenter(FlexoResourceCenter<I> resourceCenter) {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public <I> boolean isIgnorable(FlexoResourceCenter<I> resourceCenter, I contents) {
+	// TODO Auto-generated method stub
+	return false;
+}
+
+@Override
+public <I> void contentsAdded(FlexoResourceCenter<I> resourceCenter, I contents) {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public <I> void contentsDeleted(FlexoResourceCenter<I> resourceCenter,
+		I contents) {
+	// TODO Auto-generated method stub
+	
+}
+
+@Override
+public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass,
+		VirtualModel<?> virtualModel) {
+	// TODO Auto-generated method stub
+	return null;
+}
 }

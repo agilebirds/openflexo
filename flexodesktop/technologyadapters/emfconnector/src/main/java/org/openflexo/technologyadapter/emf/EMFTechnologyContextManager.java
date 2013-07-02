@@ -23,18 +23,17 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
-import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
-import org.openflexo.technologyadapter.emf.model.EMFModel;
+import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
 import org.openflexo.technologyadapter.emf.rm.EMFModelResource;
 
-public class EMFTechnologyContextManager extends TechnologyContextManager<EMFModel, EMFMetaModel> {
+public class EMFTechnologyContextManager extends TechnologyContextManager {
 
-	/** All known models, stored by File */
-	protected Map<File, FlexoResource<EMFModel>> models = new HashMap<File, FlexoResource<EMFModel>>();
+	/** Stores all known metamodels where key is the URI of metamodel */
+	protected Map<String, EMFMetaModelResource> metamodels = new HashMap<String, EMFMetaModelResource>();
+	/** Stores all known models where key is the URI of model */
+	protected Map<String, EMFModelResource> models = new HashMap<String, EMFModelResource>();
 
 	public EMFTechnologyContextManager(EMFTechnologyAdapter adapter, FlexoResourceCenterService resourceCenterService) {
 		super(adapter, resourceCenterService);
@@ -46,15 +45,27 @@ public class EMFTechnologyContextManager extends TechnologyContextManager<EMFMod
 	}
 
 	public EMFModelResource getModel(File modelFile) {
-		return (EMFModelResource) models.get(modelFile);
+		return models.get(modelFile);
 	}
 
-	@Override
-	public void registerModel(FlexoModelResource<EMFModel, EMFMetaModel> newModelResource) {
-		super.registerModel(newModelResource);
-		if (newModelResource instanceof EMFModelResource) {
-			models.put(((EMFModelResource) newModelResource).getFile(), newModelResource);
-		}
+	/**
+	 * Called when a new meta model was registered, notify the {@link TechnologyContextManager}
+	 * 
+	 * @param newModel
+	 */
+	public void registerMetaModel(EMFMetaModelResource newMetaModelResource) {
+		registerResource(newMetaModelResource);
+		metamodels.put(newMetaModelResource.getURI(), newMetaModelResource);
+	}
+
+	/**
+	 * Called when a new model was registered, notify the {@link TechnologyContextManager}
+	 * 
+	 * @param newModel
+	 */
+	public void registerModel(EMFModelResource newModelResource) {
+		registerResource(newModelResource);
+		models.put(newModelResource.getURI(), newModelResource);
 	}
 
 }

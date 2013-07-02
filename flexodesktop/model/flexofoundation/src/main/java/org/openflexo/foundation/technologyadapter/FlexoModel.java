@@ -41,5 +41,5 @@ public interface FlexoModel<M extends FlexoModel<M, MM>, MM extends FlexoMetaMod
 	 * 
 	 * @return
 	 */
-	public TechnologyAdapter<?, ?> getTechnologyAdapter();
+	public TechnologyAdapter getTechnologyAdapter();
 }

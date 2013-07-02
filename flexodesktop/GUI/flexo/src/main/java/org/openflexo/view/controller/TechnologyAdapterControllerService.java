@@ -30,7 +30,7 @@ public interface TechnologyAdapterControllerService extends FlexoService {
 	 * @param technologyAdapterClass
 	 * @return
 	 */
-	public <TAC extends TechnologyAdapterController<TA>, TA extends TechnologyAdapter<?, ?>> TAC getTechnologyAdapterController(
+	public <TAC extends TechnologyAdapterController<TA>, TA extends TechnologyAdapter> TAC getTechnologyAdapterController(
 			Class<TAC> technologyAdapterControllerClass);
 
 	/**
@@ -40,7 +40,7 @@ public interface TechnologyAdapterControllerService extends FlexoService {
 	 * @param technologyAdapterClass
 	 * @return
 	 */
-	public <TAC extends TechnologyAdapterController<TA>, TA extends TechnologyAdapter<?, ?>> TAC getTechnologyAdapterController(
+	public <TAC extends TechnologyAdapterController<TA>, TA extends TechnologyAdapter> TAC getTechnologyAdapterController(
 			TA technologyAdapter);
 
 }

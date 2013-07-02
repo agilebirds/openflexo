@@ -105,7 +105,7 @@ public class Diagram extends VirtualModelInstance<Diagram, DiagramSpecification>
 	}
 
 	@Override
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+	public TechnologyAdapter getTechnologyAdapter() {
 		return getProject().getServiceManager().getService(TechnologyAdapterService.class)
 				.getTechnologyAdapter(DiagramTechnologyAdapter.class);
 	}

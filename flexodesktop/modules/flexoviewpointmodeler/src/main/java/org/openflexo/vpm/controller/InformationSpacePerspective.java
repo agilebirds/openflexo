@@ -26,14 +26,15 @@ import javax.swing.JLabel;
 import org.openflexo.FlexoCst;
 import org.openflexo.components.widget.FIBInformationSpaceBrowser;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.ontology.IFlexoOntology;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
+import org.openflexo.foundation.ontology.IFlexoOntologyObject;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
+import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.icon.VPMIconLibrary;
 import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.TechnologyAdapterController;
 import org.openflexo.view.controller.model.FlexoPerspective;
-import org.openflexo.vpm.view.OntologyView;
 
 public class InformationSpacePerspective extends FlexoPerspective {
 
@@ -95,26 +96,22 @@ public class InformationSpacePerspective extends FlexoPerspective {
 
 	@Override
 	public boolean hasModuleViewForObject(FlexoObject object) {
-		return object instanceof IFlexoOntology /*|| object == _controller.getBaseOntologyLibrary()*/;
+		if (object instanceof TechnologyObject) {
+			TechnologyAdapter ta = ((TechnologyObject) object).getTechnologyAdapter();
+			TechnologyAdapterController<?> tac = _controller.getApplicationContext().getTechnologyAdapterControllerService()
+					.getTechnologyAdapterController(ta);
+			return tac.hasModuleViewForObject(object);
+		}
+		return false;
 	}
 
 	@Override
-	public ModuleView<? extends FlexoObject> createModuleViewForObject(FlexoObject object, FlexoController controller) {
-		if (object instanceof IFlexoOntology) {
-			// ((IFlexoOntology) object).loadWhenUnloaded();
-			OntologyView returned = new OntologyView((IFlexoOntology) object, (VPMController) controller, this);
-			if (!(object instanceof FlexoMetaModel)) {
-				returned.setShowClasses(false);
-				returned.setShowDataProperties(false);
-				returned.setShowObjectProperties(false);
-				returned.setShowAnnotationProperties(false);
-			} else {
-				returned.setShowClasses(true);
-				returned.setShowDataProperties(true);
-				returned.setShowObjectProperties(true);
-				returned.setShowAnnotationProperties(true);
-			}
-			return returned;
+	public ModuleView<?> createModuleViewForObject(FlexoObject object, FlexoController controller) {
+		if (object instanceof TechnologyObject) {
+			TechnologyAdapter ta = ((TechnologyObject) object).getTechnologyAdapter();
+			TechnologyAdapterController<?> tac = _controller.getApplicationContext().getTechnologyAdapterControllerService()
+					.getTechnologyAdapterController(ta);
+			return tac.createModuleViewForObject(object, _controller, this);
 		}
 		return new EmptyPanel<FlexoObject>(controller, this, object);
 	}
@@ -125,12 +122,9 @@ public class InformationSpacePerspective extends FlexoPerspective {
 	}
 
 	public String getWindowTitleforObject(FlexoObject object) {
-		/*if (object instanceof OntologyLibrary) {
-			return FlexoLocalization.localizedForKey("ontology_library");
+		if (object instanceof IFlexoOntologyObject) {
+			return ((IFlexoOntologyObject) object).getName();
 		}
-		if (object instanceof OWLMetaModel) {
-			return ((OWLMetaModel) object).getName();
-		}*/
 		return object.getFullyQualifiedName();
 	}
 

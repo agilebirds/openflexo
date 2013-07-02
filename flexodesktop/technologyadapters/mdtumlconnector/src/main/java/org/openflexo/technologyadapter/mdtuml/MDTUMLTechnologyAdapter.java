@@ -74,7 +74,7 @@ public class MDTUMLTechnologyAdapter extends EMFTechnologyAdapter {
 	 * 
 	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#isValidMetaModelFile(File aMetaModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
 	 */
-	public boolean isValidMetaModelFile(File aMetaModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
+	public boolean isValidMetaModelFile(File aMetaModelFile, TechnologyContextManager technologyContextManager)
 	{
 		return false;
 	}
@@ -86,7 +86,7 @@ public class MDTUMLTechnologyAdapter extends EMFTechnologyAdapter {
 	 * 
 	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#isValidModelFile(File aModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
 	 */
-	public boolean isValidModelFile(File aModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
+	public boolean isValidModelFile(File aModelFile, TechnologyContextManager technologyContextManager)
 	{
 
 		boolean valid = false;
@@ -108,7 +108,7 @@ public class MDTUMLTechnologyAdapter extends EMFTechnologyAdapter {
 	 * 
 	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#isValidModelFile(File aModelFile, FlexoResource<EMFMetaModel> metaModelResource, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
 	 */
-	public boolean isValidModelFile(File aModelFile, FlexoResource<EMFMetaModel> metaModelResource, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
+	public boolean isValidModelFile(File aModelFile, FlexoResource<EMFMetaModel> metaModelResource, TechnologyContextManager technologyContextManager)
 	{
 		// EMFMetaModelResource emfMetaModelResource = (EMFMetaModelResource)metaModelResource;
 		return isValidModelFile(aModelFile, technologyContextManager);

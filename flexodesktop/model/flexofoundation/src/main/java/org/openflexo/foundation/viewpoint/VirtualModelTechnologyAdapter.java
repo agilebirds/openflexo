@@ -19,21 +19,15 @@
  */
 package org.openflexo.foundation.viewpoint;
 
-import java.io.File;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
-import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
-import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.technologyadapter.MetaModelRepository;
-import org.openflexo.foundation.technologyadapter.ModelRepository;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterBindingFactory;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
-import org.openflexo.foundation.view.VirtualModelInstance;
 
 /**
  * This class defines and implements the Openflexo built-in virtual model technology adapter
@@ -41,8 +35,7 @@ import org.openflexo.foundation.view.VirtualModelInstance;
  * @author sylvain
  * 
  */
-public class VirtualModelTechnologyAdapter<VMI extends VirtualModelInstance<VMI, VM>, VM extends VirtualModel<VM>> extends
-		TechnologyAdapter<VMI, VM> {
+public class VirtualModelTechnologyAdapter extends TechnologyAdapter {
 
 	private static final Logger logger = Logger.getLogger(VirtualModelTechnologyAdapter.class.getPackage().getName());
 
@@ -55,106 +48,11 @@ public class VirtualModelTechnologyAdapter<VMI extends VirtualModelInstance<VMI,
 	}
 
 	@Override
-	public VirtualModelModelSlot<VMI, VM> createNewModelSlot(ViewPoint viewPoint) {
-		return new VirtualModelModelSlot<VMI, VM>(viewPoint, this);
-	}
-
-	@Override
-	public VirtualModelModelSlot<VMI, VM> createNewModelSlot(VirtualModel<?> virtualModel) {
-		return new VirtualModelModelSlot<VMI, VM>(virtualModel, this);
-	}
-
-	/**
-	 * Not applicable here
-	 * 
-	 * @param aMetaModelFile
-	 * @return
-	 */
-	@Override
-	public boolean isValidMetaModelFile(File aMetaModelFile, TechnologyContextManager<VMI, VM> technologyContextManager) {
-		return false;
-	}
-
-	/**
-	 * Retrieve and return URI for supplied meta model file, if supplied file represents a valid XSD meta model
-	 * 
-	 * @param aMetaModelFile
-	 * @return
-	 */
-	@Override
-	public String retrieveMetaModelURI(File aMetaModelFile, TechnologyContextManager<VMI, VM> technologyContextManager) {
-		return null;
-	}
-
-	/**
-	 * Return flag indicating if supplied file represents a valid XML model conform to supplied meta-model
-	 * 
-	 * @param aModelFile
-	 * @param metaModel
-	 * @return
-	 */
-	@Override
-	public boolean isValidModelFile(File aModelFile, FlexoResource<VM> metaModelResource,
-			TechnologyContextManager<VMI, VM> technologyContextManager) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean isValidModelFile(File aModelFile, TechnologyContextManager<VMI, VM> technologyContextManager) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/**
-	 * Creates new model conform to the supplied meta model
-	 * 
-	 * @param project
-	 * @param metaModel
-	 * @return
-	 */
-	@Override
-	public FlexoResource<VMI> createEmptyModel(FlexoProject project, String filename, String modelUri, FlexoResource<VM> metaModel,
-			TechnologyContextManager<VMI, VM> technologyContextManager) {
-		logger.info("Add view");
-		logger.warning("Not implemented yet");
-		return null;
-		/*if (StringUtils.isNotEmpty(newViewTitle) && StringUtils.isEmpty(newViewName)) {
-			newViewName = JavaUtils.getClassName(newViewTitle);
+	public <MS extends ModelSlot<?>> MS makeModelSlot(Class<MS> modelSlotClass, VirtualModel<?> virtualModel) {
+		if (VirtualModelModelSlot.class.isAssignableFrom(modelSlotClass)) {
+			return (MS) new VirtualModelModelSlot(virtualModel, this);
 		}
-
-		if (StringUtils.isNotEmpty(newViewName) && StringUtils.isEmpty(newViewTitle)) {
-			newViewTitle = newViewName;
-		}
-
-		if (getFolder() == null) {
-			throw new InvalidParameterException("folder is undefined");
-		}
-		if (StringUtils.isEmpty(newViewName)) {
-			throw new InvalidParameterException("view name is undefined");
-		}
-
-		int index = 1;
-		String baseName = newViewName;
-		while (getProject().getShemaLibrary().getShemaNamed(newViewName) != null) {
-			newViewName = baseName + index;
-			index++;
-		}
-
-		_newShema = new ViewDefinition(newViewName, getFolder().getShemaLibrary(), getFolder(), getProject(), true);
-		_newShema.setTitle(newViewTitle);
-		if (useViewPoint) {
-			_newShema.setViewPoint(viewpoint);
-		}
-		logger.info("Added view " + _newShema + " for project " + _newShema.getProject());
-		// Creates the resource here
-		_newShema.getShemaResource();*/
-	}
-
-	@Override
-	public FlexoResource<VMI> createEmptyModel(FileSystemBasedResourceCenter resourceCenter, String relativePath, String filename,
-			String modelUri, FlexoResource<VM> metaModelResource, TechnologyContextManager<VMI, VM> technologyContextManager) {
-		// TODO Auto-generated method stub
+		logger.warning("Unexpected model slot: " + modelSlotClass.getName());
 		return null;
 	}
 
@@ -165,60 +63,33 @@ public class VirtualModelTechnologyAdapter<VMI extends VirtualModelInstance<VMI,
 	}
 
 	@Override
-	public FlexoResource<VM> retrieveMetaModelResource(File aMetaModelFile, TechnologyContextManager<VMI, VM> technologyContextManager) {
+	public TechnologyContextManager createTechnologyContextManager(FlexoResourceCenterService service) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String retrieveModelURI(File aModelFile, FlexoResource<VM> metaModelResource,
-			TechnologyContextManager<VMI, VM> technologyContextManager) {
+	public <I> void initializeResourceCenter(FlexoResourceCenter<I> resourceCenter) {
 		// TODO Auto-generated method stub
-		return null;
+
 	}
 
 	@Override
-	public FlexoResource<VMI> retrieveModelResource(File aModelFile, FlexoResource<VM> metaModelResource,
-			TechnologyContextManager<VMI, VM> technologyContextManager) {
+	public <I> boolean isIgnorable(FlexoResourceCenter<I> resourceCenter, I contents) {
 		// TODO Auto-generated method stub
-		return null;
+		return false;
 	}
 
 	@Override
-	public FlexoResource<VMI> retrieveModelResource(File aModelFile, TechnologyContextManager<VMI, VM> technologyContextManager) {
+	public <I> void contentsAdded(FlexoResourceCenter<I> resourceCenter, I contents) {
 		// TODO Auto-generated method stub
-		return null;
+
 	}
 
 	@Override
-	public <R extends FlexoResource<? extends VM>> MetaModelRepository<R, VMI, VM, ? extends TechnologyAdapter<VMI, VM>> createMetaModelRepository(
-			FlexoResourceCenter resourceCenter) {
+	public <I> void contentsDeleted(FlexoResourceCenter<I> resourceCenter, I contents) {
 		// TODO Auto-generated method stub
-		return null;
+
 	}
 
-	@Override
-	public <R extends FlexoResource<? extends VMI>> ModelRepository<R, VMI, VM, ? extends TechnologyAdapter<VMI, VM>> createModelRepository(
-			FlexoResourceCenter resourceCenter) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public TechnologyContextManager<VMI, VM> createTechnologyContextManager(FlexoResourceCenterService service) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getExpectedMetaModelExtension() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getExpectedModelExtension(FlexoResource<VM> metaModel) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

@@ -27,8 +27,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 
@@ -38,7 +37,7 @@ import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationConte
  * @author sylvain
  * 
  */
-public abstract class FetchRequest<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends AssignableAction<M, MM, List<T>> {
+public abstract class FetchRequest<MS extends ModelSlot<?>, T> extends AssignableAction<MS, List<T>> {
 
 	private static final Logger logger = Logger.getLogger(FetchRequest.class.getPackage().getName());
 

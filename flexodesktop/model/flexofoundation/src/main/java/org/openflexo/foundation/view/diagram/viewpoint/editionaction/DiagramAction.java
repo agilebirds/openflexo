@@ -20,13 +20,10 @@
 package org.openflexo.foundation.view.diagram.viewpoint.editionaction;
 
 import org.openflexo.foundation.view.diagram.DiagramModelSlot;
-import org.openflexo.foundation.view.diagram.model.Diagram;
-import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 
-public abstract class DiagramAction<T> extends AssignableAction<Diagram, DiagramSpecification, T> {
+public abstract class DiagramAction<T> extends AssignableAction<DiagramModelSlot, T> {
 
 	public DiagramAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
@@ -39,7 +36,7 @@ public abstract class DiagramAction<T> extends AssignableAction<Diagram, Diagram
 
 	@Override
 	public DiagramModelSlot getModelSlot() {
-		DiagramModelSlot returned = (DiagramModelSlot) super.getModelSlot();
+		DiagramModelSlot returned = super.getModelSlot();
 		if (returned == null) {
 			if (getVirtualModel() != null && getVirtualModel().getModelSlots(DiagramModelSlot.class).size() > 0) {
 				return getVirtualModel().getModelSlots(DiagramModelSlot.class).get(0);

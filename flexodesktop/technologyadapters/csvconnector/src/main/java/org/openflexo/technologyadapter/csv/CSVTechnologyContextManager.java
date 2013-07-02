@@ -6,9 +6,9 @@
 /*    */ import org.openflexo.technologyadapter.csv.model.CSVMetaModel;
 /*    */ import org.openflexo.technologyadapter.csv.model.CSVModel;
 /*    */ 
-/*    */ public class CSVTechnologyContextManager extends TechnologyContextManager<CSVModel, CSVMetaModel>
+/*    */ public class CSVTechnologyContextManager extends TechnologyContextManager
 /*    */ {
-/*    */   public CSVTechnologyContextManager(TechnologyAdapter<CSVModel, CSVMetaModel> adapter, FlexoResourceCenterService resourceCenterService)
+/*    */   public CSVTechnologyContextManager(TechnologyAdapter adapter, FlexoResourceCenterService resourceCenterService)
 /*    */   {
 /* 42 */     super(adapter, resourceCenterService);
 /*    */   }

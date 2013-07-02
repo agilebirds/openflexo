@@ -6,15 +6,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 
 import org.apache.commons.io.IOUtils;
 import org.jdom2.JDOMException;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
-import org.openflexo.foundation.technologyadapter.MetaModelRepository;
-import org.openflexo.foundation.technologyadapter.ModelRepository;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
@@ -39,7 +36,10 @@ import org.openflexo.model.factory.SerializationPolicy;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.IProgress;
 
-public class UserResourceCenter /*extends FileSystemBasedResourceCenter*/implements FlexoResourceCenter {
+// TODO: SGU: i don't know the status of this.
+// This class was initiated by Guillaume before the huge 1.6 refactoring.
+// Those works need to be merged
+public class UserResourceCenter /*extends FileSystemBasedResourceCenter*/implements FlexoResourceCenter<File> {
 
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(UserResourceCenter.class
 			.getPackage().getName());
@@ -147,6 +147,12 @@ public class UserResourceCenter /*extends FileSystemBasedResourceCenter*/impleme
 		}
 		return returned;
 
+	}
+
+	@Override
+	public FlexoResource<?> retrieveResource(String uri, IProgress progress) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -262,17 +268,26 @@ public class UserResourceCenter /*extends FileSystemBasedResourceCenter*/impleme
 	}
 
 	@Override
-	public <R extends FlexoResource<? extends M>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> ModelRepository<R, M, MM, TA> getModelRepository(
-			TA technologyAdapter) {
+	public Iterator<File> iterator() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> MetaModelRepository<R, M, MM, TA> getMetaModelRepository(
-			TA technologyAdapter) {
+	public <R extends ResourceRepository<?>> R getRepository(Class<? extends R> repositoryType, TechnologyAdapter technologyAdapter) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
+	public <R extends ResourceRepository<?>> void registerRepository(R repository, Class<? extends R> repositoryType,
+			TechnologyAdapter technologyAdapter) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public List<ResourceRepository<?>> getRegistedRepositories(TechnologyAdapter technologyAdapter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

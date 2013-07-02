@@ -2,10 +2,8 @@ package org.openflexo.diagram.controller;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.components.widget.OntologyBrowserModel;
-import org.openflexo.foundation.ontology.IFlexoOntology;
-import org.openflexo.foundation.ontology.IFlexoOntologyObject;
-import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
+import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.foundation.view.diagram.DiagramTechnologyAdapter;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPatternRole;
@@ -21,8 +19,12 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.VEIconLibrary;
+import org.openflexo.view.EmptyPanel;
+import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.TechnologyAdapterController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 public class DiagramTechnologyAdapterController extends TechnologyAdapterController<DiagramTechnologyAdapter> {
 
@@ -78,18 +80,7 @@ public class DiagramTechnologyAdapterController extends TechnologyAdapterControl
 	 * @return
 	 */
 	@Override
-	public ImageIcon getIconForOntologyObject(Class<? extends IFlexoOntologyObject> objectClass) {
-		return null;
-	}
-
-	/**
-	 * Return icon representing supplied property value
-	 * 
-	 * @param object
-	 * @return
-	 */
-	@Override
-	public ImageIcon getIconForPropertyValue(Class<? extends IFlexoOntologyPropertyValue> objectClass) {
+	public ImageIcon getIconForTechnologyObject(Class<? extends TechnologyObject> objectClass) {
 		return null;
 	}
 
@@ -130,9 +121,16 @@ public class DiagramTechnologyAdapterController extends TechnologyAdapterControl
 	}
 
 	@Override
-	public OntologyBrowserModel makeOntologyBrowserModel(IFlexoOntology model) {
+	public boolean hasModuleViewForObject(FlexoObject object) {
 		// TODO not applicable
-		return null;
+		return false;
+	}
+
+	@Override
+	public <T extends FlexoObject> ModuleView<T> createModuleViewForObject(T object, FlexoController controller,
+			FlexoPerspective perspective) {
+		// TODO not applicable
+		return new EmptyPanel<T>(controller, perspective, object);
 	}
 
 }

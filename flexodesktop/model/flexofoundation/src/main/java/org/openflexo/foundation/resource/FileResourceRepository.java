@@ -30,7 +30,7 @@ import java.util.logging.Logger;
  * @param <R>
  * @param <TA>
  */
-public class FileResourceRepository<R extends FlexoResource<?>> extends ResourceRepository<R> {
+public class FileResourceRepository<R extends FlexoFileResource<?>> extends ResourceRepository<R> {
 
 	private static final Logger logger = Logger.getLogger(FileResourceRepository.class.getPackage().getName());
 

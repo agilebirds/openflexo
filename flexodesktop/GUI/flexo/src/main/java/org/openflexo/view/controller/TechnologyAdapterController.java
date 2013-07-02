@@ -23,12 +23,10 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.components.widget.OntologyBrowserModel;
-import org.openflexo.foundation.ontology.IFlexoOntology;
-import org.openflexo.foundation.ontology.IFlexoOntologyObject;
-import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
+import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.foundation.viewpoint.AddEditionPatternInstance;
 import org.openflexo.foundation.viewpoint.ConditionalAction;
 import org.openflexo.foundation.viewpoint.DeleteAction;
@@ -41,6 +39,8 @@ import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconLibrary;
 import org.openflexo.icon.VEIconLibrary;
 import org.openflexo.icon.VPMIconLibrary;
+import org.openflexo.view.ModuleView;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 /**
  * This class represents a technology-specific controller provided by a {@link TechnologyAdapter}<br>
@@ -51,7 +51,7 @@ import org.openflexo.icon.VPMIconLibrary;
  * @author sylvain
  * 
  */
-public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<?, ?>> {
+public abstract class TechnologyAdapterController<TA extends TechnologyAdapter> {
 
 	private static final Logger logger = Logger.getLogger(TechnologyAdapterController.class.getPackage().getName());
 
@@ -132,15 +132,7 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<?
 	 * @param object
 	 * @return
 	 */
-	public abstract ImageIcon getIconForOntologyObject(Class<? extends IFlexoOntologyObject> objectClass);
-
-	/**
-	 * Return icon representing supplied property value
-	 * 
-	 * @param object
-	 * @return
-	 */
-	public abstract ImageIcon getIconForPropertyValue(Class<? extends IFlexoOntologyPropertyValue> objectClass);
+	public abstract ImageIcon getIconForTechnologyObject(Class<? extends TechnologyObject> objectClass);
 
 	/**
 	 * Return icon representing supplied pattern role
@@ -180,5 +172,9 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter<?
 
 	}
 
-	public abstract OntologyBrowserModel makeOntologyBrowserModel(IFlexoOntology context);
+	public abstract boolean hasModuleViewForObject(FlexoObject object);
+
+	public abstract <T extends FlexoObject> ModuleView<T> createModuleViewForObject(T object, FlexoController controller,
+			FlexoPerspective perspective);
+
 }

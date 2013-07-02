@@ -26,26 +26,31 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
+import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
-import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
-import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.openflexo.foundation.view.View;
+import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.NamedViewPointObject;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
+import org.openflexo.technologyadapter.xsd.model.AbstractXSOntObject;
 import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
+import org.openflexo.technologyadapter.xsd.rm.XMLXSDFileResource;
+import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSClassPatternRole;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSIndividualPatternRole;
 import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSClass;
@@ -57,24 +62,25 @@ import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSIndividu
  * @author Luka Le Roux, Sylvain Guerin, Christophe Guychard
  * 
  */
-@DeclarePatternRoles({ @DeclarePatternRole(XSIndividualPatternRole.class), // Instances
-	@DeclarePatternRole(XSClassPatternRole.class) // Classes
+@DeclarePatternRoles({ // All pattern roles available through this model slot
+	@DeclarePatternRole(FML = "XSIndividual", patternRoleClass = XSIndividualPatternRole.class),
+	@DeclarePatternRole(FML = "XSClass", patternRoleClass = XSClassPatternRole.class), })
+@DeclareEditionActions({ // All edition actions available through this model slot
+	@DeclareEditionAction(FML = "AddXSIndividual", editionActionClass = AddXSIndividual.class),
+	@DeclareEditionAction(FML = "AddXSClass", editionActionClass = AddXSClass.class) })
+@DeclareFetchRequests({ // All requests available through this model slot
 })
-@DeclareEditionActions({ @DeclareEditionAction(AddXSIndividual.class), // Add instance
-	@DeclareEditionAction(AddXSClass.class) // Add class
-})
-public class XSDModelSlot extends FlexoOntologyModelSlot<XMLXSDModel, XSDMetaModel> {
-
+public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> {
 	static final Logger logger = Logger.getLogger(XSDModelSlot.class.getPackage().getName());
 
 	/* Used to process URIs for XML Objects */
 	private Hashtable<String, XSURIProcessor> uriProcessors;
 
-	public XSDModelSlot(ViewPoint viewPoint, XSDTechnologyAdapter adapter) {
+	/*public XSDModelSlot(ViewPoint viewPoint, XSDTechnologyAdapter adapter) {
 		super(viewPoint, adapter);
 		if (uriProcessors == null)
 			uriProcessors = new Hashtable<String, XSURIProcessor>();
-	}
+	}*/
 
 	public XSDModelSlot(VirtualModel<?> virtualModel, XSDTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
@@ -88,15 +94,23 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLXSDModel, XSDMetaMod
 			uriProcessors = new Hashtable<String, XSURIProcessor>();
 	}
 
-	public XSDModelSlot(ViewPointBuilder builder) {
+	/*public XSDModelSlot(ViewPointBuilder builder) {
 		super(builder);
 		if (uriProcessors == null)
 			uriProcessors = new Hashtable<String, XSURIProcessor>();
-	}
+	}*/
 
 	@Override
 	public Class<XSDTechnologyAdapter> getTechnologyAdapterClass() {
 		return XSDTechnologyAdapter.class;
+	}
+
+	/**
+	 * Instanciate a new model slot instance configuration for this model slot
+	 */
+	@Override
+	public XSDModelSlotInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
+		return new XSDModelSlotInstanceConfiguration(this, action);
 	}
 
 	/**
@@ -137,7 +151,7 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLXSDModel, XSDMetaMod
 	 * @return
 	 */
 	@Override
-	public <EA extends EditionAction<?, ?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
+	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddXSIndividual.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddXSIndividual(null);
 		} else if (AddXSClass.class.isAssignableFrom(editionActionClass)) {
@@ -148,34 +162,28 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLXSDModel, XSDMetaMod
 	}
 
 	@Override
-	public <FR extends FetchRequest<?, ?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
+	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
 		return null;
 	}
 
-	@Override
-	@Deprecated
-	public BindingVariable makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
-		return null;
-	}
-	
 
 	/*=====================================================================================
 	 * URI Accessors
 	 */
-	
 
 	// TODO Manage the fact that URI May Change
 
-	@Override
-	public String getURIForObject(ModelSlotInstance msInstance, Object o) {
 
+	@Override
+	public String getURIForObject(
+			TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, ? extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel>> msInstance, Object o) {
 		XSOntIndividual xsO = (XSOntIndividual) o;
 
 		String ltypeURI = ((XSOntClass) xsO.getType()).getURI();
 		XSURIProcessor mapParams = uriProcessors.get(ltypeURI);
 
 		if (mapParams != null){
-			return mapParams.getURIForObject(msInstance, xsO);	
+			return mapParams.getURIForObject((TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, XSDModelSlot>) msInstance, xsO);	
 		}
 		else {
 			logger.warning("XSDModelSlot: unable to get the URIProcessor for element of type: "+((XSOntClass) xsO.getType()).getName());
@@ -186,7 +194,7 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLXSDModel, XSDMetaMod
 	}
 
 	@Override
-	public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) {
+	public Object retrieveObjectWithURI(TypeSafeModelSlotInstance<XMLXSDModel, XSDMetaModel, ? extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel>> msInstance, String objectURI) {
 
 		XSURIProcessor mapParams = uriProcessors.get(XSURIProcessor.retrieveTypeURI(msInstance, objectURI));
 		if (mapParams != null){
@@ -244,6 +252,24 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLXSDModel, XSDMetaMod
 	@Override
 	public Type getType() {
 		return XMLXSDModel.class;
+	}
+
+	@Override
+	public XSDTechnologyAdapter getTechnologyAdapter() {
+		return (XSDTechnologyAdapter) super.getTechnologyAdapter();
+	}
+
+	@Override
+	public XMLXSDFileResource createProjectSpecificEmptyModel(View view, String filename, String modelUri,
+			FlexoMetaModelResource<XMLXSDModel, XSDMetaModel> metaModelResource) {
+		return getTechnologyAdapter().createNewXMLFile(view.getProject(), filename, modelUri, metaModelResource);
+	}
+
+	@Override
+	public XMLXSDFileResource createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter, String relativePath, String filename,
+			String modelUri, FlexoMetaModelResource<XMLXSDModel, XSDMetaModel> metaModelResource) {
+		return getTechnologyAdapter().createNewXMLFile((FileSystemBasedResourceCenter) resourceCenter, relativePath, filename, modelUri,
+				(XSDMetaModelResource) metaModelResource);
 	}
 
 }

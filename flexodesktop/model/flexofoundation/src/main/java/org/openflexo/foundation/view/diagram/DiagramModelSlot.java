@@ -2,8 +2,6 @@ package org.openflexo.foundation.view.diagram;
 
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclareFetchRequest;
@@ -11,7 +9,6 @@ import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
-import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 import org.openflexo.foundation.view.diagram.action.CreateDiagram;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
@@ -28,8 +25,6 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.SelectEditionPatternInstance;
-import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.viewpoint.ViewPoint.ViewPointBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
 
@@ -39,27 +34,27 @@ import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
  * @author sylvain
  * 
  */
-@DeclarePatternRoles({ @DeclarePatternRole(DiagramPatternRole.class), // Diagrams
-		@DeclarePatternRole(ShapePatternRole.class), // Shapes
-		@DeclarePatternRole(ConnectorPatternRole.class), // Connectors
-		@DeclarePatternRole(EditionPatternInstancePatternRole.class) // EditionPatternInstance
+@DeclarePatternRoles({ // All pattern roles available through this model slot
+@DeclarePatternRole(FML = "Diagram", patternRoleClass = DiagramPatternRole.class), // Diagrams
+		@DeclarePatternRole(FML = "Shape", patternRoleClass = ShapePatternRole.class), // Shapes
+		@DeclarePatternRole(FML = "Connector", patternRoleClass = ConnectorPatternRole.class), // Connectors
+		@DeclarePatternRole(FML = "EditionPatternInstance", patternRoleClass = EditionPatternInstancePatternRole.class) // EditionPatternInstance
 })
-@DeclareEditionActions({ @DeclareEditionAction(AddDiagram.class), // Add diagram
-		@DeclareEditionAction(AddShape.class), // Add shape
-		@DeclareEditionAction(AddConnector.class), // Add connector
-		@DeclareEditionAction(GraphicalAction.class), // Graphical action
-		@DeclareEditionAction(DeleteAction.class), // Delete action
-		@DeclareEditionAction(AddEditionPatternInstance.class) // Add EditionPatternInstance
-})
-@DeclareFetchRequests({ @DeclareFetchRequest(SelectEditionPatternInstance.class) // Allows to select some EditionPatternInstance
-})
+@DeclareEditionActions({ // All edition actions available through this model slot
+@DeclareEditionAction(FML = "AddDiagram", editionActionClass = AddDiagram.class),
+		@DeclareEditionAction(FML = "AddShape", editionActionClass = AddShape.class),
+		@DeclareEditionAction(FML = "AddConnector", editionActionClass = AddConnector.class),
+		@DeclareEditionAction(FML = "GraphicalAction", editionActionClass = GraphicalAction.class),
+		@DeclareEditionAction(FML = "AddEditionPatternInstance", editionActionClass = AddEditionPatternInstance.class) })
+@DeclareFetchRequests({ // All requests available through this model slot
+@DeclareFetchRequest(FML = "SelectEditionPatternInstance", fetchRequestClass = SelectEditionPatternInstance.class) })
 public class DiagramModelSlot extends VirtualModelModelSlot<Diagram, DiagramSpecification> {
 
 	private static final Logger logger = Logger.getLogger(DiagramModelSlot.class.getPackage().getName());
 
-	public DiagramModelSlot(ViewPoint viewPoint, DiagramTechnologyAdapter adapter) {
+	/*public DiagramModelSlot(ViewPoint viewPoint, DiagramTechnologyAdapter adapter) {
 		super(viewPoint, adapter);
-	}
+	}*/
 
 	public DiagramModelSlot(DiagramSpecification diagramSpecification, DiagramTechnologyAdapter adapter) {
 		super(diagramSpecification, adapter);
@@ -69,9 +64,9 @@ public class DiagramModelSlot extends VirtualModelModelSlot<Diagram, DiagramSpec
 		super(builder);
 	}
 
-	public DiagramModelSlot(ViewPointBuilder builder) {
+	/*public DiagramModelSlot(ViewPointBuilder builder) {
 		super(builder);
-	}
+	}*/
 
 	@Override
 	public String getFullyQualifiedName() {
@@ -81,18 +76,6 @@ public class DiagramModelSlot extends VirtualModelModelSlot<Diagram, DiagramSpec
 	@Override
 	public Class<DiagramTechnologyAdapter> getTechnologyAdapterClass() {
 		return DiagramTechnologyAdapter.class;
-	}
-
-	@Override
-	public BindingVariable makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
-		/*if (pr instanceof ShapePatternRole) {
-			return new ShapePatternRolePathElement((ShapePatternRole) pr, container);
-		} else if (pr instanceof ConnectorPatternRole) {
-			return new ConnectorPatternRolePathElement((ConnectorPatternRole) pr, container);
-		} else {
-			return null;
-		}*/
-		return null;
 	}
 
 	@Override
@@ -126,7 +109,7 @@ public class DiagramModelSlot extends VirtualModelModelSlot<Diagram, DiagramSpec
 	}
 
 	@Override
-	public <EA extends EditionAction<?, ?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
+	public <EA extends EditionAction<?, ?>> EA makeEditionAction(Class<EA> editionActionClass) {
 		if (AddDiagram.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddDiagram(null);
 		} else if (AddShape.class.isAssignableFrom(editionActionClass)) {
@@ -148,8 +131,7 @@ public class DiagramModelSlot extends VirtualModelModelSlot<Diagram, DiagramSpec
 	}
 
 	@Override
-	public ModelSlotInstanceConfiguration<? extends VirtualModelModelSlot<Diagram, DiagramSpecification>> createConfiguration(
-			CreateVirtualModelInstance<?> action) {
+	public DiagramModelSlotInstanceConfiguration createConfiguration(CreateVirtualModelInstance<?> action) {
 		if (action instanceof CreateDiagram) {
 			return new DiagramModelSlotInstanceConfiguration(this, (CreateDiagram) action);
 		} else {

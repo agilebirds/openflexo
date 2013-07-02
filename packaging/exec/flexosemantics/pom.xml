@@ -77,6 +77,16 @@
             <artifactId>xmlconnector</artifactId>
             <classifier>resources</classifier>
             <type>zip</type>
+  		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>excelconnector</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>excelconnector</artifactId>
+            <classifier>resources</classifier>
+            <type>zip</type>
         </dependency>
     </dependencies>
 </project>

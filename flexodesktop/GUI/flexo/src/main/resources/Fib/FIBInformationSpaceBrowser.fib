@@ -8,12 +8,10 @@
       <Children data="viewPointFolder.children" visible="" cast="" name="subFolders" />
       <Children data="viewPointFolder.resources" visible="" cast="" name="resource" />
     </BrowserElement>
-    <BrowserElement dataClassName="org.openflexo.foundation.technologyadapter.FlexoMetaModelResource" label="metaModelResource.name" icon="controller.iconForObject(metaModelResource)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="metaModelResource" />
+    <BrowserElement dataClassName="org.openflexo.foundation.resource.FlexoResource" label="resource.name" icon="controller.iconForObject(resource)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="resource" />
     <BrowserElement dataClassName="org.openflexo.foundation.technologyadapter.TechnologyAdapter" label="technologyAdapter.name" icon="controller.iconForObject(technologyAdapter)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="technologyAdapter">
-      <Children data="data.getAllModelRepositories(technologyAdapter)" visible="" cast="child.rootFolder" name="modelRepositories" />
-      <Children data="data.getAllMetaModelRepositories(technologyAdapter)" visible="" cast="child.rootFolder" name="metaModelRepositories" />
+      <Children data="data.getAllRepositories(technologyAdapter)" visible="" cast="child.rootFolder" name="repositories" />
     </BrowserElement>
-    <BrowserElement dataClassName="org.openflexo.foundation.technologyadapter.FlexoModelResource" label="modelResource.name" icon="controller.iconForObject(modelResource)" tooltip="" enabled="" visible="" isEditable="false" editableLabel="" filtered="false" defaultVisible="true" dynamicFont="" name="modelResource" />
   </Browser>
   <LocalizedDictionary />
 </Panel>

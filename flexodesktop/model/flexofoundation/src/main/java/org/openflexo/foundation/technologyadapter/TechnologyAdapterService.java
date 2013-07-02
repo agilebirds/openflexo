@@ -6,6 +6,7 @@ import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.resource.ResourceRepository;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.Getter.Cardinality;
@@ -34,16 +35,16 @@ public interface TechnologyAdapterService extends FlexoService {
 	// public void loadAvailableTechnologyAdapters();
 
 	@Getter(value = TECHNOLOGY_ADAPTERS, cardinality = Cardinality.LIST, ignoreType = true)
-	public List<TechnologyAdapter<?, ?>> getTechnologyAdapters();
+	public List<TechnologyAdapter> getTechnologyAdapters();
 
 	@Setter(TECHNOLOGY_ADAPTERS)
-	public void setTechnologyAdapters(List<TechnologyAdapter<?, ?>> technologyAdapters);
+	public void setTechnologyAdapters(List<TechnologyAdapter> technologyAdapters);
 
 	@Adder(TECHNOLOGY_ADAPTERS)
-	public void addToTechnologyAdapters(TechnologyAdapter<?, ?> technologyAdapters);
+	public void addToTechnologyAdapters(TechnologyAdapter technologyAdapters);
 
 	@Remover(TECHNOLOGY_ADAPTERS)
-	public void removeFromTechnologyAdapters(TechnologyAdapter<?, ?> technologyAdapters);
+	public void removeFromTechnologyAdapters(TechnologyAdapter technologyAdapters);
 
 	@Getter(value = RESOURCE_CENTER_SERVICE, ignoreType = true)
 	public FlexoResourceCenterService getFlexoResourceCenterService();
@@ -58,7 +59,7 @@ public interface TechnologyAdapterService extends FlexoService {
 	 * @param technologyAdapterClass
 	 * @return
 	 */
-	public <TA extends TechnologyAdapter<?, ?>> TA getTechnologyAdapter(Class<TA> technologyAdapterClass);
+	public <TA extends TechnologyAdapter> TA getTechnologyAdapter(Class<TA> technologyAdapterClass);
 
 	/**
 	 * Return the {@link TechnologyContextManager} for this technology shared by all {@link FlexoResourceCenter} declared in the scope of
@@ -66,7 +67,7 @@ public interface TechnologyAdapterService extends FlexoService {
 	 * 
 	 * @return
 	 */
-	public TechnologyContextManager<?, ?> getTechnologyContextManager(TechnologyAdapter<?, ?> technologyAdapter);
+	public TechnologyContextManager getTechnologyContextManager(TechnologyAdapter technologyAdapter);
 
 	/**
 	 * Return the list of all non-empty {@link ModelRepository} discoverable in the scope of {@link FlexoServiceManager}, related to
@@ -75,7 +76,7 @@ public interface TechnologyAdapterService extends FlexoService {
 	 * @param technologyAdapter
 	 * @return
 	 */
-	public List<ModelRepository<?, ?, ?, ?>> getAllModelRepositories(TechnologyAdapter<?, ?> technologyAdapter);
+	// public List<ModelRepository<?, ?, ?, ?>> getAllModelRepositories(TechnologyAdapter technologyAdapter);
 
 	/*public <R extends FlexoResource<? extends M>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> List<ModelRepository<R, M, MM, TA>> getAllModelRepositories(
 			TA technologyAdapter);*/
@@ -87,7 +88,16 @@ public interface TechnologyAdapterService extends FlexoService {
 	 * @param technologyAdapter
 	 * @return
 	 */
-	public List<MetaModelRepository<?, ?, ?, ?>> getAllMetaModelRepositories(TechnologyAdapter<?, ?> technologyAdapter);
+	// public List<MetaModelRepository<?, ?, ?, ?>> getAllMetaModelRepositories(TechnologyAdapter technologyAdapter);
 	/*public <R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> List<MetaModelRepository<R, M, MM, TA>> getAllMetaModelRepositories(
 			TA technologyAdapter);*/
+
+	/**
+	 * Return the list of all non-empty {@link ResourceRepository} discovered in the scope of {@link FlexoServiceManager}, related to
+	 * technology as supplied by {@link TechnologyAdapter} parameter
+	 * 
+	 * @param technologyAdapter
+	 * @return
+	 */
+	public List<ResourceRepository<?>> getAllRepositories(TechnologyAdapter technologyAdapter);
 }

@@ -17,6 +17,7 @@
 		<module>mdtumlconnector</module>
 		<module>csvconnector</module>
 		<module>xmlconnector</module>
+		<module>excelconnector</module>
 	</modules>
 	<build>
 		<!--  <resources>

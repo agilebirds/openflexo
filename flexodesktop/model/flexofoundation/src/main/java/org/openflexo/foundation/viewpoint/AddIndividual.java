@@ -27,8 +27,7 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IndividualOfClass;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.validation.FixProposal;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
@@ -37,8 +36,7 @@ import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationConte
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T extends IFlexoOntologyIndividual> extends
-		AddConcept<M, MM, T> {
+public abstract class AddIndividual<MS extends TypeAwareModelSlot<?, ?>, T extends IFlexoOntologyIndividual> extends AddConcept<MS, T> {
 
 	protected static final Logger logger = FlexoLogger.getLogger(AddIndividual.class.getPackage().getName());
 
@@ -120,7 +118,7 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 	@Override
 	public IFlexoOntologyClass getOntologyClass() {
 		// System.out.println("AddIndividual: ontologyClassURI=" + ontologyClassURI);
-		if (StringUtils.isNotEmpty(ontologyClassURI)) {
+		if (StringUtils.isNotEmpty(ontologyClassURI) && getVirtualModel() != null) {
 			return getVirtualModel().getOntologyClass(ontologyClassURI);
 		} else {
 			if (getPatternRole() != null) {
@@ -134,7 +132,6 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 
 	@Override
 	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
-		System.out.println("!!!!!!!! Je sette la classe avec " + ontologyClass);
 		if (ontologyClass != null) {
 			if (getPatternRole() instanceof IndividualPatternRole) {
 				if (getPatternRole().getOntologicType().isSuperConceptOf(ontologyClass)) {
@@ -286,7 +283,7 @@ public abstract class AddIndividual<M extends FlexoModel<M, MM>, MM extends Flex
 
 			@Override
 			protected void fixAction() {
-				AddIndividual<?, ?, ?> action = getObject();
+				AddIndividual<?, ?> action = getObject();
 				action.setAssignation(new DataBinding<Object>(patternRole.getPatternRoleName()));
 			}
 

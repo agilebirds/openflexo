@@ -69,7 +69,7 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 	 * @param technologyContextManager
 	 * @return
 	 */
-	public static XMLXSDFileResource makeXMLXSDModelResource(String modelUri,
+	public static XMLXSDFileResource makeXMLXSDFileResource(String modelUri,
 			File xmlFile, XSDMetaModelResource metaModelResource,
 			XSDTechnologyContextManager technologyContextManager) {
 
@@ -86,7 +86,8 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 			returned.getModel().setResource(returned);
 			returned.setMetaModelResource(metaModelResource);
 
-			technologyContextManager.registerModel((FlexoModelResource<XMLXSDModel, XSDMetaModel>) returned);
+			// FIXME : check that this is ok
+			technologyContextManager.registerResource(returned);
 
 			// FIXME : comment ça marche le resource Manager?
 			// test pour créer le fichier si jamais il n'existe pas

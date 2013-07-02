@@ -146,8 +146,8 @@ public class EditionPatternInstancePatternRole extends PatternRole<EditionPatter
 	}
 
 	@Override
-	public VirtualModelModelSlot<?, ?> getModelSlot() {
-		VirtualModelModelSlot<?, ?> returned = (VirtualModelModelSlot<?, ?>) super.getModelSlot();
+	public VirtualModelModelSlot getModelSlot() {
+		VirtualModelModelSlot returned = (VirtualModelModelSlot) super.getModelSlot();
 		if (returned == null) {
 			if (getVirtualModel() != null && getVirtualModel().getModelSlots(VirtualModelModelSlot.class).size() > 0) {
 				return getVirtualModel().getModelSlots(VirtualModelModelSlot.class).get(0);
@@ -156,11 +156,11 @@ public class EditionPatternInstancePatternRole extends PatternRole<EditionPatter
 		return returned;
 	}
 
-	public VirtualModelModelSlot<?, ?> getVirtualModelModelSlot() {
+	public VirtualModelModelSlot getVirtualModelModelSlot() {
 		return getModelSlot();
 	}
 
-	public void setVirtualModelModelSlot(VirtualModelModelSlot<?, ?> modelSlot) {
+	public void setVirtualModelModelSlot(VirtualModelModelSlot modelSlot) {
 		setModelSlot(modelSlot);
 	}
 

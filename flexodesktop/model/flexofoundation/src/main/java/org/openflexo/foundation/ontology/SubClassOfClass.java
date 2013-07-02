@@ -49,7 +49,7 @@ public class SubClassOfClass implements TechnologySpecificCustomType {
 	}
 
 	@Override
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+	public TechnologyAdapter getTechnologyAdapter() {
 		if (getOntologyClass() != null) {
 			return getOntologyClass().getTechnologyAdapter();
 		}

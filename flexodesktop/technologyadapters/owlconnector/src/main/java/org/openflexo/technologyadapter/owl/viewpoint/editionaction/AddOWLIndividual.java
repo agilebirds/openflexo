@@ -26,11 +26,13 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.technologyadapter.owl.OWLModelSlot;
 import org.openflexo.technologyadapter.owl.model.OWLClass;
 import org.openflexo.technologyadapter.owl.model.OWLConcept;
 import org.openflexo.technologyadapter.owl.model.OWLIndividual;
@@ -38,7 +40,7 @@ import org.openflexo.technologyadapter.owl.model.OWLObjectProperty;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLProperty;
 
-public class AddOWLIndividual extends AddIndividual<OWLOntology, OWLOntology, OWLIndividual> {
+public class AddOWLIndividual extends AddIndividual<OWLModelSlot, OWLIndividual> {
 
 	private static final Logger logger = Logger.getLogger(AddOWLIndividual.class.getPackage().getName());
 
@@ -78,10 +80,10 @@ public class AddOWLIndividual extends AddIndividual<OWLOntology, OWLOntology, OW
 		OWLIndividual newIndividual = null;
 		try {
 			if (getModelSlotInstance(action) != null) {
-				if (getModelSlotInstance(action).getModel() != null) {
+				if (getModelSlotInstance(action).getResourceData() != null) {
 					logger.info("Adding individual individualName=" + getIndividualName() + " father =" + getOntologyClass());
 					logger.info("Adding individual individualName=" + individualName + " father =" + father);
-					newIndividual = getModelSlotInstance(action).getModel().createOntologyIndividual(individualName, father);
+					newIndividual = getModelSlotInstance(action).getResourceData().createOntologyIndividual(individualName, father);
 					logger.info("********* Added individual " + newIndividual.getName() + " as " + father);
 
 					for (DataPropertyAssertion dataPropertyAssertion : getDataAssertions()) {
@@ -137,6 +139,11 @@ public class AddOWLIndividual extends AddIndividual<OWLOntology, OWLOntology, OW
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	@Override
+	public TypeSafeModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot> getModelSlotInstance(EditionSchemeAction action) {
+		return (TypeSafeModelSlotInstance<OWLOntology, OWLOntology, OWLModelSlot>) super.getModelSlotInstance(action);
 	}
 
 }

@@ -66,7 +66,7 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 			return new EditionPatternPatternRolePathElement<PatternRole<?>>(parent, (PatternRole<?>) object);
 		}
 		if (object instanceof ModelSlot) {
-			return new VirtualModelModelSlotPathElement<ModelSlot<?, ?>>(parent, (ModelSlot<?, ?>) object);
+			return new VirtualModelModelSlotPathElement<ModelSlot>(parent, (ModelSlot) object);
 		}
 		if (object instanceof EditionSchemeParameter) {
 			if (parent.getType() instanceof EditionSchemeParametersType) {
@@ -84,7 +84,7 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 
 		if (parent.getType() instanceof TechnologySpecificCustomType) {
 			TechnologySpecificCustomType parentType = (TechnologySpecificCustomType) parent.getType();
-			TechnologyAdapter<?, ?> ta = parentType.getTechnologyAdapter();
+			TechnologyAdapter ta = parentType.getTechnologyAdapter();
 			if (ta != null && ta.getTechnologyAdapterBindingFactory().handleType(parentType)) {
 				List<? extends SimplePathElement> returned = ta.getTechnologyAdapterBindingFactory()
 						.getAccessibleSimplePathElements(parent);
@@ -146,7 +146,7 @@ public final class EditionPatternBindingFactory extends JavaBindingFactory {
 			EditionPattern ep = ((EditionPatternInstanceType) parent.getType()).getEditionPattern();
 			if (ep instanceof VirtualModel) {
 				VirtualModel<?> vm = (VirtualModel<?>) ep;
-				for (ModelSlot<?, ?> ms : vm.getModelSlots()) {
+				for (ModelSlot ms : vm.getModelSlots()) {
 					returned.add(getSimplePathElement(ms, parent));
 				}
 			}

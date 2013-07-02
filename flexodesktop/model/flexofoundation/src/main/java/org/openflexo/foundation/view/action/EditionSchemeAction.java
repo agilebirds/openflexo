@@ -1,5 +1,7 @@
 /*
- * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2010-2012 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
+ *
  *
  * This file is part of OpenFlexo.
  *
@@ -37,8 +39,9 @@ import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.rm.FlexoProject;
-import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.VirtualModelInstance;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
@@ -65,7 +68,7 @@ import org.openflexo.toolbox.StringUtils;
  * @param <A>
  */
 public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, ES extends EditionScheme> extends
-		FlexoAction<A, FlexoModelObject, FlexoModelObject> implements SettableBindingEvaluationContext {
+FlexoAction<A, FlexoModelObject, FlexoModelObject> implements SettableBindingEvaluationContext {
 
 	private static final Logger logger = Logger.getLogger(EditionSchemeAction.class.getPackage().getName());
 
@@ -358,16 +361,15 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 		public synchronized Object put(EditionSchemeParameter parameter, Object value) {
 			Object returned = super.put(parameter, value);
 			for (EditionSchemeParameter p : parameter.getEditionScheme().getParameters()) {
-				if (p != parameter && p instanceof URIParameter && ((URIParameter) p).getModelSlot() instanceof FlexoOntologyModelSlot) {
+				if (p != parameter && p instanceof URIParameter && ((URIParameter) p).getModelSlot() instanceof TypeAwareModelSlot) {
 					URIParameter uriParam = (URIParameter) p;
-					FlexoOntologyModelSlot modelSlot = uriParam.getModelSlot();
+					TypeAwareModelSlot modelSlot = uriParam.getModelSlot();
 					String newURI;
 					try {
 						newURI = uriParam.getBaseURI().getBindingValue(EditionSchemeAction.this);
-						if (newURI == null) {
-							newURI = "generatedURI";
-						}
-						newURI = modelSlot.generateUniqueURIName(getVirtualModelInstance().getModelSlotInstance(modelSlot), newURI);
+
+						newURI = modelSlot.generateUniqueURIName((TypeSafeModelSlotInstance) getVirtualModelInstance()
+								.getModelSlotInstance(modelSlot), newURI);
 						logger.info("Generated new URI " + newURI + " for " + getVirtualModelInstance().getModelSlotInstance(modelSlot));
 						super.put(uriParam, newURI);
 					} catch (TypeMismatchException e) {
@@ -390,9 +392,9 @@ public abstract class EditionSchemeAction<A extends EditionSchemeAction<A, ES>, 
 	public String retrieveFullURI(EditionSchemeParameter parameter) {
 		if (parameter instanceof URIParameter) {
 			URIParameter uriParam = (URIParameter) parameter;
-			if (uriParam.getModelSlot() instanceof FlexoOntologyModelSlot) {
-				FlexoOntologyModelSlot modelSlot = uriParam.getModelSlot();
-				return modelSlot.generateUniqueURI(getVirtualModelInstance().getModelSlotInstance(modelSlot),
+			if (uriParam.getModelSlot() instanceof TypeAwareModelSlot) {
+				TypeAwareModelSlot modelSlot = uriParam.getModelSlot();
+				return modelSlot.generateUniqueURI((TypeSafeModelSlotInstance) getVirtualModelInstance().getModelSlotInstance(modelSlot),
 						(String) getParameterValue(parameter));
 			}
 		}

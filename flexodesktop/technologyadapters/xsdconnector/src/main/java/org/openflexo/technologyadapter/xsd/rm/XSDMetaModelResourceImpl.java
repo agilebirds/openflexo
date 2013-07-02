@@ -92,7 +92,7 @@ public abstract class XSDMetaModelResourceImpl extends
 	public static XSDMetaModelResource makeXSDMetaModelResource(
 			File xsdMetaModelFile,
 			String uri,
-			TechnologyContextManager<XMLXSDModel, XSDMetaModel> technologyContextManager) {
+			TechnologyContextManager technologyContextManager) {
 		try {
 			ModelFactory factory = new ModelFactory(XSDMetaModelResource.class);
 			XSDMetaModelResource returned = factory
@@ -103,8 +103,9 @@ public abstract class XSDMetaModelResourceImpl extends
 			returned.setName("Unnamed");
 			returned.setFile(xsdMetaModelFile);
 
+			// FIXME : check if its ok
 			technologyContextManager
-					.registerMetaModel((FlexoMetaModelResource<XMLXSDModel, XSDMetaModel>) returned);
+					.registerResource((FlexoMetaModelResource<XMLXSDModel, XSDMetaModel>) returned);
 
 			return returned;
 		} catch (ModelDefinitionException e) {

@@ -28,8 +28,7 @@ import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.DataBinding.BindingDefinitionType;
 import org.openflexo.foundation.FlexoObject;
-import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
-import org.openflexo.foundation.technologyadapter.FlexoModel;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.toolbox.StringUtils;
 
 /**
@@ -38,7 +37,7 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain
  * 
  */
-public abstract class AssignableAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, T> extends EditionAction<M, MM, T> {
+public abstract class AssignableAction<MS extends ModelSlot<?>, T> extends EditionAction<MS, T> {
 
 	private static final Logger logger = Logger.getLogger(AssignableAction.class.getPackage().getName());
 

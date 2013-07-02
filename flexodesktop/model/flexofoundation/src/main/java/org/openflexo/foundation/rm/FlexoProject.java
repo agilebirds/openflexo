@@ -138,6 +138,7 @@ import org.openflexo.foundation.stats.ProjectStatistics;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.foundation.utils.FlexoCSS;
@@ -334,7 +335,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	private FlexoProjectReferenceLoader projectReferenceLoader;
 
 	private List<ModelSlotInstance> models;
-	private Map<View, Map<ModelSlot<?, ?>, ModelSlotInstance>> modelsAssociationMap; // Do not serialize this
+	private Map<View, Map<ModelSlot, ModelSlotInstance>> modelsAssociationMap; // Do not serialize this
 
 	private class ResourceHashtable extends TreeMap<String, FlexoResource<? extends FlexoResourceData>> {
 		public ResourceHashtable() {
@@ -4592,7 +4593,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Retrieve ontology class from its URI.<br>
 	 * Note that search is performed in the scope of current project only
@@ -4622,6 +4623,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		return null;
 	}
+
 	/**
 	 * Retrieve ontology property from its URI.<br>
 	 * Note that search is performed in the scope of current project only
@@ -4666,7 +4668,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		return null;
 	}
-	
 
 	/**
 	 * Return true if URI is well formed and valid regarding its unicity (no one other object has same URI)
@@ -4683,6 +4684,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		return conceptURI.equals(ToolBox.getJavaName(conceptURI, true, false)) && !isDuplicatedURI(ontologyURI, conceptURI);
 	}
+
 	/**
 	 * Return true if URI is duplicated in the context of this project
 	 * 
@@ -4700,7 +4702,6 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		return false;
 	}
-	
 
 	/**
 	 * Retrieve model or metamodel conform to {@link IFlexoOntology} and referenced by its URI<br>
@@ -4720,6 +4721,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		}
 		return null;
 	}
+
 	/**
 	 * Retrieve model referenced by its URI<br>
 	 * Note that search is performed in the scope of current project only
@@ -4727,6 +4729,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * @param modelURI
 	 * @return
 	 */
+	@Deprecated
 	public FlexoModel<?, ?> getModel(String modelURI) {
 		for (FlexoModel<?, ?> m : getAllReferencedModels()) {
 			if (m.getURI().equals(modelURI)) {
@@ -4742,13 +4745,16 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * 
 	 * @return
 	 */
+	@Deprecated
 	public Set<FlexoModel<?, ?>> getAllReferencedModels() {
 		HashSet<FlexoModel<?, ?>> returned = new HashSet<FlexoModel<?, ?>>();
 		for (ViewResource vr : getViewLibrary().getAllResources()) {
 			if (vr.isLoaded()) {
 				View v = vr.getView();
 				for (ModelSlotInstance<?, ?> msi : v.getModelSlotInstances()) {
-					returned.add(msi.getModel());
+					if (msi.getResourceData() instanceof FlexoModel) {
+						returned.add((FlexoModel<?, ?>) msi.getResourceData());
+					}
 				}
 			}
 		}
@@ -4762,6 +4768,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * @param modelURI
 	 * @return
 	 */
+	@Deprecated
 	public FlexoMetaModel<?> getMetaModel(String metaModelURI) {
 		for (FlexoMetaModel<?> m : getAllReferencedMetaModels()) {
 			if (m.getURI().equals(metaModelURI)) {
@@ -4777,13 +4784,16 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 	 * 
 	 * @return
 	 */
+	@Deprecated
 	public Set<FlexoMetaModel<?>> getAllReferencedMetaModels() {
 		HashSet<FlexoMetaModel<?>> returned = new HashSet<FlexoMetaModel<?>>();
 		for (ViewResource vr : getViewLibrary().getAllResources()) {
 			if (vr.isLoaded()) {
 				View v = vr.getView();
 				for (ModelSlotInstance<?, ?> msi : v.getModelSlotInstances()) {
-					returned.add(msi.getModelSlot().getMetaModelResource().getMetaModelData());
+					if (msi.getModelSlot() instanceof TypeAwareModelSlot) {
+						returned.add(((TypeAwareModelSlot) msi.getModelSlot()).getMetaModelResource().getMetaModelData());
+					}
 				}
 			}
 		}

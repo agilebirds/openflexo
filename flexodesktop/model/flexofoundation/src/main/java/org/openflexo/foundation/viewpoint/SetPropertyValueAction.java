@@ -46,7 +46,7 @@ public interface SetPropertyValueAction {
 
 	public void setProperty(IFlexoOntologyStructuralProperty aProperty);
 
-	public ModelSlot<?, ?> getModelSlot();
+	public ModelSlot getModelSlot();
 
 	public DataBinding<Object> getAssignation();
 
