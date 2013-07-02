@@ -47,12 +47,34 @@
         </dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
+			<artifactId>emfconnector-ui</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>emfconnector-ui</artifactId>
+            <classifier>resources</classifier>
+            <type>zip</type>
+        </dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
 			<artifactId>xsdconnector</artifactId>
 			<scope>runtime</scope>
 		</dependency>
         <dependency>
             <groupId>org.openflexo</groupId>
             <artifactId>xsdconnector</artifactId>
+            <classifier>resources</classifier>
+            <type>zip</type>
+        </dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>xsdconnector-ui</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>xsdconnector-ui</artifactId>
             <classifier>resources</classifier>
             <type>zip</type>
         </dependency>
@@ -67,16 +89,17 @@
             <classifier>resources</classifier>
             <type>zip</type>
         </dependency>
- 		<dependency>
+		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>xmlconnector</artifactId>
+			<artifactId>owlconnector-ui</artifactId>
 			<scope>runtime</scope>
 		</dependency>
         <dependency>
             <groupId>org.openflexo</groupId>
-            <artifactId>xmlconnector</artifactId>
+            <artifactId>owlconnector-ui</artifactId>
             <classifier>resources</classifier>
             <type>zip</type>
+        </dependency>
   		<dependency>
 			<groupId>org.openflexo</groupId>
 			<artifactId>excelconnector</artifactId>
@@ -85,6 +108,17 @@
         <dependency>
             <groupId>org.openflexo</groupId>
             <artifactId>excelconnector</artifactId>
+            <classifier>resources</classifier>
+            <type>zip</type>
+        </dependency>
+   		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>excelconnector-ui</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.openflexo</groupId>
+            <artifactId>excelconnector-ui</artifactId>
             <classifier>resources</classifier>
             <type>zip</type>
         </dependency>

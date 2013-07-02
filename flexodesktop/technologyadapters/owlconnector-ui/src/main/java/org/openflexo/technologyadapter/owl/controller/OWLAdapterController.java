@@ -1,6 +1,7 @@
 package org.openflexo.technologyadapter.owl.controller;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
@@ -50,6 +51,8 @@ import org.openflexo.view.controller.model.FlexoPerspective;
 
 public class OWLAdapterController extends TechnologyAdapterController<OWLTechnologyAdapter> implements
 		IFlexoOntologyTechnologyAdapterController {
+
+	static final Logger logger = Logger.getLogger(OWLAdapterController.class.getPackage().getName());
 
 	// Ontology edition
 	public static File CREATE_ONTOLOGY_CLASS_DIALOG_FIB = new FileResource("Fib/Dialog/CreateOntologyClassDialog.fib");
@@ -179,11 +182,6 @@ public class OWLAdapterController extends TechnologyAdapterController<OWLTechnol
 	}
 
 	@Override
-	public OntologyBrowserModel makeOntologyBrowserModel(IFlexoOntology model) {
-		return new OWLOntologyBrowserModel((OWLOntology) model);
-	}
-
-	@Override
 	public boolean hasModuleViewForObject(FlexoObject object) {
 		return object instanceof OWLOntology;
 	}
@@ -200,6 +198,16 @@ public class OWLAdapterController extends TechnologyAdapterController<OWLTechnol
 			return (ModuleView<T>) returned;
 		}
 		return new EmptyPanel<T>(controller, perspective, object);
+	}
+
+	@Override
+	public OntologyBrowserModel makeOntologyBrowserModel(IFlexoOntology context) {
+		if (context instanceof OWLOntology) {
+			return new OWLOntologyBrowserModel((OWLOntology) context);
+		} else {
+			logger.warning("Unexpected " + context);
+			return null;
+		}
 	}
 
 }
