@@ -34,7 +34,7 @@ public class ExcelIconLibrary {
 
 	private static final Logger logger = Logger.getLogger(ExcelIconLibrary.class.getPackage().getName());
 
-	public static final ImageIconResource EXCEL_TECHNOLOGY_BIG_ICON = new ImageIconResource("Icons/ExcelBig.jpg");
+	public static final ImageIconResource EXCEL_TECHNOLOGY_BIG_ICON = new ImageIconResource("Icons/ExcelBig.png");
 	public static final ImageIconResource EXCEL_TECHNOLOGY_ICON = new ImageIconResource("Icons/ExcelSmall.png");
 
 	public static ImageIcon iconForObject(Class<? extends TechnologyObject> objectClass) {
