@@ -7,8 +7,8 @@
 		<artifactId>technologyadapters</artifactId>
 		<version>1.6-SNAPSHOT</version>
 	</parent>
-	<artifactId>emfconnector</artifactId>
-	<name>EMF technology connector</name>
+	<artifactId>xsdconnector-ui</artifactId>
+	<name>XSD technology connector UI</name>
 	<build>
 		<plugins>
 			<plugin>
@@ -20,26 +20,17 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexofoundation</artifactId>
+			<artifactId>xsdconnector</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexofoundation</artifactId>
+			<artifactId>flexo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>flexo</artifactId>
 			<classifier>tests</classifier>
 			<scope>test</scope>
-		</dependency>
-		<!-- Direct dependencies for EMF support -->
-		<dependency>
-			<groupId>org.eclipse.emf</groupId>
-			<artifactId>common</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.emf</groupId>
-			<artifactId>ecore</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.emf</groupId>
-			<artifactId>ecore-xmi</artifactId>
 		</dependency>
 	</dependencies>
 </project>

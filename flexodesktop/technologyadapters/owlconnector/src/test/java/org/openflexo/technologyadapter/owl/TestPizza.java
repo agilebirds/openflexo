@@ -25,9 +25,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.Iterator;
 
-import org.openflexo.ApplicationContext;
-import org.openflexo.TestApplicationContext;
 import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.TestFlexoServiceManager;
 import org.openflexo.technologyadapter.owl.model.OWLOntology;
 import org.openflexo.technologyadapter.owl.model.OWLOntologyLibrary;
 import org.openflexo.toolbox.FileResource;
@@ -40,7 +39,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 public class TestPizza extends FlexoTestCase {
 
-	private static ApplicationContext testApplicationContext;
+	private static TestFlexoServiceManager testServiceManager;
 	private static OWLTechnologyAdapter owlAdapter;
 	private static OWLOntologyLibrary ontologyLibrary;
 
@@ -49,9 +48,9 @@ public class TestPizza extends FlexoTestCase {
 	 */
 	public void test0LoadTestResourceCenter() {
 		log("test0LoadTestResourceCenter()");
-		testApplicationContext = new TestApplicationContext(new FileResource("src/test/resources/Ontologies"));
-		owlAdapter = testApplicationContext.getTechnologyAdapterService().getTechnologyAdapter(OWLTechnologyAdapter.class);
-		ontologyLibrary = (OWLOntologyLibrary) testApplicationContext.getTechnologyAdapterService().getTechnologyContextManager(owlAdapter);
+		testServiceManager = new TestFlexoServiceManager(new FileResource("src/test/resources/Ontologies"));
+		owlAdapter = testServiceManager.getTechnologyAdapterService().getTechnologyAdapter(OWLTechnologyAdapter.class);
+		ontologyLibrary = (OWLOntologyLibrary) testServiceManager.getTechnologyAdapterService().getTechnologyContextManager(owlAdapter);
 	}
 
 	/**
