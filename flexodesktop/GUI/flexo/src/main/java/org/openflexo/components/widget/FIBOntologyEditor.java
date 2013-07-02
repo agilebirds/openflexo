@@ -89,6 +89,7 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 		super(null, controller, FIB_FILE);
 		matchingValues = new ArrayList<IFlexoOntologyConcept>();
 		setOntology(ontology);
+		setTechnologyAdapter(ontology.getTechnologyAdapter());
 		setDataObject(this);
 	}
 
@@ -226,22 +227,33 @@ public class FIBOntologyEditor extends SelectionSynchronizedFIBView {
 		this.technologyAdapter = technologyAdapter;
 	}
 
+	/**
+	 * Build browser model Override this method when required
+	 * 
+	 * @return
+	 */
+	protected OntologyBrowserModel makeBrowserModel() {
+		OntologyBrowserModel returned = null;
+		if (getTechnologyAdapter() != null) {
+			// Use technology specific browser model
+			TechnologyAdapterController<?> technologyAdapterController = getTechnologyAdapter().getTechnologyAdapterService()
+					.getServiceManager().getService(TechnologyAdapterControllerService.class)
+					.getTechnologyAdapterController(technologyAdapter);
+			if (technologyAdapterController instanceof IFlexoOntologyTechnologyAdapterController) {
+				returned = ((IFlexoOntologyTechnologyAdapterController) technologyAdapterController)
+						.makeOntologyBrowserModel(getOntology());
+			}
+		}
+		if (returned == null) {
+			// Use default
+			returned = new OntologyBrowserModel(getOntology());
+		}
+		return returned;
+	}
+
 	public OntologyBrowserModel getModel() {
 		if (model == null) {
-			if (getTechnologyAdapter() != null) {
-				// Use technology specific browser model
-				TechnologyAdapterController<?> technologyAdapterController = getTechnologyAdapter().getTechnologyAdapterService()
-						.getServiceManager().getService(TechnologyAdapterControllerService.class)
-						.getTechnologyAdapterController(technologyAdapter);
-				if (technologyAdapterController instanceof IFlexoOntologyTechnologyAdapterController) {
-					model = ((IFlexoOntologyTechnologyAdapterController) technologyAdapterController)
-							.makeOntologyBrowserModel(getOntology());
-				}
-			}
-			if (model == null) {
-				// Use default
-				model = new OntologyBrowserModel(getOntology());
-			}
+			model = makeBrowserModel();
 			model.setStrictMode(getStrictMode());
 			model.setHierarchicalMode(getHierarchicalMode());
 			model.setDisplayPropertiesInClasses(getDisplayPropertiesInClasses());

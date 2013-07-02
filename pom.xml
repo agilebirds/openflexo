@@ -679,6 +679,8 @@
 			</dependency>
 
 			<!-- Technology adaptors -->
+
+			<!--  OWL -->
 			<dependency>
 				<groupId>org.openflexo</groupId>
 				<artifactId>owlconnector</artifactId>
@@ -691,6 +693,20 @@
 				<classifier>resources</classifier>
 				<type>zip</type>
 			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>owlconnector-ui</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openflexo</groupId>
+				<artifactId>owlconnector-ui</artifactId>
+				<version>${project.version}</version>
+				<classifier>resources</classifier>
+				<type>zip</type>
+			</dependency>
+			
+			<!--  EMF -->
 			<dependency>
 				<groupId>org.openflexo</groupId>
 				<artifactId>emfconnector</artifactId>
