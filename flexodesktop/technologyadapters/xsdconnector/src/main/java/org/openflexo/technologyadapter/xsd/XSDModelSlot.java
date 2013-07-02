@@ -268,7 +268,7 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 	@Override
 	public XMLXSDFileResource createSharedEmptyModel(FlexoResourceCenter<?> resourceCenter, String relativePath, String filename,
 			String modelUri, FlexoMetaModelResource<XMLXSDModel, XSDMetaModel> metaModelResource) {
-		return getTechnologyAdapter().createNewXMLFile((FileSystemBasedResourceCenter) resourceCenter, relativePath, filename, modelUri,
+		return (XMLXSDFileResource) getTechnologyAdapter().createNewXMLFile((FileSystemBasedResourceCenter) resourceCenter, relativePath, filename, modelUri,
 				(XSDMetaModelResource) metaModelResource);
 	}
 

@@ -30,9 +30,11 @@ import java.util.Map;
 
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 import org.openflexo.technologyadapter.xsd.model.AbstractXSOntObject;
+import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 import org.openflexo.technologyadapter.xsd.model.XSOntology;
 import org.openflexo.technologyadapter.xsd.model.XSPropertyValue;
@@ -182,7 +184,7 @@ public class XSURIProcessor implements XMLSerializable {
 	}
 
 	// get the Object given the URI
-	public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) {
+	public Object retrieveObjectWithURI(ModelSlotInstance<?,?> msInstance, String objectURI) {
 
 		AbstractXSOntObject o = uriCache.get(objectURI);
 
@@ -193,7 +195,9 @@ public class XSURIProcessor implements XMLSerializable {
 
 		// modelResource must also be loaded!
 		
-		FlexoModelResource resource = (FlexoModelResource) msInstance.getModel().getResource();
+		
+		
+		FlexoModelResource<XMLXSDModel, XSDMetaModel> resource = (FlexoModelResource<XMLXSDModel, XSDMetaModel>) msInstance.getResource();
 		if (!resource.isLoaded()) {
 			resource.getModelData();
 		}
@@ -206,7 +210,7 @@ public class XSURIProcessor implements XMLSerializable {
 				XSOntProperty aProperty = mappedClass.getPropertyByName(attributeName);
 				String attrValue = URI.create(objectURI).getQuery();
 				
-				for (XSOntIndividual obj: ((XSOntology) msInstance.getModel()).getIndividualsOfClass(mappedClass)){
+				for (XSOntIndividual obj: ((XSOntology) resource.getModel()).getIndividualsOfClass(mappedClass)){
 
 					XSPropertyValue value = ((XSOntIndividual) obj).getPropertyValue(aProperty);
 					try {
