@@ -69,4 +69,8 @@ public interface FGEConstants {
 
 	public static Stroke DASHED = new BasicStroke(1.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1.0f, new float[] { 3.0f, 3.0f }, 1);
 
+	public static final double DEFAULT_DRAWING_WIDTH = 1000;
+	public static final double DEFAULT_DRAWING_HEIGHT = 1000;
+	public static final Color DEFAULT_DRAWING_BACKGROUND_COLOR = Color.WHITE;
+
 }

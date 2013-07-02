@@ -91,7 +91,15 @@ public class ModelContext {
 	}
 
 	public ModelContext(Class<?>... baseClasses) throws ModelDefinitionException {
-		this(null, ModelContextLibrary.getModelContext(Arrays.asList(baseClasses)));
+		this(null, makeModelContextList(baseClasses));
+	}
+
+	private static List<ModelContext> makeModelContextList(Class<?>... baseClasses) throws ModelDefinitionException {
+		List<ModelContext> returned = new ArrayList<ModelContext>();
+		for (Class<?> c : baseClasses) {
+			returned.add(ModelContextLibrary.getModelContext(c));
+		}
+		return returned;
 	}
 
 	public ModelContext(ModelContext... contexts) throws ModelDefinitionException {
