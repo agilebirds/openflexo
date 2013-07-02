@@ -118,7 +118,7 @@ public class TestXML extends FlexoTestCase {
 
 		assertNotNull(modelRes.getModel().getTypeFromURI("#Library"));
 
-		// dumpIndividual(modelRes.getModelData().getRoot(),"");
+		dumpIndividual(modelRes.getModelData().getRoot(),"");
 
 
 	}
@@ -140,7 +140,7 @@ public class TestXML extends FlexoTestCase {
 
 		assertNotNull(modelRes.getModel().getTypeFromURI("#Library"));
 
-		// dumpIndividual(modelRes.getModelData().getRoot(),"");
+		dumpIndividual(modelRes.getModelData().getRoot(),"");
 
 
 	}
@@ -199,6 +199,7 @@ public class TestXML extends FlexoTestCase {
 			XMLFileResource  modelRes = XMLFileResourceImpl.makeXMLFileResource(xmlFile, (XMLTechnologyContextManager) xmlAdapter.getTechnologyContextManager());
 
 			XMLModel aModel = modelRes.getModel();
+			aModel.setNamespace("http://montest.com", "tst");
 
 			XMLType aType = new XMLType ("http://montest.com","Blob","tst:Blob",aModel);
 			aModel.addType(aType);

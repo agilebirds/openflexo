@@ -85,6 +85,7 @@ public class XMLReaderSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMet
 	public void startElement (String uri, String localName,String qName, 
 			Attributes attributes) throws SAXException {
 
+		String NSPrefix = "p"; // default		
 
 		try {
 
@@ -125,7 +126,8 @@ public class XMLReaderSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMet
 			}
 
 			if (anIndividual != null){
-				// Attributes
+				//************************************
+				// processing Attributes
 
 				int len = attributes.getLength();
 
@@ -137,6 +139,11 @@ public class XMLReaderSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMet
 					String attrQName = attributes.getQName(i);
 					String attrName = attributes.getLocalName(i);
 					String attrURI= attributes.getURI(i);
+					NSPrefix = "p"; // default
+					if (attrQName != null && attrName != null && currentContainer==null){ // we only set prefix if there is no other Root Element
+						NSPrefix = attrQName;
+						NSPrefix.replace(attrName, "");
+					}
 					
 					aType = ((IXMLMetaModel) aMetaModel).getTypeFromURI(attrURI+"#"+attrName);
 
@@ -161,6 +168,10 @@ public class XMLReaderSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMet
 
 				if ( currentContainer == null) {
 					((IXMLModel) aXMLModel).setRoot( (IXMLIndividual<IC, AC>) anIndividual);
+					if (uri != null && !uri.isEmpty()){
+						
+						((IXMLModel) aXMLModel).setNamespace(uri,NSPrefix);
+						}
 					currentContainer = anIndividual;
 				}
 				else {

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns1:Library xmlns:ns1="http://www.example.org/Library">
+<ns1:Book title="My First Book">
+</ns1:Book>
+<ns1:Book title="My Second Book">
+</ns1:Book>
+</ns1:Library>
+

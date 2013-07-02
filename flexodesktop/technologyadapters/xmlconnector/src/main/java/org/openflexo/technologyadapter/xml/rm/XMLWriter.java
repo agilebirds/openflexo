@@ -52,8 +52,10 @@ public class XMLWriter<R extends TechnologyAdapterResource<RD>, RD extends Resou
 	private R taRes = null;
 	private OutputStreamWriter outputStr = null;
 	private XMLStreamWriter myWriter = null;
+	private String NSURI = null;
 
 	private static String LINE_SEP = "\n";
+	private static String DEFAULT_NS = "ns1";
 
 	private static XMLOutputFactory xmlOutputFactory = XMLOutputFactory
 			.newInstance();
@@ -66,129 +68,78 @@ public class XMLWriter<R extends TechnologyAdapterResource<RD>, RD extends Resou
 	}
 
 
-	public void writeEmptyElement(String namespaceURI, String localName)
-			throws XMLStreamException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void writeEmptyElement(String prefix, String localName,
-			String namespaceURI) throws XMLStreamException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void writeEmptyElement(String localName) throws XMLStreamException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void writeEndElement() throws XMLStreamException {
-		myWriter.writeEndElement();
-
-	}
-
-	public void writeEndDocument() throws XMLStreamException {
-		myWriter.writeEndDocument();
-
-	}
-
-	public void close() throws XMLStreamException {
-		myWriter.flush();
-		myWriter.close();
-
-	}
-
-	public void writeAttribute(String localName, String value)
-			throws XMLStreamException {
-		myWriter.writeAttribute(localName, value);
-
-	}
-
-	public void writeAttribute(String prefix, String namespaceURI,
-			String localName, String value) throws XMLStreamException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void writeAttribute(String namespaceURI, String localName,
-			String value) throws XMLStreamException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void writeNamespace(String prefix, String namespaceURI)
-			throws XMLStreamException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void writeDefaultNamespace(String namespaceURI)
-			throws XMLStreamException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void writeComment(String data) throws XMLStreamException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void writeProcessingInstruction(String target)
-			throws XMLStreamException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void writeProcessingInstruction(String target, String data)
-			throws XMLStreamException {
-		// TODO Auto-generated method stub
-
-	}
-
-
-	public void writeEntityRef(String name) throws XMLStreamException {
-		// TODO Auto-generated method stub
-
-	}
-
 	public void writeDocument() throws XMLStreamException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException, IOException {
-
+		
+		String NSPrefix = DEFAULT_NS;
+		
 		if (outputStr != null) {
+			xmlOutputFactory.setProperty(XMLOutputFactory.IS_REPAIRING_NAMESPACES, false);
 			myWriter = xmlOutputFactory.createXMLStreamWriter(outputStr);
+
+			IXMLModel model = ((IXMLModel) taRes.getResourceData(null));
+			NSPrefix = model.getNamespacePrefix();
+			NSURI = model.getNamespaceURI();
+
+			if (NSURI != null && !NSURI.isEmpty()){
+				if(NSPrefix == null || NSPrefix.isEmpty()){
+					NSPrefix = DEFAULT_NS; //default
+				}
+				myWriter.setDefaultNamespace(NSURI);
+				myWriter.setPrefix(NSPrefix, NSURI);
+			}
+
 		}
 		if (myWriter != null) {
-			myWriter.writeStartDocument();
+			myWriter.writeStartDocument("UTF-8","1.0");
 			myWriter.writeCharacters(LINE_SEP);
 		}
 
 		IXMLIndividual<?,?> rootIndiv = ((IXMLModel) taRes.getResourceData(null)).getRoot();
 
 		if (rootIndiv != null ){
-			writeRootElement(rootIndiv);
+			writeRootElement(rootIndiv,NSURI, NSPrefix);
 			myWriter.writeCharacters(LINE_SEP);
 		}
 
 		if (myWriter != null) {
 			myWriter.writeEndDocument();
+			myWriter.flush();
+			myWriter.close();
 		}
 		myWriter = null;
 	}
 
 
-	private void writeRootElement(IXMLIndividual<?, ?> rootIndiv) throws XMLStreamException, IOException {
-		// myWriter.writeStartElement(PREFIX,NAMESPACE, rootIndiv.getName());
-		// TODO SetNamespace!!!
-		
-		writeElement(rootIndiv);
+	private void writeRootElement(IXMLIndividual<?, ?> rootIndiv, String nSURI, String nSPrefix) throws XMLStreamException, IOException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+
+
+		myWriter.writeStartElement(nSURI, rootIndiv.getName());
+		myWriter.writeNamespace(nSPrefix, nSURI);
+		// Attributes
+		writeAttributes(rootIndiv);
+		myWriter.writeCharacters(LINE_SEP);
+		// children node 
+		for (Object i : rootIndiv.getChildren()){
+			writeElement(i);			
+		}
+		// CDATA
+		String content = rootIndiv.getContentDATA();
+		if (content != null && !content.isEmpty()){
+			myWriter.writeCData(content);
+			myWriter.writeCharacters(LINE_SEP);
+		}
+		// Element End
+		myWriter.writeEndElement();		
+		myWriter.writeCharacters(LINE_SEP);
 
 	}
 
 
 	private void writeElement(Object o) throws XMLStreamException {
 		IXMLIndividual indiv = (IXMLIndividual) o;
-		// myWriter.writeStartElement(PREFIX,NAMESPACE, rootIndiv.getName());
-		myWriter.writeStartElement(indiv.getName());
+		
+		myWriter.writeStartElement(NSURI,indiv.getName());
+
 		// Attributes
 		writeAttributes(indiv);
 		myWriter.writeCharacters(LINE_SEP);
@@ -224,36 +175,5 @@ public class XMLWriter<R extends TechnologyAdapterResource<RD>, RD extends Resou
 		// TODO
 	}
 
-
-	public String getPrefix(String uri) throws XMLStreamException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void setPrefix(String prefix, String uri) throws XMLStreamException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setDefaultNamespace(String uri) throws XMLStreamException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void setNamespaceContext(NamespaceContext context)
-			throws XMLStreamException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public NamespaceContext getNamespaceContext() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Object getProperty(String name) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

@@ -76,9 +76,28 @@ public class XMLXSDModel extends XSOntology implements FlexoModel<XMLXSDModel, X
 	public void setMetaModel(XSDMetaModel metaModelData) {
 		this.metaModel = metaModelData;
 		setChanged();
-
 	}
 
+
+	@Override
+	public void setNamespace(String uri, String prefix) {
+		// does nothing as Namespace comes from MetaModel
+		return;
+		
+	}
+
+	@Override
+	public String getNamespacePrefix() {
+		// TODO Should default to something
+		return null;
+	}
+
+	@Override
+	public String getNamespaceURI() {
+		return this.getMetaModel().getURI();
+	}
+
+	
 
 	@Override
 	public XSDMetaModel getMetaModel() {
