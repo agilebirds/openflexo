@@ -23,14 +23,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.geom.AffineTransform;
 
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.geom.area.FGEArea;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ShadowStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.shapes.Circle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;

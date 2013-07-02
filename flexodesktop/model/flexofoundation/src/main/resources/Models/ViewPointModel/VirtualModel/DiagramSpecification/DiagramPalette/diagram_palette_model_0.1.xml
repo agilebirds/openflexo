@@ -111,11 +111,11 @@
    	 <property name="adjustMaximalWidthToLabelWidth" xmlTag="adjustMaximalWidthToLabelWidth" attribute="YES"/>
    	 <property name="adjustMaximalHeightToLabelHeight" xmlTag="adjustMaximalHeightToLabelHeight" attribute="YES"/>
  	 <property name="foreground" xmlTag="ForegroundStyle"/>
-  	 <property name="background" contains="org.openflexo.fge.graphics.BackgroundStyle"/>
- 	 <property name="selectedForeground" contains="org.openflexo.fge.graphics.ForegroundStyle" context="Selected"/>
-  	 <property name="selectedBackground" contains="org.openflexo.fge.graphics.BackgroundStyle" context="Selected"/>
- 	 <property name="focusedForeground" contains="org.openflexo.fge.graphics.ForegroundStyle" context="Focused"/>
-  	 <property name="focusedBackground" contains="org.openflexo.fge.graphics.BackgroundStyle" context="Focused"/>
+  	 <property name="background" contains="org.openflexo.fge.BackgroundStyle"/>
+ 	 <property name="selectedForeground" contains="org.openflexo.fge.ForegroundStyle" context="Selected"/>
+  	 <property name="selectedBackground" contains="org.openflexo.fge.BackgroundStyle" context="Selected"/>
+ 	 <property name="focusedForeground" contains="org.openflexo.fge.ForegroundStyle" context="Focused"/>
+  	 <property name="focusedBackground" contains="org.openflexo.fge.BackgroundStyle" context="Focused"/>
    	 <property name="hasSelectedForeground" xmlTag="hasSelectedForeground" attribute="YES"/>
    	 <property name="hasSelectedBackground" xmlTag="hasSelectedBackground" attribute="YES"/>
    	 <property name="hasFocusedForeground" xmlTag="hasFocusedForeground" attribute="YES"/>
@@ -134,8 +134,8 @@
   <entity name="org.openflexo.fge.ConnectorGraphicalRepresentation" xmlTag="ConnectorGraphicalRepresentation">
      <description>Connector graphical representation</description>
  	 <property name="foreground" xmlTag="ForegroundStyle"/>
- 	 <property name="selectedForeground" contains="org.openflexo.fge.graphics.ForegroundStyle" context="Selected"/>
- 	 <property name="focusedForeground" contains="org.openflexo.fge.graphics.ForegroundStyle" context="Focused"/>
+ 	 <property name="selectedForeground" contains="org.openflexo.fge.ForegroundStyle" context="Selected"/>
+ 	 <property name="focusedForeground" contains="org.openflexo.fge.ForegroundStyle" context="Focused"/>
    	 <property name="hasSelectedForeground" xmlTag="hasSelectedForeground" attribute="YES"/>
    	 <property name="hasFocusedForeground" xmlTag="hasFocusedForeground" attribute="YES"/>
  	 <property name="startObject" contains="org.openflexo.fge.ShapeGraphicalRepresentation" context="Start"/>
@@ -248,7 +248,7 @@
      <description>Arc connector</description>
    </entity>	
 
-  <entity name="org.openflexo.fge.graphics.TextStyle" xmlTag="TextStyle">
+  <entity name="org.openflexo.fge.TextStyle" xmlTag="TextStyle">
      <description>Text style</description>
    	 <property name="font" xmlTag="font" attribute="YES"/>
    	 <property name="color" xmlTag="color" attribute="YES"/>
@@ -257,7 +257,7 @@
    	 <property name="backgroundColor" xmlTag="backgroundColor" attribute="YES"/>
   </entity>
 
-  <entity name="org.openflexo.fge.graphics.ForegroundStyle" xmlTag="ForegroundStyle" contexts="Focused,Selected">
+  <entity name="org.openflexo.fge.ForegroundStyle" xmlTag="ForegroundStyle" contexts="Focused,Selected">
      <description>Foreground style</description>
    	 <property name="noStroke" xmlTag="noStroke" attribute="YES"/>
    	 <property name="color" xmlTag="color" attribute="YES"/>
@@ -269,7 +269,7 @@
  	 <property name="transparencyLevel" xmlTag="transparencyLevel" attribute="YES"/>
   </entity>
 	
-  <entity name="org.openflexo.fge.graphics.BackgroundStyle" abstract="YES" contexts="Focused,Selected">
+  <entity name="org.openflexo.fge.BackgroundStyle" abstract="YES" contexts="Focused,Selected">
      <description>Background style</description>
  	 <property name="useTransparency" xmlTag="useTransparency" attribute="YES"/>
  	 <property name="transparencyLevel" xmlTag="transparencyLevel" attribute="YES"/>
@@ -283,7 +283,7 @@
 	 <property name="right" xmlTag="right" attribute="YES"/>
  </entity>
 	
-  <entity name="org.openflexo.fge.graphics.ShadowStyle" xmlTag="ShadowStyle">
+  <entity name="org.openflexo.fge.ShadowStyle" xmlTag="ShadowStyle">
      <description>Shadow</description>
  	 <property name="drawShadow" xmlTag="drawShadow" attribute="YES"/>
 	 <property name="shadowDarkness" xmlTag="shadowDarkness" attribute="YES"/>
@@ -291,30 +291,30 @@
 	 <property name="shadowBlur" xmlTag="shadowBlur" attribute="YES"/>
  </entity>
 
-  <entity name="org.openflexo.fge.graphics.NoneBackgroundStyle" xmlTag="NoneBackgroundStyle">
+  <entity name="org.openflexo.fge.NoneBackgroundStyle" xmlTag="NoneBackgroundStyle">
      <description>Empty background style</description>
   </entity>
 	
-  <entity name="org.openflexo.fge.graphics.ColorBackgroundStyle" xmlTag="ColorBackgroundStyle">
+  <entity name="org.openflexo.fge.ColorBackgroundStyle" xmlTag="ColorBackgroundStyle">
      <description>Colored background style</description>
   	 <property name="color" xmlTag="color" attribute="YES"/>
   </entity>
 	
-  <entity name="org.openflexo.fge.graphics.ColorGradientBackgroundStyle" xmlTag="ColorGradientBackgroundStyle">
+  <entity name="org.openflexo.fge.ColorGradientBackgroundStyle" xmlTag="ColorGradientBackgroundStyle">
      <description>Colored gradient background style</description>
   	 <property name="color1" xmlTag="color1" attribute="YES"/>
   	 <property name="color2" xmlTag="color2" attribute="YES"/>
   	 <property name="direction" xmlTag="direction" attribute="YES"/>
   </entity>
 	
-  <entity name="org.openflexo.fge.graphics.TextureBackgroundStyle" xmlTag="TexturedBackgroundStyle">
+  <entity name="org.openflexo.fge.TextureBackgroundStyle" xmlTag="TexturedBackgroundStyle">
      <description>Textured background style</description>
   	 <property name="color1" xmlTag="color1" attribute="YES"/>
   	 <property name="color2" xmlTag="color2" attribute="YES"/>
   	 <property name="textureType" xmlTag="textureType" attribute="YES"/>
   </entity>
 	
-  <entity name="org.openflexo.fge.graphics.BackgroundImageBackgroundStyle" xmlTag="ImageBackgroundStyle">
+  <entity name="org.openflexo.fge.BackgroundImageBackgroundStyle" xmlTag="ImageBackgroundStyle">
      <description>Textured background style</description>
   	 <property name="imageFile" xmlTag="imageFile" attribute="YES"/>
   	 <property name="scaleX" xmlTag="scaleX" attribute="YES"/>

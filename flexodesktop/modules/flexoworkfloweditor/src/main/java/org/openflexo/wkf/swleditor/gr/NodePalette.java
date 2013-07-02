@@ -34,9 +34,13 @@ import java.util.Observer;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEUtils;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.ColorGradientBackgroundStyle.ColorGradientDirection;
 import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
@@ -48,11 +52,7 @@ import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGERegularPolygon;
 import org.openflexo.fge.geom.FGERoundRectangle;
 import org.openflexo.fge.geom.FGEShape;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ColorGradientBackgroundStyle.ColorGradientDirection;
 import org.openflexo.fge.graphics.FGEGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEPaintManager;

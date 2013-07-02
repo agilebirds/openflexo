@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.geom.FGEAbstractLine;
 import org.openflexo.fge.geom.FGEGeometricObject;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
@@ -31,7 +32,6 @@ import org.openflexo.fge.geom.FGELine;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGEShape;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEGraphics;
 
 public class FGESubstractionArea extends FGEOperationArea {

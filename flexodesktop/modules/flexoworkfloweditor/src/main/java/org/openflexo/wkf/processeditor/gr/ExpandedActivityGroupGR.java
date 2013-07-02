@@ -22,8 +22,8 @@ package org.openflexo.wkf.processeditor.gr;
 import java.awt.Color;
 import java.util.logging.Level;
 
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.ActivityGroup;

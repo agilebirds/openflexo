@@ -41,8 +41,16 @@ import java.awt.geom.RoundRectangle2D;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundImageBackgroundStyle;
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ColorBackgroundStyle;
+import org.openflexo.fge.ColorGradientBackgroundStyle;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.NoneBackgroundStyle;
+import org.openflexo.fge.TextStyle;
+import org.openflexo.fge.TextureBackgroundStyle;
 import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;

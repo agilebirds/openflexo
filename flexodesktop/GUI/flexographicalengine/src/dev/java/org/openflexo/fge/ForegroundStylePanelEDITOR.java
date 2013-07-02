@@ -22,7 +22,6 @@ package org.openflexo.fge;
 
 import java.io.File;
 
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 

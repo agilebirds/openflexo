@@ -31,7 +31,6 @@ import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.impl.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.view.ConnectorView;
 import org.openflexo.model.annotations.Getter;

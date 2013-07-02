@@ -44,7 +44,6 @@ import javax.swing.JScrollPane;
 
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.controller.DrawingController;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.DecorationPainter;
 import org.openflexo.fge.graphics.FGEShapeDecorationGraphics;
 import org.openflexo.fge.shapes.Rectangle;

@@ -21,9 +21,9 @@ package org.openflexo.wkf.processeditor.gr;
 
 import java.awt.Color;
 
-import org.openflexo.fge.graphics.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;

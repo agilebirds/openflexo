@@ -21,6 +21,8 @@ package org.openflexo.fge.geomedit.edition;
 
 import java.awt.Color;
 
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEQuadCurve;
 import org.openflexo.fge.geom.FGESegment;
@@ -28,8 +30,6 @@ import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.QuadCurve;
 import org.openflexo.fge.geomedit.construction.QuadCurveWithThreePointsConstruction;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 
 public class CreateQuadCurveFromThreePoints extends Edition {
 

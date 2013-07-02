@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.graphics;
+package org.openflexo.fge;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -27,9 +27,6 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.fge.FGEIconLibrary;
-import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.inspector.HasIcon;
 import org.openflexo.localization.FlexoLocalization;

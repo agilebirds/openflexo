@@ -23,12 +23,12 @@ import java.awt.Color;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.rpc.RectPolylinConnector;
 import org.openflexo.fge.connectors.rpc.RectPolylinConnector.RectPolylinConstraints;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;

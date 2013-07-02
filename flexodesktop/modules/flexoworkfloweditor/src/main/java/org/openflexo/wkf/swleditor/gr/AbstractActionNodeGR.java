@@ -21,7 +21,7 @@ package org.openflexo.wkf.swleditor.gr;
 
 import java.awt.Color;
 
-import org.openflexo.fge.graphics.TextStyle;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.shapes.Circle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.wkf.node.ActionNode;

@@ -21,6 +21,7 @@ package org.openflexo.fge.graphics;
 
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundImageBackgroundStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 
 public class FGEShapeGraphics extends FGEGraphics {

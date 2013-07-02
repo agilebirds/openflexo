@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.awt.event.MouseEvent;
 
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.cp.ControlArea;
@@ -37,7 +38,6 @@ import org.openflexo.fge.geomedit.construction.LineIntersectionPointConstruction
 import org.openflexo.fge.geomedit.construction.PointConstruction;
 import org.openflexo.fge.geomedit.construction.PointReference;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.xmlcode.StringEncoder;
 
 public class ObtainPoint extends EditionInput<FGEPoint> {

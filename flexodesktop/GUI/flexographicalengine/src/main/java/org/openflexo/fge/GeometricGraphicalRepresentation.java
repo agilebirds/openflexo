@@ -24,9 +24,7 @@ import java.util.List;
 
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.area.FGEArea;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEGeometricGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.impl.GeometricGraphicalRepresentationImpl;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;

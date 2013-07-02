@@ -59,12 +59,12 @@ import javax.swing.text.StyledDocument;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
 import org.openflexo.fge.GraphicalRepresentation.ParagraphAlignment;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.DrawingPalette;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.LabelHasMoved;
 import org.openflexo.fge.notifications.LabelWillMove;

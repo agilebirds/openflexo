@@ -1,9 +1,8 @@
-package org.openflexo.fge.graphics;
+package org.openflexo.fge;
 
 import java.awt.GradientPaint;
 import java.awt.Paint;
 
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.notifications.FGENotification;
 
 public class ColorGradientBackgroundStyle extends BackgroundStyle {
@@ -13,7 +12,7 @@ public class ColorGradientBackgroundStyle extends BackgroundStyle {
 
 	public ColorGradientBackgroundStyle() {
 		this(java.awt.Color.WHITE, java.awt.Color.BLACK,
-				org.openflexo.fge.graphics.ColorGradientBackgroundStyle.ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
+				org.openflexo.fge.ColorGradientBackgroundStyle.ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 	}
 
 	public ColorGradientBackgroundStyle(java.awt.Color aColor1, java.awt.Color aColor2,

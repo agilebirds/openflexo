@@ -19,8 +19,8 @@
  */
 package org.openflexo.wkf.swleditor.gr;
 
+import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoModelObject;

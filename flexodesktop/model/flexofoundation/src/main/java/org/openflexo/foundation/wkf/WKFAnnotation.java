@@ -21,7 +21,7 @@ package org.openflexo.foundation.wkf;
 
 import java.awt.Color;
 
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.foundation.DeletableObject;
 import org.openflexo.foundation.Inspectors;
 import org.openflexo.foundation.utils.FlexoColor;

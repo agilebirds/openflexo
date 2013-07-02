@@ -43,7 +43,6 @@ import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.impl.GraphicalRepresentationImpl;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.model.annotations.Adder;

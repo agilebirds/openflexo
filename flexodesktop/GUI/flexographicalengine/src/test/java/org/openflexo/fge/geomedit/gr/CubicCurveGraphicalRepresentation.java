@@ -22,6 +22,8 @@ package org.openflexo.fge.geomedit.gr;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGECubicCurve;
 import org.openflexo.fge.geom.FGEPoint;
@@ -30,8 +32,6 @@ import org.openflexo.fge.geomedit.CubicCurve;
 import org.openflexo.fge.geomedit.GeometricDrawing;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
 import org.openflexo.fge.graphics.FGEGeometricGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.xmlcode.XMLSerializable;
 
 public class CubicCurveGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGECubicCurve, CubicCurve> implements

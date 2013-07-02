@@ -22,13 +22,13 @@ package org.openflexo.fge.geomedit.edition;
 import java.awt.Color;
 import java.util.Vector;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.TextureBackgroundStyle.TextureType;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.GeometricObject;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.TextureBackgroundStyle.TextureType;
 
 public abstract class Edition {
 	public int currentStep;

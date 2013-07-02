@@ -1,9 +1,8 @@
-package org.openflexo.fge.graphics;
+package org.openflexo.fge;
 
 import java.awt.Paint;
 
-import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundStyleType;
+import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 
 public class NoneBackgroundStyle extends BackgroundStyle {
 	@Override

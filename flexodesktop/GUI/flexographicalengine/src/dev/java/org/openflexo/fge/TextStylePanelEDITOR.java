@@ -22,7 +22,6 @@ package org.openflexo.fge;
 
 import java.io.File;
 
-import org.openflexo.fge.graphics.TextStyle;
 import org.openflexo.fge.view.widget.FIBTextStyleSelector;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 

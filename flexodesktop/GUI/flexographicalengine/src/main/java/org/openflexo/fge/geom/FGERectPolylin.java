@@ -28,16 +28,16 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
+import org.openflexo.fge.TextureBackgroundStyle.TextureType;
 import org.openflexo.fge.geom.area.DefaultAreaProvider;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEAreaProvider;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
-import org.openflexo.fge.graphics.TextureBackgroundStyle.TextureType;
 
 public class FGERectPolylin extends FGEPolylin {
 

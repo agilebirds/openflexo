@@ -25,9 +25,9 @@ import java.util.logging.Logger;
 
 import javax.swing.Icon;
 
+import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
-import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;

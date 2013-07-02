@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.graphics;
+package org.openflexo.fge;
 
 import java.awt.Paint;
 import java.io.File;
@@ -26,8 +26,6 @@ import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.xmlcode.XMLSerializable;
 
@@ -90,9 +88,9 @@ public abstract class BackgroundStyle extends Observable implements XMLSerializa
 			return makeColoredBackground(java.awt.Color.WHITE);
 		} else if (type == BackgroundStyleType.COLOR_GRADIENT) {
 			return makeColorGradientBackground(java.awt.Color.WHITE, java.awt.Color.BLACK,
-					org.openflexo.fge.graphics.ColorGradientBackgroundStyle.ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
+					org.openflexo.fge.ColorGradientBackgroundStyle.ColorGradientDirection.SOUTH_EAST_NORTH_WEST);
 		} else if (type == BackgroundStyleType.TEXTURE) {
-			return makeTexturedBackground(org.openflexo.fge.graphics.TextureBackgroundStyle.TextureType.TEXTURE1, java.awt.Color.RED,
+			return makeTexturedBackground(org.openflexo.fge.TextureBackgroundStyle.TextureType.TEXTURE1, java.awt.Color.RED,
 					java.awt.Color.WHITE);
 		} else if (type == BackgroundStyleType.IMAGE) {
 			return makeImageBackground((File) null);

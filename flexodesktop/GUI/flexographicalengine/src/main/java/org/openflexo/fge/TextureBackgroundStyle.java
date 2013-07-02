@@ -1,4 +1,4 @@
-package org.openflexo.fge.graphics;
+package org.openflexo.fge;
 
 import java.awt.Graphics;
 import java.awt.Image;
@@ -14,7 +14,6 @@ import java.util.logging.Level;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.inspector.HasIcon;
 import org.openflexo.toolbox.ImageIconResource;

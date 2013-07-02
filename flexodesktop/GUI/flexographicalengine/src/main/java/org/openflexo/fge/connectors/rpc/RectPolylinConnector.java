@@ -33,7 +33,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
@@ -57,8 +59,6 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEAreaProvider;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.toolbox.ConcatenedList;
 
 /**

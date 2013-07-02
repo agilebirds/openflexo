@@ -22,9 +22,9 @@ package org.openflexo.vpm.view.widget;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.StringUtils;
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.TextStyle;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;

@@ -21,6 +21,8 @@ package org.openflexo.fge.geomedit.edition;
 
 import java.awt.Color;
 
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.geom.FGECubicCurve;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEQuadCurve;
@@ -29,8 +31,6 @@ import org.openflexo.fge.geomedit.CubicCurve;
 import org.openflexo.fge.geomedit.GeomEditController;
 import org.openflexo.fge.geomedit.construction.CubicCurveWithFourPointsConstruction;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 
 public class CreateCubicCurveFromFourPoints extends Edition {
 

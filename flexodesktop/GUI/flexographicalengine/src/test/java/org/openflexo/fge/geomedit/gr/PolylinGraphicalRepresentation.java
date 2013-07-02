@@ -25,6 +25,8 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Vector;
 
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEPoint;
@@ -40,8 +42,6 @@ import org.openflexo.fge.geomedit.construction.PointConstruction;
 import org.openflexo.fge.geomedit.construction.PolylinConstruction;
 import org.openflexo.fge.geomedit.construction.PolylinWithNPointsConstruction;
 import org.openflexo.fge.graphics.FGEGeometricGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.xmlcode.XMLSerializable;
 
 public class PolylinGraphicalRepresentation extends GeometricObjectGraphicalRepresentation<FGEPolylin, Polylin> implements XMLSerializable {

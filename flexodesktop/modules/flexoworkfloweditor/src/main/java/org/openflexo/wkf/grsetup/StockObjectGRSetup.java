@@ -21,9 +21,9 @@ package org.openflexo.wkf.grsetup;
 
 import java.awt.Dimension;
 
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.foundation.wkf.WKFStockObject;
 
 public class StockObjectGRSetup {

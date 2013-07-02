@@ -1,4 +1,4 @@
-package org.openflexo.fge.graphics;
+package org.openflexo.fge;
 
 import java.awt.Image;
 import java.awt.Paint;
@@ -6,7 +6,6 @@ import java.io.File;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.notifications.FGENotification;
 
 public class BackgroundImageBackgroundStyle extends BackgroundStyle {

@@ -22,9 +22,9 @@ package org.openflexo.wkf.swleditor.gr;
 import java.awt.Color;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ColorGradientBackgroundStyle.ColorGradientDirection;
-import org.openflexo.fge.graphics.ForegroundStyle;
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ColorGradientBackgroundStyle.ColorGradientDirection;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.wkf.node.AbstractActivityNode;

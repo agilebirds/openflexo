@@ -22,13 +22,13 @@ package org.openflexo.wkf.swleditor.gr;
 import java.awt.Color;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.BackgroundImageBackgroundStyle;
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
-import org.openflexo.fge.graphics.BackgroundImageBackgroundStyle;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.shapes.Circle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.wkf.action.OpenExecutionPetriGraph;

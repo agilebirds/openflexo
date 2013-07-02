@@ -23,8 +23,8 @@ import java.awt.Color;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.foundation.wkf.node.InclusiveOperator;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;

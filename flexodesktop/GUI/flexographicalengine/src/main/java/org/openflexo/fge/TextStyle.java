@@ -17,15 +17,13 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.graphics;
+package org.openflexo.fge;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Observable;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.xmlcode.XMLSerializable;
 

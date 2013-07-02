@@ -24,9 +24,9 @@ import java.awt.geom.AffineTransform;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.graphics.BackgroundStyle;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.foundation.wkf.node.ComplexOperator;

@@ -21,14 +21,14 @@ package org.openflexo.fge.geomedit.gr;
 
 import java.awt.Color;
 
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
+import org.openflexo.fge.TextureBackgroundStyle.TextureType;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geomedit.GeometricDrawing;
 import org.openflexo.fge.geomedit.GeometricObject;
 import org.openflexo.fge.geomedit.GeometricSet.GeomEditBuilder;
 import org.openflexo.fge.geomedit.ShowContextualMenuControl;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.TextureBackgroundStyle.TextureType;
 import org.openflexo.xmlcode.XMLSerializable;
 
 public class GeometricObjectGraphicalRepresentation<A extends FGEArea, G extends GeometricObject<A>> extends

@@ -21,6 +21,8 @@ package org.openflexo.fge.geomedit.edition;
 
 import java.awt.Color;
 
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.geom.FGECircle;
 import org.openflexo.fge.geom.FGELine;
 import org.openflexo.fge.geom.FGEPoint;
@@ -31,8 +33,6 @@ import org.openflexo.fge.geomedit.construction.CircleConstruction;
 import org.openflexo.fge.geomedit.construction.PointConstruction;
 import org.openflexo.fge.geomedit.construction.TangentLineWithCircleAndPointConstruction;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 
 public class CreateTangentLineWithCircleAndPoint extends Edition {
 

@@ -8,16 +8,16 @@ import java.util.Vector;
 
 import javax.swing.JPanel;
 
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.controller.DrawingController;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ShadowStyle;
 import org.openflexo.fge.shapes.Shape;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fib.controller.FIBController;

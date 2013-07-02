@@ -21,10 +21,10 @@ package org.openflexo.wkf.swleditor.gr;
 
 import java.awt.Color;
 
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.rpc.RectPolylinConnector;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle.DashStyle;
 import org.openflexo.foundation.wkf.edge.MessageEdge;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 

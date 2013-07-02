@@ -24,7 +24,9 @@ import java.awt.geom.AffineTransform;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.FGEIconLibrary;
+import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.geom.FGEEllips;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
@@ -34,8 +36,6 @@ import org.openflexo.fge.geom.FGESegment;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
 import org.openflexo.inspector.HasIcon;
 
 public interface ConnectorSymbol {

@@ -1,10 +1,9 @@
-package org.openflexo.fge.graphics;
+package org.openflexo.fge;
 
 import java.awt.Paint;
 
-import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.graphics.BackgroundStyle.BackgroundStyleType;
-import org.openflexo.fge.graphics.BackgroundStyle.Parameters;
+import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
+import org.openflexo.fge.BackgroundStyle.Parameters;
 import org.openflexo.fge.notifications.FGENotification;
 
 public class ColorBackgroundStyle extends BackgroundStyle {

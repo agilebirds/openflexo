@@ -24,10 +24,10 @@ import java.awt.FlowLayout;
 
 import javax.swing.JPanel;
 
-import org.openflexo.fge.graphics.BackgroundStyle;
-import org.openflexo.fge.graphics.ForegroundStyle;
-import org.openflexo.fge.graphics.ShadowStyle;
-import org.openflexo.fge.graphics.TextStyle;
+import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.ShadowStyle;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBShadowStyleSelector;
