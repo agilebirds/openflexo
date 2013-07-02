@@ -143,7 +143,9 @@ public class XMLXSDModel extends XSOntology implements FlexoModel<XMLXSDModel, X
 
 	@Override
 	public IFlexoOntologyDataProperty getDataProperty(String propertyURI) {
-		return null;
+		// TODO, this is not that clean!
+		logger.info("This should not happen: properties belong to the MetaModel");
+		return this.getMetaModel().getDataProperty(propertyURI);
 	}
 
 	@Override

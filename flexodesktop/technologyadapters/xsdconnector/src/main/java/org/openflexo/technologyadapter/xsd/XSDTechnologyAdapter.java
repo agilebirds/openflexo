@@ -107,7 +107,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLXSDModel, XSDMeta
 	@Override
 	public String retrieveMetaModelURI(File aMetaModelFile, TechnologyContextManager<XMLXSDModel, XSDMetaModel> technologyContextManager) {
 
-		String s =  XSOntology.findNamespaceURI(aMetaModelFile);
+		String s =  XSDMetaModel.findNamespaceURI(aMetaModelFile);
 
 		return s;
 	}
@@ -137,7 +137,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLXSDModel, XSDMeta
 			TechnologyContextManager<XMLXSDModel, XSDMetaModel> technologyContextManager) {
 
 		if (aModelFile.getName().endsWith(".xml")){
-			String schemaURI = XMLXSDNameSpaceFinder.findNameSpace(aModelFile);
+			String schemaURI = XMLXSDNameSpaceFinder.findNameSpace(aModelFile,false);
 
 			String mmURI = metaModelResource.getURI();
 
@@ -155,7 +155,7 @@ public class XSDTechnologyAdapter extends TechnologyAdapter<XMLXSDModel, XSDMeta
 	public boolean isValidModelFile(File aModelFile, TechnologyContextManager<XMLXSDModel, XSDMetaModel> technologyContextManager) {
 		if (aModelFile.getName().endsWith(".xml")){
 
-			String schemaURI = XMLXSDNameSpaceFinder.findNameSpace(aModelFile);
+			String schemaURI = XMLXSDNameSpaceFinder.findNameSpace(aModelFile,false);
 
 			XSDMetaModelResource mm = (XSDMetaModelResource) technologyContextManager.getMetaModelWithURI(schemaURI);
 

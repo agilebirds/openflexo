@@ -77,5 +77,7 @@ public interface IXMLIndividual<IC, AC extends IXMLAttribute > {
 
 	public abstract Element toXML(Document doc);
 
+	public abstract String getAttributeStringValue(IXMLAttribute a);
+
 
 }

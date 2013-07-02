@@ -51,28 +51,18 @@ public class XMLType extends XMLObject implements Type {
 	public XMLType(String aName, XMLModel model) {
 		super();
 		this.containerModel = model;
-		try {
-			this.setName(aName);
+			this.Name = aName;
 			this.NameSpaceURI = null;
 			this.NSPrefix = null;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 
 	public XMLType(String nsURI, String lName, String qName, XMLModel model) {
 		super();
 		this.containerModel = model;
-		try {
-			this.setName(lName);
-			this.setNameSpaceURI(nsURI);
+			Name = lName;
+			NameSpaceURI = nsURI; 
 			NSPrefix = qName.replaceAll(":"+lName, "");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 

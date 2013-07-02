@@ -38,6 +38,7 @@ import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
 import org.openflexo.foundation.ontology.IFlexoOntologyStructuralProperty;
 import org.openflexo.foundation.ontology.OntologyUtils;
+import org.openflexo.technologyadapter.xml.model.IXMLAttribute;
 import org.openflexo.technologyadapter.xml.model.IXMLIndividual;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
@@ -56,7 +57,7 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 	// TODO : check if this is actually useful ?!?
 	private Set<XSOntIndividual> children = new HashSet<XSOntIndividual>();
 	private XSOntIndividual parent;
-	
+
 	private String uuid;
 
 
@@ -86,14 +87,8 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 
 	@Override
 	public String getName() {
-		String objURI = getURI();
-		if (objURI != null ){
-			// return objURI.substring(objURI.lastIndexOf("#"));
-			return "TagName:"+type.getName()+ " / UUID:"+objURI;
-		}
-		else
-			return "TagName:"+type.getName();
-
+		// The name of the Tag
+		return type.getName();
 	}
 
 	@Override
@@ -189,6 +184,21 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 	}
 
 	@Override
+	public String getAttributeStringValue(IXMLAttribute a) {
+
+		XSOntProperty property = (XSOntProperty) a;
+
+		if (property != null){
+			XSPropertyValue val= this.getPropertyValue(property);	
+			if (val != null)
+				return val.getValues().get(0).toString();
+		}
+		return null;
+	}
+
+
+
+	@Override
 	public XSOntProperty getAttributeByName(String aName) {
 		return ((XSOntClass)this.getType()).getPropertyByName(aName);
 	}
@@ -215,17 +225,17 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 
 	@Override
 	public Object createAttribute(String attrLName, Type aType, String value) {
-		
+
 		XSOntProperty property = this.type.getPropertyByName(attrLName);
 		XSPropertyValue propValue = null;
-		
+
 		if (property != null) {
 			propValue = this.addToPropertyValue(property, value);
 		}
 		else {
 			logger.info("So Many Things to do...Should Add something to create Attribute: " + attrLName);
 		}
-		
+
 		return propValue;
 	}
 
@@ -326,8 +336,8 @@ public class XSOntIndividual extends AbstractXSOntConcept implements IFlexoOntol
 	public XSOntIndividual  getParent() {
 		return parent;
 	}
-	
-   @Override
+
+	@Override
 	public void addChild(IXMLIndividual<XSOntIndividual,XSOntProperty> child) {
 		children.add((XSOntIndividual) child);
 		((XSOntIndividual) child).setParent(this);

@@ -6,6 +6,7 @@ package org.openflexo.technologyadapter.xsd.rm;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,7 +32,10 @@ import org.openflexo.foundation.rm.SaveResourcePermissionDeniedException;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.model.factory.ModelFactory;
-import org.openflexo.technologyadapter.xml.rm.XMLSAXHandler;
+import org.openflexo.technologyadapter.xml.model.XMLModel;
+import org.openflexo.technologyadapter.xml.rm.XMLFileResource;
+import org.openflexo.technologyadapter.xml.rm.XMLReaderSAXHandler;
+import org.openflexo.technologyadapter.xml.rm.XMLWriter;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyContextManager;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
@@ -147,25 +151,14 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 
 	private void writeToFile() throws SaveResourceException {
 
-		FileOutputStream out = null;
+		FileWriter out = null;
 		try {
-			out = new FileOutputStream(getFile());
-			StreamResult result = new StreamResult(out);
-			TransformerFactory factory = TransformerFactory.newInstance(
-					"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
-			Transformer transformer = factory.newTransformer();
-			DOMSource source = new DOMSource(getModel().toXML());
-			transformer.transform(source, result);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			throw new SaveResourceException(this);
-		} catch (TransformerConfigurationException e) {
-			e.printStackTrace();
-			throw new SaveResourceException(this);
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-			throw new SaveResourceException(this);
-		} catch (TransformerException e) {
+			out = new FileWriter(getFile());
+			XMLWriter<XMLXSDFileResource, XMLXSDModel> writer = new XMLWriter<XMLXSDFileResource, XMLXSDModel>(this , out);
+
+			writer.writeDocument();
+
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new SaveResourceException(this);
 		} finally {
@@ -228,7 +221,7 @@ public abstract class XMLXSDFileResourceImpl extends FlexoFileResourceImpl<XMLXS
 				SAXParser saxParser = factory.newSAXParser();
 
 
-				XMLSAXHandler<XMLXSDModel, XSDMetaModel,XSOntIndividual, XSOntProperty> handler = new XMLSAXHandler<XMLXSDModel, XSDMetaModel,XSOntIndividual, XSOntProperty>(this,false); 
+				XMLReaderSAXHandler<XMLXSDModel, XSDMetaModel,XSOntIndividual, XSOntProperty> handler = new XMLReaderSAXHandler<XMLXSDModel, XSDMetaModel,XSOntIndividual, XSOntProperty>(this,false); 
 				saxParser.parse(this.getFile(), handler);
 
 				isLoaded = true;

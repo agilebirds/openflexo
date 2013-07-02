@@ -100,6 +100,29 @@ public class TestXML extends FlexoTestCase {
 		assertTrue(modelRepository.getAllResources().size()>3);
 	}
 
+
+	public void test0LoadFileAndDump() throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+
+		log("test1LoadFileAndDump()");
+
+		assertNotNull(modelRepository);
+
+		XMLFileResource modelRes = (XMLFileResource) modelRepository.getResource("file:" + baseDirName + "/XML/example_library_0.xml");
+		assertNotNull(modelRes);
+		assertFalse(modelRes.isLoaded());
+		assertNotNull(modelRes.getModelData());
+		assertNotNull(modelRes.loadResourceData(null));
+		assertTrue(modelRes.isLoaded());
+
+		// dumpTypes(modelRes.getModel());
+
+		assertNotNull(modelRes.getModel().getTypeFromURI("#Library"));
+
+		// dumpIndividual(modelRes.getModelData().getRoot(),"");
+
+
+	}
+
 	public void test1LoadFileAndDump() throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
 
 		log("test1LoadFileAndDump()");

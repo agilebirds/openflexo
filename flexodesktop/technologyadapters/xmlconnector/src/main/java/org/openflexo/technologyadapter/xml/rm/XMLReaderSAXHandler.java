@@ -49,10 +49,10 @@ import org.xml.sax.ext.DefaultHandler2;
  * @param <AC>, The Class of Attributes (mapping to XML Attributes)
  */
 
-public class XMLSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMetaModel<MM>, IC, AC extends IXMLAttribute> extends DefaultHandler2 {
+public class XMLReaderSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMetaModel<MM>, IC, AC extends IXMLAttribute> extends DefaultHandler2 {
 
 
-	protected static final Logger logger = Logger.getLogger(XMLSAXHandler.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(XMLReaderSAXHandler.class.getPackage().getName());
 
 	/**
 	 * 
@@ -72,7 +72,7 @@ public class XMLSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMetaModel
 	private Stack<IC> indivStack = new Stack<IC>();
 	private Stack<AC> attributeStack = new Stack<AC>();
 
-	public XMLSAXHandler( FlexoModelResource<M, MM> xmlFileResourceImpl, boolean allowTypeCreation) {
+	public XMLReaderSAXHandler( FlexoModelResource<M, MM> xmlFileResourceImpl, boolean allowTypeCreation) {
 		super();
 		xmlResource = xmlFileResourceImpl;
 		aXMLModel = (M) xmlResource.getModel();

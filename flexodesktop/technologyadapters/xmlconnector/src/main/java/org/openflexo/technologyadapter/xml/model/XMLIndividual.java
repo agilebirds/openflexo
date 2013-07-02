@@ -90,7 +90,11 @@ public class XMLIndividual extends XMLObject implements IXMLIndividual<XMLIndivi
 	 */
 	@Override
 	public String getContentDATA(){
-		return (String) attributes.get(CDATA_ATTR_NAME).getValue();
+		XMLAttribute attr = attributes.get(CDATA_ATTR_NAME);
+		if (attr != null){
+			return (String) attr.getValue();
+		}
+		return "";
 	}
 
 	//************ Accessors
@@ -141,7 +145,7 @@ public class XMLIndividual extends XMLObject implements IXMLIndividual<XMLIndivi
 	public Object getAttributeValue(String attributeName) {
 
 		XMLAttribute attr = attributes.get(attributeName);
-		
+
 		if (attr != null){
 			return attr.getValue();
 		}
@@ -155,7 +159,7 @@ public class XMLIndividual extends XMLObject implements IXMLIndividual<XMLIndivi
 	public void addChild(IXMLIndividual<XMLIndividual,XMLAttribute> anIndividual) {
 		XMLType aType = (XMLType) anIndividual.getType();
 		Set<XMLIndividual> typedSet = children.get(aType);
-		
+
 		if (typedSet == null) {
 			typedSet = new HashSet<XMLIndividual>();
 			children.put(aType, typedSet);
@@ -178,7 +182,7 @@ public class XMLIndividual extends XMLObject implements IXMLIndividual<XMLIndivi
 	public Set<XMLIndividual> getChildren() {
 
 		Set<XMLIndividual> returned = new HashSet<XMLIndividual>();
-		
+
 		for (Set<XMLIndividual> s : children.values()){
 			returned.addAll(s);
 		}
@@ -233,25 +237,25 @@ public class XMLIndividual extends XMLObject implements IXMLIndividual<XMLIndivi
 	@Override
 	public Object createAttribute(String attrLName, Type aType, String value) {
 		XMLAttribute attr = new XMLAttribute (attrLName, aType , value);
-		
+
 		if (attributes == null){
 			logger.warning("Attribute collection is null");
 			attributes = new HashMap<String, XMLAttribute>();
 		}
-		
+
 		attributes.put(attrLName,attr);
-		
+
 		this.notifyObservers();
-		
+
 		return attr;
 	}
-	
+
 
 	@Override
 	public XMLAttribute getAttributeByName(String aName) {
 		return attributes.get(aName);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.openflexo.technologyadapter.xml.model.IXMLIndividual#toXML(org.w3c.dom.Document)
 	 */
@@ -265,14 +269,19 @@ public class XMLIndividual extends XMLObject implements IXMLIndividual<XMLIndivi
 		else {
 			element = (Element) doc.createElement(getType().getName());
 		}
-		
+
 		for (IXMLIndividual<XMLIndividual,XMLAttribute> i : getChildren()){
 			element.appendChild(i.toXML(doc));
 		}
 
 		// TODO dump attributes !!!
-		
+
 		return element;
+	}
+
+	@Override
+	public String getAttributeStringValue(IXMLAttribute a) {
+		return ((XMLAttribute) a).getValue().toString();
 	}
 
 

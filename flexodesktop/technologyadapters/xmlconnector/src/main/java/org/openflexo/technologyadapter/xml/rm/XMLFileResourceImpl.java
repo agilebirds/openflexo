@@ -23,20 +23,14 @@ package org.openflexo.technologyadapter.xml.rm;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import javax.xml.stream.XMLStreamException;
 
 import org.apache.commons.io.IOUtils;
 import org.openflexo.foundation.FlexoException;
@@ -99,7 +93,7 @@ FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
 			// test pour créer le fichier si jamais il n'existe pas
 
 			if(!xmlFile.exists()){
-				
+
 				if (returned.resourceData == null){
 					returned.resourceData = new XMLModel(technologyContextManager.getTechnologyAdapter());
 					returned.resourceData.setResource(returned);
@@ -172,27 +166,14 @@ FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
 
 	private void writeToFile() throws SaveResourceException {
 
-		FileOutputStream out = null;
+		FileWriter out = null;
 		try {
-			out = new FileOutputStream(getFile());
-			StreamResult result = new StreamResult(out);
-			TransformerFactory factory = TransformerFactory
-					.newInstance(
-							"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl",
-							null);
-			Transformer transformer = factory.newTransformer();
-			DOMSource source = new DOMSource(getModel().toXML());
-			transformer.transform(source, result);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			throw new SaveResourceException(this);
-		} catch (TransformerConfigurationException e) {
-			e.printStackTrace();
-			throw new SaveResourceException(this);
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-			throw new SaveResourceException(this);
-		} catch (TransformerException e) {
+			out = new FileWriter(getFile());
+			XMLWriter<XMLFileResource, XMLModel> writer = new XMLWriter<XMLFileResource, XMLModel>(this , out);
+
+			writer.writeDocument();
+			
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new SaveResourceException(this);
 		} finally {
@@ -250,7 +231,7 @@ FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
 				factory.setFeature("http://xml.org/sax/features/namespace-prefixes",true);
 				SAXParser saxParser = factory.newSAXParser();
 
-				XMLSAXHandler<XMLModel, XMLModel, XMLIndividual, XMLAttribute> handler = new XMLSAXHandler<XMLModel, XMLModel, XMLIndividual, XMLAttribute>(
+				XMLReaderSAXHandler<XMLModel, XMLModel, XMLIndividual, XMLAttribute> handler = new XMLReaderSAXHandler<XMLModel, XMLModel, XMLIndividual, XMLAttribute>(
 						this, true);
 				saxParser.parse(this.getFile(), handler);
 

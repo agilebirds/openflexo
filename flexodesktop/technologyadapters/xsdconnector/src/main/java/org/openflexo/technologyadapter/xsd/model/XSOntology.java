@@ -256,17 +256,6 @@ public abstract class XSOntology extends AbstractXSOntObject implements IFlexoOn
 		return result;
 	}
 
-	public static String findNamespaceURI(File f) {
-		// This is for MetaModel Only => should not be used for XML Models
-		// FIXME : useless for models
-		String schemaURI = XMLXSDNameSpaceFinder.findNameSpace(f);
-		if (!schemaURI.equals("")){
-			return schemaURI;
-		}else{
-			return "http://www.openflexo.org/XSD/" + f.getName();
-		}
-	}
-
 	@Override
 	public String getDisplayableDescription() {
 		return "Ontology " + getName();
