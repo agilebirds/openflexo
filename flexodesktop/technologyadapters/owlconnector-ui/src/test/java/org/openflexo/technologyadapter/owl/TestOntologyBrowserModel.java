@@ -21,10 +21,9 @@ package org.openflexo.technologyadapter.owl;
 
 import java.util.logging.Logger;
 
-import org.openflexo.ApplicationContext;
-import org.openflexo.TestApplicationContext;
 import org.openflexo.components.widget.OntologyBrowserModel;
 import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.TestFlexoServiceManager;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
 import org.openflexo.foundation.ontology.OntologyUtils;
 import org.openflexo.technologyadapter.owl.gui.OWLOntologyBrowserModel;
@@ -42,7 +41,7 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 
 	protected static final Logger logger = Logger.getLogger(TestPopulateDKV.class.getPackage().getName());
 
-	private static ApplicationContext testApplicationContext;
+	private static TestFlexoServiceManager testApplicationContext;
 	private static OWLTechnologyAdapter owlAdapter;
 	private static OWLOntologyLibrary ontologyLibrary;
 
@@ -55,7 +54,7 @@ public class TestOntologyBrowserModel extends FlexoTestCase {
 	 */
 	public void test0LoadTestResourceCenter() {
 		log("test0LoadTestResourceCenter()");
-		testApplicationContext = new TestApplicationContext(new FileResource("src/test/resources/Ontologies"));
+		testApplicationContext = new TestFlexoServiceManager(new FileResource("src/test/resources/Ontologies"));
 		owlAdapter = testApplicationContext.getTechnologyAdapterService().getTechnologyAdapter(OWLTechnologyAdapter.class);
 		ontologyLibrary = (OWLOntologyLibrary) testApplicationContext.getTechnologyAdapterService().getTechnologyContextManager(owlAdapter);
 	}

@@ -36,9 +36,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.junit.Test;
-import org.openflexo.ApplicationContext;
-import org.openflexo.TestApplicationContext;
 import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.TestFlexoServiceManager;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
@@ -70,7 +69,7 @@ public class TestEMFModelEdition {
 	@Test
 	public void test() {
 		try {
-			ApplicationContext applicationContext = new TestApplicationContext(new FileResource(
+			TestFlexoServiceManager applicationContext = new TestFlexoServiceManager(new FileResource(
 					new File("src/test/resources").getAbsolutePath()));
 			EMFTechnologyAdapter technologicalAdapter = applicationContext.getTechnologyAdapterService().getTechnologyAdapter(
 					EMFTechnologyAdapter.class);

@@ -47,6 +47,11 @@ public class OntologyView<T extends FlexoObject & IFlexoOntology> extends FIBOnt
 	}
 
 	@Override
+	public T getOntology() {
+		return (T) super.getOntology();
+	}
+
+	@Override
 	public FlexoPerspective getPerspective() {
 		return declaredPerspective;
 	}
@@ -79,7 +84,7 @@ public class OntologyView<T extends FlexoObject & IFlexoOntology> extends FIBOnt
 
 	@Override
 	public T getRepresentedObject() {
-		return (T) getOntology();
+		return getOntology();
 	}
 
 }

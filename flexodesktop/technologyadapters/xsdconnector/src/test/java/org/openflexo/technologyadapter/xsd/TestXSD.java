@@ -21,9 +21,8 @@ package org.openflexo.technologyadapter.xsd;
 
 import java.util.logging.Logger;
 
-import org.openflexo.ApplicationContext;
-import org.openflexo.TestApplicationContext;
 import org.openflexo.foundation.FlexoTestCase;
+import org.openflexo.foundation.TestFlexoServiceManager;
 import org.openflexo.foundation.dkv.TestPopulateDKV;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.technologyadapter.xsd.model.XMLModelRepository;
@@ -35,7 +34,7 @@ public class TestXSD extends FlexoTestCase {
 
 	protected static final Logger logger = Logger.getLogger(TestPopulateDKV.class.getPackage().getName());
 
-	private static ApplicationContext testApplicationContext;
+	private static TestFlexoServiceManager testServiceManager;
 	private static XSDTechnologyAdapter xsdAdapter;
 	private static FlexoResourceCenter<?> resourceCenter;
 	private static XSDMetaModelRepository mmRepository;
@@ -50,9 +49,9 @@ public class TestXSD extends FlexoTestCase {
 	 */
 	public void test0LoadTestResourceCenter() {
 		log("test0LoadTestResourceCenter()");
-		testApplicationContext = new TestApplicationContext(new FileResource("src/test/resources/XSD"));
-		xsdAdapter = testApplicationContext.getTechnologyAdapterService().getTechnologyAdapter(XSDTechnologyAdapter.class);
-		resourceCenter = testApplicationContext.getResourceCenterService().getResourceCenters().get(0);
+		testServiceManager = new TestFlexoServiceManager(new FileResource("src/test/resources/XSD"));
+		xsdAdapter = testServiceManager.getTechnologyAdapterService().getTechnologyAdapter(XSDTechnologyAdapter.class);
+		resourceCenter = testServiceManager.getResourceCenterService().getResourceCenters().get(0);
 		mmRepository = resourceCenter.getRepository(XSDMetaModelRepository.class, xsdAdapter);
 		modelRepository = resourceCenter.getRepository(XMLModelRepository.class, xsdAdapter);
 		assertNotNull(mmRepository);

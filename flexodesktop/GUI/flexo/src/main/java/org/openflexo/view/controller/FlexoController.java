@@ -2053,7 +2053,7 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((TechnologyAdapterResource<?>) object)
 					.getTechnologyAdapter());
 			// TODO: vincent
-			if (TechnologyObject.class.isAssignableFrom(((TechnologyAdapterResource<?>) object).getResourceDataClass())) {
+			if (tac != null && TechnologyObject.class.isAssignableFrom(((TechnologyAdapterResource<?>) object).getResourceDataClass())) {
 				return tac.getIconForTechnologyObject((Class<? extends TechnologyObject>) ((TechnologyAdapterResource<?>) object)
 						.getResourceDataClass());
 			}
