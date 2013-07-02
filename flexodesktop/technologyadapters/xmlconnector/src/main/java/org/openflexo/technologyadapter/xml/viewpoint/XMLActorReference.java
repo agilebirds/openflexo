@@ -67,13 +67,13 @@ public class XMLActorReference<T extends XMLObject> extends ActorReference<T> {
 	public T retrieveObject() {
 		if (object == null) {
 			ModelSlotInstance msInstance = getModelSlotInstance();
-			if (msInstance.getModel() != null) {
+			if (msInstance.getResource() != null) {
 				// object = (T) getProject().getObject(objectURI); 
 				/** Model Slot is responsible for URI mapping */
 				 object = (T) msInstance.getModelSlot().retrieveObjectWithURI(msInstance, objectURI);
 			} else {
 				logger.warning("Could not access to model in model slot " + getModelSlotInstance());
-				logger.warning("Searched " + getModelSlotInstance().getModelURI());
+				logger.warning("Searched " + getModelSlotInstance().getResource().getURI());
 			}
 		}
 		if (object == null) {

@@ -5,7 +5,7 @@ import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.technologyadapter.xml.XMLTechnologyAdapter;
 import org.openflexo.technologyadapter.xml.rm.XMLFileResource;
 
-public class XMLTechnologyContextManager extends TechnologyContextManager<XMLModel, XMLModel> {
+public class XMLTechnologyContextManager extends TechnologyContextManager {
 
 	public XMLTechnologyContextManager(XMLTechnologyAdapter adapter, FlexoResourceCenterService resourceCenterService) {
 		super(adapter, resourceCenterService);

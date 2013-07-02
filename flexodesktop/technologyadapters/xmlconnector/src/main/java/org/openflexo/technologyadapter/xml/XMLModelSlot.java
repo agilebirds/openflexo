@@ -39,6 +39,7 @@ import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.FetchRequest;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.xml.editionaction.AddXMLIndividual;
 import org.openflexo.technologyadapter.xml.model.XMLModel;
 import org.openflexo.technologyadapter.xml.viewpoint.XMLIndividualPatternRole;
@@ -47,20 +48,22 @@ import org.openflexo.technologyadapter.xml.viewpoint.XMLIndividualPatternRole;
  * @author xtof
  *
  */
-@DeclarePatternRoles({ @DeclarePatternRole(XMLIndividualPatternRole.class), // Instances
+@DeclarePatternRoles({ @DeclarePatternRole(patternRoleClass=XMLIndividualPatternRole.class, FML = "XMLIndividual"), // Instances
 })
-@DeclareEditionActions({ @DeclareEditionAction(AddXMLIndividual.class), // Add instance
+@DeclareEditionActions({ @DeclareEditionAction(editionActionClass=AddXMLIndividual.class, FML = "AddXMLIndividual"), // Add instance
 })
-public class XMLModelSlot extends ModelSlot<XMLModel, XMLModel> {
+public class XMLModelSlot extends ModelSlot<XMLModel> {
+
 
 	private static final Logger logger = Logger.getLogger(XMLModelSlot.class.getPackage().getName());
 
 	
-	protected XMLModelSlot(ViewPoint viewPoint,
-			TechnologyAdapter<XMLModel, XMLModel> technologyAdapter) {
-		super(viewPoint, technologyAdapter);
-	}
 
+	protected XMLModelSlot(VirtualModel<?> virtualModel,
+			TechnologyAdapter technologyAdapter) {
+		super(virtualModel, technologyAdapter);
+	}
+	
 	@Override
 	public <PR extends PatternRole<?>> PR makePatternRole(
 			Class<PR> patternRoleClass) {
@@ -75,46 +78,43 @@ public class XMLModelSlot extends ModelSlot<XMLModel, XMLModel> {
 	}
 
 	@Override
-	public Class<? extends TechnologyAdapter<XMLModel, XMLModel>> getTechnologyAdapterClass() {
+	public Class<? extends TechnologyAdapter> getTechnologyAdapterClass() {
 		return XMLTechnologyAdapter.class;
 	}
 
-	@Override
-	public BindingVariable makePatternRolePathElement(PatternRole<?> pr,
-			Bindable container) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
-	public <EA extends EditionAction<?, ?, ?>> EA makeEditionAction(
+	public <EA extends EditionAction<?, ?>> EA makeEditionAction(
 			Class<EA> editionActionClass) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public <FR extends FetchRequest<?, ?, ?>> FR makeFetchRequest(
+	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(
 			Class<FR> fetchRequestClass) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ModelSlotInstanceConfiguration<? extends ModelSlot<XMLModel, XMLModel>> createConfiguration(
+	public ModelSlotInstanceConfiguration<? extends ModelSlot<XMLModel>, XMLModel> createConfiguration(
 			CreateVirtualModelInstance<?> action) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getURIForObject(ModelSlotInstance msInstance, Object o) {
+	public String getURIForObject(
+			ModelSlotInstance<? extends ModelSlot<XMLModel>, XMLModel> msInstance,
+			Object o) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object retrieveObjectWithURI(ModelSlotInstance msInstance,
+	public Object retrieveObjectWithURI(
+			ModelSlotInstance<? extends ModelSlot<XMLModel>, XMLModel> msInstance,
 			String objectURI) {
 		// TODO Auto-generated method stub
 		return null;

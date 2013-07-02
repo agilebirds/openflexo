@@ -99,7 +99,7 @@ public class XMLIndividual extends XMLObject implements IXMLIndividual<XMLIndivi
 	 * @see org.openflexo.technologyadapter.xml.model.IXMLIndividual#getTechnologyAdapter()
 	 */
 	@Override
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+	public TechnologyAdapter getTechnologyAdapter() {
 		return containerModel.getTechnologyAdapter();
 	}
 

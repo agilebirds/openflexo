@@ -47,7 +47,7 @@ public interface IXMLIndividual<IC, AC extends IXMLAttribute > {
 	
 	public abstract String getContentDATA();
 
-	public abstract TechnologyAdapter<?, ?> getTechnologyAdapter();
+	public abstract TechnologyAdapter getTechnologyAdapter();
 
 	public abstract void setName(String name);
 

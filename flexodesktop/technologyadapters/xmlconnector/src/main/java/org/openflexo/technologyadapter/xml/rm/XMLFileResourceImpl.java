@@ -93,7 +93,7 @@ FlexoFileResourceImpl<XMLModel> implements XMLFileResource {
 			returned.setTechnologyAdapter(technologyContextManager.getTechnologyAdapter());
 			returned.setTechnologyContextManager(technologyContextManager);
 
-			technologyContextManager.registerModel((FlexoModelResource<XMLModel, XMLModel>) returned);
+			technologyContextManager.registerResource((FlexoModelResource<XMLModel, XMLModel>) returned);
 
 			// FIXME : comment ça marche le resource Manager?
 			// test pour créer le fichier si jamais il n'existe pas

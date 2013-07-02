@@ -34,7 +34,7 @@ import org.openflexo.technologyadapter.xml.model.XMLModel;
  * @author xtof
  *
  */
-public class AddXMLIndividual extends AssignableAction<XMLModel, XMLModel, XMLIndividual> {
+public class AddXMLIndividual extends AssignableAction<XMLModelSlot, XMLIndividual> {
 
 	public AddXMLIndividual(VirtualModelBuilder builder) {
 		super(builder);

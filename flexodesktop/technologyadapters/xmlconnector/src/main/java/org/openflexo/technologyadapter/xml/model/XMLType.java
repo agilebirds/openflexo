@@ -114,7 +114,7 @@ public class XMLType extends XMLObject implements Type {
 
 
 
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+	public TechnologyAdapter getTechnologyAdapter() {
 		return containerModel.getTechnologyAdapter();
 	}
 

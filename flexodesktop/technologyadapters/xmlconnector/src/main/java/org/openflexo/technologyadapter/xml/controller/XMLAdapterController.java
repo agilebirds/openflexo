@@ -26,9 +26,11 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 import org.openflexo.components.widget.OntologyBrowserModel;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
 import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
+import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.icon.IconFactory;
@@ -41,8 +43,11 @@ import org.openflexo.technologyadapter.xml.model.XMLIndividual;
 import org.openflexo.technologyadapter.xml.model.XMLModel;
 import org.openflexo.technologyadapter.xml.viewpoint.XMLIndividualPatternRole;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.TechnologyAdapterController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
 public class XMLAdapterController extends TechnologyAdapterController<XMLTechnologyAdapter> {
 
@@ -105,7 +110,6 @@ public class XMLAdapterController extends TechnologyAdapterController<XMLTechnol
 	 * @param object
 	 * @return
 	 */
-	@Override
 	public ImageIcon getIconForOntologyObject(Class objectClass) {
 		// TODO RENAME ????
 		return XMLIconLibrary.iconForObject(objectClass);
@@ -117,7 +121,6 @@ public class XMLAdapterController extends TechnologyAdapterController<XMLTechnol
 	 * @param object
 	 * @return
 	 */
-	@Override
 	public ImageIcon getIconForPropertyValue(Class<? extends IFlexoOntologyPropertyValue> objectClass) {
 		return null;
 	}
@@ -160,7 +163,21 @@ public class XMLAdapterController extends TechnologyAdapterController<XMLTechnol
 	}
 
 	@Override
-	public OntologyBrowserModel makeOntologyBrowserModel(IFlexoOntology context) {
+	public ImageIcon getIconForTechnologyObject(
+			Class<? extends TechnologyObject> objectClass) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean hasModuleViewForObject(FlexoObject object) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public <T extends FlexoObject> ModuleView<T> createModuleViewForObject(
+			T object, FlexoController controller, FlexoPerspective perspective) {
 		// TODO Auto-generated method stub
 		return null;
 	}

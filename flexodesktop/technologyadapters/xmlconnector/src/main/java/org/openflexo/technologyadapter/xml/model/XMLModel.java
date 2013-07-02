@@ -65,7 +65,7 @@ public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLMod
 	private Map<String, XMLType> types;
 	private IXMLIndividual<?, ?> root = null;
 	
-	public XMLModel(TechnologyAdapter<?, ?> technologyAdapter) {
+	public XMLModel(TechnologyAdapter technologyAdapter) {
 		super();
 		individuals = new HashMap<String, XMLIndividual>();
 		types = new HashMap<String, XMLType>();
@@ -127,7 +127,7 @@ public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLMod
 	}
 
 	@Override
-	public TechnologyAdapter<?, ?> getTechnologyAdapter() {
+	public TechnologyAdapter getTechnologyAdapter() {
 		return technologyAdapter;
 	}
 
