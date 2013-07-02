@@ -46,13 +46,15 @@ import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.ColorBackgroundStyle;
 import org.openflexo.fge.ColorGradientBackgroundStyle;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
 import org.openflexo.fge.NoneBackgroundStyle;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.TextureBackgroundStyle;
-import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGECubicCurve;
 import org.openflexo.fge.geom.FGEDimension;
@@ -73,9 +75,14 @@ public abstract class FGEGraphics {
 	private GraphicalRepresentation<?> gr;
 	private Graphics2D g2d;
 
-	private ForegroundStyle defaultForeground = ForegroundStyle.makeDefault();
-	private BackgroundStyle defaultBackground = BackgroundStyle.makeEmptyBackground();
-	private TextStyle defaultTextStyle = TextStyle.makeDefault();
+	private static final FGEModelFactory GRAPHICS_FACTORY = FGEUtils.TOOLS_FACTORY;
+	private static final ForegroundStyle DEFAULT_FG = GRAPHICS_FACTORY.makeDefaultForegroundStyle();
+	private static final BackgroundStyle DEFAULT_BG = GRAPHICS_FACTORY.makeEmptyBackground();
+	private static final TextStyle DEFAULT_TEXT = GRAPHICS_FACTORY.makeDefaultTextStyle();
+
+	private ForegroundStyle defaultForeground = DEFAULT_FG;
+	private BackgroundStyle defaultBackground = DEFAULT_BG;
+	private TextStyle defaultTextStyle = DEFAULT_TEXT;
 
 	private ForegroundStyle currentForeground = defaultForeground;
 	protected BackgroundStyle currentBackground = defaultBackground;
@@ -425,7 +432,7 @@ public abstract class FGEGraphics {
 		}*/
 		if (getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) getGraphicalRepresentation();
-			at.concatenate(AffineTransform.getTranslateInstance(gr.getBorder().left, gr.getBorder().top));
+			at.concatenate(AffineTransform.getTranslateInstance(gr.getBorder().getLeft(), gr.getBorder().getTop()));
 		}
 		if (currentBackground instanceof BackgroundImageBackgroundStyle) {
 			at.concatenate(AffineTransform.getTranslateInstance(((BackgroundImageBackgroundStyle) currentBackground).getDeltaX(),

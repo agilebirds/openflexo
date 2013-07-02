@@ -19,41 +19,21 @@
  */
 package org.openflexo.fge.drawingeditor;
 
-import org.openflexo.fge.connectors.Connector.ConnectorType;
-import org.openflexo.fge.drawingeditor.MyDrawing.DrawingBuilder;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
-public class MyConnector extends MyDrawingElement<MyConnector, MyConnectorGraphicalRepresentation> {
-	private MyConnectorGraphicalRepresentation gr;
+@ModelEntity
+@ImplementationClass(MyConnectorImpl.class)
+@XMLElement(xmlTag = "MyConnector")
+public interface MyConnector extends MyDrawingElement<MyConnector, MyConnectorGraphicalRepresentation> {
 
-	// Called for LOAD
-	public MyConnector(DrawingBuilder builder) {
-		super(builder.drawing);
-		initializeDeserialization();
-	}
+	public abstract MyShape getStartShape();
 
-	// Called for NEW
-	public MyConnector(MyShape from, MyShape to, EditedDrawing drawing) {
-		super(drawing.getModel());
-		gr = new MyConnectorGraphicalRepresentation(ConnectorType.LINE,
-				(MyShapeGraphicalRepresentation) drawing.getGraphicalRepresentation(from),
-				(MyShapeGraphicalRepresentation) drawing.getGraphicalRepresentation(to), this, drawing);
-		setGraphicalRepresentation(gr);
-	}
+	public abstract MyShape geEndShape();
 
-	public MyShape getStartShape() {
-		return getGraphicalRepresentation().getStartObject().getDrawable();
-	}
+	public abstract MyShapeGraphicalRepresentation getStartObject();
 
-	public MyShape geEndShape() {
-		return getGraphicalRepresentation().getEndObject().getDrawable();
-	}
-
-	public MyShapeGraphicalRepresentation getStartObject() {
-		return getGraphicalRepresentation().getStartObject();
-	}
-
-	public MyShapeGraphicalRepresentation getEndObject() {
-		return getGraphicalRepresentation().getEndObject();
-	}
+	public abstract MyShapeGraphicalRepresentation getEndObject();
 
 }

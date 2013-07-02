@@ -35,18 +35,17 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.BackgroundImageBackgroundStyle;
 import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.ColorBackgroundStyle;
 import org.openflexo.fge.ColorGradientBackgroundStyle;
+import org.openflexo.fge.ColorGradientBackgroundStyle.ColorGradientDirection;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextureBackgroundStyle;
-import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
-import org.openflexo.fge.ColorGradientBackgroundStyle.ColorGradientDirection;
-import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.TextureBackgroundStyle.TextureType;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.shapes.Shape.ShapeType;
@@ -164,10 +163,18 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 		private TextureType textureType = TextureType.TEXTURE1;
 		private File imageFile;
 		private PropertyChangeSupport pcSupport;
+		private FGEModelFactory fgeFactory;
 
 		public BackgroundStyleFactory(BackgroundStyle backgroundStyle) {
 			pcSupport = new PropertyChangeSupport(this);
 			this.backgroundStyle = backgroundStyle;
+			if (backgroundStyle != null) {
+				fgeFactory = backgroundStyle.getFactory();
+			}
+			if (fgeFactory == null) {
+				logger.warning("Could not find any FGE factory, creating a default one");
+				fgeFactory = FGEUtils.TOOLS_FACTORY;
+			}
 		}
 
 		@Override
@@ -227,19 +234,19 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 
 			switch (backgroundStyleType) {
 			case NONE:
-				backgroundStyle = BackgroundStyle.makeEmptyBackground();
+				backgroundStyle = fgeFactory.makeEmptyBackground();
 				break;
 			case COLOR:
-				backgroundStyle = BackgroundStyle.makeColoredBackground(color1);
+				backgroundStyle = fgeFactory.makeColoredBackground(color1);
 				break;
 			case COLOR_GRADIENT:
-				backgroundStyle = BackgroundStyle.makeColorGradientBackground(color1, color2, gradientDirection);
+				backgroundStyle = fgeFactory.makeColorGradientBackground(color1, color2, gradientDirection);
 				break;
 			case TEXTURE:
-				backgroundStyle = BackgroundStyle.makeTexturedBackground(textureType, color1, color2);
+				backgroundStyle = fgeFactory.makeTexturedBackground(textureType, color1, color2);
 				break;
 			case IMAGE:
-				backgroundStyle = BackgroundStyle.makeImageBackground(imageFile);
+				backgroundStyle = fgeFactory.makeImageBackground(imageFile);
 				break;
 			default:
 				break;
@@ -395,12 +402,16 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 		private Object rect;
 		private ShapeGraphicalRepresentation rectGR;
 
+		private FGEModelFactory factory;
+
 		protected BackgroundStylePreviewPanel() {
 			super(new BorderLayout());
 			setBorder(BorderFactory.createEtchedBorder(Color.GRAY, Color.LIGHT_GRAY));
 			// setBorder(BorderFactory.createEtchedBorder());
 			setPreferredSize(new Dimension(40, 19));
 			// setBackground(Color.WHITE);
+
+			factory = FGEUtils.TOOLS_FACTORY;
 
 			rect = new Object();
 
@@ -447,28 +458,30 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 				public boolean isEditable() {
 					return false;
 				}
-
 			};
-			drawingGR = new DrawingGraphicalRepresentation(drawing, false);
+
+			drawingGR = factory.makeDrawingGraphicalRepresentation(drawing, false);
+
+			// drawingGR = new DrawingGraphicalRepresentationImpl(drawing, false);
 			drawingGR.setBackgroundColor(new Color(255, 255, 255));
 			drawingGR.setWidth(35);
 			drawingGR.setHeight(19);
 			drawingGR.setDrawWorkingArea(false);
-			rectGR = new ShapeGraphicalRepresentation(ShapeType.RECTANGLE, rect, drawing);
+			rectGR = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, rect, drawing);
 			rectGR.setWidth(36);
 			rectGR.setHeight(20);
 			rectGR.setX(0);
 			rectGR.setY(0);
-			rectGR.setForeground(ForegroundStyle.makeNone());
-			rectGR.setBackground(getEditedObject() != null ? getEditedObject() : BackgroundStyle.makeColoredBackground(DEFAULT_COLOR1));
-			rectGR.setShadowStyle(ShadowStyle.makeNone());
+			rectGR.setForeground(factory.makeNoneForegroundStyle());
+			rectGR.setBackground(getEditedObject() != null ? getEditedObject() : factory.makeColoredBackground(DEFAULT_COLOR1));
+			rectGR.setShadowStyle(factory.makeNoneShadowStyle());
 			rectGR.setIsSelectable(false);
 			rectGR.setIsFocusable(false);
 			rectGR.setIsReadOnly(true);
-			rectGR.setBorder(new ShapeBorder(0, 0, 0, 0));
+			rectGR.setBorder(factory.makeShapeBorder(0, 0, 0, 0));
 			rectGR.setValidated(true);
 
-			controller = new DrawingController<Drawing<?>>(drawing);
+			controller = new DrawingController<Drawing<?>>(drawing, factory);
 			add(controller.getDrawingView());
 		}
 
@@ -484,7 +497,7 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 		}
 
 		protected void update() {
-			rectGR.setBackground(getEditedObject() != null ? getEditedObject() : BackgroundStyle.makeColoredBackground(DEFAULT_COLOR1));
+			rectGR.setBackground(getEditedObject() != null ? getEditedObject() : factory.makeColoredBackground(DEFAULT_COLOR1));
 			// We do it later because producer of texture may not has finished its job
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override

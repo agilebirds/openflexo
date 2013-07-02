@@ -19,39 +19,21 @@
  */
 package org.openflexo.fge.shapes;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.geom.FGEEllips;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
+import org.openflexo.fge.shapes.impl.OvalImpl;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
-public class Oval extends Shape {
+/**
+ * Represents an oval
+ * 
+ * Note that this implementation is powered by PAMELA framework.
+ * 
+ * @author sylvain
+ */
+@ModelEntity
+@ImplementationClass(OvalImpl.class)
+@XMLElement(xmlTag = "OvalShape")
+public interface Oval extends Shape {
 
-	private FGEEllips ellips;
-
-	public Oval() {
-		this(null);
-	}
-
-	public Oval(ShapeGraphicalRepresentation aGraphicalRepresentation) {
-		super(aGraphicalRepresentation);
-		updateShape();
-	}
-
-	@Override
-	public void updateShape() {
-		ellips = new FGEEllips(0, 0, 1, 1, Filling.FILLED);
-		rebuildControlPoints();
-		if (getGraphicalRepresentation() != null) {
-			getGraphicalRepresentation().notifyShapeChanged();
-		}
-	}
-
-	@Override
-	public ShapeType getShapeType() {
-		return ShapeType.OVAL;
-	}
-
-	@Override
-	public FGEEllips getShape() {
-		return ellips;
-	}
 }

@@ -22,6 +22,7 @@ package org.openflexo.fge.connectors.rpc;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -42,7 +43,7 @@ public class AdjustableUniqueSegment extends RectPolylinAdjustableSegment {
 	private void retrieveInfos() {
 		currentSegment = getArea();
 		if (currentSegment.getApproximatedOrientation() == null) {
-			RectPolylinConnector.logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
+			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
 			return;
 		}
 		currentOrientation = currentSegment.getApproximatedOrientation();

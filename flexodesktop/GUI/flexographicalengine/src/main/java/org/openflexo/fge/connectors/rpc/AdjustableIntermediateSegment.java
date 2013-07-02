@@ -23,6 +23,7 @@ import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
@@ -52,17 +53,15 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 		currentSegment = getArea();
 		index = getPolylin().getSegmentIndex(currentSegment);
 		if (index <= 0 || index >= getPolylin().getSegmentNb() - 1) {
-			RectPolylinConnector.logger
-					.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector "
-							+ getGraphicalRepresentation().getText() + " index=" + index + " polylin.getSegmentNb()="
-							+ getPolylin().getSegmentNb());
+			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector "
+					+ getGraphicalRepresentation().getText() + " index=" + index + " polylin.getSegmentNb()=" + getPolylin().getSegmentNb());
 			return;
 		}
 		previousSegment = getPolylin().getSegmentAt(index - 1);
 		nextSegment = getPolylin().getSegmentAt(index + 1);
 		if (currentSegment.getApproximatedOrientation() == null || previousSegment.getApproximatedOrientation() == null
 				|| nextSegment.getApproximatedOrientation() == null) {
-			RectPolylinConnector.logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
+			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
 			return;
 		}
 		if (index > 1) {

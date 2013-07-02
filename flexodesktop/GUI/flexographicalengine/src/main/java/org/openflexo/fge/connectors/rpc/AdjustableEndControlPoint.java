@@ -22,7 +22,8 @@ package org.openflexo.fge.connectors.rpc;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.FGEUtils;
+import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
@@ -55,8 +56,7 @@ public class AdjustableEndControlPoint extends RectPolylinAdjustableControlPoint
 			return false;
 		}
 		setPoint(pt);
-		FGEPoint ptRelativeToEndObject = GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), pt, getConnector()
-				.getEndObject());
+		FGEPoint ptRelativeToEndObject = FGEUtils.convertNormalizedPoint(getGraphicalRepresentation(), pt, getConnector().getEndObject());
 		getConnector().setFixedEndLocation(ptRelativeToEndObject);
 		switch (getConnector().getAdjustability()) {
 		case AUTO_LAYOUT:

@@ -12,11 +12,11 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
-import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
@@ -72,21 +72,29 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	// * Constructor *
 	// *******************************************************************************
 
-	public GeometricGraphicalRepresentationImpl(FGEArea anObject, O aDrawable, Drawing<?> aDrawing) {
-		super(aDrawable, aDrawing);
+	/**
+	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
+	 */
+	public GeometricGraphicalRepresentationImpl() {
+		super();
+		graphics = new FGEGeometricGraphics(this);
+	}
 
-		foreground = ForegroundStyle.makeStyle(Color.BLACK);
+	@Deprecated
+	private GeometricGraphicalRepresentationImpl(FGEArea anObject, O aDrawable, Drawing<?> aDrawing) {
+		this();
+		setDrawable(aDrawable);
+		setDrawing(aDrawing);
+
+		foreground = getFactory().makeForegroundStyle(Color.BLACK);
 		// foreground.setGraphicalRepresentation(this);
 		foreground.addObserver(this);
 
-		background = BackgroundStyle.makeColoredBackground(Color.WHITE);
+		background = getFactory().makeColoredBackground(Color.WHITE);
 		// background.setGraphicalRepresentation(this);
 		background.addObserver(this);
 
-		geometricObject = anObject;
-		rebuildControlPoints();
-
-		graphics = new FGEGeometricGraphics(this);
+		setGeometricObject(anObject);
 
 		addToMouseClickControls(MouseClickControl.makeMouseClickControl("Selection", MouseButton.LEFT, 1,
 				MouseClickControlActionType.SELECTION));
@@ -102,7 +110,7 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	@Override
 	public Vector<GRParameter> getAllParameters() {
 		Vector<GRParameter> returned = super.getAllParameters();
-		Parameters[] allParams = Parameters.values();
+		GeometricParameters[] allParams = GeometricParameters.values();
 		for (int i = 0; i < allParams.length; i++) {
 			returned.add(allParams[i]);
 		}
@@ -128,12 +136,14 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	// * Accessors *
 	// *******************************************************************************
 
+	@Override
 	public ForegroundStyle getForeground() {
 		return foreground;
 	}
 
+	@Override
 	public void setForeground(ForegroundStyle aForeground) {
-		FGENotification notification = requireChange(Parameters.foreground, aForeground);
+		FGENotification notification = requireChange(GeometricParameters.foreground, aForeground);
 		if (notification != null) {
 			if (foreground != null) {
 				foreground.deleteObserver(this);
@@ -154,12 +164,14 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 		foreground.setNoStroke(noStroke);
 	}
 
+	@Override
 	public BackgroundStyle getBackground() {
 		return background;
 	}
 
+	@Override
 	public void setBackground(BackgroundStyle aBackground) {
-		FGENotification notification = requireChange(Parameters.background, aBackground);
+		FGENotification notification = requireChange(GeometricParameters.background, aBackground);
 		if (notification != null) {
 			// background = aBackground.clone();
 			if (background != null) {
@@ -180,7 +192,7 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 
 	public void setBackgroundType(BackgroundStyleType backgroundType) {
 		if (backgroundType != getBackgroundType()) {
-			setBackground(BackgroundStyle.makeBackground(backgroundType));
+			setBackground(getFactory().makeBackground(backgroundType));
 		}
 	}
 
@@ -223,6 +235,7 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 		return getBounds(scale);
 	}
 
+	@Override
 	public Rectangle getBounds(double scale) {
 		return getContainerGraphicalRepresentation().getViewBounds(scale);
 		// return new Rectangle(0,0,1,1);
@@ -282,6 +295,7 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	// * Methods *
 	// *******************************************************************************
 
+	@Override
 	public void paintGeometricObject(FGEGeometricGraphics graphics) {
 		getGeometricObject().paint(graphics);
 	}
@@ -361,19 +375,21 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 		super.update(observable, notification);
 
 		if (observable instanceof BackgroundStyle) {
-			notifyAttributeChange(Parameters.background);
+			notifyAttributeChange(GeometricParameters.background);
 		}
 		if (observable instanceof ForegroundStyle) {
-			notifyAttributeChange(Parameters.foreground);
+			notifyAttributeChange(GeometricParameters.foreground);
 		}
 	}
 
+	@Override
 	public FGEArea getGeometricObject() {
 		return geometricObject;
 	}
 
+	@Override
 	public void setGeometricObject(FGEArea geometricObject) {
-		FGENotification notification = requireChange(Parameters.geometricObject, geometricObject);
+		FGENotification notification = requireChange(GeometricParameters.geometricObject, geometricObject);
 		if (notification != null) {
 			this.geometricObject = geometricObject;
 			rebuildControlPoints();
@@ -383,6 +399,7 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 
 	protected Vector<ControlPoint> _controlPoints;
 
+	@Override
 	public List<ControlPoint> getControlPoints() {
 		if (_controlPoints == null) {
 			rebuildControlPoints();
@@ -904,6 +921,7 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 		}
 	}
 
+	@Override
 	public List<ControlPoint> rebuildControlPoints() {
 		if (_controlPoints == null) {
 			_controlPoints = new Vector<ControlPoint>();
@@ -938,6 +956,7 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 		return _controlPoints;
 	}
 
+	@Override
 	public void notifyGeometryChanged() {
 		updateControlPoints();
 		setChanged();

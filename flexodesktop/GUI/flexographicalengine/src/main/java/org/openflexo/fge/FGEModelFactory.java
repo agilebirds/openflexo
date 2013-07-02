@@ -18,7 +18,7 @@ import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.connectors.CurveConnector;
 import org.openflexo.fge.connectors.CurvedPolylinConnector;
 import org.openflexo.fge.connectors.LineConnector;
-import org.openflexo.fge.connectors.rpc.RectPolylinConnector;
+import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
 import org.openflexo.fge.controller.MouseControl.MouseButton;

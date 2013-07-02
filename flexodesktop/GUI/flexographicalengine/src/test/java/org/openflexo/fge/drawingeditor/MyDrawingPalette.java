@@ -23,14 +23,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.controller.DrawingPalette;
 import org.openflexo.fge.controller.PaletteElement;
@@ -48,9 +44,12 @@ public class MyDrawingPalette extends DrawingPalette {
 	public static final Font DEFAULT_TEXT_FONT = new Font("SansSerif", Font.PLAIN, 9);
 	public static final Font LABEL_FONT = new Font("SansSerif", Font.PLAIN, 11);
 
-	public MyDrawingPalette() {
-		super(360, 350, "default");
+	// This factory is the one of the editor
+	private DrawingEditorFactory editorFactory;
 
+	public MyDrawingPalette(DrawingEditorFactory editorFactory) {
+		super(360, 350, "default");
+		this.editorFactory = editorFactory;
 		int px = 0;
 		int py = 0;
 		for (ShapeType st : ShapeType.values()) {
@@ -73,7 +72,8 @@ public class MyDrawingPalette extends DrawingPalette {
 	}
 
 	private PaletteElement makePaletteElement(ShapeType st, int px, int py) {
-		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(st, null, getPaletteDrawing());
+		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(st, this, null, getPaletteDrawing());
+		getFactory().applyDefaultProperties(gr);
 		if (gr.getDimensionConstraints() == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
 			gr.setX(px * GRID_WIDTH + 15);
 			gr.setY(py * GRID_HEIGHT + 10);
@@ -86,10 +86,10 @@ public class MyDrawingPalette extends DrawingPalette {
 			gr.setHeight(50);
 		}
 		gr.setText(st.name());
-		gr.setTextStyle(TextStyle.makeTextStyle(Color.DARK_GRAY, DEFAULT_TEXT_FONT));
+		gr.setTextStyle(getFactory().makeTextStyle(Color.DARK_GRAY, DEFAULT_TEXT_FONT));
 		gr.setIsFloatingLabel(false);
-		// gr.setForeground(ForegroundStyle.makeStyle(Color.BLACK));
-		gr.setBackground(BackgroundStyle.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR));
+		gr.setForeground(getFactory().makeForegroundStyle(Color.BLACK));
+		gr.setBackground(getFactory().makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR));
 		gr.setIsVisible(true);
 		gr.setAllowToLeaveBounds(false);
 
@@ -125,7 +125,7 @@ public class MyDrawingPalette extends DrawingPalette {
 	}
 
 	private PaletteElement makeSingleLabel(int px, int py) {
-		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(ShapeType.RECTANGLE, null,
+		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(ShapeType.RECTANGLE, this, null,
 				getPaletteDrawing());
 		gr.setX(px * GRID_WIDTH + 10);
 		gr.setY(py * GRID_HEIGHT + 15);
@@ -134,19 +134,19 @@ public class MyDrawingPalette extends DrawingPalette {
 		gr.setAdjustMinimalWidthToLabelWidth(true);
 		gr.setAdjustMinimalHeightToLabelHeight(true);
 
-		gr.setTextStyle(TextStyle.makeTextStyle(Color.BLACK, LABEL_FONT));
+		gr.setTextStyle(getFactory().makeTextStyle(Color.BLACK, LABEL_FONT));
 		gr.setText("Label");
 		gr.setIsFloatingLabel(false);
-		gr.setForeground(ForegroundStyle.makeNone());
-		gr.setBackground(BackgroundStyle.makeEmptyBackground());
-		gr.setShadowStyle(ShadowStyle.makeNone());
+		gr.setForeground(getFactory().makeNoneForegroundStyle());
+		gr.setBackground(getFactory().makeEmptyBackground());
+		gr.setShadowStyle(getFactory().makeNoneShadowStyle());
 		gr.setIsVisible(true);
 
 		return makePaletteElement(gr, false, false, true, false);
 	}
 
 	private PaletteElement makeMultilineLabel(int px, int py) {
-		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(ShapeType.RECTANGLE, null,
+		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(ShapeType.RECTANGLE, this, null,
 				getPaletteDrawing());
 		gr.setX(px * GRID_WIDTH + 10);
 		gr.setY(py * GRID_HEIGHT + 10);
@@ -155,20 +155,20 @@ public class MyDrawingPalette extends DrawingPalette {
 		gr.setAdjustMinimalWidthToLabelWidth(true);
 		gr.setAdjustMinimalHeightToLabelHeight(true);
 
-		gr.setTextStyle(TextStyle.makeTextStyle(Color.BLACK, LABEL_FONT));
+		gr.setTextStyle(getFactory().makeTextStyle(Color.BLACK, LABEL_FONT));
 		gr.setIsMultilineAllowed(true);
 		gr.setText("Multiple\nlines label");
 		gr.setIsFloatingLabel(false);
-		gr.setForeground(ForegroundStyle.makeNone());
-		gr.setBackground(BackgroundStyle.makeEmptyBackground());
-		gr.setShadowStyle(ShadowStyle.makeNone());
+		gr.setForeground(getFactory().makeNoneForegroundStyle());
+		gr.setBackground(getFactory().makeEmptyBackground());
+		gr.setShadowStyle(getFactory().makeNoneShadowStyle());
 		gr.setIsVisible(true);
 
 		return makePaletteElement(gr, false, false, true, false);
 	}
 
 	private PaletteElement makeBoundedMultilineLabel(int px, int py) {
-		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(ShapeType.RECTANGLE, null,
+		final PaletteElementGraphicalRepresentation gr = new PaletteElementGraphicalRepresentation(ShapeType.RECTANGLE, this, null,
 				getPaletteDrawing());
 		gr.setX(px * GRID_WIDTH + 10);
 		gr.setY(py * GRID_HEIGHT + 10);
@@ -177,12 +177,13 @@ public class MyDrawingPalette extends DrawingPalette {
 		gr.setAdjustMinimalWidthToLabelWidth(true);
 		gr.setAdjustMinimalHeightToLabelHeight(true);
 
-		gr.setTextStyle(TextStyle.makeTextStyle(Color.BLACK, LABEL_FONT));
+		gr.setTextStyle(getFactory().makeTextStyle(Color.BLACK, LABEL_FONT));
 		gr.setIsMultilineAllowed(true);
 		gr.setText("Multiple\nlines label");
 		gr.setIsFloatingLabel(false);
-		gr.setBackground(BackgroundStyle.makeEmptyBackground());
-		gr.setShadowStyle(ShadowStyle.makeNone());
+		gr.setBackground(getFactory().makeEmptyBackground());
+		gr.setForeground(getFactory().makeNoneForegroundStyle());
+		gr.setShadowStyle(getFactory().makeNoneShadowStyle());
 		gr.setIsVisible(true);
 
 		return makePaletteElement(gr, false, false, true, false);
@@ -214,7 +215,7 @@ public class MyDrawingPalette extends DrawingPalette {
 				if (applyCurrentShadowStyle) {
 					shapeGR.setShadowStyle(getController().getCurrentShadowStyle());
 				}
-				getController().addNewShape(new MyShape(shapeGR, dropLocation, getController().getDrawing()), container);
+				getController().addNewShape(editorFactory.makeNewShape(shapeGR, dropLocation, getController().getDrawing()), container);
 				return true;
 			}
 

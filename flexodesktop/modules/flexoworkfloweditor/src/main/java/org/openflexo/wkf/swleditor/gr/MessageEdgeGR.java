@@ -23,8 +23,8 @@ import java.awt.Color;
 
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ForegroundStyle.DashStyle;
+import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
-import org.openflexo.fge.connectors.rpc.RectPolylinConnector;
 import org.openflexo.foundation.wkf.edge.MessageEdge;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 

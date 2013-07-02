@@ -627,6 +627,8 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 
 	public GraphicalRepresentation<?> getRootGraphicalRepresentation();
 
+	public void createBindingModel();
+
 	@Override
 	public BindingModel getBindingModel();
 

@@ -30,6 +30,7 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingPalette.PaletteDrawing;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.PaletteElementView;
 import org.openflexo.fge.view.ShapeView;
@@ -44,7 +45,7 @@ public interface PaletteElement extends Serializable {
 
 	public DrawingPalette getPalette();
 
-	public static class PaletteElementGraphicalRepresentation extends ShapeGraphicalRepresentation<PaletteElement> {
+	public static class PaletteElementGraphicalRepresentation extends ShapeGraphicalRepresentationImpl<PaletteElement> {
 		private ShapeGraphicalRepresentation<?> originalGR;
 
 		public PaletteElementGraphicalRepresentation(ShapeType shapeType, PaletteElement paletteElement, PaletteDrawing paletteDrawing) {

@@ -18,21 +18,20 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.DrawingNeedsToBeRedrawn;
+import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.ForegroundStyle;
-import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.DrawingGraphicalRepresentation.Parameters;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
-import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
 import org.openflexo.fge.controller.MouseControl.MouseButton;
+import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.controller.MouseDragControlAction.MouseDragControlActionType;
 import org.openflexo.fge.geom.FGEDimension;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.graphics.DrawingDecorationPainter;
 import org.openflexo.fge.graphics.FGEDrawingDecorationGraphics;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
@@ -76,27 +75,34 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 	// * Constructor *
 	// *******************************************************************************
 
-	// Never use this constructor (used during deserialization only)
-	public DrawingGraphicalRepresentation() {
-		this(null, true);
-	}
-
-	public DrawingGraphicalRepresentation(Drawing<M> aDrawing) {
-		this(aDrawing, true);
-	}
-
-	public DrawingGraphicalRepresentation(Drawing<M> aDrawing, boolean initBasicControls) {
-		super(aDrawing != null ? aDrawing.getModel() : null, aDrawing);
+	/**
+	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
+	 */
+	public DrawingGraphicalRepresentationImpl() {
+		super();
 		graphics = new FGEDrawingGraphics(this);
+	}
+
+	@Deprecated
+	private DrawingGraphicalRepresentationImpl(Drawing<M> aDrawing) {
+		this();
+		setDrawing(aDrawing);
+		setDrawable(aDrawing != null ? aDrawing.getModel() : null);
+	}
+
+	@Deprecated
+	private DrawingGraphicalRepresentationImpl(Drawing<M> aDrawing, boolean initBasicControls) {
+		this(aDrawing);
 		if (initBasicControls) {
 			addToMouseClickControls(MouseClickControl.makeMouseClickControl("Drawing selection", MouseButton.LEFT, 1,
 					MouseClickControlActionType.SELECTION));
 			addToMouseDragControls(MouseDragControl.makeMouseDragControl("Rectangle selection", MouseButton.LEFT,
 					MouseDragControlActionType.RECTANGLE_SELECTING));
+			addToMouseDragControls(MouseDragControl.makeMouseDragControl("Zoom", MouseButton.RIGHT, MouseDragControlActionType.ZOOM));
 		}
-		width = 1000;
-		height = 1000;
-		bgStyle = BackgroundStyle.makeColoredBackground(getBackgroundColor());
+		width = FGEConstants.DEFAULT_DRAWING_WIDTH;
+		height = FGEConstants.DEFAULT_DRAWING_HEIGHT;
+		bgStyle = getFactory().makeColoredBackground(getBackgroundColor());
 	}
 
 	@Override
@@ -165,6 +171,7 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 	// * Accessors *
 	// *******************************************************************************
 
+	@Override
 	public FGERectangle getWorkingArea() {
 		return new FGERectangle(0, 0, getWidth(), getHeight(), Filling.FILLED);
 	}
@@ -174,75 +181,87 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 		return 0;
 	}
 
+	@Override
 	public Color getBackgroundColor() {
 		return backgroundColor;
 	}
 
+	@Override
 	public void setBackgroundColor(Color backgroundColor) {
 		// logger.info("For "+this+" Set bg color to "+backgroundColor);
 
-		FGENotification notification = requireChange(Parameters.backgroundColor, backgroundColor);
+		FGENotification notification = requireChange(DrawingParameters.backgroundColor, backgroundColor);
 		if (notification != null) {
 			this.backgroundColor = backgroundColor;
-			bgStyle = BackgroundStyle.makeColoredBackground(backgroundColor);
+			bgStyle = getFactory().makeColoredBackground(backgroundColor);
 			hasChanged(notification);
 		}
 	}
 
+	@Override
 	public double getHeight() {
 		return height;
 	}
 
+	@Override
 	public void setHeight(double aValue) {
-		FGENotification notification = requireChange(Parameters.height, aValue);
+		FGENotification notification = requireChange(DrawingParameters.height, aValue);
 		if (notification != null) {
 			height = aValue;
 			hasChanged(notification);
 		}
 	}
 
+	@Override
 	public double getWidth() {
 		return width;
 	}
 
+	@Override
 	public void setWidth(double aValue) {
-		FGENotification notification = requireChange(Parameters.width, aValue);
+		FGENotification notification = requireChange(DrawingParameters.width, aValue);
 		if (notification != null) {
 			width = aValue;
 			hasChanged(notification);
 		}
 	}
 
+	@Override
 	public Color getFocusColor() {
 		return focusColor;
 	}
 
+	@Override
 	public void setFocusColor(Color focusColor) {
-		FGENotification notification = requireChange(Parameters.focusColor, focusColor);
+		FGENotification notification = requireChange(DrawingParameters.focusColor, focusColor);
 		if (notification != null) {
 			this.focusColor = focusColor;
 			hasChanged(notification);
 		}
 	}
 
+	@Override
 	public Color getSelectionColor() {
 		return selectionColor;
 	}
 
+	@Override
 	public void setSelectionColor(Color selectionColor) {
-		FGENotification notification = requireChange(Parameters.selectionColor, selectionColor);
+		FGENotification notification = requireChange(DrawingParameters.selectionColor, selectionColor);
 		if (notification != null) {
 			this.selectionColor = selectionColor;
 			hasChanged(notification);
 		}
 	}
 
+	@Override
 	public Color getRectangleSelectingSelectionColor() {
 		return rectangleSelectingSelectionColor;
 	}
 
+	@Override
 	public void setRectangleSelectingSelectionColor(Color selectionColor) {
-		FGENotification notification = requireChange(Parameters.rectangleSelectingSelectionColor, selectionColor);
+		FGENotification notification = requireChange(DrawingParameters.rectangleSelectingSelectionColor, selectionColor);
 		if (notification != null) {
 			this.rectangleSelectingSelectionColor = selectionColor;
 			hasChanged(notification);
@@ -321,10 +340,10 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 		super.paint(g, controller);
 
 		if (!(bgStyle instanceof ColorBackgroundStyle) || !((ColorBackgroundStyle) bgStyle).getColor().equals(getBackgroundColor())) {
-			bgStyle = BackgroundStyle.makeColoredBackground(getBackgroundColor());
+			bgStyle = getFactory().makeColoredBackground(getBackgroundColor());
 		}
 
-		ForegroundStyle fgStyle = ForegroundStyle.makeStyle(Color.DARK_GRAY);
+		ForegroundStyle fgStyle = getFactory().makeForegroundStyle(Color.DARK_GRAY);
 
 		graphics.setDefaultForeground(fgStyle);
 		graphics.setDefaultBackground(bgStyle);
@@ -340,10 +359,12 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 
 	}
 
+	@Override
 	public DrawingDecorationPainter getDecorationPainter() {
 		return decorationPainter;
 	}
 
+	@Override
 	public void setDecorationPainter(DrawingDecorationPainter aPainter) {
 		decorationGraphics = new FGEDrawingDecorationGraphics(this);
 		decorationPainter = aPainter;
@@ -384,6 +405,7 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 		return true;
 	}
 
+	@Override
 	public Vector<GraphicalRepresentation> allGraphicalRepresentations() {
 		Vector<GraphicalRepresentation> returned = new Vector<GraphicalRepresentation>();
 		_appendGraphicalRepresentations(returned, this);
@@ -415,32 +437,37 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 		}
 	}*/
 
+	@Override
 	public boolean getDrawWorkingArea() {
 		return drawWorkingArea;
 	}
 
+	@Override
 	public void setDrawWorkingArea(boolean drawWorkingArea) {
 		// logger.info("setDrawWorkingArea with "+drawWorkingArea);
 
-		FGENotification notification = requireChange(Parameters.drawWorkingArea, drawWorkingArea);
+		FGENotification notification = requireChange(DrawingParameters.drawWorkingArea, drawWorkingArea);
 		if (notification != null) {
 			this.drawWorkingArea = drawWorkingArea;
 			hasChanged(notification);
 		}
 	}
 
+	@Override
 	public boolean isResizable() {
 		return isResizable;
 	}
 
+	@Override
 	public void setIsResizable(boolean isResizable) {
-		FGENotification notification = requireChange(Parameters.isResizable, isResizable);
+		FGENotification notification = requireChange(DrawingParameters.isResizable, isResizable);
 		if (notification != null) {
 			this.isResizable = isResizable;
 			hasChanged(notification);
 		}
 	}
 
+	@Override
 	public void startConnectorObserving() {
 		for (GraphicalRepresentation gr : allGraphicalRepresentations()) {
 			if (gr instanceof ConnectorGraphicalRepresentation) {
@@ -449,6 +476,7 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 		}
 	}
 
+	@Override
 	public FGEDimension getSize() {
 		return new FGEDimension(getWidth(), getHeight());
 	}
@@ -456,6 +484,7 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 	/**
 	 * Notify that the object just resized
 	 */
+	@Override
 	public void notifyObjectResized(FGEDimension oldSize) {
 		setChanged();
 		notifyObservers(new ObjectResized(oldSize, getSize()));
@@ -464,6 +493,7 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 	/**
 	 * Notify that the object will be resized
 	 */
+	@Override
 	public void notifyObjectWillResize() {
 		setChanged();
 		notifyObservers(new ObjectWillResize());
@@ -473,20 +503,24 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 	 * Notify that the object resizing has finished (take care that this just notify END of resize, this should NOT be used to notify a
 	 * resizing: use notifyObjectResize() instead)
 	 */
+	@Override
 	public void notifyObjectHasResized() {
 		setChanged();
 		notifyObservers(new ObjectHasResized());
 	}
 
+	@Override
 	public void notifyDrawingNeedsToBeRedrawn() {
 		setChanged();
 		notifyObservers(new DrawingNeedsToBeRedrawn());
 	}
 
+	@Override
 	public FGEDrawingGraphics getGraphics() {
 		return graphics;
 	}
 
+	@Override
 	public ShapeGraphicalRepresentation<?> getTopLevelShapeGraphicalRepresentation(FGEPoint p) {
 		return getTopLevelShapeGraphicalRepresentation(this, p);
 	}
@@ -542,10 +576,12 @@ public class DrawingGraphicalRepresentationImpl<M> extends GraphicalRepresentati
 	// * Layout *
 	// *******************************************************************************
 
+	@Override
 	public void performRandomLayout() {
 		performRandomLayout(getWidth(), getHeight());
 	}
 
+	@Override
 	public void performAutoLayout() {
 		performAutoLayout(getWidth(), getHeight());
 	}

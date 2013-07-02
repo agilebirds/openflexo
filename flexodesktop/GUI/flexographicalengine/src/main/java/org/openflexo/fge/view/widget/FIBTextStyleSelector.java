@@ -30,15 +30,13 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextStyle;
-import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fib.FIBLibrary;
@@ -259,6 +257,7 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 		private DrawingController<?> controller;
 		private Object p1, p2, text;
 		private ShapeGraphicalRepresentation textGR;
+		private FGEModelFactory factory;
 
 		protected TextStylePreviewPanel() {
 			super(new BorderLayout());
@@ -267,6 +266,8 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 			// setPreferredSize(new Dimension(40,19));
 			// setBackground(Color.WHITE);
 			setMinimumSize(new Dimension(40, 19));
+
+			factory = FGEUtils.TOOLS_FACTORY;
 
 			text = new Object();
 
@@ -315,31 +316,31 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 				}
 
 			};
-			drawingGR = new DrawingGraphicalRepresentation(drawing, false);
+			drawingGR = factory.makeDrawingGraphicalRepresentation(drawing, false);
 			drawingGR.setBackgroundColor(new Color(255, 255, 255));
 			drawingGR.setWidth(199);
 			drawingGR.setHeight(19);
 			drawingGR.setDrawWorkingArea(false);
-			textGR = new ShapeGraphicalRepresentation(ShapeType.RECTANGLE, text, drawing);
+			textGR = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, text, drawing);
 			textGR.setWidth(200);
 			textGR.setHeight(20);
 			textGR.setX(0);
 			textGR.setY(0);
-			textGR.setText(FlexoLocalization.localizedForKey(GraphicalRepresentation.LOCALIZATION, "no_font_selected"));
+			textGR.setText(FlexoLocalization.localizedForKey(FGEUtils.LOCALIZATION, "no_font_selected"));
 			textGR.setIsFloatingLabel(false);
 			textGR.setRelativeTextX(0.5);
 			textGR.setRelativeTextY(0.35);
-			textGR.setForeground(ForegroundStyle.makeNone());
-			textGR.setBackground(BackgroundStyle.makeEmptyBackground());
+			textGR.setForeground(factory.makeNoneForegroundStyle());
+			textGR.setBackground(factory.makeEmptyBackground());
 			textGR.setTextStyle(getEditedObject());
-			textGR.setShadowStyle(ShadowStyle.makeNone());
+			textGR.setShadowStyle(factory.makeNoneShadowStyle());
 			textGR.setIsSelectable(false);
 			textGR.setIsFocusable(false);
 			textGR.setIsReadOnly(true);
-			textGR.setBorder(new ShapeBorder(0, 0, 0, 0));
+			textGR.setBorder(factory.makeShapeBorder(0, 0, 0, 0));
 			textGR.setValidated(true);
 
-			controller = new DrawingController<Drawing<?>>(drawing);
+			controller = new DrawingController<Drawing<?>>(drawing, factory);
 			add(controller.getDrawingView());
 
 			update();

@@ -23,7 +23,8 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.FGEUtils;
+import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -50,7 +51,7 @@ public class AdjustableLastSegment extends RectPolylinAdjustableSegment {
 		segmentsNb = getPolylin().getSegmentNb();
 		previousSegment = getPolylin().getSegmentAt(segmentsNb - 2);
 		if (currentSegment.getApproximatedOrientation() == null || previousSegment.getApproximatedOrientation() == null) {
-			RectPolylinConnector.logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
+			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
 			return;
 		}
 		if (getPolylin().getSegmentNb() > 2) {
@@ -59,8 +60,7 @@ public class AdjustableLastSegment extends RectPolylinAdjustableSegment {
 		currentOrientation = currentSegment.getApproximatedOrientation();
 		previousOrientation = previousSegment.getApproximatedOrientation();
 
-		AffineTransform at2 = GraphicalRepresentation.convertNormalizedCoordinatesAT(getConnector().getEndObject(),
-				getGraphicalRepresentation());
+		AffineTransform at2 = FGEUtils.convertNormalizedCoordinatesAT(getConnector().getEndObject(), getGraphicalRepresentation());
 		endArea = getConnector().getEndObject().getShape().getOutline().transform(at2);
 		FGEArea orthogonalPerspectiveArea = endArea.getOrthogonalPerspectiveArea(currentOrientation.getOpposite());
 		if (!previousSegment.containsPoint(currentSegment.getP2())) {

@@ -23,7 +23,8 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.FGEUtils;
+import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
@@ -43,7 +44,7 @@ public class AdjustableLastControlPoint extends RectPolylinAdjustableControlPoin
 
 	@Override
 	public FGEArea getDraggingAuthorizedArea() {
-		AffineTransform at2 = GraphicalRepresentation.convertNormalizedCoordinatesAT(getGraphicalRepresentation().getEndObject(),
+		AffineTransform at2 = FGEUtils.convertNormalizedCoordinatesAT(getGraphicalRepresentation().getEndObject(),
 				getGraphicalRepresentation());
 		FGEArea endArea = getGraphicalRepresentation().getEndObject().getShape().getShape().transform(at2);
 		return new FGESubstractionArea(new FGEPlane(), endArea, false);
@@ -103,8 +104,8 @@ public class AdjustableLastControlPoint extends RectPolylinAdjustableControlPoin
 			getConnector().getEndControlPoint().setPoint(newEndPoint);
 			if (getConnector().getIsEndingLocationFixed()) { // Don't forget this !!!
 				getConnector().setFixedEndLocation(
-						GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), newEndPoint,
-								getGraphicalRepresentation().getEndObject()));
+						FGEUtils.convertNormalizedPoint(getGraphicalRepresentation(), newEndPoint, getGraphicalRepresentation()
+								.getEndObject()));
 			}
 
 			if (initialPolylin.getSegmentNb() > 3) {
@@ -231,8 +232,8 @@ public class AdjustableLastControlPoint extends RectPolylinAdjustableControlPoin
 				getConnector().getEndControlPoint().setPoint(newEndPosition);
 				if (getConnector().getIsEndingLocationFixed()) { // Don't forget this !!!
 					getConnector().setFixedEndLocation(
-							GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), newEndPosition,
-									getGraphicalRepresentation().getEndObject()));
+							FGEUtils.convertNormalizedPoint(getGraphicalRepresentation(), newEndPosition, getGraphicalRepresentation()
+									.getEndObject()));
 				}
 
 				// Compute path to append

@@ -21,8 +21,8 @@ package org.openflexo.wkf.swleditor.gr;
 
 import java.util.logging.Logger;
 
+import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
-import org.openflexo.fge.connectors.rpc.RectPolylinConnector;
 import org.openflexo.foundation.wkf.edge.TokenEdge;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 

@@ -19,97 +19,55 @@
  */
 package org.openflexo.fge.shapes;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
-import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.geom.FGEPolygon;
+import org.openflexo.fge.shapes.impl.StarImpl;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-public class Star extends Shape {
+/**
+ * Represents a regular star, as defined by a number of points, a start angle, and a ratio between interior and exterior edges
+ * 
+ * Note that this implementation is powered by PAMELA framework.
+ * 
+ * @author sylvain
+ */
+@ModelEntity
+@ImplementationClass(StarImpl.class)
+@XMLElement(xmlTag = "StarShape")
+public interface Star extends Shape {
 
-	private int npoints = 6;
-	private double ratio = 0.5;
-	private int startAngle = 90;
+	// Property keys
 
-	private FGEPolygon _polygon;
+	public static final String N_POINTS = "nPoints";
+	public static final String START_ANGLE = "startAngle";
+	public static final String RATIO = "ratio";
 
 	// *******************************************************************************
-	// * Constructor *
+	// * Properties
 	// *******************************************************************************
 
-	public Star() {
-		this(null);
-	}
+	@Getter(value = N_POINTS, defaultValue = "6")
+	@XMLAttribute
+	public int getNPoints();
 
-	public Star(ShapeGraphicalRepresentation aGraphicalRepresentation) {
-		this(aGraphicalRepresentation, 5);
-	}
+	@Setter(value = N_POINTS)
+	public void setNPoints(int pointsNb);
 
-	public Star(ShapeGraphicalRepresentation aGraphicalRepresentation, int pointsNb) {
-		super(aGraphicalRepresentation);
-		if (pointsNb < 3) {
-			throw new IllegalArgumentException("Cannot build polygon with less then 3 points (" + pointsNb + ")");
-		}
-		updateShape();
-	}
+	@Getter(value = START_ANGLE, defaultValue = "90")
+	@XMLAttribute
+	public int getStartAngle();
 
-	@Override
-	public ShapeType getShapeType() {
-		return ShapeType.STAR;
-	}
+	@Setter(value = START_ANGLE)
+	public void setStartAngle(int anAngle);
 
-	public int getNPoints() {
-		return npoints;
-	}
+	@Getter(value = RATIO, defaultValue = "0.5")
+	@XMLAttribute
+	public double getRatio();
 
-	public void setNPoints(int pointsNb) {
-		if (pointsNb != npoints) {
-			npoints = pointsNb;
-			updateShape();
-		}
-	}
-
-	public int getStartAngle() {
-		return startAngle;
-	}
-
-	public void setStartAngle(int anAngle) {
-		if (anAngle != startAngle) {
-			startAngle = anAngle;
-			updateShape();
-		}
-	}
-
-	@Override
-	public FGEPolygon getShape() {
-		return _polygon;
-	}
-
-	public double getRatio() {
-		return ratio;
-	}
-
-	public void setRatio(double aRatio) {
-		if (aRatio > 0 && aRatio < 1.0 && ratio != aRatio) {
-			ratio = aRatio;
-			updateShape();
-		}
-	}
-
-	@Override
-	public void updateShape() {
-		_polygon = new FGEPolygon(Filling.FILLED);
-		double startA = getStartAngle() * Math.PI / 180;
-		double angleInterval = Math.PI * 2 / npoints;
-		for (int i = 0; i < npoints; i++) {
-			double angle = i * angleInterval + startA;
-			double angle1 = (i - 0.5) * angleInterval + startA;
-			_polygon.addToPoints(new FGEPoint(Math.cos(angle1) * 0.5 * ratio + 0.5, Math.sin(angle1) * 0.5 * ratio + 0.5));
-			_polygon.addToPoints(new FGEPoint(Math.cos(angle) * 0.5 + 0.5, Math.sin(angle) * 0.5 + 0.5));
-		}
-		rebuildControlPoints();
-		if (getGraphicalRepresentation() != null) {
-			getGraphicalRepresentation().notifyShapeChanged();
-		}
-	}
+	@Setter(value = RATIO)
+	public void setRatio(double aRatio);
 
 }

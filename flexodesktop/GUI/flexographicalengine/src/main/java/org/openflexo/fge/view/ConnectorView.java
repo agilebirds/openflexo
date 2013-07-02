@@ -33,6 +33,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.ConnectorGraphicalRepresentation.ConnectorParameters;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
@@ -384,7 +385,7 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 						}
 					}
 					getPaintManager().repaint(this);
-				} else if (notification.getParameter() == ConnectorGraphicalRepresentation.Parameters.applyForegroundToSymbols) {
+				} else if (notification.getParameter() == ConnectorParameters.applyForegroundToSymbols) {
 					getPaintManager().repaint(this);
 				} else if (notification instanceof ObjectWillMove) {
 					if (getPaintManager().isPaintingCacheEnabled()) {

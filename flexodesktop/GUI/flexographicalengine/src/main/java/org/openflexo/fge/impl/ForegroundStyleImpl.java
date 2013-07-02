@@ -46,31 +46,31 @@ public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle
 	}
 
 	@Deprecated
-	private static ForegroundStyleImpl makeDefault() {
+	public static ForegroundStyleImpl makeDefault() {
 		return new ForegroundStyleImpl();
 	}
 
 	@Deprecated
-	private static ForegroundStyleImpl makeNone() {
+	public static ForegroundStyleImpl makeNone() {
 		ForegroundStyleImpl returned = new ForegroundStyleImpl();
 		returned.setNoStroke(true);
 		return returned;
 	}
 
 	@Deprecated
-	private static ForegroundStyleImpl makeStyle(Color aColor) {
+	public static ForegroundStyleImpl makeStyle(Color aColor) {
 		return new ForegroundStyleImpl(aColor);
 	}
 
 	@Deprecated
-	private static ForegroundStyleImpl makeStyle(Color aColor, float aLineWidth) {
+	public static ForegroundStyleImpl makeStyle(Color aColor, float aLineWidth) {
 		ForegroundStyleImpl returned = new ForegroundStyleImpl(aColor);
 		returned.setLineWidth(aLineWidth);
 		return returned;
 	}
 
 	@Deprecated
-	private static ForegroundStyleImpl makeStyle(Color aColor, float aLineWidth, JoinStyle joinStyle, CapStyle capStyle, DashStyle dashStyle) {
+	public static ForegroundStyleImpl makeStyle(Color aColor, float aLineWidth, JoinStyle joinStyle, CapStyle capStyle, DashStyle dashStyle) {
 		ForegroundStyleImpl returned = new ForegroundStyleImpl(aColor);
 		returned.setLineWidth(aLineWidth);
 		returned.setJoinStyle(joinStyle);
@@ -80,7 +80,7 @@ public class ForegroundStyleImpl extends FGEStyleImpl implements ForegroundStyle
 	}
 
 	@Deprecated
-	private static ForegroundStyleImpl makeStyle(Color aColor, float aLineWidth, DashStyle dashStyle) {
+	public static ForegroundStyleImpl makeStyle(Color aColor, float aLineWidth, DashStyle dashStyle) {
 		ForegroundStyleImpl returned = new ForegroundStyleImpl(aColor);
 		returned.setLineWidth(aLineWidth);
 		returned.setDashStyle(dashStyle);

@@ -19,92 +19,55 @@
  */
 package org.openflexo.fge.shapes;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.geom.FGEPolygon;
+import org.openflexo.fge.shapes.impl.PolygonImpl;
+import org.openflexo.model.annotations.Adder;
+import org.openflexo.model.annotations.CloningStrategy;
+import org.openflexo.model.annotations.CloningStrategy.StrategyType;
+import org.openflexo.model.annotations.Embedded;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.Getter.Cardinality;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Remover;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLElement;
 
-public class Polygon extends Shape {
+/**
+ * Represents a polygon, with more than 3 points
+ * 
+ * Note that this implementation is powered by PAMELA framework.
+ * 
+ * @author sylvain
+ */
+@ModelEntity
+@ImplementationClass(PolygonImpl.class)
+@XMLElement(xmlTag = "CustomPolygonShape")
+public interface Polygon extends Shape {
 
-	private FGEPolygon _polygon;
+	// Property keys
 
-	private List<FGEPoint> points;
+	public static final String POINTS = "points";
 
 	// *******************************************************************************
-	// * Constructor *
+	// * Properties
 	// *******************************************************************************
 
-	public Polygon() {
-		this(null);
-	}
+	@Getter(value = POINTS, cardinality = Cardinality.LIST)
+	@XMLElement(primary = true)
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
+	public List<FGEPoint> getPoints();
 
-	public Polygon(ShapeGraphicalRepresentation aGraphicalRepresentation) {
-		super(aGraphicalRepresentation);
-	}
+	@Setter(POINTS)
+	public void setPoints(List<FGEPoint> points);
 
-	public Polygon(ShapeGraphicalRepresentation aGraphicalRepresentation, List<FGEPoint> points) {
-		super(aGraphicalRepresentation);
-		this.points = new ArrayList<FGEPoint>(points);
-		updateShape();
-	}
+	@Adder(POINTS)
+	public void addToPoints(FGEPoint aPoint);
 
-	public Polygon(ShapeGraphicalRepresentation aGraphicalRepresentation, FGEPolygon polygon) {
-		super(aGraphicalRepresentation);
-		this.points = new ArrayList<FGEPoint>();
-		for (FGEPoint pt : polygon.getPoints()) {
-			points.add(pt);
-		}
-		updateShape();
-	}
-
-	public Polygon(ShapeGraphicalRepresentation aGraphicalRepresentation, FGEPoint... points) {
-		super(aGraphicalRepresentation);
-		this.points = new ArrayList<FGEPoint>();
-		for (FGEPoint pt : points) {
-			this.points.add(pt);
-		}
-		updateShape();
-	}
-
-	public List<FGEPoint> getPoints() {
-		return points;
-	}
-
-	public void setPoints(List<FGEPoint> points) {
-		if (points != null) {
-			this.points = new ArrayList<FGEPoint>(points);
-			updateShape();
-		} else {
-			this.points = null;
-		}
-	}
-
-	public void addToPoints(FGEPoint aPoint) {
-		points.add(aPoint);
-		updateShape();
-	}
-
-	public void removeFromPoints(FGEPoint aPoint) {
-		points.remove(aPoint);
-		updateShape();
-	}
-
-	@Override
-	public FGEPolygon getShape() {
-		return _polygon;
-	}
-
-	@Override
-	public ShapeType getShapeType() {
-		return ShapeType.CUSTOM_POLYGON;
-	}
-
-	@Override
-	public void updateShape() {
-		_polygon = new FGEPolygon(Filling.FILLED, points);
-	}
+	@Remover(POINTS)
+	public void removeFromPoints(FGEPoint aPoint);
 
 }

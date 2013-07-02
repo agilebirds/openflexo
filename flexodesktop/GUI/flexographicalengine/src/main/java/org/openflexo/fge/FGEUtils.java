@@ -20,6 +20,8 @@
 package org.openflexo.fge;
 
 import java.awt.Color;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
@@ -186,6 +188,249 @@ public class FGEUtils {
 		System.err.println(emphasizedColor(yellow));
 		System.err.println(emphasizedColor(green));
 		System.err.println(emphasizedColor(grey));
+	}
+
+	public static GraphicalRepresentation<?> getFirstCommonAncestor(GraphicalRepresentation<?> child1, GraphicalRepresentation<?> child2) {
+		if (!child1.isValidated()) {
+			return null;
+		}
+		if (!child2.isValidated()) {
+			return null;
+		}
+		return getFirstCommonAncestor(child1, child2, false);
+	}
+
+	public static GraphicalRepresentation<?> getFirstCommonAncestor(GraphicalRepresentation<?> child1, GraphicalRepresentation<?> child2,
+			boolean includeCurrent) {
+		if (!child1.isValidated()) {
+			return null;
+		}
+		if (!child2.isValidated()) {
+			return null;
+		}
+		List<Object> ancestors1 = child1.getAncestors(true);
+		if (includeCurrent) {
+			ancestors1.add(0, child1);
+		}
+		List<Object> ancestors2 = child2.getAncestors(true);
+		if (includeCurrent) {
+			ancestors2.add(0, child2);
+		}
+		for (int i = 0; i < ancestors1.size(); i++) {
+			Object o1 = ancestors1.get(i);
+			if (ancestors2.contains(o1)) {
+				return child1.getGraphicalRepresentation(o1);
+			}
+		}
+		return null;
+	}
+
+	public static boolean areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation<?> element1, GraphicalRepresentation<?> element2) {
+		if (!element1.isValidated()) {
+			return false;
+		}
+		if (!element2.isValidated()) {
+			return false;
+		}
+		return getFirstCommonAncestor(element1, element2) != null;
+	}
+
+	/**
+	 * Convert a point relative to the view representing source drawable, with supplied scale, in a point relative to the view representing
+	 * destination drawable
+	 * 
+	 * @param source
+	 *            graphical representation of drawable represented in the source view
+	 * @param point
+	 *            point to convert
+	 * @param destination
+	 *            graphical representation of drawable represented in the destination view
+	 * @param scale
+	 *            the scale to be used to perform this conversion
+	 * @return
+	 */
+	public static Point convertPoint(GraphicalRepresentation<?> source, Point point, GraphicalRepresentation<?> destination, double scale) {
+		if (source != destination) {
+			AffineTransform at = convertCoordinatesAT(source, destination, scale);
+			return (Point) at.transform(point, new Point());
+		} else {
+			return new Point(point);
+		}
+	}
+
+	/**
+	 * Convert a rectangle coordinates expressed in the view representing source drawable, with supplied scale, in coordinates expressed in
+	 * the view representing destination drawable
+	 * 
+	 * @param source
+	 *            graphical representation of drawable represented in the source view
+	 * @param aRectangle
+	 *            rectangle to convert
+	 * @param destination
+	 *            graphical representation of drawable represented in the destination view
+	 * @param scale
+	 *            the scale to be used to perform this conversion
+	 * @return
+	 */
+	public static Rectangle convertRectangle(GraphicalRepresentation<?> source, Rectangle aRectangle,
+			GraphicalRepresentation<?> destination, double scale) {
+		Point point = new Point(aRectangle.x, aRectangle.y);
+		if (source != destination) {
+			point = convertPoint(source, point, destination, scale);
+		}
+		return new Rectangle(point.x, point.y, aRectangle.width, aRectangle.height);
+	}
+
+	/**
+	 * Build and return a new AffineTransform allowing to perform coordinates conversion from the view representing source drawable, with
+	 * supplied scale, to the view representing destination drawable
+	 * 
+	 * @param source
+	 * @param destination
+	 * @param scale
+	 * @return
+	 */
+	public static AffineTransform convertCoordinatesAT(GraphicalRepresentation<?> source, GraphicalRepresentation<?> destination,
+			double scale) {
+		if (source != destination) {
+			AffineTransform returned = convertFromDrawableToDrawingAT(source, scale);
+			returned.preConcatenate(convertFromDrawingToDrawableAT(destination, scale));
+			return returned;
+		} else {
+			return new AffineTransform();
+		}
+	}
+
+	/**
+	 * Convert a point defined in coordinates system related to "source" graphical representation to related drawing graphical
+	 * representation
+	 * 
+	 * @param destination
+	 * @param point
+	 * @param scale
+	 * @return
+	 */
+	public static Point convertPointFromDrawableToDrawing(GraphicalRepresentation<?> source, Point point, double scale) {
+		AffineTransform at = convertFromDrawableToDrawingAT(source, scale);
+		return (Point) at.transform(point, new Point());
+	}
+
+	/**
+	 * 
+	 * Build a new AffineTransform allowing to convert coordinates from coordinate system defined by "source" graphical representation to
+	 * related drawing graphical representation
+	 * 
+	 * @param source
+	 * @param scale
+	 * @return
+	 */
+	public static AffineTransform convertFromDrawableToDrawingAT(GraphicalRepresentation<?> source, double scale) {
+		double tx = 0;
+		double ty = 0;
+		if (source == null) {
+			logger.warning("Called convertFromDrawableToDrawingAT() for null graphical representation (source)");
+			return new AffineTransform();
+		}
+		Object current = source.getDrawable();
+		while (current != source.getDrawing().getModel()) {
+			if (source.getDrawing().getGraphicalRepresentation(current) == null) {
+				throw new IllegalArgumentException(
+						"Drawable "
+								+ current
+								+ " has no graphical representation.\nDevelopper note: Use GraphicalRepresentationUtils.areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation,GraphicalRepresentation) to prevent such cases.");
+			}
+			if (source.getDrawing().getContainer(current) == null) {
+				throw new IllegalArgumentException(
+						"Drawable "
+								+ current
+								+ " has no container.\nDevelopper note: Use GraphicalRepresentationUtils.areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation,GraphicalRepresentation) to prevent such cases.");
+			}
+			tx += source.getDrawing().getGraphicalRepresentation(current).getViewX(scale);
+			ty += source.getDrawing().getGraphicalRepresentation(current).getViewY(scale);
+			current = source.getDrawing().getContainer(current);
+		}
+		return AffineTransform.getTranslateInstance(tx, ty);
+	}
+
+	/**
+	 * Convert a point defined in related drawing graphical representation coordinates system to the one defined by "destination" graphical
+	 * representation
+	 * 
+	 * @param destination
+	 * @param point
+	 * @param scale
+	 * @return
+	 */
+	public static Point convertPointFromDrawingToDrawable(GraphicalRepresentation<?> destination, Point point, double scale) {
+		AffineTransform at = convertFromDrawingToDrawableAT(destination, scale);
+		return (Point) at.transform(point, new Point());
+	}
+
+	/**
+	 * 
+	 * Build a new AffineTransform allowing to convert coordinates from coordinate system defined by related drawing graphical
+	 * representation to the one defined by "destination" graphical representation
+	 * 
+	 * @param destination
+	 * @param scale
+	 * @return
+	 */
+	public static AffineTransform convertFromDrawingToDrawableAT(GraphicalRepresentation<?> destination, double scale) {
+		double tx = 0;
+		double ty = 0;
+		if (destination == null) {
+			logger.warning("Called convertFromDrawingToDrawableAT() for null graphical representation (destination)");
+			return new AffineTransform();
+		}
+		Object current = destination.getDrawable();
+		while (current != destination.getDrawing().getModel()) {
+			if (destination.getDrawing().getContainer(current) == null) {
+				throw new IllegalArgumentException(
+						"Drawable "
+								+ current
+								+ " has no container.\nDevelopper note: Use GraphicalRepresentationUtils.areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation,GraphicalRepresentation) to prevent such cases.");
+			}
+			tx -= destination.getDrawing().getGraphicalRepresentation(current).getViewX(scale);
+			ty -= destination.getDrawing().getGraphicalRepresentation(current).getViewY(scale);
+			current = destination.getDrawing().getContainer(current);
+		}
+		return AffineTransform.getTranslateInstance(tx, ty);
+	}
+
+	/**
+	 * Convert a point relative to the normalized coordinates system from source drawable to the normalized coordinates system from
+	 * destination drawable
+	 * 
+	 * @param source
+	 * @param point
+	 * @param destination
+	 * @return
+	 */
+	public static FGEPoint convertNormalizedPoint(GraphicalRepresentation<?> source, FGEPoint point, GraphicalRepresentation<?> destination) {
+		if (point == null) {
+			return null;
+		}
+		AffineTransform at = convertNormalizedCoordinatesAT(source, destination);
+		return (FGEPoint) at.transform(point, new FGEPoint());
+	}
+
+	/**
+	 * Build and return an AffineTransform allowing to convert locations relative to the normalized coordinates system from source drawable
+	 * to the normalized coordinates system from destination drawable
+	 * 
+	 * @param source
+	 * @param point
+	 * @param destination
+	 * @return
+	 */
+	public static AffineTransform convertNormalizedCoordinatesAT(GraphicalRepresentation<?> source, GraphicalRepresentation<?> destination) {
+		if (source == null) {
+			logger.warning("null source !");
+		}
+		AffineTransform returned = source.convertNormalizedPointToViewCoordinatesAT(1.0);
+		returned.preConcatenate(convertCoordinatesAT(source, destination, 1.0));
+		returned.preConcatenate(destination.convertViewCoordinatesToNormalizedPointAT(1.0));
+		return returned;
 	}
 
 	// Instantiate a new localizer in directory src/dev/resources/FGELocalized

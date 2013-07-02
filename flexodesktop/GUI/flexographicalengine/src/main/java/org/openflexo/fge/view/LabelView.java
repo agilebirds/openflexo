@@ -58,11 +58,14 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
 import org.openflexo.fge.GraphicalRepresentation.ParagraphAlignment;
+import org.openflexo.fge.GraphicalRepresentation.Parameters;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeParameters;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.DrawingPalette;
 import org.openflexo.fge.notifications.FGENotification;
@@ -421,11 +424,11 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 						|| notification.getParameter() == GraphicalRepresentation.Parameters.verticalTextAlignment) {
 					updateBounds();
 					getPaintManager().repaint(this);
-				} else if (notification.getParameter() == ShapeGraphicalRepresentation.Parameters.relativeTextX
-						|| notification.getParameter() == ShapeGraphicalRepresentation.Parameters.relativeTextY
-						|| notification.getParameter() == GraphicalRepresentation.Parameters.absoluteTextX
-						|| notification.getParameter() == GraphicalRepresentation.Parameters.absoluteTextY
-						|| notification.getParameter() == ShapeGraphicalRepresentation.Parameters.isFloatingLabel) {
+				} else if (notification.getParameter() == ShapeParameters.relativeTextX
+						|| notification.getParameter() == ShapeParameters.relativeTextY
+						|| notification.getParameter() == Parameters.absoluteTextX
+						|| notification.getParameter() == Parameters.absoluteTextY
+						|| notification.getParameter() == ShapeParameters.isFloatingLabel) {
 					updateBounds();
 					getPaintManager().repaint(this);
 				} else if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize
@@ -551,7 +554,11 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		AffineTransform at = AffineTransform.getScaleInstance(getScale(), getScale());
 		TextStyle ts = getGraphicalRepresentation().getTextStyle();
 		if (ts == null) {
-			ts = TextStyle.makeDefault();
+			if (getGraphicalRepresentation().getFactory() != null) {
+				ts = getGraphicalRepresentation().getFactory().makeDefaultTextStyle();
+			} else {
+				ts = FGEUtils.TOOLS_FACTORY.makeDefaultTextStyle();
+			}
 		}
 		if (ts.getOrientation() != 0) {
 			at.concatenate(AffineTransform.getRotateInstance(Math.toRadians(ts.getOrientation())));

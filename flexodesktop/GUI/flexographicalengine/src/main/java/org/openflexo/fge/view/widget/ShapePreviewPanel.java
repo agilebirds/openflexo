@@ -12,11 +12,12 @@ import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.shapes.Shape;
 import org.openflexo.fge.shapes.Shape.ShapeType;
@@ -40,15 +41,24 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 	private int height = 80;
 	private static final float RATIO = 0.6f;
 
-	private ForegroundStyle foregroundStyle = ForegroundStyle.makeStyle(Color.BLACK);
-	private BackgroundStyle backgroundStyle = BackgroundStyle.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
-	private ShadowStyle shadowStyle = ShadowStyle.makeNone();
+	private FGEModelFactory factory;
+
+	private ForegroundStyle foregroundStyle;
+	private BackgroundStyle backgroundStyle;
+	private ShadowStyle shadowStyle;
 
 	public ShapePreviewPanel(Shape aShape) {
 		super(new BorderLayout());
+
+		factory = FGEUtils.TOOLS_FACTORY;
+
 		representedDrawing = new RepresentedDrawing();
 		representedShape = new RepresentedShape();
 		setPreferredSize(new Dimension(getPanelWidth(), getPanelHeight()));
+
+		foregroundStyle = factory.makeForegroundStyle(Color.BLACK);
+		backgroundStyle = factory.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
+		shadowStyle = factory.makeNoneShadowStyle();
 
 		final Vector<RepresentedShape> singleton = new Vector<RepresentedShape>();
 		singleton.add(representedShape);
@@ -101,12 +111,12 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 			}
 
 		};
-		drawingGR = new DrawingGraphicalRepresentation<RepresentedDrawing>(drawing, false);
+		drawingGR = factory.makeDrawingGraphicalRepresentation(drawing, false);
 		drawingGR.setBackgroundColor(Color.WHITE);
 		drawingGR.setWidth(getPanelWidth());
 		drawingGR.setHeight(getPanelHeight());
 		drawingGR.setDrawWorkingArea(false);
-		shapeGR = new ShapeGraphicalRepresentation<RepresentedShape>(ShapeType.RECTANGLE, representedShape, drawing);
+		shapeGR = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, representedShape, drawing);
 		shapeGR.setX(getShapeX());
 		shapeGR.setY(getShapeY());
 		shapeGR.setWidth(getShapeWidth());
@@ -114,14 +124,14 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 		shapeGR.setForeground(getForegroundStyle());
 		shapeGR.setBackground(getBackgroundStyle());
 		shapeGR.setShadowStyle(getShadowStyle());
-		shapeGR.setShape(getShape() != null ? getShape() : Shape.makeShape(ShapeType.RECTANGLE, null));
+		shapeGR.setShape(getShape() != null ? getShape() : factory.makeShape(ShapeType.RECTANGLE, null));
 		shapeGR.setIsSelectable(false);
 		shapeGR.setIsFocusable(false);
 		shapeGR.setIsReadOnly(true);
-		shapeGR.setBorder(new ShapeBorder(getBorderSize(), getBorderSize(), getBorderSize(), getBorderSize()));
+		shapeGR.setBorder(factory.makeShapeBorder(getBorderSize(), getBorderSize(), getBorderSize(), getBorderSize()));
 		shapeGR.setValidated(true);
 
-		controller = new DrawingController<Drawing<?>>(drawing);
+		controller = new DrawingController<Drawing<?>>(drawing, factory);
 		add(controller.getDrawingView());
 	}
 
@@ -139,7 +149,7 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 
 	public void setBorderSize(int border) {
 		this.border = border;
-		shapeGR.setBorder(new ShapeBorder(getBorderSize(), getBorderSize(), getBorderSize(), getBorderSize()));
+		shapeGR.setBorder(factory.makeShapeBorder(getBorderSize(), getBorderSize(), getBorderSize(), getBorderSize()));
 		shapeGR.setX(getShapeX());
 		shapeGR.setY(getShapeY());
 		shapeGR.setWidth(getShapeWidth());
@@ -215,7 +225,7 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 
 		getShape().updateShape();
 
-		shapeGR.setShape(getShape() != null ? getShape() : Shape.makeShape(ShapeType.RECTANGLE, null));
+		shapeGR.setShape(getShape() != null ? getShape() : factory.makeShape(ShapeType.RECTANGLE, null));
 		shapeGR.notifyShapeChanged();
 
 		shapeGR.setX(getShapeX());

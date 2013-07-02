@@ -46,12 +46,13 @@ import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
@@ -108,15 +109,22 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 	private FGEPoint lastClickedPoint;
 	private GraphicalRepresentation<?> lastSelectedGR;
 
-	public DrawingController(D aDrawing) {
+	/**
+	 * This factory is the one which is used to creates and maintains object graph
+	 */
+	private FGEModelFactory factory;
+
+	public DrawingController(D aDrawing, FGEModelFactory factory) {
 		super();
 
+		this.factory = factory;
+
 		setCurrentTool(EditorTool.SelectionTool);
-		currentForegroundStyle = ForegroundStyle.makeDefault();
-		currentBackgroundStyle = BackgroundStyle.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
-		currentTextStyle = TextStyle.makeDefault();
-		currentShadowStyle = ShadowStyle.makeDefault();
-		currentShape = Shape.makeShape(ShapeType.RECTANGLE, null);
+		currentForegroundStyle = factory.makeDefaultForegroundStyle();
+		currentBackgroundStyle = factory.makeColoredBackground(FGEConstants.DEFAULT_BACKGROUND_COLOR);
+		currentTextStyle = factory.makeDefaultTextStyle();
+		currentShadowStyle = factory.makeDefaultShadowStyle();
+		currentShape = factory.makeShape(ShapeType.RECTANGLE);
 
 		toolbox = new EditorToolbox(this);
 
@@ -132,6 +140,10 @@ public class DrawingController<D extends Drawing<?>> extends Observable implemen
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Building DrawingController: " + this);
 		}
+	}
+
+	public FGEModelFactory getFactory() {
+		return factory;
 	}
 
 	public DrawingView<D> rebuildDrawingView() {

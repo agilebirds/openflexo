@@ -28,6 +28,7 @@ import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
@@ -99,6 +100,7 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	public static final String DECORATION_PAINTER = "decorationPainter";
 	public static final String SHAPE_PAINTER = "shapePainter";
 	public static final String ALLOW_TO_LEAVE_BOUNDS = "allowToLeaveBounds";
+	public static final String ADAPT_BOUNDS_TO_CONTENTS = "adaptBoundsToContents";
 	public static final String X_CONSTRAINTS_KEY = "xConstraints";
 	public static final String Y_CONSTRAINTS_KEY = "yConstraints";
 	public static final String WIDTH_CONSTRAINTS_KEY = "widthConstraints";
@@ -146,6 +148,7 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 		shapePainter,
 		specificStroke,
 		allowToLeaveBounds,
+		adaptBoundsToContents,
 		xConstraints,
 		yConstraints,
 		widthConstraints,
@@ -452,33 +455,40 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	@Setter(value = ALLOW_TO_LEAVE_BOUNDS)
 	public void setAllowToLeaveBounds(boolean allowToLeaveBounds);
 
+	@Getter(value = ADAPT_BOUNDS_TO_CONTENTS, defaultValue = "true")
+	@XMLAttribute
+	public boolean getAdaptBoundsToContents();
+
+	@Setter(value = ADAPT_BOUNDS_TO_CONTENTS)
+	public void setAdaptBoundsToContents(boolean adaptBoundsToContents);
+
 	@Getter(value = X_CONSTRAINTS_KEY)
 	@XMLAttribute
-	public DataBinding getXConstraints();
+	public DataBinding<Double> getXConstraints();
 
 	@Setter(value = X_CONSTRAINTS_KEY)
-	public void setXConstraints(DataBinding xConstraints);
+	public void setXConstraints(DataBinding<Double> xConstraints);
 
 	@Getter(value = Y_CONSTRAINTS_KEY)
 	@XMLAttribute
-	public DataBinding getYConstraints();
+	public DataBinding<Double> getYConstraints();
 
 	@Setter(value = Y_CONSTRAINTS_KEY)
-	public void setYConstraints(DataBinding yConstraints);
+	public void setYConstraints(DataBinding<Double> yConstraints);
 
 	@Getter(value = WIDTH_CONSTRAINTS_KEY)
 	@XMLAttribute
-	public DataBinding getWidthConstraints();
+	public DataBinding<Double> getWidthConstraints();
 
 	@Setter(value = WIDTH_CONSTRAINTS_KEY)
-	public void setWidthConstraints(DataBinding widthConstraints);
+	public void setWidthConstraints(DataBinding<Double> widthConstraints);
 
 	@Getter(value = HEIGHT_CONSTRAINTS_KEY)
 	@XMLAttribute
-	public DataBinding getHeightConstraints();
+	public DataBinding<Double> getHeightConstraints();
 
 	@Setter(value = HEIGHT_CONSTRAINTS_KEY)
-	public void setHeightConstraints(DataBinding heightConstraints);
+	public void setHeightConstraints(DataBinding<Double> heightConstraints);
 
 	// *******************************************************************************
 	// * Position management
@@ -497,6 +507,8 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	public Dimension getNormalizedLabelSize();
 
 	public Rectangle getNormalizedLabelBounds();
+
+	public FGERectangle getRequiredBoundsForContents();
 
 	public boolean isFullyContainedInContainer();
 
@@ -524,11 +536,14 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 
 	public void extendParentBoundsToHostThisShape();
 
+	public void extendBoundsToHostContents();
+
 	public void finalizeConstraints();
 
 	public void updateConstraints();
 
-	public void constraintChanged(DataBinding constraint);
+	// See notifiedBindingChanged(DataBinding<?>)
+	// public void constraintChanged(DataBinding<?> constraint);
 
 	public boolean getNoStroke();
 
@@ -627,6 +642,45 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	public String toString();
 
 	public List<? extends ControlArea<?>> getControlAreas();
+
+	/**
+	 * Returns the area on which the given connector can start. The area is expressed in this normalized coordinates
+	 * 
+	 * @param connectorGR
+	 *            the connector asking where to start
+	 * @return the area on which the given connector can start
+	 */
+	public FGEArea getAllowedStartAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR);
+
+	/**
+	 * Returns the area on which the given connector can end. The area is expressed in this normalized coordinates
+	 * 
+	 * @param connectorGR
+	 *            the connector asking where to end
+	 * @return the area on which the given connector can end
+	 */
+	public FGEArea getAllowedEndAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR);
+
+	/**
+	 * Returns the area on which the given connector can start. The area is expressed in this normalized coordinates
+	 * 
+	 * @param connectorGR
+	 *            the connector asking where to start
+	 * 
+	 * @return the area on which the given connector can start
+	 */
+	public FGEArea getAllowedStartAreaForConnectorForDirection(ConnectorGraphicalRepresentation<?> connectorGR, FGEArea area,
+			SimplifiedCardinalDirection direction);
+
+	/**
+	 * Returns the area on which the given connector can end. The area is expressed in this normalized coordinates
+	 * 
+	 * @param connectorGR
+	 *            the connector asking where to end
+	 * @return the area on which the given connector can end
+	 */
+	public FGEArea getAllowedEndAreaForConnectorForDirection(ConnectorGraphicalRepresentation<?> connectorGR, FGEArea area,
+			SimplifiedCardinalDirection direction);
 
 	public FGEShapeGraphics getGraphics();
 

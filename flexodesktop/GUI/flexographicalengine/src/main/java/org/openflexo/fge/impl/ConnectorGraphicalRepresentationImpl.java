@@ -90,14 +90,25 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	// * Constructor *
 	// *******************************************************************************
 
-	// Never use this constructor (used during deserialization only)
+	/**
+	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
+	 */
 	public ConnectorGraphicalRepresentationImpl() {
-		this(null, null, null, null, null);
+		super();
+		graphics = new FGEConnectorGraphics(this);
 	}
 
-	public ConnectorGraphicalRepresentationImpl(ConnectorType aConnectorType, ShapeGraphicalRepresentation<?> aStartObject,
+	@Deprecated
+	private ConnectorGraphicalRepresentationImpl(O aDrawable, Drawing<?> aDrawing) {
+		this();
+		setDrawable(aDrawable);
+		setDrawing(aDrawing);
+	}
+
+	@Deprecated
+	private ConnectorGraphicalRepresentationImpl(ConnectorType aConnectorType, ShapeGraphicalRepresentation<?> aStartObject,
 			ShapeGraphicalRepresentation<?> anEndObject, O aDrawable, Drawing<?> aDrawing) {
-		super(aDrawable, aDrawing);
+		this(aDrawable, aDrawing);
 
 		layer = FGEConstants.DEFAULT_CONNECTOR_LAYER;
 
@@ -106,7 +117,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 		setConnectorType(aConnectorType);
 		graphics = new FGEConnectorGraphics(this);
 
-		foreground = ForegroundStyle.makeStyle(Color.BLACK);
+		foreground = getFactory().makeForegroundStyle(Color.BLACK);
 		// foreground.setGraphicalRepresentation(this);
 		foreground.addObserver(this);
 
@@ -149,8 +160,8 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	public final void setsWith(GraphicalRepresentation<?> gr) {
 		super.setsWith(gr);
 		if (gr instanceof ConnectorGraphicalRepresentation) {
-			for (Parameters p : Parameters.values()) {
-				if (p != Parameters.connector) {
+			for (ConnectorParameters p : ConnectorParameters.values()) {
+				if (p != ConnectorParameters.connector) {
 					_setParameterValueWith(p, gr);
 				}
 			}
@@ -163,19 +174,19 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	@Override
 	public final void setsWith(GraphicalRepresentation<?> gr, GRParameter... exceptedParameters) {
 		super.setsWith(gr, exceptedParameters);
-		if (gr instanceof ConnectorGraphicalRepresentation) {
-			for (Parameters p : Parameters.values()) {
+		if (gr instanceof ConnectorGraphicalRepresentationImpl) {
+			for (ConnectorParameters p : ConnectorParameters.values()) {
 				boolean excepted = false;
 				for (GRParameter ep : exceptedParameters) {
 					if (p == ep) {
 						excepted = true;
 					}
 				}
-				if (p != Parameters.connector && !excepted) {
+				if (p != ConnectorParameters.connector && !excepted) {
 					_setParameterValueWith(p, gr);
 				}
 			}
-			Connector connectorToCopy = ((ConnectorGraphicalRepresentation<?>) gr).getConnector();
+			Connector connectorToCopy = ((ConnectorGraphicalRepresentationImpl<?>) gr).getConnector();
 			Connector clone = connectorToCopy.clone();
 			setConnector(clone);
 		}
@@ -195,7 +206,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 		if (aConnector != null) {
 			aConnector.setGraphicalRepresentation(this);
 		}
-		FGENotification notification = requireChange(Parameters.connector, aConnector);
+		FGENotification notification = requireChange(ConnectorParameters.connector, aConnector);
 		if (notification != null) {
 			this.connector = aConnector;
 			hasChanged(notification);
@@ -207,8 +218,9 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 		return foreground;
 	}
 
+	@Override
 	public void setForeground(ForegroundStyle aForeground) {
-		FGENotification notification = requireChange(Parameters.foreground, aForeground);
+		FGENotification notification = requireChange(ConnectorParameters.foreground, aForeground);
 		if (notification != null) {
 			if (foreground != null) {
 				foreground.deleteObserver(this);
@@ -229,8 +241,9 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 		return selectedForeground;
 	}
 
+	@Override
 	public void setSelectedForeground(ForegroundStyle aForeground) {
-		FGENotification notification = requireChange(Parameters.selectedForeground, aForeground, false);
+		FGENotification notification = requireChange(ConnectorParameters.selectedForeground, aForeground, false);
 		if (notification != null) {
 			if (selectedForeground != null) {
 				selectedForeground.deleteObserver(this);
@@ -261,8 +274,9 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 		return focusedForeground;
 	}
 
+	@Override
 	public void setFocusedForeground(ForegroundStyle aForeground) {
-		FGENotification notification = requireChange(Parameters.focusedForeground, aForeground, false);
+		FGENotification notification = requireChange(ConnectorParameters.focusedForeground, aForeground, false);
 		if (notification != null) {
 			if (focusedForeground != null) {
 				focusedForeground.deleteObserver(this);
@@ -311,7 +325,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	@Override
 	public void setConnectorType(ConnectorType connectorType) {
 		if (getConnectorType() != connectorType) {
-			setConnector(Connector.makeConnector(connectorType, this));
+			setConnector(getFactory().makeConnector(connectorType, this));
 		}
 	}
 
@@ -351,12 +365,12 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 
 		if (aStartObject != null /*&& !enabledStartObjectObserving*/) {
 			aStartObject.addObserver(this);
-			observedStartObjects.add(aStartObject);
+			observedStartObjects.add((Observable) aStartObject);
 			if (!isDeserializing()) {
 				for (Object o : aStartObject.getAncestors(true)) {
 					if (getGraphicalRepresentation(o) != null) {
 						getGraphicalRepresentation(o).addObserver(this);
-						observedStartObjects.add(getGraphicalRepresentation(o));
+						observedStartObjects.add((Observable) getGraphicalRepresentation(o));
 					}
 				}
 			}
@@ -404,12 +418,12 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 
 		if (anEndObject != null /*&& !enabledEndObjectObserving*/) {
 			anEndObject.addObserver(this);
-			observedEndObjects.add(anEndObject);
+			observedEndObjects.add((Observable) anEndObject);
 			if (!isDeserializing()) {
 				for (Object o : anEndObject.getAncestors(true)) {
 					if (getGraphicalRepresentation(o) != null) {
 						getGraphicalRepresentation(o).addObserver(this);
-						observedEndObjects.add(getGraphicalRepresentation(o));
+						observedEndObjects.add((Observable) getGraphicalRepresentation(o));
 					}
 				}
 			}
@@ -675,7 +689,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 		super.update(observable, notification);
 
 		if (observable instanceof ForegroundStyle) {
-			notifyAttributeChange(Parameters.foreground);
+			notifyAttributeChange(ConnectorParameters.foreground);
 		}
 
 		if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize) {
@@ -699,10 +713,10 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	}
 
 	@Override
-	protected boolean isConnectorConsistent() {
+	public boolean isConnectorConsistent() {
 		// if (true) return true;
 		return getStartObject() != null && getEndObject() != null && !getStartObject().isDeleted() && !getEndObject().isDeleted()
-				&& GraphicalRepresentation.areElementsConnectedInGraphicalHierarchy(getStartObject(), getEndObject());
+				&& FGEUtils.areElementsConnectedInGraphicalHierarchy(getStartObject(), getEndObject());
 	}
 
 	@Override
@@ -752,7 +766,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 
 	@Override
 	public void setEndSymbol(EndSymbolType endSymbol) {
-		FGENotification notification = requireChange(Parameters.endSymbol, endSymbol);
+		FGENotification notification = requireChange(ConnectorParameters.endSymbol, endSymbol);
 		if (notification != null) {
 			this.endSymbol = endSymbol;
 			hasChanged(notification);
@@ -766,7 +780,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 
 	@Override
 	public void setEndSymbolSize(double endSymbolSize) {
-		FGENotification notification = requireChange(Parameters.endSymbolSize, endSymbolSize);
+		FGENotification notification = requireChange(ConnectorParameters.endSymbolSize, endSymbolSize);
 		if (notification != null) {
 			this.endSymbolSize = endSymbolSize;
 			hasChanged(notification);
@@ -780,7 +794,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 
 	@Override
 	public void setMiddleSymbol(MiddleSymbolType middleSymbol) {
-		FGENotification notification = requireChange(Parameters.middleSymbol, middleSymbol);
+		FGENotification notification = requireChange(ConnectorParameters.middleSymbol, middleSymbol);
 		if (notification != null) {
 			this.middleSymbol = middleSymbol;
 			hasChanged(notification);
@@ -794,7 +808,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 
 	@Override
 	public void setMiddleSymbolSize(double middleSymbolSize) {
-		FGENotification notification = requireChange(Parameters.middleSymbolSize, middleSymbolSize);
+		FGENotification notification = requireChange(ConnectorParameters.middleSymbolSize, middleSymbolSize);
 		if (notification != null) {
 			this.middleSymbolSize = middleSymbolSize;
 			hasChanged(notification);
@@ -808,7 +822,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 
 	@Override
 	public void setStartSymbol(StartSymbolType startSymbol) {
-		FGENotification notification = requireChange(Parameters.startSymbol, startSymbol);
+		FGENotification notification = requireChange(ConnectorParameters.startSymbol, startSymbol);
 		if (notification != null) {
 			this.startSymbol = startSymbol;
 			hasChanged(notification);
@@ -822,7 +836,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 
 	@Override
 	public void setStartSymbolSize(double startSymbolSize) {
-		FGENotification notification = requireChange(Parameters.startSymbolSize, startSymbolSize);
+		FGENotification notification = requireChange(ConnectorParameters.startSymbolSize, startSymbolSize);
 		if (notification != null) {
 			this.startSymbolSize = startSymbolSize;
 			hasChanged(notification);
@@ -836,7 +850,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 
 	@Override
 	public void setRelativeMiddleSymbolLocation(double relativeMiddleSymbolLocation) {
-		FGENotification notification = requireChange(Parameters.relativeMiddleSymbolLocation, relativeMiddleSymbolLocation);
+		FGENotification notification = requireChange(ConnectorParameters.relativeMiddleSymbolLocation, relativeMiddleSymbolLocation);
 		if (notification != null) {
 			this.relativeMiddleSymbolLocation = relativeMiddleSymbolLocation;
 			hasChanged(notification);
@@ -850,7 +864,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 
 	@Override
 	public void setApplyForegroundToSymbols(boolean applyForegroundToSymbols) {
-		FGENotification notification = requireChange(Parameters.applyForegroundToSymbols, applyForegroundToSymbols);
+		FGENotification notification = requireChange(ConnectorParameters.applyForegroundToSymbols, applyForegroundToSymbols);
 		if (notification != null) {
 			this.applyForegroundToSymbols = applyForegroundToSymbols;
 			hasChanged(notification);
@@ -864,7 +878,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 
 	@Override
 	public void setDebugCoveringArea(boolean debugCoveringArea) {
-		FGENotification notification = requireChange(Parameters.debugCoveringArea, debugCoveringArea);
+		FGENotification notification = requireChange(ConnectorParameters.debugCoveringArea, debugCoveringArea);
 		if (notification != null) {
 			this.debugCoveringArea = debugCoveringArea;
 			hasChanged(notification);
@@ -884,7 +898,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	}
 
 	@Override
-	public List<? extends ControlArea> getControlAreas() {
+	public List<? extends ControlArea<?>> getControlAreas() {
 		return getConnector().getControlAreas();
 	}
 

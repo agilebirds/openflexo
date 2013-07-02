@@ -24,6 +24,7 @@ import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.FGEGraphics;
@@ -55,7 +56,7 @@ public abstract class ControlPoint extends ControlArea<FGEPoint> {
 		// getGraphicalRepresentation());
 		graphics.useDefaultForegroundStyle();
 		if (isEmbeddedInComponentHierarchy(graphics)) {
-			AffineTransform at = GraphicalRepresentation.convertNormalizedCoordinatesAT(getGraphicalRepresentation(),
+			AffineTransform at = FGEUtils.convertNormalizedCoordinatesAT(getGraphicalRepresentation(),
 					graphics.getGraphicalRepresentation());
 			return graphics.drawControlPoint(getPoint().transform(at), FGEConstants.CONTROL_POINT_SIZE);
 		} else {

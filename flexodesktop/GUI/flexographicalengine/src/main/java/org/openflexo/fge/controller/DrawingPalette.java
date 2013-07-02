@@ -45,6 +45,8 @@ import javax.swing.ScrollPaneConstants;
 
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.controller.PaletteElement.PaletteElementTransferable;
@@ -54,8 +56,16 @@ import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEView;
 import org.openflexo.fge.view.listener.FocusRetriever;
 import org.openflexo.fib.utils.FIBIconLibrary;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.toolbox.ToolBox;
 
+/**
+ * A DrawingPalette represents the graphical tool working with a Drawing Editor, which allows to drag-drop elements represented in a panel
+ * into an edited drawing
+ * 
+ * @author sylvain
+ * 
+ */
 public class DrawingPalette {
 
 	private static final Logger logger = Logger.getLogger(DrawingPalette.class.getPackage().getName());
@@ -83,7 +93,17 @@ public class DrawingPalette {
 	private final int height;
 	private final String title;
 
+	/**
+	 * This factory is the one of the palette itself, NOT THE ONE which is used in the related drawing editor
+	 */
+	private FGEModelFactory factory;
+
 	public DrawingPalette(int width, int height, String title) {
+		try {
+			factory = new FGEModelFactory();
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
 		this.width = width;
 		this.height = height;
 		this.title = title;
@@ -92,6 +112,15 @@ public class DrawingPalette {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Build palette " + title + " " + Integer.toHexString(hashCode()) + " of " + getClass().getName());
 		}
+	}
+
+	/**
+	 * Return the factory of the palette, which is different of the one which is used in the related drawing editor
+	 * 
+	 * @return
+	 */
+	public FGEModelFactory getFactory() {
+		return factory;
 	}
 
 	public void delete() {
@@ -134,7 +163,7 @@ public class DrawingPalette {
 	public JScrollPane getPaletteViewInScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane(getPaletteView(), ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-					ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+					ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		}
 		return scrollPane;
 	}
@@ -147,7 +176,7 @@ public class DrawingPalette {
 		for (PaletteElement e : elements) {
 			e.getGraphicalRepresentation().setValidated(true);
 		}
-		_paletteController = new DrawingController<PaletteDrawing>(_paletteDrawing);
+		_paletteController = new DrawingController<PaletteDrawing>(_paletteDrawing, factory);
 		for (PaletteElement e : elements) {
 			e.getGraphicalRepresentation().notifyObjectHierarchyHasBeenUpdated();
 		}
@@ -158,10 +187,10 @@ public class DrawingPalette {
 		private final DrawingGraphicalRepresentation<DrawingPalette> gr;
 
 		private PaletteDrawing() {
-			gr = new DrawingGraphicalRepresentation<DrawingPalette>(this, false);
+			gr = factory.makeDrawingGraphicalRepresentation(this, false);
 			gr.setWidth(width);
 			gr.setHeight(height);
-			gr.setDrawWorkingArea(false);
+			gr.setDrawWorkingArea(true);
 		}
 
 		@Override
@@ -441,15 +470,14 @@ public class DrawingPalette {
 							e.rejectDrop();
 							return;
 						}
-
 						// OK, let's got for the drop
 						if (element.acceptDragging(focused)) {
 							Component targetComponent = e.getDropTargetContext().getComponent();
 							Point pt = e.getLocation();
 							FGEPoint modelLocation = new FGEPoint();
 							if (targetComponent instanceof FGEView) {
-								pt = GraphicalRepresentation.convertPoint(((FGEView<?>) targetComponent).getGraphicalRepresentation(), pt,
-										focused, ((FGEView<?>) targetComponent).getScale());
+								pt = FGEUtils.convertPoint(((FGEView<?>) targetComponent).getGraphicalRepresentation(), pt, focused,
+										((FGEView<?>) targetComponent).getScale());
 								modelLocation.x = pt.x / ((FGEView<?>) targetComponent).getScale();
 								modelLocation.y = pt.y / ((FGEView<?>) targetComponent).getScale();
 								modelLocation.x -= ((TransferedPaletteElement) data).getOffset().x;

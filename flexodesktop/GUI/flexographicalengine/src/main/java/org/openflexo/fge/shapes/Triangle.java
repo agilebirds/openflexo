@@ -19,34 +19,21 @@
  */
 package org.openflexo.fge.shapes;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.shapes.impl.TriangleImpl;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
-public class Triangle extends RegularPolygon {
-
-	// *******************************************************************************
-	// * Constructor *
-	// *******************************************************************************
-
-	public Triangle() {
-		this(null);
-	}
-
-	public Triangle(ShapeGraphicalRepresentation aGraphicalRepresentation) {
-		super(aGraphicalRepresentation, 3);
-	}
-
-	@Override
-	public ShapeType getShapeType() {
-		return ShapeType.TRIANGLE;
-	}
-
-	@Override
-	public int getNPoints() {
-		return 3;
-	}
-
-	@Override
-	public void setNPoints(int pointsNb) {
-	}
+/**
+ * Represents a triangle
+ * 
+ * Note that this implementation is powered by PAMELA framework.
+ * 
+ * @author sylvain
+ */
+@ModelEntity
+@ImplementationClass(TriangleImpl.class)
+@XMLElement(xmlTag = "TriangleShape")
+public interface Triangle extends RegularPolygon {
 
 }

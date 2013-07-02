@@ -23,7 +23,8 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.FGEUtils;
+import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
@@ -43,7 +44,7 @@ public class AdjustableFirstControlPoint extends RectPolylinAdjustableControlPoi
 
 	@Override
 	public FGEArea getDraggingAuthorizedArea() {
-		AffineTransform at1 = GraphicalRepresentation.convertNormalizedCoordinatesAT(getGraphicalRepresentation().getStartObject(),
+		AffineTransform at1 = FGEUtils.convertNormalizedCoordinatesAT(getGraphicalRepresentation().getStartObject(),
 				getGraphicalRepresentation());
 		FGEArea startArea = getGraphicalRepresentation().getStartObject().getShape().getShape().transform(at1);
 		return new FGESubstractionArea(new FGEPlane(), startArea, false);
@@ -102,8 +103,8 @@ public class AdjustableFirstControlPoint extends RectPolylinAdjustableControlPoi
 			getConnector().getStartControlPoint().setPoint(newStartPoint);
 			if (getConnector().getIsStartingLocationFixed()) { // Don't forget this !!!
 				getConnector().setFixedStartLocation(
-						GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), newStartPoint,
-								getGraphicalRepresentation().getStartObject()));
+						FGEUtils.convertNormalizedPoint(getGraphicalRepresentation(), newStartPoint, getGraphicalRepresentation()
+								.getStartObject()));
 			}
 
 			if (initialPolylin.getSegmentNb() > 3) {
@@ -241,8 +242,8 @@ public class AdjustableFirstControlPoint extends RectPolylinAdjustableControlPoi
 				getConnector().getStartControlPoint().setPoint(newStartPosition);
 				if (getConnector().getIsStartingLocationFixed()) { // Don't forget this !!!
 					getConnector().setFixedStartLocation(
-							GraphicalRepresentation.convertNormalizedPoint(getGraphicalRepresentation(), newStartPosition,
-									getGraphicalRepresentation().getStartObject()));
+							FGEUtils.convertNormalizedPoint(getGraphicalRepresentation(), newStartPosition, getGraphicalRepresentation()
+									.getStartObject()));
 				}
 
 				// FGEPoint newStartPosition = startArea.getAnchorAreaFrom(orientation).getNearestPoint(newFirstCPLocation);

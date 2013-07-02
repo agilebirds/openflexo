@@ -29,10 +29,10 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.GRVariable;
-import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.GRVariable.GRVariableType;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseControl.MouseButton;
@@ -75,7 +75,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 
 	protected int layer;
 
-	private TextStyle textStyle = TextStyle.makeDefault();
+	private TextStyle textStyle;
 	private String text;
 	private boolean multilineAllowed = false;
 	private boolean lineWrap = false;
@@ -122,21 +122,30 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	// * Constructor *
 	// *******************************************************************************
 
-	protected GraphicalRepresentationImpl(O aDrawable, Drawing<?> aDrawing) {
+	/**
+	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
+	 */
+	public GraphicalRepresentationImpl() {
 		super();
-		drawable = aDrawable;
-		drawing = aDrawing;
-		textStyle = TextStyle.makeDefault();
-		// textStyle.setGraphicalRepresentation(this);
-		if (textStyle != null) {
-			textStyle.addObserver(this);
-		}
 
 		mouseClickControls = new Vector<MouseClickControl>();
 		mouseDragControls = new Vector<MouseDragControl>();
 
 		dependancies = new Vector<ConstraintDependency>();
 		alterings = new Vector<ConstraintDependency>();
+
+	}
+
+	@Deprecated
+	private GraphicalRepresentationImpl(O aDrawable, Drawing<?> aDrawing) {
+		this();
+		setDrawable(aDrawable);
+		setDrawing(aDrawing);
+		textStyle = getFactory().makeDefaultTextStyle();
+		// textStyle.setGraphicalRepresentation(this);
+		if (textStyle != null) {
+			textStyle.addObserver(this);
+		}
 
 	}
 
@@ -333,7 +342,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 				// logger.info("retrieveDefaultIdentifier return "+index);
 				return "object_" + index;
 			} else {
-				return getParentGraphicalRepresentation().retrieveDefaultIdentifier() + "_" + index;
+				return ((GraphicalRepresentationImpl<?>) getParentGraphicalRepresentation()).retrieveDefaultIdentifier() + "_" + index;
 			}
 		}
 	}
@@ -1175,7 +1184,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	// *******************************************************************************
 
 	@Override
-	protected void notifyChange(GRParameter parameter, Object oldValue, Object newValue) {
+	public void notifyChange(GRParameter parameter, Object oldValue, Object newValue) {
 		// Never notify unchanged values
 		if (oldValue != null && newValue != null && oldValue.equals(newValue)) {
 			return;
@@ -1928,7 +1937,8 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		createBindingModel();
 	}
 
-	private void createBindingModel() {
+	@Override
+	public void createBindingModel() {
 		_bindingModel = new BindingModel();
 
 		_bindingModel.addToBindingVariables(new BindingVariable("this", getClass()));
@@ -2069,14 +2079,14 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 			logger.info("Parameter " + requiringParameter + " of GR " + this + " depends of parameter " + requiredParameter + " of GR "
 					+ aComponent);
 		}
-		if (!aComponent.alterings.contains(newDependancy)) {
-			aComponent.alterings.add(newDependancy);
+		if (!((GraphicalRepresentationImpl<?>) aComponent).alterings.contains(newDependancy)) {
+			((GraphicalRepresentationImpl<?>) aComponent).alterings.add(newDependancy);
 		}
 	}
 
 	private void searchLoopInDependenciesWith(GraphicalRepresentation<?> aComponent, Vector<GraphicalRepresentation<?>> actualDependancies)
 			throws DependencyLoopException {
-		for (ConstraintDependency dependancy : aComponent.dependancies) {
+		for (ConstraintDependency dependancy : ((GraphicalRepresentationImpl<?>) aComponent).dependancies) {
 			GraphicalRepresentation<?> c = dependancy.requiredGR;
 			if (c == this) {
 				throw new DependencyLoopException(actualDependancies);
@@ -2088,23 +2098,10 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		}
 	}
 
-	protected static class DependencyLoopException extends Exception {
-		private Vector<GraphicalRepresentation<?>> dependencies;
-
-		public DependencyLoopException(Vector<GraphicalRepresentation<?>> dependancies) {
-			this.dependencies = dependancies;
-		}
-
-		@Override
-		public String getMessage() {
-			return "DependencyLoopException: " + dependencies;
-		}
-	}
-
 	protected void propagateConstraintsAfterModification(GRParameter parameter) {
 		for (ConstraintDependency dependency : alterings) {
 			if (dependency.requiredParameter == parameter) {
-				dependency.requiringGR.computeNewConstraint(dependency);
+				((GraphicalRepresentationImpl<?>) dependency.requiringGR).computeNewConstraint(dependency);
 			}
 		}
 	}

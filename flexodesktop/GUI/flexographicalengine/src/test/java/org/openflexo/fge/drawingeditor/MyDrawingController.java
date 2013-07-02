@@ -27,6 +27,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import org.apache.xml.serialize.XMLSerializer;
+import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawShapeAction;
@@ -35,23 +37,32 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEView;
+import org.openflexo.inspector.selection.EmptySelection;
+import org.openflexo.inspector.selection.MultipleSelection;
+import org.openflexo.inspector.selection.UniqueSelection;
+import org.openflexo.model.exceptions.ModelDefinitionException;
+import org.openflexo.model.exceptions.ModelExecutionException;
+import org.openflexo.model.factory.Clipboard;
 
 public class MyDrawingController extends DrawingController<EditedDrawing> {
+
 	private JPopupMenu contextualMenu;
 	private GraphicalRepresentation<?> contextualMenuInvoker;
 	private Point contextualMenuClickedPoint;
 
-	private MyShape copiedShape;
+	// private MyShape copiedShape;
 
-	public MyDrawingController(final EditedDrawing aDrawing) {
-		super(aDrawing);
+	public MyDrawingController(final EditedDrawing aDrawing, DrawingEditorFactory factory) {
+		super(aDrawing, factory);
+
 		setDrawShapeAction(new DrawShapeAction() {
 			@Override
 			public void performedDrawNewShape(ShapeGraphicalRepresentation<?> graphicalRepresentation,
 					GraphicalRepresentation<?> parentGraphicalRepresentation) {
 				System.out.println("OK, perform draw new shape with " + graphicalRepresentation + " et parent: "
 						+ parentGraphicalRepresentation);
-				MyShape newShape = new MyShape(graphicalRepresentation, graphicalRepresentation.getLocation(), getDrawing());
+				MyShape newShape = getDrawing().getModel().getFactory()
+						.makeNewShape(graphicalRepresentation, graphicalRepresentation.getLocation(), getDrawing());
 				if (parentGraphicalRepresentation != null && parentGraphicalRepresentation.getDrawable() instanceof MyDrawingElement) {
 					addNewShape(newShape, (MyDrawingElement) parentGraphicalRepresentation.getDrawable());
 				} else {
@@ -65,7 +76,8 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 			menuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					MyShape newShape = new MyShape(st, new FGEPoint(contextualMenuClickedPoint), getDrawing());
+					MyShape newShape = getDrawing().getModel().getFactory()
+							.makeNewShape(st, new FGEPoint(contextualMenuClickedPoint), getDrawing());
 					addNewShape(newShape, (MyDrawingElement) contextualMenuInvoker.getDrawable());
 				}
 			});
@@ -101,7 +113,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 
 	private void initPalette() {
 		// TODO Auto-generated method stub
-		_palette = new MyDrawingPalette();
+		_palette = new MyDrawingPalette(getDrawing().getModel().getFactory());
 		registerPalette(_palette);
 		activatePalette(_palette);
 	}
@@ -114,7 +126,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 
 	public void addNewShape(MyShape aShape, MyDrawingElement father) {
 		father.addToChilds(aShape);
-		// aShape.getGraphicalRepresentation().extendParentBoundsToHostThisShape();
+		aShape.getGraphicalRepresentation().extendParentBoundsToHostThisShape();
 		// getDrawing().addDrawable(aShape,
 		// contextualMenuInvoker.getDrawable());
 	}
@@ -122,7 +134,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 	public void addNewConnector(MyConnector aConnector) {
 		ShapeGraphicalRepresentation startObject = aConnector.getStartObject();
 		ShapeGraphicalRepresentation endObject = aConnector.getEndObject();
-		GraphicalRepresentation fatherGR = GraphicalRepresentation.getFirstCommonAncestor(startObject, endObject);
+		GraphicalRepresentation fatherGR = FGEUtils.getFirstCommonAncestor(startObject, endObject);
 		((MyDrawingElement) fatherGR.getDrawable()).addToChilds(aConnector);
 		// getDrawing().addDrawable(aConnector, fatherGR.getDrawable());
 	}
@@ -138,7 +150,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 		super.addToSelectedObjects(anObject);
 		if (getSelectedObjects().size() == 1) {
 			setChanged();
-			notifyObservers(new UniqueSelection(getSelectedObjects().get(0), null));
+			notifyObservers(new UniqueSelection((getSelectedObjects().get(0)), null));
 		} else {
 			setChanged();
 			notifyObservers(new MultipleSelection());
@@ -150,7 +162,7 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 		super.removeFromSelectedObjects(anObject);
 		if (getSelectedObjects().size() == 1) {
 			setChanged();
-			notifyObservers(new UniqueSelection(getSelectedObjects().get(0), null));
+			notifyObservers(new UniqueSelection((getSelectedObjects().get(0)), null));
 		} else {
 			setChanged();
 			notifyObservers(new MultipleSelection());
@@ -180,16 +192,77 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 		return (MyDrawingView) super.getDrawingView();
 	}
 
+	private Clipboard clipboard;
+
 	public void copy() {
-		if (contextualMenuInvoker instanceof MyShapeGraphicalRepresentation) {
-			copiedShape = (MyShape) ((MyShapeGraphicalRepresentation) getFocusedObjects().firstElement()).getDrawable().clone();
+		/*if (contextualMenuInvoker instanceof MyShapeGraphicalRepresentation) {
+			MyShape copiedShape = (MyShape) ((MyShapeGraphicalRepresentation) getFocusedObjects().firstElement()).getDrawable().clone();
 			System.out.println("Copied: " + copiedShape);
+
+			XMLSerializer serializer = copiedShape.getDrawing().getEditedDrawing().getModel().getFactory().getSerializer();
+			System.out.println("Hop: " + serializer.serializeAsString(copiedShape));
+
+			try {
+				clipboard = getDrawing().getModel().getFactory().copy(copiedShape);
+			} catch (ModelExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ModelDefinitionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (CloneNotSupportedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}*/
+
+		System.out.println("Selected objects = " + getSelectedObjects());
+		Object[] objectsToBeCopied = new Object[getSelectedObjects().size()];
+
+		XMLSerializer serializer = getDrawing().getModel().getFactory().getSerializer();
+		int i = 0;
+		for (GraphicalRepresentation gr : getSelectedObjects()) {
+			objectsToBeCopied[i] = getSelectedObjects().get(i).getDrawable();
+			System.out.println("object: " + objectsToBeCopied[i] + " gr=" + getSelectedObjects().get(i));
+			System.out.println("Copied: " + serializer.serializeAsString(objectsToBeCopied[i]));
+			i++;
 		}
+
+		try {
+			clipboard = getDrawing().getModel().getFactory().copy(objectsToBeCopied);
+		} catch (ModelExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ModelDefinitionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		System.out.println(clipboard.debug());
+
 	}
 
 	public void paste() {
 		System.out.println("Paste in " + contextualMenuInvoker.getDrawable());
-		addNewShape((MyShape) copiedShape.clone(), (MyDrawingElement) contextualMenuInvoker.getDrawable());
+		// addNewShape((MyShape) copiedShape.clone(), (MyDrawingElement) contextualMenuInvoker.getDrawable());
+
+		try {
+			getDrawing().getModel().getFactory().paste(clipboard, contextualMenuInvoker.getDrawable());
+		} catch (ModelExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ModelDefinitionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	public void cut() {

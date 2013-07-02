@@ -55,7 +55,7 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 	}
 
 	@Deprecated
-	public static BackgroundStyle makeBackground(BackgroundStyleType type) {
+	/*public static BackgroundStyle makeBackground(BackgroundStyleType type) {
 		if (type == BackgroundStyleType.NONE) {
 			return makeEmptyBackground();
 		} else if (type == BackgroundStyleType.COLOR) {
@@ -70,8 +70,7 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 			return makeImageBackground((File) null);
 		}
 		return null;
-	}
-
+	}*/
 	@Override
 	public abstract Paint getPaint(GraphicalRepresentation gr, double scale);
 

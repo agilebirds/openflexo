@@ -19,29 +19,21 @@
  */
 package org.openflexo.fge.shapes;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.shapes.impl.SquareImpl;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
-public class Square extends Rectangle {
+/**
+ * Represents a square
+ * 
+ * Note that this implementation is powered by PAMELA framework.
+ * 
+ * @author sylvain
+ */
+@ModelEntity
+@ImplementationClass(SquareImpl.class)
+@XMLElement(xmlTag = "SquareShape")
+public interface Square extends Rectangle {
 
-	// *******************************************************************************
-	// * Constructor *
-	// *******************************************************************************
-
-	public Square() {
-		this(null);
-	}
-
-	public Square(ShapeGraphicalRepresentation aGraphicalRepresentation) {
-		super(aGraphicalRepresentation);
-	}
-
-	@Override
-	public ShapeType getShapeType() {
-		return ShapeType.SQUARE;
-	}
-
-	@Override
-	public boolean areDimensionConstrained() {
-		return true;
-	}
 }

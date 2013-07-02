@@ -19,91 +19,47 @@
  */
 package org.openflexo.fge.shapes;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.openflexo.fge.shapes.impl.RegularPolygonImpl;
+import org.openflexo.model.annotations.Getter;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
+import org.openflexo.model.annotations.XMLAttribute;
+import org.openflexo.model.annotations.XMLElement;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
-import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.geom.FGEPolygon;
-import org.openflexo.fge.geom.FGERegularPolygon;
+/**
+ * Represents a regular polygon, with more than 3 points
+ * 
+ * Note that this implementation is powered by PAMELA framework.
+ * 
+ * @author sylvain
+ */
+@ModelEntity
+@ImplementationClass(RegularPolygonImpl.class)
+@XMLElement(xmlTag = "PolygonShape")
+public interface RegularPolygon extends Polygon {
 
-public class RegularPolygon extends Polygon {
+	// Property keys
 
-	private FGEPolygon _polygon;
-
-	private int npoints = 5;
-	private int startAngle = 90;
+	public static final String N_POINTS = "nPoints";
+	public static final String START_ANGLE = "startAngle";
 
 	// *******************************************************************************
-	// * Constructor *
+	// * Properties
 	// *******************************************************************************
 
-	public RegularPolygon() {
-		this(null);
-	}
+	@Getter(value = N_POINTS, defaultValue = "5")
+	@XMLAttribute
+	public int getNPoints();
 
-	public RegularPolygon(ShapeGraphicalRepresentation aGraphicalRepresentation) {
-		this(aGraphicalRepresentation, 5);
-	}
+	@Setter(value = N_POINTS)
+	public void setNPoints(int pointsNb);
 
-	public RegularPolygon(ShapeGraphicalRepresentation aGraphicalRepresentation, List<FGEPoint> points) {
-		super(aGraphicalRepresentation);
-		setPoints(new ArrayList<FGEPoint>(points));
-	}
+	@Getter(value = START_ANGLE, defaultValue = "90")
+	@XMLAttribute
+	public int getStartAngle();
 
-	public RegularPolygon(ShapeGraphicalRepresentation aGraphicalRepresentation, int pointsNb) {
-		super(aGraphicalRepresentation);
-		if (pointsNb < 3) {
-			throw new IllegalArgumentException("Cannot build polygon with less then 3 points (" + pointsNb + ")");
-		}
-		npoints = pointsNb;
-		updateShape();
-	}
-
-	@Override
-	public void updateShape() {
-		if (getPoints() != null && getPoints().size() > 0) {
-			_polygon = new FGEPolygon(Filling.FILLED, getPoints());
-		} else {
-			_polygon = new FGERegularPolygon(0, 0, 1, 1, Filling.FILLED, npoints, startAngle);
-		}
-		rebuildControlPoints();
-		if (getGraphicalRepresentation() != null) {
-			getGraphicalRepresentation().notifyShapeChanged();
-		}
-	}
-
-	@Override
-	public ShapeType getShapeType() {
-		return ShapeType.POLYGON;
-	}
-
-	public int getNPoints() {
-		return npoints;
-	}
-
-	public void setNPoints(int pointsNb) {
-		if (pointsNb != npoints) {
-			npoints = pointsNb;
-			updateShape();
-		}
-	}
-
-	public int getStartAngle() {
-		return startAngle;
-	}
-
-	public void setStartAngle(int anAngle) {
-		if (anAngle != startAngle) {
-			startAngle = anAngle;
-			updateShape();
-		}
-	}
-
-	@Override
-	public FGEPolygon getShape() {
-		return _polygon;
-	}
+	@Setter(value = START_ANGLE)
+	public void setStartAngle(int anAngle);
 
 }

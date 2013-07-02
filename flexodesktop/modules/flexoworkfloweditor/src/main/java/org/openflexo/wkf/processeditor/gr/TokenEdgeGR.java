@@ -21,7 +21,7 @@ package org.openflexo.wkf.processeditor.gr;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.connectors.rpc.RectPolylinConnector;
+import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.foundation.wkf.edge.TokenEdge;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 

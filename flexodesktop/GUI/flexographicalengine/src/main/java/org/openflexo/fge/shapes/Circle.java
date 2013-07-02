@@ -19,26 +19,21 @@
  */
 package org.openflexo.fge.shapes;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.shapes.impl.CircleImpl;
+import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.XMLElement;
 
-public class Circle extends Oval {
-
-	public Circle() {
-		this(null);
-	}
-
-	public Circle(ShapeGraphicalRepresentation aGraphicalRepresentation) {
-		super(aGraphicalRepresentation);
-	}
-
-	@Override
-	public ShapeType getShapeType() {
-		return ShapeType.CIRCLE;
-	}
-
-	@Override
-	public boolean areDimensionConstrained() {
-		return true;
-	}
+/**
+ * Represents a circle
+ * 
+ * Note that this implementation is powered by PAMELA framework.
+ * 
+ * @author sylvain
+ */
+@ModelEntity
+@ImplementationClass(CircleImpl.class)
+@XMLElement(xmlTag = "CircleShape")
+public interface Circle extends Oval {
 
 }

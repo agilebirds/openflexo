@@ -19,39 +19,33 @@ import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.fge.ConstraintDependency;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
-import org.openflexo.fge.GRParameter;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextStyle;
-import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
-import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
-import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
-import org.openflexo.fge.ShapeGraphicalRepresentation.Parameters;
-import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
-import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
 import org.openflexo.fge.controller.MouseControl.MouseButton;
+import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.controller.MouseDragControlAction.MouseDragControlActionType;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject;
+import org.openflexo.fge.geom.FGEGeometricObject.Filling;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGESegment;
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEIntersectionArea;
 import org.openflexo.fge.graphics.DecorationPainter;
@@ -70,9 +64,7 @@ import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
 import org.openflexo.fge.shapes.Shape;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ShapeView;
-import org.openflexo.kvc.KVCObject;
 import org.openflexo.toolbox.ToolBox;
-import org.openflexo.xmlcode.XMLSerializable;
 
 public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentationImpl<O> implements ShapeGraphicalRepresentation<O> {
 
@@ -111,11 +103,11 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	private boolean hasFocusedForeground = false;
 	private boolean hasFocusedBackground = false;
 
-	private ShapeBorder border = new ShapeBorder();
+	private ShapeBorder border = new ShapeBorderImpl();
 
 	private Shape shape = null;
 
-	private ShadowStyle shadowStyle = ShadowStyle.makeDefault();
+	private ShadowStyle shadowStyle;
 
 	private boolean allowToLeaveBounds = true;
 	private boolean adaptBoundsToContents = false;
@@ -141,49 +133,51 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	// * Constructor *
 	// *******************************************************************************
 
-	// Never use this constructor (used during deserialization only)
+	/**
+	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
+	 */
 	public ShapeGraphicalRepresentationImpl() {
-		this(null, null);
+		super();
+		graphics = new FGEShapeGraphics(this);
 	}
 
+	@Deprecated
 	private ShapeGraphicalRepresentationImpl(O aDrawable, Drawing<?> aDrawing) {
-		super(aDrawable, aDrawing);
+		this();
+		setDrawable(aDrawable);
+		setDrawing(aDrawing);
 	}
 
+	@Deprecated
 	public ShapeGraphicalRepresentationImpl(ShapeType shapeType, O aDrawable, Drawing<?> aDrawing) {
 		this(aDrawable, aDrawing);
 		setShapeType(shapeType);
 		layer = FGEConstants.DEFAULT_SHAPE_LAYER;
-		foreground = ForegroundStyle.makeDefault();
+		foreground = getFactory().makeDefaultForegroundStyle();
 		// foreground.setGraphicalRepresentation(this);
 		foreground.addObserver(this);
-		background = BackgroundStyle.makeColoredBackground(Color.WHITE);
+		background = getFactory().makeColoredBackground(Color.WHITE);
 		// background.setGraphicalRepresentation(this);
 		background.addObserver(this);
+		shadowStyle = getFactory().makeDefaultShadowStyle();
+		// background.setGraphicalRepresentation(this);
+		shadowStyle.addObserver(this);
 
 		graphics = new FGEShapeGraphics(this);
 
-		addToMouseClickControls(MouseClickControl.makeMouseClickControl("Selection", MouseButton.LEFT, 1,
-				MouseClickControlActionType.SELECTION));
-		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
-			addToMouseClickControls(MouseClickControl.makeMouseMetaClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
-		} else {
-			addToMouseClickControls(MouseClickControl.makeMouseControlClickControl("Multiple selection", MouseButton.LEFT, 1,
-					MouseClickControlActionType.MULTIPLE_SELECTION));
-		}
-		addToMouseDragControls(MouseDragControl.makeMouseDragControl("Move", MouseButton.LEFT, MouseDragControlActionType.MOVE));
-		addToMouseDragControls(MouseDragControl.makeMouseShiftDragControl("Rectangle selection", MouseButton.LEFT,
-				MouseDragControlActionType.RECTANGLE_SELECTING));
+		init();
 	}
 
-	public ShapeGraphicalRepresentation(ShapeGraphicalRepresentation<?> aGR, O aDrawable, Drawing<?> aDrawing) {
+	@Deprecated
+	private ShapeGraphicalRepresentationImpl(ShapeGraphicalRepresentation<?> aGR, O aDrawable, Drawing<?> aDrawing) {
 		this(aDrawable, aDrawing);
 
 		setsWith(aGR);
-		// setShape(aGR.getShape().clone());
-		// getShape().setGraphicalRepresentation(this);
-		// getShape().rebuildControlPoints();
+		init();
+	}
+
+	@Deprecated
+	private void init() {
 
 		graphics = new FGEShapeGraphics(this);
 
@@ -204,10 +198,10 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	}
 
 	@Override
-	public ShapeGraphicalRepresentation<O> clone() {
+	public ShapeGraphicalRepresentationImpl<O> clone() {
 		// logger.info("La GR "+this+" se fait cloner la");
 		try {
-			return (ShapeGraphicalRepresentation<O>) super.clone();
+			return (ShapeGraphicalRepresentationImpl<O>) super.clone();
 		} catch (CloneNotSupportedException e) {
 			// cannot happen since we are clonable
 			e.printStackTrace();
@@ -263,8 +257,8 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	public final void setsWith(GraphicalRepresentation<?> gr) {
 		super.setsWith(gr);
 		if (gr instanceof ShapeGraphicalRepresentation) {
-			for (Parameters p : Parameters.values()) {
-				if (p != Parameters.shape && p != Parameters.shapeType) {
+			for (ShapeParameters p : ShapeParameters.values()) {
+				if (p != ShapeParameters.shape && p != ShapeParameters.shapeType) {
 					_setParameterValueWith(p, gr);
 				}
 			}
@@ -278,14 +272,14 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	public final void setsWith(GraphicalRepresentation<?> gr, GRParameter... exceptedParameters) {
 		super.setsWith(gr, exceptedParameters);
 		if (gr instanceof ShapeGraphicalRepresentation) {
-			for (Parameters p : Parameters.values()) {
+			for (ShapeParameters p : ShapeParameters.values()) {
 				boolean excepted = false;
 				for (GRParameter ep : exceptedParameters) {
 					if (p == ep) {
 						excepted = true;
 					}
 				}
-				if (p != Parameters.shape && p != Parameters.shapeType && !excepted) {
+				if (p != ShapeParameters.shape && p != ShapeParameters.shapeType && !excepted) {
 					_setParameterValueWith(p, gr);
 				}
 			}
@@ -316,13 +310,13 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		}
 
 		if (observable instanceof BackgroundStyle) {
-			notifyAttributeChange(Parameters.background);
+			notifyAttributeChange(ShapeParameters.background);
 		}
 		if (observable instanceof ForegroundStyle) {
-			notifyAttributeChange(Parameters.foreground);
+			notifyAttributeChange(ShapeParameters.foreground);
 		}
 		if (observable instanceof ShadowStyle) {
-			notifyAttributeChange(Parameters.shadowStyle);
+			notifyAttributeChange(ShapeParameters.shadowStyle);
 		}
 	}
 
@@ -392,8 +386,8 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 			if (parentNeedsRelocate || parentNeedsResize) {
 				FGEPoint oldLocation = new FGEPoint(x, y);
 				notifyObjectMoved(oldLocation);
-				notifyChange(Parameters.x, oldLocation.x, getX());
-				notifyChange(Parameters.y, oldLocation.y, getY());
+				notifyChange(ShapeParameters.x, oldLocation.x, getX());
+				notifyChange(ShapeParameters.y, oldLocation.y, getY());
 			}
 		}
 	}
@@ -402,6 +396,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	 * Check and eventually relocate and resize current graphical representation in order to all all contained shape graphical
 	 * representations. Contained graphical representations may substantically be relocated.
 	 */
+	@Override
 	public void extendBoundsToHostContents() {
 
 		// logger.info("Hop: extendBoundsToHostContents");
@@ -449,11 +444,11 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 			if (child instanceof ShapeGraphicalRepresentation) {
 				ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) child;
 				if (gr.getX() + gr.getWidth() > getWidth()) {
-					newDimension.width = gr.x + gr.getWidth();
+					newDimension.width = gr.getX() + gr.getWidth();
 					needsResize = true;
 				}
-				if (gr.y + gr.getHeight() > getHeight()) {
-					newDimension.height = gr.y + gr.getHeight();
+				if (gr.getY() + gr.getHeight() > getHeight()) {
+					newDimension.height = gr.getY() + gr.getHeight();
 					needsResize = true;
 				}
 			}
@@ -501,7 +496,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public final void setX(double aValue) {
-		FGENotification notification = requireChange(Parameters.x, aValue);
+		FGENotification notification = requireChange(ShapeParameters.x, aValue);
 		if (notification != null) {
 			FGEPoint oldLocation = getLocation();
 			setXNoNotification(aValue);
@@ -537,7 +532,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public final void setY(double aValue) {
-		FGENotification notification = requireChange(Parameters.y, aValue);
+		FGENotification notification = requireChange(ShapeParameters.y, aValue);
 		if (notification != null) {
 			FGEPoint oldLocation = getLocation();
 			setYNoNotification(aValue);
@@ -572,8 +567,8 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 				setYNoNotification(newLocation.y);
 			}
 			notifyObjectMoved(oldLocation);
-			notifyChange(Parameters.x, oldX, getX());
-			notifyChange(Parameters.y, oldY, getY());
+			notifyChange(ShapeParameters.x, oldX, getX());
+			notifyChange(ShapeParameters.y, oldY, getY());
 			if (!isFullyContainedInContainer()) {
 				if (logger.isLoggable(Level.FINE)) {
 					logger.fine("setLocation() lead shape going outside it's parent view");
@@ -584,7 +579,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public FGEPoint getLocationInDrawing() {
-		return GraphicalRepresentation.convertNormalizedPoint(this, new FGEPoint(0, 0), getDrawingGraphicalRepresentation());
+		return FGEUtils.convertNormalizedPoint(this, new FGEPoint(0, 0), getDrawingGraphicalRepresentation());
 	}
 
 	/*@Override
@@ -611,7 +606,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	}
 
 	private void setLocationForContainerLayout(FGEPoint newLocation) {
-		ShapeGraphicalRepresentation<?> container = (ShapeGraphicalRepresentation<?>) getContainerGraphicalRepresentation();
+		ShapeGraphicalRepresentationImpl<?> container = (ShapeGraphicalRepresentationImpl<?>) getContainerGraphicalRepresentation();
 		container.updateRequiredBoundsForChildGRLocation(this, newLocation);
 	}
 
@@ -624,7 +619,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		AffineTransform translation = AffineTransform.getTranslateInstance(deltaX, deltaY);
 		for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
 			if (gr instanceof ShapeGraphicalRepresentation) {
-				ShapeGraphicalRepresentation<?> shapeGR = (ShapeGraphicalRepresentation<?>) gr;
+				ShapeGraphicalRepresentationImpl<?> shapeGR = (ShapeGraphicalRepresentationImpl<?>) gr;
 				if (shapeGR == child) {
 					shapeGR.setLocationNoCheckNorNotification(newChildLocation.transform(translation));
 				} else {
@@ -657,6 +652,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		return r;
 	}
 
+	@Override
 	public FGERectangle getRequiredBoundsForContents() {
 		FGERectangle requiredBounds = null;
 		if (getContainedGraphicalRepresentations() == null) {
@@ -664,7 +660,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		}
 		for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
 			if (gr instanceof ShapeGraphicalRepresentation) {
-				ShapeGraphicalRepresentation<?> shapeGR = (ShapeGraphicalRepresentation<?>) gr;
+				ShapeGraphicalRepresentationImpl<?> shapeGR = (ShapeGraphicalRepresentationImpl<?>) gr;
 				FGERectangle bounds = shapeGR.getBoundsNoBorder();
 				if (shapeGR.hasText()) {
 					Rectangle labelBounds = shapeGR.getNormalizedLabelBounds(); // getLabelBounds((new JLabel()), 1.0);
@@ -692,8 +688,8 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 			}
 		}
 
-		requiredBounds.x = requiredBounds.x - getBorder().left;
-		requiredBounds.y = requiredBounds.y - getBorder().top;
+		requiredBounds.x = requiredBounds.x - getBorder().getLeft();
+		requiredBounds.y = requiredBounds.y - getBorder().getTop();
 
 		return requiredBounds;
 	}
@@ -745,7 +741,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public void setLocationConstraints(LocationConstraints locationConstraints) {
-		FGENotification notification = requireChange(Parameters.locationConstraints, locationConstraints);
+		FGENotification notification = requireChange(ShapeParameters.locationConstraints, locationConstraints);
 		if (notification != null && getShape() != null) {
 			this.locationConstraints = locationConstraints;
 			if (isRegistered()) {
@@ -765,7 +761,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public void setLocationConstrainedArea(FGEArea locationConstrainedArea) {
-		FGENotification notification = requireChange(Parameters.locationConstrainedArea, locationConstrainedArea);
+		FGENotification notification = requireChange(ShapeParameters.locationConstrainedArea, locationConstrainedArea);
 		if (notification != null) {
 			this.locationConstrainedArea = locationConstrainedArea;
 			if (isRegistered()) {
@@ -971,7 +967,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public void setAdjustMinimalWidthToLabelWidth(boolean adjustMinimalWidthToLabelWidth) {
-		FGENotification notification = requireChange(Parameters.adjustMinimalWidthToLabelWidth, adjustMinimalWidthToLabelWidth);
+		FGENotification notification = requireChange(ShapeParameters.adjustMinimalWidthToLabelWidth, adjustMinimalWidthToLabelWidth);
 		if (notification != null) {
 			this.adjustMinimalWidthToLabelWidth = adjustMinimalWidthToLabelWidth;
 			checkAndUpdateDimensionBoundsIfRequired();
@@ -986,7 +982,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public void setAdjustMinimalHeightToLabelHeight(boolean adjustMinimalHeightToLabelHeight) {
-		FGENotification notification = requireChange(Parameters.adjustMinimalHeightToLabelHeight, adjustMinimalHeightToLabelHeight);
+		FGENotification notification = requireChange(ShapeParameters.adjustMinimalHeightToLabelHeight, adjustMinimalHeightToLabelHeight);
 		if (notification != null) {
 			this.adjustMinimalHeightToLabelHeight = adjustMinimalHeightToLabelHeight;
 			checkAndUpdateDimensionBoundsIfRequired();
@@ -1001,7 +997,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public void setAdjustMaximalWidthToLabelWidth(boolean adjustMaximalWidthToLabelWidth) {
-		FGENotification notification = requireChange(Parameters.adjustMaximalWidthToLabelWidth, adjustMaximalWidthToLabelWidth);
+		FGENotification notification = requireChange(ShapeParameters.adjustMaximalWidthToLabelWidth, adjustMaximalWidthToLabelWidth);
 		if (notification != null) {
 			this.adjustMaximalWidthToLabelWidth = adjustMaximalWidthToLabelWidth;
 			checkAndUpdateDimensionBoundsIfRequired();
@@ -1016,7 +1012,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public void setAdjustMaximalHeightToLabelHeight(boolean adjustMaximalHeightToLabelHeight) {
-		FGENotification notification = requireChange(Parameters.adjustMaximalHeightToLabelHeight, adjustMaximalHeightToLabelHeight);
+		FGENotification notification = requireChange(ShapeParameters.adjustMaximalHeightToLabelHeight, adjustMaximalHeightToLabelHeight);
 		if (notification != null) {
 			this.adjustMaximalHeightToLabelHeight = adjustMaximalHeightToLabelHeight;
 			checkAndUpdateDimensionBoundsIfRequired();
@@ -1031,7 +1027,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public final void setWidth(double aValue) {
-		FGENotification notification = requireChange(Parameters.width, aValue);
+		FGENotification notification = requireChange(ShapeParameters.width, aValue);
 		if (notification != null) {
 			FGEDimension oldSize = getSize();
 			setWidthNoNotification(aValue);
@@ -1052,7 +1048,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public final void setHeight(double aValue) {
-		FGENotification notification = requireChange(Parameters.height, aValue);
+		FGENotification notification = requireChange(ShapeParameters.height, aValue);
 		if (notification != null) {
 			FGEDimension oldSize = getSize();
 			setHeightNoNotification(aValue);
@@ -1107,11 +1103,11 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 			}
 			checkAndUpdateDimensionBoundsIfRequired();
 			if (isParentLayoutedAsContainer()) {
-				((ShapeGraphicalRepresentation<?>) getContainerGraphicalRepresentation()).checkAndUpdateDimensionIfRequired();
+				((ShapeGraphicalRepresentationImpl<?>) getContainerGraphicalRepresentation()).checkAndUpdateDimensionIfRequired();
 			}
 			notifyObjectResized(oldSize);
-			notifyChange(Parameters.width, oldWidth, getWidth());
-			notifyChange(Parameters.height, oldHeight, getHeight());
+			notifyChange(ShapeParameters.width, oldWidth, getWidth());
+			notifyChange(ShapeParameters.height, oldHeight, getHeight());
 			getShape().notifyObjectResized();
 		}
 	}
@@ -1123,7 +1119,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public final void setMinimalWidth(double minimalWidth) {
-		FGENotification notification = requireChange(Parameters.minimalWidth, minimalWidth);
+		FGENotification notification = requireChange(ShapeParameters.minimalWidth, minimalWidth);
 		if (notification != null) {
 			this.minimalWidth = minimalWidth;
 			checkAndUpdateDimensionBoundsIfRequired();
@@ -1138,7 +1134,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public final void setMinimalHeight(double minimalHeight) {
-		FGENotification notification = requireChange(Parameters.minimalHeight, minimalHeight);
+		FGENotification notification = requireChange(ShapeParameters.minimalHeight, minimalHeight);
 		if (notification != null) {
 			this.minimalHeight = minimalHeight;
 			checkAndUpdateDimensionBoundsIfRequired();
@@ -1153,7 +1149,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public final void setMaximalHeight(double maximalHeight) {
-		FGENotification notification = requireChange(Parameters.maximalHeight, maximalHeight);
+		FGENotification notification = requireChange(ShapeParameters.maximalHeight, maximalHeight);
 		if (notification != null) {
 			this.maximalHeight = maximalHeight;
 			checkAndUpdateDimensionBoundsIfRequired();
@@ -1168,7 +1164,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public final void setMaximalWidth(double maximalWidth) {
-		FGENotification notification = requireChange(Parameters.maximalWidth, maximalWidth);
+		FGENotification notification = requireChange(ShapeParameters.maximalWidth, maximalWidth);
 		if (notification != null) {
 			this.maximalWidth = maximalWidth;
 			checkAndUpdateDimensionBoundsIfRequired();
@@ -1183,19 +1179,21 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public void setAllowToLeaveBounds(boolean allowToLeaveBounds) {
-		FGENotification notification = requireChange(Parameters.allowToLeaveBounds, allowToLeaveBounds);
+		FGENotification notification = requireChange(ShapeParameters.allowToLeaveBounds, allowToLeaveBounds);
 		if (notification != null) {
 			this.allowToLeaveBounds = allowToLeaveBounds;
 			hasChanged(notification);
 		}
 	}
 
-	public final boolean getAdaptBoundsToContents() {
+	@Override
+	public boolean getAdaptBoundsToContents() {
 		return adaptBoundsToContents;
 	}
 
+	@Override
 	public void setAdaptBoundsToContents(boolean adaptBoundsToContents) {
-		FGENotification notification = requireChange(Parameters.adaptBoundsToContents, adaptBoundsToContents);
+		FGENotification notification = requireChange(ShapeParameters.adaptBoundsToContents, adaptBoundsToContents);
 		if (notification != null) {
 			this.adaptBoundsToContents = adaptBoundsToContents;
 			hasChanged(notification);
@@ -1223,7 +1221,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public void setDimensionConstraints(DimensionConstraints dimensionConstraints) {
-		FGENotification notification = requireChange(Parameters.dimensionConstraints, dimensionConstraints);
+		FGENotification notification = requireChange(ShapeParameters.dimensionConstraints, dimensionConstraints);
 		if (notification != null && getShape() != null) {
 			this.dimensionConstraints = dimensionConstraints;
 			getShape().rebuildControlPoints();
@@ -1238,7 +1236,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public void setDimensionConstraintStep(FGESteppedDimensionConstraint dimensionConstraintStep) {
-		FGENotification notification = requireChange(Parameters.dimensionConstraintStep, dimensionConstraintStep);
+		FGENotification notification = requireChange(ShapeParameters.dimensionConstraintStep, dimensionConstraintStep);
 		if (notification != null) {
 			this.dimensionConstraintStep = dimensionConstraintStep;
 			if (isRegistered()) {
@@ -1525,8 +1523,9 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		return xConstraints;
 	}
 
+	@Override
 	public void setXConstraints(DataBinding<Double> xConstraints) {
-		FGENotification notification = requireChange(Parameters.xConstraints, xConstraints);
+		FGENotification notification = requireChange(ShapeParameters.xConstraints, xConstraints);
 		if (notification != null) {
 			if (xConstraints != null) {
 				xConstraints.setOwner(this);
@@ -1546,8 +1545,9 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		return yConstraints;
 	}
 
+	@Override
 	public void setYConstraints(DataBinding<Double> yConstraints) {
-		FGENotification notification = requireChange(Parameters.yConstraints, yConstraints);
+		FGENotification notification = requireChange(ShapeParameters.yConstraints, yConstraints);
 		if (notification != null) {
 			if (yConstraints != null) {
 				yConstraints.setOwner(this);
@@ -1567,8 +1567,9 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		return widthConstraints;
 	}
 
+	@Override
 	public void setWidthConstraints(DataBinding<Double> widthConstraints) {
-		FGENotification notification = requireChange(Parameters.widthConstraints, widthConstraints);
+		FGENotification notification = requireChange(ShapeParameters.widthConstraints, widthConstraints);
 		if (notification != null) {
 			if (widthConstraints != null) {
 				widthConstraints.setOwner(this);
@@ -1588,8 +1589,9 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		return heightConstraints;
 	}
 
+	@Override
 	public void setHeightConstraints(DataBinding<Double> heightConstraints) {
-		FGENotification notification = requireChange(Parameters.heightConstraints, heightConstraints);
+		FGENotification notification = requireChange(ShapeParameters.heightConstraints, heightConstraints);
 		if (notification != null) {
 			if (heightConstraints != null) {
 				heightConstraints.setOwner(this);
@@ -1659,13 +1661,14 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	protected void computeNewConstraint(ConstraintDependency dependancy) {
-		if (dependancy.requiringParameter == Parameters.xConstraints && xConstraints != null && xConstraints.isValid()) {
+		if (dependancy.requiringParameter == ShapeParameters.xConstraints && xConstraints != null && xConstraints.isValid()) {
 			updateXPosition();
-		} else if (dependancy.requiringParameter == Parameters.yConstraints && yConstraints != null && yConstraints.isValid()) {
+		} else if (dependancy.requiringParameter == ShapeParameters.yConstraints && yConstraints != null && yConstraints.isValid()) {
 			updateYPosition();
-		} else if (dependancy.requiringParameter == Parameters.widthConstraints && widthConstraints != null && widthConstraints.isValid()) {
+		} else if (dependancy.requiringParameter == ShapeParameters.widthConstraints && widthConstraints != null
+				&& widthConstraints.isValid()) {
 			updateWidthPosition();
-		} else if (dependancy.requiringParameter == Parameters.heightConstraints && heightConstraints != null
+		} else if (dependancy.requiringParameter == ShapeParameters.heightConstraints && heightConstraints != null
 				&& heightConstraints.isValid()) {
 			updateHeightPosition();
 		}
@@ -1788,8 +1791,9 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		return foreground;
 	}
 
+	@Override
 	public void setForeground(ForegroundStyle aForeground) {
-		FGENotification notification = requireChange(Parameters.foreground, aForeground, false);
+		FGENotification notification = requireChange(ShapeParameters.foreground, aForeground, false);
 		if (notification != null) {
 			if (foreground != null) {
 				foreground.deleteObserver(this);
@@ -1810,8 +1814,9 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		return selectedForeground;
 	}
 
+	@Override
 	public void setSelectedForeground(ForegroundStyle aForeground) {
-		FGENotification notification = requireChange(Parameters.selectedForeground, aForeground, false);
+		FGENotification notification = requireChange(ShapeParameters.selectedForeground, aForeground, false);
 		if (notification != null) {
 			if (selectedForeground != null) {
 				selectedForeground.deleteObserver(this);
@@ -1842,8 +1847,9 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		return focusedForeground;
 	}
 
+	@Override
 	public void setFocusedForeground(ForegroundStyle aForeground) {
-		FGENotification notification = requireChange(Parameters.focusedForeground, aForeground, false);
+		FGENotification notification = requireChange(ShapeParameters.focusedForeground, aForeground, false);
 		if (notification != null) {
 			if (focusedForeground != null) {
 				focusedForeground.deleteObserver(this);
@@ -1881,8 +1887,9 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		return background;
 	}
 
+	@Override
 	public void setBackground(BackgroundStyle aBackground) {
-		FGENotification notification = requireChange(Parameters.background, aBackground, false);
+		FGENotification notification = requireChange(ShapeParameters.background, aBackground, false);
 		if (notification != null) {
 			// background = aBackground.clone();
 			if (background != null) {
@@ -1902,9 +1909,10 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		return background.getBackgroundStyleType();
 	}
 
+	@Override
 	public void setBackgroundType(BackgroundStyleType backgroundType) {
 		if (backgroundType != getBackgroundType()) {
-			setBackground(BackgroundStyle.makeBackground(backgroundType));
+			setBackground(getFactory().makeBackground(backgroundType));
 		}
 	}
 
@@ -1916,8 +1924,9 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		return selectedBackground;
 	}
 
+	@Override
 	public void setSelectedBackground(BackgroundStyle aBackground) {
-		FGENotification notification = requireChange(Parameters.selectedBackground, aBackground, false);
+		FGENotification notification = requireChange(ShapeParameters.selectedBackground, aBackground, false);
 		if (notification != null) {
 			// background = aBackground.clone();
 			if (selectedBackground != null) {
@@ -1950,8 +1959,9 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		return focusedBackground;
 	}
 
+	@Override
 	public void setFocusedBackground(BackgroundStyle aBackground) {
-		FGENotification notification = requireChange(Parameters.focusedBackground, aBackground, false);
+		FGENotification notification = requireChange(ShapeParameters.focusedBackground, aBackground, false);
 		if (notification != null) {
 			// background = aBackground.clone();
 			if (focusedBackground != null) {
@@ -1983,7 +1993,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public void setBorder(ShapeBorder border) {
-		FGENotification notification = requireChange(Parameters.border, border);
+		FGENotification notification = requireChange(ShapeParameters.border, border);
 		if (notification != null) {
 			this.border = border;
 			hasChanged(notification);
@@ -1996,8 +2006,9 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		return shadowStyle;
 	}
 
+	@Override
 	public void setShadowStyle(ShadowStyle aShadowStyle) {
-		FGENotification notification = requireChange(Parameters.shadowStyle, aShadowStyle);
+		FGENotification notification = requireChange(ShapeParameters.shadowStyle, aShadowStyle);
 		if (notification != null) {
 			if (shadowStyle != null) {
 				shadowStyle.deleteObserver(this);
@@ -2079,14 +2090,14 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	@Override
 	public void setShape(Shape aShape) {
 		aShape.setGraphicalRepresentation(this);
-		FGENotification notification = requireChange(Parameters.shape, aShape);
+		FGENotification notification = requireChange(ShapeParameters.shape, aShape);
 		if (notification != null) {
 			ShapeType oldType = aShape != null ? aShape.getShapeType() : null;
 			this.shape = aShape;
 			shape.rebuildControlPoints();
 			hasChanged(notification);
 			setChanged();
-			notifyObservers(new FGENotification(Parameters.shapeType, oldType, aShape.getShapeType()));
+			notifyObservers(new FGENotification(ShapeParameters.shapeType, oldType, aShape.getShapeType()));
 			notifyShapeChanged();
 		}
 	}
@@ -2102,7 +2113,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	@Override
 	public void setShapeType(ShapeType shapeType) {
 		if (getShapeType() != shapeType) {
-			setShape(Shape.makeShape(shapeType, this));
+			setShape(getFactory().makeShape(shapeType, this));
 			if (getShape().areDimensionConstrained()) {
 				double newSize = Math.max(getWidth(), getHeight());
 				setWidth(newSize);
@@ -2198,8 +2209,8 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	public void notifyObjectHasResized() {
 		isResizing = false;
 		for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
-			if (gr instanceof ShapeGraphicalRepresentation) {
-				((ShapeGraphicalRepresentation<?>) gr).checkAndUpdateLocationIfRequired();
+			if (gr instanceof ShapeGraphicalRepresentationImpl) {
+				((ShapeGraphicalRepresentationImpl<?>) gr).checkAndUpdateLocationIfRequired();
 			}
 		}
 		setChanged();
@@ -2223,7 +2234,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public void setIsFloatingLabel(boolean isFloatingLabel) {
-		FGENotification notification = requireChange(Parameters.isFloatingLabel, isFloatingLabel);
+		FGENotification notification = requireChange(ShapeParameters.isFloatingLabel, isFloatingLabel);
 		if (notification != null) {
 			this.isFloatingLabel = isFloatingLabel;
 			hasChanged(notification);
@@ -2242,7 +2253,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public void setRelativeTextX(double textX) {
-		FGENotification notification = requireChange(Parameters.relativeTextX, textX);
+		FGENotification notification = requireChange(ShapeParameters.relativeTextX, textX);
 		if (notification != null) {
 			this.relativeTextX = textX;
 			hasChanged(notification);
@@ -2256,7 +2267,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public void setRelativeTextY(double textY) {
-		FGENotification notification = requireChange(Parameters.relativeTextY, textY);
+		FGENotification notification = requireChange(ShapeParameters.relativeTextY, textY);
 		if (notification != null) {
 			this.relativeTextY = textY;
 			hasChanged(notification);
@@ -2284,7 +2295,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public double getUnscaledViewWidth() {
-		return getWidth() + (getBorder() != null ? getBorder().left + getBorder().right : 0);
+		return getWidth() + (getBorder() != null ? getBorder().getLeft() + getBorder().getRight() : 0);
 	}
 
 	@Override
@@ -2294,7 +2305,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	@Override
 	public double getUnscaledViewHeight() {
-		return getHeight() + (getBorder() != null ? getBorder().top + getBorder().bottom : 0);
+		return getHeight() + (getBorder() != null ? getBorder().getTop() + getBorder().getBottom() : 0);
 	}
 
 	/**
@@ -2326,8 +2337,8 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	public Rectangle getBounds(double scale) {
 		Rectangle bounds = new Rectangle();
 
-		bounds.x = (int) ((getX() + (getBorder() != null ? getBorder().left : 0)) * scale);
-		bounds.y = (int) ((getY() + (getBorder() != null ? getBorder().top : 0)) * scale);
+		bounds.x = (int) ((getX() + (getBorder() != null ? getBorder().getLeft() : 0)) * scale);
+		bounds.y = (int) ((getY() + (getBorder() != null ? getBorder().getTop() : 0)) * scale);
 		bounds.width = (int) (getWidth() * scale);
 		bounds.height = (int) (getHeight() * scale);
 
@@ -2370,7 +2381,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	public AffineTransform convertNormalizedPointToViewCoordinatesAT(double scale) {
 		AffineTransform returned = AffineTransform.getScaleInstance(getWidth(), getHeight());
 		if (getBorder() != null) {
-			returned.preConcatenate(AffineTransform.getTranslateInstance(getBorder().left, getBorder().top));
+			returned.preConcatenate(AffineTransform.getTranslateInstance(getBorder().getLeft(), getBorder().getTop()));
 		}
 		if (scale != 1) {
 			returned.preConcatenate(AffineTransform.getScaleInstance(scale, scale));
@@ -2397,7 +2408,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 			returned = AffineTransform.getScaleInstance(1 / scale, 1 / scale);
 		}
 		if (getBorder() != null) {
-			returned.preConcatenate(AffineTransform.getTranslateInstance(-getBorder().left, -getBorder().top));
+			returned.preConcatenate(AffineTransform.getTranslateInstance(-getBorder().getLeft(), -getBorder().getTop()));
 		}
 		returned.preConcatenate(AffineTransform.getScaleInstance(1 / getWidth(), 1 / getHeight()));
 		return returned;
@@ -2476,7 +2487,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 				g2.setColor(Color.RED);
 				g2.drawRect(0, 0, getViewWidth(controller.getScale()) - 1, getViewHeight(controller.getScale()) - 1);
 				g2.setColor(Color.BLUE);
-				g2.drawRect((int) (getBorder().left * controller.getScale()), (int) (getBorder().top * controller.getScale()),
+				g2.drawRect((int) (getBorder().getLeft() * controller.getScale()), (int) (getBorder().getTop() * controller.getScale()),
 						(int) (getWidth() * controller.getScale()) - 1, (int) (getHeight() * controller.getScale()) - 1);
 			} else {
 				g2.setColor(Color.BLUE);
@@ -2726,6 +2737,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	 *            the connector asking where to start
 	 * @return the area on which the given connector can start
 	 */
+	@Override
 	public FGEArea getAllowedStartAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR) {
 		return getShape().getOutline();
 	}
@@ -2737,6 +2749,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	 *            the connector asking where to end
 	 * @return the area on which the given connector can end
 	 */
+	@Override
 	public FGEArea getAllowedEndAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR) {
 		return getShape().getOutline();
 	}
@@ -2749,6 +2762,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	 * 
 	 * @return the area on which the given connector can start
 	 */
+	@Override
 	public FGEArea getAllowedStartAreaForConnectorForDirection(ConnectorGraphicalRepresentation<?> connectorGR, FGEArea area,
 			SimplifiedCardinalDirection direction) {
 		return area;
@@ -2761,6 +2775,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	 *            the connector asking where to end
 	 * @return the area on which the given connector can end
 	 */
+	@Override
 	public FGEArea getAllowedEndAreaForConnectorForDirection(ConnectorGraphicalRepresentation<?> connectorGR, FGEArea area,
 			SimplifiedCardinalDirection direction) {
 		return area;
