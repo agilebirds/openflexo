@@ -9,6 +9,7 @@
     <Table iteratorClassName="org.openflexo.foundation.technologyadapter.ModelSlot" visibleRowCount="5" autoSelectFirstRow="true" createNewRowOnClick="false" boundToSelectionManager="true" showFooter="true" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="ModelSlotTable" index="0" data="data.modelSlots" constraints="split(index=0;location=north;splitIdentifier=top)" opaque="false">
       <IconColumn data="controller.iconForObject(iterator)" title="icon" columnWidth="25" resizable="false" displayTitle="false" name="icon" />
       <TextFieldColumn data="iterator.name" title="model_slot" columnWidth="80" resizable="true" displayTitle="true" />
+      <LabelColumn data="iterator.class.simpleName" title="type" columnWidth="100" resizable="true" displayTitle="true" name="label" />
       <LabelColumn data="iterator.technologyAdapter.name" title="technology" columnWidth="200" resizable="true" displayTitle="true" name="label" />
       <LabelColumn data="iterator.metaModelURI" title="meta_model" columnWidth="500" resizable="true" displayTitle="true" name="label" />
       <RemoveAction method="data.deleteModelSlot(selected)" name="delete" />

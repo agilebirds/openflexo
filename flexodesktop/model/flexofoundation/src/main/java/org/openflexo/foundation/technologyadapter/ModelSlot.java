@@ -394,4 +394,5 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 	public String toString() {
 		return getClass().getSimpleName() + ":" + getName();
 	}
+
 }

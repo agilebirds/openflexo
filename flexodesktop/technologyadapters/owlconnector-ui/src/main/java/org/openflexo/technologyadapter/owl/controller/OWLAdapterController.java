@@ -5,6 +5,8 @@ import java.io.File;
 import javax.swing.ImageIcon;
 
 import org.openflexo.components.widget.OntologyBrowserModel;
+import org.openflexo.components.widget.OntologyView;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -38,10 +40,16 @@ import org.openflexo.technologyadapter.owl.viewpoint.SubClassStatementPatternRol
 import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLClass;
 import org.openflexo.technologyadapter.owl.viewpoint.editionaction.AddOWLIndividual;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.view.EmptyPanel;
+import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ControllerActionInitializer;
+import org.openflexo.view.controller.FlexoController;
+import org.openflexo.view.controller.IFlexoOntologyTechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterController;
+import org.openflexo.view.controller.model.FlexoPerspective;
 
-public class OWLAdapterController extends TechnologyAdapterController<OWLTechnologyAdapter> {
+public class OWLAdapterController extends TechnologyAdapterController<OWLTechnologyAdapter> implements
+		IFlexoOntologyTechnologyAdapterController {
 
 	// Ontology edition
 	public static File CREATE_ONTOLOGY_CLASS_DIALOG_FIB = new FileResource("Fib/Dialog/CreateOntologyClassDialog.fib");
@@ -174,4 +182,24 @@ public class OWLAdapterController extends TechnologyAdapterController<OWLTechnol
 	public OntologyBrowserModel makeOntologyBrowserModel(IFlexoOntology model) {
 		return new OWLOntologyBrowserModel((OWLOntology) model);
 	}
+
+	@Override
+	public boolean hasModuleViewForObject(FlexoObject object) {
+		return object instanceof OWLOntology;
+	}
+
+	@Override
+	public <T extends FlexoObject> ModuleView<T> createModuleViewForObject(T object, FlexoController controller,
+			FlexoPerspective perspective) {
+		if (object instanceof OWLOntology) {
+			OntologyView<OWLOntology> returned = new OntologyView<OWLOntology>((OWLOntology) object, controller, perspective);
+			returned.setShowClasses(true);
+			returned.setShowDataProperties(true);
+			returned.setShowObjectProperties(true);
+			returned.setShowAnnotationProperties(true);
+			return (ModuleView<T>) returned;
+		}
+		return new EmptyPanel<T>(controller, perspective, object);
+	}
+
 }

@@ -30,7 +30,7 @@ import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
 import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
@@ -68,7 +68,7 @@ import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelWor
 @DeclareEditionActions({ // All edition actions available through this model slot
 @DeclareEditionAction(FML = "AddBusinessConceptInstance", editionActionClass = AddBusinessConceptInstance.class) // Add instance of BC
 })
-public class SemanticsExcelModelSlot extends TypeSafeModelSlot<ExcelModel, ExcelMetaModel> {
+public class SemanticsExcelModelSlot extends TypeAwareModelSlot<ExcelModel, ExcelMetaModel> {
 
 	private static final Logger logger = Logger.getLogger(SemanticsExcelModelSlot.class.getPackage().getName());
 
@@ -178,7 +178,7 @@ public class SemanticsExcelModelSlot extends TypeSafeModelSlot<ExcelModel, Excel
 
 	@Override
 	public String getURIForObject(
-			TypeSafeModelSlotInstance<ExcelModel, ExcelMetaModel, ? extends TypeSafeModelSlot<ExcelModel, ExcelMetaModel>> msInstance,
+			TypeSafeModelSlotInstance<ExcelModel, ExcelMetaModel, ? extends TypeAwareModelSlot<ExcelModel, ExcelMetaModel>> msInstance,
 			Object o) {
 		// TODO Auto-generated method stub
 		return null;
@@ -186,7 +186,7 @@ public class SemanticsExcelModelSlot extends TypeSafeModelSlot<ExcelModel, Excel
 
 	@Override
 	public Object retrieveObjectWithURI(
-			TypeSafeModelSlotInstance<ExcelModel, ExcelMetaModel, ? extends TypeSafeModelSlot<ExcelModel, ExcelMetaModel>> msInstance,
+			TypeSafeModelSlotInstance<ExcelModel, ExcelMetaModel, ? extends TypeAwareModelSlot<ExcelModel, ExcelMetaModel>> msInstance,
 			String objectURI) {
 		// TODO Auto-generated method stub
 		return null;

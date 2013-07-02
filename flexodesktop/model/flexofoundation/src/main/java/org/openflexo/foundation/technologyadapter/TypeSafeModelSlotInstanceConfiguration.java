@@ -31,13 +31,13 @@ import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 import org.openflexo.toolbox.StringUtils;
 
 /**
- * This class is used to stored the configuration of a {@link TypeSafeModelSlot} which has to be instantiated
+ * This class is used to stored the configuration of a {@link TypeAwareModelSlot} which has to be instantiated
  * 
  * 
  * @author sylvain
  * 
  */
-public abstract class TypeSafeModelSlotInstanceConfiguration<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, MS extends TypeSafeModelSlot<M, MM>>
+public abstract class TypeSafeModelSlotInstanceConfiguration<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, MS extends TypeAwareModelSlot<M, MM>>
 		extends ModelSlotInstanceConfiguration<MS, M> {
 
 	private static final Logger logger = Logger.getLogger(TypeSafeModelSlotInstanceConfiguration.class.getPackage().getName());

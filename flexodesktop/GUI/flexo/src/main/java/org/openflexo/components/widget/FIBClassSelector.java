@@ -33,6 +33,7 @@ import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.view.controller.IFlexoOntologyTechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterController;
 import org.openflexo.view.controller.TechnologyAdapterControllerService;
 
@@ -196,11 +197,15 @@ public class FIBClassSelector extends FIBModelObjectSelector<IFlexoOntologyClass
 		if (model == null) {
 			if (getTechnologyAdapter() != null) {
 				// Use technology specific browser model
-				TechnologyAdapterController technologyAdapterController = getTechnologyAdapter().getTechnologyAdapterService()
+				TechnologyAdapterController<?> technologyAdapterController = getTechnologyAdapter().getTechnologyAdapterService()
 						.getServiceManager().getService(TechnologyAdapterControllerService.class)
 						.getTechnologyAdapterController(technologyAdapter);
-				model = technologyAdapterController.makeOntologyBrowserModel(getContext());
-			} else { // Use default
+				if (technologyAdapterController instanceof IFlexoOntologyTechnologyAdapterController) {
+					model = ((IFlexoOntologyTechnologyAdapterController) technologyAdapterController).makeOntologyBrowserModel(getContext());
+				}
+			}
+			if (model == null) {
+				// Use default
 				model = new OntologyBrowserModel(getContext());
 			}
 			model.addObserver(new Observer() {

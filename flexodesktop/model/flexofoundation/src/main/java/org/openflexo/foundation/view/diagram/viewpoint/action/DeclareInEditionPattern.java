@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
@@ -40,12 +40,12 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 
 	private EditionPattern editionPattern;
 
-	private TypeSafeModelSlot modelSlot;
+	private TypeAwareModelSlot<?, ?> modelSlot;
 
 	DeclareInEditionPattern(FlexoActionType<A, T1, ExampleDiagramObject> actionType, T1 focusedObject,
 			Vector<ExampleDiagramObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
-		List<TypeSafeModelSlot> availableModelSlots = focusedObject.getVirtualModel().getModelSlots(TypeSafeModelSlot.class);
+		List<TypeAwareModelSlot> availableModelSlots = focusedObject.getVirtualModel().getModelSlots(TypeAwareModelSlot.class);
 		if (availableModelSlots.size() > 0) {
 			modelSlot = availableModelSlots.get(0);
 		}
@@ -147,11 +147,11 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 		return null;
 	}
 
-	public TypeSafeModelSlot getModelSlot() {
+	public TypeAwareModelSlot<?, ?> getModelSlot() {
 		return modelSlot;
 	}
 
-	public void setModelSlot(TypeSafeModelSlot modelSlot) {
+	public void setModelSlot(TypeAwareModelSlot<?, ?> modelSlot) {
 		this.modelSlot = modelSlot;
 	}
 }

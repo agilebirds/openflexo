@@ -138,7 +138,7 @@ import org.openflexo.foundation.stats.ProjectStatistics;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.technologyadapter.TypeSafeModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.toc.TOCData;
 import org.openflexo.foundation.toc.TOCRepository;
 import org.openflexo.foundation.utils.FlexoCSS;
@@ -4791,8 +4791,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 			if (vr.isLoaded()) {
 				View v = vr.getView();
 				for (ModelSlotInstance<?, ?> msi : v.getModelSlotInstances()) {
-					if (msi.getModelSlot() instanceof TypeSafeModelSlot) {
-						returned.add(((TypeSafeModelSlot) msi.getModelSlot()).getMetaModelResource().getMetaModelData());
+					if (msi.getModelSlot() instanceof TypeAwareModelSlot) {
+						returned.add(((TypeAwareModelSlot) msi.getModelSlot()).getMetaModelResource().getMetaModelData());
 					}
 				}
 			}
