@@ -65,11 +65,30 @@ public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLMod
 	private Map<String, XMLType> types;
 	private IXMLIndividual<?, ?> root = null;
 	
+	private String namespaceURI = null;
+	private String namespacePrefix = null;
+
 	public XMLModel(TechnologyAdapter technologyAdapter) {
 		super();
 		individuals = new HashMap<String, XMLIndividual>();
 		types = new HashMap<String, XMLType>();
 		this.technologyAdapter = (XMLTechnologyAdapter) technologyAdapter;
+	}
+	
+	@Override
+	public void setNamespace(String uri, String prefix){
+		this.namespacePrefix = prefix;
+		this.namespaceURI = uri;
+	}
+	
+	@Override
+	public String getNamespacePrefix() {
+		return namespacePrefix;
+	}
+
+	@Override
+	public String getNamespaceURI() {
+		return namespaceURI;
 	}
 
 	/**
@@ -205,6 +224,7 @@ public class XMLModel extends FlexoObject implements FlexoModel<XMLModel, XMLMod
 
 		return doc;
 	}
+
 
 
 }

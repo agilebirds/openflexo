@@ -57,9 +57,11 @@ public final class XMLXSDNameSpaceFinder  {
 	private XMLReader saxParser =null;
 	private MetamodelFinderSAXHandler saxHandler =null;
 	private MetamodelFinderSAXErrorHandler errorHandler =null;
-	
+
 	private static String currentSchemaURI = null;
-	
+	private static boolean isSchema = false;
+
+
 	private static XMLXSDNameSpaceFinder instance = new XMLXSDNameSpaceFinder();
 
 	private  XMLXSDNameSpaceFinder() {
@@ -95,7 +97,9 @@ public final class XMLXSDNameSpaceFinder  {
 	 * @param model
 	 * @return
 	 */
-	public static final String findNameSpace(File aXmlFile) {
+	public static final String findNameSpace(File aXmlFile, boolean isXmlSchema) {
+
+		instance.isSchema = isXmlSchema;
 
 		try {
 			currentSchemaURI = null;
@@ -154,11 +158,12 @@ public final class XMLXSDNameSpaceFinder  {
 
 
 			int len = attributes.getLength();
-			
-			currentSchemaURI = attributes.getValue("targetNamespace");
-			if (currentSchemaURI == null){			
+			if (instance.isSchema) { 
+				currentSchemaURI = attributes.getValue("targetNamespace");
+			}
+			else{			
 				currentSchemaURI = uri;
-				}
+			}
 
 			throw new SAXException();
 		}

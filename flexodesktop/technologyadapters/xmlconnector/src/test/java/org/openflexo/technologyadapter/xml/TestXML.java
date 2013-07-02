@@ -45,6 +45,7 @@ import org.openflexo.technologyadapter.xml.model.XMLTechnologyContextManager;
 import org.openflexo.technologyadapter.xml.model.XMLType;
 import org.openflexo.technologyadapter.xml.rm.XMLFileResource;
 import org.openflexo.technologyadapter.xml.rm.XMLFileResourceImpl;
+import org.openflexo.technologyadapter.xml.rm.XMLModelRepository;
 import org.openflexo.toolbox.FileResource;
 
 public class TestXML extends FlexoTestCase {
@@ -54,8 +55,8 @@ public class TestXML extends FlexoTestCase {
 	private static ApplicationContext testApplicationContext;
 	private static XMLTechnologyAdapter xmlAdapter;
 	private static FlexoResourceCenter resourceCenter;
-	private static ModelRepository<FlexoResource<XMLModel>, XMLModel, XMLModel, XMLTechnologyAdapter> modelRepository;
-	private static MetaModelRepository<FlexoResource<XMLModel>, XMLModel, XMLModel, XMLTechnologyAdapter> metamodelRepository;
+	private static XMLModelRepository modelRepository;
+	private static XMLModelRepository metamodelRepository;
 	private static String baseDirName;
 	
 	public TestXML(String name) {
@@ -91,13 +92,35 @@ public class TestXML extends FlexoTestCase {
 		testApplicationContext.getResourceCenterService().addToResourceCenters(resourceCenter);
 		resourceCenter.initialize(testApplicationContext.getTechnologyAdapterService());
 		xmlAdapter = testApplicationContext.getTechnologyAdapterService().getTechnologyAdapter(XMLTechnologyAdapter.class);
-		modelRepository = resourceCenter.getModelRepository(xmlAdapter);
-		metamodelRepository = resourceCenter.getMetaModelRepository(xmlAdapter);
+		modelRepository = (XMLModelRepository) resourceCenter.getRepository(XMLModelRepository.class, xmlAdapter);
 		baseDirName=((DirectoryResourceCenter)resourceCenter).getDirectory().getCanonicalPath();
 		assertNotNull(modelRepository);
 		assertNotNull(metamodelRepository);
 		assertEquals(0, metamodelRepository.getAllResources().size());
 		assertTrue(modelRepository.getAllResources().size()>3);
+	}
+
+
+	public void test0LoadFileAndDump() throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
+
+		log("test1LoadFileAndDump()");
+
+		assertNotNull(modelRepository);
+
+		XMLFileResource modelRes = (XMLFileResource) modelRepository.getResource("file:" + baseDirName + "/XML/example_library_0.xml");
+		assertNotNull(modelRes);
+		assertFalse(modelRes.isLoaded());
+		assertNotNull(modelRes.getModelData());
+		assertNotNull(modelRes.loadResourceData(null));
+		assertTrue(modelRes.isLoaded());
+
+		// dumpTypes(modelRes.getModel());
+
+		assertNotNull(modelRes.getModel().getTypeFromURI("#Library"));
+
+		dumpIndividual(modelRes.getModelData().getRoot(),"");
+
+
 	}
 
 	public void test1LoadFileAndDump() throws FileNotFoundException, ResourceLoadingCancelledException, ResourceDependencyLoopException, FlexoException {
@@ -117,7 +140,7 @@ public class TestXML extends FlexoTestCase {
 
 		assertNotNull(modelRes.getModel().getTypeFromURI("#Library"));
 
-		// dumpIndividual(modelRes.getModelData().getRoot(),"");
+		dumpIndividual(modelRes.getModelData().getRoot(),"");
 
 
 	}
@@ -176,6 +199,7 @@ public class TestXML extends FlexoTestCase {
 			XMLFileResource  modelRes = XMLFileResourceImpl.makeXMLFileResource(xmlFile, (XMLTechnologyContextManager) xmlAdapter.getTechnologyContextManager());
 
 			XMLModel aModel = modelRes.getModel();
+			aModel.setNamespace("http://montest.com", "tst");
 
 			XMLType aType = new XMLType ("http://montest.com","Blob","tst:Blob",aModel);
 			aModel.addType(aType);

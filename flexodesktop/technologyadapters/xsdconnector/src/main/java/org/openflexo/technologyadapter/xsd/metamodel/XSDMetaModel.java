@@ -35,6 +35,7 @@ import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.technologyadapter.xml.model.IXMLMetaModel;
 import org.openflexo.technologyadapter.xsd.XSDTechnologyAdapter;
 import org.openflexo.technologyadapter.xsd.model.XSOntology;
+import org.openflexo.technologyadapter.xsd.rm.XMLXSDNameSpaceFinder;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
 
 import com.sun.xml.xsom.XSSimpleType;
@@ -117,6 +118,17 @@ public class XSDMetaModel extends XSOntology implements FlexoMetaModel<XSDMetaMo
 	@Override
 	public List<XSOntDataProperty> getDataProperties() {
 		return new ArrayList<XSOntDataProperty>(dataProperties.values());
+	}
+
+	public static String findNamespaceURI(File f) {
+		// This is for MetaModel Only => should not be used for XML Models
+		// FIXME : useless for models
+		String schemaURI = XMLXSDNameSpaceFinder.findNameSpace(f,true);
+		if (schemaURI != null && !schemaURI.equals("")){
+			return schemaURI;
+		}else{
+			return "http://www.openflexo.org/XSD/" + f.getName();
+		}
 	}
 
 	@Override

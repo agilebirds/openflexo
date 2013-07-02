@@ -66,8 +66,8 @@ public class XSURIProcessor implements XMLSerializable {
 	private Map<String, XMLIndividual> uriCache = new HashMap<String, XMLIndividual>();
 
 
-	public void setModelSlot(XMLModelSlot XMLModelSlot) {
-		modelSlot = XMLModelSlot;
+	public void setModelSlot(XMLModelSlot xmlModelSlot) {
+		modelSlot = xmlModelSlot;
 	}
 
 	// Serialized properties
@@ -190,7 +190,7 @@ public class XSURIProcessor implements XMLSerializable {
 
 		// modelResource must also be loaded!
 		
-		FlexoModelResource resource = (FlexoModelResource) msInstance.getModel().getResource();
+		FlexoModelResource resource = (FlexoModelResource) msInstance.getResource();
 		if (!resource.isLoaded()) {
 			resource.getModelData();
 		}
@@ -200,7 +200,7 @@ public class XSURIProcessor implements XMLSerializable {
 
 			if (mappingStyle.equals(ATTRIBUTE_VALUE) && attributeName != null) {
 
-				for (IXMLIndividual obj: ((XMLModel) msInstance.getModel()).getIndividualsOfType(mappedClass)){
+				for (IXMLIndividual obj: ((XMLModel) msInstance.getResourceData()).getIndividualsOfType(mappedClass)){
 
 					Object value = ((IXMLIndividual) obj).getAttributeValue(attributeName);
 					try {

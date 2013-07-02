@@ -21,6 +21,7 @@
 
 package org.openflexo.technologyadapter.xml.rm;
 import org.openflexo.foundation.resource.FlexoFileResource;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.model.annotations.Getter;
@@ -32,7 +33,7 @@ import org.openflexo.technologyadapter.xml.model.XMLTechnologyContextManager;
 
 @ModelEntity
 @ImplementationClass(XMLFileResourceImpl.class)
-public interface XMLFileResource  extends FlexoFileResource<XMLModel>,  TechnologyAdapterResource<XMLModel>, FlexoModelResource<XMLModel,XMLModel> {
+public interface XMLFileResource  extends FlexoFileResource<XMLModel>,  TechnologyAdapterResource<XMLModel>, FlexoModelResource<XMLModel,XMLModel>, FlexoMetaModelResource<XMLModel,XMLModel> {
 
 	public static final String TECHNOLOGY_CONTEXT_MANAGER = "XMLTechnologyContextManager";
 

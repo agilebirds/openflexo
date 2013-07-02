@@ -40,4 +40,7 @@ public interface IXMLAttribute {
 	 public void addValue(IXMLIndividual<?, ?> indiv, Object value);
 	 
 	 public Type getAttributeType();
+
+	public String getName();
+	
 }

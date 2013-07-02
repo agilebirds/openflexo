@@ -41,6 +41,12 @@ public interface IXMLModel {
 
 	public IXMLIndividual<?, ?> getRoot();
 
+	public void setNamespace(String uri, String prefix);
+
+	public String getNamespacePrefix();
+
+	public String getNamespaceURI();
+
 
 
 }

@@ -76,9 +76,28 @@ public class XMLXSDModel extends XSOntology implements FlexoModel<XMLXSDModel, X
 	public void setMetaModel(XSDMetaModel metaModelData) {
 		this.metaModel = metaModelData;
 		setChanged();
-
 	}
 
+
+	@Override
+	public void setNamespace(String uri, String prefix) {
+		// does nothing as Namespace comes from MetaModel
+		return;
+		
+	}
+
+	@Override
+	public String getNamespacePrefix() {
+		// TODO Should default to something
+		return null;
+	}
+
+	@Override
+	public String getNamespaceURI() {
+		return this.getMetaModel().getURI();
+	}
+
+	
 
 	@Override
 	public XSDMetaModel getMetaModel() {
@@ -143,7 +162,9 @@ public class XMLXSDModel extends XSOntology implements FlexoModel<XMLXSDModel, X
 
 	@Override
 	public IFlexoOntologyDataProperty getDataProperty(String propertyURI) {
-		return null;
+		// TODO, this is not that clean!
+		logger.info("This should not happen: properties belong to the MetaModel");
+		return this.getMetaModel().getDataProperty(propertyURI);
 	}
 
 	@Override

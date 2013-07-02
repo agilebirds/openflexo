@@ -49,10 +49,10 @@ import org.xml.sax.ext.DefaultHandler2;
  * @param <AC>, The Class of Attributes (mapping to XML Attributes)
  */
 
-public class XMLSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMetaModel<MM>, IC, AC extends IXMLAttribute> extends DefaultHandler2 {
+public class XMLReaderSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMetaModel<MM>, IC, AC extends IXMLAttribute> extends DefaultHandler2 {
 
 
-	protected static final Logger logger = Logger.getLogger(XMLSAXHandler.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(XMLReaderSAXHandler.class.getPackage().getName());
 
 	/**
 	 * 
@@ -72,7 +72,7 @@ public class XMLSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMetaModel
 	private Stack<IC> indivStack = new Stack<IC>();
 	private Stack<AC> attributeStack = new Stack<AC>();
 
-	public XMLSAXHandler( FlexoModelResource<M, MM> xmlFileResourceImpl, boolean allowTypeCreation) {
+	public XMLReaderSAXHandler( FlexoModelResource<M, MM> xmlFileResourceImpl, boolean allowTypeCreation) {
 		super();
 		xmlResource = xmlFileResourceImpl;
 		aXMLModel = (M) xmlResource.getModel();
@@ -85,6 +85,7 @@ public class XMLSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMetaModel
 	public void startElement (String uri, String localName,String qName, 
 			Attributes attributes) throws SAXException {
 
+		String NSPrefix = "p"; // default		
 
 		try {
 
@@ -125,7 +126,8 @@ public class XMLSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMetaModel
 			}
 
 			if (anIndividual != null){
-				// Attributes
+				//************************************
+				// processing Attributes
 
 				int len = attributes.getLength();
 
@@ -137,6 +139,11 @@ public class XMLSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMetaModel
 					String attrQName = attributes.getQName(i);
 					String attrName = attributes.getLocalName(i);
 					String attrURI= attributes.getURI(i);
+					NSPrefix = "p"; // default
+					if (attrQName != null && attrName != null && currentContainer==null){ // we only set prefix if there is no other Root Element
+						NSPrefix = attrQName;
+						NSPrefix.replace(attrName, "");
+					}
 					
 					aType = ((IXMLMetaModel) aMetaModel).getTypeFromURI(attrURI+"#"+attrName);
 
@@ -161,6 +168,10 @@ public class XMLSAXHandler<M extends FlexoModel<M,MM>, MM extends FlexoMetaModel
 
 				if ( currentContainer == null) {
 					((IXMLModel) aXMLModel).setRoot( (IXMLIndividual<IC, AC>) anIndividual);
+					if (uri != null && !uri.isEmpty()){
+						
+						((IXMLModel) aXMLModel).setNamespace(uri,NSPrefix);
+						}
 					currentContainer = anIndividual;
 				}
 				else {
