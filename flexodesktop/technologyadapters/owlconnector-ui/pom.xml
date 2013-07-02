@@ -7,7 +7,7 @@
 		<artifactId>technologyadapters</artifactId>
 		<version>1.6-SNAPSHOT</version>
 	</parent>
-	<artifactId>owlconnector</artifactId>
+	<artifactId>owlconnector-ui</artifactId>
 	<name>OWL technology connector</name>
 	<build>
 		<plugins>
@@ -20,11 +20,15 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexofoundation</artifactId>
+			<artifactId>owlconnector</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexofoundation</artifactId>
+			<artifactId>flexo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.openflexo</groupId>
+			<artifactId>flexo</artifactId>
 			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>

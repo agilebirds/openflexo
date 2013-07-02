@@ -12,6 +12,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>owlconnector</module>
+		<module>owlconnector-ui</module>
 		<module>xsdconnector</module>
 		<module>emfconnector</module>
 		<module>mdtumlconnector</module>
