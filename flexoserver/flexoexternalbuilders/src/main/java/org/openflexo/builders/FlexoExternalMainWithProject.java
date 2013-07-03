@@ -13,6 +13,7 @@ import org.openflexo.builders.utils.FlexoBuilderResourceCenterService;
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
@@ -113,7 +114,7 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 			}
 
 			@Override
-			public FlexoEditor makeFlexoEditor(FlexoProject project) {
+			public FlexoEditor makeFlexoEditor(FlexoProject project, FlexoServiceManager sm) {
 				FlexoBuilderEditor builderEditor = new FlexoBuilderEditor(FlexoExternalMainWithProject.this, project);
 				builderEditor.setFactory(new FlexoProgressFactory() {
 					@Override
@@ -131,7 +132,7 @@ public abstract class FlexoExternalMainWithProject extends FlexoExternalMain {
 
 			@Override
 			protected FlexoEditor createApplicationEditor() {
-				return new DefaultFlexoEditor(null);
+				return new DefaultFlexoEditor(null, applicationContext);
 			}
 
 			@Override

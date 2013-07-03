@@ -36,10 +36,12 @@ import org.openflexo.foundation.utils.FlexoProgressFactory;
 public interface FlexoEditor {
 
 	public static interface FlexoEditorFactory {
-		public FlexoEditor makeFlexoEditor(FlexoProject project);
+		public FlexoEditor makeFlexoEditor(FlexoProject project, FlexoServiceManager serviceManager);
 	}
 
 	public FlexoProject getProject();
+
+	public FlexoServiceManager getServiceManager();
 
 	public FlexoProgressFactory getFlexoProgressFactory();
 

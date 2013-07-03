@@ -96,6 +96,8 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 		return super.getDocTypes();
 	}
 
+	// TODO: Should be refactored with injectors
+	@Deprecated
 	public FlexoServiceManager getServiceManager() {
 		if (getProject() != null) {
 			return getProject().getServiceManager();
@@ -129,7 +131,7 @@ public abstract class FlexoProjectObject extends FlexoObject implements XMLSeria
 				}
 			}
 		});*/
-		//logger.info("****************** addToEditionPatternReferences() with " + ref);
+		// logger.info("****************** addToEditionPatternReferences() with " + ref);
 		ref.setOwner(this);
 		editionPatternReferences.add(ref);
 		setChanged();

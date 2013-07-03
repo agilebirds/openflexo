@@ -22,7 +22,7 @@ package org.openflexo.foundation.view.diagram.model;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
-import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
+import org.openflexo.foundation.xml.DiagramBuilder;
 
 public class DiagramRootPane extends DiagramElement<DrawingGraphicalRepresentation> {
 
@@ -33,7 +33,7 @@ public class DiagramRootPane extends DiagramElement<DrawingGraphicalRepresentati
 	 * 
 	 * @param componentDefinition
 	 */
-	public DiagramRootPane(VirtualModelInstanceBuilder builder) {
+	public DiagramRootPane(DiagramBuilder builder) {
 		this((Diagram) builder.vmInstance);
 		initializeDeserialization(builder);
 	}
@@ -45,7 +45,7 @@ public class DiagramRootPane extends DiagramElement<DrawingGraphicalRepresentati
 	 */
 	public DiagramRootPane(Diagram diagram) {
 		super(diagram);
-		setGraphicalRepresentation(new DrawingGraphicalRepresentation());
+		setGraphicalRepresentation(getFactory().makeDrawingGraphicalRepresentation(null));
 		logger.info("%%%%%%%%%%%%%%%%%%%%%%% On cree un DiagramRootPane");
 	}
 

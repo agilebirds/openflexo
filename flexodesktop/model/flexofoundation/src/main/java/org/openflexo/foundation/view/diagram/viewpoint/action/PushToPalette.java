@@ -25,13 +25,9 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.BackgroundImageBackgroundStyle;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.FlexoEditor;
@@ -116,12 +112,12 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDiagramShap
 
 			if (takeScreenshotForTopLevelElement) {
 				File screenshotFile = saveScreenshot();
-				ShapeGraphicalRepresentation gr = new ShapeGraphicalRepresentation();
+				ShapeGraphicalRepresentation gr = getFocusedObject().getFactory().makeShapeGraphicalRepresentation(null, null);
 				gr.setShapeType(ShapeType.RECTANGLE);
-				gr.setForeground(ForegroundStyle.makeNone());
-				gr.setBackground(new BackgroundImageBackgroundStyle(screenshotFile));
-				gr.setShadowStyle(ShadowStyle.makeNone());
-				gr.setTextStyle(TextStyle.makeDefault());
+				gr.setForeground(getFocusedObject().getFactory().makeNoneForegroundStyle());
+				gr.setBackground(getFocusedObject().getFactory().makeImageBackground(screenshotFile));
+				gr.setShadowStyle(getFocusedObject().getFactory().makeNoneShadowStyle());
+				gr.setTextStyle(getFocusedObject().getFactory().makeDefaultTextStyle());
 				gr.setText("");
 				gr.setWidth(imageWidth);
 				gr.setHeight(imageHeight);
@@ -131,10 +127,10 @@ public class PushToPalette extends FlexoAction<PushToPalette, ExampleDiagramShap
 			} else {
 				GraphicalRepresentation gr = getFocusedObject().getGraphicalRepresentation();
 				if (gr instanceof ShapeGraphicalRepresentation) {
-					graphicalRepresentation = new ShapeGraphicalRepresentation();
+					graphicalRepresentation = getFocusedObject().getFactory().makeShapeGraphicalRepresentation(null, null);
 					((ShapeGraphicalRepresentation) graphicalRepresentation).setsWith(gr);
 				} else if (gr instanceof ConnectorGraphicalRepresentation) {
-					graphicalRepresentation = new ConnectorGraphicalRepresentation();
+					graphicalRepresentation = getFocusedObject().getFactory().makeConnectorGraphicalRepresentation(null, null);
 					((ConnectorGraphicalRepresentation) graphicalRepresentation).setsWith(gr);
 				}
 			}

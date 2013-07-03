@@ -96,7 +96,7 @@ public class InteractiveFlexoEditor extends DefaultFlexoEditor {
 	private Map<FlexoModule, ControllerActionInitializer> actionInitializers;
 
 	public InteractiveFlexoEditor(ApplicationContext applicationContext, FlexoProject project) {
-		super(project);
+		super(project, applicationContext);
 		this.applicationContext = applicationContext;
 		actionInitializers = new Hashtable<FlexoModule, ControllerActionInitializer>();
 		_undoManager = new UndoManager();

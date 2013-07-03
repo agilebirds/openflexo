@@ -75,7 +75,8 @@ public abstract class DiagramPaletteResourceImpl extends FlexoXMLFileResourceImp
 	@Override
 	public final DiagramPaletteBuilder instanciateNewBuilder() {
 		// TODO: use a dedicated builder for ExampleDiagram instead of VirtualModelBuilder
-		return new DiagramPaletteBuilder(getContainer().getDiagramSpecification(), this);
+		return new DiagramPaletteBuilder(getContainer().getDiagramSpecification(), this, getServiceManager().getXMLSerializationService()
+				.getDiagramPaletteFactory());
 	}
 
 	@Override

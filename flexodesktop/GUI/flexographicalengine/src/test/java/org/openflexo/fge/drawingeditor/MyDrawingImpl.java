@@ -29,8 +29,8 @@ import java.util.logging.Logger;
 import org.jdom2.JDOMException;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
-import org.openflexo.model.xml.InvalidXMLDataException;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.XMLMapping;
 
@@ -102,12 +102,14 @@ public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDr
 		System.out.println("Saving " + file);
 
 		try {
-			getFactory().getSerializer().serializeDocument(this, new FileOutputStream(file));
+			getFactory().serialize(this, new FileOutputStream(file));
 			System.out.println("Saved " + file.getAbsolutePath());
-			System.out.println(factory.getSerializer().serializeAsString(this));
+			System.out.println(getFactory().stringRepresentation(this));
 			return true;
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		return false;
 
@@ -181,8 +183,8 @@ public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDr
 		logger.info("Loading " + file);
 
 		try {
-			MyDrawing returned = (MyDrawing) factory.getDeserializer().deserializeDocument(new FileInputStream(file));
-			System.out.println("Loaded " + factory.getSerializer().serializeAsString(returned));
+			MyDrawing returned = (MyDrawing) factory.deserialize(new FileInputStream(file));
+			System.out.println("Loaded " + factory.stringRepresentation(returned));
 			returned.finalizeDeserialization();
 			returned.setFactory(factory);
 			returned.setFile(file);
@@ -193,9 +195,9 @@ public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDr
 			e.printStackTrace();
 		} catch (JDOMException e) {
 			e.printStackTrace();
-		} catch (InvalidXMLDataException e) {
-			e.printStackTrace();
 		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		} catch (InvalidDataException e) {
 			e.printStackTrace();
 		}
 		return null;

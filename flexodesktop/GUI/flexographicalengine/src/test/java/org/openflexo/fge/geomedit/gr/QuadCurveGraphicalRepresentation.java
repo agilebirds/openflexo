@@ -25,7 +25,6 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Vector;
 
-import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlPoint;
@@ -76,7 +75,7 @@ public class QuadCurveGraphicalRepresentation extends GeometricObjectGraphicalRe
 			FGEPoint pp1 = getGeometricObject().getPP1();
 			FGEPoint pp2 = getGeometricObject().getPP2();
 
-			graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY, 0.5f, DashStyle.PLAIN_STROKE));
+			graphics.setDefaultForeground(graphics.getFactory().makeForegroundStyle(Color.LIGHT_GRAY, 0.5f, DashStyle.PLAIN_STROKE));
 
 			FGESegment line1 = new FGESegment(p1, cp);
 			FGESegment line2 = new FGESegment(p2, cp);
@@ -85,7 +84,7 @@ public class QuadCurveGraphicalRepresentation extends GeometricObjectGraphicalRe
 			line2.paint(graphics);
 			line3.paint(graphics);
 
-			graphics.useForegroundStyle(ForegroundStyle.makeStyle(Color.RED, 1));
+			graphics.useForegroundStyle(graphics.getFactory().makeForegroundStyle(Color.RED, 1));
 
 			graphics.drawPoint(pp1);
 			graphics.drawPoint(pp2);

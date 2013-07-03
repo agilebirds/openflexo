@@ -24,14 +24,22 @@ import java.io.File;
 
 import org.openflexo.fge.view.widget.FIBTextStyleSelector;
 import org.openflexo.fib.editor.FIBAbstractEditor;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 
 public class TextStylePanelEDITOR {
 
+	public static FGEModelFactory FACTORY = null;
+
 	public static void main(String[] args) {
+		try {
+			FACTORY = new FGEModelFactory();
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				TextStyle ts = TextStyle.makeDefault();
+				TextStyle ts = FACTORY.makeDefaultTextStyle();
 				return FIBAbstractEditor.makeArray(ts);
 			}
 

@@ -66,15 +66,15 @@ public abstract class ProjectDialogEDITOR extends FIBAbstractEditor {
 
 	protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
 		@Override
-		public DefaultFlexoEditor makeFlexoEditor(FlexoProject project) {
-			return new FlexoTestEditor(project);
+		public DefaultFlexoEditor makeFlexoEditor(FlexoProject project, FlexoServiceManager sm) {
+			return new FlexoTestEditor(project, sm);
 		}
 	};
 	private static FlexoResourceCenterService resourceCenterService;
 
 	public static class FlexoTestEditor extends DefaultFlexoEditor {
-		public FlexoTestEditor(FlexoProject project) {
-			super(project);
+		public FlexoTestEditor(FlexoProject project, FlexoServiceManager sm) {
+			super(project, sm);
 		}
 
 	}

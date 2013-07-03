@@ -1,5 +1,6 @@
 package org.openflexo.model.factory;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -553,6 +554,17 @@ public class ModelFactory {
 		}
 
 		return getHandler(context).paste(clipboard, (ModelProperty) modelProperty, pp);
+	}
+
+	public String stringRepresentation(Object object) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
+			serialize(object, baos, SerializationPolicy.PERMISSIVE);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return baos.toString();
 	}
 
 	public void serialize(Object object, OutputStream os) throws IOException {

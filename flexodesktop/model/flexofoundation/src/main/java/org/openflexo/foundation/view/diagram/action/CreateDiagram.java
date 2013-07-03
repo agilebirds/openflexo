@@ -78,7 +78,7 @@ public class CreateDiagram extends CreateVirtualModelInstance<CreateDiagram> {
 	@Override
 	public DiagramResource makeVirtualModelInstanceResource() throws InvalidFileNameException, SaveResourceException {
 		return Diagram.newDiagramResource(getNewVirtualModelInstanceName(), getNewVirtualModelInstanceTitle(), getDiagramSpecification(),
-				getFocusedObject());
+				getFocusedObject(), getServiceManager().getXMLSerializationService().getDiagramFactory());
 	}
 
 	@Override

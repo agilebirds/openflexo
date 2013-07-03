@@ -26,6 +26,7 @@ import org.openflexo.ApplicationData;
 import org.openflexo.components.WelcomeDialog;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.rm.FlexoProject.FlexoProjectReferenceLoader;
@@ -50,7 +51,7 @@ public class WelcomePanelEDITOR extends FIBAbstractEditor {
 			}
 
 			@Override
-			public FlexoEditor makeFlexoEditor(FlexoProject project) {
+			public FlexoEditor makeFlexoEditor(FlexoProject project, FlexoServiceManager sm) {
 				return new InteractiveFlexoEditor(this, project);
 			}
 

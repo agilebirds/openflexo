@@ -22,6 +22,7 @@ package org.openflexo.fge.geomedit;
 import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.geomedit.gr.GeometricDrawingGraphicalRepresentation;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 
 public class GeometricDrawing extends DefaultDrawing<GeometricSet> {
 	private GeometricDrawingGraphicalRepresentation gr;
@@ -55,7 +56,11 @@ public class GeometricDrawing extends DefaultDrawing<GeometricSet> {
 	}
 
 	public void init() {
-		controller = new GeomEditController(this);
+		try {
+			controller = new GeomEditController(this);
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public GeomEditController getController() {

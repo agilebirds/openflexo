@@ -16,13 +16,8 @@ public class DrawingEditorFactory extends FGEModelFactory {
 	private static int totalOccurences = 0;
 
 	public DrawingEditorFactory() throws ModelDefinitionException {
-		super();
-		importClass(MyDrawing.class);
-		importClass(MyShape.class);
-		importClass(MyConnector.class);
-		importClass(MyDrawingGraphicalRepresentation.class);
-		importClass(MyShapeGraphicalRepresentation.class);
-		importClass(MyConnectorGraphicalRepresentation.class);
+		super(MyDrawing.class, MyShape.class, MyConnector.class, MyDrawingGraphicalRepresentation.class,
+				MyShapeGraphicalRepresentation.class, MyConnectorGraphicalRepresentation.class);
 	}
 
 	// Called for NEW

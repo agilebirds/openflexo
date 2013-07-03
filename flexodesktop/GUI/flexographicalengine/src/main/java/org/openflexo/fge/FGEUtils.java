@@ -26,6 +26,7 @@ import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.DataBinding;
@@ -41,6 +42,7 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.ColorUtils;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.xmlcode.StringEncoder;
 
 public class FGEUtils {
 
@@ -556,6 +558,76 @@ public class FGEUtils {
 		public String convertToString(FGESteppedDimensionConstraint aDim) {
 			if (aDim != null) {
 				return aDim.getHorizontalStep() + "," + aDim.getVerticalStep();
+			} else {
+				return null;
+			}
+		}
+	};
+
+	@Deprecated
+	public static final StringEncoder.Converter<FGEPoint> DEPRECATED_POINT_CONVERTER = new StringEncoder.Converter<FGEPoint>(FGEPoint.class) {
+		@Override
+		public FGEPoint convertFromString(String value) {
+			try {
+				FGEPoint returned = new FGEPoint();
+				StringTokenizer st = new StringTokenizer(value, ",");
+				if (st.hasMoreTokens()) {
+					returned.x = Double.parseDouble(st.nextToken());
+				}
+				if (st.hasMoreTokens()) {
+					returned.y = Double.parseDouble(st.nextToken());
+				}
+				return returned;
+			} catch (NumberFormatException e) {
+				// Warns about the exception
+				System.err.println("Supplied value is not parsable as a FGEPoint:" + value);
+				return null;
+			}
+		}
+
+		@Override
+		public String convertToString(FGEPoint aPoint) {
+			if (aPoint != null) {
+				return aPoint.x + "," + aPoint.y;
+			} else {
+				return null;
+			}
+		}
+	};
+
+	@Deprecated
+	public static final StringEncoder.Converter<FGERectPolylin> DEPRECATED_RECT_POLYLIN_CONVERTER = new StringEncoder.Converter<FGERectPolylin>(
+			FGERectPolylin.class) {
+		@Override
+		public FGERectPolylin convertFromString(String value) {
+			try {
+				Vector<FGEPoint> points = new Vector<FGEPoint>();
+				StringTokenizer st = new StringTokenizer(value, ";");
+				while (st.hasMoreTokens()) {
+					String nextPoint = st.nextToken();
+					points.add(DEPRECATED_POINT_CONVERTER.convertFromString(nextPoint));
+				}
+				return new FGERectPolylin(points);
+			} catch (NumberFormatException e) {
+				// Warns about the exception
+				System.err.println("Supplied value is not parsable as a FGEPoint:" + value);
+				return null;
+			}
+		}
+
+		@Override
+		public String convertToString(FGERectPolylin aPolylin) {
+			if (aPolylin != null) {
+				StringBuffer sb = new StringBuffer();
+				boolean isFirst = true;
+				for (FGEPoint pt : aPolylin.getPoints()) {
+					if (!isFirst) {
+						sb.append(";");
+					}
+					sb.append(POINT_CONVERTER.convertToString(pt));
+					isFirst = false;
+				}
+				return sb.toString();
 			} else {
 				return null;
 			}

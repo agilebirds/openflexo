@@ -223,7 +223,7 @@ public class FlexoResourceManager {
 			}
 
 		}
-		FlexoEditor returned = editorFactory.makeFlexoEditor(project);
+		FlexoEditor returned = editorFactory.makeFlexoEditor(project, serviceManager);
 		FlexoResourceManager resourceManager = new FlexoResourceManager(returned, returned.getResourceUpdateHandler());
 		resourceManager.startResourcePeriodicChecking();
 		resourceManager.isLoadingAProject = false;

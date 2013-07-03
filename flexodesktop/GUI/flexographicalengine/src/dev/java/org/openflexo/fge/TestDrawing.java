@@ -46,6 +46,8 @@ import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.graphics.DecorationPainter;
 import org.openflexo.fge.graphics.FGEShapeDecorationGraphics;
+import org.openflexo.fge.impl.ConnectorGraphicalRepresentationImpl;
+import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ConnectorView;
@@ -57,6 +59,7 @@ import org.openflexo.inspector.selection.MultipleSelection;
 import org.openflexo.inspector.selection.UniqueSelection;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.toolbox.FileResource;
 
 public class TestDrawing {
@@ -81,7 +84,7 @@ public class TestDrawing {
 		private JPopupMenu contextualMenu;
 
 		public TestDrawingController(MyDrawing aDrawing) {
-			super(aDrawing);
+			super(aDrawing, aDrawing.getFactory());
 			contextualMenu = new JPopupMenu();
 			contextualMenu.add(new JMenuItem("Item"));
 		}
@@ -214,7 +217,7 @@ public class TestDrawing {
 
 		dialog.setVisible(true);
 
-		DrawingController<MyDrawing> dc2 = new DrawingController<MyDrawing>(d);
+		DrawingController<MyDrawing> dc2 = new DrawingController<MyDrawing>(d, d.getFactory());
 		final JDialog dialog2 = new JDialog((Frame) null, false);
 		dialog2.getContentPane().add(new JScrollPane(dc2.getDrawingView()));
 		dialog2.setPreferredSize(new Dimension(400, 400));
@@ -237,6 +240,7 @@ public class TestDrawing {
 		private DrawingGraphicalRepresentation gr;
 		private Vector<Object> list = new Vector<Object>();
 		private Vector<Object> list2 = new Vector<Object>();
+		private FGEModelFactory factory;
 
 		@Override
 		public Object getModel() {
@@ -304,7 +308,12 @@ public class TestDrawing {
 		private MyLineConnector line2;
 
 		public MyDrawing() {
-			gr = new DrawingGraphicalRepresentation<MyDrawing>(this);
+			try {
+				factory = new FGEModelFactory();
+			} catch (ModelDefinitionException e) {
+				e.printStackTrace();
+			}
+			gr = factory.makeDrawingGraphicalRepresentation(this);
 			rectangle1 = new MyRectangle();
 			rectangle2 = new MyRoundedRectangle2();
 			circle = new MyCircle();
@@ -321,12 +330,16 @@ public class TestDrawing {
 			list2.add(circle);
 		}
 
+		public FGEModelFactory getFactory() {
+			return factory;
+		}
+
 		@Override
 		public boolean isEditable() {
 			return true;
 		}
 
-		public class MyShapeGraphicalRepresentation<O extends MyShape> extends ShapeGraphicalRepresentation<O> {
+		public class MyShapeGraphicalRepresentation<O extends MyShape> extends ShapeGraphicalRepresentationImpl<O> {
 			public MyShapeGraphicalRepresentation(ShapeType shapeType, O aDrawable, MyDrawing aDrawing) {
 				super(shapeType, aDrawable, aDrawing);
 			}
@@ -350,7 +363,7 @@ public class TestDrawing {
 			public abstract MyShapeGraphicalRepresentation<?> getGraphicalRepresentation();
 		}
 
-		public class MyConnectorGraphicalRepresentation<O extends MyConnector> extends ConnectorGraphicalRepresentation<O> {
+		public class MyConnectorGraphicalRepresentation<O extends MyConnector> extends ConnectorGraphicalRepresentationImpl<O> {
 			public MyConnectorGraphicalRepresentation(ConnectorType aConnectorType, MyShapeGraphicalRepresentation<?> aStartObject,
 					MyShapeGraphicalRepresentation<?> anEndObject, O aDrawable, MyDrawing aDrawing) {
 				super(aConnectorType, aStartObject, anEndObject, aDrawable, aDrawing);
@@ -384,7 +397,7 @@ public class TestDrawing {
 				gr.setHeight(100);
 				gr.setX(300);
 				gr.setY(300);
-				gr.setBackground(BackgroundStyle.makeColoredBackground(Color.LIGHT_GRAY));
+				gr.setBackground(getFactory().makeColoredBackground(Color.LIGHT_GRAY));
 			}
 
 			@Override
@@ -403,8 +416,8 @@ public class TestDrawing {
 				gr.setX(30);
 				gr.setY(300);
 				((Rectangle) gr.getShape()).setIsRounded(true);
-				gr.setBackground(BackgroundStyle.makeColoredBackground(Color.ORANGE));
-				gr.setBorder(new ShapeGraphicalRepresentation.ShapeBorder(20, 20, 20, 20));
+				gr.setBackground(getFactory().makeColoredBackground(Color.ORANGE));
+				gr.setBorder(getFactory().makeShapeBorder(20, 20, 20, 20));
 				circle = new MyCircle();
 			}
 
@@ -425,7 +438,7 @@ public class TestDrawing {
 				gr.setX(30);
 				gr.setY(40);
 				gr.getForeground().setColor(Color.BLUE);
-				gr.setBackground(BackgroundStyle.makeColoredBackground(Color.PINK));
+				gr.setBackground(getFactory().makeColoredBackground(Color.PINK));
 			}
 
 			@Override
@@ -445,13 +458,13 @@ public class TestDrawing {
 				gr.setX(100);
 				gr.setY(100);
 				gr.getForeground().setColor(Color.BLUE);
-				gr.setBackground(BackgroundStyle.makeColoredBackground(Color.YELLOW));
-				gr.setBorder(new MyShapeGraphicalRepresentation.ShapeBorder(20, 10, 50, 0));
+				gr.setBackground(getFactory().makeColoredBackground(Color.YELLOW));
+				gr.setBorder(getFactory().makeShapeBorder(20, 10, 50, 0));
 				gr.setLayer(2);
 				gr.setDecorationPainter(new DecorationPainter() {
 					@Override
 					public void paintDecoration(FGEShapeDecorationGraphics g) {
-						g.setDefaultBackground(BackgroundStyle.makeColoredBackground(Color.RED));
+						g.setDefaultBackground(getFactory().makeColoredBackground(Color.RED));
 						g.useDefaultBackgroundStyle();
 						g.drawRoundRect(0, 0, g.getWidth() - 1, g.getHeight() - 1, 20, 20);
 					}
@@ -481,8 +494,8 @@ public class TestDrawing {
 				gr.setY(100);
 				gr.setLayer(3);
 				gr.getForeground().setColor(Color.BLUE);
-				gr.setBackground(BackgroundStyle.makeImageBackground(new FileResource("Resources/WKF/IfOperator.gif")));
-				gr.setBorder(new MyShapeGraphicalRepresentation.ShapeBorder(20, 10, 50, 0));
+				gr.setBackground(getFactory().makeImageBackground(new FileResource("Resources/WKF/IfOperator.gif")));
+				gr.setBorder(getFactory().makeShapeBorder(20, 10, 50, 0));
 			}
 
 			@Override

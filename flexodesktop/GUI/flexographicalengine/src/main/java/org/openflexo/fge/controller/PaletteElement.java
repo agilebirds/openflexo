@@ -25,6 +25,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.logging.Logger;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
@@ -37,6 +38,8 @@ import org.openflexo.fge.view.ShapeView;
 
 public interface PaletteElement extends Serializable {
 
+	public static final Logger logger = Logger.getLogger(PaletteElement.class.getPackage().getName());
+
 	public PaletteElementGraphicalRepresentation getGraphicalRepresentation();
 
 	public boolean acceptDragging(GraphicalRepresentation<?> target);
@@ -48,18 +51,25 @@ public interface PaletteElement extends Serializable {
 	public static class PaletteElementGraphicalRepresentation extends ShapeGraphicalRepresentationImpl<PaletteElement> {
 		private ShapeGraphicalRepresentation<?> originalGR;
 
-		public PaletteElementGraphicalRepresentation(ShapeType shapeType, PaletteElement paletteElement, PaletteDrawing paletteDrawing) {
-			super(shapeType, paletteElement, paletteDrawing);
-			// setValidated(true);
+		public PaletteElementGraphicalRepresentation(ShapeType shapeType, DrawingPalette palette, PaletteElement paletteElement,
+				PaletteDrawing paletteDrawing) {
+			super();
+			setFGEModelFactory(palette.getFactory());
+			setDrawable(paletteElement);
+			setDrawing(paletteDrawing);
+			setShapeType(shapeType);
+
 		}
 
-		public PaletteElementGraphicalRepresentation(ShapeGraphicalRepresentation<?> shapeGR, PaletteElement paletteElement,
-				PaletteDrawing paletteDrawing) {
-			this(shapeGR.getShapeType(), paletteElement, paletteDrawing);
+		public PaletteElementGraphicalRepresentation(ShapeGraphicalRepresentation<?> shapeGR, DrawingPalette palette,
+				PaletteElement paletteElement, PaletteDrawing paletteDrawing) {
+			this(shapeGR.getShapeType(), palette, paletteElement, paletteDrawing);
 			// Copy parameters...
 			setsWith(shapeGR);
 			this.originalGR = shapeGR;
 			// setValidated(true);
+
+			logger.info("Created " + this);
 		}
 
 		@Override

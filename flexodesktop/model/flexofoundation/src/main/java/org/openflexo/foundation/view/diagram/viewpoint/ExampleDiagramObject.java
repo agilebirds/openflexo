@@ -51,12 +51,18 @@ public abstract class ExampleDiagramObject extends NamedViewPointObject implemen
 		public DiagramSpecification diagramSpecification;
 		public ExampleDiagram exampleDiagram;
 		public ExampleDiagramResource resource;
+		private ExampleDiagramFactory factory;
 
-		public ExampleDiagramBuilder(DiagramSpecification diagramSpecification, ExampleDiagramResource resource) {
+		public ExampleDiagramBuilder(DiagramSpecification diagramSpecification, ExampleDiagramResource resource,
+				ExampleDiagramFactory factory) {
 			this.diagramSpecification = diagramSpecification;
 			this.resource = resource;
+			this.factory = factory;
 		}
 
+		public ExampleDiagramFactory getFactory() {
+			return factory;
+		}
 	}
 
 	// ==========================================================================
@@ -95,6 +101,13 @@ public abstract class ExampleDiagramObject extends NamedViewPointObject implemen
 	public ExampleDiagram getExampleDiagram() {
 		if (getParent() != null) {
 			return getParent().getExampleDiagram();
+		}
+		return null;
+	}
+
+	public ExampleDiagramFactory getFactory() {
+		if (getExampleDiagram() != null) {
+			return getExampleDiagram().getFactory();
 		}
 		return null;
 	}

@@ -80,7 +80,8 @@ public abstract class ExampleDiagramResourceImpl extends FlexoXMLFileResourceImp
 
 	@Override
 	public final ExampleDiagramBuilder instanciateNewBuilder() {
-		return new ExampleDiagramBuilder(getContainer().getDiagramSpecification(), this);
+		return new ExampleDiagramBuilder(getContainer().getDiagramSpecification(), this, getServiceManager().getXMLSerializationService()
+				.getExampleDiagramFactory());
 	}
 
 	@Override

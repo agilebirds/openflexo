@@ -330,15 +330,15 @@ public class FlexoFIBView extends JPanel implements GraphicalFlexoObserver, HasP
 	// test purposes
 	protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
 		@Override
-		public DefaultFlexoEditor makeFlexoEditor(FlexoProject project) {
-			return new FlexoTestEditor(project);
+		public DefaultFlexoEditor makeFlexoEditor(FlexoProject project, FlexoServiceManager serviceManager) {
+			return new FlexoTestEditor(project, serviceManager);
 		}
 	};
 
 	// test purposes
 	public static class FlexoTestEditor extends DefaultFlexoEditor {
-		public FlexoTestEditor(FlexoProject project) {
-			super(project);
+		public FlexoTestEditor(FlexoProject project, FlexoServiceManager sm) {
+			super(project, sm);
 		}
 
 	}

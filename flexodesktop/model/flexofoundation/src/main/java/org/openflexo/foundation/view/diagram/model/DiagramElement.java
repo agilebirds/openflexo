@@ -101,6 +101,10 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> exte
 		return diagram;
 	}
 
+	public DiagramFactory getFactory() {
+		return diagram.getFactory();
+	}
+
 	public DiagramSpecification getDiagramSpecification() {
 		return getDiagram().getDiagramSpecification();
 	}

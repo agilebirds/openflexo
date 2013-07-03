@@ -2,7 +2,7 @@
 
 <!-- Mapping model for drawing editor -->
 
-<model builder="org.openflexo.foundation.xml.VirtualModelInstanceBuilder" handlesReferences="yes" serializationMode="pseudoTree">
+<model builder="org.openflexo.foundation.xml.DiagramBuilder" handlesReferences="yes" serializationMode="pseudoTree">
 
 	<mapId>
 		<map entityClass="org.openflexo.foundation.FlexoModelObject"

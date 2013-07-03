@@ -22,14 +22,15 @@ package org.openflexo.foundation.view.diagram.model;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentation.Parameters;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeParameters;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
-import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
+import org.openflexo.foundation.xml.DiagramBuilder;
 
 public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> {
 
@@ -46,7 +47,7 @@ public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> {
 	 * 
 	 * @param componentDefinition
 	 */
-	public DiagramShape(VirtualModelInstanceBuilder builder) {
+	public DiagramShape(DiagramBuilder builder) {
 		this((Diagram) builder.vmInstance);
 		initializeDeserialization(builder);
 	}
@@ -77,12 +78,9 @@ public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> {
 	 */
 	@Override
 	public void resetGraphicalRepresentation() {
-		getGraphicalRepresentation().setsWith(getPatternRole().getGraphicalRepresentation(), GraphicalRepresentation.Parameters.text,
-				GraphicalRepresentation.Parameters.isVisible, GraphicalRepresentation.Parameters.absoluteTextX,
-				GraphicalRepresentation.Parameters.absoluteTextY, ShapeGraphicalRepresentation.Parameters.x,
-				ShapeGraphicalRepresentation.Parameters.y, ShapeGraphicalRepresentation.Parameters.width,
-				ShapeGraphicalRepresentation.Parameters.height, ShapeGraphicalRepresentation.Parameters.relativeTextX,
-				ShapeGraphicalRepresentation.Parameters.relativeTextY);
+		getGraphicalRepresentation().setsWith(getPatternRole().getGraphicalRepresentation(), Parameters.text, Parameters.isVisible,
+				Parameters.absoluteTextX, Parameters.absoluteTextY, ShapeParameters.x, ShapeParameters.y, ShapeParameters.width,
+				ShapeParameters.height, ShapeParameters.relativeTextX, ShapeParameters.relativeTextY);
 		refreshGraphicalRepresentation();
 	}
 

@@ -17,37 +17,21 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+package org.openflexo.foundation.view.diagram.model;
 
-package org.openflexo.fge;
-
-import java.io.File;
-
-import org.openflexo.fge.view.widget.FIBShadowStyleSelector;
-import org.openflexo.fib.editor.FIBAbstractEditor;
+import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 
-public class ShadowStylePanelEDITOR {
+/**
+ * Diagram factory<br>
+ * Only one instance of this class should be used
+ * 
+ * @author sylvain
+ * 
+ */
+public class DiagramFactory extends FGEModelFactory {
 
-	public static FGEModelFactory FACTORY = null;
-
-	public static void main(String[] args) {
-		try {
-			FACTORY = new FGEModelFactory();
-		} catch (ModelDefinitionException e) {
-			e.printStackTrace();
-		}
-		FIBAbstractEditor editor = new FIBAbstractEditor() {
-			@Override
-			public Object[] getData() {
-				ShadowStyle ss = FACTORY.makeDefaultShadowStyle();
-				return FIBAbstractEditor.makeArray(ss);
-			}
-
-			@Override
-			public File getFIBFile() {
-				return FIBShadowStyleSelector.FIB_FILE;
-			}
-		};
-		editor.launch();
+	public DiagramFactory() throws ModelDefinitionException {
+		super(DiagramRootPane.class, DiagramShape.class, DiagramConnector.class);
 	}
 }

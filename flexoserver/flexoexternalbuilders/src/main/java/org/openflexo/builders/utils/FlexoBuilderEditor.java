@@ -47,7 +47,7 @@ public class FlexoBuilderEditor extends DefaultFlexoEditor implements ProjectGen
 	private final FlexoExternalMainWithProject externalMainWithProject;
 
 	public FlexoBuilderEditor(FlexoExternalMainWithProject externalMainWithProject, FlexoProject project) {
-		super(project);
+		super(project, null);
 		this.externalMainWithProject = externalMainWithProject;
 	}
 

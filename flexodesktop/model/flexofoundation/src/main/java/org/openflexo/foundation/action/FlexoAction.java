@@ -26,6 +26,8 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoProjectObject;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.utils.FlexoProgress;
 import org.openflexo.foundation.utils.FlexoProgressFactory;
 import org.openflexo.logging.FlexoLogger;
@@ -72,7 +74,16 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 	}
 
 	public enum ExecutionStatus {
-		NEVER_EXECUTED, EXECUTING_CORE, HAS_SUCCESSFULLY_EXECUTED, FAILED_EXECUTION, EXECUTING_UNDO_CORE, HAS_SUCCESSFULLY_UNDONE, FAILED_UNDO_EXECUTION, EXECUTING_REDO_CORE, HAS_SUCCESSFULLY_REDONE, FAILED_REDO_EXECUTION;
+		NEVER_EXECUTED,
+		EXECUTING_CORE,
+		HAS_SUCCESSFULLY_EXECUTED,
+		FAILED_EXECUTION,
+		EXECUTING_UNDO_CORE,
+		HAS_SUCCESSFULLY_UNDONE,
+		FAILED_UNDO_EXECUTION,
+		EXECUTING_REDO_CORE,
+		HAS_SUCCESSFULLY_REDONE,
+		FAILED_REDO_EXECUTION;
 
 		public boolean hasActionExecutionSucceeded() {
 			return this == ExecutionStatus.HAS_SUCCESSFULLY_EXECUTED;
@@ -527,4 +538,14 @@ public abstract class FlexoAction<A extends FlexoAction<A, T1, T2>, T1 extends F
 		return getClass().getName();
 	}
 
+	// TODO: Should be refactored with injectors
+	@Deprecated
+	public FlexoServiceManager getServiceManager() {
+		if (getEditor() != null) {
+			return getEditor().getServiceManager();
+		} else if (getFocusedObject() instanceof FlexoProjectObject) {
+			return ((FlexoProjectObject) getFocusedObject()).getServiceManager();
+		}
+		return null;
+	}
 }

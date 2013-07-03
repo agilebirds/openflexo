@@ -25,14 +25,22 @@ import java.io.File;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector.BackgroundStyleFactory;
 import org.openflexo.fib.editor.FIBAbstractEditor;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 
 public class BackgroundStylePanelEDITOR {
 
+	public static FGEModelFactory FACTORY = null;
+
 	public static void main(String[] args) {
+		try {
+			FACTORY = new FGEModelFactory();
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				BackgroundStyleFactory bsFactory = new BackgroundStyleFactory(BackgroundStyle.makeEmptyBackground());// BackgroundStyle.makeColoredBackground(Color.BLUE);
+				BackgroundStyleFactory bsFactory = new BackgroundStyleFactory(FACTORY.makeEmptyBackground());// BackgroundStyle.makeColoredBackground(Color.BLUE);
 				return FIBAbstractEditor.makeArray(bsFactory);
 			}
 

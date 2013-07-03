@@ -157,7 +157,8 @@ public class AddShape extends AddShemaElementAction<DiagramShape> {
 
 	@Override
 	public DiagramShape performAction(EditionSchemeAction action) {
-		DiagramShape newShape = new DiagramShape((Diagram) action.retrieveVirtualModelInstance());
+		Diagram diagram = (Diagram) action.retrieveVirtualModelInstance();
+		DiagramShape newShape = new DiagramShape(diagram);
 
 		GraphicalRepresentation<?> grToUse = null;
 
@@ -168,7 +169,7 @@ public class AddShape extends AddShemaElementAction<DiagramShape> {
 			grToUse = getPatternRole().getGraphicalRepresentation();
 		}
 
-		ShapeGraphicalRepresentation<DiagramShape> newGR = new ShapeGraphicalRepresentation<DiagramShape>();
+		ShapeGraphicalRepresentation<DiagramShape> newGR = diagram.getFactory().makeShapeGraphicalRepresentation(null, null);
 		newGR.setsWith(grToUse);
 		newShape.setGraphicalRepresentation(newGR);
 

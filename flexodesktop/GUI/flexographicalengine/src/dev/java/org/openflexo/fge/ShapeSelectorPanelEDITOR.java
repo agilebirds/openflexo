@@ -22,19 +22,26 @@ package org.openflexo.fge;
 
 import java.io.File;
 
-import org.openflexo.fge.shapes.Shape;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.widget.FIBShapeSelector;
 import org.openflexo.fge.view.widget.FIBShapeSelector.ShapeFactory;
 import org.openflexo.fib.editor.FIBAbstractEditor;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 
 public class ShapeSelectorPanelEDITOR {
 
+	public static FGEModelFactory FACTORY = null;
+
 	public static void main(String[] args) {
+		try {
+			FACTORY = new FGEModelFactory();
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				ShapeFactory shapeFactory = new ShapeFactory(Shape.makeShape(ShapeType.STAR, null));
+				ShapeFactory shapeFactory = new ShapeFactory(FACTORY.makeShape(ShapeType.STAR, null));
 				return FIBAbstractEditor.makeArray(shapeFactory);
 			}
 

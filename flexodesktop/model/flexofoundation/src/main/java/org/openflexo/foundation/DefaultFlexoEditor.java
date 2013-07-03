@@ -40,20 +40,27 @@ public class DefaultFlexoEditor implements FlexoEditor {
 	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(DefaultFlexoEditor.class
 			.getPackage().getName());
 
-	private final FlexoProject _project;
+	private final FlexoProject project;
+	private final FlexoServiceManager serviceManager;
 	private DefaultFlexoResourceUpdateHandler resourceUpdateHandler;
 
-	public DefaultFlexoEditor(FlexoProject project) {
-		_project = project;
-		if (_project != null) {
-			_project.addToEditors(this);
+	public DefaultFlexoEditor(FlexoProject project, FlexoServiceManager serviceManager) {
+		this.project = project;
+		this.serviceManager = serviceManager;
+		if (project != null) {
+			project.addToEditors(this);
 		}
 		resourceUpdateHandler = new DefaultFlexoResourceUpdateHandler();
 	}
 
 	@Override
 	public final FlexoProject getProject() {
-		return _project;
+		return project;
+	}
+
+	@Override
+	public FlexoServiceManager getServiceManager() {
+		return serviceManager;
 	}
 
 	@Override

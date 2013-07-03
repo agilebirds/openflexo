@@ -146,14 +146,14 @@ public abstract class FlexoTestCase extends TestCase {
 
 	protected static final FlexoEditorFactory EDITOR_FACTORY = new FlexoEditorFactory() {
 		@Override
-		public DefaultFlexoEditor makeFlexoEditor(FlexoProject project) {
-			return new FlexoTestEditor(project);
+		public DefaultFlexoEditor makeFlexoEditor(FlexoProject project, FlexoServiceManager serviceManager) {
+			return new FlexoTestEditor(project, serviceManager);
 		}
 	};
 
 	public static class FlexoTestEditor extends DefaultFlexoEditor {
-		public FlexoTestEditor(FlexoProject project) {
-			super(project);
+		public FlexoTestEditor(FlexoProject project, FlexoServiceManager sm) {
+			super(project, sm);
 		}
 
 	}
@@ -191,7 +191,7 @@ public abstract class FlexoTestCase extends TestCase {
 
 			@Override
 			protected FlexoEditor createApplicationEditor() {
-				return new FlexoTestEditor(null);
+				return new FlexoTestEditor(null, this);
 			}
 
 			@Override

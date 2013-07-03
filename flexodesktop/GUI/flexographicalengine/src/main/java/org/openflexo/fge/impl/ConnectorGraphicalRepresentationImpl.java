@@ -106,7 +106,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	}
 
 	@Deprecated
-	private ConnectorGraphicalRepresentationImpl(ConnectorType aConnectorType, ShapeGraphicalRepresentation<?> aStartObject,
+	protected ConnectorGraphicalRepresentationImpl(ConnectorType aConnectorType, ShapeGraphicalRepresentation<?> aStartObject,
 			ShapeGraphicalRepresentation<?> anEndObject, O aDrawable, Drawing<?> aDrawing) {
 		this(aDrawable, aDrawing);
 

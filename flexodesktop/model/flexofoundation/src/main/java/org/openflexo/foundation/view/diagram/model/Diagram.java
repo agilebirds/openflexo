@@ -33,7 +33,7 @@ import org.openflexo.foundation.view.diagram.rm.DiagramResource;
 import org.openflexo.foundation.view.diagram.rm.DiagramResourceImpl;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
-import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
+import org.openflexo.foundation.xml.DiagramBuilder;
 
 /**
  * Represents a diagram in Openflexo build-in diagram technology<br>
@@ -48,13 +48,14 @@ public class Diagram extends VirtualModelInstance<Diagram, DiagramSpecification>
 	private static final Logger logger = Logger.getLogger(Diagram.class.getPackage().getName());
 
 	private DiagramRootPane rootPane;
+	private DiagramFactory factory;
 
 	public static DiagramResource newDiagramResource(String diagramName, String diagramTitle, DiagramSpecification diagramSpecification,
-			View view) throws InvalidFileNameException, SaveResourceException {
+			View view, DiagramFactory factory) throws InvalidFileNameException, SaveResourceException {
 
 		DiagramResource newDiagramResource = DiagramResourceImpl.makeDiagramResource(diagramName, diagramSpecification, view);
 
-		Diagram newDiagram = new Diagram(view, diagramSpecification);
+		Diagram newDiagram = new Diagram(view, diagramSpecification, factory);
 		newDiagramResource.setResourceData(newDiagram);
 		newDiagram.setResource(newDiagramResource);
 
@@ -70,8 +71,9 @@ public class Diagram extends VirtualModelInstance<Diagram, DiagramSpecification>
 	 * 
 	 * @param componentDefinition
 	 */
-	public Diagram(VirtualModelInstanceBuilder builder) {
+	public Diagram(DiagramBuilder builder) {
 		super(builder);
+		factory = builder.getFactory();
 	}
 
 	/**
@@ -79,8 +81,13 @@ public class Diagram extends VirtualModelInstance<Diagram, DiagramSpecification>
 	 * 
 	 * @param shemaDefinition
 	 */
-	public Diagram(View view, DiagramSpecification diagramSpecification) {
+	public Diagram(View view, DiagramSpecification diagramSpecification, DiagramFactory factory) {
 		super(view, diagramSpecification);
+		this.factory = factory;
+	}
+
+	public DiagramFactory getFactory() {
+		return factory;
 	}
 
 	@Override

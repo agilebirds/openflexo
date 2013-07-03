@@ -93,6 +93,10 @@ public abstract class FGEGraphics {
 		gr = aGraphicalRepresentation;
 	}
 
+	public FGEModelFactory getFactory() {
+		return GRAPHICS_FACTORY;
+	}
+
 	public GraphicalRepresentation<?> getGraphicalRepresentation() {
 		return gr;
 	}

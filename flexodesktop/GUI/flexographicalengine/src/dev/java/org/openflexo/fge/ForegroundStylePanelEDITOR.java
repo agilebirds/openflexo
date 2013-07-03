@@ -24,14 +24,22 @@ import java.io.File;
 
 import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
 import org.openflexo.fib.editor.FIBAbstractEditor;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 
 public class ForegroundStylePanelEDITOR {
 
+	public static FGEModelFactory FACTORY = null;
+
 	public static void main(String[] args) {
+		try {
+			FACTORY = new FGEModelFactory();
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				ForegroundStyle fs = ForegroundStyle.makeDefault();
+				ForegroundStyle fs = FACTORY.makeDefaultForegroundStyle();
 				return FIBAbstractEditor.makeArray(fs);
 			}
 

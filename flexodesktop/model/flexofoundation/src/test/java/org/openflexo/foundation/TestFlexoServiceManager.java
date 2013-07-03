@@ -16,8 +16,8 @@ public class TestFlexoServiceManager extends DefaultFlexoServiceManager {
 	private File resourceCenterDirectory;
 
 	public static class FlexoTestEditor extends DefaultFlexoEditor {
-		public FlexoTestEditor(FlexoProject project) {
-			super(project);
+		public FlexoTestEditor(FlexoProject project, FlexoServiceManager sm) {
+			super(project, sm);
 		}
 
 	}
@@ -30,7 +30,7 @@ public class TestFlexoServiceManager extends DefaultFlexoServiceManager {
 
 	@Override
 	protected FlexoEditor createApplicationEditor() {
-		return new FlexoTestEditor(null);
+		return new FlexoTestEditor(null, this);
 	}
 
 }

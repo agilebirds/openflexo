@@ -124,7 +124,7 @@ public abstract class VirtualModelInstanceResourceImpl<VMI extends VirtualModelI
 	}
 
 	@Override
-	public final VirtualModelInstanceBuilder instanciateNewBuilder() {
+	public VirtualModelInstanceBuilder instanciateNewBuilder() {
 		return new VirtualModelInstanceBuilder(getContainer(), this);
 	}
 

@@ -58,6 +58,8 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 	private ScreenshotImage screenshotImage;
 	private File expectedScreenshotImageFile = null;
 
+	private ExampleDiagramFactory factory;
+
 	public static ExampleDiagram newExampleDiagram(DiagramSpecification diagramSpecification, String exampleDiagramName,
 			DrawingGraphicalRepresentation<ExampleDiagram> graphicalRepresentation, ViewPointLibrary viewPointLibrary) {
 		ExampleDiagramResource edRes = ExampleDiagramResourceImpl.makeExampleDiagramResource(diagramSpecification.getResource(),
@@ -77,7 +79,13 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 			builder.exampleDiagram = this;
 			diagramSpecification = builder.diagramSpecification;
 			resource = builder.resource;
+			factory = builder.getFactory();
 		}
+	}
+
+	@Override
+	public ExampleDiagramFactory getFactory() {
+		return factory;
 	}
 
 	@Override

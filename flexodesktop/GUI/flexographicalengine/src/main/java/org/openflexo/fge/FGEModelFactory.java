@@ -4,6 +4,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
@@ -50,7 +55,7 @@ import org.openflexo.toolbox.ToolBox;
  * All objects involved in a FGE model should be created using this factory in order to be well managed by PAMELA framework.<br>
  * In particular, please note that all objects belonging to the closure of an object graph managed using PAMELA must share the same factory.
  * 
- * This class also provides support for XML serializer/deserializer
+ * This class also provides support for XML serializing/deserializing
  * 
  * Please feel free to override this class
  * 
@@ -62,14 +67,31 @@ public class FGEModelFactory extends ModelFactory {
 	static final Logger logger = Logger.getLogger(FGEModelFactory.class.getPackage().getName());
 
 	/**
-	 * Creates a new model factory.
+	 * Creates a new model factory including all classes involved in FGE model
 	 * 
 	 * @throws ModelDefinitionException
 	 */
 	public FGEModelFactory() throws ModelDefinitionException {
+		this(new ArrayList<Class<?>>());
+	}
 
-		super(ModelContextLibrary.getCompoundModelContext(GraphicalRepresentation.class, DrawingGraphicalRepresentation.class,
-				ShapeGraphicalRepresentation.class, ConnectorGraphicalRepresentation.class, GeometricGraphicalRepresentation.class));
+	/**
+	 * Creates a new model factory including all supplied classes and all classes involved in FGE model
+	 * 
+	 * @throws ModelDefinitionException
+	 */
+	public FGEModelFactory(Class<?>... classes) throws ModelDefinitionException {
+		this(Arrays.asList(classes));
+	}
+
+	/**
+	 * Creates a new model factory including all supplied classes and all classes involved in FGE model
+	 * 
+	 * @throws ModelDefinitionException
+	 */
+	public FGEModelFactory(Collection<Class<?>> classes) throws ModelDefinitionException {
+
+		super(ModelContextLibrary.getCompoundModelContext(appendGRClasses(classes)));
 
 		getStringEncoder().addConverter(FGEUtils.DATA_BINDING_CONVERTER);
 		getStringEncoder().addConverter(FGEUtils.POINT_CONVERTER);
@@ -77,6 +99,16 @@ public class FGEModelFactory extends ModelFactory {
 
 		logger.info("Created new FGEModelFactory...............................");
 
+	}
+
+	private static Class<?>[] appendGRClasses(Collection<Class<?>> classes) {
+		Set<Class<?>> returned = new HashSet<Class<?>>(classes);
+		returned.add(GraphicalRepresentation.class);
+		returned.add(DrawingGraphicalRepresentation.class);
+		returned.add(ShapeGraphicalRepresentation.class);
+		returned.add(ConnectorGraphicalRepresentation.class);
+		returned.add(GeometricGraphicalRepresentation.class);
+		return returned.toArray(new Class<?>[returned.size()]);
 	}
 
 	/**
@@ -735,6 +767,21 @@ public class FGEModelFactory extends ModelFactory {
 		returned.setBottom(bottom);
 		returned.setLeft(left);
 		returned.setRight(right);
+		return returned;
+	}
+
+	/**
+	 * Make a new border, initialized with an other border
+	 * 
+	 * @return a newly created ShapeBorder
+	 */
+	public ShapeBorder makeShapeBorder(ShapeBorder border) {
+		ShapeBorder returned = newInstance(ShapeBorder.class);
+		returned.setFGEModelFactory(this);
+		returned.setTop(border.getTop());
+		returned.setBottom(border.getBottom());
+		returned.setLeft(border.getLeft());
+		returned.setRight(border.getRight());
 		return returned;
 	}
 

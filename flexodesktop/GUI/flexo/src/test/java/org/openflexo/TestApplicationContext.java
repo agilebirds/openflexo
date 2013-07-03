@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.openflexo.foundation.DefaultFlexoEditor;
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
@@ -29,8 +30,8 @@ public class TestApplicationContext extends ApplicationContext {
 	private File resourceCenterDirectory;
 
 	public static class FlexoTestEditor extends DefaultFlexoEditor {
-		public FlexoTestEditor(FlexoProject project) {
-			super(project);
+		public FlexoTestEditor(FlexoProject project, FlexoServiceManager sm) {
+			super(project, sm);
 		}
 
 	}
@@ -48,8 +49,8 @@ public class TestApplicationContext extends ApplicationContext {
 	}
 
 	@Override
-	public FlexoEditor makeFlexoEditor(FlexoProject project) {
-		return new FlexoTestEditor(project);
+	public FlexoEditor makeFlexoEditor(FlexoProject project, FlexoServiceManager serviceManager) {
+		return new FlexoTestEditor(project, serviceManager);
 	}
 
 	@Override
@@ -60,7 +61,7 @@ public class TestApplicationContext extends ApplicationContext {
 
 	@Override
 	protected FlexoEditor createApplicationEditor() {
-		return new FlexoTestEditor(null);
+		return new FlexoTestEditor(null, this);
 	}
 
 	@Override

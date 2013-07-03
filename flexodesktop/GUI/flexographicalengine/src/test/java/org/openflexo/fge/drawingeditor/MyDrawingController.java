@@ -27,7 +27,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import org.apache.xml.serialize.XMLSerializer;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
@@ -220,12 +219,13 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 		System.out.println("Selected objects = " + getSelectedObjects());
 		Object[] objectsToBeCopied = new Object[getSelectedObjects().size()];
 
-		XMLSerializer serializer = getDrawing().getModel().getFactory().getSerializer();
+		// XMLSerializer serializer = getDrawing().getModel().getFactory().getSerializer();
 		int i = 0;
 		for (GraphicalRepresentation gr : getSelectedObjects()) {
 			objectsToBeCopied[i] = getSelectedObjects().get(i).getDrawable();
 			System.out.println("object: " + objectsToBeCopied[i] + " gr=" + getSelectedObjects().get(i));
-			System.out.println("Copied: " + serializer.serializeAsString(objectsToBeCopied[i]));
+			// System.out.println("Copied: " + serializer.serializeAsString(objectsToBeCopied[i]));
+			System.out.println("Copied: " + getDrawing().getModel().getFactory().stringRepresentation(objectsToBeCopied[i]));
 			i++;
 		}
 

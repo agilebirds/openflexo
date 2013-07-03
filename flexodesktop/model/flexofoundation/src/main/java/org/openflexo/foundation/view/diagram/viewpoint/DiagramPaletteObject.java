@@ -45,10 +45,17 @@ public abstract class DiagramPaletteObject extends NamedViewPointObject {
 		public DiagramSpecification diagramSpecification;
 		public DiagramPalette diagramPalette;
 		public DiagramPaletteResource resource;
+		private DiagramPaletteFactory factory;
 
-		public DiagramPaletteBuilder(DiagramSpecification diagramSpecification, DiagramPaletteResource resource) {
+		public DiagramPaletteBuilder(DiagramSpecification diagramSpecification, DiagramPaletteResource resource,
+				DiagramPaletteFactory factory) {
 			this.diagramSpecification = diagramSpecification;
 			this.resource = resource;
+			this.factory = factory;
+		}
+
+		public DiagramPaletteFactory getFactory() {
+			return factory;
 		}
 
 	}

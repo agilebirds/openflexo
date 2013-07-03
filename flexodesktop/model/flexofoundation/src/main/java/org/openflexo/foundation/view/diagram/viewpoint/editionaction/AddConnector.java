@@ -38,6 +38,7 @@ import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationRule;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.view.diagram.action.LinkSchemeAction;
+import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.model.DiagramConnector;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
@@ -222,7 +223,8 @@ public class AddConnector extends AddShemaElementAction<DiagramConnector> {
 
 		DiagramShape fromShape = getFromShape(action);
 		DiagramShape toShape = getToShape(action);
-		DiagramConnector newConnector = new DiagramConnector(fromShape.getDiagram(), fromShape, toShape);
+		Diagram diagram = fromShape.getDiagram();
+		DiagramConnector newConnector = new DiagramConnector(diagram, fromShape, toShape);
 		DiagramElement<?> parent = DiagramElement.getFirstCommonAncestor(fromShape, toShape);
 		if (parent == null) {
 			throw new IllegalArgumentException("No common ancestor");
@@ -237,7 +239,7 @@ public class AddConnector extends AddShemaElementAction<DiagramConnector> {
 			grToUse = getPatternRole().getGraphicalRepresentation();
 		}
 
-		ConnectorGraphicalRepresentation<DiagramConnector> newGR = new ConnectorGraphicalRepresentation<DiagramConnector>();
+		ConnectorGraphicalRepresentation<DiagramConnector> newGR = diagram.getFactory().makeConnectorGraphicalRepresentation(null, null);
 		newGR.setsWith(grToUse);
 		newConnector.setGraphicalRepresentation(newGR);
 

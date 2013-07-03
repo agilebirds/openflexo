@@ -36,18 +36,15 @@ public abstract class Edition {
 	private String label;
 	private GeomEditController controller;
 
-	protected static ForegroundStyle focusedForegroundStyle;
-	protected static BackgroundStyle focusedBackgroundStyle;
-
-	static {
-		focusedForegroundStyle = ForegroundStyle.makeStyle(Color.RED);
-		focusedBackgroundStyle = BackgroundStyle.makeTexturedBackground(TextureType.TEXTURE1, Color.RED, Color.WHITE);
-		focusedBackgroundStyle.setUseTransparency(true);
-	}
+	protected ForegroundStyle focusedForegroundStyle;
+	protected BackgroundStyle focusedBackgroundStyle;
 
 	public Edition(String aLabel, GeomEditController aController) {
 		super();
 		controller = aController;
+		focusedForegroundStyle = aController.getFactory().makeForegroundStyle(Color.RED);
+		focusedBackgroundStyle = aController.getFactory().makeTexturedBackground(TextureType.TEXTURE1, Color.RED, Color.WHITE);
+		focusedBackgroundStyle.setUseTransparency(true);
 		label = aLabel;
 		currentStep = 0;
 		inputs = new Vector<EditionInput>();

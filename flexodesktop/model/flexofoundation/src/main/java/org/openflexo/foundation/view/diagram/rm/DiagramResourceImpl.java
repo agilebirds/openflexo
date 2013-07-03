@@ -14,6 +14,7 @@ import org.openflexo.foundation.view.diagram.DiagramTechnologyAdapter;
 import org.openflexo.foundation.view.diagram.model.Diagram;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.xml.DiagramBuilder;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.toolbox.IProgress;
@@ -120,6 +121,11 @@ public abstract class DiagramResourceImpl extends VirtualModelInstanceResourceIm
 			return getServiceManager().getTechnologyAdapterService().getTechnologyAdapter(DiagramTechnologyAdapter.class);
 		}
 		return null;
+	}
+
+	@Override
+	public final DiagramBuilder instanciateNewBuilder() {
+		return new DiagramBuilder(getContainer(), this, getServiceManager().getXMLSerializationService().getDiagramFactory());
 	}
 
 }

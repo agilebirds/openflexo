@@ -1908,7 +1908,7 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		// aProjectDirectory = aProjectDirectory.getCanonicalFile();
 		FlexoProject project = new FlexoProject(aProjectDirectory, serviceManager);
 		project.setServiceManager(serviceManager);
-		FlexoEditor editor = editorFactory.makeFlexoEditor(project);
+		FlexoEditor editor = editorFactory.makeFlexoEditor(project, serviceManager);
 		project.setLastUniqueID(0);
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("Building project: " + aProjectDirectory.getAbsolutePath());
@@ -4323,6 +4323,8 @@ public class FlexoProject extends FlexoModelObject implements XMLStorageResource
 		return objectIDManager;
 	}
 
+	// TODO: Should be refactored with injectors
+	@Deprecated
 	@Override
 	public FlexoServiceManager getServiceManager() {
 		return serviceManager;

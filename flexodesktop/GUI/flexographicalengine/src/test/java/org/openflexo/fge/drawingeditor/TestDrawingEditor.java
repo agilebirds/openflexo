@@ -52,6 +52,7 @@ import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.logging.FlexoLoggingManager;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.swing.FlexoFileChooser;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.xmlcode.StringEncoder;
@@ -118,8 +119,24 @@ public class TestDrawingEditor {
 
 	private FIBInspectorController inspector;
 
+	private DrawingEditorFactory factory;
+
+	// private Injector injector;
+
 	public TestDrawingEditor() {
 		super();
+
+		try {
+			factory = new DrawingEditorFactory();
+			// System.out.println("factory: " + factory.debug());
+			// FGEPamelaInjectionModule injectionModule = new FGEPamelaInjectionModule(factory);
+			// injector = Guice.createInjector(injectionModule);
+
+			factory = new DrawingEditorFactory();
+		} catch (ModelDefinitionException e1) {
+			e1.printStackTrace();
+		}
+
 		frame = new JFrame();
 		frame.setPreferredSize(new Dimension(1000, 800));
 		fileChooser = new FlexoFileChooser(frame);
@@ -152,6 +169,14 @@ public class TestDrawingEditor {
 			drawingView = v;
 		}
 	}
+
+	public DrawingEditorFactory getFactory() {
+		return factory;
+	}
+
+	/*public Injector getInjector() {
+		return injector;
+	}*/
 
 	private void addDrawing(final MyDrawing drawing) {
 		if (tabbedPane == null) {
@@ -222,9 +247,7 @@ public class TestDrawingEditor {
 		topPanel.add(currentDrawing.getEditedDrawing().getController().getToolbox().getToolboxPanel(), BorderLayout.WEST);
 		topPanel2.add(currentDrawing.getEditedDrawing().getController().getScalePanel(), BorderLayout.EAST);*/
 		JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		topPanel.add(currentDrawing.getEditedDrawing().getController().getToolbox().getToolPanel());
 		topPanel.add(currentDrawing.getEditedDrawing().getController().getToolbox().getStyleToolBar());
-		topPanel.add(currentDrawing.getEditedDrawing().getController().getToolbox().getLayoutToolBar());
 		topPanel.add(currentDrawing.getEditedDrawing().getController().getScalePanel());
 
 		mainPanel.add(topPanel, BorderLayout.NORTH);
@@ -386,14 +409,21 @@ public class TestDrawingEditor {
 	}
 
 	public void newDrawing() {
-		MyDrawing newDrawing = MyDrawing.makeNewDrawing();
+		MyDrawing newDrawing = factory.makeNewDrawing();
+		/*MyDrawing newDrawing = injector.getInstance(MyDrawing.class);
+		System.out.println("newDrawing= [" + newDrawing + "] of " + newDrawing.getClass());
+		System.out.println("editedDrawing=" + newDrawing.getEditedDrawing());
+		System.out.println("gr=" + newDrawing.getGraphicalRepresentation() + " of " + newDrawing.getGraphicalRepresentation().getClass());
+		newDrawing.getGraphicalRepresentation().setDrawing(newDrawing.getEditedDrawing());
+		newDrawing.getGraphicalRepresentation().setDrawable(newDrawing);
+		newDrawing.getEditedDrawing().init();*/
 		addDrawing(newDrawing);
 	}
 
 	public void loadDrawing() {
 		if (fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
 			File file = fileChooser.getSelectedFile();
-			MyDrawing loadedDrawing = MyDrawing.load(file);
+			MyDrawing loadedDrawing = MyDrawingImpl.load(file, factory);
 			if (loadedDrawing != null) {
 				addDrawing(loadedDrawing);
 			}
@@ -404,7 +434,7 @@ public class TestDrawingEditor {
 		if (currentDrawing == null) {
 			return false;
 		}
-		if (currentDrawing.file == null) {
+		if (currentDrawing.getFile() == null) {
 			return saveDrawingAs();
 		} else {
 			return currentDrawing.save();
@@ -420,7 +450,7 @@ public class TestDrawingEditor {
 			if (!file.getName().endsWith(".drw")) {
 				file = new File(file.getParentFile(), file.getName() + ".drw");
 			}
-			currentDrawing.file = file;
+			currentDrawing.setFile(file);
 			updateFrameTitle();
 			updateTabTitle();
 			return currentDrawing.save();

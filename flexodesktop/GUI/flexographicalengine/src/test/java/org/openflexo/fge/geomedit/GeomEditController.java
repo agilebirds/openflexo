@@ -40,12 +40,10 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
-import org.openflexo.fge.drawingeditor.EmptySelection;
-import org.openflexo.fge.drawingeditor.MultipleSelection;
-import org.openflexo.fge.drawingeditor.UniqueSelection;
 import org.openflexo.fge.geomedit.edition.CreateBandFromLines;
 import org.openflexo.fge.geomedit.edition.CreateCircleWithCenterAndPoint;
 import org.openflexo.fge.geomedit.edition.CreateCubicCurveFromFourPoints;
@@ -74,7 +72,11 @@ import org.openflexo.fge.geomedit.edition.CreateVerticalLineWithPoint;
 import org.openflexo.fge.geomedit.edition.Edition;
 import org.openflexo.fge.geomedit.edition.EditionInput;
 import org.openflexo.fge.view.DrawingView;
+import org.openflexo.inspector.selection.EmptySelection;
+import org.openflexo.inspector.selection.MultipleSelection;
+import org.openflexo.inspector.selection.UniqueSelection;
 import org.openflexo.logging.FlexoLogger;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 
 public class GeomEditController extends DrawingController<GeometricDrawing> implements TreeSelectionListener {
 	private static final Logger logger = FlexoLogger.getLogger(GeomEditController.class.getPackage().getName());
@@ -98,8 +100,8 @@ public class GeomEditController extends DrawingController<GeometricDrawing> impl
 
 	private String NO_EDITION_STRING = "No edition";
 
-	public GeomEditController(final GeometricDrawing aDrawing) {
-		super(aDrawing);
+	public GeomEditController(final GeometricDrawing aDrawing) throws ModelDefinitionException {
+		super(aDrawing, new FGEModelFactory());
 
 		// !!!!! TAKE CARE !!!!!
 		// When i tried to activate painting cache,

@@ -22,7 +22,6 @@ package org.openflexo.fge.geomedit.gr;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGECubicCurve;
@@ -64,7 +63,7 @@ public class CubicCurveGraphicalRepresentation extends GeometricObjectGraphicalR
 			FGEPoint cp1 = getGeometricObject().getCtrlP1();
 			FGEPoint cp2 = getGeometricObject().getCtrlP2();
 
-			graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY, 0.5f, DashStyle.PLAIN_STROKE));
+			graphics.setDefaultForeground(graphics.getFactory().makeForegroundStyle(Color.LIGHT_GRAY, 0.5f, DashStyle.PLAIN_STROKE));
 
 			FGESegment line1 = new FGESegment(p1, cp1);
 			FGESegment line2 = new FGESegment(p2, cp2);

@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
-import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
+import org.openflexo.foundation.xml.DiagramBuilder;
 
 public class DiagramConnector extends DiagramElement<ConnectorGraphicalRepresentation> {
 
@@ -38,7 +38,7 @@ public class DiagramConnector extends DiagramElement<ConnectorGraphicalRepresent
 	 * 
 	 * @param componentDefinition
 	 */
-	public DiagramConnector(VirtualModelInstanceBuilder builder) {
+	public DiagramConnector(DiagramBuilder builder) {
 		this((Diagram) builder.vmInstance);
 		initializeDeserialization(builder);
 	}

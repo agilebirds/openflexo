@@ -21,7 +21,6 @@ package org.openflexo.fge.geomedit.edition;
 
 import java.awt.Color;
 
-import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEQuadCurve;
@@ -65,24 +64,24 @@ public class CreateQuadCurveFromThreePoints extends Edition {
 			FGEPoint p1 = ((ObtainPoint) inputs.get(0)).getInputData();
 			graphics.setDefaultForeground(focusedForegroundStyle);
 			p1.paint(graphics);
-			new FGESegment(p1, lastMouseLocation).paint(graphics);
+			(new FGESegment(p1, lastMouseLocation)).paint(graphics);
 		} else if (currentStep == 2) {
 			// Draw construction
 			FGEPoint p1 = ((ObtainPoint) inputs.get(0)).getInputData();
 			FGEPoint p2 = ((ObtainPoint) inputs.get(1)).getInputData();
 
-			graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.LIGHT_GRAY, 1, DashStyle.MEDIUM_DASHES));
+			graphics.setDefaultForeground(graphics.getFactory().makeForegroundStyle(Color.LIGHT_GRAY, 1, DashStyle.MEDIUM_DASHES));
 			FGESegment line1 = new FGESegment(lastMouseLocation, p1);
 			FGESegment line2 = new FGESegment(lastMouseLocation, p2);
 			line1.paint(graphics);
 			line2.paint(graphics);
 
-			graphics.setDefaultForeground(ForegroundStyle.makeStyle(Color.RED, 1));
+			graphics.setDefaultForeground(graphics.getFactory().makeForegroundStyle(Color.RED, 1));
 			p1.paint(graphics);
 			p2.paint(graphics);
 			lastMouseLocation.paint(graphics);
 
-			new FGEQuadCurve(p1, lastMouseLocation, p2).paint(graphics);
+			(new FGEQuadCurve(p1, lastMouseLocation, p2)).paint(graphics);
 		}
 	}
 }
