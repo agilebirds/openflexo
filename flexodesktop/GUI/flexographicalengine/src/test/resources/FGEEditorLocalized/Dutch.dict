@@ -14,6 +14,7 @@ plain=plain
 quit=Quit
 save_drawing=Save drawing
 save_drawing_as=Save drawing as...
+show_palette=Show palette
 tools=Tools
 undefined_value=undefined_value
 untitled=untitled

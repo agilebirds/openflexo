@@ -319,6 +319,14 @@ public class TestDrawingEditor {
 			}
 		});
 
+		JMenuItem paletteItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "show_palette"));
+		paletteItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				paletteDialog.setVisible(true);
+			}
+		});
+
 		JMenuItem logsItem = new JMenuItem(FlexoLocalization.localizedForKey(LOCALIZATION, "logs"));
 		logsItem.addActionListener(new ActionListener() {
 			@Override
@@ -336,6 +344,7 @@ public class TestDrawingEditor {
 		});
 
 		toolsMenu.add(inspectItem);
+		toolsMenu.add(paletteItem);
 		toolsMenu.add(logsItem);
 		toolsMenu.add(localizedItem);
 
