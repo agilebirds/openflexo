@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="gridbag" titleFont="Lucida Grande,0,11" darkLevel="0" dataClassName="org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration" controllerClassName="org.openflexo.view.controller.FlexoFIBController" font="Lucida Grande,0,11" width="800" height="500" name="main">
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="Lucida Grande,0,11" darkLevel="0" index="1" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=0.0)">
+    <Image imageFile="../../../../../../../GUI/flexointerfacebuilder/src/dev/resources/FIBEditorPalette/Image/Image.gif" sizeAdjustment="OriginalSize" align="left" imageWidth="32" imageHeight="32" data="controller.getTechnologyAdapterController(data.modelSlot.technologyAdapter).technologyBigIcon.image" constraints="flow()" localize="true" />
+    <Label label="" index="0" data="((((&quot;Step &quot; + (data.action.virtualModel.modelSlots.indexOf(data.modelSlot) + 2)) + &quot; / &quot;) + data.action.stepsNumber) + &quot; - &quot;)" constraints="flow()" font="Lucida Grande,1,15" localize="true">
+      <Dependancy componentName="VirtualModelBrowser" />
+    </Label>
+    <Label label="configure_model_slot" align="center" index="0" constraints="flow(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;location=center;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,1,15" localize="true">
+      <LocalizedDictionary />
+    </Label>
+  </Panel>
+  <Label label="model_slot_name" index="1" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=10;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <TextField index="3" data="data.modelSlot.name" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="VirtualModelNameTextField" readOnly="true" localize="true" columns="6" text="TextField" />
+  <Label label="technology" index="3" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=10;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <TextField index="3" data="data.modelSlot.technologyAdapter.name" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="VirtualModelTitleTextField" readOnly="true" localize="true" columns="7" text="TextField" />
+  <Label label="meta_model" index="3" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=10;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <TextField index="3" data="data.modelSlot.metaModelURI" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="MetaModelTF" readOnly="true" localize="true" columns="7" text="TextField" />
+  <Label label="select_an_option" index="5" constraints="gridbag(anchor=north_east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=10;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <RadioButtonList columns="1" hGap="0" vGap="-2" index="5" data="data.option" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="OptionRadioButtonList" format="object.name" localize="true" staticList="" list="data.availableOptions" iteratorClassName="org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration$ModelSlotInstanceConfigurationOption" autoSelectFirstRow="true" />
+  <Label label="" index="5" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <Panel layout="border" border="rounded3d" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="Lucida Grande,0,11" darkLevel="0" index="5" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=10;padX=0;padY=0;weightX=1.0;weightY=1.0)" width="14" height="50">
+    <Label label="" align="center" data="data.option.descriptionKey" constraints="border(location=center)" localize="true">
+      <Dependancy componentName="OptionRadioButtonList" />
+    </Label>
+  </Panel>
+  <Label label="label" align="center" index="5" data="data.errorMessage" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=10;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(!(data.isValid))" name="ErrorMessage" localize="true">
+    <Dependancy componentName="VirtualModelBrowser" />
+    <Dependancy componentName="VirtualModelNameTextField" />
+    <Dependancy componentName="VirtualModelTitleTextField" />
+    <LocalizedDictionary />
+  </Label>
+  <Label label="" index="6" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+  <Panel layout="gridbag" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="Lucida Grande,0,11" darkLevel="0" index="6" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)">
+    <Panel layout="twocols" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="Lucida Grande,0,11" darkLevel="0" index="0" data="($org.openflexo.foundation.technologyadapter.TypeSafeModelSlotInstanceConfiguration)data" dataClassName="org.openflexo.foundation.technologyadapter.TypeSafeModelSlotInstanceConfiguration" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="((OptionRadioButtonList.selected.name = &quot;SelectExistingModel&quot;) &amp; (data.class.simpleName = &quot;TypeSafeModelSlotInstanceConfiguration&quot;))" name="SelectExistingModelPanel">
+      <Label label="resource_center" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.components.widget.FIBResourceCenterSelector" localize="true" manageDynamicModel="true" name="ResourceCenterSelector" data="SelectExistingModelPanel.data.resourceCenter" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+        <Assignment variable="component.resourceCenterService" value="data.action.virtualModel.viewPoint.viewPointLibrary.serviceManager.resourceCenterService" />
+        <Assignment variable="component.project" value="data.action.editor.project" />
+        <Assignment variable="component.selectableCondition" />
+      </Custom>
+      <Label label="model" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.components.widget.FIBModelSelector" localize="true" manageDynamicModel="true" name="ModelSelector" data="SelectExistingModelPanel.data.modelResource" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+        <Assignment variable="component.technologyAdapter" />
+        <Assignment variable="component.informationSpace" value="data.action.virtualModel.viewPoint.viewPointLibrary.serviceManager.informationSpace" />
+        <Assignment variable="component.project" value="data.action.editor.project" />
+        <Assignment variable="component.selectableCondition" />
+        <Assignment variable="component.metaModelResource" value="data.modelSlot.metaModelResource" />
+      </Custom>
+    </Panel>
+    <Panel layout="twocols" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="Lucida Grande,0,11" darkLevel="0" index="0" data="($org.openflexo.foundation.viewpoint.VirtualModelModelSlotInstanceConfiguration)data" dataClassName="org.openflexo.foundation.viewpoint.VirtualModelModelSlotInstanceConfiguration" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="((OptionRadioButtonList.selected.name = &quot;SelectExistingVirtualModel&quot;) &amp; (data.class.simpleName = &quot;VirtualModelModelSlotInstanceConfiguration&quot;))" name="SelectExistingVirtualModelPanel">
+      <Label label="virtual_model_instance" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.components.widget.FIBVirtualModelInstanceSelector" localize="true" manageDynamicModel="true" name="VirtualModelInstanceSelector" data="SelectExistingVirtualModelPanel.data.addressedVirtualModelInstanceResource" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+        <Assignment variable="component.view" value="data.action.focusedObject" />
+        <Assignment variable="component.viewLibrary" value="data.action.focusedObject.viewLibrary" />
+        <Assignment variable="component.virtualModel" value="SelectExistingVirtualModelPanel.data.modelSlot.addressedVirtualModel" />
+      </Custom>
+      <description />
+    </Panel>
+    <Panel layout="twocols" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="Lucida Grande,0,11" darkLevel="0" index="1" data="($org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlotInstanceConfiguration)data" dataClassName="org.openflexo.foundation.technologyadapter.TypeSafeModelSlotInstanceConfiguration" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="((OptionRadioButtonList.selected.name = &quot;CreatePrivateNewModel&quot;) &amp; (data.class.simpleName = &quot;FlexoOntologyModelSlotInstanceConfiguration&quot;))" name="CreatePrivateNewModelPanel">
+      <Label label="model_uri" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <TextField data="CreatePrivateNewModelPanel.data.modelUri" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="ModelURITF1" localize="true" columns="7" text="TextField" />
+      <Label label="relative_path" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <TextField data="CreatePrivateNewModelPanel.data.relativePath" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="RelativePathTF1" localize="true" columns="7" text="TextField" />
+      <Label label="file_name" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <TextField data="CreatePrivateNewModelPanel.data.filename" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="FileNameTF1" localize="true" columns="7" text="TextField" />
+    </Panel>
+    <Panel layout="twocols" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="Lucida Grande,0,11" darkLevel="0" index="2" data="($org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlotInstanceConfiguration)data" dataClassName="org.openflexo.foundation.technologyadapter.TypeSafeModelSlotInstanceConfiguration" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="((OptionRadioButtonList.selected.name = &quot;CreateSharedNewModel&quot;) &amp; (data.class.simpleName = &quot;FlexoOntologyModelSlotInstanceConfiguration&quot;))" name="CreateSharedNewModelPanel">
+      <Label label="resource_center" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <Custom componentClassName="org.openflexo.components.widget.FIBResourceCenterSelector" localize="true" manageDynamicModel="true" name="ResourceCenterSelector3" data="CreateSharedNewModelPanel.data.resourceCenter" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
+        <Assignment variable="component.resourceCenterService" value="data.action.virtualModel.viewPoint.viewPointLibrary.serviceManager.resourceCenterService" />
+        <Assignment variable="component.project" value="data.action.editor.project" />
+        <Assignment variable="component.selectableCondition" />
+      </Custom>
+      <Label label="model_uri" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <TextField data="CreateSharedNewModelPanel.data.modelUri" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="ModelURITF2" localize="true" columns="7" text="TextField" />
+      <Label label="relative_path" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <TextField data="CreateSharedNewModelPanel.data.relativePath" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="RelaivePathTF2" localize="true" columns="7" text="TextField" />
+      <Label label="file_name" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <TextField data="CreateSharedNewModelPanel.data.filename" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="FileNameTF2" localize="true" columns="7" text="TextField" />
+    </Panel>
+    <Panel layout="twocols" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="Lucida Grande,0,11" darkLevel="0" index="3" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(OptionRadioButtonList.selected.name = &quot;CreateNewVirtualModel&quot;)" name="CreateNewVirtualModelPanel">
+      <Label label="not_implemented_yet" align="center" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=center)" localize="true" />
+    </Panel>
+    <Panel layout="twocols" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="Lucida Grande,0,11" darkLevel="0" index="3" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(OptionRadioButtonList.selected.name = &quot;LeaveEmpty&quot;)" name="LeaveEmptyPanel" />
+    <Panel layout="twocols" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="Lucida Grande,0,11" darkLevel="0" index="4" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(OptionRadioButtonList.selected.name = &quot;Autoconfigure&quot;)" name="AutoconfigurePanel" />
+  </Panel>
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" titleFont="Lucida Grande,0,11" darkLevel="0" index="6" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=7;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=10;padX=0;padY=0;weightX=1.0;weightY=0.0)">
+    <Button action="controller.backAndDispose()" buttonType="Trigger" label="back" localize="true" constraints="flow()" font="Lucida Grande,0,13" />
+    <Button action="controller.nextAndDispose()" buttonType="Trigger" label="next" localize="true" enable="((data.isValidConfiguration &amp; ((data.action.virtualModel.modelSlots.indexOf(data.modelSlot) + 2) &lt; data.action.stepsNumber)) &amp; data.isValidConfiguration)" index="0" constraints="flow(index=0)" font="Lucida Grande,0,13">
+      <Dependancy componentName="ResourceCenterSelector" />
+      <Dependancy componentName="ModelSelector" />
+      <Dependancy componentName="ModelURITF1" />
+      <Dependancy componentName="RelativePathTF1" />
+      <Dependancy componentName="FileNameTF1" />
+      <Dependancy componentName="ModelURITF2" />
+      <Dependancy componentName="RelaivePathTF2" />
+      <Dependancy componentName="FileNameTF2" />
+      <Dependancy componentName="ResourceCenterSelector3" />
+      <Dependancy componentName="OptionRadioButtonList" />
+      <Dependancy componentName="VirtualModelInstanceSelector" />
+      <LocalizedDictionary />
+    </Button>
+    <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="Cancel" localize="true" index="1" constraints="flow(index=1)" font="Lucida Grande,0,13">
+      <LocalizedDictionary />
+    </Button>
+    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="finish" localize="true" enable="data.action.isActionValidable" index="1" constraints="flow()" font="Lucida Grande,0,13">
+      <Dependancy componentName="ResourceCenterSelector" />
+      <Dependancy componentName="ModelSelector" />
+      <Dependancy componentName="ModelURITF1" />
+      <Dependancy componentName="RelativePathTF1" />
+      <Dependancy componentName="FileNameTF1" />
+      <Dependancy componentName="ModelURITF2" />
+      <Dependancy componentName="RelaivePathTF2" />
+      <Dependancy componentName="FileNameTF2" />
+      <Dependancy componentName="ResourceCenterSelector3" />
+      <Dependancy componentName="OptionRadioButtonList" />
+      <Dependancy componentName="VirtualModelInstanceSelector" />
+    </Button>
+  </Panel>
+  <LocalizedDictionary>
+    <Localized key="validate" lang="English">Validate</Localized>
+    <Localized key="validate" lang="French">Valider</Localized>
+    <Localized key="validate" lang="Dutch">Validate</Localized>
+    <Localized key="back" lang="English">&lt;&lt; Back</Localized>
+    <Localized key="back" lang="French">&lt;&lt; Précédent</Localized>
+    <Localized key="back" lang="Dutch">back</Localized>
+    <Localized key="next" lang="English">&gt;&gt; Next</Localized>
+    <Localized key="next" lang="French">&gt;&gt; Suivant</Localized>
+    <Localized key="next" lang="Dutch">next</Localized>
+    <Localized key="configure_model_slot" lang="English">Configure model slot</Localized>
+    <Localized key="configure_model_slot" lang="French">Configuration de la connexion au modèle</Localized>
+    <Localized key="configure_model_slot" lang="Dutch">configure_model_slot</Localized>
+    <Localized key="model_slot_name" lang="English">Model slot name</Localized>
+    <Localized key="model_slot_name" lang="French">Nom du connecteur de modèle</Localized>
+    <Localized key="model_slot_name" lang="Dutch">model_slot_name</Localized>
+    <Localized key="technology" lang="English">Technology</Localized>
+    <Localized key="technology" lang="French">Technologie</Localized>
+    <Localized key="technology" lang="Dutch">technology</Localized>
+    <Localized key="select_an_option" lang="English">Select an option</Localized>
+    <Localized key="select_an_option" lang="French">Sélectionner une option</Localized>
+    <Localized key="select_an_option" lang="Dutch">select_an_option</Localized>
+    <Localized key="SelectExistingModel" lang="English">Select existing model</Localized>
+    <Localized key="SelectExistingModel" lang="French">Sélectionner un modèle existant</Localized>
+    <Localized key="SelectExistingModel" lang="Dutch">SelectExistingModel</Localized>
+    <Localized key="CreatePrivateNewModel" lang="English">Create private new model</Localized>
+    <Localized key="CreatePrivateNewModel" lang="French">Créer un nouveau modèle propre au projet courant</Localized>
+    <Localized key="CreatePrivateNewModel" lang="Dutch">CreatePrivateNewModel</Localized>
+    <Localized key="CreateSharedNewModel" lang="English">Create shared new model</Localized>
+    <Localized key="CreateSharedNewModel" lang="French">Créer un nouveau modèle partageable</Localized>
+    <Localized key="CreateSharedNewModel" lang="Dutch">CreateSharedNewModel</Localized>
+    <Localized key="LeaveEmpty" lang="English">Leave this model empty</Localized>
+    <Localized key="LeaveEmpty" lang="French">Ne pas renseigner</Localized>
+    <Localized key="LeaveEmpty" lang="Dutch">LeaveEmpty</Localized>
+    <Localized key="Autoconfigure" lang="English">Automatic configuration</Localized>
+    <Localized key="Autoconfigure" lang="French">Configuration automatique</Localized>
+    <Localized key="Autoconfigure" lang="Dutch">Autoconfigure</Localized>
+    <Localized key="label" lang="English">Label</Localized>
+    <Localized key="label" lang="French">Label</Localized>
+    <Localized key="label" lang="Dutch">Label</Localized>
+    <Localized key="finish" lang="English">Finish</Localized>
+    <Localized key="finish" lang="French">Terminer</Localized>
+    <Localized key="finish" lang="Dutch">Finish</Localized>
+    <Localized key="Cancel" lang="English">Cancel</Localized>
+    <Localized key="Cancel" lang="French">Annuler</Localized>
+    <Localized key="Cancel" lang="Dutch">Cancel</Localized>
+    <Localized key="SelectExistingModel_description" lang="English">&lt;html&gt;Retrieve an existing model from a given ResourceCenter.&lt;/html&gt;</Localized>
+    <Localized key="SelectExistingModel_description" lang="French">Accèder à un modèle existant mis à disposition par un centre de resources Openflexo.</Localized>
+    <Localized key="SelectExistingModel_description" lang="Dutch">SelectExistingModel_description</Localized>
+    <Localized key="CreatePrivateNewModel_description" lang="English">&lt;html&gt;&lt;center&gt;Create a dedicated model in the scope of current project.&lt;br&gt;The model will be managed in the project directory and should not be concurrently accessed&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="CreatePrivateNewModel_description" lang="French">&lt;html&gt;&lt;center&gt;Créer un modèle dédié au sein du project courant.&lt;br&gt;Le modèle sera géré et stocké dans le répertoire de projet courant et ne devra pas être accédé concurrentiellement.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="CreatePrivateNewModel_description" lang="Dutch">CreatePrivateNewModel_description</Localized>
+    <Localized key="CreateSharedNewModel_description" lang="English">&lt;html&gt;&lt;center&gt;Created a new model which might be shared with other users and/or applications.&lt;br&gt;A ResourceCenter accessible for push should be selected, and will be the location where the new model will be stored.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="CreateSharedNewModel_description" lang="French">&lt;html&gt;&lt;center&gt;Créer un modèle qui sera partagé avec d'autres utilisateurs et/ou d'autres applications.&lt;br&gt;Un centre de resource accessible en mode "push" doit être sélectionné, et sera le lieu de stockage du nouveau modèle.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="CreateSharedNewModel_description" lang="Dutch">CreateSharedNewModel_description</Localized>
+    <Localized key="LeaveEmptyDescription" lang="English">&lt;html&gt;&lt;center&gt;Leave the model slot empty&lt;br&gt;Use this option if you would like to later generate this model or if you would like to decide later what to do&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="LeaveEmptyDescription" lang="French">LeaveEmptyDescription</Localized>
+    <Localized key="LeaveEmptyDescription" lang="Dutch">LeaveEmptyDescription</Localized>
+    <Localized key="Autoconfigure_decription" lang="English">Autoconfigure_decription</Localized>
+    <Localized key="Autoconfigure_decription" lang="French">Autoconfigure_decription</Localized>
+    <Localized key="Autoconfigure_decription" lang="Dutch">Autoconfigure_decription</Localized>
+    <Localized key="Autoconfigure_description" lang="English">&lt;html&gt;&lt;center&gt;A default configuration is available.&lt;br&gt;Let Openflexo manage this configuration for you.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="Autoconfigure_description" lang="French">&lt;html&gt;&lt;center&gt;Une configuration par défaut est disponible.&lt;br&gt;Laisser Openflexo gérer cette configuration.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="Autoconfigure_description" lang="Dutch">Autoconfigure_decription</Localized>
+    <Localized key="LeaveEmpty_Description" lang="English">&lt;html&gt;&lt;center&gt;Leave the model slot empty&lt;br&gt;Use this option if you would like to later generate this model or if you would like to decide later what to do&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="LeaveEmpty_Description" lang="French">LeaveEmptyDescription</Localized>
+    <Localized key="LeaveEmpty_Description" lang="Dutch">LeaveEmptyDescription</Localized>
+    <Localized key="LeaveEmpty_description" lang="English">&lt;html&gt;&lt;center&gt;Leave the model slot empty.&lt;br&gt;Use this option if you would like to later generate this model or if you would like to decide later what to do.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="LeaveEmpty_description" lang="French">&lt;html&gt;&lt;center&gt;Ne pas renseigner ce connecteur de modèle.&lt;br&gt;Vous pouvez utiliser cette option pour générer le modèle plus tard, ou bien décider plus tard quoi faire.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="LeaveEmpty_description" lang="Dutch">LeaveEmptyDescription</Localized>
+    <Localized key="" lang="English" />
+    <Localized key="" lang="French" />
+    <Localized key="" lang="Dutch" />
+    <Localized key="SelectExistingVirtualModel" lang="English">Select existing virtual model</Localized>
+    <Localized key="SelectExistingVirtualModel" lang="French">Sélectionner un modèle virtuel</Localized>
+    <Localized key="SelectExistingVirtualModel" lang="Dutch">SelectExistingVirtualModel</Localized>
+    <Localized key="Select existing model" lang="English">Select existing model</Localized>
+    <Localized key="Select existing model" lang="French">Select existing model</Localized>
+    <Localized key="Select existing model" lang="Dutch">Select existing model</Localized>
+    <Localized key="Create private new model" lang="English">Create private new model</Localized>
+    <Localized key="Create private new model" lang="French">Create private new model</Localized>
+    <Localized key="Create private new model" lang="Dutch">Create private new model</Localized>
+    <Localized key="Create shared new model" lang="English">Create shared new model</Localized>
+    <Localized key="Create shared new model" lang="French">Create shared new model</Localized>
+    <Localized key="Create shared new model" lang="Dutch">Create shared new model</Localized>
+    <Localized key="model_uri" lang="English">model_uri</Localized>
+    <Localized key="model_uri" lang="French">model_uri</Localized>
+    <Localized key="model_uri" lang="Dutch">model_uri</Localized>
+    <Localized key="relative_path" lang="English">relative_path</Localized>
+    <Localized key="relative_path" lang="French">relative_path</Localized>
+    <Localized key="relative_path" lang="Dutch">relative_path</Localized>
+    <Localized key="file_name" lang="English">File name</Localized>
+    <Localized key="file_name" lang="French">Nom de fichier</Localized>
+    <Localized key="file_name" lang="Dutch">File name</Localized>
+    <Localized key="model" lang="English">Model</Localized>
+    <Localized key="model" lang="French">Modèle</Localized>
+    <Localized key="model" lang="Dutch">Model</Localized>
+    <Localized key="resource_center" lang="English">Resource center</Localized>
+    <Localized key="resource_center" lang="French">Centre des ressources</Localized>
+    <Localized key="resource_center" lang="Dutch">Resource center</Localized>
+    <Localized key="meta_model" lang="English">Meta model</Localized>
+    <Localized key="meta_model" lang="French">Métamodèle</Localized>
+    <Localized key="meta_model" lang="Dutch">meta_model</Localized>
+    <Localized key="Sélectionner un modèle existant" lang="English">Sélectionner un modèle existant</Localized>
+    <Localized key="Sélectionner un modèle existant" lang="French">Sélectionner un modèle existant</Localized>
+    <Localized key="Sélectionner un modèle existant" lang="Dutch">Sélectionner un modèle existant</Localized>
+    <Localized key="Créer un nouveau modèle propre au projet courant" lang="English">Créer un nouveau modèle propre au projet courant</Localized>
+    <Localized key="Créer un nouveau modèle propre au projet courant" lang="French">Créer un nouveau modèle propre au projet courant</Localized>
+    <Localized key="Créer un nouveau modèle propre au projet courant" lang="Dutch">Créer un nouveau modèle propre au projet courant</Localized>
+    <Localized key="Créer un nouveau modèle partageable" lang="English">Créer un nouveau modèle partageable</Localized>
+    <Localized key="Créer un nouveau modèle partageable" lang="French">Créer un nouveau modèle partageable</Localized>
+    <Localized key="Créer un nouveau modèle partageable" lang="Dutch">Créer un nouveau modèle partageable</Localized>
+    <Localized key="SelectExistingVirtualModel_description" lang="English">&lt;html&gt;Retrieve an existing virtual model already defined.&lt;/html&gt;</Localized>
+    <Localized key="SelectExistingVirtualModel_description" lang="French">&lt;html&gt;Accèder à un modèle virtuel existant.&lt;/html&gt;</Localized>
+    <Localized key="SelectExistingVirtualModel_description" lang="Dutch">SelectExistingVirtualModel_description</Localized>
+    <Localized key="CreateNewVirtualModel" lang="English">Creates new virtual model</Localized>
+    <Localized key="CreateNewVirtualModel" lang="French">Créer un nouveau modèle virtuel</Localized>
+    <Localized key="CreateNewVirtualModel" lang="Dutch">CreateNewVirtualModel</Localized>
+    <Localized key="virtual_model_instance" lang="English">Virtual model instance</Localized>
+    <Localized key="virtual_model_instance" lang="French">Instance de modèle virtuel</Localized>
+    <Localized key="virtual_model_instance" lang="Dutch">virtual_model_instance</Localized>
+    <Localized key="CreateNewVirtualModel_description" lang="English">Creates a new virtual model instance conform to required virtual model</Localized>
+    <Localized key="CreateNewVirtualModel_description" lang="French">&lt;html&gt;&lt;center&gt;Créer une nouvelle instance modèle virtuel conforme au modèle virtuel désiré.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="CreateNewVirtualModel_description" lang="Dutch">CreateNewVirtualModel_description</Localized>
+  </LocalizedDictionary>
+</Panel>

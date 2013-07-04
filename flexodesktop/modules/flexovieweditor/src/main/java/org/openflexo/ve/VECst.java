@@ -51,7 +51,10 @@ public class VECst {
 	// View/VirtualModelInstance edition
 	public static File CREATE_VIEW_DIALOG_FIB = new FileResource("Fib/Dialog/CreateViewDialog.fib");
 	public static File CREATE_VIRTUAL_MODEL_INSTANCE_DIALOG_FIB = new FileResource("Fib/Dialog/CreateVirtualModelInstanceDialog.fib");
-	public static File CONFIGURE_MODEL_SLOT_INSTANCE_DIALOG_FIB = new FileResource("Fib/Dialog/ConfigureModelSlotInstanceDialog.fib");
+	public static File CONFIGURE_FREE_MODEL_SLOT_INSTANCE_DIALOG_FIB = new FileResource(
+			"Fib/Dialog/ConfigureFreeModelSlotInstanceDialog.fib");
+	public static File CONFIGURE_TYPESAFE_MODEL_SLOT_INSTANCE_DIALOG_FIB = new FileResource(
+			"Fib/Dialog/ConfigureTypeSafeModelSlotInstanceDialog.fib");
 
 	// Diagram edition
 	public static File CREATE_DIAGRAM_DIALOG_FIB = new FileResource("Fib/Dialog/CreateDiagramDialog.fib");
