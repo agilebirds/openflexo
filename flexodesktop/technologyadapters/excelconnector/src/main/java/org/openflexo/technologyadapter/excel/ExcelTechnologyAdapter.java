@@ -122,6 +122,7 @@ public class ExcelTechnologyAdapter extends TechnologyAdapter {
 		while (it.hasNext()) {
 			I item = it.next();
 			if (item instanceof File) {
+				System.out.println("searching " + item);
 				File candidateFile = (File) item;
 				ExcelWorkbookResource wbRes = tryToLookupWorkbook(resourceCenter, candidateFile);
 			}
@@ -179,7 +180,7 @@ public class ExcelTechnologyAdapter extends TechnologyAdapter {
 	 * @return
 	 */
 	public boolean isValidWorkbookFile(File candidateFile) {
-		return (candidateFile.getName().endsWith(".xlsx"))||(candidateFile.getName().endsWith(".xls"));
+		return candidateFile.getName().endsWith(".xlsx") || candidateFile.getName().endsWith(".xls");
 	}
 
 	@Override
