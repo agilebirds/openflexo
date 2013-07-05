@@ -48,6 +48,11 @@ public abstract class ModelSlotInstanceConfiguration<MS extends ModelSlot<RD>, R
 	}
 
 	public static enum DefaultModelSlotInstanceConfigurationOption implements ModelSlotInstanceConfigurationOption {
+
+		/**
+		 * Retrieve an existing resource from a ResourceCenter
+		 */
+		SelectExistingResource,
 		/**
 		 * Retrieve an existing model from a ResourceCenter
 		 */
@@ -61,9 +66,17 @@ public abstract class ModelSlotInstanceConfiguration<MS extends ModelSlot<RD>, R
 		 */
 		CreatePrivateNewModel,
 		/**
+		 * Create a resource in a ResourceCenter (the resource might be shared and concurrently accessed)
+		 */
+		CreatePrivateNewResource,
+		/**
 		 * Create a model in a ResourceCenter (the model might be shared and concurrently accessed)
 		 */
 		CreateSharedNewModel,
+		/**
+		 * Create a resource in a ResourceCenter (the resource might be shared and concurrently accessed)
+		 */
+		CreateSharedNewResource,
 		/**
 		 * Retrieve an existing virtual model instance
 		 */
