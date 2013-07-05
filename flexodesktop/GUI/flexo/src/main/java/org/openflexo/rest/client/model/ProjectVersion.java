@@ -1,9 +1,13 @@
 
-package org.openflexo.rest.client;
+package org.openflexo.rest.client.model;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -35,7 +39,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="isProtoValidationSuccessful" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="mergeFromProjectVersion" type="{http://www.agilebirds.com/openflexo}ProjectVersion" minOccurs="0"/>
  *         &lt;element name="prjModelVersion" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="prjVersionId" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="prjfileuuid" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="project" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="projectRevision" type="{http://www.w3.org/2001/XMLSchema}integer" minOccurs="0"/>
@@ -43,9 +46,10 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="protoLogin" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="protoPassword" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="protoUrl" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="tocRepositories" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="tocEntries" type="{http://www.agilebirds.com/openflexo}TocEntryDefinition" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="unmergedVersion" type="{http://www.agilebirds.com/openflexo}ProjectVersion" minOccurs="0"/>
  *         &lt;element name="uploadedWarName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="versionID" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="versionNumber" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/extension>
@@ -73,7 +77,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "isProtoValidationSuccessful",
     "mergeFromProjectVersion",
     "prjModelVersion",
-    "prjVersionId",
     "prjfileuuid",
     "project",
     "projectRevision",
@@ -81,11 +84,13 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "protoLogin",
     "protoPassword",
     "protoUrl",
-    "tocRepositories",
+    "tocEntries",
     "unmergedVersion",
     "uploadedWarName",
+    "versionID",
     "versionNumber"
 })
+@XmlRootElement(name = "ProjectVersion")
 public class ProjectVersion
     extends ModelObject
 {
@@ -109,7 +114,6 @@ public class ProjectVersion
     protected Boolean isProtoValidationSuccessful;
     protected ProjectVersion mergeFromProjectVersion;
     protected String prjModelVersion;
-    protected Integer prjVersionId;
     protected String prjfileuuid;
     protected Integer project;
     protected BigInteger projectRevision;
@@ -118,9 +122,11 @@ public class ProjectVersion
     protected String protoLogin;
     protected String protoPassword;
     protected String protoUrl;
-    protected String tocRepositories;
+    @XmlElement(nillable = true)
+    protected List<TocEntryDefinition> tocEntries;
     protected ProjectVersion unmergedVersion;
     protected String uploadedWarName;
+    protected Integer versionID;
     protected String versionNumber;
 
     /**
@@ -508,30 +514,6 @@ public class ProjectVersion
     }
 
     /**
-     * Gets the value of the prjVersionId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Integer }
-     *     
-     */
-    public Integer getPrjVersionId() {
-        return prjVersionId;
-    }
-
-    /**
-     * Sets the value of the prjVersionId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Integer }
-     *     
-     */
-    public void setPrjVersionId(Integer value) {
-        this.prjVersionId = value;
-    }
-
-    /**
      * Gets the value of the prjfileuuid property.
      * 
      * @return
@@ -700,27 +682,32 @@ public class ProjectVersion
     }
 
     /**
-     * Gets the value of the tocRepositories property.
+     * Gets the value of the tocEntries property.
      * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getTocRepositories() {
-        return tocRepositories;
-    }
-
-    /**
-     * Sets the value of the tocRepositories property.
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the tocEntries property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getTocEntries().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link TocEntryDefinition }
+     * 
+     * 
      */
-    public void setTocRepositories(String value) {
-        this.tocRepositories = value;
+    public List<TocEntryDefinition> getTocEntries() {
+        if (tocEntries == null) {
+            tocEntries = new ArrayList<TocEntryDefinition>();
+        }
+        return this.tocEntries;
     }
 
     /**
@@ -769,6 +756,30 @@ public class ProjectVersion
      */
     public void setUploadedWarName(String value) {
         this.uploadedWarName = value;
+    }
+
+    /**
+     * Gets the value of the versionID property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getVersionID() {
+        return versionID;
+    }
+
+    /**
+     * Sets the value of the versionID property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setVersionID(Integer value) {
+        this.versionID = value;
     }
 
     /**

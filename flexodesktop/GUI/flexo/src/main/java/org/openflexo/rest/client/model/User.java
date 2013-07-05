@@ -1,8 +1,9 @@
 
-package org.openflexo.rest.client;
+package org.openflexo.rest.client.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -55,6 +56,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "phone",
     "usertype"
 })
+@XmlRootElement(name = "User")
 public class User
     extends ModelObject
 {

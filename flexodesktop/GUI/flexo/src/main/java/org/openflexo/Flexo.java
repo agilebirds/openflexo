@@ -183,7 +183,7 @@ public class Flexo {
 					noSplash = true;
 				} else if (args[i].equalsIgnoreCase("DEV")) {
 					isDev = true;
-				} else if (args[i].equalsIgnoreCase("demo")) {
+				} else if (args[i].toLowerCase().contains("demo")) {
 					demoMode = true;
 				}
 			}

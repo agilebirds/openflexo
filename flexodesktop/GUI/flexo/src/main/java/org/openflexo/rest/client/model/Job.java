@@ -1,8 +1,9 @@
 
-package org.openflexo.rest.client;
+package org.openflexo.rest.client.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -21,13 +22,16 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="creationDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="creator" type="{http://www.agilebirds.com/openflexo}User" minOccurs="0"/>
  *         &lt;element name="directActionName" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="docFormat" type="{http://www.agilebirds.com/openflexo}DocFormat" minOccurs="0"/>
+ *         &lt;element name="docType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="endDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="jobId" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
- *         &lt;element name="jobStatus" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="jobType" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="jobStatus" type="{http://www.agilebirds.com/openflexo}JobStatus" minOccurs="0"/>
+ *         &lt;element name="jobType" type="{http://www.agilebirds.com/openflexo}JobType" minOccurs="0"/>
  *         &lt;element name="report" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="slave" type="{http://www.agilebirds.com/openflexo}Slave" minOccurs="0"/>
  *         &lt;element name="startDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
+ *         &lt;element name="tocEntry" type="{http://www.agilebirds.com/openflexo}TocEntryDefinition" minOccurs="0"/>
  *         &lt;element name="updateDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="version" type="{http://www.agilebirds.com/openflexo}ProjectVersion" minOccurs="0"/>
  *       &lt;/sequence>
@@ -43,6 +47,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "creationDate",
     "creator",
     "directActionName",
+    "docFormat",
+    "docType",
     "endDate",
     "jobId",
     "jobStatus",
@@ -50,9 +56,11 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "report",
     "slave",
     "startDate",
+    "tocEntry",
     "updateDate",
     "version"
 })
+@XmlRootElement(name = "Job")
 public class Job
     extends ModelObject
 {
@@ -61,15 +69,18 @@ public class Job
     protected XMLGregorianCalendar creationDate;
     protected User creator;
     protected String directActionName;
+    protected DocFormat docFormat;
+    protected String docType;
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar endDate;
     protected Integer jobId;
-    protected String jobStatus;
-    protected String jobType;
+    protected JobStatus jobStatus;
+    protected JobType jobType;
     protected String report;
     protected Slave slave;
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar startDate;
+    protected TocEntryDefinition tocEntry;
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar updateDate;
     protected ProjectVersion version;
@@ -147,6 +158,54 @@ public class Job
     }
 
     /**
+     * Gets the value of the docFormat property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link DocFormat }
+     *     
+     */
+    public DocFormat getDocFormat() {
+        return docFormat;
+    }
+
+    /**
+     * Sets the value of the docFormat property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link DocFormat }
+     *     
+     */
+    public void setDocFormat(DocFormat value) {
+        this.docFormat = value;
+    }
+
+    /**
+     * Gets the value of the docType property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getDocType() {
+        return docType;
+    }
+
+    /**
+     * Sets the value of the docType property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setDocType(String value) {
+        this.docType = value;
+    }
+
+    /**
      * Gets the value of the endDate property.
      * 
      * @return
@@ -199,10 +258,10 @@ public class Job
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link JobStatus }
      *     
      */
-    public String getJobStatus() {
+    public JobStatus getJobStatus() {
         return jobStatus;
     }
 
@@ -211,10 +270,10 @@ public class Job
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link JobStatus }
      *     
      */
-    public void setJobStatus(String value) {
+    public void setJobStatus(JobStatus value) {
         this.jobStatus = value;
     }
 
@@ -223,10 +282,10 @@ public class Job
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link JobType }
      *     
      */
-    public String getJobType() {
+    public JobType getJobType() {
         return jobType;
     }
 
@@ -235,10 +294,10 @@ public class Job
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link JobType }
      *     
      */
-    public void setJobType(String value) {
+    public void setJobType(JobType value) {
         this.jobType = value;
     }
 
@@ -312,6 +371,30 @@ public class Job
      */
     public void setStartDate(XMLGregorianCalendar value) {
         this.startDate = value;
+    }
+
+    /**
+     * Gets the value of the tocEntry property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link TocEntryDefinition }
+     *     
+     */
+    public TocEntryDefinition getTocEntry() {
+        return tocEntry;
+    }
+
+    /**
+     * Sets the value of the tocEntry property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link TocEntryDefinition }
+     *     
+     */
+    public void setTocEntry(TocEntryDefinition value) {
+        this.tocEntry = value;
     }
 
     /**

@@ -43,10 +43,10 @@ import org.openflexo.foundation.rm.SaveResourceException;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.rest.action.UploadProjectAction;
-import org.openflexo.rest.client.Project;
-import org.openflexo.rest.client.ProjectVersion;
 import org.openflexo.rest.client.ServerRestClient;
-import org.openflexo.rest.client.User;
+import org.openflexo.rest.client.model.Project;
+import org.openflexo.rest.client.model.ProjectVersion;
+import org.openflexo.rest.client.model.User;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
 import org.openflexo.view.controller.FlexoController;
@@ -172,12 +172,19 @@ public class UploadProjectInitializer extends ActionInitializer<UploadProjectAct
 					FormDataMultiPart mp = new FormDataMultiPart();
 					mp.field("version", version, MediaType.APPLICATION_XML_TYPE);
 					mp.bodyPart(new StreamDataBodyPart("file", inputStream, zipFile.getName()));
-					client.projectsProjectIDVersions(projectId).postMultipartFormDataAsXml(mp, ProjectVersion.class);
+					ProjectVersion response = client.projectsProjectIDVersions(projectId).postMultipartFormDataAsXml(mp,
+							ProjectVersion.class);
+					FlexoController.notify(FlexoLocalization.localizedForKey("successfully created version") + " "
+							+ response.getVersionNumber());
 					return true;
 				} catch (HeadlessException e) {
 					e.printStackTrace();
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
+				} catch (Exception e) {
+					getController().handleWSException(e);
+				} finally {
+					ProgressWindow.hideProgressWindow();
 				}
 				return false;
 			}

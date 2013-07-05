@@ -1,5 +1,5 @@
 
-package org.openflexo.rest.client;
+package org.openflexo.rest.client.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -32,13 +32,14 @@ import javax.xml.bind.annotation.XmlType;
     "id"
 })
 @XmlSeeAlso({
-    User.class,
-    Job.class,
-    Session.class,
-    ProjectVersion.class,
-    Slave.class,
+    JobHistory.class,
+    Project.class,
     Account.class,
-    Project.class
+    Slave.class,
+    ProjectVersion.class,
+    Session.class,
+    Job.class,
+    User.class
 })
 public abstract class ModelObject {
 

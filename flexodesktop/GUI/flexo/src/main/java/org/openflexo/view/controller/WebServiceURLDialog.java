@@ -12,7 +12,7 @@ public class WebServiceURLDialog {
 	public static final File FIB_FILE = new FileResource("Fib/WebServiceURLDialog.fib");
 
 	@ModelEntity
-	public interface PPMWSClientParameter {
+	public interface ServerRestClientParameter {
 		public static final String WS_INSTANCE = "wsInstance";
 		public static final String WS_URL = "wsURL";
 		public static final String WS_LOGIN = "wsLogin";
@@ -51,13 +51,13 @@ public class WebServiceURLDialog {
 
 	}
 
-	private PPMWSClientParameter clientParameter;
+	private ServerRestClientParameter clientParameter;
 
-	public PPMWSClientParameter getClientParameter() {
+	public ServerRestClientParameter getClientParameter() {
 		return clientParameter;
 	}
 
-	public void setClientParameter(PPMWSClientParameter clientParameter) {
+	public void setClientParameter(ServerRestClientParameter clientParameter) {
 		this.clientParameter = clientParameter;
 	}
 

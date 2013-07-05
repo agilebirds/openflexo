@@ -24,7 +24,7 @@ import java.io.File;
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.view.controller.WebServiceURLDialog;
 
-public class PPMWSParameterEDITOR extends FIBAbstractEditor {
+public class WSParameterEDITOR extends FIBAbstractEditor {
 
 	@Override
 	public Object[] getData() {
@@ -40,6 +40,6 @@ public class PPMWSParameterEDITOR extends FIBAbstractEditor {
 	}
 
 	public static void main(String[] args) {
-		main(PPMWSParameterEDITOR.class);
+		main(WSParameterEDITOR.class);
 	}
 }

@@ -1,8 +1,12 @@
 
-package org.openflexo.rest.client;
+package org.openflexo.rest.client.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -28,6 +32,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="dlpmProjectId" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="dlpmReleaseId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="docTargets" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="docTypes" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;element name="effectiveEndDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="endDate" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
  *         &lt;element name="isActive" type="{http://www.w3.org/2001/XMLSchema}boolean"/>
@@ -62,6 +67,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "dlpmProjectId",
     "dlpmReleaseId",
     "docTargets",
+    "docTypes",
     "effectiveEndDate",
     "endDate",
     "isActive",
@@ -77,6 +83,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "protoDefaultPassword",
     "startDate"
 })
+@XmlRootElement(name = "Project")
 public class Project
     extends ModelObject
 {
@@ -92,6 +99,8 @@ public class Project
     protected Integer dlpmProjectId;
     protected String dlpmReleaseId;
     protected String docTargets;
+    @XmlElement(nillable = true)
+    protected List<String> docTypes;
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar effectiveEndDate;
     @XmlSchemaType(name = "dateTime")
@@ -349,6 +358,35 @@ public class Project
      */
     public void setDocTargets(String value) {
         this.docTargets = value;
+    }
+
+    /**
+     * Gets the value of the docTypes property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the docTypes property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getDocTypes().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link String }
+     * 
+     * 
+     */
+    public List<String> getDocTypes() {
+        if (docTypes == null) {
+            docTypes = new ArrayList<String>();
+        }
+        return this.docTypes;
     }
 
     /**

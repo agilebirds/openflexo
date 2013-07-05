@@ -1,8 +1,9 @@
 
-package org.openflexo.rest.client;
+package org.openflexo.rest.client.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -45,6 +46,7 @@ import javax.xml.bind.annotation.XmlType;
     "port",
     "slaveid"
 })
+@XmlRootElement(name = "Slave")
 public class Slave
     extends ModelObject
 {

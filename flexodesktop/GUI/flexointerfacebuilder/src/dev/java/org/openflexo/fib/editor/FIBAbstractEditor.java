@@ -412,10 +412,15 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 			throw new RuntimeException("Fib component not found ! Path: '" + fibFile.getAbsolutePath() + "'");
 		}
 
+		Object dataObject = null;
+		Object[] data = getData();
+		if (data != null && data.length > 0) {
+			dataObject = data[0];
+		}
 		if (getController() != null) {
-			editorController = new FIBEditorController(fibComponent, this, getData()[0], getController());
+			editorController = new FIBEditorController(fibComponent, this, dataObject, getController());
 		} else {
-			editorController = new FIBEditorController(fibComponent, this, getData()[0]);
+			editorController = new FIBEditorController(fibComponent, this, dataObject);
 		}
 		getPalette().setEditorController(editorController);
 		frame.getContentPane().add(editorController.getEditorPanel());

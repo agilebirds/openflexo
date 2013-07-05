@@ -358,12 +358,17 @@ public class ProgressWindow extends JDialog implements FlexoProgress {
 			});
 			return;
 		}
-		isSecondaryProgressIndeterminate = false;
-		secondaryProgressBar.setIndeterminate(false);
-		secondaryProgressBar.setMinimum(0);
-		secondaryProgressBar.setMaximum(steps);
-		secondaryProgress = 1;
-		secondaryProgressBar.setValue(secondaryProgress);
+		if (steps > 0) {
+			isSecondaryProgressIndeterminate = false;
+			secondaryProgressBar.setIndeterminate(false);
+			secondaryProgressBar.setMinimum(0);
+			secondaryProgressBar.setMaximum(steps);
+			secondaryProgress = 1;
+			secondaryProgressBar.setValue(secondaryProgress);
+		} else {
+			isSecondaryProgressIndeterminate = true;
+			secondaryProgressBar.setIndeterminate(true);
+		}
 		paintImmediately();
 	}
 
