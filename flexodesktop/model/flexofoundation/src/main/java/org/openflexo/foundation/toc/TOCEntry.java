@@ -355,6 +355,8 @@ public class TOCEntry extends TOCObject implements Sortable, InspectableObject, 
 			}
 			setChanged();
 			notifyObservers(new TOCModification("tocEntries", null, entry));
+			setChanged();
+			notifyObservers(new TOCModification("sortedTocEntries", null, entry));
 			rebuildInferedBindingModel();
 		}
 	}
