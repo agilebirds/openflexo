@@ -161,10 +161,7 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 	public static enum ConnectorType {
 		LINE,
 		// RECT_LINE,
-		RECT_POLYLIN,
-		CURVE,
-		CURVED_POLYLIN,
-		CUSTOM;
+		RECT_POLYLIN, CURVE, CURVED_POLYLIN, CUSTOM;
 
 		public ImageIcon getIcon() {
 			if (this == RECT_POLYLIN) {
@@ -374,5 +371,7 @@ public abstract class Connector extends KVCObject implements XMLSerializable, Cl
 	 * @return
 	 */
 	public abstract FGEPoint getEndLocation();
+
+	public abstract void resetConnectorLayout();
 
 }

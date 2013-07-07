@@ -112,6 +112,11 @@ public class LineConnector extends Connector {
 		return middleSymbolLocationControlPoint;
 	}
 
+	@Override
+	public void resetConnectorLayout() {
+		updateControlPoints();
+	}
+
 	private void updateControlPoints() {
 		if (lineConnectorType == LineConnectorType.CENTER_TO_CENTER) {
 
