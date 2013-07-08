@@ -91,7 +91,7 @@ public class DiagramTechnologyAdapterController extends TechnologyAdapterControl
 	 * @return
 	 */
 	@Override
-	public ImageIcon getIconForPatternRole(Class<? extends PatternRole> patternRoleClass) {
+	public ImageIcon getIconForPatternRole(Class<? extends PatternRole<?>> patternRoleClass) {
 		if (DiagramPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return VEIconLibrary.VIEW_ICON;
 		} else if (ShapePatternRole.class.isAssignableFrom(patternRoleClass)) {
@@ -105,7 +105,7 @@ public class DiagramTechnologyAdapterController extends TechnologyAdapterControl
 	}
 
 	@Override
-	public ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass) {
+	public ImageIcon getIconForEditionAction(Class<? extends EditionAction<?, ?>> editionActionClass) {
 		if (AddDiagram.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(VEIconLibrary.VIEW_ICON, IconLibrary.DUPLICATE);
 		} else if (AddShape.class.isAssignableFrom(editionActionClass)) {

@@ -47,152 +47,142 @@ import org.openflexo.technologyadapter.csv.CSVTechnologyContextManager;
 import org.openflexo.technologyadapter.csv.model.CSVModel;
 import org.openflexo.toolbox.IProgress;
 
-public abstract class CSVModelResourceImpl extends FlexoFileResourceImpl<CSVModel>
-  implements CSVModelResource
-{
+public abstract class CSVModelResourceImpl extends FlexoFileResourceImpl<CSVModel> implements CSVModelResource {
 	private static final Logger logger = Logger.getLogger(CSVModelResourceImpl.class.getPackage().getName());
 
-  public static CSVModelResource makeCSVModelResource(String modelURI, File modelFile, CSVTechnologyContextManager technologyContextManager)
-  {
-    try
-    {
-	 ModelFactory factory = new ModelFactory(CSVModelResource.class);
-     CSVModelResourceImpl returned = (CSVModelResourceImpl)factory.newInstance(CSVModelResource.class);
-     returned.setName(modelFile.getName());
-     returned.setFile(modelFile);
-     returned.setURI(modelURI);
-     returned.setServiceManager(technologyContextManager.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
-     returned.setTechnologyAdapter(technologyContextManager.getTechnologyAdapter());
-     returned.setTechnologyContextManager(technologyContextManager);
-     technologyContextManager.registerModel(returned);
+	public static CSVModelResource makeCSVModelResource(String modelURI, File modelFile,
+			CSVTechnologyContextManager technologyContextManager) {
+		try {
+			ModelFactory factory = new ModelFactory(CSVModelResource.class);
+			CSVModelResourceImpl returned = (CSVModelResourceImpl) factory.newInstance(CSVModelResource.class);
+			returned.setName(modelFile.getName());
+			returned.setFile(modelFile);
+			returned.setURI(modelURI);
+			returned.setServiceManager(technologyContextManager.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
+			returned.setTechnologyAdapter(technologyContextManager.getTechnologyAdapter());
+			returned.setTechnologyContextManager(technologyContextManager);
+			technologyContextManager.registerResource(returned);
 
-     return returned;
-    } catch (ModelDefinitionException e) {
-     e.printStackTrace();
-    }
-   return null;
-  }
+			return returned;
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
-  public static CSVModelResource retrieveCSVModelResource(File modelFile, CSVTechnologyContextManager technologyContextManager)
-  {
-    try
-    {
-     ModelFactory factory = new ModelFactory(CSVModelResource.class);
-     CSVModelResourceImpl returned = (CSVModelResourceImpl)factory.newInstance(CSVModelResource.class);
-     returned.setName(modelFile.getName());
-     returned.setFile(modelFile);
-     returned.setURI(modelFile.toURI().toString());
-     returned.setServiceManager(technologyContextManager.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
-     returned.setTechnologyAdapter(technologyContextManager.getTechnologyAdapter());
-     returned.setTechnologyContextManager(technologyContextManager);
-     technologyContextManager.registerModel(returned);
-     return returned;
-    } catch (ModelDefinitionException e) {
-     e.printStackTrace();
-    }
-   return null;
-  }
+	public static CSVModelResource retrieveCSVModelResource(File modelFile, CSVTechnologyContextManager technologyContextManager) {
+		try {
+			ModelFactory factory = new ModelFactory(CSVModelResource.class);
+			CSVModelResourceImpl returned = (CSVModelResourceImpl) factory.newInstance(CSVModelResource.class);
+			returned.setName(modelFile.getName());
+			returned.setFile(modelFile);
+			returned.setURI(modelFile.toURI().toString());
+			returned.setServiceManager(technologyContextManager.getTechnologyAdapter().getTechnologyAdapterService().getServiceManager());
+			returned.setTechnologyAdapter(technologyContextManager.getTechnologyAdapter());
+			returned.setTechnologyContextManager(technologyContextManager);
+			technologyContextManager.registerResource(returned);
+			return returned;
+		} catch (ModelDefinitionException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
-  public CSVModel loadResourceData(IProgress progress)
-    throws ResourceLoadingCancelledException, ResourceDependencyLoopException, FileNotFoundException, FlexoException
-  {
-   CSVModel returned = new CSVModel(getURI(), getFile(), (CSVTechnologyAdapter)getTechnologyAdapter());
-   returned.loadWhenUnloaded();
-   return returned;
-  }
+	@Override
+	public CSVModel loadResourceData(IProgress progress) throws ResourceLoadingCancelledException, ResourceDependencyLoopException,
+			FileNotFoundException, FlexoException {
+		CSVModel returned = new CSVModel(getURI(), getFile(), (CSVTechnologyAdapter) getTechnologyAdapter());
+		returned.loadWhenUnloaded();
+		return returned;
+	}
 
-  public void save(IProgress progress)
-    throws SaveResourceException
-  {
-    try
-    {
-     resourceData = (CSVModel)getResourceData(progress);
-    }
-    catch (FileNotFoundException e)
-    {
-      CSVModel resourceData;
-     e.printStackTrace();
-     throw new SaveResourceException(this);
-    } catch (ResourceLoadingCancelledException e) {
-     e.printStackTrace();
-     throw new SaveResourceException(this);
-    } catch (ResourceDependencyLoopException e) {
-     e.printStackTrace();
-     throw new SaveResourceException(this);
-    } catch (FlexoException e) {
-     e.printStackTrace();
-     throw new SaveResourceException(this);
-    }
-    CSVModel resourceData = null;
-    
-   if (!hasWritePermission()) {
-     if (logger.isLoggable(Level.WARNING)) {
-       logger.warning("Permission denied : " + getFile().getAbsolutePath());
-      }
-     throw new SaveResourcePermissionDeniedException(this);
-    }
-   if (resourceData != null) {
-     FlexoFileResource.FileWritingLock lock = willWriteOnDisk();
-     writeToFile();
-     hasWrittenOnDisk(lock);
-     notifyResourceStatusChanged();
-     resourceData.clearIsModified(false);
-     if (logger.isLoggable(Level.INFO))
-       logger.info("Succeeding to save Resource " + getURI() + " : " + getFile().getName());
-    }
-  }
+	@Override
+	public void save(IProgress progress) throws SaveResourceException {
+		try {
+			resourceData = getResourceData(progress);
+		} catch (FileNotFoundException e) {
+			CSVModel resourceData;
+			e.printStackTrace();
+			throw new SaveResourceException(this);
+		} catch (ResourceLoadingCancelledException e) {
+			e.printStackTrace();
+			throw new SaveResourceException(this);
+		} catch (ResourceDependencyLoopException e) {
+			e.printStackTrace();
+			throw new SaveResourceException(this);
+		} catch (FlexoException e) {
+			e.printStackTrace();
+			throw new SaveResourceException(this);
+		}
+		CSVModel resourceData = null;
 
-  public CSVModel getModelData()
-  {
-    try
-    {
-     return (CSVModel)getResourceData(null);
-    } catch (ResourceLoadingCancelledException e) {
-     e.printStackTrace();
-     return null;
-    } catch (FileNotFoundException e) {
-     e.printStackTrace();
-     return null;
-    } catch (ResourceDependencyLoopException e) {
-     e.printStackTrace();
-     return null;
-    } catch (FlexoException e) {
-     e.printStackTrace();
-   }return null;
-  }
+		if (!hasWritePermission()) {
+			if (logger.isLoggable(Level.WARNING)) {
+				logger.warning("Permission denied : " + getFile().getAbsolutePath());
+			}
+			throw new SaveResourcePermissionDeniedException(this);
+		}
+		if (resourceData != null) {
+			FlexoFileResource.FileWritingLock lock = willWriteOnDisk();
+			writeToFile();
+			hasWrittenOnDisk(lock);
+			notifyResourceStatusChanged();
+			resourceData.clearIsModified(false);
+			if (logger.isLoggable(Level.INFO)) {
+				logger.info("Succeeding to save Resource " + getURI() + " : " + getFile().getName());
+			}
+		}
+	}
 
-  public CSVModel getModel()
-  {
-   return getModelData();
-  }
+	@Override
+	public CSVModel getModelData() {
+		try {
+			return getResourceData(null);
+		} catch (ResourceLoadingCancelledException e) {
+			e.printStackTrace();
+			return null;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		} catch (ResourceDependencyLoopException e) {
+			e.printStackTrace();
+			return null;
+		} catch (FlexoException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
-  private void writeToFile() throws SaveResourceException {
-   FileOutputStream out = null;
-    try {
-     out = new FileOutputStream(getFile());
-     StreamResult result = new StreamResult(out);
-     TransformerFactory factory = TransformerFactory.newInstance(
-       "com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
+	@Override
+	public CSVModel getModel() {
+		return getModelData();
+	}
 
-     Transformer transformer = factory.newTransformer();
-     
-    }
-    catch (FileNotFoundException e)
-    {
-     e.printStackTrace();
-     throw new SaveResourceException(this);
-    } catch (TransformerConfigurationException e) {
-     e.printStackTrace();
-     throw new SaveResourceException(this);
-    } finally {
-     IOUtils.closeQuietly(out);
-    }
+	private void writeToFile() throws SaveResourceException {
+		FileOutputStream out = null;
+		try {
+			out = new FileOutputStream(getFile());
+			StreamResult result = new StreamResult(out);
+			TransformerFactory factory = TransformerFactory.newInstance(
+					"com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
 
-   logger.info("Wrote " + getFile());
-  }
+			Transformer transformer = factory.newTransformer();
 
-  public Class<CSVModel> getResourceDataClass()
-  {
-   return CSVModel.class;
-  }
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			throw new SaveResourceException(this);
+		} catch (TransformerConfigurationException e) {
+			e.printStackTrace();
+			throw new SaveResourceException(this);
+		} finally {
+			IOUtils.closeQuietly(out);
+		}
+
+		logger.info("Wrote " + getFile());
+	}
+
+	@Override
+	public Class<CSVModel> getResourceDataClass() {
+		return CSVModel.class;
+	}
 }

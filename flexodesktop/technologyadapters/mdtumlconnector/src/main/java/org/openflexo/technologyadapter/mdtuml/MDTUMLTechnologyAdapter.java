@@ -29,8 +29,6 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializatio
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.technologyadapter.emf.EMFTechnologyAdapter;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
-import org.openflexo.technologyadapter.emf.model.EMFModel;
-import org.openflexo.technologyadapter.emf.rm.EMFMetaModelResource;
 import org.openflexo.technologyadapter.emf.viewpoint.binding.EMFBindingFactory;
 
 /**
@@ -72,10 +70,10 @@ public class MDTUMLTechnologyAdapter extends EMFTechnologyAdapter {
 	 * 
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#isValidMetaModelFile(File aMetaModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
+	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#isValidMetaModelFile(File aMetaModelFile,
+	 *      TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
 	 */
-	public boolean isValidMetaModelFile(File aMetaModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
-	{
+	public boolean isValidMetaModelFile(File aMetaModelFile, TechnologyContextManager technologyContextManager) {
 		return false;
 	}
 
@@ -84,35 +82,32 @@ public class MDTUMLTechnologyAdapter extends EMFTechnologyAdapter {
 	 * 
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#isValidModelFile(File aModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
+	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#isValidModelFile(File aModelFile,
+	 *      TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
 	 */
-	public boolean isValidModelFile(File aModelFile, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
-	{
+	public boolean isValidModelFile(File aModelFile, TechnologyContextManager technologyContextManager) {
 
 		boolean valid = false;
-		if (aModelFile.exists())
-		{
-			if ((aModelFile.getName().endsWith(UML_FILE_EXTENSION)) && 
-					(aModelFile.isFile())) {
+		if (aModelFile.exists()) {
+			if (aModelFile.getName().endsWith(UML_FILE_EXTENSION) && aModelFile.isFile()) {
 				valid = true;
 			}
 		}
 		return valid;
-		}
-
+	}
 
 	/**
 	 * 
 	 * 
 	 * Follow the link.
 	 * 
-	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#isValidModelFile(File aModelFile, FlexoResource<EMFMetaModel> metaModelResource, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
+	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#isValidModelFile(File aModelFile, FlexoResource<EMFMetaModel>
+	 *      metaModelResource, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
 	 */
-	public boolean isValidModelFile(File aModelFile, FlexoResource<EMFMetaModel> metaModelResource, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
-	{
+	public boolean isValidModelFile(File aModelFile, FlexoResource<EMFMetaModel> metaModelResource,
+			TechnologyContextManager technologyContextManager) {
 		// EMFMetaModelResource emfMetaModelResource = (EMFMetaModelResource)metaModelResource;
 		return isValidModelFile(aModelFile, technologyContextManager);
 	}
-
 
 }
