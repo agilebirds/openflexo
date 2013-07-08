@@ -63,7 +63,7 @@ public abstract class FreeModelSlot<RD extends ResourceData<RD>> extends ModelSl
 		if (msInstance == null || msInstance.getResourceData() == null) {
 			return null;
 		}
-		return msInstance.getModelURI() + "#" + generateUniqueURIName(msInstance, proposedName);
+		return msInstance.getResourceURI() + "#" + generateUniqueURIName(msInstance, proposedName);
 	}
 
 	/**
@@ -78,7 +78,7 @@ public abstract class FreeModelSlot<RD extends ResourceData<RD>> extends ModelSl
 		if (msInstance == null || msInstance.getResourceData() == null) {
 			return proposedName;
 		}
-		return generateUniqueURIName(msInstance, proposedName, msInstance.getModelURI() + "#");
+		return generateUniqueURIName(msInstance, proposedName, msInstance.getResourceURI() + "#");
 	}
 
 	public String generateUniqueURIName(FreeModelSlotInstance msInstance, String proposedName, String uriPrefix) {

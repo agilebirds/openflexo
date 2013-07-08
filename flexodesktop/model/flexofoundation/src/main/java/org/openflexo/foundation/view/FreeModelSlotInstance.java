@@ -21,14 +21,20 @@
 
 package org.openflexo.foundation.view;
 
+import java.io.FileNotFoundException;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.ResourceData;
+import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
+import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.FreeModelSlot;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.foundation.xml.ViewBuilder;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
+import org.openflexo.toolbox.StringUtils;
 
 /**
  * Concretize the binding of a {@link ModelSlot} to a concrete {@link FlexoModel}<br>
@@ -43,7 +49,7 @@ public class FreeModelSlotInstance<RD extends ResourceData<RD>, MS extends FreeM
 	private static final Logger logger = Logger.getLogger(FreeModelSlotInstance.class.getPackage().getName());
 
 	// Serialization/deserialization only, do not use
-	private String modelURI;
+	private String resourceURI;
 
 	/**
 	 * Constructor invoked during deserialization
@@ -73,31 +79,44 @@ public class FreeModelSlotInstance<RD extends ResourceData<RD>, MS extends FreeM
 
 	@Override
 	public RD getResourceData() {
-		/*if (getVirtualModelInstance() != null && resourceData == null && StringUtils.isNotEmpty(modelURI)) {
-			FlexoModelResource<M, ?> modelResource = (FlexoModelResource<M, ?>) getVirtualModelInstance().getInformationSpace()
-					.getMetaModelWithURI(modelURI, getModelSlot().getTechnologyAdapter());
-			if (modelResource != null) {
-				resourceData = modelResource.getModel();
-				resource = modelResource;
+		if (getVirtualModelInstance() != null && resourceData == null && StringUtils.isNotEmpty(resourceURI)) {
+			TechnologyAdapterResource<RD> resource = (TechnologyAdapterResource<RD>) getVirtualModelInstance().getInformationSpace()
+					.getResource(resourceURI);
+			if (resource != null) {
+				try {
+					resourceData = resource.getResourceData(null);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ResourceLoadingCancelledException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ResourceDependencyLoopException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (FlexoException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
-		if (resourceData == null && StringUtils.isNotEmpty(modelURI)) {
-			logger.warning("cannot find model " + modelURI);
-		}*/
+		if (resourceData == null && StringUtils.isNotEmpty(resourceURI)) {
+			logger.warning("cannot find resource " + resourceURI);
+		}
 		return resourceData;
 	}
 
 	// Serialization/deserialization only, do not use
-	public String getModelURI() {
+	public String getResourceURI() {
 		if (getResource() != null) {
 			return getResource().getURI();
 		}
-		return modelURI;
+		return resourceURI;
 	}
 
 	// Serialization/deserialization only, do not use
-	public void setModelURI(String modelURI) {
-		this.modelURI = modelURI;
+	public void setResourceURI(String resourceURI) {
+		this.resourceURI = resourceURI;
 	}
 
 	public RD getModel() {
