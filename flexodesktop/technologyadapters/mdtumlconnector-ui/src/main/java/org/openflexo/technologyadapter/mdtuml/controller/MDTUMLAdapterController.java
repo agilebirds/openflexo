@@ -22,28 +22,22 @@
 package org.openflexo.technologyadapter.mdtuml.controller;
 
 import java.util.logging.Logger;
+
 import javax.swing.ImageIcon;
+
 import org.openflexo.components.widget.OntologyBrowserModel;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.ontology.IFlexoOntology;
 import org.openflexo.foundation.ontology.IFlexoOntologyObject;
-import org.openflexo.foundation.ontology.IFlexoOntologyPropertyValue;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.foundation.viewpoint.EditionAction;
 import org.openflexo.foundation.viewpoint.PatternRole;
-import org.openflexo.icon.IconFactory;
-import org.openflexo.icon.IconLibrary;
-import org.openflexo.icon.IconMarker;
-import org.openflexo.inspector.ModuleInspectorController;
-import org.openflexo.technologyadapter.mdtuml.MDTUMLTechnologyAdapter;
-import org.openflexo.technologyadapter.emf.gui.EMFIconLibrary;
 import org.openflexo.technologyadapter.emf.gui.EMFMetaModelBrowserModel;
 import org.openflexo.technologyadapter.emf.gui.EMFModelBrowserModel;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
-import org.openflexo.technologyadapter.emf.model.EMFObjectIndividual;
-import org.openflexo.technologyadapter.emf.viewpoint.EMFObjectIndividualPatternRole;
-import org.openflexo.technologyadapter.emf.viewpoint.editionaction.AddEMFObjectIndividual;
+import org.openflexo.technologyadapter.mdtuml.MDTUMLTechnologyAdapter;
+import org.openflexo.technologyadapter.mdtuml.gui.MDTUMLIconLibrary;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -51,78 +45,76 @@ import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.TechnologyAdapterController;
 import org.openflexo.view.controller.model.FlexoPerspective;
 
-public class MDTUMLAdapterController extends TechnologyAdapterController<MDTUMLTechnologyAdapter>
-{
+public class MDTUMLAdapterController extends TechnologyAdapterController<MDTUMLTechnologyAdapter> {
 	static final Logger logger = Logger.getLogger(MDTUMLAdapterController.class.getPackage().getName());
 
-	public Class<MDTUMLTechnologyAdapter> getTechnologyAdapterClass()
-	{
+	@Override
+	public Class<MDTUMLTechnologyAdapter> getTechnologyAdapterClass() {
 		return MDTUMLTechnologyAdapter.class;
 	}
 
-	public void initializeActions(ControllerActionInitializer actionInitializer)
-	{
+	@Override
+	public void initializeActions(ControllerActionInitializer actionInitializer) {
 		// TODO Check this, why a src directory?
 		actionInitializer.getController().getModuleInspectorController()
-		.loadDirectory(new FileResource("src/main/resources/Inspectors/EMF"));
+				.loadDirectory(new FileResource("src/main/resources/Inspectors/EMF"));
 	}
 
-	public ImageIcon getTechnologyBigIcon()
-	{
-		return EMFIconLibrary.EMF_TECHNOLOGY_BIG_ICON;
+	@Override
+	public ImageIcon getTechnologyBigIcon() {
+		return MDTUMLIconLibrary.UML_TECHNOLOGY_MEDIUM_ICON;
 	}
 
-	public ImageIcon getTechnologyIcon()
-	{
-		return EMFIconLibrary.EMF_TECHNOLOGY_ICON;
+	@Override
+	public ImageIcon getTechnologyIcon() {
+		return MDTUMLIconLibrary.UML_TECHNOLOGY_ICON;
 	}
 
-	public ImageIcon getModelIcon()
-	{
-		return EMFIconLibrary.EMF_FILE_ICON;
+	@Override
+	public ImageIcon getModelIcon() {
+		return MDTUMLIconLibrary.UML_TECHNOLOGY_ICON;
 	}
 
-	public ImageIcon getMetaModelIcon()
-	{
-		return EMFIconLibrary.ECORE_FILE_ICON;
+	@Override
+	public ImageIcon getMetaModelIcon() {
+		return MDTUMLIconLibrary.UML_TECHNOLOGY_ICON;
 	}
 
-	public ImageIcon getIconForOntologyObject(Class<? extends IFlexoOntologyObject> objectClass)
-	{
-		return EMFIconLibrary.iconForObject(objectClass);
+	public ImageIcon getIconForOntologyObject(Class<? extends IFlexoOntologyObject> objectClass) {
+		return MDTUMLIconLibrary.iconForObject(objectClass);
 	}
 
-	public ImageIcon getIconForPatternRole(Class<? extends PatternRole> patternRoleClass)
-	{
-		if (EMFObjectIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
+	@Override
+	public ImageIcon getIconForPatternRole(Class<? extends PatternRole<?>> patternRoleClass) {
+		/*if (EMFObjectIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return getIconForOntologyObject(EMFObjectIndividual.class);
-		}
+		}*/
 		return null;
 	}
 
-	public ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass)
-	{
-		if (AddEMFObjectIndividual.class.isAssignableFrom(editionActionClass)) {
-			return IconFactory.getImageIcon(getIconForOntologyObject(EMFObjectIndividual.class), new IconMarker[] { IconLibrary.DUPLICATE });
-		}
+	@Override
+	public ImageIcon getIconForEditionAction(Class<? extends EditionAction<?, ?>> editionActionClass) {
+		/*if (AddEMFObjectIndividual.class.isAssignableFrom(editionActionClass)) {
+			return IconFactory
+					.getImageIcon(getIconForOntologyObject(EMFObjectIndividual.class), new IconMarker[] { IconLibrary.DUPLICATE });
+		}*/
 
 		return super.getIconForEditionAction(editionActionClass);
 	}
 
-	public OntologyBrowserModel makeOntologyBrowserModel(IFlexoOntology context)
-	{
-		if ((context instanceof EMFMetaModel))
-			return new EMFMetaModelBrowserModel((EMFMetaModel)context);
-		if ((context instanceof EMFModel)) {
-			return new EMFModelBrowserModel((EMFModel)context);
+	public OntologyBrowserModel makeOntologyBrowserModel(IFlexoOntology context) {
+		if (context instanceof EMFMetaModel) {
+			return new EMFMetaModelBrowserModel((EMFMetaModel) context);
+		}
+		if (context instanceof EMFModel) {
+			return new EMFModelBrowserModel((EMFModel) context);
 		}
 		logger.warning("Unexpected " + context);
 		return null;
 	}
 
 	@Override
-	public ImageIcon getIconForTechnologyObject(
-			Class<? extends TechnologyObject> objectClass) {
+	public ImageIcon getIconForTechnologyObject(Class<? extends TechnologyObject> objectClass) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -134,10 +126,9 @@ public class MDTUMLAdapterController extends TechnologyAdapterController<MDTUMLT
 	}
 
 	@Override
-	public <T extends FlexoObject> ModuleView<T> createModuleViewForObject(
-			T object, FlexoController controller, FlexoPerspective perspective) {
+	public <T extends FlexoObject> ModuleView<T> createModuleViewForObject(T object, FlexoController controller,
+			FlexoPerspective perspective) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

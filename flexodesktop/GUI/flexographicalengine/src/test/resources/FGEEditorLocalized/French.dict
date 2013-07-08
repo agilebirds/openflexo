@@ -14,6 +14,7 @@ plain=plain
 quit=Quitter
 save_drawing=Sauver le dessin
 save_drawing_as=Sauver le dessin sous...
+show_palette=Voir la palette
 tools=Outils
 undefined_value=undefined_value
 untitled=sans titre

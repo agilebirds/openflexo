@@ -6,17 +6,11 @@
     <version>1.6-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
-  <artifactId>csvconnector</artifactId>
+  <artifactId>csvconnector-ui</artifactId>
   <dependencies>
 		<dependency>
 			<groupId>org.openflexo</groupId>
-			<artifactId>flexofoundation</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.openflexo</groupId>
-			<artifactId>flexofoundation</artifactId>
-			<classifier>tests</classifier>
-			<scope>test</scope>
+			<artifactId>csvconnector</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.openflexo</groupId>

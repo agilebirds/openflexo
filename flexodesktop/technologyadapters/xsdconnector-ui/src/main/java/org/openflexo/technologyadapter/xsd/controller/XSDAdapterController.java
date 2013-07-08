@@ -112,7 +112,7 @@ public class XSDAdapterController extends TechnologyAdapterController<XSDTechnol
 	 * @return
 	 */
 	@Override
-	public ImageIcon getIconForPatternRole(Class<? extends PatternRole> patternRoleClass) {
+	public ImageIcon getIconForPatternRole(Class<? extends PatternRole<?>> patternRoleClass) {
 		if (XSClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return getIconForTechnologyObject(XSOntClass.class);
 		} else if (XSIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
@@ -128,7 +128,7 @@ public class XSDAdapterController extends TechnologyAdapterController<XSDTechnol
 	 * @return
 	 */
 	@Override
-	public ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass) {
+	public ImageIcon getIconForEditionAction(Class<? extends EditionAction<?, ?>> editionActionClass) {
 		if (AddXSIndividual.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(getIconForTechnologyObject(XSOntIndividual.class), IconLibrary.DUPLICATE);
 		} else if (AddXSClass.class.isAssignableFrom(editionActionClass)) {

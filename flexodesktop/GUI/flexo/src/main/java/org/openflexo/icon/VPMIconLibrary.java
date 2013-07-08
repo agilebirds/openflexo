@@ -189,7 +189,7 @@ public class VPMIconLibrary extends IconLibrary {
 			TechnologyAdapterController<?> tac = getTechnologyAdapterController(((PatternRole) object).getModelSlot()
 					.getTechnologyAdapter());
 			if (tac != null) {
-				return tac.getIconForPatternRole((Class<? extends PatternRole>) object.getClass());
+				return tac.getIconForPatternRole((Class<? extends PatternRole<?>>) object.getClass());
 			}
 		}
 		if (object instanceof ViewPoint) {
@@ -278,7 +278,7 @@ public class VPMIconLibrary extends IconLibrary {
 				TechnologyAdapterController<?> tac = getTechnologyAdapterController(((EditionAction) object).getModelSlot()
 						.getTechnologyAdapter());
 				if (tac != null) {
-					ImageIcon returned = tac.getIconForEditionAction((Class<? extends EditionAction>) object.getClass());
+					ImageIcon returned = tac.getIconForEditionAction((Class<? extends EditionAction<?, ?>>) object.getClass());
 					if (returned != null) {
 						return returned;
 					} else {

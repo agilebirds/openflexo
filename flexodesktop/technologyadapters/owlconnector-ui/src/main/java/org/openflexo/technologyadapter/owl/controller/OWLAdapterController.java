@@ -142,7 +142,7 @@ public class OWLAdapterController extends TechnologyAdapterController<OWLTechnol
 	 * @return
 	 */
 	@Override
-	public ImageIcon getIconForPatternRole(Class<? extends PatternRole> patternRoleClass) {
+	public ImageIcon getIconForPatternRole(Class<? extends PatternRole<?>> patternRoleClass) {
 		if (OWLClassPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return getIconForTechnologyObject(OWLClass.class);
 		} else if (OWLIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
@@ -172,7 +172,7 @@ public class OWLAdapterController extends TechnologyAdapterController<OWLTechnol
 	 * @return
 	 */
 	@Override
-	public ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass) {
+	public ImageIcon getIconForEditionAction(Class<? extends EditionAction<?, ?>> editionActionClass) {
 		if (AddOWLIndividual.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(getIconForTechnologyObject(OWLIndividual.class), IconLibrary.DUPLICATE);
 		} else if (AddOWLClass.class.isAssignableFrom(editionActionClass)) {
