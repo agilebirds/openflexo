@@ -235,7 +235,7 @@ public class ModelProperty<I> {
 		}
 
 		if (isSerializable() && ignoreType()) {
-			throw new ModelDefinitionException("Inconsistent property '" + propertyIdentifier
+			throw new ModelDefinitionException("Inconsistent property '" + propertyIdentifier + " for " + getModelEntity()
 					+ "'. It cannot be serializable (annotation XMLAttribute or XMLElement) and ignored. "
 					+ "If it is string convertable, mark it with the attribute 'stringConvertable'.");
 		}

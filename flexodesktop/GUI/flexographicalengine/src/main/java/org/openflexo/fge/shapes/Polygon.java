@@ -55,7 +55,7 @@ public interface Polygon extends Shape {
 	// * Properties
 	// *******************************************************************************
 
-	@Getter(value = POINTS, cardinality = Cardinality.LIST)
+	@Getter(value = POINTS, cardinality = Cardinality.LIST, isStringConvertable = true)
 	@XMLElement(primary = true)
 	@CloningStrategy(StrategyType.CLONE)
 	@Embedded

@@ -280,7 +280,7 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	@Setter(value = MAXIMAL_WIDTH)
 	public void setMaximalWidth(double maximalWidth);
 
-	@Getter(value = DIMENSION_CONSTRAINT_STEP)
+	@Getter(value = DIMENSION_CONSTRAINT_STEP, isStringConvertable = true)
 	@XMLAttribute
 	public FGESteppedDimensionConstraint getDimensionConstraintStep();
 
@@ -462,28 +462,28 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	@Setter(value = ADAPT_BOUNDS_TO_CONTENTS)
 	public void setAdaptBoundsToContents(boolean adaptBoundsToContents);
 
-	@Getter(value = X_CONSTRAINTS_KEY)
+	@Getter(value = X_CONSTRAINTS_KEY, isStringConvertable = true)
 	@XMLAttribute
 	public DataBinding<Double> getXConstraints();
 
 	@Setter(value = X_CONSTRAINTS_KEY)
 	public void setXConstraints(DataBinding<Double> xConstraints);
 
-	@Getter(value = Y_CONSTRAINTS_KEY)
+	@Getter(value = Y_CONSTRAINTS_KEY, isStringConvertable = true)
 	@XMLAttribute
 	public DataBinding<Double> getYConstraints();
 
 	@Setter(value = Y_CONSTRAINTS_KEY)
 	public void setYConstraints(DataBinding<Double> yConstraints);
 
-	@Getter(value = WIDTH_CONSTRAINTS_KEY)
+	@Getter(value = WIDTH_CONSTRAINTS_KEY, isStringConvertable = true)
 	@XMLAttribute
 	public DataBinding<Double> getWidthConstraints();
 
 	@Setter(value = WIDTH_CONSTRAINTS_KEY)
 	public void setWidthConstraints(DataBinding<Double> widthConstraints);
 
-	@Getter(value = HEIGHT_CONSTRAINTS_KEY)
+	@Getter(value = HEIGHT_CONSTRAINTS_KEY, isStringConvertable = true)
 	@XMLAttribute
 	public DataBinding<Double> getHeightConstraints();
 

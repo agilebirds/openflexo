@@ -44,21 +44,21 @@ public interface CurveConnector extends Connector {
 	// * Properties
 	// *******************************************************************************
 
-	@Getter(value = CP1_RELATIVE_TO_START_OBJECT)
+	@Getter(value = CP1_RELATIVE_TO_START_OBJECT, isStringConvertable = true)
 	@XMLAttribute
 	public FGEPoint _getCp1RelativeToStartObject();
 
 	@Setter(value = CP1_RELATIVE_TO_START_OBJECT)
 	public void _setCp1RelativeToStartObject(FGEPoint aPoint);
 
-	@Getter(value = CP2_RELATIVE_TO_END_OBJECT)
+	@Getter(value = CP2_RELATIVE_TO_END_OBJECT, isStringConvertable = true)
 	@XMLAttribute
 	public FGEPoint _getCp2RelativeToEndObject();
 
 	@Setter(value = CP2_RELATIVE_TO_END_OBJECT)
 	public void _setCp2RelativeToEndObject(FGEPoint aPoint);
 
-	@Getter(value = CP_POSITION)
+	@Getter(value = CP_POSITION, isStringConvertable = true)
 	@XMLAttribute
 	public FGEPoint _getCpPosition();
 

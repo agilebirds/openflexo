@@ -219,7 +219,12 @@ public class ModelEntity<I> {
 		for (ModelProperty<? super I> property : declaredModelProperties.values()) {
 			if (property.getType() != null && !StringConverterLibrary.getInstance().hasConverter(property.getType())
 					&& !property.getType().isEnum() && !property.isStringConvertable() && !property.ignoreType()) {
-				embeddedEntities.add(ModelEntityLibrary.get(property.getType(), true));
+				try {
+					embeddedEntities.add(ModelEntityLibrary.get(property.getType(), true));
+				} catch (ModelDefinitionException e) {
+					throw new ModelDefinitionException("Could not retrieve model entity for property " + property + " and entity " + this,
+							e);
+				}
 			}
 		}
 

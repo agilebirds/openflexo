@@ -191,7 +191,7 @@ public interface RectPolylinConnector extends Connector {
 	@Setter(value = IS_ENDING_LOCATION_DRAGGABLE)
 	public void setIsEndingLocationDraggable(boolean aFlag);
 
-	@Getter(value = CROSSED_CONTROL_POINT)
+	@Getter(value = CROSSED_CONTROL_POINT, isStringConvertable = true)
 	@XMLAttribute
 	public FGEPoint getCrossedControlPoint();
 
@@ -204,7 +204,7 @@ public interface RectPolylinConnector extends Connector {
 	 * 
 	 * @return
 	 */
-	@Getter(value = FIXED_START_LOCATION)
+	@Getter(value = FIXED_START_LOCATION, isStringConvertable = true)
 	@XMLAttribute
 	public FGEPoint getFixedStartLocation();
 
@@ -223,7 +223,7 @@ public interface RectPolylinConnector extends Connector {
 	 * 
 	 * @return
 	 */
-	@Getter(value = FIXED_END_LOCATION)
+	@Getter(value = FIXED_END_LOCATION, isStringConvertable = true)
 	@XMLAttribute
 	public FGEPoint getFixedEndLocation();
 

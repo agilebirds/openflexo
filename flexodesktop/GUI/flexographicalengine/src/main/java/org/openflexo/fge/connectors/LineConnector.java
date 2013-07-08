@@ -54,14 +54,14 @@ public interface LineConnector extends Connector {
 	@Setter(value = LINE_CONNECTOR_TYPE)
 	public void setLineConnectorType(LineConnectorType aLineConnectorType);
 
-	@Getter(value = CP1_RELATIVE_TO_START_OBJECT)
+	@Getter(value = CP1_RELATIVE_TO_START_OBJECT, isStringConvertable = true)
 	@XMLAttribute
 	public FGEPoint _getCp1RelativeToStartObject();
 
 	@Setter(value = CP1_RELATIVE_TO_START_OBJECT)
 	public void _setCp1RelativeToStartObject(FGEPoint aPoint);
 
-	@Getter(value = CP2_RELATIVE_TO_END_OBJECT)
+	@Getter(value = CP2_RELATIVE_TO_END_OBJECT, isStringConvertable = true)
 	@XMLAttribute
 	public FGEPoint _getCp2RelativeToEndObject();
 

@@ -74,7 +74,7 @@ public interface GeometricGraphicalRepresentation<O> extends GraphicalRepresenta
 	@Setter(value = BACKGROUND)
 	public void setBackground(BackgroundStyle aBackground);
 
-	@Getter(value = GEOMETRIC_OBJECT, ignoreType = true)
+	@Getter(value = GEOMETRIC_OBJECT, isStringConvertable = true)
 	@XMLElement
 	public FGEArea getGeometricObject();
 

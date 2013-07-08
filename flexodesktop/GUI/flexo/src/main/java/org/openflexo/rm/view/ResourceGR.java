@@ -25,26 +25,29 @@ import java.text.SimpleDateFormat;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundImageBackgroundStyle;
+import org.openflexo.fge.BackgroundImageBackgroundStyle.ImageBackgroundType;
 import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ColorGradientBackgroundStyle.ColorGradientDirection;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.GraphicalRepresentation.HorizontalTextAlignment;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.TextStyle;
-import org.openflexo.fge.BackgroundImageBackgroundStyle.ImageBackgroundType;
-import org.openflexo.fge.ColorGradientBackgroundStyle.ColorGradientDirection;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.DecorationPainter;
 import org.openflexo.fge.graphics.FGEShapeDecorationGraphics;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ShapePainter;
+import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.rm.FlexoResource;
 import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.icon.IconLibrary;
 
-public class ResourceGR extends ShapeGraphicalRepresentation<FlexoResource<? extends FlexoResourceData>> {
+public class ResourceGR extends ShapeGraphicalRepresentationImpl<FlexoResource<? extends FlexoResourceData>> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ResourceGR.class.getPackage().getName());
