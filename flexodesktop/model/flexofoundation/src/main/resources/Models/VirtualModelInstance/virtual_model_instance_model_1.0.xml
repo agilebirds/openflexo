@@ -45,6 +45,10 @@
 	<entity name="org.openflexo.foundation.view.TypeSafeModelSlotInstance" xmlTag="TypeSafeModelSlotInstance">
 		<property name="modelURI" xmlTag="modelURI" attribute="YES" />
 	</entity>
+	
+	<entity name="org.openflexo.foundation.view.FreeModelSlotInstance" xmlTag="FreeModelSlotInstance">
+		<property name="resourceURI" xmlTag="resourceURI" attribute="YES" />
+	</entity>
 
 	<entity name="org.openflexo.foundation.view.VirtualModelModelSlotInstance" xmlTag="VirtualModelModelSlotInstance">
 		<property name="virtualModelInstanceURI" xmlTag="virtualModelInstanceURI" attribute="YES" />

@@ -33,6 +33,9 @@
 	<entity name="org.openflexo.foundation.technologyadapter.TypeAwareModelSlot" abstract="yes" contexts="Addressed">
 		<property name="metaModelURI" xmlTag="metaModelURI" attribute="YES" />
 	</entity>
+	
+	<entity name="org.openflexo.foundation.technologyadapter.FreeModelSlot" abstract="yes" contexts="Addressed">
+	</entity>
 
 	<entity name="org.openflexo.foundation.view.diagram.DiagramModelSlot" xmlTag="DiagramModelSlot">
 	</entity>
