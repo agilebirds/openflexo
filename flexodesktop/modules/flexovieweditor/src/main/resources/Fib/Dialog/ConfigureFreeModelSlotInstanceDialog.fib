@@ -36,7 +36,7 @@
         <Assignment variable="component.project" value="data.action.editor.project" />
         <Assignment variable="component.selectableCondition" />
       </Custom>
-      <Label label="model" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <Label label="resource" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
       <Custom componentClassName="org.openflexo.components.widget.FIBResourceSelector" localize="true" manageDynamicModel="true" name="ResourceSelector" data="SelectExistingResourcePanel.data.resource" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)">
         <Assignment variable="component.technologyAdapter" />
         <Assignment variable="component.informationSpace" value="data.action.virtualModel.viewPoint.viewPointLibrary.serviceManager.informationSpace" />
@@ -45,7 +45,7 @@
       </Custom>
     </Panel>
     <Panel layout="twocols" borderTitle="" borderTop="2" borderBottom="2" borderLeft="2" borderRight="2" titleFont="Lucida Grande,0,11" darkLevel="0" index="1" data="($org.openflexo.foundation.technologyadapter.FreeModelSlotInstanceConfiguration)data" dataClassName="org.openflexo.foundation.technologyadapter.FreeModelSlotInstanceConfiguration" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)" visible="(OptionRadioButtonList.selected.name = &quot;CreatePrivateNewResource&quot;)" name="CreatePrivateNewResourcePanel">
-      <Label label="model_uri" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
+      <Label label="resource_uri" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
       <TextField data="CreatePrivateNewResourcePanel.data.resourceUri" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="ResourceURITF1" localize="true" columns="7" text="TextField" />
       <Label label="relative_path" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true" />
       <TextField data="CreatePrivateNewResourcePanel.data.relativePath" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="RelativePathTF1" localize="true" columns="7" text="TextField" />
