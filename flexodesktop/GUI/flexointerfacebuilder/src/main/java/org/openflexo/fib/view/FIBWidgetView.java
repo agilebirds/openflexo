@@ -278,27 +278,27 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 
 				@Override
 				public void run() {
-					update(new Vector<FIBComponent>());
+					update(new ArrayList<FIBComponent>());
 				}
 			});
 		} else {
-			update(new Vector<FIBComponent>());
+			update(new ArrayList<FIBComponent>());
 		}
 	}
 
 	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
+	public final void propertyChange(PropertyChangeEvent evt) {
 		// System.out.println("Widget "+getWidget()+" : propertyChange "+evt);
 		if (!SwingUtilities.isEventDispatchThread()) {
 			SwingUtilities.invokeLater(new Runnable() {
 
 				@Override
 				public void run() {
-					update(new Vector<FIBComponent>());
+					update(new ArrayList<FIBComponent>());
 				}
 			});
 		} else {
-			update(new Vector<FIBComponent>());
+			update(new ArrayList<FIBComponent>());
 		}
 	}
 
@@ -412,7 +412,7 @@ public abstract class FIBWidgetView<M extends FIBWidget, J extends JComponent, T
 			});
 			return;
 		}
-		update(new Vector<FIBComponent>());
+		update(new ArrayList<FIBComponent>());
 	}
 
 	@Override
