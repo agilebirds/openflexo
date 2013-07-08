@@ -1,5 +1,6 @@
 package org.openflexo.technologyadapter.excel.viewpoint.editionaction;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -10,7 +11,6 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
-import org.openflexo.technologyadapter.excel.viewpoint.binding.ExcelSheetType;
 
 public class SelectExcelSheet extends FetchRequest<BasicExcelModelSlot, ExcelSheet> {
 
@@ -27,8 +27,8 @@ public class SelectExcelSheet extends FetchRequest<BasicExcelModelSlot, ExcelShe
 	}
 
 	@Override
-	public ExcelSheetType getFetchedType() {
-		return new ExcelSheetType();
+	public Type getFetchedType() {
+		return ExcelSheet.class;
 	}
 
 	@Override

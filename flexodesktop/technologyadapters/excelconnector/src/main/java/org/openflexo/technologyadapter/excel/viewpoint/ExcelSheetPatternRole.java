@@ -23,6 +23,7 @@ import java.lang.reflect.Type;
 
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
+import org.openflexo.foundation.view.FreeActorReference;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
@@ -36,14 +37,12 @@ public class ExcelSheetPatternRole extends PatternRole<ExcelSheet> {
 
 	@Override
 	public Type getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return ExcelSheet.class;
 	}
 
 	@Override
 	public String getPreciseType() {
-		// TODO Auto-generated method stub
-		return null;
+		return ExcelSheet.class.getName();
 	}
 
 	@Override
@@ -53,23 +52,19 @@ public class ExcelSheetPatternRole extends PatternRole<ExcelSheet> {
 	}
 
 	@Override
-	public void setIsPrimaryRole(boolean isPrimary) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public boolean defaultBehaviourIsToBeDeleted() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public ActorReference<ExcelSheet> makeActorReference(ExcelSheet object,
-			EditionPatternInstance epi) {
-		// TODO Auto-generated method stub
-		return null;
+	public ActorReference<ExcelSheet> makeActorReference(ExcelSheet object, EditionPatternInstance epi) {
+		return new FreeActorReference<ExcelSheet>(object, this, epi);
 	}
 
+	@Override
+	public void setIsPrimaryRole(boolean isPrimary) {
+
+	}
 
 }

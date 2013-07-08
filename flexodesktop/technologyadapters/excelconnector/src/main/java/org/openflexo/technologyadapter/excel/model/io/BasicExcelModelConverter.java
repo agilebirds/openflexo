@@ -1,4 +1,3 @@
-
 package org.openflexo.technologyadapter.excel.model.io;
 
 import java.util.HashMap;
@@ -22,7 +21,7 @@ public class BasicExcelModelConverter {
 
 	/** Excel Objects. */
 	protected final Map<Object, ExcelObject> excelObjects = new HashMap<Object, ExcelObject>();
-	
+
 	/**
 	 * Constructor.
 	 */
@@ -30,71 +29,68 @@ public class BasicExcelModelConverter {
 	}
 
 	/**
-	 * Convert a Workbook into an Excel Workbook 
+	 * Convert a Workbook into an Excel Workbook
 	 */
-	public ExcelWorkbook convertExcelWorkbook(Workbook workbook,ExcelTechnologyAdapter technologyAdapter) {
-		ExcelWorkbook excelWorkbook = new ExcelWorkbook(workbook,technologyAdapter);
+	public ExcelWorkbook convertExcelWorkbook(Workbook workbook, ExcelTechnologyAdapter technologyAdapter) {
+		ExcelWorkbook excelWorkbook = new ExcelWorkbook(workbook, this, technologyAdapter);
 		excelObjects.put(workbook, excelWorkbook);
-		for (int index = 0;index<workbook.getNumberOfSheets();index++) {
+		for (int index = 0; index < workbook.getNumberOfSheets(); index++) {
 			Sheet sheet = workbook.getSheetAt(index);
-			ExcelSheet excelSheet = convertExcelSheetToSheet(sheet,technologyAdapter);
+			ExcelSheet excelSheet = convertExcelSheetToSheet(sheet, technologyAdapter);
 			excelWorkbook.addExcelSheet(excelSheet);
 		}
 		return excelWorkbook;
 	}
 
 	/**
-	 * Convert a Sheet into an Excel Sheet 
+	 * Convert a Sheet into an Excel Sheet
 	 */
-	public ExcelSheet convertExcelSheetToSheet(Sheet sheet,ExcelTechnologyAdapter technologyAdapter) {
+	public ExcelSheet convertExcelSheetToSheet(Sheet sheet, ExcelTechnologyAdapter technologyAdapter) {
 		ExcelSheet excelSheet = null;
 		if (excelObjects.get(sheet) == null) {
-			excelSheet = new ExcelSheet(sheet,technologyAdapter);
+			excelSheet = new ExcelSheet(sheet, technologyAdapter);
 			excelObjects.put(sheet, excelSheet);
 			for (Row row : sheet) {
-				ExcelRow excelRow = convertExcelRowToRow(row,technologyAdapter);
-		    }
-		}
-		else{
+				ExcelRow excelRow = convertExcelRowToRow(row, technologyAdapter);
+			}
+		} else {
 			excelSheet = (ExcelSheet) excelObjects.get(sheet);
 		}
 		return excelSheet;
 	}
-	
+
 	/**
-	 * Convert a Row into an Excel Row 
+	 * Convert a Row into an Excel Row
 	 */
-	public ExcelRow convertExcelRowToRow(Row row,ExcelTechnologyAdapter technologyAdapter) {
+	public ExcelRow convertExcelRowToRow(Row row, ExcelTechnologyAdapter technologyAdapter) {
 		ExcelRow excelRow;
 		if (excelObjects.get(row) == null) {
-			excelRow = new ExcelRow(row,technologyAdapter);
+			excelRow = new ExcelRow(row, technologyAdapter);
 			excelObjects.put(row, excelRow);
 			for (Cell cell : row) {
-				ExcelCell excelCell = convertExcelCellToCell(cell,technologyAdapter);
-		    }
-		}
-		else{
+				ExcelCell excelCell = convertExcelCellToCell(cell, technologyAdapter);
+			}
+		} else {
 			excelRow = (ExcelRow) excelObjects.get(row);
 		}
-		 
+
 		return excelRow;
 	}
-	
+
 	/**
-	 * Convert a Cell into an Excel Cell 
+	 * Convert a Cell into an Excel Cell
 	 */
-	public ExcelCell convertExcelCellToCell(Cell cell,ExcelTechnologyAdapter technologyAdapter) {
-		ExcelCell excelCell  = null;
+	public ExcelCell convertExcelCellToCell(Cell cell, ExcelTechnologyAdapter technologyAdapter) {
+		ExcelCell excelCell = null;
 		if (excelObjects.get(cell) == null) {
-			excelCell = new ExcelCell(cell,technologyAdapter);
+			excelCell = new ExcelCell(cell, technologyAdapter);
 			excelObjects.put(cell, excelCell);
-		}
-		else{
+		} else {
 			excelCell = (ExcelCell) excelObjects.get(cell);
 		}
 		return excelCell;
 	}
-	
+
 	/**
 	 * Getter of excel objects.
 	 * 
@@ -103,5 +99,5 @@ public class BasicExcelModelConverter {
 	public Map<Object, ExcelObject> getExcelObjects() {
 		return excelObjects;
 	}
-	
+
 }

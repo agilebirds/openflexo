@@ -19,7 +19,7 @@ public class ExcelCell extends ExcelObject {
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return null;
+		return "ROW:" + cell.getRowIndex() + "/" + "COL:" + cell.getColumnIndex();
 	}
 
 }

@@ -9,8 +9,6 @@ import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingPathElement;
 import org.openflexo.antar.binding.FunctionPathElement;
 import org.openflexo.antar.binding.SimplePathElement;
-import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
-import org.openflexo.foundation.ontology.IndividualOfClass;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterBindingFactory;
 import org.openflexo.foundation.viewpoint.TechnologySpecificCustomType;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
@@ -37,17 +35,23 @@ public final class ExcelBindingFactory extends TechnologyAdapterBindingFactory {
 
 	@Override
 	public boolean handleType(TechnologySpecificCustomType technologySpecificType) {
-		if ((technologySpecificType instanceof ExcelSheetType)) {
+		if (technologySpecificType instanceof ExcelWorkbook) {
 			return true;
 		}
-		return false;
+		if (technologySpecificType instanceof ExcelSheet) {
+			return true;
+		}
+		/*if (technologySpecificType instanceof ExcelSheetType) {
+			return true;
+		}*/
+		return true;
 	}
 
 	@Override
 	public List<? extends SimplePathElement> getAccessibleSimplePathElements(BindingPathElement parent) {
 		List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
 		if (parent instanceof ExcelWorkbook) {
-			for ( ExcelSheet sheet : ((ExcelWorkbook)parent).getExcelSheets()) {
+			for (ExcelSheet sheet : ((ExcelWorkbook) parent).getExcelSheets()) {
 				returned.add(getSimplePathElement(sheet, parent));
 			}
 		}

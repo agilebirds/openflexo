@@ -1,20 +1,20 @@
 package org.openflexo.technologyadapter.excel.viewpoint.editionaction;
 
 import java.lang.reflect.Type;
+import java.util.logging.Logger;
 
-
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.openflexo.foundation.view.ModelSlotInstance;
-import org.openflexo.foundation.view.TypeSafeModelSlotInstance;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.openflexo.foundation.view.FreeModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AssignableAction;
-import org.openflexo.foundation.viewpoint.EditionAction.EditionActionType;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
-import org.openflexo.technologyadapter.excel.rm.ExcelModelRepository;
+import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
 public class AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSheet> {
+
+	private static final Logger logger = Logger.getLogger(AddExcelSheet.class.getPackage().getName());
 
 	public AddExcelSheet(VirtualModelBuilder builder) {
 		super(builder);
@@ -34,9 +34,26 @@ public class AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSh
 
 	@Override
 	public ExcelSheet performAction(EditionSchemeAction action) {
-	/*	ModelSlotInstance<BasicExcelModelSlot,?> modelSlotInstance = (ModelSlotInstance<BasicExcelModelSlot,?>) getModelSlotInstance(action);
-		modelSlotInstance.getResourceData().getResource();*/
-		return null;
+
+		ExcelSheet result = null;
+
+		FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot> modelSlotInstance = (FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot>) getModelSlotInstance(action);
+		if (modelSlotInstance.getResourceData() != null) {
+
+			// Create an Excel Sheet
+			Sheet sheet = modelSlotInstance.getResourceData().getWorkbook().createSheet();
+
+			// Instanciate Wrapper.
+			result = modelSlotInstance.getResourceData().getConverter().convertExcelSheetToSheet(sheet, null);
+			modelSlotInstance.getResourceData().addExcelSheet(result);
+			modelSlotInstance.getResourceData().setIsModified();
+
+		} else {
+			logger.warning("Model slot not correctly initialised : model is null");
+			return null;
+		}
+
+		return result;
 	}
 
 }

@@ -24,7 +24,6 @@ import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.resource.FlexoFileResourceImpl;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
