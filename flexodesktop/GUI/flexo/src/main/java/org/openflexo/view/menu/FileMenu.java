@@ -378,11 +378,12 @@ public class FileMenu extends FlexoMenu {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			/*
 			boolean isOperationConfirmed = saveForServerPreprocessing();
 			if (!isOperationConfirmed) {
 				return;
 			}
-
+			 */
 			UploadProjectAction refresh = UploadProjectAction.actionType.makeNewAction(getController().getProject(), null, getController()
 					.getEditor());
 			refresh.doAction();
