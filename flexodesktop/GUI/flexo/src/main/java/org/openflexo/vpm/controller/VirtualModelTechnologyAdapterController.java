@@ -86,7 +86,7 @@ public class VirtualModelTechnologyAdapterController extends TechnologyAdapterCo
 	 * @return
 	 */
 	@Override
-	public ImageIcon getIconForPatternRole(Class<? extends PatternRole> patternRoleClass) {
+	public ImageIcon getIconForPatternRole(Class<? extends PatternRole<?>> patternRoleClass) {
 		if (EditionPatternInstancePatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return VEIconLibrary.EDITION_PATTERN_INSTANCE_ICON;
 		}
@@ -94,7 +94,7 @@ public class VirtualModelTechnologyAdapterController extends TechnologyAdapterCo
 	}
 
 	@Override
-	public ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass) {
+	public ImageIcon getIconForEditionAction(Class<? extends EditionAction<?, ?>> editionActionClass) {
 		if (AddEditionPatternInstance.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(VEIconLibrary.EDITION_PATTERN_INSTANCE_ICON, IconLibrary.DUPLICATE);
 		} else if (SelectEditionPatternInstance.class.isAssignableFrom(editionActionClass)) {

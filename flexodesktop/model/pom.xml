@@ -12,6 +12,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>flexofoundation</module>
+		<module>flexodiagram</module>
 		<module>flexoinspector</module>
 		<module>flexopamela</module>
 		<module>flexoutils</module>

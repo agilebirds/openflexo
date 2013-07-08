@@ -140,7 +140,7 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter> 
 	 * @param object
 	 * @return
 	 */
-	public abstract ImageIcon getIconForPatternRole(Class<? extends PatternRole> patternRoleClass);
+	public abstract ImageIcon getIconForPatternRole(Class<? extends PatternRole<?>> patternRoleClass);
 
 	/**
 	 * Return icon representing supplied edition action
@@ -148,7 +148,7 @@ public abstract class TechnologyAdapterController<TA extends TechnologyAdapter> 
 	 * @param object
 	 * @return
 	 */
-	public ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass) {
+	public ImageIcon getIconForEditionAction(Class<? extends EditionAction<?, ?>> editionActionClass) {
 		if (org.openflexo.foundation.viewpoint.DeclarePatternRole.class.isAssignableFrom(editionActionClass)) {
 			return VPMIconLibrary.DECLARE_PATTERN_ROLE_ICON;
 		} else if (org.openflexo.foundation.viewpoint.AssignationAction.class.isAssignableFrom(editionActionClass)) {

@@ -62,7 +62,7 @@ public class ExcelAdapterController extends TechnologyAdapterController<ExcelTec
 	}
 
 	@Override
-	public ImageIcon getIconForPatternRole(Class<? extends PatternRole> patternRoleClass) {
+	public ImageIcon getIconForPatternRole(Class<? extends PatternRole<?>> patternRoleClass) {
 		if (ExcelWorkbookPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return getIconForTechnologyObject(ExcelWorkbook.class);
 		}
