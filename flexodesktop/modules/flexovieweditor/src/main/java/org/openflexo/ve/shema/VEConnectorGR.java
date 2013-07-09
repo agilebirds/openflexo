@@ -82,9 +82,11 @@ public class VEConnectorGR extends ConnectorGraphicalRepresentation<ViewConnecto
 			EditionPatternReference epRef = getDrawable().getEditionPatternReference();
 			if (epRef != null) {
 				GraphicalElementPatternRole patternRole = (GraphicalElementPatternRole) epRef.getPatternRole();
-				for (GraphicalElementAction.ActionMask mask : patternRole.getReferencedMasks()) {
-					addToMouseClickControls(new VEMouseClickControl(mask, patternRole));
-					doubleClickUsed |= mask == ActionMask.DoubleClick;
+				if (patternRole != null) {
+					for (GraphicalElementAction.ActionMask mask : patternRole.getReferencedMasks()) {
+						addToMouseClickControls(new VEMouseClickControl(mask, patternRole));
+						doubleClickUsed |= mask == ActionMask.DoubleClick;
+					}
 				}
 			}
 		}

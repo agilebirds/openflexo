@@ -57,9 +57,9 @@ public class LocalResourceCenterImplementation implements FlexoResourceCenter {
 		}
 
 		public static final List<ImportableViewPoint> IMPORTABLE_VIEWPOINTS = Arrays.asList(
-				new ImportableViewPoint("Archimate", Arrays.asList("InformationStructure", "IntroductoryViewpoint", "ProjectViewpoint")),
-				new ImportableViewPoint("FlexoMethodology", new ArrayList<String>(0)), new ImportableViewPoint("Basic",
-						new ArrayList<String>(0)), new ImportableViewPoint("Tests", new ArrayList<String>(0)));
+				new ImportableViewPoint("Archimate", Arrays.asList("BusinessProcess", "InformationStructure", "Introductory",
+						"Organisation", "Project")), new ImportableViewPoint("FlexoMethodology", new ArrayList<String>(0)),
+				new ImportableViewPoint("Basic", new ArrayList<String>(0)), new ImportableViewPoint("Tests", new ArrayList<String>(0)));
 
 		public static boolean isImportable(File viewPointFile) {
 			String parentDirName = viewPointFile.getParentFile().getName();
