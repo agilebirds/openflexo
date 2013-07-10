@@ -272,6 +272,17 @@ public class CurveConnector extends Connector {
 		refreshCurve();
 	}
 
+	@Override
+	public void resetConnectorLayout() {
+		cpPosition = null;
+		cp = null;
+		cp1 = null;
+		cp2 = null;
+		cp1RelativeToStartObject = null;
+		cp2RelativeToEndObject = null;
+		updateControlPoints();
+	}
+
 	/**
 	 * This method updates the position according to start/end motions. However, this has a small drawback which is caused by the continuous
 	 * change of the system coordinates of the connector. Indeed, it is based on the bounds of the start and end node. If one of them moves,

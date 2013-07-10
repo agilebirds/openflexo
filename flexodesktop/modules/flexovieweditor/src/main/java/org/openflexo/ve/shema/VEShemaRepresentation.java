@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -209,8 +210,10 @@ public class VEShemaRepresentation extends DefaultDrawing<View> implements Graph
 		}*/
 		if (shape.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 			VEShapeGR graphicalRepresentation = new VEShapeGR(shape, this);
-			graphicalRepresentation.setsWith((GraphicalRepresentation<?>) shape.getGraphicalRepresentation(),
-					GraphicalRepresentation.Parameters.text /*, ShapeGraphicalRepresentation.Parameters.border*/);
+			graphicalRepresentation
+					.setsWith(shape.getGraphicalRepresentation(),
+							shape.getPatternRole() != null ? new GRParameter[] { GraphicalRepresentation.Parameters.text }
+									: new GRParameter[0] /*, ShapeGraphicalRepresentation.Parameters.border*/);
 			if (!screenshotOnly) {
 				shape.setGraphicalRepresentation(graphicalRepresentation);
 			}
