@@ -596,6 +596,8 @@ public class WKFController extends FlexoController implements PrintManagingContr
 			return FlexoLocalization.localizedForKeyWithParams("roles");
 		} else if (object instanceof FlexoWorkflow) {
 			return object.getProject().getDisplayableName();
+		} else if (object instanceof FlexoProject) {
+			return ((FlexoProject) object).getDisplayName();
 		}
 		return null;
 	}

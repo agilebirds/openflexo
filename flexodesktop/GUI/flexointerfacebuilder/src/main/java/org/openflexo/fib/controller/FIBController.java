@@ -498,6 +498,10 @@ public class FIBController extends Observable implements BindingEvaluationContex
 		}
 	}
 
+	public String getLocalizedForKey(String key) {
+		return getLocalizer().getLocalizedForKeyAndLanguage(key, FlexoLocalization.getCurrentLanguage());
+	}
+
 	/**
 	 * Return parent localizer for component localizer
 	 * 

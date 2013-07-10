@@ -46,6 +46,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		private PropertyChangeSupport pcSupport;
 		private String docType;
 		private DocFormat docFormat;
+		private File folder;
 
 		public void delete() {
 			this.pcSupport.firePropertyChange(DELETED, false, true);
@@ -173,9 +174,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 		@Override
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
-			// client.jobs().pu
-			// TODO:
-			// client.jobs().
+			client.jobs().postXml(job, Job.class);
 		}
 
 		@Override
@@ -347,6 +346,28 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 			job.setVersion(version);
 			job.setDocFormat(choice.getDocFormat());
 			job.setDocType(choice.getDocType());
+			performOperations(new GenerateDocumentation(job));
+		}
+
+	}
+
+	public void generatePrototype(ProjectVersion version) {
+		if (version == null) {
+			return;
+		}
+		if (getUser() == null) {
+			return;
+		}
+		DocGenerationChoice choice = new DocGenerationChoice();
+		choice.setDocFormat(DocFormat.WORD);
+		choice.setDocType(serverProject.getDocTypes().get(0));
+		FIBDialog<DocGenerationChoice> dialog = FIBDialog.instanciateAndShowDialog(DOC_GENERATION_CHOOSER_FIB_FILE, choice,
+				controller.getFlexoFrame(), true, FlexoLocalization.getMainLocalizer());
+		if (dialog.getController().getStatus() == FIBController.Status.VALIDATED) {
+			Job job = new Job();
+			job.setCreator(getUser());
+			job.setJobType(JobType.PROTOTYPE_BUILDER);
+			job.setVersion(version);
 			performOperations(new GenerateDocumentation(job));
 		}
 
