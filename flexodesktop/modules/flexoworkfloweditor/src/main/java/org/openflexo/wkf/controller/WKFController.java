@@ -64,6 +64,7 @@ import org.openflexo.module.FlexoModule;
 import org.openflexo.module.UserType;
 import org.openflexo.print.PrintManager;
 import org.openflexo.print.PrintManagingController;
+import org.openflexo.rest.client.ServerRestClientPerspective;
 import org.openflexo.selection.SelectionManager;
 import org.openflexo.view.FlexoMainPane;
 import org.openflexo.view.ModuleView;
@@ -124,6 +125,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 	public SwimmingLanePerspective SWIMMING_LANE_PERSPECTIVE;
 	public RolePerspective ROLE_EDITOR_PERSPECTIVE;
 	public DocumentationPerspective DOCUMENTATION_PERSPECTIVE;
+	public ServerRestClientPerspective SERVER_PERSPECTIVE;
 
 	public final FlexoPerspective WKF_INVADERS = new DocumentationPerspective(this, "wkf_invaders") {
 		@Override
@@ -177,6 +179,7 @@ public class WKFController extends FlexoController implements PrintManagingContr
 		if (UserType.isDevelopperRelease() || UserType.isMaintainerRelease()) {
 			addToPerspectives(DOCUMENTATION_PERSPECTIVE);
 		}
+		addToPerspectives(SERVER_PERSPECTIVE = new ServerRestClientPerspective());
 	}
 
 	@Override

@@ -37,7 +37,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *         &lt;element name="isMergeSuccessful" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="isMerged" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
  *         &lt;element name="isProtoValidationSuccessful" type="{http://www.w3.org/2001/XMLSchema}boolean" minOccurs="0"/>
- *         &lt;element name="mergeFromProjectVersion" type="{http://www.agilebirds.com/openflexo}ProjectVersion" minOccurs="0"/>
+ *         &lt;element name="mergeFromProjectVersion" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
  *         &lt;element name="prjModelVersion" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="prjfileuuid" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="project" type="{http://www.w3.org/2001/XMLSchema}int" minOccurs="0"/>
@@ -112,7 +112,7 @@ public class ProjectVersion
     protected Boolean isMergeSuccessful;
     protected Boolean isMerged;
     protected Boolean isProtoValidationSuccessful;
-    protected ProjectVersion mergeFromProjectVersion;
+    protected Integer mergeFromProjectVersion;
     protected String prjModelVersion;
     protected String prjfileuuid;
     protected Integer project;
@@ -470,10 +470,10 @@ public class ProjectVersion
      * 
      * @return
      *     possible object is
-     *     {@link ProjectVersion }
+     *     {@link Integer }
      *     
      */
-    public ProjectVersion getMergeFromProjectVersion() {
+    public Integer getMergeFromProjectVersion() {
         return mergeFromProjectVersion;
     }
 
@@ -482,10 +482,10 @@ public class ProjectVersion
      * 
      * @param value
      *     allowed object is
-     *     {@link ProjectVersion }
+     *     {@link Integer }
      *     
      */
-    public void setMergeFromProjectVersion(ProjectVersion value) {
+    public void setMergeFromProjectVersion(Integer value) {
         this.mergeFromProjectVersion = value;
     }
 

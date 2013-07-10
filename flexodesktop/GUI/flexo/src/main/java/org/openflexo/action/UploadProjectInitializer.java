@@ -61,10 +61,6 @@ public class UploadProjectInitializer extends ActionInitializer<UploadProjectAct
 
 	public static final String ROLE_ACCOUNT_ADMIN = "CLADMIN";
 
-	private class ChangeServerException extends Exception {
-
-	}
-
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
@@ -182,7 +178,13 @@ public class UploadProjectInitializer extends ActionInitializer<UploadProjectAct
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				} catch (Exception e) {
-					getController().handleWSException(e);
+					try {
+						if (!getController().handleWSException(e)) {
+							return false;
+						}
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
 				} finally {
 					ProgressWindow.hideProgressWindow();
 				}

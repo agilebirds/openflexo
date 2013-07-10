@@ -1,2 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel layout="border" darkLevel="0" dataClassName="org.openflexo.rest.client.ServerRestClientModel$DocGenerationChoice">
+  <Panel layout="gridbag" darkLevel="0" constraints="border(location=center)">
+    <Label label="doc_format" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+    <DropDown data="data.docFormat" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="docFormat" localize="true" iteratorClassName="org.openflexo.rest.client.model.DocFormat" autoSelectFirstRow="true" />
+    <Label label="doc_type" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+    <DropDown data="data.docType" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="dropdown" localize="true" list="data.serverRestClientModel.serverProject.docTypes" iteratorClassName="java.lang.String" autoSelectFirstRow="true" />
+  </Panel>
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" darkLevel="0" constraints="border(location=south)">
+    <Panel layout="grid" hGap="5" vGap="5" cols="2" rows="1" darkLevel="0" constraints="flow()">
+      <Button action="controller.validateAndDispose()" buttonType="Trigger" label="OK" localize="true" constraints="grid(x=0;y=0)" />
+      <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" localize="true" constraints="grid(x=1;y=0)" />
+    </Panel>
+  </Panel>
+  <LocalizedDictionary>
+    <Localized key="doc_format" lang="English">Documentation format</Localized>
+    <Localized key="doc_format" lang="French">Format de la documentation</Localized>
+    <Localized key="doc_format" lang="Dutch">Formaat van het document</Localized>
+    <Localized key="WORD" lang="English">Word</Localized>
+    <Localized key="WORD" lang="French">Word</Localized>
+    <Localized key="WORD" lang="Dutch">Word</Localized>
+    <Localized key="HTML" lang="English">HTML</Localized>
+    <Localized key="HTML" lang="French">HTML</Localized>
+    <Localized key="HTML" lang="Dutch">HTML</Localized>
+    <Localized key="doc_type" lang="English">Documentation type</Localized>
+    <Localized key="doc_type" lang="French">Type de documentation</Localized>
+    <Localized key="doc_type" lang="Dutch">Type van het document</Localized>
+    <Localized key="OK" lang="English">OK</Localized>
+    <Localized key="OK" lang="French">OK</Localized>
+    <Localized key="OK" lang="Dutch">OK</Localized>
+    <Localized key="cancel" lang="English">Cancel</Localized>
+    <Localized key="cancel" lang="French">Annuler</Localized>
+    <Localized key="cancel" lang="Dutch">Annuleren</Localized>
+  </LocalizedDictionary>
+</Panel>

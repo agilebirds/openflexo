@@ -37,6 +37,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
@@ -74,6 +75,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.ws.rs.WebApplicationException;
+import javax.xml.ws.Holder;
 
 import org.openflexo.AdvancedPrefs;
 import org.openflexo.ApplicationContext;
@@ -1654,7 +1656,26 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 		return params;
 	}
 
-	public boolean handleWSException(Exception e) {
+	public boolean handleWSException(final Exception e) throws InterruptedException {
+		if (!SwingUtilities.isEventDispatchThread()) {
+			final Holder<Boolean> returned = new Holder<Boolean>();
+			try {
+				SwingUtilities.invokeAndWait(new Runnable() {
+					@Override
+					public void run() {
+						returned.value = _handleWSException(e);
+					}
+				});
+			} catch (InvocationTargetException e1) {
+				e1.printStackTrace();
+				return false;
+			}
+			return returned.value != null && returned.value;
+		}
+		return _handleWSException(e);
+	}
+
+	private boolean _handleWSException(Exception e) {
 		if (e.getCause() instanceof TooManyFailedAttemptException) {
 			throw (TooManyFailedAttemptException) e.getCause();
 		}
@@ -1669,52 +1690,61 @@ public abstract class FlexoController implements FlexoObserver, InspectorNotFoun
 			if (e.getMessage().indexOf("Location") > -1) {
 				location = e.getMessage().substring(e.getMessage().indexOf("Location") + 9).trim();
 			}
-			return FlexoController.confirm(FlexoLocalization.localizedForKey("could_not_connect_to_web_sevice") + ": "
+			FlexoController.notify(FlexoLocalization.localizedForKey("could_not_connect_to_web_sevice") + ": "
 					+ FlexoLocalization.localizedForKey("the_url_seems_incorrect")
 					+ (location != null ? "\n" + FlexoLocalization.localizedForKey("try_with_this_one") + " " + location : ""));
+			return false;
 		}
 		if (e instanceof WebApplicationException) {
 			WebApplicationException wae = (WebApplicationException) e;
 			Object entity = wae.getResponse().getEntity();
 			switch (wae.getResponse().getStatus()) {
 			case 500:
-				return FlexoController.confirm(FlexoLocalization.localizedForKey("webservice_remote_error") + entity);
+				return FlexoController.confirm(FlexoLocalization.localizedForKey("webservice_remote_error") + entity + "\n"
+						+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
 			case 401:
-				return FlexoController.confirm(FlexoLocalization.localizedForKey("unauthorized_action_on_the_server") + entity);
+				return FlexoController.confirm(FlexoLocalization.localizedForKey("unauthorized_action_on_the_server") + entity + "\n"
+						+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
 			default:
 				if (entity != null) {
 					return FlexoController.confirm(entity.toString());
 				} else {
-					return FlexoController
-							.confirm(FlexoLocalization.localizedForKey("unexpected_error_occured_while_connecting_to_server"));
+					return FlexoController.confirm(FlexoLocalization.localizedForKey("unexpected_error_occured_while_connecting_to_server")
+							+ "\n" + FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
 				}
 			}
 		}
 		if (e.getCause() instanceof ConnectException) {
 			return FlexoController.confirm(FlexoLocalization.localizedForKey("connection_error")
-					+ (e.getCause().getMessage() != null ? " (" + e.getCause().getMessage() + ")" : ""));
+					+ (e.getCause().getMessage() != null ? " (" + e.getCause().getMessage() + ")" : "") + "\n"
+					+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
 		} else if (e.getMessage() != null && "(500)Apple WebObjects".equals(e.getMessage())
 				|| e.getMessage().startsWith("No such operation")) {
 			return FlexoController.confirm(FlexoLocalization.localizedForKey("could_not_connect_to_web_sevice") + ": "
-					+ FlexoLocalization.localizedForKey("the_url_seems_incorrect"));
+					+ FlexoLocalization.localizedForKey("the_url_seems_incorrect") + "\n"
+					+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
 		} else if (e.toString() != null && e.toString().startsWith("javax.net.ssl.SSLHandshakeException")) {
-			return FlexoController.confirm(FlexoLocalization.localizedForKey("connection_error") + ": " + e);
+			return FlexoController.confirm(FlexoLocalization.localizedForKey("connection_error") + ": " + e + "\n"
+					+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
 		} else if (e instanceof SocketTimeoutException) {
-			return FlexoController.confirm(FlexoLocalization.localizedForKey("connection_timeout"));
+			return FlexoController.confirm(FlexoLocalization.localizedForKey("connection_timeout") + "\n"
+					+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
 		} else if (e instanceof IOException || e.getCause() instanceof IOException) {
 			IOException ioEx = (IOException) (e instanceof IOException ? e : e.getCause());
 			return FlexoController.confirm(FlexoLocalization.localizedForKey("connection_error") + ": "
-					+ FlexoLocalization.localizedForKey(ioEx.getClass().getSimpleName()) + " " + ioEx.getMessage());
+					+ FlexoLocalization.localizedForKey(ioEx.getClass().getSimpleName()) + " " + ioEx.getMessage() + "\n"
+					+ FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
 		} else {
 			if (e.getMessage() != null && e.getMessage().indexOf("Content is not allowed in prolog") > -1) {
-				return FlexoController
-						.confirm("Check your connection url in FlexoPreferences > Advanced.\n It seems wrong.\nsee logs for details.");
+				FlexoController
+						.notify("Check your connection url in FlexoPreferences > Advanced.\n It seems wrong.\nsee logs for details.");
+				return false;
 			} else {
 				return FlexoController
 						.confirm(FlexoLocalization.localizedForKey("webservice_remote_error")
 								+ " \n"
 								+ (e.getMessage() == null || "java.lang.NullPointerException".equals(e.getMessage()) ? "Check your connection parameters.\nThe service may be temporary unavailable."
-										: e.getMessage()));
+										: e.getMessage()) + "\n" + FlexoLocalization.localizedForKey("would_you_like_to_try_again?"));
 			}
 		}
 		/*FlexoController.notify(FlexoLocalization.localizedForKey("webservice_connection_failed"));

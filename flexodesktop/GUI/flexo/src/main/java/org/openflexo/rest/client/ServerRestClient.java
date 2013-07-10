@@ -170,6 +170,10 @@ public class ServerRestClient {
 		return createClientInstance(cc);
 	}
 
+	public ServerRestClient.Projects projects(com.sun.jersey.api.client.Client client, URI baseURI) {
+		return new ServerRestClient.Projects(client, baseURI);
+	}
+
 	public ServerRestClient.Projects projects() {
 		return projects(createClient(), BASE_URI);
 	}
@@ -178,20 +182,16 @@ public class ServerRestClient {
 		return projects(client, BASE_URI);
 	}
 
-	public ServerRestClient.Projects projects(com.sun.jersey.api.client.Client client, URI baseURI) {
-		return new ServerRestClient.Projects(client, baseURI);
+	public ServerRestClient.JobsHistory jobsHistory(com.sun.jersey.api.client.Client client, URI baseURI) {
+		return new ServerRestClient.JobsHistory(client, baseURI);
 	}
 
-	public ServerRestClient.Users users(com.sun.jersey.api.client.Client client, URI baseURI) {
-		return new ServerRestClient.Users(client, baseURI);
+	public ServerRestClient.JobsHistory jobsHistory() {
+		return jobsHistory(createClient(), BASE_URI);
 	}
 
-	public ServerRestClient.Users users() {
-		return users(createClient(), BASE_URI);
-	}
-
-	public ServerRestClient.Users users(com.sun.jersey.api.client.Client client) {
-		return users(client, BASE_URI);
+	public ServerRestClient.JobsHistory jobsHistory(com.sun.jersey.api.client.Client client) {
+		return jobsHistory(client, BASE_URI);
 	}
 
 	public ServerRestClient.ProjectsProjectIDVersions projectsProjectIDVersions(com.sun.jersey.api.client.Client client, URI baseURI,
@@ -207,40 +207,16 @@ public class ServerRestClient {
 		return projectsProjectIDVersions(client, BASE_URI, projectid);
 	}
 
-	public ServerRestClient.Jobs jobs(com.sun.jersey.api.client.Client client, URI baseURI) {
-		return new ServerRestClient.Jobs(client, baseURI);
+	public ServerRestClient.Users users(com.sun.jersey.api.client.Client client, URI baseURI) {
+		return new ServerRestClient.Users(client, baseURI);
 	}
 
-	public ServerRestClient.Jobs jobs() {
-		return jobs(createClient(), BASE_URI);
+	public ServerRestClient.Users users() {
+		return users(createClient(), BASE_URI);
 	}
 
-	public ServerRestClient.Jobs jobs(com.sun.jersey.api.client.Client client) {
-		return jobs(client, BASE_URI);
-	}
-
-	public ServerRestClient.JobsHistory jobsHistory(com.sun.jersey.api.client.Client client, URI baseURI) {
-		return new ServerRestClient.JobsHistory(client, baseURI);
-	}
-
-	public ServerRestClient.JobsHistory jobsHistory() {
-		return jobsHistory(createClient(), BASE_URI);
-	}
-
-	public ServerRestClient.JobsHistory jobsHistory(com.sun.jersey.api.client.Client client) {
-		return jobsHistory(client, BASE_URI);
-	}
-
-	public ServerRestClient.Accounts accounts(com.sun.jersey.api.client.Client client, URI baseURI) {
-		return new ServerRestClient.Accounts(client, baseURI);
-	}
-
-	public ServerRestClient.Accounts accounts() {
-		return accounts(createClient(), BASE_URI);
-	}
-
-	public ServerRestClient.Accounts accounts(com.sun.jersey.api.client.Client client) {
-		return accounts(client, BASE_URI);
+	public ServerRestClient.Users users(com.sun.jersey.api.client.Client client) {
+		return users(client, BASE_URI);
 	}
 
 	public ServerRestClient.ProjectsProjectIDSessions projectsProjectIDSessions(com.sun.jersey.api.client.Client client, URI baseURI,
@@ -254,6 +230,30 @@ public class ServerRestClient {
 
 	public ServerRestClient.ProjectsProjectIDSessions projectsProjectIDSessions(com.sun.jersey.api.client.Client client, Integer projectid) {
 		return projectsProjectIDSessions(client, BASE_URI, projectid);
+	}
+
+	public ServerRestClient.Jobs jobs(com.sun.jersey.api.client.Client client, URI baseURI) {
+		return new ServerRestClient.Jobs(client, baseURI);
+	}
+
+	public ServerRestClient.Jobs jobs() {
+		return jobs(createClient(), BASE_URI);
+	}
+
+	public ServerRestClient.Jobs jobs(com.sun.jersey.api.client.Client client) {
+		return jobs(client, BASE_URI);
+	}
+
+	public ServerRestClient.Accounts accounts(com.sun.jersey.api.client.Client client, URI baseURI) {
+		return new ServerRestClient.Accounts(client, baseURI);
+	}
+
+	public ServerRestClient.Accounts accounts() {
+		return accounts(createClient(), BASE_URI);
+	}
+
+	public ServerRestClient.Accounts accounts(com.sun.jersey.api.client.Client client) {
+		return accounts(client, BASE_URI);
 	}
 
 	public class Accounts {
@@ -597,42 +597,45 @@ public class ServerRestClient {
 			}
 		}
 
-		public Account postAsAccountXml() {
+		public Account postXmlAsAccount(Account input) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("application/xml");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
 				throwWebApplicationException(response);
 			}
 			return response.getEntity(Account.class);
 		}
 
-		public <T> T postAsXml(com.sun.jersey.api.client.GenericType<T> returnType) {
+		public <T> T postXml(Object input, com.sun.jersey.api.client.GenericType<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("application/xml");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
 				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
 
-		public <T> T postAsXml(Class<T> returnType) {
+		public <T> T postXml(Object input, Class<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("application/xml");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
 					throwWebApplicationException(response);
@@ -645,42 +648,45 @@ public class ServerRestClient {
 			}
 		}
 
-		public Account postAsAccountJson() {
+		public Account postJsonAsAccount(Account input) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("application/json");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
 				throwWebApplicationException(response);
 			}
 			return response.getEntity(Account.class);
 		}
 
-		public <T> T postAsJson(com.sun.jersey.api.client.GenericType<T> returnType) {
+		public <T> T postJson(Object input, com.sun.jersey.api.client.GenericType<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("application/json");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
 				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
 
-		public <T> T postAsJson(Class<T> returnType) {
+		public <T> T postJson(Object input, Class<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("application/json");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
 					throwWebApplicationException(response);
@@ -770,7 +776,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(Account.class);
 			}
@@ -784,7 +790,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -819,7 +825,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(Account.class);
 			}
@@ -833,7 +839,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -867,7 +873,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("DELETE", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(com.sun.jersey.api.client.ClientResponse.class);
 			}
@@ -880,7 +886,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("DELETE", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -915,7 +921,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(Account.class);
 			}
@@ -930,7 +936,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -967,7 +973,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(Account.class);
 			}
@@ -982,7 +988,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -1045,7 +1051,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(Job.class);
 		}
@@ -1059,7 +1065,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -1074,7 +1080,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -1114,7 +1120,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(Job.class);
 		}
@@ -1149,7 +1155,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -1185,7 +1191,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -1204,7 +1210,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(Job.class);
 		}
@@ -1218,7 +1224,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -1233,7 +1239,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -1273,7 +1279,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(Job.class);
 		}
@@ -1308,7 +1314,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -1344,7 +1350,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -1354,45 +1360,48 @@ public class ServerRestClient {
 			}
 		}
 
-		public Job postAsJobXml() {
+		public Job postXmlAsJob(Job input) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("application/xml");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(Job.class);
 		}
 
-		public <T> T postAsXml(com.sun.jersey.api.client.GenericType<T> returnType) {
+		public <T> T postXml(Object input, com.sun.jersey.api.client.GenericType<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("application/xml");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
 
-		public <T> T postAsXml(Class<T> returnType) {
+		public <T> T postXml(Object input, Class<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("application/xml");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -1402,45 +1411,48 @@ public class ServerRestClient {
 			}
 		}
 
-		public Job postAsJobJson() {
+		public Job postJsonAsJob(Job input) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("application/json");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(Job.class);
 		}
 
-		public <T> T postAsJson(com.sun.jersey.api.client.GenericType<T> returnType) {
+		public <T> T postJson(Object input, com.sun.jersey.api.client.GenericType<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("application/json");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
 
-		public <T> T postAsJson(Class<T> returnType) {
+		public <T> T postJson(Object input, Class<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("application/json");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -1527,7 +1539,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(Job.class);
 			}
@@ -1541,7 +1553,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -1576,7 +1588,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(Job.class);
 			}
@@ -1590,7 +1602,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -1624,7 +1636,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("DELETE", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(com.sun.jersey.api.client.ClientResponse.class);
 			}
@@ -1637,7 +1649,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("DELETE", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -1672,7 +1684,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(Job.class);
 			}
@@ -1687,7 +1699,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -1724,7 +1736,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(Job.class);
 			}
@@ -1739,7 +1751,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -1793,45 +1805,48 @@ public class ServerRestClient {
 			_templateAndMatrixParameterValues = new HashMap<String, Object>();
 		}
 
-		public JobHistory postAsJobHistoryXml() {
+		public JobHistory postXmlAsJobHistory(JobHistory input) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("application/xml");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(JobHistory.class);
 		}
 
-		public <T> T postAsXml(com.sun.jersey.api.client.GenericType<T> returnType) {
+		public <T> T postXml(Object input, com.sun.jersey.api.client.GenericType<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("application/xml");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
 
-		public <T> T postAsXml(Class<T> returnType) {
+		public <T> T postXml(Object input, Class<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("application/xml");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -1841,45 +1856,48 @@ public class ServerRestClient {
 			}
 		}
 
-		public JobHistory postAsJobHistoryJson() {
+		public JobHistory postJsonAsJobHistory(JobHistory input) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("application/json");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(JobHistory.class);
 		}
 
-		public <T> T postAsJson(com.sun.jersey.api.client.GenericType<T> returnType) {
+		public <T> T postJson(Object input, com.sun.jersey.api.client.GenericType<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("application/json");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
 
-		public <T> T postAsJson(Class<T> returnType) {
+		public <T> T postJson(Object input, Class<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("application/json");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -1898,7 +1916,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(JobHistory.class);
 		}
@@ -1912,7 +1930,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -1927,7 +1945,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -1967,7 +1985,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(JobHistory.class);
 		}
@@ -2002,7 +2020,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -2038,7 +2056,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -2057,7 +2075,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(JobHistory.class);
 		}
@@ -2071,7 +2089,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -2086,7 +2104,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -2126,7 +2144,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(JobHistory.class);
 		}
@@ -2161,7 +2179,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -2197,7 +2215,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -2287,7 +2305,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("DELETE", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(com.sun.jersey.api.client.ClientResponse.class);
 			}
@@ -2300,7 +2318,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("DELETE", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -2335,7 +2353,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(JobHistory.class);
 			}
@@ -2350,7 +2368,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -2387,7 +2405,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(JobHistory.class);
 			}
@@ -2402,7 +2420,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -2505,7 +2523,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -2542,7 +2560,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -2605,7 +2623,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(Project.class);
 		}
@@ -2619,7 +2637,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -2634,7 +2652,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -2674,7 +2692,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(Project.class);
 		}
@@ -2709,7 +2727,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -2745,7 +2763,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -2764,7 +2782,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(Project.class);
 		}
@@ -2778,7 +2796,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -2793,7 +2811,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -2833,7 +2851,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(Project.class);
 		}
@@ -2868,7 +2886,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -2904,7 +2922,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -2914,45 +2932,48 @@ public class ServerRestClient {
 			}
 		}
 
-		public Project postAsProjectXml() {
+		public Project postXmlAsProject(Project input) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("application/xml");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(Project.class);
 		}
 
-		public <T> T postAsXml(com.sun.jersey.api.client.GenericType<T> returnType) {
+		public <T> T postXml(Object input, com.sun.jersey.api.client.GenericType<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("application/xml");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
 
-		public <T> T postAsXml(Class<T> returnType) {
+		public <T> T postXml(Object input, Class<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("application/xml");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -2962,45 +2983,48 @@ public class ServerRestClient {
 			}
 		}
 
-		public Project postAsProjectJson() {
+		public Project postJsonAsProject(Project input) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("application/json");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(Project.class);
 		}
 
-		public <T> T postAsJson(com.sun.jersey.api.client.GenericType<T> returnType) {
+		public <T> T postJson(Object input, com.sun.jersey.api.client.GenericType<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("application/json");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
 
-		public <T> T postAsJson(Class<T> returnType) {
+		public <T> T postJson(Object input, Class<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("application/json");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -3087,7 +3111,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(Project.class);
 			}
@@ -3101,7 +3125,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -3136,7 +3160,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(Project.class);
 			}
@@ -3150,7 +3174,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -3184,7 +3208,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("DELETE", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(com.sun.jersey.api.client.ClientResponse.class);
 			}
@@ -3197,7 +3221,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("DELETE", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -3232,7 +3256,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(Project.class);
 			}
@@ -3247,7 +3271,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -3284,7 +3308,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(Project.class);
 			}
@@ -3299,7 +3323,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -3403,7 +3427,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(Session.class);
 		}
@@ -3417,7 +3441,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -3432,7 +3456,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -3472,7 +3496,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(Session.class);
 		}
@@ -3507,7 +3531,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -3543,7 +3567,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -3562,7 +3586,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(Session.class);
 		}
@@ -3576,7 +3600,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -3591,7 +3615,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -3631,7 +3655,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(Session.class);
 		}
@@ -3666,7 +3690,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -3702,7 +3726,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -3712,45 +3736,48 @@ public class ServerRestClient {
 			}
 		}
 
-		public Session postAsSessionXml() {
+		public Session postXmlAsSession(Session input) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("application/xml");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(Session.class);
 		}
 
-		public <T> T postAsXml(com.sun.jersey.api.client.GenericType<T> returnType) {
+		public <T> T postXml(Object input, com.sun.jersey.api.client.GenericType<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("application/xml");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
 
-		public <T> T postAsXml(Class<T> returnType) {
+		public <T> T postXml(Object input, Class<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("application/xml");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -3760,45 +3787,48 @@ public class ServerRestClient {
 			}
 		}
 
-		public Session postAsSessionJson() {
+		public Session postJsonAsSession(Session input) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("application/json");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(Session.class);
 		}
 
-		public <T> T postAsJson(com.sun.jersey.api.client.GenericType<T> returnType) {
+		public <T> T postJson(Object input, com.sun.jersey.api.client.GenericType<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("application/json");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
 
-		public <T> T postAsJson(Class<T> returnType) {
+		public <T> T postJson(Object input, Class<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("application/json");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -3886,7 +3916,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(Session.class);
 			}
@@ -3900,7 +3930,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -3935,7 +3965,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(Session.class);
 			}
@@ -3949,7 +3979,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -3983,7 +4013,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("DELETE", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(com.sun.jersey.api.client.ClientResponse.class);
 			}
@@ -3996,7 +4026,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("DELETE", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -4031,7 +4061,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(Session.class);
 			}
@@ -4046,7 +4076,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -4083,7 +4113,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(Session.class);
 			}
@@ -4098,7 +4128,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -4202,7 +4232,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(ProjectVersion.class);
 		}
@@ -4216,7 +4246,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -4231,7 +4261,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -4271,7 +4301,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(ProjectVersion.class);
 		}
@@ -4306,7 +4336,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -4342,7 +4372,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -4361,7 +4391,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(ProjectVersion.class);
 		}
@@ -4375,7 +4405,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -4390,7 +4420,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -4430,7 +4460,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(ProjectVersion.class);
 		}
@@ -4465,7 +4495,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -4501,7 +4531,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -4521,7 +4551,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -4537,7 +4567,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -4557,7 +4587,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -4573,7 +4603,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -4583,45 +4613,48 @@ public class ServerRestClient {
 			}
 		}
 
-		public ProjectVersion postAsProjectVersionXml() {
+		public ProjectVersion postXmlAsProjectVersion(ProjectVersion input) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("application/xml");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(ProjectVersion.class);
 		}
 
-		public <T> T postAsXml(com.sun.jersey.api.client.GenericType<T> returnType) {
+		public <T> T postXml(Object input, com.sun.jersey.api.client.GenericType<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("application/xml");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
 
-		public <T> T postAsXml(Class<T> returnType) {
+		public <T> T postXml(Object input, Class<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("application/xml");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -4631,45 +4664,48 @@ public class ServerRestClient {
 			}
 		}
 
-		public ProjectVersion postAsProjectVersionJson() {
+		public ProjectVersion postJsonAsProjectVersion(ProjectVersion input) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("application/json");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(ProjectVersion.class);
 		}
 
-		public <T> T postAsJson(com.sun.jersey.api.client.GenericType<T> returnType) {
+		public <T> T postJson(Object input, com.sun.jersey.api.client.GenericType<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("application/json");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
 
-		public <T> T postAsJson(Class<T> returnType) {
+		public <T> T postJson(Object input, Class<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("application/json");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -4762,7 +4798,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(ProjectVersion.class);
 			}
@@ -4776,7 +4812,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -4811,7 +4847,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(ProjectVersion.class);
 			}
@@ -4825,7 +4861,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -4859,7 +4895,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("DELETE", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(com.sun.jersey.api.client.ClientResponse.class);
 			}
@@ -4872,7 +4908,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("DELETE", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -4907,7 +4943,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(ProjectVersion.class);
 			}
@@ -4922,7 +4958,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -4959,7 +4995,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(ProjectVersion.class);
 			}
@@ -4974,7 +5010,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -5076,7 +5112,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -5138,7 +5174,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(User.class);
 		}
@@ -5152,7 +5188,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -5167,7 +5203,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -5207,7 +5243,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(User.class);
 		}
@@ -5242,7 +5278,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -5278,7 +5314,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -5297,7 +5333,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(User.class);
 		}
@@ -5311,7 +5347,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -5326,7 +5362,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -5366,7 +5402,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(User.class);
 		}
@@ -5401,7 +5437,7 @@ public class ServerRestClient {
 			com.sun.jersey.api.client.ClientResponse response;
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
@@ -5437,7 +5473,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -5447,45 +5483,48 @@ public class ServerRestClient {
 			}
 		}
 
-		public User postAsUserXml() {
+		public User postXmlAsUser(User input) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("application/xml");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(User.class);
 		}
 
-		public <T> T postAsXml(com.sun.jersey.api.client.GenericType<T> returnType) {
+		public <T> T postXml(Object input, com.sun.jersey.api.client.GenericType<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("application/xml");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
 
-		public <T> T postAsXml(Class<T> returnType) {
+		public <T> T postXml(Object input, Class<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/xml");
+			resourceBuilder = resourceBuilder.type("application/xml");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -5495,45 +5534,48 @@ public class ServerRestClient {
 			}
 		}
 
-		public User postAsUserJson() {
+		public User postJsonAsUser(User input) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("application/json");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(User.class);
 		}
 
-		public <T> T postAsJson(com.sun.jersey.api.client.GenericType<T> returnType) {
+		public <T> T postJson(Object input, com.sun.jersey.api.client.GenericType<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("application/json");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (response.getStatus() >= 400) {
-				throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+				throwWebApplicationException(response);
 			}
 			return response.getEntity(returnType);
 		}
 
-		public <T> T postAsJson(Class<T> returnType) {
+		public <T> T postJson(Object input, Class<T> returnType) {
 			UriBuilder localUriBuilder = _uriBuilder.clone();
 			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
 					.buildFromMap(_templateAndMatrixParameterValues));
 			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
 			resourceBuilder = resourceBuilder.accept("application/json");
+			resourceBuilder = resourceBuilder.type("application/json");
 			com.sun.jersey.api.client.ClientResponse response;
-			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class);
+			response = resourceBuilder.method("POST", com.sun.jersey.api.client.ClientResponse.class, input);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
@@ -5620,7 +5662,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(User.class);
 			}
@@ -5634,7 +5676,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -5669,7 +5711,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(User.class);
 			}
@@ -5683,7 +5725,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -5717,7 +5759,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("DELETE", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(com.sun.jersey.api.client.ClientResponse.class);
 			}
@@ -5730,7 +5772,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("DELETE", com.sun.jersey.api.client.ClientResponse.class);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -5765,7 +5807,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(User.class);
 			}
@@ -5780,7 +5822,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}
@@ -5817,7 +5859,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(User.class);
 			}
@@ -5832,7 +5874,7 @@ public class ServerRestClient {
 				com.sun.jersey.api.client.ClientResponse response;
 				response = resourceBuilder.method("PUT", com.sun.jersey.api.client.ClientResponse.class, input);
 				if (response.getStatus() >= 400) {
-					throw new ServerRestClient.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+					throwWebApplicationException(response);
 				}
 				return response.getEntity(returnType);
 			}

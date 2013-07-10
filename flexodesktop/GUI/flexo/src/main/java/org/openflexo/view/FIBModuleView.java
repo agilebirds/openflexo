@@ -23,8 +23,8 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import javax.swing.Scrollable;
@@ -96,9 +96,7 @@ public abstract class FIBModuleView<O extends FlexoModelObject> extends Selectio
 
 	@Override
 	public List<SelectionListener> getSelectionListeners() {
-		Vector<SelectionListener> reply = new Vector<SelectionListener>();
-		reply.add(this);
-		return reply;
+		return Arrays.asList((SelectionListener) this);
 	}
 
 	@Override

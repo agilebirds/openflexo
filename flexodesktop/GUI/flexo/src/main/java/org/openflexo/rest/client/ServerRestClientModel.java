@@ -8,6 +8,7 @@ import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
 
+import javax.swing.SwingWorker;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.UriBuilder;
 
@@ -120,6 +121,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 			if (projects.size() > 0) {
 				setServerProject(projects.get(0));
 			} else {
+				setServerProject(null);
 				FlexoController.notify(FlexoLocalization.localizedForKey("your_project_is_not_handled_by_the_server"));
 				setVersions(Collections.<ProjectVersion> emptyList());
 			}
@@ -143,8 +145,9 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 			if (serverProject == null) {
 				return;
 			}
-			setVersions(client.projectsProjectIDVersions(serverProject.getProjectId()).getAsXml(page * pageSize, (page + 1) * pageSize, "",
-					new GenericType<List<ProjectVersion>>() {
+			UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("isMerged", Boolean.TRUE);
+			setVersions(client.projectsProjectIDVersions(client.createClient(), builder.build(), serverProject.getProjectId()).getAsXml(
+					page * pageSize, (page + 1) * pageSize, "creationDate desc", new GenericType<List<ProjectVersion>>() {
 					}));
 		}
 
@@ -172,6 +175,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
 			// client.jobs().pu
 			// TODO:
+			// client.jobs().
 		}
 
 		@Override
@@ -235,37 +239,48 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		pcSupport.firePropertyChange(DELETED, false, true);
 	}
 
-	private void performOperations(ServerRestClientOperation... operations) {
-		boolean firstAttempt = true;
+	private void performOperations(final ServerRestClientOperation... operations) {
 		ProgressWindow.makeProgressWindow("", operations.length);
-		try {
-			for (ServerRestClientOperation operation : operations) {
-				ServerRestClient client = getServerRestClient(!firstAttempt);
-				ProgressWindow.setProgressInstance(operation.getLocalizedTitle());
-				ProgressWindow.resetSecondaryProgressInstance(operation.getSteps());
+		SwingWorker<Void, Integer> worker = new SwingWorker<Void, Integer>() {
+
+			@Override
+			protected Void doInBackground() throws Exception {
+				boolean firstAttempt = true;
 				try {
-					operation.doOperation(client, new Progress() {
-						@Override
-						public void increment(String message) {
-							ProgressWindow.setSecondaryProgressInstance(message);
+					for (ServerRestClientOperation operation : operations) {
+						ServerRestClient client = getServerRestClient(!firstAttempt);
+						ProgressWindow.setProgressInstance(operation.getLocalizedTitle());
+						ProgressWindow.resetSecondaryProgressInstance(operation.getSteps());
+						try {
+							operation.doOperation(client, new Progress() {
+								@Override
+								public void increment(String message) {
+									ProgressWindow.setSecondaryProgressInstance(message);
+								}
+							});
+						} catch (WebApplicationException e) {
+							e.printStackTrace();
+							if (!controller.handleWSException(e)) {
+								return null;
+							}
+							firstAttempt = false;
+						} catch (IOException e) {
+							e.printStackTrace();
+							if (!controller.handleWSException(e)) {
+								return null;
+							}
+							firstAttempt = false;
 						}
-					});
-				} catch (WebApplicationException e) {
-					e.printStackTrace();
-					if (!controller.handleWSException(e)) {
-						return;
 					}
-				} catch (IOException e) {
-					e.printStackTrace();
-					if (!controller.handleWSException(e)) {
-						return;
-					}
+				} finally {
+					ProgressWindow.hideProgressWindow();
 				}
-				firstAttempt = false;
+
+				return null;
 			}
-		} finally {
-			ProgressWindow.hideProgressWindow();
-		}
+
+		};
+		worker.execute();
 	}
 
 	public void refresh() {
@@ -332,7 +347,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 			job.setVersion(version);
 			job.setDocFormat(choice.getDocFormat());
 			job.setDocType(choice.getDocType());
-
+			performOperations(new GenerateDocumentation(job));
 		}
 
 	}
