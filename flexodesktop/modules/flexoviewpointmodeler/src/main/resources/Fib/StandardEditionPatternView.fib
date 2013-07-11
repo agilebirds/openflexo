@@ -65,6 +65,7 @@
                   <AddAction method="EditionSchemeTable.selected.createListParameter" name="add_list_parameter" />
                   <AddAction method="EditionSchemeTable.selected.createEditionPatternInstanceParameter" name="add_edition_pattern_instance_parameter" />
                   <AddAction method="EditionSchemeTable.selected.createPropertyParameter" name="add_property_parameter" />
+       		      <AddAction method="EditionSchemeTable.selected.createTechnologyObjectParameter" name="add_technology_object" />
                 </Table>
                 <Panel layout="box" boxLayoutAxis="Y_AXIS" borderTitle="Panel" titleFont="SansSerif,0,11" darkLevel="0" constraints="border(location=east)" opaque="false" name="ParametersOrderingPanel">
                   <Button action="EditionSchemeTable.selected.parameterFirst(ParametersTable.selected)" buttonIcon="controller.arrowTop" buttonType="Trigger" label="" localize="true" enable="((ParametersTable.selected != null) &amp; (ParametersTable.selected.index &gt; 0))" index="0" constraints="box(alignmentX=0.5;alignmentY=0.5;index=0;location=west)">
