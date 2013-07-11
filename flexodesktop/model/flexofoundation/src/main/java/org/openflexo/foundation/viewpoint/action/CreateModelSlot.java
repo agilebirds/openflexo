@@ -23,6 +23,7 @@ import java.security.InvalidParameterException;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoAction;
@@ -30,7 +31,9 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.rm.DuplicateResourceException;
 import org.openflexo.foundation.rm.VirtualModelResource;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.FlexoMetaModelResource;
+import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
@@ -170,6 +173,32 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, VirtualModel, 
 
 	public boolean isTypeAwareModelSlot() {
 		return getModelSlotClass() != null && TypeAwareModelSlot.class.isAssignableFrom(getModelSlotClass());
+	}
+
+	/**
+	 * Return class of models this repository contains, in case of selected model slot class is a TypeAwareModelSlot
+	 * 
+	 * @return
+	 */
+	public final Class<? extends FlexoModel<?, ?>> getModelClass() {
+		if (getModelSlotClass() != null && TypeAwareModelSlot.class.isAssignableFrom(getModelSlotClass())) {
+			return (Class<? extends FlexoModel<?, ?>>) TypeUtils.getTypeArguments(getModelSlotClass(), TypeAwareModelSlot.class).get(
+					TypeAwareModelSlot.class.getTypeParameters()[0]);
+		}
+		return null;
+	}
+
+	/**
+	 * Return class of models this repository contains, in case of selected model slot class is a TypeAwareModelSlot
+	 * 
+	 * @return
+	 */
+	public final Class<? extends FlexoMetaModel<?>> getMetaModelClass() {
+		if (getModelSlotClass() != null && TypeAwareModelSlot.class.isAssignableFrom(getModelSlotClass())) {
+			return (Class<? extends FlexoMetaModel<?>>) TypeUtils.getTypeArguments(getModelSlotClass(), TypeAwareModelSlot.class).get(
+					TypeAwareModelSlot.class.getTypeParameters()[1]);
+		}
+		return null;
 	}
 
 }

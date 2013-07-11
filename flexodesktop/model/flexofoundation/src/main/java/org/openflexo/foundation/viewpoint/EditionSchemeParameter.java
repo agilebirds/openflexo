@@ -59,7 +59,8 @@ public abstract class EditionSchemeParameter extends EditionSchemeObject impleme
 		DATA_PROPERTY,
 		FLEXO_OBJECT,
 		LIST,
-		EDITION_PATTERN;
+		EDITION_PATTERN,
+		TECHNOLOGY_OBJECT;
 	}
 
 	private String label;

@@ -86,14 +86,16 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLModel, XSDMetaModel> {
 
 	public XSDModelSlot(VirtualModel<?> virtualModel, XSDTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
-		if (uriProcessors == null)
+		if (uriProcessors == null) {
 			uriProcessors = new Hashtable<String, XSURIProcessor>();
+		}
 	}
 
 	public XSDModelSlot(VirtualModelBuilder builder) {
 		super(builder);
-		if (uriProcessors == null)
+		if (uriProcessors == null) {
 			uriProcessors = new Hashtable<String, XSURIProcessor>();
+		}
 	}
 
 	/*public XSDModelSlot(ViewPointBuilder builder) {
@@ -255,8 +257,9 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLModel, XSDMetaModel> {
 					} else {
 						logger.warning("unable to map typeURI to an OntClass, as metaModelResource is Null ");
 					}
-				} else
+				} else {
 					mappedClass = null;
+				}
 			} else {
 				logger.warning("unable to map typeURI to an OntClass, as modelSlot is Null ");
 			}
@@ -292,8 +295,9 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLModel, XSDMetaModel> {
 					Object value = ((XSOntIndividual) xsO).getPropertyValue(restriction.getProperty());
 					return msInstance.getModelURI() + "#" + (String) value;
 
-				} else
+				} else {
 					logger.warning("Cannot process URI - Unexpected or Unspecified mapping parameters");
+				}
 				return null;
 			}
 		}
@@ -388,6 +392,11 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLModel, XSDMetaModel> {
 			String modelUri, FlexoMetaModelResource<XMLModel, XSDMetaModel> metaModelResource) {
 		return getTechnologyAdapter().createNewXMLFile((FileSystemBasedResourceCenter) resourceCenter, relativePath, filename, modelUri,
 				(XSDMetaModelResource) metaModelResource);
+	}
+
+	@Override
+	public boolean isStrictMetaModelling() {
+		return true;
 	}
 
 }

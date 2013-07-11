@@ -15,8 +15,10 @@ import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.resource.DefaultResourceCenterService;
 import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterAdded;
 import org.openflexo.foundation.resource.DefaultResourceCenterService.ResourceCenterRemoved;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.resource.ResourceRepository;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.factory.ModelFactory;
@@ -231,6 +233,76 @@ public abstract class DefaultTechnologyAdapterService extends FlexoServiceImpl i
 			Collection<ResourceRepository<?>> repCollection = rc.getRegistedRepositories(technologyAdapter);
 			if (repCollection != null) {
 				returned.addAll(repCollection);
+			}
+		}
+		return returned;
+	}
+
+	/**
+	 * Return the list of all non-empty {@link ResourceRepository} discovered in the scope of {@link FlexoServiceManager} which may give
+	 * access to some instance of supplied resource data class, related to technology as supplied by {@link TechnologyAdapter} parameter
+	 * 
+	 * @param technologyAdapter
+	 * @return
+	 */
+	@Override
+	public <RD extends ResourceData<RD>> List<ResourceRepository<? extends FlexoResource<RD>>> getAllRepositories(
+			TechnologyAdapter technologyAdapter, Class<RD> resourceDataClass) {
+		List<ResourceRepository<? extends FlexoResource<RD>>> returned = new ArrayList<ResourceRepository<? extends FlexoResource<RD>>>();
+		for (FlexoResourceCenter<?> rc : getFlexoResourceCenterService().getResourceCenters()) {
+			Collection<ResourceRepository<?>> repCollection = rc.getRegistedRepositories(technologyAdapter);
+			if (repCollection != null) {
+				for (ResourceRepository<?> rep : repCollection) {
+					if (resourceDataClass.isAssignableFrom(rep.getResourceDataClass())) {
+						returned.add((ResourceRepository<? extends FlexoResource<RD>>) rep);
+					}
+				}
+			}
+		}
+		return returned;
+	}
+
+	/**
+	 * Return the list of all non-empty {@link ModelRepository} discovered in the scope of {@link FlexoServiceManager}, related to
+	 * technology as supplied by {@link TechnologyAdapter} parameter
+	 * 
+	 * @param technologyAdapter
+	 * @return
+	 */
+	@Override
+	public List<ModelRepository<?, ?, ?, ?>> getAllModelRepositories(TechnologyAdapter technologyAdapter) {
+		List<ModelRepository<?, ?, ?, ?>> returned = new ArrayList<ModelRepository<?, ?, ?, ?>>();
+		for (FlexoResourceCenter<?> rc : getFlexoResourceCenterService().getResourceCenters()) {
+			Collection<ResourceRepository<?>> repCollection = rc.getRegistedRepositories(technologyAdapter);
+			if (repCollection != null) {
+				for (ResourceRepository<?> rep : repCollection) {
+					if (rep instanceof ModelRepository) {
+						returned.add((ModelRepository<?, ?, ?, ?>) rep);
+					}
+				}
+			}
+		}
+		return returned;
+	}
+
+	/**
+	 * Return the list of all non-empty {@link MetaModelRepository} discovered in the scope of {@link FlexoServiceManager}, related to
+	 * technology as supplied by {@link TechnologyAdapter} parameter
+	 * 
+	 * @param technologyAdapter
+	 * @return
+	 */
+	@Override
+	public List<MetaModelRepository<?, ?, ?, ?>> getAllMetaModelRepositories(TechnologyAdapter technologyAdapter) {
+		List<MetaModelRepository<?, ?, ?, ?>> returned = new ArrayList<MetaModelRepository<?, ?, ?, ?>>();
+		for (FlexoResourceCenter<?> rc : getFlexoResourceCenterService().getResourceCenters()) {
+			Collection<ResourceRepository<?>> repCollection = rc.getRegistedRepositories(technologyAdapter);
+			if (repCollection != null) {
+				for (ResourceRepository<?> rep : repCollection) {
+					if (rep instanceof MetaModelRepository) {
+						returned.add((MetaModelRepository<?, ?, ?, ?>) rep);
+					}
+				}
 			}
 		}
 		return returned;

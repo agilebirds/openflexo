@@ -30,4 +30,5 @@ public class EMFModelRepository extends ModelRepository<EMFModelResource, EMFMod
 	public EMFModelRepository(EMFTechnologyAdapter adapter, FlexoResourceCenter<?> resourceCenter) {
 		super(adapter, resourceCenter);
 	}
+
 }

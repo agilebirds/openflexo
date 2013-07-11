@@ -19,7 +19,6 @@
  */
 package org.openflexo.technologyadapter.excel.rm;
 
-
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.MetaModelRepository;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
@@ -43,4 +42,5 @@ public class ExcelMetaModelRepository extends
 	public ExcelMetaModelRepository(ExcelTechnologyAdapter adapter, FlexoResourceCenter<?> resourceCenter) {
 		super(adapter, resourceCenter);
 	}
+
 }

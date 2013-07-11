@@ -201,6 +201,10 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 		});
 	}
 
+	public FIBController getFIBController() {
+		return controller;
+	}
+
 	@Override
 	public void delete() {
 		super.delete();
@@ -353,7 +357,7 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 	 */
 	protected boolean matches(T o, String filteredName) {
 		return o != null && StringUtils.isNotEmpty(renderedString(o))
-				&& (renderedString(o)).toUpperCase().indexOf(filteredName.toUpperCase()) > -1;
+				&& renderedString(o).toUpperCase().indexOf(filteredName.toUpperCase()) > -1;
 		/*if (o instanceof FlexoModelObject) {
 			return ((FlexoModelObject) o).getName() != null
 					&& ((FlexoModelObject) o).getName().toUpperCase().indexOf(filteredName.toUpperCase()) > -1;
@@ -419,7 +423,7 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 		// logger.info("updateCustomPanel with " + editedObject + " _selectorPanel=" + _selectorPanel);
 		setSelectedObject(editedObject);
 		if (_selectorPanel != null) {
-			_selectorPanel.update();
+			_selectorPanel.update(true);
 		}
 	}
 
@@ -455,8 +459,8 @@ public abstract class FIBModelObjectSelector<T> extends TextFieldCustomPopup<T> 
 			}
 		}
 
-		public void update() {
-			controller.setDataObject(FIBModelObjectSelector.this);
+		public void update(boolean force) {
+			controller.setDataObject(FIBModelObjectSelector.this, force);
 			// logger.info("update() selectedValue=" + getSelectedValue() + " selectedObject=" + getSelectedObject());
 			selectValue(getSelectedValue());
 		}
