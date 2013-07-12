@@ -23,6 +23,7 @@ import java.io.File;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.technologyadapter.InformationSpace;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
@@ -44,7 +45,7 @@ public class FIBResourceSelector extends FIBModelObjectSelector<TechnologyAdapte
 	private InformationSpace informationSpace;
 	private TechnologyAdapter technologyAdapter;
 	private FlexoResourceCenter resourceCenter;
-	private TechnologyAdapterResource resource;
+	private Class<? extends ResourceData<?>> resourceDataClass;
 
 	public FIBResourceSelector(TechnologyAdapterResource editedObject) {
 		super(editedObject);
@@ -104,13 +105,20 @@ public class FIBResourceSelector extends FIBModelObjectSelector<TechnologyAdapte
 		this.resourceCenter = resourceCenter;
 	}
 
-	public TechnologyAdapterResource getResource() {
-		return resource;
+	// IMPORTANT: used in ResourceSelector.fib
+	public <RD extends ResourceData<RD>> Class<RD> getTypedResourceDataClass() {
+		return (Class<RD>) resourceDataClass;
 	}
 
-	@CustomComponentParameter(name = "resource", type = CustomComponentParameter.Type.OPTIONAL)
-	public void setResource(TechnologyAdapterResource resource) {
-		this.resource = resource;
+	public Class<? extends ResourceData<?>> getResourceDataClass() {
+		return resourceDataClass;
+	}
+
+	@CustomComponentParameter(name = "resourceDataClass", type = CustomComponentParameter.Type.OPTIONAL)
+	public void setResourceDataClass(Class<? extends ResourceData<?>> resourceDataClass) {
+		// System.out.println("set resource data class with " + resourceDataClass);
+		this.resourceDataClass = resourceDataClass;
+		fireEditedObjectChanged();
 	}
 
 	//
@@ -121,7 +129,12 @@ public class FIBResourceSelector extends FIBModelObjectSelector<TechnologyAdapte
 		if (super.isAcceptableValue(o)) {
 			if (o instanceof TechnologyAdapterResource) {
 				if (getTechnologyAdapter() != null) {
-					return ((TechnologyAdapterResource) o).getTechnologyAdapter() == getTechnologyAdapter();
+					if (((TechnologyAdapterResource) o).getTechnologyAdapter() != getTechnologyAdapter()) {
+						return false;
+					}
+				}
+				if (getResourceDataClass() != null) {
+					return getResourceDataClass().isAssignableFrom(((TechnologyAdapterResource) o).getResourceDataClass());
 				}
 				return true;
 			}

@@ -59,4 +59,5 @@ public class ViewPointRepository extends FileResourceRepository<ViewPointResourc
 	public ViewPointLibrary getViewPointLibrary() {
 		return viewPointLibrary;
 	}
+
 }

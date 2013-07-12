@@ -84,7 +84,10 @@ public class EditionPatternInstanceParameter extends InnerModelSlotParameter<Vir
 	}
 
 	public VirtualModel<?> getModelSlotVirtualModel() {
-		return getModelSlot().getVirtualModelResource().getVirtualModel();
+		if (getModelSlot() != null) {
+			return getModelSlot().getVirtualModelResource().getVirtualModel();
+		}
+		return null;
 	}
 
 }

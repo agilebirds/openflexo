@@ -337,11 +337,7 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 	public abstract ModelSlotInstanceConfiguration<? extends ModelSlot<RD>, RD> createConfiguration(CreateVirtualModelInstance<?> action);
 
 	/**
-	 * Model Slot is responsible for URI mapping
-	 * 
-	 */
-
-	/**
+	 * A Model Slot is responsible for URI mapping
 	 * 
 	 * @param msInstance
 	 * @param o
@@ -351,6 +347,8 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 	public abstract String getURIForObject(ModelSlotInstance<? extends ModelSlot<RD>, RD> msInstance, Object o);
 
 	/**
+	 * A Model Slot is responsible for URI mapping
+	 * 
 	 * @param msInstance
 	 * @param objectURI
 	 * @return the Object
@@ -393,6 +391,10 @@ public abstract class ModelSlot<RD extends ResourceData<RD>> extends NamedViewPo
 	@Override
 	public String toString() {
 		return getClass().getSimpleName() + ":" + getName();
+	}
+
+	public String getModelSlotDescription() {
+		return getTechnologyAdapter().getName();
 	}
 
 }

@@ -192,4 +192,9 @@ public class SemanticsExcelModelSlot extends TypeAwareModelSlot<ExcelModel, Exce
 		return null;
 	}
 
+	@Override
+	public boolean isStrictMetaModelling() {
+		return true;
+	}
+
 }

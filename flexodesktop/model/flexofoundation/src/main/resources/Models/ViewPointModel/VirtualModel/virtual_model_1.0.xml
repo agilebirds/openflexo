@@ -421,6 +421,10 @@
 	</entity>
 
 	<entity
+		name="org.openflexo.foundation.viewpoint.TechnologyObjectParameter" xmlTag="TechnologyObjectParameter">
+	</entity>
+
+	<entity
 		name="org.openflexo.foundation.viewpoint.ListParameter" xmlTag="ListParameter">
 		<property name="listType" xmlTag="listType" attribute="YES" />
 		<property name="list" xmlTag="list" attribute="YES" />

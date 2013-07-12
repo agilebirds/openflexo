@@ -17,24 +17,32 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.technologyadapter.excel.rm;
+package org.openflexo.foundation.viewpoint;
 
-import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.technologyadapter.ModelRepository;
-import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
-import org.openflexo.technologyadapter.excel.model.semantics.ExcelMetaModel;
-import org.openflexo.technologyadapter.excel.model.semantics.ExcelModel;
+import java.lang.reflect.Type;
+
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 
 /**
- * Excel model repository
+ * Allows the manipulation of an instance of a TechnologyObject
  * 
  * @author sylvain
  * 
  */
-public class ExcelModelRepository extends ModelRepository<ExcelModelResource, ExcelModel, ExcelMetaModel, ExcelTechnologyAdapter> {
+public class TechnologyObjectParameter<MS extends ModelSlot<?>> extends InnerModelSlotParameter<MS> {
 
-	public ExcelModelRepository(ExcelTechnologyAdapter adapter, FlexoResourceCenter<?> resourceCenter) {
-		super(adapter, resourceCenter);
+	public TechnologyObjectParameter(VirtualModel.VirtualModelBuilder builder) {
+		super(builder);
+	}
+
+	@Override
+	public Type getType() {
+		return Object.class;
+	};
+
+	@Override
+	public WidgetType getWidget() {
+		return WidgetType.TECHNOLOGY_OBJECT;
 	}
 
 }

@@ -29,4 +29,5 @@ public class OWLOntologyRepository extends ModelRepository<OWLOntologyResource, 
 	public OWLOntologyRepository(OWLTechnologyAdapter adapter, FlexoResourceCenter<?> rc) {
 		super(adapter, rc);
 	}
+
 }

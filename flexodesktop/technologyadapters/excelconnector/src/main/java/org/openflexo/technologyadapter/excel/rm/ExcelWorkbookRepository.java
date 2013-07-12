@@ -36,4 +36,5 @@ public class ExcelWorkbookRepository extends
 	public ExcelWorkbookRepository(ExcelTechnologyAdapter adapter, FlexoResourceCenter<?> resourceCenter) {
 		super(adapter, resourceCenter);
 	}
+
 }

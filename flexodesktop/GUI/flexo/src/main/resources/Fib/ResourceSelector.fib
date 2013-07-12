@@ -9,12 +9,12 @@
     <BrowserElement dataClassName="org.openflexo.foundation.technologyadapter.InformationSpace" label="&quot;Information Space&quot;" icon="controller.iconForObject(informationSpace)" isEditable="false" filtered="false" defaultVisible="true" name="informationSpace">
       <Children data="informationSpace.technologyAdapters" name="resourceCenters" />
     </BrowserElement>
-    <BrowserElement dataClassName="org.openflexo.foundation.resource.RepositoryFolder" label="folder.name" icon="controller.iconForObject(viewPointFolder)" isEditable="false" filtered="false" defaultVisible="true" name="folder">
+    <BrowserElement dataClassName="org.openflexo.foundation.resource.RepositoryFolder" label="folder.name" icon="controller.iconForObject(folder)" isEditable="false" filtered="false" defaultVisible="true" name="folder">
       <Children data="folder.children" name="subFolders" />
       <Children data="folder.resources" name="resource" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.foundation.technologyadapter.TechnologyAdapter" label="technologyAdapter.name" icon="controller.iconForObject(technologyAdapter)" isEditable="false" filtered="false" defaultVisible="true" name="technologyAdapter">
-      <Children data="data.informationSpace.getAllRepositories(technologyAdapter)" visible="true" cast="child.rootFolder" name="resourceRepositories" />
+      <Children data="data.informationSpace.getAllRepositories(technologyAdapter,data.typedResourceDataClass)" visible="true" cast="child.rootFolder" name="resourceRepositories" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.foundation.technologyadapter.TechnologyAdapterResource" label="resource.name" icon="controller.iconForObject(resource)" enabled="(data.resource = null)" isEditable="false" filtered="false" defaultVisible="true" name="resource" />
   </Browser>

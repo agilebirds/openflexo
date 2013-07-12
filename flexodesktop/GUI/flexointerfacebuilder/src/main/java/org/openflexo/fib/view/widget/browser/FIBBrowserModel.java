@@ -427,7 +427,7 @@ public class FIBBrowserModel extends DefaultTreeModel implements TreeModel {
 				computedExhaustiveContents.add(getRepresentedObject());
 			}
 
-			// logger.info("**************** update() "+this);
+			// logger.info("**************** update() " + this);
 			if (browserElementType == null) {
 				logger.warning("No element type registered for " + getRepresentedObject());
 				return;
