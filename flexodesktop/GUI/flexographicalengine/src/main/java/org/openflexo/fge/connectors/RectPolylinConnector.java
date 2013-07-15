@@ -237,7 +237,6 @@ public interface RectPolylinConnector extends Connector {
 	public void setFixedEndLocation(FGEPoint aPoint);
 
 	@Getter(value = POLYLIN, ignoreType = true)
-	@XMLElement
 	public FGERectPolylin _getPolylin();
 
 	@Setter(value = POLYLIN)

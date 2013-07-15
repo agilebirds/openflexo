@@ -24,6 +24,8 @@ import java.awt.Paint;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.impl.BackgroundStyleImpl;
 import org.openflexo.model.annotations.ImplementationClass;
+import org.openflexo.model.annotations.Import;
+import org.openflexo.model.annotations.Imports;
 import org.openflexo.model.annotations.ModelEntity;
 
 /**
@@ -34,6 +36,8 @@ import org.openflexo.model.annotations.ModelEntity;
  */
 @ModelEntity(isAbstract = true)
 @ImplementationClass(BackgroundStyleImpl.class)
+@Imports({ @Import(NoneBackgroundStyle.class), @Import(ColorBackgroundStyle.class), @Import(ColorGradientBackgroundStyle.class),
+		@Import(TextureBackgroundStyle.class), @Import(BackgroundImageBackgroundStyle.class) })
 public interface BackgroundStyle extends FGEStyle {
 
 	public static enum Parameters implements GRParameter {

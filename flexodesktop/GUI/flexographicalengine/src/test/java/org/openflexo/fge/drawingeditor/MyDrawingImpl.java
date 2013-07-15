@@ -31,14 +31,12 @@ import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
-import org.openflexo.toolbox.FileResource;
-import org.openflexo.xmlcode.XMLMapping;
 
 public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDrawingGraphicalRepresentation> implements MyDrawing {
 
 	private static final Logger logger = FlexoLogger.getLogger(MyDrawingImpl.class.getPackage().getName());
 
-	private static XMLMapping mapping;
+	// private static XMLMapping mapping;
 
 	private int index;
 	private File file = null;
@@ -46,13 +44,13 @@ public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDr
 
 	private DrawingEditorFactory factory;
 
-	static {
+	/*static {
 		try {
 			mapping = new XMLMapping(new FileResource("Mappings/DrawingMapping.xml"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	// Used by PAMELA, do not use it
 	public MyDrawingImpl() {
@@ -62,7 +60,9 @@ public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDr
 	// Called for LOAD
 	public MyDrawingImpl(DrawingBuilder builder) {
 		this();
-		builder.drawing = this;
+		if (builder != null) {
+			builder.drawing = this;
+		}
 		// initializeDeserialization();
 	}
 

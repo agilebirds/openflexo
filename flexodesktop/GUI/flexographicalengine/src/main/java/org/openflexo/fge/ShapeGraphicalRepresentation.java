@@ -295,7 +295,6 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	public void setLocationConstraints(LocationConstraints locationConstraints);
 
 	@Getter(value = LOCATION_CONSTRAINED_AREA, ignoreType = true)
-	@XMLAttribute
 	public FGEArea getLocationConstrainedArea();
 
 	@Setter(value = LOCATION_CONSTRAINED_AREA)

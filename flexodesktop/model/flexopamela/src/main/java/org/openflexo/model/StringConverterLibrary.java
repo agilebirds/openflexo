@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
@@ -272,7 +270,16 @@ public class StringConverterLibrary {
 
 		@Override
 		public Double convertFromString(String value, ModelFactory factory) {
-			return Double.valueOf(value);
+			try {
+				return Double.valueOf(value);
+			} catch (NumberFormatException e) {
+				if (value.equals("POSITIVE_INFINITY")) {
+					return Double.POSITIVE_INFINITY;
+				} else if (value.equals("NEGATIVE_INFINITY")) {
+					return Double.NEGATIVE_INFINITY;
+				}
+				throw e;
+			}
 		}
 
 		@Override
