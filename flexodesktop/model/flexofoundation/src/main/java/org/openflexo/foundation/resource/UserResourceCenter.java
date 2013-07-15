@@ -55,9 +55,9 @@ public class UserResourceCenter implements FlexoResourceCenter {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} else if (!userResourceCenterStorageFile.canRead() || !userResourceCenterStorageFile.canWrite()) {
+		} /*else if (!userResourceCenterStorageFile.canRead() || !userResourceCenterStorageFile.canWrite()) {
 			System.err.println("Permission denied for file " + userResourceCenterStorageFile.getAbsolutePath());
-		}
+			}*/
 		if (storage == null) {
 			storage = modelFactory.newInstance(Storage.class);
 		}
