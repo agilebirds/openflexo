@@ -216,19 +216,20 @@ public class FIBLibrary {
 		return (FIBComponent) XMLDecoder.decodeObjectWithMapping(inputStream, getFIBMapping(), this);
 	}
 
-	public static void save(FIBComponent component, File file) {
+	public static boolean save(FIBComponent component, File file) {
 		logger.info("Save to file " + file.getAbsolutePath());
 
 		FileOutputStream out = null;
 		try {
 			out = new FileOutputStream(file);
 			saveComponentToStream(component, file, out);
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			IOUtils.closeQuietly(out);
 		}
-
+		return false;
 	}
 
 	public static void saveComponentToStream(FIBComponent component, File file, OutputStream stream) {

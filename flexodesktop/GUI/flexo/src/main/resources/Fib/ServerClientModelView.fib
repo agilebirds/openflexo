@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="border" darkLevel="0" dataClassName="org.openflexo.rest.client.ServerRestClientModel">
+<Panel layout="border" darkLevel="0" dataClassName="org.openflexo.rest.client.ServerRestClientModel" controllerClassName="org.openflexo.view.controller.FlexoFIBController">
   <Panel layout="border" darkLevel="0" constraints="border(location=center)">
     <Panel layout="flow" hGap="5" vGap="5" flowAlignment="LEFT" darkLevel="0" constraints="border(location=south)">
       <Panel layout="grid" hGap="5" vGap="5" cols="8" rows="1" darkLevel="0" constraints="flow()">
@@ -13,9 +13,9 @@
         <LabelColumn data="iterator.comment" title="comment" columnWidth="100" resizable="true" displayTitle="true" name="label" />
         <LabelColumn data="iterator.creationDate" title="creation_date" columnWidth="100" resizable="true" displayTitle="true" name="label" />
         <LabelColumn data="iterator.creator" title="creator" columnWidth="100" resizable="true" displayTitle="true" name="label" />
-        <IconColumn data="data" title="Consistency" columnWidth="100" resizable="true" displayTitle="true" name="icon" />
-        <ButtonColumn title="generate_doc" columnWidth="100" resizable="true" displayTitle="true" name="button" />
-        <ButtonColumn title="generate_proto" columnWidth="100" resizable="true" displayTitle="true" name="button" />
+        <IconColumn data="data.getConsistencyIcon(iterator)" title="Consistency" columnWidth="100" resizable="true" displayTitle="true" name="icon" />
+        <ButtonColumn action="data.generateDocumentation(iterator)" data="controller.getLocalizedForKey(&quot;generate_doc&quot;)" title="generate_doc" columnWidth="100" resizable="true" displayTitle="true" name="button" />
+        <ButtonColumn action="data.generatePrototype(iterator)" data="controller.getLocalizedForKey(&quot;generate_proto&quot;)" title="generate_proto" columnWidth="100" resizable="true" displayTitle="true" name="button" />
       </Table>
     </Panel>
   </Panel>
@@ -35,9 +35,9 @@
     <Localized key="creation_date" lang="English">Creation date</Localized>
     <Localized key="creation_date" lang="French">Date de création</Localized>
     <Localized key="creation_date" lang="Dutch">Aanmaak datum</Localized>
-    <Localized key="creator" lang="English">creator</Localized>
-    <Localized key="creator" lang="French">creator</Localized>
-    <Localized key="creator" lang="Dutch">creator</Localized>
+    <Localized key="creator" lang="English">Creator</Localized>
+    <Localized key="creator" lang="French">Créateur</Localized>
+    <Localized key="creator" lang="Dutch">Schepper</Localized>
     <Localized key="Consistency" lang="English">Consistency</Localized>
     <Localized key="Consistency" lang="French">Consistency</Localized>
     <Localized key="Consistency" lang="Dutch">Consistency</Localized>

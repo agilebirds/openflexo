@@ -8,6 +8,7 @@ import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.SwingWorker;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.UriBuilder;
@@ -16,6 +17,7 @@ import org.openflexo.components.ProgressWindow;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.controller.FIBDialog;
 import org.openflexo.foundation.rm.FlexoProject;
+import org.openflexo.icon.IconLibrary;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.rest.client.model.DocFormat;
 import org.openflexo.rest.client.model.Job;
@@ -47,6 +49,10 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		private String docType;
 		private DocFormat docFormat;
 		private File folder;
+
+		public DocGenerationChoice() {
+			pcSupport = new PropertyChangeSupport(this);
+		}
 
 		public void delete() {
 			this.pcSupport.firePropertyChange(DELETED, false, true);
@@ -325,6 +331,14 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 	private void setVersions(List<ProjectVersion> versions) {
 		this.versions = versions;
 		pcSupport.firePropertyChange(VERSIONS, null, versions);
+	}
+
+	public ImageIcon getConsistencyIcon(ProjectVersion version) {
+		if (version.isIsProtoValidationSuccessful()) {
+			return IconLibrary.POSITIVE_MARKER.getImage();
+		} else {
+			return IconLibrary.ERROR2.getImage();
+		}
 	}
 
 	public void generateDocumentation(ProjectVersion version) {
