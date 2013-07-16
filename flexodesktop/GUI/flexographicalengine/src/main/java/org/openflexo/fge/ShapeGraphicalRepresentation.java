@@ -60,7 +60,7 @@ import org.openflexo.model.annotations.XMLElement;
 @ModelEntity
 @ImplementationClass(ShapeGraphicalRepresentationImpl.class)
 @XMLElement(xmlTag = "ShapeGraphicalRepresentation")
-public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation<O> {
+public interface ShapeGraphicalRepresentation extends GraphicalRepresentation {
 
 	// Property keys
 
@@ -531,7 +531,7 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 
 	public void setShapeType(ShapeType shapeType);
 
-	public ShapeGraphicalRepresentation<O> clone();
+	public ShapeGraphicalRepresentation clone();
 
 	public void extendParentBoundsToHostThisShape();
 
@@ -614,7 +614,7 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	 * @param scale
 	 * @return
 	 */
-	public Rectangle getBounds(GraphicalRepresentation<?> container, double scale);
+	public Rectangle getBounds(GraphicalRepresentation container, double scale);
 
 	/**
 	 * Return logical bounds (including border) relative to given container
@@ -622,7 +622,7 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	 * @param scale
 	 * @return
 	 */
-	public Rectangle getViewBounds(GraphicalRepresentation<?> container, double scale);
+	public Rectangle getViewBounds(GraphicalRepresentation container, double scale);
 
 	public boolean isPointInsideShape(FGEPoint aPoint);
 
@@ -635,7 +635,7 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	public void setShapePainter(ShapePainter aPainter);
 
 	// Override for a custom view management
-	public ShapeView<O> makeShapeView(DrawingController<?> controller);
+	public ShapeView makeShapeView(DrawingController controller);
 
 	@Override
 	public String toString();
@@ -649,7 +649,7 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	 *            the connector asking where to start
 	 * @return the area on which the given connector can start
 	 */
-	public FGEArea getAllowedStartAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR);
+	public FGEArea getAllowedStartAreaForConnector(ConnectorGraphicalRepresentation connectorGR);
 
 	/**
 	 * Returns the area on which the given connector can end. The area is expressed in this normalized coordinates
@@ -658,7 +658,7 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	 *            the connector asking where to end
 	 * @return the area on which the given connector can end
 	 */
-	public FGEArea getAllowedEndAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR);
+	public FGEArea getAllowedEndAreaForConnector(ConnectorGraphicalRepresentation connectorGR);
 
 	/**
 	 * Returns the area on which the given connector can start. The area is expressed in this normalized coordinates
@@ -668,7 +668,7 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	 * 
 	 * @return the area on which the given connector can start
 	 */
-	public FGEArea getAllowedStartAreaForConnectorForDirection(ConnectorGraphicalRepresentation<?> connectorGR, FGEArea area,
+	public FGEArea getAllowedStartAreaForConnectorForDirection(ConnectorGraphicalRepresentation connectorGR, FGEArea area,
 			SimplifiedCardinalDirection direction);
 
 	/**
@@ -678,7 +678,7 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	 *            the connector asking where to end
 	 * @return the area on which the given connector can end
 	 */
-	public FGEArea getAllowedEndAreaForConnectorForDirection(ConnectorGraphicalRepresentation<?> connectorGR, FGEArea area,
+	public FGEArea getAllowedEndAreaForConnectorForDirection(ConnectorGraphicalRepresentation connectorGR, FGEArea area,
 			SimplifiedCardinalDirection direction);
 
 	public FGEShapeGraphics getGraphics();
@@ -695,13 +695,13 @@ public interface ShapeGraphicalRepresentation<O> extends GraphicalRepresentation
 	 * 
 	 * @return
 	 */
-	public boolean isAllowedToBeDraggedOutsideParentContainerInsideContainer(GraphicalRepresentation<?> container);
+	public boolean isAllowedToBeDraggedOutsideParentContainerInsideContainer(GraphicalRepresentation container);
 
 	/**
 	 * Override this if you want to use this feature Default implementation does nothing return boolean indicating if drag was successfully
 	 * performed
 	 */
-	public boolean dragOutsideParentContainerInsideContainer(GraphicalRepresentation<?> container, FGEPoint location);
+	public boolean dragOutsideParentContainerInsideContainer(GraphicalRepresentation container, FGEPoint location);
 
 	public void performRandomLayout();
 

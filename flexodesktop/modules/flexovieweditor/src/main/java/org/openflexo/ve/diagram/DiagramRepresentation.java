@@ -23,9 +23,9 @@ import java.util.Hashtable;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -35,7 +35,7 @@ import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramRootPane;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
 
-public class DiagramRepresentation extends DefaultDrawing<DiagramRootPane> implements GraphicalFlexoObserver, DiagramConstants {
+public class DiagramRepresentation extends DrawingImpl<DiagramRootPane> implements GraphicalFlexoObserver, DiagramConstants {
 
 	private static final Logger logger = Logger.getLogger(DiagramRepresentation.class.getPackage().getName());
 
@@ -111,12 +111,12 @@ public class DiagramRepresentation extends DefaultDrawing<DiagramRootPane> imple
 
 	/*@SuppressWarnings("unchecked")
 	@Override
-	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable)
+	public <O> GraphicalRepresentation retrieveGraphicalRepresentation(O aDrawable)
 	{
-		return (GraphicalRepresentation<O>)buildGraphicalRepresentation(aDrawable);
+		return (GraphicalRepresentation)buildGraphicalRepresentation(aDrawable);
 	}*/
 
-	/*private GraphicalRepresentation<?> buildGraphicalRepresentation(Object aDrawable)
+	/*private GraphicalRepresentation buildGraphicalRepresentation(Object aDrawable)
 	{
 		if (aDrawable instanceof OEShape) {
 			OEShape shape = (OEShape)aDrawable;
@@ -167,7 +167,7 @@ public class DiagramRepresentation extends DefaultDrawing<DiagramRootPane> imple
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable) {
+	public <O> GraphicalRepresentation retrieveGraphicalRepresentation(O aDrawable) {
 		if (aDrawable instanceof DiagramShape) {
 			DiagramShape shape = (DiagramShape) aDrawable;
 			DiagramShapeGR returned = shapesGR.get(shape);
@@ -175,7 +175,7 @@ public class DiagramRepresentation extends DefaultDrawing<DiagramRootPane> imple
 				returned = buildGraphicalRepresentation(shape);
 				shapesGR.put(shape, returned);
 			}
-			return (GraphicalRepresentation<O>) returned;
+			return (GraphicalRepresentation) returned;
 		} else if (aDrawable instanceof DiagramConnector) {
 			DiagramConnector connector = (DiagramConnector) aDrawable;
 			DiagramConnectorGR returned = connectorsGR.get(connector);
@@ -183,7 +183,7 @@ public class DiagramRepresentation extends DefaultDrawing<DiagramRootPane> imple
 				returned = buildGraphicalRepresentation(connector);
 				connectorsGR.put(connector, returned);
 			}
-			return (GraphicalRepresentation<O>) returned;
+			return (GraphicalRepresentation) returned;
 		}
 		logger.warning("Cannot build GraphicalRepresentation for " + aDrawable);
 		return null;
@@ -192,7 +192,7 @@ public class DiagramRepresentation extends DefaultDrawing<DiagramRootPane> imple
 	private DiagramConnectorGR buildGraphicalRepresentation(DiagramConnector connector) {
 		if (connector.getGraphicalRepresentation() instanceof ConnectorGraphicalRepresentation) {
 			DiagramConnectorGR graphicalRepresentation = new DiagramConnectorGR(connector, this);
-			graphicalRepresentation.setsWith((ConnectorGraphicalRepresentation<?>) connector.getGraphicalRepresentation(),
+			graphicalRepresentation.setsWith((ConnectorGraphicalRepresentation) connector.getGraphicalRepresentation(),
 					GraphicalRepresentation.Parameters.text);
 			if (!screenshotOnly) {
 				connector.setGraphicalRepresentation(graphicalRepresentation);
@@ -214,7 +214,7 @@ public class DiagramRepresentation extends DefaultDrawing<DiagramRootPane> imple
 		}*/
 		if (shape.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 			DiagramShapeGR graphicalRepresentation = new DiagramShapeGR(shape, this);
-			graphicalRepresentation.setsWith((GraphicalRepresentation<?>) shape.getGraphicalRepresentation(),
+			graphicalRepresentation.setsWith((GraphicalRepresentation) shape.getGraphicalRepresentation(),
 					GraphicalRepresentation.Parameters.text /*, ShapeGraphicalRepresentation.Parameters.border*/);
 			if (!screenshotOnly) {
 				shape.setGraphicalRepresentation(graphicalRepresentation);

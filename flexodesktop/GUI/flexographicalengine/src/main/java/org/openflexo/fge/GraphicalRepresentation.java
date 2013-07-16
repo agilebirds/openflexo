@@ -20,29 +20,19 @@
 package org.openflexo.fge;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Stroke;
-import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeSupport;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
 
 import org.openflexo.antar.binding.Bindable;
-import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
-import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
-import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseDragControl;
-import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.impl.GraphicalRepresentationImpl;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.model.annotations.Adder;
@@ -68,7 +58,7 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
  */
 @ModelEntity(isAbstract = true)
 @ImplementationClass(GraphicalRepresentationImpl.class)
-public interface GraphicalRepresentation<O> extends FGEObject, Bindable, BindingEvaluationContext, Observer, HasPropertyChangeSupport {
+public interface GraphicalRepresentation extends FGEObject, Bindable, Observer, HasPropertyChangeSupport {
 
 	// Property keys
 
@@ -156,13 +146,13 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 	}
 
 	public static class ConstraintDependency {
-		public GraphicalRepresentation<?> requiringGR;
+		public GraphicalRepresentation requiringGR;
 		public GRParameter requiringParameter;
-		public GraphicalRepresentation<?> requiredGR;
+		public GraphicalRepresentation requiredGR;
 		public GRParameter requiredParameter;
 
-		public ConstraintDependency(GraphicalRepresentation<?> requiringGR, GRParameter requiringParameter,
-				GraphicalRepresentation<?> requiredGR, GRParameter requiredParameter) {
+		public ConstraintDependency(GraphicalRepresentation requiringGR, GRParameter requiringParameter,
+				GraphicalRepresentation requiredGR, GRParameter requiredParameter) {
 			super();
 			this.requiringGR = requiringGR;
 			this.requiringParameter = requiringParameter;
@@ -183,9 +173,9 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 
 	@SuppressWarnings("serial")
 	public static class DependencyLoopException extends Exception {
-		private Vector<GraphicalRepresentation<?>> dependencies;
+		private Vector<GraphicalRepresentation> dependencies;
 
-		public DependencyLoopException(Vector<GraphicalRepresentation<?>> dependancies) {
+		public DependencyLoopException(Vector<GraphicalRepresentation> dependancies) {
 			this.dependencies = dependancies;
 		}
 
@@ -198,13 +188,6 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 	// *******************************************************************************
 	// * Model
 	// *******************************************************************************
-
-	@Getter(value = DRAWABLE, ignoreType = true)
-	@CloningStrategy(CloningStrategy.StrategyType.REFERENCE)
-	public O getDrawable();
-
-	@Setter(value = DRAWABLE)
-	public void setDrawable(O aDrawable);
 
 	@Getter(value = DRAWING, ignoreType = true)
 	@CloningStrategy(CloningStrategy.StrategyType.REFERENCE)
@@ -448,9 +431,9 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 
 	public Vector<GRParameter> getAllParameters();
 
-	public void setsWith(GraphicalRepresentation<?> gr);
+	public void setsWith(GraphicalRepresentation gr);
 
-	public void setsWith(GraphicalRepresentation<?> gr, GRParameter... exceptedParameters);
+	public void setsWith(GraphicalRepresentation gr, GRParameter... exceptedParameters);
 
 	public void initializeDeserialization();
 
@@ -464,11 +447,11 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 
 	public boolean hasFloatingLabel();
 
-	public boolean shouldBeDisplayed();
+	// public boolean shouldBeDisplayed();
 
-	public DrawingGraphicalRepresentation<?> getDrawingGraphicalRepresentation();
+	/*public DrawingGraphicalRepresentation getDrawingGraphicalRepresentation();
 
-	public <O2> GraphicalRepresentation<O2> getGraphicalRepresentation(O2 drawable);
+	public GraphicalRepresentation getGraphicalRepresentation(Object drawable);
 
 	public List<? extends Object> getContainedObjects(Object drawable);
 
@@ -476,25 +459,25 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 
 	public List<? extends Object> getContainedObjects();
 
-	public List<GraphicalRepresentation<?>> getContainedGraphicalRepresentations();
+	public List<GraphicalRepresentation> getContainedGraphicalRepresentations();
 
-	public List<GraphicalRepresentation<?>> getOrderedContainedGraphicalRepresentations();
+	public List<GraphicalRepresentation> getOrderedContainedGraphicalRepresentations();*/
 
-	public void moveToTop(GraphicalRepresentation<?> gr);
+	public void moveToTop(GraphicalRepresentation gr);
 
-	public int getOrder(GraphicalRepresentation<?> child1, GraphicalRepresentation<?> child2);
+	// public int getOrder(GraphicalRepresentation child1, GraphicalRepresentation child2);
 
-	public int getLayerOrder();
+	// public int getLayerOrder();
 
-	public int getIndex();
+	// public int getIndex();
 
-	public Object getContainer();
+	/*public Object getContainer();
 
-	public GraphicalRepresentation<?> getContainerGraphicalRepresentation();
+	public GraphicalRepresentation getContainerGraphicalRepresentation();
 
-	public GraphicalRepresentation<?> getParentGraphicalRepresentation();
+	public GraphicalRepresentation getParentGraphicalRepresentation();
 
-	public boolean contains(GraphicalRepresentation<?> gr);
+	public boolean contains(GraphicalRepresentation gr);
 
 	public boolean contains(Object drawable);
 
@@ -504,15 +487,15 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 
 	public boolean isConnectedToDrawing();
 
-	public boolean isAncestorOf(GraphicalRepresentation<?> child);
+	public boolean isAncestorOf(GraphicalRepresentation child);*/
 
-	public boolean isPointVisible(FGEPoint p);
+	// public boolean isPointVisible(FGEPoint p);
 
-	public ShapeGraphicalRepresentation<?> shapeHiding(FGEPoint p);
+	// public ShapeGraphicalRepresentation shapeHiding(FGEPoint p);
 
 	public boolean hasText();
 
-	public int getViewX(double scale);
+	/*public int getViewX(double scale);
 
 	public int getViewY(double scale);
 
@@ -522,9 +505,9 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 
 	public Rectangle getViewBounds(double scale);
 
-	public FGERectangle getNormalizedBounds();
+	public FGERectangle getNormalizedBounds();*/
 
-	public Point getLabelLocation(double scale);
+	/*public Point getLabelLocation(double scale);
 
 	public Dimension getLabelDimension(double scale);
 
@@ -532,7 +515,7 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 
 	public Rectangle getLabelBounds(double scale);
 
-	public void paint(Graphics g, DrawingController<?> controller);
+	public void paint(Graphics g, DrawingController controller);*/
 
 	public void notifyChange(GRParameter parameter, Object oldValue, Object newValue);
 
@@ -551,14 +534,14 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 
 	public boolean isDrawing();
 
-	public void notifyDrawableAdded(GraphicalRepresentation<?> addedGR);
+	public void notifyDrawableAdded(GraphicalRepresentation addedGR);
 
-	public void notifyDrawableRemoved(GraphicalRepresentation<?> removedGR);
+	public void notifyDrawableRemoved(GraphicalRepresentation removedGR);
 
 	@Override
 	public void update(Observable observable, Object notification);
 
-	public Point convertNormalizedPointToViewCoordinates(double x, double y, double scale);
+	/*public Point convertNormalizedPointToViewCoordinates(double x, double y, double scale);
 
 	public Rectangle convertNormalizedRectangleToViewCoordinates(FGERectangle r, double scale);
 
@@ -572,16 +555,17 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 
 	public FGEPoint convertViewCoordinatesToNormalizedPoint(Point p, double scale);
 
-	public FGEPoint convertRemoteViewCoordinatesToLocalNormalizedPoint(Point p, GraphicalRepresentation<?> source, double scale);
+	public FGEPoint convertRemoteViewCoordinatesToLocalNormalizedPoint(Point p, GraphicalRepresentation source, double scale);
 
-	public FGEPoint convertLocalViewCoordinatesToRemoteNormalizedPoint(Point p, GraphicalRepresentation<?> destination, double scale);
+	public FGEPoint convertLocalViewCoordinatesToRemoteNormalizedPoint(Point p, GraphicalRepresentation destination, double scale);
 
-	public Point convertLocalNormalizedPointToRemoteViewCoordinates(FGEPoint p, GraphicalRepresentation<?> destination, double scale);
+	public Point convertLocalNormalizedPointToRemoteViewCoordinates(FGEPoint p, GraphicalRepresentation destination, double scale);
 
-	public Rectangle convertLocalNormalizedRectangleToRemoteViewCoordinates(FGERectangle r, GraphicalRepresentation<?> destination,
+	public Rectangle convertLocalNormalizedRectangleToRemoteViewCoordinates(FGERectangle r, GraphicalRepresentation destination,
 			double scale);
 
-	public Point convertRemoteNormalizedPointToLocalViewCoordinates(FGEPoint p, GraphicalRepresentation<?> source, double scale);
+	public Point convertRemoteNormalizedPointToLocalViewCoordinates(FGEPoint p, GraphicalRepresentation source, double scale);
+	*/
 
 	public boolean isRegistered();
 
@@ -615,17 +599,17 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 	// Override when required
 	public void notifyObjectHierarchyHasBeenUpdated();
 
-	public void performRandomLayout(double width, double height);
+	// public void performRandomLayout(double width, double height);
 
-	public void performAutoLayout(double width, double height);
+	// public void performAutoLayout(double width, double height);
 
 	public Stroke getSpecificStroke();
 
 	public void setSpecificStroke(Stroke aStroke);
 
-	public boolean isRootGraphicalRepresentation();
+	/*public boolean isRootGraphicalRepresentation();
 
-	public GraphicalRepresentation<?> getRootGraphicalRepresentation();
+	public GraphicalRepresentation getRootGraphicalRepresentation();*/
 
 	public void createBindingModel();
 
@@ -637,24 +621,24 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 
 	public void updateBindingModel();
 
-	@Override
-	public Object getValue(BindingVariable variable);
+	/*@Override
+	public Object getValue(BindingVariable variable);*/
 
 	public void notifiedBindingModelRecreated();
 
 	public void notifyBindingChanged(DataBinding<?> binding);
 
-	public List<GraphicalRepresentation<?>> retrieveAllContainedGR();
+	// public List<GraphicalRepresentation> retrieveAllContainedGR();
 
-	public Iterator<GraphicalRepresentation<?>> allGRIterator();
+	// public Iterator<GraphicalRepresentation> allGRIterator();
 
-	public Iterator<GraphicalRepresentation<?>> allContainedGRIterator();
+	// public Iterator<GraphicalRepresentation> allContainedGRIterator();
 
 	public Vector<ConstraintDependency> getDependancies();
 
 	public Vector<ConstraintDependency> getAlterings();
 
-	public void declareDependantOf(GraphicalRepresentation<?> aComponent, GRParameter requiringParameter, GRParameter requiredParameter)
+	public void declareDependantOf(GraphicalRepresentation aComponent, GRParameter requiringParameter, GRParameter requiredParameter)
 			throws DependencyLoopException;
 
 	public GRVariable createStringVariable();
@@ -669,15 +653,7 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 	@Override
 	public String getDeletedProperty();
 
-	/**
-	 * Return boolean indicating if this graphical representation is validated. A validated graphical representation is a graphical
-	 * representation fully embedded in its graphical representation tree, which means that parent and child are set and correct, and that
-	 * start and end shapes are set for connectors
-	 * 
-	 * 
-	 * @return
-	 */
-	public boolean isValidated();
+	/*public boolean isValidated();
 
 	public void setValidated(boolean validated);
 
@@ -685,12 +661,6 @@ public interface GraphicalRepresentation<O> extends FGEObject, Bindable, Binding
 
 	public void setLabelMetricsProvider(LabelMetricsProvider labelMetricsProvider);
 
-	/**
-	 * Returns the number of pixels available for the label considering its positioning. This method is used in case of line wrapping.
-	 * 
-	 * @param scale
-	 * @return
-	 */
-	public int getAvailableLabelWidth(double scale);
+	public int getAvailableLabelWidth(double scale);*/
 
 }

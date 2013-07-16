@@ -40,8 +40,8 @@ public class RoleSpecializationGR extends ConnectorGraphicalRepresentation<RoleS
 	private ForegroundStyle foreground;
 
 	public RoleSpecializationGR(RoleSpecialization specialization, Drawing<?> aDrawing) {
-		super(ConnectorType.LINE, (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(specialization.getRole()),
-				(ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(specialization.getParentRole()), specialization,
+		super(ConnectorType.LINE, (ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(specialization.getRole()),
+				(ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(specialization.getParentRole()), specialization,
 				aDrawing);
 		foreground = ForegroundStyle.makeStyle(Color.DARK_GRAY);
 		foreground.setLineWidth(1.6);

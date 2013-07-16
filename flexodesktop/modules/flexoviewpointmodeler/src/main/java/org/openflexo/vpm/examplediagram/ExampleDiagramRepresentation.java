@@ -23,9 +23,9 @@ import java.util.Hashtable;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -34,7 +34,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
 
-public class ExampleDiagramRepresentation extends DefaultDrawing<ExampleDiagram> implements GraphicalFlexoObserver,
+public class ExampleDiagramRepresentation extends DrawingImpl<ExampleDiagram> implements GraphicalFlexoObserver,
 		ExampleDiagramConstants {
 
 	private static final Logger logger = Logger.getLogger(ExampleDiagramRepresentation.class.getPackage().getName());
@@ -132,7 +132,7 @@ public class ExampleDiagramRepresentation extends DefaultDrawing<ExampleDiagram>
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable) {
+	public <O> GraphicalRepresentation retrieveGraphicalRepresentation(O aDrawable) {
 		if (aDrawable instanceof ExampleDiagramShape) {
 			ExampleDiagramShape shape = (ExampleDiagramShape) aDrawable;
 			ExampleDiagramShapeGR returned = shapesGR.get(shape);
@@ -140,7 +140,7 @@ public class ExampleDiagramRepresentation extends DefaultDrawing<ExampleDiagram>
 				returned = buildGraphicalRepresentation(shape);
 				shapesGR.put(shape, returned);
 			}
-			return (GraphicalRepresentation<O>) returned;
+			return (GraphicalRepresentation) returned;
 		} else if (aDrawable instanceof ExampleDiagramConnector) {
 			ExampleDiagramConnector connector = (ExampleDiagramConnector) aDrawable;
 			ExampleDiagramConnectorGR returned = connectorsGR.get(connector);
@@ -148,7 +148,7 @@ public class ExampleDiagramRepresentation extends DefaultDrawing<ExampleDiagram>
 				returned = buildGraphicalRepresentation(connector);
 				connectorsGR.put(connector, returned);
 			}
-			return (GraphicalRepresentation<O>) returned;
+			return (GraphicalRepresentation) returned;
 		}
 		logger.warning("Cannot build GraphicalRepresentation for " + aDrawable);
 		return null;

@@ -85,7 +85,7 @@ public class VESelectionManager extends SelectionManager {
 	public FlexoModelObject getPasteContext() {
 		if (getVEController().getCurrentModuleView() instanceof DiagramModuleView) {
 			DiagramView v = ((DiagramModuleView) getVEController().getCurrentModuleView()).getController().getDrawingView();
-			GraphicalRepresentation<?> gr = v.getController().getLastSelectedGR();
+			GraphicalRepresentation gr = v.getController().getLastSelectedGR();
 			if (gr != null && gr.getDrawable() instanceof FlexoModelObject) {
 				return (FlexoModelObject) gr.getDrawable();
 			} else {
@@ -101,8 +101,8 @@ public class VESelectionManager extends SelectionManager {
 		PastingGraphicalContext pgc = new PastingGraphicalContext();
 		if (getVEController().getCurrentModuleView() instanceof DiagramModuleView) {
 			DiagramView v = ((DiagramModuleView) getVEController().getCurrentModuleView()).getController().getDrawingView();
-			DrawingController<?> controller = v.getController();
-			GraphicalRepresentation<?> target = controller.getLastSelectedGR();
+			DrawingController controller = v.getController();
+			GraphicalRepresentation target = controller.getLastSelectedGR();
 			if (target == null) {
 				pgc.targetContainer = controller.getDrawingView();
 			} else {

@@ -89,8 +89,8 @@ public class ExampleDiagram extends ExampleDiagramObject implements XMLStorageRe
 	}
 
 	@Override
-	public DrawingGraphicalRepresentation<?> getGraphicalRepresentation() {
-		return (DrawingGraphicalRepresentation<?>) super.getGraphicalRepresentation();
+	public DrawingGraphicalRepresentation getGraphicalRepresentation() {
+		return (DrawingGraphicalRepresentation) super.getGraphicalRepresentation();
 	}
 
 	public void init(DiagramSpecification diagramSpecification, String exampleDiagramName) {

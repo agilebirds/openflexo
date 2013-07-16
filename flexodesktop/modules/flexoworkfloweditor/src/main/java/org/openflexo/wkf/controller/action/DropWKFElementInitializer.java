@@ -170,7 +170,7 @@ public class DropWKFElementInitializer extends ActionInitializer {
 				}
 				DrawingView<?> drawingView = (DrawingView<?>) moduleView;
 				Drawing<?> drawing = drawingView.getDrawing();
-				ShapeGraphicalRepresentation<?> newNodeGR = (ShapeGraphicalRepresentation<?>) drawing.getGraphicalRepresentation(action
+				ShapeGraphicalRepresentation newNodeGR = (ShapeGraphicalRepresentation) drawing.getGraphicalRepresentation(action
 						.getObject());
 				if (newNodeGR == null) {
 					if (logger.isLoggable(Level.WARNING)) {

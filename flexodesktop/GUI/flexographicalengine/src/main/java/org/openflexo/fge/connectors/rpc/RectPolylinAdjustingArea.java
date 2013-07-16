@@ -101,7 +101,7 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
+	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
 		super.stopDragging(controller, focusedGR);
 		if (controller.getPaintManager().isPaintingCacheEnabled()) {
 			controller.getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
@@ -166,7 +166,7 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 	}
 
 	@Override
-	public ConnectorGraphicalRepresentation<?> getGraphicalRepresentation() {
+	public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
 		return connector.getGraphicalRepresentation();
 	}
 

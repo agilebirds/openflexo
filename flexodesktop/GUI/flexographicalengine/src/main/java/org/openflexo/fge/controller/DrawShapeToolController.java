@@ -45,10 +45,10 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 
 	private static final Logger logger = Logger.getLogger(DrawShapeToolController.class.getPackage().getName());
 
-	private DrawingController<?> controller;
+	private DrawingController controller;
 	private DrawShapeAction control;
 
-	protected GraphicalRepresentation<?> parentGR = null;
+	protected GraphicalRepresentation parentGR = null;
 
 	private S shape;
 	private GeometricGraphicalRepresentation<S> currentEditedShapeGR;
@@ -57,7 +57,7 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 
 	private ForegroundStyle currentlyEditedForeground;
 
-	public DrawShapeToolController(DrawingController<?> controller, DrawShapeAction control) {
+	public DrawShapeToolController(DrawingController controller, DrawShapeAction control) {
 		super();
 		this.controller = controller;
 		this.control = control;
@@ -118,7 +118,7 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 		geometryChanged();
 	}
 
-	public DrawingController<?> getController() {
+	public DrawingController getController() {
 		return controller;
 	}
 
@@ -186,11 +186,11 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 		return currentEditedShapeGR.getControlPoints();
 	}
 
-	public abstract ShapeGraphicalRepresentation<?> buildShapeGraphicalRepresentation();
+	public abstract ShapeGraphicalRepresentation buildShapeGraphicalRepresentation();
 
 	public void makeNewShape() {
 		if (control != null) {
-			ShapeGraphicalRepresentation<?> newShapeGraphicalRepresentation = buildShapeGraphicalRepresentation();
+			ShapeGraphicalRepresentation newShapeGraphicalRepresentation = buildShapeGraphicalRepresentation();
 			control.performedDrawNewShape(newShapeGraphicalRepresentation, parentGR);
 		} else {
 			logger.warning("No DrawShapeAction defined !");

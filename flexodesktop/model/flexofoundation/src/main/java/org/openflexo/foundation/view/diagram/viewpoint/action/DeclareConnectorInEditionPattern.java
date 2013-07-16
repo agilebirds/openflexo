@@ -165,7 +165,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 						.setExampleLabel(((ConnectorGraphicalRepresentation) getFocusedObject().getGraphicalRepresentation()).getText());
 				// }
 				// We clone here the GR (fixed unfocusable GR bug)
-				newConnectorPatternRole.setGraphicalRepresentation(((ConnectorGraphicalRepresentation<?>) getFocusedObject()
+				newConnectorPatternRole.setGraphicalRepresentation(((ConnectorGraphicalRepresentation) getFocusedObject()
 						.getGraphicalRepresentation()).clone());
 				newEditionPattern.addToPatternRoles(newConnectorPatternRole);
 				newEditionPattern.setPrimaryRepresentationRole(newConnectorPatternRole);

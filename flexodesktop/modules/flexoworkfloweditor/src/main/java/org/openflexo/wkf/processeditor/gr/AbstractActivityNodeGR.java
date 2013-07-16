@@ -106,7 +106,7 @@ public abstract class AbstractActivityNodeGR<O extends AbstractActivityNode> ext
 		public PetriGraphOpener() {
 			super("Opener", MouseButton.LEFT, 2, new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						java.awt.event.MouseEvent event) {
 					logger.info("Opening Operation petri graph by double-clicking");
 					OpenOperationLevel.actionType.makeNewAction(getAbstractActivityNode(), null, getDrawing().getEditor()).doAction();

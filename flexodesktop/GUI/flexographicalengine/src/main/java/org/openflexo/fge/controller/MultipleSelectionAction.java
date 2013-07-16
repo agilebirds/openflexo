@@ -30,7 +30,7 @@ public class MultipleSelectionAction extends MouseClickControlAction {
 	}
 
 	@Override
-	public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
+	public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
 		if (graphicalRepresentation.getIsSelectable()) {
 			MouseClickControlAction.logger.info("Multiple select " + graphicalRepresentation);
 			controller.toggleSelection(graphicalRepresentation);

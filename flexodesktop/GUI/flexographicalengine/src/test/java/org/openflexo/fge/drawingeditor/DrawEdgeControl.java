@@ -28,6 +28,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.TestDrawing.MyDrawing.MyShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;
@@ -36,8 +38,8 @@ public class DrawEdgeControl extends MouseDragControl {
 
 	Point currentDraggingLocationInDrawingView = null;
 	boolean drawEdge = false;
-	MyShapeGraphicalRepresentation fromShape = null;
-	MyShapeGraphicalRepresentation toShape = null;
+	ShapeGraphicalRepresentation fromShape = null;
+	ShapeGraphicalRepresentation toShape = null;
 	private DrawingEditorFactory factory;
 
 	public DrawEdgeControl(DrawingEditorFactory factory) {
@@ -48,11 +50,10 @@ public class DrawEdgeControl extends MouseDragControl {
 
 	protected class DrawEdgeAction extends CustomDragControlAction {
 		@Override
-		public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
-				MouseEvent event) {
-			if (graphicalRepresentation instanceof MyShapeGraphicalRepresentation) {
+		public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
+			if (graphicalRepresentation instanceof ShapeGraphicalRepresentation) {
 				drawEdge = true;
-				fromShape = (MyShapeGraphicalRepresentation) graphicalRepresentation;
+				fromShape = (ShapeGraphicalRepresentation) graphicalRepresentation;
 				((MyDrawingView) controller.getDrawingView()).setDrawEdgeAction(this);
 				return true;
 			}
@@ -60,13 +61,12 @@ public class DrawEdgeControl extends MouseDragControl {
 		}
 
 		@Override
-		public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
-				MouseEvent event, boolean isSignificativeDrag) {
+		public boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event,
+				boolean isSignificativeDrag) {
 			if (drawEdge) {
 				if (fromShape != null && toShape != null) {
 					// System.out.println("Add Connector contextualMenuInvoker="+contextualMenuInvoker+" point="+contextualMenuClickedPoint);
-					MyConnector newConnector = factory.makeNewConnector(fromShape.getDrawable(), toShape.getDrawable(),
-							(EditedDrawing) controller.getDrawing());
+					MyConnector newConnector = factory.makeNewConnector(fromShape, toShape, (EditedDrawing) controller.getDrawing());
 					((MyDrawingController) controller).addNewConnector(newConnector);
 				}
 				drawEdge = false;
@@ -79,10 +79,9 @@ public class DrawEdgeControl extends MouseDragControl {
 		}
 
 		@Override
-		public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
-				MouseEvent event) {
+		public boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
 			if (drawEdge) {
-				GraphicalRepresentation<?> gr = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
+				GraphicalRepresentation gr = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
 				if (gr instanceof MyShapeGraphicalRepresentation && gr != fromShape && !fromShape.getAncestors().contains(gr.getDrawable())) {
 					toShape = (MyShapeGraphicalRepresentation) gr;
 				} else {
@@ -96,7 +95,7 @@ public class DrawEdgeControl extends MouseDragControl {
 			return false;
 		}
 
-		public void paint(Graphics g, DrawingController<?> controller) {
+		public void paint(Graphics g, DrawingController controller) {
 			if (drawEdge && currentDraggingLocationInDrawingView != null) {
 				Point from = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
 						fromShape.getShape().getShape().getCenter(), fromShape, controller.getScale());

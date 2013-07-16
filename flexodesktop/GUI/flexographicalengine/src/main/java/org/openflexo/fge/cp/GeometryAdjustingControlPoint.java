@@ -35,14 +35,14 @@ public abstract class GeometryAdjustingControlPoint<O extends FGEArea> extends C
 
 	private String name;
 
-	public GeometryAdjustingControlPoint(GeometricGraphicalRepresentation<?> gr, String aName, FGEPoint pt) {
+	public GeometryAdjustingControlPoint(GeometricGraphicalRepresentation gr, String aName, FGEPoint pt) {
 		super(gr, pt);
 		name = aName;
 	}
 
 	@Override
-	public GeometricGraphicalRepresentation<?> getGraphicalRepresentation() {
-		return (GeometricGraphicalRepresentation<?>) super.getGraphicalRepresentation();
+	public GeometricGraphicalRepresentation getGraphicalRepresentation() {
+		return (GeometricGraphicalRepresentation) super.getGraphicalRepresentation();
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public abstract class GeometryAdjustingControlPoint<O extends FGEArea> extends C
 	}
 
 	@Override
-	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+	public void startDragging(DrawingController controller, FGEPoint startPoint) {
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public abstract class GeometryAdjustingControlPoint<O extends FGEArea> extends C
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
+	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
 	}
 
 	public abstract void update(O geometricObject);

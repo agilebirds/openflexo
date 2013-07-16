@@ -59,7 +59,7 @@ public class SWLDrawEdgeControl extends MouseDragControl {
 
 	protected class SWLDrawEdgeAction extends CustomDragControlAction {
 		@Override
-		public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+		public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 				MouseEvent event) {
 			if (graphicalRepresentation instanceof WKFNodeGR) {
 				drawEdge = true;
@@ -71,7 +71,7 @@ public class SWLDrawEdgeControl extends MouseDragControl {
 		}
 
 		@Override
-		public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+		public boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 				MouseEvent event, boolean isSignificativeDrag) {
 			if (drawEdge) {
 				if (from != null && to != null) {
@@ -130,7 +130,7 @@ public class SWLDrawEdgeControl extends MouseDragControl {
 		}
 
 		@Override
-		public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+		public boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 				MouseEvent event) {
 			if (drawEdge) {
 

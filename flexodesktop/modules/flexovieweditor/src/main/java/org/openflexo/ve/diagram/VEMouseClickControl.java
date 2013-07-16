@@ -30,7 +30,7 @@ public class VEMouseClickControl extends MouseClickControl {
 	}
 
 	@Override
-	public void handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
+	public void handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
 		super.handleClick(graphicalRepresentation, controller, event);
 		FlexoEditor editor = ((DiagramController) controller).getEditor();
 		DiagramElement diagramElement = null;

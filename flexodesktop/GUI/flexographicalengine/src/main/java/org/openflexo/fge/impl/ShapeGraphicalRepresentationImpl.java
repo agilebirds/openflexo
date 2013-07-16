@@ -66,7 +66,7 @@ import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.fge.view.ShapeView;
 import org.openflexo.toolbox.ToolBox;
 
-public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentationImpl<O> implements ShapeGraphicalRepresentation<O> {
+public class ShapeGraphicalRepresentationImpl extends GraphicalRepresentationImpl implements ShapeGraphicalRepresentation {
 
 	private static final Logger logger = Logger.getLogger(ShapeGraphicalRepresentation.class.getPackage().getName());
 
@@ -169,7 +169,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	}
 
 	@Deprecated
-	private ShapeGraphicalRepresentationImpl(ShapeGraphicalRepresentation<?> aGR, O aDrawable, Drawing<?> aDrawing) {
+	private ShapeGraphicalRepresentationImpl(ShapeGraphicalRepresentation aGR, O aDrawable, Drawing<?> aDrawing) {
 		this(aDrawable, aDrawing);
 
 		setsWith(aGR);
@@ -254,7 +254,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	// ***************************************************************************
 
 	@Override
-	public final void setsWith(GraphicalRepresentation<?> gr) {
+	public final void setsWith(GraphicalRepresentation gr) {
 		super.setsWith(gr);
 		if (gr instanceof ShapeGraphicalRepresentation) {
 			for (ShapeParameters p : ShapeParameters.values()) {
@@ -262,14 +262,14 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 					_setParameterValueWith(p, gr);
 				}
 			}
-			Shape shapeToCopy = ((ShapeGraphicalRepresentation<?>) gr).getShape();
+			Shape shapeToCopy = ((ShapeGraphicalRepresentation) gr).getShape();
 			Shape clone = shapeToCopy.clone();
 			setShape(clone);
 		}
 	}
 
 	@Override
-	public final void setsWith(GraphicalRepresentation<?> gr, GRParameter... exceptedParameters) {
+	public final void setsWith(GraphicalRepresentation gr, GRParameter... exceptedParameters) {
 		super.setsWith(gr, exceptedParameters);
 		if (gr instanceof ShapeGraphicalRepresentation) {
 			for (ShapeParameters p : ShapeParameters.values()) {
@@ -283,7 +283,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 					_setParameterValueWith(p, gr);
 				}
 			}
-			Shape shapeToCopy = ((ShapeGraphicalRepresentation<?>) gr).getShape();
+			Shape shapeToCopy = ((ShapeGraphicalRepresentation) gr).getShape();
 			Shape clone = shapeToCopy.clone();
 			setShape(clone);
 		}
@@ -327,7 +327,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	@Override
 	public void extendParentBoundsToHostThisShape() {
 		if (getParentGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-			ShapeGraphicalRepresentation<?> parent = (ShapeGraphicalRepresentation) getParentGraphicalRepresentation();
+			ShapeGraphicalRepresentation parent = (ShapeGraphicalRepresentation) getParentGraphicalRepresentation();
 			parent.extendBoundsToHostContents();
 		}
 	}
@@ -335,7 +335,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	public void extendParentBoundsToHostThisShape2() {
 		// System.out.println("parent=" + getParentGraphicalRepresentation());
 		if (getParentGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-			ShapeGraphicalRepresentation<?> parent = (ShapeGraphicalRepresentation) getParentGraphicalRepresentation();
+			ShapeGraphicalRepresentation parent = (ShapeGraphicalRepresentation) getParentGraphicalRepresentation();
 
 			// parent.updateRequiredBoundsForChildGRLocation(this, new FGEPoint(x, y));
 
@@ -375,9 +375,9 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 			}
 
 			if (parentNeedsRelocate) {
-				for (GraphicalRepresentation<?> child : parent.getContainedGraphicalRepresentations()) {
+				for (GraphicalRepresentation child : parent.getContainedGraphicalRepresentations()) {
 					if (child instanceof ShapeGraphicalRepresentation && child != this) {
-						ShapeGraphicalRepresentation<?> c = (ShapeGraphicalRepresentation<?>) child;
+						ShapeGraphicalRepresentation c = (ShapeGraphicalRepresentation) child;
 						c.setLocation(new FGEPoint(c.getX() + deltaX, c.getY() + deltaY));
 					}
 				}
@@ -409,9 +409,9 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		double deltaY = 0;
 
 		// First compute the delta to be applied (max of all required delta)
-		for (GraphicalRepresentation<?> child : getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation child : getContainedGraphicalRepresentations()) {
 			if (child instanceof ShapeGraphicalRepresentation) {
-				ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) child;
+				ShapeGraphicalRepresentation gr = (ShapeGraphicalRepresentation) child;
 				if (gr.getX() < -deltaX) {
 					deltaX = -gr.getX();
 					needsRelocate = true;
@@ -431,18 +431,18 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 			setLocation(newPosition);
 			needsResize = true;
 			newDimension = new FGEDimension(getWidth() + deltaX, getHeight() + deltaY);
-			for (GraphicalRepresentation<?> child : getContainedGraphicalRepresentations()) {
+			for (GraphicalRepresentation child : getContainedGraphicalRepresentations()) {
 				if (child instanceof ShapeGraphicalRepresentation && child != this) {
-					ShapeGraphicalRepresentation<?> c = (ShapeGraphicalRepresentation<?>) child;
+					ShapeGraphicalRepresentation c = (ShapeGraphicalRepresentation) child;
 					c.setLocation(new FGEPoint(c.getX() + deltaX, c.getY() + deltaY));
 				}
 			}
 		}
 
 		// First compute the resize to be applied
-		for (GraphicalRepresentation<?> child : getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation child : getContainedGraphicalRepresentations()) {
 			if (child instanceof ShapeGraphicalRepresentation) {
-				ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) child;
+				ShapeGraphicalRepresentation gr = (ShapeGraphicalRepresentation) child;
 				if (gr.getX() + gr.getWidth() > getWidth()) {
 					newDimension.width = gr.getX() + gr.getWidth();
 					needsResize = true;
@@ -460,9 +460,9 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		}
 
 		/*if (needsRelocate || needsResize) {
-			for (GraphicalRepresentation<?> child : getContainedGraphicalRepresentations()) {
+			for (GraphicalRepresentation child : getContainedGraphicalRepresentations()) {
 				if (child instanceof ShapeGraphicalRepresentation) {
-					ShapeGraphicalRepresentation<?> c = (ShapeGraphicalRepresentation<?>) child;
+					ShapeGraphicalRepresentation c = (ShapeGraphicalRepresentation) child;
 					FGEPoint oldLocation = new FGEPoint(c.getX() - deltaX, c.getY() - deltaY);
 					c.notifyObjectMoved(oldLocation);
 					c.notifyChange(Parameters.x, oldLocation.x, c.getX());
@@ -482,9 +482,9 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 			}
 			double maxX = 0;
 			if (getContainerGraphicalRepresentation() instanceof DrawingGraphicalRepresentation) {
-				maxX = ((DrawingGraphicalRepresentation<?>) getContainerGraphicalRepresentation()).getWidth();
+				maxX = ((DrawingGraphicalRepresentation) getContainerGraphicalRepresentation()).getWidth();
 			} else if (getContainerGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-				maxX = ((ShapeGraphicalRepresentation<?>) getContainerGraphicalRepresentation()).getWidth();
+				maxX = ((ShapeGraphicalRepresentation) getContainerGraphicalRepresentation()).getWidth();
 			}
 			if (maxX > 0 && x > maxX - getWidth()) {
 				// logger.info("Relocate x from "+x+" to "+(maxX-getWidth())+" maxX="+maxX+" width="+getWidth());
@@ -518,9 +518,9 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 			}
 			double maxY = 0;
 			if (getContainerGraphicalRepresentation() instanceof DrawingGraphicalRepresentation) {
-				maxY = ((DrawingGraphicalRepresentation<?>) getContainerGraphicalRepresentation()).getHeight();
+				maxY = ((DrawingGraphicalRepresentation) getContainerGraphicalRepresentation()).getHeight();
 			} else if (getContainerGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-				maxY = ((ShapeGraphicalRepresentation<?>) getContainerGraphicalRepresentation()).getHeight();
+				maxY = ((ShapeGraphicalRepresentation) getContainerGraphicalRepresentation()).getHeight();
 			}
 			if (maxY > 0 && y > maxY - getHeight()) {
 				// logger.info("Relocate y from " + y + " to " + (maxY - getHeight()) + " maxY=" + maxY + " height=" + getHeight());
@@ -587,7 +587,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	{
 		super.setAbsoluteTextX(absoluteTextX);
 		if (isParentLayoutedAsContainer()) {
-			ShapeGraphicalRepresentation<?> container = (ShapeGraphicalRepresentation<?>)getContainerGraphicalRepresentation();
+			ShapeGraphicalRepresentation container = (ShapeGraphicalRepresentation)getContainerGraphicalRepresentation();
 			FGEPoint oldLocation = container.getLocation();
 			FGERectangle oldBounds = container.getBounds();
 			FGERectangle newBounds = container.getRequiredBoundsForChildGRLocation(this,getLocation());
@@ -610,14 +610,14 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		container.updateRequiredBoundsForChildGRLocation(this, newLocation);
 	}
 
-	private void updateRequiredBoundsForChildGRLocation(ShapeGraphicalRepresentation<?> child, FGEPoint newChildLocation) {
+	private void updateRequiredBoundsForChildGRLocation(ShapeGraphicalRepresentation child, FGEPoint newChildLocation) {
 		FGERectangle oldBounds = getBounds();
 		FGERectangle newBounds = getRequiredBoundsForChildGRLocation(child, newChildLocation);
 		// System.out.println("oldBounds= "+oldBounds+" newBounds="+newBounds);
 		double deltaX = -newBounds.x + oldBounds.x;
 		double deltaY = -newBounds.y + oldBounds.y;
 		AffineTransform translation = AffineTransform.getTranslateInstance(deltaX, deltaY);
-		for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation gr : getContainedGraphicalRepresentations()) {
 			if (gr instanceof ShapeGraphicalRepresentation) {
 				ShapeGraphicalRepresentationImpl<?> shapeGR = (ShapeGraphicalRepresentationImpl<?>) gr;
 				if (shapeGR == child) {
@@ -658,7 +658,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		if (getContainedGraphicalRepresentations() == null) {
 			return new FGERectangle(getMinimalWidth() / 2, getMinimalHeight() / 2, getMinimalWidth(), getMinimalHeight());
 		}
-		for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation gr : getContainedGraphicalRepresentations()) {
 			if (gr instanceof ShapeGraphicalRepresentation) {
 				ShapeGraphicalRepresentationImpl<?> shapeGR = (ShapeGraphicalRepresentationImpl<?>) gr;
 				FGERectangle bounds = shapeGR.getBoundsNoBorder();
@@ -694,11 +694,11 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 		return requiredBounds;
 	}
 
-	private FGERectangle getRequiredBoundsForChildGRLocation(GraphicalRepresentation<?> child, FGEPoint newChildLocation) {
+	private FGERectangle getRequiredBoundsForChildGRLocation(GraphicalRepresentation child, FGEPoint newChildLocation) {
 		FGERectangle requiredBounds = null;
-		for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation gr : getContainedGraphicalRepresentations()) {
 			if (gr instanceof ShapeGraphicalRepresentation) {
-				ShapeGraphicalRepresentation<?> shapeGR = (ShapeGraphicalRepresentation<?>) gr;
+				ShapeGraphicalRepresentation shapeGR = (ShapeGraphicalRepresentation) gr;
 				FGERectangle bounds = shapeGR.getBounds();
 				if (shapeGR == child) {
 					bounds.x = newChildLocation.x;
@@ -804,9 +804,9 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 			return newLocation.clone();
 		}
 		if (getLocationConstraints() == LocationConstraints.CONTAINED_IN_SHAPE) {
-			GraphicalRepresentation<?> parent = getContainerGraphicalRepresentation();
+			GraphicalRepresentation parent = getContainerGraphicalRepresentation();
 			if (parent instanceof ShapeGraphicalRepresentation) {
-				ShapeGraphicalRepresentation<?> container = (ShapeGraphicalRepresentation<?>) parent;
+				ShapeGraphicalRepresentation container = (ShapeGraphicalRepresentation) parent;
 				FGEPoint center = new FGEPoint(container.getWidth() / 2, container.getHeight() / 2);
 				double authorizedRatio = getMoveAuthorizedRatio(newLocation, center);
 				return new FGEPoint(center.x + (newLocation.x - center.x) * authorizedRatio, center.y + (newLocation.y - center.y)
@@ -865,7 +865,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	public boolean isParentLayoutedAsContainer() {
 		return getContainerGraphicalRepresentation() != null
 				&& getContainerGraphicalRepresentation() instanceof ShapeGraphicalRepresentation
-				&& ((ShapeGraphicalRepresentation<?>) getContainerGraphicalRepresentation()).getDimensionConstraints() == DimensionConstraints.CONTAINER;
+				&& ((ShapeGraphicalRepresentation) getContainerGraphicalRepresentation()).getDimensionConstraints() == DimensionConstraints.CONTAINER;
 	}
 
 	@Override
@@ -1255,9 +1255,9 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	 */
 	protected void checkAndUpdateDimensionIfRequired() {
 		if (getDimensionConstraints() == DimensionConstraints.CONTAINER) {
-			List<? extends GraphicalRepresentation<?>> childs = getContainedGraphicalRepresentations();
+			List<? extends GraphicalRepresentation> childs = getContainedGraphicalRepresentations();
 			if (childs != null && childs.size() > 0) {
-				ShapeGraphicalRepresentation<?> first = (ShapeGraphicalRepresentation<?>) childs.get(0);
+				ShapeGraphicalRepresentation first = (ShapeGraphicalRepresentation) childs.get(0);
 				updateRequiredBoundsForChildGRLocation(first, first.getLocation());
 			}
 		} else {
@@ -2208,7 +2208,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	@Override
 	public void notifyObjectHasResized() {
 		isResizing = false;
-		for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation gr : getContainedGraphicalRepresentations()) {
 			if (gr instanceof ShapeGraphicalRepresentationImpl) {
 				((ShapeGraphicalRepresentationImpl<?>) gr).checkAndUpdateLocationIfRequired();
 			}
@@ -2352,7 +2352,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	 * @return
 	 */
 	@Override
-	public Rectangle getBounds(GraphicalRepresentation<?> container, double scale) {
+	public Rectangle getBounds(GraphicalRepresentation container, double scale) {
 		Rectangle bounds = getBounds(scale);
 		bounds = convertRectangle(getContainerGraphicalRepresentation(), bounds, container, scale);
 		return bounds;
@@ -2365,7 +2365,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	 * @return
 	 */
 	@Override
-	public Rectangle getViewBounds(GraphicalRepresentation<?> container, double scale) {
+	public Rectangle getViewBounds(GraphicalRepresentation container, double scale) {
 		Rectangle bounds = getViewBounds(scale);
 		if (getContainerGraphicalRepresentation() == null) {
 			logger.warning("Container is null for " + this + " validated=" + isValidated());
@@ -2463,7 +2463,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	}
 
 	@Override
-	public void paint(Graphics g, DrawingController<?> controller) {
+	public void paint(Graphics g, DrawingController controller) {
 		if (!isRegistered()) {
 			setRegistered(true);
 		}
@@ -2647,7 +2647,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 
 	// Override for a custom view management
 	@Override
-	public ShapeView<O> makeShapeView(DrawingController<?> controller) {
+	public ShapeView<O> makeShapeView(DrawingController controller) {
 		return new ShapeView<O>(this, controller);
 	}
 
@@ -2695,7 +2695,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	 * @return
 	 */
 	@Override
-	public boolean isAllowedToBeDraggedOutsideParentContainerInsideContainer(GraphicalRepresentation<?> container) {
+	public boolean isAllowedToBeDraggedOutsideParentContainerInsideContainer(GraphicalRepresentation container) {
 		return false;
 	}
 
@@ -2704,7 +2704,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	 * performed
 	 */
 	@Override
-	public boolean dragOutsideParentContainerInsideContainer(GraphicalRepresentation<?> container, FGEPoint location) {
+	public boolean dragOutsideParentContainerInsideContainer(GraphicalRepresentation container, FGEPoint location) {
 		return false;
 	}
 
@@ -2723,7 +2723,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	}
 
 	@Override
-	public void notifyDrawableAdded(GraphicalRepresentation<?> addedGR) {
+	public void notifyDrawableAdded(GraphicalRepresentation addedGR) {
 		super.notifyDrawableAdded(addedGR);
 		if (getAdaptBoundsToContents()) {
 			extendBoundsToHostContents();
@@ -2738,7 +2738,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	 * @return the area on which the given connector can start
 	 */
 	@Override
-	public FGEArea getAllowedStartAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR) {
+	public FGEArea getAllowedStartAreaForConnector(ConnectorGraphicalRepresentation connectorGR) {
 		return getShape().getOutline();
 	}
 
@@ -2750,7 +2750,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	 * @return the area on which the given connector can end
 	 */
 	@Override
-	public FGEArea getAllowedEndAreaForConnector(ConnectorGraphicalRepresentation<?> connectorGR) {
+	public FGEArea getAllowedEndAreaForConnector(ConnectorGraphicalRepresentation connectorGR) {
 		return getShape().getOutline();
 	}
 
@@ -2763,7 +2763,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	 * @return the area on which the given connector can start
 	 */
 	@Override
-	public FGEArea getAllowedStartAreaForConnectorForDirection(ConnectorGraphicalRepresentation<?> connectorGR, FGEArea area,
+	public FGEArea getAllowedStartAreaForConnectorForDirection(ConnectorGraphicalRepresentation connectorGR, FGEArea area,
 			SimplifiedCardinalDirection direction) {
 		return area;
 	}
@@ -2776,7 +2776,7 @@ public class ShapeGraphicalRepresentationImpl<O> extends GraphicalRepresentation
 	 * @return the area on which the given connector can end
 	 */
 	@Override
-	public FGEArea getAllowedEndAreaForConnectorForDirection(ConnectorGraphicalRepresentation<?> connectorGR, FGEArea area,
+	public FGEArea getAllowedEndAreaForConnectorForDirection(ConnectorGraphicalRepresentation connectorGR, FGEArea area,
 			SimplifiedCardinalDirection direction) {
 		return area;
 	}

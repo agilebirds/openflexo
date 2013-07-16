@@ -48,7 +48,7 @@ public class RectangleSelectingAction extends MouseDragControlAction {
 	}
 
 	@Override
-	public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
+	public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
 		// logger.info("Perform mouse PRESSED on RECTANGLE_SELECTING MouseDragControlAction");
 		rectangleSelectingOriginInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
 				controller.getDrawingView());
@@ -61,11 +61,11 @@ public class RectangleSelectingAction extends MouseDragControlAction {
 	}
 
 	@Override
-	public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+	public boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 			MouseEvent event, boolean isSignificativeDrag) {
 		// logger.info("Perform mouse RELEASED on RECTANGLE_SELECTING MouseDragControlAction");
 		if (isSignificativeDrag) {
-			List<GraphicalRepresentation<?>> newSelection = buildCurrentSelection(graphicalRepresentation, controller);
+			List<GraphicalRepresentation> newSelection = buildCurrentSelection(graphicalRepresentation, controller);
 			controller.setSelectedObjects(newSelection);
 			if (controller.getDrawingView() == null) {
 				return false;
@@ -76,14 +76,14 @@ public class RectangleSelectingAction extends MouseDragControlAction {
 	}
 
 	@Override
-	public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
+	public boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Perform mouse DRAGGED on RECTANGLE_SELECTING MouseDragControlAction");
 		}
 		currentMousePositionInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
 				controller.getDrawingView());
 
-		List<GraphicalRepresentation<?>> newFocusSelection = buildCurrentSelection(graphicalRepresentation, controller);
+		List<GraphicalRepresentation> newFocusSelection = buildCurrentSelection(graphicalRepresentation, controller);
 		controller.setFocusedObjects(newFocusSelection);
 		if (controller.getDrawingView() == null) {
 			return false;
@@ -93,13 +93,13 @@ public class RectangleSelectingAction extends MouseDragControlAction {
 		return true;
 	}
 
-	private List<GraphicalRepresentation<?>> buildCurrentSelection(GraphicalRepresentation<?> graphicalRepresentation,
-			DrawingController<?> controller) {
+	private List<GraphicalRepresentation> buildCurrentSelection(GraphicalRepresentation graphicalRepresentation,
+			DrawingController controller) {
 		if (getRectangleSelection() == null) {
 			return null;
 		}
-		List<GraphicalRepresentation<?>> returned = new Vector<GraphicalRepresentation<?>>();
-		for (GraphicalRepresentation<?> child : graphicalRepresentation.getContainedGraphicalRepresentations()) {
+		List<GraphicalRepresentation> returned = new Vector<GraphicalRepresentation>();
+		for (GraphicalRepresentation child : graphicalRepresentation.getContainedGraphicalRepresentations()) {
 			if (child.getIsVisible()) {
 				if (child.isContainedInSelection(getRectangleSelection(), controller.getScale())) {
 					returned.add(child);

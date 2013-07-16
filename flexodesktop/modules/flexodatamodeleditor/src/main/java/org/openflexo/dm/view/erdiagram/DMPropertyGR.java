@@ -179,7 +179,7 @@ public class DMPropertyGR extends ShapeGraphicalRepresentation<DMProperty> imple
 
 	@Override
 	public double getWidth() {
-		GraphicalRepresentation<?> container = getContainerGraphicalRepresentation();
+		GraphicalRepresentation container = getContainerGraphicalRepresentation();
 		if (container instanceof DMEntityGR) {
 			return ((DMEntityGR) container).getWidth() - 1;
 		}

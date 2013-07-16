@@ -19,9 +19,9 @@
  */
 package org.openflexo.fge.drawingeditor;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Vector;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.model.annotations.Adder;
@@ -42,28 +42,45 @@ import org.openflexo.xmlcode.XMLSerializable;
 
 @ModelEntity
 @ImplementationClass(MyDrawingElementImpl.class)
-public interface MyDrawingElement<M extends MyDrawingElement<M, G>, G extends GraphicalRepresentation<M>> extends XMLSerializable,
-		Cloneable, Observer, AccessibleProxyObject, CloneableProxyObject {
+public interface MyDrawingElement<M extends MyDrawingElement<M, G>, G extends GraphicalRepresentation> extends XMLSerializable, Cloneable,
+		Observer, AccessibleProxyObject, CloneableProxyObject {
 
 	public static final String GRAPHICAL_REPRESENTATION = "graphicalRepresentation";
 	public static final String DRAWING = "drawing";
-	public static final String CHILDS = "childs";
+	public static final String SHAPES = "shapes";
+	public static final String CONNECTORS = "connectors";
 
-	@Getter(value = CHILDS, cardinality = Cardinality.LIST)
+	@Getter(value = SHAPES, cardinality = Cardinality.LIST)
 	@XMLElement(primary = true)
 	@CloningStrategy(StrategyType.CLONE)
 	@Embedded
-	public Vector<MyDrawingElement/*<?, ?>*/> getChilds();
+	public List<MyShape> getShapes();
 
-	@Setter(CHILDS)
-	public void setChilds(Vector<MyDrawingElement/*<?, ?>*/> someChilds);
+	@Setter(SHAPES)
+	public void setShapes(List<MyShape> someShapes);
 
-	@Adder(CHILDS)
+	@Adder(SHAPES)
 	@PastingPoint
-	public void addToChilds(MyDrawingElement/*<?, ?>*/aChild);
+	public void addToShapes(MyShape aShape);
 
-	@Remover(CHILDS)
-	public void removeFromChilds(MyDrawingElement/*<?, ?>*/aChild);
+	@Remover(SHAPES)
+	public void removeFromShapes(MyShape aShape);
+
+	@Getter(value = CONNECTORS, cardinality = Cardinality.LIST)
+	@XMLElement(primary = true)
+	@CloningStrategy(StrategyType.CLONE)
+	@Embedded
+	public List<MyConnector> getConnectors();
+
+	@Setter(CONNECTORS)
+	public void setConnectors(List<MyConnector> someConnectors);
+
+	@Adder(CONNECTORS)
+	@PastingPoint
+	public void addToConnectors(MyConnector aConnector);
+
+	@Remover(CONNECTORS)
+	public void removeFromConnectors(MyConnector aConnector);
 
 	@Getter(value = DRAWING)
 	public MyDrawing getDrawing();

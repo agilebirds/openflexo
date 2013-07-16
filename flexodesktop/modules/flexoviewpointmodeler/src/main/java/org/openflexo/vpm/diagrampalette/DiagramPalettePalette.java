@@ -181,7 +181,7 @@ public class DiagramPalettePalette extends DrawingPalette {
 
 					DiagramPalette container = (DiagramPalette) containerGR.getDrawable();
 
-					ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
+					ShapeGraphicalRepresentation shapeGR = getGraphicalRepresentation().clone();
 					shapeGR.setIsSelectable(true);
 					shapeGR.setIsFocusable(true);
 					shapeGR.setIsReadOnly(false);

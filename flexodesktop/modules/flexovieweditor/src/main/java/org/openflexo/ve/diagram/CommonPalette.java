@@ -185,7 +185,7 @@ public class CommonPalette extends DrawingPalette {
 				}
 
 				if (container != null) {
-					ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
+					ShapeGraphicalRepresentation shapeGR = getGraphicalRepresentation().clone();
 					shapeGR.setIsSelectable(true);
 					shapeGR.setIsFocusable(true);
 					shapeGR.setIsReadOnly(false);

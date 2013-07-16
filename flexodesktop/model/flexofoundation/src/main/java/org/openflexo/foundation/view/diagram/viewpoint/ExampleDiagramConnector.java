@@ -60,8 +60,8 @@ public class ExampleDiagramConnector extends ExampleDiagramObject {
 	}
 
 	@Override
-	public ConnectorGraphicalRepresentation<?> getGraphicalRepresentation() {
-		return (ConnectorGraphicalRepresentation<?>) super.getGraphicalRepresentation();
+	public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
+		return (ConnectorGraphicalRepresentation) super.getGraphicalRepresentation();
 	}
 
 	@Override

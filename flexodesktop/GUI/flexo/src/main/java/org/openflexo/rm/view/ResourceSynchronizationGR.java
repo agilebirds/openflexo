@@ -35,8 +35,8 @@ public class ResourceSynchronizationGR extends ConnectorGraphicalRepresentationI
 	private ForegroundStyle foreground;
 
 	public ResourceSynchronizationGR(ResourceSynchronization synchro, Drawing<?> aDrawing) {
-		super(ConnectorType.LINE, (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(synchro.getR1()),
-				(ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(synchro.getR2()), synchro, aDrawing);
+		super(ConnectorType.LINE, (ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(synchro.getR1()),
+				(ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(synchro.getR2()), synchro, aDrawing);
 		foreground = ForegroundStyle.makeStyle(Color.RED);
 		foreground.setLineWidth(1.6);
 		setForeground(foreground);

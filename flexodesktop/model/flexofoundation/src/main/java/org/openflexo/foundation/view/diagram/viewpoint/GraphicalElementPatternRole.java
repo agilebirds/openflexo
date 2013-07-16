@@ -55,11 +55,11 @@ public abstract class GraphicalElementPatternRole<T extends DiagramElement> exte
 		return true;
 	}
 
-	public abstract GraphicalRepresentation<?> getGraphicalRepresentation();
+	public abstract GraphicalRepresentation getGraphicalRepresentation();
 
-	public abstract void setGraphicalRepresentation(GraphicalRepresentation<?> graphicalRepresentation);
+	public abstract void setGraphicalRepresentation(GraphicalRepresentation graphicalRepresentation);
 
-	public abstract void _setGraphicalRepresentationNoNotification(GraphicalRepresentation<?> graphicalRepresentation);
+	public abstract void _setGraphicalRepresentationNoNotification(GraphicalRepresentation graphicalRepresentation);
 
 	private BindingDefinition LABEL;
 
@@ -267,28 +267,28 @@ public abstract class GraphicalElementPatternRole<T extends DiagramElement> exte
 		}
 	}
 
-	public static GraphicalFeature<String, GraphicalRepresentation<?>> LABEL_FEATURE = new GraphicalFeature<String, GraphicalRepresentation<?>>(
+	public static GraphicalFeature<String, GraphicalRepresentation> LABEL_FEATURE = new GraphicalFeature<String, GraphicalRepresentation>(
 			"label", GraphicalRepresentation.Parameters.text, String.class) {
 		@Override
-		public String retrieveFromGraphicalRepresentation(GraphicalRepresentation<?> gr) {
+		public String retrieveFromGraphicalRepresentation(GraphicalRepresentation gr) {
 			return gr.getText();
 		}
 
 		@Override
-		public void applyToGraphicalRepresentation(GraphicalRepresentation<?> gr, String value) {
+		public void applyToGraphicalRepresentation(GraphicalRepresentation gr, String value) {
 			gr.setText(value);
 		}
 	};
 
-	public static GraphicalFeature<Boolean, GraphicalRepresentation<?>> VISIBLE_FEATURE = new GraphicalFeature<Boolean, GraphicalRepresentation<?>>(
+	public static GraphicalFeature<Boolean, GraphicalRepresentation> VISIBLE_FEATURE = new GraphicalFeature<Boolean, GraphicalRepresentation>(
 			"visible", GraphicalRepresentation.Parameters.isVisible, Boolean.class) {
 		@Override
-		public Boolean retrieveFromGraphicalRepresentation(GraphicalRepresentation<?> gr) {
+		public Boolean retrieveFromGraphicalRepresentation(GraphicalRepresentation gr) {
 			return gr.getIsVisible();
 		}
 
 		@Override
-		public void applyToGraphicalRepresentation(GraphicalRepresentation<?> gr, Boolean value) {
+		public void applyToGraphicalRepresentation(GraphicalRepresentation gr, Boolean value) {
 			gr.setIsVisible(value);
 		}
 	};

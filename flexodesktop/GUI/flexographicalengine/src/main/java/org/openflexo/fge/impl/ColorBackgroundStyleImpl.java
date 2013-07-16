@@ -3,7 +3,7 @@ package org.openflexo.fge.impl;
 import java.awt.Paint;
 
 import org.openflexo.fge.ColorBackgroundStyle;
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.notifications.FGENotification;
 
 public class ColorBackgroundStyleImpl extends BackgroundStyleImpl implements ColorBackgroundStyle {
@@ -19,7 +19,7 @@ public class ColorBackgroundStyleImpl extends BackgroundStyleImpl implements Col
 	}
 
 	@Override
-	public Paint getPaint(GraphicalRepresentation gr, double scale) {
+	public Paint getPaint(DrawingTreeNode<?, ?> dtn, double scale) {
 		return color;
 	}
 

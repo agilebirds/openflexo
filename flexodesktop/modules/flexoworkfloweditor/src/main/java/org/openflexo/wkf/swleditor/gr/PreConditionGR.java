@@ -107,18 +107,18 @@ public class PreConditionGR extends AbstractNodeGR<FlexoPreCondition> implements
 		super.updatePropertiesFromWKFPreferences();
 	}
 
-	private GraphicalRepresentation<?> parentGR = null;
+	private GraphicalRepresentation parentGR = null;
 	private FGEArea parentOutline = null;
 
 	@Override
 	public FGEArea getLocationConstrainedArea() {
-		GraphicalRepresentation<?> parent = getContainerGraphicalRepresentation();
+		GraphicalRepresentation parent = getContainerGraphicalRepresentation();
 		if (parentGR == null || parent != parentGR) {
 			if (parent != null && parent instanceof ShapeGraphicalRepresentation) {
-				parentOutline = ((ShapeGraphicalRepresentation<?>) parent).getShape().getOutline();
+				parentOutline = ((ShapeGraphicalRepresentation) parent).getShape().getOutline();
 				parentOutline = parentOutline.transform(AffineTransform.getScaleInstance(
-						((ShapeGraphicalRepresentation<?>) parent).getWidth(), ((ShapeGraphicalRepresentation<?>) parent).getHeight()));
-				ShapeBorder parentBorder = ((ShapeGraphicalRepresentation<?>) parent).getBorder();
+						((ShapeGraphicalRepresentation) parent).getWidth(), ((ShapeGraphicalRepresentation) parent).getHeight()));
+				ShapeBorder parentBorder = ((ShapeGraphicalRepresentation) parent).getBorder();
 				parentOutline = parentOutline.transform(AffineTransform.getTranslateInstance(parentBorder.left - PRECONDITION_SIZE / 2,
 						parentBorder.top - PRECONDITION_SIZE / 2));
 				// System.out.println("Rebuild outline = "+parentOutline);
@@ -222,8 +222,8 @@ public class PreConditionGR extends AbstractNodeGR<FlexoPreCondition> implements
 				// getDrawing().getFirstVisibleObject(EdgeGR.getRepresentedEndObject((WKFObject)post.getEndingObject(),getDrawing()));
 
 				if (startObject != null) {
-					ShapeGraphicalRepresentation<?> startGR = (ShapeGraphicalRepresentation<?>) getGraphicalRepresentation(startObject);
-					ShapeGraphicalRepresentation<?> endGR = (ShapeGraphicalRepresentation<?>) getGraphicalRepresentation(getFlexoPreCondition()
+					ShapeGraphicalRepresentation startGR = (ShapeGraphicalRepresentation) getGraphicalRepresentation(startObject);
+					ShapeGraphicalRepresentation endGR = (ShapeGraphicalRepresentation) getGraphicalRepresentation(getFlexoPreCondition()
 							.getAttachedNode());
 					if (startGR != null && endGR != null && startGR.isRegistered() && endGR.isRegistered()) {
 						logger.finer("findDefaultOrientation(): "

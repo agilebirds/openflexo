@@ -48,7 +48,7 @@ public class DrawRoleSpecializationControl extends MouseDragControl {
 
 	protected class DrawRoleSpecializationAction extends CustomDragControlAction {
 		@Override
-		public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+		public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 				MouseEvent event) {
 			if (graphicalRepresentation instanceof RoleGR) {
 				drawEdge = true;
@@ -60,7 +60,7 @@ public class DrawRoleSpecializationControl extends MouseDragControl {
 		}
 
 		@Override
-		public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+		public boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 				MouseEvent event, boolean isSignificativeDrag) {
 			if (drawEdge) {
 				if (fromRole != null && toRole != null) {
@@ -80,10 +80,10 @@ public class DrawRoleSpecializationControl extends MouseDragControl {
 		}
 
 		@Override
-		public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+		public boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 				MouseEvent event) {
 			if (drawEdge) {
-				GraphicalRepresentation<?> gr = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
+				GraphicalRepresentation gr = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
 				if (gr instanceof RoleGR && gr != fromRole && !fromRole.getAncestors().contains(gr.getDrawable())) {
 					toRole = (RoleGR) gr;
 				} else {
@@ -97,7 +97,7 @@ public class DrawRoleSpecializationControl extends MouseDragControl {
 			return false;
 		}
 
-		public void paint(Graphics g, DrawingController<?> controller) {
+		public void paint(Graphics g, DrawingController controller) {
 			if (drawEdge && currentDraggingLocationInDrawingView != null) {
 				Point from = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
 						fromRole.getShape().getShape().getCenter(), fromRole, controller.getScale());

@@ -172,7 +172,7 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 				for (EditionAction action : dropScheme.getActions()) {
 					if (action instanceof AddShape) {
 						ShapePatternRole role = ((AddShape) action).getPatternRole();
-						ShapeGraphicalRepresentation<?> shapeGR = (ShapeGraphicalRepresentation<?>) viewPointPaletteElement
+						ShapeGraphicalRepresentation shapeGR = (ShapeGraphicalRepresentation) viewPointPaletteElement
 								.getOverridingGraphicalRepresentation(role);
 						if (shapeGR == null) {
 							shapeGR = role.getGraphicalRepresentation();
@@ -201,7 +201,7 @@ public class ContextualPalette extends DrawingPalette implements GraphicalFlexoO
 					}
 				}
 
-				/*ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
+				/*ShapeGraphicalRepresentation shapeGR = getGraphicalRepresentation().clone();
 				shapeGR.setIsSelectable(true);
 				shapeGR.setIsFocusable(true);
 				shapeGR.setIsReadOnly(false);

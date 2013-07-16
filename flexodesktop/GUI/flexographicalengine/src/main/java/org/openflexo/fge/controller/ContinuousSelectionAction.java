@@ -30,7 +30,7 @@ public class ContinuousSelectionAction extends MouseClickControlAction {
 	}
 
 	@Override
-	public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
+	public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
 		MouseClickControlAction.logger.info("Continuous select " + graphicalRepresentation);
 
 		return true;

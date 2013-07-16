@@ -67,7 +67,7 @@ public abstract class ShapeImpl extends FGEObjectImpl implements Shape {
 	}
 
 	@Deprecated
-	private ShapeImpl(ShapeGraphicalRepresentation<?> aGraphicalRepresentation) {
+	private ShapeImpl(ShapeGraphicalRepresentation aGraphicalRepresentation) {
 		this();
 		setGraphicalRepresentation(aGraphicalRepresentation);
 	}

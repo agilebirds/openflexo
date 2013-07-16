@@ -230,7 +230,7 @@ public class AddConnector extends AddShemaElementAction<DiagramConnector> {
 			throw new IllegalArgumentException("No common ancestor");
 		}
 
-		GraphicalRepresentation<?> grToUse = null;
+		GraphicalRepresentation grToUse = null;
 
 		// If an overriden graphical representation is defined, use it
 		if (action.getOverridingGraphicalRepresentation(getPatternRole()) != null) {

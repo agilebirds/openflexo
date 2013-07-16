@@ -28,10 +28,10 @@ public class LabelViewMouseListener extends FGEViewMouseListener {
 
 	private static final Logger logger = Logger.getLogger(LabelViewMouseListener.class.getPackage().getName());
 
-	// private GraphicalRepresentation<?> graphicalRepresentation;
+	// private GraphicalRepresentation graphicalRepresentation;
 	// private LabelView<?> labelView;
 
-	public LabelViewMouseListener(GraphicalRepresentation aGraphicalRepresentation, LabelView<?> aView) {
+	public LabelViewMouseListener(GraphicalRepresentation aGraphicalRepresentation, LabelView aView) {
 		/*graphicalRepresentation = aGraphicalRepresentation;
 		labelView = aView;*/
 		super(aGraphicalRepresentation, aView);
@@ -142,7 +142,7 @@ public class LabelViewMouseListener extends FGEViewMouseListener {
 		getFocusRetriever().handleMouseMove(e);
 	}
 	
-	public DrawingController<?> getController() 
+	public DrawingController getController() 
 	{
 		return labelView.getController();
 	}

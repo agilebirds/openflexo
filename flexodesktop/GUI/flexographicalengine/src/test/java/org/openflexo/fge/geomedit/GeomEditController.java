@@ -82,7 +82,7 @@ public class GeomEditController extends DrawingController<GeometricDrawing> impl
 	private static final Logger logger = FlexoLogger.getLogger(GeomEditController.class.getPackage().getName());
 
 	private JPopupMenu contextualMenu;
-	private GraphicalRepresentation<?> contextualMenuInvoker;
+	private GraphicalRepresentation contextualMenuInvoker;
 	private Point contextualMenuClickedPoint;
 
 	private GeometricObject copiedShape;

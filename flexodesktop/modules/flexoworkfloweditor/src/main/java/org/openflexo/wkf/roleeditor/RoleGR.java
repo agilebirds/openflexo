@@ -260,9 +260,9 @@ public class RoleGR extends ShapeGraphicalRepresentation<Role> implements Graphi
 
 	private void doDefaultLayout(int x, int y) {
 		boolean ok = true;
-		Enumeration<GraphicalRepresentation<?>> en = getDrawing().getAllGraphicalRepresentations();
+		Enumeration<GraphicalRepresentation> en = getDrawing().getAllGraphicalRepresentations();
 		while (en.hasMoreElements()) {
-			GraphicalRepresentation<?> gr = en.nextElement();
+			GraphicalRepresentation gr = en.nextElement();
 			if (gr instanceof RoleGR) {
 				RoleGR rgr = (RoleGR) gr;
 				if (rgr != this) {

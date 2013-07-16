@@ -50,18 +50,21 @@ import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.view.listener.ConnectorViewMouseListener;
 
-public class ConnectorView<O> extends JPanel implements FGEView<O> {
+public class ConnectorView extends JPanel implements FGEView {
 
 	private static final Logger logger = Logger.getLogger(ConnectorView.class.getPackage().getName());
 
-	private ConnectorGraphicalRepresentation<O> graphicalRepresentation;
+	private ConnectorGraphicalRepresentation graphicalRepresentation;
 	private ConnectorViewMouseListener mouseListener;
-	private DrawingController<?> _controller;
+	private DrawingController _controller;
 
-	private LabelView<O> _labelView;
+	private LabelView _labelView;
 
-	public ConnectorView(ConnectorGraphicalRepresentation<O> aGraphicalRepresentation, DrawingController<?> controller) {
+	private Object drawable;
+
+	public ConnectorView(ConnectorGraphicalRepresentation aGraphicalRepresentation, Object drawable, DrawingController controller) {
 		super();
+		this.drawable = drawable;
 		_controller = controller;
 		graphicalRepresentation = aGraphicalRepresentation;
 		updateLabelView();
@@ -98,7 +101,7 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 			logger.fine("Delete ConnectorView for " + getGraphicalRepresentation());
 		}
 		if (getParentView() != null) {
-			FGELayeredView<?> parentView = getParentView();
+			FGELayeredView parentView = getParentView();
 			// logger.warning("Unexpected not null parent, proceeding anyway");
 			parentView.remove(this);
 			parentView.revalidate();
@@ -124,34 +127,30 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 	}
 
 	@Override
-	public O getModel() {
-		return getDrawable();
-	}
-
-	public O getDrawable() {
-		return getGraphicalRepresentation().getDrawable();
+	public Object getDrawable() {
+		return drawable;
 	}
 
 	@Override
-	public DrawingView<?> getDrawingView() {
+	public DrawingView getDrawingView() {
 		return getController().getDrawingView();
 	}
 
 	@Override
-	public FGELayeredView<?> getParent() {
-		return (FGELayeredView<?>) super.getParent();
+	public FGELayeredView getParent() {
+		return (FGELayeredView) super.getParent();
 	}
 
-	public FGELayeredView<?> getParentView() {
+	public FGELayeredView getParentView() {
 		return getParent();
 	}
 
 	@Override
-	public ConnectorGraphicalRepresentation<O> getGraphicalRepresentation() {
+	public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
-	public DrawingGraphicalRepresentation<?> getDrawingGraphicalRepresentation() {
+	public DrawingGraphicalRepresentation getDrawingGraphicalRepresentation() {
 		return graphicalRepresentation.getDrawingGraphicalRepresentation();
 	}
 
@@ -241,7 +240,7 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 			_labelView.delete();
 			_labelView = null;
 		} else if (getGraphicalRepresentation().getHasText() && _labelView == null) {
-			_labelView = new LabelView<O>(getGraphicalRepresentation(), getController(), this);
+			_labelView = new LabelView(getGraphicalRepresentation(), getController(), this);
 			if (getParentView() != null) {
 				getParentView().add(getLabelView());
 			}
@@ -313,7 +312,7 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 	}
 
 	@Override
-	public DrawingController<?> getController() {
+	public DrawingController getController() {
 		return _controller;
 	}
 
@@ -344,8 +343,7 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 					revalidate();
 					getPaintManager().repaint(this);
 				} else if (notification instanceof GraphicalRepresentationDeleted) {
-					GraphicalRepresentation<?> deletedGR = ((GraphicalRepresentationDeleted) notification)
-							.getDeletedGraphicalRepresentation();
+					GraphicalRepresentation deletedGR = ((GraphicalRepresentationDeleted) notification).getDeletedGraphicalRepresentation();
 					// If was not removed, try to do it now
 					if (getGraphicalRepresentation() != null && getGraphicalRepresentation().getContainerGraphicalRepresentation() != null
 							&& getGraphicalRepresentation().getContainerGraphicalRepresentation().contains(getGraphicalRepresentation())) {
@@ -436,7 +434,7 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 	}
 
 	@Override
-	public LabelView<O> getLabelView() {
+	public LabelView getLabelView() {
 		return _labelView;
 	}
 

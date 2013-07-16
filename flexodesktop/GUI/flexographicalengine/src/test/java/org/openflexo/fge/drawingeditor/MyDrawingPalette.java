@@ -193,16 +193,16 @@ public class MyDrawingPalette extends DrawingPalette {
 			final boolean applyCurrentBackground, final boolean applyCurrentTextStyle, final boolean applyCurrentShadowStyle) {
 		PaletteElement returned = new PaletteElement() {
 			@Override
-			public boolean acceptDragging(GraphicalRepresentation<?> gr) {
+			public boolean acceptDragging(GraphicalRepresentation gr) {
 				return gr instanceof DrawingGraphicalRepresentation || gr instanceof ShapeGraphicalRepresentation;
 			}
 
 			@Override
-			public boolean elementDragged(GraphicalRepresentation<?> gr, FGEPoint dropLocation) {
+			public boolean elementDragged(GraphicalRepresentation gr, FGEPoint dropLocation) {
 				MyDrawingElement<?, ?> container = (MyDrawingElement<?, ?>) gr.getDrawable();
 				// getController().addNewShape(new MyShape(getGraphicalRepresentation().getShapeType(), dropLocation,
 				// getController().getDrawing()),container);
-				ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
+				ShapeGraphicalRepresentation shapeGR = getGraphicalRepresentation().clone();
 				if (applyCurrentForeground) {
 					shapeGR.setForeground(getController().getCurrentForegroundStyle());
 				}

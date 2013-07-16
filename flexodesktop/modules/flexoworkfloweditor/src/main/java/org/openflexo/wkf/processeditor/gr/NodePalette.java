@@ -141,8 +141,8 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 	protected boolean drawEdge = false;
 	protected boolean isDnd = false;
 	protected WKFNodeGR<?> to = null;
-	protected GraphicalRepresentation<?> focusedGR;
-	private DrawingController<?> controller;
+	protected GraphicalRepresentation focusedGR;
+	private DrawingController controller;
 	private FGEPoint normalizedStartPoint;
 
 	private Rectangle previousRectangle;
@@ -152,7 +152,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 	public void paint(Graphics g, ProcessEditorController controller) {
 		if (drawEdge && currentDraggingLocationInDrawingView != null) {
 			FGEShape<?> fgeShape = nodeGR.getShape().getOutline();
-			DrawingGraphicalRepresentation<?> drawingGR = controller.getDrawingGraphicalRepresentation();
+			DrawingGraphicalRepresentation drawingGR = controller.getDrawingGraphicalRepresentation();
 			double scale = controller.getScale();
 			FGEPoint nearestOnOutline = fgeShape.getNearestPoint(drawingGR.convertLocalViewCoordinatesToRemoteNormalizedPoint(
 					currentDraggingLocationInDrawingView, nodeGR, scale));
@@ -197,7 +197,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 	}
 
 	@Override
-	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+	public void startDragging(DrawingController controller, FGEPoint startPoint) {
 		mode = null;
 		if (nodeRect.contains(startPoint)) {
 			mode = Mode.NODE;
@@ -288,10 +288,10 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
+	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
 		if (drawEdge && currentDraggingLocationInDrawingView != null && isDnd) {
 			try {
-				GraphicalRepresentation<?> targetGR = controller.getGraphicalRepresentation(target);
+				GraphicalRepresentation targetGR = controller.getGraphicalRepresentation(target);
 				if (targetGR == null) {
 					targetGR = controller.getDrawingGraphicalRepresentation();
 				}
@@ -431,7 +431,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 					controller.getGraphicalRepresentation(container), controller.getDrawingGraphicalRepresentation(), 1.0));// gr.getLocationInDrawing();
 		}
 		if (drop.getObject() != null && drop.hasActionExecutionSucceeded()) {
-			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) controller.getGraphicalRepresentation(drop.getObject());
+			ShapeGraphicalRepresentation gr = (ShapeGraphicalRepresentation) controller.getGraphicalRepresentation(drop.getObject());
 			if (locationInDrawing == null) {
 				locationInDrawing = gr.getLocationInDrawing();
 			}
@@ -563,7 +563,7 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements Proce
 	}
 
 	/*@Override
-	public boolean isApplicable(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent e)
+	public boolean isApplicable(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent e)
 	{
 		return super.isApplicable(graphicalRepresentation, controller, e)
 		&& (RoleContainerGR.isInsideRectangle(graphicalRepresentation, controller, e, upRect)

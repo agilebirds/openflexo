@@ -45,9 +45,9 @@ public class GeometricDrawingGraphicalRepresentation extends DrawingGraphicalRep
 		= MouseClickControl.makeMouseClickControl("Show contextual menu", MouseButton.RIGHT, 1,
 				new CustomClickControlAction() {
 			@Override
-			public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, java.awt.event.MouseEvent event)
+			public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller, java.awt.event.MouseEvent event)
 			{
-				FGEView<?> view = controller.getDrawingView().viewForObject(graphicalRepresentation);
+				FGEView view = controller.getDrawingView().viewForObject(graphicalRepresentation);
 				Point newPoint = SwingUtilities.convertPoint(
 						(Component)event.getSource(), 
 

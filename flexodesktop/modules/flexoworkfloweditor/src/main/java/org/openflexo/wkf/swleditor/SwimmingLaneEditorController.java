@@ -295,7 +295,7 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 			movedObject = ((WKFObjectGR<?>) currentMove.getMovedObject()).getModel();
 		}
 
-		for (GraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
+		for (GraphicalRepresentation gr : currentMove.getMovedObjects()) {
 			if (gr instanceof WKFObjectGR<?>) {
 				movedObjects.add(((WKFObjectGR<?>) gr).getModel());
 			}
@@ -304,7 +304,7 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 		if (movedObject != null) {
 			currentMoveAction = WKFMove.actionType.makeNewAction(movedObject, movedObjects, getWKFController().getEditor());
 			currentMoveAction.setGraphicalContext(SWLEditorConstants.SWIMMING_LANE_EDITOR);
-			for (ShapeGraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
+			for (ShapeGraphicalRepresentation gr : currentMove.getMovedObjects()) {
 				if (gr instanceof WKFObjectGR<?>) {
 					WKFObject o = ((WKFObjectGR<?>) gr).getModel();
 					FGEPoint initialLocation = currentMove.getInitialLocations().get(gr);
@@ -319,7 +319,7 @@ public class SwimmingLaneEditorController extends SelectionManagingDrawingContro
 	@Override
 	public void notifyHasMoved(MoveInfo currentMove) {
 		if (currentMoveAction != null) {
-			for (ShapeGraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
+			for (ShapeGraphicalRepresentation gr : currentMove.getMovedObjects()) {
 				if (gr instanceof WKFObjectGR<?>) {
 					WKFObject o = ((WKFObjectGR<?>) gr).getModel();
 					currentMoveAction.getNewLocations().put(o, new Point2D.Double(gr.getX(), gr.getY()));

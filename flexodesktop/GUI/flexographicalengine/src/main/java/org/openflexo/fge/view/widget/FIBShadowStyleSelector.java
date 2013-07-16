@@ -252,7 +252,7 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 	protected class ShadowStylePreviewPanel extends JPanel {
 		private Drawing drawing;
 		private DrawingGraphicalRepresentation drawingGR;
-		private DrawingController<?> controller;
+		private DrawingController controller;
 		private Object p1, p2, text;
 		private ShapeGraphicalRepresentation shapeGR;
 
@@ -295,7 +295,7 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 				}
 
 				@Override
-				public <O> GraphicalRepresentation<O> getGraphicalRepresentation(O aDrawable) {
+				public <O> GraphicalRepresentation getGraphicalRepresentation(O aDrawable) {
 					if (aDrawable == ShadowStylePreviewPanel.this) {
 						return drawingGR;
 					} else if (aDrawable == text) {

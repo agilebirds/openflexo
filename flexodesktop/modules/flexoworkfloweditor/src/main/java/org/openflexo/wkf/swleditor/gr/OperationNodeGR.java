@@ -185,7 +185,7 @@ public class OperationNodeGR extends AbstractOperationNodeGR {
 		public PetriGraphOpener() {
 			super("Opener", MouseButton.LEFT, 2, new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						java.awt.event.MouseEvent event) {
 					logger.info("Opening Operation petri graph by double-clicking");
 					OpenActionLevel.actionType.makeNewAction(getOperationNode(), null, getDrawing().getEditor()).doAction();
@@ -203,7 +203,7 @@ public class OperationNodeGR extends AbstractOperationNodeGR {
 		public OperationComponentOpener() {
 			super("Component opener", MouseButton.LEFT, 1, new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						java.awt.event.MouseEvent event) {
 					if (!getOperationNode().hasWOComponent()) {
 						return false;

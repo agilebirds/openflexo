@@ -89,7 +89,7 @@ public class ActionNodeGR extends AbstractActionNodeGR {
 		/*		double xOffset = 0;
 				Vector<FlexoNode> allBeginNodes = getActionNode().getParentPetriGraph().getAllBeginNodes();
 				if (allBeginNodes.size()>0) {
-					ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) getGraphicalRepresentation(allBeginNodes.firstElement());
+					ShapeGraphicalRepresentation gr = (ShapeGraphicalRepresentation) getGraphicalRepresentation(allBeginNodes.firstElement());
 					if (gr!=null && allBeginNodes.firstElement()!=getActionNode() && allBeginNodes.firstElement().hasLocationForContext(BASIC_PROCESS_EDITOR))
 						xOffset = gr.getX();
 				}
@@ -107,7 +107,7 @@ public class ActionNodeGR extends AbstractActionNodeGR {
 		/*		double yOffset = 0;
 				Vector<FlexoNode> allBeginNodes = getActionNode().getParentPetriGraph().getAllBeginNodes();
 				if (allBeginNodes.size()>0) {
-					ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) getGraphicalRepresentation(allBeginNodes.firstElement());
+					ShapeGraphicalRepresentation gr = (ShapeGraphicalRepresentation) getGraphicalRepresentation(allBeginNodes.firstElement());
 					if (gr!=null && allBeginNodes.firstElement()!=getActionNode() && allBeginNodes.firstElement().hasLocationForContext(BASIC_PROCESS_EDITOR))
 						yOffset = gr.getY();
 				}

@@ -60,20 +60,23 @@ import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
 import org.openflexo.fge.view.listener.ShapeViewMouseListener;
 
-public class ShapeView<O> extends FGELayeredView<O> {
+public class ShapeView extends FGELayeredView {
 
 	private static final Logger logger = Logger.getLogger(ShapeView.class.getPackage().getName());
 
-	private ShapeGraphicalRepresentation<O> graphicalRepresentation;
+	private ShapeGraphicalRepresentation graphicalRepresentation;
 	private ShapeViewMouseListener mouseListener;
 	private DrawingController _controller;
 
-	private LabelView<O> _labelView;
+	private LabelView _labelView;
 
-	public ShapeView(ShapeGraphicalRepresentation<O> aGraphicalRepresentation, DrawingController<?> controller) {
+	private Object drawable;
+
+	public ShapeView(ShapeGraphicalRepresentation aGraphicalRepresentation, Object drawable, DrawingController controller) {
 		super();
 		logger.fine("Create ShapeView " + Integer.toHexString(hashCode()) + " for " + aGraphicalRepresentation);
 		_controller = controller;
+		this.drawable = drawable;
 		graphicalRepresentation = aGraphicalRepresentation;
 		graphicalRepresentation.finalizeConstraints();
 		updateLabelView();
@@ -146,16 +149,12 @@ public class ShapeView<O> extends FGELayeredView<O> {
 	}
 
 	@Override
-	public O getModel() {
-		return getDrawable();
-	}
-
-	public O getDrawable() {
-		return getGraphicalRepresentation().getDrawable();
+	public Object getDrawable() {
+		return drawable;
 	}
 
 	@Override
-	public DrawingView<?> getDrawingView() {
+	public DrawingView getDrawingView() {
 		if (getController() != null) {
 			return getController().getDrawingView();
 		}
@@ -172,11 +171,11 @@ public class ShapeView<O> extends FGELayeredView<O> {
 	}
 
 	@Override
-	public ShapeGraphicalRepresentation<O> getGraphicalRepresentation() {
+	public ShapeGraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
-	public DrawingGraphicalRepresentation<?> getDrawingGraphicalRepresentation() {
+	public DrawingGraphicalRepresentation getDrawingGraphicalRepresentation() {
 		return graphicalRepresentation.getDrawingGraphicalRepresentation();
 	}
 
@@ -243,7 +242,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 			_labelView.delete();
 			_labelView = null;
 		} else if (getGraphicalRepresentation().getHasText() && _labelView == null) {
-			_labelView = new LabelView<O>(getGraphicalRepresentation(), getController(), this);
+			_labelView = new LabelView(getGraphicalRepresentation(), getController(), this);
 			if (getParentView() != null) {
 				getParentView().add(getLabelView(), getLayer(), -1);
 			}
@@ -317,7 +316,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 	}
 
 	@Override
-	public DrawingController<?> getController() {
+	public DrawingController getController() {
 		return _controller;
 	}
 
@@ -341,16 +340,16 @@ public class ShapeView<O> extends FGELayeredView<O> {
 			if (aNotification instanceof FGENotification) {
 				FGENotification notification = (FGENotification) aNotification;
 				if (notification instanceof GraphicalRepresentationAdded) {
-					GraphicalRepresentation<?> newGR = ((GraphicalRepresentationAdded) notification).getAddedGraphicalRepresentation();
+					GraphicalRepresentation newGR = ((GraphicalRepresentationAdded) notification).getAddedGraphicalRepresentation();
 					logger.fine("ShapeView: Received ObjectAdded notification, creating view for " + newGR);
 					if (newGR instanceof ShapeGraphicalRepresentation) {
-						ShapeGraphicalRepresentation<?> shapeGR = (ShapeGraphicalRepresentation<?>) newGR;
+						ShapeGraphicalRepresentation shapeGR = (ShapeGraphicalRepresentation) newGR;
 						add(shapeGR.makeShapeView(getController()));
 						revalidate();
 						getPaintManager().repaint(this);
 						shapeGR.notifyShapeNeedsToBeRedrawn();
 					} else if (newGR instanceof ConnectorGraphicalRepresentation) {
-						ConnectorGraphicalRepresentation<?> connectorGR = (ConnectorGraphicalRepresentation<?>) newGR;
+						ConnectorGraphicalRepresentation connectorGR = (ConnectorGraphicalRepresentation) newGR;
 						add(connectorGR.makeConnectorView(getController()));
 						revalidate();
 						getPaintManager().repaint(this);
@@ -360,10 +359,9 @@ public class ShapeView<O> extends FGELayeredView<O> {
 						getPaintManager().repaint(this);
 					}
 				} else if (notification instanceof GraphicalRepresentationRemoved) {
-					GraphicalRepresentation<?> removedGR = ((GraphicalRepresentationRemoved) notification)
-							.getRemovedGraphicalRepresentation();
+					GraphicalRepresentation removedGR = ((GraphicalRepresentationRemoved) notification).getRemovedGraphicalRepresentation();
 					if (removedGR instanceof ShapeGraphicalRepresentation) {
-						ShapeView<?> view = getDrawingView().shapeViewForObject((ShapeGraphicalRepresentation<?>) removedGR);
+						ShapeView view = getDrawingView().shapeViewForObject((ShapeGraphicalRepresentation) removedGR);
 						if (view != null) {
 							remove(view);
 							revalidate();
@@ -373,7 +371,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 							logger.warning("Cannot find view for " + removedGR);
 						}
 					} else if (removedGR instanceof ConnectorGraphicalRepresentation) {
-						ConnectorView<?> view = getDrawingView().connectorViewForObject((ConnectorGraphicalRepresentation<?>) removedGR);
+						ConnectorView view = getDrawingView().connectorViewForObject((ConnectorGraphicalRepresentation) removedGR);
 						if (view != null) {
 							remove(view);
 							revalidate();
@@ -388,8 +386,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 						getPaintManager().repaint(this);
 					}
 				} else if (notification instanceof GraphicalRepresentationDeleted) {
-					GraphicalRepresentation<?> deletedGR = ((GraphicalRepresentationDeleted) notification)
-							.getDeletedGraphicalRepresentation();
+					GraphicalRepresentation deletedGR = ((GraphicalRepresentationDeleted) notification).getDeletedGraphicalRepresentation();
 					// If was not removed, try to do it now
 					if (getGraphicalRepresentation() != null && getGraphicalRepresentation().getContainerGraphicalRepresentation() != null
 							&& getGraphicalRepresentation().getContainerGraphicalRepresentation().contains(getGraphicalRepresentation())) {
@@ -490,7 +487,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 	}
 
 	@Override
-	public LabelView<O> getLabelView() {
+	public LabelView getLabelView() {
 		return _labelView;
 	}
 

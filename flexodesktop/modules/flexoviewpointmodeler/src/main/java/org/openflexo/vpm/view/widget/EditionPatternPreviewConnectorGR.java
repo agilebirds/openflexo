@@ -55,11 +55,11 @@ public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresen
 
 	}
 
-	private ShapeGraphicalRepresentation<?> startObjectGR;
-	private ShapeGraphicalRepresentation<?> endObjectGR;
+	private ShapeGraphicalRepresentation startObjectGR;
+	private ShapeGraphicalRepresentation endObjectGR;
 
 	@Override
-	public ShapeGraphicalRepresentation<?> getStartObject() {
+	public ShapeGraphicalRepresentation getStartObject() {
 		if (startObjectGR == null && getDrawing() != null) {
 			startObjectGR = getDrawing().getStartShape(getPatternRole());
 			enableStartObjectObserving(startObjectGR);
@@ -68,7 +68,7 @@ public class EditionPatternPreviewConnectorGR extends ConnectorGraphicalRepresen
 	}
 
 	@Override
-	public ShapeGraphicalRepresentation<?> getEndObject() {
+	public ShapeGraphicalRepresentation getEndObject() {
 		if (endObjectGR == null && getDrawing() != null) {
 			endObjectGR = getDrawing().getEndShape(getPatternRole());
 			enableEndObjectObserving(endObjectGR);

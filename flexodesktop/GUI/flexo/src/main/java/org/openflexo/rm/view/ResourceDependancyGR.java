@@ -37,8 +37,8 @@ public class ResourceDependancyGR extends ConnectorGraphicalRepresentationImpl<R
 	private ForegroundStyle foreground;
 
 	public ResourceDependancyGR(ResourceDependancy dependancy, Drawing<?> aDrawing) {
-		super(ConnectorType.LINE, (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(dependancy.getR1()),
-				(ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(dependancy.getR2()), dependancy, aDrawing);
+		super(ConnectorType.LINE, (ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(dependancy.getR1()),
+				(ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(dependancy.getR2()), dependancy, aDrawing);
 		foreground = ForegroundStyle.makeStyle(Color.DARK_GRAY);
 		foreground.setLineWidth(1.6);
 		setForeground(foreground);

@@ -12,7 +12,7 @@ import java.awt.image.ImageProducer;
 import java.awt.image.RGBImageFilter;
 import java.util.logging.Level;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.TextureBackgroundStyle;
 import org.openflexo.fge.notifications.FGENotification;
 
@@ -132,7 +132,7 @@ public class TextureBackgroundStyleImpl extends BackgroundStyleImpl implements T
 	}
 
 	@Override
-	public Paint getPaint(GraphicalRepresentation gr, double scale) {
+	public Paint getPaint(DrawingTreeNode<?, ?> dtn, double scale) {
 		return new TexturePaint(getColoredTexture(), new Rectangle(0, 0, getColoredTexture().getWidth(), getColoredTexture().getHeight()));
 	}
 

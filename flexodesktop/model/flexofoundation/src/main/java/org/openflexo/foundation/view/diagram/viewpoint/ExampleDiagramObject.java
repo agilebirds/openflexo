@@ -45,7 +45,7 @@ public abstract class ExampleDiagramObject extends NamedViewPointObject implemen
 	// For a CalcDrawingSchema, graphicalRepresentation is a DrawingGraphicalRepresentation
 	// For a CalcDrawingShape, graphicalRepresentation is a ShapeGraphicalRepresentation
 	// For a CalcDrawingConnector, graphicalRepresentation is a ConnectorGraphicalRepresentation
-	private GraphicalRepresentation<?> _graphicalRepresentation;
+	private GraphicalRepresentation _graphicalRepresentation;
 
 	public static class ExampleDiagramBuilder {
 		public DiagramSpecification diagramSpecification;
@@ -160,11 +160,11 @@ public abstract class ExampleDiagramObject extends NamedViewPointObject implemen
 		}
 	}
 
-	public GraphicalRepresentation<?> getGraphicalRepresentation() {
+	public GraphicalRepresentation getGraphicalRepresentation() {
 		return _graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(GraphicalRepresentation<?> graphicalRepresentation) {
+	public void setGraphicalRepresentation(GraphicalRepresentation graphicalRepresentation) {
 		_graphicalRepresentation = graphicalRepresentation;
 		// setChanged();
 	}

@@ -48,7 +48,7 @@ import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.GeometryModified;
 import org.openflexo.toolbox.ToolBox;
 
-public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresentationImpl<O> implements GeometricGraphicalRepresentation<O> {
+public class GeometricGraphicalRepresentationImpl extends GraphicalRepresentationImpl implements GeometricGraphicalRepresentation {
 
 	private static final Logger logger = Logger.getLogger(GeometricGraphicalRepresentation.class.getPackage().getName());
 
@@ -301,7 +301,7 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	}
 
 	@Override
-	public void paint(Graphics g, DrawingController<?> controller) {
+	public void paint(Graphics g, DrawingController controller) {
 		if (!isRegistered()) {
 			setRegistered(true);
 		}
@@ -729,7 +729,7 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 			private double initialHeight;
 
 			@Override
-			public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+			public void startDragging(DrawingController controller, FGEPoint startPoint) {
 				initialWidth = ((FGERectangle) getGeometricObject()).width;
 				initialHeight = ((FGERectangle) getGeometricObject()).height;
 				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(((FGERectangle) getGeometricObject()).getSouthEastPt(),
@@ -761,7 +761,7 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 			private double initialHeight;
 
 			@Override
-			public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+			public void startDragging(DrawingController controller, FGEPoint startPoint) {
 				initialWidth = ((FGERectangle) getGeometricObject()).width;
 				initialHeight = ((FGERectangle) getGeometricObject()).height;
 				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(((FGERectangle) getGeometricObject()).getSouthWestPt(),
@@ -792,7 +792,7 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 			private double initialHeight;
 
 			@Override
-			public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+			public void startDragging(DrawingController controller, FGEPoint startPoint) {
 				initialWidth = ((FGERectangle) getGeometricObject()).width;
 				initialHeight = ((FGERectangle) getGeometricObject()).height;
 				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(((FGERectangle) getGeometricObject()).getNorthEastPt(),
@@ -823,7 +823,7 @@ public class GeometricGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 			private double initialHeight;
 
 			@Override
-			public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+			public void startDragging(DrawingController controller, FGEPoint startPoint) {
 				initialWidth = ((FGERectangle) getGeometricObject()).width;
 				initialHeight = ((FGERectangle) getGeometricObject()).height;
 				setDraggingAuthorizedArea(FGEQuarterPlane.makeFGEQuarterPlane(((FGERectangle) getGeometricObject()).getNorthWestPt(),

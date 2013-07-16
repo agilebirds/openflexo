@@ -301,7 +301,7 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 			movedObject = ((WKFObjectGR<?>) currentMove.getMovedObject()).getModel();
 		}
 
-		for (GraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
+		for (GraphicalRepresentation gr : currentMove.getMovedObjects()) {
 			if (gr instanceof WKFObjectGR<?>) {
 				movedObjects.add(((WKFObjectGR<?>) gr).getModel());
 			}
@@ -310,7 +310,7 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 		if (movedObject != null) {
 			currentMoveAction = WKFMove.actionType.makeNewAction(movedObject, movedObjects, getEditor());
 			currentMoveAction.setGraphicalContext(ProcessEditorConstants.BASIC_PROCESS_EDITOR);
-			for (ShapeGraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
+			for (ShapeGraphicalRepresentation gr : currentMove.getMovedObjects()) {
 				if (gr instanceof WKFObjectGR<?>) {
 					WKFObject o = ((WKFObjectGR<?>) gr).getModel();
 					FGEPoint initialLocation = currentMove.getInitialLocations().get(gr);
@@ -331,7 +331,7 @@ public class ProcessEditorController extends SelectionManagingDrawingController<
 	@Override
 	public void notifyHasMoved(MoveInfo currentMove) {
 		if (currentMoveAction != null) {
-			for (ShapeGraphicalRepresentation<?> gr : currentMove.getMovedObjects()) {
+			for (ShapeGraphicalRepresentation gr : currentMove.getMovedObjects()) {
 				if (gr instanceof WKFObjectGR<?>) {
 					WKFObject o = ((WKFObjectGR<?>) gr).getModel();
 					currentMoveAction.getNewLocations().put(o, new Point2D.Double(gr.getX(), gr.getY()));

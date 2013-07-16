@@ -403,7 +403,7 @@ public class WKFModule extends FlexoModule implements ExternalWKFModule {
 			public Void call() throws Exception {
 				if (screenshot != null) {
 					if (screenshot instanceof DrawingView) {
-						DrawingController<?> controller = ((DrawingView<?>) screenshot).getController();
+						DrawingController controller = ((DrawingView<?>) screenshot).getController();
 						drawingControllers.remove(controller.getDrawing());
 						controller.delete();
 					} else if (screenshot instanceof FlexoJTree) {

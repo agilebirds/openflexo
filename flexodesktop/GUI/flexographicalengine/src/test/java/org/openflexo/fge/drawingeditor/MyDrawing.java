@@ -21,6 +21,7 @@ package org.openflexo.fge.drawingeditor;
 
 import java.io.File;
 
+import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.XMLElement;
@@ -28,7 +29,7 @@ import org.openflexo.model.annotations.XMLElement;
 @ModelEntity
 @ImplementationClass(MyDrawingImpl.class)
 @XMLElement(xmlTag = "MyDrawing")
-public interface MyDrawing extends MyDrawingElement<MyDrawing, MyDrawingGraphicalRepresentation> {
+public interface MyDrawing extends MyDrawingElement<MyDrawing, DrawingGraphicalRepresentation> {
 
 	public File getFile();
 

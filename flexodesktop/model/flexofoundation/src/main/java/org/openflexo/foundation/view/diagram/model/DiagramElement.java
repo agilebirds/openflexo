@@ -62,7 +62,7 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
-public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> extends VirtualModelInstanceObject implements Bindable,
+public abstract class DiagramElement<GR extends GraphicalRepresentation> extends VirtualModelInstanceObject implements Bindable,
 		PropertyChangeListener, Observer {
 
 	private static final Logger logger = Logger.getLogger(DiagramElement.class.getPackage().getName());

@@ -171,14 +171,14 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 		if (getAnnotation().isAnnotation()) {
 			super.doLayoutMethod3(x, y);
 		} else {
-			Iterator<GraphicalRepresentation<?>> i = null;
+			Iterator<GraphicalRepresentation> i = null;
 			double attemptX = x, attemptY = y;
 			boolean found = false;
 			while (!found) {
 				i = getContainerGraphicalRepresentation().getContainedGraphicalRepresentations().iterator();
 				found = true;
 				while (i.hasNext()) {
-					GraphicalRepresentation<?> gr = i.next();
+					GraphicalRepresentation gr = i.next();
 					if (gr instanceof AnnotationGR && ((AnnotationGR) gr).getDrawable().isBoundingBox()) {
 						AnnotationGR rgr = (AnnotationGR) gr;
 						if (rgr != this) {

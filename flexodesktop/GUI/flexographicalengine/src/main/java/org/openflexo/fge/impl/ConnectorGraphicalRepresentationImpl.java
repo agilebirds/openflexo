@@ -46,7 +46,7 @@ import org.openflexo.fge.notifications.ShapeChanged;
 import org.openflexo.fge.view.ConnectorView;
 import org.openflexo.toolbox.ToolBox;
 
-public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresentationImpl<O> implements ConnectorGraphicalRepresentation<O> {
+public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentationImpl implements ConnectorGraphicalRepresentation {
 
 	private static final Logger logger = Logger.getLogger(ConnectorGraphicalRepresentation.class.getPackage().getName());
 
@@ -82,8 +82,8 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	// * Fields *
 	// *******************************************************************************
 
-	private ShapeGraphicalRepresentation<?> startObject;
-	private ShapeGraphicalRepresentation<?> endObject;
+	private ShapeGraphicalRepresentation startObject;
+	private ShapeGraphicalRepresentation endObject;
 	protected FGEConnectorGraphics graphics;
 
 	// *******************************************************************************
@@ -106,8 +106,8 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	}
 
 	@Deprecated
-	protected ConnectorGraphicalRepresentationImpl(ConnectorType aConnectorType, ShapeGraphicalRepresentation<?> aStartObject,
-			ShapeGraphicalRepresentation<?> anEndObject, O aDrawable, Drawing<?> aDrawing) {
+	protected ConnectorGraphicalRepresentationImpl(ConnectorType aConnectorType, ShapeGraphicalRepresentation aStartObject,
+			ShapeGraphicalRepresentation anEndObject, O aDrawable, Drawing<?> aDrawing) {
 		this(aDrawable, aDrawing);
 
 		layer = FGEConstants.DEFAULT_CONNECTOR_LAYER;
@@ -157,7 +157,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	}
 
 	@Override
-	public final void setsWith(GraphicalRepresentation<?> gr) {
+	public final void setsWith(GraphicalRepresentation gr) {
 		super.setsWith(gr);
 		if (gr instanceof ConnectorGraphicalRepresentation) {
 			for (ConnectorParameters p : ConnectorParameters.values()) {
@@ -165,14 +165,14 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 					_setParameterValueWith(p, gr);
 				}
 			}
-			Connector connectorToCopy = ((ConnectorGraphicalRepresentation<?>) gr).getConnector();
+			Connector connectorToCopy = ((ConnectorGraphicalRepresentation) gr).getConnector();
 			Connector clone = connectorToCopy.clone();
 			setConnector(clone);
 		}
 	}
 
 	@Override
-	public final void setsWith(GraphicalRepresentation<?> gr, GRParameter... exceptedParameters) {
+	public final void setsWith(GraphicalRepresentation gr, GRParameter... exceptedParameters) {
 		super.setsWith(gr, exceptedParameters);
 		if (gr instanceof ConnectorGraphicalRepresentationImpl) {
 			for (ConnectorParameters p : ConnectorParameters.values()) {
@@ -335,12 +335,12 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	}
 
 	@Override
-	public ShapeGraphicalRepresentation<?> getStartObject() {
+	public ShapeGraphicalRepresentation getStartObject() {
 		return startObject;
 	}
 
 	@Override
-	public void setStartObject(ShapeGraphicalRepresentation<?> aStartObject) {
+	public void setStartObject(ShapeGraphicalRepresentation aStartObject) {
 		startObject = aStartObject;
 		if (!enabledStartObjectObserving) {
 			enableStartObjectObserving(startObject);
@@ -353,7 +353,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	private boolean enabledEndObjectObserving = false;
 	private Vector<Observable> observedEndObjects = new Vector<Observable>();
 
-	protected void enableStartObjectObserving(ShapeGraphicalRepresentation<?> aStartObject) {
+	protected void enableStartObjectObserving(ShapeGraphicalRepresentation aStartObject) {
 
 		if (aStartObject == null || !aStartObject.isValidated()) {
 			return;
@@ -378,7 +378,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 		}
 	}
 
-	protected void disableStartObjectObserving(/*ShapeGraphicalRepresentation<?> aStartObject*/) {
+	protected void disableStartObjectObserving(/*ShapeGraphicalRepresentation aStartObject*/) {
 		if (/*aStartObject != null &&*/enabledStartObjectObserving) {
 			/*aStartObject.deleteObserver(this);
 			if (!isDeserializing()) {
@@ -394,19 +394,19 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	}
 
 	@Override
-	public ShapeGraphicalRepresentation<?> getEndObject() {
+	public ShapeGraphicalRepresentation getEndObject() {
 		return endObject;
 	}
 
 	@Override
-	public void setEndObject(ShapeGraphicalRepresentation<?> anEndObject) {
+	public void setEndObject(ShapeGraphicalRepresentation anEndObject) {
 		endObject = anEndObject;
 		if (!enabledEndObjectObserving) {
 			enableEndObjectObserving(endObject);
 		}
 	}
 
-	protected void enableEndObjectObserving(ShapeGraphicalRepresentation<?> anEndObject) {
+	protected void enableEndObjectObserving(ShapeGraphicalRepresentation anEndObject) {
 
 		if (anEndObject == null || !anEndObject.isValidated()) {
 			return;
@@ -431,7 +431,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 		}
 	}
 
-	protected void disableEndObjectObserving(/*ShapeGraphicalRepresentation<?> anEndObject*/) {
+	protected void disableEndObjectObserving(/*ShapeGraphicalRepresentation anEndObject*/) {
 		if (/*anEndObject != null &&*/enabledEndObjectObserving) {
 			/*anEndObject.deleteObserver(this);
 			if (!isDeserializing()) {
@@ -611,7 +611,7 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	// *******************************************************************************
 
 	@Override
-	public void paint(Graphics g, DrawingController<?> controller) {
+	public void paint(Graphics g, DrawingController controller) {
 		if (!isRegistered()) {
 			setRegistered(true);
 		}
@@ -755,8 +755,8 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 
 	// Override for a custom view management
 	@Override
-	public ConnectorView<O> makeConnectorView(DrawingController<?> controller) {
-		return new ConnectorView<O>(this, controller);
+	public ConnectorView makeConnectorView(DrawingController controller) {
+		return new ConnectorView(this, controller);
 	}
 
 	@Override
@@ -917,10 +917,10 @@ public class ConnectorGraphicalRepresentationImpl<O> extends GraphicalRepresenta
 	}
 
 	@Override
-	public ConnectorGraphicalRepresentation<O> clone() {
+	public ConnectorGraphicalRepresentation clone() {
 		// logger.info("La GR "+this+" se fait cloner la");
 		try {
-			return (ConnectorGraphicalRepresentation<O>) super.clone();
+			return (ConnectorGraphicalRepresentation) super.clone();
 		} catch (CloneNotSupportedException e) {
 			// cannot happen since we are clonable
 			e.printStackTrace();

@@ -19,6 +19,7 @@
  */
 package org.openflexo.fge.drawingeditor;
 
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.XMLElement;
@@ -26,7 +27,7 @@ import org.openflexo.model.annotations.XMLElement;
 @ModelEntity
 @ImplementationClass(MyShapeImpl.class)
 @XMLElement(xmlTag = "MyShape")
-public interface MyShape extends MyDrawingElement<MyShape, MyShapeGraphicalRepresentation> {
+public interface MyShape extends MyDrawingElement<MyShape, ShapeGraphicalRepresentation> {
 
 	public String getName();
 

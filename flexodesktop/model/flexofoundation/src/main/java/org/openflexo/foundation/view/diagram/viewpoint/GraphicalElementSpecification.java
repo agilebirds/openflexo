@@ -25,7 +25,7 @@ import org.openflexo.foundation.viewpoint.VirtualModel;
  * @author sylvain
  * 
  */
-public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation<?>> extends EditionPatternObject implements Bindable {
+public class GraphicalElementSpecification<T, GR extends GraphicalRepresentation> extends EditionPatternObject implements Bindable {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(GraphicalElementSpecification.class.getPackage().getName());

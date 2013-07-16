@@ -146,7 +146,7 @@ public class CollabsedActivityGroupGR extends WKFObjectGR<ActivityGroup> {
 		public GroupExpander() {
 			super("GroupExpander", MouseButton.LEFT, new CustomDragControlAction() {
 				@Override
-				public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						MouseEvent event) {
 					logger.info("Expand group");
 					OpenGroup.actionType.makeNewAction(getActivityGroup(), null, getDrawing().getEditor()).doAction();
@@ -154,14 +154,14 @@ public class CollabsedActivityGroupGR extends WKFObjectGR<ActivityGroup> {
 				}
 
 				@Override
-				public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						MouseEvent event, boolean isSignificativeDrag) {
 					// TODO Auto-generated method stub
 					return false;
 				}
 
 				@Override
-				public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						MouseEvent event) {
 					// TODO Auto-generated method stub
 					return false;
@@ -170,13 +170,13 @@ public class CollabsedActivityGroupGR extends WKFObjectGR<ActivityGroup> {
 		}
 
 		@Override
-		public boolean isApplicable(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent e) {
+		public boolean isApplicable(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent e) {
 			return super.isApplicable(graphicalRepresentation, controller, e) && isInsideClosingBox(graphicalRepresentation, controller, e);
 		}
 
 	}
 
-	protected boolean isInsideClosingBox(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+	protected boolean isInsideClosingBox(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 			MouseEvent event) {
 		ShapeView view = (ShapeView) controller.getDrawingView().viewForObject(graphicalRepresentation);
 		FGERectangle expandingRect = getExpandingRect();

@@ -44,21 +44,21 @@ public abstract class MouseDragControlAction extends MouseControlAction {
 				return new CustomDragControlAction() {
 
 					@Override
-					public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+					public boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 							MouseEvent event) {
 						logger.info("Perform mouse DRAGGED on undefined CUSTOM MouseDragControlAction");
 						return true;
 					}
 
 					@Override
-					public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+					public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 							MouseEvent event) {
 						logger.info("Perform mouse PRESSED on undefined CUSTOM MouseDragControlAction");
 						return false;
 					}
 
 					@Override
-					public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+					public boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 							MouseEvent event, boolean isSignificativeDrag) {
 						logger.info("Perform mouse RELEASED on undefined CUSTOM MouseDragControlAction");
 						return false;
@@ -83,7 +83,7 @@ public abstract class MouseDragControlAction extends MouseControlAction {
 	 *            TODO
 	 * @return
 	 */
-	public abstract boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+	public abstract boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 			MouseEvent event);
 
 	/**
@@ -99,7 +99,7 @@ public abstract class MouseDragControlAction extends MouseControlAction {
 	 *            TODO
 	 * @return
 	 */
-	public abstract boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+	public abstract boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 			MouseEvent event, boolean isSignificativeDrag);
 
 	/**
@@ -113,7 +113,7 @@ public abstract class MouseDragControlAction extends MouseControlAction {
 	 *            TODO
 	 * @return
 	 */
-	public abstract boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+	public abstract boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 			MouseEvent event);
 
 	public static class None extends MouseDragControlAction {
@@ -123,19 +123,19 @@ public abstract class MouseDragControlAction extends MouseControlAction {
 		}
 
 		@Override
-		public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+		public boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 				MouseEvent event) {
 			return true;
 		}
 
 		@Override
-		public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+		public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 				MouseEvent event) {
 			return false;
 		}
 
 		@Override
-		public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+		public boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 				MouseEvent event, boolean isSignificativeDrag) {
 			return false;
 		}

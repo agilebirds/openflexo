@@ -30,7 +30,7 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 
 	private Drawing<RepresentedDrawing> drawing;
 	private DrawingGraphicalRepresentation<RepresentedDrawing> drawingGR;
-	private DrawingController<?> controller;
+	private DrawingController controller;
 	private RepresentedDrawing representedDrawing;
 	private RepresentedShape representedShape;
 
@@ -90,12 +90,12 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 			}
 
 			@Override
-			public <O> GraphicalRepresentation<O> getGraphicalRepresentation(O aDrawable) {
+			public <O> GraphicalRepresentation getGraphicalRepresentation(O aDrawable) {
 				// System.out.println("getContainer() for " + aDrawable);
 				if (aDrawable == representedDrawing) {
-					return (GraphicalRepresentation<O>) drawingGR;
+					return (GraphicalRepresentation) drawingGR;
 				} else if (aDrawable == representedShape) {
-					return (GraphicalRepresentation<O>) shapeGR;
+					return (GraphicalRepresentation) shapeGR;
 				}
 				return null;
 			}

@@ -47,12 +47,12 @@ public class ExampleDiagramConnectorGR extends ConnectorGraphicalRepresentation<
 	}
 
 	public ExampleDiagramConnectorGR(ExampleDiagramConnector aConnector, Drawing<?> aDrawing) {
-		super(ConnectorType.LINE, aDrawing != null ? (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(aConnector
-				.getStartShape()) : null, aDrawing != null ? (ShapeGraphicalRepresentation<?>) aDrawing
+		super(ConnectorType.LINE, aDrawing != null ? (ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(aConnector
+				.getStartShape()) : null, aDrawing != null ? (ShapeGraphicalRepresentation) aDrawing
 				.getGraphicalRepresentation(aConnector.getEndShape()) : null, aConnector, aDrawing);
 
-		setStartObject((ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(aConnector.getStartShape()));
-		setEndObject((ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(aConnector.getEndShape()));
+		setStartObject((ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(aConnector.getStartShape()));
+		setEndObject((ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(aConnector.getEndShape()));
 
 		addToMouseClickControls(new ExampleDiagramController.ShowContextualMenuControl());
 		if (ToolBox.getPLATFORM() != ToolBox.MACOS) {

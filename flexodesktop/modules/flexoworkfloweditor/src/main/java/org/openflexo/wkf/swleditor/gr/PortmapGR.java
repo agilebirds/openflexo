@@ -255,7 +255,7 @@ public class PortmapGR extends AbstractNodeGR<FlexoPortMap> {
 		super.notifyObjectHasMoved();
 		FlexoPortMap afterPortmap = null;
 		if (observedContainer != null) {
-			for (GraphicalRepresentation<?> gr : observedContainer.getContainedGraphicalRepresentations()) {
+			for (GraphicalRepresentation gr : observedContainer.getContainedGraphicalRepresentations()) {
 				if (gr instanceof PortmapGR && gr != this && gr.getIsVisible()) {
 					PortmapGR portmapGR = (PortmapGR) gr;
 					if (getOrientation().isVertical()) {

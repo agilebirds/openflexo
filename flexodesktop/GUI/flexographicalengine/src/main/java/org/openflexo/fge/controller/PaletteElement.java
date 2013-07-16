@@ -42,26 +42,25 @@ public interface PaletteElement extends Serializable {
 
 	public PaletteElementGraphicalRepresentation getGraphicalRepresentation();
 
-	public boolean acceptDragging(GraphicalRepresentation<?> target);
+	public boolean acceptDragging(GraphicalRepresentation target);
 
-	public boolean elementDragged(GraphicalRepresentation<?> target, FGEPoint dropLocation);
+	public boolean elementDragged(GraphicalRepresentation target, FGEPoint dropLocation);
 
 	public DrawingPalette getPalette();
 
-	public static class PaletteElementGraphicalRepresentation extends ShapeGraphicalRepresentationImpl<PaletteElement> {
-		private ShapeGraphicalRepresentation<?> originalGR;
+	public static class PaletteElementGraphicalRepresentation extends ShapeGraphicalRepresentationImpl {
+		private ShapeGraphicalRepresentation originalGR;
 
 		public PaletteElementGraphicalRepresentation(ShapeType shapeType, DrawingPalette palette, PaletteElement paletteElement,
 				PaletteDrawing paletteDrawing) {
 			super();
-			setFGEModelFactory(palette.getFactory());
-			setDrawable(paletteElement);
+			setFactory(palette.getFactory());
 			setDrawing(paletteDrawing);
 			setShapeType(shapeType);
 
 		}
 
-		public PaletteElementGraphicalRepresentation(ShapeGraphicalRepresentation<?> shapeGR, DrawingPalette palette,
+		public PaletteElementGraphicalRepresentation(ShapeGraphicalRepresentation shapeGR, DrawingPalette palette,
 				PaletteElement paletteElement, PaletteDrawing paletteDrawing) {
 			this(shapeGR.getShapeType(), palette, paletteElement, paletteDrawing);
 			// Copy parameters...
@@ -81,7 +80,7 @@ public interface PaletteElement extends Serializable {
 		}
 
 		@Override
-		public ShapeView<PaletteElement> makeShapeView(DrawingController controller) {
+		public ShapeView makeShapeView(DrawingController controller) {
 			return new PaletteElementView(this, controller);
 		}
 

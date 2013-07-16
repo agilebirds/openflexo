@@ -152,12 +152,12 @@ public abstract class AbstractNodeGR<O extends AbstractNode> extends WKFNodeGR<O
 	}
 
 	@Override
-	public boolean isAllowedToBeDraggedOutsideParentContainerInsideContainer(GraphicalRepresentation<?> container) {
+	public boolean isAllowedToBeDraggedOutsideParentContainerInsideContainer(GraphicalRepresentation container) {
 		return container instanceof RoleContainerGR;
 	}
 
 	@Override
-	public boolean dragOutsideParentContainerInsideContainer(GraphicalRepresentation<?> container, FGEPoint location) {
+	public boolean dragOutsideParentContainerInsideContainer(GraphicalRepresentation container, FGEPoint location) {
 		if (container instanceof RoleContainerGR) {
 			getDrawing().setRepresentationRole(((RoleContainerGR) container).getRole(), getNode());
 			getNode().setX(location.x, SWIMMING_LANE_EDITOR);

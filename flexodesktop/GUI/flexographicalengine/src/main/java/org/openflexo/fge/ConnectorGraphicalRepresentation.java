@@ -52,7 +52,7 @@ import org.openflexo.model.annotations.XMLElement;
 @ModelEntity
 @ImplementationClass(ConnectorGraphicalRepresentationImpl.class)
 @XMLElement(xmlTag = "ConnectorGraphicalRepresentation")
-public interface ConnectorGraphicalRepresentation<O> extends GraphicalRepresentation<O> {
+public interface ConnectorGraphicalRepresentation extends GraphicalRepresentation {
 
 	// Property keys
 
@@ -99,17 +99,17 @@ public interface ConnectorGraphicalRepresentation<O> extends GraphicalRepresenta
 
 	@Getter(value = START_OBJECT)
 	@XMLElement(context = "Start")
-	public ShapeGraphicalRepresentation<?> getStartObject();
+	public ShapeGraphicalRepresentation getStartObject();
 
 	@Setter(value = START_OBJECT)
-	public void setStartObject(ShapeGraphicalRepresentation<?> aStartObject);
+	public void setStartObject(ShapeGraphicalRepresentation aStartObject);
 
 	@Getter(value = END_OBJECT)
 	@XMLElement(context = "End")
-	public ShapeGraphicalRepresentation<?> getEndObject();
+	public ShapeGraphicalRepresentation getEndObject();
 
 	@Setter(value = END_OBJECT)
-	public void setEndObject(ShapeGraphicalRepresentation<?> anEndObject);
+	public void setEndObject(ShapeGraphicalRepresentation anEndObject);
 
 	@Getter(value = CONNECTOR)
 	@XMLElement
@@ -246,7 +246,7 @@ public interface ConnectorGraphicalRepresentation<O> extends GraphicalRepresenta
 	public void refreshConnector();
 
 	// Override for a custom view management
-	public ConnectorView<O> makeConnectorView(DrawingController<?> controller);
+	public ConnectorView makeConnectorView(DrawingController controller);
 
 	public boolean getDebugCoveringArea();
 
@@ -256,6 +256,6 @@ public interface ConnectorGraphicalRepresentation<O> extends GraphicalRepresenta
 
 	public List<? extends ControlArea<?>> getControlAreas();
 
-	public ConnectorGraphicalRepresentation<O> clone();
+	public ConnectorGraphicalRepresentation clone();
 
 }

@@ -36,7 +36,7 @@ public class OvalImpl extends ShapeImpl implements Oval {
 	}
 
 	@Deprecated
-	private OvalImpl(ShapeGraphicalRepresentation<?> aGraphicalRepresentation) {
+	private OvalImpl(ShapeGraphicalRepresentation aGraphicalRepresentation) {
 		this();
 		setGraphicalRepresentation(aGraphicalRepresentation);
 		updateShape();

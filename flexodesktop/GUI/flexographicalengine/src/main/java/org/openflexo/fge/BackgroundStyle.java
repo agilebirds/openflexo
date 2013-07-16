@@ -21,6 +21,7 @@ package org.openflexo.fge;
 
 import java.awt.Paint;
 
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.impl.BackgroundStyleImpl;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -62,7 +63,7 @@ public interface BackgroundStyle extends FGEStyle {
 		NONE, COLOR, COLOR_GRADIENT, TEXTURE, IMAGE
 	}
 
-	public Paint getPaint(GraphicalRepresentation<?> gr, double scale);
+	public Paint getPaint(DrawingTreeNode<?, ?> dtn, double scale);
 
 	public BackgroundStyleType getBackgroundStyleType();
 

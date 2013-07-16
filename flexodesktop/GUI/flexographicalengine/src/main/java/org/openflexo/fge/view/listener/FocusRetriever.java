@@ -53,9 +53,9 @@ public class FocusRetriever {
 
 	private static final Logger logger = Logger.getLogger(FocusRetriever.class.getPackage().getName());
 
-	private DrawingView<?> drawingView;
+	private DrawingView drawingView;
 
-	public FocusRetriever(DrawingView<?> aDrawingView) {
+	public FocusRetriever(DrawingView aDrawingView) {
 		drawingView = aDrawingView;
 	}
 
@@ -72,12 +72,12 @@ public class FocusRetriever {
 		}
 	}
 
-	public DrawingController<?> getController() {
+	public DrawingController getController() {
 		return drawingView.getController();
 	}
 
 	public void handleMouseMove(MouseEvent event) {
-		GraphicalRepresentation<?> newFocusedObject = getFocusedObject(event);
+		GraphicalRepresentation newFocusedObject = getFocusedObject(event);
 
 		if (newFocusedObject != null) {
 			drawingView.getController().setFocusedFloatingLabel(focusOnFloatingLabel(newFocusedObject, event) ? newFocusedObject : null);
@@ -107,23 +107,23 @@ public class FocusRetriever {
 
 	}
 
-	public boolean focusOnFloatingLabel(GraphicalRepresentation<?> graphicalRepresentation, MouseEvent event) {
+	public boolean focusOnFloatingLabel(GraphicalRepresentation graphicalRepresentation, MouseEvent event) {
 		return focusOnFloatingLabel(graphicalRepresentation, (Component) event.getSource(), event.getPoint());
 	}
 
-	private boolean focusOnFloatingLabel(GraphicalRepresentation<?> graphicalRepresentation, Component eventSource, Point eventLocation) {
+	private boolean focusOnFloatingLabel(GraphicalRepresentation graphicalRepresentation, Component eventSource, Point eventLocation) {
 		// if (!graphicalRepresentation.hasText()) return false;
 
 		if (graphicalRepresentation instanceof GeometricGraphicalRepresentation) {
 			return false;
 		}
 
-		FGEView<?> view = drawingView.viewForObject(graphicalRepresentation);
-		FGEView<?> containerView = graphicalRepresentation == drawingView.getGraphicalRepresentation() ? drawingView : drawingView
+		FGEView view = drawingView.viewForObject(graphicalRepresentation);
+		FGEView containerView = graphicalRepresentation == drawingView.getGraphicalRepresentation() ? drawingView : drawingView
 				.viewForObject(graphicalRepresentation.getContainerGraphicalRepresentation());
 		Point p = SwingUtilities.convertPoint(eventSource, eventLocation, (Component) containerView);
 		if (graphicalRepresentation.getHasText()) {
-			LabelView<?> labelView = view.getLabelView();
+			LabelView labelView = view.getLabelView();
 			if (labelView != null) {
 				return labelView.getBounds().contains(p);
 			}
@@ -132,16 +132,16 @@ public class FocusRetriever {
 
 	}
 
-	public ControlArea<?> getFocusedControlAreaForDrawable(GraphicalRepresentation<?> graphicalRepresentation, MouseEvent event) {
+	public ControlArea<?> getFocusedControlAreaForDrawable(GraphicalRepresentation graphicalRepresentation, MouseEvent event) {
 		return getFocusedControlAreaForDrawable(graphicalRepresentation, drawingView.getGraphicalRepresentation(), event);
 	}
 
-	public ControlArea<?> getFocusedControlAreaForDrawable(GraphicalRepresentation<?> graphicalRepresentation,
-			GraphicalRepresentation<?> container, MouseEvent event) {
+	public ControlArea<?> getFocusedControlAreaForDrawable(GraphicalRepresentation graphicalRepresentation,
+			GraphicalRepresentation container, MouseEvent event) {
 		ControlArea<?> returned = null;
 		double selectionDistance = FGEConstants.SELECTION_DISTANCE; // Math.max(5.0,FGEConstants.SELECTION_DISTANCE*getScale());
 		if (graphicalRepresentation instanceof GeometricGraphicalRepresentation) {
-			GeometricGraphicalRepresentation<?> gr = (GeometricGraphicalRepresentation<?>) graphicalRepresentation;
+			GeometricGraphicalRepresentation gr = (GeometricGraphicalRepresentation) graphicalRepresentation;
 			Point viewPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
 					(Component) drawingView.viewForObject(container));
 			// FGEPoint point =
@@ -166,14 +166,14 @@ public class FocusRetriever {
 			return returned;
 		}
 
-		FGEView<?> view = drawingView.viewForObject(container);
+		FGEView view = drawingView.viewForObject(container);
 		Point p = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), (Component) view);
-		FGEView<?> v = drawingView.viewForObject(graphicalRepresentation);
+		FGEView v = drawingView.viewForObject(graphicalRepresentation);
 		Point p2 = SwingUtilities.convertPoint((Component) view, p, (Component) v);
 		FGEPoint p3 = v.getGraphicalRepresentation().convertViewCoordinatesToNormalizedPoint(p2, getScale());
 
 		if (graphicalRepresentation instanceof ShapeGraphicalRepresentation) {
-			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) graphicalRepresentation;
+			ShapeGraphicalRepresentation gr = (ShapeGraphicalRepresentation) graphicalRepresentation;
 			if (Double.isNaN(p3.getX()) && gr.getWidth() == 0) {
 				p3.x = 1;
 			}
@@ -197,7 +197,7 @@ public class FocusRetriever {
 				}
 			}
 		} else if (graphicalRepresentation instanceof ConnectorGraphicalRepresentation) {
-			ConnectorGraphicalRepresentation<?> gr = (ConnectorGraphicalRepresentation<?>) graphicalRepresentation;
+			ConnectorGraphicalRepresentation gr = (ConnectorGraphicalRepresentation) graphicalRepresentation;
 			double smallestDistance = Double.POSITIVE_INFINITY;
 			for (ControlArea<?> ca : gr.getControlAreas()) {
 				// Point pt1 =
@@ -218,14 +218,14 @@ public class FocusRetriever {
 		return returned;
 	}
 
-	public GraphicalRepresentation<?> getFocusedObject(MouseEvent event) {
+	public GraphicalRepresentation getFocusedObject(MouseEvent event) {
 		switch (getController().getCurrentTool()) {
 		case SelectionTool:
-			GraphicalRepresentation<?> returned = getFocusedObject(drawingView.getGraphicalRepresentation(), event);
+			GraphicalRepresentation returned = getFocusedObject(drawingView.getGraphicalRepresentation(), event);
 			/*
 			 * System.out.println("getFocusedObject(), return "+returned); if
-			 * (getController().getDrawing() instanceof DefaultDrawing)
-			 * ((DefaultDrawing
+			 * (getController().getDrawing() instanceof DrawingImpl)
+			 * ((DrawingImpl
 			 * )getController().getDrawing()).printGraphicalObjectHierarchy();
 			 */
 			return returned;
@@ -240,38 +240,38 @@ public class FocusRetriever {
 		}
 	}
 
-	public GraphicalRepresentation<?> getFocusedObject(DropTargetDragEvent event) {
+	public GraphicalRepresentation getFocusedObject(DropTargetDragEvent event) {
 		return getFocusedObject(drawingView.getGraphicalRepresentation(), event);
 	}
 
-	public GraphicalRepresentation<?> getFocusedObject(DropTargetDropEvent event) {
+	public GraphicalRepresentation getFocusedObject(DropTargetDropEvent event) {
 		return getFocusedObject(drawingView.getGraphicalRepresentation(), event);
 	}
 
-	public GraphicalRepresentation<?> getFocusedObject(GraphicalRepresentation<?> container, MouseEvent event) {
+	public GraphicalRepresentation getFocusedObject(GraphicalRepresentation container, MouseEvent event) {
 		return getFocusedObject(container, (Component) event.getSource(), event.getPoint());
 	}
 
-	public GraphicalRepresentation<?> getFocusedObject(GraphicalRepresentation<?> container, DropTargetDragEvent event) {
+	public GraphicalRepresentation getFocusedObject(GraphicalRepresentation container, DropTargetDragEvent event) {
 		return getFocusedObject(container, event.getDropTargetContext().getComponent(), event.getLocation());
 	}
 
-	public GraphicalRepresentation<?> getFocusedObject(GraphicalRepresentation<?> container, DropTargetDropEvent event) {
+	public GraphicalRepresentation getFocusedObject(GraphicalRepresentation container, DropTargetDropEvent event) {
 		return getFocusedObject(container, event.getDropTargetContext().getComponent(), event.getLocation());
 	}
 
-	private GraphicalRepresentation<?> getFocusedObject(GraphicalRepresentation<?> container, Component eventSource, Point eventLocation) {
-		FGEView<?> view = drawingView.viewForObject(container);
+	private GraphicalRepresentation getFocusedObject(GraphicalRepresentation container, Component eventSource, Point eventLocation) {
+		FGEView view = drawingView.viewForObject(container);
 		Point p = SwingUtilities.convertPoint(eventSource, eventLocation, (Component) view);
 		double distanceToNearestConnector = Double.POSITIVE_INFINITY;
 		double smallestDistanceToCPOfNearestConnector = Double.POSITIVE_INFINITY;
-		ConnectorGraphicalRepresentation<?> nearestConnector = null;
-		List<ShapeGraphicalRepresentation<?>> enclosingShapes = new ArrayList<ShapeGraphicalRepresentation<?>>();
+		ConnectorGraphicalRepresentation nearestConnector = null;
+		List<ShapeGraphicalRepresentation> enclosingShapes = new ArrayList<ShapeGraphicalRepresentation>();
 
 		double distanceToNearestGeometricObject = Double.POSITIVE_INFINITY;
 		int layerOfNearestGeometricObject = 0;
-		GeometricGraphicalRepresentation<?> nearestGeometricObject = null;
-		List<GeometricGraphicalRepresentation<?>> enclosingGeometricObjects = new ArrayList<GeometricGraphicalRepresentation<?>>();
+		GeometricGraphicalRepresentation nearestGeometricObject = null;
+		List<GeometricGraphicalRepresentation> enclosingGeometricObjects = new ArrayList<GeometricGraphicalRepresentation>();
 
 		// iterate on all contained objects
 
@@ -281,7 +281,7 @@ public class FocusRetriever {
 
 			for (Object o : container.getContainedObjects()) {
 
-				GraphicalRepresentation<?> graphicalRepresentation = container.getGraphicalRepresentation(o);
+				GraphicalRepresentation graphicalRepresentation = container.getGraphicalRepresentation(o);
 
 				if (graphicalRepresentation == null) {
 					logger.warning("No graphical representation for " + o);
@@ -293,7 +293,7 @@ public class FocusRetriever {
 
 					if (graphicalRepresentation instanceof GeometricGraphicalRepresentation) {
 
-						GeometricGraphicalRepresentation<?> gr = (GeometricGraphicalRepresentation<?>) graphicalRepresentation;
+						GeometricGraphicalRepresentation gr = (GeometricGraphicalRepresentation) graphicalRepresentation;
 						Point viewPoint = SwingUtilities.convertPoint(eventSource, eventLocation,
 								(Component) drawingView.viewForObject(container));
 						FGEPoint point = graphicalRepresentation.convertViewCoordinatesToNormalizedPoint(viewPoint, getScale());
@@ -338,7 +338,7 @@ public class FocusRetriever {
 
 					else {
 
-						FGEView<?> v = drawingView.viewForObject(graphicalRepresentation);
+						FGEView v = drawingView.viewForObject(graphicalRepresentation);
 						Rectangle r = graphicalRepresentation.getViewBounds(getScale());
 
 						if (r.contains(p)) {
@@ -347,7 +347,7 @@ public class FocusRetriever {
 							Point p2 = SwingUtilities.convertPoint((Component) view, p, (Component) v);
 							FGEPoint p3 = graphicalRepresentation.convertViewCoordinatesToNormalizedPoint(p2, getScale());
 							if (graphicalRepresentation instanceof ShapeGraphicalRepresentation) {
-								ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) graphicalRepresentation;
+								ShapeGraphicalRepresentation gr = (ShapeGraphicalRepresentation) graphicalRepresentation;
 								if (Double.isNaN(p3.getX()) && gr.getWidth() == 0) {
 									p3.x = 0;
 								}
@@ -378,14 +378,14 @@ public class FocusRetriever {
 									}
 									// Look if we are not contained in a child
 									// shape outside current shape
-									GraphicalRepresentation<?> insideFocusedShape = getFocusedObject(gr, eventSource, eventLocation);
+									GraphicalRepresentation insideFocusedShape = getFocusedObject(gr, eventSource, eventLocation);
 									if (insideFocusedShape != null && insideFocusedShape instanceof ShapeGraphicalRepresentation) {
-										enclosingShapes.add((ShapeGraphicalRepresentation<?>) insideFocusedShape);
+										enclosingShapes.add((ShapeGraphicalRepresentation) insideFocusedShape);
 									}
 								}
 
 							} else if (graphicalRepresentation instanceof ConnectorGraphicalRepresentation) {
-								ConnectorGraphicalRepresentation<?> gr = (ConnectorGraphicalRepresentation<?>) graphicalRepresentation;
+								ConnectorGraphicalRepresentation gr = (ConnectorGraphicalRepresentation) graphicalRepresentation;
 								double distance = gr.distanceToConnector(p3, getScale());
 								if (distance < selectionDistance) {
 									// The current gr can be selected if either
@@ -477,7 +477,7 @@ public class FocusRetriever {
 								Point p2 = SwingUtilities.convertPoint((Component) view, p, (Component) v);
 								FGEPoint p3 = graphicalRepresentation.convertViewCoordinatesToNormalizedPoint(p2, getScale());
 								if (graphicalRepresentation instanceof ShapeGraphicalRepresentation) {
-									ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) graphicalRepresentation;
+									ShapeGraphicalRepresentation gr = (ShapeGraphicalRepresentation) graphicalRepresentation;
 									for (ControlArea<?> ca : gr.getControlAreas()) {
 										// Point pt1 =
 										// gr.convertNormalizedPointToViewCoordinates(cp.getPoint(),
@@ -494,7 +494,7 @@ public class FocusRetriever {
 										}
 									}
 								} else if (graphicalRepresentation instanceof ConnectorGraphicalRepresentation) {
-									ConnectorGraphicalRepresentation<?> gr = (ConnectorGraphicalRepresentation<?>) graphicalRepresentation;
+									ConnectorGraphicalRepresentation gr = (ConnectorGraphicalRepresentation) graphicalRepresentation;
 									if (gr.isValidated()) {
 										for (ControlArea<?> ca : gr.getControlAreas()) {
 											// Point pt1 =
@@ -528,9 +528,9 @@ public class FocusRetriever {
 									&& focusOnFloatingLabel(graphicalRepresentation, eventSource, eventLocation)) {
 								// System.out.println("Detected floating label");
 								if (graphicalRepresentation instanceof ShapeGraphicalRepresentation) {
-									enclosingShapes.add((ShapeGraphicalRepresentation<?>) graphicalRepresentation);
+									enclosingShapes.add((ShapeGraphicalRepresentation) graphicalRepresentation);
 								} else if (graphicalRepresentation instanceof ConnectorGraphicalRepresentation) {
-									nearestConnector = (ConnectorGraphicalRepresentation<?>) graphicalRepresentation;
+									nearestConnector = (ConnectorGraphicalRepresentation) graphicalRepresentation;
 								}
 							}
 						}
@@ -546,9 +546,9 @@ public class FocusRetriever {
 
 		if (enclosingGeometricObjects.size() > 0) {
 
-			Collections.sort(enclosingGeometricObjects, new Comparator<GeometricGraphicalRepresentation<?>>() {
+			Collections.sort(enclosingGeometricObjects, new Comparator<GeometricGraphicalRepresentation>() {
 				@Override
-				public int compare(GeometricGraphicalRepresentation<?> o1, GeometricGraphicalRepresentation<?> o2) {
+				public int compare(GeometricGraphicalRepresentation o1, GeometricGraphicalRepresentation o2) {
 					return o2.getLayer() - o1.getLayer();
 				}
 			});
@@ -556,13 +556,13 @@ public class FocusRetriever {
 			return enclosingGeometricObjects.get(0);
 		}
 
-		GraphicalRepresentation<?> returned = nearestConnector;
+		GraphicalRepresentation returned = nearestConnector;
 
 		if (enclosingShapes.size() > 0) {
 
-			Collections.sort(enclosingShapes, new Comparator<ShapeGraphicalRepresentation<?>>() {
+			Collections.sort(enclosingShapes, new Comparator<ShapeGraphicalRepresentation>() {
 				@Override
-				public int compare(ShapeGraphicalRepresentation<?> o1, ShapeGraphicalRepresentation<?> o2) {
+				public int compare(ShapeGraphicalRepresentation o1, ShapeGraphicalRepresentation o2) {
 					if (o2.getIsSelected()) {
 						return Integer.MAX_VALUE;
 					}
@@ -573,10 +573,10 @@ public class FocusRetriever {
 				}
 			});
 
-			ShapeGraphicalRepresentation<?> focusedShape = enclosingShapes.get(0);
+			ShapeGraphicalRepresentation focusedShape = enclosingShapes.get(0);
 			int layer = focusedShape.getLayer();
 			if (focusedShape.getIsSelected()) {
-				for (ShapeGraphicalRepresentation<?> s : enclosingShapes) {
+				for (ShapeGraphicalRepresentation s : enclosingShapes) {
 					if (s.getIsSelected()) {
 						continue;
 					} else {
@@ -585,8 +585,8 @@ public class FocusRetriever {
 					}
 				}
 			}
-			List<ShapeGraphicalRepresentation<?>> shapesInSameLayer = new ArrayList<ShapeGraphicalRepresentation<?>>();
-			for (ShapeGraphicalRepresentation<?> s : enclosingShapes) {
+			List<ShapeGraphicalRepresentation> shapesInSameLayer = new ArrayList<ShapeGraphicalRepresentation>();
+			for (ShapeGraphicalRepresentation s : enclosingShapes) {
 				if (s.getLayer() == layer || s.getIsSelected()) {
 					shapesInSameLayer.add(s);
 				} else {
@@ -595,8 +595,8 @@ public class FocusRetriever {
 			}
 			if (shapesInSameLayer.size() > 1) {
 				double distance = Double.MAX_VALUE;
-				for (ShapeGraphicalRepresentation<?> gr : shapesInSameLayer) {
-					FGEView<?> v = drawingView.viewForObject(gr);
+				for (ShapeGraphicalRepresentation gr : shapesInSameLayer) {
+					FGEView v = drawingView.viewForObject(gr);
 					Point p2 = SwingUtilities.convertPoint((Component) view, p, (Component) v);
 					FGEPoint p3 = gr.convertViewCoordinatesToNormalizedPoint(p2, getScale());
 					if (Double.isNaN(p3.getX()) && gr.getWidth() == 0) {
@@ -623,7 +623,7 @@ public class FocusRetriever {
 					}
 				}
 			}
-			GraphicalRepresentation<?> insideFocusedShape = getFocusedObject(focusedShape, eventSource, eventLocation);
+			GraphicalRepresentation insideFocusedShape = getFocusedObject(focusedShape, eventSource, eventLocation);
 
 			if (insideFocusedShape != null) {
 				if (returned == null || returned.getLayer() < insideFocusedShape.getLayer() || insideFocusedShape.getIsSelected()) {
@@ -655,7 +655,7 @@ public class FocusRetriever {
 	 * @param distance
 	 * @return
 	 */
-	private double updateSmallestDistanceToCPForConnector(ConnectorGraphicalRepresentation<?> gr, Point p2, double distance) {
+	private double updateSmallestDistanceToCPForConnector(ConnectorGraphicalRepresentation gr, Point p2, double distance) {
 		if (gr.getConnector() != null && gr.getConnector().getMiddleSymbolLocation() != null) {
 			return gr.convertNormalizedPointToViewCoordinates(gr.getConnector().getMiddleSymbolLocation(), getScale()).distance(p2);
 		} else {

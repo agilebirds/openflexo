@@ -45,6 +45,7 @@ import org.openflexo.fge.BackgroundImageBackgroundStyle;
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.ColorBackgroundStyle;
 import org.openflexo.fge.ColorGradientBackgroundStyle;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEUtils;
@@ -72,7 +73,7 @@ public abstract class FGEGraphics {
 	private static final Logger logger = Logger.getLogger(FGEGraphics.class.getPackage().getName());
 
 	private DrawingController<?> _controller;
-	private GraphicalRepresentation<?> gr;
+	private DrawingTreeNode<?, ?> dtn;
 	private Graphics2D g2d;
 
 	private static final FGEModelFactory GRAPHICS_FACTORY = FGEUtils.TOOLS_FACTORY;
@@ -88,17 +89,21 @@ public abstract class FGEGraphics {
 	protected BackgroundStyle currentBackground = defaultBackground;
 	private TextStyle currentTextStyle = defaultTextStyle;
 
-	public FGEGraphics(GraphicalRepresentation<?> aGraphicalRepresentation) {
+	public FGEGraphics(DrawingTreeNode<?, ?> dtn) {
 		super();
-		gr = aGraphicalRepresentation;
+		this.dtn = dtn;
 	}
 
 	public FGEModelFactory getFactory() {
 		return GRAPHICS_FACTORY;
 	}
 
-	public GraphicalRepresentation<?> getGraphicalRepresentation() {
-		return gr;
+	public DrawingTreeNode<?, ?> getDrawingTreeNode() {
+		return dtn;
+	}
+
+	public GraphicalRepresentation getGraphicalRepresentation() {
+		return dtn.getGraphicalRepresentation();
 	}
 
 	public DrawingController<?> getController() {
@@ -110,7 +115,7 @@ public abstract class FGEGraphics {
 	}
 
 	public void delete() {
-		gr = null;
+		dtn = null;
 		_controller = null;
 		g2d = null;
 	}
@@ -120,7 +125,7 @@ public abstract class FGEGraphics {
 	 * @param graphics2D
 	 * @param controller
 	 */
-	public void createGraphics(Graphics2D graphics2D, DrawingController<?> controller) {
+	public void createGraphics(Graphics2D graphics2D, DrawingController controller) {
 		g2d = (Graphics2D) graphics2D.create();
 		_controller = controller;
 	}
@@ -229,11 +234,11 @@ public abstract class FGEGraphics {
 		} else if (currentBackground instanceof ColorBackgroundStyle) {
 			g2d.setColor(((ColorBackgroundStyle) currentBackground).getColor());
 		} else if (currentBackground instanceof ColorGradientBackgroundStyle) {
-			g2d.setPaint(currentBackground.getPaint(getGraphicalRepresentation(), _controller.getScale()));
+			g2d.setPaint(currentBackground.getPaint(dtn, _controller.getScale()));
 		} else if (currentBackground instanceof TextureBackgroundStyle) {
-			g2d.setPaint(currentBackground.getPaint(getGraphicalRepresentation(), _controller.getScale()));
+			g2d.setPaint(currentBackground.getPaint(dtn, _controller.getScale()));
 		} else if (currentBackground instanceof BackgroundImageBackgroundStyle) {
-			g2d.setPaint(currentBackground.getPaint(getGraphicalRepresentation(), _controller.getScale()));
+			g2d.setPaint(currentBackground.getPaint(dtn, _controller.getScale()));
 		}
 
 		if (currentBackground.getUseTransparency()) {
@@ -275,15 +280,15 @@ public abstract class FGEGraphics {
 	}
 
 	public int getViewWidth(double scale) {
-		return getGraphicalRepresentation().getViewWidth(scale);
+		return dtn.getViewWidth(scale);
 	}
 
 	public int getViewHeight(double scale) {
-		return getGraphicalRepresentation().getViewHeight(scale);
+		return dtn.getViewHeight(scale);
 	}
 
 	public Point convertNormalizedPointToViewCoordinates(double x, double y) {
-		return getGraphicalRepresentation().convertNormalizedPointToViewCoordinates(x, y, getScale());
+		return dtn.convertNormalizedPointToViewCoordinates(x, y, getScale());
 	}
 
 	public final Point convertNormalizedPointToViewCoordinates(FGEPoint p) {
@@ -302,7 +307,7 @@ public abstract class FGEGraphics {
 	}
 
 	public FGEPoint convertViewCoordinatesToNormalizedPoint(int x, int y) {
-		return getGraphicalRepresentation().convertViewCoordinatesToNormalizedPoint(x, y, getScale());
+		return dtn.convertViewCoordinatesToNormalizedPoint(x, y, getScale());
 	}
 
 	public final FGEPoint convertViewCoordinatesToNormalizedPoint(Point p) {
@@ -435,7 +440,7 @@ public abstract class FGEGraphics {
 			
 		}*/
 		if (getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) getGraphicalRepresentation();
+			ShapeGraphicalRepresentation gr = (ShapeGraphicalRepresentation) getGraphicalRepresentation();
 			at.concatenate(AffineTransform.getTranslateInstance(gr.getBorder().getLeft(), gr.getBorder().getTop()));
 		}
 		if (currentBackground instanceof BackgroundImageBackgroundStyle) {

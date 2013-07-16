@@ -32,13 +32,13 @@ public abstract class GeomEditAdjustingControlPoint<O extends FGEArea> extends G
 
 	private String name;
 
-	public GeomEditAdjustingControlPoint(GeometricGraphicalRepresentation<?> gr, String aName, FGEPoint pt) {
+	public GeomEditAdjustingControlPoint(GeometricGraphicalRepresentation gr, String aName, FGEPoint pt) {
 		super(gr, aName, pt);
 		name = aName;
 	}
 
 	@Override
-	public GeometricGraphicalRepresentation<?> getGraphicalRepresentation() {
+	public GeometricGraphicalRepresentation getGraphicalRepresentation() {
 		return super.getGraphicalRepresentation();
 	}
 
@@ -58,7 +58,7 @@ public abstract class GeomEditAdjustingControlPoint<O extends FGEArea> extends G
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
+	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
 		// TODO Auto-generated method stub
 	}
 

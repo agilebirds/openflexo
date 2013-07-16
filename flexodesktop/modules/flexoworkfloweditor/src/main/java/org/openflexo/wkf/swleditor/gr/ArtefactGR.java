@@ -120,7 +120,7 @@ public class ArtefactGR<O extends WKFArtefact> extends WKFNodeGR<O> {
 				}
 			}
 			if (node instanceof PetriGraphNode && ((PetriGraphNode) node).getParentPetriGraph() == parentPetrigraph) {
-				GraphicalRepresentation<?> gr = getGraphicalRepresentation(node);
+				GraphicalRepresentation gr = getGraphicalRepresentation(node);
 				if (gr != null) {
 					AffineTransform at = convertCoordinatesAT(gr.getParentGraphicalRepresentation(), getParentGraphicalRepresentation(),
 							1.0);

@@ -22,6 +22,7 @@ package org.openflexo.fge.graphics;
 import java.awt.Point;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.Drawing.RootNode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 
@@ -29,13 +30,13 @@ public class FGEDrawingDecorationGraphics extends FGEGraphics {
 
 	private static final Logger logger = Logger.getLogger(FGEDrawingDecorationGraphics.class.getPackage().getName());
 
-	public FGEDrawingDecorationGraphics(DrawingGraphicalRepresentation<?> aGraphicalRepresentation) {
-		super(aGraphicalRepresentation);
+	public FGEDrawingDecorationGraphics(RootNode<?> rootNode) {
+		super(rootNode);
 	}
 
 	@Override
-	public DrawingGraphicalRepresentation<?> getGraphicalRepresentation() {
-		return (DrawingGraphicalRepresentation<?>) super.getGraphicalRepresentation();
+	public DrawingGraphicalRepresentation getGraphicalRepresentation() {
+		return (DrawingGraphicalRepresentation) super.getGraphicalRepresentation();
 	}
 
 	public double getWidth() {

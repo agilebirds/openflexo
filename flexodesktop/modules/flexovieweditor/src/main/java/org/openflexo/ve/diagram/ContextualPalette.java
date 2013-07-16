@@ -148,8 +148,8 @@ public class ContextualPalette extends DrawingPalette {
 
 					final DiagramElement<?> container = (DiagramElement<?>) containerGR.getDrawable();
 
-					// final ShapeGraphicalRepresentation<?> shapeGR = getGraphicalRepresentation().clone();
-					final ShapeGraphicalRepresentation<?> shapeGR = new DiagramShapeGR(null, null);
+					// final ShapeGraphicalRepresentation shapeGR = getGraphicalRepresentation().clone();
+					final ShapeGraphicalRepresentation shapeGR = new DiagramShapeGR(null, null);
 					// boolean wasAllowedToLeaveBounds = getGraphicalRepresentation().getAllowToLeaveBounds();
 					// getGraphicalRepresentation().setAllowToLeaveBounds(true);
 

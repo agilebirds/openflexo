@@ -254,7 +254,7 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 	protected class TextStylePreviewPanel extends JPanel {
 		private Drawing drawing;
 		private DrawingGraphicalRepresentation drawingGR;
-		private DrawingController<?> controller;
+		private DrawingController controller;
 		private Object p1, p2, text;
 		private ShapeGraphicalRepresentation textGR;
 		private FGEModelFactory factory;
@@ -296,7 +296,7 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 				}
 
 				@Override
-				public <O> GraphicalRepresentation<O> getGraphicalRepresentation(O aDrawable) {
+				public <O> GraphicalRepresentation getGraphicalRepresentation(O aDrawable) {
 					if (aDrawable == TextStylePreviewPanel.this) {
 						return drawingGR;
 					} else if (aDrawable == text) {

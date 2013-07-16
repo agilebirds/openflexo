@@ -137,8 +137,8 @@ public abstract class AbstractWKFPalette extends DrawingPalette {
 				}
 				if (gr.getDrawable() instanceof WKFArtefact) {
 					container = ((WKFArtefact) gr.getDrawable()).getParentPetriGraph();
-					dropLocation.x += ((ShapeGraphicalRepresentation<?>) gr).getX();
-					dropLocation.y += ((ShapeGraphicalRepresentation<?>) gr).getY();
+					dropLocation.x += ((ShapeGraphicalRepresentation) gr).getX();
+					dropLocation.y += ((ShapeGraphicalRepresentation) gr).getY();
 				}
 				if (container == null) {
 					logger.warning("Unexpected container");

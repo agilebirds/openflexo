@@ -19,42 +19,28 @@
  */
 package org.openflexo.fge;
 
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
 import java.util.List;
+
+import org.openflexo.antar.binding.BindingEvaluationContext;
+import org.openflexo.fge.GRBinding.ConnectorGRBinding;
+import org.openflexo.fge.GRBinding.ShapeGRBinding;
+import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
+import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.geom.FGERectangle;
+import org.openflexo.fge.graphics.FGEGraphics;
+import org.openflexo.fge.impl.DrawingImpl;
 
 /**
  * This interface is implemented by all objects representing a graphical drawing, that is a complex graphical representation involving an
  * object tree where all objects have their own graphical representation.
  * 
- * To perform this, two major features are required here:
- * <ul>
- * <li>First, a
- * 
- * <pre>
- * Drawing
- * </pre>
- * 
- * must indicate how to map a given object (called drawable) to its graphical representation (@see
- * {@link #getGraphicalRepresentation(Object)})</li>
- * <li>Then, this
- * 
- * <pre>
- * Drawing
- * </pre>
- * 
- * must encode the objects hierarchy, by implementing following methods: (@see {@link #getContainer(Object)} and @see
- * {@link #getContainedObjects(Object)})</li>
- * </ul>
- * 
- * Note that at top level, this drawing is associated with its own {@link GraphicalRepresentation} which is this case is a
- * {@link DrawingGraphicalRepresentation<M>} of
- * 
- * <pre>
- * M
- * </pre>
- * 
- * .
- * 
- * To implement those schemes, note that there is a default implementation {@link DefaultDrawing}.
+ * To implement those schemes, note that there is a default implementation {@link DrawingImpl}.
  * 
  * @author sylvain
  * 
@@ -62,16 +48,152 @@ import java.util.List;
  *            Type of object which is handled as root object
  */
 public interface Drawing<M> {
-	public M getModel();
 
-	public <O> GraphicalRepresentation<O> getGraphicalRepresentation(O aDrawable);
+	public interface DrawingTreeNode<O, GR extends GraphicalRepresentation> extends BindingEvaluationContext {
 
-	public Object getContainer(Object aDrawable);
+		public Drawing<?> getDrawing();
 
-	public List<?> getContainedObjects(Object aDrawable);
+		public FGEModelFactory getFactory();
 
-	public DrawingGraphicalRepresentation<M> getDrawingGraphicalRepresentation();
+		public O getDrawable();
+
+		public GRBinding<O, GR> getGRBinding();
+
+		public GR getGraphicalRepresentation();
+
+		public DrawingTreeNode<?, ?> getParentNode();
+
+		public List<? extends DrawingTreeNode<?, ?>> getChildNodes();
+
+		public List<DrawingTreeNode<?, ?>> getAncestors();
+
+		public int getDepth();
+
+		public void invalidate();
+
+		public boolean isInvalidated();
+
+		public int getOrder(DrawingTreeNode<?, ?> child1, DrawingTreeNode<?, ?> child2);
+
+		/**
+		 * Recursively delete this DrawingTreeNode and all its descendants
+		 */
+		public void delete();
+
+		public <O2, P> boolean hasShapeFor(ShapeGRBinding<O2> binding, O2 aDrawable);
+
+		public <O2, P> ShapeNode<O2> getShapeFor(ShapeGRBinding<O2> binding, O2 aDrawable);
+
+		public <O2, F, T> boolean hasConnectorFor(ConnectorGRBinding<O2> binding, O2 aDrawable, ShapeNode<?> from, ShapeNode<?> to);
+
+		public <O2, F, T> DrawingTreeNode<O2, ?> getConnectorFor(ConnectorGRBinding<O2> binding, O2 aDrawable, ShapeNode<?> from,
+				ShapeNode<?> to);
+
+		public FGEPoint convertRemoteViewCoordinatesToLocalNormalizedPoint(Point p, DrawingTreeNode<?, ?> source, double scale);
+
+		public FGEPoint convertLocalViewCoordinatesToRemoteNormalizedPoint(Point p, DrawingTreeNode<?, ?> destination, double scale);
+
+		public Point convertLocalNormalizedPointToRemoteViewCoordinates(FGEPoint p, DrawingTreeNode<?, ?> destination, double scale);
+
+		public Rectangle convertLocalNormalizedRectangleToRemoteViewCoordinates(FGERectangle r, DrawingTreeNode<?, ?> destination,
+				double scale);
+
+		public Point convertRemoteNormalizedPointToLocalViewCoordinates(FGEPoint p, DrawingTreeNode<?, ?> source, double scale);
+
+		public Point convertNormalizedPointToViewCoordinates(double x, double y, double scale);
+
+		public Rectangle convertNormalizedRectangleToViewCoordinates(FGERectangle r, double scale);
+
+		public AffineTransform convertNormalizedPointToViewCoordinatesAT(double scale);
+
+		public FGEPoint convertViewCoordinatesToNormalizedPoint(int x, int y, double scale);
+
+		public AffineTransform convertViewCoordinatesToNormalizedPointAT(double scale);
+
+		public Point convertNormalizedPointToViewCoordinates(FGEPoint p, double scale);
+
+		public FGEPoint convertViewCoordinatesToNormalizedPoint(Point p, double scale);
+
+		public int getViewX(double scale);
+
+		public int getViewY(double scale);
+
+		public int getViewWidth(double scale);
+
+		public int getViewHeight(double scale);
+
+		public Rectangle getViewBounds(double scale);
+
+		public FGERectangle getNormalizedBounds();
+
+		/**
+		 * Return boolean indicating if this graphical representation is validated. A validated graphical representation is a graphical
+		 * representation fully embedded in its graphical representation tree, which means that parent and child are set and correct, and
+		 * that start and end shapes are set for connectors
+		 * 
+		 * 
+		 * @return
+		 */
+		public boolean isValidated();
+
+		public void setValidated(boolean validated);
+
+		public LabelMetricsProvider getLabelMetricsProvider();
+
+		public void setLabelMetricsProvider(LabelMetricsProvider labelMetricsProvider);
+
+		/**
+		 * Returns the number of pixels available for the label considering its positioning. This method is used in case of line wrapping.
+		 * 
+		 * @param scale
+		 * @return
+		 */
+		public int getAvailableLabelWidth(double scale);
+
+		public Point getLabelLocation(double scale);
+
+		public Dimension getLabelDimension(double scale);
+
+		public void setLabelLocation(Point point, double scale);
+
+		public Rectangle getLabelBounds(double scale);
+
+		public FGEGraphics getGraphics();
+
+		public void paint(Graphics g, DrawingController<?> controller);
+
+		public abstract ShapeNode<?> getTopLevelShapeGraphicalRepresentation(FGEPoint p);
+
+	}
+
+	public interface RootNode<M> extends DrawingTreeNode<M, DrawingGraphicalRepresentation> {
+	}
+
+	public interface ShapeNode<O> extends DrawingTreeNode<O, ShapeGraphicalRepresentation> {
+	}
+
+	public interface ConnectorNode<O> extends DrawingTreeNode<O, ConnectorGraphicalRepresentation> {
+	}
+
+	// public DrawingGraphicalRepresentation getDrawingGraphicalRepresentation();
 
 	public boolean isEditable();
+
+	// TODO: rename as getDrawable()
+	public M getModel();
+
+	public FGEModelFactory getFactory();
+
+	public RootNode<M> getRoot();
+
+	public <O> ShapeNode<O> drawShape(RootNode<?> parent, ShapeGRBinding<O> binding, O representable);
+
+	public <O> ShapeNode<O> drawShape(ShapeNode<?> parent, ShapeGRBinding<O> binding, O representable);
+
+	/*public DrawingTreeNode<?> getContainer(DrawingTreeNode<?> node);
+
+	public List<DrawingTreeNode<?>> getContainedNodes(DrawingTreeNode<?> parentNode);*/
+
+	public <O, GR extends GraphicalRepresentation> DrawingTreeNode<O, GR> getDrawingTreeNode(O aDrawable, GRBinding<O, GR> grBinding);
 
 }

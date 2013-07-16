@@ -179,7 +179,7 @@ public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 		}
 	}
 
-	private GraphicalRepresentation<?> parentGR = null;
+	private GraphicalRepresentation parentGR = null;
 	private FGEArea parentOutline = null;
 
 	@Override
@@ -187,13 +187,13 @@ public class EventNodeGR extends PetriGraphNodeGR<EventNode> {
 		if (getEventNode().getBoundaryOf() == null) {
 			return null;
 		}
-		GraphicalRepresentation<?> parent = getContainerGraphicalRepresentation();
+		GraphicalRepresentation parent = getContainerGraphicalRepresentation();
 		if (parentGR == null || parent != parentGR) {
 			if (parent != null && parent instanceof ShapeGraphicalRepresentation) {
-				parentOutline = ((ShapeGraphicalRepresentation<?>) parent).getShape().getOutline();
+				parentOutline = ((ShapeGraphicalRepresentation) parent).getShape().getOutline();
 				parentOutline = parentOutline.transform(AffineTransform.getScaleInstance(
-						((ShapeGraphicalRepresentation<?>) parent).getWidth(), ((ShapeGraphicalRepresentation<?>) parent).getHeight()));
-				ShapeBorder parentBorder = ((ShapeGraphicalRepresentation<?>) parent).getBorder();
+						((ShapeGraphicalRepresentation) parent).getWidth(), ((ShapeGraphicalRepresentation) parent).getHeight()));
+				ShapeBorder parentBorder = ((ShapeGraphicalRepresentation) parent).getBorder();
 				parentOutline = parentOutline
 						.transform(AffineTransform.getTranslateInstance(parentBorder.left - 20, parentBorder.top - 20));
 				// System.out.println("Rebuild outline = "+parentOutline);

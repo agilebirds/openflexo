@@ -48,7 +48,7 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 	private boolean boundLabelToElementName = true;
 
 	// Represent graphical representation to be used as representation in the palette
-	private ShapeGraphicalRepresentation<?> graphicalRepresentation;
+	private ShapeGraphicalRepresentation graphicalRepresentation;
 
 	// Represent graphical representation to be used as overriding representation
 	private Vector<OverridingGraphicalRepresentation> overridingGraphicalRepresentations;
@@ -242,7 +242,7 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 		notifyObservers();
 	}
 
-	public GraphicalRepresentation<?> getOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
+	public GraphicalRepresentation getOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole) {
 		for (OverridingGraphicalRepresentation ogr : getOverridingGraphicalRepresentations()) {
 			if (ogr.getPatternRoleName().equals(patternRole.getPatternRoleName())) {
 				return ogr.getGraphicalRepresentation();
@@ -275,11 +275,11 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 		deleteObservers();
 	}
 
-	public ShapeGraphicalRepresentation<?> getGraphicalRepresentation() {
+	public ShapeGraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(ShapeGraphicalRepresentation<?> graphicalRepresentation) {
+	public void setGraphicalRepresentation(ShapeGraphicalRepresentation graphicalRepresentation) {
 		this.graphicalRepresentation = graphicalRepresentation;
 	}
 
@@ -346,7 +346,7 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 			this.patternRoleName = patternRoleName;
 		}
 
-		public abstract GraphicalRepresentation<?> getGraphicalRepresentation();
+		public abstract GraphicalRepresentation getGraphicalRepresentation();
 
 		@Override
 		public String getFMLRepresentation(FMLRepresentationContext context) {
@@ -366,7 +366,7 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 
 	public static class ShapeOverridingGraphicalRepresentation extends OverridingGraphicalRepresentation {
 
-		private ShapeGraphicalRepresentation<?> graphicalRepresentation;
+		private ShapeGraphicalRepresentation graphicalRepresentation;
 
 		// Do not use, required for deserialization
 		public ShapeOverridingGraphicalRepresentation(DiagramPaletteBuilder builder) {
@@ -374,17 +374,17 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 		}
 
 		// Do not use, required for deserialization
-		public ShapeOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole, ShapeGraphicalRepresentation<?> gr) {
+		public ShapeOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole, ShapeGraphicalRepresentation gr) {
 			super(patternRole);
 			graphicalRepresentation = gr;
 		}
 
 		@Override
-		public ShapeGraphicalRepresentation<?> getGraphicalRepresentation() {
+		public ShapeGraphicalRepresentation getGraphicalRepresentation() {
 			return graphicalRepresentation;
 		}
 
-		public void setGraphicalRepresentation(ShapeGraphicalRepresentation<?> graphicalRepresentation) {
+		public void setGraphicalRepresentation(ShapeGraphicalRepresentation graphicalRepresentation) {
 			this.graphicalRepresentation = graphicalRepresentation;
 		}
 
@@ -397,7 +397,7 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 
 	public static class ConnectorOverridingGraphicalRepresentation extends OverridingGraphicalRepresentation {
 
-		private ConnectorGraphicalRepresentation<?> graphicalRepresentation;
+		private ConnectorGraphicalRepresentation graphicalRepresentation;
 
 		// Do not use, required for deserialization
 		public ConnectorOverridingGraphicalRepresentation(DiagramPaletteBuilder builder) {
@@ -405,17 +405,17 @@ public class DiagramPaletteElement extends DiagramPaletteObject {
 		}
 
 		// Do not use, required for deserialization
-		public ConnectorOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole, ConnectorGraphicalRepresentation<?> gr) {
+		public ConnectorOverridingGraphicalRepresentation(GraphicalElementPatternRole patternRole, ConnectorGraphicalRepresentation gr) {
 			super(patternRole);
 			graphicalRepresentation = gr;
 		}
 
 		@Override
-		public ConnectorGraphicalRepresentation<?> getGraphicalRepresentation() {
+		public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
 			return graphicalRepresentation;
 		}
 
-		public void setGraphicalRepresentation(ConnectorGraphicalRepresentation<?> graphicalRepresentation) {
+		public void setGraphicalRepresentation(ConnectorGraphicalRepresentation graphicalRepresentation) {
 			this.graphicalRepresentation = graphicalRepresentation;
 		}
 

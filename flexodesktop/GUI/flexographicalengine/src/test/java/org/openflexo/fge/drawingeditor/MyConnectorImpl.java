@@ -19,10 +19,10 @@
  */
 package org.openflexo.fge.drawingeditor;
 
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.drawingeditor.MyDrawing.DrawingBuilder;
 
-public abstract class MyConnectorImpl extends MyDrawingElementImpl<MyConnector, MyConnectorGraphicalRepresentation> implements MyConnector {
-	private MyConnectorGraphicalRepresentation gr;
+public abstract class MyConnectorImpl extends MyDrawingElementImpl<MyConnector, ConnectorGraphicalRepresentation> implements MyConnector {
 
 	// Called for LOAD
 	public MyConnectorImpl(DrawingBuilder builder) {
@@ -47,25 +47,5 @@ public abstract class MyConnectorImpl extends MyDrawingElementImpl<MyConnector, 
 
 		setGraphicalRepresentation(gr);
 	}*/
-
-	@Override
-	public MyShape getStartShape() {
-		return getGraphicalRepresentation().getStartObject().getDrawable();
-	}
-
-	@Override
-	public MyShape geEndShape() {
-		return getGraphicalRepresentation().getEndObject().getDrawable();
-	}
-
-	@Override
-	public MyShapeGraphicalRepresentation getStartObject() {
-		return getGraphicalRepresentation().getStartObject();
-	}
-
-	@Override
-	public MyShapeGraphicalRepresentation getEndObject() {
-		return getGraphicalRepresentation().getEndObject();
-	}
 
 }

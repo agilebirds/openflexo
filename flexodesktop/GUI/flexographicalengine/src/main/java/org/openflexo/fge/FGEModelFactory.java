@@ -118,7 +118,7 @@ public class FGEModelFactory extends ModelFactory {
 	 * @param aDrawing
 	 * @return a newly created DrawingGraphicalRepresentation
 	 */
-	public <M> DrawingGraphicalRepresentation<M> makeDrawingGraphicalRepresentation(Drawing<M> aDrawing) {
+	public DrawingGraphicalRepresentation makeDrawingGraphicalRepresentation(Drawing<?> aDrawing) {
 		return makeDrawingGraphicalRepresentation(aDrawing, true);
 	}
 
@@ -129,10 +129,10 @@ public class FGEModelFactory extends ModelFactory {
 	 * @param aDrawing
 	 * @return a newly created DrawingGraphicalRepresentation
 	 */
-	public <M> DrawingGraphicalRepresentation<M> makeDrawingGraphicalRepresentation(Drawing<M> aDrawing, boolean initBasicControls) {
-		DrawingGraphicalRepresentation<M> returned = newInstance(DrawingGraphicalRepresentation.class, true, initBasicControls);
-		returned.setFGEModelFactory(this);
-		returned.setDrawable(aDrawing.getModel());
+	public DrawingGraphicalRepresentation makeDrawingGraphicalRepresentation(Drawing<?> aDrawing, boolean initBasicControls) {
+		DrawingGraphicalRepresentation returned = newInstance(DrawingGraphicalRepresentation.class, true, initBasicControls);
+		returned.setFactory(this);
+		// returned.setDrawable(aDrawing.getModel());
 		returned.setDrawing(aDrawing);
 		return returned;
 	}
@@ -142,7 +142,7 @@ public class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @param drawingGraphicalRepresentation
 	 */
-	public void applyDefaultProperties(DrawingGraphicalRepresentation<?> drawingGraphicalRepresentation) {
+	public void applyDefaultProperties(DrawingGraphicalRepresentation drawingGraphicalRepresentation) {
 		drawingGraphicalRepresentation.setTextStyle(makeDefaultTextStyle());
 		drawingGraphicalRepresentation.setBackgroundColor(FGEConstants.DEFAULT_DRAWING_BACKGROUND_COLOR);
 		drawingGraphicalRepresentation.setWidth(FGEConstants.DEFAULT_DRAWING_WIDTH);
@@ -154,7 +154,7 @@ public class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @param drawingGraphicalRepresentation
 	 */
-	public void applyBasicControls(DrawingGraphicalRepresentation<?> drawingGraphicalRepresentation) {
+	public void applyBasicControls(DrawingGraphicalRepresentation drawingGraphicalRepresentation) {
 		drawingGraphicalRepresentation.addToMouseClickControls(MouseClickControl.makeMouseClickControl("Drawing selection",
 				MouseButton.LEFT, 1, MouseClickControlActionType.SELECTION));
 		drawingGraphicalRepresentation.addToMouseDragControls(MouseDragControl.makeMouseDragControl("Rectangle selection",
@@ -174,11 +174,11 @@ public class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @return a newly created ShapeGraphicalRepresentation
 	 */
-	public <O> ShapeGraphicalRepresentation<O> makeShapeGraphicalRepresentation(O aDrawable, Drawing<?> aDrawing) {
+	public <O> ShapeGraphicalRepresentation makeShapeGraphicalRepresentation(/*O aDrawable,*/Drawing<?> aDrawing) {
 
-		ShapeGraphicalRepresentation<O> returned = newInstance(ShapeGraphicalRepresentation.class, true, true);
-		returned.setFGEModelFactory(this);
-		returned.setDrawable(aDrawable);
+		ShapeGraphicalRepresentation returned = newInstance(ShapeGraphicalRepresentation.class, true, true);
+		returned.setFactory(this);
+		// returned.setDrawable(aDrawable);
 		returned.setDrawing(aDrawing);
 		return returned;
 	}
@@ -189,7 +189,7 @@ public class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @param shapeGraphicalRepresentation
 	 */
-	public void applyDefaultProperties(ShapeGraphicalRepresentation<?> shapeGraphicalRepresentation) {
+	public void applyDefaultProperties(ShapeGraphicalRepresentation shapeGraphicalRepresentation) {
 		shapeGraphicalRepresentation.setBorder(makeShapeBorder());
 		shapeGraphicalRepresentation.setLayer(FGEConstants.DEFAULT_SHAPE_LAYER);
 		shapeGraphicalRepresentation.setTextStyle(makeDefaultTextStyle());
@@ -203,7 +203,7 @@ public class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @param shapeGraphicalRepresentation
 	 */
-	public void applyBasicControls(ShapeGraphicalRepresentation<?> shapeGraphicalRepresentation) {
+	public void applyBasicControls(ShapeGraphicalRepresentation shapeGraphicalRepresentation) {
 		shapeGraphicalRepresentation.addToMouseClickControls(MouseClickControl.makeMouseClickControl("Selection", MouseButton.LEFT, 1,
 				MouseClickControlActionType.SELECTION));
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
@@ -232,8 +232,8 @@ public class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @return a newly created ShapeGraphicalRepresentation
 	 */
-	public <O> ShapeGraphicalRepresentation<O> makeShapeGraphicalRepresentation(ShapeType shapeType, O aDrawable, Drawing<?> aDrawing) {
-		ShapeGraphicalRepresentation<O> returned = makeShapeGraphicalRepresentation(aDrawable, aDrawing);
+	public <O> ShapeGraphicalRepresentation makeShapeGraphicalRepresentation(ShapeType shapeType,/* O aDrawable,*/Drawing<?> aDrawing) {
+		ShapeGraphicalRepresentation returned = makeShapeGraphicalRepresentation(/*aDrawable,*/aDrawing);
 		returned.setShapeType(shapeType);
 		return returned;
 	}
@@ -249,9 +249,9 @@ public class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @return a newly created ShapeGraphicalRepresentation
 	 */
-	public <O> ShapeGraphicalRepresentation<O> makeShapeGraphicalRepresentation(ShapeGraphicalRepresentation<O> aGR, O aDrawable,
+	public <O> ShapeGraphicalRepresentation makeShapeGraphicalRepresentation(ShapeGraphicalRepresentation aGR,/* O aDrawable,*/
 			Drawing<?> aDrawing) {
-		ShapeGraphicalRepresentation<O> returned = makeShapeGraphicalRepresentation(aDrawable, aDrawing);
+		ShapeGraphicalRepresentation returned = makeShapeGraphicalRepresentation(/*aDrawable,*/aDrawing);
 		returned.setsWith(aGR);
 		return returned;
 	}
@@ -266,11 +266,11 @@ public class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @return a newly created ConnectorGraphicalRepresentation
 	 */
-	public <O> ConnectorGraphicalRepresentation<O> makeConnectorGraphicalRepresentation(O aDrawable, Drawing<?> aDrawing) {
+	public <O> ConnectorGraphicalRepresentation makeConnectorGraphicalRepresentation(/*O aDrawable,*/Drawing<?> aDrawing) {
 
-		ConnectorGraphicalRepresentation<O> returned = newInstance(ConnectorGraphicalRepresentation.class, true, true);
-		returned.setFGEModelFactory(this);
-		returned.setDrawable(aDrawable);
+		ConnectorGraphicalRepresentation returned = newInstance(ConnectorGraphicalRepresentation.class, true, true);
+		returned.setFactory(this);
+		// returned.setDrawable(aDrawable);
 		returned.setDrawing(aDrawing);
 		return returned;
 	}
@@ -286,10 +286,10 @@ public class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @return a newly created ConnectorGraphicalRepresentation
 	 */
-	public <O> ConnectorGraphicalRepresentation<O> makeConnectorGraphicalRepresentation(ConnectorType aConnectorType,
-			ShapeGraphicalRepresentation<?> aStartObject, ShapeGraphicalRepresentation<?> anEndObject, O aDrawable, Drawing<?> aDrawing) {
+	public <O> ConnectorGraphicalRepresentation makeConnectorGraphicalRepresentation(ConnectorType aConnectorType,
+			ShapeGraphicalRepresentation aStartObject, ShapeGraphicalRepresentation anEndObject,/* O aDrawable,*/Drawing<?> aDrawing) {
 
-		ConnectorGraphicalRepresentation<O> returned = makeConnectorGraphicalRepresentation(aDrawable, aDrawing);
+		ConnectorGraphicalRepresentation returned = makeConnectorGraphicalRepresentation(/*aDrawable,*/aDrawing);
 		returned.setStartObject(aStartObject);
 		returned.setEndObject(anEndObject);
 		returned.setConnectorType(aConnectorType);
@@ -302,7 +302,7 @@ public class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @param connectorGraphicalRepresentation
 	 */
-	public void applyDefaultProperties(ConnectorGraphicalRepresentation<?> connectorGraphicalRepresentation) {
+	public void applyDefaultProperties(ConnectorGraphicalRepresentation connectorGraphicalRepresentation) {
 		connectorGraphicalRepresentation.setLayer(FGEConstants.DEFAULT_CONNECTOR_LAYER);
 		connectorGraphicalRepresentation.setForeground(makeDefaultForegroundStyle());
 		connectorGraphicalRepresentation.setTextStyle(makeDefaultTextStyle());
@@ -313,7 +313,7 @@ public class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @param connectorGraphicalRepresentation
 	 */
-	public void applyBasicControls(ConnectorGraphicalRepresentation<?> connectorGraphicalRepresentation) {
+	public void applyBasicControls(ConnectorGraphicalRepresentation connectorGraphicalRepresentation) {
 		connectorGraphicalRepresentation.addToMouseClickControls(MouseClickControl.makeMouseClickControl("Selection", MouseButton.LEFT, 1,
 				MouseClickControlActionType.SELECTION));
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
@@ -335,11 +335,11 @@ public class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @return a newly created GeometricGraphicalRepresentation
 	 */
-	public <O> GeometricGraphicalRepresentation<O> makeGeometricGraphicalRepresentation(O aDrawable, Drawing<?> aDrawing) {
+	public <O> GeometricGraphicalRepresentation makeGeometricGraphicalRepresentation(O aDrawable, Drawing<?> aDrawing) {
 
-		GeometricGraphicalRepresentation<O> returned = newInstance(GeometricGraphicalRepresentation.class, true, true);
-		returned.setFGEModelFactory(this);
-		returned.setDrawable(aDrawable);
+		GeometricGraphicalRepresentation returned = newInstance(GeometricGraphicalRepresentation.class, true, true);
+		returned.setFactory(this);
+		// returned.setDrawable(aDrawable);
 		returned.setDrawing(aDrawing);
 
 		applyDefaultProperties(returned);
@@ -358,10 +358,10 @@ public class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @return a newly created GeometricGraphicalRepresentation
 	 */
-	public <O> GeometricGraphicalRepresentation<O> makeGeometricGraphicalRepresentation(FGEArea geometricObject, O aDrawable,
+	public <O> GeometricGraphicalRepresentation makeGeometricGraphicalRepresentation(FGEArea geometricObject, O aDrawable,
 			Drawing<?> aDrawing) {
 
-		GeometricGraphicalRepresentation<O> returned = makeGeometricGraphicalRepresentation(aDrawable, aDrawing);
+		GeometricGraphicalRepresentation returned = makeGeometricGraphicalRepresentation(aDrawable, aDrawing);
 		returned.setGeometricObject(geometricObject);
 		return returned;
 	}
@@ -371,7 +371,7 @@ public class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @param connectorGraphicalRepresentation
 	 */
-	public void applyDefaultProperties(GeometricGraphicalRepresentation<?> geometricGraphicalRepresentation) {
+	public void applyDefaultProperties(GeometricGraphicalRepresentation geometricGraphicalRepresentation) {
 		geometricGraphicalRepresentation.setLayer(FGEConstants.DEFAULT_OBJECT_LAYER);
 		geometricGraphicalRepresentation.setForeground(makeDefaultForegroundStyle());
 		geometricGraphicalRepresentation.setBackground(makeColoredBackground(Color.WHITE));
@@ -383,7 +383,7 @@ public class FGEModelFactory extends ModelFactory {
 	 * 
 	 * @param connectorGraphicalRepresentation
 	 */
-	public void applyBasicControls(GeometricGraphicalRepresentation<?> geometricGraphicalRepresentation) {
+	public void applyBasicControls(GeometricGraphicalRepresentation geometricGraphicalRepresentation) {
 		geometricGraphicalRepresentation.addToMouseClickControls(MouseClickControl.makeMouseClickControl("Selection", MouseButton.LEFT, 1,
 				MouseClickControlActionType.SELECTION));
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
@@ -395,7 +395,7 @@ public class FGEModelFactory extends ModelFactory {
 		}
 	}
 
-	public Connector makeConnector(ConnectorType type, ConnectorGraphicalRepresentation<?> aGraphicalRepresentation) {
+	public Connector makeConnector(ConnectorType type, ConnectorGraphicalRepresentation aGraphicalRepresentation) {
 
 		if (type == ConnectorType.LINE) {
 			return makeLineConnector(aGraphicalRepresentation);
@@ -419,9 +419,9 @@ public class FGEModelFactory extends ModelFactory {
 	 * @param aGR
 	 * @return a newly created LineConnector
 	 */
-	public LineConnector makeLineConnector(ConnectorGraphicalRepresentation<?> aGR) {
+	public LineConnector makeLineConnector(ConnectorGraphicalRepresentation aGR) {
 		LineConnector returned = newInstance(LineConnector.class);
-		returned.setFGEModelFactory(this);
+		returned.setFactory(this);
 		returned.setGraphicalRepresentation(aGR);
 		return returned;
 	}
@@ -432,9 +432,9 @@ public class FGEModelFactory extends ModelFactory {
 	 * @param aGR
 	 * @return a newly created CurveConnector
 	 */
-	public CurveConnector makeCurveConnector(ConnectorGraphicalRepresentation<?> aGR) {
+	public CurveConnector makeCurveConnector(ConnectorGraphicalRepresentation aGR) {
 		CurveConnector returned = newInstance(CurveConnector.class);
-		returned.setFGEModelFactory(this);
+		returned.setFactory(this);
 		returned.setGraphicalRepresentation(aGR);
 		return returned;
 	}
@@ -445,9 +445,9 @@ public class FGEModelFactory extends ModelFactory {
 	 * @param aGR
 	 * @return a newly created RectPolylinConnector
 	 */
-	public RectPolylinConnector makeRectPolylinConnector(ConnectorGraphicalRepresentation<?> aGR) {
+	public RectPolylinConnector makeRectPolylinConnector(ConnectorGraphicalRepresentation aGR) {
 		RectPolylinConnector returned = newInstance(RectPolylinConnector.class);
-		returned.setFGEModelFactory(this);
+		returned.setFactory(this);
 		returned.setGraphicalRepresentation(aGR);
 		return returned;
 	}
@@ -458,9 +458,9 @@ public class FGEModelFactory extends ModelFactory {
 	 * @param aGR
 	 * @return a newly created CurvedPolylinConnector
 	 */
-	public CurvedPolylinConnector makeCurvedPolylinConnector(ConnectorGraphicalRepresentation<?> aGR) {
+	public CurvedPolylinConnector makeCurvedPolylinConnector(ConnectorGraphicalRepresentation aGR) {
 		CurvedPolylinConnector returned = newInstance(CurvedPolylinConnector.class);
-		returned.setFGEModelFactory(this);
+		returned.setFactory(this);
 		returned.setGraphicalRepresentation(aGR);
 		return returned;
 	}
@@ -472,7 +472,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public ForegroundStyle makeNewForegroundStyle() {
 		ForegroundStyle returned = newInstance(ForegroundStyle.class);
-		returned.setFGEModelFactory(this);
+		returned.setFactory(this);
 		return returned;
 	}
 
@@ -483,7 +483,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public ForegroundStyle makeDefaultForegroundStyle() {
 		ForegroundStyle returned = newInstance(ForegroundStyle.class);
-		returned.setFGEModelFactory(this);
+		returned.setFactory(this);
 		returned.setNoStroke(false);
 		returned.setColor(Color.BLACK);
 		returned.setLineWidth(1.0);
@@ -583,7 +583,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public NoneBackgroundStyle makeEmptyBackground() {
 		NoneBackgroundStyle returned = newInstance(NoneBackgroundStyle.class);
-		returned.setFGEModelFactory(this);
+		returned.setFactory(this);
 		return returned;
 	}
 
@@ -596,7 +596,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public ColorBackgroundStyle makeColoredBackground(Color aColor) {
 		ColorBackgroundStyle returned = newInstance(ColorBackgroundStyle.class);
-		returned.setFGEModelFactory(this);
+		returned.setFactory(this);
 		returned.setColor(aColor);
 		return returned;
 	}
@@ -612,7 +612,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public ColorGradientBackgroundStyle makeColorGradientBackground(Color color1, Color color2, ColorGradientDirection direction) {
 		ColorGradientBackgroundStyle returned = newInstance(ColorGradientBackgroundStyle.class);
-		returned.setFGEModelFactory(this);
+		returned.setFactory(this);
 		returned.setColor1(color1);
 		returned.setColor2(color2);
 		returned.setDirection(direction);
@@ -630,7 +630,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public TextureBackgroundStyle makeTexturedBackground(TextureType textureType, Color color1, Color color2) {
 		TextureBackgroundStyle returned = newInstance(TextureBackgroundStyle.class);
-		returned.setFGEModelFactory(this);
+		returned.setFactory(this);
 		returned.setColor1(color1);
 		returned.setColor2(color2);
 		returned.setTextureType(textureType);
@@ -647,7 +647,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public BackgroundImageBackgroundStyle makeImageBackground(File imageFile) {
 		BackgroundImageBackgroundStyle returned = newInstance(BackgroundImageBackgroundStyle.class);
-		returned.setFGEModelFactory(this);
+		returned.setFactory(this);
 		returned.setImageFile(imageFile);
 		return returned;
 	}
@@ -661,7 +661,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public BackgroundImageBackgroundStyle makeImageBackground(Image image) {
 		BackgroundImageBackgroundStyle returned = newInstance(BackgroundImageBackgroundStyle.class);
-		returned.setFGEModelFactory(this);
+		returned.setFactory(this);
 		returned.setImage(image);
 		return returned;
 	}
@@ -694,7 +694,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public ShadowStyle makeNoneShadowStyle() {
 		ShadowStyle returned = newInstance(ShadowStyle.class);
-		returned.setFGEModelFactory(this);
+		returned.setFactory(this);
 		returned.setDrawShadow(false);
 		returned.setShadowDepth(0);
 		return returned;
@@ -707,7 +707,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public ShadowStyle makeDefaultShadowStyle() {
 		ShadowStyle returned = newInstance(ShadowStyle.class);
-		returned.setFGEModelFactory(this);
+		returned.setFactory(this);
 		returned.setDrawShadow(true);
 		returned.setShadowDarkness(FGEConstants.DEFAULT_SHADOW_DARKNESS);
 		returned.setShadowDepth(FGEConstants.DEFAULT_SHADOW_DEEP);
@@ -734,7 +734,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public TextStyle makeTextStyle(Color aColor, Font aFont) {
 		TextStyle returned = newInstance(TextStyle.class);
-		returned.setFGEModelFactory(this);
+		returned.setFactory(this);
 		returned.setFont(aFont);
 		returned.setColor(aColor);
 		return returned;
@@ -747,7 +747,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public ShapeBorder makeShapeBorder() {
 		ShapeBorder returned = newInstance(ShapeBorder.class);
-		returned.setFGEModelFactory(this);
+		returned.setFactory(this);
 		returned.setTop(FGEConstants.DEFAULT_BORDER_SIZE);
 		returned.setBottom(FGEConstants.DEFAULT_BORDER_SIZE);
 		returned.setLeft(FGEConstants.DEFAULT_BORDER_SIZE);
@@ -762,7 +762,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public ShapeBorder makeShapeBorder(int top, int bottom, int left, int right) {
 		ShapeBorder returned = newInstance(ShapeBorder.class);
-		returned.setFGEModelFactory(this);
+		returned.setFactory(this);
 		returned.setTop(top);
 		returned.setBottom(bottom);
 		returned.setLeft(left);
@@ -777,7 +777,7 @@ public class FGEModelFactory extends ModelFactory {
 	 */
 	public ShapeBorder makeShapeBorder(ShapeBorder border) {
 		ShapeBorder returned = newInstance(ShapeBorder.class);
-		returned.setFGEModelFactory(this);
+		returned.setFactory(this);
 		returned.setTop(border.getTop());
 		returned.setBottom(border.getBottom());
 		returned.setLeft(border.getLeft());
@@ -792,7 +792,7 @@ public class FGEModelFactory extends ModelFactory {
 	 * @param aGraphicalRepresentation
 	 * @return a newly created Shape
 	 */
-	public Shape makeShape(ShapeType type, ShapeGraphicalRepresentation<?> aGraphicalRepresentation) {
+	public Shape makeShape(ShapeType type, ShapeGraphicalRepresentation aGraphicalRepresentation) {
 
 		Shape returned = makeShape(type);
 		if (returned != null) {
@@ -836,7 +836,7 @@ public class FGEModelFactory extends ModelFactory {
 		}
 
 		if (returned != null) {
-			returned.setFGEModelFactory(this);
+			returned.setFactory(this);
 		}
 
 		return returned;
@@ -884,36 +884,36 @@ public class FGEModelFactory extends ModelFactory {
 	 * @param initWithBasicControls
 	 * @return
 	 */
-	public <I extends GraphicalRepresentation<?>> I newInstance(Class<I> implementedInterface, boolean initWithDefaultProperties,
+	public <I extends GraphicalRepresentation> I newInstance(Class<I> implementedInterface, boolean initWithDefaultProperties,
 			boolean initWithBasicControls) {
 		I returned = super.newInstance(implementedInterface);
 		if (returned instanceof ShapeGraphicalRepresentation) {
 			if (initWithDefaultProperties) {
-				applyDefaultProperties((ShapeGraphicalRepresentation<?>) returned);
+				applyDefaultProperties((ShapeGraphicalRepresentation) returned);
 			}
 			if (initWithBasicControls) {
-				applyBasicControls((ShapeGraphicalRepresentation<?>) returned);
+				applyBasicControls((ShapeGraphicalRepresentation) returned);
 			}
 		} else if (returned instanceof ConnectorGraphicalRepresentation) {
 			if (initWithDefaultProperties) {
-				applyDefaultProperties((ConnectorGraphicalRepresentation<?>) returned);
+				applyDefaultProperties((ConnectorGraphicalRepresentation) returned);
 			}
 			if (initWithBasicControls) {
-				applyBasicControls((ConnectorGraphicalRepresentation<?>) returned);
+				applyBasicControls((ConnectorGraphicalRepresentation) returned);
 			}
 		} else if (returned instanceof DrawingGraphicalRepresentation) {
 			if (initWithDefaultProperties) {
-				applyDefaultProperties((DrawingGraphicalRepresentation<?>) returned);
+				applyDefaultProperties((DrawingGraphicalRepresentation) returned);
 			}
 			if (initWithBasicControls) {
-				applyBasicControls((DrawingGraphicalRepresentation<?>) returned);
+				applyBasicControls((DrawingGraphicalRepresentation) returned);
 			}
 		} else if (returned instanceof GeometricGraphicalRepresentation) {
 			if (initWithDefaultProperties) {
-				applyDefaultProperties((GeometricGraphicalRepresentation<?>) returned);
+				applyDefaultProperties((GeometricGraphicalRepresentation) returned);
 			}
 			if (initWithBasicControls) {
-				applyBasicControls((GeometricGraphicalRepresentation<?>) returned);
+				applyBasicControls((GeometricGraphicalRepresentation) returned);
 			}
 		}
 		return returned;

@@ -84,7 +84,7 @@ public class CreateDiagramPalette extends FlexoAction<CreateDiagramPalette, Diag
 		logger.info("Add calc palette");
 
 		_newPalette = DiagramPalette.newDiagramPalette(getFocusedObject(), newPaletteName,
-				(DrawingGraphicalRepresentation<?>) graphicalRepresentation, getFocusedObject().getViewPoint().getViewPointLibrary());
+				(DrawingGraphicalRepresentation) graphicalRepresentation, getFocusedObject().getViewPoint().getViewPointLibrary());
 		_newPalette.setDescription(description);
 		getFocusedObject().addToPalettes(_newPalette);
 		_newPalette.save();

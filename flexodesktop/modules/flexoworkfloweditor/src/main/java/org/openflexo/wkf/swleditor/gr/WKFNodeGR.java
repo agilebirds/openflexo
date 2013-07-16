@@ -218,14 +218,14 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 	 * Performs dumb layout to try not to be on other views of this level
 	 */
 	protected void doLayoutMethod3(double x, double y) {
-		Iterator<GraphicalRepresentation<?>> en = null;
+		Iterator<GraphicalRepresentation> en = null;
 		double attemptX = x, attemptY = y;
 		boolean found = false;
 		while (!found) {
 			en = getContainerGraphicalRepresentation().getContainedGraphicalRepresentations().iterator();
 			found = true;
 			while (en.hasNext()) {
-				GraphicalRepresentation<?> gr = en.next();
+				GraphicalRepresentation gr = en.next();
 				if (gr instanceof WKFNodeGR<?>) {
 					WKFNodeGR<?> rgr = (WKFNodeGR<?>) gr;
 					if (rgr != this) {
@@ -283,7 +283,7 @@ public abstract class WKFNodeGR<O extends WKFNode> extends WKFObjectGR<O> implem
 	}
 
 	private void findSiblingGRFromNodeAndAddToVector(WKFNode node, List<WKFNodeGR<?>> vector) {
-		GraphicalRepresentation<?> gr = getGraphicalRepresentation(node);
+		GraphicalRepresentation gr = getGraphicalRepresentation(node);
 		while (gr != null && gr.getParentGraphicalRepresentation() != getParentGraphicalRepresentation()) {
 			gr = gr.getParentGraphicalRepresentation();
 		}

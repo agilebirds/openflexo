@@ -50,8 +50,8 @@ public class DiagramConnectorGR extends ConnectorGraphicalRepresentation<Diagram
 	}
 
 	public DiagramConnectorGR(DiagramConnector aConnector, Drawing<?> aDrawing) {
-		super(ConnectorType.LINE, aDrawing != null ? (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(aConnector
-				.getStartShape()) : null, aDrawing != null ? (ShapeGraphicalRepresentation<?>) aDrawing
+		super(ConnectorType.LINE, aDrawing != null ? (ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(aConnector
+				.getStartShape()) : null, aDrawing != null ? (ShapeGraphicalRepresentation) aDrawing
 				.getGraphicalRepresentation(aConnector.getEndShape()) : null, aConnector, aDrawing);
 		// setText(getRole().getName());
 

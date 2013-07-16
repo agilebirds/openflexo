@@ -263,7 +263,7 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 	protected class ForegroundStylePreviewPanel extends JPanel {
 		private Drawing drawing;
 		private DrawingGraphicalRepresentation drawingGR;
-		private DrawingController<?> controller;
+		private DrawingController controller;
 		private Object p1, p2, line;
 		private ShapeGraphicalRepresentation lineGR;
 
@@ -306,7 +306,7 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 				}
 
 				@Override
-				public <O> GraphicalRepresentation<O> getGraphicalRepresentation(O aDrawable) {
+				public <O> GraphicalRepresentation getGraphicalRepresentation(O aDrawable) {
 					if (aDrawable == ForegroundStylePreviewPanel.this) {
 						return drawingGR;
 					} else if (aDrawable == line) {

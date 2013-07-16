@@ -64,9 +64,9 @@ public interface Connector extends FGEObject {
 
 	}
 
-	public ConnectorGraphicalRepresentation<?> getGraphicalRepresentation();
+	public ConnectorGraphicalRepresentation getGraphicalRepresentation();
 
-	public void setGraphicalRepresentation(ConnectorGraphicalRepresentation<?> aGraphicalRepresentation);
+	public void setGraphicalRepresentation(ConnectorGraphicalRepresentation aGraphicalRepresentation);
 
 	public double getStartAngle();
 
@@ -74,9 +74,9 @@ public interface Connector extends FGEObject {
 
 	public Object getDrawable();
 
-	public ShapeGraphicalRepresentation<?> getStartObject();
+	public ShapeGraphicalRepresentation getStartObject();
 
-	public ShapeGraphicalRepresentation<?> getEndObject();
+	public ShapeGraphicalRepresentation getEndObject();
 
 	/**
 	 * Return value indicating distance from aPoint to connector, asserting aPoint is related to local normalized coordinates system

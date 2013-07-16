@@ -38,11 +38,11 @@ public abstract class ControlArea<A extends FGEArea> implements FGEConstants {
 
 	private static final Logger logger = Logger.getLogger(ControlArea.class.getPackage().getName());
 
-	private GraphicalRepresentation<?> graphicalRepresentation;
+	private GraphicalRepresentation graphicalRepresentation;
 
 	private A _area;
 
-	public ControlArea(GraphicalRepresentation<?> aGraphicalRepresentation, A area) {
+	public ControlArea(GraphicalRepresentation aGraphicalRepresentation, A area) {
 		graphicalRepresentation = aGraphicalRepresentation;
 		_area = area;
 		if (graphicalRepresentation == null) {
@@ -51,7 +51,7 @@ public abstract class ControlArea<A extends FGEArea> implements FGEConstants {
 
 	}
 
-	public GraphicalRepresentation<?> getGraphicalRepresentation() {
+	public GraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
@@ -90,7 +90,7 @@ public abstract class ControlArea<A extends FGEArea> implements FGEConstants {
 	}
 
 	// Override when required
-	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+	public void startDragging(DrawingController controller, FGEPoint startPoint) {
 	}
 
 	// Override when required
@@ -106,7 +106,7 @@ public abstract class ControlArea<A extends FGEArea> implements FGEConstants {
 	}
 
 	// Override when required
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
+	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
 	}
 
 	// Override when required

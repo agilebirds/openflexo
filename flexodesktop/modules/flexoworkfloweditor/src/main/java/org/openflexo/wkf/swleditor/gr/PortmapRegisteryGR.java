@@ -89,17 +89,17 @@ public class PortmapRegisteryGR extends WKFObjectGR<PortMapRegistery> {
 		return false;
 	}
 
-	private GraphicalRepresentation<?> parentGR = null;
+	private GraphicalRepresentation parentGR = null;
 	private FGEArea parentOutline = null;
 
 	@Override
 	public FGEArea getLocationConstrainedArea() {
-		GraphicalRepresentation<?> parent = getContainerGraphicalRepresentation();
+		GraphicalRepresentation parent = getContainerGraphicalRepresentation();
 		if (parentGR == null || parent != parentGR) {
 			if (parent != null && parent instanceof ShapeGraphicalRepresentation) {
-				parentOutline = ((ShapeGraphicalRepresentation<?>) parent).getShape().getOutline();
+				parentOutline = ((ShapeGraphicalRepresentation) parent).getShape().getOutline();
 				parentOutline = parentOutline.transform(AffineTransform.getScaleInstance(
-						((ShapeGraphicalRepresentation<?>) parent).getWidth(), ((ShapeGraphicalRepresentation<?>) parent).getHeight()));
+						((ShapeGraphicalRepresentation) parent).getWidth(), ((ShapeGraphicalRepresentation) parent).getHeight()));
 				parentOutline = parentOutline.transform(AffineTransform.getTranslateInstance(
 						PORTMAP_REGISTERY_WIDTH / 2 - getBorder().left, PORTMAP_REGISTERY_WIDTH / 2 - getBorder().top));
 				// System.out.println("Rebuild outline = "+parentOutline);

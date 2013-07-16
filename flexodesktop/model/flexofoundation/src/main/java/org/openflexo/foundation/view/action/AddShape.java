@@ -72,7 +72,7 @@ public class AddShape extends FlexoAction<AddShape, DiagramElement<?>, DiagramEl
 	private DiagramShape _newShape;
 	private String _newShapeName;
 	private DiagramElement<?> _parent;
-	private ShapeGraphicalRepresentation<?> _graphicalRepresentation;
+	private ShapeGraphicalRepresentation _graphicalRepresentation;
 	private boolean nameSetToNull = false;
 
 	AddShape(DiagramElement<?> focusedObject, Vector<DiagramElement<?>> globalSelection, FlexoEditor editor) {
@@ -140,11 +140,11 @@ public class AddShape extends FlexoAction<AddShape, DiagramElement<?>, DiagramEl
 		_newShapeName = newShapeName;
 	}
 
-	public ShapeGraphicalRepresentation<?> getGraphicalRepresentation() {
+	public ShapeGraphicalRepresentation getGraphicalRepresentation() {
 		return _graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(ShapeGraphicalRepresentation<?> graphicalRepresentation) {
+	public void setGraphicalRepresentation(ShapeGraphicalRepresentation graphicalRepresentation) {
 		_graphicalRepresentation = graphicalRepresentation;
 	}
 

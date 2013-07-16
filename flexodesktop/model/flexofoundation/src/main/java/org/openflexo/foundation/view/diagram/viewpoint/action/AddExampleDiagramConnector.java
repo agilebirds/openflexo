@@ -67,7 +67,7 @@ public class AddExampleDiagramConnector extends FlexoAction<AddExampleDiagramCon
 	public ExampleDiagramShape toShape;
 	public String newConnectorName;
 	public String annotation;
-	public ConnectorGraphicalRepresentation<?> graphicalRepresentation;
+	public ConnectorGraphicalRepresentation graphicalRepresentation;
 
 	private ExampleDiagramConnector _newConnector;
 

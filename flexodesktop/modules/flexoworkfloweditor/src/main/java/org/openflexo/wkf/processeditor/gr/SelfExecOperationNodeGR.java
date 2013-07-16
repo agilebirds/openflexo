@@ -85,7 +85,7 @@ public class SelfExecOperationNodeGR extends AbstractOperationNodeGR {
 		public ExecutionPetriGraphOpener() {
 			super("ExecutionPetriGraphOpener", MouseButton.LEFT, 2, new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						java.awt.event.MouseEvent event) {
 					logger.info("Opening Execution petri graph by double-clicking");
 					OpenExecutionPetriGraph.actionType.makeNewAction(getOperationNode(), null, getDrawing().getEditor()).doAction();

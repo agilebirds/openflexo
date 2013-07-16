@@ -1,20 +1,12 @@
 package org.openflexo.fge.impl;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Stroke;
-import java.awt.geom.AffineTransform;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
-import java.util.Random;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,15 +25,9 @@ import org.openflexo.fge.GRVariable.GRVariableType;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextStyle;
-import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseControl.MouseButton;
 import org.openflexo.fge.controller.MouseDragControl;
-import org.openflexo.fge.geom.FGEGeometricObject;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
-import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.graphics.DrawUtils;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.GraphicalRepresentationAdded;
 import org.openflexo.fge.notifications.GraphicalRepresentationDeleted;
@@ -53,7 +39,7 @@ import org.openflexo.fge.notifications.LabelWillMove;
 import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.toolbox.FileResource;
 
-public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl implements GraphicalRepresentation<O> {
+public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implements GraphicalRepresentation {
 
 	private static final Logger logger = Logger.getLogger(GraphicalRepresentation.class.getPackage().getName());
 
@@ -67,7 +53,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	private static BindingFactory BINDING_FACTORY = new JavaBindingFactory();
 
 	private static final List<Object> EMPTY_VECTOR = Collections.emptyList();
-	private static final List<GraphicalRepresentation<?>> EMPTY_GR_VECTOR = Collections.emptyList();
+	private static final List<GraphicalRepresentation> EMPTY_GR_VECTOR = Collections.emptyList();
 
 	// *******************************************************************************
 	// * Parameters *
@@ -109,7 +95,6 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 
 	// *******************************************************************************
 
-	private O drawable;
 	private Drawing<?> drawing;
 
 	private Vector<Object> ancestors;
@@ -137,9 +122,8 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	}
 
 	@Deprecated
-	private GraphicalRepresentationImpl(O aDrawable, Drawing<?> aDrawing) {
+	private GraphicalRepresentationImpl(Drawing<?> aDrawing) {
 		this();
-		setDrawable(aDrawable);
 		setDrawing(aDrawing);
 		textStyle = getFactory().makeDefaultTextStyle();
 		// textStyle.setGraphicalRepresentation(this);
@@ -209,7 +193,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	// ***************************************************************************
 
 	@Override
-	public void setsWith(GraphicalRepresentation<?> gr) {
+	public void setsWith(GraphicalRepresentation gr) {
 		if (gr instanceof GraphicalRepresentation) {
 			for (Parameters p : Parameters.values()) {
 				if (p != Parameters.identifier && p != Parameters.mouseClickControls && p != Parameters.mouseDragControls) {
@@ -220,7 +204,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	}
 
 	@Override
-	public void setsWith(GraphicalRepresentation<?> gr, GRParameter... exceptedParameters) {
+	public void setsWith(GraphicalRepresentation gr, GRParameter... exceptedParameters) {
 		if (gr instanceof GraphicalRepresentation) {
 			for (Parameters p : Parameters.values()) {
 				boolean excepted = false;
@@ -236,7 +220,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		}
 	}
 
-	protected void _setParameterValueWith(Enum<?> parameterKey, GraphicalRepresentation<?> gr) {
+	protected void _setParameterValueWith(Enum<?> parameterKey, GraphicalRepresentation gr) {
 		Class<?> type = getTypeForKey(parameterKey.name());
 		if (type.isPrimitive()) {
 			if (logger.isLoggable(Level.FINE)) {
@@ -310,9 +294,9 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	public void finalizeDeserialization() {
 		// logger.info("Hop: finalizeDeserialization for "+this+" root is "+getRootGraphicalRepresentation());
 
-		if (getRootGraphicalRepresentation().getBindingModel() == null) {
+		/*if (getRootGraphicalRepresentation().getBindingModel() == null) {
 			getRootGraphicalRepresentation().createBindingModel();
-		}
+		}*/
 
 		isDeserializing = false;
 	}
@@ -333,7 +317,8 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	}
 
 	private String retrieveDefaultIdentifier() {
-		if (getParentGraphicalRepresentation() == null) {
+		return Integer.toHexString(hashCode());
+		/*if (getParentGraphicalRepresentation() == null) {
 			return "root";
 		} else {
 			// int index = getParentGraphicalRepresentation().getContainedGraphicalRepresentations().indexOf(this);
@@ -342,9 +327,9 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 				// logger.info("retrieveDefaultIdentifier return "+index);
 				return "object_" + index;
 			} else {
-				return ((GraphicalRepresentationImpl<?>) getParentGraphicalRepresentation()).retrieveDefaultIdentifier() + "_" + index;
+				return ((GraphicalRepresentationImpl) getParentGraphicalRepresentation()).retrieveDefaultIdentifier() + "_" + index;
 			}
-		}
+		}*/
 	}
 
 	@Override
@@ -373,13 +358,13 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	@Override
 	public void setLayer(int layer) {
 		/*
-		 * Vector<GraphicalRepresentation> allGRInSameLayer = null; GraphicalRepresentation<?> parent = getParentGraphicalRepresentation();
-		 * if (parent != null) { for (GraphicalRepresentation<?> child : parent.getContainedGraphicalRepresentations()) { if
+		 * Vector<GraphicalRepresentation> allGRInSameLayer = null; GraphicalRepresentation parent = getParentGraphicalRepresentation();
+		 * if (parent != null) { for (GraphicalRepresentation child : parent.getContainedGraphicalRepresentations()) { if
 		 * (child.getLayer() == layer) { System.out.println("Il faudrait changer la layer de "+child +" en meme temps"); if
 		 * (allGRInSameLayer == null) allGRInSameLayer = new Vector<GraphicalRepresentation>(); allGRInSameLayer.add(child); } } }
 		 * 
 		 * if (allGRInSameLayer == null || allGRInSameLayer.size() == 1) { FGENotification notification = requireChange(Parameters.layer,
-		 * layer); if (notification != null) { this.layer = layer; hasChanged(notification); } } else { for (GraphicalRepresentation<?>
+		 * layer); if (notification != null) { this.layer = layer; hasChanged(notification); } } else { for (GraphicalRepresentation
 		 * child : allGRInSameLayer) { child.proceedSetLayer(layer); } }
 		 */
 		FGENotification notification = requireChange(Parameters.layer, layer);
@@ -395,16 +380,6 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	 */
 
 	@Override
-	public final O getDrawable() {
-		return drawable;
-	}
-
-	@Override
-	public final void setDrawable(O aDrawable) {
-		drawable = aDrawable;
-	}
-
-	@Override
 	public Drawing<?> getDrawing() {
 		return drawing;
 	}
@@ -414,8 +389,8 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		this.drawing = drawing;
 	}
 
-	@Override
-	public DrawingGraphicalRepresentation<?> getDrawingGraphicalRepresentation() {
+	/*@Override
+	public DrawingGraphicalRepresentation getDrawingGraphicalRepresentation() {
 		return getDrawing().getDrawingGraphicalRepresentation();
 	}
 
@@ -446,17 +421,17 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 			return null;
 		}
 		return getDrawing().getContainedObjects(getDrawable());
-	}
+	}*/
 
-	@Override
-	public List<GraphicalRepresentation<?>> getContainedGraphicalRepresentations() {
+	/*@Override
+	public List<GraphicalRepresentation> getContainedGraphicalRepresentations() {
 		// Indirection added to separate callers that require an ordered list of contained GR and those who do not care. Wa may then later
 		// reimplement these methods to optimizer perfs.
 		return getOrderedContainedGraphicalRepresentations();
-	}
+	}*/
 
-	@Override
-	public List<GraphicalRepresentation<?>> getOrderedContainedGraphicalRepresentations() {
+	/*@Override
+	public List<GraphicalRepresentation> getOrderedContainedGraphicalRepresentations() {
 		if (!isValidated()) {
 			return EMPTY_GR_VECTOR;
 		}
@@ -465,7 +440,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 			return null;
 		}
 
-		List<GraphicalRepresentation<?>> toRemove = new ArrayList<GraphicalRepresentation<?>>(getOrderedContainedGR());
+		List<GraphicalRepresentation> toRemove = new ArrayList<GraphicalRepresentation>(getOrderedContainedGR());
 
 		for (Object o : getContainedObjects()) {
 			GraphicalRepresentation<Object> gr = getDrawing().getGraphicalRepresentation(o);
@@ -483,33 +458,33 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 			}
 		}
 
-		for (GraphicalRepresentation<?> c : toRemove) {
+		for (GraphicalRepresentation c : toRemove) {
 			orderedContainedGR.remove(c);
 		}
 
 		return orderedContainedGR;
-	}
+	}*/
 
-	private List<GraphicalRepresentation<?>> orderedContainedGR = null;
+	// private List<GraphicalRepresentation> orderedContainedGR = null;
 
-	private List<GraphicalRepresentation<?>> getOrderedContainedGR() {
+	/*private List<GraphicalRepresentation> getOrderedContainedGR() {
 		if (!isValidated()) {
 			logger.warning("GR " + this + " is not validated");
 			return EMPTY_GR_VECTOR;
 		}
 		if (orderedContainedGR == null) {
-			orderedContainedGR = new ArrayList<GraphicalRepresentation<?>>();
-			for (GraphicalRepresentation<?> c : getOrderedContainedGraphicalRepresentations()) {
+			orderedContainedGR = new ArrayList<GraphicalRepresentation>();
+			for (GraphicalRepresentation c : getOrderedContainedGraphicalRepresentations()) {
 				if (!orderedContainedGR.contains(c)) {
 					orderedContainedGR.add(c);
 				}
 			}
 		}
 		return orderedContainedGR;
-	}
+	}*/
 
 	@Override
-	public void moveToTop(GraphicalRepresentation<?> gr) {
+	public void moveToTop(GraphicalRepresentation gr) {
 		// TODO: something to do here
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("moveToTop temporarily desactivated");
@@ -523,9 +498,9 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		getOrderedContainedGR().add(gr);*/
 	}
 
-	@Override
-	public int getOrder(GraphicalRepresentation<?> child1, GraphicalRepresentation<?> child2) {
-		List<GraphicalRepresentation<?>> orderedGRList = getOrderedContainedGraphicalRepresentations();
+	/*@Override
+	public int getOrder(GraphicalRepresentation child1, GraphicalRepresentation child2) {
+		List<GraphicalRepresentation> orderedGRList = getOrderedContainedGraphicalRepresentations();
 
 		// logger.info("getOrder: "+orderedGRList);
 		if (!orderedGRList.contains(child1)) {
@@ -534,17 +509,10 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		if (!orderedGRList.contains(child2)) {
 			return 0;
 		}
-		/*
-		 * if (orderedGRList.indexOf(child1)<orderedGRList.indexOf(child2)) logger
-		 * .info("Ordering: "+child1+" on top of "+child2+" child1:"+orderedGRList
-		 * .indexOf(child1)+" child2:"+orderedGRList.indexOf(child2)); else logger
-		 * .info("Ordering: "+child2+" on top of "+child1+" child1:"+orderedGRList
-		 * .indexOf(child1)+" child2:"+orderedGRList.indexOf(child2));
-		 */
 		return orderedGRList.indexOf(child1) - orderedGRList.indexOf(child2);
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public int getLayerOrder() {
 		if (!isValidated()) {
 			return -1;
@@ -552,21 +520,16 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		if (getParentGraphicalRepresentation() == null) {
 			return -1;
 		}
-		List<GraphicalRepresentation<?>> orderedGRList = getParentGraphicalRepresentation().getOrderedContainedGraphicalRepresentations();
-		/*System.out.println("Index of " + this + " inside parent " + getParentGraphicalRepresentation() + " is "
-				+ orderedGRList.indexOf(this));
-		for (GraphicalRepresentation gr : orderedGRList) {
-			System.out.println("> " + gr + " : is this=" + gr.equals(this));
-		}*/
+		List<GraphicalRepresentation> orderedGRList = getParentGraphicalRepresentation().getOrderedContainedGraphicalRepresentations();
 		return orderedGRList.indexOf(this);
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public int getIndex() {
 		return getLayerOrder();
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public Object getContainer() {
 		if (drawing == null) {
 			return null;
@@ -578,7 +541,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	}
 
 	@Override
-	public GraphicalRepresentation<?> getContainerGraphicalRepresentation() {
+	public GraphicalRepresentation getContainerGraphicalRepresentation() {
 		if (!isValidated()) {
 			return null;
 		}
@@ -588,15 +551,15 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 			return null;
 		}
 		return getDrawing().getGraphicalRepresentation(getContainer());
-	}
+	}*/
 
-	@Override
-	public GraphicalRepresentation<?> getParentGraphicalRepresentation() {
+	/*@Override
+	public GraphicalRepresentation getParentGraphicalRepresentation() {
 		return getContainerGraphicalRepresentation();
 	}
 
 	@Override
-	public boolean contains(GraphicalRepresentation<?> gr) {
+	public boolean contains(GraphicalRepresentation gr) {
 		if (!isValidated()) {
 			return false;
 		}
@@ -642,9 +605,9 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 			}
 		}
 		return ancestors;
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public boolean isConnectedToDrawing() {
 		if (!isValidated()) {
 			return false;
@@ -661,11 +624,11 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	}
 
 	@Override
-	public boolean isAncestorOf(GraphicalRepresentation<?> child) {
+	public boolean isAncestorOf(GraphicalRepresentation child) {
 		if (!isValidated()) {
 			return false;
 		}
-		GraphicalRepresentation<?> father = child.getContainerGraphicalRepresentation();
+		GraphicalRepresentation father = child.getContainerGraphicalRepresentation();
 		while (father != null) {
 			if (father == this) {
 				return true;
@@ -673,9 +636,9 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 			father = father.getContainerGraphicalRepresentation();
 		}
 		return false;
-	}
+	}*/
 
-	public static GraphicalRepresentation<?> getFirstCommonAncestor(GraphicalRepresentation<?> child1, GraphicalRepresentation<?> child2) {
+	/*public static GraphicalRepresentation getFirstCommonAncestor(GraphicalRepresentation child1, GraphicalRepresentation child2) {
 		if (!child1.isValidated()) {
 			return null;
 		}
@@ -685,7 +648,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		return getFirstCommonAncestor(child1, child2, false);
 	}
 
-	public static GraphicalRepresentation<?> getFirstCommonAncestor(GraphicalRepresentation<?> child1, GraphicalRepresentation<?> child2,
+	public static GraphicalRepresentation getFirstCommonAncestor(GraphicalRepresentation child1, GraphicalRepresentation child2,
 			boolean includeCurrent) {
 		if (!child1.isValidated()) {
 			return null;
@@ -710,7 +673,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		return null;
 	}
 
-	public static boolean areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation<?> element1, GraphicalRepresentation<?> element2) {
+	public static boolean areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation element1, GraphicalRepresentation element2) {
 		if (!element1.isValidated()) {
 			return false;
 		}
@@ -718,24 +681,24 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 			return false;
 		}
 		return getFirstCommonAncestor(element1, element2) != null;
-	}
+	}*/
 
 	/*
-	 * public boolean isLayerVisibleAccross(GraphicalRepresentation<?> gr) { if (getLayer() > gr.getLayer()) return true;
+	 * public boolean isLayerVisibleAccross(GraphicalRepresentation gr) { if (getLayer() > gr.getLayer()) return true;
 	 * 
 	 * //if (debug) logger.info("this="+this); //if (debug) logger.info("gr="+gr);
 	 * 
-	 * // But may be i have one parent whose layer is bigger than opposite gr GraphicalRepresentation<?> commonAncestor =
+	 * // But may be i have one parent whose layer is bigger than opposite gr GraphicalRepresentation commonAncestor =
 	 * getFirstCommonAncestor(this, gr, true);
 	 * 
 	 * //if (debug) logger.info("commonAncestor="+commonAncestor+" of "+commonAncestor .getClass().getName());
 	 * 
 	 * if (commonAncestor == null) return false;
 	 * 
-	 * GraphicalRepresentation<?> lastAncestor1 = null; GraphicalRepresentation<?> lastAncestor2 = null; if (commonAncestor == this)
+	 * GraphicalRepresentation lastAncestor1 = null; GraphicalRepresentation lastAncestor2 = null; if (commonAncestor == this)
 	 * lastAncestor1 = this; if (commonAncestor == gr) lastAncestor2 = gr;
 	 * 
-	 * for (GraphicalRepresentation<?> child : commonAncestor.getContainedGraphicalRepresentations()) { //logger.info("Child:"+child); if
+	 * for (GraphicalRepresentation child : commonAncestor.getContainedGraphicalRepresentations()) { //logger.info("Child:"+child); if
 	 * (lastAncestor1 == null && (child == this || child.isAncestorOf(this))) lastAncestor1 = child; if (lastAncestor2 == null && (child ==
 	 * gr || child.isAncestorOf(gr))) lastAncestor2 = child; }
 	 * 
@@ -750,12 +713,12 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	/*
 	 * public boolean isPointVisible(FGEPoint p) { if (!getIsVisible()) return false;
 	 * 
-	 * GraphicalRepresentation<?> initialGR = this; GraphicalRepresentation<?> currentGR = this;
+	 * GraphicalRepresentation initialGR = this; GraphicalRepresentation currentGR = this;
 	 * 
-	 * while (currentGR != null) { GraphicalRepresentation<?> parentGR = currentGR.getContainerGraphicalRepresentation(); if (parentGR ==
-	 * null) return true; if (!parentGR.getIsVisible()) return false; for (GraphicalRepresentation<?> child :
+	 * while (currentGR != null) { GraphicalRepresentation parentGR = currentGR.getContainerGraphicalRepresentation(); if (parentGR ==
+	 * null) return true; if (!parentGR.getIsVisible()) return false; for (GraphicalRepresentation child :
 	 * parentGR.getContainedGraphicalRepresentations()) { // Only ShapeGR can hide other GR, ignore ConnectorGR here if (child instanceof
-	 * ShapeGraphicalRepresentation) { ShapeGraphicalRepresentation<?> shapedChild = (ShapeGraphicalRepresentation<?>)child; if
+	 * ShapeGraphicalRepresentation) { ShapeGraphicalRepresentation shapedChild = (ShapeGraphicalRepresentation)child; if
 	 * (shapedChild.getShape().getShape().containsPoint( convertNormalizedPoint(initialGR, p, child))) {
 	 * logger.info("GR "+child+" contains point "+p+" on "+initialGR); if(child.getLayer() > currentGR.getLayer()) {
 	 * logger.info("GR "+child+" hides point "+p+" on "+initialGR); } } } } currentGR = parentGR; }
@@ -763,28 +726,19 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	 * return true; }
 	 */
 
-	@Override
+	/*@Override
 	public boolean isPointVisible(FGEPoint p) {
 		if (!getIsVisible()) {
 			return false;
 		}
 
-		/*
-		 * if (this instanceof ShapeGraphicalRepresentation) { // Be careful, maybe this point is just on outline // So translate it to the
-		 * center to be sure FGEPoint center = ((ShapeGraphicalRepresentation)this).getShape ().getShape().getCenter(); p.x =
-		 * p.x+FGEGeometricObject.EPSILON*(center.x-p.x); p.y = p.y+FGEGeometricObject.EPSILON*(center.y-p.y); }
-		 * 
-		 * DrawingGraphicalRepresentation<?> drawingGR = getDrawingGraphicalRepresentation(); ShapeGraphicalRepresentation<?> topLevelShape
-		 * = drawingGR.getTopLevelShapeGraphicalRepresentation( convertNormalizedPoint(this, p, drawingGR));
-		 */
-
-		GraphicalRepresentation<?> topLevelShape = shapeHiding(p);
+		GraphicalRepresentation topLevelShape = shapeHiding(p);
 
 		return topLevelShape == null;
-	}
+	}*/
 
-	@Override
-	public ShapeGraphicalRepresentation<?> shapeHiding(FGEPoint p) {
+	/*@Override
+	public ShapeGraphicalRepresentation shapeHiding(FGEPoint p) {
 		if (!getIsVisible()) {
 			return null;
 		}
@@ -792,13 +746,13 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		if (this instanceof ShapeGraphicalRepresentation) {
 			// Be careful, maybe this point is just on outline
 			// So translate it to the center to be sure
-			FGEPoint center = ((ShapeGraphicalRepresentation<?>) this).getShape().getShape().getCenter();
+			FGEPoint center = ((ShapeGraphicalRepresentation) this).getShape().getShape().getCenter();
 			p.x = p.x + FGEGeometricObject.EPSILON * (center.x - p.x);
 			p.y = p.y + FGEGeometricObject.EPSILON * (center.y - p.y);
 		}
 
-		DrawingGraphicalRepresentation<?> drawingGR = getDrawingGraphicalRepresentation();
-		ShapeGraphicalRepresentation<?> topLevelShape = drawingGR.getTopLevelShapeGraphicalRepresentation(convertNormalizedPoint(this, p,
+		DrawingGraphicalRepresentation drawingGR = getDrawingGraphicalRepresentation();
+		ShapeGraphicalRepresentation topLevelShape = drawingGR.getTopLevelShapeGraphicalRepresentation(convertNormalizedPoint(this, p,
 				drawingGR));
 
 		if (topLevelShape == this || topLevelShape == getParentGraphicalRepresentation()) {
@@ -806,7 +760,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		}
 
 		return topLevelShape;
-	}
+	}*/
 
 	// *******************************************************************************
 	// * Accessors *
@@ -843,7 +797,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		 * if (absoluteTextX < 0) absoluteTextX = 0; if (getContainerGraphicalRepresentation() != null &&
 		 * getContainerGraphicalRepresentation() instanceof ShapeGraphicalRepresentation && absoluteTextX > ((ShapeGraphicalRepresentation
 		 * <?>)getContainerGraphicalRepresentation()).getWidth()) { absoluteTextX =
-		 * ((ShapeGraphicalRepresentation<?>)getContainerGraphicalRepresentation ()).getWidth(); }
+		 * ((ShapeGraphicalRepresentation)getContainerGraphicalRepresentation ()).getWidth(); }
 		 */
 		FGENotification notification = requireChange(Parameters.absoluteTextX, absoluteTextX);
 		if (notification != null) {
@@ -1041,9 +995,9 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 
 	@Override
 	public void setIsSelected(boolean aFlag) {
-		if (getParentGraphicalRepresentation() != null && aFlag) {
+		/*if (getParentGraphicalRepresentation() != null && aFlag) {
 			getParentGraphicalRepresentation().moveToTop(this);
-		}
+		}*/
 		FGENotification notification = requireChange(Parameters.isSelected, aFlag);
 		if (notification != null) {
 			isSelected = aFlag;
@@ -1079,11 +1033,11 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		}
 	}
 
-	@Override
+	/*@Override
 	public boolean shouldBeDisplayed() {
 		// logger.info("For "+this+" getIsVisible()="+getIsVisible()+" getContainerGraphicalRepresentation()="+getContainerGraphicalRepresentation());
 		return getIsVisible() && getContainerGraphicalRepresentation() != null && getContainerGraphicalRepresentation().shouldBeDisplayed();
-	}
+	}*/
 
 	@Override
 	public boolean getIsVisible() {
@@ -1111,7 +1065,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	// * Methods *
 	// *******************************************************************************
 
-	@Override
+	/*@Override
 	public abstract int getViewX(double scale);
 
 	@Override
@@ -1138,9 +1092,9 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	@Override
 	public FGERectangle getNormalizedBounds() {
 		return new FGERectangle(0, 0, 1, 1, Filling.FILLED);
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public Point getLabelLocation(double scale) {
 		return new Point((int) (getAbsoluteTextX() * scale + getViewX(scale)), (int) (getAbsoluteTextY() * scale + getViewY(scale)));
 	}
@@ -1167,17 +1121,14 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		return new Rectangle(getLabelLocation(scale), getLabelDimension(scale));
 	}
 
-	// *******************************************************************************
-	// * Methods *
-	// *******************************************************************************
-
 	@Override
-	public void paint(Graphics g, DrawingController<?> controller) {
+	public void paint(Graphics g, DrawingController controller) {
 		Graphics2D g2 = (Graphics2D) g;
 		DrawUtils.turnOnAntiAlising(g2);
 		DrawUtils.setRenderQuality(g2);
 		DrawUtils.setColorRenderQuality(g2);
 	}
+	*/
 
 	// *******************************************************************************
 	// * Utils *
@@ -1332,7 +1283,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	}
 
 	@Override
-	public void notifyDrawableAdded(GraphicalRepresentation<?> addedGR) {
+	public void notifyDrawableAdded(GraphicalRepresentation addedGR) {
 		addedGR.updateBindingModel();
 		// logger.info(">>>>>>>>>> NEW GraphicalRepresentationAdded");
 		setChanged();
@@ -1340,7 +1291,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	}
 
 	@Override
-	public void notifyDrawableRemoved(GraphicalRepresentation<?> removedGR) {
+	public void notifyDrawableRemoved(GraphicalRepresentation removedGR) {
 		removedGR.updateBindingModel();
 		setChanged();
 		notifyObservers(new GraphicalRepresentationRemoved(removedGR));
@@ -1361,247 +1312,10 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	// * Coordinates manipulation *
 	// *******************************************************************************
 
-	/**
-	 * Convert a point relative to the view representing source drawable, with supplied scale, in a point relative to the view representing
-	 * destination drawable
-	 * 
-	 * @param source
-	 *            graphical representation of drawable represented in the source view
-	 * @param point
-	 *            point to convert
-	 * @param destination
-	 *            graphical representation of drawable represented in the destination view
-	 * @param scale
-	 *            the scale to be used to perform this conversion
-	 * @return
-	 */
-	public static Point convertPoint(GraphicalRepresentation<?> source, Point point, GraphicalRepresentation<?> destination, double scale) {
-		if (source != destination) {
-			AffineTransform at = convertCoordinatesAT(source, destination, scale);
-			return (Point) at.transform(point, new Point());
-		} else {
-			return new Point(point);
-		}
-	}
+	
 
-	/**
-	 * Convert a rectangle coordinates expressed in the view representing source drawable, with supplied scale, in coordinates expressed in
-	 * the view representing destination drawable
-	 * 
-	 * @param source
-	 *            graphical representation of drawable represented in the source view
-	 * @param aRectangle
-	 *            rectangle to convert
-	 * @param destination
-	 *            graphical representation of drawable represented in the destination view
-	 * @param scale
-	 *            the scale to be used to perform this conversion
-	 * @return
-	 */
-	public static Rectangle convertRectangle(GraphicalRepresentation<?> source, Rectangle aRectangle,
-			GraphicalRepresentation<?> destination, double scale) {
-		Point point = new Point(aRectangle.x, aRectangle.y);
-		if (source != destination) {
-			point = convertPoint(source, point, destination, scale);
-		}
-		return new Rectangle(point.x, point.y, aRectangle.width, aRectangle.height);
-	}
-
-	/**
-	 * Build and return a new AffineTransform allowing to perform coordinates conversion from the view representing source drawable, with
-	 * supplied scale, to the view representing destination drawable
-	 * 
-	 * @param source
-	 * @param destination
-	 * @param scale
-	 * @return
-	 */
-	public static AffineTransform convertCoordinatesAT(GraphicalRepresentation<?> source, GraphicalRepresentation<?> destination,
-			double scale) {
-		if (source != destination) {
-			AffineTransform returned = convertFromDrawableToDrawingAT(source, scale);
-			returned.preConcatenate(convertFromDrawingToDrawableAT(destination, scale));
-			return returned;
-		} else {
-			return new AffineTransform();
-		}
-	}
-
-	/**
-	 * Convert a point defined in coordinates system related to "source" graphical representation to related drawing graphical
-	 * representation
-	 * 
-	 * @param destination
-	 * @param point
-	 * @param scale
-	 * @return
-	 */
-	public static Point convertPointFromDrawableToDrawing(GraphicalRepresentation<?> source, Point point, double scale) {
-		AffineTransform at = convertFromDrawableToDrawingAT(source, scale);
-		return (Point) at.transform(point, new Point());
-	}
-
-	/**
-	 * 
-	 * Build a new AffineTransform allowing to convert coordinates from coordinate system defined by "source" graphical representation to
-	 * related drawing graphical representation
-	 * 
-	 * @param source
-	 * @param scale
-	 * @return
-	 */
-	public static AffineTransform convertFromDrawableToDrawingAT(GraphicalRepresentation<?> source, double scale) {
-		double tx = 0;
-		double ty = 0;
-		if (source == null) {
-			logger.warning("Called convertFromDrawableToDrawingAT() for null graphical representation (source)");
-			return new AffineTransform();
-		}
-		Object current = source.getDrawable();
-		while (current != source.getDrawing().getModel()) {
-			if (source.getDrawing().getGraphicalRepresentation(current) == null) {
-				throw new IllegalArgumentException(
-						"Drawable "
-								+ current
-								+ " has no graphical representation.\nDevelopper note: Use GraphicalRepresentation.areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation,GraphicalRepresentation) to prevent such cases.");
-			}
-			if (source.getDrawing().getContainer(current) == null) {
-				throw new IllegalArgumentException(
-						"Drawable "
-								+ current
-								+ " has no container.\nDevelopper note: Use GraphicalRepresentation.areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation,GraphicalRepresentation) to prevent such cases.");
-			}
-			tx += source.getDrawing().getGraphicalRepresentation(current).getViewX(scale);
-			ty += source.getDrawing().getGraphicalRepresentation(current).getViewY(scale);
-			current = source.getDrawing().getContainer(current);
-		}
-		return AffineTransform.getTranslateInstance(tx, ty);
-	}
-
-	/**
-	 * Convert a point defined in related drawing graphical representation coordinates system to the one defined by "destination" graphical
-	 * representation
-	 * 
-	 * @param destination
-	 * @param point
-	 * @param scale
-	 * @return
-	 */
-	public static Point convertPointFromDrawingToDrawable(GraphicalRepresentation<?> destination, Point point, double scale) {
-		AffineTransform at = convertFromDrawingToDrawableAT(destination, scale);
-		return (Point) at.transform(point, new Point());
-	}
-
-	/**
-	 * 
-	 * Build a new AffineTransform allowing to convert coordinates from coordinate system defined by related drawing graphical
-	 * representation to the one defined by "destination" graphical representation
-	 * 
-	 * @param destination
-	 * @param scale
-	 * @return
-	 */
-	public static AffineTransform convertFromDrawingToDrawableAT(GraphicalRepresentation<?> destination, double scale) {
-		double tx = 0;
-		double ty = 0;
-		if (destination == null) {
-			logger.warning("Called convertFromDrawingToDrawableAT() for null graphical representation (destination)");
-			return new AffineTransform();
-		}
-		Object current = destination.getDrawable();
-		while (current != destination.getDrawing().getModel()) {
-			if (destination.getDrawing().getContainer(current) == null) {
-				throw new IllegalArgumentException(
-						"Drawable "
-								+ current
-								+ " has no container.\nDevelopper note: Use GraphicalRepresentation.areElementsConnectedInGraphicalHierarchy(GraphicalRepresentation,GraphicalRepresentation) to prevent such cases.");
-			}
-			tx -= destination.getDrawing().getGraphicalRepresentation(current).getViewX(scale);
-			ty -= destination.getDrawing().getGraphicalRepresentation(current).getViewY(scale);
-			current = destination.getDrawing().getContainer(current);
-		}
-		return AffineTransform.getTranslateInstance(tx, ty);
-	}
-
-	@Override
-	public final Point convertNormalizedPointToViewCoordinates(double x, double y, double scale) {
-		AffineTransform at = convertNormalizedPointToViewCoordinatesAT(scale);
-		FGEPoint returned = new FGEPoint();
-		at.transform(new FGEPoint(x, y), returned);
-		return new Point((int) returned.x, (int) returned.y);
-	}
-
-	@Override
-	public Rectangle convertNormalizedRectangleToViewCoordinates(FGERectangle r, double scale) {
-		FGEPoint p1 = new FGEPoint(r.x, r.y);
-		FGEPoint p2 = new FGEPoint(r.x + r.width, r.y + r.height);
-		Point pp1 = convertNormalizedPointToViewCoordinates(p1, scale);
-		Point pp2 = convertNormalizedPointToViewCoordinates(p2, scale);
-		return new Rectangle(pp1.x, pp1.y, pp2.x - pp1.x, pp2.y - pp1.y);
-	}
-
-	@Override
-	public abstract AffineTransform convertNormalizedPointToViewCoordinatesAT(double scale);
-
-	@Override
-	public final FGEPoint convertViewCoordinatesToNormalizedPoint(int x, int y, double scale) {
-		AffineTransform at = convertViewCoordinatesToNormalizedPointAT(scale);
-		FGEPoint returned = new FGEPoint();
-		at.transform(new FGEPoint(x, y), returned);
-		return returned;
-	}
-
-	@Override
-	public abstract AffineTransform convertViewCoordinatesToNormalizedPointAT(double scale);
-
-	@Override
-	public Point convertNormalizedPointToViewCoordinates(FGEPoint p, double scale) {
-		return convertNormalizedPointToViewCoordinates(p.x, p.y, scale);
-	}
-
-	@Override
-	public FGEPoint convertViewCoordinatesToNormalizedPoint(Point p, double scale) {
-		return convertViewCoordinatesToNormalizedPoint(p.x, p.y, scale);
-	}
-
-	/**
-	 * Convert a point relative to the normalized coordinates system from source drawable to the normalized coordinates system from
-	 * destination drawable
-	 * 
-	 * @param source
-	 * @param point
-	 * @param destination
-	 * @return
-	 */
-	public static FGEPoint convertNormalizedPoint(GraphicalRepresentation<?> source, FGEPoint point, GraphicalRepresentation<?> destination) {
-		if (point == null) {
-			return null;
-		}
-		AffineTransform at = convertNormalizedCoordinatesAT(source, destination);
-		return (FGEPoint) at.transform(point, new FGEPoint());
-	}
-
-	/**
-	 * Build and return an AffineTransform allowing to convert locations relative to the normalized coordinates system from source drawable
-	 * to the normalized coordinates system from destination drawable
-	 * 
-	 * @param source
-	 * @param point
-	 * @param destination
-	 * @return
-	 */
-	public static AffineTransform convertNormalizedCoordinatesAT(GraphicalRepresentation<?> source, GraphicalRepresentation<?> destination) {
-		if (source == null) {
-			logger.warning("null source !");
-		}
-		AffineTransform returned = source.convertNormalizedPointToViewCoordinatesAT(1.0);
-		returned.preConcatenate(convertCoordinatesAT(source, destination, 1.0));
-		returned.preConcatenate(destination.convertViewCoordinatesToNormalizedPointAT(1.0));
-		return returned;
-	}
-
-	@Override
-	public FGEPoint convertRemoteViewCoordinatesToLocalNormalizedPoint(Point p, GraphicalRepresentation<?> source, double scale) {
+	/*@Override
+	public FGEPoint convertRemoteViewCoordinatesToLocalNormalizedPoint(Point p, GraphicalRepresentation source, double scale) {
 		if (!isConnectedToDrawing() || !source.isConnectedToDrawing()) {
 			return new FGEPoint(p.x / scale, p.y / scale);
 		}
@@ -1610,7 +1324,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	}
 
 	@Override
-	public FGEPoint convertLocalViewCoordinatesToRemoteNormalizedPoint(Point p, GraphicalRepresentation<?> destination, double scale) {
+	public FGEPoint convertLocalViewCoordinatesToRemoteNormalizedPoint(Point p, GraphicalRepresentation destination, double scale) {
 		if (!isConnectedToDrawing() || !destination.isConnectedToDrawing()) {
 			return new FGEPoint(p.x * scale, p.y * scale);
 		}
@@ -1619,13 +1333,13 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	}
 
 	@Override
-	public Point convertLocalNormalizedPointToRemoteViewCoordinates(FGEPoint p, GraphicalRepresentation<?> destination, double scale) {
+	public Point convertLocalNormalizedPointToRemoteViewCoordinates(FGEPoint p, GraphicalRepresentation destination, double scale) {
 		Point point = convertNormalizedPointToViewCoordinates(p, scale);
 		return convertPoint(this, point, destination, scale);
 	}
 
 	@Override
-	public Rectangle convertLocalNormalizedRectangleToRemoteViewCoordinates(FGERectangle r, GraphicalRepresentation<?> destination,
+	public Rectangle convertLocalNormalizedRectangleToRemoteViewCoordinates(FGERectangle r, GraphicalRepresentation destination,
 			double scale) {
 		FGEPoint p1 = new FGEPoint(r.x, r.y);
 		FGEPoint p2 = new FGEPoint(r.x + r.width, r.y + r.height);
@@ -1635,10 +1349,10 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	}
 
 	@Override
-	public Point convertRemoteNormalizedPointToLocalViewCoordinates(FGEPoint p, GraphicalRepresentation<?> source, double scale) {
+	public Point convertRemoteNormalizedPointToLocalViewCoordinates(FGEPoint p, GraphicalRepresentation source, double scale) {
 		Point point = source.convertNormalizedPointToViewCoordinates(p, scale);
 		return convertPoint(source, point, this, scale);
-	}
+	}*/
 
 	@Override
 	public boolean isRegistered() {
@@ -1865,20 +1579,20 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	// * Layout *
 	// *******************************************************************************
 
-	@Override
+	/*@Override
 	public void performRandomLayout(double width, double height) {
 		Random r = new Random();
-		for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation gr : getContainedGraphicalRepresentations()) {
 			if (gr instanceof ShapeGraphicalRepresentation) {
-				ShapeGraphicalRepresentation<?> child = (ShapeGraphicalRepresentation<?>) gr;
+				ShapeGraphicalRepresentation child = (ShapeGraphicalRepresentation) gr;
 				child.setLocation(new FGEPoint(r.nextDouble() * (width - child.getWidth()), r.nextDouble() * (height - child.getHeight())));
 			}
 		}
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public void performAutoLayout(double width, double height) {
-	}
+	}*/
 
 	@Override
 	public Stroke getSpecificStroke() {
@@ -1894,19 +1608,19 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	// * Bindings: constraint expressions
 	// *******************************************************************************
 
-	@Override
+	/*@Override
 	public boolean isRootGraphicalRepresentation() {
 		return getParentGraphicalRepresentation() == null;
 	}
 
 	@Override
-	public GraphicalRepresentation<?> getRootGraphicalRepresentation() {
-		GraphicalRepresentation<?> current = this;
+	public GraphicalRepresentation getRootGraphicalRepresentation() {
+		GraphicalRepresentation current = this;
 		while (current != null && !current.isRootGraphicalRepresentation()) {
 			current = current.getParentGraphicalRepresentation();
 		}
 		return current;
-	}
+	}*/
 
 	private BindingModel _bindingModel = null;
 
@@ -1942,9 +1656,10 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		_bindingModel = new BindingModel();
 
 		_bindingModel.addToBindingVariables(new BindingVariable("this", getClass()));
-		if (getParentGraphicalRepresentation() != null) {
-			_bindingModel.addToBindingVariables(new BindingVariable("parent", getParentGraphicalRepresentation().getClass()));
-		}
+		// if (getParentGraphicalRepresentation() != null) {
+		_bindingModel
+				.addToBindingVariables(new BindingVariable("parent", GraphicalRepresentation.class/*getParentGraphicalRepresentation().getClass()*/));
+		// }
 		/*_bindingModel.addToBindingVariables(new BindingVariable("components", new ParameterizedTypeImpl(List.class,
 				GraphicalRepresentation.class)));*/
 
@@ -1955,17 +1670,17 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		}
 		_bindingModel.addToBindingVariables(new ComponentsBindingVariable(this));*/
 
-		Iterator<GraphicalRepresentation<?>> it = allContainedGRIterator();
+		/*Iterator<GraphicalRepresentation> it = allContainedGRIterator();
 		while (it.hasNext()) {
-			GraphicalRepresentation<?> subComponent = it.next();
+			GraphicalRepresentation subComponent = it.next();
 			// _bindingModel.addToBindingVariables(new ComponentBindingVariable(subComponent));
 			subComponent.notifiedBindingModelRecreated();
-		}
+		}*/
 
 		logger.fine("Created binding model at root component level:\n" + _bindingModel);
 	}
 
-	@Override
+	/*@Override
 	public Object getValue(BindingVariable variable) {
 		if (variable.getVariableName().equals("this")) {
 			return this;
@@ -1975,7 +1690,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 			logger.warning("Could not find variable named " + variable);
 			return null;
 		}
-	}
+	}*/
 
 	@Override
 	public void notifiedBindingModelRecreated() {
@@ -1987,51 +1702,51 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		logger.fine("notifyBindingChanged() for " + binding);
 	}
 
-	@Override
-	public List<GraphicalRepresentation<?>> retrieveAllContainedGR() {
+	/*@Override
+	public List<GraphicalRepresentation> retrieveAllContainedGR() {
 		if (!isValidated()) {
 			return EMPTY_GR_VECTOR;
 		}
-		List<GraphicalRepresentation<?>> returned = new ArrayList<GraphicalRepresentation<?>>();
+		List<GraphicalRepresentation> returned = new ArrayList<GraphicalRepresentation>();
 		addAllContainedGR(this, returned);
 		return returned;
-	}
+	}*/
 
-	private void addAllContainedGR(GraphicalRepresentation<?> gr, List<GraphicalRepresentation<?>> returned) {
+	/*private void addAllContainedGR(GraphicalRepresentation gr, List<GraphicalRepresentation> returned) {
 		if (gr.getContainedGraphicalRepresentations() == null) {
 			return;
 		}
-		for (GraphicalRepresentation<?> gr2 : gr.getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation gr2 : gr.getContainedGraphicalRepresentations()) {
 			returned.add(gr2);
 			addAllContainedGR(gr2, returned);
 		}
-	}
+	}*/
 
-	@Override
-	public Iterator<GraphicalRepresentation<?>> allGRIterator() {
-		List<GraphicalRepresentation<?>> returned = getRootGraphicalRepresentation().retrieveAllContainedGR();
+	/*@Override
+	public Iterator<GraphicalRepresentation> allGRIterator() {
+		List<GraphicalRepresentation> returned = getRootGraphicalRepresentation().retrieveAllContainedGR();
 		if (!isValidated()) {
 			return returned.iterator();
 		}
 		returned.add(0, getRootGraphicalRepresentation());
 		return returned.iterator();
-	}
+	}*/
 
-	@Override
-	public Iterator<GraphicalRepresentation<?>> allContainedGRIterator() {
-		List<GraphicalRepresentation<?>> allGR = retrieveAllContainedGR();
+	/*@Override
+	public Iterator<GraphicalRepresentation> allContainedGRIterator() {
+		List<GraphicalRepresentation> allGR = retrieveAllContainedGR();
 		if (!isValidated()) {
 			return allGR.iterator();
 		}
 		if (allGR == null) {
-			return new Iterator<GraphicalRepresentation<?>>() {
+			return new Iterator<GraphicalRepresentation>() {
 				@Override
 				public boolean hasNext() {
 					return false;
 				}
 
 				@Override
-				public GraphicalRepresentation<?> next() {
+				public GraphicalRepresentation next() {
 					return null;
 				}
 
@@ -2042,7 +1757,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		} else {
 			return allGR.iterator();
 		}
-	}
+	}*/
 
 	@Override
 	public Vector<ConstraintDependency> getDependancies() {
@@ -2055,7 +1770,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	}
 
 	@Override
-	public void declareDependantOf(GraphicalRepresentation<?> aComponent, GRParameter requiringParameter, GRParameter requiredParameter)
+	public void declareDependantOf(GraphicalRepresentation aComponent, GRParameter requiringParameter, GRParameter requiredParameter)
 			throws DependencyLoopException {
 		// logger.info("Component "+this+" depends of "+aComponent);
 		if (aComponent == this) {
@@ -2064,7 +1779,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		}
 		// Look if this dependancy may cause a loop in dependancies
 		try {
-			Vector<GraphicalRepresentation<?>> actualDependancies = new Vector<GraphicalRepresentation<?>>();
+			Vector<GraphicalRepresentation> actualDependancies = new Vector<GraphicalRepresentation>();
 			actualDependancies.add(aComponent);
 			searchLoopInDependenciesWith(aComponent, actualDependancies);
 		} catch (DependencyLoopException e) {
@@ -2079,19 +1794,19 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 			logger.info("Parameter " + requiringParameter + " of GR " + this + " depends of parameter " + requiredParameter + " of GR "
 					+ aComponent);
 		}
-		if (!((GraphicalRepresentationImpl<?>) aComponent).alterings.contains(newDependancy)) {
-			((GraphicalRepresentationImpl<?>) aComponent).alterings.add(newDependancy);
+		if (!((GraphicalRepresentationImpl) aComponent).alterings.contains(newDependancy)) {
+			((GraphicalRepresentationImpl) aComponent).alterings.add(newDependancy);
 		}
 	}
 
-	private void searchLoopInDependenciesWith(GraphicalRepresentation<?> aComponent, Vector<GraphicalRepresentation<?>> actualDependancies)
+	private void searchLoopInDependenciesWith(GraphicalRepresentation aComponent, Vector<GraphicalRepresentation> actualDependancies)
 			throws DependencyLoopException {
-		for (ConstraintDependency dependancy : ((GraphicalRepresentationImpl<?>) aComponent).dependancies) {
-			GraphicalRepresentation<?> c = dependancy.requiredGR;
+		for (ConstraintDependency dependancy : ((GraphicalRepresentationImpl) aComponent).dependancies) {
+			GraphicalRepresentation c = dependancy.requiredGR;
 			if (c == this) {
 				throw new DependencyLoopException(actualDependancies);
 			}
-			Vector<GraphicalRepresentation<?>> newVector = new Vector<GraphicalRepresentation<?>>();
+			Vector<GraphicalRepresentation> newVector = new Vector<GraphicalRepresentation>();
 			newVector.addAll(actualDependancies);
 			newVector.add(c);
 			searchLoopInDependenciesWith(c, newVector);
@@ -2101,7 +1816,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 	protected void propagateConstraintsAfterModification(GRParameter parameter) {
 		for (ConstraintDependency dependency : alterings) {
 			if (dependency.requiredParameter == parameter) {
-				((GraphicalRepresentationImpl<?>) dependency.requiringGR).computeNewConstraint(dependency);
+				((GraphicalRepresentationImpl) dependency.requiringGR).computeNewConstraint(dependency);
 			}
 		}
 	}
@@ -2168,48 +1883,34 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 		return "delete";
 	}
 
-	private boolean validated = false;
-	protected LabelMetricsProvider labelMetricsProvider;
+	/*	private boolean validated = false;
+		protected LabelMetricsProvider labelMetricsProvider;
 
-	/**
-	 * Return boolean indicating if this graphical representation is validated. A validated graphical representation is a graphical
-	 * representation fully embedded in its graphical representation tree, which means that parent and child are set and correct, and that
-	 * start and end shapes are set for connectors
-	 * 
-	 * 
-	 * @return
-	 */
-	@Override
-	public boolean isValidated() {
-		return validated;
-	}
+		@Override
+		public boolean isValidated() {
+			return validated;
+		}
 
-	@Override
-	public void setValidated(boolean validated) {
-		this.validated = validated;
-	}
+		@Override
+		public void setValidated(boolean validated) {
+			this.validated = validated;
+		}
 
-	@Override
-	public LabelMetricsProvider getLabelMetricsProvider() {
-		return labelMetricsProvider;
-	}
+		@Override
+		public LabelMetricsProvider getLabelMetricsProvider() {
+			return labelMetricsProvider;
+		}
 
-	@Override
-	public void setLabelMetricsProvider(LabelMetricsProvider labelMetricsProvider) {
-		this.labelMetricsProvider = labelMetricsProvider;
-	}
+		@Override
+		public void setLabelMetricsProvider(LabelMetricsProvider labelMetricsProvider) {
+			this.labelMetricsProvider = labelMetricsProvider;
+		}
 
-	/**
-	 * Returns the number of pixels available for the label considering its positioning. This method is used in case of line wrapping.
-	 * 
-	 * @param scale
-	 * @return
-	 */
-	@Override
-	public int getAvailableLabelWidth(double scale) {
-		return Integer.MAX_VALUE;
-	}
-
+		@Override
+		public int getAvailableLabelWidth(double scale) {
+			return Integer.MAX_VALUE;
+		}
+	*/
 	protected void updateDependanciesForBinding(DataBinding<?> binding) {
 		if (binding == null) {
 			return;
@@ -2217,13 +1918,14 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 
 		// logger.info("Searching dependancies for "+this);
 
-		GraphicalRepresentation<?> component = this;
-		List<TargetObject> targetList = binding.getTargetObjects(this);
+		GraphicalRepresentation component = this;
+		// TODO !!!!
+		List<TargetObject> targetList = binding.getTargetObjects(null/*this*/);
 		if (targetList != null) {
 			for (TargetObject o : targetList) {
 				// System.out.println("> "+o.target+" for "+o.propertyName);
 				if (o.target instanceof GraphicalRepresentation) {
-					GraphicalRepresentation<?> c = (GraphicalRepresentation) o.target;
+					GraphicalRepresentation c = (GraphicalRepresentation) o.target;
 					GRParameter param = c.parameterWithName(o.propertyName);
 					// logger.info("OK, found "+getBindingAttribute()+" of "+getOwner()+" depends of "+param+" , "+c);
 					try {
@@ -2255,7 +1957,7 @@ public abstract class GraphicalRepresentationImpl<O> extends FGEObjectImpl imple
 						logger.info("parameter="+parameter);
 						Iterator<GraphicalRepresentation> allComponents = rootComponent.allGRIterator();
 						while (allComponents.hasNext()) {
-							GraphicalRepresentation<?> next = allComponents.next();
+							GraphicalRepresentation next = allComponents.next();
 							if (next != getOwner()) {
 								if (identifier.equals(next.getIdentifier())) {
 									for (GRParameter param : next.getAllParameters()) {

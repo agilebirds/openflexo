@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 import org.openflexo.fge.BackgroundImageBackgroundStyle;
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.ColorGradientBackgroundStyle;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.TextureBackgroundStyle;
 import org.openflexo.fge.notifications.FGENotification;
@@ -54,7 +55,7 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 		return new BackgroundImageBackgroundStyleImpl(image);
 	}
 
-	@Deprecated
+	// @Deprecated
 	/*public static BackgroundStyle makeBackground(BackgroundStyleType type) {
 		if (type == BackgroundStyleType.NONE) {
 			return makeEmptyBackground();
@@ -72,7 +73,7 @@ public abstract class BackgroundStyleImpl extends FGEStyleImpl implements Backgr
 		return null;
 	}*/
 	@Override
-	public abstract Paint getPaint(GraphicalRepresentation gr, double scale);
+	public abstract Paint getPaint(DrawingTreeNode<?, ?> dtn, double scale);
 
 	@Override
 	public abstract BackgroundStyleType getBackgroundStyleType();

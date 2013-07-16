@@ -44,7 +44,7 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 
 	private boolean isBuildingPoints;
 
-	public DrawPolygonToolController(DrawingController<?> controller, DrawShapeAction control) {
+	public DrawPolygonToolController(DrawingController controller, DrawShapeAction control) {
 		super(controller, control);
 	}
 
@@ -130,8 +130,8 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 	}
 
 	@Override
-	public ShapeGraphicalRepresentation<?> buildShapeGraphicalRepresentation() {
-		ShapeGraphicalRepresentation<?> returned = getController().getFactory().makeShapeGraphicalRepresentation(ShapeType.CUSTOM_POLYGON,
+	public ShapeGraphicalRepresentation buildShapeGraphicalRepresentation() {
+		ShapeGraphicalRepresentation returned = getController().getFactory().makeShapeGraphicalRepresentation(ShapeType.CUSTOM_POLYGON,
 				null, getController().getDrawing());
 		returned.setBorder(getController().getFactory().makeShapeBorder(FGEConstants.DEFAULT_BORDER_SIZE, FGEConstants.DEFAULT_BORDER_SIZE,
 				FGEConstants.DEFAULT_BORDER_SIZE, FGEConstants.DEFAULT_BORDER_SIZE));

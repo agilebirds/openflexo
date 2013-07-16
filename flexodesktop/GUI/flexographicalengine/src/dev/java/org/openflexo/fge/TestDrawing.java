@@ -345,7 +345,7 @@ public class TestDrawing {
 			}
 
 			@Override
-			public ShapeView<O> makeShapeView(DrawingController<?> controller) {
+			public ShapeView<O> makeShapeView(DrawingController controller) {
 				ShapeView<O> returned = super.makeShapeView(controller);
 				returned.addMouseListener(new MouseAdapter() {
 					@Override
@@ -360,17 +360,17 @@ public class TestDrawing {
 		}
 
 		public abstract class MyShape {
-			public abstract MyShapeGraphicalRepresentation<?> getGraphicalRepresentation();
+			public abstract MyShapeGraphicalRepresentation getGraphicalRepresentation();
 		}
 
 		public class MyConnectorGraphicalRepresentation<O extends MyConnector> extends ConnectorGraphicalRepresentationImpl<O> {
-			public MyConnectorGraphicalRepresentation(ConnectorType aConnectorType, MyShapeGraphicalRepresentation<?> aStartObject,
-					MyShapeGraphicalRepresentation<?> anEndObject, O aDrawable, MyDrawing aDrawing) {
+			public MyConnectorGraphicalRepresentation(ConnectorType aConnectorType, MyShapeGraphicalRepresentation aStartObject,
+					MyShapeGraphicalRepresentation anEndObject, O aDrawable, MyDrawing aDrawing) {
 				super(aConnectorType, aStartObject, anEndObject, aDrawable, aDrawing);
 			}
 
 			@Override
-			public ConnectorView<O> makeConnectorView(DrawingController<?> controller) {
+			public ConnectorView<O> makeConnectorView(DrawingController controller) {
 				ConnectorView<O> returned = super.makeConnectorView(controller);
 				returned.addMouseListener(new MouseAdapter() {
 					@Override

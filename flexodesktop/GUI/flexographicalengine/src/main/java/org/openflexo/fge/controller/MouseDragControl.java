@@ -88,7 +88,7 @@ public class MouseDragControl extends MouseControl {
 	}
 
 	@Override
-	public boolean isApplicable(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent e) {
+	public boolean isApplicable(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent e) {
 		return super.isApplicable(graphicalRepresentation, controller, e);
 	}
 
@@ -106,7 +106,7 @@ public class MouseDragControl extends MouseControl {
 	 * @param e
 	 *            MouseEvent
 	 */
-	public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
+	public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
 
 		if (action.handleMousePressed(graphicalRepresentation, controller, event)) {
 			initialGraphicalRepresentation = graphicalRepresentation;
@@ -126,7 +126,7 @@ public class MouseDragControl extends MouseControl {
 	 * @param e
 	 *            MouseEvent
 	 */
-	public void handleMouseReleased(DrawingController<?> controller, MouseEvent event) {
+	public void handleMouseReleased(DrawingController controller, MouseEvent event) {
 		if (action.handleMouseReleased(initialGraphicalRepresentation, controller, event, isSignificativeDrag())) {
 			initialGraphicalRepresentation = null;
 			// System.out.println("RELEASED initialGraphicalRepresentation="+initialGraphicalRepresentation);
@@ -142,7 +142,7 @@ public class MouseDragControl extends MouseControl {
 	 * @param e
 	 *            MouseEvent
 	 */
-	public void handleMouseDragged(DrawingController<?> controller, MouseEvent event) {
+	public void handleMouseDragged(DrawingController controller, MouseEvent event) {
 		if (action.handleMouseDragged(initialGraphicalRepresentation, controller, event)) {
 			// System.out.println("DRAGGED initialGraphicalRepresentation="+initialGraphicalRepresentation);
 			isSignificativeDrag = true;

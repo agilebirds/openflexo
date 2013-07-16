@@ -26,7 +26,7 @@ public class SWLContainerResizeAreas {
 	private static class LineControlArea extends ControlArea<FGESegment> {
 		private final SimplifiedCardinalDirection cardinalDirection;
 
-		public LineControlArea(ShapeGraphicalRepresentation<?> aGraphicalRepresentation, SimplifiedCardinalDirection cardinalDirection) {
+		public LineControlArea(ShapeGraphicalRepresentation aGraphicalRepresentation, SimplifiedCardinalDirection cardinalDirection) {
 			super(aGraphicalRepresentation, getSegment(cardinalDirection));
 			this.cardinalDirection = cardinalDirection;
 		}
@@ -47,8 +47,8 @@ public class SWLContainerResizeAreas {
 		}
 
 		@Override
-		public ShapeGraphicalRepresentation<?> getGraphicalRepresentation() {
-			return (ShapeGraphicalRepresentation<?>) super.getGraphicalRepresentation();
+		public ShapeGraphicalRepresentation getGraphicalRepresentation() {
+			return (ShapeGraphicalRepresentation) super.getGraphicalRepresentation();
 		}
 
 		@Override
@@ -64,7 +64,7 @@ public class SWLContainerResizeAreas {
 		private FGERectangle initialRequiredBounds;
 
 		@Override
-		public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+		public void startDragging(DrawingController controller, FGEPoint startPoint) {
 			if (!isDraggable()) {
 				return;
 			}
@@ -127,7 +127,7 @@ public class SWLContainerResizeAreas {
 		}
 
 		@Override
-		public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
+		public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
 			if (!isDraggable()) {
 				return;
 			}
@@ -169,7 +169,7 @@ public class SWLContainerResizeAreas {
 
 	private List<ControlArea<?>> controlAreas;
 
-	public SWLContainerResizeAreas(ShapeGraphicalRepresentation<?> gr) {
+	public SWLContainerResizeAreas(ShapeGraphicalRepresentation gr) {
 		super();
 		controlAreas = new ArrayList<ControlArea<?>>();
 		controlAreas.add(new ShapeResizingControlPoint(gr, new FGEPoint(1, 1), null));

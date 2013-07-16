@@ -43,10 +43,10 @@ import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.model.exceptions.ModelExecutionException;
 import org.openflexo.model.factory.Clipboard;
 
-public class MyDrawingController extends DrawingController<EditedDrawing> {
+public class MyDrawingController extends DrawingController<MyDrawing> {
 
 	private JPopupMenu contextualMenu;
-	private GraphicalRepresentation<?> contextualMenuInvoker;
+	private GraphicalRepresentation contextualMenuInvoker;
 	private Point contextualMenuClickedPoint;
 
 	// private MyShape copiedShape;
@@ -56,8 +56,8 @@ public class MyDrawingController extends DrawingController<EditedDrawing> {
 
 		setDrawShapeAction(new DrawShapeAction() {
 			@Override
-			public void performedDrawNewShape(ShapeGraphicalRepresentation<?> graphicalRepresentation,
-					GraphicalRepresentation<?> parentGraphicalRepresentation) {
+			public void performedDrawNewShape(ShapeGraphicalRepresentation graphicalRepresentation,
+					GraphicalRepresentation parentGraphicalRepresentation) {
 				System.out.println("OK, perform draw new shape with " + graphicalRepresentation + " et parent: "
 						+ parentGraphicalRepresentation);
 				MyShape newShape = getDrawing().getModel().getFactory()

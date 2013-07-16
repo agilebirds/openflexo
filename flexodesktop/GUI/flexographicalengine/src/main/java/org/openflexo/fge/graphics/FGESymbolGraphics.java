@@ -31,7 +31,7 @@ public class FGESymbolGraphics extends FGEGraphics {
 
 	private static final Logger logger = Logger.getLogger(FGESymbolGraphics.class.getPackage().getName());
 
-	public FGESymbolGraphics(ConnectorGraphicalRepresentation<?> aGraphicalRepresentation) {
+	public FGESymbolGraphics(ConnectorGraphicalRepresentation aGraphicalRepresentation) {
 		super(aGraphicalRepresentation);
 	}
 

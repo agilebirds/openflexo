@@ -9,5 +9,5 @@ public interface FGEObject extends /*AccessibleProxyObject,*/XMLSerializable, Cl
 
 	public FGEModelFactory getFactory();
 
-	public void setFGEModelFactory(FGEModelFactory factory);
+	public void setFactory(FGEModelFactory factory);
 }

@@ -116,7 +116,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 	protected boolean drawEdge = false;
 	protected boolean isDnd = false;
 	protected RoleGR to = null;
-	protected GraphicalRepresentation<?> focusedGR;
+	protected GraphicalRepresentation focusedGR;
 	private RoleEditorController controller;
 	private FGEPoint normalizedStartPoint;
 
@@ -126,7 +126,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 	public void paint(Graphics g, RoleEditorController controller) {
 		if (drawEdge && currentDraggingLocationInDrawingView != null) {
 			FGEShape<?> fgeShape = roleGR.getShape().getOutline();
-			DrawingGraphicalRepresentation<?> drawingGR = controller.getDrawingGraphicalRepresentation();
+			DrawingGraphicalRepresentation drawingGR = controller.getDrawingGraphicalRepresentation();
 			double scale = controller.getScale();
 			FGEPoint nearestOnOutline = fgeShape.getNearestPoint(drawingGR.convertLocalViewCoordinatesToRemoteNormalizedPoint(
 					currentDraggingLocationInDrawingView, roleGR, scale));
@@ -171,7 +171,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 	}
 
 	@Override
-	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+	public void startDragging(DrawingController controller, FGEPoint startPoint) {
 		mode = null;
 		if (roleRect.contains(startPoint)) {
 			mode = Mode.ROLE;
@@ -258,10 +258,10 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
+	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
 		if (drawEdge && currentDraggingLocationInDrawingView != null && isDnd) {
 			try {
-				GraphicalRepresentation<?> targetGR = controller.getGraphicalRepresentation(target);
+				GraphicalRepresentation targetGR = controller.getGraphicalRepresentation(target);
 				if (targetGR == null) {
 					targetGR = controller.getDrawingGraphicalRepresentation();
 				}
@@ -345,7 +345,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 		addRole.doAction();
 
 		if (addRole.getNewRole() != null) {
-			ShapeGraphicalRepresentation<?> gr = (ShapeGraphicalRepresentation<?>) controller.getGraphicalRepresentation(addRole
+			ShapeGraphicalRepresentation gr = (ShapeGraphicalRepresentation) controller.getGraphicalRepresentation(addRole
 					.getNewRole());
 			if (locationInDrawing == null) {
 				locationInDrawing = gr.getLocationInDrawing();

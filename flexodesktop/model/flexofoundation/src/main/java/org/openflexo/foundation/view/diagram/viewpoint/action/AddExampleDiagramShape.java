@@ -69,7 +69,7 @@ public class AddExampleDiagramShape extends FlexoAction<AddExampleDiagramShape, 
 	private ExampleDiagramShape _newShape;
 	public String newShapeName;
 	private ExampleDiagramObject _parent;
-	public ShapeGraphicalRepresentation<?> graphicalRepresentation;
+	public ShapeGraphicalRepresentation graphicalRepresentation;
 	public boolean nameSetToNull = false;
 
 	AddExampleDiagramShape(ExampleDiagramObject focusedObject, Vector<ExampleDiagramObject> globalSelection, FlexoEditor editor) {

@@ -36,7 +36,7 @@ public abstract class FGEObjectImpl extends DefaultInspectableObject implements 
 	}
 
 	@Override
-	public void setFGEModelFactory(FGEModelFactory factory) {
+	public void setFactory(FGEModelFactory factory) {
 		this.factory = factory;
 	}
 

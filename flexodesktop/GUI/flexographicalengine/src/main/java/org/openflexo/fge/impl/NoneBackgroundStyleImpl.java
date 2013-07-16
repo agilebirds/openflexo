@@ -2,13 +2,13 @@ package org.openflexo.fge.impl;
 
 import java.awt.Paint;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.NoneBackgroundStyle;
 
 public class NoneBackgroundStyleImpl extends BackgroundStyleImpl implements NoneBackgroundStyle {
 
 	@Override
-	public Paint getPaint(GraphicalRepresentation gr, double scale) {
+	public Paint getPaint(DrawingTreeNode<?, ?> dtn, double scale) {
 		return null;
 	}
 

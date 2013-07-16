@@ -79,12 +79,12 @@ public class DrawingPalette {
 	public static final Cursor dropKO = ToolBox.getPLATFORM() == ToolBox.MACOS ? Toolkit.getDefaultToolkit().createCustomCursor(
 			DROP_KO_IMAGE, new Point(16, 16), "Drop KO") : DragSource.DefaultMoveNoDrop;
 
-	private DrawingController<?> _controller;
+	private DrawingController _controller;
 
 	private final PaletteDrawing _paletteDrawing;
 	// This controller is the local controller for displaying the palette, NOT the controller
 	// Which this palette is associated to.
-	private DrawingController<PaletteDrawing> _paletteController;
+	private DrawingController _paletteController;
 	protected Vector<PaletteElement> elements;
 
 	private DragSourceContext dragSourceContext;
@@ -151,7 +151,7 @@ public class DrawingPalette {
 		elements.remove(element);
 	}
 
-	public DrawingView<PaletteDrawing> getPaletteView() {
+	public DrawingView getPaletteView() {
 		if (_paletteController == null) {
 			makePalettePanel();
 		}
@@ -176,7 +176,7 @@ public class DrawingPalette {
 		for (PaletteElement e : elements) {
 			e.getGraphicalRepresentation().setValidated(true);
 		}
-		_paletteController = new DrawingController<PaletteDrawing>(_paletteDrawing, factory);
+		_paletteController = new DrawingController(_paletteDrawing, factory);
 		for (PaletteElement e : elements) {
 			e.getGraphicalRepresentation().notifyObjectHierarchyHasBeenUpdated();
 		}
@@ -184,7 +184,7 @@ public class DrawingPalette {
 
 	public class PaletteDrawing implements Drawing<DrawingPalette> {
 
-		private final DrawingGraphicalRepresentation<DrawingPalette> gr;
+		private final DrawingGraphicalRepresentation gr;
 
 		private PaletteDrawing() {
 			gr = factory.makeDrawingGraphicalRepresentation(this, false);
@@ -212,13 +212,13 @@ public class DrawingPalette {
 		}
 
 		@Override
-		public DrawingGraphicalRepresentation<DrawingPalette> getDrawingGraphicalRepresentation() {
+		public DrawingGraphicalRepresentation getDrawingGraphicalRepresentation() {
 			return gr;
 		}
 
 		@Override
 		@SuppressWarnings("unchecked")
-		public GraphicalRepresentation<?> getGraphicalRepresentation(Object aDrawable) {
+		public GraphicalRepresentation getGraphicalRepresentation(Object aDrawable) {
 			if (aDrawable == getModel()) {
 				return getDrawingGraphicalRepresentation();
 			}
@@ -326,7 +326,7 @@ public class DrawingPalette {
 				if (element == null) {
 					return false;
 				}
-				GraphicalRepresentation<?> focused = getFocusedObject(e);
+				GraphicalRepresentation focused = getFocusedObject(e);
 				if (focused == null) {
 					return false;
 				}
@@ -465,7 +465,7 @@ public class DrawingPalette {
 							e.rejectDrop();
 							return;
 						}
-						GraphicalRepresentation<?> focused = getFocusedObject(e);
+						GraphicalRepresentation focused = getFocusedObject(e);
 						if (focused == null) {
 							e.rejectDrop();
 							return;
@@ -476,10 +476,10 @@ public class DrawingPalette {
 							Point pt = e.getLocation();
 							FGEPoint modelLocation = new FGEPoint();
 							if (targetComponent instanceof FGEView) {
-								pt = FGEUtils.convertPoint(((FGEView<?>) targetComponent).getGraphicalRepresentation(), pt, focused,
-										((FGEView<?>) targetComponent).getScale());
-								modelLocation.x = pt.x / ((FGEView<?>) targetComponent).getScale();
-								modelLocation.y = pt.y / ((FGEView<?>) targetComponent).getScale();
+								pt = FGEUtils.convertPoint(((FGEView) targetComponent).getGraphicalRepresentation(), pt, focused,
+										((FGEView) targetComponent).getScale());
+								modelLocation.x = pt.x / ((FGEView) targetComponent).getScale();
+								modelLocation.y = pt.y / ((FGEView) targetComponent).getScale();
 								modelLocation.x -= ((TransferedPaletteElement) data).getOffset().x;
 								modelLocation.y -= ((TransferedPaletteElement) data).getOffset().y;
 							} else {
@@ -531,9 +531,9 @@ public class DrawingPalette {
 			return null;
 		}
 
-		public GraphicalRepresentation<?> getFocusedObject(DropTargetDragEvent event) {
+		public GraphicalRepresentation getFocusedObject(DropTargetDragEvent event) {
 			if (getFocusRetriever() != null) {
-				GraphicalRepresentation<?> returned = getFocusRetriever().getFocusedObject(event);
+				GraphicalRepresentation returned = getFocusRetriever().getFocusedObject(event);
 				if (returned == null) {
 					// Since we are in a FGEView, a null value indicates that we are on the Drawing view
 					return getFGEView().getGraphicalRepresentation().getDrawingGraphicalRepresentation();
@@ -544,9 +544,9 @@ public class DrawingPalette {
 			return null;
 		}
 
-		public GraphicalRepresentation<?> getFocusedObject(DropTargetDropEvent event) {
+		public GraphicalRepresentation getFocusedObject(DropTargetDropEvent event) {
 			if (getFocusRetriever() != null) {
-				GraphicalRepresentation<?> returned = getFocusRetriever().getFocusedObject(event);
+				GraphicalRepresentation returned = getFocusRetriever().getFocusedObject(event);
 				if (returned == null) {
 					// Since we are in a FGEView, a null value indicates that we are on the Drawing view
 					return getFGEView().getGraphicalRepresentation().getDrawingGraphicalRepresentation();
@@ -559,11 +559,11 @@ public class DrawingPalette {
 
 	}
 
-	public DrawingController<?> getController() {
+	public DrawingController getController() {
 		return _controller;
 	}
 
-	protected void registerController(DrawingController<?> controller) {
+	protected void registerController(DrawingController controller) {
 		_controller = controller;
 	}
 

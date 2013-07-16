@@ -44,7 +44,7 @@ import org.openflexo.model.annotations.XMLElement;
 @ModelEntity
 @ImplementationClass(GeometricGraphicalRepresentationImpl.class)
 @XMLElement(xmlTag = "GeometricGraphicalRepresentation")
-public interface GeometricGraphicalRepresentation<O> extends GraphicalRepresentation<O> {
+public interface GeometricGraphicalRepresentation extends GraphicalRepresentation {
 
 	// Property keys
 

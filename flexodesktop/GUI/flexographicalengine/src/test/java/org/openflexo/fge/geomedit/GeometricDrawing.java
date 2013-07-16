@@ -19,12 +19,12 @@
  */
 package org.openflexo.fge.geomedit;
 
-import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.geomedit.gr.GeometricDrawingGraphicalRepresentation;
+import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 
-public class GeometricDrawing extends DefaultDrawing<GeometricSet> {
+public class GeometricDrawing extends DrawingImpl<GeometricSet> {
 	private GeometricDrawingGraphicalRepresentation gr;
 	private GeomEditController controller;
 
@@ -44,9 +44,9 @@ public class GeometricDrawing extends DefaultDrawing<GeometricSet> {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable) {
+	public <O> GraphicalRepresentation retrieveGraphicalRepresentation(O aDrawable) {
 		if (aDrawable == getModel()) {
-			return (GraphicalRepresentation<O>) getDrawingGraphicalRepresentation();
+			return (GraphicalRepresentation) getDrawingGraphicalRepresentation();
 		}
 		if (aDrawable instanceof GeometricObject) {
 			return ((GeometricObject) aDrawable).getGraphicalRepresentation();

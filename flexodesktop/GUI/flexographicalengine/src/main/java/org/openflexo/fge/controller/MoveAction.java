@@ -64,7 +64,7 @@ public class MoveAction extends MouseDragControlAction {
 	}
 
 	@Override
-	public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
+	public boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Perform mouse DRAGGED on MOVE MouseDragControlAction");
 		}
@@ -73,11 +73,11 @@ public class MoveAction extends MouseDragControlAction {
 					controller.getDrawingView());
 
 			if (graphicalRepresentation instanceof ShapeGraphicalRepresentation
-					&& ((ShapeGraphicalRepresentation<?>) graphicalRepresentation).isAllowedToBeDraggedOutsideParentContainer()
+					&& ((ShapeGraphicalRepresentation) graphicalRepresentation).isAllowedToBeDraggedOutsideParentContainer()
 					&& currentMove.isDnDPattern(newPointLocation, event) && currentDND == null) {
 				currentMove.stopDragging();
 				currentMove = null;
-				currentDND = new DNDInfo(this, (ShapeGraphicalRepresentation<?>) graphicalRepresentation, controller, event);
+				currentDND = new DNDInfo(this, (ShapeGraphicalRepresentation) graphicalRepresentation, controller, event);
 			} else {
 				currentMove.moveTo(newPointLocation);
 			}
@@ -87,17 +87,17 @@ public class MoveAction extends MouseDragControlAction {
 	}
 
 	@Override
-	public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
+	public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Perform mouse PRESSED on MOVE MouseDragControlAction");
 		}
-		FGEView<?> view = controller.getDrawingView().viewForObject(graphicalRepresentation);
+		FGEView view = controller.getDrawingView().viewForObject(graphicalRepresentation);
 		initialClickOffset = SwingUtilities.convertPoint(event.getComponent(), event.getPoint(), (Component) view);
 		if (graphicalRepresentation instanceof ShapeGraphicalRepresentation && !graphicalRepresentation.getIsReadOnly()
 				&& graphicalRepresentation.getDrawing().isEditable()
-				&& ((ShapeGraphicalRepresentation<?>) graphicalRepresentation).getLocationConstraints() != LocationConstraints.UNMOVABLE) {
+				&& ((ShapeGraphicalRepresentation) graphicalRepresentation).getLocationConstraints() != LocationConstraints.UNMOVABLE) {
 			// Let's go for a move
-			currentMove = new MoveInfo((ShapeGraphicalRepresentation<?>) graphicalRepresentation, event, view, controller);
+			currentMove = new MoveInfo((ShapeGraphicalRepresentation) graphicalRepresentation, event, view, controller);
 			controller.notifyWillMove(currentMove);
 			return true;
 		}
@@ -105,7 +105,7 @@ public class MoveAction extends MouseDragControlAction {
 	}
 
 	@Override
-	public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+	public boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 			MouseEvent event, boolean isSignificativeDrag) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Perform mouse RELEASED on MOVE MouseDragControlAction");
@@ -158,9 +158,9 @@ public class MoveAction extends MouseDragControlAction {
 	public static class TransferedShapeGraphicalRepresentation {
 		private final Point offset;
 
-		private final ShapeGraphicalRepresentation<?> transfered;
+		private final ShapeGraphicalRepresentation transfered;
 
-		public TransferedShapeGraphicalRepresentation(ShapeGraphicalRepresentation<?> element, Point dragOffset) {
+		public TransferedShapeGraphicalRepresentation(ShapeGraphicalRepresentation element, Point dragOffset) {
 			super();
 			transfered = element;
 			offset = dragOffset;
@@ -170,7 +170,7 @@ public class MoveAction extends MouseDragControlAction {
 			return offset;
 		}
 
-		public ShapeGraphicalRepresentation<?> getTransferedElement() {
+		public ShapeGraphicalRepresentation getTransferedElement() {
 			return transfered;
 		}
 

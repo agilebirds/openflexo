@@ -159,10 +159,10 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 								newShapePatternRole.setExampleLabel(((ShapeGraphicalRepresentation) entry.graphicalObject
 										.getGraphicalRepresentation()).getText());
 								// We clone here the GR (fixed unfocusable GR bug)
-								newShapePatternRole.setGraphicalRepresentation(((ShapeGraphicalRepresentation<?>) entry.graphicalObject
+								newShapePatternRole.setGraphicalRepresentation(((ShapeGraphicalRepresentation) entry.graphicalObject
 										.getGraphicalRepresentation()).clone());
 								// Forces GR to be displayed in view
-								((ShapeGraphicalRepresentation<?>) newShapePatternRole.getGraphicalRepresentation())
+								((ShapeGraphicalRepresentation) newShapePatternRole.getGraphicalRepresentation())
 										.setAllowToLeaveBounds(false);
 								newEditionPattern.addToPatternRoles(newShapePatternRole);
 								if (entry.getParentEntry() != null) {

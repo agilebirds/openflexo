@@ -160,7 +160,7 @@ public class AddShape extends AddShemaElementAction<DiagramShape> {
 		Diagram diagram = (Diagram) action.retrieveVirtualModelInstance();
 		DiagramShape newShape = new DiagramShape(diagram);
 
-		GraphicalRepresentation<?> grToUse = null;
+		GraphicalRepresentation grToUse = null;
 
 		// If an overriden graphical representation is defined, use it
 		if (action.getOverridingGraphicalRepresentation(getPatternRole()) != null) {

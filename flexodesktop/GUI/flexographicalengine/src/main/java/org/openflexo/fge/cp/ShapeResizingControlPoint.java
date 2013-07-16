@@ -46,7 +46,7 @@ public class ShapeResizingControlPoint extends ControlPoint {
 
 	// private FGEArea authorizedDragArea;
 
-	public ShapeResizingControlPoint(ShapeGraphicalRepresentation<?> graphicalRepresentation, FGEPoint pt,
+	public ShapeResizingControlPoint(ShapeGraphicalRepresentation graphicalRepresentation, FGEPoint pt,
 			CardinalDirection aCardinalDirection) {
 		super(graphicalRepresentation, pt);
 
@@ -148,8 +148,8 @@ public class ShapeResizingControlPoint extends ControlPoint {
 	}
 
 	@Override
-	public ShapeGraphicalRepresentation<?> getGraphicalRepresentation() {
-		return (ShapeGraphicalRepresentation<?>) super.getGraphicalRepresentation();
+	public ShapeGraphicalRepresentation getGraphicalRepresentation() {
+		return (ShapeGraphicalRepresentation) super.getGraphicalRepresentation();
 	}
 
 	@Override
@@ -202,7 +202,7 @@ public class ShapeResizingControlPoint extends ControlPoint {
 	private FGERectangle initialRequiredBounds;
 
 	@Override
-	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+	public void startDragging(DrawingController controller, FGEPoint startPoint) {
 		if (!isDraggable()) {
 			return;
 		}
@@ -312,7 +312,7 @@ public class ShapeResizingControlPoint extends ControlPoint {
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
+	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
 		if (!isDraggable()) {
 			return;
 		}

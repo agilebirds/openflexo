@@ -26,13 +26,13 @@ import org.openflexo.fge.geom.FGEPoint;
 
 public class ConnectorNonAdjustableControlPoint extends ControlPoint {
 
-	public ConnectorNonAdjustableControlPoint(ConnectorGraphicalRepresentation<?> gr, FGEPoint pt) {
+	public ConnectorNonAdjustableControlPoint(ConnectorGraphicalRepresentation gr, FGEPoint pt) {
 		super(gr, pt);
 	}
 
 	@Override
-	public ConnectorGraphicalRepresentation<?> getGraphicalRepresentation() {
-		return (ConnectorGraphicalRepresentation<?>) super.getGraphicalRepresentation();
+	public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
+		return (ConnectorGraphicalRepresentation) super.getGraphicalRepresentation();
 	}
 
 	@Override

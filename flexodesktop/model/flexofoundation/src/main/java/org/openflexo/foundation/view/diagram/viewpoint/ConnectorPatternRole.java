@@ -16,7 +16,7 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole<DiagramCon
 
 	// We dont want to import graphical engine in foundation
 	// But you can assert graphical representation is a org.openflexo.fge.ConnectorGraphicalRepresentation.
-	private ConnectorGraphicalRepresentation<?> _graphicalRepresentation;
+	private ConnectorGraphicalRepresentation _graphicalRepresentation;
 
 	// We dont want to import graphical engine in foundation
 	// But you can assert graphical representation here are a org.openflexo.fge.ShapeGraphicalRepresentation.
@@ -48,20 +48,20 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole<DiagramCon
 	}
 
 	@Override
-	public ConnectorGraphicalRepresentation<?> getGraphicalRepresentation() {
+	public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
 		return _graphicalRepresentation;
 	}
 
 	@Override
-	public void setGraphicalRepresentation(GraphicalRepresentation<?> graphicalRepresentation) {
-		_graphicalRepresentation = (ConnectorGraphicalRepresentation<?>) graphicalRepresentation;
+	public void setGraphicalRepresentation(GraphicalRepresentation graphicalRepresentation) {
+		_graphicalRepresentation = (ConnectorGraphicalRepresentation) graphicalRepresentation;
 		setChanged();
 		notifyObservers(new GraphicalRepresentationChanged(this, graphicalRepresentation));
 	}
 
-	public void updateGraphicalRepresentation(ConnectorGraphicalRepresentation<?> graphicalRepresentation) {
+	public void updateGraphicalRepresentation(ConnectorGraphicalRepresentation graphicalRepresentation) {
 		if (_graphicalRepresentation != null) {
-			((ConnectorGraphicalRepresentation<?>) _graphicalRepresentation).setsWith(graphicalRepresentation);
+			((ConnectorGraphicalRepresentation) _graphicalRepresentation).setsWith(graphicalRepresentation);
 			setChanged();
 			notifyObservers(new GraphicalRepresentationModified(this, graphicalRepresentation));
 		} else {
@@ -71,8 +71,8 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole<DiagramCon
 
 	// No notification
 	@Override
-	public void _setGraphicalRepresentationNoNotification(GraphicalRepresentation<?> graphicalRepresentation) {
-		_graphicalRepresentation = (ConnectorGraphicalRepresentation<?>) graphicalRepresentation;
+	public void _setGraphicalRepresentationNoNotification(GraphicalRepresentation graphicalRepresentation) {
+		_graphicalRepresentation = (ConnectorGraphicalRepresentation) graphicalRepresentation;
 	}
 
 	public Object getArtifactFromGraphicalRepresentation() {

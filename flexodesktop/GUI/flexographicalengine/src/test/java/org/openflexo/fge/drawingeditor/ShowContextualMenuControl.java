@@ -35,9 +35,9 @@ public class ShowContextualMenuControl extends MouseClickControl {
 	public ShowContextualMenuControl() {
 		super("Show contextual menu", MouseButton.RIGHT, 1, new CustomClickControlAction() {
 			@Override
-			public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+			public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 					java.awt.event.MouseEvent event) {
-				FGEView<?> view = controller.getDrawingView().viewForObject(graphicalRepresentation);
+				FGEView view = controller.getDrawingView().viewForObject(graphicalRepresentation);
 				Point newPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), (Component) view);
 				((MyDrawingController) controller).showContextualMenu(graphicalRepresentation, view, newPoint);
 				return false;

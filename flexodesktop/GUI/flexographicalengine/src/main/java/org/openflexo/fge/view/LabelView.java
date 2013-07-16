@@ -80,7 +80,7 @@ import org.openflexo.fge.view.listener.LabelViewMouseListener;
 import org.openflexo.swing.FlexoSwingUtils;
 import org.openflexo.toolbox.ToolBox;
 
-public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetricsProvider {
+public class LabelView extends JScrollPane implements FGEView, LabelMetricsProvider {
 
 	private boolean mouseInsideLabel = false;
 
@@ -167,17 +167,17 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 
 	private static final Logger logger = Logger.getLogger(LabelView.class.getPackage().getName());
 
-	private GraphicalRepresentation<O> graphicalRepresentation;
+	private GraphicalRepresentation graphicalRepresentation;
 	private LabelViewMouseListener mouseListener;
-	private DrawingController<?> controller;
-	private FGEView<?> delegateView;
+	private DrawingController controller;
+	private FGEView delegateView;
 	private boolean isEditing = false;
 
 	private TextComponent textComponent;
 
 	private boolean initialized = false;
 
-	public LabelView(GraphicalRepresentation<O> graphicalRepresentation, DrawingController<?> controller, FGEView<?> delegateView) {
+	public LabelView(GraphicalRepresentation graphicalRepresentation, DrawingController controller, FGEView delegateView) {
 		setUI(new BasicScrollPaneUI());
 		getViewport().setUI(new BasicViewportUI());
 		this.controller = controller;
@@ -291,7 +291,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 			getController().resetEditedLabel(this);
 		}
 		removeFGEMouseListener();
-		FGELayeredView<?> parentView = getParentView();
+		FGELayeredView parentView = getParentView();
 		if (parentView != null) {
 			// logger.warning("Unexpected not null parent, proceeding anyway");
 			parentView.remove(this);
@@ -303,7 +303,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 		if (getGraphicalRepresentation() != null) {
 			getGraphicalRepresentation().deleteObserver(this);
 			if (graphicalRepresentation instanceof ShapeGraphicalRepresentation) {
-				((ShapeGraphicalRepresentation<O>) graphicalRepresentation).setLabelMetricsProvider(null);
+				((ShapeGraphicalRepresentation) graphicalRepresentation).setLabelMetricsProvider(null);
 			}
 		}
 		isDeleted = true;
@@ -321,16 +321,12 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	}
 
 	@Override
-	public O getModel() {
-		return getDrawable();
-	}
-
-	public O getDrawable() {
-		return getGraphicalRepresentation().getDrawable();
+	public Object getDrawable() {
+		return delegateView.getDrawable();
 	}
 
 	@Override
-	public DrawingView<?> getDrawingView() {
+	public DrawingView getDrawingView() {
 		if (getController() != null) {
 			return getController().getDrawingView();
 		}
@@ -338,25 +334,25 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	}
 
 	@Override
-	public LabelView<O> getLabelView() {
+	public LabelView getLabelView() {
 		return this;
 	}
 
 	@Override
-	public FGELayeredView<?> getParent() {
-		return (FGELayeredView<?>) super.getParent();
+	public FGELayeredView getParent() {
+		return (FGELayeredView) super.getParent();
 	}
 
-	public FGELayeredView<?> getParentView() {
+	public FGELayeredView getParentView() {
 		return getParent();
 	}
 
 	@Override
-	public GraphicalRepresentation<O> getGraphicalRepresentation() {
+	public GraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
-	public DrawingGraphicalRepresentation<?> getDrawingGraphicalRepresentation() {
+	public DrawingGraphicalRepresentation getDrawingGraphicalRepresentation() {
 		return graphicalRepresentation.getDrawingGraphicalRepresentation();
 	}
 
@@ -385,7 +381,7 @@ public class LabelView<O> extends JScrollPane implements FGEView<O>, LabelMetric
 	}
 
 	@Override
-	public DrawingController<?> getController() {
+	public DrawingController getController() {
 		return controller;
 	}
 

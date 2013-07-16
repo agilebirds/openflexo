@@ -144,14 +144,14 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 	}
 
 	/*@Override
-	public ShapeView<Role> makeShapeView(DrawingController<?> controller)
+	public ShapeView<Role> makeShapeView(DrawingController controller)
 	{
 		return new RoleContainerView(this,controller);
 	}
 
 	public class RoleContainerView extends ShapeView<Role>
 	{
-		public RoleContainerView(RoleContainerGR aGraphicalRepresentation,DrawingController<?> controller)
+		public RoleContainerView(RoleContainerGR aGraphicalRepresentation,DrawingController controller)
 		{
 			super(aGraphicalRepresentation,controller);
 			JButton plus = new JButton(IconLibrary.PLUS);
@@ -166,7 +166,7 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 		}
 	}*/
 
-	protected static boolean isInsideRectangle(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+	protected static boolean isInsideRectangle(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 			MouseEvent event, FGERectangle rect) {
 		ShapeView view = (ShapeView) controller.getDrawingView().viewForObject(graphicalRepresentation);
 		Rectangle boxRect = new Rectangle((int) (rect.getX() * controller.getScale()), (int) (rect.getY() * controller.getScale()),
@@ -222,7 +222,7 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 			if (r == getRole()) {
 				return returned;
 			}
-			GraphicalRepresentation<?> gr = getGraphicalRepresentation(r);
+			GraphicalRepresentation gr = getGraphicalRepresentation(r);
 			if (gr instanceof RoleContainerGR) { // What else could it be ???
 				RoleContainerGR roleGR = (RoleContainerGR)gr;
 				returned += roleGR.getHeight()+2*SWIMMING_LANE_BORDER;
@@ -333,9 +333,9 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 		if (objectIsBeeingDragged) {
 			getDrawing().reindexObjectForNewVerticalLocation(getRole(), getY());
 			anchorLocation();
-			for (GraphicalRepresentation<?> gr : getDrawingGraphicalRepresentation().getContainedGraphicalRepresentations()) {
+			for (GraphicalRepresentation gr : getDrawingGraphicalRepresentation().getContainedGraphicalRepresentations()) {
 				if (gr instanceof ShapeGraphicalRepresentation && gr != this) {
-					((ShapeGraphicalRepresentation<?>) gr).notifyObjectHasMoved();
+					((ShapeGraphicalRepresentation) gr).notifyObjectHasMoved();
 				}
 			}
 		}

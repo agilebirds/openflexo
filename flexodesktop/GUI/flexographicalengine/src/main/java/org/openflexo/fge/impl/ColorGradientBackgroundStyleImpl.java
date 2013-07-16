@@ -4,7 +4,7 @@ import java.awt.GradientPaint;
 import java.awt.Paint;
 
 import org.openflexo.fge.ColorGradientBackgroundStyle;
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.notifications.FGENotification;
 
 public class ColorGradientBackgroundStyleImpl extends BackgroundStyleImpl implements ColorGradientBackgroundStyle {
@@ -27,20 +27,20 @@ public class ColorGradientBackgroundStyleImpl extends BackgroundStyleImpl implem
 	}
 
 	@Override
-	public Paint getPaint(GraphicalRepresentation gr, double scale) {
+	public Paint getPaint(DrawingTreeNode<?, ?> dtn, double scale) {
 		switch (direction) {
 		case SOUTH_EAST_NORTH_WEST:
-			return new GradientPaint(0, 0, color1, gr.getViewWidth(scale), gr.getViewHeight(scale), color2);
+			return new GradientPaint(0, 0, color1, dtn.getViewWidth(scale), dtn.getViewHeight(scale), color2);
 		case SOUTH_WEST_NORTH_EAST:
-			return new GradientPaint(0, gr.getViewHeight(scale), color1, gr.getViewWidth(scale), 0, color2);
+			return new GradientPaint(0, dtn.getViewHeight(scale), color1, dtn.getViewWidth(scale), 0, color2);
 		case WEST_EAST:
-			return new GradientPaint(0, 0.5f * gr.getViewHeight(scale), color1, gr.getViewWidth(scale), 0.5f * gr.getViewHeight(scale),
+			return new GradientPaint(0, 0.5f * dtn.getViewHeight(scale), color1, dtn.getViewWidth(scale), 0.5f * dtn.getViewHeight(scale),
 					color2);
 		case NORTH_SOUTH:
-			return new GradientPaint(0.5f * gr.getViewWidth(scale), 0, color1, 0.5f * gr.getViewWidth(scale), gr.getViewHeight(scale),
+			return new GradientPaint(0.5f * dtn.getViewWidth(scale), 0, color1, 0.5f * dtn.getViewWidth(scale), dtn.getViewHeight(scale),
 					color2);
 		default:
-			return new GradientPaint(0, 0, color1, gr.getViewWidth(scale), gr.getViewHeight(scale), color2);
+			return new GradientPaint(0, 0, color1, dtn.getViewWidth(scale), dtn.getViewHeight(scale), color2);
 		}
 	}
 

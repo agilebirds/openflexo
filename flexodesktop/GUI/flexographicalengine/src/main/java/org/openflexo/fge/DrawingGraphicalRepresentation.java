@@ -20,15 +20,10 @@
 package org.openflexo.fge;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.util.Vector;
 
-import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEDimension;
-import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.DrawingDecorationPainter;
-import org.openflexo.fge.graphics.FGEDrawingGraphics;
 import org.openflexo.fge.impl.DrawingGraphicalRepresentationImpl;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -49,7 +44,7 @@ import org.openflexo.model.annotations.XMLElement;
 @ModelEntity
 @ImplementationClass(DrawingGraphicalRepresentationImpl.class)
 @XMLElement(xmlTag = "DrawingGraphicalRepresentation")
-public interface DrawingGraphicalRepresentation<M> extends GraphicalRepresentation<M> {
+public interface DrawingGraphicalRepresentation extends GraphicalRepresentation {
 
 	// Property keys
 
@@ -128,16 +123,16 @@ public interface DrawingGraphicalRepresentation<M> extends GraphicalRepresentati
 
 	public abstract FGERectangle getWorkingArea();
 
-	@Override
-	public abstract void paint(Graphics g, DrawingController controller);
+	// @Override
+	// public abstract void paint(Graphics g, DrawingController<?> controller);
 
 	public abstract DrawingDecorationPainter getDecorationPainter();
 
 	public abstract void setDecorationPainter(DrawingDecorationPainter aPainter);
 
-	public abstract Vector<GraphicalRepresentation> allGraphicalRepresentations();
+	// public abstract Vector<GraphicalRepresentation> allGraphicalRepresentations();
 
-	public abstract void startConnectorObserving();
+	// public abstract void startConnectorObserving();
 
 	public abstract FGEDimension getSize();
 
@@ -159,12 +154,12 @@ public interface DrawingGraphicalRepresentation<M> extends GraphicalRepresentati
 
 	public abstract void notifyDrawingNeedsToBeRedrawn();
 
-	public abstract FGEDrawingGraphics getGraphics();
+	// public abstract FGEDrawingGraphics getGraphics();
 
-	public abstract ShapeGraphicalRepresentation<?> getTopLevelShapeGraphicalRepresentation(FGEPoint p);
+	// public abstract ShapeGraphicalRepresentation getTopLevelShapeGraphicalRepresentation(FGEPoint p);
 
-	public abstract void performRandomLayout();
+	// public abstract void performRandomLayout();
 
-	public abstract void performAutoLayout();
+	// public abstract void performAutoLayout();
 
 }

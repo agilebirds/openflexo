@@ -58,7 +58,7 @@ public class OperatorLOOPGR extends OperatorGR<LOOPOperator> {
 		public LoopedPetriGraphOpener() {
 			super("LoopedPetriGraphOpener", MouseButton.LEFT, 2, new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						java.awt.event.MouseEvent event) {
 					logger.info("Opening Execution petri graph by double-clicking");
 					OpenLoopedPetriGraph.actionType.makeNewAction(getOperatorNode(), null, getDrawing().getEditor()).doAction();

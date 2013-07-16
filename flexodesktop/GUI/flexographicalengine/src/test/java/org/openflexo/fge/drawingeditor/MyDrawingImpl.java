@@ -27,12 +27,13 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import org.jdom2.JDOMException;
+import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.model.exceptions.InvalidDataException;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 
-public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDrawingGraphicalRepresentation> implements MyDrawing {
+public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, DrawingGraphicalRepresentation> implements MyDrawing {
 
 	private static final Logger logger = FlexoLogger.getLogger(MyDrawingImpl.class.getPackage().getName());
 
@@ -40,7 +41,7 @@ public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDr
 
 	private int index;
 	private File file = null;
-	private EditedDrawing editedDrawing = new EditedDrawing(this);
+	private EditedDrawing editedDrawing;
 
 	private DrawingEditorFactory factory;
 
@@ -79,8 +80,9 @@ public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDr
 	@Override
 	public void setFactory(DrawingEditorFactory factory) {
 		this.factory = factory;
+		editedDrawing = new EditedDrawing(this, factory);
 		setGraphicalRepresentation(factory.makeNewDrawingGR(editedDrawing));
-		editedDrawing.init(factory);
+		editedDrawing.init();
 	}
 
 	@Override
@@ -138,14 +140,15 @@ public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDr
 		/*for (MyDrawingElement e : childs) {
 			getDrawing().getEditedDrawing().addDrawable(e, this);
 		}*/
-		_finalizeDeserializationFor(this);
-		_finalizeDeserializationFor2(this);
 
-		editedDrawing.getDrawingGraphicalRepresentation().startConnectorObserving();
+		// _finalizeDeserializationFor(this);
+		// _finalizeDeserializationFor2(this);
+
+		// editedDrawing.getDrawingGraphicalRepresentation().startConnectorObserving();
 
 	}
 
-	private void _finalizeDeserializationFor(MyDrawingElement<?, ?> element) {
+	/*private void _finalizeDeserializationFor(MyDrawingElement<?, ?> element) {
 		// element.getGraphicalRepresentation().resetToDefaultIdentifier();
 
 		element.setDrawing(this);
@@ -154,30 +157,15 @@ public abstract class MyDrawingImpl extends MyDrawingElementImpl<MyDrawing, MyDr
 		for (MyDrawingElement<?, ?> e : element.getChilds()) {
 			_finalizeDeserializationFor(e);
 		}
-	}
+	}*/
 
-	private void _finalizeDeserializationFor2(MyDrawingElement<?, ?> element) {
-
-		/*if (element instanceof MyConnector) {
-			Connector c = ((MyConnector) element).getGraphicalRepresentation().getConnector();
-			if (c instanceof LineConnector) {
-				((LineConnectorImpl) c).updateControlPoints();
-			}
-		}*/
-
-		// element.getGraphicalRepresentation().resetToDefaultIdentifier();
-
-		/*System.out.println(">>>>>>> " + element);
-		System.out.println("Drawing=" + element.getDrawing());
-		System.out.println("GR= " + element.getGraphicalRepresentation());
-		System.out.println("drawable= " + element.getGraphicalRepresentation().getDrawable());
-		System.out.println("gr_drawing=" + element.getGraphicalRepresentation().getDrawing());*/
+	/*private void _finalizeDeserializationFor2(MyDrawingElement<?, ?> element) {
 
 		for (MyDrawingElement<?, ?> e : element.getChilds()) {
 			getDrawing().getEditedDrawing().addDrawable(e, element);
 			_finalizeDeserializationFor2(e);
 		}
-	}
+	}*/
 
 	public static MyDrawing load(File file, DrawingEditorFactory factory) {
 		logger.info("Loading " + file);

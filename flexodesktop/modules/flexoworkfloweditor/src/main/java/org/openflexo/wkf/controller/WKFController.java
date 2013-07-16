@@ -36,9 +36,9 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 import org.openflexo.AdvancedPrefs;
-import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
@@ -456,11 +456,11 @@ public class WKFController extends FlexoController implements PrintManagingContr
 
 	private void updateGraphicalRepresentationWithNewWKFPreferenceSettings() {
 		for (ModuleView<?> moduleView : getViews()) {
-			if (moduleView instanceof DrawingView && ((DrawingView<?>) moduleView).getDrawing() instanceof DefaultDrawing) {
-				DefaultDrawing<?> drawing = (DefaultDrawing<?>) ((DrawingView<?>) moduleView).getDrawing();
-				Enumeration<GraphicalRepresentation<?>> en = drawing.getAllGraphicalRepresentations();
+			if (moduleView instanceof DrawingView && ((DrawingView<?>) moduleView).getDrawing() instanceof DrawingImpl) {
+				DrawingImpl<?> drawing = (DrawingImpl<?>) ((DrawingView<?>) moduleView).getDrawing();
+				Enumeration<GraphicalRepresentation> en = drawing.getAllGraphicalRepresentations();
 				while (en.hasMoreElements()) {
-					GraphicalRepresentation<?> gr = en.nextElement();
+					GraphicalRepresentation gr = en.nextElement();
 					if (gr instanceof WKFObjectGR<?>) {
 						((WKFObjectGR<?>) gr).updatePropertiesFromWKFPreferences();
 					} else if (gr instanceof org.openflexo.wkf.swleditor.gr.WKFObjectGR<?>) {

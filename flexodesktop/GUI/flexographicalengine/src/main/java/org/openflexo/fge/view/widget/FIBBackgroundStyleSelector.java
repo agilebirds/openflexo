@@ -398,7 +398,7 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 	protected class BackgroundStylePreviewPanel extends JPanel {
 		private Drawing drawing;
 		private DrawingGraphicalRepresentation drawingGR;
-		private DrawingController<?> controller;
+		private DrawingController controller;
 		private Object rect;
 		private ShapeGraphicalRepresentation rectGR;
 
@@ -440,7 +440,7 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 				}
 
 				@Override
-				public <O> GraphicalRepresentation<O> getGraphicalRepresentation(O aDrawable) {
+				public <O> GraphicalRepresentation getGraphicalRepresentation(O aDrawable) {
 					if (aDrawable == BackgroundStylePreviewPanel.this) {
 						return drawingGR;
 					} else if (aDrawable == rect) {

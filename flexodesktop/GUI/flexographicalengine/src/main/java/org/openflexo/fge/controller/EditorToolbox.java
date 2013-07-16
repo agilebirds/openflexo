@@ -49,7 +49,7 @@ public class EditorToolbox {
 	private FIBShadowStyleSelector shadowStyleSelector;
 	private FIBShapeSelector shapeSelector;
 
-	DrawingController<?> controller;
+	DrawingController controller;
 
 	public EditorToolbox(DrawingController controller) {
 		super();

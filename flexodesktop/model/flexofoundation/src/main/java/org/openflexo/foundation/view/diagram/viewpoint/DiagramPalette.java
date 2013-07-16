@@ -62,7 +62,7 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 	private DiagramSpecification diagramSpecification;
 	private RelativePathFileConverter relativePathFileConverter;
 	private DiagramPaletteResource resource;
-	private DrawingGraphicalRepresentation<?> graphicalRepresentation;
+	private DrawingGraphicalRepresentation graphicalRepresentation;
 
 	private boolean initialized = false;
 	private StringEncoder encoder;
@@ -81,7 +81,7 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 	}*/
 
 	public static DiagramPalette newDiagramPalette(DiagramSpecification diagramSpecification, String diagramPaletteName,
-			DrawingGraphicalRepresentation<?> graphicalRepresentation, ViewPointLibrary viewPointLibrary) {
+			DrawingGraphicalRepresentation graphicalRepresentation, ViewPointLibrary viewPointLibrary) {
 		DiagramPaletteResource edRes = DiagramPaletteResourceImpl.makeDiagramPaletteResource(diagramSpecification.getResource(),
 				diagramPaletteName, viewPointLibrary);
 		DiagramPalette diagramPalette = new DiagramPalette(null);
@@ -203,11 +203,11 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 		return returned;
 	}
 
-	public DrawingGraphicalRepresentation<?> getGraphicalRepresentation() {
+	public DrawingGraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
-	public void setGraphicalRepresentation(DrawingGraphicalRepresentation<?> graphicalRepresentation) {
+	public void setGraphicalRepresentation(DrawingGraphicalRepresentation graphicalRepresentation) {
 		this.graphicalRepresentation = graphicalRepresentation;
 	}
 
@@ -222,7 +222,7 @@ public class DiagramPalette extends DiagramPaletteObject implements XMLStorageRe
 	public DiagramPaletteElement addPaletteElement(String name, Object graphicalRepresentation) {
 		DiagramPaletteElement newElement = new DiagramPaletteElement(null);
 		newElement.setName(name);
-		newElement.setGraphicalRepresentation((ShapeGraphicalRepresentation<?>) graphicalRepresentation);
+		newElement.setGraphicalRepresentation((ShapeGraphicalRepresentation) graphicalRepresentation);
 		addToElements(newElement);
 		return newElement;
 	}

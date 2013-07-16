@@ -84,7 +84,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 	}
 
 	@Override
-	public void setSelectedObjects(List<? extends GraphicalRepresentation<?>> someSelectedObjects) {
+	public void setSelectedObjects(List<? extends GraphicalRepresentation> someSelectedObjects) {
 		if (_selectionManager != null) {
 			_selectionManager.resetSelection();
 		}
@@ -92,7 +92,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 	}
 
 	@Override
-	public void addToSelectedObjects(GraphicalRepresentation<?> anObject) {
+	public void addToSelectedObjects(GraphicalRepresentation anObject) {
 		// logger.info("_selectionManager="+_selectionManager);
 		// logger.info("anObject.getDrawable()="+anObject.getDrawable());
 		if (_selectionManager != null) {
@@ -112,7 +112,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 	}
 
 	@Override
-	public void removeFromSelectedObjects(GraphicalRepresentation<?> anObject) {
+	public void removeFromSelectedObjects(GraphicalRepresentation anObject) {
 		if (_selectionManager != null) {
 			for (FlexoObject o : new ArrayList<FlexoObject>(_selectionManager.getSelection())) {
 				if (!mayRepresent(o)) {
@@ -151,9 +151,9 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 		public ShowContextualMenuControl(boolean controlDown) {
 			super("Show contextual menu", MouseButton.RIGHT, 1, new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						java.awt.event.MouseEvent event) {
-					FGEView<?> view = controller.getDrawingView().viewForObject(graphicalRepresentation);
+					FGEView view = controller.getDrawingView().viewForObject(graphicalRepresentation);
 					Point newPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), (Component) view);
 					controller.setLastClickedPoint(new FGEPoint(newPoint.x / controller.getScale(), newPoint.y / controller.getScale()));
 					controller.setLastSelectedGR(graphicalRepresentation);
@@ -166,7 +166,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 						return false;
 					}
 					FlexoObject o = (FlexoObject) graphicalRepresentation.getDrawable();
-					SelectionManager selectionManager = ((SelectionManagingDrawingController<?>) controller).getSelectionManager();
+					SelectionManager selectionManager = ((SelectionManagingDrawingController) controller).getSelectionManager();
 					if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 						if (!selectionManager.selectionContains(o)) {
 							if (selectionManager.getSelectionSize() < 2) {
@@ -240,7 +240,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 	}
 
 	@Override
-	public void setLastSelectedGR(GraphicalRepresentation<?> lastSelectedGR) {
+	public void setLastSelectedGR(GraphicalRepresentation lastSelectedGR) {
 		super.setLastSelectedGR(lastSelectedGR);
 		if (_selectionManager instanceof MouseSelectionManager) {
 			if (lastSelectedGR.getDrawable() instanceof FlexoObject) {

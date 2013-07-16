@@ -163,7 +163,7 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 		public PortRegisteryCloser() {
 			super("Closer", MouseButton.LEFT, new CustomDragControlAction() {
 				@Override
-				public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						MouseEvent event) {
 					logger.info("handleMousePressed");
 					if (isInsideClosingBox(graphicalRepresentation, controller, event)) {
@@ -175,14 +175,14 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 				}
 
 				@Override
-				public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						MouseEvent event, boolean isSignificativeDrag) {
 					// TODO Auto-generated method stub
 					return false;
 				}
 
 				@Override
-				public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						MouseEvent event) {
 					// TODO Auto-generated method stub
 					return false;
@@ -191,14 +191,14 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 		}
 
 		@Override
-		public boolean isApplicable(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent e) {
+		public boolean isApplicable(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent e) {
 			// TODO Auto-generated method stub
 			return super.isApplicable(graphicalRepresentation, controller, e) && isInsideClosingBox(graphicalRepresentation, controller, e);
 		}
 
 	}
 
-	protected static boolean isInsideClosingBox(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+	protected static boolean isInsideClosingBox(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 			MouseEvent event) {
 		ShapeView view = (ShapeView) controller.getDrawingView().viewForObject(graphicalRepresentation);
 		Rectangle closingBoxRect = new Rectangle((int) (5 * controller.getScale()), (int) (5 * controller.getScale()),
@@ -303,9 +303,9 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 		if (objectIsBeeingDragged) {
 			getDrawing().reindexObjectForNewVerticalLocation(getPortRegistery(), getY());
 			anchorLocation();
-			for (GraphicalRepresentation<?> gr : getDrawingGraphicalRepresentation().getContainedGraphicalRepresentations()) {
+			for (GraphicalRepresentation gr : getDrawingGraphicalRepresentation().getContainedGraphicalRepresentations()) {
 				if (gr instanceof ShapeGraphicalRepresentation && gr != this) {
-					((ShapeGraphicalRepresentation<?>) gr).notifyObjectHasMoved();
+					((ShapeGraphicalRepresentation) gr).notifyObjectHasMoved();
 				}
 			}
 		}

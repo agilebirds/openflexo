@@ -26,12 +26,12 @@ import java.util.logging.Logger;
 
 import javax.swing.JLayeredPane;
 
-public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<O> {
+public abstract class FGELayeredView extends JLayeredPane implements FGEView {
 
 	private static final Logger logger = Logger.getLogger(FGELayeredView.class.getPackage().getName());
 
 	@Override
-	public abstract DrawingView<?> getDrawingView();
+	public abstract DrawingView getDrawingView();
 
 	/**
 	 * Sets the layer attribute on the specified component, making it the bottommost component in that layer. Should be called before adding
@@ -79,17 +79,17 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 		super.moveToBack((Component) c);
 	}
 
-	public List<FGEView<?>> getViewsInLayer(int layer) {
-		List<FGEView<?>> returned = new ArrayList<FGEView<?>>();
+	public List<FGEView> getViewsInLayer(int layer) {
+		List<FGEView> returned = new ArrayList<FGEView>();
 		for (Component c : super.getComponentsInLayer(layer)) {
 			if (c instanceof FGEView) {
-				returned.add((FGEView<?>) c);
+				returned.add((FGEView) c);
 			}
 		}
 		return returned;
 	}
 
-	public void add(ShapeView<?> view) {
+	public void add(ShapeView view) {
 		// logger.info("add "+view);
 		view.setBackground(getBackground());
 		if (view.getLabelView() != null) {
@@ -101,7 +101,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 		}
 	}
 
-	public void remove(ShapeView<?> view) {
+	public void remove(ShapeView view) {
 		if (view.getLabelView() != null) {
 			remove(view.getLabelView());
 		}
@@ -111,7 +111,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 		}
 	}
 
-	public void add(ConnectorView<?> view) {
+	public void add(ConnectorView view) {
 		view.setBackground(getBackground());
 		if (view.getLabelView() != null) {
 			add(view.getLabelView(), view.getLayer(), -1);
@@ -122,7 +122,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 		}
 	}
 
-	public void remove(ConnectorView<?> view) {
+	public void remove(ConnectorView view) {
 		if (view.getLabelView() != null) {
 			remove(view.getLabelView());
 		}

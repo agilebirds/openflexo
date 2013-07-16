@@ -105,7 +105,7 @@ public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentati
 
 	public void updateAlignOnGridOrGridSize() {
 		updateConstraints();
-		for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation gr : getContainedGraphicalRepresentations()) {
 			if (gr instanceof WKFObjectGR && ((WKFObjectGR<?>) gr).getDimensionConstraints() != DimensionConstraints.CONTAINER) {
 				updateConstraintsForObject((WKFObjectGR<?>) gr);
 			}
@@ -245,7 +245,7 @@ public class ProcessGraphicalRepresentation extends DrawingGraphicalRepresentati
 	}
 
 	public void updateAllEdgeLayers() {
-		for (GraphicalRepresentation<?> processChild : getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation processChild : getContainedGraphicalRepresentations()) {
 			if (processChild instanceof WKFConnectorGR<?>) {
 				((WKFConnectorGR<?>) processChild).updateLayer();
 			}

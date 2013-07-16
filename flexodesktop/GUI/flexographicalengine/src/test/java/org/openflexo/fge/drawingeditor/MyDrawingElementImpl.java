@@ -19,49 +19,78 @@
  */
 package org.openflexo.fge.drawingeditor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
-import java.util.Vector;
 
 import javax.inject.Inject;
 
 import org.openflexo.fge.GraphicalRepresentation;
 
-public abstract class MyDrawingElementImpl<M extends MyDrawingElement<M, G>, G extends GraphicalRepresentation<M>> extends Observable
+public abstract class MyDrawingElementImpl<M extends MyDrawingElement<M, G>, G extends GraphicalRepresentation> extends Observable
 		implements MyDrawingElement<M, G> {
 
 	private MyDrawing _drawing;
-	private Vector<MyDrawingElement/*<?, ?>*/> childs;
+	private List<MyShape> shapes;
+	private List<MyConnector> connectors;
 
 	@Inject
 	private G graphicalRepresentation;
 
 	public MyDrawingElementImpl(MyDrawing drawing) {
-		childs = new Vector<MyDrawingElement/*<?, ?>*/>();
+		shapes = new ArrayList<MyShape>();
+		connectors = new ArrayList<MyConnector>();
 		_drawing = drawing;
 	}
 
 	@Override
-	public Vector<MyDrawingElement/*<?, ?>*/> getChilds() {
-		return childs;
+	public List<MyShape> getShapes() {
+		return shapes;
 	}
 
 	@Override
-	public void setChilds(Vector<MyDrawingElement/*<?, ?>*/> someChilds) {
-		childs.addAll(someChilds);
+	public void setShapes(List<MyShape> someShapes) {
+		shapes.addAll(someShapes);
 	}
 
 	@Override
-	public void addToChilds(MyDrawingElement/*<?, ?>*/aChild) {
-		childs.add(aChild);
-		// System.out.println("Add "+aChild+" isDeserializing="+isDeserializing());
+	public void addToShapes(MyShape aShape) {
+		shapes.add(aShape);
+		// System.out.println("Add "+aShape+" isDeserializing="+isDeserializing());
 		if (!isDeserializing()) {
-			getDrawing().getEditedDrawing().addDrawable(aChild, this);
+			getDrawing().getEditedDrawing().updateGraphicalObjectsHierarchy(this);
+			// getDrawing().getEditedDrawing().addDrawable(aShape, this);
 		}
 	}
 
 	@Override
-	public void removeFromChilds(MyDrawingElement/*<?, ?>*/aChild) {
-		childs.remove(aChild);
+	public void removeFromShapes(MyShape aShape) {
+		shapes.remove(aShape);
+	}
+
+	@Override
+	public List<MyConnector> getConnectors() {
+		return connectors;
+	}
+
+	@Override
+	public void setConnectors(List<MyConnector> someConnectors) {
+		connectors.addAll(someConnectors);
+	}
+
+	@Override
+	public void addToConnectors(MyConnector aConnector) {
+		connectors.add(aConnector);
+		// System.out.println("Add "+aConnector+" isDeserializing="+isDeserializing());
+		if (!isDeserializing()) {
+			getDrawing().getEditedDrawing().updateGraphicalObjectsHierarchy(this);
+			// getDrawing().getEditedDrawing().addDrawable(aConnector, this);
+		}
+	}
+
+	@Override
+	public void removeFromConnectors(MyConnector aConnector) {
+		connectors.remove(aConnector);
 	}
 
 	@Override
@@ -82,7 +111,7 @@ public abstract class MyDrawingElementImpl<M extends MyDrawingElement<M, G>, G e
 	@Override
 	public void setGraphicalRepresentation(G graphicalRepresentation) {
 		this.graphicalRepresentation = graphicalRepresentation;
-		graphicalRepresentation.setDrawable((M) this);
+		// graphicalRepresentation.setDrawable((M) this);
 		graphicalRepresentation.addObserver(this);
 	}
 

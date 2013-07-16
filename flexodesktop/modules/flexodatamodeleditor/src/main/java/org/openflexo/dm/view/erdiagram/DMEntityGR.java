@@ -173,7 +173,7 @@ public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implement
 	{
 		super.setWidthNoNotification(aValue);
 		System.out.println("set width to "+aValue);
-		for (GraphicalRepresentation<?> child : getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation child : getContainedGraphicalRepresentations()) {
 			if (child instanceof DMPropertyGR) {
 				((DMPropertyGR)child).notifyObjectHasResized();
 			}
@@ -259,7 +259,7 @@ public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implement
 		if (observable == getEntity()) {
 			if (dataModification instanceof PropertyRegistered) {
 				getDrawing().updateGraphicalObjectsHierarchy();
-				for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
+				for (GraphicalRepresentation gr : getContainedGraphicalRepresentations()) {
 					if (gr instanceof DMPropertyGR) {
 						((DMPropertyGR) gr).notifyObjectMoved();
 					}
@@ -268,7 +268,7 @@ public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implement
 				notifyShapeNeedsToBeRedrawn();
 			} else if (dataModification instanceof PropertyUnregistered) {
 				getDrawing().updateGraphicalObjectsHierarchy();
-				for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
+				for (GraphicalRepresentation gr : getContainedGraphicalRepresentations()) {
 					if (gr instanceof DMPropertyGR) {
 						((DMPropertyGR) gr).notifyObjectMoved();
 					}
@@ -288,7 +288,7 @@ public class DMEntityGR extends ShapeGraphicalRepresentation<DMEntity> implement
 	@Override
 	public void notifyObjectHasResized() {
 		super.notifyObjectHasResized();
-		for (GraphicalRepresentation<?> gr : getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation gr : getContainedGraphicalRepresentations()) {
 			if (gr instanceof DMPropertyGR) {
 				((DMPropertyGR) gr).notifyObjectResized();
 			}

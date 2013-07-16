@@ -26,11 +26,11 @@ import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.drawingeditor.DrawEdgeControl.DrawEdgeAction;
 import org.openflexo.fge.view.DrawingView;
 
-public class MyDrawingView extends DrawingView<EditedDrawing> {
+public class MyDrawingView extends DrawingView {
 
 	private static final Logger logger = Logger.getLogger(MyDrawingView.class.getPackage().getName());
 
-	public MyDrawingView(EditedDrawing drawing, DrawingController<EditedDrawing> controller) {
+	public MyDrawingView(EditedDrawing drawing, DrawingController controller) {
 		super(drawing, controller);
 	}
 
@@ -54,10 +54,10 @@ public class MyDrawingView extends DrawingView<EditedDrawing> {
 		}
 	}
 
-	@Override
+	/*@Override
 	public MyDrawingController getController() {
 		return (MyDrawingController) super.getController();
-	}
+	}*/
 
 	/*@Override
 	public void repaint() {

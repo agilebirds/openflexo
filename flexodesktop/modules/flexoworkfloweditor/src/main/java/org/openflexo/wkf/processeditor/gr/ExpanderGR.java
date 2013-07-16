@@ -74,8 +74,8 @@ public class ExpanderGR<O extends AbstractNode> extends ConnectorGraphicalRepres
 	protected BackgroundStyle emptyBackground;
 
 	public ExpanderGR(Expander<O> expander, ProcessRepresentation aDrawing) {
-		super(ConnectorType.CUSTOM, (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(expander.getFatherNode()),
-				(ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(expander.getPetriGraph()), expander, aDrawing);
+		super(ConnectorType.CUSTOM, (ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(expander.getFatherNode()),
+				(ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(expander.getPetriGraph()), expander, aDrawing);
 
 		setConnector(new ExpanderConnector());
 

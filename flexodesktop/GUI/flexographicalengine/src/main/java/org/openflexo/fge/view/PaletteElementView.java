@@ -21,7 +21,6 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.DrawingPalette;
-import org.openflexo.fge.controller.DrawingPalette.PaletteDrawing;
 import org.openflexo.fge.controller.PaletteElement;
 import org.openflexo.fge.controller.PaletteElement.PaletteElementGraphicalRepresentation;
 import org.openflexo.fge.controller.PaletteElement.PaletteElementTransferable;
@@ -29,7 +28,7 @@ import org.openflexo.toolbox.ToolBox;
 
 import sun.awt.dnd.SunDragSourceContextPeer;
 
-public class PaletteElementView extends ShapeView<PaletteElement> {
+public class PaletteElementView extends ShapeView {
 
 	private static final Logger logger = Logger.getLogger(PaletteElementView.class.getPackage().getName());
 
@@ -41,10 +40,11 @@ public class PaletteElementView extends ShapeView<PaletteElement> {
 	private DragGestureRecognizer labelDgr;
 
 	/* Local controller ONLY */
-	private DrawingController<PaletteDrawing> paletteController;
+	private DrawingController paletteController;
 
-	public PaletteElementView(PaletteElementGraphicalRepresentation aGraphicalRepresentation, DrawingController<PaletteDrawing> controller) {
-		super(aGraphicalRepresentation, controller);
+	public PaletteElementView(PaletteElement paletteElement, PaletteElementGraphicalRepresentation aGraphicalRepresentation,
+			DrawingController controller) {
+		super(aGraphicalRepresentation, paletteElement, controller);
 		this.dgListener = new DGListener();
 		this.dragSource = DragSource.getDefaultDragSource();
 		this.dsListener = new DSListener();
@@ -74,7 +74,7 @@ public class PaletteElementView extends ShapeView<PaletteElement> {
 	}
 
 	public PaletteElement getPaletteElement() {
-		return getGraphicalRepresentation().getDrawable();
+		return (PaletteElement) getDrawable();
 	}
 
 	public DrawingPalette getPalette() {
@@ -146,7 +146,7 @@ public class PaletteElementView extends ShapeView<PaletteElement> {
 			}
 
 			Point p = SwingUtilities.convertPoint(e.getComponent(), e.getDragOrigin(), PaletteElementView.this);
-			PaletteElementTransferable transferable = new PaletteElementTransferable(getDrawable(), p);
+			PaletteElementTransferable transferable = new PaletteElementTransferable((PaletteElement) getDrawable(), p);
 			if (ToolBox.isMacOS()) {
 				// Need to call this on MacOS.
 				// Scenario to reproduce issue

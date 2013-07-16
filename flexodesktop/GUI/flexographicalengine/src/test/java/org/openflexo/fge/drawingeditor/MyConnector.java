@@ -19,21 +19,31 @@
  */
 package org.openflexo.fge.drawingeditor;
 
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
+import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
 @ImplementationClass(MyConnectorImpl.class)
 @XMLElement(xmlTag = "MyConnector")
-public interface MyConnector extends MyDrawingElement<MyConnector, MyConnectorGraphicalRepresentation> {
+public interface MyConnector extends MyDrawingElement<MyConnector, ConnectorGraphicalRepresentation> {
 
-	public abstract MyShape getStartShape();
+	public static final String START_SHAPE = "startShape";
+	public static final String END_SHAPE = "endShape";
 
-	public abstract MyShape geEndShape();
+	@Getter(START_SHAPE)
+	public MyShape getStartShape();
 
-	public abstract MyShapeGraphicalRepresentation getStartObject();
+	@Setter(START_SHAPE)
+	public void setStartShape(MyShape startShape);
 
-	public abstract MyShapeGraphicalRepresentation getEndObject();
+	@Getter(END_SHAPE)
+	public abstract MyShape getEndShape();
+
+	@Setter(END_SHAPE)
+	public abstract void setEndShape(MyShape endShape);
 
 }

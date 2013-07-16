@@ -172,7 +172,7 @@ public class DropSchemeAction extends DiagramEditionSchemeAction<DropSchemeActio
 			AddShape action = (AddShape) anAction;
 			DiagramShape newShape = (DiagramShape) assignedObject;
 			if (newShape != null) {
-				ShapeGraphicalRepresentation<?> gr = newShape.getGraphicalRepresentation();
+				ShapeGraphicalRepresentation gr = newShape.getGraphicalRepresentation();
 				if (action.getPatternRole().getIsPrimaryRepresentationRole()) {
 					// Declare shape as new shape only if it is the primary representation role of the EP
 
@@ -216,8 +216,8 @@ public class DropSchemeAction extends DiagramEditionSchemeAction<DropSchemeActio
 					}
 				} else if (action.getPatternRole().getParentShapeAsDefinedInAction()) {
 					Object graphicalRepresentation = action.getEditionPattern().getPrimaryRepresentationRole().getGraphicalRepresentation();
-					if (graphicalRepresentation instanceof ShapeGraphicalRepresentation<?>) {
-						ShapeGraphicalRepresentation<?> primaryGR = (ShapeGraphicalRepresentation<?>) graphicalRepresentation;
+					if (graphicalRepresentation instanceof ShapeGraphicalRepresentation) {
+						ShapeGraphicalRepresentation primaryGR = (ShapeGraphicalRepresentation) graphicalRepresentation;
 						gr.setLocation(new FGEPoint(dropLocation.x + gr.getX() - primaryGR.getX(), dropLocation.y + gr.getY()
 								- primaryGR.getY()));
 					}
@@ -228,7 +228,7 @@ public class DropSchemeAction extends DiagramEditionSchemeAction<DropSchemeActio
 			}
 
 			if (action.getExtendParentBoundsToHostThisShape()) {
-				((ShapeGraphicalRepresentation<?>) newShape.getGraphicalRepresentation()).extendParentBoundsToHostThisShape();
+				((ShapeGraphicalRepresentation) newShape.getGraphicalRepresentation()).extendParentBoundsToHostThisShape();
 			}
 
 		}

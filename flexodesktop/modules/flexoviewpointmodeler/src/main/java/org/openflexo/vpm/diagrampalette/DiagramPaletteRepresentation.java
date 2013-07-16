@@ -22,16 +22,16 @@ package org.openflexo.vpm.diagrampalette;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 
-public class DiagramPaletteRepresentation extends DefaultDrawing<DiagramPalette> implements GraphicalFlexoObserver {
+public class DiagramPaletteRepresentation extends DrawingImpl<DiagramPalette> implements GraphicalFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(DiagramPaletteRepresentation.class.getPackage().getName());
 
@@ -116,16 +116,16 @@ public class DiagramPaletteRepresentation extends DefaultDrawing<DiagramPalette>
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable) {
+	public <O> GraphicalRepresentation retrieveGraphicalRepresentation(O aDrawable) {
 		if (aDrawable instanceof DiagramPaletteElement) {
 			DiagramPaletteElement element = (DiagramPaletteElement) aDrawable;
 			DiagramPaletteElementGR returned = paletteElementsGR.get(element);
 			if (returned == null) {
 				returned = buildGraphicalRepresentation(element);
 				paletteElementsGR.put(element, returned);
-				return (GraphicalRepresentation<O>) returned;
+				return (GraphicalRepresentation) returned;
 			}
-			return (GraphicalRepresentation<O>) returned;
+			return (GraphicalRepresentation) returned;
 		}
 		logger.warning("Cannot build GraphicalRepresentation for " + aDrawable);
 		return null;
@@ -134,7 +134,7 @@ public class DiagramPaletteRepresentation extends DefaultDrawing<DiagramPalette>
 	private DiagramPaletteElementGR buildGraphicalRepresentation(DiagramPaletteElement element) {
 		if (element.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 			DiagramPaletteElementGR graphicalRepresentation = new DiagramPaletteElementGR(element, this);
-			graphicalRepresentation.setsWith((GraphicalRepresentation<?>) element.getGraphicalRepresentation(),
+			graphicalRepresentation.setsWith((GraphicalRepresentation) element.getGraphicalRepresentation(),
 					GraphicalRepresentation.Parameters.text);
 			if (!readOnly) {
 				element.setGraphicalRepresentation(graphicalRepresentation);

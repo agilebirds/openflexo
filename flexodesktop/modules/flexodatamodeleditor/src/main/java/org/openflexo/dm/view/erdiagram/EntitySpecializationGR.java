@@ -50,8 +50,8 @@ public class EntitySpecializationGR extends ConnectorGraphicalRepresentation<Ent
 	private ForegroundStyle foreground;
 
 	public EntitySpecializationGR(EntitySpecialization anEntitySpecialization, Drawing<?> aDrawing) {
-		super(ConnectorType.RECT_POLYLIN, (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(anEntitySpecialization
-				.getSpecializedEntity()), (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(anEntitySpecialization
+		super(ConnectorType.RECT_POLYLIN, (ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(anEntitySpecialization
+				.getSpecializedEntity()), (ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(anEntitySpecialization
 				.getParentEntity()), anEntitySpecialization, aDrawing);
 		// setText(getRole().getName());
 
@@ -120,7 +120,7 @@ public class EntitySpecializationGR extends ConnectorGraphicalRepresentation<Ent
 		public ResetLayout() {
 			super("ResetLayout", MouseButton.LEFT, 2, new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						java.awt.event.MouseEvent event) {
 					// logger.info("Reset layout for edge");
 					resetLayout();

@@ -28,7 +28,7 @@ import org.openflexo.fge.geom.FGEPoint;
 
 public class LabelControlPoint extends ControlPoint {
 
-	public LabelControlPoint(GraphicalRepresentation<?> graphicalRepresentation, FGEPoint pt) {
+	public LabelControlPoint(GraphicalRepresentation graphicalRepresentation, FGEPoint pt) {
 		super(graphicalRepresentation, pt);
 	}
 
@@ -43,7 +43,7 @@ public class LabelControlPoint extends ControlPoint {
 	}
 
 	@Override
-	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+	public void startDragging(DrawingController controller, FGEPoint startPoint) {
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class LabelControlPoint extends ControlPoint {
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation<?> focusedGR) {
+	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
 		// TODO Auto-generated method stub
 
 	}

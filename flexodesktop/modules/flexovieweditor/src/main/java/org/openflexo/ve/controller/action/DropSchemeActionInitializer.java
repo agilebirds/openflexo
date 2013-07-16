@@ -68,7 +68,7 @@ public class DropSchemeActionInitializer extends ActionInitializer {
 			@Override
 			public boolean run(EventObject e, DropSchemeAction action) {
 				/*	DiagramShape shape = action.getPrimaryShape();
-					logger.info("border5 = " + ((ShapeGraphicalRepresentation<?>) shape.getGraphicalRepresentation()).getBorder());
+					logger.info("border5 = " + ((ShapeGraphicalRepresentation) shape.getGraphicalRepresentation()).getBorder());
 					if (shape.getParent() != action.getParent()) {
 						DiagramShapeGR parentGR = (DiagramShapeGR) shape.getParent().getGraphicalRepresentation();
 						DiagramShapeGR expectedGR = (DiagramShapeGR) action.getParent().getGraphicalRepresentation();

@@ -19,9 +19,10 @@
  */
 package org.openflexo.fge.drawingeditor;
 
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.drawingeditor.MyDrawing.DrawingBuilder;
 
-public abstract class MyShapeImpl extends MyDrawingElementImpl<MyShape, MyShapeGraphicalRepresentation> implements MyShape {
+public abstract class MyShapeImpl extends MyDrawingElementImpl<MyShape, ShapeGraphicalRepresentation> implements MyShape {
 	public String name;
 
 	// Called for LOAD
@@ -51,7 +52,7 @@ public abstract class MyShapeImpl extends MyDrawingElementImpl<MyShape, MyShapeG
 		setGraphicalRepresentation(gr);
 	}
 
-	public MyShapeImpl(ShapeGraphicalRepresentation<?> aGR, FGEPoint p, EditedDrawing drawing) {
+	public MyShapeImpl(ShapeGraphicalRepresentation aGR, FGEPoint p, EditedDrawing drawing) {
 		super(drawing.getModel());
 		MyShapeGraphicalRepresentation gr = drawing.getModel().getFactory().makeNewShapeGR(aGR, this, drawing);
 		gr.setX(p.x);
@@ -71,13 +72,9 @@ public abstract class MyShapeImpl extends MyDrawingElementImpl<MyShape, MyShapeG
 
 	@Override
 	public String toString() {
-		return "MyShape["
-				+ name
-				+ ":"
-				+ getGraphicalRepresentation().toString()
-				+ "  drawable="
-				+ (getGraphicalRepresentation().getDrawable() != null ? getGraphicalRepresentation().getDrawable().getClass()
-						.getSimpleName() : null) + " drawing=" + getGraphicalRepresentation().getDrawing() + "]";
+		return "MyShape[" + name + ":" + getGraphicalRepresentation().toString() + "  drawable="
+		/*+ (getGraphicalRepresentation().getDrawable() != null ? getGraphicalRepresentation().getDrawable().getClass()
+				.getSimpleName() : null)*/+ " drawing=" + getGraphicalRepresentation().getDrawing() + "]";
 	}
 
 }

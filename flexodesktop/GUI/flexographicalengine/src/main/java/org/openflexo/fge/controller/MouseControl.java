@@ -38,7 +38,7 @@ public abstract class MouseControl extends DefaultInspectableObject {
 
 	private boolean modelEditionAction = true;
 
-	public boolean isApplicable(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent e) {
+	public boolean isApplicable(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent e) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Called isApplicable(MouseEvent) for " + this + " event=" + e);
 		}

@@ -23,9 +23,9 @@ import java.util.Hashtable;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -34,7 +34,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 
-public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionPattern> implements GraphicalFlexoObserver,
+public class EditionPatternPreviewRepresentation extends DrawingImpl<EditionPattern> implements GraphicalFlexoObserver,
 		EditionPatternPreviewConstants {
 
 	private static final Logger logger = Logger.getLogger(EditionPatternPreviewRepresentation.class.getPackage().getName());
@@ -138,7 +138,7 @@ public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionP
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable) {
+	public <O> GraphicalRepresentation retrieveGraphicalRepresentation(O aDrawable) {
 		if (aDrawable instanceof PatternRole) {
 			PatternRole patternRole = (PatternRole) aDrawable;
 			if (patternRole instanceof ShapePatternRole) {
@@ -146,24 +146,24 @@ public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionP
 				if (returned == null || returned.isDeleted()) {
 					returned = buildGraphicalRepresentationForShape((ShapePatternRole) patternRole);
 					shapesGR.put(patternRole, returned);
-					return (GraphicalRepresentation<O>) returned;
+					return (GraphicalRepresentation) returned;
 				}
-				return (GraphicalRepresentation<O>) returned;
+				return (GraphicalRepresentation) returned;
 			} else if (patternRole instanceof ConnectorPatternRole) {
 				EditionPatternPreviewConnectorGR returned = connectorsGR.get(patternRole);
 				if (returned == null || returned.isDeleted()) {
 					returned = buildGraphicalRepresentationForConnector((ConnectorPatternRole) patternRole);
 					connectorsGR.put(patternRole, returned);
-					return (GraphicalRepresentation<O>) returned;
+					return (GraphicalRepresentation) returned;
 				}
-				return (GraphicalRepresentation<O>) returned;
+				return (GraphicalRepresentation) returned;
 			}
 		} else if (aDrawable instanceof ConnectorFromArtifact) {
 			ConnectorFromArtifact connector = (ConnectorFromArtifact) aDrawable;
-			return (GraphicalRepresentation<O>) connector.getGraphicalRepresentation();
+			return (GraphicalRepresentation) connector.getGraphicalRepresentation();
 		} else if (aDrawable instanceof ConnectorToArtifact) {
 			ConnectorToArtifact connector = (ConnectorToArtifact) aDrawable;
-			return (GraphicalRepresentation<O>) connector.getGraphicalRepresentation();
+			return (GraphicalRepresentation) connector.getGraphicalRepresentation();
 		}
 		logger.warning("Cannot build GraphicalRepresentation for " + aDrawable);
 		return null;
@@ -174,8 +174,8 @@ public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionP
 		patternRole.addObserver(this);
 		if (patternRole.getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 			EditionPatternPreviewShapeGR graphicalRepresentation = new EditionPatternPreviewShapeGR(patternRole, this);
-			((ShapeGraphicalRepresentation<?>) patternRole.getGraphicalRepresentation()).setValidated(false);
-			graphicalRepresentation.setsWith((GraphicalRepresentation<?>) patternRole.getGraphicalRepresentation(),
+			((ShapeGraphicalRepresentation) patternRole.getGraphicalRepresentation()).setValidated(false);
+			graphicalRepresentation.setsWith((GraphicalRepresentation) patternRole.getGraphicalRepresentation(),
 					GraphicalRepresentation.Parameters.text);
 			patternRole._setGraphicalRepresentationNoNotification(graphicalRepresentation);
 			return graphicalRepresentation;
@@ -192,8 +192,8 @@ public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionP
 		patternRole.addObserver(this);
 		if (patternRole.getGraphicalRepresentation() instanceof ConnectorGraphicalRepresentation) {
 			EditionPatternPreviewConnectorGR graphicalRepresentation = new EditionPatternPreviewConnectorGR(patternRole, this);
-			((ConnectorGraphicalRepresentation<?>) patternRole.getGraphicalRepresentation()).setValidated(false);
-			graphicalRepresentation.setsWith((ConnectorGraphicalRepresentation<?>) patternRole.getGraphicalRepresentation(),
+			((ConnectorGraphicalRepresentation) patternRole.getGraphicalRepresentation()).setValidated(false);
+			graphicalRepresentation.setsWith((ConnectorGraphicalRepresentation) patternRole.getGraphicalRepresentation(),
 					GraphicalRepresentation.Parameters.text);
 			patternRole._setGraphicalRepresentationNoNotification(graphicalRepresentation);
 			return graphicalRepresentation;
@@ -247,7 +247,7 @@ public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionP
 			if (gr == null || gr.isDeleted()) {
 				gr = new EditionPatternConnectorFromArtefactGR(this, EditionPatternPreviewRepresentation.this);
 				if (connector.getArtifactFromGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-					GraphicalRepresentation<?> storedGR = (GraphicalRepresentation<?>) connector.getArtifactFromGraphicalRepresentation();
+					GraphicalRepresentation storedGR = (GraphicalRepresentation) connector.getArtifactFromGraphicalRepresentation();
 					gr.setsWith(storedGR, GraphicalRepresentation.Parameters.text);
 				}
 				connector.setArtifactFromGraphicalRepresentation(gr);
@@ -270,7 +270,7 @@ public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionP
 			if (gr == null || gr.isDeleted()) {
 				gr = new EditionPatternConnectorToArtefactGR(this, EditionPatternPreviewRepresentation.this);
 				if (connector.getArtifactToGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-					gr.setsWith((GraphicalRepresentation<?>) connector.getArtifactToGraphicalRepresentation(),
+					gr.setsWith((GraphicalRepresentation) connector.getArtifactToGraphicalRepresentation(),
 							GraphicalRepresentation.Parameters.text);
 				}
 				connector.setArtifactToGraphicalRepresentation(gr);
@@ -280,20 +280,20 @@ public class EditionPatternPreviewRepresentation extends DefaultDrawing<EditionP
 
 	}
 
-	protected ShapeGraphicalRepresentation<?> getStartShape(ConnectorPatternRole connector) {
+	protected ShapeGraphicalRepresentation getStartShape(ConnectorPatternRole connector) {
 		Object startShape = connector.getStartShapePatternRole();
 		if (startShape == null) {
 			startShape = getFromArtifact(connector);
 		}
-		return (ShapeGraphicalRepresentation<?>) getGraphicalRepresentation(startShape);
+		return (ShapeGraphicalRepresentation) getGraphicalRepresentation(startShape);
 	}
 
-	protected ShapeGraphicalRepresentation<?> getEndShape(ConnectorPatternRole connector) {
+	protected ShapeGraphicalRepresentation getEndShape(ConnectorPatternRole connector) {
 		Object endShape = connector.getEndShapePatternRole();
 		if (endShape == null) {
 			endShape = getToArtifact(connector);
 		}
-		return (ShapeGraphicalRepresentation<?>) getGraphicalRepresentation(endShape);
+		return (ShapeGraphicalRepresentation) getGraphicalRepresentation(endShape);
 	}
 
 }

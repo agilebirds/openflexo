@@ -101,7 +101,7 @@ public class MouseClickControl extends MouseControl {
 	}
 
 	@Override
-	public boolean isApplicable(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent e) {
+	public boolean isApplicable(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent e) {
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 			if (e.getButton() == MouseEvent.BUTTON1 && e.isControlDown()) {
 				if (logger.isLoggable(Level.FINE)) {
@@ -128,7 +128,7 @@ public class MouseClickControl extends MouseControl {
 	 * @param graphicalRepresentation
 	 * @param controller
 	 */
-	public void handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller, MouseEvent event) {
+	public void handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
 		if (action.handleClick(graphicalRepresentation, controller, event)) {
 			event.consume();
 		}

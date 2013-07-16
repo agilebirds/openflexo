@@ -26,17 +26,17 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.DrawingPalette;
 
-public interface FGEView<O> extends Observer, FGEConstants {
+public interface FGEView extends Observer, FGEConstants {
 
-	public O getModel();
+	public DrawingController getController();
 
-	public DrawingController<?> getController();
+	public GraphicalRepresentation getGraphicalRepresentation();
 
-	public GraphicalRepresentation<O> getGraphicalRepresentation();
+	public DrawingView getDrawingView();
 
-	public DrawingView<?> getDrawingView();
+	public Object getDrawable();
 
-	public LabelView<O> getLabelView();
+	public LabelView getLabelView();
 
 	public double getScale();
 

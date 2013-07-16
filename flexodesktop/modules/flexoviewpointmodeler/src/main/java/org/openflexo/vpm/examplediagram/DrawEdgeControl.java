@@ -63,7 +63,7 @@ public class DrawEdgeControl extends MouseDragControl {
 
 	protected class DrawEdgeAction extends CustomDragControlAction {
 		@Override
-		public boolean handleMousePressed(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+		public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 				MouseEvent event) {
 			if (graphicalRepresentation instanceof ExampleDiagramShapeGR) {
 				drawEdge = true;
@@ -75,7 +75,7 @@ public class DrawEdgeControl extends MouseDragControl {
 		}
 
 		@Override
-		public boolean handleMouseReleased(GraphicalRepresentation<?> graphicalRepresentation, final DrawingController<?> controller,
+		public boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, final DrawingController controller,
 				MouseEvent event, boolean isSignificativeDrag) {
 			if (drawEdge && toShape != null) {
 
@@ -128,12 +128,12 @@ public class DrawEdgeControl extends MouseDragControl {
 			return false;
 		}
 
-		private void performAddDefaultConnector(DrawingController<?> controller) {
+		private void performAddDefaultConnector(DrawingController controller) {
 			AddExampleDiagramConnector action = AddExampleDiagramConnector.actionType.makeNewAction(fromShape.getDrawable(), null,
 					((ExampleDiagramController) controller).getCEDController().getEditor());
 			action.toShape = toShape.getDrawable();
 
-			ConnectorGraphicalRepresentation<?> connectorGR = new ConnectorGraphicalRepresentation<ExampleDiagramConnector>();
+			ConnectorGraphicalRepresentation connectorGR = new ConnectorGraphicalRepresentation<ExampleDiagramConnector>();
 			connectorGR.setConnectorType(ConnectorType.LINE);
 			connectorGR.setIsSelectable(true);
 			connectorGR.setIsFocusable(true);
@@ -152,7 +152,7 @@ public class DrawEdgeControl extends MouseDragControl {
 
 		}
 
-		private void performAddConnector(DrawingController<?> controller, ConnectorGraphicalRepresentation<?> connectorGR, String text) {
+		private void performAddConnector(DrawingController controller, ConnectorGraphicalRepresentation connectorGR, String text) {
 			AddExampleDiagramConnector action = AddExampleDiagramConnector.actionType.makeNewAction(fromShape.getDrawable(), null,
 					((ExampleDiagramController) controller).getCEDController().getEditor());
 			action.toShape = toShape.getDrawable();
@@ -168,10 +168,10 @@ public class DrawEdgeControl extends MouseDragControl {
 		}
 
 		@Override
-		public boolean handleMouseDragged(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+		public boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 				MouseEvent event) {
 			if (drawEdge) {
-				GraphicalRepresentation<?> gr = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
+				GraphicalRepresentation gr = controller.getDrawingView().getFocusRetriever().getFocusedObject(event);
 				if (gr instanceof ExampleDiagramShapeGR && gr != fromShape && !fromShape.getAncestors().contains(gr.getDrawable())) {
 					toShape = (ExampleDiagramShapeGR) gr;
 				} else {
@@ -185,7 +185,7 @@ public class DrawEdgeControl extends MouseDragControl {
 			return false;
 		}
 
-		public void paint(Graphics g, DrawingController<?> controller) {
+		public void paint(Graphics g, DrawingController controller) {
 			if (drawEdge && currentDraggingLocationInDrawingView != null) {
 				Point from = controller.getDrawingGraphicalRepresentation().convertRemoteNormalizedPointToLocalViewCoordinates(
 						fromShape.getShape().getShape().getCenter(), fromShape, controller.getScale());

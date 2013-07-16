@@ -78,7 +78,7 @@ public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation
 	 * @param endObjGR
 	 * @return
 	 */
-	private int computeBestLayer(ShapeGraphicalRepresentation<?> startObjGR, ShapeGraphicalRepresentation<?> endObjGR) {
+	private int computeBestLayer(ShapeGraphicalRepresentation startObjGR, ShapeGraphicalRepresentation endObjGR) {
 		if (isConnectorFullyVisible(startObjGR, endObjGR)) {
 			return Math.max(startObjGR.getLayer(), endObjGR.getLayer()) + 1;
 		} else {
@@ -103,7 +103,7 @@ public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation
 	 * @param endObjGR
 	 * @return
 	 */
-	protected boolean isConnectorFullyVisible(ShapeGraphicalRepresentation<?> startObjGR, ShapeGraphicalRepresentation<?> endObjGR) {
+	protected boolean isConnectorFullyVisible(ShapeGraphicalRepresentation startObjGR, ShapeGraphicalRepresentation endObjGR) {
 		FGEPoint startLocation = getConnector().getStartLocation();
 		FGEPoint endLocation = getConnector().getEndLocation();
 
@@ -122,8 +122,8 @@ public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation
 				logger.info("DEBUG: start location is not visible");
 				logger.info("DEBUG: startLocation="+startLocation);
 				logger.info("DEBUG: shape="+startObjGR.getShape().getShape());
-				DrawingGraphicalRepresentation<?> drawingGR = getDrawingGraphicalRepresentation();
-				ShapeGraphicalRepresentation<?> topLevelShape = drawingGR.getTopLevelShapeGraphicalRepresentation(
+				DrawingGraphicalRepresentation drawingGR = getDrawingGraphicalRepresentation();
+				ShapeGraphicalRepresentation topLevelShape = drawingGR.getTopLevelShapeGraphicalRepresentation(
 						convertNormalizedPoint(startObjGR, startLocation, drawingGR));
 				logger.info("DEBUG: topLevelShape="+topLevelShape);
 				logger.info("DEBUG: layer="+topLevelShape.getLayer());
@@ -135,8 +135,8 @@ public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation
 				logger.info("DEBUG: end location is not visible");
 				logger.info("DEBUG: endLocation="+endLocation);
 				logger.info("DEBUG: shape="+endObjGR.getShape().getShape());
-				DrawingGraphicalRepresentation<?> drawingGR = getDrawingGraphicalRepresentation();
-				ShapeGraphicalRepresentation<?> topLevelShape = drawingGR.getTopLevelShapeGraphicalRepresentation(
+				DrawingGraphicalRepresentation drawingGR = getDrawingGraphicalRepresentation();
+				ShapeGraphicalRepresentation topLevelShape = drawingGR.getTopLevelShapeGraphicalRepresentation(
 						convertNormalizedPoint(endObjGR, endLocation, drawingGR));
 				logger.info("DEBUG: topLevelShape="+topLevelShape);
 				logger.info("DEBUG: layer="+topLevelShape.getLayer());
@@ -156,7 +156,7 @@ public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation
 	 * @param endObjGR
 	 * @return
 	 */
-	protected int minimalLayerHiding(ShapeGraphicalRepresentation<?> startObjGR, ShapeGraphicalRepresentation<?> endObjGR) {
+	protected int minimalLayerHiding(ShapeGraphicalRepresentation startObjGR, ShapeGraphicalRepresentation endObjGR) {
 		FGEPoint startLocation = getConnector().getStartLocation();
 		FGEPoint endLocation = getConnector().getEndLocation();
 
@@ -167,8 +167,8 @@ public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation
 			return -1;
 		}
 
-		ShapeGraphicalRepresentation<?> firstHiddingShape = startObjGR.shapeHiding(startLocation);
-		ShapeGraphicalRepresentation<?> secondHiddingShape = endObjGR.shapeHiding(endLocation);
+		ShapeGraphicalRepresentation firstHiddingShape = startObjGR.shapeHiding(startLocation);
+		ShapeGraphicalRepresentation secondHiddingShape = endObjGR.shapeHiding(endLocation);
 
 		if (firstHiddingShape == null) {
 			if (secondHiddingShape == null) {
@@ -191,7 +191,7 @@ public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation
 	 * @param startObjGR
 	 * @param endObjGR
 	 */
-	private void updateLayer(ShapeGraphicalRepresentation<?> startObjGR, ShapeGraphicalRepresentation<?> endObjGR) {
+	private void updateLayer(ShapeGraphicalRepresentation startObjGR, ShapeGraphicalRepresentation endObjGR) {
 		if (startObjGR != null && endObjGR != null && !switchedToSelectionLayer) {
 			setLayer(computeBestLayer(startObjGR, endObjGR));
 		}

@@ -28,11 +28,11 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.DefaultDrawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -42,7 +42,7 @@ import org.openflexo.foundation.rm.FlexoResourceData;
 import org.openflexo.foundation.rm.ResourceAdded;
 import org.openflexo.foundation.rm.ResourceRemoved;
 
-public class RMViewerRepresentation extends DefaultDrawing<FlexoProject> implements GraphicalFlexoObserver {
+public class RMViewerRepresentation extends DrawingImpl<FlexoProject> implements GraphicalFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(RMViewerRepresentation.class.getPackage().getName());
 
@@ -99,11 +99,11 @@ public class RMViewerRepresentation extends DefaultDrawing<FlexoProject> impleme
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable) {
-		return (GraphicalRepresentation<O>) buildGraphicalRepresentation(aDrawable);
+	public <O> GraphicalRepresentation retrieveGraphicalRepresentation(O aDrawable) {
+		return (GraphicalRepresentation) buildGraphicalRepresentation(aDrawable);
 	}
 
-	private GraphicalRepresentation<?> buildGraphicalRepresentation(Object aDrawable) {
+	private GraphicalRepresentation buildGraphicalRepresentation(Object aDrawable) {
 		if (aDrawable instanceof FlexoResource) {
 			return new ResourceGR((FlexoResource) aDrawable, this);
 		} else if (aDrawable instanceof ResourceDependancy) {

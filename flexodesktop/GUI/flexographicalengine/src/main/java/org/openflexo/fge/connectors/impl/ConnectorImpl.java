@@ -43,7 +43,7 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	// *******************************************************************************
 
 	@Override
-	public ConnectorGraphicalRepresentation<?> getGraphicalRepresentation() {
+	public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
 
@@ -64,7 +64,7 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	}
 
 	@Override
-	public ShapeGraphicalRepresentation<?> getStartObject() {
+	public ShapeGraphicalRepresentation getStartObject() {
 		if (graphicalRepresentation == null) {
 			return null;
 		}
@@ -72,7 +72,7 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	}
 
 	@Override
-	public ShapeGraphicalRepresentation<?> getEndObject() {
+	public ShapeGraphicalRepresentation getEndObject() {
 		if (graphicalRepresentation == null) {
 			return null;
 		}

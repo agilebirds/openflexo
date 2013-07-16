@@ -70,16 +70,16 @@ public class FGEPaintManager {
 		*/
 	}
 
-	private DrawingView<?> _drawingView;
+	private DrawingView _drawingView;
 
 	private BufferedImage _paintBuffer;
-	private HashSet<GraphicalRepresentation<?>> _temporaryObjects;
+	private HashSet<GraphicalRepresentation> _temporaryObjects;
 
-	public FGEPaintManager(DrawingView<?> drawingView) {
+	public FGEPaintManager(DrawingView drawingView) {
 		super();
 		_drawingView = drawingView;
 		_paintBuffer = null;
-		_temporaryObjects = new HashSet<GraphicalRepresentation<?>>();
+		_temporaryObjects = new HashSet<GraphicalRepresentation>();
 		if (ENABLE_CACHE_BY_DEFAULT) {
 			enablePaintingCache();
 		} else {
@@ -87,11 +87,11 @@ public class FGEPaintManager {
 		}
 	}
 
-	public DrawingView<?> getDrawingView() {
+	public DrawingView getDrawingView() {
 		return _drawingView;
 	}
 
-	public DrawingController<?> getDrawingController() {
+	public DrawingController getDrawingController() {
 		return _drawingView.getController();
 	}
 
@@ -113,11 +113,11 @@ public class FGEPaintManager {
 		_paintingCacheEnabled = false;
 	}
 
-	public HashSet<GraphicalRepresentation<?>> getTemporaryObjects() {
+	public HashSet<GraphicalRepresentation> getTemporaryObjects() {
 		return _temporaryObjects;
 	}
 
-	public boolean containsTemporaryObject(GraphicalRepresentation<?> gr) {
+	public boolean containsTemporaryObject(GraphicalRepresentation gr) {
 		if (gr == null) {
 			return false;
 		}
@@ -127,7 +127,7 @@ public class FGEPaintManager {
 		if (gr.getContainedGraphicalRepresentations() == null) {
 			return false;
 		}
-		for (GraphicalRepresentation<?> child : gr.getContainedGraphicalRepresentations()) {
+		for (GraphicalRepresentation child : gr.getContainedGraphicalRepresentations()) {
 			if (containsTemporaryObject(child)) {
 				return true;
 			}
@@ -135,11 +135,11 @@ public class FGEPaintManager {
 		return false;
 	}
 
-	public boolean isTemporaryObject(GraphicalRepresentation<?> gr) {
+	public boolean isTemporaryObject(GraphicalRepresentation gr) {
 		return _temporaryObjects.contains(gr);
 	}
 
-	public boolean isTemporaryObjectOrParentIsTemporaryObject(GraphicalRepresentation<?> gr) {
+	public boolean isTemporaryObjectOrParentIsTemporaryObject(GraphicalRepresentation gr) {
 		if (isTemporaryObject(gr)) {
 			return true;
 		}
@@ -149,7 +149,7 @@ public class FGEPaintManager {
 		return false;
 	}
 
-	public void addToTemporaryObjects(GraphicalRepresentation<?> gr) {
+	public void addToTemporaryObjects(GraphicalRepresentation gr) {
 		if (paintRequestLogger.isLoggable(Level.FINE)) {
 			paintRequestLogger.fine("addToTemporaryObjects() " + gr);
 		}
@@ -158,12 +158,12 @@ public class FGEPaintManager {
 		}
 	}
 
-	public void removeFromTemporaryObjects(GraphicalRepresentation<?> gr) {
+	public void removeFromTemporaryObjects(GraphicalRepresentation gr) {
 		_temporaryObjects.remove(gr);
 	}
 
 	// CPU-expensive because it will ask to recreate the whole buffer
-	public void invalidate(GraphicalRepresentation<?> object) {
+	public void invalidate(GraphicalRepresentation object) {
 		if (paintRequestLogger.isLoggable(Level.FINE)) {
 			paintRequestLogger.fine("CALLED invalidate on FGEPaintManager");
 		}
@@ -179,7 +179,7 @@ public class FGEPaintManager {
 
 	}
 
-	public void repaint(FGEView<?> view, Rectangle bounds) {
+	public void repaint(FGEView view, Rectangle bounds) {
 		if (!_drawingView.contains(view)) {
 			return;
 		}
@@ -223,7 +223,7 @@ public class FGEPaintManager {
 		repaintManager.repaintTemporaryRepaintAreas(_drawingView);
 		((JComponent) view).repaint();
 		if (view.getGraphicalRepresentation().hasFloatingLabel()) {
-			LabelView<?> label = view.getLabelView();
+			LabelView label = view.getLabelView();
 			if (label != null) {
 				label.repaint();
 			}
@@ -239,7 +239,7 @@ public class FGEPaintManager {
 			// Control points displayed focus or selection might changed, and to be refresh correctely
 			// we must assume that a request to an extended area embedding those control points
 			// must be performed (in case of border is not sufficient)
-			ShapeGraphicalRepresentation<?> gr = ((ShapeView<?>) view).getGraphicalRepresentation();
+			ShapeGraphicalRepresentation gr = ((ShapeView) view).getGraphicalRepresentation();
 			int requiredControlPointSpace = FGEConstants.CONTROL_POINT_SIZE;
 			if (gr.getBorder().getTop() * view.getScale() < requiredControlPointSpace) {
 				Rectangle repaintAlsoThis = new Rectangle(-requiredControlPointSpace, -requiredControlPointSpace,
@@ -274,23 +274,23 @@ public class FGEPaintManager {
 		}
 	}
 
-	public void repaint(GraphicalRepresentation<?> gr) {
+	public void repaint(GraphicalRepresentation gr) {
 		if (paintRequestLogger.isLoggable(Level.FINE)) {
 			paintRequestLogger.fine("Called REPAINT for graphical representation " + gr);
 		}
-		FGEView<?> view = _drawingView.viewForObject(gr);
+		FGEView view = _drawingView.viewForObject(gr);
 		if (view != null) {
 			repaint(view);
 		}
 	}
 
-	public BufferedImage getScreenshot(GraphicalRepresentation<?> gr) {
+	public BufferedImage getScreenshot(GraphicalRepresentation gr) {
 		/*Component view = getDrawingView();
 		BufferedImage bufferedImage = new BufferedImage(view.getWidth(), view.getHeight(), DEFAULT_IMAGE_TYPE);
 		Graphics2D g = bufferedImage.createGraphics();
 		view.print(g);
 		return bufferedImage;*/
-		FGEView<?> v = getDrawingView().viewForObject(gr);
+		FGEView v = getDrawingView().viewForObject(gr);
 		Rectangle rect = new Rectangle(((JComponent) v).getX(), ((JComponent) v).getY(), ((JComponent) v).getWidth(),
 				((JComponent) v).getHeight());
 		if (v instanceof ShapeView) {

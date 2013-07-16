@@ -50,8 +50,8 @@ public class DMRelationshipGR extends ConnectorGraphicalRepresentation<Relations
 	private ForegroundStyle foreground;
 
 	public DMRelationshipGR(RelationshipRepresentation aRelationshipRepresentation, Drawing<?> aDrawing) {
-		super(ConnectorType.RECT_POLYLIN, (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(aRelationshipRepresentation
-				.getProperty()), (ShapeGraphicalRepresentation<?>) aDrawing.getGraphicalRepresentation(aRelationshipRepresentation
+		super(ConnectorType.RECT_POLYLIN, (ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(aRelationshipRepresentation
+				.getProperty()), (ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(aRelationshipRepresentation
 				.getInverseProperty() != null ? aRelationshipRepresentation.getInverseProperty() : aRelationshipRepresentation
 				.getDestinationEntity()), aRelationshipRepresentation, aDrawing);
 		// setText(getRole().getName());
@@ -136,7 +136,7 @@ public class DMRelationshipGR extends ConnectorGraphicalRepresentation<Relations
 		public ResetLayout() {
 			super("ResetLayout", MouseButton.LEFT, 2, new CustomClickControlAction() {
 				@Override
-				public boolean handleClick(GraphicalRepresentation<?> graphicalRepresentation, DrawingController<?> controller,
+				public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						java.awt.event.MouseEvent event) {
 					// logger.info("Reset layout for edge");
 					resetLayout();

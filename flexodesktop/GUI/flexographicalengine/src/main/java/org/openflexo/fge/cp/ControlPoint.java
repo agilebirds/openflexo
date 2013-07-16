@@ -33,7 +33,7 @@ public abstract class ControlPoint extends ControlArea<FGEPoint> {
 
 	private static final Logger logger = Logger.getLogger(ControlPoint.class.getPackage().getName());
 
-	public ControlPoint(GraphicalRepresentation<?> aGraphicalRepresentation, FGEPoint pt) {
+	public ControlPoint(GraphicalRepresentation aGraphicalRepresentation, FGEPoint pt) {
 		super(aGraphicalRepresentation, pt);
 	}
 

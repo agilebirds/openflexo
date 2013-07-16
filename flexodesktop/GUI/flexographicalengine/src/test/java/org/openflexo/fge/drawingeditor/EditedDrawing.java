@@ -1,69 +1,76 @@
-/*
- * (c) Copyright 2010-2011 AgileBirds
- *
- * This file is part of OpenFlexo.
- *
- * OpenFlexo is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * OpenFlexo is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
- *
- */
 package org.openflexo.fge.drawingeditor;
 
-import java.util.logging.Logger;
+import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.FGEModelFactory;
+import org.openflexo.fge.GRBinding.ConnectorGRBinding;
+import org.openflexo.fge.GRBinding.DrawingGRBinding;
+import org.openflexo.fge.GRBinding.ShapeGRBinding;
+import org.openflexo.fge.impl.DrawingImpl;
+import org.openflexo.fge.GRProvider;
+import org.openflexo.fge.GRStructureWalker;
+import org.openflexo.model.exceptions.ModelDefinitionException;
 
-import org.openflexo.fge.DefaultDrawing;
-import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.logging.FlexoLogger;
+public class EditedDrawing extends DrawingImpl<MyDrawing> {
 
-public class EditedDrawing extends DefaultDrawing<MyDrawing> {
-	private static final Logger logger = FlexoLogger.getLogger(TestDrawingEditor.class.getPackage().getName());
-
-	private MyDrawingController controller;
-
-	public EditedDrawing(MyDrawing drawing) {
-		super(drawing);
+	public EditedDrawing(MyDrawing model, FGEModelFactory factory) {
+		super(model, factory);
 	}
 
 	@Override
-	public MyDrawingGraphicalRepresentation getDrawingGraphicalRepresentation() {
-		return getModel().getGraphicalRepresentation();
+	public void init() {
+
+		final DrawingGRBinding<MyDrawing> drawingBinding = bindDrawing(MyDrawing.class, "drawing");
+		final ShapeGRBinding<MyShape> shapeBinding = bindShape(MyShape.class, "shape");
+		final ConnectorGRBinding<MyConnector> connectorBinding = bindConnector(MyConnector.class, "connector", shapeBinding, shapeBinding);
+
+		drawingBinding.setGRProvider(new GRProvider<MyDrawing, DrawingGraphicalRepresentation>() {
+			@Override
+			public DrawingGraphicalRepresentation provideGR(MyDrawing drawable, FGEModelFactory factory) {
+				if (drawable.getGraphicalRepresentation() != null) {
+					drawable.getGraphicalRepresentation().setFactory(factory);
+					return drawable.getGraphicalRepresentation();
+				} else {
+					DrawingGraphicalRepresentation returned = factory.makeDrawingGraphicalRepresentation(EditedDrawing.this);
+					drawable.setGraphicalRepresentation(returned);
+					return returned;
+				}
+			}
+		});
+		drawingBinding.addToWalkers(new GRStructureWalker<MyDrawing>() {
+
+			@Override
+			public void walk(MyDrawing myDrawing) {
+				for (MyShape shape : myDrawing.getShapes()) {
+					drawShape(shapeBinding, shape, myDrawing);
+					// drawShape(shape).as(shapeBinding).in(myDrawing);
+				}
+			}
+		});
+
+		drawingBinding.addToWalkers(new GRStructureWalker<MyDrawing>() {
+			@Override
+			public void walk(MyDrawing myDrawing) {
+				for (MyConnector connector : myDrawing.getConnectors()) {
+					drawConnector(connectorBinding, connector, connector.getStartShape(), connector.getEndShape());
+				}
+			}
+		});
+
+		shapeBinding.addToWalkers(new GRStructureWalker<MyShape>() {
+			@Override
+			public void walk(MyShape myShape) {
+				for (MyShape shape : myShape.getShapes()) {
+					drawShape(shapeBinding, shape, shapeBinding, myShape);
+					// drawShape(shape).as(shapeBinding).in(myShape).as(shapeBinding);
+				}
+			}
+		});
+
 	}
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public <O> GraphicalRepresentation<O> retrieveGraphicalRepresentation(O aDrawable) {
-		if (aDrawable == getModel()) {
-			return (GraphicalRepresentation<O>) getDrawingGraphicalRepresentation();
-		}
-		if (aDrawable instanceof MyShape) {
-			return (GraphicalRepresentation<O>) ((MyShape) aDrawable).getGraphicalRepresentation();
-		}
-		if (aDrawable instanceof MyConnector) {
-			return (GraphicalRepresentation<O>) ((MyConnector) aDrawable).getGraphicalRepresentation();
-		}
-		return null;
+	public static void main(String[] args) throws ModelDefinitionException {
+		DrawingEditorFactory factory = new DrawingEditorFactory();
+		MyDrawing myDrawing = factory.makeNewDrawing();
+		new EditedDrawing(myDrawing, factory);
 	}
-
-	public void init(DrawingEditorFactory factory) {
-		controller = new MyDrawingController(this, factory);
-	}
-
-	public MyDrawingController getController() {
-		return controller;
-	}
-
-	@Override
-	protected void buildGraphicalObjectsHierarchy() {
-	}
-
 }

@@ -61,8 +61,8 @@ public class ExampleDiagramShape extends ExampleDiagramObject {
 	}
 
 	@Override
-	public ShapeGraphicalRepresentation<?> getGraphicalRepresentation() {
-		return (ShapeGraphicalRepresentation<?>) super.getGraphicalRepresentation();
+	public ShapeGraphicalRepresentation getGraphicalRepresentation() {
+		return (ShapeGraphicalRepresentation) super.getGraphicalRepresentation();
 	}
 
 	@Override
