@@ -26,8 +26,10 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.logging.Logger;
 
+
 import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
+import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
@@ -168,11 +170,9 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 		return null;
 	}
 
-
 	/*=====================================================================================
 	 * URI Accessors
 	 */
-
 	// TODO Manage the fact that URI May Change
 
 
@@ -199,10 +199,15 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 
 		XSURIProcessor mapParams = uriProcessors.get(XSURIProcessor.retrieveTypeURI(msInstance, objectURI));
 		if (mapParams != null){
-			return mapParams.retrieveObjectWithURI(msInstance, objectURI);
+			try {
+				return mapParams.retrieveObjectWithURI(msInstance, objectURI);
+			} catch (DuplicateURIException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		else 
-			return null;
+		
+		return null;
 	}
 
 	// ==========================================================================
@@ -217,13 +222,22 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 		return uriProcessors;
 	}
 
+	public XSURIProcessor createURIProcessor(){
+		XSURIProcessor xsuriProc = new XSURIProcessor();
+		// TODO remplacer le hash par une liste + table de hash pour cacher les URI....
+		// add
+		return xsuriProc;
+	}
+	
 	public void addToUriProcessors(XSURIProcessor xsuriProc) {
 		xsuriProc.setModelSlot(this);
-		uriProcessors.put(xsuriProc.typeURI.toString(), xsuriProc);
+		// TODO To be optimized => e.g. cach typeURI String?
+		uriProcessors.put(xsuriProc._getTypeURI().toString(), xsuriProc);
 	}
 
 	public void removeFromUriProcessors(XSURIProcessor xsuriProc) {
-		uriProcessors.remove(xsuriProc.typeURI.toString());
+		// TODO To be optimized => e.g. cach typeURI String?
+		uriProcessors.remove(xsuriProc._getTypeURI().toString());
 		xsuriProc.reset();
 	}
 

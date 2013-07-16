@@ -25,17 +25,23 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.validation.Validable;
 import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.foundation.viewpoint.NamedViewPointObject;
+import org.openflexo.foundation.viewpoint.ViewPoint;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
+import org.openflexo.technologyadapter.xml.model.IXMLAttribute;
 import org.openflexo.technologyadapter.xml.model.IXMLIndividual;
 import org.openflexo.technologyadapter.xml.model.XMLIndividual;
 import org.openflexo.technologyadapter.xml.model.XMLModel;
-import org.openflexo.technologyadapter.xml.model.XMLTechnologyContextManager;
 import org.openflexo.technologyadapter.xml.model.XMLType;
 import org.openflexo.technologyadapter.xml.rm.XMLFileResource;
 import org.openflexo.xmlcode.XMLSerializable;
@@ -49,18 +55,24 @@ import org.openflexo.xmlcode.XMLSerializable;
 
 // TODO Manage the fact that URI May Change
 
-public class XSURIProcessor implements XMLSerializable {
+public class XMLURIProcessor extends NamedViewPointObject implements XMLSerializable {
 
-	private static final Logger logger = Logger.getLogger(XSURIProcessor.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(XMLURIProcessor.class.getPackage().getName());
 
 	// mapping styles enumeration
-
-	public static final String ATTRIBUTE_VALUE = "attribute";
+	
+	public enum MappingStyle {
+		ATTRIBUTE_VALUE,
+		SINGLETON;
+	}
 
 	// Properties actually used to calculate URis
 
+	// TODO Change to a common Type for XML & XMLXSD
 	private XMLType mappedClass;
 	private XMLModelSlot modelSlot;
+	private IXMLAttribute baseAttributeForURI;
+	
 	// Cache des URis Pour aller plus vite ??
 	// TODO some optimization required
 	private Map<String, XMLIndividual> uriCache = new HashMap<String, XMLIndividual>();
@@ -72,12 +84,14 @@ public class XSURIProcessor implements XMLSerializable {
 
 	// Serialized properties
 
-	URI typeURI;
-	private String mappingStyle;
-	private String attributeName;
+	protected URI typeURI;
+	protected MappingStyle mappingStyle;
+	protected String attributeName;
 
 	public String _getTypeURI() {
 		if (mappedClass != null) {
+			// FIXME : update _typeURI si on supprime le champs...
+			// Parce que mappedClass doit rester prioritaire partout.
 			return mappedClass.getURI();
 		} else {
 			this.bindtypeURIToMappedClass();
@@ -85,16 +99,17 @@ public class XSURIProcessor implements XMLSerializable {
 		}
 	}
 
+	// TODO WARNING!!! Pb avec les typeURI....
 	public void _setTypeURI(String name) {
 		typeURI = URI.create(name);
 		bindtypeURIToMappedClass();
 	}
 
-	public String _getMappingStyle() {
+	public MappingStyle getMappingStyle() {
 		return mappingStyle;
 	}
 
-	public void _setMappingStyle(String mappingStyle) {
+	public void setMappingStyle(MappingStyle mappingStyle) {
 		this.mappingStyle = mappingStyle;
 	}
 
@@ -117,6 +132,7 @@ public class XSURIProcessor implements XMLSerializable {
 		if (modelSlot != null) {
 			String mmURI = modelSlot.getMetaModelURI();
 			if (mmURI != null) {
+				// FIXME : to be re-factored
 				XMLFileResource  mmResource = (XMLFileResource) modelSlot.getMetaModelResource();
 				if (mmResource != null) {
 					mappedClass = ((XMLModel) mmResource.getModelData()).getTypeFromURI(typeURI.toString());
@@ -130,12 +146,12 @@ public class XSURIProcessor implements XMLSerializable {
 		}
 	}
 
-	public XSURIProcessor() {
-		super();
+	public XMLURIProcessor() {
+		super((VirtualModelBuilder) null);
 	}
 
-	public XSURIProcessor(String typeURI) {
-		super();
+	public XMLURIProcessor(String typeURI) {
+		super((VirtualModelBuilder) null);
 		this.typeURI = URI.create(typeURI);
 	}
 
@@ -154,7 +170,7 @@ public class XSURIProcessor implements XMLSerializable {
 			logger.warning("Cannot process URI as URIProcessor is not initialized for that class: " + typeURI);
 			return null;
 		} else {
-			if (mappingStyle.equals(ATTRIBUTE_VALUE) && attributeName != null) {
+			if (mappingStyle == MappingStyle.ATTRIBUTE_VALUE && attributeName != null) {
 
 				Object value = ((IXMLIndividual) xsO).getAttributeValue(attributeName);
 				try {
@@ -163,7 +179,11 @@ public class XSURIProcessor implements XMLSerializable {
 					logger.warning("Cannot process URI - Unexpected encoding error");
 					e.printStackTrace();
 				}
-			} else{
+			} 
+			else if (mappingStyle == MappingStyle.SINGLETON ){
+				// TODO singleton here
+			}
+			else{
 				logger.warning("Cannot process URI - Unexpected or Unspecified mapping parameters");
 			}
 		}
@@ -179,7 +199,7 @@ public class XSURIProcessor implements XMLSerializable {
 	}
 
 	// get the Object given the URI
-	public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) {
+	public Object retrieveObjectWithURI(ModelSlotInstance msInstance, String objectURI) throws Exception {
 
 		IXMLIndividual o = uriCache.get(objectURI);
 
@@ -198,7 +218,7 @@ public class XSURIProcessor implements XMLSerializable {
 		// retrieve object
 		if (o == null) {
 
-			if (mappingStyle.equals(ATTRIBUTE_VALUE) && attributeName != null) {
+			if (mappingStyle == MappingStyle.ATTRIBUTE_VALUE && attributeName != null) {
 
 				for (IXMLIndividual obj: ((XMLModel) msInstance.getResourceData()).getIndividualsOfType(mappedClass)){
 
@@ -233,6 +253,36 @@ public class XSURIProcessor implements XMLSerializable {
 		typeURIStr.append(fullURI.getScheme()).append("://").append(fullURI.getHost() ).append(fullURI.getPath()).append("#").append(fullURI.getFragment());
 
 		return typeURIStr.toString();
+	}
+
+	// TODO ... To support Notification
+	
+	@Override
+	public BindingModel getBindingModel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection<? extends Validable> getEmbeddedValidableObjects() {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public String getURI() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ViewPoint getViewPoint() {
+		return this.modelSlot.getViewPoint();
+	}
+
+	@Override
+	public String getFMLRepresentation(FMLRepresentationContext context) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
