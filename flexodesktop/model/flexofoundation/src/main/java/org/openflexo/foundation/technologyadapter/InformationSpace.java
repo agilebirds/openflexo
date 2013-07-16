@@ -71,6 +71,21 @@ public class InformationSpace extends FlexoServiceImpl {
 	}
 
 	/**
+	 * Return the list of all non-empty {@link ResourceRepository} discovered in the scope of {@link FlexoServiceManager} which may give
+	 * access to some instance of supplied resource data class, related to technology as supplied by {@link TechnologyAdapter} parameter
+	 * 
+	 * @param technologyAdapter
+	 * @return
+	 */
+	public <RD extends ResourceData<RD>> List<ResourceRepository<? extends FlexoResource<RD>>> getAllRepositories(
+			TechnologyAdapter technologyAdapter, Class<RD> resourceDataClass) {
+		if (getServiceManager() != null) {
+			return getServiceManager().getTechnologyAdapterService().getAllRepositories(technologyAdapter, resourceDataClass);
+		}
+		return null;
+	}
+
+	/**
 	 * Returns the resource identified by the given <code>uri</code>
 	 * 
 	 * @param uri
@@ -143,4 +158,33 @@ public class InformationSpace extends FlexoServiceImpl {
 		}
 		return (FlexoModelResource<?, ?>) technologyAdapter.getTechnologyContextManager().getResourceWithURI(uri);
 	}
+
+	/**
+	 * Return the list of all non-empty {@link ModelRepository} discoverable in the scope of {@link FlexoServiceManager}, related to
+	 * technology as supplied by {@link TechnologyAdapter} parameter
+	 * 
+	 * @param technologyAdapter
+	 * @return
+	 */
+	public List<ModelRepository<?, ?, ?, ?>> getAllModelRepositories(TechnologyAdapter technologyAdapter) {
+		if (getServiceManager() != null) {
+			return getServiceManager().getTechnologyAdapterService().getAllModelRepositories(technologyAdapter);
+		}
+		return null;
+	}
+
+	/**
+	 * Return the list of all non-empty {@link MetaModelRepository} discoverable in the scope of {@link FlexoServiceManager}, related to
+	 * technology as supplied by {@link TechnologyAdapter} parameter
+	 * 
+	 * @param technologyAdapter
+	 * @return
+	 */
+	public List<MetaModelRepository<?, ?, ?, ?>> getAllMetaModelRepositories(TechnologyAdapter technologyAdapter) {
+		if (getServiceManager() != null) {
+			return getServiceManager().getTechnologyAdapterService().getAllMetaModelRepositories(technologyAdapter);
+		}
+		return null;
+	}
+
 }

@@ -30,4 +30,5 @@ public class XSDMetaModelRepository extends MetaModelRepository<XSDMetaModelReso
 	public XSDMetaModelRepository(XSDTechnologyAdapter adapter, FlexoResourceCenter resourceCenter) {
 		super(adapter, resourceCenter);
 	}
+
 }

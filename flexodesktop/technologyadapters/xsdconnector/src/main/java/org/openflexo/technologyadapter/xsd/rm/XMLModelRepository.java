@@ -31,4 +31,5 @@ public class XMLModelRepository extends ModelRepository<XMLXSDFileResource, XMLX
 	public XMLModelRepository(XSDTechnologyAdapter adapter, FlexoResourceCenter resourceCenter) {
 		super(adapter, resourceCenter);
 	}
+
 }

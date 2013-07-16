@@ -220,4 +220,17 @@ public class OWLModelSlot extends TypeAwareModelSlot<OWLOntology, OWLOntology> {
 				(OWLOntologyResource) metaModelResource);
 	}
 
+	/**
+	 * OWL ontologies conformity is not strict (an ontology might import many other ontologies)
+	 */
+	@Override
+	public boolean isStrictMetaModelling() {
+		return false;
+	}
+
+	@Override
+	public String getModelSlotDescription() {
+		return "Ontology importing " + getMetaModelURI();
+	}
+
 }

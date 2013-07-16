@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.openflexo.foundation.FlexoService;
 import org.openflexo.foundation.FlexoServiceManager;
+import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.resource.ResourceData;
 import org.openflexo.foundation.resource.ResourceRepository;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.Getter;
@@ -70,27 +72,22 @@ public interface TechnologyAdapterService extends FlexoService {
 	public TechnologyContextManager getTechnologyContextManager(TechnologyAdapter technologyAdapter);
 
 	/**
-	 * Return the list of all non-empty {@link ModelRepository} discoverable in the scope of {@link FlexoServiceManager}, related to
+	 * Return the list of all non-empty {@link ModelRepository} discovered in the scope of {@link FlexoServiceManager}, related to
 	 * technology as supplied by {@link TechnologyAdapter} parameter
 	 * 
 	 * @param technologyAdapter
 	 * @return
 	 */
-	// public List<ModelRepository<?, ?, ?, ?>> getAllModelRepositories(TechnologyAdapter technologyAdapter);
-
-	/*public <R extends FlexoResource<? extends M>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> List<ModelRepository<R, M, MM, TA>> getAllModelRepositories(
-			TA technologyAdapter);*/
+	public List<ModelRepository<?, ?, ?, ?>> getAllModelRepositories(TechnologyAdapter technologyAdapter);
 
 	/**
-	 * Return the list of all non-empty {@link MetaModelRepository} discoverable in the scope of {@link FlexoServiceManager}, related to
+	 * Return the list of all non-empty {@link MetaModelRepository} discovered in the scope of {@link FlexoServiceManager}, related to
 	 * technology as supplied by {@link TechnologyAdapter} parameter
 	 * 
 	 * @param technologyAdapter
 	 * @return
 	 */
-	// public List<MetaModelRepository<?, ?, ?, ?>> getAllMetaModelRepositories(TechnologyAdapter technologyAdapter);
-	/*public <R extends FlexoResource<? extends MM>, M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>, TA extends TechnologyAdapter<M, MM>> List<MetaModelRepository<R, M, MM, TA>> getAllMetaModelRepositories(
-			TA technologyAdapter);*/
+	public List<MetaModelRepository<?, ?, ?, ?>> getAllMetaModelRepositories(TechnologyAdapter technologyAdapter);
 
 	/**
 	 * Return the list of all non-empty {@link ResourceRepository} discovered in the scope of {@link FlexoServiceManager}, related to
@@ -100,4 +97,14 @@ public interface TechnologyAdapterService extends FlexoService {
 	 * @return
 	 */
 	public List<ResourceRepository<?>> getAllRepositories(TechnologyAdapter technologyAdapter);
+
+	/**
+	 * Return the list of all non-empty {@link ResourceRepository} discovered in the scope of {@link FlexoServiceManager} which may give
+	 * access to some instance of supplied resource data class, related to technology as supplied by {@link TechnologyAdapter} parameter
+	 * 
+	 * @param technologyAdapter
+	 * @return
+	 */
+	public <RD extends ResourceData<RD>> List<ResourceRepository<? extends FlexoResource<RD>>> getAllRepositories(
+			TechnologyAdapter technologyAdapter, Class<RD> resourceDataClass);
 }

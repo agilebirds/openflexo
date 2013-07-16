@@ -242,4 +242,10 @@ public class EMFModelSlot extends TypeAwareModelSlot<EMFModel, EMFMetaModel> {
 		return getTechnologyAdapter().createNewEMFModel((FileSystemBasedResourceCenter) resourceCenter, relativePath, filename, modelUri,
 				(EMFMetaModelResource) metaModelResource);
 	}
+
+	@Override
+	public boolean isStrictMetaModelling() {
+		return true;
+	}
+
 }

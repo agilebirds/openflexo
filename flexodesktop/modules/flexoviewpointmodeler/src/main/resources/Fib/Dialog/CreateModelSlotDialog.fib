@@ -16,15 +16,26 @@
   <DropDown index="4" data="data.modelSlotClass" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="modelSlotTypeDD" format="object.simpleName" localize="true" list="data.technologyAdapter.availableModelSlotTypes" iteratorClassName="java.lang.Class" autoSelectFirstRow="true">
     <Dependancy componentName="TechnologyAdapterDD" />
   </DropDown>
+  <Label label="metamodel" index="4" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.isTypeAwareModelSlot" localize="true">
+    <Dependancy componentName="TechnologyAdapterDD" />
+    <Dependancy componentName="modelSlotTypeDD" />
+  </Label>
+  <Custom componentClassName="org.openflexo.components.widget.FIBResourceSelector" localize="true" manageDynamicModel="true" index="4" data="data.mmRes" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.isTypeAwareModelSlot">
+    <Assignment variable="component.technologyAdapter" value="TechnologyAdapterDD.selected" />
+    <Assignment variable="component.informationSpace" value="data.focusedObject.viewPointLibrary.serviceManager.informationSpace" />
+    <Assignment variable="component.resourceDataClass" value="data.metaModelClass" />
+    <Dependancy componentName="TechnologyAdapterDD" />
+    <Dependancy componentName="modelSlotTypeDD" />
+  </Custom>
   <Label label="virtual_model" index="4" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="(TechnologyAdapterDD.data.class.simpleName = &quot;VirtualModelTechnologyAdapter&quot;)" name="VirtualModelLabel" localize="true" />
   <Custom componentClassName="org.openflexo.components.widget.FIBVirtualModelSelector" localize="true" manageDynamicModel="true" name="VirtualModelSelector" index="4" data="data.vmRes" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" visible="(TechnologyAdapterDD.data.class.simpleName = &quot;VirtualModelTechnologyAdapter&quot;)">
     <Assignment variable="component.viewPoint" value="data.focusedObject.viewPoint.resource" />
   </Custom>
-  <Label label="metamodel" index="5" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.isTypeAwareModelSlot" localize="true">
+  <Label label="metamodel" index="5" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;index=5;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="false" localize="true">
     <Dependancy componentName="modelSlotTypeDD" />
     <Dependancy componentName="TechnologyAdapterDD" />
   </Label>
-  <Custom componentClassName="org.openflexo.components.widget.FIBMetaModelSelector" localize="true" manageDynamicModel="true" name="MetaModelSelector" index="6" data="data.mmRes" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.isTypeAwareModelSlot">
+  <Custom componentClassName="org.openflexo.components.widget.FIBMetaModelSelector" localize="true" manageDynamicModel="true" name="MetaModelSelector" index="6" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=6;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="false">
     <Assignment variable="component.informationSpace" value="data.focusedObject.viewPointLibrary.serviceManager.informationSpace" />
     <Assignment variable="component.technologyAdapter" value="TechnologyAdapterDD.selected" />
     <Dependancy componentName="TechnologyAdapterDD" />

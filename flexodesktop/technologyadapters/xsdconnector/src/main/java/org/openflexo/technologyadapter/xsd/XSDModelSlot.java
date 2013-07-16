@@ -84,14 +84,16 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 
 	public XSDModelSlot(VirtualModel<?> virtualModel, XSDTechnologyAdapter adapter) {
 		super(virtualModel, adapter);
-		if (uriProcessors == null)
+		if (uriProcessors == null) {
 			uriProcessors = new Hashtable<String, XSURIProcessor>();
+		}
 	}
 
 	public XSDModelSlot(VirtualModelBuilder builder) {
 		super(builder);
-		if (uriProcessors == null)
+		if (uriProcessors == null) {
 			uriProcessors = new Hashtable<String, XSURIProcessor>();
+		}
 	}
 
 	/*public XSDModelSlot(ViewPointBuilder builder) {
@@ -190,7 +192,6 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 			return null;
 		}
 
-
 	}
 
 	@Override
@@ -270,6 +271,11 @@ public class XSDModelSlot extends TypeAwareModelSlot<XMLXSDModel, XSDMetaModel> 
 			String modelUri, FlexoMetaModelResource<XMLXSDModel, XSDMetaModel> metaModelResource) {
 		return (XMLXSDFileResource) getTechnologyAdapter().createNewXMLFile((FileSystemBasedResourceCenter) resourceCenter, relativePath, filename, modelUri,
 				(XSDMetaModelResource) metaModelResource);
+	}
+
+	@Override
+	public boolean isStrictMetaModelling() {
+		return true;
 	}
 
 }

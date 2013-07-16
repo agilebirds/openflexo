@@ -30,6 +30,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.openflexo.foundation.DataFlexoObserver;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObject;
@@ -45,7 +46,7 @@ import org.openflexo.toolbox.FileUtils;
  * @param <R>
  * @param <TA>
  */
-public class ResourceRepository<R extends FlexoResource<?>> extends FlexoObject implements DataFlexoObserver {
+public abstract class ResourceRepository<R extends FlexoResource<?>> extends FlexoObject implements DataFlexoObserver {
 
 	private static final Logger logger = Logger.getLogger(ResourceRepository.class.getPackage().getName());
 
@@ -310,6 +311,28 @@ public class ResourceRepository<R extends FlexoResource<?>> extends FlexoObject 
 			return returned;
 		}
 		return null;
+	}
+
+	/**
+	 * Return class of resource this repository contains
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public final Class<R> getResourceClass() {
+		return (Class<R>) TypeUtils.getTypeArguments(getClass(), ResourceRepository.class).get(
+				ResourceRepository.class.getTypeParameters()[0]);
+	}
+
+	/**
+	 * Return class of resource this repository contains
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public final Class<? extends ResourceData<?>> getResourceDataClass() {
+		return (Class<? extends ResourceData<?>>) TypeUtils.getTypeArguments(getResourceClass(), FlexoResource.class).get(
+				FlexoResource.class.getTypeParameters()[0]);
 	}
 
 }
