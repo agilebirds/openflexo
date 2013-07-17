@@ -19,10 +19,11 @@
  */
 package org.openflexo.fge.shapes.impl;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
+import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.shapes.Star;
 
 public class StarImpl extends ShapeImpl implements Star {
@@ -30,8 +31,6 @@ public class StarImpl extends ShapeImpl implements Star {
 	private int npoints = 6;
 	private double ratio = 0.5;
 	private int startAngle = 90;
-
-	private FGEPolygon _polygon;
 
 	// *******************************************************************************
 	// * Constructor *
@@ -44,7 +43,7 @@ public class StarImpl extends ShapeImpl implements Star {
 		super();
 	}
 
-	@Deprecated
+	/*@Deprecated
 	private StarImpl(ShapeGraphicalRepresentation aGraphicalRepresentation) {
 		this(aGraphicalRepresentation, 5);
 	}
@@ -57,7 +56,7 @@ public class StarImpl extends ShapeImpl implements Star {
 			throw new IllegalArgumentException("Cannot build polygon with less then 3 points (" + pointsNb + ")");
 		}
 		updateShape();
-	}
+	}*/
 
 	@Override
 	public ShapeType getShapeType() {
@@ -73,7 +72,7 @@ public class StarImpl extends ShapeImpl implements Star {
 	public void setNPoints(int pointsNb) {
 		if (pointsNb != npoints) {
 			npoints = pointsNb;
-			updateShape();
+			shapeChanged();
 		}
 	}
 
@@ -86,13 +85,8 @@ public class StarImpl extends ShapeImpl implements Star {
 	public void setStartAngle(int anAngle) {
 		if (anAngle != startAngle) {
 			startAngle = anAngle;
-			updateShape();
+			shapeChanged();
 		}
-	}
-
-	@Override
-	public FGEPolygon getShape() {
-		return _polygon;
 	}
 
 	@Override
@@ -104,24 +98,22 @@ public class StarImpl extends ShapeImpl implements Star {
 	public void setRatio(double aRatio) {
 		if (aRatio > 0 && aRatio < 1.0 && ratio != aRatio) {
 			ratio = aRatio;
-			updateShape();
+			shapeChanged();
 		}
 	}
 
 	@Override
-	public void updateShape() {
-		_polygon = new FGEPolygon(Filling.FILLED);
+	protected FGEShape<?> makeShape(ShapeNode<?> node) {
+		FGEPolygon returned = new FGEPolygon(Filling.FILLED);
 		double startA = getStartAngle() * Math.PI / 180;
 		double angleInterval = Math.PI * 2 / npoints;
 		for (int i = 0; i < npoints; i++) {
 			double angle = i * angleInterval + startA;
 			double angle1 = (i - 0.5) * angleInterval + startA;
-			_polygon.addToPoints(new FGEPoint(Math.cos(angle1) * 0.5 * ratio + 0.5, Math.sin(angle1) * 0.5 * ratio + 0.5));
-			_polygon.addToPoints(new FGEPoint(Math.cos(angle) * 0.5 + 0.5, Math.sin(angle) * 0.5 + 0.5));
+			returned.addToPoints(new FGEPoint(Math.cos(angle1) * 0.5 * ratio + 0.5, Math.sin(angle1) * 0.5 * ratio + 0.5));
+			returned.addToPoints(new FGEPoint(Math.cos(angle) * 0.5 + 0.5, Math.sin(angle) * 0.5 + 0.5));
 		}
-		rebuildControlPoints();
-		if (getGraphicalRepresentation() != null) {
-			getGraphicalRepresentation().notifyShapeChanged();
-		}
+		return returned;
 	}
+
 }

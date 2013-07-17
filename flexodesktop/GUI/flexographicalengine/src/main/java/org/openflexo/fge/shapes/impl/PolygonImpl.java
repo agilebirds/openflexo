@@ -22,15 +22,14 @@ package org.openflexo.fge.shapes.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
+import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.shapes.Polygon;
 
 public class PolygonImpl extends ShapeImpl implements Polygon {
-
-	private FGEPolygon _polygon;
 
 	private List<FGEPoint> points;
 
@@ -44,10 +43,23 @@ public class PolygonImpl extends ShapeImpl implements Polygon {
 	public PolygonImpl() {
 		super();
 		this.points = new ArrayList<FGEPoint>();
-		updateShape();
 	}
 
-	@Deprecated
+	public PolygonImpl(List<FGEPoint> points) {
+		this();
+		for (FGEPoint pt : points) {
+			this.points.add(pt);
+		}
+	}
+
+	public PolygonImpl(FGEPolygon polygon) {
+		this();
+		for (FGEPoint pt : polygon.getPoints()) {
+			points.add(pt);
+		}
+	}
+
+	/*@Deprecated
 	private PolygonImpl(ShapeGraphicalRepresentation aGraphicalRepresentation) {
 		this();
 		setGraphicalRepresentation(aGraphicalRepresentation);
@@ -78,7 +90,7 @@ public class PolygonImpl extends ShapeImpl implements Polygon {
 			this.points.add(pt);
 		}
 		updateShape();
-	}
+	}*/
 
 	@Override
 	public List<FGEPoint> getPoints() {
@@ -89,27 +101,22 @@ public class PolygonImpl extends ShapeImpl implements Polygon {
 	public void setPoints(List<FGEPoint> points) {
 		if (points != null) {
 			this.points = new ArrayList<FGEPoint>(points);
-			updateShape();
 		} else {
 			this.points = null;
 		}
+		shapeChanged();
 	}
 
 	@Override
 	public void addToPoints(FGEPoint aPoint) {
 		points.add(aPoint);
-		updateShape();
+		shapeChanged();
 	}
 
 	@Override
 	public void removeFromPoints(FGEPoint aPoint) {
 		points.remove(aPoint);
-		updateShape();
-	}
-
-	@Override
-	public FGEPolygon getShape() {
-		return _polygon;
+		shapeChanged();
 	}
 
 	@Override
@@ -118,8 +125,8 @@ public class PolygonImpl extends ShapeImpl implements Polygon {
 	}
 
 	@Override
-	public void updateShape() {
-		_polygon = new FGEPolygon(Filling.FILLED, points);
+	protected FGEShape<?> makeShape(ShapeNode<?> node) {
+		return new FGEPolygon(Filling.FILLED, points);
 	}
 
 }

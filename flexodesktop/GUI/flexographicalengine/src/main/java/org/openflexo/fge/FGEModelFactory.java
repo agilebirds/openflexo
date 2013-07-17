@@ -786,7 +786,7 @@ public class FGEModelFactory extends ModelFactory {
 	}
 
 	/**
-	 * Make a new Shape from corresponding ShapeType and set with supplied graphical representation
+	 * Make a new Shape from corresponding ShapeType and set supplied graphical representation with it
 	 * 
 	 * @param type
 	 * @param aGraphicalRepresentation
@@ -795,6 +795,7 @@ public class FGEModelFactory extends ModelFactory {
 	public Shape makeShape(ShapeType type, ShapeGraphicalRepresentation aGraphicalRepresentation) {
 
 		Shape returned = makeShape(type);
+		aGraphicalRepresentation.setShape(returned);
 		if (returned != null) {
 			returned.setGraphicalRepresentation(aGraphicalRepresentation);
 		}

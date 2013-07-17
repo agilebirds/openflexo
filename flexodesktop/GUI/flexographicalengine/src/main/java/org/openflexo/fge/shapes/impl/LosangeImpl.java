@@ -19,7 +19,6 @@
  */
 package org.openflexo.fge.shapes.impl;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.shapes.Losange;
 
 public class LosangeImpl extends RegularPolygonImpl implements Losange {
@@ -34,12 +33,6 @@ public class LosangeImpl extends RegularPolygonImpl implements Losange {
 	public LosangeImpl() {
 		super();
 		super.setNPoints(4);
-	}
-
-	@Deprecated
-	private LosangeImpl(ShapeGraphicalRepresentation aGraphicalRepresentation) {
-		this();
-		setGraphicalRepresentation(aGraphicalRepresentation);
 	}
 
 	@Override

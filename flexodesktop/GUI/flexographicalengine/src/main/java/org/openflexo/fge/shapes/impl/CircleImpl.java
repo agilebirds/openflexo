@@ -19,7 +19,6 @@
  */
 package org.openflexo.fge.shapes.impl;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.shapes.Circle;
 
 public class CircleImpl extends OvalImpl implements Circle {
@@ -29,12 +28,6 @@ public class CircleImpl extends OvalImpl implements Circle {
 	 */
 	public CircleImpl() {
 		super();
-	}
-
-	@Deprecated
-	private CircleImpl(ShapeGraphicalRepresentation aGraphicalRepresentation) {
-		this();
-		setGraphicalRepresentation(aGraphicalRepresentation);
 	}
 
 	@Override

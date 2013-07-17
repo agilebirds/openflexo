@@ -19,14 +19,15 @@
  */
 package org.openflexo.fge.shapes.impl;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.geom.FGEArc;
 import org.openflexo.fge.geom.FGEArc.ArcType;
+import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.shapes.Arc;
 
 public class ArcImpl extends ShapeImpl implements Arc {
 
-	private FGEArc arc;
+	// private FGEArc arc;
 
 	private int angleStart = 0;
 	private int angleExtent = 90;
@@ -39,30 +40,14 @@ public class ArcImpl extends ShapeImpl implements Arc {
 		super();
 	}
 
-	@Deprecated
-	private ArcImpl(ShapeGraphicalRepresentation aGraphicalRepresentation) {
-		this();
-		setGraphicalRepresentation(aGraphicalRepresentation);
-		updateShape();
-	}
-
 	@Override
 	public ShapeType getShapeType() {
 		return ShapeType.ARC;
 	}
 
 	@Override
-	public void updateShape() {
-		arc = new FGEArc(0, 0, 1, 1, angleStart, angleExtent, arcType);
-		rebuildControlPoints();
-		if (getGraphicalRepresentation() != null) {
-			getGraphicalRepresentation().notifyShapeChanged();
-		}
-	}
-
-	@Override
-	public FGEArc getShape() {
-		return arc;
+	protected FGEShape<?> makeShape(ShapeNode<?> node) {
+		return new FGEArc(0, 0, 1, 1, angleStart, angleExtent, arcType);
 	}
 
 	@Override
@@ -74,7 +59,7 @@ public class ArcImpl extends ShapeImpl implements Arc {
 	public void setAngleStart(int anAngle) {
 		if (angleStart != anAngle) {
 			angleStart = anAngle;
-			updateShape();
+			shapeChanged();
 		}
 	}
 
@@ -87,7 +72,7 @@ public class ArcImpl extends ShapeImpl implements Arc {
 	public void setAngleExtent(int anAngle) {
 		if (angleExtent != anAngle) {
 			angleExtent = anAngle;
-			updateShape();
+			shapeChanged();
 		}
 	}
 
@@ -100,7 +85,7 @@ public class ArcImpl extends ShapeImpl implements Arc {
 	public void setArcType(ArcType anArcType) {
 		if (arcType != anArcType) {
 			arcType = anArcType;
-			updateShape();
+			shapeChanged();
 		}
 	}
 

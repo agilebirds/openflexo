@@ -2011,16 +2011,21 @@ public class ShapeGraphicalRepresentationImpl extends GraphicalRepresentationImp
 
 	@Override
 	public void setShape(Shape aShape) {
-		aShape.setGraphicalRepresentation(this);
-		FGENotification notification = requireChange(ShapeParameters.shape, aShape);
-		if (notification != null) {
-			ShapeType oldType = aShape != null ? aShape.getShapeType() : null;
-			this.shape = aShape;
-			// shape.rebuildControlPoints();
-			hasChanged(notification);
-			setChanged();
-			notifyObservers(new FGENotification(ShapeParameters.shapeType, oldType, aShape.getShapeType()));
-			// notifyShapeChanged();
+		if (shape != aShape) {
+			if (shape != null) {
+				shape.deleteObserver(this);
+			}
+			aShape.addObserver(this);
+			FGENotification notification = requireChange(ShapeParameters.shape, aShape);
+			if (notification != null) {
+				ShapeType oldType = aShape != null ? aShape.getShapeType() : null;
+				this.shape = aShape;
+				// shape.rebuildControlPoints();
+				hasChanged(notification);
+				setChanged();
+				notifyObservers(new FGENotification(ShapeParameters.shapeType, oldType, aShape.getShapeType()));
+				// notifyShapeChanged();
+			}
 		}
 	}
 

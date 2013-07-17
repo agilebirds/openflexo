@@ -19,14 +19,13 @@
  */
 package org.openflexo.fge.shapes.impl;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.geom.FGEEllips;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
+import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.shapes.Oval;
 
 public class OvalImpl extends ShapeImpl implements Oval {
-
-	private FGEEllips ellips;
 
 	/**
 	 * This constructor should not be used, as it is invoked by PAMELA framework to create objects, as well as during deserialization
@@ -35,20 +34,9 @@ public class OvalImpl extends ShapeImpl implements Oval {
 		super();
 	}
 
-	@Deprecated
-	private OvalImpl(ShapeGraphicalRepresentation aGraphicalRepresentation) {
-		this();
-		setGraphicalRepresentation(aGraphicalRepresentation);
-		updateShape();
-	}
-
 	@Override
-	public void updateShape() {
-		ellips = new FGEEllips(0, 0, 1, 1, Filling.FILLED);
-		rebuildControlPoints();
-		if (getGraphicalRepresentation() != null) {
-			getGraphicalRepresentation().notifyShapeChanged();
-		}
+	protected FGEShape<?> makeShape(ShapeNode<?> node) {
+		return new FGEEllips(0, 0, 1, 1, Filling.FILLED);
 	}
 
 	@Override
@@ -56,8 +44,4 @@ public class OvalImpl extends ShapeImpl implements Oval {
 		return ShapeType.OVAL;
 	}
 
-	@Override
-	public FGEEllips getShape() {
-		return ellips;
-	}
 }

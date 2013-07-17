@@ -21,6 +21,7 @@ package org.openflexo.fge.shapes;
 
 import java.util.List;
 
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEObject;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.cp.ControlPoint;
@@ -65,7 +66,7 @@ public interface Shape extends FGEObject {
 	public static final FGEPoint SOUTH = new FGEPoint(0.5, 1);
 	public static final FGEPoint WEST = new FGEPoint(0, 0.5);
 
-	public void setPaintAttributes(FGEShapeGraphics g);
+	public void setPaintAttributes(ShapeNode<?> node, FGEShapeGraphics g);
 
 	/**
 	 * Must be overriden when shape requires it
@@ -77,26 +78,33 @@ public interface Shape extends FGEObject {
 	public ShapeType getShapeType();
 
 	/**
-	 * Return geometric shape of this shape
+	 * Return geometric shape of this shape, in the context of supplied node
 	 * 
 	 * @return
 	 */
-	public FGEShape<?> getShape();
+	public FGEShape<?> getShape(ShapeNode<?> node);
 
 	/**
-	 * Return outline for geometric shape of this shape (this is the shape itself, but NOT filled)
+	 * Return outline for geometric shape of this shape, in the context of supplied node (this is the shape itself, but NOT filled)
 	 * 
 	 * @return
 	 */
-	public FGEShape getOutline();
+	public FGEShape<?> getOutline(ShapeNode<?> node);
 
-	public ShapeGraphicalRepresentation getGraphicalRepresentation();
+	// public ShapeGraphicalRepresentation getGraphicalRepresentation();
 
-	public void setGraphicalRepresentation(ShapeGraphicalRepresentation aGR);
+	// public void setGraphicalRepresentation(ShapeGraphicalRepresentation aGR);
 
-	public List<ControlPoint> getControlPoints();
+	// public List<ControlPoint> getControlPoints();
 
-	public List<ControlPoint> rebuildControlPoints();
+	/**
+	 * Recompute all control points for supplied shape node<br>
+	 * Return a newly created list of required control points
+	 * 
+	 * @param shapeNode
+	 * @return
+	 */
+	public List<ControlPoint> rebuildControlPoints(ShapeNode<?> shapeNode);
 
 	/**
 	 * Return nearest point located on outline, asserting aPoint is related to shape coordinates, and normalized to shape
@@ -104,7 +112,7 @@ public interface Shape extends FGEObject {
 	 * @param aPoint
 	 * @return
 	 */
-	public FGEPoint nearestOutlinePoint(FGEPoint aPoint);
+	public FGEPoint nearestOutlinePoint(FGEPoint aPoint, ShapeNode<?> shapeNode);
 
 	/**
 	 * Return flag indicating if position represented is located inside shape, asserting aPoint is related to shape coordinates, and
@@ -113,7 +121,7 @@ public interface Shape extends FGEObject {
 	 * @param aPoint
 	 * @return
 	 */
-	public boolean isPointInsideShape(FGEPoint aPoint);
+	public boolean isPointInsideShape(FGEPoint aPoint, ShapeNode<?> shapeNode);
 
 	/**
 	 * Compute point where supplied line intersects with shape outline trying to minimize distance from "from" point
@@ -124,7 +132,7 @@ public interface Shape extends FGEObject {
 	 * @param from
 	 * @return
 	 */
-	public FGEPoint outlineIntersect(FGELine line, FGEPoint from);
+	public FGEPoint outlineIntersect(FGELine line, FGEPoint from, ShapeNode<?> shapeNode);
 
 	/**
 	 * Compute point where a line formed by current shape's center and "from" point intersects with shape outline trying to minimize
@@ -137,11 +145,11 @@ public interface Shape extends FGEObject {
 	 * @param from
 	 * @return
 	 */
-	public FGEPoint outlineIntersect(FGEPoint from);
+	public FGEPoint outlineIntersect(FGEPoint from, ShapeNode<?> shapeNode);
 
 	public FGEArea getAllowedHorizontalConnectorLocationFromEast();
 
-	public FGEArea getAllowedHorizontalConnectorLocationFromWest2();
+	// public FGEArea getAllowedHorizontalConnectorLocationFromWest2();
 
 	public FGEArea getAllowedHorizontalConnectorLocationFromWest();
 
@@ -149,17 +157,15 @@ public interface Shape extends FGEObject {
 
 	public FGEArea getAllowedVerticalConnectorLocationFromSouth();
 
-	public void paintShadow(FGEShapeGraphics g);
+	public void paintShadow(ShapeNode<?> node, FGEShapeGraphics g);
 
 	// @Override
-	public void paintShape(FGEShapeGraphics g);
+	public void paintShape(ShapeNode<?> node, FGEShapeGraphics g);
 
 	// Override when required
 	public void notifyObjectResized();
 
 	public Shape clone();
-
-	public void updateShape();
 
 	@Override
 	public boolean equals(Object object);

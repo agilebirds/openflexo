@@ -19,10 +19,7 @@
  */
 package org.openflexo.fge.shapes.impl;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.shapes.Shape;
 import org.openflexo.fge.shapes.Triangle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
 
 public class TriangleImpl extends RegularPolygonImpl implements Triangle {
 
@@ -38,12 +35,12 @@ public class TriangleImpl extends RegularPolygonImpl implements Triangle {
 		super.setNPoints(3);
 	}
 
-	@Deprecated
+	/*@Deprecated
 	private TriangleImpl(ShapeGraphicalRepresentation aGraphicalRepresentation) {
 		this();
 		setGraphicalRepresentation(aGraphicalRepresentation);
 		updateShape();
-	}
+	}*/
 
 	@Override
 	public ShapeType getShapeType() {

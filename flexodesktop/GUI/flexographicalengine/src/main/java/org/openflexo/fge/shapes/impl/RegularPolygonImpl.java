@@ -22,16 +22,16 @@ package org.openflexo.fge.shapes.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGERegularPolygon;
+import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.shapes.RegularPolygon;
 
 public class RegularPolygonImpl extends PolygonImpl implements RegularPolygon {
-
-	private FGEPolygon _polygon;
 
 	private int npoints = -1;
 	private int startAngle = 90;
@@ -48,7 +48,20 @@ public class RegularPolygonImpl extends PolygonImpl implements RegularPolygon {
 		setNPoints(5);
 	}
 
-	@Deprecated
+	public RegularPolygonImpl(ShapeGraphicalRepresentation aGraphicalRepresentation, List<FGEPoint> points) {
+		this();
+		setPoints(new ArrayList<FGEPoint>(points));
+	}
+
+	public RegularPolygonImpl(ShapeGraphicalRepresentation aGraphicalRepresentation, int pointsNb) {
+		this();
+		if (pointsNb < 3) {
+			throw new IllegalArgumentException("Cannot build polygon with less then 3 points (" + pointsNb + ")");
+		}
+		npoints = pointsNb;
+	}
+
+	/*@Deprecated
 	private RegularPolygonImpl(ShapeGraphicalRepresentation aGraphicalRepresentation) {
 		this();
 		setGraphicalRepresentation(aGraphicalRepresentation);
@@ -70,19 +83,16 @@ public class RegularPolygonImpl extends PolygonImpl implements RegularPolygon {
 		}
 		npoints = pointsNb;
 		updateShape();
-	}
+	}*/
 
 	@Override
-	public void updateShape() {
+	protected FGEShape<?> makeShape(ShapeNode<?> node) {
 		if (getPoints() != null && getPoints().size() > 0) {
-			_polygon = new FGEPolygon(Filling.FILLED, getPoints());
+			return new FGEPolygon(Filling.FILLED, getPoints());
 		} else if (npoints > 2) {
-			_polygon = new FGERegularPolygon(0, 0, 1, 1, Filling.FILLED, npoints, startAngle);
+			return new FGERegularPolygon(0, 0, 1, 1, Filling.FILLED, npoints, startAngle);
 		}
-		rebuildControlPoints();
-		if (getGraphicalRepresentation() != null) {
-			getGraphicalRepresentation().notifyShapeChanged();
-		}
+		return null;
 	}
 
 	@Override
@@ -99,7 +109,7 @@ public class RegularPolygonImpl extends PolygonImpl implements RegularPolygon {
 	public void setNPoints(int pointsNb) {
 		if (pointsNb != npoints) {
 			npoints = pointsNb;
-			updateShape();
+			shapeChanged();
 		}
 	}
 
@@ -112,13 +122,8 @@ public class RegularPolygonImpl extends PolygonImpl implements RegularPolygon {
 	public void setStartAngle(int anAngle) {
 		if (anAngle != startAngle) {
 			startAngle = anAngle;
-			updateShape();
+			shapeChanged();
 		}
-	}
-
-	@Override
-	public FGEPolygon getShape() {
-		return _polygon;
 	}
 
 }

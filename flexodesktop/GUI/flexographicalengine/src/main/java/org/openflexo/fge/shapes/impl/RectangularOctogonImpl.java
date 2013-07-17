@@ -19,7 +19,6 @@
  */
 package org.openflexo.fge.shapes.impl;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.RectangularOctogon;
 
@@ -44,10 +43,10 @@ public class RectangularOctogonImpl extends PolygonImpl implements RectangularOc
 		addToPoints(new FGEPoint(0.1, 0));
 	}
 
-	@Deprecated
+	/*@Deprecated
 	private RectangularOctogonImpl(ShapeGraphicalRepresentation aGraphicalRepresentation) {
 		this();
 		setGraphicalRepresentation(aGraphicalRepresentation);
-	}
+	}*/
 
 }

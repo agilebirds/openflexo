@@ -19,7 +19,6 @@
  */
 package org.openflexo.fge.shapes.impl;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.shapes.Square;
 
 public class SquareImpl extends RectangleImpl implements Square {
@@ -35,11 +34,11 @@ public class SquareImpl extends RectangleImpl implements Square {
 		super();
 	}
 
-	@Deprecated
+	/*@Deprecated
 	private SquareImpl(ShapeGraphicalRepresentation aGraphicalRepresentation) {
 		this();
 		setGraphicalRepresentation(aGraphicalRepresentation);
-	}
+	}*/
 
 	@Override
 	public ShapeType getShapeType() {

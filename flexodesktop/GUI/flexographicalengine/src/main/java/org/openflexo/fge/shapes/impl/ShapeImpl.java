@@ -23,35 +23,42 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
+import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.cp.ShapeResizingControlPoint;
 import org.openflexo.fge.geom.FGELine;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.geom.area.FGEArea;
-import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEHalfBand;
 import org.openflexo.fge.geom.area.FGEHalfLine;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.impl.FGEObjectImpl;
+import org.openflexo.fge.notifications.ShapeChanged;
 import org.openflexo.fge.shapes.Shape;
 
+/**
+ * Default implementation of {@link Shape}
+ * 
+ * @author sylvain
+ * 
+ */
 public abstract class ShapeImpl extends FGEObjectImpl implements Shape {
 
 	private static final Logger logger = Logger.getLogger(ShapeImpl.class.getPackage().getName());
 
-	private transient ShapeGraphicalRepresentation graphicalRepresentation;
+	// private transient ShapeGraphicalRepresentation graphicalRepresentation;
 
-	private transient Vector<ControlPoint> _controlPoints = null;
+	// private transient Vector<ControlPoint> _controlPoints = null;
 
 	private static final FGEModelFactory SHADOW_FACTORY = FGEUtils.TOOLS_FACTORY;
 
@@ -66,54 +73,48 @@ public abstract class ShapeImpl extends FGEObjectImpl implements Shape {
 		super();
 	}
 
-	@Deprecated
-	private ShapeImpl(ShapeGraphicalRepresentation aGraphicalRepresentation) {
-		this();
-		setGraphicalRepresentation(aGraphicalRepresentation);
-	}
-
 	// *******************************************************************************
 	// * Methods *
 	// *******************************************************************************
 
 	@Override
-	public void setPaintAttributes(FGEShapeGraphics g) {
+	public void setPaintAttributes(ShapeNode<?> node, FGEShapeGraphics g) {
 
 		// Background
-		if (getGraphicalRepresentation().getIsSelected()) {
-			if (getGraphicalRepresentation().getHasSelectedBackground()) {
-				g.setDefaultBackground(getGraphicalRepresentation().getSelectedBackground());
-			} else if (getGraphicalRepresentation().getHasFocusedBackground()) {
-				g.setDefaultBackground(getGraphicalRepresentation().getFocusedBackground());
+		if (node.getGraphicalRepresentation().getIsSelected()) {
+			if (node.getGraphicalRepresentation().getHasSelectedBackground()) {
+				g.setDefaultBackground(node.getGraphicalRepresentation().getSelectedBackground());
+			} else if (node.getGraphicalRepresentation().getHasFocusedBackground()) {
+				g.setDefaultBackground(node.getGraphicalRepresentation().getFocusedBackground());
 			} else {
-				g.setDefaultBackground(getGraphicalRepresentation().getBackground());
+				g.setDefaultBackground(node.getGraphicalRepresentation().getBackground());
 			}
-		} else if (getGraphicalRepresentation().getIsFocused() && getGraphicalRepresentation().getHasFocusedBackground()) {
-			g.setDefaultBackground(getGraphicalRepresentation().getFocusedBackground());
+		} else if (node.getGraphicalRepresentation().getIsFocused() && node.getGraphicalRepresentation().getHasFocusedBackground()) {
+			g.setDefaultBackground(node.getGraphicalRepresentation().getFocusedBackground());
 		} else {
-			g.setDefaultBackground(getGraphicalRepresentation().getBackground());
+			g.setDefaultBackground(node.getGraphicalRepresentation().getBackground());
 		}
 
 		// Foreground
-		if (getGraphicalRepresentation().getIsSelected()) {
-			if (getGraphicalRepresentation().getHasSelectedForeground()) {
-				g.setDefaultForeground(getGraphicalRepresentation().getSelectedForeground());
-			} else if (getGraphicalRepresentation().getHasFocusedForeground()) {
-				g.setDefaultForeground(getGraphicalRepresentation().getFocusedForeground());
+		if (node.getGraphicalRepresentation().getIsSelected()) {
+			if (node.getGraphicalRepresentation().getHasSelectedForeground()) {
+				g.setDefaultForeground(node.getGraphicalRepresentation().getSelectedForeground());
+			} else if (node.getGraphicalRepresentation().getHasFocusedForeground()) {
+				g.setDefaultForeground(node.getGraphicalRepresentation().getFocusedForeground());
 			} else {
-				g.setDefaultForeground(getGraphicalRepresentation().getForeground());
+				g.setDefaultForeground(node.getGraphicalRepresentation().getForeground());
 			}
-		} else if (getGraphicalRepresentation().getIsFocused() && getGraphicalRepresentation().getHasFocusedForeground()) {
-			g.setDefaultForeground(getGraphicalRepresentation().getFocusedForeground());
+		} else if (node.getGraphicalRepresentation().getIsFocused() && node.getGraphicalRepresentation().getHasFocusedForeground()) {
+			g.setDefaultForeground(node.getGraphicalRepresentation().getFocusedForeground());
 		} else {
-			if (getGraphicalRepresentation().getForeground() == null) {
-				logger.info("Ca vient de la: " + getGraphicalRepresentation());
+			if (node.getGraphicalRepresentation().getForeground() == null) {
+				logger.info("Ca vient de la: " + node.getGraphicalRepresentation());
 			}
-			g.setDefaultForeground(getGraphicalRepresentation().getForeground());
+			g.setDefaultForeground(node.getGraphicalRepresentation().getForeground());
 		}
 
 		// Text
-		g.setDefaultTextStyle(getGraphicalRepresentation().getTextStyle());
+		g.setDefaultTextStyle(node.getGraphicalRepresentation().getTextStyle());
 	}
 
 	/**
@@ -129,13 +130,35 @@ public abstract class ShapeImpl extends FGEObjectImpl implements Shape {
 	@Override
 	public abstract ShapeType getShapeType();
 
+	private Hashtable<ShapeNode<?>, FGEShape<?>> shapes = new Hashtable<ShapeNode<?>, FGEShape<?>>();
+	private Hashtable<ShapeNode<?>, FGEShape<?>> outlines = new Hashtable<ShapeNode<?>, FGEShape<?>>();
+
 	/**
-	 * Return geometric shape of this shape
+	 * Return geometric shape of this shape, in the context of supplied node
 	 * 
 	 * @return
 	 */
 	@Override
-	public abstract FGEShape<?> getShape();
+	public FGEShape<?> getShape(ShapeNode<?> node) {
+		if (shapes.get(node) != null) {
+			return shapes.get(node);
+		} else {
+			FGEShape<?> returned = makeShape(node);
+			shapes.put(node, returned);
+			rebuildControlPoints(node);
+			node.notifyShapeChanged();
+			return returned;
+		}
+	}
+
+	protected abstract FGEShape<?> makeShape(ShapeNode<?> node);
+
+	protected void shapeChanged() {
+		shapes.clear();
+		outlines.clear();
+		setChanged();
+		notifyObservers(new ShapeChanged());
+	}
 
 	/**
 	 * Return outline for geometric shape of this shape (this is the shape itself, but NOT filled)
@@ -143,13 +166,20 @@ public abstract class ShapeImpl extends FGEObjectImpl implements Shape {
 	 * @return
 	 */
 	@Override
-	public final FGEShape getOutline() {
-		FGEShape<?> outline = (FGEShape<?>) getShape().clone();
-		outline.setIsFilled(false);
-		return outline;
+	public final FGEShape<?> getOutline(ShapeNode<?> node) {
+		if (outlines.get(node) != null) {
+			return outlines.get(node);
+		} else {
+			FGEShape<?> plainShape = getShape(node);
+			FGEShape<?> outline = (FGEShape<?>) plainShape.clone();
+			outline.setIsFilled(false);
+			outlines.put(node, outline);
+			return outline;
+
+		}
 	}
 
-	@Override
+	/*@Override
 	public final ShapeGraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
@@ -161,21 +191,30 @@ public abstract class ShapeImpl extends FGEObjectImpl implements Shape {
 			graphicalRepresentation = aGR;
 			updateShape();
 		}
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public List<ControlPoint> getControlPoints() {
 		if (_controlPoints == null) {
 			rebuildControlPoints();
 		}
 		return _controlPoints;
-	}
+	}*/
 
+	/**
+	 * Recompute all control points for supplied shape node Return a newly created list of required control points
+	 * 
+	 * @param shapeNode
+	 * @return
+	 */
 	@Override
-	public List<ControlPoint> rebuildControlPoints() {
+	public List<ControlPoint> rebuildControlPoints(ShapeNode<?> node) {
+
+		List<ControlPoint> returned = new ArrayList<ControlPoint>();
+
 		// logger.info("For Shape "+this+" rebuildControlPoints()");
 
-		if (_controlPoints != null) {
+		/*if (_controlPoints != null) {
 			_controlPoints.clear();
 		} else {
 			_controlPoints = new Vector<ControlPoint>();
@@ -183,18 +222,14 @@ public abstract class ShapeImpl extends FGEObjectImpl implements Shape {
 
 		if (getGraphicalRepresentation() == null) {
 			return _controlPoints;
-		}
+		}*/
 
-		if (getShape() == null) {
-			updateShape();
-		}
-
-		if (getShape().getControlPoints() != null) {
-			for (FGEPoint pt : getShape().getControlPoints()) {
-				_controlPoints.add(new ShapeResizingControlPoint(getGraphicalRepresentation(), pt, null));
+		if (getShape(node).getControlPoints() != null) {
+			for (FGEPoint pt : getShape(node).getControlPoints()) {
+				returned.add(new ShapeResizingControlPoint(node, pt, null));
 			}
 		}
-		return _controlPoints;
+		return returned;
 	}
 
 	/**
@@ -204,8 +239,8 @@ public abstract class ShapeImpl extends FGEObjectImpl implements Shape {
 	 * @return
 	 */
 	@Override
-	public FGEPoint nearestOutlinePoint(FGEPoint aPoint) {
-		return getShape().nearestOutlinePoint(aPoint);
+	public FGEPoint nearestOutlinePoint(FGEPoint aPoint, ShapeNode<?> node) {
+		return getShape(node).nearestOutlinePoint(aPoint);
 	}
 
 	/**
@@ -216,8 +251,8 @@ public abstract class ShapeImpl extends FGEObjectImpl implements Shape {
 	 * @return
 	 */
 	@Override
-	public boolean isPointInsideShape(FGEPoint aPoint) {
-		return getShape().containsPoint(aPoint);
+	public boolean isPointInsideShape(FGEPoint aPoint, ShapeNode<?> node) {
+		return getShape(node).containsPoint(aPoint);
 	}
 
 	/**
@@ -230,8 +265,8 @@ public abstract class ShapeImpl extends FGEObjectImpl implements Shape {
 	 * @return
 	 */
 	@Override
-	public final FGEPoint outlineIntersect(FGELine line, FGEPoint from) {
-		FGEArea intersection = getShape().intersect(line);
+	public final FGEPoint outlineIntersect(FGELine line, FGEPoint from, ShapeNode<?> node) {
+		FGEArea intersection = getShape(node).intersect(line);
 		return intersection.getNearestPoint(from);
 	}
 
@@ -247,9 +282,9 @@ public abstract class ShapeImpl extends FGEObjectImpl implements Shape {
 	 * @return
 	 */
 	@Override
-	public final FGEPoint outlineIntersect(FGEPoint from) {
+	public final FGEPoint outlineIntersect(FGEPoint from, ShapeNode<?> node) {
 		FGELine line = new FGELine(new FGEPoint(0.5, 0.5), from);
-		return outlineIntersect(line, from);
+		return outlineIntersect(line, from, node);
 	}
 
 	@Override
@@ -259,7 +294,7 @@ public abstract class ShapeImpl extends FGEObjectImpl implements Shape {
 		return new FGEHalfBand(north, south);
 	}
 
-	@Override
+	/*@Override
 	public FGEArea getAllowedHorizontalConnectorLocationFromWest2() {
 		double maxY = Double.NEGATIVE_INFINITY;
 		double minY = Double.POSITIVE_INFINITY;
@@ -280,16 +315,12 @@ public abstract class ShapeImpl extends FGEObjectImpl implements Shape {
 		}
 		FGEHalfLine north = new FGEHalfLine(0, minY, -1, minY);
 		FGEHalfLine south = new FGEHalfLine(0, maxY, -1, maxY);
-		/*
-		 * FGEHalfLine north = new FGEHalfLine(0,0,-1,0); FGEHalfLine south =
-		 * new FGEHalfLine(0,1,-1,1);
-		 */
 		if (north.overlap(south)) {
 			System.out.println("Return a " + north.intersect(south));
 			return north.intersect(south);
 		}
 		return new FGEHalfBand(north, south);
-	}
+	}*/
 
 	@Override
 	public FGEArea getAllowedHorizontalConnectorLocationFromWest() {
@@ -313,21 +344,20 @@ public abstract class ShapeImpl extends FGEObjectImpl implements Shape {
 	}
 
 	@Override
-	public final void paintShadow(FGEShapeGraphics g) {
-		double deep = getGraphicalRepresentation().getShadowStyle().getShadowDepth();
-		int blur = getGraphicalRepresentation().getShadowStyle().getShadowBlur();
-		double viewWidth = getGraphicalRepresentation().getViewWidth(1.0);
-		double viewHeight = getGraphicalRepresentation().getViewHeight(1.0);
+	public final void paintShadow(ShapeNode<?> node, FGEShapeGraphics g) {
+		double deep = node.getGraphicalRepresentation().getShadowStyle().getShadowDepth();
+		int blur = node.getGraphicalRepresentation().getShadowStyle().getShadowBlur();
+		double viewWidth = node.getViewWidth(1.0);
+		double viewHeight = node.getViewHeight(1.0);
 		AffineTransform shadowTranslation = AffineTransform.getTranslateInstance(deep / viewWidth, deep / viewHeight);
 
-		int darkness = getGraphicalRepresentation().getShadowStyle().getShadowDarkness();
+		int darkness = node.getGraphicalRepresentation().getShadowStyle().getShadowDarkness();
 
 		Graphics2D oldGraphics = g.cloneGraphics();
 
-		Area clipArea = new Area(new java.awt.Rectangle(0, 0, getGraphicalRepresentation().getViewWidth(g.getScale()),
-				getGraphicalRepresentation().getViewHeight(g.getScale())));
-		Area a = new Area(getGraphicalRepresentation().getShape().getShape());
-		a.transform(getGraphicalRepresentation().convertNormalizedPointToViewCoordinatesAT(g.getScale()));
+		Area clipArea = new Area(new java.awt.Rectangle(0, 0, node.getViewWidth(g.getScale()), node.getViewHeight(g.getScale())));
+		Area a = new Area(node.getGraphicalRepresentation().getShape().getShape(node));
+		a.transform(node.convertNormalizedPointToViewCoordinatesAT(g.getScale()));
 		clipArea.subtract(a);
 		g.getGraphics().clip(clipArea);
 
@@ -347,7 +377,7 @@ public abstract class ShapeImpl extends FGEObjectImpl implements Shape {
 			background.setTransparencyLevel(transparency);
 			AffineTransform at = AffineTransform.getScaleInstance((i + 1 + viewWidth) / viewWidth, (i + 1 + viewHeight) / viewHeight);
 			at.concatenate(shadowTranslation);
-			getShape().transform(at).paint(g);
+			getShape(node).transform(at).paint(g);
 		}
 
 		g.releaseClonedGraphics(oldGraphics);
@@ -355,9 +385,9 @@ public abstract class ShapeImpl extends FGEObjectImpl implements Shape {
 
 	// @Override
 	@Override
-	public final void paintShape(FGEShapeGraphics g) {
-		setPaintAttributes(g);
-		getShape().paint(g);
+	public final void paintShape(ShapeNode<?> node, FGEShapeGraphics g) {
+		setPaintAttributes(node, g);
+		getShape(node).paint(g);
 		// drawLabel(g);
 	}
 
@@ -370,10 +400,10 @@ public abstract class ShapeImpl extends FGEObjectImpl implements Shape {
 	public ShapeImpl clone() {
 		try {
 			ShapeImpl returned = (ShapeImpl) super.clone();
-			returned._controlPoints = null;
-			returned.graphicalRepresentation = null;
-			returned.updateShape();
-			returned.rebuildControlPoints();
+			// returned._controlPoints = null;
+			// returned.graphicalRepresentation = null;
+			// returned.updateShape();
+			// returned.rebuildControlPoints();
 			return returned;
 		} catch (CloneNotSupportedException e) {
 			// cannot happen since we are clonable
@@ -383,22 +413,21 @@ public abstract class ShapeImpl extends FGEObjectImpl implements Shape {
 	}
 
 	@Override
-	public abstract void updateShape();
-
-	@Override
 	public boolean equals(Object object) {
-		if (object instanceof ShapeImpl && getShape() != null) {
+		// TODO
+		/*if (object instanceof ShapeImpl && getShape() != null) {
 			return getShape().equals(((ShapeImpl) object).getShape())
 					&& areDimensionConstrained() == ((ShapeImpl) object).areDimensionConstrained();
-		}
+		}*/
 		return super.equals(object);
 	}
 
 	@Override
 	public int hashCode() {
-		if (getShape() != null) {
+		// TODO
+		/*if (getShape() != null) {
 			return getShape().toString().hashCode();
-		}
+		}*/
 		return super.hashCode();
 	}
 }
