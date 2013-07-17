@@ -589,9 +589,9 @@ public interface ShapeGraphicalRepresentation extends GraphicalRepresentation {
 
 	public boolean isResizing();
 
-	public double getUnscaledViewWidth();
+	// public double getUnscaledViewWidth();
 
-	public double getUnscaledViewHeight();
+	// public double getUnscaledViewHeight();
 
 	/**
 	 * Return bounds (including border) relative to parent container

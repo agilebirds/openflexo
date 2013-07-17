@@ -5,17 +5,22 @@ import java.awt.geom.AffineTransform;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.GRBinding;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.graphics.FGEGraphics;
+import org.openflexo.fge.graphics.FGEShapeGraphics;
 
 public class ShapeNodeImpl<O> extends DrawingTreeNodeImpl<O, ShapeGraphicalRepresentation> implements ShapeNode<O> {
+
+	private FGEShapeGraphics graphics;
 
 	public ShapeNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, ShapeGraphicalRepresentation> grBinding,
 			DrawingTreeNodeImpl<?, ?> parentNode) {
 		super(drawingImpl, drawable, grBinding, parentNode);
+		graphics = new FGEShapeGraphics(this);
 	}
 
 	@Override
 	public ShapeGraphicalRepresentation getGraphicalRepresentation() {
-		return (ShapeGraphicalRepresentation) super.getGraphicalRepresentation();
+		return super.getGraphicalRepresentation();
 	}
 
 	@Override
@@ -77,4 +82,42 @@ public class ShapeNodeImpl<O> extends DrawingTreeNodeImpl<O, ShapeGraphicalRepre
 		return new FGEPoint(x2,y2);*/
 	}
 
+	@Override
+	public int getViewX(double scale) {
+		return (int) (getGraphicalRepresentation().getX() * scale/*-(border!=null?border.left:0)*/);
+	}
+
+	@Override
+	public int getViewY(double scale) {
+		return (int) (getGraphicalRepresentation().getY() * scale/*-(border!=null?border.top:0)*/);
+	}
+
+	@Override
+	public int getViewWidth(double scale) {
+		return (int) (getUnscaledViewWidth() * scale) + 1;
+	}
+
+	@Override
+	public int getViewHeight(double scale) {
+		return (int) (getUnscaledViewHeight() * scale) + 1;
+	}
+
+	@Override
+	public double getUnscaledViewWidth() {
+		return getGraphicalRepresentation().getWidth()
+				+ (getGraphicalRepresentation().getBorder() != null ? getGraphicalRepresentation().getBorder().getLeft()
+						+ getGraphicalRepresentation().getBorder().getRight() : 0);
+	}
+
+	@Override
+	public double getUnscaledViewHeight() {
+		return getGraphicalRepresentation().getHeight()
+				+ (getGraphicalRepresentation().getBorder() != null ? getGraphicalRepresentation().getBorder().getTop()
+						+ getGraphicalRepresentation().getBorder().getBottom() : 0);
+	}
+
+	@Override
+	public FGEGraphics getGraphics() {
+		return graphics;
+	}
 }

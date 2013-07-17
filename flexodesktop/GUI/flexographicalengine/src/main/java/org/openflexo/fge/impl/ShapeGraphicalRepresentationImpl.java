@@ -124,7 +124,7 @@ public class ShapeGraphicalRepresentationImpl extends GraphicalRepresentationImp
 	private boolean isResizing = false;
 	private boolean isMoving = false;
 
-	private FGEShapeGraphics graphics;
+	// private FGEShapeGraphics graphics;
 	private FGEShapeDecorationGraphics decorationGraphics;
 	private DecorationPainter decorationPainter;
 	private ShapePainter shapePainter;
@@ -138,18 +138,18 @@ public class ShapeGraphicalRepresentationImpl extends GraphicalRepresentationImp
 	 */
 	public ShapeGraphicalRepresentationImpl() {
 		super();
-		graphics = new FGEShapeGraphics(this);
+		// graphics = new FGEShapeGraphics(this);
 	}
 
 	@Deprecated
-	private ShapeGraphicalRepresentationImpl(O aDrawable, Drawing<?> aDrawing) {
+	private ShapeGraphicalRepresentationImpl(Object aDrawable, Drawing<?> aDrawing) {
 		this();
-		setDrawable(aDrawable);
+		// setDrawable(aDrawable);
 		setDrawing(aDrawing);
 	}
 
 	@Deprecated
-	public ShapeGraphicalRepresentationImpl(ShapeType shapeType, O aDrawable, Drawing<?> aDrawing) {
+	public ShapeGraphicalRepresentationImpl(ShapeType shapeType, Object aDrawable, Drawing<?> aDrawing) {
 		this(aDrawable, aDrawing);
 		setShapeType(shapeType);
 		layer = FGEConstants.DEFAULT_SHAPE_LAYER;
@@ -163,13 +163,13 @@ public class ShapeGraphicalRepresentationImpl extends GraphicalRepresentationImp
 		// background.setGraphicalRepresentation(this);
 		shadowStyle.addObserver(this);
 
-		graphics = new FGEShapeGraphics(this);
+		// graphics = new FGEShapeGraphics(this);
 
 		init();
 	}
 
 	@Deprecated
-	private ShapeGraphicalRepresentationImpl(ShapeGraphicalRepresentation aGR, O aDrawable, Drawing<?> aDrawing) {
+	private ShapeGraphicalRepresentationImpl(ShapeGraphicalRepresentation aGR, Object aDrawable, Drawing<?> aDrawing) {
 		this(aDrawable, aDrawing);
 
 		setsWith(aGR);
@@ -179,7 +179,7 @@ public class ShapeGraphicalRepresentationImpl extends GraphicalRepresentationImp
 	@Deprecated
 	private void init() {
 
-		graphics = new FGEShapeGraphics(this);
+		// graphics = new FGEShapeGraphics(this);
 
 		addToMouseClickControls(MouseClickControl.makeMouseClickControl("Selection", MouseButton.LEFT, 1,
 				MouseClickControlActionType.SELECTION));
@@ -198,10 +198,10 @@ public class ShapeGraphicalRepresentationImpl extends GraphicalRepresentationImp
 	}
 
 	@Override
-	public ShapeGraphicalRepresentationImpl<O> clone() {
+	public ShapeGraphicalRepresentationImpl clone() {
 		// logger.info("La GR "+this+" se fait cloner la");
 		try {
-			return (ShapeGraphicalRepresentationImpl<O>) super.clone();
+			return (ShapeGraphicalRepresentationImpl) super.clone();
 		} catch (CloneNotSupportedException e) {
 			// cannot happen since we are clonable
 			e.printStackTrace();
@@ -301,7 +301,7 @@ public class ShapeGraphicalRepresentationImpl extends GraphicalRepresentationImp
 
 		super.update(observable, notification);
 
-		if (observeParentGRBecauseMyLocationReferToIt && observable == getContainerGraphicalRepresentation()) {
+		if (observeParentGRBecauseMyLocationReferToIt /*&& observable == getContainerGraphicalRepresentation()*/) {
 			if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize
 					|| notification instanceof ObjectHasMoved || notification instanceof ObjectHasResized
 					|| notification instanceof ObjectMove || notification instanceof ObjectResized || notification instanceof ShapeChanged) {
@@ -2278,14 +2278,14 @@ public class ShapeGraphicalRepresentationImpl extends GraphicalRepresentationImp
 	// * Methods *
 	// *******************************************************************************
 
-	@Override
+	/*@Override
 	public int getViewX(double scale) {
-		return (int) (getX() * scale/*-(border!=null?border.left:0)*/);
+		return (int) (getX() * scale);
 	}
 
 	@Override
 	public int getViewY(double scale) {
-		return (int) (getY() * scale/*-(border!=null?border.top:0)*/);
+		return (int) (getY() * scale);
 	}
 
 	@Override
@@ -2294,19 +2294,19 @@ public class ShapeGraphicalRepresentationImpl extends GraphicalRepresentationImp
 	}
 
 	@Override
-	public double getUnscaledViewWidth() {
-		return getWidth() + (getBorder() != null ? getBorder().getLeft() + getBorder().getRight() : 0);
-	}
-
-	@Override
 	public int getViewHeight(double scale) {
 		return (int) (getUnscaledViewHeight() * scale) + 1;
 	}
 
 	@Override
+	public double getUnscaledViewWidth() {
+		return getWidth() + (getBorder() != null ? getBorder().getLeft() + getBorder().getRight() : 0);
+	}
+
+	@Override
 	public double getUnscaledViewHeight() {
 		return getHeight() + (getBorder() != null ? getBorder().getTop() + getBorder().getBottom() : 0);
-	}
+	}*/
 
 	/**
 	 * Return bounds (including border) relative to parent container

@@ -94,7 +94,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 	private RootNodeImpl<M> buildRoot() {
 		if (drawingBinding != null) {
 			RootNodeImpl<M> _root = new RootNodeImpl<M>(this, model, drawingBinding, null);
-			Hashtable<Object, DrawingTreeNode<?>> hash = retrieveHash(drawingBinding);
+			Hashtable<Object, DrawingTreeNode<?, ?>> hash = retrieveHash(drawingBinding);
 			hash.put(model, _root);
 			return _root;
 		} else {
@@ -111,8 +111,8 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		return hash;
 	}
 
-	private DrawingTreeNode<?> retrieveDrawingTreeNode(GRBinding<?, ?> grBinding, Object drawable) {
-		Hashtable<Object, DrawingTreeNode<?>> hash = retrieveHash(grBinding);
+	private DrawingTreeNode<?, ?> retrieveDrawingTreeNode(GRBinding<?, ?> grBinding, Object drawable) {
+		Hashtable<Object, DrawingTreeNode<?, ?>> hash = retrieveHash(grBinding);
 		return hash.get(drawable);
 	}
 
@@ -141,15 +141,15 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		return null;
 	}
 
-	protected <O> DrawingTreeNode<O> getDrawingTreeNode(O representable) {
+	protected <O> DrawingTreeNode<O, ?> getDrawingTreeNode(O representable) {
 		return null;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <O> DrawingTreeNode<O> getDrawingTreeNode(O drawable, GRBinding<O, ?> grBinding) {
-		Hashtable<Object, DrawingTreeNode<?>> hash = retrieveHash(grBinding);
-		return (DrawingTreeNode<O>) hash.get(drawable);
+	public <O, GR extends GraphicalRepresentation> DrawingTreeNode<O, GR> getDrawingTreeNode(O drawable, GRBinding<O, GR> grBinding) {
+		Hashtable<Object, DrawingTreeNode<?, ?>> hash = retrieveHash(grBinding);
+		return (DrawingTreeNode<O, GR>) hash.get(drawable);
 	}
 
 	/*public Enumeration<GraphicalRepresentation> getAllGraphicalRepresentations() {
@@ -289,7 +289,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 	 * @param deleteGraphicalRepresentation
 	 */
 	public <O> void invalidateGraphicalObjectsHierarchy(O drawable) {
-		for (DrawingTreeNode<O> dtn : getDrawingTreeNodes(drawable)) {
+		for (DrawingTreeNode<O, ?> dtn : getDrawingTreeNodes(drawable)) {
 			dtn.invalidate();
 		}
 	}
@@ -300,14 +300,14 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 	 * @param drawable
 	 */
 	public final <O> void updateGraphicalObjectsHierarchy(O drawable) {
-		for (DrawingTreeNode<O> dtn : getDrawingTreeNodes(drawable)) {
+		for (DrawingTreeNode<O, ?> dtn : getDrawingTreeNodes(drawable)) {
 			dtn.invalidate();
 			updateGraphicalObjectsHierarchy(dtn);
 		}
 	}
 
-	private <O> List<DrawingTreeNode<O>> getDrawingTreeNodes(O drawable) {
-		List<DrawingTreeNode<O>> returned = new ArrayList<DrawingTreeNode<O>>();
+	private <O> List<DrawingTreeNode<O, ?>> getDrawingTreeNodes(O drawable) {
+		List<DrawingTreeNode<O, ?>> returned = new ArrayList<DrawingTreeNode<O, ?>>();
 		for (GRBinding<?, ?> grBinding : _hashMap.keySet()) {
 			if (getDrawingTreeNode(drawable, (GRBinding<O, ?>) grBinding) != null) {
 				returned.add(getDrawingTreeNode(drawable, (GRBinding<O, ?>) grBinding));
@@ -326,13 +326,13 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		}
 	}
 
-	private void _printGraphicalObjectHierarchy(DrawingTreeNodeImpl<?> dtn, int level) {
+	private void _printGraphicalObjectHierarchy(DrawingTreeNodeImpl<?, ?> dtn, int level) {
 		logger.info(buildWhiteSpaceIndentation(level * 5)
 				+ " > "
 				+ (dtn.getGraphicalRepresentation() != null ? dtn.getGraphicalRepresentation().getClass().getSimpleName() + " "
 						+ Integer.toHexString(dtn.getGraphicalRepresentation().hashCode()) : " null ") + " object=" + dtn.getDrawable());
 		if (dtn.getChildNodes() != null) {
-			for (DrawingTreeNodeImpl<?> child : dtn.getChildNodes()) {
+			for (DrawingTreeNodeImpl<?, ?> child : dtn.getChildNodes()) {
 				_printGraphicalObjectHierarchy(child, level + 1);
 			}
 		}
@@ -361,23 +361,23 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		updateGraphicalObjectsHierarchy(getRoot());
 	}*/
 
-	private final <O> void updateGraphicalObjectsHierarchy(DrawingTreeNode<O> dtn) {
+	private final <O> void updateGraphicalObjectsHierarchy(DrawingTreeNode<O, ?> dtn) {
 		if (dtn.isInvalidated()) {
 			GRBinding<O, ? extends GraphicalRepresentation> grBinding = dtn.getGRBinding();
-			List<DrawingTreeNode<?>> nodesToRemove = new ArrayList<DrawingTreeNode<?>>(dtn.getChildNodes());
+			List<DrawingTreeNode<?, ?>> nodesToRemove = new ArrayList<DrawingTreeNode<?, ?>>(dtn.getChildNodes());
 			for (GRStructureWalker<O> walker : grBinding.getWalkers()) {
 				walker.startWalking(dtn);
 				walker.walk(dtn.getDrawable());
-				List<DrawingTreeNode<?>> updatedNodes = walker.stopWalking(dtn);
-				for (DrawingTreeNode<?> updatedNode : updatedNodes) {
+				List<DrawingTreeNode<?, ?>> updatedNodes = walker.stopWalking(dtn);
+				for (DrawingTreeNode<?, ?> updatedNode : updatedNodes) {
 					updateGraphicalObjectsHierarchy(updatedNode);
 					nodesToRemove.remove(updatedNode);
 				}
 			}
-			for (DrawingTreeNode<?> nodeToRemove : nodesToRemove) {
+			for (DrawingTreeNode<?, ?> nodeToRemove : nodesToRemove) {
 				deleteNode(nodeToRemove);
 			}
-			((DrawingTreeNodeImpl<?>) dtn).isInvalidated = false;
+			((DrawingTreeNodeImpl<?, ?>) dtn).isInvalidated = false;
 		}
 	}
 
@@ -394,24 +394,24 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		}
 	}*/
 
-	private <O> boolean deleteNode(DrawingTreeNode<?> node) {
+	private <O> boolean deleteNode(DrawingTreeNode<?, ?> node) {
 		node.delete();
 		notifyNodeRemoved(node);
 		return true;
 	}
 
-	public void notifyNodeAdded(DrawingTreeNode<?> addedNode) {
+	public void notifyNodeAdded(DrawingTreeNode<?, ?> addedNode) {
 		logger.info(">>>> Added node: " + addedNode);
 		// See parentGR.notifyDrawableAdded(removedGR);
 	}
 
-	public void notifyNodeRemoved(DrawingTreeNode<?> removedNode) {
+	public void notifyNodeRemoved(DrawingTreeNode<?, ?> removedNode) {
 		logger.info(">>>> Removed node: " + removedNode);
 		// See parentGR.notifyDrawableRemoved(removedGR);
 	}
 
 	@Override
-	public <O> DrawingTreeNode<O> drawShape(DrawingTreeNode<?> parentNode, ShapeGRBinding<O> grBinding, O aDrawable) {
+	public <O> ShapeNode<O> drawShape(RootNode<?> parentNode, ShapeGRBinding<O> grBinding, O aDrawable) {
 
 		if (parentNode == null) {
 			logger.warning("Cannot register drawable above null parent");
@@ -421,7 +421,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		if (parentNode.hasShapeFor(grBinding, aDrawable)) {
 			return parentNode.getShapeFor(grBinding, aDrawable);
 		} else {
-			DrawingTreeNode<O> returned = new DrawingTreeNodeImpl<O>(this, aDrawable, grBinding, (DrawingTreeNodeImpl<?>) parentNode);
+			ShapeNode<O> returned = new ShapeNodeImpl<O>(this, aDrawable, grBinding, (RootNodeImpl<?>) parentNode);
 			if (isUpdatingObjectHierarchy) {
 				notifyNodeAdded(returned);
 			}
@@ -636,7 +636,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		}
 		if (_hashMap != null) {
 			for (GRBinding grBinding : _hashMap.keySet()) {
-				for (DrawingTreeNode<?> dtn : retrieveHash(grBinding).values()) {
+				for (DrawingTreeNode<?, ?> dtn : retrieveHash(grBinding).values()) {
 					dtn.delete();
 				}
 			}

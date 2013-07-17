@@ -54,7 +54,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		Hashtable<Object, DrawingTreeNode<?, ?>> hash = this.drawing.retrieveHash(grBinding);
 
 		hash.put(drawable, this);
-		graphicalRepresentation = grBinding.getGRProvider().provideGR(drawable, this.drawing.factory);
+		graphicalRepresentation = grBinding.getGRProvider().provideGR(drawable, drawing.getFactory());
 
 		/*if (aParentDrawable == null) { // This is the root node
 			graphicalRepresentation = (GraphicalRepresentation) getDrawingGraphicalRepresentation();
@@ -120,20 +120,6 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 			}
 		}
 		return null;
-	}
-
-	private boolean isAncestorOf(DrawingTreeNode<?, ?> o2) {
-		if (o2 == null) {
-			return false;
-		}
-		DrawingTreeNode<?, ?> current = o2;
-		while (current != this.drawing && current != null) {
-			current = current.getParentNode();
-		}
-		if (current == null) {
-			return false;
-		}
-		return true;
 	}
 
 	@Override
@@ -335,11 +321,42 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	}
 
 	@Override
+	public boolean isConnectedToDrawing() {
+		if (!isValidated()) {
+			return false;
+		}
+		DrawingTreeNode<?, ?> current = this;
+		while (current != getDrawing().getRoot()) {
+			DrawingTreeNode<?, ?> container = current.getParentNode();
+			if (container == null) {
+				return false;
+			}
+			current = container;
+		}
+		return true;
+	}
+
+	@Override
+	public boolean isAncestorOf(DrawingTreeNode<?, ?> child) {
+		if (!isValidated()) {
+			return false;
+		}
+		DrawingTreeNode<?, ?> father = child.getParentNode();
+		while (father != null) {
+			if (father == this) {
+				return true;
+			}
+			father = father.getParentNode();
+		}
+		return false;
+	}
+
+	@Override
 	public FGEPoint convertRemoteViewCoordinatesToLocalNormalizedPoint(Point p, DrawingTreeNode<?, ?> source, double scale) {
 		if (!isConnectedToDrawing() || !source.isConnectedToDrawing()) {
 			return new FGEPoint(p.x / scale, p.y / scale);
 		}
-		Point pointRelativeToCurrentView = convertPoint(source, p, this, scale);
+		Point pointRelativeToCurrentView = FGEUtils.convertPoint(source, p, this, scale);
 		return convertViewCoordinatesToNormalizedPoint(pointRelativeToCurrentView, scale);
 	}
 
@@ -348,14 +365,14 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		if (!isConnectedToDrawing() || !destination.isConnectedToDrawing()) {
 			return new FGEPoint(p.x * scale, p.y * scale);
 		}
-		Point pointRelativeToRemoteView = convertPoint(this, p, destination, scale);
+		Point pointRelativeToRemoteView = FGEUtils.convertPoint(this, p, destination, scale);
 		return destination.convertViewCoordinatesToNormalizedPoint(pointRelativeToRemoteView, scale);
 	}
 
 	@Override
 	public Point convertLocalNormalizedPointToRemoteViewCoordinates(FGEPoint p, DrawingTreeNode<?, ?> destination, double scale) {
 		Point point = convertNormalizedPointToViewCoordinates(p, scale);
-		return convertPoint(this, point, destination, scale);
+		return FGEUtils.convertPoint(this, point, destination, scale);
 	}
 
 	@Override
@@ -370,7 +387,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	@Override
 	public Point convertRemoteNormalizedPointToLocalViewCoordinates(FGEPoint p, DrawingTreeNode<?, ?> source, double scale) {
 		Point point = source.convertNormalizedPointToViewCoordinates(p, scale);
-		return convertPoint(source, point, this, scale);
+		return FGEUtils.convertPoint(source, point, this, scale);
 	}
 
 	@Override

@@ -89,6 +89,10 @@ public interface Drawing<M> {
 		public <O2, F, T> DrawingTreeNode<O2, ?> getConnectorFor(ConnectorGRBinding<O2> binding, O2 aDrawable, ShapeNode<?> from,
 				ShapeNode<?> to);
 
+		public boolean isConnectedToDrawing();
+
+		public boolean isAncestorOf(DrawingTreeNode<?, ?> child);
+
 		public FGEPoint convertRemoteViewCoordinatesToLocalNormalizedPoint(Point p, DrawingTreeNode<?, ?> source, double scale);
 
 		public FGEPoint convertLocalViewCoordinatesToRemoteNormalizedPoint(Point p, DrawingTreeNode<?, ?> destination, double scale);
@@ -170,6 +174,10 @@ public interface Drawing<M> {
 	}
 
 	public interface ShapeNode<O> extends DrawingTreeNode<O, ShapeGraphicalRepresentation> {
+		public double getUnscaledViewWidth();
+
+		public double getUnscaledViewHeight();
+
 	}
 
 	public interface ConnectorNode<O> extends DrawingTreeNode<O, ConnectorGraphicalRepresentation> {

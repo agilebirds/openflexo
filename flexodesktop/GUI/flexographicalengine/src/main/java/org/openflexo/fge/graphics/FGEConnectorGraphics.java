@@ -26,6 +26,7 @@ import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.connectors.ConnectorSymbol;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
@@ -37,9 +38,9 @@ public class FGEConnectorGraphics extends FGEGraphics {
 
 	private FGESymbolGraphics symbolGraphics;
 
-	public FGEConnectorGraphics(ConnectorGraphicalRepresentation aGraphicalRepresentation) {
-		super(aGraphicalRepresentation);
-		symbolGraphics = new FGESymbolGraphics(aGraphicalRepresentation);
+	public FGEConnectorGraphics(ConnectorNode<?> node) {
+		super(node);
+		symbolGraphics = new FGESymbolGraphics(node);
 	}
 
 	@Override

@@ -22,7 +22,7 @@ package org.openflexo.fge.graphics;
 import java.awt.Point;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.geom.FGEPoint;
 
 //import org.openflexo.fge.ShapeGraphicalRepresentation;
@@ -31,8 +31,8 @@ public class FGESymbolGraphics extends FGEGraphics {
 
 	private static final Logger logger = Logger.getLogger(FGESymbolGraphics.class.getPackage().getName());
 
-	public FGESymbolGraphics(ConnectorGraphicalRepresentation aGraphicalRepresentation) {
-		super(aGraphicalRepresentation);
+	public FGESymbolGraphics(ConnectorNode<?> node) {
+		super(node);
 	}
 
 	// sometimes this method throw a class cast exception with a TokenEdgeGR instead of a
