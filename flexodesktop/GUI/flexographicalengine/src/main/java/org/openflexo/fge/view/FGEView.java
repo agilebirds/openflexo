@@ -21,20 +21,27 @@ package org.openflexo.fge.view;
 
 import java.util.Observer;
 
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.DrawingPalette;
 
-public interface FGEView extends Observer, FGEConstants {
+/**
+ * Implemented by all views representing a DrawingTreeNode
+ * 
+ * @author sylvain
+ * 
+ * @param <O>
+ */
+public interface FGEView<O> extends Observer, FGEConstants {
 
-	public DrawingController getController();
+	public DrawingController<?> getController();
 
-	public GraphicalRepresentation getGraphicalRepresentation();
+	public DrawingTreeNode<O, ?> getDrawingTreeNode();
 
 	public DrawingView getDrawingView();
 
-	public Object getDrawable();
+	public O getDrawable();
 
 	public LabelView getLabelView();
 

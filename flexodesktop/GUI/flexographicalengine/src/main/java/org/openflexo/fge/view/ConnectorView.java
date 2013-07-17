@@ -34,6 +34,7 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.ConnectorGraphicalRepresentation.ConnectorParameters;
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
@@ -50,23 +51,20 @@ import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.view.listener.ConnectorViewMouseListener;
 
-public class ConnectorView extends JPanel implements FGEView {
+public class ConnectorView<O> extends JPanel implements FGEView<O> {
 
 	private static final Logger logger = Logger.getLogger(ConnectorView.class.getPackage().getName());
 
-	private ConnectorGraphicalRepresentation graphicalRepresentation;
+	private ConnectorNode<O> node;
 	private ConnectorViewMouseListener mouseListener;
 	private DrawingController _controller;
 
 	private LabelView _labelView;
 
-	private Object drawable;
-
-	public ConnectorView(ConnectorGraphicalRepresentation aGraphicalRepresentation, Object drawable, DrawingController controller) {
+	public ConnectorView(ConnectorNode<O> node, DrawingController controller) {
 		super();
-		this.drawable = drawable;
 		_controller = controller;
-		graphicalRepresentation = aGraphicalRepresentation;
+		this.node = node;
 		updateLabelView();
 		relocateAndResizeView();
 		mouseListener = makeConnectorViewMouseListener();
@@ -127,8 +125,8 @@ public class ConnectorView extends JPanel implements FGEView {
 	}
 
 	@Override
-	public Object getDrawable() {
-		return drawable;
+	public O getDrawable() {
+		return node.getDrawable();
 	}
 
 	@Override

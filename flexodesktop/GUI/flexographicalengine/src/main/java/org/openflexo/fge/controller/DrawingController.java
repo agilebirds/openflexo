@@ -41,9 +41,11 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.openflexo.fge.BackgroundStyle;
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ConnectorNode;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.Drawing.RootNode;
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.ForegroundStyle;
@@ -72,7 +74,7 @@ public class DrawingController<M> extends Observable implements Observer {
 	private static final Logger logger = Logger.getLogger(DrawingController.class.getPackage().getName());
 
 	private Drawing<M> drawing;
-	private DrawingView drawingView;
+	private DrawingView<M> drawingView;
 
 	public enum EditorTool {
 		SelectionTool, DrawShapeTool, DrawConnectorTool, DrawTextTool
@@ -136,7 +138,7 @@ public class DrawingController<M> extends Observable implements Observer {
 		focusedObjects = new Vector<GraphicalRepresentation>();
 		selectedObjects = new Vector<GraphicalRepresentation>();
 		palettes = new Vector<DrawingPalette>();
-		_buildDrawingView();
+		buildDrawingView();
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Building DrawingController: " + this);
 		}
@@ -146,56 +148,55 @@ public class DrawingController<M> extends Observable implements Observer {
 		return factory;
 	}
 
-	public DrawingView rebuildDrawingView() {
+	public DrawingView<?> rebuildDrawingView() {
 		if (drawingView != null) {
 			drawingView.delete();
 		}
-		_buildDrawingView();
+		buildDrawingView();
 		return drawingView;
 	}
 
-	private DrawingView _buildDrawingView() {
-		drawingView = makeDrawingView(drawing);
-		if (drawing.getContainedObjects(drawing.getModel()) != null) {
-			for (Object o : drawing.getContainedObjects(drawing.getModel())) {
-				GraphicalRepresentation gr = drawing.getGraphicalRepresentation(o);
-				if (gr instanceof ShapeGraphicalRepresentation && gr.isValidated()) {
-					ShapeView v = _buildShapeView((ShapeGraphicalRepresentation) gr);
-					drawingView.add(v);
-				} else if (gr instanceof ConnectorGraphicalRepresentation && gr.isValidated()) {
-					ConnectorGraphicalRepresentation connectorGR = (ConnectorGraphicalRepresentation) gr;
-					ConnectorView v = connectorGR.makeConnectorView(this);
-					drawingView.add(v);
-				}
-				if (!gr.isValidated()) {
-					logger.warning("DrawingView " + drawingView.getClass().getSimpleName() + " unvalidated GR found " + gr);
-				}
+	private DrawingView<?> buildDrawingView() {
+		drawingView = makeDrawingView(drawing.getRoot());
+		for (DrawingTreeNode<?, ?> dtn : drawing.getRoot().getChildNodes()) {
+			if (dtn instanceof ShapeNode) {
+				ShapeView<?> v = recursivelyBuildShapeView((ShapeNode<?>) dtn);
+				drawingView.add(v);
+			} else if (dtn instanceof ConnectorNode) {
+				ConnectorView<?> v = makeConnectorView((ConnectorNode<?>) dtn);
+				drawingView.add(v);
 			}
 		}
 		return drawingView;
 	}
 
-	private <O> ShapeView _buildShapeView(ShapeGraphicalRepresentation shapedGR) {
-		ShapeView returned = shapedGR.makeShapeView(this);
-		if (shapedGR.getContainedObjects() != null) {
-			for (Object o : shapedGR.getContainedObjects()) {
-				GraphicalRepresentation gr = shapedGR.getDrawing().getGraphicalRepresentation(o);
-				if (gr instanceof ShapeGraphicalRepresentation) {
-					ShapeView v = _buildShapeView((ShapeGraphicalRepresentation) gr);
-					returned.add(v);
-				} else if (gr instanceof ConnectorGraphicalRepresentation) {
-					ConnectorGraphicalRepresentation connectorGR = (ConnectorGraphicalRepresentation) gr;
-					ConnectorView v = connectorGR.makeConnectorView(this);
-					returned.add(v);
-				}
+	private <O> ShapeView<?> recursivelyBuildShapeView(ShapeNode<O> shapeNode) {
+		ShapeView<O> returned = makeShapeView(shapeNode);
+		for (DrawingTreeNode<?, ?> dtn : shapeNode.getChildNodes()) {
+			if (dtn instanceof ShapeNode) {
+				ShapeView<?> v = recursivelyBuildShapeView((ShapeNode<?>) dtn);
+				returned.add(v);
+			} else if (dtn instanceof ConnectorNode) {
+				ConnectorView<?> v = makeConnectorView((ConnectorNode<?>) dtn);
+				returned.add(v);
 			}
 		}
 		return returned;
 	}
 
-	// Override for a custom view
-	public DrawingView makeDrawingView(Drawing<?> drawing) {
-		return new DrawingView(drawing, this);
+	// Override for a custom view managing
+	public DrawingView<M> makeDrawingView(RootNode<M> rootNode) {
+		return new DrawingView<M>(rootNode, this);
+	}
+
+	// Override for a custom view managing
+	public <O> ShapeView<O> makeShapeView(ShapeNode<O> shapeNode) {
+		return new ShapeView<O>(shapeNode, this);
+	}
+
+	// Override for a custom view managing
+	public <O> ConnectorView<O> makeConnectorView(ConnectorNode<O> connectorNode) {
+		return new ConnectorView<O>(connectorNode, this);
 	}
 
 	public DrawShapeToolController<?> getDrawShapeToolController() {
@@ -388,20 +389,20 @@ public class DrawingController<M> extends Observable implements Observer {
 		return drawing;
 	}
 
-	public DrawingGraphicalRepresentation getDrawingGraphicalRepresentation() {
+	/*public DrawingGraphicalRepresentation getDrawingGraphicalRepresentation() {
 		return drawing.getDrawingGraphicalRepresentation();
-	}
+	}*/
 
 	public DrawingView getDrawingView() {
 		return drawingView;
 	}
 
-	public <O> GraphicalRepresentation getGraphicalRepresentation(O drawable) {
+	/*public <O> GraphicalRepresentation getGraphicalRepresentation(O drawable) {
 		if (drawable == null) {
 			return null;
 		}
 		return drawing.getGraphicalRepresentation(drawable);
-	}
+	}*/
 
 	public GraphicalRepresentation getFocusedFloatingLabel() {
 		return focusedFloatingLabel;

@@ -11,9 +11,16 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Observable;
+import java.util.Vector;
+import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.Drawing.ConstraintDependency;
+import org.openflexo.fge.Drawing.DependencyLoopException;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEModelFactory;
@@ -21,15 +28,22 @@ import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GRBinding;
 import org.openflexo.fge.GRBinding.ShapeGRBinding;
 import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
+import org.openflexo.fge.GraphicalRepresentation.Parameters;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.DrawUtils;
+import org.openflexo.fge.notifications.BindingChanged;
+import org.openflexo.fge.notifications.FGENotification;
 
-public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation> implements DrawingTreeNode<O, GR> {
+public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation> extends Observable implements DrawingTreeNode<O, GR> {
+
+	private static final Logger logger = Logger.getLogger(DrawingTreeNodeImpl.class.getPackage().getName());
 
 	private final DrawingImpl<?> drawing;
 	private O drawable;
@@ -38,6 +52,9 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	private GR graphicalRepresentation;
 	private GRBinding<O, GR> grBinding;
 
+	private List<ConstraintDependency> dependancies;
+	private List<ConstraintDependency> alterings;
+
 	boolean isInvalidated = true;
 
 	public DrawingTreeNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, GR> grBinding, DrawingTreeNodeImpl<?, ?> parentNode) {
@@ -45,15 +62,16 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		// logger.info("New DrawingTreeNode for "+aDrawable+" under "+aParentDrawable+" (is "+this+")");
 		this.drawable = drawable;
 		this.grBinding = grBinding;
+
 		this.parentNode = parentNode;
 
-		if (parentNode != null) {
-			parentNode.childNodes.add(this);
-		}
 		childNodes = new ArrayList<DrawingTreeNodeImpl<?, ?>>();
 		Hashtable<Object, DrawingTreeNode<?, ?>> hash = this.drawing.retrieveHash(grBinding);
 
 		hash.put(drawable, this);
+
+		parentNode.addChild(this);
+
 		graphicalRepresentation = grBinding.getGRProvider().provideGR(drawable, drawing.getFactory());
 
 		/*if (aParentDrawable == null) { // This is the root node
@@ -61,6 +79,36 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		} else {
 			graphicalRepresentation = retrieveGraphicalRepresentation(aDrawable);
 		}*/
+
+		dependancies = new ArrayList<ConstraintDependency>();
+		alterings = new ArrayList<ConstraintDependency>();
+
+	}
+
+	protected void addChild(DrawingTreeNodeImpl<?, ?> aChildNode) {
+		if (aChildNode == null) {
+			logger.warning("Cannot add null node");
+			return;
+		}
+		if (childNodes.contains(aChildNode)) {
+			logger.warning("Node already present");
+		} else {
+			aChildNode.parentNode = this;
+			childNodes.add(aChildNode);
+		}
+	}
+
+	protected void removeChild(DrawingTreeNode<?, ?> aChildNode) {
+		if (aChildNode == null) {
+			DrawingImpl.logger.warning("Cannot remove null node");
+			return;
+		}
+		if (childNodes.contains(aChildNode)) {
+			childNodes.remove(aChildNode);
+		} else {
+			DrawingImpl.logger.warning("Cannot remove node: not present");
+		}
+		aChildNode.delete();
 	}
 
 	@Override
@@ -151,19 +199,6 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		}
 	}*/
 
-	private void removeChild(DrawingTreeNode<?, ?> aChildNode) {
-		if (aChildNode == null) {
-			DrawingImpl.logger.warning("Cannot remove null node");
-			return;
-		}
-		if (childNodes.contains(aChildNode)) {
-			childNodes.remove(aChildNode);
-		} else {
-			DrawingImpl.logger.warning("Cannot remove node: not present");
-		}
-		aChildNode.delete();
-	}
-
 	/**
 	 * Recursively delete this DrawingTreeNode and all its descendants
 	 */
@@ -228,6 +263,132 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	@Override
 	public O getDrawable() {
 		return drawable;
+	}
+
+	protected void updateDependanciesForBinding(DataBinding<?> binding) {
+		if (binding == null) {
+			return;
+		}
+
+		// logger.info("Searching dependancies for "+this);
+
+		DrawingTreeNode<?, ?> node = this;
+		// TODO !!!!
+		List<TargetObject> targetList = binding.getTargetObjects(this);
+		if (targetList != null) {
+			for (TargetObject o : targetList) {
+				// System.out.println("> "+o.target+" for "+o.propertyName);
+				if (o.target instanceof DrawingTreeNode) {
+					DrawingTreeNode<?, ?> c = (DrawingTreeNode<?, ?>) o.target;
+					GRParameter param = c.getGraphicalRepresentation().parameterWithName(o.propertyName);
+					// logger.info("OK, found "+getBindingAttribute()+" of "+getOwner()+" depends of "+param+" , "+c);
+					try {
+						node.declareDependantOf(c, param, param);
+					} catch (DependencyLoopException e) {
+						logger.warning("DependancyLoopException raised while declaring dependancy (data lookup)"
+								+ "in the context of binding: " + binding.toString() + " node: " + node + " dependancy: " + c
+								+ " message: " + e.getMessage());
+					}
+				}
+			}
+		}
+
+	}
+
+	@Override
+	public List<ConstraintDependency> getDependancies() {
+		return dependancies;
+	}
+
+	@Override
+	public List<ConstraintDependency> getAlterings() {
+		return alterings;
+	}
+
+	@Override
+	public void declareDependantOf(DrawingTreeNode<?, ?> aNode, GRParameter requiringParameter, GRParameter requiredParameter)
+			throws DependencyLoopException {
+		// logger.info("Component "+this+" depends of "+aComponent);
+		if (aNode == this) {
+			logger.warning("Forbidden reflexive dependancies");
+			return;
+		}
+		// Look if this dependancy may cause a loop in dependancies
+		try {
+			List<DrawingTreeNode<?, ?>> actualDependancies = new Vector<DrawingTreeNode<?, ?>>();
+			actualDependancies.add(aNode);
+			searchLoopInDependenciesWith(aNode, actualDependancies);
+		} catch (DependencyLoopException e) {
+			logger.warning("Forbidden loop in dependancies: " + e.getMessage());
+			throw e;
+		}
+
+		ConstraintDependency newDependancy = new ConstraintDependency(this, requiringParameter, aNode, requiredParameter);
+
+		if (!dependancies.contains(newDependancy)) {
+			dependancies.add(newDependancy);
+			logger.info("Parameter " + requiringParameter + " of GR " + this + " depends of parameter " + requiredParameter + " of GR "
+					+ aNode);
+		}
+		if (!((DrawingTreeNodeImpl<?, ?>) aNode).alterings.contains(newDependancy)) {
+			((DrawingTreeNodeImpl<?, ?>) aNode).alterings.add(newDependancy);
+		}
+	}
+
+	private void searchLoopInDependenciesWith(DrawingTreeNode<?, ?> aNode, List<DrawingTreeNode<?, ?>> actualDependancies)
+			throws DependencyLoopException {
+		for (ConstraintDependency dependancy : ((DrawingTreeNodeImpl<?, ?>) aNode).dependancies) {
+			DrawingTreeNode<?, ?> c = dependancy.requiredGR;
+			if (c == this) {
+				throw new DependencyLoopException(actualDependancies);
+			}
+			Vector<DrawingTreeNode<?, ?>> newVector = new Vector<DrawingTreeNode<?, ?>>();
+			newVector.addAll(actualDependancies);
+			newVector.add(c);
+			searchLoopInDependenciesWith(c, newVector);
+		}
+	}
+
+	protected void propagateConstraintsAfterModification(GRParameter parameter) {
+		for (ConstraintDependency dependency : alterings) {
+			if (dependency.requiredParameter == parameter) {
+				((GraphicalRepresentationImpl) dependency.requiringGR).computeNewConstraint(dependency);
+			}
+		}
+	}
+
+	protected void computeNewConstraint(ConstraintDependency dependency) {
+		// None known at this level
+	}
+
+	// *******************************************************************************
+	// * Observer implementation *
+	// *******************************************************************************
+
+	@Override
+	public void update(Observable observable, Object notification) {
+
+		if (notification instanceof FGENotification && observable == getGraphicalRepresentation()) {
+			// Those notifications are forwarded by my graphical representation
+			FGENotification notif = (FGENotification) notification;
+
+			if (notif instanceof BindingChanged) {
+				updateDependanciesForBinding(((BindingChanged) notif).getBinding());
+			}
+
+			/*if (notif.getParameter() == Parameters.text) {
+				checkAndUpdateDimensionBoundsIfRequired();
+			}*/
+		}
+
+		if (observable instanceof TextStyle) {
+			notifyAttributeChanged(Parameters.textStyle, null, getGraphicalRepresentation().getTextStyle());
+		}
+	}
+
+	public void notifyAttributeChanged(GRParameter parameter, Object oldValue, Object newValue) {
+		setChanged();
+		notifyObservers(new FGENotification(parameter, oldValue, newValue));
 	}
 
 	@Override

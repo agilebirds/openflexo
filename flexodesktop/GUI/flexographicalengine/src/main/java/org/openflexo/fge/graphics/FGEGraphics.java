@@ -102,6 +102,10 @@ public abstract class FGEGraphics {
 		return dtn;
 	}
 
+	public DrawingTreeNode<?, ?> getNode() {
+		return getDrawingTreeNode();
+	}
+
 	public GraphicalRepresentation getGraphicalRepresentation() {
 		return dtn.getGraphicalRepresentation();
 	}

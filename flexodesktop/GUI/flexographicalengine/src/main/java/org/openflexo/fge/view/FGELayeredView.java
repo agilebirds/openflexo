@@ -26,8 +26,10 @@ import java.util.logging.Logger;
 
 import javax.swing.JLayeredPane;
 
-public abstract class FGELayeredView extends JLayeredPane implements FGEView {
+@SuppressWarnings("serial")
+public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<O> {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FGELayeredView.class.getPackage().getName());
 
 	@Override
@@ -42,7 +44,7 @@ public abstract class FGELayeredView extends JLayeredPane implements FGEView {
 	 * @param layer
 	 *            an int specifying the layer to set, where lower numbers are closer to the bottom
 	 */
-	public void setLayer(FGEView c, int layer) {
+	public void setLayer(FGEView<?> c, int layer) {
 		setLayer((Component) c, layer, -1);
 	}
 
@@ -53,7 +55,7 @@ public abstract class FGELayeredView extends JLayeredPane implements FGEView {
 	 *            the Component to check
 	 * @return an int specifying the component's current layer
 	 */
-	public int getLayer(FGEView c) {
+	public int getLayer(FGEView<?> c) {
 		return super.getLayer((Component) c);
 	}
 
@@ -64,7 +66,7 @@ public abstract class FGELayeredView extends JLayeredPane implements FGEView {
 	 *            the Component to move
 	 * @see #setPosition(Component, int)
 	 */
-	public void toFront(FGEView c) {
+	public void toFront(FGEView<?> c) {
 		super.moveToFront((Component) c);
 	}
 
@@ -75,21 +77,21 @@ public abstract class FGELayeredView extends JLayeredPane implements FGEView {
 	 *            the Component to move
 	 * @see #setPosition(Component, int)
 	 */
-	public void toBack(FGEView c) {
+	public void toBack(FGEView<?> c) {
 		super.moveToBack((Component) c);
 	}
 
-	public List<FGEView> getViewsInLayer(int layer) {
-		List<FGEView> returned = new ArrayList<FGEView>();
+	public List<FGEView<?>> getViewsInLayer(int layer) {
+		List<FGEView<?>> returned = new ArrayList<FGEView<?>>();
 		for (Component c : super.getComponentsInLayer(layer)) {
 			if (c instanceof FGEView) {
-				returned.add((FGEView) c);
+				returned.add((FGEView<?>) c);
 			}
 		}
 		return returned;
 	}
 
-	public void add(ShapeView view) {
+	public void add(ShapeView<?> view) {
 		// logger.info("add "+view);
 		view.setBackground(getBackground());
 		if (view.getLabelView() != null) {
@@ -101,7 +103,7 @@ public abstract class FGELayeredView extends JLayeredPane implements FGEView {
 		}
 	}
 
-	public void remove(ShapeView view) {
+	public void remove(ShapeView<?> view) {
 		if (view.getLabelView() != null) {
 			remove(view.getLabelView());
 		}
@@ -111,7 +113,7 @@ public abstract class FGELayeredView extends JLayeredPane implements FGEView {
 		}
 	}
 
-	public void add(ConnectorView view) {
+	public void add(ConnectorView<O> view) {
 		view.setBackground(getBackground());
 		if (view.getLabelView() != null) {
 			add(view.getLabelView(), view.getLayer(), -1);
@@ -122,7 +124,7 @@ public abstract class FGELayeredView extends JLayeredPane implements FGEView {
 		}
 	}
 
-	public void remove(ConnectorView view) {
+	public void remove(ConnectorView<O> view) {
 		if (view.getLabelView() != null) {
 			remove(view.getLabelView());
 		}

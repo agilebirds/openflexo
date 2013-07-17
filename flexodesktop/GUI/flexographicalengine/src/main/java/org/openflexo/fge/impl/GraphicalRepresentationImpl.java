@@ -1,6 +1,5 @@
 package org.openflexo.fge.impl;
 
-import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Method;
@@ -16,9 +15,9 @@ import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.JavaBindingFactory;
-import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.Drawing.ConstraintDependency;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.GRVariable;
 import org.openflexo.fge.GRVariable.GRVariableType;
@@ -28,6 +27,7 @@ import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseControl.MouseButton;
 import org.openflexo.fge.controller.MouseDragControl;
+import org.openflexo.fge.notifications.BindingChanged;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.GraphicalRepresentationAdded;
 import org.openflexo.fge.notifications.GraphicalRepresentationDeleted;
@@ -90,8 +90,8 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	private String toolTipText = null;
 
-	private Vector<ConstraintDependency> dependancies;
-	private Vector<ConstraintDependency> alterings;
+	// private Vector<ConstraintDependency> dependancies;
+	// private Vector<ConstraintDependency> alterings;
 
 	// *******************************************************************************
 
@@ -115,9 +115,6 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 		mouseClickControls = new Vector<MouseClickControl>();
 		mouseDragControls = new Vector<MouseDragControl>();
-
-		dependancies = new Vector<ConstraintDependency>();
-		alterings = new Vector<ConstraintDependency>();
 
 	}
 
@@ -1262,10 +1259,10 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 		getPropertyChangeSupport().firePropertyChange(notification.propertyName(), notification.oldValue, notification.newValue);
 	}
 
-	@Override
+	/*@Override
 	public String getInspectorName() {
 		return "GraphicalRepresentation.inspector";
-	}
+	}*/
 
 	@Override
 	public boolean isShape() {
@@ -1311,8 +1308,6 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	// *******************************************************************************
 	// * Coordinates manipulation *
 	// *******************************************************************************
-
-	
 
 	/*@Override
 	public FGEPoint convertRemoteViewCoordinatesToLocalNormalizedPoint(Point p, GraphicalRepresentation source, double scale) {
@@ -1472,8 +1467,8 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 		return true;
 	}
 
-	@Override
-	public abstract boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
+	// @Override
+	// public abstract boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
 
 	@Override
 	public void notifyLabelWillBeEdited() {
@@ -1759,17 +1754,17 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 		}
 	}*/
 
-	@Override
+	/*@Override
 	public Vector<ConstraintDependency> getDependancies() {
 		return dependancies;
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public Vector<ConstraintDependency> getAlterings() {
 		return alterings;
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public void declareDependantOf(GraphicalRepresentation aComponent, GRParameter requiringParameter, GRParameter requiredParameter)
 			throws DependencyLoopException {
 		// logger.info("Component "+this+" depends of "+aComponent);
@@ -1797,9 +1792,9 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 		if (!((GraphicalRepresentationImpl) aComponent).alterings.contains(newDependancy)) {
 			((GraphicalRepresentationImpl) aComponent).alterings.add(newDependancy);
 		}
-	}
+	}*/
 
-	private void searchLoopInDependenciesWith(GraphicalRepresentation aComponent, Vector<GraphicalRepresentation> actualDependancies)
+	/*private void searchLoopInDependenciesWith(GraphicalRepresentation aComponent, Vector<GraphicalRepresentation> actualDependancies)
 			throws DependencyLoopException {
 		for (ConstraintDependency dependancy : ((GraphicalRepresentationImpl) aComponent).dependancies) {
 			GraphicalRepresentation c = dependancy.requiredGR;
@@ -1811,7 +1806,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 			newVector.add(c);
 			searchLoopInDependenciesWith(c, newVector);
 		}
-	}
+	}*/
 
 	protected void propagateConstraintsAfterModification(GRParameter parameter) {
 		for (ConstraintDependency dependency : alterings) {
@@ -1821,9 +1816,9 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 		}
 	}
 
-	protected void computeNewConstraint(ConstraintDependency dependency) {
+	/*protected void computeNewConstraint(ConstraintDependency dependency) {
 		// None known at this level
-	}
+	}*/
 
 	private Vector<GRVariable> variables = new Vector<GRVariable>();
 
@@ -1911,7 +1906,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 			return Integer.MAX_VALUE;
 		}
 	*/
-	protected void updateDependanciesForBinding(DataBinding<?> binding) {
+	/*protected void updateDependanciesForBinding(DataBinding<?> binding) {
 		if (binding == null) {
 			return;
 		}
@@ -1920,7 +1915,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 		GraphicalRepresentation component = this;
 		// TODO !!!!
-		List<TargetObject> targetList = binding.getTargetObjects(null/*this*/);
+		List<TargetObject> targetList = binding.getTargetObjects(this);
 		if (targetList != null) {
 			for (TargetObject o : targetList) {
 				// System.out.println("> "+o.target+" for "+o.propertyName);
@@ -1939,69 +1934,17 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 			}
 		}
 
-		// Vector<Expression> primitives;
-		// try {
-
-		/*primitives = Expression.extractPrimitives(binding.getStringRepresentation());
-
-			GraphicalRepresentation component = getOwner();
-			GraphicalRepresentation rootComponent = component.getRootGraphicalRepresentation();
-			
-			for (Expression p : primitives) {
-				if (p instanceof Variable) {
-					String fullVariable = ((Variable)p).getName(); 
-					if (fullVariable.indexOf(".") > 0) {
-						String identifier = fullVariable.substring(0,fullVariable.indexOf("."));
-						String parameter = fullVariable.substring(fullVariable.indexOf(".")+1);
-						logger.info("identifier="+identifier);
-						logger.info("parameter="+parameter);
-						Iterator<GraphicalRepresentation> allComponents = rootComponent.allGRIterator();
-						while (allComponents.hasNext()) {
-							GraphicalRepresentation next = allComponents.next();
-							if (next != getOwner()) {
-								if (identifier.equals(next.getIdentifier())) {
-									for (GRParameter param : next.getAllParameters()) {
-										if (param.name().equals(parameter)) {
-											logger.info("OK, found "+getBindingAttribute()+" of "+getOwner()+" depends of "+param+" , "+next);
-											try {
-												component.declareDependantOf(next,getBindingAttribute(),param);
-											} catch (DependancyLoopException e) {
-												logger.warning("DependancyLoopException raised while declaring dependancy (data lookup)"
-														+"in the context of binding: "+binding.getStringRepresentation()
-														+" fullVariable: "+fullVariable
-														+" component: "+component
-														+" dependancy: "+next
-														+" identifier: "+next.getIdentifier()
-														+" message: "+e.getMessage());
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-
-							
-
-		} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (TypeMismatchException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		*/
-	}
+	}*/
 
 	@Override
 	public void notifiedBindingDecoded(DataBinding<?> binding) {
-		updateDependanciesForBinding(binding);
+		setChanged();
+		notifyObservers(new BindingChanged(binding));
 	}
 
 	@Override
-	public void notifiedBindingChanged(DataBinding<?> dataBinding) {
-		updateDependanciesForBinding(dataBinding);
+	public void notifiedBindingChanged(DataBinding<?> binding) {
+		setChanged();
+		notifyObservers(new BindingChanged(binding));
 	}
 }

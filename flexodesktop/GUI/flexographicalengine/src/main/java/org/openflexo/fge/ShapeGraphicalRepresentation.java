@@ -19,28 +19,20 @@
  */
 package org.openflexo.fge;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
 import java.util.List;
 
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
-import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
 import org.openflexo.fge.geom.area.FGEArea;
-import org.openflexo.fge.graphics.DecorationPainter;
-import org.openflexo.fge.graphics.FGEShapeGraphics;
-import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl.ShapeBorderImpl;
 import org.openflexo.fge.shapes.Shape;
 import org.openflexo.fge.shapes.Shape.ShapeType;
-import org.openflexo.fge.view.ShapeView;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
@@ -495,29 +487,29 @@ public interface ShapeGraphicalRepresentation extends GraphicalRepresentation {
 
 	public FGEPoint getLocation();
 
-	public void setLocation(FGEPoint newLocation);
+	// public void setLocation(FGEPoint newLocation);
 
-	public FGEPoint getLocationInDrawing();
+	// public FGEPoint getLocationInDrawing();
 
 	// *******************************************************************************
 	// * Size management
 	// *******************************************************************************
 
-	public Dimension getNormalizedLabelSize();
+	// public Dimension getNormalizedLabelSize();
 
-	public Rectangle getNormalizedLabelBounds();
+	// public Rectangle getNormalizedLabelBounds();
 
-	public FGERectangle getRequiredBoundsForContents();
+	// public FGERectangle getRequiredBoundsForContents();
 
-	public boolean isFullyContainedInContainer();
+	// public boolean isFullyContainedInContainer();
 
-	public boolean isParentLayoutedAsContainer();
+	// public boolean isParentLayoutedAsContainer();
 
-	public double getMoveAuthorizedRatio(FGEPoint desiredLocation, FGEPoint initialLocation);
+	// public double getMoveAuthorizedRatio(FGEPoint desiredLocation, FGEPoint initialLocation);
 
 	public FGEDimension getSize();
 
-	public void setSize(FGEDimension newSize);
+	// public void setSize(FGEDimension newSize);
 
 	// *******************************************************************************
 	// * Properties management
@@ -533,13 +525,13 @@ public interface ShapeGraphicalRepresentation extends GraphicalRepresentation {
 
 	public ShapeGraphicalRepresentation clone();
 
-	public void extendParentBoundsToHostThisShape();
+	// public void extendParentBoundsToHostThisShape();
 
-	public void extendBoundsToHostContents();
+	// public void extendBoundsToHostContents();
 
-	public void finalizeConstraints();
+	// public void finalizeConstraints();
 
-	public void updateConstraints();
+	// public void updateConstraints();
 
 	// See notifiedBindingChanged(DataBinding<?>)
 	// public void constraintChanged(DataBinding<?> constraint);
@@ -552,11 +544,11 @@ public interface ShapeGraphicalRepresentation extends GraphicalRepresentation {
 
 	public void setBackgroundType(BackgroundStyleType backgroundType);
 
-	public void notifyShapeChanged();
+	// public void notifyShapeChanged();
 
-	public void notifyShapeNeedsToBeRedrawn();
+	// public void notifyShapeNeedsToBeRedrawn();
 
-	public void notifyObjectMoved();
+	/*public void notifyObjectMoved();
 
 	public void notifyObjectMoved(FGEPoint oldLocation);
 
@@ -566,28 +558,15 @@ public interface ShapeGraphicalRepresentation extends GraphicalRepresentation {
 
 	public boolean isMoving();
 
-	/**
-	 * Notify that the object just resized
-	 */
 	public void notifyObjectResized();
 
-	/**
-	 * Notify that the object just resized
-	 */
 	public void notifyObjectResized(FGEDimension oldSize);
 
-	/**
-	 * Notify that the object will be resized
-	 */
 	public void notifyObjectWillResize();
 
-	/**
-	 * Notify that the object resizing has finished (take care that this just notify END of resize, this should NOT be used to notify a
-	 * resizing: use notifyObjectResize() instead)
-	 */
 	public void notifyObjectHasResized();
 
-	public boolean isResizing();
+	public boolean isResizing();*/
 
 	// public double getUnscaledViewWidth();
 
@@ -598,7 +577,7 @@ public interface ShapeGraphicalRepresentation extends GraphicalRepresentation {
 	 * 
 	 * @return
 	 */
-	public FGERectangle getBounds();
+	// public FGERectangle getBounds();
 
 	/**
 	 * Return view bounds (excluding border) relative to parent container
@@ -606,7 +585,7 @@ public interface ShapeGraphicalRepresentation extends GraphicalRepresentation {
 	 * @param scale
 	 * @return
 	 */
-	public Rectangle getBounds(double scale);
+	// public Rectangle getBounds(double scale);
 
 	/**
 	 * Return view bounds (excluding border) relative to given container
@@ -614,7 +593,7 @@ public interface ShapeGraphicalRepresentation extends GraphicalRepresentation {
 	 * @param scale
 	 * @return
 	 */
-	public Rectangle getBounds(GraphicalRepresentation container, double scale);
+	// public Rectangle getBounds(GraphicalRepresentation container, double scale);
 
 	/**
 	 * Return logical bounds (including border) relative to given container
@@ -622,20 +601,20 @@ public interface ShapeGraphicalRepresentation extends GraphicalRepresentation {
 	 * @param scale
 	 * @return
 	 */
-	public Rectangle getViewBounds(GraphicalRepresentation container, double scale);
+	// public Rectangle getViewBounds(GraphicalRepresentation container, double scale);
 
-	public boolean isPointInsideShape(FGEPoint aPoint);
+	// public boolean isPointInsideShape(FGEPoint aPoint);
 
-	public DecorationPainter getDecorationPainter();
+	/*public DecorationPainter getDecorationPainter();
 
 	public void setDecorationPainter(DecorationPainter aPainter);
 
 	public ShapePainter getShapePainter();
 
-	public void setShapePainter(ShapePainter aPainter);
+	public void setShapePainter(ShapePainter aPainter);*/
 
 	// Override for a custom view management
-	public ShapeView makeShapeView(DrawingController controller);
+	// public ShapeView makeShapeView(DrawingController controller);
 
 	@Override
 	public String toString();
@@ -681,7 +660,7 @@ public interface ShapeGraphicalRepresentation extends GraphicalRepresentation {
 	public FGEArea getAllowedEndAreaForConnectorForDirection(ConnectorGraphicalRepresentation connectorGR, FGEArea area,
 			SimplifiedCardinalDirection direction);
 
-	public FGEShapeGraphics getGraphics();
+	// public FGEShapeGraphics getGraphics();
 
 	/**
 	 * Override this if you want to use such a feature
@@ -703,8 +682,8 @@ public interface ShapeGraphicalRepresentation extends GraphicalRepresentation {
 	 */
 	public boolean dragOutsideParentContainerInsideContainer(GraphicalRepresentation container, FGEPoint location);
 
-	public void performRandomLayout();
+	// public void performRandomLayout();
 
-	public void performAutoLayout();
+	// public void performAutoLayout();
 
 }

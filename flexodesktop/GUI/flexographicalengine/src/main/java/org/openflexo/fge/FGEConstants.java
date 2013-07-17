@@ -34,7 +34,7 @@ public interface FGEConstants {
 	// constraints
 	// to avoid this, we should rework code to cache GR's (avoir rebuilding them) and don't apply constraints on creation of GR's, only on
 	// creation of model objects
-	public static final boolean APPLY_CONSTRAINTS_IMMEDIATELY = true;
+	// public static final boolean APPLY_CONSTRAINTS_IMMEDIATELY = true;
 	public static final boolean DEBUG = false;
 	public static final int CONTROL_POINT_SIZE = 2;
 	public static final int POINT_SIZE = 4;

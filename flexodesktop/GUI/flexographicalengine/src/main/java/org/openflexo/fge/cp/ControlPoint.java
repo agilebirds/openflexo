@@ -23,18 +23,23 @@ import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.FGEGraphics;
 
+/**
+ * A {@link ControlArea} encodes an interactive area, attached to a DrawingTreeNode, and represented by a single point<br>
+ * 
+ * @author sylvain
+ */
 public abstract class ControlPoint extends ControlArea<FGEPoint> {
 
 	private static final Logger logger = Logger.getLogger(ControlPoint.class.getPackage().getName());
 
-	public ControlPoint(GraphicalRepresentation aGraphicalRepresentation, FGEPoint pt) {
-		super(aGraphicalRepresentation, pt);
+	public ControlPoint(DrawingTreeNode<?, ?> node, FGEPoint pt) {
+		super(node, pt);
 	}
 
 	public FGEPoint getPoint() {
@@ -48,16 +53,15 @@ public abstract class ControlPoint extends ControlArea<FGEPoint> {
 	// @SuppressWarnings("unchecked")
 	@Override
 	public Rectangle paint(FGEGraphics graphics) {
-		if (getGraphicalRepresentation() == null) {
-			logger.warning("Unexpected null GraphicalRepresentation");
+		if (getNode() == null) {
+			logger.warning("Unexpected null node");
 			return null;
 		}
 		// logger.info("paintControlPoint " + getPoint() + "style=" + graphics.getDefaultForeground() + " for " +
 		// getGraphicalRepresentation());
 		graphics.useDefaultForegroundStyle();
 		if (isEmbeddedInComponentHierarchy(graphics)) {
-			AffineTransform at = FGEUtils.convertNormalizedCoordinatesAT(getGraphicalRepresentation(),
-					graphics.getGraphicalRepresentation());
+			AffineTransform at = FGEUtils.convertNormalizedCoordinatesAT(getNode(), graphics.getNode());
 			return graphics.drawControlPoint(getPoint().transform(at), FGEConstants.CONTROL_POINT_SIZE);
 		} else {
 			return graphics.drawControlPoint(getPoint(), FGEConstants.CONTROL_POINT_SIZE);
@@ -66,7 +70,7 @@ public abstract class ControlPoint extends ControlArea<FGEPoint> {
 	}
 
 	public boolean isEmbeddedInComponentHierarchy(FGEGraphics graphics) {
-		return getGraphicalRepresentation().isConnectedToDrawing();
+		return getNode().isConnectedToDrawing();
 	}
 
 }

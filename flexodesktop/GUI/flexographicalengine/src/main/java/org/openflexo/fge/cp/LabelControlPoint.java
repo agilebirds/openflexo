@@ -22,14 +22,20 @@ package org.openflexo.fge.cp;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 
+/**
+ * A {@link LabelControlPoint} encodes an interactive control point which purpose is to control a label location<br>
+ * 
+ * @author sylvain
+ */
 public class LabelControlPoint extends ControlPoint {
 
-	public LabelControlPoint(GraphicalRepresentation graphicalRepresentation, FGEPoint pt) {
-		super(graphicalRepresentation, pt);
+	public LabelControlPoint(DrawingTreeNode<?, ?> node, FGEPoint pt) {
+		super(node, pt);
 	}
 
 	@Override
@@ -43,7 +49,8 @@ public class LabelControlPoint extends ControlPoint {
 	}
 
 	@Override
-	public void startDragging(DrawingController controller, FGEPoint startPoint) {
+	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
+		super.startDragging(controller, startPoint);
 	}
 
 	@Override
@@ -53,8 +60,7 @@ public class LabelControlPoint extends ControlPoint {
 	}
 
 	@Override
-	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
-		// TODO Auto-generated method stub
-
+	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation focusedGR) {
+		super.stopDragging(controller, focusedGR);
 	}
 }

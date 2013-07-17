@@ -244,15 +244,15 @@ public class FGEUtils {
 			new LocalizedDelegateGUIImpl(new FileResource("Localized"), null, false), true);
 
 	@StringConverter
-	public static final Converter<DataBinding> DATA_BINDING_CONVERTER = new Converter<DataBinding>(DataBinding.class) {
+	public static final Converter<DataBinding<?>> DATA_BINDING_CONVERTER = new Converter<DataBinding<?>>(DataBinding.class) {
 
 		@Override
-		public DataBinding convertFromString(String value, ModelFactory factory) throws InvalidDataException {
-			return new DataBinding(value);
+		public DataBinding<?> convertFromString(String value, ModelFactory factory) throws InvalidDataException {
+			return new DataBinding<Object>(value);
 		}
 
 		@Override
-		public String convertToString(DataBinding value) {
+		public String convertToString(DataBinding<?> value) {
 			if (value.isSet()) {
 				return value.toString();
 			}

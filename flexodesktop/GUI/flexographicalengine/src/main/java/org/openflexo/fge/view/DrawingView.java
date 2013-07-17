@@ -57,6 +57,8 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.Drawing.RootNode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.DrawingGraphicalRepresentation.DrawingParameters;
 import org.openflexo.fge.DrawingNeedsToBeRedrawn;
@@ -80,7 +82,7 @@ import org.openflexo.fge.view.listener.DrawingViewMouseListener;
 import org.openflexo.fge.view.listener.FocusRetriever;
 import org.openflexo.swing.MouseResizer;
 
-public class DrawingView extends FGELayeredView implements Autoscroll {
+public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 
 	private final class DrawingViewResizer extends MouseResizer {
 		protected DrawingViewResizer() {
@@ -118,7 +120,7 @@ public class DrawingView extends FGELayeredView implements Autoscroll {
 
 	private static final Logger logger = Logger.getLogger(DrawingView.class.getPackage().getName());
 
-	private Drawing<?> drawing;
+	private Drawing<M> drawing;
 	private Map<GraphicalRepresentation, FGEView> contents;
 	private DrawingController _controller;
 	private FocusRetriever _focusRetriever;
@@ -131,14 +133,14 @@ public class DrawingView extends FGELayeredView implements Autoscroll {
 
 	private static final FGEModelFactory PAINT_FACTORY = FGEUtils.TOOLS_FACTORY;
 
-	public DrawingView(Drawing<?> aDrawing, DrawingController controller) {
+	public DrawingView(RootNode<M> node, DrawingController<M> controller) {
 		_controller = controller;
-		drawing = aDrawing;
-		aDrawing.getDrawingGraphicalRepresentation().updateBindingModel();
+		drawing = controller.getDrawing();
+		node.getGraphicalRepresentation().updateBindingModel();
 		contents = new Hashtable<GraphicalRepresentation, FGEView>();
-		graphics = new FGEDrawingGraphics(drawing.getDrawingGraphicalRepresentation());
+		graphics = new FGEDrawingGraphics(node);
 		_focusRetriever = new FocusRetriever(this);
-		if (aDrawing.getDrawingGraphicalRepresentation().isResizable()) {
+		if (node.getGraphicalRepresentation().isResizable()) {
 			resizer = new DrawingViewResizer();
 		}
 		mouseListener = makeDrawingViewMouseListener();
@@ -148,9 +150,9 @@ public class DrawingView extends FGELayeredView implements Autoscroll {
 		resizeView();
 		getGraphicalRepresentation().addObserver(this);
 
-		for (Object gr : getGraphicalRepresentation().getContainedGraphicalRepresentations()) {
-			if (gr instanceof GeometricGraphicalRepresentation) {
-				((GeometricGraphicalRepresentation) gr).addObserver(this);
+		for (DrawingTreeNode<?, ?> dtn : node.getChildNodes()) {
+			if (dtn instanceof GeometricNode<?>) {
+				((GeometricNode<?>) dtn).addObserver(this);
 			}
 		}
 

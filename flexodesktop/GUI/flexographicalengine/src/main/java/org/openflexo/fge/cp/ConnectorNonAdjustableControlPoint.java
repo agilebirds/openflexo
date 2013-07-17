@@ -21,18 +21,13 @@ package org.openflexo.fge.cp;
 
 import java.awt.Cursor;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.geom.FGEPoint;
 
-public class ConnectorNonAdjustableControlPoint extends ControlPoint {
+public class ConnectorNonAdjustableControlPoint extends ConnectorControlPoint {
 
-	public ConnectorNonAdjustableControlPoint(ConnectorGraphicalRepresentation gr, FGEPoint pt) {
-		super(gr, pt);
-	}
-
-	@Override
-	public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
-		return (ConnectorGraphicalRepresentation) super.getGraphicalRepresentation();
+	public ConnectorNonAdjustableControlPoint(ConnectorNode<?> node, FGEPoint pt) {
+		super(node, pt);
 	}
 
 	@Override

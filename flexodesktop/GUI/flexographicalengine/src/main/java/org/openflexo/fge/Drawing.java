@@ -25,15 +25,20 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.util.List;
+import java.util.Observer;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.fge.GRBinding.ConnectorGRBinding;
 import org.openflexo.fge.GRBinding.ShapeGRBinding;
+import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
 import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
+import org.openflexo.fge.graphics.DecorationPainter;
 import org.openflexo.fge.graphics.FGEGraphics;
+import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.impl.DrawingImpl;
 
 /**
@@ -49,7 +54,7 @@ import org.openflexo.fge.impl.DrawingImpl;
  */
 public interface Drawing<M> {
 
-	public interface DrawingTreeNode<O, GR extends GraphicalRepresentation> extends BindingEvaluationContext {
+	public interface DrawingTreeNode<O, GR extends GraphicalRepresentation> extends BindingEvaluationContext, Observer {
 
 		public Drawing<?> getDrawing();
 
@@ -168,9 +173,27 @@ public interface Drawing<M> {
 
 		public abstract ShapeNode<?> getTopLevelShapeGraphicalRepresentation(FGEPoint p);
 
+		public boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
+
+		public List<ConstraintDependency> getDependancies();
+
+		public List<ConstraintDependency> getAlterings();
+
+		public void declareDependantOf(DrawingTreeNode<?, ?> aNode, GRParameter requiringParameter, GRParameter requiredParameter)
+				throws DependencyLoopException;
+
 	}
 
 	public interface RootNode<M> extends DrawingTreeNode<M, DrawingGraphicalRepresentation> {
+
+		public double getWidth();
+
+		public void setWidth(double aValue);
+
+		public double getHeight();
+
+		public void setHeight(double aValue);
+
 	}
 
 	public interface ShapeNode<O> extends DrawingTreeNode<O, ShapeGraphicalRepresentation> {
@@ -178,9 +201,141 @@ public interface Drawing<M> {
 
 		public double getUnscaledViewHeight();
 
+		/**
+		 * Return bounds (including border) relative to parent container
+		 * 
+		 * @return
+		 */
+		public FGERectangle getBounds();
+
+		/**
+		 * Return view bounds (excluding border) relative to parent container
+		 * 
+		 * @param scale
+		 * @return
+		 */
+		public Rectangle getBounds(double scale);
+
+		/**
+		 * Return view bounds (excluding border) relative to given container
+		 * 
+		 * @param scale
+		 * @return
+		 */
+		public Rectangle getBounds(DrawingTreeNode<?, ?> container, double scale);
+
+		/**
+		 * Return logical bounds (including border) relative to given container
+		 * 
+		 * @param scale
+		 * @return
+		 */
+		public Rectangle getViewBounds(DrawingTreeNode<?, ?> container, double scale);
+
+		public boolean isPointInsideShape(FGEPoint aPoint);
+
+		public void notifyShapeChanged();
+
+		public void notifyShapeNeedsToBeRedrawn();
+
+		public void notifyObjectMoved();
+
+		public void notifyObjectMoved(FGEPoint oldLocation);
+
+		public void notifyObjectWillMove();
+
+		public void notifyObjectHasMoved();
+
+		public boolean isMoving();
+
+		/**
+		 * Notify that the object just resized
+		 */
+		public void notifyObjectResized();
+
+		/**
+		 * Notify that the object just resized
+		 */
+		public void notifyObjectResized(FGEDimension oldSize);
+
+		/**
+		 * Notify that the object will be resized
+		 */
+		public void notifyObjectWillResize();
+
+		/**
+		 * Notify that the object resizing has finished (take care that this just notify END of resize, this should NOT be used to notify a
+		 * resizing: use notifyObjectResize() instead)
+		 */
+		public void notifyObjectHasResized();
+
+		public boolean isResizing();
+
+		public void extendParentBoundsToHostThisShape();
+
+		/**
+		 * Check and eventually relocate and resize current graphical representation in order to all all contained shape graphical
+		 * representations. Contained graphical representations may substantically be relocated.
+		 */
+		public void extendBoundsToHostContents();
+
+		public double getX();
+
+		public void setX(double aValue);
+
+		public double getY();
+
+		public void setY(double aValue);
+
+		public FGEPoint getLocation();
+
+		public void setLocation(FGEPoint newLocation);
+
+		public FGEPoint getLocationInDrawing();
+
+		public Dimension getNormalizedLabelSize();
+
+		public Rectangle getNormalizedLabelBounds();
+
+		public FGERectangle getRequiredBoundsForContents();
+
+		public boolean isFullyContainedInContainer();
+
+		public boolean isParentLayoutedAsContainer();
+
+		public double getMoveAuthorizedRatio(FGEPoint desiredLocation, FGEPoint initialLocation);
+
+		public double getWidth();
+
+		public void setWidth(double aValue);
+
+		public double getHeight();
+
+		public void setHeight(double aValue);
+
+		public FGEDimension getSize();
+
+		public void setSize(FGEDimension newSize);
+
+		@Override
+		public int getAvailableLabelWidth(double scale);
+
+		public DecorationPainter getDecorationPainter();
+
+		public void setDecorationPainter(DecorationPainter aPainter);
+
+		public ShapePainter getShapePainter();
+
+		public void setShapePainter(ShapePainter aPainter);
+
+		public void finalizeConstraints();
+
 	}
 
 	public interface ConnectorNode<O> extends DrawingTreeNode<O, ConnectorGraphicalRepresentation> {
+	}
+
+	public interface GeometricNode<O> extends DrawingTreeNode<O, GeometricGraphicalRepresentation> {
 	}
 
 	// public DrawingGraphicalRepresentation getDrawingGraphicalRepresentation();
@@ -203,5 +358,45 @@ public interface Drawing<M> {
 	public List<DrawingTreeNode<?>> getContainedNodes(DrawingTreeNode<?> parentNode);*/
 
 	public <O, GR extends GraphicalRepresentation> DrawingTreeNode<O, GR> getDrawingTreeNode(O aDrawable, GRBinding<O, GR> grBinding);
+
+	public static class ConstraintDependency {
+		public DrawingTreeNode<?, ?> requiringGR;
+		public GRParameter requiringParameter;
+		public DrawingTreeNode<?, ?> requiredGR;
+		public GRParameter requiredParameter;
+
+		public ConstraintDependency(DrawingTreeNode<?, ?> requiringGR, GRParameter requiringParameter, DrawingTreeNode<?, ?> requiredGR,
+				GRParameter requiredParameter) {
+			super();
+			this.requiringGR = requiringGR;
+			this.requiringParameter = requiringParameter;
+			this.requiredGR = requiredGR;
+			this.requiredParameter = requiredParameter;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof ConstraintDependency) {
+				ConstraintDependency opposite = (ConstraintDependency) obj;
+				return requiredGR == opposite.requiredGR && requiringGR == opposite.requiringGR
+						&& requiringParameter == opposite.requiringParameter && requiredParameter == opposite.requiredParameter;
+			}
+			return super.equals(obj);
+		}
+	}
+
+	@SuppressWarnings("serial")
+	public static class DependencyLoopException extends Exception {
+		private List<DrawingTreeNode<?, ?>> dependencies;
+
+		public DependencyLoopException(List<DrawingTreeNode<?, ?>> dependancies) {
+			this.dependencies = dependancies;
+		}
+
+		@Override
+		public String getMessage() {
+			return "DependencyLoopException: " + dependencies;
+		}
+	}
 
 }

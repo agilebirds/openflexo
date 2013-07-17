@@ -22,6 +22,7 @@ package org.openflexo.fge.graphics;
 import java.awt.Point;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 
@@ -29,8 +30,8 @@ public class FGEShapeDecorationGraphics extends FGEGraphics {
 
 	private static final Logger logger = Logger.getLogger(FGEShapeDecorationGraphics.class.getPackage().getName());
 
-	public FGEShapeDecorationGraphics(ShapeGraphicalRepresentation aGraphicalRepresentation) {
-		super(aGraphicalRepresentation);
+	public FGEShapeDecorationGraphics(ShapeNode<?> node) {
+		super(node);
 	}
 
 	@Override

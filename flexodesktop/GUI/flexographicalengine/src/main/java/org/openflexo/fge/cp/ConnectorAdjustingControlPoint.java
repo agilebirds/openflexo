@@ -22,20 +22,15 @@ package org.openflexo.fge.cp;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 
-public class ConnectorAdjustingControlPoint extends ControlPoint {
+public class ConnectorAdjustingControlPoint extends ConnectorControlPoint {
 
-	public ConnectorAdjustingControlPoint(ConnectorGraphicalRepresentation gr, FGEPoint pt) {
-		super(gr, pt);
-	}
-
-	@Override
-	public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
-		return (ConnectorGraphicalRepresentation) super.getGraphicalRepresentation();
+	public ConnectorAdjustingControlPoint(ConnectorNode<?> node, FGEPoint pt) {
+		super(node, pt);
 	}
 
 	@Override
@@ -49,11 +44,11 @@ public class ConnectorAdjustingControlPoint extends ControlPoint {
 	}
 
 	@Override
-	public void startDragging(DrawingController controller, FGEPoint startPoint) {
+	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
 		if (controller.getPaintManager().isPaintingCacheEnabled()) {
-			controller.getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
-			controller.getPaintManager().invalidate(getGraphicalRepresentation());
+			controller.getPaintManager().addToTemporaryObjects(getNode());
+			controller.getPaintManager().invalidate(getNode());
 		}
 	}
 
@@ -64,11 +59,11 @@ public class ConnectorAdjustingControlPoint extends ControlPoint {
 	}
 
 	@Override
-	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
+	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation focusedGR) {
 		super.stopDragging(controller, focusedGR);
 		if (controller.getPaintManager().isPaintingCacheEnabled()) {
-			controller.getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
-			controller.getPaintManager().invalidate(getGraphicalRepresentation());
+			controller.getPaintManager().removeFromTemporaryObjects(getNode());
+			controller.getPaintManager().invalidate(getNode());
 			controller.getPaintManager().repaint(controller.getDrawingView());
 		}
 	}

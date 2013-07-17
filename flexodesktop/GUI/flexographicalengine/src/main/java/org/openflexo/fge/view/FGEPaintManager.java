@@ -39,6 +39,7 @@ import javax.swing.JComponent;
 import javax.swing.RepaintManager;
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GraphicalRepresentation;
@@ -73,13 +74,13 @@ public class FGEPaintManager {
 	private DrawingView _drawingView;
 
 	private BufferedImage _paintBuffer;
-	private HashSet<GraphicalRepresentation> _temporaryObjects;
+	private HashSet<DrawingTreeNode<?, ?>> _temporaryObjects;
 
 	public FGEPaintManager(DrawingView drawingView) {
 		super();
 		_drawingView = drawingView;
 		_paintBuffer = null;
-		_temporaryObjects = new HashSet<GraphicalRepresentation>();
+		_temporaryObjects = new HashSet<DrawingTreeNode<?, ?>>();
 		if (ENABLE_CACHE_BY_DEFAULT) {
 			enablePaintingCache();
 		} else {
@@ -113,21 +114,21 @@ public class FGEPaintManager {
 		_paintingCacheEnabled = false;
 	}
 
-	public HashSet<GraphicalRepresentation> getTemporaryObjects() {
+	public HashSet<DrawingTreeNode<?, ?>> getTemporaryObjects() {
 		return _temporaryObjects;
 	}
 
-	public boolean containsTemporaryObject(GraphicalRepresentation gr) {
-		if (gr == null) {
+	public boolean containsTemporaryObject(DrawingTreeNode<?, ?> dtn) {
+		if (dtn == null) {
 			return false;
 		}
-		if (isTemporaryObject(gr)) {
+		if (isTemporaryObject(dtn)) {
 			return true;
 		}
-		if (gr.getContainedGraphicalRepresentations() == null) {
+		if (dtn.getChildNodes() == null) {
 			return false;
 		}
-		for (GraphicalRepresentation child : gr.getContainedGraphicalRepresentations()) {
+		for (DrawingTreeNode<?, ?> child : dtn.getChildNodes()) {
 			if (containsTemporaryObject(child)) {
 				return true;
 			}
@@ -135,35 +136,35 @@ public class FGEPaintManager {
 		return false;
 	}
 
-	public boolean isTemporaryObject(GraphicalRepresentation gr) {
-		return _temporaryObjects.contains(gr);
+	public boolean isTemporaryObject(DrawingTreeNode<?, ?> dtn) {
+		return _temporaryObjects.contains(dtn);
 	}
 
-	public boolean isTemporaryObjectOrParentIsTemporaryObject(GraphicalRepresentation gr) {
-		if (isTemporaryObject(gr)) {
+	public boolean isTemporaryObjectOrParentIsTemporaryObject(DrawingTreeNode<?, ?> dtn) {
+		if (isTemporaryObject(dtn)) {
 			return true;
 		}
-		if (gr.getContainerGraphicalRepresentation() != null) {
-			return isTemporaryObjectOrParentIsTemporaryObject(gr.getContainerGraphicalRepresentation());
+		if (dtn.getParentNode() != null) {
+			return isTemporaryObjectOrParentIsTemporaryObject(dtn.getParentNode());
 		}
 		return false;
 	}
 
-	public void addToTemporaryObjects(GraphicalRepresentation gr) {
+	public void addToTemporaryObjects(DrawingTreeNode<?, ?> dtn) {
 		if (paintRequestLogger.isLoggable(Level.FINE)) {
-			paintRequestLogger.fine("addToTemporaryObjects() " + gr);
+			paintRequestLogger.fine("addToTemporaryObjects() " + dtn);
 		}
-		if (!_temporaryObjects.contains(gr)) {
-			_temporaryObjects.add(gr);
+		if (!_temporaryObjects.contains(dtn)) {
+			_temporaryObjects.add(dtn);
 		}
 	}
 
-	public void removeFromTemporaryObjects(GraphicalRepresentation gr) {
-		_temporaryObjects.remove(gr);
+	public void removeFromTemporaryObjects(DrawingTreeNode<?, ?> dtn) {
+		_temporaryObjects.remove(dtn);
 	}
 
 	// CPU-expensive because it will ask to recreate the whole buffer
-	public void invalidate(GraphicalRepresentation object) {
+	public void invalidate(DrawingTreeNode<?, ?> dtn) {
 		if (paintRequestLogger.isLoggable(Level.FINE)) {
 			paintRequestLogger.fine("CALLED invalidate on FGEPaintManager");
 		}
@@ -196,7 +197,7 @@ public class FGEPaintManager {
 		repaintManager.addTemporaryRepaintArea(r, view);
 	}
 
-	public void repaint(final FGEView view) {
+	public void repaint(final FGEView<?> view) {
 		if (view.isDeleted()) {
 			return;
 		}
@@ -222,7 +223,7 @@ public class FGEPaintManager {
 		}
 		repaintManager.repaintTemporaryRepaintAreas(_drawingView);
 		((JComponent) view).repaint();
-		if (view.getGraphicalRepresentation().hasFloatingLabel()) {
+		if (view.getDrawingTreeNode().getGraphicalRepresentation().hasFloatingLabel()) {
 			LabelView label = view.getLabelView();
 			if (label != null) {
 				label.repaint();
@@ -469,13 +470,13 @@ public class FGEPaintManager {
 	 * @param gr
 	 * @return
 	 */
-	protected boolean renderUsingBuffer(Graphics2D g, Rectangle renderingBounds, GraphicalRepresentation gr, double scale) {
+	protected boolean renderUsingBuffer(Graphics2D g, Rectangle renderingBounds, DrawingTreeNode<?, ?> node, double scale) {
 		if (renderingBounds == null) {
 			return false;
 		}
 		// Use buffer
 		BufferedImage buffer = getPaintBuffer();
-		Rectangle viewBoundsInDrawingView = FGEUtils.convertRectangle(gr, renderingBounds, gr.getDrawingGraphicalRepresentation(), scale);
+		Rectangle viewBoundsInDrawingView = FGEUtils.convertRectangle(node, renderingBounds, node.getDrawing().getRoot(), scale);
 		Point dp1 = renderingBounds.getLocation();
 		Point dp2 = new Point(renderingBounds.x + renderingBounds.width, renderingBounds.y + renderingBounds.height);
 		Point sp1 = viewBoundsInDrawingView.getLocation();
@@ -487,7 +488,7 @@ public class FGEPaintManager {
 			// We have here a request for render outside cached image
 			// We cannot do that, so skip buffer use and do normal painting
 			if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE)) {
-				FGEPaintManager.paintPrimitiveLogger.fine("GraphicalRepresentation:" + gr
+				FGEPaintManager.paintPrimitiveLogger.fine("Node:" + node
 						+ " / request to render outside image buffer, use normal rendering clip=" + renderingBounds);
 			}
 			// invalidate(gr);

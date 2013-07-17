@@ -40,6 +40,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
@@ -60,25 +61,22 @@ import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
 import org.openflexo.fge.view.listener.ShapeViewMouseListener;
 
-public class ShapeView extends FGELayeredView {
+public class ShapeView<O> extends FGELayeredView<O> {
 
 	private static final Logger logger = Logger.getLogger(ShapeView.class.getPackage().getName());
 
-	private ShapeGraphicalRepresentation graphicalRepresentation;
+	private ShapeNode<O> node;
 	private ShapeViewMouseListener mouseListener;
-	private DrawingController _controller;
+	private DrawingController<?> _controller;
 
 	private LabelView _labelView;
 
-	private Object drawable;
-
-	public ShapeView(ShapeGraphicalRepresentation aGraphicalRepresentation, Object drawable, DrawingController controller) {
+	public ShapeView(ShapeNode<O> node, DrawingController<?> controller) {
 		super();
-		logger.fine("Create ShapeView " + Integer.toHexString(hashCode()) + " for " + aGraphicalRepresentation);
+		logger.fine("Create ShapeView " + Integer.toHexString(hashCode()) + " for " + node);
 		_controller = controller;
-		this.drawable = drawable;
-		graphicalRepresentation = aGraphicalRepresentation;
-		graphicalRepresentation.finalizeConstraints();
+		this.node = node;
+		node.finalizeConstraints();
 		updateLabelView();
 		relocateAndResizeView();
 		mouseListener = makeShapeViewMouseListener();
@@ -149,8 +147,8 @@ public class ShapeView extends FGELayeredView {
 	}
 
 	@Override
-	public Object getDrawable() {
-		return drawable;
+	public O getDrawable() {
+		return node.getDrawable();
 	}
 
 	@Override

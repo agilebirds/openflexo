@@ -1,7 +1,6 @@
 package org.openflexo.fge.impl;
 
 import java.awt.Color;
-import java.awt.Rectangle;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -278,10 +277,10 @@ public class DrawingGraphicalRepresentationImpl extends GraphicalRepresentationI
 		return new FGERectangle(0, 0, getWidth(), getHeight(), Filling.FILLED);
 	}*/
 
-	@Override
+	/*@Override
 	public boolean isContainedInSelection(Rectangle drawingViewSelection, double scale) {
 		return false;
-	}
+	}*/
 
 	/*@Override
 	public AffineTransform convertNormalizedPointToViewCoordinatesAT(double scale) {

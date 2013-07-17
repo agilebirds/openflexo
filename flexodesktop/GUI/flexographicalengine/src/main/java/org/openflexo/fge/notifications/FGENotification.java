@@ -38,7 +38,6 @@ public class FGENotification implements InspectableModification {
 		this.newValue = newValue;
 	}
 
-	@Deprecated
 	public FGENotification(String parameterName, Object oldValue, Object newValue) {
 		super();
 		this.parameter = null;

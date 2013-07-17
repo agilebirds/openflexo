@@ -17,32 +17,20 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.cp;
+package org.openflexo.fge.notifications;
 
-import java.awt.Cursor;
+import org.openflexo.antar.binding.DataBinding;
 
-import org.openflexo.fge.Drawing.ConnectorNode;
-import org.openflexo.fge.geom.FGEPoint;
+public class BindingChanged extends FGENotification {
 
-/**
- * A {@link ConnectorControlPoint} encodes an interactive control point, attached to a ConnectorNode<br>
- * 
- * @author sylvain
- */
-public class ConnectorControlPoint extends ControlPoint {
+	private DataBinding<?> binding;
 
-	public ConnectorControlPoint(ConnectorNode<?> node, FGEPoint pt) {
-		super(node, pt);
+	public BindingChanged(DataBinding<?> binding) {
+		super(binding.getBindingName(), null, binding);
 	}
 
-	@Override
-	public Cursor getDraggingCursor() {
-		return Cursor.getDefaultCursor();
-	}
-
-	@Override
-	public boolean isDraggable() {
-		return false;
+	public DataBinding<?> getBinding() {
+		return binding;
 	}
 
 }

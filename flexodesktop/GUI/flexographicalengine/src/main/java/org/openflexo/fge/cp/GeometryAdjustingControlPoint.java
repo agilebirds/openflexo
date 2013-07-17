@@ -23,26 +23,32 @@ import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.GeometricGraphicalRepresentation;
+import org.openflexo.fge.Drawing.GeometricNode;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
 
+/**
+ * A {@link LabelControlPoint} encodes an interactive control point which purpose is to adjust geometry of a GeometricNode<br>
+ * 
+ * @author sylvain
+ */
 public abstract class GeometryAdjustingControlPoint<O extends FGEArea> extends ControlPoint {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(GeometryAdjustingControlPoint.class.getPackage().getName());
 
 	private String name;
 
-	public GeometryAdjustingControlPoint(GeometricGraphicalRepresentation gr, String aName, FGEPoint pt) {
-		super(gr, pt);
+	public GeometryAdjustingControlPoint(GeometricNode<?> node, String aName, FGEPoint pt) {
+		super(node, pt);
 		name = aName;
 	}
 
 	@Override
-	public GeometricGraphicalRepresentation getGraphicalRepresentation() {
-		return (GeometricGraphicalRepresentation) super.getGraphicalRepresentation();
+	public GeometricNode<?> getNode() {
+		return (GeometricNode<?>) super.getNode();
 	}
 
 	@Override
@@ -56,7 +62,7 @@ public abstract class GeometryAdjustingControlPoint<O extends FGEArea> extends C
 	}
 
 	@Override
-	public void startDragging(DrawingController controller, FGEPoint startPoint) {
+	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
 	}
 
 	@Override
@@ -66,7 +72,7 @@ public abstract class GeometryAdjustingControlPoint<O extends FGEArea> extends C
 	}
 
 	@Override
-	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
+	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation focusedGR) {
 	}
 
 	public abstract void update(O geometricObject);

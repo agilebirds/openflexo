@@ -27,12 +27,10 @@ import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
-import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.impl.ConnectorGraphicalRepresentationImpl;
-import org.openflexo.fge.view.ConnectorView;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
@@ -246,7 +244,7 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 	public void refreshConnector();
 
 	// Override for a custom view management
-	public ConnectorView makeConnectorView(DrawingController controller);
+	// public ConnectorView makeConnectorView(DrawingController controller);
 
 	public boolean getDebugCoveringArea();
 

@@ -20,7 +20,6 @@
 package org.openflexo.fge;
 
 import java.awt.Dimension;
-import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.beans.PropertyChangeSupport;
 import java.util.Observable;
@@ -130,7 +129,8 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer, 
 		mouseClickControls,
 		mouseDragControls,
 		toolTipText,
-		variables
+		variables;
+
 	}
 
 	public static enum ParagraphAlignment {
@@ -143,46 +143,6 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer, 
 
 	public static enum VerticalTextAlignment {
 		TOP, MIDDLE, BOTTOM;
-	}
-
-	public static class ConstraintDependency {
-		public GraphicalRepresentation requiringGR;
-		public GRParameter requiringParameter;
-		public GraphicalRepresentation requiredGR;
-		public GRParameter requiredParameter;
-
-		public ConstraintDependency(GraphicalRepresentation requiringGR, GRParameter requiringParameter,
-				GraphicalRepresentation requiredGR, GRParameter requiredParameter) {
-			super();
-			this.requiringGR = requiringGR;
-			this.requiringParameter = requiringParameter;
-			this.requiredGR = requiredGR;
-			this.requiredParameter = requiredParameter;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (obj instanceof ConstraintDependency) {
-				ConstraintDependency opposite = (ConstraintDependency) obj;
-				return requiredGR == opposite.requiredGR && requiringGR == opposite.requiringGR
-						&& requiringParameter == opposite.requiringParameter && requiredParameter == opposite.requiredParameter;
-			}
-			return super.equals(obj);
-		}
-	}
-
-	@SuppressWarnings("serial")
-	public static class DependencyLoopException extends Exception {
-		private Vector<GraphicalRepresentation> dependencies;
-
-		public DependencyLoopException(Vector<GraphicalRepresentation> dependancies) {
-			this.dependencies = dependancies;
-		}
-
-		@Override
-		public String getMessage() {
-			return "DependencyLoopException: " + dependencies;
-		}
 	}
 
 	// *******************************************************************************
@@ -420,7 +380,6 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer, 
 	 * 
 	 * @return
 	 */
-	@Override
 	public boolean isDeleted();
 
 	// *******************************************************************************
@@ -525,8 +484,8 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer, 
 
 	public void notify(FGENotification notification);
 
-	@Override
-	public String getInspectorName();
+	// @Override
+	// public String getInspectorName();
 
 	public boolean isShape();
 
@@ -567,9 +526,9 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer, 
 	public Point convertRemoteNormalizedPointToLocalViewCoordinates(FGEPoint p, GraphicalRepresentation source, double scale);
 	*/
 
-	public boolean isRegistered();
+	// public boolean isRegistered();
 
-	public void setRegistered(boolean aFlag);
+	// public void setRegistered(boolean aFlag);
 
 	public MouseClickControl createMouseClickControl();
 
@@ -583,7 +542,7 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer, 
 
 	public boolean isMouseDragControlDeletable(MouseDragControl mouseDragControl);
 
-	public boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
+	// public boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
 
 	public void notifyLabelWillBeEdited();
 
@@ -634,13 +593,13 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer, 
 
 	// public Iterator<GraphicalRepresentation> allContainedGRIterator();
 
-	public Vector<ConstraintDependency> getDependancies();
+	/*public Vector<ConstraintDependency> getDependancies();
 
 	public Vector<ConstraintDependency> getAlterings();
 
 	public void declareDependantOf(GraphicalRepresentation aComponent, GRParameter requiringParameter, GRParameter requiredParameter)
 			throws DependencyLoopException;
-
+	*/
 	public GRVariable createStringVariable();
 
 	public GRVariable createIntegerVariable();

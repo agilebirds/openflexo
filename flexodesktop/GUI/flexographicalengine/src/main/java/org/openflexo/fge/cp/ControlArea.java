@@ -26,6 +26,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
@@ -34,33 +35,43 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.graphics.FGEGraphics;
 
+/**
+ * A {@link ControlArea} encodes an interactive area, attached to a DrawingTreeNode<br>
+ * 
+ * This class is abstract, as it should be subclassed where to define a custom behavioural interaction.<br>
+ * The {@link ControlPoint} is the most common specialization of a {@link ControlArea}
+ * 
+ * @author sylvain
+ * 
+ * @param <A>
+ */
 public abstract class ControlArea<A extends FGEArea> implements FGEConstants {
 
 	private static final Logger logger = Logger.getLogger(ControlArea.class.getPackage().getName());
 
-	private GraphicalRepresentation graphicalRepresentation;
+	private DrawingTreeNode<?, ?> node;
+	private A area;
+	private FGEArea draggingAuthorizedArea = new FGEEmptyArea();
 
-	private A _area;
-
-	public ControlArea(GraphicalRepresentation aGraphicalRepresentation, A area) {
-		graphicalRepresentation = aGraphicalRepresentation;
-		_area = area;
-		if (graphicalRepresentation == null) {
-			logger.warning("!!!!!!!!!!!! ControlArea built for null GraphicalRepresentation");
+	public ControlArea(DrawingTreeNode<?, ?> node, A area) {
+		this.node = node;
+		this.area = area;
+		if (node == null) {
+			logger.warning("ControlArea built for null DrawingTreeNode");
 		}
 
 	}
 
-	public GraphicalRepresentation getGraphicalRepresentation() {
-		return graphicalRepresentation;
+	public DrawingTreeNode<?, ?> getNode() {
+		return node;
 	}
 
 	public A getArea() {
-		return _area;
+		return area;
 	}
 
 	public void setArea(A point) {
-		_area = point;
+		area = point;
 	}
 
 	// Please override when required
@@ -75,14 +86,12 @@ public abstract class ControlArea<A extends FGEArea> implements FGEConstants {
 		return Cursor.getDefaultCursor();
 	}
 
-	private FGEArea _draggingAuthorizedArea = new FGEEmptyArea();
-
 	public FGEArea getDraggingAuthorizedArea() {
-		return _draggingAuthorizedArea;
+		return draggingAuthorizedArea;
 	}
 
 	public final void setDraggingAuthorizedArea(FGEArea area) {
-		_draggingAuthorizedArea = area;
+		draggingAuthorizedArea = area;
 	}
 
 	protected FGEPoint getNearestPointOnAuthorizedArea(FGEPoint point) {
@@ -90,15 +99,14 @@ public abstract class ControlArea<A extends FGEArea> implements FGEConstants {
 	}
 
 	// Override when required
-	public void startDragging(DrawingController controller, FGEPoint startPoint) {
+	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
 	}
 
 	// Override when required
 	/**
-	 * Drag control area to supplied location Return a flag indicating if dragging should continue Override this method when required
+	 * Drag control area to supplied location Return a flag indicating if dragging should continue<br>
+	 * Override this method when required
 	 * 
-	 * @param event
-	 *            TODO
 	 */
 	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
 			FGEPoint initialPoint, MouseEvent event) {
@@ -106,7 +114,7 @@ public abstract class ControlArea<A extends FGEArea> implements FGEConstants {
 	}
 
 	// Override when required
-	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
+	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation focusedGR) {
 	}
 
 	// Override when required
@@ -134,12 +142,12 @@ public abstract class ControlArea<A extends FGEArea> implements FGEConstants {
 			logger.warning("Could not find nearest point for " + aPoint + " on " + getArea());
 			return Double.POSITIVE_INFINITY;
 		}
-		if (getGraphicalRepresentation() == null) {
-			logger.warning("Unexpected null GraphicalRepresentation !");
+		if (node == null) {
+			logger.warning("Unexpected null DrawingTreeNode !");
 			return Double.POSITIVE_INFINITY;
 		}
-		Point pt1 = getGraphicalRepresentation().convertNormalizedPointToViewCoordinates(nearestPoint, scale);
-		Point pt2 = getGraphicalRepresentation().convertNormalizedPointToViewCoordinates(aPoint, scale);
+		Point pt1 = node.convertNormalizedPointToViewCoordinates(nearestPoint, scale);
+		Point pt2 = node.convertNormalizedPointToViewCoordinates(aPoint, scale);
 		return Point2D.distance(pt1.x, pt1.y, pt2.x, pt2.y);
 	}
 
@@ -153,9 +161,9 @@ public abstract class ControlArea<A extends FGEArea> implements FGEConstants {
 	 * @return
 	 */
 	public double getDistanceToArea(Point aPoint, double scale) {
-		FGEPoint normalizedPoint = graphicalRepresentation.convertViewCoordinatesToNormalizedPoint(aPoint, scale);
+		FGEPoint normalizedPoint = node.convertViewCoordinatesToNormalizedPoint(aPoint, scale);
 		FGEPoint nearestPoint = getArea().getNearestPoint(normalizedPoint);
-		Point pt1 = graphicalRepresentation.convertNormalizedPointToViewCoordinates(nearestPoint, scale);
+		Point pt1 = node.convertNormalizedPointToViewCoordinates(nearestPoint, scale);
 		return Point2D.distance(pt1.x, pt1.y, aPoint.x, aPoint.y);
 	}
 

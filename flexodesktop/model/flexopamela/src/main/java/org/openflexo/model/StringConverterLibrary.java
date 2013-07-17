@@ -77,14 +77,14 @@ public class StringConverterLibrary {
 	 */
 	public static abstract class Converter<T> {
 
-		protected Class<T> converterClass;
+		protected Class<? super T> converterClass;
 
-		public Converter(Class<T> aClass) {
+		public Converter(Class<? super T> aClass) {
 			super();
 			converterClass = aClass;
 		}
 
-		public Class<T> getConverterClass() {
+		public Class<? super T> getConverterClass() {
 			return converterClass;
 		}
 

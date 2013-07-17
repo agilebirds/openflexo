@@ -3,6 +3,7 @@ package org.openflexo.fge.impl;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 
 import org.openflexo.fge.BackgroundStyle;
@@ -78,6 +79,11 @@ public class RootNodeImpl<M> extends DrawingTreeNodeImpl<M, DrawingGraphicalRepr
 	}
 
 	@Override
+	public boolean isContainedInSelection(Rectangle drawingViewSelection, double scale) {
+		return false;
+	}
+
+	@Override
 	public void paint(Graphics g, DrawingController<?> controller) {
 		Graphics2D g2 = (Graphics2D) g;
 		graphics.createGraphics(g2, controller);
@@ -129,6 +135,26 @@ public class RootNodeImpl<M> extends DrawingTreeNodeImpl<M, DrawingGraphicalRepr
 		}
 		graphics = null;
 		decorationGraphics = null;
+	}
+
+	@Override
+	public double getWidth() {
+		return getGraphicalRepresentation().getWidth();
+	}
+
+	@Override
+	public final void setWidth(double aValue) {
+		getGraphicalRepresentation().setWidth(aValue);
+	}
+
+	@Override
+	public double getHeight() {
+		return getGraphicalRepresentation().getHeight();
+	}
+
+	@Override
+	public final void setHeight(double aValue) {
+		getGraphicalRepresentation().setHeight(aValue);
 	}
 
 }
