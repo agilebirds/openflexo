@@ -24,6 +24,7 @@ import java.awt.event.MouseEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.connectors.RectPolylinConnector.RectPolylinAdjustability;
 import org.openflexo.fge.geom.FGEGeometricObject;
@@ -39,8 +40,8 @@ public class AdjustableIntermediateControlPoint extends RectPolylinAdjustableCon
 
 	private int index;
 
-	public AdjustableIntermediateControlPoint(FGEPoint point, int index, RectPolylinConnector connector) {
-		super(point, connector);
+	public AdjustableIntermediateControlPoint(FGEPoint point, int index, RectPolylinConnector connector, ConnectorNode<?> node) {
+		super(point, connector, node);
 		this.index = index;
 	}
 
@@ -63,7 +64,7 @@ public class AdjustableIntermediateControlPoint extends RectPolylinAdjustableCon
 		if (getConnector().getAdjustability() == RectPolylinAdjustability.BASICALLY_ADJUSTABLE) {
 			getConnector().setCrossedControlPoint(newRelativePoint);
 			getConnector()._connectorChanged(true);
-			getGraphicalRepresentation().notifyConnectorChanged();
+			getNode().notifyConnectorChanged();
 			return true;
 		}
 		FGEPoint pt = getNearestPointOnAuthorizedArea(newRelativePoint);
@@ -80,7 +81,7 @@ public class AdjustableIntermediateControlPoint extends RectPolylinAdjustableCon
 		getPolylin().updatePointAt(index, pt);
 		boolean continueDragging = movedIntermediateCP(index, oldPoint, true);
 		getConnector()._connectorChanged(true);
-		getGraphicalRepresentation().notifyConnectorChanged();
+		getNode().notifyConnectorChanged();
 		return continueDragging;
 	}
 

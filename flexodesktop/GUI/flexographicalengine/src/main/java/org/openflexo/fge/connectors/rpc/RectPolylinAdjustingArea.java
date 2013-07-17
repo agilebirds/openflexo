@@ -26,7 +26,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.Hashtable;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEIconLibrary;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.connectors.RectPolylinConnector;
@@ -45,9 +45,14 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 	private RectPolylinConnector connector;
 	private FGERectPolylin newPolylin;
 
-	public RectPolylinAdjustingArea(RectPolylinConnector connector) {
-		super(connector.getGraphicalRepresentation(), connector.getCurrentPolylin());
+	public RectPolylinAdjustingArea(RectPolylinConnector connector, ConnectorNode<?> node) {
+		super(node, connector.getCurrentPolylin());
 		this.connector = connector;
+	}
+
+	@Override
+	public ConnectorNode<?> getNode() {
+		return (ConnectorNode<?>) super.getNode();
 	}
 
 	@Override
@@ -80,20 +85,20 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 		// getConnector()._updateAsBasicallyAdjustable();
 
 		getConnector()._connectorChanged(true);
-		getGraphicalRepresentation().notifyConnectorChanged();
+		getNode().notifyConnectorChanged();
 		return true;
 	}
 
 	protected void notifyConnectorChanged() {
-		getGraphicalRepresentation().notifyConnectorChanged();
+		getNode().notifyConnectorChanged();
 	}
 
 	@Override
 	public void startDragging(DrawingController controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
 		if (controller.getPaintManager().isPaintingCacheEnabled()) {
-			controller.getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
-			controller.getPaintManager().invalidate(getGraphicalRepresentation());
+			controller.getPaintManager().addToTemporaryObjects(getNode());
+			controller.getPaintManager().invalidate(getNode());
 		}
 		initialPolylin = getPolylin().clone();
 		// getConnector().setWasManuallyAdjusted(true);
@@ -104,8 +109,8 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
 		super.stopDragging(controller, focusedGR);
 		if (controller.getPaintManager().isPaintingCacheEnabled()) {
-			controller.getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
-			controller.getPaintManager().invalidate(getGraphicalRepresentation());
+			controller.getPaintManager().removeFromTemporaryObjects(getNode());
+			controller.getPaintManager().invalidate(getNode());
 			controller.getPaintManager().repaint(controller.getDrawingView());
 		}
 		// getConnector().setWasManuallyAdjusted(true);
@@ -130,8 +135,7 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 			Image PIN = getPinForPinSize(pinSize);
 			// int d = (int) (PIN_SIZE * graphics.getScale());
 			// g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 0.4f));
-			Point p = getGraphicalRepresentation().convertLocalNormalizedPointToRemoteViewCoordinates(crossedControlPoint,
-					graphics.getGraphicalRepresentation(), 1.0);
+			Point p = getNode().convertLocalNormalizedPointToRemoteViewCoordinates(crossedControlPoint, graphics.getNode(), 1.0);
 			p.x -= (int) (54.0d / 196.0d * pinSize);
 			p.y -= (int) (150.0d / 196.0d * pinSize);
 			graphics.drawImage(PIN, new FGEPoint(p.x, p.y));
@@ -165,10 +169,10 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 		return connector;
 	}
 
-	@Override
+	/*@Override
 	public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
 		return connector.getGraphicalRepresentation();
-	}
+	}*/
 
 	public FGERectPolylin getPolylin() {
 		return getConnector().getCurrentPolylin();

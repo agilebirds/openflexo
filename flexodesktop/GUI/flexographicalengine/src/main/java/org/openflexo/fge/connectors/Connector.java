@@ -24,8 +24,9 @@ import java.util.List;
 import javax.swing.ImageIcon;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ConnectorNode;
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEObject;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.impl.ConnectorImpl;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
@@ -72,11 +73,11 @@ public interface Connector extends FGEObject {
 
 	public double getEndAngle();
 
-	public Object getDrawable();
+	// public Object getDrawable();
 
-	public ShapeGraphicalRepresentation getStartObject();
+	public ShapeNode<?> getStartNode(ConnectorNode<?> node);
 
-	public ShapeGraphicalRepresentation getEndObject();
+	public ShapeNode<?> getEndNode(ConnectorNode<?> node);
 
 	/**
 	 * Return value indicating distance from aPoint to connector, asserting aPoint is related to local normalized coordinates system
@@ -86,11 +87,11 @@ public interface Connector extends FGEObject {
 	 */
 	public double distanceToConnector(FGEPoint aPoint, double scale);
 
-	public void setPaintAttributes(FGEConnectorGraphics g);
+	public void setPaintAttributes(ConnectorNode<?> node, FGEConnectorGraphics g);
 
-	public void paintConnector(FGEConnectorGraphics g);
+	public void paintConnector(ConnectorNode<?> node, FGEConnectorGraphics g);
 
-	public void drawConnector(FGEConnectorGraphics g);
+	public void drawConnector(ConnectorNode<?> node, FGEConnectorGraphics g);
 
 	public List<? extends ControlArea<?>> getControlAreas();
 

@@ -23,6 +23,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
@@ -38,15 +39,15 @@ public class AdjustableFirstControlPoint extends RectPolylinAdjustableControlPoi
 
 	private SimplifiedCardinalDirection currentStartOrientation = null;
 
-	public AdjustableFirstControlPoint(FGEPoint point, RectPolylinConnector connector) {
-		super(point, connector);
+	public AdjustableFirstControlPoint(FGEPoint point, RectPolylinConnector connector, ConnectorNode<?> node) {
+		super(point, connector, node);
 	}
 
 	@Override
 	public FGEArea getDraggingAuthorizedArea() {
-		AffineTransform at1 = FGEUtils.convertNormalizedCoordinatesAT(getGraphicalRepresentation().getStartObject(),
-				getGraphicalRepresentation());
-		FGEArea startArea = getGraphicalRepresentation().getStartObject().getShape().getShape().transform(at1);
+		AffineTransform at1 = FGEUtils.convertNormalizedCoordinatesAT(getNode().getStartNode(), getNode());
+		FGEArea startArea = getNode().getStartNode().getGraphicalRepresentation().getShape().getShape(getNode().getStartNode())
+				.transform(at1);
 		return new FGESubstractionArea(new FGEPlane(), startArea, false);
 	}
 
@@ -66,7 +67,7 @@ public class AdjustableFirstControlPoint extends RectPolylinAdjustableControlPoi
 		getPolylin().updatePointAt(1, pt);
 		movedFirstCP();
 		getConnector()._connectorChanged(true);
-		getGraphicalRepresentation().notifyConnectorChanged();
+		getNode().notifyConnectorChanged();
 		return true;
 	}
 
@@ -102,9 +103,7 @@ public class AdjustableFirstControlPoint extends RectPolylinAdjustableControlPoi
 			getPolylin().updatePointAt(0, newStartPoint);
 			getConnector().getStartControlPoint().setPoint(newStartPoint);
 			if (getConnector().getIsStartingLocationFixed()) { // Don't forget this !!!
-				getConnector().setFixedStartLocation(
-						FGEUtils.convertNormalizedPoint(getGraphicalRepresentation(), newStartPoint, getGraphicalRepresentation()
-								.getStartObject()));
+				getConnector().setFixedStartLocation(FGEUtils.convertNormalizedPoint(getNode(), newStartPoint, getNode().getStartNode()));
 			}
 
 			if (initialPolylin.getSegmentNb() > 3) {
@@ -242,8 +241,7 @@ public class AdjustableFirstControlPoint extends RectPolylinAdjustableControlPoi
 				getConnector().getStartControlPoint().setPoint(newStartPosition);
 				if (getConnector().getIsStartingLocationFixed()) { // Don't forget this !!!
 					getConnector().setFixedStartLocation(
-							FGEUtils.convertNormalizedPoint(getGraphicalRepresentation(), newStartPosition, getGraphicalRepresentation()
-									.getStartObject()));
+							FGEUtils.convertNormalizedPoint(getNode(), newStartPosition, getNode().getStartNode()));
 				}
 
 				// FGEPoint newStartPosition = startArea.getAnchorAreaFrom(orientation).getNearestPoint(newFirstCPLocation);

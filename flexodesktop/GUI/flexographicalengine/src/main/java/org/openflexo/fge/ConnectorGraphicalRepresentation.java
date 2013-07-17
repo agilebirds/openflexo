@@ -211,7 +211,7 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 	// * Utils
 	// *******************************************************************************
 
-	public void notifyConnectorChanged();
+	// public void notifyConnectorChanged();
 
 	public ConnectorType getConnectorType();
 

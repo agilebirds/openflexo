@@ -786,23 +786,6 @@ public class FGEModelFactory extends ModelFactory {
 	}
 
 	/**
-	 * Make a new Shape from corresponding ShapeType and set supplied graphical representation with it
-	 * 
-	 * @param type
-	 * @param aGraphicalRepresentation
-	 * @return a newly created Shape
-	 */
-	public Shape makeShape(ShapeType type, ShapeGraphicalRepresentation aGraphicalRepresentation) {
-
-		Shape returned = makeShape(type);
-		aGraphicalRepresentation.setShape(returned);
-		if (returned != null) {
-			returned.setGraphicalRepresentation(aGraphicalRepresentation);
-		}
-		return returned;
-	}
-
-	/**
 	 * Make a new Shape from corresponding ShapeType
 	 * 
 	 * @param type
@@ -850,12 +833,11 @@ public class FGEModelFactory extends ModelFactory {
 	 * @param aPolygon
 	 * @return a newly created Polygon
 	 */
-	public Polygon makePolygon(ShapeGraphicalRepresentation aGraphicalRepresentation, FGEPolygon aPolygon) {
+	public Polygon makePolygon(FGEPolygon aPolygon) {
 		Polygon polygon = newInstance(Polygon.class);
 		for (FGEPoint pt : aPolygon.getPoints()) {
 			polygon.addToPoints(pt);
 		}
-		polygon.updateShape();
 		return polygon;
 	}
 
@@ -866,12 +848,11 @@ public class FGEModelFactory extends ModelFactory {
 	 * @param aPolygon
 	 * @return a newly created Polygon
 	 */
-	public Polygon makePolygon(ShapeGraphicalRepresentation aGraphicalRepresentation, FGEPoint... points) {
+	public Polygon makePolygon(FGEPoint... points) {
 		Polygon polygon = newInstance(Polygon.class);
 		for (FGEPoint pt : points) {
 			polygon.addToPoints(pt);
 		}
-		polygon.updateShape();
 		return polygon;
 	}
 

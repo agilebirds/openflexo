@@ -35,8 +35,8 @@ import org.openflexo.wkf.swleditor.SWLEditorConstants;
 import org.openflexo.wkf.swleditor.SwimmingLaneEditorController;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
 
-public abstract class SWLObjectGR<O extends FlexoModelObject> extends ShapeGraphicalRepresentationImpl<O> implements
-		GraphicalFlexoObserver, SWLEditorConstants {
+public abstract class SWLObjectGR<O extends FlexoModelObject> extends ShapeGraphicalRepresentationImpl implements GraphicalFlexoObserver,
+		SWLEditorConstants {
 
 	public SWLObjectGR(O object, ShapeType shapeType, SwimmingLaneRepresentation aDrawing) {
 		super(shapeType, object, aDrawing);

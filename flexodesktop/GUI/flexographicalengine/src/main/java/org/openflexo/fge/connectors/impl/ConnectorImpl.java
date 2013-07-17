@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ConnectorNode;
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
@@ -25,15 +25,15 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 
 	private static final Logger logger = Logger.getLogger(Connector.class.getPackage().getName());
 
-	private transient ConnectorGraphicalRepresentation graphicalRepresentation;
+	// private transient ConnectorGraphicalRepresentation graphicalRepresentation;
 
 	private boolean debug = false;
 
 	protected FGERectangle NORMALIZED_BOUNDS = new FGERectangle(0, 0, 1, 1, Filling.FILLED);
 
-	public ConnectorImpl(ConnectorGraphicalRepresentation aGraphicalRepresentation) {
+	public ConnectorImpl(/*ConnectorGraphicalRepresentation aGraphicalRepresentation*/) {
 		super();
-		graphicalRepresentation = aGraphicalRepresentation;
+		// graphicalRepresentation = aGraphicalRepresentation;
 		// labelCP1 = new LabelControlPoint(aGraphicalRepresentation,new FGEPoint());
 		// labelCP2 = new LabelControlPoint(aGraphicalRepresentation,new FGEPoint());
 	}
@@ -42,7 +42,7 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	// * Methods *
 	// *******************************************************************************
 
-	@Override
+	/*@Override
 	public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
@@ -50,7 +50,7 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	@Override
 	public void setGraphicalRepresentation(ConnectorGraphicalRepresentation aGraphicalRepresentation) {
 		graphicalRepresentation = aGraphicalRepresentation;
-	}
+	}*/
 
 	@Override
 	public abstract double getStartAngle();
@@ -58,25 +58,25 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	@Override
 	public abstract double getEndAngle();
 
-	@Override
+	/*@Override
 	public Object getDrawable() {
 		return graphicalRepresentation.getDrawable();
+	}*/
+
+	@Override
+	public ShapeNode<?> getStartNode(ConnectorNode<?> node) {
+		if (node == null) {
+			return null;
+		}
+		return node.getStartNode();
 	}
 
 	@Override
-	public ShapeGraphicalRepresentation getStartObject() {
-		if (graphicalRepresentation == null) {
+	public ShapeNode<?> getEndNode(ConnectorNode<?> node) {
+		if (node == null) {
 			return null;
 		}
-		return graphicalRepresentation.getStartObject();
-	}
-
-	@Override
-	public ShapeGraphicalRepresentation getEndObject() {
-		if (graphicalRepresentation == null) {
-			return null;
-		}
-		return graphicalRepresentation.getEndObject();
+		return node.getEndNode();
 	}
 
 	/**
@@ -89,7 +89,7 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	public abstract double distanceToConnector(FGEPoint aPoint, double scale);
 
 	@Override
-	public void setPaintAttributes(FGEConnectorGraphics g) {
+	public void setPaintAttributes(ConnectorNode<?> node, FGEConnectorGraphics g) {
 
 		// Foreground
 		if (getGraphicalRepresentation().getIsSelected()) {
@@ -110,17 +110,17 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	}
 
 	@Override
-	public final void paintConnector(FGEConnectorGraphics g) {
+	public final void paintConnector(ConnectorNode<?> node, FGEConnectorGraphics g) {
 		/*
 		 * if (FGEConstants.DEBUG || getGraphicalRepresentation().getDebugCoveringArea()) { drawCoveringAreas(g); }
 		 */
 
-		setPaintAttributes(g);
-		drawConnector(g);
+		setPaintAttributes(node, g);
+		drawConnector(node, g);
 	}
 
 	@Override
-	public abstract void drawConnector(FGEConnectorGraphics g);
+	public abstract void drawConnector(ConnectorNode<?> node, FGEConnectorGraphics g);
 
 	@Override
 	public abstract List<? extends ControlArea<?>> getControlAreas();

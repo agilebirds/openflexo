@@ -21,10 +21,10 @@ package org.openflexo.ve.diagram;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
+import org.openflexo.fge.impl.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -36,8 +36,7 @@ import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecifica
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.toolbox.ToolBox;
 
-public class DiagramConnectorGR extends ConnectorGraphicalRepresentation<DiagramConnector> implements GraphicalFlexoObserver,
-		DiagramConstants {
+public class DiagramConnectorGR extends ConnectorGraphicalRepresentationImpl implements GraphicalFlexoObserver, DiagramConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DiagramConnectorGR.class.getPackage().getName());
@@ -51,8 +50,8 @@ public class DiagramConnectorGR extends ConnectorGraphicalRepresentation<Diagram
 
 	public DiagramConnectorGR(DiagramConnector aConnector, Drawing<?> aDrawing) {
 		super(ConnectorType.LINE, aDrawing != null ? (ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(aConnector
-				.getStartShape()) : null, aDrawing != null ? (ShapeGraphicalRepresentation) aDrawing
-				.getGraphicalRepresentation(aConnector.getEndShape()) : null, aConnector, aDrawing);
+				.getStartShape()) : null, aDrawing != null ? (ShapeGraphicalRepresentation) aDrawing.getGraphicalRepresentation(aConnector
+				.getEndShape()) : null, aConnector, aDrawing);
 		// setText(getRole().getName());
 
 		addToMouseClickControls(new DiagramController.ShowContextualMenuControl());

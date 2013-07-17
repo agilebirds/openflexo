@@ -23,6 +23,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.controller.DrawingController;
@@ -45,6 +46,11 @@ public class AdjustableFirstSegment extends RectPolylinAdjustableSegment {
 	private FGEArea startArea;
 	private FGEArea draggingAuthorizedArea;
 
+	public AdjustableFirstSegment(FGESegment segment, RectPolylinConnector connector, ConnectorNode<?> node) {
+		super(segment, connector, node);
+		retrieveInfos();
+	}
+
 	private void retrieveInfos() {
 		currentSegment = getArea();
 		nextSegment = getPolylin().getSegmentAt(1);
@@ -58,8 +64,8 @@ public class AdjustableFirstSegment extends RectPolylinAdjustableSegment {
 		currentOrientation = currentSegment.getApproximatedOrientation();
 		nextOrientation = nextSegment.getApproximatedOrientation();
 
-		AffineTransform at1 = FGEUtils.convertNormalizedCoordinatesAT(getConnector().getStartObject(), getGraphicalRepresentation());
-		startArea = getConnector().getStartObject().getShape().getOutline().transform(at1);
+		AffineTransform at1 = FGEUtils.convertNormalizedCoordinatesAT(getNode().getStartNode(), getNode());
+		startArea = getNode().getStartNode().getGraphicalRepresentation().getShape().getOutline(getNode().getStartNode()).transform(at1);
 		FGEArea orthogonalPerspectiveArea = startArea.getOrthogonalPerspectiveArea(currentOrientation);
 		if (!nextSegment.containsPoint(currentSegment.getP1())) {
 			FGEHalfPlane hp = new FGEHalfPlane(nextSegment, currentSegment.getP1());
@@ -71,13 +77,8 @@ public class AdjustableFirstSegment extends RectPolylinAdjustableSegment {
 		consistentData = true;
 	}
 
-	public AdjustableFirstSegment(FGESegment segment, RectPolylinConnector connector) {
-		super(segment, connector);
-		retrieveInfos();
-	}
-
 	@Override
-	public void startDragging(DrawingController controller, FGEPoint startPoint) {
+	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
 		retrieveInfos();
 		logger.info("Start dragging: " + draggingAuthorizedArea);
@@ -126,7 +127,7 @@ public class AdjustableFirstSegment extends RectPolylinAdjustableSegment {
 		getConnector()._getControlPoints().elementAt(1).setPoint(p2);
 
 		getConnector()._connectorChanged(true);
-		getGraphicalRepresentation().notifyConnectorChanged();
+		getNode().notifyConnectorChanged();
 
 		return true;
 

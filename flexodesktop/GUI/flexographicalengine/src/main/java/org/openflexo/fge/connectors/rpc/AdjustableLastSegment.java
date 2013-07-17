@@ -23,6 +23,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.controller.DrawingController;
@@ -46,6 +47,11 @@ public class AdjustableLastSegment extends RectPolylinAdjustableSegment {
 	private FGEArea endArea;
 	private FGEArea draggingAuthorizedArea;
 
+	public AdjustableLastSegment(FGESegment segment, RectPolylinConnector connector, ConnectorNode<?> node) {
+		super(segment, connector, node);
+		retrieveInfos();
+	}
+
 	private void retrieveInfos() {
 		currentSegment = getArea();
 		segmentsNb = getPolylin().getSegmentNb();
@@ -60,8 +66,8 @@ public class AdjustableLastSegment extends RectPolylinAdjustableSegment {
 		currentOrientation = currentSegment.getApproximatedOrientation();
 		previousOrientation = previousSegment.getApproximatedOrientation();
 
-		AffineTransform at2 = FGEUtils.convertNormalizedCoordinatesAT(getConnector().getEndObject(), getGraphicalRepresentation());
-		endArea = getConnector().getEndObject().getShape().getOutline().transform(at2);
+		AffineTransform at2 = FGEUtils.convertNormalizedCoordinatesAT(getNode().getEndNode(), getNode());
+		endArea = getNode().getEndNode().getGraphicalRepresentation().getShape().getOutline(getNode().getEndNode()).transform(at2);
 		FGEArea orthogonalPerspectiveArea = endArea.getOrthogonalPerspectiveArea(currentOrientation.getOpposite());
 		if (!previousSegment.containsPoint(currentSegment.getP2())) {
 			FGEHalfPlane hp = new FGEHalfPlane(previousSegment, currentSegment.getP2());
@@ -71,11 +77,6 @@ public class AdjustableLastSegment extends RectPolylinAdjustableSegment {
 		}
 
 		consistentData = true;
-	}
-
-	public AdjustableLastSegment(FGESegment segment, RectPolylinConnector connector) {
-		super(segment, connector);
-		retrieveInfos();
 	}
 
 	@Override
@@ -164,7 +165,7 @@ public class AdjustableLastSegment extends RectPolylinAdjustableSegment {
 		getConnector()._getControlPoints().elementAt(segmentsNb).setPoint(p2);
 
 		getConnector()._connectorChanged(true);
-		getGraphicalRepresentation().notifyConnectorChanged();
+		getNode().notifyConnectorChanged();
 
 		return true;
 

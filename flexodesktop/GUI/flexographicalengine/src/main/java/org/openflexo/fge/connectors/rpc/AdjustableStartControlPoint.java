@@ -22,6 +22,7 @@ package org.openflexo.fge.connectors.rpc;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.controller.DrawingController;
@@ -32,8 +33,8 @@ import org.openflexo.fge.geom.area.FGEArea;
 public class AdjustableStartControlPoint extends RectPolylinAdjustableControlPoint {
 	static final Logger logger = Logger.getLogger(AdjustableStartControlPoint.class.getPackage().getName());
 
-	public AdjustableStartControlPoint(FGEPoint point, RectPolylinConnector connector) {
-		super(point, connector);
+	public AdjustableStartControlPoint(FGEPoint point, RectPolylinConnector connector, ConnectorNode<?> node) {
+		super(point, connector, node);
 	}
 
 	@Override
@@ -58,8 +59,7 @@ public class AdjustableStartControlPoint extends RectPolylinAdjustableControlPoi
 			return false;
 		}
 		setPoint(pt);
-		FGEPoint ptRelativeToStartObject = FGEUtils.convertNormalizedPoint(getGraphicalRepresentation(), pt, getConnector()
-				.getStartObject());
+		FGEPoint ptRelativeToStartObject = FGEUtils.convertNormalizedPoint(getNode(), pt, getNode().getStartNode());
 		getConnector().setFixedStartLocation(ptRelativeToStartObject);
 		switch (getConnector().getAdjustability()) {
 		case AUTO_LAYOUT:
@@ -82,7 +82,7 @@ public class AdjustableStartControlPoint extends RectPolylinAdjustableControlPoi
 			break;
 		}
 		getConnector()._connectorChanged(true);
-		getGraphicalRepresentation().notifyConnectorChanged();
+		getNode().notifyConnectorChanged();
 		return true;
 	}
 }

@@ -22,6 +22,7 @@ package org.openflexo.fge.connectors.rpc;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.connectors.RectPolylinConnector;
@@ -35,8 +36,8 @@ public abstract class RectPolylinAdjustableControlPoint extends ConnectorAdjusti
 	protected FGERectPolylin initialPolylin;
 	private RectPolylinConnector connector;
 
-	public RectPolylinAdjustableControlPoint(FGEPoint point, RectPolylinConnector connector) {
-		super(connector.getGraphicalRepresentation(), point);
+	public RectPolylinAdjustableControlPoint(FGEPoint point, RectPolylinConnector connector, ConnectorNode<?> node) {
+		super(node, point);
 		this.connector = connector;
 	}
 
@@ -53,18 +54,18 @@ public abstract class RectPolylinAdjustableControlPoint extends ConnectorAdjusti
 			FGEPoint initialPoint, MouseEvent event);
 
 	protected void notifyConnectorChanged() {
-		getGraphicalRepresentation().notifyConnectorChanged();
+		getNode().notifyConnectorChanged();
 	}
 
 	@Override
-	public void startDragging(DrawingController controller, FGEPoint startPoint) {
+	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
 		initialPolylin = getPolylin().clone();
 		getConnector().setWasManuallyAdjusted(true);
 	}
 
 	@Override
-	public final void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
+	public final void stopDragging(DrawingController<?> controller, GraphicalRepresentation focusedGR) {
 		super.stopDragging(controller, focusedGR);
 		getConnector().setWasManuallyAdjusted(true);
 		getConnector()._connectorChanged(false);

@@ -34,6 +34,11 @@ public class ConnectorAdjustingControlPoint extends ConnectorControlPoint {
 	}
 
 	@Override
+	public ConnectorNode<?> getNode() {
+		return (ConnectorNode<?>) super.getNode();
+	}
+
+	@Override
 	public Cursor getDraggingCursor() {
 		return Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
 	}

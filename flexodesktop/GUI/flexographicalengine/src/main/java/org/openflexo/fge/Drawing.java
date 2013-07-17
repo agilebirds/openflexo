@@ -333,6 +333,12 @@ public interface Drawing<M> {
 	}
 
 	public interface ConnectorNode<O> extends DrawingTreeNode<O, ConnectorGraphicalRepresentation> {
+
+		public ShapeNode<?> getStartNode();
+
+		public ShapeNode<?> getEndNode();
+
+		public void notifyConnectorChanged();
 	}
 
 	public interface GeometricNode<O> extends DrawingTreeNode<O, GeometricGraphicalRepresentation> {

@@ -22,6 +22,7 @@ package org.openflexo.fge.connectors.rpc;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.controller.DrawingController;
@@ -49,12 +50,18 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 	private SimplifiedCardinalDirection nextOrientation;
 	private FGEArea draggingAuthorizedArea;
 
+	public AdjustableIntermediateSegment(FGESegment segment, RectPolylinConnector connector, ConnectorNode<?> node) {
+		super(segment, connector, node);
+		retrieveInfos();
+	}
+
 	private void retrieveInfos() {
 		currentSegment = getArea();
 		index = getPolylin().getSegmentIndex(currentSegment);
 		if (index <= 0 || index >= getPolylin().getSegmentNb() - 1) {
 			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector "
-					+ getGraphicalRepresentation().getText() + " index=" + index + " polylin.getSegmentNb()=" + getPolylin().getSegmentNb());
+					+ getNode().getGraphicalRepresentation().getText() + " index=" + index + " polylin.getSegmentNb()="
+					+ getPolylin().getSegmentNb());
 			return;
 		}
 		previousSegment = getPolylin().getSegmentAt(index - 1);
@@ -143,11 +150,6 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 		}
 
 		consistentData = true;
-	}
-
-	public AdjustableIntermediateSegment(FGESegment segment, RectPolylinConnector connector) {
-		super(segment, connector);
-		retrieveInfos();
 	}
 
 	@Override
@@ -290,7 +292,7 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 		getConnector()._getControlPoints().elementAt(index + 1).setPoint(p2);
 
 		getConnector()._connectorChanged(true);
-		getGraphicalRepresentation().notifyConnectorChanged();
+		getNode().notifyConnectorChanged();
 
 		return true;
 

@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
+import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.foundation.DataModification;
@@ -44,7 +44,7 @@ import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 import org.openflexo.toolbox.ConcatenedList;
 import org.openflexo.toolbox.ToolBox;
 
-public class DiagramShapeGR extends ShapeGraphicalRepresentation<DiagramShape> implements GraphicalFlexoObserver, DiagramConstants {
+public class DiagramShapeGR extends ShapeGraphicalRepresentationImpl implements GraphicalFlexoObserver, DiagramConstants {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DiagramShapeGR.class.getPackage().getName());

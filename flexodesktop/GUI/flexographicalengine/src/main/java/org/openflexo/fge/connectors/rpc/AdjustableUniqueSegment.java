@@ -22,6 +22,7 @@ package org.openflexo.fge.connectors.rpc;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
@@ -39,6 +40,11 @@ public class AdjustableUniqueSegment extends RectPolylinAdjustableSegment {
 	private FGEArea startArea;
 	private FGEArea endArea;
 	private FGEArea draggingAuthorizedArea;
+
+	public AdjustableUniqueSegment(FGESegment segment, RectPolylinConnector connector, ConnectorNode<?> node) {
+		super(segment, connector, node);
+		retrieveInfos();
+	}
 
 	private void retrieveInfos() {
 		currentSegment = getArea();
@@ -69,11 +75,6 @@ public class AdjustableUniqueSegment extends RectPolylinAdjustableSegment {
 		draggingAuthorizedArea = startOrthogonalPerspectiveArea.intersect(endOrthogonalPerspectiveArea);
 
 		consistentData = true;
-	}
-
-	public AdjustableUniqueSegment(FGESegment segment, RectPolylinConnector connector) {
-		super(segment, connector);
-		retrieveInfos();
 	}
 
 	@Override
@@ -134,7 +135,7 @@ public class AdjustableUniqueSegment extends RectPolylinAdjustableSegment {
 		getConnector()._getControlPoints().elementAt(1).setPoint(p2);
 
 		getConnector()._connectorChanged(true);
-		getGraphicalRepresentation().notifyConnectorChanged();
+		getNode().notifyConnectorChanged();
 
 		// logger.info("drag cpts="+getConnector().getControlAreas());
 		return true;

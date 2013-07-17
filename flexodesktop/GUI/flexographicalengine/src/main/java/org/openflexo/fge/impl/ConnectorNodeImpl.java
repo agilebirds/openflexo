@@ -3,6 +3,7 @@ package org.openflexo.fge.impl;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.GRBinding;
+import org.openflexo.fge.notifications.ConnectorModified;
 
 public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphicalRepresentation> implements ConnectorNode<O> {
 
@@ -13,7 +14,17 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 
 	@Override
 	public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
-		return (ConnectorGraphicalRepresentation) super.getGraphicalRepresentation();
+		return super.getGraphicalRepresentation();
+	}
+
+	@Override
+	public void notifyConnectorChanged() {
+		/*if (!isRegistered()) {
+			return;
+		}*/
+		checkViewBounds();
+		setChanged();
+		notifyObservers(new ConnectorModified());
 	}
 
 }

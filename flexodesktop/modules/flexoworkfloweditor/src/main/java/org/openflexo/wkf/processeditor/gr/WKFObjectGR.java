@@ -22,7 +22,6 @@ package org.openflexo.wkf.processeditor.gr;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ShadowStyle;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.shapes.Shape.ShapeType;
@@ -39,7 +38,7 @@ import org.openflexo.wkf.processeditor.ProcessEditorConstants;
 import org.openflexo.wkf.processeditor.ProcessEditorController;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
-public abstract class WKFObjectGR<O extends WKFObject> extends ShapeGraphicalRepresentationImpl<O> implements GraphicalFlexoObserver,
+public abstract class WKFObjectGR<O extends WKFObject> extends ShapeGraphicalRepresentationImpl implements GraphicalFlexoObserver,
 		ProcessEditorConstants {
 
 	private static final Logger logger = Logger.getLogger(WKFObjectGR.class.getPackage().getName());

@@ -304,7 +304,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 		return super.shouldBeDisplayed();
 	}
 
-	@Override
+	/*@Override
 	public void notifyConnectorChanged() {
 		if (!isRegistered()) {
 			return;
@@ -312,7 +312,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 		checkViewBounds();
 		setChanged();
 		notifyObservers(new ConnectorModified());
-	}
+	}*/
 
 	@Override
 	public ConnectorType getConnectorType() {

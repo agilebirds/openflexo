@@ -23,6 +23,7 @@ import java.awt.event.MouseEvent;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.connectors.RectPolylinConnector;
 import org.openflexo.fge.geom.FGEGeometricObject;
@@ -35,8 +36,8 @@ import org.openflexo.fge.geom.area.FGEPlane;
 public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPoint {
 	static final Logger logger = Logger.getLogger(AdjustableMiddleControlPoint.class.getPackage().getName());
 
-	public AdjustableMiddleControlPoint(FGEPoint point, RectPolylinConnector connector) {
-		super(point, connector);
+	public AdjustableMiddleControlPoint(FGEPoint point, RectPolylinConnector connector, ConnectorNode<?> node) {
+		super(point, connector, node);
 	}
 
 	@Override
@@ -60,7 +61,7 @@ public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPo
 		getPolylin().updatePointAt(1, pt);
 		movedMiddleCP();
 		getConnector()._connectorChanged(true);
-		getGraphicalRepresentation().notifyConnectorChanged();
+		getNode().notifyConnectorChanged();
 		return true;
 	}
 
@@ -106,13 +107,11 @@ public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPo
 
 		if (getConnector().getIsStartingLocationFixed()) { // Don't forget this !!!
 			getConnector().setFixedStartLocation(
-					FGEUtils.convertNormalizedPoint(getGraphicalRepresentation(), newPolylin.getFirstPoint(), getGraphicalRepresentation()
-							.getStartObject()));
+					FGEUtils.convertNormalizedPoint(getNode(), newPolylin.getFirstPoint(), getNode().getStartNode()));
 		}
 		if (getConnector().getIsEndingLocationFixed()) { // Don't forget this !!!
 			getConnector().setFixedEndLocation(
-					FGEUtils.convertNormalizedPoint(getGraphicalRepresentation(), newPolylin.getLastPoint(), getGraphicalRepresentation()
-							.getEndObject()));
+					FGEUtils.convertNormalizedPoint(getNode(), newPolylin.getLastPoint(), getNode().getEndNode()));
 		}
 
 		if (newPolylin.isNormalized()) {
