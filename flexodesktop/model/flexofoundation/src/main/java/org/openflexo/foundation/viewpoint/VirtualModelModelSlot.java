@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
@@ -105,6 +106,12 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 		return null;
 	}
 
+	public EditionPatternInstancePatternRole makeEditionPatternInstancePatternRole(EditionPattern editionPattern) {
+		EditionPatternInstancePatternRole returned = makePatternRole(EditionPatternInstancePatternRole.class);
+		returned.setEditionPatternType(editionPattern);
+		return returned;
+	}
+
 	@Override
 	public <PR extends PatternRole<?>> String defaultPatternRoleName(Class<PR> patternRoleClass) {
 		if (EditionPatternInstancePatternRole.class.isAssignableFrom(patternRoleClass)) {
@@ -120,6 +127,13 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 			return (EA) new AddEditionPatternInstance(null);
 		}
 		return null;
+	}
+
+	public AddEditionPatternInstance makeAddEditionPatternInstanceEditionAction(
+			EditionPatternInstancePatternRole editionPatternInstanceRole, AbstractCreationScheme creationScheme) {
+		AddEditionPatternInstance returned = makeEditionAction(AddEditionPatternInstance.class);
+		returned.setAssignation(new DataBinding(editionPatternInstanceRole.getPatternRoleName()));
+		return returned;
 	}
 
 	@Override

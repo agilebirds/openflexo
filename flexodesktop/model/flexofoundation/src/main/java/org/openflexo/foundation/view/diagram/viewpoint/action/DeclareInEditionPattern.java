@@ -27,6 +27,7 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
@@ -40,7 +41,7 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 
 	private EditionPattern editionPattern;
 
-	private FlexoOntologyModelSlot<?, ?> modelSlot;
+	private ModelSlot<?, ?> modelSlot;
 
 	DeclareInEditionPattern(FlexoActionType<A, T1, ExampleDiagramObject> actionType, T1 focusedObject,
 			Vector<ExampleDiagramObject> globalSelection, FlexoEditor editor) {
@@ -147,11 +148,11 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 		return null;
 	}
 
-	public FlexoOntologyModelSlot<?, ?> getModelSlot() {
+	public ModelSlot<?, ?> getModelSlot() {
 		return modelSlot;
 	}
 
-	public void setModelSlot(FlexoOntologyModelSlot<?, ?> modelSlot) {
+	public void setModelSlot(ModelSlot<?, ?> modelSlot) {
 		this.modelSlot = modelSlot;
 	}
 }

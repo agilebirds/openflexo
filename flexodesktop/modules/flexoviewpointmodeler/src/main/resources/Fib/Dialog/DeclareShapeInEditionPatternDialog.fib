@@ -26,31 +26,52 @@
     <Label label="label" align="center" index="0" data="(data.patternChoice.name + &quot;_description&quot;)" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=10;location=center)" localize="true">
       <LocalizedDictionary />
     </Label>
-    <Label label="model_slot" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
-    <DropDown index="0" data="data.modelSlot" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="modelSlotDD" format="object.name" icon="controller.getTechnologyAdapterController(object.technologyAdapter).technologyIcon" localize="true" list="data.focusedObject.virtualModel.modelSlots" showIcon="true" iteratorClassName="org.openflexo.foundation.technologyadapter.ModelSlot" autoSelectFirstRow="true" />
     <Label label="pattern" index="1" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
       <LocalizedDictionary />
     </Label>
-    <DropDown index="2" data="data.patternChoice" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="patternChoice" format="object.name" localize="true" manageDynamicModel="true" staticList="" iteratorClassName="java.lang.Object" autoSelectFirstRow="true">
+    <DropDown index="0" data="data.patternChoice" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="patternChoice" format="object.name" localize="true" manageDynamicModel="true" staticList="" iteratorClassName="java.lang.Object" autoSelectFirstRow="true">
       <LocalizedDictionary />
     </DropDown>
+    <Label label="model_slot" index="2" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" visible="((patternChoice.selectedIndex = 1) | (patternChoice.selectedIndex = 0))" localize="true" />
+    <DropDown index="0" data="data.modelSlot" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 1)" name="virtualModelModelSlotDD" format="object.name" icon="controller.getTechnologyAdapterController(object.technologyAdapter).technologyIcon" localize="true" list="data.virtualModelModelSlots" showIcon="true" iteratorClassName="org.openflexo.foundation.viewpoint.VirtualModelModelSlot" autoSelectFirstRow="true" />
+    <DropDown index="0" data="data.modelSlot" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 0)" name="ontologyModelSlotDD" format="object.name" icon="controller.getTechnologyAdapterController(object.technologyAdapter).technologyIcon" localize="true" list="data.flexoOntologyModelSlots" showIcon="true" iteratorClassName="org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot" autoSelectFirstRow="true" />
+    <Label label="virtualModel_concept" index="3" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 1)" localize="true">
+      <LocalizedDictionary />
+    </Label>
+    <Custom componentClassName="org.openflexo.components.widget.FIBEditionPatternSelector" localize="true" manageDynamicModel="true" name="patternSelector" index="4" data="data.virtualModelConcept" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 1)">
+      <Assignment variable="component.context" />
+      <Assignment variable="component.viewPointLibrary" />
+      <Assignment variable="component.viewPoint" />
+      <Assignment variable="component.project" />
+      <Assignment variable="component.selectableCondition" />
+      <Assignment variable="component.virtualModel" value="data.adressedVirtualModel" />
+      <Dependancy componentName="virtualModelModelSlotDD" />
+    </Custom>
     <Label label="ontologic_concept" index="3" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 0)" localize="true">
       <LocalizedDictionary />
     </Label>
     <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" localize="true" manageDynamicModel="true" name="conceptSelector" index="4" data="data.concept" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 0)">
       <Assignment variable="component.context" value="data.modelSlot.metaModelResource.metaModelData" />
+      <Dependancy componentName="ontologyModelSlotDD" />
     </Custom>
     <Label label="new_edition_pattern_name" index="5" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
       <LocalizedDictionary />
     </Label>
     <TextField index="6" data="data.editionPatternName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="newEditionPatternName" localize="true" columns="7" text="TextField">
       <Dependancy componentName="conceptSelector" />
+      <Dependancy componentName="patternSelector" />
     </TextField>
     <Label label="individual_pattern_role_name" index="9" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 0)" localize="true">
       <LocalizedDictionary />
     </Label>
-    <TextField index="10" data="data.individualPatternRoleName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 0)" name="individualPatternRoleName" localize="true" columns="7" text="TextField">
+    <Label label="edition_pattern_role_name" index="9" constraints="twocols(expandHorizontally=true;expandVertically=false;index=9;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 1)" localize="true">
+      <LocalizedDictionary />
+    </Label>
+    <TextField index="10" data="data.individualPatternRoleName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 0)" name="individualPatternRoleName" localize="true" validateOnReturn="true" columns="7" text="TextField">
       <Dependancy componentName="conceptSelector" />
+    </TextField>
+    <TextField index="10" data="data.virtualModelPatternRoleName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 1)" name="virtualModelPatternRoleName" localize="true" validateOnReturn="true" columns="7" text="TextField">
+      <Dependancy componentName="patternSelector" />
     </TextField>
     <Label label="graphical_elements" index="11" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
       <LocalizedDictionary />
@@ -129,11 +150,16 @@
     <Localized key="declare_in_edition_pattern" lang="English">Declare in edition pattern</Localized>
     <Localized key="declare_in_edition_pattern" lang="French">Déclarer dans un Edition Pattern</Localized>
     <Localized key="declare_in_edition_pattern" lang="Dutch">Declare in edition pattern</Localized>
-    <Localized key="MAP_SINGLE_INDIVIDUAL" lang="French">Correspondance simple vers un individuel ontologique</Localized>
-    <Localized key="MAP_SINGLE_INDIVIDUAL" lang="English">Single mapping to ontologic individual</Localized>
-    <Localized key="MAP_SINGLE_INDIVIDUAL_description" lang="English">&lt;html&gt;&lt;center&gt;This will create a simple mapping between a shape and&lt;br&gt;an ontologic individual stored in project ontology.&lt;/center&gt;&lt;/html&gt;</Localized>
-    <Localized key="MAP_SINGLE_INDIVIDUAL_description" lang="French">&lt;html&gt;&lt;center&gt;This will create a simple mapping between a shape and&lt;br&gt;an ontologic individual stored in project ontology.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="MAP_SINGLE_INDIVIDUAL" lang="French">Correspondance simple vers un individual définit dans une ontologie</Localized>
+    <Localized key="MAP_SINGLE_INDIVIDUAL" lang="English">Single mapping to individual</Localized>
+    <Localized key="MAP_SINGLE_INDIVIDUAL_description" lang="English">&lt;html&gt;&lt;center&gt;This will create a simple mapping between a shape and&lt;br&gt;an individual stored in project ontology.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="MAP_SINGLE_INDIVIDUAL_description" lang="French">&lt;html&gt;&lt;center&gt;This will create a simple mapping between a shape and&lt;br&gt;an individual stored in project ontology.&lt;/center&gt;&lt;/html&gt;</Localized>
     <Localized key="MAP_SINGLE_INDIVIDUAL_description" lang="Dutch">new_entry</Localized>
+    <Localized key="MAP_SINGLE_EDITION_PATTERN" lang="French">Correspondance simple vers un edition pattern définit dans un virtual model</Localized>
+    <Localized key="MAP_SINGLE_EDITION_PATTERN" lang="English">Single mapping to edition pattern</Localized>
+    <Localized key="MAP_SINGLE_EDITION_PATTERN_description" lang="English">&lt;html&gt;&lt;center&gt;This will create a simple mapping between a shape and&lt;br&gt;an edition pattern stored in project virtual model.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="MAP_SINGLE_EDITION_PATTERN_description" lang="French">&lt;html&gt;&lt;center&gt;This will create a simple mapping between a shape and&lt;br&gt;an edition pattern stored in project virtual model.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="MAP_SINGLE_EDITION_PATTERN_description" lang="Dutch">new_entry</Localized>
     <Localized key="new_edition_pattern_name" lang="French">Nom du nouvel Edition Pattern</Localized>
     <Localized key="new_edition_pattern_name" lang="English">New edition pattern name</Localized>
     <Localized key="shape_pattern_role_name" lang="English">Shape pattern role name</Localized>
