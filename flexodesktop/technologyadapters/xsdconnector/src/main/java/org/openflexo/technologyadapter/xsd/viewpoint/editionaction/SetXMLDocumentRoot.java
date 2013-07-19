@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2012-2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -19,16 +19,30 @@
  */
 package org.openflexo.technologyadapter.xsd.viewpoint.editionaction;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
+import org.openflexo.antar.binding.BindingEvaluationContext;
+import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.view.ModelSlotInstance;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.AddIndividual;
+import org.openflexo.foundation.viewpoint.AssignableAction;
 import org.openflexo.foundation.viewpoint.DataPropertyAssertion;
+import org.openflexo.foundation.viewpoint.EditionAction;
+import org.openflexo.foundation.viewpoint.ProcedureAction;
 import org.openflexo.foundation.viewpoint.ObjectPropertyAssertion;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.EditionAction.EditionActionType;
+import org.openflexo.foundation.viewpoint.ViewPointObject.BindingIsRequiredAndMustBeValid;
+import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.xsd.XSDModelSlot;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
@@ -36,84 +50,52 @@ import org.openflexo.technologyadapter.xsd.metamodel.XSOntDataProperty;
 import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
 
-public class SetXMLDocumentRoot extends AddIndividual<XMLXSDModel, XSDMetaModel, XSOntIndividual> {
+public class SetXMLDocumentRoot extends ProcedureAction<XMLXSDModel, XSDMetaModel, XSOntIndividual> {
 
-	@Override
-	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
-		// TODO Auto-generated method stub
-		super.setOntologyClass(ontologyClass);
-		if ( ontologyClassURI == null) {
-			logger.warning("OntologyURI is null for XSIndividual");
-		}
-	}
 
 	private static final Logger logger = Logger.getLogger(SetXMLDocumentRoot.class.getPackage().getName());
 
-	public SetXMLDocumentRoot(VirtualModel.VirtualModelBuilder builder) {
+
+	public SetXMLDocumentRoot(VirtualModelBuilder builder) {
 		super(builder);
 	}
 
-	@Override
-	public XSOntClass getOntologyClass() {
-		return (XSOntClass) super.getOntologyClass();
-	}
-
-	@Override
-	public Class<XSOntIndividual> getOntologyIndividualClass() {
-		return XSOntIndividual.class;
-	}
 
 	@Override
 	public XSOntIndividual performAction(EditionSchemeAction action) {
-		XSOntClass father = getOntologyClass();
+
+		ModelSlotInstance<XMLXSDModel, XSDMetaModel> modelSlotInstance = getModelSlotInstance(action);
+		XMLXSDModel model = modelSlotInstance.getModel();
+		XSDModelSlot modelSlot = (XSDModelSlot) modelSlotInstance.getModelSlot();
+
+		XSOntIndividual rootIndiv = null;
 		
-		XSOntIndividual newIndividual = null;
 		try {
-
-			ModelSlotInstance<XMLXSDModel, XSDMetaModel> modelSlotInstance = getModelSlotInstance(action);
-			XMLXSDModel model = modelSlotInstance.getModel();
-			XSDModelSlot modelSlot = (XSDModelSlot) modelSlotInstance.getModelSlot();
-			
-		
-			newIndividual = model.createOntologyIndividual( father);
-			
-			for (DataPropertyAssertion dataPropertyAssertion : getDataAssertions()) {
-				if (dataPropertyAssertion.evaluateCondition(action)) {
-					logger.info("DataPropertyAssertion=" + dataPropertyAssertion);
-					XSOntDataProperty property = (XSOntDataProperty) dataPropertyAssertion.getOntologyProperty();
-					logger.info("Property=" + property);
-					Object value = dataPropertyAssertion.getValue(action);
-					logger.info("Value=" + value);
-					newIndividual.addToPropertyValue(property, value);
-				}
+			Object o = getParameter().getBindingValue(action);
+			if (o instanceof XSOntIndividual){
+				rootIndiv = (XSOntIndividual) o;
 			}
-			
-			for (ObjectPropertyAssertion objectPropertyAssertion : getObjectAssertions()) {
-				if (objectPropertyAssertion.evaluateCondition(action)) {
-					// ... TODO
-					logger.warning("***** AddObjectProperty Not Implemented yet");
-				}
+			else{
+				logger.warning("Invalid value in Binding :" + getParameter().getUnparsedBinding());
 			}
-
-			// add it to the model
-			// Two phase creation, then addition, to be able to process URIs once you have the property values
-			// and verify that there is no duplicate URIs
-			
-			String processedURI = modelSlot.getURIForObject(modelSlotInstance, newIndividual);
-			Object o = modelSlot.retrieveObjectWithURI(modelSlotInstance, processedURI);
-			if (o == null ) {
-				model.addIndividual(newIndividual);
-				model.setIsModified();
-			}
-			else {
-				throw new DuplicateURIException("Error while creating Individual of type " + father.getURI());
-			}
-			
-			return newIndividual;
-		} catch (DuplicateURIException e) {
+		} catch (TypeMismatchException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return null;
+		} catch (NullReferenceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		if (rootIndiv != null){
+			model.setRoot(rootIndiv);
+		}
+		
+		return rootIndiv;
 	}
+
+
 
 }

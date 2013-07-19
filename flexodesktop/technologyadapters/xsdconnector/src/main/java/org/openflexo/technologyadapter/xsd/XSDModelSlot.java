@@ -51,6 +51,7 @@ import org.openflexo.technologyadapter.xsd.viewpoint.XSClassPatternRole;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSIndividualPatternRole;
 import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSClass;
 import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSIndividual;
+import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.SetXMLDocumentRoot;
 
 /**
  * Implementation of the ModelSlot class for the XSD/XML technology adapter
@@ -62,6 +63,7 @@ import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSIndividu
 	@DeclarePatternRole(XSClassPatternRole.class) // Classes
 })
 @DeclareEditionActions({ @DeclareEditionAction(AddXSIndividual.class), // Add instance
+	@DeclareEditionAction(SetXMLDocumentRoot.class), // Sets the root instance of XML Document
 	@DeclareEditionAction(AddXSClass.class) // Add class
 })
 public class XSDModelSlot extends FlexoOntologyModelSlot<XMLXSDModel, XSDMetaModel> {
@@ -143,7 +145,9 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLXSDModel, XSDMetaMod
 			return (EA) new AddXSIndividual(null);
 		} else if (AddXSClass.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddXSClass(null);
-		} else {
+		} else if (SetXMLDocumentRoot.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new SetXMLDocumentRoot(null);
+		}else {
 			return null;
 		}
 	}

@@ -156,7 +156,7 @@ public class XSURIProcessor extends XMLURIProcessor {
 			} 
 			else if (mappingStyle  == MappingStyle.SINGLETON ){
 				try {
-					builtURI = URLEncoder.encode(((XSOntIndividual) xsO).getParent().getURI(),"UTF-8");
+					builtURI = URLEncoder.encode(((XSOntClass) ((XSOntIndividual) xsO).getType()).getURI(),"UTF-8");
 				} catch (UnsupportedEncodingException e) {
 					XSDModelSlot.logger.warning("Cannot process URI - Unexpected encoding error");
 					e.printStackTrace();
@@ -216,8 +216,11 @@ public class XSURIProcessor extends XMLURIProcessor {
 
 			} 	else if (mappingStyle == MappingStyle.SINGLETON ){
 				List<?> indivList = ((XSOntology) msInstance.getModel()).getIndividualsOfClass(mappedClass);
-				if (indivList.size() != 1) {
+				if (indivList.size() > 1) {
 					throw new DuplicateURIException("Cannot process URI - Several individuals found for singleton of type " + this._getTypeURI().toString());
+				}
+				else if (indivList.size() ==0){
+					XSDModelSlot.logger.warning("Cannot find Singleton for type : " + this._getTypeURI().toString());
 				}
 				else{
 					o = (AbstractXSOntObject) indivList.get(0);

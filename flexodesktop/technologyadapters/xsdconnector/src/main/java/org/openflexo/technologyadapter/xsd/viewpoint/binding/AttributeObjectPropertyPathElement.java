@@ -31,6 +31,7 @@ import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.antar.expr.InvocationTargetTransformException;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
+import org.openflexo.foundation.ontology.IFlexoOntologyIndividual;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntObjectProperty;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 import org.openflexo.technologyadapter.xsd.model.XSDataPropertyValue;
@@ -61,7 +62,7 @@ public class AttributeObjectPropertyPathElement extends SimplePathElement {
 				return Object.class;
 			} else {
 				if (property.getRange() != null) {
-					return new ParameterizedTypeImpl(List.class, property.getRange());
+					return new ParameterizedTypeImpl(List.class, IFlexoOntologyIndividual.class);
 				}
 				return new ParameterizedTypeImpl(List.class, Object.class);
 			}

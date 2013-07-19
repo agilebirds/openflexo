@@ -40,7 +40,6 @@ public class AddXSIndividual extends AddIndividual<XMLXSDModel, XSDMetaModel, XS
 
 	@Override
 	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
-		// TODO Auto-generated method stub
 		super.setOntologyClass(ontologyClass);
 		if ( ontologyClassURI == null) {
 			logger.warning("OntologyURI is null for XSIndividual");
