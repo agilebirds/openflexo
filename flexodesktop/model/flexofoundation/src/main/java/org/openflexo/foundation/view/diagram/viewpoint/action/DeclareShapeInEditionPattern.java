@@ -652,30 +652,34 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 	}
 
 	public List<VirtualModelModelSlot<?, ?>> getVirtualModelModelSlots() {
-		if (virtualModelModelSlots == null) {
-			virtualModelModelSlots = new ArrayList<VirtualModelModelSlot<?, ?>>();
-		}
-		if (!virtualModelModelSlots.isEmpty()) {
-			virtualModelModelSlots.clear();
-		}
-		for (ModelSlot<?, ?> modelSlot : getModelSlot().getVirtualModel().getModelSlots()) {
-			if (modelSlot instanceof VirtualModelModelSlot) {
-				virtualModelModelSlots.add((VirtualModelModelSlot<?, ?>) modelSlot);
+		if (getModelSlot() != null) {
+			if (virtualModelModelSlots == null) {
+				virtualModelModelSlots = new ArrayList<VirtualModelModelSlot<?, ?>>();
+			}
+			if (!virtualModelModelSlots.isEmpty()) {
+				virtualModelModelSlots.clear();
+			}
+			for (ModelSlot<?, ?> modelSlot : getModelSlot().getVirtualModel().getModelSlots()) {
+				if (modelSlot instanceof VirtualModelModelSlot) {
+					virtualModelModelSlots.add((VirtualModelModelSlot<?, ?>) modelSlot);
+				}
 			}
 		}
 		return virtualModelModelSlots;
 	}
 
 	public List<FlexoOntologyModelSlot<?, ?>> getFlexoOntologyModelSlots() {
-		if (flexoOntologyModelSlots == null) {
-			flexoOntologyModelSlots = new ArrayList<FlexoOntologyModelSlot<?, ?>>();
-		}
-		if (!flexoOntologyModelSlots.isEmpty()) {
-			flexoOntologyModelSlots.clear();
-		}
-		for (ModelSlot<?, ?> modelSlot : getModelSlot().getVirtualModel().getModelSlots()) {
-			if (modelSlot instanceof FlexoOntologyModelSlot) {
-				flexoOntologyModelSlots.add((FlexoOntologyModelSlot<?, ?>) modelSlot);
+		if (getModelSlot() != null) {
+			if (flexoOntologyModelSlots == null) {
+				flexoOntologyModelSlots = new ArrayList<FlexoOntologyModelSlot<?, ?>>();
+			}
+			if (!flexoOntologyModelSlots.isEmpty()) {
+				flexoOntologyModelSlots.clear();
+			}
+			for (ModelSlot<?, ?> modelSlot : getModelSlot().getVirtualModel().getModelSlots()) {
+				if (modelSlot instanceof FlexoOntologyModelSlot) {
+					flexoOntologyModelSlots.add((FlexoOntologyModelSlot<?, ?>) modelSlot);
+				}
 			}
 		}
 		return flexoOntologyModelSlots;

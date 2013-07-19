@@ -26,7 +26,6 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
-import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
@@ -46,7 +45,7 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 	DeclareInEditionPattern(FlexoActionType<A, T1, ExampleDiagramObject> actionType, T1 focusedObject,
 			Vector<ExampleDiagramObject> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
-		List<FlexoOntologyModelSlot> availableModelSlots = focusedObject.getVirtualModel().getModelSlots(FlexoOntologyModelSlot.class);
+		List<ModelSlot<?, ?>> availableModelSlots = focusedObject.getVirtualModel().getModelSlots();
 		if (availableModelSlots.size() > 0) {
 			modelSlot = availableModelSlots.get(0);
 		}
