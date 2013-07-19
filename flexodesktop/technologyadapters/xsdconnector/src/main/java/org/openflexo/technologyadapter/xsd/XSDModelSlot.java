@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingVariable;
+import org.openflexo.foundation.ontology.DuplicateURIException;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
@@ -50,6 +51,7 @@ import org.openflexo.technologyadapter.xsd.viewpoint.XSClassPatternRole;
 import org.openflexo.technologyadapter.xsd.viewpoint.XSIndividualPatternRole;
 import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSClass;
 import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSIndividual;
+import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.SetXMLDocumentRoot;
 
 /**
  * Implementation of the ModelSlot class for the XSD/XML technology adapter
@@ -61,6 +63,7 @@ import org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSIndividu
 	@DeclarePatternRole(XSClassPatternRole.class) // Classes
 })
 @DeclareEditionActions({ @DeclareEditionAction(AddXSIndividual.class), // Add instance
+	@DeclareEditionAction(SetXMLDocumentRoot.class), // Sets the root instance of XML Document
 	@DeclareEditionAction(AddXSClass.class) // Add class
 })
 public class XSDModelSlot extends FlexoOntologyModelSlot<XMLXSDModel, XSDMetaModel> {
@@ -142,7 +145,9 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLXSDModel, XSDMetaMod
 			return (EA) new AddXSIndividual(null);
 		} else if (AddXSClass.class.isAssignableFrom(editionActionClass)) {
 			return (EA) new AddXSClass(null);
-		} else {
+		} else if (SetXMLDocumentRoot.class.isAssignableFrom(editionActionClass)) {
+			return (EA) new SetXMLDocumentRoot(null);
+		}else {
 			return null;
 		}
 	}
@@ -157,12 +162,12 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLXSDModel, XSDMetaMod
 	public BindingVariable makePatternRolePathElement(PatternRole<?> pr, Bindable container) {
 		return null;
 	}
-	
+
 
 	/*=====================================================================================
 	 * URI Accessors
 	 */
-	
+
 
 	// TODO Manage the fact that URI May Change
 
@@ -190,10 +195,15 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLXSDModel, XSDMetaMod
 
 		XSURIProcessor mapParams = uriProcessors.get(XSURIProcessor.retrieveTypeURI(msInstance, objectURI));
 		if (mapParams != null){
-			return mapParams.retrieveObjectWithURI(msInstance, objectURI);
+			try {
+				return mapParams.retrieveObjectWithURI(msInstance, objectURI);
+			} catch (DuplicateURIException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		else 
-			return null;
+		
+		return null;
 	}
 
 	// ==========================================================================
@@ -208,13 +218,22 @@ public class XSDModelSlot extends FlexoOntologyModelSlot<XMLXSDModel, XSDMetaMod
 		return uriProcessors;
 	}
 
+	public XSURIProcessor createURIProcessor(){
+		XSURIProcessor xsuriProc = new XSURIProcessor();
+		// TODO remplacer le hash par une liste + table de hash pour cacher les URI....
+		// add
+		return xsuriProc;
+	}
+	
 	public void addToUriProcessors(XSURIProcessor xsuriProc) {
 		xsuriProc.setModelSlot(this);
-		uriProcessors.put(xsuriProc.typeURI.toString(), xsuriProc);
+		// TODO To be optimized => e.g. cach typeURI String?
+		uriProcessors.put(xsuriProc._getTypeURI().toString(), xsuriProc);
 	}
 
 	public void removeFromUriProcessors(XSURIProcessor xsuriProc) {
-		uriProcessors.remove(xsuriProc.typeURI.toString());
+		// TODO To be optimized => e.g. cach typeURI String?
+		uriProcessors.remove(xsuriProc._getTypeURI().toString());
 		xsuriProc.reset();
 	}
 

@@ -96,12 +96,21 @@ public class CustomColumn<T extends Object> extends AbstractColumn<T> implements
 			boolean found = false;
 			Constructor<FIBCustomComponent<T, ?>> constructor = null;
 			while (!found && types[0] != null && customComponentClass != null) {
-				try {
+				for (Constructor<?> c : customComponentClass.getConstructors()) {
+					if (c.getGenericParameterTypes().length == 1) {
+						if (TypeUtils.isTypeAssignableFrom(c.getGenericParameterTypes()[0],dataClass)) {
+							constructor = (Constructor<FIBCustomComponent<T, ?>>)c;
+							found = true;
+						}
+					}
+				}
+				
+				/*try {
 					constructor = customComponentClass.getConstructor(types);
 					found = true;
 				} catch (NoSuchMethodException e) {
 					types[0] = types[0].getSuperclass();
-				}
+				}*/
 			}
 			if (constructor == null) {
 				logger.warning("Cound not instanciate class " + customComponentClass + " : no valid constructor found");
