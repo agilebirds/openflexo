@@ -65,6 +65,7 @@ public abstract class EditionAction<MS extends ModelSlot<?>, T> extends EditionS
 		DeclarePatternRole,
 		Assignation,
 		Execution,
+		Procedure,
 		DeleteAction,
 		GraphicalAction,
 		GoToObject,

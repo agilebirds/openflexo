@@ -542,7 +542,13 @@
 	
 	<entity name="org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSIndividual"
 		xmlTag="AddXSIndividual">
+	</entity>	
+
+    <entity name="org.openflexo.technologyadapter.xsd.viewpoint.editionaction.SetXMLDocumentRoot"
+		xmlTag="SetXMLDocumentRoot">
+		<property name="parameter" xmlTag="parameter" attribute="YES"/>
 	</entity>
+	
 	
 	<entity name="org.openflexo.technologyadapter.xsd.viewpoint.editionaction.AddXSClass"
 		xmlTag="AddXSClass">

@@ -44,7 +44,6 @@ public class AddXSIndividual extends AddIndividual<XSDModelSlot, XSOntIndividual
 
 	@Override
 	public void setOntologyClass(IFlexoOntologyClass ontologyClass) {
-		// TODO Auto-generated method stub
 		super.setOntologyClass(ontologyClass);
 		if (ontologyClassURI == null) {
 			logger.warning("OntologyURI is null for XSIndividual");

@@ -85,7 +85,7 @@ public class XSURIProcessor extends XMLURIProcessor {
 		}
 		return mappedClass;
 	}
-	
+
 	// TODO
 	public void setMappedClass(XSOntClass mappedClass) {
 		this.mappedClass = mappedClass;
@@ -158,7 +158,7 @@ public class XSURIProcessor extends XMLURIProcessor {
 			} 
 			else if (mappingStyle  == MappingStyle.SINGLETON ){
 				try {
-					builtURI = URLEncoder.encode(((XSOntIndividual) xsO).getParent().getURI(),"UTF-8");
+					builtURI = URLEncoder.encode(((XSOntClass) ((XSOntIndividual) xsO).getType()).getURI(),"UTF-8");
 				} catch (UnsupportedEncodingException e) {
 					XSDModelSlot.logger.warning("Cannot process URI - Unexpected encoding error");
 					e.printStackTrace();
@@ -190,7 +190,7 @@ public class XSURIProcessor extends XMLURIProcessor {
 		}
 
 		// modelResource must also be loaded!
-	
+
 		FlexoModelResource<XMLXSDModel, XSDMetaModel> resource = (FlexoModelResource<XMLXSDModel, XSDMetaModel>) msInstance.getResource();
 
 		if (!resource.isLoaded()) {
@@ -206,7 +206,7 @@ public class XSURIProcessor extends XMLURIProcessor {
 				String attrValue = URI.create(objectURI).getQuery();
 
 				for (XSOntIndividual obj: ((XSOntology) resource.getModel()).getIndividualsOfClass(mappedClass)){
-					
+
 					XSPropertyValue value = ((XSOntIndividual) obj).getPropertyValue(aProperty);
 					try {
 						if (value.equals(URLDecoder.decode(attrValue,"UTF-8"))){
@@ -222,6 +222,9 @@ public class XSURIProcessor extends XMLURIProcessor {
 				List<?> indivList = ((XSOntology) msInstance.getResource()).getIndividualsOfClass(mappedClass);
 				if (indivList.size() != 1) {
 					throw new DuplicateURIException("Cannot process URI - Several individuals found for singleton of type " + this._getTypeURI().toString());
+				}
+				else if (indivList.size() ==0){
+					XSDModelSlot.logger.warning("Cannot find Singleton for type : " + this._getTypeURI().toString());
 				}
 				else{
 					o = (AbstractXSOntObject) indivList.get(0);
