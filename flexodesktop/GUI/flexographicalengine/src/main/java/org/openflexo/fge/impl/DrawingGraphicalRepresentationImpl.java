@@ -8,7 +8,6 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.DrawingNeedsToBeRedrawn;
-import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
@@ -24,14 +23,12 @@ import org.openflexo.fge.notifications.ObjectHasResized;
 import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.notifications.ObjectWillResize;
 
-public class DrawingGraphicalRepresentationImpl extends GraphicalRepresentationImpl implements DrawingGraphicalRepresentation {
+public class DrawingGraphicalRepresentationImpl extends ContainerGraphicalRepresentationImpl implements DrawingGraphicalRepresentation {
 
 	private static final Logger logger = Logger.getLogger(DrawingGraphicalRepresentation.class.getPackage().getName());
 
 	private Color backgroundColor = Color.WHITE;
 
-	private double width;
-	private double height;
 	private Color rectangleSelectingSelectionColor = Color.BLUE;
 	private Color focusColor = Color.RED;
 	private Color selectionColor = Color.BLUE;
@@ -84,8 +81,8 @@ public class DrawingGraphicalRepresentationImpl extends GraphicalRepresentationI
 					MouseDragControlActionType.RECTANGLE_SELECTING));
 			addToMouseDragControls(MouseDragControl.makeMouseDragControl("Zoom", MouseButton.RIGHT, MouseDragControlActionType.ZOOM));
 		}
-		width = FGEConstants.DEFAULT_DRAWING_WIDTH;
-		height = FGEConstants.DEFAULT_DRAWING_HEIGHT;
+		// width = FGEConstants.DEFAULT_DRAWING_WIDTH;
+		// height = FGEConstants.DEFAULT_DRAWING_HEIGHT;
 		// bgStyle = getFactory().makeColoredBackground(getBackgroundColor());
 	}
 
@@ -182,33 +179,33 @@ public class DrawingGraphicalRepresentationImpl extends GraphicalRepresentationI
 		}
 	}
 
-	@Override
-	public double getHeight() {
-		return height;
-	}
-
-	@Override
-	public void setHeight(double aValue) {
-		FGENotification notification = requireChange(DrawingParameters.height, aValue);
-		if (notification != null) {
-			height = aValue;
-			hasChanged(notification);
+	/*	@Override
+		public double getHeight() {
+			return height;
 		}
-	}
 
-	@Override
-	public double getWidth() {
-		return width;
-	}
-
-	@Override
-	public void setWidth(double aValue) {
-		FGENotification notification = requireChange(DrawingParameters.width, aValue);
-		if (notification != null) {
-			width = aValue;
-			hasChanged(notification);
+		@Override
+		public void setHeight(double aValue) {
+			FGENotification notification = requireChange(DrawingParameters.height, aValue);
+			if (notification != null) {
+				height = aValue;
+				hasChanged(notification);
+			}
 		}
-	}
+
+		@Override
+		public double getWidth() {
+			return width;
+		}
+
+		@Override
+		public void setWidth(double aValue) {
+			FGENotification notification = requireChange(DrawingParameters.width, aValue);
+			if (notification != null) {
+				width = aValue;
+				hasChanged(notification);
+			}
+		}*/
 
 	@Override
 	public Color getFocusColor() {

@@ -19,11 +19,8 @@
  */
 package org.openflexo.fge;
 
-import java.util.List;
-
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
-import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -46,20 +43,16 @@ import org.openflexo.model.annotations.XMLElement;
  * 
  * @author sylvain
  * 
- * @param <O>
- *            the represented type
  */
 @ModelEntity
 @ImplementationClass(ShapeGraphicalRepresentationImpl.class)
 @XMLElement(xmlTag = "ShapeGraphicalRepresentation")
-public interface ShapeGraphicalRepresentation extends GraphicalRepresentation {
+public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresentation {
 
 	// Property keys
 
 	public static final String X = "x";
 	public static final String Y = "y";
-	public static final String WIDTH = "width";
-	public static final String HEIGHT = "height";
 	public static final String MINIMAL_WIDTH = "minimalWidth";
 	public static final String MINIMAL_HEIGHT = "minimalHeight";
 	public static final String MAXIMAL_WIDTH = "maximalWidth";
@@ -103,10 +96,9 @@ public interface ShapeGraphicalRepresentation extends GraphicalRepresentation {
 	// *******************************************************************************
 
 	public static enum ShapeParameters implements GRParameter {
-		x,
-		y,
-		width,
-		height,
+		x, y,
+		// width,
+		// height,
 		minimalWidth,
 		minimalHeight,
 		maximalWidth,
@@ -230,19 +222,15 @@ public interface ShapeGraphicalRepresentation extends GraphicalRepresentation {
 	@Setter(value = Y)
 	public void setY(double aValue);
 
+	@Override
 	@Getter(value = WIDTH, defaultValue = "60.0")
 	@XMLAttribute
 	public double getWidth();
 
-	@Setter(value = WIDTH)
-	public void setWidth(double aValue);
-
+	@Override
 	@Getter(value = HEIGHT, defaultValue = "20.0")
 	@XMLAttribute
 	public double getHeight();
-
-	@Setter(value = HEIGHT)
-	public void setHeight(double aValue);
 
 	@Getter(value = MINIMAL_WIDTH, defaultValue = "0.0")
 	@XMLAttribute
@@ -507,6 +495,7 @@ public interface ShapeGraphicalRepresentation extends GraphicalRepresentation {
 
 	// public double getMoveAuthorizedRatio(FGEPoint desiredLocation, FGEPoint initialLocation);
 
+	@Override
 	public FGEDimension getSize();
 
 	// public void setSize(FGEDimension newSize);
@@ -544,9 +533,9 @@ public interface ShapeGraphicalRepresentation extends GraphicalRepresentation {
 
 	public void setBackgroundType(BackgroundStyleType backgroundType);
 
-	// public void notifyShapeChanged();
+	public void notifyShapeChanged();
 
-	// public void notifyShapeNeedsToBeRedrawn();
+	public void notifyShapeNeedsToBeRedrawn();
 
 	/*public void notifyObjectMoved();
 
@@ -619,7 +608,7 @@ public interface ShapeGraphicalRepresentation extends GraphicalRepresentation {
 	@Override
 	public String toString();
 
-	public List<? extends ControlArea<?>> getControlAreas();
+	// public List<? extends ControlArea<?>> getControlAreas();
 
 	/**
 	 * Returns the area on which the given connector can start. The area is expressed in this normalized coordinates

@@ -38,19 +38,15 @@ import org.openflexo.model.annotations.XMLElement;
  * 
  * @author sylvain
  * 
- * @param <O>
- *            the represented type
  */
 @ModelEntity
 @ImplementationClass(DrawingGraphicalRepresentationImpl.class)
 @XMLElement(xmlTag = "DrawingGraphicalRepresentation")
-public interface DrawingGraphicalRepresentation extends GraphicalRepresentation {
+public interface DrawingGraphicalRepresentation extends ContainerGraphicalRepresentation {
 
 	// Property keys
 
 	public static final String BACKGROUND_COLOR = "backgroundColor";
-	public static final String WIDTH = "width";
-	public static final String HEIGHT = "height";
 	public static final String RECTANGLE_SELECTING_SELECTION_COLOR = "rectangleSelectingSelectionColor";
 	public static final String FOCUS_COLOR = "focusColor";
 	public static final String SELECTION_COLOR = "selectionColor";
@@ -72,19 +68,15 @@ public interface DrawingGraphicalRepresentation extends GraphicalRepresentation 
 	@Setter(value = BACKGROUND_COLOR)
 	public abstract void setBackgroundColor(Color backgroundColor);
 
-	@Getter(value = HEIGHT, defaultValue = "1000.0")
-	@XMLAttribute
-	public abstract double getHeight();
-
-	@Setter(value = HEIGHT)
-	public abstract void setHeight(double aValue);
-
-	@Getter(value = WIDTH, defaultValue = "1000.0")
+	@Override
+	@Getter(value = WIDTH, defaultValue = "" + FGEConstants.DEFAULT_DRAWING_WIDTH)
 	@XMLAttribute
 	public abstract double getWidth();
 
-	@Setter(value = WIDTH)
-	public abstract void setWidth(double aValue);
+	@Override
+	@Getter(value = HEIGHT, defaultValue = "" + FGEConstants.DEFAULT_DRAWING_HEIGHT)
+	@XMLAttribute
+	public abstract double getHeight();
 
 	@Getter(value = FOCUS_COLOR)
 	@XMLAttribute
@@ -134,6 +126,7 @@ public interface DrawingGraphicalRepresentation extends GraphicalRepresentation 
 
 	// public abstract void startConnectorObserving();
 
+	@Override
 	public abstract FGEDimension getSize();
 
 	/**

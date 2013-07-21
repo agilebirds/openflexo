@@ -287,11 +287,11 @@ public class FGEModelFactory extends ModelFactory {
 	 * @return a newly created ConnectorGraphicalRepresentation
 	 */
 	public <O> ConnectorGraphicalRepresentation makeConnectorGraphicalRepresentation(ConnectorType aConnectorType,
-			ShapeGraphicalRepresentation aStartObject, ShapeGraphicalRepresentation anEndObject,/* O aDrawable,*/Drawing<?> aDrawing) {
+	/*ShapeGraphicalRepresentation aStartObject, ShapeGraphicalRepresentation anEndObject,*//* O aDrawable,*/Drawing<?> aDrawing) {
 
 		ConnectorGraphicalRepresentation returned = makeConnectorGraphicalRepresentation(/*aDrawable,*/aDrawing);
-		returned.setStartObject(aStartObject);
-		returned.setEndObject(anEndObject);
+		// returned.setStartObject(aStartObject);
+		// returned.setEndObject(anEndObject);
 		returned.setConnectorType(aConnectorType);
 
 		return returned;

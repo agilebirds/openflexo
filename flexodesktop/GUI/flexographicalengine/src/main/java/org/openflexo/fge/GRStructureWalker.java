@@ -3,8 +3,8 @@ package org.openflexo.fge;
 import java.util.List;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
+import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.Drawing.RootNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.GRBinding.ConnectorGRBinding;
 import org.openflexo.fge.GRBinding.DrawingGRBinding;
@@ -28,25 +28,19 @@ public abstract class GRStructureWalker<R> {
 		return null;
 	}*/
 
-	public <O> ShapeNode<O> drawShape(ShapeGRBinding<O> binding, O representable, Object parentRepresentable) {
+	public <O> ShapeNode<O> drawShape(ShapeGRBinding<O> binding, O drawable, Object parentDrawable) {
 		return null;
 	}
 
-	public <O, P> ShapeNode<O> drawShape(ShapeGRBinding<O> binding, O representable, ShapeGRBinding<P> parentBinding, P parentRepresentable) {
+	public <O, P> ShapeNode<O> drawShape(ShapeGRBinding<O> binding, O drawable, ShapeGRBinding<P> parentBinding, P parentDrawable) {
 		return null;
 	}
 
-	public <O, P> ShapeNode<O> drawShape(ShapeGRBinding<O> binding, O representable, DrawingGRBinding<P> parentBinding,
-			P parentRepresentable) {
+	public <O, P> ShapeNode<O> drawShape(ShapeGRBinding<O> binding, O drawable, DrawingGRBinding<P> parentBinding, P parentDrawable) {
 		return null;
 	}
 
-	public <O> ShapeNode<O> drawShape(ShapeNode<?> parent, ShapeGRBinding<O> binding, O drawable) {
-		Drawing<?> drawing = dtn.getDrawing();
-		return drawing.drawShape(parent, binding, drawable);
-	}
-
-	public <O> ShapeNode<O> drawShape(RootNode<?> parent, ShapeGRBinding<O> binding, O drawable) {
+	public <O> ShapeNode<O> drawShape(ContainerNode<O, ?> parent, ShapeGRBinding<O> binding, O drawable) {
 		Drawing<?> drawing = dtn.getDrawing();
 		return drawing.drawShape(parent, binding, drawable);
 	}

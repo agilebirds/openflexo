@@ -19,11 +19,9 @@
  */
 package org.openflexo.fge.connectors;
 
-import java.util.List;
 import java.util.Vector;
 
 import org.openflexo.fge.connectors.impl.RectPolylinConnectorImpl;
-import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -257,9 +255,6 @@ public interface RectPolylinConnector extends Connector {
 	public int getPixelOverlap();
 
 	public void setPixelOverlap(int aPixelOverlap);
-
-	@Override
-	public List<? extends ControlArea<?>> getControlAreas();
 
 	/**
 	 * 

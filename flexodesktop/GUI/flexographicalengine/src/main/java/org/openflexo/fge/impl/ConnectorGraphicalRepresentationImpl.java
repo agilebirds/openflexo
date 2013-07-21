@@ -1,21 +1,14 @@
 package org.openflexo.fge.impl;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
-import java.util.List;
 import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
@@ -24,30 +17,19 @@ import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
-import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
 import org.openflexo.fge.controller.MouseControl.MouseButton;
-import org.openflexo.fge.cp.ControlArea;
-import org.openflexo.fge.cp.ControlPoint;
-import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.notifications.ConnectorModified;
+import org.openflexo.fge.notifications.ConnectorNeedsToBeRedrawn;
 import org.openflexo.fge.notifications.FGENotification;
-import org.openflexo.fge.notifications.ObjectHasMoved;
-import org.openflexo.fge.notifications.ObjectHasResized;
-import org.openflexo.fge.notifications.ObjectMove;
-import org.openflexo.fge.notifications.ObjectResized;
-import org.openflexo.fge.notifications.ObjectWillMove;
-import org.openflexo.fge.notifications.ObjectWillResize;
-import org.openflexo.fge.notifications.ShapeChanged;
-import org.openflexo.fge.view.ConnectorView;
+import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
 import org.openflexo.toolbox.ToolBox;
 
 public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentationImpl implements ConnectorGraphicalRepresentation {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ConnectorGraphicalRepresentation.class.getPackage().getName());
 
 	private Connector connector = null;
@@ -82,9 +64,9 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 	// * Fields *
 	// *******************************************************************************
 
-	private ShapeGraphicalRepresentation startObject;
-	private ShapeGraphicalRepresentation endObject;
-	protected FGEConnectorGraphics graphics;
+	// private ShapeGraphicalRepresentation startObject;
+	// private ShapeGraphicalRepresentation endObject;
+	// protected FGEConnectorGraphics graphics;
 
 	// *******************************************************************************
 	// * Constructor *
@@ -95,27 +77,27 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 	 */
 	public ConnectorGraphicalRepresentationImpl() {
 		super();
-		graphics = new FGEConnectorGraphics(this);
+		// graphics = new FGEConnectorGraphics(this);
 	}
 
 	@Deprecated
-	private ConnectorGraphicalRepresentationImpl(O aDrawable, Drawing<?> aDrawing) {
+	private ConnectorGraphicalRepresentationImpl(Object aDrawable, Drawing<?> aDrawing) {
 		this();
-		setDrawable(aDrawable);
+		// setDrawable(aDrawable);
 		setDrawing(aDrawing);
 	}
 
 	@Deprecated
 	protected ConnectorGraphicalRepresentationImpl(ConnectorType aConnectorType, ShapeGraphicalRepresentation aStartObject,
-			ShapeGraphicalRepresentation anEndObject, O aDrawable, Drawing<?> aDrawing) {
+			ShapeGraphicalRepresentation anEndObject, Object aDrawable, Drawing<?> aDrawing) {
 		this(aDrawable, aDrawing);
 
 		layer = FGEConstants.DEFAULT_CONNECTOR_LAYER;
 
-		setStartObject(aStartObject);
-		setEndObject(anEndObject);
+		// setStartObject(aStartObject);
+		// setEndObject(anEndObject);
 		setConnectorType(aConnectorType);
-		graphics = new FGEConnectorGraphics(this);
+		// graphics = new FGEConnectorGraphics(this);
 
 		foreground = getFactory().makeForegroundStyle(Color.BLACK);
 		// foreground.setGraphicalRepresentation(this);
@@ -142,8 +124,8 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 			foreground.deleteObserver(this);
 		}
 		super.delete();
-		disableStartObjectObserving();
-		disableEndObjectObserving();
+		// disableStartObjectObserving();
+		// disableEndObjectObserving();
 	}
 
 	@Override
@@ -186,7 +168,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 					_setParameterValueWith(p, gr);
 				}
 			}
-			Connector connectorToCopy = ((ConnectorGraphicalRepresentationImpl<?>) gr).getConnector();
+			Connector connectorToCopy = ((ConnectorGraphicalRepresentationImpl) gr).getConnector();
 			Connector clone = connectorToCopy.clone();
 			setConnector(clone);
 		}
@@ -203,13 +185,16 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 	@Override
 	public void setConnector(Connector aConnector) {
-		if (aConnector != null) {
-			aConnector.setGraphicalRepresentation(this);
-		}
-		FGENotification notification = requireChange(ConnectorParameters.connector, aConnector);
-		if (notification != null) {
-			this.connector = aConnector;
-			hasChanged(notification);
+		if (connector != aConnector) {
+			if (connector != null) {
+				connector.deleteObserver(this);
+			}
+			aConnector.addObserver(this);
+			FGENotification notification = requireChange(ConnectorParameters.connector, aConnector);
+			if (notification != null) {
+				this.connector = aConnector;
+				hasChanged(notification);
+			}
 		}
 	}
 
@@ -299,20 +284,26 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 		hasFocusedForeground = aFlag;
 	}
 
-	@Override
+	/*@Override
 	public final boolean shouldBeDisplayed() {
 		return super.shouldBeDisplayed();
-	}
+	}*/
 
-	/*@Override
-	public void notifyConnectorChanged() {
-		if (!isRegistered()) {
+	@Override
+	public void notifyConnectorModified() {
+		/*if (!isRegistered()) {
 			return;
 		}
-		checkViewBounds();
+		checkViewBounds();*/
 		setChanged();
 		notifyObservers(new ConnectorModified());
-	}*/
+	}
+
+	@Override
+	public void notifyConnectorNeedsToBeRedrawn() {
+		setChanged();
+		notifyObservers(new ConnectorNeedsToBeRedrawn());
+	}
 
 	@Override
 	public ConnectorType getConnectorType() {
@@ -334,7 +325,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 		super.setText(text);
 	}
 
-	@Override
+	/*@Override
 	public ShapeGraphicalRepresentation getStartObject() {
 		return startObject;
 	}
@@ -345,9 +336,9 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 		if (!enabledStartObjectObserving) {
 			enableStartObjectObserving(startObject);
 		}
-	}
+	}*/
 
-	private boolean enabledStartObjectObserving = false;
+	/*private boolean enabledStartObjectObserving = false;
 	private Vector<Observable> observedStartObjects = new Vector<Observable>();
 
 	private boolean enabledEndObjectObserving = false;
@@ -363,7 +354,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 			disableStartObjectObserving();
 		}
 
-		if (aStartObject != null /*&& !enabledStartObjectObserving*/) {
+		if (aStartObject != null ) {
 			aStartObject.addObserver(this);
 			observedStartObjects.add((Observable) aStartObject);
 			if (!isDeserializing()) {
@@ -378,22 +369,17 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 		}
 	}
 
-	protected void disableStartObjectObserving(/*ShapeGraphicalRepresentation aStartObject*/) {
-		if (/*aStartObject != null &&*/enabledStartObjectObserving) {
-			/*aStartObject.deleteObserver(this);
-			if (!isDeserializing()) {
-				for (Object o : aStartObject.getAncestors())
-					if (getGraphicalRepresentation(o) != null) getGraphicalRepresentation(o).deleteObserver(this);
-			}*/
+	protected void disableStartObjectObserving() {
+		if (enabledStartObjectObserving) {
 			for (Observable o : observedStartObjects) {
 				o.deleteObserver(this);
 			}
 
 			enabledStartObjectObserving = false;
 		}
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public ShapeGraphicalRepresentation getEndObject() {
 		return endObject;
 	}
@@ -404,9 +390,9 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 		if (!enabledEndObjectObserving) {
 			enableEndObjectObserving(endObject);
 		}
-	}
+	}*/
 
-	protected void enableEndObjectObserving(ShapeGraphicalRepresentation anEndObject) {
+	/*protected void enableEndObjectObserving(ShapeGraphicalRepresentation anEndObject) {
 
 		if (anEndObject == null || !anEndObject.isValidated()) {
 			return;
@@ -416,7 +402,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 			disableEndObjectObserving();
 		}
 
-		if (anEndObject != null /*&& !enabledEndObjectObserving*/) {
+		if (anEndObject != null) {
 			anEndObject.addObserver(this);
 			observedEndObjects.add((Observable) anEndObject);
 			if (!isDeserializing()) {
@@ -431,13 +417,8 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 		}
 	}
 
-	protected void disableEndObjectObserving(/*ShapeGraphicalRepresentation anEndObject*/) {
-		if (/*anEndObject != null &&*/enabledEndObjectObserving) {
-			/*anEndObject.deleteObserver(this);
-			if (!isDeserializing()) {
-				for (Object o : anEndObject.getAncestors())
-					if (getGraphicalRepresentation(o) != null) getGraphicalRepresentation(o).deleteObserver(this);
-			}*/
+	protected void disableEndObjectObserving() {
+		if (enabledEndObjectObserving) {
 			for (Observable o : observedEndObjects) {
 				o.deleteObserver(this);
 			}
@@ -449,9 +430,9 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 	public void observeRelevantObjects() {
 		enableStartObjectObserving(getStartObject());
 		enableEndObjectObserving(getEndObject());
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public int getViewX(double scale) {
 		return getViewBounds(scale).x;
 	}
@@ -485,18 +466,13 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 			maxX = Math.max(r.getMaxX(), 1.0);
 			maxY = Math.max(r.getMaxY(), 1.0);
 		}
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public Rectangle getViewBounds(double scale) {
 		// return getNormalizedBounds(scale);
 
 		Rectangle bounds = getNormalizedBounds(scale);
-		/*System.out.println("Bounds="+bounds);
-		System.out.println("minX="+minX);
-		System.out.println("minY="+minY);
-		System.out.println("maxX="+maxX);
-		System.out.println("maxY="+maxY);*/
 		Rectangle returned = new Rectangle();
 		returned.x = (int) (bounds.x + (minX < 0 ? minX * bounds.width : 0));
 		returned.y = (int) (bounds.y + (minY < 0 ? minY * bounds.height : 0));
@@ -517,10 +493,6 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 		return (int) (bounds.y + (minY < 0 ? minY * bounds.height : 0));
 	}
 
-	/**
-	 * Return normalized bounds Those bounds corresponds to the normalized area defined as (0.0,0.0)-(1.0,1.0) enclosing EXACTELY the two
-	 * related shape bounds. Those bounds should eventually be extended to contain connector contained outside this area.
-	 */
 	@Override
 	public Rectangle getNormalizedBounds(double scale) {
 		if (getStartObject() == null || getStartObject().isDeleted() || getEndObject() == null || getEndObject().isDeleted()) {
@@ -561,9 +533,9 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 			}
 		}
 		return isFullyContained;
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public AffineTransform convertNormalizedPointToViewCoordinatesAT(double scale) {
 		Rectangle bounds = getNormalizedBounds(scale);
 
@@ -576,9 +548,9 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 		return returned;
 
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public AffineTransform convertViewCoordinatesToNormalizedPointAT(double scale) {
 		Rectangle bounds = getNormalizedBounds(scale);
 
@@ -591,7 +563,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 		return returned;
 
-	}
+	}*/
 
 	/**
 	 * Return distance from point to connector representation with a given scale
@@ -602,15 +574,15 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 	 * @return
 	 */
 	@Override
-	public double distanceToConnector(FGEPoint aPoint, double scale) {
-		return connector.distanceToConnector(aPoint, scale);
+	public double distanceToConnector(FGEPoint aPoint, double scale, ConnectorNode<?> connectorNode) {
+		return connector.distanceToConnector(aPoint, scale, connectorNode);
 	}
 
 	// *******************************************************************************
 	// * Methods *
 	// *******************************************************************************
 
-	@Override
+	/*@Override
 	public void paint(Graphics g, DrawingController controller) {
 		if (!isRegistered()) {
 			setRegistered(true);
@@ -670,7 +642,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 		Point connectorCenter = convertNormalizedPointToViewCoordinates(getConnector().getMiddleSymbolLocation(), scale);
 		setAbsoluteTextX(((double) point.x - connectorCenter.x - getViewX(scale)) / scale);
 		setAbsoluteTextY(((double) point.y - connectorCenter.y - getViewY(scale)) / scale);
-	}
+	}*/
 
 	@Override
 	public boolean hasFloatingLabel() {
@@ -688,11 +660,21 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 		super.update(observable, notification);
 
+		if (notification instanceof ConnectorModified) {
+			// Reforward notification
+			notifyConnectorModified();
+		}
+
+		if (notification instanceof ShapeNeedsToBeRedrawn) {
+			// Reforward notification
+			notifyConnectorNeedsToBeRedrawn();
+		}
+
 		if (observable instanceof ForegroundStyle) {
 			notifyAttributeChange(ConnectorParameters.foreground);
 		}
 
-		if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize) {
+		/*if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize) {
 			connector.connectorWillBeModified();
 			// Propagate notification to views
 			setChanged();
@@ -709,10 +691,10 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 			// !!! or any of ancestors
 			refreshConnector();
 			// }
-		}
+		}*/
 	}
 
-	@Override
+	/*@Override
 	public boolean isConnectorConsistent() {
 		// if (true) return true;
 		return getStartObject() != null && getEndObject() != null && !getStartObject().isDeleted() && !getEndObject().isDeleted()
@@ -741,9 +723,9 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 			logger.warning("Unexpected exception: " + e);
 			e.printStackTrace();
 		}
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public void setRegistered(boolean aFlag) {
 		if (aFlag != isRegistered()) {
 			super.setRegistered(aFlag);
@@ -751,13 +733,13 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 				refreshConnector();
 			}
 		}
-	}
+	}*/
 
 	// Override for a custom view management
-	@Override
+	/*@Override
 	public ConnectorView makeConnectorView(DrawingController controller) {
 		return new ConnectorView(this, controller);
-	}
+	}*/
 
 	@Override
 	public EndSymbolType getEndSymbol() {
@@ -889,23 +871,23 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 	@Override
 	public void notifyObjectHierarchyHasBeenUpdated() {
 		super.notifyObjectHierarchyHasBeenUpdated();
-		refreshConnector();
+		// refreshConnector();
 	}
 
-	@Override
+	/*@Override
 	public FGEConnectorGraphics getGraphics() {
 		return graphics;
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public List<? extends ControlArea<?>> getControlAreas() {
 		return getConnector().getControlAreas();
-	}
+	}*/
 
 	/**
 	 * Override parent's behaviour by enabling start and end object observing
 	 */
-	@Override
+	/*@Override
 	public void setValidated(boolean validated) {
 		super.setValidated(validated);
 		if (!enabledStartObjectObserving) {
@@ -914,7 +896,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 		if (!enabledEndObjectObserving) {
 			enableEndObjectObserving(endObject);
 		}
-	}
+	}*/
 
 	@Override
 	public ConnectorGraphicalRepresentation clone() {

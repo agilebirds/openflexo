@@ -32,58 +32,140 @@ import org.openflexo.fge.GRBinding.ConnectorGRBinding;
 import org.openflexo.fge.GRBinding.ShapeGRBinding;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
+import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
+import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.graphics.DecorationPainter;
 import org.openflexo.fge.graphics.FGEGraphics;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.impl.DrawingImpl;
+import org.openflexo.fge.impl.DrawingTreeNodeImpl;
+import org.openflexo.fge.shapes.Shape;
 
 /**
- * This interface is implemented by all objects representing a graphical drawing, that is a complex graphical representation involving an
- * object tree where all objects have their own graphical representation.
+ * This interface is implemented by all objects representing a graphical drawing<br>
  * 
- * To implement those schemes, note that there is a default implementation {@link DrawingImpl}.
+ * The internal structure of a {@link Drawing} rely on a tree whose nodes are {@link DrawingTreeNode}, which refer to a
+ * {@link GraphicalRepresentation} and the represented drawable (an arbitrary java {@link Object}).
+ * 
+ * {@link DrawingImpl} is the default implementation
+ * 
+ * @see DrawingTreeNode
+ * @see DrawingImpl
  * 
  * @author sylvain
  * 
  * @param <M>
- *            Type of object which is handled as root object
+ *            Type of object which is handled as root object: this is the model represented by the drawing
  */
 public interface Drawing<M> {
 
-	public interface DrawingTreeNode<O, GR extends GraphicalRepresentation> extends BindingEvaluationContext, Observer {
+	/**
+	 * This interfaces encodes a node in the drawing tree. A node essentially references {@link GraphicalRepresentation} and the represented
+	 * drawable (an arbitrary java {@link Object}).<br>
+	 * 
+	 * Also reference the {@link GRBinding} which is the specification of a node in the drawing tree
+	 * 
+	 * @author sylvain
+	 * 
+	 * @param <O>
+	 *            Type of (model) object represented by this graphical node
+	 * @param <GR>
+	 *            Type of GraphicalRepresentation represented by this node
+	 */
+	public interface DrawingTreeNode<O, GR extends GraphicalRepresentation> extends BindingEvaluationContext, Observer, IObservable {
 
+		/**
+		 * Return the drawing
+		 * 
+		 * @return
+		 */
 		public Drawing<?> getDrawing();
 
-		public FGEModelFactory getFactory();
-
-		public O getDrawable();
-
+		/**
+		 * Return the node specification (the formal binding between a {@link GraphicalRepresentation} and an arbitrary java {@link Object}
+		 * of the represented model
+		 * 
+		 * @return
+		 */
 		public GRBinding<O, GR> getGRBinding();
 
+		/**
+		 * Return the FGEModelFactory (the factory used to build graphical representation objects)
+		 * 
+		 * @return
+		 */
+		public FGEModelFactory getFactory();
+
+		/**
+		 * Return the represented java {@link Object} (the object of the model represented by this graphical node)
+		 * 
+		 * @return
+		 */
+		public O getDrawable();
+
+		/**
+		 * Return the graphical representation which represents the drawable (the object of the model represented by this graphical node)
+		 * 
+		 * @return
+		 */
 		public GR getGraphicalRepresentation();
 
-		public DrawingTreeNode<?, ?> getParentNode();
+		/**
+		 * Return parent node (a container node which contains this node)
+		 * 
+		 * @return
+		 */
+		public ContainerNode<?, ?> getParentNode();
 
-		public List<? extends DrawingTreeNode<?, ?>> getChildNodes();
-
+		/**
+		 * Return a list of all ancestors of this node
+		 * 
+		 * @return
+		 */
 		public List<DrawingTreeNode<?, ?>> getAncestors();
 
+		/**
+		 * Return depth of this node in the whole hierarchy
+		 * 
+		 * @return
+		 */
 		public int getDepth();
 
+		/**
+		 * Invalidate this graphical node (mark it as to be updated)
+		 */
 		public void invalidate();
 
+		/**
+		 * Return flag indicating if this node has been invalidated
+		 * 
+		 * @return
+		 */
 		public boolean isInvalidated();
 
-		public int getOrder(DrawingTreeNode<?, ?> child1, DrawingTreeNode<?, ?> child2);
+		/**
+		 * Return the list of all control areas declared for this graphical node
+		 * 
+		 * @return
+		 */
+		public List<ControlArea<?>> getControlAreas();
 
 		/**
 		 * Recursively delete this DrawingTreeNode and all its descendants
 		 */
 		public void delete();
+
+		/**
+		 * Return a flag indicating if this node has been deleted
+		 * 
+		 * @return
+		 */
+		public boolean isDeleted();
 
 		public <O2, P> boolean hasShapeFor(ShapeGRBinding<O2> binding, O2 aDrawable);
 
@@ -171,8 +253,6 @@ public interface Drawing<M> {
 
 		public void paint(Graphics g, DrawingController<?> controller);
 
-		public abstract ShapeNode<?> getTopLevelShapeGraphicalRepresentation(FGEPoint p);
-
 		public boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
 
 		public List<ConstraintDependency> getDependancies();
@@ -184,7 +264,7 @@ public interface Drawing<M> {
 
 	}
 
-	public interface RootNode<M> extends DrawingTreeNode<M, DrawingGraphicalRepresentation> {
+	public interface ContainerNode<O, GR extends ContainerGraphicalRepresentation> extends DrawingTreeNode<O, GR> {
 
 		public double getWidth();
 
@@ -194,9 +274,23 @@ public interface Drawing<M> {
 
 		public void setHeight(double aValue);
 
+		public List<? extends DrawingTreeNode<?, ?>> getChildNodes();
+
+		public void addChild(DrawingTreeNodeImpl<?, ?> aChildNode);
+
+		public void removeChild(DrawingTreeNode<?, ?> aChildNode);
+
+		public int getOrder(DrawingTreeNode<?, ?> child1, DrawingTreeNode<?, ?> child2);
+
+		public ShapeNode<?> getTopLevelShapeGraphicalRepresentation(FGEPoint p);
+
 	}
 
-	public interface ShapeNode<O> extends DrawingTreeNode<O, ShapeGraphicalRepresentation> {
+	public interface RootNode<M> extends ContainerNode<M, DrawingGraphicalRepresentation> {
+
+	}
+
+	public interface ShapeNode<O> extends ContainerNode<O, ShapeGraphicalRepresentation> {
 		public double getUnscaledViewWidth();
 
 		public double getUnscaledViewHeight();
@@ -233,6 +327,10 @@ public interface Drawing<M> {
 		public Rectangle getViewBounds(DrawingTreeNode<?, ?> container, double scale);
 
 		public boolean isPointInsideShape(FGEPoint aPoint);
+
+		public Shape getShape();
+
+		public FGEShape<?> getFGEShape();
 
 		public void notifyShapeChanged();
 
@@ -305,14 +403,6 @@ public interface Drawing<M> {
 
 		public double getMoveAuthorizedRatio(FGEPoint desiredLocation, FGEPoint initialLocation);
 
-		public double getWidth();
-
-		public void setWidth(double aValue);
-
-		public double getHeight();
-
-		public void setHeight(double aValue);
-
 		public FGEDimension getSize();
 
 		public void setSize(FGEDimension newSize);
@@ -338,7 +428,24 @@ public interface Drawing<M> {
 
 		public ShapeNode<?> getEndNode();
 
+		public Connector getConnector();
+
 		public void notifyConnectorChanged();
+
+		public int getExtendedX(double scale);
+
+		public int getExtendedY(double scale);
+
+		/**
+		 * Return normalized bounds Those bounds corresponds to the normalized area defined as (0.0,0.0)-(1.0,1.0) enclosing EXACTELY the
+		 * two related shape bounds. Those bounds should eventually be extended to contain connector contained outside this area.
+		 */
+		public Rectangle getNormalizedBounds(double scale);
+
+		public boolean isConnectorConsistent();
+
+		public void refreshConnector();
+
 	}
 
 	public interface GeometricNode<O> extends DrawingTreeNode<O, GeometricGraphicalRepresentation> {
@@ -355,9 +462,9 @@ public interface Drawing<M> {
 
 	public RootNode<M> getRoot();
 
-	public <O> ShapeNode<O> drawShape(RootNode<?> parent, ShapeGRBinding<O> binding, O representable);
+	public <O> ShapeNode<O> drawShape(ContainerNode<?, ?> parent, ShapeGRBinding<O> binding, O representable);
 
-	public <O> ShapeNode<O> drawShape(ShapeNode<?> parent, ShapeGRBinding<O> binding, O representable);
+	// public <O> ShapeNode<O> drawShape(ShapeNode<?> parent, ShapeGRBinding<O> binding, O representable);
 
 	/*public DrawingTreeNode<?> getContainer(DrawingTreeNode<?> node);
 

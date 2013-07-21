@@ -34,12 +34,11 @@ import org.openflexo.model.annotations.XMLElement;
 
 /**
  * Represents a geometric object in a diagram<br>
+ * 
  * Note that this implementation is powered by PAMELA framework.
  * 
  * @author sylvain
  * 
- * @param <O>
- *            the represented type
  */
 @ModelEntity
 @ImplementationClass(GeometricGraphicalRepresentationImpl.class)

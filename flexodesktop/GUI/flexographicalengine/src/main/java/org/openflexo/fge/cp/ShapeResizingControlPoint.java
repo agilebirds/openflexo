@@ -165,7 +165,7 @@ public class ShapeResizingControlPoint extends ControlPoint {
 		if (!isDraggable()) {
 			return Cursor.getDefaultCursor();
 		}
-		FGEPoint center = getNode().getGraphicalRepresentation().getShape().getShape().getCenter();
+		FGEPoint center = getNode().getGraphicalRepresentation().getShape().getShape(getNode()).getCenter();
 		return getResizingCursor(FGEPoint.getOrientation(center, getPoint()));
 	}
 

@@ -23,12 +23,11 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEObject;
 import org.openflexo.fge.connectors.impl.ConnectorImpl;
-import org.openflexo.fge.cp.ControlArea;
+import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.area.FGEArea;
@@ -65,9 +64,9 @@ public interface Connector extends FGEObject {
 
 	}
 
-	public ConnectorGraphicalRepresentation getGraphicalRepresentation();
+	// public ConnectorGraphicalRepresentation getGraphicalRepresentation();
 
-	public void setGraphicalRepresentation(ConnectorGraphicalRepresentation aGraphicalRepresentation);
+	// public void setGraphicalRepresentation(ConnectorGraphicalRepresentation aGraphicalRepresentation);
 
 	public double getStartAngle();
 
@@ -85,7 +84,7 @@ public interface Connector extends FGEObject {
 	 * @param aPoint
 	 * @return
 	 */
-	public double distanceToConnector(FGEPoint aPoint, double scale);
+	public double distanceToConnector(FGEPoint aPoint, double scale, ConnectorNode<?> node);
 
 	public void setPaintAttributes(ConnectorNode<?> node, FGEConnectorGraphics g);
 
@@ -93,13 +92,20 @@ public interface Connector extends FGEObject {
 
 	public void drawConnector(ConnectorNode<?> node, FGEConnectorGraphics g);
 
-	public List<? extends ControlArea<?>> getControlAreas();
+	/**
+	 * Recompute all control points for supplied connector node<br>
+	 * Return a newly created list of required control points
+	 * 
+	 * @param shapeNode
+	 * @return
+	 */
+	public List<ControlPoint> rebuildControlPoints(ConnectorNode<?> connectorNode);
 
 	public ConnectorType getConnectorType();
 
-	public void refreshConnector(boolean forceRefresh);
+	public void refreshConnector(ConnectorNode<?> connectorNode, boolean forceRefresh);
 
-	public boolean needsRefresh();
+	public boolean needsRefresh(ConnectorNode<?> connectorNode);
 
 	public void connectorWillBeModified();
 
@@ -115,11 +121,11 @@ public interface Connector extends FGEObject {
 	 * @param order
 	 * @return
 	 */
-	public FGEArea computeCoveringArea(int order);
+	public FGEArea computeCoveringArea(ConnectorNode<?> connectorNode, int order);
 
 	public boolean getDebug();
 
-	public void setDebug(boolean debug);
+	public void setDebug(ConnectorNode<?> connectorNode, boolean debug);
 
 	/**
 	 * Return bounds of actually required area to fully display current connector (which might require to be paint outside normalized

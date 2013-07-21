@@ -1,7 +1,6 @@
 package org.openflexo.fge.connectors.impl;
 
 import java.awt.geom.AffineTransform;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -9,7 +8,6 @@ import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.connectors.Connector;
-import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
@@ -19,6 +17,7 @@ import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.impl.FGEObjectImpl;
+import org.openflexo.fge.notifications.ConnectorModified;
 import org.openflexo.fge.shapes.Shape;
 
 public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
@@ -86,7 +85,7 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	 * @return
 	 */
 	@Override
-	public abstract double distanceToConnector(FGEPoint aPoint, double scale);
+	public abstract double distanceToConnector(FGEPoint aPoint, double scale, ConnectorNode<?> node);
 
 	@Override
 	public void setPaintAttributes(ConnectorNode<?> node, FGEConnectorGraphics g) {
@@ -122,62 +121,65 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	@Override
 	public abstract void drawConnector(ConnectorNode<?> node, FGEConnectorGraphics g);
 
-	@Override
-	public abstract List<? extends ControlArea<?>> getControlAreas();
+	/*@Override
+	public abstract List<? extends ControlArea<?>> getControlAreas();*/
 
 	@Override
 	public abstract ConnectorType getConnectorType();
 
-	public final void refreshConnector() {
-		refreshConnector(false);
+	public final void refreshConnector(ConnectorNode<?> connectorNode) {
+		refreshConnector(connectorNode, false);
 	}
 
 	@Override
-	public void refreshConnector(boolean forceRefresh) {
+	public void refreshConnector(ConnectorNode<?> connectorNode, boolean forceRefresh) {
 		/*
 		 * if (FGEConstants.DEBUG || getGraphicalRepresentation().getDebugCoveringArea()) { computeCoveringAreas(); }
 		 */
-		storeLayoutOfStartOrEndObject();
+		storeLayoutOfStartOrEndObject(connectorNode);
 	}
 
 	@Override
-	public boolean needsRefresh() {
-		return getGraphicalRepresentation().isRegistered() && layoutOfStartOrEndObjectHasChanged();
+	public boolean needsRefresh(ConnectorNode<?> connectorNode) {
+		return /*getGraphicalRepresentation().isRegistered() &&*/layoutOfStartOrEndObjectHasChanged(connectorNode);
 	}
 
-	private void storeLayoutOfStartOrEndObject() {
-		startShape = getStartObject().getShape();
-		startShapeDimension = getStartObject().getSize();
-		startShapeLocation = getStartObject().getLocationInDrawing();
-		endShape = getEndObject().getShape();
-		endShapeDimension = getEndObject().getSize();
-		endShapeLocation = getEndObject().getLocationInDrawing();
+	private void storeLayoutOfStartOrEndObject(ConnectorNode<?> connectorNode) {
+		startShape = connectorNode.getStartNode().getShape();
+		startShapeDimension = connectorNode.getStartNode().getSize();
+		startShapeLocation = connectorNode.getStartNode().getLocationInDrawing();
+		endShape = connectorNode.getEndNode().getShape();
+		endShapeDimension = connectorNode.getEndNode().getSize();
+		endShapeLocation = connectorNode.getEndNode().getLocationInDrawing();
 		knownConnectorUsedBounds = getConnectorUsedBounds();
 	}
 
-	private boolean layoutOfStartOrEndObjectHasChanged() {
+	private boolean layoutOfStartOrEndObjectHasChanged(ConnectorNode<?> connectorNode) {
 		// if (true) return true;
-		if (startShape == null || startShape != null && startShape.getShapeType() != getStartObject().getShape().getShapeType()) {
+		if (startShape == null || startShape != null && startShape.getShapeType() != connectorNode.getStartNode().getShape().getShapeType()) {
 			// logger.info("Layout has changed because start shape change");
 			return true;
 		}
-		if (startShapeDimension == null || startShapeDimension != null && !startShapeDimension.equals(getStartObject().getSize())) {
+		if (startShapeDimension == null || startShapeDimension != null
+				&& !startShapeDimension.equals(connectorNode.getStartNode().getSize())) {
 			// logger.info("Layout has changed because start shape dimension change");
 			return true;
 		}
-		if (startShapeLocation == null || startShapeLocation != null && !startShapeLocation.equals(getStartObject().getLocationInDrawing())) {
+		if (startShapeLocation == null || startShapeLocation != null
+				&& !startShapeLocation.equals(connectorNode.getStartNode().getLocationInDrawing())) {
 			// logger.info("Layout has changed because start shape location change");
 			return true;
 		}
-		if (endShape == null || endShape != null && endShape.getShapeType() != getEndObject().getShape().getShapeType()) {
+		if (endShape == null || endShape != null && endShape.getShapeType() != connectorNode.getEndNode().getShape().getShapeType()) {
 			// logger.info("Layout has changed because end shape change");
 			return true;
 		}
-		if (endShapeDimension == null || endShapeDimension != null && !endShapeDimension.equals(getEndObject().getSize())) {
+		if (endShapeDimension == null || endShapeDimension != null && !endShapeDimension.equals(connectorNode.getEndNode().getSize())) {
 			// logger.info("Layout has changed because end shape dimension change");
 			return true;
 		}
-		if (endShapeLocation == null || endShapeLocation != null && !endShapeLocation.equals(getEndObject().getLocationInDrawing())) {
+		if (endShapeLocation == null || endShapeLocation != null
+				&& !endShapeLocation.equals(connectorNode.getEndNode().getLocationInDrawing())) {
 			// logger.info("Layout has changed because end shape location change");
 			return true;
 		}
@@ -249,14 +251,14 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	 * @return
 	 */
 	@Override
-	public FGEArea computeCoveringArea(int order) {
-		AffineTransform at1 = FGEUtils.convertNormalizedCoordinatesAT(getStartObject(), getGraphicalRepresentation());
+	public FGEArea computeCoveringArea(ConnectorNode<?> connectorNode, int order) {
+		AffineTransform at1 = FGEUtils.convertNormalizedCoordinatesAT(connectorNode.getStartNode(), connectorNode);
 
-		AffineTransform at2 = FGEUtils.convertNormalizedCoordinatesAT(getEndObject(), getGraphicalRepresentation());
+		AffineTransform at2 = FGEUtils.convertNormalizedCoordinatesAT(connectorNode.getEndNode(), connectorNode);
 
 		if (order == 0) {
-			FGEArea startObjectShape = getStartObject().getShape().getShape().transform(at1);
-			FGEArea endObjectShape = getEndObject().getShape().getShape().transform(at2);
+			FGEArea startObjectShape = connectorNode.getStartNode().getFGEShape().transform(at1);
+			FGEArea endObjectShape = connectorNode.getEndNode().getFGEShape().transform(at2);
 			FGEArea returned = startObjectShape.intersect(endObjectShape);
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("computeCoveringArea(" + order + ") = " + returned);
@@ -264,15 +266,15 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 			return returned;
 		}
 
-		FGEArea start_east = getStartObject().getShape().getAllowedHorizontalConnectorLocationFromEast().transform(at1);
-		FGEArea start_west = getStartObject().getShape().getAllowedHorizontalConnectorLocationFromWest().transform(at1);
-		FGEArea start_north = getStartObject().getShape().getAllowedVerticalConnectorLocationFromNorth().transform(at1);
-		FGEArea start_south = getStartObject().getShape().getAllowedVerticalConnectorLocationFromSouth().transform(at1);
+		FGEArea start_east = connectorNode.getStartNode().getShape().getAllowedHorizontalConnectorLocationFromEast().transform(at1);
+		FGEArea start_west = connectorNode.getStartNode().getShape().getAllowedHorizontalConnectorLocationFromWest().transform(at1);
+		FGEArea start_north = connectorNode.getStartNode().getShape().getAllowedVerticalConnectorLocationFromNorth().transform(at1);
+		FGEArea start_south = connectorNode.getStartNode().getShape().getAllowedVerticalConnectorLocationFromSouth().transform(at1);
 
-		FGEArea end_east = getEndObject().getShape().getAllowedHorizontalConnectorLocationFromEast().transform(at2);
-		FGEArea end_west = getEndObject().getShape().getAllowedHorizontalConnectorLocationFromWest().transform(at2);
-		FGEArea end_north = getEndObject().getShape().getAllowedVerticalConnectorLocationFromNorth().transform(at2);
-		FGEArea end_south = getEndObject().getShape().getAllowedVerticalConnectorLocationFromSouth().transform(at2);
+		FGEArea end_east = connectorNode.getEndNode().getShape().getAllowedHorizontalConnectorLocationFromEast().transform(at2);
+		FGEArea end_west = connectorNode.getEndNode().getShape().getAllowedHorizontalConnectorLocationFromWest().transform(at2);
+		FGEArea end_north = connectorNode.getEndNode().getShape().getAllowedVerticalConnectorLocationFromNorth().transform(at2);
+		FGEArea end_south = connectorNode.getEndNode().getShape().getAllowedVerticalConnectorLocationFromSouth().transform(at2);
 
 		FGEArea returned = new FGEEmptyArea();
 
@@ -300,9 +302,9 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	}
 
 	@Override
-	public void setDebug(boolean debug) {
+	public void setDebug(ConnectorNode<?> connectorNode, boolean debug) {
 		this.debug = debug;
-		refreshConnector();
+		refreshConnector(connectorNode);
 	}
 
 	/**
@@ -332,5 +334,10 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	 */
 	@Override
 	public abstract FGEPoint getEndLocation();
+
+	protected void connectorChanged() {
+		setChanged();
+		notifyObservers(new ConnectorModified());
+	}
 
 }

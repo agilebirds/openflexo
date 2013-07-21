@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
+import java.util.Collections;
+import java.util.List;
 
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.ColorBackgroundStyle;
@@ -13,20 +15,20 @@ import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding;
 import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.FGEDrawingDecorationGraphics;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 
-public class RootNodeImpl<M> extends DrawingTreeNodeImpl<M, DrawingGraphicalRepresentation> implements RootNode<M> {
+public class RootNodeImpl<M> extends ContainerNodeImpl<M, DrawingGraphicalRepresentation> implements RootNode<M> {
 
 	protected FGEDrawingGraphics graphics;
 	private FGEDrawingDecorationGraphics decorationGraphics;
 	private BackgroundStyle bgStyle;
 
-	public RootNodeImpl(DrawingImpl<?> drawing, M drawable, GRBinding<M, DrawingGraphicalRepresentation> grBinding,
-			DrawingTreeNodeImpl<?, ?> parentNode) {
-		super(drawing, drawable, grBinding, parentNode);
+	public RootNodeImpl(DrawingImpl<?> drawing, M drawable, GRBinding<M, DrawingGraphicalRepresentation> grBinding) {
+		super(drawing, drawable, grBinding, null);
 		graphics = new FGEDrawingGraphics(this);
 		decorationGraphics = new FGEDrawingDecorationGraphics(this);
 		bgStyle = drawing.getFactory().makeColoredBackground(getGraphicalRepresentation().getBackgroundColor());
@@ -138,23 +140,8 @@ public class RootNodeImpl<M> extends DrawingTreeNodeImpl<M, DrawingGraphicalRepr
 	}
 
 	@Override
-	public double getWidth() {
-		return getGraphicalRepresentation().getWidth();
+	protected List<? extends ControlArea<?>> rebuildControlAreas() {
+		// No control areas are declared for the root node
+		return Collections.emptyList();
 	}
-
-	@Override
-	public final void setWidth(double aValue) {
-		getGraphicalRepresentation().setWidth(aValue);
-	}
-
-	@Override
-	public double getHeight() {
-		return getGraphicalRepresentation().getHeight();
-	}
-
-	@Override
-	public final void setHeight(double aValue) {
-		getGraphicalRepresentation().setHeight(aValue);
-	}
-
 }

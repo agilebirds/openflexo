@@ -19,17 +19,13 @@
  */
 package org.openflexo.fge;
 
-import java.awt.Rectangle;
-import java.util.List;
-
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.connectors.Connector.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
-import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.impl.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -44,8 +40,6 @@ import org.openflexo.model.annotations.XMLElement;
  * 
  * @author sylvain
  * 
- * @param <O>
- *            the represented type
  */
 @ModelEntity
 @ImplementationClass(ConnectorGraphicalRepresentationImpl.class)
@@ -54,8 +48,8 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 
 	// Property keys
 
-	public static final String START_OBJECT = "startObject";
-	public static final String END_OBJECT = "endObject";
+	// public static final String START_OBJECT = "startObject";
+	// public static final String END_OBJECT = "endObject";
 	public static final String CONNECTOR = "connector";
 
 	public static final String FOREGROUND = "foreground";
@@ -95,7 +89,7 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 	// * Properties
 	// *******************************************************************************
 
-	@Getter(value = START_OBJECT)
+	/*@Getter(value = START_OBJECT)
 	@XMLElement(context = "Start")
 	public ShapeGraphicalRepresentation getStartObject();
 
@@ -107,7 +101,7 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 	public ShapeGraphicalRepresentation getEndObject();
 
 	@Setter(value = END_OBJECT)
-	public void setEndObject(ShapeGraphicalRepresentation anEndObject);
+	public void setEndObject(ShapeGraphicalRepresentation anEndObject);*/
 
 	@Getter(value = CONNECTOR)
 	@XMLElement
@@ -213,21 +207,25 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 
 	// public void notifyConnectorChanged();
 
+	public void notifyConnectorModified();
+
+	public void notifyConnectorNeedsToBeRedrawn();
+
 	public ConnectorType getConnectorType();
 
 	public void setConnectorType(ConnectorType connectorType);
 
-	public void observeRelevantObjects();
+	// public void observeRelevantObjects();
 
-	public int getExtendedX(double scale);
+	// public int getExtendedX(double scale);
 
-	public int getExtendedY(double scale);
+	// public int getExtendedY(double scale);
 
 	/**
 	 * Return normalized bounds Those bounds corresponds to the normalized area defined as (0.0,0.0)-(1.0,1.0) enclosing EXACTELY the two
 	 * related shape bounds. Those bounds should eventually be extended to contain connector contained outside this area.
 	 */
-	public Rectangle getNormalizedBounds(double scale);
+	// public Rectangle getNormalizedBounds(double scale);
 
 	/**
 	 * Return distance from point to connector representation with a given scale
@@ -237,11 +235,11 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 	 * @param scale
 	 * @return
 	 */
-	public double distanceToConnector(FGEPoint aPoint, double scale);
+	public double distanceToConnector(FGEPoint aPoint, double scale, ConnectorNode<?> connectorNode);
 
-	public boolean isConnectorConsistent();
+	// public boolean isConnectorConsistent();
 
-	public void refreshConnector();
+	// public void refreshConnector();
 
 	// Override for a custom view management
 	// public ConnectorView makeConnectorView(DrawingController controller);
@@ -250,9 +248,9 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 
 	public void setDebugCoveringArea(boolean debugCoveringArea);
 
-	public FGEConnectorGraphics getGraphics();
+	// public FGEConnectorGraphics getGraphics();
 
-	public List<? extends ControlArea<?>> getControlAreas();
+	// public List<? extends ControlArea<?>> getControlAreas();
 
 	public ConnectorGraphicalRepresentation clone();
 

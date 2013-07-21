@@ -18,6 +18,7 @@ import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fge.BackgroundStyle;
+import org.openflexo.fge.ContainerGraphicalRepresentation.ContainerParameters;
 import org.openflexo.fge.Drawing.ConstraintDependency;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.RootNode;
@@ -33,6 +34,7 @@ import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeParameters;
 import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject;
@@ -40,6 +42,7 @@ import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGESegment;
+import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEIntersectionArea;
 import org.openflexo.fge.graphics.DecorationPainter;
@@ -57,8 +60,9 @@ import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.notifications.ShapeChanged;
 import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
+import org.openflexo.fge.shapes.Shape;
 
-public class ShapeNodeImpl<O> extends DrawingTreeNodeImpl<O, ShapeGraphicalRepresentation> implements ShapeNode<O> {
+public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalRepresentation> implements ShapeNode<O> {
 
 	private static final Logger logger = Logger.getLogger(ShapeNodeImpl.class.getPackage().getName());
 
@@ -78,7 +82,7 @@ public class ShapeNodeImpl<O> extends DrawingTreeNodeImpl<O, ShapeGraphicalRepre
 	private ShapePainter shapePainter;
 
 	public ShapeNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, ShapeGraphicalRepresentation> grBinding,
-			DrawingTreeNodeImpl<?, ?> parentNode) {
+			ContainerNodeImpl<?, ?> parentNode) {
 		super(drawingImpl, drawable, grBinding, parentNode);
 		graphics = new FGEShapeGraphics(this);
 		width = getGraphicalRepresentation().getMinimalWidth();
@@ -86,8 +90,19 @@ public class ShapeNodeImpl<O> extends DrawingTreeNodeImpl<O, ShapeGraphicalRepre
 	}
 
 	@Override
-	public ShapeGraphicalRepresentation getGraphicalRepresentation() {
-		return super.getGraphicalRepresentation();
+	public Shape getShape() {
+		if (getGraphicalRepresentation() != null) {
+			return getGraphicalRepresentation().getShape();
+		}
+		return null;
+	}
+
+	@Override
+	public FGEShape<?> getFGEShape() {
+		if (getShape() != null) {
+			return getShape().getShape(this);
+		}
+		return null;
 	}
 
 	/**
@@ -163,7 +178,7 @@ public class ShapeNodeImpl<O> extends DrawingTreeNodeImpl<O, ShapeGraphicalRepre
 
 	@Override
 	public boolean isPointInsideShape(FGEPoint aPoint) {
-		return getGraphicalRepresentation().getShape().isPointInsideShape(aPoint);
+		return getGraphicalRepresentation().getShape().isPointInsideShape(aPoint, this);
 	}
 
 	@Override
@@ -283,7 +298,7 @@ public class ShapeNodeImpl<O> extends DrawingTreeNodeImpl<O, ShapeGraphicalRepre
 					|| notif.getParameter() == ShapeParameters.adjustMaximalHeightToLabelHeight
 					|| notif.getParameter() == ShapeParameters.adjustMinimalHeightToLabelHeight) {
 				checkAndUpdateDimensionBoundsIfRequired();
-			} else if (notif.getParameter() == ShapeParameters.width || notif.getParameter() == ShapeParameters.height
+			} else if (notif.getParameter() == ContainerParameters.width || notif.getParameter() == ContainerParameters.height
 					|| notif.getParameter() == ShapeParameters.minimalWidth || notif.getParameter() == ShapeParameters.minimalHeight
 					|| notif.getParameter() == ShapeParameters.maximalWidth || notif.getParameter() == ShapeParameters.maximalHeight) {
 				checkAndUpdateDimensionBoundsIfRequired();
@@ -294,13 +309,13 @@ public class ShapeNodeImpl<O> extends DrawingTreeNodeImpl<O, ShapeGraphicalRepre
 					|| notif.getParameter() == ShapeParameters.locationConstrainedArea
 					|| notif.getParameter() == ShapeParameters.dimensionConstraintStep) {
 				checkAndUpdateLocationIfRequired();
-				getGraphicalRepresentation().getShape().rebuildControlPoints();
+				updateControlAreas();
 			} else if (notif.getParameter() == ShapeParameters.adaptBoundsToContents) {
 				extendBoundsToHostContents();
 			} else if (notif.getParameter() == ShapeParameters.border) {
 				notifyObjectResized();
 			} else if (notif.getParameter() == ShapeParameters.shape || notif.getParameter() == ShapeParameters.shapeType) {
-				getGraphicalRepresentation().getShape().rebuildControlPoints();
+				updateControlAreas();
 				notifyShapeChanged();
 			}
 
@@ -902,11 +917,6 @@ public class ShapeNodeImpl<O> extends DrawingTreeNodeImpl<O, ShapeGraphicalRepre
 	}
 
 	@Override
-	public double getWidth() {
-		return width;
-	}
-
-	@Override
 	public final void setWidth(double aValue) {
 		if (aValue != width) {
 			FGEDimension oldSize = getSize();
@@ -917,11 +927,6 @@ public class ShapeNodeImpl<O> extends DrawingTreeNodeImpl<O, ShapeGraphicalRepre
 
 	protected void setWidthNoNotification(double aValue) {
 		width = aValue;
-	}
-
-	@Override
-	public double getHeight() {
-		return height;
 	}
 
 	@Override
@@ -985,8 +990,8 @@ public class ShapeNodeImpl<O> extends DrawingTreeNodeImpl<O, ShapeGraphicalRepre
 				((ShapeNodeImpl<?>) getParentNode()).checkAndUpdateDimensionIfRequired();
 			}
 			notifyObjectResized(oldSize);
-			notifyAttributeChanged(ShapeParameters.width, oldWidth, getWidth());
-			notifyAttributeChanged(ShapeParameters.height, oldHeight, getHeight());
+			notifyAttributeChanged(ContainerParameters.width, oldWidth, getWidth());
+			notifyAttributeChanged(ContainerParameters.height, oldHeight, getHeight());
 			getGraphicalRepresentation().getShape().notifyObjectResized();
 		}
 	}
@@ -1244,6 +1249,7 @@ public class ShapeNodeImpl<O> extends DrawingTreeNodeImpl<O, ShapeGraphicalRepre
 		}
 	}
 
+	@Override
 	public void finalizeConstraints() {
 		if (getGraphicalRepresentation().getXConstraints() != null && getGraphicalRepresentation().getXConstraints().isValid()) {
 			getGraphicalRepresentation().getXConstraints().decode();
@@ -1446,9 +1452,9 @@ public class ShapeNodeImpl<O> extends DrawingTreeNodeImpl<O, ShapeGraphicalRepre
 
 		if (getGraphicalRepresentation().getShape() != null && getGraphicalRepresentation().getShadowStyle() != null) {
 			if (getGraphicalRepresentation().getShadowStyle().getDrawShadow()) {
-				getGraphicalRepresentation().getShape().paintShadow(graphics);
+				getGraphicalRepresentation().getShape().paintShadow(this, graphics);
 			}
-			getGraphicalRepresentation().getShape().paintShape(graphics);
+			getGraphicalRepresentation().getShape().paintShape(this, graphics);
 		}
 
 		if (shapePainter != null) {
@@ -1601,7 +1607,7 @@ public class ShapeNodeImpl<O> extends DrawingTreeNodeImpl<O, ShapeGraphicalRepre
 	}
 
 	@Override
-	protected void addChild(DrawingTreeNodeImpl<?, ?> aChildNode) {
+	public void addChild(DrawingTreeNodeImpl<?, ?> aChildNode) {
 		super.addChild(aChildNode);
 		if (getGraphicalRepresentation().getAdaptBoundsToContents()) {
 			extendBoundsToHostContents();
@@ -1659,7 +1665,7 @@ public class ShapeNodeImpl<O> extends DrawingTreeNodeImpl<O, ShapeGraphicalRepre
 	@Override
 	public void notifyObjectResized(FGEDimension oldSize) {
 		if (getGraphicalRepresentation().getShape() != null) {
-			getGraphicalRepresentation().getShape().updateShape();
+			getGraphicalRepresentation().getShape().notifyObjectResized();
 		}
 		setChanged();
 		notifyObservers(new ObjectResized(oldSize, getSize()));
@@ -1706,5 +1712,10 @@ public class ShapeNodeImpl<O> extends DrawingTreeNodeImpl<O, ShapeGraphicalRepre
 	public void notifyShapeNeedsToBeRedrawn() {
 		setChanged();
 		notifyObservers(new ShapeNeedsToBeRedrawn());
+	}
+
+	@Override
+	protected List<? extends ControlArea<?>> rebuildControlAreas() {
+		return getGraphicalRepresentation().getShape().rebuildControlPoints(this);
 	}
 }

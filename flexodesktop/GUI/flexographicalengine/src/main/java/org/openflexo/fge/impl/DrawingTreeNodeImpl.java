@@ -7,8 +7,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Observable;
@@ -20,9 +18,9 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.Drawing.ConstraintDependency;
+import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DependencyLoopException;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GRBinding;
@@ -31,9 +29,9 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
 import org.openflexo.fge.GraphicalRepresentation.Parameters;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
@@ -47,17 +45,19 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 
 	private final DrawingImpl<?> drawing;
 	private O drawable;
-	private DrawingTreeNodeImpl<?, ?> parentNode;
-	private List<DrawingTreeNodeImpl<?, ?>> childNodes;
+	private ContainerNodeImpl<?, ?> parentNode;
 	private GR graphicalRepresentation;
 	private GRBinding<O, GR> grBinding;
+
+	private List<ControlArea<?>> controlAreas;
 
 	private List<ConstraintDependency> dependancies;
 	private List<ConstraintDependency> alterings;
 
-	boolean isInvalidated = true;
+	private boolean isInvalidated = true;
+	private boolean isDeleted = false;
 
-	public DrawingTreeNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, GR> grBinding, DrawingTreeNodeImpl<?, ?> parentNode) {
+	public DrawingTreeNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, GR> grBinding, ContainerNodeImpl<?, ?> parentNode) {
 		this.drawing = drawingImpl;
 		// logger.info("New DrawingTreeNode for "+aDrawable+" under "+aParentDrawable+" (is "+this+")");
 		this.drawable = drawable;
@@ -65,7 +65,6 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 
 		this.parentNode = parentNode;
 
-		childNodes = new ArrayList<DrawingTreeNodeImpl<?, ?>>();
 		Hashtable<Object, DrawingTreeNode<?, ?>> hash = this.drawing.retrieveHash(grBinding);
 
 		hash.put(drawable, this);
@@ -83,32 +82,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		dependancies = new ArrayList<ConstraintDependency>();
 		alterings = new ArrayList<ConstraintDependency>();
 
-	}
-
-	protected void addChild(DrawingTreeNodeImpl<?, ?> aChildNode) {
-		if (aChildNode == null) {
-			logger.warning("Cannot add null node");
-			return;
-		}
-		if (childNodes.contains(aChildNode)) {
-			logger.warning("Node already present");
-		} else {
-			aChildNode.parentNode = this;
-			childNodes.add(aChildNode);
-		}
-	}
-
-	protected void removeChild(DrawingTreeNode<?, ?> aChildNode) {
-		if (aChildNode == null) {
-			DrawingImpl.logger.warning("Cannot remove null node");
-			return;
-		}
-		if (childNodes.contains(aChildNode)) {
-			childNodes.remove(aChildNode);
-		} else {
-			DrawingImpl.logger.warning("Cannot remove node: not present");
-		}
-		aChildNode.delete();
+		controlAreas = new ArrayList<ControlArea<?>>();
 	}
 
 	@Override
@@ -130,9 +104,9 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	public void invalidate() {
 		// System.out.println("* Invalidate " + drawable.getClass().getSimpleName() + " : " + drawable);
 		isInvalidated = true;
-		for (DrawingTreeNode<?, ?> dtn : childNodes) {
+		/*for (DrawingTreeNode<?, ?> dtn : childNodes) {
 			dtn.invalidate();
-		}
+		}*/
 	}
 
 	@Override
@@ -141,13 +115,12 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	}
 
 	@Override
-	public DrawingTreeNodeImpl<?, ?> getParentNode() {
+	public ContainerNodeImpl<?, ?> getParentNode() {
 		return parentNode;
 	}
 
-	@Override
-	public List<DrawingTreeNodeImpl<?, ?>> getChildNodes() {
-		return childNodes;
+	protected void setParentNode(ContainerNodeImpl<?, ?> parentNode) {
+		this.parentNode = parentNode;
 	}
 
 	@Override
@@ -186,6 +159,18 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		return graphicalRepresentation;
 	}
 
+	@Override
+	public final List<ControlArea<?>> getControlAreas() {
+		return controlAreas;
+	}
+
+	protected final void updateControlAreas() {
+		controlAreas.clear();
+		controlAreas.addAll(rebuildControlAreas());
+	}
+
+	protected abstract List<? extends ControlArea<?>> rebuildControlAreas();
+
 	/*private void update()
 	{
 		if (parentNode == null) { // This is the root node
@@ -205,18 +190,9 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	@Override
 	public void delete() {
 		// Normally, it is already done, but check and do it when required...
-		if (parentNode != null && parentNode.childNodes.contains(this)) {
+		if (parentNode instanceof ContainerNode && ((ContainerNode<?, ?>) parentNode).getChildNodes().contains(this)) {
 			parentNode.removeChild(this);
 		}
-
-		if (childNodes != null) {
-			for (DrawingTreeNode<?, ?> n : new ArrayList<DrawingTreeNode<?, ?>>(childNodes)) {
-				removeChild(n);
-			}
-			childNodes.clear();
-		}
-
-		childNodes = null;
 
 		Hashtable<Object, DrawingTreeNode<?, ?>> hash = this.drawing.retrieveHash(grBinding);
 
@@ -228,6 +204,12 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		parentNode = null;
 		graphicalRepresentation = null;
 
+		isDeleted = true;
+	}
+
+	@Override
+	public boolean isDeleted() {
+		return isDeleted;
 	}
 
 	/*Vector<DrawingTreeNode<?>> nodesToRemove = new Vector<DrawingTreeNode<?>>();
@@ -349,18 +331,6 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		}
 	}
 
-	protected void propagateConstraintsAfterModification(GRParameter parameter) {
-		for (ConstraintDependency dependency : alterings) {
-			if (dependency.requiredParameter == parameter) {
-				((GraphicalRepresentationImpl) dependency.requiringGR).computeNewConstraint(dependency);
-			}
-		}
-	}
-
-	protected void computeNewConstraint(ConstraintDependency dependency) {
-		// None known at this level
-	}
-
 	// *******************************************************************************
 	// * Observer implementation *
 	// *******************************************************************************
@@ -387,8 +357,21 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	}
 
 	public void notifyAttributeChanged(GRParameter parameter, Object oldValue, Object newValue) {
+		propagateConstraintsAfterModification(parameter);
 		setChanged();
 		notifyObservers(new FGENotification(parameter, oldValue, newValue));
+	}
+
+	protected void propagateConstraintsAfterModification(GRParameter parameter) {
+		for (ConstraintDependency dependency : alterings) {
+			if (dependency.requiredParameter == parameter) {
+				((DrawingTreeNodeImpl<?, ?>) dependency.requiringGR).computeNewConstraint(dependency);
+			}
+		}
+	}
+
+	protected void computeNewConstraint(ConstraintDependency dependency) {
+		// None known at this level
 	}
 
 	@Override
@@ -427,17 +410,6 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 			DrawingImpl.logger.warning("Could not find variable named " + variable);
 			return null;
 		}
-	}
-
-	@Override
-	public int getOrder(DrawingTreeNode<?, ?> child1, DrawingTreeNode<?, ?> child2) {
-		if (!getChildNodes().contains(child1)) {
-			return 0;
-		}
-		if (!getChildNodes().contains(child2)) {
-			return 0;
-		}
-		return getChildNodes().indexOf(child1) - getChildNodes().indexOf(child2);
 	}
 
 	@Override
@@ -650,68 +622,12 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		return new Rectangle(getLabelLocation(scale), getLabelDimension(scale));
 	}
 
-	// *******************************************************************************
-	// * Methods *
-	// *******************************************************************************
-
 	@Override
 	public void paint(Graphics g, DrawingController<?> controller) {
 		Graphics2D g2 = (Graphics2D) g;
 		DrawUtils.turnOnAntiAlising(g2);
 		DrawUtils.setRenderQuality(g2);
 		DrawUtils.setColorRenderQuality(g2);
-	}
-
-	@Override
-	public ShapeNode<?> getTopLevelShapeGraphicalRepresentation(FGEPoint p) {
-		return getTopLevelShapeGraphicalRepresentation(this, p);
-	}
-
-	private ShapeNode<?> getTopLevelShapeGraphicalRepresentation(DrawingTreeNode<?, ?> container, FGEPoint p) {
-
-		List<ShapeNode<?>> enclosingShapes = new ArrayList<ShapeNode<?>>();
-
-		for (DrawingTreeNode<?, ?> dtn : container.getChildNodes()) {
-			if (dtn instanceof ShapeNode) {
-				ShapeNode<?> child = (ShapeNode<?>) dtn;
-				if (child.getGraphicalRepresentation().getShape().getShape().containsPoint(FGEUtils.convertNormalizedPoint(this, p, child))) {
-					enclosingShapes.add(child);
-				} else {
-					// Look if we are not contained in a child shape outside current shape
-					ShapeNode<?> insideFocusedShape = getTopLevelShapeGraphicalRepresentation(child, p);
-					if (insideFocusedShape != null && insideFocusedShape instanceof ShapeGraphicalRepresentation) {
-						enclosingShapes.add(insideFocusedShape);
-					}
-				}
-			}
-		}
-
-		if (enclosingShapes.size() > 0) {
-
-			Collections.sort(enclosingShapes, new Comparator<ShapeNode<?>>() {
-				@Override
-				public int compare(ShapeNode<?> o1, ShapeNode<?> o2) {
-					if (o2.getGraphicalRepresentation().getLayer() == o1.getGraphicalRepresentation().getLayer()
-							&& o1.getParentNode() != null && o1.getParentNode() == o2.getParentNode()) {
-						return o1.getParentNode().getOrder(o1, o2);
-					}
-					return o2.getGraphicalRepresentation().getLayer() - o1.getGraphicalRepresentation().getLayer();
-				}
-			});
-
-			ShapeNode<?> focusedShape = enclosingShapes.get(0);
-
-			ShapeNode<?> insideFocusedShape = getTopLevelShapeGraphicalRepresentation(focusedShape, p);
-
-			if (insideFocusedShape != null) {
-				return insideFocusedShape;
-			} else {
-				return focusedShape;
-			}
-		}
-
-		return null;
-
 	}
 
 }

@@ -3,8 +3,6 @@ package org.openflexo.fge.impl;
 import java.awt.Stroke;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.Method;
-import java.util.Collections;
-import java.util.List;
 import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -17,7 +15,6 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.antar.binding.JavaBindingFactory;
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.Drawing.ConstraintDependency;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.GRVariable;
 import org.openflexo.fge.GRVariable.GRVariableType;
@@ -52,8 +49,8 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	private static BindingFactory BINDING_FACTORY = new JavaBindingFactory();
 
-	private static final List<Object> EMPTY_VECTOR = Collections.emptyList();
-	private static final List<GraphicalRepresentation> EMPTY_GR_VECTOR = Collections.emptyList();
+	// private static final List<Object> EMPTY_VECTOR = Collections.emptyList();
+	// private static final List<GraphicalRepresentation> EMPTY_GR_VECTOR = Collections.emptyList();
 
 	// *******************************************************************************
 	// * Parameters *
@@ -99,7 +96,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	private Vector<Object> ancestors;
 
-	private boolean isRegistered = false;
+	// private boolean isRegistered = false;
 	private boolean isDeleted = false;
 	private boolean hasText = true;
 
@@ -1253,7 +1250,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 			logger.fine("Change attribute " + notification.parameter + " for object " + this + " was: " + notification.oldValue
 					+ " is now: " + notification.newValue);
 		}
-		propagateConstraintsAfterModification(notification.parameter);
+		// propagateConstraintsAfterModification(notification.parameter);
 		setChanged();
 		notifyObservers(notification);
 		getPropertyChangeSupport().firePropertyChange(notification.propertyName(), notification.oldValue, notification.newValue);
@@ -1349,7 +1346,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 		return convertPoint(source, point, this, scale);
 	}*/
 
-	@Override
+	/*@Override
 	public boolean isRegistered() {
 		return isRegistered;
 	}
@@ -1357,7 +1354,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	@Override
 	public void setRegistered(boolean aFlag) {
 		isRegistered = aFlag;
-	}
+	}*/
 
 	@Override
 	public Vector<MouseClickControl> getMouseClickControls() {
@@ -1497,7 +1494,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	// Override when required
 	@Override
 	public void notifyObjectHierarchyWillBeUpdated() {
-		setRegistered(false);
+		// setRegistered(false);
 		if (ancestors != null) {
 			ancestors.clear();
 		}
@@ -1507,7 +1504,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	// Override when required
 	@Override
 	public void notifyObjectHierarchyHasBeenUpdated() {
-		setRegistered(true);
+		// setRegistered(true);
 		if (ancestors != null) {
 			ancestors.clear();
 		}
@@ -1808,13 +1805,13 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 		}
 	}*/
 
-	protected void propagateConstraintsAfterModification(GRParameter parameter) {
+	/*protected void propagateConstraintsAfterModification(GRParameter parameter) {
 		for (ConstraintDependency dependency : alterings) {
 			if (dependency.requiredParameter == parameter) {
 				((GraphicalRepresentationImpl) dependency.requiringGR).computeNewConstraint(dependency);
 			}
 		}
-	}
+	}*/
 
 	/*protected void computeNewConstraint(ConstraintDependency dependency) {
 		// None known at this level

@@ -13,15 +13,15 @@ import java.util.Observable;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.Drawing.GeometricNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding;
+import org.openflexo.fge.GeometricGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeParameters;
-import org.openflexo.fge.connectors.Connector;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
@@ -39,45 +39,21 @@ import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.notifications.ShapeChanged;
 
-public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphicalRepresentation> implements ConnectorNode<O> {
+public class GeometricNodeImpl<O> extends DrawingTreeNodeImpl<O, GeometricGraphicalRepresentation> implements GeometricNode<O> {
 
-	private static final Logger logger = Logger.getLogger(ConnectorNodeImpl.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(GeometricNodeImpl.class.getPackage().getName());
 
 	protected FGEConnectorGraphics graphics;
 
-	private ShapeNodeImpl<?> startNode;
-	private ShapeNodeImpl<?> endNode;
-
-	public ConnectorNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, ConnectorGraphicalRepresentation> grBinding,
-			ContainerNodeImpl<?, ?> parentNode) {
+	public GeometricNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, GeometricGraphicalRepresentation> grBinding,
+			DrawingTreeNodeImpl<?, ?> parentNode) {
 		super(drawingImpl, drawable, grBinding, parentNode);
 		graphics = new FGEConnectorGraphics(this);
 	}
 
 	@Override
-	public ShapeNodeImpl<?> getStartNode() {
-		return startNode;
-	}
-
-	public void setStartNode(ShapeNodeImpl<?> startNode) {
-		this.startNode = startNode;
-	}
-
-	@Override
-	public ShapeNodeImpl<?> getEndNode() {
-		return endNode;
-	}
-
-	public void setEndNode(ShapeNodeImpl<?> endNode) {
-		this.endNode = endNode;
-	}
-
-	@Override
-	public Connector getConnector() {
-		if (getGraphicalRepresentation() != null) {
-			return getGraphicalRepresentation().getConnector();
-		}
-		return null;
+	public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
+		return super.getGraphicalRepresentation();
 	}
 
 	@Override
@@ -281,7 +257,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 		FGERectangle drawingViewBounds = new FGERectangle(drawingViewSelection.getX(), drawingViewSelection.getY(),
 				drawingViewSelection.getWidth(), drawingViewSelection.getHeight(), Filling.FILLED);
 		boolean isFullyContained = true;
-		for (ControlArea<?> ca : getControlAreas()) {
+		for (ControlArea<?> ca : getGraphicalRepresentation().getConnector().getControlAreas()) {
 			if (ca instanceof ControlPoint) {
 				ControlPoint cp = (ControlPoint) ca;
 				Point cpInContainerView = convertLocalNormalizedPointToRemoteViewCoordinates(cp.getPoint(), getDrawing().getRoot(), scale);
@@ -419,10 +395,6 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 			}
 		}
 
-		if (notification instanceof ConnectorModified) {
-			updateControlAreas();
-		}
-
 		if (observable instanceof ForegroundStyle) {
 			notifyAttributeChanged(ShapeParameters.foreground, null, getGraphicalRepresentation().getForeground());
 		}
@@ -448,8 +420,8 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 			return;
 		}
 		try {
-			if (forceRefresh || getGraphicalRepresentation().getConnector().needsRefresh(this)) {
-				getGraphicalRepresentation().getConnector().refreshConnector(this, forceRefresh);
+			if (forceRefresh || getGraphicalRepresentation().getConnector().needsRefresh()) {
+				getGraphicalRepresentation().getConnector().refreshConnector(forceRefresh);
 				checkViewBounds();
 				setChanged();
 				notifyObservers(new ConnectorModified());
@@ -466,8 +438,8 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	}
 
 	@Override
-	protected List<? extends ControlArea<?>> rebuildControlAreas() {
-		return getGraphicalRepresentation().getConnector().rebuildControlPoints(this);
+	public List<? extends ControlArea<?>> getControlAreas() {
+		return getGraphicalRepresentation().getConnector().getControlAreas(this);
 	}
 
 	@Override

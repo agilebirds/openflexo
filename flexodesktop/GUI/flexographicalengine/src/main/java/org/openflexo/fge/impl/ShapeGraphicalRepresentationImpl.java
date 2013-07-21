@@ -28,18 +28,20 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.ShapeChanged;
+import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
 import org.openflexo.fge.shapes.Shape;
 import org.openflexo.fge.shapes.Shape.ShapeType;
 import org.openflexo.toolbox.ToolBox;
 
-public class ShapeGraphicalRepresentationImpl extends GraphicalRepresentationImpl implements ShapeGraphicalRepresentation {
+public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresentationImpl implements ShapeGraphicalRepresentation {
 
 	private static final Logger logger = Logger.getLogger(ShapeGraphicalRepresentation.class.getPackage().getName());
 
 	private double x = 0;
 	private double y = 0;
-	private double width = 1;
-	private double height = 1;
+	// private double width = 1;
+	// private double height = 1;
 	private double minimalWidth = 0;
 	private double minimalHeight = 0;
 	private double maximalWidth = Double.POSITIVE_INFINITY;
@@ -274,6 +276,16 @@ public class ShapeGraphicalRepresentationImpl extends GraphicalRepresentationImp
 				checkAndUpdateLocationIfRequired();
 			}
 		}*/
+
+		if (notification instanceof ShapeChanged) {
+			// Reforward notification
+			notifyShapeChanged();
+		}
+
+		if (notification instanceof ShapeNeedsToBeRedrawn) {
+			// Reforward notification
+			notifyShapeNeedsToBeRedrawn();
+		}
 
 		if (observable instanceof BackgroundStyle) {
 			notifyAttributeChange(ShapeParameters.background);
@@ -948,12 +960,12 @@ public class ShapeGraphicalRepresentationImpl extends GraphicalRepresentationImp
 		}
 	}
 
-	@Override
+	/*@Override
 	public double getWidth() {
 		return width;
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public final void setWidth(double aValue) {
 		FGENotification notification = requireChange(ShapeParameters.width, aValue);
 		if (notification != null) {
@@ -963,18 +975,14 @@ public class ShapeGraphicalRepresentationImpl extends GraphicalRepresentationImp
 			hasChanged(notification);
 			// notifyObjectResized(oldSize);
 		}
-	}
-
-	/*public void setWidthNoNotification(double aValue) {
-		width = aValue;
 	}*/
 
-	@Override
+	/*@Override
 	public double getHeight() {
 		return height;
-	}
+	}*/
 
-	@Override
+	/*@Override
 	public final void setHeight(double aValue) {
 		FGENotification notification = requireChange(ShapeParameters.height, aValue);
 		if (notification != null) {
@@ -984,7 +992,7 @@ public class ShapeGraphicalRepresentationImpl extends GraphicalRepresentationImp
 			hasChanged(notification);
 			// notifyObjectResized(oldSize);
 		}
-	}
+	}*/
 
 	/*public void setHeightNoNotification(double aValue) {
 		height = aValue;
@@ -2040,7 +2048,7 @@ public class ShapeGraphicalRepresentationImpl extends GraphicalRepresentationImp
 	@Override
 	public void setShapeType(ShapeType shapeType) {
 		if (getShapeType() != shapeType) {
-			setShape(getFactory().makeShape(shapeType, this));
+			setShape(getFactory().makeShape(shapeType/*, this*/));
 			if (getShape().areDimensionConstrained()) {
 				double newSize = Math.max(getWidth(), getHeight());
 				setWidth(newSize);
@@ -2049,7 +2057,7 @@ public class ShapeGraphicalRepresentationImpl extends GraphicalRepresentationImp
 		}
 	}
 
-	/*@Override
+	@Override
 	public void notifyShapeChanged() {
 		setChanged();
 		notifyObservers(new ShapeChanged());
@@ -2059,7 +2067,7 @@ public class ShapeGraphicalRepresentationImpl extends GraphicalRepresentationImp
 	public void notifyShapeNeedsToBeRedrawn() {
 		setChanged();
 		notifyObservers(new ShapeNeedsToBeRedrawn());
-	}*/
+	}
 
 	/*@Override
 	public void notifyObjectMoved() {
