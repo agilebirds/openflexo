@@ -19,15 +19,11 @@
  */
 package org.openflexo.fge.connectors;
 
-import java.util.Vector;
-
-import org.openflexo.fge.Drawing.ConnectorNode;
+import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.connectors.impl.RectPolylinConnectorSpecificationImpl;
-import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
-import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
@@ -88,6 +84,7 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 	public static final String FIXED_START_LOCATION = "fixedStartLocation";
 	public static final String FIXED_END_LOCATION = "fixedEndLocation";
 	public static final String POLYLIN = "polylin";
+	public static final String PIXEL_OVERLAP = "pixelOverlap";
 
 	public static enum RectPolylinAdjustability {
 		AUTO_LAYOUT, BASICALLY_ADJUSTABLE, FULLY_ADJUSTABLE
@@ -235,6 +232,13 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 	@Setter(value = FIXED_END_LOCATION)
 	public void setFixedEndLocation(FGEPoint aPoint);
 
+	@Getter(value = PIXEL_OVERLAP, defaultValue = "" + FGEConstants.DEFAULT_RECT_POLYLIN_PIXEL_OVERLAP)
+	@XMLAttribute
+	public int getPixelOverlap();
+
+	@Setter(value = PIXEL_OVERLAP)
+	public void setPixelOverlap(int aPixelOverlap);
+
 	@Getter(value = POLYLIN, ignoreType = true)
 	public FGERectPolylin _getPolylin();
 
@@ -249,21 +253,17 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 
 	public void setIsAdjustable(boolean aFlag);
 
-	public boolean getWasManuallyAdjusted();
+	/*public boolean getWasManuallyAdjusted();
 
-	public void setWasManuallyAdjusted(boolean aFlag);
-
-	public int getPixelOverlap();
-
-	public void setPixelOverlap(int aPixelOverlap);
+	public void setWasManuallyAdjusted(boolean aFlag);*/
 
 	/**
 	 * 
 	 * @return angle expressed in radians
 	 */
-	public double getMiddleSymbolAngle(ConnectorNode<?> node);
+	// public double getMiddleSymbolAngle(ConnectorNode<?> node);
 
-	public FGERectPolylin getCurrentPolylin();
+	/*public FGERectPolylin getCurrentPolylin();
 
 	public void manuallySetPolylin(FGERectPolylin aPolylin);
 
@@ -273,7 +273,7 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 
 	public FGEPoint getCrossedControlPointOnRoundedArc();
 
-	public Vector<SimplifiedCardinalDirection> getAllowedStartOrientations();
+	public Vector<SimplifiedCardinalDirection> getAllowedStartOrientations();*/
 
 	/**
 	 * Return all allowed start orientation as this is defined in orientation constraint Does NOT take under account the fact that starting
@@ -281,9 +281,9 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 	 * 
 	 * @return
 	 */
-	public Vector<SimplifiedCardinalDirection> getPrimitiveAllowedStartOrientations();
+	// public Vector<SimplifiedCardinalDirection> getPrimitiveAllowedStartOrientations();
 
-	public Vector<SimplifiedCardinalDirection> getExcludedStartOrientations();
+	/*public Vector<SimplifiedCardinalDirection> getExcludedStartOrientations();
 
 	public Vector<SimplifiedCardinalDirection> getAllowedEndOrientations();
 
@@ -303,7 +303,7 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 
 	public boolean _updateAsFullyAdjustableForUniqueSegment(FGEPoint pt);
 
-	public void _connectorChanged(boolean temporary);
+	public void _connectorChanged(boolean temporary);*/
 
 	/**
 	 * Compute and return start area outline, in the connector coordinates system
@@ -314,7 +314,7 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 	 * 
 	 * @return FGEArea
 	 */
-	public FGEArea retrieveStartArea();
+	// public FGEArea retrieveStartArea();
 
 	/**
 	 * Compute and return allowed start area, in the connector coordinates system If some orientation constraints are defined, return
@@ -322,7 +322,7 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 	 * 
 	 * @return FGEArea
 	 */
-	public FGEArea retrieveAllowedStartArea(boolean takeFixedControlPointUnderAccount);
+	// public FGEArea retrieveAllowedStartArea(boolean takeFixedControlPointUnderAccount);
 
 	/**
 	 * Compute and return end area outline, in the connector coordinates system
@@ -333,7 +333,7 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 	 * 
 	 * @return FGEArea
 	 */
-	public FGEArea retrieveEndArea();
+	// public FGEArea retrieveEndArea();
 
 	/**
 	 * Compute and return allowed end area, in the connector coordinates system If some orientation constraints are defined, return portion
@@ -341,11 +341,11 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 	 * 
 	 * @return FGEArea
 	 */
-	public FGEArea retrieveAllowedEndArea(boolean takeFixedControlPointUnderAccount);
+	// public FGEArea retrieveAllowedEndArea(boolean takeFixedControlPointUnderAccount);
 
-	public double getOverlapXResultingFromPixelOverlap(ConnectorNode<?> node);
+	// public double getOverlapXResultingFromPixelOverlap(ConnectorNode<?> node);
 
-	public double getOverlapYResultingFromPixelOverlap(ConnectorNode<?> node);
+	// public double getOverlapYResultingFromPixelOverlap(ConnectorNode<?> node);
 
 	/**
 	 * This method is internally called while updating starting point of polylin.
@@ -357,7 +357,7 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 	 *            Polylin to take under account to recreate new layout
 	 * 
 	 */
-	public void checkAndUpdateStartCP(FGERectPolylin initialPolylin);
+	// public void checkAndUpdateStartCP(FGERectPolylin initialPolylin);
 
 	/**
 	 * This method is internally called while updating ending point of polylin.
@@ -369,7 +369,7 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 	 *            Polylin to take under account to recreate new layout
 	 * 
 	 */
-	public void checkAndUpdateEndCP(FGERectPolylin initialPolylin);
+	// public void checkAndUpdateEndCP(FGERectPolylin initialPolylin);
 
 	/**
 	 * Compute a new polylin by concatening supplied polylins and given indexes
@@ -382,14 +382,15 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 	 * @param endIndex2
 	 * @return
 	 */
-	public FGERectPolylin mergePolylins(FGERectPolylin p1, int startIndex1, int endIndex1, FGERectPolylin p2, int startIndex2, int endIndex2);
+	// public FGERectPolylin mergePolylins(FGERectPolylin p1, int startIndex1, int endIndex1, FGERectPolylin p2, int startIndex2, int
+	// endIndex2);
 
 	/**
 	 * Simplify layout of current polylin asserting that two points are safelly removable.
 	 * 
 	 * @param index
 	 */
-	public void _simplifyLayoutOfCurrentPolylinByDeletingTwoPoints(int index);
+	// public void _simplifyLayoutOfCurrentPolylinByDeletingTwoPoints(int index);
 
 	/**
 	 * Simplify layout of current polylin asserting that two points are safelly removable. If a location is given, this location will be
@@ -398,5 +399,5 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 	 * @param index
 	 * @param newCPLocation
 	 */
-	public void _simplifyLayoutOfCurrentPolylinByDeletingTwoPoints(int index, FGEPoint newCPLocation);
+	// public void _simplifyLayoutOfCurrentPolylinByDeletingTwoPoints(int index, FGEPoint newCPLocation);
 }

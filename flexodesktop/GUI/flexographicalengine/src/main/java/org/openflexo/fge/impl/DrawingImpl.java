@@ -331,9 +331,13 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 				+ " > "
 				+ (dtn.getGraphicalRepresentation() != null ? dtn.getGraphicalRepresentation().getClass().getSimpleName() + " "
 						+ Integer.toHexString(dtn.getGraphicalRepresentation().hashCode()) : " null ") + " object=" + dtn.getDrawable());
-		if (dtn.getChildNodes() != null) {
-			for (DrawingTreeNodeImpl<?, ?> child : dtn.getChildNodes()) {
-				_printGraphicalObjectHierarchy(child, level + 1);
+		if (dtn instanceof ContainerNode) {
+			if (((ContainerNode<?, ?>) dtn).getChildNodes() != null) {
+				for (DrawingTreeNode<?, ?> child : ((ContainerNode<?, ?>) dtn).getChildNodes()) {
+					if (child instanceof DrawingTreeNodeImpl) {
+						_printGraphicalObjectHierarchy((DrawingTreeNodeImpl<?, ?>) child, level + 1);
+					}
+				}
 			}
 		}
 	}
@@ -377,7 +381,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 			for (DrawingTreeNode<?, ?> nodeToRemove : nodesToRemove) {
 				deleteNode(nodeToRemove);
 			}
-			((DrawingTreeNodeImpl<?, ?>) dtn).isInvalidated = false;
+			((DrawingTreeNodeImpl<?, ?>) dtn).validate();
 		}
 	}
 

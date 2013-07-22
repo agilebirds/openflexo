@@ -46,24 +46,24 @@ public interface CurveConnectorSpecification extends ConnectorSpecification {
 
 	@Getter(value = CP1_RELATIVE_TO_START_OBJECT, isStringConvertable = true)
 	@XMLAttribute
-	public FGEPoint _getCp1RelativeToStartObject();
+	public FGEPoint getCp1RelativeToStartObject();
 
 	@Setter(value = CP1_RELATIVE_TO_START_OBJECT)
-	public void _setCp1RelativeToStartObject(FGEPoint aPoint);
+	public void setCp1RelativeToStartObject(FGEPoint aPoint);
 
 	@Getter(value = CP2_RELATIVE_TO_END_OBJECT, isStringConvertable = true)
 	@XMLAttribute
-	public FGEPoint _getCp2RelativeToEndObject();
+	public FGEPoint getCp2RelativeToEndObject();
 
 	@Setter(value = CP2_RELATIVE_TO_END_OBJECT)
-	public void _setCp2RelativeToEndObject(FGEPoint aPoint);
+	public void setCp2RelativeToEndObject(FGEPoint aPoint);
 
 	@Getter(value = CP_POSITION, isStringConvertable = true)
 	@XMLAttribute
-	public FGEPoint _getCpPosition();
+	public FGEPoint getCpPosition();
 
 	@Setter(value = CP_POSITION)
-	public void _setCpPosition(FGEPoint cpPosition);
+	public void setCpPosition(FGEPoint cpPosition);
 
 	@Getter(value = ARE_BOUNDS_ADJUSTABLE, defaultValue = "true")
 	@XMLAttribute

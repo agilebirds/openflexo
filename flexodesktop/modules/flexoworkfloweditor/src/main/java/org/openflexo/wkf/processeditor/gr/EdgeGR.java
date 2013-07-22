@@ -199,7 +199,7 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 			if (!getEdge().hasGraphicalPropertyForKey(getStoredCurveCPKey())) {
 				getEdge()._setGraphicalPropertyForKey(new FGEPoint(0.5, 0.55), getStoredCurveCPKey());
 			}
-			connector._setCpPosition((FGEPoint) getEdge()._graphicalPropertyForKey(getStoredCurveCPKey()));
+			connector.setCpPosition((FGEPoint) getEdge()._graphicalPropertyForKey(getStoredCurveCPKey()));
 		}
 
 		return returned;
@@ -715,11 +715,11 @@ public abstract class EdgeGR<O extends WKFEdge<?, ?>> extends WKFConnectorGR<O> 
 		} else if (getConnector() instanceof CurveConnectorSpecification && isRegistered()) {
 			CurveConnectorSpecification connector = (CurveConnectorSpecification) getConnector();
 			ensurePointConverterIsRegistered();
-			getEdge()._setGraphicalPropertyForKey(connector._getCpPosition(), getStoredCurveCPKey());
+			getEdge()._setGraphicalPropertyForKey(connector.getCpPosition(), getStoredCurveCPKey());
 			if (connector.getAreBoundsAdjustable()) {
 				ensurePointConverterIsRegistered();
-				getEdge()._setGraphicalPropertyForKey(connector._getCp1RelativeToStartObject(), getFixedStartLocationKey());
-				getEdge()._setGraphicalPropertyForKey(connector._getCp2RelativeToEndObject(), getFixedEndLocationKey());
+				getEdge()._setGraphicalPropertyForKey(connector.getCp1RelativeToStartObject(), getFixedStartLocationKey());
+				getEdge()._setGraphicalPropertyForKey(connector.getCp2RelativeToEndObject(), getFixedEndLocationKey());
 			} else {
 				if (getEdge().hasGraphicalPropertyForKey(getFixedStartLocationKey())) {
 					getEdge()._removeGraphicalPropertyWithKey(getFixedStartLocationKey());

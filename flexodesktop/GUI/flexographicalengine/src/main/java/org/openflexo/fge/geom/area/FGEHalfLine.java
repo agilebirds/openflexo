@@ -199,7 +199,7 @@ public class FGEHalfLine extends FGEAbstractLine<FGEHalfLine> {
 	}
 
 	protected FGEPoint getOppositePointProjection(FGEGraphics g) {
-		FGERectangle bounds = g.getGraphicalRepresentation().getNormalizedBounds();
+		FGERectangle bounds = g.getNode().getNormalizedBounds();
 		FGEArea area = bounds.intersect(new FGELine(getP1(), getP2()));
 		if (area instanceof FGESegment) {
 			// We must now find which point to choose

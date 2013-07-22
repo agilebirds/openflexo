@@ -159,7 +159,7 @@ public class FGEHalfBand implements FGEArea {
 	@Override
 	public void paint(FGEGraphics g) {
 		// System.out.println("paint() for "+this);
-		FGERectangle bounds = g.getGraphicalRepresentation().getNormalizedBounds();
+		FGERectangle bounds = g.getNode().getNormalizedBounds();
 		FGEArea l1 = bounds.intersect(halfLine1);
 		FGEArea l2 = bounds.intersect(halfLine2);
 

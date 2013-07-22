@@ -22,7 +22,6 @@ package org.openflexo.fge;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.geom.FGEDimension;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
 import org.openflexo.fge.geom.area.FGEArea;
@@ -617,7 +616,7 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 	 *            the connector asking where to start
 	 * @return the area on which the given connector can start
 	 */
-	public FGEArea getAllowedStartAreaForConnector(ConnectorGraphicalRepresentation connectorGR);
+	// public FGEArea getAllowedStartAreaForConnector(ConnectorGraphicalRepresentation connectorGR);
 
 	/**
 	 * Returns the area on which the given connector can end. The area is expressed in this normalized coordinates
@@ -626,7 +625,7 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 	 *            the connector asking where to end
 	 * @return the area on which the given connector can end
 	 */
-	public FGEArea getAllowedEndAreaForConnector(ConnectorGraphicalRepresentation connectorGR);
+	// public FGEArea getAllowedEndAreaForConnector(ConnectorGraphicalRepresentation connectorGR);
 
 	/**
 	 * Returns the area on which the given connector can start. The area is expressed in this normalized coordinates
@@ -636,8 +635,8 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 	 * 
 	 * @return the area on which the given connector can start
 	 */
-	public FGEArea getAllowedStartAreaForConnectorForDirection(ConnectorGraphicalRepresentation connectorGR, FGEArea area,
-			SimplifiedCardinalDirection direction);
+	// public FGEArea getAllowedStartAreaForConnectorForDirection(ConnectorGraphicalRepresentation connectorGR, FGEArea area,
+	// SimplifiedCardinalDirection direction);
 
 	/**
 	 * Returns the area on which the given connector can end. The area is expressed in this normalized coordinates
@@ -646,8 +645,8 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 	 *            the connector asking where to end
 	 * @return the area on which the given connector can end
 	 */
-	public FGEArea getAllowedEndAreaForConnectorForDirection(ConnectorGraphicalRepresentation connectorGR, FGEArea area,
-			SimplifiedCardinalDirection direction);
+	// public FGEArea getAllowedEndAreaForConnectorForDirection(ConnectorGraphicalRepresentation connectorGR, FGEArea area,
+	// SimplifiedCardinalDirection direction);
 
 	// public FGEShapeGraphics getGraphics();
 

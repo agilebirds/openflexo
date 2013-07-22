@@ -386,7 +386,7 @@ public class FGEHalfPlane implements FGEArea {
 
 	@Override
 	public void paint(FGEGraphics g) {
-		FGERectangle bounds = g.getGraphicalRepresentation().getNormalizedBounds();
+		FGERectangle bounds = g.getNode().getNormalizedBounds();
 
 		g.useDefaultForegroundStyle();
 		bounds.intersect(line).paint(g);

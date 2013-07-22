@@ -110,6 +110,11 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	}
 
 	@Override
+	public void validate() {
+		isInvalidated = false;
+	}
+
+	@Override
 	public boolean isInvalidated() {
 		return isInvalidated;
 	}

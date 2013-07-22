@@ -22,10 +22,10 @@ package org.openflexo.fge.connectors.rpc;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 
-import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
+import org.openflexo.fge.connectors.impl.RectPolylinConnector;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.geom.FGEPoint;
@@ -34,11 +34,15 @@ import org.openflexo.fge.geom.area.FGEArea;
 
 public abstract class RectPolylinAdjustableControlPoint extends ConnectorAdjustingControlPoint {
 	protected FGERectPolylin initialPolylin;
-	private RectPolylinConnectorSpecification connector;
+	private RectPolylinConnector connector;
 
-	public RectPolylinAdjustableControlPoint(FGEPoint point, RectPolylinConnectorSpecification connector, ConnectorNode<?> node) {
-		super(node, point);
+	public RectPolylinAdjustableControlPoint(FGEPoint point, RectPolylinConnector connector) {
+		super(connector.getConnectorNode(), point);
 		this.connector = connector;
+	}
+
+	public RectPolylinConnectorSpecification getConnectorSpecification() {
+		return connector.getConnectorSpecification();
 	}
 
 	@Override
@@ -71,7 +75,7 @@ public abstract class RectPolylinAdjustableControlPoint extends ConnectorAdjusti
 		getConnector()._connectorChanged(false);
 	}
 
-	public RectPolylinConnectorSpecification getConnector() {
+	public RectPolylinConnector getConnector() {
 		return connector;
 	}
 

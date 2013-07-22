@@ -19,19 +19,10 @@
  */
 package org.openflexo.fge.connectors;
 
-import java.util.List;
-
 import javax.swing.ImageIcon;
 
-import org.openflexo.fge.Drawing.ConnectorNode;
-import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEObject;
 import org.openflexo.fge.connectors.impl.ConnectorSpecificationImpl;
-import org.openflexo.fge.cp.ControlPoint;
-import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.geom.FGERectangle;
-import org.openflexo.fge.geom.area.FGEArea;
-import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.Import;
 import org.openflexo.model.annotations.Imports;
@@ -46,8 +37,8 @@ import org.openflexo.model.annotations.ModelEntity;
  */
 @ModelEntity(isAbstract = true)
 @ImplementationClass(ConnectorSpecificationImpl.class)
-@Imports({ @Import(LineConnectorSpecification.class), @Import(CurveConnectorSpecification.class), @Import(RectPolylinConnectorSpecification.class),
-		@Import(CurvedPolylinConnectorSpecification.class) })
+@Imports({ @Import(LineConnectorSpecification.class), @Import(CurveConnectorSpecification.class),
+		@Import(RectPolylinConnectorSpecification.class), @Import(CurvedPolylinConnectorSpecification.class) })
 public interface ConnectorSpecification extends FGEObject {
 
 	public static enum ConnectorType {
@@ -71,91 +62,8 @@ public interface ConnectorSpecification extends FGEObject {
 
 	}
 
-	// public ConnectorGraphicalRepresentation getGraphicalRepresentation();
-
-	// public void setGraphicalRepresentation(ConnectorGraphicalRepresentation aGraphicalRepresentation);
-
-	public double getStartAngle();
-
-	public double getEndAngle();
-
-	// public Object getDrawable();
-
-	public ShapeNode<?> getStartNode(ConnectorNode<?> node);
-
-	public ShapeNode<?> getEndNode(ConnectorNode<?> node);
-
-	/**
-	 * Return value indicating distance from aPoint to connector, asserting aPoint is related to local normalized coordinates system
-	 * 
-	 * @param aPoint
-	 * @return
-	 */
-	public double distanceToConnector(FGEPoint aPoint, double scale, ConnectorNode<?> node);
-
-	public void setPaintAttributes(ConnectorNode<?> node, FGEConnectorGraphics g);
-
-	public void paintConnector(ConnectorNode<?> node, FGEConnectorGraphics g);
-
-	public void drawConnector(ConnectorNode<?> node, FGEConnectorGraphics g);
-
-	/**
-	 * Recompute all control points for supplied connector node<br>
-	 * Return a newly created list of required control points
-	 * 
-	 * @param shapeNode
-	 * @return
-	 */
-	public List<ControlPoint> rebuildControlPoints(ConnectorNode<?> connectorNode);
-
 	public ConnectorType getConnectorType();
 
-	public void refreshConnector(ConnectorNode<?> connectorNode, boolean forceRefresh);
-
-	public boolean needsRefresh(ConnectorNode<?> connectorNode);
-
-	public void connectorWillBeModified(ConnectorNode<?> connectorNode);
-
-	public void connectorHasBeenModified(ConnectorNode<?> connectorNode);
-
-	public FGEPoint getMiddleSymbolLocation(ConnectorNode<?> connectorNode);
-
-	/**
-	 * Perform an area computation related to the both extremity objects
-	 * 
-	 * If order equals 0, return intersection between shapes representing the two object If order equals 1, return intersection of
-	 * 
-	 * @param order
-	 * @return
-	 */
-	public FGEArea computeCoveringArea(ConnectorNode<?> connectorNode, int order);
-
-	public boolean getDebug();
-
-	public void setDebug(ConnectorNode<?> connectorNode, boolean debug);
-
-	/**
-	 * Return bounds of actually required area to fully display current connector (which might require to be paint outside normalized
-	 * bounds)
-	 * 
-	 * @return
-	 */
-	public FGERectangle getConnectorUsedBounds(ConnectorNode<?> connectorNode);
-
 	public ConnectorSpecification clone();
-
-	/**
-	 * Return start point, relative to start object
-	 * 
-	 * @return
-	 */
-	public FGEPoint getStartLocation();
-
-	/**
-	 * Return end point, relative to end object
-	 * 
-	 * @return
-	 */
-	public FGEPoint getEndLocation();
 
 }

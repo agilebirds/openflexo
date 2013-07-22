@@ -19,6 +19,7 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.ContainerGraphicalRepresentation.ContainerParameters;
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.ConstraintDependency;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.RootNode;
@@ -39,6 +40,7 @@ import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
+import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGESegment;
@@ -1718,4 +1720,55 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	protected List<? extends ControlArea<?>> rebuildControlAreas() {
 		return getGraphicalRepresentation().getShape().rebuildControlPoints(this);
 	}
+
+	/**
+	 * Returns the area on which the given connector can start. The area is expressed in this normalized coordinates
+	 * 
+	 * @param connectorGR
+	 *            the connector asking where to start
+	 * @return the area on which the given connector can start
+	 */
+	@Override
+	public FGEArea getAllowedStartAreaForConnector(ConnectorNode<?> connector) {
+		return getShape().getOutline(this);
+	}
+
+	/**
+	 * Returns the area on which the given connector can end. The area is expressed in this normalized coordinates
+	 * 
+	 * @param connectorGR
+	 *            the connector asking where to end
+	 * @return the area on which the given connector can end
+	 */
+	@Override
+	public FGEArea getAllowedEndAreaForConnector(ConnectorNode<?> connector) {
+		return getShape().getOutline(this);
+	}
+
+	/**
+	 * Returns the area on which the given connector can start. The area is expressed in this normalized coordinates
+	 * 
+	 * @param connectorGR
+	 *            the connector asking where to start
+	 * 
+	 * @return the area on which the given connector can start
+	 */
+	@Override
+	public FGEArea getAllowedStartAreaForConnectorForDirection(ConnectorNode<?> connector, FGEArea area,
+			SimplifiedCardinalDirection direction) {
+		return area;
+	}
+
+	/**
+	 * Returns the area on which the given connector can end. The area is expressed in this normalized coordinates
+	 * 
+	 * @param connectorGR
+	 *            the connector asking where to end
+	 * @return the area on which the given connector can end
+	 */
+	@Override
+	public FGEArea getAllowedEndAreaForConnectorForDirection(ConnectorNode<?> connector, FGEArea area, SimplifiedCardinalDirection direction) {
+		return area;
+	}
+
 }

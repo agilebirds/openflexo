@@ -210,7 +210,7 @@ public class FGELine extends FGEAbstractLine<FGELine> {
 	@Override
 	public void paint(FGEGraphics g) {
 		g.useDefaultForegroundStyle();
-		FGERectangle bounds = g.getGraphicalRepresentation().getNormalizedBounds();
+		FGERectangle bounds = g.getNode().getNormalizedBounds();
 		bounds.intersect(this).paint(g);
 		// logger.info("Paint bounds="+bounds+": "+bounds.intersect(this));
 	}

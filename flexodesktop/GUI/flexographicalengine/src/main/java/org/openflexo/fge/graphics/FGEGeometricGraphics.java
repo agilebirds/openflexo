@@ -21,14 +21,16 @@ package org.openflexo.fge.graphics;
 
 import java.util.logging.Logger;
 
+import org.openflexo.fge.Drawing.GeometricNode;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
 
 public class FGEGeometricGraphics extends FGEGraphics {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FGEGeometricGraphics.class.getPackage().getName());
 
-	public FGEGeometricGraphics(GeometricGraphicalRepresentation aGraphicalRepresentation) {
-		super(aGraphicalRepresentation);
+	public FGEGeometricGraphics(GeometricNode<?> geometricNode) {
+		super(geometricNode);
 	}
 
 	@Override

@@ -224,7 +224,7 @@ public class FGEBand implements FGEArea {
 
 	@Override
 	public void paint(FGEGraphics g) {
-		FGERectangle bounds = g.getGraphicalRepresentation().getNormalizedBounds();
+		FGERectangle bounds = g.getNode().getNormalizedBounds();
 
 		g.useDefaultBackgroundStyle();
 		bounds.intersect(this).paint(g);

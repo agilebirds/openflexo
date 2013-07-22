@@ -1021,8 +1021,8 @@ public class FGERectPolylin extends FGEPolylin {
 	public void paintWithRounds(FGEGraphics g, int arcSize) {
 		g.useDefaultForegroundStyle();
 
-		FGEPoint arcP1 = g.getGraphicalRepresentation().convertViewCoordinatesToNormalizedPoint(new Point(0, 0), 1.0);
-		FGEPoint arcP2 = g.getGraphicalRepresentation().convertViewCoordinatesToNormalizedPoint(new Point(arcSize, arcSize), 1.0);
+		FGEPoint arcP1 = g.getNode().convertViewCoordinatesToNormalizedPoint(new Point(0, 0), 1.0);
+		FGEPoint arcP2 = g.getNode().convertViewCoordinatesToNormalizedPoint(new Point(arcSize, arcSize), 1.0);
 		double requestedArcWidth = arcP2.x - arcP1.x;
 		double requestedArcHeight = arcP2.y - arcP1.y;
 

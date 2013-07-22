@@ -56,16 +56,16 @@ public interface LineConnectorSpecification extends ConnectorSpecification {
 
 	@Getter(value = CP1_RELATIVE_TO_START_OBJECT, isStringConvertable = true)
 	@XMLAttribute
-	public FGEPoint _getCp1RelativeToStartObject();
+	public FGEPoint getCp1RelativeToStartObject();
 
 	@Setter(value = CP1_RELATIVE_TO_START_OBJECT)
-	public void _setCp1RelativeToStartObject(FGEPoint aPoint);
+	public void setCp1RelativeToStartObject(FGEPoint aPoint);
 
 	@Getter(value = CP2_RELATIVE_TO_END_OBJECT, isStringConvertable = true)
 	@XMLAttribute
-	public FGEPoint _getCp2RelativeToEndObject();
+	public FGEPoint getCp2RelativeToEndObject();
 
 	@Setter(value = CP2_RELATIVE_TO_END_OBJECT)
-	public void _setCp2RelativeToEndObject(FGEPoint aPoint);
+	public void setCp2RelativeToEndObject(FGEPoint aPoint);
 
 }
