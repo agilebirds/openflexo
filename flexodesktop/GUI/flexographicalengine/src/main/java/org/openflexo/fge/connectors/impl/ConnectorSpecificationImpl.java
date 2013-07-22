@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.connectors.Connector;
+import org.openflexo.fge.connectors.ConnectorSpecification;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
@@ -20,9 +20,9 @@ import org.openflexo.fge.impl.FGEObjectImpl;
 import org.openflexo.fge.notifications.ConnectorModified;
 import org.openflexo.fge.shapes.Shape;
 
-public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
+public abstract class ConnectorSpecificationImpl extends FGEObjectImpl implements ConnectorSpecification {
 
-	private static final Logger logger = Logger.getLogger(Connector.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ConnectorSpecification.class.getPackage().getName());
 
 	// private transient ConnectorGraphicalRepresentation graphicalRepresentation;
 
@@ -30,7 +30,7 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 
 	protected FGERectangle NORMALIZED_BOUNDS = new FGERectangle(0, 0, 1, 1, Filling.FILLED);
 
-	public ConnectorImpl(/*ConnectorGraphicalRepresentation aGraphicalRepresentation*/) {
+	public ConnectorSpecificationImpl(/*ConnectorGraphicalRepresentation aGraphicalRepresentation*/) {
 		super();
 		// graphicalRepresentation = aGraphicalRepresentation;
 		// labelCP1 = new LabelControlPoint(aGraphicalRepresentation,new FGEPoint());
@@ -317,7 +317,7 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	public abstract FGERectangle getConnectorUsedBounds(ConnectorNode<?> connectorNode);
 
 	@Override
-	public abstract Connector clone();
+	public abstract ConnectorSpecification clone();
 
 	/**
 	 * Return start point, relative to start object

@@ -19,14 +19,14 @@
  */
 package org.openflexo.fge.connectors;
 
-import org.openflexo.fge.connectors.impl.CurvedPolylinConnectorImpl;
+import org.openflexo.fge.connectors.impl.CurvedPolylinConnectorSpecificationImpl;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
-@ImplementationClass(CurvedPolylinConnectorImpl.class)
-@XMLElement(xmlTag = "CurvedPolylinConnector")
-public interface CurvedPolylinConnector extends Connector {
+@ImplementationClass(CurvedPolylinConnectorSpecificationImpl.class)
+@XMLElement(xmlTag = "CurvedPolylinConnectorSpecification")
+public interface CurvedPolylinConnectorSpecification extends ConnectorSpecification {
 
 }

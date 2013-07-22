@@ -65,7 +65,7 @@ public class DrawEdgeControl extends MouseDragControl {
 				boolean isSignificativeDrag) {
 			if (drawEdge) {
 				if (fromShape != null && toShape != null) {
-					// System.out.println("Add Connector contextualMenuInvoker="+contextualMenuInvoker+" point="+contextualMenuClickedPoint);
+					// System.out.println("Add ConnectorSpecification contextualMenuInvoker="+contextualMenuInvoker+" point="+contextualMenuClickedPoint);
 					MyConnector newConnector = factory.makeNewConnector(fromShape, toShape, (EditedDrawing) controller.getDrawing());
 					((MyDrawingController) controller).addNewConnector(newConnector);
 				}

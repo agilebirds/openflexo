@@ -22,7 +22,7 @@ package org.openflexo.fge.connectors;
 import java.util.Vector;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
-import org.openflexo.fge.connectors.impl.RectPolylinConnectorImpl;
+import org.openflexo.fge.connectors.impl.RectPolylinConnectorSpecificationImpl;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -36,7 +36,7 @@ import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 
 /**
- * A RectPolylinConnector is a connector joining 2 shapes with a path of orthogonal segments (this connector is encoded as a
+ * A RectPolylinConnectorSpecification is a connector joining 2 shapes with a path of orthogonal segments (this connector is encoded as a
  * {@link FGERectPolylin} instance).
  * 
  * This connector has many configuration parameters.
@@ -67,9 +67,9 @@ import org.openflexo.model.annotations.XMLElement;
  * 
  */
 @ModelEntity
-@ImplementationClass(RectPolylinConnectorImpl.class)
-@XMLElement(xmlTag = "RectPolylinConnector")
-public interface RectPolylinConnector extends Connector {
+@ImplementationClass(RectPolylinConnectorSpecificationImpl.class)
+@XMLElement(xmlTag = "RectPolylinConnectorSpecification")
+public interface RectPolylinConnectorSpecification extends ConnectorSpecification {
 
 	// Property keys
 

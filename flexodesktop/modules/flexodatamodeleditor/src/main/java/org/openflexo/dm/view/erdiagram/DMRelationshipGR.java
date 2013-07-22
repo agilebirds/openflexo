@@ -28,12 +28,12 @@ import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextStyle;
-import org.openflexo.fge.connectors.RectPolylinConnector;
-import org.openflexo.fge.connectors.Connector.ConnectorType;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
+import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
-import org.openflexo.fge.connectors.RectPolylinConnector.RectPolylinAdjustability;
-import org.openflexo.fge.connectors.RectPolylinConnector.RectPolylinConstraints;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification.RectPolylinAdjustability;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification.RectPolylinConstraints;
 import org.openflexo.fge.controller.CustomClickControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseClickControl;
@@ -106,8 +106,8 @@ public class DMRelationshipGR extends ConnectorGraphicalRepresentation<Relations
 	}
 
 	@Override
-	public RectPolylinConnector getConnector() {
-		return (RectPolylinConnector) super.getConnector();
+	public RectPolylinConnectorSpecification getConnector() {
+		return (RectPolylinConnectorSpecification) super.getConnector();
 	}
 
 	private void updateStyles() {

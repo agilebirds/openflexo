@@ -154,7 +154,7 @@ public class DiagramConnector extends DiagramElement<ConnectorGraphicalRepresent
 
 	@Override
 	public String getDisplayableDescription() {
-		return "Connector" + (getEditionPattern() != null ? " representing " + getEditionPattern() : "");
+		return "ConnectorSpecification" + (getEditionPattern() != null ? " representing " + getEditionPattern() : "");
 	}
 
 	@Override

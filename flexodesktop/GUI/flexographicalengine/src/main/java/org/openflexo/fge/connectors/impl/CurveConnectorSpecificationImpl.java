@@ -13,7 +13,7 @@ import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
-import org.openflexo.fge.connectors.CurveConnector;
+import org.openflexo.fge.connectors.CurveConnectorSpecification;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEAbstractLine;
@@ -30,9 +30,9 @@ import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEPlane;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 
-public class CurveConnectorImpl extends ConnectorImpl implements CurveConnector {
+public class CurveConnectorSpecificationImpl extends ConnectorSpecificationImpl implements CurveConnectorSpecification {
 
-	private static final Logger logger = Logger.getLogger(CurveConnector.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(CurveConnectorSpecification.class.getPackage().getName());
 
 	private ControlPoint cp1;
 	private ControlPoint cp2;
@@ -52,12 +52,12 @@ public class CurveConnectorImpl extends ConnectorImpl implements CurveConnector 
 	// *******************************************************************************
 
 	// Used for deserialization
-	public CurveConnectorImpl() {
+	public CurveConnectorSpecificationImpl() {
 		super();
 		controlPoints = new Vector<ControlPoint>();
 	}
 
-	/*public CurveConnectorImpl(ConnectorGraphicalRepresentation graphicalRepresentation) {
+	/*public CurveConnectorSpecificationImpl(ConnectorGraphicalRepresentation graphicalRepresentation) {
 		super(graphicalRepresentation);
 		controlPoints = new Vector<ControlPoint>();
 	}*/
@@ -511,8 +511,8 @@ public class CurveConnectorImpl extends ConnectorImpl implements CurveConnector 
 	}
 
 	@Override
-	public CurveConnector clone() {
-		CurveConnector returned = new CurveConnectorImpl();
+	public CurveConnectorSpecification clone() {
+		CurveConnectorSpecification returned = new CurveConnectorSpecificationImpl();
 		returned._setCpPosition(_getCpPosition());
 		returned._setCp1RelativeToStartObject(_getCp1RelativeToStartObject());
 		returned._setCp2RelativeToEndObject(_getCp2RelativeToEndObject());

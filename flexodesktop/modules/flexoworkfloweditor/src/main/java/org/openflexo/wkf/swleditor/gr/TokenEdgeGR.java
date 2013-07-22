@@ -21,7 +21,7 @@ package org.openflexo.wkf.swleditor.gr;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.connectors.RectPolylinConnector;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
 import org.openflexo.foundation.wkf.edge.TokenEdge;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;
@@ -68,10 +68,10 @@ public class TokenEdgeGR extends EdgeGR<TokenEdge> {
 			// during big model restructurations (for example during a multiple delete)
 			return;
 		}
-		if (getConnector() instanceof RectPolylinConnector) {
+		if (getConnector() instanceof RectPolylinConnectorSpecification) {
 			startOrientationFixed = false;
 			endOrientationFixed = false;
-			// ((RectPolylinConnector)getConnector()).setRectPolylinConstraints(RectPolylinConstraints.NONE);
+			// ((RectPolylinConnectorSpecification)getConnector()).setRectPolylinConstraints(RectPolylinConstraints.NONE);
 		}
 		super.refreshConnector();
 	}

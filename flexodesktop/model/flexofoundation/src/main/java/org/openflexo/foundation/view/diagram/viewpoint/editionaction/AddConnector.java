@@ -78,7 +78,7 @@ public class AddConnector extends AddShemaElementAction<DiagramConnector> {
 			out.append(getAssignation().toString() + " = (", context);
 		}
 		out.append(
-				getClass().getSimpleName() + " conformTo Connector from " + getModelSlot().getName() + " {" + StringUtils.LINE_SEPARATOR,
+				getClass().getSimpleName() + " conformTo ConnectorSpecification from " + getModelSlot().getName() + " {" + StringUtils.LINE_SEPARATOR,
 				context);
 		out.append(getGraphicalElementSpecificationFMLRepresentation(context), context);
 		out.append("}", context);

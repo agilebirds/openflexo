@@ -13,7 +13,7 @@ import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
-import org.openflexo.fge.connectors.LineConnector;
+import org.openflexo.fge.connectors.LineConnectorSpecification;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.cp.ConnectorControlPoint;
 import org.openflexo.fge.cp.ControlPoint;
@@ -28,9 +28,9 @@ import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.fge.notifications.ConnectorModified;
 
-public class LineConnectorImpl extends ConnectorImpl implements LineConnector {
+public class LineConnectorSpecificationImpl extends ConnectorSpecificationImpl implements LineConnectorSpecification {
 
-	private static final Logger logger = Logger.getLogger(LineConnector.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(LineConnectorSpecification.class.getPackage().getName());
 
 	private ControlPoint cp1;
 	private ControlPoint cp2;
@@ -47,12 +47,12 @@ public class LineConnectorImpl extends ConnectorImpl implements LineConnector {
 	// *******************************************************************************
 
 	// Used for deserialization
-	public LineConnectorImpl() {
+	public LineConnectorSpecificationImpl() {
 		super();
 		controlPoints = new ArrayList<ControlPoint>();
 	}
 
-	/*public LineConnectorImpl(ConnectorGraphicalRepresentation graphicalRepresentation) {
+	/*public LineConnectorSpecificationImpl(ConnectorGraphicalRepresentation graphicalRepresentation) {
 		super(graphicalRepresentation);
 		controlPoints = new Vector<ControlPoint>();
 	}*/
@@ -492,7 +492,7 @@ public class LineConnectorImpl extends ConnectorImpl implements LineConnector {
 	@Override
 	public double distanceToConnector(FGEPoint aPoint, double scale, ConnectorNode<?> connectorNode) {
 		if (cp1 == null || cp2 == null) {
-			logger.warning("Invalid date in LineConnector: control points are null");
+			logger.warning("Invalid date in LineConnectorSpecification: control points are null");
 			return Double.POSITIVE_INFINITY;
 		}
 		Point testPoint = connectorNode.convertNormalizedPointToViewCoordinates(aPoint, scale);
@@ -572,8 +572,8 @@ public class LineConnectorImpl extends ConnectorImpl implements LineConnector {
 	}
 
 	@Override
-	public LineConnector clone() {
-		LineConnector returned = new LineConnectorImpl();
+	public LineConnectorSpecification clone() {
+		LineConnectorSpecification returned = new LineConnectorSpecificationImpl();
 		returned.setLineConnectorType(getLineConnectorType());
 		returned._setCp1RelativeToStartObject(_getCp1RelativeToStartObject());
 		returned._setCp2RelativeToEndObject(_getCp2RelativeToEndObject());

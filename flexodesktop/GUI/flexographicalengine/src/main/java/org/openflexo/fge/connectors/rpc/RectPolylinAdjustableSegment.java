@@ -25,7 +25,7 @@ import java.awt.event.MouseEvent;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.connectors.RectPolylinConnector;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
@@ -37,9 +37,9 @@ import org.openflexo.fge.graphics.FGEGraphics;
 
 public abstract class RectPolylinAdjustableSegment extends ControlArea<FGESegment> {
 	protected FGERectPolylin initialPolylin;
-	private RectPolylinConnector connector;
+	private RectPolylinConnectorSpecification connector;
 
-	public RectPolylinAdjustableSegment(FGESegment segment, RectPolylinConnector connector, ConnectorNode<?> node) {
+	public RectPolylinAdjustableSegment(FGESegment segment, RectPolylinConnectorSpecification connector, ConnectorNode<?> node) {
 		super(node, segment);
 		this.connector = connector;
 	}
@@ -114,7 +114,7 @@ public abstract class RectPolylinAdjustableSegment extends ControlArea<FGESegmen
 		return new Rectangle(Math.min(p1.x,p2.x),Math.min(p1.y,p2.y),Math.abs(p1.x-p2.x),Math.abs(p1.y-p2.y));*/
 	}
 
-	public RectPolylinConnector getConnector() {
+	public RectPolylinConnectorSpecification getConnector() {
 		return connector;
 	}
 

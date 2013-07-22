@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.connectors.RectPolylinConnector;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.geom.FGEGeometricObject;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -36,7 +36,7 @@ import org.openflexo.fge.geom.area.FGEPlane;
 public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPoint {
 	static final Logger logger = Logger.getLogger(AdjustableMiddleControlPoint.class.getPackage().getName());
 
-	public AdjustableMiddleControlPoint(FGEPoint point, RectPolylinConnector connector, ConnectorNode<?> node) {
+	public AdjustableMiddleControlPoint(FGEPoint point, RectPolylinConnectorSpecification connector, ConnectorNode<?> node) {
 		super(point, connector, node);
 	}
 

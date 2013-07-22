@@ -23,7 +23,7 @@ import java.awt.Color;
 
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ForegroundStyle.DashStyle;
-import org.openflexo.fge.connectors.RectPolylinConnector;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.foundation.wkf.edge.MessageEdge;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;
@@ -50,7 +50,7 @@ public class MessageEdgeGR extends EdgeGR<MessageEdge<?, ?>> {
 			// during big model restructurations (for example during a multiple delete)
 			return;
 		}
-		if (getConnector() instanceof RectPolylinConnector) {
+		if (getConnector() instanceof RectPolylinConnectorSpecification) {
 			if (getStartObject() instanceof PortmapGR) {
 				startOrientationFixed = true;
 				newStartOrientation = ((PortmapGR) getStartObject()).getOrientation();
@@ -71,7 +71,7 @@ public class MessageEdgeGR extends EdgeGR<MessageEdge<?, ?>> {
 					newOrientationConstraints = RectPolylinConstraints.ORIENTATIONS_FIXED;
 					newStartOrientation = startPortmapGR.getOrientation();
 					newEndOrientation = endPortmapGR.getOrientation();
-					//((RectPolylinConnector)getConnector()).setRectPolylinConstraints(RectPolylinConstraints.ORIENTATIONS_FIXED,startPortmapGR.getOrientation(),endPortmapGR.getOrientation());	
+					//((RectPolylinConnectorSpecification)getConnector()).setRectPolylinConstraints(RectPolylinConstraints.ORIENTATIONS_FIXED,startPortmapGR.getOrientation(),endPortmapGR.getOrientation());	
 					//System.out.println("connector "+getMessageEdge()+" set start orientation to "+startPortmapGR.getOrientation());
 					//System.out.println("connector "+getMessageEdge()+" set end orientation to "+endPortmapGR.getOrientation());
 				}
@@ -83,7 +83,7 @@ public class MessageEdgeGR extends EdgeGR<MessageEdge<?, ?>> {
 						&& portmapGR.getOrientation() != null) {
 					newOrientationConstraints = RectPolylinConstraints.END_ORIENTATION_FIXED;
 					newEndOrientation = portmapGR.getOrientation();
-					//((RectPolylinConnector)getConnector()).setRectPolylinConstraints(RectPolylinConstraints.END_ORIENTATION_FIXED,null,portmapGR.getOrientation());		
+					//((RectPolylinConnectorSpecification)getConnector()).setRectPolylinConstraints(RectPolylinConstraints.END_ORIENTATION_FIXED,null,portmapGR.getOrientation());		
 					//System.out.println("connector "+getMessageEdge()+" set end orientation to "+portmapGR.getOrientation());
 				}
 			}
@@ -94,7 +94,7 @@ public class MessageEdgeGR extends EdgeGR<MessageEdge<?, ?>> {
 						&& portmapGR.getOrientation() != null) {
 					newOrientationConstraints = RectPolylinConstraints.START_ORIENTATION_FIXED;
 					newStartOrientation = portmapGR.getOrientation();
-					//((RectPolylinConnector)getConnector()).setRectPolylinConstraints(RectPolylinConstraints.START_ORIENTATION_FIXED,portmapGR.getOrientation(),null);			
+					//((RectPolylinConnectorSpecification)getConnector()).setRectPolylinConstraints(RectPolylinConstraints.START_ORIENTATION_FIXED,portmapGR.getOrientation(),null);			
 					//System.out.println("connector "+getMessageEdge()+" set start orientation to "+portmapGR.getOrientation());
 				}
 			}*/

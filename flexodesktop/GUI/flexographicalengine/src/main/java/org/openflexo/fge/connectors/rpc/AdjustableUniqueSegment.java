@@ -23,7 +23,7 @@ import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
-import org.openflexo.fge.connectors.RectPolylinConnector;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -41,7 +41,7 @@ public class AdjustableUniqueSegment extends RectPolylinAdjustableSegment {
 	private FGEArea endArea;
 	private FGEArea draggingAuthorizedArea;
 
-	public AdjustableUniqueSegment(FGESegment segment, RectPolylinConnector connector, ConnectorNode<?> node) {
+	public AdjustableUniqueSegment(FGESegment segment, RectPolylinConnectorSpecification connector, ConnectorNode<?> node) {
 		super(segment, connector, node);
 		retrieveInfos();
 	}
@@ -49,7 +49,7 @@ public class AdjustableUniqueSegment extends RectPolylinAdjustableSegment {
 	private void retrieveInfos() {
 		currentSegment = getArea();
 		if (currentSegment.getApproximatedOrientation() == null) {
-			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
+			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnectorSpecification");
 			return;
 		}
 		currentOrientation = currentSegment.getApproximatedOrientation();
@@ -100,12 +100,12 @@ public class AdjustableUniqueSegment extends RectPolylinAdjustableSegment {
 
 		FGEPoint p1 = getPolylin().getPointAt(0);
 		if (p1 == null) {
-			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
+			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnectorSpecification");
 			return false;
 		}
 		FGEPoint p2 = getPolylin().getPointAt(1);
 		if (p2 == null) {
-			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
+			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnectorSpecification");
 			return false;
 		}
 
@@ -124,7 +124,7 @@ public class AdjustableUniqueSegment extends RectPolylinAdjustableSegment {
 			p2.x = pt.x;
 		}	
 		else {
-			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
+			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnectorSpecification");
 			return false;
 		}*/
 

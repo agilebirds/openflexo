@@ -20,8 +20,8 @@
 package org.openflexo.fge;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
-import org.openflexo.fge.connectors.Connector;
-import org.openflexo.fge.connectors.Connector.ConnectorType;
+import org.openflexo.fge.connectors.ConnectorSpecification;
+import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
@@ -105,10 +105,10 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 
 	@Getter(value = CONNECTOR)
 	@XMLElement
-	public Connector getConnector();
+	public ConnectorSpecification getConnector();
 
 	@Setter(value = CONNECTOR)
-	public void setConnector(Connector aConnector);
+	public void setConnector(ConnectorSpecification aConnector);
 
 	@Getter(value = FOREGROUND)
 	@XMLElement

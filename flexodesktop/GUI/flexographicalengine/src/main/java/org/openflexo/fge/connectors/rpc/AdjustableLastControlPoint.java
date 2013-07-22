@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.connectors.RectPolylinConnector;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
@@ -39,7 +39,7 @@ public class AdjustableLastControlPoint extends RectPolylinAdjustableControlPoin
 
 	private SimplifiedCardinalDirection currentEndOrientation = null;
 
-	public AdjustableLastControlPoint(FGEPoint point, RectPolylinConnector connector, ConnectorNode<?> node) {
+	public AdjustableLastControlPoint(FGEPoint point, RectPolylinConnectorSpecification connector, ConnectorNode<?> node) {
 		super(point, connector, node);
 	}
 

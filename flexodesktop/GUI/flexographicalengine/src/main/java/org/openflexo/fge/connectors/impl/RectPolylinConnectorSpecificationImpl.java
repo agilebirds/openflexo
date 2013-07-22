@@ -21,7 +21,7 @@ import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
-import org.openflexo.fge.connectors.RectPolylinConnector;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.connectors.rpc.AdjustableEndControlPoint;
 import org.openflexo.fge.connectors.rpc.AdjustableFirstControlPoint;
 import org.openflexo.fge.connectors.rpc.AdjustableFirstSegment;
@@ -54,9 +54,9 @@ import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 import org.openflexo.toolbox.ConcatenedList;
 
-public class RectPolylinConnectorImpl extends ConnectorImpl implements RectPolylinConnector {
+public class RectPolylinConnectorSpecificationImpl extends ConnectorSpecificationImpl implements RectPolylinConnectorSpecification {
 
-	static final Logger logger = Logger.getLogger(RectPolylinConnector.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(RectPolylinConnectorSpecification.class.getPackage().getName());
 
 	private FGERectPolylin polylin;
 	private Vector<FGERectPolylin> potentialPolylin;
@@ -111,11 +111,11 @@ public class RectPolylinConnectorImpl extends ConnectorImpl implements RectPolyl
 	// *******************************************************************************
 
 	// Used for deserialization
-	public RectPolylinConnectorImpl() {
+	public RectPolylinConnectorSpecificationImpl() {
 		this(null);
 	}
 
-	public RectPolylinConnectorImpl(ConnectorGraphicalRepresentation graphicalRepresentation) {
+	public RectPolylinConnectorSpecificationImpl(ConnectorGraphicalRepresentation graphicalRepresentation) {
 		super(graphicalRepresentation);
 		controlPoints = new Vector<ControlPoint>();
 		controlAreas = new Vector<ControlArea<?>>();
@@ -1127,7 +1127,7 @@ public class RectPolylinConnectorImpl extends ConnectorImpl implements RectPolyl
 
 		}
 
-		else /* RectPolylinConnector is adjustable, getAdjustability() == RectPolylinAdjustability.FULLY_ADJUSTABLE */{
+		else /* RectPolylinConnectorSpecification is adjustable, getAdjustability() == RectPolylinAdjustability.FULLY_ADJUSTABLE */{
 
 			_updateAsFullyAdjustable();
 
@@ -2545,8 +2545,8 @@ public class RectPolylinConnectorImpl extends ConnectorImpl implements RectPolyl
 	}
 
 	@Override
-	public RectPolylinConnector clone() {
-		RectPolylinConnector returned = new RectPolylinConnectorImpl(null);
+	public RectPolylinConnectorSpecification clone() {
+		RectPolylinConnectorSpecification returned = new RectPolylinConnectorSpecificationImpl(null);
 		returned.setRectPolylinConstraints(getRectPolylinConstraints());
 		returned.setStraightLineWhenPossible(getStraightLineWhenPossible());
 		returned.setAdjustability(getAdjustability());

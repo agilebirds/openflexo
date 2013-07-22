@@ -32,7 +32,7 @@ import org.openflexo.fge.GRBinding.ConnectorGRBinding;
 import org.openflexo.fge.GRBinding.ShapeGRBinding;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
-import org.openflexo.fge.connectors.Connector;
+import org.openflexo.fge.connectors.ConnectorSpecification;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
@@ -428,7 +428,7 @@ public interface Drawing<M> {
 
 		public ShapeNode<?> getEndNode();
 
-		public Connector getConnector();
+		public ConnectorSpecification getConnector();
 
 		public void notifyConnectorChanged();
 

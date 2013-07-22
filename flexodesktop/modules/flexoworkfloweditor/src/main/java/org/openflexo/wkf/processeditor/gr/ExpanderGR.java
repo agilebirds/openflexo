@@ -28,8 +28,8 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.connectors.Connector;
-import org.openflexo.fge.connectors.Connector.ConnectorType;
+import org.openflexo.fge.connectors.ConnectorSpecification;
+import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.cp.ConnectorControlPoint;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
@@ -49,7 +49,7 @@ import org.openflexo.wkf.processeditor.ProcessRepresentation;
 public class ExpanderGR<O extends AbstractNode> extends ConnectorGraphicalRepresentation<ExpanderGR.Expander<O>> implements
 		ProcessEditorConstants {
 
-	static final Logger logger = Logger.getLogger(Connector.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(ConnectorSpecification.class.getPackage().getName());
 
 	public static class Expander<N extends AbstractNode> {
 		private N node;
@@ -126,7 +126,7 @@ public class ExpanderGR<O extends AbstractNode> extends ConnectorGraphicalRepres
 		return "ExpanderGR of " + getFatherNode();
 	}
 
-	public class ExpanderConnector extends Connector {
+	public class ExpanderConnector extends ConnectorSpecification {
 		private boolean firstUpdated = false;
 		private Vector<ControlPoint> controlPoints;
 
@@ -136,7 +136,7 @@ public class ExpanderGR<O extends AbstractNode> extends ConnectorGraphicalRepres
 		}
 
 		@Override
-		public Connector clone() {
+		public ConnectorSpecification clone() {
 			return new ExpanderConnector();
 		}
 

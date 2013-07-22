@@ -24,8 +24,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ForegroundStyle.DashStyle;
-import org.openflexo.fge.connectors.Connector;
-import org.openflexo.fge.connectors.Connector.ConnectorType;
+import org.openflexo.fge.connectors.ConnectorSpecification;
+import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
@@ -35,7 +35,7 @@ import org.openflexo.wkf.processeditor.ProcessRepresentation;
 
 public class PreAndBeginNodeAssociationGR extends WKFConnectorGR<PreAndBeginNodeAssociationGR.PreAndBeginNodeAssociation> {
 
-	private static final Logger logger = Logger.getLogger(Connector.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(ConnectorSpecification.class.getPackage().getName());
 
 	public static class PreAndBeginNodeAssociation {
 		private FlexoPreCondition precondition;

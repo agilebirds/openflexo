@@ -19,7 +19,7 @@
  */
 package org.openflexo.fge.connectors;
 
-import org.openflexo.fge.connectors.impl.LineConnectorImpl;
+import org.openflexo.fge.connectors.impl.CurveConnectorSpecificationImpl;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -29,30 +29,20 @@ import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
 
 @ModelEntity
-@ImplementationClass(LineConnectorImpl.class)
-@XMLElement(xmlTag = "LineConnector")
-public interface LineConnector extends Connector {
+@ImplementationClass(CurveConnectorSpecificationImpl.class)
+@XMLElement(xmlTag = "ArcConnector")
+public interface CurveConnectorSpecification extends ConnectorSpecification {
 
 	// Property keys
 
-	public static final String LINE_CONNECTOR_TYPE = "lineConnectorType";
+	public static final String CP_POSITION = "cpPosition";
 	public static final String CP1_RELATIVE_TO_START_OBJECT = "cp1RelativeToStartObject";
 	public static final String CP2_RELATIVE_TO_END_OBJECT = "cp2RelativeToEndObject";
-
-	public static enum LineConnectorType {
-		CENTER_TO_CENTER, MINIMAL_LENGTH, FUNNY, ADJUSTABLE
-	}
+	public static final String ARE_BOUNDS_ADJUSTABLE = "areBoundsAdjustable";
 
 	// *******************************************************************************
 	// * Properties
 	// *******************************************************************************
-
-	@Getter(value = LINE_CONNECTOR_TYPE)
-	@XMLAttribute
-	public LineConnectorType getLineConnectorType();
-
-	@Setter(value = LINE_CONNECTOR_TYPE)
-	public void setLineConnectorType(LineConnectorType aLineConnectorType);
 
 	@Getter(value = CP1_RELATIVE_TO_START_OBJECT, isStringConvertable = true)
 	@XMLAttribute
@@ -67,5 +57,19 @@ public interface LineConnector extends Connector {
 
 	@Setter(value = CP2_RELATIVE_TO_END_OBJECT)
 	public void _setCp2RelativeToEndObject(FGEPoint aPoint);
+
+	@Getter(value = CP_POSITION, isStringConvertable = true)
+	@XMLAttribute
+	public FGEPoint _getCpPosition();
+
+	@Setter(value = CP_POSITION)
+	public void _setCpPosition(FGEPoint cpPosition);
+
+	@Getter(value = ARE_BOUNDS_ADJUSTABLE, defaultValue = "true")
+	@XMLAttribute
+	public boolean getAreBoundsAdjustable();
+
+	@Setter(value = ARE_BOUNDS_ADJUSTABLE)
+	public void setAreBoundsAdjustable(boolean aFlag);
 
 }

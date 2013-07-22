@@ -18,12 +18,12 @@ import org.openflexo.fge.ForegroundStyle.DashStyle;
 import org.openflexo.fge.ForegroundStyle.JoinStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeBorder;
 import org.openflexo.fge.TextureBackgroundStyle.TextureType;
-import org.openflexo.fge.connectors.Connector;
-import org.openflexo.fge.connectors.Connector.ConnectorType;
-import org.openflexo.fge.connectors.CurveConnector;
-import org.openflexo.fge.connectors.CurvedPolylinConnector;
-import org.openflexo.fge.connectors.LineConnector;
-import org.openflexo.fge.connectors.RectPolylinConnector;
+import org.openflexo.fge.connectors.ConnectorSpecification;
+import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
+import org.openflexo.fge.connectors.CurveConnectorSpecification;
+import org.openflexo.fge.connectors.CurvedPolylinConnectorSpecification;
+import org.openflexo.fge.connectors.LineConnectorSpecification;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
 import org.openflexo.fge.controller.MouseControl.MouseButton;
@@ -395,7 +395,7 @@ public class FGEModelFactory extends ModelFactory {
 		}
 	}
 
-	public Connector makeConnector(ConnectorType type, ConnectorGraphicalRepresentation aGraphicalRepresentation) {
+	public ConnectorSpecification makeConnector(ConnectorType type, ConnectorGraphicalRepresentation aGraphicalRepresentation) {
 
 		if (type == ConnectorType.LINE) {
 			return makeLineConnector(aGraphicalRepresentation);
@@ -414,13 +414,13 @@ public class FGEModelFactory extends ModelFactory {
 	}
 
 	/**
-	 * Creates and return a new LineConnector, given a connector graphical representation
+	 * Creates and return a new LineConnectorSpecification, given a connector graphical representation
 	 * 
 	 * @param aGR
-	 * @return a newly created LineConnector
+	 * @return a newly created LineConnectorSpecification
 	 */
-	public LineConnector makeLineConnector(ConnectorGraphicalRepresentation aGR) {
-		LineConnector returned = newInstance(LineConnector.class);
+	public LineConnectorSpecification makeLineConnector(ConnectorGraphicalRepresentation aGR) {
+		LineConnectorSpecification returned = newInstance(LineConnectorSpecification.class);
 		returned.setFactory(this);
 		aGR.setConnector(returned);
 		// returned.setGraphicalRepresentation(aGR);
@@ -428,13 +428,13 @@ public class FGEModelFactory extends ModelFactory {
 	}
 
 	/**
-	 * Creates and return a new CurveConnector, given a connector graphical representation
+	 * Creates and return a new CurveConnectorSpecification, given a connector graphical representation
 	 * 
 	 * @param aGR
-	 * @return a newly created CurveConnector
+	 * @return a newly created CurveConnectorSpecification
 	 */
-	public CurveConnector makeCurveConnector(ConnectorGraphicalRepresentation aGR) {
-		CurveConnector returned = newInstance(CurveConnector.class);
+	public CurveConnectorSpecification makeCurveConnector(ConnectorGraphicalRepresentation aGR) {
+		CurveConnectorSpecification returned = newInstance(CurveConnectorSpecification.class);
 		returned.setFactory(this);
 		aGR.setConnector(returned);
 		// returned.setGraphicalRepresentation(aGR);
@@ -442,13 +442,13 @@ public class FGEModelFactory extends ModelFactory {
 	}
 
 	/**
-	 * Creates and return a new RectPolylinConnector, given a connector graphical representation
+	 * Creates and return a new RectPolylinConnectorSpecification, given a connector graphical representation
 	 * 
 	 * @param aGR
-	 * @return a newly created RectPolylinConnector
+	 * @return a newly created RectPolylinConnectorSpecification
 	 */
-	public RectPolylinConnector makeRectPolylinConnector(ConnectorGraphicalRepresentation aGR) {
-		RectPolylinConnector returned = newInstance(RectPolylinConnector.class);
+	public RectPolylinConnectorSpecification makeRectPolylinConnector(ConnectorGraphicalRepresentation aGR) {
+		RectPolylinConnectorSpecification returned = newInstance(RectPolylinConnectorSpecification.class);
 		returned.setFactory(this);
 		aGR.setConnector(returned);
 		// returned.setGraphicalRepresentation(aGR);
@@ -456,13 +456,13 @@ public class FGEModelFactory extends ModelFactory {
 	}
 
 	/**
-	 * Creates and return a new CurvedPolylinConnector, given a connector graphical representation
+	 * Creates and return a new CurvedPolylinConnectorSpecification, given a connector graphical representation
 	 * 
 	 * @param aGR
-	 * @return a newly created CurvedPolylinConnector
+	 * @return a newly created CurvedPolylinConnectorSpecification
 	 */
-	public CurvedPolylinConnector makeCurvedPolylinConnector(ConnectorGraphicalRepresentation aGR) {
-		CurvedPolylinConnector returned = newInstance(CurvedPolylinConnector.class);
+	public CurvedPolylinConnectorSpecification makeCurvedPolylinConnector(ConnectorGraphicalRepresentation aGR) {
+		CurvedPolylinConnectorSpecification returned = newInstance(CurvedPolylinConnectorSpecification.class);
 		returned.setFactory(this);
 		aGR.setConnector(returned);
 		// returned.setGraphicalRepresentation(aGR);

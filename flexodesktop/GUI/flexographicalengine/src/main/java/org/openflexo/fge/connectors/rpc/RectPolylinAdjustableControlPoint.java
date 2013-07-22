@@ -25,7 +25,7 @@ import java.awt.event.MouseEvent;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.connectors.RectPolylinConnector;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.geom.FGEPoint;
@@ -34,9 +34,9 @@ import org.openflexo.fge.geom.area.FGEArea;
 
 public abstract class RectPolylinAdjustableControlPoint extends ConnectorAdjustingControlPoint {
 	protected FGERectPolylin initialPolylin;
-	private RectPolylinConnector connector;
+	private RectPolylinConnectorSpecification connector;
 
-	public RectPolylinAdjustableControlPoint(FGEPoint point, RectPolylinConnector connector, ConnectorNode<?> node) {
+	public RectPolylinAdjustableControlPoint(FGEPoint point, RectPolylinConnectorSpecification connector, ConnectorNode<?> node) {
 		super(node, point);
 		this.connector = connector;
 	}
@@ -71,7 +71,7 @@ public abstract class RectPolylinAdjustableControlPoint extends ConnectorAdjusti
 		getConnector()._connectorChanged(false);
 	}
 
-	public RectPolylinConnector getConnector() {
+	public RectPolylinConnectorSpecification getConnector() {
 		return connector;
 	}
 

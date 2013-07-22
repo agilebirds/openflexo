@@ -38,7 +38,7 @@ public class ConnectorPatternRole extends GraphicalElementPatternRole<DiagramCon
 	@Override
 	public String getFMLRepresentation(FMLRepresentationContext context) {
 		FMLRepresentationOutput out = new FMLRepresentationOutput(context);
-		out.append("PatternRole " + getName() + " as Connector from " + getVirtualModel().getReflexiveModelSlot().getName() + ";", context);
+		out.append("PatternRole " + getName() + " as ConnectorSpecification from " + getVirtualModel().getReflexiveModelSlot().getName() + ";", context);
 		return out.toString();
 	}
 

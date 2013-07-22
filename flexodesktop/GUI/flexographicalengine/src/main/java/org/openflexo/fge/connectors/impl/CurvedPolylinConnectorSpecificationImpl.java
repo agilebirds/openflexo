@@ -7,7 +7,7 @@ import java.util.Vector;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.connectors.CurvedPolylinConnector;
+import org.openflexo.fge.connectors.CurvedPolylinConnectorSpecification;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
@@ -15,7 +15,7 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
 
-public class CurvedPolylinConnectorImpl extends ConnectorImpl implements CurvedPolylinConnector {
+public class CurvedPolylinConnectorSpecificationImpl extends ConnectorSpecificationImpl implements CurvedPolylinConnectorSpecification {
 
 	private FGEPoint p1 = new FGEPoint();
 	private FGEPoint p2 = new FGEPoint();
@@ -26,12 +26,12 @@ public class CurvedPolylinConnectorImpl extends ConnectorImpl implements CurvedP
 	// *******************************************************************************
 
 	// Used for deserialization
-	public CurvedPolylinConnectorImpl() {
+	public CurvedPolylinConnectorSpecificationImpl() {
 		super();
 		controlPoints = new Vector<ControlPoint>();
 	}
 
-	/*public CurvedPolylinConnectorImpl(ConnectorGraphicalRepresentation graphicalRepresentation) {
+	/*public CurvedPolylinConnectorSpecificationImpl(ConnectorGraphicalRepresentation graphicalRepresentation) {
 		super(graphicalRepresentation);
 		controlPoints = new Vector<ControlPoint>();
 		controlPoints.add(new ConnectorAdjustingControlPoint(graphicalRepresentation, p1));
@@ -143,8 +143,8 @@ public class CurvedPolylinConnectorImpl extends ConnectorImpl implements CurvedP
 	}
 
 	@Override
-	public CurvedPolylinConnector clone() {
-		CurvedPolylinConnector returned = new CurvedPolylinConnectorImpl();
+	public CurvedPolylinConnectorSpecification clone() {
+		CurvedPolylinConnectorSpecification returned = new CurvedPolylinConnectorSpecificationImpl();
 		return returned;
 	}
 

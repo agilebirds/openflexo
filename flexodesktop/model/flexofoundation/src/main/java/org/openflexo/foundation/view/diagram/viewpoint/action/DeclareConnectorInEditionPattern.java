@@ -112,7 +112,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 			switch (primaryChoice) {
 			case CHOOSE_EXISTING_EDITION_PATTERN:
 				if (getPatternRole() != null) {
-					System.out.println("Connector representation updated");
+					System.out.println("ConnectorSpecification representation updated");
 					// getPatternRole().setGraphicalRepresentation(getFocusedObject().getGraphicalRepresentation());
 					getPatternRole().updateGraphicalRepresentation(getFocusedObject().getGraphicalRepresentation());
 				}

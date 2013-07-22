@@ -29,7 +29,7 @@ import java.util.Hashtable;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEIconLibrary;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.connectors.RectPolylinConnector;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
@@ -42,10 +42,10 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 
 	private static final Hashtable<Integer, Image> PIN_CACHE = new Hashtable<Integer, Image>();
 	protected FGERectPolylin initialPolylin;
-	private RectPolylinConnector connector;
+	private RectPolylinConnectorSpecification connector;
 	private FGERectPolylin newPolylin;
 
-	public RectPolylinAdjustingArea(RectPolylinConnector connector, ConnectorNode<?> node) {
+	public RectPolylinAdjustingArea(RectPolylinConnectorSpecification connector, ConnectorNode<?> node) {
 		super(node, connector.getCurrentPolylin());
 		this.connector = connector;
 	}
@@ -165,7 +165,7 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 		return r;
 	}*/
 
-	public RectPolylinConnector getConnector() {
+	public RectPolylinConnectorSpecification getConnector() {
 		return connector;
 	}
 

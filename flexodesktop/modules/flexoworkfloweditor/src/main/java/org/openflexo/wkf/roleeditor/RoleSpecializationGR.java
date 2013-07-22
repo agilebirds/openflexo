@@ -25,10 +25,10 @@ import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.connectors.RectPolylinConnector;
-import org.openflexo.fge.connectors.Connector.ConnectorType;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
+import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
-import org.openflexo.fge.connectors.RectPolylinConnector.RectPolylinConstraints;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification.RectPolylinConstraints;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;
@@ -46,12 +46,12 @@ public class RoleSpecializationGR extends ConnectorGraphicalRepresentation<RoleS
 		foreground = ForegroundStyle.makeStyle(Color.DARK_GRAY);
 		foreground.setLineWidth(1.6);
 		setForeground(foreground);
-		/*if (getConnector() instanceof LineConnector) {
-			((LineConnector)getConnector()).setLineConnectorType(LineConnectorType.CENTER_TO_CENTER);
+		/*if (getConnector() instanceof LineConnectorSpecification) {
+			((LineConnectorSpecification)getConnector()).setLineConnectorType(LineConnectorType.CENTER_TO_CENTER);
 		}*/
-		if (getConnector() instanceof RectPolylinConnector) {
-			((RectPolylinConnector) getConnector()).setStraightLineWhenPossible(false);
-			((RectPolylinConnector) getConnector()).setRectPolylinConstraints(RectPolylinConstraints.VERTICAL_LAYOUT);
+		if (getConnector() instanceof RectPolylinConnectorSpecification) {
+			((RectPolylinConnectorSpecification) getConnector()).setStraightLineWhenPossible(false);
+			((RectPolylinConnectorSpecification) getConnector()).setRectPolylinConstraints(RectPolylinConstraints.VERTICAL_LAYOUT);
 		}
 		setEndSymbol(EndSymbolType.PLAIN_ARROW);
 		if (getStartObject() != null && getEndObject() != null) {

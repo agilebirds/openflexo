@@ -12,8 +12,8 @@ import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.connectors.Connector;
-import org.openflexo.fge.connectors.Connector.ConnectorType;
+import org.openflexo.fge.connectors.ConnectorSpecification;
+import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
@@ -32,7 +32,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ConnectorGraphicalRepresentation.class.getPackage().getName());
 
-	private Connector connector = null;
+	private ConnectorSpecification connector = null;
 
 	private ForegroundStyle foreground;
 
@@ -147,8 +147,8 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 					_setParameterValueWith(p, gr);
 				}
 			}
-			Connector connectorToCopy = ((ConnectorGraphicalRepresentation) gr).getConnector();
-			Connector clone = connectorToCopy.clone();
+			ConnectorSpecification connectorToCopy = ((ConnectorGraphicalRepresentation) gr).getConnector();
+			ConnectorSpecification clone = connectorToCopy.clone();
 			setConnector(clone);
 		}
 	}
@@ -168,8 +168,8 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 					_setParameterValueWith(p, gr);
 				}
 			}
-			Connector connectorToCopy = ((ConnectorGraphicalRepresentationImpl) gr).getConnector();
-			Connector clone = connectorToCopy.clone();
+			ConnectorSpecification connectorToCopy = ((ConnectorGraphicalRepresentationImpl) gr).getConnector();
+			ConnectorSpecification clone = connectorToCopy.clone();
 			setConnector(clone);
 		}
 	}
@@ -179,12 +179,12 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 	// *******************************************************************************
 
 	@Override
-	public Connector getConnector() {
+	public ConnectorSpecification getConnector() {
 		return connector;
 	}
 
 	@Override
-	public void setConnector(Connector aConnector) {
+	public void setConnector(ConnectorSpecification aConnector) {
 		if (connector != aConnector) {
 			if (connector != null) {
 				connector.deleteObserver(this);
@@ -656,7 +656,7 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 
 	@Override
 	public void update(Observable observable, Object notification) {
-		// System.out.println("Connector received "+notification+" from "+observable);
+		// System.out.println("ConnectorSpecification received "+notification+" from "+observable);
 
 		super.update(observable, notification);
 

@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.connectors.RectPolylinConnector;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
@@ -50,7 +50,7 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 	private SimplifiedCardinalDirection nextOrientation;
 	private FGEArea draggingAuthorizedArea;
 
-	public AdjustableIntermediateSegment(FGESegment segment, RectPolylinConnector connector, ConnectorNode<?> node) {
+	public AdjustableIntermediateSegment(FGESegment segment, RectPolylinConnectorSpecification connector, ConnectorNode<?> node) {
 		super(segment, connector, node);
 		retrieveInfos();
 	}
@@ -59,7 +59,7 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 		currentSegment = getArea();
 		index = getPolylin().getSegmentIndex(currentSegment);
 		if (index <= 0 || index >= getPolylin().getSegmentNb() - 1) {
-			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector "
+			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnectorSpecification "
 					+ getNode().getGraphicalRepresentation().getText() + " index=" + index + " polylin.getSegmentNb()="
 					+ getPolylin().getSegmentNb());
 			return;
@@ -68,7 +68,7 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 		nextSegment = getPolylin().getSegmentAt(index + 1);
 		if (currentSegment.getApproximatedOrientation() == null || previousSegment.getApproximatedOrientation() == null
 				|| nextSegment.getApproximatedOrientation() == null) {
-			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
+			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnectorSpecification");
 			return;
 		}
 		if (index > 1) {
@@ -145,7 +145,7 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 		}
 
 		if (draggingAuthorizedArea == null) {
-			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
+			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnectorSpecification");
 			return;
 		}
 
@@ -248,7 +248,7 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 			}
 		*/
 
-		// logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
+		// logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnectorSpecification");
 		// return new FGEEmptyArea();
 	}
 
@@ -265,12 +265,12 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 
 		FGEPoint p1 = getPolylin().getPointAt(index);
 		if (p1 == null) {
-			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
+			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnectorSpecification");
 			return false;
 		}
 		FGEPoint p2 = getPolylin().getPointAt(index + 1);
 		if (p2 == null) {
-			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
+			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnectorSpecification");
 			return false;
 		}
 
@@ -281,7 +281,7 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 			p1.x = pt.x;
 			p2.x = pt.x;
 		} else {
-			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
+			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnectorSpecification");
 			return false;
 		}
 
@@ -305,7 +305,7 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 		/*if (currentOrientation.isHorizontal()) {
 			FGEPoint p1 = getPolylin().getPointAt(index);
 			if (p1 == null) {
-				logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
+				logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnectorSpecification");
 				return false;
 			}
 			p1.y = pt.y;
@@ -313,7 +313,7 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 			getConnector()._getControlPoints().elementAt(index).setPoint(p1);
 			FGEPoint p2 = getPolylin().getPointAt(index+1);
 			if (p2 == null) {
-				logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
+				logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnectorSpecification");
 				return false;
 			}
 			p2.y = pt.y;
@@ -326,7 +326,7 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 		else if (currentOrientation.isVertical()) {
 			FGEPoint p1 = getPolylin().getPointAt(index);
 			if (p1 == null) {
-				logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
+				logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnectorSpecification");
 				return false;
 			}
 			p1.x = pt.x;
@@ -334,7 +334,7 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 			getConnector()._getControlPoints().elementAt(index).setPoint(p1);
 			FGEPoint p2 = getPolylin().getPointAt(index+1);
 			if (p2 == null) {
-				logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
+				logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnectorSpecification");
 				return false;
 			}
 			p2.x = pt.x;
@@ -345,7 +345,7 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 			return true;
 		}
 		else {
-			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnector");
+			logger.warning("Inconsistent data while managing adjustable segment in RectPolylinConnectorSpecification");
 			return false;
 		}			*/
 	}

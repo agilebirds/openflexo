@@ -24,7 +24,7 @@ import org.openflexo.foundation.view.diagram.model.DiagramShape;
 
 
 /**
- * Notify that a new Connector has been inserted in a OEShema
+ * Notify that a new ConnectorSpecification has been inserted in a OEShema
  * 
  * @author sguerin
  * 

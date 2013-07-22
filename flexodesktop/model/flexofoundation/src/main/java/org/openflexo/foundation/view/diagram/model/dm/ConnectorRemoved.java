@@ -24,7 +24,7 @@ import org.openflexo.foundation.view.diagram.model.DiagramShape;
 
 
 /**
- * Notify that a Connector has been removed from a OEShema
+ * Notify that a ConnectorSpecification has been removed from a OEShema
  * 
  * @author sguerin
  * 

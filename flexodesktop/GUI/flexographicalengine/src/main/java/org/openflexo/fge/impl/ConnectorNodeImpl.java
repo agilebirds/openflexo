@@ -21,7 +21,7 @@ import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeParameters;
-import org.openflexo.fge.connectors.Connector;
+import org.openflexo.fge.connectors.ConnectorSpecification;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
@@ -73,7 +73,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	}
 
 	@Override
-	public Connector getConnector() {
+	public ConnectorSpecification getConnector() {
 		if (getGraphicalRepresentation() != null) {
 			return getGraphicalRepresentation().getConnector();
 		}

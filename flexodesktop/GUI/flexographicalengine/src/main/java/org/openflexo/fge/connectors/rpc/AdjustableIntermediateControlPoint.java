@@ -25,8 +25,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
-import org.openflexo.fge.connectors.RectPolylinConnector;
-import org.openflexo.fge.connectors.RectPolylinConnector.RectPolylinAdjustability;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification.RectPolylinAdjustability;
 import org.openflexo.fge.geom.FGEGeometricObject;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -40,7 +40,7 @@ public class AdjustableIntermediateControlPoint extends RectPolylinAdjustableCon
 
 	private int index;
 
-	public AdjustableIntermediateControlPoint(FGEPoint point, int index, RectPolylinConnector connector, ConnectorNode<?> node) {
+	public AdjustableIntermediateControlPoint(FGEPoint point, int index, RectPolylinConnectorSpecification connector, ConnectorNode<?> node) {
 		super(point, connector, node);
 		this.index = index;
 	}

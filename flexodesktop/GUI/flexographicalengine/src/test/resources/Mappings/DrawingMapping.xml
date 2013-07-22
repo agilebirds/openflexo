@@ -127,7 +127,7 @@
    	 <property name="hasFocusedForeground" xmlTag="hasFocusedForeground" attribute="YES"/>
  	 <property name="startObject" contains="org.openflexo.fge.ShapeGraphicalRepresentation" context="Start"/>
  	 <property name="endObject" contains="org.openflexo.fge.ShapeGraphicalRepresentation" context="End"/>
-  	 <property name="connector" contains="org.openflexo.fge.connectors.Connector"/>
+  	 <property name="connector" contains="org.openflexo.fge.connectors.ConnectorSpecification"/>
 	 <property name="startSymbol" xmlTag="startSymbol" attribute="YES"/>
  	 <property name="endSymbol" xmlTag="endSymbol" attribute="YES"/>
  	 <property name="middleSymbol" xmlTag="middleSymbol" attribute="YES"/>
@@ -189,7 +189,7 @@
   	 <property name="ratio" xmlTag="ratio" attribute="YES"/>
    </entity>	
 
-  <entity name="org.openflexo.fge.connectors.LineConnector" xmlTag="LineConnector">
+  <entity name="org.openflexo.fge.connectors.LineConnectorSpecification" xmlTag="LineConnector">
      <description>Single line connector</description>
   	 <property name="lineConnectorType" xmlTag="lineConnectorType" attribute="YES"/>
   	 <property name="cp1RelativeToStartObject" xmlTag="cp1RelativeToStartObject" attribute="YES"/>  <!-- relevant for adjustable mode only -->
@@ -203,7 +203,7 @@
   	 <property name="controlPointLocation" xmlTag="controlPointLocation" attribute="YES"/>
    </entity>	-->
 
-  <entity name="org.openflexo.fge.connectors.RectPolylinConnector" xmlTag="RectPolylinConnector">
+  <entity name="org.openflexo.fge.connectors.RectPolylinConnectorSpecification" xmlTag="RectPolylinConnector">
      <description>Rect polyline connector</description>
   	 <property name="rectPolylinConstraints" xmlTag="rectPolylinConstraints" attribute="YES"/>
   	 <property name="straightLineWhenPossible" xmlTag="straightLineWhenPossible" attribute="YES"/>
@@ -223,7 +223,7 @@
   </entity>	
 
 		
-  <entity name="org.openflexo.fge.connectors.CurveConnector" xmlTag="ArcConnector">
+  <entity name="org.openflexo.fge.connectors.CurveConnectorSpecification" xmlTag="ArcConnector">
      <description>Curved connector</description>
   	 <property name="cpPosition" xmlTag="cpPosition" attribute="YES"/> 
  	 <property name="cp1RelativeToStartObject" xmlTag="cp1RelativeToStartObject" attribute="YES"/>  <!-- relevant for "areBoundsAdjustable=true" mode only -->
@@ -231,7 +231,7 @@
   	 <property name="areBoundsAdjustable" xmlTag="areBoundsAdjustable" attribute="YES"/>
    </entity>	
 
-  <entity name="org.openflexo.fge.connectors.CurvedPolylinConnector" xmlTag="PolyLineConnector">
+  <entity name="org.openflexo.fge.connectors.CurvedPolylinConnectorSpecification" xmlTag="PolyLineConnector">
      <description>Arc connector</description>
    </entity>	
 

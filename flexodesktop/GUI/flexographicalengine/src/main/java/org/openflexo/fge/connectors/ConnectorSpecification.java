@@ -26,7 +26,7 @@ import javax.swing.ImageIcon;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEObject;
-import org.openflexo.fge.connectors.impl.ConnectorImpl;
+import org.openflexo.fge.connectors.impl.ConnectorSpecificationImpl;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
@@ -37,11 +37,18 @@ import org.openflexo.model.annotations.Import;
 import org.openflexo.model.annotations.Imports;
 import org.openflexo.model.annotations.ModelEntity;
 
+/**
+ * This is the specification of a Connector<br>
+ * Contains all the properties required to manage a Connector
+ * 
+ * @author sylvain
+ * 
+ */
 @ModelEntity(isAbstract = true)
-@ImplementationClass(ConnectorImpl.class)
-@Imports({ @Import(LineConnector.class), @Import(CurveConnector.class), @Import(RectPolylinConnector.class),
-		@Import(CurvedPolylinConnector.class) })
-public interface Connector extends FGEObject {
+@ImplementationClass(ConnectorSpecificationImpl.class)
+@Imports({ @Import(LineConnectorSpecification.class), @Import(CurveConnectorSpecification.class), @Import(RectPolylinConnectorSpecification.class),
+		@Import(CurvedPolylinConnectorSpecification.class) })
+public interface ConnectorSpecification extends FGEObject {
 
 	public static enum ConnectorType {
 		LINE,
@@ -135,7 +142,7 @@ public interface Connector extends FGEObject {
 	 */
 	public FGERectangle getConnectorUsedBounds(ConnectorNode<?> connectorNode);
 
-	public Connector clone();
+	public ConnectorSpecification clone();
 
 	/**
 	 * Return start point, relative to start object

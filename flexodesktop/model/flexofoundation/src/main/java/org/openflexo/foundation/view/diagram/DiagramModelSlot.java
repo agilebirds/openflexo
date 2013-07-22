@@ -37,7 +37,7 @@ import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
 @DeclarePatternRoles({ // All pattern roles available through this model slot
 @DeclarePatternRole(FML = "Diagram", patternRoleClass = DiagramPatternRole.class), // Diagrams
 		@DeclarePatternRole(FML = "Shape", patternRoleClass = ShapePatternRole.class), // Shapes
-		@DeclarePatternRole(FML = "Connector", patternRoleClass = ConnectorPatternRole.class), // Connectors
+		@DeclarePatternRole(FML = "ConnectorSpecification", patternRoleClass = ConnectorPatternRole.class), // Connectors
 		@DeclarePatternRole(FML = "EditionPatternInstance", patternRoleClass = EditionPatternInstancePatternRole.class) // EditionPatternInstance
 })
 @DeclareEditionActions({ // All edition actions available through this model slot

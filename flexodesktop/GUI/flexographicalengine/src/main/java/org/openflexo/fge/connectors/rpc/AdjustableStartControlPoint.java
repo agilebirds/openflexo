@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.connectors.RectPolylinConnector;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
@@ -33,7 +33,7 @@ import org.openflexo.fge.geom.area.FGEArea;
 public class AdjustableStartControlPoint extends RectPolylinAdjustableControlPoint {
 	static final Logger logger = Logger.getLogger(AdjustableStartControlPoint.class.getPackage().getName());
 
-	public AdjustableStartControlPoint(FGEPoint point, RectPolylinConnector connector, ConnectorNode<?> node) {
+	public AdjustableStartControlPoint(FGEPoint point, RectPolylinConnectorSpecification connector, ConnectorNode<?> node) {
 		super(point, connector, node);
 	}
 
