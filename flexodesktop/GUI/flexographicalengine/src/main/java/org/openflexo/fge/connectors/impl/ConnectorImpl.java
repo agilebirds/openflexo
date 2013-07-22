@@ -91,21 +91,21 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	public void setPaintAttributes(ConnectorNode<?> node, FGEConnectorGraphics g) {
 
 		// Foreground
-		if (getGraphicalRepresentation().getIsSelected()) {
-			if (getGraphicalRepresentation().getHasSelectedForeground()) {
-				g.setDefaultForeground(getGraphicalRepresentation().getSelectedForeground());
-			} else if (getGraphicalRepresentation().getHasFocusedForeground()) {
-				g.setDefaultForeground(getGraphicalRepresentation().getFocusedForeground());
+		if (node.getGraphicalRepresentation().getIsSelected()) {
+			if (node.getGraphicalRepresentation().getHasSelectedForeground()) {
+				g.setDefaultForeground(node.getGraphicalRepresentation().getSelectedForeground());
+			} else if (node.getGraphicalRepresentation().getHasFocusedForeground()) {
+				g.setDefaultForeground(node.getGraphicalRepresentation().getFocusedForeground());
 			} else {
-				g.setDefaultForeground(getGraphicalRepresentation().getForeground());
+				g.setDefaultForeground(node.getGraphicalRepresentation().getForeground());
 			}
-		} else if (getGraphicalRepresentation().getIsFocused() && getGraphicalRepresentation().getHasFocusedForeground()) {
-			g.setDefaultForeground(getGraphicalRepresentation().getFocusedForeground());
+		} else if (node.getGraphicalRepresentation().getIsFocused() && node.getGraphicalRepresentation().getHasFocusedForeground()) {
+			g.setDefaultForeground(node.getGraphicalRepresentation().getFocusedForeground());
 		} else {
-			g.setDefaultForeground(getGraphicalRepresentation().getForeground());
+			g.setDefaultForeground(node.getGraphicalRepresentation().getForeground());
 		}
 
-		g.setDefaultTextStyle(getGraphicalRepresentation().getTextStyle());
+		g.setDefaultTextStyle(node.getGraphicalRepresentation().getTextStyle());
 	}
 
 	@Override
@@ -200,12 +200,12 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	private FGERectangle knownConnectorUsedBounds;
 
 	@Override
-	public void connectorWillBeModified() {
+	public void connectorWillBeModified(ConnectorNode<?> connectorNode) {
 
 	}
 
 	@Override
-	public void connectorHasBeenModified() {
+	public void connectorHasBeenModified(ConnectorNode<?> connectorNode) {
 
 	}
 
@@ -240,7 +240,7 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	 */
 
 	@Override
-	public abstract FGEPoint getMiddleSymbolLocation();
+	public abstract FGEPoint getMiddleSymbolLocation(ConnectorNode<?> connectorNode);
 
 	/**
 	 * Perform an area computation related to the both extremity objects

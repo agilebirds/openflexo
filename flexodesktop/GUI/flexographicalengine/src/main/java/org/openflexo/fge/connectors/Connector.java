@@ -107,11 +107,11 @@ public interface Connector extends FGEObject {
 
 	public boolean needsRefresh(ConnectorNode<?> connectorNode);
 
-	public void connectorWillBeModified();
+	public void connectorWillBeModified(ConnectorNode<?> connectorNode);
 
-	public void connectorHasBeenModified();
+	public void connectorHasBeenModified(ConnectorNode<?> connectorNode);
 
-	public FGEPoint getMiddleSymbolLocation();
+	public FGEPoint getMiddleSymbolLocation(ConnectorNode<?> connectorNode);
 
 	/**
 	 * Perform an area computation related to the both extremity objects

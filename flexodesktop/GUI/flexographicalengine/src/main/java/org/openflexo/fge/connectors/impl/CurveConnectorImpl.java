@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
@@ -53,13 +53,14 @@ public class CurveConnectorImpl extends ConnectorImpl implements CurveConnector 
 
 	// Used for deserialization
 	public CurveConnectorImpl() {
-		this(null);
-	}
-
-	public CurveConnectorImpl(ConnectorGraphicalRepresentation graphicalRepresentation) {
-		super(graphicalRepresentation);
+		super();
 		controlPoints = new Vector<ControlPoint>();
 	}
+
+	/*public CurveConnectorImpl(ConnectorGraphicalRepresentation graphicalRepresentation) {
+		super(graphicalRepresentation);
+		controlPoints = new Vector<ControlPoint>();
+	}*/
 
 	@Override
 	public ConnectorType getConnectorType() {
@@ -67,11 +68,12 @@ public class CurveConnectorImpl extends ConnectorImpl implements CurveConnector 
 	}
 
 	@Override
-	public List<ControlPoint> getControlAreas() {
+	public List<ControlPoint> rebuildControlPoints(ConnectorNode<?> connectorNode) {
+		updateControlPoints(connectorNode);
 		return controlPoints;
 	}
 
-	private void updateControlPoints() {
+	private void updateControlPoints(final ConnectorNode<?> connectorNode) {
 		FGEPoint newP1 = null;
 		FGEPoint newP2 = null;
 
@@ -83,17 +85,19 @@ public class CurveConnectorImpl extends ConnectorImpl implements CurveConnector 
 				// We have to compute the intersection between this line and the outline
 				// of joined shapes
 
-				FGEPoint centerOfEndObjectSeenFromStartObject = FGEUtils.convertNormalizedPoint(getEndObject(), new FGEPoint(0.5, 0.5),
-						getStartObject());
-				cp1RelativeToStartObject = getStartObject().getShape().outlineIntersect(centerOfEndObjectSeenFromStartObject);
+				FGEPoint centerOfEndObjectSeenFromStartObject = FGEUtils.convertNormalizedPoint(connectorNode.getEndNode(), new FGEPoint(
+						0.5, 0.5), connectorNode.getStartNode());
+				cp1RelativeToStartObject = connectorNode.getStartNode().getShape()
+						.outlineIntersect(centerOfEndObjectSeenFromStartObject, connectorNode.getStartNode());
 				if (cp1RelativeToStartObject == null) {
 					logger.warning("outlineIntersect() returned null");
 					cp1RelativeToStartObject = new FGEPoint(0.5, 0.5);
 				}
 
-				FGEPoint centerOfStartObjectSeenFromEndObject = FGEUtils.convertNormalizedPoint(getStartObject(), new FGEPoint(0.5, 0.5),
-						getEndObject());
-				cp2RelativeToEndObject = getEndObject().getShape().outlineIntersect(centerOfStartObjectSeenFromEndObject);
+				FGEPoint centerOfStartObjectSeenFromEndObject = FGEUtils.convertNormalizedPoint(connectorNode.getStartNode(), new FGEPoint(
+						0.5, 0.5), connectorNode.getEndNode());
+				cp2RelativeToEndObject = connectorNode.getEndNode().getShape()
+						.outlineIntersect(centerOfStartObjectSeenFromEndObject, connectorNode.getEndNode());
 				if (cp2RelativeToEndObject == null) {
 					logger.warning("outlineIntersect() returned null");
 					cp2RelativeToEndObject = new FGEPoint(0.5, 0.5);
@@ -107,17 +111,19 @@ public class CurveConnectorImpl extends ConnectorImpl implements CurveConnector 
 			if (cp1 != null) {
 				newP1 = cp1.getPoint();
 			}
-			cp1RelativeToStartObject = getStartObject().getShape().outlineIntersect(cp1RelativeToStartObject);
+			cp1RelativeToStartObject = connectorNode.getStartNode().getShape()
+					.outlineIntersect(cp1RelativeToStartObject, connectorNode.getStartNode());
 			if (cp1RelativeToStartObject != null) {
-				newP1 = FGEUtils.convertNormalizedPoint(getStartObject(), cp1RelativeToStartObject, getGraphicalRepresentation());
+				newP1 = FGEUtils.convertNormalizedPoint(connectorNode.getStartNode(), cp1RelativeToStartObject, connectorNode);
 			}
 
 			if (cp2 != null) {
 				newP2 = cp2.getPoint();
 			}
-			cp2RelativeToEndObject = getEndObject().getShape().outlineIntersect(cp2RelativeToEndObject);
+			cp2RelativeToEndObject = connectorNode.getEndNode().getShape()
+					.outlineIntersect(cp2RelativeToEndObject, connectorNode.getEndNode());
 			if (cp2RelativeToEndObject != null) {
-				newP2 = FGEUtils.convertNormalizedPoint(getEndObject(), cp2RelativeToEndObject, getGraphicalRepresentation());
+				newP2 = FGEUtils.convertNormalizedPoint(connectorNode.getEndNode(), cp2RelativeToEndObject, connectorNode);
 			}
 
 			if (cpPosition == null) {
@@ -133,36 +139,37 @@ public class CurveConnectorImpl extends ConnectorImpl implements CurveConnector 
 				cpPosition = new FGEPoint(0.5, 0.4);
 			}
 
-			updateCPPositionIfNeeded();
+			updateCPPositionIfNeeded(connectorNode);
 
-			FGEPoint cpPositionSeenFromStartObject = FGEUtils.convertNormalizedPoint(getGraphicalRepresentation(), cpPosition,
-					getStartObject());
-			cp1RelativeToStartObject = getStartObject().getShape().outlineIntersect(cpPositionSeenFromStartObject);
+			FGEPoint cpPositionSeenFromStartObject = FGEUtils.convertNormalizedPoint(connectorNode, cpPosition,
+					connectorNode.getStartNode());
+			cp1RelativeToStartObject = connectorNode.getStartNode().getShape()
+					.outlineIntersect(cpPositionSeenFromStartObject, connectorNode.getStartNode());
 			if (cp1RelativeToStartObject == null) {
 				logger.warning("outlineIntersect() returned null");
 				cp1RelativeToStartObject = new FGEPoint(0.5, 0.5);
 			}
 
-			FGEPoint cpPositionSeenFromEndObject = FGEUtils
-					.convertNormalizedPoint(getGraphicalRepresentation(), cpPosition, getEndObject());
-			cp2RelativeToEndObject = getEndObject().getShape().outlineIntersect(cpPositionSeenFromEndObject);
+			FGEPoint cpPositionSeenFromEndObject = FGEUtils.convertNormalizedPoint(connectorNode, cpPosition, connectorNode.getEndNode());
+			cp2RelativeToEndObject = connectorNode.getEndNode().getShape()
+					.outlineIntersect(cpPositionSeenFromEndObject, connectorNode.getEndNode());
 			if (cp2RelativeToEndObject == null) {
 				logger.warning("outlineIntersect() returned null");
 				cp2RelativeToEndObject = new FGEPoint(0.5, 0.5);
 			}
 
-			newP1 = FGEUtils.convertNormalizedPoint(getStartObject(), cp1RelativeToStartObject, getGraphicalRepresentation());
-			newP2 = FGEUtils.convertNormalizedPoint(getEndObject(), cp2RelativeToEndObject, getGraphicalRepresentation());
+			newP1 = FGEUtils.convertNormalizedPoint(connectorNode.getStartNode(), cp1RelativeToStartObject, connectorNode);
+			newP2 = FGEUtils.convertNormalizedPoint(connectorNode.getEndNode(), cp2RelativeToEndObject, connectorNode);
 
 		}
 
-		cp1 = new ConnectorAdjustingControlPoint(getGraphicalRepresentation(), newP1) {
+		cp1 = new ConnectorAdjustingControlPoint(connectorNode, newP1) {
 			@Override
 			public FGEArea getDraggingAuthorizedArea() {
 				if (getAreBoundsAdjustable()) {
-					FGEShape<?> shape = getStartObject().getShape().getShape();
-					FGEShape<?> returned = (FGEShape<?>) shape.transform(FGEUtils.convertNormalizedCoordinatesAT(getStartObject(),
-							getGraphicalRepresentation()));
+					FGEShape<?> shape = connectorNode.getStartNode().getFGEShape();
+					FGEShape<?> returned = (FGEShape<?>) shape.transform(FGEUtils.convertNormalizedCoordinatesAT(
+							connectorNode.getStartNode(), connectorNode));
 					returned.setIsFilled(false);
 					return returned;
 				} else {
@@ -176,22 +183,22 @@ public class CurveConnectorImpl extends ConnectorImpl implements CurveConnector 
 				if (getAreBoundsAdjustable()) {
 					FGEPoint pt = getNearestPointOnAuthorizedArea(newRelativePoint);
 					setPoint(pt);
-					cp1RelativeToStartObject = FGEUtils.convertNormalizedPoint(getGraphicalRepresentation(), pt, getStartObject());
+					cp1RelativeToStartObject = FGEUtils.convertNormalizedPoint(connectorNode, pt, connectorNode.getStartNode());
 					refreshCurve();
-					getGraphicalRepresentation().notifyConnectorChanged();
+					connectorNode.notifyConnectorChanged();
 				}
 				return true;
 			}
 
 		};
 
-		cp2 = new ConnectorAdjustingControlPoint(getGraphicalRepresentation(), newP2) {
+		cp2 = new ConnectorAdjustingControlPoint(connectorNode, newP2) {
 			@Override
 			public FGEArea getDraggingAuthorizedArea() {
 				if (getAreBoundsAdjustable()) {
-					FGEShape<?> shape = getEndObject().getShape().getShape();
-					FGEShape<?> returned = (FGEShape<?>) shape.transform(FGEUtils.convertNormalizedCoordinatesAT(getEndObject(),
-							getGraphicalRepresentation()));
+					FGEShape<?> shape = connectorNode.getEndNode().getFGEShape();
+					FGEShape<?> returned = (FGEShape<?>) shape.transform(FGEUtils.convertNormalizedCoordinatesAT(
+							connectorNode.getEndNode(), connectorNode));
 					returned.setIsFilled(false);
 					return returned;
 				} else {
@@ -205,15 +212,15 @@ public class CurveConnectorImpl extends ConnectorImpl implements CurveConnector 
 				if (getAreBoundsAdjustable()) {
 					FGEPoint pt = getNearestPointOnAuthorizedArea(newRelativePoint);
 					setPoint(pt);
-					cp2RelativeToEndObject = FGEUtils.convertNormalizedPoint(getGraphicalRepresentation(), pt, getEndObject());
+					cp2RelativeToEndObject = FGEUtils.convertNormalizedPoint(connectorNode, pt, connectorNode.getEndNode());
 					refreshCurve();
-					getGraphicalRepresentation().notifyConnectorChanged();
+					connectorNode.notifyConnectorChanged();
 				}
 				return true;
 			}
 		};
 
-		cp = new ConnectorAdjustingControlPoint(getGraphicalRepresentation(), cpPosition) {
+		cp = new ConnectorAdjustingControlPoint(connectorNode, cpPosition) {
 			@Override
 			public FGEArea getDraggingAuthorizedArea() {
 				return new FGEPlane();
@@ -232,10 +239,10 @@ public class CurveConnectorImpl extends ConnectorImpl implements CurveConnector 
 				setPoint(pt);
 				cpPosition = pt;
 				if (!getAreBoundsAdjustable()) {
-					updateFromNewCPPosition();
+					updateFromNewCPPosition(connectorNode);
 				}
 				refreshCurve();
-				getGraphicalRepresentation().notifyConnectorChanged();
+				connectorNode.notifyConnectorChanged();
 				return true;
 			}
 		};
@@ -253,9 +260,9 @@ public class CurveConnectorImpl extends ConnectorImpl implements CurveConnector 
 	 * change of the system coordinates of the connector. Indeed, it is based on the bounds of the start and end node. If one of them moves,
 	 * the coordinates should ideally be compared to the same coordinates system.
 	 */
-	private void updateCPPositionIfNeeded() {
+	private void updateCPPositionIfNeeded(ConnectorNode<?> connectorNode) {
 		if (willBeModified && previous != null) {
-			FGESegment newSegment = getCenterToCenterSegment();
+			FGESegment newSegment = getCenterToCenterSegment(connectorNode);
 			double delta = newSegment.getAngle() - previous.getAngle();
 			if (Math.abs(delta) > FGEGeometricObject.EPSILON) {
 				FGEPoint inter;
@@ -279,43 +286,44 @@ public class CurveConnectorImpl extends ConnectorImpl implements CurveConnector 
 	private boolean willBeModified = false;
 
 	@Override
-	public void connectorWillBeModified() {
-		super.connectorWillBeModified();
+	public void connectorWillBeModified(ConnectorNode<?> connectorNode) {
+		super.connectorWillBeModified(connectorNode);
 		willBeModified = true;
-		previous = getCenterToCenterSegment();
+		previous = getCenterToCenterSegment(connectorNode);
 	}
 
-	private FGESegment getCenterToCenterSegment() {
-		return new FGESegment(FGEUtils.convertNormalizedPoint(getStartObject(), getStartObject().getShape().getShape().getCenter(),
-				getGraphicalRepresentation()), FGEUtils.convertNormalizedPoint(getEndObject(), getEndObject().getShape().getShape()
-				.getCenter(), getGraphicalRepresentation()));
+	private FGESegment getCenterToCenterSegment(ConnectorNode<?> connectorNode) {
+		return new FGESegment(FGEUtils.convertNormalizedPoint(connectorNode.getStartNode(), connectorNode.getStartNode().getFGEShape()
+				.getCenter(), connectorNode), FGEUtils.convertNormalizedPoint(connectorNode.getEndNode(), connectorNode.getEndNode()
+				.getFGEShape().getCenter(), connectorNode));
 	}
 
 	@Override
-	public void connectorHasBeenModified() {
+	public void connectorHasBeenModified(ConnectorNode<?> connectorNode) {
 		willBeModified = false;
 		previous = null;
-		super.connectorHasBeenModified();
+		super.connectorHasBeenModified(connectorNode);
 	};
 
-	private void updateFromNewCPPosition() {
-		FGEPoint cpPositionSeenFromStartObject = FGEUtils
-				.convertNormalizedPoint(getGraphicalRepresentation(), cpPosition, getStartObject());
-		cp1RelativeToStartObject = getStartObject().getShape().outlineIntersect(cpPositionSeenFromStartObject);
+	private void updateFromNewCPPosition(ConnectorNode<?> connectorNode) {
+		FGEPoint cpPositionSeenFromStartObject = FGEUtils.convertNormalizedPoint(connectorNode, cpPosition, connectorNode.getStartNode());
+		cp1RelativeToStartObject = connectorNode.getStartNode().getShape()
+				.outlineIntersect(cpPositionSeenFromStartObject, connectorNode.getStartNode());
 		if (cp1RelativeToStartObject == null) {
 			logger.warning("outlineIntersect() returned null");
 			cp1RelativeToStartObject = new FGEPoint(0.5, 0.5);
 		}
 
-		FGEPoint cpPositionSeenFromEndObject = FGEUtils.convertNormalizedPoint(getGraphicalRepresentation(), cpPosition, getEndObject());
-		cp2RelativeToEndObject = getEndObject().getShape().outlineIntersect(cpPositionSeenFromEndObject);
+		FGEPoint cpPositionSeenFromEndObject = FGEUtils.convertNormalizedPoint(connectorNode, cpPosition, connectorNode.getEndNode());
+		cp2RelativeToEndObject = connectorNode.getEndNode().getShape()
+				.outlineIntersect(cpPositionSeenFromEndObject, connectorNode.getEndNode());
 		if (cp2RelativeToEndObject == null) {
 			logger.warning("outlineIntersect() returned null");
 			cp2RelativeToEndObject = new FGEPoint(0.5, 0.5);
 		}
 
-		FGEPoint newP1 = FGEUtils.convertNormalizedPoint(getStartObject(), cp1RelativeToStartObject, getGraphicalRepresentation());
-		FGEPoint newP2 = FGEUtils.convertNormalizedPoint(getEndObject(), cp2RelativeToEndObject, getGraphicalRepresentation());
+		FGEPoint newP1 = FGEUtils.convertNormalizedPoint(connectorNode.getStartNode(), cp1RelativeToStartObject, connectorNode);
+		FGEPoint newP2 = FGEUtils.convertNormalizedPoint(connectorNode.getEndNode(), cp2RelativeToEndObject, connectorNode);
 
 		cp1.setPoint(newP1);
 		cp2.setPoint(newP2);
@@ -330,9 +338,9 @@ public class CurveConnectorImpl extends ConnectorImpl implements CurveConnector 
 	}
 
 	@Override
-	public void drawConnector(FGEConnectorGraphics g) {
+	public void drawConnector(ConnectorNode<?> connectorNode, FGEConnectorGraphics g) {
 		if (!firstUpdated) {
-			refreshConnector();
+			refreshConnector(connectorNode);
 		}
 
 		g.useDefaultForegroundStyle();
@@ -342,67 +350,64 @@ public class CurveConnectorImpl extends ConnectorImpl implements CurveConnector 
 			curve.paint(g);
 
 			// Draw eventual symbols
-			if (getGraphicalRepresentation().getStartSymbol() != StartSymbolType.NONE) {
+			if (connectorNode.getGraphicalRepresentation().getStartSymbol() != StartSymbolType.NONE) {
 				FGESegment firstSegment = curve.getApproximatedStartTangent();
-				FGESegment viewSegment = firstSegment.transform(getGraphicalRepresentation().convertNormalizedPointToViewCoordinatesAT(
-						g.getScale()));
-				g.drawSymbol(firstSegment.getP1(), getGraphicalRepresentation().getStartSymbol(), getGraphicalRepresentation()
-						.getStartSymbolSize(), viewSegment.getAngle());
+				FGESegment viewSegment = firstSegment.transform(connectorNode.convertNormalizedPointToViewCoordinatesAT(g.getScale()));
+				g.drawSymbol(firstSegment.getP1(), connectorNode.getGraphicalRepresentation().getStartSymbol(), connectorNode
+						.getGraphicalRepresentation().getStartSymbolSize(), viewSegment.getAngle());
 			}
-			if (getGraphicalRepresentation().getEndSymbol() != EndSymbolType.NONE) {
+			if (connectorNode.getGraphicalRepresentation().getEndSymbol() != EndSymbolType.NONE) {
 				FGESegment lastSegment = curve.getApproximatedEndTangent();
-				FGESegment viewSegment = lastSegment.transform(getGraphicalRepresentation().convertNormalizedPointToViewCoordinatesAT(
-						g.getScale()));
-				g.drawSymbol(lastSegment.getP2(), getGraphicalRepresentation().getEndSymbol(), getGraphicalRepresentation()
-						.getEndSymbolSize(), viewSegment.getAngle() + Math.PI);
+				FGESegment viewSegment = lastSegment.transform(connectorNode.convertNormalizedPointToViewCoordinatesAT(g.getScale()));
+				g.drawSymbol(lastSegment.getP2(), connectorNode.getGraphicalRepresentation().getEndSymbol(), connectorNode
+						.getGraphicalRepresentation().getEndSymbolSize(), viewSegment.getAngle() + Math.PI);
 			}
-			if (getGraphicalRepresentation().getMiddleSymbol() != MiddleSymbolType.NONE) {
+			if (connectorNode.getGraphicalRepresentation().getMiddleSymbol() != MiddleSymbolType.NONE) {
 				FGESegment cpSegment = curve.getApproximatedControlPointTangent();
-				FGESegment viewSegment = cpSegment.transform(getGraphicalRepresentation().convertNormalizedPointToViewCoordinatesAT(
-						g.getScale()));
-				g.drawSymbol(curve.getP3(), getGraphicalRepresentation().getMiddleSymbol(), getGraphicalRepresentation()
-						.getMiddleSymbolSize(), viewSegment.getAngle() + Math.PI);
+				FGESegment viewSegment = cpSegment.transform(connectorNode.convertNormalizedPointToViewCoordinatesAT(g.getScale()));
+				g.drawSymbol(curve.getP3(), connectorNode.getGraphicalRepresentation().getMiddleSymbol(), connectorNode
+						.getGraphicalRepresentation().getMiddleSymbolSize(), viewSegment.getAngle() + Math.PI);
 			}
 		}
 
 	}
 
 	@Override
-	public double distanceToConnector(FGEPoint aPoint, double scale) {
+	public double distanceToConnector(FGEPoint aPoint, double scale, ConnectorNode<?> connectorNode) {
 		if (curve == null) {
 			logger.warning("Curve is null");
 			return Double.POSITIVE_INFINITY;
 		}
-		Point testPoint = getGraphicalRepresentation().convertNormalizedPointToViewCoordinates(aPoint, scale);
+		Point testPoint = connectorNode.convertNormalizedPointToViewCoordinates(aPoint, scale);
 		FGEPoint nearestPointOnCurve = curve.getNearestPoint(aPoint);
-		Point nearestPoint = getGraphicalRepresentation().convertNormalizedPointToViewCoordinates(nearestPointOnCurve, scale);
+		Point nearestPoint = connectorNode.convertNormalizedPointToViewCoordinates(nearestPointOnCurve, scale);
 		return testPoint.distance(nearestPoint);
 	}
 
 	@Override
-	public void refreshConnector(boolean force) {
-		if (!force && !needsRefresh()) {
+	public void refreshConnector(ConnectorNode<?> connectorNode, boolean force) {
+		if (!force && !needsRefresh(connectorNode)) {
 			return;
 		}
 
-		updateControlPoints();
+		updateControlPoints(connectorNode);
 
-		super.refreshConnector(force);
+		super.refreshConnector(connectorNode, force);
 
 		firstUpdated = true;
 
 	}
 
 	@Override
-	public boolean needsRefresh() {
+	public boolean needsRefresh(ConnectorNode<?> connectorNode) {
 		if (!firstUpdated) {
 			return true;
 		}
-		return super.needsRefresh();
+		return super.needsRefresh(connectorNode);
 	}
 
 	@Override
-	public FGEPoint getMiddleSymbolLocation() {
+	public FGEPoint getMiddleSymbolLocation(ConnectorNode<?> connectorNode) {
 		if (cpPosition == null) {
 			return new FGEPoint(0, 0);
 		}
@@ -448,10 +453,10 @@ public class CurveConnectorImpl extends ConnectorImpl implements CurveConnector 
 	public void setAreBoundsAdjustable(boolean aFlag) {
 		if (areBoundsAdjustable != aFlag) {
 			areBoundsAdjustable = aFlag;
-			if (getGraphicalRepresentation() != null) {
+			/*if (getGraphicalRepresentation() != null) {
 				updateControlPoints();
 				getGraphicalRepresentation().notifyConnectorChanged();
-			}
+			}*/
 		}
 	}
 
@@ -507,7 +512,7 @@ public class CurveConnectorImpl extends ConnectorImpl implements CurveConnector 
 
 	@Override
 	public CurveConnector clone() {
-		CurveConnector returned = new CurveConnectorImpl(null);
+		CurveConnector returned = new CurveConnectorImpl();
 		returned._setCpPosition(_getCpPosition());
 		returned._setCp1RelativeToStartObject(_getCp1RelativeToStartObject());
 		returned._setCp2RelativeToEndObject(_getCp2RelativeToEndObject());

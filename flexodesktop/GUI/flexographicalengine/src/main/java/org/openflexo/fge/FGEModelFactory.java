@@ -422,7 +422,8 @@ public class FGEModelFactory extends ModelFactory {
 	public LineConnector makeLineConnector(ConnectorGraphicalRepresentation aGR) {
 		LineConnector returned = newInstance(LineConnector.class);
 		returned.setFactory(this);
-		returned.setGraphicalRepresentation(aGR);
+		aGR.setConnector(returned);
+		// returned.setGraphicalRepresentation(aGR);
 		return returned;
 	}
 
@@ -435,7 +436,8 @@ public class FGEModelFactory extends ModelFactory {
 	public CurveConnector makeCurveConnector(ConnectorGraphicalRepresentation aGR) {
 		CurveConnector returned = newInstance(CurveConnector.class);
 		returned.setFactory(this);
-		returned.setGraphicalRepresentation(aGR);
+		aGR.setConnector(returned);
+		// returned.setGraphicalRepresentation(aGR);
 		return returned;
 	}
 
@@ -448,7 +450,8 @@ public class FGEModelFactory extends ModelFactory {
 	public RectPolylinConnector makeRectPolylinConnector(ConnectorGraphicalRepresentation aGR) {
 		RectPolylinConnector returned = newInstance(RectPolylinConnector.class);
 		returned.setFactory(this);
-		returned.setGraphicalRepresentation(aGR);
+		aGR.setConnector(returned);
+		// returned.setGraphicalRepresentation(aGR);
 		return returned;
 	}
 
@@ -461,7 +464,8 @@ public class FGEModelFactory extends ModelFactory {
 	public CurvedPolylinConnector makeCurvedPolylinConnector(ConnectorGraphicalRepresentation aGR) {
 		CurvedPolylinConnector returned = newInstance(CurvedPolylinConnector.class);
 		returned.setFactory(this);
-		returned.setGraphicalRepresentation(aGR);
+		aGR.setConnector(returned);
+		// returned.setGraphicalRepresentation(aGR);
 		return returned;
 	}
 
