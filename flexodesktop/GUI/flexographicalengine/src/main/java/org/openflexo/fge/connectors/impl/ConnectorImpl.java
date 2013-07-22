@@ -314,7 +314,7 @@ public abstract class ConnectorImpl extends FGEObjectImpl implements Connector {
 	 * @return
 	 */
 	@Override
-	public abstract FGERectangle getConnectorUsedBounds();
+	public abstract FGERectangle getConnectorUsedBounds(ConnectorNode<?> connectorNode);
 
 	@Override
 	public abstract Connector clone();

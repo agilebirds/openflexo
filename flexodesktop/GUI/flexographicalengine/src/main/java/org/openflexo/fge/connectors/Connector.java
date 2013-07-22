@@ -133,7 +133,7 @@ public interface Connector extends FGEObject {
 	 * 
 	 * @return
 	 */
-	public FGERectangle getConnectorUsedBounds();
+	public FGERectangle getConnectorUsedBounds(ConnectorNode<?> connectorNode);
 
 	public Connector clone();
 

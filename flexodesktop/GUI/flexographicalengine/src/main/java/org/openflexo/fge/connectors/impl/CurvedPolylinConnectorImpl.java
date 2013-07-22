@@ -5,7 +5,7 @@ import java.awt.geom.Line2D;
 import java.util.List;
 import java.util.Vector;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.connectors.CurvedPolylinConnector;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
@@ -27,15 +27,16 @@ public class CurvedPolylinConnectorImpl extends ConnectorImpl implements CurvedP
 
 	// Used for deserialization
 	public CurvedPolylinConnectorImpl() {
-		this(null);
+		super();
+		controlPoints = new Vector<ControlPoint>();
 	}
 
-	public CurvedPolylinConnectorImpl(ConnectorGraphicalRepresentation graphicalRepresentation) {
+	/*public CurvedPolylinConnectorImpl(ConnectorGraphicalRepresentation graphicalRepresentation) {
 		super(graphicalRepresentation);
 		controlPoints = new Vector<ControlPoint>();
 		controlPoints.add(new ConnectorAdjustingControlPoint(graphicalRepresentation, p1));
 		controlPoints.add(new ConnectorAdjustingControlPoint(graphicalRepresentation, p2));
-	}
+	}*/
 
 	@Override
 	public ConnectorType getConnectorType() {
@@ -43,13 +44,18 @@ public class CurvedPolylinConnectorImpl extends ConnectorImpl implements CurvedP
 	}
 
 	@Override
-	public List<ControlPoint> getControlAreas() {
+	public List<ControlPoint> rebuildControlPoints(ConnectorNode<?> connectorNode) {
+		updateControlPoints(connectorNode);
 		return controlPoints;
 	}
 
-	private void updateControlPoints() {
-		FGEPoint newP1 = FGEUtils.convertNormalizedPoint(getStartObject(), new FGEPoint(0.5, 0.5), getGraphicalRepresentation());
-		FGEPoint newP2 = FGEUtils.convertNormalizedPoint(getEndObject(), new FGEPoint(0.5, 0.5), getGraphicalRepresentation());
+	private void updateControlPoints(final ConnectorNode<?> connectorNode) {
+
+		controlPoints.add(new ConnectorAdjustingControlPoint(connectorNode, p1));
+		controlPoints.add(new ConnectorAdjustingControlPoint(connectorNode, p2));
+
+		FGEPoint newP1 = FGEUtils.convertNormalizedPoint(connectorNode.getStartNode(), new FGEPoint(0.5, 0.5), connectorNode);
+		FGEPoint newP2 = FGEUtils.convertNormalizedPoint(connectorNode.getEndNode(), new FGEPoint(0.5, 0.5), connectorNode);
 
 		p1.x = newP1.x;
 		p1.y = newP1.y;
@@ -58,8 +64,8 @@ public class CurvedPolylinConnectorImpl extends ConnectorImpl implements CurvedP
 	}
 
 	@Override
-	public void drawConnector(FGEConnectorGraphics g) {
-		updateControlPoints();
+	public void drawConnector(ConnectorNode<?> connectorNode, FGEConnectorGraphics g) {
+		updateControlPoints(connectorNode);
 
 		g.drawLine(p1.x, p1.y, p2.x, p2.y);
 
@@ -76,35 +82,35 @@ public class CurvedPolylinConnectorImpl extends ConnectorImpl implements CurvedP
 	}
 
 	@Override
-	public double distanceToConnector(FGEPoint aPoint, double scale) {
-		Point testPoint = getGraphicalRepresentation().convertNormalizedPointToViewCoordinates(aPoint, scale);
-		Point point1 = getGraphicalRepresentation().convertNormalizedPointToViewCoordinates(p1, scale);
-		Point point2 = getGraphicalRepresentation().convertNormalizedPointToViewCoordinates(p2, scale);
+	public double distanceToConnector(FGEPoint aPoint, double scale, ConnectorNode<?> connectorNode) {
+		Point testPoint = connectorNode.convertNormalizedPointToViewCoordinates(aPoint, scale);
+		Point point1 = connectorNode.convertNormalizedPointToViewCoordinates(p1, scale);
+		Point point2 = connectorNode.convertNormalizedPointToViewCoordinates(p2, scale);
 		return Line2D.ptSegDist(point1.x, point1.y, point2.x, point2.y, testPoint.x, testPoint.y);
 	}
 
 	@Override
-	public void refreshConnector(boolean force) {
-		if (!force && !needsRefresh()) {
+	public void refreshConnector(ConnectorNode<?> connectorNode, boolean force) {
+		if (!force && !needsRefresh(connectorNode)) {
 			return;
 		}
 
-		updateControlPoints();
+		updateControlPoints(connectorNode);
 
-		super.refreshConnector(force);
+		super.refreshConnector(connectorNode, force);
 
 		// firstUpdated = true;
 
 	}
 
 	@Override
-	public boolean needsRefresh() {
+	public boolean needsRefresh(ConnectorNode<?> connectorNode) {
 		// if (!firstUpdated) return true;
-		return super.needsRefresh();
+		return super.needsRefresh(connectorNode);
 	}
 
 	@Override
-	public FGEPoint getMiddleSymbolLocation() {
+	public FGEPoint getMiddleSymbolLocation(ConnectorNode<?> connectorNode) {
 		// TODO Auto-generated method stub
 		return new FGEPoint(0.5, 0.5);
 	}
@@ -138,7 +144,7 @@ public class CurvedPolylinConnectorImpl extends ConnectorImpl implements CurvedP
 
 	@Override
 	public CurvedPolylinConnector clone() {
-		CurvedPolylinConnector returned = new CurvedPolylinConnectorImpl(null);
+		CurvedPolylinConnector returned = new CurvedPolylinConnectorImpl();
 		return returned;
 	}
 

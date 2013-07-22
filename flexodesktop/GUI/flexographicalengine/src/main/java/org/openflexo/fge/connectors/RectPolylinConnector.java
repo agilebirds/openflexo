@@ -21,6 +21,7 @@ package org.openflexo.fge.connectors;
 
 import java.util.Vector;
 
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.connectors.impl.RectPolylinConnectorImpl;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
@@ -260,7 +261,7 @@ public interface RectPolylinConnector extends Connector {
 	 * 
 	 * @return angle expressed in radians
 	 */
-	public double getMiddleSymbolAngle();
+	public double getMiddleSymbolAngle(ConnectorNode<?> node);
 
 	public FGERectPolylin getCurrentPolylin();
 
@@ -342,9 +343,9 @@ public interface RectPolylinConnector extends Connector {
 	 */
 	public FGEArea retrieveAllowedEndArea(boolean takeFixedControlPointUnderAccount);
 
-	public double getOverlapXResultingFromPixelOverlap();
+	public double getOverlapXResultingFromPixelOverlap(ConnectorNode<?> node);
 
-	public double getOverlapYResultingFromPixelOverlap();
+	public double getOverlapYResultingFromPixelOverlap(ConnectorNode<?> node);
 
 	/**
 	 * This method is internally called while updating starting point of polylin.
