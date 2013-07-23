@@ -49,7 +49,7 @@ import org.openflexo.fge.graphics.FGEShapeDecorationGraphics;
 import org.openflexo.fge.impl.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.shapes.Rectangle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.ConnectorView;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.ShapeView;

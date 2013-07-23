@@ -23,9 +23,10 @@ import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.geom.FGEArc;
 import org.openflexo.fge.geom.FGEArc.ArcType;
 import org.openflexo.fge.geom.FGEShape;
+import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.shapes.Arc;
 
-public class ArcImpl extends ShapeImpl implements Arc {
+public class ArcImpl extends ShapeSpecificationImpl implements Arc {
 
 	// private FGEArc arc;
 
@@ -46,7 +47,7 @@ public class ArcImpl extends ShapeImpl implements Arc {
 	}
 
 	@Override
-	protected FGEShape<?> makeShape(ShapeNode<?> node) {
+	public FGEShape<?> makeFGEShape(ShapeNode<?> node) {
 		return new FGEArc(0, 0, 1, 1, angleStart, angleExtent, arcType);
 	}
 
@@ -57,9 +58,10 @@ public class ArcImpl extends ShapeImpl implements Arc {
 
 	@Override
 	public void setAngleStart(int anAngle) {
-		if (angleStart != anAngle) {
+		FGENotification notification = requireChange(ArcParameters.angleStart, anAngle);
+		if (notification != null) {
 			angleStart = anAngle;
-			shapeChanged();
+			hasChanged(notification);
 		}
 	}
 
@@ -70,9 +72,10 @@ public class ArcImpl extends ShapeImpl implements Arc {
 
 	@Override
 	public void setAngleExtent(int anAngle) {
-		if (angleExtent != anAngle) {
+		FGENotification notification = requireChange(ArcParameters.angleExtent, anAngle);
+		if (notification != null) {
 			angleExtent = anAngle;
-			shapeChanged();
+			hasChanged(notification);
 		}
 	}
 
@@ -83,9 +86,10 @@ public class ArcImpl extends ShapeImpl implements Arc {
 
 	@Override
 	public void setArcType(ArcType anArcType) {
-		if (arcType != anArcType) {
+		FGENotification notification = requireChange(ArcParameters.arcType, anArcType);
+		if (notification != null) {
 			arcType = anArcType;
-			shapeChanged();
+			hasChanged(notification);
 		}
 	}
 

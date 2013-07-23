@@ -22,7 +22,7 @@ package org.openflexo.wkf.processeditor.gr;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.wkf.WKFStockObject;
 import org.openflexo.wkf.grsetup.StockObjectGRSetup;
 import org.openflexo.wkf.processeditor.ProcessRepresentation;

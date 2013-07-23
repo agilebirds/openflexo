@@ -29,6 +29,7 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGERegularPolygon;
 import org.openflexo.fge.geom.FGEShape;
+import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.shapes.RegularPolygon;
 
 public class RegularPolygonImpl extends PolygonImpl implements RegularPolygon {
@@ -86,7 +87,7 @@ public class RegularPolygonImpl extends PolygonImpl implements RegularPolygon {
 	}*/
 
 	@Override
-	protected FGEShape<?> makeShape(ShapeNode<?> node) {
+	public FGEShape<?> makeFGEShape(ShapeNode<?> node) {
 		if (getPoints() != null && getPoints().size() > 0) {
 			return new FGEPolygon(Filling.FILLED, getPoints());
 		} else if (npoints > 2) {
@@ -107,9 +108,10 @@ public class RegularPolygonImpl extends PolygonImpl implements RegularPolygon {
 
 	@Override
 	public void setNPoints(int pointsNb) {
-		if (pointsNb != npoints) {
+		FGENotification notification = requireChange(RegularPolygonParameters.nPoints, pointsNb);
+		if (notification != null) {
 			npoints = pointsNb;
-			shapeChanged();
+			hasChanged(notification);
 		}
 	}
 
@@ -120,9 +122,10 @@ public class RegularPolygonImpl extends PolygonImpl implements RegularPolygon {
 
 	@Override
 	public void setStartAngle(int anAngle) {
-		if (anAngle != startAngle) {
+		FGENotification notification = requireChange(RegularPolygonParameters.startAngle, anAngle);
+		if (notification != null) {
 			startAngle = anAngle;
-			shapeChanged();
+			hasChanged(notification);
 		}
 	}
 

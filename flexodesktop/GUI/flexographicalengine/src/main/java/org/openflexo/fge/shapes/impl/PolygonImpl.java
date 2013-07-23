@@ -29,7 +29,7 @@ import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.shapes.Polygon;
 
-public class PolygonImpl extends ShapeImpl implements Polygon {
+public class PolygonImpl extends ShapeSpecificationImpl implements Polygon {
 
 	private List<FGEPoint> points;
 
@@ -104,19 +104,22 @@ public class PolygonImpl extends ShapeImpl implements Polygon {
 		} else {
 			this.points = null;
 		}
-		shapeChanged();
+		setChanged();
+		notifyChange(PolygonParameters.points);
 	}
 
 	@Override
 	public void addToPoints(FGEPoint aPoint) {
 		points.add(aPoint);
-		shapeChanged();
+		setChanged();
+		notifyChange(PolygonParameters.points);
 	}
 
 	@Override
 	public void removeFromPoints(FGEPoint aPoint) {
 		points.remove(aPoint);
-		shapeChanged();
+		setChanged();
+		notifyChange(PolygonParameters.points);
 	}
 
 	@Override
@@ -125,7 +128,7 @@ public class PolygonImpl extends ShapeImpl implements Polygon {
 	}
 
 	@Override
-	protected FGEShape<?> makeShape(ShapeNode<?> node) {
+	public FGEShape<?> makeFGEShape(ShapeNode<?> node) {
 		return new FGEPolygon(Filling.FILLED, points);
 	}
 

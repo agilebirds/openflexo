@@ -77,7 +77,7 @@ public class DropSchemeActionInitializer extends ActionInitializer {
 						Point newP = GraphicalRepresentation.convertPoint(expectedGR, p, parentGR, 1.0);
 						myGR.setLocation(new FGEPoint(newP.x, newP.y));
 						logger.info("border6 = " + myGR.getBorder());
-						logger.info("Shape has been relocated");
+						logger.info("ShapeSpecification has been relocated");
 					}*/
 
 				((VEController) getController()).getSelectionManager().setSelectedObject(action.getPrimaryShape());

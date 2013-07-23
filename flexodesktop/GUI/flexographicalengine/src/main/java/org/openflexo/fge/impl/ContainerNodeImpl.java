@@ -59,8 +59,7 @@ public abstract class ContainerNodeImpl<O, GR extends ContainerGraphicalRepresen
 		for (DrawingTreeNode<?, ?> dtn : container.getChildNodes()) {
 			if (dtn instanceof ShapeNode) {
 				ShapeNode<?> child = (ShapeNode<?>) dtn;
-				if (child.getGraphicalRepresentation().getShape().getShape(child)
-						.containsPoint(FGEUtils.convertNormalizedPoint(this, p, child))) {
+				if (child.getShape().getShape().containsPoint(FGEUtils.convertNormalizedPoint(this, p, child))) {
 					enclosingShapes.add(child);
 				} else {
 					// Look if we are not contained in a child shape outside current shape

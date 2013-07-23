@@ -19,7 +19,7 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGESegment;
 import org.openflexo.fge.graphics.FGEGraphics;
-import org.openflexo.fge.shapes.Shape;
+import org.openflexo.fge.shapes.ShapeSpecification;
 
 public class SWLContainerResizeAreas {
 
@@ -103,23 +103,23 @@ public class SWLContainerResizeAreas {
 			FGEPoint nearestPoint = getNearestPointOnAuthorizedArea(pointRelativeToInitialConfiguration);
 			// System.out.println("nearestPoint="+nearestPoint);
 			if (cardinalDirection == SimplifiedCardinalDirection.NORTH) {
-				FGEPoint opposite = Shape.SOUTH;
+				FGEPoint opposite = ShapeSpecification.SOUTH;
 				double newHeight = initialHeight * (opposite.y - nearestPoint.y) / (opposite.y - initialPoint.y);
 				getGraphicalRepresentation().setSize(new FGEDimension(initialWidth - offset.width, newHeight - offset.height));
 				getGraphicalRepresentation().setLocation(
 						new FGEPoint(initialShapePosition.x, initialShapePosition.y - (newHeight - initialHeight)));
 			} else if (cardinalDirection == SimplifiedCardinalDirection.SOUTH) {
-				FGEPoint opposite = Shape.NORTH;
+				FGEPoint opposite = ShapeSpecification.NORTH;
 				double newHeight = initialHeight * (opposite.y - nearestPoint.y) / (opposite.y - initialPoint.y);
 				getGraphicalRepresentation().setSize(new FGEDimension(initialWidth - offset.width, newHeight - offset.height));
 			} else if (cardinalDirection == SimplifiedCardinalDirection.WEST) {
-				FGEPoint opposite = Shape.EAST;
+				FGEPoint opposite = ShapeSpecification.EAST;
 				double newWidth = initialWidth * (opposite.x - nearestPoint.x) / (opposite.x - initialPoint.x);
 				getGraphicalRepresentation().setSize(new FGEDimension(newWidth - offset.width, initialHeight - offset.height));
 				getGraphicalRepresentation().setLocation(
 						new FGEPoint(initialShapePosition.x - (newWidth - initialWidth), initialShapePosition.y));
 			} else if (cardinalDirection == SimplifiedCardinalDirection.EAST) {
-				FGEPoint opposite = Shape.WEST;
+				FGEPoint opposite = ShapeSpecification.WEST;
 				double newWidth = initialWidth * (opposite.x - nearestPoint.x) / (opposite.x - initialPoint.x);
 				getGraphicalRepresentation().setSize(new FGEDimension(newWidth - offset.width, initialHeight - offset.height));
 			}

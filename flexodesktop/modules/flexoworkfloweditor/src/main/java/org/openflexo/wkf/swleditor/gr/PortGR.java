@@ -26,7 +26,7 @@ import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.geom.area.FGEArea;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.wkf.ws.FlexoPort;
 import org.openflexo.icon.WKFIconLibrary;
 import org.openflexo.wkf.WKFPreferences;

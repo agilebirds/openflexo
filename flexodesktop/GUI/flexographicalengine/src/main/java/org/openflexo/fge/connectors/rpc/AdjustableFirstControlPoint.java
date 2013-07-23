@@ -45,8 +45,7 @@ public class AdjustableFirstControlPoint extends RectPolylinAdjustableControlPoi
 	@Override
 	public FGEArea getDraggingAuthorizedArea() {
 		AffineTransform at1 = FGEUtils.convertNormalizedCoordinatesAT(getNode().getStartNode(), getNode());
-		FGEArea startArea = getNode().getStartNode().getGraphicalRepresentation().getShape().getShape(getNode().getStartNode())
-				.transform(at1);
+		FGEArea startArea = getNode().getStartNode().getFGEShape().transform(at1);
 		return new FGESubstractionArea(new FGEPlane(), startArea, false);
 	}
 

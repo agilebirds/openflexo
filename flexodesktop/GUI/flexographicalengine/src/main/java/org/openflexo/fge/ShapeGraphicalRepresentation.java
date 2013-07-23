@@ -27,8 +27,8 @@ import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl.ShapeBorderImpl;
-import org.openflexo.fge.shapes.Shape;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.ModelEntity;
@@ -144,15 +144,15 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 
 	public static enum LocationConstraints {
 		/**
-		 * Shape is freely relocatable in parent global bounds (rectangular bounds, don't care about borders nor shape of parent)
+		 * ShapeSpecification is freely relocatable in parent global bounds (rectangular bounds, don't care about borders nor shape of parent)
 		 */
 		FREELY_MOVABLE,
 		/**
-		 * Shape is freely relocatable in parent exact bounds (shape of this GR must be fully located INSIDE parent GR outline)
+		 * ShapeSpecification is freely relocatable in parent exact bounds (shape of this GR must be fully located INSIDE parent GR outline)
 		 */
 		CONTAINED_IN_SHAPE,
 		/**
-		 * Shape is not movable
+		 * ShapeSpecification is not movable
 		 */
 		UNMOVABLE, RELATIVE_TO_PARENT, X_FIXED, Y_FIXED, AREA_CONSTRAINED;
 	}
@@ -393,10 +393,10 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 
 	@Getter(value = SHAPE)
 	@XMLElement
-	public Shape getShape();
+	public ShapeSpecification getShape();
 
 	@Setter(value = SHAPE)
-	public void setShape(Shape aShape);
+	public void setShape(ShapeSpecification aShape);
 
 	@Getter(value = SHADOW_STYLE)
 	@XMLElement

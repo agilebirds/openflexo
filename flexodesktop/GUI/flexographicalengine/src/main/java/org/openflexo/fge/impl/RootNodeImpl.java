@@ -140,7 +140,7 @@ public class RootNodeImpl<M> extends ContainerNodeImpl<M, DrawingGraphicalRepres
 	}
 
 	@Override
-	protected List<? extends ControlArea<?>> rebuildControlAreas() {
+	public List<ControlArea<?>> getControlAreas() {
 		// No control areas are declared for the root node
 		return Collections.emptyList();
 	}

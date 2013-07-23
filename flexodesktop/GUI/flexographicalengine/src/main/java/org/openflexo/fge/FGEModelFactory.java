@@ -40,8 +40,8 @@ import org.openflexo.fge.shapes.Polygon;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.RectangularOctogon;
 import org.openflexo.fge.shapes.RegularPolygon;
-import org.openflexo.fge.shapes.Shape;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.shapes.Square;
 import org.openflexo.fge.shapes.Star;
 import org.openflexo.fge.shapes.Triangle;
@@ -790,13 +790,13 @@ public class FGEModelFactory extends ModelFactory {
 	}
 
 	/**
-	 * Make a new Shape from corresponding ShapeType
+	 * Make a new ShapeSpecification from corresponding ShapeType
 	 * 
 	 * @param type
-	 * @return a newly created Shape
+	 * @return a newly created ShapeSpecification
 	 */
-	public Shape makeShape(ShapeType type) {
-		Shape returned = null;
+	public ShapeSpecification makeShape(ShapeType type) {
+		ShapeSpecification returned = null;
 		if (type == ShapeType.SQUARE) {
 			returned = newInstance(Square.class);
 		} else if (type == ShapeType.RECTANGLE) {

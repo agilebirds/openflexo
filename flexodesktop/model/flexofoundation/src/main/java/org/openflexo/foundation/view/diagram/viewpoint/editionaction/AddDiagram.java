@@ -145,7 +145,7 @@ public class AddDiagram extends DiagramAction<Diagram> {
 				logger.warning("Sorry, shape pattern role is undefined");
 				return newShema;
 			}
-			// logger.info("Shape pattern role: " + shapePatternRole);
+			// logger.info("ShapeSpecification pattern role: " + shapePatternRole);
 			EditionPatternInstance newEditionPatternInstance = getProject().makeNewEditionPatternInstance(getEditionPattern());
 			DiagramShape newShape = new DiagramShape(newShema);
 			if (getEditionPatternInstance().getPatternActor(shapePatternRole) instanceof DiagramShape) {

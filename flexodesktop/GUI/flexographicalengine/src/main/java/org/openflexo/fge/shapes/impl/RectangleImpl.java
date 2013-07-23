@@ -27,9 +27,10 @@ import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGERoundRectangle;
 import org.openflexo.fge.geom.FGEShape;
+import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.shapes.Rectangle;
 
-public class RectangleImpl extends ShapeImpl implements Rectangle {
+public class RectangleImpl extends ShapeSpecificationImpl implements Rectangle {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(RectangleImpl.class.getPackage().getName());
@@ -61,7 +62,7 @@ public class RectangleImpl extends ShapeImpl implements Rectangle {
 	}
 
 	@Override
-	protected FGEShape<?> makeShape(ShapeNode<?> node) {
+	public FGEShape<?> makeFGEShape(ShapeNode<?> node) {
 		if (node != null && isRounded) {
 			double arcwidth = arcSize / node.getWidth();
 			double archeight = arcSize / node.getHeight();
@@ -87,9 +88,10 @@ public class RectangleImpl extends ShapeImpl implements Rectangle {
 	 */
 	@Override
 	public void setArcSize(double anArcSize) {
-		if (arcSize != anArcSize) {
+		FGENotification notification = requireChange(RectangleParameters.arcSize, anArcSize);
+		if (notification != null) {
 			arcSize = anArcSize;
-			shapeChanged();
+			hasChanged(notification);
 		}
 	}
 
@@ -100,9 +102,10 @@ public class RectangleImpl extends ShapeImpl implements Rectangle {
 
 	@Override
 	public void setIsRounded(boolean aFlag) {
-		if (isRounded != aFlag) {
+		FGENotification notification = requireChange(RectangleParameters.isRounded, aFlag);
+		if (notification != null) {
 			isRounded = aFlag;
-			shapeChanged();
+			hasChanged(notification);
 		}
 	}
 
@@ -119,11 +122,11 @@ public class RectangleImpl extends ShapeImpl implements Rectangle {
 		}
 	}*/
 
-	@Override
+	/*@Override
 	public void notifyObjectResized() {
 		if (getIsRounded()) {
 			setArcSize(arcSize);
 		}
-	}
+	}*/
 
 }

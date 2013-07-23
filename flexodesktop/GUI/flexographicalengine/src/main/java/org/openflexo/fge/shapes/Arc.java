@@ -19,6 +19,7 @@
  */
 package org.openflexo.fge.shapes;
 
+import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.geom.FGEArc.ArcType;
 import org.openflexo.fge.shapes.impl.ArcImpl;
 import org.openflexo.model.annotations.Getter;
@@ -38,13 +39,17 @@ import org.openflexo.model.annotations.XMLElement;
 @ModelEntity
 @ImplementationClass(ArcImpl.class)
 @XMLElement(xmlTag = "ArcShape")
-public interface Arc extends Shape {
+public interface Arc extends ShapeSpecification {
 
 	// Property keys
 
 	public static final String ANGLE_EXTENT = "angleExtent";
 	public static final String ANGLE_START = "angleStart";
 	public static final String ARC_TYPE = "arcType";
+
+	public static enum ArcParameters implements GRParameter {
+		angleExtent, angleStart, arcType;
+	}
 
 	// *******************************************************************************
 	// * Properties

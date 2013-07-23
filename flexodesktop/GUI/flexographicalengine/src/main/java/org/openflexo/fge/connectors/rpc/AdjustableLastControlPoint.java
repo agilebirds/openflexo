@@ -45,7 +45,7 @@ public class AdjustableLastControlPoint extends RectPolylinAdjustableControlPoin
 	@Override
 	public FGEArea getDraggingAuthorizedArea() {
 		AffineTransform at2 = FGEUtils.convertNormalizedCoordinatesAT(getNode().getEndNode(), getNode());
-		FGEArea endArea = getNode().getEndNode().getGraphicalRepresentation().getShape().getShape(getNode().getEndNode()).transform(at2);
+		FGEArea endArea = getNode().getEndNode().getFGEShape().transform(at2);
 		return new FGESubstractionArea(new FGEPlane(), endArea, false);
 	}
 

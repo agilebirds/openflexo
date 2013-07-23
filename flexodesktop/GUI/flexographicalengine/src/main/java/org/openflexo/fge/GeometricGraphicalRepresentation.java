@@ -19,12 +19,8 @@
  */
 package org.openflexo.fge;
 
-import java.awt.Rectangle;
-import java.util.List;
-
-import org.openflexo.fge.cp.ControlPoint;
+import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.geom.area.FGEArea;
-import org.openflexo.fge.graphics.FGEGeometricGraphics;
 import org.openflexo.fge.impl.GeometricGraphicalRepresentationImpl;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -84,7 +80,15 @@ public interface GeometricGraphicalRepresentation extends GraphicalRepresentatio
 	// * Utils
 	// *******************************************************************************
 
-	public Rectangle getBounds(double scale);
+	public boolean getNoStroke();
+
+	public void setNoStroke(boolean noStroke);
+
+	public BackgroundStyleType getBackgroundType();
+
+	public void setBackgroundType(BackgroundStyleType backgroundType);
+
+	/*public Rectangle getBounds(double scale);
 
 	public void paintGeometricObject(FGEGeometricGraphics graphics);
 
@@ -92,6 +96,6 @@ public interface GeometricGraphicalRepresentation extends GraphicalRepresentatio
 
 	public List<ControlPoint> rebuildControlPoints();
 
-	public void notifyGeometryChanged();
+	public void notifyGeometryChanged();*/
 
 }

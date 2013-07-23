@@ -21,7 +21,7 @@ package org.openflexo.wkf.swleditor.gr;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.wkf.WKFStockObject;
 import org.openflexo.wkf.grsetup.StockObjectGRSetup;
 import org.openflexo.wkf.swleditor.SwimmingLaneRepresentation;

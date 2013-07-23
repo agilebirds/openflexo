@@ -36,7 +36,7 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGEShape;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 
 public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygon> {
 
@@ -119,7 +119,7 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		super.mouseMoved(e);
-		// System.out.println("Shape=" + getShape());
+		// System.out.println("ShapeSpecification=" + getShape());
 		if (isBuildingPoints && getShape().getPointsNb() > 0) {
 			FGEPoint newPoint = getPoint(e);
 			// logger.info("move last point to " + newPoint);

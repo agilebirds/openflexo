@@ -36,7 +36,7 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.shapes.Rectangle;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.wkf.FlexoLevel;
 import org.openflexo.foundation.wkf.WKFAnnotation;
 import org.openflexo.foundation.wkf.edge.WKFAssociation;

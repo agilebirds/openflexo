@@ -1245,7 +1245,7 @@ public class FGERectPolylin extends FGEPolylin {
 			   logger.info("endArea="+endArea);
 			   logger.info("resultingStartArea="+resultingStartArea);
 			   logger.info("resultingEndArea="+resultingEndArea);
-			   logger.info("Shape is "+intersect);*/
+			   logger.info("ShapeSpecification is "+intersect);*/
 
 			if (intersect instanceof FGEShape) {
 				center = ((FGEShape) intersect).getCenter();

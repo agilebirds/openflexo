@@ -145,7 +145,7 @@ public interface ForegroundStyle extends FGEStyle {
 
 		/**
 		 * Returns the array representing the lengths of the dash segments. Alternate entries in the array represent the user space lengths
-		 * of the opaque and transparent segments of the dashes. As the pen moves along the outline of the <code>Shape</code> to be stroked,
+		 * of the opaque and transparent segments of the dashes. As the pen moves along the outline of the <code>ShapeSpecification</code> to be stroked,
 		 * the user space distance that the pen travels is accumulated. The distance value is used to index into the dash array. The pen is
 		 * opaque when its current cumulative distance maps to an even element of the dash array and transparent otherwise.
 		 * 

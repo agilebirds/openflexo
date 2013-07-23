@@ -66,7 +66,7 @@ public class AdjustableLastSegment extends RectPolylinAdjustableSegment {
 		previousOrientation = previousSegment.getApproximatedOrientation();
 
 		AffineTransform at2 = FGEUtils.convertNormalizedCoordinatesAT(getNode().getEndNode(), getNode());
-		endArea = getNode().getEndNode().getGraphicalRepresentation().getShape().getOutline(getNode().getEndNode()).transform(at2);
+		endArea = getNode().getEndNode().getFGEShapeOutline().transform(at2);
 		FGEArea orthogonalPerspectiveArea = endArea.getOrthogonalPerspectiveArea(currentOrientation.getOpposite());
 		if (!previousSegment.containsPoint(currentSegment.getP2())) {
 			FGEHalfPlane hp = new FGEHalfPlane(previousSegment, currentSegment.getP2());

@@ -34,6 +34,6 @@ import org.openflexo.model.annotations.XMLElement;
 @ModelEntity
 @ImplementationClass(OvalImpl.class)
 @XMLElement(xmlTag = "OvalShape")
-public interface Oval extends Shape {
+public interface Oval extends ShapeSpecification {
 
 }

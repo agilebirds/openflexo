@@ -19,14 +19,14 @@ import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
-import org.openflexo.fge.shapes.Shape;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fib.controller.FIBController;
 import org.openflexo.fib.model.FIBCustom;
 import org.openflexo.fib.model.FIBCustom.FIBCustomComponent;
 import org.openflexo.swing.CustomPopup.ApplyCancelListener;
 
-public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shape, ShapePreviewPanel> {
+public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<ShapeSpecification, ShapePreviewPanel> {
 
 	private Drawing<RepresentedDrawing> drawing;
 	private DrawingGraphicalRepresentation<RepresentedDrawing> drawingGR;
@@ -47,7 +47,7 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 	private BackgroundStyle backgroundStyle;
 	private ShadowStyle shadowStyle;
 
-	public ShapePreviewPanel(Shape aShape) {
+	public ShapePreviewPanel(ShapeSpecification aShape) {
 		super(new BorderLayout());
 
 		factory = FGEUtils.TOOLS_FACTORY;
@@ -239,11 +239,11 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 
 	}
 
-	public Shape getShape() {
+	public ShapeSpecification getShape() {
 		return shapeGR.getShape();
 	}
 
-	public void setShape(Shape shape) {
+	public void setShape(ShapeSpecification shape) {
 		if (shape != null && (shape != shapeGR.getShape() || !shape.equals(shapeGR.getShape()))) {
 			shapeGR.setShape(shape.clone());
 			/*
@@ -263,22 +263,22 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 	}
 
 	@Override
-	public Shape getEditedObject() {
+	public ShapeSpecification getEditedObject() {
 		return getShape();
 	}
 
 	@Override
-	public void setEditedObject(Shape object) {
+	public void setEditedObject(ShapeSpecification object) {
 		setShape(object);
 	}
 
 	@Override
-	public Shape getRevertValue() {
+	public ShapeSpecification getRevertValue() {
 		return null;
 	}
 
 	@Override
-	public void setRevertValue(Shape object) {
+	public void setRevertValue(ShapeSpecification object) {
 	}
 
 	@Override
@@ -290,8 +290,8 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 	}
 
 	@Override
-	public Class<Shape> getRepresentedType() {
-		return Shape.class;
+	public Class<ShapeSpecification> getRepresentedType() {
+		return ShapeSpecification.class;
 	}
 
 	@Override
@@ -302,7 +302,7 @@ public class ShapePreviewPanel extends JPanel implements FIBCustomComponent<Shap
 	}
 
 	public class RepresentedShape {
-		public Shape getRepresentedShape() {
+		public ShapeSpecification getRepresentedShape() {
 			return getShape();
 		}
 	}

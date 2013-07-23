@@ -76,7 +76,7 @@ public class AddShape extends AddShemaElementAction<DiagramShape> {
 		if (getAssignation().isSet()) {
 			out.append(getAssignation().toString() + " = (", context);
 		}
-		out.append(getClass().getSimpleName() + " conformTo Shape from " + getModelSlot().getName() + " {" + StringUtils.LINE_SEPARATOR,
+		out.append(getClass().getSimpleName() + " conformTo ShapeSpecification from " + getModelSlot().getName() + " {" + StringUtils.LINE_SEPARATOR,
 				context);
 		out.append(getGraphicalElementSpecificationFMLRepresentation(context), context);
 		out.append("}", context);

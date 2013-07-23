@@ -38,8 +38,8 @@ import org.openflexo.fge.shapes.Oval;
 import org.openflexo.fge.shapes.Polygon;
 import org.openflexo.fge.shapes.Rectangle;
 import org.openflexo.fge.shapes.RegularPolygon;
-import org.openflexo.fge.shapes.Shape;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.shapes.Square;
 import org.openflexo.fge.shapes.Star;
 import org.openflexo.fge.shapes.Triangle;
@@ -60,7 +60,7 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
  * @author sguerin
  * 
  */
-public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomComponent<Shape, FIBShapeSelector> {
+public class FIBShapeSelector extends CustomPopup<ShapeSpecification> implements FIBCustomComponent<ShapeSpecification, FIBShapeSelector> {
 
 	static final Logger logger = Logger.getLogger(FIBShapeSelector.class.getPackage().getName());
 
@@ -71,12 +71,12 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 
 	private static final FGEModelFactory SHAPE_FACTORY = FGEUtils.TOOLS_FACTORY;
 
-	private Shape _revertValue;
+	private ShapeSpecification _revertValue;
 
 	protected ShapeDetailsPanel _selectorPanel;
 	private ShapePreviewPanel frontComponent;
 
-	public FIBShapeSelector(Shape editedObject) {
+	public FIBShapeSelector(ShapeSpecification editedObject) {
 		super(editedObject);
 		setRevertValue(editedObject != null ? editedObject.clone() : null);
 		setFocusable(true);
@@ -95,7 +95,7 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 	}
 
 	@Override
-	public void setRevertValue(Shape oldValue) {
+	public void setRevertValue(ShapeSpecification oldValue) {
 		// WARNING: we need here to clone to keep track back of previous data
 		// !!!
 		if (oldValue != null) {
@@ -109,22 +109,22 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 	}
 
 	@Override
-	public Shape getRevertValue() {
+	public ShapeSpecification getRevertValue() {
 		return _revertValue;
 	}
 
 	@Override
-	protected ResizablePanel createCustomPanel(Shape editedObject) {
+	protected ResizablePanel createCustomPanel(ShapeSpecification editedObject) {
 		_selectorPanel = makeCustomPanel(editedObject);
 		return _selectorPanel;
 	}
 
-	protected ShapeDetailsPanel makeCustomPanel(Shape editedObject) {
+	protected ShapeDetailsPanel makeCustomPanel(ShapeSpecification editedObject) {
 		return new ShapeDetailsPanel(editedObject);
 	}
 
 	@Override
-	public void updateCustomPanel(Shape editedObject) {
+	public void updateCustomPanel(ShapeSpecification editedObject) {
 		if (_selectorPanel != null) {
 			_selectorPanel.update();
 		}
@@ -141,7 +141,7 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 	public static class ShapeFactory implements HasPropertyChangeSupport {
 		private static final String DELETED = "deleted";
 
-		private Shape shape;
+		private ShapeSpecification shape;
 
 		private Rectangle rectangle;
 		private Square square;
@@ -156,7 +156,7 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 
 		private PropertyChangeSupport pcSupport;
 
-		public ShapeFactory(Shape shape) {
+		public ShapeFactory(ShapeSpecification shape) {
 			pcSupport = new PropertyChangeSupport(this);
 			this.shape = shape;
 		}
@@ -176,12 +176,12 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 			return DELETED;
 		}
 
-		public Shape getShape() {
+		public ShapeSpecification getShape() {
 			return shape;
 		}
 
-		public void setShape(Shape shape) {
-			Shape oldShape = this.shape;
+		public void setShape(ShapeSpecification shape) {
+			ShapeSpecification oldShape = this.shape;
 			this.shape = shape;
 			pcSupport.firePropertyChange("shape", shape, shape);
 		}
@@ -278,7 +278,7 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 		private CustomFIBController controller;
 		private ShapeFactory shapeFactory;
 
-		protected ShapeDetailsPanel(Shape backgroundStyle) {
+		protected ShapeDetailsPanel(ShapeSpecification backgroundStyle) {
 			super();
 
 			shapeFactory = new ShapeFactory(backgroundStyle);
@@ -420,8 +420,8 @@ public class FIBShapeSelector extends CustomPopup<Shape> implements FIBCustomCom
 	}
 
 	@Override
-	public Class<Shape> getRepresentedType() {
-		return Shape.class;
+	public Class<ShapeSpecification> getRepresentedType() {
+		return ShapeSpecification.class;
 	}
 
 }

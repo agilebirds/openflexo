@@ -27,7 +27,7 @@ import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ShapePainter;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.wkf.WKFDataSource;

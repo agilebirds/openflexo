@@ -12,7 +12,7 @@ import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.connectors.ConnectorSpecification;
 import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
-import org.openflexo.fge.cp.ControlPoint;
+import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
@@ -21,7 +21,7 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
-import org.openflexo.fge.shapes.Shape;
+import org.openflexo.fge.shapes.impl.Shape;
 
 /**
  * This is an instance of a {@link ConnectorSpecification}. As it, it is attached to a {@link ConnectorNode}. A {@link Connector} observes
@@ -42,10 +42,10 @@ public abstract class Connector<CS extends ConnectorSpecification> implements Ob
 
 	protected FGERectangle NORMALIZED_BOUNDS = new FGERectangle(0, 0, 1, 1, Filling.FILLED);
 
-	private Shape startShape;
+	private Shape<?> startShape;
 	private FGEDimension startShapeDimension;
 	private FGEPoint startShapeLocation;
-	private Shape endShape;
+	private Shape<?> endShape;
 	private FGEDimension endShapeDimension;
 	private FGEPoint endShapeLocation;
 	private FGERectangle knownConnectorUsedBounds;
@@ -58,15 +58,15 @@ public abstract class Connector<CS extends ConnectorSpecification> implements Ob
 	public void delete() {
 		if (getConnectorSpecification() != null) {
 			getConnectorSpecification().deleteObserver(this);
-			connectorNode = null;
-			startShape = null;
-			startShape = null;
-			startShapeLocation = null;
-			endShape = null;
-			endShape = null;
-			endShape = null;
-			knownConnectorUsedBounds = null;
 		}
+		connectorNode = null;
+		startShape = null;
+		startShape = null;
+		startShapeLocation = null;
+		endShape = null;
+		endShape = null;
+		endShape = null;
+		knownConnectorUsedBounds = null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -109,11 +109,11 @@ public abstract class Connector<CS extends ConnectorSpecification> implements Ob
 	public abstract void drawConnector(FGEConnectorGraphics g);
 
 	/**
-	 * Retrieve all control points managing this connector
+	 * Retrieve all control area used to manage this connector
 	 * 
 	 * @return
 	 */
-	public abstract List<ControlPoint> getControlPoints();
+	public abstract List<? extends ControlArea<?>> getControlAreas();
 
 	public abstract FGEPoint getMiddleSymbolLocation();
 

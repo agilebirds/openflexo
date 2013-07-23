@@ -104,13 +104,13 @@ public class RectPolylinConnector extends Connector<RectPolylinConnectorSpecific
 		potentialPolylin = new Vector<FGERectPolylin>();
 	}
 
-	@Override
 	public List<ControlPoint> getControlPoints() {
 		// TODO: perfs issue : do not update all the time !!!
 		updateLayout();
 		return controlPoints;
 	}
 
+	@Override
 	public List<? extends ControlArea<?>> getControlAreas() {
 		if (connectorNode.getGraphicalRepresentation().getMiddleSymbol() == MiddleSymbolType.NONE && controlAreas.size() == 0) {
 			return controlPoints;
@@ -2126,7 +2126,7 @@ public class RectPolylinConnector extends Connector<RectPolylinConnectorSpecific
 	}
 
 	public void setFixedStartLocation(FGEPoint aPoint) {
-		FGEShape<?> startArea = getStartNode().getShape().getOutline(getStartNode());
+		FGEShape<?> startArea = getStartNode().getShape().getOutline();
 		aPoint = startArea.getNearestPoint(aPoint);
 		getConnectorSpecification().setFixedStartLocation(aPoint);
 	}
@@ -2136,7 +2136,7 @@ public class RectPolylinConnector extends Connector<RectPolylinConnectorSpecific
 	}
 
 	public void setFixedEndLocation(FGEPoint aPoint) {
-		FGEShape<?> endArea = getEndNode().getShape().getOutline(getEndNode());
+		FGEShape<?> endArea = getEndNode().getShape().getOutline();
 		aPoint = endArea.getNearestPoint(aPoint);
 		getConnectorSpecification().setFixedEndLocation(aPoint);
 	}

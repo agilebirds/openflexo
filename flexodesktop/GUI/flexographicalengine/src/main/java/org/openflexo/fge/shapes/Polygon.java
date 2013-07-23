@@ -21,6 +21,7 @@ package org.openflexo.fge.shapes;
 
 import java.util.List;
 
+import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.shapes.impl.PolygonImpl;
 import org.openflexo.model.annotations.Adder;
@@ -45,11 +46,15 @@ import org.openflexo.model.annotations.XMLElement;
 @ModelEntity
 @ImplementationClass(PolygonImpl.class)
 @XMLElement(xmlTag = "CustomPolygonShape")
-public interface Polygon extends Shape {
+public interface Polygon extends ShapeSpecification {
 
 	// Property keys
 
 	public static final String POINTS = "points";
+
+	public static enum PolygonParameters implements GRParameter {
+		points;
+	}
 
 	// *******************************************************************************
 	// * Properties

@@ -22,7 +22,7 @@ package org.openflexo.fge;
 
 import java.io.File;
 
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.widget.FIBShapeSelector;
 import org.openflexo.fge.view.widget.FIBShapeSelector.ShapeFactory;
 import org.openflexo.fib.editor.FIBAbstractEditor;

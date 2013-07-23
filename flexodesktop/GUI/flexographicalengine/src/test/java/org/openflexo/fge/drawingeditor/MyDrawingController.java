@@ -33,7 +33,7 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawShapeAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEView;
 import org.openflexo.inspector.selection.EmptySelection;

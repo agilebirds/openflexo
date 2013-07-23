@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.GraphicalFlexoObserver;

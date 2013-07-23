@@ -46,7 +46,7 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.area.FGEHalfLine;
 import org.openflexo.fge.graphics.DecorationPainter;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.ConvertedIntoLocalObject;
 import org.openflexo.foundation.DataModification;

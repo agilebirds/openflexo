@@ -19,6 +19,7 @@
  */
 package org.openflexo.fge.shapes;
 
+import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.shapes.impl.RectangleImpl;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -37,12 +38,16 @@ import org.openflexo.model.annotations.XMLElement;
 @ModelEntity
 @ImplementationClass(RectangleImpl.class)
 @XMLElement(xmlTag = "RectangleShape")
-public interface Rectangle extends Shape {
+public interface Rectangle extends ShapeSpecification {
 
 	// Property keys
 
 	public static final String IS_ROUNDED = "isRounded";
 	public static final String ARC_SIZE = "arcSize";
+
+	public static enum RectangleParameters implements GRParameter {
+		isRounded, arcSize;
+	}
 
 	// *******************************************************************************
 	// * Properties

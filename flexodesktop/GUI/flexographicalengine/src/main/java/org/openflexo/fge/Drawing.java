@@ -36,6 +36,7 @@ import org.openflexo.fge.connectors.ConnectorSpecification;
 import org.openflexo.fge.connectors.impl.Connector;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
+import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -43,11 +44,13 @@ import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.graphics.DecorationPainter;
+import org.openflexo.fge.graphics.FGEGeometricGraphics;
 import org.openflexo.fge.graphics.FGEGraphics;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.impl.DrawingTreeNodeImpl;
-import org.openflexo.fge.shapes.Shape;
+import org.openflexo.fge.shapes.ShapeSpecification;
+import org.openflexo.fge.shapes.impl.Shape;
 
 /**
  * This interface is implemented by all objects representing a graphical drawing<br>
@@ -299,6 +302,11 @@ public interface Drawing<M> {
 	}
 
 	public interface ShapeNode<O> extends ContainerNode<O, ShapeGraphicalRepresentation> {
+
+		public ShapeSpecification getShapeSpecification();
+
+		public Shape<?> getShape();
+
 		public double getUnscaledViewWidth();
 
 		public double getUnscaledViewHeight();
@@ -336,9 +344,9 @@ public interface Drawing<M> {
 
 		public boolean isPointInsideShape(FGEPoint aPoint);
 
-		public Shape getShape();
-
 		public FGEShape<?> getFGEShape();
+
+		public FGEShape<?> getFGEShapeOutline();
 
 		public void notifyShapeChanged();
 
@@ -498,6 +506,17 @@ public interface Drawing<M> {
 	}
 
 	public interface GeometricNode<O> extends DrawingTreeNode<O, GeometricGraphicalRepresentation> {
+
+		public Rectangle getBounds(double scale);
+
+		public void paintGeometricObject(FGEGeometricGraphics graphics);
+
+		public List<ControlPoint> getControlPoints();
+
+		public List<ControlPoint> rebuildControlPoints();
+
+		public void notifyGeometryChanged();
+
 	}
 
 	// public DrawingGraphicalRepresentation getDrawingGraphicalRepresentation();

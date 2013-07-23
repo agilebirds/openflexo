@@ -82,7 +82,7 @@ public class CurveConnector extends Connector<CurveConnectorSpecification> {
 	}
 
 	@Override
-	public List<ControlPoint> getControlPoints() {
+	public List<ControlPoint> getControlAreas() {
 		// TODO: perfs issue : do not update all the time !!!
 		updateControlPoints();
 		return controlPoints;
@@ -103,8 +103,7 @@ public class CurveConnector extends Connector<CurveConnectorSpecification> {
 
 				FGEPoint centerOfEndObjectSeenFromStartObject = FGEUtils.convertNormalizedPoint(getEndNode(), new FGEPoint(0.5, 0.5),
 						getStartNode());
-				setCp1RelativeToStartObject(getStartNode().getShape()
-						.outlineIntersect(centerOfEndObjectSeenFromStartObject, getStartNode()));
+				setCp1RelativeToStartObject(getStartNode().getShape().outlineIntersect(centerOfEndObjectSeenFromStartObject));
 				if (getCp1RelativeToStartObject() == null) {
 					logger.warning("outlineIntersect() returned null");
 					setCp1RelativeToStartObject(new FGEPoint(0.5, 0.5));
@@ -112,7 +111,7 @@ public class CurveConnector extends Connector<CurveConnectorSpecification> {
 
 				FGEPoint centerOfStartObjectSeenFromEndObject = FGEUtils.convertNormalizedPoint(getStartNode(), new FGEPoint(0.5, 0.5),
 						getEndNode());
-				setCp2RelativeToEndObject(getEndNode().getShape().outlineIntersect(centerOfStartObjectSeenFromEndObject, getEndNode()));
+				setCp2RelativeToEndObject(getEndNode().getShape().outlineIntersect(centerOfStartObjectSeenFromEndObject));
 				if (getCp2RelativeToEndObject() == null) {
 					logger.warning("outlineIntersect() returned null");
 					setCp2RelativeToEndObject(new FGEPoint(0.5, 0.5));
@@ -126,7 +125,7 @@ public class CurveConnector extends Connector<CurveConnectorSpecification> {
 			if (cp1 != null) {
 				newP1 = cp1.getPoint();
 			}
-			setCp1RelativeToStartObject(getStartNode().getShape().outlineIntersect(getCp1RelativeToStartObject(), getStartNode()));
+			setCp1RelativeToStartObject(getStartNode().getShape().outlineIntersect(getCp1RelativeToStartObject()));
 			if (getCp1RelativeToStartObject() != null) {
 				newP1 = FGEUtils.convertNormalizedPoint(getStartNode(), getCp1RelativeToStartObject(), connectorNode);
 			}
@@ -134,7 +133,7 @@ public class CurveConnector extends Connector<CurveConnectorSpecification> {
 			if (cp2 != null) {
 				newP2 = cp2.getPoint();
 			}
-			setCp2RelativeToEndObject(getEndNode().getShape().outlineIntersect(getCp2RelativeToEndObject(), getEndNode()));
+			setCp2RelativeToEndObject(getEndNode().getShape().outlineIntersect(getCp2RelativeToEndObject()));
 			if (getCp2RelativeToEndObject() != null) {
 				newP2 = FGEUtils.convertNormalizedPoint(getEndNode(), getCp2RelativeToEndObject(), connectorNode);
 			}
@@ -155,14 +154,14 @@ public class CurveConnector extends Connector<CurveConnectorSpecification> {
 			updateCPPositionIfNeeded();
 
 			FGEPoint cpPositionSeenFromStartObject = FGEUtils.convertNormalizedPoint(connectorNode, getCpPosition(), getStartNode());
-			setCp1RelativeToStartObject(getStartNode().getShape().outlineIntersect(cpPositionSeenFromStartObject, getStartNode()));
+			setCp1RelativeToStartObject(getStartNode().getShape().outlineIntersect(cpPositionSeenFromStartObject));
 			if (getCp1RelativeToStartObject() == null) {
 				logger.warning("outlineIntersect() returned null");
 				setCp1RelativeToStartObject(new FGEPoint(0.5, 0.5));
 			}
 
 			FGEPoint cpPositionSeenFromEndObject = FGEUtils.convertNormalizedPoint(connectorNode, getCpPosition(), getEndNode());
-			setCp2RelativeToEndObject(getEndNode().getShape().outlineIntersect(cpPositionSeenFromEndObject, getEndNode()));
+			setCp2RelativeToEndObject(getEndNode().getShape().outlineIntersect(cpPositionSeenFromEndObject));
 			if (getCp2RelativeToEndObject() == null) {
 				logger.warning("outlineIntersect() returned null");
 				setCp2RelativeToEndObject(new FGEPoint(0.5, 0.5));
@@ -313,14 +312,14 @@ public class CurveConnector extends Connector<CurveConnectorSpecification> {
 
 	private void updateFromNewCPPosition() {
 		FGEPoint cpPositionSeenFromStartObject = FGEUtils.convertNormalizedPoint(connectorNode, getCpPosition(), getStartNode());
-		setCp1RelativeToStartObject(getStartNode().getShape().outlineIntersect(cpPositionSeenFromStartObject, getStartNode()));
+		setCp1RelativeToStartObject(getStartNode().getShape().outlineIntersect(cpPositionSeenFromStartObject));
 		if (getCp1RelativeToStartObject() == null) {
 			logger.warning("outlineIntersect() returned null");
 			setCp1RelativeToStartObject(new FGEPoint(0.5, 0.5));
 		}
 
 		FGEPoint cpPositionSeenFromEndObject = FGEUtils.convertNormalizedPoint(connectorNode, getCpPosition(), getEndNode());
-		setCp2RelativeToEndObject(getEndNode().getShape().outlineIntersect(cpPositionSeenFromEndObject, getEndNode()));
+		setCp2RelativeToEndObject(getEndNode().getShape().outlineIntersect(cpPositionSeenFromEndObject));
 		if (getCp2RelativeToEndObject() == null) {
 			logger.warning("outlineIntersect() returned null");
 			setCp2RelativeToEndObject(new FGEPoint(0.5, 0.5));

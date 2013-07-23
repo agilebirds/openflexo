@@ -775,8 +775,8 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 	}
 
 	/**
-	 * Returns an iterator object that iterates along the boundary of the <code>Shape</code> and provides access to the geometry of the
-	 * outline of the <code>Shape</code>. Only SEG_MOVETO, SEG_LINETO, and SEG_CLOSE point types are returned by the iterator. Since
+	 * Returns an iterator object that iterates along the boundary of the <code>ShapeSpecification</code> and provides access to the geometry of the
+	 * outline of the <code>ShapeSpecification</code>. Only SEG_MOVETO, SEG_LINETO, and SEG_CLOSE point types are returned by the iterator. Since
 	 * polygons are already flat, the <code>flatness</code> parameter is ignored. An optional <code>AffineTransform</code> can be specified
 	 * in which case the coordinates returned in the iteration are transformed accordingly.
 	 * 
@@ -787,7 +787,7 @@ public class FGEPolygon implements FGEGeometricObject<FGEPolygon>, FGEShape<FGEP
 	 *            the maximum amount that the control points for a given curve can vary from colinear before a subdivided curve is replaced
 	 *            by a straight line connecting the endpoints. Since polygons are already flat the <code>flatness</code> parameter is
 	 *            ignored.
-	 * @return a <code>PathIterator</code> object that provides access to the <code>Shape</code> object's geometry.
+	 * @return a <code>PathIterator</code> object that provides access to the <code>ShapeSpecification</code> object's geometry.
 	 */
 	@Override
 	public PathIterator getPathIterator(AffineTransform at, double flatness) {

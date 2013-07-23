@@ -61,8 +61,8 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.notifications.GraphicalObjectsHierarchyRebuildEnded;
 import org.openflexo.fge.notifications.GraphicalObjectsHierarchyRebuildStarted;
-import org.openflexo.fge.shapes.Shape;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.ConnectorView;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEPaintManager;
@@ -89,7 +89,7 @@ public class DrawingController<M> extends Observable implements Observer {
 	private BackgroundStyle currentBackgroundStyle;
 	private TextStyle currentTextStyle;
 	private ShadowStyle currentShadowStyle;
-	private Shape currentShape;
+	private ShapeSpecification currentShape;
 
 	private ScalePanel _scalePanel;
 	private EditorToolbox toolbox;
@@ -270,11 +270,11 @@ public class DrawingController<M> extends Observable implements Observer {
 		this.currentShadowStyle = currentShadowStyle;
 	}
 
-	public Shape getCurrentShape() {
+	public ShapeSpecification getCurrentShape() {
 		return currentShape;
 	}
 
-	public void setCurrentShape(Shape currentShape) {
+	public void setCurrentShape(ShapeSpecification currentShape) {
 		this.currentShape = currentShape;
 	}
 

@@ -400,7 +400,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 
 	@Override
 	public void update(Observable observable, Object notification) {
-		// System.out.println("Shape received "+notification+" from "+observable);
+		// System.out.println("ShapeSpecification received "+notification+" from "+observable);
 
 		super.update(observable, notification);
 
@@ -474,8 +474,8 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	}
 
 	@Override
-	public List<ControlPoint> getControlAreas() {
-		return getConnector().getControlPoints();
+	public List<? extends ControlArea<?>> getControlAreas() {
+		return getConnector().getControlAreas();
 	}
 
 	@Override

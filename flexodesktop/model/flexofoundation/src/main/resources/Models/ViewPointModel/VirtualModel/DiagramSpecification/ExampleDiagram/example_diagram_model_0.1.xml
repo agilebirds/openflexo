@@ -103,7 +103,7 @@
    	 <property name="hasFocusedForeground" xmlTag="hasFocusedForeground" attribute="YES"/>
    	 <property name="hasFocusedBackground" xmlTag="hasFocusedBackground" attribute="YES"/>
   	 <property name="border" xmlTag="Border"/>
- 	 <property name="shape" contains="org.openflexo.fge.shapes.Shape"/>
+ 	 <property name="shape" contains="org.openflexo.fge.shapes.ShapeSpecification"/>
    	 <property name="shadowStyle" xmlTag="ShadowStyle"/>
      <property name="isFloatingLabel" xmlTag="isFloatingLabel" attribute="YES"/>
      <property name="allowToLeaveBounds" xmlTag="allowToLeaveBounds" attribute="YES"/>

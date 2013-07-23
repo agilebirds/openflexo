@@ -23,7 +23,7 @@ import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
 
 /**
- * Notify that a Shape has been removed from a OEShema
+ * Notify that a ShapeSpecification has been removed from a OEShema
  * 
  * @author sguerin
  * 

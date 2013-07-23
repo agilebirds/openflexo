@@ -19,6 +19,7 @@
  */
 package org.openflexo.fge.shapes;
 
+import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.shapes.impl.RegularPolygonImpl;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -43,6 +44,10 @@ public interface RegularPolygon extends Polygon {
 
 	public static final String N_POINTS = "nPoints";
 	public static final String START_ANGLE = "startAngle";
+
+	public static enum RegularPolygonParameters implements GRParameter {
+		nPoints, startAngle;
+	}
 
 	// *******************************************************************************
 	// * Properties

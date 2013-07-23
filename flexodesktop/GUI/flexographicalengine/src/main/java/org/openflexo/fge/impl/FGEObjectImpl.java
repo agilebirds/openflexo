@@ -106,7 +106,7 @@ public abstract class FGEObjectImpl extends DefaultInspectableObject implements 
 
 	@Override
 	public void notifyChange(GRParameter parameter) {
-		notifyChange(parameter, null, null);
+		notifyChange(parameter, null, valueForParameter(parameter));
 	}
 
 	@Override
@@ -142,38 +142,9 @@ public abstract class FGEObjectImpl extends DefaultInspectableObject implements 
 	 * @return
 	 */
 	protected FGENotification requireChange(GRParameter parameter, Object value, boolean useEquals) {
-		Class<?> type = getTypeForKey(parameter.name());
-		Object oldValue = null;
-		if (type.isPrimitive()) {
-			if (type == Boolean.TYPE) {
-				oldValue = booleanValueForKey(parameter.name());
-			}
-			if (type == Integer.TYPE) {
-				oldValue = integerValueForKey(parameter.name());
-			}
-			if (type == Short.TYPE) {
-				oldValue = shortValueForKey(parameter.name());
-			}
-			if (type == Long.TYPE) {
-				oldValue = longValueForKey(parameter.name());
-			}
-			if (type == Float.TYPE) {
-				oldValue = floatValueForKey(parameter.name());
-			}
-			if (type == Double.TYPE) {
-				oldValue = doubleValueForKey(parameter.name());
-			}
-			if (type == Byte.TYPE) {
-				oldValue = byteValueForKey(parameter.name());
-			}
-			if (type == Character.TYPE) {
-				oldValue = characterForKey(parameter.name());
-			}
-		} else {
-			oldValue = objectForKey(parameter.name());
-			if (value == oldValue && value != null && !value.getClass().isEnum()) {
-				// logger.warning(parameter.name() + ": require change called for same object: aren't you wrong ???");
-			}
+		Object oldValue = valueForParameter(parameter);
+		if (value == oldValue && value != null && !value.getClass().isEnum()) {
+			// logger.warning(parameter.name() + ": require change called for same object: aren't you wrong ???");
 		}
 		// System.out.println("param: "+parameterKey.name()+" value="+oldValue+" value="+value);
 		if (oldValue == null) {
@@ -197,6 +168,46 @@ public abstract class FGEObjectImpl extends DefaultInspectableObject implements 
 				}
 			}
 		}
+	}
+
+	/**
+	 * Computes value for supplied parameter
+	 * 
+	 * @param parameter
+	 * @return
+	 */
+	protected Object valueForParameter(GRParameter parameter) {
+		Class<?> type = getTypeForKey(parameter.name());
+		Object returned = null;
+		if (type.isPrimitive()) {
+			if (type == Boolean.TYPE) {
+				returned = booleanValueForKey(parameter.name());
+			}
+			if (type == Integer.TYPE) {
+				returned = integerValueForKey(parameter.name());
+			}
+			if (type == Short.TYPE) {
+				returned = shortValueForKey(parameter.name());
+			}
+			if (type == Long.TYPE) {
+				returned = longValueForKey(parameter.name());
+			}
+			if (type == Float.TYPE) {
+				returned = floatValueForKey(parameter.name());
+			}
+			if (type == Double.TYPE) {
+				returned = doubleValueForKey(parameter.name());
+			}
+			if (type == Byte.TYPE) {
+				returned = byteValueForKey(parameter.name());
+			}
+			if (type == Character.TYPE) {
+				returned = characterForKey(parameter.name());
+			}
+		} else {
+			returned = objectForKey(parameter.name());
+		}
+		return returned;
 	}
 
 	@Override

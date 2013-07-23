@@ -20,6 +20,7 @@
 package org.openflexo.fge.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Observable;
@@ -368,7 +369,12 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 	private final <O> void updateGraphicalObjectsHierarchy(DrawingTreeNode<O, ?> dtn) {
 		if (dtn.isInvalidated()) {
 			GRBinding<O, ? extends GraphicalRepresentation> grBinding = dtn.getGRBinding();
-			List<DrawingTreeNode<?, ?>> nodesToRemove = new ArrayList<DrawingTreeNode<?, ?>>(dtn.getChildNodes());
+			List<DrawingTreeNode<?, ?>> nodesToRemove;
+			if (dtn instanceof ContainerNode) {
+				nodesToRemove = new ArrayList<DrawingTreeNode<?, ?>>(((ContainerNode<?, ?>) dtn).getChildNodes());
+			} else {
+				nodesToRemove = Collections.emptyList();
+			}
 			for (GRStructureWalker<O> walker : grBinding.getWalkers()) {
 				walker.startWalking(dtn);
 				walker.walk(dtn.getDrawable());
@@ -415,7 +421,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 	}
 
 	@Override
-	public <O> ShapeNode<O> drawShape(RootNode<?> parentNode, ShapeGRBinding<O> grBinding, O aDrawable) {
+	public <O> ShapeNode<O> drawShape(ContainerNode<?, ?> parentNode, ShapeGRBinding<O> grBinding, O aDrawable) {
 
 		if (parentNode == null) {
 			logger.warning("Cannot register drawable above null parent");

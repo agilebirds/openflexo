@@ -34,7 +34,7 @@ public class CurvedPolylinConnector extends Connector<CurvedPolylinConnectorSpec
 	}
 
 	@Override
-	public List<ControlPoint> getControlPoints() {
+	public List<ControlPoint> getControlAreas() {
 		// TODO: perfs issue : do not update all the time !!!
 		updateControlPoints();
 		return controlPoints;

@@ -168,7 +168,7 @@ public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> {
 
 	@Override
 	public String getDisplayableDescription() {
-		return "Shape" + (getEditionPattern() != null ? " representing " + getEditionPattern() : "");
+		return "ShapeSpecification" + (getEditionPattern() != null ? " representing " + getEditionPattern() : "");
 	}
 
 	public static class DropAndLinkScheme {

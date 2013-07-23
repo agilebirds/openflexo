@@ -23,7 +23,7 @@ import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
 
 /**
- * Notify that a new Shape has been inserted in a OEShema
+ * Notify that a new ShapeSpecification has been inserted in a OEShema
  * 
  * @author sguerin
  * 

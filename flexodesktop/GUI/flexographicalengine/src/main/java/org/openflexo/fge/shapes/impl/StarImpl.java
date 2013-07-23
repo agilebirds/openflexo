@@ -24,9 +24,10 @@ import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGEPolygon;
 import org.openflexo.fge.geom.FGEShape;
+import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.shapes.Star;
 
-public class StarImpl extends ShapeImpl implements Star {
+public class StarImpl extends ShapeSpecificationImpl implements Star {
 
 	private int npoints = 6;
 	private double ratio = 0.5;
@@ -70,9 +71,10 @@ public class StarImpl extends ShapeImpl implements Star {
 
 	@Override
 	public void setNPoints(int pointsNb) {
-		if (pointsNb != npoints) {
+		FGENotification notification = requireChange(StarParameters.nPoints, pointsNb);
+		if (notification != null) {
 			npoints = pointsNb;
-			shapeChanged();
+			hasChanged(notification);
 		}
 	}
 
@@ -83,9 +85,10 @@ public class StarImpl extends ShapeImpl implements Star {
 
 	@Override
 	public void setStartAngle(int anAngle) {
-		if (anAngle != startAngle) {
+		FGENotification notification = requireChange(StarParameters.startAngle, anAngle);
+		if (notification != null) {
 			startAngle = anAngle;
-			shapeChanged();
+			hasChanged(notification);
 		}
 	}
 
@@ -96,14 +99,17 @@ public class StarImpl extends ShapeImpl implements Star {
 
 	@Override
 	public void setRatio(double aRatio) {
-		if (aRatio > 0 && aRatio < 1.0 && ratio != aRatio) {
-			ratio = aRatio;
-			shapeChanged();
+		if (aRatio > 0 && aRatio < 1.0) {
+			FGENotification notification = requireChange(StarParameters.ratio, aRatio);
+			if (notification != null) {
+				ratio = aRatio;
+				hasChanged(notification);
+			}
 		}
 	}
 
 	@Override
-	protected FGEShape<?> makeShape(ShapeNode<?> node) {
+	public FGEShape<?> makeFGEShape(ShapeNode<?> node) {
 		FGEPolygon returned = new FGEPolygon(Filling.FILLED);
 		double startA = getStartAngle() * Math.PI / 180;
 		double angleInterval = Math.PI * 2 / npoints;

@@ -62,7 +62,8 @@ import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.notifications.ShapeChanged;
 import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
-import org.openflexo.fge.shapes.Shape;
+import org.openflexo.fge.shapes.ShapeSpecification;
+import org.openflexo.fge.shapes.impl.Shape;
 
 public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalRepresentation> implements ShapeNode<O> {
 
@@ -83,6 +84,8 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	private DecorationPainter decorationPainter;
 	private ShapePainter shapePainter;
 
+	private Shape<?> shape;
+
 	public ShapeNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, ShapeGraphicalRepresentation> grBinding,
 			ContainerNodeImpl<?, ?> parentNode) {
 		super(drawingImpl, drawable, grBinding, parentNode);
@@ -92,7 +95,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	}
 
 	@Override
-	public Shape getShape() {
+	public ShapeSpecification getShapeSpecification() {
 		if (getGraphicalRepresentation() != null) {
 			return getGraphicalRepresentation().getShape();
 		}
@@ -100,9 +103,25 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	}
 
 	@Override
+	public Shape<?> getShape() {
+		if (shape == null && getGraphicalRepresentation() != null) {
+			shape = getGraphicalRepresentation().getShape().makeShape(this);
+		}
+		return shape;
+	}
+
+	@Override
 	public FGEShape<?> getFGEShape() {
 		if (getShape() != null) {
-			return getShape().getShape(this);
+			return getShape().getShape();
+		}
+		return null;
+	}
+
+	@Override
+	public FGEShape<?> getFGEShapeOutline() {
+		if (getShape() != null) {
+			return getShape().getOutline();
 		}
 		return null;
 	}
@@ -180,7 +199,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	@Override
 	public boolean isPointInsideShape(FGEPoint aPoint) {
-		return getGraphicalRepresentation().getShape().isPointInsideShape(aPoint, this);
+		return getShape().isPointInsideShape(aPoint);
 	}
 
 	@Override
@@ -283,7 +302,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 	@Override
 	public void update(Observable observable, Object notification) {
-		// System.out.println("Shape received "+notification+" from "+observable);
+		// System.out.println("ShapeSpecification received "+notification+" from "+observable);
 
 		super.update(observable, notification);
 
@@ -309,15 +328,16 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 				checkAndUpdateDimensionBoundsIfRequired();
 			} else if (notif.getParameter() == ShapeParameters.locationConstraints
 					|| notif.getParameter() == ShapeParameters.locationConstrainedArea
-					|| notif.getParameter() == ShapeParameters.dimensionConstraintStep) {
+					|| notif.getParameter() == ShapeParameters.dimensionConstraintStep
+					|| notif.getParameter() == ShapeParameters.dimensionConstraints) {
 				checkAndUpdateLocationIfRequired();
-				updateControlAreas();
+				getShape().updateControlPoints();
 			} else if (notif.getParameter() == ShapeParameters.adaptBoundsToContents) {
 				extendBoundsToHostContents();
 			} else if (notif.getParameter() == ShapeParameters.border) {
 				notifyObjectResized();
 			} else if (notif.getParameter() == ShapeParameters.shape || notif.getParameter() == ShapeParameters.shapeType) {
-				updateControlAreas();
+				getShape().updateShape();
 				notifyShapeChanged();
 			}
 
@@ -809,7 +829,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 		boolean isFullyContained = true;
 		FGERectangle containerViewBounds = new FGERectangle(0, 0, getParentNode().getViewWidth(1), getParentNode().getViewHeight(1),
 				Filling.FILLED);
-		for (ControlPoint cp : getGraphicalRepresentation().getShape().getControlPoints()) {
+		for (ControlPoint cp : getShape().getControlPoints()) {
 			Point cpInContainerView = convertLocalNormalizedPointToRemoteViewCoordinates(cp.getPoint(), getParentNode(), 1);
 			FGEPoint preciseCPInContainerView = new FGEPoint(cpInContainerView.x, cpInContainerView.y);
 			if (!containerViewBounds.containsPoint(preciseCPInContainerView)) {
@@ -825,7 +845,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 		FGERectangle drawingViewBounds = new FGERectangle(drawingViewSelection.getX(), drawingViewSelection.getY(),
 				drawingViewSelection.getWidth(), drawingViewSelection.getHeight(), Filling.FILLED);
 		boolean isFullyContained = true;
-		for (ControlPoint cp : getGraphicalRepresentation().getShape().getControlPoints()) {
+		for (ControlPoint cp : getShape().getControlPoints()) {
 			Point cpInContainerView = convertLocalNormalizedPointToRemoteViewCoordinates(cp.getPoint(), getParentNode(), scale);
 			FGEPoint preciseCPInContainerView = new FGEPoint(cpInContainerView.x, cpInContainerView.y);
 			if (!drawingViewBounds.containsPoint(preciseCPInContainerView)) {
@@ -846,7 +866,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	@Override
 	public double getMoveAuthorizedRatio(FGEPoint desiredLocation, FGEPoint initialLocation) {
 		if (isParentLayoutedAsContainer()) {
-			// This object is contained in a Shape acting as container: all locations are valid thus,
+			// This object is contained in a ShapeSpecification acting as container: all locations are valid thus,
 			// container will adapt
 			return 1;
 		}
@@ -872,7 +892,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			logger.warning("getMoveAuthorizedRatio() called for a shape whose initial location wasn't in container shape");
 			return 1;
 		}*/
-		for (ControlPoint cp : getGraphicalRepresentation().getShape().getControlPoints()) {
+		for (ControlPoint cp : getShape().getControlPoints()) {
 			Point currentCPInContainerView = convertLocalNormalizedPointToRemoteViewCoordinates(cp.getPoint(), getParentNode(), 1);
 			FGEPoint initialCPInContainerView = new FGEPoint((int) (currentCPInContainerView.x + initialLocation.x - getX()),
 					(int) (currentCPInContainerView.y + initialLocation.y - getY()));
@@ -994,7 +1014,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 			notifyObjectResized(oldSize);
 			notifyAttributeChanged(ContainerParameters.width, oldWidth, getWidth());
 			notifyAttributeChanged(ContainerParameters.height, oldHeight, getHeight());
-			getGraphicalRepresentation().getShape().notifyObjectResized();
+			// getGraphicalRepresentation().getShape().notifyObjectResized();
 		}
 	}
 
@@ -1454,9 +1474,9 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 
 		if (getGraphicalRepresentation().getShape() != null && getGraphicalRepresentation().getShadowStyle() != null) {
 			if (getGraphicalRepresentation().getShadowStyle().getDrawShadow()) {
-				getGraphicalRepresentation().getShape().paintShadow(this, graphics);
+				getShape().paintShadow(graphics);
 			}
-			getGraphicalRepresentation().getShape().paintShape(this, graphics);
+			getShape().paintShape(graphics);
 		}
 
 		if (shapePainter != null) {
@@ -1666,9 +1686,10 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	 */
 	@Override
 	public void notifyObjectResized(FGEDimension oldSize) {
-		if (getGraphicalRepresentation().getShape() != null) {
+		/*if (getGraphicalRepresentation().getShape() != null) {
 			getGraphicalRepresentation().getShape().notifyObjectResized();
-		}
+		}*/
+		getShape().notifyObjectResized();
 		setChanged();
 		notifyObservers(new ObjectResized(oldSize, getSize()));
 	}
@@ -1717,8 +1738,8 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	}
 
 	@Override
-	protected List<? extends ControlArea<?>> rebuildControlAreas() {
-		return getGraphicalRepresentation().getShape().rebuildControlPoints(this);
+	public List<? extends ControlArea<?>> getControlAreas() {
+		return getShape().getControlAreas();
 	}
 
 	/**
@@ -1730,7 +1751,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	 */
 	@Override
 	public FGEArea getAllowedStartAreaForConnector(ConnectorNode<?> connector) {
-		return getShape().getOutline(this);
+		return getShape().getOutline();
 	}
 
 	/**
@@ -1742,7 +1763,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	 */
 	@Override
 	public FGEArea getAllowedEndAreaForConnector(ConnectorNode<?> connector) {
-		return getShape().getOutline(this);
+		return getShape().getOutline();
 	}
 
 	/**

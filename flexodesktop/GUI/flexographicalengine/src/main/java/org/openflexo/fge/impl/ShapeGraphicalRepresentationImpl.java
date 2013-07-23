@@ -1,7 +1,6 @@
 package org.openflexo.fge.impl;
 
 import java.awt.Color;
-import java.util.List;
 import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -9,7 +8,6 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.ForegroundStyle;
@@ -21,17 +19,15 @@ import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlAct
 import org.openflexo.fge.controller.MouseControl.MouseButton;
 import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.controller.MouseDragControlAction.MouseDragControlActionType;
-import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
-import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.fge.notifications.ShapeChanged;
 import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
-import org.openflexo.fge.shapes.Shape;
-import org.openflexo.fge.shapes.Shape.ShapeType;
+import org.openflexo.fge.shapes.ShapeSpecification;
+import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.toolbox.ToolBox;
 
 public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresentationImpl implements ShapeGraphicalRepresentation {
@@ -73,7 +69,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 
 	private ShapeBorder border = new ShapeBorderImpl();
 
-	private Shape shape = null;
+	private ShapeSpecification shape = null;
 
 	private ShadowStyle shadowStyle;
 
@@ -230,8 +226,8 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 					_setParameterValueWith(p, gr);
 				}
 			}
-			Shape shapeToCopy = ((ShapeGraphicalRepresentation) gr).getShape();
-			Shape clone = shapeToCopy.clone();
+			ShapeSpecification shapeToCopy = ((ShapeGraphicalRepresentation) gr).getShape();
+			ShapeSpecification clone = shapeToCopy.clone();
 			setShape(clone);
 		}
 	}
@@ -251,8 +247,8 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 					_setParameterValueWith(p, gr);
 				}
 			}
-			Shape shapeToCopy = ((ShapeGraphicalRepresentation) gr).getShape();
-			Shape clone = shapeToCopy.clone();
+			ShapeSpecification shapeToCopy = ((ShapeGraphicalRepresentation) gr).getShape();
+			ShapeSpecification clone = shapeToCopy.clone();
 			setShape(clone);
 		}
 	}
@@ -265,7 +261,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	// SGU: Developer really need to think about what he's doing while overriding this
 	@Override
 	public void update(Observable observable, Object notification) {
-		// System.out.println("Shape received "+notification+" from "+observable);
+		// System.out.println("ShapeSpecification received "+notification+" from "+observable);
 
 		super.update(observable, notification);
 
@@ -826,7 +822,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	/*@Override
 	public double getMoveAuthorizedRatio(FGEPoint desiredLocation, FGEPoint initialLocation) {
 		if (isParentLayoutedAsContainer()) {
-			// This object is contained in a Shape acting as container: all locations are valid thus,
+			// This object is contained in a ShapeSpecification acting as container: all locations are valid thus,
 			// container will adapt
 			return 1;
 		}
@@ -1141,7 +1137,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 
 	@Override
 	public DimensionConstraints getDimensionConstraints() {
-		// Shape dimension constraints may override defaults
+		// ShapeSpecification dimension constraints may override defaults
 
 		if (shape != null && shape.areDimensionConstrained()) {
 			if (dimensionConstraints == DimensionConstraints.CONSTRAINED_DIMENSIONS) {
@@ -1160,7 +1156,6 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 		FGENotification notification = requireChange(ShapeParameters.dimensionConstraints, dimensionConstraints);
 		if (notification != null && getShape() != null) {
 			this.dimensionConstraints = dimensionConstraints;
-			getShape().rebuildControlPoints();
 			hasChanged(notification);
 		}
 	}
@@ -2013,12 +2008,12 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	}*/
 
 	@Override
-	public Shape getShape() {
+	public ShapeSpecification getShape() {
 		return shape;
 	}
 
 	@Override
-	public void setShape(Shape aShape) {
+	public void setShape(ShapeSpecification aShape) {
 		if (shape != aShape) {
 			if (shape != null) {
 				shape.deleteObserver(this);
@@ -2552,10 +2547,10 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 		checkAndUpdateDimensionIfRequired();
 	}*/
 
-	@Override
+	/*@Override
 	public List<? extends ControlArea<?>> getControlAreas() {
-		return getShape().getControlPoints();
-	}
+		return getShape().getControlAreas();
+	}*/
 
 	/*@Override
 	public FGEShapeGraphics getGraphics() {
@@ -2620,10 +2615,10 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	 *            the connector asking where to start
 	 * @return the area on which the given connector can start
 	 */
-	@Override
+	/*@Override
 	public FGEArea getAllowedStartAreaForConnector(ConnectorGraphicalRepresentation connectorGR) {
 		return getShape().getOutline();
-	}
+	}*/
 
 	/**
 	 * Returns the area on which the given connector can end. The area is expressed in this normalized coordinates
@@ -2632,10 +2627,10 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	 *            the connector asking where to end
 	 * @return the area on which the given connector can end
 	 */
-	@Override
+	/*@Override
 	public FGEArea getAllowedEndAreaForConnector(ConnectorGraphicalRepresentation connectorGR) {
 		return getShape().getOutline();
-	}
+	}*/
 
 	/**
 	 * Returns the area on which the given connector can start. The area is expressed in this normalized coordinates
@@ -2645,11 +2640,11 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	 * 
 	 * @return the area on which the given connector can start
 	 */
-	@Override
+	/*@Override
 	public FGEArea getAllowedStartAreaForConnectorForDirection(ConnectorGraphicalRepresentation connectorGR, FGEArea area,
 			SimplifiedCardinalDirection direction) {
 		return area;
-	}
+	}*/
 
 	/**
 	 * Returns the area on which the given connector can end. The area is expressed in this normalized coordinates
@@ -2658,11 +2653,11 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	 *            the connector asking where to end
 	 * @return the area on which the given connector can end
 	 */
-	@Override
+	/*@Override
 	public FGEArea getAllowedEndAreaForConnectorForDirection(ConnectorGraphicalRepresentation connectorGR, FGEArea area,
 			SimplifiedCardinalDirection direction) {
 		return area;
-	}
+	}*/
 
 	public static class ShapeBorderImpl extends FGEObjectImpl implements ShapeBorder {
 		private int top = FGEConstants.DEFAULT_BORDER_SIZE;
