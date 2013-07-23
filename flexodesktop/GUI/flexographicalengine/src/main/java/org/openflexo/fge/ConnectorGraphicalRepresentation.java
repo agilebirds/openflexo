@@ -19,13 +19,11 @@
  */
 package org.openflexo.fge;
 
-import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.connectors.ConnectorSpecification;
 import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
-import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.impl.ConnectorGraphicalRepresentationImpl;
 import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ImplementationClass;
@@ -235,7 +233,7 @@ public interface ConnectorGraphicalRepresentation extends GraphicalRepresentatio
 	 * @param scale
 	 * @return
 	 */
-	public double distanceToConnector(FGEPoint aPoint, double scale, ConnectorNode<?> connectorNode);
+	// public double distanceToConnector(FGEPoint aPoint, double scale, ConnectorNode<?> connectorNode);
 
 	// public boolean isConnectorConsistent();
 

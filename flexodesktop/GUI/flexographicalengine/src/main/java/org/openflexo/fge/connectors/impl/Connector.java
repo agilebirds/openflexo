@@ -3,6 +3,7 @@ package org.openflexo.fge.connectors.impl;
 import java.awt.geom.AffineTransform;
 import java.util.List;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,16 +21,16 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
-import org.openflexo.fge.notifications.ConnectorModified;
 import org.openflexo.fge.shapes.Shape;
 
 /**
- * This is an instance of a {@link ConnectorSpecification}. As it, it is attached to a {@link ConnectorNode}.
+ * This is an instance of a {@link ConnectorSpecification}. As it, it is attached to a {@link ConnectorNode}. A {@link Connector} observes
+ * its {@link ConnectorSpecification}
  * 
  * @author sylvain
  * 
  */
-public abstract class Connector<CS extends ConnectorSpecification> extends Observable {
+public abstract class Connector<CS extends ConnectorSpecification> implements Observer {
 
 	private static final Logger logger = Logger.getLogger(ConnectorSpecification.class.getPackage().getName());
 
@@ -41,9 +42,31 @@ public abstract class Connector<CS extends ConnectorSpecification> extends Obser
 
 	protected FGERectangle NORMALIZED_BOUNDS = new FGERectangle(0, 0, 1, 1, Filling.FILLED);
 
+	private Shape startShape;
+	private FGEDimension startShapeDimension;
+	private FGEPoint startShapeLocation;
+	private Shape endShape;
+	private FGEDimension endShapeDimension;
+	private FGEPoint endShapeLocation;
+	private FGERectangle knownConnectorUsedBounds;
+
 	public Connector(ConnectorNode<?> connectorNode) {
 		super();
 		this.connectorNode = connectorNode;
+	}
+
+	public void delete() {
+		if (getConnectorSpecification() != null) {
+			getConnectorSpecification().deleteObserver(this);
+			connectorNode = null;
+			startShape = null;
+			startShape = null;
+			startShapeLocation = null;
+			endShape = null;
+			endShape = null;
+			endShape = null;
+			knownConnectorUsedBounds = null;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -282,29 +305,12 @@ public abstract class Connector<CS extends ConnectorSpecification> extends Obser
 		return false;
 	}
 
-	private Shape startShape;
-	private FGEDimension startShapeDimension;
-	private FGEPoint startShapeLocation;
-	private Shape endShape;
-	private FGEDimension endShapeDimension;
-	private FGEPoint endShapeLocation;
-	private FGERectangle knownConnectorUsedBounds;
+	protected void notifyConnectorModified() {
+		connectorNode.notifyConnectorModified();
+	}
 
-	/*
-	 * private FGEArea trivialCoveringArea; private FGEArea firstDegreeCoveringArea; private FGEArea secondDegreeCoveringArea; private
-	 * ForegroundStyle fs0 = ForegroundStyle.makeStyle(Color.BLUE); private BackgroundStyle bs0 =
-	 * BackgroundStyle.makeTexturedBackground(TextureType.TEXTURE8,Color.RED,Color.YELLOW); private ForegroundStyle fs1 =
-	 * ForegroundStyle.makeStyle(Color.RED); private BackgroundStyle bs1 =
-	 * BackgroundStyle.makeTexturedBackground(TextureType.TEXTURE1,Color.RED,Color.WHITE); private ForegroundStyle fs2 =
-	 * ForegroundStyle.makeStyle(Color.RED); private BackgroundStyle bs2 =
-	 * BackgroundStyle.makeTexturedBackground(TextureType.TEXTURE4,Color.GREEN,Color.LIGHT_GRAY); private ForegroundStyle fs3 =
-	 * ForegroundStyle.makeStyle(Color.MAGENTA); private BackgroundStyle bs3 =
-	 * BackgroundStyle.makeTexturedBackground(TextureType.TEXTURE8,Color.BLACK,Color.WHITE);
-	 */
-
-	protected void connectorChanged() {
-		setChanged();
-		notifyObservers(new ConnectorModified());
+	@Override
+	public void update(Observable observable, Object notification) {
 	}
 
 }

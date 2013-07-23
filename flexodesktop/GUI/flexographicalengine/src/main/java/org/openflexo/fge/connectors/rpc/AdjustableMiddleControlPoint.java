@@ -23,9 +23,8 @@ import java.awt.event.MouseEvent;
 import java.util.Vector;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
+import org.openflexo.fge.connectors.impl.RectPolylinConnector;
 import org.openflexo.fge.geom.FGEGeometricObject;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -36,8 +35,8 @@ import org.openflexo.fge.geom.area.FGEPlane;
 public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPoint {
 	static final Logger logger = Logger.getLogger(AdjustableMiddleControlPoint.class.getPackage().getName());
 
-	public AdjustableMiddleControlPoint(FGEPoint point, RectPolylinConnectorSpecification connector, ConnectorNode<?> node) {
-		super(point, connector, node);
+	public AdjustableMiddleControlPoint(FGEPoint point, RectPolylinConnector connector) {
+		super(point, connector);
 	}
 
 	@Override
@@ -61,7 +60,7 @@ public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPo
 		getPolylin().updatePointAt(1, pt);
 		movedMiddleCP();
 		getConnector()._connectorChanged(true);
-		getNode().notifyConnectorChanged();
+		getNode().notifyConnectorModified();
 		return true;
 	}
 
@@ -71,7 +70,7 @@ public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPo
 		Vector<SimplifiedCardinalDirection> allowedStartOrientations = getConnector().getPrimitiveAllowedStartOrientations();
 		Vector<SimplifiedCardinalDirection> allowedEndOrientations = getConnector().getPrimitiveAllowedEndOrientations();
 
-		if (getConnector().getIsStartingLocationFixed() && !getConnector().getIsStartingLocationDraggable()) {
+		if (getConnectorSpecification().getIsStartingLocationFixed() && !getConnectorSpecification().getIsStartingLocationDraggable()) {
 			// If starting location is fixed and not draggable,
 			// Then retrieve start area itself (which is here a single point)
 			startArea = getConnector().retrieveStartArea();
@@ -80,7 +79,7 @@ public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPo
 
 		FGEArea endArea = getConnector().retrieveAllowedEndArea(false);
 
-		if (getConnector().getIsEndingLocationFixed() && !getConnector().getIsEndingLocationDraggable()) {
+		if (getConnectorSpecification().getIsEndingLocationFixed() && !getConnectorSpecification().getIsEndingLocationDraggable()) {
 			// If starting location is fixed and not draggable,
 			// Then retrieve start area itself (which is here a single point)
 			endArea = getConnector().retrieveEndArea();
@@ -105,11 +104,11 @@ public class AdjustableMiddleControlPoint extends RectPolylinAdjustableControlPo
 			return;
 		}
 
-		if (getConnector().getIsStartingLocationFixed()) { // Don't forget this !!!
+		if (getConnectorSpecification().getIsStartingLocationFixed()) { // Don't forget this !!!
 			getConnector().setFixedStartLocation(
 					FGEUtils.convertNormalizedPoint(getNode(), newPolylin.getFirstPoint(), getNode().getStartNode()));
 		}
-		if (getConnector().getIsEndingLocationFixed()) { // Don't forget this !!!
+		if (getConnectorSpecification().getIsEndingLocationFixed()) { // Don't forget this !!!
 			getConnector().setFixedEndLocation(
 					FGEUtils.convertNormalizedPoint(getNode(), newPolylin.getLastPoint(), getNode().getEndNode()));
 		}

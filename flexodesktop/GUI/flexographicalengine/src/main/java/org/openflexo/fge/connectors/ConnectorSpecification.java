@@ -21,7 +21,10 @@ package org.openflexo.fge.connectors;
 
 import javax.swing.ImageIcon;
 
+import org.openflexo.fge.Drawing.ConnectorNode;
+import org.openflexo.fge.FGEIconLibrary;
 import org.openflexo.fge.FGEObject;
+import org.openflexo.fge.connectors.impl.Connector;
 import org.openflexo.fge.connectors.impl.ConnectorSpecificationImpl;
 import org.openflexo.model.annotations.ImplementationClass;
 import org.openflexo.model.annotations.Import;
@@ -42,20 +45,15 @@ import org.openflexo.model.annotations.ModelEntity;
 public interface ConnectorSpecification extends FGEObject {
 
 	public static enum ConnectorType {
-		LINE,
-		// RECT_LINE,
-		RECT_POLYLIN,
-		CURVE,
-		CURVED_POLYLIN,
-		CUSTOM;
+		LINE, RECT_POLYLIN, CURVE, CURVED_POLYLIN, CUSTOM;
 
 		public ImageIcon getIcon() {
 			if (this == RECT_POLYLIN) {
-				return org.openflexo.fge.FGEIconLibrary.RECT_POLYLIN_CONNECTOR_ICON;
+				return FGEIconLibrary.RECT_POLYLIN_CONNECTOR_ICON;
 			} else if (this == CURVE) {
-				return org.openflexo.fge.FGEIconLibrary.CURVE_CONNECTOR_ICON;
+				return FGEIconLibrary.CURVE_CONNECTOR_ICON;
 			} else if (this == LINE) {
-				return org.openflexo.fge.FGEIconLibrary.LINE_CONNECTOR_ICON;
+				return FGEIconLibrary.LINE_CONNECTOR_ICON;
 			}
 			return null;
 		}
@@ -66,4 +64,5 @@ public interface ConnectorSpecification extends FGEObject {
 
 	public ConnectorSpecification clone();
 
+	public Connector<?> makeConnector(ConnectorNode<?> connectorNode);
 }

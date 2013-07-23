@@ -6,6 +6,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
@@ -14,6 +15,7 @@ import org.openflexo.fge.connectors.ConnectorSymbol.EndSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
 import org.openflexo.fge.connectors.LineConnectorSpecification;
+import org.openflexo.fge.connectors.LineConnectorSpecification.LineConnectorParameters;
 import org.openflexo.fge.connectors.LineConnectorSpecification.LineConnectorType;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
 import org.openflexo.fge.cp.ConnectorControlPoint;
@@ -27,6 +29,7 @@ import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
+import org.openflexo.fge.notifications.FGENotification;
 
 public class LineConnector extends Connector<LineConnectorSpecification> {
 
@@ -52,7 +55,7 @@ public class LineConnector extends Connector<LineConnectorSpecification> {
 	@Override
 	public List<ControlPoint> getControlPoints() {
 		// TODO: perfs issue : do not update all the time !!!
-		updateControlPoints();
+		// updateControlPoints();
 		return controlPoints;
 	}
 
@@ -92,7 +95,7 @@ public class LineConnector extends Connector<LineConnectorSpecification> {
 				 * cp1RelativeToStartObject = GraphicalRepresentation.convertNormalizedPoint( getGraphicalRepresentation(), pt,
 				 * getStartNode());
 				 */
-				connectorNode.notifyConnectorChanged();
+				connectorNode.notifyConnectorModified();
 				return true;
 			}
 
@@ -346,7 +349,7 @@ public class LineConnector extends Connector<LineConnectorSpecification> {
 					FGEPoint pt = getNearestPointOnAuthorizedArea(newRelativePoint);
 					setPoint(pt);
 					setCp1RelativeToStartObject(FGEUtils.convertNormalizedPoint(connectorNode, pt, getStartNode()));
-					connectorNode.notifyConnectorChanged();
+					connectorNode.notifyConnectorModified();
 					return true;
 				}
 
@@ -371,7 +374,7 @@ public class LineConnector extends Connector<LineConnectorSpecification> {
 							middleSymbolLocationControlPoint.setPoint(getMiddleSymbolLocation());
 						}
 					}
-					connectorNode.notifyConnectorChanged();
+					connectorNode.notifyConnectorModified();
 					return true;
 				}
 			};
@@ -402,6 +405,8 @@ public class LineConnector extends Connector<LineConnectorSpecification> {
 		super.refreshConnector(force);
 
 		firstUpdated = true;
+
+		connectorNode.notifyConnectorModified();
 
 	}
 
@@ -515,6 +520,20 @@ public class LineConnector extends Connector<LineConnectorSpecification> {
 	@Override
 	public FGEPoint getEndLocation() {
 		return getCp2RelativeToEndObject();
+	}
+
+	@Override
+	public void update(Observable observable, Object notification) {
+		super.update(observable, notification);
+
+		if (notification instanceof FGENotification && observable == getConnectorSpecification()) {
+			// Those notifications are forwarded by the connector specification
+			FGENotification notif = (FGENotification) notification;
+
+			if (notif.getParameter() == LineConnectorParameters.lineConnectorType) {
+				refreshConnector(true);
+			}
+		}
 	}
 
 }

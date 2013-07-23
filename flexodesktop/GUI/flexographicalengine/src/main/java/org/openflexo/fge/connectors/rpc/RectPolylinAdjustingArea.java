@@ -30,6 +30,7 @@ import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEIconLibrary;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
+import org.openflexo.fge.connectors.impl.RectPolylinConnector;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEPoint;
@@ -42,11 +43,11 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 
 	private static final Hashtable<Integer, Image> PIN_CACHE = new Hashtable<Integer, Image>();
 	protected FGERectPolylin initialPolylin;
-	private RectPolylinConnectorSpecification connector;
+	private RectPolylinConnector connector;
 	private FGERectPolylin newPolylin;
 
-	public RectPolylinAdjustingArea(RectPolylinConnectorSpecification connector, ConnectorNode<?> node) {
-		super(node, connector.getCurrentPolylin());
+	public RectPolylinAdjustingArea(RectPolylinConnector connector) {
+		super(connector.getConnectorNode(), connector.getCurrentPolylin());
 		this.connector = connector;
 	}
 
@@ -78,19 +79,19 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 		getConnector().getBasicallyAdjustableControlPoint().setPoint(newRelativePoint);
 		getConnector().updateWithNewPolylin(newPolylin);*/
 
-		getConnector().setCrossedControlPoint(newRelativePoint);
+		getConnectorSpecification().setCrossedControlPoint(newRelativePoint);
 
 		// getConnector().updateLayout();
 
 		// getConnector()._updateAsBasicallyAdjustable();
 
 		getConnector()._connectorChanged(true);
-		getNode().notifyConnectorChanged();
+		getNode().notifyConnectorModified();
 		return true;
 	}
 
 	protected void notifyConnectorChanged() {
-		getNode().notifyConnectorChanged();
+		getNode().notifyConnectorModified();
 	}
 
 	@Override
@@ -165,8 +166,12 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 		return r;
 	}*/
 
-	public RectPolylinConnectorSpecification getConnector() {
+	public RectPolylinConnector getConnector() {
 		return connector;
+	}
+
+	public RectPolylinConnectorSpecification getConnectorSpecification() {
+		return connector.getConnectorSpecification();
 	}
 
 	/*@Override

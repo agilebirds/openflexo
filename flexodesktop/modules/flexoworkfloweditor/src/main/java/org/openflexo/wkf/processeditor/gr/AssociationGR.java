@@ -95,7 +95,7 @@ public class AssociationGR extends EdgeGR<WKFAssociation> {
 			// during big model restructurations (for example during a multiple delete)
 			return;
 		}
-		if (getConnector() instanceof RectPolylinConnectorSpecification) {
+		if (getConnectorSpecification() instanceof RectPolylinConnectorSpecification) {
 			startOrientationFixed = false;
 			endOrientationFixed = false;
 			// ((RectPolylinConnectorSpecification)getConnector()).setRectPolylinConstraints(RectPolylinConstraints.NONE);

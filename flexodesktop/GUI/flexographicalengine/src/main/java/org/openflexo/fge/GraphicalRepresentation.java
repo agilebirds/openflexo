@@ -33,7 +33,6 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.impl.GraphicalRepresentationImpl;
-import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.model.annotations.Adder;
 import org.openflexo.model.annotations.CloningStrategy;
 import org.openflexo.model.annotations.Getter;
@@ -44,7 +43,6 @@ import org.openflexo.model.annotations.Remover;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.model.annotations.XMLAttribute;
 import org.openflexo.model.annotations.XMLElement;
-import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 /**
  * This is the common super interfaces for all graphical representation object encoded in a diagram<br>
@@ -57,7 +55,7 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
  */
 @ModelEntity(isAbstract = true)
 @ImplementationClass(GraphicalRepresentationImpl.class)
-public interface GraphicalRepresentation extends FGEObject, Bindable, Observer, HasPropertyChangeSupport {
+public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 
 	// Property keys
 
@@ -367,22 +365,6 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer, 
 	public void removeFromVariables(GRVariable v);
 
 	// *******************************************************************************
-	// * Deletion management
-	// *******************************************************************************
-
-	/**
-	 * Delete this graphical representation
-	 */
-	public void delete();
-
-	/**
-	 * Return a flag indicating if this graphical representation has been deleted
-	 * 
-	 * @return
-	 */
-	public boolean isDeleted();
-
-	// *******************************************************************************
 	// * Utils
 	// *******************************************************************************
 
@@ -476,13 +458,13 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer, 
 
 	public void paint(Graphics g, DrawingController controller);*/
 
-	public void notifyChange(GRParameter parameter, Object oldValue, Object newValue);
+	/*public void notifyChange(GRParameter parameter, Object oldValue, Object newValue);
 
 	public void notifyChange(GRParameter parameter);
 
 	public void notifyAttributeChange(GRParameter parameter);
 
-	public void notify(FGENotification notification);
+	public void notify(FGENotification notification);*/
 
 	// @Override
 	// public String getInspectorName();

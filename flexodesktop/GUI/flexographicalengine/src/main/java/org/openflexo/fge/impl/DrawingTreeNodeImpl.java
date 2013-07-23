@@ -49,7 +49,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	private GR graphicalRepresentation;
 	private GRBinding<O, GR> grBinding;
 
-	private List<ControlArea<?>> controlAreas;
+	// private List<ControlArea<?>> controlAreas;
 
 	private List<ConstraintDependency> dependancies;
 	private List<ConstraintDependency> alterings;
@@ -82,7 +82,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		dependancies = new ArrayList<ConstraintDependency>();
 		alterings = new ArrayList<ConstraintDependency>();
 
-		controlAreas = new ArrayList<ControlArea<?>>();
+		// controlAreas = new ArrayList<ControlArea<?>>();
 	}
 
 	@Override
@@ -165,16 +165,14 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	}
 
 	@Override
-	public final List<ControlArea<?>> getControlAreas() {
-		return controlAreas;
-	}
+	public abstract List<? extends ControlArea<?>> getControlAreas();
 
-	protected final void updateControlAreas() {
+	/*protected final void updateControlAreas() {
 		controlAreas.clear();
 		controlAreas.addAll(rebuildControlAreas());
-	}
+	}*/
 
-	protected abstract List<? extends ControlArea<?>> rebuildControlAreas();
+	// protected abstract List<? extends ControlArea<?>> rebuildControlAreas();
 
 	/*private void update()
 	{

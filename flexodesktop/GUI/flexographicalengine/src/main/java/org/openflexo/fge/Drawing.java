@@ -33,6 +33,7 @@ import org.openflexo.fge.GRBinding.ShapeGRBinding;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
 import org.openflexo.fge.connectors.ConnectorSpecification;
+import org.openflexo.fge.connectors.impl.Connector;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.geom.FGEDimension;
@@ -160,7 +161,7 @@ public interface Drawing<M> {
 		 * 
 		 * @return
 		 */
-		public List<ControlArea<?>> getControlAreas();
+		public List<? extends ControlArea<?>> getControlAreas();
 
 		/**
 		 * Recursively delete this DrawingTreeNode and all its descendants
@@ -281,7 +282,7 @@ public interface Drawing<M> {
 
 		public void setHeight(double aValue);
 
-		public List<DrawingTreeNode<?, ?>> getChildNodes();
+		public List<? extends DrawingTreeNode<?, ?>> getChildNodes();
 
 		public void addChild(DrawingTreeNodeImpl<?, ?> aChildNode);
 
@@ -474,9 +475,11 @@ public interface Drawing<M> {
 
 		public ShapeNode<?> getEndNode();
 
-		public ConnectorSpecification getConnector();
+		public ConnectorSpecification getConnectorSpecification();
 
-		public void notifyConnectorChanged();
+		public Connector<?> getConnector();
+
+		public void notifyConnectorModified();
 
 		public int getExtendedX(double scale);
 

@@ -22,6 +22,7 @@ import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GRBinding;
 import org.openflexo.fge.ShapeGraphicalRepresentation.ShapeParameters;
 import org.openflexo.fge.connectors.ConnectorSpecification;
+import org.openflexo.fge.connectors.impl.Connector;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
@@ -48,6 +49,8 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	private ShapeNodeImpl<?> startNode;
 	private ShapeNodeImpl<?> endNode;
 
+	private Connector<?> connector;
+
 	public ConnectorNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, ConnectorGraphicalRepresentation> grBinding,
 			ContainerNodeImpl<?, ?> parentNode) {
 		super(drawingImpl, drawable, grBinding, parentNode);
@@ -73,7 +76,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	}
 
 	@Override
-	public ConnectorSpecification getConnector() {
+	public ConnectorSpecification getConnectorSpecification() {
 		if (getGraphicalRepresentation() != null) {
 			return getGraphicalRepresentation().getConnector();
 		}
@@ -81,7 +84,15 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	}
 
 	@Override
-	public void notifyConnectorChanged() {
+	public Connector<?> getConnector() {
+		if (connector == null && getGraphicalRepresentation() != null) {
+			connector = getGraphicalRepresentation().getConnector().makeConnector(this);
+		}
+		return connector;
+	}
+
+	@Override
+	public void notifyConnectorModified() {
 		/*if (!isRegistered()) {
 			return;
 		}*/
@@ -210,7 +221,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	private double maxY = 1.0;
 
 	private void checkViewBounds() {
-		FGERectangle r = getGraphicalRepresentation().getConnector().getConnectorUsedBounds();
+		FGERectangle r = getConnector().getConnectorUsedBounds();
 		if (FGEUtils.checkDoubleIsAValue(r.getMinX()) && FGEUtils.checkDoubleIsAValue(r.getMinY())
 				&& FGEUtils.checkDoubleIsAValue(r.getMaxX()) && FGEUtils.checkDoubleIsAValue(r.getMaxY())) {
 			minX = Math.min(r.getMinX(), 0.0);
@@ -367,7 +378,7 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 						+ " end=" + getEndNode());
 				return;
 			}
-			getGraphicalRepresentation().getConnector().paintConnector(this, graphics);
+			getConnector().paintConnector(graphics);
 		}
 
 		graphics.releaseGraphics();
@@ -375,16 +386,14 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 
 	@Override
 	public Point getLabelLocation(double scale) {
-		Point connectorCenter = convertNormalizedPointToViewCoordinates(getGraphicalRepresentation().getConnector()
-				.getMiddleSymbolLocation(), scale);
+		Point connectorCenter = convertNormalizedPointToViewCoordinates(getConnector().getMiddleSymbolLocation(), scale);
 		return new Point((int) (connectorCenter.x + getGraphicalRepresentation().getAbsoluteTextX() * scale + getViewX(scale)),
 				(int) (connectorCenter.y + getGraphicalRepresentation().getAbsoluteTextY() * scale + getViewY(scale)));
 	}
 
 	@Override
 	public void setLabelLocation(Point point, double scale) {
-		Point connectorCenter = convertNormalizedPointToViewCoordinates(getGraphicalRepresentation().getConnector()
-				.getMiddleSymbolLocation(), scale);
+		Point connectorCenter = convertNormalizedPointToViewCoordinates(getConnector().getMiddleSymbolLocation(), scale);
 		getGraphicalRepresentation().setAbsoluteTextX(((double) point.x - connectorCenter.x - getViewX(scale)) / scale);
 		getGraphicalRepresentation().setAbsoluteTextY(((double) point.y - connectorCenter.y - getViewY(scale)) / scale);
 	}
@@ -400,13 +409,13 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 			FGENotification notif = (FGENotification) notification;
 
 			if (notification instanceof ObjectWillMove || notification instanceof ObjectWillResize) {
-				getGraphicalRepresentation().getConnector().connectorWillBeModified();
+				getConnector().connectorWillBeModified();
 				// Propagate notification to views
 				setChanged();
 				notifyObservers(notification);
 			}
 			if (notification instanceof ObjectHasMoved || notification instanceof ObjectHasResized) {
-				getGraphicalRepresentation().getConnector().connectorHasBeenModified();
+				getConnector().connectorHasBeenModified();
 				// Propagate notification to views
 				setChanged();
 				notifyObservers(notification);
@@ -419,9 +428,9 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 			}
 		}
 
-		if (notification instanceof ConnectorModified) {
+		/*if (notification instanceof ConnectorModified) {
 			updateControlAreas();
-		}
+		}*/
 
 		if (observable instanceof ForegroundStyle) {
 			notifyAttributeChanged(ShapeParameters.foreground, null, getGraphicalRepresentation().getForeground());
@@ -448,11 +457,10 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 			return;
 		}
 		try {
-			if (forceRefresh || getGraphicalRepresentation().getConnector().needsRefresh(this)) {
-				getGraphicalRepresentation().getConnector().refreshConnector(this, forceRefresh);
+			if (forceRefresh || getConnector().needsRefresh()) {
+				getConnector().refreshConnector(forceRefresh);
 				checkViewBounds();
-				setChanged();
-				notifyObservers(new ConnectorModified());
+				notifyConnectorModified();
 			}
 		} catch (Exception e) {
 			logger.warning("Unexpected exception: " + e);
@@ -466,8 +474,8 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 	}
 
 	@Override
-	protected List<? extends ControlArea<?>> rebuildControlAreas() {
-		return getGraphicalRepresentation().getConnector().rebuildControlPoints(this);
+	public List<ControlPoint> getControlAreas() {
+		return getConnector().getControlPoints();
 	}
 
 	@Override

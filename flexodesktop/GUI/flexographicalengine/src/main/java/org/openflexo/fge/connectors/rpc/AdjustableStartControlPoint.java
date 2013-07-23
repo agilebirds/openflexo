@@ -22,9 +22,8 @@ package org.openflexo.fge.connectors.rpc;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
+import org.openflexo.fge.connectors.impl.RectPolylinConnector;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
@@ -33,8 +32,8 @@ import org.openflexo.fge.geom.area.FGEArea;
 public class AdjustableStartControlPoint extends RectPolylinAdjustableControlPoint {
 	static final Logger logger = Logger.getLogger(AdjustableStartControlPoint.class.getPackage().getName());
 
-	public AdjustableStartControlPoint(FGEPoint point, RectPolylinConnectorSpecification connector, ConnectorNode<?> node) {
-		super(point, connector, node);
+	public AdjustableStartControlPoint(FGEPoint point, RectPolylinConnector connector) {
+		super(point, connector);
 	}
 
 	@Override
@@ -45,7 +44,7 @@ public class AdjustableStartControlPoint extends RectPolylinAdjustableControlPoi
 	@Override
 	public void startDragging(DrawingController controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
-		getConnector().setIsStartingLocationFixed(true);
+		getConnectorSpecification().setIsStartingLocationFixed(true);
 	}
 
 	@Override
@@ -61,7 +60,7 @@ public class AdjustableStartControlPoint extends RectPolylinAdjustableControlPoi
 		setPoint(pt);
 		FGEPoint ptRelativeToStartObject = FGEUtils.convertNormalizedPoint(getNode(), pt, getNode().getStartNode());
 		getConnector().setFixedStartLocation(ptRelativeToStartObject);
-		switch (getConnector().getAdjustability()) {
+		switch (getConnectorSpecification().getAdjustability()) {
 		case AUTO_LAYOUT:
 			// Nothing special to do
 			break;
@@ -70,7 +69,7 @@ public class AdjustableStartControlPoint extends RectPolylinAdjustableControlPoi
 			break;
 		case FULLY_ADJUSTABLE:
 			if (initialPolylin.getSegmentNb() == 1 && getConnector()._updateAsFullyAdjustableForUniqueSegment(pt)
-					&& !getConnector().getIsEndingLocationFixed()) {
+					&& !getConnectorSpecification().getIsEndingLocationFixed()) {
 				// OK this is still a unique segment, nice !
 			} else {
 				FGERectPolylin newPolylin = initialPolylin.clone();
@@ -82,7 +81,7 @@ public class AdjustableStartControlPoint extends RectPolylinAdjustableControlPoi
 			break;
 		}
 		getConnector()._connectorChanged(true);
-		getNode().notifyConnectorChanged();
+		getNode().notifyConnectorModified();
 		return true;
 	}
 }

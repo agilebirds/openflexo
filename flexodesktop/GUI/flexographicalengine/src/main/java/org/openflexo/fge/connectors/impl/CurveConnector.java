@@ -6,6 +6,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
@@ -29,6 +30,7 @@ import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEEmptyArea;
 import org.openflexo.fge.geom.area.FGEPlane;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
+import org.openflexo.fge.notifications.FGENotification;
 
 public class CurveConnector extends Connector<CurveConnectorSpecification> {
 
@@ -193,7 +195,7 @@ public class CurveConnector extends Connector<CurveConnectorSpecification> {
 					setPoint(pt);
 					setCp1RelativeToStartObject(FGEUtils.convertNormalizedPoint(connectorNode, pt, getStartNode()));
 					refreshCurve();
-					connectorNode.notifyConnectorChanged();
+					connectorNode.notifyConnectorModified();
 				}
 				return true;
 			}
@@ -222,7 +224,7 @@ public class CurveConnector extends Connector<CurveConnectorSpecification> {
 					setPoint(pt);
 					setCp2RelativeToEndObject(FGEUtils.convertNormalizedPoint(connectorNode, pt, getEndNode()));
 					refreshCurve();
-					connectorNode.notifyConnectorChanged();
+					connectorNode.notifyConnectorModified();
 				}
 				return true;
 			}
@@ -250,7 +252,7 @@ public class CurveConnector extends Connector<CurveConnectorSpecification> {
 					updateFromNewCPPosition();
 				}
 				refreshCurve();
-				connectorNode.notifyConnectorChanged();
+				connectorNode.notifyConnectorModified();
 				return true;
 			}
 		};
@@ -462,6 +464,17 @@ public class CurveConnector extends Connector<CurveConnectorSpecification> {
 			return FGEUtils.getSlope(FGEPoint.ORIGIN_POINT, cp2.getPoint());
 		}
 		return 0;
+	}
+
+	@Override
+	public void update(Observable observable, Object notification) {
+		super.update(observable, notification);
+
+		if (notification instanceof FGENotification && observable == getConnectorSpecification()) {
+			// Those notifications are forwarded by the connector specification
+			// FGENotification notif = (FGENotification) notification;
+
+		}
 	}
 
 }

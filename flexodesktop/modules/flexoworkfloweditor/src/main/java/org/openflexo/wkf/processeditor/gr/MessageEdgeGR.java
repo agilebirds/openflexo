@@ -50,7 +50,7 @@ public class MessageEdgeGR extends EdgeGR<MessageEdge<?, ?>> {
 			// during big model restructurations (for example during a multiple delete)
 			return;
 		}
-		if (getConnector() instanceof RectPolylinConnectorSpecification) {
+		if (getConnectorSpecification() instanceof RectPolylinConnectorSpecification) {
 			if (getStartObject() instanceof PortmapGR) {
 				startOrientationFixed = true;
 				newStartOrientation = ((PortmapGR) getStartObject()).getOrientation();

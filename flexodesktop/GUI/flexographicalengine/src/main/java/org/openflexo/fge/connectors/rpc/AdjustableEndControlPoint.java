@@ -57,7 +57,7 @@ public class AdjustableEndControlPoint extends RectPolylinAdjustableControlPoint
 		}
 		setPoint(pt);
 		FGEPoint ptRelativeToEndObject = FGEUtils.convertNormalizedPoint(getNode(), pt, getConnector().getEndNode());
-		getConnectorSpecification().setFixedEndLocation(ptRelativeToEndObject);
+		getConnector().setFixedEndLocation(ptRelativeToEndObject);
 		switch (getConnectorSpecification().getAdjustability()) {
 		case AUTO_LAYOUT:
 			// Nothing special to do
@@ -79,7 +79,7 @@ public class AdjustableEndControlPoint extends RectPolylinAdjustableControlPoint
 			break;
 		}
 		getConnector()._connectorChanged(true);
-		getNode().notifyConnectorChanged();
+		getNode().notifyConnectorModified();
 
 		return true;
 	}

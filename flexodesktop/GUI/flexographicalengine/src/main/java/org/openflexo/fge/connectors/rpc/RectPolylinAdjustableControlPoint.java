@@ -58,7 +58,7 @@ public abstract class RectPolylinAdjustableControlPoint extends ConnectorAdjusti
 			FGEPoint initialPoint, MouseEvent event);
 
 	protected void notifyConnectorChanged() {
-		getNode().notifyConnectorChanged();
+		getNode().notifyConnectorModified();
 	}
 
 	@Override

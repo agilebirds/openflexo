@@ -8,6 +8,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.NoninvertibleTransformException;
 import java.util.List;
+import java.util.Observable;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +23,7 @@ import org.openflexo.fge.connectors.ConnectorSymbol.MiddleSymbolType;
 import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
 import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.connectors.RectPolylinConnectorSpecification.RectPolylinAdjustability;
+import org.openflexo.fge.connectors.RectPolylinConnectorSpecification.RectPolylinConnectorParameters;
 import org.openflexo.fge.connectors.RectPolylinConnectorSpecification.RectPolylinConstraints;
 import org.openflexo.fge.connectors.rpc.AdjustableEndControlPoint;
 import org.openflexo.fge.connectors.rpc.AdjustableFirstControlPoint;
@@ -47,11 +49,13 @@ import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGESegment;
+import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.geom.area.DefaultAreaProvider;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEAreaProvider;
 import org.openflexo.fge.geom.area.FGEUnionArea;
 import org.openflexo.fge.graphics.FGEConnectorGraphics;
+import org.openflexo.fge.notifications.FGENotification;
 import org.openflexo.toolbox.ConcatenedList;
 
 public class RectPolylinConnector extends Connector<RectPolylinConnectorSpecification> {
@@ -82,6 +86,8 @@ public class RectPolylinConnector extends Connector<RectPolylinConnectorSpecific
 	private FGEPoint fixedStartLocationRelativeToStartObject;
 	private FGEPoint fixedEndLocationRelativeToEndObject;
 	private FGEPoint _crossedPoint;
+
+	private FGERectPolylin _deserializedPolylin;
 
 	private static final FGEModelFactory DEBUG_FACTORY = FGEUtils.TOOLS_FACTORY;
 	private static final ForegroundStyle DEBUG_GRAY_STROKE = DEBUG_FACTORY.makeForegroundStyle(Color.GRAY, 1.0f, DashStyle.SMALL_DASHES);
@@ -370,8 +376,6 @@ public class RectPolylinConnector extends Connector<RectPolylinConnectorSpecific
 		return polylin;
 	}
 
-	private FGERectPolylin _deserializedPolylin;
-
 	// Used for serialization only
 	public FGERectPolylin _getPolylin() {
 		if (getConnectorSpecification().getAdjustability() != RectPolylinAdjustability.FULLY_ADJUSTABLE) {
@@ -437,7 +441,7 @@ public class RectPolylinConnector extends Connector<RectPolylinConnectorSpecific
 					 * cp1RelativeToStartObject = GraphicalRepresentation.convertNormalizedPoint( getGraphicalRepresentation(), pt,
 					 * getStartObject());
 					 */
-					connectorNode.notifyConnectorChanged();
+					connectorNode.notifyConnectorModified();
 					return true;
 				}
 
@@ -663,8 +667,7 @@ public class RectPolylinConnector extends Connector<RectPolylinConnectorSpecific
 		}*/
 
 		if (getConnectorSpecification().getAdjustability() == RectPolylinAdjustability.AUTO_LAYOUT
-				|| getConnectorSpecification().getAdjustability() == RectPolylinAdjustability.FULLY_ADJUSTABLE
-				&& !getConnectorSpecification().getWasManuallyAdjusted()) {
+				|| getConnectorSpecification().getAdjustability() == RectPolylinAdjustability.FULLY_ADJUSTABLE && !getWasManuallyAdjusted()) {
 
 			_updateAsAutoLayout();
 
@@ -1542,9 +1545,9 @@ public class RectPolylinConnector extends Connector<RectPolylinConnectorSpecific
 			for (int i = 0; i < nPoints; i++) {
 				FGEPoint p = polylin.getPointAt(i);
 				if (i == 0 && getConnectorSpecification().getIsStartingLocationDraggable()) {
-					controlPoints.add(new AdjustableStartControlPoint(p, getConnectorSpecification(), connectorNode));
+					controlPoints.add(new AdjustableStartControlPoint(p, this));
 				} else if (i == nPoints - 1 && getConnectorSpecification().getIsEndingLocationDraggable()) {
-					controlPoints.add(new AdjustableEndControlPoint(p, getConnectorSpecification(), connectorNode));
+					controlPoints.add(new AdjustableEndControlPoint(p, this));
 				} else {
 					controlPoints.add(new ConnectorNonAdjustableControlPoint(connectorNode, p));
 				}
@@ -1555,14 +1558,14 @@ public class RectPolylinConnector extends Connector<RectPolylinConnectorSpecific
 			for (int i = 0; i < nPoints; i++) {
 				FGEPoint p = polylin.getPointAt(i);
 				if (i == 0 && getConnectorSpecification().getIsStartingLocationDraggable()) {
-					controlPoints.add(new AdjustableStartControlPoint(p, getConnectorSpecification(), connectorNode));
+					controlPoints.add(new AdjustableStartControlPoint(p, this));
 				} else if (i == nPoints - 1 && getConnectorSpecification().getIsEndingLocationDraggable()) {
-					controlPoints.add(new AdjustableEndControlPoint(p, getConnectorSpecification(), connectorNode));
+					controlPoints.add(new AdjustableEndControlPoint(p, this));
 				} else {
-					controlPoints.add(new AdjustableIntermediateControlPoint(p, -1, getConnectorSpecification(), connectorNode));
+					controlPoints.add(new AdjustableIntermediateControlPoint(p, -1, this));
 				}
 			}
-			controlAreas.add(new RectPolylinAdjustingArea(getConnectorSpecification(), connectorNode));
+			controlAreas.add(new RectPolylinAdjustingArea(this));
 			/*
 			 * if (_crossedPoint != null) { if (crossedControlPoint == null) { crossedControlPoint = new
 			 * ConnectorNonAdjustableControlPoint(getGraphicalRepresentation(),_crossedPoint); }
@@ -1573,25 +1576,21 @@ public class RectPolylinConnector extends Connector<RectPolylinConnectorSpecific
 		case FULLY_ADJUSTABLE:
 			if (nPoints >= 2) {
 				if (getConnectorSpecification().getIsStartingLocationDraggable()) {
-					controlPoints.add(new AdjustableStartControlPoint(polylin.getFirstPoint(), getConnectorSpecification(), connectorNode));
+					controlPoints.add(new AdjustableStartControlPoint(polylin.getFirstPoint(), this));
 				} else {
 					controlPoints.add(new ConnectorNonAdjustableControlPoint(connectorNode, polylin.getFirstPoint()));
 				}
 				if (nPoints == 3) {
-					controlPoints.add(new AdjustableMiddleControlPoint(polylin.getPoints().elementAt(1), getConnectorSpecification(),
-							connectorNode));
+					controlPoints.add(new AdjustableMiddleControlPoint(polylin.getPoints().elementAt(1), this));
 				} else if (nPoints > 3) { // nPoints > 3
-					controlPoints.add(new AdjustableFirstControlPoint(polylin.getPoints().elementAt(1), getConnectorSpecification(),
-							connectorNode));
+					controlPoints.add(new AdjustableFirstControlPoint(polylin.getPoints().elementAt(1), this));
 					for (int i = 2; i < nPoints - 2; i++) {
-						controlPoints.add(new AdjustableIntermediateControlPoint(polylin.getPoints().elementAt(i), i,
-								getConnectorSpecification(), connectorNode));
+						controlPoints.add(new AdjustableIntermediateControlPoint(polylin.getPoints().elementAt(i), i, this));
 					}
-					controlPoints.add(new AdjustableLastControlPoint(polylin.getPoints().elementAt(nPoints - 2),
-							getConnectorSpecification(), connectorNode));
+					controlPoints.add(new AdjustableLastControlPoint(polylin.getPoints().elementAt(nPoints - 2), this));
 				}
 				if (getConnectorSpecification().getIsEndingLocationDraggable()) {
-					controlPoints.add(new AdjustableEndControlPoint(polylin.getLastPoint(), getConnectorSpecification(), connectorNode));
+					controlPoints.add(new AdjustableEndControlPoint(polylin.getLastPoint(), this));
 				} else {
 					controlPoints.add(new ConnectorNonAdjustableControlPoint(connectorNode, polylin.getLastPoint()));
 				}
@@ -1605,19 +1604,19 @@ public class RectPolylinConnector extends Connector<RectPolylinConnectorSpecific
 						.getIsStartingLocationDraggable())
 						&& (!getConnectorSpecification().getIsEndingLocationFixed() || getConnectorSpecification()
 								.getIsEndingLocationDraggable())) {
-					controlAreas.add(new AdjustableUniqueSegment(polylin.getFirstSegment(), getConnectorSpecification(), connectorNode));
+					controlAreas.add(new AdjustableUniqueSegment(polylin.getFirstSegment(), this));
 				}
 			} else {
 				if (!getConnectorSpecification().getIsStartingLocationFixed()
 						|| getConnectorSpecification().getIsStartingLocationDraggable()) {
-					controlAreas.add(new AdjustableFirstSegment(polylin.getFirstSegment(), getConnectorSpecification(), connectorNode));
+					controlAreas.add(new AdjustableFirstSegment(polylin.getFirstSegment(), this));
 				}
 				for (int i = 1; i < nSegments - 1; i++) {
 					FGESegment s = polylin.getSegmentAt(i);
-					controlAreas.add(new AdjustableIntermediateSegment(s, getConnectorSpecification(), connectorNode));
+					controlAreas.add(new AdjustableIntermediateSegment(s, this));
 				}
 				if (!getConnectorSpecification().getIsEndingLocationFixed() || getConnectorSpecification().getIsEndingLocationDraggable()) {
-					controlAreas.add(new AdjustableLastSegment(polylin.getLastSegment(), getConnectorSpecification(), connectorNode));
+					controlAreas.add(new AdjustableLastSegment(polylin.getLastSegment(), this));
 				}
 			}
 			break;
@@ -1767,8 +1766,7 @@ public class RectPolylinConnector extends Connector<RectPolylinConnectorSpecific
 		p_start.setPoint(startCPLocation);
 
 		if (getConnectorSpecification().getIsStartingLocationFixed()) { // Don't forget this !!!
-			getConnectorSpecification().setFixedStartLocation(
-					FGEUtils.convertNormalizedPoint(connectorNode, startCPLocation, getStartNode()));
+			setFixedStartLocation(FGEUtils.convertNormalizedPoint(connectorNode, startCPLocation, getStartNode()));
 		}
 
 		// Update for start cp
@@ -1916,7 +1914,7 @@ public class RectPolylinConnector extends Connector<RectPolylinConnectorSpecific
 		p_end.setPoint(endCPLocation);
 
 		if (getConnectorSpecification().getIsEndingLocationFixed()) { // Don't forget this !!!
-			getConnectorSpecification().setFixedEndLocation(FGEUtils.convertNormalizedPoint(connectorNode, endCPLocation, getEndNode()));
+			setFixedEndLocation(FGEUtils.convertNormalizedPoint(connectorNode, endCPLocation, getEndNode()));
 		}
 
 		// Look for orientation of this newly computed segment
@@ -2118,7 +2116,93 @@ public class RectPolylinConnector extends Connector<RectPolylinConnectorSpecific
 				if (polylin != null) {
 					updateWithNewPolylin(polylin);
 				}
-				connectorNode.notifyConnectorChanged();
+				connectorNode.notifyConnectorModified();
+			}
+		}
+	}
+
+	public FGEPoint getFixedStartLocation() {
+		return getConnectorSpecification().getFixedStartLocation();
+	}
+
+	public void setFixedStartLocation(FGEPoint aPoint) {
+		FGEShape<?> startArea = getStartNode().getShape().getOutline(getStartNode());
+		aPoint = startArea.getNearestPoint(aPoint);
+		getConnectorSpecification().setFixedStartLocation(aPoint);
+	}
+
+	public FGEPoint getFixedEndLocation() {
+		return getConnectorSpecification().getFixedEndLocation();
+	}
+
+	public void setFixedEndLocation(FGEPoint aPoint) {
+		FGEShape<?> endArea = getEndNode().getShape().getOutline(getEndNode());
+		aPoint = endArea.getNearestPoint(aPoint);
+		getConnectorSpecification().setFixedEndLocation(aPoint);
+	}
+
+	@Override
+	public void update(Observable observable, Object notification) {
+		super.update(observable, notification);
+
+		// TODO: manage crossedControlPoint and polylin (see _deserializedPolylin)
+
+		if (notification instanceof FGENotification && observable == getConnectorSpecification()) {
+			// Those notifications are forwarded by the connector specification
+			FGENotification notif = (FGENotification) notification;
+
+			if (notif.getParameter() == RectPolylinConnectorParameters.rectPolylinConstraints) {
+				p_start = null;
+				p_end = null;
+				updateLayout();
+				connectorNode.notifyConnectorModified();
+			} else if (notif.getParameter() == RectPolylinConnectorParameters.straightLineWhenPossible
+					|| notif.getParameter() == RectPolylinConnectorParameters.startOrientation
+					|| notif.getParameter() == RectPolylinConnectorParameters.endOrientation
+					|| notif.getParameter() == RectPolylinConnectorParameters.pixelOverlap
+					|| notif.getParameter() == RectPolylinConnectorParameters.isRounded
+					|| notif.getParameter() == RectPolylinConnectorParameters.arcSize) {
+				updateLayout();
+				connectorNode.notifyConnectorModified();
+			} else if (notif.getParameter() == RectPolylinConnectorParameters.isStartingLocationDraggable
+					|| notif.getParameter() == RectPolylinConnectorParameters.isEndingLocationDraggable
+					|| notif.getParameter() == RectPolylinConnectorParameters.fixedStartLocation
+					|| notif.getParameter() == RectPolylinConnectorParameters.fixedEndLocation) {
+				updateLayout();
+				// Force control points to be rebuild in order to get draggable feature
+				_rebuildControlPoints();
+				connectorNode.notifyConnectorModified();
+			} else if (notif.getParameter() == RectPolylinConnectorParameters.isStartingLocationFixed) {
+				if (getConnectorSpecification().getIsStartingLocationFixed() && fixedStartLocationRelativeToStartObject == null
+						&& p_start != null) {
+					// In this case, we can initialize fixed start location to its current value
+					fixedStartLocationRelativeToStartObject = FGEUtils.convertNormalizedPoint(connectorNode, p_start.getPoint(),
+							getStartNode());
+				}
+				updateLayout();
+				_rebuildControlPoints();
+				connectorNode.notifyConnectorModified();
+			} else if (notif.getParameter() == RectPolylinConnectorParameters.isEndingLocationFixed) {
+				if (getConnectorSpecification().getIsEndingLocationFixed() && fixedEndLocationRelativeToEndObject == null && p_end != null) {
+					// In this case, we can initialize fixed start location to its current value
+					fixedEndLocationRelativeToEndObject = FGEUtils.convertNormalizedPoint(connectorNode, p_end.getPoint(), getEndNode());
+				}
+				updateLayout();
+				_rebuildControlPoints();
+				connectorNode.notifyConnectorModified();
+			} else if (notif.getParameter() == RectPolylinConnectorParameters.adjustability) {
+				if (polylin != null) {
+					updateWithNewPolylin(polylin);
+				}
+				updateLayout();
+				if (polylin != null) {
+					updateWithNewPolylin(polylin);
+				}
+				connectorNode.notifyConnectorModified();
+
+				if (getConnectorSpecification().getAdjustability() != RectPolylinAdjustability.FULLY_ADJUSTABLE) {
+					setWasManuallyAdjusted(false);
+				}
 			}
 		}
 	}

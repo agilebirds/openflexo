@@ -22,9 +22,8 @@ package org.openflexo.fge.connectors.rpc;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
+import org.openflexo.fge.connectors.impl.RectPolylinConnector;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
@@ -50,8 +49,8 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 	private SimplifiedCardinalDirection nextOrientation;
 	private FGEArea draggingAuthorizedArea;
 
-	public AdjustableIntermediateSegment(FGESegment segment, RectPolylinConnectorSpecification connector, ConnectorNode<?> node) {
-		super(segment, connector, node);
+	public AdjustableIntermediateSegment(FGESegment segment, RectPolylinConnector connector) {
+		super(segment, connector);
 		retrieveInfos();
 	}
 
@@ -286,13 +285,13 @@ public class AdjustableIntermediateSegment extends RectPolylinAdjustableSegment 
 		}
 
 		getPolylin().updatePointAt(index, p1);
-		getConnector()._getControlPoints().elementAt(index).setPoint(p1);
+		getConnector().getControlPoints().get(index).setPoint(p1);
 
 		getPolylin().updatePointAt(index + 1, p2);
-		getConnector()._getControlPoints().elementAt(index + 1).setPoint(p2);
+		getConnector().getControlPoints().get(index + 1).setPoint(p2);
 
 		getConnector()._connectorChanged(true);
-		getNode().notifyConnectorChanged();
+		getNode().notifyConnectorModified();
 
 		return true;
 

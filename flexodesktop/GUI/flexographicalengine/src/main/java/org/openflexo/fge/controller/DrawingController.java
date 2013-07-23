@@ -644,7 +644,7 @@ public class DrawingController<M> extends Observable implements Observer {
 	 * @return
 	 */
 	public ControlArea<?> preferredFocusedControlArea(ControlArea<?> ca1, ControlArea<?> ca2) {
-		if (ca1.getGraphicalRepresentation().getLayer() == ca2.getGraphicalRepresentation().getLayer()) {
+		if (ca1.getNode().getGraphicalRepresentation().getLayer() == ca2.getNode().getGraphicalRepresentation().getLayer()) {
 			// ControlPoint have priority on other ControlArea
 			if (ca1 instanceof ConnectorAdjustingControlPoint) {
 				return ca1;
@@ -657,7 +657,7 @@ public class DrawingController<M> extends Observable implements Observer {
 				return ca2;
 			}
 		}
-		return ca1.getGraphicalRepresentation().getLayer() > ca2.getGraphicalRepresentation().getLayer() ? ca1 : ca2;
+		return ca1.getNode().getGraphicalRepresentation().getLayer() > ca2.getNode().getGraphicalRepresentation().getLayer() ? ca1 : ca2;
 	}
 
 	public ControlArea<?> getFocusedControlArea() {

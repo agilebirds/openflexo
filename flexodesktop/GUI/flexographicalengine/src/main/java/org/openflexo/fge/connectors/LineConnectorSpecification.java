@@ -19,6 +19,7 @@
  */
 package org.openflexo.fge.connectors;
 
+import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.connectors.impl.LineConnectorSpecificationImpl;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.model.annotations.Getter;
@@ -38,6 +39,10 @@ public interface LineConnectorSpecification extends ConnectorSpecification {
 	public static final String LINE_CONNECTOR_TYPE = "lineConnectorType";
 	public static final String CP1_RELATIVE_TO_START_OBJECT = "cp1RelativeToStartObject";
 	public static final String CP2_RELATIVE_TO_END_OBJECT = "cp2RelativeToEndObject";
+
+	public static enum LineConnectorParameters implements GRParameter {
+		lineConnectorType, cp1RelativeToStartObject, cp2RelativeToEndObject;
+	}
 
 	public static enum LineConnectorType {
 		CENTER_TO_CENTER, MINIMAL_LENGTH, FUNNY, ADJUSTABLE

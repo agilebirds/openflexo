@@ -20,6 +20,7 @@
 package org.openflexo.fge.connectors;
 
 import org.openflexo.fge.FGEConstants;
+import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.connectors.impl.RectPolylinConnectorSpecificationImpl;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -85,6 +86,25 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 	public static final String FIXED_END_LOCATION = "fixedEndLocation";
 	public static final String POLYLIN = "polylin";
 	public static final String PIXEL_OVERLAP = "pixelOverlap";
+
+	public static enum RectPolylinConnectorParameters implements GRParameter {
+		rectPolylinConstraints,
+		straightLineWhenPossible,
+		adjustability,
+		startOrientation,
+		endOrientation,
+		isRounded,
+		arcSize,
+		isStartingLocationFixed,
+		isEndingLocationFixed,
+		isStartingLocationDraggable,
+		isEndingLocationDraggable,
+		crossedControlPoint,
+		fixedStartLocation,
+		fixedEndLocation,
+		polylin,
+		pixelOverlap
+	}
 
 	public static enum RectPolylinAdjustability {
 		AUTO_LAYOUT, BASICALLY_ADJUSTABLE, FULLY_ADJUSTABLE
@@ -240,10 +260,10 @@ public interface RectPolylinConnectorSpecification extends ConnectorSpecificatio
 	public void setPixelOverlap(int aPixelOverlap);
 
 	@Getter(value = POLYLIN, ignoreType = true)
-	public FGERectPolylin _getPolylin();
+	public FGERectPolylin getPolylin();
 
 	@Setter(value = POLYLIN)
-	public void _setPolylin(FGERectPolylin aPolylin);
+	public void setPolylin(FGERectPolylin aPolylin);
 
 	// *******************************************************************************
 	// * Utils

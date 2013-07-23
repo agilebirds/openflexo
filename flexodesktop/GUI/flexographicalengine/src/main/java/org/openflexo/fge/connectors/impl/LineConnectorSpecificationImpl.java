@@ -2,12 +2,14 @@ package org.openflexo.fge.connectors.impl;
 
 import java.util.logging.Logger;
 
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.connectors.LineConnectorSpecification;
 import org.openflexo.fge.geom.FGEPoint;
-import org.openflexo.fge.notifications.ConnectorModified;
+import org.openflexo.fge.notifications.FGENotification;
 
 public class LineConnectorSpecificationImpl extends ConnectorSpecificationImpl implements LineConnectorSpecification {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(LineConnectorSpecification.class.getPackage().getName());
 
 	private FGEPoint cp1RelativeToStartObject;
@@ -26,40 +28,39 @@ public class LineConnectorSpecificationImpl extends ConnectorSpecificationImpl i
 
 	@Override
 	public void setLineConnectorType(LineConnectorType aLineConnectorType) {
-		if (lineConnectorType != aLineConnectorType) {
-			// LineConnectorType oldLineConnectorType = lineConnectorType;
+		FGENotification notification = requireChange(LineConnectorParameters.lineConnectorType, aLineConnectorType);
+		if (notification != null) {
 			lineConnectorType = aLineConnectorType;
-			setChanged();
-			notifyObservers(new ConnectorModified());
+			hasChanged(notification);
 		}
-		/*if (getGraphicalRepresentation() != null) {
-			updateControlPoints();
-			getGraphicalRepresentation().notifyConnectorChanged();
-		}*/
 	}
 
-	// Used for serialization only
 	@Override
 	public FGEPoint getCp1RelativeToStartObject() {
 		return cp1RelativeToStartObject;
 	}
 
-	// Used for serialization only
 	@Override
 	public void setCp1RelativeToStartObject(FGEPoint aPoint) {
-		this.cp1RelativeToStartObject = aPoint;
+		FGENotification notification = requireChange(LineConnectorParameters.cp1RelativeToStartObject, cp1RelativeToStartObject);
+		if (notification != null) {
+			this.cp1RelativeToStartObject = aPoint;
+			hasChanged(notification);
+		}
 	}
 
-	// Used for serialization only
 	@Override
 	public FGEPoint getCp2RelativeToEndObject() {
 		return cp2RelativeToEndObject;
 	}
 
-	// Used for serialization only
 	@Override
 	public void setCp2RelativeToEndObject(FGEPoint aPoint) {
-		this.cp2RelativeToEndObject = aPoint;
+		FGENotification notification = requireChange(LineConnectorParameters.cp2RelativeToEndObject, cp2RelativeToEndObject);
+		if (notification != null) {
+			this.cp2RelativeToEndObject = aPoint;
+			hasChanged(notification);
+		}
 	}
 
 	@Override
@@ -73,6 +74,13 @@ public class LineConnectorSpecificationImpl extends ConnectorSpecificationImpl i
 		returned.setLineConnectorType(getLineConnectorType());
 		returned.setCp1RelativeToStartObject(getCp1RelativeToStartObject());
 		returned.setCp2RelativeToEndObject(getCp2RelativeToEndObject());
+		return returned;
+	}
+
+	@Override
+	public LineConnector makeConnector(ConnectorNode<?> connectorNode) {
+		LineConnector returned = new LineConnector(connectorNode);
+		addObserver(returned);
 		return returned;
 	}
 

@@ -68,7 +68,7 @@ public class TokenEdgeGR extends EdgeGR<TokenEdge> {
 			// during big model restructurations (for example during a multiple delete)
 			return;
 		}
-		if (getConnector() instanceof RectPolylinConnectorSpecification) {
+		if (getConnectorSpecification() instanceof RectPolylinConnectorSpecification) {
 			startOrientationFixed = false;
 			endOrientationFixed = false;
 			// ((RectPolylinConnectorSpecification)getConnector()).setRectPolylinConstraints(RectPolylinConstraints.NONE);

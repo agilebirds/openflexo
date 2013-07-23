@@ -23,9 +23,8 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
+import org.openflexo.fge.connectors.impl.RectPolylinConnector;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectPolylin;
@@ -39,8 +38,8 @@ public class AdjustableLastControlPoint extends RectPolylinAdjustableControlPoin
 
 	private SimplifiedCardinalDirection currentEndOrientation = null;
 
-	public AdjustableLastControlPoint(FGEPoint point, RectPolylinConnectorSpecification connector, ConnectorNode<?> node) {
-		super(point, connector, node);
+	public AdjustableLastControlPoint(FGEPoint point, RectPolylinConnector connector) {
+		super(point, connector);
 	}
 
 	@Override
@@ -66,7 +65,7 @@ public class AdjustableLastControlPoint extends RectPolylinAdjustableControlPoin
 		getPolylin().updatePointAt(getPolylin().getPointsNb() - 2, pt);
 		movedLastCP();
 		getConnector()._connectorChanged(true);
-		getNode().notifyConnectorChanged();
+		getNode().notifyConnectorModified();
 		return true;
 	}
 
@@ -77,7 +76,7 @@ public class AdjustableLastControlPoint extends RectPolylinAdjustableControlPoin
 	private void movedLastCP() {
 		FGEArea endArea = getConnector().retrieveAllowedEndArea(false);
 
-		if (getConnector().getIsEndingLocationFixed() && !getConnector().getIsEndingLocationDraggable()) {
+		if (getConnectorSpecification().getIsEndingLocationFixed() && !getConnectorSpecification().getIsEndingLocationDraggable()) {
 			// If starting location is fixed and not draggable,
 			// Then retrieve start area itself (which is here a single point)
 			endArea = getConnector().retrieveEndArea();
@@ -102,7 +101,7 @@ public class AdjustableLastControlPoint extends RectPolylinAdjustableControlPoin
 			}
 			getPolylin().updatePointAt(getPolylin().getPointsNb() - 1, newEndPoint);
 			getConnector().getEndControlPoint().setPoint(newEndPoint);
-			if (getConnector().getIsEndingLocationFixed()) { // Don't forget this !!!
+			if (getConnectorSpecification().getIsEndingLocationFixed()) { // Don't forget this !!!
 				getConnector().setFixedEndLocation(FGEUtils.convertNormalizedPoint(getNode(), newEndPoint, getNode().getEndNode()));
 			}
 
@@ -228,8 +227,9 @@ public class AdjustableLastControlPoint extends RectPolylinAdjustableControlPoin
 				}
 				getPolylin().updatePointAt(getPolylin().getPointsNb() - 1, newEndPosition);
 				getConnector().getEndControlPoint().setPoint(newEndPosition);
-				if (getConnector().getIsEndingLocationFixed()) { // Don't forget this !!!
-					getConnector().setFixedEndLocation(FGEUtils.convertNormalizedPoint(getNode(), newEndPosition, getNode().getEndNode()));
+				if (getConnectorSpecification().getIsEndingLocationFixed()) { // Don't forget this !!!
+					getConnectorSpecification().setFixedEndLocation(
+							FGEUtils.convertNormalizedPoint(getNode(), newEndPosition, getNode().getEndNode()));
 				}
 
 				// Compute path to append

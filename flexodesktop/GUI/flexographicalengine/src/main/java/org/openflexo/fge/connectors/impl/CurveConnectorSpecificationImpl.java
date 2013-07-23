@@ -2,11 +2,14 @@ package org.openflexo.fge.connectors.impl;
 
 import java.util.logging.Logger;
 
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.connectors.CurveConnectorSpecification;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.notifications.FGENotification;
 
 public class CurveConnectorSpecificationImpl extends ConnectorSpecificationImpl implements CurveConnectorSpecification {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(CurveConnectorSpecification.class.getPackage().getName());
 
 	private FGEPoint cp1RelativeToStartObject;
@@ -31,7 +34,11 @@ public class CurveConnectorSpecificationImpl extends ConnectorSpecificationImpl 
 
 	@Override
 	public void setCp1RelativeToStartObject(FGEPoint aPoint) {
-		this.cp1RelativeToStartObject = aPoint;
+		FGENotification notification = requireChange(CurveConnectorParameters.cp1RelativeToStartObject, cp1RelativeToStartObject);
+		if (notification != null) {
+			this.cp1RelativeToStartObject = aPoint;
+			hasChanged(notification);
+		}
 	}
 
 	@Override
@@ -41,7 +48,11 @@ public class CurveConnectorSpecificationImpl extends ConnectorSpecificationImpl 
 
 	@Override
 	public void setCp2RelativeToEndObject(FGEPoint aPoint) {
-		this.cp2RelativeToEndObject = aPoint;
+		FGENotification notification = requireChange(CurveConnectorParameters.cp2RelativeToEndObject, cp2RelativeToEndObject);
+		if (notification != null) {
+			this.cp2RelativeToEndObject = aPoint;
+			hasChanged(notification);
+		}
 	}
 
 	@Override
@@ -51,7 +62,11 @@ public class CurveConnectorSpecificationImpl extends ConnectorSpecificationImpl 
 
 	@Override
 	public void setCpPosition(FGEPoint cpPosition) {
-		this.cpPosition = cpPosition;
+		FGENotification notification = requireChange(CurveConnectorParameters.cpPosition, cpPosition);
+		if (notification != null) {
+			this.cpPosition = cpPosition;
+			hasChanged(notification);
+		}
 	}
 
 	@Override
@@ -61,12 +76,10 @@ public class CurveConnectorSpecificationImpl extends ConnectorSpecificationImpl 
 
 	@Override
 	public void setAreBoundsAdjustable(boolean aFlag) {
-		if (areBoundsAdjustable != aFlag) {
+		FGENotification notification = requireChange(CurveConnectorParameters.areBoundsAdjustable, aFlag);
+		if (notification != null) {
 			areBoundsAdjustable = aFlag;
-			/*if (getGraphicalRepresentation() != null) {
-				updateControlPoints();
-				getGraphicalRepresentation().notifyConnectorChanged();
-			}*/
+			hasChanged(notification);
 		}
 	}
 
@@ -82,6 +95,13 @@ public class CurveConnectorSpecificationImpl extends ConnectorSpecificationImpl 
 		returned.setCp1RelativeToStartObject(getCp1RelativeToStartObject());
 		returned.setCp2RelativeToEndObject(getCp2RelativeToEndObject());
 		returned.setAreBoundsAdjustable(getAreBoundsAdjustable());
+		return returned;
+	}
+
+	@Override
+	public CurveConnector makeConnector(ConnectorNode<?> connectorNode) {
+		CurveConnector returned = new CurveConnector(connectorNode);
+		addObserver(returned);
 		return returned;
 	}
 

@@ -1,5 +1,6 @@
 package org.openflexo.fge.connectors.impl;
 
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.connectors.CurvedPolylinConnectorSpecification;
 
 public class CurvedPolylinConnectorSpecificationImpl extends ConnectorSpecificationImpl implements CurvedPolylinConnectorSpecification {
@@ -21,6 +22,13 @@ public class CurvedPolylinConnectorSpecificationImpl extends ConnectorSpecificat
 	@Override
 	public CurvedPolylinConnectorSpecification clone() {
 		CurvedPolylinConnectorSpecification returned = new CurvedPolylinConnectorSpecificationImpl();
+		return returned;
+	}
+
+	@Override
+	public CurvedPolylinConnector makeConnector(ConnectorNode<?> connectorNode) {
+		CurvedPolylinConnector returned = new CurvedPolylinConnector(connectorNode);
+		addObserver(returned);
 		return returned;
 	}
 

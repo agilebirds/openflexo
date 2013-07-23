@@ -104,8 +104,8 @@ public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation
 	 * @return
 	 */
 	protected boolean isConnectorFullyVisible(ShapeGraphicalRepresentation startObjGR, ShapeGraphicalRepresentation endObjGR) {
-		FGEPoint startLocation = getConnector().getStartLocation();
-		FGEPoint endLocation = getConnector().getEndLocation();
+		FGEPoint startLocation = getConnectorSpecification().getStartLocation();
+		FGEPoint endLocation = getConnectorSpecification().getEndLocation();
 
 		if (startLocation == null) {
 			return true;
@@ -157,8 +157,8 @@ public abstract class WKFConnectorGR<O> extends ConnectorGraphicalRepresentation
 	 * @return
 	 */
 	protected int minimalLayerHiding(ShapeGraphicalRepresentation startObjGR, ShapeGraphicalRepresentation endObjGR) {
-		FGEPoint startLocation = getConnector().getStartLocation();
-		FGEPoint endLocation = getConnector().getEndLocation();
+		FGEPoint startLocation = getConnectorSpecification().getStartLocation();
+		FGEPoint endLocation = getConnectorSpecification().getEndLocation();
 
 		if (startLocation == null) {
 			return -1;

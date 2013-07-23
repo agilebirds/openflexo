@@ -23,9 +23,8 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
+import org.openflexo.fge.connectors.impl.RectPolylinConnector;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -47,8 +46,8 @@ public class AdjustableLastSegment extends RectPolylinAdjustableSegment {
 	private FGEArea endArea;
 	private FGEArea draggingAuthorizedArea;
 
-	public AdjustableLastSegment(FGESegment segment, RectPolylinConnectorSpecification connector, ConnectorNode<?> node) {
-		super(segment, connector, node);
+	public AdjustableLastSegment(FGESegment segment, RectPolylinConnector connector) {
+		super(segment, connector);
 		retrieveInfos();
 	}
 
@@ -159,13 +158,13 @@ public class AdjustableLastSegment extends RectPolylinAdjustableSegment {
 		}*/
 
 		getPolylin().updatePointAt(segmentsNb - 1, p1);
-		getConnector()._getControlPoints().elementAt(segmentsNb - 1).setPoint(p1);
+		getConnector().getControlPoints().get(segmentsNb - 1).setPoint(p1);
 
 		getPolylin().updatePointAt(segmentsNb, p2);
-		getConnector()._getControlPoints().elementAt(segmentsNb).setPoint(p2);
+		getConnector().getControlPoints().get(segmentsNb).setPoint(p2);
 
 		getConnector()._connectorChanged(true);
-		getNode().notifyConnectorChanged();
+		getNode().notifyConnectorModified();
 
 		return true;
 

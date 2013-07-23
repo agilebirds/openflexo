@@ -107,7 +107,7 @@ public class DMRelationshipGR extends ConnectorGraphicalRepresentation<Relations
 
 	@Override
 	public RectPolylinConnectorSpecification getConnector() {
-		return (RectPolylinConnectorSpecification) super.getConnector();
+		return (RectPolylinConnectorSpecification) super.getConnectorSpecification();
 	}
 
 	private void updateStyles() {
@@ -191,10 +191,10 @@ public class DMRelationshipGR extends ConnectorGraphicalRepresentation<Relations
 	private void storeNewLayout() {
 		if (isRegistered()) {
 			ensurePolylinConverterIsRegistered();
-			if (getConnector().getWasManuallyAdjusted() && getConnector()._getPolylin() != null) {
+			if (getConnector().getWasManuallyAdjusted() && getConnector().getPolylin() != null) {
 				if (polylinIWillBeAdustedTo == null) { // Store this layout only in no other layout is beeing registering
 					// logger.info("Post "+getPostCondition().getName()+": store new layout to "+connector._getPolylin());
-					getProperty()._setGraphicalPropertyForKey(getConnector()._getPolylin(), getStoredPolylinKey());
+					getProperty()._setGraphicalPropertyForKey(getConnector().getPolylin(), getStoredPolylinKey());
 				}
 			} else {
 				if (getProperty().hasGraphicalPropertyForKey(getStoredPolylinKey())) {

@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
@@ -20,7 +19,6 @@ import org.openflexo.fge.connectors.ConnectorSymbol.StartSymbolType;
 import org.openflexo.fge.controller.MouseClickControl;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
 import org.openflexo.fge.controller.MouseControl.MouseButton;
-import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.notifications.ConnectorModified;
 import org.openflexo.fge.notifications.ConnectorNeedsToBeRedrawn;
 import org.openflexo.fge.notifications.FGENotification;
@@ -573,10 +571,10 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 	 * @param scale
 	 * @return
 	 */
-	@Override
+	/*@Override
 	public double distanceToConnector(FGEPoint aPoint, double scale, ConnectorNode<?> connectorNode) {
 		return connector.distanceToConnector(aPoint, scale, connectorNode);
-	}
+	}*/
 
 	// *******************************************************************************
 	// * Methods *

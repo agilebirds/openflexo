@@ -93,7 +93,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 
 	private RootNodeImpl<M> buildRoot() {
 		if (drawingBinding != null) {
-			RootNodeImpl<M> _root = new RootNodeImpl<M>(this, model, drawingBinding, null);
+			RootNodeImpl<M> _root = new RootNodeImpl<M>(this, model, drawingBinding);
 			Hashtable<Object, DrawingTreeNode<?, ?>> hash = retrieveHash(drawingBinding);
 			hash.put(model, _root);
 			return _root;

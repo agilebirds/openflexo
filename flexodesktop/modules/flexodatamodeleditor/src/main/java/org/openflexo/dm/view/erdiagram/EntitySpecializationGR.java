@@ -91,7 +91,7 @@ public class EntitySpecializationGR extends ConnectorGraphicalRepresentation<Ent
 
 	@Override
 	public RectPolylinConnectorSpecification getConnector() {
-		return (RectPolylinConnectorSpecification) super.getConnector();
+		return (RectPolylinConnectorSpecification) super.getConnectorSpecification();
 	}
 
 	private void updateStyles() {
@@ -193,10 +193,10 @@ public class EntitySpecializationGR extends ConnectorGraphicalRepresentation<Ent
 	private void storeNewLayout() {
 		if (isRegistered()) {
 			ensurePolylinConverterIsRegistered();
-			if (getConnector().getWasManuallyAdjusted() && getConnector()._getPolylin() != null) {
+			if (getConnector().getWasManuallyAdjusted() && getConnector().getPolylin() != null) {
 				if (polylinIWillBeAdustedTo == null) { // Store this layout only in no other layout is beeing registering
 					// logger.info("Post "+getPostCondition().getName()+": store new layout to "+connector._getPolylin());
-					getSpecializedEntity()._setGraphicalPropertyForKey(getConnector()._getPolylin(), getStoredPolylinKey());
+					getSpecializedEntity()._setGraphicalPropertyForKey(getConnector().getPolylin(), getStoredPolylinKey());
 				}
 			} else {
 				if (getSpecializedEntity().hasGraphicalPropertyForKey(getStoredPolylinKey())) {

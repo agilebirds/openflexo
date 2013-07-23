@@ -80,7 +80,7 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 					for (WKFAssociation a : getAnnotation().getIncomingAssociations()) {
 						ConnectorGraphicalRepresentation<WKFAssociation> gr = (ConnectorGraphicalRepresentation<WKFAssociation>) getGraphicalRepresentation(a);
 						if (gr.getEndObject() == AnnotationGR.this) {
-							if (gr.getConnector().getEndLocation().x < 0.5) {
+							if (gr.getConnectorSpecification().getEndLocation().x < 0.5) {
 								drawLeft = true;
 							} else {
 								drawRight = true;
@@ -90,7 +90,7 @@ public class AnnotationGR extends ArtefactGR<WKFAnnotation> {
 					for (WKFAssociation a : getAnnotation().getOutgoingAssociations()) {
 						ConnectorGraphicalRepresentation<WKFAssociation> gr = (ConnectorGraphicalRepresentation<WKFAssociation>) getGraphicalRepresentation(a);
 						if (gr.getStartObject() == AnnotationGR.this) {
-							if (gr.getConnector().getStartLocation().x < 0.5) {
+							if (gr.getConnectorSpecification().getStartLocation().x < 0.5) {
 								drawLeft = true;
 							} else {
 								drawRight = true;

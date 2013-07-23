@@ -49,9 +49,9 @@ public class RoleSpecializationGR extends ConnectorGraphicalRepresentation<RoleS
 		/*if (getConnector() instanceof LineConnectorSpecification) {
 			((LineConnectorSpecification)getConnector()).setLineConnectorType(LineConnectorType.CENTER_TO_CENTER);
 		}*/
-		if (getConnector() instanceof RectPolylinConnectorSpecification) {
-			((RectPolylinConnectorSpecification) getConnector()).setStraightLineWhenPossible(false);
-			((RectPolylinConnectorSpecification) getConnector()).setRectPolylinConstraints(RectPolylinConstraints.VERTICAL_LAYOUT);
+		if (getConnectorSpecification() instanceof RectPolylinConnectorSpecification) {
+			((RectPolylinConnectorSpecification) getConnectorSpecification()).setStraightLineWhenPossible(false);
+			((RectPolylinConnectorSpecification) getConnectorSpecification()).setRectPolylinConstraints(RectPolylinConstraints.VERTICAL_LAYOUT);
 		}
 		setEndSymbol(EndSymbolType.PLAIN_ARROW);
 		if (getStartObject() != null && getEndObject() != null) {

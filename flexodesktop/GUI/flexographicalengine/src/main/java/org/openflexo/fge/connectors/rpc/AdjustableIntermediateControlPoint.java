@@ -24,9 +24,8 @@ import java.awt.event.MouseEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.Drawing.ConnectorNode;
-import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.connectors.RectPolylinConnectorSpecification.RectPolylinAdjustability;
+import org.openflexo.fge.connectors.impl.RectPolylinConnector;
 import org.openflexo.fge.geom.FGEGeometricObject;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGEPoint;
@@ -40,8 +39,8 @@ public class AdjustableIntermediateControlPoint extends RectPolylinAdjustableCon
 
 	private int index;
 
-	public AdjustableIntermediateControlPoint(FGEPoint point, int index, RectPolylinConnectorSpecification connector, ConnectorNode<?> node) {
-		super(point, connector, node);
+	public AdjustableIntermediateControlPoint(FGEPoint point, int index, RectPolylinConnector connector) {
+		super(point, connector);
 		this.index = index;
 	}
 
@@ -52,7 +51,7 @@ public class AdjustableIntermediateControlPoint extends RectPolylinAdjustableCon
 
 	@Override
 	public Cursor getDraggingCursor() {
-		if (getConnector().getAdjustability() == RectPolylinAdjustability.BASICALLY_ADJUSTABLE) {
+		if (getConnectorSpecification().getAdjustability() == RectPolylinAdjustability.BASICALLY_ADJUSTABLE) {
 			return Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
 		}
 		return super.getDraggingCursor();
@@ -61,10 +60,10 @@ public class AdjustableIntermediateControlPoint extends RectPolylinAdjustableCon
 	@Override
 	public boolean dragToPoint(FGEPoint newRelativePoint, FGEPoint pointRelativeToInitialConfiguration, FGEPoint newAbsolutePoint,
 			FGEPoint initialPoint, MouseEvent event) {
-		if (getConnector().getAdjustability() == RectPolylinAdjustability.BASICALLY_ADJUSTABLE) {
-			getConnector().setCrossedControlPoint(newRelativePoint);
+		if (getConnectorSpecification().getAdjustability() == RectPolylinAdjustability.BASICALLY_ADJUSTABLE) {
+			getConnectorSpecification().setCrossedControlPoint(newRelativePoint);
 			getConnector()._connectorChanged(true);
-			getNode().notifyConnectorChanged();
+			getNode().notifyConnectorModified();
 			return true;
 		}
 		FGEPoint pt = getNearestPointOnAuthorizedArea(newRelativePoint);
@@ -81,7 +80,7 @@ public class AdjustableIntermediateControlPoint extends RectPolylinAdjustableCon
 		getPolylin().updatePointAt(index, pt);
 		boolean continueDragging = movedIntermediateCP(index, oldPoint, true);
 		getConnector()._connectorChanged(true);
-		getNode().notifyConnectorChanged();
+		getNode().notifyConnectorModified();
 		return continueDragging;
 	}
 
@@ -194,7 +193,7 @@ public class AdjustableIntermediateControlPoint extends RectPolylinAdjustableCon
 		}
 
 		getPolylin().updatePointAt(index - 1, previousCPNewLocation);
-		getConnector()._getControlPoints().elementAt(index - 1).setPoint(previousCPNewLocation);
+		getConnector().getControlPoints().get(index - 1).setPoint(previousCPNewLocation);
 
 		// Update next control point location according to orientation of related segment
 		if (nextSegmentOrientation.isHorizontal()) {
@@ -266,7 +265,7 @@ public class AdjustableIntermediateControlPoint extends RectPolylinAdjustableCon
 		}
 
 		getPolylin().updatePointAt(index + 1, nextCPNewLocation);
-		getConnector()._getControlPoints().elementAt(index + 1).setPoint(nextCPNewLocation);
+		getConnector().getControlPoints().get(index + 1).setPoint(nextCPNewLocation);
 
 		/*if (!getPolylin().isNormalized()) {
 			getConnector().updateWithNewPolylin(getPolylin(), true);
