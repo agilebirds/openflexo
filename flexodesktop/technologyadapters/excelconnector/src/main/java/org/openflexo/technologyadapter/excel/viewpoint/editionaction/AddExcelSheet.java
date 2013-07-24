@@ -23,7 +23,7 @@ public class AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSh
 
 	@Override
 	public org.openflexo.foundation.viewpoint.EditionAction.EditionActionType getEditionActionType() {
-		return EditionActionType.AddIndividual;
+		return EditionActionType.Assignation;
 	}
 
 	@Override

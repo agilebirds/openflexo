@@ -23,7 +23,7 @@ public class SelectExcelSheet extends FetchRequest<BasicExcelModelSlot, ExcelShe
 
 	@Override
 	public org.openflexo.foundation.viewpoint.EditionAction.EditionActionType getEditionActionType() {
-		return EditionActionType.SelectIndividual;
+		return EditionActionType.FetchRequest;
 	}
 
 	@Override

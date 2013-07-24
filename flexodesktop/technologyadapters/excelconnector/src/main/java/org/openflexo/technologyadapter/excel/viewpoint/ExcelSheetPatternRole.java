@@ -23,7 +23,6 @@ import java.lang.reflect.Type;
 
 import org.openflexo.foundation.view.ActorReference;
 import org.openflexo.foundation.view.EditionPatternInstance;
-import org.openflexo.foundation.view.FreeActorReference;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel.VirtualModelBuilder;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
@@ -59,7 +58,7 @@ public class ExcelSheetPatternRole extends PatternRole<ExcelSheet> {
 
 	@Override
 	public ActorReference<ExcelSheet> makeActorReference(ExcelSheet object, EditionPatternInstance epi) {
-		return new FreeActorReference<ExcelSheet>(object, this, epi);
+		return null;
 	}
 
 	@Override
