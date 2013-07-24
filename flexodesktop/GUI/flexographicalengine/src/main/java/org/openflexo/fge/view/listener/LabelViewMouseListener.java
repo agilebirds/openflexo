@@ -21,20 +21,21 @@ package org.openflexo.fge.view.listener;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.view.LabelView;
 
 public class LabelViewMouseListener extends FGEViewMouseListener {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(LabelViewMouseListener.class.getPackage().getName());
 
 	// private GraphicalRepresentation graphicalRepresentation;
 	// private LabelView<?> labelView;
 
-	public LabelViewMouseListener(GraphicalRepresentation aGraphicalRepresentation, LabelView aView) {
+	public <O> LabelViewMouseListener(DrawingTreeNode<O, ?> node, LabelView<O> aView) {
 		/*graphicalRepresentation = aGraphicalRepresentation;
 		labelView = aView;*/
-		super(aGraphicalRepresentation, aView);
+		super(node, aView);
 	}
 
 	/*public void mouseClicked(MouseEvent e) 

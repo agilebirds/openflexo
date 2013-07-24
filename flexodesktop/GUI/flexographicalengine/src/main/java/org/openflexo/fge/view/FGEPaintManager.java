@@ -39,11 +39,11 @@ import javax.swing.JComponent;
 import javax.swing.RepaintManager;
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 
 public class FGEPaintManager {
@@ -58,7 +58,7 @@ public class FGEPaintManager {
 
 	private boolean _paintingCacheEnabled;
 
-	private static final int DEFAULT_IMAGE_TYPE = BufferedImage.TYPE_INT_RGB;
+	// private static final int DEFAULT_IMAGE_TYPE = BufferedImage.TYPE_INT_RGB;
 
 	private static FGERepaintManager repaintManager;
 
@@ -71,12 +71,12 @@ public class FGEPaintManager {
 		*/
 	}
 
-	private DrawingView _drawingView;
+	private DrawingView<?> _drawingView;
 
 	private BufferedImage _paintBuffer;
 	private HashSet<DrawingTreeNode<?, ?>> _temporaryObjects;
 
-	public FGEPaintManager(DrawingView drawingView) {
+	public FGEPaintManager(DrawingView<?> drawingView) {
 		super();
 		_drawingView = drawingView;
 		_paintBuffer = null;
@@ -88,11 +88,11 @@ public class FGEPaintManager {
 		}
 	}
 
-	public DrawingView getDrawingView() {
+	public DrawingView<?> getDrawingView() {
 		return _drawingView;
 	}
 
-	public DrawingController getDrawingController() {
+	public DrawingController<?> getDrawingController() {
 		return _drawingView.getController();
 	}
 
@@ -125,12 +125,14 @@ public class FGEPaintManager {
 		if (isTemporaryObject(dtn)) {
 			return true;
 		}
-		if (dtn.getChildNodes() == null) {
-			return false;
-		}
-		for (DrawingTreeNode<?, ?> child : dtn.getChildNodes()) {
-			if (containsTemporaryObject(child)) {
-				return true;
+		if (dtn instanceof ContainerNode) {
+			if (((ContainerNode<?, ?>) dtn).getChildNodes() == null) {
+				return false;
+			}
+			for (DrawingTreeNode<?, ?> child : ((ContainerNode<?, ?>) dtn).getChildNodes()) {
+				if (containsTemporaryObject(child)) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -180,7 +182,7 @@ public class FGEPaintManager {
 
 	}
 
-	public void repaint(FGEView view, Rectangle bounds) {
+	public void repaint(FGEView<?> view, Rectangle bounds) {
 		if (!_drawingView.contains(view)) {
 			return;
 		}
@@ -223,8 +225,8 @@ public class FGEPaintManager {
 		}
 		repaintManager.repaintTemporaryRepaintAreas(_drawingView);
 		((JComponent) view).repaint();
-		if (view.getDrawingTreeNode().getGraphicalRepresentation().hasFloatingLabel()) {
-			LabelView label = view.getLabelView();
+		if (view.getNode().getGraphicalRepresentation().hasFloatingLabel()) {
+			LabelView<?> label = view.getLabelView();
 			if (label != null) {
 				label.repaint();
 			}
@@ -240,16 +242,16 @@ public class FGEPaintManager {
 			// Control points displayed focus or selection might changed, and to be refresh correctely
 			// we must assume that a request to an extended area embedding those control points
 			// must be performed (in case of border is not sufficient)
-			ShapeGraphicalRepresentation gr = ((ShapeView) view).getGraphicalRepresentation();
+			ShapeNode<?> shapeNode = ((ShapeView<?>) view).getNode();
 			int requiredControlPointSpace = FGEConstants.CONTROL_POINT_SIZE;
-			if (gr.getBorder().getTop() * view.getScale() < requiredControlPointSpace) {
+			if (shapeNode.getGraphicalRepresentation().getBorder().getTop() * view.getScale() < requiredControlPointSpace) {
 				Rectangle repaintAlsoThis = new Rectangle(-requiredControlPointSpace, -requiredControlPointSpace,
 						((Component) view).getWidth() + requiredControlPointSpace * 2, requiredControlPointSpace * 2);
 				repaintAlsoThis = SwingUtilities.convertRectangle((Component) view, repaintAlsoThis, parent);
 				parent.repaint(repaintAlsoThis.x, repaintAlsoThis.y, repaintAlsoThis.width, repaintAlsoThis.height);
 				// System.out.println("Repaint "+repaintAlsoThis+" for "+((Component)view).getParent());
 			}
-			if (gr.getBorder().getBottom() * view.getScale() < requiredControlPointSpace) {
+			if (shapeNode.getGraphicalRepresentation().getBorder().getBottom() * view.getScale() < requiredControlPointSpace) {
 				Rectangle repaintAlsoThis = new Rectangle(-requiredControlPointSpace, ((Component) view).getHeight()
 						- requiredControlPointSpace, ((Component) view).getWidth() + requiredControlPointSpace * 2,
 						requiredControlPointSpace * 2);
@@ -257,14 +259,14 @@ public class FGEPaintManager {
 				parent.repaint(repaintAlsoThis.x, repaintAlsoThis.y, repaintAlsoThis.width, repaintAlsoThis.height);
 				// System.out.println("Repaint "+repaintAlsoThis+" for "+((Component)view).getParent());
 			}
-			if (gr.getBorder().getLeft() * view.getScale() < requiredControlPointSpace) {
+			if (shapeNode.getGraphicalRepresentation().getBorder().getLeft() * view.getScale() < requiredControlPointSpace) {
 				Rectangle repaintAlsoThis = new Rectangle(-requiredControlPointSpace, -requiredControlPointSpace,
 						requiredControlPointSpace * 2, ((Component) view).getHeight() + requiredControlPointSpace * 2);
 				repaintAlsoThis = SwingUtilities.convertRectangle((Component) view, repaintAlsoThis, parent);
 				parent.repaint(repaintAlsoThis.x, repaintAlsoThis.y, repaintAlsoThis.width, repaintAlsoThis.height);
 				// System.out.println("Repaint "+repaintAlsoThis+" for "+((Component)view).getParent());
 			}
-			if (gr.getBorder().getRight() * view.getScale() < requiredControlPointSpace) {
+			if (shapeNode.getGraphicalRepresentation().getBorder().getRight() * view.getScale() < requiredControlPointSpace) {
 				Rectangle repaintAlsoThis = new Rectangle(((Component) view).getWidth() - requiredControlPointSpace,
 						-requiredControlPointSpace, requiredControlPointSpace * 2, ((Component) view).getHeight()
 								+ requiredControlPointSpace * 2);
@@ -275,23 +277,23 @@ public class FGEPaintManager {
 		}
 	}
 
-	public void repaint(GraphicalRepresentation gr) {
+	public void repaint(DrawingTreeNode<?, ?> node) {
 		if (paintRequestLogger.isLoggable(Level.FINE)) {
-			paintRequestLogger.fine("Called REPAINT for graphical representation " + gr);
+			paintRequestLogger.fine("Called REPAINT for graphical representation " + node);
 		}
-		FGEView view = _drawingView.viewForObject(gr);
+		FGEView<?> view = _drawingView.viewForNode(node);
 		if (view != null) {
 			repaint(view);
 		}
 	}
 
-	public BufferedImage getScreenshot(GraphicalRepresentation gr) {
+	public BufferedImage getScreenshot(DrawingTreeNode<?, ?> node) {
 		/*Component view = getDrawingView();
 		BufferedImage bufferedImage = new BufferedImage(view.getWidth(), view.getHeight(), DEFAULT_IMAGE_TYPE);
 		Graphics2D g = bufferedImage.createGraphics();
 		view.print(g);
 		return bufferedImage;*/
-		FGEView v = getDrawingView().viewForObject(gr);
+		FGEView<?> v = getDrawingView().viewForNode(node);
 		Rectangle rect = new Rectangle(((JComponent) v).getX(), ((JComponent) v).getY(), ((JComponent) v).getWidth(),
 				((JComponent) v).getHeight());
 		if (v instanceof ShapeView) {
@@ -478,7 +480,7 @@ public class FGEPaintManager {
 		BufferedImage buffer = getPaintBuffer();
 		Rectangle viewBoundsInDrawingView = FGEUtils.convertRectangle(node, renderingBounds, node.getDrawing().getRoot(), scale);
 		Point dp1 = renderingBounds.getLocation();
-		Point dp2 = new Point(renderingBounds.x + renderingBounds.width, renderingBounds.y + renderingBounds.height);
+		// Point dp2 = new Point(renderingBounds.x + renderingBounds.width, renderingBounds.y + renderingBounds.height);
 		Point sp1 = viewBoundsInDrawingView.getLocation();
 		Point sp2 = new Point(viewBoundsInDrawingView.x + viewBoundsInDrawingView.width, viewBoundsInDrawingView.y
 				+ viewBoundsInDrawingView.height);

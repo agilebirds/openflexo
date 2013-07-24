@@ -77,7 +77,7 @@ public class AdjustableUniqueSegment extends RectPolylinAdjustableSegment {
 	}
 
 	@Override
-	public void startDragging(DrawingController controller, FGEPoint startPoint) {
+	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
 		retrieveInfos();
 		logger.info("start cpts=" + getConnector().getControlAreas());

@@ -49,11 +49,11 @@ import java.util.logging.Logger;
 
 import javax.swing.JComponent;
 
+import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.controller.MoveAction.ShapeGraphicalRepresentationTransferable;
-import org.openflexo.fge.controller.MoveAction.TransferedShapeGraphicalRepresentation;
+import org.openflexo.fge.controller.MoveAction.ShapeNodeTransferable;
+import org.openflexo.fge.controller.MoveAction.TransferedShapeNode;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.FGEView;
 import org.openflexo.fge.view.ShapeView;
@@ -61,30 +61,33 @@ import org.openflexo.fge.view.listener.FocusRetriever;
 
 import sun.awt.dnd.SunDragSourceContextPeer;
 
+/**
+ * Utility class storing informations used during a drag & drop scheme
+ * 
+ * @author sylvain
+ * 
+ */
 public class DNDInfo {
 
 	private static final Logger logger = Logger.getLogger(DNDInfo.class.getPackage().getName());
 
-	/**
-	 * 
-	 */
 	private final MoveAction _moveAction;
-	private ShapeView shapeView;
+	private ShapeView<?> shapeView;
 	private DragSource dragSource;
 	private DragGestureListener dgListener;
 	private DragSourceListener dsListener;
 	private int dragAction = DnDConstants.ACTION_MOVE;
 	private DragGestureRecognizer dgr;
 	private DragSourceContext dragSourceContext;
-	private DrawingController _controller;
-	private ShapeGraphicalRepresentation draggedObject;
+	private DrawingController<?> _controller;
+	private ShapeNode<?> draggedObject;
 
-	private Hashtable<FGEView, DropTarget> dropTargets;
+	private Hashtable<FGEView<?>, DropTarget> dropTargets;
 
-	DNDInfo(MoveAction moveAction, ShapeGraphicalRepresentation gr, DrawingController controller, final MouseEvent initialEvent) {
+	public DNDInfo(MoveAction moveAction, ShapeNode<?> shapeNode, DrawingController<?> controller, final MouseEvent initialEvent) {
 		_moveAction = moveAction;
 		_controller = controller;
-		draggedObject = gr;
+		draggedObject = shapeNode;
 
 		logger.info("DnD gesture recognized, starting DnD");
 
@@ -92,7 +95,7 @@ public class DNDInfo {
 		this.dragSource = DragSource.getDefaultDragSource();
 		this.dsListener = new DSListener();
 
-		shapeView = controller.getDrawingView().shapeViewForObject(gr);
+		shapeView = controller.getDrawingView().shapeViewForNode(shapeNode);
 
 		// component, action, listener
 		dgr = this.dragSource.createDefaultDragGestureRecognizer(shapeView, this.dragAction, this.dgListener);
@@ -122,8 +125,7 @@ public class DNDInfo {
 				SunDragSourceContextPeer.setDragDropInProgress(false);
 			}
 		}
-		this.dragSource.startDrag(dge, MoveAction.dropKO, new MoveAction.ShapeGraphicalRepresentationTransferable(gr, initialPoint),
-				dsListener);
+		this.dragSource.startDrag(dge, MoveAction.dropKO, new MoveAction.ShapeNodeTransferable(shapeNode, initialPoint), dsListener);
 		controller.getDrawingView().captureDraggedNode(shapeView, dge);
 
 		// gr.setIsVisible(false);
@@ -138,10 +140,10 @@ public class DNDInfo {
 		if (dropTargets != null) {
 			dropTargets.clear();
 		}
-		dropTargets = new Hashtable<FGEView, DropTarget>();
+		dropTargets = new Hashtable<FGEView<?>, DropTarget>();
 
-		for (GraphicalRepresentation gr : _controller.getDrawingView().getContents().keySet()) {
-			FGEView view = _controller.getDrawingView().getContents().get(gr);
+		for (DrawingTreeNode<?, ?> node : _controller.getDrawingView().getContents().keySet()) {
+			FGEView<?> view = _controller.getDrawingView().getContents().get(node);
 			if (((Component) view).getDropTarget() != null) {
 				dropTargets.put(view, ((Component) view).getDropTarget());
 			}
@@ -151,7 +153,7 @@ public class DNDInfo {
 	}
 
 	protected void disableDragging() {
-		for (FGEView v : dropTargets.keySet()) {
+		for (FGEView<?> v : dropTargets.keySet()) {
 			((Component) v).setDropTarget(dropTargets.get(v));
 		}
 		dgr.setComponent(null);
@@ -185,8 +187,7 @@ public class DNDInfo {
 				// DragLabel.this.getText() );
 			}
 
-			ShapeGraphicalRepresentationTransferable transferable = new MoveAction.ShapeGraphicalRepresentationTransferable(null,
-					e.getDragOrigin());
+			ShapeNodeTransferable transferable = new MoveAction.ShapeNodeTransferable(null, e.getDragOrigin());
 
 			try {
 				// initial cursor, transferrable, dsource listener
@@ -317,7 +318,7 @@ public class DNDInfo {
 		 */
 		private boolean isDragFlavorSupported(DropTargetDragEvent e) {
 			boolean ok = false;
-			if (e.isDataFlavorSupported(ShapeGraphicalRepresentationTransferable.defaultFlavor())) {
+			if (e.isDataFlavorSupported(ShapeNodeTransferable.defaultFlavor())) {
 				ok = true;
 			}
 			return ok;
@@ -331,8 +332,8 @@ public class DNDInfo {
 		 * @return the chosen DataFlavor or null if none match
 		 */
 		private DataFlavor chooseDropFlavor(DropTargetDropEvent e) {
-			if (e.isLocalTransfer() == true && e.isDataFlavorSupported(ShapeGraphicalRepresentationTransferable.defaultFlavor())) {
-				return ShapeGraphicalRepresentationTransferable.defaultFlavor();
+			if (e.isLocalTransfer() == true && e.isDataFlavorSupported(ShapeNodeTransferable.defaultFlavor())) {
+				return ShapeNodeTransferable.defaultFlavor();
 			}
 			return null;
 		}
@@ -356,17 +357,18 @@ public class DNDInfo {
 			}
 
 			try {
-				ShapeGraphicalRepresentation element = ((TransferedShapeGraphicalRepresentation) e.getTransferable().getTransferData(
-						ShapeGraphicalRepresentationTransferable.defaultFlavor())).getTransferedElement();
+				ShapeNode<?> element = ((TransferedShapeNode) e.getTransferable().getTransferData(ShapeNodeTransferable.defaultFlavor()))
+						.getTransferedElement();
 				if (element == null) {
 					return false;
 				}
-				GraphicalRepresentation focused = getFocusedObject(e);
+				DrawingTreeNode<?, ?> focused = getFocusedObject(e);
 				if (focused == null) {
 					return false;
 				}
-				return focused instanceof ShapeGraphicalRepresentation
-						&& element.isAllowedToBeDraggedOutsideParentContainerInsideContainer(focused);
+				return focused instanceof ShapeNode
+						&& element.getGraphicalRepresentation().isAllowedToBeDraggedOutsideParentContainerInsideContainer(
+								(ShapeNode<?>) focused);
 
 			} catch (UnsupportedFlavorException e1) {
 				logger.warning("Unexpected: " + e1);
@@ -424,7 +426,7 @@ public class DNDInfo {
 				dragSourceContext.setCursor(MoveAction.dropOK);
 
 				/*try {
-					ShapeGraphicalRepresentation element = ((TransferedShapeGraphicalRepresentation)e.getTransferable().getTransferData(ShapeGraphicalRepresentationTransferable.defaultFlavor())).getTransferedElement();
+					ShapeGraphicalRepresentation element = ((TransferedShapeNode)e.getTransferable().getTransferData(ShapeNodeTransferable.defaultFlavor())).getTransferedElement();
 					GraphicalRepresentation focused = getFocusedObject(e);
 					if (focused instanceof ShapeGraphicalRepresentation) { 
 						element.dragOutsideParentContainerInsideContainer((ShapeGraphicalRepresentation)focused,new FGEPoint(0,0),true);
@@ -509,36 +511,38 @@ public class DNDInfo {
 					return;
 				}
 
-				if (data instanceof TransferedShapeGraphicalRepresentation) {
+				if (data instanceof TransferedShapeNode) {
 
 					try {
-						ShapeGraphicalRepresentation element = ((TransferedShapeGraphicalRepresentation) data).getTransferedElement();
+						ShapeNode<?> element = ((TransferedShapeNode) data).getTransferedElement();
 						if (element == null) {
 							e.rejectDrop();
 							return;
 						}
-						GraphicalRepresentation focused = getFocusedObject(e);
-						if (!(focused instanceof ShapeGraphicalRepresentation)) {
+						DrawingTreeNode<?, ?> focused = getFocusedObject(e);
+						if (!(focused instanceof ShapeNode)) {
 							e.rejectDrop();
 							return;
 						}
 						// OK, let's got for the drop
-						if (element.isAllowedToBeDraggedOutsideParentContainerInsideContainer(focused)) {
+						if (element.getGraphicalRepresentation().isAllowedToBeDraggedOutsideParentContainerInsideContainer(
+								(ShapeNode<?>) focused)) {
 							Component targetComponent = e.getDropTargetContext().getComponent();
 							Point pt = e.getLocation();
 							FGEPoint modelLocation = new FGEPoint();
 							if (targetComponent instanceof FGEView) {
-								pt = FGEUtils.convertPoint(((FGEView) targetComponent).getGraphicalRepresentation(), pt, focused,
-										((FGEView) targetComponent).getScale());
-								modelLocation.x = pt.x / ((FGEView) targetComponent).getScale();
-								modelLocation.y = pt.y / ((FGEView) targetComponent).getScale();
-								modelLocation.x -= ((TransferedShapeGraphicalRepresentation) data).getOffset().x;
-								modelLocation.y -= ((TransferedShapeGraphicalRepresentation) data).getOffset().y;
+								pt = FGEUtils.convertPoint(((FGEView<?>) targetComponent).getNode(), pt, focused,
+										((FGEView<?>) targetComponent).getScale());
+								modelLocation.x = pt.x / ((FGEView<?>) targetComponent).getScale();
+								modelLocation.y = pt.y / ((FGEView<?>) targetComponent).getScale();
+								modelLocation.x -= ((TransferedShapeNode) data).getOffset().x;
+								modelLocation.y -= ((TransferedShapeNode) data).getOffset().y;
 							} else {
-								modelLocation.x -= ((TransferedShapeGraphicalRepresentation) data).getOffset().x;
-								modelLocation.y -= ((TransferedShapeGraphicalRepresentation) data).getOffset().y;
+								modelLocation.x -= ((TransferedShapeNode) data).getOffset().x;
+								modelLocation.y -= ((TransferedShapeNode) data).getOffset().y;
 							}
-							if (element.dragOutsideParentContainerInsideContainer(focused, modelLocation)) {
+							if (element.getGraphicalRepresentation().dragOutsideParentContainerInsideContainer((ShapeNode<?>) focused,
+									modelLocation)) {
 								e.acceptDrop(acceptableActions);
 								e.dropComplete(true);
 								return;
@@ -571,24 +575,24 @@ public class DNDInfo {
 
 		private FocusRetriever getFocusRetriever() {
 			if (_dropContainer instanceof FGEView) {
-				return ((FGEView) _dropContainer).getDrawingView().getFocusRetriever();
+				return ((FGEView<?>) _dropContainer).getDrawingView().getFocusRetriever();
 			}
 			return null;
 		}
 
-		private FGEView getFGEView() {
+		private FGEView<?> getFGEView() {
 			if (_dropContainer instanceof FGEView) {
-				return (FGEView) _dropContainer;
+				return (FGEView<?>) _dropContainer;
 			}
 			return null;
 		}
 
-		public GraphicalRepresentation getFocusedObject(DropTargetDragEvent event) {
+		public DrawingTreeNode<?, ?> getFocusedObject(DropTargetDragEvent event) {
 			if (getFocusRetriever() != null) {
-				GraphicalRepresentation returned = getFocusRetriever().getFocusedObject(event);
+				DrawingTreeNode<?, ?> returned = getFocusRetriever().getFocusedObject(event);
 				if (returned == null) {
 					// Since we are in a FGEView, a null value indicates that we are on the Drawing view
-					return getFGEView().getGraphicalRepresentation().getDrawingGraphicalRepresentation();
+					return getFGEView().getNode().getDrawing().getRoot();
 				}
 				return returned;
 			}
@@ -596,12 +600,12 @@ public class DNDInfo {
 			return null;
 		}
 
-		public GraphicalRepresentation getFocusedObject(DropTargetDropEvent event) {
+		public DrawingTreeNode<?, ?> getFocusedObject(DropTargetDropEvent event) {
 			if (getFocusRetriever() != null) {
-				GraphicalRepresentation returned = getFocusRetriever().getFocusedObject(event);
+				DrawingTreeNode<?, ?> returned = getFocusRetriever().getFocusedObject(event);
 				if (returned == null) {
 					// Since we are in a FGEView, a null value indicates that we are on the Drawing view
-					return getFGEView().getGraphicalRepresentation().getDrawingGraphicalRepresentation();
+					return getFGEView().getNode().getDrawing().getRoot();
 				}
 				return returned;
 			}

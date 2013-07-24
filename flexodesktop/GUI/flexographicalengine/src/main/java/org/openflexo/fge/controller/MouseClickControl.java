@@ -24,7 +24,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.util.logging.Level;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.controller.MouseClickControlAction.MouseClickControlActionType;
 import org.openflexo.toolbox.ToolBox;
 
@@ -101,7 +101,7 @@ public class MouseClickControl extends MouseControl {
 	}
 
 	@Override
-	public boolean isApplicable(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent e) {
+	public boolean isApplicable(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent e) {
 		if (ToolBox.getPLATFORM() == ToolBox.MACOS) {
 			if (e.getButton() == MouseEvent.BUTTON1 && e.isControlDown()) {
 				if (logger.isLoggable(Level.FINE)) {
@@ -116,7 +116,7 @@ public class MouseClickControl extends MouseControl {
 			}
 		}
 
-		if (!super.isApplicable(graphicalRepresentation, controller, e)) {
+		if (!super.isApplicable(node, controller, e)) {
 			return false;
 		}
 		return e.getClickCount() == clickCount;
@@ -128,8 +128,8 @@ public class MouseClickControl extends MouseControl {
 	 * @param graphicalRepresentation
 	 * @param controller
 	 */
-	public void handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
-		if (action.handleClick(graphicalRepresentation, controller, event)) {
+	public void handleClick(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event) {
+		if (action.handleClick(node, controller, event)) {
 			event.consume();
 		}
 	}

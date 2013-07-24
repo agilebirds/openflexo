@@ -203,7 +203,7 @@ public class ContextualPalette extends DrawingPalette {
 								popup.add(menuItem);
 							}
 							DrawingView dw = getController().getDrawingView();
-							FGEView containerView = dw.viewForObject(containerGR);
+							FGEView containerView = dw.viewForNode(containerGR);
 
 							popup.show((Component) containerView, (int) dropLocation.x, (int) dropLocation.y);
 							return true;

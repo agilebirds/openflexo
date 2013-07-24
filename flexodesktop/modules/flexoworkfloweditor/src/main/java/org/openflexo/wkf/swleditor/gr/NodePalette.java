@@ -268,12 +268,12 @@ public class NodePalette extends ControlArea<FGERoundRectangle> implements SWLEd
 
 	// Attempt to repaint relevant zone only
 	private Rectangle getBoundsToRepaint(DrawingView<?> drawingView) {
-		ShapeView<?> fromView = drawingView.shapeViewForObject(nodeGR);
+		ShapeView<?> fromView = drawingView.shapeViewForNode(nodeGR);
 		Rectangle fromViewBounds = SwingUtilities.convertRectangle(fromView, fromView.getBounds(), drawingView);
 		Rectangle boundsToRepaint = fromViewBounds;
 
 		if (to != null) {
-			ShapeView<?> toView = drawingView.shapeViewForObject(to);
+			ShapeView<?> toView = drawingView.shapeViewForNode(to);
 			Rectangle toViewBounds = SwingUtilities.convertRectangle(toView, toView.getBounds(), drawingView);
 			boundsToRepaint = fromViewBounds.union(toViewBounds);
 		}

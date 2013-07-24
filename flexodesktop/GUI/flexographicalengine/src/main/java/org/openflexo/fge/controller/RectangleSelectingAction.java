@@ -25,6 +25,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -32,8 +33,8 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
-import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ContainerNode;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 
 public class RectangleSelectingAction extends MouseDragControlAction {
 
@@ -48,7 +49,7 @@ public class RectangleSelectingAction extends MouseDragControlAction {
 	}
 
 	@Override
-	public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
+	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event) {
 		// logger.info("Perform mouse PRESSED on RECTANGLE_SELECTING MouseDragControlAction");
 		rectangleSelectingOriginInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
 				controller.getDrawingView());
@@ -61,11 +62,11 @@ public class RectangleSelectingAction extends MouseDragControlAction {
 	}
 
 	@Override
-	public boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
-			MouseEvent event, boolean isSignificativeDrag) {
+	public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event,
+			boolean isSignificativeDrag) {
 		// logger.info("Perform mouse RELEASED on RECTANGLE_SELECTING MouseDragControlAction");
-		if (isSignificativeDrag) {
-			List<GraphicalRepresentation> newSelection = buildCurrentSelection(graphicalRepresentation, controller);
+		if (isSignificativeDrag && node instanceof ContainerNode) {
+			List<DrawingTreeNode<?, ?>> newSelection = buildCurrentSelection((ContainerNode<?, ?>) node, controller);
 			controller.setSelectedObjects(newSelection);
 			if (controller.getDrawingView() == null) {
 				return false;
@@ -76,14 +77,19 @@ public class RectangleSelectingAction extends MouseDragControlAction {
 	}
 
 	@Override
-	public boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
+	public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Perform mouse DRAGGED on RECTANGLE_SELECTING MouseDragControlAction");
 		}
 		currentMousePositionInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
 				controller.getDrawingView());
 
-		List<GraphicalRepresentation> newFocusSelection = buildCurrentSelection(graphicalRepresentation, controller);
+		List<DrawingTreeNode<?, ?>> newFocusSelection;
+		if (node instanceof ContainerNode) {
+			newFocusSelection = buildCurrentSelection((ContainerNode<?, ?>) node, controller);
+		} else {
+			newFocusSelection = Collections.emptyList();
+		}
 		controller.setFocusedObjects(newFocusSelection);
 		if (controller.getDrawingView() == null) {
 			return false;
@@ -93,19 +99,18 @@ public class RectangleSelectingAction extends MouseDragControlAction {
 		return true;
 	}
 
-	private List<GraphicalRepresentation> buildCurrentSelection(GraphicalRepresentation graphicalRepresentation,
-			DrawingController controller) {
+	private List<DrawingTreeNode<?, ?>> buildCurrentSelection(ContainerNode<?, ?> node, DrawingController<?> controller) {
 		if (getRectangleSelection() == null) {
 			return null;
 		}
-		List<GraphicalRepresentation> returned = new Vector<GraphicalRepresentation>();
-		for (GraphicalRepresentation child : graphicalRepresentation.getContainedGraphicalRepresentations()) {
-			if (child.getIsVisible()) {
+		List<DrawingTreeNode<?, ?>> returned = new Vector<DrawingTreeNode<?, ?>>();
+		for (DrawingTreeNode<?, ?> child : node.getChildNodes()) {
+			if (child.getGraphicalRepresentation().getIsVisible()) {
 				if (child.isContainedInSelection(getRectangleSelection(), controller.getScale())) {
 					returned.add(child);
 				}
-				if (child instanceof ShapeGraphicalRepresentation) {
-					returned.addAll(buildCurrentSelection(child, controller));
+				if (child instanceof ContainerNode) {
+					returned.addAll(buildCurrentSelection((ContainerNode<?, ?>) child, controller));
 				}
 
 			}
@@ -142,12 +147,12 @@ public class RectangleSelectingAction extends MouseDragControlAction {
 		}
 	}
 
-	public void paint(Graphics g, DrawingController controller) {
+	public void paint(Graphics g, DrawingController<?> controller) {
 		Rectangle selection = getRectangleSelection();
 		if (selection == null) {
 			return;
 		}
-		g.setColor(controller.getDrawingGraphicalRepresentation().getRectangleSelectingSelectionColor());
+		g.setColor(controller.getDrawing().getRoot().getGraphicalRepresentation().getRectangleSelectingSelectionColor());
 		g.drawRect(selection.x, selection.y, selection.width, selection.height);
 	}
 

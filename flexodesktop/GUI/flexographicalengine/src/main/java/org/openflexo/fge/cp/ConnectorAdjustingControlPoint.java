@@ -23,7 +23,7 @@ import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 
@@ -64,8 +64,8 @@ public class ConnectorAdjustingControlPoint extends ConnectorControlPoint {
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation focusedGR) {
-		super.stopDragging(controller, focusedGR);
+	public void stopDragging(DrawingController<?> controller, DrawingTreeNode<?, ?> focused) {
+		super.stopDragging(controller, focused);
 		if (controller.getPaintManager().isPaintingCacheEnabled()) {
 			controller.getPaintManager().removeFromTemporaryObjects(getNode());
 			controller.getPaintManager().invalidate(getNode());

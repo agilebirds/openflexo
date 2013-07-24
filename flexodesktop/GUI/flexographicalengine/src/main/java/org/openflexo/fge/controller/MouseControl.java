@@ -23,7 +23,7 @@ import java.awt.event.MouseEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.inspector.DefaultInspectableObject;
 
 public abstract class MouseControl extends DefaultInspectableObject {
@@ -38,7 +38,7 @@ public abstract class MouseControl extends DefaultInspectableObject {
 
 	private boolean modelEditionAction = true;
 
-	public boolean isApplicable(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent e) {
+	public boolean isApplicable(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent e) {
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Called isApplicable(MouseEvent) for " + this + " event=" + e);
 		}

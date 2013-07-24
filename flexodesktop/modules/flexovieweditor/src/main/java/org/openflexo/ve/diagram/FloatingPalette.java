@@ -250,12 +250,12 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 
 	// Attempt to repaint relevant zone only
 	private Rectangle getBoundsToRepaint(DrawingView<?> drawingView) {
-		ShapeView<?> fromView = drawingView.shapeViewForObject(shapeGR);
+		ShapeView<?> fromView = drawingView.shapeViewForNode(shapeGR);
 		Rectangle fromViewBounds = SwingUtilities.convertRectangle(fromView, fromView.getBounds(), drawingView);
 		Rectangle boundsToRepaint = fromViewBounds;
 
 		if (to != null) {
-			ShapeView<?> toView = drawingView.shapeViewForObject(to);
+			ShapeView<?> toView = drawingView.shapeViewForNode(to);
 			Rectangle toViewBounds = SwingUtilities.convertRectangle(toView, toView.getBounds(), drawingView);
 			boundsToRepaint = fromViewBounds.union(toViewBounds);
 		}
@@ -382,7 +382,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 			menuItem.setToolTipText(dropAndLinkScheme.dropScheme.getDescription());
 			popup.add(menuItem);
 		}
-		popup.show((Component) controller.getDrawingView().viewForObject(controller.getGraphicalRepresentation(target)),
+		popup.show((Component) controller.getDrawingView().viewForNode(controller.getGraphicalRepresentation(target)),
 				(int) dropLocation.x, (int) dropLocation.y);
 
 	}
@@ -443,7 +443,7 @@ public class FloatingPalette extends ControlArea<FGERoundRectangle> implements O
 			});
 			menuItem.setToolTipText(FlexoLocalization.localizedForKey("draw_basic_graphical_connector_without_ontologic_semantic"));
 			popup.add(menuItem);*/
-			popup.show((Component) controller.getDrawingView().viewForObject(controller.getGraphicalRepresentation(target)),
+			popup.show((Component) controller.getDrawingView().viewForNode(controller.getGraphicalRepresentation(target)),
 					(int) dropLocation.x, (int) dropLocation.y);
 		} else {
 			AddConnector action = AddConnector.actionType.makeNewAction(shapeGR.getDrawable(), null, controller.getVEController()

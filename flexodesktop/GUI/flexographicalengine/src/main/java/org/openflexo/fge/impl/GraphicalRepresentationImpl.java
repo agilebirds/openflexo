@@ -25,13 +25,7 @@ import org.openflexo.fge.controller.MouseControl.MouseButton;
 import org.openflexo.fge.controller.MouseDragControl;
 import org.openflexo.fge.notifications.BindingChanged;
 import org.openflexo.fge.notifications.FGENotification;
-import org.openflexo.fge.notifications.GraphicalRepresentationAdded;
-import org.openflexo.fge.notifications.GraphicalRepresentationDeleted;
-import org.openflexo.fge.notifications.GraphicalRepresentationRemoved;
-import org.openflexo.fge.notifications.LabelHasEdited;
-import org.openflexo.fge.notifications.LabelHasMoved;
-import org.openflexo.fge.notifications.LabelWillEdit;
-import org.openflexo.fge.notifications.LabelWillMove;
+import org.openflexo.fge.notifications.GRDeleted;
 import org.openflexo.fib.utils.LocalizedDelegateGUIImpl;
 import org.openflexo.toolbox.FileResource;
 
@@ -91,7 +85,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 
 	private Drawing<?> drawing;
 
-	private Vector<Object> ancestors;
+	// private Vector<Object> ancestors;
 
 	// private boolean isRegistered = false;
 	private boolean hasText = true;
@@ -136,7 +130,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 			_bindingModel = null;
 			super.delete();
 			setChanged();
-			notifyObservers(new GraphicalRepresentationDeleted(this));
+			notifyObservers(new GRDeleted(this));
 		}
 	}
 
@@ -1125,20 +1119,20 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 		return this instanceof DrawingGraphicalRepresentation;
 	}
 
-	@Override
+	/*@Override
 	public void notifyDrawableAdded(GraphicalRepresentation addedGR) {
 		addedGR.updateBindingModel();
-		// logger.info(">>>>>>>>>> NEW GraphicalRepresentationAdded");
+		// logger.info(">>>>>>>>>> NEW NodeAdded");
 		setChanged();
-		notifyObservers(new GraphicalRepresentationAdded(addedGR));
+		notifyObservers(new NodeAdded(addedGR));
 	}
 
 	@Override
 	public void notifyDrawableRemoved(GraphicalRepresentation removedGR) {
 		removedGR.updateBindingModel();
 		setChanged();
-		notifyObservers(new GraphicalRepresentationRemoved(removedGR));
-	}
+		notifyObservers(new NodeRemoved(removedGR));
+	}*/
 
 	// *******************************************************************************
 	// * Observer implementation *
@@ -1316,7 +1310,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	// @Override
 	// public abstract boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
 
-	@Override
+	/*@Override
 	public void notifyLabelWillBeEdited() {
 		setChanged();
 		notifyObservers(new LabelWillEdit());
@@ -1358,7 +1352,7 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 			ancestors.clear();
 		}
 		ancestors = null;
-	}
+	}*/
 
 	@Override
 	public String getToolTipText() {

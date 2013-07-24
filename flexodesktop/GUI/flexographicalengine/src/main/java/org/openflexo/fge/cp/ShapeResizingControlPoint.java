@@ -23,8 +23,8 @@ import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.DimensionConstraints;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEDimension;
@@ -307,7 +307,7 @@ public class ShapeResizingControlPoint extends ControlPoint {
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation focusedGR) {
+	public void stopDragging(DrawingController<?> controller, DrawingTreeNode<?, ?> focused) {
 		if (!isDraggable()) {
 			return;
 		}

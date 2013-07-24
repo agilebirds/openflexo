@@ -14,6 +14,8 @@ import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GRBinding;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.notifications.NodeAdded;
+import org.openflexo.fge.notifications.NodeRemoved;
 
 public abstract class ContainerNodeImpl<O, GR extends ContainerGraphicalRepresentation> extends DrawingTreeNodeImpl<O, GR> implements
 		ContainerNode<O, GR> {
@@ -166,6 +168,20 @@ public abstract class ContainerNodeImpl<O, GR extends ContainerGraphicalRepresen
 		childNodes = null;
 
 		super.delete();
+	}
+
+	@Override
+	public void notifyNodeAdded(DrawingTreeNode<?, ?> addedNode) {
+		addedNode.getGraphicalRepresentation().updateBindingModel();
+		setChanged();
+		notifyObservers(new NodeAdded(addedNode, this));
+	}
+
+	@Override
+	public void notifyNodeRemoved(DrawingTreeNode<?, ?> removedNode) {
+		removedNode.getGraphicalRepresentation().updateBindingModel();
+		setChanged();
+		notifyObservers(new NodeRemoved(removedNode, this));
 	}
 
 }

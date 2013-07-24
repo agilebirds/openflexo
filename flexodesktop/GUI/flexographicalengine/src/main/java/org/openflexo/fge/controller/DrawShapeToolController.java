@@ -31,8 +31,8 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.Drawing.GeometricNode;
 import org.openflexo.fge.ForegroundStyle;
-import org.openflexo.fge.GeometricGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.cp.ControlArea;
@@ -51,7 +51,7 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 	protected GraphicalRepresentation parentGR = null;
 
 	private S shape;
-	private GeometricGraphicalRepresentation<S> currentEditedShapeGR;
+	private GeometricNode<S> currentEditedShapeGeometricNode;
 
 	private boolean editionHasBeenStarted = false;
 
@@ -71,8 +71,9 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 		parentGR = getController().getDrawingView().getFocusRetriever()
 				.getFocusedObject(getController().getDrawingGraphicalRepresentation(), e);
 		shape = makeDefaultShape(e);
-		currentEditedShapeGR = getController().getFactory().makeGeometricGraphicalRepresentation(shape, shape, controller.getDrawing());
-		currentEditedShapeGR.addObserver(new Observer() {
+		currentEditedShapeGeometricNode = getController().getFactory().makeGeometricGraphicalRepresentation(shape, shape,
+				controller.getDrawing());
+		currentEditedShapeGeometricNode.addObserver(new Observer() {
 			@Override
 			public void update(Observable observable, Object dataModification) {
 				if (dataModification instanceof GeometryModified) {
@@ -81,15 +82,15 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 			}
 		});
 		// TODO Check this / fge_under_pamela
-		/*currentEditedShapeGR = new GeometricGraphicalRepresentationImpl(shape, shape, controller.getDrawing()) {
+		/*currentEditedShapeGeometricNode = new GeometricGraphicalRepresentationImpl(shape, shape, controller.getDrawing()) {
 			@Override
 			public void notifyGeometryChanged() {
 				super.notifyGeometryChanged();
 				geometryChanged();
 			}
 		};*/
-		currentEditedShapeGR.setBackground(getController().getCurrentBackgroundStyle());
-		currentEditedShapeGR.setForeground(getController().getCurrentForegroundStyle());
+		currentEditedShapeGeometricNode.setBackground(getController().getCurrentBackgroundStyle());
+		currentEditedShapeGeometricNode.setForeground(getController().getCurrentForegroundStyle());
 		geometryChanged();
 	}
 
@@ -114,7 +115,7 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 
 	public void setShape(FGEShape shape) {
 		this.shape = (S) shape.clone();
-		currentEditedShapeGR.setGeometricObject(this.shape);
+		currentEditedShapeGeometricNode.setGeometricObject(this.shape);
 		geometryChanged();
 	}
 
@@ -127,8 +128,8 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 	 * 
 	 * @return
 	 */
-	public GeometricGraphicalRepresentation<S> getCurrentEditedShapeGR() {
-		return currentEditedShapeGR;
+	public GeometricNode<S> getCurrentEditedShape() {
+		return currentEditedShapeGeometricNode;
 	}
 
 	protected void geometryChanged() {
@@ -164,8 +165,8 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 
 	protected FGEPoint getPoint(MouseEvent e) {
 		Point pt = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), controller.getDrawingView());
-		return currentEditedShapeGR.convertRemoteViewCoordinatesToLocalNormalizedPoint(pt, controller.getDrawingGraphicalRepresentation(),
-				controller.getScale());
+		return currentEditedShapeGeometricNode.convertRemoteViewCoordinatesToLocalNormalizedPoint(pt,
+				controller.getDrawingGraphicalRepresentation(), controller.getScale());
 	}
 
 	public void paintCurrentEditedShape(FGEDrawingGraphics graphics) {
@@ -177,13 +178,13 @@ public abstract class DrawShapeToolController<S extends FGEShape<S>> extends Obs
 		Graphics2D oldGraphics = graphics.cloneGraphics();
 		graphics.setDefaultForeground(currentlyEditedForeground);
 
-		currentEditedShapeGR.paint(graphics.getGraphics(), getController());
+		currentEditedShapeGeometricNode.paint(graphics.getGraphics(), getController());
 
 		graphics.releaseClonedGraphics(oldGraphics);
 	}
 
 	public List<? extends ControlArea<?>> getControlAreas() {
-		return currentEditedShapeGR.getControlPoints();
+		return currentEditedShapeGeometricNode.getControlPoints();
 	}
 
 	public abstract ShapeGraphicalRepresentation buildShapeGraphicalRepresentation();

@@ -21,9 +21,9 @@ package org.openflexo.fge.notifications;
 
 import org.openflexo.fge.Drawing;
 
-public class GraphicalObjectsHierarchyRebuildStarted extends FGENotification {
+public class DrawingTreeNodeHierarchyRebuildStarted extends FGENotification {
 
-	public GraphicalObjectsHierarchyRebuildStarted(Drawing<?> drawing) {
+	public DrawingTreeNodeHierarchyRebuildStarted(Drawing<?> drawing) {
 		super("graphicalObjectsHierarchy", null, drawing);
 	}
 

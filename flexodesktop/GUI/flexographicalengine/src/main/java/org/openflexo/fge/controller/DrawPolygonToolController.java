@@ -93,7 +93,7 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 					// System.out.println("add point " + newPoint);
 					getShape().addToPoints(newPoint);
 				}
-				getCurrentEditedShapeGR().rebuildControlPoints();
+				getCurrentEditedShape().rebuildControlPoints();
 				geometryChanged();
 			} else {
 				// System.out.println("Done edited shape");

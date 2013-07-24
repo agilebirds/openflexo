@@ -19,19 +19,17 @@
  */
 package org.openflexo.fge.notifications;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.Drawing;
 
-public class GraphicalRepresentationDeleted extends FGENotification {
+public class DrawingTreeNodeHierarchyRebuildEnded extends FGENotification {
 
-	private GraphicalRepresentation deletedGR;
+	public DrawingTreeNodeHierarchyRebuildEnded(Drawing<?> drawing) {
+		super("graphicalObjectsHierarchy", null, drawing);
 
-	public GraphicalRepresentationDeleted(GraphicalRepresentation gr) {
-		super("delete", gr, null);
-		deletedGR = gr;
 	}
 
-	public GraphicalRepresentation getDeletedGraphicalRepresentation() {
-		return deletedGR;
+	public Drawing<?> getDrawing() {
+		return (Drawing<?>) newValue();
 	}
 
 	@Override

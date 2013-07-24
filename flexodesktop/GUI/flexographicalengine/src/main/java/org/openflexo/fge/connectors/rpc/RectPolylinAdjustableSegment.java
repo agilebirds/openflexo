@@ -24,7 +24,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.connectors.impl.RectPolylinConnector;
 import org.openflexo.fge.controller.DrawingController;
@@ -73,8 +73,8 @@ public abstract class RectPolylinAdjustableSegment extends ControlArea<FGESegmen
 	}
 
 	@Override
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation focusedGR) {
-		super.stopDragging(controller, focusedGR);
+	public void stopDragging(DrawingController<?> controller, DrawingTreeNode<?, ?> focused) {
+		super.stopDragging(controller, focused);
 		if (controller.getPaintManager().isPaintingCacheEnabled()) {
 			controller.getPaintManager().removeFromTemporaryObjects(getNode());
 			controller.getPaintManager().invalidate(getNode());
@@ -102,7 +102,6 @@ public abstract class RectPolylinAdjustableSegment extends ControlArea<FGESegmen
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Rectangle paint(FGEGraphics graphics) {
 		return null;

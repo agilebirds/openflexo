@@ -153,7 +153,7 @@ public class SelectionManagingDrawingController<D extends Drawing<? extends Flex
 				@Override
 				public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 						java.awt.event.MouseEvent event) {
-					FGEView view = controller.getDrawingView().viewForObject(graphicalRepresentation);
+					FGEView view = controller.getDrawingView().viewForNode(graphicalRepresentation);
 					Point newPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), (Component) view);
 					controller.setLastClickedPoint(new FGEPoint(newPoint.x / controller.getScale(), newPoint.y / controller.getScale()));
 					controller.setLastSelectedGR(graphicalRepresentation);

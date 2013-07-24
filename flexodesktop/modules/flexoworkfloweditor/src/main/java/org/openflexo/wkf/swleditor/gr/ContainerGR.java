@@ -283,7 +283,7 @@ public abstract class ContainerGR<O extends WKFObject> extends WKFObjectGR<O> im
 	protected static boolean isInsideClosingBox(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 			MouseEvent event) {
 		if (graphicalRepresentation instanceof ShapeGraphicalRepresentation) {
-			ShapeView view = (ShapeView) controller.getDrawingView().viewForObject(graphicalRepresentation);
+			ShapeView view = (ShapeView) controller.getDrawingView().viewForNode(graphicalRepresentation);
 			Rectangle closingBoxRect = new Rectangle(
 					(int) ((((ShapeGraphicalRepresentation) graphicalRepresentation).getWidth() - 20) * controller.getScale()),
 					(int) (5 * controller.getScale()), (int) (15 * controller.getScale()), (int) (15 * controller.getScale()));

@@ -5,9 +5,11 @@ import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.GRBinding.ConnectorGRBinding;
 import org.openflexo.fge.GRBinding.DrawingGRBinding;
 import org.openflexo.fge.GRBinding.ShapeGRBinding;
-import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.GRProvider;
 import org.openflexo.fge.GRStructureWalker;
+import org.openflexo.fge.GraphicalRepresentation.Parameters;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 
 public class EditedDrawing extends DrawingImpl<MyDrawing> {
@@ -65,6 +67,20 @@ public class EditedDrawing extends DrawingImpl<MyDrawing> {
 				}
 			}
 		});
+		shapeBinding.setGRProvider(new GRProvider<MyShape, ShapeGraphicalRepresentation>() {
+			@Override
+			public ShapeGraphicalRepresentation provideGR(MyShape drawable, FGEModelFactory factory) {
+				if (drawable.getGraphicalRepresentation() != null) {
+					drawable.getGraphicalRepresentation().setFactory(factory);
+					return drawable.getGraphicalRepresentation();
+				} else {
+					ShapeGraphicalRepresentation returned = factory.makeShapeGraphicalRepresentation(EditedDrawing.this);
+					drawable.setGraphicalRepresentation(returned);
+					return returned;
+				}
+			}
+		});
+		shapeBinding.addDynamicPropertyValue(Parameters.text, "drawable.name");
 
 	}
 

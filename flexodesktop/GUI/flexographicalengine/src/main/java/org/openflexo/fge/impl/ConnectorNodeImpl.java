@@ -485,4 +485,17 @@ public class ConnectorNodeImpl<O> extends DrawingTreeNodeImpl<O, ConnectorGraphi
 		disableEndObjectObserving();
 	}
 
+	/**
+	 * Return distance from point to connector representation with a given scale
+	 * 
+	 * @param aPoint
+	 *            expressed in local normalized coordinates system
+	 * @param scale
+	 * @return
+	 */
+	@Override
+	public double distanceToConnector(FGEPoint aPoint, double scale) {
+		return connector.distanceToConnector(aPoint, scale);
+	}
+
 }

@@ -32,17 +32,16 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.ConnectorGraphicalRepresentation.ConnectorParameters;
 import org.openflexo.fge.Drawing.ConnectorNode;
-import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.DrawingPalette;
 import org.openflexo.fge.notifications.ConnectorModified;
 import org.openflexo.fge.notifications.FGENotification;
-import org.openflexo.fge.notifications.GraphicalRepresentationDeleted;
+import org.openflexo.fge.notifications.NodeDeleted;
 import org.openflexo.fge.notifications.ObjectHasMoved;
 import org.openflexo.fge.notifications.ObjectHasResized;
 import org.openflexo.fge.notifications.ObjectMove;
@@ -51,26 +50,34 @@ import org.openflexo.fge.notifications.ObjectWillMove;
 import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.view.listener.ConnectorViewMouseListener;
 
+/**
+ * The ConnectorView is the SWING implementation of a panel showing a {@link ConnectorNode}
+ * 
+ * @author sylvain
+ * 
+ * @param <O>
+ */
+@SuppressWarnings("serial")
 public class ConnectorView<O> extends JPanel implements FGEView<O> {
 
 	private static final Logger logger = Logger.getLogger(ConnectorView.class.getPackage().getName());
 
-	private ConnectorNode<O> node;
+	private ConnectorNode<O> connectorNode;
 	private ConnectorViewMouseListener mouseListener;
-	private DrawingController _controller;
+	private DrawingController<?> _controller;
 
-	private LabelView _labelView;
+	private LabelView<O> labelView;
 
-	public ConnectorView(ConnectorNode<O> node, DrawingController controller) {
+	public ConnectorView(ConnectorNode<O> node, DrawingController<?> controller) {
 		super();
 		_controller = controller;
-		this.node = node;
+		this.connectorNode = node;
 		updateLabelView();
 		relocateAndResizeView();
 		mouseListener = makeConnectorViewMouseListener();
 		addMouseListener(mouseListener);
 		addMouseMotionListener(mouseListener);
-		getGraphicalRepresentation().addObserver(this);
+		connectorNode.addObserver(this);
 		setOpaque(false);
 
 		updateVisibility();
@@ -96,61 +103,61 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 	@Override
 	public synchronized void delete() {
 		if (logger.isLoggable(Level.FINE)) {
-			logger.fine("Delete ConnectorView for " + getGraphicalRepresentation());
+			logger.fine("Delete ConnectorView for " + connectorNode);
 		}
 		if (getParentView() != null) {
-			FGELayeredView parentView = getParentView();
+			FGELayeredView<?> parentView = getParentView();
 			// logger.warning("Unexpected not null parent, proceeding anyway");
 			parentView.remove(this);
 			parentView.revalidate();
 			if (getPaintManager() != null) {
-				getPaintManager().invalidate(getGraphicalRepresentation());
+				getPaintManager().invalidate(connectorNode);
 				getPaintManager().repaint(parentView);
 			}
 		}
-		if (getGraphicalRepresentation() != null) {
-			getGraphicalRepresentation().deleteObserver(this);
+		if (connectorNode != null) {
+			connectorNode.deleteObserver(this);
 		}
 		setDropTarget(null);
 		removeMouseListener(mouseListener);
 		removeMouseMotionListener(mouseListener);
-		if (_labelView != null) {
-			_labelView.delete();
+		if (labelView != null) {
+			labelView.delete();
 		}
-		_labelView = null;
+		labelView = null;
 		_controller = null;
 		mouseListener = null;
-		graphicalRepresentation = null;
+		connectorNode = null;
 		isDeleted = true;
 	}
 
 	@Override
 	public O getDrawable() {
-		return node.getDrawable();
+		return connectorNode.getDrawable();
 	}
 
 	@Override
-	public DrawingView getDrawingView() {
+	public ConnectorNode<O> getNode() {
+		return connectorNode;
+	}
+
+	@Override
+	public DrawingView<?> getDrawingView() {
 		return getController().getDrawingView();
 	}
 
 	@Override
-	public FGELayeredView getParent() {
-		return (FGELayeredView) super.getParent();
+	public FGELayeredView<?> getParent() {
+		return (FGELayeredView<?>) super.getParent();
 	}
 
-	public FGELayeredView getParentView() {
+	public FGELayeredView<?> getParentView() {
 		return getParent();
 	}
 
-	@Override
-	public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
-		return graphicalRepresentation;
-	}
-
-	public DrawingGraphicalRepresentation getDrawingGraphicalRepresentation() {
-		return graphicalRepresentation.getDrawingGraphicalRepresentation();
-	}
+	/*public ConnectorGraphicalRepresentation getGraphicalRepresentation() {
+		return connectorNode.getGraphicalRepresentation();
+	}*/
 
 	@Override
 	public double getScale() {
@@ -171,12 +178,12 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 		/*logger.info("relocateView to ("
 				+getGraphicalRepresentation().getViewX(getScale())+","+
 				getGraphicalRepresentation().getViewY(getScale())+")");*/
-		if (_labelView != null) {
-			_labelView.updateBounds();
+		if (labelView != null) {
+			labelView.updateBounds();
 		}
 		int newX, newY;
-		newX = getGraphicalRepresentation().getViewX(getScale());
-		newY = getGraphicalRepresentation().getViewY(getScale());
+		newX = connectorNode.getViewX(getScale());
+		newY = connectorNode.getViewY(getScale());
 		if (newX != getX() || newY != getY()) {
 			setLocation(newX, newY);
 		}
@@ -186,12 +193,12 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 		/*logger.info("resizeView to ("
 				+getGraphicalRepresentation().getViewWidth(getScale())+","+
 				getGraphicalRepresentation().getViewHeight(getScale())+")");*/
-		if (_labelView != null) {
-			_labelView.updateBounds();
+		if (labelView != null) {
+			labelView.updateBounds();
 		}
 		int newWidth, newHeight;
-		newWidth = getGraphicalRepresentation().getViewWidth(getScale());
-		newHeight = getGraphicalRepresentation().getViewHeight(getScale());
+		newWidth = connectorNode.getViewWidth(getScale());
+		newHeight = connectorNode.getViewHeight(getScale());
 		if (newWidth != getWidth() || newHeight != getHeight()) {
 			setSize(newWidth, newHeight);
 			if (getDrawingView().isBuffering()) {
@@ -209,36 +216,36 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 	{
 		//logger.info("GR: "+getGraphicalRepresentation()+" update layer to "+getLayer());
 		if (getParent() instanceof JLayeredPane) {
-			if (_labelView!=null)
-				((JLayeredPane)getParent()).setLayer(_labelView, getLayer());
+			if (labelView!=null)
+				((JLayeredPane)getParent()).setLayer(labelView, getLayer());
 			((JLayeredPane)getParent()).setLayer(this, getLayer());
 		}
 	}*/
 
 	private void updateLayer() {
 		if (getParent() != null) {
-			if (_labelView != null) {
-				getParent().setLayer((Component) _labelView, getLayer());
-				getParent().setPosition(_labelView, getGraphicalRepresentation().getLayerOrder() * 2);
+			if (labelView != null) {
+				getParent().setLayer((Component) labelView, getLayer());
+				getParent().setPosition(labelView, connectorNode.getIndex() * 2);
 			}
 			getParent().setLayer((Component) this, getLayer());
-			getParent().setPosition(this, getGraphicalRepresentation().getLayerOrder() * 2 + 1);
+			getParent().setPosition(this, connectorNode.getIndex() * 2 + 1);
 		}
 	}
 
 	private void updateVisibility() {
-		if (_labelView != null) {
-			_labelView.setVisible(getGraphicalRepresentation().shouldBeDisplayed());
+		if (labelView != null) {
+			labelView.setVisible(connectorNode.shouldBeDisplayed());
 		}
-		setVisible(getGraphicalRepresentation().shouldBeDisplayed());
+		setVisible(connectorNode.shouldBeDisplayed());
 	}
 
 	private void updateLabelView() {
-		if (!getGraphicalRepresentation().getHasText() && _labelView != null) {
-			_labelView.delete();
-			_labelView = null;
-		} else if (getGraphicalRepresentation().getHasText() && _labelView == null) {
-			_labelView = new LabelView(getGraphicalRepresentation(), getController(), this);
+		if (!connectorNode.getGraphicalRepresentation().getHasText() && labelView != null) {
+			labelView.delete();
+			labelView = null;
+		} else if (connectorNode.getGraphicalRepresentation().getHasText() && labelView == null) {
+			labelView = new LabelView<O>(connectorNode, getController(), this);
 			if (getParentView() != null) {
 				getParentView().add(getLabelView());
 			}
@@ -246,7 +253,7 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 	}
 
 	public Integer getLayer() {
-		return FGEConstants.INITIAL_LAYER + getGraphicalRepresentation().getLayer();
+		return FGEConstants.INITIAL_LAYER + connectorNode.getGraphicalRepresentation().getLayer();
 	}
 
 	@Override
@@ -257,24 +264,23 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 		if (getPaintManager().isPaintingCacheEnabled()) {
 			if (getDrawingView().isBuffering()) {
 				// Buffering painting
-				if (getPaintManager().isTemporaryObject(getGraphicalRepresentation())) {
+				if (getPaintManager().isTemporaryObject(connectorNode)) {
 					// This object is declared to be a temporary object, to be redrawn
 					// continuously, so we need to ignore it: do nothing
 					if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE)) {
-						FGEPaintManager.paintPrimitiveLogger
-								.fine("ConnectorView: buffering paint, ignore: " + getGraphicalRepresentation());
+						FGEPaintManager.paintPrimitiveLogger.fine("ConnectorView: buffering paint, ignore: " + connectorNode);
 					}
 				} else {
 					if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE)) {
-						FGEPaintManager.paintPrimitiveLogger.fine("ConnectorView: buffering paint, draw: " + getGraphicalRepresentation()
-								+ " clip=" + g.getClip());
+						FGEPaintManager.paintPrimitiveLogger.fine("ConnectorView: buffering paint, draw: " + connectorNode + " clip="
+								+ g.getClip());
 					}
-					getGraphicalRepresentation().paint(g, getController());
+					connectorNode.paint(g, getController());
 					super.paint(g);
 				}
 			} else {
-				if (!getPaintManager().renderUsingBuffer((Graphics2D) g, g.getClipBounds(), getGraphicalRepresentation(), getScale())) {
-					getGraphicalRepresentation().paint(g, getController());
+				if (!getPaintManager().renderUsingBuffer((Graphics2D) g, g.getClipBounds(), connectorNode, getScale())) {
+					connectorNode.paint(g, getController());
 					super.paint(g);
 				}
 
@@ -297,7 +303,7 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 			}
 		} else {
 			// Normal painting
-			getGraphicalRepresentation().paint(g, getController());
+			connectorNode.paint(g, getController());
 			super.paint(g);
 		}
 
@@ -306,12 +312,32 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 	}
 
 	protected ConnectorViewMouseListener makeConnectorViewMouseListener() {
-		return new ConnectorViewMouseListener(graphicalRepresentation, this);
+		return new ConnectorViewMouseListener(connectorNode, this);
 	}
 
 	@Override
-	public DrawingController getController() {
+	public DrawingController<?> getController() {
 		return _controller;
+	}
+
+	protected void handleNodeDeleted(NodeDeleted notification) {
+		DrawingTreeNode<?, ?> deletedNode = notification.getDeletedNode();
+		if (deletedNode == getNode()) {
+			// If was not removed, try to do it now
+			// TODO: is this necessary ???
+			if (deletedNode != null && deletedNode.getParentNode() != null
+					&& deletedNode.getParentNode().getChildNodes().contains(deletedNode)) {
+				deletedNode.getParentNode().removeChild(deletedNode);
+			}
+			if (getNode() != null && getController().getFocusedObjects().contains(getNode())) {
+				getController().removeFromFocusedObjects(getNode());
+			}
+			if (getNode() != null && getController().getSelectedObjects().contains(getNode())) {
+				getController().removeFromSelectedObjects(getNode());
+			}
+			// Now delete the view
+			delete();
+		}
 	}
 
 	@Override
@@ -334,30 +360,18 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 			if (aNotification instanceof FGENotification) {
 				FGENotification notification = (FGENotification) aNotification;
 				if (notification instanceof ConnectorModified) {
-					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
-						getPaintManager().invalidate(getGraphicalRepresentation());
+					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(connectorNode)) {
+						getPaintManager().invalidate(connectorNode);
 					}
 					relocateAndResizeView();
 					revalidate();
 					getPaintManager().repaint(this);
-				} else if (notification instanceof GraphicalRepresentationDeleted) {
-					GraphicalRepresentation deletedGR = ((GraphicalRepresentationDeleted) notification).getDeletedGraphicalRepresentation();
-					// If was not removed, try to do it now
-					if (getGraphicalRepresentation() != null && getGraphicalRepresentation().getContainerGraphicalRepresentation() != null
-							&& getGraphicalRepresentation().getContainerGraphicalRepresentation().contains(getGraphicalRepresentation())) {
-						getGraphicalRepresentation().getContainerGraphicalRepresentation().notifyDrawableRemoved(deletedGR);
-					}
-					if (getGraphicalRepresentation() != null && getController().getFocusedObjects().contains(getGraphicalRepresentation())) {
-						getController().removeFromFocusedObjects(getGraphicalRepresentation());
-					}
-					if (getGraphicalRepresentation() != null && getController().getSelectedObjects().contains(getGraphicalRepresentation())) {
-						getController().removeFromSelectedObjects(getGraphicalRepresentation());
-					}
-					delete();
+				} else if (notification instanceof NodeDeleted) {
+					handleNodeDeleted((NodeDeleted) notification);
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.layer) {
 					updateLayer();
-					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
-						getPaintManager().invalidate(getGraphicalRepresentation());
+					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(connectorNode)) {
+						getPaintManager().invalidate(connectorNode);
 					}
 					getPaintManager().repaint(this);
 					/*if (getParentView() != null) {
@@ -368,7 +382,7 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 					getPaintManager().repaint(this);
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isSelected) {
 					// TODO: ugly hack, please fix this, implement a ForceRepaint in FGEPaintManager
-					if (graphicalRepresentation.getIsSelected()) {
+					if (connectorNode.getGraphicalRepresentation().getIsSelected()) {
 						requestFocusInWindow();
 					}
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.hasText) {
@@ -376,8 +390,8 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isVisible) {
 					updateVisibility();
 					if (getPaintManager().isPaintingCacheEnabled()) {
-						if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
-							getPaintManager().invalidate(getGraphicalRepresentation());
+						if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(connectorNode)) {
+							getPaintManager().invalidate(connectorNode);
 						}
 					}
 					getPaintManager().repaint(this);
@@ -385,8 +399,8 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 					getPaintManager().repaint(this);
 				} else if (notification instanceof ObjectWillMove) {
 					if (getPaintManager().isPaintingCacheEnabled()) {
-						getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
-						getPaintManager().invalidate(getGraphicalRepresentation());
+						getPaintManager().addToTemporaryObjects(connectorNode);
+						getPaintManager().invalidate(connectorNode);
 					}
 				} else if (notification instanceof ObjectMove) {
 					relocateView();
@@ -396,14 +410,14 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 					}
 				} else if (notification instanceof ObjectHasMoved) {
 					if (getPaintManager().isPaintingCacheEnabled()) {
-						getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
-						getPaintManager().invalidate(getGraphicalRepresentation());
+						getPaintManager().removeFromTemporaryObjects(connectorNode);
+						getPaintManager().invalidate(connectorNode);
 						getPaintManager().repaint(getParentView());
 					}
 				} else if (notification instanceof ObjectWillResize) {
 					if (getPaintManager().isPaintingCacheEnabled()) {
-						getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
-						getPaintManager().invalidate(getGraphicalRepresentation());
+						getPaintManager().addToTemporaryObjects(connectorNode);
+						getPaintManager().invalidate(connectorNode);
 					}
 				} else if (notification instanceof ObjectResized) {
 					relocateView();
@@ -413,14 +427,14 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 					}
 				} else if (notification instanceof ObjectHasResized) {
 					if (getPaintManager().isPaintingCacheEnabled()) {
-						getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
-						getPaintManager().invalidate(getGraphicalRepresentation());
+						getPaintManager().removeFromTemporaryObjects(connectorNode);
+						getPaintManager().invalidate(connectorNode);
 						getPaintManager().repaint(getParentView());
 					}
 				} else {
 					// revalidate();
-					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
-						getPaintManager().invalidate(getGraphicalRepresentation());
+					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(connectorNode)) {
+						getPaintManager().invalidate(connectorNode);
 					}
 					getPaintManager().repaint(this);
 				}
@@ -432,8 +446,8 @@ public class ConnectorView<O> extends JPanel implements FGEView<O> {
 	}
 
 	@Override
-	public LabelView getLabelView() {
-		return _labelView;
+	public LabelView<O> getLabelView() {
+		return labelView;
 	}
 
 	@Override

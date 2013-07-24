@@ -35,8 +35,8 @@ import org.openflexo.fge.GRBinding.DrawingGRBinding;
 import org.openflexo.fge.GRBinding.ShapeGRBinding;
 import org.openflexo.fge.GRStructureWalker;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.notifications.GraphicalObjectsHierarchyRebuildEnded;
-import org.openflexo.fge.notifications.GraphicalObjectsHierarchyRebuildStarted;
+import org.openflexo.fge.notifications.DrawingTreeNodeHierarchyRebuildEnded;
+import org.openflexo.fge.notifications.DrawingTreeNodeHierarchyRebuildStarted;
 
 /**
  * This class is the default implementation for all objects representing a graphical drawing, that is a complex graphical representation
@@ -153,6 +153,12 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		return (DrawingTreeNode<O, GR>) hash.get(drawable);
 	}
 
+	@Override
+	public <O> org.openflexo.fge.Drawing.DrawingTreeNode<O, ?> getDrawingTreeNode(
+			org.openflexo.fge.Drawing.DrawingTreeNodeIdentifier<O> identifier) {
+		return getDrawingTreeNode(identifier.getDrawable(), identifier.getGRBinding());
+	}
+
 	/*public Enumeration<GraphicalRepresentation> getAllGraphicalRepresentations() {
 		Vector<GraphicalRepresentation> returned = new Vector<GraphicalRepresentation>();
 		for (Enumeration<DrawingTreeNode<?>> en = _hashMap.elements(); en.hasMoreElements();) {
@@ -254,7 +260,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 
 		// logger.info("******************** BEGIN updateGraphicalObjectsHierarchy() ");
 		setChanged();
-		notifyObservers(new GraphicalObjectsHierarchyRebuildStarted(this));
+		notifyObservers(new DrawingTreeNodeHierarchyRebuildStarted(this));
 		// beginUpdateObjectHierarchy();
 
 		updateGraphicalObjectsHierarchy(getRoot());
@@ -266,7 +272,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		// isGraphicalHierarchyDirty = false;
 
 		setChanged();
-		notifyObservers(new GraphicalObjectsHierarchyRebuildEnded(this));
+		notifyObservers(new DrawingTreeNodeHierarchyRebuildEnded(this));
 		// logger.info("******************** END updateGraphicalObjectsHierarchy() ");
 
 	}
@@ -405,19 +411,24 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 	}*/
 
 	private <O> boolean deleteNode(DrawingTreeNode<?, ?> node) {
+		ContainerNode<?, ?> parentNode = node.getParentNode();
 		node.delete();
-		notifyNodeRemoved(node);
+		if (parentNode != null) {
+			parentNode.notifyNodeRemoved(node);
+		}
 		return true;
 	}
 
-	public void notifyNodeAdded(DrawingTreeNode<?, ?> addedNode) {
+	public void notifyNodeAdded(DrawingTreeNode<?, ?> addedNode, ContainerNode<?, ?> parentNode) {
 		logger.info(">>>> Added node: " + addedNode);
 		// See parentGR.notifyDrawableAdded(removedGR);
+		parentNode.notifyNodeAdded(addedNode);
 	}
 
-	public void notifyNodeRemoved(DrawingTreeNode<?, ?> removedNode) {
+	public void notifyNodeRemoved(DrawingTreeNode<?, ?> removedNode, ContainerNode<?, ?> parentNode) {
 		logger.info(">>>> Removed node: " + removedNode);
 		// See parentGR.notifyDrawableRemoved(removedGR);
+		parentNode.notifyNodeRemoved(removedNode);
 	}
 
 	@Override
@@ -433,7 +444,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		} else {
 			ShapeNode<O> returned = new ShapeNodeImpl<O>(this, aDrawable, grBinding, (RootNodeImpl<?>) parentNode);
 			if (isUpdatingObjectHierarchy) {
-				notifyNodeAdded(returned);
+				notifyNodeAdded(returned, parentNode);
 			}
 			return returned;
 		}

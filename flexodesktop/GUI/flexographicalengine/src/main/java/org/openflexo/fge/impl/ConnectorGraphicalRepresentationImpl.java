@@ -866,11 +866,11 @@ public class ConnectorGraphicalRepresentationImpl extends GraphicalRepresentatio
 	}
 
 	// Override when required
-	@Override
+	/*@Override
 	public void notifyObjectHierarchyHasBeenUpdated() {
 		super.notifyObjectHierarchyHasBeenUpdated();
 		// refreshConnector();
-	}
+	}*/
 
 	/*@Override
 	public FGEConnectorGraphics getGraphics() {

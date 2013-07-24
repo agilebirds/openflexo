@@ -27,8 +27,8 @@ import java.awt.event.MouseEvent;
 import java.util.Hashtable;
 
 import org.openflexo.fge.Drawing.ConnectorNode;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEIconLibrary;
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.connectors.impl.RectPolylinConnector;
 import org.openflexo.fge.controller.DrawingController;
@@ -44,7 +44,8 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 	private static final Hashtable<Integer, Image> PIN_CACHE = new Hashtable<Integer, Image>();
 	protected FGERectPolylin initialPolylin;
 	private RectPolylinConnector connector;
-	private FGERectPolylin newPolylin;
+
+	// private FGERectPolylin newPolylin;
 
 	public RectPolylinAdjustingArea(RectPolylinConnector connector) {
 		super(connector.getConnectorNode(), connector.getCurrentPolylin());
@@ -95,7 +96,7 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 	}
 
 	@Override
-	public void startDragging(DrawingController controller, FGEPoint startPoint) {
+	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
 		if (controller.getPaintManager().isPaintingCacheEnabled()) {
 			controller.getPaintManager().addToTemporaryObjects(getNode());
@@ -107,8 +108,8 @@ public class RectPolylinAdjustingArea extends ControlArea<FGERectPolylin> {
 	}
 
 	@Override
-	public void stopDragging(DrawingController controller, GraphicalRepresentation focusedGR) {
-		super.stopDragging(controller, focusedGR);
+	public void stopDragging(DrawingController<?> controller, DrawingTreeNode<?, ?> focused) {
+		super.stopDragging(controller, focused);
 		if (controller.getPaintManager().isPaintingCacheEnabled()) {
 			controller.getPaintManager().removeFromTemporaryObjects(getNode());
 			controller.getPaintManager().invalidate(getNode());

@@ -22,28 +22,30 @@ package org.openflexo.fge.view.listener;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing;
-import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.view.DrawingView;
 
-public class DrawingViewMouseListener extends FGEViewMouseListener {
+public class DrawingViewMouseListener<M> extends FGEViewMouseListener {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(DrawingViewMouseListener.class.getPackage().getName());
 
 	/*private boolean isRectangleSelecting = false;
 	private Point rectangleSelectingOrigin;
 	private Point currentMousePosition;*/
 
-	public DrawingViewMouseListener(DrawingGraphicalRepresentation aDrawingGraphicalRepresentation, DrawingView aView) {
-		super(aDrawingGraphicalRepresentation, aView);
+	public DrawingViewMouseListener(DrawingView<M> aView) {
+		super(aView.getDrawing().getRoot(), aView);
 	}
 
-	public Drawing getDrawing() {
-		return getGraphicalRepresentation().getDrawing();
+	@SuppressWarnings("unchecked")
+	public Drawing<M> getDrawing() {
+		return (Drawing<M>) getNode().getDrawing();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public DrawingView getView() {
-		return (DrawingView) super.getView();
+	public DrawingView<M> getView() {
+		return (DrawingView<M>) super.getView();
 	}
 
 	/*public void mouseClicked(MouseEvent e) 

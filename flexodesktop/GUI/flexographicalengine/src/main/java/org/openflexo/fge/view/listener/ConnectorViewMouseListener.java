@@ -21,15 +21,16 @@ package org.openflexo.fge.view.listener;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.view.ConnectorView;
 
 public class ConnectorViewMouseListener extends FGEViewMouseListener {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ConnectorViewMouseListener.class.getPackage().getName());
 
-	public ConnectorViewMouseListener(ConnectorGraphicalRepresentation anObject, ConnectorView aView) {
-		super(anObject, aView);
+	public <O> ConnectorViewMouseListener(ConnectorNode<O> connectorNode, ConnectorView<O> aView) {
+		super(connectorNode, aView);
 	}
 
 }

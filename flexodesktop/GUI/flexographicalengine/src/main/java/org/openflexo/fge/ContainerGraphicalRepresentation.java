@@ -54,14 +54,14 @@ public interface ContainerGraphicalRepresentation extends GraphicalRepresentatio
 	// * Properties
 	// *******************************************************************************
 
-	@Getter(value = WIDTH)
+	@Getter(value = WIDTH, defaultValue = "100")
 	@XMLAttribute
 	public abstract double getWidth();
 
 	@Setter(value = WIDTH)
 	public abstract void setWidth(double aValue);
 
-	@Getter(value = HEIGHT)
+	@Getter(value = HEIGHT, defaultValue = "100")
 	@XMLAttribute
 	public abstract double getHeight();
 

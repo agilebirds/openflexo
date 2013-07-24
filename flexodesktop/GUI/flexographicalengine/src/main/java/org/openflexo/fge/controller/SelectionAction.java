@@ -26,7 +26,7 @@ import java.util.logging.Level;
 
 import javax.swing.SwingUtilities;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.view.FGEView;
 
@@ -37,23 +37,23 @@ public class SelectionAction extends MouseClickControlAction {
 	}
 
 	@Override
-	public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
+	public boolean handleClick(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event) {
 		if (controller.getDrawingView() == null) {
 			return false;
 		}
 
-		if (graphicalRepresentation.getIsSelectable()) {
+		if (node.getGraphicalRepresentation().getIsSelectable()) {
 			if (logger.isLoggable(Level.FINE)) {
-				logger.fine("Select " + graphicalRepresentation);
+				logger.fine("Select " + node);
 			}
-			controller.setSelectedObject(graphicalRepresentation);
+			controller.setSelectedObject(node);
 			if (controller.getDrawingView() == null) {
 				return false;
 			}
-			FGEView view = controller.getDrawingView().viewForObject(graphicalRepresentation);
+			FGEView<?> view = controller.getDrawingView().viewForNode(node);
 			Point newPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), (Component) view);
 			controller.setLastClickedPoint(new FGEPoint(newPoint.x / controller.getScale(), newPoint.y / controller.getScale()));
-			controller.setLastSelectedGR(graphicalRepresentation);
+			controller.setLastSelectedGR(node);
 			return false;
 		} else {
 			return false;

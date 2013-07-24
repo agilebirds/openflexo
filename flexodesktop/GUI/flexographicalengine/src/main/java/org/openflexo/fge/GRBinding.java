@@ -3,6 +3,8 @@ package org.openflexo.fge;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openflexo.fge.GraphicalRepresentation.GRParameter;
+
 public abstract class GRBinding<O, GR extends GraphicalRepresentation> {
 
 	private GRProvider<O, GR> grProvider;
@@ -26,6 +28,9 @@ public abstract class GRBinding<O, GR extends GraphicalRepresentation> {
 
 	public void setGRProvider(GRProvider<O, GR> grProvider) {
 		this.grProvider = grProvider;
+	}
+
+	public void addDynamicPropertyValue(GRParameter parameter, String bindingValue) {
 	}
 
 	public static class DrawingGRBinding<R> extends GRBinding<R, DrawingGraphicalRepresentation> {

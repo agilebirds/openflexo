@@ -178,7 +178,7 @@ public class DropWKFElementInitializer extends ActionInitializer {
 					}
 					return true;
 				}
-				final ShapeView<?> view = drawingView.shapeViewForObject(newNodeGR);
+				final ShapeView<?> view = drawingView.shapeViewForNode(newNodeGR);
 				if (view == null) {
 					if (logger.isLoggable(Level.WARNING)) {
 						logger.warning("Cannot build view for newly created node insertion");

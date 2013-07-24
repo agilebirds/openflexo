@@ -26,14 +26,21 @@ import java.util.logging.Logger;
 
 import javax.swing.JLayeredPane;
 
+import org.openflexo.fge.Drawing.ConnectorNode;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.Drawing.GeometricNode;
+import org.openflexo.fge.Drawing.ShapeNode;
+import org.openflexo.fge.notifications.NodeAdded;
+import org.openflexo.fge.notifications.NodeDeleted;
+import org.openflexo.fge.notifications.NodeRemoved;
+
 @SuppressWarnings("serial")
 public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<O> {
 
-	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(FGELayeredView.class.getPackage().getName());
 
 	@Override
-	public abstract DrawingView getDrawingView();
+	public abstract DrawingView<?> getDrawingView();
 
 	/**
 	 * Sets the layer attribute on the specified component, making it the bottommost component in that layer. Should be called before adding
@@ -99,7 +106,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 		}
 		add(view, view.getLayer(), -1);
 		if (getDrawingView() != null) {
-			getDrawingView().getContents().put(view.getGraphicalRepresentation(), view);
+			getDrawingView().getContents().put(view.getNode(), view);
 		}
 	}
 
@@ -109,7 +116,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 		}
 		remove((Component) view);
 		if (getDrawingView() != null) {
-			getDrawingView().getContents().remove(view.getGraphicalRepresentation());
+			getDrawingView().getContents().remove(view.getNode());
 		}
 	}
 
@@ -120,7 +127,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 		}
 		add(view, view.getLayer(), -1);
 		if (getDrawingView() != null) {
-			getDrawingView().getContents().put(view.getGraphicalRepresentation(), view);
+			getDrawingView().getContents().put(view.getNode(), view);
 		}
 	}
 
@@ -130,7 +137,86 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 		}
 		remove((Component) view);
 		if (getDrawingView() != null) {
-			getDrawingView().getContents().remove(view.getGraphicalRepresentation());
+			getDrawingView().getContents().remove(view.getNode());
+		}
+	}
+
+	protected void handleNodeAdded(NodeAdded notification) {
+		DrawingTreeNode<?, ?> newNode = notification.getAddedNode();
+		logger.fine("ShapeView: Received NodeAdded notification, creating view for " + newNode);
+		if (newNode instanceof ShapeNode) {
+			ShapeNode<?> shapeNode = (ShapeNode<?>) newNode;
+			ShapeView<?> shapeView = getController().makeShapeView(shapeNode);
+			add(shapeView);
+			revalidate();
+			getPaintManager().invalidate(notification.getParent());
+			getPaintManager().repaint(this);
+			shapeNode.notifyShapeNeedsToBeRedrawn(); // TODO: is this necessary ?
+		} else if (newNode instanceof ConnectorNode) {
+			ConnectorNode<?> connectorNode = (ConnectorNode<?>) newNode;
+			ConnectorView<?> connectorView = getController().makeConnectorView(connectorNode);
+			add(connectorView);
+			revalidate();
+			getPaintManager().invalidate(notification.getParent());
+			getPaintManager().repaint(this);
+		} else if (newNode instanceof GeometricNode) {
+			newNode.addObserver(this);
+			revalidate();
+			getPaintManager().invalidate(notification.getParent());
+			getPaintManager().repaint(this);
+		}
+	}
+
+	protected void handleNodeRemoved(NodeRemoved notification) {
+		DrawingTreeNode<?, ?> removedNode = notification.getRemovedNode();
+		if (removedNode instanceof ShapeNode) {
+			ShapeNode<?> removedShapeNode = (ShapeNode<?>) removedNode;
+			ShapeView<?> view = getDrawingView().shapeViewForNode(removedShapeNode);
+			if (view != null) {
+				remove(view);
+				revalidate();
+				getPaintManager().invalidate(notification.getParent());
+				getPaintManager().invalidate(removedShapeNode);
+				getPaintManager().repaint(this);
+			} else {
+				logger.warning("Cannot find view for " + removedShapeNode);
+			}
+		} else if (removedNode instanceof ConnectorNode) {
+			ConnectorNode<?> removedConnectorNode = (ConnectorNode<?>) removedNode;
+			ConnectorView<?> view = getDrawingView().connectorViewForNode(removedConnectorNode);
+			if (view != null) {
+				remove(view);
+				revalidate();
+				getPaintManager().invalidate(notification.getParent());
+				getPaintManager().invalidate(removedConnectorNode);
+				getPaintManager().repaint(this);
+			} else {
+				logger.warning("Cannot find view for " + removedConnectorNode);
+			}
+		} else if (removedNode instanceof GeometricNode) {
+			removedNode.deleteObserver(this);
+			revalidate();
+			getPaintManager().repaint(this);
+		}
+	}
+
+	protected void handleNodeDeleted(NodeDeleted notification) {
+		DrawingTreeNode<?, ?> deletedNode = notification.getDeletedNode();
+		if (deletedNode == getNode()) {
+			// If was not removed, try to do it now
+			// TODO: is this necessary ???
+			if (deletedNode != null && deletedNode.getParentNode() != null
+					&& deletedNode.getParentNode().getChildNodes().contains(deletedNode)) {
+				deletedNode.getParentNode().removeChild(deletedNode);
+			}
+			if (getNode() != null && getController().getFocusedObjects().contains(getNode())) {
+				getController().removeFromFocusedObjects(getNode());
+			}
+			if (getNode() != null && getController().getSelectedObjects().contains(getNode())) {
+				getController().removeFromSelectedObjects(getNode());
+			}
+			// Now delete the view
+			delete();
 		}
 	}
 

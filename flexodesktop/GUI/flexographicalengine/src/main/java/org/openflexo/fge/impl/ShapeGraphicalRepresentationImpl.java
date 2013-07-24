@@ -9,6 +9,7 @@ import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.ForegroundStyle;
 import org.openflexo.fge.GraphicalRepresentation;
@@ -2573,7 +2574,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	 * @return
 	 */
 	@Override
-	public boolean isAllowedToBeDraggedOutsideParentContainerInsideContainer(GraphicalRepresentation container) {
+	public boolean isAllowedToBeDraggedOutsideParentContainerInsideContainer(ContainerNode<?, ?> container) {
 		return false;
 	}
 
@@ -2582,7 +2583,7 @@ public class ShapeGraphicalRepresentationImpl extends ContainerGraphicalRepresen
 	 * performed
 	 */
 	@Override
-	public boolean dragOutsideParentContainerInsideContainer(GraphicalRepresentation container, FGEPoint location) {
+	public boolean dragOutsideParentContainerInsideContainer(ContainerNode<?, ?> container, FGEPoint location) {
 		return false;
 	}
 

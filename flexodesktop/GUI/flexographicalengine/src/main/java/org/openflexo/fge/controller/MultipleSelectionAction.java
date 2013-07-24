@@ -21,7 +21,7 @@ package org.openflexo.fge.controller;
 
 import java.awt.event.MouseEvent;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 
 public class MultipleSelectionAction extends MouseClickControlAction {
 	@Override
@@ -30,10 +30,10 @@ public class MultipleSelectionAction extends MouseClickControlAction {
 	}
 
 	@Override
-	public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
-		if (graphicalRepresentation.getIsSelectable()) {
-			MouseClickControlAction.logger.info("Multiple select " + graphicalRepresentation);
-			controller.toggleSelection(graphicalRepresentation);
+	public boolean handleClick(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event) {
+		if (node.getGraphicalRepresentation().getIsSelectable()) {
+			MouseClickControlAction.logger.info("Multiple select " + node);
+			controller.toggleSelection(node);
 			return true;
 		} else {
 			return false;

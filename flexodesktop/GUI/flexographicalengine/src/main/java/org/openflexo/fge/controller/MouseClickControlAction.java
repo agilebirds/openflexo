@@ -22,7 +22,7 @@ package org.openflexo.fge.controller;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 
 public abstract class MouseClickControlAction extends MouseControlAction {
 
@@ -43,8 +43,7 @@ public abstract class MouseClickControlAction extends MouseControlAction {
 			} else if (this == CUSTOM) {
 				return new CustomClickControlAction() {
 					@Override
-					public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
-							MouseEvent event) {
+					public boolean handleClick(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event) {
 						logger.info("Perform undefined CUSTOM MouseClickControlAction");
 						return true;
 					}
@@ -67,7 +66,7 @@ public abstract class MouseClickControlAction extends MouseControlAction {
 	 *            TODO
 	 * @return
 	 */
-	public abstract boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event);
+	public abstract boolean handleClick(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event);
 
 	public static class None extends MouseClickControlAction {
 		@Override
@@ -76,7 +75,7 @@ public abstract class MouseClickControlAction extends MouseControlAction {
 		}
 
 		@Override
-		public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
+		public boolean handleClick(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event) {
 			// No action
 			return true;
 		}

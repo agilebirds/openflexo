@@ -29,60 +29,65 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.geom.FGEGeometricObject.Filling;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.view.FGEView;
 
+/**
+ * Utility class used to store a move
+ * 
+ * @author sylvain
+ * 
+ */
 public class MoveInfo {
+
 	private static final Logger logger = Logger.getLogger(MoveInfo.class.getPackage().getName());
 
-	private FGEView view;
+	private FGEView<?> view;
 	private Point startMovingLocationInDrawingView;
-	private Hashtable<ShapeGraphicalRepresentation, FGEPoint> movedObjects;
-	private ShapeGraphicalRepresentation movedObject;
+	private Hashtable<ShapeNode<?>, FGEPoint> movedObjects;
+	private ShapeNode<?> movedObject;
 
 	private boolean moveHasStarted = false;
 
 	private Point currentLocationInDrawingView;
 
-	MoveInfo(ShapeGraphicalRepresentation graphicalRepresentation, DrawingController controller) {
+	public MoveInfo(ShapeNode<?> shapeNode, DrawingController<?> controller) {
 		view = controller.getDrawingView();
 
-		startMovingLocationInDrawingView = FGEUtils
-				.convertPointFromDrawableToDrawing(graphicalRepresentation.getParentGraphicalRepresentation(), new Point(
-						graphicalRepresentation.getViewX(controller.getScale()), graphicalRepresentation.getViewY(controller.getScale())),
-						controller.getScale());
+		startMovingLocationInDrawingView = FGEUtils.convertPointFromDrawableToDrawing(shapeNode.getParentNode(),
+				new Point(shapeNode.getViewX(controller.getScale()), shapeNode.getViewY(controller.getScale())), controller.getScale());
 		currentLocationInDrawingView = new Point(startMovingLocationInDrawingView);
 
-		movedObject = graphicalRepresentation;
+		movedObject = shapeNode;
 
 		if (!controller.getSelectedObjects().contains(movedObject)) {
 			controller.setSelectedObject(movedObject);
 		}
 
-		movedObjects = new Hashtable<ShapeGraphicalRepresentation, FGEPoint>();
+		movedObjects = new Hashtable<ShapeNode<?>, FGEPoint>();
 		movedObjects.put(movedObject, movedObject.getLocation());
 
 		// Now see objects coming with
-		for (GraphicalRepresentation d : controller.getSelectedObjects()) {
-			if (d != graphicalRepresentation && d instanceof ShapeGraphicalRepresentation
-					&& ((ShapeGraphicalRepresentation) d).getContainer() == graphicalRepresentation.getContainer() && !d.getIsReadOnly()
-					&& ((ShapeGraphicalRepresentation) d).getLocationConstraints() != LocationConstraints.UNMOVABLE) {
-				// OK, d comes with me
-				movedObjects.put((ShapeGraphicalRepresentation) d, ((ShapeGraphicalRepresentation) d).getLocation());
+		for (DrawingTreeNode<?, ?> o : controller.getSelectedObjects()) {
+			if (o != shapeNode && o instanceof ShapeNode && ((ShapeNode<?>) o).getParentNode() == shapeNode.getParentNode()
+					&& !o.getGraphicalRepresentation().getIsReadOnly()
+					&& ((ShapeNode<?>) o).getGraphicalRepresentation().getLocationConstraints() != LocationConstraints.UNMOVABLE) {
+				// OK, o comes with me
+				movedObjects.put((ShapeNode<?>) o, ((ShapeNode<?>) o).getLocation());
 			}
 		}
 
 	}
 
-	MoveInfo(ShapeGraphicalRepresentation graphicalRepresentation, MouseEvent e, FGEView view, DrawingController controller) {
-		this(graphicalRepresentation, controller);
+	public MoveInfo(ShapeNode<?> shapeNode, MouseEvent e, FGEView<?> view, DrawingController<?> controller) {
+		this(shapeNode, controller);
 
 		this.view = view;
 		try {
@@ -101,16 +106,16 @@ public class MoveInfo {
 	}
 
 	private void startDragging() {
-		for (ShapeGraphicalRepresentation d : movedObjects.keySet()) {
-			d.notifyObjectWillMove();
+		for (ShapeNode<?> shapeNode : movedObjects.keySet()) {
+			shapeNode.notifyObjectWillMove();
 		}
 
 		if (movedObject.isParentLayoutedAsContainer()) {
-			((ShapeGraphicalRepresentation) movedObject.getContainerGraphicalRepresentation()).notifyObjectWillMove();
-			((ShapeGraphicalRepresentation) movedObject.getContainerGraphicalRepresentation()).notifyObjectWillResize();
-			for (GraphicalRepresentation gr : ((ShapeGraphicalRepresentation) movedObject).getContainedGraphicalRepresentations()) {
-				if (gr instanceof ShapeGraphicalRepresentation) {
-					((ShapeGraphicalRepresentation) gr).notifyObjectWillMove();
+			((ShapeNode<?>) movedObject.getParentNode()).notifyObjectWillMove();
+			((ShapeNode<?>) movedObject.getParentNode()).notifyObjectWillResize();
+			for (DrawingTreeNode<?, ?> child : movedObject.getChildNodes()) {
+				if (child instanceof ShapeNode) {
+					((ShapeNode<?>) child).notifyObjectWillMove();
 				}
 			}
 		}
@@ -124,7 +129,7 @@ public class MoveInfo {
 			startDragging();
 		}
 
-		for (ShapeGraphicalRepresentation d : movedObjects.keySet()) {
+		for (ShapeNode<?> d : movedObjects.keySet()) {
 			FGEPoint startMovingPoint = movedObjects.get(d);
 
 			FGEPoint desiredLocation = new FGEPoint(startMovingPoint.x + (newLocationInDrawingView.x - startMovingLocationInDrawingView.x)
@@ -156,15 +161,15 @@ public class MoveInfo {
 	}
 
 	void stopDragging() {
-		for (ShapeGraphicalRepresentation d : movedObjects.keySet()) {
+		for (ShapeNode<?> d : movedObjects.keySet()) {
 			d.notifyObjectHasMoved();
 		}
 		if (movedObject.isParentLayoutedAsContainer()) {
-			((ShapeGraphicalRepresentation) movedObject.getContainerGraphicalRepresentation()).notifyObjectHasMoved();
-			((ShapeGraphicalRepresentation) movedObject.getContainerGraphicalRepresentation()).notifyObjectHasResized();
-			for (GraphicalRepresentation gr : ((ShapeGraphicalRepresentation) movedObject).getContainedGraphicalRepresentations()) {
-				if (gr instanceof ShapeGraphicalRepresentation) {
-					((ShapeGraphicalRepresentation) gr).notifyObjectHasMoved();
+			((ShapeNode<?>) movedObject.getParentNode()).notifyObjectHasMoved();
+			((ShapeNode<?>) movedObject.getParentNode()).notifyObjectHasResized();
+			for (DrawingTreeNode<?, ?> child : movedObject.getChildNodes()) {
+				if (child instanceof ShapeNode) {
+					((ShapeNode<?>) child).notifyObjectHasMoved();
 				}
 			}
 		}
@@ -180,15 +185,13 @@ public class MoveInfo {
 		FGEPoint desiredLocation = new FGEPoint(startMovingPoint.x + (newLocationInDrawingView.x - startMovingLocationInDrawingView.x)
 				/ view.getScale(), startMovingPoint.y + (newLocationInDrawingView.y - startMovingLocationInDrawingView.y) / view.getScale());
 
-		if (movedObject.getContainerGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-			ShapeGraphicalRepresentation container = (ShapeGraphicalRepresentation) movedObject.getContainerGraphicalRepresentation();
+		if (movedObject.getParentNode() instanceof ShapeNode) {
+			ShapeNode<?> container = (ShapeNode<?>) movedObject.getParentNode();
 			FGERectangle bounds = new FGERectangle(0, 0, container.getWidth() - movedObject.getWidth(), container.getHeight()
 					- movedObject.getHeight(), Filling.FILLED);
 			FGEPoint nearestPoint = bounds.getNearestPoint(desiredLocation);
-			Point p1 = FGEUtils.convertPointFromDrawableToDrawing(movedObject.getContainerGraphicalRepresentation(),
-					desiredLocation.toPoint(), view.getScale());
-			Point p2 = FGEUtils.convertPointFromDrawableToDrawing(movedObject.getContainerGraphicalRepresentation(),
-					nearestPoint.toPoint(), view.getScale());
+			Point p1 = FGEUtils.convertPointFromDrawableToDrawing(movedObject.getParentNode(), desiredLocation.toPoint(), view.getScale());
+			Point p2 = FGEUtils.convertPointFromDrawableToDrawing(movedObject.getParentNode(), nearestPoint.toPoint(), view.getScale());
 			if (Point2D.distance(p1.x, p1.y, p2.x, p2.y) > FGEConstants.DND_DISTANCE) {
 				return true;
 			}
@@ -197,15 +200,15 @@ public class MoveInfo {
 		return false;
 	}
 
-	public ShapeGraphicalRepresentation getMovedObject() {
+	public ShapeNode<?> getMovedObject() {
 		return movedObject;
 	}
 
-	public Set<ShapeGraphicalRepresentation> getMovedObjects() {
+	public Set<ShapeNode<?>> getMovedObjects() {
 		return movedObjects.keySet();
 	}
 
-	public Hashtable<ShapeGraphicalRepresentation, FGEPoint> getInitialLocations() {
+	public Hashtable<ShapeNode<?>, FGEPoint> getInitialLocations() {
 		return movedObjects;
 	}
 

@@ -22,8 +22,8 @@ package org.openflexo.fge.connectors.rpc;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.connectors.RectPolylinConnectorSpecification;
 import org.openflexo.fge.connectors.impl.RectPolylinConnector;
 import org.openflexo.fge.controller.DrawingController;
@@ -69,8 +69,8 @@ public abstract class RectPolylinAdjustableControlPoint extends ConnectorAdjusti
 	}
 
 	@Override
-	public final void stopDragging(DrawingController<?> controller, GraphicalRepresentation focusedGR) {
-		super.stopDragging(controller, focusedGR);
+	public final void stopDragging(DrawingController<?> controller, DrawingTreeNode<?, ?> focused) {
+		super.stopDragging(controller, focused);
 		getConnector().setWasManuallyAdjusted(true);
 		getConnector()._connectorChanged(false);
 	}

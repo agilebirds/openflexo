@@ -200,7 +200,7 @@ public class PortRegisteryGR extends SWLObjectGR<PortRegistery> implements SWLCo
 
 	protected static boolean isInsideClosingBox(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 			MouseEvent event) {
-		ShapeView view = (ShapeView) controller.getDrawingView().viewForObject(graphicalRepresentation);
+		ShapeView view = (ShapeView) controller.getDrawingView().viewForNode(graphicalRepresentation);
 		Rectangle closingBoxRect = new Rectangle((int) (5 * controller.getScale()), (int) (5 * controller.getScale()),
 				(int) (15 * controller.getScale()), (int) (15 * controller.getScale()));
 		Point clickLocation = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), view);

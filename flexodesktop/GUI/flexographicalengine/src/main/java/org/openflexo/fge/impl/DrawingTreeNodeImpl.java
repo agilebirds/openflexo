@@ -38,6 +38,10 @@ import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.graphics.DrawUtils;
 import org.openflexo.fge.notifications.BindingChanged;
 import org.openflexo.fge.notifications.FGENotification;
+import org.openflexo.fge.notifications.LabelHasEdited;
+import org.openflexo.fge.notifications.LabelHasMoved;
+import org.openflexo.fge.notifications.LabelWillEdit;
+import org.openflexo.fge.notifications.LabelWillMove;
 
 public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation> extends Observable implements DrawingTreeNode<O, GR> {
 
@@ -631,6 +635,80 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		DrawUtils.turnOnAntiAlising(g2);
 		DrawUtils.setRenderQuality(g2);
 		DrawUtils.setColorRenderQuality(g2);
+	}
+
+	/**
+	 * Return the index of this drawing tree node relatively to all children declared in parent node
+	 * 
+	 * @return
+	 */
+	@Override
+	public int getIndex() {
+		if (!isValidated()) {
+			return -1;
+		}
+		if (getParentNode() == null) {
+			return -1;
+		}
+
+		List<DrawingTreeNodeImpl<?, ?>> orderedGRList = getParentNode().getChildNodes();
+		return orderedGRList.indexOf(this);
+	}
+
+	/**
+	 * Return flag indicating if this node should be displayed, relatively to the value returned by visible feature in
+	 * {@link GraphicalRepresentation}, and the structure of the tree (the parent should be visible too)
+	 */
+	@Override
+	public boolean shouldBeDisplayed() {
+		if (!isValidated()) {
+			return false;
+		}
+		// logger.info("For " + this + " getIsVisible()=" + getGraphicalRepresentation().getIsVisible() + " getParentNode()="
+		// + getParentNode());
+		return getGraphicalRepresentation().getIsVisible() && getParentNode() != null && getParentNode().shouldBeDisplayed();
+	}
+
+	@Override
+	public void notifyLabelWillBeEdited() {
+		setChanged();
+		notifyObservers(new LabelWillEdit());
+	}
+
+	@Override
+	public void notifyLabelHasBeenEdited() {
+		setChanged();
+		notifyObservers(new LabelHasEdited());
+	}
+
+	@Override
+	public void notifyLabelWillMove() {
+		setChanged();
+		notifyObservers(new LabelWillMove());
+	}
+
+	@Override
+	public void notifyLabelHasMoved() {
+		setChanged();
+		notifyObservers(new LabelHasMoved());
+	}
+
+	@Override
+	public void notifyObjectHierarchyWillBeUpdated() {
+		// setRegistered(false);
+		/*if (ancestors != null) {
+			ancestors.clear();
+		}
+		ancestors = null;*/
+	}
+
+	@Override
+	public void notifyObjectHierarchyHasBeenUpdated() {
+		// setRegistered(true);
+		/*if (ancestors != null) {
+			ancestors.clear();
+		}
+		ancestors = null;*/
 	}
 
 }

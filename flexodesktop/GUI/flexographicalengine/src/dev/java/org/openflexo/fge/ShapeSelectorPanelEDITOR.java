@@ -41,7 +41,7 @@ public class ShapeSelectorPanelEDITOR {
 		FIBAbstractEditor editor = new FIBAbstractEditor() {
 			@Override
 			public Object[] getData() {
-				ShapeFactory shapeFactory = new ShapeFactory(FACTORY.makeShape(ShapeType.STAR, null));
+				ShapeFactory shapeFactory = new ShapeFactory(FACTORY.makeShape(ShapeType.STAR));
 				return FIBAbstractEditor.makeArray(shapeFactory);
 			}
 

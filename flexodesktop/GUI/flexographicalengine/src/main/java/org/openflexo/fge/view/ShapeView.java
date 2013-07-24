@@ -39,19 +39,15 @@ import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing.ShapeNode;
-import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.GeometricGraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.DrawingPalette;
 import org.openflexo.fge.notifications.FGENotification;
-import org.openflexo.fge.notifications.GraphicalRepresentationAdded;
-import org.openflexo.fge.notifications.GraphicalRepresentationDeleted;
-import org.openflexo.fge.notifications.GraphicalRepresentationRemoved;
+import org.openflexo.fge.notifications.NodeAdded;
+import org.openflexo.fge.notifications.NodeDeleted;
+import org.openflexo.fge.notifications.NodeRemoved;
 import org.openflexo.fge.notifications.ObjectHasMoved;
 import org.openflexo.fge.notifications.ObjectHasResized;
 import org.openflexo.fge.notifications.ObjectMove;
@@ -61,28 +57,36 @@ import org.openflexo.fge.notifications.ObjectWillResize;
 import org.openflexo.fge.notifications.ShapeNeedsToBeRedrawn;
 import org.openflexo.fge.view.listener.ShapeViewMouseListener;
 
+/**
+ * The {@link ShapeView} is the SWING implementation of a panel showing a {@link ShapeNode}
+ * 
+ * @author sylvain
+ * 
+ * @param <O>
+ */
+@SuppressWarnings("serial")
 public class ShapeView<O> extends FGELayeredView<O> {
 
 	private static final Logger logger = Logger.getLogger(ShapeView.class.getPackage().getName());
 
-	private ShapeNode<O> node;
+	private ShapeNode<O> shapeNode;
 	private ShapeViewMouseListener mouseListener;
 	private DrawingController<?> _controller;
 
-	private LabelView _labelView;
+	private LabelView<O> labelView;
 
 	public ShapeView(ShapeNode<O> node, DrawingController<?> controller) {
 		super();
 		logger.fine("Create ShapeView " + Integer.toHexString(hashCode()) + " for " + node);
 		_controller = controller;
-		this.node = node;
+		this.shapeNode = node;
 		node.finalizeConstraints();
 		updateLabelView();
 		relocateAndResizeView();
 		mouseListener = makeShapeViewMouseListener();
 		addMouseListener(mouseListener);
 		addMouseMotionListener(mouseListener);
-		getGraphicalRepresentation().addObserver(this);
+		shapeNode.addObserver(this);
 		setOpaque(false);
 		updateVisibility();
 		setFocusable(true);
@@ -119,40 +123,45 @@ public class ShapeView<O> extends FGELayeredView<O> {
 
 	@Override
 	public synchronized void delete() {
-		logger.fine("Delete ShapeView " + Integer.toHexString(hashCode()) + " for " + getGraphicalRepresentation());
+		logger.fine("Delete ShapeView " + Integer.toHexString(hashCode()) + " for " + shapeNode);
 		if (getParentView() != null) {
-			FGELayeredView parentView = getParentView();
+			FGELayeredView<?> parentView = getParentView();
 			// logger.warning("Unexpected not null parent, proceeding anyway");
 			parentView.remove(this);
 			parentView.revalidate();
 			if (getPaintManager() != null) {
-				getPaintManager().invalidate(getGraphicalRepresentation());
+				getPaintManager().invalidate(shapeNode);
 				getPaintManager().repaint(parentView);
 			}
 		}
-		if (getGraphicalRepresentation() != null) {
-			getGraphicalRepresentation().deleteObserver(this);
+		if (shapeNode != null) {
+			shapeNode.deleteObserver(this);
 		}
 		setDropTarget(null);
 		removeMouseListener(mouseListener);
 		removeMouseMotionListener(mouseListener);
-		if (_labelView != null) {
-			_labelView.delete();
+		if (labelView != null) {
+			labelView.delete();
 		}
-		_labelView = null;
+		labelView = null;
 		_controller = null;
 		mouseListener = null;
-		graphicalRepresentation = null;
+		shapeNode = null;
 		isDeleted = true;
 	}
 
 	@Override
 	public O getDrawable() {
-		return node.getDrawable();
+		return shapeNode.getDrawable();
 	}
 
 	@Override
-	public DrawingView getDrawingView() {
+	public ShapeNode<O> getNode() {
+		return shapeNode;
+	}
+
+	@Override
+	public DrawingView<?> getDrawingView() {
 		if (getController() != null) {
 			return getController().getDrawingView();
 		}
@@ -160,22 +169,17 @@ public class ShapeView<O> extends FGELayeredView<O> {
 	}
 
 	@Override
-	public FGELayeredView getParent() {
-		return (FGELayeredView) super.getParent();
+	public FGELayeredView<?> getParent() {
+		return (FGELayeredView<?>) super.getParent();
 	}
 
-	public FGELayeredView getParentView() {
+	public FGELayeredView<?> getParentView() {
 		return getParent();
 	}
 
-	@Override
-	public ShapeGraphicalRepresentation getGraphicalRepresentation() {
-		return graphicalRepresentation;
-	}
-
-	public DrawingGraphicalRepresentation getDrawingGraphicalRepresentation() {
-		return graphicalRepresentation.getDrawingGraphicalRepresentation();
-	}
+	/*public ShapeGraphicalRepresentation getGraphicalRepresentation() {
+		return shapeNode.getGraphicalRepresentation();
+	}*/
 
 	@Override
 	public double getScale() {
@@ -194,23 +198,22 @@ public class ShapeView<O> extends FGELayeredView<O> {
 	}
 
 	private void relocateView() {
-		if (getX() != getGraphicalRepresentation().getViewX(getScale()) || getY() != getGraphicalRepresentation().getViewY(getScale())) {
-			if (_labelView != null) {
-				_labelView.updateBounds();
+		if (getX() != shapeNode.getViewX(getScale()) || getY() != shapeNode.getViewY(getScale())) {
+			if (labelView != null) {
+				labelView.updateBounds();
 			}
-			setLocation(getGraphicalRepresentation().getViewX(getScale()), getGraphicalRepresentation().getViewY(getScale()));
+			setLocation(shapeNode.getViewX(getScale()), shapeNode.getViewY(getScale()));
 		} else {
 			// logger.info("Ignore relocateView() because unchanged");
 		}
 	}
 
 	private void resizeView() {
-		if (getWidth() != getGraphicalRepresentation().getViewWidth(getScale())
-				|| getHeight() != getGraphicalRepresentation().getViewHeight(getScale())) {
-			if (_labelView != null) {
-				_labelView.updateBounds();
+		if (getWidth() != shapeNode.getViewWidth(getScale()) || getHeight() != shapeNode.getViewHeight(getScale())) {
+			if (labelView != null) {
+				labelView.updateBounds();
 			}
-			setSize(getGraphicalRepresentation().getViewWidth(getScale()), getGraphicalRepresentation().getViewHeight(getScale()));
+			setSize(shapeNode.getViewWidth(getScale()), shapeNode.getViewHeight(getScale()));
 		} else {
 			// logger.info("Ignore resizeView() because unchanged");
 		}
@@ -218,29 +221,29 @@ public class ShapeView<O> extends FGELayeredView<O> {
 
 	private void updateLayer() {
 		if (getParent() instanceof JLayeredPane) {
-			if (_labelView != null) {
-				getParent().setLayer((Component) _labelView, getLayer());
-				getParent().setPosition(_labelView, getGraphicalRepresentation().getLayerOrder() * 2);
+			if (labelView != null) {
+				getParent().setLayer((Component) labelView, getLayer());
+				getParent().setPosition(labelView, shapeNode.getIndex() * 2);
 			}
 			getParent().setLayer((Component) this, getLayer());
-			getParent().setPosition(this, getGraphicalRepresentation().getLayerOrder() * 2 + 1);
+			getParent().setPosition(this, shapeNode.getIndex() * 2 + 1);
 		}
 	}
 
 	private void updateVisibility() {
-		if (_labelView != null) {
-			_labelView.setVisible(getGraphicalRepresentation().shouldBeDisplayed());
+		if (labelView != null) {
+			labelView.setVisible(shapeNode.shouldBeDisplayed());
 		}
 
-		setVisible(getGraphicalRepresentation().shouldBeDisplayed());
+		setVisible(shapeNode.shouldBeDisplayed());
 	}
 
 	private void updateLabelView() {
-		if (!getGraphicalRepresentation().getHasText() && _labelView != null) {
-			_labelView.delete();
-			_labelView = null;
-		} else if (getGraphicalRepresentation().getHasText() && _labelView == null) {
-			_labelView = new LabelView(getGraphicalRepresentation(), getController(), this);
+		if (!shapeNode.getGraphicalRepresentation().getHasText() && labelView != null) {
+			labelView.delete();
+			labelView = null;
+		} else if (shapeNode.getGraphicalRepresentation().getHasText() && labelView == null) {
+			labelView = new LabelView<O>(shapeNode, getController(), this);
 			if (getParentView() != null) {
 				getParentView().add(getLabelView(), getLayer(), -1);
 			}
@@ -248,7 +251,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 	}
 
 	public Integer getLayer() {
-		return FGEConstants.INITIAL_LAYER + getGraphicalRepresentation().getLayer();
+		return FGEConstants.INITIAL_LAYER + shapeNode.getGraphicalRepresentation().getLayer();
 	}
 
 	@Override
@@ -259,21 +262,21 @@ public class ShapeView<O> extends FGELayeredView<O> {
 		if (getPaintManager().isPaintingCacheEnabled()) {
 			if (getDrawingView().isBuffering()) {
 				// Buffering painting
-				if (getPaintManager().isTemporaryObject(getGraphicalRepresentation())) {
+				if (getPaintManager().isTemporaryObject(shapeNode)) {
 					// This object is declared to be a temporary object, to be redrawn
 					// continuously, so we need to ignore it: do nothing
 					if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE)) {
-						FGEPaintManager.paintPrimitiveLogger.fine("ShapeView: buffering paint, ignore: " + getGraphicalRepresentation());
+						FGEPaintManager.paintPrimitiveLogger.fine("ShapeView: buffering paint, ignore: " + shapeNode);
 					}
 				} else {
 					if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE)) {
-						FGEPaintManager.paintPrimitiveLogger.fine("ShapeView: buffering paint, draw: " + getGraphicalRepresentation()
-								+ " clip=" + g.getClip());
+						FGEPaintManager.paintPrimitiveLogger
+								.fine("ShapeView: buffering paint, draw: " + shapeNode + " clip=" + g.getClip());
 					}
 					doPaint(g);
 				}
 			} else {
-				if (!getPaintManager().renderUsingBuffer((Graphics2D) g, g.getClipBounds(), getGraphicalRepresentation(), getScale())) {
+				if (!getPaintManager().renderUsingBuffer((Graphics2D) g, g.getClipBounds(), shapeNode, getScale())) {
 					doPaint(g);
 				}
 
@@ -305,16 +308,16 @@ public class ShapeView<O> extends FGELayeredView<O> {
 	}
 
 	private void doPaint(Graphics g) {
-		getGraphicalRepresentation().paint(g, getController());
+		shapeNode.paint(g, getController());
 		super.paint(g);
 	}
 
 	protected ShapeViewMouseListener makeShapeViewMouseListener() {
-		return new ShapeViewMouseListener(graphicalRepresentation, this);
+		return new ShapeViewMouseListener(shapeNode, this);
 	}
 
 	@Override
-	public DrawingController getController() {
+	public DrawingController<?> getController() {
 		return _controller;
 	}
 
@@ -337,70 +340,16 @@ public class ShapeView<O> extends FGELayeredView<O> {
 
 			if (aNotification instanceof FGENotification) {
 				FGENotification notification = (FGENotification) aNotification;
-				if (notification instanceof GraphicalRepresentationAdded) {
-					GraphicalRepresentation newGR = ((GraphicalRepresentationAdded) notification).getAddedGraphicalRepresentation();
-					logger.fine("ShapeView: Received ObjectAdded notification, creating view for " + newGR);
-					if (newGR instanceof ShapeGraphicalRepresentation) {
-						ShapeGraphicalRepresentation shapeGR = (ShapeGraphicalRepresentation) newGR;
-						add(shapeGR.makeShapeView(getController()));
-						revalidate();
-						getPaintManager().repaint(this);
-						shapeGR.notifyShapeNeedsToBeRedrawn();
-					} else if (newGR instanceof ConnectorGraphicalRepresentation) {
-						ConnectorGraphicalRepresentation connectorGR = (ConnectorGraphicalRepresentation) newGR;
-						add(connectorGR.makeConnectorView(getController()));
-						revalidate();
-						getPaintManager().repaint(this);
-					} else if (newGR instanceof GeometricGraphicalRepresentation) {
-						newGR.addObserver(this);
-						revalidate();
-						getPaintManager().repaint(this);
-					}
-				} else if (notification instanceof GraphicalRepresentationRemoved) {
-					GraphicalRepresentation removedGR = ((GraphicalRepresentationRemoved) notification).getRemovedGraphicalRepresentation();
-					if (removedGR instanceof ShapeGraphicalRepresentation) {
-						ShapeView view = getDrawingView().shapeViewForObject((ShapeGraphicalRepresentation) removedGR);
-						if (view != null) {
-							remove(view);
-							revalidate();
-							getPaintManager().invalidate(getGraphicalRepresentation());
-							getPaintManager().repaint(this);
-						} else {
-							logger.warning("Cannot find view for " + removedGR);
-						}
-					} else if (removedGR instanceof ConnectorGraphicalRepresentation) {
-						ConnectorView view = getDrawingView().connectorViewForObject((ConnectorGraphicalRepresentation) removedGR);
-						if (view != null) {
-							remove(view);
-							revalidate();
-							getPaintManager().invalidate(getGraphicalRepresentation());
-							getPaintManager().repaint(this);
-						} else {
-							logger.warning("Cannot find view for " + removedGR);
-						}
-					} else if (removedGR instanceof GeometricGraphicalRepresentation) {
-						removedGR.deleteObserver(this);
-						revalidate();
-						getPaintManager().repaint(this);
-					}
-				} else if (notification instanceof GraphicalRepresentationDeleted) {
-					GraphicalRepresentation deletedGR = ((GraphicalRepresentationDeleted) notification).getDeletedGraphicalRepresentation();
-					// If was not removed, try to do it now
-					if (getGraphicalRepresentation() != null && getGraphicalRepresentation().getContainerGraphicalRepresentation() != null
-							&& getGraphicalRepresentation().getContainerGraphicalRepresentation().contains(getGraphicalRepresentation())) {
-						getGraphicalRepresentation().getContainerGraphicalRepresentation().notifyDrawableRemoved(deletedGR);
-					}
-					if (getGraphicalRepresentation() != null && getController().getFocusedObjects().contains(getGraphicalRepresentation())) {
-						getController().removeFromFocusedObjects(getGraphicalRepresentation());
-					}
-					if (getGraphicalRepresentation() != null && getController().getSelectedObjects().contains(getGraphicalRepresentation())) {
-						getController().removeFromSelectedObjects(getGraphicalRepresentation());
-					}
-					delete();
+				if (notification instanceof NodeAdded) {
+					handleNodeAdded((NodeAdded) notification);
+				} else if (notification instanceof NodeRemoved) {
+					handleNodeRemoved((NodeRemoved) notification);
+				} else if (notification instanceof NodeDeleted) {
+					handleNodeDeleted((NodeDeleted) notification);
 				} else if (notification instanceof ObjectWillMove) {
 					if (getPaintManager().isPaintingCacheEnabled()) {
-						getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
-						getPaintManager().invalidate(getGraphicalRepresentation());
+						getPaintManager().addToTemporaryObjects(shapeNode);
+						getPaintManager().invalidate(shapeNode);
 					}
 				} else if (notification instanceof ObjectMove) {
 					relocateView();
@@ -409,14 +358,14 @@ public class ShapeView<O> extends FGELayeredView<O> {
 					}
 				} else if (notification instanceof ObjectHasMoved) {
 					if (getPaintManager().isPaintingCacheEnabled()) {
-						getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
-						getPaintManager().invalidate(getGraphicalRepresentation());
+						getPaintManager().removeFromTemporaryObjects(shapeNode);
+						getPaintManager().invalidate(shapeNode);
 						getPaintManager().repaint(getParentView());
 					}
 				} else if (notification instanceof ObjectWillResize) {
 					if (getPaintManager().isPaintingCacheEnabled()) {
-						getPaintManager().addToTemporaryObjects(getGraphicalRepresentation());
-						getPaintManager().invalidate(getGraphicalRepresentation());
+						getPaintManager().addToTemporaryObjects(shapeNode);
+						getPaintManager().invalidate(shapeNode);
 					}
 				} else if (notification instanceof ObjectResized) {
 					resizeView();
@@ -427,17 +376,17 @@ public class ShapeView<O> extends FGELayeredView<O> {
 				} else if (notification instanceof ObjectHasResized) {
 					resizeView();
 					if (getPaintManager().isPaintingCacheEnabled()) {
-						getPaintManager().removeFromTemporaryObjects(getGraphicalRepresentation());
-						getPaintManager().invalidate(getGraphicalRepresentation());
+						getPaintManager().removeFromTemporaryObjects(shapeNode);
+						getPaintManager().invalidate(shapeNode);
 						getPaintManager().repaint(getParentView());
 					}
 				} else if (notification instanceof ShapeNeedsToBeRedrawn) {
-					getPaintManager().invalidate(getGraphicalRepresentation());
+					getPaintManager().invalidate(shapeNode);
 					getPaintManager().repaint(this);
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.layer) {
 					updateLayer();
-					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
-						getPaintManager().invalidate(getGraphicalRepresentation());
+					if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(shapeNode)) {
+						getPaintManager().invalidate(shapeNode);
 					}
 					getPaintManager().repaint(this);
 
@@ -453,15 +402,15 @@ public class ShapeView<O> extends FGELayeredView<O> {
 						getParent().moveToFront(getLabelView());
 					}
 					getPaintManager().repaint(this);
-					if (graphicalRepresentation.getIsSelected()) {
+					if (shapeNode.getGraphicalRepresentation().getIsSelected()) {
 						requestFocusInWindow();
 						// requestFocus();
 					}
 				} else if (notification.getParameter() == GraphicalRepresentation.Parameters.isVisible) {
 					updateVisibility();
 					if (getPaintManager().isPaintingCacheEnabled()) {
-						if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
-							getPaintManager().invalidate(getGraphicalRepresentation());
+						if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(shapeNode)) {
+							getPaintManager().invalidate(shapeNode);
 						}
 					}
 					getPaintManager().repaint(this);
@@ -469,8 +418,8 @@ public class ShapeView<O> extends FGELayeredView<O> {
 				} else {
 					// revalidate();
 					if (getPaintManager().isPaintingCacheEnabled()) {
-						if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(getGraphicalRepresentation())) {
-							getPaintManager().invalidate(getGraphicalRepresentation());
+						if (!getPaintManager().isTemporaryObjectOrParentIsTemporaryObject(shapeNode)) {
+							getPaintManager().invalidate(shapeNode);
 						}
 					}
 					getPaintManager().repaint(this);
@@ -485,8 +434,8 @@ public class ShapeView<O> extends FGELayeredView<O> {
 	}
 
 	@Override
-	public LabelView getLabelView() {
-		return _labelView;
+	public LabelView<O> getLabelView() {
+		return labelView;
 	}
 
 	@Override

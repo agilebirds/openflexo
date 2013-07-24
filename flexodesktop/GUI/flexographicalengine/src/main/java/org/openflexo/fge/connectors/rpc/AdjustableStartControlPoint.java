@@ -42,7 +42,7 @@ public class AdjustableStartControlPoint extends RectPolylinAdjustableControlPoi
 	}
 
 	@Override
-	public void startDragging(DrawingController controller, FGEPoint startPoint) {
+	public void startDragging(DrawingController<?> controller, FGEPoint startPoint) {
 		super.startDragging(controller, startPoint);
 		getConnectorSpecification().setIsStartingLocationFixed(true);
 	}

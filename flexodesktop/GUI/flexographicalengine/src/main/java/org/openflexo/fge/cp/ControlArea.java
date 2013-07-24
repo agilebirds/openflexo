@@ -28,7 +28,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.area.FGEArea;
@@ -114,7 +113,7 @@ public abstract class ControlArea<A extends FGEArea> implements FGEConstants {
 	}
 
 	// Override when required
-	public void stopDragging(DrawingController<?> controller, GraphicalRepresentation focusedGR) {
+	public void stopDragging(DrawingController<?> controller, DrawingTreeNode<?, ?> focused) {
 	}
 
 	// Override when required

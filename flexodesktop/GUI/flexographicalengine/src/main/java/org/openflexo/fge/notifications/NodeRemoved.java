@@ -19,19 +19,32 @@
  */
 package org.openflexo.fge.notifications;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.Drawing.ContainerNode;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 
-public class GraphicalRepresentationAdded extends FGENotification {
+/**
+ * This notification is thrown when a node has been removed from the drawing tree
+ * 
+ * @author sylvain
+ * 
+ */
+public class NodeRemoved extends FGENotification {
 
-	private GraphicalRepresentation newGR;
+	private DrawingTreeNode<?, ?> removedNode;
+	private ContainerNode<?, ?> parent;
 
-	public GraphicalRepresentationAdded(GraphicalRepresentation gr) {
-		super("object", null, gr);
-		newGR = gr;
+	public NodeRemoved(DrawingTreeNode<?, ?> removedNode, ContainerNode<?, ?> parent) {
+		super("node", removedNode, null);
+		this.removedNode = removedNode;
+		this.parent = parent;
 	}
 
-	public GraphicalRepresentation getAddedGraphicalRepresentation() {
-		return newGR;
+	public DrawingTreeNode<?, ?> getRemovedNode() {
+		return removedNode;
+	}
+
+	public ContainerNode<?, ?> getParent() {
+		return parent;
 	}
 
 	@Override

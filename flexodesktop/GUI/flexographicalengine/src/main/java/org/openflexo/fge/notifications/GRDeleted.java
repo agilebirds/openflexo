@@ -19,17 +19,25 @@
  */
 package org.openflexo.fge.notifications;
 
-import org.openflexo.fge.Drawing;
+import org.openflexo.fge.GraphicalRepresentation;
 
-public class GraphicalObjectsHierarchyRebuildEnded extends FGENotification {
+/**
+ * This notification is thrown when a graphical representation has been deleted
+ * 
+ * @author sylvain
+ * 
+ */
+public class GRDeleted extends FGENotification {
 
-	public GraphicalObjectsHierarchyRebuildEnded(Drawing<?> drawing) {
-		super("graphicalObjectsHierarchy", null, drawing);
+	private GraphicalRepresentation deletedGR;
 
+	public GRDeleted(GraphicalRepresentation deletedGR) {
+		super("delete", deletedGR, null);
+		this.deletedGR = deletedGR;
 	}
 
-	public Drawing<?> getDrawing() {
-		return (Drawing<?>) newValue();
+	public GraphicalRepresentation getDeletedGR() {
+		return deletedGR;
 	}
 
 	@Override

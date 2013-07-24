@@ -55,10 +55,12 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.Drawing.ConnectorNode;
+import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.Drawing.RootNode;
+import org.openflexo.fge.Drawing.GeometricNode;
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.DrawingGraphicalRepresentation.DrawingParameters;
 import org.openflexo.fge.DrawingNeedsToBeRedrawn;
@@ -66,8 +68,6 @@ import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GeometricGraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.DrawingController.EditorTool;
 import org.openflexo.fge.controller.DrawingPalette;
@@ -75,72 +75,66 @@ import org.openflexo.fge.controller.RectangleSelectingAction;
 import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.graphics.FGEDrawingGraphics;
 import org.openflexo.fge.notifications.FGENotification;
-import org.openflexo.fge.notifications.GraphicalRepresentationAdded;
-import org.openflexo.fge.notifications.GraphicalRepresentationRemoved;
+import org.openflexo.fge.notifications.NodeAdded;
+import org.openflexo.fge.notifications.NodeDeleted;
+import org.openflexo.fge.notifications.NodeRemoved;
 import org.openflexo.fge.notifications.ObjectResized;
 import org.openflexo.fge.view.listener.DrawingViewMouseListener;
 import org.openflexo.fge.view.listener.FocusRetriever;
 import org.openflexo.swing.MouseResizer;
 
+/**
+ * The DrawingView is the SWING implementation of the root pane of a FGE graphical editor
+ * 
+ * @author sylvain
+ * 
+ * @param <M>
+ *            the type of represented model
+ */
+@SuppressWarnings("serial")
 public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
-
-	private final class DrawingViewResizer extends MouseResizer {
-		protected DrawingViewResizer() {
-			super(DrawingView.this, new MouseResizer.MouseResizerDelegate() {
-
-				@Override
-				public void resizeBy(int deltaX, int deltaY) {
-
-				}
-
-				@Override
-				public void resizeDirectlyBy(int deltaX, int deltaY) {
-					if (deltaX != 0) {
-						getDrawing().getDrawingGraphicalRepresentation().setWidth(
-								getDrawing().getDrawingGraphicalRepresentation().getWidth() + deltaX / getScale());
-					}
-					if (deltaY != 0) {
-						getDrawing().getDrawingGraphicalRepresentation().setHeight(
-								getDrawing().getDrawingGraphicalRepresentation().getHeight() + deltaY / getScale());
-					}
-				}
-			}, ResizeMode.SOUTH, ResizeMode.EAST, ResizeMode.SOUTH_EAST);
-		}
-
-		@Override
-		protected int getComponentWidth() {
-			return getDrawing().getDrawingGraphicalRepresentation().getViewWidth(getScale());
-		}
-
-		@Override
-		protected int getComponentHeight() {
-			return getDrawing().getDrawingGraphicalRepresentation().getViewHeight(getScale());
-		}
-	}
 
 	private static final Logger logger = Logger.getLogger(DrawingView.class.getPackage().getName());
 
 	private Drawing<M> drawing;
-	private Map<GraphicalRepresentation, FGEView> contents;
-	private DrawingController _controller;
+	private Map<DrawingTreeNode<?, ?>, FGEView<?>> contents;
+	private DrawingController<?> _controller;
 	private FocusRetriever _focusRetriever;
 	private FGEPaintManager _paintManager;
 
 	private MouseResizer resizer;
-	private DrawingViewMouseListener mouseListener;
+	private DrawingViewMouseListener<M> mouseListener;
 
 	protected FGEDrawingGraphics graphics;
 
 	private static final FGEModelFactory PAINT_FACTORY = FGEUtils.TOOLS_FACTORY;
 
-	public DrawingView(RootNode<M> node, DrawingController<M> controller) {
+	private Rectangle drawnRectangle = new Rectangle();
+	private BufferedImage capturedDraggedNodeImage;
+	private Point capturedNodeLocation;
+	private Point dragOrigin;
+
+	private long cumulatedRepaintTime = 0;
+
+	private boolean isBuffering = false;
+	private boolean bufferingHasBeenStartedAgain = false;
+
+	private boolean paintTemporary;
+
+	private RectangleSelectingAction _rectangleSelectingAction;
+
+	private static final int margin = 20;
+
+	private boolean isDeleted = false;
+
+	public DrawingView(DrawingController<M> controller) {
 		_controller = controller;
 		drawing = controller.getDrawing();
-		node.getGraphicalRepresentation().updateBindingModel();
-		contents = new Hashtable<GraphicalRepresentation, FGEView>();
-		graphics = new FGEDrawingGraphics(node);
+		drawing.getRoot().getGraphicalRepresentation().updateBindingModel();
+		contents = new Hashtable<DrawingTreeNode<?, ?>, FGEView<?>>();
+		graphics = new FGEDrawingGraphics(drawing.getRoot());
 		_focusRetriever = new FocusRetriever(this);
-		if (node.getGraphicalRepresentation().isResizable()) {
+		if (drawing.getRoot().getGraphicalRepresentation().isResizable()) {
 			resizer = new DrawingViewResizer();
 		}
 		mouseListener = makeDrawingViewMouseListener();
@@ -148,9 +142,9 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		addMouseMotionListener(mouseListener);
 		installKeyBindings();
 		resizeView();
-		getGraphicalRepresentation().addObserver(this);
+		drawing.getRoot().addObserver(this);
 
-		for (DrawingTreeNode<?, ?> dtn : node.getChildNodes()) {
+		for (DrawingTreeNode<?, ?> dtn : drawing.getRoot().getChildNodes()) {
 			if (dtn instanceof GeometricNode<?>) {
 				((GeometricNode<?>) dtn).addObserver(this);
 			}
@@ -172,6 +166,11 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		setFocusable(true);
 		// GPO: no LayoutManager here, so next line is useless?
 		revalidate();
+	}
+
+	@Override
+	public DrawingTreeNode<M, ?> getNode() {
+		return drawing.getRoot();
 	}
 
 	private void installKeyBindings() {
@@ -209,32 +208,31 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		});
 	}
 
-	public Drawing<?> getDrawing() {
+	public Drawing<M> getDrawing() {
 		return drawing;
 	}
 
 	@Override
-	public Object getDrawable() {
+	public M getDrawable() {
+		return getModel();
+	}
+
+	public M getModel() {
 		return drawing.getModel();
 	}
 
 	@Override
-	public DrawingView getDrawingView() {
+	public DrawingView<M> getDrawingView() {
 		return this;
 	}
 
 	@Override
-	public LabelView getLabelView() {
+	public LabelView<M> getLabelView() {
 		return null;
 	}
 
-	@Override
 	public DrawingGraphicalRepresentation getGraphicalRepresentation() {
-		return drawing.getDrawingGraphicalRepresentation();
-	}
-
-	public DrawingGraphicalRepresentation getDrawingGraphicalRepresentation() {
-		return getGraphicalRepresentation();
+		return drawing.getRoot().getGraphicalRepresentation();
 	}
 
 	@Override
@@ -257,7 +255,7 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 
 	@Override
 	public void rescale() {
-		for (FGEView v : contents.values()) {
+		for (FGEView<?> v : contents.values()) {
 			v.rescale();
 			if (v.getLabelView() != null) {
 				v.getLabelView().rescale();
@@ -265,14 +263,14 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		}
 		resizeView();
 		// revalidate();
-		getPaintManager().invalidate(getGraphicalRepresentation());
+		getPaintManager().invalidate(drawing.getRoot());
 		getPaintManager().repaint(this);
 	}
 
 	private void resizeView() {
 		int offset = getGraphicalRepresentation().isResizable() ? 20 : 0;
-		setPreferredSize(new Dimension(getGraphicalRepresentation().getViewWidth(getController().getScale()) + offset,
-				getGraphicalRepresentation().getViewHeight(getController().getScale()) + offset));
+		setPreferredSize(new Dimension(drawing.getRoot().getViewWidth(getController().getScale()) + offset, drawing.getRoot()
+				.getViewHeight(getController().getScale()) + offset));
 		if (getParent() != null) {
 			getParent().doLayout();
 		}
@@ -286,12 +284,12 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		}
 	}
 
-	protected DrawingViewMouseListener makeDrawingViewMouseListener() {
-		return new DrawingViewMouseListener(getGraphicalRepresentation(), this);
+	protected DrawingViewMouseListener<M> makeDrawingViewMouseListener() {
+		return new DrawingViewMouseListener<M>(this);
 	}
 
 	@Override
-	public DrawingController getController() {
+	public DrawingController<?> getController() {
 		return _controller;
 	}
 
@@ -314,8 +312,15 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 
 			if (notification instanceof FGENotification) {
 				FGENotification notif = (FGENotification) notification;
-				if (notification instanceof GraphicalRepresentationAdded) {
-					GraphicalRepresentation newGR = ((GraphicalRepresentationAdded) notification).getAddedGraphicalRepresentation();
+				if (notification instanceof NodeAdded) {
+					handleNodeAdded((NodeAdded) notification);
+				} else if (notification instanceof NodeRemoved) {
+					handleNodeRemoved((NodeRemoved) notification);
+				} else if (notification instanceof NodeDeleted) {
+					handleNodeDeleted((NodeDeleted) notification);
+				}
+				/*if (notification instanceof NodeAdded) {
+					GraphicalRepresentation newGR = ((NodeAdded) notification).getAddedGraphicalRepresentation();
 					logger.fine("DrawingView: Received ObjectAdded notification, creating view for " + newGR);
 					if (newGR instanceof ShapeGraphicalRepresentation) {
 						ShapeGraphicalRepresentation shapeGR = (ShapeGraphicalRepresentation) newGR;
@@ -335,10 +340,10 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 						getPaintManager().invalidate(getDrawingGraphicalRepresentation());
 						getPaintManager().repaint(this);
 					}
-				} else if (notification instanceof GraphicalRepresentationRemoved) {
-					GraphicalRepresentation removedGR = ((GraphicalRepresentationRemoved) notification).getRemovedGraphicalRepresentation();
+				} else if (notification instanceof NodeRemoved) {
+					GraphicalRepresentation removedGR = ((NodeRemoved) notification).getRemovedGraphicalRepresentation();
 					if (removedGR instanceof ShapeGraphicalRepresentation) {
-						ShapeView view = shapeViewForObject((ShapeGraphicalRepresentation) removedGR);
+						ShapeView view = shapeViewForNode((ShapeGraphicalRepresentation) removedGR);
 						if (view != null) {
 							remove(view);
 							revalidate();
@@ -349,7 +354,7 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 							// logger.warning("Cannot find view for " + removedGR);
 						}
 					} else if (removedGR instanceof ConnectorGraphicalRepresentation) {
-						ConnectorView view = connectorViewForObject((ConnectorGraphicalRepresentation) removedGR);
+						ConnectorView view = connectorViewForNode((ConnectorGraphicalRepresentation) removedGR);
 						if (view != null) {
 							remove(view);
 							revalidate();
@@ -365,28 +370,28 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 						getPaintManager().invalidate(getDrawingGraphicalRepresentation());
 						getPaintManager().repaint(this);
 					}
-				} else if (notification instanceof ObjectResized) {
+				}*/else if (notification instanceof ObjectResized) {
 					rescale();
-					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+					getPaintManager().invalidate(getDrawing().getRoot());
 					getPaintManager().repaint(this);
 				} else if (notif.getParameter() == DrawingParameters.backgroundColor) {
-					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+					getPaintManager().invalidate(getDrawing().getRoot());
 					updateBackground();
 					getPaintManager().repaint(this);
 				} else if (notif.getParameter() == DrawingParameters.drawWorkingArea) {
-					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+					getPaintManager().invalidate(getDrawing().getRoot());
 					updateBackground();
 					getPaintManager().repaint(this);
 				} else if (notif.getParameter() == DrawingParameters.width) {
 					rescale();
-					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+					getPaintManager().invalidate(getDrawing().getRoot());
 					getPaintManager().repaint(this);
 				} else if (notif.getParameter() == DrawingParameters.height) {
 					rescale();
-					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+					getPaintManager().invalidate(getDrawing().getRoot());
 					getPaintManager().repaint(this);
 				} else if (notif.getParameter() == DrawingParameters.isResizable) {
-					if (getDrawingGraphicalRepresentation().isResizable()) {
+					if (getDrawing().getRoot().getGraphicalRepresentation().isResizable()) {
 						removeMouseListener(mouseListener); // We remove the mouse
 															// listener, so that the
 															// mouse resizer is
@@ -402,17 +407,15 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 						removeMouseListener(resizer);
 					}
 				} else if (notif instanceof DrawingNeedsToBeRedrawn) {
-					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+					getPaintManager().invalidate(getDrawing().getRoot());
 					getPaintManager().repaint(this);
 				} else if (o instanceof GeometricGraphicalRepresentation) {
-					getPaintManager().invalidate(getDrawingGraphicalRepresentation());
+					getPaintManager().invalidate(getDrawing().getRoot());
 					getPaintManager().repaint(this);
 				}
 			}
 		}
 	}
-
-	private RectangleSelectingAction _rectangleSelectingAction;
 
 	public void setRectangleSelectingAction(RectangleSelectingAction action) {
 		_rectangleSelectingAction = action;
@@ -426,15 +429,8 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		getGraphicalRepresentation().paint(g, getController());
+		getDrawing().getRoot().paint(g, getController());
 	}
-
-	private long cumulatedRepaintTime = 0;
-
-	private boolean isBuffering = false;
-	private boolean bufferingHasBeenStartedAgain = false;
-
-	private boolean paintTemporary;
 
 	/**
 	 * 
@@ -456,37 +452,38 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		bufferingHasBeenStartedAgain = true;
 	}
 
-	private void forcePaintTemporaryObjects(GraphicalRepresentation fatherGraphicalRepresentation, Graphics g) {
-		forcePaintObjects(fatherGraphicalRepresentation, g, true);
+	private void forcePaintTemporaryObjects(ContainerNode<?, ?> parentNode, Graphics g) {
+		forcePaintObjects(parentNode, g, true);
 	}
 
-	private void forcePaintObjects(GraphicalRepresentation fatherGraphicalRepresentation, Graphics g) {
-		forcePaintObjects(fatherGraphicalRepresentation, g, false);
-	}
+	/*private void forcePaintObjects(ContainerNode<?, ?> parentNode, Graphics g) {
+		forcePaintObjects(parentNode, g, false);
+	}*/
 
-	private void forcePaintObjects(GraphicalRepresentation fatherGraphicalRepresentation, final Graphics g, boolean temporaryObjectsOnly) {
-		List<? extends GraphicalRepresentation> containedGR = fatherGraphicalRepresentation.getOrderedContainedGraphicalRepresentations();
+	private void forcePaintObjects(ContainerNode<?, ?> parentNode, final Graphics g, boolean temporaryObjectsOnly) {
+		List<? extends DrawingTreeNode<?, ?>> containedGR = parentNode.getChildNodes();
 		if (containedGR == null) {
 			return;
 		}
 		paintTemporary = true;
-		for (GraphicalRepresentation gr : new ArrayList<GraphicalRepresentation>(containedGR)) {
-			if (gr.shouldBeDisplayed()
-					&& (!temporaryObjectsOnly || getPaintManager().isTemporaryObject(gr) || getPaintManager().containsTemporaryObject(gr))) {
-				FGEView view = viewForObject(gr);
+		for (DrawingTreeNode<?, ?> node : new ArrayList<DrawingTreeNode<?, ?>>(containedGR)) {
+			if (node.shouldBeDisplayed()
+					&& (!temporaryObjectsOnly || getPaintManager().isTemporaryObject(node) || getPaintManager().containsTemporaryObject(
+							node))) {
+				FGEView<?> view = viewForNode(node);
 				if (view == null) {
 					continue;
 				}
 				Component viewAsComponent = (Component) view;
 				Graphics childGraphics = g.create(viewAsComponent.getX(), viewAsComponent.getY(), viewAsComponent.getWidth(),
 						viewAsComponent.getHeight());
-				if (getPaintManager().isTemporaryObject(gr) || !temporaryObjectsOnly) {
+				if (getPaintManager().isTemporaryObject(node) || !temporaryObjectsOnly) {
 					if (FGEPaintManager.paintPrimitiveLogger.isLoggable(Level.FINE)) {
-						FGEPaintManager.paintPrimitiveLogger.fine("DrawingView: continuous painting, paint " + gr
+						FGEPaintManager.paintPrimitiveLogger.fine("DrawingView: continuous painting, paint " + node
 								+ " temporaryObjectsOnly=" + temporaryObjectsOnly);
 					}
-					gr.paint(childGraphics, getController());
-					LabelView labelView = view.getLabelView();
+					node.paint(childGraphics, getController());
+					LabelView<?> labelView = view.getLabelView();
 					if (labelView != null) {
 						Graphics labelGraphics = g.create(labelView.getX(), labelView.getY(), labelView.getWidth(), labelView.getHeight());
 						// Tricky area: if label is currently being edited,
@@ -497,10 +494,14 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 						labelGraphics.dispose();
 					}
 					// do the job for childs
-					forcePaintObjects(gr, childGraphics, false);
+					if (node instanceof ContainerNode) {
+						forcePaintObjects((ContainerNode<?, ?>) node, childGraphics, false);
+					}
 				} else {
 					// do the job for childs
-					forcePaintObjects(gr, childGraphics, true);
+					if (node instanceof ContainerNode) {
+						forcePaintObjects((ContainerNode<?, ?>) node, childGraphics, true);
+					}
 				}
 			}
 		}
@@ -525,16 +526,16 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 				}
 				super.paint(g);
 				if (bufferingHasBeenStartedAgain) {
-					g.clearRect(0, 0, getGraphicalRepresentation().getViewWidth(getController().getScale()), getGraphicalRepresentation()
-							.getViewHeight(getController().getScale()));
+					g.clearRect(0, 0, drawing.getRoot().getViewWidth(getController().getScale()),
+							drawing.getRoot().getViewHeight(getController().getScale()));
 					super.paint(g);
 					bufferingHasBeenStartedAgain = false;
 				}
 			} else {
-				if (getPaintManager().renderUsingBuffer((Graphics2D) g, g.getClipBounds(), getDrawingGraphicalRepresentation(), getScale())) {
+				if (getPaintManager().renderUsingBuffer((Graphics2D) g, g.getClipBounds(), drawing.getRoot(), getScale())) {
 					// Now, we still have to paint objects that are declared
 					// to be temporary and continuously to be redrawn
-					forcePaintTemporaryObjects(getDrawingGraphicalRepresentation(), g);
+					forcePaintTemporaryObjects(drawing.getRoot(), g);
 				} else {
 					// This failed for some reasons (eg rendering request
 					// outside cached image)
@@ -548,21 +549,21 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 			super.paint(g);
 		}
 
-		paintGeometricGraphicalRepresentation(g);
+		paintGeometricObjects(g);
 
 		if (!isBuffering) {
 
-			FGEDrawingGraphics graphics = getDrawingGraphicalRepresentation().getGraphics();
+			FGEDrawingGraphics graphics = drawing.getRoot().getGraphics();
 			Graphics2D g2 = (Graphics2D) g;
 			graphics.createGraphics(g2, getController());
 
 			// Don't paint those things in case of buffering
-			for (GraphicalRepresentation o : new ArrayList<GraphicalRepresentation>(getController().getFocusedObjects())) {
+			for (DrawingTreeNode<?, ?> o : new ArrayList<DrawingTreeNode<?, ?>>(getController().getFocusedObjects())) {
 				// logger.info("Paint focused " + o);
 				paintFocused(o, graphics);
 			}
 
-			for (GraphicalRepresentation o : new ArrayList<GraphicalRepresentation>(getController().getSelectedObjects())) {
+			for (DrawingTreeNode<?, ?> o : new ArrayList<DrawingTreeNode<?, ?>>(getController().getSelectedObjects())) {
 				// logger.info("Paint selected " + o + "shouldBeDisplayed=" + o.shouldBeDisplayed());
 				if (o.shouldBeDisplayed()) {
 					paintSelected(o, graphics);
@@ -603,37 +604,37 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		}
 	}
 
-	private void paintGeometricGraphicalRepresentation(Graphics g) {
-		List<GeometricGraphicalRepresentation> geomList = new ArrayList<GeometricGraphicalRepresentation>();
-		for (Object gr : getGraphicalRepresentation().getOrderedContainedGraphicalRepresentations()) {
-			if (gr instanceof GeometricGraphicalRepresentation) {
-				geomList.add((GeometricGraphicalRepresentation) gr);
+	private void paintGeometricObjects(Graphics g) {
+		List<GeometricNode<?>> geomList = new ArrayList<GeometricNode<?>>();
+		for (Object n : drawing.getRoot().getChildNodes()) {
+			if (n instanceof GeometricNode) {
+				geomList.add((GeometricNode<?>) n);
 			}
 		}
 		if (geomList.size() > 0) {
-			Collections.sort(geomList, new Comparator<GeometricGraphicalRepresentation>() {
+			Collections.sort(geomList, new Comparator<GeometricNode<?>>() {
 				@Override
-				public int compare(GeometricGraphicalRepresentation o1, GeometricGraphicalRepresentation o2) {
-					return o1.getLayer() - o2.getLayer();
+				public int compare(GeometricNode<?> o1, GeometricNode<?> o2) {
+					return o1.getGraphicalRepresentation().getLayer() - o2.getGraphicalRepresentation().getLayer();
 				}
 			});
-			for (GeometricGraphicalRepresentation gr : geomList) {
-				gr.paint(g, getController());
+			for (GeometricNode<?> gn : geomList) {
+				gn.paint(g, getController());
 			}
 		}
 	}
 
-	private void paintFocusedFloatingLabel(GraphicalRepresentation focusedFloatingLabel, Graphics g) {
+	private void paintFocusedFloatingLabel(DrawingTreeNode<?, ?> focusedFloatingLabel, Graphics g) {
 		Color color = Color.BLACK;
-		if (focusedFloatingLabel.getIsSelected()) {
-			color = getDrawingView().getDrawingGraphicalRepresentation().getSelectionColor();
-		} else if (focusedFloatingLabel.getIsFocused()) {
-			color = getDrawingView().getDrawingGraphicalRepresentation().getFocusColor();
+		if (focusedFloatingLabel.getGraphicalRepresentation().getIsSelected()) {
+			color = getGraphicalRepresentation().getSelectionColor();
+		} else if (focusedFloatingLabel.getGraphicalRepresentation().getIsFocused()) {
+			color = getGraphicalRepresentation().getFocusColor();
 		} else {
 			return;
 		}
-		FGEView view = viewForObject(focusedFloatingLabel);
-		LabelView labelView = view.getLabelView();
+		FGEView<?> view = viewForNode(focusedFloatingLabel);
+		LabelView<?> labelView = view.getLabelView();
 		if (labelView != null) {
 			Point p1 = SwingUtilities.convertPoint(labelView, new Point(0, labelView.getHeight() / 2), this);
 			Point p2 = SwingUtilities.convertPoint(labelView, new Point(labelView.getWidth(), labelView.getHeight() / 2), this);
@@ -657,14 +658,14 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		getPaintManager().addTemporaryRepaintArea(r, this);
 	}
 
-	private void paintSelected(GraphicalRepresentation selected, FGEDrawingGraphics graphics) {
+	private void paintSelected(DrawingTreeNode<?, ?> selected, FGEDrawingGraphics graphics) {
 
 		if (selected.isDeleted()) {
 			logger.warning("Cannot paint for a deleted GR");
 			return;
 		}
 
-		if (!selected.getDrawControlPointsWhenSelected()) {
+		if (!selected.getGraphicalRepresentation().getDrawControlPointsWhenSelected()) {
 			// Don't paint control points in this case
 			return;
 		}
@@ -672,38 +673,38 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		Graphics2D oldGraphics = graphics.cloneGraphics();
 		graphics.setDefaultForeground(PAINT_FACTORY.makeForegroundStyle(getGraphicalRepresentation().getSelectionColor()));
 
-		if (selected instanceof ShapeGraphicalRepresentation) {
-			ShapeGraphicalRepresentation gr = (ShapeGraphicalRepresentation) selected;
-			for (ControlArea<?> ca : gr.getControlAreas()) {
+		if (selected instanceof ShapeNode) {
+			ShapeNode<?> shapeNode = (ShapeNode<?>) selected;
+			for (ControlArea<?> ca : shapeNode.getControlAreas()) {
 				if (selected.isConnectedToDrawing()) {
 					paintControlArea(ca, graphics);
 				}
 			}
 		}
 
-		else if (selected instanceof ConnectorGraphicalRepresentation) {
+		else if (selected instanceof ConnectorNode) {
 
-			ConnectorGraphicalRepresentation gr = (ConnectorGraphicalRepresentation) selected;
+			ConnectorNode<?> connectorNode = (ConnectorNode<?>) selected;
 			// g.setColor(getGraphicalRepresentation().getSelectionColor());
 
-			if (gr.getStartObject() == null || gr.getStartObject().isDeleted()) {
+			if (connectorNode.getStartNode() == null || connectorNode.getStartNode().isDeleted()) {
 				logger.warning("Could not paint connector: start object is null or deleted");
 				return;
 			}
 
-			if (gr.getEndObject() == null || gr.getEndObject().isDeleted()) {
+			if (connectorNode.getEndNode() == null || connectorNode.getEndNode().isDeleted()) {
 				logger.warning("Could not paint connector: end object is null or deleted");
 				return;
 			}
 
-			for (ControlArea<?> ca : gr.getControlAreas()) {
+			for (ControlArea<?> ca : connectorNode.getControlAreas()) {
 				if (selected.isConnectedToDrawing()) {
 					paintControlArea(ca, graphics);
 				}
 			}
 		}
 
-		if (selected.hasFloatingLabel()) {
+		if (selected.getGraphicalRepresentation().hasFloatingLabel()) {
 			paintFocusedFloatingLabel(selected, graphics.getGraphics());
 		}
 
@@ -737,12 +738,12 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		graphics.releaseClonedGraphics(oldGraphics);
 	}
 
-	private void paintFocused(GraphicalRepresentation focused, FGEDrawingGraphics graphics) {
+	private void paintFocused(DrawingTreeNode<?, ?> focused, FGEDrawingGraphics graphics) {
 		if (focused.isDeleted()) {
 			logger.warning("Cannot paint for a deleted GR");
 			return;
 		}
-		if (!focused.getDrawControlPointsWhenFocused()) {
+		if (!focused.getGraphicalRepresentation().getDrawControlPointsWhenFocused()) {
 			// Don't paint control points in this case
 			return;
 		}
@@ -750,33 +751,33 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		Graphics2D oldGraphics = graphics.cloneGraphics();
 		graphics.setDefaultForeground(PAINT_FACTORY.makeForegroundStyle(getGraphicalRepresentation().getFocusColor()));
 
-		if (focused instanceof ShapeGraphicalRepresentation) {
-			ShapeGraphicalRepresentation gr = (ShapeGraphicalRepresentation) focused;
-			for (ControlArea<?> ca : gr.getControlAreas()) {
+		if (focused instanceof ShapeNode) {
+			ShapeNode<?> shapeNode = (ShapeNode<?>) focused;
+			for (ControlArea<?> ca : shapeNode.getControlAreas()) {
 				if (focused.isConnectedToDrawing()) {
 					paintControlArea(ca, graphics);
 				}
 			}
-		} else if (focused instanceof ConnectorGraphicalRepresentation) {
-			ConnectorGraphicalRepresentation gr = (ConnectorGraphicalRepresentation) focused;
+		} else if (focused instanceof ConnectorNode) {
+			ConnectorNode<?> connectorNode = (ConnectorNode<?>) focused;
 
-			if (gr.getStartObject() == null || gr.getStartObject().isDeleted()) {
+			if (connectorNode.getStartNode() == null || connectorNode.getStartNode().isDeleted()) {
 				logger.warning("Could not paint connector: start object is null or deleted");
 				return;
 			}
 
-			if (gr.getEndObject() == null || gr.getEndObject().isDeleted()) {
+			if (connectorNode.getEndNode() == null || connectorNode.getEndNode().isDeleted()) {
 				logger.warning("Could not paint connector: end object is null or deleted");
 				return;
 			}
 
-			for (ControlArea<?> ca : gr.getControlAreas()) {
+			for (ControlArea<?> ca : connectorNode.getControlAreas()) {
 				if (focused.isConnectedToDrawing()) {
 					paintControlArea(ca, graphics);
 				}
 			}
 		}
-		if (focused.hasFloatingLabel()) {
+		if (focused.getGraphicalRepresentation().hasFloatingLabel()) {
 			paintFocusedFloatingLabel(focused, graphics.getGraphics());
 		}
 		/*
@@ -817,31 +818,30 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 	 * FGEConstants.CONTROL_POINT_SIZE*2); } }
 	 */
 
-	public Map<GraphicalRepresentation, FGEView> getContents() {
+	public Map<DrawingTreeNode<?, ?>, FGEView<?>> getContents() {
 		return contents;
 	}
 
-	@SuppressWarnings("unchecked")
-	public <O> FGEView viewForObject(GraphicalRepresentation gr) {
-		if (gr == getGraphicalRepresentation()) {
+	public <O> FGEView<?> viewForNode(DrawingTreeNode<?, ?> node) {
+		if (node == drawing.getRoot()) {
 			return this;
 		}
-		return contents.get(gr);
+		return contents.get(node);
 	}
 
-	public <O> ShapeView shapeViewForObject(ShapeGraphicalRepresentation gr) {
-		return (ShapeView) viewForObject(gr);
+	public ShapeView<?> shapeViewForNode(ShapeNode<?> node) {
+		return (ShapeView<?>) viewForNode(node);
 	}
 
-	public <O> ConnectorView connectorViewForObject(ConnectorGraphicalRepresentation gr) {
-		return (ConnectorView) viewForObject(gr);
+	public ConnectorView<?> connectorViewForNode(ConnectorNode<?> node) {
+		return (ConnectorView<?>) viewForNode(node);
 	}
 
 	public FocusRetriever getFocusRetriever() {
 		return _focusRetriever;
 	}
 
-	public DrawingViewMouseListener getMouseListener() {
+	public DrawingViewMouseListener<M> getMouseListener() {
 		return mouseListener;
 	}
 
@@ -853,7 +853,7 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		logger.fine("Registering drop target");
 		setDropTarget(new DropTarget(this, DnDConstants.ACTION_COPY, aPalette.buildPaletteDropListener(this, _controller), true));
 		activePalette = aPalette;
-		for (FGEView v : contents.values()) {
+		for (FGEView<?> v : contents.values()) {
 			v.registerPalette(aPalette);
 		}
 	}
@@ -863,7 +863,7 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		return _paintManager;
 	}
 
-	public boolean contains(FGEView view) {
+	public boolean contains(FGEView<?> view) {
 		if (view == null) {
 			return false;
 		}
@@ -871,7 +871,7 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 			return true;
 		}
 		if (((JComponent) view).getParent() != null && ((JComponent) view).getParent() instanceof FGEView) {
-			return contains((FGEView) ((JComponent) view).getParent());
+			return contains((FGEView<?>) ((JComponent) view).getParent());
 		}
 		return false;
 	}
@@ -880,8 +880,6 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 	public String getToolTipText(MouseEvent event) {
 		return getController().getToolTipText();
 	}
-
-	private boolean isDeleted = false;
 
 	@Override
 	public boolean isDeleted() {
@@ -894,29 +892,26 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		removeMouseListener(mouseListener);
 		removeMouseMotionListener(mouseListener);
 
-		List<FGEView> views = new ArrayList<FGEView>(contents.values());
+		List<FGEView<?>> views = new ArrayList<FGEView<?>>(contents.values());
 
-		for (FGEView v : views) {
+		for (FGEView<?> v : views) {
 			v.delete();
 			// logger.info("Deleted view "+v);
 		}
 		contents.clear();
 		getGraphicalRepresentation().deleteObserver(this);
 
-		for (Object gr : getGraphicalRepresentation().getContainedGraphicalRepresentations()) {
-			if (gr instanceof GeometricGraphicalRepresentation) {
-				((GeometricGraphicalRepresentation) gr).deleteObserver(this);
+		for (DrawingTreeNode<?, ?> dtn : drawing.getRoot().getChildNodes()) {
+			if (dtn instanceof GeometricNode<?>) {
+				((GeometricNode<?>) dtn).deleteObserver(this);
 			}
 		}
+
 		isDeleted = true;
 	}
 
-	private Rectangle drawnRectangle = new Rectangle();
-	private BufferedImage capturedDraggedNodeImage;
-	private Point capturedNodeLocation;
-
 	// This call is made on the edition drawing view
-	public final void updateCapturedDraggedNodeImagePosition(DropTargetDragEvent e, DrawingView source) {
+	public final void updateCapturedDraggedNodeImagePosition(DropTargetDragEvent e, DrawingView<?> source) {
 		capturedNodeLocation = SwingUtilities.convertPoint(((DropTarget) e.getSource()).getComponent(), e.getLocation(), this);
 		if (source != this) {
 			dragOrigin = activePalette.getPaletteView().dragOrigin; // transfer from
@@ -952,15 +947,13 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		}
 	}
 
-	private Point dragOrigin;
-
 	// This call is made on the drawing view of the palette
-	public void captureDraggedNode(ShapeView view, MouseEvent e) {
+	public void captureDraggedNode(ShapeView<?> view, MouseEvent e) {
 		capturedDraggedNodeImage = view.getScreenshot();
 		dragOrigin = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), view);
 	}
 
-	public void captureDraggedNode(ShapeView view, DragGestureEvent e) {
+	public void captureDraggedNode(ShapeView<?> view, DragGestureEvent e) {
 		capturedDraggedNodeImage = view.getScreenshot();
 		dragOrigin = SwingUtilities.convertPoint(e.getComponent(), e.getDragOrigin(), view);
 	}
@@ -975,8 +968,6 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 	public DrawingPalette getActivePalette() {
 		return activePalette;
 	}
-
-	private static final int margin = 20;
 
 	@Override
 	public void autoscroll(Point p) {
@@ -1034,4 +1025,39 @@ public class DrawingView<M> extends FGELayeredView<M> implements Autoscroll {
 		return new Insets(inner.y - outer.y + margin, inner.x - outer.x + margin, outer.height - inner.height - inner.y + outer.y + margin,
 				outer.width - inner.width - inner.x + outer.x + margin);
 	}
+
+	private final class DrawingViewResizer extends MouseResizer {
+		protected DrawingViewResizer() {
+			super(DrawingView.this, new MouseResizer.MouseResizerDelegate() {
+
+				@Override
+				public void resizeBy(int deltaX, int deltaY) {
+
+				}
+
+				@Override
+				public void resizeDirectlyBy(int deltaX, int deltaY) {
+					if (deltaX != 0) {
+						getDrawing().getRoot().getGraphicalRepresentation()
+								.setWidth(getDrawing().getRoot().getGraphicalRepresentation().getWidth() + deltaX / getScale());
+					}
+					if (deltaY != 0) {
+						getDrawing().getRoot().getGraphicalRepresentation()
+								.setHeight(getDrawing().getRoot().getGraphicalRepresentation().getHeight() + deltaY / getScale());
+					}
+				}
+			}, ResizeMode.SOUTH, ResizeMode.EAST, ResizeMode.SOUTH_EAST);
+		}
+
+		@Override
+		protected int getComponentWidth() {
+			return getDrawing().getRoot().getViewWidth(getScale());
+		}
+
+		@Override
+		protected int getComponentHeight() {
+			return getDrawing().getRoot().getViewHeight(getScale());
+		}
+	}
+
 }

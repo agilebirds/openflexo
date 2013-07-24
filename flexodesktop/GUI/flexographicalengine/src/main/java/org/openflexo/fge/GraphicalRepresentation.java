@@ -475,9 +475,9 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 
 	public boolean isDrawing();
 
-	public void notifyDrawableAdded(GraphicalRepresentation addedGR);
+	// public void notifyDrawableAdded(GraphicalRepresentation addedGR);
 
-	public void notifyDrawableRemoved(GraphicalRepresentation removedGR);
+	// public void notifyDrawableRemoved(GraphicalRepresentation removedGR);
 
 	@Override
 	public void update(Observable observable, Object notification);
@@ -526,19 +526,19 @@ public interface GraphicalRepresentation extends FGEObject, Bindable, Observer {
 
 	// public boolean isContainedInSelection(Rectangle drawingViewSelection, double scale);
 
-	public void notifyLabelWillBeEdited();
+	/*public void notifyLabelWillBeEdited();
 
 	public void notifyLabelHasBeenEdited();
 
 	public void notifyLabelWillMove();
 
-	public void notifyLabelHasMoved();
+	public void notifyLabelHasMoved();*/
 
 	// Override when required
-	public void notifyObjectHierarchyWillBeUpdated();
+	// public void notifyObjectHierarchyWillBeUpdated();
 
 	// Override when required
-	public void notifyObjectHierarchyHasBeenUpdated();
+	// public void notifyObjectHierarchyHasBeenUpdated();
 
 	// public void performRandomLayout(double width, double height);
 

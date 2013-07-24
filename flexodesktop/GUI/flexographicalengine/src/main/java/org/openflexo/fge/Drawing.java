@@ -44,8 +44,11 @@ import org.openflexo.fge.geom.FGERectangle;
 import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.graphics.DecorationPainter;
+import org.openflexo.fge.graphics.FGEConnectorGraphics;
+import org.openflexo.fge.graphics.FGEDrawingGraphics;
 import org.openflexo.fge.graphics.FGEGeometricGraphics;
 import org.openflexo.fge.graphics.FGEGraphics;
+import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ShapePainter;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.impl.DrawingTreeNodeImpl;
@@ -134,6 +137,19 @@ public interface Drawing<M> {
 		 * @return
 		 */
 		public List<DrawingTreeNode<?, ?>> getAncestors();
+
+		/**
+		 * Return the index of this node relatively to all children declared in parent node
+		 * 
+		 * @return
+		 */
+		public int getIndex();
+
+		/**
+		 * Return flag indicating if this node should be displayed, relatively to the value returned by visible feature in
+		 * {@link GraphicalRepresentation}, and the structure of the tree (the parent should be visible too)
+		 */
+		public boolean shouldBeDisplayed();
 
 		/**
 		 * Return depth of this node in the whole hierarchy
@@ -273,6 +289,17 @@ public interface Drawing<M> {
 		public void declareDependantOf(DrawingTreeNode<?, ?> aNode, GRParameter requiringParameter, GRParameter requiredParameter)
 				throws DependencyLoopException;
 
+		public void notifyLabelWillBeEdited();
+
+		public void notifyLabelHasBeenEdited();
+
+		public void notifyLabelWillMove();
+
+		public void notifyLabelHasMoved();
+
+		public void notifyObjectHierarchyWillBeUpdated();
+
+		public void notifyObjectHierarchyHasBeenUpdated();
 	}
 
 	public interface ContainerNode<O, GR extends ContainerGraphicalRepresentation> extends DrawingTreeNode<O, GR> {
@@ -295,9 +322,15 @@ public interface Drawing<M> {
 
 		public ShapeNode<?> getTopLevelShapeGraphicalRepresentation(FGEPoint p);
 
+		public void notifyNodeAdded(DrawingTreeNode<?, ?> addedNode);
+
+		public void notifyNodeRemoved(DrawingTreeNode<?, ?> removedNode);
 	}
 
 	public interface RootNode<M> extends ContainerNode<M, DrawingGraphicalRepresentation> {
+
+		@Override
+		public FGEDrawingGraphics getGraphics();
 
 	}
 
@@ -306,6 +339,9 @@ public interface Drawing<M> {
 		public ShapeSpecification getShapeSpecification();
 
 		public Shape<?> getShape();
+
+		@Override
+		public FGEShapeGraphics getGraphics();
 
 		public double getUnscaledViewWidth();
 
@@ -487,6 +523,9 @@ public interface Drawing<M> {
 
 		public Connector<?> getConnector();
 
+		@Override
+		public FGEConnectorGraphics getGraphics();
+
 		public void notifyConnectorModified();
 
 		public int getExtendedX(double scale);
@@ -503,6 +542,8 @@ public interface Drawing<M> {
 
 		public void refreshConnector();
 
+		public double distanceToConnector(FGEPoint aPoint, double scale);
+
 	}
 
 	public interface GeometricNode<O> extends DrawingTreeNode<O, GeometricGraphicalRepresentation> {
@@ -516,6 +557,9 @@ public interface Drawing<M> {
 		public List<ControlPoint> rebuildControlPoints();
 
 		public void notifyGeometryChanged();
+
+		@Override
+		public FGEGeometricGraphics getGraphics();
 
 	}
 
@@ -538,8 +582,28 @@ public interface Drawing<M> {
 
 	public List<DrawingTreeNode<?>> getContainedNodes(DrawingTreeNode<?> parentNode);*/
 
+	/**
+	 * Retrieve drawing tree node matching supplied drawable and grBinding
+	 * 
+	 * @param identifier
+	 * @return
+	 */
 	public <O, GR extends GraphicalRepresentation> DrawingTreeNode<O, GR> getDrawingTreeNode(O aDrawable, GRBinding<O, GR> grBinding);
 
+	/**
+	 * Retrieve drawing tree node matching supplied identifier
+	 * 
+	 * @param identifier
+	 * @return
+	 */
+	public <O> DrawingTreeNode<O, ?> getDrawingTreeNode(DrawingTreeNodeIdentifier<O> identifier);
+
+	/**
+	 * Encodes the dependancy between two {@link DrawingTreeNode}
+	 * 
+	 * @author sylvain
+	 * 
+	 */
 	public static class ConstraintDependency {
 		public DrawingTreeNode<?, ?> requiringGR;
 		public GRParameter requiringParameter;
@@ -566,6 +630,12 @@ public interface Drawing<M> {
 		}
 	}
 
+	/**
+	 * Throw when a dependancy raises a loop
+	 * 
+	 * @author sylvain
+	 * 
+	 */
 	@SuppressWarnings("serial")
 	public static class DependencyLoopException extends Exception {
 		private List<DrawingTreeNode<?, ?>> dependencies;
@@ -577,6 +647,34 @@ public interface Drawing<M> {
 		@Override
 		public String getMessage() {
 			return "DependencyLoopException: " + dependencies;
+		}
+	}
+
+	/**
+	 * Encodes an identifier for a DrawingTreeNode<br>
+	 * This couple of data always uniquely identifies an occurrence of a given object in a particular context in a Drawing.<br>
+	 * Use of this identifier allows to guarantee a conceptual persistence over life cycle of {@link Drawing}.
+	 * 
+	 * @author sylvain
+	 * 
+	 * @param <O>
+	 */
+	public static class DrawingTreeNodeIdentifier<O> {
+		private O drawable;
+		private GRBinding<O, ?> grBinding;
+
+		public DrawingTreeNodeIdentifier(O drawable, GRBinding<O, ?> grBinding) {
+			super();
+			this.drawable = drawable;
+			this.grBinding = grBinding;
+		}
+
+		public O getDrawable() {
+			return drawable;
+		}
+
+		public GRBinding<O, ?> getGRBinding() {
+			return grBinding;
 		}
 	}
 

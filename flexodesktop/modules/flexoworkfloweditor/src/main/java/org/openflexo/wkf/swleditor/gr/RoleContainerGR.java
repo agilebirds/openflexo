@@ -168,7 +168,7 @@ public class RoleContainerGR extends SWLObjectGR<Role> implements SWLContainerGR
 
 	protected static boolean isInsideRectangle(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
 			MouseEvent event, FGERectangle rect) {
-		ShapeView view = (ShapeView) controller.getDrawingView().viewForObject(graphicalRepresentation);
+		ShapeView view = (ShapeView) controller.getDrawingView().viewForNode(graphicalRepresentation);
 		Rectangle boxRect = new Rectangle((int) (rect.getX() * controller.getScale()), (int) (rect.getY() * controller.getScale()),
 				(int) (rect.getWidth() * controller.getScale()), (int) (rect.getHeight() * controller.getScale()));
 		Point clickLocation = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), view);

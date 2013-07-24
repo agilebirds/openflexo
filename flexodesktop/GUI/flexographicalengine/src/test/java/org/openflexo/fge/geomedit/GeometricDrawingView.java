@@ -33,7 +33,7 @@ import javax.swing.SwingUtilities;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geomedit.edition.EditionInputMethod;
-import org.openflexo.fge.notifications.GraphicalRepresentationAdded;
+import org.openflexo.fge.notifications.NodeAdded;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.logging.FlexoLogger;
 
@@ -104,9 +104,9 @@ public class GeometricDrawingView extends DrawingView<GeometricDrawing> {
 
 	@Override
 	public void update(Observable o, Object notification) {
-		if (notification instanceof GraphicalRepresentationAdded) {
+		if (notification instanceof NodeAdded) {
 			getController().notifiedObjectAdded();
-		} else if (notification instanceof GraphicalRepresentationAdded) {
+		} else if (notification instanceof NodeAdded) {
 			getController().notifiedObjectRemoved();
 		}
 		super.update(o, notification);

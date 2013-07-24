@@ -44,14 +44,12 @@ import org.openflexo.fge.BackgroundStyle;
 import org.openflexo.fge.Drawing;
 import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.Drawing.RootNode;
+import org.openflexo.fge.Drawing.DrawingTreeNodeIdentifier;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEConstants;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.ForegroundStyle;
-import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShadowStyle;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.cp.ConnectorAdjustingControlPoint;
@@ -59,8 +57,8 @@ import org.openflexo.fge.cp.ControlArea;
 import org.openflexo.fge.cp.ControlPoint;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.impl.DrawingImpl;
-import org.openflexo.fge.notifications.GraphicalObjectsHierarchyRebuildEnded;
-import org.openflexo.fge.notifications.GraphicalObjectsHierarchyRebuildStarted;
+import org.openflexo.fge.notifications.DrawingTreeNodeHierarchyRebuildEnded;
+import org.openflexo.fge.notifications.DrawingTreeNodeHierarchyRebuildStarted;
 import org.openflexo.fge.shapes.ShapeSpecification;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fge.view.ConnectorView;
@@ -94,13 +92,13 @@ public class DrawingController<M> extends Observable implements Observer {
 	private ScalePanel _scalePanel;
 	private EditorToolbox toolbox;
 
-	private GraphicalRepresentation focusedFloatingLabel;
+	private DrawingTreeNode<?, ?> focusedFloatingLabel;
 	// private GraphicalRepresentation focusedObject;
 
-	private Vector<GraphicalRepresentation> focusedObjects;
-	private Vector<GraphicalRepresentation> selectedObjects;
+	private List<DrawingTreeNode<?, ?>> focusedObjects;
+	private List<DrawingTreeNode<?, ?>> selectedObjects;
 
-	private LabelView _currentlyEditedLabel;
+	private LabelView<?> _currentlyEditedLabel;
 
 	private ControlArea<?> focusedControlArea;
 
@@ -109,7 +107,12 @@ public class DrawingController<M> extends Observable implements Observer {
 	private Vector<DrawingPalette> palettes;
 
 	private FGEPoint lastClickedPoint;
-	private GraphicalRepresentation lastSelectedGR;
+	private DrawingTreeNode<?, ?> lastSelectedNode;
+
+	/**
+	 * Stores selection as a persistent list of identified objects
+	 */
+	private List<DrawingTreeNodeIdentifier<?>> storedSelection;
 
 	/**
 	 * This factory is the one which is used to creates and maintains object graph
@@ -135,8 +138,8 @@ public class DrawingController<M> extends Observable implements Observer {
 			((DrawingImpl<?>) drawing).addObserver(this);
 		}
 
-		focusedObjects = new Vector<GraphicalRepresentation>();
-		selectedObjects = new Vector<GraphicalRepresentation>();
+		focusedObjects = new ArrayList<DrawingTreeNode<?, ?>>();
+		selectedObjects = new ArrayList<DrawingTreeNode<?, ?>>();
 		palettes = new Vector<DrawingPalette>();
 		buildDrawingView();
 		if (logger.isLoggable(Level.FINE)) {
@@ -157,7 +160,7 @@ public class DrawingController<M> extends Observable implements Observer {
 	}
 
 	private DrawingView<?> buildDrawingView() {
-		drawingView = makeDrawingView(drawing.getRoot());
+		drawingView = makeDrawingView();
 		for (DrawingTreeNode<?, ?> dtn : drawing.getRoot().getChildNodes()) {
 			if (dtn instanceof ShapeNode) {
 				ShapeView<?> v = recursivelyBuildShapeView((ShapeNode<?>) dtn);
@@ -184,17 +187,34 @@ public class DrawingController<M> extends Observable implements Observer {
 		return returned;
 	}
 
-	// Override for a custom view managing
-	public DrawingView<M> makeDrawingView(RootNode<M> rootNode) {
-		return new DrawingView<M>(rootNode, this);
+	/**
+	 * Instantiate a new DrawingView<br>
+	 * You might override this method for a custom view managing
+	 * 
+	 * @return
+	 */
+	public DrawingView<M> makeDrawingView() {
+		return new DrawingView<M>(this);
 	}
 
-	// Override for a custom view managing
+	/**
+	 * Instantiate a new ShapeView for a shape node<br>
+	 * You might override this method for a custom view managing
+	 * 
+	 * @param shapeNode
+	 * @return
+	 */
 	public <O> ShapeView<O> makeShapeView(ShapeNode<O> shapeNode) {
 		return new ShapeView<O>(shapeNode, this);
 	}
 
-	// Override for a custom view managing
+	/**
+	 * Instantiate a new ConnectorView for a connector node<br>
+	 * You might override this method for a custom view managing
+	 * 
+	 * @param shapeNode
+	 * @return
+	 */
 	public <O> ConnectorView<O> makeConnectorView(ConnectorNode<O> connectorNode) {
 		return new ConnectorView<O>(connectorNode, this);
 	}
@@ -312,6 +332,7 @@ public class DrawingController<M> extends Observable implements Observer {
 		return _scalePanel;
 	}
 
+	@SuppressWarnings("serial")
 	public class ScalePanel extends JToolBar {
 
 		private static final int MAX_ZOOM_VALUE = 300;
@@ -393,7 +414,7 @@ public class DrawingController<M> extends Observable implements Observer {
 		return drawing.getDrawingGraphicalRepresentation();
 	}*/
 
-	public DrawingView getDrawingView() {
+	public DrawingView<?> getDrawingView() {
 		return drawingView;
 	}
 
@@ -404,11 +425,11 @@ public class DrawingController<M> extends Observable implements Observer {
 		return drawing.getGraphicalRepresentation(drawable);
 	}*/
 
-	public GraphicalRepresentation getFocusedFloatingLabel() {
+	public DrawingTreeNode<?, ?> getFocusedFloatingLabel() {
 		return focusedFloatingLabel;
 	}
 
-	public void setFocusedFloatingLabel(GraphicalRepresentation aFocusedlabel) {
+	public void setFocusedFloatingLabel(DrawingTreeNode<?, ?> aFocusedlabel) {
 		// logger.info("setFocusedFloatingLabel() with "+aFocusedlabel);
 		if (focusedFloatingLabel == null) {
 			if (aFocusedlabel == null) {
@@ -424,7 +445,7 @@ public class DrawingController<M> extends Observable implements Observer {
 				}
 			}
 		} else {
-			GraphicalRepresentation oldFocusedFloatingLabel = focusedFloatingLabel;
+			DrawingTreeNode<?, ?> oldFocusedFloatingLabel = focusedFloatingLabel;
 			focusedFloatingLabel = aFocusedlabel;
 			if (aFocusedlabel == null || focusedFloatingLabel != aFocusedlabel) {
 				if (getPaintManager().isPaintingCacheEnabled()) {
@@ -448,75 +469,75 @@ public class DrawingController<M> extends Observable implements Observer {
 		}
 	}
 
-	private ShapeGraphicalRepresentation getFirstSelectedShape() {
-		for (GraphicalRepresentation gr : getSelectedObjects()) {
-			if (gr instanceof ShapeGraphicalRepresentation) {
-				return (ShapeGraphicalRepresentation) gr;
+	private ShapeNode<?> getFirstSelectedShape() {
+		for (DrawingTreeNode<?, ?> node : getSelectedObjects()) {
+			if (node instanceof ShapeNode) {
+				return (ShapeNode<?>) node;
 			}
 		}
 		return null;
 	}
 
-	public List<GraphicalRepresentation> getSelectedObjects() {
+	public List<DrawingTreeNode<?, ?>> getSelectedObjects() {
 		return selectedObjects;
 	}
 
-	public void setSelectedObjects(List<? extends GraphicalRepresentation> someSelectedObjects) {
+	public void setSelectedObjects(List<? extends DrawingTreeNode<?, ?>> someSelectedObjects) {
 		stopEditionOfEditedLabelIfAny();
 		if (someSelectedObjects == null) {
-			setSelectedObjects(new ArrayList<GraphicalRepresentation>());
+			setSelectedObjects(new ArrayList<DrawingTreeNode<?, ?>>());
 			return;
 		}
 
 		if (!selectedObjects.equals(someSelectedObjects)) {
 			clearSelection();
-			for (GraphicalRepresentation d : someSelectedObjects) {
+			for (DrawingTreeNode<?, ?> d : someSelectedObjects) {
 				addToSelectedObjects(d);
 			}
 		}
 	}
 
-	public void setSelectedObject(GraphicalRepresentation aGraphicalRepresentation) {
+	public void setSelectedObject(DrawingTreeNode<?, ?> aNode) {
 		stopEditionOfEditedLabelIfAny();
-		setSelectedObjects(Collections.singletonList(aGraphicalRepresentation));
+		setSelectedObjects(Collections.singletonList(aNode));
 		if (getToolbox() != null) {
 			getToolbox().update();
 		}
 	}
 
-	public void addToSelectedObjects(GraphicalRepresentation aGraphicalRepresentation) {
+	public void addToSelectedObjects(DrawingTreeNode<?, ?> aNode) {
 		stopEditionOfEditedLabelIfAny();
-		if (aGraphicalRepresentation == null) {
+		if (aNode == null) {
 			logger.warning("Cannot add null object");
 			return;
 		}
-		if (!selectedObjects.contains(aGraphicalRepresentation)) {
-			selectedObjects.add(aGraphicalRepresentation);
-			aGraphicalRepresentation.setIsSelected(true);
+		if (!selectedObjects.contains(aNode)) {
+			selectedObjects.add(aNode);
+			aNode.getGraphicalRepresentation().setIsSelected(true);
 		}
 		getToolbox().update();
 	}
 
-	public void removeFromSelectedObjects(GraphicalRepresentation aGraphicalRepresentation) {
+	public void removeFromSelectedObjects(DrawingTreeNode<?, ?> aNode) {
 		stopEditionOfEditedLabelIfAny();
-		if (aGraphicalRepresentation == null) {
+		if (aNode == null) {
 			logger.warning("Cannot remove null object");
 			return;
 		}
-		if (selectedObjects.contains(aGraphicalRepresentation)) {
-			selectedObjects.remove(aGraphicalRepresentation);
+		if (selectedObjects.contains(aNode)) {
+			selectedObjects.remove(aNode);
 		}
-		aGraphicalRepresentation.setIsSelected(false);
+		aNode.getGraphicalRepresentation().setIsSelected(false);
 		getToolbox().update();
 	}
 
-	public void toggleSelection(GraphicalRepresentation aGraphicalRepresentation) {
+	public void toggleSelection(DrawingTreeNode<?, ?> aNode) {
 		// logger.info("BEGIN toggle selection with "+aGraphicalRepresentation+" with selection="+selectedObjects);
 		stopEditionOfEditedLabelIfAny();
-		if (aGraphicalRepresentation.getIsSelected()) {
-			removeFromSelectedObjects(aGraphicalRepresentation);
+		if (aNode.getGraphicalRepresentation().getIsSelected()) {
+			removeFromSelectedObjects(aNode);
 		} else {
-			addToSelectedObjects(aGraphicalRepresentation);
+			addToSelectedObjects(aNode);
 		}
 		// logger.info("END toggle selection with "+aGraphicalRepresentation+" with selection="+selectedObjects);
 	}
@@ -524,73 +545,73 @@ public class DrawingController<M> extends Observable implements Observer {
 	public void clearSelection() {
 		// logger.info("Clear selection");
 		stopEditionOfEditedLabelIfAny();
-		for (GraphicalRepresentation gr : selectedObjects) {
-			gr.setIsSelected(false);
+		for (DrawingTreeNode<?, ?> s : selectedObjects) {
+			s.getGraphicalRepresentation().setIsSelected(false);
 		}
 		selectedObjects.clear();
 	}
 
-	public Vector<GraphicalRepresentation> getFocusedObjects() {
+	public List<DrawingTreeNode<?, ?>> getFocusedObjects() {
 		return focusedObjects;
 	}
 
-	public void setFocusedObjects(List<? extends GraphicalRepresentation> someFocusedObjects) {
+	public void setFocusedObjects(List<? extends DrawingTreeNode<?, ?>> someFocusedObjects) {
 		if (someFocusedObjects == null) {
-			setFocusedObjects(Collections.<GraphicalRepresentation> emptyList());
+			setFocusedObjects(Collections.<DrawingTreeNode<?, ?>> emptyList());
 			return;
 		}
 
 		if (!focusedObjects.equals(someFocusedObjects)) {
 			clearFocusSelection();
-			for (GraphicalRepresentation d : someFocusedObjects) {
+			for (DrawingTreeNode<?, ?> d : someFocusedObjects) {
 				addToFocusedObjects(d);
 			}
 		}
 	}
 
-	public void setFocusedObject(GraphicalRepresentation aGraphicalRepresentation) {
-		if (aGraphicalRepresentation == null) {
+	public void setFocusedObject(DrawingTreeNode<?, ?> aNode) {
+		if (aNode == null) {
 			clearFocusSelection();
 			return;
 		}
 
-		setFocusedObjects(Collections.singletonList(aGraphicalRepresentation));
+		setFocusedObjects(Collections.singletonList(aNode));
 	}
 
-	public void addToFocusedObjects(GraphicalRepresentation aGraphicalRepresentation) {
-		if (aGraphicalRepresentation == null) {
+	public void addToFocusedObjects(DrawingTreeNode<?, ?> aNode) {
+		if (aNode == null) {
 			logger.warning("Cannot add null object");
 			return;
 		}
-		if (!focusedObjects.contains(aGraphicalRepresentation)) {
-			focusedObjects.add(aGraphicalRepresentation);
-			aGraphicalRepresentation.setIsFocused(true);
+		if (!focusedObjects.contains(aNode)) {
+			focusedObjects.add(aNode);
+			aNode.getGraphicalRepresentation().setIsFocused(true);
 		}
 	}
 
-	public void removeFromFocusedObjects(GraphicalRepresentation aGraphicalRepresentation) {
-		if (aGraphicalRepresentation == null) {
+	public void removeFromFocusedObjects(DrawingTreeNode<?, ?> aNode) {
+		if (aNode == null) {
 			logger.warning("Cannot remove null object");
 			return;
 		}
-		if (focusedObjects.contains(aGraphicalRepresentation)) {
-			focusedObjects.remove(aGraphicalRepresentation);
+		if (focusedObjects.contains(aNode)) {
+			focusedObjects.remove(aNode);
 		}
-		aGraphicalRepresentation.setIsFocused(false);
+		aNode.getGraphicalRepresentation().setIsFocused(false);
 	}
 
-	public void toggleFocusSelection(GraphicalRepresentation aGraphicalRepresentation) {
-		if (aGraphicalRepresentation.getIsFocused()) {
-			removeFromFocusedObjects(aGraphicalRepresentation);
+	public void toggleFocusSelection(DrawingTreeNode<?, ?> aNode) {
+		if (aNode.getGraphicalRepresentation().getIsFocused()) {
+			removeFromFocusedObjects(aNode);
 		} else {
-			addToFocusedObjects(aGraphicalRepresentation);
+			addToFocusedObjects(aNode);
 		}
 	}
 
 	public void clearFocusSelection() {
 		// stopEditionOfEditedLabelIfAny();
-		for (GraphicalRepresentation gr : focusedObjects) {
-			gr.setIsFocused(false);
+		for (DrawingTreeNode<?, ?> node : focusedObjects) {
+			node.getGraphicalRepresentation().setIsFocused(false);
 		}
 		focusedObjects.clear();
 	}
@@ -600,12 +621,12 @@ public class DrawingController<M> extends Observable implements Observer {
 		// Override when required
 	}
 
-	public void setEditedLabel(LabelView aLabel) {
+	public void setEditedLabel(LabelView<?> aLabel) {
 		stopEditionOfEditedLabelIfAny();
 		_currentlyEditedLabel = aLabel;
 	}
 
-	public void resetEditedLabel(LabelView editedLabel) {
+	public void resetEditedLabel(LabelView<?> editedLabel) {
 		if (_currentlyEditedLabel == editedLabel) {
 			_currentlyEditedLabel = null;
 		}
@@ -615,7 +636,7 @@ public class DrawingController<M> extends Observable implements Observer {
 		return _currentlyEditedLabel != null;
 	}
 
-	public LabelView getEditedLabel() {
+	public LabelView<?> getEditedLabel() {
 		return _currentlyEditedLabel;
 	}
 
@@ -711,10 +732,10 @@ public class DrawingController<M> extends Observable implements Observer {
 
 	public String getToolTipText() {
 		if (getFocusedObjects().size() > 0) {
-			GraphicalRepresentation gr = getFocusedObjects().firstElement();
-			if (gr.getToolTipText() != null) {
+			DrawingTreeNode<?, ?> node = getFocusedObjects().get(0);
+			if (node.getGraphicalRepresentation().getToolTipText() != null) {
 				// logger.info("getToolTipText() ? return "+gr.getToolTipText());
-				return gr.getToolTipText();
+				return node.getGraphicalRepresentation().getToolTipText();
 			}
 		}
 		// logger.info("getToolTipText() ? return null");
@@ -753,16 +774,17 @@ public class DrawingController<M> extends Observable implements Observer {
 		this.lastClickedPoint = lastClickedPoint;
 	}
 
-	public GraphicalRepresentation getLastSelectedGR() {
-		return lastSelectedGR;
+	public DrawingTreeNode<?, ?> getLastSelectedNode() {
+		return lastSelectedNode;
 	}
 
-	public void setLastSelectedGR(GraphicalRepresentation lastSelectedGR) {
-		this.lastSelectedGR = lastSelectedGR;
+	public void setLastSelectedGR(DrawingTreeNode<?, ?> lastSelectedGR) {
+		this.lastSelectedNode = lastSelectedGR;
 	}
 
-	private Vector<Object> storedSelection;
-
+	/**
+	 * Retrieve stored selection as a persistent list of identified objects
+	 */
 	private void restoreStoredSelection() {
 		if (storedSelection == null) {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -771,10 +793,10 @@ public class DrawingController<M> extends Observable implements Observer {
 			return;
 		}
 		try {
-			for (Object o : storedSelection) {
-				GraphicalRepresentation gr = getGraphicalRepresentation(o);
-				if (gr != null) {
-					addToSelectedObjects(gr);
+			for (DrawingTreeNodeIdentifier<?> identifier : storedSelection) {
+				DrawingTreeNode<?, ?> node = getDrawing().getDrawingTreeNode(identifier);
+				if (node != null) {
+					addToSelectedObjects(node);
 				}
 			}
 		} finally {
@@ -782,6 +804,11 @@ public class DrawingController<M> extends Observable implements Observer {
 		}
 	}
 
+	/**
+	 * Stores the current selection as a persistent list of identified objects<br>
+	 * Guarantee persistence over tree restructurations
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void storeCurrentSelection() {
 		if (storedSelection != null) {
 			if (logger.isLoggable(Level.WARNING)) {
@@ -789,18 +816,18 @@ public class DrawingController<M> extends Observable implements Observer {
 			}
 			return;
 		}
-		storedSelection = new Vector<Object>();
-		for (GraphicalRepresentation gr : getSelectedObjects()) {
-			storedSelection.add(gr.getDrawable());
+		storedSelection = new ArrayList<DrawingTreeNodeIdentifier<?>>();
+		for (DrawingTreeNode<?, ?> node : getSelectedObjects()) {
+			storedSelection.add(new DrawingTreeNodeIdentifier(node.getDrawable(), node.getGRBinding()));
 		}
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
 		if (o == getDrawing()) {
-			if (arg instanceof GraphicalObjectsHierarchyRebuildStarted) {
+			if (arg instanceof DrawingTreeNodeHierarchyRebuildStarted) {
 				storeCurrentSelection();
-			} else if (arg instanceof GraphicalObjectsHierarchyRebuildEnded) {
+			} else if (arg instanceof DrawingTreeNodeHierarchyRebuildEnded) {
 				restoreStoredSelection();
 			}
 		}
@@ -882,11 +909,11 @@ public class DrawingController<M> extends Observable implements Observer {
 
 	private synchronized boolean startKeyDrivenMovingSession() {
 
-		if (getFirstSelectedShape().getLocationConstraints() != LocationConstraints.UNMOVABLE) {
+		if (getFirstSelectedShape().getGraphicalRepresentation().getLocationConstraints() != LocationConstraints.UNMOVABLE) {
 
 			keyDrivenMovingSessionTimer = new KeyDrivenMovingSessionTimer();
 			keyDrivenMovingSessionTimer.start();
-			ShapeGraphicalRepresentation movedObject = getFirstSelectedShape();
+			ShapeNode<?> movedObject = getFirstSelectedShape();
 			keyDrivenMovingSession = new MoveInfo(movedObject, this);
 			notifyWillMove(keyDrivenMovingSession);
 			return true;

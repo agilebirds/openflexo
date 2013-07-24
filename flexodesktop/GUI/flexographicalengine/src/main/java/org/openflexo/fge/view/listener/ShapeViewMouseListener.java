@@ -21,15 +21,16 @@ package org.openflexo.fge.view.listener;
 
 import java.util.logging.Logger;
 
-import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.view.ShapeView;
 
 public class ShapeViewMouseListener extends FGEViewMouseListener {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ShapeViewMouseListener.class.getPackage().getName());
 
-	public ShapeViewMouseListener(ShapeGraphicalRepresentation aGraphicalRepresentation, ShapeView aView) {
-		super(aGraphicalRepresentation, aView);
+	public <O> ShapeViewMouseListener(ShapeNode<O> aShapeNode, ShapeView<O> aView) {
+		super(aShapeNode, aView);
 	}
 
 }

@@ -21,13 +21,13 @@ package org.openflexo.fge.controller;
 
 import java.awt.event.MouseEvent;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.controller.MouseDragControlAction.MouseDragControlActionType;
 
 public class MouseDragControl extends MouseControl {
 	public MouseDragControlAction action;
 
-	private GraphicalRepresentation initialGraphicalRepresentation;
+	private DrawingTreeNode<?, ?> initialNode;
 
 	public MouseDragControl(String aName, MouseButton button, boolean shiftPressed, boolean ctrlPressed, boolean metaPressed,
 			boolean altPressed) {
@@ -88,8 +88,8 @@ public class MouseDragControl extends MouseControl {
 	}
 
 	@Override
-	public boolean isApplicable(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent e) {
-		return super.isApplicable(graphicalRepresentation, controller, e);
+	public boolean isApplicable(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent e) {
+		return super.isApplicable(node, controller, e);
 	}
 
 	private boolean isSignificativeDrag = false;
@@ -106,11 +106,11 @@ public class MouseDragControl extends MouseControl {
 	 * @param e
 	 *            MouseEvent
 	 */
-	public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
+	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event) {
 
-		if (action.handleMousePressed(graphicalRepresentation, controller, event)) {
-			initialGraphicalRepresentation = graphicalRepresentation;
-			// System.out.println("PRESSED initialGraphicalRepresentation="+initialGraphicalRepresentation);
+		if (action.handleMousePressed(node, controller, event)) {
+			initialNode = node;
+			// System.out.println("PRESSED initialNode="+initialNode);
 			event.consume();
 			isSignificativeDrag = false;
 			return true;
@@ -126,10 +126,10 @@ public class MouseDragControl extends MouseControl {
 	 * @param e
 	 *            MouseEvent
 	 */
-	public void handleMouseReleased(DrawingController controller, MouseEvent event) {
-		if (action.handleMouseReleased(initialGraphicalRepresentation, controller, event, isSignificativeDrag())) {
-			initialGraphicalRepresentation = null;
-			// System.out.println("RELEASED initialGraphicalRepresentation="+initialGraphicalRepresentation);
+	public void handleMouseReleased(DrawingController<?> controller, MouseEvent event) {
+		if (action.handleMouseReleased(initialNode, controller, event, isSignificativeDrag())) {
+			initialNode = null;
+			// System.out.println("RELEASED initialNode="+initialNode);
 			event.consume();
 		}
 	}
@@ -142,9 +142,9 @@ public class MouseDragControl extends MouseControl {
 	 * @param e
 	 *            MouseEvent
 	 */
-	public void handleMouseDragged(DrawingController controller, MouseEvent event) {
-		if (action.handleMouseDragged(initialGraphicalRepresentation, controller, event)) {
-			// System.out.println("DRAGGED initialGraphicalRepresentation="+initialGraphicalRepresentation);
+	public void handleMouseDragged(DrawingController<?> controller, MouseEvent event) {
+		if (action.handleMouseDragged(initialNode, controller, event)) {
+			// System.out.println("DRAGGED initialNode="+initialNode);
 			isSignificativeDrag = true;
 			event.consume();
 		}

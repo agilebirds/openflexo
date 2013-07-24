@@ -153,7 +153,7 @@ public class WKFSelectionManager extends SelectionManager {
 	@Override
 	public FlexoModelObject getPasteContext() {
 		if (getWKFController().getCurrentModuleView() instanceof DrawingView) {
-			GraphicalRepresentation gr = ((DrawingView) getWKFController().getCurrentModuleView()).getController().getLastSelectedGR();
+			GraphicalRepresentation gr = ((DrawingView) getWKFController().getCurrentModuleView()).getController().getLastSelectedNode();
 			if (gr != null && gr.getDrawable() instanceof FlexoModelObject) {
 				return (FlexoModelObject) gr.getDrawable();
 			} else {
@@ -170,11 +170,11 @@ public class WKFSelectionManager extends SelectionManager {
 		if (getWKFController().getCurrentModuleView() instanceof DrawingView) {
 			DrawingView<?> moduleView = (DrawingView<?>) getWKFController().getCurrentModuleView();
 			DrawingController controller = moduleView.getController();
-			GraphicalRepresentation target = controller.getLastSelectedGR();
+			GraphicalRepresentation target = controller.getLastSelectedNode();
 			if (target == null) {
 				pgc.targetContainer = controller.getDrawingView();
 			} else {
-				pgc.targetContainer = (JComponent) moduleView.viewForObject(target);
+				pgc.targetContainer = (JComponent) moduleView.viewForNode(target);
 			}
 			if (controller.getLastClickedPoint() != null) {
 				pgc.precisePastingLocation = controller.getLastClickedPoint();

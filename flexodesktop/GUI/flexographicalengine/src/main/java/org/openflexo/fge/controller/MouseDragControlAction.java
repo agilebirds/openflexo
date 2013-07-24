@@ -22,7 +22,7 @@ package org.openflexo.fge.controller;
 import java.awt.event.MouseEvent;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 
 public abstract class MouseDragControlAction extends MouseControlAction {
 
@@ -44,22 +44,20 @@ public abstract class MouseDragControlAction extends MouseControlAction {
 				return new CustomDragControlAction() {
 
 					@Override
-					public boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
-							MouseEvent event) {
+					public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event) {
 						logger.info("Perform mouse DRAGGED on undefined CUSTOM MouseDragControlAction");
 						return true;
 					}
 
 					@Override
-					public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
-							MouseEvent event) {
+					public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event) {
 						logger.info("Perform mouse PRESSED on undefined CUSTOM MouseDragControlAction");
 						return false;
 					}
 
 					@Override
-					public boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
-							MouseEvent event, boolean isSignificativeDrag) {
+					public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event,
+							boolean isSignificativeDrag) {
 						logger.info("Perform mouse RELEASED on undefined CUSTOM MouseDragControlAction");
 						return false;
 					}
@@ -83,8 +81,7 @@ public abstract class MouseDragControlAction extends MouseControlAction {
 	 *            TODO
 	 * @return
 	 */
-	public abstract boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
-			MouseEvent event);
+	public abstract boolean handleMousePressed(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event);
 
 	/**
 	 * Handle mouse released event, by performing what is required here Return flag indicating if event has been correctely handled and
@@ -99,8 +96,8 @@ public abstract class MouseDragControlAction extends MouseControlAction {
 	 *            TODO
 	 * @return
 	 */
-	public abstract boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
-			MouseEvent event, boolean isSignificativeDrag);
+	public abstract boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event,
+			boolean isSignificativeDrag);
 
 	/**
 	 * Handle mouse dragged event, by performing what is required here Return flag indicating if event has been correctely handled and thus,
@@ -113,8 +110,7 @@ public abstract class MouseDragControlAction extends MouseControlAction {
 	 *            TODO
 	 * @return
 	 */
-	public abstract boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
-			MouseEvent event);
+	public abstract boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event);
 
 	public static class None extends MouseDragControlAction {
 		@Override
@@ -123,20 +119,18 @@ public abstract class MouseDragControlAction extends MouseControlAction {
 		}
 
 		@Override
-		public boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
-				MouseEvent event) {
+		public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event) {
 			return true;
 		}
 
 		@Override
-		public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
-				MouseEvent event) {
+		public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event) {
 			return false;
 		}
 
 		@Override
-		public boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
-				MouseEvent event, boolean isSignificativeDrag) {
+		public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event,
+				boolean isSignificativeDrag) {
 			return false;
 		}
 	}

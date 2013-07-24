@@ -70,7 +70,7 @@ public class PushToPaletteInitializer extends ActionInitializer<PushToPalette, E
 						&& action.getFocusedObject().getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
 					ExampleDiagramController c = ((ExampleDiagramModuleView) getController().getCurrentModuleView()).getController();
 					ShapeGraphicalRepresentation gr = action.getFocusedObject().getGraphicalRepresentation();
-					ShapeView shapeView = c.getDrawingView().shapeViewForObject(gr);
+					ShapeView shapeView = c.getDrawingView().shapeViewForNode(gr);
 					BufferedImage image = shapeView.getScreenshot();
 					ShapeBorder b = gr.getBorder();
 					ShadowStyle ss = gr.getShadowStyle();

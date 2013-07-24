@@ -21,6 +21,7 @@ package org.openflexo.fge;
 
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.BackgroundStyle.BackgroundStyleType;
+import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.geom.FGEDimension;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.geom.FGESteppedDimensionConstraint;
@@ -144,7 +145,8 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 
 	public static enum LocationConstraints {
 		/**
-		 * ShapeSpecification is freely relocatable in parent global bounds (rectangular bounds, don't care about borders nor shape of parent)
+		 * ShapeSpecification is freely relocatable in parent global bounds (rectangular bounds, don't care about borders nor shape of
+		 * parent)
 		 */
 		FREELY_MOVABLE,
 		/**
@@ -662,13 +664,13 @@ public interface ShapeGraphicalRepresentation extends ContainerGraphicalRepresen
 	 * 
 	 * @return
 	 */
-	public boolean isAllowedToBeDraggedOutsideParentContainerInsideContainer(GraphicalRepresentation container);
+	public boolean isAllowedToBeDraggedOutsideParentContainerInsideContainer(ContainerNode<?, ?> container);
 
 	/**
 	 * Override this if you want to use this feature Default implementation does nothing return boolean indicating if drag was successfully
 	 * performed
 	 */
-	public boolean dragOutsideParentContainerInsideContainer(GraphicalRepresentation container, FGEPoint location);
+	public boolean dragOutsideParentContainerInsideContainer(ContainerNode<?, ?> container, FGEPoint location);
 
 	// public void performRandomLayout();
 

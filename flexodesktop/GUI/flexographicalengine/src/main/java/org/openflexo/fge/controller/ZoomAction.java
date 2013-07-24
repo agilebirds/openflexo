@@ -25,7 +25,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.SwingUtilities;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.geom.FGEGeometricObject.SimplifiedCardinalDirection;
 import org.openflexo.fge.geom.FGELine;
 import org.openflexo.fge.geom.FGEPoint;
@@ -43,7 +43,7 @@ public class ZoomAction extends MouseDragControlAction {
 	}
 
 	@Override
-	public boolean handleMouseDragged(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
+	public boolean handleMouseDragged(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event) {
 		Point currentMousePositionInDrawingView = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(),
 				controller.getDrawingView());
 		SimplifiedCardinalDirection card = FGEPoint.getSimplifiedOrientation(new FGEPoint(startPoint), new FGEPoint(
@@ -70,7 +70,7 @@ public class ZoomAction extends MouseDragControlAction {
 	}
 
 	@Override
-	public boolean handleMousePressed(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
+	public boolean handleMousePressed(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event) {
 		startPoint = SwingUtilities.convertPoint((Component) event.getSource(), event.getPoint(), controller.getDrawingView());
 		// Virtual line that goes through the start point and its orientation is NORTH_EAST (or SOUTH_WEST, it's the same)
 		refLine = new FGELine(new FGEPoint(startPoint), new FGEPoint(startPoint.x + 1, startPoint.y - 1));
@@ -79,8 +79,8 @@ public class ZoomAction extends MouseDragControlAction {
 	}
 
 	@Override
-	public boolean handleMouseReleased(GraphicalRepresentation graphicalRepresentation, DrawingController controller,
-			MouseEvent event, boolean isSignificativeDrag) {
+	public boolean handleMouseReleased(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event,
+			boolean isSignificativeDrag) {
 		startPoint = null;
 		refLine = null;
 		initialScale = controller.getScale();

@@ -48,7 +48,6 @@ import org.openflexo.fge.geom.FGEShape;
 import org.openflexo.fge.geom.area.FGEArea;
 import org.openflexo.fge.geom.area.FGEIntersectionArea;
 import org.openflexo.fge.graphics.DecorationPainter;
-import org.openflexo.fge.graphics.FGEGraphics;
 import org.openflexo.fge.graphics.FGEShapeDecorationGraphics;
 import org.openflexo.fge.graphics.FGEShapeGraphics;
 import org.openflexo.fge.graphics.ShapePainter;
@@ -296,7 +295,7 @@ public class ShapeNodeImpl<O> extends ContainerNodeImpl<O, ShapeGraphicalReprese
 	}
 
 	@Override
-	public FGEGraphics getGraphics() {
+	public FGEShapeGraphics getGraphics() {
 		return graphics;
 	}
 

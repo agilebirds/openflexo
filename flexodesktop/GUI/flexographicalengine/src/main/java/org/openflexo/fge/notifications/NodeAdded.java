@@ -17,43 +17,39 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.fge.view;
+package org.openflexo.fge.notifications;
 
-import java.util.Observer;
-
+import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
-import org.openflexo.fge.FGEConstants;
-import org.openflexo.fge.controller.DrawingController;
-import org.openflexo.fge.controller.DrawingPalette;
 
 /**
- * Implemented by all views representing a DrawingTreeNode
+ * This notification is thrown when a node has been added in the drawing tree
  * 
  * @author sylvain
  * 
- * @param <O>
  */
-public interface FGEView<O> extends Observer, FGEConstants {
+public class NodeAdded extends FGENotification {
 
-	public DrawingController<?> getController();
+	private DrawingTreeNode<?, ?> addedNode;
+	private ContainerNode<?, ?> parent;
 
-	public DrawingTreeNode<O, ?> getNode();
+	public NodeAdded(DrawingTreeNode<?, ?> addedNode, ContainerNode<?, ?> parent) {
+		super("object", null, addedNode);
+		this.addedNode = addedNode;
+		this.parent = parent;
+	}
 
-	public DrawingView<?> getDrawingView();
+	public DrawingTreeNode<?, ?> getAddedNode() {
+		return addedNode;
+	}
 
-	public O getDrawable();
+	public ContainerNode<?, ?> getParent() {
+		return parent;
+	}
 
-	public LabelView<O> getLabelView();
+	@Override
+	public boolean isModelNotification() {
+		return false;
+	}
 
-	public double getScale();
-
-	public void registerPalette(DrawingPalette aPalette);
-
-	public FGEPaintManager getPaintManager();
-
-	public void delete();
-
-	public boolean isDeleted();
-
-	public void rescale();
 }

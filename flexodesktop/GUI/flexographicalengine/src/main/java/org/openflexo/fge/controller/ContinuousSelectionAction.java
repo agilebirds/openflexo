@@ -21,7 +21,7 @@ package org.openflexo.fge.controller;
 
 import java.awt.event.MouseEvent;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 
 public class ContinuousSelectionAction extends MouseClickControlAction {
 	@Override
@@ -30,8 +30,8 @@ public class ContinuousSelectionAction extends MouseClickControlAction {
 	}
 
 	@Override
-	public boolean handleClick(GraphicalRepresentation graphicalRepresentation, DrawingController controller, MouseEvent event) {
-		MouseClickControlAction.logger.info("Continuous select " + graphicalRepresentation);
+	public boolean handleClick(DrawingTreeNode<?, ?> node, DrawingController<?> controller, MouseEvent event) {
+		MouseClickControlAction.logger.info("Continuous select " + node);
 
 		return true;
 	}
