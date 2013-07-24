@@ -50,7 +50,7 @@ public class FreeModelSlotInstanceConfiguration<RD extends ResourceData<RD>, MS 
 	protected List<ModelSlotInstanceConfigurationOption> options;
 
 	protected FlexoResourceCenter<?> resourceCenter;
-	protected TechnologyAdapterResource<RD> resource;
+	private TechnologyAdapterResource<RD> resource;
 	protected String resourceUri;
 	protected String relativePath;
 	protected String filename;

@@ -41,6 +41,7 @@
 	</entity>
 
 	<entity name="org.openflexo.foundation.viewpoint.VirtualModelModelSlot" xmlTag="VirtualModelModelSlot">
+		<property name="virtualModelURI" xmlTag="virtualModelURI" attribute="YES" />
 	</entity>
 
 	<entity name="org.openflexo.technologyadapter.emf.EMFModelSlot" xmlTag="EMFModelSlot">
