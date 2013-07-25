@@ -28,6 +28,7 @@ import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,11 +39,29 @@ import org.openflexo.antar.expr.EvaluationType;
 
 import com.google.common.primitives.Primitives;
 
+/**
+ * Utility methods focusing on types introspection
+ */
 public class TypeUtils {
 
 	static final Logger logger = Logger.getLogger(TypeUtils.class.getPackage().getName());
 
-	public static Class getBaseClass(Type aType) {
+	/**
+	 * <p>
+	 * Transforms the passed in type to a {@code Class} object. Type-checking method of convenience.
+	 * </p>
+	 * 
+	 * @param parameterizedType
+	 *            the type to be converted
+	 * @return the corresponding {@code Class} object
+	 * @throws IllegalStateException
+	 *             if the conversion fails
+	 */
+	public static Class<?> getRawType(Type aType) {
+		return getBaseClass(aType);
+	}
+
+	public static Class<?> getBaseClass(Type aType) {
 		if (aType == null) {
 			return null;
 		}
@@ -538,8 +557,7 @@ public class TypeUtils {
 	}
 
 	public static boolean isResolved(Type type) {
-		return type instanceof Class
-				|| (type instanceof GenericArrayType && isResolved(((GenericArrayType) type).getGenericComponentType()))
+		return type instanceof Class || type instanceof GenericArrayType && isResolved(((GenericArrayType) type).getGenericComponentType())
 				|| type instanceof ParameterizedType || type instanceof CustomType;
 	}
 
@@ -657,7 +675,7 @@ public class TypeUtils {
 				logger.fine("Not found type variable " + tv + " in context " + context + " GenericDeclaration="
 						+ tv.getGenericDeclaration() + " bounds=" + (tv.getBounds().length > 0 ? tv.getBounds()[0] : Object.class));
 			}
-			return (tv.getBounds().length > 0 ? tv.getBounds()[0] : Object.class);
+			return tv.getBounds().length > 0 ? tv.getBounds()[0] : Object.class;
 		}
 
 		if (type instanceof WildcardType) {
@@ -782,6 +800,33 @@ public class TypeUtils {
 
 	}
 
+	/**
+	 * <p>
+	 * Retrieves all the type arguments for this parameterized type including owner hierarchy arguments such as <code>
+	 * Outer<K,V>.Inner<T>.DeepInner<E></code> . The arguments are returned in a {@link Map} specifying the argument type for each
+	 * {@link TypeVariable}.
+	 * </p>
+	 * 
+	 * @param type
+	 *            specifies the subject parameterized type from which to harvest the parameters.
+	 * @return a map of the type arguments to their respective type variables.
+	 */
+	public static Map<TypeVariable<?>, Type> getTypeArguments(Type type, Class<?> rawType) {
+		return org.apache.commons.lang3.reflect.TypeUtils.getTypeArguments(type, rawType);
+	}
+
+	/**
+	 * Retrieve resolved type for type variable at specified index relatively to specified type, for supplied Type
+	 * 
+	 * @param type
+	 * @param index
+	 * @return
+	 */
+	public static Type getTypeArgument(Type type, Class<?> rawType, int index) {
+
+		return getTypeArguments(type, rawType).get(rawType.getTypeParameters()[index]);
+	}
+
 	// TESTS
 
 	public static interface ShouldFail {
@@ -850,7 +895,12 @@ public class TypeUtils {
 
 	}
 
+	public static class MyVector extends Vector<String> {
+
+	}
+
 	public static void main(String[] args) {
+		System.out.println("Type Argument=" + getTypeArgument(MyVector.class, Vector.class, 0));
 		/*Class shouldSucceed = ShouldSucceed.class;
 		for (Method m : shouldSucceed.getMethods()) {
 			checkSucceed(m);
