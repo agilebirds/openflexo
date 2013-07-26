@@ -33,12 +33,14 @@ import javax.swing.JLabel;
 import javax.swing.JToolBar;
 import javax.swing.Timer;
 
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEIconLibrary;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 
+@SuppressWarnings("serial")
 public class LayoutToolBar extends JToolBar {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(LayoutToolBar.class.getPackage().getName());
 
 	private final EditorToolbox editorToolbox;
@@ -112,13 +114,13 @@ public class LayoutToolBar extends JToolBar {
 	protected void alignLeft() {
 		System.out.println("Align left with " + editorToolbox.getSelectedShapes());
 		double newX = Double.POSITIVE_INFINITY;
-		for (ShapeGraphicalRepresentation<Object> gr : editorToolbox.getSelectedShapes()) {
+		for (ShapeNode<?> gr : editorToolbox.getSelectedShapes()) {
 			if (gr.getX() < newX) {
 				newX = gr.getX();
 			}
 		}
 		List<TranslationTransition> tts = new ArrayList<LayoutToolBar.TranslationTransition>();
-		for (ShapeGraphicalRepresentation<Object> gr : editorToolbox.getSelectedShapes()) {
+		for (ShapeNode<?> gr : editorToolbox.getSelectedShapes()) {
 			tts.add(new TranslationTransition(gr, gr.getLocation(), new FGEPoint(newX, gr.getY())));
 		}
 		performTransitions(tts);
@@ -127,12 +129,12 @@ public class LayoutToolBar extends JToolBar {
 	protected void alignCenter() {
 		System.out.println("Align center with " + editorToolbox.getSelectedShapes());
 		double totalX = 0;
-		for (ShapeGraphicalRepresentation<Object> gr : editorToolbox.getSelectedShapes()) {
+		for (ShapeNode<?> gr : editorToolbox.getSelectedShapes()) {
 			totalX += gr.getX() + gr.getWidth() / 2;
 		}
 		double newX = totalX / editorToolbox.getSelectedShapes().size();
 		List<TranslationTransition> tts = new ArrayList<LayoutToolBar.TranslationTransition>();
-		for (ShapeGraphicalRepresentation<Object> gr : editorToolbox.getSelectedShapes()) {
+		for (ShapeNode<?> gr : editorToolbox.getSelectedShapes()) {
 			tts.add(new TranslationTransition(gr, gr.getLocation(), new FGEPoint(newX - gr.getWidth() / 2, gr.getY())));
 		}
 		performTransitions(tts);
@@ -141,13 +143,13 @@ public class LayoutToolBar extends JToolBar {
 	protected void alignRight() {
 		System.out.println("Align right with " + editorToolbox.getSelectedShapes());
 		double newX = 0;
-		for (ShapeGraphicalRepresentation<Object> gr : editorToolbox.getSelectedShapes()) {
+		for (ShapeNode<?> gr : editorToolbox.getSelectedShapes()) {
 			if (gr.getX() + gr.getWidth() > newX) {
 				newX = gr.getX() + gr.getWidth();
 			}
 		}
 		List<TranslationTransition> tts = new ArrayList<LayoutToolBar.TranslationTransition>();
-		for (ShapeGraphicalRepresentation<Object> gr : editorToolbox.getSelectedShapes()) {
+		for (ShapeNode<?> gr : editorToolbox.getSelectedShapes()) {
 			tts.add(new TranslationTransition(gr, gr.getLocation(), new FGEPoint(newX - gr.getWidth(), gr.getY())));
 		}
 		performTransitions(tts);
@@ -156,13 +158,13 @@ public class LayoutToolBar extends JToolBar {
 	protected void alignTop() {
 		System.out.println("Align top with " + editorToolbox.getSelectedShapes());
 		double newY = Double.POSITIVE_INFINITY;
-		for (ShapeGraphicalRepresentation<Object> gr : editorToolbox.getSelectedShapes()) {
+		for (ShapeNode<?> gr : editorToolbox.getSelectedShapes()) {
 			if (gr.getY() < newY) {
 				newY = gr.getY();
 			}
 		}
 		List<TranslationTransition> tts = new ArrayList<LayoutToolBar.TranslationTransition>();
-		for (ShapeGraphicalRepresentation<Object> gr : editorToolbox.getSelectedShapes()) {
+		for (ShapeNode<?> gr : editorToolbox.getSelectedShapes()) {
 			tts.add(new TranslationTransition(gr, gr.getLocation(), new FGEPoint(gr.getX(), newY)));
 		}
 		performTransitions(tts);
@@ -171,12 +173,12 @@ public class LayoutToolBar extends JToolBar {
 	protected void alignMiddle() {
 		System.out.println("Align middle with " + editorToolbox.getSelectedShapes());
 		double totalY = 0;
-		for (ShapeGraphicalRepresentation<Object> gr : editorToolbox.getSelectedShapes()) {
+		for (ShapeNode<?> gr : editorToolbox.getSelectedShapes()) {
 			totalY += gr.getY() + gr.getHeight() / 2;
 		}
 		double newY = totalY / editorToolbox.getSelectedShapes().size();
 		List<TranslationTransition> tts = new ArrayList<LayoutToolBar.TranslationTransition>();
-		for (ShapeGraphicalRepresentation<Object> gr : editorToolbox.getSelectedShapes()) {
+		for (ShapeNode<?> gr : editorToolbox.getSelectedShapes()) {
 			tts.add(new TranslationTransition(gr, gr.getLocation(), new FGEPoint(gr.getX(), newY - gr.getHeight() / 2)));
 		}
 		performTransitions(tts);
@@ -185,32 +187,32 @@ public class LayoutToolBar extends JToolBar {
 	protected void alignBottom() {
 		System.out.println("Align bottom with " + editorToolbox.getSelectedShapes());
 		double newY = 0;
-		for (ShapeGraphicalRepresentation<Object> gr : editorToolbox.getSelectedShapes()) {
+		for (ShapeNode<?> gr : editorToolbox.getSelectedShapes()) {
 			if (gr.getY() + gr.getHeight() > newY) {
 				newY = gr.getY() + gr.getHeight();
 			}
 		}
 		List<TranslationTransition> tts = new ArrayList<LayoutToolBar.TranslationTransition>();
-		for (ShapeGraphicalRepresentation<Object> gr : editorToolbox.getSelectedShapes()) {
+		for (ShapeNode<?> gr : editorToolbox.getSelectedShapes()) {
 			tts.add(new TranslationTransition(gr, gr.getLocation(), new FGEPoint(gr.getX(), newY - gr.getHeight())));
 		}
 		performTransitions(tts);
 	}
 
 	public class TranslationTransition {
-		private ShapeGraphicalRepresentation gr;
+		private ShapeNode<?> shapeNode;
 		private FGEPoint oldLocation;
 		private FGEPoint newLocation;
 
-		public TranslationTransition(ShapeGraphicalRepresentation gr, FGEPoint oldLocation, FGEPoint newLocation) {
+		public TranslationTransition(ShapeNode<?> shapeNode, FGEPoint oldLocation, FGEPoint newLocation) {
 			super();
-			this.gr = gr;
+			this.shapeNode = shapeNode;
 			this.oldLocation = oldLocation;
 			this.newLocation = newLocation;
 		}
 
 		public void performStep(int step, int totalSteps) {
-			gr.setLocation(new FGEPoint(oldLocation.x - (oldLocation.x - newLocation.x) * step / totalSteps, oldLocation.y
+			shapeNode.setLocation(new FGEPoint(oldLocation.x - (oldLocation.x - newLocation.x) * step / totalSteps, oldLocation.y
 					- (oldLocation.y - newLocation.y) * step / totalSteps));
 		}
 	}

@@ -44,15 +44,15 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 
 	private boolean isBuildingPoints;
 
-	public DrawPolygonToolController(DrawingController controller, DrawShapeAction control) {
+	public DrawPolygonToolController(DrawingController<?> controller, DrawShapeAction control) {
 		super(controller, control);
 	}
 
 	@Override
 	public FGEPolygon makeDefaultShape(MouseEvent e) {
 		Point pt = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getController().getDrawingView());
-		FGEPoint newPoint = getController().getDrawingGraphicalRepresentation().convertRemoteViewCoordinatesToLocalNormalizedPoint(pt,
-				getController().getDrawingGraphicalRepresentation(), getController().getScale());
+		FGEPoint newPoint = getController().getDrawing().getRoot()
+				.convertRemoteViewCoordinatesToLocalNormalizedPoint(pt, getController().getDrawing().getRoot(), getController().getScale());
 		return new FGEPolygon(Filling.NOT_FILLED, newPoint, new FGEPoint(newPoint));
 	}
 
@@ -132,7 +132,7 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 	@Override
 	public ShapeGraphicalRepresentation buildShapeGraphicalRepresentation() {
 		ShapeGraphicalRepresentation returned = getController().getFactory().makeShapeGraphicalRepresentation(ShapeType.CUSTOM_POLYGON,
-				null, getController().getDrawing());
+				getController().getDrawing());
 		returned.setBorder(getController().getFactory().makeShapeBorder(FGEConstants.DEFAULT_BORDER_SIZE, FGEConstants.DEFAULT_BORDER_SIZE,
 				FGEConstants.DEFAULT_BORDER_SIZE, FGEConstants.DEFAULT_BORDER_SIZE));
 		returned.setBackground(getController().getCurrentBackgroundStyle());
@@ -147,16 +147,15 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 
 		AffineTransform scaleAT = AffineTransform.getScaleInstance(1 / boundingBox.getWidth(), 1 / boundingBox.getHeight());
 		FGEPolygon normalizedPolygon = getPolygon().transform(translateAT).transform(scaleAT);
-		if (parentGR instanceof ShapeGraphicalRepresentation) {
-			FGEPoint pt = FGEUtils
-					.convertNormalizedPoint(parentGR, new FGEPoint(0, 0), getController().getDrawingGraphicalRepresentation());
+		if (parentNode instanceof ShapeGraphicalRepresentation) {
+			FGEPoint pt = FGEUtils.convertNormalizedPoint(parentNode, new FGEPoint(0, 0), getController().getDrawing().getRoot());
 			returned.setX(boundingBox.getX() - pt.x);
 			returned.setY(boundingBox.getY() - pt.y);
 		} else {
 			returned.setX(boundingBox.getX() - FGEConstants.DEFAULT_BORDER_SIZE);
 			returned.setY(boundingBox.getY() - FGEConstants.DEFAULT_BORDER_SIZE);
 		}
-		returned.setShape(getController().getFactory().makePolygon(returned, normalizedPolygon));
+		returned.setShape(getController().getFactory().makePolygon(normalizedPolygon));
 		return returned;
 	}
 }

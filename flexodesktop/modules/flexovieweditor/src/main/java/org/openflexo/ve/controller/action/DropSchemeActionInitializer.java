@@ -70,11 +70,11 @@ public class DropSchemeActionInitializer extends ActionInitializer {
 				/*	DiagramShape shape = action.getPrimaryShape();
 					logger.info("border5 = " + ((ShapeGraphicalRepresentation) shape.getGraphicalRepresentation()).getBorder());
 					if (shape.getParent() != action.getParent()) {
-						DiagramShapeGR parentGR = (DiagramShapeGR) shape.getParent().getGraphicalRepresentation();
+						DiagramShapeGR parentNode = (DiagramShapeGR) shape.getParent().getGraphicalRepresentation();
 						DiagramShapeGR expectedGR = (DiagramShapeGR) action.getParent().getGraphicalRepresentation();
 						DiagramShapeGR myGR = (DiagramShapeGR) action.getPrimaryShape().getGraphicalRepresentation();
 						Point p = new Point((int) myGR.getX(), (int) myGR.getY());
-						Point newP = GraphicalRepresentation.convertPoint(expectedGR, p, parentGR, 1.0);
+						Point newP = GraphicalRepresentation.convertPoint(expectedGR, p, parentNode, 1.0);
 						myGR.setLocation(new FGEPoint(newP.x, newP.y));
 						logger.info("border6 = " + myGR.getBorder());
 						logger.info("ShapeSpecification has been relocated");

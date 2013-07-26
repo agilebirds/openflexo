@@ -19,16 +19,17 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingUtilities;
 
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.DrawingPalette;
 import org.openflexo.fge.controller.PaletteElement;
-import org.openflexo.fge.controller.PaletteElement.PaletteElementGraphicalRepresentation;
 import org.openflexo.fge.controller.PaletteElement.PaletteElementTransferable;
 import org.openflexo.toolbox.ToolBox;
 
 import sun.awt.dnd.SunDragSourceContextPeer;
 
-public class PaletteElementView extends ShapeView {
+@SuppressWarnings("serial")
+public class PaletteElementView extends ShapeView<PaletteElement> {
 
 	private static final Logger logger = Logger.getLogger(PaletteElementView.class.getPackage().getName());
 
@@ -40,23 +41,28 @@ public class PaletteElementView extends ShapeView {
 	private DragGestureRecognizer labelDgr;
 
 	/* Local controller ONLY */
-	private DrawingController paletteController;
+	// private DrawingController<DrawingPalette> paletteController;
 
-	public PaletteElementView(PaletteElement paletteElement, PaletteElementGraphicalRepresentation aGraphicalRepresentation,
-			DrawingController controller) {
-		super(aGraphicalRepresentation, paletteElement, controller);
+	public PaletteElementView(ShapeNode<PaletteElement> node, DrawingController<DrawingPalette> controller) {
+		super(node, controller);
 		this.dgListener = new DGListener();
 		this.dragSource = DragSource.getDefaultDragSource();
 		this.dsListener = new DSListener();
-		this.paletteController = controller;
+		// this.paletteController = controller;
 
 		dgr = createDragGestureRecognizer();
 		// component, action, listener
 		enableDragging();
 
-		if (aGraphicalRepresentation.getToolTipText() != null) {
-			setToolTipText(aGraphicalRepresentation.getToolTipText());
+		if (node.getGraphicalRepresentation().getToolTipText() != null) {
+			setToolTipText(node.getGraphicalRepresentation().getToolTipText());
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public DrawingController<DrawingPalette> getController() {
+		return (DrawingController<DrawingPalette>) super.getController();
 	}
 
 	private DragGestureRecognizer createDragGestureRecognizer() {
@@ -68,13 +74,13 @@ public class PaletteElementView extends ShapeView {
 		return getToolTipText();
 	}
 
-	@Override
+	/*@Override
 	public PaletteElementGraphicalRepresentation getGraphicalRepresentation() {
 		return (PaletteElementGraphicalRepresentation) super.getGraphicalRepresentation();
-	}
+	}*/
 
 	public PaletteElement getPaletteElement() {
-		return (PaletteElement) getDrawable();
+		return getDrawable();
 	}
 
 	public DrawingPalette getPalette() {
@@ -82,7 +88,7 @@ public class PaletteElementView extends ShapeView {
 	}
 
 	public BufferedImage getBuffer() {
-		return getDrawingView().getPaintManager().getScreenshot(getGraphicalRepresentation());
+		return getDrawingView().getPaintManager().getScreenshot(getNode());
 	}
 
 	// ===============================================================
@@ -146,7 +152,7 @@ public class PaletteElementView extends ShapeView {
 			}
 
 			Point p = SwingUtilities.convertPoint(e.getComponent(), e.getDragOrigin(), PaletteElementView.this);
-			PaletteElementTransferable transferable = new PaletteElementTransferable((PaletteElement) getDrawable(), p);
+			PaletteElementTransferable transferable = new PaletteElementTransferable(getDrawable(), p);
 			if (ToolBox.isMacOS()) {
 				// Need to call this on MacOS.
 				// Scenario to reproduce issue
@@ -170,7 +176,7 @@ public class PaletteElementView extends ShapeView {
 			try {
 				// initial cursor, transferrable, dsource listener
 				e.startDrag(DrawingPalette.dropKO, transferable, dsListener);
-				logger.info("Starting drag for " + getGraphicalRepresentation());
+				logger.info("Starting drag for " + getNode());
 				getDrawingView().captureDraggedNode(PaletteElementView.this, e);
 			} catch (Exception idoe) {
 				logger.warning("Unexpected exception " + idoe);

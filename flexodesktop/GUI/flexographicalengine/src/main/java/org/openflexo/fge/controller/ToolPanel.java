@@ -13,6 +13,7 @@ import javax.swing.JToggleButton;
 import org.openflexo.fge.FGEIconLibrary;
 import org.openflexo.fge.controller.DrawingController.EditorTool;
 
+@SuppressWarnings("serial")
 public class ToolPanel extends JPanel {
 
 	private final EditorToolbox editorToolbox;
@@ -46,23 +47,23 @@ public class ToolPanel extends JPanel {
 	}
 
 	private void selectTool(EditorTool tool) {
-		this.editorToolbox.controller.setCurrentTool(tool);
+		this.editorToolbox.getController().setCurrentTool(tool);
 		updateButtons();
 	}
 
 	public void updateButtons() {
-		selectionToolButton.setSelected(this.editorToolbox.controller.getCurrentTool() == EditorTool.SelectionTool);
-		drawShapeToolButton.setSelected(this.editorToolbox.controller.getCurrentTool() == EditorTool.DrawShapeTool);
-		drawConnectorToolButton.setSelected(this.editorToolbox.controller.getCurrentTool() == EditorTool.DrawConnectorTool);
-		drawTextToolButton.setSelected(this.editorToolbox.controller.getCurrentTool() == EditorTool.DrawTextTool);
+		selectionToolButton.setSelected(this.editorToolbox.getController().getCurrentTool() == EditorTool.SelectionTool);
+		drawShapeToolButton.setSelected(this.editorToolbox.getController().getCurrentTool() == EditorTool.DrawShapeTool);
+		drawConnectorToolButton.setSelected(this.editorToolbox.getController().getCurrentTool() == EditorTool.DrawConnectorTool);
+		drawTextToolButton.setSelected(this.editorToolbox.getController().getCurrentTool() == EditorTool.DrawTextTool);
 	}
 
 	public class ToolButton extends JToggleButton {
-		private final EditorTool tool;
+		// private final EditorTool tool;
 
 		public ToolButton(final EditorTool tool, Icon icon, Icon selectedIcon) {
 			super();
-			this.tool = tool;
+			// this.tool = tool;
 			setIcon(icon);
 			setPressedIcon(selectedIcon);
 			setSelectedIcon(selectedIcon);

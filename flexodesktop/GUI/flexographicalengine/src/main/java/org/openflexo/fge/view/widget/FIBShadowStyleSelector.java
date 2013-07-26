@@ -22,8 +22,6 @@ package org.openflexo.fge.view.widget;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,10 +32,15 @@ import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GRBinding.DrawingGRBinding;
+import org.openflexo.fge.GRBinding.ShapeGRBinding;
+import org.openflexo.fge.GRProvider.DrawingGRProvider;
+import org.openflexo.fge.GRProvider.ShapeGRProvider;
+import org.openflexo.fge.GRStructureWalker;
 import org.openflexo.fge.ShadowStyle;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
@@ -54,9 +57,9 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
+@SuppressWarnings("serial")
 public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements FIBCustomComponent<ShadowStyle, FIBShadowStyleSelector> {
 
-	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBShadowStyleSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/ShadowStylePanel.fib");
@@ -136,7 +139,7 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 
 	public class ShadowStyleDetailsPanel extends ResizablePanel {
 		private FIBComponent fibComponent;
-		private FIBView fibView;
+		private FIBView<?, ?> fibView;
 		private CustomFIBController controller;
 
 		protected ShadowStyleDetailsPanel(ShadowStyle shadowStyle) {
@@ -250,10 +253,9 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 	}*/
 
 	protected class ShadowStylePreviewPanel extends JPanel {
-		private Drawing drawing;
+		private Drawing<ShadowStylePreviewPanel> drawing;
 		private DrawingGraphicalRepresentation drawingGR;
-		private DrawingController controller;
-		private Object p1, p2, text;
+		private DrawingController<ShadowStylePreviewPanel> controller;
 		private ShapeGraphicalRepresentation shapeGR;
 
 		private FGEModelFactory factory;
@@ -267,59 +269,41 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 
 			factory = FGEUtils.TOOLS_FACTORY;
 
-			text = new Object();
-
-			final Vector<Object> singleton = new Vector<Object>();
-			singleton.add(text);
-
-			drawing = new Drawing<ShadowStylePreviewPanel>() {
+			drawing = new DrawingImpl<ShadowStylePreviewPanel>(this, factory) {
 				@Override
-				public List<?> getContainedObjects(Object aDrawable) {
-					if (aDrawable == ShadowStylePreviewPanel.this) {
-						return singleton;
-					}
-					return null;
-				}
+				public void init() {
+					final DrawingGRBinding<ShadowStylePreviewPanel> previewPanelBinding = bindDrawing(ShadowStylePreviewPanel.class,
+							"previewPanel", new DrawingGRProvider<ShadowStylePreviewPanel>() {
+								@Override
+								public DrawingGraphicalRepresentation provideGR(ShadowStylePreviewPanel drawable, FGEModelFactory factory) {
+									return drawingGR;
+								}
+							});
+					final ShapeGRBinding<ShadowStylePreviewPanel> shapeBinding = bindShape(ShadowStylePreviewPanel.class, "line",
+							new ShapeGRProvider<ShadowStylePreviewPanel>() {
+								@Override
+								public ShapeGraphicalRepresentation provideGR(ShadowStylePreviewPanel drawable, FGEModelFactory factory) {
+									return shapeGR;
+								}
+							});
 
-				@Override
-				public Object getContainer(Object aDrawable) {
-					if (aDrawable == text) {
-						return ShadowStylePreviewPanel.this;
-					}
-					return null;
-				}
+					previewPanelBinding.addToWalkers(new GRStructureWalker<ShadowStylePreviewPanel>() {
 
-				@Override
-				public DrawingGraphicalRepresentation<ShadowStylePreviewPanel> getDrawingGraphicalRepresentation() {
-					return drawingGR;
-				}
-
-				@Override
-				public <O> GraphicalRepresentation getGraphicalRepresentation(O aDrawable) {
-					if (aDrawable == ShadowStylePreviewPanel.this) {
-						return drawingGR;
-					} else if (aDrawable == text) {
-						return shapeGR;
-					}
-					return null;
-				}
-
-				@Override
-				public ShadowStylePreviewPanel getModel() {
-					return ShadowStylePreviewPanel.this;
-				}
-
-				@Override
-				public boolean isEditable() {
-					return false;
+						@Override
+						public void walk(ShadowStylePreviewPanel previewPanel) {
+							drawShape(shapeBinding, previewPanel, previewPanel);
+						}
+					});
 				}
 			};
+			drawing.setEditable(false);
+
 			drawingGR = factory.makeDrawingGraphicalRepresentation(drawing, false);
 			drawingGR.setBackgroundColor(new Color(255, 255, 255));
 			drawingGR.setWidth(35);
 			drawingGR.setHeight(19);
 			drawingGR.setDrawWorkingArea(false);
-			shapeGR = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, text, drawing);
+			shapeGR = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, drawing);
 			shapeGR.setWidth(130);
 			shapeGR.setHeight(130);
 			shapeGR.setAllowToLeaveBounds(true);
@@ -332,11 +316,10 @@ public class FIBShadowStyleSelector extends CustomPopup<ShadowStyle> implements 
 			shapeGR.setIsFocusable(false);
 			shapeGR.setIsReadOnly(true);
 			shapeGR.setBorder(factory.makeShapeBorder(20, 20, 20, 20));
-			shapeGR.setValidated(true);
 
 			update();
 
-			controller = new DrawingController<Drawing<?>>(drawing, factory);
+			controller = new DrawingController<ShadowStylePreviewPanel>(drawing, factory);
 			add(controller.getDrawingView());
 
 		}

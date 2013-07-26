@@ -26,17 +26,19 @@ import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.JToolBar;
 
-import org.openflexo.fge.ConnectorGraphicalRepresentation;
-import org.openflexo.fge.GraphicalRepresentation;
-import org.openflexo.fge.ShapeGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ConnectorNode;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.view.widget.FIBBackgroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBForegroundStyleSelector;
 import org.openflexo.fge.view.widget.FIBShadowStyleSelector;
 import org.openflexo.fge.view.widget.FIBShapeSelector;
 import org.openflexo.fge.view.widget.FIBTextStyleSelector;
 
+@SuppressWarnings("serial")
 public class EditorToolbox {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(EditorToolbox.class.getPackage().getName());
 
 	private ToolPanel toolPanel;
@@ -49,9 +51,13 @@ public class EditorToolbox {
 	private FIBShadowStyleSelector shadowStyleSelector;
 	private FIBShapeSelector shapeSelector;
 
-	DrawingController controller;
+	private DrawingController<?> controller;
 
-	public EditorToolbox(DrawingController controller) {
+	private List<ShapeNode<?>> selectedShapes = new ArrayList<ShapeNode<?>>();
+	private List<ConnectorNode<?>> selectedConnectors = new ArrayList<ConnectorNode<?>>();
+	private List<DrawingTreeNode<?, ?>> selection = new ArrayList<DrawingTreeNode<?, ?>>();
+
+	public EditorToolbox(DrawingController<?> controller) {
 		super();
 		this.controller = controller;
 	}
@@ -80,8 +86,12 @@ public class EditorToolbox {
 		}
 		selectedShapes.clear();
 		selectedConnectors.clear();
-		selectedGR.clear();
+		selection.clear();
 		controller = null;// Don't delete, we did not create it
+	}
+
+	public DrawingController<?> getController() {
+		return controller;
 	}
 
 	public ToolPanel getToolPanel() {
@@ -99,12 +109,12 @@ public class EditorToolbox {
 				@Override
 				public void apply() {
 					super.apply();
-					if (selectedGR.size() > 0) {
-						for (ShapeGraphicalRepresentation shape : selectedShapes) {
-							shape.setForeground(getEditedObject().clone());
+					if (selection.size() > 0) {
+						for (ShapeNode<?> shape : selectedShapes) {
+							shape.getGraphicalRepresentation().setForeground(getEditedObject().clone());
 						}
-						for (ConnectorGraphicalRepresentation connector : selectedConnectors) {
-							connector.setForeground(getEditedObject().clone());
+						for (ConnectorNode<?> connector : selectedConnectors) {
+							connector.getGraphicalRepresentation().setForeground(getEditedObject().clone());
 						}
 					} else {
 						controller.setCurrentForegroundStyle(getEditedObject().clone());
@@ -116,8 +126,8 @@ public class EditorToolbox {
 				public void apply() {
 					super.apply();
 					if (selectedShapes.size() > 0) {
-						for (ShapeGraphicalRepresentation shape : selectedShapes) {
-							shape.setBackground(getEditedObject().clone());
+						for (ShapeNode<?> shape : selectedShapes) {
+							shape.getGraphicalRepresentation().setBackground(getEditedObject().clone());
 						}
 					} else {
 						controller.setCurrentBackgroundStyle(getEditedObject().clone());
@@ -128,9 +138,9 @@ public class EditorToolbox {
 				@Override
 				public void apply() {
 					super.apply();
-					if (selectedGR.size() > 0) {
-						for (GraphicalRepresentation gr : selectedGR) {
-							gr.setTextStyle(getEditedObject().clone());
+					if (selection.size() > 0) {
+						for (DrawingTreeNode<?, ?> gr : selection) {
+							gr.getGraphicalRepresentation().setTextStyle(getEditedObject().clone());
 						}
 					} else {
 						controller.setCurrentTextStyle(getEditedObject().clone());
@@ -142,8 +152,8 @@ public class EditorToolbox {
 				public void apply() {
 					super.apply();
 					if (selectedShapes.size() > 0) {
-						for (ShapeGraphicalRepresentation shape : selectedShapes) {
-							shape.setShadowStyle(getEditedObject().clone());
+						for (ShapeNode<?> shape : selectedShapes) {
+							shape.getGraphicalRepresentation().setShadowStyle(getEditedObject().clone());
 						}
 					} else {
 						controller.setCurrentShadowStyle(getEditedObject().clone());
@@ -155,8 +165,8 @@ public class EditorToolbox {
 				public void apply() {
 					super.apply();
 					if (selectedShapes.size() > 0) {
-						for (ShapeGraphicalRepresentation shape : selectedShapes) {
-							shape.setShape(getEditedObject().clone());
+						for (ShapeNode<?> shape : selectedShapes) {
+							shape.getGraphicalRepresentation().setShape(getEditedObject().clone());
 						}
 
 					} else {
@@ -184,42 +194,38 @@ public class EditorToolbox {
 		return layoutToolBar;
 	}
 
-	private List<ShapeGraphicalRepresentation> selectedShapes = new ArrayList<ShapeGraphicalRepresentation>();
-	private List<ConnectorGraphicalRepresentation> selectedConnectors = new ArrayList<ConnectorGraphicalRepresentation>();
-	private List<GraphicalRepresentation> selectedGR = new ArrayList<GraphicalRepresentation>();
-
 	public void update() {
 		selectedShapes.clear();
 		selectedConnectors.clear();
-		selectedGR.clear();
-		for (GraphicalRepresentation gr : controller.getSelectedObjects()) {
-			if (gr instanceof ShapeGraphicalRepresentation) {
-				selectedGR.add(gr);
-				selectedShapes.add((ShapeGraphicalRepresentation) gr);
+		selection.clear();
+		for (DrawingTreeNode<?, ?> node : controller.getSelectedObjects()) {
+			if (node instanceof ShapeNode) {
+				selection.add(node);
+				selectedShapes.add((ShapeNode<?>) node);
 			}
-			if (gr instanceof ConnectorGraphicalRepresentation) {
-				selectedGR.add(gr);
-				selectedConnectors.add((ConnectorGraphicalRepresentation) gr);
+			if (node instanceof ConnectorNode) {
+				selection.add(node);
+				selectedConnectors.add((ConnectorNode<?>) node);
 			}
 		}
 		if (stylesToolBar == null) {
 			return;
 		}
-		if (selectedGR.size() > 0) {
-			textStyleSelector.setEditedObject(selectedGR.get(0).getTextStyle());
+		if (selection.size() > 0) {
+			textStyleSelector.setEditedObject(selection.get(0).getGraphicalRepresentation().getTextStyle());
 			if (selectedShapes.size() > 0) {
-				foregroundSelector.setEditedObject(selectedShapes.get(0).getForeground());
+				foregroundSelector.setEditedObject(selectedShapes.get(0).getGraphicalRepresentation().getForeground());
 			} else if (selectedConnectors.size() > 0) {
-				foregroundSelector.setEditedObject(selectedConnectors.get(0).getForeground());
+				foregroundSelector.setEditedObject(selectedConnectors.get(0).getGraphicalRepresentation().getForeground());
 			}
 		} else {
 			textStyleSelector.setEditedObject(controller.getCurrentTextStyle());
 			foregroundSelector.setEditedObject(controller.getCurrentForegroundStyle());
 		}
 		if (selectedShapes.size() > 0) {
-			shapeSelector.setEditedObject(selectedShapes.get(0).getShape());
-			backgroundSelector.setEditedObject(selectedShapes.get(0).getBackground());
-			shadowStyleSelector.setEditedObject(selectedShapes.get(0).getShadowStyle());
+			shapeSelector.setEditedObject(selectedShapes.get(0).getGraphicalRepresentation().getShape());
+			backgroundSelector.setEditedObject(selectedShapes.get(0).getGraphicalRepresentation().getBackground());
+			shadowStyleSelector.setEditedObject(selectedShapes.get(0).getGraphicalRepresentation().getShadowStyle());
 		} else {
 			shapeSelector.setEditedObject(controller.getCurrentShape());
 			backgroundSelector.setEditedObject(controller.getCurrentBackgroundStyle());
@@ -227,11 +233,11 @@ public class EditorToolbox {
 		}
 	}
 
-	public List<ShapeGraphicalRepresentation> getSelectedShapes() {
+	public List<ShapeNode<?>> getSelectedShapes() {
 		return selectedShapes;
 	}
 
-	public List<GraphicalRepresentation> getSelectedGR() {
-		return selectedGR;
+	public List<DrawingTreeNode<?, ?>> getSelection() {
+		return selection;
 	}
 }

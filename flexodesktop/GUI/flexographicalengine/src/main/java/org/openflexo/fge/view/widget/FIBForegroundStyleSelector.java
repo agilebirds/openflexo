@@ -23,8 +23,6 @@ package org.openflexo.fge.view.widget;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,9 +34,14 @@ import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GRBinding.DrawingGRBinding;
+import org.openflexo.fge.GRBinding.ShapeGRBinding;
+import org.openflexo.fge.GRProvider.DrawingGRProvider;
+import org.openflexo.fge.GRProvider.ShapeGRProvider;
+import org.openflexo.fge.GRStructureWalker;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
@@ -55,10 +58,10 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
+@SuppressWarnings("serial")
 public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> implements
 		FIBCustomComponent<ForegroundStyle, FIBForegroundStyleSelector> {
 
-	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBForegroundStyleSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/ForegroundStylePanel.fib");
@@ -148,7 +151,7 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 
 	public class ForegroundStyleDetailsPanel extends ResizablePanel {
 		private FIBComponent fibComponent;
-		private FIBView fibView;
+		private FIBView<?, ?> fibView;
 		private CustomFIBController controller;
 
 		protected ForegroundStyleDetailsPanel(ForegroundStyle fs) {
@@ -261,10 +264,9 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 	}*/
 
 	protected class ForegroundStylePreviewPanel extends JPanel {
-		private Drawing drawing;
+		private Drawing<ForegroundStylePreviewPanel> drawing;
 		private DrawingGraphicalRepresentation drawingGR;
-		private DrawingController controller;
-		private Object p1, p2, line;
+		private DrawingController<ForegroundStylePreviewPanel> controller;
 		private ShapeGraphicalRepresentation lineGR;
 
 		private FGEModelFactory factory;
@@ -278,61 +280,42 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 
 			factory = FGEUtils.TOOLS_FACTORY;
 
-			line = new Object();
-
-			final Vector<Object> singleton = new Vector<Object>();
-			singleton.add(line);
-
-			drawing = new Drawing<ForegroundStylePreviewPanel>() {
+			drawing = new DrawingImpl<ForegroundStylePreviewPanel>(this, factory) {
 				@Override
-				public List<?> getContainedObjects(Object aDrawable) {
-					if (aDrawable == ForegroundStylePreviewPanel.this) {
-						return singleton;
-					}
-					return null;
-				}
+				public void init() {
+					final DrawingGRBinding<ForegroundStylePreviewPanel> previewPanelBinding = bindDrawing(
+							ForegroundStylePreviewPanel.class, "previewPanel", new DrawingGRProvider<ForegroundStylePreviewPanel>() {
+								@Override
+								public DrawingGraphicalRepresentation provideGR(ForegroundStylePreviewPanel drawable,
+										FGEModelFactory factory) {
+									return drawingGR;
+								}
+							});
+					final ShapeGRBinding<ForegroundStylePreviewPanel> shapeBinding = bindShape(ForegroundStylePreviewPanel.class, "line",
+							new ShapeGRProvider<ForegroundStylePreviewPanel>() {
+								@Override
+								public ShapeGraphicalRepresentation provideGR(ForegroundStylePreviewPanel drawable, FGEModelFactory factory) {
+									return lineGR;
+								}
+							});
 
-				@Override
-				public Object getContainer(Object aDrawable) {
-					if (aDrawable == line) {
-						return ForegroundStylePreviewPanel.this;
-					}
-					return null;
-				}
+					previewPanelBinding.addToWalkers(new GRStructureWalker<ForegroundStylePreviewPanel>() {
 
-				@Override
-				public DrawingGraphicalRepresentation<ForegroundStylePreviewPanel> getDrawingGraphicalRepresentation() {
-					return drawingGR;
+						@Override
+						public void walk(ForegroundStylePreviewPanel previewPanel) {
+							drawShape(shapeBinding, previewPanel, previewPanel);
+						}
+					});
 				}
-
-				@Override
-				public <O> GraphicalRepresentation getGraphicalRepresentation(O aDrawable) {
-					if (aDrawable == ForegroundStylePreviewPanel.this) {
-						return drawingGR;
-					} else if (aDrawable == line) {
-						return lineGR;
-					}
-					return null;
-				}
-
-				@Override
-				public ForegroundStylePreviewPanel getModel() {
-					return ForegroundStylePreviewPanel.this;
-				}
-
-				@Override
-				public boolean isEditable() {
-					// TODO Auto-generated method stub
-					return false;
-				}
-
 			};
+			drawing.setEditable(false);
+
 			drawingGR = factory.makeDrawingGraphicalRepresentation(drawing, false);
 			drawingGR.setBackgroundColor(new Color(255, 255, 255));
 			drawingGR.setWidth(35);
 			drawingGR.setHeight(19);
 			drawingGR.setDrawWorkingArea(false);
-			lineGR = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, line, drawing);
+			lineGR = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, drawing);
 			lineGR.setWidth(25);
 			lineGR.setHeight(0);
 			lineGR.setX(-5);
@@ -344,9 +327,8 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 			lineGR.setIsFocusable(false);
 			lineGR.setIsReadOnly(true);
 			lineGR.setBorder(factory.makeShapeBorder(10, 10, 10, 10));
-			lineGR.setValidated(true);
 
-			controller = new DrawingController<Drawing<?>>(drawing, factory);
+			controller = new DrawingController<ForegroundStylePreviewPanel>(drawing, factory);
 			add(controller.getDrawingView());
 		}
 

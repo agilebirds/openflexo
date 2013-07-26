@@ -20,7 +20,6 @@
 package org.openflexo.fge.view.widget;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.beans.PropertyChangeSupport;
 import java.util.logging.Level;
@@ -55,19 +54,17 @@ import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
 
 /**
- * Widget allowing to view and edit a BackgroundStyle
+ * Widget allowing to view and edit a Shape
  * 
  * @author sguerin
  * 
  */
+@SuppressWarnings("serial")
 public class FIBShapeSelector extends CustomPopup<ShapeSpecification> implements FIBCustomComponent<ShapeSpecification, FIBShapeSelector> {
 
 	static final Logger logger = Logger.getLogger(FIBShapeSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/ShapeSelectorPanel.fib");
-
-	private static final Color DEFAULT_COLOR1 = Color.RED;
-	private static final Color DEFAULT_COLOR2 = Color.WHITE;
 
 	private static final FGEModelFactory SHAPE_FACTORY = FGEUtils.TOOLS_FACTORY;
 
@@ -183,7 +180,7 @@ public class FIBShapeSelector extends CustomPopup<ShapeSpecification> implements
 		public void setShape(ShapeSpecification shape) {
 			ShapeSpecification oldShape = this.shape;
 			this.shape = shape;
-			pcSupport.firePropertyChange("shape", shape, shape);
+			pcSupport.firePropertyChange("shape", oldShape, shape);
 		}
 
 		public ShapeType getShapeType() {
@@ -205,13 +202,13 @@ public class FIBShapeSelector extends CustomPopup<ShapeSpecification> implements
 				switch (shapeType) {
 				case RECTANGLE:
 					if (rectangle == null) {
-						rectangle = (Rectangle) SHAPE_FACTORY.makeShape(shapeType, null);
+						rectangle = (Rectangle) SHAPE_FACTORY.makeShape(shapeType);
 					}
 					shape = rectangle;
 					break;
 				case SQUARE:
 					if (square == null) {
-						square = (Square) SHAPE_FACTORY.makeShape(shapeType, null);
+						square = (Square) SHAPE_FACTORY.makeShape(shapeType);
 					}
 					shape = square;
 					break;
@@ -223,48 +220,48 @@ public class FIBShapeSelector extends CustomPopup<ShapeSpecification> implements
 					break;
 				case POLYGON:
 					if (regularPolygon == null) {
-						regularPolygon = (RegularPolygon) SHAPE_FACTORY.makeShape(shapeType, null);
+						regularPolygon = (RegularPolygon) SHAPE_FACTORY.makeShape(shapeType);
 					}
 					shape = regularPolygon;
 					break;
 				case TRIANGLE:
 					if (triangle == null) {
-						triangle = (Triangle) SHAPE_FACTORY.makeShape(shapeType, null);
+						triangle = (Triangle) SHAPE_FACTORY.makeShape(shapeType);
 					}
 					shape = triangle;
 					break;
 				case LOSANGE:
 					if (losange == null) {
-						losange = (Losange) SHAPE_FACTORY.makeShape(shapeType, null);
+						losange = (Losange) SHAPE_FACTORY.makeShape(shapeType);
 					}
 					shape = losange;
 					break;
 				case OVAL:
 					if (oval == null) {
-						oval = (Oval) SHAPE_FACTORY.makeShape(shapeType, null);
+						oval = (Oval) SHAPE_FACTORY.makeShape(shapeType);
 					}
 					shape = oval;
 					break;
 				case CIRCLE:
 					if (circle == null) {
-						circle = (Circle) SHAPE_FACTORY.makeShape(shapeType, null);
+						circle = (Circle) SHAPE_FACTORY.makeShape(shapeType);
 					}
 					shape = circle;
 					break;
 				case ARC:
 					if (arc == null) {
-						arc = (Arc) SHAPE_FACTORY.makeShape(shapeType, null);
+						arc = (Arc) SHAPE_FACTORY.makeShape(shapeType);
 					}
 					shape = arc;
 					break;
 				case STAR:
 					if (star == null) {
-						star = (Star) SHAPE_FACTORY.makeShape(shapeType, null);
+						star = (Star) SHAPE_FACTORY.makeShape(shapeType);
 					}
 					shape = star;
 					break;
 				default:
-					shape = SHAPE_FACTORY.makeShape(shapeType, null);
+					shape = SHAPE_FACTORY.makeShape(shapeType);
 				}
 
 				pcSupport.firePropertyChange("shapeType", oldShapeType, getShapeType());
@@ -274,7 +271,7 @@ public class FIBShapeSelector extends CustomPopup<ShapeSpecification> implements
 
 	public class ShapeDetailsPanel extends ResizablePanel {
 		private FIBComponent fibComponent;
-		private FIBView fibView;
+		private FIBView<?, ?> fibView;
 		private CustomFIBController controller;
 		private ShapeFactory shapeFactory;
 
@@ -333,9 +330,9 @@ public class FIBShapeSelector extends CustomPopup<ShapeSpecification> implements
 				getFrontComponent().setShape(shapeFactory.getShape());
 				// getFrontComponent().update();
 
-				FIBView previewComponent = viewForComponent(fibComponent.getComponentNamed("PreviewPanel"));
+				FIBView<?, ?> previewComponent = viewForComponent(fibComponent.getComponentNamed("PreviewPanel"));
 				if (previewComponent instanceof FIBCustomWidget) {
-					JComponent customComponent = ((FIBCustomWidget) previewComponent).getJComponent();
+					JComponent customComponent = ((FIBCustomWidget<?, ?>) previewComponent).getJComponent();
 					if (customComponent instanceof ShapePreviewPanel) {
 						((ShapePreviewPanel) customComponent).setShape(shapeFactory.getShape());
 						// ((ShapePreviewPanel) customComponent).update();

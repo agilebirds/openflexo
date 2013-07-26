@@ -22,8 +22,6 @@ package org.openflexo.fge.view.widget;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.util.Collections;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,10 +32,15 @@ import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GRBinding.DrawingGRBinding;
+import org.openflexo.fge.GRBinding.ShapeGRBinding;
+import org.openflexo.fge.GRProvider.DrawingGRProvider;
+import org.openflexo.fge.GRProvider.ShapeGRProvider;
+import org.openflexo.fge.GRStructureWalker;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextStyle;
 import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
@@ -56,9 +59,9 @@ import org.openflexo.toolbox.FileResource;
  * @author sguerin
  * 
  */
+@SuppressWarnings("serial")
 public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBCustomComponent<TextStyle, FIBTextStyleSelector> {
 
-	@SuppressWarnings("hiding")
 	static final Logger logger = Logger.getLogger(FIBTextStyleSelector.class.getPackage().getName());
 
 	public static FileResource FIB_FILE = new FileResource("Fib/TextStylePanel.fib");
@@ -138,7 +141,7 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 
 	public class TextStyleDetailsPanel extends ResizablePanel {
 		private FIBComponent fibComponent;
-		private FIBView fibView;
+		private FIBView<?, ?> fibView;
 		private CustomFIBController controller;
 
 		protected TextStyleDetailsPanel(TextStyle textStyle) {
@@ -252,10 +255,9 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 	}*/
 
 	protected class TextStylePreviewPanel extends JPanel {
-		private Drawing drawing;
+		private Drawing<TextStylePreviewPanel> drawing;
 		private DrawingGraphicalRepresentation drawingGR;
-		private DrawingController controller;
-		private Object p1, p2, text;
+		private DrawingController<TextStylePreviewPanel> controller;
 		private ShapeGraphicalRepresentation textGR;
 		private FGEModelFactory factory;
 
@@ -269,59 +271,41 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 
 			factory = FGEUtils.TOOLS_FACTORY;
 
-			text = new Object();
-
-			final List<Object> singleton = Collections.singletonList(text);
-
-			drawing = new Drawing<TextStylePreviewPanel>() {
+			drawing = new DrawingImpl<TextStylePreviewPanel>(this, factory) {
 				@Override
-				public List<?> getContainedObjects(Object aDrawable) {
-					if (aDrawable == TextStylePreviewPanel.this) {
-						return singleton;
-					}
-					return null;
-				}
+				public void init() {
+					final DrawingGRBinding<TextStylePreviewPanel> previewPanelBinding = bindDrawing(TextStylePreviewPanel.class,
+							"previewPanel", new DrawingGRProvider<TextStylePreviewPanel>() {
+								@Override
+								public DrawingGraphicalRepresentation provideGR(TextStylePreviewPanel drawable, FGEModelFactory factory) {
+									return drawingGR;
+								}
+							});
+					final ShapeGRBinding<TextStylePreviewPanel> shapeBinding = bindShape(TextStylePreviewPanel.class, "line",
+							new ShapeGRProvider<TextStylePreviewPanel>() {
+								@Override
+								public ShapeGraphicalRepresentation provideGR(TextStylePreviewPanel drawable, FGEModelFactory factory) {
+									return textGR;
+								}
+							});
 
-				@Override
-				public Object getContainer(Object aDrawable) {
-					if (aDrawable == text) {
-						return TextStylePreviewPanel.this;
-					}
-					return null;
-				}
+					previewPanelBinding.addToWalkers(new GRStructureWalker<TextStylePreviewPanel>() {
 
-				@Override
-				public DrawingGraphicalRepresentation<TextStylePreviewPanel> getDrawingGraphicalRepresentation() {
-					return drawingGR;
+						@Override
+						public void walk(TextStylePreviewPanel previewPanel) {
+							drawShape(shapeBinding, previewPanel, previewPanel);
+						}
+					});
 				}
-
-				@Override
-				public <O> GraphicalRepresentation getGraphicalRepresentation(O aDrawable) {
-					if (aDrawable == TextStylePreviewPanel.this) {
-						return drawingGR;
-					} else if (aDrawable == text) {
-						return textGR;
-					}
-					return null;
-				}
-
-				@Override
-				public TextStylePreviewPanel getModel() {
-					return TextStylePreviewPanel.this;
-				}
-
-				@Override
-				public boolean isEditable() {
-					return false;
-				}
-
 			};
+			drawing.setEditable(false);
+
 			drawingGR = factory.makeDrawingGraphicalRepresentation(drawing, false);
 			drawingGR.setBackgroundColor(new Color(255, 255, 255));
 			drawingGR.setWidth(199);
 			drawingGR.setHeight(19);
 			drawingGR.setDrawWorkingArea(false);
-			textGR = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, text, drawing);
+			textGR = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, drawing);
 			textGR.setWidth(200);
 			textGR.setHeight(20);
 			textGR.setX(0);
@@ -338,9 +322,8 @@ public class FIBTextStyleSelector extends CustomPopup<TextStyle> implements FIBC
 			textGR.setIsFocusable(false);
 			textGR.setIsReadOnly(true);
 			textGR.setBorder(factory.makeShapeBorder(0, 0, 0, 0));
-			textGR.setValidated(true);
 
-			controller = new DrawingController<Drawing<?>>(drawing, factory);
+			controller = new DrawingController<TextStylePreviewPanel>(drawing, factory);
 			add(controller.getDrawingView());
 
 			update();

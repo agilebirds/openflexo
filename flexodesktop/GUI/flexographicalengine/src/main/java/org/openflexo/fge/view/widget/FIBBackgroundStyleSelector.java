@@ -24,8 +24,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
-import java.util.Collections;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,11 +41,16 @@ import org.openflexo.fge.Drawing;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GRBinding.DrawingGRBinding;
+import org.openflexo.fge.GRBinding.ShapeGRBinding;
+import org.openflexo.fge.GRProvider.DrawingGRProvider;
+import org.openflexo.fge.GRProvider.ShapeGRProvider;
+import org.openflexo.fge.GRStructureWalker;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.TextureBackgroundStyle;
 import org.openflexo.fge.TextureBackgroundStyle.TextureType;
 import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
@@ -65,6 +68,7 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
  * @author sguerin
  * 
  */
+@SuppressWarnings("serial")
 public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> implements
 		FIBCustomComponent<BackgroundStyle, FIBBackgroundStyleSelector> {
 
@@ -73,7 +77,7 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 	public static FileResource FIB_FILE = new FileResource("Fib/BackgroundStylePanel.fib");
 
 	private static final Color DEFAULT_COLOR1 = Color.RED;
-	private static final Color DEFAULT_COLOR2 = Color.WHITE;
+	// private static final Color DEFAULT_COLOR2 = Color.WHITE;
 
 	private BackgroundStyle _revertValue;
 
@@ -259,7 +263,7 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 
 	public class BackgroundStyleDetailsPanel extends ResizablePanel {
 		private FIBComponent fibComponent;
-		private FIBView fibView;
+		private FIBView<?, ?> fibView;
 		private CustomFIBController controller;
 		private BackgroundStyleFactory bsFactory;
 
@@ -396,10 +400,9 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 	}*/
 
 	protected class BackgroundStylePreviewPanel extends JPanel {
-		private Drawing drawing;
+		private Drawing<BackgroundStylePreviewPanel> drawing;
 		private DrawingGraphicalRepresentation drawingGR;
-		private DrawingController controller;
-		private Object rect;
+		private DrawingController<BackgroundStylePreviewPanel> controller;
 		private ShapeGraphicalRepresentation rectGR;
 
 		private FGEModelFactory factory;
@@ -413,61 +416,42 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 
 			factory = FGEUtils.TOOLS_FACTORY;
 
-			rect = new Object();
-
-			final List<Object> singleton = Collections.singletonList(rect);
-
-			drawing = new Drawing<BackgroundStylePreviewPanel>() {
+			drawing = new DrawingImpl<BackgroundStylePreviewPanel>(this, factory) {
 				@Override
-				public List<?> getContainedObjects(Object aDrawable) {
-					if (aDrawable == BackgroundStylePreviewPanel.this) {
-						return singleton;
-					}
-					return null;
-				}
+				public void init() {
+					final DrawingGRBinding<BackgroundStylePreviewPanel> previewPanelBinding = bindDrawing(
+							BackgroundStylePreviewPanel.class, "previewPanel", new DrawingGRProvider<BackgroundStylePreviewPanel>() {
+								@Override
+								public DrawingGraphicalRepresentation provideGR(BackgroundStylePreviewPanel drawable,
+										FGEModelFactory factory) {
+									return drawingGR;
+								}
+							});
+					final ShapeGRBinding<BackgroundStylePreviewPanel> shapeBinding = bindShape(BackgroundStylePreviewPanel.class, "line",
+							new ShapeGRProvider<BackgroundStylePreviewPanel>() {
+								@Override
+								public ShapeGraphicalRepresentation provideGR(BackgroundStylePreviewPanel drawable, FGEModelFactory factory) {
+									return rectGR;
+								}
+							});
 
-				@Override
-				public Object getContainer(Object aDrawable) {
-					if (aDrawable == rect) {
-						return BackgroundStylePreviewPanel.this;
-					}
-					return null;
-				}
+					previewPanelBinding.addToWalkers(new GRStructureWalker<BackgroundStylePreviewPanel>() {
 
-				@Override
-				public DrawingGraphicalRepresentation<BackgroundStylePreviewPanel> getDrawingGraphicalRepresentation() {
-					return drawingGR;
-				}
-
-				@Override
-				public <O> GraphicalRepresentation getGraphicalRepresentation(O aDrawable) {
-					if (aDrawable == BackgroundStylePreviewPanel.this) {
-						return drawingGR;
-					} else if (aDrawable == rect) {
-						return rectGR;
-					}
-					return null;
-				}
-
-				@Override
-				public BackgroundStylePreviewPanel getModel() {
-					return BackgroundStylePreviewPanel.this;
-				}
-
-				@Override
-				public boolean isEditable() {
-					return false;
+						@Override
+						public void walk(BackgroundStylePreviewPanel previewPanel) {
+							drawShape(shapeBinding, previewPanel, previewPanel);
+						}
+					});
 				}
 			};
+			drawing.setEditable(false);
 
 			drawingGR = factory.makeDrawingGraphicalRepresentation(drawing, false);
-
-			// drawingGR = new DrawingGraphicalRepresentationImpl(drawing, false);
 			drawingGR.setBackgroundColor(new Color(255, 255, 255));
 			drawingGR.setWidth(35);
 			drawingGR.setHeight(19);
 			drawingGR.setDrawWorkingArea(false);
-			rectGR = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, rect, drawing);
+			rectGR = factory.makeShapeGraphicalRepresentation(ShapeType.RECTANGLE, drawing);
 			rectGR.setWidth(36);
 			rectGR.setHeight(20);
 			rectGR.setX(0);
@@ -479,9 +463,8 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 			rectGR.setIsFocusable(false);
 			rectGR.setIsReadOnly(true);
 			rectGR.setBorder(factory.makeShapeBorder(0, 0, 0, 0));
-			rectGR.setValidated(true);
 
-			controller = new DrawingController<Drawing<?>>(drawing, factory);
+			controller = new DrawingController<BackgroundStylePreviewPanel>(drawing, factory);
 			add(controller.getDrawingView());
 		}
 
@@ -493,7 +476,6 @@ public class FIBBackgroundStyleSelector extends CustomPopup<BackgroundStyle> imp
 			controller = null;
 			drawingGR = null;
 			rectGR = null;
-			rect = null;
 		}
 
 		protected void update() {

@@ -185,7 +185,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 		}
 		else {
 			GraphicalRe
-			parentGR.notifyDrawableRemoved(removedGR);
+			parentNode.notifyDrawableRemoved(removedGR);
 			graphicalRepresentation = retrieveGraphicalRepresentation(drawable);
 			System.out.println("Tiens maintenant la GR c'est "+graphicalRepresentation);
 		}

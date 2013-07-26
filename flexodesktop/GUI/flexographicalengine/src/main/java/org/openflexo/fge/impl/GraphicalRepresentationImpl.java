@@ -684,13 +684,13 @@ public abstract class GraphicalRepresentationImpl extends FGEObjectImpl implemen
 	 * 
 	 * GraphicalRepresentation initialGR = this; GraphicalRepresentation currentGR = this;
 	 * 
-	 * while (currentGR != null) { GraphicalRepresentation parentGR = currentGR.getContainerGraphicalRepresentation(); if (parentGR ==
-	 * null) return true; if (!parentGR.getIsVisible()) return false; for (GraphicalRepresentation child :
-	 * parentGR.getContainedGraphicalRepresentations()) { // Only ShapeGR can hide other GR, ignore ConnectorGR here if (child instanceof
+	 * while (currentGR != null) { GraphicalRepresentation parentNode = currentGR.getContainerGraphicalRepresentation(); if (parentNode ==
+	 * null) return true; if (!parentNode.getIsVisible()) return false; for (GraphicalRepresentation child :
+	 * parentNode.getContainedGraphicalRepresentations()) { // Only ShapeGR can hide other GR, ignore ConnectorGR here if (child instanceof
 	 * ShapeGraphicalRepresentation) { ShapeGraphicalRepresentation shapedChild = (ShapeGraphicalRepresentation)child; if
 	 * (shapedChild.getShape().getShape().containsPoint( convertNormalizedPoint(initialGR, p, child))) {
 	 * logger.info("GR "+child+" contains point "+p+" on "+initialGR); if(child.getLayer() > currentGR.getLayer()) {
-	 * logger.info("GR "+child+" hides point "+p+" on "+initialGR); } } } } currentGR = parentGR; }
+	 * logger.info("GR "+child+" hides point "+p+" on "+initialGR); } } } } currentGR = parentNode; }
 	 * 
 	 * return true; }
 	 */
