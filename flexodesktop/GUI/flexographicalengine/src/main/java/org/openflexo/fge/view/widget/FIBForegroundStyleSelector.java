@@ -36,9 +36,16 @@ import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.ForegroundStyle;
+import org.openflexo.fge.GRBinding.DrawingGRBinding;
+import org.openflexo.fge.GRBinding.ShapeGRBinding;
+import org.openflexo.fge.GRProvider;
+import org.openflexo.fge.GRStructureWalker;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingController;
+import org.openflexo.fge.drawingeditor.MyDrawing;
+import org.openflexo.fge.drawingeditor.MyShape;
+import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBController;
@@ -283,7 +290,31 @@ public class FIBForegroundStyleSelector extends CustomPopup<ForegroundStyle> imp
 			final Vector<Object> singleton = new Vector<Object>();
 			singleton.add(line);
 
-			drawing = new Drawing<ForegroundStylePreviewPanel>() {
+			drawing = new DrawingImpl<ForegroundStylePreviewPanel>(this, factory) {
+				@Override
+				public void init() {
+					final DrawingGRBinding<ForegroundStylePreviewPanel> previewPanelBinding = bindDrawing(
+							ForegroundStylePreviewPanel.class, "previewPanel");
+					final ShapeGRBinding<ForegroundStylePreviewPanel> shapeBinding = bindShape(ForegroundStylePreviewPanel.class, "line");
+
+					previewPanelBinding.setGRProvider(new GRProvider<MyDrawing, DrawingGraphicalRepresentation>() {
+						@Override
+						public DrawingGraphicalRepresentation provideGR(MyDrawing drawable, FGEModelFactory factory) {
+							return drawingGR;
+						}
+					});
+					drawingBinding.addToWalkers(new GRStructureWalker<MyDrawing>() {
+
+						@Override
+						public void walk(MyDrawing myDrawing) {
+							for (MyShape shape : myDrawing.getShapes()) {
+								drawShape(shapeBinding, shape, myDrawing);
+								// drawShape(shape).as(shapeBinding).in(myDrawing);
+							}
+						}
+					});
+				}
+
 				@Override
 				public List<?> getContainedObjects(Object aDrawable) {
 					if (aDrawable == ForegroundStylePreviewPanel.this) {

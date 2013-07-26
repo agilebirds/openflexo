@@ -414,7 +414,7 @@ public class DrawingController<M> extends Observable implements Observer {
 		return drawing.getDrawingGraphicalRepresentation();
 	}*/
 
-	public DrawingView<?> getDrawingView() {
+	public DrawingView<M> getDrawingView() {
 		return drawingView;
 	}
 

@@ -31,8 +31,14 @@ import org.openflexo.fge.Drawing;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.GRBinding;
 import org.openflexo.fge.GRBinding.ConnectorGRBinding;
+import org.openflexo.fge.GRBinding.ContainerGRBinding;
 import org.openflexo.fge.GRBinding.DrawingGRBinding;
+import org.openflexo.fge.GRBinding.GeometricGRBinding;
 import org.openflexo.fge.GRBinding.ShapeGRBinding;
+import org.openflexo.fge.GRProvider.ConnectorGRProvider;
+import org.openflexo.fge.GRProvider.DrawingGRProvider;
+import org.openflexo.fge.GRProvider.GeometricGRProvider;
+import org.openflexo.fge.GRProvider.ShapeGRProvider;
 import org.openflexo.fge.GRStructureWalker;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.notifications.DrawingTreeNodeHierarchyRebuildEnded;
@@ -117,28 +123,47 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		return hash.get(drawable);
 	}
 
-	public DrawingGRBinding<M> bindDrawing(Class<M> drawingClass, String name) {
-		return drawingBinding = new DrawingGRBinding<M>();
+	@Override
+	public DrawingGRBinding<M> bindDrawing(Class<M> drawingClass, String name, DrawingGRProvider<M> grProvider) {
+		return drawingBinding = new DrawingGRBinding<M>(grProvider);
 	}
 
-	public <R> ShapeGRBinding<R> bindShape(Class<R> shapeObjectClass, String name) {
+	@Override
+	public <R> ShapeGRBinding<R> bindShape(Class<R> shapeObjectClass, String name, ShapeGRProvider<R> grProvider) {
 		return null;
 	}
 
-	public <R> ShapeGRBinding<R> bindShape(Class<R> shapeObjectClass, String name, ShapeGRBinding<?> parentBinding) {
+	@Override
+	public <R> ShapeGRBinding<R> bindShape(Class<R> shapeObjectClass, String name, ContainerGRBinding<?, ?> parentBinding,
+			ShapeGRProvider<R> grProvider) {
 		return null;
 	}
 
-	public <R> ShapeGRBinding<R> bindShape(Class<R> shapeObjectClass, String name, DrawingGRBinding<?> parentBinding) {
+	@Override
+	public <R> GeometricGRBinding<R> bindGeometric(Class<R> geometricObjectClass, String name, GeometricGRProvider<R> grProvider) {
 		return null;
 	}
 
-	public <R> ConnectorGRBinding<R> bindConnector(Class<R> connectorObjectClass, String name) {
+	@Override
+	public <R> GeometricGRBinding<R> bindGeometric(Class<R> geometricObjectClass, String name, ContainerGRBinding<?, ?> parentBinding,
+			GeometricGRProvider<R> grProvider) {
 		return null;
 	}
 
+	@Override
+	public <R> ConnectorGRBinding<R> bindConnector(Class<R> connectorObjectClass, String name, ConnectorGRProvider<R> grProvider) {
+		return null;
+	}
+
+	@Override
 	public <R> ConnectorGRBinding<R> bindConnector(Class<R> connectorObjectClass, String name, ShapeGRBinding<?> fromBinding,
-			ShapeGRBinding<?> toBinding) {
+			ShapeGRBinding<?> toBinding, ConnectorGRProvider<R> grProvider) {
+		return null;
+	}
+
+	@Override
+	public <R> ConnectorGRBinding<R> bindConnector(Class<R> connectorObjectClass, String name, ShapeGRBinding<?> fromBinding,
+			ShapeGRBinding<?> toBinding, ContainerGRBinding<?, ?> parentBinding, ConnectorGRProvider<R> grProvider) {
 		return null;
 	}
 

@@ -1,11 +1,14 @@
 package org.openflexo.fge.drawingeditor;
 
+import org.openflexo.fge.ConnectorGraphicalRepresentation;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.GRBinding.ConnectorGRBinding;
 import org.openflexo.fge.GRBinding.DrawingGRBinding;
 import org.openflexo.fge.GRBinding.ShapeGRBinding;
-import org.openflexo.fge.GRProvider;
+import org.openflexo.fge.GRProvider.ConnectorGRProvider;
+import org.openflexo.fge.GRProvider.DrawingGRProvider;
+import org.openflexo.fge.GRProvider.ShapeGRProvider;
 import org.openflexo.fge.GRStructureWalker;
 import org.openflexo.fge.GraphicalRepresentation.Parameters;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
@@ -21,11 +24,7 @@ public class EditedDrawing extends DrawingImpl<MyDrawing> {
 	@Override
 	public void init() {
 
-		final DrawingGRBinding<MyDrawing> drawingBinding = bindDrawing(MyDrawing.class, "drawing");
-		final ShapeGRBinding<MyShape> shapeBinding = bindShape(MyShape.class, "shape");
-		final ConnectorGRBinding<MyConnector> connectorBinding = bindConnector(MyConnector.class, "connector", shapeBinding, shapeBinding);
-
-		drawingBinding.setGRProvider(new GRProvider<MyDrawing, DrawingGraphicalRepresentation>() {
+		final DrawingGRBinding<MyDrawing> drawingBinding = bindDrawing(MyDrawing.class, "drawing", new DrawingGRProvider<MyDrawing>() {
 			@Override
 			public DrawingGraphicalRepresentation provideGR(MyDrawing drawable, FGEModelFactory factory) {
 				if (drawable.getGraphicalRepresentation() != null) {
@@ -38,6 +37,27 @@ public class EditedDrawing extends DrawingImpl<MyDrawing> {
 				}
 			}
 		});
+		final ShapeGRBinding<MyShape> shapeBinding = bindShape(MyShape.class, "shape", new ShapeGRProvider<MyShape>() {
+			@Override
+			public ShapeGraphicalRepresentation provideGR(MyShape drawable, FGEModelFactory factory) {
+				if (drawable.getGraphicalRepresentation() != null) {
+					drawable.getGraphicalRepresentation().setFactory(factory);
+					return drawable.getGraphicalRepresentation();
+				} else {
+					ShapeGraphicalRepresentation returned = factory.makeShapeGraphicalRepresentation(EditedDrawing.this);
+					drawable.setGraphicalRepresentation(returned);
+					return returned;
+				}
+			}
+		});
+		final ConnectorGRBinding<MyConnector> connectorBinding = bindConnector(MyConnector.class, "connector", shapeBinding, shapeBinding,
+				new ConnectorGRProvider<MyConnector>() {
+					@Override
+					public ConnectorGraphicalRepresentation provideGR(MyConnector drawable, FGEModelFactory factory) {
+						return null;
+					}
+				});
+
 		drawingBinding.addToWalkers(new GRStructureWalker<MyDrawing>() {
 
 			@Override
@@ -64,19 +84,6 @@ public class EditedDrawing extends DrawingImpl<MyDrawing> {
 				for (MyShape shape : myShape.getShapes()) {
 					drawShape(shapeBinding, shape, shapeBinding, myShape);
 					// drawShape(shape).as(shapeBinding).in(myShape).as(shapeBinding);
-				}
-			}
-		});
-		shapeBinding.setGRProvider(new GRProvider<MyShape, ShapeGraphicalRepresentation>() {
-			@Override
-			public ShapeGraphicalRepresentation provideGR(MyShape drawable, FGEModelFactory factory) {
-				if (drawable.getGraphicalRepresentation() != null) {
-					drawable.getGraphicalRepresentation().setFactory(factory);
-					return drawable.getGraphicalRepresentation();
-				} else {
-					ShapeGraphicalRepresentation returned = factory.makeShapeGraphicalRepresentation(EditedDrawing.this);
-					drawable.setGraphicalRepresentation(returned);
-					return returned;
 				}
 			}
 		});

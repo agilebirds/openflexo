@@ -44,15 +44,15 @@ public class DrawPolygonToolController extends DrawShapeToolController<FGEPolygo
 
 	private boolean isBuildingPoints;
 
-	public DrawPolygonToolController(DrawingController controller, DrawShapeAction control) {
+	public DrawPolygonToolController(DrawingController<?> controller, DrawShapeAction control) {
 		super(controller, control);
 	}
 
 	@Override
 	public FGEPolygon makeDefaultShape(MouseEvent e) {
 		Point pt = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), getController().getDrawingView());
-		FGEPoint newPoint = getController().getDrawingGraphicalRepresentation().convertRemoteViewCoordinatesToLocalNormalizedPoint(pt,
-				getController().getDrawingGraphicalRepresentation(), getController().getScale());
+		FGEPoint newPoint = getController().getDrawing().getRoot()
+				.convertRemoteViewCoordinatesToLocalNormalizedPoint(pt, getController().getDrawing().getRoot(), getController().getScale());
 		return new FGEPolygon(Filling.NOT_FILLED, newPoint, new FGEPoint(newPoint));
 	}
 

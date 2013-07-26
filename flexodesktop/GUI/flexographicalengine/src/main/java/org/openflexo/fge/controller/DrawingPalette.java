@@ -34,8 +34,8 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,16 +44,25 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 import org.openflexo.fge.Drawing;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
+import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.DrawingGraphicalRepresentation;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEUtils;
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.GRBinding.DrawingGRBinding;
+import org.openflexo.fge.GRBinding.ShapeGRBinding;
+import org.openflexo.fge.GRProvider;
+import org.openflexo.fge.GRStructureWalker;
+import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation.LocationConstraints;
 import org.openflexo.fge.controller.PaletteElement.PaletteElementTransferable;
 import org.openflexo.fge.controller.PaletteElement.TransferedPaletteElement;
 import org.openflexo.fge.geom.FGEPoint;
+import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.view.DrawingView;
 import org.openflexo.fge.view.FGEView;
+import org.openflexo.fge.view.PaletteElementView;
+import org.openflexo.fge.view.ShapeView;
 import org.openflexo.fge.view.listener.FocusRetriever;
 import org.openflexo.fib.utils.FIBIconLibrary;
 import org.openflexo.model.exceptions.ModelDefinitionException;
@@ -79,13 +88,13 @@ public class DrawingPalette {
 	public static final Cursor dropKO = ToolBox.getPLATFORM() == ToolBox.MACOS ? Toolkit.getDefaultToolkit().createCustomCursor(
 			DROP_KO_IMAGE, new Point(16, 16), "Drop KO") : DragSource.DefaultMoveNoDrop;
 
-	private DrawingController _controller;
+	private DrawingController<?> _controller;
 
-	private final PaletteDrawing _paletteDrawing;
+	private final PaletteDrawing paletteDrawing;
 	// This controller is the local controller for displaying the palette, NOT the controller
 	// Which this palette is associated to.
-	private DrawingController _paletteController;
-	protected Vector<PaletteElement> elements;
+	private DrawingController<DrawingPalette> paletteController;
+	protected List<PaletteElement> elements;
 
 	private DragSourceContext dragSourceContext;
 
@@ -107,8 +116,8 @@ public class DrawingPalette {
 		this.width = width;
 		this.height = height;
 		this.title = title;
-		elements = new Vector<PaletteElement>();
-		_paletteDrawing = new PaletteDrawing();
+		elements = new ArrayList<PaletteElement>();
+		paletteDrawing = new PaletteDrawing();
 		if (logger.isLoggable(Level.FINE)) {
 			logger.fine("Build palette " + title + " " + Integer.toHexString(hashCode()) + " of " + getClass().getName());
 		}
@@ -124,16 +133,20 @@ public class DrawingPalette {
 	}
 
 	public void delete() {
-		_paletteController.delete();
+		paletteController.delete();
 		for (PaletteElement element : elements) {
 			element.getGraphicalRepresentation().delete();
 		}
-		_paletteDrawing.getDrawingGraphicalRepresentation().delete();
+		paletteDrawing.gr.delete();
 		elements = null;
 	}
 
 	public String getTitle() {
 		return title;
+	}
+
+	public List<PaletteElement> getElements() {
+		return elements;
 	}
 
 	public void addElement(PaletteElement element) {
@@ -151,11 +164,11 @@ public class DrawingPalette {
 		elements.remove(element);
 	}
 
-	public DrawingView getPaletteView() {
-		if (_paletteController == null) {
+	public DrawingView<DrawingPalette> getPaletteView() {
+		if (paletteController == null) {
 			makePalettePanel();
 		}
-		return _paletteController.getDrawingView();
+		return paletteController.getDrawingView();
 	}
 
 	private JScrollPane scrollPane;
@@ -169,31 +182,72 @@ public class DrawingPalette {
 	}
 
 	public PaletteDrawing getPaletteDrawing() {
-		return _paletteDrawing;
+		return paletteDrawing;
 	}
 
 	protected void makePalettePanel() {
-		for (PaletteElement e : elements) {
+		/*for (PaletteElement e : elements) {
 			e.getGraphicalRepresentation().setValidated(true);
-		}
-		_paletteController = new DrawingController(_paletteDrawing, factory);
-		for (PaletteElement e : elements) {
+		}*/
+		paletteController = new DrawingController<DrawingPalette>(paletteDrawing, factory) {
+			@Override
+			public <O> ShapeView<O> makeShapeView(ShapeNode<O> shapeNode) {
+				if (shapeNode.getDrawable() instanceof PaletteElement) {
+					return (ShapeView<O>) new PaletteElementView((ShapeNode<PaletteElement>) shapeNode, paletteController);
+				}
+				return super.makeShapeView(shapeNode);
+			}
+		};
+		/*for (PaletteElement e : elements) {
 			e.getGraphicalRepresentation().notifyObjectHierarchyHasBeenUpdated();
-		}
+		}*/
 	}
 
-	public class PaletteDrawing implements Drawing<DrawingPalette> {
+	public class PaletteDrawing extends DrawingImpl<DrawingPalette> implements Drawing<DrawingPalette> {
 
 		private final DrawingGraphicalRepresentation gr;
 
 		private PaletteDrawing() {
+			super(DrawingPalette.this, factory);
 			gr = factory.makeDrawingGraphicalRepresentation(this, false);
 			gr.setWidth(width);
 			gr.setHeight(height);
 			gr.setDrawWorkingArea(true);
+			setEditable(false);
 		}
 
 		@Override
+		public void init() {
+
+			final DrawingGRBinding<DrawingPalette> paletteBinding = bindDrawing(DrawingPalette.class, "palette");
+			final ShapeGRBinding<PaletteElement> paletteElementBinding = bindShape(PaletteElement.class, "paletteElement");
+
+			paletteBinding.setGRProvider(new GRProvider<DrawingPalette, DrawingGraphicalRepresentation>() {
+				@Override
+				public DrawingGraphicalRepresentation provideGR(DrawingPalette drawable, FGEModelFactory factory) {
+					return gr;
+				}
+			});
+			paletteBinding.addToWalkers(new GRStructureWalker<DrawingPalette>() {
+
+				@Override
+				public void walk(DrawingPalette palette) {
+					for (PaletteElement element : palette.getElements()) {
+						drawShape(paletteElementBinding, element, palette);
+					}
+				}
+			});
+
+			paletteElementBinding.setGRProvider(new GRProvider<PaletteElement, ShapeGraphicalRepresentation>() {
+				@Override
+				public ShapeGraphicalRepresentation provideGR(PaletteElement drawable, FGEModelFactory factory) {
+					return drawable.getGraphicalRepresentation();
+				}
+			});
+
+		}
+
+		/*@Override
 		public List<?> getContainedObjects(Object aDrawable) {
 			if (aDrawable == getModel()) {
 				return elements;
@@ -236,7 +290,7 @@ public class DrawingPalette {
 		@Override
 		public boolean isEditable() {
 			return false;
-		}
+		}*/
 
 	}
 
@@ -251,7 +305,7 @@ public class DrawingPalette {
 		}
 	});*/
 
-	public PaletteDropListener buildPaletteDropListener(JComponent dropContainer, DrawingController controller) {
+	public PaletteDropListener buildPaletteDropListener(JComponent dropContainer, DrawingController<?> controller) {
 		return new PaletteDropListener(dropContainer, controller);
 	}
 
@@ -265,9 +319,9 @@ public class DrawingPalette {
 
 		private final int acceptableActions = DnDConstants.ACTION_COPY;
 		private final JComponent _dropContainer;
-		private final DrawingController _controller;
+		private final DrawingController<?> _controller;
 
-		public PaletteDropListener(JComponent dropContainer, DrawingController controller) {
+		public PaletteDropListener(JComponent dropContainer, DrawingController<?> controller) {
 			super();
 			_dropContainer = dropContainer;
 			_controller = controller;
@@ -326,7 +380,7 @@ public class DrawingPalette {
 				if (element == null) {
 					return false;
 				}
-				GraphicalRepresentation focused = getFocusedObject(e);
+				DrawingTreeNode<?, ?> focused = getFocusedObject(e);
 				if (focused == null) {
 					return false;
 				}
@@ -465,7 +519,7 @@ public class DrawingPalette {
 							e.rejectDrop();
 							return;
 						}
-						GraphicalRepresentation focused = getFocusedObject(e);
+						DrawingTreeNode<?, ?> focused = getFocusedObject(e);
 						if (focused == null) {
 							e.rejectDrop();
 							return;
@@ -476,10 +530,10 @@ public class DrawingPalette {
 							Point pt = e.getLocation();
 							FGEPoint modelLocation = new FGEPoint();
 							if (targetComponent instanceof FGEView) {
-								pt = FGEUtils.convertPoint(((FGEView) targetComponent).getGraphicalRepresentation(), pt, focused,
-										((FGEView) targetComponent).getScale());
-								modelLocation.x = pt.x / ((FGEView) targetComponent).getScale();
-								modelLocation.y = pt.y / ((FGEView) targetComponent).getScale();
+								pt = FGEUtils.convertPoint(((FGEView<?>) targetComponent).getNode(), pt, focused,
+										((FGEView<?>) targetComponent).getScale());
+								modelLocation.x = pt.x / ((FGEView<?>) targetComponent).getScale();
+								modelLocation.y = pt.y / ((FGEView<?>) targetComponent).getScale();
 								modelLocation.x -= ((TransferedPaletteElement) data).getOffset().x;
 								modelLocation.y -= ((TransferedPaletteElement) data).getOffset().y;
 							} else {
@@ -519,24 +573,24 @@ public class DrawingPalette {
 
 		private FocusRetriever getFocusRetriever() {
 			if (_dropContainer instanceof FGEView) {
-				return ((FGEView) _dropContainer).getDrawingView().getFocusRetriever();
+				return ((FGEView<?>) _dropContainer).getDrawingView().getFocusRetriever();
 			}
 			return null;
 		}
 
-		private FGEView getFGEView() {
+		private FGEView<?> getFGEView() {
 			if (_dropContainer instanceof FGEView) {
-				return (FGEView) _dropContainer;
+				return (FGEView<?>) _dropContainer;
 			}
 			return null;
 		}
 
-		public GraphicalRepresentation getFocusedObject(DropTargetDragEvent event) {
+		public DrawingTreeNode<?, ?> getFocusedObject(DropTargetDragEvent event) {
 			if (getFocusRetriever() != null) {
-				GraphicalRepresentation returned = getFocusRetriever().getFocusedObject(event);
+				DrawingTreeNode<?, ?> returned = getFocusRetriever().getFocusedObject(event);
 				if (returned == null) {
 					// Since we are in a FGEView, a null value indicates that we are on the Drawing view
-					return getFGEView().getGraphicalRepresentation().getDrawingGraphicalRepresentation();
+					return getFGEView().getDrawingView().getDrawing().getRoot();
 				}
 				return returned;
 			}
@@ -544,12 +598,12 @@ public class DrawingPalette {
 			return null;
 		}
 
-		public GraphicalRepresentation getFocusedObject(DropTargetDropEvent event) {
+		public DrawingTreeNode<?, ?> getFocusedObject(DropTargetDropEvent event) {
 			if (getFocusRetriever() != null) {
-				GraphicalRepresentation returned = getFocusRetriever().getFocusedObject(event);
+				DrawingTreeNode<?, ?> returned = getFocusRetriever().getFocusedObject(event);
 				if (returned == null) {
 					// Since we are in a FGEView, a null value indicates that we are on the Drawing view
-					return getFGEView().getGraphicalRepresentation().getDrawingGraphicalRepresentation();
+					return getFGEView().getDrawingView().getDrawing().getRoot();
 				}
 				return returned;
 			}
@@ -559,16 +613,16 @@ public class DrawingPalette {
 
 	}
 
-	public DrawingController getController() {
+	public DrawingController<?> getController() {
 		return _controller;
 	}
 
-	protected void registerController(DrawingController controller) {
+	protected void registerController(DrawingController<?> controller) {
 		_controller = controller;
 	}
 
 	public void updatePalette() {
-		_paletteController.rebuildDrawingView();
+		paletteController.rebuildDrawingView();
 	}
 
 	public DragSourceContext getDragSourceContext() {

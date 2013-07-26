@@ -27,14 +27,12 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.logging.Logger;
 
-import org.openflexo.fge.GraphicalRepresentation;
+import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.DrawingPalette.PaletteDrawing;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.impl.ShapeGraphicalRepresentationImpl;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
-import org.openflexo.fge.view.PaletteElementView;
-import org.openflexo.fge.view.ShapeView;
 
 public interface PaletteElement extends Serializable {
 
@@ -42,9 +40,9 @@ public interface PaletteElement extends Serializable {
 
 	public PaletteElementGraphicalRepresentation getGraphicalRepresentation();
 
-	public boolean acceptDragging(GraphicalRepresentation target);
+	public boolean acceptDragging(DrawingTreeNode<?, ?> target);
 
-	public boolean elementDragged(GraphicalRepresentation target, FGEPoint dropLocation);
+	public boolean elementDragged(DrawingTreeNode<?, ?> target, FGEPoint dropLocation);
 
 	public DrawingPalette getPalette();
 
@@ -79,10 +77,10 @@ public interface PaletteElement extends Serializable {
 			super.delete();
 		}
 
-		@Override
+		/*@Override
 		public ShapeView makeShapeView(DrawingController controller) {
 			return new PaletteElementView(this, controller);
-		}
+		}*/
 
 		@Override
 		public final void setIsFocusable(boolean isFocusable) {

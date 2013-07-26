@@ -29,7 +29,14 @@ import java.util.Observer;
 
 import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.fge.GRBinding.ConnectorGRBinding;
+import org.openflexo.fge.GRBinding.ContainerGRBinding;
+import org.openflexo.fge.GRBinding.DrawingGRBinding;
+import org.openflexo.fge.GRBinding.GeometricGRBinding;
 import org.openflexo.fge.GRBinding.ShapeGRBinding;
+import org.openflexo.fge.GRProvider.ConnectorGRProvider;
+import org.openflexo.fge.GRProvider.DrawingGRProvider;
+import org.openflexo.fge.GRProvider.GeometricGRProvider;
+import org.openflexo.fge.GRProvider.ShapeGRProvider;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
 import org.openflexo.fge.connectors.ConnectorSpecification;
@@ -563,16 +570,33 @@ public interface Drawing<M> {
 
 	}
 
-	// public DrawingGraphicalRepresentation getDrawingGraphicalRepresentation();
-
 	public boolean isEditable();
 
-	// TODO: rename as getDrawable()
 	public M getModel();
 
 	public FGEModelFactory getFactory();
 
 	public RootNode<M> getRoot();
+
+	public DrawingGRBinding<M> bindDrawing(Class<M> drawingClass, String name, DrawingGRProvider<M> grProvider);
+
+	public <R> ShapeGRBinding<R> bindShape(Class<R> shapeObjectClass, String name, ShapeGRProvider<R> grProvider);
+
+	public <R> ShapeGRBinding<R> bindShape(Class<R> shapeObjectClass, String name, ContainerGRBinding<?, ?> parentBinding,
+			ShapeGRProvider<R> grProvider);
+
+	public <R> GeometricGRBinding<R> bindGeometric(Class<R> geometricObjectClass, String name, GeometricGRProvider<R> grProvider);
+
+	public <R> GeometricGRBinding<R> bindGeometric(Class<R> geometricObjectClass, String name, ContainerGRBinding<?, ?> parentBinding,
+			GeometricGRProvider<R> grProvider);
+
+	public <R> ConnectorGRBinding<R> bindConnector(Class<R> connectorObjectClass, String name, ConnectorGRProvider<R> grProvider);
+
+	public <R> ConnectorGRBinding<R> bindConnector(Class<R> connectorObjectClass, String name, ShapeGRBinding<?> fromBinding,
+			ShapeGRBinding<?> toBinding, ConnectorGRProvider<R> grProvider);
+
+	public <R> ConnectorGRBinding<R> bindConnector(Class<R> connectorObjectClass, String name, ShapeGRBinding<?> fromBinding,
+			ShapeGRBinding<?> toBinding, ContainerGRBinding<?, ?> parentBinding, ConnectorGRProvider<R> grProvider);
 
 	public <O> ShapeNode<O> drawShape(ContainerNode<?, ?> parent, ShapeGRBinding<O> binding, O representable);
 
