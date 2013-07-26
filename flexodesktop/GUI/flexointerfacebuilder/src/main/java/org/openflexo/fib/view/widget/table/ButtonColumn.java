@@ -73,7 +73,7 @@ public class ButtonColumn<T extends Object> extends AbstractColumn<T> implements
 
 	@Override
 	public Class<T> getValueClass() {
-		return TypeUtils.getBaseClass(getColumnModel().getDataClass());
+		return (Class<T>) TypeUtils.getBaseClass(getColumnModel().getDataClass());
 	}
 
 	@Override
