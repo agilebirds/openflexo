@@ -19,7 +19,9 @@
  */
 package org.openflexo.foundation.view.diagram.viewpoint.action;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -29,6 +31,8 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
@@ -39,9 +43,11 @@ import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
 import org.openflexo.foundation.viewpoint.AddIndividual;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.URIParameter;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
@@ -79,7 +85,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 	}
 
 	public static enum NewEditionPatternChoices {
-		MAP_SINGLE_INDIVIDUAL, BLANK_EDITION_PATTERN
+		MAP_SINGLE_INDIVIDUAL, MAP_SINGLE_EDITION_PATTERN, BLANK_EDITION_PATTERN
 	}
 
 	public NewEditionPatternChoices patternChoice = NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL;
@@ -87,12 +93,16 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 	private String editionPatternName;
 	private IFlexoOntologyClass concept;
 	private String individualPatternRoleName;
+	private String virtualModelPatternRoleName;
+	private List<VirtualModelModelSlot<?, ?>> virtualModelModelSlots = null;
+	private List<FlexoOntologyModelSlot<?, ?>> flexoOntologyModelSlots = null;
 
 	public boolean isTopLevel = true;
 	public EditionPattern containerEditionPattern;
 	private String dropSchemeName;
 
 	private EditionPattern newEditionPattern;
+	private EditionPattern virtualModelConcept;
 	private Hashtable<ExampleDrawingObjectEntry, GraphicalElementPatternRole> newGraphicalElementPatternRoles;
 
 	// public Vector<PropertyEntry> propertyEntries = new Vector<PropertyEntry>();
@@ -116,6 +126,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 						getFocusedObject().getViewPoint(), getFocusedObject().getVirtualModel().getResource());
 				switch (patternChoice) {
 				case MAP_SINGLE_INDIVIDUAL:
+				case MAP_SINGLE_EDITION_PATTERN:
 				case BLANK_EDITION_PATTERN:
 
 					// Create new edition pattern
@@ -128,13 +139,28 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					// Find best URI base candidate
 					// PropertyEntry mainPropertyDescriptor = selectBestEntryForURIBaseName();
 
-					// Create individual pattern role
-					IndividualPatternRole individualPatternRole = getModelSlot().makeIndividualPatternRole(getConcept());
+					// Create pattern role, if it is an ontology then we create an individual, otherwise if it is a virtual model we create
+					// an edition pattern instance
+					IndividualPatternRole<?> individualPatternRole = null;
+					EditionPatternInstancePatternRole editionPatternPatternRole = null;
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
-						individualPatternRole.setPatternRoleName(getIndividualPatternRoleName());
-						individualPatternRole.setOntologicType(getConcept());
-						newEditionPattern.addToPatternRoles(individualPatternRole);
-						newEditionPattern.setPrimaryConceptRole(individualPatternRole);
+						if (isFlexoOntologyModelSlot()) {
+							FlexoOntologyModelSlot<?, ?> flexoOntologyModelSlot = (FlexoOntologyModelSlot<?, ?>) getModelSlot();
+							individualPatternRole = flexoOntologyModelSlot.makeIndividualPatternRole(getConcept());
+							individualPatternRole.setPatternRoleName(getIndividualPatternRoleName());
+							individualPatternRole.setOntologicType(getConcept());
+							newEditionPattern.addToPatternRoles(individualPatternRole);
+							newEditionPattern.setPrimaryConceptRole(individualPatternRole);
+						}
+					}
+					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_EDITION_PATTERN) {
+						if (isVirtualModelModelSlot()) {
+							VirtualModelModelSlot<?, ?> virtualModelModelSlot = (VirtualModelModelSlot<?, ?>) getModelSlot();
+							editionPatternPatternRole = virtualModelModelSlot
+									.makeEditionPatternInstancePatternRole(getVirtualModelConcept());
+							editionPatternPatternRole.setPatternRoleName(getVirtualModelPatternRoleName());
+							newEditionPattern.addToPatternRoles(editionPatternPatternRole);
+						}
 					}
 
 					// Create graphical elements pattern role
@@ -211,96 +237,113 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 					// Parameters
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
-						// Vector<PropertyEntry> candidates = new Vector<PropertyEntry>();
-						/*for (PropertyEntry e : propertyEntries) {
-							if (e != null && e.selectEntry) {
-								EditionSchemeParameter newParameter = null;
-								if (e.property instanceof IFlexoOntologyDataProperty) {
-									switch (((IFlexoOntologyDataProperty) e.property).getRange().getBuiltInDataType()) {
-									case Boolean:
-										newParameter = new CheckboxParameter(builder);
-										newParameter.setName(e.property.getName());
-										newParameter.setLabel(e.label);
-										break;
-									case Byte:
-									case Integer:
-									case Long:
-									case Short:
-										newParameter = new IntegerParameter(builder);
-										newParameter.setName(e.property.getName());
-										newParameter.setLabel(e.label);
-										break;
-									case Double:
-									case Float:
-										newParameter = new FloatParameter(builder);
-										newParameter.setName(e.property.getName());
-										newParameter.setLabel(e.label);
-										break;
-									case String:
-										newParameter = new TextFieldParameter(builder);
-										newParameter.setName(e.property.getName());
-										newParameter.setLabel(e.label);
-										break;
-									default:
-										break;
+						if (isFlexoOntologyModelSlot()) {
+							FlexoOntologyModelSlot<?, ?> flexoOntologyModelSlot = (FlexoOntologyModelSlot<?, ?>) getModelSlot();
+							// Vector<PropertyEntry> candidates = new Vector<PropertyEntry>();
+							/*for (PropertyEntry e : propertyEntries) {
+								if (e != null && e.selectEntry) {
+									EditionSchemeParameter newParameter = null;
+									if (e.property instanceof IFlexoOntologyDataProperty) {
+										switch (((IFlexoOntologyDataProperty) e.property).getRange().getBuiltInDataType()) {
+										case Boolean:
+											newParameter = new CheckboxParameter(builder);
+											newParameter.setName(e.property.getName());
+											newParameter.setLabel(e.label);
+											break;
+										case Byte:
+										case Integer:
+										case Long:
+										case Short:
+											newParameter = new IntegerParameter(builder);
+											newParameter.setName(e.property.getName());
+											newParameter.setLabel(e.label);
+											break;
+										case Double:
+										case Float:
+											newParameter = new FloatParameter(builder);
+											newParameter.setName(e.property.getName());
+											newParameter.setLabel(e.label);
+											break;
+										case String:
+											newParameter = new TextFieldParameter(builder);
+											newParameter.setName(e.property.getName());
+											newParameter.setLabel(e.label);
+											break;
+										default:
+											break;
+										}
+									} else if (e.property instanceof IFlexoOntologyObjectProperty) {
+										IFlexoOntologyConcept range = ((IFlexoOntologyObjectProperty) e.property).getRange();
+										if (range instanceof IFlexoOntologyClass) {
+											newParameter = new IndividualParameter(builder);
+											newParameter.setName(e.property.getName());
+											newParameter.setLabel(e.label);
+											((IndividualParameter) newParameter).setConcept((IFlexoOntologyClass) range);
+										}
 									}
-								} else if (e.property instanceof IFlexoOntologyObjectProperty) {
-									IFlexoOntologyConcept range = ((IFlexoOntologyObjectProperty) e.property).getRange();
-									if (range instanceof IFlexoOntologyClass) {
-										newParameter = new IndividualParameter(builder);
-										newParameter.setName(e.property.getName());
-										newParameter.setLabel(e.label);
-										((IndividualParameter) newParameter).setConcept((IFlexoOntologyClass) range);
+									if (newParameter != null) {
+										newDropScheme.addToParameters(newParameter);
 									}
 								}
-								if (newParameter != null) {
-									newDropScheme.addToParameters(newParameter);
-								}
-							}
-						}*/
+							}*/
 
-						URIParameter uriParameter = new URIParameter(builder);
-						uriParameter.setName("uri");
-						uriParameter.setLabel("uri");
-						/*if (mainPropertyDescriptor != null) {
-							uriParameter.setBaseURI(new DataBinding<String>(mainPropertyDescriptor.property.getName()));
-						}*/
-						newDropScheme.addToParameters(uriParameter);
+							URIParameter uriParameter = new URIParameter(builder);
+							uriParameter.setName("uri");
+							uriParameter.setLabel("uri");
+							/*if (mainPropertyDescriptor != null) {
+								uriParameter.setBaseURI(new DataBinding<String>(mainPropertyDescriptor.property.getName()));
+							}*/
+							newDropScheme.addToParameters(uriParameter);
 
-						// Declare pattern role
-						/*for (IndividualPatternRole r : otherRoles) {
-							DeclarePatternRole action = new DeclarePatternRole(builder);
-							action.setAssignation(new DataBinding<Object>(r.getPatternRoleName()));
-							action.setObject(new DataBinding<Object>("parameters." + r.getName()));
-							newDropScheme.addToActions(action);
-						}*/
+							// Declare pattern role
+							/*for (IndividualPatternRole r : otherRoles) {
+								DeclarePatternRole action = new DeclarePatternRole(builder);
+								action.setAssignation(new DataBinding<Object>(r.getPatternRoleName()));
+								action.setObject(new DataBinding<Object>("parameters." + r.getName()));
+								newDropScheme.addToActions(action);
+							}*/
 
-						// Add individual action
-						AddIndividual newAddIndividual = getModelSlot().makeAddIndividualAction(individualPatternRole, newDropScheme);
+							// Add individual action
+							AddIndividual<?, ?, ?> newAddIndividual = flexoOntologyModelSlot.makeAddIndividualAction(individualPatternRole,
+									newDropScheme);
 
-						/*AddIndividual newAddIndividual = new AddIndividual(builder);
-						newAddIndividual.setAssignation(new ViewPointDataBinding(individualPatternRole.getPatternRoleName()));
-						newAddIndividual.setIndividualName(new ViewPointDataBinding("parameters.uri"));
-						for (PropertyEntry e : propertyEntries) {
-							if (e.selectEntry) {
-								if (e.property instanceof IFlexoOntologyObjectProperty) {
-									IFlexoOntologyConcept range = ((IFlexoOntologyObjectProperty) e.property).getRange();
-									if (range instanceof IFlexoOntologyClass) {
-										ObjectPropertyAssertion propertyAssertion = new ObjectPropertyAssertion(builder);
+							/*AddIndividual newAddIndividual = new AddIndividual(builder);
+							newAddIndividual.setAssignation(new ViewPointDataBinding(individualPatternRole.getPatternRoleName()));
+							newAddIndividual.setIndividualName(new ViewPointDataBinding("parameters.uri"));
+							for (PropertyEntry e : propertyEntries) {
+								if (e.selectEntry) {
+									if (e.property instanceof IFlexoOntologyObjectProperty) {
+										IFlexoOntologyConcept range = ((IFlexoOntologyObjectProperty) e.property).getRange();
+										if (range instanceof IFlexoOntologyClass) {
+											ObjectPropertyAssertion propertyAssertion = new ObjectPropertyAssertion(builder);
+											propertyAssertion.setOntologyProperty(e.property);
+											propertyAssertion.setObject(new ViewPointDataBinding("parameters." + e.property.getName()));
+											newAddIndividual.addToObjectAssertions(propertyAssertion);
+										}
+									} else if (e.property instanceof IFlexoOntologyDataProperty) {
+										DataPropertyAssertion propertyAssertion = new DataPropertyAssertion(builder);
 										propertyAssertion.setOntologyProperty(e.property);
-										propertyAssertion.setObject(new ViewPointDataBinding("parameters." + e.property.getName()));
-										newAddIndividual.addToObjectAssertions(propertyAssertion);
+										propertyAssertion.setValue(new ViewPointDataBinding("parameters." + e.property.getName()));
+										newAddIndividual.addToDataAssertions(propertyAssertion);
 									}
-								} else if (e.property instanceof IFlexoOntologyDataProperty) {
-									DataPropertyAssertion propertyAssertion = new DataPropertyAssertion(builder);
-									propertyAssertion.setOntologyProperty(e.property);
-									propertyAssertion.setValue(new ViewPointDataBinding("parameters." + e.property.getName()));
-									newAddIndividual.addToDataAssertions(propertyAssertion);
 								}
-							}
-						}*/
-						newDropScheme.addToActions(newAddIndividual);
+							}*/
+							newDropScheme.addToActions(newAddIndividual);
+						}
 					}
+
+					// Parameters for edition patterns creation action
+					/*if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_EDITION_PATTERN) {
+						if (isVirtualModelModelSlot()) {
+							VirtualModelModelSlot<?, ?> virtualModelModelSlot = (VirtualModelModelSlot<?, ?>) getModelSlot();
+
+							// Add individual action
+							EditionAction newAddEditionPattern = virtualModelModelSlot.makeAddEditionPatternInstanceEditionAction(
+									editionPatternPatternRole, newDropScheme);
+
+							newDropScheme.addToActions(newAddEditionPattern);
+						}
+					}*/
 
 					// Add shape/connector actions
 					boolean mainPatternRole = true;
@@ -398,6 +441,10 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 				return StringUtils.isNotEmpty(getEditionPatternName()) && concept != null
 						&& StringUtils.isNotEmpty(getIndividualPatternRoleName()) && getSelectedEntriesCount() > 0
 						&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
+			case MAP_SINGLE_EDITION_PATTERN:
+				return StringUtils.isNotEmpty(getEditionPatternName()) && virtualModelConcept != null
+						&& StringUtils.isNotEmpty(getVirtualModelPatternRoleName()) && getSelectedEntriesCount() > 0
+						&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
 			case BLANK_EDITION_PATTERN:
 				return StringUtils.isNotEmpty(getEditionPatternName()) && getSelectedEntriesCount() > 0
 						&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
@@ -441,9 +488,24 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 		}*/
 	}
 
+	public EditionPattern getVirtualModelConcept() {
+		return virtualModelConcept;
+	}
+
+	public void setVirtualModelConcept(EditionPattern virtualModelConcept) {
+		this.virtualModelConcept = virtualModelConcept;
+	}
+
 	public String getEditionPatternName() {
-		if (StringUtils.isEmpty(editionPatternName) && concept != null) {
-			return concept.getName();
+		if (isVirtualModelModelSlot()) {
+			if (StringUtils.isEmpty(editionPatternName) && virtualModelConcept != null) {
+				return virtualModelConcept.getName();
+			}
+		}
+		if (isFlexoOntologyModelSlot()) {
+			if (StringUtils.isEmpty(editionPatternName) && concept != null) {
+				return concept.getName();
+			}
 		}
 		return editionPatternName;
 	}
@@ -461,6 +523,17 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 	public void setIndividualPatternRoleName(String individualPatternRoleName) {
 		this.individualPatternRoleName = individualPatternRoleName;
+	}
+
+	public String getVirtualModelPatternRoleName() {
+		if (StringUtils.isEmpty(virtualModelPatternRoleName) && virtualModelConcept != null) {
+			return JavaUtils.getVariableName(virtualModelConcept.getName());
+		}
+		return virtualModelPatternRoleName;
+	}
+
+	public void setVirtualModelPatternRoleName(String virtualModelPatternRoleName) {
+		this.virtualModelPatternRoleName = virtualModelPatternRoleName;
 	}
 
 	/*public String getShapePatternRoleName() {
@@ -550,5 +623,66 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 		}
 		return super.getEditionPattern();
 	};
+
+	public boolean isFlexoOntologyModelSlot() {
+		if (getModelSlot() instanceof FlexoOntologyModelSlot) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isVirtualModelModelSlot() {
+		if (getModelSlot() instanceof VirtualModelModelSlot) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Return a virtual model adressed by a model slot
+	 * 
+	 * @return
+	 */
+	public VirtualModel getAdressedVirtualModel() {
+		if (isVirtualModelModelSlot()) {
+			VirtualModelModelSlot virtualModelModelSlot = (VirtualModelModelSlot) getModelSlot();
+			return virtualModelModelSlot.getAddressedVirtualModel();
+		}
+		return null;
+	}
+
+	public List<VirtualModelModelSlot<?, ?>> getVirtualModelModelSlots() {
+		if (getModelSlot() != null) {
+			if (virtualModelModelSlots == null) {
+				virtualModelModelSlots = new ArrayList<VirtualModelModelSlot<?, ?>>();
+			}
+			if (!virtualModelModelSlots.isEmpty()) {
+				virtualModelModelSlots.clear();
+			}
+			for (ModelSlot<?, ?> modelSlot : getModelSlot().getVirtualModel().getModelSlots()) {
+				if (modelSlot instanceof VirtualModelModelSlot) {
+					virtualModelModelSlots.add((VirtualModelModelSlot<?, ?>) modelSlot);
+				}
+			}
+		}
+		return virtualModelModelSlots;
+	}
+
+	public List<FlexoOntologyModelSlot<?, ?>> getFlexoOntologyModelSlots() {
+		if (getModelSlot() != null) {
+			if (flexoOntologyModelSlots == null) {
+				flexoOntologyModelSlots = new ArrayList<FlexoOntologyModelSlot<?, ?>>();
+			}
+			if (!flexoOntologyModelSlots.isEmpty()) {
+				flexoOntologyModelSlots.clear();
+			}
+			for (ModelSlot<?, ?> modelSlot : getModelSlot().getVirtualModel().getModelSlots()) {
+				if (modelSlot instanceof FlexoOntologyModelSlot) {
+					flexoOntologyModelSlots.add((FlexoOntologyModelSlot<?, ?>) modelSlot);
+				}
+			}
+		}
+		return flexoOntologyModelSlots;
+	}
 
 }
