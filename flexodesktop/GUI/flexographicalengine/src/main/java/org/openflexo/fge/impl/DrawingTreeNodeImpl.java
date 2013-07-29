@@ -73,9 +73,11 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 
 		hash.put(drawable, this);
 
-		parentNode.addChild(this);
+		// parentNode.addChild(this);
 
 		graphicalRepresentation = grBinding.getGRProvider().provideGR(drawable, drawing.getFactory());
+
+		System.out.println("Hop");
 
 		/*if (aParentDrawable == null) { // This is the root node
 			graphicalRepresentation = (GraphicalRepresentation) getDrawingGraphicalRepresentation();

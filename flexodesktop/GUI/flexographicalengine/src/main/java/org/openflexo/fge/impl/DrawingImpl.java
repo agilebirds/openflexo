@@ -71,6 +71,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		this.model = model;
 		this.factory = factory;
 		_hashMap = new Hashtable<GRBinding<?, ?>, Hashtable<Object, DrawingTreeNode<?, ?>>>();
+		init();
 	}
 
 	public abstract void init();
@@ -85,6 +86,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		return editable;
 	}
 
+	@Override
 	public void setEditable(boolean editable) {
 		this.editable = editable;
 
@@ -125,46 +127,53 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 
 	@Override
 	public DrawingGRBinding<M> bindDrawing(Class<M> drawingClass, String name, DrawingGRProvider<M> grProvider) {
-		return drawingBinding = new DrawingGRBinding<M>(grProvider);
+		return drawingBinding = new DrawingGRBinding<M>(name, grProvider);
 	}
 
 	@Override
 	public <R> ShapeGRBinding<R> bindShape(Class<R> shapeObjectClass, String name, ShapeGRProvider<R> grProvider) {
-		return null;
+		ShapeGRBinding<R> returned = new ShapeGRBinding<R>(name, grProvider);
+		return returned;
 	}
 
 	@Override
 	public <R> ShapeGRBinding<R> bindShape(Class<R> shapeObjectClass, String name, ContainerGRBinding<?, ?> parentBinding,
 			ShapeGRProvider<R> grProvider) {
-		return null;
+		ShapeGRBinding<R> returned = new ShapeGRBinding<R>(name, grProvider);
+		return returned;
 	}
 
 	@Override
 	public <R> GeometricGRBinding<R> bindGeometric(Class<R> geometricObjectClass, String name, GeometricGRProvider<R> grProvider) {
-		return null;
+		GeometricGRBinding<R> returned = new GeometricGRBinding<R>(name, grProvider);
+		return returned;
 	}
 
 	@Override
 	public <R> GeometricGRBinding<R> bindGeometric(Class<R> geometricObjectClass, String name, ContainerGRBinding<?, ?> parentBinding,
 			GeometricGRProvider<R> grProvider) {
-		return null;
+		GeometricGRBinding<R> returned = new GeometricGRBinding<R>(name, grProvider);
+		return returned;
 	}
 
 	@Override
 	public <R> ConnectorGRBinding<R> bindConnector(Class<R> connectorObjectClass, String name, ConnectorGRProvider<R> grProvider) {
-		return null;
+		ConnectorGRBinding<R> returned = new ConnectorGRBinding<R>(name, grProvider);
+		return returned;
 	}
 
 	@Override
 	public <R> ConnectorGRBinding<R> bindConnector(Class<R> connectorObjectClass, String name, ShapeGRBinding<?> fromBinding,
 			ShapeGRBinding<?> toBinding, ConnectorGRProvider<R> grProvider) {
-		return null;
+		ConnectorGRBinding<R> returned = new ConnectorGRBinding<R>(name, grProvider);
+		return returned;
 	}
 
 	@Override
 	public <R> ConnectorGRBinding<R> bindConnector(Class<R> connectorObjectClass, String name, ShapeGRBinding<?> fromBinding,
 			ShapeGRBinding<?> toBinding, ContainerGRBinding<?, ?> parentBinding, ConnectorGRProvider<R> grProvider) {
-		return null;
+		ConnectorGRBinding<R> returned = new ConnectorGRBinding<R>(name, grProvider);
+		return returned;
 	}
 
 	protected <O> DrawingTreeNode<O, ?> getDrawingTreeNode(O representable) {

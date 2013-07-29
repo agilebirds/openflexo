@@ -31,7 +31,13 @@ public class RootNodeImpl<M> extends ContainerNodeImpl<M, DrawingGraphicalRepres
 		super(drawing, drawable, grBinding, null);
 		graphics = new FGEDrawingGraphics(this);
 		decorationGraphics = new FGEDrawingDecorationGraphics(this);
-		bgStyle = drawing.getFactory().makeColoredBackground(getGraphicalRepresentation().getBackgroundColor());
+	}
+
+	private BackgroundStyle getBGStyle() {
+		if (bgStyle == null && getGraphicalRepresentation() != null) {
+			bgStyle = getFactory().makeColoredBackground(getGraphicalRepresentation().getBackgroundColor());
+		}
+		return bgStyle;
 	}
 
 	@Override
@@ -102,15 +108,15 @@ public class RootNodeImpl<M> extends ContainerNodeImpl<M, DrawingGraphicalRepres
 
 		super.paint(g, controller);
 
-		if (!(bgStyle instanceof ColorBackgroundStyle)
-				|| !((ColorBackgroundStyle) bgStyle).getColor().equals(getGraphicalRepresentation().getBackgroundColor())) {
+		if (!(getBGStyle() instanceof ColorBackgroundStyle)
+				|| !((ColorBackgroundStyle) getBGStyle()).getColor().equals(getGraphicalRepresentation().getBackgroundColor())) {
 			bgStyle = getFactory().makeColoredBackground(getGraphicalRepresentation().getBackgroundColor());
 		}
 
 		ForegroundStyle fgStyle = getFactory().makeForegroundStyle(Color.DARK_GRAY);
 
 		graphics.setDefaultForeground(fgStyle);
-		graphics.setDefaultBackground(bgStyle);
+		graphics.setDefaultBackground(getBGStyle());
 		if (getGraphicalRepresentation().getDrawWorkingArea()) {
 			getGraphicalRepresentation().getWorkingArea().paint(graphics);
 		}

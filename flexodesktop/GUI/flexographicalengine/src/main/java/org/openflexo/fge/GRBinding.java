@@ -12,10 +12,12 @@ import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 
 public abstract class GRBinding<O, GR extends GraphicalRepresentation> {
 
+	private String name;
 	private GRProvider<O, GR> grProvider;
 	private List<GRStructureWalker<O>> walkers;
 
-	protected GRBinding(GRProvider<O, GR> grProvider) {
+	protected GRBinding(String name, GRProvider<O, GR> grProvider) {
+		this.name = name;
 		this.grProvider = grProvider;
 		walkers = new ArrayList<GRStructureWalker<O>>();
 	}
@@ -37,38 +39,38 @@ public abstract class GRBinding<O, GR extends GraphicalRepresentation> {
 
 	public static abstract class ContainerGRBinding<O, GR extends ContainerGraphicalRepresentation> extends GRBinding<O, GR> {
 
-		public ContainerGRBinding(ContainerGRProvider<O, GR> grProvider) {
-			super(grProvider);
+		public ContainerGRBinding(String name, ContainerGRProvider<O, GR> grProvider) {
+			super(name, grProvider);
 		}
 	}
 
 	public static class DrawingGRBinding<M> extends ContainerGRBinding<M, DrawingGraphicalRepresentation> {
 
-		public DrawingGRBinding(DrawingGRProvider<M> grProvider) {
-			super(grProvider);
+		public DrawingGRBinding(String name, DrawingGRProvider<M> grProvider) {
+			super(name, grProvider);
 		}
 
 	}
 
 	public static class ShapeGRBinding<O> extends ContainerGRBinding<O, ShapeGraphicalRepresentation> {
 
-		public ShapeGRBinding(ShapeGRProvider<O> grProvider) {
-			super(grProvider);
+		public ShapeGRBinding(String name, ShapeGRProvider<O> grProvider) {
+			super(name, grProvider);
 		}
 
 	}
 
 	public static class ConnectorGRBinding<O> extends GRBinding<O, ConnectorGraphicalRepresentation> {
 
-		public ConnectorGRBinding(ConnectorGRProvider<O> grProvider) {
-			super(grProvider);
+		public ConnectorGRBinding(String name, ConnectorGRProvider<O> grProvider) {
+			super(name, grProvider);
 		}
 	}
 
 	public static class GeometricGRBinding<O> extends GRBinding<O, GeometricGraphicalRepresentation> {
 
-		public GeometricGRBinding(GeometricGRProvider<O> grProvider) {
-			super(grProvider);
+		public GeometricGRBinding(String name, GeometricGRProvider<O> grProvider) {
+			super(name, grProvider);
 		}
 	}
 
