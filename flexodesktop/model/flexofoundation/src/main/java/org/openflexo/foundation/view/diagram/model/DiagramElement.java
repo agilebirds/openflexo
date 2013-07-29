@@ -54,6 +54,7 @@ import org.openflexo.foundation.view.diagram.model.dm.ShapeRemoved;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementSpecification;
+import org.openflexo.foundation.view.diagram.viewpoint.action.GRTemplate;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.localization.FlexoLocalization;
@@ -62,8 +63,8 @@ import org.openflexo.toolbox.HasPropertyChangeSupport;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
-public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> extends VirtualModelInstanceObject implements Bindable,
-		PropertyChangeListener, Observer {
+public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> extends VirtualModelInstanceObject implements
+		GRTemplate, Bindable, PropertyChangeListener, Observer {
 
 	private static final Logger logger = Logger.getLogger(DiagramElement.class.getPackage().getName());
 
@@ -101,6 +102,7 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> exte
 		return diagram;
 	}
 
+	@Override
 	public DiagramSpecification getDiagramSpecification() {
 		return getDiagram().getDiagramSpecification();
 	}
@@ -307,6 +309,7 @@ public abstract class DiagramElement<GR extends GraphicalRepresentation<?>> exte
 		super.delete();
 	}
 
+	@Override
 	public GR getGraphicalRepresentation() {
 		return graphicalRepresentation;
 	}
