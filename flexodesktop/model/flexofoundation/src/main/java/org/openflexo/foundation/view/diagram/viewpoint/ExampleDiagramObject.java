@@ -27,6 +27,7 @@ import org.openflexo.antar.binding.Bindable;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
+import org.openflexo.foundation.view.diagram.viewpoint.action.GRTemplate;
 import org.openflexo.foundation.viewpoint.NamedViewPointObject;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramConnectorInserted;
@@ -34,7 +35,7 @@ import org.openflexo.foundation.viewpoint.dm.ExampleDiagramConnectorRemoved;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramShapeInserted;
 import org.openflexo.foundation.viewpoint.dm.ExampleDiagramShapeRemoved;
 
-public abstract class ExampleDiagramObject extends NamedViewPointObject implements Bindable {
+public abstract class ExampleDiagramObject extends NamedViewPointObject implements Bindable, GRTemplate {
 
 	private static final Logger logger = Logger.getLogger(ExampleDiagramObject.class.getPackage().getName());
 
@@ -147,6 +148,7 @@ public abstract class ExampleDiagramObject extends NamedViewPointObject implemen
 		}
 	}
 
+	@Override
 	public GraphicalRepresentation<?> getGraphicalRepresentation() {
 		return _graphicalRepresentation;
 	}
@@ -175,6 +177,7 @@ public abstract class ExampleDiagramObject extends NamedViewPointObject implemen
 		return ancestors;
 	}
 
+	@Override
 	public Vector<ExampleDiagramObject> getDescendants() {
 		if (descendants == null) {
 			descendants = new Vector<ExampleDiagramObject>();
