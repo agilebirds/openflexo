@@ -24,8 +24,10 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
@@ -33,8 +35,18 @@ import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 
-public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<A, T1>, T1 extends ExampleDiagramObject> extends
-		FlexoAction<A, T1, ExampleDiagramObject> {
+/**
+ * This abstract class is an action that allows to create an edition pattern from a graphical representation(for instance a shape or
+ * connector)
+ * 
+ * @author Sylvain, Vincent
+ * 
+ * @param <A>
+ * @param <T1>
+ *            is the graphical repesentation
+ */
+public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<A, T1, T2>, T1 extends FlexoObject & GRTemplate, T2 extends FlexoObject>
+		extends FlexoAction<A, T1, T2> {
 
 	private static final Logger logger = Logger.getLogger(DeclareInEditionPattern.class.getPackage().getName());
 
@@ -42,17 +54,26 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 
 	private TypeAwareModelSlot<?, ?> modelSlot;
 
-	DeclareInEditionPattern(FlexoActionType<A, T1, ExampleDiagramObject> actionType, T1 focusedObject,
-			Vector<ExampleDiagramObject> globalSelection, FlexoEditor editor) {
+	/**
+	 * Constructor for this class
+	 * 
+	 * @param actionType
+	 * @param focusedObject
+	 * @param globalSelection
+	 * @param editor
+	 */
+	DeclareInEditionPattern(FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
-		List<TypeAwareModelSlot> availableModelSlots = focusedObject.getVirtualModel().getModelSlots(TypeAwareModelSlot.class);
+		// Get the set of model slots that are available from the current virtual model
+		List<TypeAwareModelSlot> availableModelSlots = focusedObject.getDiagramSpecification().getModelSlots(TypeAwareModelSlot.class);
 		if (availableModelSlots.size() > 0) {
 			modelSlot = availableModelSlots.get(0);
 		}
-		drawingObjectEntries = new Vector<DeclareInEditionPattern<A, T1>.ExampleDrawingObjectEntry>();
+		// Get the set of internal elements inside the current focused object
+		drawingObjectEntries = new Vector<DeclareInEditionPattern<A, T1, T2>.ExampleDrawingObjectEntry>();
 		int shapeIndex = 1;
 		int connectorIndex = 1;
-		for (ExampleDiagramObject o : getFocusedObject().getDescendants()) {
+		for (GRTemplate o : getFocusedObject().getDescendants()) {
 			if (o instanceof ExampleDiagramShape) {
 				ExampleDiagramShape shape = (ExampleDiagramShape) o;
 				String shapeRoleName = "shape" + (shapeIndex > 1 ? shapeIndex : "");
@@ -153,5 +174,9 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 
 	public void setModelSlot(TypeAwareModelSlot<?, ?> modelSlot) {
 		this.modelSlot = modelSlot;
+	}
+
+	public List<ModelSlot> getModelSlots() {
+		return getFocusedObject().getDiagramSpecification().getModelSlots();
 	}
 }
