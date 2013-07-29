@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Panel layout="gridbag" titleFont="Lucida Grande,0,13" darkLevel="0" dataClassName="org.openflexo.foundation.view.diagram.viewpoint.action.DeclareExampleDiagramConnectorInEditionPattern" controllerClassName="org.openflexo.view.controller.FlexoFIBController" opaque="false" width="650" height="550">
+  <Label label="declare_connector_in_edition_pattern" align="center" index="0" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=20;insetsLeft=0;insetsRight=0;insetsTop=20;padX=0;padY=0;weightX=1.0;weightY=0.0)" font="Lucida Grande,1,15" localize="true" />
+  <RadioButtonList columns="1" hGap="0" vGap="-2" index="1" data="data.primaryChoice" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=1;insetsBottom=15;insetsLeft=50;insetsRight=50;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="PaletteRadioButtonList" format="object.name" localize="true" manageDynamicModel="true" staticList="" iteratorClassName="java.lang.Object" autoSelectFirstRow="true">
+    <LocalizedDictionary />
+  </RadioButtonList>
+  <Panel layout="twocols" border="rounded3d" borderColor="0,0,0" borderTitle="" borderTop="2" borderBottom="2" borderLeft="20" borderRight="20" titleFont="Lucida Grande,0,13" darkLevel="0" index="2" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=2;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=1.0)" visible="(PaletteRadioButtonList.selectedIndex = 1)" opaque="false" width="170" height="150">
+    <Label label="edition_pattern" index="1" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=50;insetsRight=2;insetsTop=5;location=left)" localize="true">
+      <LocalizedDictionary />
+    </Label>
+    <Label label="pattern_role" index="3" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
+      <LocalizedDictionary />
+    </Label>
+    <DropDown index="2" data="data.editionPattern" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="editionPatternDropdown" format="object.name" localize="true" staticList="" list="data.focusedObject.calc.editionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="true">
+      <LocalizedDictionary />
+    </DropDown>
+    <DropDown index="4" data="data.patternRole" constraints="twocols(expandHorizontally=false;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="patternRoleDropDown" localize="true" staticList="" list="editionPatternDropdown.selected.connectorPatternRoles" iteratorClassName="org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole" autoSelectFirstRow="true">
+      <LocalizedDictionary />
+    </DropDown>
+    <Label label="DECLARE_IN_EXISTING_EDITION_PATTERN_description" align="center" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=20;insetsLeft=2;insetsRight=2;insetsTop=20;location=center)" localize="true">
+      <LocalizedDictionary />
+    </Label>
+    <LocalizedDictionary />
+  </Panel>
+  <Panel layout="twocols" border="rounded3d" borderTitle="" borderTop="2" borderBottom="2" borderLeft="20" borderRight="20" titleFont="Lucida Grande,0,13" darkLevel="0" index="3" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=3;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=1.0)" visible="(PaletteRadioButtonList.selectedIndex = 0)" opaque="false">
+    <Label label="label" align="center" index="0" data="(data.patternChoice.name + &quot;_description&quot;)" constraints="twocols(expandHorizontally=true;expandVertically=false;index=0;insetsBottom=10;insetsLeft=2;insetsRight=2;insetsTop=10;location=center)" localize="true">
+      <LocalizedDictionary />
+    </Label>
+    <Label label="pattern" index="1" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
+      <LocalizedDictionary />
+    </Label>
+    <DropDown index="2" data="data.patternChoice" constraints="twocols(expandHorizontally=true;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="patternChoice" format="object.name" localize="true" manageDynamicModel="true" staticList="" iteratorClassName="java.lang.Object" autoSelectFirstRow="true">
+      <LocalizedDictionary />
+    </DropDown>
+    <Label label="model_slot" index="0" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" localize="true" />
+    <DropDown index="0" data="data.modelSlot" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" name="modelSlotDD" format="object.name" icon="controller.getTechnologyAdapterController(object.technologyAdapter).technologyIcon" localize="true" list="data.focusedObject.virtualModel.modelSlots" showIcon="true" iteratorClassName="org.openflexo.foundation.technologyadapter.ModelSlot" autoSelectFirstRow="true" />
+    <Label label="ontologic_concept" index="3" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 0)" localize="true">
+      <LocalizedDictionary />
+    </Label>
+    <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" localize="true" manageDynamicModel="true" name="conceptSelector" index="5" data="data.concept" constraints="twocols(expandHorizontally=true;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 0)">
+      <Assignment variable="component.context" value="data.modelSlot.metaModelResource.metaModelData" />
+    </Custom>
+    <Label label="ontologic_property" index="4" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 1)" localize="true">
+      <LocalizedDictionary />
+    </Label>
+    <Custom componentClassName="org.openflexo.components.widget.FIBPropertySelector" localize="true" manageDynamicModel="true" name="propertySelector" index="6" data="data.objectProperty" constraints="twocols(expandHorizontally=true;expandVertically=false;index=6;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 1)">
+      <Assignment variable="component.context" value="data.modelSlot.metaModelResource.metaModelData" />
+      <Assignment variable="component.selectObjectProperties" value="$true" />
+      <Assignment variable="component.selectDataProperties" value="$false" />
+      <Assignment variable="component.selectAnnotationProperties" value="$false" />
+    </Custom>
+    <Label label="new_edition_pattern_name" index="7" constraints="twocols(expandHorizontally=false;expandVertically=false;index=7;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
+      <LocalizedDictionary />
+    </Label>
+    <TextField index="8" data="data.editionPatternName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=8;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="newEditionPatternName" localize="true" columns="7" text="TextField">
+      <Dependancy componentName="conceptSelector" />
+    </TextField>
+    <Label label="individual_pattern_role_name" index="11" constraints="twocols(expandHorizontally=true;expandVertically=false;index=11;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 0)" localize="true">
+      <LocalizedDictionary />
+    </Label>
+    <TextField index="13" data="data.individualPatternRoleName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=13;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 0)" name="individualPatternRoleName" localize="true" columns="7" text="TextField">
+      <Dependancy componentName="conceptSelector" />
+    </TextField>
+    <Label label="property_statement_pattern_role_name" index="12" constraints="twocols(expandHorizontally=true;expandVertically=false;index=12;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 1)" localize="true">
+      <LocalizedDictionary />
+    </Label>
+    <TextField index="14" data="data.objectPropertyStatementPatternRoleName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=14;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 1)" name="propertyStatementPatternRoleName" localize="true" columns="7" text="TextField">
+      <Dependancy componentName="propertySelector" />
+    </TextField>
+    <Label label="connector_pattern_role_name" index="15" constraints="twocols(expandHorizontally=true;expandVertically=false;index=15;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
+      <LocalizedDictionary />
+    </Label>
+    <TextField index="16" data="data.connectorPatternRoleName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=16;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="connectorPatternRoleName" localize="true" columns="7" text="TextField" />
+    <Label label="from_target" index="17" constraints="twocols(expandHorizontally=true;expandVertically=false;index=17;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
+      <LocalizedDictionary />
+    </Label>
+    <DropDown index="18" data="data.fromEditionPattern" constraints="twocols(expandHorizontally=false;expandVertically=false;index=18;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="fromDropDown" format="object.name" localize="true" staticList="" list="data.focusedObject.virtualModel.editionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="true">
+      <LocalizedDictionary />
+    </DropDown>
+    <Label label="to_target" index="19" constraints="twocols(expandHorizontally=true;expandVertically=false;index=19;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
+      <LocalizedDictionary />
+    </Label>
+    <DropDown index="20" data="data.toEditionPattern" constraints="twocols(expandHorizontally=false;expandVertically=false;index=20;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="toDropDown" format="object.name" localize="true" staticList="" list="data.focusedObject.virtualModel.editionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="true">
+      <LocalizedDictionary />
+    </DropDown>
+    <Label label="drop_scheme_name" index="21" constraints="twocols(expandHorizontally=true;expandVertically=false;index=21;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
+      <LocalizedDictionary />
+    </Label>
+    <TextField index="22" data="data.linkSchemeName" constraints="twocols(expandHorizontally=true;expandVertically=false;index=22;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" localize="true" columns="7" text="TextField">
+      <Dependancy componentName="fromDropDown" />
+      <Dependancy componentName="conceptSelector" />
+      <Dependancy componentName="toDropDown" />
+    </TextField>
+    <LocalizedDictionary />
+  </Panel>
+  <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" borderTitle="Panel" borderTop="10" titleFont="Lucida Grande,0,13" darkLevel="0" index="4" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=4;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" opaque="false">
+    <Button action="controller.validateAndDispose()" buttonType="Trigger" label="validate" localize="true" enable="data.isValid" index="0" constraints="flow(index=0)">
+      <Dependancy componentName="editionPatternDropdown" />
+      <Dependancy componentName="patternRoleDropDown" />
+      <Dependancy componentName="newEditionPatternName" />
+      <Dependancy componentName="individualPatternRoleName" />
+      <Dependancy componentName="connectorPatternRoleName" />
+      <Dependancy componentName="conceptSelector" />
+      <Dependancy componentName="fromDropDown" />
+      <Dependancy componentName="toDropDown" />
+      <Dependancy componentName="propertyStatementPatternRoleName" />
+      <Dependancy componentName="propertySelector" />
+    </Button>
+    <Button action="controller.cancelAndDispose()" buttonType="Trigger" label="cancel" localize="true" index="1" constraints="flow(index=1)" />
+  </Panel>
+  <LocalizedDictionary>
+    <Localized key="validate" lang="English">Validate</Localized>
+    <Localized key="cancel" lang="English">Cancel</Localized>
+    <Localized key="validate" lang="French">Valider</Localized>
+    <Localized key="cancel" lang="French">Annuler</Localized>
+    <Localized key="validate" lang="Dutch">Validate</Localized>
+    <Localized key="cancel" lang="Dutch">Cancel</Localized>
+    <Localized key="edition_pattern" lang="French">Edition pattern</Localized>
+    <Localized key="edition_pattern" lang="English">Edition pattern</Localized>
+    <Localized key="pattern_role" lang="French">Pattern role</Localized>
+    <Localized key="pattern_role" lang="English">Pattern role</Localized>
+    <Localized key="please_choose_an_edition_pattern" lang="French">Veuillez choisir un Edition Pattern</Localized>
+    <Localized key="please_choose_an_edition_pattern" lang="English">Please choose an edition pattern</Localized>
+    <Localized key="create_new_edition_pattern" lang="English">Create new Edition Pattern</Localized>
+    <Localized key="create_new_edition_pattern" lang="French">Créer un nouvel Edition Pattern</Localized>
+    <Localized key="create_new_edition_pattern" lang="Dutch">new_entry</Localized>
+    <Localized key="declare_in_existing_edition_pattern" lang="English">Declare in existing Edition Pattern</Localized>
+    <Localized key="declare_in_existing_edition_pattern" lang="French">Déclarer dans un Edition Pattern existant</Localized>
+    <Localized key="declare_in_existing_edition_pattern" lang="Dutch">new_entry</Localized>
+    <Localized key="pattern_role_name" lang="French">Nom du pattern role</Localized>
+    <Localized key="pattern_role_name" lang="English">Pattern Role name</Localized>
+    <Localized key="new_edition_pattern" lang="French">Nouvel edition pattern</Localized>
+    <Localized key="new_edition_pattern" lang="English">New edition pattern</Localized>
+    <Localized key="ontologic_concept" lang="French">Concept ontologique</Localized>
+    <Localized key="ontologic_concept" lang="English">Ontologic concept</Localized>
+    <Localized key="CREATES_EDITION_PATTERN" lang="English">Create new Edition Pattern</Localized>
+    <Localized key="CREATES_EDITION_PATTERN" lang="French">Créer un nouvel Edition Pattern</Localized>
+    <Localized key="CREATES_EDITION_PATTERN" lang="Dutch">new_entry</Localized>
+    <Localized key="CHOOSE_EXISTING_EDITION_PATTERN" lang="English">Declare in existing Edition Pattern</Localized>
+    <Localized key="CHOOSE_EXISTING_EDITION_PATTERN" lang="French">Déclarer dans un Edition Pattern existant</Localized>
+    <Localized key="CHOOSE_EXISTING_EDITION_PATTERN" lang="Dutch">new_entry</Localized>
+    <Localized key="declare_in_edition_pattern" lang="English">Declare in edition pattern</Localized>
+    <Localized key="declare_in_edition_pattern" lang="French">Déclarer dans un Edition Pattern</Localized>
+    <Localized key="declare_in_edition_pattern" lang="Dutch">Declare in edition pattern</Localized>
+    <Localized key="MAP_SINGLE_INDIVIDUAL" lang="French">Correspondance simple vers un individuel ontologique</Localized>
+    <Localized key="MAP_SINGLE_INDIVIDUAL" lang="English">Single mapping to ontologic individual</Localized>
+    <Localized key="MAP_SINGLE_INDIVIDUAL_description" lang="English">&lt;html&gt;&lt;center&gt;This will create a simple mapping between a connector and&lt;br&gt;an ontologic individual stored in project ontology.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="MAP_SINGLE_INDIVIDUAL_description" lang="French">&lt;html&gt;&lt;center&gt;This will create a simple mapping between a connector and&lt;br&gt;an ontologic individual stored in project ontology.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="MAP_SINGLE_INDIVIDUAL_description" lang="Dutch">new_entry</Localized>
+    <Localized key="new_edition_pattern_name" lang="French">Nom du nouvel Edition Pattern</Localized>
+    <Localized key="new_edition_pattern_name" lang="English">New edition pattern name</Localized>
+    <Localized key="connector_pattern_role_name" lang="English">Connector pattern role name</Localized>
+    <Localized key="connector_pattern_role_name" lang="French">Nom du role de la forme</Localized>
+    <Localized key="pattern" lang="French">Patron</Localized>
+    <Localized key="pattern" lang="English">Pattern</Localized>
+    <Localized key="individual_pattern_role_name" lang="French">Nom du role de l'individuel</Localized>
+    <Localized key="individual_pattern_role_name" lang="English">Individual pattern role name</Localized>
+    <Localized key="DECLARE_IN_EXISTING_EDITION_PATTERN_description" lang="English">&lt;html&gt;&lt;center&gt;Will assign this connector as a connector to be used in supplied edition pattern&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="DECLARE_IN_EXISTING_EDITION_PATTERN_description" lang="French">&lt;html&gt;&lt;center&gt;Will assign this connector as a connector to be used in supplied edition pattern&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="DECLARE_IN_EXISTING_EDITION_PATTERN_description" lang="Dutch">new_entry</Localized>
+    <Localized key="property" lang="English">Property</Localized>
+    <Localized key="label" lang="English">Label</Localized>
+    <Localized key="delete_data_assertion" lang="English">Delete data assertion</Localized>
+    <Localized key="target" lang="English">Target</Localized>
+    <Localized key="property" lang="French">Propriété</Localized>
+    <Localized key="label" lang="French">Label</Localized>
+    <Localized key="delete_data_assertion" lang="French">Supprimer l'assertion</Localized>
+    <Localized key="target" lang="French">Cible</Localized>
+    <Localized key="property" lang="Dutch">Property</Localized>
+    <Localized key="label" lang="Dutch">Label</Localized>
+    <Localized key="delete_data_assertion" lang="Dutch">Delete data assertion</Localized>
+    <Localized key="target" lang="Dutch">Target</Localized>
+    <Localized key="top_level" lang="French">à la racine</Localized>
+    <Localized key="top_level" lang="English">top level</Localized>
+    <Localized key="range" lang="French">Plage de valeurs</Localized>
+    <Localized key="range" lang="English">Range</Localized>
+    <Localized key="properties_to_handle" lang="French">Propriétés à gérer</Localized>
+    <Localized key="properties_to_handle" lang="English">Properties to handle</Localized>
+    <Localized key="drop_scheme_name" lang="French">Nom du Drop Scheme</Localized>
+    <Localized key="drop_scheme_name" lang="English">Drop scheme name</Localized>
+    <Localized key="select_all" lang="English">Select all</Localized>
+    <Localized key="select_all" lang="French">Sélectionner tout</Localized>
+    <Localized key="select_all" lang="Dutch">Select all</Localized>
+    <Localized key="select_none" lang="French">Déséselectionner tout</Localized>
+    <Localized key="select_none" lang="English">Select none</Localized>
+    <Localized key="BLANK_EDITION_PATTERN" lang="French">Edition Pattern vide</Localized>
+    <Localized key="BLANK_EDITION_PATTERN" lang="English">Blank Edition Pattern</Localized>
+    <Localized key="BLANK_EDITION_PATTERN_description" lang="English">&lt;html&gt;&lt;center&gt;This will create a simple Edition Pattern only containing a connector&lt;br&gt;similar to the one which has just been selected.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="BLANK_EDITION_PATTERN_description" lang="French">&lt;html&gt;&lt;center&gt;This will create a simple Edition Pattern only containing a connector&lt;br&gt;similar to the one which has just been selected.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="BLANK_EDITION_PATTERN_description" lang="Dutch">new_entry</Localized>
+    <Localized key="declare_connector_in_edition_pattern" lang="English">Declare connector in edition pattern</Localized>
+    <Localized key="declare_connector_in_edition_pattern" lang="French">Déclarer le connecteur dans un Edition Pattern</Localized>
+    <Localized key="declare_connector_in_edition_pattern" lang="Dutch">Declare in edition pattern</Localized>
+    <Localized key="to_target" lang="French">Cible de destination</Localized>
+    <Localized key="to_target" lang="English">To target</Localized>
+    <Localized key="from_target" lang="French">Cible d'origine</Localized>
+    <Localized key="from_target" lang="English">From target</Localized>
+    <Localized key="MAP_OBJECT_PROPERTY" lang="French">Correspondance vers une relation d'objets</Localized>
+    <Localized key="MAP_OBJECT_PROPERTY" lang="English">Single mapping to object property</Localized>
+    <Localized key="MAP_OBJECT_PROPERTY" lang="Dutch">MAP_OBJECT_PROPERTY</Localized>
+    <Localized key="MAP_OBJECT_PROPERTY_description" lang="English">&lt;html&gt;&lt;center&gt;This will create a simple mapping between a connector and&lt;br&gt;an object property statement stored in project ontology.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="MAP_OBJECT_PROPERTY_description" lang="French">&lt;html&gt;&lt;center&gt;This will create a simple mapping between a connector and&lt;br&gt;an object property statement stored in project ontology.&lt;/center&gt;&lt;/html&gt;</Localized>
+    <Localized key="MAP_OBJECT_PROPERTY_description" lang="Dutch">new_entry</Localized>
+  </LocalizedDictionary>
+</Panel>

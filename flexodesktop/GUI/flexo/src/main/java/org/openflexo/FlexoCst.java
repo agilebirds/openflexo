@@ -155,4 +155,8 @@ public class FlexoCst extends ColorCst {
 	// Saving operations
 	public static File REVIEW_UNSAVED_DIALOG_FIB = new FileResource("Fib/Dialog/ReviewUnsavedDialog.fib");
 
+	public static File DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB = new FileResource("Fib/Widget/DeclareShapeInEditionPatternDialog.fib");
+	public static File DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB = new FileResource(
+			"Fib/Widget/DeclareConnectorInEditionPatternDialog.fib");
+
 }
