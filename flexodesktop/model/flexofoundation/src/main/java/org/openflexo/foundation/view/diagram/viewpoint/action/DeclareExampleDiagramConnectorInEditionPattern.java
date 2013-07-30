@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.view.diagram.viewpoint.action;
 
-import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -30,7 +29,6 @@ import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
-import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
@@ -84,9 +82,6 @@ public class DeclareExampleDiagramConnectorInEditionPattern
 	private String dropSchemeName;
 
 	private EditionPattern newEditionPattern;
-	private Hashtable<ExampleDrawingObjectEntry, GraphicalElementPatternRole> newGraphicalElementPatternRoles;
-
-	// public Vector<PropertyEntry> propertyEntries = new Vector<PropertyEntry>();
 
 	DeclareExampleDiagramConnectorInEditionPattern(ExampleDiagramConnector focusedObject, Vector<ExampleDiagramObject> globalSelection,
 			FlexoEditor editor) {

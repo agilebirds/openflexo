@@ -29,9 +29,6 @@ import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 
@@ -70,20 +67,20 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 			modelSlot = availableModelSlots.get(0);
 		}
 		// Get the set of internal elements inside the current focused object
-		drawingObjectEntries = new Vector<DeclareInEditionPattern<A, T1, T2>.ExampleDrawingObjectEntry>();
+		drawingObjectEntries = new Vector<DeclareInEditionPattern<A, T1, T2>.DrawingObjectEntry>();
 		int shapeIndex = 1;
 		int connectorIndex = 1;
 		for (GRTemplate o : getFocusedObject().getDescendants()) {
-			if (o instanceof ExampleDiagramShape) {
-				ExampleDiagramShape shape = (ExampleDiagramShape) o;
+			if (o instanceof GRShapeTemplate) {
+				GRShapeTemplate shape = (GRShapeTemplate) o;
 				String shapeRoleName = "shape" + (shapeIndex > 1 ? shapeIndex : "");
-				drawingObjectEntries.add(new ExampleDrawingObjectEntry(shape, shapeRoleName));
+				drawingObjectEntries.add(new DrawingObjectEntry(shape, shapeRoleName));
 				shapeIndex++;
 			}
-			if (o instanceof ExampleDiagramConnector) {
-				ExampleDiagramConnector connector = (ExampleDiagramConnector) o;
+			if (o instanceof GRConnectorTemplate) {
+				GRConnectorTemplate connector = (GRConnectorTemplate) o;
 				String connectorRoleName = "connector" + (connectorIndex > 1 ? connectorIndex : "");
-				drawingObjectEntries.add(new ExampleDrawingObjectEntry(connector, connectorRoleName));
+				drawingObjectEntries.add(new DrawingObjectEntry(connector, connectorRoleName));
 				connectorIndex++;
 			}
 		}
@@ -113,14 +110,14 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 
 	public abstract void resetPatternRole();
 
-	public Vector<ExampleDrawingObjectEntry> drawingObjectEntries;
+	public Vector<DrawingObjectEntry> drawingObjectEntries;
 
-	public class ExampleDrawingObjectEntry {
+	public class DrawingObjectEntry {
 		private boolean selectThis;
-		public ExampleDiagramObject graphicalObject;
+		public GRTemplate graphicalObject;
 		public String patternRoleName;
 
-		public ExampleDrawingObjectEntry(ExampleDiagramObject graphicalObject, String patternRoleName) {
+		public DrawingObjectEntry(GRTemplate graphicalObject, String patternRoleName) {
 			super();
 			this.graphicalObject = graphicalObject;
 			this.patternRoleName = patternRoleName;
@@ -144,14 +141,14 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 			}
 		}
 
-		public ExampleDrawingObjectEntry getParentEntry() {
+		public DrawingObjectEntry getParentEntry() {
 			return getEntry(graphicalObject.getParent());
 		}
 	}
 
 	public int getSelectedEntriesCount() {
 		int returned = 0;
-		for (ExampleDrawingObjectEntry e : drawingObjectEntries) {
+		for (DrawingObjectEntry e : drawingObjectEntries) {
 			if (e.selectThis) {
 				returned++;
 			}
@@ -159,8 +156,8 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 		return returned;
 	}
 
-	public ExampleDrawingObjectEntry getEntry(ExampleDiagramObject o) {
-		for (ExampleDrawingObjectEntry e : drawingObjectEntries) {
+	public DrawingObjectEntry getEntry(GRTemplate o) {
+		for (DrawingObjectEntry e : drawingObjectEntries) {
 			if (e.graphicalObject == o) {
 				return e;
 			}

@@ -23,4 +23,9 @@ public interface GRTemplate {
 	public DiagramSpecification getDiagramSpecification();
 
 	public List<? extends GRTemplate> getDescendants();
+
+	public GRTemplate getParent();
+
+	public String getName();
+
 }

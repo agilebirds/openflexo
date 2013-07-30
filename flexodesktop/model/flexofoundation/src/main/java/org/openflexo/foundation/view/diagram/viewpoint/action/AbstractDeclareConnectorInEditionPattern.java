@@ -88,7 +88,7 @@ public abstract class AbstractDeclareConnectorInEditionPattern<T1 extends FlexoO
 	private String dropSchemeName;
 
 	private EditionPattern newEditionPattern;
-	private Hashtable<ExampleDrawingObjectEntry, GraphicalElementPatternRole> newGraphicalElementPatternRoles;
+	private Hashtable<DrawingObjectEntry, GraphicalElementPatternRole> newGraphicalElementPatternRoles;
 
 	// public Vector<PropertyEntry> propertyEntries = new Vector<PropertyEntry>();
 
