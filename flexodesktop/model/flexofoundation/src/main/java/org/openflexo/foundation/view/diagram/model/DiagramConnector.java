@@ -98,7 +98,7 @@ public class DiagramConnector extends DiagramElement<ConnectorGraphicalRepresent
 	}
 
 	/* @Override
-	 public AddShemaElementAction getEditionAction() 
+	 public AddSchemaElementAction getEditionAction() 
 	 {
 	 	return getAddConnectorAction();
 	 }

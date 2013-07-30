@@ -26,9 +26,9 @@ import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.toolbox.StringUtils;
 
-public abstract class AddShemaElementAction<T extends DiagramElement<?>> extends DiagramAction<T> {
+public abstract class AddSchemaElementAction<T extends DiagramElement<?>> extends DiagramAction<T> {
 
-	public AddShemaElementAction(VirtualModel.VirtualModelBuilder builder) {
+	public AddSchemaElementAction(VirtualModel.VirtualModelBuilder builder) {
 		super(builder);
 	}
 

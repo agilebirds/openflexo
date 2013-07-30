@@ -55,7 +55,7 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain
  * 
  */
-public class AddShape extends AddShemaElementAction<DiagramShape> {
+public class AddShape extends AddSchemaElementAction<DiagramShape> {
 
 	private static final Logger logger = Logger.getLogger(AddShape.class.getPackage().getName());
 

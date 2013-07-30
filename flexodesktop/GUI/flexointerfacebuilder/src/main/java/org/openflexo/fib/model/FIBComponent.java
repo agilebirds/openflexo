@@ -620,6 +620,13 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 			returned.add(c2);
 			if (c2 instanceof FIBContainer) {
 				addAllSubComponents((FIBContainer) c2, returned);
+			}	
+			else if (c2 instanceof FIBReferencedComponent){
+				FIBComponent referenced =((FIBReferencedComponent) c2).getComponent();
+				if (referenced instanceof FIBContainer){
+					returned.add((FIBContainer) referenced);
+					addAllSubComponents((FIBContainer) referenced, returned);
+					}
 			}
 		}
 	}
@@ -1399,7 +1406,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 						// System.out.println("Component " + toString() + " depends of " + c.toString());
 						declareDependantOf(c);
 					} else {
-						logger.warning("Cannot find component named " + e.getBindingVariable().getVariableName());
+						logger.warning("Cannot find component named " + e.getBindingVariable().getVariableName() +" in " + this.getName());
 					}
 				}
 			}

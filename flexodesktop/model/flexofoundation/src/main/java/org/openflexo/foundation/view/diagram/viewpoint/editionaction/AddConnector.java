@@ -57,7 +57,7 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain
  * 
  */
-public class AddConnector extends AddShemaElementAction<DiagramConnector> {
+public class AddConnector extends AddSchemaElementAction<DiagramConnector> {
 
 	private static final Logger logger = Logger.getLogger(LinkSchemeAction.class.getPackage().getName());
 

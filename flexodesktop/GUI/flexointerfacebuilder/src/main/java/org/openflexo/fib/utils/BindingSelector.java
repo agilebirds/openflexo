@@ -1111,7 +1111,9 @@ public class BindingSelector extends TextFieldCustomPopup<DataBinding> implement
 
 	@Override
 	public void cancel() {
-		setEditedObject(_revertBindingValue);
+		if (_revertBindingValue.getOwner() != null && _revertBindingValue.isValid()){
+			setEditedObject(_revertBindingValue);
+			}
 		closePopup();
 		super.cancel();
 	}
