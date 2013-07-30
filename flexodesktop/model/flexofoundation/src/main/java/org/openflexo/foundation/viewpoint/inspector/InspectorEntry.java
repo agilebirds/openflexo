@@ -167,7 +167,11 @@ public abstract class InspectorEntry extends EditionPatternObject implements Bin
 
 	@Override
 	public BindingModel getBindingModel() {
-		return getInspector().getBindingModel();
+		EditionPatternInspector inspector = getInspector();
+		if (inspector != null){
+			return getInspector().getBindingModel();
+		}
+		else return null;
 	}
 
 	public static class DataBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<InspectorEntry> {

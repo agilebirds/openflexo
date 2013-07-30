@@ -351,8 +351,10 @@ public abstract class FIBView<M extends FIBComponent, J extends JComponent> impl
 	}
 
 	public FIBView<?, ?> getParentView() {
-		if (getComponent().getParent() != null) {
-			return getController().viewForComponent(getComponent().getParent());
+		if (getComponent() != null){
+			if (getComponent().getParent() != null) {
+				return getController().viewForComponent(getComponent().getParent());
+			}
 		}
 		return null;
 	}
