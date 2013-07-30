@@ -31,8 +31,8 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.technologyadapter.FlexoOntologyModelSlot;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
@@ -95,7 +95,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 	private String individualPatternRoleName;
 	private String virtualModelPatternRoleName;
 	private List<VirtualModelModelSlot<?, ?>> virtualModelModelSlots = null;
-	private List<FlexoOntologyModelSlot<?, ?>> flexoOntologyModelSlots = null;
+	private List<ModelSlot<?>> flexoTypeAwareModelSlots = null;
 
 	public boolean isTopLevel = true;
 	public EditionPattern containerEditionPattern;
@@ -145,7 +145,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					EditionPatternInstancePatternRole editionPatternPatternRole = null;
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
 						if (isFlexoOntologyModelSlot()) {
-							FlexoOntologyModelSlot<?, ?> flexoOntologyModelSlot = (FlexoOntologyModelSlot<?, ?>) getModelSlot();
+							TypeAwareModelSlot<?, ?> flexoOntologyModelSlot = (TypeAwareModelSlot<?, ?>) getModelSlot();
 							individualPatternRole = flexoOntologyModelSlot.makeIndividualPatternRole(getConcept());
 							individualPatternRole.setPatternRoleName(getIndividualPatternRoleName());
 							individualPatternRole.setOntologicType(getConcept());
@@ -238,7 +238,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					// Parameters
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
 						if (isFlexoOntologyModelSlot()) {
-							FlexoOntologyModelSlot<?, ?> flexoOntologyModelSlot = (FlexoOntologyModelSlot<?, ?>) getModelSlot();
+							TypeAwareModelSlot<?,?> flexoOntologyModelSlot = (TypeAwareModelSlot<?,?>) getModelSlot();
 							// Vector<PropertyEntry> candidates = new Vector<PropertyEntry>();
 							/*for (PropertyEntry e : propertyEntries) {
 								if (e != null && e.selectEntry) {
@@ -304,7 +304,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 							}*/
 
 							// Add individual action
-							AddIndividual<?, ?, ?> newAddIndividual = flexoOntologyModelSlot.makeAddIndividualAction(individualPatternRole,
+							AddIndividual<?, ?> newAddIndividual = flexoOntologyModelSlot.makeAddIndividualAction(individualPatternRole,
 									newDropScheme);
 
 							/*AddIndividual newAddIndividual = new AddIndividual(builder);
@@ -625,7 +625,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 	};
 
 	public boolean isFlexoOntologyModelSlot() {
-		if (getModelSlot() instanceof FlexoOntologyModelSlot) {
+		if (getModelSlot() instanceof TypeAwareModelSlot) {
 			return true;
 		}
 		return false;
@@ -659,7 +659,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 			if (!virtualModelModelSlots.isEmpty()) {
 				virtualModelModelSlots.clear();
 			}
-			for (ModelSlot<?, ?> modelSlot : getModelSlot().getVirtualModel().getModelSlots()) {
+			for (ModelSlot<?> modelSlot : getModelSlot().getVirtualModel().getModelSlots()) {
 				if (modelSlot instanceof VirtualModelModelSlot) {
 					virtualModelModelSlots.add((VirtualModelModelSlot<?, ?>) modelSlot);
 				}
@@ -668,21 +668,21 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 		return virtualModelModelSlots;
 	}
 
-	public List<FlexoOntologyModelSlot<?, ?>> getFlexoOntologyModelSlots() {
+	public List<ModelSlot<?>> getTypeAwareModelSlots() {
 		if (getModelSlot() != null) {
-			if (flexoOntologyModelSlots == null) {
-				flexoOntologyModelSlots = new ArrayList<FlexoOntologyModelSlot<?, ?>>();
+			if (flexoTypeAwareModelSlots == null) {
+				flexoTypeAwareModelSlots = new ArrayList<ModelSlot<?>>();
 			}
-			if (!flexoOntologyModelSlots.isEmpty()) {
-				flexoOntologyModelSlots.clear();
+			if (!flexoTypeAwareModelSlots.isEmpty()) {
+				flexoTypeAwareModelSlots.clear();
 			}
-			for (ModelSlot<?, ?> modelSlot : getModelSlot().getVirtualModel().getModelSlots()) {
-				if (modelSlot instanceof FlexoOntologyModelSlot) {
-					flexoOntologyModelSlots.add((FlexoOntologyModelSlot<?, ?>) modelSlot);
+			for (ModelSlot<?> modelSlot : getModelSlot().getVirtualModel().getModelSlots()) {
+				if (modelSlot instanceof TypeAwareModelSlot) {
+					flexoTypeAwareModelSlots.add((TypeAwareModelSlot<?, ?>) modelSlot);
 				}
 			}
 		}
-		return flexoOntologyModelSlots;
+		return flexoTypeAwareModelSlots;
 	}
 
 }

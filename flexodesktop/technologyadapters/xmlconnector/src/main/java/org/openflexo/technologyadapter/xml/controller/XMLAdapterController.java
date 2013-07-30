@@ -131,7 +131,9 @@ public class XMLAdapterController extends TechnologyAdapterController<XMLTechnol
 	 * @return
 	 */
 	@Override
-	public ImageIcon getIconForPatternRole(Class<? extends PatternRole> patternRoleClass) {
+	public ImageIcon getIconForPatternRole(
+			Class<? extends PatternRole<?>> patternRoleClass) {
+
 		if (XMLIndividualPatternRole.class.isAssignableFrom(patternRoleClass)) {
 			return getIconForOntologyObject(XMLIndividualPatternRole.class);
 		}
@@ -145,11 +147,11 @@ public class XMLAdapterController extends TechnologyAdapterController<XMLTechnol
 	 * @return
 	 */
 	@Override
-	public ImageIcon getIconForEditionAction(Class<? extends EditionAction> editionActionClass) {
+	public ImageIcon getIconForEditionAction(Class<? extends EditionAction<?, ?>> editionActionClass) {
 		if (AddXMLIndividual.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(getIconForOntologyObject(XMLIndividual.class), IconLibrary.DUPLICATE);
 		} 
-		return super.getIconForEditionAction(editionActionClass);
+		return super.getIconForEditionAction((Class<? extends EditionAction<?, ?>>) editionActionClass);
 	}
 
 	public XMLModelBrowserModel makeOntologyBrowserModel(XMLModel context) {

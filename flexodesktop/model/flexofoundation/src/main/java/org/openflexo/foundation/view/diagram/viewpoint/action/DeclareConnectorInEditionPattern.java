@@ -32,6 +32,7 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.ontology.IFlexoOntologyObjectProperty;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.ConnectorPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
@@ -97,7 +98,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 	private String objectPropertyStatementPatternRoleName;
 	private String virtualModelPatternRoleName;
 	private List<VirtualModelModelSlot<?, ?>> virtualModelModelSlots = null;
-	private List<FlexoOntologyModelSlot<?, ?>> flexoOntologyModelSlots = null;
+	private List<ModelSlot<?>> flexoOntologyModelSlots = null;
 
 	public EditionPattern fromEditionPattern;
 	public EditionPattern toEditionPattern;
@@ -145,7 +146,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 				IndividualPatternRole individualPatternRole = null;
 				if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
 					if (isFlexoOntologyModelSlot()) {
-						FlexoOntologyModelSlot ontologyModelSlot = (FlexoOntologyModelSlot) getModelSlot();
+						TypeAwareModelSlot<?, ?> ontologyModelSlot = (TypeAwareModelSlot<?,?>) getModelSlot();
 						individualPatternRole = ontologyModelSlot.makeIndividualPatternRole(getConcept());
 						individualPatternRole.setPatternRoleName(getIndividualPatternRoleName());
 						individualPatternRole.setOntologicType(getConcept());
@@ -221,7 +222,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 				// Parameters
 				if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
 					if (isFlexoOntologyModelSlot()) {
-						FlexoOntologyModelSlot<?, ?> flexoOntologyModelSlot = (FlexoOntologyModelSlot<?, ?>) getModelSlot();
+						TypeAwareModelSlot<?, ?> flexoOntologyModelSlot = (TypeAwareModelSlot<?, ?>) getModelSlot();
 						/*Vector<PropertyEntry> candidates = new Vector<PropertyEntry>();
 						for (PropertyEntry e : propertyEntries) {
 							if (e.selectEntry) {
@@ -618,7 +619,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 	};
 
 	public boolean isFlexoOntologyModelSlot() {
-		if (getModelSlot() instanceof FlexoOntologyModelSlot) {
+		if (getModelSlot() instanceof TypeAwareModelSlot) {
 			return true;
 		}
 		return false;
@@ -651,7 +652,7 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 		if (!virtualModelModelSlots.isEmpty()) {
 			virtualModelModelSlots.clear();
 		}
-		for (ModelSlot<?, ?> modelSlot : getModelSlot().getVirtualModel().getModelSlots()) {
+		for (ModelSlot<?> modelSlot : getModelSlot().getVirtualModel().getModelSlots()) {
 			if (modelSlot instanceof VirtualModelModelSlot) {
 				virtualModelModelSlots.add((VirtualModelModelSlot<?, ?>) modelSlot);
 			}
@@ -659,16 +660,16 @@ public class DeclareConnectorInEditionPattern extends DeclareInEditionPattern<De
 		return virtualModelModelSlots;
 	}
 
-	public List<FlexoOntologyModelSlot<?, ?>> getFlexoOntologyModelSlots() {
+	public List<ModelSlot<?>> getFlexoOntologyModelSlots() {
 		if (flexoOntologyModelSlots == null) {
-			flexoOntologyModelSlots = new ArrayList<FlexoOntologyModelSlot<?, ?>>();
+			flexoOntologyModelSlots = new ArrayList<ModelSlot<?>>();
 		}
 		if (!flexoOntologyModelSlots.isEmpty()) {
 			flexoOntologyModelSlots.clear();
 		}
-		for (ModelSlot<?, ?> modelSlot : getModelSlot().getVirtualModel().getModelSlots()) {
-			if (modelSlot instanceof FlexoOntologyModelSlot) {
-				flexoOntologyModelSlots.add((FlexoOntologyModelSlot<?, ?>) modelSlot);
+		for (ModelSlot<?> modelSlot : getModelSlot().getVirtualModel().getModelSlots()) {
+			if (modelSlot instanceof TypeAwareModelSlot) {
+				flexoOntologyModelSlots.add((ModelSlot<?>) modelSlot);
 			}
 		}
 		return flexoOntologyModelSlots;
