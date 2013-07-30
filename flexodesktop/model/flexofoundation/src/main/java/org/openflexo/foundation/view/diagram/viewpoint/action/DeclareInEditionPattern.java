@@ -19,6 +19,7 @@
  */
 package org.openflexo.foundation.view.diagram.viewpoint.action;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -28,8 +29,11 @@ import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
 
 /**
  * This abstract class is an action that allows to create an edition pattern from a graphical representation(for instance a shape or
@@ -50,6 +54,13 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 
 	private ModelSlot<?> modelSlot;
 
+	private List<VirtualModelModelSlot<?, ?>> virtualModelModelSlots = null;
+	private List<TypeAwareModelSlot<?, ?>> typeAwareModelSlots = null;
+
+	private VirtualModelModelSlot virtualModelModelSlot;
+
+	private TypeAwareModelSlot typeAwareModelSlot;
+
 	/**
 	 * Constructor for this class
 	 * 
@@ -61,7 +72,7 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 	DeclareInEditionPattern(FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		// Get the set of model slots that are available from the current virtual model
-		List<ModelSlot> availableModelSlots = focusedObject.getDiagramSpecification().getModelSlots();
+		List<ModelSlot> availableModelSlots = getModelSlots();
 		if (availableModelSlots.size() > 0) {
 			modelSlot = availableModelSlots.get(0);
 		}
@@ -164,6 +175,14 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 		return null;
 	}
 
+	public VirtualModelModelSlot getVirtualModelModelSlot() {
+		return (VirtualModelModelSlot) modelSlot;
+	}
+
+	public TypeAwareModelSlot getTypeAwareModelSlot() {
+		return (TypeAwareModelSlot) modelSlot;
+	}
+
 	public ModelSlot<?> getModelSlot() {
 		return modelSlot;
 	}
@@ -175,4 +194,66 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 	public List<ModelSlot> getModelSlots() {
 		return getFocusedObject().getDiagramSpecification().getModelSlots();
 	}
+
+	/**
+	 * Return a virtual model adressed by a model slot
+	 * 
+	 * @return
+	 */
+	public VirtualModel getAdressedVirtualModel() {
+		if (isVirtualModelModelSlot()) {
+			VirtualModelModelSlot virtualModelModelSlot = (VirtualModelModelSlot) getModelSlot();
+			return virtualModelModelSlot.getAddressedVirtualModel();
+		}
+		return null;
+	}
+
+	public List<VirtualModelModelSlot<?, ?>> getVirtualModelModelSlots() {
+		if (getModelSlot() != null) {
+			if (virtualModelModelSlots == null) {
+				virtualModelModelSlots = new ArrayList<VirtualModelModelSlot<?, ?>>();
+			}
+			if (!virtualModelModelSlots.isEmpty()) {
+				virtualModelModelSlots.clear();
+			}
+			for (ModelSlot<?> modelSlot : getModelSlot().getVirtualModel().getModelSlots()) {
+				if (modelSlot instanceof VirtualModelModelSlot) {
+					virtualModelModelSlots.add((VirtualModelModelSlot<?, ?>) modelSlot);
+				}
+			}
+		}
+		return virtualModelModelSlots;
+	}
+
+	public List<TypeAwareModelSlot<?, ?>> getTypeAwareModelSlots() {
+		if (getModelSlot() != null) {
+			if (typeAwareModelSlots == null) {
+				typeAwareModelSlots = new ArrayList<TypeAwareModelSlot<?, ?>>();
+			}
+			if (!typeAwareModelSlots.isEmpty()) {
+				typeAwareModelSlots.clear();
+			}
+			for (ModelSlot<?> modelSlot : getModelSlot().getVirtualModel().getModelSlots()) {
+				if (modelSlot instanceof TypeAwareModelSlot) {
+					typeAwareModelSlots.add((TypeAwareModelSlot<?, ?>) modelSlot);
+				}
+			}
+		}
+		return typeAwareModelSlots;
+	}
+
+	public boolean isTypeAwareModelSlot() {
+		if (getModelSlot() instanceof TypeAwareModelSlot) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isVirtualModelModelSlot() {
+		if (getModelSlot() instanceof VirtualModelModelSlot) {
+			return true;
+		}
+		return false;
+	}
+
 }
