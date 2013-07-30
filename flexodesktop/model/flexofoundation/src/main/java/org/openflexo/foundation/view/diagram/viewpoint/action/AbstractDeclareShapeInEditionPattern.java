@@ -19,6 +19,8 @@
  */
 package org.openflexo.foundation.view.diagram.viewpoint.action;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -26,8 +28,12 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
+import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
@@ -45,7 +51,7 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 	private static final Logger logger = Logger.getLogger(AbstractDeclareShapeInEditionPattern.class.getPackage().getName());
 
 	public static enum NewEditionPatternChoices {
-		MAP_SINGLE_INDIVIDUAL, BLANK_EDITION_PATTERN
+		MAP_SINGLE_INDIVIDUAL, MAP_SINGLE_EDITION_PATTERN, BLANK_EDITION_PATTERN
 	}
 
 	public NewEditionPatternChoices patternChoice = NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL;
@@ -53,9 +59,13 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 	private String editionPatternName;
 	private IFlexoOntologyClass concept;
 	private String individualPatternRoleName;
+	private String virtualModelPatternRoleName;
+	private List<VirtualModelModelSlot<?, ?>> virtualModelModelSlots = null;
+	private List<TypeAwareModelSlot<?, ?>> typeAwareModelSlots = null;
 
 	public boolean isTopLevel = true;
 	public EditionPattern containerEditionPattern;
+	private EditionPattern virtualModelConcept;
 	private String dropSchemeName;
 
 	// public Vector<PropertyEntry> propertyEntries = new Vector<PropertyEntry>();
@@ -223,5 +233,85 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 		}
 	}
 	*/
+
+	public EditionPattern getVirtualModelConcept() {
+		return virtualModelConcept;
+	}
+
+	public void setVirtualModelConcept(EditionPattern virtualModelConcept) {
+		this.virtualModelConcept = virtualModelConcept;
+	}
+
+	public String getVirtualModelPatternRoleName() {
+		if (StringUtils.isEmpty(virtualModelPatternRoleName) && virtualModelConcept != null) {
+			return JavaUtils.getVariableName(virtualModelConcept.getName());
+		}
+		return virtualModelPatternRoleName;
+	}
+
+	public void setVirtualModelPatternRoleName(String virtualModelPatternRoleName) {
+		this.virtualModelPatternRoleName = virtualModelPatternRoleName;
+	}
+
+	public boolean isFlexoOntologyModelSlot() {
+		if (getModelSlot() instanceof TypeAwareModelSlot) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isVirtualModelModelSlot() {
+		if (getModelSlot() instanceof VirtualModelModelSlot) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Return a virtual model adressed by a model slot
+	 * 
+	 * @return
+	 */
+	public VirtualModel getAdressedVirtualModel() {
+		if (isVirtualModelModelSlot()) {
+			VirtualModelModelSlot virtualModelModelSlot = (VirtualModelModelSlot) getModelSlot();
+			return virtualModelModelSlot.getAddressedVirtualModel();
+		}
+		return null;
+	}
+
+	public List<VirtualModelModelSlot<?, ?>> getVirtualModelModelSlots() {
+		if (getModelSlot() != null) {
+			if (virtualModelModelSlots == null) {
+				virtualModelModelSlots = new ArrayList<VirtualModelModelSlot<?, ?>>();
+			}
+			if (!virtualModelModelSlots.isEmpty()) {
+				virtualModelModelSlots.clear();
+			}
+			for (ModelSlot<?> modelSlot : getModelSlot().getVirtualModel().getModelSlots()) {
+				if (modelSlot instanceof VirtualModelModelSlot) {
+					virtualModelModelSlots.add((VirtualModelModelSlot<?, ?>) modelSlot);
+				}
+			}
+		}
+		return virtualModelModelSlots;
+	}
+
+	public List<TypeAwareModelSlot<?, ?>> getFlexoOntologyModelSlots() {
+		if (getModelSlot() != null) {
+			if (typeAwareModelSlots == null) {
+				typeAwareModelSlots = new ArrayList<TypeAwareModelSlot<?, ?>>();
+			}
+			if (!typeAwareModelSlots.isEmpty()) {
+				typeAwareModelSlots.clear();
+			}
+			for (ModelSlot<?> modelSlot : getModelSlot().getVirtualModel().getModelSlots()) {
+				if (modelSlot instanceof TypeAwareModelSlot) {
+					typeAwareModelSlots.add((TypeAwareModelSlot<?, ?>) modelSlot);
+				}
+			}
+		}
+		return typeAwareModelSlots;
+	}
 
 }

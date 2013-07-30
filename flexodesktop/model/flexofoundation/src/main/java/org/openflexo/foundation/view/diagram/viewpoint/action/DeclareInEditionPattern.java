@@ -165,7 +165,7 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 		return null;
 	}
 
-	public TypeAwareModelSlot<?, ?> getModelSlot() {
+	public ModelSlot<?> getModelSlot() {
 		return modelSlot;
 	}
 
