@@ -116,7 +116,7 @@ public class FIBResourceSelector extends FIBModelObjectSelector<TechnologyAdapte
 
 	@CustomComponentParameter(name = "resourceDataClass", type = CustomComponentParameter.Type.OPTIONAL)
 	public void setResourceDataClass(Class<? extends ResourceData<?>> resourceDataClass) {
-		// System.out.println("set resource data class with " + resourceDataClass);
+		System.out.println("set resource data class with " + resourceDataClass);
 		this.resourceDataClass = resourceDataClass;
 		fireEditedObjectChanged();
 	}
