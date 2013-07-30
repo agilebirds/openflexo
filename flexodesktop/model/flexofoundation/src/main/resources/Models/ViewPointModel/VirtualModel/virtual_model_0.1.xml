@@ -382,7 +382,7 @@
 	</entity>
 
 	<entity
-		name="org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShemaElementAction"
+		name="org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddSchemaElementAction"
 		abstract="yes">
 	</entity>
 
