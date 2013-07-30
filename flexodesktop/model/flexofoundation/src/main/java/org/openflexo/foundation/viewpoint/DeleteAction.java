@@ -32,7 +32,7 @@ import org.openflexo.foundation.technologyadapter.FlexoModel;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.ViewPointObject.FMLRepresentationContext.FMLRepresentationOutput;
 
-public class DeleteAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends EditionAction<M, MM, FlexoModelObject> {
+public class DeleteAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel<MM>> extends EditionAction<M, MM, ViewPointObject> {
 
 	private static final Logger logger = Logger.getLogger(DeleteAction.class.getPackage().getName());
 
@@ -110,10 +110,10 @@ public class DeleteAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel
 	}
 
 	@Override
-	public FlexoModelObject performAction(EditionSchemeAction action) {
-		FlexoModelObject objectToDelete = null;
+	public ViewPointObject performAction(EditionSchemeAction action) {
+		ViewPointObject objectToDelete = null;
 		try {
-			objectToDelete = (FlexoModelObject) getObject().getBindingValue(action);
+			objectToDelete = (ViewPointObject) getObject().getBindingValue(action);
 		} catch (TypeMismatchException e1) {
 			e1.printStackTrace();
 		} catch (NullReferenceException e1) {
@@ -135,7 +135,7 @@ public class DeleteAction<M extends FlexoModel<M, MM>, MM extends FlexoMetaModel
 	}
 
 	@Override
-	public void finalizePerformAction(EditionSchemeAction action, FlexoModelObject initialContext) {
+	public void finalizePerformAction(EditionSchemeAction action, ViewPointObject initialContext) {
 		// TODO Auto-generated method stub
 
 	}
