@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.view.action.EditionSchemeAction;
 import org.openflexo.foundation.viewpoint.DeleteAction;
+import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.technologyadapter.emf.metamodel.EMFMetaModel;
 import org.openflexo.technologyadapter.emf.model.EMFModel;
@@ -61,7 +62,7 @@ public class RemoveEMFObjectIndividual extends DeleteAction<EMFModel, EMFMetaMod
 	 * @see org.openflexo.foundation.viewpoint.DeleteAction#performAction(org.openflexo.foundation.view.action.EditionSchemeAction)
 	 */
 	@Override
-	public FlexoModelObject performAction(EditionSchemeAction action) {
+	public ViewPointObject performAction(EditionSchemeAction action) {
 		// ModelSlotInstance<EMFModel, EMFMetaModel> modelSlotInstance = getModelSlotInstance(action);
 		// EObject object = objectIndividual.getObject();
 		// EObject container = object.eContainer();
@@ -88,6 +89,6 @@ public class RemoveEMFObjectIndividual extends DeleteAction<EMFModel, EMFMetaMod
 	 *      org.openflexo.foundation.FlexoModelObject)
 	 */
 	@Override
-	public void finalizePerformAction(EditionSchemeAction action, FlexoModelObject initialContext) {
+	public void finalizePerformAction(EditionSchemeAction action, ViewPointObject initialContext) {
 	}
 }
