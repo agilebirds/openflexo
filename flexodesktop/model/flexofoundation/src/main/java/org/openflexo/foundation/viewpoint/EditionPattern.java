@@ -885,7 +885,7 @@ public class EditionPattern extends EditionPatternObject {
 	}
 
 	public static class EditionPatternShouldHaveEditionSchemes extends
-			ValidationRule<EditionPatternShouldHaveEditionSchemes, EditionPattern> {
+	ValidationRule<EditionPatternShouldHaveEditionSchemes, EditionPattern> {
 		public EditionPatternShouldHaveEditionSchemes() {
 			super(EditionPattern.class, "edition_pattern_should_have_edition_scheme");
 		}
@@ -901,7 +901,7 @@ public class EditionPattern extends EditionPatternObject {
 	}
 
 	public static class EditionPatternShouldHaveDeletionScheme extends
-			ValidationRule<EditionPatternShouldHaveDeletionScheme, EditionPattern> {
+	ValidationRule<EditionPatternShouldHaveDeletionScheme, EditionPattern> {
 		public EditionPatternShouldHaveDeletionScheme() {
 			super(EditionPattern.class, "edition_pattern_should_have_deletion_scheme");
 		}
