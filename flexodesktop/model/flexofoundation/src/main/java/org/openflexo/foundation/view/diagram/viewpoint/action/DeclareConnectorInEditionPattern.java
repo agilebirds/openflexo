@@ -422,10 +422,12 @@ public class DeclareConnectorInEditionPattern extends
 		}*/
 	}
 
+	@Override
 	public IFlexoOntologyObjectProperty getObjectProperty() {
 		return objectProperty;
 	}
 
+	@Override
 	public void setObjectProperty(IFlexoOntologyObjectProperty property) {
 		this.objectProperty = property;
 	}
@@ -456,6 +458,7 @@ public class DeclareConnectorInEditionPattern extends
 		this.individualPatternRoleName = individualPatternRoleName;
 	}
 
+	@Override
 	public String getObjectPropertyStatementPatternRoleName() {
 		if (StringUtils.isEmpty(objectPropertyStatementPatternRoleName) && objectProperty != null) {
 			return JavaUtils.getVariableName(objectProperty.getName()) + "Statement";
@@ -463,10 +466,12 @@ public class DeclareConnectorInEditionPattern extends
 		return objectPropertyStatementPatternRoleName;
 	}
 
+	@Override
 	public void setObjectPropertyStatementPatternRoleName(String objectPropertyStatementPatternRoleName) {
 		this.objectPropertyStatementPatternRoleName = objectPropertyStatementPatternRoleName;
 	}
 
+	@Override
 	public String getConnectorPatternRoleName() {
 		if (StringUtils.isEmpty(connectorPatternRoleName)) {
 			return "connector";
@@ -474,10 +479,12 @@ public class DeclareConnectorInEditionPattern extends
 		return connectorPatternRoleName;
 	}
 
+	@Override
 	public void setConnectorPatternRoleName(String connectorPatternRoleName) {
 		this.connectorPatternRoleName = connectorPatternRoleName;
 	}
 
+	@Override
 	public String getLinkSchemeName() {
 		if (StringUtils.isEmpty(linkSchemeName)) {
 			return "link" + (fromEditionPattern != null ? fromEditionPattern.getName() : "") + "To"
@@ -486,6 +493,7 @@ public class DeclareConnectorInEditionPattern extends
 		return linkSchemeName;
 	}
 
+	@Override
 	public void setLinkSchemeName(String linkSchemeName) {
 		this.linkSchemeName = linkSchemeName;
 	}
@@ -554,5 +562,10 @@ public class DeclareConnectorInEditionPattern extends
 		}
 		return super.getEditionPattern();
 	};
+
+	@Override
+	public DiagramConnector getFocusedObject() {
+		return super.getFocusedObject();
+	}
 
 }

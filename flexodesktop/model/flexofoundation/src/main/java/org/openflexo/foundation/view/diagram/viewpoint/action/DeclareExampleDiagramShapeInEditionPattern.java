@@ -70,4 +70,9 @@ public class DeclareExampleDiagramShapeInEditionPattern extends
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
+	@Override
+	public ExampleDiagramShape getFocusedObject() {
+		return super.getFocusedObject();
+	}
+
 }

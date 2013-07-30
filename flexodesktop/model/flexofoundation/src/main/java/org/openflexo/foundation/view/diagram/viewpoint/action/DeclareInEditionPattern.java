@@ -175,14 +175,6 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 		return null;
 	}
 
-	public VirtualModelModelSlot getVirtualModelModelSlot() {
-		return (VirtualModelModelSlot) modelSlot;
-	}
-
-	public TypeAwareModelSlot getTypeAwareModelSlot() {
-		return (TypeAwareModelSlot) modelSlot;
-	}
-
 	public ModelSlot<?> getModelSlot() {
 		return modelSlot;
 	}
