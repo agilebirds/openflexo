@@ -108,6 +108,12 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 		return null;
 	}
 
+	public EditionPatternInstancePatternRole makeEditionPatternInstancePatternRole(EditionPattern editionPattern) {
+		EditionPatternInstancePatternRole returned = makePatternRole(EditionPatternInstancePatternRole.class);
+		returned.setEditionPatternType(editionPattern);
+		return returned;
+	}
+
 	@Override
 	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
 		if (SelectEditionPatternInstance.class.isAssignableFrom(fetchRequestClass)) {

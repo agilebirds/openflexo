@@ -43,6 +43,7 @@ import org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole;
 import org.openflexo.foundation.viewpoint.IndividualPatternRole;
 import org.openflexo.foundation.viewpoint.URIParameter;
 import org.openflexo.foundation.viewpoint.VirtualModel;
+import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
 import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
 import org.openflexo.toolbox.StringUtils;
 
@@ -131,7 +132,7 @@ public class DeclareExampleDiagramShapeInEditionPattern extends
 							newEditionPattern.setPrimaryConceptRole(individualPatternRole);
 						}
 					}
-					/*if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_EDITION_PATTERN) {
+					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_EDITION_PATTERN) {
 						if (isVirtualModelModelSlot()) {
 							VirtualModelModelSlot<?, ?> virtualModelModelSlot = (VirtualModelModelSlot<?, ?>) getModelSlot();
 							editionPatternPatternRole = virtualModelModelSlot
@@ -139,7 +140,7 @@ public class DeclareExampleDiagramShapeInEditionPattern extends
 							editionPatternPatternRole.setPatternRoleName(getVirtualModelPatternRoleName());
 							newEditionPattern.addToPatternRoles(editionPatternPatternRole);
 						}
-					}*/
+					}
 
 					// Create graphical elements pattern role
 

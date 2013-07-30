@@ -28,7 +28,6 @@ import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 
@@ -49,7 +48,7 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 
 	private EditionPattern editionPattern;
 
-	private TypeAwareModelSlot<?, ?> modelSlot;
+	private ModelSlot<?> modelSlot;
 
 	/**
 	 * Constructor for this class
@@ -62,7 +61,7 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 	DeclareInEditionPattern(FlexoActionType<A, T1, T2> actionType, T1 focusedObject, Vector<T2> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
 		// Get the set of model slots that are available from the current virtual model
-		List<TypeAwareModelSlot> availableModelSlots = focusedObject.getDiagramSpecification().getModelSlots(TypeAwareModelSlot.class);
+		List<ModelSlot> availableModelSlots = focusedObject.getDiagramSpecification().getModelSlots();
 		if (availableModelSlots.size() > 0) {
 			modelSlot = availableModelSlots.get(0);
 		}
@@ -169,7 +168,7 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 		return modelSlot;
 	}
 
-	public void setModelSlot(TypeAwareModelSlot<?, ?> modelSlot) {
+	public void setModelSlot(ModelSlot<?> modelSlot) {
 		this.modelSlot = modelSlot;
 	}
 
