@@ -36,14 +36,12 @@ public class ExcelWorkbookPatternRole extends PatternRole<ExcelWorkbook> {
 
 	@Override
 	public Type getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return ExcelWorkbook.class;
 	}
 
 	@Override
 	public String getPreciseType() {
-		// TODO Auto-generated method stub
-		return null;
+		return ExcelWorkbook.class.getName();
 	}
 
 	@Override
@@ -55,7 +53,7 @@ public class ExcelWorkbookPatternRole extends PatternRole<ExcelWorkbook> {
 	@Override
 	public void setIsPrimaryRole(boolean isPrimary) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -65,11 +63,9 @@ public class ExcelWorkbookPatternRole extends PatternRole<ExcelWorkbook> {
 	}
 
 	@Override
-	public ActorReference<ExcelWorkbook> makeActorReference(ExcelWorkbook object,
-			EditionPatternInstance epi) {
+	public ActorReference<ExcelWorkbook> makeActorReference(ExcelWorkbook object, EditionPatternInstance epi) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 }

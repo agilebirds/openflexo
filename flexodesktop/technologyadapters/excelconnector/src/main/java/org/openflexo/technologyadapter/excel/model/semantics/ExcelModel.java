@@ -67,4 +67,10 @@ public class ExcelModel extends ExcelObject implements FlexoModel<ExcelModel, Ex
 		this.resource = (ExcelModelResource) resource;
 	}
 
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -16,4 +16,14 @@ public class ExcelRow extends ExcelObject {
 		this.row = row;
 	}
 
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public int getRowNum(){
+		return row.getRowNum();
+	}	
+
 }

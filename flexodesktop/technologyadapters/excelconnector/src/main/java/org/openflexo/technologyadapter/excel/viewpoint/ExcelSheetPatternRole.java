@@ -36,14 +36,12 @@ public class ExcelSheetPatternRole extends PatternRole<ExcelSheet> {
 
 	@Override
 	public Type getType() {
-		// TODO Auto-generated method stub
-		return null;
+		return ExcelSheet.class;
 	}
 
 	@Override
 	public String getPreciseType() {
-		// TODO Auto-generated method stub
-		return null;
+		return ExcelSheet.class.getName();
 	}
 
 	@Override
@@ -53,23 +51,19 @@ public class ExcelSheetPatternRole extends PatternRole<ExcelSheet> {
 	}
 
 	@Override
-	public void setIsPrimaryRole(boolean isPrimary) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public boolean defaultBehaviourIsToBeDeleted() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public ActorReference<ExcelSheet> makeActorReference(ExcelSheet object,
-			EditionPatternInstance epi) {
-		// TODO Auto-generated method stub
+	public ActorReference<ExcelSheet> makeActorReference(ExcelSheet object, EditionPatternInstance epi) {
 		return null;
 	}
 
+	@Override
+	public void setIsPrimaryRole(boolean isPrimary) {
+
+	}
 
 }

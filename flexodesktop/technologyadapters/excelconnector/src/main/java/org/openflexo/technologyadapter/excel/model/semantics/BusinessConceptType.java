@@ -9,4 +9,10 @@ public class BusinessConceptType extends ExcelObject {
 		super(adapter);
 	}
 
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

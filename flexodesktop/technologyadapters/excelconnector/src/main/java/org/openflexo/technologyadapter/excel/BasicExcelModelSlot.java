@@ -23,12 +23,17 @@ package org.openflexo.technologyadapter.excel;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
+import org.openflexo.foundation.technologyadapter.DeclareFetchRequest;
+import org.openflexo.foundation.technologyadapter.DeclareFetchRequests;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRole;
 import org.openflexo.foundation.technologyadapter.DeclarePatternRoles;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
-import org.openflexo.foundation.view.ModelSlotInstance;
+import org.openflexo.foundation.technologyadapter.FreeModelSlot;
+import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
+import org.openflexo.foundation.view.FreeModelSlotInstance;
+import org.openflexo.foundation.view.View;
 import org.openflexo.foundation.view.action.CreateVirtualModelInstance;
 import org.openflexo.foundation.view.action.ModelSlotInstanceConfiguration;
 import org.openflexo.foundation.viewpoint.EditionAction;
@@ -46,6 +51,7 @@ import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelCel
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelRow;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelSheet;
 import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelWorkbook;
+import org.openflexo.technologyadapter.excel.viewpoint.editionaction.SelectExcelSheet;
 
 /**
  * Implementation of a basic ModelSlot class for the Excel technology adapter<br>
@@ -67,7 +73,9 @@ import org.openflexo.technologyadapter.excel.viewpoint.editionaction.AddExcelWor
 		@DeclareEditionAction(FML = "AddExcelRow", editionActionClass = AddExcelRow.class), // Add row
 		@DeclareEditionAction(FML = "AddExcelSheet", editionActionClass = AddExcelSheet.class) // Add sheet
 })
-public class BasicExcelModelSlot extends ModelSlot<ExcelWorkbook> {
+@DeclareFetchRequests({ // All requests available through this model slot
+@DeclareFetchRequest(FML = "RemoveReferencePropertyValue", fetchRequestClass = SelectExcelSheet.class) })
+public class BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 
 	private static final Logger logger = Logger.getLogger(BasicExcelModelSlot.class.getPackage().getName());
 
@@ -151,24 +159,40 @@ public class BasicExcelModelSlot extends ModelSlot<ExcelWorkbook> {
 
 	@Override
 	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
-		// TODO Auto-generated method stub
-		return null;
+		if (SelectExcelSheet.class.isAssignableFrom(fetchRequestClass)) {
+			return (FR) new SelectExcelSheet(null);
+		} else {
+			return null;
+		}
 	}
 
 	@Override
 	public ModelSlotInstanceConfiguration<BasicExcelModelSlot, ExcelWorkbook> createConfiguration(CreateVirtualModelInstance<?> action) {
+		return new BasicExcelModelSlotInstanceConfiguration(this, action);
+	}
+
+	@Override
+	public String getURIForObject(FreeModelSlotInstance<ExcelWorkbook, ? extends FreeModelSlot<ExcelWorkbook>> msInstance, Object o) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getURIForObject(ModelSlotInstance<? extends ModelSlot<ExcelWorkbook>, ExcelWorkbook> msInstance, Object o) {
+	public Object retrieveObjectWithURI(FreeModelSlotInstance<ExcelWorkbook, ? extends FreeModelSlot<ExcelWorkbook>> msInstance,
+			String objectURI) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object retrieveObjectWithURI(ModelSlotInstance<? extends ModelSlot<ExcelWorkbook>, ExcelWorkbook> msInstance, String objectURI) {
+	public TechnologyAdapterResource<ExcelWorkbook> createProjectSpecificEmptyResource(View view, String filename, String modelUri) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TechnologyAdapterResource<ExcelWorkbook> createSharedEmptyResource(FlexoResourceCenter<?> resourceCenter, String relativePath,
+			String filename, String modelUri) {
 		// TODO Auto-generated method stub
 		return null;
 	}

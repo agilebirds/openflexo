@@ -13,15 +13,22 @@ public abstract class ExcelObject extends FlexoObject implements TechnologyObjec
 		technologyAdapter = adapter;
 	}
 
+	/**
+	 * Name of Object.
+	 * 
+	 * @return
+	 */
+	public abstract String getName();
+
 	@Override
 	public ExcelTechnologyAdapter getTechnologyAdapter() {
 		// TODO Auto-generated method stub
-		return null;
+		return technologyAdapter;
 	}
 
 	@Override
 	public String getFullyQualifiedName() {
-		return null;
+		return getName();
 	}
 
 }

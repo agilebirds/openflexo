@@ -1,5 +1,6 @@
 package org.openflexo.technologyadapter.excel.viewpoint.binding;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
@@ -10,11 +11,13 @@ import org.openflexo.antar.binding.FunctionPathElement;
 import org.openflexo.antar.binding.SimplePathElement;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterBindingFactory;
 import org.openflexo.foundation.viewpoint.TechnologySpecificCustomType;
+import org.openflexo.technologyadapter.excel.model.ExcelSheet;
+import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
 /**
  * This class represent the {@link BindingFactory} dedicated to handle Excel technology-specific binding elements
  * 
- * @author sylvain
+ * @author sylvain, vincent
  * 
  */
 public final class ExcelBindingFactory extends TechnologyAdapterBindingFactory {
@@ -32,13 +35,27 @@ public final class ExcelBindingFactory extends TechnologyAdapterBindingFactory {
 
 	@Override
 	public boolean handleType(TechnologySpecificCustomType technologySpecificType) {
-		return false;
+		if (technologySpecificType instanceof ExcelWorkbook) {
+			return true;
+		}
+		if (technologySpecificType instanceof ExcelSheet) {
+			return true;
+		}
+		/*if (technologySpecificType instanceof ExcelSheetType) {
+			return true;
+		}*/
+		return true;
 	}
 
 	@Override
 	public List<? extends SimplePathElement> getAccessibleSimplePathElements(BindingPathElement parent) {
-		// TODO
-		return super.getAccessibleSimplePathElements(parent);
+		List<SimplePathElement> returned = new ArrayList<SimplePathElement>();
+		if (parent instanceof ExcelWorkbook) {
+			for (ExcelSheet sheet : ((ExcelWorkbook) parent).getExcelSheets()) {
+				returned.add(getSimplePathElement(sheet, parent));
+			}
+		}
+		return returned;
 	}
 
 	@Override

@@ -65,4 +65,10 @@ public class ExcelMetaModel extends ExcelObject implements FlexoMetaModel<ExcelM
 		return null;
 	}
 
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

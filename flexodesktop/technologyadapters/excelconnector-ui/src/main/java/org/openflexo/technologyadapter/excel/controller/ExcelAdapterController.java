@@ -7,6 +7,15 @@ import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.foundation.viewpoint.PatternRole;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 import org.openflexo.technologyadapter.excel.gui.ExcelIconLibrary;
+import org.openflexo.technologyadapter.excel.model.ExcelCell;
+import org.openflexo.technologyadapter.excel.model.ExcelRow;
+import org.openflexo.technologyadapter.excel.model.ExcelSheet;
+import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
+import org.openflexo.technologyadapter.excel.viewpoint.ExcelCellPatternRole;
+import org.openflexo.technologyadapter.excel.viewpoint.ExcelRowPatternRole;
+import org.openflexo.technologyadapter.excel.viewpoint.ExcelSheetPatternRole;
+import org.openflexo.technologyadapter.excel.viewpoint.ExcelWorkbookPatternRole;
+import org.openflexo.toolbox.FileResource;
 import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.ModuleView;
 import org.openflexo.view.controller.ControllerActionInitializer;
@@ -23,8 +32,7 @@ public class ExcelAdapterController extends TechnologyAdapterController<ExcelTec
 
 	@Override
 	public void initializeActions(ControllerActionInitializer actionInitializer) {
-		// TODO Auto-generated method stub
-
+		actionInitializer.getController().getModuleInspectorController().loadDirectory(new FileResource("Inspectors/Excel"));
 	}
 
 	@Override
@@ -55,7 +63,18 @@ public class ExcelAdapterController extends TechnologyAdapterController<ExcelTec
 
 	@Override
 	public ImageIcon getIconForPatternRole(Class<? extends PatternRole<?>> patternRoleClass) {
-		// TODO Auto-generated method stub
+		if (ExcelWorkbookPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return getIconForTechnologyObject(ExcelWorkbook.class);
+		}
+		if (ExcelSheetPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return getIconForTechnologyObject(ExcelSheet.class);
+		}
+		if (ExcelCellPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return getIconForTechnologyObject(ExcelCell.class);
+		}
+		if (ExcelRowPatternRole.class.isAssignableFrom(patternRoleClass)) {
+			return getIconForTechnologyObject(ExcelRow.class);
+		}
 		return null;
 	}
 

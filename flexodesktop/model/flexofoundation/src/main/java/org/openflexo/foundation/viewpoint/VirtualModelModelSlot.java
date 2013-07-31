@@ -149,14 +149,14 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 		return EditionPatternInstanceType.getEditionPatternInstanceType(getAddressedVirtualModel());
 	}
 
-	public String getMetaModelURI() {
+	public String getVirtualModelURI() {
 		if (virtualModelResource != null) {
 			return virtualModelResource.getURI();
 		}
 		return virtualModelURI;
 	}
 
-	public void setMetaModelURI(String metaModelURI) {
+	public void setVirtualModelURI(String metaModelURI) {
 		this.virtualModelURI = metaModelURI;
 	}
 
@@ -203,4 +203,10 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 		logger.warning("This method should be refined by child classes");
 		return null;
 	}
+
+	@Override
+	public String getModelSlotDescription() {
+		return "Virtual Model conform to " + getVirtualModelURI() + (isReflexiveModelSlot() ? " [reflexive]" : "");
+	}
+
 }

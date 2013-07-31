@@ -14,7 +14,7 @@
       <Children data="folder.resources" name="resource" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.foundation.technologyadapter.TechnologyAdapter" label="technologyAdapter.name" icon="controller.iconForObject(technologyAdapter)" isEditable="false" filtered="false" defaultVisible="true" name="technologyAdapter">
-      <Children data="data.informationSpace.getAllRepositories(technologyAdapter,data.typedResourceDataClass)" visible="true" cast="child.rootFolder" name="resourceRepositories" />
+      <Children data="data.informationSpace.getAllRepositories(technologyAdapter)" visible="true" cast="child.rootFolder" name="resourceRepositories" />
     </BrowserElement>
     <BrowserElement dataClassName="org.openflexo.foundation.technologyadapter.TechnologyAdapterResource" label="resource.name" icon="controller.iconForObject(resource)" enabled="(data.resource = null)" isEditable="false" filtered="false" defaultVisible="true" name="resource" />
   </Browser>
