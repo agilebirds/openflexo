@@ -167,7 +167,7 @@ public class XMLAdapterController extends TechnologyAdapterController<XMLTechnol
 	public ImageIcon getIconForTechnologyObject(
 			Class<? extends TechnologyObject> objectClass) {
 		// TODO Auto-generated method stub
-		return null;
+		return XMLIconLibrary.XML_FILE_ICON;
 	}
 
 	@Override
