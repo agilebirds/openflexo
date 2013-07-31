@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.controller.action;
+package org.openflexo.ve.controller.action;
 
 import java.util.EventObject;
 import java.util.logging.Logger;
@@ -27,50 +27,49 @@ import javax.swing.Icon;
 import org.openflexo.FlexoCst;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
-import org.openflexo.foundation.view.diagram.viewpoint.action.DeclareExampleDiagramShapeInEditionPattern;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
+import org.openflexo.foundation.view.diagram.viewpoint.action.DeclareDiagramShapeInEditionPattern;
 import org.openflexo.icon.VPMIconLibrary;
+import org.openflexo.ve.controller.VEController;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.vpm.controller.VPMController;
 
 public class DeclareShapeInEditionPatternInitializer extends
-		ActionInitializer<DeclareExampleDiagramShapeInEditionPattern, ExampleDiagramShape, ExampleDiagramObject> {
+		ActionInitializer<DeclareDiagramShapeInEditionPattern, DiagramShape, DiagramElement> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeclareShapeInEditionPatternInitializer(VPMControllerActionInitializer actionInitializer) {
-		super(DeclareExampleDiagramShapeInEditionPattern.actionType, actionInitializer);
+	DeclareShapeInEditionPatternInitializer(VEControllerActionInitializer actionInitializer) {
+		super(DeclareDiagramShapeInEditionPattern.actionType, actionInitializer);
 	}
 
 	@Override
-	protected VPMControllerActionInitializer getControllerActionInitializer() {
-		return (VPMControllerActionInitializer) super.getControllerActionInitializer();
+	protected VEControllerActionInitializer getControllerActionInitializer() {
+		return (VEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	public VPMController getController() {
-		return (VPMController) super.getController();
+	public VEController getController() {
+		return (VEController) super.getController();
 	}
 
 	@Override
-	protected FlexoActionInitializer<DeclareExampleDiagramShapeInEditionPattern> getDefaultInitializer() {
-		return new FlexoActionInitializer<DeclareExampleDiagramShapeInEditionPattern>() {
+	protected FlexoActionInitializer<DeclareDiagramShapeInEditionPattern> getDefaultInitializer() {
+		return new FlexoActionInitializer<DeclareDiagramShapeInEditionPattern>() {
 			@Override
-			public boolean run(EventObject e, DeclareExampleDiagramShapeInEditionPattern action) {
-
+			public boolean run(EventObject e, DeclareDiagramShapeInEditionPattern action) {
 				return instanciateAndShowDialog(action, FlexoCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB);
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DeclareExampleDiagramShapeInEditionPattern> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<DeclareExampleDiagramShapeInEditionPattern>() {
+	protected FlexoActionFinalizer<DeclareDiagramShapeInEditionPattern> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<DeclareDiagramShapeInEditionPattern>() {
 			@Override
-			public boolean run(EventObject e, DeclareExampleDiagramShapeInEditionPattern action) {
-				getController().setCurrentEditedObjectAsModuleView(action.getEditionPattern(), getController().VIEW_POINT_PERSPECTIVE);
+			public boolean run(EventObject e, DeclareDiagramShapeInEditionPattern action) {
+				// getController().setCurrentEditedObjectAsModuleView(action.getEditionPattern(), getController().VIEW_POINT_PERSPECTIVE);
 				getController().getSelectionManager().setSelectedObject(action.getEditionPattern().getPrimaryRepresentationRole());
 				return true;
 			}

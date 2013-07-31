@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -17,6 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 package org.openflexo.foundation.view.diagram.viewpoint.action;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ import java.util.logging.Logger;
 import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
@@ -36,7 +37,6 @@ import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
 import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
@@ -52,37 +52,19 @@ import org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
-public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<DeclareShapeInEditionPattern, ExampleDiagramShape> {
+/**
+ * This class represents an abstraction for a declare shape in edition pattern action among several kind of shapes.</br>
+ * 
+ * 
+ * @author Vincent
+ * 
+ * @param <T1>
+ */
 
-	private static final Logger logger = Logger.getLogger(DeclareShapeInEditionPattern.class.getPackage().getName());
+public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObject & GRShapeTemplate, T2 extends FlexoObject, A extends AbstractDeclareShapeInEditionPattern<T1, T2, A>>
+extends DeclareInEditionPattern<A, T1, T2> {
 
-	public static FlexoActionType<DeclareShapeInEditionPattern, ExampleDiagramShape, ExampleDiagramObject> actionType = new FlexoActionType<DeclareShapeInEditionPattern, ExampleDiagramShape, ExampleDiagramObject>(
-			"declare_in_edition_pattern", FlexoActionType.defaultGroup, FlexoActionType.NORMAL_ACTION_TYPE) {
-
-		/**
-		 * Factory method
-		 */
-		@Override
-		public DeclareShapeInEditionPattern makeNewAction(ExampleDiagramShape focusedObject, Vector<ExampleDiagramObject> globalSelection,
-				FlexoEditor editor) {
-			return new DeclareShapeInEditionPattern(focusedObject, globalSelection, editor);
-		}
-
-		@Override
-		public boolean isVisibleForSelection(ExampleDiagramShape shape, Vector<ExampleDiagramObject> globalSelection) {
-			return true;
-		}
-
-		@Override
-		public boolean isEnabledForSelection(ExampleDiagramShape shape, Vector<ExampleDiagramObject> globalSelection) {
-			return shape != null && shape.getVirtualModel() != null;
-		}
-
-	};
-
-	static {
-		FlexoModelObject.addActionForClass(DeclareShapeInEditionPattern.actionType, ExampleDiagramShape.class);
-	}
+	private static final Logger logger = Logger.getLogger(AbstractDeclareShapeInEditionPattern.class.getPackage().getName());
 
 	public static enum NewEditionPatternChoices {
 		MAP_SINGLE_INDIVIDUAL, MAP_SINGLE_EDITION_PATTERN, BLANK_EDITION_PATTERN
@@ -94,22 +76,192 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 	private IFlexoOntologyClass concept;
 	private String individualPatternRoleName;
 	private String virtualModelPatternRoleName;
-	private List<VirtualModelModelSlot<?, ?>> virtualModelModelSlots = null;
-	private List<ModelSlot<?>> flexoTypeAwareModelSlots = null;
+	private EditionPattern newEditionPattern;
+	private Hashtable<DrawingObjectEntry, GraphicalElementPatternRole> newGraphicalElementPatternRoles;
 
 	public boolean isTopLevel = true;
 	public EditionPattern containerEditionPattern;
+	private EditionPattern virtualModelConcept;
 	private String dropSchemeName;
 
-	private EditionPattern newEditionPattern;
-	private EditionPattern virtualModelConcept;
-	private Hashtable<ExampleDrawingObjectEntry, GraphicalElementPatternRole> newGraphicalElementPatternRoles;
+	AbstractDeclareShapeInEditionPattern(FlexoActionType actionType, T1 focusedObject, Vector<T2> globalSelection, FlexoEditor editor) {
+		super(actionType, focusedObject, globalSelection, editor);
+	}
+
+	@Override
+	public boolean isValid() {
+		if (getFocusedObject() == null) {
+			return false;
+		}
+		switch (primaryChoice) {
+		case CHOOSE_EXISTING_EDITION_PATTERN:
+			return getEditionPattern() != null && getPatternRole() != null;
+		case CREATES_EDITION_PATTERN:
+			switch (patternChoice) {
+			case MAP_SINGLE_INDIVIDUAL:
+				return StringUtils.isNotEmpty(getEditionPatternName()) && concept != null
+				&& StringUtils.isNotEmpty(getIndividualPatternRoleName()) && getSelectedEntriesCount() > 0
+				&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
+			case MAP_SINGLE_EDITION_PATTERN:
+				return StringUtils.isNotEmpty(getEditionPatternName()) && virtualModelConcept != null
+				&& StringUtils.isNotEmpty(getVirtualModelPatternRoleName()) && getSelectedEntriesCount() > 0
+				&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
+			case BLANK_EDITION_PATTERN:
+				return StringUtils.isNotEmpty(getEditionPatternName()) && getSelectedEntriesCount() > 0
+						&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
+			default:
+				break;
+			}
+		default:
+			return false;
+		}
+	}
+
+	private ShapePatternRole patternRole;
+
+	@Override
+	public ShapePatternRole getPatternRole() {
+		return patternRole;
+	}
+
+	public void setPatternRole(ShapePatternRole patternRole) {
+		this.patternRole = patternRole;
+	}
+
+	@Override
+	public void resetPatternRole() {
+		this.patternRole = null;
+	}
+
+	public IFlexoOntologyClass getConcept() {
+		return concept;
+	}
+
+	public void setConcept(IFlexoOntologyClass concept) {
+		this.concept = concept;
+		/*propertyEntries.clear();
+		IFlexoOntology ownerOntology = concept.getOntology();
+		for (IFlexoOntologyFeature p : concept.getPropertiesTakingMySelfAsDomain()) {
+			if (p.getOntology() == ownerOntology && p instanceof IFlexoOntologyStructuralProperty) {
+				PropertyEntry newEntry = new PropertyEntry((IFlexoOntologyStructuralProperty) p);
+				propertyEntries.add(newEntry);
+			}
+		}*/
+	}
+
+
+
+	public String getDropSchemeName() {
+		if (StringUtils.isEmpty(dropSchemeName)) {
+			return "drop" + (StringUtils.isEmpty(getEditionPatternName()) ? "" : getEditionPatternName())
+					+ (isTopLevel ? "AtTopLevel" : containerEditionPattern != null ? "In" + containerEditionPattern.getName() : "");
+		}
+		return dropSchemeName;
+	}
+
+	public void setDropSchemeName(String dropSchemeName) {
+		this.dropSchemeName = dropSchemeName;
+	}
+
+
+	public String getEditionPatternName() {
+		if (StringUtils.isEmpty(editionPatternName) && concept != null) {
+			return concept.getName();
+		}
+		return editionPatternName;
+	}
+
+	public void setEditionPatternName(String editionPatternName) {
+		this.editionPatternName = editionPatternName;
+	}
+
+	public String getIndividualPatternRoleName() {
+		if (StringUtils.isEmpty(individualPatternRoleName) && concept != null) {
+			return JavaUtils.getVariableName(concept.getName());
+		}
+		return individualPatternRoleName;
+	}
+
+	public void setIndividualPatternRoleName(String individualPatternRoleName) {
+		this.individualPatternRoleName = individualPatternRoleName;
+	}
+
+
 
 	// public Vector<PropertyEntry> propertyEntries = new Vector<PropertyEntry>();
 
-	DeclareShapeInEditionPattern(ExampleDiagramShape focusedObject, Vector<ExampleDiagramObject> globalSelection, FlexoEditor editor) {
-		super(actionType, focusedObject, globalSelection, editor);
+	/*
+	public void selectNoneProperties() {
+		for (PropertyEntry e : propertyEntries) {
+			e.selectEntry = false;
+		}
 	}
+	 */
+
+	/*public class PropertyEntry {
+
+		public IFlexoOntologyStructuralProperty property;
+		public String label;
+		public boolean selectEntry = false;
+
+		public PropertyEntry(IFlexoOntologyStructuralProperty property) {
+			this.property = property;
+			if (StringUtils.isNotEmpty(property.getDescription())) {
+				label = property.getDescription();
+			} else {
+				label = property.getName() + "_of_" + getIndividualPatternRoleName();
+			}
+		}
+
+		public String getRange() {
+			return property.getRange().getName();
+		}
+	}*/
+
+	/*private PropertyEntry selectBestEntryForURIBaseName() {
+		Vector<PropertyEntry> candidates = new Vector<PropertyEntry>();
+		for (PropertyEntry e : propertyEntries) {
+			if (e.selectEntry && e.property instanceof IFlexoOntologyDataProperty
+					&& ((IFlexoOntologyDataProperty) e.property).getRange().getBuiltInDataType() == BuiltInDataType.String) {
+				candidates.add(e);
+			}
+		}
+		if (candidates.size() > 0) {
+			return candidates.firstElement();
+		}
+		return null;
+	}*/
+
+	/*public PropertyEntry createPropertyEntry() {
+		PropertyEntry newPropertyEntry = new PropertyEntry(null);
+		propertyEntries.add(newPropertyEntry);
+		return newPropertyEntry;
+	}
+
+	public PropertyEntry deletePropertyEntry(PropertyEntry aPropertyEntry) {
+		propertyEntries.remove(aPropertyEntry);
+		return aPropertyEntry;
+	}
+
+	public void selectAllProperties() {
+		for (PropertyEntry e : propertyEntries) {
+			e.selectEntry = true;
+		}
+
+	 */
+
+
+	public String getVirtualModelPatternRoleName() {
+		if (StringUtils.isEmpty(virtualModelPatternRoleName) && virtualModelConcept != null) {
+			return JavaUtils.getVariableName(virtualModelConcept.getName());
+		}
+		return virtualModelPatternRoleName;
+	}
+
+	public void setVirtualModelPatternRoleName(String virtualModelPatternRoleName) {
+		this.virtualModelPatternRoleName = virtualModelPatternRoleName;
+	}
+
 
 	@Override
 	protected void doAction(Object context) {
@@ -122,8 +274,11 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 				}
 				break;
 			case CREATES_EDITION_PATTERN:
-				VirtualModel.VirtualModelBuilder builder = new VirtualModel.VirtualModelBuilder(getFocusedObject().getViewPointLibrary(),
-						getFocusedObject().getViewPoint(), getFocusedObject().getVirtualModel().getResource());
+				// DiagramShape diagramShape = getFocusedObject();
+
+				VirtualModel.VirtualModelBuilder builder = new VirtualModel.VirtualModelBuilder(getFocusedObject()
+						.getDiagramSpecification().getViewPointLibrary(), getFocusedObject().getDiagramSpecification().getViewPoint(),
+						getFocusedObject().getDiagramSpecification().getResource());
 				switch (patternChoice) {
 				case MAP_SINGLE_INDIVIDUAL:
 				case MAP_SINGLE_EDITION_PATTERN:
@@ -134,7 +289,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					newEditionPattern.setName(getEditionPatternName());
 
 					// And add the newly created edition pattern
-					getFocusedObject().getVirtualModel().addToEditionPatterns(newEditionPattern);
+					getFocusedObject().getDiagramSpecification().addToEditionPatterns(newEditionPattern);
 
 					// Find best URI base candidate
 					// PropertyEntry mainPropertyDescriptor = selectBestEntryForURIBaseName();
@@ -144,7 +299,8 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 					IndividualPatternRole<?> individualPatternRole = null;
 					EditionPatternInstancePatternRole editionPatternPatternRole = null;
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
-						if (isFlexoOntologyModelSlot()) {
+
+						if (isTypeAwareModelSlot()) {
 							TypeAwareModelSlot<?, ?> flexoOntologyModelSlot = (TypeAwareModelSlot<?, ?>) getModelSlot();
 							individualPatternRole = flexoOntologyModelSlot.makeIndividualPatternRole(getConcept());
 							individualPatternRole.setPatternRoleName(getIndividualPatternRoleName());
@@ -165,10 +321,10 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 					// Create graphical elements pattern role
 
-					newGraphicalElementPatternRoles = new Hashtable<ExampleDrawingObjectEntry, GraphicalElementPatternRole>();
+					newGraphicalElementPatternRoles = new Hashtable<DrawingObjectEntry, GraphicalElementPatternRole>();
 
 					GraphicalElementPatternRole primaryRepresentationRole = null;
-					for (ExampleDrawingObjectEntry entry : drawingObjectEntries) {
+					for (DrawingObjectEntry entry : drawingObjectEntries) {
 						if (entry.getSelectThis()) {
 							if (entry.graphicalObject instanceof ExampleDiagramShape) {
 								ShapePatternRole newShapePatternRole = new ShapePatternRole(builder);
@@ -189,7 +345,7 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 										.getGraphicalRepresentation()).clone());
 								// Forces GR to be displayed in view
 								((ShapeGraphicalRepresentation<?>) newShapePatternRole.getGraphicalRepresentation())
-										.setAllowToLeaveBounds(false);
+								.setAllowToLeaveBounds(false);
 								newEditionPattern.addToPatternRoles(newShapePatternRole);
 								if (entry.getParentEntry() != null) {
 									newShapePatternRole.setParentShapePatternRole((ShapePatternRole) newGraphicalElementPatternRoles
@@ -237,8 +393,8 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 
 					// Parameters
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
-						if (isFlexoOntologyModelSlot()) {
-							TypeAwareModelSlot<?,?> flexoOntologyModelSlot = (TypeAwareModelSlot<?,?>) getModelSlot();
+						if (isTypeAwareModelSlot()) {
+							TypeAwareModelSlot<?, ?> flexoOntologyModelSlot = (TypeAwareModelSlot<?, ?>) getModelSlot();
 							// Vector<PropertyEntry> candidates = new Vector<PropertyEntry>();
 							/*for (PropertyEntry e : propertyEntries) {
 								if (e != null && e.selectEntry) {
@@ -427,67 +583,6 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 		}
 	}
 
-	@Override
-	public boolean isValid() {
-		if (getFocusedObject() == null) {
-			return false;
-		}
-		switch (primaryChoice) {
-		case CHOOSE_EXISTING_EDITION_PATTERN:
-			return getEditionPattern() != null && getPatternRole() != null;
-		case CREATES_EDITION_PATTERN:
-			switch (patternChoice) {
-			case MAP_SINGLE_INDIVIDUAL:
-				return StringUtils.isNotEmpty(getEditionPatternName()) && concept != null
-						&& StringUtils.isNotEmpty(getIndividualPatternRoleName()) && getSelectedEntriesCount() > 0
-						&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
-			case MAP_SINGLE_EDITION_PATTERN:
-				return StringUtils.isNotEmpty(getEditionPatternName()) && virtualModelConcept != null
-						&& StringUtils.isNotEmpty(getVirtualModelPatternRoleName()) && getSelectedEntriesCount() > 0
-						&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
-			case BLANK_EDITION_PATTERN:
-				return StringUtils.isNotEmpty(getEditionPatternName()) && getSelectedEntriesCount() > 0
-						&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
-			default:
-				break;
-			}
-		default:
-			return false;
-		}
-	}
-
-	private ShapePatternRole patternRole;
-
-	@Override
-	public ShapePatternRole getPatternRole() {
-		return patternRole;
-	}
-
-	public void setPatternRole(ShapePatternRole patternRole) {
-		this.patternRole = patternRole;
-	}
-
-	@Override
-	public void resetPatternRole() {
-		this.patternRole = null;
-	}
-
-	public IFlexoOntologyClass getConcept() {
-		return concept;
-	}
-
-	public void setConcept(IFlexoOntologyClass concept) {
-		this.concept = concept;
-		/*propertyEntries.clear();
-		IFlexoOntology ownerOntology = concept.getOntology();
-		for (IFlexoOntologyFeature p : concept.getPropertiesTakingMySelfAsDomain()) {
-			if (p.getOntology() == ownerOntology && p instanceof IFlexoOntologyStructuralProperty) {
-				PropertyEntry newEntry = new PropertyEntry((IFlexoOntologyStructuralProperty) p);
-				propertyEntries.add(newEntry);
-			}
-		}*/
-	}
-
 	public EditionPattern getVirtualModelConcept() {
 		return virtualModelConcept;
 	}
@@ -495,70 +590,6 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 	public void setVirtualModelConcept(EditionPattern virtualModelConcept) {
 		this.virtualModelConcept = virtualModelConcept;
 	}
-
-	public String getEditionPatternName() {
-		if (isVirtualModelModelSlot()) {
-			if (StringUtils.isEmpty(editionPatternName) && virtualModelConcept != null) {
-				return virtualModelConcept.getName();
-			}
-		}
-		if (isFlexoOntologyModelSlot()) {
-			if (StringUtils.isEmpty(editionPatternName) && concept != null) {
-				return concept.getName();
-			}
-		}
-		return editionPatternName;
-	}
-
-	public void setEditionPatternName(String editionPatternName) {
-		this.editionPatternName = editionPatternName;
-	}
-
-	public String getIndividualPatternRoleName() {
-		if (StringUtils.isEmpty(individualPatternRoleName) && concept != null) {
-			return JavaUtils.getVariableName(concept.getName());
-		}
-		return individualPatternRoleName;
-	}
-
-	public void setIndividualPatternRoleName(String individualPatternRoleName) {
-		this.individualPatternRoleName = individualPatternRoleName;
-	}
-
-	public String getVirtualModelPatternRoleName() {
-		if (StringUtils.isEmpty(virtualModelPatternRoleName) && virtualModelConcept != null) {
-			return JavaUtils.getVariableName(virtualModelConcept.getName());
-		}
-		return virtualModelPatternRoleName;
-	}
-
-	public void setVirtualModelPatternRoleName(String virtualModelPatternRoleName) {
-		this.virtualModelPatternRoleName = virtualModelPatternRoleName;
-	}
-
-	/*public String getShapePatternRoleName() {
-		if (StringUtils.isEmpty(shapePatternRoleName)) {
-			return "shape";
-		}
-		return shapePatternRoleName;
-	}
-
-	public void setShapePatternRoleName(String shapePatternRoleName) {
-		this.shapePatternRoleName = shapePatternRoleName;
-	}*/
-
-	public String getDropSchemeName() {
-		if (StringUtils.isEmpty(dropSchemeName)) {
-			return "drop" + (StringUtils.isEmpty(getEditionPatternName()) ? "" : getEditionPatternName())
-					+ (isTopLevel ? "AtTopLevel" : containerEditionPattern != null ? "In" + containerEditionPattern.getName() : "");
-		}
-		return dropSchemeName;
-	}
-
-	public void setDropSchemeName(String dropSchemeName) {
-		this.dropSchemeName = dropSchemeName;
-	}
-
 	/*public class PropertyEntry {
 
 		public IFlexoOntologyStructuralProperty property;
@@ -615,28 +646,16 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 			e.selectEntry = false;
 		}
 	}
-	*/
+	 */
 	@Override
 	public EditionPattern getEditionPattern() {
 		if (primaryChoice == DeclareInEditionPatternChoices.CREATES_EDITION_PATTERN) {
 			return newEditionPattern;
 		}
 		return super.getEditionPattern();
-	};
-
-	public boolean isFlexoOntologyModelSlot() {
-		if (getModelSlot() instanceof TypeAwareModelSlot) {
-			return true;
-		}
-		return false;
 	}
 
-	public boolean isVirtualModelModelSlot() {
-		if (getModelSlot() instanceof VirtualModelModelSlot) {
-			return true;
-		}
-		return false;
-	}
+
 
 	/**
 	 * Return a virtual model adressed by a model slot
@@ -649,40 +668,6 @@ public class DeclareShapeInEditionPattern extends DeclareInEditionPattern<Declar
 			return virtualModelModelSlot.getAddressedVirtualModel();
 		}
 		return null;
-	}
-
-	public List<VirtualModelModelSlot<?, ?>> getVirtualModelModelSlots() {
-		if (getModelSlot() != null) {
-			if (virtualModelModelSlots == null) {
-				virtualModelModelSlots = new ArrayList<VirtualModelModelSlot<?, ?>>();
-			}
-			if (!virtualModelModelSlots.isEmpty()) {
-				virtualModelModelSlots.clear();
-			}
-			for (ModelSlot<?> modelSlot : getModelSlot().getVirtualModel().getModelSlots()) {
-				if (modelSlot instanceof VirtualModelModelSlot) {
-					virtualModelModelSlots.add((VirtualModelModelSlot<?, ?>) modelSlot);
-				}
-			}
-		}
-		return virtualModelModelSlots;
-	}
-
-	public List<ModelSlot<?>> getTypeAwareModelSlots() {
-		if (getModelSlot() != null) {
-			if (flexoTypeAwareModelSlots == null) {
-				flexoTypeAwareModelSlots = new ArrayList<ModelSlot<?>>();
-			}
-			if (!flexoTypeAwareModelSlots.isEmpty()) {
-				flexoTypeAwareModelSlots.clear();
-			}
-			for (ModelSlot<?> modelSlot : getModelSlot().getVirtualModel().getModelSlots()) {
-				if (modelSlot instanceof TypeAwareModelSlot) {
-					flexoTypeAwareModelSlots.add((TypeAwareModelSlot<?, ?>) modelSlot);
-				}
-			}
-		}
-		return flexoTypeAwareModelSlots;
 	}
 
 }

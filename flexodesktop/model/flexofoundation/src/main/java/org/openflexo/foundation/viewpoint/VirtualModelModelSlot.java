@@ -115,13 +115,6 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 		return null;
 	}
 
-	public AddEditionPatternInstance makeAddEditionPatternInstanceEditionAction(
-			EditionPatternInstancePatternRole editionPatternInstanceRole, AbstractCreationScheme creationScheme) {
-		AddEditionPatternInstance returned = makeEditionAction(AddEditionPatternInstance.class);
-		returned.setAssignation(new DataBinding(editionPatternInstanceRole.getPatternRoleName()));
-		return returned;
-	}
-
 	@Override
 	public <FR extends FetchRequest<?, ?>> FR makeFetchRequest(Class<FR> fetchRequestClass) {
 		if (SelectEditionPatternInstance.class.isAssignableFrom(fetchRequestClass)) {

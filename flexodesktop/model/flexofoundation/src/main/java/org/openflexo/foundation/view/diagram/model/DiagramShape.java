@@ -19,6 +19,8 @@
  */
 package org.openflexo.foundation.view.diagram.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -27,11 +29,12 @@ import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.LinkScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
+import org.openflexo.foundation.view.diagram.viewpoint.action.GRShapeTemplate;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 
-public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> {
+public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> implements GRShapeTemplate {
 
 	private static final Logger logger = Logger.getLogger(DiagramShape.class.getPackage().getName());
 
@@ -248,5 +251,25 @@ public class DiagramShape extends DiagramElement<ShapeGraphicalRepresentation> {
 	@Override
 	public ShapePatternRole getPatternRole() {
 		return (ShapePatternRole) super.getPatternRole();
+	}
+
+	private List<DiagramElement<?>> descendants;
+
+	@Override
+	public List<DiagramElement<?>> getDescendants() {
+		if (descendants == null) {
+			descendants = new ArrayList<DiagramElement<?>>();
+			appendDescendants(this, descendants);
+		}
+		return descendants;
+	}
+
+	private void appendDescendants(DiagramElement<?> current, List<DiagramElement<?>> descendants) {
+		descendants.add(current);
+		for (DiagramElement<?> child : current.getChilds()) {
+			if (child != current) {
+				appendDescendants(child, descendants);
+			}
+		}
 	}
 }
