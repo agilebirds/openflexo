@@ -22,24 +22,25 @@
 package org.openflexo.technologyadapter.xml;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceCenterService;
+import org.openflexo.foundation.resource.RepositoryFolder;
+import org.openflexo.foundation.resource.ResourceRepository;
 import org.openflexo.foundation.rm.FlexoProject;
 import org.openflexo.foundation.technologyadapter.FlexoModelResource;
-import org.openflexo.foundation.technologyadapter.MetaModelRepository;
-import org.openflexo.foundation.technologyadapter.ModelRepository;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterBindingFactory;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
-import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.technologyadapter.xml.model.XMLTechnologyContextManager;
 import org.openflexo.technologyadapter.xml.model.XMLModel;
+import org.openflexo.technologyadapter.xml.model.XMLTechnologyContextManager;
 import org.openflexo.technologyadapter.xml.rm.XMLFileResource;
 import org.openflexo.technologyadapter.xml.rm.XMLFileResourceImpl;
 import org.openflexo.technologyadapter.xml.rm.XMLMetaModelRepository;
@@ -85,12 +86,11 @@ public class XMLTechnologyAdapter extends TechnologyAdapter {
 			FlexoResource<XMLModel> metaModelResource,
 			TechnologyContextManager technologyContextManager) {
 
-		return isValidModelFile(aModelFile, technologyContextManager);
+		return isValidModelFile(aModelFile);
 
 	}
 
-	public boolean isValidModelFile(File aModelFile,
-			TechnologyContextManager technologyContextManager) {
+	public boolean isValidModelFile(File aModelFile) {
 		if ( aModelFile.exists() &&  aModelFile.getName().endsWith(XML_EXTENSION)) return true;
 		else return false;
 	}
@@ -101,23 +101,11 @@ public class XMLTechnologyAdapter extends TechnologyAdapter {
 		return aModelFile.toURI().toString();
 	}
 
-	public XMLFileResource retrieveModelResource(File aModelFile,
-			TechnologyContextManager technologyContextManager) {
-
+	public XMLFileResource retrieveModelResource(File aModelFile) {
 
 		XMLFileResource xmlModelResource = XMLFileResourceImpl.makeXMLFileResource(aModelFile, (XMLTechnologyContextManager) getTechnologyContextManager());
 
-		XMLTechnologyContextManager xmlContextManager = (XMLTechnologyContextManager) technologyContextManager;
-
-		xmlContextManager.registerResource((FlexoModelResource<XMLModel, XMLModel>) xmlModelResource);
-
 		return xmlModelResource;
-	}
-
-	public XMLFileResource retrieveModelResource(File aModelFile,
-			FlexoResource<XMLModel> metaModelResource,
-			TechnologyContextManager technologyContextManager) {
-		return  retrieveModelResource(aModelFile,technologyContextManager);
 	}
 
 	/**
@@ -180,9 +168,53 @@ public class XMLTechnologyAdapter extends TechnologyAdapter {
 	@Override
 	public <I> void initializeResourceCenter(
 			FlexoResourceCenter<I> resourceCenter) {
-		// TODO Auto-generated method stub
+
+		XMLModelRepository mRepository = resourceCenter.getRepository(XMLModelRepository.class, this);
+		if (mRepository == null) {
+			mRepository = createXMLModelRepository(resourceCenter);
+		}
+
+		XMLMetaModelRepository mmRepository = resourceCenter.getRepository(XMLMetaModelRepository.class, this);
+		if (mmRepository == null) {
+			mmRepository = createXMLMetaModelRepository(resourceCenter);
+		}
+
+		Iterator<I> it = resourceCenter.iterator();
 		
+		while (it.hasNext()) {
+			I item = it.next();
+			if (item instanceof File) {
+				File candidateFile = (File) item;
+
+				if (isValidModelFile(candidateFile)) {
+					XMLFileResource res = this.retrieveModelResource(candidateFile);
+					XMLModelRepository repository = resourceCenter.getRepository(XMLModelRepository.class, this);
+
+					if (res != null) {
+						RepositoryFolder<XMLFileResource> folder;
+						try {
+							folder = repository.getRepositoryFolder(candidateFile, true);
+							repository.registerResource(res, folder);
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+						// Also register the resource in the ResourceCenter seen as a ResourceRepository
+						if (resourceCenter instanceof ResourceRepository) {
+							try {
+								((ResourceRepository) resourceCenter).registerResource(res,
+										((ResourceRepository<?>) resourceCenter).getRepositoryFolder(candidateFile, true));
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+
+				}
+			}
+		}
 	}
+
+
 
 	@Override
 	public <I> boolean isIgnorable(FlexoResourceCenter<I> resourceCenter,
@@ -195,14 +227,14 @@ public class XMLTechnologyAdapter extends TechnologyAdapter {
 	public <I> void contentsAdded(FlexoResourceCenter<I> resourceCenter,
 			I contents) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public <I> void contentsDeleted(FlexoResourceCenter<I> resourceCenter,
 			I contents) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -210,6 +242,29 @@ public class XMLTechnologyAdapter extends TechnologyAdapter {
 			VirtualModel<?> virtualModel) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/**
+	 * 
+	 * Create a XMLModel repository for current {@link TechnologyAdapter} and supplied {@link FlexoResourceCenter}
+	 * 
+	 */
+	public XMLModelRepository createXMLModelRepository(FlexoResourceCenter<?> resourceCenter) {
+		XMLModelRepository returned = new XMLModelRepository(this, resourceCenter);
+		resourceCenter.registerRepository(returned, XMLModelRepository.class, this);
+		return returned;
+	}
+
+
+	/**
+	 * 
+	 * Create a XMLModel repository for current {@link TechnologyAdapter} and supplied {@link FlexoResourceCenter}
+	 * 
+	 */
+	public XMLMetaModelRepository createXMLMetaModelRepository(FlexoResourceCenter<?> resourceCenter) {
+		XMLMetaModelRepository returned = new XMLMetaModelRepository(this, resourceCenter);
+		resourceCenter.registerRepository(returned, XMLMetaModelRepository.class, this);
+		return returned;
 	}
 
 

@@ -3,25 +3,18 @@ package org.openflexo.technologyadapter.xsd;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.TestApplicationContext;
 import org.openflexo.foundation.FlexoTestCase;
-import org.openflexo.foundation.dkv.TestPopulateDKV;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
-import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.technologyadapter.MetaModelRepository;
-import org.openflexo.foundation.technologyadapter.ModelRepository;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntClass;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntDataProperty;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntObjectProperty;
-import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.AbstractXSOntObject;
 import org.openflexo.technologyadapter.xsd.model.XSOntology;
 import org.openflexo.technologyadapter.xsd.rm.XMLModelRepository;
@@ -34,16 +27,20 @@ public class TestLibrary extends FlexoTestCase {
 
 	private static final String FILE_NAME = "library";
 
-	protected static final Logger logger = Logger.getLogger(TestPopulateDKV.class.getPackage().getName());
+	protected static final Logger logger = Logger.getLogger(TestLibrary.class.getPackage().getName());
 
-	private static ApplicationContext testApplicationContext;
 	private static XSDTechnologyAdapter xsdAdapter;
 	private static XSDTechnologyContextManager xsdContextManager;
-	private static FlexoResourceCenter resourceCenter;
+	private static FlexoResourceCenter<?> resourceCenter;
 	private static XSDMetaModelRepository mmRepository;
 	private static XMLModelRepository modelRepository;
-	private static String baseDirName;
+	private static ApplicationContext testApplicationContext;
 
+	public TestLibrary(String name) {
+		super(name);
+	}
+
+	
 	public static File openTestXSD(String filename) throws FileNotFoundException {
 		// TODO Use resource manager?
 		// tip to do it, look at: LocalResourceCenterImpl.findOntologies
@@ -102,6 +99,7 @@ public class TestLibrary extends FlexoTestCase {
 	}
 
 
+
 	/**
 	 * Instanciate test ResourceCenter
 	 * @throws IOException 
@@ -116,7 +114,7 @@ public class TestLibrary extends FlexoTestCase {
 		xsdContextManager = xsdAdapter.getTechnologyContextManager();
 		mmRepository = (XSDMetaModelRepository) resourceCenter.getRepository(XSDMetaModelRepository.class, xsdAdapter);
 		modelRepository = (XMLModelRepository) resourceCenter.getRepository(XMLModelRepository.class, xsdAdapter);
-		baseDirName=((DirectoryResourceCenter)resourceCenter).getDirectory().getCanonicalPath();
+		((DirectoryResourceCenter)resourceCenter).getDirectory().getCanonicalPath();
 		assertNotNull(modelRepository);
 		assertNotNull(mmRepository);
 		assertEquals(3, mmRepository.getAllResources().size());

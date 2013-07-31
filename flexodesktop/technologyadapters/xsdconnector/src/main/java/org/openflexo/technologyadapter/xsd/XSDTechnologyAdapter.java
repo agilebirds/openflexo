@@ -39,14 +39,10 @@ import org.openflexo.foundation.technologyadapter.DeclareRepositoryType;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterInitializationException;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.foundation.viewpoint.VirtualModel;
-import org.openflexo.model.exceptions.ModelDefinitionException;
-import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
-import org.openflexo.technologyadapter.xsd.model.XSOntology;
 import org.openflexo.technologyadapter.xsd.rm.XMLModelRepository;
 import org.openflexo.technologyadapter.xsd.rm.XMLXSDFileResource;
 import org.openflexo.technologyadapter.xsd.rm.XMLXSDFileResourceImpl;
@@ -317,10 +313,11 @@ public class XSDTechnologyAdapter extends TechnologyAdapter {
 			String schemaURI = XMLXSDNameSpaceFinder.findNameSpace(aModelFile,false);
 
 			String mmURI = metaModelResource.getURI();
-
-			if (schemaURI.equals(metaModelResource.getURI())) {
-				logger.info("Found a conformant XML Model File [" + schemaURI+"]" + aModelFile.getAbsolutePath() );
-				return  !schemaURI.isEmpty();
+			if (schemaURI != null && mmURI != null){
+				if (schemaURI.equals(mmURI)) {
+					logger.info("Found a conformant XML Model File [" + schemaURI+"]" + aModelFile.getAbsolutePath() );
+					return  !schemaURI.isEmpty();
+				}
 			}
 		}
 
@@ -508,5 +505,18 @@ public class XSDTechnologyAdapter extends TechnologyAdapter {
 	public String getExpectedModelExtension(FlexoResource<XSDMetaModel> metaModel) {
 		return ".xml";
 	}
+
+
+	/**
+	 * 
+	 * Create a XMLModel repository for current {@link TechnologyAdapter} and supplied {@link FlexoResourceCenter}
+	 * 
+	 */
+	public XMLModelRepository createXMLModelRepository(FlexoResourceCenter<?> resourceCenter) {
+		XMLModelRepository returned = new XMLModelRepository(this, resourceCenter);
+		resourceCenter.registerRepository(returned, XMLModelRepository.class, this);
+		return returned;
+	}
+
 
 }

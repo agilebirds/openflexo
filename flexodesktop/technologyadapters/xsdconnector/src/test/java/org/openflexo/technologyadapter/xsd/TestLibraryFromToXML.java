@@ -4,44 +4,29 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.openflexo.ApplicationContext;
 import org.openflexo.TestApplicationContext;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoTestCase;
-import org.openflexo.foundation.dkv.TestPopulateDKV;
-import org.openflexo.foundation.ontology.DuplicateURIException;
-import org.openflexo.foundation.ontology.IFlexoOntologyFeatureAssociation;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.resource.FileSystemBasedResourceCenter;
-import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
 import org.openflexo.foundation.rm.SaveResourceException;
-import org.openflexo.foundation.technologyadapter.MetaModelRepository;
-import org.openflexo.foundation.technologyadapter.ModelRepository;
-import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.technologyadapter.xml.model.IXMLIndividual;
 import org.openflexo.technologyadapter.xsd.metamodel.XSDMetaModel;
 import org.openflexo.technologyadapter.xsd.metamodel.XSOntProperty;
 import org.openflexo.technologyadapter.xsd.model.XMLXSDModel;
 import org.openflexo.technologyadapter.xsd.model.XSOntIndividual;
-import org.openflexo.technologyadapter.xsd.model.XSOntology;
-import org.openflexo.technologyadapter.xsd.model.XSPropertyValue;
 import org.openflexo.technologyadapter.xsd.rm.XMLModelRepository;
 import org.openflexo.technologyadapter.xsd.rm.XMLXSDFileResource;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelRepository;
 import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResource;
-import org.openflexo.technologyadapter.xsd.rm.XSDMetaModelResourceImpl;
 import org.openflexo.toolbox.FileResource;
 
 public class TestLibraryFromToXML extends FlexoTestCase {
@@ -61,6 +46,10 @@ public class TestLibraryFromToXML extends FlexoTestCase {
 	private static XSDMetaModelRepository mmRepository;
 	private static XMLModelRepository modelRepository;
 	private static String baseDirName;
+
+	public TestLibraryFromToXML(String name) {
+		super(name);
+	}
 
 
 	private static final void dumpIndividual(IXMLIndividual<XSOntIndividual,XSOntProperty> indiv, String prefix){

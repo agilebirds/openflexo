@@ -29,14 +29,10 @@ import org.openflexo.ApplicationContext;
 import org.openflexo.TestApplicationContext;
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.FlexoTestCase;
-import org.openflexo.foundation.dkv.TestPopulateDKV;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
-import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.rm.ResourceDependencyLoopException;
-import org.openflexo.foundation.technologyadapter.MetaModelRepository;
-import org.openflexo.foundation.technologyadapter.ModelRepository;
 import org.openflexo.technologyadapter.xml.model.IXMLIndividual;
 import org.openflexo.technologyadapter.xml.model.XMLAttribute;
 import org.openflexo.technologyadapter.xml.model.XMLIndividual;
@@ -56,7 +52,6 @@ public class TestXML extends FlexoTestCase {
 	private static XMLTechnologyAdapter xmlAdapter;
 	private static FlexoResourceCenter resourceCenter;
 	private static XMLModelRepository modelRepository;
-	private static XMLModelRepository metamodelRepository;
 	private static String baseDirName;
 	
 	public TestXML(String name) {
@@ -95,8 +90,6 @@ public class TestXML extends FlexoTestCase {
 		modelRepository = (XMLModelRepository) resourceCenter.getRepository(XMLModelRepository.class, xmlAdapter);
 		baseDirName=((DirectoryResourceCenter)resourceCenter).getDirectory().getCanonicalPath();
 		assertNotNull(modelRepository);
-		assertNotNull(metamodelRepository);
-		assertEquals(0, metamodelRepository.getAllResources().size());
 		assertTrue(modelRepository.getAllResources().size()>3);
 	}
 
