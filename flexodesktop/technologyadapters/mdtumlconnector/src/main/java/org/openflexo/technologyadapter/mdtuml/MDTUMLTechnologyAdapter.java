@@ -104,7 +104,6 @@ public class MDTUMLTechnologyAdapter extends EMFTechnologyAdapter {
 	 * @see org.openflexo.foundation.technologyadapter.TechnologyAdapter#isValidModelFile(File aModelFile, FlexoResource<EMFMetaModel>
 	 *      metaModelResource, TechnologyContextManager<EMFModel, EMFMetaModel> technologyContextManager)
 	 */
-	@Override
 	public boolean isValidModelFile(File aModelFile, FlexoResource<EMFMetaModel> metaModelResource,
 			TechnologyContextManager technologyContextManager) {
 		// EMFMetaModelResource emfMetaModelResource = (EMFMetaModelResource)metaModelResource;
