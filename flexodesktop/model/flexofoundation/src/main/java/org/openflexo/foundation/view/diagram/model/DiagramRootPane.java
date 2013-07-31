@@ -19,9 +19,11 @@
  */
 package org.openflexo.foundation.view.diagram.model;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.DrawingGraphicalRepresentation;
+import org.openflexo.foundation.view.diagram.viewpoint.action.GRTemplate;
 import org.openflexo.foundation.xml.VirtualModelInstanceBuilder;
 
 public class DiagramRootPane extends DiagramElement<DrawingGraphicalRepresentation> {
@@ -72,6 +74,12 @@ public class DiagramRootPane extends DiagramElement<DrawingGraphicalRepresentati
 	@Override
 	public String getClassNameKey() {
 		return "diagram_root_pane";
+	}
+
+	@Override
+	public List<? extends GRTemplate> getDescendants() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

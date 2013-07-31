@@ -64,11 +64,11 @@ public class TestVPMFIB extends FIBTestCase {
 	}
 
 	public void testDeclareConnectorInEditionPatternDialog() {
-		validateFIB(VPMCst.DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB);
+		validateFIB(FlexoCst.DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB);
 	}
 
 	public void testDeclareShapeInEditionPatternDialog() {
-		validateFIB(VPMCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB);
+		validateFIB(FlexoCst.DECLARE_SHAPE_IN_EDITION_PATTERN_DIALOG_FIB);
 	}
 
 	public void testPushToPaletteDialog() {

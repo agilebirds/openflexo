@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.controller.action;
+package org.openflexo.ve.controller.action;
 
 import java.util.EventObject;
 import java.util.logging.Logger;
@@ -27,50 +27,49 @@ import javax.swing.Icon;
 import org.openflexo.FlexoCst;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramConnector;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
-import org.openflexo.foundation.view.diagram.viewpoint.action.DeclareExampleDiagramConnectorInEditionPattern;
+import org.openflexo.foundation.view.diagram.model.DiagramConnector;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.viewpoint.action.DeclareConnectorInEditionPattern;
 import org.openflexo.icon.VPMIconLibrary;
+import org.openflexo.ve.controller.VEController;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.vpm.controller.VPMController;
 
 public class DeclareConnectorInEditionPatternInitializer extends
-		ActionInitializer<DeclareExampleDiagramConnectorInEditionPattern, ExampleDiagramConnector, ExampleDiagramObject> {
+		ActionInitializer<DeclareConnectorInEditionPattern, DiagramConnector, DiagramElement> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	DeclareConnectorInEditionPatternInitializer(VPMControllerActionInitializer actionInitializer) {
-		super(DeclareExampleDiagramConnectorInEditionPattern.actionType, actionInitializer);
+	DeclareConnectorInEditionPatternInitializer(VEControllerActionInitializer actionInitializer) {
+		super(DeclareConnectorInEditionPattern.actionType, actionInitializer);
 	}
 
 	@Override
-	protected VPMControllerActionInitializer getControllerActionInitializer() {
-		return (VPMControllerActionInitializer) super.getControllerActionInitializer();
+	protected VEControllerActionInitializer getControllerActionInitializer() {
+		return (VEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	public VPMController getController() {
-		return (VPMController) super.getController();
+	public VEController getController() {
+		return (VEController) super.getController();
 	}
 
 	@Override
-	protected FlexoActionInitializer<DeclareExampleDiagramConnectorInEditionPattern> getDefaultInitializer() {
-		return new FlexoActionInitializer<DeclareExampleDiagramConnectorInEditionPattern>() {
+	protected FlexoActionInitializer<DeclareConnectorInEditionPattern> getDefaultInitializer() {
+		return new FlexoActionInitializer<DeclareConnectorInEditionPattern>() {
 			@Override
-			public boolean run(EventObject e, DeclareExampleDiagramConnectorInEditionPattern action) {
-
+			public boolean run(EventObject e, DeclareConnectorInEditionPattern action) {
 				return instanciateAndShowDialog(action, FlexoCst.DECLARE_CONNECTOR_IN_EDITION_PATTERN_DIALOG_FIB);
 			}
 		};
 	}
 
 	@Override
-	protected FlexoActionFinalizer<DeclareExampleDiagramConnectorInEditionPattern> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<DeclareExampleDiagramConnectorInEditionPattern>() {
+	protected FlexoActionFinalizer<DeclareConnectorInEditionPattern> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<DeclareConnectorInEditionPattern>() {
 			@Override
-			public boolean run(EventObject e, DeclareExampleDiagramConnectorInEditionPattern action) {
-				getController().setCurrentEditedObjectAsModuleView(action.getEditionPattern(), getController().VIEW_POINT_PERSPECTIVE);
+			public boolean run(EventObject e, DeclareConnectorInEditionPattern action) {
+				// getController().setCurrentEditedObjectAsModuleView(action.getEditionPattern(), getController().VIEW_POINT_PERSPECTIVE);
 				getController().getSelectionManager().setSelectedObject(action.getPatternRole());
 				return true;
 			}
