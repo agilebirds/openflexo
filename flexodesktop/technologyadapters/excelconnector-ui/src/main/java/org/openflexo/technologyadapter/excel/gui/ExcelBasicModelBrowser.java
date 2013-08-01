@@ -1,10 +1,10 @@
 package org.openflexo.technologyadapter.excel.gui;
 
-import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
+import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
-public class ExcelBasicModelBrowser extends ExcelBrowserModel {
+public class ExcelBasicModelBrowser extends ModelBrowser {
 
-	public ExcelBasicModelBrowser(ExcelWorkbookResource context) {
+	public ExcelBasicModelBrowser(ExcelWorkbook context) {
 		super(context);
 	}
 
