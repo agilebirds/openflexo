@@ -28,8 +28,10 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.action.FlexoActionType;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramSpecification;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.VirtualModel;
@@ -56,10 +58,6 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 
 	private List<VirtualModelModelSlot<?, ?>> virtualModelModelSlots = null;
 	private List<TypeAwareModelSlot<?, ?>> typeAwareModelSlots = null;
-
-	private VirtualModelModelSlot virtualModelModelSlot;
-
-	private TypeAwareModelSlot typeAwareModelSlot;
 
 	/**
 	 * Constructor for this class
@@ -175,6 +173,10 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 		return null;
 	}
 
+	public DiagramSpecification getDiagramSpecification() {
+		return getFocusedObject().getDiagramSpecification();
+	}
+
 	public ModelSlot<?> getModelSlot() {
 		return modelSlot;
 	}
@@ -196,6 +198,19 @@ public abstract class DeclareInEditionPattern<A extends DeclareInEditionPattern<
 		if (isVirtualModelModelSlot()) {
 			VirtualModelModelSlot virtualModelModelSlot = (VirtualModelModelSlot) getModelSlot();
 			return virtualModelModelSlot.getAddressedVirtualModel();
+		}
+		return null;
+	}
+
+	/**
+	 * Return a virtual model adressed by a model slot
+	 * 
+	 * @return
+	 */
+	public FlexoMetaModel getAdressedFlexoMetaModel() {
+		if (isTypeAwareModelSlot()) {
+			TypeAwareModelSlot typeAwareModelSlot = (TypeAwareModelSlot) getModelSlot();
+			return typeAwareModelSlot.getMetaModelResource().getMetaModelData();
 		}
 		return null;
 	}

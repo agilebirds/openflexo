@@ -19,7 +19,6 @@
  */
 package org.openflexo.foundation.view.diagram.viewpoint.action;
 
-import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -74,8 +73,6 @@ public abstract class AbstractDeclareConnectorInEditionPattern<T1 extends FlexoO
 	private String connectorPatternRoleName;
 	private String objectPropertyStatementPatternRoleName;
 	private String virtualModelPatternRoleName;
-	private List<VirtualModelModelSlot<?, ?>> virtualModelModelSlots = null;
-	private List<TypeAwareModelSlot<?, ?>> typeAwareModelSlots = null;
 
 	public EditionPattern fromEditionPattern;
 	public EditionPattern toEditionPattern;
@@ -531,6 +528,14 @@ public abstract class AbstractDeclareConnectorInEditionPattern<T1 extends FlexoO
 		this.linkSchemeName = linkSchemeName;
 	}
 
+	@Override
+	public EditionPattern getEditionPattern() {
+		if (primaryChoice == DeclareInEditionPatternChoices.CREATES_EDITION_PATTERN) {
+			return newEditionPattern;
+		}
+		return super.getEditionPattern();
+	};
+
 	/*public class PropertyEntry {
 
 		public IFlexoOntologyStructuralProperty property;
@@ -587,13 +592,5 @@ public abstract class AbstractDeclareConnectorInEditionPattern<T1 extends FlexoO
 			e.selectEntry = false;
 		}
 	}*/
-
-	@Override
-	public EditionPattern getEditionPattern() {
-		if (primaryChoice == DeclareInEditionPatternChoices.CREATES_EDITION_PATTERN) {
-			return newEditionPattern;
-		}
-		return super.getEditionPattern();
-	};
 
 }

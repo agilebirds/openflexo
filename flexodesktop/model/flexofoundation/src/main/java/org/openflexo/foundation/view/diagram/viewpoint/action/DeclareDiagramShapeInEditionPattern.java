@@ -23,7 +23,7 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoObject;
+import org.openflexo.foundation.FlexoModelObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.model.DiagramShape;
@@ -67,7 +67,7 @@ public class DeclareDiagramShapeInEditionPattern extends
 	};
 
 	static {
-		FlexoObject.addActionForClass(DeclareDiagramShapeInEditionPattern.actionType, DiagramShape.class);
+		FlexoModelObject.addActionForClass(DeclareDiagramShapeInEditionPattern.actionType, DiagramShape.class);
 	}
 
 	public boolean isTopLevel = true;
@@ -75,11 +75,6 @@ public class DeclareDiagramShapeInEditionPattern extends
 
 	DeclareDiagramShapeInEditionPattern(DiagramShape focusedObject, Vector<DiagramElement> globalSelection, FlexoEditor editor) {
 		super(actionType, focusedObject, globalSelection, editor);
-	}
-
-	@Override
-	public DiagramShape getFocusedObject() {
-		return super.getFocusedObject();
 	}
 
 }
