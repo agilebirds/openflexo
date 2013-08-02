@@ -20,7 +20,7 @@
     <Dependancy componentName="PatternRoleTypeDD" />
   </Label>
   <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" localize="true" manageDynamicModel="true" index="11" data="data.individualType" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;index=0;insetsBottom=0;insetsLeft=0;insetsRight=20;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" visible="data.isIndividual" opaque="false">
-    <Assignment variable="component.context" value="data.modelSlot.metaModelResource.metaModelData" />
+    <Assignment variable="component.context" value="data.adressedFlexoMetaModel" />
     <Assignment variable="component.rootClass" />
     <Assignment variable="component.hierarchicalMode" />
     <Assignment variable="component.strictMode" />
