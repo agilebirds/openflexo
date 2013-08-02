@@ -16,7 +16,7 @@
     </Table>
     <TabPanel name="MainTabPanel" index="1" constraints="split(index=1;location=center;splitIdentifier=bottom)">
       <Tab title="structural" layout="border" titleFont="SansSerif,0,12" darkLevel="0" index="0" name="StructuralTab">
-        <FIBReferencedComponent componentFile="DiagramSpecificationStructuralPanel.fib" localize="true" manageDynamicModel="true" data="data" constraints="border(location=center)" />
+        <FIBReferencedComponent componentFile="($java.io.File)&quot;DiagramSpecificationStructuralPanel.fib&quot;" localize="true" manageDynamicModel="true" data="data" constraints="border(location=center)" />
       </Tab>
       <Tab title="behavioural" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="1" constraints="border(index=1;location=center)" name="BehaviouralTab">
         <SplitPanel index="0" constraints="border(index=0;location=center)">
@@ -88,14 +88,14 @@
               </Panel>
             </SplitPanel>
           </Panel>
-          <FIBReferencedComponent componentFile="EditionSchemePanel.fib" localize="true" manageDynamicModel="true" name="EditionSchemeWidget" index="0" data="EditionSchemeTable.selected" constraints="split(index=0;location=center;splitIdentifier=bottom)" />
+          <FIBReferencedComponent componentFile="&quot;EditionSchemePanel.fib&quot;" localize="true" manageDynamicModel="true" name="EditionSchemeWidget" index="0" data="EditionSchemeTable.selected" constraints="split(index=0;location=center;splitIdentifier=bottom)" />
         </SplitPanel>
       </Tab>
       <Tab title="inspector" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" index="1" data="data.inspector" dataClassName="org.openflexo.foundation.viewpoint.inspector.EditionPatternInspector" constraints="border(index=1;location=center)" width="80" height="60" useScrollBar="true" horizontalScrollbarPolicy="HORIZONTAL_SCROLLBAR_AS_NEEDED" verticalScrollbarPolicy="VERTICAL_SCROLLBAR_AS_NEEDED" name="InspectorTab">
-        <FIBReferencedComponent componentFile="EditionPatternInspectorPanel.fib" localize="true" manageDynamicModel="true" name="EditionPatternInspectorWidget" data="data.inspector" constraints="border(location=center)" />
+        <FIBReferencedComponent componentFile="&quot;EditionPatternInspectorPanel.fib&quot;" localize="true" manageDynamicModel="true" name="EditionPatternInspectorWidget" data="data.inspector" constraints="border(location=center)" />
       </Tab>
       <Tab title="localization" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" index="2" constraints="border(index=1;location=center)" name="LocalizationTab">
-        <FIBReferencedComponent componentFile="LocalizedDictionaryPanel.fib" localize="true" manageDynamicModel="true" name="LocalizedDictionaryWidget" data="data.viewPoint.localizedDictionary" constraints="border(location=center)" />
+        <FIBReferencedComponent componentFile="&quot;LocalizedDictionaryPanel.fib&quot;" localize="true" manageDynamicModel="true" name="LocalizedDictionaryWidget" data="data.viewPoint.localizedDictionary" constraints="border(location=center)" />
       </Tab>
     </TabPanel>
   </SplitPanel>

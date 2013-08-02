@@ -19,6 +19,7 @@
  */
 package org.openflexo.antar.binding;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ import org.openflexo.antar.expr.BindingValue;
 import org.openflexo.antar.expr.CastExpression;
 import org.openflexo.antar.expr.Constant;
 import org.openflexo.antar.expr.Constant.StringConstant;
+import org.openflexo.antar.expr.EvaluationType;
 import org.openflexo.antar.expr.Expression;
 import org.openflexo.antar.expr.ExpressionTransformer;
 import org.openflexo.antar.expr.ExpressionVisitor;
@@ -551,6 +553,7 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 	 * @throws NullReferenceException
 	 * @throws InvocationTargetException
 	 */
+	@SuppressWarnings("unchecked")
 	public T getBindingValue(final BindingEvaluationContext context) throws TypeMismatchException, NullReferenceException,
 			InvocationTargetException {
 
@@ -599,7 +602,12 @@ public class DataBinding<T> extends Observable implements StringConvertable<Data
 				Expression evaluatedExpression = resolvedExpression.evaluate();
 
 				if (evaluatedExpression instanceof CastExpression) {
-					if (((CastExpression) evaluatedExpression).getArgument() instanceof Constant) {
+					Expression argument = ((CastExpression) evaluatedExpression).getArgument();
+					if ( argument instanceof Constant) {
+						// Special case for Files to be converted from Strings
+						if (declaredType == File.class && argument.getEvaluationType() == EvaluationType.STRING) {
+							return (T) new File((String) ((Constant) argument).getValue());
+						}
 						return (T) ((Constant) ((CastExpression) evaluatedExpression).getArgument()).getValue();
 					}
 				}

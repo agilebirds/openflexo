@@ -20,25 +20,34 @@
 package org.openflexo.fib.model;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingModel;
+import org.openflexo.antar.binding.BindingVariable;
 import org.openflexo.antar.binding.DataBinding;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.FIBLibrary;
 
-public class FIBReferencedComponent extends FIBWidget {
+public class FIBReferencedComponent extends FIBWidget implements BindingEvaluationContext {
 
 	private static final Logger logger = Logger.getLogger(FIBReferencedComponent.class.getPackage().getName());
+
+	// This is the Fib File used for the component
+	private DataBinding<File> componentFile;
+
 
 	public static enum Parameters implements FIBModelAttribute {
 		componentFile, assignments
 	}
 
-	private File componentFile;
+	// private File componentFile;
 	private FIBComponent component;
 	private Vector<FIBReferenceAssignment> assignments;
 
@@ -59,23 +68,57 @@ public class FIBReferencedComponent extends FIBWidget {
 		return Object.class;
 	}
 
-	public File getComponentFile() {
+	public DataBinding<File>  getComponentFile() {
+
+		if (componentFile == null) {
+			componentFile = new DataBinding<File>(this, File.class, DataBinding.BindingDefinitionType.GET);
+			componentFile.setBindingName("componentFile");
+		}
 		return componentFile;
 	}
 
-	public void setComponentFile(File componentFile) {
-		FIBAttributeNotification<File> notification = requireChange(Parameters.componentFile, componentFile);
+	public void setComponentFile(DataBinding<File>  componentFile) {
+
+		FIBAttributeNotification<DataBinding<File>> notification = requireChange(Parameters.componentFile, componentFile);
+
 		if (notification != null) {
+
+			if (componentFile != null) {
+				componentFile.setOwner(this);
+				componentFile.setDeclaredType(File.class);
+				componentFile.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
+				componentFile.setBindingName("componentFile");
+			}
+
 			this.componentFile = componentFile;
+
 			component = null;
 			notify(notification);
 		}
+
+
 	}
 
 	@Override
 	public FIBComponent getComponent() {
-		if (component == null && getComponentFile() != null && getComponentFile().exists()) {
-			component = FIBLibrary.instance().retrieveFIBComponent(getComponentFile());
+		if (component == null && getComponentFile() != null) {
+
+			try {
+				// TODO : find the right evaluation context
+				File fibFile = getComponentFile().getBindingValue((BindingEvaluationContext) this);
+				
+				component = FIBLibrary.instance().retrieveFIBComponent(fibFile);
+
+			} catch (TypeMismatchException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NullReferenceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return component;
 	}
@@ -267,6 +310,13 @@ public class FIBReferencedComponent extends FIBWidget {
 			return null;
 		}
 
+	}
+
+	@Override
+	public Object getValue(BindingVariable variable) {
+		// TODO Auto-generated method stub
+		logger.info("This has to be done :"+variable.getLabel());
+		return null;
 	}
 
 }

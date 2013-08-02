@@ -49,6 +49,8 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 
 	private static final Logger logger = Logger.getLogger(EditionAction.class.getPackage().getName());
 
+	private static String relatedFibFile;
+	
 	public static enum EditionActionType {
 		AddClass,
 		AddIndividual,
@@ -105,6 +107,16 @@ public abstract class EditionAction<M extends FlexoModel<M, MM>, MM extends Flex
 		return null;
 	}
 
+	public static String getRelatedFibFile() {
+		return relatedFibFile;
+	}
+
+	public static void setRelatedFibFile(String relatedFibFile) {
+		EditionAction.relatedFibFile = relatedFibFile;
+	}
+
+	// TODO: Suppress all of this
+	@Deprecated
 	public abstract EditionActionType getEditionActionType();
 
 	@Override
