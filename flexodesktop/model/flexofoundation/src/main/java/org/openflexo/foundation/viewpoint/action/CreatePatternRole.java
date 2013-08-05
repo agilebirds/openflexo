@@ -31,7 +31,9 @@ import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.action.NotImplementedException;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.rm.DuplicateResourceException;
+import org.openflexo.foundation.technologyadapter.FlexoMetaModel;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
+import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.viewpoint.EditionPattern;
 import org.openflexo.foundation.viewpoint.EditionPatternInstancePatternRole;
 import org.openflexo.foundation.viewpoint.EditionPatternObject;
@@ -197,4 +199,18 @@ public class CreatePatternRole extends FlexoAction<CreatePatternRole, EditionPat
 			return getFocusedObject().getVirtualModel().getModelSlots();
 		}
 	}
+
+	/**
+	 * Return a metamodel adressed by a model slot
+	 * 
+	 * @return
+	 */
+	public FlexoMetaModel getAdressedFlexoMetaModel() {
+		if (modelSlot instanceof TypeAwareModelSlot) {
+			TypeAwareModelSlot typeAwareModelSlot = (TypeAwareModelSlot) modelSlot;
+			return typeAwareModelSlot.getMetaModelResource().getMetaModelData();
+		}
+		return null;
+	}
+
 }

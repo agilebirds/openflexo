@@ -11,7 +11,7 @@
     <Label label="edition_pattern" index="1" constraints="twocols(expandHorizontally=true;expandVertically=false;index=1;insetsBottom=0;insetsLeft=50;insetsRight=2;insetsTop=5;location=left)" localize="true">
       <LocalizedDictionary />
     </Label>
-    <DropDown index="2" data="data.editionPattern" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="editionPatternDropdown" format="object.name" localize="true" staticList="" list="data.focusedObject.virtualModel.editionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="true">
+    <DropDown index="2" data="data.editionPattern" constraints="twocols(expandHorizontally=false;expandVertically=false;index=2;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" name="editionPatternDropdown" format="object.name" localize="true" staticList="" list="data.diagramSpecification.editionPatterns" iteratorClassName="org.openflexo.foundation.viewpoint.EditionPattern" autoSelectFirstRow="true">
       <LocalizedDictionary />
     </DropDown>
     <Label label="pattern_role" index="3" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">
@@ -33,8 +33,12 @@
       <LocalizedDictionary />
     </DropDown>
     <Label label="model_slot" index="2" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=left)" visible="((patternChoice.selectedIndex = 1) | (patternChoice.selectedIndex = 0))" localize="true" />
-    <DropDown index="0" data="data.modelSlot" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 1)" name="virtualModelModelSlotDD" format="object.name" icon="controller.getTechnologyAdapterController(object.technologyAdapter).technologyIcon" localize="true" list="data.virtualModelModelSlots" showIcon="true" iteratorClassName="org.openflexo.foundation.viewpoint.VirtualModelModelSlot" autoSelectFirstRow="true" />
-    <DropDown index="0" data="data.ModelSlot" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 0)" name="ontologyModelSlotDD" format="object.name" icon="controller.getTechnologyAdapterController(object.technologyAdapter).technologyIcon" localize="true" list="data.typeAwareModelSlots" showIcon="true" iteratorClassName="org.openflexo.foundation.technologyadapter.ModelSlot" autoSelectFirstRow="true" />
+    <DropDown index="0" data="data.modelSlot" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 1)" name="virtualModelModelSlotDD" format="object.name" icon="controller.getTechnologyAdapterController(object.technologyAdapter).technologyIcon" localize="true" list="data.virtualModelModelSlots" showIcon="true" iteratorClassName="org.openflexo.foundation.technologyadapter.ModelSlot" autoSelectFirstRow="true">
+      <Dependancy componentName="patternChoice" />
+    </DropDown>
+    <DropDown index="0" data="data.modelSlot" constraints="twocols(expandHorizontally=true;expandVertically=false;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 0)" name="ontologyModelSlotDD" format="object.name" icon="controller.getTechnologyAdapterController(object.technologyAdapter).technologyIcon" localize="true" list="data.typeAwareModelSlots" showIcon="true" iteratorClassName="org.openflexo.foundation.technologyadapter.ModelSlot" autoSelectFirstRow="true">
+      <Dependancy componentName="patternChoice" />
+    </DropDown>
     <Label label="virtualModel_concept" index="3" constraints="twocols(expandHorizontally=true;expandVertically=false;index=3;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="(patternChoice.selectedIndex = 1)" localize="true">
       <LocalizedDictionary />
     </Label>
@@ -51,7 +55,7 @@
       <LocalizedDictionary />
     </Label>
     <Custom componentClassName="org.openflexo.components.widget.FIBClassSelector" localize="true" manageDynamicModel="true" name="conceptSelector" index="4" data="data.concept" constraints="twocols(expandHorizontally=true;expandVertically=false;index=4;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=0;location=right)" visible="(patternChoice.selectedIndex = 0)">
-      <Assignment variable="component.context" value="data.modelSlot.metaModelResource.metaModelData" />
+      <Assignment variable="component.context" value="data.adressedFlexoMetaModel" />
       <Dependancy componentName="ontologyModelSlotDD" />
     </Custom>
     <Label label="new_edition_pattern_name" index="5" constraints="twocols(expandHorizontally=false;expandVertically=false;index=5;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" localize="true">

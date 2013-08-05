@@ -91,7 +91,11 @@ public class CreateDiagramInitializer extends ActionInitializer<CreateDiagram, V
 							result = chooseAndConfigureCreationScheme(action);
 						} else {
 							ModelSlot configuredModelSlot = action.getVirtualModel().getModelSlots().get(step - 1);
-							result = configureModelSlot(action, configuredModelSlot);
+							// result = configureModelSlot(action, configuredModelSlot);
+
+							//
+							result = instanciateShowDialogAndReturnStatus(action.getModelSlotInstanceConfiguration(configuredModelSlot),
+									getModelSlotInstanceConfigurationFIB(configuredModelSlot.getClass()));
 						}
 						if (result == Status.CANCELED) {
 							return false;
@@ -159,7 +163,7 @@ public class CreateDiagramInitializer extends ActionInitializer<CreateDiagram, V
 			return VECst.CONFIGURE_FREE_MODEL_SLOT_INSTANCE_DIALOG_FIB;
 		}
 		if (VirtualModelModelSlot.class.isAssignableFrom(modelSlotClass)) {
-			return VECst.CONFIGURE_FREE_MODEL_SLOT_INSTANCE_DIALOG_FIB;
+			return VECst.CONFIGURE_VIRTUAL_MODEL_SLOT_INSTANCE_DIALOG_FIB;
 		}
 		return null;
 	}

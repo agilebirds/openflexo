@@ -18,7 +18,6 @@ public class AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSh
 
 	public AddExcelSheet(VirtualModelBuilder builder) {
 		super(builder);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -37,7 +36,7 @@ public class AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSh
 
 		ExcelSheet result = null;
 
-		FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot> modelSlotInstance = (FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot>) getModelSlotInstance(action);
+		FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot> modelSlotInstance = getModelSlotInstance(action);
 		if (modelSlotInstance.getResourceData() != null) {
 
 			// Create an Excel Sheet
@@ -54,6 +53,11 @@ public class AddExcelSheet extends AssignableAction<BasicExcelModelSlot, ExcelSh
 		}
 
 		return result;
+	}
+
+	@Override
+	public FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot> getModelSlotInstance(EditionSchemeAction action) {
+		return (FreeModelSlotInstance<ExcelWorkbook, BasicExcelModelSlot>) super.getModelSlotInstance(action);
 	}
 
 }

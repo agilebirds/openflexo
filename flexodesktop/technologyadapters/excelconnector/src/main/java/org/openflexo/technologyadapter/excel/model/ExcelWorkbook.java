@@ -6,11 +6,12 @@ import java.util.List;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.ResourceData;
+import org.openflexo.foundation.technologyadapter.TechnologyObject;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 import org.openflexo.technologyadapter.excel.model.io.BasicExcelModelConverter;
 import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
 
-public class ExcelWorkbook extends ExcelObject implements ResourceData<ExcelWorkbook> {
+public class ExcelWorkbook extends ExcelObject implements ResourceData<ExcelWorkbook>, IFlexoTechnology {
 
 	private Workbook workbook;
 	private ExcelWorkbookResource resource;
@@ -50,8 +51,7 @@ public class ExcelWorkbook extends ExcelObject implements ResourceData<ExcelWork
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return this.getResource().getName();
+		return getResource().getName();
 	}
 
 	public List<ExcelSheet> getExcelSheets() {
@@ -64,5 +64,30 @@ public class ExcelWorkbook extends ExcelObject implements ResourceData<ExcelWork
 
 	public void addExcelSheet(ExcelSheet newExcelSheet) {
 		this.excelSheets.add(newExcelSheet);
+	}
+
+	@Override
+	public List<? extends TechnologyObject> getAccessibleTechnologyObject() {
+		return getExcelSheets();
+	}
+
+	@Override
+	public TechnologyObject getRootConcept() {
+		return this;
+	}
+
+	@Override
+	public List<? extends IFlexoTechnologyObjectContainer> getSubContainers() {
+		return null;
+	}
+
+	@Override
+	public List<? extends TechnologyObject> getConcepts() {
+		return getExcelSheets();
+	}
+
+	@Override
+	public List<? extends TechnologyObject> getTechnologyObjects() {
+		return getExcelSheets();
 	}
 }

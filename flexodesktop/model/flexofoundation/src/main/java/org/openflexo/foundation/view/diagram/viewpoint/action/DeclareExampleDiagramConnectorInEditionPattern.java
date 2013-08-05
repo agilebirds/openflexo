@@ -67,9 +67,4 @@ public class DeclareExampleDiagramConnectorInEditionPattern
 		super(actionType, focusedObject, globalSelection, editor);
 	}
 
-	@Override
-	public ExampleDiagramConnector getFocusedObject() {
-		return super.getFocusedObject();
-	}
-
 }

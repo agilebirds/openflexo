@@ -27,44 +27,38 @@ import java.util.Vector;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.DataModification;
-import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
-import org.openflexo.foundation.ontology.BuiltInDataType;
-import org.openflexo.foundation.ontology.IFlexoOntologyConcept;
-import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
+import org.openflexo.foundation.technologyadapter.TechnologyObject;
 
 /**
- * Model supporting browsing through Excel resources<br>
+ * Model supporting browsing through resources<br>
  * 
  * @author vincent
  */
-public class ExcelBrowserModel extends Observable implements FlexoObserver {
+public class ModelBrowser extends Observable implements FlexoObserver {
 
-	static final Logger logger = Logger.getLogger(ExcelBrowserModel.class.getPackage().getName());
+	static final Logger logger = Logger.getLogger(ModelBrowser.class.getPackage().getName());
 
-	private ExcelWorkbookResource context;
-	private boolean hierarchicalMode = true;
-	private boolean strictMode = false;
-	private FlexoObject rootClass;
-	private BuiltInDataType dataType = null;
+	private IFlexoTechnology context;
+	private TechnologyObject rootClass;
 
-	private List<FlexoObject> roots = null;
-	private Map<FlexoObject, List<FlexoObject>> structure = null;
+	private List<TechnologyObject> roots = null;
+	private Map<TechnologyObject, List<TechnologyObject>> structure = null;
 
-	public ExcelBrowserModel(ExcelWorkbookResource context) {
+	public ModelBrowser(IFlexoTechnology context) {
 		super();
 		setContext(context);
 	}
 
-	public List<FlexoObject> getRoots() {
+	public List<TechnologyObject> getRoots() {
 		if (roots == null) {
 			recomputeStructure();
 		}
 		return roots;
 	}
 
-	public List<FlexoObject> getChildren(FlexoObject father) {
+	public List<TechnologyObject> getChildren(TechnologyObject father) {
 		return structure.get(father);
 	}
 
@@ -77,12 +71,12 @@ public class ExcelBrowserModel extends Observable implements FlexoObserver {
 		isRecomputingStructure = true;
 		isRecomputingStructure = false;
 		setChanged();
-		notifyObservers(new OntologyBrowserModelRecomputed());
+		notifyObservers(new BrowserModelRecomputed());
 
 		logger.fine("END recomputeStructure for " + getContext());
 	}
 
-	public static class OntologyBrowserModelRecomputed {
+	public static class BrowserModelRecomputed {
 
 	}
 
@@ -90,11 +84,11 @@ public class ExcelBrowserModel extends Observable implements FlexoObserver {
 		context = null;
 	}
 
-	public ExcelWorkbookResource getContext() {
+	public IFlexoTechnology getContext() {
 		return context;
 	}
 
-	public void setContext(ExcelWorkbookResource context) {
+	public void setContext(IFlexoTechnology context) {
 		if (this.context != null) {
 			((FlexoObservable) context).deleteObserver(this);
 		}
@@ -112,27 +106,27 @@ public class ExcelBrowserModel extends Observable implements FlexoObserver {
 		recomputeStructure();
 	}
 
-	public FlexoObject getRootClass() {
+	public TechnologyObject getRootClass() {
 		return rootClass;
 	}
 
-	public void setRootClass(FlexoObject rootClass) {
+	public void setRootClass(TechnologyObject rootClass) {
 		this.rootClass = rootClass;
 	}
 
-	public boolean isDisplayable(FlexoObject object) {
+	public boolean isDisplayable(TechnologyObject object) {
 
-		if (object instanceof FlexoObject) {
+		if (object instanceof TechnologyObject) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	private void addChildren(FlexoObject parent, FlexoObject child) {
-		List<FlexoObject> v = structure.get(parent);
+	private void addChildren(TechnologyObject parent, TechnologyObject child) {
+		List<TechnologyObject> v = structure.get(parent);
 		if (v == null) {
-			v = new Vector<FlexoObject>();
+			v = new Vector<TechnologyObject>();
 			structure.put(parent, v);
 		}
 		if (!v.contains(child)) {
@@ -140,10 +134,7 @@ public class ExcelBrowserModel extends Observable implements FlexoObserver {
 		}
 	}
 
-	public Font getFont(IFlexoOntologyConcept object, Font baseFont) {
-		if (object.getOntology() != getContext()) {
-			return baseFont.deriveFont(Font.ITALIC);
-		}
+	public Font getFont(TechnologyObject object, Font baseFont) {
 		return baseFont;
 	}
 

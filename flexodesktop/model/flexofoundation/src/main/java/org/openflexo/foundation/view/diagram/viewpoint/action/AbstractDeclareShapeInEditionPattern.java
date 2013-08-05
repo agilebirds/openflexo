@@ -20,9 +20,7 @@
 
 package org.openflexo.foundation.view.diagram.viewpoint.action;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -32,12 +30,10 @@ import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoObject;
 import org.openflexo.foundation.action.FlexoActionType;
 import org.openflexo.foundation.ontology.IFlexoOntologyClass;
-import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.editionaction.AddShape;
@@ -62,7 +58,7 @@ import org.openflexo.toolbox.StringUtils;
  */
 
 public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObject & GRShapeTemplate, T2 extends FlexoObject, A extends AbstractDeclareShapeInEditionPattern<T1, T2, A>>
-extends DeclareInEditionPattern<A, T1, T2> {
+		extends DeclareInEditionPattern<A, T1, T2> {
 
 	private static final Logger logger = Logger.getLogger(AbstractDeclareShapeInEditionPattern.class.getPackage().getName());
 
@@ -100,12 +96,12 @@ extends DeclareInEditionPattern<A, T1, T2> {
 			switch (patternChoice) {
 			case MAP_SINGLE_INDIVIDUAL:
 				return StringUtils.isNotEmpty(getEditionPatternName()) && concept != null
-				&& StringUtils.isNotEmpty(getIndividualPatternRoleName()) && getSelectedEntriesCount() > 0
-				&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
+						&& StringUtils.isNotEmpty(getIndividualPatternRoleName()) && getSelectedEntriesCount() > 0
+						&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
 			case MAP_SINGLE_EDITION_PATTERN:
 				return StringUtils.isNotEmpty(getEditionPatternName()) && virtualModelConcept != null
-				&& StringUtils.isNotEmpty(getVirtualModelPatternRoleName()) && getSelectedEntriesCount() > 0
-				&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
+						&& StringUtils.isNotEmpty(getVirtualModelPatternRoleName()) && getSelectedEntriesCount() > 0
+						&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
 			case BLANK_EDITION_PATTERN:
 				return StringUtils.isNotEmpty(getEditionPatternName()) && getSelectedEntriesCount() > 0
 						&& (isTopLevel || containerEditionPattern != null) && StringUtils.isNotEmpty(getDropSchemeName());
@@ -149,7 +145,13 @@ extends DeclareInEditionPattern<A, T1, T2> {
 		}*/
 	}
 
+	public EditionPattern getVirtualModelConcept() {
+		return virtualModelConcept;
+	}
 
+	public void setVirtualModelConcept(EditionPattern virtualModelConcept) {
+		this.virtualModelConcept = virtualModelConcept;
+	}
 
 	public String getDropSchemeName() {
 		if (StringUtils.isEmpty(dropSchemeName)) {
@@ -163,11 +165,26 @@ extends DeclareInEditionPattern<A, T1, T2> {
 		this.dropSchemeName = dropSchemeName;
 	}
 
+	@Override
+	public EditionPattern getEditionPattern() {
+		if (primaryChoice == DeclareInEditionPatternChoices.CREATES_EDITION_PATTERN) {
+			return newEditionPattern;
+		}
+		return super.getEditionPattern();
+	}
 
 	public String getEditionPatternName() {
-		if (StringUtils.isEmpty(editionPatternName) && concept != null) {
-			return concept.getName();
+		if (isTypeAwareModelSlot()) {
+			if (StringUtils.isEmpty(editionPatternName) && concept != null) {
+				return concept.getName();
+			}
 		}
+		if (isVirtualModelModelSlot()) {
+			if (StringUtils.isEmpty(editionPatternName) && virtualModelConcept != null) {
+				return virtualModelConcept.getName();
+			}
+		}
+
 		return editionPatternName;
 	}
 
@@ -185,8 +202,6 @@ extends DeclareInEditionPattern<A, T1, T2> {
 	public void setIndividualPatternRoleName(String individualPatternRoleName) {
 		this.individualPatternRoleName = individualPatternRoleName;
 	}
-
-
 
 	// public Vector<PropertyEntry> propertyEntries = new Vector<PropertyEntry>();
 
@@ -250,7 +265,6 @@ extends DeclareInEditionPattern<A, T1, T2> {
 
 	 */
 
-
 	public String getVirtualModelPatternRoleName() {
 		if (StringUtils.isEmpty(virtualModelPatternRoleName) && virtualModelConcept != null) {
 			return JavaUtils.getVariableName(virtualModelConcept.getName());
@@ -261,7 +275,6 @@ extends DeclareInEditionPattern<A, T1, T2> {
 	public void setVirtualModelPatternRoleName(String virtualModelPatternRoleName) {
 		this.virtualModelPatternRoleName = virtualModelPatternRoleName;
 	}
-
 
 	@Override
 	protected void doAction(Object context) {
@@ -326,36 +339,34 @@ extends DeclareInEditionPattern<A, T1, T2> {
 					GraphicalElementPatternRole primaryRepresentationRole = null;
 					for (DrawingObjectEntry entry : drawingObjectEntries) {
 						if (entry.getSelectThis()) {
-							if (entry.graphicalObject instanceof ExampleDiagramShape) {
-								ShapePatternRole newShapePatternRole = new ShapePatternRole(builder);
-								newShapePatternRole.setPatternRoleName(entry.patternRoleName);
-								/*if (mainPropertyDescriptor != null && entry.isMainEntry()) {
-									newShapePatternRole.setLabel(new DataBinding<String>(getIndividualPatternRoleName() + "."
-											+ mainPropertyDescriptor.property.getName()));
-								} else {*/
-								newShapePatternRole.setReadOnlyLabel(true);
-								if (StringUtils.isNotEmpty(entry.graphicalObject.getName())) {
-									newShapePatternRole.setLabel(new DataBinding<String>("\"" + entry.graphicalObject.getName() + "\""));
-								}
-								// }
-								newShapePatternRole.setExampleLabel(((ShapeGraphicalRepresentation) entry.graphicalObject
-										.getGraphicalRepresentation()).getText());
-								// We clone here the GR (fixed unfocusable GR bug)
-								newShapePatternRole.setGraphicalRepresentation(((ShapeGraphicalRepresentation<?>) entry.graphicalObject
-										.getGraphicalRepresentation()).clone());
-								// Forces GR to be displayed in view
-								((ShapeGraphicalRepresentation<?>) newShapePatternRole.getGraphicalRepresentation())
-								.setAllowToLeaveBounds(false);
-								newEditionPattern.addToPatternRoles(newShapePatternRole);
-								if (entry.getParentEntry() != null) {
-									newShapePatternRole.setParentShapePatternRole((ShapePatternRole) newGraphicalElementPatternRoles
-											.get(entry.getParentEntry()));
-								}
-								if (entry.isMainEntry()) {
-									primaryRepresentationRole = newShapePatternRole;
-								}
-								newGraphicalElementPatternRoles.put(entry, newShapePatternRole);
+							ShapePatternRole newShapePatternRole = new ShapePatternRole(builder);
+							newShapePatternRole.setPatternRoleName(entry.patternRoleName);
+							/*if (mainPropertyDescriptor != null && entry.isMainEntry()) {
+								newShapePatternRole.setLabel(new DataBinding<String>(getIndividualPatternRoleName() + "."
+										+ mainPropertyDescriptor.property.getName()));
+							} else {*/
+							newShapePatternRole.setReadOnlyLabel(true);
+							if (StringUtils.isNotEmpty(entry.graphicalObject.getName())) {
+								newShapePatternRole.setLabel(new DataBinding<String>("\"" + entry.graphicalObject.getName() + "\""));
 							}
+							// }
+							newShapePatternRole.setExampleLabel(((ShapeGraphicalRepresentation) entry.graphicalObject
+									.getGraphicalRepresentation()).getText());
+							// We clone here the GR (fixed unfocusable GR bug)
+							newShapePatternRole.setGraphicalRepresentation(((ShapeGraphicalRepresentation<?>) entry.graphicalObject
+									.getGraphicalRepresentation()).clone());
+							// Forces GR to be displayed in view
+							((ShapeGraphicalRepresentation<?>) newShapePatternRole.getGraphicalRepresentation())
+									.setAllowToLeaveBounds(false);
+							newEditionPattern.addToPatternRoles(newShapePatternRole);
+							if (entry.getParentEntry() != null) {
+								newShapePatternRole.setParentShapePatternRole((ShapePatternRole) newGraphicalElementPatternRoles.get(entry
+										.getParentEntry()));
+							}
+							if (entry.isMainEntry()) {
+								primaryRepresentationRole = newShapePatternRole;
+							}
+							newGraphicalElementPatternRoles.put(entry, newShapePatternRole);
 						}
 					}
 					newEditionPattern.setPrimaryRepresentationRole(primaryRepresentationRole);
@@ -583,13 +594,6 @@ extends DeclareInEditionPattern<A, T1, T2> {
 		}
 	}
 
-	public EditionPattern getVirtualModelConcept() {
-		return virtualModelConcept;
-	}
-
-	public void setVirtualModelConcept(EditionPattern virtualModelConcept) {
-		this.virtualModelConcept = virtualModelConcept;
-	}
 	/*public class PropertyEntry {
 
 		public IFlexoOntologyStructuralProperty property;
@@ -647,27 +651,5 @@ extends DeclareInEditionPattern<A, T1, T2> {
 		}
 	}
 	 */
-	@Override
-	public EditionPattern getEditionPattern() {
-		if (primaryChoice == DeclareInEditionPatternChoices.CREATES_EDITION_PATTERN) {
-			return newEditionPattern;
-		}
-		return super.getEditionPattern();
-	}
-
-
-
-	/**
-	 * Return a virtual model adressed by a model slot
-	 * 
-	 * @return
-	 */
-	public VirtualModel getAdressedVirtualModel() {
-		if (isVirtualModelModelSlot()) {
-			VirtualModelModelSlot virtualModelModelSlot = (VirtualModelModelSlot) getModelSlot();
-			return virtualModelModelSlot.getAddressedVirtualModel();
-		}
-		return null;
-	}
 
 }

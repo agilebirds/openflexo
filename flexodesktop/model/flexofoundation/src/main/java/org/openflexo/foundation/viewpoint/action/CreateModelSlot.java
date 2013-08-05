@@ -40,6 +40,7 @@ import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
 import org.openflexo.foundation.viewpoint.VirtualModel;
 import org.openflexo.foundation.viewpoint.VirtualModelModelSlot;
+import org.openflexo.foundation.viewpoint.VirtualModelTechnologyAdapter;
 import org.openflexo.localization.FlexoLocalization;
 import org.openflexo.toolbox.StringUtils;
 
@@ -93,6 +94,17 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, VirtualModel, 
 	@Override
 	protected void doAction(Object context) throws DuplicateResourceException, NotImplementedException, InvalidParameterException {
 		logger.info("Add model slot");
+
+		if (technologyAdapter instanceof VirtualModelTechnologyAdapter) {
+			VirtualModelTechnologyAdapter virtualModelTechnologyAdapter = (VirtualModelTechnologyAdapter) technologyAdapter;
+			newModelSlot = virtualModelTechnologyAdapter.makeModelSlot(VirtualModelModelSlot.class, getFocusedObject());
+			newModelSlot.setName(modelSlotName);
+			((VirtualModelModelSlot<?, ?>) newModelSlot).setVirtualModelResource(vmRes);
+			newModelSlot.setIsRequired(required);
+			newModelSlot.setIsReadOnly(readOnly);
+			newModelSlot.setDescription(description);
+			getFocusedObject().addToModelSlots(newModelSlot);
+		}
 
 		if (technologyAdapter != null && getModelSlotClass() != null) {
 			// if (getFocusedObject() instanceof VirtualModel) {
@@ -148,16 +160,27 @@ public class CreateModelSlot extends FlexoAction<CreateModelSlot, VirtualModel, 
 			}*/else if (technologyAdapter == null) {
 			validityMessage = NO_TECHNOLOGY_ADAPTER;
 			return false;
-		} else if (getModelSlotClass() == null) {
-			validityMessage = NO_MODEL_SLOT_TYPE;
-			return false;
-		} else if (mmRes == null && TypeAwareModelSlot.class.isAssignableFrom(getModelSlotClass())) {
-			validityMessage = NO_META_MODEL;
-			return true;
-		} else {
-			validityMessage = "";
-			return true;
+		} else if (technologyAdapter instanceof VirtualModelTechnologyAdapter) {
+			if (vmRes == null) {
+				return false;
+			} else {
+				validityMessage = "";
+				return true;
+			}
+		} else if (!(technologyAdapter instanceof VirtualModelTechnologyAdapter)) {
+			if (getModelSlotClass() == null) {
+				validityMessage = NO_MODEL_SLOT_TYPE;
+				return false;
+			}
+			if (mmRes == null && TypeAwareModelSlot.class.isAssignableFrom(getModelSlotClass())) {
+				validityMessage = NO_META_MODEL;
+				return false;
+			} else {
+				validityMessage = "";
+				return true;
+			}
 		}
+		return false;
 	}
 
 	public Class<? extends ModelSlot<?>> getModelSlotClass() {

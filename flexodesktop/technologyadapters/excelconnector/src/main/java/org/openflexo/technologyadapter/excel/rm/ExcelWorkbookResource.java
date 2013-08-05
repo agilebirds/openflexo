@@ -1,5 +1,5 @@
 /*
- * (c) Copyright 2010-2011 AgileBirds
+ * (c) Copyright 2013 Openflexo
  *
  * This file is part of OpenFlexo.
  *
@@ -28,11 +28,6 @@ import org.openflexo.model.annotations.Setter;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyContextManager;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
-/**
- * EMF Model Resource.
- * 
- * @author gbesancon
- */
 @ModelEntity
 @ImplementationClass(ExcelWorkbookResourceImpl.class)
 public interface ExcelWorkbookResource extends FlexoFileResource<ExcelWorkbook>, TechnologyAdapterResource<ExcelWorkbook> {

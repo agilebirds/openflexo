@@ -130,7 +130,6 @@ public abstract class ExcelWorkbookResourceImpl extends FlexoFileResourceImpl<Ex
 			FileNotFoundException, FlexoException {
 
 		ExcelWorkbook resourceData = null;
-		// TODO: insert loading code here
 
 		try {
 			FileInputStream fis = new FileInputStream(getFile());
@@ -138,6 +137,9 @@ public abstract class ExcelWorkbookResourceImpl extends FlexoFileResourceImpl<Ex
 			// XSSFWorkbook wbOpenned = new XSSFWorkbook(fis);
 			BasicExcelModelConverter converter = new BasicExcelModelConverter();
 			resourceData = converter.convertExcelWorkbook(wbOpenned, (ExcelTechnologyAdapter) getTechnologyAdapter());
+			// TODO how to change this?
+			resourceData.setResource(retrieveExcelWorkbookResource(getFile(), getTechnologyContextManager()));
+
 			fis.close();
 		} catch (IOException e) {
 			e.printStackTrace();
