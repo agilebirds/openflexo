@@ -340,13 +340,7 @@ public class TypeUtils {
 		if (isObject(aType)) {
 			return true;
 		}
-
-		// Special case for Files from Strings (as in XMLDecode, with the FileConverter)
-		
-		if (isFile(aType) && isString(anOtherType)) {
-			return true;
-		}
-		
+	
 		// Special case for Custom types
 		if (aType instanceof CustomType) {
 			return ((CustomType) aType).isTypeAssignableFrom(anOtherType, permissive);

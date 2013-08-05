@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.beans.PropertyChangeEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,6 +37,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.tree.TreeNode;
 
 import org.openflexo.antar.binding.BindingDefinition;
+import org.openflexo.antar.binding.BindingEvaluationContext;
 import org.openflexo.antar.binding.BindingFactory;
 import org.openflexo.antar.binding.BindingModel;
 import org.openflexo.antar.binding.BindingVariable;
@@ -45,6 +47,8 @@ import org.openflexo.antar.binding.ParameterizedTypeImpl;
 import org.openflexo.antar.binding.TargetObject;
 import org.openflexo.antar.binding.TypeUtils;
 import org.openflexo.antar.expr.BindingValue;
+import org.openflexo.antar.expr.NullReferenceException;
+import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.FIBLibrary;
 import org.openflexo.fib.controller.FIBComponentDynamicModel;
 import org.openflexo.fib.controller.FIBController;
@@ -744,6 +748,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 					return getDataType();
 				}
 			};
+			data.setBindingName("data");
 		}
 		return data;
 	}
@@ -756,6 +761,7 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 					return getDataType();
 				}
 			};
+			data.setBindingName("data");
 		} else {
 			this.data = null;
 		}
@@ -1428,5 +1434,6 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode, H
 	public void setBindingFactory(BindingFactory bindingFactory) {
 		this.bindingFactory = bindingFactory;
 	}
+
 
 }

@@ -77,7 +77,7 @@ public class VirtualModel<VM extends VirtualModel<VM>> extends EditionPattern im
 	private ViewPoint viewPoint;
 	private Vector<EditionPattern> editionPatterns;
 	private List<ModelSlot<?, ?>> modelSlots;
-	private BindingModel bindingModel;
+	protected BindingModel bindingModel;
 	private VirtualModelResource<VM> resource;
 	private LocalizedDictionary localizedDictionary;
 

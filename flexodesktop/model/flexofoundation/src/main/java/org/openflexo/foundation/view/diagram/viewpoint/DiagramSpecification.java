@@ -21,8 +21,11 @@ package org.openflexo.foundation.view.diagram.viewpoint;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
@@ -39,6 +42,7 @@ import org.openflexo.foundation.view.diagram.DiagramTechnologyAdapter;
 import org.openflexo.foundation.view.diagram.rm.DiagramPaletteResource;
 import org.openflexo.foundation.view.diagram.rm.ExampleDiagramResource;
 import org.openflexo.foundation.viewpoint.EditionPattern;
+import org.openflexo.foundation.viewpoint.EditionPatternInstanceType;
 import org.openflexo.foundation.viewpoint.ViewPoint;
 import org.openflexo.foundation.viewpoint.ViewPointLibrary;
 import org.openflexo.foundation.viewpoint.ViewPointObject;
@@ -62,6 +66,7 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 
 	private List<DiagramPalette> palettes;
 	private List<ExampleDiagram> exampleDiagrams;
+
 
 	/**
 	 * Stores a chained collections of objects which are involved in validation
@@ -157,11 +162,24 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 		}
 	}
 
+	public static File getUiPanelComponentFib() throws IOException{
+		Enumeration<URL> res = DiagramSpecification.class.getClassLoader().getResources("DiagramSpecificationStructuralPanel.fib");
+		File aFile = null;
+		if (res != null){
+			aFile = new File(res.toString());
+			}	
+		else {
+			logger.info("Mais où donc vais-je te trouver connard!");
+		}
+
+		return aFile;
+	}
+	
 	@Override
 	public DiagramSpecificationResource getResource() {
 		return (DiagramSpecificationResource) super.getResource();
 	}
-
+	
 	@Override
 	public String toString() {
 		return "DiagramSpecification:" + getURI();
@@ -375,5 +393,6 @@ public class DiagramSpecification extends VirtualModel<DiagramSpecification> {
 			e.printStackTrace();
 		}
 	}
+
 
 }

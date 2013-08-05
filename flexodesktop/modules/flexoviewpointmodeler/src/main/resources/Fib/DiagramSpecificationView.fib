@@ -16,7 +16,7 @@
     </Table>
     <TabPanel name="MainTabPanel" index="1" constraints="split(index=1;location=center;splitIdentifier=bottom)">
       <Tab title="structural" layout="border" titleFont="SansSerif,0,12" darkLevel="0" index="0" name="StructuralTab">
-        <FIBReferencedComponent componentFile="($java.io.File)&quot;DiagramSpecificationStructuralPanel.fib&quot;" localize="true" manageDynamicModel="true" data="data" constraints="border(location=center)" />
+        <FIBReferencedComponent componentFile="data.uiPanelComponentFib" localize="true" manageDynamicModel="true" data="data" constraints="border(location=center)" />
       </Tab>
       <Tab title="behavioural" layout="border" borderTitle="EditionScheme" titleFont="SansSerif,0,11" darkLevel="0" protectContent="true" index="1" constraints="border(index=1;location=center)" name="BehaviouralTab">
         <SplitPanel index="0" constraints="border(index=0;location=center)">

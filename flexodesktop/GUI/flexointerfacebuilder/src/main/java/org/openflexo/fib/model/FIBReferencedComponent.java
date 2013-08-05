@@ -35,7 +35,7 @@ import org.openflexo.antar.expr.NullReferenceException;
 import org.openflexo.antar.expr.TypeMismatchException;
 import org.openflexo.fib.FIBLibrary;
 
-public class FIBReferencedComponent extends FIBWidget implements BindingEvaluationContext {
+public class FIBReferencedComponent extends FIBWidget implements BindingEvaluationContext  {
 
 	private static final Logger logger = Logger.getLogger(FIBReferencedComponent.class.getPackage().getName());
 
@@ -62,8 +62,8 @@ public class FIBReferencedComponent extends FIBWidget implements BindingEvaluati
 
 	@Override
 	public Type getDefaultDataClass() {
-		if (getComponent() != null) {
-			return getComponent().getDataType();
+		if (component != null) {
+			return component.getDataType();
 		}
 		return Object.class;
 	}
@@ -73,6 +73,7 @@ public class FIBReferencedComponent extends FIBWidget implements BindingEvaluati
 		if (componentFile == null) {
 			componentFile = new DataBinding<File>(this, File.class, DataBinding.BindingDefinitionType.GET);
 			componentFile.setBindingName("componentFile");
+			componentFile.setCacheable(true);
 		}
 		return componentFile;
 	}
@@ -88,6 +89,7 @@ public class FIBReferencedComponent extends FIBWidget implements BindingEvaluati
 				componentFile.setDeclaredType(File.class);
 				componentFile.setBindingDefinitionType(DataBinding.BindingDefinitionType.GET);
 				componentFile.setBindingName("componentFile");
+				componentFile.setCacheable(true);
 			}
 
 			this.componentFile = componentFile;
@@ -95,7 +97,6 @@ public class FIBReferencedComponent extends FIBWidget implements BindingEvaluati
 			component = null;
 			notify(notification);
 		}
-
 
 	}
 
@@ -105,8 +106,11 @@ public class FIBReferencedComponent extends FIBWidget implements BindingEvaluati
 
 			try {
 				// TODO : find the right evaluation context
+				logger.info("getComponent....");
 				File fibFile = getComponentFile().getBindingValue((BindingEvaluationContext) this);
-				
+
+				logger.info(fibFile.getAbsolutePath());
+
 				component = FIBLibrary.instance().retrieveFIBComponent(fibFile);
 
 			} catch (TypeMismatchException e) {
@@ -312,11 +316,16 @@ public class FIBReferencedComponent extends FIBWidget implements BindingEvaluati
 
 	}
 
+
 	@Override
 	public Object getValue(BindingVariable variable) {
-		// TODO Auto-generated method stub
-		logger.info("This has to be done :"+variable.getLabel());
-		return null;
+		Object value = null;
+		// TODO: XtoF: pas très propre au sens où on se sert de data, pour récupérer non les data, mais la classe de  data
+		if (variable.getLabel().equals("data")) {
+				value = variable.getType();
+		}
+		return value;
+
 	}
 
 }
