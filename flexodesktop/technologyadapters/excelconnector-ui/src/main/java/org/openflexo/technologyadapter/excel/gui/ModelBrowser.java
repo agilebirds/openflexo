@@ -30,6 +30,7 @@ import org.openflexo.foundation.DataModification;
 import org.openflexo.foundation.FlexoObservable;
 import org.openflexo.foundation.FlexoObserver;
 import org.openflexo.foundation.technologyadapter.TechnologyObject;
+import org.openflexo.technologyadapter.excel.model.IFlexoTechnology;
 
 /**
  * Model supporting browsing through resources<br>
