@@ -51,9 +51,6 @@
 								<schemaPackagename>http://www.agilebirds.com/openflexo=org.openflexo.rest.model</schemaPackagename> 
 								</schemaPackagenames> </wadlOption> </wadlOptions> -->
 						</configuration>
-						<goals>
-							<goal>generate</goal>
-						</goals>
 					</execution>
 				</executions>
 			</plugin>
