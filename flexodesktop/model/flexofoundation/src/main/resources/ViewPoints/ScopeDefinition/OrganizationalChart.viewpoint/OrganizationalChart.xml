@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ViewPoint id="1" uri="http://www.agilebirds.com/openflexo/ViewPoints/ScopeDefinition/OrganizationalChart.owl" owlFile="OrganizationalChart.owl">
   <EditionPattern id="2" name="Actor">
-    <DropScheme id="3" target="top" name="dropActorAtTopLevel" label="dropActorAtTopLevel" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600">
+    <DropScheme id="3" target="top" name="dropActorAtTopLevel" label="dropActorAtTopLevel" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600">
       <description>Creates a new actor in organization unit</description>
       <TextFieldParameter id="4" name="firstName" label="First name" usePaletteLabelAsDefaultValue="false" isRequired="false" />
       <TextFieldParameter id="5" name="lastName" label="Last name" usePaletteLabelAsDefaultValue="false" isRequired="false" />
       <URIParameter id="6" base="(parameters.firstName + parameters.lastName)" name="uri" label="uri" usePaletteLabelAsDefaultValue="false" isRequired="true" />
-      <IndividualParameter id="7" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Position" name="position" label="position" usePaletteLabelAsDefaultValue="false" isRequired="false" />
+      <IndividualParameter id="7" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Position" renderer="individual.positionName" name="position" label="position" usePaletteLabelAsDefaultValue="false" isRequired="false" />
       <AddIndividual id="8" individualName="parameters.uri" assignation="actor">
         <DataPropertyAssertion id="9" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#firstName" value="parameters.firstName" />
         <DataPropertyAssertion id="10" dataPropertyURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#lastName" value="parameters.lastName" />
@@ -17,7 +17,7 @@
       <AddShape id="14" extendParentBoundsToHostThisShape="false" assignation="nameLabel" />
       <AddShape id="15" extendParentBoundsToHostThisShape="false" assignation="icon" />
     </DropScheme>
-    <NavigationScheme id="16" targetObject="ownedProcess" conditional="(ownedProcess != null)" name="OpenOwnedProcess" label="OpenOwnedProcess" skipConfirmationPanel="false" definePopupDefaultSize="false" width="800" height="600" />
+    <NavigationScheme id="16" targetObject="ownedProcess" conditional="(ownedProcess != null)" name="OpenOwnedProcess" label="OpenOwnedProcess" skipConfirmationPanel="true" definePopupDefaultSize="false" width="800" height="600" />
     <ContainedIndividualPatternRole id="17" ontologicType="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Actor" patternRole="actor" />
     <ContainedShapePatternRole id="18" exampleLabel="" patternRole="shape">
       <ShapeGraphicalRepresentation id="19" className="org.openflexo.vpm.view.widget.EditionPatternPreviewShapeGR" x="10.0" y="10.0" width="170.9725117248567" height="58.60160965794768" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="FREELY_RESIZABLE" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="false" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="true" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
@@ -86,10 +86,10 @@
     <Inspector id="68" inspectorTitle="Actor">
       <TextField id="69" label="First name" name="firstName" readOnly="false" data="actor.firstName" />
       <TextField id="70" label="Last name" name="lastName" readOnly="false" data="actor.lastName" />
-      <TextField id="71" label="uri" name="uri" readOnly="false" data="actor.uriName" />
-      <Individual id="72" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Position" renderer="individual.positionName" label="position" name="position" readOnly="false" data="actor.hasPosition" />
-      <TextField id="73" label="organization_unit" name="organizationUnit" readOnly="true" data="actor.hasPosition.isInvolvedInOrganizationUnit.uriName" />
-      <FlexoObject id="74" flexoObjectType="Process" label="ownedProcess" name="ownedProcess" readOnly="false" data="ownedProcess" />
+      <Individual id="71" conceptURI="http://www.agilebirds.com/openflexo/ontologies/ScopeDefinition/OrganizationalUnitScopeDefinition.owl#Position" renderer="individual.positionName" label="position" name="position" readOnly="false" data="actor.hasPosition" />
+      <TextField id="72" label="organization_unit" name="organizationUnit" readOnly="true" data="actor.hasPosition.isInvolvedInOrganizationUnit.organizationUnitName" />
+      <FlexoObject id="73" flexoObjectType="Process" label="ownedProcess" name="ownedProcess" readOnly="false" data="ownedProcess" />
+      <TextField id="74" label="uri" name="uri" readOnly="false" data="actor.uriName" />
     </Inspector>
   </EditionPattern>
   <EditionPattern id="75" name="CollaboratorLink">
@@ -104,7 +104,7 @@
         <ForegroundStyle id="83" noStroke="false" color="102,102,102" lineWidth="1.6000000014901161" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <SelectedForegroundStyle id="84" noStroke="false" color="102,102,102" lineWidth="1.6000000014901161" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
         <FocusedForegroundStyle id="85" noStroke="false" color="102,102,102" lineWidth="1.6000000014901161" joinStyle="JOIN_MITER" capStyle="CAP_SQUARE" dashStyle="PLAIN_STROKE" useTransparency="false" transparencyLevel="0.5" />
-        <RectPolylinConnector id="86" rectPolylinConstraints="VERTICAL_LAYOUT" straightLineWhenPossible="true" adjustability="AUTO_LAYOUT" startOrientation="SOUTH" endOrientation="NORTH" isRounded="true" arcSize="10" isStartingLocationFixed="true" isEndingLocationFixed="true" isStartingLocationDraggable="false" isEndingLocationDraggable="false" fixedStartLocation="0.45967047054620336,0.9999999999999999" fixedEndLocation="0.5,0.0" />
+        <RectPolylinConnector id="86" rectPolylinConstraints="NONE" straightLineWhenPossible="false" adjustability="FULLY_ADJUSTABLE" startOrientation="SOUTH" endOrientation="NORTH" isRounded="true" arcSize="10" isStartingLocationFixed="false" isEndingLocationFixed="false" isStartingLocationDraggable="true" isEndingLocationDraggable="true" />
         <TextStyle id="87" font="Lucida Sans,0,11" color="0,0,0" orientation="0" isBackgroundColored="false" backgroundColor="255,255,255" />
       </ConnectorGraphicalRepresentation>
       <ArtifactFromShapeGraphicalRepresentation id="88" className="org.openflexo.vpm.view.widget.EditionPatternConnectorFromArtefactGR" x="207.0" y="-3.0" width="20.0" height="20.0" minimalWidth="0.0" minimalHeight="0.0" maximalWidth="Infinity" maximalHeight="Infinity" relativeTextX="0.5" relativeTextY="0.5" lineWrap="false" locationConstraints="FREELY_MOVABLE" dimensionConstraints="CONSTRAINED_DIMENSIONS" adjustMinimalWidthToLabelWidth="true" adjustMinimalHeightToLabelHeight="true" adjustMaximalWidthToLabelWidth="false" adjustMaximalHeightToLabelHeight="false" hasSelectedForeground="false" hasSelectedBackground="false" hasFocusedForeground="false" hasFocusedBackground="false" isFloatingLabel="true" allowToLeaveBounds="true" identifier="object_0" layer="1" hasText="true" isMultilineAllowed="false" continuousTextEditing="true" absoluteTextX="0.0" absoluteTextY="0.0" paragraphAlignment="CENTER" horizontalTextAlignment="CENTER" verticalTextAlignment="MIDDLE" isSelectable="false" isFocusable="true" drawControlPointsWhenFocused="true" drawControlPointsWhenSelected="true" isReadOnly="false" isLabelEditable="true" isVisible="true">
@@ -139,5 +139,45 @@
       <TextField id="111" label="statement" name="statement" readOnly="true" data="hasCollaboratorStatement.displayableRepresentation.toString" />
     </Inspector>
   </EditionPattern>
-  <LocalizedDictionary id="112" />
+  <LocalizedDictionary id="112">
+    <Localized id="113" key="Actor" lang="English">Actor</Localized>
+    <Localized id="114" key="Actor" lang="French">Acteur</Localized>
+    <Localized id="115" key="Actor" lang="Dutch">Actor</Localized>
+    <Localized id="116" key="dropActorAtTopLevel" lang="English">dropActorAtTopLevel</Localized>
+    <Localized id="117" key="dropActorAtTopLevel" lang="French">dropActorAtTopLevel</Localized>
+    <Localized id="118" key="dropActorAtTopLevel" lang="Dutch">dropActorAtTopLevel</Localized>
+    <Localized id="119" key="Creates a new actor in organization unit" lang="English">Creates a new actor in organization unit</Localized>
+    <Localized id="120" key="Creates a new actor in organization unit" lang="French">Créer un nouvel acteur dans l'unité organisationnelle</Localized>
+    <Localized id="121" key="Creates a new actor in organization unit" lang="Dutch">Creates a new actor in organization unit</Localized>
+    <Localized id="122" key="First name" lang="English">First name</Localized>
+    <Localized id="123" key="First name" lang="French">Prénom</Localized>
+    <Localized id="124" key="First name" lang="Dutch">First name</Localized>
+    <Localized id="125" key="Last name" lang="English">Last name</Localized>
+    <Localized id="126" key="Last name" lang="French">Nom</Localized>
+    <Localized id="127" key="Last name" lang="Dutch">Last name</Localized>
+    <Localized id="128" key="uri" lang="English">URI</Localized>
+    <Localized id="129" key="uri" lang="French">URI</Localized>
+    <Localized id="130" key="uri" lang="Dutch">uri</Localized>
+    <Localized id="131" key="position" lang="English">Position</Localized>
+    <Localized id="132" key="position" lang="French">Position</Localized>
+    <Localized id="133" key="position" lang="Dutch">Position</Localized>
+    <Localized id="134" key="organization_unit" lang="English">Organization unit</Localized>
+    <Localized id="135" key="organization_unit" lang="French">Unité organisationnelle</Localized>
+    <Localized id="136" key="organization_unit" lang="Dutch">organization_unit</Localized>
+    <Localized id="137" key="ownedProcess" lang="English">Owned process</Localized>
+    <Localized id="138" key="ownedProcess" lang="French">Processus associé</Localized>
+    <Localized id="139" key="ownedProcess" lang="Dutch">ownedProcess</Localized>
+    <Localized id="140" key="OpenOwnedProcess" lang="English">OpenOwnedProcess</Localized>
+    <Localized id="141" key="OpenOwnedProcess" lang="French">OpenOwnedProcess</Localized>
+    <Localized id="142" key="OpenOwnedProcess" lang="Dutch">OpenOwnedProcess</Localized>
+    <Localized id="143" key="CollaboratorLink" lang="English">CollaboratorLink</Localized>
+    <Localized id="144" key="CollaboratorLink" lang="French">CollaboratorLink</Localized>
+    <Localized id="145" key="CollaboratorLink" lang="Dutch">CollaboratorLink</Localized>
+    <Localized id="146" key="linkActorToActor" lang="English">linkActorToActor</Localized>
+    <Localized id="147" key="linkActorToActor" lang="French">linkActorToActor</Localized>
+    <Localized id="148" key="linkActorToActor" lang="Dutch">linkActorToActor</Localized>
+    <Localized id="149" key="statement" lang="English">statement</Localized>
+    <Localized id="150" key="statement" lang="French">statement</Localized>
+    <Localized id="151" key="statement" lang="Dutch">statement</Localized>
+  </LocalizedDictionary>
 </ViewPoint>

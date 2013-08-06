@@ -79,6 +79,10 @@ public class CurvedPolylinConnector extends Connector {
 	}
 
 	@Override
+	public void resetConnectorLayout() {
+	}
+
+	@Override
 	public void drawConnector(FGEConnectorGraphics g) {
 		updateControlPoints();
 
