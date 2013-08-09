@@ -201,7 +201,7 @@ public class AddEMFObjectIndividualReferenceObjectPropertyValue extends
 		TypeSafeModelSlotInstance<EMFModel, EMFMetaModel, EMFModelSlot> modelSlotInstance = getModelSlotInstance(action);
 		EMFModel model = modelSlotInstance.getResourceData();
 		// Add Reference in EMF
-		getSubject(action).getObject().eSet(((EMFReferenceObjectProperty) getObjectProperty()).getObject(), getObject(action));
+		getSubject(action).getObject().eSet(((EMFReferenceObjectProperty) getObjectProperty()).getObject(), getObject(action).getObject());
 		// if (referenceObjectProperty.getObject().getUpperBound() != 1) {
 		// List<T> values = (List<T>) objectIndividual.getObject().eGet(referenceObjectProperty.getObject());
 		// values.add(value);
