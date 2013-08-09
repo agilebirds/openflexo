@@ -22,6 +22,7 @@
     <Assignment variable="component.selectObjectProperties" value="true" />
     <Assignment variable="component.selectDataProperties" value="false" />
     <Assignment variable="component.selectAnnotationProperties" value="false" />
+    <Assignment variable="component.modelSlot" value="data.modelSlot" />
     <Dependancy componentName="AddObjectPropertyStatementAssignCC" />
   </Custom>
   <Label label="object" align="right" index="10" data="" constraints="twocols(expandHorizontally=true;expandVertically=false;index=10;insetsBottom=0;insetsLeft=2;insetsRight=2;insetsTop=5;location=left)" visible="" format="" icon="" tooltip="" localize="true" enable="" clickAction="" doubleClickAction="" rightClickAction="" enterPressedAction="" valueChangedAction="" valueTransform="" valueValidator="" />
