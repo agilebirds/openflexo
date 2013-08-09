@@ -90,6 +90,7 @@ public abstract class TypeSafeModelSlotInstanceConfiguration<M extends FlexoMode
 			if (modelResource != null) {
 				System.out.println("Select model with uri " + getModelResource().getURI());
 				msInstance.setResourceData(getModelResource().getModel());
+				msInstance.setModelURI(getModelResource().getURI());
 			} else {
 				logger.warning("No model for model slot " + getModelSlot());
 			}
@@ -98,6 +99,7 @@ public abstract class TypeSafeModelSlotInstanceConfiguration<M extends FlexoMode
 			System.out.println("***** modelResource = " + modelResource);
 			if (modelResource != null) {
 				msInstance.setResourceData(getModelResource().getModel());
+				msInstance.setModelURI(getModelResource().getURI());
 				System.out.println("***** Created model resource " + getModelResource());
 				System.out.println("***** Created model " + getModelResource().getModel());
 				System.out.println("***** Created model with uri=" + getModelResource().getModel().getURI());
@@ -108,6 +110,7 @@ public abstract class TypeSafeModelSlotInstanceConfiguration<M extends FlexoMode
 			modelResource = createSharedEmptyModel(msInstance, getModelSlot());
 			if (modelResource != null) {
 				msInstance.setResourceData(getModelResource().getModel());
+				msInstance.setModelURI(getModelResource().getURI());
 			} else {
 				logger.warning("Could not create SharedEmptyModel for model slot " + getModelSlot());
 			}

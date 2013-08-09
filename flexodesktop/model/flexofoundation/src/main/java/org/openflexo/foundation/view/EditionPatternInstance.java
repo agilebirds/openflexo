@@ -556,7 +556,11 @@ public class EditionPatternInstance extends VirtualModelInstanceObject implement
 		sb.append(getEditionPattern().getName() + ": ");
 		boolean isFirst = true;
 		for (ActorReference ref : actors.values()) {
-			sb.append((isFirst ? "" : ", ") + ref.getPatternRoleName() + "=" + ref.retrieveObject().toString());
+			if (ref.retrieveObject() != null) {
+				sb.append((isFirst ? "" : ", ") + ref.getPatternRoleName() + "=" + ref.retrieveObject().toString());
+			} else {
+				sb.append((isFirst ? "" : ", ") + ref.getPatternRoleName() + "=" + "No object found");
+			}
 			isFirst = false;
 		}
 		return sb.toString();

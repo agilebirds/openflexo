@@ -78,7 +78,7 @@ public class TypeSafeModelSlotInstance<M extends FlexoModel<M, MM>, MM extends F
 	public M getResourceData() {
 		if (getVirtualModelInstance() != null && resourceData == null && StringUtils.isNotEmpty(modelURI)) {
 			FlexoModelResource<M, ?> modelResource = (FlexoModelResource<M, ?>) getVirtualModelInstance().getInformationSpace()
-					.getMetaModelWithURI(modelURI, getModelSlot().getTechnologyAdapter());
+					.getModelWithURI(modelURI, getModelSlot().getTechnologyAdapter());
 			if (modelResource != null) {
 				resourceData = modelResource.getModel();
 				resource = modelResource;
