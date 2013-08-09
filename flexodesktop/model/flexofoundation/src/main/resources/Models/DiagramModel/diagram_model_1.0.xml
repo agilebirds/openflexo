@@ -38,7 +38,6 @@
 
 	<entity name="org.openflexo.foundation.view.ModelSlotInstance" abstract="yes">
 		<description>Binds a model slot to a model within a given view </description>
-		<property name="view" xmlTag="view" attribute="YES" />
 		<property name="modelSlotName" xmlTag="modelSlotName" attribute="YES" />
 	</entity>
 
