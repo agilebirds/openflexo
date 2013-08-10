@@ -26,9 +26,9 @@ public class FGEIconLibrary {
 
 	public static final ImageIconResource CURSOR_MOVE_ICON = new ImageIconResource("Icons/CursorMove.gif");
 
-	public static final ImageIconResource RECT_POLYLIN_CONNECTOR_ICON = new ImageIconResource("Icons/RectPolylinConnectorSpecification.gif");
-	public static final ImageIconResource CURVE_CONNECTOR_ICON = new ImageIconResource("Icons/CurveConnectorSpecification.gif");
-	public static final ImageIconResource LINE_CONNECTOR_ICON = new ImageIconResource("Icons/LineConnectorSpecification.gif");
+	public static final ImageIconResource RECT_POLYLIN_CONNECTOR_ICON = new ImageIconResource("Icons/RectPolylinConnector.gif");
+	public static final ImageIconResource CURVE_CONNECTOR_ICON = new ImageIconResource("Icons/CurveConnector.gif");
+	public static final ImageIconResource LINE_CONNECTOR_ICON = new ImageIconResource("Icons/LineConnector.gif");
 
 	public static final ImageIconResource PIN_ICON = new ImageIconResource("Icons/Pin.gif");
 

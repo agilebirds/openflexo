@@ -99,7 +99,7 @@ public abstract class FGELayeredView<O> extends JLayeredPane implements FGEView<
 	}
 
 	public void add(ShapeView<?> view) {
-		// logger.info("add "+view);
+		logger.info("add view " + view + " under " + this);
 		view.setBackground(getBackground());
 		if (view.getLabelView() != null) {
 			add(view.getLabelView(), view.getLayer(), -1);

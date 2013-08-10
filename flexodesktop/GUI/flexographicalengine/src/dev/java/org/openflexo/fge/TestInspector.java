@@ -19,14 +19,12 @@
  */
 package org.openflexo.fge;
 
-import java.io.FileNotFoundException;
 import java.util.Observable;
 import java.util.logging.Logger;
 
 import org.openflexo.inspector.InspectorController;
 import org.openflexo.inspector.InspectorWindow;
 import org.openflexo.logging.FlexoLogger;
-import org.openflexo.toolbox.FileResource;
 
 public class TestInspector extends InspectorController {
 
@@ -37,17 +35,17 @@ public class TestInspector extends InspectorController {
 	public TestInspector() {
 		super(null, null);
 		logger.info("Load inspectors...");
-		try {
-			importInspectorFile(new FileResource("DrawingEditorInspectors/GraphicalRepresentation.inspector"));
-			importInspectorFile(new FileResource("DrawingEditorInspectors/ShapeGraphicalRepresentation.inspector"));
-			importInspectorFile(new FileResource("DrawingEditorInspectors/DrawingGraphicalRepresentation.inspector"));
-			importInspectorFile(new FileResource("DrawingEditorInspectors/ConnectorGraphicalRepresentation.inspector"));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
+		// try {
+		// importInspectorFile(new FileResource("Inspectors/DrawingEditor/GraphicalRepresentation.inspector"));
+		// importInspectorFile(new FileResource("Inspectors/DrawingEditor/ShapeGraphicalRepresentation.inspector"));
+		// importInspectorFile(new FileResource("Inspectors/DrawingEditor/DrawingGraphicalRepresentation.inspector"));
+		// importInspectorFile(new FileResource("Inspectors/DrawingEditor/ConnectorGraphicalRepresentation.inspector"));
+		// } catch (FileNotFoundException e) {
+		// TODO Auto-generated catch block
+		// e.printStackTrace();
+		/*} finally {
 			updateSuperInspectors();
-		}
+		}*/
 
 		window = createInspectorWindow(null);
 	}

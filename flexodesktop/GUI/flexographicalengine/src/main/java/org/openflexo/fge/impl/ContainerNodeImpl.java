@@ -7,11 +7,14 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.fge.ContainerGraphicalRepresentation;
+import org.openflexo.fge.Drawing.ConnectorNode;
 import org.openflexo.fge.Drawing.ContainerNode;
 import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.Drawing.ShapeNode;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GRBinding;
+import org.openflexo.fge.GRBinding.ConnectorGRBinding;
+import org.openflexo.fge.GRBinding.ShapeGRBinding;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
 import org.openflexo.fge.geom.FGEPoint;
 import org.openflexo.fge.notifications.NodeAdded;
@@ -182,6 +185,36 @@ public abstract class ContainerNodeImpl<O, GR extends ContainerGraphicalRepresen
 		removedNode.getGraphicalRepresentation().updateBindingModel();
 		setChanged();
 		notifyObservers(new NodeRemoved(removedNode, this));
+	}
+
+	@Override
+	public <O2> boolean hasShapeFor(ShapeGRBinding<O2> binding, O2 aDrawable) {
+		return getShapeFor(binding, aDrawable) != null;
+	}
+
+	@Override
+	public <O2> ShapeNode<O2> getShapeFor(ShapeGRBinding<O2> binding, O2 aDrawable) {
+		for (DrawingTreeNode<?, ?> child : childNodes) {
+			if (child instanceof ShapeNode && child.getGRBinding() == binding && child.getDrawable() == aDrawable) {
+				return (ShapeNode<O2>) child;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public <O2> boolean hasConnectorFor(ConnectorGRBinding<O2> binding, O2 aDrawable) {
+		return getConnectorFor(binding, aDrawable) != null;
+	}
+
+	@Override
+	public <O2> ConnectorNode<O2> getConnectorFor(ConnectorGRBinding<O2> binding, O2 aDrawable) {
+		for (DrawingTreeNode<?, ?> child : childNodes) {
+			if (child instanceof ConnectorNode && child.getGRBinding() == binding && child.getDrawable() == aDrawable) {
+				return (ConnectorNode<O2>) child;
+			}
+		}
+		return null;
 	}
 
 }

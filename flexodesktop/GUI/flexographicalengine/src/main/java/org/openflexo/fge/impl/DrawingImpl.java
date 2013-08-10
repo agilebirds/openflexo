@@ -20,7 +20,6 @@
 package org.openflexo.fge.impl;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Observable;
@@ -57,9 +56,10 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 
 	static final Logger logger = Logger.getLogger(DrawingImpl.class.getPackage().getName());
 
-	private Hashtable<GRBinding<?, ?>, Hashtable<Object, DrawingTreeNode<?, ?>>> _hashMap;
-	private RootNodeImpl<M> _root;
+	private Hashtable<GRBinding<?, ?>, Hashtable<Object, DrawingTreeNode<?, ?>>> nodes;
+	private RootNodeImpl<M> rootNode;
 	private M model;
+	private List<PendingConnector<?>> pendingConnectors;
 
 	private DrawingGRBinding<M> drawingBinding;
 
@@ -70,7 +70,8 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 	public DrawingImpl(M model, FGEModelFactory factory) {
 		this.model = model;
 		this.factory = factory;
-		_hashMap = new Hashtable<GRBinding<?, ?>, Hashtable<Object, DrawingTreeNode<?, ?>>>();
+		nodes = new Hashtable<GRBinding<?, ?>, Hashtable<Object, DrawingTreeNode<?, ?>>>();
+		pendingConnectors = new ArrayList<PendingConnector<?>>();
 		init();
 	}
 
@@ -94,10 +95,11 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 
 	@Override
 	public RootNode<M> getRoot() {
-		if (_root == null) {
-			_root = buildRoot();
+		if (rootNode == null) {
+			rootNode = buildRoot();
+			updateGraphicalObjectsHierarchy();
 		}
-		return _root;
+		return rootNode;
 	}
 
 	private RootNodeImpl<M> buildRoot() {
@@ -111,11 +113,11 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		}
 	}
 
-	Hashtable<Object, DrawingTreeNode<?, ?>> retrieveHash(GRBinding<?, ?> grBinding) {
-		Hashtable<Object, DrawingTreeNode<?, ?>> hash = _hashMap.get(grBinding);
+	protected Hashtable<Object, DrawingTreeNode<?, ?>> retrieveHash(GRBinding<?, ?> grBinding) {
+		Hashtable<Object, DrawingTreeNode<?, ?>> hash = nodes.get(grBinding);
 		if (hash == null) {
 			hash = new Hashtable<Object, DrawingTreeNode<?, ?>>();
-			_hashMap.put(grBinding, hash);
+			nodes.put(grBinding, hash);
 		}
 		return hash;
 	}
@@ -176,10 +178,32 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		return returned;
 	}
 
-	protected <O> DrawingTreeNode<O, ?> getDrawingTreeNode(O representable) {
+	/**
+	 * Retrieve first drawing tree node matching supplied drawable<br>
+	 * Note that GRBinding is not specified here, so if a given drawable is represented through multiple GRBinding, there is no guarantee
+	 * that you receive the right object. Use {@link #getDrawingTreeNode(Object, GRBinding)} instead
+	 * 
+	 * @param aDrawable
+	 * @return
+	 */
+	@Override
+	public <O, GR extends GraphicalRepresentation> DrawingTreeNode<O, GR> getDrawingTreeNode(O drawable) {
+		for (GRBinding grBinding : nodes.keySet()) {
+			DrawingTreeNode<O, GR> returned = getDrawingTreeNode(drawable, grBinding);
+			if (returned != null) {
+				return returned;
+			}
+		}
 		return null;
 	}
 
+	/**
+	 * Retrieve drawing tree node matching supplied drawable and grBinding<br>
+	 * GRBinding value should not be null
+	 * 
+	 * @param aDrawable
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public <O, GR extends GraphicalRepresentation> DrawingTreeNode<O, GR> getDrawingTreeNode(O drawable, GRBinding<O, GR> grBinding) {
@@ -187,9 +211,19 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		return (DrawingTreeNode<O, GR>) hash.get(drawable);
 	}
 
+	/**
+	 * Retrieve drawing tree node matching supplied identifier<br>
+	 * If GRBinding is null, return first DrawingTreeNode representing supplied drawable
+	 * 
+	 * @param identifier
+	 * @return
+	 */
 	@Override
 	public <O> org.openflexo.fge.Drawing.DrawingTreeNode<O, ?> getDrawingTreeNode(
 			org.openflexo.fge.Drawing.DrawingTreeNodeIdentifier<O> identifier) {
+		if (identifier.getGRBinding() == null) {
+			return getDrawingTreeNode(identifier.getDrawable());
+		}
 		return getDrawingTreeNode(identifier.getDrawable(), identifier.getGRBinding());
 	}
 
@@ -349,7 +383,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 
 	private <O> List<DrawingTreeNode<O, ?>> getDrawingTreeNodes(O drawable) {
 		List<DrawingTreeNode<O, ?>> returned = new ArrayList<DrawingTreeNode<O, ?>>();
-		for (GRBinding<?, ?> grBinding : _hashMap.keySet()) {
+		for (GRBinding<?, ?> grBinding : nodes.keySet()) {
 			if (getDrawingTreeNode(drawable, (GRBinding<O, ?>) grBinding) != null) {
 				returned.add(getDrawingTreeNode(drawable, (GRBinding<O, ?>) grBinding));
 			}
@@ -360,18 +394,26 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 
 	public void printGraphicalObjectHierarchy() {
 		logger.info("Graphical object hierarchy");
-		if (_root != null) {
-			_printGraphicalObjectHierarchy(_root, 0);
+		if (getRoot() != null) {
+			_printGraphicalObjectHierarchy((RootNodeImpl<?>) getRoot(), 0);
 		} else {
 			logger.info(" > Root node is null !");
 		}
 	}
 
 	private void _printGraphicalObjectHierarchy(DrawingTreeNodeImpl<?, ?> dtn, int level) {
-		logger.info(buildWhiteSpaceIndentation(level * 5)
-				+ " > "
-				+ (dtn.getGraphicalRepresentation() != null ? dtn.getGraphicalRepresentation().getClass().getSimpleName() + " "
-						+ Integer.toHexString(dtn.getGraphicalRepresentation().hashCode()) : " null ") + " object=" + dtn.getDrawable());
+		String nodePrettyPrint = "???";
+		if (dtn instanceof RootNode) {
+			nodePrettyPrint = "Root[" + ((RootNode<?>) dtn).getWidth() + "x" + ((RootNode<?>) dtn).getHeight() + "]:" + dtn.getDrawable();
+		} else if (dtn instanceof ShapeNode) {
+			nodePrettyPrint = "Shape-" + dtn.getIndex() + "[" + ((ShapeNode<?>) dtn).getX() + ";" + ((ShapeNode<?>) dtn).getY() + "]["
+					+ ((ShapeNode<?>) dtn).getWidth() + "x" + ((ShapeNode<?>) dtn).getHeight() + "][" + ((ShapeNode<?>) dtn).getFGEShape()
+					+ "]:" + dtn.getDrawable();
+		} else if (dtn instanceof ConnectorNode) {
+			nodePrettyPrint = "Connector-" + dtn.getIndex() + "[Shape-" + ((ConnectorNode<?>) dtn).getStartNode().getIndex() + "][Shape-"
+					+ ((ConnectorNode<?>) dtn).getEndNode().getIndex() + "]:" + dtn.getDrawable();
+		}
+		logger.info(buildWhiteSpaceIndentation(level * 5) + " > " + nodePrettyPrint);
 		if (dtn instanceof ContainerNode) {
 			if (((ContainerNode<?, ?>) dtn).getChildNodes() != null) {
 				for (DrawingTreeNode<?, ?> child : ((ContainerNode<?, ?>) dtn).getChildNodes()) {
@@ -408,25 +450,47 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 
 	private final <O> void updateGraphicalObjectsHierarchy(DrawingTreeNode<O, ?> dtn) {
 		if (dtn.isInvalidated()) {
+			System.out.println("Updating " + dtn);
 			GRBinding<O, ? extends GraphicalRepresentation> grBinding = dtn.getGRBinding();
-			List<DrawingTreeNode<?, ?>> nodesToRemove;
-			if (dtn instanceof ContainerNode) {
-				nodesToRemove = new ArrayList<DrawingTreeNode<?, ?>>(((ContainerNode<?, ?>) dtn).getChildNodes());
-			} else {
-				nodesToRemove = Collections.emptyList();
-			}
+			// List<DrawingTreeNode<?, ?>> nodesToRemove;
+			// if (dtn instanceof ContainerNode) {
+			// nodesToRemove = new ArrayList<DrawingTreeNode<?, ?>>(((ContainerNode<?, ?>) dtn).getChildNodes());
+
+			List<DrawingTreeNode<?, ?>> createdNodes = new ArrayList<DrawingTreeNode<?, ?>>();
+			List<DrawingTreeNode<?, ?>> deletedNodes = new ArrayList<DrawingTreeNode<?, ?>>();
+			List<DrawingTreeNode<?, ?>> updatedNodes = new ArrayList<DrawingTreeNode<?, ?>>();
+
 			for (GRStructureWalker<O> walker : grBinding.getWalkers()) {
 				walker.startWalking(dtn);
 				walker.walk(dtn.getDrawable());
-				List<DrawingTreeNode<?, ?>> updatedNodes = walker.stopWalking(dtn);
-				for (DrawingTreeNode<?, ?> updatedNode : updatedNodes) {
-					updateGraphicalObjectsHierarchy(updatedNode);
-					nodesToRemove.remove(updatedNode);
-				}
+				walker.stopWalking();
+				createdNodes.addAll(walker.getCreatedNodes());
+				createdNodes.addAll(walker.getDeletedNodes());
+				createdNodes.addAll(walker.getUpdatedNodes());
 			}
-			for (DrawingTreeNode<?, ?> nodeToRemove : nodesToRemove) {
+			for (DrawingTreeNode<?, ?> nodeToRemove : deletedNodes) {
 				deleteNode(nodeToRemove);
 			}
+			for (DrawingTreeNode<?, ?> createdNode : createdNodes) {
+				updateGraphicalObjectsHierarchy(createdNode);
+				// nodesToRemove.remove(updatedNode);
+			}
+			for (DrawingTreeNode<?, ?> updatedNode : updatedNodes) {
+				updateGraphicalObjectsHierarchy(updatedNode);
+				// nodesToRemove.remove(updatedNode);
+			}
+			// } else {
+			// nodesToRemove = Collections.emptyList();
+			// }
+
+			// Try now to handle pending connectors
+			for (PendingConnector<?> pendingConnector : new ArrayList<PendingConnector<?>>(pendingConnectors)) {
+				if (pendingConnector.tryToResolve(this)) {
+					System.out.println("Resolved " + pendingConnector);
+					pendingConnectors.remove(pendingConnector);
+				}
+			}
+
 			((DrawingTreeNodeImpl<?, ?>) dtn).validate();
 		}
 	}
@@ -466,22 +530,21 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 	}
 
 	@Override
-	public <O> ShapeNode<O> drawShape(ContainerNode<?, ?> parentNode, ShapeGRBinding<O> grBinding, O aDrawable) {
+	public <O> ShapeNode<O> createNewShape(ContainerNode<?, ?> parentNode, ShapeGRBinding<O> binding, O drawable) {
+
+		System.out.println("draw shape with " + binding + " drawable=" + drawable + " parent=" + parentNode);
 
 		if (parentNode == null) {
 			logger.warning("Cannot register drawable above null parent");
 			return null;
 		}
 
-		if (parentNode.hasShapeFor(grBinding, aDrawable)) {
-			return parentNode.getShapeFor(grBinding, aDrawable);
-		} else {
-			ShapeNode<O> returned = new ShapeNodeImpl<O>(this, aDrawable, grBinding, (RootNodeImpl<?>) parentNode);
-			if (isUpdatingObjectHierarchy) {
-				notifyNodeAdded(returned, parentNode);
-			}
-			return returned;
+		ShapeNodeImpl<O> returned = new ShapeNodeImpl<O>(this, drawable, binding, (ContainerNodeImpl<?, ?>) parentNode);
+		parentNode.addChild(returned);
+		if (isUpdatingObjectHierarchy) {
+			notifyNodeAdded(returned, parentNode);
 		}
+		return returned;
 
 		/*if (parentNode.childs.contains(aDrawable)) {
 			DrawingTreeNode<?> alreadyExistingNode = _hashMap.get(aDrawable);
@@ -517,6 +580,67 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 				}
 			}
 		}*/
+	}
+
+	@Override
+	public <O> ConnectorNode<O> createNewConnector(ContainerNode<?, ?> parentNode, ConnectorGRBinding<O> binding, O drawable,
+			ShapeNode<?> fromNode, ShapeNode<?> toNode) {
+
+		System.out.println("draw connector with " + binding + " drawable=" + drawable + " parent=" + parentNode + " fromNode=" + fromNode
+				+ " toNode=" + toNode);
+
+		if (parentNode == null) {
+			logger.warning("Cannot register drawable above null parent");
+			return null;
+		}
+
+		ConnectorNodeImpl<O> returned = new ConnectorNodeImpl<O>(this, drawable, binding, (ContainerNodeImpl<?, ?>) parentNode);
+		returned.setStartNode((ShapeNodeImpl<?>) fromNode);
+		returned.setEndNode((ShapeNodeImpl<?>) toNode);
+		parentNode.addChild(returned);
+		if (isUpdatingObjectHierarchy) {
+			notifyNodeAdded(returned, parentNode);
+		}
+		return returned;
+
+	}
+
+	@Override
+	public <O> boolean hasPendingConnector(ConnectorGRBinding<O> binding, O drawable, DrawingTreeNodeIdentifier<?> parentNodeIdentifier,
+			DrawingTreeNodeIdentifier<?> startNodeIdentifier, DrawingTreeNodeIdentifier<?> endNodeIdentifier) {
+		return getPendingConnector(binding, drawable, parentNodeIdentifier, startNodeIdentifier, endNodeIdentifier) != null;
+	}
+
+	@Override
+	public <O> PendingConnector<O> getPendingConnector(ConnectorGRBinding<O> binding, O drawable,
+			DrawingTreeNodeIdentifier<?> parentNodeIdentifier, DrawingTreeNodeIdentifier<?> startNodeIdentifier,
+			DrawingTreeNodeIdentifier<?> endNodeIdentifier) {
+		for (PendingConnector<?> pendingConnector : pendingConnectors) {
+			if (pendingConnector.getConnectorNode().getDrawable() == drawable
+					&& pendingConnector.getConnectorNode().getGRBinding() == binding
+					&& pendingConnector.getParentNodeIdentifier().equals(parentNodeIdentifier)
+					&& pendingConnector.getStartNodeIdentifier().equals(startNodeIdentifier)
+					&& pendingConnector.getEndNodeIdentifier().equals(endNodeIdentifier)) {
+				return (PendingConnector<O>) pendingConnector;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public <O> PendingConnector<O> createPendingConnector(ConnectorGRBinding<O> binding, O drawable,
+			DrawingTreeNodeIdentifier<?> parentNodeIdentifier, DrawingTreeNodeIdentifier<?> startNodeIdentifier,
+			DrawingTreeNodeIdentifier<?> endNodeIdentifier) {
+		ContainerNode<?, ?> parentNode = (ContainerNode<?, ?>) getDrawingTreeNode(parentNodeIdentifier);
+		// ShapeNode<?> startNode = (ShapeNode<?>) getDrawingTreeNode(startNodeIdentifier);
+		// ShapeNode<?> endNode = (ShapeNode<?>) getDrawingTreeNode(endNodeIdentifier);
+		ConnectorNodeImpl<O> connectorNode = new ConnectorNodeImpl<O>(this, drawable, binding, (ContainerNodeImpl<?, ?>) parentNode);
+		// ConnectorNode<O> connectorNode = createNewConnector(parentNode, binding, drawable, startNode, endNode);
+		PendingConnector<O> returned = new PendingConnectorImpl<O>(connectorNode, parentNodeIdentifier, startNodeIdentifier,
+				endNodeIdentifier);
+		pendingConnectors.add(returned);
+		System.out.println("Nouveau pending connector, " + returned);
+		return returned;
 	}
 
 	/*public <O> void removeDrawable(O aDrawable, Object aParentDrawable) {
@@ -689,8 +813,8 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 		if (logger.isLoggable(Level.INFO)) {
 			logger.info("deleting " + this);
 		}
-		if (_hashMap != null) {
-			for (GRBinding grBinding : _hashMap.keySet()) {
+		if (nodes != null) {
+			for (GRBinding grBinding : nodes.keySet()) {
 				for (DrawingTreeNode<?, ?> dtn : retrieveHash(grBinding).values()) {
 					dtn.delete();
 				}
@@ -712,7 +836,7 @@ public abstract class DrawingImpl<M> extends Observable implements Drawing<M> {
 			if (getDrawingGraphicalRepresentation() != null) {
 				getDrawingGraphicalRepresentation().delete();
 			}*/
-			_hashMap.clear();
+			nodes.clear();
 		}
 		model = null;
 		// _hashMap = null;

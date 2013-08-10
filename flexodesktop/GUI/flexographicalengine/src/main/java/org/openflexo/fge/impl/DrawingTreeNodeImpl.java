@@ -24,7 +24,6 @@ import org.openflexo.fge.Drawing.DrawingTreeNode;
 import org.openflexo.fge.FGEModelFactory;
 import org.openflexo.fge.FGEUtils;
 import org.openflexo.fge.GRBinding;
-import org.openflexo.fge.GRBinding.ShapeGRBinding;
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.GraphicalRepresentation.GRParameter;
 import org.openflexo.fge.GraphicalRepresentation.LabelMetricsProvider;
@@ -58,8 +57,11 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	private List<ConstraintDependency> dependancies;
 	private List<ConstraintDependency> alterings;
 
+	// TODO: manage validated/isInvalidated: is this still required ???
 	private boolean isInvalidated = true;
 	private boolean isDeleted = false;
+	private boolean validated = true;
+	protected LabelMetricsProvider labelMetricsProvider;
 
 	public DrawingTreeNodeImpl(DrawingImpl<?> drawingImpl, O drawable, GRBinding<O, GR> grBinding, ContainerNodeImpl<?, ?> parentNode) {
 		this.drawing = drawingImpl;
@@ -77,7 +79,7 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 
 		graphicalRepresentation = grBinding.getGRProvider().provideGR(drawable, drawing.getFactory());
 
-		System.out.println("Hop");
+		// System.out.println("Hop");
 
 		/*if (aParentDrawable == null) { // This is the root node
 			graphicalRepresentation = (GraphicalRepresentation) getDrawingGraphicalRepresentation();
@@ -384,32 +386,6 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	}
 
 	@Override
-	public <O2, P> boolean hasShapeFor(ShapeGRBinding<O2> binding, O2 aDrawable) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public <O2, P> Drawing.ShapeNode<O2> getShapeFor(GRBinding.ShapeGRBinding<O2> binding, O2 aDrawable) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <O2, F, T> boolean hasConnectorFor(GRBinding.ConnectorGRBinding<O2> binding, O2 aDrawable, Drawing.ShapeNode<?> from,
-			Drawing.ShapeNode<?> to) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public <O2, F, T> Drawing.DrawingTreeNode<O2, ?> getConnectorFor(GRBinding.ConnectorGRBinding<O2> binding, O2 aDrawable,
-			Drawing.ShapeNode<?> from, Drawing.ShapeNode<?> to) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Object getValue(BindingVariable variable) {
 		if (variable.getVariableName().equals("this")) {
 			return getGraphicalRepresentation();
@@ -560,9 +536,6 @@ public abstract class DrawingTreeNodeImpl<O, GR extends GraphicalRepresentation>
 	public FGERectangle getNormalizedBounds() {
 		return new FGERectangle(0, 0, 1, 1, Filling.FILLED);
 	}
-
-	private boolean validated = false;
-	protected LabelMetricsProvider labelMetricsProvider;
 
 	/**
 	 * Return boolean indicating if this graphical representation is validated. A validated graphical representation is a graphical

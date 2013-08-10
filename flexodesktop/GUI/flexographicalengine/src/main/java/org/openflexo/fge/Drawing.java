@@ -201,15 +201,6 @@ public interface Drawing<M> {
 		 */
 		public boolean isDeleted();
 
-		public <O2, P> boolean hasShapeFor(ShapeGRBinding<O2> binding, O2 aDrawable);
-
-		public <O2, P> ShapeNode<O2> getShapeFor(ShapeGRBinding<O2> binding, O2 aDrawable);
-
-		public <O2, F, T> boolean hasConnectorFor(ConnectorGRBinding<O2> binding, O2 aDrawable, ShapeNode<?> from, ShapeNode<?> to);
-
-		public <O2, F, T> DrawingTreeNode<O2, ?> getConnectorFor(ConnectorGRBinding<O2> binding, O2 aDrawable, ShapeNode<?> from,
-				ShapeNode<?> to);
-
 		public boolean isConnectedToDrawing();
 
 		public boolean isAncestorOf(DrawingTreeNode<?, ?> child);
@@ -332,6 +323,15 @@ public interface Drawing<M> {
 		public void notifyNodeAdded(DrawingTreeNode<?, ?> addedNode);
 
 		public void notifyNodeRemoved(DrawingTreeNode<?, ?> removedNode);
+
+		public <O2> boolean hasShapeFor(ShapeGRBinding<O2> binding, O2 aDrawable);
+
+		public <O2> ShapeNode<O2> getShapeFor(ShapeGRBinding<O2> binding, O2 aDrawable);
+
+		public <O2> boolean hasConnectorFor(ConnectorGRBinding<O2> binding, O2 aDrawable);
+
+		public <O2> ConnectorNode<O2> getConnectorFor(ConnectorGRBinding<O2> binding, O2 aDrawable);
+
 	}
 
 	public interface RootNode<M> extends ContainerNode<M, DrawingGraphicalRepresentation> {
@@ -600,7 +600,21 @@ public interface Drawing<M> {
 	public <R> ConnectorGRBinding<R> bindConnector(Class<R> connectorObjectClass, String name, ShapeGRBinding<?> fromBinding,
 			ShapeGRBinding<?> toBinding, ContainerGRBinding<?, ?> parentBinding, ConnectorGRProvider<R> grProvider);
 
-	public <O> ShapeNode<O> drawShape(ContainerNode<?, ?> parent, ShapeGRBinding<O> binding, O representable);
+	public <O> ShapeNode<O> createNewShape(ContainerNode<?, ?> parent, ShapeGRBinding<O> binding, O representable);
+
+	public <O> ConnectorNode<O> createNewConnector(ContainerNode<?, ?> parent, ConnectorGRBinding<O> binding, O representable,
+			ShapeNode<?> fromNode, ShapeNode<?> toNode);
+
+	public <O> boolean hasPendingConnector(ConnectorGRBinding<O> binding, O drawable, DrawingTreeNodeIdentifier<?> parentNodeIdentifier,
+			DrawingTreeNodeIdentifier<?> startNodeIdentifier, DrawingTreeNodeIdentifier<?> endNodeIdentifier);
+
+	public <O> PendingConnector<O> getPendingConnector(ConnectorGRBinding<O> binding, O drawable,
+			DrawingTreeNodeIdentifier<?> parentNodeIdentifier, DrawingTreeNodeIdentifier<?> startNodeIdentifier,
+			DrawingTreeNodeIdentifier<?> endNodeIdentifier);
+
+	public <O> PendingConnector<O> createPendingConnector(ConnectorGRBinding<O> binding, O drawable,
+			DrawingTreeNodeIdentifier<?> parentNodeIdentifier, DrawingTreeNodeIdentifier<?> startNodeIdentifier,
+			DrawingTreeNodeIdentifier<?> endNodeIdentifier);
 
 	// public <O> ShapeNode<O> drawShape(ShapeNode<?> parent, ShapeGRBinding<O> binding, O representable);
 
@@ -609,9 +623,19 @@ public interface Drawing<M> {
 	public List<DrawingTreeNode<?>> getContainedNodes(DrawingTreeNode<?> parentNode);*/
 
 	/**
+	 * Retrieve first drawing tree node matching supplied drawable<br>
+	 * Note that GRBinding is not specified here, so if a given drawable is represented through multiple GRBinding, there is no guarantee
+	 * that you receive the right object. Use {@link #getDrawingTreeNode(Object, GRBinding)} instead
+	 * 
+	 * @param aDrawable
+	 * @return
+	 */
+	public <O, GR extends GraphicalRepresentation> DrawingTreeNode<O, GR> getDrawingTreeNode(O aDrawable);
+
+	/**
 	 * Retrieve drawing tree node matching supplied drawable and grBinding
 	 * 
-	 * @param identifier
+	 * @param aDrawable
 	 * @return
 	 */
 	public <O, GR extends GraphicalRepresentation> DrawingTreeNode<O, GR> getDrawingTreeNode(O aDrawable, GRBinding<O, GR> grBinding);
@@ -702,6 +726,57 @@ public interface Drawing<M> {
 		public GRBinding<O, ?> getGRBinding() {
 			return grBinding;
 		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + (drawable == null ? 0 : drawable.hashCode());
+			result = prime * result + (grBinding == null ? 0 : grBinding.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj == null) {
+				return false;
+			}
+			if (getClass() != obj.getClass()) {
+				return false;
+			}
+			DrawingTreeNodeIdentifier other = (DrawingTreeNodeIdentifier) obj;
+			if (drawable == null) {
+				if (other.drawable != null) {
+					return false;
+				}
+			} else if (!drawable.equals(other.drawable)) {
+				return false;
+			}
+			if (grBinding == null) {
+				if (other.grBinding != null) {
+					return false;
+				}
+			} else if (!grBinding.equals(other.grBinding)) {
+				return false;
+			}
+			return true;
+		}
+
 	}
 
+	public static interface PendingConnector<O> {
+		public ConnectorNode<O> getConnectorNode();
+
+		public DrawingTreeNodeIdentifier<?> getParentNodeIdentifier();
+
+		public DrawingTreeNodeIdentifier<?> getStartNodeIdentifier();
+
+		public DrawingTreeNodeIdentifier<?> getEndNodeIdentifier();
+
+		public boolean tryToResolve(Drawing<?> drawing);
+
+	}
 }

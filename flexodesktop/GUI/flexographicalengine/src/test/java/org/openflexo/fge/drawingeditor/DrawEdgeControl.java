@@ -29,7 +29,7 @@ import javax.swing.SwingUtilities;
 
 import org.openflexo.fge.GraphicalRepresentation;
 import org.openflexo.fge.ShapeGraphicalRepresentation;
-import org.openflexo.fge.TestDrawing.MyDrawing.MyShapeGraphicalRepresentation;
+import org.openflexo.fge.LaunchGraphDrawing.MyDrawing.MyShapeGraphicalRepresentation;
 import org.openflexo.fge.controller.CustomDragControlAction;
 import org.openflexo.fge.controller.DrawingController;
 import org.openflexo.fge.controller.MouseDragControl;

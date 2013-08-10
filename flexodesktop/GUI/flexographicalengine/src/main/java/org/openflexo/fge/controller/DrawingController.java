@@ -205,7 +205,10 @@ public class DrawingController<M> extends Observable implements Observer {
 	 * @return
 	 */
 	public <O> ShapeView<O> makeShapeView(ShapeNode<O> shapeNode) {
-		return new ShapeView<O>(shapeNode, this);
+		System.out.println("> Make ShapeView with " + shapeNode);
+		ShapeView<O> returned = new ShapeView<O>(shapeNode, this);
+		System.out.println("bounds = " + returned.getBounds());
+		return returned;
 	}
 
 	/**
@@ -216,6 +219,7 @@ public class DrawingController<M> extends Observable implements Observer {
 	 * @return
 	 */
 	public <O> ConnectorView<O> makeConnectorView(ConnectorNode<O> connectorNode) {
+		System.out.println("> Make ConnectorView with " + connectorNode);
 		return new ConnectorView<O>(connectorNode, this);
 	}
 

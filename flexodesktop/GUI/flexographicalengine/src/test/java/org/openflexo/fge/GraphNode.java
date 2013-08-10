@@ -7,13 +7,16 @@ import java.util.Observable;
 public class GraphNode extends Observable {
 
 	private String name;
+	private Graph graph;
 	private List<Edge> inputEdges;
 	private List<Edge> outputEdges;
 
-	public GraphNode(String name) {
+	public GraphNode(String name, Graph graph) {
 		inputEdges = new ArrayList<Edge>();
 		outputEdges = new ArrayList<Edge>();
 		this.name = name;
+		this.graph = graph;
+		graph.addToNodes(this);
 	}
 
 	public String getName() {
@@ -22,6 +25,10 @@ public class GraphNode extends Observable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Graph getGraph() {
+		return graph;
 	}
 
 	public List<Edge> getInputEdges() {

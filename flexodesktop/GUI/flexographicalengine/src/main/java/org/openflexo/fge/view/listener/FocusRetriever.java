@@ -130,8 +130,7 @@ public class FocusRetriever {
 		}
 
 		FGEView<?> view = drawingView.viewForNode(node);
-		FGEView<?> parenttView = node == drawingView.getGraphicalRepresentation() ? drawingView : drawingView.viewForNode(node
-				.getParentNode());
+		FGEView<?> parenttView = node == drawingView.getDrawing().getRoot() ? drawingView : drawingView.viewForNode(node.getParentNode());
 		Point p = SwingUtilities.convertPoint(eventSource, eventLocation, (Component) parenttView);
 		if (node.getGraphicalRepresentation().getHasText()) {
 			LabelView<?> labelView = view.getLabelView();

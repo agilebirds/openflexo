@@ -1,5 +1,7 @@
 package org.openflexo.fge;
 
+import java.awt.Color;
+
 import org.openflexo.fge.GRBinding.ConnectorGRBinding;
 import org.openflexo.fge.GRBinding.DrawingGRBinding;
 import org.openflexo.fge.GRBinding.ShapeGRBinding;
@@ -11,20 +13,25 @@ import org.openflexo.fge.connectors.ConnectorSpecification.ConnectorType;
 import org.openflexo.fge.impl.DrawingImpl;
 import org.openflexo.fge.shapes.ShapeSpecification.ShapeType;
 
-public class GraphDrawing extends DrawingImpl<Graph> {
+public class GraphDrawing1 extends DrawingImpl<Graph> {
 
 	private DrawingGraphicalRepresentation graphRepresentation;
 	private ShapeGraphicalRepresentation nodeRepresentation;
 	private ConnectorGraphicalRepresentation edgeRepresentation;
 
-	public GraphDrawing(Graph graph, FGEModelFactory factory) {
+	public GraphDrawing1(Graph graph, FGEModelFactory factory) {
 		super(graph, factory);
 	}
 
 	@Override
 	public void init() {
 		graphRepresentation = getFactory().makeDrawingGraphicalRepresentation(this);
+		graphRepresentation.setBackgroundColor(Color.RED);
 		nodeRepresentation = getFactory().makeShapeGraphicalRepresentation(ShapeType.CIRCLE, this);
+		// nodeRepresentation.setX(50);
+		// nodeRepresentation.setY(50);
+		nodeRepresentation.setWidth(20);
+		nodeRepresentation.setHeight(20);
 		edgeRepresentation = getFactory().makeConnectorGraphicalRepresentation(ConnectorType.CURVE, this);
 
 		final DrawingGRBinding<Graph> graphBinding = bindDrawing(Graph.class, "graph", new DrawingGRProvider<Graph>() {
@@ -52,7 +59,7 @@ public class GraphDrawing extends DrawingImpl<Graph> {
 			@Override
 			public void walk(Graph graph) {
 				for (GraphNode node : graph.getNodes()) {
-					drawShape(nodeBinding, node, graph);
+					drawShape(nodeBinding, node);
 				}
 			}
 		});
@@ -60,11 +67,12 @@ public class GraphDrawing extends DrawingImpl<Graph> {
 		nodeBinding.addToWalkers(new GRStructureWalker<GraphNode>() {
 			@Override
 			public void walk(GraphNode node) {
+				System.out.println("Walking for edges ");
 				for (Edge edge : node.getInputEdges()) {
-					drawConnector(edgeBinding, edge, edge.getStartNode(), edge.getEndNode());
+					drawConnector(edgeBinding, edge, edge.getStartNode(), edge.getEndNode(), node.getGraph());
 				}
 				for (Edge edge : node.getOutputEdges()) {
-					drawConnector(edgeBinding, edge, edge.getStartNode(), edge.getEndNode());
+					drawConnector(edgeBinding, edge, edge.getStartNode(), edge.getEndNode(), node.getGraph());
 				}
 			}
 		});

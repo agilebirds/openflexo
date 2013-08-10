@@ -58,6 +58,7 @@ public class EditedDrawing extends DrawingImpl<MyDrawing> {
 					}
 				});
 
+		// visitor plutot ?
 		drawingBinding.addToWalkers(new GRStructureWalker<MyDrawing>() {
 
 			@Override

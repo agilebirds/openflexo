@@ -101,6 +101,8 @@ public class ShapeView<O> extends FGELayeredView<O> {
 		// setToolTipText(getClass().getSimpleName()+hashCode());
 
 		// System.out.println("isDoubleBuffered()="+isDoubleBuffered());
+
+		// revalidate();
 	}
 
 	public void disableFGEViewMouseListener() {
@@ -256,6 +258,7 @@ public class ShapeView<O> extends FGELayeredView<O> {
 
 	@Override
 	public void paint(Graphics g) {
+		System.out.println("hop???");
 		if (isDeleted()) {
 			return;
 		}
