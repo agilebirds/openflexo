@@ -1,4 +1,4 @@
-package org.openflexo.view.controller;
+package org.openflexo.rest.client;
 
 import java.io.File;
 
@@ -6,6 +6,9 @@ import org.openflexo.model.annotations.Getter;
 import org.openflexo.model.annotations.ModelEntity;
 import org.openflexo.model.annotations.Setter;
 import org.openflexo.toolbox.FileResource;
+import org.openflexo.view.controller.FlexoServerAddressBook;
+import org.openflexo.view.controller.FlexoServerInstance;
+import org.openflexo.view.controller.FlexoServerInstanceManager;
 
 public class WebServiceURLDialog {
 
