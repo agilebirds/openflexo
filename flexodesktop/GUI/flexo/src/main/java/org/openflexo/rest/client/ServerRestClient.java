@@ -170,6 +170,18 @@ public class ServerRestClient {
 		return createClientInstance(cc);
 	}
 
+	public Files files(com.sun.jersey.api.client.Client client, URI baseURI) {
+		return new Files(client, baseURI);
+	}
+
+	public Files files() {
+		return files(createClient(), BASE_URI);
+	}
+
+	public Files files(com.sun.jersey.api.client.Client client) {
+		return files(client, BASE_URI);
+	}
+
 	public ServerRestClient.Projects projects(com.sun.jersey.api.client.Client client, URI baseURI) {
 		return new ServerRestClient.Projects(client, baseURI);
 	}
@@ -1015,6 +1027,113 @@ public class ServerRestClient {
 				}
 			}
 
+		}
+
+	}
+
+	public class Files {
+
+		private com.sun.jersey.api.client.Client _client;
+		private UriBuilder _uriBuilder;
+		private Map<String, Object> _templateAndMatrixParameterValues;
+
+		private Files(com.sun.jersey.api.client.Client client, UriBuilder uriBuilder, Map<String, Object> map) {
+			_client = client;
+			_uriBuilder = uriBuilder.clone();
+			_templateAndMatrixParameterValues = map;
+		}
+
+		/**
+		 * Create new instance using existing Client instance, and a base URI and any parameters
+		 * 
+		 */
+		public Files(com.sun.jersey.api.client.Client client, URI baseUri) {
+			_client = client;
+			_uriBuilder = UriBuilder.fromUri(baseUri);
+			_uriBuilder = _uriBuilder.path("/files");
+			_templateAndMatrixParameterValues = new HashMap<String, Object>();
+		}
+
+		public <T> T getAsOctetStream(com.sun.jersey.api.client.GenericType<T> returnType) {
+			UriBuilder localUriBuilder = _uriBuilder.clone();
+			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
+					.buildFromMap(_templateAndMatrixParameterValues));
+			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+			resourceBuilder = resourceBuilder.accept("application/octet-stream");
+			com.sun.jersey.api.client.ClientResponse response;
+			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+			if (response.getStatus() >= 400) {
+
+			}
+			return response.getEntity(returnType);
+		}
+
+		public <T> T getAsOctetStream(Class<T> returnType) {
+			UriBuilder localUriBuilder = _uriBuilder.clone();
+			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
+					.buildFromMap(_templateAndMatrixParameterValues));
+			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+			resourceBuilder = resourceBuilder.accept("application/octet-stream");
+			com.sun.jersey.api.client.ClientResponse response;
+			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+				if (response.getStatus() >= 400) {
+
+				}
+			}
+			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+				return response.getEntity(returnType);
+			} else {
+				return returnType.cast(response);
+			}
+		}
+
+		public <T> T getAsOctetStream(String uuid, com.sun.jersey.api.client.GenericType<T> returnType) {
+			UriBuilder localUriBuilder = _uriBuilder.clone();
+			if (uuid == null) {
+			}
+			if (uuid != null) {
+				localUriBuilder = localUriBuilder.replaceQueryParam("uuid", uuid);
+			} else {
+				localUriBuilder = localUriBuilder.replaceQueryParam("uuid", (Object[]) null);
+			}
+			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
+					.buildFromMap(_templateAndMatrixParameterValues));
+			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+			resourceBuilder = resourceBuilder.accept("application/octet-stream");
+			com.sun.jersey.api.client.ClientResponse response;
+			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+			if (response.getStatus() >= 400) {
+				throwWebApplicationException(response);
+			}
+			return response.getEntity(returnType);
+		}
+
+		public <T> T getAsOctetStream(String uuid, Class<T> returnType) {
+			UriBuilder localUriBuilder = _uriBuilder.clone();
+			if (uuid == null) {
+			}
+			if (uuid != null) {
+				localUriBuilder = localUriBuilder.replaceQueryParam("uuid", uuid);
+			} else {
+				localUriBuilder = localUriBuilder.replaceQueryParam("uuid", (Object[]) null);
+			}
+			com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder
+					.buildFromMap(_templateAndMatrixParameterValues));
+			com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+			resourceBuilder = resourceBuilder.accept("application/octet-stream");
+			com.sun.jersey.api.client.ClientResponse response;
+			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+				if (response.getStatus() >= 400) {
+
+				}
+			}
+			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+				return response.getEntity(returnType);
+			} else {
+				return returnType.cast(response);
+			}
 		}
 
 	}
