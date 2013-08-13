@@ -33,6 +33,8 @@ import org.openflexo.foundation.ontology.IFlexoOntologyClass;
 import org.openflexo.foundation.technologyadapter.TypeAwareModelSlot;
 import org.openflexo.foundation.view.diagram.model.DiagramElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DiagramEditionScheme;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPalette;
+import org.openflexo.foundation.view.diagram.viewpoint.DiagramPaletteElement;
 import org.openflexo.foundation.view.diagram.viewpoint.DropScheme;
 import org.openflexo.foundation.view.diagram.viewpoint.GraphicalElementPatternRole;
 import org.openflexo.foundation.view.diagram.viewpoint.ShapePatternRole;
@@ -74,8 +76,10 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 	private String virtualModelPatternRoleName;
 	private EditionPattern newEditionPattern;
 	private Hashtable<DrawingObjectEntry, GraphicalElementPatternRole> newGraphicalElementPatternRoles;
+	public DiagramPalette palette;
 
-	public boolean isTopLevel = true;
+	private boolean isTopLevel = true;
+	public boolean isPushedToPalette = true;
 	public EditionPattern containerEditionPattern;
 	private EditionPattern virtualModelConcept;
 	private String dropSchemeName;
@@ -276,6 +280,22 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 		this.virtualModelPatternRoleName = virtualModelPatternRoleName;
 	}
 
+	public boolean isTopLevel() {
+		return isTopLevel;
+	}
+
+	public void setTopLevel(boolean isTopLevel) {
+		this.isTopLevel = isTopLevel;
+	}
+
+	public EditionPattern getContainerEditionPattern() {
+		return containerEditionPattern;
+	}
+
+	public void setContainerEditionPattern(EditionPattern containerEditionPattern) {
+		this.containerEditionPattern = containerEditionPattern;
+	}
+
 	@Override
 	protected void doAction(Object context) {
 		logger.info("Declare shape in edition pattern");
@@ -312,7 +332,6 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 					IndividualPatternRole<?> individualPatternRole = null;
 					EditionPatternInstancePatternRole editionPatternPatternRole = null;
 					if (patternChoice == NewEditionPatternChoices.MAP_SINGLE_INDIVIDUAL) {
-
 						if (isTypeAwareModelSlot()) {
 							TypeAwareModelSlot<?, ?> flexoOntologyModelSlot = (TypeAwareModelSlot<?, ?>) getModelSlot();
 							individualPatternRole = flexoOntologyModelSlot.makeIndividualPatternRole(getConcept());
@@ -370,6 +389,11 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 						}
 					}
 					newEditionPattern.setPrimaryRepresentationRole(primaryRepresentationRole);
+
+					DiagramPaletteElement _newPaletteElement = palette.addPaletteElement(newEditionPattern.getName(), getFocusedObject()
+							.getGraphicalRepresentation());
+					_newPaletteElement.setEditionPattern(newEditionPattern);
+					_newPaletteElement.notifyObservers();
 
 					// Create other individual roles
 					/*Vector<IndividualPatternRole> otherRoles = new Vector<IndividualPatternRole>();
