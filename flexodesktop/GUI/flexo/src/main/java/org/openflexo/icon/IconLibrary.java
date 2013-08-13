@@ -61,6 +61,10 @@ public class IconLibrary {
 	public static final ImageIcon SMALL_EXCEL_ICON = new ImageIconResource("Icons/Common/SmallExcel.gif");
 	public static final ImageIcon BIG_EXCEL_ICON = new ImageIconResource("Icons/Common/BigExcel.png");
 
+	public static final ImageIcon IN_PROGRESS_ICON = new ImageIconResource("Icons/Common/Progress.gif");
+	public static final ImageIcon VALID_ICON = new ImageIconResource("Icons/Common/Valid.png");
+	public static final ImageIcon INVALID_ICON = new ImageIconResource("Icons/Common/Invalid.png");
+
 	public static final ImageIconResource FIX_PROPOSAL_ICON = new ImageIconResource("Icons/Common/Validation/FixProposal.gif");
 	public static final ImageIconResource INFO_ISSUE_ICON = new ImageIconResource("Icons/Common/Validation/Info.gif");
 	public static final ImageIconResource FIXABLE_ERROR_ICON = new ImageIconResource("Icons/Common/Validation/FixableError.gif");
