@@ -16,7 +16,8 @@
 		<ant.version>1.9.0</ant.version>
 		<compiler.source>1.6</compiler.source>
 		<compiler.target>1.6</compiler.target>
-		<jersey.version>1.17.1</jersey.version>
+        <hibernate.version>4.2.3.Final</hibernate.version>
+        <jersey.version>1.17.1</jersey.version>
 		<organization.name>AgileBirds</organization.name>
 		<organization.url>http://www.agilebirds.com/</organization.url>
 		<organization.logo>http://www.agilebirds.com/_Ressources/img/header_Logo.gif</organization.logo>
@@ -180,8 +181,8 @@
 								</pluginExecution>
 								<pluginExecution>
 									<pluginExecutionFilter>
-						                <groupId>org.jvnet.ws.wadl</groupId>
-						                <artifactId>wadl-client-plugin</artifactId>
+										<groupId>org.jvnet.ws.wadl</groupId>
+										<artifactId>wadl-client-plugin</artifactId>
 										<versionRange>[1.0,)</versionRange>
 										<goals>
 											<goal>generate</goal>
@@ -212,7 +213,7 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-site-plugin</artifactId>
 					<version>3.3</version>
-			  </plugin>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
@@ -729,26 +730,26 @@
 				<version>${project.version}</version>
 				<type>pom</type>
 			</dependency>
-	        <dependency>
-	            <groupId>com.agilebirds.server</groupId>
-	            <artifactId>flexoserver-model</artifactId>
-	            <version>1.0-SNAPSHOT</version>
-	        </dependency>
-	        <dependency>
-	            <groupId>com.sun.jersey</groupId>
-	            <artifactId>jersey-client</artifactId>
-	            <version>${jersey.version}</version>
-	        </dependency>
-            <dependency>
-                <groupId>com.sun.jersey.contribs</groupId>
-                <artifactId>jersey-multipart</artifactId>
-                <version>${jersey.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.sun.jersey</groupId>
-                <artifactId>jersey-json</artifactId>
-                <version>${jersey.version}</version>
-            </dependency>
+			<dependency>
+				<groupId>com.agilebirds.server</groupId>
+				<artifactId>flexoserver-model</artifactId>
+				<version>1.0-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.sun.jersey</groupId>
+				<artifactId>jersey-client</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.sun.jersey.contribs</groupId>
+				<artifactId>jersey-multipart</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.sun.jersey</groupId>
+				<artifactId>jersey-json</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
 			<!-- tests -->
 			<dependency>
 				<groupId>org.openflexo.test</groupId>
@@ -767,11 +768,11 @@
 				<artifactId>commons-io</artifactId>
 				<version>1.4</version>
 			</dependency>
-            <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>1.8</version>
-            </dependency>
+			<dependency>
+				<groupId>commons-codec</groupId>
+				<artifactId>commons-codec</artifactId>
+				<version>1.8</version>
+			</dependency>
 			<dependency>
 				<groupId>jalopy</groupId>
 				<artifactId>jalopy</artifactId>
@@ -861,6 +862,21 @@
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
 				<version>3.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-core</artifactId>
+				<version>${hibernate.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-entitymanager</artifactId>
+				<version>${hibernate.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.h2database</groupId>
+				<artifactId>h2</artifactId>
+				<version>1.3.173</version>
 			</dependency>
 			<dependency>
 				<groupId>javax.help</groupId>
