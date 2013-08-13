@@ -18,6 +18,13 @@
 		<module>csvconnector</module>
 		<module>xmlconnector</module>
 		<module>excelconnector</module>
+		<module>owlconnector-ui</module>
+		<module>xsdconnector-ui</module>
+		<module>emfconnector-ui</module>
+		<module>mdtumlconnector-ui</module>
+		<module>csvconnector-ui</module>
+		<module>xmlconnector-ui</module>
+		<module>excelconnector-ui</module>
 	</modules>
 	<build>
 		<!--  <resources>
