@@ -80,7 +80,7 @@ public class UploadProjectInitializer extends ActionInitializer<UploadProjectAct
 				User user = null;
 				try {
 					while (projectId == null) {
-						client = getController().getWSClient(!isFirst);
+						client = getController().getApplicationContext().getServerRestService().getWSClient(!isFirst);
 						isFirst = false;
 						if (client == null) {
 							return false;// Cancelled

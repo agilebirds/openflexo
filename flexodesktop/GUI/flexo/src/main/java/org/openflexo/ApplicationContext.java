@@ -10,6 +10,7 @@ import org.openflexo.foundation.utils.ProjectLoadingHandler;
 import org.openflexo.model.exceptions.ModelDefinitionException;
 import org.openflexo.module.ModuleLoader;
 import org.openflexo.module.ProjectLoader;
+import org.openflexo.rest.client.ServerRestService;
 
 public abstract class ApplicationContext implements FlexoEditorFactory {
 
@@ -22,6 +23,8 @@ public abstract class ApplicationContext implements FlexoEditorFactory {
 	private FlexoProjectReferenceLoader projectReferenceLoader;
 
 	private FlexoResourceCenterService resourceCenterService;
+
+	private ServerRestService serverRestService;
 
 	public ApplicationContext() {
 		applicationEditor = createApplicationEditor();
@@ -54,6 +57,13 @@ public abstract class ApplicationContext implements FlexoEditorFactory {
 
 	public final FlexoEditor getApplicationEditor() {
 		return applicationEditor;
+	}
+
+	public ServerRestService getServerRestService() {
+		if (serverRestService == null) {
+			serverRestService = new ServerRestService(getProjectLoader());
+		}
+		return serverRestService;
 	}
 
 	public boolean isAutoSaveServiceEnabled() {

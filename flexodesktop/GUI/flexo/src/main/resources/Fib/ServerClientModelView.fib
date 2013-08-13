@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel layout="border" darkLevel="0" dataClassName="org.openflexo.rest.client.ServerRestClientModel" controllerClassName="org.openflexo.view.controller.FlexoFIBController">
   <Panel layout="border" darkLevel="0" constraints="border(location=center)">
-    <Panel layout="flow" hGap="5" vGap="5" flowAlignment="LEFT" darkLevel="0" constraints="border(location=south)">
-      <Panel layout="grid" hGap="5" vGap="5" cols="8" rows="1" darkLevel="0" constraints="flow()">
-        <Button action="data.refresh()" buttonType="Trigger" label="refresh" localize="true" constraints="grid(x=0;y=0)" />
-        <Button buttonType="Trigger" label="Button" localize="true" constraints="grid(x=1;y=0)" />
-      </Panel>
-    </Panel>
     <Panel layout="gridbag" darkLevel="0" constraints="border(location=center)">
-      <Table iteratorClassName="org.openflexo.rest.client.model.ProjectVersion" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" data="data.versions" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)">
+      <Table iteratorClassName="org.openflexo.rest.client.model.ProjectVersion" autoSelectFirstRow="false" createNewRowOnClick="false" boundToSelectionManager="false" showFooter="false" selectionMode="MultipleIntervalSelection" localize="true" manageDynamicModel="true" name="versionTable" data="data.versions" constraints="gridbag(anchor=center;fill=both;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=1.0)">
         <LabelColumn data="iterator.versionNumber" title="Version" columnWidth="100" resizable="true" displayTitle="true" name="label" />
         <LabelColumn data="iterator.comment" title="comment" columnWidth="100" resizable="true" displayTitle="true" name="label" />
         <LabelColumn data="iterator.creationDate" title="creation_date" columnWidth="100" resizable="true" displayTitle="true" name="label" />
@@ -17,6 +11,19 @@
         <ButtonColumn action="data.generateDocumentation(iterator)" data="controller.getLocalizedForKey(&quot;generate_doc&quot;)" title="generate_doc" columnWidth="100" resizable="true" displayTitle="true" name="button" />
         <ButtonColumn action="data.generatePrototype(iterator)" data="controller.getLocalizedForKey(&quot;generate_proto&quot;)" title="generate_proto" columnWidth="100" resizable="true" displayTitle="true" name="button" />
       </Table>
+    </Panel>
+    <Panel layout="border" borderTitle="Panel" darkLevel="0" constraints="border(location=south)">
+      <Panel layout="flow" hGap="5" vGap="5" flowAlignment="LEFT" darkLevel="0" constraints="border(location=center)">
+        <Panel layout="grid" hGap="5" vGap="5" cols="8" rows="1" darkLevel="0" constraints="flow()">
+          <Button action="data.refresh()" buttonType="Trigger" label="refresh" localize="true" constraints="grid(x=0;y=0)" />
+          <Button action="data.sendProjectToServer()" buttonType="Trigger" label="send_to_server" localize="true" enable="(data.serverProject != null)" constraints="grid(x=1;y=0)" />
+          <Button action="data.generateDocumentation(versionTable.selected)" buttonType="Trigger" label="generate_doc" localize="true" enable="(versionTable.selected != null)" constraints="grid(x=2;y=0)" />
+          <Button action="data.generatePrototype(versionTable.selected)" buttonType="Trigger" label="generate_proto" localize="true" enable="((versionTable.selected != null) &amp; versionTable.selected.isIsProtoValidationSuccessful)" constraints="grid(x=3;y=0)" />
+        </Panel>
+      </Panel>
+      <Panel layout="border" darkLevel="0" constraints="border(location=east)" width="35" height="30">
+        <Label label="label" data="data.status" constraints="border(location=center)" name="Status" localize="true" />
+      </Panel>
     </Panel>
   </Panel>
   <LocalizedDictionary>
@@ -47,5 +54,8 @@
     <Localized key="generate_proto" lang="English">Generate prototype</Localized>
     <Localized key="generate_proto" lang="French">Générer le prototype</Localized>
     <Localized key="generate_proto" lang="Dutch">Genereren prototype</Localized>
+    <Localized key="send_to_server" lang="English">Send to server</Localized>
+    <Localized key="send_to_server" lang="French">Envoyer vers le serveur</Localized>
+    <Localized key="send_to_server" lang="Dutch">Verszenden naar server</Localized>
   </LocalizedDictionary>
 </Panel>

@@ -45,7 +45,7 @@ public class ServerRestClientPerspective extends FlexoPerspective {
 			}
 			FIBView<?, ?> view = fibController.buildView(component);
 			fibController.setDataObject(model);
-			return new DefaultModuleView<FlexoProject>((FlexoProject) object, view, this);
+			return new DefaultModuleView<FlexoProject>(controller, (FlexoProject) object, view, this);
 		} else {
 			return null;
 		}

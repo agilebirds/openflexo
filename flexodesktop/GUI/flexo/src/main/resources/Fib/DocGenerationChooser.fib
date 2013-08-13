@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Panel layout="border" darkLevel="0" dataClassName="org.openflexo.rest.client.ServerRestClientModel$DocGenerationChoice">
   <Panel layout="gridbag" darkLevel="0" constraints="border(location=center)">
-    <Label label="doc_format" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+    <Label label="doc_format" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
     <DropDown data="data.docFormat" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="docFormat" localize="true" iteratorClassName="org.openflexo.rest.client.model.DocFormat" autoSelectFirstRow="true" />
-    <Label label="doc_type" constraints="gridbag(anchor=center;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+    <Label label="doc_type" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
     <DropDown data="data.docType" constraints="gridbag(anchor=center;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=1.0;weightY=0.0)" name="dropdown" localize="true" list="data.serverRestClientModel.serverProject.docTypes" iteratorClassName="java.lang.String" autoSelectFirstRow="true" />
+    <Label label="save_in_folder" align="right" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+    <File isDirectory="false" localize="true" data="data.folder" constraints="gridbag(anchor=west;fill=horizontal;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" />
+    <Label label="open_file" constraints="gridbag(anchor=east;fill=none;gridHeight=1;gridWidth=1;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" localize="true" />
+    <CheckBox selected="false" data="data.isAutomaticallyOpenFile" constraints="gridbag(anchor=west;fill=none;gridHeight=1;gridWidth=0;gridX=-1;gridY=-1;insetsBottom=0;insetsLeft=0;insetsRight=0;insetsTop=0;padX=0;padY=0;weightX=0.0;weightY=0.0)" name="automaticallyOpenFile" localize="true" />
   </Panel>
   <Panel layout="flow" hGap="5" vGap="5" flowAlignment="CENTER" darkLevel="0" constraints="border(location=south)">
     <Panel layout="grid" hGap="5" vGap="5" cols="2" rows="1" darkLevel="0" constraints="flow()">
@@ -31,5 +35,14 @@
     <Localized key="cancel" lang="English">Cancel</Localized>
     <Localized key="cancel" lang="French">Annuler</Localized>
     <Localized key="cancel" lang="Dutch">Annuleren</Localized>
+    <Localized key="Word" lang="English">Word</Localized>
+    <Localized key="Word" lang="French">Word</Localized>
+    <Localized key="Word" lang="Dutch">Word</Localized>
+    <Localized key="save_in_folder" lang="English">Save in folder</Localized>
+    <Localized key="save_in_folder" lang="French">Sauver dans le répertoire</Localized>
+    <Localized key="save_in_folder" lang="Dutch">Opslaan in map</Localized>
+    <Localized key="open_file" lang="English">Open file</Localized>
+    <Localized key="open_file" lang="French">Ouvrir le fichier</Localized>
+    <Localized key="open_file" lang="Dutch">Open het bestand</Localized>
   </LocalizedDictionary>
 </Panel>
