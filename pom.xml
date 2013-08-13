@@ -16,8 +16,8 @@
 		<ant.version>1.9.0</ant.version>
 		<compiler.source>1.6</compiler.source>
 		<compiler.target>1.6</compiler.target>
-        <hibernate.version>4.2.3.Final</hibernate.version>
-        <jersey.version>1.17.1</jersey.version>
+		<hibernate.version>4.2.3.Final</hibernate.version>
+		<jersey.version>1.17.1</jersey.version>
 		<organization.name>AgileBirds</organization.name>
 		<organization.url>http://www.agilebirds.com/</organization.url>
 		<organization.logo>http://www.agilebirds.com/_Ressources/img/header_Logo.gif</organization.logo>
@@ -862,6 +862,11 @@
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>
 				<version>3.1</version>
+			</dependency>
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>1.2.17</version>
 			</dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>
