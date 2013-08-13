@@ -22,7 +22,7 @@ package org.openflexo.fib;
 import java.io.File;
 
 import org.openflexo.fib.editor.FIBAbstractEditor;
-import org.openflexo.view.controller.WebServiceURLDialog;
+import org.openflexo.rest.client.WebServiceURLDialog;
 
 public class WSParameterEDITOR extends FIBAbstractEditor {
 
