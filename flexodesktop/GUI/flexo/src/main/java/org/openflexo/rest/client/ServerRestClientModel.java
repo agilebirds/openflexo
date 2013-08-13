@@ -33,6 +33,7 @@ import org.openflexo.rest.client.model.Job;
 import org.openflexo.rest.client.model.JobType;
 import org.openflexo.rest.client.model.Project;
 import org.openflexo.rest.client.model.ProjectVersion;
+import org.openflexo.rest.client.model.TocEntryDefinition;
 import org.openflexo.rest.client.model.User;
 import org.openflexo.toolbox.FileResource;
 import org.openflexo.toolbox.HasPropertyChangeSupport;
@@ -54,6 +55,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 	private static final String DOC_TYPE = "docType";
 	private static final String DOC_FORMAT = "docFormat";
 	private static final String FOLDER = "folder";
+	private static final String TOC_ENTRY = "tocEntry";
 
 	private interface Progress {
 		public void increment(String message);
@@ -65,9 +67,16 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		private DocFormat docFormat;
 		private File folder;
 		private boolean automaticallyOpenFile = true;
+		private TocEntryDefinition tocEntry;
+		private final ProjectVersion version;
 
-		public DocGenerationChoice() {
+		public DocGenerationChoice(ProjectVersion version) {
+			this.version = version;
 			pcSupport = new PropertyChangeSupport(this);
+		}
+
+		public ProjectVersion getVersion() {
+			return version;
 		}
 
 		public void delete() {
@@ -123,6 +132,15 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		public void setAutomaticallyOpenFile(boolean automaticallyOpenFile) {
 			this.automaticallyOpenFile = automaticallyOpenFile;
 			pcSupport.firePropertyChange(AUTOMATICALLY_OPEN_FILE, !automaticallyOpenFile, automaticallyOpenFile);
+		}
+
+		public TocEntryDefinition getTocEntry() {
+			return tocEntry;
+		}
+
+		public void setTocEntry(TocEntryDefinition tocEntry) {
+			this.tocEntry = tocEntry;
+			pcSupport.firePropertyChange(TOC_ENTRY, null, tocEntry);
 		}
 	}
 
@@ -229,6 +247,13 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 	}
 
 	private class SendProjectToServer implements ServerRestClientOperation {
+
+		private final String comment;
+
+		public SendProjectToServer(String comment) {
+			this.comment = comment;
+		}
+
 		@Override
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
 			ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 5);
@@ -275,11 +300,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 			ProjectVersion version = new ProjectVersion();
 			version.setProject(serverProject.getProjectId());
 			version.setCreator(user.getLogin());
-			String s = FlexoController.askForString(FlexoLocalization.localizedForKey("please_provide_some_comments"));
-			if (s == null) {
-				return;
-			}
-			version.setComment(s);
+			version.setComment(comment);
 			FormDataMultiPart mp = new FormDataMultiPart();
 			mp.field("version", version, MediaType.APPLICATION_XML_TYPE);
 			mp.bodyPart(new StreamDataBodyPart("file", inputStream, zipFile.getName()));
@@ -319,6 +340,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 			job.setVersion(version);
 			job.setDocFormat(choice.getDocFormat());
 			job.setDocType(choice.getDocType());
+			job.setTocEntry(choice.getTocEntry());
 			final Job returned = client.jobs().postXml(job, Job.class);
 			if (returned != null && choice.getFolder() != null) {
 				WatchedRemoteDocJob watchedRemoteJob = new WatchedRemoteDocJob();
@@ -557,7 +579,11 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	public void sendProjectToServer() {
 		if (serverProject != null) {
-			performOperations(new SendProjectToServer());
+			String comment = FlexoController.askForString(FlexoLocalization.localizedForKey("please_provide_some_comments"));
+			if (comment == null) {
+				return;
+			}
+			performOperations(new SendProjectToServer(comment));
 		}
 	}
 
@@ -568,7 +594,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		if (getUser() == null) {
 			return;
 		}
-		DocGenerationChoice choice = new DocGenerationChoice();
+		DocGenerationChoice choice = new DocGenerationChoice(version);
 		choice.setDocFormat(DocFormat.WORD);
 		choice.setDocType(serverProject.getDocTypes().get(0));
 		FIBDialog<DocGenerationChoice> dialog = FIBDialog.instanciateAndShowDialog(DOC_GENERATION_CHOOSER_FIB_FILE, choice,
@@ -586,18 +612,11 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		if (getUser() == null) {
 			return;
 		}
-		DocGenerationChoice choice = new DocGenerationChoice();
-		choice.setDocFormat(DocFormat.WORD);
-		choice.setDocType(serverProject.getDocTypes().get(0));
-		FIBDialog<DocGenerationChoice> dialog = FIBDialog.instanciateAndShowDialog(DOC_GENERATION_CHOOSER_FIB_FILE, choice,
-				controller.getFlexoFrame(), true, FlexoLocalization.getMainLocalizer());
-		if (dialog.getController().getStatus() == FIBController.Status.VALIDATED) {
-			Job job = new Job();
-			job.setCreator(getUser());
-			job.setJobType(JobType.PROTOTYPE_BUILDER);
-			job.setVersion(version);
-			performOperations(new GeneratePrototype(version));
-		}
+		Job job = new Job();
+		job.setCreator(getUser());
+		job.setJobType(JobType.PROTOTYPE_BUILDER);
+		job.setVersion(version);
+		performOperations(new GeneratePrototype(version));
 
 	}
 }
