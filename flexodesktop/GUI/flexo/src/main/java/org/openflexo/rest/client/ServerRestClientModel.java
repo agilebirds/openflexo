@@ -391,6 +391,38 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		}
 	}
 
+	private class ValidationInProgress implements ServerRestClientOperation {
+
+		private ProjectVersion version;
+
+		public ValidationInProgress(ProjectVersion version) {
+			super();
+			this.version = version;
+		}
+
+		@Override
+		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
+			UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("version.versionID", version.getVersionID())
+					.queryParam("jobType", JobType.PROJECT_MERGER).queryParam("jobType", JobType.DOC_REINJECTER);
+			List<Job> jobs = client.jobs(client.createClient(), builder.build()).getAsXml(new GenericType<List<Job>>() {
+			});
+			validationInProgress.put(version, jobs.size() > 0);
+
+		}
+
+		@Override
+		public String getLocalizedTitle() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public int getSteps() {
+			return -1;
+		}
+
+	}
+
 	private static final String DELETED = "deleted";
 
 	private static final String SERVER_PROJECT = "serverProject";
@@ -450,7 +482,13 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 	}
 
 	private void performOperations(final ServerRestClientOperation... operations) {
-		ProgressWindow.makeProgressWindow("", operations.length);
+		performOperations(true, operations);
+	}
+
+	private void performOperations(final boolean useProgressWindow, final ServerRestClientOperation... operations) {
+		if (useProgressWindow) {
+			ProgressWindow.makeProgressWindow("", operations.length);
+		}
 		SwingWorker<Void, Integer> worker = new SwingWorker<Void, Integer>() {
 
 			@Override
@@ -461,13 +499,18 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 						boolean done = false;
 						while (!done) {
 							ServerRestClient client = getServerRestClient(!firstAttempt);
-							ProgressWindow.setProgressInstance(operation.getLocalizedTitle());
-							ProgressWindow.resetSecondaryProgressInstance(operation.getSteps());
+							if (useProgressWindow) {
+								ProgressWindow.setProgressInstance(operation.getLocalizedTitle());
+								int steps = operation.getSteps();
+								ProgressWindow.resetSecondaryProgressInstance(steps);
+							}
 							try {
 								operation.doOperation(client, new Progress() {
 									@Override
 									public void increment(String message) {
-										ProgressWindow.setSecondaryProgressInstance(message);
+										if (useProgressWindow) {
+											ProgressWindow.setSecondaryProgressInstance(message);
+										}
 									}
 								});
 								done = true;
@@ -493,7 +536,9 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 						}
 					}
 				} finally {
-					ProgressWindow.hideProgressWindow();
+					if (useProgressWindow) {
+						ProgressWindow.hideProgressWindow();
+					}
 				}
 
 				return null;
@@ -574,6 +619,9 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	public boolean isValidationInProgress(ProjectVersion version) {
 		Boolean b = validationInProgress.get(version);
+		if (b == null) {
+			performOperations(false, new ValidationInProgress(version));
+		}
 		return b != null && b;
 	}
 
