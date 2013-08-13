@@ -23,7 +23,7 @@ import java.io.File;
 
 import org.openflexo.fib.editor.FIBAbstractEditor;
 import org.openflexo.rest.client.ServerRestClientModel;
-import org.openflexo.view.controller.WebServiceURLDialog;
+import org.openflexo.rest.client.WebServiceURLDialog;
 
 public class ServerRestClientModelViewEDITOR extends FIBAbstractEditor {
 
