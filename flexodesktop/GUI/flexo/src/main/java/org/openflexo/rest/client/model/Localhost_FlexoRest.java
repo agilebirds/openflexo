@@ -15,7 +15,7 @@ import com.sun.jersey.api.uri.UriTemplate;
 @Generated(value = {
     "wadl|http://localhost:9090/Flexo/rest/application.wadl",
     "customization|file:/D:/Work/Git/openflexo/flexodesktop/GUI/flexo/rest-client-bindings.xml"
-}, comments = "wadl2java, http://wadl.java.net", date = "2013-07-06T20:47:42.514+02:00")
+}, comments = "wadl2java, http://wadl.java.net", date = "2013-08-09T12:53:22.940+02:00")
 public class Localhost_FlexoRest {
 
     /**
@@ -55,8 +55,8 @@ public class Localhost_FlexoRest {
         BASE_URI = originalURI;
     }
 
-    public static Localhost_FlexoRest.Projects projects(com.sun.jersey.api.client.Client client, URI baseURI) {
-        return new Localhost_FlexoRest.Projects(client, baseURI);
+    public static Localhost_FlexoRest.ProjectsProjectIDVersions projectsProjectIDVersions(com.sun.jersey.api.client.Client client, URI baseURI, Integer projectid) {
+        return new Localhost_FlexoRest.ProjectsProjectIDVersions(client, baseURI, projectid);
     }
 
     /**
@@ -84,30 +84,6 @@ public class Localhost_FlexoRest {
         return createClientInstance(cc);
     }
 
-    public static Localhost_FlexoRest.Projects projects() {
-        return projects(createClient(), BASE_URI);
-    }
-
-    public static Localhost_FlexoRest.Projects projects(com.sun.jersey.api.client.Client client) {
-        return projects(client, BASE_URI);
-    }
-
-    public static Localhost_FlexoRest.JobsHistory jobsHistory(com.sun.jersey.api.client.Client client, URI baseURI) {
-        return new Localhost_FlexoRest.JobsHistory(client, baseURI);
-    }
-
-    public static Localhost_FlexoRest.JobsHistory jobsHistory() {
-        return jobsHistory(createClient(), BASE_URI);
-    }
-
-    public static Localhost_FlexoRest.JobsHistory jobsHistory(com.sun.jersey.api.client.Client client) {
-        return jobsHistory(client, BASE_URI);
-    }
-
-    public static Localhost_FlexoRest.ProjectsProjectIDVersions projectsProjectIDVersions(com.sun.jersey.api.client.Client client, URI baseURI, Integer projectid) {
-        return new Localhost_FlexoRest.ProjectsProjectIDVersions(client, baseURI, projectid);
-    }
-
     public static Localhost_FlexoRest.ProjectsProjectIDVersions projectsProjectIDVersions(Integer projectid) {
         return projectsProjectIDVersions(createClient(), BASE_URI, projectid);
     }
@@ -116,16 +92,16 @@ public class Localhost_FlexoRest {
         return projectsProjectIDVersions(client, BASE_URI, projectid);
     }
 
-    public static Localhost_FlexoRest.Users users(com.sun.jersey.api.client.Client client, URI baseURI) {
-        return new Localhost_FlexoRest.Users(client, baseURI);
+    public static Localhost_FlexoRest.Accounts accounts(com.sun.jersey.api.client.Client client, URI baseURI) {
+        return new Localhost_FlexoRest.Accounts(client, baseURI);
     }
 
-    public static Localhost_FlexoRest.Users users() {
-        return users(createClient(), BASE_URI);
+    public static Localhost_FlexoRest.Accounts accounts() {
+        return accounts(createClient(), BASE_URI);
     }
 
-    public static Localhost_FlexoRest.Users users(com.sun.jersey.api.client.Client client) {
-        return users(client, BASE_URI);
+    public static Localhost_FlexoRest.Accounts accounts(com.sun.jersey.api.client.Client client) {
+        return accounts(client, BASE_URI);
     }
 
     public static Localhost_FlexoRest.ProjectsProjectIDSessions projectsProjectIDSessions(com.sun.jersey.api.client.Client client, URI baseURI, Integer projectid) {
@@ -152,16 +128,52 @@ public class Localhost_FlexoRest {
         return jobs(client, BASE_URI);
     }
 
-    public static Localhost_FlexoRest.Accounts accounts(com.sun.jersey.api.client.Client client, URI baseURI) {
-        return new Localhost_FlexoRest.Accounts(client, baseURI);
+    public static Localhost_FlexoRest.Users users(com.sun.jersey.api.client.Client client, URI baseURI) {
+        return new Localhost_FlexoRest.Users(client, baseURI);
     }
 
-    public static Localhost_FlexoRest.Accounts accounts() {
-        return accounts(createClient(), BASE_URI);
+    public static Localhost_FlexoRest.Users users() {
+        return users(createClient(), BASE_URI);
     }
 
-    public static Localhost_FlexoRest.Accounts accounts(com.sun.jersey.api.client.Client client) {
-        return accounts(client, BASE_URI);
+    public static Localhost_FlexoRest.Users users(com.sun.jersey.api.client.Client client) {
+        return users(client, BASE_URI);
+    }
+
+    public static Localhost_FlexoRest.JobsHistory jobsHistory(com.sun.jersey.api.client.Client client, URI baseURI) {
+        return new Localhost_FlexoRest.JobsHistory(client, baseURI);
+    }
+
+    public static Localhost_FlexoRest.JobsHistory jobsHistory() {
+        return jobsHistory(createClient(), BASE_URI);
+    }
+
+    public static Localhost_FlexoRest.JobsHistory jobsHistory(com.sun.jersey.api.client.Client client) {
+        return jobsHistory(client, BASE_URI);
+    }
+
+    public static Localhost_FlexoRest.Files files(com.sun.jersey.api.client.Client client, URI baseURI) {
+        return new Localhost_FlexoRest.Files(client, baseURI);
+    }
+
+    public static Localhost_FlexoRest.Files files() {
+        return files(createClient(), BASE_URI);
+    }
+
+    public static Localhost_FlexoRest.Files files(com.sun.jersey.api.client.Client client) {
+        return files(client, BASE_URI);
+    }
+
+    public static Localhost_FlexoRest.Projects projects(com.sun.jersey.api.client.Client client, URI baseURI) {
+        return new Localhost_FlexoRest.Projects(client, baseURI);
+    }
+
+    public static Localhost_FlexoRest.Projects projects() {
+        return projects(createClient(), BASE_URI);
+    }
+
+    public static Localhost_FlexoRest.Projects projects(com.sun.jersey.api.client.Client client) {
+        return projects(client, BASE_URI);
     }
 
     public static class Accounts {
@@ -885,6 +897,109 @@ public class Localhost_FlexoRest {
                 }
             }
 
+        }
+
+    }
+
+    public static class Files {
+
+        private com.sun.jersey.api.client.Client _client;
+        private UriBuilder _uriBuilder;
+        private Map<String, Object> _templateAndMatrixParameterValues;
+
+        private Files(com.sun.jersey.api.client.Client client, UriBuilder uriBuilder, Map<String, Object> map) {
+            _client = client;
+            _uriBuilder = uriBuilder.clone();
+            _templateAndMatrixParameterValues = map;
+        }
+
+        /**
+         * Create new instance using existing Client instance, and a base URI and any parameters
+         * 
+         */
+        public Files(com.sun.jersey.api.client.Client client, URI baseUri) {
+            _client = client;
+            _uriBuilder = UriBuilder.fromUri(baseUri);
+            _uriBuilder = _uriBuilder.path("/files");
+            _templateAndMatrixParameterValues = new HashMap<String, Object>();
+        }
+
+        public<T >T getAsOctetStream(com.sun.jersey.api.client.GenericType<T> returnType) {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/octet-stream");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+            if (response.getStatus()>= 400) {
+                throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+            }
+            return response.getEntity(returnType);
+        }
+
+        public<T >T getAsOctetStream(Class<T> returnType) {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/octet-stream");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+            if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                if (response.getStatus()>= 400) {
+                    throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+            }
+            if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                return response.getEntity(returnType);
+            } else {
+                return returnType.cast(response);
+            }
+        }
+
+        public<T >T getAsOctetStream(String uuid, com.sun.jersey.api.client.GenericType<T> returnType) {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            if (uuid == null) {
+            }
+            if (uuid!= null) {
+                localUriBuilder = localUriBuilder.replaceQueryParam("uuid", uuid);
+            } else {
+                localUriBuilder = localUriBuilder.replaceQueryParam("uuid", ((Object[]) null));
+            }
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/octet-stream");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+            if (response.getStatus()>= 400) {
+                throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+            }
+            return response.getEntity(returnType);
+        }
+
+        public<T >T getAsOctetStream(String uuid, Class<T> returnType) {
+            UriBuilder localUriBuilder = _uriBuilder.clone();
+            if (uuid == null) {
+            }
+            if (uuid!= null) {
+                localUriBuilder = localUriBuilder.replaceQueryParam("uuid", uuid);
+            } else {
+                localUriBuilder = localUriBuilder.replaceQueryParam("uuid", ((Object[]) null));
+            }
+            com.sun.jersey.api.client.WebResource resource = _client.resource(localUriBuilder.buildFromMap(_templateAndMatrixParameterValues));
+            com.sun.jersey.api.client.WebResource.Builder resourceBuilder = resource.getRequestBuilder();
+            resourceBuilder = resourceBuilder.accept("application/octet-stream");
+            com.sun.jersey.api.client.ClientResponse response;
+            response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
+            if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                if (response.getStatus()>= 400) {
+                    throw new Localhost_FlexoRest.WebApplicationExceptionMessage(Response.status(response.getClientResponseStatus()).build());
+                }
+            }
+            if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
+                return response.getEntity(returnType);
+            } else {
+                return returnType.cast(response);
+            }
         }
 
     }
