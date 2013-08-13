@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 
 import org.openflexo.fib.view.FIBView;
 import org.openflexo.foundation.FlexoModelObject;
+import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.model.FlexoPerspective;
 
 public class DefaultModuleView<O extends FlexoModelObject> extends JPanel implements ModuleView<O> {
@@ -13,9 +14,11 @@ public class DefaultModuleView<O extends FlexoModelObject> extends JPanel implem
 	private final O representedObject;
 	private final FIBView<?, ?> component;
 	private final FlexoPerspective perspective;
+	private final FlexoController controller;
 
-	public DefaultModuleView(O representedObject, FIBView<?, ?> component, FlexoPerspective perspective) {
+	public DefaultModuleView(FlexoController controller, O representedObject, FIBView<?, ?> component, FlexoPerspective perspective) {
 		super(new BorderLayout());
+		this.controller = controller;
 		this.representedObject = representedObject;
 		this.component = component;
 		this.perspective = perspective;
@@ -29,6 +32,9 @@ public class DefaultModuleView<O extends FlexoModelObject> extends JPanel implem
 
 	@Override
 	public void deleteModuleView() {
+		if (controller != null) {
+			controller.removeModuleView(this);
+		}
 		component.delete();
 	}
 
