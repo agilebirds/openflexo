@@ -23,7 +23,6 @@
 		<module>emfconnector-ui</module>
 		<module>mdtumlconnector-ui</module>
 		<module>csvconnector-ui</module>
-		<module>xmlconnector-ui</module>
 		<module>excelconnector-ui</module>
 	</modules>
 	<build>
