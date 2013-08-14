@@ -179,9 +179,7 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				if (confirmExit()) {
-					System.exit(0);
-				}
+				quit();
 			}
 		});
 		// mainPanel = new JPanel();
@@ -510,7 +508,13 @@ public abstract class FIBAbstractEditor implements FIBGenericEditor {
 
 	public void quit() {
 		frame.dispose();
-		System.exit(0);
+		if (confirmExit() && exitOnDispose()) {
+			System.exit(0);
+		}
+	}
+
+	public boolean exitOnDispose() {
+		return true;
 	}
 
 	@Deprecated

@@ -38,6 +38,11 @@ public class FIBEmbeddedEditor {
 			return FIBEmbeddedEditor.this.getFIBFile();
 		}
 
+		@Override
+		public boolean exitOnDispose() {
+			return false;
+		}
+
 	}
 
 	public FIBEmbeddedEditor(File aFile, Object object) {
