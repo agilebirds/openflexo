@@ -27,6 +27,7 @@ import org.openflexo.foundation.validation.InformationIssue;
 import org.openflexo.foundation.validation.ValidationError;
 import org.openflexo.foundation.validation.ValidationIssue;
 import org.openflexo.foundation.validation.ValidationWarning;
+import org.openflexo.swing.AnimatedIcon;
 import org.openflexo.toolbox.ImageIconResource;
 
 /**
@@ -61,7 +62,7 @@ public class IconLibrary {
 	public static final ImageIcon SMALL_EXCEL_ICON = new ImageIconResource("Icons/Common/SmallExcel.gif");
 	public static final ImageIcon BIG_EXCEL_ICON = new ImageIconResource("Icons/Common/BigExcel.png");
 
-	public static final ImageIcon IN_PROGRESS_ICON = new ImageIconResource("Icons/Common/Progress.gif");
+	public static final Icon IN_PROGRESS_ICON = new AnimatedIcon(new ImageIconResource("Icons/Common/Progress.gif"));
 	public static final ImageIcon VALID_ICON = new ImageIconResource("Icons/Common/Valid.png");
 	public static final ImageIcon INVALID_ICON = new ImageIconResource("Icons/Common/Invalid.png");
 
