@@ -830,7 +830,7 @@ public class BindingValue extends AbstractBinding {
 			return null;
 		}
 
-		ArrayList<TargetObject> returned = new ArrayList<TargetObject>();
+		List<TargetObject> returned = new ArrayList<TargetObject>();
 
 		Object current = context.getValue(_bindingVariable);
 
@@ -839,7 +839,9 @@ public class BindingValue extends AbstractBinding {
 		if (current == null) {
 			return returned;
 		}
-
+		if (getStringRepresentation().equals("data.getConsistencyIcon(iterator)")) {
+			System.err.println("coucou");
+		}
 		try {
 			for (BindingPathElement element : getBindingPath()) {
 				returned.add(new TargetObject(current, element.getLabel()));

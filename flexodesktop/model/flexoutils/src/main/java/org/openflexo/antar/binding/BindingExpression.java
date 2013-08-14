@@ -902,7 +902,7 @@ public class BindingExpression extends AbstractBinding {
 			return null;
 		}
 
-		final ArrayList<TargetObject> returned = new ArrayList<TargetObject>();
+		final List<TargetObject> returned = new ArrayList<TargetObject>();
 
 		try {
 			expression.transform(new ExpressionTransformer() {
