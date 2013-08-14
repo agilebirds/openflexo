@@ -6,17 +6,24 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
-import javax.swing.ImageIcon;
+import javax.persistence.EntityManager;
+import javax.swing.Icon;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.lang3.StringUtils;
 import org.openflexo.LocalDBAccess;
@@ -48,6 +55,8 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	public static final File FIB_FILE = new FileResource("Fib/ServerClientModelView.fib");
 	public static final File DOC_GENERATION_CHOOSER_FIB_FILE = new FileResource("Fib/DocGenerationChooser.fib");
+
+	private static final SimpleDateFormat FORMATTER = new SimpleDateFormat("dd/MM/yy hh:mm");
 
 	private static final String STATUS = "status";
 
@@ -227,11 +236,8 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 			progress.increment(FlexoLocalization.localizedForKey("retrieving_status"));
 			for (ProjectVersion version : getVersions()) {
 				progress.increment(FlexoLocalization.localizedForKey("retrieving_status"));
-				UriBuilder builder2 = UriBuilder.fromUri(client.getBASE_URI()).queryParam("jobType", JobType.DOC_REINJECTER)
-						.queryParam("jobType", JobType.PROJECT_MERGER).queryParam("version", version.getVersionID());
-				List<Job> jobs = client.jobs(restClient, builder2.build()).getAsXml(null, null, null, new GenericType<List<Job>>() {
-				});
-				validationInProgress.put(version, jobs.size() > 0);
+				Boolean value = isValidationInProgress(client, restClient, version);
+				setValidationInProgress(version, value);
 			}
 		}
 
@@ -307,7 +313,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 			zipFile.delete();
 			ProjectVersion response = client.projectsProjectIDVersions(serverProject.getProjectId()).postMultipartFormDataAsXml(mp,
 					ProjectVersion.class);
-			performOperations(new UpdateVersions());
+			performOperationsInSwingWorker(new UpdateVersions());
 		}
 
 		@Override
@@ -347,7 +353,18 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 				watchedRemoteJob.setRemoteJobId(returned.getJobId());
 				watchedRemoteJob.setSaveToFolder(choice.getFolder().getAbsolutePath());
 				watchedRemoteJob.setOpenDocument(choice.isAutomaticallyOpenFile());
-				LocalDBAccess.getInstance().getEntityManager().persist(watchedRemoteJob);
+				watchedRemoteJob.setProjectURI(flexoProject.getProjectURI());
+				EntityManager em = LocalDBAccess.getInstance().getEntityManager();
+				try {
+					em.getTransaction().begin();
+					em.persist(watchedRemoteJob);
+					em.getTransaction().commit();
+				} finally {
+					if (em.getTransaction().isActive()) {
+						em.getTransaction().rollback();
+					}
+					em.close();
+				}
 			}
 		}
 
@@ -406,8 +423,8 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 					.queryParam("jobType", JobType.PROJECT_MERGER).queryParam("jobType", JobType.DOC_REINJECTER);
 			List<Job> jobs = client.jobs(client.createClient(), builder.build()).getAsXml(new GenericType<List<Job>>() {
 			});
-			validationInProgress.put(version, jobs.size() > 0);
-
+			Boolean value = isValidationInProgress(client, client.createClient(), version);
+			setValidationInProgress(version, value);
 		}
 
 		@Override
@@ -421,6 +438,51 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 			return -1;
 		}
 
+	}
+
+	protected Boolean isValidationInProgress(ServerRestClient client, Client restClient, ProjectVersion version) {
+		UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("jobType", JobType.DOC_REINJECTER)
+				.queryParam("jobType", JobType.PROJECT_MERGER).queryParam("version.versionID", version.getVersionID());
+		List<Job> jobs = client.jobs(restClient, builder.build()).getAsXml(null, null, null, new GenericType<List<Job>>() {
+		});
+		Boolean validationInProgressValue = jobs.size() > 0;
+		return validationInProgressValue;
+	}
+
+	protected void setValidationInProgress(ProjectVersion version, Boolean value) {
+		Boolean oldValue = validationInProgress.put(version, value);
+		if (value != oldValue && oldValue != null) {
+			performOperationsInSwingWorker(false, new UpdateVersions());
+		}
+		if (value && validationJobChecker == null) {
+			validationJobChecker = Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(new Runnable() {
+
+				@Override
+				public void run() {
+					for (Entry<ProjectVersion, Boolean> e : validationInProgress.entrySet()) {
+						if (e.getValue()) {
+							try {
+								performOperations(false, new ValidationInProgress(e.getKey()));
+							} catch (InterruptedException ex) {
+								ex.printStackTrace();
+							}
+						}
+					}
+				}
+			}, 10, 10, TimeUnit.SECONDS);
+		} else if (!value && validationJobChecker != null) {
+			boolean stop = true;
+			for (Entry<ProjectVersion, Boolean> e : validationInProgress.entrySet()) {
+				if (e.getValue()) {
+					stop = false;
+					break;
+				}
+			}
+			if (stop) {
+				validationJobChecker.cancel(true);
+				validationJobChecker = null;
+			}
+		}
 	}
 
 	private static final String DELETED = "deleted";
@@ -447,6 +509,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	private int pageSize = 5;
 	private int page = 0;
+	private ScheduledFuture<?> validationJobChecker;
 
 	public ServerRestClientModel(FlexoController controller, FlexoProject flexoProject) {
 		super();
@@ -479,13 +542,17 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	public void delete() {
 		pcSupport.firePropertyChange(DELETED, false, true);
+		if (validationJobChecker != null) {
+			validationJobChecker.cancel(true);
+			validationJobChecker = null;
+		}
 	}
 
-	private void performOperations(final ServerRestClientOperation... operations) {
-		performOperations(true, operations);
+	private void performOperationsInSwingWorker(final ServerRestClientOperation... operations) {
+		performOperationsInSwingWorker(true, operations);
 	}
 
-	private void performOperations(final boolean useProgressWindow, final ServerRestClientOperation... operations) {
+	private void performOperationsInSwingWorker(final boolean useProgressWindow, final ServerRestClientOperation... operations) {
 		if (useProgressWindow) {
 			ProgressWindow.makeProgressWindow("", operations.length);
 		}
@@ -493,54 +560,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 			@Override
 			protected Void doInBackground() throws Exception {
-				boolean firstAttempt = true;
-				try {
-					for (ServerRestClientOperation operation : operations) {
-						boolean done = false;
-						while (!done) {
-							ServerRestClient client = getServerRestClient(!firstAttempt);
-							if (useProgressWindow) {
-								ProgressWindow.setProgressInstance(operation.getLocalizedTitle());
-								int steps = operation.getSteps();
-								ProgressWindow.resetSecondaryProgressInstance(steps);
-							}
-							try {
-								operation.doOperation(client, new Progress() {
-									@Override
-									public void increment(String message) {
-										if (useProgressWindow) {
-											ProgressWindow.setSecondaryProgressInstance(message);
-										}
-									}
-								});
-								done = true;
-							} catch (WebApplicationException e) {
-								e.printStackTrace();
-								if (!controller.handleWSException(e)) {
-									return null;
-								}
-								firstAttempt = false;
-							} catch (IOException e) {
-								e.printStackTrace();
-								if (!controller.handleWSException(e)) {
-									return null;
-								}
-								firstAttempt = false;
-							} catch (RuntimeException e) {
-								e.printStackTrace();
-								if (!controller.handleWSException(e)) {
-									return null;
-								}
-								firstAttempt = false;
-							}
-						}
-					}
-				} finally {
-					if (useProgressWindow) {
-						ProgressWindow.hideProgressWindow();
-					}
-				}
-
+				performOperations(useProgressWindow, operations);
 				return null;
 			}
 
@@ -549,11 +569,11 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 	}
 
 	public void refresh() {
-		performOperations(new UpdateUserOperation(), new UpdateServerProject(), new UpdateVersions());
+		performOperationsInSwingWorker(new UpdateUserOperation(), new UpdateServerProject(), new UpdateVersions());
 	}
 
 	public void refreshVersions() {
-		performOperations(new UpdateVersions());
+		performOperationsInSwingWorker(new UpdateVersions());
 	}
 
 	@Override
@@ -606,7 +626,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		pcSupport.firePropertyChange(STATUS, null, status);
 	}
 
-	public ImageIcon getConsistencyIcon(ProjectVersion version) {
+	public Icon getConsistencyIcon(ProjectVersion version) {
 		if (isValidationInProgress(version)) {
 			return IconLibrary.IN_PROGRESS_ICON;
 		}
@@ -617,10 +637,14 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		}
 	}
 
+	public String formatDate(XMLGregorianCalendar date) {
+		return FORMATTER.format(date.toGregorianCalendar().getTime());
+	}
+
 	public boolean isValidationInProgress(ProjectVersion version) {
 		Boolean b = validationInProgress.get(version);
 		if (b == null) {
-			performOperations(false, new ValidationInProgress(version));
+			// performOperations(false, new ValidationInProgress(version));
 		}
 		return b != null && b;
 	}
@@ -631,7 +655,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 			if (comment == null) {
 				return;
 			}
-			performOperations(new SendProjectToServer(comment));
+			performOperationsInSwingWorker(new SendProjectToServer(comment));
 		}
 	}
 
@@ -648,7 +672,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		FIBDialog<DocGenerationChoice> dialog = FIBDialog.instanciateAndShowDialog(DOC_GENERATION_CHOOSER_FIB_FILE, choice,
 				controller.getFlexoFrame(), true, FlexoLocalization.getMainLocalizer());
 		if (dialog.getController().getStatus() == FIBController.Status.VALIDATED) {
-			performOperations(new GenerateDocumentation(version, choice));
+			performOperationsInSwingWorker(new GenerateDocumentation(version, choice));
 		}
 
 	}
@@ -664,7 +688,60 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		job.setCreator(getUser());
 		job.setJobType(JobType.PROTOTYPE_BUILDER);
 		job.setVersion(version);
-		performOperations(new GeneratePrototype(version));
+		performOperationsInSwingWorker(new GeneratePrototype(version));
 
+	}
+
+	private void performOperations(final boolean useProgressWindow, final ServerRestClientOperation... operations)
+			throws InterruptedException {
+		boolean firstAttempt = true;
+		try {
+			for (ServerRestClientOperation operation : operations) {
+				boolean done = false;
+				while (!done) {
+					ServerRestClient client = getServerRestClient(!firstAttempt);
+					if (useProgressWindow) {
+						ProgressWindow.setProgressInstance(operation.getLocalizedTitle());
+						int steps = operation.getSteps();
+						ProgressWindow.resetSecondaryProgressInstance(steps);
+					}
+					try {
+						operation.doOperation(client, new Progress() {
+							@Override
+							public void increment(String message) {
+								if (useProgressWindow) {
+									ProgressWindow.setSecondaryProgressInstance(message);
+								}
+							}
+						});
+						done = true;
+					} catch (WebApplicationException e) {
+						e.printStackTrace();
+						if (!controller.handleWSException(e)) {
+							return;
+						}
+						firstAttempt = false;
+					} catch (IOException e) {
+						e.printStackTrace();
+						if (!controller.handleWSException(e)) {
+							return;
+						}
+						firstAttempt = false;
+					} catch (RuntimeException e) {
+						e.printStackTrace();
+						if (!controller.handleWSException(e)) {
+							return;
+						}
+						firstAttempt = false;
+					}
+				}
+			}
+		} finally {
+			if (useProgressWindow) {
+				ProgressWindow.hideProgressWindow();
+			}
+		}
+
+		return;
 	}
 }
