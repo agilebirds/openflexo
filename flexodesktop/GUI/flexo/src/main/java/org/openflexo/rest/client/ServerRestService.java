@@ -1,5 +1,6 @@
 package org.openflexo.rest.client;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -10,6 +11,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -30,6 +32,7 @@ import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.module.ProjectLoader;
 import org.openflexo.rest.client.WebServiceURLDialog.ServerRestClientParameter;
 import org.openflexo.rest.client.model.JobHistory;
+import org.openflexo.swing.FlexoSwingUtils;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoServerInstance;
@@ -67,13 +70,18 @@ public class ServerRestService {
 			Client createClient = client.createClient();
 			for (FlexoProject project : projectLoader.getRootProjects()) {
 				EntityManager em = LocalDBAccess.getInstance().getEntityManager();
-				TypedQuery<WatchedRemoteJob> query = em.createNamedQuery(WatchedRemoteJob.FindByProjectURI.NAME, WatchedRemoteJob.class)
-						.setParameter(WatchedRemoteJob.FindByProjectURI.PROJECT_URI_PARAM, project.getProjectURI());
-				List<WatchedRemoteJob> watchedRemoteJobs = query.getResultList();
-				for (WatchedRemoteJob watchedRemoteJob : watchedRemoteJobs) {
-					if (watchedRemoteJob instanceof WatchedRemoteDocJob) {
-						handleRemoteDocJob(client, createClient, em, (WatchedRemoteDocJob) watchedRemoteJob);
+				try {
+					TypedQuery<WatchedRemoteJob> query = em
+							.createNamedQuery(WatchedRemoteJob.FindByProjectURI.NAME, WatchedRemoteJob.class).setParameter(
+									WatchedRemoteJob.FindByProjectURI.PROJECT_URI_PARAM, project.getProjectURI());
+					List<WatchedRemoteJob> watchedRemoteJobs = query.getResultList();
+					for (WatchedRemoteJob watchedRemoteJob : watchedRemoteJobs) {
+						if (watchedRemoteJob instanceof WatchedRemoteDocJob) {
+							handleRemoteDocJob(client, createClient, em, (WatchedRemoteDocJob) watchedRemoteJob);
+						}
 					}
+				} finally {
+					em.close();
 				}
 			}
 		}
@@ -103,7 +111,9 @@ public class ServerRestService {
 					fos = new FileOutputStream(file);
 					input = response.getEntity(InputStream.class);
 					IOUtils.copy(input, fos);
+					em.getTransaction().begin();
 					em.remove(watchedRemoteJob);
+					em.getTransaction().commit();
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				} catch (ClientHandlerException e) {
@@ -115,6 +125,18 @@ public class ServerRestService {
 				} finally {
 					IOUtils.closeQuietly(input);
 					IOUtils.closeQuietly(fos);
+					if (em.getTransaction().isActive()) {
+						em.getTransaction().rollback();
+					}
+					if (watchedRemoteJob.isOpenDocument()) {
+						if (Desktop.isDesktopSupported()) {
+							try {
+								Desktop.getDesktop().open(file);
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					}
 				}
 			}
 		}
@@ -122,27 +144,17 @@ public class ServerRestService {
 
 	private class ServerRestClientParameterProvider {
 
-		public ServerRestClientParameter getServerRestClientParameter(boolean forceDialog) throws Error {
-			ModelFactory factory;
-			try {
-				factory = new ModelFactory(ServerRestClientParameter.class);
-			} catch (ModelDefinitionException e) {
-				e.printStackTrace();
-				throw new Error("Improperly configured PPMWSClientParameter. ", e);
+		private class ParameterCallable implements Callable<ServerRestClientParameter> {
+
+			private ServerRestClientParameter params;
+
+			public ParameterCallable(ServerRestClientParameter params) {
+				super();
+				this.params = params;
 			}
-			FlexoServerInstance instance = FlexoServerInstanceManager.getInstance().getAddressBook()
-					.getInstanceWithID(AdvancedPrefs.getWebServiceInstance());
-			ServerRestClientParameter params = factory.newInstance(ServerRestClientParameter.class);
-			params.setWSInstance(instance);
-			params.setWSLogin(AdvancedPrefs.getWebServiceLogin());
-			params.setWSPassword(AdvancedPrefs.getWebServicePassword());
-			params.setWSURL(AdvancedPrefs.getWebServiceUrl());
-			params.setRemember(AdvancedPrefs.getRememberAndDontAskWebServiceParamsAnymore());
-			if (params.getWSInstance() != null && !params.getWSInstance().getID().equals(FlexoServerInstance.OTHER_ID)) {
-				params.setWSURL(params.getWSInstance().getRestURL());
-			}
-			if (forceDialog || !params.getRemember() || params.getWSURL() == null || params.getWSLogin() == null
-					|| params.getWSPassword() == null || !isWSUrlValid(params.getWSURL()) || urlSeemsIncorrect(params.getWSURL())) {
+
+			@Override
+			public ServerRestClientParameter call() throws Exception {
 				WebServiceURLDialog data = new WebServiceURLDialog();
 				data.setClientParameter(params);
 				FIBDialog<WebServiceURLDialog> dialog = FIBDialog.instanciateAndShowDialog(WebServiceURLDialog.FIB_FILE, data,
@@ -179,7 +191,40 @@ public class ServerRestService {
 					}
 					AdvancedPrefs.setRememberAndDontAskWebServiceParamsAnymore(params.getRemember());
 					AdvancedPrefs.save();
+					return params;
 				} else {
+					return null;
+				}
+			}
+
+		}
+
+		public ServerRestClientParameter getServerRestClientParameter(boolean forceDialog) throws Error {
+
+			ModelFactory factory;
+			try {
+				factory = new ModelFactory(ServerRestClientParameter.class);
+			} catch (ModelDefinitionException e) {
+				e.printStackTrace();
+				throw new Error("Improperly configured PPMWSClientParameter. ", e);
+			}
+			FlexoServerInstance instance = FlexoServerInstanceManager.getInstance().getAddressBook()
+					.getInstanceWithID(AdvancedPrefs.getWebServiceInstance());
+			ServerRestClientParameter params = factory.newInstance(ServerRestClientParameter.class);
+			params.setWSInstance(instance);
+			params.setWSLogin(AdvancedPrefs.getWebServiceLogin());
+			params.setWSPassword(AdvancedPrefs.getWebServicePassword());
+			params.setWSURL(AdvancedPrefs.getWebServiceUrl());
+			params.setRemember(AdvancedPrefs.getRememberAndDontAskWebServiceParamsAnymore());
+			if (params.getWSInstance() != null && !params.getWSInstance().getID().equals(FlexoServerInstance.OTHER_ID)) {
+				params.setWSURL(params.getWSInstance().getRestURL());
+			}
+			if (forceDialog || !params.getRemember() || params.getWSURL() == null || params.getWSLogin() == null
+					|| params.getWSPassword() == null || !isWSUrlValid(params.getWSURL()) || urlSeemsIncorrect(params.getWSURL())) {
+				try {
+					params = FlexoSwingUtils.syncRunInEDT(new ParameterCallable(params));
+				} catch (Exception e) {
+					e.printStackTrace();
 					return null;
 				}
 			}
@@ -220,7 +265,7 @@ public class ServerRestService {
 
 	}
 
-	private ScheduledFuture<?> threadPool;
+	private ScheduledFuture<?> scheduledFuture;
 	private final ProjectLoader projectLoader;
 	private ServerRestClientParameterProvider parameterProvider;
 
@@ -254,12 +299,13 @@ public class ServerRestService {
 			return;
 		}
 		started = true;
-		threadPool = Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(new RemoteJobChecker(), 0, 15, TimeUnit.SECONDS);
+		scheduledFuture = Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(new RemoteJobChecker(), 0, 15,
+				TimeUnit.SECONDS);
 	}
 
 	public void stop() {
 		if (started) {
-			threadPool.cancel(true);
+			scheduledFuture.cancel(true);
 			started = false;
 		}
 	}
