@@ -79,7 +79,7 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 	public DiagramPalette palette;
 
 	private boolean isTopLevel = true;
-	public boolean isPushedToPalette = true;
+	public boolean isPushedToPalette = false;
 	public EditionPattern containerEditionPattern;
 	private EditionPattern virtualModelConcept;
 	private String dropSchemeName;
@@ -390,10 +390,11 @@ public abstract class AbstractDeclareShapeInEditionPattern<T1 extends FlexoObjec
 					}
 					newEditionPattern.setPrimaryRepresentationRole(primaryRepresentationRole);
 
-					DiagramPaletteElement _newPaletteElement = palette.addPaletteElement(newEditionPattern.getName(), getFocusedObject()
-							.getGraphicalRepresentation());
-					_newPaletteElement.setEditionPattern(newEditionPattern);
-					_newPaletteElement.notifyObservers();
+					if (isPushedToPalette) {
+						DiagramPaletteElement _newPaletteElement = palette.addPaletteElement(newEditionPattern.getName(),
+								getFocusedObject().getGraphicalRepresentation());
+						_newPaletteElement.setEditionPattern(newEditionPattern);
+					}
 
 					// Create other individual roles
 					/*Vector<IndividualPatternRole> otherRoles = new Vector<IndividualPatternRole>();
