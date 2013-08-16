@@ -82,6 +82,7 @@ public class VEControllerActionInitializer extends ControllerActionInitializer {
 		new ResetGraphicalRepresentationInitializer(this);
 		new DeclareShapeInEditionPatternInitializer(this);
 		new DeclareConnectorInEditionPatternInitializer(this);
+		new PushToPaletteInitializer(this);
 
 	}
 

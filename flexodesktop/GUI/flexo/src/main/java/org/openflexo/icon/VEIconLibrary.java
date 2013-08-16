@@ -64,7 +64,7 @@ public class VEIconLibrary extends IconLibrary {
 	public static final ImageIconResource VIRTUAL_MODEL_INSTANCE_ICON = new ImageIconResource("Icons/Model/VE/VirtualModelInstance.png");
 	public static final ImageIconResource EDITION_PATTERN_INSTANCE_ICON = new ImageIconResource("Icons/Model/VE/EditionPatternInstance.png");
 	public static final ImageIconResource MODEL_SLOT_INSTANCE_ICON = new ImageIconResource("Icons/Model/VE/ModelSlotInstance.png");
-
+	public static final ImageIconResource DIAGRAM_PALETTE_ICON = new ImageIconResource("Icons/Model/VPM/DiagramPalette.png");
 	public static final ImageIconResource DIAGRAM_ICON = new ImageIconResource("Icons/Model/VE/Diagram.png");
 	public static final ImageIconResource SHAPE_ICON = new ImageIconResource("Icons/Model/VE/DiagramShape.png");
 	public static final ImageIconResource CONNECTOR_ICON = new ImageIconResource("Icons/Model/VE/DiagramConnector.png");

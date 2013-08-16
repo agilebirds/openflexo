@@ -17,7 +17,7 @@
  * along with OpenFlexo. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package org.openflexo.vpm.controller.action;
+package org.openflexo.ve.controller.action;
 
 import java.awt.image.BufferedImage;
 import java.util.EventObject;
@@ -33,42 +33,42 @@ import org.openflexo.fge.view.ShapeView;
 import org.openflexo.foundation.action.FlexoActionFinalizer;
 import org.openflexo.foundation.action.FlexoActionInitializer;
 import org.openflexo.foundation.gen.ScreenshotGenerator;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramObject;
-import org.openflexo.foundation.view.diagram.viewpoint.ExampleDiagramShape;
-import org.openflexo.foundation.view.diagram.viewpoint.action.PushToPalette;
-import org.openflexo.icon.VPMIconLibrary;
+import org.openflexo.foundation.view.action.DiagramShapePushToPalette;
+import org.openflexo.foundation.view.diagram.model.DiagramElement;
+import org.openflexo.foundation.view.diagram.model.DiagramShape;
+import org.openflexo.icon.VEIconLibrary;
+import org.openflexo.ve.controller.VEController;
+import org.openflexo.ve.diagram.DiagramController;
+import org.openflexo.ve.diagram.DiagramModuleView;
 import org.openflexo.view.controller.ActionInitializer;
 import org.openflexo.view.controller.ControllerActionInitializer;
-import org.openflexo.vpm.controller.VPMController;
-import org.openflexo.vpm.examplediagram.ExampleDiagramController;
-import org.openflexo.vpm.examplediagram.ExampleDiagramModuleView;
 
-public class PushToPaletteInitializer extends ActionInitializer<PushToPalette, ExampleDiagramShape, ExampleDiagramObject> {
+public class PushToPaletteInitializer extends ActionInitializer<DiagramShapePushToPalette, DiagramShape, DiagramElement> {
 
 	private static final Logger logger = Logger.getLogger(ControllerActionInitializer.class.getPackage().getName());
 
-	PushToPaletteInitializer(VPMControllerActionInitializer actionInitializer) {
-		super(PushToPalette.actionType, actionInitializer);
+	PushToPaletteInitializer(VEControllerActionInitializer actionInitializer) {
+		super(DiagramShapePushToPalette.actionType, actionInitializer);
 	}
 
 	@Override
-	protected VPMControllerActionInitializer getControllerActionInitializer() {
-		return (VPMControllerActionInitializer) super.getControllerActionInitializer();
+	protected VEControllerActionInitializer getControllerActionInitializer() {
+		return (VEControllerActionInitializer) super.getControllerActionInitializer();
 	}
 
 	@Override
-	public VPMController getController() {
-		return (VPMController) super.getController();
+	public VEController getController() {
+		return (VEController) super.getController();
 	}
 
 	@Override
-	protected FlexoActionInitializer<PushToPalette> getDefaultInitializer() {
-		return new FlexoActionInitializer<PushToPalette>() {
+	protected FlexoActionInitializer<DiagramShapePushToPalette> getDefaultInitializer() {
+		return new FlexoActionInitializer<DiagramShapePushToPalette>() {
 			@Override
-			public boolean run(EventObject e, PushToPalette action) {
-				if (getController().getCurrentModuleView() instanceof ExampleDiagramModuleView
+			public boolean run(EventObject e, DiagramShapePushToPalette action) {
+				if (getController().getCurrentModuleView() instanceof DiagramModuleView
 						&& action.getFocusedObject().getGraphicalRepresentation() instanceof ShapeGraphicalRepresentation) {
-					ExampleDiagramController c = ((ExampleDiagramModuleView) getController().getCurrentModuleView()).getController();
+					DiagramController c = ((DiagramModuleView) getController().getCurrentModuleView()).getController();
 					ShapeGraphicalRepresentation gr = action.getFocusedObject().getGraphicalRepresentation();
 					ShapeView shapeView = c.getDrawingView().shapeViewForObject(gr);
 					BufferedImage image = shapeView.getScreenshot();
@@ -86,12 +86,13 @@ public class PushToPaletteInitializer extends ActionInitializer<PushToPalette, E
 	}
 
 	@Override
-	protected FlexoActionFinalizer<PushToPalette> getDefaultFinalizer() {
-		return new FlexoActionFinalizer<PushToPalette>() {
+	protected FlexoActionFinalizer<DiagramShapePushToPalette> getDefaultFinalizer() {
+		return new FlexoActionFinalizer<DiagramShapePushToPalette>() {
 			@Override
-			public boolean run(EventObject e, PushToPalette action) {
-				getController().setCurrentEditedObjectAsModuleView(action.palette, getController().VIEW_POINT_PERSPECTIVE);
+			public boolean run(EventObject e, DiagramShapePushToPalette action) {
+				// getController().setCurrentEditedObjectAsModuleView(action.palette, getController().VIEW_LIBRARY_PERSPECTIVE);
 				getController().getSelectionManager().setSelectedObject(action.getNewPaletteElement());
+				getController().updateRecentProjectMenu();
 				return true;
 			}
 		};
@@ -99,7 +100,7 @@ public class PushToPaletteInitializer extends ActionInitializer<PushToPalette, E
 
 	@Override
 	protected Icon getEnabledIcon() {
-		return VPMIconLibrary.DIAGRAM_PALETTE_ICON;
+		return VEIconLibrary.DIAGRAM_PALETTE_ICON;
 	}
 
 }
