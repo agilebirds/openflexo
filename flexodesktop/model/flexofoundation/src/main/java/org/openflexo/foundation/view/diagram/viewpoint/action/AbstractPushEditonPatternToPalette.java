@@ -110,7 +110,6 @@ public abstract class AbstractPushEditonPatternToPalette<A extends AbstractPushE
 			_newPaletteElement.setEditionPattern(editionPattern);
 			_newPaletteElement.setDropScheme(dropScheme);
 			_newPaletteElement.setBoundLabelToElementName(!takeScreenshotForTopLevelElement);
-			palette.notifyObservers();
 
 			if (overrideDefaultGraphicalRepresentations) {
 				for (DrawingObjectEntry entry : drawingObjectEntries) {

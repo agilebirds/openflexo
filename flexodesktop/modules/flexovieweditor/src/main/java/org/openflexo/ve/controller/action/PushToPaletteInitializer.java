@@ -90,7 +90,6 @@ public class PushToPaletteInitializer extends ActionInitializer<DiagramShapePush
 		return new FlexoActionFinalizer<DiagramShapePushToPalette>() {
 			@Override
 			public boolean run(EventObject e, DiagramShapePushToPalette action) {
-				// getController().setCurrentEditedObjectAsModuleView(action.palette, getController().VIEW_LIBRARY_PERSPECTIVE);
 				getController().getSelectionManager().setSelectedObject(action.getNewPaletteElement());
 				getController().updateRecentProjectMenu();
 				return true;
