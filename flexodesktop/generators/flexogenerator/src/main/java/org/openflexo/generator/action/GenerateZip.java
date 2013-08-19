@@ -21,8 +21,11 @@ package org.openflexo.generator.action;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Vector;
+import java.util.zip.Deflater;
+import java.util.zip.ZipOutputStream;
 
 import org.openflexo.foundation.FlexoEditor;
 import org.openflexo.foundation.FlexoException;
@@ -35,6 +38,7 @@ import org.openflexo.foundation.cg.DGRepository;
 import org.openflexo.foundation.cg.GenerationRepository;
 import org.openflexo.generator.AbstractProjectGenerator;
 import org.openflexo.localization.FlexoLocalization;
+import org.openflexo.toolbox.FileUtils;
 import org.openflexo.toolbox.ZipUtils;
 
 public class GenerateZip extends GenerateArtefact<GenerateZip, GenerationRepository> {
@@ -82,12 +86,19 @@ public class GenerateZip extends GenerateArtefact<GenerateZip, GenerationReposit
 	@Override
 	protected void doAction(Object context) throws FlexoException {
 		try {
-			ZipUtils.makeZip(
-					((DGRepository) getFocusedObject()).getPostBuildFile(),
-					getFocusedObject().getDirectory(),
-					makeFlexoProgress(
-							FlexoLocalization.localizedForKey("creating_zip_file") + " "
-									+ ((DGRepository) getFocusedObject()).getPostProductName(), 1), new ZipFileFilter());
+			FileUtils.createNewFile(((DGRepository) getFocusedObject()).getPostBuildFile());
+			ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(((DGRepository) getFocusedObject()).getPostBuildFile()));
+			zos.setLevel(Deflater.DEFAULT_COMPRESSION);
+			try {
+				ZipUtils.zipDir(
+						getFocusedObject().getDirectory().getAbsolutePath().length() + 1,
+						getFocusedObject().getDirectory(),
+						zos,
+						makeFlexoProgress(FlexoLocalization.localizedForKey("creating_zip_file") + " "
+								+ ((DGRepository) getFocusedObject()).getPostProductName(), 1), new ZipFileFilter());
+			} finally {
+				zos.close();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new IOFlexoException(e);
