@@ -40,6 +40,12 @@ public abstract class BooleanBinaryOperator extends BinaryOperator {
 			if (leftArg instanceof BooleanConstant && rightArg instanceof BooleanConstant) {
 				return BooleanConstant.get(((BooleanConstant) leftArg).getValue() && ((BooleanConstant) rightArg).getValue());
 			}
+			if (leftArg instanceof BooleanConstant && !((BooleanConstant) leftArg).getValue()) {
+				return BooleanConstant.get(false);
+			}
+			if (rightArg instanceof BooleanConstant && !((BooleanConstant) rightArg).getValue()) {
+				return BooleanConstant.get(false);
+			}
 			throw new TypeMismatchException(this, leftArg.getEvaluationType(), rightArg.getEvaluationType(), EvaluationType.BOOLEAN);
 		}
 
@@ -81,6 +87,12 @@ public abstract class BooleanBinaryOperator extends BinaryOperator {
 		public Constant evaluate(Constant leftArg, Constant rightArg) throws TypeMismatchException {
 			if (leftArg instanceof BooleanConstant && rightArg instanceof BooleanConstant) {
 				return BooleanConstant.get(((BooleanConstant) leftArg).getValue() || ((BooleanConstant) rightArg).getValue());
+			}
+			if (leftArg instanceof BooleanConstant && ((BooleanConstant) leftArg).getValue()) {
+				return BooleanConstant.get(true);
+			}
+			if (rightArg instanceof BooleanConstant && ((BooleanConstant) rightArg).getValue()) {
+				return BooleanConstant.get(true);
 			}
 			throw new TypeMismatchException(this, leftArg.getEvaluationType(), rightArg.getEvaluationType(), EvaluationType.BOOLEAN);
 		}
