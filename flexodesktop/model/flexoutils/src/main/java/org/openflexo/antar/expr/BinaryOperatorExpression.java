@@ -111,8 +111,18 @@ public class BinaryOperatorExpression extends Expression {
 	public Expression transform(ExpressionTransformer transformer) throws TransformException {
 
 		Expression expression = this;
-		Expression transformedLeftArgument = leftArgument.transform(transformer);
-		Expression transformedRightArgument = rightArgument.transform(transformer);
+		Expression transformedLeftArgument;
+		try {
+			transformedLeftArgument = leftArgument.transform(transformer);
+		} catch (Exception e) {
+			transformedLeftArgument = Constant.BooleanConstant.FALSE;
+		}
+		Expression transformedRightArgument;
+		try {
+			transformedRightArgument = rightArgument.transform(transformer);
+		} catch (Exception e) {
+			transformedRightArgument = Constant.BooleanConstant.FALSE;
+		}
 
 		if (!transformedLeftArgument.equals(leftArgument) || !transformedRightArgument.equals(rightArgument)) {
 			expression = new BinaryOperatorExpression(operator, transformedLeftArgument, transformedRightArgument);
