@@ -251,7 +251,9 @@ public class AskParametersDialog extends FlexoDialog implements ValueListener {
 		scrollpane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		scrollpane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		getContentPane().add(scrollpane, BorderLayout.CENTER);
-		getContentPane().add(controlPanel, BorderLayout.SOUTH);
+		JPanel south = new JPanel();
+		south.add(controlPanel);
+		getContentPane().add(south, BorderLayout.SOUTH);
 		// setSize(new Dimension (400,200+parameters.length*30));
 		getRootPane().setDefaultButton(_validateButton);
 		pack();
