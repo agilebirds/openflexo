@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Panel layout="border" dataClassName="org.openflexo.rest.client.WebServiceURLDialog" width="625" height="240" opaque="false">
+<Panel layout="border" dataClassName="org.openflexo.rest.client.WebServiceURLDialog" width="625" height="300" opaque="false">
   <Panel layout="gridbag" borderTitle="Panel" constraints="border(location=center)" opaque="false">
     <Label label="url" localize="true" constraints="gridbag(insetsLeft=5;insetsRight=5;gridHeight=1;padY=0;padX=0;anchor=east;gridY=1;gridX=0;index=1;gridWidth=1;insetsTop=3;insetsBottom=3;weightY=0.0;weightX=0.0;fill=none)" visible="data.clientParameter.wSInstance.iD.equals(&quot;other&quot;)">
       <LocalizedDictionary />
