@@ -1126,7 +1126,7 @@ public class ServerRestClient {
 			response = resourceBuilder.method("GET", com.sun.jersey.api.client.ClientResponse.class);
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
 				if (response.getStatus() >= 400) {
-
+					throwWebApplicationException(response);
 				}
 			}
 			if (!com.sun.jersey.api.client.ClientResponse.class.isAssignableFrom(returnType)) {
