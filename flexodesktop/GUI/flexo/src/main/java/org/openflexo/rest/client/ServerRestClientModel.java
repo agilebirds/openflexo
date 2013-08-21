@@ -40,6 +40,7 @@ import org.openflexo.rest.client.model.Job;
 import org.openflexo.rest.client.model.JobType;
 import org.openflexo.rest.client.model.Project;
 import org.openflexo.rest.client.model.ProjectVersion;
+import org.openflexo.rest.client.model.Session;
 import org.openflexo.rest.client.model.TocEntryDefinition;
 import org.openflexo.rest.client.model.User;
 import org.openflexo.toolbox.FileResource;
@@ -221,6 +222,34 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	}
 
+	private class UpdateProjectEditionSession implements ServerRestClientOperation {
+		@Override
+		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
+			if (serverProject == null) {
+				return;
+			}
+			List<Session> sessions = client.projectsProjectIDSessions(serverProject.getProjectId()).getAsXml(
+					new GenericType<List<Session>>() {
+					});
+			if (sessions.size() == 0) {
+				setSession(null);
+			} else {
+				setSession(sessions.get(0));
+			}
+		}
+
+		@Override
+		public int getSteps() {
+			return 0;
+		}
+
+		@Override
+		public String getLocalizedTitle() {
+			return FlexoLocalization.localizedForKey("retrieving_edition_session_information");
+		}
+
+	}
+
 	private class UpdateVersions implements ServerRestClientOperation {
 		@Override
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
@@ -353,7 +382,9 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 				watchedRemoteJob.setRemoteJobId(returned.getJobId());
 				watchedRemoteJob.setSaveToFolder(choice.getFolder().getAbsolutePath());
 				watchedRemoteJob.setOpenDocument(choice.isAutomaticallyOpenFile());
+				watchedRemoteJob.setUnzip(job.getDocFormat() == DocFormat.HTML);
 				watchedRemoteJob.setProjectURI(flexoProject.getProjectURI());
+				watchedRemoteJob.setLogin(getUser().getLogin());
 				EntityManager em = LocalDBAccess.getInstance().getEntityManager();
 				try {
 					em.getTransaction().begin();
@@ -429,13 +460,39 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 		@Override
 		public String getLocalizedTitle() {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public int getSteps() {
 			return -1;
+		}
+
+	}
+
+	private class CloseSession implements ServerRestClientOperation {
+
+		private Session session;
+
+		public CloseSession(Session session) {
+			super();
+			this.session = session;
+		}
+
+		@Override
+		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
+			client.projectsProjectIDSessions(serverProject.getProjectId()).id(session.getEditSessionId()).deleteAsClientResponse();
+			performOperationsInSwingWorker(new UpdateProjectEditionSession());
+		}
+
+		@Override
+		public String getLocalizedTitle() {
+			return FlexoLocalization.localizedForKey("closing_session");
+		}
+
+		@Override
+		public int getSteps() {
+			return 0;
 		}
 
 	}
@@ -489,6 +546,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 	private static final String SERVER_PROJECT = "serverProject";
 	private static final String USER = "user";
+	private static final String SESSION = "session";
 	private static final String VERSIONS = "versions";
 
 	private final FlexoController controller;
@@ -498,6 +556,8 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 	private Project serverProject;
 
 	private User user;
+
+	private Session session;
 
 	private List<ProjectVersion> versions;
 
@@ -569,7 +629,8 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 	}
 
 	public void refresh() {
-		performOperationsInSwingWorker(new UpdateUserOperation(), new UpdateServerProject(), new UpdateVersions());
+		performOperationsInSwingWorker(new UpdateUserOperation(), new UpdateServerProject(), new UpdateProjectEditionSession(),
+				new UpdateVersions());
 	}
 
 	public void refreshVersions() {
@@ -602,6 +663,10 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		return versions;
 	}
 
+	public Session getSession() {
+		return session;
+	}
+
 	private void setServerProject(Project serverProject) {
 		this.serverProject = serverProject;
 		pcSupport.firePropertyChange(SERVER_PROJECT, null, serverProject);
@@ -615,6 +680,11 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 	private void setVersions(List<ProjectVersion> versions) {
 		this.versions = versions;
 		pcSupport.firePropertyChange(VERSIONS, null, versions);
+	}
+
+	private void setSession(Session session) {
+		this.session = session;
+		pcSupport.firePropertyChange(SESSION, null, session);
 	}
 
 	public String getStatus() {
@@ -689,7 +759,12 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		job.setJobType(JobType.PROTOTYPE_BUILDER);
 		job.setVersion(version);
 		performOperationsInSwingWorker(new GeneratePrototype(version));
+	}
 
+	public void closeSession() {
+		if (session != null) {
+			performOperationsInSwingWorker(new CloseSession(session));
+		}
 	}
 
 	private void performOperations(final boolean useProgressWindow, final ServerRestClientOperation... operations)
