@@ -11,6 +11,7 @@ public class WatchedRemoteDocJob extends WatchedRemoteJob {
 	public static final String ENTITY_NAME = "WatchedRemoteDocJob";
 
 	private String saveToFolder;
+	private boolean unzip;
 	private boolean openDocument;
 
 	public String getSaveToFolder() {
@@ -27,6 +28,14 @@ public class WatchedRemoteDocJob extends WatchedRemoteJob {
 
 	public void setOpenDocument(boolean openDocument) {
 		this.openDocument = openDocument;
+	}
+
+	public boolean isUnzip() {
+		return unzip;
+	}
+
+	public void setUnzip(boolean unzip) {
+		this.unzip = unzip;
 	}
 
 }

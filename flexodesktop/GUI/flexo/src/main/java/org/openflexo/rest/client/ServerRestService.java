@@ -2,25 +2,31 @@ package org.openflexo.rest.client;
 
 import java.awt.Desktop;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.UriBuilder;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.openflexo.AdvancedPrefs;
 import org.openflexo.LocalDBAccess;
 import org.openflexo.fib.controller.FIBController.Status;
@@ -32,19 +38,24 @@ import org.openflexo.model.factory.ModelFactory;
 import org.openflexo.module.ProjectLoader;
 import org.openflexo.rest.client.WebServiceURLDialog.ServerRestClientParameter;
 import org.openflexo.rest.client.model.JobHistory;
+import org.openflexo.rest.client.model.User;
 import org.openflexo.swing.FlexoSwingUtils;
+import org.openflexo.toolbox.ZipUtils;
 import org.openflexo.view.FlexoFrame;
 import org.openflexo.view.controller.FlexoController;
 import org.openflexo.view.controller.FlexoServerInstance;
 import org.openflexo.view.controller.FlexoServerInstanceManager;
 
 import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
-import com.sun.jersey.api.client.UniformInterfaceException;
 
 public class ServerRestService {
+
+	private static final java.util.logging.Logger logger = org.openflexo.logging.FlexoLogger.getLogger(ServerRestService.class.getPackage()
+			.getName());
+
+	private static final List<String> HTML_FILE_ORDER = Arrays.asList("index.html", "main.html");
 
 	private boolean started = false;
 
@@ -68,30 +79,67 @@ public class ServerRestService {
 				}
 			}
 			Client createClient = client.createClient();
+			User currentUser = client.users(createClient).id(client.getUserName()).getAsUserXml();
 			for (FlexoProject project : projectLoader.getRootProjects()) {
 				EntityManager em = LocalDBAccess.getInstance().getEntityManager();
 				try {
-					TypedQuery<WatchedRemoteJob> query = em
-							.createNamedQuery(WatchedRemoteJob.FindByProjectURI.NAME, WatchedRemoteJob.class).setParameter(
-									WatchedRemoteJob.FindByProjectURI.PROJECT_URI_PARAM, project.getProjectURI());
+					TypedQuery<WatchedRemoteJob> query;
+					if ("DNL".equals(currentUser.getUsertype())) {
+						query = em.createNamedQuery(WatchedRemoteJob.FindByProjectURI.NAME, WatchedRemoteJob.class).setParameter(
+								WatchedRemoteJob.FindByProjectURI.PROJECT_URI_PARAM, project.getProjectURI());
+					} else {
+						query = em.createNamedQuery(WatchedRemoteJob.FindByProjectURIAndLogin.NAME, WatchedRemoteJob.class)
+								.setParameter(WatchedRemoteJob.FindByProjectURIAndLogin.PROJECT_URI_PARAM, project.getProjectURI())
+								.setParameter(WatchedRemoteJob.FindByProjectURIAndLogin.LOGIN_PARAM, currentUser.getLogin());
+					}
 					List<WatchedRemoteJob> watchedRemoteJobs = query.getResultList();
 					for (WatchedRemoteJob watchedRemoteJob : watchedRemoteJobs) {
-						if (watchedRemoteJob instanceof WatchedRemoteDocJob) {
-							handleRemoteDocJob(client, createClient, em, (WatchedRemoteDocJob) watchedRemoteJob);
+						try {
+							if (watchedRemoteJob instanceof WatchedRemoteDocJob) {
+								handleRemoteDocJob(client, createClient, em, (WatchedRemoteDocJob) watchedRemoteJob);
+							}
+						} catch (SocketException e) {
+							// Issues with connection (no Internet, server down, etc...)
+							return;
+						} catch (IOException e) {
+							logger.log(Level.WARNING, "IOException while trying to handle ", e);
+
+						} catch (WebApplicationException e) {
+							if (e.getResponse().getStatus() == com.sun.jersey.api.client.ClientResponse.Status.UNAUTHORIZED.getStatusCode()) {
+								AdvancedPrefs.setRememberAndDontAskWebServiceParamsAnymore(false);
+								AdvancedPrefs.save();
+							}
+						} catch (Exception e) {
+							logger.log(Level.WARNING, "Unexpected exception while trying to handle ", e);
+							if (em.getTransaction().isActive()) {
+								em.getTransaction().rollback();
+							}
+							em.getTransaction().begin();
+							watchedRemoteJob.setFailedAttempt(watchedRemoteJob.getFailedAttempt() + 1);
+							em.getTransaction().commit();
 						}
 					}
 				} finally {
+					try {
+						if (em.getTransaction() != null && em.getTransaction().isActive()) {
+							em.getTransaction().rollback();
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					em.close();
 				}
 			}
 		}
 
-		private void handleRemoteDocJob(ServerRestClient client, Client createClient, EntityManager em, WatchedRemoteDocJob watchedRemoteJob) {
+		private void handleRemoteDocJob(ServerRestClient client, Client createClient, EntityManager em, WatchedRemoteDocJob watchedRemoteJob)
+				throws Exception {
 			UriBuilder builder = UriBuilder.fromUri(client.getBASE_URI()).queryParam("originalJobId", watchedRemoteJob.getRemoteJobId());
 			List<JobHistory> jobHistory = client.jobsHistory(createClient, builder.build()).getAsXml(new GenericType<List<JobHistory>>() {
 			});
 			if (jobHistory.size() > 0) {
-				String uuid = jobHistory.get(0).getJobResult();
+				JobHistory history = jobHistory.get(0);
+				String uuid = history.getJobResult();
 				ClientResponse response = client.files(createClient, client.getBASE_URI()).getAsOctetStream(uuid, ClientResponse.class);
 				String fileName = uuid;
 				List<String> list = response.getHeaders().get("content-disposition");
@@ -103,25 +151,55 @@ public class ServerRestService {
 						fileName = string.substring(indexOf + 1).trim();
 					}
 				}
-				File file = new File(watchedRemoteJob.getSaveToFolder(), fileName);
-				file.getParentFile().mkdirs();
+
+				File saveToFile = null;
+				File fileToOpen = null;
 				InputStream input = null;
 				FileOutputStream fos = null;
 				try {
-					fos = new FileOutputStream(file);
+					File saveToFolder = new File(watchedRemoteJob.getSaveToFolder());
+					if (watchedRemoteJob.isUnzip()) {
+						saveToFile = File.createTempFile(StringUtils.rightPad(fileName, 3, '_'), ".zip");
+					} else {
+						saveToFile = new File(saveToFolder, fileName);
+						fileToOpen = saveToFile;
+					}
+					saveToFile.getParentFile().mkdirs();
+					fos = new FileOutputStream(saveToFile);
 					input = response.getEntity(InputStream.class);
 					IOUtils.copy(input, fos);
+					if (watchedRemoteJob.isUnzip()) {
+						ZipUtils.unzip(saveToFile, saveToFolder);
+						Collection<File> listFiles = FileUtils.listFiles(saveToFolder, new String[] { "html" }, false);
+						if (listFiles.size() == 0) {
+							listFiles = FileUtils.listFiles(saveToFolder, new String[] { "html" }, true);
+						}
+						if (listFiles.size() == 0) {
+							if (logger.isLoggable(Level.WARNING)) {
+								logger.warning("Could not find html file in zip extracted at: " + saveToFolder.getAbsolutePath());
+							}
+							fileToOpen = saveToFile;
+						} else if (listFiles.size() == 1) {
+							fileToOpen = listFiles.iterator().next();
+						} else {
+							fileToOpen = null;
+							int curIndex = Integer.MAX_VALUE;
+							for (File f : listFiles) {
+								if (fileToOpen == null) {
+									fileToOpen = f;
+								} else {
+									int index = HTML_FILE_ORDER.indexOf(f.getName().toLowerCase());
+									if (index > -1 && index < curIndex) {
+										curIndex = index;
+										fileToOpen = f;
+									}
+								}
+							}
+						}
+					}
 					em.getTransaction().begin();
 					em.remove(watchedRemoteJob);
 					em.getTransaction().commit();
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (ClientHandlerException e) {
-					e.printStackTrace();
-				} catch (UniformInterfaceException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
 				} finally {
 					IOUtils.closeQuietly(input);
 					IOUtils.closeQuietly(fos);
@@ -131,7 +209,7 @@ public class ServerRestService {
 					if (watchedRemoteJob.isOpenDocument()) {
 						if (Desktop.isDesktopSupported()) {
 							try {
-								Desktop.getDesktop().open(file);
+								Desktop.getDesktop().open(saveToFile);
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
