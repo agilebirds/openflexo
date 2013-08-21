@@ -30,12 +30,14 @@ public class FIBButtonColumn extends FIBTableColumn {
 
 	public static BindingDefinition BUTTON_ICON = new BindingDefinition("buttonIcon", Icon.class, BindingDefinitionType.GET, false);
 	public static BindingDefinition ACTION = new BindingDefinition("action", Object.class, BindingDefinitionType.EXECUTE, false);
+	private static BindingDefinition ENABLED = new BindingDefinition("enabled", Boolean.class, BindingDefinitionType.GET, false);
 
 	public static enum Parameters implements FIBModelAttribute {
-		action, buttonIcon;
+		action, enabled;
 	}
 
 	private DataBinding action;
+	private DataBinding enabled;
 
 	// private DataBinding buttonIcon;
 
@@ -55,6 +57,24 @@ public class FIBButtonColumn extends FIBTableColumn {
 
 	public BindingDefinition getActionBindingDefinition() {
 		return ACTION;
+	}
+
+	public DataBinding getEnabled() {
+		if (enabled == null) {
+			enabled = new DataBinding(this, Parameters.enabled, ENABLED);
+		}
+		return enabled;
+	}
+
+	public void setEnabled(DataBinding enabled) {
+		enabled.setOwner(this);
+		enabled.setBindingAttribute(Parameters.enabled);
+		enabled.setBindingDefinition(ENABLED);
+		this.enabled = enabled;
+	}
+
+	public BindingDefinition getEnabledBindingDefinition() {
+		return ENABLED;
 	}
 
 	/*

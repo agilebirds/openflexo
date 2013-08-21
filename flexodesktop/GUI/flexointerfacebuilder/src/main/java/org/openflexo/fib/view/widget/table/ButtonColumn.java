@@ -23,6 +23,7 @@ import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
 import javax.swing.AbstractAction;
+import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
@@ -52,7 +53,20 @@ public class ButtonColumn<T extends Object> extends AbstractColumn<T> implements
 					getColumnModel().getAction().execute(ButtonColumn.this);
 				}
 			}
-		});
+
+		}) {
+			@Override
+			public boolean isEnabled(JTable table, Object value, int row, int column) {
+				if (getColumnModel().getEnabled().isSet() && getColumnModel().getEnabled().isValid()) {
+					iteratorObject = elementAt(row);
+					Object enabled = getColumnModel().getEnabled().getBindingValue(ButtonColumn.this);
+					if (enabled instanceof Boolean) {
+						return (Boolean) enabled;
+					}
+				}
+				return super.isEnabled(table, value, row, column);
+			}
+		};
 	}
 
 	@Override
