@@ -36,6 +36,8 @@ public class ServerRestClientPerspective extends FlexoPerspective {
 	public ModuleView<?> createModuleViewForObject(FlexoModelObject object, FlexoController controller) {
 		if (object instanceof FlexoProject) {
 			ServerRestClientModel model = new ServerRestClientModel(controller, object.getProject());
+			controller.getApplicationContext().getServerRestService().init();
+			model.refresh();
 			FIBComponent component = FIBLibrary.instance().retrieveFIBComponent(ServerRestClientModel.FIB_FILE);
 			FIBController fibController = FIBController.instanciateController(component, FlexoLocalization.getMainLocalizer());
 			if (fibController instanceof FlexoFIBController) {

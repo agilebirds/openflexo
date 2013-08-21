@@ -291,57 +291,70 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 		@Override
 		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
-			ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("saving"), 5);
-			File zipFile = null;
-			zipFile = File.createTempFile(StringUtils.rightPad(flexoProject.getProjectName(), 3, '_'), ".zip");
-			zipFile.deleteOnExit();
+			boolean success = false;
+			String oldVersion = flexoProject.getVersion();
 			try {
-				flexoProject.saveAsZipFile(zipFile, ProgressWindow.instance(), true, true);
-			} catch (final SaveResourceException e) {
-				e.printStackTrace();
-				SwingUtilities.invokeLater(new Runnable() {
+				ProgressWindow.showProgressWindow(FlexoLocalization.localizedForKey("retrieving_next_version"), 6);
+				String nextVersion = client.projectsProjectIDVersions(serverProject.getProjectId()).next().getAsTextPlain(String.class);
+				flexoProject.setVersion(nextVersion);
+				File zipFile = null;
+				zipFile = File.createTempFile(StringUtils.rightPad(flexoProject.getProjectName(), 3, '_'), ".zip");
+				zipFile.deleteOnExit();
+				ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("saving"));
+				try {
+					flexoProject.saveAsZipFile(zipFile, ProgressWindow.instance(), true, true);
+				} catch (final SaveResourceException e) {
+					e.printStackTrace();
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							FlexoController.notify(FlexoLocalization.localizedForKey("error_during_saving") + " " + e.getMessage());
+						}
+					});
+					return;
+				}
+				ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("sending_project"));
+				final long length = zipFile.length();
+				final int numberOfStates = 1000; // We will display tenth of percent, hence 1000 states
+				ProgressWindow.resetSecondaryProgressInstance(numberOfStates);
+				FileInputStream inputStream = new FileInputStream(zipFile) {
+
+					long progress = 0;
+					long lastUpdate = 0;
+					int stepSize = (int) (length / numberOfStates);
+
 					@Override
-					public void run() {
-						FlexoController.notify(FlexoLocalization.localizedForKey("error_during_saving") + " " + e.getMessage());
+					public int read() throws IOException {
+						progress++;
+						updateProgress();
+						return super.read();
 					}
-				});
-				return;
+
+					private void updateProgress() {
+						if (lastUpdate == 0 || progress - lastUpdate > stepSize || progress == length) {
+							double percent = progress * 100.0d / length;
+							ProgressWindow.instance().setProgress(
+									String.format("%1$.2f%1$%"/*+" (%2$d/%3$d)"*/, percent, progress, length));
+							lastUpdate = progress;
+						}
+					}
+				};
+				ProjectVersion version = new ProjectVersion();
+				version.setProject(serverProject.getProjectId());
+				version.setCreator(user.getLogin());
+				version.setComment(comment);
+				FormDataMultiPart mp = new FormDataMultiPart();
+				mp.field("version", version, MediaType.APPLICATION_XML_TYPE);
+				mp.bodyPart(new StreamDataBodyPart("file", inputStream, zipFile.getName()));
+				zipFile.delete();
+				ProjectVersion response = client.projectsProjectIDVersions(serverProject.getProjectId()).postMultipartFormDataAsXml(mp,
+						ProjectVersion.class);
+				success = true;
+			} finally {
+				if (!success) {
+					flexoProject.setVersion(oldVersion);
+				}
 			}
-			ProgressWindow.setProgressInstance(FlexoLocalization.localizedForKey("sending_project"));
-			final long length = zipFile.length();
-			final int numberOfStates = 1000; // We will display tenth of percent, hence 1000 states
-			ProgressWindow.resetSecondaryProgressInstance(numberOfStates);
-			FileInputStream inputStream = new FileInputStream(zipFile) {
-
-				long progress = 0;
-				long lastUpdate = 0;
-				int stepSize = (int) (length / numberOfStates);
-
-				@Override
-				public int read() throws IOException {
-					progress++;
-					updateProgress();
-					return super.read();
-				}
-
-				private void updateProgress() {
-					if (lastUpdate == 0 || progress - lastUpdate > stepSize || progress == length) {
-						double percent = progress * 100.0d / length;
-						ProgressWindow.instance().setProgress(String.format("%1$.2f%1$%"/*+" (%2$d/%3$d)"*/, percent, progress, length));
-						lastUpdate = progress;
-					}
-				}
-			};
-			ProjectVersion version = new ProjectVersion();
-			version.setProject(serverProject.getProjectId());
-			version.setCreator(user.getLogin());
-			version.setComment(comment);
-			FormDataMultiPart mp = new FormDataMultiPart();
-			mp.field("version", version, MediaType.APPLICATION_XML_TYPE);
-			mp.bodyPart(new StreamDataBodyPart("file", inputStream, zipFile.getName()));
-			zipFile.delete();
-			ProjectVersion response = client.projectsProjectIDVersions(serverProject.getProjectId()).postMultipartFormDataAsXml(mp,
-					ProjectVersion.class);
 			performOperationsInSwingWorker(new UpdateVersions());
 		}
 
@@ -352,7 +365,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 
 		@Override
 		public int getSteps() {
-			return 0;
+			return 6;
 		}
 	}
 
@@ -376,7 +389,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 			job.setDocFormat(choice.getDocFormat());
 			job.setDocType(choice.getDocType());
 			job.setTocEntry(choice.getTocEntry());
-			final Job returned = client.jobs().postXml(job, Job.class);
+			final Job returned = client.jobs().postXmlAsJob(job);
 			if (returned != null && choice.getFolder() != null) {
 				WatchedRemoteDocJob watchedRemoteJob = new WatchedRemoteDocJob();
 				watchedRemoteJob.setRemoteJobId(returned.getJobId());
@@ -425,7 +438,7 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 			job.setCreator(getUser());
 			job.setJobType(JobType.PROTOTYPE_BUILDER);
 			job.setVersion(version);
-			final Job returned = client.jobs().postXml(job, Job.class);
+			final Job returned = client.jobs().postXmlAsJob(job);
 		}
 
 		@Override
@@ -469,6 +482,34 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		}
 
 	}
+
+	/*
+	private class StartSession implements ServerRestClientOperation {
+
+		public StartSession() {
+			super();
+		}
+
+		@Override
+		public void doOperation(ServerRestClient client, Progress progress) throws IOException, WebApplicationException {
+			Session session = new Session();
+			session.setUser(getUser());
+			client.projectsProjectIDSessions(serverProject.getProjectId()).postXmlAsSession();
+					performOperationsInSwingWorker(new UpdateProjectEditionSession());
+		}
+
+		@Override
+		public String getLocalizedTitle() {
+			return FlexoLocalization.localizedForKey("starting_session");
+		}
+
+		@Override
+		public int getSteps() {
+			return 0;
+		}
+
+	}
+	*/
 
 	private class CloseSession implements ServerRestClientOperation {
 
@@ -577,8 +618,6 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		this.flexoProject = flexoProject;
 		this.validationInProgress = new Hashtable<ProjectVersion, Boolean>();
 		this.pcSupport = new PropertyChangeSupport(this);
-		controller.getApplicationContext().getServerRestService().init();
-		refresh();
 	}
 
 	private ServerRestClient getServerRestClient(boolean forceDialog) {
@@ -759,6 +798,10 @@ public class ServerRestClientModel implements HasPropertyChangeSupport {
 		job.setJobType(JobType.PROTOTYPE_BUILDER);
 		job.setVersion(version);
 		performOperationsInSwingWorker(new GeneratePrototype(version));
+	}
+
+	public void startSession() {
+		// performOperationsInSwingWorker(new StartSession());
 	}
 
 	public void closeSession() {
