@@ -74,7 +74,7 @@ public class OWLOntologyLibrary extends TechnologyContextManager implements Mode
 
 	private SimpleGraphMaker graphMaker;
 
-	private Map<String, FlexoResource<OWLOntology>> ontologies;
+	private Map<String, TechnologyAdapterResource<OWLOntology>> ontologies;
 	private final Map<String, OWLDataType> dataTypes;
 
 	private OntologyObjectConverter ontologyObjectConverter;
@@ -97,7 +97,7 @@ public class OWLOntologyLibrary extends TechnologyContextManager implements Mode
 		ontologyObjectConverter = new OntologyObjectConverter(null/*this*/);
 		graphMaker = new SimpleGraphMaker();
 
-		ontologies = new HashMap<String, FlexoResource<OWLOntology>>();
+		ontologies = new HashMap<String, TechnologyAdapterResource<OWLOntology>>();
 		dataTypes = new HashMap<String, OWLDataType>();
 
 		statementsWithProperty = new Hashtable<IFlexoOntologyStructuralProperty, StatementWithProperty>();
@@ -385,6 +385,11 @@ public class OWLOntologyLibrary extends TechnologyContextManager implements Mode
 		if (resource instanceof OWLOntologyResource) {
 			registerOntology((OWLOntologyResource) resource);
 		}
+	}
+
+	@Override
+	public TechnologyAdapterResource<?> getResourceWithURI(String uri) {
+		return ontologies.get(uri);
 	}
 
 }
