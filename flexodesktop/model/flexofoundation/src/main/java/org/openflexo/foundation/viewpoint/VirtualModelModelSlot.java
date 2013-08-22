@@ -24,7 +24,6 @@ package org.openflexo.foundation.viewpoint;
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
 
-import org.openflexo.antar.binding.DataBinding;
 import org.openflexo.foundation.rm.VirtualModelResource;
 import org.openflexo.foundation.technologyadapter.DeclareEditionAction;
 import org.openflexo.foundation.technologyadapter.DeclareEditionActions;
@@ -166,8 +165,8 @@ public class VirtualModelModelSlot<VMI extends VirtualModelInstance<VMI, VM>, VM
 	 * @return
 	 */
 	public VirtualModel getAddressedVirtualModel() {
-		if (getViewPoint() != null && StringUtils.isNotEmpty(virtualModelURI)) {
-			return getViewPoint().getVirtualModelNamed(virtualModelURI);
+		if (getViewPoint() != null && StringUtils.isNotEmpty(getVirtualModelURI())) {
+			return getViewPoint().getVirtualModelNamed(getVirtualModelURI());
 		}
 		return null;
 	}
