@@ -14,9 +14,10 @@
     </Panel>
     <Panel layout="border" borderTitle="Panel" darkLevel="0" constraints="border(location=south)">
       <Panel layout="flow" hGap="5" vGap="5" flowAlignment="LEFT" darkLevel="0" constraints="border(location=center)">
-        <Panel layout="grid" hGap="5" vGap="5" cols="8" rows="1" darkLevel="0" constraints="flow()">
+        <Panel layout="buttons" hGap="5" vGap="5" cols="8" rows="1" darkLevel="0" constraints="flow()">
           <Button action="data.refresh()" buttonType="Trigger" label="refresh" localize="true" constraints="grid(x=0;y=0)" />
-          <Button action="data.sendProjectToServer()" buttonType="Trigger" label="send_to_server" localize="true" enable="(data.serverProject != null)" constraints="grid(x=1;y=0)" />
+          <Button action="data.createProject()" buttonType="Trigger" label="create_project" localize="true" enable="(data.serverProject = null)" constraints="buttons()" visible="(data.serverProject = null)" />
+          <Button action="data.sendProjectToServer()" buttonType="Trigger" label="send_to_server" localize="true" enable="(data.serverProject != null)" data="((data.serverProject != null) ? &quot;send_to_server&quot; : &quot;create_project&quot;)" constraints="grid(x=1;y=0)" visible="(data.serverProject != null)" />
           <Button action="data.generateDocumentation(versionTable.selected)" buttonType="Trigger" label="generate_doc" localize="true" enable="((versionTable.selected != null) &amp; (versionTable.selected.tocEntries.size &gt; 0))" constraints="grid(x=2;y=0)" />
           <Button action="data.generatePrototype(versionTable.selected)" buttonType="Trigger" label="generate_proto" localize="true" enable="((versionTable.selected != null) &amp; versionTable.selected.isIsProtoValidationSuccessful)" constraints="grid(x=3;y=0)" />
         </Panel>
