@@ -131,7 +131,8 @@ public class FIBPanelView<C extends FIBPanel> extends FIBContainerView<C, JPanel
 			panel.setLayout(new GridBagLayout());
 			break;
 		case buttons:
-			panel.setLayout(new ButtonLayout(getComponent().getFlowAlignment().getAlign(), getComponent().getHGap()));
+			panel.setLayout(new ButtonLayout(getComponent().getFlowAlignment() != null ? getComponent().getFlowAlignment().getAlign() : -1,
+					getComponent().getHGap() != null ? getComponent().getHGap() : 5));
 			break;
 		default:
 			break;
