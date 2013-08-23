@@ -314,6 +314,9 @@ public abstract class FIBComponent extends FIBModelObject implements TreeNode {
 				case gridbag:
 					returned = new GridBagLayoutConstraints();
 					break;
+				case buttons:
+					returned = new ButtonLayoutConstraints();
+					break;
 				default:
 					returned = new NoneLayoutConstraints();
 					break;
