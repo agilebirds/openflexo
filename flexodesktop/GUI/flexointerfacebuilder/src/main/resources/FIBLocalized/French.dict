@@ -9,6 +9,7 @@ connect=Connecter
 date=Date
 define_a_static_value=D\u00E9finir une valeur
 duration=Dur\u00E9e
+empty_string=Vide
 enum=Enum
 evaluation=Evaluation
 expression=Expression
